@@ -37,7 +37,7 @@ class Mage_Core_Model_Layout_MergeTest extends PHPUnit_Framework_TestCase
         /* Disable loading and saving layout cache */
         Mage::app()->getCacheInstance()->banUse('layout');
 
-        Magento_Test_Bootstrap::getInstance()->reinitialize(array(
+        Magento_Test_Helper_Bootstrap::getInstance()->reinitialize(array(
             Mage_Core_Model_App::INIT_OPTION_DIRS => array(
                 Mage_Core_Model_Dir::THEMES => dirname(__DIR__) . '/_files/design'
             )
@@ -82,6 +82,8 @@ class Mage_Core_Model_Layout_MergeTest extends PHPUnit_Framework_TestCase
         /* add a non-page handle to verify that it won't be affected during page handles manipulation */
         $nonPageHandles = array('non_page_handle');
         $this->_model->addHandle($nonPageHandles);
+
+        Mage::getDesign()->setArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->setDefaultDesignTheme();
 
         $this->assertFalse($this->_model->addPageHandles(array('non_existing_handle')));
         $this->assertEmpty($this->_model->getPageHandles());
@@ -301,6 +303,7 @@ class Mage_Core_Model_Layout_MergeTest extends PHPUnit_Framework_TestCase
 
     public function testGetFileLayoutUpdatesXmlFromModule()
     {
+        Mage::getDesign()->setArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->setDefaultDesignTheme();
         $this->_replaceConfigLayoutUpdates('
             <page module="Mage_Page">
                 <file>layout.xml</file>

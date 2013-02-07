@@ -62,6 +62,7 @@ class Mage_Catalog_Block_Product_AbstractTest extends PHPUnit_Framework_TestCase
             self::$_isStubClass = true;
         }
 
+        Mage::getDesign()->setDefaultDesignTheme();
         $this->_block = Mage::app()->getLayout()->createBlock(self::STUB_CLASS);
         $this->_product = Mage::getModel('Mage_Catalog_Model_Product');
         $this->_product->load(1);

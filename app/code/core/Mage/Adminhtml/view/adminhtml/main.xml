@@ -61,6 +61,7 @@ Supported layout update handles (special):
                 <action method="addJs"><file>head.load.min.js</file></action>
                 <action method="addJs"><file>mage/mage.js</file></action>
                 <action method="addJs"><file>jquery/jquery.tmpl.min.js</file></action>
+                <action method="addJs"><file>jquery/jquery.hoverIntent.js</file></action>
                 <action method="addJs"><file>mage/translate.js</file></action>
                 <action method="addJs"><file>mage/backend/bootstrap.js</file></action>
                 <action method="addJs"><file>mage/backend/floating-header.js</file></action>
@@ -123,6 +124,13 @@ Supported layout update handles (special):
 
             <!-- deprecated since 1.7.0.0 see Mage_Page_Block_Js_Translate -->
             <block type="Mage_Page_Block_Js_Translate" name="js_translate" as="js_translate" template="Mage_Adminhtml::page/js/translate.phtml"/>
+            <container name="main-top" label="main-top" as="main-top">
+                <block name="page-title" type="Mage_Page_Block_Html_Title" template="title.phtml" >
+                    <!--
+                        <action method="setPageTitle" translate=""><value>Example title set from layout</value></action>
+                    -->
+                </block>
+            </container>
             <container name="left" as="left" label="Left Column"/>
             <container name="content" as="content" label="Content"/>
             <block type="Mage_Core_Block_Messages" name="messages" as="messages"/>

@@ -37,6 +37,7 @@ class Mage_User_Block_User_Edit_Tab_Main extends Mage_Backend_Block_Widget_Form
 
     protected function _prepareForm()
     {
+        /** @var $model Mage_User_Model_User */
         $model = Mage::registry('permissions_user');
 
         $form = new Varien_Data_Form();
@@ -91,11 +92,14 @@ class Mage_User_Block_User_Edit_Tab_Main extends Mage_Backend_Block_Widget_Form
             'required' => true,
         ));
 
-        if ($model->getUserId()) {
-            $this->_addRegisteredUserPasswordFields($fieldset);
+        $isNewObject = $model->isObjectNew();
+        if ($isNewObject) {
+            $passwordLabel = Mage::helper('Mage_User_Helper_Data')->__('Password');
         } else {
-            $this->_addNewUserPasswordFields($fieldset);
+            $passwordLabel = Mage::helper('Mage_User_Helper_Data')->__('New Password');
         }
+        $confirmationLabel = Mage::helper('Mage_User_Helper_Data')->__('Password Confirmation');
+        $this->_addPasswordFields($fieldset, $passwordLabel, $confirmationLabel, $isNewObject);
 
         if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->getUser()->getId() != $model->getUserId()) {
             $fieldset->addField('is_active', 'select', array(
@@ -129,50 +133,32 @@ class Mage_User_Block_User_Edit_Tab_Main extends Mage_Backend_Block_Widget_Form
     }
 
     /**
-     * Add password change fields in registered user edit form
+     * Add password input fields
      *
      * @param Varien_Data_Form_Element_Fieldset $fieldset
+     * @param string $passwordLabel
+     * @param string $confirmationLabel
+     * @param bool $isRequired
      */
-    protected function _addRegisteredUserPasswordFields(Varien_Data_Form_Element_Fieldset $fieldset)
-    {
-        $fieldset->addField('password', 'password', array(
-            'name'  => 'new_password',
-            'label' => Mage::helper('Mage_User_Helper_Data')->__('New Password'),
-            'id'    => 'new_pass',
-            'title' => Mage::helper('Mage_User_Helper_Data')->__('New Password'),
-            'class' => 'input-text validate-admin-password',
-        ));
-
-        $fieldset->addField('confirmation', 'password', array(
-            'name'  => 'password_confirmation',
-            'label' => Mage::helper('Mage_User_Helper_Data')->__('Password Confirmation'),
-            'id'    => 'confirmation',
-            'class' => 'input-text validate-cpassword',
-        ));
-    }
-
-    /**
-     * Add password creation fields in new user form
-     *
-     * @param Varien_Data_Form_Element_Fieldset $fieldset
-     */
-    protected function _addNewUserPasswordFields(Varien_Data_Form_Element_Fieldset $fieldset)
-    {
+    protected function _addPasswordFields(
+        Varien_Data_Form_Element_Fieldset $fieldset, $passwordLabel, $confirmationLabel, $isRequired = false
+    ) {
+        $requiredFieldClass = ($isRequired ? ' required-entry' : '');
         $fieldset->addField('password', 'password', array(
             'name'  => 'password',
-            'label' => Mage::helper('Mage_User_Helper_Data')->__('Password'),
+            'label' => $passwordLabel,
             'id'    => 'customer_pass',
-            'title' => Mage::helper('Mage_User_Helper_Data')->__('Password'),
-            'class' => 'input-text required-entry validate-admin-password',
-            'required' => true,
+            'title' => $passwordLabel,
+            'class' => 'input-text validate-admin-password' . $requiredFieldClass,
+            'required' => $isRequired,
         ));
         $fieldset->addField('confirmation', 'password', array(
             'name'  => 'password_confirmation',
-            'label' => Mage::helper('Mage_User_Helper_Data')->__('Password Confirmation'),
+            'label' => $confirmationLabel,
             'id'    => 'confirmation',
-            'title' => Mage::helper('Mage_User_Helper_Data')->__('Password Confirmation'),
-            'class' => 'input-text required-entry validate-cpassword',
-            'required' => true,
+            'title' => $confirmationLabel,
+            'class' => 'input-text validate-cpassword' . $requiredFieldClass,
+            'required' => $isRequired,
         ));
     }
 }

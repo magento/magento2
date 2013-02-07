@@ -66,11 +66,11 @@ class Mage_Widget_Model_WidgetTest extends PHPUnit_Framework_TestCase
     public function testGetPlaceholderImageUrl($type, $expectedFile)
     {
         Mage::getDesign()->setDesignTheme('default/basic', 'adminhtml');
-        $expectedPubFile = Mage::getBaseDir('media') . "/theme/adminhtml/default/basic/en_US/{$expectedFile}";
+        $expectedPubFile = Mage::getBaseDir('media') . "/theme/static/adminhtml/default/basic/en_US/{$expectedFile}";
         if (file_exists($expectedPubFile)) {
             unlink($expectedPubFile);
         }
-
+        $expectedPubFile = str_replace('/', DIRECTORY_SEPARATOR, $expectedPubFile);
         $url = $this->_model->getPlaceholderImageUrl($type);
         $this->assertStringEndsWith($expectedFile, $url);
         $this->assertFileExists($expectedPubFile);
@@ -102,7 +102,7 @@ class Mage_Widget_Model_WidgetTest extends PHPUnit_Framework_TestCase
      */
     public function testGetPlaceholderImageUrlAtTheme()
     {
-        Magento_Test_Bootstrap::getInstance()->reinitialize(array(
+        Magento_Test_Helper_Bootstrap::getInstance()->reinitialize(array(
             Mage_Core_Model_App::INIT_OPTION_DIRS => array(
                 Mage_Core_Model_Dir::THEMES => dirname(__DIR__) . '/_files/design'
             )

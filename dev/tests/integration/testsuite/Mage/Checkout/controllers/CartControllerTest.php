@@ -46,7 +46,7 @@ class Mage_Checkout_CartControllerTest extends Magento_Test_TestCase_ControllerA
         $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
         $response = $this->getResponse();
 
-        $this->assertCount(0, $session->getMessages()->getErrors(), 'Response for simple product contains errors');
+        $this->assertSessionMessages($this->isEmpty(), Mage_Core_Model_Message::ERROR, 'Mage_Checkout_Model_Session');
 
         $this->assertSelectCount('button.button.btn-cart[type="button"][title="Update Cart"]', 1, $response->getBody(),
             'Response for simple product doesn\'t contain "Update Cart" button');
@@ -68,10 +68,7 @@ class Mage_Checkout_CartControllerTest extends Magento_Test_TestCase_ControllerA
         $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
         $response = $this->getResponse();
 
-        /** @var $session Mage_Checkout_Model_Session  */
-        $session = Mage::getModel('Mage_Checkout_Model_Session');
-        $this->assertCount(0, $session->getMessages()->getErrors(),
-            'Response for simple product with custom option contains errors');
+        $this->assertSessionMessages($this->isEmpty(), Mage_Core_Model_Message::ERROR, 'Mage_Checkout_Model_Session');
 
         $this->assertSelectCount('button.button.btn-cart[type="button"][title="Update Cart"]', 1, $response->getBody(),
             'Response for simple product with custom option doesn\'t contain "Update Cart" button');
@@ -96,8 +93,7 @@ class Mage_Checkout_CartControllerTest extends Magento_Test_TestCase_ControllerA
         $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
         $response = $this->getResponse();
 
-        $this->assertCount(0, $session->getMessages()->getErrors(),
-            'Response for bundle product contains errors');
+        $this->assertSessionMessages($this->isEmpty(), Mage_Core_Model_Message::ERROR, 'Mage_Checkout_Model_Session');
 
         $this->assertSelectCount('button.button.btn-cart[type="button"][title="Update Cart"]', 1, $response->getBody(),
             'Response for bundle product doesn\'t contain "Update Cart" button');
@@ -119,8 +115,7 @@ class Mage_Checkout_CartControllerTest extends Magento_Test_TestCase_ControllerA
         $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
         $response = $this->getResponse();
 
-        $this->assertCount(0, $session->getMessages()->getErrors(),
-            'Response for downloadable product contains errors');
+        $this->assertSessionMessages($this->isEmpty(), Mage_Core_Model_Message::ERROR, 'Mage_Checkout_Model_Session');
 
         $this->assertSelectCount('button.button.btn-cart[type="button"][title="Update Cart"]', 1, $response->getBody(),
             'Response for downloadable product doesn\'t contain "Update Cart" button');
@@ -145,8 +140,7 @@ class Mage_Checkout_CartControllerTest extends Magento_Test_TestCase_ControllerA
         $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
         $response = $this->getResponse();
 
-        $this->assertCount(0, $session->getMessages()->getErrors(),
-            'Response for configurable product contains errors');
+        $this->assertSessionMessages($this->isEmpty(), Mage_Core_Model_Message::ERROR, 'Mage_Checkout_Model_Session');
 
         $this->assertSelectCount('button.button.btn-cart[type="button"][title="Update Cart"]', 1, $response->getBody(),
             'Response for configurable product doesn\'t contain "Update Cart" button');

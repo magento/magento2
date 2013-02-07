@@ -28,12 +28,15 @@
 /**
  * Template for Mage_Backend_Block_Widget_Accordion
  */
+$items = $this->getItems();
 ?>
-<dl id="tab_content_<?php echo $this->getHtmlId() ?>" name="tab_content_<?php echo $this->getHtmlId() ?>" class="accordion">
-<?php foreach ($this->getItems() as $_item): ?>
-    <?php echo $this->getChildHtml($_item->getId()) ?>
-<?php endforeach ?>
-</dl>
-<script type="text/javascript">
-    tab_content_<?php echo $this->getHtmlId() ?>AccordionJs = new varienAccordion('tab_content_<?php echo $this->getHtmlId() ?>', '<?php echo $this->getShowOnlyOne() ?>');
-</script>
+<?php if(!empty($items)): ?>
+    <dl id="tab_content_<?php echo $this->getHtmlId() ?>" name="tab_content_<?php echo $this->getHtmlId() ?>" class="accordion">
+    <?php foreach ($items as $_item): ?>
+        <?php echo $this->getChildHtml($_item->getId()) ?>
+    <?php endforeach ?>
+    </dl>
+    <script type="text/javascript">
+        tab_content_<?php echo $this->getHtmlId() ?>AccordionJs = new varienAccordion('tab_content_<?php echo $this->getHtmlId() ?>', '<?php echo $this->getShowOnlyOne() ?>');
+    </script>
+<?php endif; ?>

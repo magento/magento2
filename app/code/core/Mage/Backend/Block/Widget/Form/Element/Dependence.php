@@ -29,7 +29,7 @@
  * Assumes that one element may depend on other element values.
  * Will toggle as "enabled" only if all elements it depends from toggle as true.
  */
-class Mage_Backend_Block_Widget_Form_Element_Dependence extends Mage_Core_Block_Template
+class Mage_Backend_Block_Widget_Form_Element_Dependence extends Mage_Backend_Block_Abstract
 {
     /**
      * name => id mapper

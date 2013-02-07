@@ -25,59 +25,54 @@
  */
 ?>
 <div class="page-create-order">
-<p class="switcher">
-<label for="currency_switcher"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Order Currency:') ?></label>
-<select id="currency_switcher" name="order[currency]" onchange="order.setCurrencyId(this.value); order.setCurrencySymbol(this.options[this.selectedIndex].getAttribute('symbol'));">
-    <?php foreach ($this->getAvailableCurrencies() as $_code): ?>
-    <option value="<?php echo $_code ?>"<?php if($_code==$this->getCurrentCurrencyCode()): ?> selected="selected"<?php endif; ?> symbol="<?php echo $this->getCurrencySymbol($_code) ?>"><?php echo $this->getCurrencyName($_code) ?></option>
-    <?php endforeach; ?>
-</select>
-</p>
-<script type="text/javascript">order.setCurrencySymbol('<?php echo $this->getCurrencySymbol($this->getCurrentCurrencyCode()) ?>')</script>
-<table cellspacing="0" width="100%">
-<tr>
+    <p class="switcher">
+        <label for="currency_switcher"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Order Currency:') ?></label>
+        <select id="currency_switcher" name="order[currency]" onchange="order.setCurrencyId(this.value); order.setCurrencySymbol(this.options[this.selectedIndex].getAttribute('symbol'));">
+            <?php foreach ($this->getAvailableCurrencies() as $_code): ?>
+                <option value="<?php echo $_code ?>"<?php if($_code==$this->getCurrentCurrencyCode()): ?> selected="selected"<?php endif; ?> symbol="<?php echo $this->getCurrencySymbol($_code) ?>">
+                    <?php echo $this->getCurrencyName($_code) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </p>
+    <script type="text/javascript">order.setCurrencySymbol('<?php echo $this->getCurrencySymbol($this->getCurrentCurrencyCode()) ?>')</script>
     <?php if($this->getCustomerId()): ?>
-    <td class="side-col" style="background:none; padding:0;">
-        <div id="order-sidebar"><?php echo $this->getChildHtml('sidebar') ?></div>
-    </td>
+    <div class="customer-current-activity" id="order-sidebar">
+        <div class="customer-current-activity-inner"><?php echo $this->getChildHtml('sidebar') ?></div>
+    </div>
     <?php endif; ?>
-    <td <?php if($this->getCustomerId()): ?>class="main-col"<?php endif; ?>>
-       <div id="order-additional_area" style="display:none" class="order-additional-area"><?php echo $this->getChildHtml('additional_area') ?></div>
-       <div id="order-search" style="display:none" class="order-search-items"><?php echo $this->getChildHtml('search') ?></div>
-        <div id="order-items"><?php echo $this->getChildHtml('items') ?></div>
-        <div id="order-errors"><?php echo $this->getChildHtml('errors') ?></div>
-        <div id="order-form_account"><?php echo $this->getChildHtml('form_account') ?></div>
-        <div id="order-addresses">
-            <div id="order-billing_address" class="box-left"><?php echo $this->getChildHtml('billing_address') ?></div>
-            <div id="order-shipping_address" class="box-right"><?php echo $this->getChildHtml('shipping_address') ?></div>
-        </div>
-        <div class="clear"></div>
-        <div id="order-methods">
-            <div id="order-billing_method" class="box-left payments"><?php echo $this->getChildHtml('billing_method') ?></div>
-            <div id="order-shipping_method" class="box-right"><?php echo $this->getChildHtml('shipping_method') ?></div>
-        </div>
+    <div class="order-details<?php if($this->getCustomerId()): ?> order-details-existing-customer<?php endif; ?>">
+        <div class="order-details-inner">
+            <div id="order-additional_area" style="display:none" class="order-additional-area"><?php echo $this->getChildHtml('additional_area') ?></div>
+            <div id="order-search" style="display:none" class="order-search-items"><?php echo $this->getChildHtml('search') ?></div>
+            <div id="order-items" class="order-items"><?php echo $this->getChildHtml('items') ?></div>
+            <div id="order-errors" class="order-errors"><?php echo $this->getChildHtml('errors') ?></div>
+            <div id="order-form_account" class="order-account-information"><?php echo $this->getChildHtml('form_account') ?></div>
+            <div id="order-addresses" class="order-addresses">
+                <div id="order-billing_address" class="order-billing-address"><?php echo $this->getChildHtml('billing_address') ?></div>
+                <div id="order-shipping_address" class="order-shipping-address"><?php echo $this->getChildHtml('shipping_address') ?></div>
+            </div>
+            <div id="order-methods" class="order-methods">
+                <div id="order-billing_method" class="order-billing-method"><?php echo $this->getChildHtml('billing_method') ?></div>
+                <div id="order-shipping_method" class="order-shipping-method"><?php echo $this->getChildHtml('shipping_method') ?></div>
+            </div>
 
-        <?php if($this->getChildBlock('card_validation')): ?>
-        <div class="clear"></div>
-        <div id="order-methods">
-            <div id="order-card_validation" class="box-left payments"><?php echo $this->getChildHtml('card_validation') ?></div>
-        </div>
-        <?php endif; ?>
+            <?php if($this->getChildBlock('card_validation')): ?>
+                <div id="order-card_validation" class="order-card-validation"><?php echo $this->getChildHtml('card_validation') ?></div>
+            <?php endif; ?>
 
-        <div class="clear"></div>
-        <?php echo $this->getChildHtml('gift_options') ?>
+            <?php echo $this->getChildHtml('gift_options') ?>
 
-        <div class="clear"></div>
-        <div class="box-left entry-edit">
-            <div class="entry-edit-head"><h4><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Order History') ?></h4></div>
-            <fieldset id="order-comment"><?php echo $this->getChildHtml('comment') ?></fieldset>
+            <div class="order-summary">
+                <div class="order-history">
+                    <div class="entry-edit-head"><h4><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Order History') ?></h4></div>
+                    <fieldset class="fieldset" id="order-comment"><?php echo $this->getChildHtml('comment') ?></fieldset>
+                </div>
+                <div class="order-totals">
+                    <div class="entry-edit-head"><h4><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Order Totals') ?></h4></div>
+                    <div id="order-totals" class="order-totals-content"><?php echo $this->getChildHtml('totals') ?></div>
+                </div>
+            </div>
         </div>
-        <div class="box-right entry-edit">
-            <div class="entry-edit-head"><h4><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Order Totals') ?></h4></div>
-            <div id="order-totals" class="order-totals"><?php echo $this->getChildHtml('totals') ?></div>
-        </div>
-        <div class="clear"></div>
-    </td>
-</tr>
-</table>
+    </div>
 </div>

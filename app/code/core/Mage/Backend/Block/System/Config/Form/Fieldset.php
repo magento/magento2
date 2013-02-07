@@ -33,7 +33,7 @@
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Backend_Block_System_Config_Form_Fieldset
-    extends Mage_Core_Block_Template
+    extends Mage_Backend_Block_Abstract
     implements Varien_Data_Form_Element_Renderer_Interface
 {
 
@@ -70,7 +70,7 @@ class Mage_Backend_Block_System_Config_Form_Fieldset
     {
         $default = !$this->getRequest()->getParam('website') && !$this->getRequest()->getParam('store');
 
-        $html = '<div><div>';
+        $html = '';
         $html .= '<div  class="entry-edit-head collapseable" ><a id="' . $element->getHtmlId()
             . '-head" href="#" onclick="Fieldset.toggleCollapse(\'' . $element->getHtmlId() . '\', \''
             . $this->getUrl('*/*/state') . '\'); return false;">' . $element->getLegend() . '</a></div>';
@@ -125,7 +125,7 @@ class Mage_Backend_Block_System_Config_Form_Fieldset
             }
         }
         $html .= '</fieldset>' . $this->_getExtraJs($element, $tooltipsExist);
-        $html .= '</div></div>';
+        $html .= '';
         return $html;
     }
 

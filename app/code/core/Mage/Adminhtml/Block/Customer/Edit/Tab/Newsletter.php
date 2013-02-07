@@ -47,7 +47,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Newsletter extends Mage_Adminhtml_B
 
         $fieldset->addField('subscription', 'checkbox',
              array(
-                    'label' => Mage::helper('Mage_Customer_Helper_Data')->__('Subscribed to Newsletter?'),
+                    'label' => Mage::helper('Mage_Customer_Helper_Data')->__('Subscribed to Newsletter'),
                     'name'  => 'subscription'
              )
         );

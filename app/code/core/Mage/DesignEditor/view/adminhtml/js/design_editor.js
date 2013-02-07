@@ -204,9 +204,11 @@
             $(window).on('resize', $.proxy(this._resizeFrame, this));
         },
         _resizeFrame: function() {
-            var height = $(window).innerHeight();
-            var offset = $(this.options.frameSelector).offset();
-            $(this.options.frameSelector).height(height - parseInt(offset.top) - 5);
+            if ($(this.options.frameSelector).length) {
+                var height = $(window).innerHeight();
+                var offset = $(this.options.frameSelector).offset();
+                $(this.options.frameSelector).height(height - parseInt(offset.top) - 5);
+            }
         },
         _initFrame: function() {
             this._resizeFrame();

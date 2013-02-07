@@ -367,8 +367,8 @@ class Mage_Checkout_Model_Cart_ApiTest extends PHPUnit_Framework_TestCase
      */
     public function testTotals()
     {
-        if (Magento_Test_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
-            $this->markTestIncomplete('Legacy API is expected to support MySQL only.');
+        if (Magento_Test_Helper_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
+            $this->markTestSkipped('Legacy API is expected to support MySQL only.');
         }
         /** @var Mage_Checkout_Model_Cart $quote */
         $quote = $this->_getQuoteFixture();

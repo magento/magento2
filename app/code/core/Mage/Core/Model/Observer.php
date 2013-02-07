@@ -123,22 +123,4 @@ class Mage_Core_Model_Observer
         }
         return $this;
     }
-
-    /**
-     * Add theme customization
-     *
-     * @param Varien_Event_Observer $observer
-     * @return Mage_Core_Model_Observer
-     */
-    public function addThemeCustomization(Varien_Event_Observer $observer)
-    {
-        /** @var $layout Mage_Core_Model_Layout */
-        $layout = $observer->getEvent()->getLayout();
-
-        /** @var $themeService Mage_Core_Model_Theme_Service */
-        $themeService = Mage::getObjectManager()->get('Mage_Core_Model_Theme_Service');
-        $themeService->addThemeCustomization($layout);
-
-        return $this;
-    }
 }

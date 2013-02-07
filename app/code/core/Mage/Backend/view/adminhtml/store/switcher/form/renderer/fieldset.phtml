@@ -26,38 +26,35 @@
 ?>
 <?php $_element = $this->getElement() ?>
 <?php if ($_element->getFieldsetContainerId()): ?>
-<div id="<?php echo $_element->getFieldsetContainerId(); ?>">
+    <div id="<?php echo $_element->getFieldsetContainerId(); ?>">789
 <?php endif; ?>
-<?php if ($_element->getLegend()): ?>
-<div class="entry-edit-head">
-    <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $_element->getLegend() ?></h4>
-    <div class="form-buttons"><?php echo $_element->getHeaderBar() ?></div>
-</div>
-<?php endif; ?>
+
 <?php if (!$_element->getNoContainer()): ?>
-    <div class="fieldset <?php echo $_element->getClass() ?>" id="<?php echo $_element->getHtmlId() ?>">
+    <fieldset class="fieldset <?php echo $_element->getClass() ?>" id="<?php echo $_element->getHtmlId() ?>">
 <?php endif; ?>
-<div class="store-scope">
-    <?php echo $this->getHintHtml() ?>
-    <div class="tree-store-scope">
-        <?php if ($_element->getComment()): ?>
+
+    <?php if ($_element->getLegend()): ?>
+        <legend class="legend">
+            <span><?php echo $_element->getLegend() ?></span>
+        </legend>
+        <?php echo $_element->getHeaderBar() ?>
+    <?php endif; ?>
+        <?php echo $this->getHintHtml() ?>
+        <div class="tree-store-scope">
+            <?php if ($_element->getComment()): ?>
             <p class="comment"><?php echo $this->escapeHtml($_element->getComment()) ?></p>
-        <?php endif; ?>
-        <?php if ($_element->hasHtmlContent()): ?>
-            <?php echo $_element->getHtmlContent(); ?>
-        <?php else: ?>
-        <table cellspacing="0" class="<?php echo $_element->hasTableClass() ? $_element->getTableClass() : 'form-list'?>">
-            <tbody>
+            <?php endif; ?>
+            <?php if ($_element->hasHtmlContent()): ?>
+               <?php echo $_element->getHtmlContent(); ?>
+            <?php else: ?>
                 <?php echo $_element->getChildrenHtml(); ?>
-            </tbody>
-        </table>
-        <?php endif; ?>
-    </div>
-</div>
-    <?php echo $_element->getSubFieldsetHtml() ?>
+            <?php endif; ?>
+        </div>
+<?php echo $_element->getSubFieldsetHtml() ?>
+
 <?php if (!$_element->getNoContainer()): ?>
-    </div>
+    </fieldset>
 <?php endif; ?>
 <?php if ($_element->getFieldsetContainerId()): ?>
-</div>
+    </div>
 <?php endif; ?>

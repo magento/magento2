@@ -28,7 +28,7 @@
     $.widget('vde.infinite_scroll', {
         _locked: false,
         _loader: '.theme-loader',
-        _container: '.theme-container',
+        _container: '#available-themes-container',
         _defaultElementSize: 400,
         _elementsInRow: 2,
         _pageSize: 4,

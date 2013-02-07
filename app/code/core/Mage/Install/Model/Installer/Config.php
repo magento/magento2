@@ -238,21 +238,18 @@ class Mage_Install_Model_Installer_Config extends Mage_Install_Model_Installer_A
         return null;
     }
 
-    public function replaceTmpInstallDate($date = null)
+    public function replaceTmpInstallDate($date = 'now')
     {
         $stamp    = strtotime((string) $date);
         $localXml = $this->_filesystem->read($this->_localConfigFile);
-        $localXml = str_replace(self::TMP_INSTALL_DATE_VALUE, date('r', $stamp ? $stamp : time()), $localXml);
+        $localXml = str_replace(self::TMP_INSTALL_DATE_VALUE, date('r', $stamp), $localXml);
         $this->_filesystem->write($this->_localConfigFile, $localXml);
 
         return $this;
     }
 
-    public function replaceTmpEncryptKey($key = null)
+    public function replaceTmpEncryptKey($key)
     {
-        if (!$key) {
-            $key = md5(Mage::helper('Mage_Core_Helper_Data')->getRandomString(10));
-        }
         $localXml = $this->_filesystem->read($this->_localConfigFile);
         $localXml = str_replace(self::TMP_ENCRYPT_KEY_VALUE, $key, $localXml);
         $this->_filesystem->write($this->_localConfigFile, $localXml);

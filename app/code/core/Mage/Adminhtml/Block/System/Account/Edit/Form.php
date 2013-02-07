@@ -83,7 +83,7 @@ class Mage_Adminhtml_Block_System_Account_Edit_Form extends Mage_Adminhtml_Block
         );
 
         $fieldset->addField('password', 'password', array(
-                'name'  => 'new_password',
+                'name'  => 'password',
                 'label' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('New Password'),
                 'title' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('New Password'),
                 'class' => 'input-text validate-admin-password',

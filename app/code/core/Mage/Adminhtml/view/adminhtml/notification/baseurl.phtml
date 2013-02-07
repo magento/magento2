@@ -29,7 +29,11 @@
 ?>
 <?php $_url = $this->getConfigUrl()?>
 <?php if ($_url): ?>
-<div class="notification-global notification-global-notice">
-    <?php echo $this->helper('Mage_Adminhtml_Helper_Data')->__('{{base_url}} is not recommended to use in a production environment to declare the Base Unsecure URL / Base Secure URL. It is highly recommended to change this value in your Magento <a href="%s">configuration</a>.', $_url)?>
+<div class="message message-system">
+    <div class="message-inner">
+        <div class="message-content">
+            <?php echo $this->helper('Mage_Adminhtml_Helper_Data')->__('{{base_url}} is not recommended to use in a production environment to declare the Base Unsecure URL / Base Secure URL. It is highly recommended to change this value in your Magento <a href="%s">configuration</a>.', $_url)?>
+        </div>
+    </div>
 </div>
 <?php endif; ?>

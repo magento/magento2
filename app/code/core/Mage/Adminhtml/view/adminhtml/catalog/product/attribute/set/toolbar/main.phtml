@@ -24,16 +24,5 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="content-header">
-    <table cellspacing="0">
-        <tr>
-            <td style="width:50%;"><h3 class="icon-head head-product-attribute-sets"><?php echo $this->_getHeader() ?></h3></td>
-            <td class="form-buttons">
-                <?php echo $this->getNewButtonHtml() ?>
-            </td>
-        </tr>
-    </table>
-</div>
-<div>
-    <?php echo $this->getChildHtml('grid') ?>
-</div>
+<div class="page-actions"><?php echo $this->getNewButtonHtml() ?></div>
+<?php echo $this->getChildHtml('grid') ?>

@@ -31,22 +31,24 @@
  * @method array getFiles()
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
-    extends Mage_Backend_Block_Widget_Form
-    implements Mage_Backend_Block_Widget_Tab_Interface
+    extends Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_TabAbstract
 {
-    /**
-     * @var Magento_ObjectManager
-     */
-    protected $_objectManager;
-
     /**
      * Uploader service
      *
      * @var Mage_Theme_Model_Uploader_Service
      */
     protected $_uploaderService;
+
+    /**
+     * Theme custom css file
+     *
+     * @var Mage_Core_Model_Theme_Files
+     */
+    protected $_customCssFile;
 
     /**
      * @param Mage_Core_Controller_Request_Http $request
@@ -65,6 +67,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
      * @param Magento_Filesystem $filesystem
      * @param Magento_ObjectManager $objectManager
      * @param Mage_Theme_Model_Uploader_Service $uploaderService
+     * @param Magento_Filesystem $filesystem
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -89,9 +92,8 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
         array $data = array()
     ) {
         parent::__construct($request, $layout, $eventManager, $urlBuilder, $translator, $cache, $designPackage,
-            $session, $storeConfig, $frontController, $helperFactory, $dirs, $logger, $filesystem, $data
+            $session, $storeConfig, $frontController, $helperFactory, $dirs, $logger, $filesystem, $objectManager, $data
         );
-        $this->_objectManager = $objectManager;
         $this->_uploaderService = $uploaderService;
     }
 
@@ -105,9 +107,14 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
         $form = new Varien_Data_Form();
         $this->setForm($form);
         $this->_addThemeCssFieldset();
+
+        $this->_customCssFile = $this->_getCurrentTheme()
+            ->getCustomizationData(Mage_Core_Model_Theme_Customization_Files_Css::TYPE)->getFirstItem();
+
         $this->_addCustomCssFieldset();
 
-        $formData['custom_css_content'] = $this->_getCurrentTheme()->getCustomCssFile()->getContent();
+        $formData['custom_css_content'] = $this->_customCssFile->getContent();
+
         /** @var $session Mage_Backend_Model_Session */
         $session = $this->_objectManager->get('Mage_Backend_Model_Session');
         $cssFileContent = $session->getThemeCustomCssData();
@@ -116,6 +123,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
             $session->unsThemeCustomCssData();
         }
         $form->addValues($formData);
+        parent::_prepareForm();
         return $this;
     }
 
@@ -153,13 +161,15 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
      */
     protected function _getThemeCss($fileTitle, $filePath)
     {
+        $appPath = $this->_dirs->getDir(Mage_Core_Model_Dir::APP);
+        $shownFilePath = str_ireplace($appPath, '', $filePath);
         return array(
             'href'      => $this->getUrl('*/*/downloadCss', array(
                 'theme_id' => $this->_getCurrentTheme()->getId(),
                 'file'     => $this->_helperFactory->get('Mage_Theme_Helper_Data')->urlEncode($fileTitle))
             ),
             'label'     => $fileTitle,
-            'title'     => $filePath,
+            'title'     => $shownFilePath,
             'delimiter' => '<br />'
         );
     }
@@ -176,19 +186,79 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
             'legend' => $this->__('Custom CSS'),
             'class'  => 'fieldset-wide'
         ));
+        $this->_addElementTypes($themeFieldset);
 
-        $themeFieldset->addField('css_file_uploader', 'file', array(
+        $themeFieldset->addField('css_file_uploader', 'css_file', array(
             'name'     => 'css_file_uploader',
             'label'    => $this->__('Select CSS File to Upload'),
             'title'    => $this->__('Select CSS File to Upload'),
-            'note'     => $this->__('Allowed file types *.css.')
-                . ' ' . $this->__('The file you upload will replace the existing custom.css file (shown below).')
+            'accept'   => 'text/css',
+            'note'     => $this->_getUploadCssFileNote()
         ));
 
         $themeFieldset->addField('css_uploader_button', 'button', array(
             'name'     => 'css_uploader_button',
             'value'    => $this->__('Upload CSS File'),
             'disabled' => 'disabled',
+        ));
+
+        $downloadButtonConfig = array(
+            'name'  => 'css_download_button',
+            'value' => $this->__('Download CSS File'),
+            'onclick' => "setLocation('" . $this->getUrl('*/*/downloadCustomCss', array(
+                'theme_id' => $this->_getCurrentTheme()->getId())) . "');"
+        );
+        if (!$this->_customCssFile->getContent()) {
+            $downloadButtonConfig['disabled'] = 'disabled';
+        }
+        $themeFieldset->addField('css_download_button', 'button', $downloadButtonConfig);
+
+        /** @var $imageButton Mage_Backend_Block_Widget_Button */
+        $imageButton = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
+            ->setData(array(
+            'id'        => 'css_images_manager',
+            'label'     => $this->__('Manage'),
+            'class'     => 'button',
+            'onclick'   => "MediabrowserUtility.openDialog('"
+                . $this->getUrl('*/system_design_wysiwyg_files/index', array(
+                    'target_element_id'                           => 'custom_css_content',
+                    Mage_Theme_Helper_Storage::PARAM_THEME_ID     => $this->_getCurrentTheme()->getId(),
+                    Mage_Theme_Helper_Storage::PARAM_CONTENT_TYPE => Mage_Theme_Model_Wysiwyg_Storage::TYPE_IMAGE
+                ))
+                . "', null, null,'"
+                . $this->quoteEscape(
+                    $this->__('Upload Images...'), true
+                )
+                . "');"
+        ));
+
+        $themeFieldset->addField('css_browse_image_button', 'note', array(
+            'label' => $this->__("Images Assets"),
+            'text'  => $imageButton->toHtml()
+        ));
+
+        /** @var $fontButton Mage_Backend_Block_Widget_Button */
+        $fontButton = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
+            ->setData(array(
+            'id'        => 'css_fonts_manager',
+            'label'     => $this->__('Manage'),
+            'class'     => 'button',
+            'onclick'   => "MediabrowserUtility.openDialog('"
+                . $this->getUrl('*/system_design_wysiwyg_files/index', array(
+                    'target_element_id'                           => 'custom_css_content',
+                    Mage_Theme_Helper_Storage::PARAM_THEME_ID     => $this->_getCurrentTheme()->getId(),
+                    Mage_Theme_Helper_Storage::PARAM_CONTENT_TYPE => Mage_Theme_Model_Wysiwyg_Storage::TYPE_FONT
+                ))
+                . "', null, null,'"
+                . $this->quoteEscape(
+                    $this->__('Upload fonts...'), true
+                )
+                . "');",
+        ));
+
+        $themeFieldset->addField('css_browse_font_button', 'note', array(
+            'label' => $this->__("Fonts Assets"),
+            'text'  => $fontButton->toHtml()
         ));
 
         $themeFieldset->addField('custom_css_content', 'textarea', array(
@@ -201,13 +271,24 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
     }
 
     /**
-     * Get current theme
+     * Get note string for css file to Upload
      *
-     * @return Mage_Core_Model_Theme
+     * @return string
      */
-    protected function _getCurrentTheme()
+    protected function _getUploadCssFileNote()
     {
-        return Mage::registry('current_theme');
+        $messages = array(
+            $this->__('Allowed file types *.css.'),
+            $this->__('The file you upload will replace the existing custom.css file (shown below).')
+        );
+        $maxFileSize = $this->_objectManager->get('Magento_File_Size')->getMaxFileSizeInMb();
+        if ($maxFileSize) {
+            $messages[] = $this->__('Max file size to upload %sM', $maxFileSize);
+        } else {
+            $messages[] = $this->__('System doesn\'t allow to get file upload settings');
+        }
+
+        return implode('<br />', $messages);
     }
 
     /**
@@ -217,9 +298,11 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
      */
     protected function _getAdditionalElementTypes()
     {
-        $element = Mage::getConfig()
+        $linksElement = $this->_objectManager->get('Mage_Core_Model_Config')
             ->getBlockClassName('Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Form_Element_Links');
-        return array('links' => $element);
+        $fileElement = $this->_objectManager->get('Mage_Core_Model_Config')
+            ->getBlockClassName('Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Form_Element_File');
+        return array('links' => $linksElement, 'css_file' => $fileElement);
     }
 
     /**
@@ -248,7 +331,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
         }
 
         if (count($themes) > 1) {
-            $this->_sortThemes($themes);
+            $themes = $this->_sortThemesByHierarchy($themes);
         }
 
         $order = array_merge(array($codeDir, $jsDir), array_map(function ($theme) {
@@ -259,7 +342,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
 
         $labels = $this->_getGroupLabels($themes);
         foreach ($groups as $key => $group) {
-            usort($group, array($this, '_sortGroupFiles'));
+            usort($group, array($this, '_sortGroupFilesCallback'));
             $groups[$labels[$key]] = $group;
             unset($groups[$key]);
         }
@@ -269,20 +352,20 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
     /**
      * Sort files inside group
      *
-     * @param array $item1
-     * @param array $item2
+     * @param array $firstGroup
+     * @param array $secondGroup
      * @return int
      */
-    protected function _sortGroupFiles ($item1, $item2)
+    protected function _sortGroupFilesCallback($firstGroup, $secondGroup)
     {
-        $hasModuleContext = strpos($item1['label'], '::') !== false;
-        $hasModuleContext2 = strpos($item2['label'], '::') !== false;
+        $hasContextFirst = strpos($firstGroup['label'], '::') !== false;
+        $hasContextSecond = strpos($secondGroup['label'], '::') !== false;
 
-        if ($hasModuleContext && $hasModuleContext2) {
-            $result = strcmp($item1['label'], $item2['label']);
-        } elseif (!$hasModuleContext && !$hasModuleContext2) {
-            $result = strcmp($item1['label'], $item2['label']);
-        } elseif ($hasModuleContext) {
+        if ($hasContextFirst && $hasContextSecond) {
+            $result = strcmp($firstGroup['label'], $secondGroup['label']);
+        } elseif (!$hasContextFirst && !$hasContextSecond) {
+            $result = strcmp($firstGroup['label'], $secondGroup['label']);
+        } elseif ($hasContextFirst) {
             //case when first item has module context and second item doesn't
             $result = 1;
         } else {
@@ -297,6 +380,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
      *
      * @param string $filename
      * @return array
+     * @throws Mage_Core_Exception
      */
     protected function _getGroup($filename)
     {
@@ -307,7 +391,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
         $group = null;
         $theme = null;
         if (substr($filename, 0, strlen($designDir)) == $designDir) {
-            $theme = $this->_getThemeByFilename($filename);
+            $theme = $this->_getThemeByFilename(substr($filename, strlen($designDir)));
             $group = $theme->getThemeId();
         } elseif (substr($filename, 0, strlen($jsDir)) == $jsDir) {
             $group = $jsDir;
@@ -324,37 +408,52 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
      * Sort themes according to their hierarchy
      *
      * @param array $themes
-     * @return Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
+     * @return array
      */
-    protected function _sortThemes(&$themes)
+    protected function _sortThemesByHierarchy($themes)
     {
-        uasort($themes, function($theme, $theme2) {
-            /** @var $theme Mage_Core_Model_Theme */
-            /** @var $theme2 Mage_Core_Model_Theme */
-            while ($parentTheme = $theme->getParentTheme()) {
-                if ($parentTheme->getId() == $theme2->getId()) {
-                    return -1;
-                }
-            }
-            return 1;
-        });
-
-        return $this;
+        uasort($themes, array($this, '_sortThemesByHierarchyCallback'));
+        return $themes;
     }
 
     /**
-     * Get theme object that contains gien file
+     * Sort themes by hierarchy callback
+     *
+     * @param Mage_Core_Model_Theme $firstTheme
+     * @param Mage_Core_Model_Theme $secondTheme
+     * @return int
+     */
+    protected function _sortThemesByHierarchyCallback($firstTheme, $secondTheme)
+    {
+        $parentTheme = $firstTheme->getParentTheme();
+        while ($parentTheme) {
+            if ($parentTheme->getId() == $secondTheme->getId()) {
+                return -1;
+            }
+            $parentTheme = $parentTheme->getParentTheme();
+        }
+        return 1;
+    }
+
+    /**
+     * Get theme object that contains given file
      *
      * @param string $filename
      * @return Mage_Core_Model_Theme
+     * @throws InvalidArgumentException
      */
     protected function _getThemeByFilename($filename)
     {
-        $designDir = $this->_dirs->getDir(Mage_Core_Model_Dir::THEMES);
-        list(, $area, $package, $theme,) = explode('/', substr($filename, strlen($designDir)), 5);
+        $area = strtok($filename, DIRECTORY_SEPARATOR);
+        $package = strtok(DIRECTORY_SEPARATOR);
+        $theme = strtok(DIRECTORY_SEPARATOR);
+
+        if ($area === false || $package === false || $theme === false) {
+            throw new InvalidArgumentException('Theme path does not recognized');
+        }
         /** @var $collection Mage_Core_Model_Resource_Theme_Collection */
-        $collection = Mage::getModel('Mage_Core_Model_Resource_Theme_Collection');
-        return $collection->getThemeByFullPath(join('/', array($area, $package, $theme)));
+        $collection = $this->_objectManager->create('Mage_Core_Model_Resource_Theme_Collection');
+        return $collection->getThemeByFullPath($area . '/' . $package . '/' . $theme);
     }
 
     /**
@@ -366,14 +465,13 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
     protected function _getGroupLabels($themes)
     {
         $labels = array(
-            $this->_dirs->getDir(Mage_Core_Model_Dir::PUB_LIB)   => $this->__('Library files'),
-            $this->_dirs->getDir(Mage_Core_Model_Dir::MODULES)   => $this->__('Framework files')
+            $this->_dirs->getDir(Mage_Core_Model_Dir::PUB_LIB) => $this->__('Library files'),
+            $this->_dirs->getDir(Mage_Core_Model_Dir::MODULES) => $this->__('Framework files')
         );
         foreach ($themes as $theme) {
             /** @var $theme Mage_Core_Model_Theme */
             $labels[$theme->getThemeId()] = $this->__('"%s" Theme files', $theme->getThemeTitle());
         }
-
         return $labels;
     }
 
@@ -416,35 +514,5 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
     public function getTabLabel()
     {
         return $this->__('CSS Editor');
-    }
-
-    /**
-     * Return Tab title
-     *
-     * @return string
-     */
-    public function getTabTitle()
-    {
-        return $this->getTabLabel();
-    }
-
-    /**
-     * Can show tab in tabs
-     *
-     * @return boolean
-     */
-    public function canShowTab()
-    {
-        return $this->_getCurrentTheme()->isVirtual() && $this->_getCurrentTheme()->getId();
-    }
-
-    /**
-     * Tab is hidden
-     *
-     * @return boolean
-     */
-    public function isHidden()
-    {
-        return false;
     }
 }

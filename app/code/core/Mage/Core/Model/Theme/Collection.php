@@ -143,7 +143,6 @@ class Mage_Core_Model_Theme_Collection extends Varien_Data_Collection
     /**
      * Return target dir for themes with theme configuration file
      *
-     *
      * @throws Magento_Exception
      * @return array|string
      */

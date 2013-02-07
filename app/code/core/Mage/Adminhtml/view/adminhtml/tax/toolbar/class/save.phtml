@@ -24,19 +24,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="content-header">
-    <table cellspacing="0">
-        <tr>
-            <td style="width:50%;"><h3><?php echo $header ?></h3></td>
-            <td class="form-buttons">
-                <?php echo $this->getBackButtonHtml() ?>
-                <?php echo $this->getResetButtonHtml() ?>
-                <?php echo $this->getSaveButtonHtml() ?>
-            </td>
-        </tr>
-    </table>
+<div class="page-actions">
+    <?php echo $this->getBackButtonHtml() ?>
+    <?php echo $this->getResetButtonHtml() ?>
+    <?php echo $this->getSaveButtonHtml() ?>
 </div>
-<?php if( $form ): ?>
+<?php if ($form): ?>
 <?php echo $form->toHtml(); ?>
 <script type="text/javascript">
     jQuery('#<?php echo $form->getForm()->getId() ?>').mage('form').mage('validation');

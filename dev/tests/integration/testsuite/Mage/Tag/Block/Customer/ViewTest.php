@@ -59,16 +59,19 @@ class Mage_Tag_Block_Customer_ViewTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Mage/Catalog/_files/product_with_image.php
      */
     public function testImage()
     {
+        Mage::getDesign()->setArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->setDefaultDesignTheme();
+
         $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->load(1);
 
         $size = $this->_block->getImageSize();
         $this->assertGreaterThan(1, $size);
-        $this->assertContains('/'.$size, $this->_block->getImageUrl($product));
+        $this->assertContains('/' . $size, $this->_block->getImageUrl($product));
         $this->assertStringEndsWith('magento_image.jpg', $this->_block->getImageUrl($product));
     }
 }

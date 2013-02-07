@@ -112,22 +112,24 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_BaseImage extends Varien_
         $html = '<input id="' . $htmlId .'-upload" type="file" name="image" '
             . 'data-url="' . $uploadUrl . '" style="display:none" />'
             . '<input id="' . $htmlId . '" type="hidden" name="'. $this->getName() .'" />'
-            . '<div id="' . $htmlId  . '-container" data-main="' .  $this->getEscapedValue() . '" '
+            . '<div id="' . $htmlId  . '-container" class="images" data-main="' .  $this->getEscapedValue() . '" '
             . 'data-images="' . $this->_coreHelper->escapeHtml(
-                $this->_coreHelper->jsonEncode($gallery ? $gallery->toArray() : array())
-            ) . '">'
-            . '<span id="' . $htmlId . '-upload-placeholder"></span>'
+            $this->_coreHelper->jsonEncode($gallery ? $gallery->toArray() : array())
+        ) . '">'
+            . '<div class="image image-placeholder" id="' . $htmlId . '-upload-placeholder"><p class="image-placeholder-text">' . $this->helper('Mage_Catalog_Helper_Data')->__('Click here or drag and drop to add images') . '</p></div>'
             . '<script id="' . $htmlId . '-template" type="text/x-jquery-tmpl">'
-                . '<span class="container">'
-                . '<span class="main-sticker">' . $this->helper('Mage_Catalog_Helper_Data')->__('Main') . '</span>'
-                    . '<span class="close">&times;</span>'
-                    . '<img class="base-image-uploader" src="${url}" data-position="${position}" alt="${label}" />'
-                    . '<div class="drag-zone">'
-                        . '<button class="make-main" type="button">'
-                            . $this->helper('Mage_Catalog_Helper_Data')->__('Make Main')
-                        . '</button>'
-                    . '</div>'
-                . '</span>'
+            . '<div class="image" data-image-label="' . $this->helper('Mage_Catalog_Helper_Data')->__('Main') . '">'
+                . '<img class="base-image-uploader" src="${url}" data-position="${position}" alt="${label}" />'
+                . '<div class="actions">'
+                    . '<button class="action-delete" title="' . $this->helper('Mage_Catalog_Helper_Data')->__('Delete image') . '">'
+                        . '<span>' . $this->helper('Mage_Catalog_Helper_Data')->__('Delete image') . '</span>'
+                    . '</button>'
+                    . '<button class="action-make-main" title="' . $this->helper('Mage_Catalog_Helper_Data')->__('Make Main') . '">'
+                        . '<span>' . $this->helper('Mage_Catalog_Helper_Data')->__('Make Main') . '</span>'
+                    . '</button>'
+                    . '<div class="draggable-handle"></div>'
+                . '</div>'
+            . '</div>'
             . '</script>'
             . '</div>';
         $html .= $this->_getJs();

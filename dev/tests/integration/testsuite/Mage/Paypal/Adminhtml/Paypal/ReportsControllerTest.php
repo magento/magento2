@@ -35,13 +35,8 @@ class Mage_Paypal_Adminhtml_Paypal_ReportsControllerTest extends Mage_Backend_Ut
     public function testFetchAction()
     {
         $this->dispatch('backend/admin/paypal_reports/fetch');
-        /** @var $session Mage_Backend_Model_Session */
-        $session = Mage::getSingleton('Mage_Backend_Model_Session');
-        $this->assertEquals(1, $session->getMessages()->count());
-        /** @var $message Mage_Core_Model_Message_Error */
-        foreach ($session->getMessages() as $message) {
-            $this->assertInstanceOf('Mage_Core_Model_Message_Error', $message);
-            $this->assertContains('login@127.0.0.1', $message->getText());
-        }
+        $this->assertSessionMessages(
+            $this->equalTo(array("Failed to fetch reports from 'login@127.0.0.1'.")), Mage_Core_Model_Message::ERROR
+        );
     }
 }

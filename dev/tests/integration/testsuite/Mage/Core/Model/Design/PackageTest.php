@@ -72,7 +72,7 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
      */
     protected function _emulateFixtureTheme($themePath = 'test/default')
     {
-        Magento_Test_Bootstrap::getInstance()->reinitialize(array(
+        Magento_Test_Helper_Bootstrap::getInstance()->reinitialize(array(
             Mage_Core_Model_App::INIT_OPTION_DIRS => array(
                 Mage_Core_Model_Dir::THEMES => realpath(__DIR__ . '/../_files/design'),
             ),
@@ -185,7 +185,7 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
     {
         $this->_emulateFixtureTheme();
         $expected = array(
-            'http://localhost/pub/media/theme/frontend/test/default/en_US/css/styles.css',
+            'http://localhost/pub/media/theme/static/frontend/test/default/en_US/css/styles.css',
             'http://localhost/pub/lib/mage/translate-inline.css',
         );
         $params = array(
@@ -213,11 +213,11 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 array('css/styles.css', 'mage/calendar.css'),
-                array('http://localhost/pub/media/theme/_merged/dce6f2a22049cd09bbfbe344fc73b037.css')
+                array('http://localhost/pub/media/theme/static/_merged/dce6f2a22049cd09bbfbe344fc73b037.css')
             ),
             array(
                 array('css/styles.css'),
-                array('http://localhost/pub/media/theme/frontend/test/default/en_US/css/styles.css',)
+                array('http://localhost/pub/media/theme/static/frontend/test/default/en_US/css/styles.css',)
             ),
         );
     }
@@ -229,7 +229,7 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
     {
         $this->_emulateFixtureTheme();
         $expected = array(
-            'http://localhost/pub/media/theme/frontend/test/default/en_US/js/tabs.js',
+            'http://localhost/pub/media/theme/static/frontend/test/default/en_US/js/tabs.js',
             'http://localhost/pub/lib/jquery/jquery-ui-timepicker-addon.js',
             'http://localhost/pub/lib/mage/calendar.js',
         );
@@ -259,7 +259,7 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 array('js/tabs.js', 'mage/calendar.js', 'jquery/jquery-ui-timepicker-addon.js'),
-                array('http://localhost/pub/media/theme/_merged/51cf03344697f37c2511aa0ad3391d56.js',)
+                array('http://localhost/pub/media/theme/static/_merged/51cf03344697f37c2511aa0ad3391d56.js',)
             ),
             array(
                 array('mage/calendar.js'),
@@ -328,7 +328,7 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
             array(
                 false,
                 'Mage_Page::favicon.ico',
-                'http://localhost/pub/media/theme/frontend/test/default/en_US/Mage_Page/favicon.ico',
+                'http://localhost/pub/media/theme/static/frontend/test/default/en_US/Mage_Page/favicon.ico',
             ),
             array(
                 true,
@@ -343,22 +343,22 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
             array(
                 true,
                 'Mage_Page::menu.js',
-                'http://localhost/pub/media/theme/frontend/test/default/en_US/Mage_Page/menu.js'
+                'http://localhost/pub/media/theme/static/frontend/test/default/en_US/Mage_Page/menu.js'
             ),
             array(
                 false,
                 'Mage_Page::menu.js',
-                'http://localhost/pub/media/theme/frontend/test/default/en_US/Mage_Page/menu.js'
+                'http://localhost/pub/media/theme/static/frontend/test/default/en_US/Mage_Page/menu.js'
             ),
             array(
                 false,
                 'Mage_Catalog::widgets.css',
-                'http://localhost/pub/media/theme/frontend/test/default/en_US/Mage_Catalog/widgets.css'
+                'http://localhost/pub/media/theme/static/frontend/test/default/en_US/Mage_Catalog/widgets.css'
             ),
             array(
                 true,
                 'Mage_Catalog::widgets.css',
-                'http://localhost/pub/media/theme/frontend/test/default/en_US/Mage_Catalog/widgets.css'
+                'http://localhost/pub/media/theme/static/frontend/test/default/en_US/Mage_Catalog/widgets.css'
             ),
         );
     }

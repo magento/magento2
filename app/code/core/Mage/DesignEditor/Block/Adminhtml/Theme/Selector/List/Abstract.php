@@ -172,7 +172,7 @@ abstract class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
         $previewButton = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button');
         $previewButton->setData(array(
             'label'     => $this->__('Preview Theme'),
-            'class'     => 'preview-default',
+            'class'     => 'action-theme-preview',
             'data_attribute' => array(
                 'mage-init' => array(
                     'button' => array(
@@ -202,7 +202,7 @@ abstract class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
         $editButton = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button');
         $editButton->setData(array(
             'label'     => $this->__('Edit Theme'),
-            'class'     => 'add edit-theme',
+            'class'     => 'add action-edit',
             'data_attribute' => array(
                 'mage-init' => array(
                     'button' => array(

@@ -51,13 +51,13 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
 
     public static function setUpBeforeClass()
     {
-        self::$_themePublicDir = Mage::getBaseDir(Mage_Core_Model_Dir::MEDIA) . '/theme';
+        self::$_themePublicDir = Mage::getDesign()->getPublicDir();
         self::$_viewPublicMergedDir = self::$_themePublicDir . '/_merged';
     }
 
     protected function setUp()
     {
-        Magento_Test_Bootstrap::getInstance()->reinitialize(array(
+        Magento_Test_Helper_Bootstrap::getInstance()->reinitialize(array(
             Mage_Core_Model_App::INIT_OPTION_DIRS => array(
                 Mage_Core_Model_Dir::THEMES => dirname(__DIR__) . '/_files/design'
             )
@@ -84,6 +84,7 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
             'css/exception.css',
             'css/file.css',
         ));
+        $this->assertFileNotExists(self::$_themePublicDir . '/frontend/package/default/en_US/access_violation.php');
     }
 
     /**

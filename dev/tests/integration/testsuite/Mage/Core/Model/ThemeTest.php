@@ -107,31 +107,6 @@ class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test get preview image
-     */
-    public function testGetPreviewImageUrl()
-    {
-        $themeModel = Mage::getObjectManager()->create('Mage_Core_Model_Theme');
-        $themeModel->setPreviewImage('preview_image.jpg');
-        $this->assertEquals('http://localhost/pub/media/theme/preview/preview_image.jpg',
-                            $themeModel->getPreviewImageUrl());
-    }
-
-    /**
-     * Test get preview image default
-     */
-    public function testGetPreviewImageDefaultUrl()
-    {
-        $defPreviewImageUrl = 'default_image_preview_url';
-        $themeModel = $this->getMock('Mage_Core_Model_Theme', array('_getPreviewImageDefaultUrl'), array(), '', false);
-        $themeModel->expects($this->once())
-            ->method('_getPreviewImageDefaultUrl')
-            ->will($this->returnValue($defPreviewImageUrl));
-
-        $this->assertEquals($defPreviewImageUrl, $themeModel->getPreviewImageUrl());
-    }
-
-    /**
      * Test is virtual
      *
      * @magentoAppIsolation enabled
@@ -145,11 +120,11 @@ class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($themeModel->isVirtual());
     }
 
-
     /**
      * Test id deletable
      *
      * @dataProvider isDeletableDataProvider
+     * @param bool $isVirtual
      */
     public function testIsDeletable($isVirtual)
     {
@@ -210,5 +185,113 @@ class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
 
         $labelsCollection = $themeModel->getLabelsCollection('-- Please Select --');
         $this->assertEquals(++$expectedItemsCount, count($labelsCollection));
+    }
+
+    /**
+     * Test theme on child relations
+     */
+    public function testChildRelation()
+    {
+        /** @var $theme Mage_Core_Model_Theme */
+        /** @var $currentTheme Mage_Core_Model_Theme */
+        $theme = Mage::getObjectManager()->get('Mage_Core_Model_Theme');
+        foreach ($theme->getCollection() as $currentTheme) {
+            $parentTheme = $currentTheme->getParentTheme();
+            if (!empty($parentTheme)) {
+                $this->assertTrue($parentTheme->hasChildThemes());
+            }
+        }
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @dataProvider getJsCustomizationProvider
+     * @param array $filesData
+     * @param array $expectedData
+     */
+    public function testJsCustomization($filesData, $expectedData)
+    {
+        /** @var $theme Mage_Core_Model_Theme */
+        /** @var $themeModel Mage_Core_Model_Theme */
+        $theme = Mage::getObjectManager()->create('Mage_Core_Model_Theme');
+        $themeModel = $theme->getCollection()->getFirstItem();
+
+        foreach ($filesData as $fileData) {
+            /** @var $filesModel Mage_Core_Model_Theme_Files */
+            $filesModel = Mage::getObjectManager()->create('Mage_Core_Model_Theme_Files');
+            $fileData['theme_id'] = $themeModel->getId();
+            $filesModel->setData($fileData)
+                ->save();
+        }
+
+        /** @var $filesJs Mage_Core_Model_Theme_Customization_Files_Js */
+        $filesJs = Mage::getObjectManager()->create('Mage_Core_Model_Theme_Customization_Files_Js');
+        $themeFilesCollection = $themeModel->setCustomization($filesJs)
+            ->getCustomizationData(Mage_Core_Model_Theme_Customization_Files_Js::TYPE);
+        $this->assertInstanceOf('Mage_Core_Model_Resource_Theme_Files_Collection', $themeFilesCollection);
+        $themeFiles = $themeFilesCollection->toArray();
+        foreach ($themeFiles['items'] as &$themeFile) {
+            $this->assertEquals($themeModel->getId(), $themeFile['theme_id']);
+            unset($themeFile['theme_id']);
+            unset($themeFile['theme_files_id']);
+        }
+        $this->assertEquals($expectedData, $themeFiles['items']);
+    }
+
+    /**
+     * @return array
+     */
+    public function getJsCustomizationProvider()
+    {
+        return array(
+            array(
+                'filesData' => array(
+                    array(
+                        'file_path'    => 'test_1.js',
+                        'file_type'    => Mage_Core_Model_Theme_Files::TYPE_JS,
+                        'content'      => 'content 1',
+                        'sort_order'   => '1'
+                    ),
+                    array(
+                        'file_path'    => 'test_2.js',
+                        'file_type'    => Mage_Core_Model_Theme_Files::TYPE_JS,
+                        'content'      => 'content 2',
+                        'sort_order'   => '3'
+                    ),
+                    array(
+                        'file_path'    => 'test_3.js',
+                        'file_type'    => Mage_Core_Model_Theme_Files::TYPE_JS,
+                        'content'      => 'content 3',
+                        'sort_order'   => '2'
+                    ),
+                    array(
+                        'file_path'    => 'test_not_js.js',
+                        'file_type'    => Mage_Core_Model_Theme_Files::TYPE_CSS,
+                        'content'      => 'content css',
+                        'sort_order'   => ''
+                    )
+                ),
+                'expectedData' => array(
+                    array(
+                        'file_path'    => 'test_1.js',
+                        'file_type'    => Mage_Core_Model_Theme_Files::TYPE_JS,
+                        'content'      => 'content 1',
+                        'sort_order'   => '1',
+                        'is_temporary' => '0'
+                    ),
+                    array(
+                        'file_path'    => 'test_3.js',
+                        'file_type'    => Mage_Core_Model_Theme_Files::TYPE_JS,
+                        'content'      => 'content 3',
+                        'sort_order'   => '2',
+                        'is_temporary' => '0'
+                    ),
+                    array(
+                        'file_path'    => 'test_2.js',
+                        'file_type'    => Mage_Core_Model_Theme_Files::TYPE_JS,
+                        'content'      => 'content 2',
+                        'sort_order'   => '3',
+                        'is_temporary' => '0'
+        ))));
     }
 }

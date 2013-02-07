@@ -24,23 +24,15 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="content-header">
-    <table cellspacing="0">
-        <tr>
-            <td><h3><?php echo $this->getHeaderText() ?></h3></td>
-            <td class="form-buttons">
-                <?php echo $this->getBackButtonHtml() ?>
-                <?php echo $this->getResetButtonHtml() ?>
-                <span style="display:none;" id="formButtons">
-                <?php echo $this->getSaveButtonHtml() ?>
-                </span>
-            </td>
-        </tr>
-    </table>
+<div class="page-actions">
+    <?php echo $this->getBackButtonHtml() ?>
+    <?php echo $this->getResetButtonHtml() ?>
+    <span class="hidden" id="formButtons">
+        <?php echo $this->getSaveButtonHtml() ?>
+    </span>
 </div>
-
-<div style="display:none;" id="formContainer">
-<?php echo $this->getFormHtml() ?>
+<div class="hidden" id="formContainer">
+    <?php echo $this->getFormHtml() ?>
 </div>
 <script type="text/javascript">
    jQuery('#edit_form').mage('form').mage('validation');

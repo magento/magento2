@@ -42,7 +42,13 @@ class Mage_User_Adminhtml_UserController extends Mage_Backend_Controller_ActionA
         $this->_title($this->__('System'))
              ->_title($this->__('Permissions'))
              ->_title($this->__('Users'));
-
+        /** @var $model Mage_User_Model_Resource_User */
+        $model = Mage::getObjectManager()->get('Mage_User_Model_Resource_User');
+        if (!$model->canCreateUser()) {
+            /** @var $session Mage_Adminhtml_Model_Session */
+            $session = Mage::getSingleton('Mage_Adminhtml_Model_Session');
+            $session->addNotice($model->getMessageUserCreationProhibited());
+        }
         $this->_initAction();
         $this->renderLayout();
     }
@@ -91,76 +97,51 @@ class Mage_User_Adminhtml_UserController extends Mage_Backend_Controller_ActionA
 
     public function saveAction()
     {
-        $userId = $this->getRequest()->getParam('user_id');
+        $userId = (int)$this->getRequest()->getParam('user_id');
         $data = $this->getRequest()->getPost();
         if (!$data) {
             $this->_redirect('*/*/');
-            return null;
-        }
-
-        $model = $this->_prepareUserForSave($userId, $data);
-
-        if (is_null($model)) {
             return;
         }
-
-        try {
-            $uRoles = $this->getRequest()->getParam('roles', array());
-            if (count($uRoles)) {
-                $model->setRoleId($uRoles[0]);
-            }
-            $model->save();
-            Mage::getSingleton('Mage_Backend_Model_Session')->addSuccess($this->__('The user has been saved.'));
-            Mage::getSingleton('Mage_Backend_Model_Session')->setUserData(false);
+        /** @var $model Mage_User_Model_User */
+        $model = $this->_objectManager->create('Mage_User_Model_User')->load($userId);
+        if ($userId && $model->isObjectNew()) {
+            $this->_getSession()->addError($this->__('This user no longer exists.'));
             $this->_redirect('*/*/');
             return;
-        } catch (Mage_Core_Exception $e) {
-            Mage::getSingleton('Mage_Backend_Model_Session')->addError($e->getMessage());
-            Mage::getSingleton('Mage_Backend_Model_Session')->setUserData($data);
-            $this->_redirect('*/*/edit', array('user_id' => $model->getUserId()));
-            return;
         }
-
-        $this->_redirect('*/*/');
+        $model->setData($this->_getAdminUserData($data));
+        $uRoles = $this->getRequest()->getParam('roles', array());
+        if (count($uRoles)) {
+            $model->setRoleId($uRoles[0]);
+        }
+        try {
+            $model->save();
+            $this->_getSession()->addSuccess($this->__('The user has been saved.'));
+            $this->_getSession()->setUserData(false);
+            $this->_redirect('*/*/');
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addMessages($e->getMessages());
+            $this->_getSession()->setUserData($data);
+            $this->_redirect('*/*/edit', array('_current' => true));
+        }
     }
 
     /**
-     * Retrieve user save params and validate them
+     * Retrieve well-formed admin user data from the form input
      *
-     * @param int $userId
      * @param array $data
-     * @return Mage_Core_Model_Abstract|null
+     * @return array
      */
-    protected function _prepareUserForSave($userId, array $data)
+    protected function _getAdminUserData(array $data)
     {
-        $model = Mage::getModel('Mage_User_Model_User')->load($userId);
-        if (!$model->getId() && $userId) {
-            Mage::getSingleton('Mage_Backend_Model_Session')->addError($this->__('This user no longer exists.'));
-            $this->_redirect('*/*/');
-            return null;
+        if (isset($data['password']) && $data['password'] === '') {
+            unset($data['password']);
         }
-        $model->setData($data);
-
-        /*
-         * Unsetting new password and password confirmation if they are blank
-         */
-        if ($model->hasNewPassword() && $model->getNewPassword() === '') {
-            $model->unsNewPassword();
+        if (isset($data['password_confirmation']) && $data['password_confirmation'] === '') {
+            unset($data['password_confirmation']);
         }
-        if ($model->hasPasswordConfirmation() && $model->getPasswordConfirmation() === '') {
-            $model->unsPasswordConfirmation();
-        }
-
-        $result = $model->validate();
-        if (is_array($result)) {
-            Mage::getSingleton('Mage_Backend_Model_Session')->setUserData($data);
-            foreach ($result as $message) {
-                Mage::getSingleton('Mage_Backend_Model_Session')->addError($message);
-            }
-            $this->_redirect('*/*/edit', array('_current' => true));
-            return null;
-        }
-        return $model;
+        return $data;
     }
 
     public function deleteAction()

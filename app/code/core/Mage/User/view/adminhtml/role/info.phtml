@@ -24,18 +24,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="content-header">
-    <table cellspacing="0">
-        <tr>
-            <td style="width:50%;"><h3 class="icon-head head-permissions-role"><?php echo ($this->getRoleId() > 0 ) ? ($this->__('Edit Role') . " '{$this->escapeHtml($this->getRoleInfo()->getRoleName())}'") : $this->__('Add New Role') ?></h3></td>
-            <td class="form-buttons">
-                <?php echo $this->getBackButtonHtml() ?>
-                <?php echo $this->getResetButtonHtml() ?>
-                <?php echo $this->getDeleteButtonHtml() ?>
-                <?php echo $this->getSaveButtonHtml() ?>
-            </td>
-        </tr>
-    </table>
+<div class="page-actions">
+    <?php echo $this->getBackButtonHtml() ?>
+    <?php echo $this->getResetButtonHtml() ?>
+    <?php echo $this->getDeleteButtonHtml() ?>
+    <?php echo $this->getSaveButtonHtml() ?>
 </div>
 <form action="<?php echo $this->getUrl('*/*/saverole') ?>" method="post" id="role-edit-form">
     <?php echo $this->getBlockHtml('formkey')?>

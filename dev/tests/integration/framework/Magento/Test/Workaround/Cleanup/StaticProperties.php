@@ -48,7 +48,7 @@ class Magento_Test_Workaround_Cleanup_StaticProperties
      */
     protected static $_classesToSkip = array(
         'Mage',
-        'Magento_Test_Bootstrap',
+        'Magento_Test_Helper_Bootstrap',
         'Magento_Test_Event_Magento',
         'Magento_Test_Event_PhpUnit',
         'Magento_Test_Annotation_AppIsolation',

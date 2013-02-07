@@ -34,6 +34,8 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        Mage::getDesign()->setArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->setDefaultDesignTheme();
+
         $this->_model = $this->getMockForAbstractClass(
             'Mage_Core_Controller_Varien_Action',
             array(
@@ -156,6 +158,9 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function addActionLayoutHandlesDataProvider()
     {
         return array(
@@ -191,6 +196,9 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function addActionLayoutHandlesInheritedDataProvider()
     {
         return array(
@@ -307,6 +315,9 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function controllerAreaDesignDataProvider()
     {
         return array(
@@ -331,6 +342,9 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($caughtException, $message);
     }
 
+    /**
+     * @return array
+     */
     public function controllerAreaSetDataProvider()
     {
         return array(

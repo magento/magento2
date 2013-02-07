@@ -48,6 +48,6 @@ class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_Tabs extends Mage_Backend
      */
     protected function _toHtml()
     {
-        return parent::_toHtml() . '<div id="' . $this->getDestElementId() . '"><div>';
+        return parent::_toHtml() . '<div id="' . $this->getDestElementId() . '" class="theme-selector"><div>';
     }
 }

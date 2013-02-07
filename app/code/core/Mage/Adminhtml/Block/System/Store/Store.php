@@ -32,8 +32,13 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 
-class Mage_Adminhtml_Block_System_Store_Store extends Mage_Adminhtml_Block_Widget_Grid_Container
+class Mage_Adminhtml_Block_System_Store_Store extends Mage_Backend_Block_Widget_Grid_Container
 {
+    /**
+     * @var string
+     */
+    protected $_blockGroup = 'Mage_Adminhtml';
+
     protected function _construct()
     {
         $this->_controller  = 'system_store';
@@ -55,11 +60,16 @@ class Mage_Adminhtml_Block_System_Store_Store extends Mage_Adminhtml_Block_Widge
         ));
 
         /* Add Store button */
-        $this->_addButton('add_store', array(
-            'label'     => Mage::helper('Mage_Core_Helper_Data')->__('Create Store View'),
-            'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/newStore') .'\')',
-            'class'     => 'add',
-        ));
+
+        /** @var $limitation Mage_Core_Model_Store_Limitation */
+        $limitation = Mage::getObjectManager()->get('Mage_Core_Model_Store_Limitation');
+        if ($limitation->canCreate()) {
+            $this->_addButton('add_store', array(
+                'label'     => Mage::helper('Mage_Core_Helper_Data')->__('Create Store View'),
+                'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/newStore') .'\')',
+                'class'     => 'add',
+            ));
+        }
 
         return parent::_prepareLayout();
     }

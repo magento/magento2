@@ -26,9 +26,13 @@
 ?>
 <?php $_processes = $this->getProcessesForReindex()?>
 <?php if($_processes):?>
-<div class="notification-global">
-    <strong><?php echo $this->helper('Mage_Index_Helper_Data')->__('One or more of the Indexes are not up to date:') ?></strong>
-    <?php echo implode(', ', $_processes)?>.
-    <?php echo $this->helper('Mage_Index_Helper_Data')->__('Click here to go to <a href="%s">Index Management</a> and rebuild required indexes.', $this->getManageUrl());?>
+<div class="message message-system">
+    <div class="message-inner">
+        <div class="message-content">
+            <strong><?php echo $this->helper('Mage_Index_Helper_Data')->__('One or more of the Indexes are not up to date:') ?></strong>
+            <?php echo implode(', ', $_processes)?>.
+            <?php echo $this->helper('Mage_Index_Helper_Data')->__('Click here to go to <a href="%s">Index Management</a> and rebuild required indexes.', $this->getManageUrl());?>
+        </div>
+    </div>
 </div>
 <?php endif;?>

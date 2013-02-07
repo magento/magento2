@@ -76,7 +76,7 @@ class Mage_Core_Model_Resource_Theme_Collection extends Mage_Core_Model_Resource
      */
     public function toOptionArray()
     {
-        return$this->_toOptionArray('theme_id', 'theme_title');
+        return $this->_toOptionArray('theme_id', 'theme_title');
     }
 
     /**
@@ -99,8 +99,11 @@ class Mage_Core_Model_Resource_Theme_Collection extends Mage_Core_Model_Resource
         /** @var $theme Mage_Core_Model_Theme */
         foreach ($this as $theme) {
             if ($theme->getParentId()) {
-                $theme->setParentId($this->_getParentThemeRecursively($theme->getParentId()));
-                $theme->save();
+                $newParentId = $this->_getParentThemeRecursively($theme->getParentId());
+                if ($newParentId != $theme->getParentId()) {
+                    $theme->setParentId($newParentId);
+                    $theme->save();
+                }
             }
         }
         return $this;
@@ -148,5 +151,23 @@ class Mage_Core_Model_Resource_Theme_Collection extends Mage_Core_Model_Resource
     public function setPageSize($size = self::DEFAULT_PAGE_SIZE)
     {
         return parent::setPageSize($size);
+    }
+
+    /**
+     * Update all child themes relations
+     *
+     * @param Mage_Core_Model_Theme $themeModel
+     * @return Mage_Core_Model_Resource_Theme_Collection
+     */
+    public function updateChildRelations(Mage_Core_Model_Theme $themeModel)
+    {
+        $parentThemeId = $themeModel->getParentId();
+        $this->addFieldToFilter('parent_id', array('eq' => $themeModel->getId()))->load();
+
+        /** @var $theme Mage_Core_Model_Theme */
+        foreach ($this->getItems() as $theme) {
+            $theme->setParentId($parentThemeId)->save();
+        }
+        return $this;
     }
 }

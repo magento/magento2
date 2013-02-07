@@ -38,6 +38,9 @@
             <css>
                 <upload_limit>2M</upload_limit>
             </css>
+            <js>
+                <upload_limit>2M</upload_limit>
+            </js>
         </theme>
     </global>
     <admin>

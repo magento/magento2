@@ -27,6 +27,10 @@
  * @see Mage_Adminhtml_Block_Notification_Baseurl
  */
 ?>
-<div class="notification-global notification-global-notice">
-    <?php echo $this->helper('Mage_Adminhtml_Helper_Data')->__('Your web server is configured incorrectly. As a result, configuration files with sensitive information are accessible from the outside. Please contact your hosting provider.')?>
+<div class="message message-system">
+    <div class="message-inner">
+        <div class="message-content">
+            <?php echo $this->helper('Mage_Adminhtml_Helper_Data')->__('Your web server is configured incorrectly. As a result, configuration files with sensitive information are accessible from the outside. Please contact your hosting provider.')?>
+        </div>
+    </div>
 </div>

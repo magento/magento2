@@ -65,12 +65,8 @@ class Magento_Profiler_Driver_Standard_Output_Csvfile extends Magento_Profiler_D
     protected function _parseFilePath(array $config = null)
     {
         $result = isset($config['filePath']) ? $config['filePath'] : self::DEFAULT_FILEPATH;
-        $result = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $result);
-
         if (isset($config['baseDir'])) {
-            $result = rtrim($config['baseDir'], DIRECTORY_SEPARATOR)
-                . DIRECTORY_SEPARATOR
-                . ltrim($result, DIRECTORY_SEPARATOR);
+            $result = rtrim($config['baseDir'], '/') . '/' . ltrim($result, '/');
         }
         return $result;
     }

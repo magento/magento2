@@ -24,17 +24,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="content-header">
-<table cellspacing="0">
-    <tr>
-        <td style="width:50%;"><h3 class="icon-head head-backups-control"><?php echo Mage::helper('Mage_Backup_Helper_Data')->__('Backups') ?></h3></td>
-        <td class="form-buttons">
-            <?php echo $this->getCreateSnapshotButtonHtml(); ?>
-            <?php echo $this->getCreateMediaBackupButtonHtml(); ?>
-            <?php echo $this->getCreateButtonHtml(); ?>
-        </td>
-    </tr>
-</table>
+<div class="page-actions">
+    <?php echo $this->getCreateSnapshotButtonHtml(); ?>
+    <?php echo $this->getCreateMediaBackupButtonHtml(); ?>
+    <?php echo $this->getCreateButtonHtml(); ?>
 </div>
 <?php echo $this->getChildHtml('grid') ?>
 <?php echo $this->getGridHtml() ?>

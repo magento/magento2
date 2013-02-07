@@ -35,8 +35,8 @@
         var elem = $('<?php echo $this->getHtmlId() ?>');
 
         params = {
-            country: $('general_store_information_merchant_country').value,
-            vat: $('general_store_information_merchant_vat_number').value
+            country: $('<?php echo $this->getMerchantCountryField(); ?>').value,
+            vat: $('<?php echo $this->getMerchantVatNumberField(); ?>').value
         };
 
         new Ajax.Request('<?php echo $this->getAjaxUrl() ?>', {
@@ -60,6 +60,8 @@
     }
 //]]>
 </script>
-<button onclick="javascript:validateVat(); return false;" class="scalable" type="button" id="<?php echo $this->getHtmlId() ?>">
-    <span id="validation_result"><?php echo $this->escapeHtml($this->getButtonLabel()) ?></span>
-</button>
+<div class="actions actions-validate-vat">
+    <button onclick="javascript:validateVat(); return false;" class="scalable" type="button" id="<?php echo $this->getHtmlId() ?>">
+        <span id="validation_result"><?php echo $this->escapeHtml($this->getButtonLabel()) ?></span>
+    </button>
+</div>

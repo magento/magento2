@@ -27,9 +27,8 @@
 /**
  * Backend form widget
  *
- * @category    Mage
- * @package     Mage_Backend
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.numberOfChildren)
  */
 class Mage_Backend_Block_Widget_Form extends Mage_Backend_Block_Widget
 {

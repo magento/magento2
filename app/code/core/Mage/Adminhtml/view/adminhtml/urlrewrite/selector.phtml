@@ -30,21 +30,18 @@
  * @see Mage_Adminhtml_Block_Urlrewrite_Selector
  */
 ?>
-<div class="entry-edit">
-<div class="fieldset">
-
-<table cellspacing="0" class="form-list">
-    <tr>
-        <td class="label"><?php echo $this->getSelectorLabel() ?></td>
-        <td class="value">
-            <?php $url = Mage::helper('Mage_Adminhtml_Helper_Data')->getUrl('*/*/*')?>
-            <select class="select" onchange="window.location = this.value;">
-            <?php foreach ($this->getModes() as $mode => $label): ?>
-                <option <?php echo ($this->isMode($mode) ? 'selected="selected" ' :'' ) ?>value="<?php echo $url . $mode ?>"><?php echo $label ?></option>
-            <?php endforeach; ?>
-            </select>
-        </td>
-    </tr>
-</table>
-</div>
+<div class="form-inline">
+    <fieldset class="fieldset">
+        <div class="field">
+            <label for="url-rewrite-option-select" class="label"><?php echo $this->getSelectorLabel() ?></label>
+            <div class="control">
+                <?php $url = Mage::helper('Mage_Adminhtml_Helper_Data')->getUrl('*/*/*')?>
+                <select id="url-rewrite-option-select" class="select" onchange="window.location = this.value;">
+                <?php foreach ($this->getModes() as $mode => $label): ?>
+                    <option <?php echo ($this->isMode($mode) ? 'selected="selected" ' :'' ) ?>value="<?php echo $url . $mode ?>"><?php echo $label ?></option>
+                <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+    </fieldset>
 </div>

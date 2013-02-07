@@ -32,25 +32,24 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Adminhtml_Block_Customer_Edit_Renderer_Newpass
-    extends Mage_Core_Block_Template
+    extends Mage_Backend_Block_Abstract
     implements Varien_Data_Form_Element_Renderer_Interface
 {
 
     public function render(Varien_Data_Form_Element_Abstract $element)
     {
-        $html = '<tr>';
-        $html.= '<td class="label">'.$element->getLabelHtml().'</td>';
-        $html.= '<td class="value">'.$element->getElementHtml().'</td>';
-        $html.= '</tr>'."\n";
-        $html.= '<tr>';
-        $html.= '<td class="label"><label>&nbsp;</label></td>';
-        $html.= '<td class="value">'.Mage::helper('Mage_Customer_Helper_Data')->__('or').'</td>';
-        $html.= '</tr>'."\n";
-        $html.= '<tr>';
-        $html.= '<td class="label"><label>&nbsp;</label></td>';
-        $html.= '<td class="value"><input type="checkbox" id="account-send-pass" name="'.$element->getName().'" value="auto" onclick="setElementDisable(\''.$element->getHtmlId().'\', this.checked)"/>&nbsp;';
-        $html.= '<label for="account-send-pass">'.Mage::helper('Mage_Customer_Helper_Data')->__('Send auto-generated password').'</label></td>';
-        $html.= '</tr>'."\n";
+        $html = '<div class="field field-'.$element->getHtmlId().'">';
+        $html.= $element->getLabelHtml();
+        $html.= '<div class="control">'.$element->getElementHtml();
+        $html.= '<div class="nested">';
+        $html.= '<div class="field choice">';
+        $html.= '<label for="account-send-pass" class="addbefore"><span>'.Mage::helper('Mage_Customer_Helper_Data')->__('or ').'</span></label>';
+        $html.= '<input type="checkbox" id="account-send-pass" name="'.$element->getName().'" value="auto" onclick="setElementDisable(\''.$element->getHtmlId().'\', this.checked)" />';
+        $html.= '<label class="label" for="account-send-pass"><span>'.Mage::helper('Mage_Customer_Helper_Data')->__(' Send auto-generated password').'</span></label>';
+        $html.= '</div>'."\n";
+        $html.= '</div>'."\n";
+        $html.= '</div>'."\n";
+        $html.= '</div>'."\n";
 
         return $html;
     }

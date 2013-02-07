@@ -29,6 +29,7 @@
  * Test class for Mage_Catalog_Block_Product_New.
  *
  * @magentoDataFixture Mage/Catalog/_files/products_new.php
+ * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
  */
 class Mage_Catalog_Block_Product_NewTest extends PHPUnit_Framework_TestCase
 {
@@ -61,7 +62,15 @@ class Mage_Catalog_Block_Product_NewTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Mage::app()->getStore()->getId(), $info[1]);
 
         $this->assertSame(2, array_shift($keys));
-        $this->assertEquals(Mage_Core_Model_Theme::CACHE_TAG_NO_THEME, $info[2]);
+
+        $themeModel = Mage::getDesign()->getDesignTheme();
+        if (!$themeModel->getId()) {
+            $themeCacheKey = Mage_Core_Model_Theme::CACHE_TAG_NO_THEME . $themeModel->getThemePath();
+        } else {
+            $themeCacheKey = $themeModel->getId() . $themeModel->getThemePath();
+        }
+
+        $this->assertEquals($themeCacheKey, $info[2]);
 
         $this->assertSame(3, array_shift($keys));
         $this->assertEquals(Mage::getSingleton('Mage_Customer_Model_Session')->getCustomerGroupId(), $info[3]);

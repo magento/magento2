@@ -28,8 +28,7 @@
  * Theme selector tab for available themes
  */
 class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_Tab_Available
-    extends Mage_Backend_Block_Template
-    implements Mage_Backend_Block_Widget_Tab_Interface
+    extends Mage_DesignEditor_Block_Adminhtml_Theme_Selector_Tab_TabAbstract
 {
     /**
      * Return tab content, available theme list
@@ -50,35 +49,5 @@ class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_Tab_Available
     public function getTabTitle()
     {
         return $this->__('Available Themes');
-    }
-
-    /**
-     * Return Tab label
-     *
-     * @return string
-     */
-    public function getTabLabel()
-    {
-        return $this->getTabTitle();
-    }
-
-    /**
-     * Can show tab in tabs
-     *
-     * @return boolean
-     */
-    public function canShowTab()
-    {
-        return true;
-    }
-
-    /**
-     * Tab is hidden
-     *
-     * @return boolean
-     */
-    public function isHidden()
-    {
-        return false;
     }
 }

@@ -24,10 +24,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<input
-    type="submit"
-    class="form-button"
-    value="<?php echo Mage::helper('Mage_Backend_Helper_Data')->__('Login')?>"
-    title="<?php echo Mage::helper('Mage_Backend_Helper_Data')->__('Login')?>"
-    <?php $this->getUiId(); ?>
-    />
+<div class="actions">
+    <button <?php $this->getUiId(); ?> class="action-login primary" title="<?php echo Mage::helper('Mage_Backend_Helper_Data')->__('Login')?>" type="submit">
+        <span><?php echo Mage::helper('Mage_Backend_Helper_Data')->__('Login')?></span>
+    </button>
+</div>

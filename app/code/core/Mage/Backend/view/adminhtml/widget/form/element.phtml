@@ -27,9 +27,8 @@
 <?php switch ($element->getType()){
     case 'fieldset': ?>
 
-    <h3><?php echo $element->getLegend() ?></h3>
     <fieldset>
-        <legend><?php echo $element->getLegend() ?></legend>
+        <legend><?php echo $element->getLegend() ?></legend><br />
         <?php foreach ($element->getElements() as $_element): ?>
             <?php echo $formBlock->drawElement($_element) ?>
         <?php endforeach; ?>

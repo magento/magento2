@@ -31,7 +31,7 @@
  * @package    Mage_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Backend_Block_Widget_Grid_Column_Filter_Abstract extends Mage_Core_Block_Template
+class Mage_Backend_Block_Widget_Grid_Column_Filter_Abstract extends Mage_Backend_Block_Abstract
     implements Mage_Backend_Block_Widget_Grid_Column_Filter_Interface
 {
 

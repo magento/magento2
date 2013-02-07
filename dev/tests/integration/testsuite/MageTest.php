@@ -88,7 +88,7 @@ class MageTest extends PHPUnit_Framework_TestCase
     public function testLogWrapper()
     {
         // @magentoConfigFixture is applied after initialization, so we need to do this again
-        Magento_Test_Bootstrap::getInstance()->reinitialize();
+        Magento_Test_Helper_Bootstrap::getInstance()->reinitialize();
         $this->expectOutputRegex('/test/');
         Mage::log('test');
     }
@@ -110,7 +110,7 @@ class MageTest extends PHPUnit_Framework_TestCase
     public function testLogUnsupportedWrapper()
     {
         // initialize again, because config fixture is applied after initialization
-        Magento_Test_Bootstrap::getInstance()->reinitialize();
+        Magento_Test_Helper_Bootstrap::getInstance()->reinitialize();
         $logEntry = microtime();
         Mage::log($logEntry);
         $logFile = Mage::getBaseDir('log') . '/system.log';
@@ -126,7 +126,7 @@ class MageTest extends PHPUnit_Framework_TestCase
     public function testLogException()
     {
         // reinitialization is needed here, too
-        Magento_Test_Bootstrap::getInstance()->reinitialize();
+        Magento_Test_Helper_Bootstrap::getInstance()->reinitialize();
         $msg = uniqid();
         $exception = new Exception((string)$msg);
         Mage::logException($exception);

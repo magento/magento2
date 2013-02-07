@@ -24,101 +24,132 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div id="answers_container">
-<?php if( !$answers ): ?>
-<?php else: ?>
-    <div class="entry-edit-head">
-    <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Assigned Answers') ?></h4>
-    </div>
-    <?php foreach($answers->getItems() as $_item): ?>
-        <div class="fieldset fieldset-wide" id="poll_answer_fieldset_<?php echo $_item->getId() ?>">
-        <table cellspacing="0" class="form-list">
-            <tr>
-                <td class="label"><label for="answer_<?php echo $_item->getId() ?>"><?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Answer Title:') ?> <span class="required">*</span></label></td>
-                <td class="value"><input type="text" id="answer_<?php echo $_item->getId() ?>" name="answer[<?php echo $_item->getId() ?>][title]" value="<?php echo $this->escapeHtml($_item->getAnswerTitle()) ?>" class="input-text required-entry" /></td>
-            </tr>
-            <tr>
-                <td class="label"><label for="answer_votes_<?php echo $_item->getId() ?>"><?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Votes Count:') ?> <span class="required">*</span></label></td>
-                <td class="value"><input type="text" id="answer_votes_<?php echo $_item->getId() ?>" name="answer[<?php echo $_item->getId() ?>][votes]" value="<?php echo $_item->getVotesCount() ?>" class="input-text required-entry validate-not-negative-number" />
-                    <p class="a-left" style="margin:7px 0 0;"><?php echo $this->getDeleteButtonHtml() ?></p>
-                </td>
-             </tr>
-        </table>
-        <input type="hidden" id="id_poll_answer_fieldset_<?php echo $_item->getId() ?>" value="<?php echo $_item->getId() ?>" />
+
+<div class="fieldset-wrapper">
+    <?php if($answers): ?>
+        <div class="fieldset-wrapper-title">
+            <span class="title"><?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Assigned Answers') ?></span>
         </div>
-    <?php endforeach; ?>
-<?php endif; ?>
+
+        <div class="field">
+            <div class="control">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th><?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Answer Title') ?></th>
+                            <th><?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Votes Count') ?></th>
+                            <th class="col-delete"><?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Action') ?></th>
+                        </tr>
+                    </thead>
+                    <tbody id="answers_container">
+                        <?php foreach($answers->getItems() as $_item): ?>
+                        <tr id="poll_answer_fieldset_<?php echo $_item->getId() ?>">
+                            <td>
+                                <input type="text" id="answer_<?php echo $_item->getId() ?>" name="answer[<?php echo $_item->getId() ?>][title]" value="<?php echo $this->escapeHtml($_item->getAnswerTitle()) ?>" class="required-entry" />
+                            </td>
+                            <td>
+                                <input type="text" id="answer_votes_<?php echo $_item->getId() ?>" name="answer[<?php echo $_item->getId() ?>][votes]" value="<?php echo $_item->getVotesCount() ?>" class="required-entry validate-not-negative-number" />
+                            </td>
+                            <td>
+                                <?php echo $this->getDeleteButtonHtml() ?>
+                                <input type="hidden" id="id_poll_answer_fieldset_<?php echo $_item->getId() ?>" value="<?php echo $_item->getId() ?>" />
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3">
+                                <?php echo $this->getAddButtonHtml(); ?>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+    <?php endif; ?>
 </div>
-<p class="a-right" style="margin:7px 0 0;"><?php echo $this->getAddButtonHtml(); ?></p>
-<script type="text/template" id="pollTemplate">
-<div class="fieldset fieldset-wide" id="poll_answer_fieldset_#{id}">
-    <table cellspacing="0" class="form-list">
-        <tr>
-            <td class="label">
-                <label for="answer_#{id}">
-                    <?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Answer Title:') ?>
-                    <span class="required">*</span>
-                </label>
-            </td>
-            <td class="value">
-                <input type="text" id="answer_#{id}" name="answer[#{id}][title]" value="" class="input-text required-entry" />
-            </td>
-        </tr>
-        <tr>
-            <td class="label">
-                <label for="answer_votes_#{id}">
-                    <?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Votes Count:') ?>
-                    <span class="required">*</span></label>
-            </td>
-            <td class="value">
-                <input type="text" id="answer_votes_#{id}" name="answer[#{id}][votes]" value="0" class="input-text required-entry validate-not-negative-number" />
-                <p class="a-left" style="margin:7px 0 0;">
-                    <?php echo $this->getDeleteButtonHtml() ?>
-                </p>
-            </td>
-        </tr>
-    </table>
-    <input type="hidden" id="id_poll_answer_fieldset_#{id}" value="#{id}" />
-</div>
+
+
+
+
+<script type="text/template" id="templatePollAnswer">
+    <tr id="poll_answer_fieldset_#{id}">
+        <td>
+            <input type="text" id="answer_#{id}" name="answer[#{id}][title]" value="" class="required-entry" />
+        </td>
+        <td>
+            <input type="text" id="answer_votes_#{id}" name="answer[#{id}][votes]" value="0" class="required-entry validate-not-negative-number" />
+        </td>
+        <td>
+            <?php echo $this->getDeleteButtonHtml() ?>
+            <input type="hidden" id="id_poll_answer_fieldset_#{id}" value="#{id}" />
+        </td>
+    </tr>
 </script>
+
+
+
+
+<script type="text/template" id="templatePollHidden">
+    <input type="hidden" name="deleteAnswer[]" value="#{id}" />
+</script>
+
+
+
+
 <script type="text/javascript">
-//<![CDATA[
-    var lastId = 0;
-    var answer = function() {
-        return {
-            del : function(obj) {
-                if( confirm('<?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Are you sure you want to delete it?') ?>') ) {
-                    fieldSet = obj.up('div.fieldset');
-                    if( $('id_' + fieldSet.id) ) {
-                        var itemId = $('id_' + fieldSet.id).value;
-                        var newElement = document.createElement('input');
-                        newElement.type = 'hidden';
-                        newElement.value = itemId;
-                        newElement.name = 'deleteAnswer[]';
-                        $('answers_container').appendChild(newElement);
-                    }
-                    fieldSet.remove();
-                }
-            },
+(function($) {
+    'use strict';
 
-            add : function(obj) {
-                var newElement = document.createElement('div');
-                newElement.innerHTML = this.getTemplate();
-                $('answers_container').appendChild(newElement);
-            },
+    $.widget('mage.poll', {
+        options: {
+        },
+        
+        lastId: 0,
+    
+        _init: function() {
+            this.templatePollAnswer = new Template($('#templatePollAnswer').html());
+            this.templatePollHidden = new Template($('#templatePollHidden').html());
+            this.container = $('#answers_container');
+        },
+    
+        _create: function() {
+            this._bind();
+        },
 
-            getTemplate : function() {
-                var id = this.createId(),
-                    // Should be changed due refactoring of Poll module
-                    template = new Template($('pollTemplate').innerHTML)
+        _bind: function() {
+            var self = this;
 
-                return template.evaluate({id:id});
-            },
+            $('body')
+                .on('click.btnPollAddAnswer', '.action-add', function() {
+                    self.addAnswer();
+                })
+                .on('click.btnPollDeleteAnswer', '.action-delete', function() {
+                    self.deleteAnswer(this);
+                });
+        },
 
-            createId : function () {
-                return --lastId;
+        addAnswer: function() {
+            this.container.append(this.templatePollAnswer.evaluate({
+                id: --this.lastId
+            }));
+        },
+
+        deleteAnswer: function(el) {
+            if(confirm('<?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Are you sure you want to delete it?') ?>')) {
+                var fieldset = $(el).closest('tr');
+                var hidden = $('#id_' + fieldset.attr("id"));
+                var id = hidden.attr("value");
+                hidden.after(this.templatePollHidden.evaluate({
+                    id: id
+                }));
+                fieldset.hide();
             }
         }
-    }();
-//]]>
+    });
+
+    $('#poll_tabs_answers_section_content').poll();
+})(jQuery);
 </script>

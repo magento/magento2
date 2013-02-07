@@ -95,6 +95,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_BaseImageTest extends PHP
      */
     public function testGetElementHtml($imageValue, $urlPath)
     {
+        $this->markTestIncomplete('Test should be rewritten as part of MAGETWO-4611');
         $this->_block->setValue($imageValue);
         $this->_coreHelper->expects($this->any())->method('escapeHtml')->will($this->returnArgument(0));
         $html = $this->_createHtmlCode($imageValue, $urlPath);
@@ -128,6 +129,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_BaseImageTest extends PHP
      */
     public function testImagePlaceholder()
     {
+        $this->markTestIncomplete('Test should be rewritten as part of MAGETWO-4611');
         $urlPath = 'http://example.com/pub/images/image-placeholder.png';
         $this->_block->setValue(null);
         $this->_coreHelper->expects($this->any())->method('escapeHtml')->will($this->returnArgument(0));

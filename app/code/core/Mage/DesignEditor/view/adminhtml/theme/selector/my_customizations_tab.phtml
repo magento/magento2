@@ -26,9 +26,8 @@
 ?>
 <?php /** @var $this Mage_Backend_Block_Template */?>
 
-<div><?php echo $this->getChildHtml('assigned.theme.list') ?></div>
-<hr style="clear: both; margin-bottom: 40px;" />
-<div><?php echo $this->getChildHtml('unassigned.theme.list') ?></div>
+<div class="themes-assigned"><?php echo $this->getChildHtml('assigned.theme.list') ?></div>
+<div class="themes-unassigned"><?php echo $this->getChildHtml('unassigned.theme.list') ?></div>
 
 <script type="text/javascript">
     <?php if ($this->getTabId()): ?>

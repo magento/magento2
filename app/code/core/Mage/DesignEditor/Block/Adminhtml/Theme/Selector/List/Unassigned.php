@@ -53,7 +53,7 @@ class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Unassigned
         $removeButton = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button');
 
         $removeButton->setData(array(
-            'label'     => $this->__('Remove Button'),
+            'label'     => $this->__('Remove'),
             'data_attribute'  => array(
                 'mage-init' => array(
                     'button' => array(
@@ -68,7 +68,7 @@ class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Unassigned
                     ),
                 ),
             ),
-            'class'   => 'save delete-theme',
+            'class'   => 'action-delete',
             'target'  => '_blank'
         ));
 

@@ -25,7 +25,7 @@
  */
 ?>
 
-<img src="<?php echo $this->getViewFileUrl('images/icon_export.gif') ?>" alt="" class="v-middle"/>&nbsp; <?php echo $this->__('Export to:') ?>
+<?php echo $this->__('Export to:') ?>
 <select name="<?php echo $this->getId() ?>_export" id="<?php echo $this->getId() ?>_export" style="width:8em;">
     <?php foreach ($this->getExportTypes() as $_type): ?>
         <option value="<?php echo $_type->getUrl() ?>"><?php echo $_type->getLabel() ?></option>

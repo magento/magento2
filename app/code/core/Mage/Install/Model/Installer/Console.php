@@ -280,7 +280,7 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
                 'lastname'          => $options['admin_lastname'],
                 'email'             => $options['admin_email'],
                 'username'          => $options['admin_username'],
-                'new_password'      => $options['admin_password'],
+                'password'          => $options['admin_password'],
             ));
 
             $installer = $this->_getInstaller();
@@ -311,44 +311,12 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
             Mage_Core_Model_Resource_Setup::applyAllDataUpdates();
 
             /**
-             * Validate entered data for administrator user
+             * Create primary administrator user & install encryption key
              */
-            $user = $installer->validateAndPrepareAdministrator($this->_getDataModel()->getAdminData());
-
-            if ($this->hasErrors()) {
-                return false;
-            }
-
-            /**
-             * Prepare encryption key and validate it
-             */
-            $encryptionKey = empty($options['encryption_key'])
-                ? $this->generateEncryptionKey()
-                : $options['encryption_key'];
-            $this->_getDataModel()->setEncryptionKey($encryptionKey);
-            $installer->validateEncryptionKey($encryptionKey);
-
-            if ($this->hasErrors()) {
-                return false;
-            }
-
-            /**
-             * Create primary administrator user
-             */
-            $installer->createAdministrator($user);
-
-            if ($this->hasErrors()) {
-                return false;
-            }
-
-            /**
-             * Save encryption key or create if empty
-             */
-            $installer->installEnryptionKey($encryptionKey);
-
-            if ($this->hasErrors()) {
-                return false;
-            }
+            $encryptionKey = !empty($options['encryption_key']) ? $options['encryption_key'] : null;
+            $encryptionKey = $installer->getValidEncryptionKey($encryptionKey);
+            $installer->createAdministrator($this->_getDataModel()->getAdminData());
+            $installer->installEncryptionKey($encryptionKey);
 
             /**
              * Installation finish
@@ -365,23 +333,15 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
             $this->_filesystem->changePermissions(Mage::getBaseDir('var'), 0777, true);
             return $encryptionKey;
         } catch (Exception $e) {
-            $this->addError('ERROR: ' . $e->getMessage());
+            if ($e instanceof Mage_Core_Exception) {
+                foreach ($e->getMessages(Mage_Core_Model_Message::ERROR) as $errorMessage) {
+                    $this->addError($errorMessage);
+                }
+            } else {
+                $this->addError('ERROR: ' . $e->getMessage());
+            }
             return false;
         }
-    }
-
-    /**
-     * Generate pseudorandom encryption key
-     *
-     * @param Mage_Core_Helper_Data $helper
-     * @return string
-     */
-    public function generateEncryptionKey($helper = null)
-    {
-        if ($helper === null) {
-            $helper = Mage::helper('Mage_Core_Helper_Data');
-        }
-        return md5($helper->getRandomString(10));
     }
 
     /**

@@ -50,6 +50,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Form_Element_Links ext
         $html = '<div id="'.$this->getHtmlId().'" ' . $this->serialize($this->getHtmlAttributes()) . '>'."\n";
 
         $values = $this->getValues();
+
         if ($values) {
             foreach ($values as $option) {
                 $html .= $this->_optionToHtml($option);

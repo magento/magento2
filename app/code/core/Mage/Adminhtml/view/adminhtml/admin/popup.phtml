@@ -37,8 +37,8 @@
     },
     "vars":{}
 }*/ ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->getLang() ?>" lang="<?php echo $this->getLang() ?>">
+<!doctype html>
+<html lang="<?php echo $this->getLang() ?>" class="no-js">
 <head>
 <?php echo $this->getChildHtml('head') ?>
 </head>
@@ -47,7 +47,7 @@
     <div class="middle" id="anchor-content">
         <div id="page:main-container">
         <?php if($this->getChildHtml('left')): ?>
-            <div class="columns <?php echo $this->getContainerCssClass() ?>" id="page:container">
+            <div class="col-2-left-layout<?php echo $this->getContainerCssClass() ?>" id="page:container">
                 <div id="page:left" class="side-col">
                     <?php echo $this->getChildHtml('left') ?>
                 </div>
@@ -70,8 +70,10 @@
     </div>
     <?php endif; ?>
     <?php echo $this->getChildHtml('js') ?>
-    <div id="loading-mask" style="display:none;">
-        <p class="loader" id="loading_mask_loader"><img src="<?php echo $this->getViewFileUrl('images/ajax-loader-tr.gif') ?>" alt="<?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Loading...') ?>" /><br /><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Please wait...') ?></p>
+
+    <!-- TODO: remove this popup after refactoring of "varienLoader.js" file -->
+    <div class="loading-old" id="loading-mask" style="display:none;">
+        <div class="loader" id="loading_mask_loader"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Please wait...') ?></div>
     </div>
 </div>
 <?php echo $this->getChildHtml('before_body_end') ?>

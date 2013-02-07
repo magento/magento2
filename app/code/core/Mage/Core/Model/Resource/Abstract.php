@@ -241,4 +241,14 @@ abstract class Mage_Core_Model_Resource_Abstract
         }
         return $value;
     }
+
+    /**
+     * Template method to return validate rules to be executed before entity is saved
+     *
+     * @return Zend_Validate_Interface|null
+     */
+    public function getValidationRulesBeforeSave()
+    {
+        return null;
+    }
 }

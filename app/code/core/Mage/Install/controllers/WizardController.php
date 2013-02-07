@@ -399,7 +399,7 @@ class Mage_Install_WizardController extends Mage_Install_Controller_Action
     }
 
     /**
-     * Process administrator instalation POST data
+     * Process administrator installation POST data
      */
     public function administratorPostAction()
     {
@@ -409,37 +409,22 @@ class Mage_Install_WizardController extends Mage_Install_Controller_Action
         $adminData      = $this->getRequest()->getPost('admin');
         $encryptionKey  = $this->getRequest()->getPost('encryption_key');
 
-        $errors = array();
-
-        //preparing admin user model with data and validate it
-        $user = $this->_getInstaller()->validateAndPrepareAdministrator($adminData);
-        if (is_array($user)) {
-            $errors = $user;
-        }
-
-        //checking if valid encryption key was entered
-        $result = $this->_getInstaller()->validateEncryptionKey($encryptionKey);
-        if (is_array($result)) {
-            $errors = array_merge($errors, $result);
-        }
-
-        if (!empty($errors)) {
-            Mage::getSingleton('Mage_Install_Model_Session')->setAdminData($adminData);
-            $this->getResponse()->setRedirect($step->getUrl());
-            return false;
-        }
-
         try {
-            $this->_getInstaller()->createAdministrator($user);
-            $this->_getInstaller()->installEnryptionKey($encryptionKey);
+            $encryptionKey = $this->_getInstaller()->getValidEncryptionKey($encryptionKey);
+            $this->_getInstaller()->createAdministrator($adminData);
+            $this->_getInstaller()->installEncryptionKey($encryptionKey);
+            $this->getResponse()->setRedirect($step->getNextUrl());
         } catch (Exception $e){
-            Mage::getSingleton('Mage_Install_Model_Session')
-                ->setAdminData($adminData)
-                ->addError($e->getMessage());
+            /** @var $session Mage_Install_Model_Session */
+            $session = Mage::getSingleton('Mage_Install_Model_Session');
+            $session->setAdminData($adminData);
+            if ($e instanceof Mage_Core_Exception) {
+                $session->addMessages($e->getMessages());
+            } else {
+                $session->addError($e->getMessage());
+            }
             $this->getResponse()->setRedirect($step->getUrl());
-            return false;
         }
-        $this->getResponse()->setRedirect($step->getNextUrl());
     }
 
     /**

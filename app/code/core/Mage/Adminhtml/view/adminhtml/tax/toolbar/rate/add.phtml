@@ -24,14 +24,5 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="content-header">
-    <table cellspacing="0">
-        <tr>
-            <td style="width:50%;"><h3 class="icon-head head-tax"><?php echo Mage::helper('Mage_Tax_Helper_Data')->__('Manage Tax Rates') ?></h3></td>
-            <td class="form-buttons">
-                <?php echo $this->getChildHtml('addButton') ?>
-            </td>
-        </tr>
-    </table>
-</div>
+<div class="page-actions"><?php echo $this->getChildHtml('addButton') ?></div>
 <?php echo $this->getChildhtml('grid') ?>

@@ -41,6 +41,7 @@ class Mage_Catalog_Helper_Product_ViewTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        Mage::getDesign()->setDefaultDesignTheme();
         $this->_helper = Mage::helper('Mage_Catalog_Helper_Product_View');
         $request = new Magento_Test_Request();
         $request->setRouteName('catalog')
@@ -100,7 +101,6 @@ class Mage_Catalog_Helper_Product_ViewTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Mage/Catalog/_files/multiple_products.php
      * @expectedException Mage_Core_Exception
      * @magentoAppIsolation enabled
      */
@@ -118,6 +118,7 @@ class Mage_Catalog_Helper_Product_ViewTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @expectedException Mage_Core_Exception
      */
     public function testPrepareAndRenderWrongProduct()

@@ -24,47 +24,48 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-
-<div class="content-header">
-        <h3 class="icon-head head-categories"><?php echo $this->escapeHtml($this->getHeader()) . ($this->getCategoryId() ? ' (' . Mage::helper('Mage_Catalog_Helper_Data')->__('ID: %s', $this->getCategoryId()) . ')' : '') ?></h3>
-        <p class="content-buttons form-buttons">
-            <?php echo $this->getResetButtonHtml() ?>
-            <?php if($this->getCategoryId()): ?>
-                    <?php echo $this->getDeleteButtonHtml() ?>
-            <?php endif; ?>
-            <?php echo $this->getAdditionalButtonsHtml(); ?>
-            <?php echo $this->getSaveButtonHtml() ?>
-        </p>
+<div class="category-edit-title">
+    <h3 class="title"><?php echo $this->escapeHtml($this->getHeader()) . ($this->getCategoryId() ? ' (' . Mage::helper('Mage_Catalog_Helper_Data')->__('ID: %s', $this->getCategoryId()) . ')' : '') ?></h3>
 </div>
-<?php if($this->hasStoreRootCategory()): ?>
+<div class="page-actions">
+    <?php echo $this->getResetButtonHtml() ?>
+    <?php if ($this->getCategoryId()): ?>
+        <?php echo $this->getDeleteButtonHtml() ?>
+    <?php endif; ?>
+    <?php echo $this->getAdditionalButtonsHtml(); ?>
+    <?php echo $this->getSaveButtonHtml() ?>
+</div>
+<?php if ($this->hasStoreRootCategory()): ?>
     <?php echo $this->getTabsHtml() ?>
 <?php else: ?>
 <div class="messages warning-msg">
     <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Set root category for this store in the <a href="%s">configuration</a>', $this->getStoreConfigurationUrl()) ?>
 </div>
 <?php endif; ?>
-<iframe name="iframeSave" style="display:none; width:100%;" src="<?php echo $this->getViewFileUrl('blank.html') ?>"></iframe>
-<form target="iframeSave" id="category_edit_form" action="<?php echo $this->getSaveUrl() ?>" method="post" enctype="multipart/form-data">
+<iframe name="iframeSave" style="display:none; width:100%;"
+        src="<?php echo $this->getViewFileUrl('blank.html') ?>"></iframe>
+<form target="iframeSave" id="category_edit_form" action="<?php echo $this->getSaveUrl() ?>" method="post"
+      enctype="multipart/form-data">
     <div class="no-display">
-        <input type="hidden" name="isIframe" value="1" />
-        <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
-        <input type="hidden" name="category_products" id="in_category_products" value="" />
-        <input type="hidden" name="active_tab_id" id="active_tab_id" value="" />
+        <input type="hidden" name="isIframe" value="1"/>
+        <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>"/>
+        <input type="hidden" name="category_products" id="in_category_products" value=""/>
+        <input type="hidden" name="active_tab_id" id="active_tab_id" value=""/>
     </div>
     <div id="category_tab_content"></div>
 </form>
 <script type="text/javascript">
     (function($) {
         $.mage.extend('categoryForm', 'form',
-            '<?php echo $this->getViewFileUrl('Mage_Adminhtml::catalog/category/form.js') ?>');
+                '<?php echo $this->getViewFileUrl('Mage_Adminhtml::catalog/category/form.js') ?>');
         $('#category_edit_form')
-            .mage('categoryForm', {refreshUrl: '<?php echo $this->getRefreshPathUrl() ?>'})
-            .mage('validation', {submitHandler: function(form){
-                form.submit();
-                displayLoadingMask();
-            }});
+                .mage('categoryForm', {refreshUrl: '<?php echo $this->getRefreshPathUrl() ?>'})
+                .mage('validation', {submitHandler: function(form){
+                    form.submit();
+                    displayLoadingMask();
+                }});
     })(jQuery);
-<?php if(($block = $this->getLayout()->getBlock('category.product.grid')) && ($_gridJsObject=$block->getJsObjectName())): ?>
+    <?php if(($block = $this->getLayout()->getBlock('category.product.grid')) && ($_gridJsObject=$block->getJsObjectName())): ?>
 
     var categoryProducts = $H(<?php echo $this->getProductsJson() ?>);
     $('in_category_products').value = categoryProducts.toQueryString();
@@ -118,19 +119,19 @@
     }
 
 
-    <?php echo $_gridJsObject ?>.rowClickCallback = categoryProductRowClick;
-    <?php echo $_gridJsObject ?>.initRowCallback = categoryProductRowInit;
-    <?php echo $_gridJsObject ?>.checkboxCheckCallback = registerCategoryProduct;
-    <?php echo $_gridJsObject ?>.rows.each(function(row){categoryProductRowInit(<?php echo $_gridJsObject ?>, row)});
+        <?php echo $_gridJsObject ?>.rowClickCallback = categoryProductRowClick;
+        <?php echo $_gridJsObject ?>.initRowCallback = categoryProductRowInit;
+        <?php echo $_gridJsObject ?>.checkboxCheckCallback = registerCategoryProduct;
+        <?php echo $_gridJsObject ?>.rows.each(function(row){categoryProductRowInit(<?php echo $_gridJsObject ?>, row)});
 
-<?php endif; ?>
-<?php if($this->isAjax() && ($block = $this->getLayout()->getBlock('tabs')) && ($_tabsJsObject=$block->getJsObjectName())): ?>
+        <?php endif; ?>
+    <?php if($this->isAjax() && ($block = $this->getLayout()->getBlock('tabs')) && ($_tabsJsObject=$block->getJsObjectName())): ?>
     // Temporary solution, will be replaced after refactoring of manage category functionality
-    <?php $tabsBlock = $this->getLayout()->getBlock('tabs'); ?>
+        <?php $tabsBlock = $this->getLayout()->getBlock('tabs'); ?>
     var activeAnchor = jQuery('#<?php echo $tabsBlock->getId() ?>').tabs('activeAnchor');
     if (activeAnchor.length) {
         $('active_tab_id').value = activeAnchor.prop('id');
     }
     $('active_tab_id').tabsJsObject = jQuery('#<?php echo $tabsBlock->getId() ?>');
-<?php endif; ?>
+        <?php endif; ?>
 </script>

@@ -27,54 +27,56 @@
 
 <?php /** @var $this Mage_DesignEditor_Block_Adminhtml_Theme_Selector_StoreView */?>
 
-<div style="position:absolute; z-index:500;">
-    <div id="store-view-window" style="position:fixed; left:50%; margin-left:-355px; width:650px; top:15%; border:2px solid #555; background:#fff; display:none;">
-        <div style="padding-top:10px; text-align:center; border-bottom:2px solid #555; background-color:#eee;">
-            <h2><?php echo $this->__('Select Storeviews to make your changes live:') ?></h2>
-        </div>
-        <form method="post" action="">
-        <ul class="websites">
-        <?php foreach ($this->getWebsiteStructure() as $website => $stores): ?>
-            <li class="website">
-                <p class="title" style="font-size:1.7em; color:#777; font-weight:bold; padding:15px 20px;">
-                    <?php echo $website; ?>
-                </p>
-                <ul class="stores">
-                <?php foreach ($stores as $store => $storeViews): ?>
-                    <li class="store">
-                        <p class="title" style="font-size:1.7em; color:#777; padding:15px 25px; border-top:2px solid #ccc; border-bottom:2px solid #ccc;">
-                            <?php echo $store; ?>
-                        </p>
-                        <ul class="storeviews">
-                        <?php foreach ($storeViews as $storeView => $id): ?>
-                            <li class="storeview">
-                                <p class="title" style="font-size:1.7em; color:#777; padding:10px 40px;">
-                                    <input type="hidden" name="storeviews[<?php echo $id; ?>]" value="0" />
-                                    <input type="checkbox" id="storeview_<?php echo $id ?>" name="storeviews[<?php echo $id; ?>]" value="1" style="position:relative; top:-1px;" />
-                                    <label for="storeview_<?php echo $id ?>" style="color:rgb(0,176,244); margin-left:5px;">
-                                        <?php echo $storeView; ?>
-                                    </label>
-                                </p>
+
+<div class="fade" id="store-view-window">
+    <div class="popup">
+        <header class="popup-header">
+            <strong class="popup-title"><?php echo $this->__('Select Storeviews to make your changes live:') ?></strong>
+        </header>
+        <div class="popup-content">
+            <form method="post" action="">
+                <ul class="websites">
+                    <?php foreach ($this->getWebsiteStructure() as $website => $stores): ?>
+                    <li class="website">
+                        <h3 class="website-title"><?php echo $website; ?></h3>
+                        <ul class="stores">
+                            <?php foreach ($stores as $store => $storeViews): ?>
+                            <li class="store">
+                                <h4 class="store-title"><?php echo $store; ?></h4>
+                                <ul class="storeviews">
+                                    <?php foreach ($storeViews as $storeView => $id): ?>
+                                    <li class="storeview">
+                                        <input type="hidden" name="storeviews[<?php echo $id; ?>]" value="0" />
+                                        <label for="storeview_<?php echo $id ?>">
+                                            <input type="checkbox" id="storeview_<?php echo $id ?>" class="storeview-selector-control" name="storeviews[<?php echo $id; ?>]" value="1" />
+                                            <span class="storeview-name"><?php echo $storeView; ?></span>
+                                        </label>
+                                    </li>
+                                    <?php endforeach; ?>
+                                </ul>
                             </li>
-                        <?php endforeach; ?>
+                            <?php endforeach; ?>
                         </ul>
                     </li>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
                 </ul>
-            </li>
-        <?php endforeach; ?>
-        </ul>
-        <div style="text-align:right; padding:10px;">
-            <?php echo $this->getAssignSaveButtonHtml(); ?>
+            </form>
         </div>
-        </form>
+        <footer class="popup-footer">
+            <div class="actions">
+                <?php echo $this->getAssignSaveButtonHtml(); ?>
+                <span class="action-close" title="<?php echo $this->__('Close Popup') ?>"><?php echo $this->__('Close') ?></span>
+            </div>
+        </footer>
+        <span class="action-close-popup" data-dismiss="popup" title="<?php echo $this->__('Close Popup') ?>"><?php echo $this->__('Close Popup') ?></span>
     </div>
 </div>
+
 <script type="text/javascript">
     (function ($) {
         $( document ).ready(function( ) {
             $( 'body' ).themeSelector(<?php echo $this->getOptionsJson(); ?>);
         });
-        $('.theme-element-customizations').themeControl({url: '<?php echo $this->getUrl('*/*/quickEdit') ?>'});
+        $('.themes-customizations .theme').themeControl({url: '<?php echo $this->getUrl('*/*/quickEdit') ?>'});
     })(jQuery);
 </script>

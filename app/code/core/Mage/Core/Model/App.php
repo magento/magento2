@@ -63,8 +63,14 @@ class Mage_Core_Model_App
     const SCOPE_TYPE_WEBSITE = 'website';
     /**#@-*/
 
+    /**
+     * Xml path install date
+     */
     const XML_PATH_INSTALL_DATE = 'global/install/date';
 
+    /**
+     * Xml path: global skip modules update
+     */
     const XML_PATH_SKIP_PROCESS_MODULES_UPDATES = 'global/skip_process_modules_updates';
 
     /**
@@ -72,6 +78,9 @@ class Mage_Core_Model_App
      */
     const XML_PATH_IGNORE_DEV_MODE = 'global/skip_process_modules_updates_ignore_dev_mode';
 
+    /**
+     * Default error handler
+     */
     const DEFAULT_ERROR_HANDLER = 'mageCoreErrorHandler';
 
     /**
@@ -88,20 +97,19 @@ class Mage_Core_Model_App
     /**
      * Default store Id (for install)
      */
-    const DISTRO_STORE_ID       = 1;
+    const DISTRO_STORE_ID = 1;
 
     /**
      * Default store code (for install)
      *
      */
-    const DISTRO_STORE_CODE     = Mage_Core_Model_Store::DEFAULT_CODE;
+    const DISTRO_STORE_CODE = Mage_Core_Model_Store::DEFAULT_CODE;
 
     /**
      * Admin store Id
      *
      */
     const ADMIN_STORE_ID = 0;
-
 
     /**
      * Application loaded areas array
@@ -137,13 +145,6 @@ class Mage_Core_Model_App
      * @var Mage_Core_Model_Translate
      */
     protected $_translator;
-
-    /**
-     * Application design package object
-     *
-     * @var Mage_Core_Model_Design_Package
-     */
-    protected $_design;
 
     /**
      * Initialization parameters
@@ -273,9 +274,9 @@ class Mage_Core_Model_App
     /**
      * Cache locked flag
      *
-     * @var null|bool
+     * @var bool
      */
-    protected $_isCacheLocked = null;
+    protected $_isCacheLocked;
 
     /**
      * Object manager
@@ -722,6 +723,9 @@ class Mage_Core_Model_App
         return $this;
     }
 
+    /**
+     * Re-init stores
+     */
     public function reinitStores()
     {
         return $this->_initStores();
@@ -1514,16 +1518,29 @@ class Mage_Core_Model_App
         return $this;
     }
 
+    /**
+     * Set update process run flag
+     *
+     * @param bool $value
+     */
     public function setUpdateMode($value)
     {
         $this->_updateMode = $value;
     }
 
+    /**
+     * Get update process run flag
+     *
+     * @return bool
+     */
     public function getUpdateMode()
     {
         return $this->_updateMode;
     }
 
+    /**
+     * @throws Mage_Core_Model_Store_Exception
+     */
     public function throwStoreException()
     {
         throw new Mage_Core_Model_Store_Exception('');

@@ -24,45 +24,34 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="content-header">
-    <table cellspacing="0">
-        <tr>
-            <td style="width:50%;"><h3 class="icon-head head-newsletter-report"><?php echo Mage::helper('Mage_Newsletter_Helper_Data')->__('Newsletter Problem Reports') ?></h3></td>
-            <td class="form-buttons">
+<?php echo $this->getChildHtml('grid') ?>
 
-            </td>
-        </tr>
-    </table>
-</div>
-<div>
-    <?php echo $this->getChildHtml('grid') ?>
-</div>
-<?php if($this->getShowButtons()): ?>
+<?php if ($this->getShowButtons()): ?>
 <div class="form-buttons">
     <?php echo $this->getUnsubscribeButtonHtml(); ?>
     <?php echo $this->getDeleteButtonHtml(); ?>
 </div>
 <?php endif ?>
 <script type="text/javascript">
-<!--
+    <!--
     var problemController = {
-        checkCheckboxes: function(controlCheckbox) {
+        checkCheckboxes:function (controlCheckbox) {
             var elements = $('problemGrid').getElementsByClassName('problemCheckbox');
-            elements.each(function(obj){
+            elements.each(function (obj) {
                 obj.checked = controlCheckbox.checked;
             });
         },
-        rowClick: function (e) {
-            if(!Event.element(e).hasClassName('problemCheckbox')) {
+        rowClick:function (e) {
+            if (!Event.element(e).hasClassName('problemCheckbox')) {
                 var elements = Event.findElement(e, 'tr').getElementsByClassName('problemCheckbox');
-                if(elements.length != 1) {
+                if (elements.length != 1) {
                     return;
                 }
                 elements[0].checked = !elements[0].checked;
             }
         },
 
-        unsubscribe: function () {
+        unsubscribe:function () {
             var elements = $$('input.problemCheckbox');
             var serializedElements = Form.serializeElements(elements, true);
             serializedElements._unsubscribe = '1';
@@ -70,12 +59,12 @@
             var url = problemGridJsObject.url;
 
             new Ajax.Updater('problemGrid', url + '?ajax=1',
-                             {parameters:  serializedElements,
-                              evalScripts: true,
-                              onComplete:problemGridJsObject.initGrid.bind(problemGridJsObject)});
+                    {parameters:serializedElements,
+                        evalScripts:true,
+                        onComplete:problemGridJsObject.initGrid.bind(problemGridJsObject)});
         },
 
-        deleteSelected: function () {
+        deleteSelected:function () {
             var elements = $$('input.problemCheckbox');
             var serializedElements = Form.serializeElements(elements, true);
             serializedElements._delete = '1';
@@ -83,12 +72,12 @@
             var url = problemGridJsObject.url;
 
             new Ajax.Updater('problemGrid', url + '?ajax=1',
-                             {parameters:  serializedElements,
-                              evalScripts: true,
-                              onComplete:problemGridJsObject.initGrid.bind(problemGridJsObject)});
+                    {parameters:serializedElements,
+                        evalScripts:true,
+                        onComplete:problemGridJsObject.initGrid.bind(problemGridJsObject)});
         }
     }
 
     varienGlobalEvents.attachEventHandler('gridRowClick', problemController.rowClick.bind(problemController));
-//-->
+    //-->
 </script>

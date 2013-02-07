@@ -33,20 +33,12 @@
  *  getForm() - html
  */
 ?>
-
-<div class="content-header">
-    <table cellspacing="0">
-        <tr>
-            <td>
-                <h3<?php if ($this->getHeaderCss()): ?> class="<?php echo $this->getHeaderCss()?>"<?php endif; ?>><?php echo Mage::helper('Mage_Backend_Helper_Data')->__($this->getTitle()) ?></h3>
-            </td>
-            <td class="form-buttons"><?php echo $this->getSaveButtonHtml() ?></td>
-         </tr>
-    </table>
-</div>
+<div class="page-actions"><?php echo $this->getSaveButtonHtml() ?></div>
 <form action="<?php echo $this->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
     <?php echo $this->getBlockHtml('formkey')?>
-    <?php echo $this->getChildHtml('form') ?>
+    <div class="accordion">
+        <?php echo $this->getChildHtml('form') ?>
+    </div>
 </form>
 <script type="text/javascript">
     jQuery('#config-edit-form').mage('form').mage('validation');

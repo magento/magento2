@@ -35,10 +35,12 @@ class Mage_User_Block_User extends Mage_Backend_Block_Widget_Grid_Container
 {
     protected function _construct()
     {
-        $this->_controller = 'user';
-        $this->_blockGroup = 'Mage_User';
-        $this->_headerText = Mage::helper('Mage_User_Helper_Data')->__('Users');
-        $this->_addButtonLabel = Mage::helper('Mage_User_Helper_Data')->__('Add New User');
+        $this->addData(array(
+            Mage_Backend_Block_Widget_Container::PARAM_CONTROLLER => 'user',
+            Mage_Backend_Block_Widget_Grid_Container::PARAM_BLOCK_GROUP => 'Mage_User',
+            Mage_Backend_Block_Widget_Grid_Container::PARAM_BUTTON_NEW => $this->__('Add New User'),
+            Mage_Backend_Block_Widget_Container::PARAM_HEADER_TEXT => $this->__('Users'),
+        ));
         parent::_construct();
     }
 
@@ -50,6 +52,11 @@ class Mage_User_Block_User extends Mage_Backend_Block_Widget_Grid_Container
     protected function _toHtml()
     {
         Mage::dispatchEvent('permissions_user_html_before', array('block' => $this));
+        /** @var $model Mage_User_Model_Resource_User */
+        $model = Mage::getObjectManager()->get('Mage_User_Model_Resource_User');
+        if ($model->canCreateUser()) {
+            $this->_addNewButton();
+        }
         return parent::_toHtml();
     }
 }

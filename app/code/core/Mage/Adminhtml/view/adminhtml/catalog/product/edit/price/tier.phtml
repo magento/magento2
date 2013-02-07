@@ -36,34 +36,26 @@
 
 <?php $_showWebsite = $this->isShowWebsiteColumn(); ?>
 <?php $_showWebsite= $this->isMultiWebsites(); ?>
-<tr id="attribute-<?php echo $_htmlId?>-container">
-    <td class="label"><?php echo $this->getElement()->getLabel() ?></td>
-    <td colspan="10" class="grid tier">
-    <table cellspacing="0" class="data border" id="tiers_table">
-        <?php if ($_showWebsite): ?>
-        <col width="135" />
-        <?php endif; ?>
-        <col width="120" />
-        <col width="95" />
-        <col />
-        <col width="1" />
-        <thead>
-            <tr class="headings">
-                <th <?php if (!$_showWebsite): ?>style="display:none"<?php endif; ?>><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Website') ?></th>
-                <th><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Customer Group') ?></th>
-                <th><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Qty') ?></th>
-                <th><?php echo $this->getPriceColumnHeader(Mage::helper('Mage_Catalog_Helper_Data')->__('Price')) ?></th>
-                <th class="last"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Action') ?></th>
-            </tr>
-        </thead>
-        <tbody id="<?php echo $_htmlId ?>_container"></tbody>
-        <tfoot>
-            <tr>
-                <td <?php if (!$_showWebsite): ?>style="display:none"<?php endif; ?>></td>
-                <td colspan="4" class="a-right"><?php echo $this->getAddButtonHtml() ?></td>
-            </tr>
-        </tfoot>
-    </table>
+<div class="field" id="attribute-<?php echo $_htmlId?>-container">
+    <label class="label"><span><?php echo $this->getElement()->getLabel() ?></span></label>
+    <div class="control">
+        <table cellspacing="0" class="data-table" id="tiers_table">
+            <thead>
+                <tr>
+                    <th <?php if (!$_showWebsite): ?>style="display:none"<?php endif; ?>><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Website') ?></th>
+                    <th><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Customer Group') ?></th>
+                    <th><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Qty') ?></th>
+                    <th><?php echo $this->getPriceColumnHeader(Mage::helper('Mage_Catalog_Helper_Data')->__('Price')) ?></th>
+                    <th class="col-delete"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Action') ?></th>
+                </tr>
+            </thead>
+            <tbody id="<?php echo $_htmlId ?>_container"></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="<?php if (!$_showWebsite): ?>4<?php else: ?>5<?php endif; ?>"><?php echo $this->getAddButtonHtml() ?></td>
+                </tr>
+            </tfoot>
+        </table>
 
 <script type="text/javascript">
 //<![CDATA[
@@ -79,12 +71,12 @@ var tierPriceRowTemplate = '<tr>'
     + '<option value="<?php echo $_groupId ?>"><?php echo $this->jsQuoteEscape($this->escapeHtml($_groupName)) ?></option>'
     <?php endforeach ?>
     + '</select></td>'
-    + '<td class="nobr"><input class="<?php echo $_htmlClass ?> qty required-entry validate-greater-than-zero" type="text" name="<?php echo $_htmlName ?>[{{index}}][price_qty]" value="{{qty}}" id="tier_price_row_{{index}}_qty" />'
+    + '<td class="col-qty"><input class="<?php echo $_htmlClass ?> qty required-entry validate-greater-than-zero" type="text" name="<?php echo $_htmlName ?>[{{index}}][price_qty]" value="{{qty}}" id="tier_price_row_{{index}}_qty" />'
     + ' <small class="nobr"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__("and above")?></small></td>'
-    + '<td><input class="<?php echo $_htmlClass ?> required-entry <?php echo $_priceValueValidation ?>" type="text" name="<?php echo $_htmlName ?>[{{index}}][price]" value="{{price}}" id="tier_price_row_{{index}}_price" /></td>'
-    + '<td class="last"><input type="hidden" name="<?php echo $_htmlName ?>[{{index}}][delete]" class="delete" value="" id="tier_price_row_{{index}}_delete" />'
-    + '<button title="<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__("Delete Tier") ?>" type="button" class="scalable delete icon-btn delete-product-option" id="tier_price_row_{{index}}_delete_button" onclick="return tierPriceControl.deleteItem(event);">'
-    + '<span><span><span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__("Delete") ?></span></span></span></button></td>'
+    + '<td class="col-price"><input class="<?php echo $_htmlClass ?> required-entry <?php echo $_priceValueValidation ?>" type="text" name="<?php echo $_htmlName ?>[{{index}}][price]" value="{{price}}" id="tier_price_row_{{index}}_price" /></td>'
+    + '<td class="col-delete"><input type="hidden" name="<?php echo $_htmlName ?>[{{index}}][delete]" class="delete" value="" id="tier_price_row_{{index}}_delete" />'
+    + '<button title="<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__("Delete Tier") ?>" type="button" class="action- scalable delete icon-btn delete-product-option" id="tier_price_row_{{index}}_delete_button" onclick="return tierPriceControl.deleteItem(event);">'
+    + '<span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__("Delete") ?></span></button></td>'
     + '</tr>';
 
 var tierPriceControl = {
@@ -168,4 +160,5 @@ $('<?php echo $_htmlId ?>_container').up('table').select('button')
 <?php endif; ?>
 //]]>
 </script>
-</td></tr>
+    </div>
+</div>

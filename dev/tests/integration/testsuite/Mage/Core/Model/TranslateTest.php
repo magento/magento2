@@ -35,20 +35,26 @@ class Mage_Core_Model_TranslateTest extends PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    /**
+     * @var Mage_Core_Model_Design_Package
+     */
+    protected $_designModel;
+
     public function setUp()
     {
         $pathChunks = array(dirname(__FILE__), '_files', 'design', 'frontend', 'test', 'default', 'locale', 'en_US',
             'translate.csv');
 
         $filesystem = new Magento_Filesystem(new Magento_Filesystem_Adapter_Local);
-        $design = $this->getMock('Mage_Core_Model_Design_Package', array('getLocaleFileName'), array($filesystem));
-        $design->expects($this->any())
+        $this->_designModel = $this->getMock('Mage_Core_Model_Design_Package',
+            array('getLocaleFileName'), array($filesystem));
+        $this->_designModel->expects($this->any())
             ->method('getLocaleFileName')
-            ->will($this->returnValue(implode(DS, $pathChunks)));
+            ->will($this->returnValue(implode(DIRECTORY_SEPARATOR, $pathChunks)));
 
         Mage::getConfig()->setModuleDir('Mage_Core', 'locale', dirname(__FILE__) . '/_files/Mage/Core/locale');
         Mage::getConfig()->setModuleDir('Mage_Catalog', 'locale', dirname(__FILE__) . '/_files/Mage/Catalog/locale');
-        $this->_model = Mage::getModel('Mage_Core_Model_Translate', array($design));
+        $this->_model = Mage::getModel('Mage_Core_Model_Translate', array($this->_designModel));
         $this->_model->init('frontend');
     }
 
@@ -122,10 +128,42 @@ class Mage_Core_Model_TranslateTest extends PHPUnit_Framework_TestCase
      */
     public function testTranslate($inputText, $expectedTranslation)
     {
+        $theme = $this->getMock('Mage_Core_Model_Theme', array(), array(), '', false);
+        $theme->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(10));
+
+        $this->_designModel->expects($this->any())
+            ->method('getDesignTheme')
+            ->will($this->returnValue($theme));
+
+        $pathChunks = array(dirname(__FILE__), '_files', 'design', 'frontend', 'test', 'default', 'locale', 'en_US',
+            'translate.csv');
+
+        $filesystem = new Magento_Filesystem(new Magento_Filesystem_Adapter_Local);
+        $this->_designModel = $this->getMock('Mage_Core_Model_Design_Package',
+            array('getLocaleFileName', 'getDesignTheme'), array($filesystem));
+        $this->_designModel->expects($this->any())
+            ->method('getLocaleFileName')
+            ->will($this->returnValue(implode(DIRECTORY_SEPARATOR, $pathChunks)));
+
+        $this->_designModel->expects($this->any())
+            ->method('getDesignTheme')
+            ->will($this->returnValue($theme));
+
+        Mage::getConfig()->setModuleDir('Mage_Core', 'locale', dirname(__FILE__) . '/_files/Mage/Core/locale');
+        Mage::getConfig()->setModuleDir('Mage_Catalog', 'locale', dirname(__FILE__) . '/_files/Mage/Catalog/locale');
+        $this->_model = Mage::getModel('Mage_Core_Model_Translate', array($this->_designModel));
+        $this->_model->init('frontend');
+
+
         $actualTranslation = $this->_model->translate(array($inputText));
         $this->assertEquals($expectedTranslation, $actualTranslation);
     }
 
+    /**
+     * @return array
+     */
     public function translateDataProvider()
     {
         return array(
@@ -163,6 +201,7 @@ class Mage_Core_Model_TranslateTest extends PHPUnit_Framework_TestCase
      * @magentoConfigFixture global/locale/inheritance/en_AU en_UK
      * @magentoConfigFixture global/locale/inheritance/en_UK en_US
      * @dataProvider translateWithLocaleInheritanceDataProvider
+     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      */
     public function testTranslateWithLocaleInheritance($inputText, $expectedTranslation)
     {
@@ -172,6 +211,9 @@ class Mage_Core_Model_TranslateTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedTranslation, $model->translate(array($inputText)));
     }
 
+    /**
+     * @return array
+     */
     public function translateWithLocaleInheritanceDataProvider()
     {
         return array(

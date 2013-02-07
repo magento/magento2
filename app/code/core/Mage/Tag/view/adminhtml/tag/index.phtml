@@ -24,14 +24,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="content-header">
-<table cellspacing="0">
-    <tr>
-        <td style="width:80%;"><h3 class="<?php echo $this->getHeaderCssClass() ?>"><?php echo $this->getHeaderHtml(); ?></h3></td>
-        <td class="form-buttons"><?php echo $this->getCreateButtonHtml(); ?></td>
-    </tr>
-</table>
-</div>
+<div class="page-actions"><?php echo $this->getCreateButtonHtml(); ?></div>
 <div id="tag_frame">
     <?php echo $this->getGridHtml() ?>
 </div>

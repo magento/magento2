@@ -37,7 +37,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     /**
      * Dependency injection configuration node name
      */
-    const CONFIGURATION_DI_NODE = 'di';
+    const XML_PATH_DI_CONFIG = 'global/di';
 
     /**
      * Configuration cache tag
@@ -443,7 +443,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
                 Magento_Profiler::stop('init_modules_config_cache');
                 if ($loaded) {
                     $this->_useCache = true;
-                    $this->loadDiConfiguration();
+                    $this->_loadDiConfiguration();
                     return true;
                 }
             }
@@ -471,7 +471,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
         $this->_loadLocalConfig();
 
         $this->applyExtends();
-        $this->loadDiConfiguration();
+        $this->_loadDiConfiguration();
         Magento_Profiler::stop('load_modules');
         Magento_Profiler::stop('config');
         return $this;
@@ -479,12 +479,10 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
 
     /**
      * Load di configuration for given area
-     *
-     * @param string $areaCode
      */
-    public function loadDiConfiguration($areaCode = Mage_Core_Model_App_Area::AREA_GLOBAL)
+    protected function _loadDiConfiguration()
     {
-        $configurationNode = $this->getNode($areaCode . '/' . self::CONFIGURATION_DI_NODE);
+        $configurationNode = $this->getNode(self::XML_PATH_DI_CONFIG);
         if ($configurationNode) {
             $configuration = $configurationNode->asArray();
             $this->_objectManager->setConfiguration($configuration);

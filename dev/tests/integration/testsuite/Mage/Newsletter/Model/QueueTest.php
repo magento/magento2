@@ -29,6 +29,7 @@ class Mage_Newsletter_Model_QueueTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @magentoDataFixture Mage/Newsletter/_files/queue.php
+     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      * @magentoConfigFixture frontend/design/theme/full_name default/demo_blue
      * @magentoConfigFixture fixturestore_store general/locale/code  de_DE
      * @magentoAppIsolation enabled
@@ -43,10 +44,10 @@ class Mage_Newsletter_Model_QueueTest extends PHPUnit_Framework_TestCase
         $subscriberOne->expects($this->any())->method('send');
         $subscriberTwo = clone $subscriberOne;
         $subscriberOne->expects($this->once())->method('setBodyHTML')->with(
-            $this->stringEndsWith('/theme/frontend/default/demo_blue/en_US/images/logo.gif')
+            $this->stringEndsWith('/theme/static/frontend/default/demo_blue/en_US/images/logo.gif')
         );
         $subscriberTwo->expects($this->once())->method('setBodyHTML')->with(
-            $this->stringEndsWith('/theme/frontend/default/demo/de_DE/images/logo.gif')
+            $this->stringEndsWith('/theme/static/frontend/default/demo/de_DE/images/logo.gif')
         );
 
         $emailTemplate = $this->getMock('Mage_Core_Model_Email_Template', array('_getMail'), array(), '', false);
@@ -62,6 +63,7 @@ class Mage_Newsletter_Model_QueueTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      * @magentoDataFixture Mage/Newsletter/_files/queue.php
      * @magentoAppIsolation enabled
      */

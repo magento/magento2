@@ -147,6 +147,9 @@
                 <tag module="Mage_Tag">
                     <file>tag.xml</file>
                 </tag>
+                <tag_report module="Mage_Tag">
+                    <file>report.xml</file>
+                </tag_report>
             </updates>
         </layout>
     </adminhtml>

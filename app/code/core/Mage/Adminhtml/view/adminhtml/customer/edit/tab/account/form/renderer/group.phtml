@@ -27,26 +27,28 @@
 <?php
 $_element = $this->getElement();
 $_note = $_element->getNote();
-$_trId = $_element->getHtmlContainerId();
-$_class = $_element->getFieldsetHtmlClass();
-?>
+$_class = $_element->getFieldsetHtmlClass();?>
+
 <?php if (!$_element->getNoDisplay()): ?>
-<tr<?php if ($_trId): ?> id="<?php echo $_trId; ?>"<?php endif; ?>>
-    <?php if ($_element->getType() == 'hidden'): ?>
-    <td colspan="2" class="hidden"><?php echo trim($_element->getElementHtml()); ?></td>
-    <?php else: ?>
-    <td class="label<?php echo $_class ? " {$_class}-label" : ''; ?>"><?php echo trim($_element->getLabelHtml()); ?></td>
-    <td class="<?php echo $_element->hasValueClass() ? $_element->getValueClass() : 'value'; ?><?php echo $_class ? " {$_class}-value" : ''; ?>">
-        <?php echo trim($_element->getElementHtml()); ?>
-        <?php if ($this->getDisableAutoGroupChangeAttribute()): ?>
-            <br/>
-            <input id="<?php echo $this->escapeHtml($this->getDisableAutoGroupChangeCheckboxElementId()); ?>" name="<?php echo $this->escapeHtml($this->getDisableAutoGroupChangeCheckboxElementName()); ?>" type="checkbox"<?php if ($this->getDisableAutoGroupChangeCheckboxState() == 'checked') :?> checked="checked"<?php endif; ?> value="1"/>
-            <label for="<?php echo $this->escapeHtml($this->getDisableAutoGroupChangeCheckboxElementId()); ?>"><?php echo $this->escapeHtml($this->getDisableAutoGroupChangeCheckboxLabel()); ?></label>
+    <div class="field with-note">
+        <?php if ($_element->getType() == 'hidden'): ?>
+            <div class="hidden"><?php echo $_element->getElementHtml(); ?></div>
+        <?php else: ?>
+            <?php echo $_element->getLabelHtml(); ?>
+            <div class="control">
+                <?php echo $_element->getElementHtml(); ?>
+                <?php if ($this->getDisableAutoGroupChangeAttribute()): ?>
+                <div class="nested">
+                    <div class="field choice">
+                        <input id="<?php echo $this->escapeHtml($this->getDisableAutoGroupChangeCheckboxElementId()); ?>" name="<?php echo $this->escapeHtml($this->getDisableAutoGroupChangeCheckboxElementName()); ?>" type="checkbox" <?php if ($this->getDisableAutoGroupChangeCheckboxState() == 'checked') :?> checked="checked"<?php endif; ?> value="1" class="addbefore" />
+                        <label for="<?php echo $this->escapeHtml($this->getDisableAutoGroupChangeCheckboxElementId()); ?>"><span><?php echo $this->escapeHtml($this->getDisableAutoGroupChangeCheckboxLabel()); ?></span></label>
+                        <?php if ($_note): ?>
+                             <p class="note <?php echo $_class ? " {$_class}-note" : ''; ?>" id="note_<?php echo $_element->getId(); ?>"><?php echo $_note; ?></p>
+                        <?php endif ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+            </div>
         <?php endif; ?>
-        <?php if ($_note): ?>
-            <p class="note<?php echo $_class ? " {$_class}-note" : ''; ?>" id="note_<?php echo $_element->getId(); ?>"><span><?php echo $_note; ?></span></p>
-        <?php endif ?>
-    </td>
-    <?php endif; ?>
-</tr>
+    </div>
 <?php endif; ?>

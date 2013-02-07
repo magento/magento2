@@ -31,8 +31,7 @@
  * @package    Mage_Tag
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
-class Mage_Tag_Block_Adminhtml_Report_Customer extends Mage_Adminhtml_Block_Widget_Grid_Container
+class Mage_Tag_Block_Adminhtml_Report_Customer extends Mage_Backend_Block_Widget_Grid_Container
 {
     public function _construct()
     {
@@ -42,5 +41,4 @@ class Mage_Tag_Block_Adminhtml_Report_Customer extends Mage_Adminhtml_Block_Widg
         parent::_construct();
         $this->_removeButton('add');
     }
-
 }

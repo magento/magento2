@@ -101,13 +101,13 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
     }
 
     /**
-     * Get theme code
+     * Get theme identification code
      *
      * @return string
      */
     public function getTheme()
     {
-        return $this->_theme->getThemeCode();
+        return $this->_theme->getId() ?: $this->_theme->getThemePath();
     }
 
     /**
@@ -133,8 +133,10 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
         $dirs = array();
         $themeModel = $this->_theme;
         while ($themeModel) {
-            list($package, $theme) = $this->_getInheritedTheme($themeModel);
-            $dirs[] = "{$dir}/{$this->_area}/{$package}/{$theme}";
+            $themePath = $themeModel->getThemePath();
+            if ($themePath) {
+                $dirs[] = "{$dir}/{$this->_area}/{$themePath}";
+            }
             $themeModel = $themeModel->getParentTheme();
         }
 
@@ -159,8 +161,10 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
         $dirs = array();
         $themeModel = $this->_theme;
         while ($themeModel) {
-            list($package, $theme) = $this->_getInheritedTheme($themeModel);
-            $dirs[] = "{$dir}/{$this->_area}/{$package}/{$theme}/locale/{$this->_locale}";
+            $themePath = $themeModel->getThemePath();
+            if ($themePath) {
+                $dirs[] = "{$dir}/{$this->_area}/{$themePath}/locale/{$this->_locale}";
+            }
             $themeModel = $themeModel->getParentTheme();
         }
 
@@ -182,23 +186,20 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
         $dirs = array();
         $themeModel = $this->_theme;
         while ($themeModel) {
-            list($package, $theme) = $this->_getInheritedTheme($themeModel);
-            $dirs[] = "{$dir}/{$this->_area}/{$package}/{$theme}/locale/{$this->_locale}";
-            $dirs[] = "{$dir}/{$this->_area}/{$package}/{$theme}";
+            $themePath = $themeModel->getThemePath();
+            if ($themePath) {
+                $dirs[] = "{$dir}/{$this->_area}/{$themePath}/locale/{$this->_locale}";
+                $dirs[] = "{$dir}/{$this->_area}/{$themePath}";
+            }
             $themeModel = $themeModel->getParentTheme();
         }
-
-        $extraDirs = array(
-            $this->_dirs->getDir(Mage_Core_Model_Dir::PUB_LIB),
-            Mage::getDesign()->getCustomizationDir()
-        );
 
         return $this->_fallback(
             $file,
             $dirs,
             $module,
             array("{$moduleDir}/{$this->_area}/locale/{$this->_locale}", "{$moduleDir}/{$this->_area}"),
-            $extraDirs
+            array($this->_dirs->getDir(Mage_Core_Model_Dir::PUB_LIB))
         );
     }
 
@@ -216,15 +217,22 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
      */
     protected function _fallback($file, $themeDirs, $module = false, $moduleDirs = array(), $extraDirs = array())
     {
+        // add customization path
+        $dirs = array();
+        if ($this->_theme->getCustomizationPath()) {
+            $dirs[] = $this->_theme->getCustomizationPath();
+        }
+
         // add modules to lookup
-        $dirs = $themeDirs;
+        $dirs = array_merge($dirs, $themeDirs);
         if ($module) {
             array_walk($themeDirs, function (&$dir) use ($module) {
                 $dir = "{$dir}/{$module}";
             });
-            $dirs = array_merge($themeDirs, $moduleDirs);
+            $dirs = array_merge($dirs, $themeDirs, $moduleDirs);
         }
         $dirs = array_merge($dirs, $extraDirs);
+
         // look for files
         $tryFile = '';
         foreach ($dirs as $dir) {
@@ -234,34 +242,5 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
             }
         }
         return $tryFile;
-    }
-
-    /**
-     * Get the name of the inherited theme
-     *
-     * If the specified theme inherits other theme the result is the name of inherited theme.
-     * If the specified theme does not inherit other theme the result is null.
-     *
-     * @param Mage_Core_Model_Theme $themeModel
-     * @return string|null
-     */
-    protected function _getInheritedTheme($themeModel)
-    {
-        $themePath = $themeModel->getThemePath();
-        return $themePath ? explode('/', $themePath) : null;
-    }
-
-    /**
-     * Object notified, that theme file was published, thus it can return published file name on next calls
-     *
-     * @param string $publicFilePath
-     * @param string $file
-     * @param string|null $module
-     * @return Mage_Core_Model_Design_FallbackInterface
-     */
-    public function notifyViewFilePublished($publicFilePath, $file, $module = null)
-    {
-        // Do nothing - we don't cache file paths in real fallback
-        return $this;
     }
 }

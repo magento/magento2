@@ -38,14 +38,9 @@ class Mage_Core_Model_Design_Package
     const SCOPE_SEPARATOR = '::';
 
     /**
-     * Public directory which contain theme files
+     * Public directory which contains theme files
      */
-    const PUBLIC_BASE_THEME_DIR = 'theme';
-
-    /**
-     * Public directory which contain virtual themes files
-     */
-    const PUBLIC_CUSTOMIZATION_THEME_DIR = 'customization';
+    const PUBLIC_BASE_THEME_DIR = 'static';
 
     /**#@+
      * Public directories prefix group
@@ -134,13 +129,6 @@ class Mage_Core_Model_Design_Package
      * @var string
      */
     protected $_callbackFileDir;
-
-    /**
-     * List of theme configuration objects per area
-     *
-     * @var array
-     */
-    protected $_themeConfigs = array();
 
     /**
      * List of view configuration objects per theme
@@ -412,6 +400,26 @@ class Mage_Core_Model_Design_Package
             $file = $file[1];
         }
         return $file;
+    }
+
+    /**
+     * Update file path in map while we use caching mechanism
+     *
+     * @param string $targetPath
+     * @param string $themeFile
+     * @param array $params
+     * @return Mage_Core_Model_Design_Package
+     */
+    public function updateFilePathInMap($targetPath, $themeFile, $params)
+    {
+        $themeFile = $this->_extractScope($themeFile, $params);
+        $this->_updateParamDefaults($params);
+        $fallback = $this->_getFallback($params);
+        /** @var $fallback Mage_Core_Model_Design_Fallback_CachingProxy */
+        if ($fallback instanceof Mage_Core_Model_Design_Fallback_CachingProxy) {
+            $fallback->setFilePathToMap($targetPath, $themeFile, $params['module']);
+        }
+        return $this;
     }
 
     /**
@@ -692,7 +700,7 @@ class Mage_Core_Model_Design_Package
             }
         }
 
-        $this->_getFallback($params)->notifyViewFilePublished($targetPath, $themeFile, $params['module']);
+        $this->updateFilePathInMap($targetPath, $themeFile, $params);
         return $targetPath;
     }
 
@@ -722,11 +730,6 @@ class Mage_Core_Model_Design_Package
     {
         $jsPath = Mage::getBaseDir(Mage_Core_Model_Dir::PUB_LIB) . DS;
         if (strncmp($filePath, $jsPath, strlen($jsPath)) === 0) {
-            return false;
-        }
-
-        $customizationPath = $this->getCustomizationDir();
-        if (strncmp($filePath, $customizationPath, strlen($customizationPath)) === 0) {
             return false;
         }
 
@@ -773,18 +776,7 @@ class Mage_Core_Model_Design_Package
      */
     public function getPublicDir()
     {
-        return Mage::getBaseDir(Mage_Core_Model_Dir::MEDIA) . DIRECTORY_SEPARATOR . self::PUBLIC_BASE_THEME_DIR;
-    }
-
-    /**
-     * Get customization directory
-     *
-     * @return string
-     */
-    public function getCustomizationDir()
-    {
-        return Mage::getBaseDir(Mage_Core_Model_Dir::MEDIA) . DIRECTORY_SEPARATOR . Mage_Core_Model_Design_Package::PUBLIC_BASE_THEME_DIR
-            . DIRECTORY_SEPARATOR . Mage_Core_Model_Design_Package::PUBLIC_CUSTOMIZATION_THEME_DIR;
+        return Mage::getBaseDir(Mage_Core_Model_Dir::THEME) . DIRECTORY_SEPARATOR . self::PUBLIC_BASE_THEME_DIR;
     }
 
     /**
@@ -862,14 +854,18 @@ class Mage_Core_Model_Design_Package
         $content = $this->_filesystem->read($filePath);
         $relativeUrls = $this->_extractCssRelativeUrls($content);
         foreach ($relativeUrls as $urlNotation => $fileUrl) {
-            $relatedFilePathPublic = $this->_publishRelatedViewFile($fileUrl, $filePath, $fileName, $params);
-            $fileUrlNew = basename($relatedFilePathPublic);
-            $offset = $this->_getFilesOffset($relatedFilePathPublic, $publicDir);
-            if ($offset) {
-                $fileUrlNew = $this->_canonize($offset . '/' . $fileUrlNew, true);
+            try {
+                $relatedFilePathPublic = $this->_publishRelatedViewFile($fileUrl, $filePath, $fileName, $params);
+                $fileUrlNew = basename($relatedFilePathPublic);
+                $offset = $this->_getFilesOffset($relatedFilePathPublic, $publicDir);
+                if ($offset) {
+                    $fileUrlNew = $this->_canonize($offset . '/' . $fileUrlNew, true);
+                }
+                $urlNotationNew = str_replace($fileUrl, $fileUrlNew, $urlNotation);
+                $content = str_replace($urlNotation, $urlNotationNew, $content);
+            } catch (Magento_Exception $e) {
+                Mage::logException($e);
             }
-            $urlNotationNew = str_replace($fileUrl, $fileUrlNew, $urlNotation);
-            $content = str_replace($urlNotation, $urlNotationNew, $content);
         }
         return $content;
     }
@@ -1132,7 +1128,8 @@ class Mage_Core_Model_Design_Package
     protected function _loadPublicCache($cacheKey)
     {
         if (!isset($this->_publicCache[$cacheKey])) {
-            if ($cache = Mage::app()->loadCache($cacheKey)) {
+            $cache = Mage::app()->loadCache($cacheKey);
+            if ($cache) {
                 $this->_publicCache[$cacheKey] = unserialize($cache);
             } else {
                 $this->_publicCache[$cacheKey] = array();
@@ -1154,7 +1151,7 @@ class Mage_Core_Model_Design_Package
 
         $configFiles = Mage::getConfig()->getModuleConfigurationFiles('view.xml');
         $themeConfigFile = $this->getFilename('view.xml', array());
-        if ($this->_filesystem->has($themeConfigFile)) {
+        if ($themeConfigFile && $this->_filesystem->has($themeConfigFile)) {
             $configFiles[] = $themeConfigFile;
         }
         $config = new Magento_Config_View($configFiles);

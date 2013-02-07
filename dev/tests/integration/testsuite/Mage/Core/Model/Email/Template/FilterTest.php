@@ -111,7 +111,7 @@ class Mage_Core_Model_Email_Template_FilterTest extends PHPUnit_Framework_TestCa
      */
     public function testLayoutDirective($area, $directiveParams, $expectedOutput)
     {
-        Magento_Test_Bootstrap::getInstance()->reinitialize(array(
+        Magento_Test_Helper_Bootstrap::getInstance()->reinitialize(array(
             Mage_Core_Model_App::INIT_OPTION_DIRS => array(
                 Mage_Core_Model_Dir::THEMES => dirname(__DIR__) . '/_files/design'
             )
@@ -123,7 +123,7 @@ class Mage_Core_Model_Email_Template_FilterTest extends PHPUnit_Framework_TestCa
 
         /** @var $layout Mage_Core_Model_Layout */
         $objectManager = Mage::getObjectManager();
-        $layout = Mage::getObjectManager()->create('Mage_Core_Model_Layout', array('area' => $area));
+        $layout = $objectManager->create('Mage_Core_Model_Layout', array('area' => $area));
         $objectManager->addSharedInstance($layout, 'Mage_Core_Model_Layout');
         $this->assertEquals($area, $layout->getArea());
         $this->assertEquals($area, Mage::app()->getLayout()->getArea());

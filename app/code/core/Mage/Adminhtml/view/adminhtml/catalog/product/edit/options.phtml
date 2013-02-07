@@ -24,25 +24,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="entry-edit custom-options product-custom-options">
-    <div id="dynamic-price-warning" style="display:none">
-        <ul class="messages">
-            <li class="error-msg">
-                <ul>
-                    <li><?php echo $this->__('Bundle with dynamic pricing cannot include custom defined options. Options will not be saved.') ?></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    <div class="entry-edit-head">
-        <h4><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Custom Options') ?></h4>
-        <div class="right">
+<div class="product-custom-options">
+    <div class="fieldset">
+        <legend class="legend"><span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Custom Options') ?></span></legend>
+        <br>
+        <div class="message message-error" id="dynamic-price-warning" style="display:none">
+            <div class="message-inner">
+                <div class="message-content"><?php echo $this->__('Bundle with dynamic pricing cannot include custom defined options. Options will not be saved.') ?></div>
+            </div>
+        </div>
+        <div>
             <?php echo $this->getChildHtml('import_button') ?>
             <?php echo $this->getAddButtonHtml() ?>
         </div>
     </div>
 
-    <div id="product_options_container" class="box">
+    <div id="product_options_container">
         <div id="product_options_container_top"></div>
         <?php echo $this->getOptionsBoxHtml() ?>
     </div>

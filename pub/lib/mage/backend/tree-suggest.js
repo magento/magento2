@@ -95,7 +95,8 @@
         }
     });
 
-    $.widget('mage.treeSuggest', $.mage.multisuggest, {
+    $.widget('mage.treeSuggest', $.mage.suggest, {
+        widgetEventPrefix: "suggest",
         /**
          * @override
          */

@@ -158,7 +158,7 @@ class Mage_Core_Model_Theme_ServiceTest extends PHPUnit_Framework_TestCase
             ->method('getConfigurationDesignTheme')
             ->with($this->anything(), $this->arrayHasKey('store'))
             ->will($this->returnCallback(
-                function($area, $params) {
+                function ($area, $params) {
                     return $params['store']->getId();
                 }
             ));

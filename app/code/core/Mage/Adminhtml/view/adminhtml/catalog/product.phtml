@@ -29,19 +29,8 @@
  * @see Mage_Adminhtml_Block_Catalog_Product
  */
 ?>
-<div class="content-header">
-<table cellspacing="0">
-    <tr>
-        <td style="width:50%;"><h3 class="icon-head head-products"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Products') ?></h3></td>
-        <td class="a-right">
-            <?php echo $this->getButtonsHtml() ?>
-        </td>
-    </tr>
-</table>
-</div>
+<div class="page-actions"><?php echo $this->getButtonsHtml() ?></div>
 <?php if( !$this->isSingleStoreMode() ): ?>
-<?php echo $this->getChildHtml('store_switcher');?>
+    <?php echo $this->getChildHtml('store_switcher');?>
 <?php endif;?>
-<div>
-    <?php echo $this->getGridHtml() ?>
-</div>
+<?php echo $this->getGridHtml() ?>

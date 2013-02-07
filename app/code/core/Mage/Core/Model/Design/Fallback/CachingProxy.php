@@ -135,7 +135,7 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
         $mapKey = "$prefix|$file|$module";
         if (isset($this->_map[$mapKey])) {
             $value =  $this->_map[$mapKey];
-            if ((string) $value !== '') {
+            if ('' !== (string)$value) {
                 return $this->_baseDir . DIRECTORY_SEPARATOR . $value;
             } else {
                 return $value;
@@ -218,16 +218,16 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
     }
 
     /**
-     * Object notified, that view file was published, thus it can return published file name on next calls
+     * Set file path to map.
      *
-     * @param string $publicFilePath
+     * @param string $filePath
      * @param string $file
      * @param string|null $module
      * @return Mage_Core_Model_Design_Fallback_CachingProxy
      */
-    public function notifyViewFilePublished($publicFilePath, $file, $module = null)
+    public function setFilePathToMap($filePath, $file, $module = null)
     {
-        $this->_setToMap('view', $file, $module, $publicFilePath);
+        $this->_setToMap('view', $file, $module, $filePath);
         return $this;
     }
 }

@@ -106,8 +106,8 @@ class Mage_Sales_Model_Order_ApiTest extends PHPUnit_Framework_TestCase
      */
     public function testList()
     {
-        if (Magento_Test_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
-            $this->markTestIncomplete('Legacy API is expected to support MySQL only.');
+        if (Magento_Test_Helper_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
+            $this->markTestSkipped('Legacy API is expected to support MySQL only.');
         }
         /** @var $order Mage_Sales_Model_Order */
         $order = Mage::registry('order');

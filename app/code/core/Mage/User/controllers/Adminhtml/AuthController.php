@@ -130,51 +130,25 @@ class Mage_User_Adminhtml_AuthController extends Mage_Backend_Controller_ActionA
             return;
         }
 
-        $errorMessages = array();
-        if (iconv_strlen($password) <= 0) {
-            array_push(
-                $errorMessages,
-                Mage::helper('Mage_User_Helper_Data')->__('New password field cannot be empty.')
-            );
-        }
         /** @var $user Mage_User_Model_User */
         $user = Mage::getModel('Mage_User_Model_User')->load($userId);
-
-        $user->setNewPassword($password);
-        $user->setPasswordConfirmation($passwordConfirmation);
-        $validationErrors = $user->validate();
-        if (is_array($validationErrors)) {
-            $errorMessages = array_merge($errorMessages, $validationErrors);
+        if ($password !== '') {
+            $user->setPassword($password);
         }
-
-        if (!empty($errorMessages)) {
-            foreach ($errorMessages as $errorMessage) {
-                $this->_getSession()->addError($errorMessage);
-            }
-
-            $this->_redirect('*/auth/resetpassword', array(
-                '_nosecret' => true,
-                '_query' => array(
-                    'id' => $userId,
-                    'token' => $passwordResetToken
-                )
-            ));
-            return;
+        if ($passwordConfirmation !== '') {
+            $user->setPasswordConfirmation($passwordConfirmation);
         }
-
+        // Empty current reset password token i.e. invalidate it
+        $user->setRpToken(null);
+        $user->setRpTokenCreatedAt(null);
         try {
-            // Empty current reset password token i.e. invalidate it
-            $user->setRpToken(null);
-            $user->setRpTokenCreatedAt(null);
-            $user->setPasswordConfirmation(null);
             $user->save();
             $this->_getSession()->addSuccess(
                 Mage::helper('Mage_User_Helper_Data')->__('Your password has been updated.')
             );
             $this->getResponse()->setRedirect(Mage::helper('Mage_Backend_Helper_Data')->getHomePageUrl());
-        } catch (Exception $exception) {
-            $this->_getSession()->addError($exception->getMessage());
-
+        } catch (Mage_Core_Exception $exception) {
+            $this->_getSession()->addMessages($exception->getMessages());
             $this->_redirect('*/auth/resetpassword', array(
                 '_nosecret' => true,
                 '_query' => array(
@@ -182,7 +156,6 @@ class Mage_User_Adminhtml_AuthController extends Mage_Backend_Controller_ActionA
                     'token' => $passwordResetToken
                 )
             ));
-            return;
         }
     }
 

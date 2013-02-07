@@ -28,7 +28,7 @@
  * Recurring profile editing form
  * Can work in scope of product edit form
  */
-class Mage_Sales_Block_Adminhtml_Recurring_Profile_Edit_Form extends Mage_Core_Block_Template
+class Mage_Sales_Block_Adminhtml_Recurring_Profile_Edit_Form extends Mage_Backend_Block_Abstract
 {
     /**
      * Reference to the parent element (optional)

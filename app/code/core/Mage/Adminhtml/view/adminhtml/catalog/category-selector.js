@@ -63,10 +63,10 @@
                 };
 
             $this.bind('categorySelector:add', function(event, args) {
-                $('<li class="category-selector-search-choice button"/>')
+                $('<li class="category-selector-search-choice"/>')
                     .data(args.data || {})
                     .append($('<input type="hidden" />').attr('name', name).val(args.value))
-                    .append($('<div/>').text(args.text))
+                    .append($('<strong/>').text(args.text))
                     .append('<span ' +
                         'class="category-selector-search-choice-close" tabindex="-1"></span>'
                     )
@@ -135,7 +135,7 @@
                         .attr('title', item.path)
                         .addClass('level-' + level)
                         .text(item.label)
-                        .css({marginLeft: level * 16})
+                        .css({paddingLeft: level * 16})
                     );
                 if (window.parseInt(item.item.is_active, 10) === 0) {
                     $li.addClass('category-disabled');

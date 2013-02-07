@@ -24,19 +24,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="content-header">
-    <table cellspacing="0">
-        <tr>
-            <td><h3 class="icon-head head-products"><?php echo $this->getHeader() ?></h3></td>
-            <td class="form-buttons">
-            <?php echo $this->getChildHtml('back_button') ?>
-            <?php if($this->getDesignChangeId()): ?>
-                <?php echo $this->getChildHtml('delete_button') ?>
-            <?php endif; ?>
-            <?php echo $this->getChildHtml('save_button') ?>
-            </td>
-        </tr>
-    </table>
+<div class="page-actions">
+    <?php echo $this->getChildHtml('back_button') ?>
+    <?php if($this->getDesignChangeId()): ?>
+    <?php echo $this->getChildHtml('delete_button') ?>
+    <?php endif; ?>
+    <?php echo $this->getChildHtml('save_button') ?>
 </div>
 <form action="<?php echo $this->getSaveUrl() ?>" method="post" id="design-edit-form">
     <?php echo $this->getBlockHtml('formkey')?>

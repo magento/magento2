@@ -35,6 +35,11 @@ class Mage_Theme_Model_Uploader_Service extends Mage_Core_Model_Abstract
     const XML_PATH_CSS_UPLOAD_LIMIT = 'global/theme/css/upload_limit';
 
     /**
+     * Js file upload limit
+     */
+    const XML_PATH_JS_UPLOAD_LIMIT = 'global/theme/js/upload_limit';
+
+    /**
      * Uploaded file path
      *
      * @var string|null
@@ -56,11 +61,25 @@ class Mage_Theme_Model_Uploader_Service extends Mage_Core_Model_Abstract
     protected $_fileSize;
 
     /**
+     * Files js model
+     *
+     * @var Mage_Core_Model_Theme_Customization_Files_Js
+     */
+    protected $_filesJs;
+
+    /**
      * File uploader
      *
      * @var Mage_Core_Model_File_Uploader
      */
     protected $_uploader;
+
+    /**
+     * Object manager
+     *
+     * @var Magento_ObjectManager
+     */
+    protected $_objectManager;
 
     /**
      * @param Mage_Core_Model_Event_Manager $eventDispatcher
@@ -69,6 +88,8 @@ class Mage_Theme_Model_Uploader_Service extends Mage_Core_Model_Abstract
      * @param Mage_Core_Model_Resource_Abstract $resource
      * @param Varien_Data_Collection_Db $resourceCollection
      * @param Magento_File_Size $fileSize
+     * @param Mage_Core_Model_Theme_Customization_Files_Js $filesJs
+     * @param Magento_ObjectManager $objectManager
      * @param array $data
      */
     public function __construct(
@@ -76,12 +97,16 @@ class Mage_Theme_Model_Uploader_Service extends Mage_Core_Model_Abstract
         Mage_Core_Model_Cache $cacheManager,
         Varien_Io_File $fileIo,
         Magento_File_Size $fileSize,
+        Mage_Core_Model_Theme_Customization_Files_Js $filesJs,
+        Magento_ObjectManager $objectManager,
         Mage_Core_Model_Resource_Abstract $resource = null,
         Varien_Data_Collection_Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_fileIo = $fileIo;
         $this->_fileSize = $fileSize;
+        $this->_filesJs = $filesJs;
+        $this->_objectManager = $objectManager;
         parent::__construct($eventDispatcher, $cacheManager, $resource, $resourceCollection, $data);
     }
 
@@ -90,6 +115,7 @@ class Mage_Theme_Model_Uploader_Service extends Mage_Core_Model_Abstract
      *
      * @param string $type
      * @return Mage_Theme_Model_Uploader_Service
+     * @throws Mage_Core_Exception
      */
     public function uploadCssFile($type)
     {
@@ -99,10 +125,47 @@ class Mage_Theme_Model_Uploader_Service extends Mage_Core_Model_Abstract
         $fileUploader->setAllowRenameFiles(true);
         $fileUploader->setAllowCreateFolders(true);
 
-        $this->_validateCssMaxFileSize($fileUploader->getFileSize());
+        $isValidFileSize = $this->_validateFileSize($fileUploader->getFileSize(), $this->getCssUploadMaxSize());
+        if (!$isValidFileSize) {
+            Mage::throwException($this->_objectManager->get('Mage_Core_Helper_Data')->__(
+                'CSS file size should be less than %sM.', $this->getCssUploadMaxSizeInMb()
+            ));
+        }
 
         $file = $fileUploader->validateFile();
         $this->setFilePath($file['tmp_name']);
+        return $this;
+    }
+
+    /**
+     * Upload js file
+     *
+     * @param string $type
+     * @param Mage_Core_Model_Theme $theme
+     * @return Mage_Theme_Model_Uploader_Service
+     * @throws Mage_Core_Exception
+     */
+    public function uploadJsFile($type, $theme)
+    {
+        /** @var $fileUploader Mage_Core_Model_File_Uploader */
+        $fileUploader = Mage::getObjectManager()->get('Mage_Core_Model_File_Uploader', array($type));
+        $fileUploader->setAllowedExtensions(array('js'));
+        $fileUploader->setAllowRenameFiles(true);
+        $fileUploader->setAllowCreateFolders(true);
+
+        $isValidFileSize = $this->_validateFileSize($fileUploader->getFileSize(), $this->getJsUploadMaxSize());
+        if (!$isValidFileSize) {
+            Mage::throwException($this->_objectManager->get('Mage_Core_Helper_Data')->__(
+                'JS file size should be less than %sM.', $this->getJsUploadMaxSizeInMb()
+            ));
+        }
+
+        $file = $fileUploader->validateFile();
+        $this->setFilePath($file['tmp_name']);
+        $file['content'] = $this->getFileContent();
+
+        $this->_filesJs->saveJsFile($theme, $file, true);
+
         return $this;
     }
 
@@ -123,8 +186,29 @@ class Mage_Theme_Model_Uploader_Service extends Mage_Core_Model_Abstract
      */
     public function getCssUploadMaxSize()
     {
+        return $this->_getMaxUploadSize(self::XML_PATH_CSS_UPLOAD_LIMIT);
+    }
+
+    /**
+     * Get js upload max size
+     *
+     * @return int
+     */
+    public function getJsUploadMaxSize()
+    {
+        return $this->_getMaxUploadSize(self::XML_PATH_JS_UPLOAD_LIMIT);
+    }
+
+    /**
+     * Get max upload size
+     *
+     * @param string $node
+     * @return int
+     */
+    protected function _getMaxUploadSize($node)
+    {
         $maxCssUploadSize = $this->_fileSize->convertSizeToInteger(
-            (string)Mage::getConfig()->getNode(self::XML_PATH_CSS_UPLOAD_LIMIT)
+            (string)Mage::getConfig()->getNode($node)
         );
         $maxIniUploadSize = $this->_fileSize->getMaxFileSize();
         return min($maxCssUploadSize, $maxIniUploadSize);
@@ -141,16 +225,27 @@ class Mage_Theme_Model_Uploader_Service extends Mage_Core_Model_Abstract
     }
 
     /**
-     * Validate CSS max file size
+     * Get js upload max size in megabytes
+     *
+     * @return float
+     */
+    public function getJsUploadMaxSizeInMb()
+    {
+        return $this->_fileSize->getFileSizeInMb($this->getJsUploadMaxSize());
+    }
+
+    /**
+     * Validate max file size
      *
      * @param int $fileSize
-     * @return Mage_Theme_Model_Uploader_Service
+     * @param int $maxFileSize
+     * @return bool
      */
-    protected function _validateCssMaxFileSize($fileSize)
+    protected function _validateFileSize($fileSize, $maxFileSize)
     {
-        if ($fileSize > $this->getCssUploadMaxSize()) {
-            Mage::throwException("File size should be less than {$this->getCssUploadMaxSizeInMb()}M.");
+        if ($fileSize > $maxFileSize) {
+            return false;
         }
-        return $this;
+        return true;
     }
 }

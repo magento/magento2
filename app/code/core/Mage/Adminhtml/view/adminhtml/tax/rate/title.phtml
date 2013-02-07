@@ -24,23 +24,17 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php /* <table class="dynamic-grid" cellspacing="0" id="tax-rate-titles-table"> */ ?>
-    <tr class="dynamic-grid">
+<div id="tax-rate-titles-table" class="form-inline">
+    <?php $_labels = $this->getTitles() ?>
     <?php foreach ($this->getStores() as $_store): ?>
-        <th><?php echo $_store->getName() ?></th>
+        <div class="field">
+            <label class="label"><span><?php echo $_store->getName() ?></span></label>
+            <div class="control">
+                <input class="input-text<?php if ($_store->getId() == 0): ?> required-entry<?php endif; ?>" type="text" name="title[<?php echo $_store->getId() ?>]" value="<?php echo $_labels[$_store->getId()] ?>"/>
+            </div>
+        </div>
     <?php endforeach; ?>
-    </tr>
-    <tr class="dynamic-grid">
-        <?php $_labels = $this->getTitles() ?>
-        <?php foreach ($this->getStores() as $_store): ?>
-        <td>
-            <input class="input-text<?php if($_store->getId()==0): ?> required-entry<?php endif; ?>" type="text" name="title[<?php echo $_store->getId() ?>]" value="<?php echo $_labels[$_store->getId()] ?>" />
-        </td>
-        <?php endforeach; ?>
-    </tr>
-    <tr class="dynamic-grid">
-        <td colspan="<?php echo count($this->getStores()); ?>" class="tax-rate-titles-note-td">
-            <p><strong><?php echo $this->__('Note:'); ?></strong> <?php echo $this->__('Leave empty to use tax identifier'); ?></p>
-        </td>
-    </tr>
-<?php /* </table> */ ?>
+    <div class="tax-rate-titles-note-td">
+        <strong><?php echo $this->__('Note:'); ?></strong> <?php echo $this->__('Leave empty to use tax identifier'); ?>
+    </div>
+</div>

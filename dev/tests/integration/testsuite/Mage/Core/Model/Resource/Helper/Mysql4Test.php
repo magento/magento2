@@ -39,7 +39,7 @@ class Mage_Core_Model_Resource_Helper_Mysql4Test extends PHPUnit_Framework_TestC
 
     protected function setUp()
     {
-        if (Magento_Test_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
+        if (Magento_Test_Helper_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
             $this->markTestSkipped('Test is designed to run on MySQL only.');
         }
         $this->_model = Mage::getResourceModel(

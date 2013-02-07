@@ -35,6 +35,7 @@
             storeView: {
                 windowSelector: '#store-view-window'
             },
+            closePopupBtn: '[class^="action-close"]',
             assignSaveUrl: null,
             afterAssignSaveUrl: null,
             storesByThemes: {},
@@ -68,12 +69,11 @@
             this.element.on(this.options.previewEvent, $.proxy(this._onPreview, this));
             this.element.on(this.options.editEvent, $.proxy(this._onEdit, this));
             this.element.on(this.options.deleteEvent, $.proxy(this._onDelete, this));
+            this.element.on('click.closePopup', this.options.closePopupBtn, $.proxy(this._closePopup, this));
             this.element.on('keyup', $.proxy(function(e) {
                 //ESC button
                 if (e.keyCode === 27) {
-                    var popUp = $(this.options.storeView.windowSelector);
-                    popUp.hide();
-                    this.themeId = null;
+                    this._closePopup();
                 }
             }, this));
             this.element.on(this.options.loadEvent, $.proxy(function() {
@@ -103,6 +103,11 @@
          */
         _onDelete: function(event, data) {
             deleteConfirm($.mage.__('Are you sure you want to do this?'), data.url);
+        },
+
+        _closePopup: function(event, data) {
+            $(this.options.storeView.windowSelector).hide();
+            this.themeId = null;
         },
 
         /**
@@ -275,9 +280,23 @@
          * @protected
          */
         _init: function() {
-            this.options._control.on('click', $.proxy(this._onEdit, this));
-            this.options._saveControl.on('click', $.proxy(this._onSave, this));
-            this.document.on('click', $.proxy(this._onCancel, this));
+            this.options._textControl.on('click.editThemeTitle', $.proxy(this._onEdit, this));
+            this.options._saveTitleBtn.on('click.submitForm', $.proxy(function() {
+                this.options._formControl.trigger('submit');
+                return false;
+            }, this));
+            this.options._formControl.on('submit.saveThemeTitle', $.proxy(function() {
+                this._onSave();
+                return false;
+            }, this));
+            this.document
+                .on('click.cancelEditThemeTitle', $.proxy(this._onCancel, this))
+                .on('keyup', $.proxy(function(e) {
+                    //ESC button
+                    if (e.keyCode === 27) {
+                        this._cancelEdit();
+                    }
+                }, this));
         },
 
         /**
@@ -285,9 +304,10 @@
          * @protected
          */
         _create: function() {
-            this.options._textControl = this.widget().find('.theme-title.text-field');
-            this.options._inputControl = this.widget().find('.theme-title.input-field');
-            this.options._saveControl = this.widget().find('.save');
+            this.options._textControl = this.widget().find('.theme-title');
+            this.options._inputControl = this.widget().find('.edit-theme-title-form');
+            this.options._formControl = this.widget().find('.edit-theme-title-form');
+            this.options._saveTitleBtn = this.widget().find('.action-save');
             this.options._control = this.widget().find('.theme-control-title');
 
             this.options.themeData = this.widget().data('widget-options');
@@ -346,7 +366,7 @@
          * @protected
          */
         _getThemeTitle: function() {
-           return this.options._inputControl.find('input').val();
+            return this.options._inputControl.find('input').val();
         },
 
         /**
@@ -356,7 +376,9 @@
          * @protected
          */
         _setThemeTitle: function(title) {
-            this.options._textControl.html(title);
+            this.options._textControl
+                .text(title)
+                .attr('title', title);
             this.options._inputControl.find('input').val(title);
             return this;
         },
@@ -367,7 +389,7 @@
          * @protected
          */
         _onCancel: function(event) {
-            if (this.options.isActive && this.options._control.has($(event.target)).length === 0) {
+            if (this.options.isActive && this.widget().has($(event.target)).length === 0) {
                 this._cancelEdit();
             }
         },

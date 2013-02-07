@@ -36,19 +36,38 @@ class Mage_Install_Controller_Action extends Mage_Core_Controller_Varien_Action
     }
 
     /**
-     * Initialize theme
+     * Initialize area and design
      *
      * @return Mage_Install_Controller_Action
      */
-    protected function _initDefaultTheme()
+    protected function _initDesign()
     {
-        $design = Mage::getDesign();
+        $areaCode = $this->getLayout()->getArea();
+        $area = Mage::app()->getArea($areaCode);
+        $area->load(Mage_Core_Model_App_Area::PART_CONFIG)
+            ->load(Mage_Core_Model_App_Area::PART_EVENTS);
+        $this->_initDefaultTheme($areaCode);
+        $area->detectDesign($this->getRequest());
+        $area->load(Mage_Core_Model_App_Area::PART_TRANSLATE);
+        return $this;
+    }
+
+    /**
+     * Initialize theme
+     *
+     * @param string $areaCode
+     * @return Mage_Install_Controller_Action
+     */
+    protected function _initDefaultTheme($areaCode)
+    {
+        /** @var $design Mage_Core_Model_Design_Package */
+        $design = Mage::getObjectManager()->get('Mage_Core_Model_Design_Package');
         /** @var $themesCollection Mage_Core_Model_Theme_Collection */
-        $themesCollection = Mage::getModel('Mage_Core_Model_Theme_Collection');
-        $themeModel = $themesCollection->addDefaultPattern($design->getArea())
-            ->addFilter('theme_path', $design->getConfigurationDesignTheme($design->getArea(), array('useId' => false)))
+        $themesCollection = Mage::getObjectManager()->create('Mage_Core_Model_Theme_Collection');
+        $themeModel = $themesCollection->addDefaultPattern($areaCode)
+            ->addFilter('theme_path', $design->getConfigurationDesignTheme($areaCode))
             ->getFirstItem();
-        $design->setDesignTheme($themeModel);
+        $design->setArea($areaCode)->setDesignTheme($themeModel);
         return $this;
     }
 }

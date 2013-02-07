@@ -32,52 +32,40 @@
 $_product = $this->getProduct();
 $this->getConfigJson();
 ?>
-<div class="fieldset">
-    <table cellspacing="0" class="form-list">
-        <tbody>
-            <tr class="headings">
-                <td class="label"><label for="name"><?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__('Title')?></label>
-                </td>
-                <td class="value">
-                    <input type="text" class="input-text" name="product[samples_title]" value="<?php echo $this->getSamplesTitle() ?>" <?php echo ($_product->getStoreId() && $this->getUsedDefault())?'disabled="disabled"':'' ?> />
-                </td>
-                <td class="scope-label"><?php echo !Mage::app()->isSingleStoreMode() ? Mage::helper('Mage_Adminhtml_Helper_Data')->__('[STORE VIEW]') : ''; ?></td>
-                <td class="value use-default">
-                <?php if($_product->getStoreId()): ?>
-                    <input id="sample_title_default" type="checkbox" name="use_default[]" value="samples_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $this->getUsedDefault()?'checked="checked"':'' ?> />
-                    <label class="normal" for="sample_title_default">Use Default Value</label>
-                <?php endif; ?>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <br />
-    <div class="grid">
-        <div class="hor-scroll">
-            <table cellspacing="0" class="data border">
-                <col />
-                <col width="1" />
-                <col width="1" />
-                <col width="1" />
-                <thead>
-                    <tr class="headings">
-                        <th><?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__('Title') ?> <span class="required">*</span></th>
-                        <th><?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__('File') ?></th>
-                        <th><span class="nobr"><?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__('Sort Order') ?></span></th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <td colspan="4" class="a-right"><?php echo $this->getAddButtonHtml() ?></td>
-                    </tr>
-                </tfoot>
-                <tbody id="sample_items_body">
-                </tbody>
-            </table>
-            <div><small><?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.')?></small></div>
+<div class="form-inline">
+    <div class="field">
+        <label class="label" for="name"><span><?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__('Title')?></span></label>
+        <div class="control">
+            <input type="text" class="input-text" name="product[samples_title]" value="<?php echo $this->getSamplesTitle() ?>" <?php echo ($_product->getStoreId() && $this->getUsedDefault())?'disabled="disabled"':'' ?>>
+            <?php if($_product->getStoreId()): ?>
+                <input id="sample_title_default" type="checkbox" name="use_default[]" value="samples_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $this->getUsedDefault()?'checked="checked"':'' ?> />
+                <label class="normal" for="sample_title_default">Use Default Value</label>
+            <?php endif; ?>
+        </div>
+        <div class="field-service">
+            <?php echo !Mage::app()->isSingleStoreMode() ? Mage::helper('Mage_Adminhtml_Helper_Data')->__('[STORE VIEW]') : ''; ?>
         </div>
     </div>
+
+    <table cellspacing="0" class="data-table">
+        <thead>
+            <tr>
+                <th><?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__('Title') ?> <span class="required">*</span></th>
+                <th><?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__('File') ?></th>
+                <th><?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__('Sort Order') ?></th>
+                <th class="col-delete">&nbsp;</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <td colspan="4" class="a-right"><?php echo $this->getAddButtonHtml() ?></td>
+            </tr>
+        </tfoot>
+        <tbody id="sample_items_body">
+        </tbody>
+    </table>
+
+    <div><small><?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.')?></small></div>
 </div>
 <script type="text/javascript">
 //<![CDATA[>
@@ -117,9 +105,9 @@ var sampleTemplate = '<tr>'+
                             '</div>'+
 
                         '</td>'+
-                        '<td class="a-center"><input type="text" name="downloadable[sample][{{id}}][sort_order]" value="{{sort_order}}" class="input-text sort" /></td>'+
-                        '<td>'+
-                            '<button type="button" class="scalable delete icon-btn delete-sample-item"><span><span><span>Delete</span></span></span></button>'+
+                        '<td><input type="text" name="downloadable[sample][{{id}}][sort_order]" value="{{sort_order}}" class="input-text sort" /></td>'+
+                        '<td class="col-delete">'+
+                            '<button type="button" class="action- scalable delete icon-btn delete-sample-item"><span>Delete</span></button>'+
                         '</td>'+
                     '</tr>';
 var sampleItems = {

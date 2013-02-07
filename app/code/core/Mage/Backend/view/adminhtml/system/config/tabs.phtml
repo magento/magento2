@@ -30,28 +30,28 @@
     <h3><?php echo $this->getTitle() ?></h3>
 <?php endif ?>
 <?php if ($this->getTabs()): ?>
-<ul id="<?php echo $this->getId() ?>" class="tabs config-tabs">
+<ul id="<?php echo $this->getId() ?>" class="config-nav">
     <?php
     /** @var $_tab Mage_Backend_Model_Config_Structure_Element_Tab */
     foreach ($this->getTabs() as $_tab):
     ?>
-    <li <?php if ($_tab->getClass()): ?>class="<?php echo $_tab->getClass() ?>"<?php endif ?>>
-        <dl>
-        <dt class="label" style=""><?php echo $_tab->getLabel() ?></dt>
+    <li class="config-nav-block <?php if ($_tab->getClass()): ?><?php echo $_tab->getClass() ?><?php endif ?>">
+        <h4 class="title"><?php echo $_tab->getLabel() ?></h4>
+        <ul class="items">
         <?php $_iterator = 1; ?>
         <?php
             /** @var $_section Mage_Backend_Model_Config_Structure_Element_Section */
             foreach ($_tab->getChildren() as $_section): ?>
-            <dd>
-                <a href="<?php echo $this->getSectionUrl($_section) ?>" class="<?php echo $_section->getClass() ?><?php if ($this->isSectionActive($_section)): ?> active<?php endif ?> <?php echo $_tab->getChildren()->isLast($_section) ? 'last' : '' ?>">
-                    <span>
-                        <?php echo $_section->getLabel() ?>
-                    </span>
-                </a>
-            </dd>
+                <li class="item">
+                    <a href="<?php echo $this->getSectionUrl($_section) ?>" class="item-nav <?php echo $_section->getClass() ?><?php if ($this->isSectionActive($_section)): ?> active<?php endif ?> <?php echo $_tab->getChildren()->isLast($_section) ? 'last' : '' ?>">
+                        <span>
+                            <?php echo $_section->getLabel() ?>
+                        </span>
+                    </a>
+                </li>
             <?php $_iterator++ ; ?>
         <?php endforeach; ?>
-        </dl>
+        </ul>
     </li>
     <?php
     endforeach;

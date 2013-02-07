@@ -24,15 +24,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="content-header">
-    <table cellspacing="0">
-        <tr>
-            <td style="<?php echo $this->getHeaderWidth() ?>"><?php echo $this->getHeaderHtml() ?></td>
-            <td class="form-buttons"><?php echo $this->getButtonsHtml() ?></td>
-        </tr>
-    </table>
-</div>
-
+<div class="page-actions"><?php echo $this->getButtonsHtml() ?></div>
 <div class="entry-edit">
     <div class="entry-edit">
         <div class="entry-edit-head">
@@ -40,45 +32,45 @@
         </div>
         <div id="log_details_fieldset" class="log-details">
             <table cellspacing="0" class="log-info table">
-                <col width="25%" />
-                <col />
+                <col width="25%"/>
+                <col/>
                 <tbody>
-                    <tr>
-                        <th><?php echo $this->__('Transaction ID'); ?></th>
-                        <td><?php echo $this->getTxnIdHtml() ?></td>
-                    </tr>
-                    <tr>
-                        <th><?php echo $this->__('Parent Transaction ID'); ?></th>
-                        <td>
-                            <?php if ($this->getParentTxnIdHtml()): ?>
-                                <a href="<?php echo $this->getParentTxnIdUrlHtml() ?>">
-                                    <?php echo $this->getParentTxnIdHtml(); ?>
-                                </a>
-                            <?php else :?>
-                                <?php echo $this->__('N/A'); ?>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th><?php echo $this->__('Order ID'); ?></th>
-                        <td>
-                            <a href="<?php echo $this->getOrderIdUrlHtml(); ?>">
-                                <?php echo $this->getOrderIncrementIdHtml() ?>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th><?php echo $this->__('Transaction Type'); ?></th>
-                        <td><?php echo $this->getTxnTypeHtml() ?></td>
-                    </tr>
-                    <tr>
-                        <th><?php echo $this->__('Is Closed'); ?></th>
-                        <td><?php echo $this->getIsClosedHtml(); ?></td>
-                    </tr>
-                    <tr>
-                        <th><?php echo $this->__('Created At'); ?></th>
-                        <td><?php echo $this->getCreatedAtHtml(); ?></td>
-                    </tr>
+                <tr>
+                    <th><?php echo $this->__('Transaction ID'); ?></th>
+                    <td><?php echo $this->getTxnIdHtml() ?></td>
+                </tr>
+                <tr>
+                    <th><?php echo $this->__('Parent Transaction ID'); ?></th>
+                    <td>
+                        <?php if ($this->getParentTxnIdHtml()): ?>
+                        <a href="<?php echo $this->getParentTxnIdUrlHtml() ?>">
+                            <?php echo $this->getParentTxnIdHtml(); ?>
+                        </a>
+                        <?php else : ?>
+                        <?php echo $this->__('N/A'); ?>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php echo $this->__('Order ID'); ?></th>
+                    <td>
+                        <a href="<?php echo $this->getOrderIdUrlHtml(); ?>">
+                            <?php echo $this->getOrderIncrementIdHtml() ?>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php echo $this->__('Transaction Type'); ?></th>
+                    <td><?php echo $this->getTxnTypeHtml() ?></td>
+                </tr>
+                <tr>
+                    <th><?php echo $this->__('Is Closed'); ?></th>
+                    <td><?php echo $this->getIsClosedHtml(); ?></td>
+                </tr>
+                <tr>
+                    <th><?php echo $this->__('Created At'); ?></th>
+                    <td><?php echo $this->getCreatedAtHtml(); ?></td>
+                </tr>
                 </tbody>
             </table>
         </div>

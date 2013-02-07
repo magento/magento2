@@ -24,16 +24,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="content-header">
-    <table cellspacing="0">
-        <tr>
-            <td style="width:50%;"><h3><?php echo Mage::helper('Mage_Newsletter_Helper_Data')->__('Newsletter Subscribers') ?></h3></td>
-        </tr>
-    </table>
-</div>
-<div>
-    <?php echo $this->getChildHtml('grid') ?>
-</div>
+<?php echo $this->getChildHtml('grid') ?>
 <?php if(count($this->getQueueAsOptions())>0 && $this->getShowQueueAdd()): ?>
 <div class="form-buttons">
     <select id="queueList" name="queue">

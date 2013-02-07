@@ -27,25 +27,23 @@
 
 <script type="text/javascript">
 //<![CDATA[
-OptionTemplateSelect = '<table class="border" cellpadding="0" cellspacing="0">'+
+OptionTemplateSelect = '<table class="data-table" cellspacing="0">'+
         '<input type="hidden" class="required-option-select-type-rows" name="validation_{{option_id}}_result" value="" >'+
-        '<thead>'+
-        '<tr class="headings">'+
-            '<th class="type-title"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Title') ?> <span class="required">*</span></th>'+
+        '<thead><tr>'+
+            '<th><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Title') ?> <span class="required">*</span></th>'+
             <?php if ($this->getCanReadPrice() !== false) : ?>
-            '<th class="type-price"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Price') ?></th>' +
-            '<th class="type-type"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Price Type') ?></th>' +
+            '<th><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Price') ?></th>' +
+            '<th><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Price Type') ?></th>' +
             <?php endif; ?>
-            '<th class="type-sku"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('SKU') ?></th>'+
-            '<th class="type-order"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Sort Order') ?></th>'+
-            '<th class="type-butt last">&nbsp;</th>'+
-        '</tr>'+
-        '</thead>'+
+            '<th><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('SKU') ?></th>'+
+            '<th><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Sort Order') ?></th>'+
+            '<th class="col-delete">&nbsp;</th>'+
+        '</tr></thead>'+
         '<tbody id="select_option_type_row_{{option_id}}">'+
         '</tbody>'+
         '<tfoot>'+
         '<tr>'+
-        '<td colspan="100" class="a-right">' + <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getAddButtonHtml()) ?>  + '</td>'+
+        '<td colspan="6">' + <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getAddButtonHtml()) ?>  + '</td>'+
         '</tr>'+
         '</tfoot>'+
     '</table>';
@@ -64,7 +62,7 @@ OptionTemplateSelectRow = '<tr id="product_option_{{id}}_select_{{select_id}}">'
             <?php endif; ?>
             '<td><input type="text" class="input-text" name="product[options][{{id}}][values][{{select_id}}][sku]" value="{{sku}}"></td>'+
             '<td><input type="text" class="validate-zero-or-greater input-text" name="product[options][{{id}}][values][{{select_id}}][sort_order]" value="{{sort_order}}"></td>'+
-            '<td class="last"><span title="Delete row">' + <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getDeleteButtonHtml()) ?> + '</span></td>'+
+            '<td class="col-delete">' + <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getDeleteButtonHtml()) ?> + '</td>'+
         '</tr>';
 
 selectOptionType = {

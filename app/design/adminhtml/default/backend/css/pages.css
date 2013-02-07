@@ -1,0 +1,289 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/*
+    Sales
+-------------------------------------- */
+
+.customer-current-activity {
+    float: left;
+    width: 20%;
+}
+
+.customer-current-activity-inner,
+.order-details-inner {
+    background: #fff;
+    border: 1px solid #EAE6E0;
+    padding: 18px;
+    border-radius: 5px;
+}
+
+.order-details-existing-customer {
+    padding: 0 1% 1%;
+    position: relative;
+    width: 78%;
+    float: right;
+}
+
+.order-billing-address,
+.order-billing-method,
+.order-history {
+    width: 49%;
+    float: left;
+}
+
+.order-shipping-address,
+.order-shipping-method,
+.order-totals {
+    width: 49%;
+    float: right;
+}
+
+.create-order-sidebar-container > div {
+    border-bottom: 1px solid #ccc;
+}
+
+.customer-current-activity .actions {
+    border-bottom: none;
+    margin-top: 20px;
+}
+
+/*
+    Product Creation
+-------------------------------------- */
+
+/* Action "Back" as cross  */
+[class^=" adminhtml-catalog-product-"] .page-actions .action-back,
+[class^=" adminhtml-catalog-product-"] .page-actions .action-back:hover,
+[class^=" adminhtml-catalog-product-"] .page-actions .action-back:active {
+    overflow: hidden;
+    padding: 5px 6px 3px;
+    margin-left: 12px;
+    color: #7a7976;;
+}
+
+[class^=" adminhtml-catalog-product-"] .page-actions .action-back:hover {
+    color: #000;
+}
+
+[class^=" adminhtml-catalog-product-"] .page-actions .action-back.mage-error {
+    color: #b57c72;
+}
+
+[class^=" adminhtml-catalog-product-"] .page-actions .action-back:before {
+    display: inline-block;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: '\e07d'; /* close icon */
+    font-size: 16px;
+}
+
+[class^=" adminhtml-catalog-product-"] .page-actions .action-back span {
+    display: inline-block;
+    overflow: hidden;
+    text-indent: -999em;
+}
+
+/* Image Management */
+.images {
+    position: relative;
+    border: 2px dotted #CCC;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.image {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    float: left;
+    margin: 0 10px 10px 0;
+    overflow: hidden;
+    background: #fff;
+}
+
+.image > img {
+    width: 120px;
+    height: 120px;
+}
+
+.image.base-image:before {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    right: 0;
+    padding: 5px 0;
+    background: #d56d27;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: 0 1px 2px #000;
+    font-size: 9px;
+    font-weight: bold;
+    color: #fff;
+    content: attr(data-image-label);
+    letter-spacing: 1px;
+    -moz-transform: rotate(-45deg) translate3d(0, 0, 0);
+    -webkit-transform: rotate(-45deg) translate3d(0, 0, 0);
+    transform: rotate(-45deg) translate3d(0, 0, 0);
+    margin-left: -90px;
+}
+
+.image[data-image-hidden]:after {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(247, 242, 236, .8);
+    content: attr(data-image-hidden);
+    text-align: center;
+    text-transform: uppercase;
+    color: #a69a8f;
+    font: 18px/120px 'CallunaSans', Arial, sans-serif;
+    font-weight: 500;
+    z-index: 1;
+}
+
+.image .actions {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding-top: 70px;
+    text-align: center;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.image .actions [class^="action-"],
+.image[data-image-hidden]:hover .actions [class^="action-"] {
+    visibility: hidden;
+}
+
+.image:hover .actions [class^="action-"],
+.image[data-image-hidden]:hover .actions .action-delete {
+    visibility: visible;
+}
+
+.image .action-delete {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    z-index: 2;
+}
+
+.image .action-make-main {
+    margin-bottom: 10px;
+}
+
+.draggable-handle {
+    position: relative;
+    display: block;
+    width: 14px;
+    height: 8px;
+    cursor: move;
+    margin: 0 auto;
+    background: url(Mage_Backend::images/draggable-handle-bg.gif) no-repeat;
+    z-index: 2;
+}
+
+.image-placeholder {
+    background: #fff url('Mage_Adminhtml::images/image-placeholder.png') no-repeat 50% 0%;
+}
+
+.image-placeholder-text {
+    padding: 72px 5px 0;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 1.333;
+    text-align: center;
+    color: #cac8c4;
+}
+
+/* action in fieldset wrapper */
+.fieldset-wrapper-title .action-add,
+.fieldset-wrapper-title .action-add:hover,
+.fieldset-wrapper-title .action-add:focus,
+.fieldset-wrapper-title .action-add:active,
+.fieldset-wrapper-title .action-add:hover {
+    font-size: 12px;
+    color: #a29c94;
+    text-decoration: underline;
+    margin: 8px 20px 0 0;
+}
+
+.fieldset-wrapper-title .action-add:hover {
+    color: #000;
+}
+
+.fieldset-wrapper-title .action-add span {
+}
+
+/* Quantity filed on product */
+.field-quantity_and_stock_status {
+}
+
+.field-quantity_and_stock_status input[type="text"] {
+    width: 36%;
+    margin-right: 15px;
+}
+
+.field-quantity_and_stock_status select {
+    vertical-align: middle;
+}
+
+/* Weight field */
+.field-weight {
+}
+
+.field-weight .field:first-child {
+    width: 36%;
+    margin-right: 15px;
+}
+
+.field-weight .choice input {
+    margin-right: 5px;
+}
+
+.images:before,
+.images:after,
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+
+.images:after,
+.clearfix:after {
+    clear: both;
+}

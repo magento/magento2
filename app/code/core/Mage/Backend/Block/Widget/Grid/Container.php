@@ -34,6 +34,13 @@
 
 class Mage_Backend_Block_Widget_Grid_Container extends Mage_Backend_Block_Widget_Container
 {
+    /**#@+
+     * Initialization parameters in pseudo-constructor
+     */
+    const PARAM_BLOCK_GROUP = 'block_group';
+    const PARAM_BUTTON_NEW  = 'button_new';
+    const PARAM_BUTTON_BACK = 'button_back';
+    /**#@-*/
 
     protected $_addButtonLabel;
     protected $_backButtonLabel;
@@ -41,25 +48,32 @@ class Mage_Backend_Block_Widget_Grid_Container extends Mage_Backend_Block_Widget
 
     protected $_template = 'Mage_Backend::widget/grid/container.phtml';
 
-
+    /**
+     * Initialize object state with incoming parameters
+     */
     protected function _construct()
     {
-        if (is_null($this->_addButtonLabel)) {
-            $this->_addButtonLabel = $this->__('Add New');
-        }
-        if (is_null($this->_backButtonLabel)) {
-            $this->_backButtonLabel = $this->__('Back');
-        }
-
         parent::_construct();
-
-
-
-        $this->_addButton('add', array(
-            'label'     => $this->getAddButtonLabel(),
-            'onclick'   => 'setLocation(\'' . $this->getCreateUrl() .'\')',
-            'class'     => 'add',
-        ));
+        if ($this->hasData(self::PARAM_BLOCK_GROUP)) {
+            $this->_blockGroup = $this->_getData(self::PARAM_BLOCK_GROUP);
+        }
+        if ($this->hasData(self::PARAM_BUTTON_NEW)) {
+            $this->_addButtonLabel = $this->_getData(self::PARAM_BUTTON_NEW);
+        } else {
+            // legacy logic to support all descendants
+            if (is_null($this->_addButtonLabel)) {
+                $this->_addButtonLabel = $this->__('Add New');
+            }
+            $this->_addNewButton();
+        }
+        if ($this->hasData(self::PARAM_BUTTON_BACK)) {
+            $this->_backButtonLabel = $this->_getData(self::PARAM_BUTTON_BACK);
+        } else {
+            // legacy logic
+            if (is_null($this->_backButtonLabel)) {
+                $this->_backButtonLabel = $this->__('Back');
+            }
+        }
     }
 
     protected function _prepareLayout()
@@ -90,14 +104,26 @@ class Mage_Backend_Block_Widget_Grid_Container extends Mage_Backend_Block_Widget
         return $this->getChildHtml('grid');
     }
 
-    protected function getAddButtonLabel()
+    public function getAddButtonLabel()
     {
         return $this->_addButtonLabel;
     }
 
-    protected function getBackButtonLabel()
+    public function getBackButtonLabel()
     {
         return $this->_backButtonLabel;
+    }
+
+    /**
+     * Create "New" button
+     */
+    protected function _addNewButton()
+    {
+        $this->_addButton('add', array(
+            'label'     => $this->getAddButtonLabel(),
+            'onclick'   => 'setLocation(\'' . $this->getCreateUrl() .'\')',
+            'class'     => 'add',
+        ));
     }
 
     protected function _addBackButton()

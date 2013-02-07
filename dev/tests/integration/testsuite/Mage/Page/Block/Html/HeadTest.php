@@ -83,7 +83,7 @@ class Mage_Page_Block_Html_HeadTest extends PHPUnit_Framework_TestCase
             . '<![endif]-->' . "\n" . '<link rel="stylesheet" type="text/css" media="all"'
             . ' href="http://localhost/index.php/core/index/notfound" />' . "\n"
             . '<link rel="stylesheet" type="text/css" media="print"'
-            . ' href="http://localhost/pub/media/theme/frontend/default/demo/en_US/css/styles.css" />'
+            . ' href="http://localhost/pub/media/theme/static/frontend/default/demo/en_US/css/styles.css" />'
             . "\n", $this->_block->getCssJsHtml());
     }
 
@@ -101,12 +101,12 @@ class Mage_Page_Block_Html_HeadTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             '<script type="text/javascript" src="http://localhost/pub/lib/varien/js.js"></script>' . "\n"
             . '<script type="text/javascript" '
-            . 'src="http://localhost/pub/media/theme/frontend/default/demo/en_US/Mage_Bundle/bundle.js">'
+            . 'src="http://localhost/pub/media/theme/static/frontend/default/demo/en_US/Mage_Bundle/bundle.js">'
             . '</script>' . "\n"
             . '<link rel="stylesheet" type="text/css" media="all"'
             . ' href="http://localhost/pub/lib/tiny_mce/themes/advanced/skins/default/ui.css" />' . "\n"
             . '<link rel="stylesheet" type="text/css" media="print" '
-                . 'href="http://localhost/pub/media/theme/frontend/default/demo/en_US/css/styles.css" />'
+                . 'href="http://localhost/pub/media/theme/static/frontend/default/demo/en_US/css/styles.css" />'
                 . "\n"
             . '<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="http://example.com/feed.xml" />'
                 . "\n"

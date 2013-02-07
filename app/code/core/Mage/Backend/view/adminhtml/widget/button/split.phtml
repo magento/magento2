@@ -29,25 +29,28 @@
 /** @var $_helper Mage_Core_Helper_Data */
 $_helper = $this->helper('Mage_Core_Helper_Data');
 ?>
-<div id="<?php echo $this->getId(); ?>" class="buttons-group widget-button-split <?php echo $this->getButtonClass() ?: '' ?>">
-    <div id="<?php echo $this->getId(); ?>-main-button" class="main-control button <?php echo $this->getClass() ?: '' ?>"<?php echo $this->getUiId(); ?>>
+
+<div id="<?php echo $this->getId(); ?>" class="actions-split <?php echo $this->getButtonClass() ?: '' ?>">
+    <button class="action-default primary <?php echo $this->getClass() ?: '' ?>" <?php echo $this->getUiId(); ?>>
         <span><?php echo $this->escapeHtml($this->getLabel()); ?></span>
-    </div>
-    <div class="button btn-toggle" data-toggle="dropdown" <?php echo $this->getUiId('dropdown'); ?>><span>Select</span></div>
+    </button>
+    <button class="action-toggle primary" data-toggle="dropdown" <?php echo $this->getUiId('dropdown'); ?>>
+        <span>Select</span>
+    </button>
     <ul class="dropdown-menu" <?php echo $this->getUiId("dropdown-menu"); ?>>
         <?php foreach ($this->getOptions() as $key => $option): ?>
         <li>
             <span class="item<?php if (!empty($option['default'])):?> item-default<?php endif; ?>"
-            <?php
+                <?php
                 echo isset($option['id']) ? ' id="' . $this->getId() . '-' . $option['id'] . '"' : '',
-                    isset($option['onclick']) ? 'onclick="' . $option['onclick'] . '"' : '',
-                    $this->getUiId(isset($option['id']) ? $option['id'] : 'item' . '-' . $key);
+                isset($option['onclick']) ? 'onclick="' . $option['onclick'] . '"' : '',
+                $this->getUiId(isset($option['id']) ? $option['id'] : 'item' . '-' . $key);
                 if (isset($option['data_attribute'])) {
                     foreach ($option['data_attribute'] as $dataKey => $data) {
                         echo ' data-', $dataKey, '="', $_helper->escapeHtml($_helper->jsonEncode($data)), '"';
                     }
                 }
-            ?>>
+                ?>>
                 <?php echo $this->escapeHtml($option['label']); ?>
             </span>
             <?php if (isset($option['hint'])): ?>
@@ -61,18 +64,14 @@ $_helper = $this->helper('Mage_Core_Helper_Data');
         <?php endforeach; ?>
     </ul>
 </div>
-<script>
-jQuery(function($) {
-    $('.widget-button-split')
-        .on('click.splitToggle', '.btn-toggle', function(event) {
-            if (!$(event.target).is('.disabled')) {
-                $(this).toggleClass('active').parent().toggleClass('active');
-            }
-        })
-        .on('click.splitDefault', '.main-control', function(event) {
-            if (!$(event.target).is('.disabled')) {
+
+<script type="text/javascript">
+    (function($) {
+        'use strict';
+
+        $('.actions-split')
+            .on('click.splitDefault', '.action-default', function() {
                 $(this).siblings('.dropdown-menu').find('.item-default').trigger('click');
-            }
-        });
-});
+            });
+    })(window.jQuery);
 </script>

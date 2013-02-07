@@ -82,7 +82,7 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorControllerTest extends Mag
         $content = $this->getResponse()->getBody();
 
         $this->assertContains('Choose a theme to start with', $content);
-        $this->assertContains('<div class="entry-edit">', $content);
+        $this->assertContains('<div class="infinite_scroll">', $content);
         $this->assertContains("jQuery('.infinite_scroll').infinite_scroll", $content);
     }
 
@@ -90,7 +90,7 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorControllerTest extends Mag
     {
         $this->getRequest()->setParam('theme_id', 999);
         $this->dispatch('backend/admin/system_design_editor/launch');
-
+        $this->assertSessionMessages($this->equalTo(array('The theme was not found.')), Mage_Core_Model_Message::ERROR);
         $expected = 'http://localhost/index.php/backend/admin/system_design_editor/index/';
         $this->assertRedirect($this->stringStartsWith($expected));
     }

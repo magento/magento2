@@ -50,9 +50,13 @@ class Mage_Core_Model_Design_FallbackTest extends PHPUnit_Framework_TestCase
     public function testGetters()
     {
         $theme = 't';
-        $themeModel = $this->getMock('Mage_Core_Model_Theme', array('getThemeCode'), array(), '', false);
+        $themeModel = $this->getMock('Mage_Core_Model_Theme', array('getId', 'getThemePath'), array(), '', false);
         $themeModel->expects($this->any())
-            ->method('getThemeCode')
+            ->method('getId')
+            ->will($this->returnValue(false));
+
+        $themeModel->expects($this->any())
+            ->method('getThemePath')
             ->will($this->returnValue($theme));
 
         $dirs = new Mage_Core_Model_Dir(__DIR__);
@@ -321,12 +325,12 @@ class Mage_Core_Model_Design_FallbackTest extends PHPUnit_Framework_TestCase
             'general modular skin file' => array(
                 'fixture_script.js', 'frontend', 'package/custom_theme2', 'en_US',
                 'Fixture_Module',
-                "%s/frontend/package/custom_theme2/Fixture_Module/fixture_script.js",
+                "%s/frontend/package/custom_theme2/fixture_script.js",
             ),
             'localized modular skin file' => array(
                 'fixture_script.js', 'frontend', 'package/custom_theme2', 'ru_RU',
                 'Fixture_Module',
-                "%s/frontend/package/custom_theme2/locale/ru_RU/Fixture_Module/fixture_script.js",
+                "%s/frontend/package/custom_theme2/locale/ru_RU/fixture_script.js",
             ),
         );
     }

@@ -59,7 +59,7 @@ class Mage_Cms_Model_Wysiwyg_Images_StorageTest extends PHPUnit_Framework_TestCa
             $this->assertInstanceOf('Varien_Object', $item);
             $this->assertStringEndsWith('/1.swf', $item->getUrl());
             $this->assertStringMatchesFormat(
-                'http://%s/media/theme/adminhtml/%s/%s/%s/Mage_Cms/images/placeholder_thumbnail.jpg',
+                'http://%s/media/theme/static/adminhtml/%s/%s/%s/Mage_Cms/images/placeholder_thumbnail.jpg',
                 $item->getThumbUrl()
             );
             return;
@@ -71,7 +71,7 @@ class Mage_Cms_Model_Wysiwyg_Images_StorageTest extends PHPUnit_Framework_TestCa
         $filesystem = new Magento_Filesystem(new Magento_Filesystem_Adapter_Local);
         $model = new Mage_Cms_Model_Wysiwyg_Images_Storage($filesystem);
         $this->assertStringStartsWith(
-            realpath(Magento_Test_Bootstrap::getInstance()->getInstallDir()),
+            realpath(Magento_Test_Helper_Bootstrap::getInstance()->getAppInstallDir()),
             $model->getThumbsPath()
         );
     }

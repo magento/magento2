@@ -29,6 +29,22 @@ class Magento_Test_TestCase_ControllerAbstractTest extends Magento_Test_TestCase
 {
     protected $_bootstrap;
 
+    protected function setUp()
+    {
+        parent::setUp();
+
+        // emulate session messages
+        $messagesCollection = new Mage_Core_Model_Message_Collection();
+        $messagesCollection
+            ->add(new Mage_Core_Model_Message_Warning('some_warning'))
+            ->add(new Mage_Core_Model_Message_Error('error_one'))
+            ->add(new Mage_Core_Model_Message_Error('error_two'))
+            ->add(new Mage_Core_Model_Message_Notice('some_notice'))
+        ;
+        $sessionModelFixture = new Varien_Object(array('messages' => $messagesCollection));
+        $this->_objectManager->addSharedInstance($sessionModelFixture, 'Mage_Core_Model_Session');
+    }
+
     /**
      * Bootstrap instance getter.
      * Mocking real bootstrap
@@ -107,5 +123,39 @@ class Magento_Test_TestCase_ControllerAbstractTest extends Magento_Test_TestCase
         $setRedirectMethod->invoke($this->getResponse(), 'http://magentocommerce.com');
         $this->assertRedirect();
         $this->assertRedirect($this->equalTo('http://magentocommerce.com'));
+    }
+
+    /**
+     * @param array $expectedMessages
+     * @param string|null $messageTypeFilter
+     * @dataProvider assertSessionMessagesDataProvider
+     */
+    public function testAssertSessionMessagesSuccess(array $expectedMessages, $messageTypeFilter)
+    {
+        $constraint = $this->getMock('PHPUnit_Framework_Constraint', array('toString', 'matches'));
+        $constraint
+            ->expects($this->once())
+            ->method('matches')
+            ->with($expectedMessages)
+            ->will($this->returnValue(true))
+        ;
+        $this->assertSessionMessages($constraint, $messageTypeFilter);
+    }
+
+    public function assertSessionMessagesDataProvider()
+    {
+        return array(
+            'no message type filtering' => array(array('some_warning', 'error_one', 'error_two', 'some_notice'), null),
+            'message type filtering'    => array(array('error_one', 'error_two'), Mage_Core_Model_Message::ERROR),
+        );
+    }
+
+    /**
+     * @expectedException PHPUnit_Framework_ExpectationFailedException
+     * @expectedExceptionMessage Session messages do not meet expectations
+     */
+    public function testAssertSessionMessagesFailure()
+    {
+        $this->assertSessionMessages($this->isEmpty());
     }
 }

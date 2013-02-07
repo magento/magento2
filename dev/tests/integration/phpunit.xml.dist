@@ -59,6 +59,9 @@
         <const name="TESTS_MODULE_CONFIG_FILES" value="../../../app/etc/modules/*.xml;etc/modules/*.xml"/>
         <!-- Whether to cleanup the application before running tests or not -->
         <const name="TESTS_CLEANUP" value="enabled"/>
+        <!-- Memory usage and estimated leaks thresholds -->
+        <const name="TESTS_MEM_USAGE_LIMIT" value=""/>
+        <const name="TESTS_MEM_LEAK_LIMIT" value=""/>
         <!-- CSV Profiler Output file -->
         <!--<const name="TESTS_PROFILER_FILE" value="profiler.csv"/>-->
         <!-- Bamboo compatible CSV Profiler Output file name -->

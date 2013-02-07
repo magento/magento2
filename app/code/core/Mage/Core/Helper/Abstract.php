@@ -26,8 +26,6 @@
 
 /**
  * Abstract helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class Mage_Core_Helper_Abstract
 {
@@ -68,37 +66,38 @@ abstract class Mage_Core_Helper_Abstract
     /**
      * Loading cache data
      *
-     * @param   string $id
+     * @param   string $cacheId
      * @return  mixed
      */
-    protected function _loadCache($id)
+    protected function _loadCache($cacheId)
     {
-        return Mage::app()->loadCache($id);
+        return Mage::app()->loadCache($cacheId);
     }
 
     /**
      * Saving cache
      *
-     * @param   mixed $data
-     * @param   string $id
-     * @param   array $tags
-     * @return  Mage_Core_Helper_Abstract
+     * @param mixed $data
+     * @param string $cacheId
+     * @param array $tags
+     * @param bool $lifeTime
+     * @return Mage_Core_Helper_Abstract
      */
-    protected function _saveCache($data, $id, $tags=array(), $lifeTime=false)
+    protected function _saveCache($data, $cacheId, $tags = array(), $lifeTime = false)
     {
-        Mage::app()->saveCache($data, $id, $tags, $lifeTime);
+        Mage::app()->saveCache($data, $cacheId, $tags, $lifeTime);
         return $this;
     }
 
     /**
      * Removing cache
      *
-     * @param   string $id
+     * @param   string $cacheId
      * @return  Mage_Core_Helper_Abstract
      */
-    protected function _removeCache($id)
+    protected function _removeCache($cacheId)
     {
-        Mage::app()->removeCache($id);
+        Mage::app()->removeCache($cacheId);
         return $this;
     }
 
@@ -176,6 +175,7 @@ abstract class Mage_Core_Helper_Abstract
     /**
      * Translate
      *
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      * @return string
      */
     public function __()
@@ -218,11 +218,11 @@ abstract class Mage_Core_Helper_Abstract
         return $result;
     }
 
-     /**
+    /**
      * Remove html tags, but leave "<" and ">" signs
      *
-     * @param   string $html
-     * @return  string
+     * @param string $html
+     * @return string
      */
     public function removeTags($html)
     {
@@ -232,7 +232,7 @@ abstract class Mage_Core_Helper_Abstract
     }
 
     /**
-     * Wrapper for standart strip_tags() function with extra functionality for html entities
+     * Wrapper for standard strip_tags() function with extra functionality for html entities
      *
      * @param string $data
      * @param string $allowableTags
@@ -259,20 +259,20 @@ abstract class Mage_Core_Helper_Abstract
     /**
      * Escape quotes in java script
      *
-     * @param moxed $data
+     * @param mixed $data
      * @param string $quote
      * @return mixed
      */
-    public function jsQuoteEscape($data, $quote='\'')
+    public function jsQuoteEscape($data, $quote = '\'')
     {
         if (is_array($data)) {
             $result = array();
             foreach ($data as $item) {
-                $result[] = str_replace($quote, '\\'.$quote, $item);
+                $result[] = str_replace($quote, '\\' . $quote, $item);
             }
             return $result;
         }
-        return str_replace($quote, '\\'.$quote, $data);
+        return str_replace($quote, '\\' . $quote, $data);
     }
 
     /**
@@ -326,10 +326,10 @@ abstract class Mage_Core_Helper_Abstract
     }
 
     /**
-     *  base64_encode() for URLs encoding
+     * base64_encode() for URLs encoding
      *
-     *  @param    string $url
-     *  @return   string
+     * @param    string $url
+     * @return   string
      */
     public function urlEncode($url)
     {
@@ -337,10 +337,10 @@ abstract class Mage_Core_Helper_Abstract
     }
 
     /**
-     *  base64_dencode() for URLs dencoding
+     *  base64_decode() for URLs decoding
      *
-     *  @param    string $url
-     *  @return   string
+     * @param    string $url
+     * @return   string
      */
     public function urlDecode($url)
     {
@@ -351,8 +351,8 @@ abstract class Mage_Core_Helper_Abstract
     /**
      *   Translate array
      *
-     *  @param    array $arr
-     *  @return   array
+     * @param    array $arr
+     * @return   array
      */
     public function translateArray($arr = array())
     {

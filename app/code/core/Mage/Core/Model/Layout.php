@@ -568,7 +568,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
             list(
                 $row[self::SCHEDULED_STRUCTURE_INDEX_SIBLING_NAME],
                 $row[self::SCHEDULED_STRUCTURE_INDEX_IS_AFTER]
-                ) = $this->_beforeAfterToSibling($node);
+            ) = $this->_beforeAfterToSibling($node);
 
             // materialized path for referencing nodes in the plain array of _scheduledStructure
             if ($this->_scheduledStructure->hasPath($parentName)) {
@@ -691,6 +691,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
      *
      * @param string $name
      * @param string $type
+     * @param string $class
      * @return string
      */
     protected function _createStructuralElement($name, $type, $class)
@@ -705,6 +706,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
     /**
      * Generate anonymous element name for structure
      *
+     * @param string $class
      * @return string
      */
     protected function _generateAnonymousName($class)

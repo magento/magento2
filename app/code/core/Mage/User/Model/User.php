@@ -58,6 +58,11 @@
  * @package     Mage_User
  * @author      Magento Core Team <core@magentocommerce.com>
  */
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.couplingBetweenObjects)
+ */
 class Mage_User_Model_User
     extends Mage_Core_Model_Abstract
     implements Mage_Backend_Model_Auth_Credential_StorageInterface
@@ -132,11 +137,7 @@ class Mage_User_Model_User
             $data['username'] = $this->getUsername();
         }
 
-        if ($this->getNewPassword()) {
-            // Change password
-            $data['password'] = $this->_getEncodedPassword($this->getNewPassword());
-        } elseif ($this->getPassword() && $this->getPassword() != $this->getOrigData('password')) {
-            // New user password
+        if ($this->_willSavePassword()) {
             $data['password'] = $this->_getEncodedPassword($this->getPassword());
         }
 
@@ -147,6 +148,97 @@ class Mage_User_Model_User
         $this->addData($data);
 
         return parent::_beforeSave();
+    }
+
+    /**
+     * Whether the password saving is going to occur
+     *
+     * @return bool
+     */
+    protected function _willSavePassword()
+    {
+        return ($this->isObjectNew() || ($this->hasData('password') && $this->dataHasChangedFor('password')));
+    }
+
+    /**
+     * Add validation rules for particular fields
+     *
+     * @return Zend_Validate_Interface
+     */
+    protected function _getValidationRulesBeforeSave()
+    {
+        $userNameNotEmpty = new Zend_Validate_NotEmpty();
+        $userNameNotEmpty->setMessage(
+            Mage::helper('Mage_User_Helper_Data')->__('User Name is required field.'),
+            Zend_Validate_NotEmpty::IS_EMPTY
+        );
+        $firstNameNotEmpty = new Zend_Validate_NotEmpty();
+        $firstNameNotEmpty->setMessage(
+            Mage::helper('Mage_User_Helper_Data')->__('First Name is required field.'),
+            Zend_Validate_NotEmpty::IS_EMPTY
+        );
+        $lastNameNotEmpty = new Zend_Validate_NotEmpty();
+        $lastNameNotEmpty->setMessage(
+            Mage::helper('Mage_User_Helper_Data')->__('Last Name is required field.'),
+            Zend_Validate_NotEmpty::IS_EMPTY
+        );
+        $emailValidity = new Zend_Validate_EmailAddress();
+        $emailValidity->setMessage(
+            Mage::helper('Mage_User_Helper_Data')->__('Please enter a valid email.'),
+            Zend_Validate_EmailAddress::INVALID
+        );
+
+        /** @var $validator Magento_Validator_Composite_VarienObject */
+        $validator = Mage::getModel('Magento_Validator_Composite_VarienObject');
+        $validator
+            ->addRule($userNameNotEmpty, 'username')
+            ->addRule($firstNameNotEmpty, 'firstname')
+            ->addRule($lastNameNotEmpty, 'lastname')
+            ->addRule($emailValidity, 'email')
+        ;
+
+        if ($this->_willSavePassword()) {
+            $this->_addPasswordValidation($validator);
+        }
+        return $validator;
+    }
+
+    /**
+     * Add validation rules for the password management fields
+     *
+     * @param Magento_Validator_Composite_VarienObject $validator
+     */
+    protected function _addPasswordValidation(Magento_Validator_Composite_VarienObject $validator)
+    {
+        $passwordNotEmpty = new Zend_Validate_NotEmpty();
+        $passwordNotEmpty->setMessage(
+            Mage::helper('Mage_User_Helper_Data')->__('Password is required field.'),
+            Zend_Validate_NotEmpty::IS_EMPTY
+        );
+        $minPassLength = self::MIN_PASSWORD_LENGTH;
+        $passwordLength = new Zend_Validate_StringLength(array('min' => $minPassLength, 'encoding' => 'UTF-8'));
+        $passwordLength->setMessage(
+            Mage::helper('Mage_User_Helper_Data')->__('Password must be at least of %d characters.', $minPassLength),
+            Zend_Validate_StringLength::TOO_SHORT
+        );
+        $passwordChars = new Zend_Validate_Regex('/[a-z].*\d|\d.*[a-z]/iu');
+        $passwordChars->setMessage(
+            Mage::helper('Mage_User_Helper_Data')->__('Password must include both numeric and alphabetic characters.'),
+            Zend_Validate_Regex::NOT_MATCH
+        );
+        $validator
+            ->addRule($passwordNotEmpty, 'password')
+            ->addRule($passwordLength, 'password')
+            ->addRule($passwordChars, 'password')
+        ;
+        if ($this->hasPasswordConfirmation()) {
+            $passwordConfirmation = new Zend_Validate_Identical($this->getPasswordConfirmation());
+            $passwordConfirmation->setMessage(
+                Mage::helper('Mage_User_Helper_Data')->__('Password confirmation must be same as password.'),
+                Zend_Validate_Identical::NOT_SAME
+            );
+            $validator->addRule($passwordConfirmation, 'password');
+        }
     }
 
     /**
@@ -221,17 +313,6 @@ class Mage_User_Model_User
     public function roleUserExists()
     {
         $result = $this->_getResource()->roleUserExists($this);
-        return (is_array($result) && count($result) > 0) ? true : false;
-    }
-
-    /**
-     * Check if user exists based on its id, username and email
-     *
-     * @return boolean
-     */
-    public function userExists()
-    {
-        $result = $this->_getResource()->userExists($this);
         return (is_array($result) && count($result) > 0) ? true : false;
     }
 
@@ -446,80 +527,6 @@ class Mage_User_Model_User
     protected function _getEncodedPassword($password)
     {
         return Mage::helper('Mage_Core_Helper_Data')->getHash($password, 2);
-    }    
-
-    /**
-     * Validate user attribute values.
-     * Returns TRUE or array of errors.
-     *
-     * @return mixed
-     */
-    public function validate()
-    {
-        $errors = array();
-
-        if (!Zend_Validate::is($this->getUsername(), 'NotEmpty')) {
-            $errors[] = Mage::helper('Mage_User_Helper_Data')->__('User Name is required field.');
-        }
-
-        if (!Zend_Validate::is($this->getFirstname(), 'NotEmpty')) {
-            $errors[] = Mage::helper('Mage_User_Helper_Data')->__('First Name is required field.');
-        }
-
-        if (!Zend_Validate::is($this->getLastname(), 'NotEmpty')) {
-            $errors[] = Mage::helper('Mage_User_Helper_Data')->__('Last Name is required field.');
-        }
-
-        if (!Zend_Validate::is($this->getEmail(), 'EmailAddress')) {
-            $errors[] = Mage::helper('Mage_User_Helper_Data')->__('Please enter a valid email.');
-        }
-
-        if ($this->hasNewPassword()) {
-            $errors = array_merge($errors, $this->_validatePassword());
-        }
-
-        if ($this->userExists()) {
-            // @codingStandardsIgnoreStart
-            $errors[] = Mage::helper('Mage_User_Helper_Data')->__('A user with the same user name or email aleady exists.');
-            // @codingStandardsIgnoreEnd
-        }
-
-        if (empty($errors)) {
-            return true;
-        }
-        return $errors;
-    }
-
-    /**
-     * Validate user password
-     *
-     * @return array
-     */
-    protected function _validatePassword()
-    {
-        $errors = array();
-
-        if (Mage::helper('Mage_Core_Helper_String')->strlen($this->getNewPassword()) < self::MIN_PASSWORD_LENGTH) {
-            // @codingStandardsIgnoreStart
-            $errors[] = Mage::helper('Mage_User_Helper_Data')->__('Password must be at least of %d characters.', self::MIN_PASSWORD_LENGTH);
-            // @codingStandardsIgnoreEnd
-        }
-
-        if (!preg_match('/[a-z]/iu', $this->getNewPassword())
-            || !preg_match('/[0-9]/u', $this->getNewPassword())
-        ) {
-            // @codingStandardsIgnoreStart
-            $errors[] = Mage::helper('Mage_User_Helper_Data')->__('Password must include both numeric and alphabetic characters.');
-            // @codingStandardsIgnoreEnd
-        }
-
-        if ($this->hasPasswordConfirmation() && $this->getNewPassword() != $this->getPasswordConfirmation()) {
-            // @codingStandardsIgnoreStart
-            $errors[] = Mage::helper('Mage_User_Helper_Data')->__('Password confirmation must be same as password.');
-            // @codingStandardsIgnoreEnd
-        }
-
-        return $errors;
     }
 
     /**

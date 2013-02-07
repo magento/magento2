@@ -41,7 +41,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit extends Mage_Backend_B
         $this->setId('theme_edit');
 
         /** @var $theme Mage_Core_Model_Theme */
-        $theme = Mage::registry('current_theme');
+        $theme = $this->_getCurrentTheme();
         if ($theme) {
             if ($theme->isEditable()) {
                 $this->_addButton('save_and_continue', array(
@@ -88,11 +88,23 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit extends Mage_Backend_B
      */
     public function getHeaderText()
     {
-        if (Mage::registry('current_theme')->getId()) {
-            $header = $this->__('Theme: %s', Mage::registry('current_theme')->getThemeTitle());
+        /** @var $theme Mage_Core_Model_Theme */
+        $theme = $this->_getCurrentTheme();
+        if ($theme->getId()) {
+            $header = $this->__('Theme: %s', $theme->getThemeTitle());
         } else {
             $header = $this->__('New Theme');
         }
         return $header;
+    }
+
+    /**
+     * Get current theme
+     *
+     * @return Mage_Core_Model_Theme
+     */
+    protected function _getCurrentTheme()
+    {
+        return Mage::registry('current_theme');
     }
 }

@@ -33,6 +33,12 @@
  */
 class Mage_Backend_Block_Widget_Container extends Mage_Backend_Block_Template
 {
+    /**#@+
+     * Initialization parameters in pseudo-constructor
+     */
+    const PARAM_CONTROLLER  = 'controller';
+    const PARAM_HEADER_TEXT = 'header_text';
+    /**#@-*/
 
     /**
      * So called "container controller" to specify group of blocks participating in some action
@@ -59,6 +65,20 @@ class Mage_Backend_Block_Widget_Container extends Mage_Backend_Block_Template
      * @var string
      */
     protected $_headerText = 'Container Widget Header';
+
+    /**
+     * Initialize "controller" and "header text"
+     */
+    protected function _construct()
+    {
+        parent::_construct();
+        if ($this->hasData(self::PARAM_CONTROLLER)) {
+            $this->_controller = $this->_getData(self::PARAM_CONTROLLER);
+        }
+        if ($this->hasData(self::PARAM_HEADER_TEXT)) {
+            $this->_headerText = $this->_getData(self::PARAM_HEADER_TEXT);
+        }
+    }
 
     /**
      * Add a button

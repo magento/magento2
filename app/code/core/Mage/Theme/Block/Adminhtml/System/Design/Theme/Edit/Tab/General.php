@@ -26,10 +26,11 @@
 
 /**
  * Theme form, general tab
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General
-    extends Mage_Backend_Block_Widget_Form
-    implements Mage_Backend_Block_Widget_Tab_Interface
+    extends Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_TabAbstract
 {
     /**
      * Whether theme is editable
@@ -46,7 +47,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General
     protected function _prepareForm()
     {
         /** @var $session Mage_Backend_Model_Session */
-        $session = Mage::getSingleton('Mage_Backend_Model_Session');
+        $session = $this->_objectManager->get('Mage_Backend_Model_Session');
         $formDataFromSession = $session->getThemeData();
         $this->_isThemeEditable = $this->_getCurrentTheme()->isVirtual();
         $formData = $this->_getCurrentTheme()->getData();
@@ -92,17 +93,17 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General
         }
 
         /** @var $themesCollections Mage_Core_Model_Theme_Collection */
-        $themesCollections = Mage::getResourceModel('Mage_Core_Model_Theme_Collection');
+        $themesCollections = $this->_objectManager->create('Mage_Core_Model_Theme_Collection');
 
         /** @var $helper Mage_Core_Helper_Data */
-        $helper = Mage::helper('Mage_Core_Helper_Data');
+        $helper = $this->_objectManager->get('Mage_Core_Helper_Data');
 
         $onChangeScript = sprintf('parentThemeOnChange(this.value, %s)', str_replace(
             '"', '\'', $helper->jsonEncode($this->_getDefaultsInherited($themesCollections->addDefaultPattern()))
         ));
 
         /** @var $parentTheme Mage_Core_Model_Theme */
-        $parentTheme = Mage::getModel('Mage_Core_Model_Theme');
+        $parentTheme = $this->_objectManager->create('Mage_Core_Model_Theme');
         if (!empty($formData['parent_id'])) {
             $parentTheme->load($formData['parent_id']);
         }
@@ -162,8 +163,8 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General
                 'label'    => $this->__('Theme Preview Image'),
                 'title'    => $this->__('Theme Preview Image'),
                 'name'     => 'preview_image',
-                'after_element_html' => '<img width="50" src="' . Mage_Core_Model_Theme::getPreviewImageDirectoryUrl()
-                    . $formData['preview_image'] . '" />'
+                'after_element_html' => '<img width="50" src="' . $parentTheme->getThemeImage()
+                    ->getPreviewImageDirectoryUrl() . $formData['preview_image'] . '" />'
             ));
         }
 
@@ -239,19 +240,9 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General
      */
     protected function _getAdditionalElementTypes()
     {
-        $element = Mage::getConfig()
+        $element = $this->_objectManager->get('Mage_Core_Model_Config')
             ->getBlockClassName('Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Form_Element_Image');
         return array('image' => $element);
-    }
-
-    /**
-     * Get current theme
-     *
-     * @return Mage_Core_Model_Theme
-     */
-    protected function _getCurrentTheme()
-    {
-        return Mage::registry('current_theme');
     }
 
     /**
@@ -265,16 +256,6 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General
     }
 
     /**
-     * Prepare title for tab
-     *
-     * @return string
-     */
-    public function getTabTitle()
-    {
-        return $this->__('General');
-    }
-
-    /**
      * Returns status flag about this tab can be shown or not
      *
      * @return bool
@@ -282,16 +263,6 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General
     public function canShowTab()
     {
         return true;
-    }
-
-    /**
-     * Returns status flag about this tab hidden or not
-     *
-     * @return bool
-     */
-    public function isHidden()
-    {
-        return false;
     }
 
     /**

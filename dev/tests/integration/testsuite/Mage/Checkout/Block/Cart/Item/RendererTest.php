@@ -27,6 +27,7 @@
 
 /**
  * @magentoDataFixture Mage/Catalog/_files/product_with_image.php
+ * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
  */
 class Mage_Checkout_Block_Cart_Item_RendererTest extends PHPUnit_Framework_TestCase
 {

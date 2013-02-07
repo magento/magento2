@@ -236,101 +236,52 @@ class Mage_Install_Model_Installer extends Varien_Object
     }
 
     /**
-     * Prepare admin user data in model and validate it.
-     * Returns TRUE or array of error messages.
+     * Create an admin user
      *
      * @param array $data
-     * @return mixed
-     */
-    public function validateAndPrepareAdministrator($data)
-    {
-        $user = Mage::getModel('Mage_User_Model_User')
-            ->load($data['username'], 'username');
-        $user->addData($data);
-
-        $result = $user->validate();
-        if (is_array($result)) {
-            foreach ($result as $error) {
-                $this->getDataModel()->addError($error);
-            }
-            return $result;
-        }
-        return $user;
-    }
-
-    /**
-     * Create admin user.
-     * Paramater can be prepared user model or array of data.
-     * Returns TRUE or throws exception.
-     *
-     * @param mixed $data
-     * @return bool
      */
     public function createAdministrator($data)
     {
-        $user = Mage::getModel('Mage_User_Model_User')
-            ->load('admin', 'username');
-        if ($user && $user->getPassword() == '4297f44b13955235245b2497399d7a93') {
-            $user->delete();
-        }
-
-        //to support old logic checking if real data was passed
-        if (is_array($data)) {
-            $data = $this->validateAndPrepareAdministrator($data);
-            if (is_array($data)) {
-                throw new Exception(Mage::helper('Mage_Install_Helper_Data')->__('Please correct the user data and try again.'));
-            }
-        }
-
-        //run time flag to force saving entered password
-        $data->setForceNewPassword(true)
+        /** @var $user Mage_User_Model_User */
+        $user = Mage::getModel('Mage_User_Model_User');
+        $user->loadByUsername($data['username']);
+        $user->addData($data)
+            ->setForceNewPassword(true) // run-time flag to force saving of the entered password
             ->setRoleId(1)
             ->save();
-
-        return true;
     }
 
     /**
-     * Validating encryption key.
-     * Returns TRUE or array of error messages.
-     *
-     * @param $key
-     * @return unknown_type
-     */
-    public function validateEncryptionKey($key)
-    {
-        $errors = array();
-
-        try {
-            if ($key) {
-                Mage::helper('Mage_Core_Helper_Data')->validateKey($key);
-            }
-        } catch (Exception $e) {
-            $errors[] = $e->getMessage();
-            $this->getDataModel()->addError($e->getMessage());
-        }
-
-        if (!empty($errors)) {
-            return $errors;
-        }
-
-        return true;
-    }
-
-    /**
-     * Set encryption key
+     * Install encryption key into the application, generate and return a random one, if no value is specified
      *
      * @param string $key
      * @return Mage_Install_Model_Installer
      */
-    public function installEnryptionKey($key)
+    public function installEncryptionKey($key)
     {
-        if ($key) {
-            Mage::helper('Mage_Core_Helper_Data')->validateKey($key);
-        }
+        /** @var $helper Mage_Core_Helper_Data */
+        $helper = Mage::helper('Mage_Core_Helper_Data');
+        $helper->validateKey($key);
         Mage::getSingleton('Mage_Install_Model_Installer_Config')->replaceTmpEncryptKey($key);
         $this->_refreshConfig();
         return $this;
+    }
+
+    /**
+     * Return a validated encryption key, generating a random one, if no value was initially provided
+     *
+     * @param string|null $key
+     * @return string
+     */
+    public function getValidEncryptionKey($key = null)
+    {
+        /** @var $helper Mage_Core_Helper_Data */
+        $helper = Mage::helper('Mage_Core_Helper_Data');
+        if (!$key) {
+            $key = md5($helper->getRandomString(10));
+        }
+        $helper->validateKey($key);
+        return $key;
     }
 
     public function finish()

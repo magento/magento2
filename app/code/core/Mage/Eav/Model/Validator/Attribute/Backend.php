@@ -34,11 +34,6 @@
 class Mage_Eav_Model_Validator_Attribute_Backend extends Magento_Validator_ValidatorAbstract
 {
     /**
-     * @var array
-     */
-    protected $_messages;
-
-    /**
      * Returns true if and only if $value meets the validation requirements.
      *
      * @param Mage_Core_Model_Abstract $entity
@@ -78,15 +73,5 @@ class Mage_Eav_Model_Validator_Attribute_Backend extends Magento_Validator_Valid
             }
         }
         return 0 == count($this->_messages);
-    }
-
-    /**
-     * Returns an array of messages that explain why the most recent isValid() call returned false.
-     *
-     * @return array
-     */
-    public function getMessages()
-    {
-        return $this->_messages;
     }
 }

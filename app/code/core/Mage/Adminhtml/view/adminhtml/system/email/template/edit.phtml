@@ -24,82 +24,55 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="content-header">
-    <h3 class="icon-head head-system-email-template"><?php echo $this->getHeaderText() ?></h3>
-    <p class="content-buttons form-buttons">
-                <?php echo $this->getBackButtonHtml(); ?>
-                <?php echo $this->getResetButtonHtml(); ?>
-                <?php if($this->getEditMode()): ?>
-                <?php echo $this->getDeleteButtonHtml(); ?>
-                <?php endif ?>
-                <?php if(!$this->isTextType()): ?>
-                <?php echo $this->getToPlainButtonHtml(); ?>
-                <?php echo $this->getToHtmlButtonHtml(); ?>
-                <?php endif ?>
-                <?php echo $this->getPreviewButtonHtml(); ?>
-                <?php echo $this->getSaveButtonHtml(); ?>
-    </p>
+<div class="page-actions">
+    <?php echo $this->getBackButtonHtml(); ?>
+    <?php echo $this->getResetButtonHtml(); ?>
+    <?php if($this->getEditMode()): ?>
+    <?php echo $this->getDeleteButtonHtml(); ?>
+    <?php endif ?>
+    <?php if(!$this->isTextType()): ?>
+    <?php echo $this->getToPlainButtonHtml(); ?>
+    <?php echo $this->getToHtmlButtonHtml(); ?>
+    <?php endif ?>
+    <?php echo $this->getPreviewButtonHtml(); ?>
+    <?php echo $this->getSaveButtonHtml(); ?>
 </div>
 <?php if (!$this->getEditMode()): ?>
 <form action="<?php echo $this->getLoadUrl() ?>" method="post" id="email_template_load_form">
     <?php echo $this->getBlockHtml('formkey')?>
-    <div class="entry-edit">
-        <div class="entry-edit-head">
-            <h4 class="icon-head head-edit-form fieldset-legend">
-            <?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Load default template') ?>
-            </h4>
-            <div class="form-buttons"></div>
+    <fieldset class="fieldset form-inline">
+        <legend class="legend"><span><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Load default template') ?></span></legend>
+        <div class="field required">
+            <label class="label" for="template_select"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Template') ?></label>
+            <div class="control">
+                <select id="template_select" name="code" class="select required-entry">
+                    <?php foreach ($this->getTemplateOptions() as $group => $options): ?>
+                        <?php if ($group): ?>
+                            <optgroup label="<?php echo $this->escapeHtml($group) ?>">
+                        <?php endif; ?>
+                        <?php foreach ($options as $option): ?>
+                            <option value="<?php echo $this->escapeHtml($option['value']) ?>"<?php echo $this->getOrigTemplateCode() == $option['value'] ? ' selected="selected"' : '' ?>><?php echo $this->escapeHtml($option['label']) ?></option>
+                        <?php endforeach; ?>
+                        <?php if ($group): ?>
+                            </optgroup>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </select>
+            </div>
         </div>
-        <div class="fieldset">
-            <table class="form-list" cellspacing="0">
-                <tbody>
-                    <tr>
-                        <td class="label">
-                            <label for="template_select">
-                            <?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Template') ?>
-                            <span class="required">*</span>
-                            </label>
-                        </td>
-                        <td class="value">
-                            <select id="template_select" name="code" class="select required-entry">
-                                <?php foreach ($this->getTemplateOptions() as $group => $options): ?>
-                                    <?php if ($group): ?>
-                                        <optgroup label="<?php echo $this->escapeHtml($group) ?>">
-                                    <?php endif; ?>
-                                    <?php foreach ($options as $option): ?>
-                                        <option value="<?php echo $this->escapeHtml($option['value']) ?>"<?php echo $this->getOrigTemplateCode() == $option['value'] ? ' selected="selected"' : '' ?>><?php echo $this->escapeHtml($option['label']) ?></option>
-                                    <?php endforeach; ?>
-                                    <?php if ($group): ?>
-                                        </optgroup>
-                                    <?php endif; ?>
-
-                                <?php endforeach; ?>
-                            </select>
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="label">
-                            <label>&nbsp;</label>
-                        </td>
-                        <td class="value">
-                            <?php echo $this->getLoadButtonHtml() ?>
-                        </td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="field required">
+            <div class="control">
+                <?php echo $this->getLoadButtonHtml() ?>
+            </div>
         </div>
-    </div>
+    </fieldset>
 </form>
 <?php endif ?>
 <form action="<?php echo $this->getSaveUrl() ?>" method="post" id="email_template_edit_form">
     <?php echo $this->getBlockHtml('formkey')?>
-    <fieldset>
-        <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
-        <input type="hidden" id="orig_template_code" name="orig_template_code" value="<?php echo $this->getOrigTemplateCode() ?>" />
-        <?php echo $this->getFormHtml() ?>
-    </fieldset>
+    <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
+    <input type="hidden" id="orig_template_code" name="orig_template_code" value="<?php echo $this->getOrigTemplateCode() ?>" />
+    <?php echo $this->getFormHtml() ?>
 </form>
 <form action="<?php echo $this->getPreviewUrl() ?>" method="post" id="email_template_preview_form" target="_blank">
     <?php echo $this->getBlockHtml('formkey')?>

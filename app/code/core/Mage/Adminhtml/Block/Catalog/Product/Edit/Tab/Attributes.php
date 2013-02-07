@@ -62,7 +62,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes extends Mage_Admi
 
             $fieldset = $form->addFieldset('group_fields' . $group->getId(), array(
                 'legend' => Mage::helper('Mage_Catalog_Helper_Data')->__($group->getAttributeGroupName()),
-                'class' => 'fieldset-wide'
+                'collapsable' => true
             ));
 
             $attributes = $this->getGroupAttributes();

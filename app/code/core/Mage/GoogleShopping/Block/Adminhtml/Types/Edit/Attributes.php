@@ -124,7 +124,7 @@ class Mage_GoogleShopping_Block_Adminhtml_Types_Edit_Attributes
      */
     public function getAttributesSelectHtml($escapeJsQuotes = false)
     {
-        $select = $this->getLayout()->createBlock('Mage_Core_Block_Html_Select')
+        $select = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Html_Select')
             ->setId($this->getFieldId().'_{{index}}_attribute')
             ->setName($this->getFieldName().'[{{index}}][attribute_id]')
             ->setOptions($this->_getAttributes($this->getAttributeSetId(), $escapeJsQuotes));

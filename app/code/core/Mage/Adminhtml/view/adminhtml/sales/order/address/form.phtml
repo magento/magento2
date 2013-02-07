@@ -24,14 +24,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div>
-<ul class="messages">
-    <li class="notice-msg">
-        <ul>
-            <li><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Changing address information will not recalculate shipping, tax or other order amount.') ?></li>
-        </ul>
-    </li>
-</ul>
+<div class="message message-info">
+    <div class="message-inner">
+        <div class="message-content"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Changing address information will not recalculate shipping, tax or other order amount.') ?></div>
+    </div>
 </div>
 <div class="entry-edit">
     <div class="entry-edit-head">

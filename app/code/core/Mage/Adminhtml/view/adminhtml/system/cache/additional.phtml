@@ -24,30 +24,24 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<br/>
-<div class="content-header">
-    <table cellspacing="0">
-        <tr>
-            <td><h3><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Additional Cache Management') ?></h3></td><td class="form-buttons"></td>
-         </tr>
-    </table>
+<div class="fieldset">
+    <div class="legend">
+        <span><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Additional Cache Management') ?></span>
+    </div>
+    <div class="field">
+        <button onclick="setLocation('<?php echo $this->getCleanImagesUrl()?>')" type="button">
+            <?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Flush Catalog Images Cache') ?>
+        </button>
+        <span class="label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Pregenerated product images files.')?></span>
+    </div>
+    <div class="field">
+        <button onclick="setLocation('<?php echo $this->getCleanMediaUrl()?>')" type="button">
+            <?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Flush JavaScript/CSS Cache') ?>
+        </button>
+        <span class="label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Themes JavaScript and CSS files combined to one file.')?></span>
+    </div>
+    <?php echo $this->getChildHtml(); ?>
 </div>
-<table class="form-list">
-    <tr>
-        <td class="scope-label">
-            <button onclick="setLocation('<?php echo $this->getCleanImagesUrl()?>')" type="button" class="scalable"><span><span><span><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Flush Catalog Images Cache') ?></span></span></span></button>
-        </td>
-        <td class="scope-label">
-            <?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Pregenerated product images files.')?>
-        </td>
-    </tr>
-    <tr>
-        <td class="scope-label">
-            <button onclick="setLocation('<?php echo $this->getCleanMediaUrl()?>')" type="button" class="scalable"><span><span><span><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Flush JavaScript/CSS Cache') ?></span></span></span></button>
-        </td>
-        <td class="scope-label">
-            <?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Themes JavaScript and CSS files combined to one file.')?>
-        </td>
-    </tr>
-</table>
-<?php echo $this->getChildHtml(); ?>
+
+
+

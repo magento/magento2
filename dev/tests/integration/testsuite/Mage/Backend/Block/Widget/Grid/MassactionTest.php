@@ -57,7 +57,7 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
      */
     protected function _setFixtureTheme()
     {
-        Magento_Test_Bootstrap::getInstance()->reinitialize(array(
+        Magento_Test_Helper_Bootstrap::getInstance()->reinitialize(array(
             Mage_Core_Model_App::INIT_OPTION_SCOPE_TYPE => 'store',
             Mage_Core_Model_App::INIT_OPTION_SCOPE_CODE => 'admin',
             Mage_Core_Model_App::INIT_OPTION_DIRS => array(

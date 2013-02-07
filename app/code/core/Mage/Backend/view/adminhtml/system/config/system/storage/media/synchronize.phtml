@@ -144,8 +144,8 @@
 
                         if (response.state == '<?php echo Mage_Core_Model_File_Storage_Flag::STATE_NOTIFIED ?>') {
                             if (response.html && response.html != '') {
-                                $$('div.notification-global').each(function(e) {
-                                    if (!e.hasClassName('notification-global-notice')) {
+                                $$('.message-system').each(function(e) {
+                                    if (!e.hasClassName('message-system')) {
                                         e.hide();
                                     }
                                 });

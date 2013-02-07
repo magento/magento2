@@ -153,7 +153,7 @@ abstract class Varien_Data_Form_Element_Abstract extends Varien_Data_Form_Abstra
 
     public function getHtmlAttributes()
     {
-        return array('type', 'title', 'class', 'style', 'onclick', 'onchange', 'disabled', 'readonly', 'tabindex');
+        return array('type', 'title', 'class', 'style', 'onclick', 'onchange', 'disabled', 'readonly', 'tabindex', 'placeholder');
     }
 
     public function addClass($class)
@@ -216,12 +216,22 @@ abstract class Varien_Data_Form_Element_Abstract extends Varien_Data_Form_Abstra
 
     public function getElementHtml()
     {
-
-        $html = '<input id="' . $this->getHtmlId() . '" name="' . $this->getName() . '" '
+        $html = '';
+        if ($this->getBeforeElementHtml()) {
+            $html .= '<label class="addbefore" for="' . $this->getHtmlId() . '">' . $this->getBeforeElementHtml() . '</label>';            
+        }
+        $html .= '<input id="' . $this->getHtmlId() . '" name="' . $this->getName() . '" '
             . $this->_getUiId()
-            . ' value="' . $this->getEscapedValue() . '" ' . $this->serialize($this->getHtmlAttributes()) . '/>' . "\n";
-        $html.= $this->getAfterElementHtml();
+            . ' value="' . $this->getEscapedValue() . '" ' . $this->serialize($this->getHtmlAttributes()) . '/>';
+        if ($this->getAfterElementHtml()) {
+            $html.= '<label class="addafter" for="' . $this->getHtmlId() . '">' . $this->getAfterElementHtml() . '</label>';            
+        }
         return $html;
+    }
+
+    public function getBeforeElementHtml()
+    {
+        return $this->getData('before_element_html');
     }
 
     public function getAfterElementHtml()
@@ -238,9 +248,10 @@ abstract class Varien_Data_Form_Element_Abstract extends Varien_Data_Form_Abstra
     public function getLabelHtml($idSuffix = '')
     {
         if (!is_null($this->getLabel())) {
-            $html = '<label for="' . $this->getHtmlId() . $idSuffix . '"' . $this->_getUiId('label') . '>'
+            $html = '<label class="label" for="' . $this->getHtmlId() . $idSuffix . '"' . $this->_getUiId('label')
+                . '><span>'
                 . $this->_escape($this->getLabel())
-                . ($this->getRequired() ? ' <span class="required">*</span>' : '') . '</label>' . "\n";
+                . ($this->getRequired() ? ' <span class="required">*</span>' : '') . '</span></label>' . "\n";
         } else {
             $html = '';
         }

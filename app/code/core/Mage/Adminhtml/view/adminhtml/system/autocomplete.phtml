@@ -24,12 +24,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<ul>
-<?php foreach ($items as $item): ?>
-    <li id="<?php echo $item['id'] ?>" url="<?php echo $item['url'] ?>">
-        <div style="float:right; color:red; font-weight:bold;">[<?php echo $item['type'] ?>]</div>
-        <strong><?php echo $this->escapeHtml($item['name']) ?></strong><br/>
-        <span class="informal"><?php echo $this->escapeHtml($item['description']) ?></span>
+<ul class="dropdown-menu">
+    <?php foreach ($items as $item): ?>
+    <li id="<?php echo $item['id'] ?>" class="item">
+        <a href="<?php echo $item['url'] ?>" class="title"><?php echo $this->escapeHtml($item['name']) ?></a>
+        <div class="type"><?php echo $item['type'] ?></div>
+        <?php echo $this->escapeHtml($item['description']) ?>
     </li>
-<?php endforeach ?>
+    <?php endforeach ?>
 </ul>

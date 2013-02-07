@@ -154,7 +154,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_Option extends Mage_
 
     public function getTypeSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Mage_Core_Block_Html_Select')
+        $select = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Html_Select')
             ->setData(array(
                 'id' => $this->getFieldId().'_{{id}}_type',
                 'class' => 'select select-product-option-type required-option-select'
@@ -167,7 +167,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_Option extends Mage_
 
     public function getRequireSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Mage_Core_Block_Html_Select')
+        $select = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Html_Select')
             ->setData(array(
                 'id' => $this->getFieldId().'_{{id}}_is_require',
                 'class' => 'select'

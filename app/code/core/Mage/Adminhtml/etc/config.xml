@@ -139,6 +139,9 @@
                 <promo module="Mage_Adminhtml">
                     <file>promo.xml</file>
                 </promo>
+                <rating module="Mage_Adminhtml">
+                    <file>rating.xml</file>
+                </rating>
                 <report module="Mage_Adminhtml">
                     <file>report.xml</file>
                 </report>
@@ -160,6 +163,9 @@
                 <system_variable module="Mage_Adminhtml">
                     <file>variable.xml</file>
                 </system_variable>
+                <system_search module="Mage_Adminhtml">
+                    <file>search.xml</file>
+                </system_search>
             </updates>
         </layout>
         <sales>

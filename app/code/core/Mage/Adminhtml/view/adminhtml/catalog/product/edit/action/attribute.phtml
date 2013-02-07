@@ -24,17 +24,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="content-header">
-    <table cellspacing="0">
-        <tr>
-            <td><h3><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Update attributes') ?></h3></td>
-            <td class="form-buttons">
-            <?php echo $this->getBackButtonHtml() ?>
-            <?php echo $this->getCancelButtonHtml() ?>
-            <?php echo $this->getSaveButtonHtml() ?>
-            </td>
-        </tr>
-    </table>
+<div class="page-actions">
+    <?php echo $this->getBackButtonHtml() ?>
+    <?php echo $this->getCancelButtonHtml() ?>
+    <?php echo $this->getSaveButtonHtml() ?>
 </div>
 <form action="<?php echo $this->getSaveUrl() ?>" method="post" id="attributes-edit-form" enctype="multipart/form-data">
     <?php echo $this->getBlockHtml('formkey')?>

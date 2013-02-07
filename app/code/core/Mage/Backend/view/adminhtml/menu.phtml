@@ -24,9 +24,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<nav class="navigation">
+    <?php echo $this->renderNavigation($this->getMenuModel(), 0, 12); ?>
+</nav>
 
-<div class="nav-bar">
-    <?php echo $this->renderMenu($this->getMenuModel()); ?>
-    <a id="page-help-link" href="<?php echo Mage::helper('Mage_Backend_Helper_Data')->getPageHelpUrl() ?>"><?php echo $this->__('Get help for this page') ?></a>
-    <script type="text/javascript">$('page-help-link').target = 'magento_page_help'</script>
-</div>
+<?php /* @TODO: find the place for the help ?>
+<a id="page-help-link" href="<?php echo Mage::helper('Mage_Backend_Helper_Data')->getPageHelpUrl() ?>"><?php echo $this->__('Get help for this page') ?></a>
+<script type="text/javascript">$('page-help-link').target = 'magento_page_help'</script>
+<?php */ ?>
+

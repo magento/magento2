@@ -931,6 +931,12 @@ div.autocomplete ul li { padding:.5em .7em; min-height:32px; cursor:pointer; tex
     margin-left: 7px;
     font-size: 11px;
 }
+.mage-suggest-dropdown .ui-menu {
+    float: none;
+}
+.mage-suggest-dropdown .ui-menu .ui-menu-item{
+    margin: 0px;
+}
 
 /* Footer */
 .footer .bug-report                     { float:left; width:35%; text-align:left; }

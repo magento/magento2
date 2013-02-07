@@ -133,7 +133,9 @@ class Mage_Core_Model_Theme_Registration
             $theme->setParentId($parentTheme->getId());
         }
 
-        $theme->savePreviewImage()->save();
+        $theme->getThemeImage()->savePreviewImage();
+        $theme->save();
+
         return $this;
     }
 

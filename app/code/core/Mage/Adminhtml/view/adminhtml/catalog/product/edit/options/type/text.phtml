@@ -26,15 +26,15 @@
 ?>
 <script type="text/javascript">
 //<![CDATA[
-OptionTemplateText = '<table class="border" cellpadding="0" cellspacing="0">'+
-        '<tr class="headings">'+
+OptionTemplateText = '<table class="data-table" cellspacing="0">'+
+        '<thead><tr>'+
             <?php if ($this->getCanReadPrice() !== false) : ?>
             '<th class="type-price"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Price') ?></th>' +
             '<th class="type-type"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Price Type') ?></th>' +
             <?php endif; ?>
             '<th class="type-sku"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('SKU') ?></th>'+
             '<th class="type-last last"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Max Characters') ?> </th>'+
-        '</tr>'+
+        '</tr></thead>'+
         '<tr>'+
             <?php if ($this->getCanReadPrice() !== false) : ?>
             '<td><input type="text" class="input-text validate-number product-option-price" id="product_option_{{option_id}}_price" name="product[options][{{option_id}}][price]" value="{{price}}"<?php if ($this->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?>></td>' +
@@ -44,7 +44,7 @@ OptionTemplateText = '<table class="border" cellpadding="0" cellspacing="0">'+
             '<input type="hidden" name="product[options][{{option_id}}][price_type]" id="product_option_{{option_id}}_price_type">' +
             <?php endif; ?>
             '<td><input type="text" class="input-text" name="product[options][{{option_id}}][sku]" value="{{sku}}"></td>'+
-            '<td class="type-last last"><input type="text" class="input-text validate-zero-or-greater" name="product[options][{{option_id}}][max_characters]" value="{{max_characters}}"></td>'+
+            '<td><input type="text" class="input-text validate-zero-or-greater" name="product[options][{{option_id}}][max_characters]" value="{{max_characters}}"></td>'+
         '</tr>'+
     '</table>';
 

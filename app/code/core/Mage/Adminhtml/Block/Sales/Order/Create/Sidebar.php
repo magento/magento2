@@ -40,7 +40,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Sidebar extends Mage_Adminhtml_Blo
             $button = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData(array(
                 'label' => Mage::helper('Mage_Sales_Helper_Data')->__('Update Changes'),
                 'onclick' => 'order.sidebarApplyChanges()',
-                'before_html' => '<div class="sub-btn-set">',
+                'before_html' => '<div class="actions">',
                 'after_html' => '</div>'
             ));
             $this->setChild('top_button', $button);

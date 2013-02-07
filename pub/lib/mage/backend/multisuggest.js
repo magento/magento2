@@ -25,13 +25,15 @@
 /*jshint jquery:true browser:true*/
 (function($) {
     'use strict';
-    $.widget('mage.multisuggest', $.mage.suggest, {
+    $.widget('mage.suggest', $.mage.suggest, {
         /**
          * @override
          */
         _create: function() {
             this._super();
-            this.valueField.hide();
+            if (this.options.multiselect) {
+                this.valueField.hide();
+            }
         },
 
         /**
@@ -39,7 +41,7 @@
          */
         _prepareValueField: function() {
             this._super();
-            if (!this.options.valueField && this.options.selectedItems) {
+            if (this.options.multiselect && !this.options.valueField && this.options.selectedItems) {
                 $.each(this.options.selectedItems, $.proxy(function(i, item) {
                     this._addOption(item);
                 }, this));
@@ -50,25 +52,33 @@
          * @override
          */
         _createValueField: function() {
-            return $('<select/>', {
-                type: 'hidden',
-                multiple: 'multiple'
-            });
+            if (this.options.multiselect) {
+                return $('<select/>', {
+                    type: 'hidden',
+                    multiple: 'multiple'
+                });
+            } else {
+                return this._super();
+            }
         },
 
         /**
          * @override
          */
         _selectItem: function() {
-            if (this.isDropdownShown() && this._focused) {
-                this._selectedItem = this._readItemData(this._focused);
-                if (this.valueField.find('option[value=' + this._selectedItem.id + ']').length) {
-                    this._selectedItem = this._nonSelectedItem;
+            if (this.options.multiselect) {
+                if (this.isDropdownShown() && this._focused) {
+                    this._selectedItem = this._readItemData(this._focused);
+                    if (this.valueField.find('option[value=' + this._selectedItem.id + ']').length) {
+                        this._selectedItem = this._nonSelectedItem;
+                    }
+                    if (this._selectedItem !== this._nonSelectedItem) {
+                        this._term = '';
+                        this._addOption(this._selectedItem);
+                    }
                 }
-                if (this._selectedItem !== this._nonSelectedItem) {
-                    this._term = '';
-                    this._addOption(this._selectedItem);
-                }
+            } else {
+                this._super();
             }
         },
 
@@ -97,11 +107,13 @@
          */
         _hideDropdown: function() {
             this._super();
-            this.element.val('');
+            if (this.options.multiselect) {
+                this.element.val('');
+            }
         }
     });
 
-    $.widget('mage.multisuggest', $.mage.multisuggest, {
+    $.widget('mage.suggest', $.mage.suggest, {
         options: {
             multiSuggestWrapper: '<ul class="category-selector-choices">' +
                 '<li class="category-selector-search-field"></li></ul>',
@@ -115,12 +127,14 @@
          */
         _render: function() {
             this._super();
-            this.element.wrap(this.options.multiSuggestWrapper);
-            this.elementWrapper = this.element.parent();
-            this.valueField.find('option').each($.proxy(function(i, option) {
-                option = $(option);
-                this._renderOption({id: option.val(), label: option.text()});
-            }, this));
+            if (this.options.multiselect) {
+                this.element.wrap(this.options.multiSuggestWrapper);
+                this.elementWrapper = this.element.parent();
+                this.valueField.find('option').each($.proxy(function(i, option) {
+                    option = $(option);
+                    this._renderOption({id: option.val(), label: option.text()});
+                }, this));
+            }
         },
 
         /**
@@ -128,7 +142,7 @@
          */
         _selectItem: function() {
             this._superApply(arguments);
-            if (this._selectedItem !== this._nonSelectedItem) {
+            if (this.options.multiselect && this._selectedItem !== this._nonSelectedItem) {
                 this._renderOption(this._selectedItem);
             }
         },

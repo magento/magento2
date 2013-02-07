@@ -50,6 +50,9 @@ app/code/core/Mage/Core/Model/Resource/Theme.php
 app/code/core/Mage/Core/Model/ShellAbstract.php
 app/code/core/Mage/Core/Model/Theme/Validator.php
 app/code/core/Mage/Core/Model/Theme.php
+app/code/core/Mage/Core/Model/Translate.php
+app/code/core/Mage/Core/Model/Translate/Expr.php
+app/code/core/Mage/Core/Helper/Abstract.php
 app/code/core/Mage/Core/sql/core_setup/upgrade-1.6.0.3-1.6.0.4.php
 app/code/core/Mage/Directory/Model/Currency/DefaultLocator.php
 app/code/core/Mage/DesignEditor

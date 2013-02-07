@@ -70,7 +70,10 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Weight_Renderer extends V
         if (!$this->getForm()->getDataObject()->getTypeInstance()->hasWeight()) {
             $this->_virtual->setChecked('checked');
         }
-        return parent::getElementHtml() . $this->_virtual->getElementHtml() . $this->_virtual->getLabelHtml();
+        return '<div class="fields-group-2"><div class="field"><div class="control">'
+            . parent::getElementHtml() . '</div></div><div class="field choice">'
+            . $this->_virtual->getElementHtml() . $this->_virtual->getLabelHtml()
+            . '</div></div>';
     }
 
     /**

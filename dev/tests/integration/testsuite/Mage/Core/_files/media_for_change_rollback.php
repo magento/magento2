@@ -25,5 +25,5 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$designDir = Magento_Test_Bootstrap::getInstance()->getInstallDir() . '/media_for_change';
+$designDir = Magento_Test_Helper_Bootstrap::getInstance()->getAppInstallDir() . '/media_for_change';
 Varien_Io_File::rmdirRecursive($designDir);

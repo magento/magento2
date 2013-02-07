@@ -25,24 +25,18 @@
  */
 /* @var $this Mage_Adminhtml_Block_Newsletter_Queue_Edit */
 ?>
-<div class="content-header">
-    <table cellspacing="0">
-        <tr>
-            <td><h3><?php echo $this->getHeaderText() ?></h3></td>
-            <td class="form-buttons">
-                <?php echo $this->getBackButtonHtml() ?>
-                <?php echo $this->getPreviewButtonHtml(); ?>
-                <?php if(!$this->getIsPreview()): ?>
-                    <?php echo $this->getResetButtonHtml() ?>
-                    <?php echo $this->getSaveButtonHtml() ?>
-                <?php endif ?>
-                <?php if($this->getCanResume()): ?>
-                    <?php echo $this->getResumeButtonHtml() ?>
-                <?php endif ?>
-            </td>
-        </tr>
-    </table>
+<div class="page-actions">
+    <?php echo $this->getBackButtonHtml() ?>
+    <?php echo $this->getPreviewButtonHtml(); ?>
+    <?php if(!$this->getIsPreview()): ?>
+        <?php echo $this->getResetButtonHtml() ?>
+        <?php echo $this->getSaveButtonHtml() ?>
+    <?php endif ?>
+    <?php if($this->getCanResume()): ?>
+        <?php echo $this->getResumeButtonHtml() ?>
+    <?php endif ?>
 </div>
+
 <form action="<?php echo $this->getSaveUrl() ?>" method="post" id="queue_edit_form">
     <?php echo $this->getBlockHtml('formkey')?>
     <?php echo $this->getChildHtml('form') ?>

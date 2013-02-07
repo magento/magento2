@@ -26,9 +26,9 @@
 ?>
 <?php /** @var $this Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract */?>
 
-<div>
+<div class="themes-customizations">
     <h3><?php echo $this->getTabTitle() ?></h3>
-    <ul>
+    <ul class="themes">
         <?php $themeItems = $this->getListItems(); ?>
         <?php if ($themeItems): ?>
             <?php echo join("\n", $themeItems) ?>

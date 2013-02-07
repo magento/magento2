@@ -79,7 +79,7 @@ class Mage_Tag_Block_Adminhtml_Edit_Form extends Mage_Adminhtml_Block_Widget_For
             'label' => Mage::helper('Mage_Tag_Helper_Data')->__('Tag Name'),
             'title' => Mage::helper('Mage_Tag_Helper_Data')->__('Tag Name'),
             'required' => true,
-            'after_element_html' => ' ' . Mage::helper('Mage_Tag_Helper_Data')->__('[GLOBAL]'),
+            'scope_label' => ' ' . Mage::helper('Mage_Tag_Helper_Data')->__('[GLOBAL]'),
         ));
 
         $fieldset->addField('status', 'select', array(
@@ -92,14 +92,14 @@ class Mage_Tag_Block_Adminhtml_Edit_Form extends Mage_Adminhtml_Block_Widget_For
                 Mage_Tag_Model_Tag::STATUS_PENDING  => Mage::helper('Mage_Tag_Helper_Data')->__('Pending'),
                 Mage_Tag_Model_Tag::STATUS_APPROVED => Mage::helper('Mage_Tag_Helper_Data')->__('Approved'),
             ),
-            'after_element_html' => ' ' . Mage::helper('Mage_Tag_Helper_Data')->__('[GLOBAL]'),
+            'scope_label' => ' ' . Mage::helper('Mage_Tag_Helper_Data')->__('[GLOBAL]'),
         ));
 
         $fieldset->addField('base_popularity', 'text', array(
             'name' => 'base_popularity',
             'label' => Mage::helper('Mage_Tag_Helper_Data')->__('Base Popularity'),
             'title' => Mage::helper('Mage_Tag_Helper_Data')->__('Base Popularity'),
-            'after_element_html' => ' ' . Mage::helper('Mage_Tag_Helper_Data')->__('[STORE VIEW]'),
+            'scope_label' => ' ' . Mage::helper('Mage_Tag_Helper_Data')->__('[STORE VIEW]'),
         ));
 
         if (!$model->getId() && !Mage::getSingleton('Mage_Adminhtml_Model_Session')->getTagData() ) {

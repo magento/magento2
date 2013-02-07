@@ -168,7 +168,7 @@ class Mage_Backend_Block_Menu extends Mage_Backend_Block_Template
         $output = ($this->_isItemActive($menuItem, $level) ? 'active' : '')
             . ' ' . ($menuItem->hasChildren() ? 'parent' : '')
             . ' ' . $isLast
-            . ' ' . 'level' . $level;
+            . ' ' . 'level-' . $level;
         return $output;
     }
 
@@ -207,7 +207,7 @@ class Mage_Backend_Block_Menu extends Mage_Backend_Block_Template
     protected function _afterToHtml($html)
     {
         $html = preg_replace_callback(
-            '#'.Mage_Backend_Model_Url::SECRET_KEY_PARAM_NAME.'/\$([^\/].*)/([^\/].*)/([^\$].*)\$#U',
+            '#' . Mage_Backend_Model_Url::SECRET_KEY_PARAM_NAME . '/\$([^\/].*)/([^\/].*)/([^\$].*)\$#U',
             array($this, '_callbackSecretKey'),
             $html
         );
@@ -295,6 +295,128 @@ class Mage_Backend_Block_Menu extends Mage_Backend_Block_Template
         $output .= '</ul>';
 
         return $output;
+    }
+
+    /**
+     * Count All Subnavigation Items
+     *
+     * @param Mage_Backend_Model_Menu $items
+     * @return int
+     */
+    protected function _countItems($items)
+    {
+        $total = count($items);
+        foreach ($items as $item) {
+            /** @var $item Mage_Backend_Model_Menu_Item */
+            if ($item->hasChildren()) {
+                $total += $this->_countItems($item->getChildren());
+            }
+        }
+        return $total;
+    }
+
+    /**
+     * Building Array with Column Brake Stops
+     *
+     * @param Mage_Backend_Model_Menu $items
+     * @param int $limit
+     * @return array
+     * @todo: Add Depth Level limit, and better logic for columns
+     */
+    protected function _columnBrake($items, $limit)
+    {
+        $total = $this->_countItems($items);
+        if ($total <= $limit) {
+            return;
+        }
+        $result[] = array(
+                'total' => $total,
+                'max'   => ceil($total / ceil($total / $limit))
+            );
+        $count = 0;
+        foreach ($items as $item) {
+            $place = $this->_countItems($item->getChildren()) + 1;
+            $count += $place;
+            if ($place - $result[0]['max'] > $limit - $result[0]['max']) {
+                $colbrake = true;
+                $count = 0;
+            } elseif ($count - $result[0]['max'] > $limit - $result[0]['max']) {
+                $colbrake = true;
+                $count = $place;
+            } else {
+                $colbrake = false;
+            }
+            $result[] = array(
+                'place' => $place,
+                'colbrake' => $colbrake
+            );
+        }
+        return $result;
+    }
+
+    /**
+     * Add sub menu HTML code for current menu item
+     *
+     * @param $menuItem Mage_Backend_Model_Menu_Item
+     * @param $level int
+     * @param $limit int
+     * @return string HTML code
+     */
+    protected function _addSubMenu($menuItem, $level, $limit)
+    {
+        $output = '';
+        if (!$menuItem->hasChildren()) {
+            return $output;
+        }
+        $output .= '<div class="submenu">';
+        $colStops = null;
+        if ($level == 0 && $limit) {
+            $colStops = $this->_columnBrake($menuItem->getChildren(), $limit);
+        }
+        $output .= $this->renderNavigation($menuItem->getChildren(), $level + 1, $limit, $colStops);
+        $output .= '</div>';
+        return $output;
+    }
+
+    /**
+     * Render Navigation
+     *
+     * @param Mage_Backend_Model_Menu $menu
+     * @param int $level
+     * @param int $limit
+     * @param array $colBrakes
+     * @return string HTML
+     */
+    public function renderNavigation($menu, $level = 0, $limit = 0, $colBrakes = array())
+    {
+        $itemPosition = 1;
+        $outputStart = '<ul ' . (0 == $level ? 'id="nav"' : '') . ' >';
+        $output = '';
+
+        /** @var $menuItem Mage_Backend_Model_Menu_Item  */
+        foreach ($this->_getMenuIterator($menu) as $menuItem) {
+            $menuId = $menuItem->getId();
+            $itemName = substr($menuId, strrpos($menuId, '::') + 2);
+            $itemClass = str_replace('_', '-', strtolower($itemName));
+
+            if (count($colBrakes) && $colBrakes[$itemPosition]['colbrake']) {
+                $output .= '</ul></li><li class="column"><ul>';
+            }
+
+            $output .= '<li ' . $this->getUiId($menuItem->getId())
+                . ' class="item-' . $itemClass . ' '
+                . $this->_renderItemCssClass($menuItem, $level) . '">'
+                . $this->_renderAnchor($menuItem, $level)
+                . $this->_addSubMenu($menuItem, $level, $limit)
+                . '</li>';
+            $itemPosition++;
+        }
+
+        if (count($colBrakes) && $limit) {
+            $output = '<li class="column"><ul>' . $output . '</ul></li>';
+        }
+
+        return $outputStart . $output . '</ul>';;
     }
 
     /**

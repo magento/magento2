@@ -26,39 +26,96 @@
 
 /** @var $this Mage_Adminhtml_Block_Page_Header */
 ?>
-<div class="header-top">
-    <a href="<?php echo $this->getHomeLink() ?>"><img src="<?php echo $this->getViewFileUrl('images/logo.gif') ?>" alt="<?php echo $this->__('Magento Logo') ?>" class="logo"/></a>
-    <div class="header-right">
-        <p class="super">
-            <?php echo $this->__("Logged in as %s", $this->escapeHtml($this->getUser()->getUsername())) ?><span class="separator">|</span><?php echo $this->formatDate(null, 'full') ?><span class="separator">|</span><a href="http://golinks.magento.com/CE15" onclick="this.target='_blank'" class="go-try"><?php echo $this->__('Try Magento Go for Free') ?></a><span class="separator">|</span><a href="<?php echo $this->getLogoutLink() ?>" class="link-logout"><?php echo $this->__('Log Out') ?></a>
-        </p>
-        <?php if ( Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Adminhtml::global_search') ): ?>
-        <fieldset>
-            <legend>Search</legend>
-            <span id="global_search_indicator" class="autocomplete-indicator" style="display: none">
-                <img src="<?php echo $this->getViewFileUrl('images/ajax-loader.gif') ?>" alt="<?php echo $this->__('Loading...') ?>" class="v-middle"/>
-            </span>
-            <?php $defSearch = $this->__('Global Record Search') ?>
-            <input id="global_search" name="query" type="text" class="input-text" value="<?php if(!empty($query)): ?><?php echo $query ?><?php else: ?><?php echo $defSearch ?><?php endif ?>" onfocus="if(this.value=='<?php echo $defSearch ?>')this.value=''; " onblur="if(this.value=='')this.value='<?php echo $defSearch ?>';" />
-            <div id="global_search_autocomplete" class="autocomplete"></div>
+<header class="header">
+    <div class="header-inner">
+        <a href="<?php echo $this->getHomeLink() ?>" class="logo" title="<?php echo $this->__('Magento Admin Panel') ?>"><span><?php echo $this->__('Magento Admin Panel') ?></span></a>
+        <div class="header-panel">
+            <div class="account">
+                <a href="<?php echo $this->getUrl('adminhtml/system_account/index') ?>" class="account-avatar" title="<?php echo $this->__('My Account') ?>" data-toggle="dropdown">
+                    <?php echo $this->escapeHtml($this->getUser()->getUsername()); ?>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="first">
+                        <a href="<?php echo $this->getUrl('adminhtml/system_account/index') ?>" title="<?php echo $this->__('Account Setting') ?>"><?php echo $this->__('Account Setting') ?></a>
+                        <div><?php echo $this->escapeHtml($this->getUser()->getUsername()); ?></div>
+                    </li>
+                    <li class="last">
+                        <a href="<?php echo $this->getLogoutLink() ?>" class="account-signout" title="<?php echo $this->__('Sign Out') ?>"><?php echo $this->__('Sign Out') ?></a>
+                    </li>
+                </ul>
+            </div>
+            <a href="<?php echo Mage::getBaseUrl(); ?>" title="<?php echo $this->__('Customer View'); ?>" target="_blank" class="store-front"><?php echo $this->__('Customer View'); ?></a>
+            <div class="notifications">
+                <a href="<?php echo $this->getUrl('adminhtml/notification/index') ?>" class="notifications-icon" title="<?php echo $this->__('Notifications') ?>" data-toggle="dropdown">
+                    <span class="value">10</span>
+                </a>
+                <!-- @TODO: Replace with real data -->
+                <ul class="dropdown-menu">
+                    <li class="first new">
+                        <strong>Mike Lastnamelong</strong>
+                        <a href="#">Lorem ipsum dolor sit amet dolor adipiscing lollipop guild...</a>
+                        <time>2:52 pm</time>
+                        <button class="action-close">Close</button>
+                    </li>
+                    <li>
+                        <strong>Mike Lastnamelong</strong>
+                        <a href="#">Lorem ipsum dolor sit amet dolor adipiscing lollipop guild...</a>
+                        <time>2:52 pm</time>
+                        <button class="action-close">Close</button>
+                    </li>
+                    <li>
+                        <strong>Mike Lastnamelong</strong>
+                        <a href="#">Lorem ipsum dolor sit amet dolor adipiscing lollipop guild...</a>
+                        <time>2:52 pm</time>
+                        <button class="action-close">Close</button>
+                    </li>
+                    <li>
+                        <strong>Mike Lastnamelong</strong>
+                        <a href="#">Lorem ipsum dolor sit amet dolor adipiscing lollipop guild...</a>
+                        <time>2:52 pm</time>
+                        <button class="action-close">Close</button>
+                    </li>
+                    <li class="last">
+                        <a href="<?php echo $this->getUrl('adminhtml/notification/index') ?>" class="action-more"><?php echo $this->__('See All') ?></a>
+                    </li>
+                </ul>
+            </div>
+            <?php if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Adminhtml::global_search')): ?>
+            <div class="search">
+                <form action="" method="post" id="form-search">
+                    <label for="search-global">
+                        <input type="text" id="search-global" name="query">
+                    </label>
+                    <button type="submit" title="<?php echo $this->__('Search') ?>"><?php echo $this->__('Search') ?></button>
+                </form>
+                <div id="search-global-autocomplete" class="autocomplete-results"></div>
+            </div>
             <script type="text/javascript">
+                (function($){
+                    $('#form-search')
+                        .off('submit')
+                        .on('submit.siteSearch',function(e){
+                            e.preventDefault();
+                            return false;
+                        });
+                })(jQuery);
+
                 new Ajax.Autocompleter(
-                    'global_search',
-                    'global_search_autocomplete',
+                    'search-global',
+                    'search-global-autocomplete',
                     '<?php echo $this->getUrl('adminhtml/index/globalSearch') ?>',
                     {
-                        paramName:"query",
-                        minChars:2,
-                        indicator:"global_search_indicator",
-                        updateElement:getSelectionId,
-                        evalJSON:'force'
+                        parent: "form-search",
+                        paramName: "query",
+                        minChars: 2,
+                        updateElement: function(e) {
+                            return false;
+                        },
+                        evalJSON: 'force'
                     }
-                );
-                function getSelectionId(li) {
-                    location.href = li.getAttribute('url');
-                }
+                )
             </script>
-        </fieldset>
-        <?php endif; ?>
+            <?php endif; ?>
+        </div>
     </div>
-</div>
+</header>

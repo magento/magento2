@@ -44,6 +44,7 @@ class Mage_GiftMessage_Block_Message_InlineTest extends PHPUnit_Framework_TestCa
 
     /**
      * @magentoDataFixture Mage/Catalog/_files/product_with_image.php
+     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      */
     public function testThumbnail()
     {

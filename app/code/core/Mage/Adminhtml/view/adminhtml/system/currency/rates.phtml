@@ -29,20 +29,14 @@
  * @var $this Mage_Adminhtml_Block_System_Currency
  */
 ?>
-<div class="content-header">
-    <table cellspacing="0">
-        <tr>
-            <td style="width:50%;"><h3 class="icon-head head-system-currency"><?php echo $this->getHeader() ?></h3></td>
-            <td class="form-buttons">
-                <form action="<?php echo $this->getImportFormAction() ?>" method="post">
-                    <?php echo $this->getBlockHtml('formkey')?>
-                    <?php echo $this->getServicesHtml() ?>
-                    <?php echo $this->getImportButtonHtml() ?>
-                </form>
-                <?php echo $this->getResetButtonHtml() ?>
-                <?php echo $this->getSaveButtonHtml() ?>
-            </td>
-        </tr>
-    </table>
+<div class="page-actions">
+    <form action="<?php echo $this->getImportFormAction() ?>" method="post">
+        <?php echo $this->getBlockHtml('formkey')?>
+        <?php echo $this->getServicesHtml() ?>
+        <?php echo $this->getImportButtonHtml() ?>
+    </form>
+    <?php echo $this->getResetButtonHtml() ?>
+    <?php echo $this->getSaveButtonHtml() ?>
 </div>
+
 <?php echo $this->getRatesMatrixHtml() ?>

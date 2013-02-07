@@ -124,6 +124,7 @@ class Mage_ImportExport_Model_Import_Entity_Eav_CustomerImportTest extends PHPUn
      * @covers Mage_ImportExport_Model_Import_Entity_Eav_Customer::_deleteCustomers
      *
      * @magentoDataFixture Mage/ImportExport/_files/customers.php
+     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      */
     public function testDeleteData()
     {

@@ -37,7 +37,7 @@ class Mage_Captcha_Model_ObserverTest extends Magento_Test_TestCase_ControllerAb
      */
     public function testBackendLoginActionWithInvalidCaptchaReturnsError()
     {
-        if (Magento_Test_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
+        if (Magento_Test_Helper_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
             $this->markTestIncomplete('MAGETWO-1662');
         }
         Mage::getSingleton('Mage_Backend_Model_Url')->turnOffSecretKey();
@@ -66,7 +66,7 @@ class Mage_Captcha_Model_ObserverTest extends Magento_Test_TestCase_ControllerAb
      */
     public function testCaptchaIsRequiredAfterFailedLoginAttempts()
     {
-        if (Magento_Test_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
+        if (Magento_Test_Helper_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
             $this->markTestIncomplete('MAGETWO-1662');
         }
         Mage::app()->setCurrentStore(0);
@@ -115,8 +115,8 @@ class Mage_Captcha_Model_ObserverTest extends Magento_Test_TestCase_ControllerAb
         Mage::getSingleton('Mage_Backend_Model_Url')->turnOffSecretKey();
         $this->getRequest()->setPost(array('email'   => 'dummy@dummy.com', 'captcha' => '1234'));
         $this->dispatch('backend/admin/auth/forgotpassword');
-        $errorMessage = Mage::getSingleton('Mage_Backend_Model_Session')->getMessages(false)->getErrors();
-        $this->assertCount(1, $errorMessage);
-        $this->assertEquals('Incorrect CAPTCHA.', current($errorMessage)->getCode());
+        $this->assertSessionMessages(
+            $this->equalTo(array('Incorrect CAPTCHA.')), Mage_Core_Model_Message::ERROR, 'Mage_Backend_Model_Session'
+        );
     }
 }

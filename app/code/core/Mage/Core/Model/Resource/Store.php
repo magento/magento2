@@ -44,6 +44,24 @@ class Mage_Core_Model_Resource_Store extends Mage_Core_Model_Resource_Db_Abstrac
     }
 
     /**
+     * Count number of all entities in the system
+     *
+     * By default won't count admin store
+     *
+     * @param bool $countAdmin
+     * @return int
+     */
+    public function countAll($countAdmin = false)
+    {
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()->from($this->getMainTable(), 'COUNT(*)');
+        if (!$countAdmin) {
+            $select->where(sprintf('%s <> %s', $adapter->quoteIdentifier('code'), $adapter->quote('admin')));
+        }
+        return (int)$adapter->fetchOne($select);
+    }
+
+    /**
      * Initialize unique fields
      *
      * @return Mage_Core_Model_Resource_Store
@@ -54,22 +72,6 @@ class Mage_Core_Model_Resource_Store extends Mage_Core_Model_Resource_Db_Abstrac
             'field' => 'code',
             'title' => Mage::helper('Mage_Core_Helper_Data')->__('Store with the same code')
         ));
-        return $this;
-    }
-
-    /**
-     * Check store code before save
-     *
-     * @param Mage_Core_Model_Abstract $model
-     * @return Mage_Core_Model_Resource_Store
-     */
-    protected function _beforeSave(Mage_Core_Model_Abstract $model)
-    {
-        if (!preg_match('/^[a-z]+[a-z0-9_]*$/', $model->getCode())) {
-            Mage::throwException(
-                Mage::helper('Mage_Core_Helper_Data')->__('The store code may contain only letters (a-z), numbers (0-9) or underscore(_), the first character must be a letter'));
-        }
-
         return $this;
     }
 

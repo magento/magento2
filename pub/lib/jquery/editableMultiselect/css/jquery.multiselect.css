@@ -1,20 +1,25 @@
 .mselect-list {
-    position:relative;
+    position: relative;
 }
 
 .mselect-items-wrapper {
     padding: 3px;
     min-height: 80px;
-    border: 1px solid #bbb;
-    border-radius: 4px;
-    margin: 10px 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 3px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .mselect-fixed {
-    overflow-x:hidden;
-    overflow-y:auto;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
-
 
 .mselect-list-item {
     position: relative;
@@ -22,43 +27,39 @@
 }
 
 .mselect-list-item:hover {
-    background: #f9f9f9;
+    background: #fbfaf6;
 }
 
 .mselect-list-item label {
-    width:100%;
-    display:block;
+    width: 100%;
+    display: block;
 }
 
 .mselect-input-container {
-    position:relative;
-    margin:5px 10px;
-    display:none;
+    position: relative;
+    display: none;
 }
 
 .mselect-input {
-    width: 99%;
-    margin:0;
+    width: 100%;
 }
 
-.mselect-list-item input:checked + span {
-    background: #e6e6e6;
-}
-
-.mselect-list-item .mselect-checked + span {
+.mselect-list-item input:checked + span,
+.mselect-list-item .mselect-checked + span{
     background: #e6e6e6;
 }
 
 .mselect-list-item input[type='checkbox'] {
     position: absolute;
-    left:-9999px;
+    left: -9999px;
     opacity: 0;
 }
 
 .mselect-list-item.mselect-disabled label span {
-    color:#999;
+    color: #999;
     cursor: default;
 }
+
 .mselect-list-item.mselect-disabled:hover {
     background: #fff;
 }
@@ -84,51 +85,74 @@
 .mselect-edit,
 .mselect-delete,
 .mselect-save {
-    width: 16px;
+    width: 0;
     height: 16px;
+    padding-left: 16px;
     position: absolute;
+    overflow: hidden;
     cursor: pointer;
-    background: url(../images/icons-sprite.png) no-repeat;
-    text-indent: -9999px;
+}
+
+.mselect-cancel:before,
+.mselect-edit:before,
+.mselect-delete:before,
+.mselect-save:before {
+    border: 0 none;
+    color: #6E685E;
+    content: '\e05b;'; /* edit icon */
+    font-family: 'MUI-Icons';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: normal;
+    height: auto;
+    left: 1px;
+    margin-top: -3px;
+    position: absolute;
+    top: 0;
+    width: auto;
 }
 
 .mselect-cancel {
     right: 5px;
     top: 7px;
-    background-position:-312px 0;
-    padding: 0;
+}
+
+.mselect-cancel:before {
+    content: '\e069;';
 }
 
 .mselect-edit {
-    background-position: 0 -72px;
     top: 5px;
     right: 30px;
     display: none;
 }
 
 .mselect-delete {
-    background-position: -456px -0;
     display: none;
     top: 5px;
     right: 5px;
 }
 
+.mselect-delete:before {
+    content: '\e07f;';
+}
+
 .mselect-save,
 .mselect-save:hover {
-    background:url(../images/icons-sprite.png) no-repeat -72px -72px;
     display: block;
     top: 6px;
     right: 25px;
-    border: none;
-    padding: 0;
-    margin: 0;
-    filter:none;
+}
+
+.mselect-save:before {
+    content: '\e067;';
 }
 
 .mselect-list-item:hover .mselect-delete,
 .mselect-list-item:hover .mselect-edit {
     display: block;
 }
+
 .mselect-list-item-not-editable:hover .mselect-edit {
     display: none;
 }
@@ -137,108 +161,50 @@
     display: none;
 }
 
-/* Temporary styles */
-.mselect-list {
-    width: 278px;
-    background: #fff;
-    border:1px solid #C4C1BC;
-}
-.mselect-list .block-content {
-    padding:0 10px;
-}
-
-.mselect-list .block-footer {
-    padding: 5px 10px;
-    background:#F0F2F4;
-    border-top:1px solid #ddd;
-    box-shadow:0 1px 5px 0 #ddd inset;
-}
-
 .mselect-list-item label {
     font-size: 12px;
     color: #333;
-    font: 12px normal Arial, Helvetica,sans-serif;
+    font: 12px normal Arial, Helvetica, sans-serif;
 }
 
 .mselect-list-item form {
     display: block;
 }
 
-.mselect-list input[type=text] {
-    font:13px/18px Arial, Helvetica, sans-serif;
-    display: inline-block;
-    width:100%;
-    height:28px;
-    padding: 4px 50px 4px 4px;
-    margin: 0 0 8px;
-    color: #333;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
-    box-sizing:border-box;
-    border-radius: 3px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
-    -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
-    -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
-    -o-transition: border linear 0.2s, box-shadow linear 0.2s;
-    transition: border linear 0.2s, box-shadow linear 0.2s;
-}
-
-.mselect-list input[type=text]:focus {
-    border-color: rgba(82, 168, 236, 0.8);
-    outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-}
-
 .mselect-button-add,
 .mselect-button-add-disabled {
-    height: 16px;
-    line-height: 16px;
-    border-width:1px;
-    border-style:solid;
-    border-color:#ed6502 #a04300 #a04300 #ed6502;
-    padding:0 7px 1px 7px;
-    color:#fff;
-    font:bold 12px arial, helvetica, sans-serif;
-    cursor:pointer;
-    background:#FFAC47;
-    background: -moz-linear-gradient(top,  #ffac47 0%, #f56c06 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffac47), color-stop(100%,#f56c06));
-    background: -webkit-linear-gradient(top,  #ffac47 0%,#f56c06 100%);
-    background: -o-linear-gradient(top,  #ffac47 0%,#f56c06 100%);
-    background: -ms-linear-gradient(top,  #ffac47 0%,#f56c06 100%);
-    background: linear-gradient(to bottom,  #ffac47 0%,#f56c06 100%);
-
+    font: 14px/18px 'CallunaSans', Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    color: #322e2a;
+    background: #dbd6ce;
+    display: inline-block;
+    padding: 5px 14px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: top;
+    cursor: pointer;
+    border: transparent;
+    border-radius: 5px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
-
 .mselect-button-add:hover {
-    background:#f77c16;
-    background: -moz-linear-gradient(top,  #f9dcba 0%, #fc7e21 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f9dcba), color-stop(100%,#fc7e21));
-    background: -webkit-linear-gradient(top,  #f9dcba 0%,#fc7e21 100%);
-    background: -o-linear-gradient(top,  #f9dcba 0%,#fc7e21 100%);
-    background: -ms-linear-gradient(top,  #f9dcba 0%,#fc7e21 100%);
-    background: linear-gradient(to bottom,  #f9dcba 0%,#fc7e21 100%);
+    background: #cac2b5;
+    color: #322e2a;
 }
 
 .mselect-button-add:active {
-    background:#f77c16;
-    background: -moz-linear-gradient(top,  #cf5a01 1%, #f77c16 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#cf5a01), color-stop(100%,#f77c16));
-    background: -webkit-linear-gradient(top,  #cf5a01 1%,#f77c16 100%);
-    background: -o-linear-gradient(top,  #cf5a01 1%,#f77c16 100%);
-    background: -ms-linear-gradient(top,  #cf5a01 1%,#f77c16 100%);
-    background: linear-gradient(to bottom,  #cf5a01 1%,#f77c16 100%);
+    box-shadow: 0 1px 5px #aaa59b inset;
 }
 
-.mselect-button-add-disabled {
-    background: #ccc;
-    color: #fafafa;
-    border:1px solid #999;
+.mselect-button-add-disabled,
+.mselect-button-add-disabled:hover {
+    cursor: not-allowed;
+    opacity: 0.65;
+    background: #d9d6cf;
+    box-shadow: none;
+    text-shadow: none;
 }

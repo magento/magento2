@@ -29,32 +29,53 @@
  * @see Mage_Adminhtml_Block_Catalog_Form_Renderer_Fieldset_Element
  */
 ?>
-<?php $_element = $this->getElement() ?>
-<?php $this->checkFieldDisable() ?>
 <?php
-    $elementToggleCode = $_element->getToggleCode() ? $_element->getToggleCode()
-        : 'toggleValueElements(this, this.parentNode.parentNode)';
+/* @var $this Mage_Backend_Block_Widget_Form_Renderer_Fieldset_Element */
+$element = $this->getElement();
+$note = $element->getNote() ? '<div class="note">' . $element->getNote() . '</div>' : '';
+$elementBeforeLabel = $element->getExtType() == 'checkbox' || $element->getExtType() == 'radio';
+$addOn = $element->getBeforeElementHtml() || $element->getAfterElementHtml();
+$fieldId = ($element->getHtmlId()) ? ' id="attribute-' . $element->getHtmlId() . '-container"' : '';
+$fieldClass = "field field-{$element->getId()} {$element->getCssClass()}";
+$fieldClass .= ($elementBeforeLabel) ? ' choice' : '';
+$fieldClass .= ($addOn) ? ' with-addon' : '';
+$fieldClass .= ($element->getRequired()) ? ' required' : '';
+$fieldClass .= ($note) ? ' with-note' : '';
+
+$fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
+    . $this->getUiId('form-field', $element->getId());
 ?>
 
-<?php if ($_element->getType()=='hidden'): ?>
-<tr>
-    <td class="hidden" colspan="100"><?php echo trim($_element->getElementHtml()) ?></td>
-</tr>
-<?php else: ?>
-<tr id="attribute-<?php echo $_element->getHtmlId()?>-container">
-    <td class="label"><?php echo trim($this->getElementLabelHtml()) ?></td>
-    <td class="value">
-        <?php echo trim($this->getElementHtml()) ?>
-        <?php if ($_element->getNote()) : ?>
-            <p class="note"><?php echo $_element->getNote() ?></p>
+<?php $this->checkFieldDisable() ?>
+<?php
+    $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode()
+        : 'toggleValueElements(this, this.parentNode.parentNode.parentNode)';
+?>
+
+<?php if (!$element->getNoDisplay()): ?>
+    <?php if ($element->getType() == 'hidden'): ?>
+        <?php echo $element->getElementHtml() ?>
+    <?php else: ?>
+    <div<?php echo $fieldAttributes ?>>
+        <?php if ($elementBeforeLabel): ?>
+            <?php echo $element->getElementHtml() ?>
+            <?php echo $element->getLabelHtml() ?>
+            <?php echo $note ?>
+        <?php else: ?>
+            <?php echo $element->getLabelHtml() ?>
+            <div class="control">
+                <?php echo ($addOn) ? '<div class="addon">' . $element->getElementHtml() . '</div>' : $element->getElementHtml(); ?>
+                <?php echo $note ?>
+            </div>
         <?php endif; ?>
-    </td>
-    <td class="scope-label"><span class="nobr"><?php echo $this->getScopeLabel() ?></span></td>
-    <?php if ($this->canDisplayUseDefault()): ?>
-    <td class="value use-default">
-        <input <?php if($_element->getReadonly()):?> disabled="disabled"<?php endif; ?> type="checkbox" name="use_default[]" id="<?php echo $_element->getHtmlId() ?>_default"<?php if ($this->usedDefault()): ?> checked="checked"<?php endif; ?> onclick="<?php echo $elementToggleCode; ?>" value="<?php echo $this->getAttributeCode() ?>"/>
-        <label for="<?php echo $_element->getHtmlId() ?>_default" class="normal"><?php echo $this->__('Use Default Value') ?></label>
-    </td>
+        <div class="field-service" value-scope="<?php echo $this->getScopeLabel()?>">
+            <?php if ($this->canDisplayUseDefault()): ?>
+                <label for="<?php echo $element->getHtmlId() ?>_default" class="choice action-default">
+                    <input <?php if($element->getReadonly()):?> disabled="disabled"<?php endif; ?> type="checkbox" name="use_default[]" id="<?php echo $element->getHtmlId() ?>_default"<?php if($this->usedDefault()): ?> checked="checked"<?php endif; ?> onclick="<?php echo $elementToggleCode; ?>" value="<?php echo $this->getAttributeCode() ?>"/>
+                    <?php echo $this->__('Use Default Value') ?>
+                </label>
+            <?php endif; ?>
+        </div>
+    </div>
     <?php endif; ?>
-</tr>
 <?php endif; ?>

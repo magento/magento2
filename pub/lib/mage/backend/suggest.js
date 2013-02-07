@@ -30,6 +30,7 @@
      * Implement base functionality
      */
     $.widget('mage.suggest', {
+        widgetEventPrefix: "suggest",
         options: {
             template: '',
             minLength: 1,
@@ -170,7 +171,7 @@
                             break;
                         case keyCode.TAB:
                             if (this.isDropdownShown()) {
-                                this._selectItem();
+                                this._onSelectItem();
                                 event.preventDefault();
                             }
                             break;
@@ -236,7 +237,7 @@
                 $.each(controlEvents, $.proxy(function(i, handlerName) {
                     switch(suggestEvent) {
                         case 'select' :
-                            events[handlerName] = this._selectItem;
+                            events[handlerName] = this._onSelectItem;
                             break;
                         case 'focus' :
                             events[handlerName] = this._focusItem;
@@ -268,6 +269,15 @@
         _blurItem: function() {
             this._focused = null;
             this.element.val(this._term);
+        },
+
+        /**
+         *
+         * @private
+         */
+        _onSelectItem: function() {
+            this._selectItem();
+            this._trigger('select', null, [this._selectedItem]);
         },
 
         /**
@@ -329,7 +339,7 @@
          */
         _setTemplate: function() {
             this.templateName = 'suggest' + Math.random().toString(36).substr(2);
-            if ($(this.options.template).length) {
+            if ($(this.options.template).length && $(this.options.template).prop('type')=== 'text/x-jquery-tmpl') {
                 $(this.options.template).template(this.templateName);
             } else {
                 $.template(this.templateName, this.options.template);

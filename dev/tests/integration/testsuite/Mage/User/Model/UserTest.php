@@ -156,26 +156,6 @@ class Mage_User_Model_UserTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->_model->roleUserExists());
     }
 
-    /**
-     * @dataProvider existingUserProvider
-     */
-    public function testUserExists($username, $email)
-    {
-        $this->_model->setUsername($username)
-            ->setEmail($email);
-        $this->assertTrue($this->_model->userExists());
-        $this->_model->loadByUsername(Magento_Test_Bootstrap::ADMIN_NAME);
-        $this->assertFalse($this->_model->userExists());
-    }
-
-    public function existingUserProvider()
-    {
-        return array(
-            array('user', 'user@magento.com'),
-            array('user1', 'admin@example.com'),
-        );
-    }
-
     public function testGetCollection()
     {
         $this->assertInstanceOf('Mage_Core_Model_Resource_Db_Collection_Abstract',
@@ -304,92 +284,88 @@ class Mage_User_Model_UserTest extends PHPUnit_Framework_TestCase
         $this->assertEmpty($this->_model->hasAssigned2Role($this->_model));
     }
 
-    public function testValidateEmptyUserName()
+    /**
+     * @expectedException Mage_Core_Exception
+     * @expectedExceptionMessage User Name is required field.
+     * @expectedExceptionMessage First Name is required field.
+     * @expectedExceptionMessage Last Name is required field.
+     * @expectedExceptionMessage Please enter a valid email.
+     * @expectedExceptionMessage Password is required field.
+     * @magentoDbIsolation enabled
+     */
+    public function testBeforeSaveRequiredFieldsValidation()
     {
-        $errors = $this->_model->validate();
-        $this->assertContains(Mage::helper('Mage_User_Helper_Data')->__('User Name is required field.'), $errors);
+        $this->_model->setSomething('some_value'); // force model change
+        $this->_model->save();
     }
 
-    public function testValidateEmptyFirstName()
+    /**
+     * @expectedException Mage_Core_Exception
+     * @expectedExceptionMessage Password confirmation must be same as password.
+     * @magentoDbIsolation enabled
+     */
+    public function testBeforeSavePasswordsDoNotMatch()
     {
-        $errors = $this->_model->validate();
-        $this->assertContains(Mage::helper('Mage_User_Helper_Data')->__('First Name is required field.'), $errors);
-    }
-
-    public function testValidateEmptyLastName()
-    {
-        $errors = $this->_model->validate();
-        $this->assertContains(Mage::helper('Mage_User_Helper_Data')->__('First Name is required field.'), $errors);
-    }
-
-    public function testValidateInvalidEmail()
-    {
-        $this->_model->setEmail('invalid@email');
-        $errors = $this->_model->validate();
-        $this->assertContains(Mage::helper('Mage_User_Helper_Data')->__('Please enter a valid email.'), $errors);
-    }
-
-    public function testValidatePasswordsDontMatch()
-    {
-        $this->_model->setNewPassword('password');
+        $this->_model->setPassword('password2');
         $this->_model->setPasswordConfirmation('password1');
-        $errors = $this->_model->validate();
-        $this->assertContains(
-            Mage::helper('Mage_User_Helper_Data')->__('Password confirmation must be same as password.'),
-            $errors
-        );
+        $this->_model->save();
     }
 
-    public function testValidatePasswordTooShort()
+    /**
+     * @expectedException Mage_Core_Exception
+     * @expectedExceptionMessage Password must be at least
+     * @magentoDbIsolation enabled
+     */
+    public function testBeforeSavePasswordTooShort()
     {
-        $this->_model->setNewPassword('123456');
-        $errors = $this->_model->validate();
-        $this->assertContains(
-            Mage::helper('Mage_User_Helper_Data')->__(
-                'Password must be at least of %d characters.', Mage_User_Model_User::MIN_PASSWORD_LENGTH
-            ),
-            $errors
+        $this->_model->setPassword('123456');
+        $this->_model->save();
+    }
+
+    /**
+     * @dataProvider beforeSavePasswordInsecureDataProvider
+     * @expectedException Mage_Core_Exception
+     * @expectedExceptionMessage Password must include both numeric and alphabetic characters.
+     * @magentoDbIsolation enabled
+     * @param string $password
+     */
+    public function testBeforeSavePasswordInsecure($password)
+    {
+        $this->_model->setPassword($password);
+        $this->_model->save();
+    }
+
+    public function beforeSavePasswordInsecureDataProvider()
+    {
+        return array(
+            'alpha chars only'  => array('aaaaaaaa'),
+            'digits only'       => array('1234567'),
         );
     }
 
     /**
-     * @dataProvider providerInvalidUserPasswords
-     * @param string $password
+     * @expectedException Mage_Core_Exception
+     * @expectedExceptionMessage A user with the same user name or email already exists.
+     * @magentoDbIsolation enabled
      */
-    public function testValidateInvalidPassword($password)
-    {
-        $this->_model->setNewPassword($password);
-        $errors = $this->_model->validate();
-        $this->assertContains(
-            Mage::helper('Mage_User_Helper_Data')->__('Password must include both numeric and alphabetic characters.'),
-            $errors
-        );
-    }
-
-    public function providerInvalidUserPasswords()
-    {
-        return array(array('aaaaaaaa'), array('1234567'));
-    }
-
-    public function testValidateExistingUser()
+    public function testBeforeSaveUserIdentityViolation()
     {
         $this->_model->setUsername('user');
-        $errors = $this->_model->validate();
-        $this->assertContains(
-            Mage::helper('Mage_User_Helper_Data')->__('A user with the same user name or email aleady exists.'),
-            $errors
-        );
+        $this->_model->save();
     }
 
-    public function testValidateOk()
+    /**
+     * @magentoDbIsolation enabled
+     */
+    public function testBeforeSaveValidationSuccess()
     {
         $this->_model->setUsername('user1')
             ->setFirstname('John')
             ->setLastname('Doe')
             ->setEmail('jdoe@gmail.com')
-            ->setNewPassword('1234abc')
+            ->setPassword('1234abc')
             ->setPasswordConfirmation('1234abc');
-        $this->assertTrue($this->_model->validate());
+        $this->_model->save();
     }
 
     /**

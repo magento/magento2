@@ -121,7 +121,7 @@ class Mage_DesignEditor_Block_Adminhtml_Theme extends Mage_Backend_Block_Templat
         $saveButton = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button');
         $saveButton->setData(array(
             'label'     => $this->__('Save'),
-            'class'     => 'save',
+            'class'     => 'action-save',
         ));
         return $saveButton;
     }

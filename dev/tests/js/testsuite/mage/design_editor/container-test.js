@@ -57,10 +57,11 @@ ContainerTest.prototype.testStartCallback = function() {
         item: container
     };
     var startCallback = container.vde_container('option', 'start');
+    assertNotEquals(uiMock.helper.outerHeight(true) + 'px', container.css('min-height'));
     startCallback('start', uiMock);
-    assertEquals(false, 0 == uiMock.placeholder.outerHeight());
+    assertEquals(uiMock.helper.outerHeight(true) + 'px', container.css('min-height'));
     var connectedWithOtherContainers = container.vde_container('option', 'connectWith').size() > 0;
-    assertEquals(true, connectedWithOtherContainers);
+    assertTrue(connectedWithOtherContainers);
     containers.vde_container('destroy');
 };
 ContainerTest.prototype.testOverCallback = function() {
@@ -68,16 +69,22 @@ ContainerTest.prototype.testOverCallback = function() {
     var container = jQuery("#container").vde_container();
     var hoverClass = container.vde_container('option', 'hoverClass');
     var overCallback = container.vde_container('option', 'over');
-    overCallback('over', {});
-    assertEquals(true, container.hasClass(hoverClass));
+    var helperHeight = 100;
+    var uiMock = {
+        helper: jQuery('<div />', {height: helperHeight})
+    };
+    overCallback('over', uiMock);
+    assertTrue(container.hasClass(hoverClass));
+    assertEquals(container.css('min-height'), uiMock.helper.outerHeight(true) + 'px');
     container.vde_container('destroy');
 };
-ContainerTest.prototype.testOutCallback = function() {
+// "out" callback is deprecated and was replaced by "stop" callback
+ContainerTest.prototype.testStopCallback = function() {
     /*:DOC += <div class="vde_element_wrapper vde_container" id="container" /> */
     var container = jQuery("#container").vde_container();
     var hoverClass = container.vde_container('option', 'hoverClass');
-    var outCallback = container.vde_container('option', 'out');
-    outCallback('out', {});
-    assertEquals(false, container.hasClass(hoverClass));
+    var stopCallback = container.vde_container('option', 'stop');
+    stopCallback('stop', {});
+    assertFalse(container.hasClass(hoverClass));
     container.vde_container('destroy');
 };

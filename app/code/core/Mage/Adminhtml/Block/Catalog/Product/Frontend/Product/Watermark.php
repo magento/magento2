@@ -32,7 +32,7 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Adminhtml_Block_Catalog_Product_Frontend_Product_Watermark
-    extends Mage_Core_Block_Template
+    extends Mage_Backend_Block_Abstract
     implements Varien_Data_Form_Element_Renderer_Interface
 {
     const XML_PATH_IMAGE_TYPES = 'global/catalog/product/media/image_types';

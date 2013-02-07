@@ -55,6 +55,14 @@ class Mage_Adminhtml_System_StoreController extends Mage_Adminhtml_Controller_Ac
         $this->_title($this->__('System'))
              ->_title($this->__('Stores'));
 
+        /** @var $limitation Mage_Core_Model_Store_Limitation */
+        $limitation = $this->_objectManager->get('Mage_Core_Model_Store_Limitation');
+        if (!$limitation->canCreate()) {
+            /** @var $session Mage_Adminhtml_Model_Session */
+            $session = Mage::getSingleton('Mage_Adminhtml_Model_Session');
+            $session->addNotice($limitation->getCreateRestrictionMessage());
+        }
+
         $this->_initAction()
             ->renderLayout();
     }
@@ -233,7 +241,7 @@ class Mage_Adminhtml_System_StoreController extends Mage_Adminhtml_Controller_Ac
                 return;
             }
             catch (Mage_Core_Exception $e) {
-                $session->addError($e->getMessage());
+                $this->_getSession()->addMessages($e->getMessages());
                 $session->setPostData($postData);
             }
             catch (Exception $e) {

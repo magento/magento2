@@ -31,78 +31,77 @@
  * @var $this Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tab_Options
  */
 ?>
-<div>
-<ul class="messages">
-    <li class="notice-msg">
-        <ul>
-            <li><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('If you do not specify an option value for a specific store view then the default (Admin) value will be used.') ?></li>
-        </ul>
-    </li>
-</ul>
-</div>
 
-<div class="entity-edit">
-    <div class="entry-edit-head">
-        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Titles (Size, Color, etc.)') ?></h4>
-    </div>
-    <div class="box">
-            <div class="hor-scroll">
-            <table class="dynamic-grid" cellspacing="0" id="attribute-labels-table">
-                <tr>
-                <?php foreach ($this->getStores() as $_store): ?>
-                    <th><?php echo $_store->getName() ?></th>
-                <?php endforeach; ?>
-                </tr>
-                <tr>
-                    <?php $_labels = $this->getLabelValues() ?>
-                    <?php foreach ($this->getStores() as $_store): ?>
-                    <td>
-                        <input class="input-text<?php if ($_store->getId() == Mage_Core_Model_App::ADMIN_STORE_ID): ?> required-option<?php endif; ?>" type="text" name="frontend_label[<?php echo $_store->getId() ?>]" value="<?php echo $this->escapeHtml($_labels[$_store->getId()]) ?>"<?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/>
-                    </td>
-                    <?php endforeach; ?>
-                </tr>
-            </table>
-            </div>
-    </div>
-</div>
-<br/>
-<div class="entity-edit" id="matage-options-panel">
-    <div class="entry-edit-head">
-    <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Options (values of your attribute)') ?></h4>
-    </div>
-    <div class="box">
-        <div class="hor-scroll">
-            <table class="dynamic-grid" cellspacing="0" cellpadding="0">
-                <tr id="attribute-options-table">
-                <?php foreach ($this->getStores() as $_store): ?>
-                    <th><?php echo $_store->getName() ?></th>
-                <?php endforeach; ?>
-                    <th><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Position') ?></th>
-                    <th class="nobr a-center"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Is Default') ?></th>
-                    <th>
-                        <?php if (!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()):?>
-                            <?php echo $this->getAddNewButtonHtml() ?>
-                        <?php endif;?>
-                    </th>
-                </tr>
-                <tr class="no-display template" id="row-template">
-                    <?php foreach ($this->getStores() as $_store): ?>
-                    <td><input name="option[value][{{id}}][<?php echo $_store->getId() ?>]" value="{{store<?php echo $_store->getId() ?>}}" class="input-text<?php if ($_store->getId() == Mage_Core_Model_App::ADMIN_STORE_ID): ?> required-option<?php endif; ?>" type="text" <?php if ($this->getReadOnly() || $this->canManageOptionDefaultOnly()):?> disabled="disabled"<?php endif;?>/></td>
-                    <?php endforeach; ?>
-                    <td class="a-center"><input class="input-text" type="text" name="option[order][{{id}}]" value="{{sort_order}}" <?php if ($this->getReadOnly() || $this->canManageOptionDefaultOnly()):?> disabled="disabled"<?php endif;?>/></td>
-                    <td><input class="input-radio" type="radio" name="default[]" value="{{id}}" <?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/></td>
-                    <td class="a-left">
-                        <input type="hidden" class="delete-flag" name="option[delete][{{id}}]" value="" />
-                        <?php if (!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()):?>
-                            <?php echo $this->getDeleteButtonHtml() ?>
-                        <?php endif;?>
-                    </td>
-                </tr>
-            </table>
+<fieldset class="fieldset">
+    <legend class="legend"><span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Titles (Size, Color, etc.)') ?></span></legend>
+    <br>
+    <div class="message message-info">
+        <div class="message-inner">
+            <div class="message-content"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('If you do not specify an option value for a specific store view then the default (Admin) value will be used.') ?></div>
         </div>
+    </div>
+
+    <table class="data-table" cellspacing="0" id="attribute-labels-table">
+        <tr>
+        <?php foreach ($this->getStores() as $_store): ?>
+            <th><?php echo $_store->getName() ?></th>
+        <?php endforeach; ?>
+        </tr>
+        <tr>
+            <?php $_labels = $this->getLabelValues() ?>
+            <?php foreach ($this->getStores() as $_store): ?>
+            <td>
+                <input class="input-text<?php if ($_store->getId() == Mage_Core_Model_App::ADMIN_STORE_ID): ?> required-option<?php endif; ?>" type="text" name="frontend_label[<?php echo $_store->getId() ?>]" value="<?php echo $this->escapeHtml($_labels[$_store->getId()]) ?>"<?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/>
+            </td>
+            <?php endforeach; ?>
+        </tr>
+    </table>
+</fieldset>
+
+<fieldset class="fieldset">
+    <legend class="legend"><span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Options (values of your attribute)') ?></span></legend>
+    <br>
+    <div id="matage-options-panel">
+        <table class="data-table" cellspacing="0">
+            <thead>
+                <tr id="attribute-options-table">
+                    <th class="col-default"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Is Default') ?></th>
+                <?php
+                    $storelist = $this->getStores();
+                    foreach ($storelist as $_store):
+                ?>
+                    <th><?php echo $_store->getName() ?></th>
+                <?php endforeach;
+                    $storetotal = count($storelist) + 3;
+                ?>
+                    <th><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Position') ?></th>
+                    <th  class="col-delete">&nbsp;</th>
+                </tr>
+            </thead>
+            <tr class="no-display template" id="row-template">
+                <td class="col-default"><input class="input-radio" type="radio" name="default[]" value="{{id}}" <?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/></td>
+            <?php foreach ($this->getStores() as $_store): ?>
+                <td class="col-{{id}}"><input name="option[value][{{id}}][<?php echo $_store->getId() ?>]" value="{{store<?php echo $_store->getId() ?>}}" class="input-text<?php if ($_store->getId() == Mage_Core_Model_App::ADMIN_STORE_ID): ?> required-option<?php endif; ?>" type="text" <?php if ($this->getReadOnly() || $this->canManageOptionDefaultOnly()):?> disabled="disabled"<?php endif;?>/></td>
+            <?php endforeach; ?>
+                <td><input class="input-text" type="text" name="option[order][{{id}}]" value="{{sort_order}}" <?php if ($this->getReadOnly() || $this->canManageOptionDefaultOnly()):?> disabled="disabled"<?php endif;?>/></td>
+                <td>
+                    <input type="hidden" class="delete-flag" name="option[delete][{{id}}]" value="" />
+                    <?php if (!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()):?>
+                        <?php echo $this->getDeleteButtonHtml() ?>
+                    <?php endif;?>
+                </td>
+            </tr>
+            <tfoot>
+                <th colspan="<?php echo $storetotal; ?>">
+                    <?php if (!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()):?>
+                    <?php echo $this->getAddNewButtonHtml() ?>
+                    <?php endif;?>
+                </th>
+            </tfoot>
+        </table>
         <input type="hidden" id="option-count-check" value="" />
     </div>
-</div>
+</fieldset>
 <script type="text/javascript">
 //<![CDATA[
 var optionDefaultInputType = 'radio';
@@ -110,12 +109,12 @@ var optionDefaultInputType = 'radio';
 // IE removes quotes from element.innerHTML whenever it thinks they're not needed, which breaks html.
 var templateText =
         '<tr class="option-row">'+
+            '<td class="col-default"><input class="input-radio" type="{{intype}}" name="default[]" value="{{id}}" {{checked}} <?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/><\/td>'+
 <?php foreach ($this->getStores() as $_store): ?>
             '<td><input name="option[value][{{id}}][<?php echo $_store->getId() ?>]" value="{{store<?php echo $_store->getId() ?>}}" class="input-text<?php if ($_store->getId() == Mage_Core_Model_App::ADMIN_STORE_ID): ?> required-option<?php endif; ?>" type="text" <?php if ($this->getReadOnly() || $this->canManageOptionDefaultOnly()):?> disabled="disabled"<?php endif;?><?php if ($_store->getId() == Mage_Core_Model_App::ADMIN_STORE_ID && $this->canManageOptionDefaultOnly()):?> style="width:196px"<?php endif;?> /><\/td>'+
 <?php endforeach; ?>
             '<td><input class="input-text" type="text" name="option[order][{{id}}]" value="{{sort_order}}" <?php if ($this->getReadOnly() || $this->canManageOptionDefaultOnly()):?> disabled="disabled"<?php endif;?>/><\/td>'+
-            '<td class="a-center"><input class="input-radio" type="{{intype}}" name="default[]" value="{{id}}" {{checked}} <?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/><\/td>'+
-            '<td class="a-left" id="delete_button_container_{{id}}">'+
+            '<td id="delete_button_container_{{id}}" class="col-delete">'+
                 '<input type="hidden" class="delete-flag" name="option[delete][{{id}}]" value="" />'+
                 <?php if (!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()):?>
                     <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getDeleteButtonHtml()) ?> +

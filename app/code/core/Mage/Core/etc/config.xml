@@ -28,7 +28,7 @@
 <config>
     <modules>
         <Mage_Core>
-            <version>1.6.0.9</version>
+            <version>1.6.0.10</version>
             <active>true</active>
             <codePool>core</codePool>
         </Mage_Core>
@@ -118,6 +118,9 @@
                 </parameters>
                 <shared>0</shared>
             </Magento_Filesystem>
+            <Mage_Core_Model_Theme_Image>
+                <shared>0</shared>
+            </Mage_Core_Model_Theme_Image>
         </di>
     </global>
     <frontend>
@@ -126,16 +129,6 @@
                 <full_name>default/demo</full_name>
             </theme>
         </design>
-        <events>
-            <controller_action_layout_generate_blocks_after>
-                <observers>
-                    <add_theme_customization>
-                        <class>Mage_Core_Model_Observer</class>
-                        <method>addThemeCustomization</method>
-                    </add_theme_customization>
-                </observers>
-            </controller_action_layout_generate_blocks_after>
-        </events>
         <routers>
             <core>
                 <use>standard</use>
@@ -200,7 +193,7 @@
         </events>
         <design>
             <theme>
-                <full_name>default/basic</full_name>
+                <full_name>default/backend</full_name>
             </theme>
         </design>
         <di>

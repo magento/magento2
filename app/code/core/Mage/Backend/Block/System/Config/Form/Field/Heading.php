@@ -31,7 +31,7 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Backend_Block_System_Config_Form_Field_Heading
-    extends Mage_Core_Block_Template implements Varien_Data_Form_Element_Renderer_Interface
+    extends Mage_Backend_Block_Abstract implements Varien_Data_Form_Element_Renderer_Interface
 {
     /**
      * Render element html

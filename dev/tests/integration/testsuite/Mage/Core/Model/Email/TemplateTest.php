@@ -106,11 +106,12 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Mage/Core/_files/store.php
+     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      */
     public function testGetProcessedTemplate()
     {
         $this->_setBlueThemeForFixtureStore();
-        $expectedViewUrl = 'theme/frontend/default/demo_blue/en_US/Mage_Page/favicon.ico';
+        $expectedViewUrl = 'theme/static/frontend/default/demo_blue/en_US/Mage_Page/favicon.ico';
         $this->_model->setTemplateText('{{view url="Mage_Page::favicon.ico"}}');
         $this->assertStringEndsNotWith($expectedViewUrl, $this->_model->getProcessedTemplate());
         $this->_model->setDesignConfig(array(
@@ -134,12 +135,13 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Mage/Core/_files/design_change.php
+     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      */
     public function testGetProcessedTemplateDesignChange()
     {
         $this->_model->setTemplateText('{{view url="Mage_Page::favicon.ico"}}');
         $this->assertStringEndsWith(
-            'theme/frontend/default/modern/en_US/Mage_Page/favicon.ico',
+            'theme/static/frontend/default/modern/en_US/Mage_Page/favicon.ico',
             $this->_model->getProcessedTemplate()
         );
     }
@@ -147,11 +149,12 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Mage/Core/_files/store.php
+     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      */
     public function testGetProcessedTemplateSubject()
     {
         $this->_setBlueThemeForFixtureStore();
-        $expectedViewUrl = 'theme/frontend/default/demo_blue/en_US/Mage_Page/favicon.ico';
+        $expectedViewUrl = 'theme/static/frontend/default/demo_blue/en_US/Mage_Page/favicon.ico';
         $this->_model->setTemplateSubject('{{view url="Mage_Page::favicon.ico"}}');
         $this->assertStringEndsNotWith($expectedViewUrl, $this->_model->getProcessedTemplateSubject(array()));
         $this->_model->setDesignConfig(array(
@@ -165,6 +168,7 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
      * @covers Mage_Core_Model_Email_Template::addBcc
      * @covers Mage_Core_Model_Email_Template::setReturnPath
      * @covers Mage_Core_Model_Email_Template::setReplyTo
+     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      */
     public function testSend()
     {
@@ -185,6 +189,9 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->_model->send('test@example.com'));
     }
 
+    /**
+     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
+     */
     public function testSendMultipleRecipients()
     {
         $this->_mail->expects($this->at(0))->method('addTo')->with('one@example.com', '=?utf-8?B?TmFtZSBPbmU=?=');
@@ -202,6 +209,9 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
         $this->assertSame($exception, $this->_model->getSendingException());
     }
 
+    /**
+     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
+     */
     public function testSendTransactional()
     {
         $this->_model->sendTransactional('customer_create_account_email_template',

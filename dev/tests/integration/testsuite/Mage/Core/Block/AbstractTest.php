@@ -78,6 +78,30 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
         $this->_layout = null;
     }
 
+    /**
+     * Checks, that not existing image in CSS not affected own publication
+     *
+     * @magentoAppIsolation enabled
+     */
+    public function testCssWithWrongImage()
+    {
+        $dirPath = __DIR__ . DIRECTORY_SEPARATOR . '_files';
+        /** @var $dirs Mage_Core_Model_Dir */
+        $dirs = Mage::getObjectManager()->get('Mage_Core_Model_Dir');
+
+        $prepareFileName = new ReflectionMethod($dirs, '_setDir');
+        $prepareFileName->setAccessible(true);
+        $prepareFileName->invoke($dirs, Mage_Core_Model_Dir::THEMES, $dirPath);
+
+        $cssUrl = $this->_block->getViewFileUrl('css/wrong.css', array(
+            'area'    => 'frontend',
+            'package' => 'default',
+            'theme'   => 'demo',
+            'locale'  => 'en_US'
+        ));
+        $this->assertStringMatchesFormat('%s/css/wrong.css', $cssUrl);
+    }
+
     public function testGetRequest()
     {
         $this->assertInstanceOf('Mage_Core_Controller_Request_Http', $this->_block->getRequest());
@@ -487,7 +511,8 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
      */
     public function testGetViewUrl()
     {
-        $this->assertStringStartsWith('http://localhost/pub/media/theme/frontend/', $this->_block->getViewFileUrl());
+        $this->assertStringStartsWith('http://localhost/pub/media/theme/static/frontend/',
+            $this->_block->getViewFileUrl());
         $this->assertStringEndsWith('css/styles.css', $this->_block->getViewFileUrl('css/styles.css'));
 
         /**

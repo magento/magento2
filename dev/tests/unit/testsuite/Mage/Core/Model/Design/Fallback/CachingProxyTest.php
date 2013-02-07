@@ -142,11 +142,14 @@ class Mage_Core_Model_Design_Fallback_CachingProxyTest extends PHPUnit_Framework
         $this->_fallback->expects($this->once())->method('getViewFile')->will($this->returnValue($fixture));
         $this->assertEquals($fixture, $this->_model->getViewFile('file.txt', $moduleArg));
         $this->assertSame(
-            $this->_model, $this->_model->notifyViewFilePublished($anotherFixture, 'file.txt', $moduleArg)
+            $this->_model, $this->_model->setFilePathToMap($anotherFixture, 'file.txt', $moduleArg)
         );
         $this->assertEquals($anotherFixture, $this->_model->getViewFile('file.txt', $moduleArg));
     }
 
+    /**
+     * @return Magento_Filesystem
+     */
     protected function _createFilesystem()
     {
         return new Magento_Filesystem(new Magento_Filesystem_Adapter_Local());

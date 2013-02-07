@@ -67,7 +67,7 @@ class Mage_Core_Controller_Varien_Router_BaseTest extends PHPUnit_Framework_Test
 
     public function testMatch()
     {
-        if (!Magento_Test_Bootstrap::canTestHeaders()) {
+        if (!Magento_Test_Helper_Bootstrap::canTestHeaders()) {
             $this->markTestSkipped('Can\'t test get match without sending headers');
         }
 

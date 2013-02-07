@@ -29,8 +29,8 @@
 
 <script type="text/javascript">
 //<![CDATA[
-window.firstStepTemplate = '<div class="option-box" id="option_{{id}}">'+
-            '<table id="<?php echo $this->getFieldId() ?>_{{id}}" class="option-header" cellpadding="0" cellspacing="0">'+
+window.firstStepTemplate = '<div class="fieldset" id="option_{{id}}">'+
+            '<table id="<?php echo $this->getFieldId() ?>_{{id}}" class="data-table" cellspacing="0">'+
             '<input type="hidden" id="<?php echo $this->getFieldId() ?>_{{id}}_is_delete" name="<?php echo $this->getFieldName() ?>[{{id}}][is_delete]" value="" />'+
             '<input type="hidden" id="<?php echo $this->getFieldId() ?>_{{id}}_previous_type" name="<?php echo $this->getFieldName() ?>[{{id}}][previous_type]" value="{{type}}" />'+
             '<input type="hidden" id="<?php echo $this->getFieldId() ?>_{{id}}_previous_group" name="<?php echo $this->getFieldName() ?>[{{id}}][previous_group]" value="" />'+
@@ -38,19 +38,19 @@ window.firstStepTemplate = '<div class="option-box" id="option_{{id}}">'+
             '<input type="hidden" id="<?php echo $this->getFieldId() ?>_{{id}}_option_id" name="<?php echo $this->getFieldName() ?>[{{id}}][option_id]" value="{{option_id}}" />'+
             '<thead>'+
                 '<tr>'+
-                    '<th class="opt-title"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Title') ?> <span class="required">*</span></th>'+
-                    '<th class="opt-type"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Input Type') ?> <span class="required">*</span></th>'+
-                    '<th class="opt-req"><?php echo $this->jsQuoteEscape(Mage::helper('Mage_Catalog_Helper_Data')->__('Is Required')) ?></th>'+
-                    '<th class="opt-order"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Sort Order') ?></th>'+
-                    '<th class="a-right">' + <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getDeleteButtonHtml()) ?> + '</th>'+
+                    '<th><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Title') ?> <span class="required">*</span></th>'+
+                    '<th><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Input Type') ?> <span class="required">*</span></th>'+
+                    '<th><?php echo $this->jsQuoteEscape(Mage::helper('Mage_Catalog_Helper_Data')->__('Is Required')) ?></th>'+
+                    '<th><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Sort Order') ?></th>'+
+                    '<th class="col-delete">' + <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getDeleteButtonHtml()) ?> + '</th>'+
                 '</tr>'+
             '</thead>'+
             '<tr>'+
                 '<td><input type="text" class="required-entry input-text" id="<?php echo $this->getFieldId() ?>_{{id}}_title" name="<?php echo $this->getFieldName() ?>[{{id}}][title]" value="{{title}}">{{checkboxScopeTitle}}</td>'+
                 '<td><?php echo $this->getTypeSelectHtml() ?></td>'+
-                '<td class="opt-req"><?php echo $this->getRequireSelectHtml() ?></td>'+
+                '<td><?php echo $this->getRequireSelectHtml() ?></td>'+
                 '<td><input type="text" class="validate-zero-or-greater input-text" name="<?php echo $this->getFieldName() ?>[{{id}}][sort_order]" value="{{sort_order}}"></td>'+
-                '<td>&nbsp;</td>'+
+                '<td class="col-delete">&nbsp;</td>'+
             '</tr></table></div>';
 
 window.productOption = {
@@ -197,7 +197,7 @@ window.productOptionType = {
                 $(element.readAttribute('id')+'_'+group).show();
 
             } else {
-                template = '<div id="'+element.readAttribute('id')+'_'+group+'" class="grid tier form-list">'+template+'</div><div id="'+element.readAttribute('id')+'_'+group+'_advice"></div';
+                template = '<div id="'+element.readAttribute('id')+'_'+group+'" class="tier form-list">'+template+'</div><div id="'+element.readAttribute('id')+'_'+group+'_advice"></div';
                 this.secondTemplate = new Template(template, this.templateSyntax);
 
                 data = {};
@@ -248,7 +248,7 @@ window.productOptionType = {
 
         $('<?php echo $this->getFieldId() ?>_'+data.id+'_previous_group').value = group;
 
-        template = '<div id="<?php echo $this->getFieldId() ?>_{{id}}_type_'+group+'" class="grid tier form-list">'+template+'</div><div id="<?php echo $this->getFieldId() ?>_{{id}}_type_'+group+'_advice"></div>';
+        template = '<div id="<?php echo $this->getFieldId() ?>_{{id}}_type_'+group+'" class="tier form-list">'+template+'</div><div id="<?php echo $this->getFieldId() ?>_{{id}}_type_'+group+'_advice"></div>';
 
         this.secondTemplate = new Template(template, this.templateSyntax);
 
@@ -424,8 +424,6 @@ window.productOptionScope.bindScopeCheckbox();
 //]]>
 </script>
 
-<div><?php if (!$this->isReadonly()):?><input type="hidden" name="affect_product_custom_options" value="1" /><?php endif;?></div>
-
+<?php if (!$this->isReadonly()):?><input type="hidden" name="affect_product_custom_options" value="1" /><?php endif;?>
 
 <div id="import-container" style="display: none;"></div>
-

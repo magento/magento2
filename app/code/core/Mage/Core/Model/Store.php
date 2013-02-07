@@ -272,6 +272,43 @@ class Mage_Core_Model_Store extends Mage_Core_Model_Abstract
     }
 
     /**
+     * Validation rules for store
+     *
+     * @return Zend_Validate_Interface|null
+     */
+    protected function _getValidationRulesBeforeSave()
+    {
+        $validator = new Magento_Validator_Composite_VarienObject();
+
+        $storeLabelRule = new Zend_Validate_NotEmpty();
+        $storeLabelRule->setMessage(
+            Mage::helper('Mage_Core_Helper_Data')->__('Name is required'),
+            Zend_Validate_NotEmpty::IS_EMPTY
+        );
+        $validator->addRule($storeLabelRule, 'name');
+
+        $storeCodeRule = new Zend_Validate_Regex('/^[a-z]+[a-z0-9_]*$/');
+        $storeCodeRule->setMessage(
+            Mage::helper('Mage_Core_Helper_Data')->__('The store code may contain only letters (a-z), numbers (0-9) or underscore(_), the first character must be a letter'),
+            Zend_Validate_Regex::NOT_MATCH
+        );
+        $validator->addRule($storeCodeRule, 'code');
+
+        if ($this->isObjectNew()) {
+            /** @var $limitation Mage_Core_Model_Store_Limitation */
+            $limitation = Mage::getObjectManager()->get('Mage_Core_Model_Store_Limitation');
+            $storeSavingAllowance = new Zend_Validate_Callback(array($limitation, 'canCreate'));
+            $storeSavingAllowance->setMessage(
+                $limitation->getCreateRestrictionMessage(), Zend_Validate_Callback::INVALID_VALUE
+            );
+
+            $validator->addRule($storeSavingAllowance);
+        }
+
+        return $validator;
+    }
+
+    /**
      * Loading store data
      *
      * @param   mixed $id

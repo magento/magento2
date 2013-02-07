@@ -156,6 +156,7 @@ class Mage_ImportExport_Model_Import_Entity_CustomerCompositeTest extends PHPUni
      * @param array $errors
      *
      * @magentoDataFixture Mage/ImportExport/_files/customers_for_address_import.php
+     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      * @magentoAppIsolation enabled
      *
      * @dataProvider importDataDataProvider

@@ -24,67 +24,100 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php /** @var $_element Varien_Data_Form_Element_Fieldset */ ?>
-<?php $_element = $this->getElement() ?>
-<?php if ($_element->getFieldsetContainerId()): ?>
-<div id="<?php echo $_element->getFieldsetContainerId(); ?>"<?php echo $_element->serialize(array('style')) ?>>
-<?php endif; ?>
-<?php if ($_element->getLegend()): ?>
-<div class="entry-edit-head"<?php echo $_element->serialize(array('style')) ?>
-     id="head-<?php echo $_element->getHtmlId() ?>">
-    <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $_element->getLegend() ?></h4>
-    <div class="form-buttons"><?php echo $_element->getHeaderBar() ?></div>
-</div>
-<?php endif; ?>
-<?php if (!$_element->getNoContainer()): ?>
-    <div class="fieldset <?php echo $_element->getClass() ?>" id="<?php echo $_element->getHtmlId() ?>"
-        <?php echo $_element->serialize(array('style')) ?>>
-<?php endif; ?>
-    <div class="hor-scroll">
-        <?php if ($_element->getComment()): ?>
-            <p class="comment"><?php echo $this->escapeHtml($_element->getComment()) ?></p>
-        <?php endif; ?>
-        <?php if ($_element->hasHtmlContent()): ?>
-            <?php echo $_element->getHtmlContent(); ?>
-        <?php else: ?>
-        <table cellspacing="0" class="<?php echo $_element->hasTableClass() ? $_element->getTableClass() : 'form-list'?>">
-            <tbody>
-                <?php echo $_element->getBasicChildrenHtml(); ?>
-            </tbody>
-        </table>
-        <?php if ($_element->hasAdvanced()): ?>
-        <div style="border:1px solid #d3d3d3;">
-            <h3 style="padding-left: 2em; cursor: " id="advanced_block_title"> <span id="advanced_block_indicator">+</span> <?php echo $_element->getAdvancedLabel() ?></h3>
-            <div style="padding: 0em; display:none;" id="advanced_block_content">
-            <table cellspacing="0" class="<?php echo $_element->hasTableClass() ? $_element->getTableClass() : 'form-list'?>">
-                <tbody>
-                    <?php echo $_element->getAdvancedChildrenHtml(); ?>
-                </tbody>
-            </table>
-            </div>
-        </div>
-        <script type="text/javascript">
-        (function($) {
-            $(function() {
-                $( "#advanced_block_title" ).click(function() {
-                    $('#advanced_block_content').toggle();
-                    if ($('#advanced_block_content').css('display') == 'block') {
-                        $('#advanced_block_indicator').html('-');
-                    } else {
-                        $('#advanced_block_indicator').html('+');
+<?php
+/** @var $element Varien_Data_Form_Element_Fieldset */
+$element = $this->getElement();
+$containerId = $element->getFieldsetContainerId();
+$id = $element->getHtmlId();
+$isCollapsable = $element->getCollapsable();
+$isWrapped = $containerId || $element->getHeaderBar() || $isCollapsable;
+$titleActions = $element->getHeaderBar() ? '<div class="actions">' . $element->getHeaderBar() . '</div>' : '';
+$isField = $element->getFieldsetType() == 'field';
+$advancedAfter = $element->getAdvancedPosition() == 'after'; // To place advanced options inside or after fieldset
 
-                    }
-                });
-            });
-        })(jQuery);
-        </script>
-        <?php endif; ?>
-        <?php endif; ?>
-    </div>
-    <?php echo $_element->getSubFieldsetHtml() ?>
-<?php if (!$_element->getNoContainer()): ?>
-    </div>
+$cssClass = ($isField) ? 'field ' . $element->getClass() : 'fieldset ' . $element->getClass();
+
+if ($isField) {
+    $count = $element->getCountBasicChildren();
+    $cssClass .= ($element->hasAdvanced()) ? ' complex' : '';
+}
+?>
+
+<?php
+/**
+* @todo investigate situations, when the following is needed:
+* echo $element->getHeaderBar();
+* echo $element->getSubFieldsetHtml();
+*/ ?>
+
+<?php if ($isWrapped): ?>
+    <div class="fieldset-wrapper" id="<?php echo $containerId ? $containerId : $id . '-wrapper';?>">
+        <div class="fieldset-wrapper-title">
+            <strong class="title"<?php echo ($isCollapsable) ? ' data-toggle="collapse" data-target="#' . $id . '-content"' : ''; ?>>
+                <span><?php echo $element->getLegend() ?></span>
+            </strong>
+            <?php echo $titleActions; ?>
+        </div>
+        <div class="fieldset-wrapper-content<?php echo ($isCollapsable) ? ' collapse' : ''; ?>" id="<?php echo $id ?>-content">
 <?php endif; ?>
-<?php if ($_element->getFieldsetContainerId()): ?>
-</div>
+
+    <?php if (!$element->getNoContainer()): ?>
+        <fieldset class="<?php echo $cssClass ?>" id="<?php echo $id ?>">
+        <?php if ($element->getLegend() && !$isWrapped): ?>
+            <legend class="<?php echo $isField ? 'label' : 'legend'?>">
+                <span><?php echo $element->getLegend() ?></span>
+            </legend><br />
+        <?php endif; ?>
+    <?php endif; ?>
+
+    <?php if ($element->getComment() && !$isField): ?>
+        <div class="comment"><?php echo $this->escapeHtml($element->getComment()) ?></div>
+    <?php endif; ?>
+
+    <?php echo ($isField) ? '<div class="control">' : ''; ?>
+
+    <?php if ($element->hasHtmlContent() && !$isField): ?>
+        <?php echo $element->getHtmlContent(); ?>
+    <?php else: ?>
+
+        <?php if ($isField && $count > 1):?>
+            <div class="fields-group-<?php echo $count?>">
+        <?php endif; ?>
+
+        <?php echo $element->getBasicChildrenHtml(); ?>
+
+        <?php echo ($isField && $count > 1) ? '</div>' : '' ?>
+
+        <?php if ($element->getComment() && $isField): ?>
+            <div class="note"><?php echo $this->escapeHtml($element->getComment()) ?></div>
+        <?php endif; ?>
+
+        <?php if ($element->hasAdvanced() && !$isField): ?>
+            <?php echo (!$element->getNoContainer() && $advancedAfter)  ? '</fieldset>' : ''?>
+            <details class="details" id="details<?php echo $id ?>">
+                <summary class="details-summary" id="details-summary<?php echo $id ?>">
+                    <span><?php echo $element->getAdvancedLabel() ?></span>
+                </summary>
+                <div class="details-content" id="details-content<?php echo $id ?>">
+                    <?php echo $element->getAdvancedChildrenHtml(); ?>
+                </div>
+            </details>
+        <?php elseif ($element->hasAdvanced() && $isField): ?>
+            <div class="nested" id="nested<?php echo $id ?>">
+                <?php echo $element->getAdvancedChildrenHtml(); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php echo ($isField) ? '</div>' : ''; ?>
+
+    <?php endif; ?>
+
+
+    <?php if (!$element->getNoContainer() && !$advancedAfter): ?>
+        </fieldset>
+    <?php endif; ?>
+
+<?php if ($isWrapped): ?>
+        </div>
+    </div>
 <?php endif; ?>

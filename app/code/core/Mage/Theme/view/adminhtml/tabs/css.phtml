@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     Mage_DesignEditor
+ * @package     Mage_Theme
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -36,6 +36,7 @@
             dataType: 'json',
             replaceFileInput: false,
             url : '<?php echo $this->getUrl('*/system_design_theme/uploadcss') ?>',
+            acceptFileTypes: /(.|\/)(css)$/i,
 
             /**
              * Add data
@@ -71,6 +72,16 @@
                     contentArea.val(data.result.content);
                     contentArea.trigger('focusout');
                 }
+            },
+
+            /**
+             * Fail event
+             * @param e
+             * @param data
+             */
+            fail: function(e, data) {
+                $(this).val('');
+                alert($.mage.__('File extension not known or unsupported type.'));
             }
         });
 

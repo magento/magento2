@@ -24,57 +24,36 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="content-header">
-    <table cellspacing="0">
-        <tr>
-            <td style="width:50%;"><h3 class="icon-head head-product-attribute-sets"><?php echo $this->escapeHtml($this->_getHeader()) ?></h3></td>
-            <td class="form-buttons">
-                <?php echo $this->getBackButtonHtml() ?>
-                <?php echo $this->getResetButtonHtml() ?>
-                <?php echo $this->getDeleteButtonHtml() ?>
-                <?php echo $this->getSaveButtonHtml() ?>
-            </td>
-        </tr>
-    </table>
+<div class="page-actions">
+    <?php echo $this->getBackButtonHtml() ?>
+    <?php echo $this->getResetButtonHtml() ?>
+    <?php echo $this->getDeleteButtonHtml() ?>
+    <?php echo $this->getSaveButtonHtml() ?>
 </div>
-<table cellspacing="0" width="100%">
-    <tr>
-        <td width="360" style="border-right:1px solid #ddd; padding:0 23px 23px 0;" class="edit-attribute-set">
-            <?php echo $this->getSetFormHtml() ?>
-            <script type="text/javascript">
-                jQuery('#set-prop-form').mage('validation', {errorClass: 'mage-error'});
-            </script>
-        </td>
-        <td width="320" style="border-right:1px solid #ddd; padding:0 23px 23px 23px;">
-            <div class="content-header skip-header">
-            <table cellspacing="0">
-                    <tbody>
-                        <tr>
-                            <td><h3><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Groups') ?></h3></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+<div class="attribute-set">
+    <div class="edit-attribute-set attribute-set-col">
+        <?php echo $this->getSetFormHtml() ?>
+        <script type="text/javascript">
+            jQuery('#set-prop-form').mage('validation', {errorClass: 'mage-error'});
+        </script>
+    </div>
+    <div class="attribute-set-col fieldset-wrapper">
+        <div class="fieldset-wrapper-title">
+            <span class="title"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Groups') ?></span>
+        </div>
+        <?php if (!$this->getIsReadOnly()): ?>
+        <?php echo $this->getAddGroupButton() ?>&nbsp;<?php echo $this->getDeleteGroupButton() ?>
+        <p class="note-block"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Double click on a group to rename it') ?></p>
+        <?php endif; ?>
 
-            <?php if (!$this->getIsReadOnly()): ?>
-                <p><?php echo $this->getAddGroupButton() ?>&nbsp;<?php echo $this->getDeleteGroupButton() ?></p>
-                <p class="note-block"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Double click on a group to rename it') ?></p>
-            <?php endif; ?>
-
-            <?php echo $this->getSetsFilterHtml() ?>
-            <?php echo $this->getGroupTreeHtml() ?>
-        </td>
-        <td style="padding:0 0 23px 23px;">
-            <div class="content-header skip-header">
-                <table cellspacing="0">
-                    <tbody>
-                        <tr>
-                            <td><h3><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Unassigned Attributes') ?></h3></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div id="tree-div2" style="height:400px; margin-top:5px;overflow:auto"></div>
+        <?php echo $this->getSetsFilterHtml() ?>
+        <?php echo $this->getGroupTreeHtml() ?>
+    </div>
+    <div class="attribute-set-col fieldset-wrapper">
+        <div class="fieldset-wrapper-title">
+            <span class="title"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Unassigned Attributes') ?></span>
+        </div>
+        <div id="tree-div2" class="attribute-set-tree"></div>
             <script type="text/javascript">
             //<![CDATA[
             var allowDragAndDrop = <?php echo ($this->getIsReadOnly() ? 'false' : 'true'); ?>;
@@ -337,7 +316,9 @@
                     },
 
                     save : function() {
-                        $('messages').update();
+                        if ($('messages')) {
+                            $('messages').update();
+                        }
                         TreePanels.rebuildTrees();
                         if(!jQuery('#set-prop-form').valid()) {
                             return;
@@ -456,6 +437,5 @@
             Ext.EventManager.onDocumentReady(TreePanels.init, TreePanels, true);
             //]]>
             </script>
-        </td>
-    </tr>
-</table>
+    </div>
+</div>

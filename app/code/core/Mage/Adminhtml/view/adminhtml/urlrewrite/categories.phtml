@@ -30,15 +30,13 @@
  * @see Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_Tree
  */
 ?>
-<div class="entry-edit">
-    <div class="entry-edit-head">
-        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Select Category') ?></h4>
-    </div>
-    <fieldset>
-        <input type="hidden" name="categories" id="product_categories" value="" />
-        <div id="tree-div" class="tree" style="width:auto;"></div>
-    </fieldset>
-</div>
+<fieldset class="fieldset">
+    <legend class="legend"><span><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Select Category') ?></span></legend>
+    <br />
+    <br>
+    <input type="hidden" name="categories" id="product_categories" value="" />
+    <div id="tree-div" class="tree" style="width:auto;"></div>
+</fieldset>
 
 <?php if ($this->getRoot()): ?>
 <script type="text/javascript">

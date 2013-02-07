@@ -30,31 +30,24 @@
     $themeTitle = $this->quoteEscape($this->getTheme()->getThemeTitle());
 ?>
 
-<li class="theme" id="theme-id-<?php echo $this->getTheme()->getId() ?>" style="margin:20px; float:left;">
-    <ul class="theme-element-customizations" data-widget-options="<?php echo $this->escapeHtml($this->getOptionsJson()); ?>">
-        <li class="theme-assigned-to-storeview theme-control-title"">
-            <span class="theme-title text-field">
-                <?php echo $this->getTheme()->getThemeTitle() ?>
-            </span>
-            <div class="theme-title input-field">
-                <div class="control">
-                    <input type="text" value="<?php echo $themeTitle ?>" data-title-original="<?php echo $themeTitle ?>" class="input-text" />
-                </div>
-                <?php echo $this->getQuickSaveButton()->toHtml() ?>
+<li class="theme" id="theme-id-<?php echo $this->getTheme()->getId() ?>" data-widget-options="<?php echo $this->escapeHtml($this->getOptionsJson()); ?>">
+    <form action="" method="post" class="edit-theme-title-form hidden">
+        <input type="text" value="<?php echo $themeTitle ?>" data-title-original="<?php echo $themeTitle ?>" required autofocus />
+        <?php echo $this->getQuickSaveButton()->toHtml() ?>
+    </form>
+    <h4 class="theme-title" title="<?php echo $themeTitle ?>"><?php echo $themeTitle ?></h4>
+    <?php if ($this->getTheme()->getAssignedStores()): ?>
+    <p class="theme-assigned-to-storeview">
+        <span><?php echo $this->__('Store View applied to: ')?></span>
+        <strong title="<?php echo implode(', ', $this->getStoresTitles()) ?>"><?php echo implode(', ', $this->getStoresTitles()) ?></strong>
+    </p>
+    <?php endif; ?>
+    <div class="theme-content">
+        <img src="<?php echo $this->getTheme()->getThemeImage()->getPreviewImageUrl() ?>" alt="<?php echo $themeTitle ?>"/>
+        <article class="theme-data">
+            <div class="actions">
+                <?php echo $this->getButtonsHtml() ?>
             </div>
-        </li>
-        <li>
-            <?php if ($this->getTheme()->getAssignedStores()): ?>
-                <?php echo $this->__('Store View applied to:') . ' ' . implode(', ', $this->getStoresTitles()) ?>
-            <?php endif; ?>
-        </li>
-        <li class="theme-front-customizations">
-            <div style="margin:0 auto; height:350px; width:350px; border:1px solid black;">
-                <img src="<?php echo $this->getTheme()->getPreviewImageUrl() ?>" style="display:block; height:350px; width:350px;" alt="" />
-                <div class="theme-buttons">
-                    <?php echo $this->getButtonsHtml() ?>
-                </div>
-            </div>
-        </li>
-    </ul>
+        </article>
+    </div>
 </li>

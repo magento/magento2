@@ -181,10 +181,11 @@ class Varien_Data_Form_Abstract extends Varien_Object
      *
      * @return Varien_Data_Form_Element_Fieldset
      */
-    public function addFieldset($elementId, $config, $after = false)
+    public function addFieldset($elementId, $config, $after = false, $isAdvanced = false)
     {
         $element = new Varien_Data_Form_Element_Fieldset($config);
         $element->setId($elementId);
+        $element->setAdvanced($isAdvanced);
         $this->addElement($element, $after);
         return $element;
     }

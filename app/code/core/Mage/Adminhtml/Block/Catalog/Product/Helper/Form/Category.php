@@ -131,7 +131,8 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Category extends Varien_D
             'valueField' => '#' . $this->getHtmlId(),
             'template' => '#' . $this->getHtmlId() . '-template',
             'control' => 'jstree',
-            'className' => 'category-select'
+            'className' => 'category-select',
+            'multiselect' => true,
         );
     }
 }

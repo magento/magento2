@@ -25,7 +25,8 @@
  */
 /** $this Mage_Backend_Block_Widget_Form */
 ?>
-<div class="entry-edit">
+<?php /* @todo replace .form-inline with better class name */?>
+<div class="entry-edit form-inline">
     <?php echo $this->getFormHtml();?>
 </div>
 <?php echo $this->getChildHtml('form_after');?>

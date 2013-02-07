@@ -16,3 +16,6 @@ dev/tests/integration/testsuite/Mage/Backend/Block/System/Config/FormStub.php
 dev/tests/integration/tmp
 dev/tests/static/testsuite/Php/Exemplar/_files/phpcs/input
 dev/tests/static/testsuite/Php/Exemplar/_files/phpmd/input
+app/code/core/Mage/Backend/view
+app/code/core/Mage/Theme/view/adminhtml/tabs/fieldset/js_items.phtml
+app/code/core/Mage/Theme/view/adminhtml/browser/content/files.phtml

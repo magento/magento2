@@ -25,24 +25,21 @@
  */
 /* @var $this Mage_Adminhtml_Block_Newsletter_Template_Edit */
 ?>
-<div class="content-header">
-   <h3 class="icon-head head-newsletter-list"><?php echo $this->getHeaderText() ?></h3>
-   <p class="content-buttons form-buttons">
-                <?php echo $this->getBackButtonHtml(); ?>
-                <?php echo $this->getResetButtonHtml(); ?>
-                <?php if(!$this->isTextType()): ?>
-                <?php echo $this->getToPlainButtonHtml(); ?>
-                <?php echo $this->getToHtmlButtonHtml(); ?>
-                <?php endif ?>
-                <?php echo $this->getPreviewButtonHtml(); ?>
-                <?php if($this->getEditMode()): ?>
-                <?php echo $this->getDeleteButtonHtml(); ?>
-                <?php endif ?>
-                <?php if($this->getEditMode()): ?>
-                <?php echo $this->getSaveAsButtonHtml(); ?>
-                <?php endif ?>
-                <?php echo $this->getSaveButtonHtml(); ?>
-    </p>
+<div class="page-actions">
+    <?php echo $this->getBackButtonHtml(); ?>
+    <?php echo $this->getResetButtonHtml(); ?>
+    <?php if(!$this->isTextType()): ?>
+    <?php echo $this->getToPlainButtonHtml(); ?>
+    <?php echo $this->getToHtmlButtonHtml(); ?>
+    <?php endif ?>
+    <?php echo $this->getPreviewButtonHtml(); ?>
+    <?php if($this->getEditMode()): ?>
+    <?php echo $this->getDeleteButtonHtml(); ?>
+    <?php endif ?>
+    <?php if($this->getEditMode()): ?>
+    <?php echo $this->getSaveAsButtonHtml(); ?>
+    <?php endif ?>
+    <?php echo $this->getSaveButtonHtml(); ?>
 </div>
 <form action="<?php echo $this->getSaveUrl() ?>" method="post" id="newsletter_template_edit_form">
     <?php echo $this->getBlockHtml('formkey')?>

@@ -435,4 +435,13 @@ return array(
     array('getButtonsHtml', 'Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Search'),
     array('getHeaderCssClass', 'Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Search'),
     array('superGroupGridOnlyAction', 'Mage_Adminhtml_Catalog_ProductController'),
+    array('getInstance', 'Magento_Test_Bootstrap', 'Magento_Test_Helper_Bootstrap::getInstance'),
+    array('setInstance', 'Magento_Test_Bootstrap', 'Magento_Test_Helper_Bootstrap::setInstance'),
+    array('canTestHeaders', 'Magento_Test_Bootstrap', 'Magento_Test_Helper_Bootstrap::canTestHeaders'),
+    array('getInstallDir', 'Magento_Test_Bootstrap', 'Magento_Test_Helper_Bootstrap::getAppInstallDir'),
+    array('getInitParams', 'Magento_Test_Bootstrap', 'Magento_Test_Helper_Bootstrap::getAppInitParams'),
+    array('getDbVendorName', 'Magento_Test_Bootstrap', 'Magento_Test_Helper_Bootstrap::getDbVendorName'),
+    array('reinitialize', 'Magento_Test_Bootstrap', 'Magento_Test_Helper_Bootstrap::reinitialize'),
+    array('runApp', 'Magento_Test_Bootstrap', 'Magento_Test_Helper_Bootstrap::runApp'),
+    array('getTestsDir', 'Magento_Test_Bootstrap'),
 );
