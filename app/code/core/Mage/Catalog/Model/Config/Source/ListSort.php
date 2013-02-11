@@ -43,7 +43,7 @@ class Mage_Catalog_Model_Config_Source_ListSort implements Mage_Core_Model_Optio
     {
         $options = array();
         $options[] = array(
-            'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Best Value'),
+            'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Position'),
             'value' => 'position'
         );
         foreach ($this->_getCatalogConfig()->getAttributesUsedForSortBy() as $attribute) {

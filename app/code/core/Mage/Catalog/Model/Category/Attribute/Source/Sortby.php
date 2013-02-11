@@ -53,7 +53,7 @@ class Mage_Catalog_Model_Category_Attribute_Source_Sortby
     {
         if (is_null($this->_options)) {
             $this->_options = array(array(
-                'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Best Value'),
+                'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Position'),
                 'value' => 'position'
             ));
             foreach ($this->_getCatalogConfig()->getAttributesUsedForSortBy() as $attribute) {
