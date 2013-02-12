@@ -736,6 +736,7 @@ class Mage_Core_Model_App
      */
     protected function _initStores()
     {
+        $this->_store    = null;
         $this->_stores   = array();
         $this->_groups   = array();
         $this->_website  = null;
