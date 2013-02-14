@@ -639,7 +639,7 @@ class Mage_Tax_Helper_Data extends Mage_Core_Helper_Abstract
                 $$rateVariable = '';
                 foreach ($$rateArray as $classId=>$rate) {
                     if ($rate) {
-                        $$rateVariable .= sprintf("WHEN %d THEN %12.4f ", $classId, $rate/100);
+                        $$rateVariable .= sprintf("WHEN %d THEN %12.4F ", $classId, $rate/100);
                     }
                 }
                 if ($$rateVariable) {
