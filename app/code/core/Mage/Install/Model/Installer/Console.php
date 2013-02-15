@@ -85,35 +85,32 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
     protected $_dataModel;
 
     /**
-     * Initialize application and "data model"
+     * Resource config
      *
-     * @param Magento_Filesystem $filesystem
-     * @param array $installArgs
+     * @var Mage_Core_Model_Config_Resource
      */
-    public function __construct(Magento_Filesystem $filesystem, array $installArgs)
-    {
-        $this->_filesystem = $filesystem;
-        $params = $this->_buildInitParams($installArgs);
-        Mage::app($params);
-        $this->_getInstaller()->setDataModel($this->_getDataModel());
-    }
+    protected $_resourceConfig;
 
     /**
-     * Customize application init parameters
+     * DB updater
      *
-     * @param array $args
-     * @return array
+     * @var Mage_Core_Model_Db_UpdaterInterface
      */
-    protected function _buildInitParams(array $args)
-    {
-        $result = array();
-        if (!empty($args[self::OPTION_URIS])) {
-            $result[Mage_Core_Model_App::INIT_OPTION_URIS] = unserialize(base64_decode($args[self::OPTION_URIS]));
-        }
-        if (!empty($args[self::OPTION_DIRS])) {
-            $result[Mage_Core_Model_App::INIT_OPTION_DIRS] = unserialize(base64_decode($args[self::OPTION_DIRS]));
-        }
-        return $result;
+    protected $_dbUpdater;
+
+    /**
+     * @param Mage_Core_Model_Config_Resource $resourceConfig
+     * @param Mage_Core_Model_Db_UpdaterInterface $daUpdater
+     */
+    public function __construct(
+        Mage_Core_Model_Config_Resource $resourceConfig,
+        Mage_Core_Model_Db_UpdaterInterface $daUpdater,
+        Magento_Filesystem $filesystem
+    ) {
+        $this->_resourceConfig = $resourceConfig;
+        $this->_dbUpdater = $daUpdater;
+        $this->_getInstaller()->setDataModel($this->_getDataModel());
+        $this->_filesystem = $filesystem;
     }
 
     /**
@@ -308,7 +305,7 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
             }
 
             // apply data updates
-            Mage_Core_Model_Resource_Setup::applyAllDataUpdates();
+            $this->_dbUpdater->updateData();
 
             /**
              * Create primary administrator user & install encryption key
@@ -349,7 +346,8 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
      */
     protected function _cleanUpDatabase()
     {
-        $dbConfig = Mage::getConfig()->getResourceConnectionConfig(Mage_Core_Model_Resource::DEFAULT_SETUP_RESOURCE);
+        $dbConfig = $this->_resourceConfig
+            ->getResourceConnectionConfig(Mage_Core_Model_Resource::DEFAULT_SETUP_RESOURCE);
         $modelName = 'Mage_Install_Model_Installer_Db_' . ucfirst($dbConfig->model);
 
         if (!class_exists($modelName)) {

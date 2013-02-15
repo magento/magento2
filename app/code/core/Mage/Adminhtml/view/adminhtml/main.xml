@@ -57,7 +57,7 @@ Supported layout update handles (special):
                 <action method="setTitle" translate="title"><title>Magento Admin</title></action>
                 <action method="addJs"><file>jquery/jquery.min.js</file></action>
                 <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
-                <action method="addJs"><file>jquery/jquery-ui.custom.min.js</file></action>
+                <action method="addJs"><file>jquery/jquery-ui.js</file></action>
                 <action method="addJs"><file>head.load.min.js</file></action>
                 <action method="addJs"><file>mage/mage.js</file></action>
                 <action method="addJs"><file>jquery/jquery.tmpl.min.js</file></action>

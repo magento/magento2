@@ -55,6 +55,28 @@
         }
     });
 
+    $.extend($.fn, {
+        /**
+         * ValidationDelegate overridden for those cases where the form is located in another form,
+         *     to avoid not correct working of validate plug-in
+         * @override
+         * @param {string} delegate - selector, if event target matched against this selector,
+         *     then event will be delegated
+         * @param {string} type - event type
+         * @param {function} handler - event handler
+         * @return {Element}
+         */
+        validateDelegate: function (delegate, type, handler) {
+            return this.on(type, $.proxy(function (event) {
+                var target = $(event.target);
+                var form = target[0].form;
+                if(form && $(form).is(this) && $.data(form, "validator") && target.is(delegate)) {
+                    return handler.apply(target, arguments);
+                }
+            }, this));
+        }
+    });
+
     $.widget("mage.validation", $.mage.validation, {
         options: {
             messagesId: 'messages',

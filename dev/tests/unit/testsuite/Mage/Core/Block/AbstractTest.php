@@ -72,21 +72,22 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
 
     public function testGetVar()
     {
-        $filesystemMock = $this->getMock('Magento_Filesystem', array(), array(), '', false);
-        $design = $this->getMock('Mage_Core_Model_Design_Package', array('getViewConfig'), array($filesystemMock));
+        $design = $this->getMock('Mage_Core_Model_Design_Package', array('getViewConfig'),
+            array(), '', false, false
+        );
         /** @var $block Mage_Core_Block_Abstract|PHPUnit_Framework_MockObject_MockObject */
         $block = $this->getMockForAbstractClass('Mage_Core_Block_Abstract', array(
             $this->getMock('Mage_Core_Controller_Request_Http'),
-            $this->getMock('Mage_Core_Model_Layout', array(), array(), '', false),
-            $this->getMock('Mage_Core_Model_Event_Manager'),
-            $this->getMock('Mage_Core_Model_Url'),
-            $this->getMock('Mage_Core_Model_Translate', array(), array($design)),
+            $this->getMock('Mage_Core_Model_Layout', array(), array(), '', false, false),
+            $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false, false),
+            $this->getMock('Mage_Core_Model_Url', array(), array(), '', false, false),
+            $this->getMock('Mage_Core_Model_Translate', array(), array($design), '', false, false),
             $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false),
             $design,
-            $this->getMock('Mage_Core_Model_Session'),
-            $this->getMock('Mage_Core_Model_Store_Config'),
-            $this->getMock('Mage_Core_Controller_Varien_Front', array(), array(), '', false),
-            $this->getMock('Mage_Core_Model_Factory_Helper'),
+            $this->getMock('Mage_Core_Model_Session', array(), array(), '', false, false),
+            $this->getMock('Mage_Core_Model_Store_Config', array(), array(), '', false, false),
+            $this->getMock('Mage_Core_Controller_Varien_Front', array(), array(), '', false, false),
+            $this->getMock('Mage_Core_Model_Factory_Helper', array(), array(), '', false, false),
         ), uniqid('Mage_Core_Block_Abstract_'));
         $config = $this->getMock('Magento_Config_View', array('getVarValue'), array(), '', false);
         $design->expects($this->exactly(2))->method('getViewConfig')->will($this->returnValue($config));

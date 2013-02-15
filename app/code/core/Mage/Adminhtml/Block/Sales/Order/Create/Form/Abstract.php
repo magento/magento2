@@ -104,9 +104,9 @@ abstract class Mage_Adminhtml_Block_Sales_Order_Create_Form_Abstract
     protected function _getAdditionalFormElementTypes()
     {
         return array(
-            'file'      => Mage::getConfig()->getBlockClassName('Mage_Adminhtml_Block_Customer_Form_Element_File'),
-            'image'     => Mage::getConfig()->getBlockClassName('Mage_Adminhtml_Block_Customer_Form_Element_Image'),
-            'boolean'   => Mage::getConfig()->getBlockClassName('Mage_Adminhtml_Block_Customer_Form_Element_Boolean'),
+            'file'      => 'Mage_Adminhtml_Block_Customer_Form_Element_File',
+            'image'     => 'Mage_Adminhtml_Block_Customer_Form_Element_Image',
+            'boolean'   => 'Mage_Adminhtml_Block_Customer_Form_Element_Boolean',
         );
     }
 

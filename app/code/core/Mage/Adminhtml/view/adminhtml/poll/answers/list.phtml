@@ -31,28 +31,28 @@
             <span class="title"><?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Assigned Answers') ?></span>
         </div>
 
-        <div class="field">
+        <div class="field field-poll_answers_container">
             <div class="control">
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th><?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Answer Title') ?></th>
-                            <th><?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Votes Count') ?></th>
+                            <th class="col-poll_answer_title"><?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Answer Title') ?></th>
+                            <th class="col-poll_votes_count"><?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Votes Count') ?></th>
                             <th class="col-delete"><?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Action') ?></th>
                         </tr>
                     </thead>
-                    <tbody id="answers_container">
+                    <tbody id="poll_answers_list">
                         <?php foreach($answers->getItems() as $_item): ?>
-                        <tr id="poll_answer_fieldset_<?php echo $_item->getId() ?>">
+                        <tr id="poll_answer_item_<?php echo $_item->getId() ?>">
                             <td>
-                                <input type="text" id="answer_<?php echo $_item->getId() ?>" name="answer[<?php echo $_item->getId() ?>][title]" value="<?php echo $this->escapeHtml($_item->getAnswerTitle()) ?>" class="required-entry" />
+                                <input type="text" name="answer[<?php echo $_item->getId() ?>][title]" value="<?php echo $this->escapeHtml($_item->getAnswerTitle()) ?>" class="required-entry" />
                             </td>
                             <td>
-                                <input type="text" id="answer_votes_<?php echo $_item->getId() ?>" name="answer[<?php echo $_item->getId() ?>][votes]" value="<?php echo $_item->getVotesCount() ?>" class="required-entry validate-not-negative-number" />
+                                <input type="text" name="answer[<?php echo $_item->getId() ?>][votes]" value="<?php echo $_item->getVotesCount() ?>" class="required-entry validate-not-negative-number" />
                             </td>
                             <td>
                                 <?php echo $this->getDeleteButtonHtml() ?>
-                                <input type="hidden" id="id_poll_answer_fieldset_<?php echo $_item->getId() ?>" value="<?php echo $_item->getId() ?>" />
+                                <input type="hidden" id="id_poll_answer_item_<?php echo $_item->getId() ?>" value="<?php echo $_item->getId() ?>" />
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -75,16 +75,16 @@
 
 
 <script type="text/template" id="templatePollAnswer">
-    <tr id="poll_answer_fieldset_#{id}">
+    <tr id="poll_answer_item_#{id}">
         <td>
-            <input type="text" id="answer_#{id}" name="answer[#{id}][title]" value="" class="required-entry" />
+            <input type="text" name="answer[#{id}][title]" value="" class="required-entry" />
         </td>
         <td>
-            <input type="text" id="answer_votes_#{id}" name="answer[#{id}][votes]" value="0" class="required-entry validate-not-negative-number" />
+            <input type="text" name="answer[#{id}][votes]" value="0" class="required-entry validate-not-negative-number" />
         </td>
         <td>
             <?php echo $this->getDeleteButtonHtml() ?>
-            <input type="hidden" id="id_poll_answer_fieldset_#{id}" value="#{id}" />
+            <input type="hidden" id="id_poll_answer_item_#{id}" value="#{id}" />
         </td>
     </tr>
 </script>
@@ -92,7 +92,7 @@
 
 
 
-<script type="text/template" id="templatePollHidden">
+<script type="text/template" id="templatePollAnswerId">
     <input type="hidden" name="deleteAnswer[]" value="#{id}" />
 </script>
 
@@ -111,8 +111,8 @@
     
         _init: function() {
             this.templatePollAnswer = new Template($('#templatePollAnswer').html());
-            this.templatePollHidden = new Template($('#templatePollHidden').html());
-            this.container = $('#answers_container');
+            this.templatePollAnswerId = new Template($('#templatePollAnswerId').html());
+            this.container = $('#poll_answers_list');
         },
     
         _create: function() {
@@ -139,13 +139,13 @@
 
         deleteAnswer: function(el) {
             if(confirm('<?php echo Mage::helper('Mage_Poll_Helper_Data')->__('Are you sure you want to delete it?') ?>')) {
-                var fieldset = $(el).closest('tr');
-                var hidden = $('#id_' + fieldset.attr("id"));
+                var item = $(el).closest('tr');
+                var hidden = $('#id_' + item.attr("id"));
                 var id = hidden.attr("value");
-                hidden.after(this.templatePollHidden.evaluate({
+                this.container.closest('table').after(this.templatePollAnswerId.evaluate({
                     id: id
                 }));
-                fieldset.hide();
+                item.remove();
             }
         }
     });

@@ -34,16 +34,18 @@
  */
 class Mage_Install_Model_Config extends Varien_Simplexml_Config
 {
-
     const XML_PATH_WIZARD_STEPS     = 'wizard/steps';
     const XML_PATH_CHECK_WRITEABLE  = 'check/filesystem/writeable';
     const XML_PATH_CHECK_EXTENSIONS = 'check/php/extensions';
 
-    public function __construct()
+    /**
+     * @param Mage_Core_Model_Config_Modules_Reader $configReader
+     */
+    public function __construct(Mage_Core_Model_Config_Modules_Reader $configReader)
     {
         parent::__construct();
         $this->loadString('<?xml version="1.0"?><config></config>');
-        Mage::getConfig()->loadModulesConfiguration('install.xml', $this);
+        $configReader->loadModulesConfiguration('install.xml', $this);
     }
 
     /**

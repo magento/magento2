@@ -49,7 +49,7 @@ class Mage_User_Model_Acl_Loader_RoleTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_resourceMock = $this->getMock('Mage_Core_Model_Resource');
+        $this->_resourceMock = $this->getMock('Mage_Core_Model_Resource', array(), array(), '', false, false);
         $this->_objectFactoryMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
 
         $this->_resourceMock->expects($this->once())

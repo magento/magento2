@@ -10,10 +10,7 @@ app/code/core/Mage/Checkout/view/frontend/multishipping/payment.js
 app/code/core/Mage/Checkout/view/frontend/onepage/accordion.js
 app/code/core/Mage/Checkout/view/frontend/opcheckout.js
 app/code/core/Mage/Captcha/view/frontend/onepage.js
-app/code/core/Mage/Adminhtml/view/adminhtml/catalog/base-image-uploader.js
 app/code/core/Mage/Adminhtml/view/adminhtml/catalog/category/edit.js
-app/code/core/Mage/Adminhtml/view/adminhtml/catalog/jquery.base-image-uploader.js
-app/code/core/Mage/Adminhtml/view/adminhtml/catalog/jquery.category-selector.js
 app/code/core/Mage/Adminhtml/view/adminhtml/catalog/product/composite/configure.js
 app/code/core/Mage/Adminhtml/view/adminhtml/catalog/product.js
 app/code/core/Mage/Adminhtml/view/adminhtml/promo/rules.js

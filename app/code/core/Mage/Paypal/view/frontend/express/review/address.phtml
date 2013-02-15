@@ -84,11 +84,6 @@
                             <select id="<?php echo $prefix ?>:region_id" name="<?php echo $prefix ?>[region_id]" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;">
                                 <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
                             </select>
-                            <script type="text/javascript">
-                            //<![CDATA[
-                                $('<?php echo $prefix ?>:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
-                            //]]>
-                            </script>
                             <input type="text" id="<?php echo $prefix ?>:region" name="<?php echo $prefix ?>[region]" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('region') ?>" style="display:none;" />
                         </div>
                     </div>
@@ -138,8 +133,22 @@
     </ul>
 </fieldset>
 <script type="text/javascript">
-//<![CDATA[
-    var <?php echo $prefix ?>RegionUpdater = new RegionUpdater('<?php echo $prefix ?>:country_id', '<?php echo $prefix ?>:region', '<?php echo $prefix ?>:region_id', <?php echo $this->helper('Mage_Directory_Helper_Data')->getRegionJson() ?>, undefined, '<?php echo $prefix ?>:postcode');
-    <?php echo $prefix ?>RegionUpdater.update();
-//]]>
+    (function($) {
+        head.js(
+            "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
+            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
+            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
+            "<?php echo $this->getViewFileUrl('Mage_Checkout::js/region-updater.js') ?>",
+            function() {
+                $('#<?php echo $prefix ?>\\:country_id').regionUpdater({
+                    regionListId: '<?php echo $prefix ?>\\:region_id',
+                    regionInputId: '#<?php echo $prefix ?>\\:region',
+                    postcodeId: '#<?php echo $prefix ?>\\:postcode',
+                    regionJson: <?php echo $this->helper('Mage_Directory_Helper_Data')->getRegionJson() ?>,
+                    defaultRegion: "<?php echo $this->getAddress()->getRegionId() ?>",
+                    countriesWithOptionalZip: <?php echo $this->helper('Mage_Directory_Helper_Data')->getCountriesWithOptionalZip(true) ?>
+                });
+            });
+    })(jQuery);
 </script>

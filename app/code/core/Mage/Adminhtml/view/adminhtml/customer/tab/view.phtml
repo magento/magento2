@@ -37,45 +37,47 @@ $createDateAdmin    = $this->getCreateDate();
 $createDateStore    = $this->getStoreCreateDate();
 ?>
 
-<div class="entry-edit fieldset-wrapper">
+<div class="fieldset-wrapper customer-iformation">
 
     <div class="fieldset-wrapper-title">
         <span class="title"><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Personal Information') ?></span>
     </div>
 
-    <table cellspacing="2">
-        <tr>
-            <td><strong><?php echo $this->__('Last Logged In:') ?></strong></td>
-            <td><?php echo $lastLoginDateAdmin ?> (<?php echo $this->getCurrentStatus() ?>)</td>
-        </tr>
-        <?php if ($lastLoginDateAdmin != $lastLoginDateStore): ?>
-        <tr>
-            <td><strong><?php echo $this->__('Last Logged In (%s):', $this->getStoreLastLoginDateTimezone()) ?></strong></td>
-            <td><?php echo $lastLoginDateStore ?> (<?php echo $this->getCurrentStatus() ?>)</td>
-        </tr>
-        <?php endif; ?>
-        <tr>
-            <td><strong><?php echo $this->__('Confirmed email:') ?></strong></td>
-            <td><?php echo $this->getIsConfirmedStatus() ?></td>
-        </tr>
-        <tr>
-            <td><strong><?php echo $this->__('Account Created on:') ?></strong></td>
-            <td><?php echo $createDateAdmin ?></td>
-        </tr>
-        <?php if ($createDateAdmin != $createDateStore): ?>
-        <tr>
-            <td><strong><?php echo $this->__('Account Created on (%s):', $this->getStoreCreateDateTimezone()) ?></strong></td>
-            <td><?php echo $createDateStore ?></td>
-        </tr>
-        <?php endif; ?>
-        <tr>
-            <td><strong><?php echo $this->__('Account Created in:') ?></strong></td>
-            <td><?php echo $this->getCreatedInStore() ?></td>
-        </tr>
-        <tr>
-            <td><strong><?php echo $this->__('Customer Group:') ?></strong></td>
-            <td><?php echo $this->getGroupName() ?></td>
-        </tr>
+    <table>
+        <tbody>
+            <tr>
+                <th><?php echo $this->__('Last Logged In:') ?></th>
+                <td><?php echo $lastLoginDateAdmin ?> (<?php echo $this->getCurrentStatus() ?>)</td>
+            </tr>
+            <?php if ($lastLoginDateAdmin != $lastLoginDateStore): ?>
+            <tr>
+                <th><?php echo $this->__('Last Logged In (%s):', $this->getStoreLastLoginDateTimezone()) ?></th>
+                <td><?php echo $lastLoginDateStore ?> (<?php echo $this->getCurrentStatus() ?>)</td>
+            </tr>
+            <?php endif; ?>
+            <tr>
+                <th><?php echo $this->__('Confirmed email:') ?></th>
+                <td><?php echo $this->getIsConfirmedStatus() ?></td>
+            </tr>
+            <tr>
+                <th><?php echo $this->__('Account Created on:') ?></th>
+                <td><?php echo $createDateAdmin ?></td>
+            </tr>
+            <?php if ($createDateAdmin != $createDateStore): ?>
+            <tr>
+                <th><?php echo $this->__('Account Created on (%s):', $this->getStoreCreateDateTimezone()) ?></th>
+                <td><?php echo $createDateStore ?></td>
+            </tr>
+            <?php endif; ?>
+            <tr>
+                <th><?php echo $this->__('Account Created in:') ?></th>
+                <td><?php echo $this->getCreatedInStore() ?></td>
+            </tr>
+            <tr>
+                <th><?php echo $this->__('Customer Group:') ?></th>
+                <td><?php echo $this->getGroupName() ?></td>
+            </tr>
+        </tbody>
     </table>
     <address>
         <strong><?php echo $this->__('Default Billing Address') ?></strong><br/>

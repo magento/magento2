@@ -40,6 +40,7 @@ Product.Gallery.prototype = {
         this.containerId = containerId, this.container = $(this.containerId);
         this.uploader = uploader;
         this.imageTypes = imageTypes;
+
         if (this.uploader) {
             this.uploader.onFilesComplete = this.handleUploadComplete
                     .bind(this);

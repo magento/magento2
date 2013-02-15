@@ -299,18 +299,18 @@
                 ? $('inventory_enable_qty_increments_default').value
                 : $('inventory_enable_qty_increments').value;
 
-        $('inventory_qty_increments').up('tr')[enableQtyIncrements == 1 ? 'show' : 'hide']();
+        $('inventory_qty_increments').up('.field')[enableQtyIncrements == 1 ? 'show' : 'hide']();
     }
 
     function applyEnableDecimalDivided() {
     <?php if (!$this->isVirtual()) : ?>
-        $('inventory_is_decimal_divided').up('tr').hide();
+        $('inventory_is_decimal_divided').up('.field').hide();
         <?php endif; ?>
         $('inventory_qty_increments').removeClassName('validate-digits').removeClassName('validate-number');
         $('inventory_min_sale_qty').removeClassName('validate-digits').removeClassName('validate-number');
         if ($('inventory_is_qty_decimal').value == 1) {
         <?php if (!$this->isVirtual()) : ?>
-            $('inventory_is_decimal_divided').up('tr').show();
+            $('inventory_is_decimal_divided').up('.field').show();
             <?php endif; ?>
             $('inventory_qty_increments').addClassName('validate-number');
             $('inventory_min_sale_qty').addClassName('validate-number');

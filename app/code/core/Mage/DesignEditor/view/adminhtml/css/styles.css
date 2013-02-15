@@ -24,49 +24,6 @@
  */
 
 /*
-Fonts
--------------------------------------- */
-@font-face {
-    font-family: 'CallunaSans';
-    src: url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansLight-webfont.woff');
-    src: url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansLight-webfont.eot?#iefix') format('embedded-opentype'), url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansLight-webfont.svg#webfont85gDAx2H') format('svg'), url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansLight-webfont.woff') format('woff'), url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansLight-webfont.ttf') format('truetype');
-    font-style: normal;
-    font-weight: 200;
-}
-
-@font-face {
-    font-family: 'CallunaSans';
-    src: url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansRegular-webfont.woff');
-    src: url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansRegular-webfont.eot?#iefix') format('embedded-opentype'), url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansRegular-webfont.svg#webfont85gDAx2D') format('svg'), url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansRegular-webfont.woff') format('woff'), url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansRegular-webfont.ttf') format('truetype');
-    font-style: normal;
-    font-weight: 400;
-}
-
-@font-face {
-    font-family: 'CallunaSans';
-    src: url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansSemiBold-webfont.woff');
-    src: url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansSemiBold-webfont.eot?#iefix') format('embedded-opentype'), url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansSemiBold-webfont.svg#webfont85gDAx2A') format('svg'), url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansSemiBold-webfont.woff') format('woff'), url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansSemiBold-webfont.ttf') format('truetype');
-    font-style: normal;
-    font-weight: 500;
-}
-
-@font-face {
-    font-family: 'CallunaSans';
-    src: url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansBold-webfont.woff');
-    src: url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansBold-webfont.eot?#iefix') format('embedded-opentype'), url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansBold-webfont.svg#webfont85gDAx2C') format('svg'), url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansBold-webfont.woff') format('woff'), url('Mage_DesignEditor::/css/fonts/calluna/CallunaSansBold-webfont.ttf') format('truetype');
-    font-style: normal;
-    font-weight: 600;
-}
-
-@font-face {
-    font-family: 'MUI-Icons';
-    src: url('Mage_DesignEditor::/css/fonts/MUI-Icons.eot');
-    src: url('Mage_DesignEditor::/css/fonts/MUI-Icons.eot?#iefix') format('embedded-opentype'), url('Mage_DesignEditor::/css/fonts/MUI-Icons.svg#MUI-Icons') format('svg'), url('Mage_DesignEditor::/css/fonts/MUI-Icons.woff') format('woff'), url('Mage_DesignEditor::/css/fonts/MUI-Icons.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-/*
    Actions look like buttons
 -------------------------------------- */
 .action-theme-preview,
@@ -109,69 +66,12 @@ Fonts
     user-select: none;
 }
 
-.action-theme-preview:hover,
-.action-theme-assign:hover,
-.action-save:hover,
-#vde_toolbar_buttons .action-theme-assign,
-#vde_toolbar_buttons .action-theme-assign:visited,
-.popup .action-save,
-.popup .action-save:visited {
-    border: 1px solid #b6754a;
-    color: #fff;
-    text-decoration: none;
-    text-shadow: 0 -1px 1px rgba(1, 1, 1, 0.5);
-    background: #f4863e;
-    background: -moz-linear-gradient(top, #f4863e 0%, #e97d37 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f4863e), color-stop(100%, #e97d37));
-    background: -webkit-linear-gradient(top, #f4863e 0%, #e97d37 100%);
-    background: -o-linear-gradient(top, #f4863e 0%, #e97d37 100%);
-    background: -ms-linear-gradient(top, #f4863e 0%, #e97d37 100%);
-    background: linear-gradient(to bottom, #f4863e 0%, #e97d37 100%);
-}
 
-.action-theme-preview:focus,
-.action-theme-assign:focus,
-.action-save:focus {
-    outline: thin dotted #333;
-    outline: 5px auto -webkit-focus-ring-color;
-    outline-offset: -2px;
-}
-
-.action-theme-preview:active,
-.action-theme-preview.active,
-.action-theme-assign:active,
-.action-theme-assign.active,
-.action-save:active,
-.action-save.active {
-    border: 1px solid #b6754a;
-    color: #fff;
-    text-decoration: none;
-    text-shadow: 0 -1px 1px rgba(1, 1, 1, 0.5);
-    background: #f4863e;
-    background: -moz-linear-gradient(top, #f4863e 0%, #e97d37 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f4863e), color-stop(100%, #e97d37));
-    background: -webkit-linear-gradient(top, #f4863e 0%, #e97d37 100%);
-    background: -o-linear-gradient(top, #f4863e 0%, #e97d37 100%);
-    background: -ms-linear-gradient(top, #f4863e 0%, #e97d37 100%);
-    background: linear-gradient(to bottom, #f4863e 0%, #e97d37 100%);
-}
-
-.action-theme-preview[disabled],
-.action-theme-assign[disabled],
-.action-save[disabled] {
-    cursor: not-allowed;
-    background-color: #e6e6e6;
-    background-image: none;
-    opacity: 0.65;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-}
 
 /*
     Actions look like links
 -------------------------------------- */
-.popup .action-close {
+#store-view-window .action-close {
     background: none;
     border: none;
     color: #6d665e;
@@ -181,9 +81,9 @@ Fonts
     border-bottom: 1px solid #b5b3af;
 }
 
-.popup .action-close:hover {
+#store-view-window .action-close:hover {
     color: #000;
-    border-bottom-color: #000;
+    border-bottom: 1px solid #000;
 }
 
 /*
@@ -250,6 +150,8 @@ Fonts
     font-size: 13px;
     min-width: 440px;
     box-shadow: 0 2px 10px 0 #333;
+    border: 0;
+    border-radius: 0;
 }
 
 .fade .popup-header {
@@ -258,9 +160,10 @@ Fonts
     background: #f3efea;
 }
 
-.fade .popup-title {
+.fade .popup .popup-title {
     font: 20px/1 'CallunaSans', Arial, sans-serif;
     font-weight: 300;
+    padding-left: 0;
 }
 
 .fade .popup .actions {
@@ -337,54 +240,6 @@ Fonts
     Themes Tabs
 -------------------------------------- */
 /* TODO: remove after unified tabs implementation */
-#theme_selector_tabs {
-
-}
-
-#theme_selector_tabs .tabs-horiz {
-    margin: 0;
-    padding: 0;
-    background: none;
-    list-style: none;
-    border-bottom: 1px solid #ccc;
-}
-
-#theme_selector_tabs .tabs-horiz > li {
-    margin: 0 -1px -1px 0;
-    float: left;
-    background: #eaeaea;
-    background: -moz-linear-gradient(top, #eaeaea 0%, #dfdfdf 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eaeaea), color-stop(100%, #dfdfdf));
-    background: -webkit-linear-gradient(top, #eaeaea 0%, #dfdfdf 100%);
-    background: -o-linear-gradient(top, #eaeaea 0%, #dfdfdf 100%);
-    background: -ms-linear-gradient(top, #eaeaea 0%, #dfdfdf 100%);
-    background: linear-gradient(to bottom, #eaeaea 0%, #dfdfdf 100%);
-}
-
-#theme_selector_tabs .tabs-horiz > li:hover {
-    background: #dfdfdf;
-    background: -moz-linear-gradient(top, #dfdfdf 0%, #eaeaea 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #dfdfdf), color-stop(100%, #eaeaea));
-    background: -webkit-linear-gradient(top, #dfdfdf 0%, #eaeaea 100%);
-    background: -o-linear-gradient(top, #dfdfdf 0%, #eaeaea 100%);
-    background: -ms-linear-gradient(top, #dfdfdf 0%, #eaeaea 100%);
-    background: linear-gradient(to bottom, #dfdfdf 0%, #eaeaea 100%);
-}
-
-#theme_selector_tabs .tabs-horiz > li a {
-    padding-right: 12px;
-    padding-left: 12px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    line-height: 18px;
-    border: 1px solid #ccc;
-    text-decoration: none;
-    color: #666;
-}
-
-#theme_selector_tabs .tabs-horiz .ui-tabs-active a {
-    border-bottom-color: #fff;
-}
 
 /*
     Themes Tabs Panel
@@ -417,8 +272,8 @@ Fonts
     padding: 40px 0 0;
 }
 
-.ie8 .theme {
-    margin-right: 3%;
+.eq-ie8 .theme {
+    margin-right: 3.33%;
 }
 
 @media screen and (min-width: 1280px) {
@@ -480,6 +335,7 @@ Fonts
 }
 
 .theme-title {
+    margin: 0;
     color: #f2ebde;
     font-family: 'CallunaSans', Arial, sans-serif;
     font-weight: 200;
@@ -503,13 +359,8 @@ Fonts
     white-space: nowrap;
 }
 
-.theme-data .action-theme-assign {
+.theme-data .actions [class^='action-'] {
     margin-left: 8px;
-}
-
-.theme-data .action-theme-assign span {
-    background: none;
-    padding-left: 4px;
 }
 
 .theme-data .action-theme-preview:hover,
@@ -524,12 +375,18 @@ Fonts
 }
 
 .theme-data .action-edit,
-.theme-data .action-delete {
-    color: #fff;
+.theme-data .action-delete,
+.theme-data .action-edit:active,
+.theme-data .action-delete:active {
+    background: none;
+    border: none;
     text-decoration: none;
+    display: inline-block;
+    box-shadow: none;
+    color: #fff;
     font-size: 16px;
     vertical-align: middle;
-    margin: 3px 0 0 7px;
+    padding: 5px;
 }
 
 .theme-data .action-edit:before,
@@ -542,25 +399,20 @@ Fonts
     font-weight: normal;
     -webkit-font-smoothing: antialiased;
     content: "\e05b";
+    color: #fff;
+}
+
+.theme-data .actions .action-delete {
+    margin-left: 0;
 }
 
 .theme-data .action-delete:before {
     content: "\e07f";
 }
 
-.theme-data .action-edit,
-.theme-data .action-delete {
-    background: none;
-    border: none;
-    display: inline-block;
-    width: 22px;
-    height: 24px;
-    overflow: hidden;
-}
-
-.theme-data .action-edit span {
-    background: none;
-    padding: 0;
+.theme-data .action-edit > span,
+.theme-data .action-delete > span {
+    display: none;
 }
 
 /*
@@ -575,6 +427,8 @@ Fonts
 
 .themes-customizations .theme-data .actions {
     bottom: 20px;
+    left: 0;
+    right: 10px;
 }
 
 .themes-customizations h3 {
@@ -593,7 +447,6 @@ Fonts
     text-overflow: ellipsis;
 }
 
-
 /*
     Unassigned Themes
 -------------------------------------- */
@@ -609,7 +462,9 @@ Fonts
     top: 0;
     left: 0;
     right: 0;
+    display: none;
 }
+
 .edit-theme-title-form > input[type="text"] {
     width: 70%;
 }
@@ -631,6 +486,7 @@ Fonts
     top: 5px;
     right: 0;
     left: 52%;
+    margin: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -643,6 +499,14 @@ Fonts
 /*
     Websites/Stores/Storeviews List in Popup
 -------------------------------------- */
+.websites,
+.stores,
+.storeviews {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
 .website {
     padding: 10px 0 0;
 }
@@ -667,8 +531,705 @@ Fonts
 }
 
 /*
+    Tools Panel
+-------------------------------------- */
+.vde-tools {
+    background: #060708;
+    color: #fff;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    padding: 0 0 52px;
+    z-index: 900;
+}
+
+.vde-tools-header {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 52px;
+    background: #32312C;
+}
+
+.vde-tools-header-inner,
+.vde-tab-data,
+.vde-tab-content-header,
+.vde-tools-handler-container,
+.vde-tools-footer-inner {
+    min-width: 1000px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.vde-tools-header-inner,
+.vde-tools-footer-inner {
+    position: relative;
+}
+
+.vde-tools.opened .vde-tools-header-inner:before,
+.vde-tools.opened .vde-tools-footer-inner:before,
+.custom-code .textarea-container:before,
+.custom-code .textarea-container:after {
+    position: absolute;
+    left: 0;
+    top: 52px;
+    right: 0;
+    height: 10px;
+    background: url(Mage_DesignEditor::images/vde-panel-top-shadow.png) repeat-x;
+    content: '';
+    z-index: 1;
+}
+
+.vde-tools.opened .vde-tools-footer-inner:before,
+.custom-code .textarea-container:after {
+    top: -10px;
+    background-position: 0 -10px;
+}
+
+.vde-tools-header .action-close {
+    position: absolute;
+    top: 17px;
+    right: -7px;
+    background: none;
+    border: none;
+    font-weight: normal;
+    cursor: pointer;
+    color: #f2ebde;
+    z-index: 2;
+}
+
+.vde-tools-header .action-close:hover {
+    color: #fff;
+}
+
+.vde-tools-header .action-close span {
+    display: none;
+}
+
+.vde-tools-header .action-close:before {
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: '\e061'; /* close icon */
+    font-size: 20px;
+}
+
+.vde-tools-content {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+}
+
+.vde-tools-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #32312C;
+    height: 52px;
+    z-index: 1001;
+}
+
+.vde-tab-content-inner.hasScroll .vde-tab-data {
+    left: 9px;
+}
+
+.vde-tools .ui-resizable-handle {
+    position: absolute;
+    font-size: 0.1px;
+    display: block;
+}
+
+.vde-tools .ui-resizable-n {
+    cursor: n-resize;
+    width: 10px;
+    height: 16px;
+    top: 17px;
+    left: 0;
+    background: url(Mage_DesignEditor::images/vde-tools-panel-draggable-handler-bg.png) no-repeat;
+}
+
+.vde-tab-controls {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.vde-tab-controls > .item {
+    display: inline-block;
+}
+
+.vde-tools-footer .vde-tab-controls > .item > a {
+    display: inline-block;
+    width: 52px;
+    height: 52px;
+    line-height: 52px;
+    text-align: center;
+    -moz-transition: background-color .3s ease;
+    -webkit-transition: background-color .3s ease;
+    transition: background-color .3s ease;
+}
+
+.vde-tab-controls > .item > a span {
+    display: block;
+    overflow: hidden;
+    text-indent: -999em;
+    width: 30px;
+    height: 27px;
+    background: url(Mage_DesignEditor::images/vde-tools-main-tabs-icons-sprite.png) no-repeat;
+    margin: 12px auto 0;
+}
+
+.vde-tab-controls > .item-design > a span {
+    background-position: 2px 0;
+}
+
+.vde-tab-controls > .item-block > a span {
+    background-position: -28px 0;
+}
+
+.vde-tab-controls > .item-settings > a span {
+    background-position: -58px 0;
+}
+
+.vde-tab-controls > .item-code > a span {
+    background-position: -88px 0;
+}
+
+.vde-tab-controls > .item-design > a:hover span {
+    background-position: 2px -27px;
+}
+
+.vde-tab-controls > .item-block > a:hover span {
+    background-position: -28px -27px;
+}
+
+.vde-tab-controls > .item-settings > a:hover span {
+    background-position: -58px -27px;
+}
+
+.vde-tab-controls > .item-code > a:hover span {
+    background-position: -88px -27px;
+}
+
+.vde-tab-controls > .item.active > a {
+    background-color: #000;
+}
+
+.tab-panel {
+    position: relative;
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+.vde-tools-content-inner {
+    position: relative;
+}
+
+.vde-tools-content-inner > .vde-tab-content {
+
+}
+
+.vde-tools-handler-container {
+    position: relative;
+}
+
+.vde-tab-content-title {
+    font: 20px/52px "CallunaSans", Arial, sans-serif;
+    font-weight: 400;
+    color: #f2ebde;
+    text-shadow: 0 -1px 1px #000;
+    float: left;
+    margin: 0 28px 0 22px;
+}
+
+.vde-tab-content-inner {
+    position: relative;
+    height: 348px;
+    overflow-y: auto;
+    background: #000;
+}
+
+.vde-tab-data {
+    position: relative;
+    padding: 50px 0;
+    color: #f2ebde;
+}
+
+.vde-tab-data .title {
+    font: 24px/1.333 "CallunaSans", Arial, sans-serif;
+    font-weight: 500;
+    color: #f2ebde;
+    margin: 0;
+}
+
+.vde-tab-data .action-download,
+.vde-tab-data .action-delete,
+.vde-tab-data .action-edit {
+    display: inline-block;
+    margin-left: 10px;
+    float: right;
+    color: #9f978b;
+    background: none;
+    border: none;
+    padding: 0;
+    text-decoration: none;
+    -moz-transition: color .5s ease;
+    -webkit-transition: color .5s ease;
+    transition: color .5s ease;
+}
+
+.vde-tab-data .action-download:hover,
+.vde-tab-data .action-download:focus,
+.vde-tab-data .action-delete:hover,
+.vde-tab-data .action-delete:focus,
+.vde-tab-data .action-edit:hover,
+.vde-tab-data .action-edit:focus {
+    color: #fff;
+}
+
+.vde-tab-data .action-download:before,
+.vde-tab-data .action-delete:before,
+.vde-tab-data .action-edit:before {
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: '\e073'; /* download icon (arrow down) */
+    font-size: 16px;
+}
+
+.vde-tab-data .action-download span,
+.vde-tab-data .action-delete span,
+.vde-tab-data .action-edit span {
+    display: none;
+}
+
+.vde-tab-data .action-delete:before {
+    content: '\e07f'; /* trash icon */
+}
+
+.vde-tab-data .action-edit:before {
+    content: '\e05b'; /* edit icon */
+}
+
+.vde-tab-content-header .vde-tab-controls {
+    padding: 8px 0 4px;
+}
+
+.vde-tab-content-header .vde-tab-controls > .item {
+    float: left;
+    margin-right: 3px;
+}
+
+.vde-tab-content-header .vde-tab-controls > .item > a {
+    display: inline-block;
+    font: 13px "CallunaSans", Arial, sans-serif;
+    font-weight: 600;
+    line-height: 40px;
+    text-align: center;
+    height: 40px;
+    padding: 0 22px;
+    background: #000;
+    border-radius: 5px;
+    color: #ccc;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.vde-tab-content-header .vde-tab-controls > .item.active > a {
+    height: 44px;
+    border-radius: 5px 5px 0 0;
+}
+
+/*
+    Files List Block
+-------------------------------------- */
+.files-list {
+    display: block;
+    float: left;
+    margin-left: 14.127659574%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 23.914893614%;
+    min-height: 250px;
+}
+
+.files-wrapper .files-list:first-child,
+.files-wrapper .files-list:nth-child(3n+1) {
+    margin-left: 0;
+}
+
+.files-list-header {
+    position: relative;
+    margin: 0 0 13px;
+    padding-right: 20px;
+    white-space: nowrap;
+}
+
+.files-list-header > .title {
+    margin: 0;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.custom-file > .action-add,
+.files-list-header > .action-add {
+    display: inline-block;
+    position: absolute;
+    top: 3px;
+    right: 0;
+    margin: 6px 0 0 0;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    color: #000;
+    background: #9f978b;
+    border-radius: 4px;
+    text-decoration: none;
+    -moz-transition: background .5s ease;
+    -webkit-transition: background .5s ease;
+    transition: background .5s ease;
+    overflow: hidden;
+}
+
+.custom-file > .action-add .field-row,
+.files-list-header > .action-add .field-row {
+    display: block;
+}
+
+.custom-file > .action-add input[type="file"],
+.files-list-header > .action-add input[type="file"] {
+    position: absolute;
+    left:0;
+    right:0;
+    top: 0;
+    bottom:0;
+    opacity: 0;
+    width: 16px;
+    height: 16px;
+}
+
+.custom-file > .action-add:hover,
+.custom-file > .action-add:focus,
+.files-list-header > .action-add:hover,
+.files-list-header > .action-add:focus {
+    background: #fff;
+    border-radius: 4px;
+}
+
+.custom-file > .action-add:before,
+.files-list-header > .action-add:before {
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: '\e02d'; /* plus icon */
+    font-size: 16px;
+}
+
+.eq-ie9 .custom-file > .action-add:before,
+.eq-ie9 .files-list-header > .action-add:before {
+    line-height: 18px !important;
+}
+
+.custom-file > .action-add span,
+.files-list-header > .action-add span {
+    display: none;
+}
+
+.custom-file > .action-add {
+    position: relative;
+}
+
+.custom-file > .action-download {
+    top: 2px;
+}
+
+.custom-file > .action-add:before {
+    font-size: 16px !important;
+}
+
+.files-list-content .items {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.files-list-content .item {
+    position: relative;
+    padding: 10px 50px 8px 0;
+    border-bottom: 1px solid #31302b;
+    white-space: nowrap;
+}
+
+.files-list-content .item [class^="action-"] {
+    position: absolute;
+    top: 10px;
+    right: 0;
+}
+
+.files-list-content .item .action-edit {
+    right: 30px;
+}
+
+.files-list-content .item .filename {
+    display: block;
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.vde-tab-content-inner .filename {
+    font: bold 16px/1.333 "Helvetica", Arial, sans-serif;
+    vertical-align: middle;
+}
+
+/*
+    JS Tabs
+-------------------------------------- */
+#vde-tab-js .title {
+    display: inline;
+    margin-right: 10px;
+}
+
+#vde-tab-js .files-list-header .action-add {
+    position: relative;
+}
+
+#vde-tab-js .files-list {
+    width: 100%;
+    margin: 0;
+}
+
+#vde-tab-js .files-list .items .item {
+    display: inline-block;
+    width: 26%;
+    margin-right: 3%;
+}
+
+/*
+    VDE Messages
+-------------------------------------- */
+.vde-message {
+    margin: -40px 0 46px;
+    background: url(Mage_DesignEditor::images/vde-message-bg.gif);
+    border-bottom: 1px solid #43423D;
+    border-radius: 5px;
+    font: 14px/1.666 Helvetica, Arial, sans-serif;
+}
+
+.vde-message > .message-inner {
+    position: relative;
+    padding: 20px 45px 15px 20px;
+}
+
+.vde-message .action-close {
+    padding: 0;
+    display: inline-block;
+    position: absolute;
+    top: 17px;
+    right: 20px;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    background: #201f1c;
+    border-radius: 4px;
+    color: #8b857b;
+    text-align: center;
+    border: none;
+    -moz-transition: all .5s ease;
+    -webkit-transition: all .5s ease;
+    transition: all .5s ease;
+}
+
+@-moz-document url-prefix() {
+    .vde-message .action-close {
+        line-height: 14px;
+    }
+}
+
+.vde-message .action-close:hover {
+    color: #fff;
+    background: #000;
+}
+
+.vde-message .action-close:before {
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: '\e061'; /* close icon */
+    font-size: 10px;
+}
+
+.vde-message .action-close span {
+    display: none;
+}
+
+.vde-message .message-content {
+
+}
+
+/*
+    Custom Code
+-------------------------------------- */
+[class^="custom-code"] {
+    display: block;
+    float: left;
+    margin-left: 2.127659574%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.custom-code-description {
+    width: 31.914893614%;
+    margin-left: 0;
+}
+
+.custom-code-description .custom-file {
+    position: relative;
+}
+
+.custom-code-description .title,
+.custom-code-description p {
+    margin-bottom: 20px;
+}
+
+.custom-code-description p {
+    font: 14px/18px Helvetica, Arial, sans-serif;
+    color: #8d857a;
+}
+
+.custom-code-description [class^="action-"] {
+    position: relative;
+    float: right;
+    margin: 0 0 0 10px;
+}
+
+.custom-code-description [class^="action-"]:before {
+    font-size: 18px;
+}
+
+.custom-code {
+    width: 65.95744680199999%;
+}
+
+.custom-code .textarea-container {
+    position: relative;
+    border: 1px solid #31302b;
+    border-radius: 5px;
+}
+
+.custom-code .textarea-container:before,
+.custom-code .textarea-container:after {
+    left: 30px;
+    right: 20px;
+}
+
+.custom-code .textarea-container:before {
+    top: 0;
+}
+
+.custom-code .textarea-container:after {
+    top: auto;
+    bottom: 5px;
+}
+
+.custom-code textarea {
+    width: 100%;
+    background: none;
+    border: none;
+    resize: vertical;
+    font: 14px/18px Helvetica, Arial, sans-serif;
+    color: #f2ebde;
+    padding: 20px 0 20px 20px;
+}
+
+.custom-code textarea:focus {
+    outline: none;
+}
+
+@-moz-document url-prefix() {
+    .custom-code textarea {
+        padding-bottom: 3px;
+    }
+}
+
+.custom-code .action-update {
+    float: right;
+    margin: 7px 0 0 0;
+}
+
+.custom-code .action-update,
+.custom-code .action-update:visited {
+    font: 14px/18px 'CallunaSans', Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    color: #322e2a;
+    background: #dbd6ce;
+    display: inline-block;
+    padding: 5px 14px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: top;
+    cursor: pointer;
+    border: transparent;
+    border-radius: 5px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.custom-code .action-update:hover,
+.custom-code .action-update:focus {
+    background: #cac2b5;
+    color: #322e2a;
+}
+
+.custom-code .action-update:active,
+.custom-code .action-update.active {
+    box-shadow: 0 1px 5px #aaa59b inset;
+}
+
+.custom-code .action-update[disabled],
+.custom-code .action-update.disabled,
+.custom-code .action-update[disabled]:hover,
+.custom-code .action-update.disabled:hover,
+.custom-code .action-update[disabled]:focus,
+.custom-code .action-update.disabled:focus,
+.custom-code .action-update[disabled]:active,
+.custom-code .action-update.disabled:active,
+.custom-code .action-update[disabled].active,
+.custom-code .action-update.disabled.active {
+    cursor: not-allowed;
+    opacity: 0.65;
+    background: #d9d6cf;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+/*
     VDE
 -------------------------------------- */
+
 #vde_toolbar {
     position: fixed;
     margin-top: -54pt;
@@ -722,6 +1283,7 @@ Fonts
     line-height: 21pt;
     padding: 2pt 0;
 }
+
 .action-switch-mode {
     float: left;
     background: none;
@@ -742,7 +1304,7 @@ Fonts
     text-decoration: none;
     background-image: url(../images/button.png);
     background-size: contain;
-    background-color:#f4f3f1 !important;
+    background-color: #f4f3f1 !important;
     float: left;
     margin-right: 3px;
 }
@@ -769,6 +1331,7 @@ Fonts
     border-color: red;
     color: red;
 }
+
 .vde_toolbar_cell_title {
     font-weight: bold;
     cursor: pointer;
@@ -852,6 +1415,7 @@ Fonts
     display: block;
     text-decoration: none;
 }
+
 #vde_handles_hierarchy .vde_toolbar_cell_content {
     padding: 1em .5em 1em 0;
 }
@@ -901,6 +1465,12 @@ Fonts
 -------------------------------------- */
 .themes:before,
 .themes:after,
+.files-list-header:before,
+.files-list-header:after,
+.vde-tab-data > .tab-panel:before,
+.vde-tab-data > .tab-panel:after,
+.vde-tab-content-header:before,
+.vde-tab-content-header:after,
 .clearfix:before,
 .clearfix:after {
     content: "";
@@ -908,6 +1478,9 @@ Fonts
 }
 
 .themes:after,
+.files-list-header:after,
+.vde-tab-data > .tab-panel:after,
+.vde-tab-content-header:after,
 .clearfix:after {
     clear: both;
 }

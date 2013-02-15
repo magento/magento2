@@ -51,7 +51,6 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
     $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode()
         : 'toggleValueElements(this, this.parentNode.parentNode.parentNode)';
 ?>
-
 <?php if (!$element->getNoDisplay()): ?>
     <?php if ($element->getType() == 'hidden'): ?>
         <?php echo $element->getElementHtml() ?>
@@ -70,9 +69,16 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
         <?php endif; ?>
         <div class="field-service" value-scope="<?php echo $this->getScopeLabel()?>">
             <?php if ($this->canDisplayUseDefault()): ?>
-                <label for="<?php echo $element->getHtmlId() ?>_default" class="choice action-default">
-                    <input <?php if($element->getReadonly()):?> disabled="disabled"<?php endif; ?> type="checkbox" name="use_default[]" id="<?php echo $element->getHtmlId() ?>_default"<?php if($this->usedDefault()): ?> checked="checked"<?php endif; ?> onclick="<?php echo $elementToggleCode; ?>" value="<?php echo $this->getAttributeCode() ?>"/>
-                    <?php echo $this->__('Use Default Value') ?>
+                <label for="<?php echo $element->getHtmlId() ?>_default" class="choice use-default">
+                    <input <?php if($element->getReadonly()):?> disabled="disabled"<?php endif; ?>
+                            type="checkbox"
+                            name="use_default[]"
+                            class="use-default-control"
+                            id="<?php echo $element->getHtmlId() ?>_default"
+                            <?php if($this->usedDefault()): ?> checked="checked"<?php endif; ?>
+                            onclick="<?php echo $elementToggleCode; ?>"
+                            value="<?php echo $this->getAttributeCode() ?>"/>
+                    <span class="use-default-label"><?php echo $this->__('Use Default Value') ?></span>
                 </label>
             <?php endif; ?>
         </div>

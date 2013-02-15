@@ -46,10 +46,12 @@ class Mage_Install_WizardControllerTest extends Magento_Test_TestCase_Controller
 
     public function setUp()
     {
-        parent::setUp();
         // emulate non-installed application
-        $this->_runOptions[Mage_Core_Model_Config::INIT_OPTION_EXTRA_DATA]
-            = sprintf(Mage_Core_Model_Config::CONFIG_TEMPLATE_INSTALL_DATE, 'invalid');
+        Magento_Test_Helper_Bootstrap::getInstance()->reinitialize(array(
+            Mage::PARAM_CUSTOM_LOCAL_CONFIG
+                => sprintf(Mage_Core_Model_Config_Primary::CONFIG_TEMPLATE_INSTALL_DATE, 'invalid')
+        ));
+        parent::setUp();
     }
 
     public function tearDown()

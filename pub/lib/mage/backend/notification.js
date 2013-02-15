@@ -52,7 +52,7 @@
         _add: function(event, jqXHR) {
             try {
                 var response = $.parseJSON(jqXHR.responseText);
-                if (response && response.error) {
+                if (response && response.error && response.message) {
                     this.element.append($.tmpl('globalNotification', response));
                 }
             } catch(e) {}

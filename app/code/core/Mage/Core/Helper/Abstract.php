@@ -51,6 +51,21 @@ abstract class Mage_Core_Helper_Abstract
     protected $_layout;
 
     /**
+     * Translator model
+     *
+     * @var Mage_Core_Model_Translate
+     */
+    protected $_translator;
+
+    /**
+     * @param Mage_Core_Model_Translate $translator
+     */
+    public function __construct(Mage_Core_Model_Translate $translator)
+    {
+        $this->_translator = $translator;
+    }
+
+    /**
      * Retrieve request object
      *
      * @return Zend_Controller_Request_Http
@@ -58,7 +73,7 @@ abstract class Mage_Core_Helper_Abstract
     protected function _getRequest()
     {
         if (!$this->_request) {
-            $this->_request = Mage::app()->getRequest();
+            $this->_request = Mage::getObjectManager()->get('Mage_Core_Controller_Request_Http');
         }
         return $this->_request;
     }
@@ -183,7 +198,7 @@ abstract class Mage_Core_Helper_Abstract
         $args = func_get_args();
         $expr = new Mage_Core_Model_Translate_Expr(array_shift($args), $this->_getModuleName());
         array_unshift($args, $expr);
-        return Mage::app()->getTranslator()->translate($args);
+        return $this->_translator->translate($args);
     }
 
     /**

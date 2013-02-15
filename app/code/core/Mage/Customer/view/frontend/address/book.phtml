@@ -18,8 +18,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
+ * @category    customer address book
+ * @package     mage
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -32,7 +32,7 @@
 ?>
 <div class="page-title title-buttons">
     <h1><?php echo $this->__('Address Book') ?></h1>
-    <button type="button" title="<?php echo $this->__('Add New Address') ?>" class="button" onclick="window.location='<?php echo $this->getAddAddressUrl() ?>';"><span><span><?php echo $this->__('Add New Address') ?></span></span></button>
+    <button type="button" role="add-address" title="<?php echo $this->__('Add New Address') ?>" class="button"><span><span><?php echo $this->__('Add New Address') ?></span></span></button>
 </div>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <div class="col2-set addresses-list">
@@ -79,7 +79,7 @@
                 <address>
                     <?php echo $this->getAddressHtml($_address) ?>
                 </address>
-                <p><a href="<?php echo $this->getUrl('customer/address/edit', array('id'=>$_address->getId())) ?>"><?php echo $this->__('Edit Address') ?></a> <span class="separator">|</span> <a href="#" class="link-remove" onclick="return deleteAddress('<?php echo $_address->getId() ?>');"><?php echo $this->__('Delete Address') ?></a></p>
+                <p><a href="<?php echo $this->getUrl('customer/address/edit', array('id'=>$_address->getId())) ?>"><?php echo $this->__('Edit Address') ?></a> <span class="separator">|</span> <a href="#" class="link-remove" role="delete-address" data-address="<?php echo $_address->getId() ?>"><?php echo $this->__('Delete Address') ?></a></p>
             </li>
             <?php endforeach; ?>
         <?php else: ?>
@@ -94,12 +94,12 @@
     <p class="back-link"><a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><small>&laquo; </small><?php echo $this->__('Back') ?></a></p>
 </div>
 <script type="text/javascript">
-//<![CDATA[
-    function deleteAddress(addressId) {
-        if(confirm('<?php echo $this->__('Are you sure you want to delete this address?') ?>')) {
-            window.location='<?php echo $this->getDeleteUrl() ?>id/'+addressId;
-        }
-        return false;
-    }
-//]]>
+    head.js("<?php echo $this->getViewFileUrl('Mage_Customer::address.js');?>", function() {
+        jQuery('div.page-title').address({
+            deleteAddress: "li.item a[role='delete-address']",
+            deleteUrlPrefix: '<?php echo $this->getDeleteUrl() ?>id/',
+            addAddress: "div.title-buttons button[role='add-address']",
+            addAddressLocation: '<?php echo $this->getAddAddressUrl() ?>'
+        });
+    });
 </script>

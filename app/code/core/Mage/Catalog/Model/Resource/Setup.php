@@ -35,13 +35,22 @@
 class Mage_Catalog_Model_Resource_Setup extends Mage_Eav_Model_Entity_Setup
 {
     /**
-     * Add Minimal attribute set id to exclude list
-     *
-     * @param string $resourceName
+     * @param Mage_Core_Model_Config_Resource $resourcesConfig
+     * @param Mage_Core_Model_Config_Modules $modulesConfig
+     * @param Mage_Core_Model_Resource $resource
+     * @param Mage_Core_Model_Config_Modules_Reader $modulesReader
+     * @param Mage_Core_Model_Cache $cache
+     * @param $resourceName
      */
-    public function __construct($resourceName)
-    {
-        parent::__construct($resourceName);
+    public function __construct(
+        Mage_Core_Model_Config_Resource $resourcesConfig,
+        Mage_Core_Model_Config_Modules $modulesConfig,
+        Mage_Core_Model_Resource $resource,
+        Mage_Core_Model_Config_Modules_Reader $modulesReader,
+        Mage_Core_Model_Cache $cache,
+        $resourceName
+    ) {
+        parent::__construct($resourcesConfig, $modulesConfig, $resource, $modulesReader, $cache, $resourceName);
         $entityTypeForMinimal = $this->getEntityType('Minimal', 'entity_type_id');
         if (is_numeric($entityTypeForMinimal)) {
             $minimalAttributeSetId = $this->getAttributeSet(

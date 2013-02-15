@@ -25,81 +25,113 @@
  */
  /** @var $this Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config */
 ?>
-<div class="entry-edit" id="<?php echo $this->getId() ?>">
-    <div class="entry-edit-head">
-        <h4 class="icon-head head-edit-form fieldset-legend">
-            <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Variations') ?>
-        </h4>
-        <div style="float:right">
-            <input type="checkbox" id="<?php echo $this->getId()?>-checkbox" name="attributes"
-                value=""
-                <?php if ($this->_getProduct()->isConfigurable() || $this->getRequest()->has('attributes')) {
-                    echo ' checked="checked" ';
-                }?>
-            />
-            <label for="<?php echo $this->getId()?>-checkbox">
-                <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Does this product have variations?') ?>
-            </label>
+<div class="entry-edit form-inline" id="<?php echo $this->getId() ?>">
+    <div class="fieldset-wrapper" id="<?php echo $this->getId() ?>-wrapper">
+        <div class="fieldset-wrapper-title">
+            <strong class="title" data-toggle="collapse" data-target="#<?php echo $this->getId() ?>-content">
+                <span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Variations') ?></span>
+            </strong>
+        </div>
+
+        <div class="fieldset-wrapper-content collapse" id="<?php echo $this->getId() ?>-content">
+            <fieldset class="fieldset">
+                <div class="field" id="variations-search-field">
+                    <label class="label" for="configurable-attribute-selector"><span>Search</span></label>
+                    <div class="control">
+                        <input id="configurable-attribute-selector" class="input-text" placeholder="start typing to search attribute" title="Select Attribute" type="search" autocomplete="off"/>
+                    </div>
+                </div>
+
+                <!-- Configurable Attributes list -->
+                <div id="configurable-attributes-container">
+                    <?php echo $this->getChildHtml('template'); ?>
+                    <?php
+                    foreach ($this->getAttributes() as $attribute) {
+                        echo $this->getChildBlock('attribute-renderer')->render(array(
+                            'attribute' => $attribute,
+                        ));
+                    } ?>
+                </div>
+
+                <!-- "Generate Variations" button -->
+                <?php echo $this->getChildHtml('generate'); ?>
+
+                <!-- Variations -->
+                <div id="product-variations-matrix">
+                    <?php echo $this->getChildHtml('matrix'); ?>
+                </div>
+
+                <!-- Select Associated Product popup -->
+                <div id="associated-products-container">
+                    <?php echo $this->getGridHtml(); ?>
+                </div>
+
+                <input type="hidden" name="affect_configurable_product_attributes" value="1" />
+            </fieldset>
         </div>
     </div>
-    <fieldset>
-        <input id="attribute-selector"
-            placeholder="start typing to search attribute"
-            title="Select Attribute" type="text"
-            style="width: 100%; margin: 0px 0px 20px; padding: 5px; box-sizing: border-box; font-size: 1.5em;"
-            class="input-text" autocomplete="off">
-        <div id="attributes-container">
-        <?php echo $this->getChildHtml('template'); ?>
-        <?php
-        foreach ($this->getAttributes() as $attribute) {
-            echo $this->getChildBlock('attribute-renderer')->render(array(
-                'attribute' => $attribute,
-            ));
-        } ?>
-        </div>
-        <?php echo $this->getChildHtml('generate'); ?>
-        <div id="product-variations-matrix" class="grid" style="margin:20px 0">
-            <?php echo $this->getChildHtml('matrix'); ?>
-        </div>
-        <div id="associated-products-container" style="display: none;">
-            <?php echo $this->getGridHtml(); ?>
-        </div>
-        <input type="hidden" name="affect_configurable_product_attributes" value="1" />
-</fieldset>
 
 <script type="text/javascript">
 jQuery(function($) {
-    var $variationsContainer = $("#<?php echo $this->getId()?>");
-    $('#attributes-container').variationsAttributes();
+    'use strict';
 
-    $("#<?php echo $this->getId()?>-checkbox").on('click change', function() {
-        var $fieldset = $("#<?php echo $this->getId()?> > fieldset"),
-            stockAvailabilityField = $('#quantity_and_stock_status'),
-            qtyField = $('#qty');
-        if ($(this).is(':checked')) {
-            $fieldset.show();
-            $('#change-attribute-set-button').attr('disabled', true).addClass('disabled');
-            $variationsContainer.find("input[name='attributes[]']").removeAttr('disabled');
-            qtyField.prop('disabled', true).trigger('change');
-            stockAvailabilityField.prop('disabled', false);
-            $.each($('#attributes-container').variationsAttributes('getAttributes'), function() {
-                $('#attribute-' + this.code + '-container select').attr('disabled', true);
+    var variationsContainer = $("#<?php echo $this->getId()?>"),
+        collapsableWrapper = $("#<?php echo $this->getId()?>-wrapper"),
+        collapsableArea = $('> .collapse', collapsableWrapper),
+        collapsableControl = $('> .fieldset-wrapper-title > [data-toggle="collapse"]', collapsableWrapper),
+        stockAvailabilityField = $('#quantity_and_stock_status'),
+        qtyField = $('#qty'),
+        currentProductTemplateContainer = $('#product-template-suggest-container .current-product-template-container'),
+        attributesInput = $("input[name='attributes[]']", variationsContainer),
+        hasVariations = <?php echo ($this->_getProduct()->isConfigurable() || $this->getRequest()->has('attributes')) ? 'true' : 'false' ?>;
+
+    $('#configurable-attributes-container').variationsAttributes();
+
+    collapsableArea
+        .collapse(hasVariations ? 'show' : 'hide')
+        .on('show', function() {
+            currentProductTemplateContainer
+                .off('click.product-template')
+                .addClass('disabled');
+
+            attributesInput.prop('disabled', false);
+
+            qtyField
+                .prop('disabled', true)
+                .trigger('change');
+
+            stockAvailabilityField
+                .prop('disabled', false);
+
+            $.each($('#configurable-attributes-container').variationsAttributes('getAttributes'), function() {
+                $('#attribute-' + this.code + '-container select').prop('disabled', true);
             })
-        } else {
-            $('#change-attribute-set-button').removeAttr('disabled').removeClass('disabled');
-            qtyField.prop('disabled', false).trigger('change');
+        })
+        .on('hide', function() {
+            currentProductTemplateContainer
+                .removeClass('disabled')
+                .off('click.product-template')
+                .on('click.product-template', function () {
+                    $(this).next('div').toggle();
+                });
+
+            qtyField
+                .prop('disabled', false)
+                .trigger('change');
+
             if (qtyField.val() == '') {
-                stockAvailabilityField.val(0).trigger('change');
+                stockAvailabilityField
+                    .val(0)
+                    .trigger('change');
+
                 stockAvailabilityField.prop('disabled', true);
             }
-            $variationsContainer.find('.entry-edit').remove();
-            $.each($('#attributes-container').variationsAttributes('getAttributes'), function() {
-                $('#attribute-' + this.code + '-container select').removeAttr('disabled');
+            variationsContainer.find('.entry-edit').remove();
+            $.each($('#configurable-attributes-container').variationsAttributes('getAttributes'), function() {
+                $('#attribute-' + this.code + '-container select').prop('disabled', false);
             });
             $('#product-variations-matrix').trigger('disable');
-            $fieldset.hide();
-        }
-    }).trigger('change');
+        });
 
     var $gridDialog = $('#associated-products-container').dialog({
         title: 'Select Associated Product',
@@ -115,7 +147,7 @@ jQuery(function($) {
                 url: data.url,
                 data: $('#product-edit-form').serialize(),
                 dataType: 'html',
-                context: $variationsContainer,
+                context: variationsContainer,
                 showLoader: true
             }).success(function(data) {
                 $('#product-variations-matrix').html(data);
@@ -127,17 +159,17 @@ jQuery(function($) {
         .on('click', 'input.associated-matrix-product-id', function() {
             $(this).closest('tr').find('input[type!=checkbox]').prop('disabled', !$(this).is(':checked'));
         })
-        .on('click', '.choose-product', function(event) {
+        .on('click', '.action-choose', function(event) {
             event.preventDefault();
             var grid = window.<?php echo $this->getGridJsObject() ?>;
             var $button = $(this);
             var attributeIds = [];
-            $variationsContainer.find("input[name='attributes[]']").each(function () {
+            variationsContainer.find("input[name='attributes[]']").each(function () {
                 attributeIds.push($(this).val());
             });
 
             grid.reloadParams = {
-                'filter': $button.data('attributes'),
+                filter: $button.data('attributes'),
                 'attributes[]': attributeIds
             };
             grid.reload(null, function() {
@@ -150,16 +182,20 @@ jQuery(function($) {
                 }
                 var $gridRow = $(event.target).parents('tr'),
                     associatedClass = '.associated-product-';
+
                 if ($gridRow.find(associatedClass + 'id').length) {
                     var $matrixRow = $button.parents('tr'),
                         matrixClass = '.associated-matrix-product-';
+
                     $.each('name,sku,qty,weight,id'.split(','), function () {
                         var target = $matrixRow.find(matrixClass + this),
                             value = $.trim($gridRow.find(associatedClass + this).text()),
-                            button = target.find('button.choose-product');
+                            button = target.find('.action-choose');
+
                         target[target.is('input[type=checkbox]') ? 'val' : 'text'](value).append(button);
                     });
-                    $matrixRow.find(matrixClass + 'id').attr('checked', true).removeAttr('disabled');
+
+                    $matrixRow.find(matrixClass + 'id').prop({checked: true, disabled: false});
                 }
                 $gridDialog.dialog('close');
             };

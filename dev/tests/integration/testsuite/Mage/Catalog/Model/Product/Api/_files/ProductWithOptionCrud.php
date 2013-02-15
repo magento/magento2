@@ -24,7 +24,7 @@
 
 $data = require dirname(__FILE__) . '/ProductAttributeData.php';
 // add product attributes via installer
-$installer = new Mage_Catalog_Model_Resource_Setup('core_setup');
+$installer = Mage::getModel('Mage_Catalog_Model_Resource_Setup', array('resourceName' => 'core_setup'));
 $installer->addAttribute(
     'catalog_product',
     $data['create_text_installer']['code'],

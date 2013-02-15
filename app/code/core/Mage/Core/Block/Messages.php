@@ -73,16 +73,36 @@ class Mage_Core_Block_Messages extends Mage_Core_Block_Template
      *
      * @var array
      */
-    protected $_usedStorageTypes = array('Mage_Core_Model_Session');
+    protected $_usedStorageTypes = array();
 
+    /**
+     * Grouped message types
+     *
+     * @var array
+     */
+    protected $_messageTypes = array(
+        Mage_Core_Model_Message::ERROR,
+        Mage_Core_Model_Message::WARNING,
+        Mage_Core_Model_Message::NOTICE,
+        Mage_Core_Model_Message::SUCCESS
+    );
+
+    /**
+     * Preparing global layout
+     *
+     * @return Mage_Core_Block_Messages
+     */
     public function _prepareLayout()
     {
-        $this->addMessages(Mage::getSingleton('Mage_Core_Model_Session')->getMessages(true));
+        $this->addStorageType(get_class($this->_session));
+        $this->addMessages($this->_session->getMessages(true));
         parent::_prepareLayout();
+        return $this;
     }
 
     /**
      * Set message escape flag
+     *
      * @param bool $flag
      * @return Mage_Core_Block_Messages
      */
@@ -222,28 +242,32 @@ class Mage_Core_Block_Messages extends Mage_Core_Block_Template
     }
 
     /**
+     * Return grouped message types
+     *
+     * @return array
+     */
+    protected function _getMessageTypes()
+    {
+        return $this->_messageTypes;
+    }
+
+    /**
      * Retrieve messages in HTML format grouped by type
      *
      * @return string
      */
     public function getGroupedHtml()
     {
-        $types = array(
-            Mage_Core_Model_Message::ERROR,
-            Mage_Core_Model_Message::WARNING,
-            Mage_Core_Model_Message::NOTICE,
-            Mage_Core_Model_Message::SUCCESS
-        );
         $html = '';
-        foreach ($types as $type) {
-            if ( $messages = $this->getMessages($type) ) {
-                if ( !$html ) {
+        foreach ($this->_getMessageTypes() as $type) {
+            if ($messages = $this->getMessages($type)) {
+                if (!$html) {
                     $html .= '<' . $this->_messagesFirstLevelTagName . ' class="messages">';
                 }
                 $html .= '<' . $this->_messagesSecondLevelTagName . ' class="' . $type . '-msg">';
                 $html .= '<' . $this->_messagesFirstLevelTagName . '>';
 
-                foreach ( $messages as $message ) {
+                foreach ($messages as $message) {
                     $html.= '<' . $this->_messagesSecondLevelTagName . '>';
                     $html.= '<' . $this->_messagesContentWrapperTagName .  $this->getUiId('message', $type) .  '>';
                     $html.= ($this->_escapeMessageFlag) ? $this->escapeHtml($message->getText()) : $message->getText();
@@ -254,15 +278,25 @@ class Mage_Core_Block_Messages extends Mage_Core_Block_Template
                 $html .= '</' . $this->_messagesSecondLevelTagName . '>';
             }
         }
-        if ( $html) {
+        if ($html) {
             $html .= '</' . $this->_messagesFirstLevelTagName . '>';
         }
         return $html;
     }
 
+    /**
+     * Render block HTML
+     *
+     * @return string
+     */
     protected function _toHtml()
     {
-        return $this->getGroupedHtml();
+        if ($this->getTemplate()) {
+            $html = parent::_toHtml();
+        } else {
+            $html = $this->getGroupedHtml();
+        }
+        return $html;
     }
 
     /**

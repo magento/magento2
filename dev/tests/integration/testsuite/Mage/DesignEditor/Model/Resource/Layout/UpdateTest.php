@@ -83,7 +83,7 @@ class Mage_DesignEditor_Model_Resource_Layout_UpdateTest extends PHPUnit_Framewo
         /** @var $vdeLayoutUpdate Mage_DesignEditor_Model_Resource_Layout_Update */
         $vdeLayoutUpdate = $this->_objectManager->create('Mage_DesignEditor_Model_Resource_Layout_Update');
         $vdeLayoutUpdate->makeTemporaryLayoutUpdatesPermanent($this->_design->getDesignTheme()->getThemeId(),
-            array(Mage_Core_Model_App::ADMIN_STORE_ID)
+            array(Mage_Core_Model_AppInterface::ADMIN_STORE_ID)
         );
 
         $resultAfter = $coreLayoutUpdate->fetchUpdatesByHandle('test_handle');

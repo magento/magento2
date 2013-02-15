@@ -57,6 +57,10 @@ Default layout, loads most of the pages
         <update handle="MAP_popup" />
         <update handle="MAP_price_msrp_wishlist_item" />
     </wishlist_shared_index>
+    <wishlist_search_view>
+        <update handle="MAP_popup" />
+        <update handle="MAP_price_msrp_wishlist_item" />
+    </wishlist_search_view>
     <review_product_list>
         <update handle="MAP_popup" />
         <update handle="MAP_price_msrp_item" />

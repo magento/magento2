@@ -102,7 +102,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_ContainerTest extends PHPUnit_Fra
     public function testPrepareLayout()
     {
         $buttonTitle = 'Back';
-        $eventManager = $this->getMock('Mage_Core_Model_Event_Manager', array('dispatch'));
+        $eventManager = $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false);
         $arguments = $this->_getBlockArguments(array('expectedTranslation' => $buttonTitle));
         $arguments['eventManager'] = $eventManager;
 

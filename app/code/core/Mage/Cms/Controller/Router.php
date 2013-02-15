@@ -35,6 +35,8 @@
 class Mage_Cms_Controller_Router extends Mage_Core_Controller_Varien_Router_Abstract
 {
     /**
+     * Event manager
+     *
      * @var Mage_Core_Model_Event_Manager
      */
     protected $_eventManager;
@@ -95,7 +97,7 @@ class Mage_Cms_Controller_Router extends Mage_Core_Controller_Varien_Router_Abst
         $identifier = $condition->getIdentifier();
 
         if ($condition->getRedirectUrl()) {
-            Mage::app()->getFrontController()->getResponse()
+            Mage::getSingleton('Mage_Core_Controller_Response_Http')
                 ->setRedirect($condition->getRedirectUrl())
                 ->sendResponse();
             $request->setDispatched(true);

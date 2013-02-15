@@ -65,11 +65,6 @@ class Mage_Core_Model_Translate
     const CONFIG_KEY_DESIGN_THEME   = 'theme';
 
     /**
-     * Xml path locale inheritance
-     */
-    const XML_PATH_LOCALE_INHERITANCE = 'global/locale/inheritance';
-
-    /**
      * Default translation string
      */
     const DEFAULT_STRING = 'Translate String';
@@ -151,22 +146,14 @@ class Mage_Core_Model_Translate
      * Initialize translate model
      *
      * @param Mage_Core_Model_Design_Package $designPackage
-     * @param array $data
+     * @param Mage_Core_Model_Locale_Hierarchy_Loader $loader
      */
-    public function __construct(Mage_Core_Model_Design_Package $designPackage, array $data = array())
-    {
+    public function __construct(
+        Mage_Core_Model_Design_Package $designPackage,
+        Mage_Core_Model_Locale_Hierarchy_Loader $loader
+    ) {
         $this->_designPackage = $designPackage;
-        if (isset($data['locale_hierarchy']) && is_array($data['locale_hierarchy'])) {
-            $this->_localeHierarchy = $data['locale_hierarchy'];
-        } else {
-            // Try to load locale inheritance from Magento configuration
-            $inheritanceNode = Mage::getConfig()->getNode(self::XML_PATH_LOCALE_INHERITANCE);
-            if ($inheritanceNode instanceof Varien_Simplexml_Element) {
-                $this->_localeHierarchy = Mage::helper('Mage_Core_Helper_Translate')->composeLocaleHierarchy(
-                    $inheritanceNode->asCanonicalArray()
-                );
-            }
-        }
+        $this->_localeHierarchy = $loader->load();
     }
 
     /**

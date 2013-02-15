@@ -29,7 +29,7 @@
  * support id and tags preffix support,
  */
 
-class Mage_Core_Model_Cache
+class Mage_Core_Model_Cache implements Mage_Core_Model_CacheInterface
 {
     const DEFAULT_LIFETIME  = 7200;
     const OPTIONS_CACHE_ID  = 'core_cache_options';
@@ -42,9 +42,14 @@ class Mage_Core_Model_Cache
     const APP_INIT_PARAM = 'cache';
 
     /**
-     * @var Mage_Core_Helper_Abstract
+     * @var Mage_Core_Model_Config
      */
-    protected $_helper;
+    protected $_config;
+
+    /**
+     * @var Mage_Core_Model_Factory_Helper
+     */
+    protected $_helperFactory;
 
     /**
      * @var string
@@ -108,23 +113,38 @@ class Mage_Core_Model_Cache
     protected $_allowedCacheOptions = null;
 
     /**
-     * @var Magento_ObjectManager
+     * @var bool
      */
-    protected $_objectManager;
+    protected $_globalBanUseCache = false;
 
     /**
-     * Class constructor. Initialize cache instance based on options
-     *
-     * @param Mage_Core_Model_App $app
+     * @param Mage_Core_Model_Config $config
+     * @param Mage_Core_Model_Config_Primary $cacheConfig
      * @param Mage_Core_Model_Dir $dirs
+     * @param Mage_Core_Model_Factory_Helper $helperFactory
+     * @param bool $banCache
      * @param array $options
      */
-    public function __construct(Magento_ObjectManager $objectManager, array $options = array())
-    {
-        $this->_objectManager = $objectManager;
-        $this->_helper = isset($options['helper']) ? $options['helper'] : Mage::helper('Mage_Core_Helper_Data');
+    public function __construct(
+        Mage_Core_Model_ConfigInterface $config,
+        Mage_Core_Model_Config_Primary $cacheConfig,
+        Mage_Core_Model_Dir $dirs,
+        Mage_Core_Model_Factory_Helper $helperFactory,
+        $banCache = false,
+        array $options = array()
+    ) {
+        $configOptions = $cacheConfig->getNode('global/cache');
+        if ($configOptions) {
+            $configOptions = $configOptions->asArray();
+        } else {
+            $configOptions = array();
+        }
+        $options = array_merge($configOptions, $options);
 
-        $dirs = $objectManager->get('Mage_Core_Model_Dir');
+        $this->_config = $config;
+        $this->_helperFactory = $helperFactory;
+        $this->_globalBanUseCache = $banCache;
+
         $this->_defaultBackendOptions['cache_dir'] = $dirs->getDir(Mage_Core_Model_Dir::CACHE);
         /**
          * Initialize id prefix
@@ -463,7 +483,7 @@ class Mage_Core_Model_Cache
          * Add global magento cache tag to all cached data exclude config cache
          */
         if (!in_array(Mage_Core_Model_Config::CACHE_TAG, $tags)) {
-            $tags[] = Mage_Core_Model_App::CACHE_TAG;
+            $tags[] = Mage_Core_Model_AppInterface::CACHE_TAG;
         }
         if ($this->_disallowSave) {
             return true;
@@ -508,7 +528,7 @@ class Mage_Core_Model_Cache
             }
             $res = $this->_frontend->clean($mode, $this->_tags($tags));
         } else {
-            $res = $this->_frontend->clean($mode, array(Mage_Core_Model_App::CACHE_TAG));
+            $res = $this->_frontend->clean($mode, array(Mage_Core_Model_AppInterface::CACHE_TAG));
             $res = $res && $this->_frontend->clean($mode, array(Mage_Core_Model_Config::CACHE_TAG));
         }
 
@@ -571,7 +591,7 @@ class Mage_Core_Model_Cache
             $this->_allowedCacheOptions = unserialize($options);
         }
 
-        if ($this->_objectManager->get('Mage_Core_Model_App')->getInitParam('global_ban_use_cache')) {
+        if ($this->_globalBanUseCache) {
             foreach ($this->_allowedCacheOptions as $key => $val) {
                 $this->_allowedCacheOptions[$key] = false;
             }
@@ -649,7 +669,7 @@ class Mage_Core_Model_Cache
     public function getTagsByType($type)
     {
         $path = self::XML_PATH_TYPES.'/'.$type.'/tags';
-        $tagsConfig = $this->_objectManager->get('Mage_Core_Model_Config')->getNode($path);
+        $tagsConfig = $this->_config->getNode($path);
         if ($tagsConfig) {
             $tags = (string) $tagsConfig;
             $tags = explode(',', $tags);
@@ -667,13 +687,15 @@ class Mage_Core_Model_Cache
     public function getTypes()
     {
         $types = array();
-        $config = $this->_objectManager->get('Mage_Core_Model_Config')->getNode(self::XML_PATH_TYPES);
+        $config = $this->_config->getNode(self::XML_PATH_TYPES);
         if ($config) {
+            /** @var $helper Mage_Core_Helper_Data*/
+            $helper = $this->_helperFactory->get('Mage_Core_Helper_Data');
             foreach ($config->children() as $type=>$node) {
                 $types[$type] = new Varien_Object(array(
                     'id'            => $type,
-                    'cache_type'    => $this->_helper->__((string)$node->label),
-                    'description'   => $this->_helper->__((string)$node->description),
+                    'cache_type'    => $helper->__((string)$node->label),
+                    'description'   => $helper->__((string)$node->description),
                     'tags'          => strtoupper((string) $node->tags),
                     'status'        => (int)$this->canUse($type),
                 ));
@@ -764,46 +786,5 @@ class Mage_Core_Model_Cache
         unset($types[$typeCode]);
         $this->_saveInvalidatedTypes($types);
         return $this;
-    }
-
-    /**
-     * Try to get response body from cache storage with predefined processors
-     *
-     * @param Zend_Controller_Response_Abstract $response
-     * @return bool
-     */
-    public function processRequest(Zend_Controller_Response_Abstract $response)
-    {
-        if (empty($this->_requestProcessors)) {
-            return false;
-        }
-
-        $content = false;
-        foreach ($this->_requestProcessors as $processor) {
-            $processor = $this->_getProcessor($processor);
-            if ($processor) {
-                $content = $processor->extractContent($content);
-            }
-        }
-
-        if ($content) {
-            $response->appendBody($content);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Get request processor object
-     *
-     * @param string|object $processor Class or object
-     * @return object
-     */
-    protected function _getProcessor($processor)
-    {
-        if (!is_object($processor)) {
-            $processor = new $processor;
-        }
-        return $processor;
     }
 }

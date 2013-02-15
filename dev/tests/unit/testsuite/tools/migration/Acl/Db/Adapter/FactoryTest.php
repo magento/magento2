@@ -82,6 +82,6 @@ class Tools_Migration_Acl_Db_Adapter_FactoryTest extends PHPUnit_Framework_TestC
      */
     public function testGetAdapterWithInvalidType()
     {
-        $this->_model->getAdapter($this->_config, 'Mage_Core_Helper_Data');
+        $this->_model->getAdapter($this->_config, 'Varien_Object');
     }
 }

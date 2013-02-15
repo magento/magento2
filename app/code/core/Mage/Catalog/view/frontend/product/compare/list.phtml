@@ -138,8 +138,10 @@
             <img src="<?php echo $this->getViewFileUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Please wait...') ?>" title="<?php echo $this->__('Please wait...') ?>" class="v-middle" /> <?php echo $this->__('Please wait...') ?>
         </span>
 </div>
+<?php endif; ?>
 <script type="text/javascript">
-    (function($) {
+    (function($, window) {
+    <?php if ($_total): ?>
         head.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/list.js')?>", function() {
             $('#product-comparison').compareList({
                 productRemoveSelector: 'a.btn-remove',
@@ -154,8 +156,8 @@
                 }
             });
         });
-    })(jQuery);
+    <?php else: ?>
+        window.close();
+    <?php endif; ?>
+    })(jQuery, window);
 </script>
-<?php else: ?>
-<script type="text/javascript">window.close();</script>
-<?php endif; ?>

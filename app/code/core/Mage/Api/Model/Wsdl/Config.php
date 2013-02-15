@@ -114,11 +114,13 @@ class Mage_Api_Model_Wsdl_Config extends Mage_Api_Model_Wsdl_Config_Base
 
             $baseWsdlFile = Mage::getConfig()->getModuleDir('etc', "Mage_Api") . DS . 'wsi.xml';
             $this->loadFile($baseWsdlFile);
-            Mage::getConfig()->loadModulesConfiguration('wsi.xml', $this, $mergeWsdl);
+            Mage::getSingleton('Mage_Core_Model_Config_Modules_Reader')
+                ->loadModulesConfiguration('wsi.xml', $this, $mergeWsdl);
         } else {
             $baseWsdlFile = Mage::getConfig()->getModuleDir('etc', "Mage_Api") . DS . 'wsdl.xml';
             $this->loadFile($baseWsdlFile);
-            Mage::getConfig()->loadModulesConfiguration('wsdl.xml', $this, $mergeWsdl);
+            Mage::getSingleton('Mage_Core_Model_Config_Modules_Reader')
+                ->loadModulesConfiguration('wsdl.xml', $this, $mergeWsdl);
         }
 
         if (Mage::app()->useCache('config')) {

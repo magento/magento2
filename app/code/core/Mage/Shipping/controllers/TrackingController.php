@@ -44,8 +44,7 @@ class Mage_Shipping_TrackingController extends Mage_Core_Controller_Front_Action
             $response = '';
             $tracks = $order->getTracksCollection();
 
-            $className = Mage::getConfig()->getBlockClassName('Mage_Core_Block_Template');
-            $block = new $className();
+            $block = $this->_objectManager->create('Mage_Core_Block_Template');
             $block->setType('Mage_Core_Block_Template')
                 ->setTemplate('order/trackinginfo.phtml');
 

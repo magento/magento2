@@ -85,7 +85,7 @@ class Mage_Webapi_Model_Soap_AutoDiscoverTest extends PHPUnit_Framework_TestCase
         $directoryScanner = new \Zend\Code\Scanner\DirectoryScanner($fixtureDir);
         /** @var Mage_Core_Model_App $app */
         $app = $this->getMockBuilder('Mage_Core_Model_App')->disableOriginalConstructor()->getMock();
-        $objectManager = new Magento_Test_ObjectManager();
+        $objectManager = Mage::getObjectManager();
         $this->_helper = $objectManager->get('Mage_Webapi_Helper_Config');
         $reader = $objectManager->get(
             'Mage_Webapi_Model_Config_Reader_Soap',
@@ -117,6 +117,18 @@ class Mage_Webapi_Model_Soap_AutoDiscoverTest extends PHPUnit_Framework_TestCase
         parent::setUp();
     }
 
+    protected function tearDown()
+    {
+        $this->_config = null;
+        $this->_autoDiscover = null;
+        $this->_helper = null;
+        $this->_resourceName = null;
+        $this->_resourceData = null;
+        $this->_dom = null;
+        $this->_xpath = null;
+    }
+
+
     /**
      * Test WSDL operations Generation.
      * Generate WSDL XML using AutoDiscover and prepared config.
@@ -124,6 +136,8 @@ class Mage_Webapi_Model_Soap_AutoDiscoverTest extends PHPUnit_Framework_TestCase
      * Assert that service, portType and binding have been generated correctly for resource.
      * Assert that each method from controller has generated operations in portType and binding nodes.
      * Assert that each method has input and output messages and complexTypes generated correctly.
+     *
+     * @magentoAppIsolation enabled
      */
     public function testGenerateOperations()
     {
@@ -182,6 +196,8 @@ class Mage_Webapi_Model_Soap_AutoDiscoverTest extends PHPUnit_Framework_TestCase
     /**
      * Test that complexType for Data structures has been generated correctly in WSDL.
      * See /_files/controllers/AutoDiscover/ModuleB/SubresourceData.php
+     *
+     * @magentoAppIsolation enabled
      */
     public function testGenerateDataStructureComplexTypes()
     {

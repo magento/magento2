@@ -23,18 +23,16 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-?>
-<?php
-/**
- * @see Mage_Adminhtml_Block_Media_Uploader
- */
+
+/** @var $this Mage_Adminhtml_Block_Media_Uploader */
 ?>
 
 <div id="<?php echo $this->getHtmlId() ?>" class="uploader">
-    <span class="fileinput-button form-buttons">
+    <div class="fileinput-button form-buttons button">
         <span><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Browse Files...') ?></span>
-        <input id="fileupload" type="file" name="<?php echo $this->getConfig()->getFileField() ?>" data-url="<?php echo $this->getConfig()->getUrl() ?>" multiple>
-    </span>
+        <input id="fileupload" type="file" name="<?php echo $this->getConfig()->getFileField() ?>"
+            data-url="<?php echo $this->getConfig()->getUrl() ?>" multiple="multiple" />
+    </div>
     <div class="clear"></div>
     <div class="no-display" id="<?php echo $this->getHtmlId() ?>-template">
         <div id="{{id}}" class="file-row">
@@ -53,12 +51,13 @@
     $(function () {
         $('#fileupload').fileupload({
             dataType: 'json',
+            dropZone: '#media_gallery_content',
             sequentialUploads: true,
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
             maxFileSize: <?php echo Mage::getObjectManager()->get('Magento_File_Size')->getMaxFileSize() ?>,
             add: function(e, data) {
                 $.each(data.files, function (index, file) {
-                    data.fileId =  Math.random().toString(36).substr(2,9);
+                    data.fileId = Math.random().toString(33).substr(2, 18);
                     var progressTmpl = $('#<?php echo $this->getHtmlId(); ?>-template').children(':first').clone();
                     progressTmpl.attr('id', data.fileId);
                     var fileInfoHtml = progressTmpl.html().replace('{{size}}', byteConvert(file.size))
@@ -73,14 +72,14 @@
                 });
             },
             done: function(e, data) {
-                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-                $(progressSelector).css('width','100%');
-                if (data.result && !data.result.hasOwnProperty('errorcode')) {
-                    $(progressSelector).removeClass('upload-progress').addClass('upload-success');
-                    <?php echo $this->getConfig()->getMegiaGallery() ?>.handleUploadComplete(data.result);
+                if (data.result && !data.result.error) {
+                    $('#<?php echo $this->getParentBlock()->getHtmlId() ?>').trigger('addItem', data.result);
                 } else {
-                    $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+                    $('#' + data.fileId)
+                        .delay(2000)
+                        .hide('highlight');
                 }
+                $('#' + data.fileId).remove();
             },
             progress: function(e, data) {
                 var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -88,16 +87,18 @@
                 $(progressSelector).css('width', progress + '%');
             },
             fail: function(e, data) {
-                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-                $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+                var progressSelector = '#' + data.fileId;
+                $(progressSelector).removeClass('upload-progress').addClass('upload-failure')
+                    .delay(2000)
+                    .hide('highlight')
+                    .remove();
             }
         });
         $('#fileupload').fileupload('option', {
             process: [
                 {
                     action: 'load',
-                    fileTypes: /^image\/(gif|jpeg|png)$/,
-                    maxFileSize: <?php echo Mage::getObjectManager()->get('Magento_File_Size')->getMaxFileSize() ?> * 10
+                    fileTypes: /^image\/(gif|jpeg|png)$/
                 },
                 {
                     action: 'resize',

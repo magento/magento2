@@ -55,13 +55,13 @@ abstract class Mage_Backend_Controller_System_ConfigAbstract extends Mage_Backen
     /**
      * @param Mage_Core_Controller_Request_Http $request
      * @param Mage_Core_Controller_Response_Http $response
-     * @param string $areaCode
      * @param Magento_ObjectManager $objectManager
      * @param Mage_Core_Controller_Varien_Front $frontController
      * @param Mage_Core_Model_Authorization $authorization
      * @param Mage_Backend_Model_Config_Structure $configStructure
      * @param Mage_Backend_Model_Auth_StorageInterface $authSession
      * @param Mage_Core_Model_Layout_Factory $layoutFactory
+     * @param string $areaCode
      * @param array $invokeArgs
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -69,16 +69,16 @@ abstract class Mage_Backend_Controller_System_ConfigAbstract extends Mage_Backen
     public function __construct(
         Mage_Core_Controller_Request_Http $request,
         Mage_Core_Controller_Response_Http $response,
-        $areaCode = null,
         Magento_ObjectManager $objectManager,
         Mage_Core_Controller_Varien_Front $frontController,
         Mage_Core_Model_Authorization $authorization,
         Mage_Backend_Model_Config_Structure $configStructure,
         Mage_Backend_Model_Auth_StorageInterface $authSession,
         Mage_Core_Model_Layout_Factory $layoutFactory,
+        $areaCode = null,
         array $invokeArgs = array()
     ) {
-        parent::__construct($request, $response, $areaCode, $objectManager, $frontController, $layoutFactory,
+        parent::__construct($request, $response, $objectManager, $frontController, $layoutFactory, $areaCode,
             $invokeArgs
         );
 

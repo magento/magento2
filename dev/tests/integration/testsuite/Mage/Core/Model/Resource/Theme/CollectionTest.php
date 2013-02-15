@@ -40,6 +40,7 @@ class Mage_Core_Model_Resource_Theme_CollectionTest extends PHPUnit_Framework_Te
      */
     public function testCollection()
     {
+        Mage::getConfig();
         $oldTotalRecords = self::_getThemesCollection()->getSize();
 
         $collection = $this->setThemeFixture();

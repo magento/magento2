@@ -102,6 +102,7 @@ class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadFromConfiguration()
     {
+        $this->markTestIncomplete('MAGETWO-5625');
         $targetPath = implode(DIRECTORY_SEPARATOR, array('frontend', 'default', 'iphone', 'theme.xml'));
         $designDir = implode(DIRECTORY_SEPARATOR, array(__DIR__, '_files'));
 
@@ -119,6 +120,7 @@ class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadInvalidConfiguration()
     {
+        $this->markTestIncomplete('MAGETWO-5625');
         $targetPath = implode(DIRECTORY_SEPARATOR, array('frontend', 'default', 'iphone', 'theme_invalid.xml'));
         $designDir = implode(DIRECTORY_SEPARATOR, array(__DIR__, '_files'));
 

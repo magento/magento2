@@ -31,6 +31,8 @@
  * @category   Mage
  * @package    Mage_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @method Varien_Data_Form_Element_Abstract getElement()
  */
 class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Gallery_Content extends Mage_Adminhtml_Block_Widget
 {
@@ -58,6 +60,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Gallery_Content extends M
 
         return parent::_prepareLayout();
     }
+
 
     /**
      * Retrive uploader block
@@ -122,7 +125,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Gallery_Content extends M
     }
 
     /**
-     * Enter description here...
+     * Get image types data
      *
      * @return array
      */
@@ -132,9 +135,11 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Gallery_Content extends M
         foreach ($this->getMediaAttributes() as $attribute) {
             /* @var $attribute Mage_Eav_Model_Entity_Attribute */
             $imageTypes[$attribute->getAttributeCode()] = array(
-                'label' => $attribute->getFrontend()->getLabel() . ' '
-                         . Mage::helper('Mage_Catalog_Helper_Data')->__($this->getElement()->getScopeLabel($attribute)),
-                'field' => $this->getElement()->getAttributeFieldName($attribute)
+                'code' => $attribute->getAttributeCode(),
+                'value' => $this->getElement()->getDataObject()->getData($attribute->getAttributeCode()),
+                'label' => $attribute->getFrontend()->getLabel(),
+                'scope' => Mage::helper('Mage_Catalog_Helper_Data')->__($this->getElement()->getScopeLabel($attribute)),
+                'name' => $this->getElement()->getAttributeFieldName($attribute)
             );
         }
         return $imageTypes;

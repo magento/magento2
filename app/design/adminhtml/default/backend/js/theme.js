@@ -254,30 +254,91 @@
         }
     });
 
-    $(document).ready(function() {
-        $('.header-panel .search').globalSearch();
-        $('.navigation').globalNavigation();
-        $('.fade').modalPopup();
-        $('details').details();
+    $.widget('mage.useDefault', {
+        options: {
+            field: '.field',
+            useDefault: '.use-default',
+            checkbox: '.use-default-control',
+            label: '.use-default-label'
+        },
 
-        /* Listen events on "Collapsable" events */
-        $('.collapse')
-            .on('show', function () {
-                var fieldsetWrapper = $(this).closest('.fieldset-wrapper');
+        _create: function() {
+            this.el = this.element;
+            this.field = $(this.el).closest(this.options.field);
+            this.useDefault = $(this.options.useDefault, this.field);
+            this.checkbox = $(this.options.checkbox, this.useDefault);
+            this.label = $(this.options.label, this.useDefault);
+            this.origValue = this.el.attr('data-store-label');
 
-                fieldsetWrapper.addClass('opened');
-            })
-            .on('hide', function () {
-                var fieldsetWrapper = $(this).closest('.fieldset-wrapper');
+            this._events();
+        },
 
-                fieldsetWrapper.removeClass('opened');
-            });
+        _events: function() {
+            var self = this;
 
-        $.each($('.entry-edit'), function(i, entry) {
-            $('.collapse:first', entry).collapse('show');
-        });
+            this.el
+                .on('change.toggleUseDefaultVisibility keyup.toggleUseDefaultVisibility', $.proxy(this._toggleUseDefaultVisibility, this))
+                .trigger('change.toggleUseDefaultVisibility');
 
+            this.checkbox
+                .on('change.setOrigValue', function() {
+                    if ($(this).prop('checked')) {
+                        self.el
+                            .val(self.origValue)
+                            .trigger('change.toggleUseDefaultVisibility');
 
+                        $(this).prop('checked', false);
+                    }
+                });
+        },
+
+        _toggleUseDefaultVisibility: function() {
+            var curValue = this.el.val(),
+                origValue = this.origValue;
+
+            this[curValue != origValue ? '_show' : '_hide']();
+        },
+
+        _show: function() {
+            this.useDefault.show();
+        },
+
+        _hide: function() {
+            this.useDefault.hide();
+        }
+    });
+
+    $.widget('mage.collapsable', {
+        options: {
+            parent: null,
+            openedClass: 'opened',
+            wrapper: '.fieldset-wrapper'
+        },
+
+        _create: function() {
+            this._events();
+        },
+
+        _events: function() {
+            var self = this;
+
+            this.element
+                .on('show', function (e) {
+                    var fieldsetWrapper = $(this).closest(self.options.wrapper);
+
+                    fieldsetWrapper.addClass(self.options.openedClass);
+                    e.stopPropagation();
+                })
+                .on('hide', function (e) {
+                    var fieldsetWrapper = $(this).closest(self.options.wrapper);
+
+                    fieldsetWrapper.removeClass(self.options.openedClass);
+                    e.stopPropagation();
+                });
+        }
+    });
+
+    var switcherForIe8 = function() {
         /* Switcher for IE8 */
         if ($.browser.msie && $.browser.version == '8.0') {
             var checkboxSwitcher = $('.switcher input');
@@ -292,8 +353,26 @@
                     toggleCheckboxState(checkboxSwitcher);
                 });
         }
+    };
 
+    $(document).ready(function() {
+        $('.header-panel .search').globalSearch();
+        $('.navigation').globalNavigation();
+        $('.fade').modalPopup();
+        $('details').details();
         $('.page-actions').floatingHeader();
+        $('[data-store-label]').useDefault();
+        $('.collapse').collapsable();
 
+        $.each($('.entry-edit'), function(i, entry) {
+            $('.collapse:first', entry).collapse('show');
+        });
+
+        switcherForIe8();
+    });
+
+    $(document).on('ajaxComplete', function() {
+        $('details').details();
+        switcherForIe8();
     });
 })(window.jQuery);

@@ -134,7 +134,7 @@ class Mage_Core_Model_Resource_Variable extends Mage_Core_Model_Resource_Db_Abst
      * @param integer $storeId
      * @return Mage_Core_Model_Resource_Variable
      */
-    protected function _addValueToSelect(Zend_Db_Select $select, $storeId = Mage_Core_Model_App::ADMIN_STORE_ID)
+    protected function _addValueToSelect(Zend_Db_Select $select, $storeId = Mage_Core_Model_AppInterface::ADMIN_STORE_ID)
     {
         $adapter = $this->_getReadAdapter();
         $ifNullPlainValue = $adapter->getCheckSql('store.plain_value IS NULL', 'def.plain_value', 'store.plain_value');

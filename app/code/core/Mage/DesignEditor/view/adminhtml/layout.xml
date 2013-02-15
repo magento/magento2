@@ -83,11 +83,16 @@
             <action method="setTemplate"><file>Mage_DesignEditor::editor.phtml</file></action>
         </reference>
         <reference name="head">
+            <action method="addJs"><file>jquery/jquery.tabs.js</file></action>
+            <action method="addJs"><file>jquery/jstree/jquery.jstree.js</file></action>
+            <action method="addJs"><file>jquery/slimScroll/slimScroll.min.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/tools-panel.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/custom-css.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/theme-selector.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/base.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/design_editor.js</file></action>
-            <action method="addJs"><file>jquery/jstree/jquery.jstree.js</file></action>
-            <action method="addJs"><file>jquery/slimScroll/slimScroll.min.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.iframe-transport.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload.js</file></action>
             <action method="addCss"><file>Mage_DesignEditor::css/styles.css</file></action>
         </reference>
         <reference name="content">
@@ -98,7 +103,48 @@
                     <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_Buttons" name="design_editor_toolbar_buttons" template="Mage_DesignEditor::editor/toolbar/buttons.phtml" />
                 </block>
                 <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_StoreView" name="theme.selector.storeview" template="Mage_DesignEditor::theme/selector/storeview.phtml" />
+                <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools" name="design_editor_tools" template="Mage_DesignEditor::editor/tools.phtml">
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Design" name="design_editor_tools_design" template="Mage_DesignEditor::editor/tools/design.phtml" />
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Block" name="design_editor_tools_block" template="Mage_DesignEditor::editor/tools/block.phtml" />
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Settings" name="design_editor_tools_settings" template="Mage_DesignEditor::editor/tools/settings.phtml" />
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code" name="design_editor_tools_code" template="Mage_DesignEditor::editor/tools/code.phtml">
+                        <!-- Tab with CSS list -->
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Css" name="design_editor_tools_code_css" template="Mage_DesignEditor::editor/tools/code/css.phtml">
+                            <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Css_Group" name="design_editor_tools_code_css_group" template="Mage_DesignEditor::editor/tools/code/css/group.phtml" />
+                        </block>
+                        <!-- Tab with JavaScript list -->
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Js" name="design_editor_tools_code_js" template="Mage_DesignEditor::editor/tools/code/js.phtml">
+                            <block template="Mage_DesignEditor::/editor/tools/code/js/items.phtml" type="Mage_Backend_Block_Template" name="design_editor_tools_code_js_items" as="design.editor.tools.code.js.items" />
+                        </block>
+                        <!-- Tab with Custom CSS -->
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Custom" name="design_editor_tools_code_custom" template="Mage_DesignEditor::editor/tools/code/custom.phtml">
+                            <block type="Mage_Core_Block_Messages" name="messages" template="Mage_DesignEditor::editor/tools/code/message.phtml" />
+                        </block>
+                    </block>
+                </block>
             </block>
         </reference>
     </adminhtml_system_design_editor_launch>
+
+    <adminhtml_system_design_editor_tools_upload>
+        <block type="Mage_Core_Block_Messages" name="messages" template="Mage_DesignEditor::editor/tools/code/message.phtml" />
+    </adminhtml_system_design_editor_tools_upload>
+
+    <adminhtml_system_design_editor_tools_savecsscontent>
+        <block type="Mage_Core_Block_Messages" name="messages" template="Mage_DesignEditor::editor/tools/code/message.phtml" />
+    </adminhtml_system_design_editor_tools_savecsscontent>
+
+    <adminhtml_system_design_editor_tools_uploadjs>
+        <block type="Mage_Core_Block_Messages" name="messages" template="Mage_DesignEditor::editor/tools/code/message.phtml" />
+    </adminhtml_system_design_editor_tools_uploadjs>
+
+    <adminhtml_system_design_editor_tools_jslist>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_Backend_Block_Template" template="Mage_DesignEditor::/editor/tools/code/js/items.phtml" name="design_editor_tools_code_js_items"/>
+        </container>
+    </adminhtml_system_design_editor_tools_jslist>
+
+    <adminhtml_system_design_editor_tools_reorderjs>
+        <block type="Mage_Core_Block_Messages" name="messages" template="Mage_DesignEditor::editor/tools/code/message.phtml" />
+    </adminhtml_system_design_editor_tools_reorderjs>
 </layout>

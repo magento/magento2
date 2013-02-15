@@ -123,6 +123,7 @@ class Mage_Theme_Helper_StorageTest extends PHPUnit_Framework_TestCase
      */
     public function testConvertPathToId()
     {
+        $this->markTestIncomplete('MAGETWO-6406');
         $storageRoot = $this->_customizationPath . Magento_Filesystem::DIRECTORY_SEPARATOR
             . Mage_Theme_Model_Wysiwyg_Storage::TYPE_IMAGE;
         $this->_mockStorageRoot($storageRoot);
@@ -187,6 +188,7 @@ class Mage_Theme_Helper_StorageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetRelativeUrl()
     {
+        $this->markTestIncomplete('MAGETWO-6406');
         $imageName = 'imageName.jpg';
         $dirOne = 'some_dir';
         $dirTwo = 'test_der';
@@ -218,6 +220,7 @@ class Mage_Theme_Helper_StorageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCurrentPath()
     {
+        $this->markTestIncomplete('MAGETWO-6406');
         $subPath = Magento_Filesystem::DIRECTORY_SEPARATOR . 'some_dir';
         $encodedSubPath = $this->_storageHelper->urlEncode($subPath);
         $storageRoot = $this->_customizationPath . Magento_Filesystem::DIRECTORY_SEPARATOR

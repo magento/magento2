@@ -240,8 +240,8 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General
      */
     protected function _getAdditionalElementTypes()
     {
-        $element = $this->_objectManager->get('Mage_Core_Model_Config')
-            ->getBlockClassName('Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Form_Element_Image');
+        $element = 
+            'Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Form_Element_Image';
         return array('image' => $element);
     }
 

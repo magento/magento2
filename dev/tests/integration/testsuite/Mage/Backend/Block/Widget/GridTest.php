@@ -60,6 +60,10 @@ class Mage_Backend_Block_Widget_GridTest extends PHPUnit_Framework_TestCase
         $this->_layoutMock->expects($this->any())->method('createBlock')
             ->with('Mage_Backend_Block_Widget_Button')
             ->will($this->returnValue(Mage::app()->getLayout()->createBlock('Mage_Backend_Block_Widget_Button')));
+        $this->_layoutMock->expects($this->any())->method('helper')
+            ->with('Mage_Core_Helper_Data')
+            ->will($this->returnValue(Mage::helper('Mage_Core_Helper_Data')));
+
 
         $this->_block = Mage::app()->getLayout()->createBlock('Mage_Backend_Block_Widget_Grid');
         $this->_block->setLayout($this->_layoutMock);
@@ -92,7 +96,7 @@ class Mage_Backend_Block_Widget_GridTest extends PHPUnit_Framework_TestCase
             Mage::getModel('Mage_Core_Model_Store_Config'),
             Mage::getModel('Mage_Core_Controller_Varien_Front'),
             Mage::getModel('Mage_Core_Model_Factory_Helper'),
-            new Mage_Core_Model_Dir(__DIR__),
+            new Mage_Core_Model_Dir(__DIR__, new Varien_Io_File()),
             Mage::getModel('Mage_Core_Model_Logger'),
             new Magento_Filesystem(new Magento_Filesystem_Adapter_Local),
             Mage::getModel('Mage_Backend_Helper_Data'),

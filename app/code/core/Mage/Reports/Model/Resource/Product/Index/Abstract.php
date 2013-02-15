@@ -67,17 +67,17 @@ abstract class Mage_Reports_Model_Resource_Product_Index_Abstract extends Mage_C
             $idx = $adapter->fetchRow($select);
 
             if ($idx) {
-            /* If we are here it means that we have two rows: one with known customer, but second just visitor is set
+            /**
+             * If we are here it means that we have two rows: one with known customer, but second just visitor is set
              * One row should be updated with customer_id, second should be deleted
-             *
              */
-                $adapter->delete($this->getMainTable(), array('index_id = ?' => $row['index_id']));
-                $where = array('index_id = ?' => $idx['index_id']);
-                $data  = array(
-                    'visitor_id'    => $object->getVisitorId(),
-                    'store_id'      => $object->getStoreId(),
-                    'added_at'      => Varien_Date::now(),
-                );
+                 $adapter->delete($this->getMainTable(), array('index_id = ?' => $row['index_id']));
+                 $where = array('index_id = ?' => $idx['index_id']);
+                 $data  = array(
+                     'visitor_id'    => $object->getVisitorId(),
+                     'store_id'      => $object->getStoreId(),
+                     'added_at'      => Varien_Date::now(),
+                 );
             } else {
                 $where = array('index_id = ?' => $row['index_id']);
                 $data  = array(
@@ -148,7 +148,6 @@ abstract class Mage_Reports_Model_Resource_Product_Index_Abstract extends Mage_C
 
         return $this;
     }
-
 
     /**
      * Clean index (visitor)

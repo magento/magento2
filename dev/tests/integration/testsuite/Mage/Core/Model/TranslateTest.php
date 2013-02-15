@@ -45,9 +45,14 @@ class Mage_Core_Model_TranslateTest extends PHPUnit_Framework_TestCase
         $pathChunks = array(dirname(__FILE__), '_files', 'design', 'frontend', 'test', 'default', 'locale', 'en_US',
             'translate.csv');
 
-        $filesystem = new Magento_Filesystem(new Magento_Filesystem_Adapter_Local);
-        $this->_designModel = $this->getMock('Mage_Core_Model_Design_Package',
-            array('getLocaleFileName'), array($filesystem));
+        $this->_designModel = $this->getMock(
+            'Mage_Core_Model_Design_Package',
+            array('getLocaleFileName'),
+            array(
+                Mage::getSingleton('Mage_Core_Model_Config_Modules_Reader'),
+                Mage::getSingleton('Magento_Filesystem'),
+            )
+        );
         $this->_designModel->expects($this->any())
             ->method('getLocaleFileName')
             ->will($this->returnValue(implode(DIRECTORY_SEPARATOR, $pathChunks)));
@@ -142,7 +147,9 @@ class Mage_Core_Model_TranslateTest extends PHPUnit_Framework_TestCase
 
         $filesystem = new Magento_Filesystem(new Magento_Filesystem_Adapter_Local);
         $this->_designModel = $this->getMock('Mage_Core_Model_Design_Package',
-            array('getLocaleFileName', 'getDesignTheme'), array($filesystem));
+            array('getLocaleFileName', 'getDesignTheme'),
+            array(Mage::getSingleton('Mage_Core_Model_Config_Modules_Reader'), $filesystem)
+        );
         $this->_designModel->expects($this->any())
             ->method('getLocaleFileName')
             ->will($this->returnValue(implode(DIRECTORY_SEPARATOR, $pathChunks)));

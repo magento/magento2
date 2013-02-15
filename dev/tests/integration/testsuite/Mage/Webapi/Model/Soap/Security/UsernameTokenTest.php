@@ -43,7 +43,7 @@ class Mage_Webapi_Model_Soap_Security_UsernameTokenTest extends PHPUnit_Framewor
      */
     protected function setUp()
     {
-        $this->_objectManager = new Magento_Test_ObjectManager();
+        $this->_objectManager = Mage::getObjectManager();
         $this->_objectManager->addSharedInstance(
             Mage::getObjectManager()->get('Mage_Core_Model_Dir'),
             'Mage_Core_Model_Dir'

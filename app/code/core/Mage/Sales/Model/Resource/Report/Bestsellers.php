@@ -226,7 +226,7 @@ class Mage_Sales_Model_Resource_Report_Bestsellers extends Mage_Sales_Model_Reso
 
             $columns = array(
                 'period'                         => 'period',
-                'store_id'                       => new Zend_Db_Expr(Mage_Core_Model_App::ADMIN_STORE_ID),
+                'store_id'                       => new Zend_Db_Expr(Mage_Core_Model_AppInterface::ADMIN_STORE_ID),
                 'product_id'                     => 'product_id',
                 'product_name'                   => new Zend_Db_Expr('MIN(product_name)'),
                 'product_price'                  => new Zend_Db_Expr('MIN(product_price)'),

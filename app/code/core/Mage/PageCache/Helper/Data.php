@@ -62,9 +62,12 @@ class Mage_PageCache_Helper_Data extends Mage_Core_Helper_Abstract
 
     /**
      * Initialize 'no cache' cookie locking
+     *
+     * @param Mage_Core_Model_Translate $translator
      */
-    function __construct()
+    function __construct(Mage_Core_Model_Translate $translator)
     {
+        parent::__construct($translator);
         $this->_isNoCacheCookieLocked = (bool)$this->_getCookie()->get(self::NO_CACHE_LOCK_COOKIE);
     }
 

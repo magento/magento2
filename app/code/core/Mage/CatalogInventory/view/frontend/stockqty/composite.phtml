@@ -30,7 +30,8 @@
 ?>
 <?php if($this->isMsgVisible()): ?>
     <p class="availability-only">
-        <a href="#" id="<?php echo $this->getPlaceholderId() ?>" title="<?php echo $this->__('Only %s left', ($this->getStockQty())) ?>"><?php echo $this->__('Only %s left', "<strong>{$this->getStockQty()}</strong>") ?></a>
+        <a href="#" data-mage-init="{toggleAdvanced:[]}" data-selectors-toggle-class="no-display" data-base-toggle-class="expanded" data-toggle-selectors="#<?php echo $this->getDetailsPlaceholderId() ?>"
+           id="<?php echo $this->getPlaceholderId() ?>" title="<?php echo $this->__('Only %s left', ($this->getStockQty())) ?>"><?php echo $this->__('Only %s left', "<strong>{$this->getStockQty()}</strong>") ?></a>
     </p>
     <table id="<?php echo $this->getDetailsPlaceholderId() ?>" class="availability-only-details no-display">
         <col />
@@ -54,13 +55,6 @@
         </tbody>
     </table>
     <script type="text/javascript">
-    //<![CDATA[
-    $('<?php echo $this->getPlaceholderId() ?>').observe('click', function(event){
-        this.toggleClassName('expanded');
-        $('<?php echo $this->getDetailsPlaceholderId() ?>').toggleClassName('no-display');
-        event.stop();
-        decorateTable('<?php echo $this->getDetailsPlaceholderId() ?>');
-    });
-    //]]>
+        jQuery('#<?php echo $this->getDetailsPlaceholderId() ?>').decorate('table');
     </script>
 <?php endif ?>

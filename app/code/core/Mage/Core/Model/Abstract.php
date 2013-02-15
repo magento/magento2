@@ -28,9 +28,7 @@
 /**
  * Abstract model class
  *
- * @category    Mage
- * @package     Mage_Core
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Mage_Core_Model_Abstract extends Varien_Object
 {
@@ -75,14 +73,14 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
      *
      * @var string
      */
-    protected $_resourceCollectionName;
+    protected $_collectionName;
 
     /**
      * Model cache tag for clear cache in after save and after delete
      *
      * When you use true - all cache will be clean
      *
-     * @var string || true
+     * @var string|array|true
      */
     protected $_cacheTag = false;
 
@@ -161,7 +159,6 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
      * Standard model initialization
      *
      * @param string $resourceModel
-     * @param string $idFieldName
      * @return Mage_Core_Model_Abstract
      */
     protected function _init($resourceModel)
@@ -190,26 +187,26 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
     public function __wakeup()
     {
         if (Mage::getIsSerializable()) {
-            $this->_eventDispatcher = Mage::getObjectManager()->get('Mage_Core_Model_Event_Manager');
-            $this->_cacheManager    = Mage::getObjectManager()->get('Mage_Core_Model_Cache');
+            $this->_eventDispatcher = Mage::getSingleton('Mage_Core_Model_Event_Manager');
+            $this->_cacheManager    = Mage::getSingleton('Mage_Core_Model_Cache');
         }
     }
 
     /**
      * Set resource names
      *
-     * If collection name is ommited, resource name will be used with _collection appended
+     * If collection name is omitted, resource name will be used with _collection appended
      *
      * @param string $resourceName
-     * @param string|null $resourceCollectionName
+     * @param string|null $collectionName
      */
-    protected function _setResourceModel($resourceName, $resourceCollectionName = null)
+    protected function _setResourceModel($resourceName, $collectionName = null)
     {
         $this->_resourceName = $resourceName;
-        if (is_null($resourceCollectionName)) {
-            $resourceCollectionName = $resourceName . '_Collection';
+        if (is_null($collectionName)) {
+            $collectionName = $resourceName . '_Collection';
         }
-        $this->_resourceCollectionName = $resourceCollectionName;
+        $this->_collectionName = $collectionName;
     }
 
     /**
@@ -243,14 +240,14 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
      */
     public function getResourceCollection()
     {
-        if (empty($this->_resourceCollectionName) &&  empty($this->_resourceCollection)) {
+        if (empty($this->_resourceCollection) && empty($this->_collectionName)) {
             Mage::throwException(
                 Mage::helper('Mage_Core_Helper_Data')->__('Model collection resource name is not defined.')
             );
         }
         return $this->_resourceCollection ?
             clone $this->_resourceCollection :
-            Mage::getResourceModel($this->_resourceCollectionName, array('resource' => $this->_getResource()));
+            Mage::getResourceModel($this->_collectionName, array('resource' => $this->_getResource()));
     }
 
     /**
@@ -266,13 +263,14 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
     /**
      * Load object data
      *
-     * @param   integer $id
-     * @return  Mage_Core_Model_Abstract
+     * @param integer $modelId
+     * @param null|string $field
+     * @return Mage_Core_Model_Abstract
      */
-    public function load($id, $field=null)
+    public function load($modelId, $field = null)
     {
-        $this->_beforeLoad($id, $field);
-        $this->_getResource()->load($this, $id, $field);
+        $this->_beforeLoad($modelId, $field);
+        $this->_getResource()->load($this, $modelId, $field);
         $this->_afterLoad();
         $this->setOrigData();
         $this->_hasDataChanges = false;
@@ -280,7 +278,7 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
     }
 
     /**
-     * Get array of objects transfered to default events processing
+     * Get array of objects transferred to default events processing
      *
      * @return array
      */
@@ -295,14 +293,16 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
     /**
      * Processing object before load data
      *
+     * @param int $modelId
+     * @param null|string $field
      * @return Mage_Core_Model_Abstract
      */
-    protected function _beforeLoad($id, $field = null)
+    protected function _beforeLoad($modelId, $field = null)
     {
-        $params = array('object' => $this, 'field' => $field, 'value'=> $id);
+        $params = array('object' => $this, 'field' => $field, 'value' => $modelId);
         $this->_eventDispatcher->dispatch('model_load_before', $params);
         $params = array_merge($params, $this->_getEventData());
-        $this->_eventDispatcher->dispatch($this->_eventPrefix.'_load_before', $params);
+        $this->_eventDispatcher->dispatch($this->_eventPrefix . '_load_before', $params);
         return $this;
     }
 
@@ -313,8 +313,8 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
      */
     protected function _afterLoad()
     {
-        $this->_eventDispatcher->dispatch('model_load_after', array('object'=>$this));
-        $this->_eventDispatcher->dispatch($this->_eventPrefix.'_load_after', $this->_getEventData());
+        $this->_eventDispatcher->dispatch('model_load_after', array('object' => $this));
+        $this->_eventDispatcher->dispatch($this->_eventPrefix . '_load_after', $this->_getEventData());
         return $this;
     }
 
@@ -346,6 +346,7 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
      * Save object data
      *
      * @return Mage_Core_Model_Abstract
+     * @throws Exception
      */
     public function save()
     {
@@ -384,21 +385,21 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
      */
     public function afterCommitCallback()
     {
-        $this->_eventDispatcher->dispatch('model_save_commit_after', array('object'=>$this));
-        $this->_eventDispatcher->dispatch($this->_eventPrefix.'_save_commit_after', $this->_getEventData());
+        $this->_eventDispatcher->dispatch('model_save_commit_after', array('object' => $this));
+        $this->_eventDispatcher->dispatch($this->_eventPrefix . '_save_commit_after', $this->_getEventData());
         return $this;
     }
 
     /**
      * Check object state (true - if it is object without id on object just created)
      * This method can help detect if object just created in _afterSave method
-     * problem is what in after save onject has id and we can't detect what object was
+     * problem is what in after save object has id and we can't detect what object was
      * created in this transaction
      *
-     * @param bool $flag
+     * @param bool|null $flag
      * @return bool
      */
-    public function isObjectNew($flag=null)
+    public function isObjectNew($flag = null)
     {
         if ($flag !== null) {
             $this->_isObjectNew = $flag;
@@ -419,7 +420,7 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
         if (!$this->getId()) {
             $this->isObjectNew(true);
         }
-        $this->_eventDispatcher->dispatch('model_save_before', array('object'=>$this));
+        $this->_eventDispatcher->dispatch('model_save_before', array('object' => $this));
         $this->_eventDispatcher->dispatch($this->_eventPrefix . '_save_before', $this->_getEventData());
         return $this;
     }
@@ -476,7 +477,7 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
             $validator = new Zend_Validate();
             $validator->addValidator($modelRules);
             $validator->addValidator($resourceRules);
-        } else if ($modelRules) {
+        } elseif ($modelRules) {
             $validator = $modelRules;
         } else {
             $validator = $resourceRules;
@@ -499,7 +500,7 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
      * Get list of cache tags applied to model object.
      * Return false if cache tags are not supported by model
      *
-     * @return array | false
+     * @return array|false
      */
     public function getCacheTags()
     {
@@ -523,7 +524,7 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
     }
 
     /**
-     * Get cahce tags associated with object id
+     * Get cache tags associated with object id
      *
      * @return array
      */
@@ -534,17 +535,17 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
             $tags = array();
             if (is_array($this->_cacheTag)) {
                 foreach ($this->_cacheTag as $_tag) {
-                    $tags[] = $_tag.'_'.$this->getId();
+                    $tags[] = $_tag . '_' . $this->getId();
                 }
             } else {
-                $tags[] = $this->_cacheTag.'_'.$this->getId();
+                $tags[] = $this->_cacheTag . '_' . $this->getId();
             }
         }
         return $tags;
     }
 
     /**
-     * Remove model onject related cache
+     * Remove model object related cache
      *
      * @return Mage_Core_Model_Abstract
      */
@@ -565,8 +566,8 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
     protected function _afterSave()
     {
         $this->cleanModelCache();
-        $this->_eventDispatcher->dispatch('model_save_after', array('object'=>$this));
-        $this->_eventDispatcher->dispatch($this->_eventPrefix.'_save_after', $this->_getEventData());
+        $this->_eventDispatcher->dispatch('model_save_after', array('object' => $this));
+        $this->_eventDispatcher->dispatch($this->_eventPrefix . '_save_after', $this->_getEventData());
         return $this;
     }
 
@@ -574,6 +575,7 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
      * Delete object from database
      *
      * @return Mage_ Core_Model_Abstract
+     * @throws Exception
      */
     public function delete()
     {
@@ -585,8 +587,7 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
 
             $this->_getResource()->commit();
             $this->_afterDeleteCommit();
-        }
-        catch (Exception $e){
+        } catch (Exception $e) {
             $this->_getResource()->rollBack();
             throw $e;
         }
@@ -594,14 +595,14 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
     }
 
     /**
-     * Processing object before delete datac
+     * Processing object before delete data
      *
      * @return Mage_Core_Model_Abstract
      */
     protected function _beforeDelete()
     {
-        $this->_eventDispatcher->dispatch('model_delete_before', array('object'=>$this));
-        $this->_eventDispatcher->dispatch($this->_eventPrefix.'_delete_before', $this->_getEventData());
+        $this->_eventDispatcher->dispatch('model_delete_before', array('object' => $this));
+        $this->_eventDispatcher->dispatch($this->_eventPrefix . '_delete_before', $this->_getEventData());
         $this->cleanModelCache();
         return $this;
     }
@@ -617,7 +618,8 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
             return;
         }
         if (!Mage::app()->getStore()->isAdmin()) {
-            Mage::throwException(Mage::helper('Mage_Core_Helper_Data')->__('Cannot complete this operation from non-admin area.'));
+            Mage::throwException(Mage::helper('Mage_Core_Helper_Data')
+                ->__('Cannot complete this operation from non-admin area.'));
         }
     }
 
@@ -628,8 +630,8 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
      */
     protected function _afterDelete()
     {
-        $this->_eventDispatcher->dispatch('model_delete_after', array('object'=>$this));
-        $this->_eventDispatcher->dispatch($this->_eventPrefix.'_delete_after', $this->_getEventData());
+        $this->_eventDispatcher->dispatch('model_delete_after', array('object' => $this));
+        $this->_eventDispatcher->dispatch($this->_eventPrefix . '_delete_after', $this->_getEventData());
         return $this;
     }
 
@@ -640,8 +642,8 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
      */
     protected function _afterDeleteCommit()
     {
-         $this->_eventDispatcher->dispatch('model_delete_commit_after', array('object'=>$this));
-         $this->_eventDispatcher->dispatch($this->_eventPrefix.'_delete_commit_after', $this->_getEventData());
+         $this->_eventDispatcher->dispatch('model_delete_commit_after', array('object' => $this));
+         $this->_eventDispatcher->dispatch($this->_eventPrefix . '_delete_commit_after', $this->_getEventData());
          return $this;
     }
 
@@ -673,7 +675,7 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
     final public function clearInstance()
     {
         $this->_clearReferences();
-        $this->_eventDispatcher->dispatch($this->_eventPrefix.'_clear', $this->_getEventData());
+        $this->_eventDispatcher->dispatch($this->_eventPrefix . '_clear', $this->_getEventData());
         $this->_clearData();
         return $this;
     }

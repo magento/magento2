@@ -32,7 +32,9 @@
     <?php if ($_element->getComment()): ?>
         <p class="comment"><?php echo $this->escapeHtml($_element->getComment()) ?></p>
     <?php endif; ?>
-    <?php echo $_element->getChildrenHtml() ?>
+    <div class="rule-tree-wrapper">
+        <?php echo $_element->getChildrenHtml() ?>
+    </div>
     </fieldset>
 </div>
 <script type="text/javascript">

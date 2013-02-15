@@ -45,13 +45,21 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute_Tab_Attributes
     protected function _prepareForm()
     {
         $this->setFormExcludedFieldList(array(
-            'tier_price', 'gallery', 'media_gallery', 'recurring_profile', 'group_price',
-            'quantity_and_stock_status'
+            'category_ids',
+            'gallery',
+            'group_price',
+            'image',
+            'media_gallery',
+            'quantity_and_stock_status',
+            'recurring_profile',
+            'tier_price',
         ));
         Mage::dispatchEvent('adminhtml_catalog_product_form_prepare_excluded_field_list', array('object'=>$this));
 
         $form = new Varien_Data_Form();
-        $fieldset = $form->addFieldset('fields', array('legend'=>Mage::helper('Mage_Catalog_Helper_Data')->__('Attributes')));
+        $fieldset = $form->addFieldset('fields', array(
+            'legend' => Mage::helper('Mage_Catalog_Helper_Data')->__('Attributes'),
+        ));
         $attributes = $this->getAttributes();
         /**
          * Initialize product object as form property
@@ -70,7 +78,8 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute_Tab_Attributes
      */
     public function getAttributes()
     {
-        return $this->helper('Mage_Adminhtml_Helper_Catalog_Product_Edit_Action_Attribute')->getAttributes()->getItems();
+        return $this->helper('Mage_Adminhtml_Helper_Catalog_Product_Edit_Action_Attribute')
+            ->getAttributes()->getItems();
     }
 
     /**
@@ -81,15 +90,15 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute_Tab_Attributes
     protected function _getAdditionalElementTypes()
     {
         return array(
-            'price' => Mage::getConfig()->getBlockClassName('Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Price'),
-            'weight' => Mage::getConfig()->getBlockClassName('Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Weight'),
-            'image' => Mage::getConfig()->getBlockClassName('Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Image'),
-            'boolean' => Mage::getConfig()->getBlockClassName('Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Boolean')
+            'price' => 'Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Price',
+            'weight' => 'Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Weight',
+            'image' => 'Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Image',
+            'boolean' => 'Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Boolean',
         );
     }
 
     /**
-     * Custom additional elemnt html
+     * Custom additional element html
      *
      * @param Varien_Data_Form_Element_Abstract $element
      * @return string
@@ -97,18 +106,28 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute_Tab_Attributes
     protected function _getAdditionalElementHtml($element)
     {
         // Add name attribute to checkboxes that correspond to multiselect elements
-        $nameAttributeHtml = ($element->getExtType() === 'multiple') ? 'name="' . $element->getId() . '_checkbox"'
-            : '';
-        return '<span class="attribute-change-checkbox"><input type="checkbox" id="' . $element->getId()
-             . '-checkbox" ' . $nameAttributeHtml . ' onclick="toogleFieldEditMode(this, \'' . $element->getId()
-             . '\')" /><label for="' . $element->getId() . '-checkbox">' . Mage::helper('Mage_Catalog_Helper_Data')->__('Change')
-             . '</label></span>
-                <script type="text/javascript">initDisableFields(\''.$element->getId().'\')</script>';
+        $nameAttributeHtml = $element->getExtType() === 'multiple' ? 'name="' . $element->getId() . '_checkbox"' : '';
+        $elementId = $element->getId();
+        $checkboxLabel = Mage::helper('Mage_Catalog_Helper_Data')->__('Change');
+        $html = <<<HTML
+<span class="attribute-change-checkbox">
+    <label>
+        <input type="checkbox" $nameAttributeHtml onclick="toogleFieldEditMode(this, '{$elementId}')" />
+        {$checkboxLabel}
+    </label>
+</span>
+<script>initDisableFields("{$elementId}")</script>
+HTML;
+        if ($elementId === 'weight') {
+            $html .= <<<HTML
+<script>jQuery(function($) {
+    $('#weight_and_type_switcher, label[for=weight_and_type_switcher]').hide();
+});</script>
+HTML;
+        }
+        return $html;
     }
 
-    /**
-     * ######################## TAB settings #################################
-     */
     public function getTabLabel()
     {
         return Mage::helper('Mage_Catalog_Helper_Data')->__('Attributes');

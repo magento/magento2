@@ -30,7 +30,7 @@
  */
 return array(
     '/pub/lib/jquery/jquery.min.js',
-    '/pub/lib/jquery/jquery-ui.custom.min.js',
+    '/pub/lib/jquery/jquery-ui.js',
     '/pub/lib/jquery/jquery.cookie.js',
     '/pub/lib/head.load.min.js',
     '/pub/lib/mage/mage.js',

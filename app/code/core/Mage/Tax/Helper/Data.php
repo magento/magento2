@@ -57,8 +57,12 @@ class Mage_Tax_Helper_Data extends Mage_Core_Helper_Abstract
      */
     protected $_postCodeSubStringLength = 10;
 
-    public function  __construct()
+    /**
+     * @param Mage_Core_Model_Translate $translator
+     */
+    public function  __construct(Mage_Core_Model_Translate $translator)
     {
+        parent::__construct($translator);
         $this->_config = Mage::getSingleton('Mage_Tax_Model_Config');
     }
 

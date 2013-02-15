@@ -1,3 +1,41 @@
+2.0.0.0-dev42
+=============
+* Application initialization improvements:
+  * Removed application initialization responsibility from `Mage` class
+  * Introduces entry points, which are responsible for different types of requests processing: HTTP, media, cron, indexing, console installing, etc.
+  * New configuration classes are introduced and each of them is responsible for specific section of configuration
+  * Class rewrites functionality removed from `Mage_Core_Model_Config` model. DI configuration should be used for rewriting classes
+* Added ability to configure object manager with array in addition to object and scalar values
+* VDE improvements:
+  * Theme CSS files viewing and uploading/downloading of custom CSS file
+  * Updated styling of VDE Tools panel
+* Refactored various components to an analogous jQuery widget:
+  * Refactored components:
+    * Category navigation
+    * Products management and gallery
+    * Send to friend
+    * Sales components, including orders and returns
+    * Retrieve shipping rates and add/remove coupon in shopping cart
+    * Customer address and address book
+    * Customer wishlist
+    * "Contact Us" form
+    * CAPTCHA
+    * Weee
+  * New tabs widget is used instead of `Varien.Tabs`
+  * Refactored `Varien.dateRangeDate` and `Varien.FileElement`
+  * Replaced `$.mage.constants` with jQuery UI `$.ui.keyCode` for keyboard key codes
+* Refactored configurable attribute, category parent and attribute set selectors to use suggest widget
+* Bug fixes:
+  * Improvements and bug fixes in new backend theme
+  * Image, categories attributes and virtual/downloadable fields are displayed on Update Attributes page, where they shouldn't be present
+  * Undefined config property in `reloadOptionLabels()` function in `configurable.js` (Chrome)
+  * Impossible to edit existing customer/product tax class
+  * Incorrect format of customer's "Date of Birth"
+  * Theme preview images are absent in VDE
+  * Search by backslash doesn't work for Categories field on product creation page
+  * Impossible to assign a category to a product, if category name contains HTML tag
+  * Incorrect URL generated for logo image
+
 2.0.0.0-dev41
 =============
 * All-new look & feel of backend UI -- "Magento 2 backend" theme

@@ -179,7 +179,7 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
             foreach ($value['images'] as &$image) {
                 if (!empty($image['removed'])) {
                     $clearImages[] = $image['file'];
-                } elseif (!isset($image['value_id'])) {
+                } else if (empty($image['value_id'])) {
                     $newFile                   = $this->_moveImageFromTmp($image['file']);
                     $image['new_file'] = $newFile;
                     $newImages[$image['file']] = $image;
@@ -193,7 +193,7 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
             // For duplicating we need copy original images.
             $duplicate = array();
             foreach ($value['images'] as &$image) {
-                if (!isset($image['value_id'])) {
+                if (empty($image['value_id'])) {
                     continue;
                 }
                 $duplicate[$image['value_id']] = $this->_copyImage($image['file']);
@@ -259,7 +259,7 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
         $storeId = $object->getStoreId();
 
         $storeIds = $object->getStoreIds();
-        $storeIds[] = Mage_Core_Model_App::ADMIN_STORE_ID;
+        $storeIds[] = Mage_Core_Model_AppInterface::ADMIN_STORE_ID;
 
         // remove current storeId
         $storeIds = array_flip($storeIds);
@@ -278,13 +278,13 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
         $filesToValueIds = array();
         foreach ($value['images'] as &$image) {
             if (!empty($image['removed'])) {
-                if (isset($image['value_id']) && !isset($picturesInOtherStores[$image['file']])) {
+                if (!empty($image['value_id']) && !isset($picturesInOtherStores[$image['file']])) {
                     $toDelete[] = $image['value_id'];
                 }
                 continue;
             }
 
-            if (!isset($image['value_id'])) {
+            if (empty($image['value_id'])) {
                 $data = array();
                 $data['entity_id']      = $object->getId();
                 $data['attribute_id']   = $this->getAttribute()->getId();

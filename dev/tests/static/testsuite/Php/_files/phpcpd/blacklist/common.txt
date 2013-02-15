@@ -37,6 +37,7 @@ Mage/Tag/Model/Resource
 Mage/Catalog/Model/Resource/Product
 Mage/Core/Model/Store
 Mage/Cron/Model/Config/Backend/Product
+Mage/DesignEditor/Block/Adminhtml/Editor/Tools/Code
 Mage/DesignEditor/Block/Adminhtml/Theme/Selector/Tab
 Mage/DesignEditor/Model/Url
 Mage/GiftMessage/Block/Adminhtml/Sales/Order

@@ -53,10 +53,9 @@ class Mage_Backend_Model_Acl_ConfigTest extends PHPUnit_Framework_TestCase
         $this->_configMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
         $this->_cacheMock  = $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false);
 
-        $this->_model = new Mage_Backend_Model_Acl_Config(array(
-            'config' => $this->_configMock,
-            'cache'  => $this->_cacheMock
-        ));
+        $this->_model = new Mage_Backend_Model_Acl_Config($this->_configMock, $this->_cacheMock,
+            $this->getMock('Mage_Core_Model_Config_Modules_Reader', array(), array(), '', false, false)
+        );
     }
 
     public function testGetAclResourcesWhenCacheLoadCorruptedValue()

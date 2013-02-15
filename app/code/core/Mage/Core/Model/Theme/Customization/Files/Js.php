@@ -238,7 +238,7 @@ class Mage_Core_Model_Theme_Customization_Files_Js extends Mage_Core_Model_Theme
         $collection = $this->getCollectionByTheme($theme);
         /** @var $file Mage_Core_Model_Theme_Files */
         foreach ($collection as $file) {
-            $position = array_search($file->getFileName(), $orderData);
+            $position = array_search($file->getId(), $orderData);
             if ($position === false) {
                 //uploaded files will be on top
                 $file->setSortOrder(0);

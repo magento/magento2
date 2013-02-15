@@ -198,7 +198,7 @@ class Mage_Cms_Model_Resource_Page extends Mage_Core_Model_Resource_Db_Abstract
         $select = parent::_getLoadSelect($field, $value, $object);
 
         if ($object->getStoreId()) {
-            $storeIds = array(Mage_Core_Model_App::ADMIN_STORE_ID, (int)$object->getStoreId());
+            $storeIds = array(Mage_Core_Model_AppInterface::ADMIN_STORE_ID, (int)$object->getStoreId());
             $select->join(
                 array('cms_page_store' => $this->getTable('cms_page_store')),
                 $this->getMainTable() . '.page_id = cms_page_store.page_id',
@@ -247,7 +247,7 @@ class Mage_Cms_Model_Resource_Page extends Mage_Core_Model_Resource_Db_Abstract
     public function getIsUniquePageToStores(Mage_Core_Model_Abstract $object)
     {
         if (Mage::app()->hasSingleStore() || !$object->hasStores()) {
-            $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID);
+            $stores = array(Mage_Core_Model_AppInterface::ADMIN_STORE_ID);
         } else {
             $stores = (array)$object->getData('stores');
         }
@@ -301,7 +301,7 @@ class Mage_Cms_Model_Resource_Page extends Mage_Core_Model_Resource_Db_Abstract
      */
     public function checkIdentifier($identifier, $storeId)
     {
-        $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID, $storeId);
+        $stores = array(Mage_Core_Model_AppInterface::ADMIN_STORE_ID, $storeId);
         $select = $this->_getLoadByIdentifierSelect($identifier, $stores, 1);
         $select->reset(Zend_Db_Select::COLUMNS)
             ->columns('cp.page_id')
@@ -319,7 +319,7 @@ class Mage_Cms_Model_Resource_Page extends Mage_Core_Model_Resource_Db_Abstract
      */
     public function getCmsPageTitleByIdentifier($identifier)
     {
-        $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID);
+        $stores = array(Mage_Core_Model_AppInterface::ADMIN_STORE_ID);
         if ($this->_store) {
             $stores[] = (int)$this->getStore()->getId();
         }

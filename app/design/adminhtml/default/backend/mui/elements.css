@@ -1333,6 +1333,7 @@ table.loading:after {
 .collapse.in,
 .no-js .collapse {
     height: auto !important;
+    overflow: visible;
 }
 
 .no-js .tabs-nav > li,

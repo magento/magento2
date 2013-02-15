@@ -39,7 +39,7 @@ class Mage_Eav_Model_Entity_Attribute_SetTest extends PHPUnit_Framework_TestCase
     {
         $resource = $this->getMock('Mage_Eav_Model_Resource_Entity_Attribute_Set', array(), array(), '', false);
 
-        $helper = $this->getMock('Mage_Eav_Helper_Data', array('__'));
+        $helper = $this->getMock('Mage_Eav_Helper_Data', array('__'), array(), '', false, false);
         $helper->expects($this->any())
             ->method('__')
             ->will($this->returnArgument(0));

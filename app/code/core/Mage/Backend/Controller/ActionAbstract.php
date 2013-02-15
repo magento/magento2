@@ -66,22 +66,22 @@ abstract class Mage_Backend_Controller_ActionAbstract extends Mage_Core_Controll
     /**
      * @param Mage_Core_Controller_Request_Http $request
      * @param Mage_Core_Controller_Response_Http $response
-     * @param string $areaCode
      * @param Magento_ObjectManager $objectManager
      * @param Mage_Core_Controller_Varien_Front $frontController
      * @param Mage_Core_Model_Layout_Factory $layoutFactory
+     * @param string $areaCode
      * @param array $invokeArgs
      */
     public function __construct(
         Mage_Core_Controller_Request_Http $request,
         Mage_Core_Controller_Response_Http $response,
-        $areaCode = null,
         Magento_ObjectManager $objectManager,
         Mage_Core_Controller_Varien_Front $frontController,
         Mage_Core_Model_Layout_Factory $layoutFactory,
+        $areaCode = null,
         array $invokeArgs = array()
     ) {
-        parent::__construct($request, $response, $areaCode, $objectManager, $frontController, $layoutFactory);
+        parent::__construct($request, $response, $objectManager, $frontController, $layoutFactory, $areaCode);
 
         $this->_helper = isset($invokeArgs['helper']) ?
             $invokeArgs['helper'] :
@@ -516,7 +516,7 @@ abstract class Mage_Backend_Controller_ActionAbstract extends Mage_Core_Controll
         $args = func_get_args();
         $expr = new Mage_Core_Model_Translate_Expr(array_shift($args), $this->_getRealModuleName());
         array_unshift($args, $expr);
-        return Mage::app()->getTranslator()->translate($args);
+        return $this->_objectManager->get('Mage_Core_Model_Translate')->translate($args);
     }
 
     /**

@@ -51,7 +51,7 @@ class Mage_Catalog_Model_Product_Indexer_FlatTest extends PHPUnit_Framework_Test
 
     public function testMatchEventAvailability()
     {
-        $flatHelper = $this->getMock('Mage_Catalog_Helper_Product_Flat');
+        $flatHelper = $this->getMock('Mage_Catalog_Helper_Product_Flat', array(), array(), '', false, false);
         $flatHelper->expects($this->any())
             ->method('isAvailable')
             ->will($this->returnValue(false));

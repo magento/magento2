@@ -69,7 +69,7 @@ class Mage_ImportExport_Model_Import_EntityAbstractTest extends PHPUnit_Framewor
      */
     protected function _getModelDependencies()
     {
-        $mageHelper = $this->getMock('Mage_ImportExport_Helper_Data', array('__'));
+        $mageHelper = $this->getMock('Mage_ImportExport_Helper_Data', array('__'), array(), '', false, false);
         $mageHelper->expects($this->any())
             ->method('__')
             ->will($this->returnArgument(0));
@@ -79,7 +79,9 @@ class Mage_ImportExport_Model_Import_EntityAbstractTest extends PHPUnit_Framewor
             'connection'                   => 'not_used',
             'helpers'                      => array('Mage_ImportExport_Helper_Data' => $mageHelper),
             'json_helper'                  => 'not_used',
-            'string_helper'                => new Mage_Core_Helper_String(),
+            'string_helper'                => new Mage_Core_Helper_String(
+                $this->getMock('Mage_Core_Model_Translate', array(), array(), '', false, false)
+            ),
             'page_size'                    => 1,
             'max_data_size'                => 1,
             'bunch_size'                   => 1,
@@ -443,7 +445,9 @@ class Mage_ImportExport_Model_Import_EntityAbstractTest extends PHPUnit_Framewor
     {
         $registryKey = '_helper/Mage_Core_Helper_String';
         if (!Mage::registry($registryKey)) {
-            $helper = new Mage_Core_Helper_String();
+            $helper = new Mage_Core_Helper_String(
+                $this->getMock('Mage_Core_Model_Translate', array(), array(), '', false, false)
+            );
             Mage::register($registryKey, $helper);
         }
 

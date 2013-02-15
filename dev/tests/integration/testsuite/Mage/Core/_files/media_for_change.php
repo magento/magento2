@@ -24,7 +24,7 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::PART_CONFIG);
 $designDir = Magento_Test_Helper_Bootstrap::getInstance()->getAppInstallDir() . '/media_for_change';
 $themeDir = $designDir . DIRECTORY_SEPARATOR . '/frontend/test/default';
 $sourcePath = dirname(__DIR__) . '/Model/_files/design/frontend/test/publication/';

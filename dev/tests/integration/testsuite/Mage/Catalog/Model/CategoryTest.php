@@ -223,6 +223,23 @@ class Mage_Catalog_Model_CategoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1000, $this->_model->getStoreId());
     }
 
+    /**
+     * @magentoDataFixture Mage/Core/_files/store.php
+     * @magentoAppIsolation enabled
+     */
+    public function testSetStoreIdWithNonNumericValue()
+    {
+        /** @var $store Mage_Core_Model_Store */
+        $store = Mage::getModel('Mage_Core_Model_Store');
+        $store->load('fixturestore');
+
+        $this->assertNotEquals($this->_model->getStoreId(), $store->getId());
+
+        $this->_model->setStoreId('fixturestore');
+
+        $this->assertEquals($this->_model->getStoreId(), $store->getId());
+    }
+
     public function testGetUrl()
     {
         $this->assertStringEndsWith('catalog/category/view/', $this->_model->getUrl());

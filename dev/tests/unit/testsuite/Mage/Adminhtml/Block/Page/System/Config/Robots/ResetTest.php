@@ -50,9 +50,9 @@ class Mage_Adminhtml_Block_Page_System_Config_Robots_ResetTest extends PHPUnit_F
                 'urlBuilder' => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false)
             )
         );
-        $this->_mockRobotsHelper = $this->getMockBuilder('Mage_Page_Helper_Robots')
-            ->setMethods(array('getRobotsDefaultCustomInstructions'))
-            ->getMock();
+        $this->_mockRobotsHelper = $this->getMock('Mage_Page_Helper_Robots',
+            array('getRobotsDefaultCustomInstructions'), array(), '', false, false
+        );
         Mage::register('_helper/Mage_Page_Helper_Robots', $this->_mockRobotsHelper);
     }
 

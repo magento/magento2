@@ -30,7 +30,7 @@ body          { background:#496778 url(../images/bkg_body.gif) 50% 0 repeat-y; f
 
 img           { border:0; vertical-align:top; }
 
-a             { color:#1e7ec8; text-decoration:underline; }
+a,.l          { color:#1e7ec8; text-decoration:underline; }
 a:hover       { text-decoration:none; }
 :focus        { outline:0; }
 
@@ -87,6 +87,7 @@ ul,ol         { list-style:none; }
 .no-margin    { margin:0 !important; }
 .no-padding   { padding:0 !important; }
 .no-bg        { background:none !important; }
+.clear        { clear: both; }
 /* ======================================================================================= */
 
 
@@ -130,6 +131,7 @@ ul,ol         { list-style:none; }
 .col4-set .col-2 { float:left; width:23.5%; margin:0 2%; }
 .col4-set .col-3 { float:left; width:23.5%; }
 .col4-set .col-4 { float:right; width:23.5%; }
+
 /* ======================================================================================= */
 
 

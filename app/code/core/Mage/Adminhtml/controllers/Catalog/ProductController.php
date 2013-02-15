@@ -1040,6 +1040,16 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
         $this->loadLayout();
         $this->renderLayout();
     }
+
+    /**
+     * Action for product template selector
+     */
+    public function suggestProductTemplatesAction()
+    {
+        $this->_initProduct();
+        $this->getResponse()->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode(
+            $this->getLayout()->createBlock('Mage_Catalog_Block_Product_TemplateSelector')
+                ->getSuggestedTemplates($this->getRequest()->getParam('label_part'))
+        ));
+    }
 }
-
-

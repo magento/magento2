@@ -34,7 +34,7 @@
 
         <reference name="vde_head">
             <action method="addJs"><file>jquery/jquery.min.js</file></action>
-            <action method="addJs"><file>jquery/jquery-ui.custom.min.js</file></action>
+            <action method="addJs"><file>jquery/jquery-ui.js</file></action>
             <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
             <action method="addJs"><file>head.load.min.js</file></action>
             <action method="addJs"><file>mage/mage.js</file></action>

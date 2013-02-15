@@ -35,6 +35,16 @@
 -->
 
 <div class="page-actions">
+    <div id="product-template-suggest-container" style="float:left; position: relative;padding: 5px 0 0 10px;">
+        <span class="current-product-template-container" style="cursor: pointer">
+            <span class="current-product-template"><?php echo $this->getAttributeSetName()?></span>
+            <div class="arrow" style="display: inline-block;height: 0;width: 0;border-left:5px solid transparent;border-right: 5px solid transparent;border-top:5px solid #000;"></div>
+        </span>
+        <div class="dropdown-wrapper" style="display: none; position: absolute; background: white; padding: 5px;">
+            <input type="text" id="product-template-suggest" placeholder="start typing to search product template"/>
+        </div>
+    </div>
+
     <div class="switcher" onselectstart='return false;'>
         <label class="switcher-label" for="product-online-switcher" title="Product online status">
             <strong>Product online</strong>
@@ -60,17 +70,17 @@
     <?php echo $this->getBlockHtml('formkey')?>
     <div id="product-edit-form-tabs"></div>
     <?php echo $this->getChildHtml('product-type-tabs') ?>
+    <input type="hidden" id="product_type_id" value="<?php echo $this->getProduct()->getTypeId()?>"/>
 </form>
 <script type="text/javascript">
-    function checkMaxLength(Object, MaxLen)
-    {
-        if (Object.value.length > MaxLen-1) {
-            Object.value = Object.value.substr(0, MaxLen);
-        }
-        return 1;
-    }
 
 jQuery(function($) {
+    $('#meta_description').on('change keyup paste', function () {
+        var maxLength = $(this).data('maxLength') || 255;
+        if ($(this).val().length >= maxLength) {
+            $(this).val($(this).val().substr(0, maxLength));
+        }
+    });
     $('#product-edit-form')
         .mage('form')
         .mage('validation', {validationUrl: '<?php echo $this->getValidationUrl() ?>'});

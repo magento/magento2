@@ -602,7 +602,7 @@ class Mage_Catalog_Model_Resource_Category_Tree extends Varien_Data_Tree_Dbp
                         array($tableDefault => $attribute->getBackend()->getTable()),
                         sprintf('%1$s.entity_id=e.entity_id AND %1$s.attribute_id=%2$d'
                             . ' AND %1$s.entity_type_id=e.entity_type_id AND %1$s.store_id=%3$d',
-                            $tableDefault, $attribute->getId(), Mage_Core_Model_App::ADMIN_STORE_ID),
+                            $tableDefault, $attribute->getId(), Mage_Core_Model_AppInterface::ADMIN_STORE_ID),
                         array($attributeCode => 'value'))
                     ->joinLeft(
                         array($tableStore => $attribute->getBackend()->getTable()),

@@ -38,60 +38,6 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
     }
 
     /**
-     * Display available theme list. Only when no customized themes
-     */
-    public function firstEntranceAction()
-    {
-        $this->_doSelectionTheme('index');
-    }
-
-    /**
-     * Check whether is customized themes in database
-     *
-     * @return bool
-     */
-    protected function _isFirstEntrance()
-    {
-        /** @var $themeService Mage_Core_Model_Theme_Service */
-        $themeService = $this->_objectManager->get('Mage_Core_Model_Theme_Service');
-        return !$themeService->isCustomizationsExist();
-    }
-
-    /**
-     * Load layout
-     *
-     * @param string $forwardAction
-     */
-    protected function _doSelectionTheme($forwardAction)
-    {
-        if ($forwardAction == 'index' xor $this->_isFirstEntrance()) {
-            $this->_forward($forwardAction);
-            return;
-        }
-
-        try {
-            $this->_title($this->__('System'))->_title($this->__('Design'))->_title($this->__('Editor'));
-            $this->loadLayout();
-            $this->_setActiveMenu('Mage_DesignEditor::system_design_editor');
-            if (!$this->_isFirstEntrance()) {
-                /** @var $themeService Mage_Core_Model_Theme_Service */
-                $themeService = $this->_objectManager->get('Mage_Core_Model_Theme_Service');
-                $this->getLayout()->getBlock('assigned.theme.list')->setCollection(
-                    $themeService->getAssignedThemeCustomizations()
-                );
-                $this->getLayout()->getBlock('unassigned.theme.list')->setCollection(
-                    $themeService->getUnassignedThemeCustomizations()
-                );
-            }
-            $this->renderLayout();
-        } catch (Exception $e) {
-            $this->_getSession()->addError($this->__('Cannot load list of themes.'));
-            $this->_redirectUrl($this->_getRefererUrl());
-            $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
-        }
-    }
-
-    /**
      * Ajax loading available themes
      */
     public function loadThemeListAction()
@@ -117,8 +63,8 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
         } catch (Exception $e) {
             $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
             $this->getResponse()->setBody($coreHelper->jsonEncode(
-                    array('error' => $this->_helper->__('Theme list can not be loaded')))
-            );
+                array('error' => $this->_helper->__('Theme list can not be loaded'))
+            ));
         }
     }
 
@@ -135,7 +81,7 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
         try {
             $theme->load($themeId);
             if (!$theme->getId()) {
-                throw new InvalidArgumentException($this->__('The theme was not found.'));
+                throw new InvalidArgumentException(sprintf('Theme "%s" was not found.', $themeId));
             }
 
             if (!$theme->isVirtual()) {
@@ -161,8 +107,10 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
             );
             $pageTypes = $customFrontLayout->getPageHandlesHierarchy();
 
-            $this->_title($this->__('System'))->_title($this->__('Design'))->_title($this->__('Editor'));
+            $this->_setTitle();
             $this->loadLayout();
+
+            $this->_configureToolsBlock($theme);
 
             /** @var $toolbarBlock Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_Buttons */
             $toolbarBlock = $this->getLayout()->getBlock('design_editor_toolbar_buttons');
@@ -220,40 +168,6 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
     }
 
     /**
-     * Get current handle
-     *
-     * @return string
-     */
-    protected function _getCurrentHandleUrl()
-    {
-        /** @var $vdeUrlModel Mage_DesignEditor_Model_Url_Handle */
-        $vdeUrlModel = $this->_objectManager->get('Mage_DesignEditor_Model_Url_Handle');
-        $handle = $this->_getSession()->getData(Mage_DesignEditor_Model_State::CURRENT_HANDLE_SESSION_KEY);
-        if (empty($handle)) {
-            $handle = 'default';
-        }
-
-        return $vdeUrlModel->getUrl('design/page/type', array('handle' => $handle));
-    }
-
-    /**
-     * Get current url
-     *
-     * @return string
-     */
-    protected function _getCurrentUrl()
-    {
-        /** @var $vdeUrlModel Mage_DesignEditor_Model_Url_NavigationMode */
-        $vdeUrlModel = $this->_objectManager->get('Mage_DesignEditor_Model_Url_NavigationMode');
-        $url = $this->_getSession()->getData(Mage_DesignEditor_Model_State::CURRENT_URL_SESSION_KEY);
-        if (empty($url)) {
-            $url = '';
-        }
-
-        return $vdeUrlModel->getUrl(ltrim($url, '/'));
-    }
-
-    /**
      * Assign theme to list of store views
      */
     public function assignThemeToStoreAction()
@@ -292,7 +206,7 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
             $themeService = $this->_objectManager->get('Mage_Core_Model_Theme_Service');
             /** @var $themeCustomization Mage_Core_Model_Theme */
             $themeCustomization = $themeService->assignThemeToStores($themeId, $stores);
-            
+
             $message = $coreHelper->__('Theme successfully assigned');
             $response = array(
                 'success' => $message,
@@ -302,8 +216,8 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
         } catch (Exception $e) {
             $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
             $this->getResponse()->setBody($coreHelper->jsonEncode(
-                    array('error' => $this->_helper->__('Theme is not assigned')))
-            );
+                array('error' => $this->_helper->__('Theme is not assigned'))
+            ));
             $response = array(
                 'error'   => true,
                 'message' => $this->_helper->__('Theme is not assigned')
@@ -327,10 +241,10 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
             /** @var $theme Mage_Core_Model_Theme */
             $theme = $this->_objectManager->get('Mage_Core_Model_Theme');
             if (!($themeId && $theme->load($themeId)->getId())) {
-                throw new Mage_Core_Exception($this->__('The theme was not found.'));
+                Mage::throwException($this->__('The theme was not found.'));
             }
             if (!$theme->isVirtual()) {
-                throw new Mage_Core_Exception($this->__('This theme is not editable.'));
+                Mage::throwException($this->__('This theme is not editable.'));
             }
             $theme->setThemeTitle($themeTitle);
             $theme->save();
@@ -343,9 +257,83 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
         } catch (Exception $e) {
             $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
             $this->getResponse()->setBody($coreHelper->jsonEncode(
-                    array('error' => true, 'message' => $this->__('Theme is not saved')))
-            );
+                array('error' => true, 'message' => $this->__('Theme is not saved'))
+            ));
         }
+    }
+
+    /**
+     * Get layout xml
+     */
+    public function getLayoutUpdateAction()
+    {
+        $historyData = Mage::app()->getRequest()->getPost('historyData');
+        if (!$historyData) {
+            $this->getResponse()->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode(
+                array(Mage_Core_Model_Message::ERROR => array($this->__('Invalid post data')))
+            ));
+            return;
+        }
+
+        try {
+            $layoutUpdate = $this->_compactHistory($historyData);
+            $this->getResponse()->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
+                Mage_Core_Model_Message::SUCCESS => array($layoutUpdate)
+            )));
+        } catch (Mage_Core_Exception $e) {
+            $this->getResponse()->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode(
+                array(Mage_Core_Model_Message::ERROR => array($e->getMessage()))
+            ));
+        }
+    }
+
+    /**
+     * Save temporary layout update
+     */
+    public function saveTemporaryLayoutUpdateAction()
+    {
+        $themeId = (int)$this->_getSession()->getData('theme_id');
+        /** @var $coreHelper Mage_Core_Helper_Data */
+        $coreHelper = $this->_objectManager->get('Mage_Core_Helper_Data');
+
+        try {
+            if (!is_numeric($themeId)) {
+                throw new InvalidArgumentException('Theme id is not valid');
+            }
+
+            if ($this->getRequest()->has('layoutUpdate')) {
+                $this->_saveLayoutUpdate(
+                    $this->getRequest()->getParam('layoutUpdate'),
+                    $this->getRequest()->getParam('handle'),
+                    $themeId,
+                    true
+                );
+            }
+            $this->getResponse()->setBody($coreHelper->jsonEncode(
+                array('success' => $this->__('Temporary layout update saved'))
+            ));
+        } catch (Exception $e) {
+            $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
+            $this->getResponse()->setBody($coreHelper->jsonEncode(
+                array('error' => $this->__('Temporary layout update not saved'))
+            ));
+        }
+    }
+
+    /**
+     * Display available theme list. Only when no customized themes
+     */
+    public function firstEntranceAction()
+    {
+        $this->_doSelectionTheme('index');
+    }
+
+    /**
+     * Set page title
+     */
+    protected function _setTitle()
+    {
+        $this->_title($this->__('System'))->_title($this->__('Design'))->_title($this->__('Editor'));
     }
 
     /**
@@ -398,7 +386,7 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
         /** @var $layoutCollection Mage_DesignEditor_Model_Resource_Layout_Update_Collection */
         $layoutCollection = $this->_objectManager
             ->create('Mage_DesignEditor_Model_Resource_Layout_Update_Collection');
-        $layoutCollection->addStoreFilter(Mage_Core_Model_App::ADMIN_STORE_ID)
+        $layoutCollection->addStoreFilter(Mage_Core_Model_AppInterface::ADMIN_STORE_ID)
             ->addThemeFilter($themeId)
             ->addFieldToFilter('handle', $handle)
             ->addFieldToFilter('is_vde', true)
@@ -414,7 +402,7 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
 
         if ($xml || $layoutUpdate) {
             $layoutUpdateData = array(
-                'store_id'     => Mage_Core_Model_App::ADMIN_STORE_ID,
+                'store_id'     => Mage_Core_Model_AppInterface::ADMIN_STORE_ID,
                 'theme_id'     => $themeId,
                 'handle'       => $handle,
                 'xml'          => $this->_compactHistory($layoutUpdate, $xml),
@@ -447,65 +435,6 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
     }
 
     /**
-     * Get layout xml
-     */
-    public function getLayoutUpdateAction()
-    {
-        $historyData = Mage::app()->getRequest()->getPost('historyData');
-        if (!$historyData) {
-            $this->getResponse()->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode(
-                array(Mage_Core_Model_Message::ERROR => array($this->__('Invalid post data')))
-            ));
-            return;
-        }
-
-        try {
-            $layoutUpdate = $this->_compactHistory($historyData);
-            $this->getResponse()->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
-                Mage_Core_Model_Message::SUCCESS => array($layoutUpdate)
-            )));
-        } catch (Mage_Core_Exception $e) {
-            $this->getResponse()->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode(
-                array(Mage_Core_Model_Message::ERROR => array($e->getMessage()))
-            ));
-        }
-    }
-
-    /**
-     * Save temporary layout update
-     * @throws InvalidArgumentException
-     */
-    public function saveTemporaryLayoutUpdateAction()
-    {
-        $themeId = (int)$this->_getSession()->getData('theme_id');
-        /** @var $coreHelper Mage_Core_Helper_Data */
-        $coreHelper = $this->_objectManager->get('Mage_Core_Helper_Data');
-
-        try {
-            if (!is_numeric($themeId)) {
-                throw new InvalidArgumentException('Theme id is not valid');
-            }
-
-            if ($this->getRequest()->has('layoutUpdate')) {
-                $this->_saveLayoutUpdate(
-                    $this->getRequest()->getParam('layoutUpdate'),
-                    $this->getRequest()->getParam('handle'),
-                    $themeId,
-                    true
-                );
-            }
-            $this->getResponse()->setBody($coreHelper->jsonEncode(
-                array('success' => $this->__('Temporary layout update saved'))
-            ));
-        } catch (Exception $e) {
-            $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
-            $this->getResponse()->setBody($coreHelper->jsonEncode(
-                array('error' => $this->__('Temporary layout update not saved'))
-            ));
-        }
-    }
-
-    /**
      * Get theme customization
      *
      * @param Mage_Core_Model_Theme $theme
@@ -516,5 +445,123 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
         /** @var $service Mage_Core_Model_Theme_Service */
         $service = $this->_objectManager->get('Mage_Core_Model_Theme_Service');
         return $service->createThemeCustomization($theme);
+    }
+
+    /**
+     * Pass CSS files data to the block who need it for rendering
+     *
+     * @param Mage_Core_Model_Theme $theme
+     * @return Mage_DesignEditor_Adminhtml_System_Design_EditorController
+     */
+    protected function _configureToolsBlock($theme)
+    {
+        /** @var $customTabBlock Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Custom */
+        $customTabBlock = $this->getLayout()->getBlock('design_editor_tools_code_custom');
+        if ($customTabBlock) {
+            $theme->setCustomization($this->_objectManager->create('Mage_Core_Model_Theme_Customization_Files_Css'));
+            $customTabBlock->setTheme($theme);
+        }
+
+        /** @var $cssTabBlock Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Css */
+        $cssTabBlock = $this->getLayout()->getBlock('design_editor_tools_code_css');
+        if ($cssTabBlock) {
+            /** @var $helper Mage_Core_Helper_Theme */
+            $helper = $this->_objectManager->get('Mage_Core_Helper_Theme');
+            $cssFiles = $helper->getGroupedCssFiles($theme);
+            $cssTabBlock->setCssFiles($cssFiles)
+                ->setThemeId($theme->getId());
+        }
+
+        /** @var $jsTabBlock Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Js */
+        $jsTabBlock = $this->getLayout()->getBlock('design_editor_tools_code_js');
+        if ($jsTabBlock) {
+            /** @var $jsFileModel Mage_Core_Model_Theme_Customization_Files_Js */
+            $jsFileModel = $this->_objectManager->create('Mage_Core_Model_Theme_Customization_Files_Js');
+            $theme->setCustomization($jsFileModel);
+
+            $jsTabBlock->setTheme($theme);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Check whether is customized themes in database
+     *
+     * @return bool
+     */
+    protected function _isFirstEntrance()
+    {
+        /** @var $themeService Mage_Core_Model_Theme_Service */
+        $themeService = $this->_objectManager->get('Mage_Core_Model_Theme_Service');
+        return !$themeService->isCustomizationsExist();
+    }
+
+    /**
+     * Load layout
+     *
+     * @param string $forwardAction
+     */
+    protected function _doSelectionTheme($forwardAction)
+    {
+        if ($forwardAction == 'index' xor $this->_isFirstEntrance()) {
+            $this->_forward($forwardAction);
+            return;
+        }
+
+        try {
+            $this->_setTitle();
+            $this->loadLayout();
+            $this->_setActiveMenu('Mage_DesignEditor::system_design_editor');
+            if (!$this->_isFirstEntrance()) {
+                /** @var $themeService Mage_Core_Model_Theme_Service */
+                $themeService = $this->_objectManager->get('Mage_Core_Model_Theme_Service');
+                $this->getLayout()->getBlock('assigned.theme.list')->setCollection(
+                    $themeService->getAssignedThemeCustomizations()
+                );
+                $this->getLayout()->getBlock('unassigned.theme.list')->setCollection(
+                    $themeService->getUnassignedThemeCustomizations()
+                );
+            }
+            $this->renderLayout();
+        } catch (Exception $e) {
+            $this->_getSession()->addError($this->__('Cannot load list of themes.'));
+            $this->_redirectUrl($this->_getRefererUrl());
+            $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
+        }
+    }
+
+    /**
+     * Get current handle
+     *
+     * @return string
+     */
+    protected function _getCurrentHandleUrl()
+    {
+        /** @var $vdeUrlModel Mage_DesignEditor_Model_Url_Handle */
+        $vdeUrlModel = $this->_objectManager->get('Mage_DesignEditor_Model_Url_Handle');
+        $handle = $this->_getSession()->getData(Mage_DesignEditor_Model_State::CURRENT_HANDLE_SESSION_KEY);
+        if (empty($handle)) {
+            $handle = 'default';
+        }
+
+        return $vdeUrlModel->getUrl('design/page/type', array('handle' => $handle));
+    }
+
+    /**
+     * Get current url
+     *
+     * @return string
+     */
+    protected function _getCurrentUrl()
+    {
+        /** @var $vdeUrlModel Mage_DesignEditor_Model_Url_NavigationMode */
+        $vdeUrlModel = $this->_objectManager->get('Mage_DesignEditor_Model_Url_NavigationMode');
+        $url = $this->_getSession()->getData(Mage_DesignEditor_Model_State::CURRENT_URL_SESSION_KEY);
+        if (empty($url)) {
+            $url = '';
+        }
+
+        return $vdeUrlModel->getUrl(ltrim($url, '/'));
     }
 }

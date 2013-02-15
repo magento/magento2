@@ -31,6 +31,27 @@
 class Magento_Test_Cookie extends Mage_Core_Model_Cookie
 {
     /**
+     * @var Mage_Core_Controller_Request_Http
+     */
+    protected $_request;
+
+    /**
+     * @param Mage_Core_Controller_Request_Http $request
+     */
+    public function __construct(Mage_Core_Controller_Request_Http $request = null)
+    {
+        $this->_request = $request;
+    }
+
+    /**
+     * @return Mage_Core_Controller_Request_Http
+     */
+    protected function _getRequest()
+    {
+        return $this->_request ?: parent::_getRequest();
+    }
+
+    /**
      * Dummy function, which sets value directly to $_COOKIE super-global array instead of calling setcookie()
      *
      * @param string $name The cookie name

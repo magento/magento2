@@ -222,7 +222,9 @@ class Mage_Eav_Model_Resource_Entity_AttributeTest extends PHPUnit_Framework_Tes
             )));
 
         /** @var $resource Mage_Core_Model_Resource */
-        $resource = $this->getMock('Mage_Core_Model_Resource', array('getTableName', 'getConnection'));
+        $resource = $this->getMock('Mage_Core_Model_Resource',
+            array('getTableName', 'getConnection'), array(), '', false, false
+        );
         $resource->expects($this->any())
             ->method('getTableName')
             ->will($this->returnArgument(0));
@@ -235,7 +237,7 @@ class Mage_Eav_Model_Resource_Entity_AttributeTest extends PHPUnit_Framework_Tes
             'resource'  => $resource,
             'arguments' => array(
                 'application' => $application,
-                'helper'      => $this->getMock('Mage_Eav_Helper_Data'),
+                'helper'      => $this->getMock('Mage_Eav_Helper_Data', array(), array(), '', false, false),
             )
         );
         $resourceModel = $this->getMock(

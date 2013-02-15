@@ -48,7 +48,7 @@ class Mage_Install_IndexController extends Mage_Install_Controller_Action
                 Varien_Io_File::rmdirRecursive($dir);
             }
         }
-        return parent::preDispatch();
+        parent::preDispatch();
     }
 
     /**

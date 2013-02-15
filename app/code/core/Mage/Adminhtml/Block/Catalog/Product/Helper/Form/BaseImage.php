@@ -34,20 +34,6 @@
 class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_BaseImage extends Varien_Data_Form_Element_Abstract
 {
     /**
-     * Maximum file size to upload in bytes.
-     *
-     * @var int
-     */
-    protected $_maxFileSize;
-
-    /**
-     * Media Uploader instance
-     *
-     * @var Mage_Adminhtml_Block_Media_Uploader
-     */
-    protected $_mediaUploader;
-
-    /**
      * Model Url instance
      *
      * @var Mage_Backend_Model_Url
@@ -65,6 +51,11 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_BaseImage extends Varien_
     protected $_catalogHelperData;
 
     /**
+     * @var Magento_File_Size
+     */
+    protected $_fileConfig;
+
+    /**
      * Constructor
      *
      * @param array $attributes
@@ -73,28 +64,34 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_BaseImage extends Varien_
     {
         parent::__construct($attributes);
 
-        $this->_mediaUploader = isset($attributes['mediaUploader']) ? $attributes['mediaUploader']
-            : Mage::getSingleton('Mage_Adminhtml_Block_Media_Uploader');
         $this->_url = isset($attributes['url']) ? $attributes['url']
             : Mage::getModel('Mage_Backend_Model_Url');
         $this->_coreHelper = isset($attributes['coreHelper']) ? $attributes['coreHelper']
             : Mage::helper('Mage_Core_Helper_Data');
         $this->_catalogHelperData = isset($attributes['catalogHelperData']) ? $attributes['catalogHelperData']
             : Mage::helper('Mage_Catalog_Helper_Data');
-
+        $this->_fileConfig = isset($attributes['fileConfig']) ? $attributes['fileConfig'] :
+            Mage::getSingleton('Magento_File_Size');
         $this->_maxFileSize = $this->_getFileMaxSize();
     }
 
-    public function getDefaultHtml()
+    /**
+     * Get label
+     *
+     * @return string
+     */
+    public function getLabel()
     {
-        $html = $this->getData('default_html');
-        if (is_null($html)) {
-            $html = ($this->getNoSpan() === true) ? '' : '<span class="field-row">' . "\n";
-            $html .= $this->getLabelHtml();
-            $html .= $this->getElementHtml();
-            $html .= ($this->getNoSpan() === true) ? '' : '</span>' . "\n";
-        }
-        return $html;
+        return $this->helper('Mage_Catalog_Helper_Data')->__('Images');
+    }
+
+    /**
+     * Translate message
+     *
+     * @param string $message
+     */
+    private function __($message) {
+        return $this->helper('Mage_Catalog_Helper_Data')->__($message);
     }
 
     /**
@@ -107,49 +104,32 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_BaseImage extends Varien_
         $htmlId = $this->_coreHelper->escapeHtml($this->getHtmlId());
         $uploadUrl = $this->_coreHelper->escapeHtml($this->_getUploadUrl());
         /** @var $product Mage_Catalog_Model_Product */
-        $product = $this->getForm()->getDataObject();
-        $gallery = $product->getMediaGalleryImages();
-        $html = '<input id="' . $htmlId .'-upload" type="file" name="image" '
-            . 'data-url="' . $uploadUrl . '" style="display:none" />'
-            . '<input id="' . $htmlId . '" type="hidden" name="'. $this->getName() .'" />'
-            . '<div id="' . $htmlId  . '-container" class="images" data-main="' .  $this->getEscapedValue() . '" '
-            . 'data-images="' . $this->_coreHelper->escapeHtml(
-            $this->_coreHelper->jsonEncode($gallery ? $gallery->toArray() : array())
-        ) . '">'
-            . '<div class="image image-placeholder" id="' . $htmlId . '-upload-placeholder"><p class="image-placeholder-text">' . $this->helper('Mage_Catalog_Helper_Data')->__('Click here or drag and drop to add images') . '</p></div>'
-            . '<script id="' . $htmlId . '-template" type="text/x-jquery-tmpl">'
-            . '<div class="image" data-image-label="' . $this->helper('Mage_Catalog_Helper_Data')->__('Main') . '">'
-                . '<img class="base-image-uploader" src="${url}" data-position="${position}" alt="${label}" />'
-                . '<div class="actions">'
-                    . '<button class="action-delete" title="' . $this->helper('Mage_Catalog_Helper_Data')->__('Delete image') . '">'
-                        . '<span>' . $this->helper('Mage_Catalog_Helper_Data')->__('Delete image') . '</span>'
-                    . '</button>'
-                    . '<button class="action-make-main" title="' . $this->helper('Mage_Catalog_Helper_Data')->__('Make Main') . '">'
-                        . '<span>' . $this->helper('Mage_Catalog_Helper_Data')->__('Make Main') . '</span>'
-                    . '</button>'
-                    . '<div class="draggable-handle"></div>'
-                . '</div>'
-            . '</div>'
-            . '</script>'
-            . '</div>';
-        $html .= $this->_getJs();
-
+        $html = <<<HTML
+<div id="{$htmlId}-container" class="images"
+    data-mage-init="{baseImage:{}}"
+    data-max-file-size="{$this->_getFileMaxSize()}"
+    >
+    <div class="image image-placeholder">
+        <input type="file" name="image"  data-url="{$uploadUrl}"  />
+        <p class="image-placeholder-text">{$this->__('Click here or drag and drop to add images')}</p>
+    </div>
+    <script id="{$htmlId}-template" class="image-template" type="text/x-jquery-tmpl">
+        <div class="image" data-image-label="{$this->__('Main')}">
+            <img class="base-image-uploader" src="\${url}" data-position="\${position}" alt="\${label}" />
+            <div class="actions">
+                <button class="action-delete" data-role="delete-button" title="{$this->__('Delete image')}">
+                    <span>{$this->__('Delete image')}</span>
+                </button>
+                <button class="action-make-main" data-role="make-main-button" title="{$this->__('Make Main')}">
+                    <span>{$this->__('Make Main')}</span>
+                </button>
+                <div class="draggable-handle"></div>
+            </div>
+        </div>
+    </script>
+</div>
+HTML;
         return $html;
-    }
-
-    /**
-     * Get js for image uploader
-     *
-     * @return string
-     */
-    protected function _getJs()
-    {
-        return "<script>/* <![CDATA[ */"
-            . "jQuery(function(){"
-            . "BaseImageUploader({$this->_coreHelper->jsonEncode($this->getHtmlId())}, "
-            . "{$this->_coreHelper->jsonEncode($this->_maxFileSize)});"
-            . " });"
-            . "/*]]>*/</script>";
     }
 
     /**
@@ -169,7 +149,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_BaseImage extends Varien_
      */
     protected function _getFileMaxSize()
     {
-        return $this->_mediaUploader->getDataMaxSizeInBytes();
+        return $this->_fileConfig->getMaxFileSize();
     }
 
     /**

@@ -29,9 +29,9 @@
 class Mage_Backend_Model_Menu_ConfigTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Mage_Core_ModeL_Config
+     * @var Mage_Core_Model_Config_Modules_Reader
      */
-    protected $_appConfigMock;
+    protected $_configMock;
 
     /**
      * @var Mage_Core_Model_Cache
@@ -95,7 +95,9 @@ class Mage_Backend_Model_Menu_ConfigTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_appConfigMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
+        $this->_configMock = $this->getMock('Mage_Core_Model_Config_Modules_Reader',
+            array(), array(), '', false, false
+        );
 
         $this->_objectManagerMock = $this->getMock(
             'Magento_ObjectManager_Zend', array('create', 'get'), array(), '', false
@@ -117,7 +119,7 @@ class Mage_Backend_Model_Menu_ConfigTest extends PHPUnit_Framework_TestCase
 
         $this->_domDocumentMock = $this->getMock('DOMDocument', array(), array(), '', false);
 
-        $this->_eventManagerMock = $this->getMock('Mage_Core_Model_Event_Manager');
+        $this->_eventManagerMock = $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false, false);
 
         $this->_logger = $this->getMock(
             'Mage_Core_Model_Logger', array('addStoreLog', 'log', 'logException'), array(), '', false
@@ -134,7 +136,7 @@ class Mage_Backend_Model_Menu_ConfigTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Backend_Model_Menu_Config(
             $this->_cacheInstanceMock,
             $this->_objectManagerMock,
-            $this->_appConfigMock,
+            $this->_configMock,
             $this->_eventManagerMock,
             $this->_logger,
             $this->_menuFactoryMock
@@ -143,7 +145,7 @@ class Mage_Backend_Model_Menu_ConfigTest extends PHPUnit_Framework_TestCase
 
     public function testGetMenuConfigurationFiles()
     {
-        $this->_appConfigMock->expects($this->any())
+        $this->_configMock->expects($this->any())
             ->method('getModuleConfigurationFiles')
             ->will($this->returnValue(array(
                 realpath(__DIR__) . '/../_files/menu_1.xml',
@@ -269,7 +271,7 @@ class Mage_Backend_Model_Menu_ConfigTest extends PHPUnit_Framework_TestCase
     {
         $xmlString = '<?xml version="1.0" encoding="utf-8"?><config><menu></menu></config>';
 
-        $this->_appConfigMock->expects($this->any())
+        $this->_configMock->expects($this->any())
             ->method('getModelInstance')
             ->will($this->returnCallback(array($this, 'getModelInstance')));
 

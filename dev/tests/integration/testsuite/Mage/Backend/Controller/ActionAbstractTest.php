@@ -60,8 +60,8 @@ class Mage_Backend_Controller_ActionAbstractTest extends Mage_Backend_Utility_Co
             'password' => Magento_Test_Bootstrap::ADMIN_PASSWORD
         ));
 
-        $this->getRequest()->setPost($postLogin);
         $url = Mage::getSingleton('Mage_Backend_Model_Url')->getUrl('adminhtml/system_account/index');
+        $this->getRequest()->setPost($postLogin);
         $this->dispatch($url);
 
         $expected = 'backend/admin/system_account/index';

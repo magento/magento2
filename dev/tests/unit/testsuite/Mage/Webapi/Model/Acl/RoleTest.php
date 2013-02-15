@@ -98,21 +98,20 @@ class Mage_Webapi_Model_Acl_RoleTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCollection()
     {
-        /** @var Mage_Webapi_Model_Resource_Acl_Role_Collection $collection */
-        $collection = $this->getMockBuilder('Mage_Webapi_Model_Resource_Acl_Role_Collection')
-            ->setConstructorArgs(array('resource' => $this->_roleResource))
-            ->setMethods(array('_initSelect'))
-            ->getMock();
+        /** @var PHPUnit_Framework_MockObject_MockObject $collection */
+        $collection = $this->getMock(
+            'Mage_Webapi_Model_Resource_Acl_Role_Collection',
+            array('_initSelect', 'setModel'),
+            array('resource' => $this->_roleResource),
+            '',
+            true
+        );
 
-        $collection->expects($this->any())
-            ->method('_initSelect')
-            ->withAnyParameters()
-            ->will($this->returnValue(null));
+        $collection->expects($this->any())->method('setModel')->with('Mage_Webapi_Model_Resource_Acl_Role');
 
         $model = $this->_createModel($this->_roleResource, $collection);
         $result = $model->getCollection();
 
-        $this->assertAttributeEquals('Mage_Webapi_Model_Acl_Role', '_model', $result);
         $this->assertAttributeEquals('Mage_Webapi_Model_Resource_Acl_Role', '_resourceModel', $result);
     }
 }

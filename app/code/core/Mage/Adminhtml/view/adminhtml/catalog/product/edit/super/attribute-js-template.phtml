@@ -38,76 +38,163 @@
         <input value="${attribute.code}" type="hidden"
             name="product[configurable_attributes_data][${attribute.id}][code]"/>
 
-        <div class="entry-edit-head">
-            <span class="ui-icon ui-icon-grip-dotted-vertical" style="float:left"></span>
-            <h4 class="icon-head head-edit-form fieldset-legend">
-                <input value="${attribute.label}"
-                    name="product[configurable_attributes_data][${attribute.id}][label]"
-                    data-store-label="${attribute.label}"
-                    class="store-label required-entry"/>
-                <label for="attribute-${attribute.id}">
-                    <input value="1"
-                        type="checkbox"
-                        class="use-default"
-                        name="product[configurable_attributes_data][${attribute.id}][use_default]"
-                        id="attribute-${attribute.id}"/>
-                    <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use default')?>
-            </h4>
-            <span class="ui-icon ui-icon-circle-close remove"></span>
-            <span class="ui-icon ui-icon-circle-triangle-s toggle"></span>
+        <div class="fieldset-wrapper" id="${attribute.id}-wrapper">
+            <div class="fieldset-wrapper-title">
+                <strong class="title" data-toggle="collapse" data-target="#${attribute.id}-content">
+                    <span>${attribute.label}</span>
+                </strong>
+                <div class="actions">
+                    <button type="button" title="<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Delete Variations Group')?>" class="action-delete">
+                        <span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Delete Variations Group')?></span>
+                    </button>
+                </div>
+                <div class="draggable-handle" title="<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Sort Variations')?>"></div>
+            </div>
+            <div class="fieldset-wrapper-content collapse" id="${attribute.id}-content">
+                <fieldset class="fieldset">
+                    <div class="field field-variation">
+                        <label class="label"><span><?php echo $this->__('Variation Label'); ?></span></label>
+                        <div class="control">
+                            <input type="text" value="${attribute.label}"
+                                   name="product[configurable_attributes_data][${attribute.id}][label]"
+                                   data-store-label="${attribute.label}"
+                                   class="store-label required-entry"/>
+                        </div>
+                        <div class="field-service">
+                            <label for="attribute-${attribute.id}" class="use-default">
+                                <input value="1"
+                                       type="checkbox"
+                                       class="use-default-control"
+                                       name="product[configurable_attributes_data][${attribute.id}][use_default]"
+                                       id="attribute-${attribute.id}"/>
+                                <span class="use-default-label"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Default')?></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th class="col-name">
+                                            <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Label')?>
+                                        </th>
+                                        <th class="col-change-price">
+                                            <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change Price')?>
+                                        </th>
+                                        <th class="col-include">
+                                            <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Include')?>
+                                        </th>
+                                        <th class="col-actions"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {{each(index, option) attribute.options}}
+                                <tr>
+                                    <td class="col-name">${option.label}</td>
+                                    <td class="col-change-price">
+                                        <input type="hidden"
+                                               name="product[configurable_attributes_data][${attribute.id}][values][${option.value}][value_index]"
+                                               value="${option.value}">
+
+                                        <div class="field field-change-pricing">
+                                            <div class="control">
+                                                <div class="fields-group-2">
+                                                    <div class="field">
+                                                        <div class="control">
+                                                            <input type="text" class="pricing-value"
+                                                                   name="product[configurable_attributes_data][${attribute.id}][values][${option.value}][pricing_value]"
+                                                                   value="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="field">
+                                                        <div class="control">
+                                                            <select name="product[configurable_attributes_data][${attribute.id}][values][${option.value}][is_percent]">
+                                                                <option value="0"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Fixed')?>
+                                                                </option>
+                                                                <option value="1"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Percentage')?>
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="col-include">
+                                        <input type="hidden"
+                                               name="product[configurable_attributes_data][${attribute.id}][values][${option.value}][include]"
+                                               value="0"/>
+                                        <div class="field choice">
+                                            <input type="checkbox" class="include"
+                                                   name="product[configurable_attributes_data][${attribute.id}][values][${option.value}][include]"
+                                                   value="1" checked="checked"/>
+                                        </div>
+                                    </td>
+                                    <td class="col-actions">
+                                        <button type="button" class="action-delete" title="<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Delete')?>">
+                                            <span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Delete')?></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                                <tr>
+                                    <td class="col-name">
+                                        <div class="field">
+                                            <div class="control">
+                                                <input type="text" value="" placeholder="<?php echo $this->__('begin typing to add value'); ?>" />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="col-change-price">
+                                        <input type="hidden"
+                                               name="name[]"
+                                               value="">
+
+                                        <div class="field field-change-pricing">
+                                            <div class="control">
+                                                <div class="fields-group-2">
+                                                    <div class="field">
+                                                        <div class="control">
+                                                            <input type="text" class="pricing-value"
+                                                                   name="pricing_value[]"
+                                                                   value="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="field">
+                                                        <div class="control">
+                                                            <select name="is_percent[]">
+                                                                <option value="0">Fixed</option>
+                                                                <option value="1">Percentage</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="col-include">
+                                        <input type="hidden"
+                                               name="include[]"
+                                               value="0"/>
+                                        <div class="field choice">
+                                            <input type="checkbox" class="include"
+                                                   name="include[]"
+                                                   value="1"/>
+                                        </div>
+                                    </td>
+                                    <td class="col-actions">
+                                        <button type="button" class="action-delete" title="<?php echo $this->__('Delete'); ?>" disabled>
+                                            <span><?php echo $this->__('Delete'); ?></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
         </div>
-        <fieldset>
-            <table style="width:100%">
-                <thead>
-                <tr>
-                    <th>
-                        <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Option Value')?>
-                    </th>
-                    <th class="column-price">
-                        <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change Price')?>
-                    </th>
-                    <th>
-                        <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Include')?>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {{each(index, option) attribute.options}}
-                <tr>
-                    <td>${option.label}</td>
-                    <td class="column-price">
-                        <input type="hidden"
-                            name="product[configurable_attributes_data][${attribute.id}][values][${option.value}][value_index]"
-                            value="${option.value}">
-                        <input type="text"
-                            name="product[configurable_attributes_data][${attribute.id}][values][${option.value}][pricing_value]"
-                            value="">
-                        <select
-                            name="product[configurable_attributes_data][${attribute.id}][values][${option.value}][is_percent]">
-                            <option value="0">
-                                <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Fixed')?>
-                            </option>
-                            <option value="1">
-                                <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Percentage')?>
-                            </option>
-                        </select>
-                    </td>
-                    <td>
-                        <input type="hidden"
-                            name="product[configurable_attributes_data][${attribute.id}][values][${option.value}][include]"
-                            value="0"/>
-                        <input type="checkbox" class="include"
-                            name="product[configurable_attributes_data][${attribute.id}][values][${option.value}][include]"
-                            value="1" checked="checked"/>
-                    </td>
-                </tr>
-                {{/each}}
-                </tbody>
-            </table>
-            <label>
-                <input type="checkbox" class="price-variation" />
-                <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Have price variations')?>
-            </label>
-        </fieldset>
     </div>
 </script>

@@ -93,11 +93,6 @@
                             <select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;">
                                 <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
                             </select>
-                            <script type="text/javascript">
-                            //<![CDATA[
-                                $('billing:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
-                            //]]>
-                            </script>
                             <input type="text" id="billing:region" name="billing[region]" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('region') ?>" style="display:none;" />
                         </div>
                     </div>
@@ -206,10 +201,8 @@
     var billing = new Billing('co-billing-form', '<?php echo $this->getUrl('checkout/onepage/getAddress') ?>address/', '<?php echo $this->getUrl('checkout/onepage/saveBilling') ?>');
     var billingForm = new VarienForm('co-billing-form');
 
-    //billingForm.setElementsRelation('billing:country_id', 'billing:region', '<?php echo $this->getUrl('directory/json/childRegion') ?>', '<?php echo $this->__('Select State/Province...') ?>');
     $('billing-address-select') && billing.newAddress(!$('billing-address-select').value);
 
-    var billingRegionUpdater = new RegionUpdater('billing:country_id', 'billing:region', 'billing:region_id', <?php echo $this->helper('Mage_Directory_Helper_Data')->getRegionJson() ?>, undefined, 'billing:postcode');
     if ($('onepage-guest-register-button')) {
         Event.observe($('onepage-guest-register-button'), 'click', function(event) {
             var billingRememberMe = $('co-billing-form').select('#remember-me-box');
@@ -223,4 +216,26 @@
         });
     }
 //]]>
+</script>
+<script type="text/javascript">
+    (function($) {
+        head.js(
+            "<?php echo $this->getViewFileUrl('Mage_Checkout::js/region-updater.js') ?>",
+            function() {
+                $('#billing\\:country_id').regionUpdater({
+                    regionListId: '#billing\\:region_id',
+                    regionInputId: '#billing\\:region',
+                    postcodeId: '#billing\\:postcode',
+                    regionJson: <?php echo $this->helper('Mage_Directory_Helper_Data')->getRegionJson() ?>,
+                    defaultRegion: "<?php echo $this->getAddress()->getRegionId() ?>",
+                    countriesWithOptionalZip: <?php echo $this->helper('Mage_Directory_Helper_Data')->getCountriesWithOptionalZip(true) ?>,
+                    clearError: function() {
+                        var selectorArr = ['#billing\\:region_id', '#billing\\:region', '#billing\\:postcode'];
+                        for (var i = 0; i < selectorArr.length; i++) {
+                            $(selectorArr[i]).removeClass('validation-failed').next("div.validation-advice").remove();
+                        }
+                    }
+                });
+            });
+    })(jQuery);
 </script>

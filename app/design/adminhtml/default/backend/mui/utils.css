@@ -27,7 +27,7 @@
 
 /* Hide from both screenreaders and browsers: h5bp.com/u */
 .hidden {
-    display: none !important;
+    display: none;
     visibility: hidden;
 }
 

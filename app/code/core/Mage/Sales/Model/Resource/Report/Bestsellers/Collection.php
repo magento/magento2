@@ -195,8 +195,8 @@ class Mage_Sales_Model_Resource_Report_Bestsellers_Collection
             $storeIds = array($storeIds);
         }
         $currentStoreIds = $this->_storesIds;
-        if (isset($currentStoreIds) && $currentStoreIds != Mage_Core_Model_App::ADMIN_STORE_ID
-            && $currentStoreIds != array(Mage_Core_Model_App::ADMIN_STORE_ID)) {
+        if (isset($currentStoreIds) && $currentStoreIds != Mage_Core_Model_AppInterface::ADMIN_STORE_ID
+            && $currentStoreIds != array(Mage_Core_Model_AppInterface::ADMIN_STORE_ID)) {
             if (!is_array($currentStoreIds)) {
                 $currentStoreIds = array($currentStoreIds);
             }

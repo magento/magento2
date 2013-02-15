@@ -284,7 +284,7 @@ class Mage_Payment_Helper_Data extends Mage_Core_Helper_Abstract
             if (!isset($data['model'])) {
                 continue;
             }
-            $method = Mage::app()->getConfig()->getModelClassName($data['model']);
+            $method = $data['model'];
             if (in_array($interface, class_implements($method))) {
                 $result[$code] = $data['title'];
             }

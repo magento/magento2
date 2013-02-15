@@ -155,7 +155,7 @@ class Varien_Data_Form_Element_Date extends Varien_Data_Form_Element_Abstract
         $this->addClass('input-text');
 
         $html = sprintf(
-            '<input name="%s" id="%s" value="%s" %s style="width:110px !important;" />',
+            '<input name="%s" id="%s" value="%s" %s />',
             $this->getName(),
             $this->getHtmlId(),
             $this->_escape($this->getValue()),

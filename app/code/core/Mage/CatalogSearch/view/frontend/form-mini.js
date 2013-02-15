@@ -24,8 +24,8 @@
  */
 /*jshint browser:true jquery:true*/
 (function ($) {
+    "use strict";
     $.widget('mage.catalogSearch', {
-
         options: {
             autocomplete: 'off',
             minSearchLength: 2,
@@ -64,16 +64,16 @@
         },
 
         /**
-         * @return {Element} The first element in the suggestion list.
          * @private
+         * @return {Element} The first element in the suggestion list.
          */
         _getFirstVisibleElement: function() {
             return this.responseList.indexList ? this.responseList.indexList.first() : false;
         },
 
         /**
-         * @return {Element} The last element in the suggestion list.
          * @private
+         * @return {Element} The last element in the suggestion list.
          */
         _getLastElement: function() {
             return this.responseList.indexList ? this.responseList.indexList.last() : false;
@@ -81,8 +81,8 @@
 
         /**
          * Clears the item selected from the suggestion list and resets the suggestion list.
-         * @param {boolean} all Controls whether to clear the suggestion list.
          * @private
+         * @param {boolean} all Controls whether to clear the suggestion list.
          */
         _resetResponseList: function(all) {
             this.responseList.selected = null;
@@ -94,8 +94,8 @@
         /**
          * Executes when the search box is submitted. Sets the search input field to the
          * value of the selected item.
-         * @param {Event} e The submit event
          * @private
+         * @param {Event} e The submit event
          */
         _onSubmit: function(e) {
             if (this.element.val() === this.options.placeholder || this.element.val() === '') {
@@ -109,21 +109,21 @@
         /**
          * Executes when keys are pressed in the search input field. Performs specific actions
          * depending on which keys are pressed.
+         * @private
          * @param {Event} e The key down event
          * @return {Boolean} Default return type for any unhandled keys
-         * @private
          */
-        _onKeyDown: function (e) {
+        _onKeyDown: function(e) {
             var keyCode = e.keyCode || e.which;
             switch (keyCode) {
-                case $.mage.constant.KEY_ESC:
+                case $.ui.keyCode.ESCAPE:
                     this._resetResponseList(true);
                     this.autoComplete.hide();
                     break;
-                case $.mage.constant.KEY_TAB:
+                case $.ui.keyCode.TAB:
                     this.searchForm.trigger('submit');
                     break;
-                case $.mage.constant.KEY_DOWN:
+                case $.ui.keyCode.DOWN:
                     if (this.responseList.indexList) {
                         if (!this.responseList.selected) {
                             this._getFirstVisibleElement().addClass(this.options.selectClass);
@@ -138,7 +138,7 @@
                         }
                     }
                     break;
-                case $.mage.constant.KEY_UP:
+                case $.ui.keyCode.UP:
                     if (this.responseList.indexList !== null) {
                         if (!this._getFirstVisibleElement().hasClass(this.options.selectClass)) {
                             this.responseList.selected = this.responseList.selected.removeClass(this.options.selectClass).prev().addClass(this.options.selectClass);
@@ -161,14 +161,14 @@
          * and mouseout events on the populated suggestion list dropdown.
          * @private
          */
-        _onPropertyChange: function () {
-            var searchField = this.element;
-            var clonePosition = {
-                position: 'absolute',
-                left: searchField.offset().left,
-                top: searchField.offset().top + searchField.outerHeight(),
-                width: searchField.outerWidth()
-            };
+        _onPropertyChange: function() {
+            var searchField = this.element,
+                clonePosition = {
+                    position: 'absolute',
+                    left: searchField.offset().left,
+                    top: searchField.offset().top + searchField.outerHeight(),
+                    width: searchField.outerWidth()
+                };
             if (searchField.val().length >= parseInt(this.options.minSearchLength, 10)) {
                 $.get(this.options.url, {q: searchField.val()}, $.proxy(function (data) {
                     this.responseList.indexList = this.autoComplete.html(data)
@@ -195,6 +195,5 @@
                 this.autoComplete.hide();
             }
         }
-
     });
 })(jQuery);

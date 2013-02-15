@@ -106,7 +106,7 @@ $numColumns = sizeof($this->getColumns());
                                 <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
                             </td>
                             <?php if ($this->shouldRenderEmptyCell($_item, $_column)):?>
-                                <td colspan="<?php echo $this->getEmptyCellColspan($_item)?>" class="empty-text <?php echo $this->getEmptyTextClass() ?> last"><?php echo $this->getEmptyCellLabel()?></td>
+                                <td colspan="<?php echo $this->getEmptyCellColspan($_item)?>" class="col-no-records <?php echo $this->getEmptyTextClass() ?> last"><?php echo $this->getEmptyCellLabel()?></td>
                             <?php endif;?>
                         <?php endif;?>
                     <?php endforeach; ?>

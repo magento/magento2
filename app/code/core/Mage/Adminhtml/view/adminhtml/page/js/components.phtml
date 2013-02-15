@@ -77,10 +77,7 @@
         /**
          * Declaration of resources for components (based on previously defined components)
          */
-        .extend('multisuggest', 'suggest',
-            '<?php echo $this->getViewFileUrl('mage/backend/multisuggest.js') ?>'
-        )
-        .extend('treeSuggest', 'multisuggest', [
+        .extend('treeSuggest', 'suggest', [
             '<?php echo $this->getViewFileUrl('jquery/jstree/jquery.hotkeys.js') ?>',
             '<?php echo $this->getViewFileUrl('jquery/jstree/jquery.jstree.js') ?>',
             '<?php echo $this->getViewFileUrl('mage/backend/tree-suggest.js') ?>'

@@ -35,6 +35,7 @@ class Mage_Core_Helper_CookieTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_object = new Mage_Core_Helper_Cookie(
+            $this->getMock('Mage_Core_Model_Translate', array(), array(), '', false, false),
             array(
                 'current_store' => $this->_getStoreStub(),
                 'cookie_model' => $this->_getCookieStub(array(1 => 1)),
@@ -47,6 +48,7 @@ class Mage_Core_Helper_CookieTest extends PHPUnit_Framework_TestCase
     {
         $this->assertFalse($this->_object->isUserNotAllowSaveCookie());
         $this->_object = new Mage_Core_Helper_Cookie(
+            $this->getMock('Mage_Core_Model_Translate', array(), array(), '', false, false),
             array(
                 'current_store' => $this->_getStoreStub(),
                 'cookie_model' => $this->_getCookieStub(array()),
@@ -72,6 +74,7 @@ class Mage_Core_Helper_CookieTest extends PHPUnit_Framework_TestCase
             ->will($this->returnCallback('Mage_Core_Helper_CookieTest::getConfigMethodStub'))
             ->with($this->equalTo('web/cookie/cookie_restriction_lifetime'));
         $this->_object = new Mage_Core_Helper_Cookie(
+            $this->getMock('Mage_Core_Model_Translate', array(), array(), '', false, false),
             array(
                 'current_store' => $storeStub,
                 'cookie_model' => $this->_getCookieStub(array(1 => 1)),

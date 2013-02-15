@@ -30,7 +30,7 @@ body          { background:#f2f2f2 url(../images/bkg_body.gif) 0 0 repeat; font:
 
 img           { border:0; vertical-align:top; }
 
-a             { color:#4f8100; text-decoration:none; }
+a,.l          { color:#4f8100; text-decoration:none; }
 a:hover       { text-decoration:underline; }
 :focus        { outline:0; }
 
@@ -86,6 +86,7 @@ ul,ol         { list-style:none; }
 .no-margin    { margin:0 !important; }
 .no-padding   { padding:0 !important; }
 .no-bg        { background:none !important; }
+.clear        { clear: both; }
 /* ======================================================================================= */
 
 

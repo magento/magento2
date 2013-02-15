@@ -46,11 +46,11 @@ class Mage_Core_Model_Resource_Config extends Mage_Core_Model_Resource_Db_Abstra
     /**
      * Load configuration values into xml config object
      *
-     * @param Mage_Core_Model_Config $xmlConfig
+     * @param Mage_Core_Model_Config_Base $xmlConfig
      * @param string $condition
      * @return Mage_Core_Model_Resource_Config
      */
-    public function loadToXml(Mage_Core_Model_Config $xmlConfig, $condition = null)
+    public function loadToXml(Mage_Core_Model_Config_Base $xmlConfig, $condition = null)
     {
         $read = $this->_getReadAdapter();
         if (!$read) {

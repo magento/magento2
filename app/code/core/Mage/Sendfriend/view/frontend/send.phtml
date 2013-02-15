@@ -30,114 +30,93 @@
  * @see Mage_Sendfriend_Block_Send
  */
 ?>
-<script type="text/javascript">
-//<![CDATA[
-    i=0;
-    var recipCount  = 1;
-    var maxRecip    = <?php echo $this->getMaxRecipients() ?>;
-    function remove_recipient(i){
-        $('recipients_name'+i).up(2).remove();
-        recipCount--;
-        if(recipCount<maxRecip && maxRecip != 0) {
-            $('add_recipient_button').show();
-            $('max_recipient_message').hide();
-        }
-        return false;
-    }
-
-    function add_recipient(){
-        ul = $('recipients_options');
-        var li_mail = Element.extend(document.createElement("LI"));
-        li_mail.addClassName('fields additional-row');
-        li_mail.innerHTML = '<p><a href="delete_email" title="<?php echo $this->jsQuoteEscape($this->__('Remove Email')) ?>" onclick="remove_recipient('+i+'); return false" class="btn-remove"><?php echo $this->jsQuoteEscape($this->__('Remove Email')) ?>"<\/a><\/p>'
-        li_mail.innerHTML += '<div class="field"><label for="recipients_name'+i+'" class="required"><em>*<\/em><?php echo $this->jsQuoteEscape($this->__('Name:')) ?><\/label><div class="input-box"><input name="recipients[name][]" type="text" class="input-text required-entry" id="recipients_name'+i+'" /><\/div>';
-        li_mail.innerHTML += '<div class="field"><label for="recipients_email'+i+'" class="required"><em>*<\/em><?php echo $this->jsQuoteEscape($this->__('Email Address:')) ?><\/label><div class="input-box"><input name="recipients[email][]" value="" title="<?php echo $this->jsQuoteEscape($this->__('Email Address')) ?>" id="recipients_email'+i+'" type="text" class="input-text required-entry validate-email" /><\/div><\/div>';
-        i++;
-        recipCount++;
-        if(recipCount>=maxRecip && maxRecip != 0) {
-            $('add_recipient_button').hide();
-            $('max_recipient_message').show();
-        }
-
-        ul.appendChild(li_mail);
-    }
-//]]>
+<script id="add-recipient-tmpl" type="text/x-jQuery-tmpl">
+    <p id="btn-remove${_index_}">
+        <a href="delete_email" class="btn-remove" title="<?php echo $this->jsQuoteEscape($this->__('Remove Email')) ?>"><?php echo $this->jsQuoteEscape($this->__('Remove Email')) ?>"</a>
+    </p>
+    <div class="field">
+        <label for="recipients-name${_index_}" class="required"><em>*</em> <?php echo $this->__('Name:')?></label>
+        <div class="input-box">
+            <input name="recipients[name][${_index_}]" type="text" title="<?php echo $this->__('Name:')?>" class="input-text" id="recipients-name${_index_}" data-validate="{required:true}"/>
+        </div>
+    </div>
+    <div class="field">
+        <label for="recipients-email${_index_}" class="required"><em>*</em> <?php echo $this->__('Email Address:') ?></label>
+        <div class="input-box">
+            <input name="recipients[email][${_index_}]" title="<?php echo $this->__('Email Address:') ?>" id="recipients-email${_index_}" type="text" class="input-text" data-validate="{required:true, 'validate-email':true}"/>
+        </div>
+    </div>
 </script>
-
 <div class="send-friend">
     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <div class="page-title">
         <h1><?php echo $this->__('Email to a Friend') ?></h1>
     </div>
-    <form action="<?php echo $this->getSendUrl() ?>" method="post" id="product_sendtofriend_form">
+    <form action="<?php echo $this->getSendUrl() ?>" method="post" id="product-sendtofriend-form">
         <div class="fieldset">
             <?php echo $this->getBlockHtml('formkey')?>
             <h2 class="legend"><?php echo $this->__('Sender:') ?></h2>
             <ul class="form-list" id="sender_options">
                 <li class="fields">
                     <div class="field">
-                        <label for="sender_name" class="required"><em>*</em><?php echo $this->__('Name:') ?></label>
+                        <label for="sender-name" class="required"><em>*</em><?php echo $this->__('Name:') ?></label>
                         <div class="input-box">
-                            <input name="sender[name]" value="<?php echo $this->escapeHtml($this->getUserName()) ?>" title="<?php echo $this->__('Name') ?>" id="sender_name" type="text" class="input-text required-entry" />
+                            <input name="sender[name]" value="<?php echo $this->escapeHtml($this->getUserName()) ?>" title="<?php echo $this->__('Name') ?>" id="sender-name" type="text" class="input-text" data-validate="{required:true}"/>
                         </div>
                     </div>
                     <div class="field">
-                       <label for="sender_email" class="required"><em>*</em><?php echo $this->__('Email:') ?></label>
+                       <label for="sender-email" class="required"><em>*</em><?php echo $this->__('Email:') ?></label>
                        <div class="input-box">
-                           <input name="sender[email]" value="<?php echo $this->escapeHtml($this->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" id="sender_email" type="text" class="input-text required-entry validate-email" />
+                           <input name="sender[email]" value="<?php echo $this->escapeHtml($this->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" id="sender-email" type="text" class="input-text" data-validate="{required:true, 'validate-email':true}"/>
                        </div>
                     </div>
                 </li>
                 <li class="wide">
-                    <label for="sender_message" class="required"><em>*</em><?php echo $this->__('Message:') ?></label>
+                    <label for="sender-message" class="required"><em>*</em><?php echo $this->__('Message:') ?></label>
                     <div class="input-box">
-                        <textarea name="sender[message]" class="input-text required-entry" id="sender_message" cols="3" rows="3"><?php echo $this->escapeHtml($this->getMessage())?></textarea>
+                        <textarea name="sender[message]" class="input-text" id="sender-message" cols="3" rows="3" data-validate="{required:true}"><?php echo $this->escapeHtml($this->getMessage())?></textarea>
                     </div>
                 </li>
             </ul>
         </div>
         <div class="fieldset">
             <h2 class="legend"><?php echo $this->__('Recipient:') ?></h2>
-            <ul class="form-list" id="recipients_options">
-                <li class="fields">
-                    <div class="field">
-                        <label for="recipients_name" class="required"><em>*</em><?php echo $this->__('Name:') ?></label>
-                        <div class="input-box">
-                            <input name="recipients[name][]" type="text" class="input-text required-entry" id="recipients_name" />
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label for="recipients_email" class="required"><em>*</em><?php echo $this->__('Email Address:') ?></label>
-                        <div class="input-box">
-                            <input name="recipients[email][]" value="" title="<?php echo $this->__('Email Address') ?>" id="recipients_email" type="text" class="input-text required-entry validate-email" />
-                        </div>
-                    </div>
-                </li>
+            <ul class="form-list" id="recipients-options">
+                <li class="no-display">&nbsp;</li>
             </ul>
         </div>
         <div class="buttons-set">
-            <p class="back-link"><a href="#" onclick="history.back(); return false;"><small>&laquo; </small><?php echo $this->__('Back') ?></a></p>
+            <p class="back-link"><a href="#" role="back"><small>&laquo; </small><?php echo $this->__('Back') ?></a></p>
             <button type="submit" class="button<?php if (!$this->canSend()):?> disabled<?php endif ?>"<?php if (!$this->canSend()):?> disabled="disabled"<?php endif ?>><span><span><?php echo $this->__('Send Email') ?></span></span></button>
-            <div id="max_recipient_message" style="display:none;">
+            <div id="max-recipient-message" style="display:none;">
                 <?php if ($this->getMaxRecipients()): ?>
                   <p class="limit"><?php echo $this->__('Maximum %d email addresses allowed.', $this->getMaxRecipients()) ?></p>
                 <?php endif; ?>
             </div>
             <?php if (1 < $this->getMaxRecipients()): ?>
-                <p id="add_recipient_button">
-                    <button type="button" onclick="add_recipient();" class="button"><span><span><?php echo $this->__('Add Recipient') ?></span></span></button>
+                <p>
+                    <button type="button" id="add-recipient-button" class="button"><span><span><?php echo $this->__('Add Recipient') ?></span></span></button>
                 </p>
             <?php endif; ?>
         </div>
     </form>
     <script type="text/javascript">
-    //<![CDATA[
-        var productSendtofriendForm = new VarienForm('product_sendtofriend_form');
-        productSendtofriendForm.submit = function() {
-            if(this.validator.validate()) {
-                this.form.submit();
-            }
-        }.bind(productSendtofriendForm);
-    //]]>
+        (function($) {
+            head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
+                "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
+                "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+                "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
+                "<?php echo $this->getViewFileUrl('Mage_Page::js/row-builder.js')?>", function() {
+                    $('#product-sendtofriend-form').rowBuilder({
+                        rowTemplate: '#add-recipient-tmpl',
+                        rowContainer: '#recipients-options',
+                        maxRows: '<?php echo $this->getMaxRecipients() ?>',
+                        maxRowsMsg: '#max-recipient-message',
+                        addRowBtn: '#add-recipient-button',
+                        additionalRowClass: 'additional-row'
+                    }).validation();
+                    $('p.back-link a[role="back"]').on('click', function() { history.back(); return false; });
+                })
+        })(jQuery);
     </script>
 </div>

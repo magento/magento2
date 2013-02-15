@@ -126,7 +126,7 @@ class Mage_Tax_Model_Resource_Report_Tax_Createdat extends Mage_Reports_Model_Re
 
             $columns = array(
                 'period'                => 'period',
-                'store_id'              => new Zend_Db_Expr(Mage_Core_Model_App::ADMIN_STORE_ID),
+                'store_id'              => new Zend_Db_Expr(Mage_Core_Model_AppInterface::ADMIN_STORE_ID),
                 'code'                  => 'code',
                 'order_status'          => 'order_status',
                 'percent'               => 'MAX(' . $writeAdapter->quoteIdentifier('percent') . ')',

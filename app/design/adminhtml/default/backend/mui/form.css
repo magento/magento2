@@ -352,9 +352,14 @@ span.required {
     padding-top: 20px;
 }
 
-.form-inline .control .control-value {
+.control .control-value {
     display: inline-block;
-    padding: 8px 0 0;
+    padding: 5px 0 0;
+    vertical-align: top;
+}
+
+.control .control-value.special {
+    font-weight: bold;
 }
 
 /*

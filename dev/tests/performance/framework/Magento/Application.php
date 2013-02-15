@@ -195,7 +195,8 @@ class Magento_Application
      */
     protected function _bootstrap()
     {
-        Mage::app();
+        /** @var $app Mage_Core_Model_App */
+        Mage::getObjectManager()->get('Mage_Core_Model_App');
         return $this;
     }
 

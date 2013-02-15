@@ -23,12 +23,24 @@
  */
 class Mage_Core_Model_DirTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_fileSystemMock;
+
+    public function setUp()
+    {
+        $this->_fileSystemMock = $this->getMock('Varien_Io_File',
+            array('checkAndCreateFolder'), array(), '', false, false
+        );
+    }
+
     public function testGetWritableDirCodes()
     {
         $codes = Mage_Core_Model_Dir::getWritableDirCodes();
         $this->assertInternalType('array', $codes);
         $this->assertNotEmpty($codes);
-        $dir = new Mage_Core_Model_Dir(__DIR__);
+        $dir = new Mage_Core_Model_Dir(__DIR__, $this->_fileSystemMock);
         foreach ($codes as $code) {
             $this->assertNotEmpty($dir->getDir($code));
         }
@@ -42,7 +54,7 @@ class Mage_Core_Model_DirTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidUri($code, $value)
     {
-        new Mage_Core_Model_Dir(__DIR__, array($code => $value));
+        new Mage_Core_Model_Dir(__DIR__, $this->_fileSystemMock, array($code => $value));
     }
 
     /**
@@ -65,11 +77,14 @@ class Mage_Core_Model_DirTest extends PHPUnit_Framework_TestCase
 
     public function testGetUri()
     {
-        $dir = new Mage_Core_Model_Dir(__DIR__, array(
-            Mage_Core_Model_Dir::PUB   => '',
-            Mage_Core_Model_Dir::MEDIA => 'test',
-            'custom' => 'test2'
-        ));
+        $dir = new Mage_Core_Model_Dir(__DIR__,
+            $this->_fileSystemMock,
+            array(
+                Mage_Core_Model_Dir::PUB   => '',
+                Mage_Core_Model_Dir::MEDIA => 'test',
+                'custom' => 'test2'
+            )
+        );
 
         // arbitrary custom value
         $this->assertEquals('test2', $dir->getUri('custom'));
@@ -83,7 +98,7 @@ class Mage_Core_Model_DirTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('test/upload', $dir->getUri(Mage_Core_Model_Dir::UPLOAD));
 
         // dirs should not be affected (there is no getter for all directories, so use whatever getter is available)
-        $default = new Mage_Core_Model_Dir(__DIR__);
+        $default = new Mage_Core_Model_Dir(__DIR__, $this->_fileSystemMock);
         foreach (Mage_Core_Model_Dir::getWritableDirCodes() as $code) {
             $this->assertEquals($default->getDir($code), $dir->getDir($code));
         }
@@ -93,7 +108,7 @@ class Mage_Core_Model_DirTest extends PHPUnit_Framework_TestCase
     {
         $newRoot = __DIR__ . DIRECTORY_SEPARATOR . 'root';
         $newMedia = __DIR__ . DIRECTORY_SEPARATOR . 'media';
-        $dir = new Mage_Core_Model_Dir(__DIR__, array(), array(
+        $dir = new Mage_Core_Model_Dir(__DIR__, $this->_fileSystemMock, array(), array(
             Mage_Core_Model_Dir::ROOT => $newRoot,
             Mage_Core_Model_Dir::MEDIA => $newMedia,
             'custom' => 'test2'
@@ -111,7 +126,7 @@ class Mage_Core_Model_DirTest extends PHPUnit_Framework_TestCase
         $this->assertStringStartsWith($newMedia, $dir->getDir(Mage_Core_Model_Dir::UPLOAD));
 
         // uris should not be affected
-        $default = new Mage_Core_Model_Dir(__DIR__);
+        $default = new Mage_Core_Model_Dir(__DIR__, $this->_fileSystemMock);
         foreach (array(
             Mage_Core_Model_Dir::PUB,
             Mage_Core_Model_Dir::PUB_LIB,

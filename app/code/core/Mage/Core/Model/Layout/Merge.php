@@ -118,7 +118,7 @@ class Mage_Core_Model_Layout_Merge
         }
 
         $this->_storeId = Mage::app()->getStore(empty($arguments['store']) ? null : $arguments['store'])->getId();
-        $this->_elementClass = Mage::getConfig()->getModelClassName('Mage_Core_Model_Layout_Element');
+        $this->_elementClass = 'Mage_Core_Model_Layout_Element';
 
         foreach (Mage::getConfig()->getPathVars() as $key => $value) {
             $this->_subst['from'][] = '{{' . $key . '}}';

@@ -438,7 +438,7 @@ class Mage_Catalog_Model_Resource_Category_Flat extends Mage_Index_Model_Resourc
         if ($this->_isBuilt === null) {
             $defaultStoreView = Mage::app()->getDefaultStoreView();
             if ($defaultStoreView === null) {
-                $defaultStoreId = Mage_Core_Model_App::ADMIN_STORE_ID;
+                $defaultStoreId = Mage_Core_Model_AppInterface::ADMIN_STORE_ID;
             } else {
                 $defaultStoreId = $defaultStoreView->getId();
             }

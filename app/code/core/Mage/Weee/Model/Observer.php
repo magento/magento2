@@ -153,7 +153,7 @@ class Mage_Weee_Model_Observer extends Mage_Core_Model_Abstract
     {
         $response = $observer->getEvent()->getResponse();
         $types    = $response->getTypes();
-        $types['weee'] = Mage::getConfig()->getBlockClassName('Mage_Weee_Block_Element_Weee_Tax');
+        $types['weee'] = 'Mage_Weee_Block_Element_Weee_Tax';
         $response->setTypes($types);
         return $this;
     }

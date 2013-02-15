@@ -46,6 +46,7 @@ class Mage_Backend_Utility_Controller extends Magento_Test_TestCase_ControllerAb
     {
         parent::setUp();
 
+        Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::PART_CONFIG);
         Mage::getSingleton('Mage_Backend_Model_Url')->turnOffSecretKey();
 
         $this->_auth = Mage::getModel('Mage_Backend_Model_Auth');

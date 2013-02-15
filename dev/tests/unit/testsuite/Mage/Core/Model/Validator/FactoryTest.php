@@ -31,7 +31,7 @@ class Mage_Core_Model_Validator_FactoryTest extends PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var Mage_Core_Model_Config
+     * @var Mage_Core_Model_Config_Modules_Reader
      */
     protected $_config;
 
@@ -74,7 +74,7 @@ class Mage_Core_Model_Validator_FactoryTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(new Magento_Translate_Adapter()));
 
         // Config mock
-        $this->_config = $this->getMockBuilder('Mage_Core_Model_Config')
+        $this->_config = $this->getMockBuilder('Mage_Core_Model_Config_Modules_Reader')
             ->setMethods(array('getModuleConfigurationFiles'))
             ->disableOriginalConstructor()
             ->getMock();
@@ -86,7 +86,9 @@ class Mage_Core_Model_Validator_FactoryTest extends PHPUnit_Framework_TestCase
         // Translate adapter mock
         $designMock = $this->getMock('Mage_Core_Model_Design_Package', array(), array(), '', false);
         $this->_translateAdapter = $this->getMockBuilder('Mage_Core_Model_Translate')
-            ->setConstructorArgs(array($designMock))
+            ->setConstructorArgs(array($designMock,
+                $this->getMock('Mage_Core_Model_Locale_Hierarchy_Loader', array(), array(), '', false, false))
+            )
             ->setMethods(array('_getTranslatedString'))
             ->getMock();
         $this->_translateAdapter->expects($this->any())
@@ -113,8 +115,11 @@ class Mage_Core_Model_Validator_FactoryTest extends PHPUnit_Framework_TestCase
             ->with('Mage_Core_Model_Translate_Expr')
             ->will($this->returnValue(new Mage_Core_Model_Translate_Expr()));
 
-        $factory = new Mage_Core_Model_Validator_Factory($this->_objectManager, $this->_config,
-            $this->_translateAdapter);
+        $factory = new Mage_Core_Model_Validator_Factory(
+            $this->_objectManager,
+            $this->_config,
+            $this->_translateAdapter
+        );
         $actualConfig = $factory->getValidatorConfig();
         $this->assertInstanceOf('Magento_Validator_Config', $actualConfig,
             'Object of incorrect type was created');

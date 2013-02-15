@@ -89,8 +89,7 @@ class Mage_Payment_Model_Config
         }
         $modelName = $config['model'];
 
-        $className = Mage::getConfig()->getModelClassName($modelName);
-        if (!class_exists($className)) {
+        if (!class_exists($modelName)) {
             return false;
         }
 

@@ -31,6 +31,21 @@ require_once('googlecheckout/googlerequest.php');
 
 abstract class Mage_GoogleCheckout_Model_Api_Xml_Abstract extends Varien_Object
 {
+    /**
+     * @var Mage_Core_Model_Translate
+     */
+    protected $_translator;
+
+    /**
+     * @param Mage_Core_Model_Translate $translator
+     * @param array $data
+     */
+    public function __construct(Mage_Core_Model_Translate $translator, array $data = array())
+    {
+        parent::__construct($data);
+        $this->_translator = $translator;
+    }
+
     public function log($text, $nl=true)
     {
         error_log(print_r($text, 1) . ($nl ? "\n" : ''), 3, Mage::getBaseDir('log') . DS . 'callback.log');
@@ -42,7 +57,7 @@ abstract class Mage_GoogleCheckout_Model_Api_Xml_Abstract extends Varien_Object
         $args = func_get_args();
         $expr = new Mage_Core_Model_Translate_Expr(array_shift($args), 'Mage_GoogleCheckout');
         array_unshift($args, $expr);
-        return Mage::app()->getTranslator()->translate($args);
+        return $this->_translator->translate($args);
     }
 
     public function getMerchantId()

@@ -29,7 +29,7 @@
 <layout version="0.1.0">
     <default>
         <reference name="head">
-            <action method="addJs"><file>Mage_Weee::tax_toggle.js</file></action>
+            <action method="addJs"><file>Mage_Weee::tax-toggle.js</file></action>
         </reference>
     </default>
 </layout>

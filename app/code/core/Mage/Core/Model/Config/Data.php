@@ -109,7 +109,7 @@ class Mage_Core_Model_Config_Data extends Mage_Core_Model_Abstract
     }
     
 
-     /**
+    /**
      * Get value by key for new user data from <section>/groups/<group>/fields/<field>
      * 
      * @return string

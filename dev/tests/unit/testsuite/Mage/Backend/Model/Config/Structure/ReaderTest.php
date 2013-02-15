@@ -35,7 +35,7 @@ class Mage_Backend_Model_Config_Structure_ReaderTest extends PHPUnit_Framework_T
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_appConfigMock;
+    protected $_configMock;
 
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
@@ -49,7 +49,7 @@ class Mage_Backend_Model_Config_Structure_ReaderTest extends PHPUnit_Framework_T
 
     public function setUp()
     {
-        $this->_appConfigMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
+        $this->_configMock = $this->getMock('Mage_Core_Model_Config_Modules_Reader', array(), array(), '', false);
         $this->_cacheMock = $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false);
         $this->_cacheMock->expects($this->any())->method('canUse')->will($this->returnValue(true));
         $this->_converterMock = $this->getMock(
@@ -68,7 +68,7 @@ class Mage_Backend_Model_Config_Structure_ReaderTest extends PHPUnit_Framework_T
             ->will($this->returnValue($cachedData));
 
         $model = new Mage_Backend_Model_Config_Structure_Reader(
-            $this->_appConfigMock, $this->_cacheMock, $this->_converterMock
+            $this->_cacheMock, $this->_configMock, $this->_converterMock
         );
         $this->assertEquals($cachedObject, $model->getData());
     }
@@ -82,7 +82,7 @@ class Mage_Backend_Model_Config_Structure_ReaderTest extends PHPUnit_Framework_T
             array('config' => array('system' => $expected))
         ));
         $filePath = dirname(dirname(__DIR__)) . '/_files';
-        $this->_appConfigMock->expects($this->once())
+        $this->_configMock->expects($this->once())
             ->method('getModuleConfigurationFiles')
             ->will($this->returnValue(array($filePath . '/system_2.xml')));
 
@@ -91,7 +91,7 @@ class Mage_Backend_Model_Config_Structure_ReaderTest extends PHPUnit_Framework_T
         );
 
         $model = new Mage_Backend_Model_Config_Structure_Reader(
-            $this->_appConfigMock, $this->_cacheMock, $this->_converterMock, false
+            $this->_cacheMock, $this->_configMock, $this->_converterMock, false
         );
         $this->assertEquals($expected, $model->getData());
     }

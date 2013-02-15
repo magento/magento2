@@ -38,8 +38,8 @@
     </adminhtml_dashboard_index>
     <adminhtml_cache_index>
         <reference name="content">
-            <block type="Mage_Adminhtml_Block_Cache" name="cache"></block>
-            <block type="Mage_Adminhtml_Block_Cache_Additional" name="cache.additional" template="system/cache/additional.phtml"></block>
+            <block type="Mage_Adminhtml_Block_Cache" name="cache" />
+            <block type="Mage_Adminhtml_Block_Cache_Additional" name="cache.additional" template="system/cache/additional.phtml" />
         </reference>
     </adminhtml_cache_index>
 </layout>

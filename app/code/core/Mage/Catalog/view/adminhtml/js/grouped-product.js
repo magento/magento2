@@ -24,6 +24,7 @@
  */
 /*jshint browser:true jquery:true*/
 (function($) {
+    'use strict';
     $.widget('mage.groupedProduct', {
         _create: function () {
             this.$grid = this.element.find('#grouped_grid');
@@ -75,13 +76,13 @@
                 $('#grouped-product-popup').dialog('open');
                 return false;
             });
-            this.$grid.on('click', '.product-delete button', function (event) {
+            this.$grid.on('click', '.product-delete button', function () {
                 $(this).closest('tr').hide().addClass('ignore-validate');
                 widget._updatePopupGrid();
                 widget._updateHiddenField(widget._getSelectedIds());
                 widget._updateGridVisibility();
             });
-            this.$grid.on('change keyup', 'input[type="text"]', function (event) {
+            this.$grid.on('change keyup', 'input[type="text"]', function () {
                 widget._updateHiddenField(widget._getSelectedIds());
             });
             this.options.grid.rowClickCallback = function () {};

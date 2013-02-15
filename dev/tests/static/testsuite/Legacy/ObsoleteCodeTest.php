@@ -223,9 +223,10 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
         foreach (self::$_methods as $row) {
             list($method, $class, $suggestion) = $row;
             if (!$this->_isClassSkipped($content, $class)) {
-                $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($method, '/') . '\s*\(/iS', $content,
-                    sprintf("Method '%s' is obsolete. Replacement suggestion: %s", $method, $suggestion)
-                );
+                $message = sprintf("Method '%s' is obsolete. Replacement suggestion: %s", $method, $suggestion);
+                 $this->_assertNotRegExp('/this->' . preg_quote($method, '/') . '\s*\(/iS', $content, $message);
+                $this->_assertNotRegExp('/ion\s*' . preg_quote($method, '/') . '\s*\(/iS', $content, $message);
+                $this->_assertNotRegExp('/self::\s*' . preg_quote($method, '/') . '\s*\(/iS', $content, $message);
             }
         }
     }

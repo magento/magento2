@@ -27,29 +27,29 @@
 <div class="page-title">
     <h1><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Orders and Returns') ?></h1>
 </div>
-<form id="oar_widget_orders_and_returns_form" action="<?php echo $this->getActionUrl() ?>" method="post" class="search-form" name="guest_post">
+<form id="oar-widget-orders-and-returns-form" action="<?php echo $this->getActionUrl() ?>" method="post" class="search-form" name="guest_post">
     <div class="fieldset">
         <h2 class="legend"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Order Information') ?></h2>
         <ul class="form-list">
             <li class="fields">
                 <div class="field">
-                    <label for="oar_order_id" class="required"><em>*</em><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Order ID') ?></label>
+                    <label for="oar-order-id" class="required"><em>*</em><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Order ID') ?></label>
                     <div class="input-box">
-                        <input type="text" class="input-text required-entry" id="oar_order_id" name="oar_order_id" />
+                        <input type="text" class="input-text" id="oar-order-id" name="oar_order_id" data-validate="{required:true}"/>
                     </div>
                 </div>
                 <div class="field">
-                    <label for="oar_billing_lastname" class="required"><em>*</em><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Billing Last Name') ?></label>
+                    <label for="oar-billing-lastname" class="required"><em>*</em><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Billing Last Name') ?></label>
                     <div class="input-box">
-                        <input type="text" class="input-text required-entry" id="oar_billing_lastname" name="oar_billing_lastname" />
+                        <input type="text" class="input-text" id="oar-billing-lastname" name="oar_billing_lastname" data-validate="{required:true}"/>
                     </div>
                 </div>
             </li>
             <li class="fields">
                 <div class="field">
-                    <label for="quick_search_type_id" class="required"><em>*</em><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Find Order By:') ?></label>
+                    <label for="quick-search-type-id" class="required"><em>*</em><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Find Order By:') ?></label>
                     <div class="input-box">
-                        <select name="oar_type" id="quick_search_type_id" class="select" onchange="showIdentifyBlock(this.value);">
+                        <select name="oar_type" id="quick-search-type-id" class="select">
                            <option value="email"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Email Address'); ?></option>
                            <option value="zip"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('ZIP Code'); ?></option>
                         </select>
@@ -58,13 +58,13 @@
                 <div id="oar-email" class="field">
                     <label for="oar_email" class="required"><em>*</em><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Email Address') ?></label>
                     <div class="input-box">
-                        <input type="text" class="input-text validate-email required-entry" id="oar_email" name="oar_email"/>
+                        <input type="text" class="input-text" id="oar_email" name="oar_email" data-validate="{required:true, 'validate-email':true}"/>
                     </div>
                 </div>
                 <div id="oar-zip" class="field">
                     <label for="oar_zip" class="required"><em>*</em><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Billing ZIP Code') ?></label>
                     <div class="input-box">
-                        <input type="text" class="input-text required-entry" id="oar_zip" name="oar_zip"/>
+                        <input type="text" class="input-text" id="oar_zip" name="oar_zip" data-validate="{required:true}"/>
                     </div>
                 </div>
             </li>
@@ -75,20 +75,11 @@
     </div>
 </form>
 <script type="text/javascript">
-//<![CDATA[
-    var dataForm = new VarienForm('oar_widget_orders_and_returns_form', true);
-
-    function showIdentifyBlock(id)
-    {
-        if (id == 'zip') {
-            $('oar-zip').show();
-            $('oar-email').hide();
-        } else {
-            $('oar-zip').hide();
-            $('oar-email').show();
-        }
-        return false;
-    }
-    showIdentifyBlock($('quick_search_type_id').value);
-//]]>
+    head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
+        "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
+        "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+        "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
+        "<?php echo $this->getViewFileUrl('Mage_Sales::orders-returns.js');?>", function() {
+            jQuery('#oar-widget-orders-and-returns-form').ordersReturns().validation();
+    });
 </script>

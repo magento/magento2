@@ -61,9 +61,11 @@ class ArrayDefinitionCompiler
      */
     public function __construct()
     {
-        $this->_config = new Mage_Core_Model_Config(new Magento_ObjectManager_Zend());
-        $this->_config->loadBase();
-        $this->_config->loadModules();
+        $objectManager = new Mage_Core_Model_ObjectManager(new Mage_Core_Model_ObjectManager_Config(array(
+            Mage::PARAM_BASEDIR => BP,
+            Mage::PARAM_BAN_CACHE => true
+        )), BP);
+        $this->_config = $objectManager->get('Mage_Core_Model_Config');
 
         $this->_initCommonDependencies();
     }
@@ -272,9 +274,10 @@ echo "Compiling Magento\n";
 $definitions = array_merge_recursive($definitions, $compiler->compileModule(BP . '/lib/Magento'));
 echo "Compiling Mage\n";
 $definitions = array_merge_recursive($definitions, $compiler->compileModule(BP . '/lib/Mage'));
-echo "Compiling generated entities\n";
-$definitions = array_merge_recursive($definitions, $compiler->compileModule(BP . '/var/generation'));
-
+if (is_readable(BP . '/var/generation')) {
+    echo "Compiling generated entities\n";
+    $definitions = array_merge_recursive($definitions, $compiler->compileModule(BP . '/var/generation'));
+}
 foreach ($definitions as $key => $definition) {
     $definitions[$key] = json_encode($definition);
 }

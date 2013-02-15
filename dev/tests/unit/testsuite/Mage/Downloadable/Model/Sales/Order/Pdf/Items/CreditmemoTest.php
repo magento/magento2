@@ -64,7 +64,8 @@ class Mage_Downloadable_Model_Sales_Order_Pdf_Items_CreditmemoTest extends PHPUn
             array('getLinks', 'getLinksTitle'),
             $modelConstructorArgs
         );
-        $this->_model->setStringHelper(new Mage_Core_Helper_String());
+        $translator = $this->getMock('Mage_Core_Model_Translate', array(), array(), '', false, false);
+        $this->_model->setStringHelper(new Mage_Core_Helper_String($translator));
         $this->_model->setOrder($this->_order);
         $this->_model->setPdf($this->_pdf);
         $this->_model->setPage(new Zend_Pdf_Page('a4'));

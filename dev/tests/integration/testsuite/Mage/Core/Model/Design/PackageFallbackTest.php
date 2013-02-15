@@ -39,11 +39,11 @@ class Mage_Core_Model_Design_PackageFallbackTest extends PHPUnit_Framework_TestC
     protected function setUp()
     {
         Magento_Test_Helper_Bootstrap::getInstance()->reinitialize(array(
-            Mage_Core_Model_App::INIT_OPTION_DIRS => array(
+            Mage::PARAM_APP_DIRS => array(
                 Mage_Core_Model_Dir::THEMES => dirname(__DIR__) . '/_files/design'
             )
         ));
-        $this->_model = new Mage_Core_Model_Design_Package(Mage::getObjectManager()->create('Magento_Filesystem'));
+        $this->_model = Mage::getObjectManager()->create('Mage_Core_Model_Design_Package');
         $this->_model->setDesignTheme('test/default');
     }
 

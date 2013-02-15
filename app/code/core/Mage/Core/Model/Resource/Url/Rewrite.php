@@ -77,7 +77,7 @@ class Mage_Core_Model_Resource_Url_Rewrite extends Mage_Core_Model_Resource_Db_A
         $select = parent::_getLoadSelect($field, $value, $object);
 
         if (!is_null($object->getStoreId())) {
-            $select->where('store_id IN(?)', array(Mage_Core_Model_App::ADMIN_STORE_ID, $object->getStoreId()));
+            $select->where('store_id IN(?)', array(Mage_Core_Model_AppInterface::ADMIN_STORE_ID, $object->getStoreId()));
             $select->order('store_id ' . Varien_Db_Select::SQL_DESC);
             $select->limit(1);
         }
@@ -138,7 +138,7 @@ class Mage_Core_Model_Resource_Url_Rewrite extends Mage_Core_Model_Resource_Db_A
         $select  = $adapter->select()
             ->from($this->getMainTable())
             ->where('request_path IN (:' . implode(', :', array_flip($pathBind)) . ')')
-            ->where('store_id IN(?)', array(Mage_Core_Model_App::ADMIN_STORE_ID, (int)$object->getStoreId()));
+            ->where('store_id IN(?)', array(Mage_Core_Model_AppInterface::ADMIN_STORE_ID, (int)$object->getStoreId()));
 
         $items = $adapter->fetchAll($select, $pathBind);
 

@@ -62,9 +62,6 @@ class Integrity_Modular_TemplateFilesTest extends Magento_Test_TestCase_Integrit
 
             $templates = array();
             foreach (Utility_Classes::collectModuleClasses('Block') as $blockClass => $module) {
-                if ($this->_isClassBroken($blockClass)) {
-                    continue;
-                }
                 if (!in_array($module, $this->_getEnabledModules())) {
                     continue;
                 }
@@ -83,7 +80,10 @@ class Integrity_Modular_TemplateFilesTest extends Magento_Test_TestCase_Integrit
                     $area = 'adminhtml';
                 }
 
-                Mage::getConfig()->setCurrentAreaCode($area);
+            Mage::app()->loadAreaPart(
+                Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::AREA_ADMINHTML
+            );
+            Mage::getConfig()->setCurrentAreaCode($area);
 
                 $block = Mage::getModel($blockClass);
                 $template = $block->getTemplate();
@@ -97,22 +97,6 @@ class Integrity_Modular_TemplateFilesTest extends Magento_Test_TestCase_Integrit
             trigger_error("Corrupted data provider. Last known block instantiation attempt: '{$blockClass}'."
                 . " Exception: {$e}", E_USER_ERROR);
         }
-    }
-
-    /**
-     * Temporary stub for classes that trigger errors on attempt to instantiate
-     *
-     * @bug MAGETWO-7377
-     * @param string $class
-     * @return bool
-     */
-    private function _isClassBroken($class)
-    {
-        return in_array($class, array(
-            'Mage_Theme_Block_Adminhtml_Wysiwyg_Files_Content',
-            'Mage_Theme_Block_Adminhtml_Wysiwyg_Files_Tree',
-            'Mage_Theme_Block_Adminhtml_Wysiwyg_Files_Content_Uploader',
-        ));
     }
 
     /**

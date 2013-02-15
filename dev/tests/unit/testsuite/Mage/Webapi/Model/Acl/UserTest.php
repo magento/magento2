@@ -144,21 +144,20 @@ class Mage_Webapi_Model_Acl_UserTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCollection()
     {
-        /** @var Mage_Webapi_Model_Resource_Acl_User_Collection $collection */
-        $collection = $this->getMockBuilder('Mage_Webapi_Model_Resource_Acl_User_Collection')
-            ->setConstructorArgs(array('resource' => $this->_userResource))
-            ->setMethods(array('_initSelect'))
-            ->getMock();
+        /** @var PHPUnit_Framework_MockObject_MockObject $collection */
+        $collection = $this->getMock(
+            'Mage_Webapi_Model_Resource_Acl_User_Collection',
+            array('_initSelect', 'setModel'),
+            array('resource' => $this->_userResource),
+            '',
+            true
+        );
 
-        $collection->expects($this->any())
-            ->method('_initSelect')
-            ->withAnyParameters()
-            ->will($this->returnValue(null));
+        $collection->expects($this->any())->method('setModel')->with('Mage_Webapi_Model_Acl_User');
 
         $model = $this->_createModel($this->_userResource, $collection);
         $result = $model->getCollection();
 
-        $this->assertAttributeEquals('Mage_Webapi_Model_Acl_User', '_model', $result);
         $this->assertAttributeEquals('Mage_Webapi_Model_Resource_Acl_User', '_resourceModel', $result);
     }
 }

@@ -63,38 +63,5 @@ if (empty($args)) {
 define('BARE_BOOTSTRAP', 1);
 require_once __DIR__ . '/../../app/bootstrap.php';
 
-$installer = new Mage_Install_Model_Installer_Console(
-    new Magento_Filesystem(new Magento_Filesystem_Adapter_Local()),
-    $args
-);
-if (isset($args['show_locales'])) {
-    var_export($installer->getAvailableLocales());
-} else if (isset($args['show_currencies'])) {
-    var_export($installer->getAvailableCurrencies());
-} else if (isset($args['show_timezones'])) {
-    var_export($installer->getAvailableTimezones());
-} else if (isset($args['show_install_options'])) {
-    var_export($installer->getAvailableInstallOptions());
-} else {
-    if (isset($args['config']) && file_exists($args['config'])) {
-        $config = (array) include($args['config']);
-        $args = array_merge((array)$config, $args);
-    }
-    $isUninstallMode = isset($args['uninstall']);
-    if ($isUninstallMode) {
-        $result = $installer->uninstall();
-    } else {
-        $result = $installer->install($args);
-    }
-    if (!$installer->hasErrors()) {
-        if ($isUninstallMode) {
-            $msg = $result ? 'Uninstalled successfully' : 'Ignoring attempt to uninstall non-installed application';
-        } else {
-            $msg = 'Installed successfully' . ($result ? ' (encryption key "' . $result . '")' : '');
-        }
-        echo $msg . PHP_EOL;
-    } else {
-        echo implode(PHP_EOL, $installer->getErrors()) . PHP_EOL;
-        exit(1);
-    }
-}
+$entryPoint = new Mage_Install_Model_EntryPoint_Console(BP, $args);
+$entryPoint->processRequest();

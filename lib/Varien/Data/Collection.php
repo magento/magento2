@@ -552,7 +552,6 @@ class Varien_Data_Collection implements IteratorAggregate, Countable
      */
     function setItemObjectClass($className)
     {
-        $className = Mage::getConfig()->getModelClassName($className);
         /**
          * is_subclass_of($className, 'Varien_Object') - Segmentation fault in php 5.2.3
          */

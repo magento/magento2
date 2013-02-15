@@ -70,11 +70,12 @@ class Mage_Customer_Helper_Address extends Mage_Core_Helper_Abstract
     protected $_blockFactory;
 
     /**
-     * Class constructor
+     * @param Mage_Core_Model_Translate $translator
      * @param Mage_Core_Model_BlockFactory $blockFactory
      */
-    public function __construct(Mage_Core_Model_BlockFactory $blockFactory)
+    public function __construct(Mage_Core_Model_Translate $translator, Mage_Core_Model_BlockFactory $blockFactory)
     {
+        parent::__construct($translator);
         $this->_blockFactory = $blockFactory;
     }
 
@@ -103,8 +104,8 @@ class Mage_Customer_Helper_Address extends Mage_Core_Helper_Abstract
 
     public function getRenderer($renderer)
     {
-        if (is_string($renderer) && $className = Mage::getConfig()->getBlockClassName($renderer)) {
-            return $this->_blockFactory->createBlock($className, array());
+        if (is_string($renderer) && $renderer) {
+            return $this->_blockFactory->createBlock($renderer, array());
         } else {
             return $renderer;
         }
@@ -119,10 +120,14 @@ class Mage_Customer_Helper_Address extends Mage_Core_Helper_Abstract
      */
     public function getConfig($key, $store = null)
     {
-        $websiteId = Mage::app()->getStore($store)->getWebsiteId();
+        /** @var $storeManager Mage_Core_Model_StoreManager */
+        $storeManager = Mage::getObjectManager()->get('Mage_Core_Model_StoreManager');
+        /** @var $store Mage_Core_Model_Store */
+        $store = $storeManager->getStore($store);
 
+        $websiteId = $store->getWebsiteId();
         if (!isset($this->_config[$websiteId])) {
-            $this->_config[$websiteId] = Mage::getStoreConfig('customer/address', $store);
+            $this->_config[$websiteId] = $store->getConfig('customer/address', $store);
         }
         return isset($this->_config[$websiteId][$key]) ? (string)$this->_config[$websiteId][$key] : null;
     }

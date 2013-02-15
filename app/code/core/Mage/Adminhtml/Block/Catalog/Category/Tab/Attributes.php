@@ -174,8 +174,8 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Attributes extends Mage_Adminhtm
     protected function _getAdditionalElementTypes()
     {
         return array(
-            'image' => Mage::getConfig()->getBlockClassName('Mage_Adminhtml_Block_Catalog_Category_Helper_Image'),
-            'textarea' => Mage::getConfig()->getBlockClassName('Mage_Adminhtml_Block_Catalog_Helper_Form_Wysiwyg')
+            'image' => 'Mage_Adminhtml_Block_Catalog_Category_Helper_Image',
+            'textarea' => 'Mage_Adminhtml_Block_Catalog_Helper_Form_Wysiwyg'
         );
     }
 }

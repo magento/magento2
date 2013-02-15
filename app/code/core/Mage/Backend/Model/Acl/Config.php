@@ -53,10 +53,26 @@ class Mage_Backend_Model_Acl_Config implements Mage_Core_Model_Acl_Config_Config
      */
     protected $_reader;
 
-    public function __construct(array $args = array())
-    {
-        $this->_config = isset($args['config']) ? $args['config'] : Mage::getConfig();
-        $this->_cache  = isset($args['cache']) ? $args['cache'] : Mage::app()->getCacheInstance();
+    /**
+     * Module configuration reader
+     *
+     * @var Mage_Core_Model_Config_Modules_Reader
+     */
+    protected $_moduleReader;
+
+    /**
+     * @param Mage_Core_Model_Config $config
+     * @param Mage_Core_Model_Cache $cache
+     * @param Mage_Core_Model_Config_Modules_Reader $moduleReader
+     */
+    public function __construct(
+        Mage_Core_Model_Config $config,
+        Mage_Core_Model_Cache $cache,
+        Mage_Core_Model_Config_Modules_Reader $moduleReader
+    ) {
+        $this->_config = $config;
+        $this->_cache  = $cache;
+        $this->_moduleReader = $moduleReader;
     }
 
     /**
@@ -66,7 +82,7 @@ class Mage_Backend_Model_Acl_Config implements Mage_Core_Model_Acl_Config_Config
      */
     protected function _getAclResourceFiles()
     {
-        $files = $this->_config
+        $files = $this->_moduleReader
             ->getModuleConfigurationFiles('adminhtml' . DIRECTORY_SEPARATOR . 'acl.xml');
         return (array) $files;
     }

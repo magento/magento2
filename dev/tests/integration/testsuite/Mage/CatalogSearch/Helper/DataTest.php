@@ -67,7 +67,10 @@ class Mage_CatalogSearch_Helper_DataTest extends PHPUnit_Framework_TestCase
     public function testCheckNotesEscapesHtmlWhenQueryIsCut()
     {
         /** @var $mock Mage_CatalogSearch_Helper_Data */
-        $mock = $this->getMock('Mage_CatalogSearch_Helper_Data', array('getQueryText'));
+        $mock = $this->getMock(
+            'Mage_CatalogSearch_Helper_Data',
+            array('getQueryText'), array(Mage::getObjectManager()->get('Mage_Core_Model_Translate'))
+        );
         $mock->expects($this->any())
             ->method('getQueryText')
             ->will($this->returnValue('five <words> here <being> tested'));

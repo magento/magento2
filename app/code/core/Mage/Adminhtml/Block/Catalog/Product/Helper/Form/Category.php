@@ -68,11 +68,11 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Category extends Varien_D
     }
 
     /**
-     * Get html of element
+     * Attach category suggest widget initialization
      *
      * @return string
      */
-    public function getElementHtml()
+    public function getAfterElementHtml()
     {
         /** @var $coreHelper Mage_Core_Helper_Data */
         $coreHelper = Mage::helper('Mage_Core_Helper_Data');
@@ -87,35 +87,50 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Category extends Varien_D
             )
         )));
 
-        return parent::getElementHtml() . "\n"
-            . '<input id="' . $this->getHtmlId() . '-suggest" />' . "\n"
-            . '<script id="' . $this->getHtmlId() . '-template" type="text/x-jquery-tmpl">'
-            . '{{if $data.allShown()}}'
-                . '{{if typeof nested === "undefined"}}'
-                . '<div style="display:none;" data-mage-init="' . $treeOptions . '">{{/if}}'
-                . '<ul>{{each items}}'
-                . '<li><a href="#" {{html optionData($value)}}>${$value.label}</a>'
-                . '{{if $value.children && $value.children.length}}'
-                . '{{html renderTreeLevel($value.children)}}'
-                . '{{/if}}'
-                . '</li>{{/each}}</ul>'
-                . '{{if typeof nested === "undefined"}}</div>{{/if}}'
-            . '{{else}}'
-                . '<ul data-mage-init="{&quot;menu&quot;:[]}">'
-                . '{{each items}}'
-                . '<li {{html optionData($value)}}><a href="#"><span class="category-label">${$value.label}<span>'
-                . '<span class="category-path">${$value.path}<span></a></li>'
-                . '{{/each}}</ul>'
-            . '{{/if}}'
-            . '</script>' . "\n"
-            . '<script>//<![CDATA[' . "\n"
-            . 'jQuery(' . $coreHelper->jsonEncode('#' . $this->getHtmlId() . '-suggest') . ').treeSuggest('
-            . $coreHelper->jsonEncode($this->_getSelectorOptions()) . ');' . "\n"
-            . '//]]></script>'
-            . '<button title="' . $coreHelper->__('New Category') . '" type="button"'
-            . ' onclick="jQuery(\'#new-category\').dialog(\'open\')">'
-            . '<span><span><span>' . $coreHelper->__('New Category') . '</span></span></span>'
-            . '</button>';
+        $htmlId = $this->getHtmlId();
+        $suggestPlaceholder = Mage::helper('Mage_Catalog_Helper_Data')->__('start typing to search category');
+        $selectorOptions = $coreHelper->jsonEncode($this->_getSelectorOptions());
+        $newCategoryCaption = Mage::helper('Mage_Catalog_Helper_Data')->__('New Category');
+
+        return <<<HTML
+    <input id="{$htmlId}-suggest" placeholder="$suggestPlaceholder" />
+    <script id="{$htmlId}-template" type="text/x-jquery-tmpl">
+        {{if \$data.allShown()}}
+            {{if typeof nested === "undefined"}}
+                <div style="display:none" data-mage-init="{$treeOptions}">
+            {{/if}}
+            <ul>
+            {{each items}}
+                <li><a href="#" {{html optionData(\$value)}}>\${\$value.label}</a>
+                    {{if \$value.children && \$value.children.length}}
+                        {{html renderTreeLevel(\$value.children)}}
+                    {{/if}}
+                </li>
+            {{/each}}
+            </ul>
+            {{if typeof nested === "undefined"}}
+                </div>
+            {{/if}}
+        {{else}}
+            <ul data-mage-init="{menu:[]}">
+            {{each items}}
+                <li {{html optionData(\$value)}}>
+                    <a href="#">
+                        <span class="category-label">\${\$value.label}</span>
+                        <span class="category-path">\${\$value.path}</span>
+                    </a>
+                </li>
+            {{/each}}
+            </ul>
+        {{/if}}
+    </script>
+    <script>
+        jQuery('#{$htmlId}-suggest').treeSuggest({$selectorOptions});
+    </script>
+    <button title="{$newCategoryCaption}" type="button" onclick="jQuery('#new-category').dialog('open')">
+        <span><span><span>{$newCategoryCaption}</span></span></span>
+    </button>
+HTML;
     }
 
     /**
@@ -126,8 +141,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Category extends Varien_D
     protected function _getSelectorOptions()
     {
         return array(
-            'source' => Mage::helper('Mage_Backend_Helper_Data')
-                ->getUrl('adminhtml/catalog_category/suggestCategories'),
+            'source' => Mage::helper('Mage_Backend_Helper_Data')->getUrl('*/catalog_category/suggestCategories'),
             'valueField' => '#' . $this->getHtmlId(),
             'template' => '#' . $this->getHtmlId() . '-template',
             'control' => 'jstree',

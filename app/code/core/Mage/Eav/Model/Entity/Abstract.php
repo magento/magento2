@@ -66,7 +66,7 @@ abstract class Mage_Eav_Model_Entity_Abstract extends Mage_Core_Model_Resource_A
     /**
      * Attributes array by attribute name
      *
-     * @var unknown_type
+     * @var array
      */
     protected $_attributesByCode            = array();
 
@@ -365,6 +365,16 @@ abstract class Mage_Eav_Model_Entity_Abstract extends Mage_Core_Model_Resource_A
     }
 
     /**
+     * Get EAV config model
+     *
+     * @return Mage_Eav_Model_Config
+     */
+    protected function _getConfig()
+    {
+        return Mage::getSingleton('Mage_Eav_Model_Config');
+    }
+
+    /**
      * Retrieve attribute instance by name, id or config node
      *
      * This will add the attribute configuration to entity's attributes cache
@@ -377,7 +387,7 @@ abstract class Mage_Eav_Model_Entity_Abstract extends Mage_Core_Model_Resource_A
     public function getAttribute($attribute)
     {
         /** @var $config Mage_Eav_Model_Config */
-        $config = Mage::getSingleton('Mage_Eav_Model_Config');
+        $config = $this->_getConfig();
         if (is_numeric($attribute)) {
             $attributeId = $attribute;
 

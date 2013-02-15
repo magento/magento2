@@ -761,7 +761,7 @@ td.divider              { font-size:1px; line-height:0; }
 .scrollContent              { position:absolute; left:0; top:0; }
 
 /* Horizontal scroll */
-.hor-scroll                 { width:100%; overflow:auto; padding-bottom:4px; margin-bottom:-4px; } /* IE has personal style, see iestyles.css */
+.hor-scroll                 { width:100%; padding-bottom:4px; margin-bottom:-4px; } /* IE has personal style, see iestyles.css */
 
 
 /**/
@@ -872,6 +872,7 @@ div.autocomplete ul li { padding:.5em .7em; min-height:32px; cursor:pointer; tex
 }
 .mage-suggest-dropdown .ui-menu {
     padding: 0px;
+    width: 100%;
 }
 .mage-suggest-dropdown .ui-menu .ui-menu-item a.ui-state-focus {
     background: #ebebeb;
@@ -885,6 +886,7 @@ div.autocomplete ul li { padding:.5em .7em; min-height:32px; cursor:pointer; tex
 .mage-suggest-dropdown {
     overflow: auto;
     max-height: 500px;
+    z-index: 1;
 }
 .mage-suggest.category-select .mage-suggest-inner {background: transparent; position: static; border: none; border-radius: 0px; box-shadow: none;}
 .mage-suggest.category-select .category-selector-choices {background: #fff; border: 1px solid #ddd; border-radius: 5px; box-shadow: none; overflow: hidden;}

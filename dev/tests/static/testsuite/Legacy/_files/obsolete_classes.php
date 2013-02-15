@@ -570,6 +570,7 @@ return array(
     array('Mage_Core_Controller_Varien_Router_Admin', 'Mage_Backend_Controller_Router_Default'),
     array('Mage_Core_Model_Convert'),
     array('Mage_Core_Model_Config_Options', 'Mage_Core_Model_Dir'),
+    array('Mage_Core_Model_Config_Module'),
     array('Mage_Core_Model_Config_System'),
     array('Mage_Core_Model_Design_Source_Apply'),
     array('Mage_Core_Model_Language'),

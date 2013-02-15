@@ -77,7 +77,7 @@ class Mage_Core_Model_Resource_Translate_String extends Mage_Core_Model_Resource
     protected function _getLoadSelect($field, $value, $object)
     {
         $select = parent::_getLoadSelect($field, $value, $object);
-        $select->where('store_id = ?', Mage_Core_Model_App::ADMIN_STORE_ID);
+        $select->where('store_id = ?', Mage_Core_Model_AppInterface::ADMIN_STORE_ID);
         return $select;
     }
 
@@ -114,7 +114,7 @@ class Mage_Core_Model_Resource_Translate_String extends Mage_Core_Model_Resource
 
         $bind = array(
             'string'   => $object->getString(),
-            'store_id' => Mage_Core_Model_App::ADMIN_STORE_ID
+            'store_id' => Mage_Core_Model_AppInterface::ADMIN_STORE_ID
         );
 
         $object->setId($adapter->fetchOne($select, $bind));
@@ -186,7 +186,7 @@ class Mage_Core_Model_Resource_Translate_String extends Mage_Core_Model_Resource
         );
 
         if ($storeId === false) {
-            $where['store_id > ?'] = Mage_Core_Model_App::ADMIN_STORE_ID;
+            $where['store_id > ?'] = Mage_Core_Model_AppInterface::ADMIN_STORE_ID;
         } elseif ($storeId !== null) {
             $where['store_id = ?'] = $storeId;
         }

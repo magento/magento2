@@ -56,7 +56,7 @@
                         <tr>
                             <th><?php echo $this->escapeHtml($_rating->getRatingCode()) ?></th>
                         <?php foreach ($_rating->getOptions() as $_option): ?>
-                            <td class="value"><input type="radio" name="ratings[<?php echo $_rating->getId() ?>]" id="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" value="<?php echo $_option->getId() ?>" class="radio" /></td>
+                            <td class="value"><input type="radio" name="ratings[<?php echo $_rating->getId() ?>]" id="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" value="<?php echo $_option->getId() ?>" class="radio" data-validate="{required:true, messages:{required:'Please select one of each of the ratings above.'}}" /></td>
                         <?php endforeach; ?>
                         </tr>
                     <?php endforeach; ?>
@@ -69,19 +69,19 @@
                     <li>
                         <label for="nickname_field" class="required"><em>*</em><?php echo $this->__('Nickname') ?></label>
                         <div class="input-box">
-                            <input type="text" name="nickname" id="nickname_field" class="input-text required-entry" value="<?php echo $this->escapeHtml($data->getNickname()) ?>" />
+                            <input type="text" name="nickname" id="nickname_field" class="input-text" data-validate="{required:true}" value="<?php echo $this->escapeHtml($data->getNickname()) ?>" />
                         </div>
                     </li>
                     <li>
                         <label for="summary_field" class="required"><em>*</em><?php echo $this->__('Summary of Your Review') ?></label>
                         <div class="input-box">
-                            <input type="text" name="title" id="summary_field" class="input-text required-entry" value="<?php echo $this->escapeHtml($data->getTitle()) ?>" />
+                            <input type="text" name="title" id="summary_field" class="input-text" data-validate="{required:true}" value="<?php echo $this->escapeHtml($data->getTitle()) ?>" />
                         </div>
                     </li>
                     <li>
                         <label for="review_field" class="required"><em>*</em><?php echo $this->__('Review') ?></label>
                         <div class="input-box">
-                            <textarea name="detail" id="review_field" cols="5" rows="3" class="required-entry"><?php echo $this->escapeHtml($data->getDetail()) ?></textarea>
+                            <textarea name="detail" id="review_field" cols="5" rows="3"  data-validate="{required:true}"><?php echo $this->escapeHtml($data->getDetail()) ?></textarea>
                         </div>
                     </li>
                 </ul>
@@ -90,39 +90,25 @@
                 <button type="submit" title="<?php echo $this->__('Submit Review') ?>" class="button"><span><span><?php echo $this->__('Submit Review') ?></span></span></button>
             </div>
     </form>
-    <script type="text/javascript">
-    //<![CDATA[
-        var dataForm = new VarienForm('review-form');
-        Validation.addAllThese(
-        [
-               ['validate-rating', '<?php echo $this->__('Please select one of each of the ratings above') ?>', function(v) {
-                    var trs = $('product-review-table').select('tr');
-                    var inputs;
-                    var error = 1;
-
-                    for( var j=0; j < trs.length; j++ ) {
-                        var tr = trs[j];
-                        if( j > 0 ) {
-                            inputs = tr.select('input');
-
-                            for( i in inputs ) {
-                                if( inputs[i].checked == true ) {
-                                    error = 0;
-                                }
-                            }
-
-                            if( error == 1 ) {
-                                return false;
+    <script>
+        (function($) {
+            head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
+                "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
+                "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+                "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
+                function() {
+                    $('#review-form').validation({
+                        errorPlacement: function (error, element) {
+                            if (element.parents('#product-review-table').length) {
+                                $('#product-review-table').siblings(this.errorElement + '.' + this.errorClass).remove();
+                                $('#product-review-table').after(error);
                             } else {
-                                error = 1;
+                                element.after(error);
                             }
                         }
-                    }
-                    return true;
-                }]
-        ]
-        );
-    //]]>
+                    });
+                });
+        })(jQuery);
     </script>
     <?php else: ?>
     <p class="review-nologged" id="review-form">

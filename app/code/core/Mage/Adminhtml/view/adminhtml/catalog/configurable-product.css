@@ -38,28 +38,29 @@ input.ui-autocomplete-loading {
     background:url('images/spinner.gif') no-repeat 100%, linear-gradient(top, #ffffff 85%, #eeeeee 99%);
 }
 
-#attributes-container {
+#configurable-attributes-container {
     padding-bottom: 15px;
 }
 
-#attributes-container .entry-edit > fieldset {
+#configurable-attributes-container .entry-edit > fieldset {
     margin-bottom: 0;
 }
-#attributes-container  .column-price {
+#configurable-attributes-container  .column-price {
     visibility: hidden;
 }
 
-#attributes-container .have-price .column-price {
+#configurable-attributes-container .have-price .column-price {
     visibility: visible;
 }
 
-#attributes-container .ui-icon-circle-triangle-s, #attributes-container .ui-icon-circle-close {
+#configurable-attributes-container .ui-icon-circle-triangle-s,
+#configurable-attributes-container .ui-icon-circle-close {
     cursor: pointer;
     float: right;
     margin-left: 4px;
 }
 
-#attributes-container tr:hover {
+#configurable-attributes-container tr:hover {
     outline: 1px dotted rgba(128, 128, 128, 0.2);
 }
 
