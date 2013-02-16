@@ -7,14 +7,19 @@
             <import namespace="http://schemas.xmlsoap.org/soap/encoding/" schemaLocation="http://schemas.xmlsoap.org/soap/encoding/" />
             <complexType name="customerCustomerEntityToCreate">
                 <all>
-                    <element name="customer_id" type="xsd:int" minOccurs="0" />
-                    <element name="email" type="xsd:string" minOccurs="0" />
-                    <element name="firstname" type="xsd:string" minOccurs="0" />
-                    <element name="lastname" type="xsd:string" minOccurs="0" />
-                    <element name="password" type="xsd:string" minOccurs="0" />
-                    <element name="website_id" type="xsd:int" minOccurs="0" />
-                    <element name="store_id" type="xsd:int" minOccurs="0" />
-                    <element name="group_id" type="xsd:int" minOccurs="0" />
+                   <element name="customer_id" type="xsd:int" minOccurs="0"/>
+                   <element name="email" type="xsd:string" minOccurs="0"/>
+                   <element name="firstname" type="xsd:string" minOccurs="0"/>
+                   <element name="lastname" type="xsd:string" minOccurs="0"/>
+                   <element name="suffix" type="xsd:string" minOccurs="0"/>
+                   <element name="dob" type="xsd:string" minOccurs="0"/>
+                   <element name="taxvat" type="xsd:string" minOccurs="0"/>
+                   <element name="gender" type="xsd:int" minOccurs="0"/>
+                   <element name="password" type="xsd:string" minOccurs="0"/>
+                   <element name="website_id" type="xsd:int" minOccurs="0"/>
+                   <element name="store_id" type="xsd:int" minOccurs="0"/>
+                   <element name="group_id" type="xsd:int" minOccurs="0"/>
+                   <element name="middlename" type="xsd:string" minOccurs="0"/>
                 </all>
             </complexType>
             <complexType name="customerCustomerEntity">
