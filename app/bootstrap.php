@@ -56,7 +56,7 @@ if (file_exists($classMapPath)) {
     require_once BP . '/lib/Magento/Autoload/ClassMap.php';
     $classMap = new Magento_Autoload_ClassMap(BP);
     $classMap->addMap(unserialize(file_get_contents($classMapPath)));
-    spl_autoload_register(array($classMap, 'load'));
+    spl_autoload_register(array($classMap, 'load'), true, true);
 }
 
 if (!defined('BARE_BOOTSTRAP')) {
