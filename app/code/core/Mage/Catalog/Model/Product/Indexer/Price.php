@@ -123,7 +123,7 @@ class Mage_Catalog_Model_Product_Indexer_Price extends Mage_Index_Model_Indexer_
      */
     protected function _getDependentAttributes()
     {
-        return array(
+        $attributes = array(
             'price',
             'special_price',
             'special_from_date',
@@ -133,6 +133,9 @@ class Mage_Catalog_Model_Product_Indexer_Price extends Mage_Index_Model_Indexer_
             'required_options',
             'force_reindex_required'
         );
+        $container = new Varien_Object(array('attributes' => $attributes));
+        Mage::dispatchEvent('catalog_product_indexer_price_dependent_attributes', array('container' => $container));
+        return $container->getData('attributes');
     }
 
     /**
