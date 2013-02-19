@@ -403,7 +403,7 @@
         }
     ?>
     <?php if ($price): ?>
-        <div class="price-box">
+        <div class="price-box" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
             <p<?php if ($showMinPrice): ?> class="minimal-price"<?php endif ?>>
                 <?php if ($showMinPrice): ?>
                 <span class="price-label"><?php echo $this->__('Starting at:') ?></span>
@@ -411,7 +411,7 @@
                 <?php if ($_taxHelper->displayBothPrices()): ?>
                     <span class="price-excluding-tax">
                         <span class="label"><?php echo $this->helper('Mage_Tax_Helper_Data')->__('Excl. Tax:') ?></span>
-                        <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>" itemprop="price">
                             <?php echo $_coreHelper->currency($_exclTax, true, false) ?>
                         </span>
                     </span>
@@ -428,7 +428,7 @@
                         $_showPrice = $_exclTax;
                     }
                     ?>
-                <span class="price" id="product-minimal-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                <span class="price" id="product-minimal-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>" itemprop="price">
                     <?php echo $_coreHelper->currency($_showPrice, true, false) ?>
                 </span>
                 <?php endif; ?>
