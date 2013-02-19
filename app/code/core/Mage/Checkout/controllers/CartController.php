@@ -513,7 +513,7 @@ class Mage_Checkout_CartController
             return;
         }
 
-        $couponCode = (string) $this->getRequest()->getParam('coupon_code');
+        $couponCode = trim((string) $this->getRequest()->getParam('coupon_code'));
         if ($this->getRequest()->getParam('remove') == 1) {
             $couponCode = '';
         }
