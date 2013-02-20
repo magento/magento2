@@ -161,6 +161,6 @@ abstract class Mage_Sales_Model_Resource_Collection_Abstract extends Mage_Core_M
      */
     public function joinAttribute($alias, $attribute, $bind, $filter = null, $joinType = 'inner', $storeId = null)
     {
-        return $this;
+        throw new Exception('Not implemented.');
     }
 }
