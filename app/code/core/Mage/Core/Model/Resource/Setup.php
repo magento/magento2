@@ -568,7 +568,7 @@ class Mage_Core_Model_Resource_Setup implements Mage_Core_Model_Resource_SetupIn
                 switch ($fileType) {
                     case 'php':
                         $conn   = $this->getConnection();
-                        $result = include $fileName;
+                        $result = $this->_includeFile($fileName);
                         break;
                     case 'sql':
                         $sql = file_get_contents($fileName);
@@ -598,6 +598,10 @@ class Mage_Core_Model_Resource_Setup implements Mage_Core_Model_Resource_SetupIn
             $this->getConnection()->allowDdlCache();
         }
         return $version;
+    }
+
+    protected function _includeFile($fileName) {
+        return include $fileName;
     }
 
     /**
