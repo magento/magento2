@@ -145,10 +145,10 @@ class Varien_Image_Adapter_Gd2 extends Varien_Image_Adapter_Abstract
             $fileType = $this->_fileType;
         }
         if (empty(self::$_callbacks[$fileType])) {
-            throw new Exception($unsupportedText);
+            throw new Exception($unsupportedText. ' File type: ' . $fileType . ' File name: ' . $this->_fileName);
         }
         if (empty(self::$_callbacks[$fileType][$callbackType])) {
-            throw new Exception('Callback not found.');
+            throw new Exception('Callback not found. File type: ' . $fileType . ' Callback type: ' . $callbackType);
         }
         return self::$_callbacks[$fileType][$callbackType];
     }
