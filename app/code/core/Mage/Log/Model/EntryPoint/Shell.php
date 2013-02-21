@@ -45,7 +45,7 @@ class Mage_Log_Model_EntryPoint_Shell extends Mage_Core_Model_EntryPointAbstract
     /**
      * Process request to application
      */
-    protected function _processRequest()
+    public function processRequest()
     {
         /** @var $shell Mage_Log_Model_Shell */
         $shell = $this->_objectManager->create('Mage_Log_Model_Shell');

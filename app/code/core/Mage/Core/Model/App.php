@@ -534,6 +534,11 @@ class Mage_Core_Model_App implements Mage_Core_Model_AppInterface
      */
     public function getResponse()
     {
+        if (!$this->_response) {
+            $this->_response = $this->_objectManager->get('Mage_Core_Controller_Response_Http');
+            $this->_response->headersSentThrowsException = Mage::$headersSentThrowsException;
+            $this->_response->setHeader('Content-Type', 'text/html; charset=UTF-8');
+        }
         return $this->_response;
     }
 

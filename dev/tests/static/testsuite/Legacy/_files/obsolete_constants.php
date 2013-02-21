@@ -78,6 +78,7 @@ return array(
     array('TYPE_TINYINT', null, 'Varien_Db_Ddl_Table::TYPE_SMALLINT'),
     array('TYPE_VARCHAR', null, 'Varien_Db_Ddl_Table::TYPE_TEXT'),
     array('URL_TYPE_SKIN'),
+    array('XML_PATH_CACHE_BETA_TYPES'),
     array('XML_PATH_COUNTRY_DEFAULT', 'Mage_Paypal_Model_System_Config_Backend_MerchantCountry'),
     array('XML_PATH_DEFAULT_COUNTRY', 'Mage_Core_Model_Locale'),
     array('XML_PATH_INSTALL_DATE', 'Mage_Core_Model_App', 'Mage_Core_Model_Config_Primary::XML_PATH_INSTALL_DATE'),

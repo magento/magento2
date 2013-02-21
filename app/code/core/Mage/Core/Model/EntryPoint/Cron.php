@@ -27,7 +27,7 @@ class Mage_Core_Model_EntryPoint_Cron extends Mage_Core_Model_EntryPointAbstract
     /**
      * Process request to application
      */
-    protected function _processRequest()
+    public function processRequest()
     {
         /** @var $app Mage_Core_Model_App */
         $app = $this->_objectManager->get('Mage_Core_Model_App');

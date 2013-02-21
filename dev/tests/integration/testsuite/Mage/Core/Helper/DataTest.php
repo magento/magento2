@@ -181,7 +181,6 @@ class Mage_Core_Helper_DataTest extends PHPUnit_Framework_TestCase
     public function testGetCacheTypes()
     {
         $this->assertTrue(is_array($this->_helper->getCacheTypes()));
-        $this->assertTrue(is_array($this->_helper->getCacheBetaTypes()));
     }
 
     public function testCopyFieldset()

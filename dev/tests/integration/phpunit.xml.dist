@@ -70,6 +70,9 @@
         <!--<const name="TESTS_BAMBOO_PROFILER_METRICS_FILE" value="../../build/profiler_metrics.php"/>-->
         <!-- Magento Developer Mode status during tests execution. Disabled by default, possible value is "enabled", and anything else will disable this mode.-->
         <!--<const name="TESTS_MAGENTO_DEVELOPER_MODE" value="enabled"/>-->
+        <!-- Connection parameters for MongoDB library tests -->
+        <!--<const name="MONGODB_CONNECTION_STRING" value="mongodb://localhost:27017"/>-->
+        <!--<const name="MONGODB_DATABASE_NAME" value="magento_integration_tests"/>-->
     </php>
     <!-- Test listeners -->
     <listeners>

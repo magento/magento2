@@ -102,6 +102,11 @@
                     <translate>Mage_Core_Model_Translate_Proxy</translate>
                 </parameters>
             </Mage_Core_Helper_Url>
+            <Mage_Core_Model_Design>
+                <parameters>
+                    <eventDispatcher>Mage_Core_Model_Event_Manager_Proxy</eventDispatcher>
+                </parameters>
+            </Mage_Core_Model_Design>
         </di>
     </global>
     <default>

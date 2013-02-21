@@ -39,7 +39,7 @@ class Mage_Catalog_Model_Product_Api_SimpleTest extends Mage_Catalog_Model_Produ
      */
     public function testCreateSimpleRequiredFieldsOnly()
     {
-        $productData = require '_files/_data/simple_product_data.php';
+        $productData = require __DIR__ . '/_files/_data/simple_product_data.php';
         $productId = $this->_createProductWithApi($productData);
 
         $actualProduct = Mage::getModel('Mage_Catalog_Model_Product');
@@ -49,6 +49,26 @@ class Mage_Catalog_Model_Product_Api_SimpleTest extends Mage_Catalog_Model_Produ
         $expectedProduct->setData($productData);
 
         $this->assertProductEquals($expectedProduct, $actualProduct);
+    }
+
+    /**
+     * @magentoConfigFixture limitations/catalog_product 2
+     * @magentoDataFixture Mage/Catalog/_files/product_simple.php
+     */
+    public function testCreateLimitationNotReached()
+    {
+        $this->testCreateSimpleRequiredFieldsOnly();
+    }
+
+    /**
+     * @magentoConfigFixture limitations/catalog_product 1
+     * @magentoDataFixture Mage/Catalog/_files/product_simple.php
+     * @expectedException SoapFault
+     * @expectedExceptionMessage Maximum allowed number of products is reached.
+     */
+    public function testCreateLimitationReached()
+    {
+        $this->_createProductWithApi(require __DIR__ . '/_files/_data/simple_product_data.php');
     }
 
     /**
@@ -98,11 +118,11 @@ class Mage_Catalog_Model_Product_Api_SimpleTest extends Mage_Catalog_Model_Produ
      */
     public function dataProviderTestCreateSimpleAllFieldsValid()
     {
-        $productData = require '_files/_data/simple_product_all_fields_data.php';
+        $productData = require __DIR__ . '/_files/_data/simple_product_all_fields_data.php';
         // Fix for tests, because in current soap version this field has "int" type in WSDL
         // @TODO: fix WSDL in new soap version when implemented
         $productData['stock_data']['notify_stock_qty'] = 2;
-        $specialCharsData = require '_files/_data/simple_product_special_chars_data.php';
+        $specialCharsData = require __DIR__ . '/_files/_data/simple_product_special_chars_data.php';
 
         return array(
             array($specialCharsData),
@@ -117,7 +137,7 @@ class Mage_Catalog_Model_Product_Api_SimpleTest extends Mage_Catalog_Model_Produ
      */
     public function testCreateInventoryUseConfigValues()
     {
-        $productData = require '_files/_data/simple_product_inventory_use_config.php';
+        $productData = require __DIR__ . '/_files/_data/simple_product_inventory_use_config.php';
         $productId = $this->_createProductWithApi($productData);
 
         $product = Mage::getModel('Mage_Catalog_Model_Product');
@@ -135,7 +155,7 @@ class Mage_Catalog_Model_Product_Api_SimpleTest extends Mage_Catalog_Model_Produ
      */
     public function testCreateInventoryManageStockUseConfig()
     {
-        $productData = require '_files/_data/simple_product_manage_stock_use_config.php';
+        $productData = require __DIR__ . '/_files/_data/simple_product_manage_stock_use_config.php';
 
         $productId = $this->_createProductWithApi($productData);
         $product = Mage::getModel('Mage_Catalog_Model_Product');
@@ -154,7 +174,7 @@ class Mage_Catalog_Model_Product_Api_SimpleTest extends Mage_Catalog_Model_Produ
      */
     public function testSetSpecialPrice()
     {
-        $productData = require dirname(__FILE__) . '/_files/ProductData.php';
+        $productData = require __DIR__ . '/_files/ProductData.php';
         $product = Mage::getModel('Mage_Catalog_Model_Product');
         $specialPrice = 1.99;
         $specialFrom = '2011-12-22 00:00:00';
@@ -192,7 +212,7 @@ class Mage_Catalog_Model_Product_Api_SimpleTest extends Mage_Catalog_Model_Produ
      */
     public function testProductInfoByNumericSku()
     {
-        $data = require dirname(__FILE__) . '/_files/ProductData.php';
+        $data = require __DIR__ . '/_files/ProductData.php';
 
         //generate numeric sku
         $data['create_with_attributes_soapv2']->sku = rand(1000000, 99999999);
@@ -233,7 +253,7 @@ class Mage_Catalog_Model_Product_Api_SimpleTest extends Mage_Catalog_Model_Produ
      */
     public function testProductCrud()
     {
-        $data = require dirname(__FILE__) . '/_files/ProductData.php';
+        $data = require __DIR__ . '/_files/ProductData.php';
 
         // create product for test
         $productId = Magento_Test_Helper_Api::call(
@@ -284,10 +304,10 @@ class Mage_Catalog_Model_Product_Api_SimpleTest extends Mage_Catalog_Model_Produ
      */
     public function testProductWithOptionsCrud()
     {
-        $this->markTestSkipped("TODO: Fix test");
+        $this->markTestIncomplete('TODO: Fix test');
         $optionValueApi = Mage::registry('optionValueApi');
         $optionValueInstaller = Mage::registry('optionValueInstaller');
-        $data = require dirname(__FILE__) . '/_files/ProductData.php';
+        $data = require __DIR__ . '/_files/ProductData.php';
 
         $singleData = & $data['create_with_attributes_soapv2']['productData']->additional_attributes->singleData;
         $singleData[1]->value = $optionValueApi;
@@ -322,7 +342,7 @@ class Mage_Catalog_Model_Product_Api_SimpleTest extends Mage_Catalog_Model_Produ
      */
     public function testProductCreateWithInvalidAttributeSet()
     {
-        $productData = require dirname(__FILE__) . '/_files/ProductData.php';
+        $productData = require __DIR__ . '/_files/ProductData.php';
         $productData = $productData['create_full']['soap'];
         $productData['set'] = 9999;
 
@@ -369,7 +389,7 @@ class Mage_Catalog_Model_Product_Api_SimpleTest extends Mage_Catalog_Model_Produ
         /** @var Mage_Core_Model_Store $store */
         $store = Mage::registry('store_on_new_website');
 
-        $data = require dirname(__FILE__) . '/_files/ProductData.php';
+        $data = require __DIR__ . '/_files/ProductData.php';
         // create product for test
         $productId = Magento_Test_Helper_Api::call($this, 'catalogProductCreate', $data['create_full']['soap']);
         $this->assertGreaterThan(0, $productId, 'Product was not created');
@@ -431,7 +451,7 @@ class Mage_Catalog_Model_Product_Api_SimpleTest extends Mage_Catalog_Model_Produ
      */
     public function testProductCreateForTestMediaAttributesDefaultValue()
     {
-        $productData = require dirname(__FILE__) . '/_files/ProductData.php';
+        $productData = require __DIR__ . '/_files/ProductData.php';
         $productData = $productData['create'];
 
         // create product for test

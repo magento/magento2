@@ -42,13 +42,17 @@ class Mage_Adminhtml_Block_Catalog_Product extends Mage_Adminhtml_Block_Widget_C
      */
     protected function _prepareLayout()
     {
-        $this->_addButton('add_new', array(
-            'id' => 'add_new_product',
-            'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Add Product'),
-            'class' => 'btn-add',
-            'class_name' => 'Mage_Backend_Block_Widget_Button_Split',
-            'options' => $this->_getAddProductButtonOptions()
-        ));
+        /** @var $limitation Mage_Catalog_Model_Product_Limitation */
+        $limitation = Mage::getObjectManager()->get('Mage_Catalog_Model_Product_Limitation');
+        if (!$limitation->isCreateRestricted()) {
+            $this->_addButton('add_new', array(
+                'id' => 'add_new_product',
+                'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Add Product'),
+                'class' => 'btn-add',
+                'class_name' => 'Mage_Backend_Block_Widget_Button_Split',
+                'options' => $this->_getAddProductButtonOptions()
+            ));
+        }
 
         $this->setChild(
             'grid',

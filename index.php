@@ -33,5 +33,8 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 require __DIR__ . '/app/bootstrap.php';
+
+Magento_Profiler::start('mage');
 $entryPoint = new Mage_Core_Model_EntryPoint_Http(BP, $_SERVER);
 $entryPoint->processRequest();
+Magento_Profiler::stop('mage');

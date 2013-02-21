@@ -56,6 +56,56 @@ class Mage_Core_Model_Config implements Mage_Core_Model_ConfigInterface
     protected $_secureUrlCache = array();
 
     /**
+     * Resource model
+     * Used for operations with DB
+     *
+     * @var Mage_Core_Model_Resource_Config
+     */
+    protected $_resourceModel;
+
+    /**
+     * Configuration data model
+     *
+     * @var Mage_Core_Model_Config_Data
+     */
+    protected $_configDataModel;
+
+    /**
+     * Configuration for events by area
+     *
+     * @var array
+     */
+    protected $_eventAreas;
+
+    /**
+     * Flag cache for existing or already created directories
+     *
+     * @var array
+     */
+    protected $_dirExists = array();
+
+    /**
+     * Flach which allow using cache for config initialization
+     *
+     * @var bool
+     */
+    protected $_allowCacheForInit = true;
+
+    /**
+     * Property used during cache save process
+     *
+     * @var array
+     */
+    protected $_cachePartsForSave = array();
+
+    /**
+     * Empty configuration object for loading and merging configuration parts
+     *
+     * @var Mage_Core_Model_Config_Base
+     */
+    protected $_prototype;
+
+    /**
      * Active modules array per namespace
      *
      * @var array
@@ -583,6 +633,7 @@ class Mage_Core_Model_Config implements Mage_Core_Model_ConfigInterface
         $this->removeCache();
         $this->_invalidator->invalidate();
         $this->_config = $this->_storage->getConfiguration();
+        $this->_cacheInstanceId = null;
     }
 
     /**

@@ -44,7 +44,7 @@ class Mage_Core_Model_EntryPoint_Media extends Mage_Core_Model_EntryPointAbstrac
     /**
      * Process request to application
      */
-    protected function _processRequest()
+    public function processRequest()
     {
         // TODO: Move configuration file generation and media files materialization here from get.php
     }

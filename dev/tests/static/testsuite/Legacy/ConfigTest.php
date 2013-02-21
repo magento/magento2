@@ -38,6 +38,7 @@ class Legacy_ConfigTest extends PHPUnit_Framework_TestCase
     {
         $obsoleteNodes = array(
             '/config/global/fieldsets'                 => '',
+            '/config/global/cache/betatypes'           => '',
             '/config/admin/fieldsets'                  => '',
             '/config/global/models/*/deprecatedNode'   => '',
             '/config/global/models/*/entities/*/table' => '',

@@ -37,11 +37,6 @@ class Mage_Core_Model_Cache implements Mage_Core_Model_CacheInterface
     const XML_PATH_TYPES    = 'global/cache/types';
 
     /**
-     * Inject custom cache settings in application initialization
-     */
-    const APP_INIT_PARAM = 'cache';
-
-    /**
      * @var Mage_Core_Model_Config
      */
     protected $_config;
@@ -92,13 +87,6 @@ class Mage_Core_Model_Cache implements Mage_Core_Model_CacheInterface
     );
 
     /**
-     * List of available request processors
-     *
-     * @var array
-     */
-    protected $_requestProcessors = array();
-
-    /**
      * Disallow cache saving
      *
      * @var bool
@@ -118,7 +106,7 @@ class Mage_Core_Model_Cache implements Mage_Core_Model_CacheInterface
     protected $_globalBanUseCache = false;
 
     /**
-     * @param Mage_Core_Model_Config $config
+     * @param Mage_Core_Model_ConfigInterface $config
      * @param Mage_Core_Model_Config_Primary $cacheConfig
      * @param Mage_Core_Model_Dir $dirs
      * @param Mage_Core_Model_Factory_Helper $helperFactory
@@ -172,10 +160,6 @@ class Mage_Core_Model_Cache implements Mage_Core_Model_CacheInterface
 
         // stop profiling
         Magento_Profiler::stop('cache_frontend_create');
-
-        if (isset($options['request_processors'])) {
-            $this->_requestProcessors = $options['request_processors'];
-        }
 
         if (isset($options['disallow_save'])) {
             $this->_disallowSave = $options['disallow_save'];

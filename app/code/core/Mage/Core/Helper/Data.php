@@ -36,7 +36,6 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_PATH_PUBLIC_FILES_VALID_PATHS     = 'general/file/public_files_valid_paths';
     const XML_PATH_ENCRYPTION_MODEL             = 'global/helpers/core/encryption_model';
     const XML_PATH_DEV_ALLOW_IPS                = 'dev/restrict/allow_ips';
-    const XML_PATH_CACHE_BETA_TYPES             = 'global/cache/betatypes';
     const XML_PATH_CONNECTION_TYPE              = 'global/resources/default_setup/connection/type';
     const XML_PATH_IMAGE_ADAPTER                = 'dev/image/adapter';
     const XML_PATH_STATIC_FILE_SIGNATURE        = 'dev/static/sign';
@@ -397,23 +396,6 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
         $config = Mage::getConfig()->getNode(Mage_Core_Model_Cache::XML_PATH_TYPES);
         foreach ($config->children() as $type=>$node) {
             $types[$type] = (string)$node->label;
-        }
-        return $types;
-    }
-
-    /**
-     * Get information about available cache beta types
-     *
-     * @return array
-     */
-    public function getCacheBetaTypes()
-    {
-        $types = array();
-        $config = Mage::getConfig()->getNode(self::XML_PATH_CACHE_BETA_TYPES);
-        if ($config) {
-            foreach ($config->children() as $type=>$node) {
-                $types[$type] = (string)$node->label;
-            }
         }
         return $types;
     }

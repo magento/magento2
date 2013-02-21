@@ -19,6 +19,7 @@ app/code/core/Mage/Adminhtml/controllers/Report/ProductController.php
 app/code/core/Mage/Adminhtml/controllers/UrlrewriteController.php
 app/code/core/Mage/Backend
 app/code/core/Mage/Catalog/Block/Product/Configurable
+app/code/core/Mage/Catalog/Model/Product/Limitation.php
 app/code/core/Mage/Catalog/Block/Product/Grouped
 app/code/core/Mage/Catalog/Block/Product/TemplateSelector.php
 app/code/core/Mage/Catalog/Model/Resource/Product/Collection

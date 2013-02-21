@@ -220,7 +220,7 @@ final class Mage
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '42',
+            'number'    => '43',
         );
     }
 
@@ -794,56 +794,6 @@ final class Mage
         }
 
         die();
-    }
-
-    /**
-     * Define system folder directory url by virtue of running script directory name
-     * Try to find requested folder by shifting to domain root directory
-     *
-     * @param   string  $folder
-     * @param   boolean $exitIfNot
-     * @return  string
-     */
-    public static function getScriptSystemUrl($folder, $exitIfNot = false)
-    {
-        $runDirUrl  = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
-        $runDir     = rtrim(dirname($_SERVER['SCRIPT_FILENAME']), DS);
-
-        $baseUrl    = null;
-        if (is_dir($runDir.'/'.$folder)) {
-            $baseUrl = str_replace(DS, '/', $runDirUrl);
-        } else {
-            $runDirUrlArray = explode('/', $runDirUrl);
-            $runDirArray    = explode('/', $runDir);
-            $count          = count($runDirArray);
-
-            for ($i=0; $i < $count; $i++) {
-                array_pop($runDirUrlArray);
-                array_pop($runDirArray);
-                $_runDir = implode('/', $runDirArray);
-                if (!empty($_runDir)) {
-                    $_runDir .= '/';
-                }
-
-                if (is_dir($_runDir.$folder)) {
-                    $_runDirUrl = implode('/', $runDirUrlArray);
-                    $baseUrl    = str_replace(DS, '/', $_runDirUrl);
-                    break;
-                }
-            }
-        }
-
-        if (is_null($baseUrl)) {
-            $errorMessage = "Unable detect system directory: $folder";
-            if ($exitIfNot) {
-                // exit because of infinity loop
-                exit($errorMessage);
-            } else {
-                self::printException(new Exception(), $errorMessage);
-            }
-        }
-
-        return $baseUrl;
     }
 
     /**

@@ -71,11 +71,6 @@ class Mage_Install_WizardControllerTest extends Magento_Test_TestCase_Controller
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
     }
 
-    public function testPreDispatchNonWritableMedia()
-    {
-        $this->_testInstallProhibitedWhenNonWritable(self::$_mediaDir);
-    }
-
     public function testPreDispatchNonWritableTheme()
     {
         $this->_testInstallProhibitedWhenNonWritable(self::$_themeDir);

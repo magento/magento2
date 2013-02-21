@@ -141,6 +141,15 @@ class Mage_Core_Model_Dir
     );
 
     /**
+     * List of directories that application requires to be writable in order to operate
+     *
+     * @var array
+     */
+    private static $_writableDirCodes = array(
+        self::MEDIA, self::VAR_DIR, self::TMP, self::CACHE, self::LOG, self::SESSION
+    );
+
+    /**
      * Paths of URIs designed for building URLs
      *
      * Values are to be initialized in constructor.
@@ -156,6 +165,13 @@ class Mage_Core_Model_Dir
     );
 
     /**
+     * File system instance
+     *
+     * @var Magento_Filesystem
+     */
+    private $_filesystem;
+
+    /**
      * Absolute paths to directories
      *
      * @var array
@@ -163,25 +179,24 @@ class Mage_Core_Model_Dir
     private $_dirs = array();
 
     /**
-     * List of directories that application requires to be writable in order to operate
+     * Directory paths, validation of which have been already performed
      *
-     * @return array
+     * @var array
      */
-    public static function getWritableDirCodes()
-    {
-        return array(self::MEDIA, self::VAR_DIR, self::TMP, self::CACHE, self::LOG, self::SESSION);
-    }
+    private $_validatedDirs = array();
 
     /**
      * Initialize URIs and paths
      *
+     * @param Magento_Filesystem $filesystem
      * @param string $baseDir
-     * @param Varien_Io_File $fileSystem
      * @param array $uris custom URIs
      * @param array $dirs custom directories (full system paths)
      */
-    public function __construct($baseDir, Varien_Io_File $fileSystem, array $uris = array(), array $dirs = array())
+    public function __construct(Magento_Filesystem $filesystem, $baseDir, array $uris = array(), array $dirs = array())
     {
+        $this->_filesystem = $filesystem;
+
         // uris
         foreach (array_keys($this->_uris) as $code) {
             $this->_uris[$code] = self::$_defaults[$code];
@@ -203,22 +218,44 @@ class Mage_Core_Model_Dir
         foreach ($this->_getDefaultReplacements($dirs) as $code => $replacement) {
             $this->_setDir($code, $replacement);
         }
-
-        $this->_createFolders($fileSystem);
     }
 
     /**
-     * Create application folders if they don't exist
+     * Validate directory path value corresponding to the directory code
      *
-     * @param Varien_Io_File $fileSystem
+     * @param string $code
+     * @param string $path
      */
-    protected function _createFolders(Varien_Io_File $fileSystem)
+    protected function _validateDir($code, $path)
     {
-        foreach (self::getWritableDirCodes() as $code) {
-            $path = $this->getDir($code);
-            if ($path) {
-                $fileSystem->checkAndCreateFolder($path);
-            }
+        // successful validation is to be performed only once for performance considerations
+        if (isset($this->_validatedDirs[$path])) {
+            return;
+        }
+        if (in_array($code, self::$_writableDirCodes)) {
+            $this->_ensureDirWritable($path);
+        }
+        $this->_validatedDirs[$path] = true;
+    }
+
+    /**
+     * Ensure a directory exists and is writable
+     *
+     * @param string $path
+     * @throws Magento_BootstrapException
+     */
+    protected function _ensureDirWritable($path)
+    {
+        // create a directory, if no directory or file with the same path already exists
+        $filesystemError = null;
+        try {
+            $this->_filesystem->setIsAllowCreateDirectories(true);
+            $this->_filesystem->ensureDirectoryExists($path, 0777);
+        } catch (Magento_Filesystem_Exception $e) {
+            $filesystemError = $e;
+        }
+        if ($filesystemError || !$this->_filesystem->isDirectory($path) || !$this->_filesystem->isWritable($path)) {
+            throw new Magento_BootstrapException("Path '$path' has to be a writable directory.", 0, $filesystemError);
         }
     }
 
@@ -263,7 +300,12 @@ class Mage_Core_Model_Dir
      */
     public function getDir($code)
     {
-        return isset($this->_dirs[$code]) ? $this->_dirs[$code] : false;
+        if (isset($this->_dirs[$code])) {
+            $path = $this->_dirs[$code];
+            $this->_validateDir($code, $path);
+            return $path;
+        }
+        return false;
     }
 
     /**

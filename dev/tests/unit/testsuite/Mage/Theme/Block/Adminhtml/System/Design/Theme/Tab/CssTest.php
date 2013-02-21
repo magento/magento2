@@ -54,17 +54,16 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Tab_CssTest extends PHPUnit
     protected function _prepareModelArguments()
     {
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $filesystemHelper = new Magento_Test_Helper_FileSystem($this);
 
         $this->_objectManager = $this->getMock('Magento_ObjectManager_Zend', array('get'), array(), '', false);
-        /** @var $dirs Mage_Core_Model_Dir */
-        $dirs = new Mage_Core_Model_Dir(__DIR__, new Varien_Io_File());
 
         $constructArguments = $objectManagerHelper->getConstructArguments(
             Magento_Test_Helper_ObjectManager::BLOCK_ENTITY,
             'Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css',
             array(
                  'objectManager'   => $this->_objectManager,
-                 'dirs'            => $dirs,
+                 'dirs'            => $filesystemHelper->createDirInstance(__DIR__),
                  'uploaderService' => $this->getMock('Mage_Theme_Model_Uploader_Service', array(), array(), '', false),
                  'urlBuilder'      => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false)
             )

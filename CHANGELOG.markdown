@@ -1,3 +1,16 @@
+2.0.0.0-dev43
+=============
+* Implemented functional limitation that restricts max number of catalog products in the system
+* Implemented cache backend library model for MongoDB
+* Converted some more grids in backend from PHP implementation to declarations in layout
+* Removed `app/etc/local.xml.additional` sample file, moved detailed description of possible configuration options to documentation
+* Refactored `Mage_Core_Model_EntryPointAbstract` to emphasize method `processRequest()` as abstract
+* Moved declaration of functional limitations to the nodes `limitations/store` and `limitations/admin_account`
+* Bug fixes:
+  * Fixed JavaScript and markup issues on product editing page in backend that caused erroneous sending of AJAX-queries and not rendering validation messages
+  * Fixed issues of application initialization in cases when `var` directory doesn't have writable permissions. Writable directories are validated at an early stage of initialization
+  * Fixed array sorting issues in test `Magento_Filesystem_Adapter_LocalTest::testGetNestedKeys()` that caused occasional failures
+
 2.0.0.0-dev42
 =============
 * Application initialization improvements:

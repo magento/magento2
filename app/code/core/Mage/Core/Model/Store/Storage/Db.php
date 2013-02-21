@@ -211,7 +211,7 @@ class Mage_Core_Model_Store_Storage_Db implements Mage_Core_Model_Store_StorageI
         $this->_initStores();
         Magento_Profiler::stop('init_stores');
 
-        if (empty($this->_scopeCode) && !is_null($this->_website)) {
+        if (empty($this->_scopeCode) && false == is_null($this->_website)) {
             $this->_scopeCode = $this->_website->getCode();
             $this->_scopeType = Mage_Core_Model_StoreManagerInterface::SCOPE_TYPE_WEBSITE;
         }

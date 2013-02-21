@@ -260,6 +260,7 @@ return array(
     array('getContainers', 'Mage_Core_Model_Layout_Update', 'Mage_Core_Model_Layout_Merge'),
     array('getControllerInstance', 'Mage'),
     array('getCustomerData', 'Mage_Adminhtml_Block_Sales_Order_Create_Form_Account'),
+    array('getCacheBetaTypes'),
     array('getDataForSave', 'Mage_Wishlist_Model_Item'),
     array('getDataMaxSize'),
     array('getDataMaxSizeInBytes', 'Mage_Adminhtml_Block_Media_Uploader', 'Magento_File_Size::getMaxFileSize()'),

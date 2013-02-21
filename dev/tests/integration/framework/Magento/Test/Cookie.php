@@ -31,24 +31,54 @@
 class Magento_Test_Cookie extends Mage_Core_Model_Cookie
 {
     /**
+     * Request instance
+     *
      * @var Mage_Core_Controller_Request_Http
      */
-    protected $_request;
+    private $_request;
+
+    /**
+     * Response instance
+     *
+     * @var Mage_Core_Controller_Response_Http
+     */
+    private $_response;
 
     /**
      * @param Mage_Core_Controller_Request_Http $request
+     * @param Mage_Core_Controller_Response_Http $response
      */
-    public function __construct(Mage_Core_Controller_Request_Http $request = null)
-    {
+    public function __construct(
+        Mage_Core_Controller_Request_Http $request = null, Mage_Core_Controller_Response_Http $response = null
+    ) {
         $this->_request = $request;
+        $this->_response = $response;
     }
 
     /**
+     * Retrieve a request instance suitable for the testing environment
+     *
      * @return Mage_Core_Controller_Request_Http
      */
     protected function _getRequest()
     {
-        return $this->_request ?: parent::_getRequest();
+        if ($this->_request) {
+            return $this->_request;
+        }
+        return parent::_getRequest();
+    }
+
+    /**
+     * Retrieve a request instance suitable for the testing environment
+     *
+     * @return Mage_Core_Controller_Response_Http
+     */
+    protected function _getResponse()
+    {
+        if ($this->_response) {
+            return $this->_response;
+        }
+        return parent::_getResponse();
     }
 
     /**
