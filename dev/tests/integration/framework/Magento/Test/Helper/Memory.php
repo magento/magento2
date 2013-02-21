@@ -104,17 +104,15 @@ class Magento_Test_Helper_Memory
      */
     public function getWinProcessMemoryUsage($pid)
     {
-        $output = $this->_shell->execute('tasklist /fi %s /fo CSV', array("PID eq $pid"));
+        $output = $this->_shell->execute('tasklist /fi %s /fo CSV /nh', array("PID eq $pid"));
 
         /** @link http://www.php.net/manual/en/wrappers.data.php */
         $csvStream = 'data://text/plain;base64,' . base64_encode($output);
         $csvHandle = fopen($csvStream, 'r');
-        $keys = fgetcsv($csvHandle);
-        $values = fgetcsv($csvHandle);
+        $stats = fgetcsv($csvHandle);
         fclose($csvHandle);
-        $stats = array_combine($keys, $values);
 
-        $result = $stats['Mem Usage'];
+        $result = $stats[4];
 
         return self::convertToBytes($result);
     }
