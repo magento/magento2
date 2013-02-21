@@ -83,7 +83,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Price extends Varien_Data
             return null;
         }
 
-        return number_format($value, 2, null, '');
+        return $value;
     }
 
 }
