@@ -105,9 +105,10 @@ class Mage_Core_Helper_AbstractTest extends PHPUnit_Framework_TestCase
      */
     public function testEscapeUrl()
     {
-        $data = '<two>"three</two>';
-        $expected = '&lt;two&gt;&quot;three&lt;/two&gt;';
+        $data = 'http://example.com/search?term=this+%26+that&view=list';
+        $expected = 'http://example.com/search?term=this+%26+that&amp;view=list';
         $this->assertEquals($expected, $this->_helper->escapeUrl($data));
+        $this->assertEquals($expected, $this->_helper->escapeUrl($expected));
     }
 
     public function testJsQuoteEscape()

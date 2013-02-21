@@ -268,7 +268,7 @@ abstract class Mage_Core_Helper_Abstract
      */
     public function escapeUrl($data)
     {
-        return htmlspecialchars($data);
+        return htmlspecialchars($data, ENT_COMPAT, 'UTF-8', false);
     }
 
     /**
