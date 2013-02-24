@@ -524,7 +524,7 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
     public function suggestCategoriesAction()
     {
         $this->getResponse()->setBody($this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Category_Tree')
-            ->getSuggestedCategoriesJson($this->getRequest()->getParam('name_part'))
+            ->getSuggestedCategoriesJson($this->getRequest()->getParam('label_part'))
         );
     }
 

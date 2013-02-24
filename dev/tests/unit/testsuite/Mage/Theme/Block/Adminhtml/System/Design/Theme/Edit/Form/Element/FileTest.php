@@ -30,9 +30,8 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_From_Element_FileTest 
     public function testGetHtmlAttributes()
     {
         /** @var $fileBlock Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Form_Element_File */
-        $fileBlock = Mage::getObjectManager()->create(
-            'Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Form_Element_File'
-        );
+        $helper = new Magento_Test_Helper_ObjectManager($this);
+        $fileBlock = $helper->getBlock('Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Form_Element_File');
         $this->assertContains('accept', $fileBlock->getHtmlAttributes());
         $this->assertContains('multiple', $fileBlock->getHtmlAttributes());
     }

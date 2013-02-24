@@ -192,41 +192,29 @@ if (Mage::helper('Mage_Weee_Helper_Data')->typeOfDisplay($_product, array(1,2,4)
 
         <?php if ($_catalogHelper->isShowPriceOnGesture($_product)):?>
             <?php $popupId = 'msrp-popup-' . $_product->getId() . $this->helper('Mage_Core_Helper_Data')->getRandomString(20); ?>
-            <a href="#" id="<?php echo($popupId);?>"><?php echo $this->__('Click for price'); ?></a>
-            <script type="text/javascript">
             <?php
-                    $addToCartUrl = $this->getProduct()->isSalable()
-                        ? $this->getAddToCartUrl($_product, array('qty' => $_price['price_qty']))
-                        : '';
+            $addToCartUrl = $this->getProduct()->isSalable()
+                ? $this->getAddToCartUrl($_product, array('qty' => $_price['price_qty']))
+                : '';
             ?>
-            <?php if (!$this->getInGrouped()): ?>
-                var newLink = {
-                    url: "<?php echo $addToCartUrl; ?>",
-                    qty: "<?php echo $_price['price_qty']?>"
-                };
-            <?php else: ?>
-                var newLink = {
-                    url: "<?php echo $addToCartUrl; ?>",
-                    notUseForm: true
-                };
-            <?php endif ?>
-                Catalog.Map.addHelpLink(
-                    $('<?php echo $popupId ?>'),
-                    "<?php echo $_product->getName() ?>",
-                    <?php echo json_encode($_price['real_price_html']) ?>,
-                    "<?php echo $this->helper('Mage_Core_Helper_Data')->currency($_product->getMsrp(),true,false) ?>",
-                    newLink
-                );
-            </script>
+            <a href="#" id="<?php echo($popupId);?>" data-tier-price='{addToCartUrl:"<?php echo $addToCartUrl; ?>", name:"<?php echo $_product->getName() ?>", price:<?php echo json_encode($_price['real_price_html']) ?>, msrp:"<?php echo $this->helper('Mage_Core_Helper_Data')->currency($_product->getMsrp(),true,false) ?>"<?php if (!$this->getInGrouped()): ?>, qty:"<?php echo $_price['price_qty']?>"<?php endif ?>}'><?php echo $this->__('Click for price'); ?></a>
         <?php else: ?>
             <span class="msrp-price-hide-message">
                 <?php echo $_catalogHelper->getMsrpPriceMessage($_product) ?>
             </span>
         <?php endif; ?>
-
-
         </li>
-
     <?php endforeach ?>
     </ul>
+    <?php if ($_catalogHelper->isShowPriceOnGesture($_product)):?>
+        <script type="text/javascript">
+            (function($) {
+                head.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/tier-price.js') ?>", function () {
+                    $('#product_addtocart_form').tierPrice({
+                        inputQty: '#qty'
+                    });
+                });
+            })(jQuery);
+        </script>
+    <?php endif;?>
 <?php endif;?>

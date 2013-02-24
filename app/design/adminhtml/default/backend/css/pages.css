@@ -107,6 +107,16 @@
     text-indent: -999em;
 }
 
+.page-actions .switcher {
+    display: inline-block;
+    vertical-align: top;
+    margin: 6px 6px;
+}
+
+.page-actions .action-.delete {
+    margin-top: 2px;
+}
+
 /* Image Management */
 .images {
     position: relative;
@@ -221,6 +231,12 @@
     background: #fff url('Mage_Adminhtml::images/image-placeholder.png') no-repeat 50% 0%;
 }
 
+.image-placeholder input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    border: 100px solid;
+}
+
 .image-placeholder-text {
     padding: 72px 5px 0;
     font-size: 11px;
@@ -275,6 +291,341 @@
     margin-right: 5px;
 }
 
+/* Variations Search Field */
+#variations-search-field {
+    margin-bottom: 16px;
+}
+
+#variations-search-field > .control {
+    position: relative;
+    width: 42%;
+}
+
+#variations-search-field > .control:after {
+    position: absolute;
+    top: 0;
+    right: 3px;
+    bottom: 0;
+    width: 22px;
+    text-align: center;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: '\e01f'; /* search icon */
+    font-size: 20px;
+    color: #b2b2b2;
+}
+
+#variations-search-field > .control > input {
+    padding-right: 25px;
+}
+
+#configurable-attributes-container .field-variation > .label {
+    margin-left: -7px;
+}
+
+#configurable-attributes-container .field-variation > .control {
+    width: 43%;
+}
+
+#configurable-attributes-container {
+    margin-bottom: 23px;
+}
+
+#configurable-attributes-container .col-name {
+    width: 45%;
+}
+
+#configurable-attributes-container .pricing-value {
+    text-align: right;
+}
+
+#generate-variations-button {
+    margin-bottom: 18px;
+}
+
+#product-variations-matrix > .title {
+    margin-bottom: 10px;
+}
+
+#product-variations-matrix .action-upload {
+    background: #fff;
+    border-radius: 0;
+    border: 1px solid #b7b2a7;
+    padding: 0;
+    width: 31px;
+    height: 31px;
+    line-height: 30px;
+    text-align: center;
+    color: #9f9a91;
+    overflow: hidden;
+}
+
+#product-variations-matrix .action-upload:hover {
+    color: #7e7e7e;
+}
+
+#product-variations-matrix .action-upload:before {
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: '\e02d'; /* plus icon */
+    font-size: 22px;
+}
+
+#product-variations-matrix .action-upload span,
+#product-variations-matrix .action-choose span {
+    display: none;
+}
+
+#product-variations-matrix .action-choose {
+    color:#b8b3a7;
+    float: right;
+    margin-left: 5px;
+}
+#product-variations-matrix .action-choose:hover {
+    color:#7e7e7e;
+}
+#product-variations-matrix .action-choose:before {
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: '\e040'; /* user icon */
+}
+
+#product-variations-matrix .col-name > a + .action-choose:before {
+    content: '\e03f'; /* user icon */
+    color: #a09a8c;
+}
+
+/*
+    Customer
+---------------------------------------*/
+.customer-iformation:before,
+.customer-iformation:after {
+    content: "";
+    display: table;
+}
+
+.customer-iformation:after {
+    clear: both;
+}
+
+.customer-iformation table,
+.customer-iformation address {
+    width: 48.5%;
+}
+
+.customer-iformation table {
+    float: left;
+    width: 48.5%;
+}
+
+.customer-iformation address {
+    padding-top: 4px;
+    line-height: 2.2;
+    float: right;
+}
+
+.customer-iformation table tbody tr th {
+    font-weight: bold;
+}
+
+.customer-iformation table tbody tr td,
+.customer-iformation table tbody tr th {
+    background-color: #fff;
+    border: 0;
+    padding: 9px 10px 10px;
+    color: #666;
+    vertical-align: top;
+}
+
+.customer-iformation table tbody tr:nth-child(2n+1) td,
+.customer-iformation table tbody tr:nth-child(2n+1) th {
+    background-color: #fbfaf6;
+}
+
+.address-list {
+    list-style: none;
+    width: 278px;
+    margin: 0 0 10px;
+    padding: 0;
+    float: left;
+}
+
+.address-list li {
+    border: 1px solid #d9d2ca;
+    background: #f7f2ec;
+    padding: 10px 10px 15px;
+    cursor: pointer;
+    margin-bottom: -1px;
+}
+
+.address-list li.active {
+    background: #fff;
+    position: relative;
+    box-shadow: 0 1px 1px 0 rgba(217, 210, 202, 1);
+    margin-left: -2px;
+    padding-left: 12px;
+}
+
+.address-list li.active:after {
+    position: absolute;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    color: #fff;
+    content: "\e02a";
+    speak: none;
+    line-height: 11px;
+    width: 10px;
+    right: -9px;
+    text-indent: -6px;
+    top: 50%;
+    margin-top: -5px;
+    text-shadow: 2px 0 0 #d9d2ca;
+    z-index: 1;
+}
+
+.address-list li.adress-list-actions {
+    padding: 20px 0 0 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    cursor: default;
+}
+
+.address-list li.adress-list-actions:first-child {
+    padding: 0;
+}
+
+.address-list li.adress-list-actions:after {
+    display: none;
+}
+
+.address-list .label {
+    float: none;
+    width: auto;
+    padding: 0 0 0 10px;
+}
+
+.address-list input[type="checkbox"] {
+    float: left;
+}
+
+.address-list address:first-line {
+    /*  its not work  if First Name and Last Name in two lines */
+    font-weight: bold;
+}
+
+.address-list address {
+    margin: 0 20px 15px 0;
+    line-height: 1.5;
+}
+
+.address-list-item-actions {
+    float: right;
+}
+
+.address-list .action-edit {
+    display: none;
+}
+
+.address-list .field {
+    margin-bottom: 15px;
+}
+
+.address-item-edit {
+    margin-left: 277px;
+}
+
+.address-item-edit-content {
+    border: 1px solid #dad1c8;
+    background: #fff;
+    box-shadow: 0 2px 1px 0 rgba(217, 210, 202, 0.5);
+}
+
+.address-item-edit .legend {
+    border-bottom: 0;
+    margin: 0 0 18px;
+    padding-left: 20%;
+}
+
+.address-item-edit .legend span {
+    padding-left: 0;
+}
+
+.address-item-edit-actions {
+    padding: 0 0 18px 20%;
+}
+
+/*
+    CMS -> Polls
+-------------------------------------- */
+
+/* Poll Answers */
+.field-poll_answers_container .control {
+    width: 600px;
+}
+
+.field-poll_answers_container .col-poll_votes_count {
+    width: 90px;
+}
+
+.field-poll_answers_container .action-add {
+    margin-top: 7px;
+}
+
+/*
+    Reports
+-------------------------------------- */
+.reports-title .page-actions {
+    float: right;
+}
+
+.reports-title .store-switcher {
+    padding: 14px 0 18px;
+}
+
+.reports-content select {
+    width: 160px;
+}
+
+.reports-content input.hasDatepicker {
+    width: 133px;
+}
+
+/* TODO: refactor when validation design is ready */
+.reports-content .required .control {
+    position: relative;
+}
+
+.reports-content input.hasDatepicker + label.mage-error {
+    left: 0;
+    position: absolute;
+    top: 30px;
+}
+
+.reports-title:before,
+.reports-title:after {
+    content: "";
+    display: table;
+}
+
+.reports-title:after {
+    clear: both;
+}
+
+/*
+    Clearfix
+-------------------------------------- */
 .images:before,
 .images:after,
 .clearfix:before,

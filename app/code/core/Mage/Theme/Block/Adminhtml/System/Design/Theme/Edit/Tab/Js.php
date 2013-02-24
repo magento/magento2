@@ -95,8 +95,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Js
      */
     protected function _getAdditionalElementTypes()
     {
-        $fileElement = $this->_objectManager->get('Mage_Core_Model_Config')
-            ->getBlockClassName('Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Form_Element_File');
+        $fileElement = 'Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Form_Element_File';
         return array('js_files' => $fileElement);
     }
 

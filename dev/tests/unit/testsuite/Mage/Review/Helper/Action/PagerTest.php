@@ -49,6 +49,7 @@ class Mage_Review_Helper_Action_PagerTest extends PHPUnit_Framework_TestCase
 
         $this->_helper = $this->getMockBuilder('Mage_Review_Helper_Action_Pager')
             ->setMethods(array('_getSession'))
+            ->disableOriginalConstructor()
             ->getMock();
         $this->_helper->expects($this->any())
             ->method('_getSession')

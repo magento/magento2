@@ -30,7 +30,7 @@ class Mage_Adminhtml_System_StoreControllerTest extends Mage_Backend_Utility_Con
     }
 
     /**
-     * @magentoConfigFixture global/functional_limitation/max_store_count 1
+     * @magentoConfigFixture limitations/store 1
      */
     public function testIndexActionRestricted()
     {

@@ -25,88 +25,102 @@
  */
 ?>
 <!-- Addresses list -->
-<div class="fieldset-wrapper">
+<fieldset class="fieldset">
+    <legend class="legend">
+        <span><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Customer Addresses') ?></span>
+    </legend>
+    <br />
 
-<table cellspacing="0" class="form-edit">
-<tr>
-<td class="address-list">
-    <div class="entry-edit-head">
-        <h4 class="icon-head head-customer-address-list"><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Customer Addresses') ?></h4>
-    </div>
-    <div class="sub-btn-set"><?php echo $this->getAddNewButtonHtml() ?></div>
-    <ul id="address_list">
-    <?php $_iterator = 0; ?>
-    <?php if(count($addressCollection)): ?>
-        <?php foreach ($addressCollection as $_address): ?>
-        <li id="address_item_<?php echo $_address->getId() ?>">
+    <ul class="address-list" id="address_list">
+        <?php if(count($addressCollection)): ?>
+        <?php $_iterator = 0; ?>
+            <?php foreach ($addressCollection as $_address): ?>
+
+            <li class="address-list-item" id="address_item_<?php echo $_address->getId() ?>">
+                <?php if (!$this->isReadonly()): ?>
+                <div class="address-list-item-actions">
+                    <button class="action-delete" type="button" title="Remove address" id="delete_button<?php echo ++$_iterator ?>">
+                        <span>Remove address</span>
+                    </button>
+                    <button class="action-edit" type="button" title="Edit address" id="select_button_<?php echo $_address->getId() ?>">
+                        <span>Edit address</span>
+                    </button>
+                </div>
+                <?php endif;?>
+
+                <address>
+                    <?php echo $_address->format('html') ?>
+                </address>
+
+                <div class="field field-address-item-billing choice">
+                    <input type="checkbox" <?php if ($this->isReadonly()):?> disabled="disabled"<?php endif;?> value="<?php echo $_address->getId() ?>" id="address_item_billing<?php echo $_address->getId() ?>" name="account[default_billing]" title="<?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Set as Default Billing Address') ?>"<?php if($_address->getId()==$customer->getDefaultBilling()): ?> checked="checked"<?php endif; ?> />
+                    <label class="label" for="address_item_billing<?php echo $_address->getId() ?>">
+                        <span><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Default Billing Address') ?></span>
+                    </label>
+                </div>
+                <div class="field field-address-item-shipping choice">
+                    <input type="checkbox" <?php if ($this->isReadonly()):?> disabled="disabled"<?php endif;?> value="<?php echo $_address->getId() ?>" id="address_item_shipping<?php echo $_address->getId() ?>" name="account[default_shipping]" title="<?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Set as Default Shipping Address') ?>"<?php if($_address->getId()==$customer->getDefaultShipping()): ?> checked="checked"<?php endif; ?> />
+                    <label class="label" for="address_item_shipping<?php echo $_address->getId() ?>">
+                        <span><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Default Shipping Address') ?></span>
+                    </label>
+                </div>
+
+            </li>
+            <?php endforeach; ?>
+            <?php endif; ?>
+            <li class="adress-list-actions last"><?php echo $this->getAddNewButtonHtml() ?></li>
+        </ul>
+
+        <!-- Template for adding address item to list -->
+        <?php $_templatePrefix = $this->getTemplatePrefix() ?>
+        <div id="address_item_template" class="hidden template">
             <?php if (!$this->isReadonly()): ?>
-            <a href="#" class="btn-remove-address">
-                <img src="<?php echo $this->getViewFileUrl('images/cancel_icon.gif') ?>" alt="Remove address" id="delete_button<?php echo ++$_iterator ?>" />
-            </a>
-            <a href="#" id="select_button_<?php echo $_address->getId() ?>" class="select_button btn-edit-address">
-                <img src="<?php echo $this->getViewFileUrl('images/edit_icon.gif') ?>" alt="Edit address"/>
-            </a>
-            <?php endif;?>
-            <address>
-                <?php echo $_address->format('html') ?>
-            </address>
-            <div class="address-type">
-                <span class="address-type-line">
-                    <input type="radio" <?php if ($this->isReadonly()):?> disabled="disabled"<?php endif;?> value="<?php echo $_address->getId() ?>" id="address_item_billing<?php echo $_address->getId() ?>" name="account[default_billing]" title="<?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Set as Default Billing Address') ?>"<?php if($_address->getId()==$customer->getDefaultBilling()): ?> checked="checked"<?php endif; ?>/>
-                    &nbsp;<label for="address_item_billing<?php echo $_address->getId() ?>"><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Default Billing Address') ?></label>
-                </span>
-                <span class="address-type-line">
-                    <input type="radio"  <?php if ($this->isReadonly()):?> disabled="disabled"<?php endif;?> value="<?php echo $_address->getId() ?>" id="address_item_shipping<?php echo $_address->getId() ?>" name="account[default_shipping]" title="<?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Set as Default Shipping Address') ?>"<?php if($_address->getId()==$customer->getDefaultShipping()): ?> checked="checked"<?php endif; ?>/>
-                    &nbsp;<label for="address_item_shipping<?php echo $_address->getId() ?>"><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Default Shipping Address') ?></label>
-                </span>
+            <div class="address-list-item-actions">
+                <button class="action-delete" type="button" title="Remove address" id="delete_button<?php echo ++$_iterator ?>">
+                    <span>Remove address</span>
+                </button>
+                <button class="action-edit" type="button" title="Edit address">
+                    <span>Edit address</span>
+                </button>
             </div>
-        </li>
-        <?php endforeach; ?>
-    <?php endif; ?>
-    </ul>
-</td>
-<td>
-    <!-- Template for adding address item to list -->
-    <?php $_templatePrefix = $this->getTemplatePrefix() ?>
-    <div id="address_item_template" class="no-display template">
-        <?php if (!$this->isReadonly()): ?>
-        <a href="#" class="btn-remove-address">
-            <img src="<?php echo $this->getViewFileUrl('images/cancel_icon.gif') ?>" alt="Remove address" id="delete_button<?php echo ++$_iterator ?>" />
-        </a>
-        <a href="#" id="select_button_" class="select_button btn-edit-address">
-            <img src="<?php echo $this->getViewFileUrl('images/edit_icon.gif') ?>" alt="Edit address"/>
-        </a>
-        <?php endif;?>
-        <address><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('New Customer Address') ?></address>
-        <div class="address-type">
-            <span class="address-type-line">
-                <input  <?php if ($this->isReadonly()):?> disabled="disabled"<?php endif;?> type="radio" value="<?php echo $_templatePrefix ?>" id="address_item_billing<?php echo $_templatePrefix ?>" name="account[default_billing]" title="<?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Set as Default Billing Address') ?>"/>
-                &nbsp;<label for="address_item_billing<?php echo $_templatePrefix ?>"><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Default Billing Address') ?></label>
-            </span>
-            <span class="address-type-line">
-                <input  <?php if ($this->isReadonly()):?> disabled="disabled"<?php endif;?> type="radio" value="<?php echo $_templatePrefix ?>" id="address_item_shipping<?php echo $_templatePrefix ?>" name="account[default_shipping]" title="<?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Set as Default Shipping Address') ?>"/>
-                &nbsp;<label for="address_item_shipping<?php echo $_templatePrefix ?>"><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Default Shipping Address') ?></label>
-            </span>
+            <?php endif;?>
+
+            <address>
+                <?php echo Mage::helper('Mage_Customer_Helper_Data')->__('New Customer Address') ?>
+            </address>
+
+            <div class="field choice field-address-item-billing">
+                    <input type="checkbox" <?php if ($this->isReadonly()):?> disabled="disabled"<?php endif;?> value="<?php echo $_templatePrefix ?>" id="address_item_billing<?php echo $_templatePrefix ?>" name="account[default_billing]" title="<?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Set as Default Billing Address') ?>" />
+                <label class="label" for="address_item_billing<?php echo $_templatePrefix ?>">
+                    <span><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Default Billing Address') ?></span>
+                </label>
+            </div>
+            <div class="field choice field-address-item-shipping">
+                    <input type="checkbox" <?php if ($this->isReadonly()):?> disabled="disabled"<?php endif;?> value="<?php echo $_templatePrefix ?>" id="address_item_shipping<?php echo $_templatePrefix ?>" name="account[default_shipping]" title="<?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Set as Default Shipping Address') ?>"/>
+                <label class="label" for="address_item_shipping<?php echo $_templatePrefix ?>">
+                    <span><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Default Shipping Address') ?></span>
+                </label>
+            </div>
         </div>
-    </div>
 
-    <!-- Address form template -->
-    <div id="address_form_template" class="no-display template">
-    <?php
-        // Set form template elements prefix
-        $this->getForm()->setHtmlIdPrefix($_templatePrefix)
-                ->setFieldNameSuffix('address['.$_templatePrefix.']');
-    ?>
-    <?php echo $this->getForm()->getHtml() ?>
-    <?php echo $this->getCancelButtonHtml() ?>
-    </div>
-<!-- -->
+        <!-- Address form template -->
+        <div id="address_form_template" class="no-display template"><!-- Don`t delete class no-display, save customer stops work  -->
+            <?php
+                // Set form template elements prefix
+                $this->getForm()->setHtmlIdPrefix($_templatePrefix)
+                        ->setFieldNameSuffix('address['.$_templatePrefix.']');
+            ?>
+            <?php echo $this->getForm()->getHtml() ?>
+            <div class="address-item-edit-actions"><?php echo $this->getCancelButtonHtml() ?></div>
+        </div>
 
-<!-- Addresses forms -->
-    <div class="entry-edit" id="address_form_container">
+
+
+    <!-- Addresses forms -->
+    <div class="address-item-edit" id="address_form_container">
         <?php if(count($addressCollection)): ?>
             <?php foreach ($addressCollection as $_address): ?>
-            <div id="form_address_item_<?php echo $_address->getId() ?>" style="display:none">
+            <div class="address-item-edit-content" id="form_address_item_<?php echo $_address->getId() ?>" style="display:none">
             <?php
                     $this->getForm()->addValues($_address->getData())
                             ->setHtmlIdPrefix("_item{$_address->getId()}")
@@ -118,10 +132,9 @@
             <input type="hidden" name="address[<?php echo $_address->getId() ?>][_deleted]" id="deleted_address_item_<?php echo $_address->getId() ?>" />
             </div>
             <?php endforeach; ?>
-        <?php else: ?>
-            <div id="no_address_message"><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('This customer has no saved addresses.') ?></div>
         <?php endif; ?>
     </div>
+</fieldset>
 
 <script type="text/javascript">
 //<![CDATA[
@@ -173,14 +186,14 @@ addressesModel.prototype = {
         if( initial ) {
             this.itemCount = this.itemList.length;
         }
-        if(!this.itemList.length){
-            if($('no_address_message')){
-                $('no_address_message').show();
-            }
-            else {
-                this.formContainer.innerHTML+= '<div id="no_address_message"><?php echo addslashes(Mage::helper('Mage_Customer_Helper_Data')->__('This customer has no saved addresses.')) ?></div>'
-            }
-        }
+        // if(!this.itemList.length){
+        //     if($('no_address_message')){
+        //         $('no_address_message').show();
+        //     }
+        //     else {
+        //         this.formContainer.innerHTML+= '<div id="no_address_message"><?php echo addslashes(Mage::helper('Mage_Customer_Helper_Data')->__('This customer has no saved addresses.')) ?></div>'
+        //     }
+        // }
     },
 
     initItem : function(item){
@@ -207,16 +220,16 @@ addressesModel.prototype = {
     addNewAddress : function(event){
         if(this.canCreateNewAddress){
             this.itemCount++;
-            if($('no_address_message')){
-                $('no_address_message').hide();
-            }
+            // if($('no_address_message')){
+            //     $('no_address_message').hide();
+            // }
             // preventing duplication of ids for fields and blocks
             while ($$("div[id='form_address_item_" + this.itemCount + "']").length) {
                 this.itemCount++;
             }
             // create new form elements
             Element.insert(this.formContainer, {bottom:
-                '<div id="' + 'form_' + this.baseItemId + this.itemCount + '">'
+                '<div id="' + 'form_' + this.baseItemId + this.itemCount + '" class="address-item-edit-content">'
                 + this.prepareTemplate(this.formTemplate.innerHTML)
                 + '</div>'
             });
@@ -231,7 +244,7 @@ addressesModel.prototype = {
             deleteButtonId ++;
             template    += this.prepareTemplate(this.itemTemplate.innerHTML).replace('delete_button', 'delete_button'+ deleteButtonId);
             template    += '</li>';
-            Element.insert(this.itemContainer, {bottom: template});
+            Element.insert(this.itemContainer.down('.adress-list-actions'), {before: template});
             var newItem = $(this.baseItemId+this.itemCount);
             newItem.isNewAddress = true;
             newItem.formBlock = newForm;
@@ -287,7 +300,7 @@ addressesModel.prototype = {
         var element = Event.findElement(event, 'li'); // find top item
         var elem = Event.element(event); // exact element clicked
 
-        if ( ((elem.tagName.toUpperCase() == 'A') && elem.id.match(/^delete_button([0-9]*?)$/)) || ((elem.tagName.toUpperCase() == 'IMG') && elem.id.match(/^delete_button([0-9]*?)$/)) ) {
+        if ( ((elem.tagName.toUpperCase() == 'BUTTON') && elem.id.match(/^delete_button([0-9]*?)$/)) && elem.id.match(/^delete_button([0-9]*?)$/) ) {
             this.deleteAddress(element);
             Event.stop(event);
         }
@@ -316,22 +329,22 @@ addressesModel.prototype = {
 
     toggleDeleteButton : function(item, flag){
         if(flag){
-            $(item).select('.btn-remove-address').each(Element.show);
+            $(item).select('.action-delete-address').each(Element.show);
             $(item.formBlock).getElementsBySelector('.delete-address').each(Element.show);
         } else {
-            $(item).select('.btn-remove-address').each(Element.hide);
+            $(item).select('.action-delete-address').each(Element.hide);
             $(item.formBlock).getElementsBySelector('.delete-address').each(Element.hide);
         }
     },
 
     setActiveItem : function(item){
         if(this.activeItem){
-            Element.removeClassName(this.activeItem, 'on');
+            Element.removeClassName(this.activeItem, 'active');
             if($('form_'+this.activeItem.id)){
                 Element.hide($('form_'+this.activeItem.id));
             }
         }
-        Element.addClassName(item, 'on');
+        Element.addClassName(item, 'active');
 
         if(item && $('form_'+item.id)){
             $('form_'+item.id).changeRelation = item;
@@ -637,7 +650,4 @@ addressesModel.prototype = {
 customerAddresses = new addressesModel();
 //]]>
 </script>
-</td>
-</tr>
-</table>
-</div>
+

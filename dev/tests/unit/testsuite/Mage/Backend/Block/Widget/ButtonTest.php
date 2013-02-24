@@ -45,33 +45,32 @@ class Mage_Backend_Block_Widget_ButtonTest extends PHPUnit_Framework_TestCase
      */
     protected $_factoryMock;
 
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_blockMock;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_buttonMock;
+
     protected function setUp()
     {
         $this->_helperMock =
-            $this->getMock('Mage_Backend_Helper_Data', array(), array(), '', false);
+            $this->getMock('Mage_Backend_Helper_Data', array('uniqHash'), array(), '', false, false);
 
         $this->_layoutMock =
-            $this->getMock('Mage_Core_Model_Layout', array(), array(), '', false);
+            $this->getMock('Mage_Core_Model_Layout', array(), array(), '', false, false);
         $this->_layoutMock
             ->expects($this->any())
             ->method('helper')
             ->will($this->returnValue($this->_helperMock));
 
-        $coreHelperMock = $this->getMockBuilder('Mage_Core_Helper_Data')->disableOriginalConstructor()->getMock();
-
-        $helperFactoryMock = $this->getMockBuilder('Mage_Core_Model_Factory_Helper')
-            ->disableOriginalConstructor()->getMock();
-
-        $helperFactoryMock->expects($this->any())
-            ->method('get')
-            ->with('Mage_Core_Helper_Data')
-            ->will($this->returnValue($coreHelperMock));
-
         $arguments = array(
             'urlBuilder' =>
-                $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false),
-            'layout' => $this->_layoutMock,
-            'helperFactory' => $helperFactoryMock
+                $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false, false),
+            'layout' => $this->_layoutMock
         );
 
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);

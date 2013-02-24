@@ -71,7 +71,7 @@ class Mage_Core_Model_Resource_TransactionTest extends PHPUnit_Framework_TestCas
         $this->assertNotEmpty($first->getId());
         $this->assertNotEmpty($second->getId());
 
-        Mage::app()->getStore()->setId(Mage_Core_Model_App::ADMIN_STORE_ID);
+        Mage::app()->getStore()->setId(Mage_Core_Model_AppInterface::ADMIN_STORE_ID);
         $this->_model->delete();
 
         $test  = Mage::getModel('Mage_Core_Model_Store_Group');

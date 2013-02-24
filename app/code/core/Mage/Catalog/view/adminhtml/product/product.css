@@ -1062,3 +1062,13 @@
     text-align: center;
     vertical-align: middle;
 }
+.ui-dialog.mage-new-category-dialog,
+.ui-dialog.mage-new-category-dialog .ui-dialog-content,
+.ui-dialog.mage-new-category-dialog .hor-scroll,
+.ui-dialog.mage-new-category-dialog .mage-suggest-dropdown {
+    overflow: visible;
+}
+
+#new_category_parent-suggest, #category_ids-suggest {
+    width: 180px;
+}

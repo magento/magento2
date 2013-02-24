@@ -115,7 +115,7 @@ jQuery(function($) {
                     return; // affected attribute set was already chosen
                 }
                 var extendingAttributes = [];
-                $.each($('#attributes-container').variationsAttributes('getAttributes'), function () {
+                $.each($('#configurable-attributes-container').variationsAttributes('getAttributes'), function () {
                     if (!$('#attribute-' + this.code + '-container').length) {
                         extendingAttributes.push(this.id);
                     }

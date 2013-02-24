@@ -204,7 +204,7 @@ class Mage_Catalog_Model_Resource_Product_Type_Configurable extends Mage_Core_Mo
                     ),
                     implode(' AND ', array(
                         'option_value.option_id = entity_value.value',
-                        'option_value.store_id = ' . Mage_Core_Model_App::ADMIN_STORE_ID,
+                        'option_value.store_id = ' . Mage_Core_Model_AppInterface::ADMIN_STORE_ID,
                     )),
                     array()
                 )->joinLeft(

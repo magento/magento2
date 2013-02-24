@@ -140,7 +140,7 @@ class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_StoreView extends Mage_Ba
         $assignSaveButton = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button');
         $assignSaveButton->setData(array(
             'label'     => $this->__('Assign'),
-            'class'     => 'action-save',
+            'class'     => 'action-save primary',
             'data_attribute' => array(
                 'mage-init' => array(
                     'button' => array(

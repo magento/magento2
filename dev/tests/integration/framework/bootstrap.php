@@ -37,9 +37,6 @@ Magento_Autoload_IncludePath::addIncludePath(array(
     "$testsBaseDir/testsuite",
 ));
 
-/* Initialize object manager instance */
-Mage::initializeObjectManager(null, new Magento_Test_ObjectManager());
-
 /* Bootstrap the application */
 $invariantSettings = array(
     'TESTS_LOCAL_CONFIG_EXTRA_FILE' => 'etc/integration-tests-config.xml',

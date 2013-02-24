@@ -979,7 +979,7 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
         Mage_Catalog_Model_Product $parentProduct,
         $postData
     ) {
-        $product->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID)
+        $product->setStoreId(Mage_Core_Model_AppInterface::ADMIN_STORE_ID)
             ->setTypeId($postData['weight']
                 ? Mage_Catalog_Model_Product_Type::TYPE_SIMPLE
                 : Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL

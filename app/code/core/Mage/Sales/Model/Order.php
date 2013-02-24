@@ -2002,7 +2002,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
         $this->_checkState();
         if (!$this->getId()) {
             $store = $this->getStore();
-            $name = array($store->getWebsite()->getName(),$store->getGroup()->getName(),$store->getName());
+            $name = array($store->getWebsite()->getName(), $store->getGroup()->getName(), $store->getName());
             $this->setStoreName(implode("\n", $name));
         }
 

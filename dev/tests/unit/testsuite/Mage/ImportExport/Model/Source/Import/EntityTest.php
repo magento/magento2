@@ -82,7 +82,11 @@ class Mage_ImportExport_Model_Source_Import_EntityTest extends PHPUnit_Framework
         if (!self::$_helper) {
             self::$_helper = $this->getMock(
                 'Mage_ImportExport_Helper_Data',
-                array('__')
+                array('__'),
+                array(),
+                '',
+                false,
+                false
             );
             self::$_helper->expects($this->any())
                 ->method('__')

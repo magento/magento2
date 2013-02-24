@@ -74,7 +74,7 @@ abstract class Mage_Core_Model_Resource_Db_Collection_Abstract extends Varien_Da
     /**
      * Fields to select changed flag
      *
-     * @var booleam
+     * @var boolean
      */
     protected $_fieldsToSelectChanged  = false;
 
@@ -340,14 +340,14 @@ abstract class Mage_Core_Model_Resource_Db_Collection_Abstract extends Varien_Da
      *
      * @param string $alias
      * @param string $expression
-     * @param array $fields
+     * @param array|string $fields
      * @return Mage_Core_Model_Resource_Db_Collection_Abstract
      */
     public function addExpressionFieldToSelect($alias, $expression, $fields)
     {
         // validate alias
         if (!is_array($fields)) {
-            $fields = array($fields=>$fields);
+            $fields = array($fields => $fields);
         }
 
         $fullExpression = $expression;
@@ -422,7 +422,7 @@ abstract class Mage_Core_Model_Resource_Db_Collection_Abstract extends Varien_Da
     {
         if (is_string($model)) {
             $this->_model = $model;
-            $this->setItemObjectClass(Mage::getConfig()->getModelClassName($model));
+            $this->setItemObjectClass($model);
         }
         return $this;
     }
@@ -653,7 +653,8 @@ abstract class Mage_Core_Model_Resource_Db_Collection_Abstract extends Varien_Da
      */
     protected function _canUseCache()
     {
-        return Mage::app()->useCache('collections') && !empty($this->_cacheConf);
+        return Mage::getObjectManager()->get('Mage_Core_Model_Cache')->canUse('collections')
+            && !empty($this->_cacheConf);
     }
 
     /**
@@ -664,7 +665,7 @@ abstract class Mage_Core_Model_Resource_Db_Collection_Abstract extends Varien_Da
      */
     protected function _loadCache($select)
     {
-        $data = Mage::app()->loadCache($this->_getSelectCacheId($select));
+        $data = Mage::getObjectManager()->get('Mage_Core_Model_Cache')->load($this->_getSelectCacheId($select));
         return $data;
     }
 
@@ -677,7 +678,9 @@ abstract class Mage_Core_Model_Resource_Db_Collection_Abstract extends Varien_Da
      */
     protected function _saveCache($data, $select)
     {
-        Mage::app()->saveCache(serialize($data), $this->_getSelectCacheId($select), $this->_getCacheTags());
+        Mage::getObjectManager()->get('Mage_Core_Model_Cache')->save(
+            serialize($data), $this->_getSelectCacheId($select), $this->_getCacheTags(), false
+        );
         return $this;
     }
 
@@ -689,7 +692,7 @@ abstract class Mage_Core_Model_Resource_Db_Collection_Abstract extends Varien_Da
     protected function _getCacheTags()
     {
         $tags = parent::_getCacheTags();
-        $tags[] = Mage_Core_Model_App::CACHE_TAG;
+        $tags[] = Mage_Core_Model_AppInterface::CACHE_TAG;
         $tags[] = self::CACHE_TAG;
         return $tags;
     }
@@ -705,7 +708,4 @@ abstract class Mage_Core_Model_Resource_Db_Collection_Abstract extends Varien_Da
     {
         return Varien_Date::formatDate($date, $includeTime);
     }
-
-
-
 }

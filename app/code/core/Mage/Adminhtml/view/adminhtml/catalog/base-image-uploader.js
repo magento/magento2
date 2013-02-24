@@ -22,137 +22,120 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-/*global media_gallery_contentJsObject*/
-// @todo: refactor as widget
-function BaseImageUploader(id, maxFileSize) {
-    (function ($) {
-        var $container = $('#' + id + '-container'),
-            $template = $('#' + id + '-template'),
-            $dropPlaceholder = $('#' + id + '-upload-placeholder'),
-            images = $container.data('images'),
-            mainImage = $container.data('main'),
-            mainClass = 'base-image',
-            currentImageCount = 0,
-            maximumImageCount = 5,
-            isInitialized = false;
+/*jshint jquery:true*/
+/*global alert*/
+(function ($) {
+    "use strict";
+    $.widget('mage.baseImage', {
+        /**
+         * Button creation
+         * @protected
+         */
+        _create: function() {
+            var $container = this.element,
+                $template = this.element.find('.image-template'),
+                $dropPlaceholder = this.element.find('.image-placeholder'),
+                $galleryContainer = $('#media_gallery_content'),
+                mainClass = 'base-image',
+                maximumImageCount = 5;
 
-        $container.on('add', function(event, data) {
-            if (currentImageCount < maximumImageCount) {
-                var $element = $template.tmpl(data);
-                $element.insertBefore($dropPlaceholder)
-                    .data('image', data);
-                if (isInitialized && !currentImageCount) {
-                    $.each('image,small_image,thumbnail'.split(','), function () {
-                        if ($('input[name="product[' + this + ']"][value=no_selection]').is(':checked')) {
-                            media_gallery_contentJsObject.imagesValues[this] = data.file;
-                            if (this == 'image') {
-                                mainImage = data.file;
-                            }
-                        }
-                    });
-                }
-                if (data.file == mainImage) {
-                    $element.addClass(mainClass);
-                }
-                currentImageCount++;
-            }
-            if (currentImageCount >= maximumImageCount) {
-                $dropPlaceholder.hide();
-            }
-            $('input[name="product[name]"]').focus().blur(); // prevent just inserted image selection
-        });
+            var findElement = function(data) {
+                return $container.find('.image:not(.image-placeholder)').filter(function() {
+                    return $(this).data('image').file === data.file;
+                }).first();
+            };
+            var updateVisibility = function() {
+                var elementsList = $container.find('.image:not(.removed-item)');
+                elementsList.each(function(index) {
+                    $(this)[index < maximumImageCount ? 'show' : 'hide']();
+                });
+                $dropPlaceholder[elementsList.length >= maximumImageCount ? 'hide' : 'show']();
+            };
 
-        $container.on('click', '.image', function (event) {
-            $(this).toggleClass('active').siblings().removeClass('active');
-        });
-        $container.on('click', '.action-make-main', function (event) {
-            var $imageContainer = $(this).closest('.image'),
-                image = $imageContainer.data('image');
-
-            $container.find('.image').removeClass(mainClass);
-            $imageContainer.addClass(mainClass);
-            mainImage = image.file;
-
-            var $galleryContainer = $('#media_gallery_content_grid'),
-                $currentImage = $galleryContainer.find('input[name="product[image]"]:checked'),
-                $currentSmallImage = $galleryContainer.find('input[name="product[small_image]"]:checked'),
-                $currentThumbnail = $galleryContainer.find('input[name="product[thumbnail]"]:checked'),
-                radiosToSwitch = 'input[name="product[image]"]';
-            if ($currentImage.attr('onclick') == $currentSmallImage.attr('onclick')
-                && $currentImage.attr('onclick') == $currentThumbnail.attr('onclick')
-            ) {
-                radiosToSwitch += ',input[name="product[small_image]"],input[name="product[thumbnail]"]';
-            }
-            _getGalleryRowByImage(image).find(radiosToSwitch).trigger('click');
-        });
-
-        $container.on('click', '.action-delete', function (event) {
-            var $imageContainer = $(this).closest('.image'),
-                image = $imageContainer.data('image'),
-                $galleryRow = _getGalleryRowByImage(image);
-
-            $galleryRow.find('.cell-remove input[type=checkbox]').prop('checked', true).trigger('click');
-            $.each('image,small_image,thumbnail'.split(','), function () {
-                if ($galleryRow.find('input[name="product[' + this + ']"]').is(':checked')) {
-                    $('input[name="product[' + this + ']"][value=no_selection]').prop('checked', true).trigger('click');
+            $galleryContainer.on('setImageType', function(event, data) {
+                if (data.type === 'image') {
+                    $container.find('.' + mainClass).removeClass(mainClass);
+                    if (data.imageData) {
+                        findElement(data.imageData).addClass(mainClass);
+                    }
                 }
             });
-            media_gallery_contentJsObject.updateImages();
-            $imageContainer.remove();
 
-            currentImageCount--;
-            if (currentImageCount < maximumImageCount) {
-                $dropPlaceholder.css('display', 'inline-block');
-            }
-        });
+            $galleryContainer.on('addItem', function(event, data) {
+                var $element = $template.tmpl(data);
+                $element.data('image', data).insertBefore($dropPlaceholder);
+                updateVisibility();
+            });
 
-        function _getGalleryRowByImage(image)
-        {
-            var escapedFileName = image.file.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g, '\\$1');
-            return $('input[onclick*="\'' + escapedFileName + '\'"]').closest('tr');
-        }
+            $galleryContainer.on('removeItem', function(event, image) {
+                findElement(image).addClass('removed-item').hide();
+                updateVisibility();
+            });
 
-        $container.sortable({
-            axis: 'x',
-            handle: '.image'
-        });
-
-        $dropPlaceholder.on('click', function(e) {
-            $('#' + id + '-upload').trigger(e);
-        });
-        $('#' + id + '-upload').fileupload({
-            dataType: 'json',
-            dropZone: $dropPlaceholder,
-            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-            maxFileSize: maxFileSize,
-            done: function (event, data) {
-                if (!data.result) {
-                    return;
-                }
-                if (!data.result.error) {
-                    $container.trigger('add', data.result);
-                    if (typeof media_gallery_contentJsObject != 'undefined') {
-                        media_gallery_contentJsObject.handleUploadComplete(data.result);
-                        media_gallery_contentJsObject.updateImages();
-                    }
+            $galleryContainer.on('moveElement', function(event, data) {
+                var $element = findElement(data.imageData);
+                if (data.position === 0) {
+                    $container.prepend($element);
                 } else {
-                    alert(jQuery.mage.__('File extension not known or unsupported type.'));
+                    var $after = $container.find('.image').eq(data.position);
+                    if (!$element.is($after)) {
+                        $element.insertAfter($after);
+                    }
                 }
-            },
-            add: function(event, data) {
-                $(this).fileupload('process', data).done(function () {
-                    data.submit();
-                });
-            }
-        });
+                updateVisibility();
+            });
 
-        $.each(images.items || [], function() {
-            $container.trigger('add', this);
-        });
-        isInitialized = true;
+            $container.on('click', '[data-role="make-main-button"]', function(event) {
+                event.preventDefault();
+                var data = $(this.target).closest('.image').data('image');
+                $galleryContainer.productGallery('setMain', data);
+            });
 
-        if ($('label[for=image]').text() == 'Base Image') {
-            $('label[for=image]').text('Images');
+            $container.on('click', '[data-role="delete-button"]', function(event) {
+                event.preventDefault();
+                $galleryContainer.trigger('removeItem', $(this.target).closest('.image').data('image'));
+            });
+
+            $container.sortable({
+                axis: 'x',
+                items: '.image:not(.image-placeholder)',
+                distance: 8,
+                tolerance: 'pointer',
+                stop: function(event, data) {
+                    $galleryContainer.trigger('setPosition', {
+                        imageData: data.item.data('image'),
+                        position: $container.find('.image').index(data.item)
+                    });
+                    $galleryContainer.trigger('resort');
+                }
+            }).disableSelection();
+
+            this.element.find('input[type="file"]').fileupload({
+                dataType: 'json',
+                dropZone: $dropPlaceholder,
+                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+                maxFileSize: this.element.data('maxFileSize'),
+                done: function(event, data) {
+                    $dropPlaceholder.find('.progress-bar').text('').removeClass('in-progress');
+                    if (!data.result) {
+                        return;
+                    }
+                    if (!data.result.error) {
+                        $galleryContainer.trigger('addItem', data.result);
+                    } else {
+                        alert($.mage.__('File extension not known or unsupported type.'));
+                    }
+                },
+                add: function(event, data) {
+                    $(this).fileupload('process', data).done(function() {
+                        data.submit();
+                    });
+                },
+                progress: function(e, data) {
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    $dropPlaceholder.find('.progress-bar').addClass('in-progress').text(progress + '%');
+                }
+            });
         }
-    })(jQuery);
-}
+    });
+})(jQuery);

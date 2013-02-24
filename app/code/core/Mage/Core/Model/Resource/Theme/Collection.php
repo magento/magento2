@@ -135,6 +135,7 @@ class Mage_Core_Model_Resource_Theme_Collection extends Mage_Core_Model_Resource
      */
     public function getThemeByFullPath($fullPath)
     {
+        $this->clear();
         list($area, $themePath) = explode('/', $fullPath, 2);
         $this->addFieldToFilter('area', $area);
         $this->addFieldToFilter('theme_path', $themePath);

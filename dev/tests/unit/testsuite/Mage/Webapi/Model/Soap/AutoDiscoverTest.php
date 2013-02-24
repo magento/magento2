@@ -70,7 +70,7 @@ class Mage_Webapi_Model_Soap_AutoDiscoverTest extends PHPUnit_Framework_TestCase
             array(new Magento_ObjectManager_Zend())
         );
         $wsdlFactory->expects($this->any())->method('create')->will($this->returnValue($this->_wsdlMock));
-        $helper = $this->getMock('Mage_Webapi_Helper_Config', array('__'));
+        $helper = $this->getMock('Mage_Webapi_Helper_Config', array('__'), array(), '', false, false);
         $helper->expects($this->any())->method('__')->will($this->returnArgument(0));
         $this->_cacheMock = $this->getMockBuilder('Mage_Core_Model_Cache')->disableOriginalConstructor()->getMock();
         /** Initialize SUT. */

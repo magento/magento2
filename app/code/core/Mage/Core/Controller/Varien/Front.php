@@ -151,7 +151,7 @@ class Mage_Core_Controller_Varien_Front extends Varien_Object implements Mage_Co
 
         $routersInfo = array_merge(
             Mage::app()->getConfig()->getRouters(),
-            Mage::app()->getStore()->getConfig(self::XML_STORE_ROUTERS_PATH)
+            Mage::app()->getStore()->getConfig(self::XML_STORE_ROUTERS_PATH) ?: array()
         );
 
         Magento_Profiler::start('collect_routers');
@@ -217,6 +217,7 @@ class Mage_Core_Controller_Varien_Front extends Varien_Object implements Mage_Co
         // This event gives possibility to launch something before sending output (allow cookie setting)
         Mage::dispatchEvent('controller_front_send_response_before', array('front'=>$this));
         Magento_Profiler::start('send_response');
+        Mage::dispatchEvent('http_response_send_before', array('response'=>$this));
         $this->getResponse()->sendResponse();
         Magento_Profiler::stop('send_response');
         Mage::dispatchEvent('controller_front_send_response_after', array('front'=>$this));

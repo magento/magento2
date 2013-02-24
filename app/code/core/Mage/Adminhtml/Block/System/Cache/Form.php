@@ -69,19 +69,6 @@ class Mage_Adminhtml_Block_System_Cache_Form extends Mage_Adminhtml_Block_Widget
             ));
         }
 
-        $fieldset = $form->addFieldset('beta_cache_enable', array(
-            'legend' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Cache Control (beta)')
-        ));
-
-        foreach (Mage::helper('Mage_Core_Helper_Data')->getCacheBetaTypes() as $type=>$label) {
-            $fieldset->addField('beta_enable_'.$type, 'checkbox', array(
-                'name'=>'beta['.$type.']',
-                'label'=>Mage::helper('Mage_Adminhtml_Helper_Data')->__($label),
-                'value'=>1,
-                'checked'=>(int)Mage::app()->useCache($type),
-            ));
-        }
-
         $this->setForm($form);
 
         return $this;

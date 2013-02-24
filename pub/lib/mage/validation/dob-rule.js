@@ -31,10 +31,14 @@
             $('.customer-dob').find('.' + this.settings.errorClass).removeClass(this.settings.errorClass);
             var dayVal = $(params[0]).find('input:text').val(),
                 monthVal = $(params[1]).find('input:text').val(),
-                yearVal = $(params[2]).find('input:text').val();
-            if (params[3] && dayVal.length + monthVal.length + yearVal.length === 0) {
+                yearVal = $(params[2]).find('input:text').val(),
+                dobLength = dayVal.length + monthVal.length + yearVal.length;
+            if (params[3] && dobLength === 0) {
                 this.dobErrorMessage = 'This is a required field.';
                 return false;
+            }
+            if (!params[3] && dobLength === 0) {
+                return true;
             }
             var day = parseInt(dayVal, 10) || 0,
                 month = parseInt(monthVal, 10) || 0,

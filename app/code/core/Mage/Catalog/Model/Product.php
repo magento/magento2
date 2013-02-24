@@ -115,9 +115,9 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
     /**
      * @param Mage_Core_Model_Event_Manager $eventDispatcher
      * @param Mage_Core_Model_Cache $cacheManager
-     * @param array $data
      * @param Mage_Catalog_Model_Resource_Product $resource
      * @param Mage_Catalog_Model_Resource_Product_Collection $resourceCollection
+     * @param array $data
      */
     public function __construct(
         Mage_Core_Model_Event_Manager $eventDispatcher,
@@ -184,9 +184,10 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
      */
     public function validate()
     {
-        Mage::dispatchEvent($this->_eventPrefix.'_validate_before', array($this->_eventObject=>$this));
+        Mage::dispatchEvent($this->_eventPrefix . '_validate_before', array($this->_eventObject => $this));
+        $this->_enforceFunctionalLimitations();
         $result = $this->_getResource()->validate($this);
-        Mage::dispatchEvent($this->_eventPrefix.'_validate_after', array($this->_eventObject=>$this));
+        Mage::dispatchEvent($this->_eventPrefix . '_validate_after', array($this->_eventObject => $this));
         return $result;
     }
 
@@ -475,6 +476,21 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
         }
 
         parent::_beforeSave();
+        $this->_enforceFunctionalLimitations();
+    }
+
+    /**
+     * Sub-routine for enforcing functional limitations
+     *
+     * @throws Mage_Core_Exception
+     */
+    protected function _enforceFunctionalLimitations()
+    {
+        /** @var $limitation Mage_Catalog_Model_Product_Limitation */
+        $limitation = Mage::getObjectManager()->get('Mage_Catalog_Model_Product_Limitation');
+        if ($this->isObjectNew() && $limitation->isCreateRestricted()) {
+            throw new Mage_Core_Exception($limitation->getCreateRestrictedMessage());
+        }
     }
 
     /**

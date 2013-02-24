@@ -725,7 +725,7 @@ class Mage_ImportExport_Model_Import_Entity_Product_Option extends Mage_ImportEx
             $storeCode = $rowData[self::COLUMN_STORE];
             $storeId = $this->_storeCodeToId[$storeCode];
         } else {
-            $storeId = Mage_Core_Model_App::ADMIN_STORE_ID;
+            $storeId = Mage_Core_Model_AppInterface::ADMIN_STORE_ID;
         }
         if (isset($this->_productsSkuToId[$this->_rowProductSku])) {
             // save in existing data array
@@ -1070,18 +1070,21 @@ class Mage_ImportExport_Model_Import_Entity_Product_Option extends Mage_ImportEx
                 $typeValues[$prevOptionId][] = $specificTypeData['value'];
 
                 // ensure default title is set
-                if (!isset($typeTitles[$nextValueId][Mage_Core_Model_App::ADMIN_STORE_ID])) {
-                    $typeTitles[$nextValueId][Mage_Core_Model_App::ADMIN_STORE_ID] = $specificTypeData['title'];
+                if (!isset($typeTitles[$nextValueId][Mage_Core_Model_AppInterface::ADMIN_STORE_ID])) {
+                    $typeTitles[$nextValueId][Mage_Core_Model_AppInterface::ADMIN_STORE_ID]
+                        = $specificTypeData['title'];
                 }
                 $typeTitles[$nextValueId][$this->_rowStoreId] = $specificTypeData['title'];;
 
                 if ($specificTypeData['price']) {
                     if ($this->_isPriceGlobal) {
-                        $typePrices[$nextValueId][Mage_Core_Model_App::ADMIN_STORE_ID] = $specificTypeData['price'];
+                        $typePrices[$nextValueId][Mage_Core_Model_AppInterface::ADMIN_STORE_ID]
+                            = $specificTypeData['price'];
                     } else {
                         // ensure default price is set
-                        if (!isset($typePrices[$nextValueId][Mage_Core_Model_App::ADMIN_STORE_ID])) {
-                            $typePrices[$nextValueId][Mage_Core_Model_App::ADMIN_STORE_ID] = $specificTypeData['price'];
+                        if (!isset($typePrices[$nextValueId][Mage_Core_Model_AppInterface::ADMIN_STORE_ID])) {
+                            $typePrices[$nextValueId][Mage_Core_Model_AppInterface::ADMIN_STORE_ID]
+                                = $specificTypeData['price'];
                         }
                         $typePrices[$nextValueId][$this->_rowStoreId] = $specificTypeData['price'];
                     }
@@ -1102,8 +1105,9 @@ class Mage_ImportExport_Model_Import_Entity_Product_Option extends Mage_ImportEx
     protected function _collectOptionTitle(array $rowData, $prevOptionId, array &$titles)
     {
         if (!empty($rowData[self::COLUMN_TITLE])) {
-            if (!isset($titles[$prevOptionId][Mage_Core_Model_App::ADMIN_STORE_ID])) { // ensure default title is set
-                $titles[$prevOptionId][Mage_Core_Model_App::ADMIN_STORE_ID] = $rowData[self::COLUMN_TITLE];
+            if (!isset($titles[$prevOptionId][Mage_Core_Model_AppInterface::ADMIN_STORE_ID])) {
+                // ensure default title is set
+                $titles[$prevOptionId][Mage_Core_Model_AppInterface::ADMIN_STORE_ID] = $rowData[self::COLUMN_TITLE];
             }
             $titles[$prevOptionId][$this->_rowStoreId] = $rowData[self::COLUMN_TITLE];
         }

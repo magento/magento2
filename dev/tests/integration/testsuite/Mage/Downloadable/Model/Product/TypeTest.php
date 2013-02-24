@@ -47,7 +47,7 @@ class Mage_Downloadable_Model_Product_TypeTest extends PHPUnit_Framework_TestCas
     {
         $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->load(1);
-        Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
+        Mage::app()->setCurrentStore(Mage_Core_Model_AppInterface::ADMIN_STORE_ID);
         $product->setOrigData();
         $downloadableData = array();
 

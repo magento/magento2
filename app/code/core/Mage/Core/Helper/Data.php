@@ -36,7 +36,6 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_PATH_PUBLIC_FILES_VALID_PATHS     = 'general/file/public_files_valid_paths';
     const XML_PATH_ENCRYPTION_MODEL             = 'global/helpers/core/encryption_model';
     const XML_PATH_DEV_ALLOW_IPS                = 'dev/restrict/allow_ips';
-    const XML_PATH_CACHE_BETA_TYPES             = 'global/cache/betatypes';
     const XML_PATH_CONNECTION_TYPE              = 'global/resources/default_setup/connection/type';
     const XML_PATH_IMAGE_ADAPTER                = 'dev/image/adapter';
     const XML_PATH_STATIC_FILE_SIGNATURE        = 'dev/static/sign';
@@ -81,6 +80,20 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
         Mage_Core_Model_Locale::FORMAT_TYPE_SHORT
     );
 
+    /**
+     * @var Mage_Core_Model_Config_Modules
+     */
+    protected $_config;
+
+    /**
+     * @param Mage_Core_Model_Translate $translator
+     * @param Mage_Core_Model_Config_Modules $config
+     */
+    public function __construct(Mage_Core_Model_Translate $translator, Mage_Core_Model_Config_Modules $config)
+    {
+        parent::__construct($translator);
+        $this->_config = $config;
+    }
 
     /**
      * @return Mage_Core_Model_Encryption
@@ -88,11 +101,13 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
     public function getEncryptor()
     {
         if ($this->_encryptor === null) {
-            $encryptionModel = (string)Mage::getConfig()->getNode(self::XML_PATH_ENCRYPTION_MODEL);
-            if (empty($encryptionModel)) {
+            $encryptionModel = (string)$this->_config->getNode(self::XML_PATH_ENCRYPTION_MODEL);
+
+            if (!$encryptionModel) {
                 $encryptionModel = 'Mage_Core_Model_Encryption';
             }
-            $this->_encryptor = Mage::getModel($encryptionModel);
+
+            $this->_encryptor = Mage::getObjectManager()->create($encryptionModel);
 
             $this->_encryptor->setHelper($this);
         }
@@ -381,23 +396,6 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
         $config = Mage::getConfig()->getNode(Mage_Core_Model_Cache::XML_PATH_TYPES);
         foreach ($config->children() as $type=>$node) {
             $types[$type] = (string)$node->label;
-        }
-        return $types;
-    }
-
-    /**
-     * Get information about available cache beta types
-     *
-     * @return array
-     */
-    public function getCacheBetaTypes()
-    {
-        $types = array();
-        $config = Mage::getConfig()->getNode(self::XML_PATH_CACHE_BETA_TYPES);
-        if ($config) {
-            foreach ($config->children() as $type=>$node) {
-                $types[$type] = (string)$node->label;
-            }
         }
         return $types;
     }
@@ -741,9 +739,10 @@ XML;
      */
     public function useDbCompatibleMode()
     {
-        $connType = (string) Mage::getConfig()->getNode(self::XML_PATH_CONNECTION_TYPE);
-        $path = 'global/resource/connection/types/' . $connType . '/compatibleMode';
-        $value = (string) Mage::getConfig()->getNode($path);
+        /** @var $resourceConfig Mage_Core_Model_Config_Resource */
+        $resourceConfig = Mage::getSingleton('Mage_Core_Model_Config_Resource');
+        $connType = (string) $resourceConfig->getResourceConnectionConfig('default_setup')->type;
+        $value = (string) $resourceConfig->getResourceTypeConfig($connType)->compatibleMode;
         return (bool) $value;
     }
 

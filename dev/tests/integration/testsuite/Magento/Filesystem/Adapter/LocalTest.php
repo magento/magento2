@@ -343,7 +343,8 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
     public function testGetNestedKeys($path, $expectedKeys)
     {
         $actualKeys = $this->_adapter->getNestedKeys($path);
-        $this->assertEquals(sort($expectedKeys), sort($actualKeys));
+        sort($actualKeys);
+        $this->assertEquals($expectedKeys, $actualKeys);
     }
 
     /**
@@ -358,10 +359,10 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
             array(
                 $this->_getFixturesPath() . 'foo',
                 array(
-                    $this->_getFixturesPath() . 'foo' . $ds . 'bar' . $ds . 'baz' . $ds . 'file_one.txt',
-                    $this->_getFixturesPath() . 'foo' . $ds . 'bar' . $ds . 'baz',
-                    $this->_getFixturesPath() . 'foo' . $ds . 'bar' . $ds . 'file_two.txt',
                     $this->_getFixturesPath() . 'foo' . $ds . 'bar',
+                    $this->_getFixturesPath() . 'foo' . $ds . 'bar' . $ds . 'baz',
+                    $this->_getFixturesPath() . 'foo' . $ds . 'bar' . $ds . 'baz' . $ds . 'file_one.txt',
+                    $this->_getFixturesPath() . 'foo' . $ds . 'bar' . $ds . 'file_two.txt',
                     $this->_getFixturesPath() . 'foo' . $ds . 'file_three.txt',
                 )
             ),

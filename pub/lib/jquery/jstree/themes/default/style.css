@@ -12,12 +12,12 @@
 .jstree-default .jstree-closed > ins { background-position:-54px 0; }
 .jstree-default .jstree-leaf > ins { background-position:-36px 0; }
 
-.jstree-default .jstree-hovered { background:#e7f4f9; border:1px solid #d8f0fa; padding:0 2px 0 1px; }
-.jstree-default .jstree-clicked { background:#beebff; border:1px solid #99defd; padding:0 2px 0 1px; }
+.jstree-default .jstree-hovered { background:#f1f8fc; }
+.jstree-default .jstree-clicked { background:#cdecf6; }
 .jstree-default a .jstree-icon { background-position:-56px -19px; }
 .jstree-default a.jstree-loading .jstree-icon { background:url("throbber.gif") center center no-repeat !important; }
 
-.jstree-default.jstree-focused { background:#ffffee; }
+.jstree-default.jstree-focused { background:#fff; }
 
 .jstree-default .jstree-no-dots li, 
 .jstree-default .jstree-no-dots .jstree-leaf > ins { background:transparent; }

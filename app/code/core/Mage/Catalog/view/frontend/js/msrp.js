@@ -35,27 +35,18 @@
                 this._addToCartSubmit();
             }, this));
 
-            if (this.element.parents(this.options.groupedProductContainer).length > 0) {
-                this.options.clickUpdate = true;
-            }
-
-            if (!$('#map-popup-price').html() && this.options.realPrice && !this.options.clickUpdate) {
-                $('#map-popup-price').html($(this.options.realPrice));
-                $('#map-popup-msrp').html(this.options.msrpPrice);
-            }
-
             $(this.options.popupId).on('click', $.proxy(function(e) {
                 if (this.options.submitUrl) {
                     location.href = this.options.submitUrl;
                 } else {
+                    $(this.options.popupCartButtonId).off('click');
                     $(this.options.popupCartButtonId).on('click', $.proxy(function() {
                         this._addToCartSubmit();
                     }, this));
                     $('#map-popup-heading').text(this.options.productName);
-                    if (this.options.clickUpdate) {
-                        $('#map-popup-price').html($(this.options.realPrice));
-                        $('#map-popup-msrp').html(this.options.msrpPrice);
-                    }
+                    $('#map-popup-price').html($(this.options.realPrice));
+                    $('#map-popup-msrp').html(this.options.msrpPrice);
+                    this.element.trigger('reloadPrice');
                     var width = $('#map-popup').width();
                     var offsetX = e.pageX - (width / 2) + "px";
                     $('#map-popup').css({left: offsetX, top: e.pageY}).show();
@@ -85,6 +76,7 @@
         },
 
         _addToCartSubmit: function() {
+            this.element.trigger('addToCart', this.element);
             if (this.options.addToCartUrl) {
                 $('#map-popup').hide();
                 if (opener !== null) {

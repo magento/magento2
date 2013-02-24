@@ -27,7 +27,7 @@
 
 /** @var $objectManager Magento_ObjectManager */
 $objectManager = Mage::getObjectManager();
-
+Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_COre_Model_App_Area::PART_CONFIG);
 /** @var $theme Mage_Core_Model_Theme */
 $theme = $objectManager->create('Mage_Core_Model_Theme');
 $theme->setThemePath('test/test')

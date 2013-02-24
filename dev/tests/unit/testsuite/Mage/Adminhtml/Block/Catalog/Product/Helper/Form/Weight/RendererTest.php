@@ -43,7 +43,9 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Weight_RendererTest exten
     {
         $this->_virtual = new Varien_Object();
 
-        $helper = $this->getMock('Mage_Catalog_Helper_Product', array('getTypeSwitcherControlLabel'));
+        $helper = $this->getMock('Mage_Catalog_Helper_Product', array('getTypeSwitcherControlLabel'),
+            array(), '', false, false
+        );
         $helper->expects($this->any())->method('getTypeSwitcherControlLabel')
             ->will($this->returnValue('Virtual / Downloadable'));
 

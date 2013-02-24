@@ -33,9 +33,19 @@ class Mage_Index_Model_Lock_StorageTest extends PHPUnit_Framework_TestCase
      */
     protected $_callbackProcessId;
 
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_dirsMock;
+
     public function testGetFile()
     {
-        $dirs = new Mage_Core_Model_Dir(__DIR__);
+        $this->_dirsMock = $this->getMock('Mage_Core_Model_Dir', array(), array(), '', false, false);
+        $this->_dirsMock->expects($this->any())
+            ->method('getDir')
+            ->with(Mage_Core_Model_Dir::VAR_DIR)
+            ->will($this->returnValue(__DIR__ . DIRECTORY_SEPARATOR. 'var'));
+
         $fileModel = $this->getMock('Mage_Index_Model_Process_File',
             array(
                 'setAllowCreateFolders',
@@ -65,7 +75,7 @@ class Mage_Index_Model_Lock_StorageTest extends PHPUnit_Framework_TestCase
             ->method('createFromArray')
             ->will($this->returnValue($fileModel));
 
-        $storage = new Mage_Index_Model_Lock_Storage($dirs, $fileFactory);
+        $storage = new Mage_Index_Model_Lock_Storage($this->_dirsMock, $fileFactory);
 
         /**
          * List if test process IDs.

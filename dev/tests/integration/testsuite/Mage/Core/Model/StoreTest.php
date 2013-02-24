@@ -158,7 +158,7 @@ class Mage_Core_Model_StoreTest extends PHPUnit_Framework_TestCase
     public function testGetBaseUrlInPub()
     {
         Magento_Test_Helper_Bootstrap::getInstance()->reinitialize(array(
-            Mage_Core_Model_App::INIT_OPTION_URIS => array(Mage_Core_Model_Dir::PUB => '')
+            Mage::PARAM_APP_URIS => array(Mage_Core_Model_Dir::PUB => '')
         ));
         $this->_model->load('default');
 
@@ -265,7 +265,7 @@ class Mage_Core_Model_StoreTest extends PHPUnit_Framework_TestCase
         );
 
         /* emulate admin store */
-        Mage::app()->getStore()->setId(Mage_Core_Model_App::ADMIN_STORE_ID);
+        Mage::app()->getStore()->setId(Mage_Core_Model_AppInterface::ADMIN_STORE_ID);
         $crud = new Magento_Test_Entity($this->_model, array('name' => 'new name'));
         $crud->testCrud();
     }
@@ -316,7 +316,7 @@ class Mage_Core_Model_StoreTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoConfigFixture global/functional_limitation/max_store_count 1
+     * @magentoConfigFixture limitations/store 1
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      * @expectedException Mage_Core_Exception

@@ -247,7 +247,7 @@
          *     (several components may be passed also as separate arguments)
          * @return {Object} $.mage
          */
-        load: function(component) {
+        load: function() {
             $.each(arguments, function(i, component) {
                 if (_resources[component] && _resources[component].length) {
                     _onload(_resources[component]);
@@ -258,25 +258,28 @@
     });
 })(jQuery);
 
-(function($) {
+(function($, window) {
     "use strict";
-    $.extend(true, $, {
-        mage: {
-            constant: {
-                KEY_BACKSPACE: 8,
-                KEY_TAB: 9,
-                KEY_RETURN: 13,
-                KEY_ESC: 27,
-                KEY_LEFT: 37,
-                KEY_UP: 38,
-                KEY_RIGHT: 39,
-                KEY_DOWN: 40,
-                KEY_DELETE: 46,
-                KEY_HOME: 36,
-                KEY_END: 35,
-                KEY_PAGEUP: 33,
-                KEY_PAGEDOWN: 34
+    $.extend($.mage, {
+            /**
+             * Method handling redirects and page refresh
+             * @param {String} url - redirect URL
+             * @param {(undefined|String)} type - 'assign', 'reload', 'replace'
+             * @param {(undefined|Number)} timeout - timeout in milliseconds before processing the redirect or reload
+             * @param {(undefined|Boolean)} forced - true|false used for 'reload' only
+             */
+            redirect: function(url, type, timeout, forced) {
+                forced = forced ? true : false;
+                timeout = timeout ? timeout : 0;
+                type = type ? type : "assign";
+                var _redirect = function() {
+                    window.location[type](type === 'reload' ? forced : url);
+                };
+                if (timeout) {
+                    setTimeout(_redirect, timeout);
+                } else {
+                    _redirect();
+                }
             }
-        }
     });
-})(jQuery);
+})(jQuery, window);

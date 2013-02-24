@@ -799,7 +799,7 @@ class Mage_Catalog_Model_Resource_Product_Flat_Indexer extends Mage_Index_Model_
                 array())
             ->where('t1.entity_type_id = :entity_type_id')
             ->where('t1.attribute_id = :attribute_id')
-            ->where('t1.store_id = ?', Mage_Core_Model_App::ADMIN_STORE_ID)
+            ->where('t1.store_id = ?', Mage_Core_Model_AppInterface::ADMIN_STORE_ID)
             ->where("{$fieldExpr} = ?", Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
         foreach ($this->getAttributes() as $attributeCode => $attribute) {
             /** @var $attribute Mage_Eav_Model_Entity_Attribute */

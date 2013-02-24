@@ -95,7 +95,7 @@
                         url: options.url,
                         context: $input,
                         dataType: 'json',
-                        data: {name_part: request.term},
+                        data: {label_part: request.term},
                         success: function(data) {
                             response(treeToList([], data || [], 0, ''));
                         }
@@ -124,10 +124,10 @@
                     return false;
                 }
             });
-            $input.data('autocomplete')._renderItem = function(ul, item) {
+            $input.data('ui-autocomplete')._renderItem = function(ul, item) {
                 var level = window.parseInt(item.level),
                     $li = $("<li>");
-                $li.data("item.autocomplete", item);
+                $li.data('ui-autocomplete-item', item);
                 $li.append($("<a />", {
                             'data-level': level,
                             'data-ui-id': 'category-selector-' + item.value

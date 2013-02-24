@@ -70,6 +70,50 @@ class Mage_Core_Model_Resource
     protected $_mappedTableNames;
 
     /**
+     * Resource configuration
+     *
+     * @var Mage_Core_Model_Config_Resource
+     */
+    protected $_resourceConfig;
+
+    /**
+     * Application cache
+     *
+     * @var Mage_Core_Model_Cache
+     */
+    protected $_cache;
+
+    /**
+     * @param Mage_Core_Model_Config_Resource $resourceConfig
+     * @param Mage_Core_Model_Cache $cache
+     */
+    public function __construct(Mage_Core_Model_Config_Resource $resourceConfig, Mage_Core_Model_Cache $cache)
+    {
+        $this->_resourceConfig = $resourceConfig;
+        $this->_cache = $cache;
+    }
+
+    /**
+     * Set resource configuration
+     *
+     * @param Mage_Core_Model_Config_Resource $resourceConfig
+     */
+    public function setResourceConfig(Mage_Core_Model_Config_Resource $resourceConfig)
+    {
+        $this->_resourceConfig = $resourceConfig;
+    }
+
+    /**
+     * Set cache instance
+     *
+     * @param Mage_Core_Model_CacheInterface $cache
+     */
+    public function setCache(Mage_Core_Model_CacheInterface $cache)
+    {
+        $this->_cache = $cache;
+    }
+
+    /**
      * Creates a connection to resource whenever needed
      *
      * @param string $name
@@ -79,13 +123,13 @@ class Mage_Core_Model_Resource
     {
         if (isset($this->_connections[$name])) {
             $connection = $this->_connections[$name];
-            if (isset($this->_skippedConnections[$name]) && !Mage::app()->getIsCacheLocked()) {
+            if (isset($this->_skippedConnections[$name])) {
                 $connection->setCacheAdapter(Mage::app()->getCache());
                 unset($this->_skippedConnections[$name]);
             }
             return $connection;
         }
-        $connConfig = Mage::getConfig()->getResourceConnectionConfig($name);
+        $connConfig = $this->_resourceConfig->getResourceConnectionConfig($name);
 
         if (!$connConfig) {
             $this->_connections[$name] = $this->_getDefaultConnection($name);
@@ -103,11 +147,7 @@ class Mage_Core_Model_Resource
 
         $connection = $this->_newConnection((string)$connConfig->type, $connConfig);
         if ($connection) {
-            if (Mage::app()->getIsCacheLocked()) {
-                $this->_skippedConnections[$name] = true;
-            } else {
-                $connection->setCacheAdapter(Mage::app()->getCache());
-            }
+            $connection->setCacheAdapter($this->_cache->getFrontend());
         }
 
         $this->_connections[$name] = $connection;
@@ -126,7 +166,7 @@ class Mage_Core_Model_Resource
      */
     protected function _getConnectionAdapterClassName($type)
     {
-        $config = Mage::getConfig()->getResourceTypeConfig($type);
+        $config = $this->_resourceConfig->getResourceTypeConfig($type);
         if (!empty($config->adapter)) {
             return (string)$config->adapter;
         }
@@ -214,7 +254,7 @@ class Mage_Core_Model_Resource
     public function getConnectionTypeInstance($type)
     {
         if (!isset($this->_connectionTypes[$type])) {
-            $config = Mage::getConfig()->getResourceTypeConfig($type);
+            $config = $this->_resourceConfig->getResourceTypeConfig($type);
             $typeClass = $config->getClassName();
             $this->_connectionTypes[$type] = new $typeClass();
         }
@@ -236,18 +276,11 @@ class Mage_Core_Model_Resource
 
         $tableName = $modelEntity;
 
-        Mage::dispatchEvent('resource_get_tablename', array(
-            'resource'      => $this,
-            'model_entity'  => $modelEntity,
-            'table_name'    => $tableName,
-            'table_suffix'  => $tableSuffix
-        ));
-
         $mappedTableName = $this->getMappedTableName($tableName);
         if ($mappedTableName) {
             $tableName = $mappedTableName;
         } else {
-            $tablePrefix = (string)Mage::getConfig()->getTablePrefix();
+            $tablePrefix = (string)$this->_resourceConfig->getTablePrefix();
             if ($tablePrefix && strpos($tableName, $tablePrefix) !== 0) {
                 $tableName = $tablePrefix . $tableName;
             }

@@ -58,7 +58,7 @@ class Integrity_Mage_Payment_MethodsTest extends PHPUnit_Framework_TestCase
             $this->assertFileExists($block->getTemplateFile(), $message);
             if ($model->canUseInternal()) {
                 try {
-                    Mage::app()->getStore()->setId(Mage_Core_Model_App::ADMIN_STORE_ID);
+                    Mage::app()->getStore()->setId(Mage_Core_Model_AppInterface::ADMIN_STORE_ID);
                     $block->setArea('adminhtml');
                     $this->assertFileExists($block->getTemplateFile(), $message);
                     Mage::app()->getStore()->setId($storeId);

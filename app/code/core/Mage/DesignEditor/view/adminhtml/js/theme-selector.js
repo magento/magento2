@@ -26,12 +26,13 @@
 (function($) {
     $.widget('vde.themeSelector', {
         options: {
-            assignEvent:      'assign',
-            assignSaveEvent:  'assign-save',
-            previewEvent:     'preview',
-            editEvent:        'edit',
-            deleteEvent:      'delete',
-            loadEvent:        'loaded',
+            refreshIframeEvent: 'refreshIframe',
+            assignEvent:        'assign',
+            assignSaveEvent:    'assign-save',
+            previewEvent:       'preview',
+            editEvent:          'edit',
+            deleteEvent:        'delete',
+            loadEvent:          'loaded',
             storeView: {
                 windowSelector: '#store-view-window'
             },
@@ -63,6 +64,8 @@
          * @protected
          */
         _bind: function() {
+            $('body').on(this.options.refreshIframeEvent, $.proxy(this._onIframeRefresh, this));
+
             //this.element is <body>
             this.element.on(this.options.assignEvent, $.proxy(this._onAssign, this));
             this.element.on(this.options.assignSaveEvent, $.proxy(this._onAssignSave, this));
@@ -79,6 +82,14 @@
             this.element.on(this.options.loadEvent, $.proxy(function() {
                 this.element.trigger('contentUpdated');
             }, this));
+        },
+
+        /**
+         * Iframe refresh
+         * @protected
+         */
+        _onIframeRefresh: function() {
+            $(this.options.frameSelector)[0].contentWindow.location.reload(true);
         },
 
         /**

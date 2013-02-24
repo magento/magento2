@@ -210,7 +210,7 @@ abstract class Mage_Eav_Block_Adminhtml_Attribute_Edit_Options_Abstract extends 
 
         foreach ($this->getStores() as $store) {
             $storeId = $store->getId();
-            $value['store' . $storeId] = $storeId == Mage_Core_Model_App::ADMIN_STORE_ID
+            $value['store' . $storeId] = $storeId == Mage_Core_Model_AppInterface::ADMIN_STORE_ID
                 ? $valuePrefix . $this->escapeHtml($option['label'])
                 : '';
         }

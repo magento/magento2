@@ -152,7 +152,7 @@ class Mage_Core_Model_Resource_Store extends Mage_Core_Model_Resource_Db_Abstrac
             $storeId = $adapter->fetchOne($select, 'default_store_id');
 
             if ($storeId == $model->getId()) {
-                $bind = array('default_store_id' => Mage_Core_Model_App::ADMIN_STORE_ID);
+                $bind = array('default_store_id' => Mage_Core_Model_AppInterface::ADMIN_STORE_ID);
                 $where = array('group_id = ?' => $model->getOriginalGroupId());
                 $this->_getWriteAdapter()->update($this->getTable('core_store_group'), $bind, $where);
             }

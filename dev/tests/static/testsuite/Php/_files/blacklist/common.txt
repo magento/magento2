@@ -7,6 +7,8 @@ app/code/core/Mage/Backend/Model/Config/Structure/Converter.php
 app/code/core/Mage/Backend/Model/Menu/Config.php
 app/code/core/Mage/Backend/Block/Widget/Grid
 app/code/core/Mage/Backend/view
+app/code/core/Mage/Core/Model/Config/Data
+app/code/core/Mage/Core/Model/Config/Element.php
 app/code/core/Mage/DesignEditor/view
 app/code/core/Mage/Webapi/view
 app/code/core/Mage/User/view

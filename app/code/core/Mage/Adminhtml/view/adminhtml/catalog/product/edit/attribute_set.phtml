@@ -25,8 +25,39 @@
  */
  /* @var $this Mage_Adminhtml_Block_Catalog_Product_Edit_AttributeSet */
 ?>
-<div id="<?php echo $this->getNameInLayout() ?>" style="display:none">
-    <?php echo $this->getFormHtml();?>
-    <?php echo $this->getChildHtml('form_after');?>
-</div>
-
+<script id="product-template-selector-template" type="text/x-jquery-tmpl">
+{{if !term && items.length && !$data.allShown()}}
+<h2>Recent Items</h2>
+{{/if}}
+<ul data-mage-init="{&quot;menu&quot;:[]}">
+    {{each items}}
+    <li {{html optionData($value)}}><a href="#">${$value.label}</a></li>
+    {{/each}}
+</ul>
+{{if !term && items.length && !$data.allShown()}}
+<div data-mage-init="{actionLink:{event:&quot;showAll&quot;}}" class="show-all">Show all...</div>
+{{/if}}
+</script>
+<script>
+    jQuery(function ($) {
+        $('#product-template-suggest-container .current-product-template-container').off('click.product-template')
+            .on('click.product-template', function () {
+                $(this).next('div').toggle().find('.mage-suggest-dropdown')/*.trigger('showAll')*/;
+            });
+        $('#product-template-suggest').suggest(<?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getSelectorOptions())?>)
+            .on('suggestselect', function (e, selectedItem) {
+                if (selectedItem.id) {
+                    var uri = document.location.href.replace(/(\/|&|\?)?\bset(\/|=)\d+/g, '').replace('#', '');
+                    uri += /\?/.test(uri) ? '&' : '?';
+                    uri += 'set=' + window.encodeURIComponent(selectedItem.id);
+                    var $form = $('#product-edit-form');
+                    $form.attr('action', uri).addClass('ignore-validate').submit();
+                }
+            }).focus();
+        $('body').on('click', function (e) {
+            if (!$(e.target).is('#product-template-suggest-container, #product-template-suggest-container *')) {
+                $('#product-template-suggest-container .dropdown-wrapper').hide();
+            }
+        });
+    });
+</script>

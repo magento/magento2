@@ -24,9 +24,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php $_width=$this->getImageWidth() ?>
+<?php $_width = $this->getImageWidth(); ?>
 <div class="product-image-popup" style="width:<?php echo $_width; ?>px;">
-    <div class="buttons-set"><a href="#" onclick="window.close(); return false;" class="button"><span><?php echo $this->__('Close Window') ?></span></a></div>
+    <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?php echo $this->__('Close Window') ?></span></a></div>
     <?php if($this->getPreviusImageUrl() || $this->getNextImageUrl()): ?>
         <div class="nav">
           <?php if($_prevUrl = $this->getPreviusImageUrl()): ?>
@@ -41,7 +41,7 @@
         <h1 class="image-label"><?php echo $_imageTitle ?></h1>
     <?php endif; ?>
     <img src="<?php echo $this->helper('Mage_Catalog_Helper_Image')->init($this->getProduct(), 'image', $this->getImageFile()); ?>"<?php if($_width): ?> width="<?php echo $_width ?>"<?php endif; ?> alt="<?php echo $this->escapeHtml($this->getCurrentImage()->getLabel()) ?>" title="<?php echo $this->escapeHtml($this->getCurrentImage()->getLabel()) ?>" id="product-gallery-image" class="image" />
-    <div class="buttons-set"><a href="#" onclick="window.close(); return false;" class="button"><span><?php echo $this->__('Close Window') ?></span></a></div>
+    <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?php echo $this->__('Close Window') ?></span></a></div>
     <?php if($this->getPreviusImageUrl() || $this->getNextImageUrl()): ?>
         <div class="nav">
           <?php if($_prevUrl = $this->getPreviusImageUrl()): ?>
@@ -54,13 +54,9 @@
     <?php endif; ?>
 </div>
 <script type="text/javascript">
-//<![CDATA[
-Event.observe(window, 'load', function(){
-    var demensions = $('product-gallery-image').getDimensions();
-    if (demensions.width < 300) {
-        demensions.width = 300
-    }
-    window.resizeTo(demensions.width+90, demensions.height+210);
-});
-//]]>
+    window.onload = function() {
+        head.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/gallery.js');?>", function() {
+            jQuery('#product-gallery-image').gallery();
+        });
+    };
 </script>

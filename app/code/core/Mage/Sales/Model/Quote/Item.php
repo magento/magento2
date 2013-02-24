@@ -191,7 +191,28 @@ class Mage_Sales_Model_Quote_Item extends Mage_Sales_Model_Quote_Item_Abstract
      *
      * @var Mage_Sales_Model_Status_List
      */
-    protected $_errorInfos = null;
+    protected $_errorInfos;
+
+    /**
+     * @param Mage_Core_Model_Event_Manager $eventDispatcher
+     * @param Mage_Core_Model_Cache $cacheManager
+     * @param Mage_Sales_Model_Status_ListFactory $statusListFactory
+     * @param Mage_Core_Model_Resource_Abstract $resource
+     * @param Varien_Data_Collection_Db $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Core_Model_Event_Manager $eventDispatcher,
+        Mage_Core_Model_Cache $cacheManager,
+        Mage_Sales_Model_Status_ListFactory $statusListFactory,
+        Mage_Core_Model_Resource_Abstract $resource = null,
+        Varien_Data_Collection_Db $resourceCollection = null,
+        array $data = array()
+    ) {
+        $this->_errorInfos = $statusListFactory->create();
+        parent::__construct($eventDispatcher, $cacheManager, $resource, $resourceCollection, $data);
+    }
+
 
     /**
      * Initialize resource model
@@ -200,7 +221,6 @@ class Mage_Sales_Model_Quote_Item extends Mage_Sales_Model_Quote_Item_Abstract
     protected function _construct()
     {
         $this->_init('Mage_Sales_Model_Resource_Quote_Item');
-        $this->_errorInfos = Mage::getModel('Mage_Sales_Model_Status_List');
     }
 
     /**

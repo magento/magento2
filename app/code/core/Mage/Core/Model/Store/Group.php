@@ -31,6 +31,7 @@
  * @method Mage_Core_Model_Resource_Store_Group getResource()
  * @method Mage_Core_Model_Store_Group setWebsiteId(int $value)
  * @method string getName()
+ * @method string getCode()
  * @method Mage_Core_Model_Store_Group setName(string $value)
  * @method Mage_Core_Model_Store_Group setRootCategoryId(int $value)
  * @method Mage_Core_Model_Store_Group setDefaultStoreId(int $value)

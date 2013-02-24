@@ -50,12 +50,8 @@ class Magento_ObjectManager_Zend implements Magento_ObjectManager
         Magento_Di $diInstance = null,
         Magento_Di_InstanceManager $instanceManager = null
     ) {
-        Magento_Profiler::start('di');
-
         $this->_di = $diInstance ?: new Magento_Di_Zend(null, $instanceManager, null, $definitionsFile);
         $this->_di->instanceManager()->addSharedInstance($this, 'Magento_ObjectManager');
-
-        Magento_Profiler::stop('di');
     }
 
     /**

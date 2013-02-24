@@ -62,7 +62,7 @@ class Mage_Api_Model_Config extends Varien_Simplexml_Config
             }
         }
 
-        $config = Mage::getConfig()->loadModulesConfiguration('api.xml');
+        $config = Mage::getSingleton('Mage_Core_Model_Config_Modules_Reader')->loadModulesConfiguration('api.xml');
         $this->setXml($config->getNode('api'));
 
         if (Mage::app()->useCache('config_api')) {

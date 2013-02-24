@@ -49,7 +49,7 @@ class Mage_Core_Model_Store_Limitation
     public function __construct(Mage_Core_Model_Resource_Store $resource, Mage_Core_Model_Config $config)
     {
         $this->_resource = $resource;
-        $allowedQty = (string)$config->getNode('global/functional_limitation/max_store_count');
+        $allowedQty = (string)$config->getNode('limitations/store');
         if ('' === $allowedQty) {
             return;
         }

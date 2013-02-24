@@ -126,9 +126,9 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Account extends Mage_Adminhtml_Bloc
     protected function _getAdditionalElementTypes()
     {
         return array(
-            'file'      => Mage::getConfig()->getBlockClassName('Mage_Adminhtml_Block_Customer_Form_Element_File'),
-            'image'     => Mage::getConfig()->getBlockClassName('Mage_Adminhtml_Block_Customer_Form_Element_Image'),
-            'boolean'   => Mage::getConfig()->getBlockClassName('Mage_Adminhtml_Block_Customer_Form_Element_Boolean'),
+            'file'      => 'Mage_Adminhtml_Block_Customer_Form_Element_File',
+            'image'     => 'Mage_Adminhtml_Block_Customer_Form_Element_Image',
+            'boolean'   => 'Mage_Adminhtml_Block_Customer_Form_Element_Boolean',
         );
     }
 

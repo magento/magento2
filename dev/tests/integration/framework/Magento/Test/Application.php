@@ -110,7 +110,7 @@ class Magento_Test_Application
         $this->_installEtcDir = "$installDir/etc";
 
         $this->_initParams = array(
-            Mage_Core_Model_App::INIT_OPTION_DIRS => array(
+            Mage::PARAM_APP_DIRS => array(
                 Mage_Core_Model_Dir::CONFIG     => $this->_installEtcDir,
                 Mage_Core_Model_Dir::VAR_DIR    => $installDir,
                 Mage_Core_Model_Dir::MEDIA      => "$installDir/media",
@@ -163,9 +163,23 @@ class Magento_Test_Application
      */
     public function initialize($overriddenParams = array())
     {
+        $overriddenParams[Mage::PARAM_BASEDIR] = BP;
         Mage::setIsDeveloperMode($this->_isDeveloperMode);
         Mage::$headersSentThrowsException = false;
-        Mage::app($this->_customizeParams($overriddenParams));
+        $config = new Mage_Core_Model_ObjectManager_Config(
+            $this->_customizeParams($overriddenParams)
+        );
+        if (!Mage::getObjectManager()) {
+            /** @var $app Mage_Core_Model_App */
+            new Magento_Test_ObjectManager($config, BP);
+        } else {
+            $config->configure(Mage::getObjectManager());
+        }
+
+        Mage::getObjectManager()->get('Mage_Core_Model_Resource')
+            ->setResourceConfig(Mage::getObjectManager()->get('Mage_Core_Model_Config_Resource'));
+        Mage::getObjectManager()->get('Mage_Core_Model_Resource')
+            ->setCache(Mage::getObjectManager()->get('Mage_Core_Model_Cache'));
     }
 
     /**
@@ -181,12 +195,15 @@ class Magento_Test_Application
 
     /**
      * Run application normally, but with encapsulated initialization options
-     *
-     * @param array $overriddenParams
      */
-    public function run(array $overriddenParams)
+    public function run()
     {
-        Mage::run($this->_customizeParams($overriddenParams));
+        $composer = Mage::getObjectManager();
+        $handler = $composer->get('Magento_Http_Handler_Composite');
+        $handler->handle(
+            isset($params['request']) ? $params['request'] : $composer->get('Mage_Core_Controller_Request_Http'),
+            isset($params['response']) ? $params['response'] : $composer->get('Mage_Core_Controller_Response_Http')
+        );
     }
 
     /**
@@ -240,8 +257,10 @@ class Magento_Test_Application
         $this->initialize();
 
         /* Run all install and data-install scripts */
-        Mage_Core_Model_Resource_Setup::applyAllUpdates();
-        Mage_Core_Model_Resource_Setup::applyAllDataUpdates();
+        /** @var $updater Mage_Core_Model_Db_Updater */
+        $updater = Mage::getObjectManager()->get('Mage_Core_Model_Db_Updater');
+        $updater->updateScheme();
+        $updater->updateData();
 
         /* Enable configuration cache by default in order to improve tests performance */
         Mage::app()->getCacheInstance()->saveOptions(array('config' => 1));

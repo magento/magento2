@@ -24,48 +24,45 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="entry-edit-head">
-    <h4><?php echo Mage::helper('Mage_Widget_Helper_Data')->__('Layout Updates') ?></h4>
-    <div class="right"><?php echo $this->getAddLayoutButtonHtml() ?></div>
-</div>
-<div class="fieldset">
-    <div class="hor-scroll">
-            <div id="page_group_container"></div>
+<fieldset class="fieldset">
+    <legend class="legend"><span><?php echo Mage::helper('Mage_Widget_Helper_Data')->__('Layout Updates') ?></span></legend>
+    <br />
+    <div class="widget-layout-updates">
+        <div id="page_group_container"></div>
+        <div class="actions"><?php echo $this->getAddLayoutButtonHtml() ?></div>
     </div>
-</div>
+</fieldset>
 <script type="text/javascript">
 //<![CDATA[
 
-var pageGroupTemplate = '<div class="options-box page_group_container" id="page_group_container_{{id}}">'+
-    '<div class="option-box">'+
-        '<div class="option-title">'+
-            <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getRemoveLayoutButtonHtml()) ?> +
-            '<label for="widget_instance[{{id}}][page_group]">Display On <span class="required">*</span></label>'+
-            '<?php echo $this->getDisplayOnSelectHtml(); ?>'+
+var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="page_group_container_{{id}}">'+
+    '<div class="fieldset-wrapper-title">'+
+        '<label for="widget_instance[{{id}}][page_group]">Display on <span class="required">*</span></label>'+
+        '<?php echo $this->getDisplayOnSelectHtml(); ?>'+
+        '<div class="actions">'+
+        <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getRemoveLayoutButtonHtml()) ?> +
         '</div>'+
+    '</div>'+
+    '<div class="fieldset-wrapper-content">'+
 <?php foreach ($this->getDisplayOnContainers() as $container): ?>
     '<div class="no-display <?php echo $container['code'] ?> group_container" id="<?php echo $container['name'] ?>_{{id}}">'+
         '<input type="hidden" class="container_name" name="__[container_name]" value="widget_instance[{{id}}][<?php echo $container['name'] ?>]" />'+
         '<input type="hidden" name="widget_instance[{{id}}][<?php echo $container['name'] ?>][page_id]" value="{{page_id}}" />'+
         '<input type="hidden" class="layout_handle_pattern" name="widget_instance[{{id}}][<?php echo $container['name'] ?>][layout_handle]" value="<?php echo $container['layout_handle'] ?>" />'+
-        '<table cellspacing="0" class="option-header">'+
+        '<table cellspacing="0" class="data-table">'+
             '<col width="200" />'+
-            '<col width="220" />'+
-            '<col width="320" />'+
-            '<col />'+
             '<thead>'+
                 '<tr>'+
                     '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('%s', $container['label'])) ?></label></th>'+
                     '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Container')) ?> <span class="required">*</span></label></th>'+
                     '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Template')) ?></label></th>'+
-                    '<th>&nbsp;</th>'+
                 '</tr>'+
             '</thead>'+
             '<tbody>'+
                 '<tr>'+
                     '<td>'+
                         '<input type="radio" class="radio for_all" id="all_<?php echo $container['name'] ?>_{{id}}" name="widget_instance[{{id}}][<?php echo $container['name'] ?>][for]" value="all" onclick="WidgetInstance.togglePageGroupChooser(this)" checked="checked" />&nbsp;'+
-                        '<label for="all_<?php echo $container['name'] ?>_{{id}}"><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('All')) ?></label>&nbsp;&nbsp;&nbsp;'+
+                        '<label for="all_<?php echo $container['name'] ?>_{{id}}"><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('All')) ?></label><br />'+
                         '<input type="radio" class="radio for_specific" id="specific_<?php echo $container['name'] ?>_{{id}}" name="widget_instance[{{id}}][<?php echo $container['name'] ?>][for]" value="specific" onclick="WidgetInstance.togglePageGroupChooser(this)" />&nbsp;'+
                         '<label for="specific_<?php echo $container['name'] ?>_{{id}}"><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Specific %s', $container['label'])) ?></label>'+
                     '</td>'+
@@ -88,10 +85,10 @@ var pageGroupTemplate = '<div class="options-box page_group_container" id="page_
             '<p>' +
                 '<input type="text" class="input-text entities" name="widget_instance[{{id}}][<?php echo $container['name'] ?>][entities]" value="{{<?php echo $container['name'] ?>_entities}}" readonly="readonly" />&nbsp;' +
                 '<a class="widget-option-chooser" href="javascript:void(0)" onclick="WidgetInstance.displayEntityChooser(\'<?php echo $container['code'] ?>\', \'<?php echo $container['name'] ?>_ids_{{id}}\')"  title="<?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Open Chooser')) ?>">' +
-                    '<img src="<?php echo Mage::getDesign()->getViewFileUrl('images/rule_chooser_trigger.gif') ?>" class="v-middle" alt="<?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Open Chooser')); ?>" />' +
+                    '<img src="<?php echo Mage::getDesign()->getViewFileUrl('images/rule_chooser_trigger.gif') ?>" alt="<?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Open Chooser')); ?>" />' +
                 '</a>&nbsp;' +
                 '<a href="javascript:void(0)" onclick="WidgetInstance.hideEntityChooser(\'<?php echo $container['name'] ?>_ids_{{id}}\')" title="<?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Apply')); ?>">' +
-                    '<img src="<?php echo Mage::getDesign()->getViewFileUrl('images/rule_component_apply.gif') ?>" class="v-middle" alt="<?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Apply')); ?>" />' +
+                    '<img src="<?php echo Mage::getDesign()->getViewFileUrl('images/rule_component_apply.gif') ?>" alt="<?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Apply')); ?>" />' +
                 '</a>' +
             '</p>'+
             '<div class="chooser"></div>'+
@@ -103,10 +100,8 @@ var pageGroupTemplate = '<div class="options-box page_group_container" id="page_
     '<input type="hidden" name="widget_instance[{{id}}][all_pages][page_id]" value="{{page_id}}" />'+
     '<input type="hidden" class="layout_handle_pattern" name="widget_instance[{{id}}][all_pages][layout_handle]" value="default" />'+
     '<input type="hidden" class="for_all" name="widget_instance[{{id}}][all_pages][for]" value="all" />'+
-    '<table cellspacing="0" class="option-header">'+
-        '<col width="220" />'+
-        '<col width="320" />'+
-        '<col />'+
+    '<table cellspacing="0" class="data-table">'+
+        '<col width="200" />'+
         '<thead>'+
             '<tr>'+
                 '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Container')) ?> <span class="required">*</span></label></th>'+
@@ -135,17 +130,13 @@ var pageGroupTemplate = '<div class="options-box page_group_container" id="page_
     '<input type="hidden" class="container_name" name="__[container_name]" value="widget_instance[{{id}}][pages]" />'+
     '<input type="hidden" name="widget_instance[{{id}}][pages][page_id]" value="{{page_id}}" />'+
     '<input type="hidden" class="for_all" name="widget_instance[{{id}}][pages][for]" value="all" />'+
-    '<table cellspacing="0" class="option-header">'+
+    '<table cellspacing="0" class="data-table">'+
         '<col width="200" />'+
-        '<col width="220" />'+
-        '<col width="320" />'+
-        '<col />'+
         '<thead>'+
             '<tr>'+
                 '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Page')) ?> <span class="required">*</span></label></th>'+
                 '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Container')) ?> <span class="required">*</span></label></th>'+
                 '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Template')) ?></label></th>'+
-                '<th>&nbsp;</th>'+
             '</tr>'+
         '</thead>'+
         '<tbody>'+
@@ -194,7 +185,7 @@ var WidgetInstance = {
                 }
             }
             pageGroupTemplateObj = new Template(this.pageGroupTemplate, this.templatePattern);
-            Element.insert(pageGroupContainer, {'top':pageGroupTemplateObj.evaluate(data)});
+            Element.insert(pageGroupContainer, {'bottom':pageGroupTemplateObj.evaluate(data)});
             if (data.group) {
                 pageGroup = $(data.group+'_'+data.id);
                 additional = {};
@@ -263,6 +254,7 @@ var WidgetInstance = {
         if (container) {
             container.removeClassName('no-display');
             container.removeClassName('ignore-validate');
+            container.up('.fieldset-wrapper').addClassName('opened');
             container.show();
         }
     },

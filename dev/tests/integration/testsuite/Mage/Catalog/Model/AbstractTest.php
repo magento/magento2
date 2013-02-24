@@ -57,7 +57,7 @@ class Mage_Catalog_Model_AbstractTest extends PHPUnit_Framework_TestCase
         $resourceProperty->setAccessible(true);
         $resourceProperty->setValue($this->_model, 'Mage_Catalog_Model_Resource_Product');
 
-        $collectionProperty = new ReflectionProperty(get_class($this->_model), '_resourceCollectionName');
+        $collectionProperty = new ReflectionProperty(get_class($this->_model), '_collectionName');
         $collectionProperty->setAccessible(true);
         $collectionProperty->setValue($this->_model, 'Mage_Catalog_Model_Resource_Product_Collection');
     }

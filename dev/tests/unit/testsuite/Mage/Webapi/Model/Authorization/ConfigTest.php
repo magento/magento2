@@ -52,7 +52,7 @@ class Mage_Webapi_Model_Authorization_ConfigTest extends PHPUnit_Framework_TestC
     {
         $helper = new Magento_Test_Helper_ObjectManager($this);
 
-        $this->_config = $this->getMockBuilder('Mage_Core_Model_Config')
+        $this->_config = $this->getMockBuilder('Mage_Core_Model_Config_Modules_Reader')
             ->disableOriginalConstructor()
             ->setMethods(array('getModuleConfigurationFiles'))
             ->getMock();
@@ -68,7 +68,7 @@ class Mage_Webapi_Model_Authorization_ConfigTest extends PHPUnit_Framework_TestC
             ->getMock();
 
         $this->_model = $helper->getModel('Mage_Webapi_Model_Authorization_Config', array(
-            'config' => $this->_config,
+            'moduleReader' => $this->_config,
             'readerFactory' => $this->_readerFactory
         ));
 

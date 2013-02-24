@@ -1,3 +1,54 @@
+2.0.0.0-dev43
+=============
+* Implemented functional limitation that restricts max number of catalog products in the system
+* Implemented cache backend library model for MongoDB
+* Converted some more grids in backend from PHP implementation to declarations in layout
+* Removed `app/etc/local.xml.additional` sample file, moved detailed description of possible configuration options to documentation
+* Refactored `Mage_Core_Model_EntryPointAbstract` to emphasize method `processRequest()` as abstract
+* Moved declaration of functional limitations to the nodes `limitations/store` and `limitations/admin_account`
+* Bug fixes:
+  * Fixed JavaScript and markup issues on product editing page in backend that caused erroneous sending of AJAX-queries and not rendering validation messages
+  * Fixed issues of application initialization in cases when `var` directory doesn't have writable permissions. Writable directories are validated at an early stage of initialization
+  * Fixed array sorting issues in test `Magento_Filesystem_Adapter_LocalTest::testGetNestedKeys()` that caused occasional failures
+
+2.0.0.0-dev42
+=============
+* Application initialization improvements:
+  * Removed application initialization responsibility from `Mage` class
+  * Introduces entry points, which are responsible for different types of requests processing: HTTP, media, cron, indexing, console installing, etc.
+  * New configuration classes are introduced and each of them is responsible for specific section of configuration
+  * Class rewrites functionality removed from `Mage_Core_Model_Config` model. DI configuration should be used for rewriting classes
+* Added ability to configure object manager with array in addition to object and scalar values
+* VDE improvements:
+  * Theme CSS files viewing and uploading/downloading of custom CSS file
+  * Updated styling of VDE Tools panel
+* Refactored various components to an analogous jQuery widget:
+  * Refactored components:
+    * Category navigation
+    * Products management and gallery
+    * Send to friend
+    * Sales components, including orders and returns
+    * Retrieve shipping rates and add/remove coupon in shopping cart
+    * Customer address and address book
+    * Customer wishlist
+    * "Contact Us" form
+    * CAPTCHA
+    * Weee
+  * New tabs widget is used instead of `Varien.Tabs`
+  * Refactored `Varien.dateRangeDate` and `Varien.FileElement`
+  * Replaced `$.mage.constants` with jQuery UI `$.ui.keyCode` for keyboard key codes
+* Refactored configurable attribute, category parent and attribute set selectors to use suggest widget
+* Bug fixes:
+  * Improvements and bug fixes in new backend theme
+  * Image, categories attributes and virtual/downloadable fields are displayed on Update Attributes page, where they shouldn't be present
+  * Undefined config property in `reloadOptionLabels()` function in `configurable.js` (Chrome)
+  * Impossible to edit existing customer/product tax class
+  * Incorrect format of customer's "Date of Birth"
+  * Theme preview images are absent in VDE
+  * Search by backslash doesn't work for Categories field on product creation page
+  * Impossible to assign a category to a product, if category name contains HTML tag
+  * Incorrect URL generated for logo image
+
 2.0.0.0-dev41
 =============
 * All-new look & feel of backend UI -- "Magento 2 backend" theme

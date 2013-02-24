@@ -20,13 +20,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Mage
- * @package    Mage
  * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 require __DIR__ . '/../app/bootstrap.php';
+Magento_Profiler::start('mage');
 $params = $_SERVER;
-$params[Mage_Core_Model_App::INIT_OPTION_URIS][Mage_Core_Model_Dir::PUB] = '';
-Mage::run($params);
+$params[Mage::PARAM_APP_URIS][Mage_Core_Model_Dir::PUB] = '';
+$entryPoint = new Mage_Core_Model_EntryPoint_Http(BP, $params);
+$entryPoint->processRequest();
+Magento_Profiler::stop('mage');

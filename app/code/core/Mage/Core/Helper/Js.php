@@ -56,6 +56,25 @@ class Mage_Core_Helper_Js extends Mage_Core_Helper_Abstract
     protected $_config = null;
 
     /**
+     * Modules configuration reader
+     *
+     * @var Mage_Core_Model_Config_Modules_Reader
+     */
+    protected $_configReader;
+
+    /**
+     * @param Mage_Core_Model_Translate $translator
+     * @param Mage_Core_Model_Config_Modules_Reader $configReader
+     */
+    public function __construct(
+        Mage_Core_Model_Translate $translator,
+        Mage_Core_Model_Config_Modules_Reader $configReader
+    ) {
+        parent::__construct($translator);
+        $this->_configReader = $configReader;
+    }
+
+    /**
      * Retrieve JSON of JS sentences translation
      *
      * @return string
@@ -142,7 +161,7 @@ class Mage_Core_Helper_Js extends Mage_Core_Helper_Abstract
             } else {
                 $xmlConfig = new Varien_Simplexml_Config();
                 $xmlConfig->loadString('<?xml version="1.0"?><jstranslator></jstranslator>');
-                Mage::getConfig()->loadModulesConfiguration(self::JAVASCRIPT_TRANSLATE_CONFIG_FILENAME, $xmlConfig);
+                $this->_configReader->loadModulesConfiguration(self::JAVASCRIPT_TRANSLATE_CONFIG_FILENAME, $xmlConfig);
 
                 if ($canUsaCache) {
                     Mage::app()->saveCache($xmlConfig->getXmlString(), self::JAVASCRIPT_TRANSLATE_CONFIG_KEY,

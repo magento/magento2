@@ -58,17 +58,17 @@ class Mage_Theme_Controller_Adminhtml_System_Design_ThemeControllerTest extends 
         $this->_model = $this->getMock('Mage_Theme_Adminhtml_System_Design_ThemeController',
             array('_forward', '_title', '__', 'loadLayout', 'renderLayout', '_redirect', '_getSession'),
             array(
-                 $this->_request,
-                 $this->getMock('Mage_Core_Controller_Response_Http', array(), array(), '', false),
-                 null,
-                 $this->_objectManagerMock,
-                 $this->getMock('Mage_Core_Controller_Varien_Front', array(), array(), '', false),
-                 $this->getMock('Mage_Core_Model_Layout_Factory', array(), array(), '', false),
-                 array(
-                     'translator' => 'translator',
-                     'helper'     => 'helper',
-                     'session'    => 'session'
-                 )
+                $this->_request,
+                $this->getMock('Mage_Core_Controller_Response_Http', array(), array(), '', false),
+                $this->_objectManagerMock,
+                $this->getMock('Mage_Core_Controller_Varien_Front', array(), array(), '', false),
+                $this->getMock('Mage_Core_Model_Layout_Factory', array(), array(), '', false),
+                null,
+                array(
+                    'translator' => 'translator',
+                    'helper'     => 'helper',
+                    'session'    => 'session'
+                ),
             ));
         $this->_model->expects($this->any())->method('_title')->will($this->returnValue($this->_model));
         $this->_model->expects($this->any())->method('loadLayout');
@@ -92,17 +92,18 @@ class Mage_Theme_Controller_Adminhtml_System_Design_ThemeControllerTest extends 
 
         $this->_request->expects($this->at(0))->method('getParam')->with('back', false)
             ->will($this->returnValue(true));
-        $this->_request->expects($this->once(1))->method('getPost')->will($this->returnValue(true));
-        $this->_request->expects($this->at(2))->method('getParam')->with('theme')
+
+        $this->_request->expects($this->at(1))->method('getParam')->with('theme')
             ->will($this->returnValue($themeData));
-        $this->_request->expects($this->at(3))->method('getParam')->with('custom_css_content')
+        $this->_request->expects($this->at(2))->method('getParam')->with('custom_css_content')
             ->will($this->returnValue($customCssContent));
-        $this->_request->expects($this->at(4))->method('getParam')->with('js_uploaded_files')
+        $this->_request->expects($this->at(3))->method('getParam')->with('js_uploaded_files')
             ->will($this->returnValue($jsUploadedFiles));
-        $this->_request->expects($this->at(5))->method('getParam')->with('js_removed_files')
+        $this->_request->expects($this->at(4))->method('getParam')->with('js_removed_files')
             ->will($this->returnValue($jsRemovedFiles));
-        $this->_request->expects($this->at(6))->method('getParam')->with('js_order')
+        $this->_request->expects($this->at(5))->method('getParam')->with('js_order')
             ->will($this->returnValue($jsOrder));
+        $this->_request->expects($this->once(6))->method('getPost')->will($this->returnValue(true));
 
         $filesCssMock = $this->getMock(
             'Mage_Core_Model_Theme_Customization_Files_Css', array('setDataForSave'), array(), '', false

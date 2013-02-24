@@ -257,8 +257,6 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tab_Main extends Mage_
      */
     protected function _getAdditionalElementTypes()
     {
-        return array(
-            'apply' => Mage::getConfig()->getBlockClassName('Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Apply'),
-        );
+        return array('apply' => 'Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Apply');
     }
 }

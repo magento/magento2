@@ -39,9 +39,9 @@ class Mage_Backend_Model_Menu_Config
     protected $_factory;
 
     /**
-     * @var Mage_Core_Model_Config
+     * @var Mage_Core_Model_Config_Modules_Reader
      */
-    protected $_appConfig;
+    protected $_moduleReader;
 
     /**
      * @var Mage_Core_Model_Event_Manager
@@ -67,7 +67,7 @@ class Mage_Backend_Model_Menu_Config
     /**
      * @param Mage_Core_Model_Cache $cache
      * @param Magento_ObjectManager $factory
-     * @param Mage_Core_Model_Config $config
+     * @param Mage_Core_Model_Config_Modules_Reader $moduleReader
      * @param Mage_Core_Model_Event_Manager $eventManager
      * @param Mage_Core_Model_Logger $logger
      * @param Mage_Backend_Model_Menu_Factory $menuFactory
@@ -75,14 +75,14 @@ class Mage_Backend_Model_Menu_Config
     public function __construct(
         Mage_Core_Model_Cache $cache,
         Magento_ObjectManager $factory,
-        Mage_Core_Model_Config $config,
+        Mage_Core_Model_Config_Modules_Reader $moduleReader,
         Mage_Core_Model_Event_Manager $eventManager,
         Mage_Core_Model_Logger $logger,
         Mage_Backend_Model_Menu_Factory $menuFactory
     ) {
         $this->_cache = $cache;
         $this->_factory = $factory;
-        $this->_appConfig = $config;
+        $this->_moduleReader = $moduleReader;
         $this->_eventManager = $eventManager;
         $this->_logger = $logger;
         $this->_menuFactory = $menuFactory;
@@ -204,7 +204,7 @@ class Mage_Backend_Model_Menu_Config
      */
     public function getMenuConfigurationFiles()
     {
-        $files = $this->_appConfig
+        $files = $this->_moduleReader
             ->getModuleConfigurationFiles('adminhtml' . DIRECTORY_SEPARATOR . 'menu.xml');
         return (array) $files;
     }

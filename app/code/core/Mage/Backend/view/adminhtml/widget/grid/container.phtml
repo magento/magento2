@@ -24,5 +24,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php if ($this->getButtonsHtml()): ?>
 <div class="page-actions"><?php echo $this->getButtonsHtml() ?></div>
+<?php endif; ?>
 <?php echo $this->getGridHtml() ?>

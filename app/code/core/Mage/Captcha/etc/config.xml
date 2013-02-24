@@ -185,7 +185,7 @@
         </system>
         <admin>
             <captcha>
-                <type>zend</type>
+                <type>default</type>
                 <enable>0</enable>
                 <font>linlibertine</font>
                 <mode>after_fail</mode>
@@ -203,7 +203,7 @@
         </admin>
         <customer>
             <captcha>
-                <type>zend</type>
+                <type>default</type>
                 <enable>0</enable>
                 <font>linlibertine</font>
                 <mode>after_fail</mode>

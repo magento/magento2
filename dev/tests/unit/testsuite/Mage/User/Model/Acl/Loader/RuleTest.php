@@ -39,7 +39,7 @@ class Mage_User_Model_Acl_Loader_RuleTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_resourceMock = $this->getMock('Mage_Core_Model_Resource');
+        $this->_resourceMock = $this->getMock('Mage_Core_Model_Resource', array(), array(), '', false, false);
         $this->_model = new Mage_User_Model_Acl_Loader_Rule(array(
             'resource' => $this->_resourceMock
         ));

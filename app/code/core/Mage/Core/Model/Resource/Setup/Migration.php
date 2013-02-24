@@ -144,22 +144,32 @@ class Mage_Core_Model_Resource_Setup_Migration extends Mage_Core_Model_Resource_
     protected $_filesystem;
 
     /**
-     * Constructor
-     *
-     * @param string $resourceName
+     * @param Mage_Core_Model_Config_Resource $resourcesConfig
+     * @param Mage_Core_Model_Config_Modules $modulesConfig
+     * @param Mage_Core_Model_Resource $resource
+     * @param Mage_Core_Model_Config_Modules_Reader $modulesReader
      * @param Magento_Filesystem $filesystem
+     * @param string $resourceName
      * @param array $data
      */
-    public function __construct($resourceName, Magento_Filesystem $filesystem, array $data = array())
-    {
+    public function __construct(
+        Mage_Core_Model_Config_Resource $resourcesConfig,
+        Mage_Core_Model_Config_Modules $modulesConfig,
+        Mage_Core_Model_Resource $resource,
+        Mage_Core_Model_Config_Modules_Reader $modulesReader,
+        Magento_Filesystem $filesystem,
+        $resourceName,
+        array $data = array()
+    ) {
         $this->_filesystem = $filesystem;
         if (!isset($data['resource_config'])
             || !isset($data['connection_config'])
             || !isset($data['module_config'])
             || !isset($data['connection'])
         ) {
-            parent::__construct($resourceName);
+            parent::__construct($resourcesConfig, $modulesConfig, $resource, $modulesReader, $resourceName);
         } else {
+            $this->_resourceModel = $resource;
             $this->_resourceName = $resourceName;
 
             if (isset($data['connection'])) {
@@ -168,7 +178,6 @@ class Mage_Core_Model_Resource_Setup_Migration extends Mage_Core_Model_Resource_
 
             $this->_initConfigs($data);
         }
-
         if (isset($data['core_helper'])) {
             $this->_coreHelper = $data['core_helper'];
         } else {

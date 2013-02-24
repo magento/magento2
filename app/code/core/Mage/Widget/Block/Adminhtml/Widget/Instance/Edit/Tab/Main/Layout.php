@@ -263,7 +263,7 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Main_Layout
             ->setData(array(
                 'label'     => Mage::helper('Mage_Widget_Helper_Data')->__('Add Layout Update'),
                 'onclick'   => 'WidgetInstance.addPageGroup({})',
-                'class'     => 'add'
+                'class'     => 'action-add'
             ));
         return $button->toHtml();
     }
@@ -279,7 +279,7 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Main_Layout
             ->setData(array(
                 'label'     => $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Remove Layout Update')),
                 'onclick'   => 'WidgetInstance.removePageGroup(this)',
-                'class'     => 'delete'
+                'class'     => 'action-delete'
             ));
         return $button->toHtml();
     }

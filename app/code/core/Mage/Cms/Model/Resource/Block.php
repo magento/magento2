@@ -169,7 +169,7 @@ class Mage_Cms_Model_Resource_Block extends Mage_Core_Model_Resource_Db_Abstract
         if ($object->getStoreId()) {
             $stores = array(
                 (int) $object->getStoreId(),
-                Mage_Core_Model_App::ADMIN_STORE_ID,
+                Mage_Core_Model_AppInterface::ADMIN_STORE_ID,
             );
 
             $select->join(
@@ -194,7 +194,7 @@ class Mage_Cms_Model_Resource_Block extends Mage_Core_Model_Resource_Db_Abstract
     public function getIsUniqueBlockToStores(Mage_Core_Model_Abstract $object)
     {
         if (Mage::app()->hasSingleStore()) {
-            $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID);
+            $stores = array(Mage_Core_Model_AppInterface::ADMIN_STORE_ID);
         } else {
             $stores = (array)$object->getData('stores');
         }

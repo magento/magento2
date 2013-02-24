@@ -48,6 +48,13 @@ class Mage_Install_Model_Installer_Config extends Mage_Install_Model_Installer_A
     protected $_config;
 
     /**
+     * Resource configuration
+     *
+     * @var Mage_Core_Model_Config_Resource
+     */
+    protected $_resourceConfig;
+
+    /**
      * @var Mage_Core_Model_Dir
      */
     protected $_dirs;
@@ -60,20 +67,21 @@ class Mage_Install_Model_Installer_Config extends Mage_Install_Model_Installer_A
     protected $_filesystem;
 
     /**
-     * Inject dependencies on config and directories
-     *
      * @param Mage_Core_Model_Config $config
      * @param Mage_Core_Model_Dir $dirs
+     * @param Mage_Core_Model_Config_Resource $resourceConfig
      * @param Magento_Filesystem $filesystem
      */
     public function __construct(
-            Mage_Core_Model_Config $config,
-            Mage_Core_Model_Dir $dirs,
-            Magento_Filesystem $filesystem
+        Mage_Core_Model_Config $config, 
+        Mage_Core_Model_Dir $dirs, 
+        Mage_Core_Model_Config_Resource $resourceConfig,
+        Magento_Filesystem $filesystem
     ) {
         $this->_localConfigFile = $dirs->getDir(Mage_Core_Model_Dir::CONFIG) . DIRECTORY_SEPARATOR . 'local.xml';
-        $this->_config = $config;
         $this->_dirs = $dirs;
+        $this->_config = $config;
+        $this->_resourceConfig = $resourceConfig;
         $this->_filesystem = $filesystem;
     }
 
@@ -160,7 +168,7 @@ class Mage_Install_Model_Installer_Config extends Mage_Install_Model_Installer_A
             $baseSecureUrl = $uri->getUri();
         }
 
-        $connectDefault = $this->_config
+        $connectDefault = $this->_resourceConfig
                 ->getResourceConnectionConfig(Mage_Core_Model_Resource::DEFAULT_SETUP_RESOURCE);
 
         $data = new Varien_Object();

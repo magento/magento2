@@ -31,7 +31,7 @@
 ?>
 
 <li class="theme" id="theme-id-<?php echo $this->getTheme()->getId() ?>" data-widget-options="<?php echo $this->escapeHtml($this->getOptionsJson()); ?>">
-    <form action="" method="post" class="edit-theme-title-form hidden">
+    <form action="" method="post" class="edit-theme-title-form">
         <input type="text" value="<?php echo $themeTitle ?>" data-title-original="<?php echo $themeTitle ?>" required autofocus />
         <?php echo $this->getQuickSaveButton()->toHtml() ?>
     </form>

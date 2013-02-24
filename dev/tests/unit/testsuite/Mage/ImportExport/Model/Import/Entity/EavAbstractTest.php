@@ -71,7 +71,9 @@ class Mage_ImportExport_Model_Import_Entity_EavAbstractTest extends PHPUnit_Fram
             'connection'                   => 'not_used',
             'translator'                   => $translator,
             'json_helper'                  => 'not_used',
-            'string_helper'                => new Mage_Core_Helper_String(),
+            'string_helper'                => new Mage_Core_Helper_String(
+                $this->getMock('Mage_Core_Model_Translate', array(), array(), '', false, false)
+            ),
             'page_size'                    => 1,
             'max_data_size'                => 1,
             'bunch_size'                   => 1,

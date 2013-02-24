@@ -45,7 +45,8 @@ class Mage_Adminhtml_Block_Report_Sales_Refunded extends Mage_Adminhtml_Block_Wi
         $this->_removeButton('add');
         $this->addButton('filter_form_submit', array(
             'label'     => Mage::helper('Mage_Reports_Helper_Data')->__('Show Report'),
-            'onclick'   => 'filterFormSubmit()'
+            'onclick'   => 'filterFormSubmit()',
+            'class'     => 'primary'
         ));
     }
 

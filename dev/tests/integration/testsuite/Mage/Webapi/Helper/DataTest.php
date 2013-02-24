@@ -56,7 +56,7 @@ class Mage_Webapi_Helper_DataTest extends PHPUnit_Framework_TestCase
     protected function _getApiConfig()
     {
         if (!self::$_apiConfig) {
-            $objectManager = new Magento_Test_ObjectManager();
+            $objectManager = Mage::getObjectManager();
             /** Prepare arguments for SUT constructor. */
             $pathToFixtures = __DIR__ . '/../_files/autodiscovery';
             /** @var Mage_Webapi_Model_Config_Reader_Soap $reader */

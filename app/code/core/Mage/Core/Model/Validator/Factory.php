@@ -31,11 +31,6 @@ class Mage_Core_Model_Validator_Factory
     protected $_objectManager;
 
     /**
-     * @var Mage_Core_Model_Config
-     */
-    protected $_config;
-
-    /**
      * @var Mage_Core_Model_Translate
      */
     protected $_translator;
@@ -51,19 +46,18 @@ class Mage_Core_Model_Validator_Factory
      * Initialize dependencies
      *
      * @param Magento_ObjectManager $objectManager
-     * @param Mage_Core_Model_Config $config
+     * @param Mage_Core_Model_Config_Modules_Reader $moduleReader
      * @param Mage_Core_Model_Translate $translator
      */
     public function __construct(
         Magento_ObjectManager $objectManager,
-        Mage_Core_Model_Config $config,
+        Mage_Core_Model_Config_Modules_Reader $moduleReader,
         Mage_Core_Model_Translate $translator
     ) {
         $this->_objectManager = $objectManager;
-        $this->_config = $config;
         $this->_translator = $translator;
 
-        $this->_configFiles = $this->_config->getModuleConfigurationFiles('validation.xml');
+        $this->_configFiles = $moduleReader->getModuleConfigurationFiles('validation.xml');
         $this->_initializeDefaultTranslator();
     }
 

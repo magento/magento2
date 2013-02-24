@@ -233,7 +233,7 @@ class Mage_Sales_Model_Resource_Report_Order_Createdat extends Mage_Sales_Model_
                 $columns[$k] = new Zend_Db_Expr('SUM(' . $k . ')');
             }
             $columns['period']         = 'period';
-            $columns['store_id']       = new Zend_Db_Expr(Mage_Core_Model_App::ADMIN_STORE_ID);
+            $columns['store_id']       = new Zend_Db_Expr(Mage_Core_Model_AppInterface::ADMIN_STORE_ID);
             $columns['order_status']   = 'order_status';
 
             $select->reset();

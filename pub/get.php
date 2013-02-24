@@ -56,17 +56,17 @@ if ($mediaDirectory) {
     checkResource($relativeFilename, $allowedResources);
     sendFile($filePath);
 }
-
-if (empty($mediaDirectory)) {
-    Mage::init($_SERVER);
-} else {
-    $params = array_merge(
-        $_SERVER,
-        array(Mage_Core_Model_Cache::APP_INIT_PARAM => array('disallow_save' => true))
-    );
-    Mage::init($params, array('Mage_Core'));
+try {
+    $entryPoint = new Mage_Core_Model_EntryPoint_Media(dirname(__DIR__), $mediaDirectory, $_SERVER);
+    $entryPoint->processRequest();
+    if (!Mage::isInstalled()) {
+        sendNotFoundPage();
+    }
+} catch (Mage_Core_Model_Store_Exception $e) {
+    sendNotFoundPage();
+} catch (Exception $e) {
+    Mage::printException($e);
 }
-Mage::app()->requireInstalledInstance();
 
 if (!$mediaDirectory) {
     $config = Mage_Core_Model_File_Storage::getScriptConfig();

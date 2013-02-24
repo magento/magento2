@@ -49,18 +49,19 @@
             <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/load-image.min.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/canvas-to-blob.min.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload-fp.js</file></action>
+
             <action method="addCss"><file>Mage_Adminhtml::catalog/category-selector.css</file></action>
             <action method="addJs"><file>Mage_Adminhtml::catalog/category-selector.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::json2.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::mage/backend/suggest.js</file></action>
-            <action method="addJs"><file>Mage_Adminhtml::mage/backend/multisuggest.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::jquery/jstree/jquery.hotkeys.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::jquery/jstree/jquery.jstree.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::mage/backend/tree-suggest.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::catalog/type-switcher.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::catalog/product-variation.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::catalog/base-image-uploader.js</file></action>
-            <action method="addCss"><file>Mage_Adminhtml::catalog/configurable-product.css</file></action>
+            <action method="addJs"><file>Mage_Catalog::js/product-gallery.js</file></action>
+            <!--<action method="addCss"><file>Mage_Adminhtml::catalog/configurable-product.css</file></action>-->
         </reference>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit" name="product_edit">
@@ -78,10 +79,6 @@
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs" name="product_tabs"/>
         </reference>
         <reference name="js">
-            <block type="Mage_Core_Block_Template" name="change-attribute-set"
-                   template="Mage_Adminhtml::catalog/product/change_attribute_set_widget.phtml"/>
-            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_NewCategory" name="new-category-js"
-                   template="Mage_Adminhtml::catalog/product/edit/category/new/js.phtml"/>
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Js" name="catalog_product_js"
                    template="catalog/product/js.phtml" />
             <block type="Mage_Core_Block_Template" template="Mage_Adminhtml::catalog/wysiwyg/js.phtml"/>
@@ -93,55 +90,9 @@
     </adminhtml_catalog_product_new>
 
     <adminhtml_catalog_product_edit>
-        <update handle="editor"/>
-        <reference name="head">
-            <action method="addCss"><file>Mage_Adminhtml::jquery/fileUploader/css/jquery.fileupload-ui.css</file></action>
-            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.iframe-transport.js</file></action>
-            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload.js</file></action>
-            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/load-image.min.js</file></action>
-            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/canvas-to-blob.min.js</file></action>
-            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload-fp.js</file></action>
-            <action method="addCss"><file>Mage_Adminhtml::catalog/category-selector.css</file></action>
-            <action method="addJs"><file>Mage_Adminhtml::catalog/category-selector.js</file></action>
-            <action method="addJs"><file>Mage_Adminhtml::json2.js</file></action>
-            <action method="addJs"><file>Mage_Adminhtml::mage/backend/suggest.js</file></action>
-            <action method="addJs"><file>Mage_Adminhtml::mage/backend/multisuggest.js</file></action>
-            <action method="addJs"><file>Mage_Adminhtml::jquery/jstree/jquery.hotkeys.js</file></action>
-            <action method="addJs"><file>Mage_Adminhtml::jquery/jstree/jquery.jstree.js</file></action>
-            <action method="addJs"><file>Mage_Adminhtml::mage/backend/tree-suggest.js</file></action>
-            <action method="addJs"><file>Mage_Adminhtml::catalog/type-switcher.js</file></action>
-            <action method="addJs"><file>Mage_Adminhtml::catalog/product-variation.js</file></action>
-            <action method="addJs"><file>Mage_Adminhtml::catalog/base-image-uploader.js</file></action>
-            <action method="addCss"><file>Mage_Adminhtml::catalog/configurable-product.css</file></action>
-        </reference>
-        <reference name="content">
-            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit" name="product_edit">
-                <container name="product-type-tabs" label="Tabs">
-                </container>
-            </block>
-            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_AttributeSet" name="attribute-set-info"
-                   template="Mage_Adminhtml::catalog/product/edit/attribute_set.phtml"/>
-            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_NewCategory" name="new-category"
-                   template="Mage_Adminhtml::catalog/product/edit/category/new/form.phtml"/>
-            <block type="Mage_Core_Block_Template" name="affected-attribute-set-form"
-                   template="Mage_Catalog::product/configurable/affected-attribute-set-selector/form.phtml"/>
-        </reference>
+        <update handle="adminhtml_catalog_product_new"/>
         <reference name="left">
-            <block type="Mage_Backend_Block_Store_Switcher" name="store_switcher" before="-"/>
-            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs" name="product_tabs"/>
-        </reference>
-        <reference name="js">
-            <block type="Mage_Core_Block_Template" name="change-attribute-set"
-                   template="Mage_Adminhtml::catalog/product/change_attribute_set_widget.phtml"/>
-            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_NewCategory" name="new-category-js"
-                   template="Mage_Adminhtml::catalog/product/edit/category/new/js.phtml"/>
-            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Js" name="catalog_product_js"
-                   template="catalog/product/js.phtml" />
-            <block type="Mage_Core_Block_Template" template="Mage_Adminhtml::catalog/wysiwyg/js.phtml"/>
-            <block type="Mage_Catalog_Block_Product_Configurable_AttributeSelector"
-                   template="Mage_Catalog::product/configurable/attribute-selector/js.phtml"/>
-            <block type="Mage_Catalog_Block_Product_Configurable_AttributeSelector"
-                   template="Mage_Catalog::product/configurable/affected-attribute-set-selector/js.phtml"/>
+            <block type="Mage_Backend_Block_Store_Switcher" name="store_switcher" before="-"/>            
         </reference>
     </adminhtml_catalog_product_edit>
 
@@ -431,25 +382,30 @@ Layout handle for grouped products
                     </block>
                     <block type="Mage_Backend_Block_Widget_Grid_Column" as="name">
                         <arguments>
-                            <header translate="true" module="Mage_Sales">Name</header>
+                            <header translate="true" module="Mage_Catalog">Name</header>
+                            <column_css_class>grouped-product-name</column_css_class>
                             <type>text</type>
                             <index>name</index>
                             <editable>1</editable>
                             <sortable>0</sortable>
+                            <escape>1</escape>
                         </arguments>
                     </block>
                     <block type="Mage_Backend_Block_Widget_Grid_Column" as="sku">
                         <arguments>
-                            <header translate="true" module="Mage_Sales">SKU</header>
+                            <header translate="true" module="Mage_Catalog">SKU</header>
+                            <column_css_class>grouped-product-sku</column_css_class>
                             <type>text</type>
                             <index>sku</index>
                             <width>80px</width>
                             <sortable>0</sortable>
+                            <escape>1</escape>
                         </arguments>
                     </block>
                     <block type="Mage_Backend_Block_Widget_Grid_Column" as="price">
                         <arguments>
-                            <header translate="true" module="Mage_Sales">Price</header>
+                            <header translate="true" module="Mage_Catalog">Price</header>
+                            <column_css_class>grouped-product-price</column_css_class>
                             <type>currency</type>
                             <index>price</index>
                             <width>110px</width>
@@ -459,7 +415,8 @@ Layout handle for grouped products
                     </block>
                     <block type="Mage_Backend_Block_Widget_Grid_Column" as="qty">
                         <arguments>
-                            <header translate="true" module="Mage_Sales">Default Qty</header>
+                            <header translate="true" module="Mage_Catalog">Default Qty</header>
+                            <column_css_class>grouped-product-qty</column_css_class>
                             <type>number</type>
                             <index>qty</index>
                             <width>110px</width>
@@ -470,10 +427,10 @@ Layout handle for grouped products
                     </block>
                     <block type="Mage_Backend_Block_Widget_Grid_Column" as="delete">
                         <arguments>
-                            <header translate="true" module="Mage_Sales">Delete</header>
+                            <header translate="true" module="Mage_Catalog">Delete</header>
                             <type>button</type>
                             <button_type>button</button_type>
-                            <column_css_class>product-delete</column_css_class>
+                            <column_css_class>grouped-product-delete</column_css_class>
                             <width>60px</width>
                             <renderer>Mage_Backend_Block_Widget_Grid_Column_Renderer_Button</renderer>
                             <align>right</align>
@@ -525,25 +482,27 @@ Layout handle for grouped products
                     </block>
                     <block type="Mage_Backend_Block_Widget_Grid_Column" as="name">
                         <arguments>
-                            <header translate="true" module="Mage_Sales">Name</header>
+                            <header translate="true" module="Mage_Catalog">Name</header>
                             <column_css_class>associated-product-name</column_css_class>
                             <type>text</type>
                             <index>name</index>
                             <editable>1</editable>
+                            <escape>1</escape>
                         </arguments>
                     </block>
                     <block type="Mage_Backend_Block_Widget_Grid_Column" as="sku">
                         <arguments>
-                            <header translate="true" module="Mage_Sales">SKU</header>
+                            <header translate="true" module="Mage_Catalog">SKU</header>
                             <column_css_class>associated-product-sku</column_css_class>
                             <type>text</type>
                             <index>sku</index>
                             <width>80px</width>
+                            <escape>1</escape>
                         </arguments>
                     </block>
                     <block type="Mage_Backend_Block_Widget_Grid_Column" as="price">
                         <arguments>
-                            <header translate="true" module="Mage_Sales">Price</header>
+                            <header translate="true" module="Mage_Catalog">Price</header>
                             <column_css_class>associated-product-price</column_css_class>
                             <type>currency</type>
                             <index>price</index>
@@ -558,12 +517,12 @@ Layout handle for grouped products
 
     <adminhtml_catalog_product_supergroup>
         <update handle="adminhtml_catalog_product_grouped"/>
-        <container output="1" name="catalog.product.edit.tab.super.grid.container" label="grid"></container>
+        <container output="1" name="catalog.product.edit.tab.super.grid.container" label="grid"/>
     </adminhtml_catalog_product_supergroup>
 
     <adminhtml_catalog_product_supergrouppopup>
         <update handle="adminhtml_catalog_product_grouped"/>
-        <container output="1" name="catalog.product.edit.tab.super.grid.popup.container" label="grid"></container>
+        <container output="1" name="catalog.product.edit.tab.super.grid.popup.container" label="grid"/>
     </adminhtml_catalog_product_supergrouppopup>
 
     <adminhtml_catalog_product_variationsmatrix>

@@ -17,42 +17,42 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
+ * @category    mage
+ * @package     captcha
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-document.observe('billing-request:completed', function(event) {
-    if (typeof window.checkout != 'undefined') {
-        if (window.checkout.method == 'guest' && $('guest_checkout')){
-            $('guest_checkout').captcha.refresh()
+/*jshint browser:true jquery:true*/
+(function($, window, document, undefined) {
+    "use strict";
+
+    $(document).on("login:setMethod", function() {
+        $("[role='guest_checkout'], [role='register_during_checkout']").hide();
+        var type = ($("#login\\:guest").is(':checked')) ? 'guest_checkout' : 'register_during_checkout';
+        $("[role='" + type + "']").show();
+    });
+
+    $(document).on('billing-request:completed', function() {
+        if (typeof window.checkout !== 'undefined') {
+            $(".captcha-reload:visible").trigger("click");
         }
-        if (window.checkout.method == 'register' && $('register_during_checkout')){
-            $('register_during_checkout').captcha.refresh()
-        }
-    }
+    });
+})(jQuery, window, document);
+
+/**
+ * Need to remove when we refactor onepage checkout
+ * @deprecated
+ */
+document.observe('login:setMethod', function() {
+    "use strict";
+    jQuery(document).trigger('login:setMethod');
 });
 
-
-document.observe('login:setMethod', function(event) {
-    var switchCaptchaElement = function(shown, hidden) {
-        var inputPrefix = 'captcha-input-box-', imagePrefix = 'captcha-image-box-';
-        if ($(inputPrefix + hidden)) {
-            $(inputPrefix + hidden).hide();
-            $(imagePrefix + hidden).hide();
-        }
-        if ($(inputPrefix + shown)) {
-            $(inputPrefix + shown).show();
-            $(imagePrefix + shown).show();
-        }
-    };
-
-    switch (event.memo.method) {
-        case 'guest':
-            switchCaptchaElement('guest_checkout', 'register_during_checkout');
-            break;
-        case 'register':
-            switchCaptchaElement('register_during_checkout', 'guest_checkout');
-            break;
-    }
+/**
+ * Need to remove when we refactor onepage checkout
+ * @deprecated
+ */
+document.observe('billing-request:completed', function() {
+    "use strict";
+    jQuery(document).trigger('billing-request:completed');
 });

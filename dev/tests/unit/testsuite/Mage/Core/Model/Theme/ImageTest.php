@@ -77,6 +77,23 @@ class Mage_Core_Model_Theme_ImageTest extends PHPUnit_Framework_TestCase
         return $designMock;
     }
 
+    /**
+     * @return PHPUnit_Framework_MockObject_MockObject|Mage_Core_Model_Dir
+     */
+    protected function _getDirMock()
+    {
+        $dirMock = $this->getMock('Mage_Core_Model_Dir', array('getDir'), array(), '', false);
+        $dirMock->expects($this->any())
+            ->method('getDir')
+            ->with($this->equalTo(Mage_Core_Model_Dir::THEME))
+            ->will($this->returnValue('pub/media/theme'));
+        $this->_objectManager->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo('Mage_Core_Model_Dir'))
+            ->will($this->returnValue($dirMock));
+        return $dirMock;
+    }
+
     public function testSavePreviewImage()
     {
         $this->_model->setTheme($this->getMock('Mage_Core_Model_Theme', array(), array(), '', false));
@@ -85,9 +102,8 @@ class Mage_Core_Model_Theme_ImageTest extends PHPUnit_Framework_TestCase
 
     public function testGetImagePathOrigin()
     {
-        $designMock = $this->_getDesignMock();
-
-        $expectedResult = $designMock->getPublicDir() . DIRECTORY_SEPARATOR
+        $dirMock = $this->_getDirMock();
+        $expectedResult = $dirMock->getDir(Mage_Core_Model_Dir::THEME) . DIRECTORY_SEPARATOR
             . Mage_Core_Model_Theme_Image::IMAGE_DIR_ORIGIN;
 
         $this->assertEquals($expectedResult, $this->_model->getImagePathOrigin());
@@ -95,8 +111,9 @@ class Mage_Core_Model_Theme_ImageTest extends PHPUnit_Framework_TestCase
 
     public function testCreatePreviewImageCopy()
     {
-        $designMock = $this->_getDesignMock();
-        $filePath = $designMock->getPublicDir() . DIRECTORY_SEPARATOR . Mage_Core_Model_Theme_Image::IMAGE_DIR_PREVIEW;
+        $dirMock = $this->_getDirMock();
+        $filePath = $dirMock->getDir(Mage_Core_Model_Dir::THEME) . DIRECTORY_SEPARATOR
+            . Mage_Core_Model_Theme_Image::IMAGE_DIR_PREVIEW;
         $fileName = $filePath . DIRECTORY_SEPARATOR . 'image.jpg';
 
         $this->_filesystem->expects($this->any())

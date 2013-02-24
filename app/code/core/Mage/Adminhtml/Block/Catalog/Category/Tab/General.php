@@ -109,9 +109,7 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_General extends Mage_Adminhtml_B
 
     protected function _getAdditionalElementTypes()
     {
-        return array(
-            'image' => Mage::getConfig()->getBlockClassName('Mage_Adminhtml_Block_Catalog_Category_Helper_Image')
-        );
+        return array('image' => 'Mage_Adminhtml_Block_Catalog_Category_Helper_Image');
     }
 
     protected function _getParentCategoryOptions($node=null, &$options=array())

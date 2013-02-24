@@ -73,7 +73,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings extends Mage_
             'legend' => Mage::helper('Mage_Catalog_Helper_Data')->__('Select Configurable Attributes')
         ));
 
-        $fieldset->addField('attribute-selector', 'text', array(
+        $fieldset->addField('configurable-attribute-selector', 'text', array(
             'label' => 'Select Attribute',
             'title' => 'Select Attribute',
         ));

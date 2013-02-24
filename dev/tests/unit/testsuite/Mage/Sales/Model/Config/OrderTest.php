@@ -40,6 +40,9 @@ class Mage_Sales_Model_Config_OrderedTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $actualResult);
     }
 
+    /**
+     * @return array
+     */
     public function getSortedCollectorCodesDataProvider()
     {
         $ambiguousCases = self::ambiguousTotalsDataProvider();
@@ -71,6 +74,9 @@ class Mage_Sales_Model_Config_OrderedTest extends PHPUnit_Framework_TestCase
         Mage_Sales_Model_Config_Ordered::validateCollectorDeclarations($config);
     }
 
+    /**
+     * @return array
+     */
     public function ambiguousTotalsDataProvider()
     {
         return array(

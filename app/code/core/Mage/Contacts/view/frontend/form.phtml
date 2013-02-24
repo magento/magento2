@@ -28,7 +28,7 @@
 <div class="page-title">
     <h1><?php echo Mage::helper('Mage_Contacts_Helper_Data')->__('Contact Us') ?></h1>
 </div>
-<form action="<?php echo $this->getFormAction(); ?>" id="contactForm" method="post">
+<form action="<?php echo $this->getFormAction(); ?>" id="contact-form" method="post">
     <div class="fieldset">
         <h2 class="legend"><?php echo Mage::helper('Mage_Contacts_Helper_Data')->__('Contact Information') ?></h2>
         <ul class="form-list">
@@ -36,13 +36,13 @@
                 <div class="field">
                     <label for="name" class="required"><em>*</em><?php echo Mage::helper('Mage_Contacts_Helper_Data')->__('Name') ?></label>
                     <div class="input-box">
-                        <input name="name" id="name" title="<?php echo Mage::helper('Mage_Contacts_Helper_Data')->__('Name') ?>" value="<?php echo $this->escapeHtml($this->helper('Mage_Contacts_Helper_Data')->getUserName()) ?>" class="input-text required-entry" type="text" />
+                        <input name="name" id="name" title="<?php echo Mage::helper('Mage_Contacts_Helper_Data')->__('Name') ?>" value="<?php echo $this->escapeHtml($this->helper('Mage_Contacts_Helper_Data')->getUserName()) ?>" class="input-text" type="text" data-validate="{required:true}"/>
                     </div>
                 </div>
                 <div class="field">
                     <label for="email" class="required"><em>*</em><?php echo Mage::helper('Mage_Contacts_Helper_Data')->__('Email') ?></label>
                     <div class="input-box">
-                        <input name="email" id="email" title="<?php echo Mage::helper('Mage_Contacts_Helper_Data')->__('Email') ?>" value="<?php echo $this->escapeHtml($this->helper('Mage_Contacts_Helper_Data')->getUserEmail()) ?>" class="input-text required-entry validate-email" type="text" />
+                        <input name="email" id="email" title="<?php echo Mage::helper('Mage_Contacts_Helper_Data')->__('Email') ?>" value="<?php echo $this->escapeHtml($this->helper('Mage_Contacts_Helper_Data')->getUserEmail()) ?>" class="input-text" type="text" data-validate="{required:true, 'validate-email':true}"/>
                     </div>
                 </div>
             </li>
@@ -55,7 +55,7 @@
             <li class="wide">
                 <label for="comment" class="required"><em>*</em><?php echo Mage::helper('Mage_Contacts_Helper_Data')->__('Comment') ?></label>
                 <div class="input-box">
-                    <textarea name="comment" id="comment" title="<?php echo Mage::helper('Mage_Contacts_Helper_Data')->__('Comment') ?>" class="required-entry input-text" cols="5" rows="3"></textarea>
+                    <textarea name="comment" id="comment" title="<?php echo Mage::helper('Mage_Contacts_Helper_Data')->__('Comment') ?>" class="input-text" cols="5" rows="3" data-validate="{required:true}"></textarea>
                 </div>
             </li>
         </ul>
@@ -67,7 +67,12 @@
     </div>
 </form>
 <script type="text/javascript">
-//<![CDATA[
-    var contactForm = new VarienForm('contactForm', true);
-//]]>
+    (function($) {
+        head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
+            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>", function() {
+                $('#contact-form').validation();
+            });
+    })(jQuery);
 </script>

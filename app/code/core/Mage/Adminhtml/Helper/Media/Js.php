@@ -35,16 +35,23 @@
  */
 class Mage_Adminhtml_Helper_Media_Js extends Mage_Core_Helper_Js
 {
+    /**
+     * @param Mage_Core_Model_Translate $translator
+     * @param Mage_Core_Model_Config_Modules_Reader $configReader
+     */
+    public function __construct(
+        Mage_Core_Model_Translate $translator,
+        Mage_Core_Model_Config_Modules_Reader $configReader
+    ) {
+        parent::__construct($translator, $configReader);
 
-    public function __construct()
-    {
-         $this->_translateData = array(
+        $this->_translateData = array(
             'Complete' => $this->__('Complete'),
             'File size should be more than 0 bytes' => $this->__('File size should be more than 0 bytes'),
             'Upload Security Error' => $this->__('Upload Security Error'),
             'Upload HTTP Error'     => $this->__('Upload HTTP Error'),
             'Upload I/O Error'     => $this->__('Upload I/O Error'),
-            'SSL Error: Invalid or self-signed certificate'     => $this->__('SSL Error: Invalid or self-signed certificate'),
+            'SSL Error: Invalid or self-signed certificate' => $this->__('SSL Error: Invalid or self-signed certificate'),
             'Tb' => $this->__('Tb'),
             'Gb' => $this->__('Gb'),
             'Mb' => $this->__('Mb'),

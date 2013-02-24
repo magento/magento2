@@ -71,16 +71,6 @@ class Mage_Catalog_Block_Product_Configurable_AttributeSelector extends Mage_Bac
     }
 
     /**
-     * Configurable attribute suggestion action URL
-     *
-     * @return string
-     */
-    public function getSuggestUrl()
-    {
-        return $this->getUrl('*/catalog_product_attribute/suggestConfigurableAttributes');
-    }
-
-    /**
      * Attribute set creation action URL
      *
      * @return string
@@ -88,5 +78,20 @@ class Mage_Catalog_Block_Product_Configurable_AttributeSelector extends Mage_Bac
     public function getAttributeSetCreationUrl()
     {
         return $this->getUrl('*/catalog_product_set/save');
+    }
+
+    /**
+     * Get options for suggest widget
+     *
+     * @return array
+     */
+    public function getSuggestWidgetOptions()
+    {
+        return array(
+            'source' => $this->getUrl('*/catalog_product_attribute/suggestConfigurableAttributes'),
+            'template' => '#configurable-attribute-selector-template',
+            'minLength' => 0,
+            'className' => 'category-select',
+        );
     }
 }

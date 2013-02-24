@@ -24,16 +24,17 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="page-actions"><?php echo $this->getButtonsHtml() ?></div>
-<div>
+<div class="reports-title">
+    <div class="page-actions"><?php echo $this->getButtonsHtml() ?></div>
     <?php echo $this->getChildHtml('store.switcher') ?>
 </div>
-<div>
+
+<div class="reports-content">
     <?php echo $this->getChildHtml('grid.filter.form') ?>
 </div>
-<div>
-    <?php echo $this->getGridHtml() ?>
-</div>
+
+<?php echo $this->getGridHtml() ?>
+
 <script type="text/javascript">
 //<![CDATA[
     jQuery('#filter_form').mage('validation', {errorClass: 'mage-error'});

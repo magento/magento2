@@ -42,7 +42,7 @@ class Varien_Data_Form_Element_Note extends Varien_Data_Form_Element_Abstract
 
     public function getElementHtml()
     {
-        $html = '<span id="' . $this->getHtmlId() . '" class="control-value">' . $this->getText() . '</span>';
+        $html = '<div id="' . $this->getHtmlId() . '" class="control-value">' . $this->getText() . '</div>';
         $html.= $this->getAfterElementHtml();
         return $html;
     }

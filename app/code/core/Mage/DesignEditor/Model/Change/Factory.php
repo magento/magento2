@@ -131,8 +131,8 @@ class Mage_DesignEditor_Model_Change_Factory
     protected static function _getAttributes(Varien_Simplexml_Element $layoutUpdate)
     {
         $attributes = array(
-            'type'        => $layoutUpdate->getAttribute('type') ?: self::DEFAULT_TYPE,
-            'action_name' => $layoutUpdate->getName()
+            'type'        => (string) $layoutUpdate->getAttribute('type') ?: self::DEFAULT_TYPE,
+            'action_name' => (string) $layoutUpdate->getName()
         );
 
         return $attributes;

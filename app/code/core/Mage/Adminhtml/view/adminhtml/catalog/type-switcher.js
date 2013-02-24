@@ -31,7 +31,7 @@
      */
     var TypeSwitcher = function (data) {
         this._data = data;
-        this.$type = $('#type_id');
+        this.$type = $('#product_type_id');
         this.$weight = $('#' + data.weight_id);
         this.$is_virtual = $('#' + data.is_virtual_id);
         this.$tab = $('#' + data.tab_id);

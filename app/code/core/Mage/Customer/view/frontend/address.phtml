@@ -18,8 +18,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
+ * @category    customer address
+ * @package     mage
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -64,7 +64,7 @@
                         <?php echo $_address->format('html') ?>
                     </address>
                     <p>
-                        <strong><a href="<?php echo $this->getUrl('customer/address/form', array('address'=>$_address->getAddressId())) ?>" class="red-link"><?php echo $this->__('Edit Address') ?></a></strong><span class="separator">&nbsp;|&nbsp;</span><strong><a href="#" onclick="return deleteAddress('<?php echo $_address->getAddressId() ?>');" class="red-link"><?php echo $this->__('Delete Address') ?></a></strong>
+                        <strong><a href="<?php echo $this->getUrl('customer/address/form', array('address'=>$_address->getAddressId())) ?>" class="red-link"><?php echo $this->__('Edit Address') ?></a></strong><span class="separator">&nbsp;|&nbsp;</span><strong><a href="#" role="delete-address" data-address="<?php echo $_address->getAddressId() ?>" class="red-link"><?php echo $this->__('Delete Address') ?></a></strong>
                     </p>
                     </td>
                 </tr>
@@ -82,13 +82,15 @@
 </table>
 <div class="buttons-set">
     <p class="back-link"><a href="<?php echo $this->getUrl('customer/account/') ?>"><small>&laquo; </small><?php echo $this->__('Back') ?></a></p>
-    <button type="button" onclick="window.location='<?php echo $this->getUrl('customer/address/form') ?>';" class="button"><span><span><?php echo $this->__('New Address') ?></span></span></button>
+    <button type="button" class="button" role="add-address"><span><span><?php echo $this->__('New Address') ?></span></span></button>
 </div>
 <script type="text/javascript">
-    function deleteAddress(addressId) {
-        if(confirm('<?php echo $this->__('Are you sure you want to delete this address?') ?>')) {
-            window.location='<?php echo $this->getUrl("customer/address/delete") ?>address/'+addressId;
-        }
-        return false;
-    }
+    head.js("<?php echo $this->getViewFileUrl('Mage_Customer::address.js') ?>", function() {
+        jQuery('div.page-title').address({
+            deleteAddress: "p a[role='delete-address']",
+            deleteUrlPrefix: "<?php echo $this->getUrl('customer/address/delete') ?>address/",
+            addAddress: "div.buttons-set button[role='add-address']",
+            addAddressLocation: "<?php echo $this->getUrl('customer/address/form') ?>"
+        });
+    });
 </script>

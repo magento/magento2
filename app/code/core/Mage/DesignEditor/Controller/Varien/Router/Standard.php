@@ -42,18 +42,19 @@ class Mage_DesignEditor_Controller_Varien_Router_Standard extends Mage_Core_Cont
      * @param Mage_Core_Controller_Varien_Action_Factory $controllerFactory
      * @param Magento_ObjectManager $objectManager
      * @param Magento_Filesystem $filesystem
+     * @param Mage_Core_Model_App $app
      * @param string $areaCode
-     * @param string $baseController
-     * @throws InvalidArgumentException
+     * @param $baseController
      */
     public function __construct(
         Mage_Core_Controller_Varien_Action_Factory $controllerFactory,
         Magento_ObjectManager $objectManager,
         Magento_Filesystem $filesystem,
+        Mage_Core_Model_App $app,
         $areaCode,
         $baseController
     ) {
-        parent::__construct($controllerFactory, $filesystem, $areaCode, $baseController);
+        parent::__construct($controllerFactory, $filesystem, $app, $areaCode, $baseController);
         $this->_objectManager = $objectManager;
     }
 

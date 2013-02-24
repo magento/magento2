@@ -56,7 +56,7 @@ class Mage_Index_Model_Resource_Setup extends Mage_Core_Model_Resource_Setup
         if (!$connection) {
             return $this;
         }
-        $indexes = Mage::getConfig()->getNode(Mage_Index_Model_Process::XML_PATH_INDEXER_DATA);
+        $indexes = $this->_config->getNode(Mage_Index_Model_Process::XML_PATH_INDEXER_DATA);
         $indexCodes = array();
         foreach ($indexes->children() as $code => $index) {
             $indexCodes[] = $code;

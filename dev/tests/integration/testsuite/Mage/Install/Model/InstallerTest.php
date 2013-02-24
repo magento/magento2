@@ -56,7 +56,7 @@ class Mage_Install_Model_InstallerTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Install_Model_Installer();
+        $this->_model = Mage::getModel('Mage_Install_Model_Installer');
     }
 
     protected function tearDown()
@@ -73,10 +73,12 @@ class Mage_Install_Model_InstallerTest extends PHPUnit_Framework_TestCase
     protected function _emulateInstallerConfigDir($dir)
     {
         $objectManager = Mage::getObjectManager();
+        $filesystem = new Magento_Filesystem(new Magento_Filesystem_Adapter_Local());
         $installerConfig = new Mage_Install_Model_Installer_Config(
             $objectManager->get('Mage_Core_Model_Config'),
-            new Mage_Core_Model_Dir(__DIR__, array(), array(Mage_Core_Model_Dir::CONFIG => $dir)),
-            new Magento_Filesystem(new Magento_Filesystem_Adapter_Local())
+            new Mage_Core_Model_Dir($filesystem, __DIR__, array(), array(Mage_Core_Model_Dir::CONFIG => $dir)),
+            $objectManager->get('Mage_Core_Model_Config_Resource'),
+            $filesystem
         );
         $objectManager->addSharedInstance($installerConfig, 'Mage_Install_Model_Installer_Config');
     }

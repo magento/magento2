@@ -59,58 +59,6 @@ class Mage_Core_Model_AppTest extends PHPUnit_Framework_TestCase
         $this->_mageModel = null;
     }
 
-    /**
-     * @covers Mage_Core_Model_App::_initCache
-     *
-     * @magentoAppIsolation enabled
-     */
-    public function testInit()
-    {
-        $this->assertNull($this->_model->getConfig());
-        $this->_model->init(Magento_Test_Helper_Bootstrap::getInstance()->getAppInitParams());
-        $this->assertInstanceOf('Mage_Core_Model_Config', $this->_model->getConfig());
-        $this->assertNotEmpty($this->_model->getConfig()->getNode());
-        $this->assertContains(Mage_Core_Model_App::ADMIN_STORE_ID, array_keys($this->_model->getStores(true)));
-
-        // Check that we have shared cache object inside of object manager
-        $objectManager = Mage::getObjectManager();
-        /** @var $cache Mage_Core_Model_Cache */
-        $cache = $objectManager->get('Mage_Core_Model_Cache');
-        $appCache = $this->_model->getCacheInstance();
-        $this->assertSame($appCache, $cache);
-    }
-
-    /**
-     * @magentoAppIsolation enabled
-     */
-    public function testBaseInit()
-    {
-        $this->assertNull($this->_model->getConfig());
-        $this->_model->baseInit(Magento_Test_Helper_Bootstrap::getInstance()->getAppInitParams());
-        $this->assertInstanceOf('Mage_Core_Model_Config', $this->_model->getConfig());
-        $this->assertNotEmpty($this->_model->getConfig()->getNode());
-    }
-
-    /**
-     * @magentoAppIsolation enabled
-     */
-    public function testRun()
-    {
-        if (!Magento_Test_Helper_Bootstrap::canTestHeaders()) {
-            $this->markTestSkipped('Can\'t test application run without sending headers');
-        }
-        $request = new Magento_Test_Request();
-        $request->setRequestUri('core/index/index');
-        $this->_mageModel->setRequest($request);
-        $this->_mageModel->run(Magento_Test_Helper_Bootstrap::getInstance()->getAppInitParams());
-        $this->assertTrue($request->isDispatched());
-    }
-
-    public function testIsInstalled()
-    {
-        $this->assertTrue($this->_mageModel->isInstalled());
-    }
-
     public function testGetCookie()
     {
         $this->assertInstanceOf('Mage_Core_Model_Cookie', $this->_model->getCookie());
@@ -136,7 +84,7 @@ class Mage_Core_Model_AppTest extends PHPUnit_Framework_TestCase
 
     public function testHasSingleStore()
     {
-        $this->assertNull($this->_model->hasSingleStore());
+        $this->assertTrue($this->_model->hasSingleStore());
         $this->assertTrue($this->_mageModel->hasSingleStore());
     }
 
@@ -165,18 +113,6 @@ class Mage_Core_Model_AppTest extends PHPUnit_Framework_TestCase
     public function errorHandler()
     {
         $this->_errorCatchFlag = true;
-    }
-
-    /**
-     * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store general/locale/code de_DE
-     */
-    public function testLoadArea()
-    {
-        $translator = Mage::app()->getTranslator();
-        $this->assertEmpty($translator->getConfig(Mage_Core_Model_Translate::CONFIG_KEY_LOCALE));
-        $this->_model->loadArea('frontend');
-        $this->assertEquals('de_DE', $translator->getConfig(Mage_Core_Model_Translate::CONFIG_KEY_LOCALE));
     }
 
     public function testGetArea()
@@ -223,7 +159,7 @@ class Mage_Core_Model_AppTest extends PHPUnit_Framework_TestCase
      */
     public function testGetWebsiteNonExisting()
     {
-        $this->assertNotEmpty($this->_mageModel->getWebsite()->getId());
+        $this->assertNotEmpty($this->_mageModel->getWebsite(true)->getId());
         $this->_mageModel->getWebsite(100);
     }
 
@@ -239,7 +175,7 @@ class Mage_Core_Model_AppTest extends PHPUnit_Framework_TestCase
      */
     public function testGetGroupNonExisting()
     {
-        $this->assertNotEmpty($this->_mageModel->getGroup()->getId());
+        $this->assertNotEmpty($this->_mageModel->getGroup(true)->getId());
         $this->_mageModel->getGroup(100);
     }
 
@@ -248,13 +184,6 @@ class Mage_Core_Model_AppTest extends PHPUnit_Framework_TestCase
         $locale = $this->_model->getLocale();
         $this->assertInstanceOf('Mage_Core_Model_Locale', $locale);
         $this->assertSame($locale, $this->_model->getLocale());
-    }
-
-    public function testGetTranslator()
-    {
-        $translate = $this->_model->getTranslator();
-        $this->assertInstanceOf('Mage_Core_Model_Translate', $translate);
-        $this->assertSame($translate, $this->_model->getTranslator());
     }
 
     /**
@@ -276,12 +205,6 @@ class Mage_Core_Model_AppTest extends PHPUnit_Framework_TestCase
     public function testGetBaseCurrencyCode()
     {
         $this->assertEquals('USD', $this->_model->getBaseCurrencyCode());
-    }
-
-    public function testGetConfig()
-    {
-        $this->assertNull($this->_model->getConfig());
-        $this->assertInstanceOf('Mage_Core_Model_Config', $this->_mageModel->getConfig());
     }
 
     public function testGetFrontController()
@@ -330,25 +253,20 @@ class Mage_Core_Model_AppTest extends PHPUnit_Framework_TestCase
     public function testSetGetRequest()
     {
         $this->assertInstanceOf('Mage_Core_Controller_Request_Http', $this->_model->getRequest());
-        $this->_model->setRequest(new Magento_Test_Request());
-        $this->assertInstanceOf('Magento_Test_Request', $this->_model->getRequest());
+        $request = new Magento_Test_Request();
+        $this->_model->setRequest($request);
+        $this->assertSame($request, $this->_model->getRequest());
     }
 
     public function testSetGetResponse()
     {
-        if (!Magento_Test_Helper_Bootstrap::canTestHeaders()) {
-            $this->markTestSkipped('Can\'t test get response without sending headers');
-        }
         $this->assertInstanceOf('Mage_Core_Controller_Response_Http', $this->_model->getResponse());
-        $this->_model->setResponse(new Magento_Test_Response());
-        $this->assertInstanceOf('Magento_Test_Response', $this->_model->getResponse());
-    }
-
-    public function testSetGetUpdateMode()
-    {
-        $this->assertFalse($this->_model->getUpdateMode());
-        $this->_model->setUpdateMode(true);
-        $this->assertTrue($this->_model->getUpdateMode());
+        $expectedHeader = array('name' => 'Content-Type', 'value' => 'text/html; charset=UTF-8', 'replace' => false);
+        $this->assertContains($expectedHeader, $this->_model->getResponse()->getHeaders());
+        $response = new Magento_Test_Response();
+        $this->_model->setResponse($response);
+        $this->assertSame($response, $this->_model->getResponse());
+        $this->assertEmpty($this->_model->getResponse()->getHeaders());
     }
 
     /**

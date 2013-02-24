@@ -30,13 +30,15 @@
  * @category   Mage
  * @package    Mage_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
+ *
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Mage_Backend_Block_Widget extends Mage_Backend_Block_Template
 {
     public function getId()
     {
-        if ($this->getData('id')===null) {
-            $this->setData('id', $this->_helperFactory->get('Mage_Core_Helper_Data')->uniqHash('id_'));
+        if (null === $this->getData('id')) {
+            $this->setData('id', $this->helper('Mage_Core_Helper_Data')->uniqHash('id_'));
         }
         return $this->getData('id');
     }

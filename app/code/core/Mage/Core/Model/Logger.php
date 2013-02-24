@@ -46,9 +46,21 @@ class Mage_Core_Model_Logger
      */
     protected $_dirs = null;
 
-    public function __construct(Mage_Core_Model_Dir $dirs)
+    /**
+     * @var Varien_Io_File
+     */
+    protected $_fileSystem;
+
+    /**
+     * @param Mage_Core_Model_Dir $dirs
+     * @param Varien_Io_File $fileSystem
+     */
+    public function __construct(Mage_Core_Model_Dir $dirs, Varien_Io_File $fileSystem, $defaultFile = '')
     {
         $this->_dirs = $dirs;
+        $this->_fileSystem = $fileSystem;
+        $this->addStreamLog(Mage_Core_Model_Logger::LOGGER_SYSTEM, $defaultFile)
+            ->addStreamLog(Mage_Core_Model_Logger::LOGGER_EXCEPTION, $defaultFile);
     }
 
     /**
@@ -67,6 +79,7 @@ class Mage_Core_Model_Logger
         $file = $fileOrWrapper ?: "{$loggerKey}.log";
         if (!preg_match('#^[a-z][a-z0-9+.-]*\://#i', $file)) {
             $logDir = $this->_dirs->getDir(Mage_Core_Model_Dir::LOG);
+            $this->_fileSystem->checkAndCreateFolder($logDir);
             $file = $logDir . DIRECTORY_SEPARATOR . $file;
         }
         if (!$writerClass || !is_subclass_of($writerClass, 'Zend_Log_Writer_Stream')) {
@@ -85,9 +98,9 @@ class Mage_Core_Model_Logger
      * Reset all loggers and initialize them according to store configuration
      *
      * @param Mage_Core_Model_Store $store
-     * @param Mage_Core_Model_Config $config
+     * @param Mage_Core_Model_ConfigInterface $config
      */
-    public function initForStore(Mage_Core_Model_Store $store, Mage_Core_Model_Config $config)
+    public function initForStore(Mage_Core_Model_Store $store, Mage_Core_Model_ConfigInterface $config)
     {
         $this->_loggers = array();
         if ($store->getConfig('dev/log/active')) {

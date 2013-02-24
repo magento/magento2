@@ -34,13 +34,51 @@
  */
 class Mage_Install_Model_Installer extends Varien_Object
 {
-
     /**
      * Installer data model used to store data between installation steps
      *
      * @var Varien_Object
      */
     protected $_dataModel;
+
+    /**
+     * DB updated model
+     *
+     * @var Mage_Core_Model_Db_UpdaterInterface
+     */
+    protected $_dbUpdater;
+
+    /**
+     * Application chache model
+     *
+     * @var Mage_Core_Model_Cache
+     */
+    protected $_cache;
+
+    /**
+     * Application config model
+     *
+     * @var Mage_Core_Model_ConfigInterface
+     */
+    protected $_config;
+
+    /**
+     * @param Mage_Core_Model_ConfigInterface $config
+     * @param Mage_Core_Model_Db_UpdaterInterface $dbUpdater
+     * @param Mage_Core_Model_Cache $cache
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Core_Model_ConfigInterface $config,
+        Mage_Core_Model_Db_UpdaterInterface $dbUpdater,
+        Mage_Core_Model_Cache $cache,
+        array $data = array()
+    ) {
+        $this->_dbUpdater = $dbUpdater;
+        $this->_config = $config;
+        $this->_cache = $cache;
+        parent::__construct($data);
+    }
 
     /**
      * Checking install status of application
@@ -85,7 +123,7 @@ class Mage_Install_Model_Installer extends Varien_Object
     public function checkDownloads()
     {
         try {
-            $result = Mage::getModel('Mage_Install_Model_Installer_Pear')->checkDownloads();
+            Mage::getModel('Mage_Install_Model_Installer_Pear')->checkDownloads();
             $result = true;
         } catch (Exception $e) {
             $result = false;
@@ -143,7 +181,15 @@ class Mage_Install_Model_Installer extends Varien_Object
             ->setConfigData($data)
             ->install();
 
-        $this->_refreshConfig();
+
+        /** @var $primaryConfig Mage_Core_Model_Config_Primary */
+        $primaryConfig = Mage::getSingleton('Mage_Core_Model_Config_Primary');
+        $primaryConfig->reinit();
+
+        /** @var $moduleConfig  Mage_Core_Model_Config_Modules*/
+        $moduleConfig = Mage::getSingleton('Mage_Core_Model_Config_Modules');
+        $moduleConfig->reinit();
+
         return $this;
     }
 
@@ -154,13 +200,14 @@ class Mage_Install_Model_Installer extends Varien_Object
      */
     public function installDb()
     {
-        Mage_Core_Model_Resource_Setup::applyAllUpdates();
+        $this->_dbUpdater->updateScheme();
         $data = $this->getDataModel()->getConfigData();
 
         /**
          * Saving host information into DB
          */
-        $setupModel = new Mage_Core_Model_Resource_Setup('core_setup');
+        $setupModel = Mage::getObjectManager()
+            ->get('Mage_Core_Model_Resource_Setup', array('resourceName' => 'core_setup'));
 
         if (!empty($data['use_rewrites'])) {
             $setupModel->setConfigData(Mage_Core_Model_Store::XML_PATH_USE_REWRITES, 1);
@@ -293,7 +340,7 @@ class Mage_Install_Model_Installer extends Varien_Object
         foreach (Mage::helper('Mage_Core_Helper_Data')->getCacheTypes() as $type => $label) {
             $cacheData[$type] = 1;
         }
-        Mage::app()->saveUseCache($cacheData);
+        $this->_cache->saveOptions($cacheData);
         return $this;
     }
 
@@ -302,7 +349,7 @@ class Mage_Install_Model_Installer extends Varien_Object
      */
     protected function _refreshConfig()
     {
-        Mage::app()->cleanCache();
-        Mage::app()->getConfig()->reinit();
+        $this->_cache->clean();
+        $this->_config->reinit();
     }
 }

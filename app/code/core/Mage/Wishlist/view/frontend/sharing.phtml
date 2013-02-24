@@ -36,7 +36,7 @@
             <li class="wide">
                 <label for="email_address" class="required"><em>*</em><?php echo $this->__('Email addresses, separated by commas') ?></label>
                 <div class="input-box">
-                    <textarea name="emails" cols="60" rows="5" id="email_address" class="validate-emails required-entry"><?php echo $this->getEnteredData('emails') ?></textarea>
+                    <textarea name="emails" cols="60" rows="5" id="email_address" data-validate="{required:true,'validate-emails':true}"><?php echo $this->getEnteredData('emails') ?></textarea>
                 </div>
             </li>
             <li class="wide">
@@ -62,25 +62,12 @@
     </div>
 </form>
 <script type="text/javascript">
-//<![CDATA[
-Validation.addAllThese([
-    ['validate-emails', '<?php echo $this->__('Please enter a valid email addresses, separated by commas. For example johndoe@domain.com, johnsmith@domain.com.') ?>', function (v) {
-    if(Validation.get('IsEmpty').test(v)) {
-        return true;
-    }
-
-    var valid_regexp = /^[a-z0-9\._-]{1,30}@([a-z0-9_-]{1,30}\.){1,5}[a-z]{2,4}$/i;
-    var emails = v.split(',');
-
-    for (var i=0; i<emails.length; i++) {
-        if(!valid_regexp.test(emails[i].strip())) {
-            return false;
-        }
-    }
-
-    return true;
-    }]
-]);
-var dataForm = new VarienForm('form-validate', true);
-//]]>
+    (function($) {
+        head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
+            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>", function() {
+                $('#form-validate').validation();
+            })
+    })(jQuery);
 </script>

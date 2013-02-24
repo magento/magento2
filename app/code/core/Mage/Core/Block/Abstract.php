@@ -128,7 +128,7 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
      * @param Mage_Core_Model_Translate $translator
      * @param Mage_Core_Model_Cache $cache
      * @param Mage_Core_Model_Design_Package $designPackage
-     * @param Mage_Core_Model_Session $session
+     * @param Mage_Core_Model_Session_Abstract $session
      * @param Mage_Core_Model_Store_Config $storeConfig
      * @param Mage_Core_Controller_Varien_Front $frontController
      * @param Mage_Core_Model_Factory_Helper $helperFactory
@@ -144,7 +144,7 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
         Mage_Core_Model_Translate $translator,
         Mage_Core_Model_Cache $cache,
         Mage_Core_Model_Design_Package $designPackage,
-        Mage_Core_Model_Session $session,
+        Mage_Core_Model_Session_Abstract $session,
         Mage_Core_Model_Store_Config $storeConfig,
         Mage_Core_Controller_Varien_Front $frontController,
         Mage_Core_Model_Factory_Helper $helperFactory,

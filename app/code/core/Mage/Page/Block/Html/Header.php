@@ -106,7 +106,7 @@ class Mage_Page_Block_Html_Header extends Mage_Core_Block_Template
         if (!is_null($storeLogoPath) && $this->_isFile($absolutePath)) {
             $url = $logoUrl;
         } else {
-            $url = $this->getViewFileUrl('images::logo.gif');
+            $url = $this->getViewFileUrl('images/logo.gif');
         }
 
         return $url;

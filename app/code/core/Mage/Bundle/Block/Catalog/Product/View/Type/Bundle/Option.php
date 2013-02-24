@@ -235,10 +235,7 @@ class Mage_Bundle_Block_Catalog_Product_View_Type_Bundle_Option extends Mage_Bun
      */
     public function setValidationContainer($elementId, $containerId)
     {
-        return '<script type="text/javascript">
-            $(\'' . $elementId . '\').advaiceContainer = \'' . $containerId . '\';
-            $(\'' . $elementId . '\').callbackFunction  = \'bundle.validationCallback\';
-            </script>';
+        return;
     }
 
     /**

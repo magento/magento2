@@ -48,7 +48,8 @@ class Magento_Test_ObjectManagerTest extends PHPUnit_Framework_TestCase
         $instanceManager->addSharedInstance($resource, 'Mage_Core_Model_Resource');
 
         $diInstance = new Magento_Di_Zend();
-        $model = new Magento_Test_ObjectManager(null, $diInstance);
+        $config = $this->getMock('Magento_ObjectManager_Configuration');
+        $model = new Magento_Test_ObjectManager($config, null, $diInstance);
 
         $diInstance->setInstanceManager($instanceManager);
         $this->assertSame($model, $model->clearCache());

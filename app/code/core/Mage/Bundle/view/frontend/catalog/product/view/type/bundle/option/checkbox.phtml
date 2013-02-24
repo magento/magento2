@@ -40,9 +40,6 @@
         <?php foreach($_selections as $_selection): ?>
             <li><input class="change-container-classname checkbox bundle-option-<?php echo $_option->getId() ?> product-bundle-option" id="bundle-option-<?php echo $_option->getId() ?>-<?php echo $_selection->getSelectionId() ?>" type="checkbox" <?php if ($_option->getRequired()) echo 'data-validate = {"validate-one-required-by-name":true}'?> name="bundle_option[<?php echo $_option->getId() ?>][]"<?php if ($this->_isSelected($_selection)) echo ' checked="checked"' ?><?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?> value="<?php echo $_selection->getSelectionId() ?>"/>
                 <span class="label"><label for="bundle-option-<?php echo $_option->getId() ?>-<?php echo $_selection->getSelectionId() ?>"><?php echo $this->getSelectionQtyTitlePrice($_selection) ?></label></span>
-                <?php if($_option->getRequired()): ?>
-                    <?php echo $this->setValidationContainer('bundle-option-'.$_option->getId().'-'.$_selection->getSelectionId(), 'bundle-option-'.$_option->getId().'-container') ?>
-                <?php endif; ?>
             </li>
         <?php endforeach; ?>
         </ul>

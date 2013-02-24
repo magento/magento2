@@ -38,7 +38,7 @@ class Mage_Core_Model_Layout_MergeTest extends PHPUnit_Framework_TestCase
         Mage::app()->getCacheInstance()->banUse('layout');
 
         Magento_Test_Helper_Bootstrap::getInstance()->reinitialize(array(
-            Mage_Core_Model_App::INIT_OPTION_DIRS => array(
+            Mage::PARAM_APP_DIRS => array(
                 Mage_Core_Model_Dir::THEMES => dirname(__DIR__) . '/_files/design'
             )
         ));
@@ -326,8 +326,7 @@ class Mage_Core_Model_Layout_MergeTest extends PHPUnit_Framework_TestCase
     {
         /* Erase existing layout updates */
         unset(Mage::app()->getConfig()->getNode("{$area}/layout")->updates);
-        /* Setup layout updates fixture */
-        Mage::app()->getConfig()->extend(new Varien_Simplexml_Config("
+        $updates = new Varien_Simplexml_Config("
             <config>
                 <{$area}>
                     <layout>
@@ -337,7 +336,9 @@ class Mage_Core_Model_Layout_MergeTest extends PHPUnit_Framework_TestCase
                     </layout>
                 </{$area}>
             </config>
-        "));
+        ");
+        /* Setup layout updates fixture */
+        Mage::app()->getConfig()->getNode()->extend($updates->getNode());
     }
 
     /**

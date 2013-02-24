@@ -42,10 +42,12 @@ class Mage_Backend_Helper_Data extends Mage_Core_Helper_Abstract
     protected $_areaFrontName = null;
 
     /**
-     * @param array $data
+     * @param Mage_Core_Model_Config $applicationConfig
+     * @param Mage_Core_Model_Translate $translator
      */
-    public function __construct(Mage_Core_Model_Config $applicationConfig)
+    public function __construct(Mage_Core_Model_Config $applicationConfig, Mage_Core_Model_Translate $translator)
     {
+        parent::__construct($translator);
         $this->_config = $applicationConfig;
     }
 

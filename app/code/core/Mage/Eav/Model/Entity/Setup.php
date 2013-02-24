@@ -35,6 +35,34 @@
 class Mage_Eav_Model_Entity_Setup extends Mage_Core_Model_Resource_Setup
 {
     /**
+     * Application cache model
+     *
+     * @var Mage_Core_Model_Cache
+     */
+    protected $_cache;
+
+    /**
+     * @param Mage_Core_Model_Config_Resource $resourcesConfig
+     * @param Mage_Core_Model_Config_Modules $modulesConfig
+     * @param Mage_Core_Model_Resource $resource
+     * @param Mage_Core_Model_Config_Modules_Reader $modulesReader
+     * @param Mage_Core_Model_Cache $cache
+     * @param string $resourceName
+     */
+    public function __construct(
+        Mage_Core_Model_Config_Resource $resourcesConfig,
+        Mage_Core_Model_Config_Modules $modulesConfig,
+        Mage_Core_Model_Resource $resource,
+        Mage_Core_Model_Config_Modules_Reader $modulesReader,
+        Mage_Core_Model_Cache $cache,
+        $resourceName
+    )
+    {
+        parent::__construct($resourcesConfig, $modulesConfig, $resource, $modulesReader, $resourceName);
+        $this->_cache = $cache;
+    }
+
+    /**
      * General Attribute Group Name
      *
      * @var string
@@ -78,7 +106,7 @@ class Mage_Eav_Model_Entity_Setup extends Mage_Core_Model_Resource_Setup
      */
     public function cleanCache()
     {
-        Mage::app()->cleanCache(array('eav'));
+        $this->_cache->clean(array('eav'));
         return $this;
     }
 

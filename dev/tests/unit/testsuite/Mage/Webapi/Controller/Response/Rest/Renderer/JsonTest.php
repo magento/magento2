@@ -34,7 +34,7 @@ class Mage_Webapi_Controller_Response_Rest_Renderer_JsonTest extends PHPUnit_Fra
     protected function setUp()
     {
         /** Prepare mocks and objects for SUT constructor. */
-        $this->_helperMock = $this->getMockBuilder('Mage_Core_Helper_Data')->getMock();
+        $this->_helperMock = $this->getMockBuilder('Mage_Core_Helper_Data')->disableOriginalConstructor()->getMock();
         $helperFactoryMock = $this->getMock('Mage_Core_Model_Factory_Helper');
         $helperFactoryMock->expects($this->any())->method('get')->will($this->returnValue($this->_helperMock));
         /** Initialize SUT. */

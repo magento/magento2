@@ -55,7 +55,7 @@ class Mage_Review_Model_Resource_Review_Summary_Collection extends Varien_Data_C
 
         $this->_select->from($this->_summaryTable);
 
-        $this->setItemObjectClass(Mage::getConfig()->getModelClassName('Mage_Review_Model_Review_Summary'));
+        $this->setItemObjectClass('Mage_Review_Model_Review_Summary');
     }
 
     /**

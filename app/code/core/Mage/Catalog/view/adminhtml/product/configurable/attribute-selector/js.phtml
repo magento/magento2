@@ -26,46 +26,36 @@
 
 /** @var $this Mage_Catalog_Block_Product_Configurable_AttributeSelector */
 ?>
+<script id="configurable-attribute-selector-template" type="text/x-jquery-tmpl">
+    <ul data-mage-init="{menu:[]}">
+        {{each items}}
+        <li {{html optionData($value)}}><a href="#">${$value.label}</a></li>
+        {{/each}}
+    </ul>
+</script>
 <script type="text/javascript">
-(function($) {
-    'use strict';
-    $(function() {
-        $('#attribute-selector')
-            .autocomplete({
-                minLength: 0,
-                appendTo: '#config_super_product',
-                source: function(request, response) {
-                    $.ajax({
-                        url: '<?php echo $this->getSuggestUrl()?>',
-                        data: {label_part: request.term},
-                        dataType: 'json',
-                        context: '<div>'
-                    })
-                    .success(function(data) {
-                        var list = [];
-                        $.each(data, function(id, item) {
-                            if (!$('#configurable_attribute_' + id ).length) {
-                                list.push(item);
-                            }
-                        });
-                        response(list);
-                    });
-                },
-                focus: function(event, ui) {
-                    return false;
-                },
-                select: function(event, ui) {
-                    var attribute = ui.item;
-                    if (attribute.id) {
-                        $('#attributes-container').trigger('add', attribute);
-                    }
-                    $(this).val('').blur();
-                    return false;
+jQuery(function($) {
+    var options = <?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode($this->getSuggestWidgetOptions())?>;
+    $.extend(options, {
+        response: function(data) {
+            var list = [];
+            $.each(data, function(id, item) {
+                if (!$('#configurable_attribute_' + id ).length) {
+                    list.push(item);
                 }
-            })
-            .on('focus', function () {
-                $(this).autocomplete('search');
             });
+            return list;
+        }
     });
-})(jQuery);
+
+    $('#configurable-attribute-selector')
+        .suggest(options)
+        .on('suggestselect', function (event, selectedItem) {
+            if (selectedItem.id) {
+                $('#configurable-attributes-container').trigger('add', selectedItem);
+            }
+            $(this).val('');
+            return false;
+        });
+});
 </script>

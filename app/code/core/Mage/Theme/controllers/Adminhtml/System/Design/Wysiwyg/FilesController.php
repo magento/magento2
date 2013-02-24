@@ -148,7 +148,7 @@ class Mage_Theme_Adminhtml_System_Design_Wysiwyg_FilesController extends Mage_Ad
     {
         try {
             if (!$this->getRequest()->isPost()) {
-                throw new Exception ('Wrong request.');
+                throw new Exception('Wrong request');
             }
             $files = $this->_objectManager->get('Mage_Core_Helper_Data')->jsonDecode(
                 $this->getRequest()->getParam('files')

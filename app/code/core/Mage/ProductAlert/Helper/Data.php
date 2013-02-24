@@ -84,12 +84,17 @@ class Mage_ProductAlert_Helper_Data extends Mage_Core_Helper_Url
         ));
     }
 
+    /**
+     * Create block instance
+     *
+     * @param string|Mage_Core_Block_Abstract $block
+     * @return Mage_Core_Block_Abstract
+     */
     public function createBlock($block)
     {
         if (is_string($block)) {
-            $block = Mage::getConfig()->getBlockClassName($block);
             if (class_exists($block)) {
-                $block = new $block(array());
+                $block = Mage::getObjectManager()->create($block);
             }
         }
         if (!$block instanceof Mage_Core_Block_Abstract) {

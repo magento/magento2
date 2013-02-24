@@ -123,23 +123,27 @@ class Mage_Backend_Adminhtml_System_Config_SaveControllerTest extends PHPUnit_Fr
         $helperMock->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
         $responseMock->expects($this->once())->method('setRedirect')->with('*/system_config/edit');
 
-        $this->_controller = new Mage_Backend_Adminhtml_System_Config_SaveController($this->_requestMock,
-            $responseMock,
-            null,
-            $objectManagerMock,
-            $frontControllerMock,
-            $authorizationMock,
-            $configStructureMock,
-            $this->_configMock,
-            $this->_configFactoryMock,
-            $this->_eventManagerMock,
-            $this->_appMock,
-            $this->_authMock,
-            $this->_layoutMock,
+        $this->_controller = $this->getMock(
+            'Mage_Backend_Adminhtml_System_Config_SaveController',
+            array('deniedAction'),
             array(
-                'helper' => $helperMock,
-                'session' => $this->_sessionMock,
-            )
+                $this->_requestMock,
+                $responseMock,
+                $objectManagerMock,
+                $frontControllerMock,
+                $authorizationMock,
+                $configStructureMock,
+                $this->_configMock,
+                $this->_configFactoryMock,
+                $this->_eventManagerMock,
+                $this->_appMock,
+                $this->_authMock,
+                $this->_layoutMock,
+                null,
+                array(
+                    'helper' => $helperMock,
+                    'session' => $this->_sessionMock,
+                ))
         );
     }
 

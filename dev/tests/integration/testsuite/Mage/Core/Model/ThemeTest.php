@@ -34,6 +34,7 @@ class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
      */
     public function testCrud()
     {
+        Mage::getConfig();
         /** @var $themeModel Mage_Core_Model_Theme */
         $themeModel = Mage::getObjectManager()->create('Mage_Core_Model_Theme');
         $themeModel->setData($this->_getThemeValidData());

@@ -231,13 +231,10 @@ abstract class Mage_Eav_Model_Entity_Attribute_Frontend_Abstract
     /**
      * Retrieve Input Renderer Class
      *
-     * @return string
+     * @return string|null
      */
-    public function getInputRendererClass() {
-        $className = $this->getAttribute()->getData('frontend_input_renderer');
-        if ($className) {
-            return Mage::getConfig()->getBlockClassName($className);
-        }
-        return null;
+    public function getInputRendererClass()
+    {
+        return $this->getAttribute()->getData('frontend_input_renderer');
     }
 }

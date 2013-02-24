@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<jmeterTestPlan version="1.2" properties="2.3">
+<jmeterTestPlan version="1.2" properties="2.4" jmeter="2.9 r1437961">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Backend High Load Testing" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -125,7 +125,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Total Number of Products" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="131458462">&lt;h3 class=&quot;icon-head head-products&quot;&gt;Manage Products&lt;/h3&gt;</stringProp>
+              <stringProp name="-1786510475">&lt;h1 class=&quot;title&quot;&gt;Manage Products&lt;/h1&gt;</stringProp>
               <stringProp name="-1952867632">Total ${products_number} records found</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -157,7 +157,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Total Number of Customers" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="2077718991">&lt;h3 class=&quot;icon-head head-customer&quot;&gt;Manage Customers&lt;/h3&gt;</stringProp>
+              <stringProp name="-5737002">&lt;h1 class=&quot;title&quot;&gt;Manage Customers&lt;/h1&gt;</stringProp>
               <stringProp name="1843270971">Total ${customers_number} records found</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -189,7 +189,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Total Number of Orders" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="1454492943">&lt;h3 class=&quot;icon-head head-sales-order&quot;&gt;Orders&lt;/h3&gt;</stringProp>
+              <stringProp name="-1043496309">&lt;h1 class=&quot;title&quot;&gt;Orders&lt;/h1&gt;</stringProp>
               <stringProp name="1043238481">Total ${orders_number} records found</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>

@@ -195,7 +195,7 @@ class Mage_Catalog_Model_Resource_Product_Status extends Mage_Core_Model_Resourc
                     't1.entity_id = t2.entity_id AND t1.attribute_id = t2.attribute_id AND t2.store_id = ' . (int)$storeId,
                     array('t1.entity_id')
                 )
-                ->where('t1.store_id = ?', Mage_Core_Model_App::ADMIN_STORE_ID)
+                ->where('t1.store_id = ?', Mage_Core_Model_AppInterface::ADMIN_STORE_ID)
                 ->where('t1.attribute_id = ?', $attribute->getAttributeId())
                 ->where('t1.entity_id IN(?)', $productIds);
             $rows = $adapter->fetchPairs($select);

@@ -101,7 +101,7 @@ class Mage_Adminhtml_Helper_Catalog_Product_Edit_Action_Attribute extends Mage_B
      */
     public function getSelectedStoreId()
     {
-        return (int)$this->_getRequest()->getParam('store', Mage_Core_Model_App::ADMIN_STORE_ID);
+        return (int)$this->_getRequest()->getParam('store', Mage_Core_Model_AppInterface::ADMIN_STORE_ID);
     }
 
     /**

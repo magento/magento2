@@ -33,6 +33,12 @@ class Mage_Customer_Block_Widget_Dob extends Mage_Customer_Block_Widget_Abstract
      */
     protected $_dateInputs = array();
 
+    /**
+     * Constants for borders of date-type customer attributes
+     */
+    const MIN_DATE_RANGE_KEY = 'date_range_min';
+    const MAX_DATE_RANGE_KEY = 'date_range_max';
+
     public function _construct()
     {
         parent::_construct();
@@ -117,5 +123,27 @@ class Mage_Customer_Block_Widget_Dob extends Mage_Customer_Block_Widget_Abstract
 
         return sprintf($dateFormat,
             $this->_dateInputs['m'], $this->_dateInputs['d'], $this->_dateInputs['y']);
+    }
+
+    /**
+     * Return minimal date range value
+     *
+     * @return string
+     */
+    public function getMinDateRange()
+    {
+        $rules = $this->_getAttribute('dob')->getValidateRules();
+        return isset($rules[self::MIN_DATE_RANGE_KEY]) ? date("Y/m/d", $rules[self::MIN_DATE_RANGE_KEY]) : null;
+    }
+
+    /**
+     * Return maximal date range value
+     *
+     * @return string
+     */
+    public function getMaxDateRange()
+    {
+        $rules = $this->_getAttribute('dob')->getValidateRules();
+        return isset($rules[self::MAX_DATE_RANGE_KEY]) ? date("Y/m/d", $rules[self::MAX_DATE_RANGE_KEY]) : null;
     }
 }

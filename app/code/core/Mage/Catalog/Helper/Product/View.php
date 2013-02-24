@@ -50,17 +50,17 @@ class Mage_Catalog_Helper_Product_View extends Mage_Core_Helper_Abstract
     protected $_config;
 
     /**
-     * Constructor dependency injection
-     *
+     * @param Mage_Core_Model_Translate $translator
+     * @param Mage_Core_Model_Config $config
      * @param array $data
      */
-    public function __construct(array $data = array())
-    {
-        if (isset($data['config'])) {
-            $this->_config = $data['config'];
-        } else {
-            $this->_config = Mage::getConfig();
-        }
+    public function __construct(
+        Mage_Core_Model_Translate $translator,
+        Mage_Core_Model_Config $config,
+        array $data = array()
+    ) {
+        parent::__construct($translator);
+        $this->_config = $config;
     }
 
     /**

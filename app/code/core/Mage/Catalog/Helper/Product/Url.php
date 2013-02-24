@@ -97,10 +97,14 @@ class Mage_Catalog_Helper_Product_Url extends Mage_Core_Helper_Url
 
     /**
      * Check additional instruction for convertation table in configuration
+     *
+     * @param Mage_Core_Model_Translate $translator
+     * @param Mage_Core_Model_Config $config
      */
-    public function __construct()
+    public function __construct(Mage_Core_Model_Translate $translator, Mage_Core_Model_Config $config)
     {
-        $convertNode = Mage::getConfig()->getNode('default/url/convert');
+        parent::__construct($translator);
+        $convertNode = $config->getNode('default/url/convert');
         if ($convertNode) {
             foreach ($convertNode->children() as $node) {
                 $this->_convertTable[strval($node->from)] = strval($node->to);

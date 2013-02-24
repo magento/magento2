@@ -150,7 +150,7 @@ class Mage_Cms_Model_Resource_Page_Collection extends Mage_Core_Model_Resource_D
             }
 
             if ($withAdmin) {
-                $store[] = Mage_Core_Model_App::ADMIN_STORE_ID;
+                $store[] = Mage_Core_Model_AppInterface::ADMIN_STORE_ID;
             }
 
             $this->addFilter('store', array('in' => $store), 'public');

@@ -691,4 +691,18 @@ class Mage_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_Ab
         $images = $read->fetchAll($select);
         return $images;
     }
+
+    /**
+     * Get total number of records in the system
+     *
+     * @return int
+     */
+    public function countAll()
+    {
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select();
+        $select->from($this->getEntityTable(), 'COUNT(*)');
+        $result = (int)$adapter->fetchOne($select);
+        return $result;
+    }
 }
