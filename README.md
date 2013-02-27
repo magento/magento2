@@ -3,6 +3,8 @@ Magento 2
 
 Magento 2 is an open source eCommerce R&D project facilitating the improvement of Magento Core products. With the new and improved features in Magento 2, developers will be able to offer more functionality to merchants and continue to grow with the platform.
 
+Check the [Wiki](https://github.com/magento/magento2/wiki "Wiki") for more details.
+
 ----
 
 All Submissions you make to Magento, a division of X.commerce, Inc. ("Magento") through GitHub are subject to the following terms and conditions:
