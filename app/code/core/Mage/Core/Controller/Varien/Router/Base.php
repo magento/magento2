@@ -100,7 +100,7 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
                 $modules = array((string)$routerConfig->args->module);
                 if ($routerConfig->args->modules) {
                     foreach ($routerConfig->args->modules->children() as $customModule) {
-                        if ($customModule) {
+                        if ((string)$customModule) {
                             if ($before = $customModule->getAttribute('before')) {
                                 $position = array_search($before, $modules);
                                 if ($position === false) {
