@@ -66,10 +66,13 @@ class Mage_Page_Block_Html_Topmenu extends Mage_Core_Block_Template
 
         $html = $this->_getHtml($this->_menu, $childrenWrapClass);
 
+        $transportObject = new Varien_Object();
+        $transportObject->setHtml($html);
         Mage::dispatchEvent('page_block_html_topmenu_gethtml_after', array(
             'menu' => $this->_menu,
-            'html' => $html
+            'transport' => $transportObject
         ));
+        $html = $transportObject->getHtml();
 
         return $html;
     }
