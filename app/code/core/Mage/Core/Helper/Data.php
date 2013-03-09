@@ -345,9 +345,9 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
 
             if ($german) {
                 // umlauts
-                $subst = array_merge($subst, array(
+                $subst = array(
                     196=>'Ae', 228=>'ae', 214=>'Oe', 246=>'oe', 220=>'Ue', 252=>'ue'
-                ));
+                ) + $subst;
             }
 
             $replacements[$german] = array();
