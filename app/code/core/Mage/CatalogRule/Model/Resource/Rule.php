@@ -523,6 +523,7 @@ class Mage_CatalogRule_Model_Resource_Rule extends Mage_Rule_Model_Resource_Abst
 
             $write->commit();
         } catch (Exception $e) {
+            Mage::logException($e);
             $write->rollback();
             throw $e;
         }
