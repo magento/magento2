@@ -52,6 +52,13 @@ class Mage_Cms_Model_Block extends Mage_Core_Model_Abstract
     const CACHE_TAG     = 'cms_block';
     protected $_cacheTag= 'cms_block';
 
+    /**
+     * Prefix of model events names
+     *
+     * @var string
+     */
+    protected $_eventPrefix = 'cms_block';
+
     protected function _construct()
     {
         $this->_init('Mage_Cms_Model_Resource_Block');
