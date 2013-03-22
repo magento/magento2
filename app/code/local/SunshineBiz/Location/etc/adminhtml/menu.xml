@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<config>
-    <menu>
-        <add id="SunshineBiz_Location::system_location" title="Locations" module="SunshineBiz_Location" sortOrder="55" parent="Mage_Adminhtml::system" resource="Sunshinebiz_Location::location"/>
-        <add id="SunshineBiz_Location::system_location_regions" title="Regions" module="SunshineBiz_Location" parent="SunshineBiz_Location::system_location" action="adminhtml/region" resource="Sunshinebiz_Location::location_regions"/>
-        <add id="SunshineBiz_Location::system_location_areas" title="Areas" module="SunshineBiz_Location" parent="SunshineBiz_Location::system_location" action="adminhtml/area" resource="Sunshinebiz_Location::location_areas"/>
-        <add id="SunshineBiz_Location::system_location_buildings" title="Buildings" module="SunshineBiz_Location" parent="SunshineBiz_Location::system_location" action="adminhtml/building" resource="Sunshinebiz_Location::location_buildings"/>
-    </menu>
-</config>
