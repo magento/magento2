@@ -1,0 +1,46 @@
+<script type="text/javascript">
+//<![CDATA[
+    function localeChanged(element, url) {
+        if (element.value !== '')
+            url = url + 'locale/' + element.value + '/';
+
+        location.href = url;
+    }
+
+    function locationChanged(element, url, updateId) {
+
+        var region = document.getElementById(updateId);
+        region.length = 1;
+        if (element.value) {
+
+            //url = url + "parent/" + element.value;
+            var xmlhttp;
+            if (window.XMLHttpRequest) {
+                // code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            } else {
+                // code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            var j = 0;
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+
+                    var data = eval('(' + xmlhttp.responseText + ')');
+                    if (data.length) {
+                        for (var i in data) {
+                            if (data[i].label) {
+                                region[j] = new Option(data[i].label, data[i].value);
+                                j++;
+                            }
+                        }
+                    }
+                }
+            };
+            xmlhttp.open("GET", url + "parent/" + element.value, true);
+            xmlhttp.send();
+        }
+    }
+//]]>
+</script>
