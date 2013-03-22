@@ -122,6 +122,9 @@ class Magento_Di_Zend extends Zend\Di\Di implements Magento_Di
                     $parameters
                 );
             } else {
+                if ($name == "" || $name == false) {
+                	throw new Exception\RuntimeException("Invalid Class Name");	 
+            	}
                 $instance = new $name();
             }
             if ($isShared) {
