@@ -32,8 +32,8 @@
     <br />
 
     <ul class="address-list" id="address_list">
-        <?php if(count($addressCollection)): ?>
         <?php $_iterator = 0; ?>
+        <?php if(count($addressCollection)): ?>        
             <?php foreach ($addressCollection as $_address): ?>
 
             <li class="address-list-item" id="address_item_<?php echo $_address->getId() ?>">
