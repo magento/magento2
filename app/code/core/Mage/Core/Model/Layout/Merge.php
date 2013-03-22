@@ -639,7 +639,9 @@ class Mage_Core_Model_Layout_Merge
             $fileStr = str_replace($this->_subst['from'], $this->_subst['to'], $fileStr);
             /** @var $fileXml Mage_Core_Model_Layout_Element */
             $fileXml = simplexml_load_string($fileStr, $this->_elementClass);
-            $layoutStr .= $fileXml->innerXml();
+            if ($fileXml){
+                $layoutStr .= $fileXml->innerXml();
+            }
         }
         $layoutStr = '<layouts>' . $layoutStr . '</layouts>';
         $layoutXml = simplexml_load_string($layoutStr, $this->_elementClass);
