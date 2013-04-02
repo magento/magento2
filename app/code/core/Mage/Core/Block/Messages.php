@@ -234,7 +234,7 @@ class Mage_Core_Block_Messages extends Mage_Core_Block_Template
         foreach ($this->getMessages($type) as $message) {
             $html .= '<' . $this->_messagesSecondLevelTagName . ' class="' . $message->getType() . '-msg" '
                 . $this->getUiId('message') . '>'
-                . $this->_escapeMessageFlag ? $this->escapeHtml($message->getText()) : $message->getText()
+                . ($this->_escapeMessageFlag ? $this->escapeHtml($message->getText()) : $message->getText())
                 . '</' . $this->_messagesSecondLevelTagName . '>';
         }
         $html .= '</' . $this->_messagesFirstLevelTagName . '>';
