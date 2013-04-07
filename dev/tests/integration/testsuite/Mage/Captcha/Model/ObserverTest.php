@@ -30,6 +30,11 @@
  */
 class Mage_Captcha_Model_ObserverTest extends Magento_Test_TestCase_ControllerAbstract
 {
+    protected function setUp()
+    {
+        parent::setUp();
+        Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::PART_CONFIG);
+    }
     /**
      * @magentoConfigFixture admin_store admin/captcha/forms backend_login
      * @magentoConfigFixture admin_store admin/captcha/enable 1

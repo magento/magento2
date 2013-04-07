@@ -27,6 +27,11 @@
 
 class Mage_Rss_CatalogControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {
+    protected function setUp()
+    {
+        parent::setUp();
+        Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::PART_CONFIG);
+    }
     /**
      * @param string $action
      * @dataProvider actionNoFeedDataProvider

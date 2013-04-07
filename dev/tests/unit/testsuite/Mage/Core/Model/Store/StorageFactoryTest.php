@@ -67,12 +67,12 @@ class Mage_Core_Model_Store_StorageFactoryTest extends PHPUnit_Framework_TestCas
     /**
      * @var string
      */
-    protected $_defaultStorage = 'Default_Storage_Class_Name';
+    protected $_defaultStorage = 'Mage_Core_Model_Store_Storage_Default';
 
     /**
      * @var string
      */
-    protected $_dbStorage = 'Db_Storage_Class_Name';
+    protected $_dbStorage = 'Mage_Core_Model_Store_Storage_Db';
 
     /**
      * @var array
@@ -113,7 +113,7 @@ class Mage_Core_Model_Store_StorageFactoryTest extends PHPUnit_Framework_TestCas
 
         $this->_objectManagerMock
             ->expects($this->once())
-            ->method('get')
+            ->method('create')
             ->with($this->_defaultStorage)
             ->will($this->returnValue($this->_storage));
 
@@ -147,7 +147,7 @@ class Mage_Core_Model_Store_StorageFactoryTest extends PHPUnit_Framework_TestCas
 
         $this->_objectManagerMock
             ->expects($this->once())
-            ->method('get')
+            ->method('create')
             ->with($this->_dbStorage)
             ->will($this->returnValue($this->_storage));
 
@@ -177,7 +177,7 @@ class Mage_Core_Model_Store_StorageFactoryTest extends PHPUnit_Framework_TestCas
 
         $this->_objectManagerMock
             ->expects($this->once())
-            ->method('get')
+            ->method('create')
             ->with($this->_dbStorage)
             ->will($this->returnValue($invalidObject));
 

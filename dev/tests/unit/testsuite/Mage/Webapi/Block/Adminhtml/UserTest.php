@@ -33,7 +33,7 @@ class Mage_Webapi_Block_Adminhtml_UserTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_block = $helper->getBlock('Mage_Webapi_Block_Adminhtml_User', array(
+        $this->_block = $helper->getObject('Mage_Webapi_Block_Adminhtml_User', array(
             // TODO: Remove injecting of 'urlBuilder' after MAGETWO-5038 complete
             'urlBuilder' => $this->getMockBuilder('Mage_Backend_Model_Url')
                 ->disableOriginalConstructor()

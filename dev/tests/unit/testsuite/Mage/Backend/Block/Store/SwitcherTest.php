@@ -54,7 +54,7 @@ class Mage_Backend_Block_Store_SwitcherTest extends PHPUnit_Framework_TestCase
         $this->_storeGroupFactory = $this->getMock('Mage_Core_Model_Store_Group_Factory', array(), array(), '', false);
 
         $helper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_object = $helper->getBlock('Mage_Backend_Block_Store_Switcher', array(
+        $this->_object = $helper->getObject('Mage_Backend_Block_Store_Switcher', array(
             'urlBuilder' => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false),
             'application' => $this->_applicationModel,
             'websiteFactory' => $this->_websiteFactory,

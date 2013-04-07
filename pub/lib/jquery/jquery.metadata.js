@@ -68,7 +68,8 @@
                 type: 'class',
                 name: 'metadata',
                 cre: /({.*})/,
-                single: 'metadata'
+                single: 'metadata',
+                meta:'validate'
             },
             setType: function( type, name ){
                 this.defaults.type = type;
@@ -77,7 +78,12 @@
             get: function( elem, opts ){
                 var settings = $.extend({},this.defaults,opts);
                 // check for empty string in single property
-                if ( !settings.single.length ) settings.single = 'metadata';
+                if (!settings.single.length) {
+                    settings.single = 'metadata';
+                }
+                if (!settings.meta.length) {
+                    settings.meta = 'validate';
+                }
 
                 var data = $.data(elem, settings.single);
                 // returned cached data if it already exists
@@ -104,8 +110,12 @@
                     var object = {};
                     $( elem.attributes ).each(function() {
                         var name = this.nodeName;
-                        if(name.match(/^data-/)) name = name.replace(/^data-/, '');
-                        else return true;
+                        if (name.indexOf('data-' + settings.meta) === 0) {
+                            name = name.replace(/^data-/, '');
+                        }
+                        else {
+                            return true;
+                        }
                         object[name] = getObject(this.nodeValue);
                     });
                 } else {

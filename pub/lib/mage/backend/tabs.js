@@ -92,6 +92,16 @@
             }
         }
     });
+    var rhash = /#.*$/,
+        isLocal = function(anchor) {
+            return anchor.hash.length > 1 &&
+                anchor.href.replace(rhash, "") ===
+                    location.href.replace(rhash, "")
+                        // support: Safari 5.1
+                        // Safari 5.1 doesn't encode spaces in window.location
+                        // but it does encode spaces from anchors (#8777)
+                        .replace(/\s/g, "%20");
+        };
 
     // Extension for mage.tabs - Move panels in destination element
     $.widget('mage.tabs', $.mage.tabs, {
@@ -121,14 +131,79 @@
             return panel;
         },
 
+        _processTabs: function() {
+            var that = this;
+
+            this.tablist = this._getList()
+                .addClass("ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all")
+                .attr("role", "tablist");
+
+            this.tabs = this.tablist.find("> li:has(a[href])")
+                .addClass("ui-state-default ui-corner-top")
+                .attr({
+                    role: "tab",
+                    tabIndex: -1
+                });
+
+            this.anchors = this.tabs.map(function() {
+                return $("a", this)[ 0 ];
+            })
+                .addClass("ui-tabs-anchor")
+                .attr({
+                    role: "presentation",
+                    tabIndex: -1
+                });
+
+            this.panels = $();
+
+            this.anchors.each(function(i, anchor) {
+                var selector, panel, panelId,
+                    anchorId = $(anchor).uniqueId().attr("id"),
+                    tab = $(anchor).closest("li"),
+                    originalAriaControls = tab.attr("aria-controls");
+
+                // inline tab
+                if (isLocal(anchor)) {
+                    selector = anchor.hash;
+                    panel = that.document.find(that._sanitizeSelector(selector));
+                    // remote tab
+                } else {
+                    panelId = that._tabId(tab);
+                    selector = "#" + panelId;
+                    panel = that.document.find(selector);
+                    if (!panel.length) {
+                        panel = that._createPanel(panelId);
+                        panel.insertAfter(that.panels[ i - 1 ] || that.tablist);
+                    }
+                    panel.attr("aria-live", "polite");
+                }
+
+                if (panel.length) {
+                    that.panels = that.panels.add(panel);
+                }
+                if (originalAriaControls) {
+                    tab.data("ui-tabs-aria-controls", originalAriaControls);
+                }
+                tab.attr({
+                    "aria-controls": selector.substring(1),
+                    "aria-labelledby": anchorId
+                });
+                panel.attr("aria-labelledby", anchorId);
+            });
+
+            this.panels
+                .addClass("ui-tabs-panel ui-widget-content ui-corner-bottom")
+                .attr("role", "tabpanel");
+        },
+
         /**
          * Move panels in destination element
          * @protected
          * @override
-         * @param {Array} panels - array of panels DOM elements
          */
         _movePanelsInDestination: function(panels) {
             if (this.options.destination && !panels.parents(this.options.destination).length) {
+                this.element.trigger('beforePanelsMove', panels);
                 panels
                     .find('script[type!="text/x-jquery-tmpl"]').remove();
                 panels.appendTo(this.options.destination)
@@ -164,7 +239,7 @@
             /**
              * Replacing href attribute with loaded panel id
              * @param {Object} event - event object
-             * @param {Object}
+             * @param {Object} ui
              */
             load: function(event, ui) {
                 var panel = $(ui.panel);
@@ -186,27 +261,24 @@
          * @protected
          * @override
          */
-        _create: function() {
+        _refresh: function() {
             this._super();
-            this._bind();
-        },
+            $.each(this.tabs, $.proxy(function(i, tab) {
+                $(this._getPanelForTab(tab))
+                    .off('changed' + this.eventNamespace)
+                    .off('highlight' + this.eventNamespace)
+                    .off('focusin' + this.eventNamespace)
 
-        /**
-         * Attach event handlers to tabs
-         * @protected
-         */
-        _bind: function() {
-            $.each(this.panels, $.proxy(function(i, panel) {
-                $(panel)
-                    .on('changed', {index: i}, $.proxy(this._onContentChange, this))
-                    .on('highlight.validate', {index: i}, $.proxy(this._onInvalid, this))
-                    .on('focusin', {index: i}, $.proxy(this._onFocus, this));
+                    .on('changed' + this.eventNamespace, {index: i}, $.proxy(this._onContentChange, this))
+                    .on('highlight' + this.eventNamespace, {index: i}, $.proxy(this._onInvalid, this))
+                    .on('focusin' + this.eventNamespace, {index: i}, $.proxy(this._onFocus, this));
             }, this));
 
             ($(this.options.destination).is('form') ?
                 $(this.options.destination) :
                 $(this.options.destination).closest('form'))
-                    .on('beforeSubmit', $.proxy(this._onBeforeSubmit, this));
+                    .off('beforeSubmit' + this.eventNamespace)
+                    .on('beforeSubmit' + this.eventNamespace, $.proxy(this._onBeforeSubmit, this));
         },
 
         /**
@@ -268,16 +340,8 @@
          * @protected
          * @override
          */
-        _bind: function() {
+        _refresh: function() {
             this._super();
-            this._bindShadowTabs();
-        },
-
-        /**
-         * Process shadow tabs
-         * @protected
-         */
-        _bindShadowTabs: function() {
             var anchors = this.anchors,
                 shadowTabs = this.options.shadowTabs,
                 tabs = this.tabs;

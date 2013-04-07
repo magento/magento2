@@ -56,22 +56,21 @@ class Mage_Core_Model_Validator_FactoryTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_defaultTranslator = Magento_Validator_ValidatorAbstract::getDefaultTranslator();
-        $this->_objectManager = $this->getMockBuilder('Magento_ObjectManager_Zend')
-            ->setMethods(array('create', 'get'))
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_objectManager = $this->getMock('Magento_ObjectManager');
         $this->_validatorConfig = $this->getMockBuilder('Magento_Validator_Config')
             ->setMethods(array('createValidatorBuilder', 'createValidator'))
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_objectManager->expects($this->once())
-            ->method('get')
-            ->with('Magento_Validator_Config', array('configFiles' => array('/tmp/moduleOne/etc/validation.xml')))
-            ->will($this->returnValue($this->_validatorConfig));
+
         $this->_objectManager->expects($this->at(0))
             ->method('create')
             ->with('Magento_Translate_Adapter')
             ->will($this->returnValue(new Magento_Translate_Adapter()));
+
+        $this->_objectManager->expects($this->at(1))
+            ->method('create')
+            ->with('Magento_Validator_Config', array('configFiles' => array('/tmp/moduleOne/etc/validation.xml')))
+            ->will($this->returnValue($this->_validatorConfig));
 
         // Config mock
         $this->_config = $this->getMockBuilder('Mage_Core_Model_Config_Modules_Reader')

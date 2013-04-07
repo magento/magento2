@@ -1,0 +1,180 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_DesignEditor
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Mage_DesignEditor>
+            <version>1.0.0.1</version>
+            <active>true</active>
+            <depends>
+                <Mage_Adminhtml/>
+                <Mage_Page/>
+            </depends>
+        </Mage_DesignEditor>
+    </modules>
+    <global>
+        <resources>
+            <designeditor_setup>
+                <setup>
+                    <module>Mage_DesignEditor</module>
+                    <class>Mage_Core_Model_Resource_Setup</class>
+                </setup>
+            </designeditor_setup>
+        </resources>
+        <events>
+            <save_xml_configuration>
+                <observers>
+                    <save_xml_configuration_observer>
+                        <class>Mage_DesignEditor_Model_Observer</class>
+                        <method>saveQuickStyles</method>
+                    </save_xml_configuration_observer>
+                </observers>
+            </save_xml_configuration>
+        </events>
+    </global>
+    <default>
+        <web>
+            <routers>
+                <vde>
+                    <area>frontend</area>
+                    <class>Mage_DesignEditor_Controller_Varien_Router_Standard</class>
+                    <base_controller>Mage_Core_Controller_Varien_Action</base_controller>
+                </vde>
+            </routers>
+        </web>
+    </default>
+    <frontend>
+        <layout>
+            <updates>
+                <designeditor module="Mage_DesignEditor">
+                    <file>layout.xml</file>
+                </designeditor>
+            </updates>
+        </layout>
+        <routers>
+            <designeditor>
+                <use>standard</use>
+                <args>
+                    <module>Mage_DesignEditor</module>
+                    <frontName>design</frontName>
+                </args>
+            </designeditor>
+        </routers>
+    </frontend>
+    <adminhtml>
+        <layout>
+            <updates>
+                <designeditor module="Mage_DesignEditor">
+                    <file>layout.xml</file>
+                </designeditor>
+            </updates>
+        </layout>
+    </adminhtml>
+    <vde>
+        <design_editor>
+            <frontName>vde</frontName>
+            <defaultHandle>default</defaultHandle>
+            <disabledCacheTypes>
+                <block_html />
+                <layout />
+                <config />
+            </disabledCacheTypes>
+            <layout_update>
+                <days_to_expire>5</days_to_expire>
+            </layout_update>
+            <block>
+                <white_list>
+                    <mage_core_block_template>Mage_Core_Block_Template</mage_core_block_template>
+                    <mage_page_block>Mage_Page_Block_</mage_page_block>
+                    <mage_designeditor_block>Mage_DesignEditor_Block_</mage_designeditor_block>
+                    <mage_checkout_block_onepage>Mage_Checkout_Block_Onepage_</mage_checkout_block_onepage>
+                    <mage_customer_block_account_navigation>Mage_Customer_Block_Account_Navigation</mage_customer_block_account_navigation>
+                    <mage_paypal_block_express_review_details>Mage_Paypal_Block_Express_Review_Details</mage_paypal_block_express_review_details>
+                    <mage_poll_block_activepoll>Mage_Poll_Block_ActivePoll</mage_poll_block_activepoll>
+                    <mage_sales_block_guest_links>Mage_Sales_Block_Guest_Links</mage_sales_block_guest_links>
+                    <mage_catalog_block_product_compare_sidebar>Mage_Catalog_Block_Product_Compare_Sidebar</mage_catalog_block_product_compare_sidebar>
+                    <mage_checkout_block_cart_sidebar>Mage_Checkout_Block_Cart_Sidebar</mage_checkout_block_cart_sidebar>
+                    <mage_wishlist_block_customer_sidebar>Mage_Wishlist_Block_Customer_Sidebar</mage_wishlist_block_customer_sidebar>
+                    <mage_reports_block_product_viewed>Mage_Reports_Block_Product_Viewed</mage_reports_block_product_viewed>
+                    <mage_reports_block_product_compared>Mage_Reports_Block_Product_Compared</mage_reports_block_product_compared>
+                    <mage_sales_block_reorder_sidebar>Mage_Sales_Block_Reorder_Sidebar</mage_sales_block_reorder_sidebar>
+                    <mage_paypal_block_express_shortcut>Mage_Paypal_Block_Express_Shortcut</mage_paypal_block_express_shortcut>
+                    <mage_paypaluk_block_express_shortcut>Mage_PaypalUk_Block_Express_Shortcut</mage_paypaluk_block_express_shortcut>
+                </white_list>
+                <black_list>
+                    <mage_page_block_html_pager>Mage_Page_Block_Html_Pager</mage_page_block_html_pager>
+                    <mage_page_block_switch>Mage_Page_Block_Switch</mage_page_block_switch>
+                </black_list>
+            </block>
+            <container>
+                <white_list>
+                    <root>root</root>
+                    <head>head</head>
+                    <after_body_start>after_body_start</after_body_start>
+                    <header>header</header>
+                    <footer>footer</footer>
+                    <before_body_end>before_body_end</before_body_end>
+                    <top_links>top.links</top_links>
+                    <top_menu>top.menu</top_menu>
+                </white_list>
+            </container>
+        </design_editor>
+        <events>
+            <controller_action_layout_generate_blocks_after>
+                <observers>
+                    <vde_editor>
+                        <class>Mage_DesignEditor_Model_Observer</class>
+                        <method>clearJs</method>
+                    </vde_editor>
+                </observers>
+            </controller_action_layout_generate_blocks_after>
+        </events>
+    </vde>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <mage_designeditor before="Mage_Adminhtml">Mage_DesignEditor_Adminhtml</mage_designeditor>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <crontab>
+        <jobs>
+            <design_editor_clear_layout_updates>
+                <schedule>
+                    <cron_expr>0 0 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>Mage_DesignEditor_Model_Observer::clearLayoutUpdates</model>
+                </run>
+            </design_editor_clear_layout_updates>
+        </jobs>
+    </crontab>
+</config>

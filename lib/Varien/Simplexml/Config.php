@@ -501,20 +501,17 @@ class Varien_Simplexml_Config
     /**
      * Imports XML string
      *
-     * @param  string $string
+     * @param string $string
      * @return boolean
      */
     public function loadString($string)
     {
-        if (is_string($string)) {
+        if (!empty($string)) {
             $xml = simplexml_load_string($string, $this->_elementClass);
-
             if ($xml instanceof Varien_Simplexml_Element) {
                 $this->_xml = $xml;
                 return true;
             }
-        } else {
-            Mage::logException(new Exception('"$string" parameter for simplexml_load_string is not a string'));
         }
         return false;
     }

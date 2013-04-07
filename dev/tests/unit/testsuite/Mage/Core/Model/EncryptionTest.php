@@ -29,7 +29,7 @@ class Mage_Core_Model_EncryptionTest extends PHPUnit_Framework_TestCase
      */
     public function testSetHelperGetHash($input)
     {
-        $objectManager = $this->getMock('Magento_ObjectManager_Zend', array('get'), array(), '', false);
+        $objectManager = $this->getMock('Magento_ObjectManager');
         $objectManager->expects($this->once())
             ->method('get')
             ->with($this->stringContains('Mage_Core_Helper_Data'))
@@ -59,7 +59,7 @@ class Mage_Core_Model_EncryptionTest extends PHPUnit_Framework_TestCase
      */
     public function testSetHelperException()
     {
-        $objectManager = $this->getMock('Magento_ObjectManager_Zend', array(), array(), '', false);
+        $objectManager = $this->getMock('Magento_ObjectManager');
         /**
          * @var Mage_Core_Model_Encryption
          */

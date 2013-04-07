@@ -35,7 +35,7 @@ class Mage_Sales_Model_Order_Shipment_TrackTest extends PHPUnit_Framework_TestCa
     protected function setUp()
     {
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_model = $objectManagerHelper->getModel('Mage_Sales_Model_Order_Shipment_Track');
+        $this->_model = $objectManagerHelper->getObject('Mage_Sales_Model_Order_Shipment_Track');
     }
 
     public function testAddData()

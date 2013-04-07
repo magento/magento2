@@ -2,18 +2,14 @@
     position: relative;
 }
 
+.mselect-list .block-footer {
+    padding: 8px 0;
+}
+
 .mselect-items-wrapper {
-    padding: 3px;
     min-height: 80px;
-    background: #fff;
     border: 1px solid #ccc;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
     border-radius: 3px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .mselect-fixed {
@@ -27,7 +23,7 @@
 }
 
 .mselect-list-item:hover {
-    background: #fbfaf6;
+    background: #eef8fc;
 }
 
 .mselect-list-item label {
@@ -38,15 +34,47 @@
 .mselect-input-container {
     position: relative;
     display: none;
+    margin: 5px 0;
 }
 
 .mselect-input {
-    width: 100%;
+    width: 99%;
+    margin:0;
+}
+.mselect-list-item .mselect-checked + span {
+    background: #cdecf6;
 }
 
-.mselect-list-item input:checked + span,
-.mselect-list-item .mselect-checked + span{
-    background: #e6e6e6;
+.mselect-list-item input:checked + span {
+    background: #cdecf6;
+}
+
+.mselect-list-item .mselect-checked + span:before {
+    color: #7ba4b1;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    vertical-align: baseline;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: "\e067";
+}
+
+.mselect-list-item input:checked + span:before {
+    color: #7ba4b1;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    vertical-align: baseline;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: "\e067";
 }
 
 .mselect-list-item input[type='checkbox'] {
@@ -64,95 +92,120 @@
     background: #fff;
 }
 
-.mselect-list-item label>span {
+.mselect-list-item label > span {
     display: block;
-    padding: 5px 50px 5px 5px;
+    padding: 5px 50px 5px 20px;
+    font-size: 13px;
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
 
 .mselect-list-item label span form {
     position: relative;
-    margin-right: -45px;
+    margin: 0 -45px 0 -15px;
     z-index: 2;
 }
 
 .mselect-list-item input[type='text'] {
     padding-right: 45px;
+    width: 100%;
+}
+
+.mselect-list-item input::-ms-clear {
+    display: none;
 }
 
 .mselect-cancel,
 .mselect-edit,
 .mselect-delete,
 .mselect-save {
-    width: 0;
+    width: 16px;
     height: 16px;
-    padding-left: 16px;
+    padding: 0;
     position: absolute;
-    overflow: hidden;
     cursor: pointer;
-}
-
-.mselect-cancel:before,
-.mselect-edit:before,
-.mselect-delete:before,
-.mselect-save:before {
-    border: 0 none;
-    color: #6E685E;
-    content: '\e05b;'; /* edit icon */
-    font-family: 'MUI-Icons';
-    font-size: 16px;
-    font-style: normal;
-    font-weight: normal;
-    height: auto;
-    left: 1px;
-    margin-top: -3px;
-    position: absolute;
-    top: 0;
-    width: auto;
+    font-size: 0;
 }
 
 .mselect-cancel {
     right: 5px;
-    top: 7px;
-}
-
-.mselect-cancel:before {
-    content: '\e069;';
+    top: 3px;
+    padding: 0;
 }
 
 .mselect-edit {
-    top: 5px;
+    top: 2px;
     right: 30px;
     display: none;
 }
 
 .mselect-delete {
     display: none;
-    top: 5px;
+    top: 2px;
     right: 5px;
 }
 
-.mselect-delete:before {
-    content: '\e07f;';
+.mselect-save,
+.mselect-save:hover,
+.mselect-save:focus {
+    display: block;
+    top: 4px;
+    right: 25px;
+    border: none;
+    background: none;
+    filter: none;
 }
 
-.mselect-save,
-.mselect-save:hover {
-    display: block;
-    top: 6px;
-    right: 25px;
+.mselect-cancel:before,
+.mselect-edit:before,
+.mselect-delete:before,
+.mselect-save:before {
+    font-size: 16px;
+    color: #666;
+    color: rgba(20,20,20,0.3);
+    vertical-align: baseline;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+}
+
+.mselect-cancel:active,
+.mselect-edit:active,
+.mselect-delete:active,
+.mselect-save:active {
+    box-shadow: none;
+}
+
+.mselect-cancel:hover:before,
+.mselect-edit:hover:before,
+.mselect-delete:hover:before,
+.mselect-save:hover:before {
+    color: #333;
+    color: rgba(20,20,20,0.6);
+}
+
+.mselect-cancel:before {
+    content: "\e069"
+}
+
+.mselect-edit:before {
+    content: "\e05b"
+}
+
+.mselect-delete:before {
+    content: "\e07f"
 }
 
 .mselect-save:before {
-    content: '\e067;';
+    content: "\e067";
 }
 
 .mselect-list-item:hover .mselect-delete,
 .mselect-list-item:hover .mselect-edit {
     display: block;
 }
-
 .mselect-list-item-not-editable:hover .mselect-edit {
     display: none;
 }
@@ -161,50 +214,6 @@
     display: none;
 }
 
-.mselect-list-item label {
-    font-size: 12px;
-    color: #333;
-    font: 12px normal Arial, Helvetica, sans-serif;
-}
-
-.mselect-list-item form {
-    display: block;
-}
-
-.mselect-button-add,
-.mselect-button-add-disabled {
-    font: 14px/18px 'CallunaSans', Arial, Helvetica, sans-serif;
-    font-weight: 500;
-    color: #322e2a;
-    background: #dbd6ce;
-    display: inline-block;
-    padding: 5px 14px;
-    text-align: center;
-    text-decoration: none;
-    vertical-align: top;
-    cursor: pointer;
-    border: transparent;
-    border-radius: 5px;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-.mselect-button-add:hover {
-    background: #cac2b5;
-    color: #322e2a;
-}
-
-.mselect-button-add:active {
-    box-shadow: 0 1px 5px #aaa59b inset;
-}
-
-.mselect-button-add-disabled,
-.mselect-button-add-disabled:hover {
-    cursor: not-allowed;
-    opacity: 0.65;
-    background: #d9d6cf;
-    box-shadow: none;
-    text-shadow: none;
+.mselect-input-container .mselect-save {
+    top: 3px;
 }

@@ -42,11 +42,6 @@ class Mage_Core_Utility_LayoutTest extends PHPUnit_Framework_TestCase
         $this->_utility = new Mage_Core_Utility_Layout($this);
     }
 
-    protected function tearDown()
-    {
-        $this->_utility = null;
-    }
-
     /**
      * Assert that the actual layout update instance represents the expected layout update file
      *

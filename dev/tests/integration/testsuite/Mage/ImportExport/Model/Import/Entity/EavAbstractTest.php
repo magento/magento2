@@ -48,15 +48,6 @@ class Mage_ImportExport_Model_Import_Entity_EavAbstractTest extends PHPUnit_Fram
     }
 
     /**
-     * Unset created data during test
-     */
-    protected function tearDown()
-    {
-        unset($this->_model);
-        parent::tearDown();
-    }
-
-    /**
      * Test for method getAttributeOptions()
      */
     public function testGetAttributeOptions()

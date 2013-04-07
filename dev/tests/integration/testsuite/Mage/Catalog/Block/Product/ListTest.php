@@ -42,11 +42,6 @@ class Mage_Catalog_Block_Product_ListTest extends PHPUnit_Framework_TestCase
         $this->_block = Mage::app()->getLayout()->createBlock('Mage_Catalog_Block_Product_List');
     }
 
-    protected function tearDown()
-    {
-        $this->_block = null;
-    }
-
     public function testGetLayer()
     {
         $this->assertInstanceOf('Mage_Catalog_Model_Layer', $this->_block->getLayer());
@@ -98,7 +93,7 @@ class Mage_Catalog_Block_Product_ListTest extends PHPUnit_Framework_TestCase
         $layout = $this->_getLayout();
         /** @var $parent Mage_Catalog_Block_Product_List */
         $parent = $layout->createBlock('Mage_Catalog_Block_Product_List');
-        $childBlock = $layout->createBlock('Mage_Core_Block_Text', 'test', array('text' => 'test'));
+        $childBlock = $layout->createBlock('Mage_Core_Block_Text', 'test', array('data' => array('text' => 'test')));
         $layout->setChild($parent->getNameInLayout(), $childBlock->getNameInLayout(), 'additional');
         $this->assertEquals('test', $parent->getAdditionalHtml());
     }

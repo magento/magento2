@@ -84,8 +84,8 @@ class Mage_Core_Model_Theme_Customization_Files_JsTest extends PHPUnit_Framework
         $jsFileModel->setDataForSave($file->getId());
         $jsFileModel->saveData($theme);
 
-        /** @var $updatedFile Mage_Core_Model_Theme_Files */
-        $updatedFile = Mage::getObjectManager()->create('Mage_Core_Model_Theme_Files');
+        /** @var $updatedFile Mage_Core_Model_Theme_File */
+        $updatedFile = Mage::getObjectManager()->create('Mage_Core_Model_Theme_File');
         $updatedFile->load($file->getId());
 
         $this->assertFalse((bool)$updatedFile->getIsTemporary());

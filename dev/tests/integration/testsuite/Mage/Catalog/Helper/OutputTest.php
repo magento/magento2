@@ -37,11 +37,6 @@ class Mage_Catalog_Helper_OutputTest extends PHPUnit_Framework_TestCase
         $this->_helper = Mage::helper('Mage_Catalog_Helper_Output');
     }
 
-    protected function tearDown()
-    {
-        $this->_helper = null;
-    }
-
     /**
      * addHandler()
      * getHandlers()

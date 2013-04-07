@@ -36,7 +36,7 @@ require_once('Varien/Data/Collection.php');
 require_once('Varien/Directory/Factory.php');
 require_once('Varien/Directory/IFactory.php');
 
-class Varien_Directory_Collection extends Varien_Data_Collection implements IFactory{
+class Varien_Directory_Collection extends Varien_Data_Collection{
     protected $_path='';
     protected $_dirName='';
     protected $_recursionLevel=0;
@@ -456,6 +456,3 @@ class Varien_Directory_Collection extends Varien_Data_Collection implements IFac
 
  */
 
-
-
-?>

@@ -37,11 +37,6 @@ class Mage_Core_Model_UrlTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getModel('Mage_Core_Model_Url');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testParseUrl()
     {
         $url = 'http://user:password@www.example.com:80/manual/3.5/?one=1&two=2#skeleton-generator.test';
@@ -163,6 +158,32 @@ class Mage_Core_Model_UrlTest extends PHPUnit_Framework_TestCase
     {
         $actualUrl = $this->_model->getBaseUrl($params);
         $this->assertEquals($expectedUrl, $actualUrl);
+    }
+
+    /**
+     * Check that url type is restored to default after call getBaseUrl with type specified in params
+     */
+    public function testGetBaseUrlWithTypeRestoring()
+    {
+        /**
+         * Get base ull with default type
+         */
+        $this->assertEquals('http://localhost/index.php/', $this->_model->getBaseUrl(), 'Incorrect link url');
+
+        /**
+         * Set specified type
+         */
+        $this->_model->setType(Mage_Core_Model_Store::URL_TYPE_WEB);
+        $webUrl = $this->_model->getBaseUrl();
+        $this->assertEquals('http://localhost/', $webUrl, 'Incorrect web url');
+        $this->assertEquals('http://localhost/index.php/', $this->_model->getBaseUrl(), 'Incorrect link url');
+
+        /**
+         * Get url with type specified in params
+         */
+        $mediaUrl = $this->_model->getBaseUrl(array('_type' => Mage_Core_Model_Store::URL_TYPE_MEDIA));
+        $this->assertEquals('http://localhost/pub/media/', $mediaUrl, 'Incorrect media url');
+        $this->assertEquals('http://localhost/index.php/', $this->_model->getBaseUrl(), 'Incorrect link url');
     }
 
     public function getBaseUrlConfiguredDataProvider()

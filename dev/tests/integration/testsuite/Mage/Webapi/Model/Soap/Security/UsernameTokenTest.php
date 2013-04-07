@@ -54,15 +54,6 @@ class Mage_Webapi_Model_Soap_Security_UsernameTokenTest extends PHPUnit_Framewor
     }
 
     /**
-     * Clean up.
-     */
-    protected function tearDown()
-    {
-        unset($this->_objectManager);
-        unset($this->_user);
-    }
-
-    /**
      * Test positive authentication with text password type.
      */
     public function testAuthenticatePasswordText()

@@ -25,7 +25,7 @@
  */
 
 /**
- * Form field renderer
+ * Form field renderer interface
  *
  * @category   Varien
  * @package    Varien_Data
@@ -33,5 +33,11 @@
  */
 interface Varien_Data_Form_Element_Renderer_Interface
 {
+    /**
+     * Render form element as HTML
+     *
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @return string
+     */
     public function render(Varien_Data_Form_Element_Abstract $element);
 }

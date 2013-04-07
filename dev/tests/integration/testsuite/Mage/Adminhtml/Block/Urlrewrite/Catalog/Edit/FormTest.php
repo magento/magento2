@@ -28,7 +28,7 @@
 /**
  * Test for Mage_Adminhtml_Block_Urlrewrite_Catalog_Edit_FormTest
  */
-class Mage_Adminhtml_Block_Urlrewrite_Catalog_Edit_FormTest extends PHPUnit_Framework_TestCase
+class Mage_Adminhtml_Block_Urlrewrite_Catalog_Edit_FormTest extends Mage_Backend_Area_TestCase
 {
     /**
      * Get form instance
@@ -41,7 +41,9 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Edit_FormTest extends PHPUnit_Fram
         /** @var $layout Mage_Core_Model_Layout */
         $layout = Mage::getModel('Mage_Core_Model_Layout');
         /** @var $block Mage_Adminhtml_Block_Urlrewrite_Catalog_Edit_Form */
-        $block = $layout->createBlock('Mage_Adminhtml_Block_Urlrewrite_Catalog_Edit_Form', 'block', $args);
+        $block = $layout->createBlock(
+            'Mage_Adminhtml_Block_Urlrewrite_Catalog_Edit_Form', 'block', array('data' => $args)
+        );
         $block->toHtml();
         return $block->getForm();
     }

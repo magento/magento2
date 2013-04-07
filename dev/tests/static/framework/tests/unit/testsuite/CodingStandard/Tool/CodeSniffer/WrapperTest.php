@@ -29,6 +29,9 @@ class CodingStandard_Tool_CodeSniffer_WrapperTest extends PHPUnit_Framework_Test
 {
     public function testSetValues()
     {
+        if (!class_exists('PHP_CodeSniffer_CLI')) {
+            $this->markTestSkipped('Code Sniffer is not installed');
+        }
         $wrapper = new CodingStandard_Tool_CodeSniffer_Wrapper();
         $expected = array('some_key' => 'some_value');
         $wrapper->setValues($expected);

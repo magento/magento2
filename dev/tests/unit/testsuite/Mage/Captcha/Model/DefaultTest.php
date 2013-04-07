@@ -73,7 +73,7 @@ class Mage_Captcha_Model_DefaultTest extends PHPUnit_Framework_TestCase
     protected $_object;
 
     /**
-     * @var Magento_ObjectManager_Zend
+     * @var Magento_ObjectManager|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManager;
 
@@ -83,7 +83,7 @@ class Mage_Captcha_Model_DefaultTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento_ObjectManager_Zend', array('get'), array(), '', false);
+        $this->_objectManager = $this->getMock('Magento_ObjectManager');
         $this->_objectManager->expects($this->any())
             ->method('get')
             ->with('Mage_Captcha_Helper_Data')

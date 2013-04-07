@@ -295,7 +295,7 @@ class Zend_Json_Server_Smd
      */
     public function addService($service)
     {
-        #require_once 'Zend/Json/Server/Smd/Service.php';
+        #require_once 'Zend/Json/Server/Smd/Subscriber.php';
 
         if ($service instanceof Zend_Json_Server_Smd_Service) {
             $name = $service->getName();

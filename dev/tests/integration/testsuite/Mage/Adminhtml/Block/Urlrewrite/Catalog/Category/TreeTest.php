@@ -28,7 +28,7 @@
 /**
  * Test for Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_Tree
  */
-class Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_TreeTest extends PHPUnit_Framework_TestCase
+class Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_TreeTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @var Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_Tree
@@ -40,6 +40,8 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_TreeTest extends PHPUnit_
      */
     protected function setUp()
     {
+        parent::setUp();
+
         $this->_treeBlock = Mage::app()->getLayout()
             ->createBlock('Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_Tree');
     }

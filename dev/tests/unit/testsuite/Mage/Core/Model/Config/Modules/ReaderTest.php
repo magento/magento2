@@ -97,8 +97,7 @@ class Mage_Core_Model_Config_Modules_ReaderTest extends PHPUnit_Framework_TestCa
         $moduleName = 'some_module';
         $this->_fileReaderMock->expects($this->once())
             ->method('getModuleDir')
-            ->with($this->equalTo($this->_configMock),
-                   $this->equalTo($type),
+            ->with($this->equalTo($type),
                    $this->equalTo($moduleName))
             ->will($this->returnValue('test_data')
         );

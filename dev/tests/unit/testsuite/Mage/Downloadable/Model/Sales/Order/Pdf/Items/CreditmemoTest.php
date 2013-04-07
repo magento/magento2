@@ -45,10 +45,7 @@ class Mage_Downloadable_Model_Sales_Order_Pdf_Items_CreditmemoTest extends PHPUn
     protected function setUp()
     {
         $objectManager = new Magento_Test_Helper_ObjectManager($this);
-        $modelConstructorArgs = $objectManager->getConstructArguments(
-            Magento_Test_Helper_ObjectManager::MODEL_ENTITY,
-            'Mage_Sales_Model_Order'
-        );
+        $modelConstructorArgs = $objectManager->getConstructArguments('Mage_Sales_Model_Order');
 
         $this->_order = $this->getMock('Mage_Sales_Model_Order', array('formatPriceTxt'), $modelConstructorArgs);
         $this->_order
@@ -64,8 +61,8 @@ class Mage_Downloadable_Model_Sales_Order_Pdf_Items_CreditmemoTest extends PHPUn
             array('getLinks', 'getLinksTitle'),
             $modelConstructorArgs
         );
-        $translator = $this->getMock('Mage_Core_Model_Translate', array(), array(), '', false, false);
-        $this->_model->setStringHelper(new Mage_Core_Helper_String($translator));
+        $context = $this->getMock('Mage_Core_Helper_Context', array(), array(), '', false, false);
+        $this->_model->setStringHelper(new Mage_Core_Helper_String($context));
         $this->_model->setOrder($this->_order);
         $this->_model->setPdf($this->_pdf);
         $this->_model->setPage(new Zend_Pdf_Page('a4'));

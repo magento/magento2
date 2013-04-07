@@ -88,9 +88,13 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorControllerTest extends Mag
 
     public function testLaunchActionSingleStoreWrongThemeId()
     {
-        $this->getRequest()->setParam('theme_id', 999);
+        $wrongThemeId = 999;
+        $this->getRequest()->setParam('theme_id', $wrongThemeId);
         $this->dispatch('backend/admin/system_design_editor/launch');
-        $this->assertSessionMessages($this->equalTo(array('The theme was not found.')), Mage_Core_Model_Message::ERROR);
+        $this->assertSessionMessages($this->equalTo(
+            array('Theme "' . $wrongThemeId . '" was not found.')),
+            Mage_Core_Model_Message::ERROR
+        );
         $expected = 'http://localhost/index.php/backend/admin/system_design_editor/index/';
         $this->assertRedirect($this->stringStartsWith($expected));
     }

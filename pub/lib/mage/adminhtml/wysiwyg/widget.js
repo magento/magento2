@@ -41,38 +41,30 @@ var widgetTools = {
     },
 
     openDialog: function(widgetUrl) {
-        if ($('widget_window') && typeof(Windows) != 'undefined') {
-            Windows.focus('widget_window');
-            return;
+        if (jQuery('.ui-dialog-content').size()) {
+            return
         }
-        this.dialogWindow = Dialog.info(null, {
-            draggable:true,
-            resizable:false,
-            closable:true,
-            className:'magento',
-            windowClassName:"popup-window",
-            title:jQuery.mage.__('Insert Widget...'),
-            top:50,
-            width:950,
-            //height:450,
-            zIndex:1000,
-            recenterAuto:false,
-            hideEffect:Element.hide,
-            showEffect:Element.show,
-            id:'widget_window',
-            onClose: this.closeDialog.bind(this)
+
+        this.dialogWindow = jQuery('<div/>').dialog({
+            autoOpen:   false,
+            title:      jQuery.mage.__('Insert Widget...'),
+            modal:      true,
+            resizable:  false,
+            width:      950,
+            dialogClass: 'popup-window',
+            open: function () {
+                var dialog = jQuery(this).addClass('loading magento_message')
+                new Ajax.Updater($(this), widgetUrl, {evalScripts: true, onComplete: function () {
+                        dialog.removeClass('loading');
+                    }
+                });
+            },
+            close: function(event, ui) {
+                jQuery(this).dialog('destroy').remove();
+            }
         });
-        new Ajax.Updater('modal_dialog_message', widgetUrl, {evalScripts: true});
-    },
-    closeDialog: function(window) {
-        if (!window) {
-            window = this.dialogWindow;
-        }
-        if (window) {
-            // IE fix - hidden form select fields after closing dialog
-            WindowUtilities._showSelect();
-            window.close();
-        }
+
+        this.dialogWindow.dialog('open');
     }
 }
 
@@ -242,7 +234,7 @@ WysiwygWidget.Widget.prototype = {
                     onComplete: function(transport) {
                         try {
                             widgetTools.onAjaxSuccess(transport);
-                            Windows.close("widget_window");
+                            jQuery('.ui-dialog-content').dialog('destroy').remove();
 
                             if (typeof(tinyMCE) != "undefined" && tinyMCE.activeEditor) {
                                 tinyMCE.activeEditor.focus();
@@ -362,28 +354,22 @@ WysiwygWidget.chooser.prototype = {
     },
 
     openDialogWindow: function(content) {
-        this.overlayShowEffectOptions = Windows.overlayShowEffectOptions;
-        this.overlayHideEffectOptions = Windows.overlayHideEffectOptions;
-        Windows.overlayShowEffectOptions = {duration:0};
-        Windows.overlayHideEffectOptions = {duration:0};
-        this.dialogWindow = Dialog.info(content, {
-            draggable:true,
-            resizable:true,
-            closable:true,
-            className:"magento",
-            windowClassName:"popup-window",
-            title:this.config.buttons.open,
-            top:50,
-            width:950,
-            height:500,
-            zIndex:1000,
-            recenterAuto:false,
-            hideEffect:Element.hide,
-            showEffect:Element.show,
-            id:"widget-chooser",
-            onClose: this.closeDialogWindow.bind(this)
+        this.dialogWindow = jQuery('<div/>').dialog({
+            autoOpen:   false,
+            title:      this.config.buttons.open,
+            modal:      true,
+            resizable:  false,
+            width:      900,
+            dialogClass: 'popup-window',
+            open: function () {
+                jQuery(this).addClass('magento_message');
+            },
+            close: function(event, ui) {
+                jQuery(this).dialog('destroy').remove();
+            }
         });
-        content.evalScripts.bind(content).defer();
+
+        this.dialogWindow.dialog('open').append(content);
     },
 
     closeDialogWindow: function(dialogWindow) {
@@ -391,9 +377,7 @@ WysiwygWidget.chooser.prototype = {
             dialogWindow = this.dialogWindow;
         }
         if (dialogWindow) {
-            dialogWindow.close();
-            Windows.overlayShowEffectOptions = this.overlayShowEffectOptions;
-            Windows.overlayHideEffectOptions = this.overlayHideEffectOptions;
+            this.dialogWindow.dialog('destroy').remove();
         }
         this.dialogWindow = null;
     },

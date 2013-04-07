@@ -114,6 +114,11 @@ class Error_Processor
     public $showSendForm;
 
     /**
+     * @var string
+     */
+    public $reportUrl;
+
+    /**
      * Server script name
      *
      * @var string
@@ -589,7 +594,7 @@ class Error_Processor
     protected function _setReportUrl()
     {
         if ($this->reportId && $this->_config && isset($this->_config->skin)) {
-            $this->reportUrl = "{$this->getBaseUrl(true)}errors/report.php?" . http_build_query(array(
+            $this->reportUrl = "{$this->getBaseUrl(true)}pub/errors/report.php?" . http_build_query(array(
                 'id' => $this->reportId, 'skin' => $this->_config->skin
             ));
         }

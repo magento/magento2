@@ -46,7 +46,7 @@ class Mage_Webapi_Model_Config_Reader_Rest_RouteGeneratorTest extends PHPUnit_Fr
         $helper = $this->getMock(
             'Mage_Webapi_Helper_Config',
             array('__'),
-            array(Mage::getObjectManager()->get('Mage_Core_Model_Translate'))
+            array(Mage::getObjectManager()->get('Mage_Core_Helper_Context'))
         );
         $this->_model = new Mage_Webapi_Model_Config_Reader_Rest_RouteGenerator($helper);
     }

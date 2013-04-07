@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     Mage_DesignEditor
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout>
+    <adminhtml_system_design_editor_index>
+        <reference name="head">
+            <action method="addJs"><file>Mage_DesignEditor::js/infinitescroll.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/theme-selector.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/theme-assign.js</file></action>
+            <action method="addCss"><file>Mage_DesignEditor::css/styles.css</file></action>
+        </reference>
+        <reference name="content">
+            <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_Tabs" name="theme.selector.tabs">
+                <action method="addTab"><name>available_themes</name><block>available.themes.tab</block></action>
+                <action method="addTab"><name>customizations</name><block>customizations.themes.tab</block></action>
+                <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_Tab_Available" name="available.themes.tab">
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Available" name="available.theme.list" template="Mage_DesignEditor::theme/list/available.phtml">
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="available.theme.item" as="item" template="Mage_DesignEditor::theme/available.phtml" />
+                    </block>
+                </block>
+                <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_Tab_Customizations" name="customizations.themes.tab" template="Mage_DesignEditor::theme/selector/my_customizations_tab.phtml">
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Assigned" name="assigned.theme.list" template="Mage_DesignEditor::theme/list/customized.phtml">
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="assigned.theme" as="theme" template="Mage_DesignEditor::theme/customized.phtml" />
+                    </block>
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Unassigned" name="unassigned.theme.list" template="Mage_DesignEditor::theme/list/customized.phtml">
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="unassigned.theme" as="theme" template="Mage_DesignEditor::theme/customized.phtml" />
+                    </block>
+                </block>
+            </block>
+            <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_StoreView" name="theme.selector.storeview" template="Mage_DesignEditor::theme/selector/storeview.phtml" />
+        </reference>
+    </adminhtml_system_design_editor_index>
+
+    <adminhtml_system_design_editor_firstentrance>
+        <reference name="head">
+            <action method="addJs"><file>Mage_DesignEditor::js/infinitescroll.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/theme-selector.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/theme-assign.js</file></action>
+            <action method="addCss"><file>Mage_DesignEditor::css/styles.css</file></action>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Backend_Block_Template" name="available.theme.list.container" as="theme_container" template="Mage_DesignEditor::theme/selector/first_entrance.phtml">
+                <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Available" name="available.theme.list" template="Mage_DesignEditor::theme/list/available.phtml">
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="design.editor.theme" as="theme" template="Mage_DesignEditor::theme/available.phtml" />
+                </block>
+            </block>
+            <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_StoreView" name="theme.selector.storeview" template="Mage_DesignEditor::theme/selector/storeview.phtml" />
+        </reference>
+    </adminhtml_system_design_editor_firstentrance>
+
+    <adminhtml_system_design_editor_loadthemelist>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Available" name="available.theme.list" template="Mage_DesignEditor::theme/list/available_ajax.phtml">
+                <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="design.editor.theme" as="theme" template="Mage_DesignEditor::theme/available.phtml"/>
+            </block>
+        </container>
+    </adminhtml_system_design_editor_loadthemelist>
+
+    <adminhtml_system_design_editor_launch>
+        <reference name="root">
+            <action method="setTemplate"><file>Mage_DesignEditor::editor.phtml</file></action>
+        </reference>
+        <reference name="head">
+            <action method="addJs"><file>jquery/jquery.tabs.js</file></action>
+            <action method="addJs"><file>jquery/jstree/jquery.jstree.js</file></action>
+            <action method="addJs"><file>jquery/slimScroll/slimScroll.min.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/tools-panel.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/custom-css.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/theme-assign.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/base.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/design_editor.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/image-sizing.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/quick-style-element.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.iframe-transport.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/quick-style-uploader.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/theme-init.js</file></action>
+            <action method="addCss"><file>Mage_DesignEditor::css/styles.css</file></action>
+        </reference>
+        <reference name="content">
+            <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Container" name="design_editor" template="Mage_DesignEditor::editor/container.phtml">
+                <block type="Mage_Backend_Block_Template" name="design_editor_toolbar" template="Mage_DesignEditor::editor/toolbar.phtml">
+                    <!-- MAGETWO-7406 - It was asked to hide Page Type navigation menu -->
+                    <!-- block type="Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_HandlesHierarchy" name="design_editor_toolbar_handles_hierarchy" template="Mage_DesignEditor::editor/toolbar/handles_hierarchy.phtml" /-->
+                    <!-- MAGETWO-7406 - It was asked to hide View Options > Highlight Elements -->
+                    <!--block type="Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_ViewOptions" name="design_editor_toolbar_view_options" template="Mage_DesignEditor::editor/toolbar/view_options.phtml" /-->
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_Buttons" name="design_editor_toolbar_buttons" template="Mage_DesignEditor::editor/toolbar/buttons.phtml">
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_Buttons_Save" name="design_editor_toolbar_buttons_save" />
+                    </block>
+                </block>
+                <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_StoreView" name="theme.selector.storeview" template="Mage_DesignEditor::theme/selector/storeview.phtml" />
+                <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools" name="design_editor_tools" template="Mage_DesignEditor::editor/tools.phtml">
+                    <block type="Mage_Backend_Block_Template" name="design_editor_tools_tab_handle" as="tab_handle" template="Mage_DesignEditor::editor/tools/tabs/super-handle.phtml" />
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_QuickStyles" name="design_editor_tools_quick-styles" template="Mage_DesignEditor::editor/tools/tabs.phtml">
+                        <block type="Mage_Backend_Block_Template" name="design_editor_tools_quick-styles_tab_handle" as="tab_handle" template="Mage_DesignEditor::editor/tools/tabs/handle.phtml" />
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Tabs_Body" name="design_editor_tools_quick-styles_tab_body" as="tab_body" template="Mage_DesignEditor::editor/tools/tabs/body.phtml" />
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_QuickStyles_Header" name="design_editor_tools_quick-styles_header" template="Mage_DesignEditor::editor/tools/quick-styles/form.phtml" />
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_QuickStyles_Backgrounds" name="design_editor_tools_quick-styles_backgrounds" template="Mage_DesignEditor::editor/tools/quick-styles/form.phtml" />
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_QuickStyles_Buttons" name="design_editor_tools_quick-styles_buttons" template="Mage_DesignEditor::editor/tools/quick-styles/form.phtml" />
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_QuickStyles_Tips" name="design_editor_tools_quick-styles_tips" template="Mage_DesignEditor::editor/tools/quick-styles/form.phtml" />
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_QuickStyles_Fonts" name="design_editor_tools_quick-styles_fonts" template="Mage_DesignEditor::editor/tools/quick-styles/form.phtml" />
+                    </block>
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Block" name="design_editor_tools_block" template="Mage_DesignEditor::editor/tools/block.phtml" />
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Settings" name="design_editor_tools_settings" template="Mage_DesignEditor::editor/tools/settings.phtml" />
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code" name="design_editor_tools_code" template="Mage_DesignEditor::editor/tools/tabs.phtml">
+                        <block type="Mage_Backend_Block_Template" name="design_editor_tools_code_tab_handle" as="tab_handle" template="Mage_DesignEditor::editor/tools/tabs/handle.phtml" />
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Tabs_Body" name="design_editor_tools_code_tab_body" as="tab_body" template="Mage_DesignEditor::editor/tools/tabs/body.phtml" />
+                        <!-- Tab with CSS list -->
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Css" name="design_editor_tools_code_css" template="Mage_DesignEditor::editor/tools/code/css.phtml">
+                            <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Css_Group" name="design_editor_tools_code_css_group" template="Mage_DesignEditor::editor/tools/code/css/group.phtml" />
+                        </block>
+                        <!-- Tab with JavaScript list -->
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Js" name="design_editor_tools_code_js" template="Mage_DesignEditor::editor/tools/code/js.phtml">
+                            <block template="Mage_DesignEditor::/editor/tools/code/js/items.phtml" type="Mage_Backend_Block_Template" name="design_editor_tools_code_js_items" as="design.editor.tools.code.js.items" />
+                        </block>
+                        <!-- Tab with Custom CSS -->
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Custom" name="design_editor_tools_code_custom" template="Mage_DesignEditor::editor/tools/code/custom.phtml">
+                            <block type="Mage_Core_Block_Messages" name="messages" template="Mage_DesignEditor::editor/tools/code/message.phtml" />
+                        </block>
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_ImageSizing" name="design_editor_tools_code_image_sizing" template="Mage_DesignEditor::editor/tools/code/image-sizing.phtml">
+                            <block type="Mage_Core_Block_Messages" name="messages" template="Mage_DesignEditor::editor/tools/code/message.phtml" />
+                        </block>
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_system_design_editor_launch>
+
+    <adminhtml_system_design_editor_tools_upload>
+        <block type="Mage_Core_Block_Messages" name="messages" template="Mage_DesignEditor::editor/tools/code/message.phtml" />
+    </adminhtml_system_design_editor_tools_upload>
+
+    <adminhtml_system_design_editor_tools_savecsscontent>
+        <block type="Mage_Core_Block_Messages" name="messages" template="Mage_DesignEditor::editor/tools/code/message.phtml" />
+    </adminhtml_system_design_editor_tools_savecsscontent>
+
+    <adminhtml_system_design_editor_tools_uploadjs>
+        <block type="Mage_Core_Block_Messages" name="messages" template="Mage_DesignEditor::editor/tools/code/message.phtml" />
+    </adminhtml_system_design_editor_tools_uploadjs>
+
+    <adminhtml_system_design_editor_tools_jslist>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_Backend_Block_Template" template="Mage_DesignEditor::/editor/tools/code/js/items.phtml" name="design_editor_tools_code_js_items"/>
+        </container>
+    </adminhtml_system_design_editor_tools_jslist>
+
+    <adminhtml_system_design_editor_tools_reorderjs>
+        <block type="Mage_Core_Block_Messages" name="messages" template="Mage_DesignEditor::editor/tools/code/message.phtml" />
+    </adminhtml_system_design_editor_tools_reorderjs>
+
+    <adminhtml_system_design_editor_tools_savequickstyles>
+        <block type="Mage_Core_Block_Messages" name="messages" template="Mage_DesignEditor::editor/tools/code/message.phtml" />
+    </adminhtml_system_design_editor_tools_savequickstyles>
+
+    <adminhtml_system_design_editor_tools_saveimagesizing>
+        <block type="Mage_Core_Block_Messages" name="messages" template="Mage_DesignEditor::editor/tools/code/message.phtml" />
+    </adminhtml_system_design_editor_tools_saveimagesizing>
+
+    <adminhtml_system_design_editor_preview>
+        <update handle="adminhtml_system_design_editor_launch"/>
+        <reference name="design_editor_toolbar">
+                <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_Buttons" name="design_editor_toolbar_buttons" template="Mage_DesignEditor::editor/toolbar/preview_buttons.phtml" />
+        </reference>
+    </adminhtml_system_design_editor_preview>
+</layout>

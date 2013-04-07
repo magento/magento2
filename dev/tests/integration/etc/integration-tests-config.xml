@@ -39,9 +39,10 @@
             </core_app_init_current_store_after>
         </events>
         <di>
-            <aliases>
+            <preferences>
                 <Mage_Core_Model_Cookie>Magento_Test_Cookie</Mage_Core_Model_Cookie>
-            </aliases>
+                <Magento_Datasource_Config_Interface>Mage_Core_Model_Datasource_Config</Magento_Datasource_Config_Interface>
+            </preferences>
         </di>
         <dev>
             <design_fallback>
@@ -54,8 +55,8 @@
             <modules>
                 <Mage_Core>
                     <files>
-                        <!-- Translation files are relative to app/code/<pool>/<Namespace>/<Module>/locale/<locale> -->
-                        <fixture>../../../../../../../dev/tests/integration/testsuite/Mage/Core/_files/fixture.csv</fixture>
+                        <!-- Translation files are relative to app/code/<Namespace>/<Module>/locale/<locale> -->
+                        <fixture>../../../../../../dev/tests/integration/testsuite/Mage/Core/_files/fixture.csv</fixture>
                     </files>
                 </Mage_Core>
             </modules>

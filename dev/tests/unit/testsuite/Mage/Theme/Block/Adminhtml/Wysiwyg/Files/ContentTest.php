@@ -54,7 +54,6 @@ class Mage_Theme_Block_Adminhtml_Wysiwyg_Files_ContentTest extends PHPUnit_Frame
 
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         $constructArguments =  $objectManagerHelper->getConstructArguments(
-            Magento_Test_Helper_ObjectManager::BLOCK_ENTITY,
             'Mage_Theme_Block_Adminhtml_Wysiwyg_Files_Content',
             array(
                 'urlBuilder'    => $this->_urlBuilder,

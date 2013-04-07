@@ -17,6 +17,8 @@ Mage/Paypal
 Mage/Paygate
 Mage/Downloadable
 Mage/Core/Model/Resource/Helper
+Mage/Core/Model/Url/RewriteFactory
+Mage/Core/Model/Layout/Merge/Factory
 Mage/Catalog/Model/Resource/Product/Indexer
 Mage/CatalogInventory/Model/Resource/Indexer/Stock
 Mage/Sales/Model/Order
@@ -69,6 +71,7 @@ lib/Mage/HTTP/Client
 lib/Magento/Acl
 lib/PEAR
 lib/phpseclib
+lib/twig12
 lib/Varien/Convert
 Mage/Cron/Model
 Mage/SalesRule/Model/Resource/Report/Rule

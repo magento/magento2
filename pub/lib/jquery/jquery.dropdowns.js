@@ -53,7 +53,7 @@
         return this.each(function() {
             var elem = $(this),
                 parent = elem.parent(),
-                menu = $('.dropdown-menu', parent);
+                menu = $('[data-target="dropdown"]', parent) || $('.dropdown-menu', parent);
 
             elem.on('click.toggleDropdown', function() {
                 self.reset({elems: actionElem.not(elem)});

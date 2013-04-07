@@ -37,11 +37,6 @@ class Mage_Widget_Model_WidgetTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getModel('Mage_Widget_Model_Widget');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testGetWidgetsArray()
     {
         $declaredWidgets = $this->_model->getWidgetsArray();
@@ -66,7 +61,8 @@ class Mage_Widget_Model_WidgetTest extends PHPUnit_Framework_TestCase
     public function testGetPlaceholderImageUrl($type, $expectedFile)
     {
         Mage::getDesign()->setDesignTheme('default/basic', 'adminhtml');
-        $expectedPubFile = Mage::getBaseDir('media') . "/theme/static/adminhtml/default/basic/en_US/{$expectedFile}";
+        $expectedPubFile = Mage::getBaseDir(Mage_Core_Model_Dir::STATIC_VIEW)
+            . "/adminhtml/default/basic/en_US/{$expectedFile}";
         if (file_exists($expectedPubFile)) {
             unlink($expectedPubFile);
         }

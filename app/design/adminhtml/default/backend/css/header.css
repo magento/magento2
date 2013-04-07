@@ -46,7 +46,7 @@
     min-width: 960px;
     max-width: 1300px;
     margin: 0 auto;
-    padding: 6px 0 7px;
+    padding: 7px 0;
 }
 
 .header .logo {
@@ -130,6 +130,7 @@
     border-bottom: 1px solid #f7e4d0;
     color: #8C867E;
     font: 11px/13px Arial, Helvetica, sans-serif;
+    white-space: normal;
 }
 
 .header-panel .dropdown-menu > li:first-child:before,

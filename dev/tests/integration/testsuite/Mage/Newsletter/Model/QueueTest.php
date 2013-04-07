@@ -44,10 +44,10 @@ class Mage_Newsletter_Model_QueueTest extends PHPUnit_Framework_TestCase
         $subscriberOne->expects($this->any())->method('send');
         $subscriberTwo = clone $subscriberOne;
         $subscriberOne->expects($this->once())->method('setBodyHTML')->with(
-            $this->stringEndsWith('/theme/static/frontend/default/demo_blue/en_US/images/logo.gif')
+            $this->stringEndsWith('/static/frontend/default/demo_blue/en_US/images/logo.gif')
         );
         $subscriberTwo->expects($this->once())->method('setBodyHTML')->with(
-            $this->stringEndsWith('/theme/static/frontend/default/demo/de_DE/images/logo.gif')
+            $this->stringEndsWith('/static/frontend/default/demo/de_DE/images/logo.gif')
         );
 
         $emailTemplate = $this->getMock('Mage_Core_Model_Email_Template', array('_getMail'), array(), '', false);

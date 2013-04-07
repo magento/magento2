@@ -247,7 +247,7 @@ class Mage_ImportExport_Model_Import_Entity_CustomerCompositeTest extends PHPUni
             'helpers'                      => array('Mage_ImportExport_Helper_Data' => $mageHelper),
             'json_helper'                  => 'not_used',
             'string_helper'                => new Mage_Core_Helper_String(
-                $this->getMock('Mage_Core_Model_Translate', array(), array(), '', false, false)
+                $this->getMock('Mage_Core_Helper_Context', array(), array(), '', false, false)
             ),
             'page_size'                    => 1,
             'max_data_size'                => 1,

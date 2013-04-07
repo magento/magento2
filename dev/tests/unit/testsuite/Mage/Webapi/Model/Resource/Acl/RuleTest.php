@@ -79,7 +79,7 @@ class Mage_Webapi_Model_Resource_Acl_RuleTest extends Mage_Webapi_Model_Resource
             ->withAnyParameters()
             ->will($this->returnValue($this->_adapter));
 
-        return $this->_helper->getModel('Mage_Webapi_Model_Resource_Acl_Rule', array(
+        return $this->_helper->getObject('Mage_Webapi_Model_Resource_Acl_Rule', array(
             'resource' => $this->_resource,
             'helper' => $this->_helperData
         ));
@@ -165,8 +165,7 @@ class Mage_Webapi_Model_Resource_Acl_RuleTest extends Mage_Webapi_Model_Resource
         // Init rule.
         $rule = $this->getMockBuilder('Mage_Webapi_Model_Acl_Rule')
             ->setConstructorArgs(array(
-                'eventDispatcher' => $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false),
-                'cacheManager' => $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false),
+                'context' => $this->getMock('Mage_Core_Model_Context', array(), array(), '', false),
                 'resource' => $ruleResource
             ))
             ->setMethods(array('getResources'))

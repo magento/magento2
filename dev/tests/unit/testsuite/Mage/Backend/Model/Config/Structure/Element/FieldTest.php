@@ -27,6 +27,8 @@
 
 class Mage_Backend_Model_Config_Structure_Element_FieldTest extends PHPUnit_Framework_TestCase
 {
+    const FIELD_TEST_CONSTANT = "field test constant";
+
     /**
      * @var Mage_Backend_Model_Config_Structure_Element_Field
      */
@@ -65,6 +67,11 @@ class Mage_Backend_Model_Config_Structure_Element_FieldTest extends PHPUnit_Fram
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
+    protected $_dsFactoryMock;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_depMapperMock;
 
     /**
@@ -82,7 +89,7 @@ class Mage_Backend_Model_Config_Structure_Element_FieldTest extends PHPUnit_Fram
             return 'translated ' . $arg;
         }));
         $this->_factoryHelperMock = $this->getMock('Mage_Core_Model_Factory_Helper', array(), array(), '', false);
-        $this->_factoryHelperMock->expects($this->any())->method('get')->with('Mage_Module_Helper_Data')
+        $this->_factoryHelperMock->expects($this->any())->method('get')
             ->will($this->returnValue($helperMock));
         $this->_applicationMock = $this->getMock('Mage_Core_Model_App', array(), array(), '', false);
         $this->_backendFactoryMock = $this->getMock(
@@ -97,6 +104,9 @@ class Mage_Backend_Model_Config_Structure_Element_FieldTest extends PHPUnit_Fram
         $this->_blockFactoryMock = $this->getMock(
             'Mage_Core_Model_BlockFactory', array(), array(), '', false
         );
+        $this->_dsFactoryMock = $this->getMock(
+            'Magento_Datasource_Factory', array(), array(), '', false
+        );
         $this->_depMapperMock = $this->getMock(
             'Mage_Backend_Model_Config_Structure_Element_Dependency_Mapper', array(), array(), '', false
         );
@@ -108,6 +118,7 @@ class Mage_Backend_Model_Config_Structure_Element_FieldTest extends PHPUnit_Fram
             $this->_sourceFactoryMock,
             $this->_commentFactoryMock,
             $this->_blockFactoryMock,
+            $this->_dsFactoryMock,
             $this->_depMapperMock
         );
     }
@@ -289,6 +300,49 @@ class Mage_Backend_Model_Config_Structure_Element_FieldTest extends PHPUnit_Fram
         $this->assertTrue($this->_model->hasSourceModel());
     }
 
+    public function testHasOptionsWithSourceModel()
+    {
+        $this->assertFalse($this->_model->hasOptions());
+        $this->_model->setData(array('source_model' => 'some_model'), 'scope');
+        $this->assertTrue($this->_model->hasOptions());
+    }
+
+    public function testHasOptionsWithOptions()
+    {
+        $this->assertFalse($this->_model->hasOptions());
+        $this->_model->setData(array('options' => 'some_option'), 'scope');
+        $this->assertTrue($this->_model->hasOptions());
+    }
+
+    public function testGetOptionsWithOptions()
+    {
+        $option = array(
+            array('label' => 'test', 'value' => 0),
+            array('label' => 'test2', 'value' => 1)
+        );
+        $expected = array(
+            array('label' => 'translated test', 'value' => 0),
+            array('label' => 'translated test2', 'value' => 1)
+        );
+        $this->_model->setData(array('options' => array('option' => $option)), 'scope');
+        $this->assertEquals($expected, $this->_model->getOptions());
+    }
+
+    public function testGetOptionsWithConstantValOptions()
+    {
+        $option = array(
+            array('label' => 'test', 'value' =>
+                "{{Mage_Backend_Model_Config_Structure_Element_FieldTest::FIELD_TEST_CONSTANT}}"),
+        );
+        $expected = array(
+            array('label' => 'translated test', 'value' =>
+                Mage_Backend_Model_Config_Structure_Element_FieldTest::FIELD_TEST_CONSTANT),
+        );
+
+        $this->_model->setData(array('options' => array('option' => $option)), 'scope');
+        $this->assertEquals($expected, $this->_model->getOptions());
+    }
+
     public function testGetOptionsUsesOptionsInterfaceIfNoMethodIsProvided()
     {
         $this->_model->setData(array('source_model' => 'Source_Model_Name'), 'scope');
@@ -297,7 +351,10 @@ class Mage_Backend_Model_Config_Structure_Element_FieldTest extends PHPUnit_Fram
             ->method('create')
             ->with('Source_Model_Name')
             ->will($this->returnValue($sourceModelMock));
-        $expected = array('testVar' => 'testVal');
+        $expected = array(
+            array('label' => 'test', 'value' => 0),
+            array('label' => 'test2', 'value' => 1)
+        );
         $sourceModelMock->expects($this->once())
             ->method('toOptionArray')
             ->with(false)

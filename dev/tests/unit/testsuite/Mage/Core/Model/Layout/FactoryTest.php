@@ -45,7 +45,7 @@ class Mage_Core_Model_Layout_FactoryTest extends PHPUnit_Framework_TestCase
     /**
      * ObjectManager mock for tests
      *
-     * @var Magento_ObjectManager
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManager;
 
@@ -58,9 +58,7 @@ class Mage_Core_Model_Layout_FactoryTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento_ObjectManager_Zend',
-            array('hasSharedInstance', 'get', 'removeSharedInstance', 'create', 'addSharedInstance'),
-            array(), '', false);
+        $this->_objectManager = $this->getMock('Magento_ObjectManager');
         $this->_model = new Mage_Core_Model_Layout_Factory($this->_objectManager);
     }
 
@@ -69,104 +67,19 @@ class Mage_Core_Model_Layout_FactoryTest extends PHPUnit_Framework_TestCase
         $this->assertAttributeInstanceOf('Magento_ObjectManager', '_objectManager', $this->_model);
     }
 
-    public function testCreateLayoutRemoveSharedInstance()
-    {
-        $this->_arguments = array('area' => 'ArgumentArea');
-
-        $this->_objectManager->expects($this->once())
-            ->method('hasSharedInstance')
-            ->with(self::CLASS_NAME)
-            ->will($this->returnValue(true));
-
-        $modelLayout = $this->getMock(self::CLASS_NAME, array('getArea'), array(), '', false);
-
-        $this->_objectManager->expects($this->at(1))
-            ->method('get')
-            ->with(self::CLASS_NAME)
-            ->will($this->returnValue($modelLayout));
-
-        $modelLayout->expects($this->any())
-            ->method('getArea')
-            ->will($this->returnValue('TestArea'));
-
-        $this->_objectManager->expects($this->once())
-            ->method('removeSharedInstance')
-            ->with(self::CLASS_NAME);
-
-        $newModelLayout = $this->getMock(self::CLASS_NAME, array(), array(), '', false);
-
-        $this->_objectManager->expects($this->once())
-            ->method('create')
-            ->with(self::CLASS_NAME, $this->_arguments, false)
-            ->will($this->returnValue($newModelLayout));
-
-        $this->_objectManager->expects($this->once())
-            ->method('addSharedInstance')
-            ->with($newModelLayout, self::CLASS_NAME);
-
-        $this->_objectManager->expects($this->at(5))
-            ->method('get')
-            ->with(self::CLASS_NAME)
-            ->will($this->returnValue($newModelLayout));
-
-        $this->assertEquals($newModelLayout, $this->_model->createLayout($this->_arguments));
-    }
-
     public function testCreateLayoutNew()
     {
         $modelLayout = $this->getMock(self::CLASS_NAME, array(), array(), '', false);
 
         $this->_objectManager->expects($this->once())
-            ->method('create')
-            ->with(self::CLASS_NAME, array(), false)
-            ->will($this->returnValue($modelLayout));
+            ->method('configure')
+            ->with(array(self::CLASS_NAME => array('parameters' => array('someParam' => 'someVal'))));
 
         $this->_objectManager->expects($this->once())
-            ->method('addSharedInstance')
-            ->with($modelLayout, self::CLASS_NAME);
-
-        $this->_objectManager->expects($this->at(2))
             ->method('get')
-            ->with(self::CLASS_NAME)
+            ->with(Mage_Core_Model_Layout_Factory::CLASS_NAME)
             ->will($this->returnValue($modelLayout));
 
-        $this->assertEquals($modelLayout, $this->_model->createLayout());
-    }
-
-    public function testCreateLayoutGetSharedInstance()
-    {
-        $this->_arguments = array('area' => 'TestArea');
-
-        $this->_objectManager->expects($this->once())
-            ->method('hasSharedInstance')
-            ->with(self::CLASS_NAME)
-            ->will($this->returnValue(true));
-
-        $modelLayout = $this->getMock(self::CLASS_NAME, array('getArea'), array(), '', false);
-
-        $this->_objectManager->expects($this->at(1))
-            ->method('get')
-            ->with(self::CLASS_NAME)
-            ->will($this->returnValue($modelLayout));
-
-        $modelLayout->expects($this->any())
-            ->method('getArea')
-            ->will($this->returnValue('TestArea'));
-
-        $this->_objectManager->expects($this->never())
-            ->method('removeSharedInstance');
-
-        $this->_objectManager->expects($this->never())
-            ->method('create');
-
-        $this->_objectManager->expects($this->never())
-            ->method('addSharedInstance');
-
-        $this->_objectManager->expects($this->at(2))
-            ->method('get')
-            ->with(self::CLASS_NAME)
-            ->will($this->returnValue($modelLayout));
-
-        $this->assertEquals($modelLayout, $this->_model->createLayout($this->_arguments));
+        $this->assertEquals($modelLayout, $this->_model->createLayout(array('someParam' => 'someVal')));
     }
 }

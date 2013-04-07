@@ -28,7 +28,7 @@
 /**
  * Test for Mage_Adminhtml_Block_Urlrewrite_Cms_Page_Grid
  */
-class Mage_Adminhtml_Block_Urlrewrite_Cms_Page_GridTest extends PHPUnit_Framework_TestCase
+class Mage_Adminhtml_Block_Urlrewrite_Cms_Page_GridTest extends Mage_Backend_Area_TestCase
 {
     /**
      * Test prepare grid

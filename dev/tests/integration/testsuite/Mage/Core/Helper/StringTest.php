@@ -37,11 +37,6 @@ class Mage_Core_Helper_StringTest extends PHPUnit_Framework_TestCase
         $this->_helper = Mage::helper('Mage_Core_Helper_String');
     }
 
-    protected function tearDown()
-    {
-        $this->_helper = null;
-    }
-
     /**
      * @covers Mage_Core_Helper_String::truncate
      * @covers Mage_Core_Helper_String::strlen

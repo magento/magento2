@@ -42,7 +42,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_CustomTest extends PHP
         $this->_urlBuilder = $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false);
 
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_model = $objectManagerHelper->getBlock(
+        $this->_model = $objectManagerHelper->getObject(
             'Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Custom',
             array(
                 'config' => $this->getMock('Mage_Core_Model_Config', array(), array(), '', false),

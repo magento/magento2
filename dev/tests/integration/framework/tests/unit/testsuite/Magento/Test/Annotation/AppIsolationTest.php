@@ -31,21 +31,19 @@
 class Magento_Test_Annotation_AppIsolationTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Test_Annotation_AppIsolation|PHPUnit_Framework_MockObject_MockObject
+     * @var Magento_Test_Annotation_AppIsolation
      */
     protected $_object;
 
     /**
-     * @var Magento_Test_Application|PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_application;
 
     protected function setUp()
     {
         $this->_application = $this->getMock('Magento_Test_Application', array('reinitialize'), array(), '', false);
-        $this->_object = $this->getMock(
-            'Magento_Test_Annotation_AppIsolation', array('_cleanupCache'), array($this->_application)
-        );
+        $this->_object = new Magento_Test_Annotation_AppIsolation($this->_application);
     }
 
     protected function tearDown()

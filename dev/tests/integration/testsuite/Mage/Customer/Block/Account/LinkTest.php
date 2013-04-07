@@ -47,12 +47,6 @@ class Mage_Customer_Block_Account_LinkTest extends PHPUnit_Framework_TestCase
         $this->_links = $layout->getBlock('links');
     }
 
-    protected function tearDown()
-    {
-        $this->_block = null;
-        $this->_links = null;
-    }
-
     public function testAddAccountLink()
     {
         $this->assertEmpty($this->_links->getLinks());

@@ -38,8 +38,7 @@ class Mage_DesignEditor_Model_Url_FactoryTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento_ObjectManager_Zend', array('addAlias', 'create'),
-            array(), '', false);
+        $this->_objectManager = $this->getMock('Magento_ObjectManager');
         $this->_model = new Mage_DesignEditor_Model_Url_Factory($this->_objectManager);
     }
 
@@ -51,19 +50,19 @@ class Mage_DesignEditor_Model_Url_FactoryTest extends PHPUnit_Framework_TestCase
     public function testReplaceClassName()
     {
         $this->_objectManager->expects($this->once())
-            ->method('addAlias')
-            ->with('Mage_Core_Model_Url', 'TestClass');
+            ->method('configure')
+            ->with(array('preferences' => array('Mage_Core_Model_Url' => 'TestClass')));
 
         $this->assertEquals($this->_model, $this->_model->replaceClassName('TestClass'));
     }
 
-    public function testCreateFromArray()
+    public function testCreate()
     {
         $this->_objectManager->expects($this->once())
             ->method('create')
-            ->with('Mage_Core_Model_Url', array(), false)
+            ->with('Mage_Core_Model_Url', array())
             ->will($this->returnValue('ModelInstance'));
 
-        $this->assertEquals('ModelInstance', $this->_model->createFromArray());
+        $this->assertEquals('ModelInstance', $this->_model->create());
     }
 }

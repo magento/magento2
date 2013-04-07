@@ -188,11 +188,14 @@ class Magento_Test_Helper_BootstrapTest extends PHPUnit_Framework_TestCase
 
     public function testRunApp()
     {
+        $requestMock = $this->getMock('Magento_Test_Request', array(), array(), '', false);
+        $responseMock = $this->getMock('Magento_Test_Response', array(), array(), '', false);
+
         $this->_application
             ->expects($this->once())
             ->method('run')
-            ->with($this->_fixtureInitParams)
+            ->with($requestMock, $responseMock)
         ;
-        $this->_object->runApp($this->_fixtureInitParams);
+        $this->_object->runApp($requestMock, $responseMock);
     }
 }

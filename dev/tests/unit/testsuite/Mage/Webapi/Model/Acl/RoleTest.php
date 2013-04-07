@@ -74,9 +74,9 @@ class Mage_Webapi_Model_Acl_RoleTest extends PHPUnit_Framework_TestCase
      */
     protected function _createModel($roleResource, $resourceCollection = null)
     {
-        return $this->_helper->getModel('Mage_Webapi_Model_Acl_Role', array(
+        return $this->_helper->getObject('Mage_Webapi_Model_Acl_Role', array(
             'eventDispatcher' => $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false),
-            'cacheManager' => $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false),
+            'cacheManager' => $this->getMock('Mage_Core_Model_CacheInterface', array(), array(), '', false),
             'resource' => $roleResource,
             'resourceCollection' => $resourceCollection
         ));

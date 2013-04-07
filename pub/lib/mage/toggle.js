@@ -101,7 +101,8 @@
     $.widget('mage.toggleAdvanced', $.mage.toggleAdvanced, {
 
         options: {
-            selectorsToggleClass: "hidden"    // Class used to be toggled on selectors DOM elements
+            selectorsToggleClass: "hidden",    // Class used to be toggled on selectors DOM elements
+            toggleContainers: null
         },
 
         /**
@@ -114,8 +115,8 @@
          */
         _toggleSelectors: function () {
             this._super();
-            if (this.element.data('toggle-selectors')) {
-                $(this.element.data('toggle-selectors')).toggleClass(this.options.selectorsToggleClass);
+            if (this.options.toggleContainers) {
+                $(this.options.toggleContainers).toggleClass(this.options.selectorsToggleClass);
             } else {
                 this.element.toggleClass(this.options.baseToggleClass);
             }
@@ -130,6 +131,8 @@
         _prepareOptions: function() {
             this.options.selectorsToggleClass = (this.element.data('selectors-toggle-class')) ?
                 this.element.data('selectors-toggle-class') :this.options.selectorsToggleClass;
+            this.options.toggleContainers = (this.element.data('toggle-selectors')) ?
+                this.element.data('toggle-selectors') :this.options.toggleContainers;
             this._super();
         }
     });

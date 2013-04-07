@@ -58,7 +58,7 @@ class Mage_Adminhtml_CustomerControllerTest extends Mage_Backend_Utility_Control
     {
         $this->getRequest()->setPost(array());
         $this->dispatch('backend/admin/customer/save');
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key'));
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl));
     }
 
     public function testSaveActionWithInvalidFormData()
@@ -79,7 +79,7 @@ class Mage_Adminhtml_CustomerControllerTest extends Mage_Backend_Utility_Control
          * Check that customer data were set to session
          */
         $this->assertEquals($post, Mage::getSingleton('Mage_Backend_Model_Session')->getCustomerData());
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key'));
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new'));
     }
 
     public function testSaveActionWithInvalidCustomerAddressData()
@@ -106,7 +106,7 @@ class Mage_Adminhtml_CustomerControllerTest extends Mage_Backend_Utility_Control
          * Check that customer data were set to session
          */
         $this->assertEquals($post, Mage::getSingleton('Mage_Backend_Model_Session')->getCustomerData());
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key'));
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new'));
     }
 
     /**
@@ -162,7 +162,7 @@ class Mage_Adminhtml_CustomerControllerTest extends Mage_Backend_Utility_Control
         $this->assertCount(1, $customer->getAddressesCollection());
 
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl
-            . 'edit/id/' . $customer->getId() . '/back/1/key/')
+            . 'edit/id/' . $customer->getId() . '/back/1')
         );
     }
 

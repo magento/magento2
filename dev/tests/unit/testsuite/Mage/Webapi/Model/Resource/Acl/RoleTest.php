@@ -73,7 +73,7 @@ class Mage_Webapi_Model_Resource_Acl_RoleTest extends Mage_Webapi_Model_Resource
             ->withAnyParameters()
             ->will($this->returnValue($this->_adapter));
 
-        return $this->_helper->getModel('Mage_Webapi_Model_Resource_Acl_Role', array(
+        return $this->_helper->getObject('Mage_Webapi_Model_Resource_Acl_Role', array(
             'resource' => $this->_resource,
             'helper' => $this->_helperData
         ));

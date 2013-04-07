@@ -38,7 +38,7 @@
                 +'%items%'
                 +'</div></div>'
                 +'<footer class="block-footer">'
-                +'<span class="%mselectButtonAddClass% button">%addText%</span>'
+                +'<span class="action-add %mselectButtonAddClass%">%addText%</span>'
                 +'</footer>'
                 +'<div class="%mselectInputContainerClass%">'
                 +'<input type="text" class="%mselectInputClass%" title="%inputTitle%"/>'
@@ -88,17 +88,17 @@
                     return str;
                 })(),
                 html = o.layout
-                        .replace(/%items%/gi, items)
-                        .replace(/%mselectListClass%/gi, o.mselectListClass)
-                        .replace(/%mselectButtonAddClass%/gi, o.mselectButtonAddClass)
-                        .replace(/%mselectButtonSaveClass%/gi, o.mselectButtonSaveClass)
-                        .replace(/%mselectButtonCancelClass%/gi, o.mselectButtonCancelClass)
-                        .replace(/%mselectItemsWrapperClass%/gi, o.mselectItemsWrapperClass)
-                        .replace(/%mselectInputContainerClass%/gi, o.mselectInputContainerClass)
-                        .replace(/%mselectInputClass%/gi, o.mselectInputClass)
-                        .replace(/%addText%/gi, o.addText)
-                        .replace(/%cancelText%/gi, o.cancelText)
-                        .replace(/%inputTitle%/gi, o.inputTitle),
+                    .replace(/%items%/gi, items)
+                    .replace(/%mselectListClass%/gi, o.mselectListClass)
+                    .replace(/%mselectButtonAddClass%/gi, o.mselectButtonAddClass)
+                    .replace(/%mselectButtonSaveClass%/gi, o.mselectButtonSaveClass)
+                    .replace(/%mselectButtonCancelClass%/gi, o.mselectButtonCancelClass)
+                    .replace(/%mselectItemsWrapperClass%/gi, o.mselectItemsWrapperClass)
+                    .replace(/%mselectInputContainerClass%/gi, o.mselectInputContainerClass)
+                    .replace(/%mselectInputClass%/gi, o.mselectInputClass)
+                    .replace(/%addText%/gi, o.addText)
+                    .replace(/%cancelText%/gi, o.cancelText)
+                    .replace(/%inputTitle%/gi, o.inputTitle),
                 widget = $(html)
                     .insertAfter(this)
                     .on('change.mselectCheck', '[type=checkbox]', function() {
@@ -154,8 +154,8 @@
                                 .replace(/%mselectDisabledClass%|%iseditable%|%isremovable%/gi,'')
                                 .replace(/%mselectListItemClass%/gi,o.mselectListItemClass))
                                 .find('[type=checkbox]')
-                                    .attr('checked', true)
-                                    .addClass(o.mselectCheckedClass)
+                                .attr('checked', true)
+                                .addClass(o.mselectCheckedClass)
                                 .end();
 
                             list.children('.' + o.mselectListItemClass + '').length
@@ -187,7 +187,7 @@
                         }
                     }
                 };
-                reset();
+            reset();
         }).end();
     };
 })(jQuery);

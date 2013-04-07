@@ -40,11 +40,6 @@ class Mage_Catalog_Model_Category_Attribute_ApiTest extends PHPUnit_Framework_Te
         $this->_model = Mage::getModel('Mage_Catalog_Model_Category_Attribute_Api');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testItems()
     {
         $attributes = $this->_model->items();

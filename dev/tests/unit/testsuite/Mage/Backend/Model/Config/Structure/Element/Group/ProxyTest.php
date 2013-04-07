@@ -39,7 +39,7 @@ class Mage_Backend_Model_Config_Structure_Element_Group_ProxyTest extends PHPUni
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento_ObjectManager_Zend', array(), array(), '', false);
+        $this->_objectManagerMock = $this->getMock('Magento_ObjectManager');
         $this->_model = new Mage_Backend_Model_Config_Structure_Element_Group_Proxy($this->_objectManagerMock);
     }
 

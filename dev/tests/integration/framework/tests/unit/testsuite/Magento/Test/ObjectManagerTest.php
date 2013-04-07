@@ -26,7 +26,7 @@
  */
 
 /**
- * Test class for Magento_ObjectManager_Zend
+ * Test class for Magento_ObjectManager_Test
  */
 class Magento_Test_ObjectManagerTest extends PHPUnit_Framework_TestCase
 {
@@ -43,19 +43,15 @@ class Magento_Test_ObjectManagerTest extends PHPUnit_Framework_TestCase
     public function testClearCache()
     {
         $resource = new stdClass;
+        $config = $this->getMock('Mage_Core_Model_Config_Primary', array(), array(), '', false);
+        $model = new Magento_Test_ObjectManager(new Magento_ObjectManager_Definition_Runtime(), $config);
+        $model->addSharedInstance($resource, 'Mage_Core_Model_Resource');
+        $instance1 = $model->get('Magento_Test_Request');
 
-        $instanceManager = new Magento_Di_InstanceManager_Zend();
-        $instanceManager->addSharedInstance($resource, 'Mage_Core_Model_Resource');
-
-        $diInstance = new Magento_Di_Zend();
-        $config = $this->getMock('Magento_ObjectManager_Configuration');
-        $model = new Magento_Test_ObjectManager($config, null, $diInstance);
-
-        $diInstance->setInstanceManager($instanceManager);
+        $this->assertSame($instance1, $model->get('Magento_Test_Request'));
         $this->assertSame($model, $model->clearCache());
-        $this->assertNotSame($instanceManager, $diInstance->instanceManager());
-        $this->assertSame($model, $diInstance->instanceManager()->getSharedInstance('Magento_ObjectManager'));
-        $this->assertSame($resource, $diInstance->instanceManager()->getSharedInstance('Mage_Core_Model_Resource'));
-        $this->assertFalse($diInstance->instanceManager()->hasSharedInstance('sharedInstance'));
+        $this->assertSame($model, $model->get('Magento_ObjectManager'));
+        $this->assertSame($resource, $model->get('Mage_Core_Model_Resource'));
+        $this->assertNotSame($instance1, $model->get('Magento_Test_Request'));
     }
 }

@@ -58,9 +58,7 @@ class Mage_Connect_Package_Target
     {
         if (is_null($this->_targetMap)) {
             $this->_targetMap = array();
-            $this->_targetMap[] = array('name'=>"magelocal" ,'label'=>"Magento Local module file" , 'uri'=>"./app/code/local");
-            $this->_targetMap[] = array('name'=>"magecommunity" ,'label'=>"Magento Community module file" , 'uri'=>"./app/code/community");
-            $this->_targetMap[] = array('name'=>"magecore" ,'label'=>"Magento Core team module file" , 'uri'=>"./app/code/core");
+            $this->_targetMap[] = array('name'=>"magecore" ,'label'=>"Magento module file" , 'uri'=>"./app/code");
             $this->_targetMap[] = array('name'=>"magedesign" ,'label'=>"Magento User Interface (layouts, templates)" , 'uri'=>"./app/design");
             $this->_targetMap[] = array('name'=>"mageetc" ,'label'=>"Magento Global Configuration" , 'uri'=>"./app/etc");
             $this->_targetMap[] = array('name'=>"magelib" ,'label'=>"Magento PHP Library file" , 'uri'=>"./lib");

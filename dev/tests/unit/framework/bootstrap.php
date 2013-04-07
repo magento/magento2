@@ -24,16 +24,17 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-require __DIR__ . '/../../../../app/code/core/Mage/Core/functions.php';
+require __DIR__ . '/../../../../app/code/Mage/Core/functions.php';
 require __DIR__ . '/../../../../app/autoload.php';
 Magento_Autoload_IncludePath::addIncludePath(array(
     __DIR__,
     realpath(__DIR__ . '/../testsuite'),
     realpath(__DIR__ . '/../../../../app'),
-    realpath(__DIR__ . '/../../../../app/code/core'),
+    realpath(__DIR__ . '/../../../../app/code'),
     realpath(__DIR__ . '/../../../../lib'),
+    realpath(__DIR__ . '/../../../../var/generation'),
 ));
-
+define('BP', realpath(__DIR__ . '/../../../../'));
 define('TESTS_TEMP_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tmp');
 define('DS', DIRECTORY_SEPARATOR);
 if (is_dir(TESTS_TEMP_DIR)) {

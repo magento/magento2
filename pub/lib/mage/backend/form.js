@@ -150,7 +150,7 @@
             var concat = /\?/.test(url) ? ['&', '='] : ['/', '/'];
             url = url.replace(/[\/&]+$/, '');
             $.each(params, function(key, value) {
-                url += concat[0] + key + concat[1] + encodeURIComponent(value);
+                url += concat[0] + key + concat[1] + window.encodeURIComponent(value);
             });
             return url + (concat[0] === '/' ? '/' : '');
         },
@@ -179,7 +179,8 @@
          */
         _beforeSubmit: function(handlerName, data) {
             var submitData = {};
-            this.element.trigger('beforeSubmit', submitData);
+            var event = new jQuery.Event('beforeSubmit');
+            this.element.trigger(event, [submitData, handlerName]);
             data = $.extend(
                 true,
                 {},
@@ -188,6 +189,7 @@
                 data
             );
             this.element.prop(this._processData(data));
+            return !event.isDefaultPrevented();
         },
 
         /**
@@ -197,8 +199,9 @@
          */
         _submit: function(e, data) {
             this._rollback();
-            this._beforeSubmit(e.type, data);
-            this.element.trigger('submit');
+            if (false !== this._beforeSubmit(e.type, data)) {
+                this.element.trigger('submit', e);
+            }
         }
     });
 })(jQuery);

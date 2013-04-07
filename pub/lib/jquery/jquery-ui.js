@@ -2144,6 +2144,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 		grid: false,
 		handles: "e,s,se",
 		helper: false,
+        iframeFix: false,
 		maxHeight: null,
 		maxWidth: null,
 		minHeight: 10,
@@ -2902,6 +2903,26 @@ $.ui.plugin.add("resizable", "grid", {
 		}
 	}
 
+});
+
+$.ui.plugin.add("resizable", "iframeFix", {
+    start: function (event, ui) {
+        var o = $(this).data('resizable').options;
+        $(o.iframeFix === true ? "iframe" : o.iframeFix).each(function () {
+            $('<div class="ui-resizable-iframeFix" style="background: #fff;"></div>')
+                .css({
+                    width: this.offsetWidth + "px", height: this.offsetHeight + "px",
+                    position: "absolute", opacity: "0.001", zIndex: 1000
+                })
+                .css($(this).offset())
+                .appendTo("body");
+        });
+    },
+    stop: function (event, ui) {
+        $("div.ui-resizable-iframeFix").each(function () {
+            this.parentNode.removeChild(this);
+        });
+    }
 });
 
 var num = function(v) {

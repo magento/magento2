@@ -38,11 +38,6 @@ class Mage_Page_Block_Html_FooterTest extends PHPUnit_Framework_TestCase
         $this->_theme = Mage::getDesign()->getDesignTheme();
     }
 
-    protected function tearDown()
-    {
-        $this->_theme = null;
-    }
-
     public function testGetCacheKeyInfo()
     {
         $block = Mage::app()->getLayout()->createBlock('Mage_Page_Block_Html_Footer');

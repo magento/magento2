@@ -45,11 +45,6 @@ class Mage_ImportExport_Model_Import_Entity_Product_Type_AbstractTest extends PH
         );
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * @dataProvider prepareAttributesWithDefaultValueForSaveDataProvider
      */

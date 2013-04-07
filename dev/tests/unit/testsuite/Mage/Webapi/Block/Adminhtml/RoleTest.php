@@ -42,7 +42,7 @@ class Mage_Webapi_Block_Adminhtml_RoleTest extends PHPUnit_Framework_TestCase
             ->getMock();
 
         $helper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_block = $helper->getBlock('Mage_Webapi_Block_Adminhtml_Role', array(
+        $this->_block = $helper->getObject('Mage_Webapi_Block_Adminhtml_Role', array(
             'urlBuilder' => $this->_urlBuilder
         ));
     }

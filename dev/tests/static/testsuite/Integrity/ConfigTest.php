@@ -57,7 +57,7 @@ class Integrity_ConfigTest extends PHPUnit_Framework_TestCase
     {
         $root = Utility_Files::init()->getPathToSource();
         $failures = array();
-        foreach (glob("{$root}/app/code/*/*/*", GLOB_ONLYDIR) as $modulePath) {
+        foreach (glob("{$root}/app/code/*/*", GLOB_ONLYDIR) as $modulePath) {
             $localeFiles = glob("{$modulePath}/locale/*/*.csv");
             foreach ($localeFiles as $file) {
                 $file = realpath($file);

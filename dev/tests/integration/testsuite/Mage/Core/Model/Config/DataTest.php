@@ -48,11 +48,6 @@ class Mage_Core_Model_Config_DataTest extends PHPUnit_Framework_TestCase
         self::_refreshConfiguration();
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * Remove cached configuration and reinitialize the application
      */

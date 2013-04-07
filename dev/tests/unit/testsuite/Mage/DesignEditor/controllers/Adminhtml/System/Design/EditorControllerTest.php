@@ -43,11 +43,9 @@ class Mage_DesignEditor_Controller_Adminhtml_System_Design_EditorControllerTest 
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento_ObjectManager_Zend',
-            array('create', 'get'), array(), '', false);
-
+        $this->_objectManagerMock = $this->getMock('Magento_ObjectManager');
         $this->_model = $this->getMock('Mage_DesignEditor_Adminhtml_System_Design_EditorController',
-            array('_forward', '_title', '__', 'loadLayout', '_setActiveMenu', 'renderLayout'),
+            array('_forward', '_title', '__', 'loadLayout', '_setActiveMenu', 'renderLayout', 'getLayout'),
             array(
                 $this->getMock('Mage_Core_Controller_Request_Http', array(), array(), '', false),
                 $this->getMock('Mage_Core_Controller_Response_Http', array(), array(), '', false),
@@ -61,9 +59,17 @@ class Mage_DesignEditor_Controller_Adminhtml_System_Design_EditorControllerTest 
                     'session'    => 'session'
                 )
             ));
+        /** @var $layoutMock Mage_Core_Model_Layout|PHPUnit_Framework_MockObject_MockObject */
+        $layoutMock  = $this->getMock('Mage_Core_Model_Layout', array('getBlock'), array(), '', false);
+        /** @var $layoutMock Mage_Core_Model_Layout */
+        $storeViewMock  = $this->getMock('Mage_DesignEditor_Block_Adminhtml_Theme_Selector_StoreView',
+            array('setData'), array(), '', false);
+        $layoutMock->expects($this->any())->method('getBlock')->will($this->returnValue($storeViewMock));
+
         $this->_model->expects($this->any())->method('_title')->will($this->returnValue($this->_model));
         $this->_model->expects($this->any())->method('loadLayout');
         $this->_model->expects($this->any())->method('renderLayout');
+        $this->_model->expects($this->any())->method('getLayout')->will($this->returnValue($layoutMock));
         $this->_model->expects($this->any())->method('_setActiveMenu');
         $this->_model->expects($this->any())->method('__');
     }

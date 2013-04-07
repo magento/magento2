@@ -37,11 +37,6 @@ class Mage_Sales_Block_Order_CommentsTest extends PHPUnit_Framework_TestCase
         $this->_block = Mage::app()->getLayout()->createBlock('Mage_Sales_Block_Order_Comments');
     }
 
-    protected function tearDown()
-    {
-        $this->_block = null;
-    }
-
     /**
      * @param mixed $commentedEntity
      * @param string $expectedClass

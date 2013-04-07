@@ -44,13 +44,6 @@ class Mage_ImportExport_Model_Import_Entity_Eav_CustomerImportTest extends PHPUn
         $this->_model = Mage::getModel('Mage_ImportExport_Model_Import_Entity_Eav_Customer');
     }
 
-    protected function tearDown()
-    {
-        unset($this->_model);
-
-        parent::tearDown();
-    }
-
     /**
      * Test importData() method
      *

@@ -37,11 +37,6 @@ class Mage_Customer_Block_Widget_GenderTest extends PHPUnit_Framework_TestCase
         $this->_block = Mage::app()->getLayout()->createBlock('Mage_Customer_Block_Widget_Gender');
     }
 
-    public function tearDown()
-    {
-        $this->_block = null;
-    }
-
     public function testGetGenderOptions()
     {
         $options = $this->_block->getGenderOptions();

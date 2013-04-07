@@ -107,15 +107,6 @@ class Mage_Core_Model_Resource_SessionTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    protected function tearDown()
-    {
-        unset($this->_objectManager);
-        unset($this->_model);
-        unset($this->_connection);
-        unset($this->_sessionTable);
-        unset($this->_sessionData);
-    }
-
     public function testHasConnection()
     {
         $this->assertTrue($this->_model->hasConnection());

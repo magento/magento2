@@ -43,7 +43,7 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends PHPUnit_Fra
             ->getMock();
 
         $helper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_block = $helper->getBlock('Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_Resource', array(
+        $this->_block = $helper->getObject('Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_Resource', array(
             // TODO: Remove injecting of 'urlBuilder' and 'authorizationConfig' after MAGETWO-5038 complete
             'urlBuilder' => $this->getMockBuilder('Mage_Backend_Model_Url')
                 ->disableOriginalConstructor()

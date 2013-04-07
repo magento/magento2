@@ -41,12 +41,9 @@ class Mage_Cms_Helper_PageTest extends PHPUnit_Framework_TestCase
             Mage::getModel(
                 'Mage_Core_Controller_Front_Action',
                 array(
-                    new Magento_Test_Request(),
-                    new Magento_Test_Response(),
-                    Mage::getObjectManager(),
-                    Mage::getObjectManager()->get('Mage_Core_Controller_Varien_Front'),
-                    Mage::getObjectManager()->get('Mage_Core_Model_Layout_Factory'),
-                    'frontend'
+                    'request' => new Magento_Test_Request(),
+                    'response' => new Magento_Test_Response(),
+                    'areaCode' => 'frontend'
                 )
             ),
             $page->getId()

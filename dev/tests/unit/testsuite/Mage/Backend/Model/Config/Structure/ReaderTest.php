@@ -50,8 +50,7 @@ class Mage_Backend_Model_Config_Structure_ReaderTest extends PHPUnit_Framework_T
     public function setUp()
     {
         $this->_configMock = $this->getMock('Mage_Core_Model_Config_Modules_Reader', array(), array(), '', false);
-        $this->_cacheMock = $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false);
-        $this->_cacheMock->expects($this->any())->method('canUse')->will($this->returnValue(true));
+        $this->_cacheMock = $this->getMock('Mage_Core_Model_Cache_Type_Config', array(), array(), '', false);
         $this->_converterMock = $this->getMock(
             'Mage_Backend_Model_Config_Structure_Converter', array(), array(), '', false
         );

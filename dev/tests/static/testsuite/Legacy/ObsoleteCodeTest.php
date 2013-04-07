@@ -186,47 +186,56 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Assert that obsolete classes are not used in the content
+     *
      * @param string $content
      */
     protected function _testObsoleteClasses($content)
     {
         foreach (self::$_classes as $row) {
-            list($entity, , $suggestion) = $row;
-            $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($entity, '/') . '[^a-z\d_]/iS', $content,
-                sprintf("Class '%s' is obsolete. Replacement suggestion: %s", $entity, $suggestion)
+            list($class, , $replacement) = $row;
+            $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($class, '/') . '[^a-z\d_]/iS', $content,
+                $this->_suggestReplacement(sprintf("Class '%s' is obsolete.", $class), $replacement)
             );
         }
     }
 
     /**
-     * Determine if content should be skipped based on specified class scope
+     * Assert that obsolete methods or functions are not used in the content
      *
-     * @param string $content
-     * @param string $class
-     * @return bool
-     */
-    protected function _isClassSkipped($content, $class)
-    {
-        $regexp = '/(class|extends)\s+' . preg_quote($class, '/') . '(\s|;)/S';
-        /* Note: strpos is used just to prevent excessive preg_match calls */
-        if ($class && (!strpos($content, $class) || !preg_match($regexp, $content))) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
+     * If class context is not specified, declaration/invocation of all functions or methods (of any class)
+     * will be matched across the board
+     *
+     * If context is specified, only the methods will be matched as follows:
+     * - usage of class::method
+     * - usage of $this, self and static within the class and its descendants
+     *
      * @param string $content
      */
     protected function _testObsoleteMethods($content)
     {
         foreach (self::$_methods as $row) {
-            list($method, $class, $suggestion) = $row;
-            if (!$this->_isClassSkipped($content, $class)) {
-                $message = sprintf("Method '%s' is obsolete. Replacement suggestion: %s", $method, $suggestion);
-                 $this->_assertNotRegExp('/this->' . preg_quote($method, '/') . '\s*\(/iS', $content, $message);
-                $this->_assertNotRegExp('/ion\s*' . preg_quote($method, '/') . '\s*\(/iS', $content, $message);
-                $this->_assertNotRegExp('/self::\s*' . preg_quote($method, '/') . '\s*\(/iS', $content, $message);
+            list($method, $class, $replacement) = $row;
+            $quotedMethod = preg_quote($method, '/');
+            if ($class) {
+                $message = $this->_suggestReplacement("Method '{$class}::{$method}()' is obsolete.", $replacement);
+                // without opening parentheses to match static callbacks notation
+                $this->_assertNotRegExp(
+                    '/' . preg_quote($class, '/') . '::\s*' . $quotedMethod . '[^a-z\d_]/iS',
+                    $content,
+                    $message
+                );
+                if ($this->_isSubclassOf($content, $class)) {
+                    $this->_assertNotRegExp('/function\s*' . $quotedMethod . '\s*\(/iS', $content, $message);
+                    $this->_assertNotRegExp('/this->' . $quotedMethod . '\s*\(/iS', $content, $message);
+                    $this->_assertNotRegExp(
+                        '/(self|static|parent)::\s*' . $quotedMethod . '\s*\(/iS', $content, $message
+                    );
+                }
+            } else {
+                $message = $this->_suggestReplacement("Function or method '{$method}()' is obsolete.", $replacement);
+                $this->_assertNotRegExp('/function\s*' . $quotedMethod . '\s*\(/iS', $content, $message);
+                $this->_assertNotRegExp('/[^a-z\d_]' . $quotedMethod . '\s*\(/iS', $content, $message);
             }
         }
     }
@@ -303,12 +312,18 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     protected function _testObsoleteProperties($content)
     {
         foreach (self::$_attributes as $row) {
-            list($attribute, $class, $suggestion) = $row;
-            if (!$this->_isClassSkipped($content, $class)) {
-                $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($attribute, '/') . '[^a-z\d_]/iS', $content,
-                    sprintf("Class attribute '%s' is obsolete. Replacement suggestion: %s", $attribute, $suggestion)
-                );
+            list($attribute, $class, $replacement) = $row;
+            if ($class) {
+                if (!$this->_isSubclassOf($content, $class)) {
+                    continue;
+                }
+                $fullyQualified = "{$class}::\${$attribute}";
+            } else {
+                $fullyQualified = $attribute;
             }
+            $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($attribute, '/') . '[^a-z\d_]/iS', $content,
+                $this->_suggestReplacement(sprintf("Class attribute '%s' is obsolete.", $fullyQualified), $replacement)
+            );
         }
     }
 
@@ -324,17 +339,35 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Assert that obsolete constants are not defined/used in the content
+     *
+     * Without class context, only presence of the literal will be checked.
+     *
+     * In context of a class, match:
+     * - fully qualified constant notation (with class)
+     * - usage with self::/parent::/static:: notation
+     *
      * @param string $content
      */
     protected function _testObsoleteConstants($content)
     {
         foreach (self::$_constants as $row) {
-            list($constant, $class, $suggestion) = $row;
-            if (!$this->_isClassSkipped($content, $class)) {
-                $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($constant, '/') . '[^a-z\d_]/iS', $content,
-                    sprintf("Constant '%s' is obsolete. Replacement suggestion: %s", $constant, $suggestion)
-                );
+            list($constant, $class, $replacement) = $row;
+            if ($class) {
+                $fullyQualified = "{$class}::{$constant}";
+                $regex = preg_quote($fullyQualified, '/');
+                if ($this->_isSubclassOf($content, $class)) {
+                    $regex .= '|' . preg_quote("self::{$constant}", '/')
+                        . '|' . preg_quote("parent::{$constant}", '/')
+                        . '|' . preg_quote("static::{$constant}", '/');
+                }
+            } else {
+                $fullyQualified = $constant;
+                $regex = preg_quote($constant, '/');
             }
+            $this->_assertNotRegExp('/[^a-z\d_]' . $regex . '[^a-z\d_]/iS', $content,
+                $this->_suggestReplacement(sprintf("Constant '%s' is obsolete.", $fullyQualified), $replacement)
+            );
         }
     }
 
@@ -346,6 +379,36 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
         $this->_assertNotRegExp('/[^a-z\d_]skipCalculate[^a-z\d_]/iS', $content,
             "Configuration property 'skipCalculate' is obsolete."
         );
+    }
+
+    /**
+     * Analyze contents of a file to determine whether this is declaration of or a direct descendant of specified class
+     *
+     * @param string $content
+     * @param string $class
+     * @return bool
+     */
+    protected function _isSubclassOf($content, $class)
+    {
+        if (!$class) {
+            return false;
+        }
+        return (bool)preg_match('/(class|extends|implements)\s+' . preg_quote($class, '/') . '(\s|;)/S', $content);
+    }
+
+    /**
+     * Append a "suggested replacement" part to the string
+     *
+     * @param string $original
+     * @param string $suggestion
+     * @return string
+     */
+    private function _suggestReplacement($original, $suggestion)
+    {
+        if ($suggestion) {
+            return "{$original} Suggested replacement: {$suggestion}";
+        }
+        return $original;
     }
 
     /**

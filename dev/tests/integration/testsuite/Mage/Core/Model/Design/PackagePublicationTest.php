@@ -43,6 +43,7 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
         $publicDir = $this->_model->getPublicDir();
         $filesystem->delete($publicDir . '/adminhtml');
         $filesystem->delete($publicDir . '/frontend');
+        $this->_model = null;
     }
 
     /**
@@ -52,8 +53,7 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
     {
         /** @var $dirs Mage_Core_Model_Dir */
         $dirs = Mage::getObjectManager()->get('Mage_Core_Model_Dir');
-        $expectedPublicDir = $dirs->getDir(Mage_Core_Model_Dir::THEME) . DIRECTORY_SEPARATOR
-            . Mage_Core_Model_Design_Package::PUBLIC_BASE_THEME_DIR;
+        $expectedPublicDir = $dirs->getDir(Mage_Core_Model_Dir::STATIC_VIEW);
         $this->assertEquals($expectedPublicDir, $this->_model->getPublicDir());
     }
 
@@ -94,20 +94,16 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
         return array(
             'theme file' => array(
                 'css/styles.css',
-                'theme/static/frontend/test/default/en_US/css/styles.css',
+                'static/frontend/test/default/en_US/css/styles.css',
             ),
             'theme localized file' => array(
                 'logo.gif',
-                'theme/static/frontend/test/default/fr_FR/logo.gif',
+                'static/frontend/test/default/fr_FR/logo.gif',
                 'fr_FR',
             ),
             'modular file' => array(
-                'Module::favicon.ico',
-                'theme/static/frontend/test/default/en_US/Module/favicon.ico',
-            ),
-            'lib file' => array(
-                'varien/product.js',
-                'http://localhost/pub/lib/varien/product.js',
+                'Namespace_Module::favicon.ico',
+                'static/frontend/test/default/en_US/Namespace_Module/favicon.ico',
             ),
             'lib folder' => array(
                 'varien',
@@ -135,52 +131,23 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
         return array(
             'theme css file' => array(
                 'css/styles.css',
-                'theme/static/frontend/test/default/en_US/css/styles.css',
+                'static/frontend/test/default/en_US/css/styles.css',
             ),
             'theme file' => array(
                 'images/logo.gif',
-                'theme/static/frontend/test/default/images/logo.gif',
+                'static/frontend/test/default/images/logo.gif',
             ),
             'theme localized file' => array(
                 'logo.gif',
-                'theme/static/frontend/test/default/locale/fr_FR/logo.gif',
+                'static/frontend/test/default/locale/fr_FR/logo.gif',
                 'fr_FR',
             )
         );
     }
 
     /**
-     * @magentoDataFixture Mage/Core/Model/_files/design/themes.php
-     * @magentoConfigFixture global/design/theme/allow_view_files_duplication 0
-     * @magentoAppIsolation enabled
-     */
-    public function testGetViewUrlNoFilesDuplicationWithCaching()
-    {
-        $this->_initTestTheme();
-        $this->_model->setDesignTheme('test/default');
-        Mage::app()->getLocale()->setLocale('en_US');
-        $theme = $this->_model->getDesignTheme();
-        $themeDesignParams = array('themeModel' => $theme);
-        $cacheKey = "frontend|{$theme->getId()}|en_US";
-        Mage::app()->cleanCache();
-
-        $viewFile = 'images/logo.gif';
-        $this->_model->getViewFileUrl($viewFile, $themeDesignParams);
-        $map = unserialize(Mage::app()->loadCache($cacheKey));
-        $this->assertTrue(count($map) == 1);
-        $this->assertStringEndsWith('logo.gif', (string)array_pop($map));
-
-        $viewFile = 'images/logo_email.gif';
-        $this->_model->getViewFileUrl($viewFile, $themeDesignParams);
-        $map = unserialize(Mage::app()->loadCache($cacheKey));
-        $this->assertTrue(count($map) == 2);
-        $this->assertStringEndsWith('logo_email.gif', (string)array_pop($map));
-    }
-
-    /**
-     * @param string $file
      * @expectedException Magento_Exception
-     * @dataProvider getViewUrlDataExceptionProvider
+     * @dataProvider getViewUrlExceptionDataProvider
      */
     public function testGetViewUrlException($file)
     {
@@ -190,7 +157,7 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
     /**
      * @return array
      */
-    public function getViewUrlDataExceptionProvider()
+    public function getViewUrlExceptionDataProvider()
     {
         return array(
             'non-existing theme file'  => array('path/to/non-existing-file.ext'),
@@ -365,6 +332,9 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
         }
     }
 
+    /**
+     * @return array
+     */
     public function publishCssFileFromModuleDataProvider()
     {
         return array(
@@ -407,7 +377,6 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
         );
     }
 
-
     /**
      * Test that modified CSS file and changed resources are re-published in developer mode
      *
@@ -449,6 +418,7 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
                 Mage_Core_Model_Dir::THEMES => "$appInstallDir/media_for_change",
             )
         ));
+        $this->_model = Mage::getModel('Mage_Core_Model_Design_Package');
         $this->_model->setDesignTheme('test/default');
         $themePath = $this->_model->getDesignTheme()->getFullPath();
         $fixtureViewPath = "$appInstallDir/media_for_change/$themePath/";
@@ -558,6 +528,7 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
                 Mage_Core_Model_Dir::THEMES => dirname(__DIR__) . '/_files/design/'
             )
         ));
+        $this->_model = Mage::getModel('Mage_Core_Model_Design_Package'); // Reinit model with new directories
         $this->_model->setDesignTheme('test/default');
     }
 
@@ -596,7 +567,7 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
         );
         $filePath = $this->_model->getViewFile('css/base64.css', $params);
 
-        // publicate static content
+        // publish static content
         $this->_model->getViewFileUrl('css/base64.css', $params);
         $this->assertFileEquals($filePath, str_replace('/', DIRECTORY_SEPARATOR, "{$publishedPath}/css/base64.css"));
 

@@ -48,6 +48,6 @@ class Magento_Acl_ResourceFactory
      */
     public function createResource(array $arguments = array())
     {
-        return $this->_objectManager->create(self::RESOURCE_CLASS_NAME, $arguments, false);
+        return $this->_objectManager->create(self::RESOURCE_CLASS_NAME, $arguments);
     }
 }

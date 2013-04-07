@@ -41,12 +41,6 @@ class Mage_ImportExport_Model_Export_EntityAbstractTest extends PHPUnit_Framewor
         $this->_model = $this->getMockForAbstractClass('Mage_ImportExport_Model_Export_EntityAbstract');
     }
 
-    protected function tearDown()
-    {
-        unset($this->_model);
-        parent::tearDown();
-    }
-
     /**
      * Check methods which provide ability to manage errors
      */

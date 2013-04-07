@@ -44,7 +44,7 @@ class Mage_Backend_Model_Config_Source_Admin_PageTest extends Mage_Backend_Utili
 
         $this->assertGreaterThan(0, $optionsCount, 'There must be present menu items at the admin backend');
 
-        $this->assertEquals('Dashboard', $options->item(0)->nodeValue, 'First element is not Dashboard');
-        $this->assertContains('Configuration', $options->item($optionsCount - 1)->nodeValue);
+        $this->assertEquals('Mage_Adminhtml::dashboard', $options->item(0)->getAttribute('value'),
+            'First element is not Dashboard');
     }
 }

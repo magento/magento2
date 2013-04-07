@@ -46,32 +46,19 @@ class Mage_Webapi_Model_Config_RestTest extends PHPUnit_Framework_TestCase
     /**
      * @var Mage_Webapi_Model_Config_Rest
      */
-    protected static $_apiConfig;
+    protected $_apiConfig;
 
     /**
      * App mock clone usage helps to improve performance. It is required because mock will be removed in tear down.
      *
      * @var Mage_Core_Model_App
      */
-    protected static $_appClone;
+    protected $_appClone;
 
-    public static function tearDownAfterClass()
+    protected function setUp()
     {
-        self::$_apiConfig = null;
-        self::$_appClone = null;
-        parent::tearDownAfterClass();
-    }
-
-    /**
-     * @return Mage_Webapi_Model_Config_Rest
-     */
-    protected function _getModel()
-    {
-        if (!self::$_apiConfig) {
-            $pathToFixtures = __DIR__ . '/../../_files/autodiscovery';
-            self::$_apiConfig = $this->_createResourceConfig($pathToFixtures);
-        }
-        return self::$_apiConfig;
+        $pathToFixtures = __DIR__ . '/../../_files/autodiscovery';
+        $this->_apiConfig = $this->_createResourceConfig($pathToFixtures);
     }
 
     public function testGetAllResourcesVersions()
@@ -80,7 +67,7 @@ class Mage_Webapi_Model_Config_RestTest extends PHPUnit_Framework_TestCase
             'vendorModuleResource' => array('V1', 'V2', 'V3', 'V4', 'V5'),
             'vendorModuleResourceSubresource' => array('V1', 'V2', 'V4')
         );
-        $allResourcesVersions = $this->_getModel()->getAllResourcesVersions();
+        $allResourcesVersions = $this->_apiConfig->getAllResourcesVersions();
         $this->assertEquals($expectedResult, $allResourcesVersions, "The list of all resources versions is incorrect.");
     }
 
@@ -90,7 +77,7 @@ class Mage_Webapi_Model_Config_RestTest extends PHPUnit_Framework_TestCase
             'InvalidArgumentException',
             'The "update" method of "vendorModuleInvalidInterface" resource in version "V2" is not registered.'
         );
-        $this->_getModel()->getMethodMetadata(
+        $this->_apiConfig->getMethodMetadata(
             $this->_createMethodReflection(
                 'Vendor_Module_Controller_Webapi_Invalid_Interface',
                 'updateV2'
@@ -100,7 +87,7 @@ class Mage_Webapi_Model_Config_RestTest extends PHPUnit_Framework_TestCase
 
     public function testGetRestRoutes()
     {
-        $actualRoutes = $this->_getModel()->getAllRestRoutes();
+        $actualRoutes = $this->_apiConfig->getAllRestRoutes();
         $expectedRoutesCount = 16;
 
         /**
@@ -126,7 +113,7 @@ class Mage_Webapi_Model_Config_RestTest extends PHPUnit_Framework_TestCase
     public function testGetRestRouteToItem()
     {
         $expectedRoute = '/:resourceVersion/vendorModuleResources/subresources/:id';
-        $this->assertEquals($expectedRoute, $this->_getModel()->getRestRouteToItem('vendorModuleResourceSubresource'));
+        $this->assertEquals($expectedRoute, $this->_apiConfig->getRestRouteToItem('vendorModuleResourceSubresource'));
     }
 
     public function testGetRestRouteToItemInvalidArguments()
@@ -136,12 +123,12 @@ class Mage_Webapi_Model_Config_RestTest extends PHPUnit_Framework_TestCase
             'InvalidArgumentException',
             sprintf('No route to the item of "%s" resource was found.', $resourceName)
         );
-        $this->_getModel()->getRestRouteToItem($resourceName);
+        $this->_apiConfig->getRestRouteToItem($resourceName);
     }
 
     public function testGetMethodRestRoutes()
     {
-        $actualRoutes = $this->_getModel()->getMethodRestRoutes('vendorModuleResourceSubresource', 'create', 'v1');
+        $actualRoutes = $this->_apiConfig->getMethodRestRoutes('vendorModuleResourceSubresource', 'create', 'v1');
         $this->assertCount(5, $actualRoutes, "Routes quantity does not match expected one.");
         foreach ($actualRoutes as $actualRoute) {
             $this->assertInstanceOf('Mage_Webapi_Controller_Router_Route_Rest', $actualRoute);
@@ -156,7 +143,7 @@ class Mage_Webapi_Model_Config_RestTest extends PHPUnit_Framework_TestCase
             'InvalidArgumentException',
             sprintf('"%s" resource does not have any REST routes for "%s" method.', $resourceName, $methodName)
         );
-        $this->_getModel()->getMethodRestRoutes($resourceName, $methodName, 'v1');
+        $this->_apiConfig->getMethodRestRoutes($resourceName, $methodName, 'v1');
     }
 
     /**
@@ -169,23 +156,30 @@ class Mage_Webapi_Model_Config_RestTest extends PHPUnit_Framework_TestCase
     {
         $objectManager = Mage::getObjectManager();
         /** Prepare arguments for SUT constructor. */
-        /** @var Mage_Core_Model_Cache $cache */
-        $cache = $this->getMockBuilder('Mage_Core_Model_Cache')->disableOriginalConstructor()->getMock();
+        /** @var Mage_Core_Model_CacheInterface $cache */
+        $cache = $this->getMock('Mage_Core_Model_CacheInterface');
         $configMock = $this->getMockBuilder('Mage_Core_Model_Config')->disableOriginalConstructor()->getMock();
         $configMock->expects($this->any())->method('getAreaFrontName')->will(
             $this->returnValue(self::WEBAPI_AREA_FRONT_NAME)
         );
         $appMock = $this->getMockBuilder('Mage_Core_Model_App')->disableOriginalConstructor()->getMock();
         $appMock->expects($this->any())->method('getConfig')->will($this->returnValue($configMock));
-        self::$_appClone = clone $appMock;
+        $this->_appClone = clone $appMock;
+        $objectManager->configure(array(
+            'Mage_Webapi_Model_Config_Reader_Rest' => array(
+                'parameters' => array(
+                    'cache' => $cache
+                )
+            )
+        ));
         /** @var Mage_Webapi_Model_Config_Reader_Rest $reader */
-        $reader = $objectManager->get('Mage_Webapi_Model_Config_Reader_Rest', array('cache' => $cache));
+        $reader = $objectManager->get('Mage_Webapi_Model_Config_Reader_Rest');
         $reader->setDirectoryScanner(new Zend\Code\Scanner\DirectoryScanner($pathToResources));
 
         /** Initialize SUT. */
         $apiConfig = $objectManager->create(
             'Mage_Webapi_Model_Config_Rest',
-            array('reader' => $reader, 'application' => self::$_appClone)
+            array('reader' => $reader, 'application' => $this->_appClone)
         );
         return $apiConfig;
     }

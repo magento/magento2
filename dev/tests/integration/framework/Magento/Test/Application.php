@@ -29,6 +29,8 @@
  * Encapsulates application installation, initialization and uninstall
  *
  * @todo Implement MAGETWO-1689: Standard Installation Method for Integration Tests
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Magento_Test_Application
 {
@@ -80,11 +82,11 @@ class Magento_Test_Application
     protected $_initParams = array();
 
     /**
-     * Whether a developer mode is enabled or not
+     * Mode to run application
      *
-     * @var bool
+     * @var string
      */
-    protected $_isDeveloperMode = false;
+    protected $_appMode;
 
     /**
      * Constructor
@@ -94,27 +96,29 @@ class Magento_Test_Application
      * @param Varien_Simplexml_Element $localXml
      * @param array $globalEtcFiles
      * @param array $moduleEtcFiles
-     * @param bool $isDeveloperMode
+     * @param string $appMode
      */
     public function __construct(
         Magento_Test_Db_DbAbstract $dbInstance, $installDir, Varien_Simplexml_Element $localXml,
-        array $globalEtcFiles, array $moduleEtcFiles, $isDeveloperMode
+        array $globalEtcFiles, array $moduleEtcFiles, $appMode
     ) {
         $this->_db              = $dbInstance;
         $this->_localXml        = $localXml;
         $this->_globalEtcFiles  = $globalEtcFiles;
         $this->_moduleEtcFiles  = $moduleEtcFiles;
-        $this->_isDeveloperMode = $isDeveloperMode;
+        $this->_appMode = $appMode;
 
         $this->_installDir = $installDir;
         $this->_installEtcDir = "$installDir/etc";
 
         $this->_initParams = array(
             Mage::PARAM_APP_DIRS => array(
-                Mage_Core_Model_Dir::CONFIG     => $this->_installEtcDir,
-                Mage_Core_Model_Dir::VAR_DIR    => $installDir,
-                Mage_Core_Model_Dir::MEDIA      => "$installDir/media",
+                Mage_Core_Model_Dir::CONFIG      => $this->_installEtcDir,
+                Mage_Core_Model_Dir::VAR_DIR     => $installDir,
+                Mage_Core_Model_Dir::MEDIA       => "$installDir/media",
+                Mage_Core_Model_Dir::STATIC_VIEW => "$installDir/static",
             ),
+            Mage::PARAM_MODE => $appMode
         );
     }
 
@@ -164,22 +168,24 @@ class Magento_Test_Application
     public function initialize($overriddenParams = array())
     {
         $overriddenParams[Mage::PARAM_BASEDIR] = BP;
-        Mage::setIsDeveloperMode($this->_isDeveloperMode);
+        $overriddenParams[Mage::PARAM_MODE] = $this->_appMode;
         Mage::$headersSentThrowsException = false;
-        $config = new Mage_Core_Model_ObjectManager_Config(
-            $this->_customizeParams($overriddenParams)
-        );
+        $config = new Mage_Core_Model_Config_Primary(BP, $this->_customizeParams($overriddenParams));
         if (!Mage::getObjectManager()) {
-            /** @var $app Mage_Core_Model_App */
-            new Magento_Test_ObjectManager($config, BP);
+            $definition = new Magento_ObjectManager_Definition_Runtime();
+            $definitionDecorator = new Magento_Code_Generator_DefinitionDecorator($definition);
+            $objectManager = new Magento_Test_ObjectManager($definitionDecorator, $config);
+            Mage::setObjectManager($objectManager);
         } else {
             $config->configure(Mage::getObjectManager());
+            Mage::getObjectManager()->addSharedInstance($config, 'Mage_Core_Model_Config_Primary');
+            Mage::getObjectManager()->addSharedInstance($config->getDirectories(), 'Mage_Core_Model_Dir');
         }
 
         Mage::getObjectManager()->get('Mage_Core_Model_Resource')
             ->setResourceConfig(Mage::getObjectManager()->get('Mage_Core_Model_Config_Resource'));
         Mage::getObjectManager()->get('Mage_Core_Model_Resource')
-            ->setCache(Mage::getObjectManager()->get('Mage_Core_Model_Cache'));
+            ->setCache(Mage::getObjectManager()->get('Mage_Core_Model_CacheInterface'));
     }
 
     /**
@@ -195,15 +201,15 @@ class Magento_Test_Application
 
     /**
      * Run application normally, but with encapsulated initialization options
+     *
+     * @param Magento_Test_Request $request
+     * @param Magento_Test_Response $response
      */
-    public function run()
+    public function run(Magento_Test_Request $request, Magento_Test_Response $response)
     {
         $composer = Mage::getObjectManager();
         $handler = $composer->get('Magento_Http_Handler_Composite');
-        $handler->handle(
-            isset($params['request']) ? $params['request'] : $composer->get('Mage_Core_Controller_Request_Http'),
-            isset($params['response']) ? $params['response'] : $composer->get('Mage_Core_Controller_Response_Http')
-        );
+        $handler->handle($request, $response);
     }
 
     /**
@@ -228,7 +234,7 @@ class Magento_Test_Application
         $this->_ensureDirExists($this->_installDir);
         $this->_ensureDirExists($this->_installEtcDir);
         $this->_ensureDirExists($this->_installDir . DIRECTORY_SEPARATOR . 'media');
-        $this->_ensureDirExists($this->_installDir . DIRECTORY_SEPARATOR . 'theme');
+        $this->_ensureDirExists($this->_installDir . DIRECTORY_SEPARATOR . 'static');
 
         /* Copy configuration files */
         $etcDirsToFilesMap = array(
@@ -263,7 +269,10 @@ class Magento_Test_Application
         $updater->updateData();
 
         /* Enable configuration cache by default in order to improve tests performance */
-        Mage::app()->getCacheInstance()->saveOptions(array('config' => 1));
+        /** @var $cacheTypes Mage_Core_Model_Cache_Types */
+        $cacheTypes = Mage::getObjectManager()->get('Mage_Core_Model_Cache_Types');
+        $cacheTypes->setEnabled(Mage_Core_Model_Cache_Type_Config::TYPE_IDENTIFIER, true);
+        $cacheTypes->persist();
 
         /* Fill installation date in local.xml to indicate that application is installed */
         $localXml = file_get_contents($targetLocalXml);
@@ -303,6 +312,7 @@ class Magento_Test_Application
         $resource = Mage::registry('_singleton/Mage_Core_Model_Resource');
 
         Mage::reset();
+        Mage::setObjectManager($objectManager);
         Varien_Data_Form::setElementRenderer(null);
         Varien_Data_Form::setFieldsetRenderer(null);
         Varien_Data_Form::setFieldsetElementRenderer(null);

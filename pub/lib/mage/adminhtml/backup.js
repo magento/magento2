@@ -27,8 +27,12 @@ AdminBackup.prototype = {
     initialize : function(a, b){
         this.reset();
         this.rollbackUrl = this.backupUrl = '';
-        this.rollbackValidator = new Validation($('rollback-form'));
-        this.backupValidator = new Validation($('backup-form'));
+        this.rollbackForm = jQuery('#rollback-form').mage('validation', {
+            submitHandler: jQuery.proxy(this.submitRollback, this)
+        });
+        this.backupForm = jQuery('#backup-form').mage('validation', {
+            submitHandler: jQuery.proxy(this.submitBackup, this)
+        });
     },
 
     reset: function() {
@@ -106,39 +110,33 @@ AdminBackup.prototype = {
     },
 
     submitBackup: function () {
-        if (!!this.backupValidator && this.backupValidator.validate()) {
-            this.hidePopups();
-            var data = {
-                'type': this.type,
-                'maintenance_mode': $('backup_maintenance_mode').checked ? 1 : 0,
-                'backup_name': $('backup_name').value,
-                'exclude_media': $('exclude_media').checked ? 1 : 0
-            };
+        this.hidePopups();
+        var data = {
+            'type': this.type,
+            'maintenance_mode': $('backup_maintenance_mode').checked ? 1 : 0,
+            'backup_name': $('backup_name').value,
+            'exclude_media': $('exclude_media').checked ? 1 : 0
+        };
 
-            new Ajax.Request(this.backupUrl, {
-                onSuccess: function(transport) {
-                    this.processResponse(transport, 'backup-options');
-                }.bind(this),
-                method: 'post',
-                parameters: data
-            });
-        }
-        return false;
+        new Ajax.Request(this.backupUrl, {
+            onSuccess: function(transport) {
+                this.processResponse(transport, 'backup-options');
+            }.bind(this),
+            method: 'post',
+            parameters: data
+        });
     },
 
     submitRollback: function() {
-        if (!!this.rollbackValidator && this.rollbackValidator.validate()) {
-            var data = this.getPostData();
-            this.hidePopups();
-            new Ajax.Request(this.rollbackUrl, {
-                onSuccess: function(transport) {
-                    this.processResponse(transport, 'rollback-request-password');
-                }.bind(this),
-                method: 'post',
-                parameters: data
-            });
-        }
-        return false;
+        var data = this.getPostData();
+        this.hidePopups();
+        new Ajax.Request(this.rollbackUrl, {
+            onSuccess: function(transport) {
+                this.processResponse(transport, 'rollback-request-password');
+            }.bind(this),
+            method: 'post',
+            parameters: data
+        });
     },
 
     processResponse: function(transport, popupId) {
@@ -180,13 +178,19 @@ AdminBackup.prototype = {
         $(divId).show().setStyle({
             'marginTop': -$(divId).getDimensions().height / 2 + 'px'
         });
-        $('popup-window-mask').setStyle({
-            height: $('html-body').getHeight() + 'px'
-        }).show();
+        var mask = $('popup-window-mask');
+        if (mask) {
+            $('popup-window-mask').setStyle({
+                height: $('html-body').getHeight() + 'px'
+            }).show();
+        }
     },
 
     hidePopups: function() {
         $$('.backup-dialog').each(Element.hide);
-        $('popup-window-mask').hide();
+        var mask = $('popup-window-mask');
+        if (mask) {
+            mask.hide();
+        }
     }
 }

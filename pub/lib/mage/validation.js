@@ -340,25 +340,25 @@
             function(value) {
                 return !/<(\/)?\w+/.test(value);
             },
-            'HTML tags are not allowed'
+            'HTML tags are not allowed.'
         ],
         "validate-select": [
             function(value) {
                 return ((value !== "none") && (value != null) && (value.length !== 0));
             },
-            'Please select an option'
+            'Please select an option.'
         ],
         "validate-no-empty": [
             function(value) {
                 return !$.mage.isEmpty(value);
             },
-            'Empty Value'
+            'Empty Value.'
         ],
         "validate-alphanum-with-spaces": [
             function(v) {
                 return $.mage.isEmptyNoTrim(v) || /^[a-zA-Z0-9 ]+$/.test(v);
             },
-            'Please use only letters (a-z or A-Z), numbers (0-9) or spaces only in this field'
+            'Please use only letters (a-z or A-Z), numbers (0-9) or spaces only in this field.'
         ],
         "validate-data": [
             function(v) {
@@ -370,7 +370,7 @@
             function(v) {
                 return $.mage.isEmptyNoTrim(v) || /^[ \w]{3,}([A-Za-z]\.)?([ \w]*\#\d+)?(\r\n| )[ \w]{3,}/.test(v);
             },
-            'Please use only letters (a-z or A-Z) or numbers (0-9) or spaces and # only in this field'
+            'Please use only letters (a-z or A-Z) or numbers (0-9) or spaces and # only in this field.'
         ],
         "validate-phoneStrict": [
             function(v) {
@@ -388,7 +388,7 @@
             function(v) {
                 return $.mage.isEmptyNoTrim(v) || /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/.test(v);
             },
-            'Please enter a valid phone number. For example (123) 456-7890 or 123-456-7890.'
+            'Please enter a valid fax number. For example (123) 456-7890 or 123-456-7890.'
         ],
         "validate-email": [
             function(v) {
@@ -452,14 +452,14 @@
                 return $.mage.isEmptyNoTrim(v) || /^(http|https|ftp):\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+.(com|org|net|dk|at|us|tv|info|uk|co.uk|biz|se)$)(:(\d+))?\/?/i.test(v) || /^(www)((\.[A-Z0-9][A-Z0-9_-]*)+.(com|org|net|dk|at|us|tv|info|uk|co.uk|biz|se)$)(:(\d+))?\/?/i.test(v);
 
             },
-            'Please enter a valid URL. For example http://www.example.com or www.example.com'
+            'Please enter a valid URL. For example http://www.example.com or www.example.com.'
         ],
         "validate-xml-identifier": [
             function(v) {
                 return $.mage.isEmptyNoTrim(v) || /^[A-Z][A-Z0-9_\/-]*$/i.test(v);
 
             },
-            'Please enter a valid URL. For example http://www.example.com or www.example.com'
+            'Please enter a valid XML-identifier. For example something_1, block5, id-4.'
         ],
         "validate-ssn": [
             function(v) {
@@ -508,7 +508,7 @@
                 return !isNaN(v) && v >= 0;
 
             },
-            'Please select one of the above options.'
+            'Please enter a number 0 or greater in this field.'
         ],
         // validate-not-negative-number should be replaced in all places with this one and then removed
         "validate-zero-or-greater": [
@@ -530,7 +530,7 @@
                 v = $.mage.parseNumber(v);
                 return !isNaN(v) && v > 0;
             },
-            'Please enter a number greater than 0 in this field'
+            'Please enter a number greater than 0 in this field.'
         ],
         "validate-css-length": [
             function(v) {
@@ -540,7 +540,7 @@
                 v = $.mage.parseNumber(v);
                 return !isNaN(v) && v > 0;
             },
-            'Please enter a number greater than 0 in this field'
+            'Please input a valid CSS-length. For example 100px or 77pt or 20em or .5ex or 50%.'
         ],
         /** @description Additional methods */
         "validate-number": [
@@ -613,16 +613,14 @@
 
                 return result;
             },
-            'Please enter a valid number in this field.'
+            'The value is not within the specified range.'
         ],
-        /*
         'validate-range': [
             function(v, elm) {
                 var minValue, maxValue;
                 if ($.mage.isEmptyNoTrim(v)) {
                     return true;
-                // @TODO: Replace Validation.get with appropriate variant
-                } else if (Validation.get('validate-digits').test(v)) {
+                } else if ($.validator.methods['validate-digits'] && $.validator.methods['validate-digits'](v)) {
                     minValue = maxValue = $.mage.parseNumber(v);
                 } else {
                     var ranges = /^(-?\d+)?-(-?\d+)?$/.exec(v);
@@ -640,7 +638,7 @@
                 var reRange = /^range-(-?\d+)?-(-?\d+)?$/,
                 result = true;
 
-                var values = elm.className.split(" ");
+                var values = $(elm).prop('class').split(" ");
 
                 for (var i = values.length - 1; i >= 0; i--) {
                     var name = values[i];
@@ -648,16 +646,15 @@
                     if (validRange) {
                         var minValidRange = $.mage.parseNumber(validRange[1]);
                         var maxValidRange = $.mage.parseNumber(validRange[2]);
-                        result = result
-                            && (isNaN(minValidRange) || minValue >= minValidRange)
-                            && (isNaN(maxValidRange) || maxValue <= maxValidRange);
+                        result = result &&
+                            (isNaN(minValidRange) || minValue >= minValidRange) &&
+                            (isNaN(maxValidRange) || maxValue <= maxValidRange);
                     }
-                };
+                }
                 return result;
             },
             'The value is not within the specified range.'
         ],
-        */
         "validate-alpha": [
             function(v) {
                 return $.mage.isEmptyNoTrim(v) || /^[a-zA-Z]+$/.test(v);
@@ -725,22 +722,6 @@
             },
             'Please make sure your passwords match.'
         ],
-        /*
-        "validate-both-passwords": [
-            function(v, input) {
-                var dependentInput = $(input.form[input.name == 'password' ? 'confirmation' : 'password']),
-                    isEqualValues  = input.value == dependentInput.value;
-
-                if (isEqualValues && dependentInput.hasClass('validation-failed')) {
-                    // @TODO: Move test method to new validation
-                    Validation.test(this.className, dependentInput);
-                }
-
-                return dependentInput.value == '' || isEqualValues;
-            },
-            'Please make sure your passwords match.'
-        ]
-        */
         "validate-identifier": [
             function(v) {
                 return $.mage.isEmptyNoTrim(v) || /^[a-z0-9][a-z0-9_\/-]+(\.[a-z0-9_-]+)?$/.test(v);
@@ -764,7 +745,8 @@
                 return options.map(function(elm) {
                     return $(elm).val();
                 }).length > 0;
-            }
+            },
+            'Please select one of the above options.'
         ],
         "validate-state": [
             function(v) {
@@ -783,7 +765,7 @@
                  }
                  return result;
              },
-            'Please select a file'
+            'Please select a file.'
         ],
         "validate-ajax-error": [
             function(v, element) {
@@ -812,7 +794,7 @@
                 }
                 return hasWithValue ^ hasWithNoValue;
             },
-            'Field is not complete'
+            'Field is not complete.'
         ],
         "validate-required-datetime": [
             function(v, elm, param) {
@@ -824,7 +806,7 @@
                 }
                 return true;
             },
-            'This field is required'
+            'This is a required field.'
         ],
         "validate-one-required-by-name": [
             function (v,elm) {
@@ -847,7 +829,7 @@
                 return true;
             },
             function() {
-                return $.mage.__('Please enter a value less than or equal to %s').replace('%s', this.lteToVal);
+                return $.mage.__('Please enter a value less than or equal to %s.').replace('%s', this.lteToVal);
             }
         ],
         "greater-than-equals-to": [
@@ -859,7 +841,7 @@
                 return true;
             },
             function() {
-                return $.mage.__('Please enter a value greater than or equal to %s').replace('%s', this.gteToVal);
+                return $.mage.__('Please enter a value greater than or equal to %s.').replace('%s', this.gteToVal);
             }
         ],
         "validate-emails": [
@@ -868,7 +850,7 @@
                     return true;
                 }
                 var valid_regexp = /^[a-z0-9\._-]{1,30}@([a-z0-9_-]{1,30}\.){1,5}[a-z]{2,4}$/i,
-                    emails = value.split(',');
+                    emails = value.split(/[\s\n\,]+/g);
                 for (var i = 0; i < emails.length; i++) {
                     if(!valid_regexp.test(emails[i].strip())) {
                         return false;
@@ -876,6 +858,81 @@
                 }
                 return true;
             }, "Please enter a valid email addresses, separated by commas. For example johndoe@domain.com, johnsmith@domain.com."
+        ],
+        "validate-length": [
+            function (v, elm) {
+                var reMax = new RegExp(/^maximum-length-[0-9]+$/),
+                    reMin = new RegExp(/^minimum-length-[0-9]+$/),
+                    validator = this,
+                    result = true,
+                    length = 0;
+                $.each(elm.className.split(' '), function(index, name) {
+                    if (name.match(reMax) && result) {
+                        length = name.split('-')[2];
+                        validator.attrLength = length;
+                        result = (v.length <= length);
+                    }
+                    if (name.match(reMin) && result && $.mage.isEmpty(v)) {
+                        length = name.split('-')[2];
+                        result = v.length >= length;
+                    }
+                });
+                return result;
+            }, function() {
+                return $.mage.__("Maximum length of this field must be equal or less than %s symbols.")
+                    .replace('%s', this.attrLength);
+            }
+        ],
+        'required-entry': [
+            function(value) {
+                return !$.mage.isEmpty(value);
+            }, $.mage.__('This is a required field.')
+        ],
+        'not-negative-amount': [
+            function(v) {
+                if(v.length)
+                    return (/^\s*\d+([,.]\d+)*\s*%?\s*$/).test(v);
+                else
+                    return true;
+            },
+            'Please enter positive number in this field.'
+        ],
+        'validate-per-page-value-list': [
+            function(v) {
+                var isValid = !$.mage.isEmpty(v);
+                var values  = v.split(',');
+                for (var i=0;i<values.length;i++) {
+                    if (!/^[0-9]+$/.test(values[i])) {
+                        isValid = false;
+                    }
+                }
+                return isValid;
+            },
+            'Please enter a valid value, ex: 10,20,30'
+        ],
+        'validate-per-page-value': [
+            function(v, elm) {
+                if ($.mage.isEmpty(v)) {
+                    return false;
+                }
+                var values = $('#' + elm.id + '_values').val().split(',');
+                return values.indexOf(v) != -1;
+            },
+            'Please enter a valid value from list'
+        ],
+        'validate-new-password': [
+            function(v) {
+
+                if (jQuery.validator.methods['validate-password'] &&
+                    !jQuery.validator.methods['validate-password'](v)) {
+                    return false;
+                }
+                if ($.mage.isEmpty(v) && v !== '') {
+                    return false;
+                }
+                return true;
+            },
+            'Please enter 6 or more characters. Leading or trailing spaces will be ignored.'
         ]
     };
 
@@ -883,11 +940,19 @@
         rule.unshift(i);
         $.validator.addMethod.apply($.validator, rule);
     });
-    $.validator.addClassRules("required-entry", {
-        required: true
+    $.validator.addClassRules({
+        "required-option": {
+            required: true
+        },
+        "required-options-count": {
+            required: true
+        },
+        "validate-both-passwords": {
+            'validate-cpassword': true
+        }
     });
-    $.validator.addClassRules("required-option", {
-        required: true
+    $.validator.messages = $.extend($.validator.messages, {
+        required: $.mage.__('This is a required field.')
     });
 
     if ($.metadata) {
@@ -902,6 +967,31 @@
         }
     });
 
+    /**
+     * Validate form field without instantiating validate plug-in
+     * @param {Element||String} element - DOM element or selector
+     * @return {Boolean} validation result
+     */
+    $.validator.validateElement = function(element) {
+        element = $(element);
+        var form = element.get(0).form,
+            validator = form ? $(form).data('validator') : null;
+
+        if (validator) {
+            return validator.element(element.get(0));
+        } else {
+            var valid = true,
+                classes = element.prop('class').split(' ');
+            $.each(classes, $.proxy(function(i, className){
+                if (this.methods[className] && !this.methods[className](element.val(), element.get(0))) {
+                    valid = false;
+                    return valid;
+                }
+            }, this));
+            return valid;
+        }
+    };
+
     $.widget("mage.validation", {
         options: {
             meta: "validate",
@@ -912,12 +1002,42 @@
             errorClass: 'mage-error',
             errorElement: 'div',
             errorPlacement: function (error, element) {
+                var errorPlacement = element;
                 // logic for date-picker error placement
                 if (element.hasClass('hasDatepicker')) {
-                    element.siblings('img').after(error);
-                } else {
-                    element.after(error);
+                    errorPlacement = element.siblings('img');
                 }
+                // logic for field wrapper
+                var fieldWrapper = element.closest('.addon');
+                if (fieldWrapper.length) {
+                    errorPlacement = fieldWrapper.after(error);
+                }
+                //logic for checkboxes/radio
+                if (element.is(':checkbox') || element.is(':radio')) {
+                    errorPlacement = element.siblings('label').last();
+                }
+                errorPlacement.after(error);
+            }
+        },
+        /**
+         * Check if form pass validation rules without submit
+         * @return boolean
+         */
+        isValid: function() {
+            return this.element.valid();
+        },
+
+        /**
+         * Remove validation error messages
+         */
+        clearError: function() {
+            if (arguments.length) {
+                $.each(arguments, $.proxy(function(index, item) {
+                    this.validate.prepareElement(item);
+                    this.validate.hideErrors();
+                }, this));
+            } else {
+                this.validate.resetForm();
             }
         },
         /**
@@ -929,12 +1049,4 @@
         }
     });
 })(jQuery);
-
-/**
- Not implemented
- ====================
- validate-both-passwords
- validate-new-password
- validate-cc-number
-*/
 

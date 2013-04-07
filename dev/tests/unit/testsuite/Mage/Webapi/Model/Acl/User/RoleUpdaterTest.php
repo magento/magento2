@@ -56,7 +56,7 @@ class Mage_Webapi_Model_Acl_User_RoleUpdaterrTest extends PHPUnit_Framework_Test
             ->with(array())->will($this->returnValue($userModel));
 
         /** @var Mage_Webapi_Model_Acl_Role_InRoleUserUpdater $model */
-        $model = $helper->getModel('Mage_Webapi_Model_Acl_User_RoleUpdater', array(
+        $model = $helper->getObject('Mage_Webapi_Model_Acl_User_RoleUpdater', array(
             'request' => $request,
             'userFactory' => $userFactory
         ));

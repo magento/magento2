@@ -68,11 +68,11 @@ class Mage_Index_Model_Lock_StorageTest extends PHPUnit_Framework_TestCase
             ->method('streamWrite')
             ->with($this->isType('string'));
 
-        $fileFactory = $this->getMock('Mage_Index_Model_Process_FileFactory', array('createFromArray'), array(), '',
+        $fileFactory = $this->getMock('Mage_Index_Model_Process_FileFactory', array('create'), array(), '',
             false
         );
         $fileFactory->expects($this->exactly(2))
-            ->method('createFromArray')
+            ->method('create')
             ->will($this->returnValue($fileModel));
 
         $storage = new Mage_Index_Model_Lock_Storage($this->_dirsMock, $fileFactory);

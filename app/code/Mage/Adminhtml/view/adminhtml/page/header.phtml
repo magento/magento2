@@ -1,0 +1,124 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/** @var $this Mage_Adminhtml_Block_Page_Header */
+?>
+<header class="header">
+    <div class="header-inner">
+        <a href="<?php echo $this->getHomeLink() ?>" class="logo" title="<?php echo $this->__('Magento Admin Panel') ?>"><span><?php echo $this->__('Magento Admin Panel') ?></span></a>
+        <div class="header-panel">
+            <?php echo $this->getChildHtml(); ?>
+            <div class="account">
+                <a href="<?php echo $this->getUrl('adminhtml/system_account/index') ?>" class="account-avatar" title="<?php echo $this->__('My Account') ?>" data-toggle="dropdown">
+                    <?php echo $this->escapeHtml($this->getUser()->getUsername()); ?>
+                </a>
+                <ul class="dropdown-menu">
+                    <?php if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Adminhtml::myaccount')): ?>
+                    <li class="first">
+                        <a href="<?php echo $this->getUrl('adminhtml/system_account/index') ?>" <?php echo $this->getUiId('user', 'account', 'settings')?> title="<?php echo $this->__('Account Setting') ?>"><?php echo $this->__('Account Setting') ?></a>
+                        <div><?php echo $this->escapeHtml($this->getUser()->getUsername()); ?></div>
+                    </li>
+                    <?php endif; ?>
+                    <li class="last">
+                        <a href="<?php echo $this->getLogoutLink() ?>" class="account-signout" title="<?php echo $this->__('Sign Out') ?>"><?php echo $this->__('Sign Out') ?></a>
+                    </li>
+                </ul>
+            </div>
+            <a href="<?php echo Mage::getBaseUrl(); ?>" title="<?php echo $this->__('Customer View'); ?>" target="_blank" class="store-front"><?php echo $this->__('Customer View'); ?></a>
+            <div class="notifications">
+                <a href="<?php echo $this->getUrl('adminhtml/notification/index') ?>" class="notifications-icon" title="<?php echo $this->__('Notifications') ?>" data-toggle="dropdown">
+                    <span class="value">10</span>
+                </a>
+                <!-- @TODO: Replace with real data -->
+                <ul class="dropdown-menu">
+                    <li class="first new">
+                        <strong>Mike Lastnamelong</strong>
+                        <a href="#">Lorem ipsum dolor sit amet dolor adipiscing lollipop guild...</a>
+                        <time>2:52 pm</time>
+                        <button class="action-close">Close</button>
+                    </li>
+                    <li>
+                        <strong>Mike Lastnamelong</strong>
+                        <a href="#">Lorem ipsum dolor sit amet dolor adipiscing lollipop guild...</a>
+                        <time>2:52 pm</time>
+                        <button class="action-close">Close</button>
+                    </li>
+                    <li>
+                        <strong>Mike Lastnamelong</strong>
+                        <a href="#">Lorem ipsum dolor sit amet dolor adipiscing lollipop guild...</a>
+                        <time>2:52 pm</time>
+                        <button class="action-close">Close</button>
+                    </li>
+                    <li>
+                        <strong>Mike Lastnamelong</strong>
+                        <a href="#">Lorem ipsum dolor sit amet dolor adipiscing lollipop guild...</a>
+                        <time>2:52 pm</time>
+                        <button class="action-close">Close</button>
+                    </li>
+                    <li class="last">
+                        <a href="<?php echo $this->getUrl('adminhtml/notification/index') ?>" class="action-more"><?php echo $this->__('See All') ?></a>
+                    </li>
+                </ul>
+            </div>
+            <?php if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Adminhtml::global_search')): ?>
+            <div class="search">
+                <form action="" method="post" id="form-search">
+                    <label for="search-global">
+                        <input type="text" id="search-global" name="query">
+                    </label>
+                    <button type="submit" title="<?php echo $this->__('Search') ?>"><?php echo $this->__('Search') ?></button>
+                </form>
+                <div id="search-global-autocomplete" class="autocomplete-results"></div>
+            </div>
+            <script type="text/javascript">
+                (function($){
+                    $('#form-search')
+                        .off('submit')
+                        .on('submit.siteSearch',function(e){
+                            e.preventDefault();
+                            return false;
+                        });
+                })(jQuery);
+
+                new Ajax.Autocompleter(
+                    'search-global',
+                    'search-global-autocomplete',
+                    '<?php echo $this->getUrl('adminhtml/index/globalSearch') ?>',
+                    {
+                        parent: "form-search",
+                        paramName: "query",
+                        minChars: 2,
+                        updateElement: function(e) {
+                            return false;
+                        },
+                        evalJSON: 'force'
+                    }
+                )
+            </script>
+            <?php endif; ?>
+        </div>
+    </div>
+</header>

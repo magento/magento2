@@ -37,11 +37,6 @@ class Mage_Sitemap_Helper_DataTest extends PHPUnit_Framework_TestCase
         $this->_helper = Mage::helper('Mage_Sitemap_Helper_Data');
     }
 
-    protected function tearDown()
-    {
-        unset($this->_helper);
-    }
-
     /**
      * @magentoConfigFixture default_store sitemap/limit/max_lines 10
      */

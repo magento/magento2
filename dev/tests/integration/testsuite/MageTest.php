@@ -134,17 +134,6 @@ class MageTest extends PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppIsolation enabled
-     */
-    public function testReset()
-    {
-        Mage::setIsDeveloperMode(true);
-        $this->assertTrue(Mage::getIsDeveloperMode());
-        Mage::reset();
-        $this->assertFalse(Mage::getIsDeveloperMode());
-    }
-
-    /**
-     * @magentoAppIsolation enabled
      *
      */
     public function testGetDesign()

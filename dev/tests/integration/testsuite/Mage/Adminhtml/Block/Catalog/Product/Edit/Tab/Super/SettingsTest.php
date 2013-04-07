@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_SettingsTest extends PHPUnit_Framework_TestCase
+class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_SettingsTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @param null|int $productId
@@ -51,13 +51,15 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_SettingsTest extends P
 
         Mage::register('current_product', $product);
 
+        $context = Mage::getModel('Mage_Core_Block_Template_Context', array('urlBuilder' => $urlModel));
+        /** @var $layout Mage_Core_Model_Layout */
         $layout = Mage::getModel('Mage_Core_Model_Layout');
         /** @var $block Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings */
         $block = $layout->createBlock(
             'Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings',
             'block',
             array(
-               'urlBuilder' => $urlModel
+               'context' => $context
             )
         );
         $this->assertEquals('url', $block->getContinueUrl());

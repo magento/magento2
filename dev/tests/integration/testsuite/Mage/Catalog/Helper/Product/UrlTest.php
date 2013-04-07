@@ -45,11 +45,6 @@ class Mage_Catalog_Helper_Product_UrlTest extends PHPUnit_Framework_TestCase
         $this->_helper = Mage::helper('Mage_Catalog_Helper_Product_Url');
     }
 
-    protected function tearDown()
-    {
-        $this->_helper = null;
-    }
-
     public function testGetConvertTable()
     {
         $convertTable = $this->_helper->getConvertTable();

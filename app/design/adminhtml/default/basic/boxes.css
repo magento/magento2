@@ -349,6 +349,7 @@ table.form-edit                         { width:100%; }
 .entry-edit .entry-edit-head .tools     { float:right;}
 .entry-edit .entry-edit-head strong,
 .entry-edit .entry-edit-head a          { color:#fff; font-size:1em; line-height:18px; min-height:0; font-weight:bold}
+.entry-edit .entry-edit-head .entry-edit-head-link {height:41px; margin:-41px 0 0; position: absolute; visibility: hidden;}
 .entry-edit .content                    { margin-left:0 !important; padding:10px 15px; }
 .entry-edit fieldset li,
 .entry-edit .fieldset li                { margin:4px 0; }
@@ -889,9 +890,9 @@ div.autocomplete ul li { padding:.5em .7em; min-height:32px; cursor:pointer; tex
     z-index: 1;
 }
 .mage-suggest.category-select .mage-suggest-inner {background: transparent; position: static; border: none; border-radius: 0px; box-shadow: none;}
-.mage-suggest.category-select .category-selector-choices {background: #fff; border: 1px solid #ddd; border-radius: 5px; box-shadow: none; overflow: hidden;}
-.mage-suggest.category-select .category-selector-choices li {float: left; margin: 5px 0 5px 7px;}
-.mage-suggest.category-select .category-selector-search-field input {
+.mage-suggest.category-select .mage-suggest-choices {background: #fff; border: 1px solid #ddd; border-radius: 5px; box-shadow: none; overflow: hidden;}
+.mage-suggest.category-select .mage-suggest-choices li {float: left; margin: 5px 0 5px 7px;}
+.mage-suggest.category-select .mage-suggest-search-field input {
     background: none repeat scroll 0 0 transparent !important;
     border: 0 none;
     box-shadow: none;

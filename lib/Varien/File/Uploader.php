@@ -265,7 +265,11 @@ class Varien_File_Uploader
      */
     protected function _moveFile($tmpPath, $destPath)
     {
-        return move_uploaded_file($tmpPath, $destPath);
+        if (is_uploaded_file($tmpPath)) {
+            return move_uploaded_file($tmpPath, $destPath);
+        } elseif (is_file($tmpPath)) {
+            return rename($tmpPath, $destPath);
+        }
     }
 
     /**
@@ -500,14 +504,14 @@ class Varien_File_Uploader
      */
     private function _setUploadFileId($fileId)
     {
-        if (empty($_FILES)) {
-            throw new Exception('$_FILES array is empty');
-        }
-
         if (is_array($fileId)) {
             $this->_uploadType = self::MULTIPLE_STYLE;
             $this->_file = $fileId;
         } else {
+            if (empty($_FILES)) {
+                throw new Exception('$_FILES array is empty');
+            }
+
             preg_match("/^(.*?)\[(.*?)\]$/", $fileId, $file);
 
             if (count($file) > 0 && (count($file[0]) > 0) && (count($file[1]) > 0)) {

@@ -75,7 +75,7 @@ class Mage_Backend_Block_Widget_ButtonTest extends PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         $this->_blockMock =
-            $objectManagerHelper->getBlock('Mage_Backend_Block_Widget_Button', $arguments);
+            $objectManagerHelper->getObject('Mage_Backend_Block_Widget_Button', $arguments);
     }
 
     public function tearDown()

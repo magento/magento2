@@ -26,7 +26,7 @@
  */
 
 /**
- * Implementation of the @magentoAppIsolation DocBlock annotation
+ * Implementation of the @magentoAppIsolation DocBlock annotation - isolation of global application objects in memory
  */
 class Magento_Test_Annotation_AppIsolation
 {
@@ -41,11 +41,6 @@ class Magento_Test_Annotation_AppIsolation
      * @var Magento_Test_Application
      */
     private $_application;
-
-    /**
-     * @var Zend_Cache_Core
-     */
-    private $_cache;
 
     /**
      * Constructor
@@ -63,28 +58,9 @@ class Magento_Test_Annotation_AppIsolation
     protected function _isolateApp()
     {
         if ($this->_hasNonIsolatedTests) {
-            $this->_cleanupCache();
             $this->_application->reinitialize();
             $this->_hasNonIsolatedTests = false;
         }
-    }
-
-    /**
-     * Remove cache polluted by other tests excluding performance critical cache (configuration, ddl)
-     */
-    protected function _cleanupCache()
-    {
-        if (!$this->_cache) {
-            $this->_cache = Mage::app()->getCache();
-        }
-        $this->_cache->clean(
-            Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
-            array(Mage_Core_Model_Config::CACHE_TAG,
-                Varien_Db_Adapter_Pdo_Mysql::DDL_CACHE_TAG,
-                'DB_PDO_MSSQL_DDL', // Varien_Db_Adapter_Pdo_Mssql::DDL_CACHE_TAG
-                'DB_ORACLE_DDL', // Varien_Db_Adapter_Oracle::DDL_CACHE_TAG
-            )
-        );
     }
 
     /**

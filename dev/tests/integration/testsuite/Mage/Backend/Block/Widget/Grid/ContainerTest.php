@@ -21,17 +21,19 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Mage_Backend_Block_Widget_Grid_ContainerTest extends PHPUnit_Framework_TestCase
+class Mage_Backend_Block_Widget_Grid_ContainerTest extends Mage_Backend_Area_TestCase
 {
     public function testPseudoConstruct()
     {
         /** @var $block Mage_Backend_Block_Widget_Grid_Container */
         $block = Mage::app()->getLayout()->createBlock('Mage_Backend_Block_Widget_Grid_Container', '', array(
-            Mage_Backend_Block_Widget_Container::PARAM_CONTROLLER => 'widget',
-            Mage_Backend_Block_Widget_Container::PARAM_HEADER_TEXT => 'two',
-            Mage_Backend_Block_Widget_Grid_Container::PARAM_BLOCK_GROUP => 'Mage_Backend',
-            Mage_Backend_Block_Widget_Grid_Container::PARAM_BUTTON_NEW => 'four',
-            Mage_Backend_Block_Widget_Grid_Container::PARAM_BUTTON_BACK => 'five',
+            'data' => array(
+                Mage_Backend_Block_Widget_Container::PARAM_CONTROLLER => 'widget',
+                Mage_Backend_Block_Widget_Container::PARAM_HEADER_TEXT => 'two',
+                Mage_Backend_Block_Widget_Grid_Container::PARAM_BLOCK_GROUP => 'Mage_Backend',
+                Mage_Backend_Block_Widget_Grid_Container::PARAM_BUTTON_NEW => 'four',
+                Mage_Backend_Block_Widget_Grid_Container::PARAM_BUTTON_BACK => 'five',
+            )
         ));
         $this->assertStringEndsWith('widget', $block->getHeaderCssClass());
         $this->assertContains('two', $block->getHeaderText());

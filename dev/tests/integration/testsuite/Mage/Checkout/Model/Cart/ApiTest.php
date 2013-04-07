@@ -180,6 +180,7 @@ class Mage_Checkout_Model_Cart_ApiTest extends PHPUnit_Framework_TestCase
      * Test order creation with payment method
      *
      * @magentoConfigFixture current_store payment/ccsave/active 1
+     * @magentoConfigFixture current_store carriers/flatrate/active 1
      * @magentoDataFixture Mage/Checkout/_files/quote_with_ccsave_payment.php
      * @magentoAppIsolation enabled
      */

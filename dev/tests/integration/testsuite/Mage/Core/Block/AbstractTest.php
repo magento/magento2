@@ -44,38 +44,10 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         Mage::getDesign()->setDefaultDesignTheme();
-        $this->_block = $this->getMockForAbstractClass('Mage_Core_Block_Abstract',
-            $this->_getBlockDependencies()
-        );
-    }
-
-    /**
-     * Retrieve block dependencies
-     *
-     * @return array
-     */
-    protected function _getBlockDependencies()
-    {
-        return array(
-            'request'         => Mage::getObjectManager()->create('Mage_Core_Controller_Request_Http', array(), false),
-            'layout'          => Mage::getObjectManager()->create('Mage_Core_Model_Layout'),
-            'eventManager'    => Mage::getObjectManager()->create('Mage_Core_Model_Event_Manager', array(), false),
-            'urlBuilder'      => Mage::getObjectManager()->create('Mage_Core_Model_Url', array(), false),
-            'translator'      => Mage::getObjectManager()->create('Mage_Core_Model_Translate', array(), false),
-            'cache'           => Mage::getObjectManager()->create('Mage_Core_Model_Cache', array(), false),
-            'designPackage'   => Mage::getObjectManager()->get('Mage_Core_Model_Design_Package'),
-            'session'         => Mage::getObjectManager()->create('Mage_Core_Model_Session', array(), false),
-            'storeConfig'     => Mage::getObjectManager()->create('Mage_Core_Model_Store_Config', array(), false),
-            'frontController' => Mage::getObjectManager()->create('Mage_Core_Controller_Varien_Front', array(), false),
-            'helperFactory'   => Mage::getObjectManager()->create('Mage_Core_Model_Factory_Helper', array(), false),
-            'data'            => array('module_name' => 'Mage_Core')
-        );
-    }
-
-    protected function tearDown()
-    {
-        $this->_block = null;
-        $this->_layout = null;
+        $this->_block = $this->getMockForAbstractClass('Mage_Core_Block_Abstract', array(
+            Mage::getSingleton('Mage_Core_Block_Context'),
+            array('module_name' => 'Mage_Core')
+        ));
     }
 
     /**
@@ -509,10 +481,10 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
      *
      * @magentoAppIsolation enabled
      */
-    public function testGetViewUrl()
+    public function testGetViewFileUrl()
     {
         $this->assertStringStartsWith(
-            'http://localhost/pub/media/theme/static/frontend/', $this->_block->getViewFileUrl()
+            'http://localhost/pub/static/frontend/', $this->_block->getViewFileUrl()
         );
         $this->assertStringEndsWith('css/styles.css', $this->_block->getViewFileUrl('css/styles.css'));
 
@@ -710,7 +682,10 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
     ) {
         $mockClass = $type . 'Mock';
         if (!isset(self::$_mocks[$mockClass])) {
-            self::$_mocks[$mockClass] = $this->getMockForAbstractClass($type, $this->_getBlockDependencies(),
+            self::$_mocks[$mockClass] = $this->getMockForAbstractClass($type, array(
+                    Mage::getSingleton('Mage_Core_Block_Context'),
+                    array('module_name' => 'Mage_Core')
+                ),
                 $type . 'Mock'
             );
         }

@@ -119,7 +119,9 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
         );
 
         $configFactoryMock->expects($this->once())->method('create')
-            ->with(array('section' => 'section_code', 'website' => 'website_code', 'store' => 'store_code'))
+            ->with(array(
+                'data' => array('section' => 'section_code', 'website' => 'website_code', 'store' => 'store_code')
+            ))
             ->will($this->returnValue($this->_backendConfigMock));
 
         $this->_backendConfigMock->expects($this->once())->method('load')
@@ -142,7 +144,7 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
         );
 
         $helper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_object = $helper->getBlock('Mage_Backend_Block_System_Config_Form', $data);
+        $this->_object = $helper->getObject('Mage_Backend_Block_System_Config_Form', $data);
         $this->_object->setData('scope_id', 1);
     }
 

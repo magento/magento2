@@ -40,7 +40,7 @@ class Mage_Adminhtml_DashboardControllerTest extends PHPUnit_Framework_TestCase
         );
         $helper->expects($this->any())->method('getChartDataHash')->will($this->returnValue($fixture));
 
-        $objectManager = $this->getMock('Magento_ObjectManager_Zend', array('create', 'get'));
+        $objectManager = $this->getMock('Magento_ObjectManager');
         $objectManager->expects($this->at(0))
             ->method('get')
             ->with('Mage_Adminhtml_Helper_Dashboard_Data')
@@ -76,7 +76,7 @@ class Mage_Adminhtml_DashboardControllerTest extends PHPUnit_Framework_TestCase
         );
         $helper->expects($this->any())->method('getChartDataHash')->will($this->returnValue($fixture));
 
-        $objectManager = $this->getMock('Magento_ObjectManager_Zend', array('create', 'get'));
+        $objectManager = $this->getMock('Magento_ObjectManager');
         $objectManager->expects($this->at(0))
             ->method('get')
             ->with('Mage_Adminhtml_Helper_Dashboard_Data')
@@ -103,7 +103,7 @@ class Mage_Adminhtml_DashboardControllerTest extends PHPUnit_Framework_TestCase
      *
      * @param Mage_Core_Controller_Request_Http $request
      * @param Mage_Core_Controller_Response_Http|null $response
-     * @param Magento_ObjectManager_Zend|null $objectManager
+     * @param Magento_ObjectManager|null $objectManager
      * @return Mage_Adminhtml_DashboardController|PHPUnit_Framework_MockObject_MockObject
      */
     protected function _factory($request, $response = null, $objectManager = null)
@@ -114,7 +114,7 @@ class Mage_Adminhtml_DashboardControllerTest extends PHPUnit_Framework_TestCase
             $response->headersSentThrowsException = false;
         }
         if (!$objectManager) {
-            $objectManager = new Magento_ObjectManager_Zend;
+            $objectManager = new Magento_ObjectManager_ObjectManager();
         }
 
         $routerFactory  = $this->getMock('Mage_Core_Controller_Varien_Router_Factory', array(), array(), '', false);
@@ -130,4 +130,4 @@ class Mage_Adminhtml_DashboardControllerTest extends PHPUnit_Framework_TestCase
     }
 }
 
-require_once __DIR__ . '/../../../../../../app/code/core/Mage/Adminhtml/controllers/DashboardController.php';
+require_once __DIR__ . '/../../../../../../app/code/Mage/Adminhtml/controllers/DashboardController.php';

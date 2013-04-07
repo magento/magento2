@@ -26,6 +26,6 @@ class Magento_DomDocument_Factory
      */
     public function createDomDocument()
     {
-        return $this->_objectManager->create('DOMDocument', array(), false);
+        return $this->_objectManager->create('DOMDocument', array());
     }
 }

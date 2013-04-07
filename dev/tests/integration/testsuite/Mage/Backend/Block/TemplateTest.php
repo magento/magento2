@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Backend_Block_Template.
  */
-class Mage_Backend_Block_TemplateTest extends PHPUnit_Framework_TestCase
+class Mage_Backend_Block_TemplateTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @var Mage_Backend_Block_Template
@@ -37,12 +37,8 @@ class Mage_Backend_Block_TemplateTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        parent::setUp();
         $this->_block = Mage::app()->getLayout()->createBlock('Mage_Backend_Block_Template');
-    }
-
-    protected function tearDown()
-    {
-        $this->_block = null;
     }
 
     /**

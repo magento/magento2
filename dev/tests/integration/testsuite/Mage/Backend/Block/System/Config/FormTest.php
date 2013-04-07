@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCase
+class Mage_Backend_Block_System_Config_FormTest extends Mage_Backend_Area_TestCase
 {
     public function testDependenceHtml()
     {
@@ -133,20 +133,21 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
             Mage::PARAM_BAN_CACHE => true,
         ));
         Mage::getConfig()->setCurrentAreaCode('adminhtml');
+        Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::PART_CONFIG);
 
         $configMock = $this->getMock('Mage_Core_Model_Config_Modules_Reader', array(), array(), '', false, false);
         $configMock->expects($this->any())->method('getModuleConfigurationFiles')
             ->will($this->returnValue(array(__DIR__ . '/_files/test_section_config.xml')));
         $configMock->expects($this->any())->method('getModuleDir')
-            ->will($this->returnValue(BP . '/app/code/core/Mage/Backend/etc'));
+            ->will($this->returnValue(BP . '/app/code/Mage/Backend/etc'));
 
-        $structureReader = Mage::getSingleton('Mage_Backend_Model_Config_Structure_Reader',
-            array('moduleReader' => $configMock)
-        );
-        /** @var Mage_Backend_Model_Config_Structure $structure  */
-        $structure = Mage::getSingleton('Mage_Backend_Model_Config_Structure', array(
-            'structureReader' => $structureReader,
+        Mage::getObjectManager()->configure(array(
+            'Mage_Backend_Model_Config_Structure_Reader' => array(
+                'parameters' => array('moduleReader' => $configMock)
+            )
         ));
+        /** @var Mage_Backend_Model_Config_Structure $structure  */
+        $structure = Mage::getSingleton('Mage_Backend_Model_Config_Structure');
 
         /** @var Mage_Backend_Model_Config_Structure_Element_Section $section  */
         $section = $structure->getElement('test_section');

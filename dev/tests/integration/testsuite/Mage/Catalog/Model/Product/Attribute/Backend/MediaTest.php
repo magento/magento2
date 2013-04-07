@@ -79,11 +79,6 @@ class Mage_Catalog_Model_Product_Attribute_Backend_MediaTest extends PHPUnit_Fra
         );
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testAfterLoad()
     {
         $product = Mage::getModel('Mage_Catalog_Model_Product');

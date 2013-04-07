@@ -67,7 +67,7 @@ class Mage_Webapi_Model_Authorization_ConfigTest extends PHPUnit_Framework_TestC
             ->setMethods(array('getAclResources'))
             ->getMock();
 
-        $this->_model = $helper->getModel('Mage_Webapi_Model_Authorization_Config', array(
+        $this->_model = $helper->getObject('Mage_Webapi_Model_Authorization_Config', array(
             'moduleReader' => $this->_config,
             'readerFactory' => $this->_readerFactory
         ));

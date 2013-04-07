@@ -60,11 +60,6 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getModel('Mage_Core_Model_Design_Package');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * Emulate fixture design theme
      *
@@ -179,95 +174,6 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @magentoAppIsolation enabled
-     */
-    public function testGetOptimalCssUrls()
-    {
-        $this->_emulateFixtureTheme();
-        $expected = array(
-            'http://localhost/pub/media/theme/static/frontend/test/default/en_US/css/styles.css',
-            'http://localhost/pub/lib/mage/translate-inline.css',
-        );
-        $params = array(
-            'css/styles.css',
-            'mage/translate-inline.css',
-        );
-        $this->assertEquals($expected, $this->_model->getOptimalCssUrls($params));
-    }
-
-    /**
-     * @param array $files
-     * @param array $expectedFiles
-     * @dataProvider getOptimalCssUrlsMergedDataProvider
-     * @magentoConfigFixture current_store dev/css/merge_css_files 1
-     * @magentoAppIsolation enabled
-     */
-    public function testGetOptimalCssUrlsMerged($files, $expectedFiles)
-    {
-        $this->_emulateFixtureTheme();
-        $this->assertEquals($expectedFiles, $this->_model->getOptimalCssUrls($files));
-    }
-
-    public function getOptimalCssUrlsMergedDataProvider()
-    {
-        return array(
-            array(
-                array('css/styles.css', 'mage/calendar.css'),
-                array('http://localhost/pub/media/theme/static/_merged/dce6f2a22049cd09bbfbe344fc73b037.css')
-            ),
-            array(
-                array('css/styles.css'),
-                array('http://localhost/pub/media/theme/static/frontend/test/default/en_US/css/styles.css',)
-            ),
-        );
-    }
-
-    /**
-     * @magentoAppIsolation enabled
-     */
-    public function testGetOptimalJsUrls()
-    {
-        $this->_emulateFixtureTheme();
-        $expected = array(
-            'http://localhost/pub/media/theme/static/frontend/test/default/en_US/js/tabs.js',
-            'http://localhost/pub/lib/jquery/jquery-ui-timepicker-addon.js',
-            'http://localhost/pub/lib/mage/calendar.js',
-        );
-        $params = array(
-            'js/tabs.js',
-            'jquery/jquery-ui-timepicker-addon.js',
-            'mage/calendar.js',
-        );
-        $this->assertEquals($expected, $this->_model->getOptimalJsUrls($params));
-    }
-
-    /**
-     * @param array $files
-     * @param array $expectedFiles
-     * @dataProvider getOptimalJsUrlsMergedDataProvider
-     * @magentoConfigFixture current_store dev/js/merge_files 1
-     * @magentoAppIsolation enabled
-     */
-    public function testGetOptimalJsUrlsMerged($files, $expectedFiles)
-    {
-        $this->_emulateFixtureTheme();
-        $this->assertEquals($expectedFiles, $this->_model->getOptimalJsUrls($files));
-    }
-
-    public function getOptimalJsUrlsMergedDataProvider()
-    {
-        return array(
-            array(
-                array('js/tabs.js', 'mage/calendar.js', 'jquery/jquery-ui-timepicker-addon.js'),
-                array('http://localhost/pub/media/theme/static/_merged/51cf03344697f37c2511aa0ad3391d56.js',)
-            ),
-            array(
-                array('mage/calendar.js'),
-                array('http://localhost/pub/lib/mage/calendar.js',)
-            ),
-        );
-    }
 
     /**
      * @magentoAppIsolation enabled
@@ -281,7 +187,32 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param bool $devMode
+     * @magentoAppIsolation enabled
+     */
+    public function testGetConfigCustomized()
+    {
+        $this->_emulateFixtureTheme();
+        $theme = $this->_model->getDesignTheme();
+        $customConfigFile = $theme->getCustomViewConfigPath();
+        /** @var $filesystem Magento_Filesystem */
+        $filesystem = Mage::getObjectManager()->create('Magento_Filesystem');
+        $filesystem->setIsAllowCreateDirectories(true);
+        try {
+            $filesystem->write($customConfigFile, '<?xml version="1.0" encoding="UTF-8"?>
+                <view><vars  module="Namespace_Module"><var name="customVar">custom value</var></vars></view>');
+
+            $config = $this->_model->getViewConfig();
+            $this->assertInstanceOf('Magento_Config_View', $config);
+            $this->assertEquals(array('customVar' => 'custom value'), $config->getVars('Namespace_Module'));
+        } catch (Exception $e) {
+            $filesystem->delete($customConfigFile);
+            throw $e;
+        }
+        $filesystem->delete($customConfigFile);
+    }
+
+    /**
+     * @param string $appMode
      * @param string $file
      * @param string $result
      *
@@ -290,15 +221,18 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
      * @magentoConfigFixture current_store dev/static/sign 0
      * @magentoAppIsolation enabled
      */
-    public function testGetViewUrl($devMode, $file, $result)
+    public function testGetViewUrl($appMode, $file, $result)
     {
+        $currentAppMode = Mage::getObjectManager()->get('Mage_Core_Model_App_State')->getMode();
+        if ($currentAppMode != $appMode) {
+            $this->markTestSkipped("Implemented to be run in {$appMode} mode");
+        }
         $this->_emulateFixtureTheme();
-        Mage::setIsDeveloperMode($devMode);
         $this->assertEquals($this->_model->getViewFileUrl($file), $result);
     }
 
     /**
-     * @param bool $devMode
+     * @param string $appMode
      * @param string $file
      * @param string $result
      *
@@ -307,9 +241,12 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
      * @magentoConfigFixture current_store dev/static/sign 1
      * @magentoAppIsolation enabled
      */
-    public function testGetViewUrlSigned($devMode, $file, $result)
+    public function testGetViewUrlSigned($appMode, $file, $result)
     {
-        Mage::setIsDeveloperMode($devMode);
+        $currentAppMode = Mage::getObjectManager()->get('Mage_Core_Model_App_State')->getMode();
+        if ($currentAppMode != $appMode) {
+            $this->markTestSkipped("Implemented to be run in {$appMode} mode");
+        }
         $url = $this->_model->getViewFileUrl($file);
         $this->assertEquals(strpos($url, $result), 0);
         $lastModified = array();
@@ -327,39 +264,39 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                false,
+                Mage_Core_Model_App_State::MODE_DEFAULT,
                 'Mage_Page::favicon.ico',
-                'http://localhost/pub/media/theme/static/frontend/test/default/en_US/Mage_Page/favicon.ico',
+                'http://localhost/pub/static/frontend/test/default/en_US/Mage_Page/favicon.ico',
             ),
             array(
-                true,
+                Mage_Core_Model_App_State::MODE_DEVELOPER,
                 'prototype/prototype.js',
                 'http://localhost/pub/lib/prototype/prototype.js'
             ),
             array(
-                false,
+                Mage_Core_Model_App_State::MODE_DEFAULT,
                 'prototype/prototype.js',
                 'http://localhost/pub/lib/prototype/prototype.min.js'
             ),
             array(
-                true,
+                Mage_Core_Model_App_State::MODE_DEVELOPER,
                 'Mage_Page::menu.js',
-                'http://localhost/pub/media/theme/static/frontend/test/default/en_US/Mage_Page/menu.js'
+                'http://localhost/pub/static/frontend/test/default/en_US/Mage_Page/menu.js'
             ),
             array(
-                false,
+                Mage_Core_Model_App_State::MODE_DEFAULT,
                 'Mage_Page::menu.js',
-                'http://localhost/pub/media/theme/static/frontend/test/default/en_US/Mage_Page/menu.js'
+                'http://localhost/pub/static/frontend/test/default/en_US/Mage_Page/menu.js'
             ),
             array(
-                false,
+                Mage_Core_Model_App_State::MODE_DEFAULT,
                 'Mage_Catalog::widgets.css',
-                'http://localhost/pub/media/theme/static/frontend/test/default/en_US/Mage_Catalog/widgets.css'
+                'http://localhost/pub/static/frontend/test/default/en_US/Mage_Catalog/widgets.css'
             ),
             array(
-                true,
+                Mage_Core_Model_App_State::MODE_DEVELOPER,
                 'Mage_Catalog::widgets.css',
-                'http://localhost/pub/media/theme/static/frontend/test/default/en_US/Mage_Catalog/widgets.css'
+                'http://localhost/pub/static/frontend/test/default/en_US/Mage_Catalog/widgets.css'
             ),
         );
     }

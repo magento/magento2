@@ -45,11 +45,6 @@ class Mage_Catalog_Model_Layer_Filter_ItemTest extends PHPUnit_Framework_TestCas
         ));
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testGetFilter()
     {
         $filter = $this->_model->getFilter();
@@ -72,12 +67,9 @@ class Mage_Catalog_Model_Layer_Filter_ItemTest extends PHPUnit_Framework_TestCas
         $action = Mage::getModel(
             'Mage_Core_Controller_Front_Action',
             array(
-                new Magento_Test_Request(),
-                new Magento_Test_Response(),
-                Mage::getObjectManager(),
-                Mage::getObjectManager()->get('Mage_Core_Controller_Varien_Front'),
-                Mage::getObjectManager()->get('Mage_Core_Model_Layout_Factory'),
-                'frontend'
+                'request' => new Magento_Test_Request(),
+                'response' => new Magento_Test_Response(),
+                'areaCode' => 'frontend',
             )
         );
         Mage::app()->getFrontController()->setAction($action); // done in action's constructor

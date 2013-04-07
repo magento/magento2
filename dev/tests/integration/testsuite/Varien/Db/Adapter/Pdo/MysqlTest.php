@@ -37,11 +37,6 @@ class Varien_Db_Adapter_Pdo_MysqlTest extends PHPUnit_Framework_TestCase
      */
     protected $_dbAdapter = null;
 
-    protected function tearDown()
-    {
-        $this->_dbAdapter = null;
-    }
-
     /**
      * Test lost connection re-initializing
      *

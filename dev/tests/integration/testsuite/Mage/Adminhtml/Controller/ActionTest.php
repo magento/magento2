@@ -47,11 +47,6 @@ class Mage_Adminhtml_Controller_ActionTest extends Magento_Test_TestCase_Control
         );
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testConstruct()
     {
         $this->assertInstanceOf('Mage_Backend_Controller_ActionAbstract', $this->_model);

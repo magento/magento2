@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Adminhtml_Block_TemplateTest extends PHPUnit_Framework_TestCase
+class Mage_Adminhtml_Block_TemplateTest extends Mage_Backend_Area_TestCase
 {
     public function testConstructor()
     {

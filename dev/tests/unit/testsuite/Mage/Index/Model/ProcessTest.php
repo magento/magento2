@@ -102,11 +102,6 @@ class Mage_Index_Model_ProcessTest extends PHPUnit_Framework_TestCase
      */
     protected function _prepareIndexProcess()
     {
-        /** @var $eventDispatcher Mage_Core_Model_Event_Manager */
-        $eventDispatcher = $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false);
-        /** @var $cacheManager Mage_Core_Model_Cache */
-        $cacheManager = $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false);
-
         $lockStorage = $this->getMock('Mage_Index_Model_Lock_Storage', array('getFile'), array(), '', false);
         $lockStorage->expects($this->once())
             ->method('getFile')
@@ -118,14 +113,12 @@ class Mage_Index_Model_ProcessTest extends PHPUnit_Framework_TestCase
             array(), '', false, false, true, array('getIdFieldName')
         );
         $resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('process_id'));
-        $this->_indexProcess = new Mage_Index_Model_Process(
-            $eventDispatcher,
-            $cacheManager,
-            $lockStorage,
-            $resource,
-            null,
-            array('process_id' => self::PROCESS_ID)
-        );
+        $helper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_indexProcess = $helper->getObject('Mage_Index_Model_Process', array(
+            'lockStorage' => $lockStorage,
+            'resource' => $resource,
+            'data' => array('process_id' => self::PROCESS_ID)
+        ));
     }
 
     public function testUnlock()

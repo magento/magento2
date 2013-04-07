@@ -69,9 +69,9 @@ class Mage_Captcha_Helper_DataTest extends PHPUnit_Framework_TestCase
 
         $filesystem = $this->getMock('Magento_Filesystem', array(), array(), '', false);
 
-        $translator = $this->getMock('Mage_Core_Model_Translate', array(), array(), '', false);
+        $context = $this->getMock('Mage_Core_Helper_Context', array(), array(), '', false);
 
-        return new Mage_Captcha_Helper_Data($this->_dirMock, $app, $config, $filesystem, $translator);
+        return new Mage_Captcha_Helper_Data($context, $this->_dirMock, $app, $config, $filesystem);
     }
 
     /**
@@ -89,7 +89,7 @@ class Mage_Captcha_Helper_DataTest extends PHPUnit_Framework_TestCase
             ->with('customer/captcha/type')
             ->will($this->returnValue('zend'));
 
-        $objectManager = $this->getMock('Magento_ObjectManager_Zend', array(), array(), '', false);
+        $objectManager = $this->getMock('Magento_ObjectManager');
         $config = $this->_getConfigStub();
         $config->expects($this->once())
             ->method('getModelInstance')

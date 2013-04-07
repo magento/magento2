@@ -49,7 +49,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_ButtonsTest extends PHPUn
             'urlBuilder' => $this->_urlBuilder
         );
 
-        $this->_block = $helper->getBlock('Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_Buttons', $arguments);
+        $this->_block = $helper->getObject('Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_Buttons', $arguments);
     }
 
     public function testGetThemeId()
@@ -82,7 +82,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_ButtonsTest extends PHPUn
 
     public function testGetNavigationModeUrl()
     {
-        $this->_block->setThemeId(2);
+        $this->_block->setVirtualThemeId(2);
         $mode = Mage_DesignEditor_Model_State::MODE_NAVIGATION;
         $this->_urlBuilder->expects($this->once())
             ->method('getUrl')
@@ -96,7 +96,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_ButtonsTest extends PHPUn
 
     public function testGetDesignModeUrl()
     {
-        $this->_block->setThemeId(3);
+        $this->_block->setVirtualThemeId(3);
         $mode = Mage_DesignEditor_Model_State::MODE_DESIGN;
         $this->_urlBuilder->expects($this->once())
             ->method('getUrl')

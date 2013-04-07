@@ -27,6 +27,11 @@
 
 class Mage_Rss_OrderControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {
+    protected function setUp()
+    {
+        parent::setUp();
+        Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::PART_CONFIG);
+    }
     /**
      * Reuse URI for "new" action
      */

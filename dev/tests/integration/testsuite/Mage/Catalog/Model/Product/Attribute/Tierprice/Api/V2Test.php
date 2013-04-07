@@ -40,11 +40,6 @@ class Mage_Catalog_Model_Product_Attribute_Tierprice_Api_V2Test extends PHPUnit_
         $this->_model = Mage::getModel('Mage_Catalog_Model_Product_Attribute_Tierprice_Api_V2');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * @expectedException Mage_Api_Exception
      */

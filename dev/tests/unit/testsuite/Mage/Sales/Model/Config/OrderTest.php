@@ -32,7 +32,9 @@ class Mage_Sales_Model_Config_OrderedTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSortedCollectorCodes($totalConfig, $expectedResult)
     {
-        $mock = $this->getMockForAbstractClass('Mage_Sales_Model_Config_Ordered');
+        $mock = $this->getMockForAbstractClass('Mage_Sales_Model_Config_Ordered', array(
+            $this->getMock('Mage_Core_Model_Cache_Type_Config', array(), array(), '', false)
+        ));
 
         $method = new ReflectionMethod($mock, '_getSortedCollectorCodes');
         $method->setAccessible(true);

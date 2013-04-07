@@ -74,12 +74,6 @@ class Mage_Catalog_Block_Product_AbstractTest extends PHPUnit_Framework_TestCase
         $this->_block->setProduct($this->_product);
     }
 
-    protected function tearDown()
-    {
-        $this->_block = null;
-        $this->_product = null;
-    }
-
     public function testGetAddToCartUrl()
     {
         $url = $this->_block->getAddToCartUrl($this->_product);

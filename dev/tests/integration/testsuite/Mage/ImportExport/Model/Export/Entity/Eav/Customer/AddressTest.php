@@ -55,14 +55,6 @@ class Mage_ImportExport_Model_Export_Entity_Eav_Customer_AddressTest extends PHP
         }
     }
 
-    protected function tearDown()
-    {
-        unset($this->_model);
-        unset($this->_websites);
-
-        parent::tearDown();
-    }
-
     /**
      * Test export method
      */

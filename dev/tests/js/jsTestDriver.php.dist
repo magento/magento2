@@ -34,15 +34,15 @@ return array(
         '/pub/lib/mage/translate.js',
         '/pub/lib/jquery/jquery-ui-timepicker-addon.js',
         '/pub/lib/jquery/jquery.tmpl.min.js',
-        '/app/code/core/Mage/DesignEditor/view/adminhtml/js/base.js',
-        '/app/code/core/Mage/DesignEditor/view/adminhtml/js/design_editor.js',
-        '/app/code/core/Mage/DesignEditor/view/frontend/js/change/layout.js',
-        '/app/code/core/Mage/DesignEditor/view/frontend/js/design_editor.js',
-        '/app/code/core/Mage/DesignEditor/view/frontend/js/form_deactivation.js',
-        '/app/code/core/Mage/DesignEditor/view/adminhtml/js/infinitescroll.js',
+        '/app/code/Mage/DesignEditor/view/adminhtml/js/base.js',
+        '/app/code/Mage/DesignEditor/view/adminhtml/js/design_editor.js',
+        '/app/code/Mage/DesignEditor/view/frontend/js/change/layout.js',
+        '/app/code/Mage/DesignEditor/view/frontend/js/design_editor.js',
+        '/app/code/Mage/DesignEditor/view/frontend/js/form_deactivation.js',
+        '/app/code/Mage/DesignEditor/view/adminhtml/js/infinitescroll.js',
         '/pub/lib/jquery/jstree/jquery.jstree.js',
         '/pub/lib/jquery/slimScroll/slimScroll.min.js',
-        '/app/code/core/Mage/DesignEditor/view/frontend/css/styles.css',
+        '/app/code/Mage/DesignEditor/view/frontend/css/styles.css',
         '/pub/lib/mage/cookies.js',
         '/pub/lib/mage/calendar.js',
         '/pub/lib/mage/loader.js',
@@ -52,7 +52,9 @@ return array(
         '/pub/lib/mage/backend/button.js',
         '/pub/lib/mage/backend/tabs.js',
         '/pub/lib/mage/validation.js',
-        '/pub/lib/mage/validation/validation.js'
+        '/pub/lib/mage/validation/validation.js',
+        '/pub/lib/mage/backend/suggest.js'
+        '/pub/lib/mage/backend/tree-suggest.js'
     ),
     'test' => array('/dev/tests/js/testsuite'),
     'JsTestDriver' => '{{path_to_jstestdriver_jar}}'

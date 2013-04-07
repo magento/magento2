@@ -49,11 +49,6 @@ class Mage_Core_Model_Layout_MergeTest extends PHPUnit_Framework_TestCase
         ));
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testAddUpdate()
     {
         $this->assertEmpty($this->_model->asArray());
@@ -310,7 +305,7 @@ class Mage_Core_Model_Layout_MergeTest extends PHPUnit_Framework_TestCase
             </page>
         ');
         $expectedXmlStr = $this->_readLayoutFileContents(
-            __DIR__ . '/../../../../../../../../app/code/core/Mage/Page/view/frontend/layout.xml'
+            __DIR__ . '/../../../../../../../../app/code/Mage/Page/view/frontend/layout.xml'
         );
         $actualXml = $this->_model->getFileLayoutUpdatesXml();
         $this->assertXmlStringEqualsXmlString($expectedXmlStr, $actualXml->asNiceXml());

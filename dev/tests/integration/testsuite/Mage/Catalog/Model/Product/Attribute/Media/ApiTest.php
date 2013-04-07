@@ -53,11 +53,6 @@ class Mage_Catalog_Model_Product_Attribute_Media_ApiTest extends PHPUnit_Framewo
         $this->_model = Mage::getModel('Mage_Catalog_Model_Product_Attribute_Media_Api');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public static function setUpBeforeClass()
     {
         self::$_filesDir = realpath(__DIR__ . '/../../../../_files');

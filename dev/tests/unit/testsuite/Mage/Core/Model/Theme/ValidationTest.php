@@ -69,9 +69,12 @@ class Mage_Core_Model_Theme_ValidationTest extends PHPUnit_Framework_TestCase
         $themeMock = new Varien_Object();
         $themeMock->setData($this->_getThemeInvalidData());
 
+        /** @var $helper Mage_Core_Helper_Data */
+        $helper = $this->getMockBuilder('Mage_Core_Helper_Data')->disableOriginalConstructor()->getMock();
+
         /** @var $validatorMock Mage_Core_Model_Theme_Validator */
         $validatorMock = $this->getMock(
-            'Mage_Core_Model_Theme_Validator', array('_setThemeValidators'), array(), '', true
+            'Mage_Core_Model_Theme_Validator', array('_setThemeValidators'), array($helper), '', true
         );
 
         $codeValidators = array(

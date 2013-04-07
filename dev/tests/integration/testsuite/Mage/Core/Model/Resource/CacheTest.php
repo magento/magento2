@@ -37,11 +37,6 @@ class Mage_Core_Model_Resource_CacheTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getResourceModel('Mage_Core_Model_Resource_Cache');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * @magentoConfigFixture global/resources/db/table_prefix prefix_
      */

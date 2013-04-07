@@ -43,11 +43,6 @@ class Mage_Webapi_Model_Resource_Acl_RuleTest extends PHPUnit_Framework_TestCase
         $this->_ruleResource = $this->_objectManager->get('Mage_Webapi_Model_Resource_Acl_Rule');
     }
 
-    protected function tearDown()
-    {
-        unset($this->_objectManager, $this->_ruleResource);
-    }
-
     /**
      * Test for Mage_Webapi_Model_Resource_Acl_Role::getRolesIds().
      */

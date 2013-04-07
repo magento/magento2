@@ -118,11 +118,11 @@ class Mage_Core_Model_Theme_Customization_Files_JsTest extends PHPUnit_Framework
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|Mage_Core_Model_Theme_Files
+     * @return PHPUnit_Framework_MockObject_MockObject|Mage_Core_Model_Theme_File
      */
     protected function _getMockThemeFile()
     {
-        $filesModel = $this->getMock('Mage_Core_Model_Theme_Files', array(
+        $filesModel = $this->getMock('Mage_Core_Model_Theme_File', array(
             'load',
             'getId',
             'getThemeId',
@@ -148,8 +148,8 @@ class Mage_Core_Model_Theme_Customization_Files_JsTest extends PHPUnit_Framework
         $themeModel = $this->_getMockThemeModel($themeId);
 
         // 3. Get files collection mock
-        /** @var $collection Mage_Core_Model_Resource_Theme_Files_Collection */
-        $collection = $this->getMock('Mage_Core_Model_Resource_Theme_Files_Collection',
+        /** @var $collection Mage_Core_Model_Resource_Theme_File_Collection */
+        $collection = $this->getMock('Mage_Core_Model_Resource_Theme_File_Collection',
             array('addFilter', 'setDefaultOrder', 'load', 'save', 'getSize'), array(), '', false
         );
         $this->_addItems($collection, $items);
@@ -162,8 +162,8 @@ class Mage_Core_Model_Theme_Customization_Files_JsTest extends PHPUnit_Framework
             ->will($this->returnSelf());
 
         // 4. Get files model (storage) mock
-        /** @var $themeFiles Mage_Core_Model_Theme_Files */
-        $themeFiles = $this->getMock('Mage_Core_Model_Theme_Files', array('getCollection'), array(), '', false);
+        /** @var $themeFiles Mage_Core_Model_Theme_File */
+        $themeFiles = $this->getMock('Mage_Core_Model_Theme_File', array('getCollection'), array(), '', false);
         $themeFiles->expects($this->any())
             ->method('getCollection')
             ->will($this->returnValue($collection));
@@ -249,7 +249,7 @@ class Mage_Core_Model_Theme_Customization_Files_JsTest extends PHPUnit_Framework
     /**
      * Set items to files collection
      *
-     * @param Mage_Core_Model_Resource_Theme_Files_Collection $collection
+     * @param Mage_Core_Model_Resource_Theme_File_Collection $collection
      * @param array $items
      */
     protected function _addItems($collection, array $items)

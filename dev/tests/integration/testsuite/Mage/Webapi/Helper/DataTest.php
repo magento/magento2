@@ -42,41 +42,24 @@ class Mage_Webapi_Helper_DataTest extends PHPUnit_Framework_TestCase
     protected $_helper;
 
     /** @var Mage_Webapi_Model_ConfigAbstract */
-    protected static $_apiConfig;
+    protected $_apiConfig;
 
     protected function setUp()
     {
         $this->_helper = Mage::getObjectManager()->get('Mage_Webapi_Helper_Data');
-        parent::setUp();
-    }
-
-    /**
-     * @return Mage_Webapi_Model_ConfigAbstract
-     */
-    protected function _getApiConfig()
-    {
-        if (!self::$_apiConfig) {
-            $objectManager = Mage::getObjectManager();
-            /** Prepare arguments for SUT constructor. */
-            $pathToFixtures = __DIR__ . '/../_files/autodiscovery';
-            /** @var Mage_Webapi_Model_Config_Reader_Soap $reader */
-            $reader = $objectManager->get(
-                'Mage_Webapi_Model_Config_Reader_Soap',
-                array(
-                    'cache' => $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false)
-                )
-            );
-            $reader->setDirectoryScanner(new Zend\Code\Scanner\DirectoryScanner($pathToFixtures));
-            /** Initialize SUT. */
-            self::$_apiConfig = $objectManager->create('Mage_Webapi_Model_Config_Soap', array('reader' => $reader));
-        }
-        return self::$_apiConfig;
-    }
-
-    public static function tearDownAfterClass()
-    {
-        self::$_apiConfig = null;
-        parent::tearDownAfterClass();
+        $objectManager = Mage::getObjectManager();
+        /** Prepare arguments for SUT constructor. */
+        $pathToFixtures = __DIR__ . '/../_files/autodiscovery';
+        /** @var Mage_Webapi_Model_Config_Reader_Soap $reader */
+        $reader = $objectManager->create(
+            'Mage_Webapi_Model_Config_Reader_Soap',
+            array(
+                'cache' => $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false)
+            )
+        );
+        $reader->setDirectoryScanner(new Zend\Code\Scanner\DirectoryScanner($pathToFixtures));
+        /** Initialize SUT. */
+        $this->_apiConfig = $objectManager->create('Mage_Webapi_Model_Config_Soap', array('reader' => $reader));
     }
 
     /**
@@ -92,7 +75,7 @@ class Mage_Webapi_Helper_DataTest extends PHPUnit_Framework_TestCase
         $requestData,
         $expectedResult = array()
     ) {
-        $actualResult = $this->_helper->prepareMethodParams($class, $methodName, $requestData, $this->_getApiConfig());
+        $actualResult = $this->_helper->prepareMethodParams($class, $methodName, $requestData, $this->_apiConfig);
         $this->assertEquals($expectedResult, $actualResult, "The array of arguments was prepared incorrectly.");
     }
 
@@ -183,7 +166,7 @@ class Mage_Webapi_Helper_DataTest extends PHPUnit_Framework_TestCase
             'Vendor_Module_Controller_Webapi_Resource_Subresource',
             'createV1',
             array('param1' => 1, 'param2' => 2, 'param3' => 'not_array', 'param4' => 4),
-            $this->_getApiConfig()
+            $this->_apiConfig
         );
     }
 
@@ -201,7 +184,7 @@ class Mage_Webapi_Helper_DataTest extends PHPUnit_Framework_TestCase
             'Vendor_Module_Controller_Webapi_Resource_Subresource',
             'updateV1',
             array('param1' => 1, 'param2' => 'Non array complex data'),
-            $this->_getApiConfig()
+            $this->_apiConfig
         );
     }
 
@@ -221,7 +204,7 @@ class Mage_Webapi_Helper_DataTest extends PHPUnit_Framework_TestCase
         $exceptionMessage
     ) {
         $this->setExpectedException($exceptionClass, $exceptionMessage);
-        $this->_helper->prepareMethodParams($class, $methodName, $requestData, $this->_getApiConfig());
+        $this->_helper->prepareMethodParams($class, $methodName, $requestData, $this->_apiConfig);
     }
 
     public static function dataProviderForTestPrepareMethodParamsNegative()

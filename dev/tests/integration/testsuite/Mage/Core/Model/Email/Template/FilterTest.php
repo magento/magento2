@@ -37,11 +37,6 @@ class Mage_Core_Model_Email_Template_FilterTest extends PHPUnit_Framework_TestCa
         $this->_model = Mage::getModel('Mage_Core_Model_Email_Template_Filter');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * Isolation level has been raised in order to flush themes configuration in-memory cache
      */
@@ -121,8 +116,8 @@ class Mage_Core_Model_Email_Template_FilterTest extends PHPUnit_Framework_TestCa
         $themeId = $collection->getThemeByFullPath('frontend/test/default')->getId();
         Mage::app()->getStore()->setConfig(Mage_Core_Model_Design_Package::XML_PATH_THEME_ID, $themeId);
 
-        /** @var $layout Mage_Core_Model_Layout */
         $objectManager = Mage::getObjectManager();
+        /** @var $layout Mage_Core_Model_Layout */
         $layout = $objectManager->create('Mage_Core_Model_Layout', array('area' => $area));
         $objectManager->addSharedInstance($layout, 'Mage_Core_Model_Layout');
         $this->assertEquals($area, $layout->getArea());

@@ -166,7 +166,7 @@ class Utility_Classes
     public static function collectModuleClasses($subTypePattern = '[A-Za-z]+')
     {
         $pattern = '/^' . preg_quote(Utility_Files::init()->getPathToSource(), '/')
-            . '\/app\/code\/[a-z]+\/([A-Za-z]+)\/([A-Za-z]+)\/(' . $subTypePattern . '\/.+)\.php$/';
+            . '\/app\/code\/([A-Za-z]+)\/([A-Za-z]+)\/(' . $subTypePattern . '\/.+)\.php$/';
         $result = array();
         foreach (Utility_Files::init()->getPhpFiles(true, false, false, false) as $file) {
             if (preg_match($pattern, $file, $matches)) {

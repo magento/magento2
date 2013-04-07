@@ -32,23 +32,13 @@ class Mage_Core_Block_TemplateTest extends PHPUnit_Framework_TestCase
         $design = $this->getMock('Mage_Core_Model_Design_Package', array('getFilename'), array(), '', false);
         $template = 'fixture';
         $area = 'areaFixture';
-        $block = new Mage_Core_Block_Template(
-            $this->getMock('Mage_Core_Controller_Request_Http', array(), array(), '', false, false),
-            $this->getMock('Mage_Core_Model_Layout', array(), array(), '', false),
-            $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false, false),
-            $this->getMock('Mage_Core_Model_Url', array(), array(), '', false, false),
-            $this->getMock('Mage_Core_Model_Translate', array(), array($design), '', false, false),
-            $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false),
-            $design,
-            $this->getMock('Mage_Core_Model_Session', array(), array(), '', false, false),
-            $this->getMock('Mage_Core_Model_Store_Config', array(), array(), '', false, false),
-            $this->getMock('Mage_Core_Controller_Varien_Front', array(), array(), '', false, false),
-            $this->getMock('Mage_Core_Model_Factory_Helper', array(), array(), '', false, false),
-            $this->getMock('Mage_Core_Model_Dir', array(), array(), '', false),
-            $this->getMock('Mage_Core_Model_Logger', array(), array(), '', false),
-            $this->getMock('Magento_Filesystem', array(), array(), '', false),
-            array('template' => $template, 'area' => $area)
+        $arguments = array(
+            'designPackage' => $design,
+            'data' => array('template' => $template, 'area' => $area),
         );
+        $helper = new Magento_Test_Helper_ObjectManager($this);
+
+        $block = $helper->getObject('Mage_Core_Block_Template', $arguments);
 
         $params = array('module' => 'Mage_Core', 'area' => $area);
         $design->expects($this->once())->method('getFilename')->with($template, $params);
@@ -71,27 +61,36 @@ class Mage_Core_Block_TemplateTest extends PHPUnit_Framework_TestCase
         $layout = $this->getMock('Mage_Core_Model_Layout', array('isDirectOutput'), array(), '', false);
         $filesystem = new Magento_Filesystem(new Magento_Filesystem_Adapter_Local);
         $design = $this->getMock('Mage_Core_Model_Design_Package', array(), array(), '', false);
-        $block = $this->getMock('Mage_Core_Block_Template', array('getShowTemplateHints'), array(
-            $this->getMock('Mage_Core_Controller_Request_Http'),
-            $layout,
-            $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false, false),
-            $this->getMock('Mage_Core_Model_Url', array(), array(), '', false, false),
-            $this->getMock('Mage_Core_Model_Translate', array(),
-                array(
-                    $design,
-                    $this->getMock('Mage_Core_Model_Locale_Hierarchy_Loader', array(), array(), '', false, false)
-                )
-            ),
-            $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false),
-            $this->getMock('Mage_Core_Model_Design_Package', array(), array(), '', false),
-            $this->getMock('Mage_Core_Model_Session', array(), array(), '', false, false),
-            $this->getMock('Mage_Core_Model_Store_Config', array(), array(), '', false, false),
-            $this->getMock('Mage_Core_Controller_Varien_Front', array(), array(), '', false, false),
-            $this->getMock('Mage_Core_Model_Factory_Helper', array(), array(), '', false, false),
-            $dirMock,
-            $this->getMock('Mage_Core_Model_Logger', array('log'), array(), '', false),
-            $filesystem
-        ));
+        $translator = $this->getMock('Mage_Core_Model_Translate', array(),
+            array(
+                $design,
+                $this->getMock('Mage_Core_Model_Locale_Hierarchy_Loader', array(), array(), '', false, false)
+            )
+        );
+        $helper = new Magento_Test_Helper_ObjectManager($this);
+
+        $objectManagerMock = $this->getMock('Magento_ObjectManager', array('get', 'create', 'configure'));
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with('Mage_Core_Block_Template_Engine_Php')
+            ->will($this->returnValue(new Mage_Core_Block_Template_Engine_Php()));
+        $engineFactory = new Mage_Core_Block_Template_Engine_Factory($objectManagerMock);
+
+        $arguments = array(
+            'designPackage' => $design,
+            'layout'        => $layout,
+            'dirs'          => $dirMock,
+            'filesystem'    => $filesystem,
+            'translator'    => $translator,
+            'engineFactory' => $engineFactory,
+        );
+
+
+        $block = $this->getMock(
+            'Mage_Core_Block_Template',
+            array('getShowTemplateHints'),
+            $helper->getConstructArguments('Mage_Core_Block_Template', $arguments)
+        );
         $layout->expects($this->once())->method('isDirectOutput')->will($this->returnValue(false));
 
         $this->assertSame($block, $block->assign(array('varOne' => 'value1', 'varTwo' => 'value2')));

@@ -46,24 +46,6 @@ class Mage_Webapi_Controller_ResponseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test setMimeType method.
-     */
-    public function testSetMimeType()
-    {
-        $this->markTestIncomplete('Fix test to work with output_buffering option.');
-        $expectedHeader = array(
-            array(
-                'name' => 'Content-Type',
-                'value' => 'application/xml; charset=' . Mage_Webapi_Controller_Response::RESPONSE_CHARSET,
-                'replace' => true,
-            ),
-        );
-        $actualHeader = $this->_response->setMimeType('application/xml')->getHeaders();
-        /** Assert that headers are equal */
-        $this->assertEquals($expectedHeader, $actualHeader, 'Mime type is not set.');
-    }
-
-    /**
      * Test addMessage, hasMessage, getMessage, and clearMessages methods.
      */
     public function testMessagesCrud()

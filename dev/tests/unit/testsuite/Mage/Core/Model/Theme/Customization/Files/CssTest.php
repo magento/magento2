@@ -55,8 +55,8 @@ class Mage_Core_Model_Theme_Customization_Files_CssTest extends PHPUnit_Framewor
             ->method('addData')
             ->with(array(
                 'theme_id'  => $themeId,
-                'file_path' => Mage_Core_Model_Theme_Customization_Files_Css::FILE_PATH,
-                'file_type' => Mage_Core_Model_Theme_Files::TYPE_CSS,
+                'file_path' => 'css/custom.css',
+                'file_type' => Mage_Core_Model_Theme_File::TYPE_CSS,
                 'content'   => $cssContent
             ))
             ->will($this->returnValue($cssFile));
@@ -71,19 +71,19 @@ class Mage_Core_Model_Theme_Customization_Files_CssTest extends PHPUnit_Framewor
         $themeModel = $this->_getMockThemeModel($themeId);
 
         $modelCssFile = new Mage_Core_Model_Theme_Customization_Files_Css($filesModel);
-        $modelCssFile->setDataForSave($cssContent);
+        $modelCssFile->setDataForSave(array(Mage_Core_Model_Theme_Customization_Files_Css::CUSTOM_CSS => $cssContent));
         $modelCssFile->saveData($themeModel);
     }
 
     /**
      * @param int $themeId
-     * @param Mage_Core_Model_Theme_Files $cssFile
-     * @return Mage_Core_Model_Resource_Theme_Files_Collection
+     * @param Mage_Core_Model_Theme_File $cssFile
+     * @return Mage_Core_Model_Resource_Theme_File_Collection
      */
     protected function _getMockFilesCollection($themeId, $cssFile)
     {
         $filesCollection = $this->getMock(
-            'Mage_Core_Model_Resource_Theme_Files_Collection', array('addFilter', 'getFirstItem'), array(), '', false
+            'Mage_Core_Model_Resource_Theme_File_Collection', array('addFilter', 'getFirstItem'), array(), '', false
         );
         $filesCollection
             ->expects($this->at(0))
@@ -93,7 +93,12 @@ class Mage_Core_Model_Theme_Customization_Files_CssTest extends PHPUnit_Framewor
         $filesCollection
             ->expects($this->at(1))
             ->method('addFilter')
-            ->with('file_type', Mage_Core_Model_Theme_Files::TYPE_CSS)
+            ->with('file_type', Mage_Core_Model_Theme_File::TYPE_CSS)
+            ->will($this->returnValue($filesCollection));
+        $filesCollection
+            ->expects($this->at(2))
+            ->method('addFilter')
+            ->with('file_path', 'css/custom.css')
             ->will($this->returnValue($filesCollection));
         $filesCollection
             ->expects($this->once())
@@ -117,11 +122,11 @@ class Mage_Core_Model_Theme_Customization_Files_CssTest extends PHPUnit_Framewor
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|Mage_Core_Model_Theme_Files
+     * @return PHPUnit_Framework_MockObject_MockObject|Mage_Core_Model_Theme_File
      */
     protected function _getMockThemeFile()
     {
-        $filesModel = $this->getMock('Mage_Core_Model_Theme_Files', array(
+        $filesModel = $this->getMock('Mage_Core_Model_Theme_File', array(
             'addData',
             'save',
             'getCollection'

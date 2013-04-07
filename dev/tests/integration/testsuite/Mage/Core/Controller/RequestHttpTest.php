@@ -37,11 +37,6 @@ class Mage_Core_Controller_RequestHttpTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getModel('Mage_Core_Controller_Request_Http');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testGetOriginalPathInfo()
     {
         $this->assertEmpty($this->_model->getOriginalPathInfo());

@@ -145,7 +145,6 @@ Compare products page
         </reference>
         <reference name="head">
             <action method="addJs"><file>scriptaculous/scriptaculous.js</file></action>
-            <action method="addJs"><file>varien/product.js</file></action>
         </reference>
         <reference name="content">
             <block type="Mage_Catalog_Block_Product_Compare_List" name="catalog.compare.list" template="product/compare/list.phtml"/>
@@ -163,8 +162,6 @@ Product view
             <action method="setTemplate"><template>2columns-left.phtml</template></action>
         </reference>
         <reference name="head">
-            <action method="addJs"><file>varien/product.js</file></action>
-            <action method="addJs"><file>varien/configurable.js</file></action>
             <action method="addCss"><file>Mage_Catalog::zoom.css</file></action>
         </reference>
         <update handle="page_calendar"/>

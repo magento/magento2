@@ -293,7 +293,7 @@ class Magento_Cache_Backend_MongoDb extends Zend_Cache_Backend implements Zend_C
             );
         }
         $result = $this->_getCollection()->findOne($query, array('data'));
-        return $result ? $result['data'] : false;
+        return $result ? $result['data']->bin : false;
     }
 
     /**
@@ -336,7 +336,7 @@ class Magento_Cache_Backend_MongoDb extends Zend_Cache_Backend implements Zend_C
         $tags = array_map(array($this, '_quoteString'), $tags);
         $document = array(
             '_id'      => $this->_quoteString($cacheId),
-            'data'     => $this->_quoteString($data),
+            'data'     => new MongoBinData($this->_quoteString($data), MongoBinData::BYTE_ARRAY),
             'tags'     => $tags,
             'mtime'    => $time,
             'expire'   => $expire,

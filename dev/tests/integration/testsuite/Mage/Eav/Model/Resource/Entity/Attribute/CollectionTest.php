@@ -37,11 +37,6 @@ class Mage_Eav_Model_Resource_Entity_Attribute_CollectionTest extends PHPUnit_Fr
         $this->_model = Mage::getResourceModel('Mage_Eav_Model_Resource_Entity_Attribute_Collection');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * Returns array of set ids, present in collection attributes
      *

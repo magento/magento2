@@ -84,12 +84,12 @@ class Mage_Core_Model_Config_Loader_Modules_FileTest extends PHPUnit_Framework_T
             ->method('create')
             ->with($this->equalTo('<config/>'))
             ->will($this->returnValue($this->_baseConfigMock));
-        $this->_modulesConfigMock->expects($this->exactly(2))
+
+        $this->_modulesConfigMock->expects($this->once())
             ->method('getNode')
-            ->will($this->returnValueMap(array(
-                array('modules', $nodes),
-                array('modules/mod1/codePool', 'core')
-            )));
+            ->with('modules')
+            ->will($this->returnValue($nodes));
+
         $result = $this->_model->loadConfigurationFromFile($this->_modulesConfigMock, $fileName, null, null, array());
         $this->assertInstanceOf('Mage_Core_Model_Config_Base', $result);
     }
@@ -99,18 +99,19 @@ class Mage_Core_Model_Config_Loader_Modules_FileTest extends PHPUnit_Framework_T
         $nodes = new Mage_Core_Model_Config_Element('<config><mod1><active>1</active></mod1></config>');
         $modulesConfigMock = $this->getMock('Mage_Core_Model_ConfigInterface', array(), array(), '', false, false);
         $fileName = 'acl.xml';
+
         $mergeToObject = $this->getMock('Mage_Core_Model_Config_Base', array(), array(), '', false, false);
         $mergeModel = null;
         $configCache = array();
-        $modulesConfigMock->expects($this->exactly(2))
+        $modulesConfigMock->expects($this->once())
             ->method('getNode')
             ->will($this->returnValue($nodes)
         );
-        $this->_protFactoryMock->expects($this->exactly(1))
+        $this->_protFactoryMock->expects($this->once())
             ->method('create')
             ->with($this->equalTo('<config/>'))
-            ->will($this->returnValue($mergeToObject)
-        );
+            ->will($this->returnValue($mergeToObject));
+
         $this->_model->loadConfigurationFromFile($modulesConfigMock, $fileName, $mergeToObject, $mergeModel,
             $configCache);
     }
@@ -121,6 +122,6 @@ class Mage_Core_Model_Config_Loader_Modules_FileTest extends PHPUnit_Framework_T
         $type = 'etc';
         $path = realpath(__DIR__. '/../../_files/testdir/etc');
         $this->_model->setModuleDir($moduleName, $type, $path);
-        $this->assertEquals($path, $this->_model->getModuleDir($this->_modulesConfigMock, $type, $moduleName));
+        $this->assertEquals($path, $this->_model->getModuleDir($type, $moduleName));
     }
 }

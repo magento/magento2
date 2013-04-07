@@ -53,7 +53,7 @@ class Mage_Webapi_Model_Acl_Role_FactoryTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_model = $helper->getModel('Mage_Webapi_Model_Acl_Role_Factory', array(
+        $this->_model = $helper->getObject('Mage_Webapi_Model_Acl_Role_Factory', array(
             'objectManager' => $this->_objectManager,
         ));
     }

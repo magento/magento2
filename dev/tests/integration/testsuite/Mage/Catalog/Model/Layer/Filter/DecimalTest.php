@@ -56,11 +56,6 @@ class Mage_Catalog_Model_Layer_Filter_DecimalTest extends PHPUnit_Framework_Test
         ));
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testApplyNothing()
     {
         $this->assertEmpty($this->_model->getData('range'));

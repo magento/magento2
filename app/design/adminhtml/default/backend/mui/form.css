@@ -137,11 +137,15 @@ span.required {
 .addon textarea,
 .addon select,
 .addon input {
-    display: table-cell;
     width: 100%;
     border-radius: 0;
     box-shadow: none;
     margin: 0;
+}
+
+.ie .addon textarea,
+.ie .addon select {
+    display:inline-block;
 }
 
 .addon textarea:first-child,
@@ -216,30 +220,6 @@ span.required {
 .field-price .addon select:first-child,
 .field-price .addon input:first-child {
     border-radius: 0 4px 4px 0;
-}
-
-.field-price .addon input:focus {
-
-}
-
-.field-price .addon .addafter {
-    /*background: none;*/
-}
-
-.field-price .addon .addafter:after {
-
-}
-
-.field-price .addon .addafter strong {
-
-}
-
-.field-price .addon input {
-    /*border-left: none;*/
-}
-
-.field-price .addon input:focus + .addafter {
-
 }
 
 /*
@@ -354,7 +334,7 @@ span.required {
 
 .control .control-value {
     display: inline-block;
-    padding: 5px 0 0;
+    padding: 6px 0 0;
     vertical-align: top;
 }
 
@@ -449,7 +429,7 @@ span.required {
 }
 
 .control *:first-child {
-    margin-top: 0;
+    /*margin-top: 0;*/
 }
 
 .nested .field {

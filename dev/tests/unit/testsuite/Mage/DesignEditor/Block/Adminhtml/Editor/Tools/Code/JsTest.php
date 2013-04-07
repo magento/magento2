@@ -43,7 +43,6 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_JsTest extends PHPUnit
 
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         $constructArguments = $objectManagerHelper->getConstructArguments(
-            Magento_Test_Helper_ObjectManager::BLOCK_ENTITY,
             'Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Js',
             array(
                  'config'     => $this->getMock('Mage_Core_Model_Config', array(), array(), '', false),
@@ -118,7 +117,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_JsTest extends PHPUnit
      */
     public function testGetJsFiles()
     {
-        $filesCollection = $this->getMockBuilder('Mage_Core_Model_Resource_Theme_Files_Collection')
+        $filesCollection = $this->getMockBuilder('Mage_Core_Model_Resource_Theme_File_Collection')
             ->disableOriginalConstructor()
             ->getMock();
 

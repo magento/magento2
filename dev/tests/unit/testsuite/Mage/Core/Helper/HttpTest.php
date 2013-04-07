@@ -35,7 +35,7 @@ class Mage_Core_Helper_HttpTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_object = new Mage_Core_Helper_Http(
-            $this->getMock('Mage_Core_Model_Translate', array(), array(), '', false, false)
+            $this->getMock('Mage_Core_Helper_Context', array(), array(), '', false, false)
         );
     }
 

@@ -78,10 +78,10 @@ class Mage_Core_Model_Store_Storage_DefaultTest extends PHPUnit_Framework_TestCa
             ->method('create')
             ->will($this->returnValue($this->_websiteMock));
         $this->_groupFactoryMock = $this->getMock('Mage_Core_Model_Store_Group_Factory',
-            array('createFromArray'), array(), '', false, false);
+            array('create'), array(), '', false, false);
         $this->_groupFactoryMock
             ->expects($this->once())
-            ->method('createFromArray')
+            ->method('create')
             ->will($this->returnValue($this->_groupMock));
         $this->_storeMock = $this->getMock('Mage_Core_Model_Store', array('setId', 'setCode', 'getCode'),
             array(), '', false, false);

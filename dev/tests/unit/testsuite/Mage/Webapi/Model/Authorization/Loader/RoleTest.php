@@ -61,7 +61,7 @@ class Mage_Webapi_Model_Authorization_Loader_RoleTest extends PHPUnit_Framework_
         $this->_acl = $this->getMock('Magento_Acl', array('addRole', 'deny'), array(), '',
             false);
 
-        $this->_model = $helper->getModel('Mage_Webapi_Model_Authorization_Loader_Role', array(
+        $this->_model = $helper->getObject('Mage_Webapi_Model_Authorization_Loader_Role', array(
             'roleResource' => $this->_resourceModelMock,
             'roleFactory' => $this->_roleFactory,
         ));

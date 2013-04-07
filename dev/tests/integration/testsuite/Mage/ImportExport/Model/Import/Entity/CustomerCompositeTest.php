@@ -105,12 +105,6 @@ class Mage_ImportExport_Model_Import_Entity_CustomerCompositeTest extends PHPUni
             ->create('Mage_ImportExport_Model_Import_Entity_CustomerComposite');
     }
 
-    protected function tearDown()
-    {
-        unset($this->_objectManager);
-        unset($this->_entityAdapter);
-    }
-
     /**
      * Assertion of current customer and address data
      *

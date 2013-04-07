@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     Mage_ImportExport
+ * @package     Mage_Catalog
  * @subpackage  unit_tests
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
@@ -31,27 +31,6 @@ class Mage_Catalog_Model_Resource_Product_Option_ValueTest extends PHPUnit_Frame
      * @var Stub_UnitTest_Mage_Catalog_Model_Resource_Product_Option_Value
      */
     protected $_object;
-
-    /**
-     * Store old display_errors ini option value here
-     *
-     * @var int
-     */
-    protected $_oldDisplayErrors;
-
-    /**
-     * Store old error_reporting ini option value here
-     *
-     * @var int
-     */
-    protected $_oldErrorLevel;
-
-    /**
-     * Store old isDeveloperMode value here
-     *
-     * @var boolean
-     */
-    protected $_oldIsDeveloperMode;
 
     /**
      * Option value title data
@@ -66,24 +45,12 @@ class Mage_Catalog_Model_Resource_Product_Option_ValueTest extends PHPUnit_Frame
 
     protected function setUp()
     {
-        parent::setUp();
-
         $this->_object = new Stub_UnitTest_Mage_Catalog_Model_Resource_Product_Option_Value();
-
-        $this->_oldDisplayErrors  = ini_get('display_errors');
-        $this->_oldErrorLevel = error_reporting();
-        $this->_oldIsDeveloperMode = Mage::getIsDeveloperMode();
     }
 
     protected function tearDown()
     {
-        ini_set('display_errors', $this->_oldDisplayErrors);
-        error_reporting($this->_oldErrorLevel);
-        Mage::setIsDeveloperMode($this->_oldIsDeveloperMode);
-
         unset($this->_object);
-
-        parent::tearDown();
     }
 
     /**
@@ -94,17 +61,11 @@ class Mage_Catalog_Model_Resource_Product_Option_ValueTest extends PHPUnit_Frame
     public function testSaveValueTitles()
     {
         $object = new Stub_UnitTest_Mage_Catalog_Model_Resource_Product_Option_Value_Mage_Core_Model_Stub(
-            $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false),
-            $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false),
+            $this->getMock('Mage_Core_Model_Context', array(), array(), '', false),
             null,
             null,
             self::$valueTitleData
         );
-
-        // we have to set strict error reporting mode and enable mage developer mode to convert notice to exception
-        error_reporting(E_ALL | E_STRICT);
-        ini_set('display_errors', 1);
-        Mage::setIsDeveloperMode(true);
 
         $this->_object->saveValueTitles($object);
     }

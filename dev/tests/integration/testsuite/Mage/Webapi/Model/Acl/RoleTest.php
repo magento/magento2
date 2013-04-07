@@ -46,14 +46,6 @@ class Mage_Webapi_Model_Acl_RoleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Cleanup model instance.
-     */
-    protected function tearDown()
-    {
-        unset($this->_objectManager, $this->_model);
-    }
-
-    /**
      * Test Web API Role CRUD.
      */
     public function testCRUD()

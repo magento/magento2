@@ -52,11 +52,6 @@ class Mage_Catalog_Model_Product_Type_ConfigurableTest extends PHPUnit_Framework
         $this->_product->setTypeInstance($this->_model);
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testGetRelationInfo()
     {
         $info = $this->_model->getRelationInfo();

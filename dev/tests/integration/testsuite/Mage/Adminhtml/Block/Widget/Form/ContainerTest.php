@@ -25,30 +25,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Adminhtml_Block_Widget_Form_ContainerTest extends PHPUnit_Framework_TestCase
+class Mage_Adminhtml_Block_Widget_Form_ContainerTest extends Mage_Backend_Area_TestCase
 {
-    /**
-     * List of block injection classes
-     *
-     * @var array
-     */
-    protected $_blockInjections = array(
-        'Mage_Core_Controller_Request_Http',
-        'Mage_Core_Model_Layout',
-        'Mage_Core_Model_Event_Manager',
-        'Mage_Backend_Model_Url',
-        'Mage_Core_Model_Translate',
-        'Mage_Core_Model_Cache',
-        'Mage_Core_Model_Design_Package',
-        'Mage_Core_Model_Session',
-        'Mage_Core_Model_Store_Config',
-        'Mage_Core_Controller_Varien_Front',
-        'Mage_Core_Model_Factory_Helper',
-        'Mage_Core_Model_Dir',
-        'Mage_Core_Model_Logger',
-        'Magento_Filesystem'
-    );
-
     public function testGetFormHtml()
     {
         /** @var $layout Mage_Core_Model_Layout */
@@ -56,7 +34,7 @@ class Mage_Adminhtml_Block_Widget_Form_ContainerTest extends PHPUnit_Framework_T
         // Create block with blocking _prepateLayout(), which is used by block to instantly add 'form' child
         /** @var $block Mage_Adminhtml_Block_Widget_Form_Container */
         $block = $this->getMock('Mage_Adminhtml_Block_Widget_Form_Container', array('_prepareLayout'),
-            $this->_prepareConstructorArguments()
+            array(Mage::getModel('Mage_Core_Block_Template_Context'))
         );
 
         $layout->addBlock($block, 'block');
@@ -66,19 +44,5 @@ class Mage_Adminhtml_Block_Widget_Form_ContainerTest extends PHPUnit_Framework_T
         $this->assertNotEquals($expectedHtml, $block->getFormHtml());
         $form->setText($expectedHtml);
         $this->assertEquals($expectedHtml, $block->getFormHtml());
-    }
-
-    /**
-     * List of block constructor arguments
-     *
-     * @return array
-     */
-    protected function _prepareConstructorArguments()
-    {
-        $arguments = array();
-        foreach ($this->_blockInjections as $injectionClass) {
-            $arguments[] = Mage::getObjectManager()->get($injectionClass);
-        }
-        return $arguments;
     }
 }

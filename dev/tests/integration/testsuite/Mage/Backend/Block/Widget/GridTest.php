@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Backend_Block_Widget_GridTest extends PHPUnit_Framework_TestCase
+class Mage_Backend_Block_Widget_GridTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @var Mage_Backend_Block_Widget_Grid_ColumnSet
@@ -70,13 +70,6 @@ class Mage_Backend_Block_Widget_GridTest extends PHPUnit_Framework_TestCase
         $this->_block->setNameInLayout('grid');
     }
 
-    protected function tearDown()
-    {
-        $this->_block = null;
-        $this->_layoutMock = null;
-        $this->_columnSetMock = null;
-    }
-
     /**
      * Retrieve the mocked column set block instance
      *
@@ -86,20 +79,10 @@ class Mage_Backend_Block_Widget_GridTest extends PHPUnit_Framework_TestCase
     {
         $filesystem = new Magento_Filesystem(new Magento_Filesystem_Adapter_Local);
         return $this->getMock('Mage_Backend_Block_Widget_Grid_ColumnSet', array(), array(
-            Mage::getModel('Mage_Core_Controller_Request_Http'),
-            Mage::getModel('Mage_Core_Model_Layout'),
-            Mage::getModel('Mage_Core_Model_Event_Manager'),
-            Mage::getModel('Mage_Backend_Model_Url'),
-            Mage::getModel('Mage_Core_Model_Translate'),
-            Mage::getModel('Mage_Core_Model_Cache'),
-            Mage::getModel('Mage_Core_Model_Design_Package'),
-            Mage::getModel('Mage_Core_Model_Session'),
-            Mage::getModel('Mage_Core_Model_Store_Config'),
-            Mage::getModel('Mage_Core_Controller_Varien_Front'),
-            Mage::getModel('Mage_Core_Model_Factory_Helper'),
-            new Mage_Core_Model_Dir($filesystem, __DIR__),
-            Mage::getModel('Mage_Core_Model_Logger'),
-            $filesystem,
+            Mage::getModel('Mage_Core_Block_Template_Context', array(
+                'dirs' => new Mage_Core_Model_Dir($filesystem, __DIR__),
+                'filesystem' => $filesystem
+            )),
             Mage::getModel('Mage_Backend_Helper_Data'),
             Mage::getModel('Mage_Backend_Model_Widget_Grid_Row_UrlGeneratorFactory'),
             Mage::getModel('Mage_Backend_Model_Widget_Grid_SubTotals'),

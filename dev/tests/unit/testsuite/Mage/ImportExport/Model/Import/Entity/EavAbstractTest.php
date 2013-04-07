@@ -72,7 +72,7 @@ class Mage_ImportExport_Model_Import_Entity_EavAbstractTest extends PHPUnit_Fram
             'translator'                   => $translator,
             'json_helper'                  => 'not_used',
             'string_helper'                => new Mage_Core_Helper_String(
-                $this->getMock('Mage_Core_Model_Translate', array(), array(), '', false, false)
+                $this->getMock('Mage_Core_Helper_Context', array(), array(), '', false, false)
             ),
             'page_size'                    => 1,
             'max_data_size'                => 1,
@@ -95,15 +95,5 @@ class Mage_ImportExport_Model_Import_Entity_EavAbstractTest extends PHPUnit_Fram
     public function testGetEntityTypeId()
     {
         $this->assertEquals(self::ENTITY_TYPE_ID, $this->_model->getEntityTypeId());
-    }
-
-    /**
-     * @todo implement in the scope of https://wiki.magento.com/display/MAGE2/Technical+Debt+%28Team-Donetsk-B%29
-     *
-     * @covers Mage_ImportExport_Model_Import_Entity_EavAbstract::getAttributeOptions
-     */
-    public function testGetAttributeOptions()
-    {
-        $this->markTestIncomplete('Technical debt - not implemented');
     }
 }

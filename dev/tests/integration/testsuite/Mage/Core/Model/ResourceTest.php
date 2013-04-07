@@ -35,11 +35,6 @@ class Mage_Core_Model_ResourceTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getModel('Mage_Core_Model_Resource');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * @magentoConfigFixture global/resources/db/table_prefix prefix_
      */

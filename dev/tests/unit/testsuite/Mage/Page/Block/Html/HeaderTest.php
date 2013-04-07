@@ -68,7 +68,7 @@ class Mage_Page_Block_Html_HeaderTest extends PHPUnit_Framework_TestCase
             'helperFactory' => $helperFactory,
             'dirs' => $dirsMock
         );
-        $block = $objectManager->getBlock('Mage_Page_Block_Html_Header', $arguments);
+        $block = $objectManager->getObject('Mage_Page_Block_Html_Header', $arguments);
 
         $this->assertEquals('http://localhost/pub/media/logo/default/image.gif', $block->getLogoSrc());
     }

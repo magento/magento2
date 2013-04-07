@@ -37,11 +37,6 @@ class Mage_Core_Model_Session_AbstractTest extends PHPUnit_Framework_TestCase
         $this->_model = $this->getMockForAbstractClass('Mage_Core_Model_Session_Abstract');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testGetCookie()
     {
         $cookie = $this->_model->getCookie();

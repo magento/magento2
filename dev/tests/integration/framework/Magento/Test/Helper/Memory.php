@@ -64,6 +64,8 @@ class Magento_Test_Helper_Memory
         $pid = getmypid();
         if (self::isWindowsOs()) {
             $result = $this->getWinProcessMemoryUsage($pid);
+        } else if (self::isMacOs()) {
+            $result = $this->getMacProcessMemoryUsage($pid);
         } else {
             $result = $this->getUnixProcessMemoryUsage($pid);
         }
@@ -93,6 +95,46 @@ class Magento_Test_Helper_Memory
         }
 
         return self::convertToBytes($result);
+    }
+
+    /**
+     * Retrieve the current process' memory usage using the Mac version of the Unix
+     * top command line interface
+     *
+     * @link http://developer.apple.com/library/mac/#documentation/Darwin/Reference/ManPages/man1/top.1.html
+     * @param int $pid
+     * @return int Memory usage in bytes
+     */
+    public function getMacProcessMemoryUsage($pid)
+    {
+        $output = $this->_shell->execute('top -pid %s -l 1 2>&1| grep PID -A 1 2>&1', array($pid));
+
+        $output = preg_split('/\n+/', $output, -1, PREG_SPLIT_NO_EMPTY);
+        $keys = preg_split('/\s+/', $output[0], -1, PREG_SPLIT_NO_EMPTY);
+        $values = preg_split('/\s+/', $output[1], -1, PREG_SPLIT_NO_EMPTY);
+        $stats = array_combine($keys, $values);
+
+        $result = $stats['RSIZE']; // resident set size, the non-swapped physical memory
+
+        if (is_numeric($result)) {
+            $result .= 'k'; // kilobytes by default
+        } else if (self::_endsWith($result, '+')) {
+            $result = substr($result, 0, -1);
+        }
+
+        return self::convertToBytes($result);
+    }
+
+    /**
+     * Tests whether the second parameter is a suffix of the first.
+     *
+     * @param string $str
+     * @param string $suffix
+     * @return boolean
+     */
+    private static function _endsWith($str, $suffix)
+    {
+        return substr_compare($str, $suffix, -strlen($suffix), strlen($suffix)) === 0;
     }
 
     /**
@@ -131,6 +173,17 @@ class Magento_Test_Helper_Memory
     }
 
     /**
+     * Whether the operating system belongs to the Mac family
+     *
+     * @link http://php.net/manual/en/function.php-uname.php
+     * @return boolean
+     */
+    public static function isMacOs()
+    {
+        return (strtoupper(PHP_OS) === 'DARWIN');
+    }
+
+    /**
      * Convert a number optionally followed by the unit symbol (B, K, M, G, etc.) to bytes
      *
      * @param string $number String representation of a number
@@ -140,7 +193,8 @@ class Magento_Test_Helper_Memory
      */
     public static function convertToBytes($number)
     {
-        $number = str_replace(array(',', ' '), '', $number);
+        $number = mb_convert_encoding($number, 'ASCII');
+        $number = str_replace(array(',', ' ', '?'), '', $number);
         $number = strtoupper($number);
         if (!preg_match('/^(\d+(?:\.\d+)?)([' . self::MEMORY_UNITS . ']?)$/', $number, $matches)) {
             throw new InvalidArgumentException("Number format '$number' is not recognized.");

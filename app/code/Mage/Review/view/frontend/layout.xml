@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+-->
+<layout version="0.1.0">
+
+    <customer_account>
+        <!-- Mage_Review -->
+        <reference name="customer_account_navigation">
+            <action method="addLink" translate="label" module="Mage_Review"><name>reviews</name><path>review/customer</path><label>My Product Reviews</label></action>
+        </reference>
+
+    </customer_account>
+
+<!--
+Customer account home dashboard layout
+-->
+
+    <customer_account_index>
+
+        <!-- Mage_Review -->
+        <reference name="customer_account_dashboard">
+            <block type="Mage_Review_Block_Customer_Recent" name="customer_account_dashboard_info1" as="info1" template="customer/recent.phtml"/>
+        </reference>
+
+    </customer_account_index>
+
+<!--
+Product reviews page
+-->
+
+    <review_product_list translate="label" type="page" parent="default">
+        <label>Catalog Product Reviews List</label>
+        <reference name="root">
+            <action method="setTemplate"><template>2columns-right.phtml</template></action>
+        </reference>
+        <reference name="head">
+            <action method="addCss"><file>Mage_Catalog::zoom.css</file></action>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Review_Block_Product_View" name="product.info" template="Mage_Catalog::product/view.phtml">
+                <block type="Mage_Catalog_Block_Product_View_Media" name="product.info.media" as="media" template="product/view/media.phtml">
+                    <action method="disableGallery"/>
+                </block>
+                <block type="Mage_Catalog_Block_Product_View" name="product.info.addto" as="addto" template="product/view/addto.phtml"/>
+                <block type="Mage_Catalog_Block_Product_View" name="product.info.addtocart" as="addtocart" template="product/view/addtocart.phtml">
+                    <!-- workaround: a better place for this code is in paypal.xml -->
+                    <container name="review.product.info.addtocart.paypal.wrapper" label="PayPal Express Checkout Shortcut Wrapper" module="Mage_Paypal" htmlTag="div">
+                        <block type="Mage_Paypal_Block_Express_Shortcut" name="review.product.info.addtocart.paypal" template="express/shortcut.phtml">
+                            <action method="setIsInCatalogProduct"><value>1</value></action>
+                        </block>
+                    </container>
+                </block>
+                <block type="Mage_Catalog_Block_Product_View" name="product.tierprices" as="tierprices" template="product/view/tierprices.phtml"/>
+                <block type="Mage_Core_Block_Template" name="product.info.other" as="other" template="Mage_Review::product/view/other.phtml"/>
+                <block type="Mage_Page_Block_Html_Pager" name="product_review_list.toolbar" />
+                <block type="Mage_Core_Block_Template" name="product_review_list.count" template="Mage_Review::product/view/count.phtml" />
+                <block type="Mage_Review_Block_Product_View_List" name="product.info.product_additional_data" as="product_additional_data" template="product/view/list.phtml">
+                    <block type="Mage_Review_Block_Form" name="product.review.form" as="review_form">
+                        <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before" htmlTag="div"/>
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </review_product_list>
+
+    <review_product_view translate="label" type="page" parent="review_product_list">
+        <label>Catalog Product Review View</label>
+        <reference name="root">
+            <action method="setTemplate"><template>2columns-right.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Review_Block_View" name="review_view"/>
+        </reference>
+    </review_product_view>
+
+    <review_customer_index translate="label" type="page" parent="customer_account_index">
+        <label>Customer My Account Product Reviews</label>
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+            <block type="Mage_Review_Block_Customer_List" name="review_customer_list" template="customer/list.phtml"/>
+        </reference>
+    </review_customer_index>
+
+    <review_customer_view translate="label" type="page" parent="review_customer_index">
+        <label>Customer My Account Review Details</label>
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+            <block type="Mage_Review_Block_Customer_View" name="customers_review"/>
+        </reference>
+    </review_customer_view>
+
+    <catalog_product_view>
+        <reference name="product.info">
+            <block type="Mage_Core_Block_Template" name="product_review_summary" template="Mage_Review::helper/summary.twig">
+                <data service-call="reviewService" alias="review"/>
+            </block>
+        </reference>
+    </catalog_product_view>
+
+</layout>

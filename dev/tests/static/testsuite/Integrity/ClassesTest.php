@@ -172,7 +172,7 @@ class Integrity_ClassesTest extends PHPUnit_Framework_TestCase
                     continue;
                 }
                 $this->assertTrue(isset(self::$_existingClasses[$class])
-                    || Utility_Files::init()->codePoolClassFileExists($class)
+                    || Utility_Files::init()->classFileExists($class)
                 );
                 self::$_existingClasses[$class] = 1;
             } catch (PHPUnit_Framework_AssertionFailedError $e) {

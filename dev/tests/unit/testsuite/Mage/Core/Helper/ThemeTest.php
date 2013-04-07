@@ -53,16 +53,28 @@ class Mage_Core_Helper_ThemeTest extends PHPUnit_Framework_TestCase
         /** @var $themeCollection Mage_Core_Model_Resource_Theme_Collection */
         $themeCollection = $this->getMock('Mage_Core_Model_Resource_Theme_Collection', null, array(), '', false);
 
-        /** @var $translator Mage_Core_Model_Translate */
-        $translator = $this->getMock('Mage_Core_Model_Translate', null, array(), '', false);
+        /** @var $context Mage_Core_Helper_Context */
+        $context = $this->getMock('Mage_Core_Helper_Context', null, array(), '', false);
 
-        $helper = new Mage_Core_Helper_Theme($design, $dirs, $layoutMergeFactory, $themeCollection, $translator);
+        $themeFactory = $this->getMockBuilder('Mage_Core_Model_Theme_Factory')->disableOriginalConstructor()->getMock();
+
+        $helper = new Mage_Core_Helper_Theme(
+            $context,
+            $design,
+            $dirs,
+            $layoutMergeFactory,
+            $themeCollection,
+            $themeFactory
+        );
 
         $result = $helper->getSafePath($filePath, $basePath);
 
         $this->assertEquals($expectedResult, $result);
     }
 
+    /**
+     * @return array
+     */
     public function getSafePathDataProvider()
     {
         return array(
@@ -112,11 +124,20 @@ class Mage_Core_Helper_ThemeTest extends PHPUnit_Framework_TestCase
         /** @var $themeCollection Mage_Core_Model_Resource_Theme_Collection */
         $themeCollection = $this->getMock('Mage_Core_Model_Resource_Theme_Collection', null, array(), '', false);
 
-        /** @var $translator Mage_Core_Model_Translate */
-        $translator = $this->getMock('Mage_Core_Model_Translate', null, array(), '', false);
+        /** @var $context Mage_Core_Helper_Context */
+        $context = $this->getMock('Mage_Core_Helper_Context', null, array(), '', false);
+
+        $themeFactory = $this->getMockBuilder('Mage_Core_Model_Theme_Factory')->disableOriginalConstructor()->getMock();
 
         // 6. Run tested method
-        $helper = new Mage_Core_Helper_Theme($design, $dirs, $layoutMergeFactory, $themeCollection, $translator);
+        $helper = new Mage_Core_Helper_Theme(
+            $context,
+            $design,
+            $dirs,
+            $layoutMergeFactory,
+            $themeCollection,
+            $themeFactory
+        );
         $result = $helper->getCssFiles($theme);
 
         $this->assertEquals($expectedResult, $result);
@@ -349,6 +370,9 @@ class Mage_Core_Helper_ThemeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
+    /**
+     * @return array
+     */
     public function getGroupedCssFilesDataProvider()
     {
         $item11 = array(
@@ -448,7 +472,7 @@ class Mage_Core_Helper_ThemeTest extends PHPUnit_Framework_TestCase
 
     /**
      * depends testGetCssFiles
-     * @expectedException Mage_Core_Exception
+     * @expectedException LogicException
      * @expectedExceptionMessage Invalid view file directory "some_path/test.test"
      */
     public function testGetGroupedCssFilesException()
@@ -594,12 +618,14 @@ class Mage_Core_Helper_ThemeTest extends PHPUnit_Framework_TestCase
         /** @var $layoutMergeFactory Mage_Core_Model_Layout_Merge_Factory|PHPUnit_Framework_MockObject_MockObject */
         $layoutMergeFactory = $this->getMock('Mage_Core_Model_Layout_Merge_Factory', null, array(), '', false);
 
-        /** @var $translator Mage_Core_Model_Translate */
-        $translator = $this->getMock('Mage_Core_Model_Translate', null, array(), '', false);
+        /** @var $context Mage_Core_Helper_Context */
+        $context = $this->getMock('Mage_Core_Helper_Context', null, array(), '', false);
+
+        $themeFactory = $this->getMockBuilder('Mage_Core_Model_Theme_Factory')->disableOriginalConstructor()->getMock();
 
         /** @var $helper Mage_Core_Helper_Theme */
         $helper = $this->getMock('Mage_Core_Helper_Theme', array('getCssFiles', '__'), array(
-            $design, $dirs, $layoutMergeFactory, $themeCollection, $translator
+            $context, $design, $dirs, $layoutMergeFactory, $themeCollection, $themeFactory
         ));
         $helper->expects($this->once())
             ->method('getCssFiles')

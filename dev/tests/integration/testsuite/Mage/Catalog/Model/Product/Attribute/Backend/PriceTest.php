@@ -45,11 +45,6 @@ class Mage_Catalog_Model_Product_Attribute_Backend_PriceTest extends PHPUnit_Fra
         );
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testSetScopeDefault()
     {
         /* validate result of setAttribute */

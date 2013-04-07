@@ -1,6 +1,6 @@
 <?php
 /**
- * Test class for Mage_Core_Model_StoreManagerTest
+ * Test class for Mage_Core_Model_StoreManager
  *
  * Magento
  *

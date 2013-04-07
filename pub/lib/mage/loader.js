@@ -31,9 +31,12 @@
                 loaderText: $.mage.__('Please wait...'),
                 imgAlt: $.mage.__('Loading...')
             },
-            template: '<div class="loading-mask"><p class="loader">'+
-                '<img {{if texts.imgAlt}}alt="${texts.imgAlt}"{{/if}} src="${icon}"><br>'+
-                '<span>{{if texts.loaderText}}${texts.loaderText}{{/if}}</span></p></div>'
+            template: '<div class="loading-mask">' +
+                         '<div class="loader">'+
+                            '<img {{if texts.imgAlt}}alt="${texts.imgAlt}"{{/if}} src="${icon}">'+
+                            '<p>{{if texts.loaderText}}${texts.loaderText}{{/if}}</p>' +
+                         '</div>' +
+                      '</div>'
         },
 
         /**
@@ -87,11 +90,8 @@
         _render: function() {
             this.loader = $.tmpl(this.options.template, this.options)
                 .css(this._getCssObj());
-            if (this.element.is('body')) {
-                this.element.prepend(this.loader);
-            } else {
-                this.element.before(this.loader);
-            }
+
+            this.element.prepend(this.loader);
         },
 
         /**

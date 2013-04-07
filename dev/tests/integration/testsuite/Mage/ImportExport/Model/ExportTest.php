@@ -39,11 +39,6 @@ class Mage_ImportExport_Model_ExportTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getModel('Mage_ImportExport_Model_Export');
     }
 
-    protected function tearDown()
-    {
-        unset($this->_model);
-    }
-
     /**
      * Test method '_getEntityAdapter' in case when entity is valid
      *

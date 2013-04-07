@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Adminhtml_Block_System_Design_Edit_Tab_General
  */
-class Mage_Adminhtml_Block_System_Design_Edit_Tab_GeneralTest extends PHPUnit_Framework_TestCase
+class Mage_Adminhtml_Block_System_Design_Edit_Tab_GeneralTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @magentoDataFixture Mage/Core/_files/init_adminhtml_design.php

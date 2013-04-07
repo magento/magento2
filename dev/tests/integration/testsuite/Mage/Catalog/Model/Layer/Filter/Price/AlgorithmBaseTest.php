@@ -63,13 +63,6 @@ class Mage_Catalog_Model_Layer_Filter_Price_AlgorithmBaseTest extends PHPUnit_Fr
             ->setAttributeModel(new Varien_Object(array('attribute_code' => 'price')));
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-        $this->_layer = null;
-        $this->_filter = null;
-    }
-
     /**
      * @dataProvider pricesSegmentationDataProvider
      */

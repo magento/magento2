@@ -74,9 +74,9 @@ class Mage_Webapi_Model_Acl_RuleTest extends PHPUnit_Framework_TestCase
      */
     protected function _createModel($ruleResource, $resourceCollection = null)
     {
-        return $this->_helper->getModel('Mage_Webapi_Model_Acl_Rule', array(
+        return $this->_helper->getObject('Mage_Webapi_Model_Acl_Rule', array(
             'eventDispatcher' => $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false),
-            'cacheManager' => $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false),
+            'cacheManager' => $this->getMock('Mage_Core_Model_CacheInterface', array(), array(), '', false),
             'resource' => $ruleResource,
             'resourceCollection' => $resourceCollection
         ));

@@ -47,11 +47,6 @@ class Mage_Checkout_Block_Cart_Item_RendererTest extends PHPUnit_Framework_TestC
         $this->_block->setItem($item);
     }
 
-    protected function tearDown()
-    {
-        $this->_block = null;
-    }
-
     public function testThumbnail()
     {
         $size = $this->_block->getThumbnailSize();

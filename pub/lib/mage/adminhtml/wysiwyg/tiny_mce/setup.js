@@ -165,6 +165,10 @@ tinyMceWysiwygSetup.prototype =
             settings.height = this.config.height;
         }
 
+        if (this.config.settings) {
+            Object.extend(settings, this.config.settings)
+        }
+
         return settings;
     },
 
@@ -187,7 +191,7 @@ tinyMceWysiwygSetup.prototype =
 
         MediabrowserUtility.openDialog(wUrl, false, false, typeTitle, {
             onBeforeShow: function(win) {
-                win.element.setStyle({zIndex: 300200});
+                win.element.setStyle({zIndex: 1100});
             }
         });
     },
@@ -212,13 +216,14 @@ tinyMceWysiwygSetup.prototype =
         return $$('#buttons' + this.id + ' > button.plugin');
     },
 
-    turnOn: function() {
+    turnOn: function(mode) {
         this.closePopups();
-        this.setup();
+        this.setup(mode);
         tinyMCE.execCommand('mceAddControl', false, this.id);
         this.getPluginButtons().each(function(e) {
             e.hide();
         });
+        return this;
     },
 
     turnOff: function() {
@@ -235,12 +240,15 @@ tinyMceWysiwygSetup.prototype =
                 }
             }.bind(this), 0);
         }
+        return this;
     },
 
     closePopups: function() {
-        // close all popups to avoid problems with updating parent content area
-        closeEditorPopup('widget_window' + this.id);
-        closeEditorPopup('browser_window' + this.id);
+        if (typeof closeEditorPopup == 'function') {
+            // close all popups to avoid problems with updating parent content area
+            closeEditorPopup('widget_window' + this.id);
+            closeEditorPopup('browser_window' + this.id);
+        }
     },
 
     toggle: function() {

@@ -51,7 +51,7 @@ class Mage_Core_Model_Layout_UpdateTest extends PHPUnit_Framework_TestCase
 
         $helper = new Magento_Test_Helper_ObjectManager($this);
         /** @var $model Mage_Core_Model_Layout_Update */
-        $model = $helper->getModel('Mage_Core_Model_Layout_Update', array('resource' => $resourceModel));
+        $model = $helper->getObject('Mage_Core_Model_Layout_Update', array('resource' => $resourceModel));
         $model->setId(0); // set any data to set _hasDataChanges flag
         $model->save();
 

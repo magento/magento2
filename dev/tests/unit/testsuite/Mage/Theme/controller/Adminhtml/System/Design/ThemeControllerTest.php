@@ -48,8 +48,7 @@ class Mage_Theme_Controller_Adminhtml_System_Design_ThemeControllerTest extends 
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento_ObjectManager_Zend',
-            array('create', 'get'), array(), '', false);
+        $this->_objectManagerMock = $this->getMock('Magento_ObjectManager');
 
         $this->_request = $this->getMock(
             'Mage_Core_Controller_Request_Http', array('getParam', 'getPost'), array(), '', false
@@ -108,7 +107,9 @@ class Mage_Theme_Controller_Adminhtml_System_Design_ThemeControllerTest extends 
         $filesCssMock = $this->getMock(
             'Mage_Core_Model_Theme_Customization_Files_Css', array('setDataForSave'), array(), '', false
         );
-        $filesCssMock->expects($this->at(0))->method('setDataForSave')->with($customCssContent);
+        $filesCssMock->expects($this->at(0))->method('setDataForSave')->with(
+            array(Mage_Core_Model_Theme_Customization_Files_Css::CUSTOM_CSS => $customCssContent)
+        );
 
         $filesJsMock = $this->getMock(
             'Mage_Core_Model_Theme_Customization_Files_Js',

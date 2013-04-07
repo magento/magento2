@@ -43,12 +43,12 @@ class Mage_Page_Block_HtmlTest extends PHPUnit_Framework_TestCase
             ->method('getBaseUrl')
             ->will($this->returnValue('http://localhost/pub/media/'));
 
-        $arguments = array(
+        $context = Mage::getModel('Mage_Core_Block_Template_Context', array(
             'storeConfig' => $storeConfig,
             'urlBuilder' => $urlBuilder,
-        );
+        ));
 
-        $block = Mage::getObjectManager()->create('Mage_Page_Block_Html', $arguments);
+        $block = Mage::getObjectManager()->create('Mage_Page_Block_Html', array('context' => $context));
 
         $this->assertEquals($returnValue, $block->getPrintLogoUrl());
     }

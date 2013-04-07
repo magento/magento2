@@ -85,7 +85,7 @@ class Mage_Webapi_Model_Acl_Role_UsersUpdaterTest extends PHPUnit_Framework_Test
         }
 
         /** @var Mage_Webapi_Model_Acl_Role_UsersUpdater $model */
-        $model = $this->_helper->getModel('Mage_Webapi_Model_Acl_Role_UsersUpdater', array(
+        $model = $this->_helper->getObject('Mage_Webapi_Model_Acl_Role_UsersUpdater', array(
             'request' => $this->_request,
             'backendHelper' => $this->_backendHelper
         ));

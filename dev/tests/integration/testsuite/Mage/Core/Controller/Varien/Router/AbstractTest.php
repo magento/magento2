@@ -39,11 +39,6 @@ class Mage_Core_Controller_Varien_Router_AbstractTest extends PHPUnit_Framework_
         );
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testGetSetFront()
     {
         $expected = Mage::getModel('Mage_Core_Controller_Varien_Front');

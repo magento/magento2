@@ -114,7 +114,7 @@ class Magento_Test_Bootstrap
             ),
             $this->_settings->getAsMatchingPaths('TESTS_GLOBAL_CONFIG_FILES'),
             $this->_settings->getAsMatchingPaths('TESTS_MODULE_CONFIG_FILES'),
-            $this->_settings->getAsBoolean('TESTS_MAGENTO_DEVELOPER_MODE')
+            $this->_settings->get('TESTS_MAGENTO_MODE')
         );
     }
 
@@ -195,11 +195,11 @@ class Magento_Test_Bootstrap
      * @param array $localConfigFiles
      * @param array $globalConfigFiles
      * @param array $moduleConfigFiles
-     * @param bool $isDeveloperMode
+     * @param string $appMode
      * @return Magento_Test_Application
      */
     protected function _createApplication(
-        array $localConfigFiles, array $globalConfigFiles, array $moduleConfigFiles, $isDeveloperMode
+        array $localConfigFiles, array $globalConfigFiles, array $moduleConfigFiles, $appMode
     ) {
         $localConfigXml = $this->_loadConfigFiles($localConfigFiles);
         $dbConfig = $localConfigXml->global->resources->default_setup->connection;
@@ -217,7 +217,7 @@ class Magento_Test_Bootstrap
             $this->_shell
         );
         return new Magento_Test_Application(
-            $dbInstance, $installDir, $localConfigXml, $globalConfigFiles, $moduleConfigFiles, $isDeveloperMode
+            $dbInstance, $installDir, $localConfigXml, $globalConfigFiles, $moduleConfigFiles, $appMode
         );
     }
 

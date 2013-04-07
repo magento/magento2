@@ -37,11 +37,6 @@ class Mage_Core_Model_Translate_StringTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getModel('Mage_Core_Model_Translate_String');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testConstructor()
     {
         $this->assertInstanceOf('Mage_Core_Model_Resource_Translate_String', $this->_model->getResource());

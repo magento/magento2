@@ -27,7 +27,7 @@
 <design>
     <package code="default">
         <title>Backend</title>
-        <theme version="1.0.0.0" code="backend">
+        <theme version="1.0.0.0" code="backend" parent="basic">
             <title>Magento 2 backend</title>
             <requirements>
                 <magento_version from="2.0.0.0-dev1" to="*"/>

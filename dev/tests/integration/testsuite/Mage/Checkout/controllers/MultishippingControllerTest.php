@@ -31,8 +31,8 @@
 class Mage_Checkout_MultishippingControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {
     /**
-     * Covers app/code/core/Mage/Checkout/Block/Multishipping/Payment/Info.php
-     * and app/code/core/Mage/Checkout/Block/Multishipping/Overview.php
+     * Covers app/code/Mage/Checkout/Block/Multishipping/Payment/Info.php
+     * and app/code/Mage/Checkout/Block/Multishipping/Overview.php
      *
      * @magentoDataFixture Mage/Sales/_files/quote.php
      * @magentoDataFixture Mage/Customer/_files/customer.php

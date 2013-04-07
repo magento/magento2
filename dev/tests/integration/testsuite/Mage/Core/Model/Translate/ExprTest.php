@@ -43,11 +43,6 @@ class Mage_Core_Model_Translate_ExprTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testConstructor()
     {
         $this->assertEquals($this->_expectedText, $this->_model->getText());

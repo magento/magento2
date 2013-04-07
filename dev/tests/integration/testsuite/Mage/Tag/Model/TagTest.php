@@ -37,11 +37,6 @@ class Mage_Tag_Model_TagTest extends PHPUnit_Framework_TestCase
         $this->_model= Mage::getModel('Mage_Tag_Model_Tag');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * @magentoAppIsolation enabled
      */

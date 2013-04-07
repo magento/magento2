@@ -36,10 +36,18 @@ class Mage_Backend_Adminhtml_IndexControllerTest extends Magento_Test_TestCase_C
      */
     protected $_auth;
 
+    protected function setUp()
+    {
+        Mage::getConfig()->setCurrentAreaCode(Mage_Core_Model_App_Area::AREA_ADMINHTML);
+        Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::PART_CONFIG);
+        parent::setUp();
+    }
+
     protected function tearDown()
     {
         $this->_auth = null;
         parent::tearDown();
+        Mage::getConfig()->setCurrentAreaCode(null);
     }
 
     /**

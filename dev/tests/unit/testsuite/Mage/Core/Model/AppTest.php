@@ -78,7 +78,7 @@ class Mage_Core_Model_AppTest extends PHPUnit_Framework_TestCase
         $this->_configMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false, false);
         $this->_frontControllerMock = $this->getMock('Mage_Core_Controller_Varien_Front',
             array(), array(), '', false, false);
-        $this->_cacheMock = $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false, false);
+        $this->_cacheMock = $this->getMock('Mage_Core_Model_CacheInterface', array(), array(), '', false, false);
         $this->_objectManagerMock = $this->getMock('Magento_ObjectManager', array(), array(), '', false, false);
         $this->_dbUpdaterMock = $this->getMock('Mage_Core_Model_Db_UpdaterInterface',
             array(), array(), '', false, false);

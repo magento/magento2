@@ -106,7 +106,7 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
             $layoutCollection->addItem($layout);
         }
 
-        $objectManager = $this->getMock('Magento_ObjectManager_Zend', array('create'), array(), '', false);
+        $objectManager = $this->getMock('Magento_ObjectManager');
         $objectManager->expects($this->at(0))
             ->method('create')
             ->with('Mage_Core_Model_Resource_Layout_Link_Collection')
@@ -116,10 +116,88 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
             ->with('Mage_Core_Model_Resource_Layout_Update_Collection')
             ->will($this->returnValue($layoutCollection));
 
-        $cacheManager = $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false);
+        $cacheManager = $this->getMock('Mage_Core_Model_CacheInterface', array(), array(), '', false);
 
         // test
         $this->_model = new Mage_DesignEditor_Model_Observer($objectManager, $helper, $cacheManager);
         $this->_model->clearLayoutUpdates();
+    }
+
+    public function testSaveQuickStyles()
+    {
+        $generatedContent = 'generated css content';
+
+        $cacheManager = $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false);
+        $objectManager = $this->getMock('Magento_ObjectManager');
+        $helper = $this->getMock('Mage_DesignEditor_Helper_Data', array(), array(), '', false);
+
+        /** Prepare renderer */
+        $renderer = $this->getMock(
+            'Mage_DesignEditor_Model_Editor_Tools_QuickStyles_Renderer', array('render'), array(), '', false
+        );
+
+        $renderer->expects($this->once())
+            ->method('render')
+            ->will($this->returnValue($generatedContent));
+
+        /** Prepare CSS */
+        $cssFile = $this->getMock(
+            'Mage_Core_Model_Theme_Customization_Files_Css', array('setDataForSave'), array(), '', false
+        );
+        $cssFile->expects($this->once())
+            ->method('setDataForSave')
+            ->with(array(Mage_Core_Model_Theme_Customization_Files_Css::QUICK_STYLE_CSS => $generatedContent))
+            ->will($this->returnValue($renderer));
+
+        /** Prepare theme */
+        $theme = $this->getMock('Mage_Core_Model_Theme', array('setCustomization', 'save'), array(), '', false);
+
+        $theme->expects($this->once())
+            ->method('setCustomization')
+            ->with($cssFile)
+            ->will($this->returnValue($theme));
+
+        $theme->expects($this->once())
+            ->method('save')
+            ->will($this->returnValue($theme));
+
+        /** Prepare configuration */
+        $configuration = $this->getMock(
+            'Mage_DesignEditor_Model_Editor_Tools_Controls_Configuration',
+            array('getControlConfig', 'getTheme'), array(), '', false
+        );
+        $quickStyle = $this->getMock(
+            'Mage_DesignEditor_Model_Config_Control_QuickStyles', array(), array(), '', false
+        );
+
+        $configuration->expects($this->once())
+            ->method('getControlConfig')
+            ->will($this->returnValue($quickStyle));
+
+        $configuration->expects($this->once())
+            ->method('getTheme')
+            ->will($this->returnValue($theme));
+
+        /** Prepare event */
+        $event = $this->getMock('Varien_Event_Observer', array('getData'), array(), '', false);
+
+        $event->expects($this->once())
+            ->method('getData')
+            ->with('configuration')
+            ->will($this->returnValue($configuration));
+
+        /** Prepare observer */
+        $objectManager->expects($this->at(0))
+            ->method('create')
+            ->with('Mage_DesignEditor_Model_Editor_Tools_QuickStyles_Renderer')
+            ->will($this->returnValue($renderer));
+
+        $objectManager->expects($this->at(1))
+            ->method('create')
+            ->with('Mage_Core_Model_Theme_Customization_Files_Css')
+            ->will($this->returnValue($cssFile));
+
+        $this->_model = new Mage_DesignEditor_Model_Observer($objectManager, $helper, $cacheManager);
+        $this->_model->saveQuickStyles($event);
     }
 }

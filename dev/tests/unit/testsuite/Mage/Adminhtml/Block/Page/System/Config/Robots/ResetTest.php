@@ -43,7 +43,7 @@ class Mage_Adminhtml_Block_Page_System_Config_Robots_ResetTest extends PHPUnit_F
     protected function setUp()
     {
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_resetRobotsBlock = $objectManagerHelper->getBlock(
+        $this->_resetRobotsBlock = $objectManagerHelper->getObject(
             'Mage_Adminhtml_Block_Page_System_Config_Robots_Reset',
             array(
                 'application' => $this->getMock('Mage_Core_Model_App', array(), array(), '', false),

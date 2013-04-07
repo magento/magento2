@@ -100,14 +100,6 @@ class Mage_ImportExport_Model_Import_Entity_Eav_Customer_AddressTest extends PHP
     }
 
     /**
-     * Unset entity adapter
-     */
-    public function tearDown()
-    {
-        unset($this->_entityAdapter);
-    }
-
-    /**
      * Test constructor
      *
      * @magentoDataFixture Mage/ImportExport/_files/customer_with_addresses.php

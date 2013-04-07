@@ -37,11 +37,6 @@ class Mage_Page_Block_Html_BreadcrumbsTest extends PHPUnit_Framework_TestCase
         $this->_block = Mage::app()->getLayout()->createBlock('Mage_Page_Block_Html_Breadcrumbs');
     }
 
-    protected function tearDown()
-    {
-        $this->_block = null;
-    }
-
     public function testAddCrumb()
     {
         $this->assertEmpty($this->_block->toHtml());

@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_MainTest extends PHPUnit_Framework_TestCase
+class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_MainTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @var Magento_Test_ObjectManager
@@ -47,6 +47,8 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_MainTest extends PHPUnit_Framewo
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->_objectManager = Mage::getObjectManager();
         $this->_layout = $this->_objectManager->get('Mage_Core_Model_Layout');
         $this->_blockFactory = $this->_objectManager->get('Mage_Core_Model_BlockFactory');

@@ -42,24 +42,32 @@ class Magento_Test_ObjectManager extends Mage_Core_Model_ObjectManager
     public function clearCache()
     {
         foreach ($this->_classesToDestruct as $className) {
-            if ($this->_di->instanceManager()->hasSharedInstance($className)) {
-                $object = $this->_di->instanceManager()->getSharedInstance($className);
-                if ($object) {
-                    // force to cleanup circular references
-                    $object->__destruct();
-                }
+            if (isset($this->_sharedInstances[$className])) {
+                $this->_sharedInstances[$className]->__destruct();
             }
         }
 
-        Mage::getSingleton('Mage_Core_Model_Config_Base')->destroy();
-        $instanceManagerNew = new Magento_Di_InstanceManager_Zend();
-        $instanceManagerNew->addSharedInstance($this, 'Magento_ObjectManager');
-        if ($this->_di->instanceManager()->hasSharedInstance('Mage_Core_Model_Resource')) {
-            $resource = $this->_di->instanceManager()->getSharedInstance('Mage_Core_Model_Resource');
-            $instanceManagerNew->addSharedInstance($resource, 'Mage_Core_Model_Resource');
+        Mage_Core_Model_Config_Base::destroy();
+        $sharedInstances = array('Magento_ObjectManager' => $this);
+        if (isset($this->_sharedInstances['Mage_Core_Model_Resource'])) {
+            $sharedInstances['Mage_Core_Model_Resource'] = $this->_sharedInstances['Mage_Core_Model_Resource'];
         }
-        $this->_di->setInstanceManager($instanceManagerNew);
+        $this->_sharedInstances = $sharedInstances;
+        $this->_nonShared = array();
+        $this->_arguments = array();
+        $this->_preferences = array();
+        $this->_creationStack = array();
 
         return $this;
+    }
+
+    public function addSharedInstance($instance, $className)
+    {
+        $this->_sharedInstances[$className] = $instance;
+    }
+
+    public function removeSharedInstance($className)
+    {
+        unset($this->_sharedInstances[$className]);
     }
 }

@@ -39,20 +39,35 @@
     line-height: 1.1;
 }
 
-.tooltip .help:before {
-    content: "?";
-    font: 11px/12px bold Arial, Verdana, sans-serif;
+.tooltip .help {
     display: inline-block;
-    text-decoration: inherit;
-    vertical-align: top;
-    color: #fff;
+    position: relative;
+    margin: 7px 0 0 15px;
+}
+
+.tooltip .help a {
+    display: block;
+    width: 14px;
+    height: 14px;
+    text-decoration: none;
+    text-indent: -999em;
+    cursor: help;
+}
+
+.tooltip .help a:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-indent: 0;
+    font: 11px/11px bold Arial, Verdana, sans-serif;
+    text-align: center;
+    color: #aaa;
     height: 12px;
     width: 12px;
-    background: #666;
-    border-radius: 6px;
-    text-align: center;
-    text-shadow: none;
-    margin-right: 3px;
+    background: #fff;
+    border: 1px #aaa solid;
+    border-radius: 7px;
+    content: "?";
 }
 
 .tooltip-content {
@@ -93,15 +108,6 @@
 
 .tooltip:hover {
     z-index: 20;
-}
-
-.tooltip > .help {
-    cursor: help;
-    display: inline-block;
-    vertical-align: top;
-    height: 12px;
-    line-height: 12px;
-    color: #666;
 }
 
 .tooltip:hover > .tooltip-content {
@@ -866,7 +872,7 @@
     top: 50%;
     left: 50%;
     margin: -12px 0 0 -12px;
-    background: url(images/ajax-loader.gif) no-repeat center;
+    background: #fff url(images/ajax-loader.gif) no-repeat center;
 }
 
 .loading-message {
@@ -1028,7 +1034,7 @@ table.loading:after {
     z-index: 999;
 }
 
-.ie8 .fade {
+.eq-ie8 .fade {
     background: transparent;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = #99000000, endColorstr = #99000000);
 }

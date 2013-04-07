@@ -34,31 +34,35 @@ class Integrity_Theme_ViewFilesTest extends Magento_Test_TestCase_IntegrityAbstr
      */
     public function testViewFilesFromThemes($theme, $file)
     {
-        $params = array(
-            'area'       => $theme->getArea(),
-            'themeModel' => $theme
-        );
-        $viewFile = Mage::getDesign()->getViewFile($file, $params);
-        $this->assertFileExists($viewFile);
+        try {
+            $params = array(
+                'area'       => $theme->getArea(),
+                'themeModel' => $theme
+            );
+            $viewFile = Mage::getDesign()->getViewFile($file, $params);
+            $this->assertFileExists($viewFile);
 
-        $fileParts = explode(Mage_Core_Model_Design_Package::SCOPE_SEPARATOR, $file);
-        if (count($fileParts) > 1) {
-            $params['module'] = $fileParts[0];
-        }
-        if (pathinfo($file, PATHINFO_EXTENSION) == 'css') {
-            $errors = array();
-            $content = file_get_contents($viewFile);
-            preg_match_all(Mage_Core_Model_Design_Package::REGEX_CSS_RELATIVE_URLS, $content, $matches);
-            foreach ($matches[1] as $relativePath) {
-                $path = $this->_addCssDirectory($relativePath, $file);
-                $pathFile = Mage::getDesign()->getViewFile($path, $params);
-                if (!is_file($pathFile)) {
-                    $errors[] = $relativePath;
+            $fileParts = explode(Mage_Core_Model_Design_Package::SCOPE_SEPARATOR, $file);
+            if (count($fileParts) > 1) {
+                $params['module'] = $fileParts[0];
+            }
+            if (pathinfo($file, PATHINFO_EXTENSION) == 'css') {
+                $errors = array();
+                $content = file_get_contents($viewFile);
+                preg_match_all(Mage_Core_Model_Design_Package::REGEX_CSS_RELATIVE_URLS, $content, $matches);
+                foreach ($matches[1] as $relativePath) {
+                    $path = $this->_addCssDirectory($relativePath, $file);
+                    $pathFile = Mage::getDesign()->getViewFile($path, $params);
+                    if (!is_file($pathFile)) {
+                        $errors[] = $relativePath;
+                    }
+                }
+                if (!empty($errors)) {
+                    $this->fail('Can not find file(s): ' . implode(', ', $errors));
                 }
             }
-            if (!empty($errors)) {
-                $this->fail('Can not find file(s): ' . implode(', ', $errors));
-            }
+        } catch (Exception $e) {
+            $this->fail($e->getMessage());
         }
     }
 

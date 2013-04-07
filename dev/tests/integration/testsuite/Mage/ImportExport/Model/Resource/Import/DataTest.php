@@ -44,13 +44,6 @@ class Mage_ImportExport_Model_Resource_Import_DataTest extends PHPUnit_Framework
         $this->_model = Mage::getResourceModel('Mage_ImportExport_Model_Resource_Import_Data');
     }
 
-    protected function tearDown()
-    {
-        unset($this->_model);
-
-        parent::tearDown();
-    }
-
     /**
      * Test getUniqueColumnData() in case when in data stored in requested column is unique
      */

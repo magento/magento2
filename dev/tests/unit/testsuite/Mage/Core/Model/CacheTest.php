@@ -32,149 +32,126 @@ class Mage_Core_Model_CacheTest extends PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var Mage_Core_Model_Config_Primary
+     * @var PHPUnit_Framework_MockObject_MockObject[]
      */
-    protected $_primaryConfigMock;
+    protected $_cacheTypeMocks;
 
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_configMock;
+    protected $_cacheFrontendMock;
 
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_dirsMock;
-
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_helperMock;
-
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_helperFactoryMock;
-
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject;
-     */
-    protected $_cacheFrontend;
+    protected $_cacheTypesMock;
 
     protected function setUp()
     {
-        $this->_helperFactoryMock = $this->getMock('Mage_Core_Model_Factory_Helper', array(), array(), '', false);
-        $this->_helperMock = $this->getMock('Mage_Core_Helper_Data', array('__'), array(), '', false);
-        $this->_helperMock
+        $helperMock = $this->getMock('Mage_Core_Helper_Data', array('__'), array(), '', false);
+        $helperMock
             ->expects($this->any())
             ->method('__')
-            ->will($this->returnArgument(0));
-        $this->_helperFactoryMock->expects($this->any())->method('get')->will($this->returnValue($this->_helperMock));
+            ->will($this->returnArgument(0))
+        ;
+        $helperFactoryMock = $this->getMock('Mage_Core_Model_Factory_Helper', array(), array(), '', false);
+        $helperFactoryMock
+            ->expects($this->any())
+            ->method('get')
+            ->with('Mage_Core_Helper_Data')
+            ->will($this->returnValue($helperMock))
+        ;
 
-        $this->_dirsMock = $this->getMock('Mage_Core_Model_Dir', array(), array(), '', false);
+        $this->_initCacheTypeMocks();
+        $objectManagerMock = $this->getMockForAbstractClass('Magento_ObjectManager');
+        $objectManagerMock
+            ->expects($this->any())
+            ->method('get')
+            ->will($this->returnCallback(array($this, 'getTypeMock')));
 
-        $this->_primaryConfigMock = $this->getMock('Mage_Core_Model_Config_Primary', array(), array(), '', false);
-
-        $this->_configMock = new Mage_Core_Model_Config_Base(<<<XML
-            <config>
-                <global>
-                    <cache>
-                        <types>
-                            <single_tag>
-                                <label>Tag One</label>
-                                <description>This is Tag One</description>
-                                <tags>tag_one</tags>
-                            </single_tag>
-                            <multiple_tags>
-                                <label>Tags One and Two</label>
-                                <description>These are Tags One and Two</description>
-                                <tags>tag_one,tag_two</tags>
-                            </multiple_tags>
-                        </types>
-                    </cache>
-                </global>
-            </config>
-XML
+        $this->_cacheFrontendMock = $this->getMockForAbstractClass(
+            'Magento_Cache_FrontendInterface', array(), '', true, true, true, array('clean')
         );
 
-        $this->_cacheFrontend = $this->getMock(
-            'Zend_Cache_Core', array('load', 'test', 'save', 'remove', 'clean', '_getHelper')
-        );
+        $frontendPoolMock = $this->getMock('Mage_Core_Model_Cache_Frontend_Pool', array(), array(), '', false);
+        $frontendPoolMock
+            ->expects($this->any())
+            ->method('valid')
+            ->will($this->onConsecutiveCalls(true, false))
+        ;
+        $frontendPoolMock
+            ->expects($this->any())
+            ->method('current')
+            ->will($this->returnValue($this->_cacheFrontendMock))
+        ;
+        $frontendPoolMock
+            ->expects($this->any())
+            ->method('get')
+            ->with(Mage_Core_Model_Cache_Frontend_Pool::DEFAULT_FRONTEND_ID)
+            ->will($this->returnValue($this->_cacheFrontendMock))
+        ;
+
+        $this->_cacheTypesMock = $this->getMock('Mage_Core_Model_Cache_Types', array(), array(), '', false);
+
+        $configFixture = new Mage_Core_Model_Config_Base(file_get_contents(__DIR__ . '/_files/cache_types.xml'));
+
+        $dirsMock = $this->getMock('Mage_Core_Model_Dir', array(), array(), '', false);
+
         $this->_model = new Mage_Core_Model_Cache(
-            $this->_configMock, $this->_primaryConfigMock, $this->_dirsMock, $this->_helperFactoryMock, false, array(
-                'frontend' => $this->_cacheFrontend,
-                'backend'  => 'BlackHole',
-            )
+            $objectManagerMock, $frontendPoolMock, $this->_cacheTypesMock, $configFixture,
+            $dirsMock, $helperFactoryMock
         );
+    }
+
+    /**
+     * Init necessary cache type mocks
+     */
+    protected function _initCacheTypeMocks()
+    {
+        $cacheTypes = array('Magento_Cache_Frontend_Decorator_TagScope', 'Magento_Cache_Frontend_Decorator_Bare');
+        foreach ($cacheTypes as $type) {
+            $this->_cacheTypeMocks[$type] = $this->getMock($type, array('clean'), array(
+                $this->getMockForAbstractClass('Magento_Cache_FrontendInterface'), 'FIXTURE_TAG'
+            ));
+        }
+    }
+
+    /**
+     * Callback for the object manager to get different cache type mocks
+     *
+     * @param string $type Class of the cache type
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getTypeMock($type)
+    {
+        return $this->_cacheTypeMocks[$type];
     }
 
     protected function tearDown()
     {
-        $this->_primaryConfigMock = null;
-        $this->_configMock = null;
-        $this->_dirsMock = null;
-        $this->_helperFactoryMock = null;
-        $this->_helperMock = null;
-        $this->_cacheFrontend = null;
+        $this->_cacheTypeMocks = array();
+        $this->_cacheTypesMock = null;
+        $this->_cacheFrontendMock = null;
         $this->_model = null;
     }
 
-    /**
-     * Force to load desired cache type options
-     *
-     * @param array $cacheTypeOptions
-     */
-    protected function _emulateCacheTypeOptions(array $cacheTypeOptions = array('config' => true))
+    public function testConstructor()
     {
-        $this->_cacheFrontend
-            ->expects($this->any())
-            ->method('load')
-            ->with(strtoupper(Mage_Core_Model_Cache::OPTIONS_CACHE_ID))
-            ->will($this->returnValue(serialize($cacheTypeOptions)))
-        ;
-    }
-
-    /**
-     * @dataProvider constructorDataProvider
-     * @param array $options
-     * @param string $expectedBackendClass
-     */
-    public function testConstructor(array $options, $expectedBackendClass)
-    {
-        $options += array('helper' => $this->_helperMock);
-        $model = new Mage_Core_Model_Cache(
-            $this->_configMock, $this->_primaryConfigMock, $this->_dirsMock,
-            $this->_helperFactoryMock, false, $options
-        );
-
-        $backend = $model->getFrontend()->getBackend();
-        $this->assertInstanceOf($expectedBackendClass, $backend);
-    }
-
-    /**
-     * @return array
-     */
-    public function constructorDataProvider()
-    {
-        return array(
-            array(array(), 'Zend_Cache_Backend_File'),
-            array(array('backend' => 'File'), 'Zend_Cache_Backend_File'),
-            array(array('backend' => 'File', 'backend_options' => array()), 'Zend_Cache_Backend_File'),
-        );
+        $this->assertSame($this->_cacheFrontendMock, $this->_model->getFrontend());
     }
 
     public function testGetFrontend()
     {
         $frontend = $this->_model->getFrontend();
-        $this->assertSame($this->_cacheFrontend, $frontend);
+        $this->assertSame($this->_cacheFrontendMock, $frontend);
     }
 
     public function testLoad()
     {
-        $this->_cacheFrontend
+        $this->_cacheFrontendMock
             ->expects($this->once())
             ->method('load')
-            ->with('TEST_ID')
+            ->with('test_id')
             ->will($this->returnValue('test_data'))
         ;
         $this->assertEquals('test_data', $this->_model->load('test_id'));
@@ -191,7 +168,7 @@ XML
      */
     public function testSave($inputData, $inputId, $inputTags, $expectedData, $expectedId, $expectedTags)
     {
-        $this->_cacheFrontend
+        $this->_cacheFrontendMock
             ->expects($this->once())
             ->method('save')
             ->with($this->identicalTo($expectedData), $expectedId, $expectedTags)
@@ -202,36 +179,20 @@ XML
     public function saveDataProvider()
     {
         $configTag = Mage_Core_Model_Config::CACHE_TAG;
-        $appTag = Mage_Core_Model_AppInterface::CACHE_TAG;
         return array(
             'default tags' => array(
-                'test_data', 'test_id', array(), 'test_data', 'TEST_ID', array($appTag)
+                'test_data', 'test_id', array(), 'test_data', 'test_id', array()
             ),
             'config tags' => array(
-                'test_data', 'test_id', array($configTag), 'test_data', 'TEST_ID', array($configTag)
+                'test_data', 'test_id', array($configTag), 'test_data', 'test_id', array($configTag)
             ),
             'lowercase tags' => array(
-                'test_data', 'test_id', array('test_tag'), 'test_data', 'TEST_ID', array('TEST_TAG', $appTag)
+                'test_data', 'test_id', array('test_tag'), 'test_data', 'test_id', array('test_tag')
             ),
             'non-string data' => array(
-                1234567890, 'test_id', array(), '1234567890', 'TEST_ID', array(Mage_Core_Model_AppInterface::CACHE_TAG)
+                1234567890, 'test_id', array(), '1234567890', 'test_id', array()
             ),
         );
-    }
-
-    public function testSaveDisallowed()
-    {
-        $model = new Mage_Core_Model_Cache(
-            $this->_configMock, $this->_primaryConfigMock, $this->_dirsMock, $this->_helperFactoryMock, array(
-            'frontend' => $this->_cacheFrontend,
-            'backend'  => 'BlackHole',
-            'disallow_save' => true
-        ));
-        $this->_cacheFrontend
-            ->expects($this->never())
-            ->method('save')
-        ;
-        $model->save('test_data', 'test_id');
     }
 
     /**
@@ -240,13 +201,13 @@ XML
      */
     public function testRemove($result)
     {
-        $this->_cacheFrontend
+        $this->_cacheFrontendMock
             ->expects($this->once())
             ->method('remove')
-            ->with('TEST_ID')
+            ->with('test_id')
             ->will($this->returnValue($result))
         ;
-        $this->assertEquals($result, $this->_model->remove('test_ID'));
+        $this->assertEquals($result, $this->_model->remove('test_id'));
     }
 
     public function successFailureDataProvider()
@@ -257,131 +218,75 @@ XML
         );
     }
 
-    /**
-     * @dataProvider cleanDataProvider
-     * @param array $inputTags
-     * @param array $expectedTags
-     */
-    public function testClean(array $inputTags, array $expectedTags)
+    public function testCleanByTags()
     {
-        $this->_cacheFrontend
+        $expectedTags = array('test_tag');
+        $this->_cacheFrontendMock
             ->expects($this->once())
             ->method('clean')
             ->with(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $expectedTags)
-            ->will($this->returnValue(false))
-        ;
-        $this->_model->clean($inputTags);
-    }
-
-    public function cleanDataProvider()
-    {
-        return array(
-            'default tags' => array(array(), array(Mage_Core_Model_AppInterface::CACHE_TAG)),
-            'custom tags'  => array(array('test_tag'), array('TEST_TAG')),
-        );
-    }
-
-    public function testCleanByConfig()
-    {
-        $this->_cacheFrontend
-            ->expects($this->at(0))
-            ->method('clean')
-            ->with(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array(Mage_Core_Model_AppInterface::CACHE_TAG))
             ->will($this->returnValue(true))
         ;
-        $this->_cacheFrontend
-            ->expects($this->at(1))
-            ->method('clean')
-            ->with(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array(Mage_Core_Model_Config::CACHE_TAG))
-            ->will($this->returnValue(true))
-        ;
-        $this->_model->clean();
+        $this->assertTrue($this->_model->clean($expectedTags));
     }
 
-    /**
-     * @dataProvider successFailureDataProvider
-     * @param bool $result
-     */
-    public function testFlush($result)
+    public function testCleanByEmptyTags()
     {
-        $this->_cacheFrontend
+        $this->_cacheFrontendMock
             ->expects($this->once())
             ->method('clean')
-            ->will($this->returnValue($result))
+            ->with(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array(Mage_Core_Model_AppInterface::CACHE_TAG))
+            ->will($this->returnValue(true))
         ;
-        $this->assertEquals($result, $this->_model->flush());
+        $this->assertTrue($this->_model->clean());
     }
 
-    /**
-     * @return Mage_Core_Model_Cache
-     */
     public function testCanUse()
     {
-        $this->_emulateCacheTypeOptions();
-        $this->assertEquals(array('config' => true), $this->_model->canUse(''));
+        $this->_cacheTypesMock
+            ->expects($this->once())
+            ->method('isEnabled')
+            ->with('config')
+            ->will($this->returnValue(true))
+        ;
         $this->assertTrue($this->_model->canUse('config'));
-        return $this->_model;
     }
 
-    /**
-     * @depends testCanUse
-     * @param Mage_Core_Model_Cache $model
-     * @return Mage_Core_Model_CacheTest
-     */
-    public function testBanUse(Mage_Core_Model_Cache $model)
+    public function testBanUse()
     {
-        $this->_emulateCacheTypeOptions();
-        $this->assertTrue($model->canUse('config'));
-        $model->banUse('config');
-        $this->assertFalse($model->canUse('config'));
-        return $model;
+        $this->_cacheTypesMock
+            ->expects($this->once())
+            ->method('setEnabled')
+            ->with('config', false)
+        ;
+        $this->_model->banUse('config');
     }
 
-    /**
-     * @depends testBanUse
-     * @param Mage_Core_Model_Cache $model
-     */
-    public function testAllowUse(Mage_Core_Model_Cache $model)
+    public function testAllowUse()
     {
-        $this->_emulateCacheTypeOptions();
-        $this->assertFalse($model->canUse('config'));
-        $model->allowUse('config');
-        $this->assertTrue($model->canUse('config'));
-    }
-
-    /**
-     * @dataProvider getTagsByTypeDataProvider
-     */
-    public function testGetTagsByType($cacheType, $expectedTags)
-    {
-        $actualTags = $this->_model->getTagsByType($cacheType);
-        $this->assertEquals($expectedTags, $actualTags);
-    }
-
-    public function getTagsByTypeDataProvider()
-    {
-        return array(
-            'single tag'    => array('single_tag',    array('tag_one')),
-            'multiple tags' => array('multiple_tags', array('tag_one', 'tag_two')),
-            'non-existing'  => array('non-existing',  false),
-        );
+        $this->_cacheTypesMock
+            ->expects($this->once())
+            ->method('setEnabled')
+            ->with('config', true)
+        ;
+        $this->_model->allowUse('config');
     }
 
     public function testGetTypes()
     {
         $expectedCacheTypes = array(
-            'single_tag' => array(
-                'id'          => 'single_tag',
-                'cache_type'  => 'Tag One',
-                'description' => 'This is Tag One',
-                'tags'        => 'TAG_ONE',
+            'fixture_type_tag_scope' => array(
+                'id'          => 'fixture_type_tag_scope',
+                'cache_type'  => 'Fixture Type One',
+                'description' => 'This is Fixture Type One',
+                'tags'        => 'FIXTURE_TAG',
                 'status'      => 0,
             ),
-            'multiple_tags' => array(
-                'id'          => 'multiple_tags',
-                'cache_type'  => 'Tags One and Two',
-                'description' => 'These are Tags One and Two',
-                'tags'        => 'TAG_ONE,TAG_TWO',
+            'fixture_type_bare' => array(
+                'id'          => 'fixture_type_bare',
+                'cache_type'  => 'Fixture Type Two',
+                'description' => 'This is Fixture Type Two',
+                'tags'        => '',
                 'status'      => 0,
             ),
         );
@@ -397,50 +302,44 @@ XML
 
     public function testGetInvalidatedTypes()
     {
-        $this->_model->allowUse('single_tag');
-        $this->_cacheFrontend
+        $this->_cacheTypesMock
+            ->expects($this->any())
+            ->method('isEnabled')
+            ->will($this->returnValue(true))
+        ;
+        $this->_cacheFrontendMock
             ->expects($this->once())
             ->method('load')
-            ->with(strtoupper(Mage_Core_Model_Cache::INVALIDATED_TYPES))
-            ->will($this->returnValue(serialize(array('single_tag' => 1, 'non_existing_type' => 1))))
+            ->with(Mage_Core_Model_Cache::INVALIDATED_TYPES)
+            ->will($this->returnValue(serialize(array('fixture_type_tag_scope' => 1))))
         ;
         $actualResult = $this->_model->getInvalidatedTypes();
         $this->assertInternalType('array', $actualResult);
         $this->assertCount(1, $actualResult);
-        $this->assertArrayHasKey('single_tag', $actualResult);
-        $this->assertInstanceOf('Varien_Object', $actualResult['single_tag']);
+        $this->assertArrayHasKey('fixture_type_tag_scope', $actualResult);
+        $this->assertInstanceOf('Varien_Object', $actualResult['fixture_type_tag_scope']);
     }
 
     public function testInvalidateType()
     {
-        $this->_cacheFrontend
+        $this->_cacheFrontendMock
             ->expects($this->once())
             ->method('save')
-            ->with(serialize(array('test' => 1)), strtoupper(Mage_Core_Model_Cache::INVALIDATED_TYPES))
+            ->with(serialize(array('test' => 1)), Mage_Core_Model_Cache::INVALIDATED_TYPES)
         ;
         $this->_model->invalidateType('test');
     }
 
     public function testCleanType()
     {
-        $this->_model->allowUse('single_tag');
-        $this->_model->allowUse('multiple_tags');
-        $this->_cacheFrontend
-            ->expects($this->at(0))
+        $this->_cacheTypeMocks['Magento_Cache_Frontend_Decorator_TagScope']
+            ->expects($this->once())
             ->method('clean')
-            ->with(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('TAG_ONE', 'TAG_TWO'))
         ;
-        $this->_cacheFrontend
-            ->expects($this->at(1))
-            ->method('load')
-            ->with(strtoupper(Mage_Core_Model_Cache::INVALIDATED_TYPES))
-            ->will($this->returnValue(serialize(array('single_tag' => 1, 'multiple_tags' => 1))))
+        $this->_cacheTypeMocks['Magento_Cache_Frontend_Decorator_Bare']
+            ->expects($this->never())
+            ->method('clean')
         ;
-        $this->_cacheFrontend
-            ->expects($this->at(2))
-            ->method('save')
-            ->with(serialize(array('single_tag' => 1)), strtoupper(Mage_Core_Model_Cache::INVALIDATED_TYPES))
-        ;
-        $this->_model->cleanType('multiple_tags');
+        $this->_model->cleanType('fixture_type_tag_scope');
     }
 }

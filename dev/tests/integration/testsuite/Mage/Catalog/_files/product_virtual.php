@@ -34,6 +34,7 @@ $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL)
     ->setName('Virtual Product')
     ->setSku('virtual-product')
     ->setPrice(10)
+    ->setTaxClassId(0)
     ->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)
     ->setStatus(Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
     ->save();

@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Backend_Model_ObserverTest extends PHPUnit_Framework_TestCase
+class Mage_Backend_Model_ObserverTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @var Mage_Backend_Model_Observer
@@ -34,12 +34,8 @@ class Mage_Backend_Model_ObserverTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        parent::setUp();
         $this->_model = Mage::getModel('Mage_Backend_Model_Observer');
-    }
-
-    protected function tearDown()
-    {
-        $this->_model = null;
     }
 
     public function testActionPreDispatchAdminNotLogged()

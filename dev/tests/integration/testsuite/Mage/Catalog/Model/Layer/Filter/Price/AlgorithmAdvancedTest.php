@@ -44,11 +44,6 @@ class Mage_Catalog_Model_Layer_Filter_Price_AlgorithmAdvancedTest extends PHPUni
          $this->_model = Mage::getModel('Mage_Catalog_Model_Layer_Filter_Price_Algorithm');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * Prepare price filter model
      *

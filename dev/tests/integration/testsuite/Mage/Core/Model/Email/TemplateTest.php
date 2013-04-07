@@ -45,19 +45,12 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
         $this->_model = $this->getMockBuilder('Mage_Core_Model_Email_Template')
             ->setMethods(array('_getMail'))
             ->setConstructorArgs(array(
-                $this->getMockBuilder('Mage_Core_Model_Event_Manager')->disableOriginalConstructor()->getMock(),
-                $this->getMockBuilder('Mage_Core_Model_Cache')->disableOriginalConstructor()->getMock(),
+                Mage::getSingleton('Mage_Core_Model_Context'),
                 Mage::getObjectManager()->create('Magento_Filesystem')
             ))
             ->getMock();
         $this->_model->expects($this->any())->method('_getMail')->will($this->returnCallback(array($this, 'getMail')));
         $this->_model->setSenderName('sender')->setSenderEmail('sender@example.com')->setTemplateSubject('Subject');
-    }
-
-    protected function tearDown()
-    {
-        $this->_model = null;
-        $this->_mail = null;
     }
 
     /**
@@ -111,7 +104,7 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
     public function testGetProcessedTemplate()
     {
         $this->_setBlueThemeForFixtureStore();
-        $expectedViewUrl = 'theme/static/frontend/default/demo_blue/en_US/Mage_Page/favicon.ico';
+        $expectedViewUrl = 'static/frontend/default/demo_blue/en_US/Mage_Page/favicon.ico';
         $this->_model->setTemplateText('{{view url="Mage_Page::favicon.ico"}}');
         $this->assertStringEndsNotWith($expectedViewUrl, $this->_model->getProcessedTemplate());
         $this->_model->setDesignConfig(array(
@@ -141,7 +134,7 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
     {
         $this->_model->setTemplateText('{{view url="Mage_Page::favicon.ico"}}');
         $this->assertStringEndsWith(
-            'theme/static/frontend/default/modern/en_US/Mage_Page/favicon.ico',
+            'static/frontend/default/modern/en_US/Mage_Page/favicon.ico',
             $this->_model->getProcessedTemplate()
         );
     }
@@ -154,7 +147,7 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
     public function testGetProcessedTemplateSubject()
     {
         $this->_setBlueThemeForFixtureStore();
-        $expectedViewUrl = 'theme/static/frontend/default/demo_blue/en_US/Mage_Page/favicon.ico';
+        $expectedViewUrl = 'static/frontend/default/demo_blue/en_US/Mage_Page/favicon.ico';
         $this->_model->setTemplateSubject('{{view url="Mage_Page::favicon.ico"}}');
         $this->assertStringEndsNotWith($expectedViewUrl, $this->_model->getProcessedTemplateSubject(array()));
         $this->_model->setDesignConfig(array(

@@ -119,7 +119,7 @@
         });
         var init = {
             name: name,
-            args: args,
+            args: args.length > 0 ? args : [{}],
             resources: (_resources[name] || []).slice()
         };
         // Through event-listener 3-rd party developer can modify options and list of resources

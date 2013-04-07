@@ -79,10 +79,10 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
      */
     public function testMergeFilesException()
     {
-        $this->_model->getOptimalCssUrls(array(
+        $this->_model->mergeFiles(array(
             'css/exception.css',
             'css/file.css',
-        ));
+        ), Mage_Core_Model_Design_Package::CONTENT_TYPE_CSS);
         $this->assertFileNotExists(self::$_themePublicDir . '/frontend/package/default/en_US/access_violation.php');
     }
 
@@ -99,13 +99,11 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
     public function testMergeFiles($contentType, $files, $expectedFilename, $related = array())
     {
         if ($contentType == Mage_Core_Model_Design_Package::CONTENT_TYPE_CSS) {
-            $result = $this->_model->getOptimalCssUrls($files);
+            $result = $this->_model->mergeFiles($files, Mage_Core_Model_Design_Package::CONTENT_TYPE_CSS);
         } else {
-            $result = $this->_model->getOptimalJsUrls($files);
+            $result = $this->_model->mergeFiles($files, Mage_Core_Model_Design_Package::CONTENT_TYPE_JS);
         }
-        $this->assertArrayHasKey(0, $result);
-        $this->assertEquals(1, count($result), 'Result must contain exactly one file.');
-        $this->assertEquals($expectedFilename, basename($result[0]));
+        $this->assertEquals($expectedFilename, basename($result));
         foreach ($related as $file) {
             $this->assertFileExists(
                 self::$_themePublicDir . '/frontend/package/default/en_US/' . $file
@@ -126,21 +124,13 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
     public function testMergeFilesSigned($contentType, $files, $expectedFilename, $related = array())
     {
         if ($contentType == Mage_Core_Model_Design_Package::CONTENT_TYPE_CSS) {
-            $result = $this->_model->getOptimalCssUrls($files);
+            $result = $this->_model->mergeFiles($files, Mage_Core_Model_Design_Package::CONTENT_TYPE_CSS);
         } else {
-            $result = $this->_model->getOptimalJsUrls($files);
+            $result = $this->_model->mergeFiles($files, Mage_Core_Model_Design_Package::CONTENT_TYPE_JS);
         }
-        $this->assertArrayHasKey(0, $result);
-        $this->assertEquals(1, count($result), 'Result must contain exactly one file.');
-        $mergedFileName = basename($result[0]);
+        $mergedFileName = basename($result);
         $mergedFileName = preg_replace('/\?.*$/i', '', $mergedFileName);
         $this->assertEquals($expectedFilename, $mergedFileName);
-        $lastModified = array();
-        preg_match('/.*\?(.*)$/i', $result[0], $lastModified);
-        $this->assertArrayHasKey(1, $lastModified);
-        $this->assertEquals(10, strlen($lastModified[1]));
-        $this->assertLessThanOrEqual(time(), $lastModified[1]);
-        $this->assertGreaterThan(1970, date('Y', $lastModified[1]));
         foreach ($related as $file) {
             $this->assertFileExists(
                 self::$_themePublicDir . '/frontend/package/default/en_US/' . $file
@@ -200,7 +190,7 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
         $this->assertFileNotExists($resultingFile);
 
         // merge first time
-        $this->_model->getOptimalJsUrls($files);
+        $this->_model->mergeFiles($files, Mage_Core_Model_Design_Package::CONTENT_TYPE_JS);
         $this->assertFileExists($resultingFile);
 
     }
@@ -212,10 +202,10 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
     {
         $this->assertFileNotExists(self::$_viewPublicMergedDir);
 
-        $this->_model->getOptimalJsUrls(array(
+        $this->_model->mergeFiles(array(
             'mage/calendar.js',
             'scripts.js',
-        ));
+        ), Mage_Core_Model_Design_Package::CONTENT_TYPE_JS);
         $this->assertFileExists(self::$_viewPublicMergedDir);
         $filesFound = false;
         foreach (new RecursiveDirectoryIterator(self::$_viewPublicMergedDir) as $fileInfo) {

@@ -53,12 +53,6 @@ class Mage_Core_Model_AppTest extends PHPUnit_Framework_TestCase
         $this->_mageModel   = Mage::app();
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-        $this->_mageModel = null;
-    }
-
     public function testGetCookie()
     {
         $this->assertInstanceOf('Mage_Core_Model_Cookie', $this->_model->getCookie());
@@ -217,13 +211,13 @@ class Mage_Core_Model_AppTest extends PHPUnit_Framework_TestCase
     public function testGetCacheInstance()
     {
         $cache = $this->_mageModel->getCacheInstance();
-        $this->assertInstanceOf('Mage_Core_Model_Cache', $cache);
+        $this->assertInstanceOf('Mage_Core_Model_CacheInterface', $cache);
         $this->assertSame($cache, $this->_mageModel->getCacheInstance());
     }
 
     public function testGetCache()
     {
-        $this->assertInstanceOf('Zend_Cache_Core', $this->_mageModel->getCache());
+        $this->assertInstanceOf('Magento_Cache_FrontendInterface', $this->_mageModel->getCache());
     }
 
     public function testLoadSaveRemoveCache()

@@ -37,11 +37,6 @@ class Mage_CatalogSearch_Helper_DataTest extends PHPUnit_Framework_TestCase
         $this->_helper = Mage::helper('Mage_CatalogSearch_Helper_Data');
     }
 
-    protected function tearDown()
-    {
-        $this->_helper = null;
-    }
-
     public function testGetResultUrl()
     {
         $this->assertStringEndsWith('/catalogsearch/result/', $this->_helper->getResultUrl());
@@ -69,7 +64,7 @@ class Mage_CatalogSearch_Helper_DataTest extends PHPUnit_Framework_TestCase
         /** @var $mock Mage_CatalogSearch_Helper_Data */
         $mock = $this->getMock(
             'Mage_CatalogSearch_Helper_Data',
-            array('getQueryText'), array(Mage::getObjectManager()->get('Mage_Core_Model_Translate'))
+            array('getQueryText'), array(Mage::getObjectManager()->get('Mage_Core_Helper_Context'))
         );
         $mock->expects($this->any())
             ->method('getQueryText')

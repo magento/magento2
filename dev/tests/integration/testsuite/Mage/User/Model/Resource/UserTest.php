@@ -31,11 +31,6 @@ class Mage_User_Model_Resource_UserTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getResourceSingleton('Mage_User_Model_Resource_User');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * No node - no limitation
      */

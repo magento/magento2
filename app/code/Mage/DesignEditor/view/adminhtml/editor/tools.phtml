@@ -1,0 +1,96 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     Mage_DesignEditor
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php /** @var $this Mage_DesignEditor_Block_Adminhtml_Editor_Tools */ ?>
+<section class="vde-tools">
+    <header class="vde-tools-header">
+        <div class="vde-tools-header-inner">
+            <button class="action-close" title="<?php echo $this->__('Close Panel'); ?>">
+                <span><?php echo $this->__('Close Panel'); ?></span>
+            </button>
+        </div>
+    </header>
+    <div class="vde-tools-content">
+        <div class="vde-tools-content-inner">
+            <div class="vde-tools-handler-container"></div>
+            <?php echo join('', $this->getTabContents()) ?>
+        </div>
+    </div>
+    <footer class="vde-tools-footer">
+        <div class="vde-tools-footer-inner">
+            <div class="vde-tools-tabs">
+                <ul class="vde-tab-controls">
+                    <?php echo join('', $this->getTabHandles()) ?>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</section>
+
+<script type="text/javascript">
+(function($) {
+    'use strict';
+
+    $(function () {
+      $('body').on('click.tab.data-api', '[data-toggle="tab-disabled"]', function (e) {
+        e.preventDefault();
+      })
+    })
+    $('.vde-tools').toolsPanel();
+    $('#vde-tab-quick-styles .element-font-picker select,' +
+      '#vde-tab-quick-styles .element-color-picker input,' +
+      '#vde-tab-quick-styles .element-background .element-checkbox'
+    ).quickStyleElement({
+        saveQuickStylesUrl: '<?php echo $this->getSaveUrl(); ?>'
+    });
+
+    $(document).ready(function() {
+        var eventData = {
+            elements: {
+                click: [
+                    '#vde-tab-quick-styles .element-image-uploader',
+                    '#vde-tab-quick-styles .element-background .element-checkbox'
+                ],
+                mousedown: ['#vde-tab-quick-styles .color-box'],
+                focus: [
+                    '#vde-tab-quick-styles .element-color-picker input',
+                    '#vde-tab-quick-styles .element-font-picker select'
+                ]
+            }
+        };
+        $('body').trigger('registerElements', eventData);
+    });
+
+    $('[class^="action-"][href="#vde-tab-custom"]').on('click.activateCustomCodeTab', function() {
+        $('.vde-tab-controls a[href="#vde-tab-custom"]').trigger('click');
+    });
+
+    $('.action-edit[href="#vde-tab-custom"]').on('click.focusOnCustomCodeTextarea', function() {
+        $('#custom_code').focus();
+    });
+})(window.jQuery);
+</script>

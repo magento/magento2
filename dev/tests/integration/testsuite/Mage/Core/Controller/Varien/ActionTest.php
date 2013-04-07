@@ -49,11 +49,6 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testHasAction()
     {
         $this->assertFalse($this->_model->hasAction('test'));

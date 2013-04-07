@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Adminhtml_Block_Poll_Grid
  */
-class Mage_Adminhtml_Block_Poll_GridTest extends PHPUnit_Framework_TestCase
+class Mage_Adminhtml_Block_Poll_GridTest extends Mage_Backend_Area_TestCase
 {
     public function testPrepareColumns()
     {

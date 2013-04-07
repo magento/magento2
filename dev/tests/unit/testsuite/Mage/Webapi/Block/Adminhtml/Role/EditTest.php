@@ -67,7 +67,7 @@ class Mage_Webapi_Block_Adminhtml_Role_EditTest extends PHPUnit_Framework_TestCa
             ->will($this->returnValue(1));
 
         $helper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_block = $helper->getBlock('Mage_Webapi_Block_Adminhtml_Role_Edit', array(
+        $this->_block = $helper->getObject('Mage_Webapi_Block_Adminhtml_Role_Edit', array(
             'urlBuilder' => $this->_urlBuilder,
             'layout' => $this->_layout,
             'request' => $this->_request

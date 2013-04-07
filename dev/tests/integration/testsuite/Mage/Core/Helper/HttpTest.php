@@ -37,11 +37,6 @@ class Mage_Core_Helper_HttpTest extends PHPUnit_Framework_TestCase
         $this->_helper = Mage::helper('Mage_Core_Helper_Http');
     }
 
-    protected function tearDown()
-    {
-        $this->_helper = null;
-    }
-
     public function testGetRemoteAddrHeaders()
     {
         $this->assertEquals(array(), $this->_helper->getRemoteAddrHeaders());

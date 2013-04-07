@@ -40,11 +40,6 @@ class Magento_File_SizeTest extends PHPUnit_Framework_TestCase
         $this->_fileSize = Mage::getObjectManager()->get('Magento_File_Size');
     }
 
-    protected function tearDown()
-    {
-        $this->_fileSize = null;
-    }
-
     /**
      * @covers Mage_Core_Helper_File_Storage::getMaxFileSize
      * @backupStaticAttributes

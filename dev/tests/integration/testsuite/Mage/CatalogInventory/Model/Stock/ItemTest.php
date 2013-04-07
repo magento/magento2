@@ -37,11 +37,6 @@ class Mage_CatalogInventory_Model_Stock_ItemTest extends PHPUnit_Framework_TestC
         $this->_model = Mage::getModel('Mage_CatalogInventory_Model_Stock_Item');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * Simple product with stock item
      */
@@ -58,6 +53,32 @@ class Mage_CatalogInventory_Model_Stock_ItemTest extends PHPUnit_Framework_TestC
             ->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)
             ->setStatus(Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
             ->save();
+    }
+
+    /**
+     * @magentoDataFixture simpleProductFixture
+     */
+    public function testSaveWithNullQty()
+    {
+        $this->markTestIncomplete('MAGETWO-8308');
+        $this->_model
+            ->setProductId(1)
+            ->setTypeId(Mage_Catalog_Model_Product_Type::DEFAULT_TYPE)
+            ->setStockId(Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID)
+            ->setQty(null);
+        $this->_model->save();
+
+        $this->_model->setQty(0)->setQtyCorrection(2);
+        $this->_model->save();
+        $this->assertEquals('2.0000', $this->_model->load(1)->getQty());
+
+        $this->_model->setQtyCorrection(-2);
+        $this->_model->save();
+        $this->assertEquals('0.0000', $this->_model->load(1)->getQty());
+
+        $this->_model->setQty(null);
+        $this->_model->save();
+        $this->assertEquals(null, $this->_model->load(1)->getQty());
     }
 
     /**

@@ -71,7 +71,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_CurrencyTest extends PHPUni
         $this->_row = new Varien_Object(array('columnIndex' => '10'));
 
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_blockCurrency = $objectManagerHelper->getBlock(
+        $this->_blockCurrency = $objectManagerHelper->getObject(
             'Mage_Backend_Block_Widget_Grid_Column_Renderer_Currency',
             array(
                 'locale' => $this->_localeMock,

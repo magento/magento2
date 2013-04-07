@@ -40,11 +40,6 @@ class Mage_Newsletter_Model_TemplateTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getModel('Mage_Newsletter_Model_Template');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * @magentoConfigFixture                    install/design/theme/full_name   default/basic
      * @magentoConfigFixture                    adminhtml/design/theme/full_name default/basic

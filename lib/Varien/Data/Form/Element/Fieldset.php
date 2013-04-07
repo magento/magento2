@@ -84,7 +84,7 @@ class Varien_Data_Form_Element_Fieldset extends Varien_Data_Form_Element_Abstrac
             $html.= '<legend ' . $this->_getUiId('legend') . '>'.$this->getLegend().'</legend>'."\n";
         }
         $html.= $this->getChildrenHtml();
-        $html.= '</fieldset></div>'."\n";
+        $html.= '</fieldset>'."\n";
         $html.= $this->getAfterElementHtml();
         return $html;
     }
@@ -215,6 +215,7 @@ class Varien_Data_Form_Element_Fieldset extends Varien_Data_Form_Element_Abstrac
     {
         $html = '<div><h4 class="icon-head head-edit-form fieldset-legend">'.$this->getLegend().'</h4>'."\n";
         $html.= $this->getElementHtml();
+        $html.= '</div>';
         return $html;
     }
 

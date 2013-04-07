@@ -40,11 +40,6 @@ class Mage_Catalog_Model_Product_Attribute_ApiTest extends PHPUnit_Framework_Tes
         $this->_model = Mage::getModel('Mage_Catalog_Model_Product_Attribute_Api');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testItems()
     {
         $items = $this->_model->items(4); /* default product attribute set after installation */

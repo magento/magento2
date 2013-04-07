@@ -61,11 +61,6 @@ class Mage_Catalog_Model_Layer_Filter_AttributeTest extends PHPUnit_Framework_Te
         ));
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testOptionIdNotEmpty()
     {
         $this->assertNotEmpty($this->_attributeOptionId, 'Fixture attribute option id.'); // just in case

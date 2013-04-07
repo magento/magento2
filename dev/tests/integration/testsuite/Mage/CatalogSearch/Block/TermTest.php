@@ -37,11 +37,6 @@ class Mage_CatalogSearch_Block_TermTest extends PHPUnit_Framework_TestCase
         $this->_block = Mage::app()->getLayout()->createBlock('Mage_CatalogSearch_Block_Term');
     }
 
-    protected function tearDown()
-    {
-        $this->_block = null;
-    }
-
     public function testGetSearchUrl()
     {
         $query = uniqid();

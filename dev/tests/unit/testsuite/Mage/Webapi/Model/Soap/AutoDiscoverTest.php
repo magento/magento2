@@ -33,7 +33,7 @@ class Mage_Webapi_Model_Soap_AutoDiscoverTest extends PHPUnit_Framework_TestCase
     /** @var Mage_Webapi_Model_Soap_AutoDiscover */
     protected $_autoDiscover;
 
-    /** @var Mage_Core_Model_Cache */
+    /** @var Mage_Core_Model_CacheInterface */
     protected $_cacheMock;
 
     /** @var Mage_Webapi_Model_Config_Soap */
@@ -67,12 +67,12 @@ class Mage_Webapi_Model_Soap_AutoDiscoverTest extends PHPUnit_Framework_TestCase
         $wsdlFactory = $this->getMock(
             'Mage_Webapi_Model_Soap_Wsdl_Factory',
             array('create'),
-            array(new Magento_ObjectManager_Zend())
+            array(new Magento_ObjectManager_ObjectManager())
         );
         $wsdlFactory->expects($this->any())->method('create')->will($this->returnValue($this->_wsdlMock));
         $helper = $this->getMock('Mage_Webapi_Helper_Config', array('__'), array(), '', false, false);
         $helper->expects($this->any())->method('__')->will($this->returnArgument(0));
-        $this->_cacheMock = $this->getMockBuilder('Mage_Core_Model_Cache')->disableOriginalConstructor()->getMock();
+        $this->_cacheMock = $this->getMock('Mage_Core_Model_CacheInterface');
         /** Initialize SUT. */
         $this->_autoDiscover = new Mage_Webapi_Model_Soap_AutoDiscover(
             $this->_resourceConfigMock,

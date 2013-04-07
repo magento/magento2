@@ -26,10 +26,10 @@
  */
 
 require_once (realpath(dirname(__FILE__) . '/../../../../../../../../../../')
-    . '/app/code/core/Mage/Backend/Controller/System/ConfigAbstract.php');
+    . '/app/code/Mage/Backend/Controller/System/ConfigAbstract.php');
 
 require_once (realpath(dirname(__FILE__) . '/../../../../../../../../../../')
-    . '/app/code/core/Mage/Backend/controllers/Adminhtml/System/Config/SaveController.php');
+    . '/app/code/Mage/Backend/controllers/Adminhtml/System/Config/SaveController.php');
 
 class Mage_Backend_Adminhtml_System_Config_SaveControllerTest extends PHPUnit_Framework_TestCase
 {
@@ -87,7 +87,7 @@ class Mage_Backend_Adminhtml_System_Config_SaveControllerTest extends PHPUnit_Fr
     {
         $this->_requestMock = $this->getMock('Mage_Core_Controller_Request_Http', array(), array(), '', false, false);
         $responseMock = $this->getMock('Mage_Core_Controller_Response_Http', array(), array(), '', false, false);
-        $objectManagerMock = $this->getMock('Magento_ObjectManager_Zend', array(), array(), '', false, false);
+        $objectManagerMock = $this->getMock('Magento_ObjectManager');
         $frontControllerMock = $this->getMock('Mage_Core_Controller_Varien_Front', array(), array(), '', false, false);
         $authorizationMock = $this->getMock('Mage_Core_Model_Authorization', array(), array(), '', false, false);
         $this->_configMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false, false);

@@ -37,11 +37,6 @@ class Mage_Catalog_Model_Resource_UrlTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getResourceModel('Mage_Catalog_Model_Resource_Url');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * @magentoDataFixture Mage/Catalog/Model/Resource/_files/url_rewrites.php
      */

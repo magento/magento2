@@ -79,9 +79,135 @@ class Mage_Theme_Model_Wysiwyg_StorageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Mage_Theme_Model_Wysiwyg_Storage::_createThumbnail
+     * @covers Mage_Theme_Model_Wysiwyg_Storage::uploadFile
+     */
+    public function testUploadFile()
+    {
+        $uplaoder = $this->_prepareUploader();
+
+        $uplaoder->expects($this->once())
+            ->method('save')
+            ->will($this->returnValue(array('not_empty')));
+
+        $this->_helperStorage->expects($this->once())
+            ->method('getStorageType')
+            ->will($this->returnValue(Mage_Theme_Model_Wysiwyg_Storage::TYPE_IMAGE));
+
+        /** Prepare filesystem */
+
+        $this->_filesystem->expects($this->any())
+            ->method('isFile')
+            ->will($this->returnValue(true));
+
+        $this->_filesystem->expects($this->once())
+            ->method('isReadable')
+            ->will($this->returnValue(true));
+
+
+        /** Prepare image */
+
+        $dataHelper = $this->getMock('Mage_Core_Helper_Data', array(), array(), '', false);
+        $imageAdapter= $this->getMock('Varien_Image_Adapter', array('factory'), array(), '', false);
+        $image = $this->getMock('Varien_Image_Adapter_Gd2', array(), array(), '', false);
+
+        $this->_objectManager->expects($this->at(1))
+            ->method('get')
+            ->will($this->returnValue($dataHelper));
+
+        $dataHelper->expects($this->once())
+            ->method('getImageAdapterType')
+            ->will($this->returnValue(Varien_Image_Adapter::ADAPTER_GD2));
+
+        $image->expects($this->once())
+            ->method('open')
+            ->will($this->returnValue(true));
+
+        $image->expects($this->once())
+            ->method('keepAspectRatio')
+            ->will($this->returnValue(true));
+
+        $image->expects($this->once())
+            ->method('resize')
+            ->will($this->returnValue(true));
+
+        $image->expects($this->once())
+            ->method('save')
+            ->will($this->returnValue(true));
+
+        $imageAdapter->staticExpects($this->at(0))
+            ->method('factory')
+            ->will($this->returnValue($image));
+
+        $this->_objectManager->expects($this->at(2))
+            ->method('get')
+            ->will($this->returnValue($imageAdapter));
+
+        /** Prepare session */
+
+        $session = $this->getMock('Mage_Backend_Model_Session', array(), array(), '', false);
+
+        $this->_helperStorage->expects($this->any())
+            ->method('getSession')
+            ->will($this->returnValue($session));
+
+        $expectedResult = array(
+            'not_empty',
+            'cookie' => array(
+                'name'     => null,
+                'value'    => null,
+                'lifetime' => null,
+                'path'     => null,
+                'domain'   => null
+            )
+        );
+
+        $this->assertEquals($expectedResult, $this->_storageModel->uploadFile($this->_storageRoot));
+    }
+
+    /**
+     * @covers Mage_Theme_Model_Wysiwyg_Storage::uploadFile
+     * @expectedException Mage_Core_Exception
+     */
+    public function testUploadInvalidFile()
+    {
+        $uplaoder = $this->_prepareUploader();
+
+        $uplaoder->expects($this->once())
+            ->method('save')
+            ->will($this->returnValue(null));
+
+        $this->_storageModel->uploadFile($this->_storageRoot);
+    }
+
+    protected function _prepareUploader()
+    {
+        $uploader = $this->getMock('Mage_Core_Model_File_Uploader', array(), array(), '', false);
+
+        $this->_objectManager->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($uploader));
+
+        $uploader->expects($this->once())
+            ->method('setAllowedExtensions')
+            ->will($this->returnValue($uploader));
+
+        $uploader->expects($this->once())
+            ->method('setAllowRenameFiles')
+            ->will($this->returnValue($uploader));
+
+        $uploader->expects($this->once())
+            ->method('setFilesDispersion')
+            ->will($this->returnValue($uploader));
+
+        return $uploader;
+    }
+
+    /**
+     * @dataProvider booleanCasesDataProvider
      * @covers Mage_Theme_Model_Wysiwyg_Storage::createFolder
      */
-    public function testCreateFolder()
+    public function testCreateFolder($isWritable)
     {
         $newDirectoryName = 'dir1';
         $fullNewPath = $this->_storageRoot . Magento_Filesystem::DIRECTORY_SEPARATOR . $newDirectoryName;
@@ -89,7 +215,7 @@ class Mage_Theme_Model_Wysiwyg_StorageTest extends PHPUnit_Framework_TestCase
         $this->_filesystem->expects($this->once())
             ->method('isWritable')
             ->with($this->_storageRoot)
-            ->will($this->returnValue(true));
+            ->will($this->returnValue($isWritable));
 
         $this->_filesystem->expects($this->once())
             ->method('has')
@@ -111,7 +237,7 @@ class Mage_Theme_Model_Wysiwyg_StorageTest extends PHPUnit_Framework_TestCase
             ->with($fullNewPath)
             ->will($this->returnValue($newDirectoryName));
 
-        $this->_helperStorage->expects($this->once())
+        $this->_helperStorage->expects($this->any())
             ->method('getStorageRoot')
             ->will($this->returnValue($this->_storageRoot));
 
@@ -126,6 +252,38 @@ class Mage_Theme_Model_Wysiwyg_StorageTest extends PHPUnit_Framework_TestCase
             $expectedResult,
             $this->_storageModel->createFolder($newDirectoryName, $this->_storageRoot)
         );
+    }
+
+    /**
+     * @covers Mage_Theme_Model_Wysiwyg_Storage::createFolder
+     * @expectedException Mage_Core_Exception
+     */
+    public function testCreateFolderWithInvalidName()
+    {
+        $newDirectoryName = 'dir2!#$%^&';
+        $this->_storageModel->createFolder($newDirectoryName, $this->_storageRoot);
+    }
+
+    /**
+     * @covers Mage_Theme_Model_Wysiwyg_Storage::createFolder
+     * @expectedException Mage_Core_Exception
+     */
+    public function testCreateFolderDirectoryAlreadyExist()
+    {
+        $newDirectoryName = 'mew';
+        $fullNewPath = $this->_storageRoot . Magento_Filesystem::DIRECTORY_SEPARATOR . $newDirectoryName;
+
+        $this->_filesystem->expects($this->once())
+            ->method('isWritable')
+            ->with($this->_storageRoot)
+            ->will($this->returnValue(true));
+
+        $this->_filesystem->expects($this->once())
+            ->method('has')
+            ->with($fullNewPath)
+            ->will($this->returnValue(true));
+
+        $this->_storageModel->createFolder($newDirectoryName, $this->_storageRoot);
     }
 
     /**
@@ -153,6 +311,20 @@ class Mage_Theme_Model_Wysiwyg_StorageTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $this->assertEquals($dirs, $this->_storageModel->getDirsCollection($this->_storageRoot));
+    }
+
+    /**
+     * @covers Mage_Theme_Model_Wysiwyg_Storage::getDirsCollection
+     * @expectedException Mage_Core_Exception
+     */
+    public function testGetDirsCollectionWrongDirName()
+    {
+        $this->_filesystem->expects($this->once())
+            ->method('has')
+            ->with($this->_storageRoot)
+            ->will($this->returnValue(false));
+
+        $this->_storageModel->getDirsCollection($this->_storageRoot);
     }
 
     /**
@@ -192,6 +364,44 @@ class Mage_Theme_Model_Wysiwyg_StorageTest extends PHPUnit_Framework_TestCase
         $this->assertCount(2, $result);
         $this->assertEquals('font1.ttf', $result[0]['text']);
         $this->assertEquals('font2.ttf', $result[1]['text']);
+    }
+
+    /**
+     * @covers Mage_Theme_Model_Wysiwyg_Storage::getFilesCollection
+     */
+    public function testGetFilesCollectionImageType()
+    {
+        $this->_helperStorage->expects($this->once())
+            ->method('getCurrentPath')
+            ->will($this->returnValue($this->_storageRoot));
+
+        $this->_helperStorage->expects($this->once())
+            ->method('getStorageType')
+            ->will($this->returnValue(Mage_Theme_Model_Wysiwyg_Storage::TYPE_IMAGE));
+
+        $this->_helperStorage->expects($this->any())
+            ->method('urlEncode')
+            ->will($this->returnArgument(0));
+
+        $paths = array(
+            $this->_storageRoot . Magento_Filesystem::DIRECTORY_SEPARATOR . 'picture1.jpg'
+        );
+
+        $this->_filesystem->expects($this->once())
+            ->method('searchKeys')
+            ->with($this->_storageRoot, '*')
+            ->will($this->returnValue($paths));
+
+        $this->_filesystem->expects($this->once())
+            ->method('isFile')
+            ->with($this->_storageRoot . Magento_Filesystem::DIRECTORY_SEPARATOR . 'picture1.jpg')
+            ->will($this->returnValue(true));
+
+        $result = $this->_storageModel->getFilesCollection();
+
+        $this->assertCount(1, $result);
+        $this->assertEquals('picture1.jpg', $result[0]['text']);
+        $this->assertEquals('picture1.jpg', $result[0]['thumbnailParams']['file']);
     }
 
     /**
@@ -327,5 +537,28 @@ class Mage_Theme_Model_Wysiwyg_StorageTest extends PHPUnit_Framework_TestCase
             ->with($directoryPath);
 
         $this->_storageModel->deleteDirectory($directoryPath);
+    }
+
+    /**
+     * @covers Mage_Theme_Model_Wysiwyg_Storage::deleteDirectory
+     * @expectedException Mage_Core_Exception
+     */
+    public function testDeleteRootDirectory()
+    {
+        $directoryPath = $this->_storageRoot;
+
+        $this->_helperStorage->expects($this->atLeastOnce())
+            ->method('getStorageRoot')
+            ->will($this->returnValue($this->_storageRoot));
+
+        $this->_storageModel->deleteDirectory($directoryPath);
+    }
+
+    public function booleanCasesDataProvider()
+    {
+        return array(
+            array(true),
+            array(false)
+        );
     }
 }

@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Backend_Block_Widget_Form
  */
-class Mage_Backend_Block_Widget_FormTest extends PHPUnit_Framework_TestCase
+class Mage_Backend_Block_Widget_FormTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @magentoDataFixture Mage/Core/_files/init_adminhtml_design.php

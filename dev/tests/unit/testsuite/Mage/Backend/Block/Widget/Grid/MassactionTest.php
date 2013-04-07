@@ -93,10 +93,12 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
             false
         );
 
+        $this->_urlModelMock = $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false);
+
         $arguments = array(
             'layout'       => $this->_layoutMock,
             'request'      => $this->_requestMock,
-            'urlBuilder'   => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false),
+            'urlBuilder'   => $this->_urlModelMock,
             'data'         => array(
                 'massaction_id_field'  => 'test_id',
                 'massaction_id_filter' => 'test_id'
@@ -104,7 +106,7 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
         );
 
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_block = $objectManagerHelper->getBlock('Mage_Backend_Block_Widget_Grid_Massaction', $arguments);
+        $this->_block = $objectManagerHelper->getObject('Mage_Backend_Block_Widget_Grid_Massaction', $arguments);
         $this->_block->setNameInLayout('test_grid_massaction');
     }
 
@@ -141,7 +143,6 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
      */
     public function testItemsProcessing($itemId, $item, $expectedItem)
     {
-        $this->markTestIncomplete('Need to fix DI dependencies');
 
         $this->_urlModelMock->expects($this->any())
             ->method('getBaseUrl')

@@ -25,12 +25,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Weight_RendererTest extends PHPUnit_Framework_TestCase
+class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_WeightTest extends PHPUnit_Framework_TestCase
 {
     const VIRTUAL_FIELD_HTML_ID = 'weight_and_type_switcher';
 
     /**
-     * @var Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Weight_Renderer
+     * @var Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Weight
      */
     protected $_model;
 
@@ -54,7 +54,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Weight_RendererTest exten
         $this->assertNull($this->_virtual->getLabel());
         $this->assertNull($this->_virtual->getForm());
 
-        $this->_model = new Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Weight_Renderer(
+        $this->_model = new Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Weight(
             array('element' => $this->_virtual, 'helper' => $helper)
         );
 
@@ -62,7 +62,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Weight_RendererTest exten
         $this->_model->setForm($form);
 
         $this->assertEquals(
-            Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Weight_Renderer::VIRTUAL_FIELD_HTML_ID,
+            Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Weight::VIRTUAL_FIELD_HTML_ID,
             $this->_virtual->getId()
         );
         $this->assertEquals('is_virtual', $this->_virtual->getName());

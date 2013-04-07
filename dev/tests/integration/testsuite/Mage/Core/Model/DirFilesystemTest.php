@@ -159,12 +159,13 @@ class Mage_Core_Model_DirFilesystemTest extends PHPUnit_Framework_TestCase
     public function writableDirCodeDataProvider()
     {
         return array(
-            Mage_Core_Model_Dir::MEDIA      => array(Mage_Core_Model_Dir::MEDIA),
-            Mage_Core_Model_Dir::VAR_DIR    => array(Mage_Core_Model_Dir::VAR_DIR),
-            Mage_Core_Model_Dir::TMP        => array(Mage_Core_Model_Dir::TMP),
-            Mage_Core_Model_Dir::CACHE      => array(Mage_Core_Model_Dir::CACHE),
-            Mage_Core_Model_Dir::LOG        => array(Mage_Core_Model_Dir::LOG),
-            Mage_Core_Model_Dir::SESSION    => array(Mage_Core_Model_Dir::SESSION),
+            Mage_Core_Model_Dir::MEDIA       => array(Mage_Core_Model_Dir::MEDIA),
+            Mage_Core_Model_Dir::STATIC_VIEW => array(Mage_Core_Model_Dir::STATIC_VIEW),
+            Mage_Core_Model_Dir::VAR_DIR     => array(Mage_Core_Model_Dir::VAR_DIR),
+            Mage_Core_Model_Dir::TMP         => array(Mage_Core_Model_Dir::TMP),
+            Mage_Core_Model_Dir::CACHE       => array(Mage_Core_Model_Dir::CACHE),
+            Mage_Core_Model_Dir::LOG         => array(Mage_Core_Model_Dir::LOG),
+            Mage_Core_Model_Dir::SESSION     => array(Mage_Core_Model_Dir::SESSION),
         );
     }
 }

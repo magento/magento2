@@ -75,14 +75,12 @@ class Integrity_Modular_TemplateFilesTest extends Magento_Test_TestCase_Integrit
                     $area = 'install';
                 } elseif ($module == 'Mage_Adminhtml' || strpos($blockClass, '_Adminhtml_')
                     || strpos($blockClass, '_Backend_')
-                    || ($this->_isClassInstanceOf($blockClass, 'Mage_Backend_Block_Template'))
-                ) {
+                    || $class->isSubclassOf('Mage_Backend_Block_Template'))
+                {
                     $area = 'adminhtml';
                 }
 
-            Mage::app()->loadAreaPart(
-                Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::AREA_ADMINHTML
-            );
+            Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::PART_CONFIG);
             Mage::getConfig()->setCurrentAreaCode($area);
 
                 $block = Mage::getModel($blockClass);
@@ -97,26 +95,5 @@ class Integrity_Modular_TemplateFilesTest extends Magento_Test_TestCase_Integrit
             trigger_error("Corrupted data provider. Last known block instantiation attempt: '{$blockClass}'."
                 . " Exception: {$e}", E_USER_ERROR);
         }
-    }
-
-    /**
-     * @param string $blockClass
-     * @param string $parentClass
-     * @return bool
-     */
-    protected function _isClassInstanceOf($blockClass, $parentClass)
-    {
-        $currentClass = new ReflectionClass($blockClass);
-        $supertypes = array();
-        do {
-            $supertypes = array_merge($supertypes, $currentClass->getInterfaceNames());
-            if (!($currentParent = $currentClass->getParentClass())) {
-                break;
-            }
-            $supertypes[] = $currentParent->getName();
-            $currentClass = $currentParent;
-        } while (true);
-
-        return in_array($parentClass, $supertypes);
     }
 }

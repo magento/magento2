@@ -39,11 +39,6 @@ class Mage_User_Model_Resource_Role_CollectionTest extends PHPUnit_Framework_Tes
         $this->_collection = Mage::getResourceModel('Mage_User_Model_Resource_Role_Collection');
     }
 
-    protected function tearDown()
-    {
-        $this->_collection = null;
-    }
-
     public function testSetUserFilter()
     {
         $user = Mage::getModel('Mage_User_Model_User');

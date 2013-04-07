@@ -61,7 +61,7 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_TabsTest extends PHPUnit_Framework_T
             ->getMock();
 
         $this->_helper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_block = $this->_helper->getBlock('Mage_Webapi_Block_Adminhtml_Role_Edit_Tabs', array(
+        $this->_block = $this->_helper->getObject('Mage_Webapi_Block_Adminhtml_Role_Edit_Tabs', array(
             'urlBuilder' => $urlBuilder,
             'layout' => $this->_layout,
             'request' => $this->_request
@@ -89,9 +89,9 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_TabsTest extends PHPUnit_Framework_T
     {
         $this->_block->setApiRole($apiRole);
 
-        $mainBlock = $this->_helper->getBlock('Mage_Core_Block_Text');
-        $resourceBlock = $this->_helper->getBlock('Mage_Core_Block_Text');
-        $userBlock = $this->_helper->getBlock('Mage_Core_Block_Text');
+        $mainBlock = $this->_helper->getObject('Mage_Core_Block_Text');
+        $resourceBlock = $this->_helper->getObject('Mage_Core_Block_Text');
+        $userBlock = $this->_helper->getObject('Mage_Core_Block_Text');
 
         $this->_layout->expects($this->any())
             ->method('getBlock')

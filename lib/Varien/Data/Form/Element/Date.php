@@ -153,14 +153,6 @@ class Varien_Data_Form_Element_Date extends Varien_Data_Form_Element_Abstract
     public function getElementHtml()
     {
         $this->addClass('input-text');
-
-        $html = sprintf(
-            '<input name="%s" id="%s" value="%s" %s />',
-            $this->getName(),
-            $this->getHtmlId(),
-            $this->_escape($this->getValue()),
-            $this->serialize($this->getHtmlAttributes())
-        );
         $dateFormat = $this->getDateFormat();
         $timeFormat = $this->getTimeFormat();
         if (empty($dateFormat)) {
@@ -168,30 +160,30 @@ class Varien_Data_Form_Element_Date extends Varien_Data_Form_Element_Abstract
                 . 'Please, specify "format" key in constructor, or set it using setFormat().');
         }
 
-        $html .= sprintf('
-            <script type="text/javascript">
-            (function($) {
-                $("#%s").calendar({
-                    dateFormat: "%s",
-                    showsTime: %s,
-                    timeFormat: "%s",
-                    buttonImage: "%s",
-                    buttonText: "%s",
-                    disabled: %s
-                })
-            })(jQuery);
-            </script>',
+        $dataInit = 'data-mage-init="'
+            . $this->_escape(json_encode(
+                array(
+                    'calendar' => array(
+                        'dateFormat' => $dateFormat,
+                        'showsTime' => !empty($timeFormat),
+                        'timeFormat' => $timeFormat,
+                        'buttonImage' => $this->getImage(),
+                        'buttonText' => 'Select Date',
+                        'disabled' => $this->getDisabled(),
+                    )
+                )
+            ))
+            . '"';
+
+        $html = sprintf(
+            '<input name="%s" id="%s" value="%s" %s %s />',
+            $this->getName(),
             $this->getHtmlId(),
-            $dateFormat,
-            $timeFormat ? 'true' : 'false',
-            $timeFormat ?: '',
-            $this->getImage(),
-            'Select Date',
-            ($this->getDisabled() ? 'true' : 'false')
+            $this->_escape($this->getValue()),
+            $this->serialize($this->getHtmlAttributes()),
+            $dataInit
         );
-
         $html .= $this->getAfterElementHtml();
-
         return $html;
     }
 }

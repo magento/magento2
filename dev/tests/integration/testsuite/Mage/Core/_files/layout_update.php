@@ -36,6 +36,7 @@ $theme->setThemePath('test/test')
     ->setThemeTitle('Test Theme')
     ->setMagentoVersionFrom('2.0.0.0')
     ->setMagentoVersionTo('*')
+    ->setType(Mage_Core_Model_Theme::TYPE_VIRTUAL)
     ->save();
 
 /** @var $updateNotTemporary Mage_Core_Model_Layout_Update */

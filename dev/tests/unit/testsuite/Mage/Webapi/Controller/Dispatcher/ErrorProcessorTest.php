@@ -165,36 +165,6 @@ class Mage_Webapi_Controller_Dispatcher_ErrorProcessorTest extends PHPUnit_Frame
     }
 
     /**
-     * Test renderException method with Mage_Webapi_Exception.
-     */
-    public function testRenderExecutionWebapiException()
-    {
-        $this->markTestIncomplete("Think how to replace this test.");
-        $_SERVER['HTTP_ACCEPT'] = 'json';
-        /** Init Mage_Webapi_Exception. */
-        $apiException = new Mage_Webapi_Exception('Exception message', 500);
-        /** Assert that jsonEncode will be executed once. */
-        $this->_helperMock->expects($this->once())->method('jsonEncode');
-        $this->_errorProcessor->renderException($apiException);
-    }
-
-    /**
-     * Test renderException method with turned on developer mode.
-     */
-    public function testRenderExecutionInDeveloperMode()
-    {
-        $this->markTestIncomplete("Think how to replace this test.");
-        $_SERVER['HTTP_ACCEPT'] = 'json';
-        /** Init base Exception object. */
-        $exception = new Exception('Message');
-        /** Mock app to return enabled developer mode flag. */
-        $this->_appMock->expects($this->any())->method('isDeveloperMode')->will($this->returnValue(true));
-        /** Assert that jsonEncode will be executed once. */
-        $this->_helperMock->expects($this->once())->method('jsonEncode');
-        $this->_errorProcessor->renderException($exception);
-    }
-
-    /**
      * Test maskException method with Mage_Webapi_Exception.
      */
     public function testMaskWebapiException()

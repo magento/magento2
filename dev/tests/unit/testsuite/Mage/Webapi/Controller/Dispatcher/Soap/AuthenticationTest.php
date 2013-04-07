@@ -58,7 +58,7 @@ class Mage_Webapi_Controller_Dispatcher_Soap_AuthenticationTest extends PHPUnit_
             ->getMock();
         $this->_helperMock->expects($this->any())->method('__')->will($this->returnArgument(0));
         $this->_tokenFactoryMock = $this->getMockBuilder('Mage_Webapi_Model_Soap_Security_UsernameToken_Factory')
-            ->setMethods(array('createFromArray'))
+            ->setMethods(array('create'))
             ->disableOriginalConstructor()
             ->getMock();
         $this->_tokenMock = $this->getMockBuilder('Mage_Webapi_Model_Soap_Security_UsernameToken')
@@ -67,7 +67,7 @@ class Mage_Webapi_Controller_Dispatcher_Soap_AuthenticationTest extends PHPUnit_
             ->getMock();
         $this->_tokenFactoryMock
             ->expects($this->once())
-            ->method('createFromArray')
+            ->method('create')
             ->will($this->returnValue($this->_tokenMock));
         $this->_roleLocatorMock = $this->getMockBuilder('Mage_Webapi_Model_Authorization_RoleLocator')
             ->setMethods(array('setRoleId'))
@@ -101,7 +101,7 @@ class Mage_Webapi_Controller_Dispatcher_Soap_AuthenticationTest extends PHPUnit_
             )->will($this->returnValue($user));
         $this->_tokenFactoryMock
             ->expects($this->once())
-            ->method('createFromArray')
+            ->method('create')
             ->will($this->returnValue($this->_tokenMock));
         $this->_roleLocatorMock->expects($this->once())->method('setRoleId')->with($roleId);
         /** Execute SUT. */

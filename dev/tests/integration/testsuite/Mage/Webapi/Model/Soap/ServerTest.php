@@ -51,15 +51,6 @@ class Mage_Webapi_Model_Soap_ServerTest extends PHPUnit_Framework_TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
-    {
-        unset($this->_applicationMock);
-        unset($this->_requestMock);
-        unset($this->_domDocumentFactory);
-        unset($this->_storeMock);
-        parent::tearDown();
-    }
-
     /**
      * Test SOAP server construction with WSDL cache enabling.
      */

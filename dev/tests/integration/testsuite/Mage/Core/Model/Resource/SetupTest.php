@@ -39,11 +39,6 @@ class Mage_Core_Model_Resource_SetupTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testSetTable()
     {
         $this->_model->setTable('test_name', 'test_real_name');

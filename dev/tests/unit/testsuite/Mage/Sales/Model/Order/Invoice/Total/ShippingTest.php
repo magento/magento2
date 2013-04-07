@@ -39,9 +39,7 @@ class Mage_Sales_Model_Order_Invoice_Total_ShippingTest extends PHPUnit_Framewor
         $result = new Varien_Data_Collection();
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         foreach ($invoicesData as $oneInvoiceData) {
-            $arguments = $objectManagerHelper->getConstructArguments(
-                Magento_Test_Helper_ObjectManager::MODEL_ENTITY, $className, array('data' => $oneInvoiceData)
-            );
+            $arguments = $objectManagerHelper->getConstructArguments($className, array('data' => $oneInvoiceData));
             /** @var $prevInvoice Mage_Sales_Model_Order_Invoice */
             $prevInvoice = $this->getMock($className, array('_init'), $arguments);
             $result->addItem($prevInvoice);

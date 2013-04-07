@@ -31,6 +31,22 @@
 class Mage_Core_Model_ObserverTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var Varien_Event_Observer
+     */
+    protected $_eventObserver;
+
+    /**
+     * @var Magento_Test_ObjectManager
+     */
+    protected $_objectManager;
+
+    protected function setUp()
+    {
+        $this->_objectManager = Mage::getObjectManager();
+        $this->_eventObserver = $this->_createEventObserverForThemeRegistration();
+    }
+
+    /**
      * Theme registration test
      *
      * @magentoDbIsolation enabled
@@ -41,35 +57,22 @@ class Mage_Core_Model_ObserverTest extends PHPUnit_Framework_TestCase
         $baseDir = 'base_dir';
         $pattern = 'path_pattern';
 
-        $eventObserver = $this->_createEventObserverForThemeRegistration();
-        $eventObserver->getEvent()->setBaseDir($baseDir);
-        $eventObserver->getEvent()->setPathPattern($pattern);
+        $this->_eventObserver->getEvent()->setBaseDir($baseDir);
+        $this->_eventObserver->getEvent()->setPathPattern($pattern);
 
-        /** @var $objectManager Magento_Test_ObjectManager */
-        $objectManager = Mage::getObjectManager();
         $themeRegistration = $this->getMock(
             'Mage_Core_Model_Theme_Registration',
             array('register'),
-            array($objectManager->create('Mage_Core_Model_Theme'))
+            array($this->_objectManager->create('Mage_Core_Model_Theme'))
         );
         $themeRegistration->expects($this->once())
             ->method('register')
             ->with($baseDir, $pattern);
-        $objectManager->addSharedInstance($themeRegistration, 'Mage_Core_Model_Theme_Registration');
+        $this->_objectManager->addSharedInstance($themeRegistration, 'Mage_Core_Model_Theme_Registration');
 
         /** @var $observer Mage_Core_Model_Observer */
-        $observer = Mage::getModel('Mage_Core_Model_Observer');
-        $observer->themeRegistration($eventObserver);
-    }
-
-    /**
-     * Get theme model
-     *
-     * @return Mage_Core_Model_Theme
-     */
-    protected function _getThemeModel()
-    {
-        return Mage::getModel('Mage_Core_Model_Theme');
+        $observer = $this->_objectManager->create('Mage_Core_Model_Observer');
+        $observer->themeRegistration($this->_eventObserver);
     }
 
     /**
@@ -79,8 +82,10 @@ class Mage_Core_Model_ObserverTest extends PHPUnit_Framework_TestCase
      */
     protected function _createEventObserverForThemeRegistration()
     {
-        $response = Mage::getModel('Varien_Object', array('additional_options' => array()));
-        $event = Mage::getModel('Varien_Event', array('response_object' => $response));
-        return Mage::getModel('Varien_Event_Observer', array('event' => $event));
+        $response = $this->_objectManager->create('Varien_Object', array(
+            'data' => array('additional_options' => array())
+        ));
+        $event = $this->_objectManager->create('Varien_Event', array('data' => array('response_object' => $response)));
+        return $this->_objectManager->create('Varien_Event_Observer', array('data' => array('event' => $event)));
     }
 }

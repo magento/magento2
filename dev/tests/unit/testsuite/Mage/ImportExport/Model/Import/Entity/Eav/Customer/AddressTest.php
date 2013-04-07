@@ -201,7 +201,7 @@ class Mage_ImportExport_Model_Import_Entity_Eav_Customer_AddressTest extends PHP
             'connection'                   => $connection,
             'json_helper'                  => 'not_used',
             'string_helper'                => new Mage_Core_Helper_String(
-                $this->getMock('Mage_Core_Model_Translate', array(), array(), '', false, false)
+                $this->getMock('Mage_Core_Helper_Context', array(), array(), '', false, false)
             ),
             'page_size'                    => 1,
             'max_data_size'                => 1,
@@ -234,10 +234,7 @@ class Mage_ImportExport_Model_Import_Entity_Eav_Customer_AddressTest extends PHP
         $attributeCollection = $this->getMock('Varien_Data_Collection', array('getEntityTypeCode'));
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         foreach ($this->_attributes as $attributeData) {
-            $arguments = $objectManagerHelper->getConstructArguments(
-                Magento_Test_Helper_ObjectManager::MODEL_ENTITY,
-                'Mage_Eav_Model_Entity_Attribute_Abstract'
-            );
+            $arguments = $objectManagerHelper->getConstructArguments('Mage_Eav_Model_Entity_Attribute_Abstract');
             $arguments['data'] = $attributeData;
             $attribute = $this->getMockForAbstractClass('Mage_Eav_Model_Entity_Attribute_Abstract',
                 $arguments, '', true, true, true, array('_construct', 'getBackend')
@@ -264,10 +261,7 @@ class Mage_ImportExport_Model_Import_Entity_Eav_Customer_AddressTest extends PHP
             array(), '', false);
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         foreach ($this->_customers as $customerData) {
-            $arguments = $objectManagerHelper->getConstructArguments(
-                Magento_Test_Helper_ObjectManager::MODEL_ENTITY,
-                'Mage_Customer_Model_Customer'
-            );
+            $arguments = $objectManagerHelper->getConstructArguments('Mage_Customer_Model_Customer');
             $arguments['data'] = $customerData;
             /** @var $customer Mage_Customer_Model_Customer */
             $customer = $this->getMock('Mage_Customer_Model_Customer', array('_construct'), $arguments);

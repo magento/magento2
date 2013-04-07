@@ -38,20 +38,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Form_AbstractTest
     public function testAddAttributesToForm()
     {
         $arguments = array(
-            Mage::getObjectManager()->get('Mage_Core_Controller_Request_Http'),
-            Mage::getObjectManager()->get('Mage_Core_Model_Layout'),
-            Mage::getObjectManager()->get('Mage_Core_Model_Event_Manager'),
-            Mage::getObjectManager()->get('Mage_Backend_Model_Url'),
-            Mage::getObjectManager()->get('Mage_Core_Model_Translate'),
-            Mage::getObjectManager()->get('Mage_Core_Model_Cache'),
-            Mage::getObjectManager()->get('Mage_Core_Model_Design_Package'),
-            Mage::getObjectManager()->get('Mage_Core_Model_Session'),
-            Mage::getObjectManager()->get('Mage_Core_Model_Store_Config'),
-            Mage::getObjectManager()->get('Mage_Core_Controller_Varien_Front'),
-            Mage::getObjectManager()->get('Mage_Core_Model_Factory_Helper'),
-            Mage::getObjectManager()->get('Mage_Core_Model_Dir'),
-            Mage::getObjectManager()->get('Mage_Core_Model_Logger'),
-            Mage::getObjectManager()->get('Magento_Filesystem'),
+            Mage::getObjectManager()->get('Mage_Core_Block_Template_Context')
         );
         /** @var $block Mage_Adminhtml_Block_Sales_Order_Create_Form_Abstract */
         $block = $this->getMockForAbstractClass('Mage_Adminhtml_Block_Sales_Order_Create_Form_Abstract', $arguments);

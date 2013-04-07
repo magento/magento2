@@ -403,3 +403,95 @@ MageValidationTest.prototype.testValidateGroupedQty = function () {
     assertTrue($.validator.methods['validate-grouped-qty'].call(this, null, null, '#div5'));
 
 };
+
+MageValidationTest.prototype.testValidateCCTypeSelect = function () {
+    /*:DOC += <input id="visa-valid" type="text" value="4916808263499650"/>
+     <input id="visa-invalid" type="text" value="1234567890123456"/>
+     <input id="mc-valid" type="text" value="5203731841177490"/>
+     <input id="mc-invalid" type="text" value="1111222233334444"/>
+     <input id="ae-valid" type="text" value="376244899619217"/>
+     <input id="ae-invalid" type="text" value="123451234512345"/>
+     */
+    assertTrue($.validator.methods['validate-cc-type-select'].call(this, 'VI', null, '#visa-valid'));
+    assertFalse($.validator.methods['validate-cc-type-select'].call(this, 'VI', null, '#visa-invalid'));
+    assertTrue($.validator.methods['validate-cc-type-select'].call(this, 'MC', null, '#mc-valid'));
+    assertFalse($.validator.methods['validate-cc-type-select'].call(this, 'MC', null, '#mc-invalid'));
+    assertTrue($.validator.methods['validate-cc-type-select'].call(this, 'AE', null, '#ae-valid'));
+    assertFalse($.validator.methods['validate-cc-type-select'].call(this, 'AE', null, '#ae-invalid'));
+};
+
+MageValidationTest.prototype.testValidateCCNumber = function () {
+    assertTrue($.validator.methods['validate-cc-number'].call(this, '4916835098995909', null, null));
+    assertTrue($.validator.methods['validate-cc-number'].call(this, '5265071363284878', null, null));
+    assertTrue($.validator.methods['validate-cc-number'].call(this, '6011120623356953', null, null));
+    assertTrue($.validator.methods['validate-cc-number'].call(this, '371293266574617', null, null));
+    assertFalse($.validator.methods['validate-cc-number'].call(this, '4916835098995901', null, null));
+    assertFalse($.validator.methods['validate-cc-number'].call(this, '5265071363284870', null, null));
+    assertFalse($.validator.methods['validate-cc-number'].call(this, '6011120623356951', null, null));
+    assertFalse($.validator.methods['validate-cc-number'].call(this, '371293266574619', null, null));
+};
+
+MageValidationTest.prototype.testValidateCCType = function () {
+    /*:DOC += <select id="cc-type">
+     <option value=""></option>
+     <option value="VI"></option>
+     <option value="MC"></option>
+     <option value="AE"></option>
+     <option value="DI"></option>
+     </select>
+     */
+    var ccType = $('#cc-type');
+    ccType.val('VI');
+    assertTrue($.validator.methods['validate-cc-type'].call(this, '4916835098995909', null, '#cc-type'));
+    assertFalse($.validator.methods['validate-cc-type'].call(this, '5265071363284878', null, '#cc-type'));
+    ccType.val('MC');
+    assertTrue($.validator.methods['validate-cc-type'].call(this, '5265071363284878', null, '#cc-type'));
+    assertFalse($.validator.methods['validate-cc-type'].call(this, '4916835098995909', null, '#cc-type'));
+    ccType.val('AE');
+    assertTrue($.validator.methods['validate-cc-type'].call(this, '371293266574617', null, '#cc-type'));
+    assertFalse($.validator.methods['validate-cc-type'].call(this, '5265071363284878', null, '#cc-type'));
+    ccType.val('DI');
+    assertTrue($.validator.methods['validate-cc-type'].call(this, '6011120623356953', null, '#cc-type'));
+    assertFalse($.validator.methods['validate-cc-type'].call(this, '4916835098995909', null, '#cc-type'));
+};
+
+MageValidationTest.prototype.testValidateCCExp = function () {
+    /*:DOC += <input id="year" type="text" value="4916808263499650"/>
+     */
+    var year = $('#year'),
+        currentTime  = new Date(),
+        currentMonth = currentTime.getMonth() + 1,
+        currentYear  = currentTime.getFullYear();;
+    year.val(currentYear);
+    if (currentMonth > 1) {
+        assertFalse($.validator.methods['validate-cc-exp'].call(this, currentMonth - 1, null, '#year'));
+    }
+    assertTrue($.validator.methods['validate-cc-exp'].call(this, currentMonth, null, '#year'));
+    year.val(currentYear + 1);
+    assertTrue($.validator.methods['validate-cc-exp'].call(this, currentMonth, null, '#year'));
+
+};
+
+MageValidationTest.prototype.testValidateCCCvn = function () {
+    /*:DOC += <select id="cc-type">
+     <option value=""></option>
+     <option value="VI"></option>
+     <option value="MC"></option>
+     <option value="AE"></option>
+     <option value="DI"></option>
+     </select>
+     */
+    var ccType = $('#cc-type');
+    ccType.val('VI');
+    assertTrue($.validator.methods['validate-cc-cvn'].call(this, '123', null, '#cc-type'));
+    assertFalse($.validator.methods['validate-cc-cvn'].call(this, '1234', null, '#cc-type'));
+    ccType.val('MC');
+    assertTrue($.validator.methods['validate-cc-cvn'].call(this, '123', null, '#cc-type'));
+    assertFalse($.validator.methods['validate-cc-cvn'].call(this, '1234', null, '#cc-type'));
+    ccType.val('AE');
+    assertTrue($.validator.methods['validate-cc-cvn'].call(this, '1234', null, '#cc-type'));
+    assertFalse($.validator.methods['validate-cc-cvn'].call(this, '123', null, '#cc-type'));
+    ccType.val('DI');
+    assertTrue($.validator.methods['validate-cc-cvn'].call(this, '123', null, '#cc-type'));
+    assertFalse($.validator.methods['validate-cc-cvn'].call(this, '1234', null, '#cc-type'));
+};

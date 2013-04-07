@@ -34,14 +34,7 @@ class Mage_Core_Model_Store_GroupTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $eventDispatcher = Mage::getObjectManager()->get('Mage_Core_Model_Event_Manager');
-        $cacheManager = Mage::getObjectManager()->get('Mage_Core_Model_Cache');
-        $this->_model = new Mage_Core_Model_Store_Group($eventDispatcher, $cacheManager);
-    }
-
-    public function tearDown()
-    {
-        $this->_model = null;
+        $this->_model = Mage::getModel('Mage_Core_Model_Store_Group');
     }
 
     public function testSetGetWebsite()

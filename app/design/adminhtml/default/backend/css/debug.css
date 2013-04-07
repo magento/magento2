@@ -60,11 +60,8 @@ ul.messages > li {
 }
 
 ul.messages li li {
-    padding: 10px 26px 10px 32px;
-    border: 0;
-    -moz-border-radius: 0;
-    -webkit-border-radius: 0;
-    border-radius: 0;
+    padding: 10px 26px 10px 35px;
+    border-radius: 5px;
     color: #676056;
     text-shadow: none;
     position: relative;
@@ -79,7 +76,7 @@ ul.messages li li:first-child {
 
 ul.messages li li:before {
     position: absolute;
-    left: 8px;
+    left: 11px;
     top: 50%;
     margin-top: -11px;
     background: none;
@@ -109,8 +106,8 @@ ul.messages li.error-msg li:before {
 }
 
 ul.messages li.success-msg li {
-    border-color: #185b00;
-    background: #e6ecc0;
+    border-color: #ceceb6;
+    background: #e4eecb;
     color: #185b00;
 }
 
@@ -119,83 +116,91 @@ ul.messages li.success-msg li:before {
     color: #185b00;
 }
 
-label.mage-error {
-    color: red;
-}
-
 /*
     Accordion
 ------------------------*/
 .accordion {
-    background: #fff;
-    border: 1px solid #eae6e0;
-    border-radius: 5px;
     margin: 0 0 8px;
     padding: 0;
 }
 
 .accordion > dt,
-.accordion .collapseable {
+.accordion > dd.open,
+.accordion .collapseable,
+.accordion .collapseable.open + input + fieldset {
+    background: #fff;
+    border: 1px solid #eae6e0;
+    border-radius: 5px;
+    margin: 0 0 8px;
+    padding: 5px 18px 2px;
     position: relative;
-    margin: 0 10px;
-}
-
-.accordion > dt a,
-.accordion .collapseable > a {
-    color: #666;
-    display: block;
-    padding: 15px 17px 10px 10px;
-    font-family: 'CallunaSans', Arial, sans-serif;
-    font-size: 18px;
-    text-decoration: none;
-    margin: 0 8px;
-}
-
-.accordion .collapseable a.open {
-    border-bottom: 1px solid #eee;
-}
-
-.accordion > dt a:before,
-.accordion .collapseable > a:before {
-    float: right;
-    content: "\e02c";
-    color: #b2aa9d;
-    display: inline-block;
-    font-family: 'MUI-Icons';
-    font-style: normal;
-    speak: none;
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-}
-
-.accordion > dt.open a:before,
-.accordion .collapseable a.open:before {
-    content: "\e029";
 }
 
 .accordion > dt + dd {
     display: none;
 }
 
-.accordion > dt + .open {
+.accordion > dt.open,
+.accordion .collapseable.open {
+    margin: 0;
+    border-bottom: 0;
+    border-radius: 5px 5px 0 0;
+}
+
+.accordion > dt + dd.open,
+.accordion .collapseable.open + input + fieldset {
+    padding: 25px 18px 18px;
     display: block;
-    border-top: 1px solid #EDEDED;
-    margin: 0 10px;
-    padding: 17px 8px;
+    border-top: 0;
+    border-radius: 0 0 5px 5px;
 }
 
-.accordion > dd + dt,
-.accordion .collapseable {
-    border-top: 1px solid #eee;
+.accordion > dt a,
+.accordion .collapseable > a {
+    color: #666;
+    display: block;
+    padding: 7px 0 10px 22px;
+    font-family: 'CallunaSans', Arial, sans-serif;
+    font-size: 18px;
+    text-decoration: none;
+    position: relative;
+    cursor: pointer;
 }
 
-.accordion > .open + dt,
-.accordion .collapseable:first-child {
-    border: none;
+.accordion .collapseable.open a,
+.accordion dt.open a {
+    border-bottom: 1px solid #ededed;
+}
+
+.accordion > dt a:before,
+.accordion .collapseable > a:before {
+    position: absolute;
+    left: 0;
+    top: 7px;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: '\e02a'; /* arrow right icon */
+    color: #b2b0ad;
+}
+
+.accordion > dt.open a:before,
+.accordion .collapseable.open a:before {
+    content: '\e02c'; /* arrow down icon */
+}
+.accordion > dt a:hover:before,
+.accordion .collapseable > a:hover:before {
+    color: #7e7e7e;
+}
+
+.accordion > dt + dd {
+    display: none;
 }
 
 .accordion > dt + .open:empty {
-    background: url(../mui/images/ajax-loader-big.gif) no-repeat center;
+    background: #fff url(../mui/images/ajax-loader-big.gif) no-repeat center;
     height: 100px;
 }
 
@@ -209,14 +214,11 @@ label.mage-error {
 
 /* TODO: arrange configuration tables */
 .accordion .collapseable.disabled {
-    margin: 0;
-    border-color: #fff;
+    background: #f1f1f1;
 }
 
 .accordion .collapseable.disabled > a {
-    background: #f1f1f1;
     cursor: not-allowed;
-    padding: 14px 27px;
 }
 
 .accordion .collapseable.disabled > a:before {
@@ -238,6 +240,7 @@ label.mage-error {
 .accordion .config .label {
     float: none;
     width: 25%;
+    text-align: right;
 }
 
 .accordion .config td {
@@ -245,7 +248,6 @@ label.mage-error {
     border: 0;
     padding: 8px 15px 0 0;
     vertical-align: top;
-    text-align: left;
 }
 
 .accordion .paypal-selection-simplified {
@@ -338,13 +340,15 @@ label.mage-error {
 }
 
 /* TODO: styles for required TH fields */
-th.required:before {
+th.required:after {
     color: red;
     content: "*";
+    margin-left: 5px;
 }
 
 /* TODO: set color for messages in Cache Storage Management */
 .grid-severity-critical,
+.grid-severity-major,
 .grid-severity-notice,
 .grid-severity-minor {
     display: block;
@@ -354,6 +358,12 @@ th.required:before {
 }
 
 .grid-severity-critical {
+    border-color: #6e1313;
+    background: #f7bfbf;
+    color: #6e1313;
+}
+
+.grid-severity-major {
     border-color: #963535;
     background: #f3dcd8;
     color: #963535;
@@ -363,15 +373,6 @@ th.required:before {
     border-color: #185b00;
     background: #e6ecc0;
     color: #185b00;
-}
-
-/* TODO: Store views tree */
-.tree-store-scope .field {
-    margin: 0;
-}
-
-.tree-store-scope .field .label {
-    padding-top: 0;
 }
 
 /*
@@ -444,31 +445,31 @@ th.required:before {
     position: relative;
     z-index: 1;
     padding: 0;
+    border: 0;
     text-align: center;
 }
 
 .adminhtml-sales-order-index .page-actions .add > span {
     text-indent: -999em;
     display: block;
-    padding: 0;
+    width: 36px;
+    height: 36px;
 }
 
 .adminhtml-sales-order-index .page-actions .add > span:before {
-    display: block;
     text-indent: 0;
     content: '+';
     font-weight: normal;
-    font-size: 36px;
+    font-size: 38px;
     color: #fff;
     position: absolute;
-    line-height: 36px;
+    line-height: 28px;
     height: 36px;
     width: 36px;
     overflow: hidden;
     text-align: center;
-    top: -4px;
-    left: -1px;
-    vertical-align: top;
+    top: 0;
+    left: 0;
 }
 
 .adminhtml-sales-order-index .grid-actions {
@@ -483,6 +484,8 @@ th.required:before {
     background: transparent;
     border: 0;
     border-radius: 0;
+    max-width: 1300px;
+    min-width: 960px;
 }
 
 .sidebar-actions {
@@ -491,6 +494,10 @@ th.required:before {
 
 .sidebar-actions button {
     margin: 0 0 5px;
+}
+
+.adminhtml-sales-order-create-index .grid table .action-configure {
+    float: right;
 }
 
 /*
@@ -614,4 +621,11 @@ th.required:before {
 .rule-param-wait {
     background: url(../mui/images/ajax-loader-small.gif) no-repeat left center;
     padding-left: 20px;
+}
+
+/*
+    URL Rewrite
+-------------------------------------- */
+.field-url-rewrite-option-select {
+    padding-top: 13px;
 }

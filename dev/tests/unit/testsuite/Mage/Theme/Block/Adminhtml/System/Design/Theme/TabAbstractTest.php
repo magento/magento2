@@ -35,10 +35,9 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_TabAbstractTest extends PHP
     protected function setUp()
     {
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        $objectManagerModel = $this->getMock('Magento_ObjectManager_Zend', array(), array(), '', false);
+        $objectManagerModel = $this->getMock('Magento_ObjectManager');
 
         $constructArguments = $objectManagerHelper->getConstructArguments(
-            Magento_Test_Helper_ObjectManager::BLOCK_ENTITY,
             'Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Js',
             array(
                  'objectManager' => $objectManagerModel,

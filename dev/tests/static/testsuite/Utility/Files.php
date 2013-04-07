@@ -111,13 +111,13 @@ class Utility_Files
     {
         $key = __METHOD__ . "/{$this->_path}/{$appCode}/{$otherCode}/{$templates}";
         if (!isset(self::$_cache[$key])) {
-            $pool = $namespace = $module = $area = $package = $theme = '*';
+            $namespace = $module = $area = $package = $theme = '*';
 
             $files = array();
             if ($appCode) {
                 $files = array_merge(
                     glob($this->_path . '/app/*.php', GLOB_NOSORT),
-                    self::_getFiles(array("{$this->_path}/app/code/{$pool}/{$namespace}/{$module}"), '*.php')
+                    self::_getFiles(array("{$this->_path}/app/code/{$namespace}/{$module}"), '*.php')
                 );
             }
             if ($otherCode) {
@@ -130,7 +130,7 @@ class Utility_Files
             }
             if ($templates) {
                 $files = array_merge($files,
-                    self::_getFiles(array("{$this->_path}/app/code/{$pool}/{$namespace}/{$module}"), '*.phtml'),
+                    self::_getFiles(array("{$this->_path}/app/code/{$namespace}/{$module}"), '*.phtml'),
                     self::_getFiles(
                         array("{$this->_path}/app/design/{$area}/{$package}/{$theme}/{$namespace}_{$module}"), '*.phtml'
                     )
@@ -171,7 +171,7 @@ class Utility_Files
     ) {
         $cacheKey = __METHOD__ . '|' . $this->_path . '|' . serialize(func_get_args());
         if (!isset(self::$_cache[$cacheKey])) {
-            $files = glob($this->_path . "/app/code/*/*/*/etc/$fileNamePattern", GLOB_NOSORT | GLOB_BRACE);
+            $files = glob($this->_path . "/app/code/*/*/etc/$fileNamePattern", GLOB_NOSORT | GLOB_BRACE);
             $files = array_filter($files, function ($file) use ($excludedFileNames) {
                 return !in_array(basename($file), $excludedFileNames);
             });
@@ -188,7 +188,6 @@ class Utility_Files
      *
      * An incoming array can contain the following items
      * array (
-     *     'pool'           => 'pool_name',
      *     'namespace'      => 'namespace_name',
      *     'module'         => 'module_name',
      *     'area'           => 'area_name',
@@ -205,7 +204,6 @@ class Utility_Files
     public function getLayoutFiles($incomingParams = array(), $asDataSet = true)
     {
          $params = array(
-            'pool' => '*',
             'namespace' => '*',
             'module' => '*',
             'area' => '*',
@@ -225,7 +223,7 @@ class Utility_Files
             $files = array();
             if ($params['include_code']) {
                 $files = self::_getFiles(
-                    array("{$this->_path}/app/code/{$params['pool']}/{$params['namespace']}/{$params['module']}"
+                    array("{$this->_path}/app/code/{$params['namespace']}/{$params['module']}"
                         . "/view/{$params['area']}"),
                     '*.xml'
                 );
@@ -264,10 +262,10 @@ class Utility_Files
         if (isset(self::$_cache[$key])) {
             return self::$_cache[$key];
         }
-        $pool = $namespace = $module = $area = $package = $theme = $skin = '*';
+        $namespace = $module = $area = $package = $theme = $skin = '*';
         $files = self::_getFiles(
             array(
-                "{$this->_path}/app/code/{$pool}/{$namespace}/{$module}/view/{$area}",
+                "{$this->_path}/app/code/{$namespace}/{$module}/view/{$area}",
                 "{$this->_path}/app/design/{$area}/{$package}/{$theme}/skin/{$skin}",
                 "{$this->_path}/pub/lib/{mage,varien}"
             ),
@@ -289,7 +287,7 @@ class Utility_Files
         if (isset(self::$_cache[$key])) {
             return self::$_cache[$key];
         }
-        $files = self::_getFiles(array($this->_path . '/app/code/*/*/*/view/email'), '*.html');
+        $files = self::_getFiles(array($this->_path . '/app/code/*/*/view/email'), '*.html');
         $result = self::composeDataSets($files);
         self::$_cache[$key] = $result;
         return $result;
@@ -356,16 +354,16 @@ class Utility_Files
     }
 
     /**
-     * Check if specified class exists within code pools
+     * Check if specified class exists
      *
      * @param string $class
      * @param string &$path
      * @return bool
      */
-    public function codePoolClassFileExists($class, &$path = '')
+    public function classFileExists($class, &$path = '')
     {
         $path = implode(DIRECTORY_SEPARATOR, explode('_', $class)) . '.php';
-        $directories = array('/app/code/core/', '/app/code/community/', '/app/code/local/', '/lib/');
+        $directories = array('/app/code/', '/lib/');
         foreach ($directories as $dir) {
             $fullPath = str_replace('/', DIRECTORY_SEPARATOR, $this->_path . $dir . $path);
             /**
@@ -374,7 +372,9 @@ class Utility_Files
              */
             if (realpath($fullPath) == $fullPath) {
                 $fileContent = file_get_contents($fullPath);
-                if (strpos($fileContent, 'class ' . $class) !== false) {
+                if (strpos($fileContent, 'class ' . $class) !== false ||
+                    strpos($fileContent, 'interface ' . $class) !== false
+                ) {
                     return true;
                 }
             }

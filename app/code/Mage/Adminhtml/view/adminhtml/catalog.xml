@@ -1,0 +1,695 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+
+<layout>
+    <adminhtml_catalog_product_index>
+        <reference name="menu">
+            <action method="setActive"><itemId>Mage_Catalog::catalog_products</itemId></action>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Adminhtml_Block_Catalog_Product" name="products_list">
+                <block type="Mage_Backend_Block_Store_Switcher" name="store_switcher" as="store_switcher">
+                    <action method="setUseConfirm"><params>0</params></action>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_catalog_product_index>
+
+    <adminhtml_catalog_product_new>
+        <update handle="editor"/>
+        <reference name="head">
+            <action method="addCss"><file>Mage_Adminhtml::jquery/fileUploader/css/jquery.fileupload-ui.css</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.iframe-transport.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/load-image.min.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/canvas-to-blob.min.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload-fp.js</file></action>
+            <action method="addJs"><file>mage/proxy-event.js</file></action>
+
+            <action method="addCss"><file>Mage_Adminhtml::catalog/category-selector.css</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::json2.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::mage/backend/suggest.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/jstree/jquery.hotkeys.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/jstree/jquery.jstree.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::mage/backend/tree-suggest.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::catalog/type-switcher.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::catalog/product-variation.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::catalog/base-image-uploader.js</file></action>
+            <action method="addJs"><file>Mage_Catalog::js/product-gallery.js</file></action>
+            <action method="addCss"><file>Mage_Catalog::product/product.css</file></action>
+            <action method="addJs"><file>Mage_Catalog::js/custom-options.js</file></action>
+            <action method="addJs"><file>mage/backend/menu.js</file></action>
+            <!--<action method="addCss"><file>Mage_Adminhtml::catalog/configurable-product.css</file></action>-->
+        </reference>
+        <reference name="content">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit" name="product_edit">
+                <container name="product-type-tabs" label="Tabs">
+                </container>
+            </block>
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_AttributeSet" name="attribute-set-info"
+                   template="Mage_Adminhtml::catalog/product/edit/attribute_set.phtml"/>
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_NewCategory" name="new-category"
+                   template="Mage_Adminhtml::catalog/product/edit/category/new/form.phtml"/>
+            <block type="Mage_Core_Block_Template" name="affected-attribute-set-form"
+                   template="Mage_Catalog::product/configurable/affected-attribute-set-selector/form.phtml"/>
+        </reference>
+        <reference name="left">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs" name="product_tabs"/>
+        </reference>
+        <reference name="js">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Js" name="catalog_product_js"
+                   template="catalog/product/js.phtml" />
+            <block type="Mage_Core_Block_Template" template="Mage_Adminhtml::catalog/wysiwyg/js.phtml"/>
+            <block type="Mage_Catalog_Block_Product_Configurable_AttributeSelector"
+                   template="Mage_Catalog::product/configurable/attribute-selector/js.phtml"/>
+            <block type="Mage_Catalog_Block_Product_Configurable_AttributeSelector"
+                   template="Mage_Catalog::product/configurable/affected-attribute-set-selector/js.phtml"/>
+        </reference>
+    </adminhtml_catalog_product_new>
+
+    <adminhtml_catalog_product_edit>
+        <update handle="adminhtml_catalog_product_new"/>
+        <reference name="left">
+            <block type="Mage_Backend_Block_Store_Switcher" name="store_switcher" before="-"/>
+        </reference>
+    </adminhtml_catalog_product_edit>
+
+    <adminhtml_catalog_product_reviews>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Reviews" name="admin.product.reviews"/>
+        </container>
+    </adminhtml_catalog_product_reviews>
+
+    <adminhtml_catalog_product_options>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options" name="admin.product.options"/>
+        </container>
+    </adminhtml_catalog_product_options>
+
+    <adminhtml_catalog_product_grid>
+        <update handle="formkey"/>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Grid" name="admin.product.grid"/>
+        </container>
+    </adminhtml_catalog_product_grid>
+
+    <adminhtml_catalog_product_related>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Related" name="catalog.product.edit.tab.related"/>
+            <block type="Mage_Adminhtml_Block_Widget_Grid_Serializer" name="related_grid_serializer">
+                <reference name="related_grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>catalog.product.edit.tab.related</grid_block_name>
+                        <data_callback>getSelectedRelatedProducts</data_callback>
+                        <hidden_input_name>links[related]</hidden_input_name>
+                        <reload_param_name>products_related</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>position</input_name>
+                    </action>
+                </reference>
+            </block>
+        </container>
+    </adminhtml_catalog_product_related>
+
+    <adminhtml_catalog_product_relatedgrid>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Related" name="catalog.product.edit.tab.related"/>
+        </container>
+    </adminhtml_catalog_product_relatedgrid>
+
+    <adminhtml_catalog_product_superconfig_config>
+        <reference name="admin.product.edit.tab.super.config.grid.container">
+            <block type="Mage_Backend_Block_Widget_Grid" name="admin.product.edit.tab.super.config.grid" as="grid">
+                <arguments>
+                    <id>configurable_associated_products_grid</id>
+                    <dataSource type="object">Mage_Catalog_Model_Resource_Product_Collection_AssociatedProduct</dataSource>
+                    <use_ajax>true</use_ajax>
+                    <default_sort>entity_id</default_sort>
+                    <default_dir>DESC</default_dir>
+                    <save_parameters_in_session>0</save_parameters_in_session>
+                    <grid_url type="url">
+                        <path>*/*/superConfig</path>
+                        <params>
+                            <_current>1</_current>
+                        </params>
+                    </grid_url>
+                </arguments>
+                <block type="Mage_Catalog_Block_Product_Configurable_AssociatedSelector_Backend_Grid_ColumnSet" as="grid.columnSet"
+                       name="admin.product.edit.tab.super.config.grid.columnSet">
+                    <arguments>
+                        <id>super_product_links</id>
+                    </arguments>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="entity_id">
+                        <arguments>
+                            <header translate="true" module="Mage_Core">ID</header>
+                            <width>60px</width>
+                            <type>text</type>
+                            <index>entity_id</index>
+                            <id>entity_id</id>
+                            <filter>0</filter>
+                            <sortable>1</sortable>
+                            <renderer>Mage_Catalog_Block_Product_Configurable_AssociatedSelector_Renderer_Id</renderer>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="name">
+                        <arguments>
+                            <header translate="true" module="Mage_Core">Name</header>
+                            <type>text</type>
+                            <escape>1</escape>
+                            <index>name</index>
+                            <id>name</id>
+                            <filter>0</filter>
+                            <sortable>1</sortable>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="price">
+                        <arguments>
+                            <header translate="true" module="Mage_Core">Price</header>
+                            <type>currency</type>
+                            <index>price</index>
+                            <id>price</id>
+                            <filter>0</filter>
+                            <sortable>1</sortable>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="sku" name="admin.product.edit.tab.super.config.grid.sku">
+                        <arguments>
+                            <header translate="true" module="Mage_Core">SKU</header>
+                            <type>text</type>
+                            <escape>1</escape>
+                            <index>sku</index>
+                            <id>sku</id>
+                            <filter>0</filter>
+                            <sortable>1</sortable>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="weight">
+                        <arguments>
+                            <header translate="true" module="Mage_Core">Weight</header>
+                            <type>text</type>
+                            <index>weight</index>
+                            <id>weight</id>
+                            <filter>0</filter>
+                            <sortable>1</sortable>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_catalog_product_superconfig_config>
+
+    <adminhtml_catalog_product_superconfig>
+        <update handle="adminhtml_catalog_product_superconfig_config"/>
+        <container output="1" name="admin.product.edit.tab.super.config.grid.container" label="grid"></container>
+    </adminhtml_catalog_product_superconfig>
+
+    <adminhtml_catalog_product_alertspricegrid>
+        <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Alerts_Price" name="admin.product.edit.tab.alerts.price" output="1" />
+    </adminhtml_catalog_product_alertspricegrid>
+
+    <adminhtml_catalog_product_alertsstockgrid>
+        <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Alerts_Stock" name="admin.product.edit.tab.alerts.stock" output="1" />
+    </adminhtml_catalog_product_alertsstockgrid>
+
+    <adminhtml_catalog_product_upsell>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Upsell" name="catalog.product.edit.tab.upsell"/>
+            <block type="Mage_Adminhtml_Block_Widget_Grid_Serializer" name="upsell_grid_serializer">
+                <reference name="upsell_grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>catalog.product.edit.tab.upsell</grid_block_name>
+                        <data_callback>getSelectedUpsellProducts</data_callback>
+                        <hidden_input_name>links[upsell]</hidden_input_name>
+                        <reload_param_name>products_upsell</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>position</input_name>
+                    </action>
+                </reference>
+            </block>
+        </container>
+    </adminhtml_catalog_product_upsell>
+
+    <adminhtml_catalog_product_upsellgrid>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Upsell" name="catalog.product.edit.tab.upsell"/>
+        </container>
+    </adminhtml_catalog_product_upsellgrid>
+
+    <adminhtml_catalog_product_crosssell>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Crosssell" name="catalog.product.edit.tab.crosssell"/>
+            <block type="Mage_Adminhtml_Block_Widget_Grid_Serializer" name="crosssell_grid_serializer">
+                <reference name="crosssell_grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>catalog.product.edit.tab.crosssell</grid_block_name>
+                        <data_callback>getSelectedCrossSellProducts</data_callback>
+                        <hidden_input_name>links[crosssell]</hidden_input_name>
+                        <reload_param_name>products_crosssell</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>position</input_name>
+                    </action>
+                </reference>
+            </block>
+        </container>
+    </adminhtml_catalog_product_crosssell>
+
+    <adminhtml_catalog_product_crosssellgrid>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Crosssell" name="catalog.product.edit.tab.crosssell"/>
+        </container>
+    </adminhtml_catalog_product_crosssellgrid>
+<!--
+Layout handle for simple products
+-->
+    <adminhtml_catalog_product_simple>
+        <update handle="adminhtml_catalog_product_superconfig_config"/>
+        <reference name="product_tabs">
+            <action method="addTab"><name>downloadable_items</name><block>Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable</block></action>
+        </reference>
+        <reference name="product-type-tabs">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config" name="admin.product.edit.tab.super.config.grid.container">
+                <block type="Mage_Core_Block_Template" name="attribute-block-template"
+                       template="Mage_Adminhtml::catalog/product/edit/super/attribute-js-template.phtml"
+                       as="template"/>
+                <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Attribute"
+                       template="Mage_Adminhtml::catalog/product/edit/super/attribute-template.phtml"
+                       as="attribute-renderer"/>
+                <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Matrix"
+                       template="Mage_Adminhtml::catalog/product/edit/super/matrix.phtml"
+                       as="matrix"/>
+            </block>
+        </reference>
+    </adminhtml_catalog_product_simple>
+<!--
+Layout handle for virtual products
+-->
+    <adminhtml_catalog_product_virtual>
+        <update handle="adminhtml_catalog_product_superconfig_config"/>
+        <reference name="product_tabs">
+            <action method="addTab"><name>downloadable_items</name><block>Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable</block></action>
+        </reference>
+        <reference name="product-type-tabs">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config" name="admin.product.edit.tab.super.config.grid.container">
+                <block type="Mage_Core_Block_Template" name="attribute-block-template"
+                       template="Mage_Adminhtml::catalog/product/edit/super/attribute-js-template.phtml"
+                       as="template"/>
+                <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Attribute"
+                       template="Mage_Adminhtml::catalog/product/edit/super/attribute-template.phtml"
+                       as="attribute-renderer"/>
+                <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Matrix"
+                       template="Mage_Adminhtml::catalog/product/edit/super/matrix.phtml"
+                       as="matrix"/>
+            </block>
+        </reference>
+    </adminhtml_catalog_product_virtual>
+
+<!--
+Layout handle for grouped products
+-->
+    <adminhtml_catalog_product_grouped>
+        <update handle="adminhtml_catalog_product_grouped_grid"/>
+        <update handle="adminhtml_catalog_product_grouped_grid_popup"/>
+        <reference name="product-type-tabs">
+            <block type="Mage_Catalog_Block_Product_Grouped_AssociatedProducts" name="catalog.product.edit.grouped.container" template="Mage_Catalog::product/grouped/container.phtml">
+                <block type="Mage_Core_Block_Template" name="catalog.product.edit.tab.super.container" template="Mage_Catalog::product/grouped/grouped.phtml">
+                    <block type="Mage_Core_Block_Template" name="catalog.product.edit.tab.super.grid.container" as="catalog.product.group.grid.container"/>
+                    <block type="Mage_Core_Block_Template" name="catalog.product.edit.tab.super.grid.popup.container" as="catalog.product.group.grid.popup.container"/>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_catalog_product_grouped>
+
+    <adminhtml_catalog_product_grouped_grid>
+        <reference name="catalog.product.edit.tab.super.grid.container">
+            <block type="Mage_Catalog_Block_Product_Grouped_AssociatedProducts_Grid" name="catalog.product.edit.tab.super.group" as="catalog.product.group.grid">
+                <arguments>
+                    <id>grouped_grid</id>
+                    <dataSource type="object">Mage_Catalog_Model_Resource_Product_Type_Grouped_AssociatedProductsCollection</dataSource>
+                    <use_ajax>1</use_ajax>
+                    <default_sort>id</default_sort>
+                    <default_dir>DESC</default_dir>
+                    <save_parameters_in_session>0</save_parameters_in_session>
+                    <pager_visibility>0</pager_visibility>
+                    <grid_url type="url">
+                        <path>*/*/superGroup</path>
+                        <params>
+                            <_current>1</_current>
+                        </params>
+                    </grid_url>
+                    <grid_css_class>data-table</grid_css_class>
+                </arguments>
+                <block type="Mage_Backend_Block_Widget_Grid_ColumnSet" name="catalog.product.edit.tab.super.group.columnSet" as="grid.columnSet">
+                    <arguments>
+                        <id>grouped_grid</id>
+                        <filter_visibility>0</filter_visibility>
+                    </arguments>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="info">
+                        <arguments>
+                            <type>grip</type>
+                            <index>entity_id</index>
+                            <sortable>0</sortable>
+                            <inline_css>draggable-handle</inline_css>
+                            <header_css_class>col-draggable</header_css_class>
+                            <column_css_class>col-draggable</column_css_class>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="name">
+                        <arguments>
+                            <header translate="true" module="Mage_Catalog">Name</header>
+                            <type>text</type>
+                            <index>name</index>
+                            <editable>1</editable>
+                            <sortable>0</sortable>
+                            <escape>1</escape>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="sku">
+                        <arguments>
+                            <header translate="true" module="Mage_Catalog">SKU</header>
+                            <type>text</type>
+                            <index>sku</index>
+                            <sortable>0</sortable>
+                            <escape>1</escape>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="price">
+                        <arguments>
+                            <header translate="true" module="Mage_Catalog">Price</header>
+                            <type>currency</type>
+                            <index>price</index>
+                            <sortable>0</sortable>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="qty">
+                        <arguments>
+                            <header translate="true" module="Mage_Catalog">Default Qty</header>
+                            <type>number</type>
+                            <index>qty</index>
+                            <editable>1</editable>
+                            <sortable>0</sortable>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="delete">
+                        <arguments>
+                            <header translate="true" module="Mage_Catalog">Delete</header>
+                            <type>button</type>
+                            <button_type>button</button_type>
+                            <column_css_class>grouped-product-delete</column_css_class>
+                            <renderer>Mage_Backend_Block_Widget_Grid_Column_Renderer_Button</renderer>
+                            <sortable>0</sortable>
+                            <header_css_class>col-actions</header_css_class>
+                            <column_css_class>col-actions</column_css_class>
+                        </arguments>
+                    </block>
+                </block>
+                <action method="setGridData">
+                    <hidden_input_name>links[grouped]</hidden_input_name>
+                    <fields_to_save>
+                        <input_name>qty</input_name>
+                        <input_name2>position</input_name2>
+                    </fields_to_save>
+                </action>
+            </block>
+        </reference>
+    </adminhtml_catalog_product_grouped_grid>
+
+    <adminhtml_catalog_product_grouped_grid_popup>
+        <reference name="catalog.product.edit.tab.super.grid.popup.container">
+            <block type="Mage_Backend_Block_Widget_Grid" name="catalog.product.edit.tab.super.group.popup" as="catalog.product.group.grid.popup">
+                <arguments>
+                    <id>grouped_grid_popup</id>
+                    <dataSource type="object">Mage_Catalog_Model_Resource_Product_Type_Grouped_AssociatedProductsCollection</dataSource>
+                    <use_ajax>1</use_ajax>
+                    <default_sort>id</default_sort>
+                    <default_dir>ASC</default_dir>
+                    <save_parameters_in_session>1</save_parameters_in_session>
+                    <grid_url type="url">
+                        <path>*/*/superGroupPopup</path>
+                        <params>
+                            <_current>1</_current>
+                        </params>
+                    </grid_url>
+                </arguments>
+                <block type="Mage_Backend_Block_Widget_Grid_ColumnSet" name="catalog.product.edit.tab.super.group.popup.columnSet" as="grid.columnSet">
+                    <arguments>
+                        <id>grouped_grid_popup</id>
+                    </arguments>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="in_products">
+                        <arguments>
+                            <type>checkbox</type>
+                            <index>entity_id</index>
+                            <header_css_class>col-select</header_css_class>
+                            <column_css_class>col-select</column_css_class>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="name">
+                        <arguments>
+                            <header translate="true" module="Mage_Catalog">Name</header>
+                            <type>text</type>
+                            <index>name</index>
+                            <editable>1</editable>
+                            <escape>1</escape>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="sku">
+                        <arguments>
+                            <header translate="true" module="Mage_Catalog">SKU</header>
+                            <type>text</type>
+                            <index>sku</index>
+                            <escape>1</escape>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="price">
+                        <arguments>
+                            <header translate="true" module="Mage_Catalog">Price</header>
+                            <type>currency</type>
+                            <index>price</index>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_catalog_product_grouped_grid_popup>
+
+    <adminhtml_catalog_product_supergroup>
+        <update handle="adminhtml_catalog_product_grouped"/>
+        <container output="1" name="catalog.product.edit.tab.super.grid.container" label="grid"/>
+    </adminhtml_catalog_product_supergroup>
+
+    <adminhtml_catalog_product_supergrouppopup>
+        <update handle="adminhtml_catalog_product_grouped"/>
+        <container output="1" name="catalog.product.edit.tab.super.grid.popup.container" label="grid"/>
+    </adminhtml_catalog_product_supergrouppopup>
+
+    <adminhtml_catalog_product_variationsmatrix>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Matrix"
+                   template="Mage_Adminhtml::catalog/product/edit/super/matrix.phtml"
+                   as="matrix"/>
+        </container>
+    </adminhtml_catalog_product_variationsmatrix>
+<!--
+Layout handle for configurable products
+-->
+
+    <adminhtml_catalog_product_configurable_new>
+        <update handle="adminhtml_catalog_product_superconfig_config"/>
+        <reference name="product-type-tabs">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config" name="admin.product.edit.tab.super.config.grid.container">
+                <block type="Mage_Core_Block_Template" name="attribute-block-template"
+                       template="Mage_Adminhtml::catalog/product/edit/super/attribute-js-template.phtml"
+                       as="template"/>
+                <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Attribute"
+                       template="Mage_Adminhtml::catalog/product/edit/super/attribute-template.phtml"
+                       as="attribute-renderer"/>
+                <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Matrix"
+                       template="Mage_Adminhtml::catalog/product/edit/super/matrix.phtml"
+                       as="matrix"/>
+            </block>
+        </reference>
+    </adminhtml_catalog_product_configurable_new>
+
+    <adminhtml_catalog_product_configurable>
+        <update handle="adminhtml_catalog_product_superconfig_config"/>
+        <reference name="product-type-tabs">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config" name="admin.product.edit.tab.super.config.grid.container">
+                <block type="Mage_Core_Block_Template" name="attribute-block-template"
+                       template="Mage_Adminhtml::catalog/product/edit/super/attribute-js-template.phtml"
+                       as="template"/>
+                <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Attribute"
+                       template="Mage_Adminhtml::catalog/product/edit/super/attribute-template.phtml"
+                       as="attribute-renderer"/>
+                <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Matrix"
+                       template="Mage_Adminhtml::catalog/product/edit/super/matrix.phtml"
+                       as="matrix"/>
+            </block>
+        </reference>
+    </adminhtml_catalog_product_configurable>
+
+    <adminhtml_catalog_product_action_attribute_edit>
+        <reference name="left">
+            <block type="Mage_Backend_Block_Store_Switcher" name="store_switcher" template="store/switcher.phtml" />
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute_Tabs" name="attributes_tabs">
+                <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute_Tab_Attributes" name="tab_attributes"/>
+                <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute_Tab_Inventory" name="tab_inventory" template="catalog/product/edit/action/inventory.phtml" />
+                <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute_Tab_Websites" name="tab_websites" template="catalog/product/edit/action/websites.phtml" />
+                <action method="addTab"><name>attributes</name><block>tab_attributes</block></action>
+                <action method="addTab"><name>inventory</name><block>tab_inventory</block></action>
+                <action method="addTab"><name>websites</name><block>tab_websites</block></action>
+            </block>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute" name="attribute" template="catalog/product/edit/action/attribute.phtml" />
+        </reference>
+    </adminhtml_catalog_product_action_attribute_edit>
+
+    <adminhtml_catalog_product_attribute_edit>
+        <reference name="left">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tabs" name="attribute_edit_tabs"></block>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit" name="attribute_edit_content"></block>
+        </reference>
+        <reference name="js">
+            <block type="Mage_Adminhtml_Block_Template" name="attribute_edit_js" template="catalog/product/attribute/js.phtml"></block>
+        </reference>
+    </adminhtml_catalog_product_attribute_edit>
+
+    <adminhtml_catalog_category_edit>
+        <update handle="editor"/>
+        <reference name="head">
+            <action method="addCss"><file>Mage_Adminhtml::jquery/fileUploader/css/jquery.fileupload-ui.css</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.iframe-transport.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload.js</file></action>
+
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/load-image.min.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/canvas-to-blob.min.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload-fp.js</file></action>
+        </reference>
+        <reference name="left">
+            <block name="category.tree" type="Mage_Adminhtml_Block_Catalog_Category_Tree" template="catalog/category/tree.phtml" />
+        </reference>
+        <reference name="content">
+            <block name="category.edit"  type="Mage_Adminhtml_Block_Catalog_Category_Edit" template="catalog/category/edit.phtml" />
+        </reference>
+        <reference name="js">
+            <block type="Mage_Core_Block_Template" template="Mage_Adminhtml::catalog/wysiwyg/js.phtml" name="catalog.wysiwyg.js" />
+        </reference>
+    </adminhtml_catalog_category_edit>
+
+    <ADMINHTML_CATALOG_PRODUCT_COMPOSITE_CONFIGURE>
+        <block type="Mage_Adminhtml_Block_Catalog_Product_Composite_Fieldset" name="product.composite.fieldset" output="1">
+            <block name="product.composite.fieldset.options" type="Mage_Adminhtml_Block_Catalog_Product_Composite_Fieldset_Options" template="catalog/product/composite/fieldset/options.phtml">
+                <action method="addOptionRenderer"><type>text</type><block>Mage_Catalog_Block_Product_View_Options_Type_Text</block><template>Mage_Adminhtml::catalog/product/composite/fieldset/options/type/text.phtml</template></action>
+                <action method="addOptionRenderer"><type>file</type><block>Mage_Catalog_Block_Product_View_Options_Type_File</block><template>Mage_Adminhtml::catalog/product/composite/fieldset/options/type/file.phtml</template></action>
+                <action method="addOptionRenderer"><type>select</type><block>Mage_Catalog_Block_Product_View_Options_Type_Select</block><template>Mage_Adminhtml::catalog/product/composite/fieldset/options/type/select.phtml</template></action>
+                <action method="addOptionRenderer"><type>date</type><block>Mage_Catalog_Block_Product_View_Options_Type_Date</block><template>Mage_Adminhtml::catalog/product/composite/fieldset/options/type/date.phtml</template></action>
+                <block type="Mage_Core_Block_Template" name="product.composite.fieldset.options.js" as="options_js" template="Mage_Adminhtml::catalog/product/composite/fieldset/options/js.phtml"/>
+            </block>
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Composite_Fieldset_Qty" name="product.composite.fieldset.qty" template="catalog/product/composite/fieldset/qty.phtml"/>
+        </block>
+    </ADMINHTML_CATALOG_PRODUCT_COMPOSITE_CONFIGURE>
+
+    <ADMINHTML_CATALOG_PRODUCT_COMPOSITE_CONFIGURE_ERROR>
+        <block type="Mage_Adminhtml_Block_Catalog_Product_Composite_Error" name="product.composite.error" output="1" />
+    </ADMINHTML_CATALOG_PRODUCT_COMPOSITE_CONFIGURE_ERROR>
+
+    <ADMINHTML_CATALOG_PRODUCT_COMPOSITE_UPDATE_RESULT>
+        <block type="Mage_Adminhtml_Block_Catalog_Product_Composite_Update_Result" name="product.composite.update.result" output="1" />
+    </ADMINHTML_CATALOG_PRODUCT_COMPOSITE_UPDATE_RESULT>
+<!--
+Additional block in composite_fieldset block dependant on product type
+-->
+    <catalog_product_view_type_configurable>
+        <reference name="product.composite.fieldset">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Composite_Fieldset_Configurable" name="product.composite.fieldset.configurable" before="product.composite.fieldset.options" template="catalog/product/composite/fieldset/configurable.phtml" />
+        </reference>
+    </catalog_product_view_type_configurable>
+    <catalog_product_view_type_grouped>
+        <reference name="product.composite.fieldset">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Composite_Fieldset_Grouped" name="product.composite.fieldset.grouped" before="product.composite.fieldset.options" template="catalog/product/composite/fieldset/grouped.phtml"/>
+            <remove name="product.composite.fieldset.qty"/>
+        </reference>
+    </catalog_product_view_type_grouped>
+
+    <adminhtml_catalog_product_optionsimportgrid>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_Popup_Grid" name="catalog.product.import.custom.options" />
+        </container>
+    </adminhtml_catalog_product_optionsimportgrid>
+
+    <adminhtml_catalog_product_customoptions>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Options_Ajax" name="catalog.product.import.custom.options"/>
+        </container>
+    </adminhtml_catalog_product_customoptions>
+
+    <adminhtml_catalog_product_set_index>
+        <update handle="formkey"/>
+        <update handle="adminhtml_catalog_product_set_block"/>
+        <reference name="content">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Toolbar_Main" name="adminhtml.catalog.product.set.container"/>
+        </reference>
+    </adminhtml_catalog_product_set_index>
+
+    <adminhtml_catalog_product_set_block>
+        <reference name='adminhtml.catalog.product.set.container'>
+            <block type="Mage_Backend_Block_Widget_Grid" name='adminhtml.catalog.product.set.grid' as='grid'>
+                <arguments>
+                    <id>setGrid</id>
+                    <dataSource type="object">Mage_Eav_Model_Resource_Entity_Attribute_Grid_Collection</dataSource>
+                    <default_sort>set_name</default_sort>
+                    <default_dir>ASC</default_dir>
+                    <save_parameters_in_session>1</save_parameters_in_session>
+                </arguments>
+                <block type='Mage_Backend_Block_Widget_Grid_ColumnSet' name='adminhtml.catalog.product.set.grid.columnSet' as='grid.columnSet'>
+                    <arguments>
+                        <id>setGrid</id>
+                        <rowUrl>
+                            <path>*/*/edit</path>
+                            <extraParamsTemplate>
+                                <id>getAttributeSetId</id>
+                            </extraParamsTemplate>
+                        </rowUrl>
+                    </arguments>
+                    <block type='Mage_Backend_Block_Widget_Grid_Column' as='set_name'>
+                        <arguments>
+                            <header translate='true' module='Mage_Catalog'>Set Name</header>
+                            <align>left</align>
+                            <sortable>1</sortable>
+                            <index>attribute_set_name</index>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_catalog_product_set_block>
+</layout>

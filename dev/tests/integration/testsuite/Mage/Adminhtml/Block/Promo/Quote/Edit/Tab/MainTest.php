@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Main
  */
-class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_MainTest extends PHPUnit_Framework_TestCase
+class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_MainTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @magentoDataFixture Mage/Core/_files/init_adminhtml_design.php

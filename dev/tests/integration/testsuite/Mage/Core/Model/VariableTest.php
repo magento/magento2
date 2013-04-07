@@ -37,11 +37,6 @@ class Mage_Core_Model_VariableTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getModel('Mage_Core_Model_Variable');
     }
 
-    public function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testGetSetStoreId()
     {
         $this->_model->setStoreId(1);

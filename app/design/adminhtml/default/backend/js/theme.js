@@ -93,53 +93,76 @@
     $.widget('mage.globalNavigation', {
         options: {
             menuCategory: '.level-0.parent',
-            menuLinks: 'a'
+            menuLinks: 'a',
+            itemsConfig: null,
+            hoverIntentConfig: {
+                interval: 100,
+                timeout: 700 // number = milliseconds delay before onMouseOut
+            }
         },
 
         _create: function() {
             this.menu = this.element;
             this.menuCategory = $(this.options.menuCategory, this.menu);
             this.menuLinks = $(this.options.menuLinks, this.menuCategory);
-
-            this._events();
+            this._bind();
         },
 
-        _events: function() {
-            var self = this;
-
-            var config = {
-                interval: 100,
-                over: self._hoverEffects, // function = onMouseOver callback (REQUIRED)
-                timeout: 700, // number = milliseconds delay before onMouseOut
-                out: self._leaveEffects // function = onMouseOut callback (REQUIRED)
-            };
-
-            this.menuCategory
-                .hoverIntent(config)
+        _menuCategoryBind: function(category, config) {
+            category
+                .hoverIntent($.extend({}, this.options.hoverIntentConfig, {
+                    over: !config.open ? this._hoverEffects : $.noop,
+                    out: !config.close ? this._leaveEffects : $.noop
+                }))
                 .on('hover', function() {
                     $(this)
-                    .addClass('recent')
-                    .siblings('.level-0')
-                    .removeClass('recent');
-/*                    $(this)
+                        .addClass('recent')
                         .siblings('.level-0')
-                            .removeClass('hover')
-                            .find('> .submenu')
-                                .hide();*/
+                        .removeClass('recent');
+                    /*                    $(this)
+                     .siblings('.level-0')
+                     .removeClass('hover')
+                     .find('> .submenu')
+                     .hide();*/
                 });
+            if (config.open) {
+                category.on(config.open, this._hoverEffects);
+            }
+            if (config.close) {
+                category.on(config.close, this._leaveEffects);
+            }
+        },
 
+        _menuCategoryEvents: function() {
+            this.menuCategory.each($.proxy(function(i, category) {
+                var itemConfig = {};
+                if (this.options.categoriesConfig) {
+                    $.each(this.options.categoriesConfig, $.proxy(function(selector, conf) {
+                        if ($(category).is(selector)) {
+                            itemConfig = conf;
+                        }
+                    }, this));
+                }
+                this._menuCategoryBind($(category), itemConfig);
+            }, this));
+        },
+
+        _bind: function() {
+            this._menuCategoryEvents();
             this.menuLinks
-                .on('focus.tabFocus', function() {
-                    $(this).closest('.level-0.parent')
-                        .trigger('mouseenter');
+                .on('focus.tabFocus', function(e) {
+                    $(e.target).trigger('mouseenter');
                 })
-                .on('blur.tabFocus', function() {
-                    $(this).closest('.level-0.parent')
-                        .trigger('mouseleave');
+                .on('blur.tabFocus', function(e) {
+                    $(e.target).trigger('mouseleave');
                 });
         },
 
-        _hoverEffects: function () {
+        _hoverEffects: function (e) {
+            var targetSubmenu = $(e.target).closest('.submenu');
+            if(targetSubmenu.length && targetSubmenu.is(':visible')) {
+                return;
+            }
             var availableWidth = parseInt($(this).parent().css('width')) - $(this).position().left,
                 submenu = $('> .submenu', this),
                 colsWidth = 0;
@@ -165,7 +188,11 @@
                 .slideDown('fast');
         },
 
-        _leaveEffects: function () {
+        _leaveEffects: function (e) {
+            var targetSubmenu = $(e.target).closest('.submenu');
+            if(targetSubmenu.length && targetSubmenu.is(':hidden')) {
+                return;
+            }
             var self = $(this);
 
             $('> .submenu', this)
@@ -178,13 +205,15 @@
     $.widget('mage.modalPopup', {
         options: {
             popup: '.popup',
-            btnClose: '[data-dismiss="popup"]'
+            btnDismiss: '[data-dismiss="popup"]',
+            btnHide: '[data-hide="popup"]'
         },
 
         _create: function() {
             this.fade = this.element;
             this.popup = $(this.options.popup, this.fade);
-            this.btnClose = $(this.options.btnClose, this.popup);
+            this.btnDismiss = $(this.options.btnDismiss, this.popup);
+            this.btnHide = $(this.options.btnHide, this.popup);
 
             this._events();
         },
@@ -192,9 +221,14 @@
         _events: function() {
             var self = this;
 
-            this.btnClose
-                .on('click.closeModalPopup', function() {
+            this.btnDismiss
+                .on('click.dismissModalPopup', function() {
                     self.fade.remove();
+                });
+
+            this.btnHide
+                .on('click.hideModalPopup', function() {
+                    self.fade.hide();
                 });
         }
     });
@@ -341,23 +375,25 @@
     var switcherForIe8 = function() {
         /* Switcher for IE8 */
         if ($.browser.msie && $.browser.version == '8.0') {
-            var checkboxSwitcher = $('.switcher input');
-
-            var toggleCheckboxState = function(elem) {
-                elem.toggleClass('checked', elem.prop('checked'));
-            };
-            toggleCheckboxState(checkboxSwitcher);
-
-            $('.switcher')
+            $('.switcher input')
                 .on('change.toggleSwitcher', function() {
-                    toggleCheckboxState(checkboxSwitcher);
-                });
+                    $(this)
+                        .closest('.switcher')
+                        .toggleClass('checked', $(this).prop('checked'));
+                })
+                .trigger('change');
         }
     };
 
     $(document).ready(function() {
         $('.header-panel .search').globalSearch();
-        $('.navigation').globalNavigation();
+        $('.navigation').globalNavigation({
+            categoriesConfig: {
+                '[data-ui-id="menu-mage-adminhtml-system"]': {
+                    open: 'click'
+                }
+            }
+        });
         $('.fade').modalPopup();
         $('details').details();
         $('.page-actions').floatingHeader();
@@ -367,6 +403,34 @@
         $.each($('.entry-edit'), function(i, entry) {
             $('.collapse:first', entry).collapse('show');
         });
+
+        // TODO: Move to VDE js widjets
+        $.each($('.color-box'), function(index, elem) {
+            $(elem).farbtastic(function(color) {
+                $(elem).css({
+                    'backgroundColor': color
+                });
+                $(elem).siblings('input').val(color);
+            });
+        });
+
+        $('.element-color-picker input')
+            .on('blur', function() {
+                $(this).siblings('.color-box')
+                    .removeClass('active')
+                    .find('.farbtastic').hide();
+                $(this).trigger('change.quickStyleElement');
+            });
+
+        $('.color-box')
+            .on('click.showColorPicker', function() {
+                $(this)
+                    .addClass('active')
+                    .siblings('input').focus();
+                $(this)
+                    .find('.farbtastic')
+                        .show();
+            });
 
         switcherForIe8();
     });
