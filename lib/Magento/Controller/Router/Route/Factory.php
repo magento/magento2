@@ -44,8 +44,7 @@ class Magento_Controller_Router_Route_Factory
                 'defaults' => $defaults,
                 'regs' => $reqs,
                 'locale' => $locale
-            ),
-            false
+            )
         );
         if (!$route instanceof Zend_Controller_Router_Route_Interface) {
             throw new LogicException('Route must implement "Zend_Controller_Router_Route_Interface".');

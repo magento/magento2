@@ -64,7 +64,9 @@ class Mage_Core_Helper_Url_RewriteTest extends PHPUnit_Framework_TestCase
      */
     public function testHasRedirectOptions($option, $expected)
     {
-        $helper = new Mage_Core_Helper_Url_Rewrite();
+        $helper = new Mage_Core_Helper_Url_Rewrite(
+            $this->getMock('Mage_Core_Helper_Context', array(), array(), '', false, false)
+        );
         $mockObject = new Varien_Object();
         $mockObject->setOptions($option);
         $this->assertEquals($expected, $helper->hasRedirectOptions($mockObject));

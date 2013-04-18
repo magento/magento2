@@ -34,17 +34,21 @@ class Mage_Core_Model_LoggerTest extends PHPUnit_Framework_TestCase
     protected $_loggersProperty = null;
 
     /**
-     * @var Mage_Core_Model_Config|PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_config = null;
+    protected $_filesystemMock;
 
     protected function setUp()
     {
-        $this->_config = $this->getMock('Mage_Core_Model_Config', array('getOptions', 'getNode'), array(), '', false);
-        $options = $this->getMock('StdClass', array('getLogDir'));
-        $options->expects($this->any())->method('getLogDir')->will($this->returnValue(TESTS_TEMP_DIR));
-        $this->_config->expects($this->any())->method('getOptions')->will($this->returnValue($options));
-        $this->_model = new Mage_Core_Model_Logger($this->_config);
+        $this->_filesystemMock = $this->getMock('Varien_Io_File', array(), array(), '', false, false);
+        $filesystemHelper = new Magento_Test_Helper_FileSystem($this);
+        $dirs = $filesystemHelper->createDirInstance(TESTS_TEMP_DIR);
+        $logDir = $dirs->getDir(Mage_Core_Model_Dir::LOG);
+        if (!is_dir($logDir)) {
+            mkdir($logDir, 0777, true);
+        }
+
+        $this->_model = new Mage_Core_Model_Logger($dirs, $this->_filesystemMock);
         $this->_loggersProperty = new ReflectionProperty($this->_model, '_loggers');
         $this->_loggersProperty->setAccessible(true);
     }
@@ -56,7 +60,6 @@ class Mage_Core_Model_LoggerTest extends PHPUnit_Framework_TestCase
      */
     public function testAddStreamLog($key, $fileOrWrapper)
     {
-        $this->_config->expects($this->any())->method('getNode')->will($this->returnValue(''));
         $this->assertFalse($this->_model->hasLog($key));
         $this->_model->addStreamLog($key, $fileOrWrapper);
         $this->assertTrue($this->_model->hasLog($key));
@@ -94,6 +97,11 @@ class Mage_Core_Model_LoggerTest extends PHPUnit_Framework_TestCase
 
     public function testInitForStore()
     {
+        $config = $this->getMock('Mage_Core_Model_Config', array('getNode'), array(), '', false);
+        $config->expects($this->atLeastOnce())
+            ->method('getNode')
+            ->with('global/log/core/writer_model')
+            ->will($this->returnValue('StdClass'));
         $store = $this->getMock('Mage_Core_Model_Store', array('getConfig'), array(), '', false);
         $store->expects($this->at(0))->method('getConfig')->with('dev/log/active')->will($this->returnValue(false));
         $store->expects($this->at(1))->method('getConfig')->with('dev/log/active')->will($this->returnValue(true));
@@ -101,10 +109,10 @@ class Mage_Core_Model_LoggerTest extends PHPUnit_Framework_TestCase
         $store->expects($this->at(3))->method('getConfig')->with('dev/log/exception_file')->will(
             $this->returnValue('')
         );
-        $this->_model->initForStore($store);
+        $this->_model->initForStore($store, $config);
         $this->assertFalse($this->_model->hasLog(Mage_Core_Model_Logger::LOGGER_SYSTEM));
         $this->assertFalse($this->_model->hasLog(Mage_Core_Model_Logger::LOGGER_EXCEPTION));
-        $this->_model->initForStore($store);
+        $this->_model->initForStore($store, $config);
         $this->assertTrue($this->_model->hasLog(Mage_Core_Model_Logger::LOGGER_SYSTEM));
         $this->assertTrue($this->_model->hasLog(Mage_Core_Model_Logger::LOGGER_EXCEPTION));
     }
@@ -114,6 +122,7 @@ class Mage_Core_Model_LoggerTest extends PHPUnit_Framework_TestCase
      */
     public function testAddStoreLog()
     {
+        $this->_filesystemMock->expects($this->once())->method('checkAndCreateFolder');
         $store = $this->getMock('Mage_Core_Model_Store', array('getConfig'), array(), '', false);
         $store->expects($this->at(0))->method('getConfig')->with('dev/log/active')->will($this->returnValue(false));
         $store->expects($this->at(1))->method('getConfig')->with('dev/log/active')->will($this->returnValue(true));

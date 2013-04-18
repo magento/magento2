@@ -591,6 +591,9 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
     public function fetchItem()
     {
         if (null === $this->_fetchStmt) {
+            $this->_renderOrders()
+                 ->_renderLimit();
+
             $this->_fetchStmt = $this->getConnection()
                 ->query($this->getSelect());
         }

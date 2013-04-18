@@ -37,11 +37,6 @@ class Mage_Weee_Model_ObserverTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getModel('Mage_Weee_Model_Observer');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * @magentoConfigFixture current_store tax/weee/enable 1
      * @magentoDataFixture Mage/Weee/_files/product_with_fpt.php

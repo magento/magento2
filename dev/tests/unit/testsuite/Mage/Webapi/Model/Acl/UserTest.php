@@ -66,7 +66,7 @@ class Mage_Webapi_Model_Acl_UserTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Create User model
+     * Create User model.
      *
      * @param Mage_Webapi_Model_Resource_Acl_User $userResource
      * @param Mage_Webapi_Model_Resource_Acl_User_Collection $resourceCollection
@@ -74,16 +74,16 @@ class Mage_Webapi_Model_Acl_UserTest extends PHPUnit_Framework_TestCase
      */
     protected function _createModel($userResource, $resourceCollection = null)
     {
-        return $this->_helper->getModel('Mage_Webapi_Model_Acl_User', array(
+        return $this->_helper->getObject('Mage_Webapi_Model_Acl_User', array(
             'eventDispatcher' => $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false),
-            'cacheManager' => $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false),
+            'cacheManager' => $this->getMock('Mage_Core_Model_CacheInterface', array(), array(), '', false),
             'resource' => $userResource,
             'resourceCollection' => $resourceCollection
         ));
     }
 
     /**
-     * Test constructor
+     * Test constructor.
      */
     public function testConstructor()
     {
@@ -94,7 +94,7 @@ class Mage_Webapi_Model_Acl_UserTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test method getRoleUsers()
+     * Test getRoleUsers() method.
      */
     public function testGetRoleUsers()
     {
@@ -111,7 +111,7 @@ class Mage_Webapi_Model_Acl_UserTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test method loadByKey()
+     * Test loadByKey() method.
      */
     public function testLoadByKey()
     {
@@ -127,7 +127,7 @@ class Mage_Webapi_Model_Acl_UserTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test public getters
+     * Test public getters.
      */
     public function testPublicGetters()
     {
@@ -140,25 +140,24 @@ class Mage_Webapi_Model_Acl_UserTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test get collection and _construct
+     * Test GET collection and _construct
      */
     public function testGetCollection()
     {
-        /** @var Mage_Webapi_Model_Resource_Acl_User_Collection $collection */
-        $collection = $this->getMockBuilder('Mage_Webapi_Model_Resource_Acl_User_Collection')
-            ->setConstructorArgs(array('resource' => $this->_userResource))
-            ->setMethods(array('_initSelect'))
-            ->getMock();
+        /** @var PHPUnit_Framework_MockObject_MockObject $collection */
+        $collection = $this->getMock(
+            'Mage_Webapi_Model_Resource_Acl_User_Collection',
+            array('_initSelect', 'setModel'),
+            array('resource' => $this->_userResource),
+            '',
+            true
+        );
 
-        $collection->expects($this->any())
-            ->method('_initSelect')
-            ->withAnyParameters()
-            ->will($this->returnValue(null));
+        $collection->expects($this->any())->method('setModel')->with('Mage_Webapi_Model_Acl_User');
 
         $model = $this->_createModel($this->_userResource, $collection);
         $result = $model->getCollection();
 
-        $this->assertAttributeEquals('Mage_Webapi_Model_Acl_User', '_model', $result);
         $this->assertAttributeEquals('Mage_Webapi_Model_Resource_Acl_User', '_resourceModel', $result);
     }
 }

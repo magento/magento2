@@ -47,7 +47,7 @@ class Mage_Core_Model_Layout_Argument_Handler_UrlTest extends PHPUnit_Framework_
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento_ObjectManager_Zend', array('create'), array(), '', false);
+        $this->_objectManagerMock = $this->getMock('Magento_ObjectManager');
         $this->_urlModelMock = $this->getMock('Mage_Core_Model_Url', array(), array(), '', false);
         $this->_model = new Mage_Core_Model_Layout_Argument_Handler_Url($this->_objectManagerMock,
             $this->_urlModelMock

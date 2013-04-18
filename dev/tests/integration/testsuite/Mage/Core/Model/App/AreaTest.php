@@ -32,15 +32,15 @@ class Mage_Core_Model_App_AreaTest extends PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    public static function tearDownAfterClass()
+    {
+        Mage::app()->cleanCache(array(Mage_Core_Model_Design::CACHE_TAG));
+    }
+
     public function setUp()
     {
         /** @var $_model Mage_Core_Model_App_Area */
         $this->_model = Mage::getModel('Mage_Core_Model_App_Area', array('areaCode' => 'frontend'));
-    }
-
-    protected function tearDown()
-    {
-        $this->_model = null;
     }
 
     /**
@@ -58,30 +58,6 @@ class Mage_Core_Model_App_AreaTest extends PHPUnit_Framework_TestCase
         // try second time and make sure it won't load second time
         $this->_model->load(Mage_Core_Model_App_Area::PART_DESIGN);
         $this->assertSame($design, Mage::getDesign());
-    }
-
-    /**
-     * @magentoConfigFixture adminhtml/design/theme/full_name default/basic
-     * @magentoAppIsolation enabled
-     */
-    public function testDetectDesignGlobalConfig()
-    {
-        /** @var $model Mage_Core_Model_App_Area */
-        $model = Mage::getModel('Mage_Core_Model_App_Area', array('areaCode' => 'adminhtml'));
-        $model->detectDesign();
-        $theme = Mage::getDesign()->getConfigurationDesignTheme('adminhtml', array('useId' => false));
-        $this->assertEquals('default/basic', $theme);
-    }
-
-    /**
-     * @magentoConfigFixture current_store design/theme/full_name default/blank
-     * @magentoAppIsolation enabled
-     */
-    public function testDetectDesignStoreConfig()
-    {
-        $this->_model->detectDesign();
-        $theme = Mage::getDesign()->getConfigurationDesignTheme('frontend', array('useId' => false));
-        $this->assertEquals('default/blank', $theme);
     }
 
     // @codingStandardsIgnoreStart

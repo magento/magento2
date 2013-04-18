@@ -66,10 +66,7 @@ class Mage_Wishlist_IndexControllerTest extends Magento_Test_TestCase_Controller
         $this->dispatch('wishlist/index/index');
         $body = $this->getResponse()->getBody();
         $this->assertStringMatchesFormat('%A<img src="%Asmall_image.jpg" %A alt="Simple Product"%A/>%A', $body);
-        $this->assertStringMatchesFormat('%Afunction addWItemToCart(itemId)%A', $body);
-        $this->assertStringMatchesFormat('%Aonclick="addWItemToCart(%d);"%A', $body);
         $this->assertStringMatchesFormat('%A<textarea name="description[%d]"%A', $body);
-        $this->assertStringMatchesFormat('%A<button%Aonclick="addAllWItemsToCart()"%A', $body);
     }
 
     /**

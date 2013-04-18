@@ -28,7 +28,7 @@
 /**
  * Test for Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_Edit
  */
-class Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_EditTest extends PHPUnit_Framework_TestCase
+class Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_EditTest extends Mage_Backend_Area_TestCase
 {
     /**
      * Test prepare layout
@@ -44,7 +44,9 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_EditTest extends PHPUnit_
         $layout = Mage::getModel('Mage_Core_Model_Layout', array('area' => Mage_Core_Model_App_Area::AREA_ADMINHTML));
 
         /** @var $block Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_Edit */
-        $block = $layout->createBlock('Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_Edit', '', $blockAttributes);
+        $block = $layout->createBlock(
+            'Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_Edit', '', array('data' => $blockAttributes)
+        );
 
         $this->_checkSelector($block, $expected);
         $this->_checkLinks($block, $expected);

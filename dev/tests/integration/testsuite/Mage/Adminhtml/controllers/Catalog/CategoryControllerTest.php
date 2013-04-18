@@ -47,10 +47,9 @@ class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Backend_Utility
         $this->getRequest()->setParam('id', 2);
         $this->dispatch('backend/admin/catalog_category/save');
 
-        $messages = Mage::getSingleton('Mage_Backend_Model_Session')
-            ->getMessages(false)->getItemsByType(Mage_Core_Model_Message::SUCCESS);
-        $this->assertNotEmpty($messages, "Could not save category");
-        $this->assertEquals('The category has been saved.', current($messages)->getCode());
+        $this->assertSessionMessages(
+            $this->equalTo(array('The category has been saved.')), Mage_Core_Model_Message::SUCCESS
+        );
 
         /** @var $category Mage_Catalog_Model_Category */
         $category = Mage::getModel('Mage_Catalog_Model_Category');
@@ -81,6 +80,7 @@ class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Backend_Utility
     /**
      * @param array $postData
      * @dataProvider categoryCreatedFromProductCreationPageDataProvider
+     * @magentoDbIsolation enabled
      */
     public function testSaveActionFromProductCreationPage($postData)
     {
@@ -115,7 +115,7 @@ class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Backend_Utility
      */
     public static function categoryCreatedFromProductCreationPageDataProvider()
     {
-        /* Keep in sync with /app/code/core/Mage/Adminhtml/view/adminhtml/catalog/product/edit/category/new/js.phtml */
+        /* Keep in sync with new-category-dialog.js */
         $postData = array(
             'general' => array (
                 'name' => 'Category Created From Product Creation Page',
@@ -134,17 +134,17 @@ class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Backend_Utility
 
     public function testSuggestCategoriesActionDefaultCategoryFound()
     {
-        $this->getRequest()->setParam('name_part', 'Default');
+        $this->getRequest()->setParam('label_part', 'Default');
         $this->dispatch('backend/admin/catalog_category/suggestCategories');
         $this->assertEquals(
-            '[{"id":"2","children":[],"is_active":"1","name":"Default Category"}]',
+            '[{"id":"2","children":[],"is_active":"1","label":"Default Category"}]',
             $this->getResponse()->getBody()
         );
     }
 
     public function testSuggestCategoriesActionNoSuggestions()
     {
-        $this->getRequest()->setParam('name_part', strrev('Default'));
+        $this->getRequest()->setParam('label_part', strrev('Default'));
         $this->dispatch('backend/admin/catalog_category/suggestCategories');
         $this->assertEquals('[]', $this->getResponse()->getBody());
     }
@@ -296,10 +296,8 @@ class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Backend_Utility
             ),
         ));
         $this->dispatch('backend/admin/catalog_category/save');
-        /** @var Mage_Backend_Model_Session $session */
-        $session = Mage::getSingleton('Mage_Backend_Model_Session');
-        $errorMessages = $session->getMessages()->getErrors();
-        $this->assertCount(1, $errorMessages);
-        $this->assertEquals('Unable to save the category', $errorMessages[0]->getCode());
+        $this->assertSessionMessages(
+            $this->equalTo(array('Unable to save the category')), Mage_Core_Model_Message::ERROR
+        );
     }
 }

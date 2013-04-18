@@ -64,11 +64,6 @@ class Mage_ImportExport_Model_Export_Entity_EavAbstractTest extends PHPUnit_Fram
         $this->_model->__construct();
     }
 
-    protected function tearDown()
-    {
-        unset($this->_model);
-    }
-
     /**
      * Test for method getEntityTypeId()
      */

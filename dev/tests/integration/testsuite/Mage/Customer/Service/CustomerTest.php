@@ -55,7 +55,7 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $previousStoreId = Mage::app()->getStore();
-        Mage::app()->setCurrentStore(Mage::app()->getStore(Mage_Core_Model_App::ADMIN_STORE_ID));
+        Mage::app()->setCurrentStore(Mage::app()->getStore(Mage_Core_Model_AppInterface::ADMIN_STORE_ID));
         if ($this->_createdCustomer && $this->_createdCustomer->getId() > 0) {
             $this->_createdCustomer->getAddressesCollection()->delete();
             $this->_createdCustomer->delete();
@@ -112,7 +112,7 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
                 'password' => '123123q',
                 'default_billing' => null,
                 'default_shipping' => null,
-                'store_id' => Mage_Core_Model_App::ADMIN_STORE_ID
+                'store_id' => Mage_Core_Model_AppInterface::ADMIN_STORE_ID
             )),
             'Mandatory data' => array(array(
                 'firstname' => 'SomeName',
@@ -150,7 +150,7 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
                 'suffix' => null,
                 'email' => 'test' . mt_rand(1000, 9999) . '@mail.com',
                 'password' => '123123q',
-                'store_id' => Mage_Core_Model_App::ADMIN_STORE_ID
+                'store_id' => Mage_Core_Model_AppInterface::ADMIN_STORE_ID
             ), 'Magento_Validator_Exception'),
             'Invalid email' => array(array(
                 'website_id' => 0,
@@ -162,7 +162,7 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
                 'suffix' => null,
                 'email' => '111@111',
                 'password' => '123123q',
-                'store_id' => Mage_Core_Model_App::ADMIN_STORE_ID
+                'store_id' => Mage_Core_Model_AppInterface::ADMIN_STORE_ID
             ), 'Magento_Validator_Exception'),
             'Invalid password' => array(array(
                 'website_id' => 0,
@@ -174,7 +174,7 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
                 'suffix' => null,
                 'email' => 'test' . mt_rand(1000, 9999) . '@mail.com',
                 'password' => '123',
-                'store_id' => Mage_Core_Model_App::ADMIN_STORE_ID
+                'store_id' => Mage_Core_Model_AppInterface::ADMIN_STORE_ID
             ), 'Mage_Eav_Model_Entity_Attribute_Exception', 'The password must have at least 6 characters.')
         );
     }
@@ -306,6 +306,7 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
     /**
      * @param array $customerData
      * @magentoDataFixture Mage/Customer/_files/customer.php
+     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      * @dataProvider updateDataProvider
      */
     public function testUpdate($customerData)
@@ -350,7 +351,7 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
                 'email' => 'test' . mt_rand(1000, 9999) . '@mail.com',
                 'dob' => date('Y-m-d H:i:s'),
                 'gender' => 1,
-                'store_id' => Mage_Core_Model_App::ADMIN_STORE_ID
+                'store_id' => Mage_Core_Model_AppInterface::ADMIN_STORE_ID
             ))
         );
     }
@@ -360,6 +361,7 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
      * @param string $exceptionName
      * @param string $exceptionMessage
      * @magentoDataFixture Mage/Customer/_files/customer.php
+     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      * @dataProvider updateExceptionsDataProvider
      */
     public function testUpdateExceptions($customerData, $exceptionName, $exceptionMessage = '')

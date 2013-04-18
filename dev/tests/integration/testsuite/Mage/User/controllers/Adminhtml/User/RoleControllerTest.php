@@ -40,7 +40,7 @@ class Mage_User_Adminhtml_User_RoleControllerTest extends Mage_Backend_Utility_C
         $this->dispatch('backend/admin/user_role/editrole');
 
         $this->assertContains('Role Information', $this->getResponse()->getBody());
-        $this->assertContains("Edit Role '" . $roleAdmin->getRoleName() . "'", $this->getResponse()->getBody());
+        $this->assertContains($roleAdmin->getRoleName(), $this->getResponse()->getBody());
     }
 
     /**

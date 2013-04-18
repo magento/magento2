@@ -37,12 +37,8 @@ class Mage_ProductAlert_Block_Email_StockTest extends PHPUnit_Framework_TestCase
         $this->_block = Mage::app()->getLayout()->createBlock('Mage_ProductAlert_Block_Email_Stock');
     }
 
-    protected function tearDown()
-    {
-        $this->_block = null;
-    }
-
     /**
+     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      * @magentoDataFixture Mage/Catalog/_files/product_with_image.php
      */
     public function testThumbnail()

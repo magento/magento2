@@ -46,10 +46,10 @@ class Mage_Backend_Utility_Controller extends Magento_Test_TestCase_ControllerAb
     {
         parent::setUp();
 
-        Mage::setCurrentArea('adminhtml');
+        Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::PART_CONFIG);
         Mage::getSingleton('Mage_Backend_Model_Url')->turnOffSecretKey();
 
-        $this->_auth = Mage::getModel('Mage_Backend_Model_Auth');
+        $this->_auth = Mage::getSingleton('Mage_Backend_Model_Auth');
         $this->_session = $this->_auth->getAuthStorage();
         $this->_auth->login(Magento_Test_Bootstrap::ADMIN_NAME, Magento_Test_Bootstrap::ADMIN_PASSWORD);
     }
@@ -61,7 +61,21 @@ class Mage_Backend_Utility_Controller extends Magento_Test_TestCase_ControllerAb
         $this->_session = null;
 
         Mage::getSingleton('Mage_Backend_Model_Url')->turnOnSecretKey();
+        Mage::getConfig()->setCurrentAreaCode(null);
 
         parent::tearDown();
+    }
+
+    /**
+     * Utilize backend session model by default
+     *
+     * @param PHPUnit_Framework_Constraint $constraint
+     * @param string|null $messageType
+     * @param string $sessionModel
+     */
+    public function assertSessionMessages(
+        PHPUnit_Framework_Constraint $constraint, $messageType = null, $sessionModel = 'Mage_Backend_Model_Session'
+    ) {
+        parent::assertSessionMessages($constraint, $messageType, $sessionModel);
     }
 }

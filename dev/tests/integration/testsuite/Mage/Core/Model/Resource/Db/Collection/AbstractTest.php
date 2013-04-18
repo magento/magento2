@@ -49,11 +49,6 @@ class Mage_Core_Model_Resource_Db_Collection_AbstractTest extends PHPUnit_Framew
         );
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testGetAllIds()
     {
         $allIds = $this->_model->getAllIds();

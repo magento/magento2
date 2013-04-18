@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Backend_Block_Widget_GridTest extends PHPUnit_Framework_TestCase
+class Mage_Backend_Block_Widget_GridTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @var Mage_Backend_Block_Widget_Grid_ColumnSet
@@ -42,35 +42,10 @@ class Mage_Backend_Block_Widget_GridTest extends PHPUnit_Framework_TestCase
      */
     protected $_columnSetMock;
 
-    /**
-     * List of block injection classes
-     *
-     * @var array
-     */
-    protected $_blockInjections = array(
-        'Mage_Core_Controller_Request_Http',
-        'Mage_Core_Model_Layout',
-        'Mage_Core_Model_Event_Manager',
-        'Mage_Backend_Model_Url',
-        'Mage_Core_Model_Translate',
-        'Mage_Core_Model_Cache',
-        'Mage_Core_Model_Design_Package',
-        'Mage_Core_Model_Session',
-        'Mage_Core_Model_Store_Config',
-        'Mage_Core_Controller_Varien_Front',
-        'Mage_Core_Model_Factory_Helper',
-        'Mage_Backend_Helper_Data',
-        'Mage_Backend_Model_Widget_Grid_Row_UrlGeneratorFactory',
-        'Mage_Backend_Model_Widget_Grid_SubTotals',
-        'Mage_Backend_Model_Widget_Grid_Totals',
-    );
-
     protected function setUp()
     {
         $this->_layoutMock = $this->getMock('Mage_Core_Model_Layout', array(), array(), '', false);
-        $this->_columnSetMock = $this->getMock(
-            'Mage_Backend_Block_Widget_Grid_ColumnSet', array(), $this->_prepareConstructorArguments()
-        );
+        $this->_columnSetMock = $this->_getColumnSetMock();
 
         $returnValueMap = array(
             array('grid', 'grid.columnSet', 'grid.columnSet'),
@@ -85,6 +60,10 @@ class Mage_Backend_Block_Widget_GridTest extends PHPUnit_Framework_TestCase
         $this->_layoutMock->expects($this->any())->method('createBlock')
             ->with('Mage_Backend_Block_Widget_Button')
             ->will($this->returnValue(Mage::app()->getLayout()->createBlock('Mage_Backend_Block_Widget_Button')));
+        $this->_layoutMock->expects($this->any())->method('helper')
+            ->with('Mage_Core_Helper_Data')
+            ->will($this->returnValue(Mage::helper('Mage_Core_Helper_Data')));
+
 
         $this->_block = Mage::app()->getLayout()->createBlock('Mage_Backend_Block_Widget_Grid');
         $this->_block->setLayout($this->_layoutMock);
@@ -92,17 +71,23 @@ class Mage_Backend_Block_Widget_GridTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * List of block constructor arguments
+     * Retrieve the mocked column set block instance
      *
-     * @return array
+     * @return Mage_Backend_Block_Widget_Grid_ColumnSet|PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _prepareConstructorArguments()
+    protected function _getColumnSetMock()
     {
-        $arguments = array();
-        foreach ($this->_blockInjections as $injectionClass) {
-            $arguments[] = Mage::getModel($injectionClass);
-        }
-        return $arguments;
+        $filesystem = new Magento_Filesystem(new Magento_Filesystem_Adapter_Local);
+        return $this->getMock('Mage_Backend_Block_Widget_Grid_ColumnSet', array(), array(
+            Mage::getModel('Mage_Core_Block_Template_Context', array(
+                'dirs' => new Mage_Core_Model_Dir($filesystem, __DIR__),
+                'filesystem' => $filesystem
+            )),
+            Mage::getModel('Mage_Backend_Helper_Data'),
+            Mage::getModel('Mage_Backend_Model_Widget_Grid_Row_UrlGeneratorFactory'),
+            Mage::getModel('Mage_Backend_Model_Widget_Grid_SubTotals'),
+            Mage::getModel('Mage_Backend_Model_Widget_Grid_Totals'),
+        ));
     }
 
     public function testToHtmlPreparesColumns()

@@ -66,7 +66,7 @@ class Mage_Backend_Model_Widget_Grid_SubTotalsTest extends PHPUnit_Framework_Tes
         );
 
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_model = $objectManagerHelper->getModel('Mage_Backend_Model_Widget_Grid_SubTotals', $arguments);
+        $this->_model = $objectManagerHelper->getObject('Mage_Backend_Model_Widget_Grid_SubTotals', $arguments);
 
         // setup columns
         $columns = array(

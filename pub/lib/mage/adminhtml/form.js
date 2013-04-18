@@ -36,22 +36,6 @@
     });
 })(jQuery);
 
-/**
- * redeclare Validation.isVisible function
- *
- * use for not visible elements validation
- */
-Validation.isVisible = function(elm){
-    while (elm && elm.tagName != 'BODY') {
-        if (elm.disabled) return false;
-        if ((Element.hasClassName(elm, 'template') && Element.hasClassName(elm, 'no-display'))
-             || Element.hasClassName(elm, 'ignore-validate')){
-            return false;
-        }
-        elm = elm.parentNode;
-    }
-    return true;
-}
 
 /**
  *  Additional elements methods
@@ -151,7 +135,12 @@ RegionUpdater.prototype = {
             if(!currentElement) {
                 return;
             }
-            Validation.reset(currentElement);
+            var form = currentElement.form,
+                validationInstance = form ? jQuery(form).data('validation') : null;
+
+            if (validationInstance) {
+                validationInstance.clearError(currentElement);
+            }
             label = $$('label[for="' + currentElement.id + '"]')[0];
             if (label) {
                 wildCard = label.down('em') || label.down('span.required');

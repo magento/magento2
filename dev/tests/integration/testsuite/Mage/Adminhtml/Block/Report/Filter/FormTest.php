@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Adminhtml_Block_Report_Filter_Form
  */
-class Mage_Adminhtml_Block_Report_Filter_FormTest extends PHPUnit_Framework_TestCase
+class Mage_Adminhtml_Block_Report_Filter_FormTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @magentoDataFixture Mage/Core/_files/init_adminhtml_design.php

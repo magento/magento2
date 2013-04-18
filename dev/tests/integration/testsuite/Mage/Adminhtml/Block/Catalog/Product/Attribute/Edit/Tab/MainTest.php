@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tab_MainTest extends PHPUnit_Framework_TestCase
+class Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tab_MainTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @var Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tab_Main
@@ -34,6 +34,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tab_MainTest extends P
 
     protected function setUp()
     {
+        parent::setUp();
         $this->_block = Mage::app()->getLayout()
             ->createBlock('Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tab_Main');
     }

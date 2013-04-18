@@ -37,11 +37,6 @@ class Mage_Customer_Block_Account_Dashboard_InfoTest extends PHPUnit_Framework_T
         $this->_block = Mage::app()->getLayout()->createBlock('Mage_Customer_Block_Account_Dashboard_Info');
     }
 
-    public function tearDown()
-    {
-        $this->_block = null;
-    }
-
     public function testGetSubscriptionObject()
     {
         $object = $this->_block->getSubscriptionObject();

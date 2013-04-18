@@ -85,7 +85,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_HandlesHierarchyTest exte
             'vdeUrlBuilder' => $vdeUrlBuilder
         );
 
-        $this->_model = $objectManagerHelper->getBlock($this->_modelName, $data);
+        $this->_model = $objectManagerHelper->getObject($this->_modelName, $data);
     }
 
     protected function tearDown()

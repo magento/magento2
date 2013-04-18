@@ -41,11 +41,6 @@ class Mage_Core_Model_Resource_Db_AbstractTest extends PHPUnit_Framework_TestCas
     }
 
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testConstruct()
     {
         $resourceProperty = new ReflectionProperty(get_class($this->_model), '_resources');

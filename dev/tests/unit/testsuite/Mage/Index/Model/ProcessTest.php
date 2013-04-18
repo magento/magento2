@@ -69,7 +69,7 @@ class Mage_Index_Model_ProcessTest extends PHPUnit_Framework_TestCase
 
     public function testGetProcessFile()
     {
-        $this->_processFile = $this->getMock('Mage_Index_Model_Process_File');
+        $this->_processFile = $this->getMock('Mage_Index_Model_Process_File', array(), array(), '', false, false);
         $this->_prepareIndexProcess();
 
         // assert that process file is stored in process entity instance and isn't changed after several invocations
@@ -87,7 +87,9 @@ class Mage_Index_Model_ProcessTest extends PHPUnit_Framework_TestCase
      */
     protected function _prepareMocksForTestLock($nonBlocking)
     {
-        $this->_processFile = $this->getMock('Mage_Index_Model_Process_File', array('processLock'));
+        $this->_processFile = $this->getMock('Mage_Index_Model_Process_File', array('processLock'), array(), '',
+            false, false
+        );
         $this->_processFile->expects($this->once())
             ->method('processLock')
             ->with($nonBlocking);
@@ -100,25 +102,23 @@ class Mage_Index_Model_ProcessTest extends PHPUnit_Framework_TestCase
      */
     protected function _prepareIndexProcess()
     {
-        /** @var $eventDispatcher Mage_Core_Model_Event_Manager */
-        $eventDispatcher = $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false);
-        /** @var $cacheManager Mage_Core_Model_Cache */
-        $cacheManager = $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false);
-
         $lockStorage = $this->getMock('Mage_Index_Model_Lock_Storage', array('getFile'), array(), '', false);
         $lockStorage->expects($this->once())
             ->method('getFile')
             ->with(self::PROCESS_ID)
             ->will($this->returnValue($this->_processFile));
 
-        $this->_indexProcess = new Mage_Index_Model_Process(
-            $eventDispatcher,
-            $cacheManager,
-            $lockStorage,
-            null,
-            null,
-            array('process_id' => self::PROCESS_ID)
+        $resource = $this->getMockForAbstractClass(
+            'Mage_Core_Model_Resource_Db_Abstract',
+            array(), '', false, false, true, array('getIdFieldName')
         );
+        $resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('process_id'));
+        $helper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_indexProcess = $helper->getObject('Mage_Index_Model_Process', array(
+            'lockStorage' => $lockStorage,
+            'resource' => $resource,
+            'data' => array('process_id' => self::PROCESS_ID)
+        ));
     }
 
     public function testUnlock()

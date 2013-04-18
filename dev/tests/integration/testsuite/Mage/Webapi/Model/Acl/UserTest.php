@@ -1,6 +1,6 @@
 <?php
 /**
- * Test for Mage_Webapi_Model_Acl_User model
+ * Test for Mage_Webapi_Model_Acl_User model.
  *
  * Magento
  *
@@ -42,7 +42,7 @@ class Mage_Webapi_Model_Acl_UserTest extends PHPUnit_Framework_TestCase
     protected $_roleFactory;
 
     /**
-     * Initialize model
+     * Initialize model.
      */
     protected function setUp()
     {
@@ -52,15 +52,7 @@ class Mage_Webapi_Model_Acl_UserTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Cleanup model instance
-     */
-    protected function tearDown()
-    {
-        unset($this->_objectManager, $this->_model);
-    }
-
-    /**
-     * Test Web API User CRUD
+     * Test Web API User CRUD.
      */
     public function testCRUD()
     {

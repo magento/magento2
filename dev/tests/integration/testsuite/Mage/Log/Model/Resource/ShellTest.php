@@ -37,11 +37,6 @@ class Mage_Log_Model_Resource_ShellTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getResourceModel('Mage_Log_Model_Resource_Shell');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testGetTablesInfo()
     {
         $tables = $this->_model->getTablesInfo();

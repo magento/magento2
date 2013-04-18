@@ -53,30 +53,35 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
     protected $_objectManager;
 
     /**
+     * Whether absence of session error messages has to be asserted automatically upon a test completion
+     *
+     * @var bool
+     */
+    protected $_assertSessionErrors = false;
+
+    /**
      * Bootstrap instance getter
      *
-     * @return Magento_Test_Bootstrap
+     * @return Magento_Test_Helper_Bootstrap
      */
     protected function _getBootstrap()
     {
-        return Magento_Test_Bootstrap::getInstance();
+        return Magento_Test_Helper_Bootstrap::getInstance();
     }
 
     /**
      * Bootstrap application before eny test
-     *
-     * @return void
      */
     protected function setUp()
     {
+        $this->_assertSessionErrors = false;
         $this->_objectManager = Mage::getObjectManager();
-
-        /**
-         * Use run options from bootstrap
-         */
-        $this->_runOptions = $this->_getBootstrap()->getAppOptions();
-        $this->_runOptions['request']   = $this->getRequest();
-        $this->_runOptions['response']  = $this->getResponse();
+        $this->_objectManager->configure(array(
+            'preferences' => array(
+                'Mage_Core_Controller_Request_Http' => 'Magento_Test_Request',
+                'Mage_Core_Controller_Response_Http' => 'Magento_Test_Response'
+            )
+        ));
     }
 
     protected function tearDown()
@@ -84,7 +89,17 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
         $this->_request = null;
         $this->_response = null;
         $this->_objectManager = null;
-        $this->_runOptions = array();
+    }
+
+    /**
+     * Ensure that there were no error messages displayed on the admin panel
+     */
+    protected function assertPostConditions()
+    {
+        if ($this->_assertSessionErrors) {
+            // equalTo() is intentionally used instead of isEmpty() to provide the informative diff
+            $this->assertSessionMessages($this->equalTo(array()), Mage_Core_Model_Message::ERROR);
+        }
     }
 
     /**
@@ -95,7 +110,7 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
     public function dispatch($uri)
     {
         $this->getRequest()->setRequestUri($uri);
-        Mage::run($this->_runCode, $this->_runScope, $this->_runOptions);
+        $this->_getBootstrap()->runApp($this->getRequest(), $this->getResponse());
     }
 
     /**
@@ -107,7 +122,7 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
     {
         if (!$this->_request) {
             $this->_request = new Magento_Test_Request();
-            $this->_objectManager->addSharedInstance($this->_request, 'Mage_Core_Controller_Request_Http');
+            $this->_objectManager->addSharedInstance($this->_request, 'Magento_Test_Request');
         }
         return $this->_request;
     }
@@ -121,7 +136,7 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
     {
         if (!$this->_response) {
             $this->_response = new Magento_Test_Response();
-            $this->_objectManager->addSharedInstance($this->_response, 'Mage_Core_Controller_Response_Http');
+            $this->_objectManager->addSharedInstance($this->_response, 'Magento_Test_Response');
         }
         return $this->_response;
     }
@@ -181,5 +196,29 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
             }
             $this->assertThat($actualUrl, $urlConstraint, 'Redirection URL does not match expectations');
         }
+    }
+
+    /**
+     * Assert that actual session messages meet expectations:
+     * Usage examples:
+     * $this->assertSessionMessages($this->isEmpty(), Mage_Core_Model_Message::ERROR);
+     * $this->assertSessionMessages($this->equalTo(array('Entity has been saved.')), Mage_Core_Model_Message::SUCCESS);
+     *
+     * @param PHPUnit_Framework_Constraint $constraint Constraint to compare actual messages against
+     * @param string|null $messageType Message type filter, one of the constants Mage_Core_Model_Message::*
+     * @param string $sessionModel Class of the session model that manages messages
+     */
+    public function assertSessionMessages(
+        PHPUnit_Framework_Constraint $constraint, $messageType = null, $sessionModel = 'Mage_Core_Model_Session'
+    ) {
+        $this->_assertSessionErrors = false;
+        /** @var $session Mage_Core_Model_Session_Abstract */
+        $session = $this->_objectManager->get($sessionModel);
+        $actualMessages = array();
+        /** @var $message Mage_Core_Model_Message_Abstract */
+        foreach ($session->getMessages()->getItems($messageType) as $message) {
+            $actualMessages[] = $message->getText();
+        }
+        $this->assertThat($actualMessages, $constraint, 'Session messages do not meet expectations');
     }
 }

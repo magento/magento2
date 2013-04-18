@@ -106,7 +106,7 @@ class Mage_Webapi_Controller_Dispatcher_SoapTest extends PHPUnit_Framework_TestC
     }
 
     /**
-     * Clean up dispatcher and it's dependencies.
+     * Clean up dispatcher and its dependencies.
      */
     protected function tearDown()
     {

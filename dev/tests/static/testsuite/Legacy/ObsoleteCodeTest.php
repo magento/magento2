@@ -36,12 +36,92 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
      */
     const SUGGESTION_MESSAGE = 'Use "%s" instead.';
 
-    /**
-     * In-memory cache for the configuration files
+    /**@#+
+     * Lists of obsolete entities from fixtures
      *
      * @var array
      */
-    protected static $_configFilesCache = array();
+    protected static $_classes    = array();
+    protected static $_constants  = array();
+    protected static $_methods    = array();
+    protected static $_attributes = array();
+    /**#@-*/
+
+    /**
+     * Read fixtures into memory as arrays
+     */
+    public static function setUpBeforeClass()
+    {
+        $errors = array();
+        self::_populateList(self::$_classes, $errors, 'obsolete_classes*.php', false);
+        self::_populateList(self::$_constants, $errors, 'obsolete_constants*.php');
+        self::_populateList(self::$_methods, $errors, 'obsolete_methods*.php');
+        self::_populateList(self::$_attributes, $errors, 'obsolete_properties*.php');
+        if ($errors) {
+            $message = 'Duplicate patterns identified in list declarations:' . PHP_EOL . PHP_EOL;
+            foreach ($errors as $file => $list) {
+                $message .= $file . PHP_EOL;
+                foreach ($list as $key) {
+                    $message .= "    {$key}" . PHP_EOL;
+                }
+                $message .= PHP_EOL;
+            }
+            throw new Exception($message);
+        }
+    }
+
+    /**
+     * Read the specified file pattern and merge it with the list
+     *
+     * Duplicate entries will be recorded into errors array.
+     *
+     * @param array $list
+     * @param array $errors
+     * @param string $filePattern
+     * @param bool $hasScope
+     */
+    protected static function _populateList(array &$list, array &$errors, $filePattern, $hasScope = true)
+    {
+
+        foreach (glob(__DIR__ . '/_files/' . $filePattern) as $file) {
+            foreach (self::_readList($file) as $row) {
+                list($item, $scope, $replacement) = self::_padRow($row, $hasScope);
+                $key = "{$item}|{$scope}";
+                if (isset($list[$key])) {
+                    $errors[$file][] = $key;
+                } else {
+                    $list[$key] = array($item, $scope, $replacement);
+                }
+            }
+        }
+    }
+
+    /**
+     * Populate insufficient row elements regarding to whether the row supposed to have scope value
+     *
+     * @param array $row
+     * @param bool $hasScope
+     * @return array
+     */
+    protected static function _padRow($row, $hasScope)
+    {
+        if ($hasScope) {
+            return array_pad($row, 3, '');
+        }
+        list($item, $replacement) = array_pad($row, 2, '');
+        return array($item, '', $replacement);
+    }
+
+    /**
+     * Isolate including a file into a method to reduce scope
+     *
+     * @param $file
+     * @return array
+     */
+    protected static function _readList($file)
+    {
+        return include($file);
+    }
 
     /**
      * @param string $file
@@ -50,12 +130,14 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     public function testPhpFile($file)
     {
         $content = file_get_contents($file);
-        $this->_testObsoleteClasses($content, $file);
-        $this->_testObsoleteMethods($content, $file);
+        $this->_testObsoleteClasses($content);
+        $this->_testObsoleteMethods($content);
+        $this->_testGetChildSpecialCase($content, $file);
+        $this->_testGetOptionsSpecialCase($content);
         $this->_testObsoleteMethodArguments($content);
-        $this->_testObsoleteProperties($content, $file);
-        $this->_testObsoleteActions($content, $file);
-        $this->_testObsoleteConstants($content, $file);
+        $this->_testObsoleteProperties($content);
+        $this->_testObsoleteActions($content);
+        $this->_testObsoleteConstants($content);
         $this->_testObsoletePropertySkipCalculate($content);
     }
 
@@ -104,33 +186,91 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Assert that obsolete classes are not used in the content
+     *
      * @param string $content
-     * @param string $file
      */
-    protected function _testObsoleteClasses($content, $file)
+    protected function _testObsoleteClasses($content)
     {
-        $declarations = $this->_getRelevantConfigEntities('obsolete_classes*.php', $content, $file);
-        foreach ($declarations as $declaration) {
-            list($entity, $suggestion) = $declaration;
-            $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($entity, '/') . '[^a-z\d_]/iS', $content,
-                "Class '$entity' is obsolete. $suggestion"
+        foreach (self::$_classes as $row) {
+            list($class, , $replacement) = $row;
+            $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($class, '/') . '[^a-z\d_]/iS', $content,
+                $this->_suggestReplacement(sprintf("Class '%s' is obsolete.", $class), $replacement)
             );
         }
     }
 
     /**
+     * Assert that obsolete methods or functions are not used in the content
+     *
+     * If class context is not specified, declaration/invocation of all functions or methods (of any class)
+     * will be matched across the board
+     *
+     * If context is specified, only the methods will be matched as follows:
+     * - usage of class::method
+     * - usage of $this, self and static within the class and its descendants
+     *
+     * @param string $content
+     */
+    protected function _testObsoleteMethods($content)
+    {
+        foreach (self::$_methods as $row) {
+            list($method, $class, $replacement) = $row;
+            $quotedMethod = preg_quote($method, '/');
+            if ($class) {
+                $message = $this->_suggestReplacement("Method '{$class}::{$method}()' is obsolete.", $replacement);
+                // without opening parentheses to match static callbacks notation
+                $this->_assertNotRegExp(
+                    '/' . preg_quote($class, '/') . '::\s*' . $quotedMethod . '[^a-z\d_]/iS',
+                    $content,
+                    $message
+                );
+                if ($this->_isSubclassOf($content, $class)) {
+                    $this->_assertNotRegExp('/function\s*' . $quotedMethod . '\s*\(/iS', $content, $message);
+                    $this->_assertNotRegExp('/this->' . $quotedMethod . '\s*\(/iS', $content, $message);
+                    $this->_assertNotRegExp(
+                        '/(self|static|parent)::\s*' . $quotedMethod . '\s*\(/iS', $content, $message
+                    );
+                }
+            } else {
+                $message = $this->_suggestReplacement("Function or method '{$method}()' is obsolete.", $replacement);
+                $this->_assertNotRegExp('/function\s*' . $quotedMethod . '\s*\(/iS', $content, $message);
+                $this->_assertNotRegExp('/[^a-z\d_]' . $quotedMethod . '\s*\(/iS', $content, $message);
+            }
+        }
+    }
+
+    /**
+     * Special case: don't allow usage of getChild() method anywhere within app directory
+     *
+     * In Magento 1.x it used to belong only to abstract block (therefore all blocks)
+     * At the same time, the name is pretty generic and can be encountered in other directories, such as lib
+     *
      * @param string $content
      * @param string $file
      */
-    protected function _testObsoleteMethods($content, $file)
+    protected function _testGetChildSpecialCase($content, $file)
     {
-        $declarations = $this->_getRelevantConfigEntities('obsolete_methods*.php', $content, $file);
-        foreach ($declarations as $declaration) {
-            list($method, $suggestion) = $declaration;
-            $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($method, '/') . '\s*\(/iS', $content,
-                "Method '$method' is obsolete. $suggestion"
+        if (0 === strpos($file, Utility_Files::init()->getPathToSource() . '/app/')) {
+            $this->_assertNotRegexp('/[^a-z\d_]getChild\s*\(/iS', $content,
+                'Block method getChild() is obsolete. Replacement suggestion: Mage_Core_Block_Abstract::getChildBlock()'
             );
         }
+    }
+
+    /**
+     * Special case for ->getConfig()->getOptions()->
+     *
+     * @param string $content
+     */
+    protected function _testGetOptionsSpecialCase($content)
+    {
+        $this->_assertNotRegexp(
+            '/getOptions\(\)\s*->get(Base|App|Code|Design|Etc|Lib|Locale|Js|Media'
+                .'|Var|Tmp|Cache|Log|Session|Upload|Export)?Dir\(/S',
+            $content,
+            'The class Mage_Core_Model_Config_Options is obsolete. Replacement suggestion: Mage_Core_Model_Dir'
+        );
     }
 
     /**
@@ -168,15 +308,21 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @param string $content
-     * @param string $file
      */
-    protected function _testObsoleteProperties($content, $file)
+    protected function _testObsoleteProperties($content)
     {
-        $declarations = $this->_getRelevantConfigEntities('obsolete_properties*.php', $content, $file);
-        foreach ($declarations as $declaration) {
-            list($entity, $suggestion) = $declaration;
-            $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($entity, '/') . '[^a-z\d_]/iS', $content,
-                "Property '$entity' is obsolete. $suggestion"
+        foreach (self::$_attributes as $row) {
+            list($attribute, $class, $replacement) = $row;
+            if ($class) {
+                if (!$this->_isSubclassOf($content, $class)) {
+                    continue;
+                }
+                $fullyQualified = "{$class}::\${$attribute}";
+            } else {
+                $fullyQualified = $attribute;
+            }
+            $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($attribute, '/') . '[^a-z\d_]/iS', $content,
+                $this->_suggestReplacement(sprintf("Class attribute '%s' is obsolete.", $fullyQualified), $replacement)
             );
         }
     }
@@ -193,16 +339,34 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Assert that obsolete constants are not defined/used in the content
+     *
+     * Without class context, only presence of the literal will be checked.
+     *
+     * In context of a class, match:
+     * - fully qualified constant notation (with class)
+     * - usage with self::/parent::/static:: notation
+     *
      * @param string $content
-     * @param string $file
      */
-    protected function _testObsoleteConstants($content, $file)
+    protected function _testObsoleteConstants($content)
     {
-        $declarations = $this->_getRelevantConfigEntities('obsolete_constants*.php', $content, $file);
-        foreach ($declarations as $declaration) {
-            list($entity, $suggestion) = $declaration;
-            $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($entity, '/') . '[^a-z\d_]/iS', $content,
-                "Constant '$entity' is obsolete. $suggestion"
+        foreach (self::$_constants as $row) {
+            list($constant, $class, $replacement) = $row;
+            if ($class) {
+                $fullyQualified = "{$class}::{$constant}";
+                $regex = preg_quote($fullyQualified, '/');
+                if ($this->_isSubclassOf($content, $class)) {
+                    $regex .= '|' . preg_quote("self::{$constant}", '/')
+                        . '|' . preg_quote("parent::{$constant}", '/')
+                        . '|' . preg_quote("static::{$constant}", '/');
+                }
+            } else {
+                $fullyQualified = $constant;
+                $regex = preg_quote($constant, '/');
+            }
+            $this->_assertNotRegExp('/[^a-z\d_]' . $regex . '[^a-z\d_]/iS', $content,
+                $this->_suggestReplacement(sprintf("Constant '%s' is obsolete.", $fullyQualified), $replacement)
             );
         }
     }
@@ -218,54 +382,33 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Retrieve configuration items, whose 'class_scope' match to the content, in the following format:
-     *   array(
-     *     array('<entity>', '<suggestion>'),
-     *     ...
-     *   )
+     * Analyze contents of a file to determine whether this is declaration of or a direct descendant of specified class
      *
-     * @param string $fileNamePattern
      * @param string $content
-     * @param string $file
-     * @return array
+     * @param string $class
+     * @return bool
      */
-    protected function _getRelevantConfigEntities($fileNamePattern, $content, $file)
+    protected function _isSubclassOf($content, $class)
     {
-        $result = array();
-        foreach ($this->_loadConfigFiles($fileNamePattern) as $info) {
-            $class = $info['class_scope'];
-            $regexp = '/(class|extends)\s+' . preg_quote($class, '/') . '(\s|;)/S';
-            /* Note: strpos is used just to prevent excessive preg_match calls */
-            if ($class && (!strpos($content, $class) || !preg_match($regexp, $content))) {
-                continue;
-            }
-            if ($info['directory']) {
-                if (0 !== strpos(str_replace('\\', '/', $file), str_replace('\\', '/', $info['directory']))) {
-                    continue;
-                }
-            }
-            $result[] = array($info['obsolete_entity'], $info['suggestion']);
+        if (!$class) {
+            return false;
         }
-        return $result;
+        return (bool)preg_match('/(class|extends|implements)\s+' . preg_quote($class, '/') . '(\s|;)/S', $content);
     }
 
     /**
-     * Load configuration data from the files that match a glob-pattern
+     * Append a "suggested replacement" part to the string
      *
-     * @param string $fileNamePattern
-     * @return array
+     * @param string $original
+     * @param string $suggestion
+     * @return string
      */
-    protected function _loadConfigFiles($fileNamePattern)
+    private function _suggestReplacement($original, $suggestion)
     {
-        if (isset(self::$_configFilesCache[$fileNamePattern])) {
-            return self::$_configFilesCache[$fileNamePattern];
+        if ($suggestion) {
+            return "{$original} Suggested replacement: {$suggestion}";
         }
-        $config = array();
-        foreach (glob(dirname(__FILE__) . '/_files/' . $fileNamePattern, GLOB_BRACE) as $configFile) {
-            $config = array_merge($config, include($configFile));
-        }
-        self::$_configFilesCache[$fileNamePattern] = $config;
-        return $config;
+        return $original;
     }
 
     /**
@@ -281,37 +424,5 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     protected function _assertNotRegexp($regex, $content, $message)
     {
         $this->assertSame(0, preg_match($regex, $content), $message);
-    }
-
-    /**
-     * Add class rule
-     *
-     * @param string $name
-     * @param null|string $suggestion
-     * @param null|string $directory
-     * @return array
-     */
-    protected function _getClassRule($name, $suggestion = null, $directory = null)
-    {
-        return $this->_getRule($name, null, $suggestion, $directory);
-    }
-
-    /**
-     * Get rule
-     *
-     * @param string $obsoleteEntity
-     * @param null|string $classScope
-     * @param null|string $suggestion
-     * @param null|string $directory
-     * @return array
-     */
-    protected function _getRule($obsoleteEntity, $classScope = null, $suggestion = null, $directory = null)
-    {
-        return array(
-            'obsolete_entity' => $obsoleteEntity,
-            'class_scope' => $classScope,
-            'suggestion' => $suggestion,
-            'directory' => $directory
-        );
     }
 }

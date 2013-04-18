@@ -45,13 +45,23 @@ class Mage_Backend_Block_Widget_ButtonTest extends PHPUnit_Framework_TestCase
      */
     protected $_factoryMock;
 
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_blockMock;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_buttonMock;
+
     protected function setUp()
     {
         $this->_helperMock =
-            $this->getMock('Mage_Backend_Helper_Data', array(), array(), '', false);
+            $this->getMock('Mage_Backend_Helper_Data', array('uniqHash'), array(), '', false, false);
 
         $this->_layoutMock =
-            $this->getMock('Mage_Core_Model_Layout', array(), array(), '', false);
+            $this->getMock('Mage_Core_Model_Layout', array(), array(), '', false, false);
         $this->_layoutMock
             ->expects($this->any())
             ->method('helper')
@@ -59,13 +69,13 @@ class Mage_Backend_Block_Widget_ButtonTest extends PHPUnit_Framework_TestCase
 
         $arguments = array(
             'urlBuilder' =>
-                $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false),
+                $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false, false),
             'layout' => $this->_layoutMock
         );
 
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         $this->_blockMock =
-            $objectManagerHelper->getBlock('Mage_Backend_Block_Widget_Button', $arguments);
+            $objectManagerHelper->getObject('Mage_Backend_Block_Widget_Button', $arguments);
     }
 
     public function tearDown()
@@ -91,28 +101,34 @@ class Mage_Backend_Block_Widget_ButtonTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 array(
-                    'data_attr' => array(
-                        'widget-button' => array('someKey' => 'someValue'),
+                    'data_attribute' => array(
+                        'validation' => array(
+                            'required' => true
+                        ),
                     ),
                 ),
-                '/data-widget-button="[^"]*" /'
+                '/data-validation="[^"]*" /'
             ),
             array(
                 array(
-                    'data_attr' => array(
-                        'mage-init' => array('someKey' => 'someValue'),
+                    'data_attribute' => array(
+                        'mage-init' => array(
+                            'button' => array('someKey' => 'someValue')
+                        ),
                     ),
                 ),
                 '/data-mage-init="[^"]*" /'
             ),
             array(
                 array(
-                    'data_attr' => array(
-                        'mage-init' => array('someKey' => 'someValue'),
-                        'widget-button' => array('someKey' => 'someValue'),
+                    'data_attribute' => array(
+                        'mage-init' => array(
+                            'button' => array('someKey' => 'someValue')
+                        ),
+                        'validation' => array('required' => true),
                     ),
                 ),
-                '/data-mage-init="[^"]*" data-widget-button="[^"]*" /'
+                '/data-mage-init="[^"]*" data-validation="[^"]*" /'
             ),
         );
     }

@@ -37,17 +37,12 @@ class Mage_Tag_Model_TagTest extends PHPUnit_Framework_TestCase
         $this->_model= Mage::getModel('Mage_Tag_Model_Tag');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * @magentoAppIsolation enabled
      */
     public function testCRUD()
     {
-        Mage::app()->setCurrentStore(Mage::app()->getStore(Mage_Core_Model_App::ADMIN_STORE_ID));
+        Mage::app()->setCurrentStore(Mage::app()->getStore(Mage_Core_Model_AppInterface::ADMIN_STORE_ID));
         $this->_model->setName('test');
         $crud = new Magento_Test_Entity($this->_model, array('name' => uniqid()));
         $crud->testCrud();

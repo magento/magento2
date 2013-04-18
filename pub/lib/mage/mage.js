@@ -23,118 +23,263 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint eqnull:true browser:true jquery:true*/
-/*global head:true */
+/*global head:true console:true*/
 (function($) {
+    "use strict";
+    /**
+     * Store developer mode flag value
+     * @type {boolean}
+     * @private
+     */
+    var _isDevMode = false;
 
-    var _syncQueue = [];
-    var _asyncQueue = [];
-    var _cssQueue = [];
-
-    // Add add arr to queue make sure elements are unique
-    function _addToQueue(files, queue) {
-        for (var i = 0; i < files.length; i++) {
-            if (typeof files[i] === 'string' && $.inArray(files[i], queue) === -1) {
-                queue.push(files[i]);
+    /**
+     * Main namespace for Magento extensions
+     * @type {Object}
+     */
+    $.mage = {
+        /**
+         * Setter and getter for developer mode flag
+         * @param {(undefined|boolean)} flag
+         * @return {boolean}
+         */
+        isDevMode: function(flag) {
+            if (typeof flag !== 'undefined') {
+                _isDevMode = !!flag;
             }
+            return _isDevMode && typeof console !== 'undefined';
         }
-    }
+    };
+})(jQuery);
 
-    function _unique(arr) {
-        var uniqueArr = [];
-        for (var i = arr.length; i--;) {
-            var val = arr[i];
-            if ($.inArray(val, uniqueArr) === -1) {
-                uniqueArr.unshift(val);
+/**
+ * Plugin mage and group of helpers for it
+ */
+(function($) {
+    "use strict";
+    /**
+     * Plugin mage, initialize components on elements
+     * @param {string} name - component name
+     * @param {}
+     * @return {Object}
+     */
+    $.fn.mage = function(name) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        return this.each(function(){
+            var inits = _getInitData(this);
+            if (name) {
+                inits[name] = args;
             }
+            $.each(inits, $.proxy(_initComponent, this));
+        });
+    };
+
+    /**
+     * Storage of declared resources
+     * @type {Object}
+     * @private
+     */
+    var _resources = {};
+
+    /**
+     * Execute initialization callback when all resources are loaded
+     * @param {Array} args - list of resources
+     * @param {(Function|undefined)} handler - initialization callback
+     * @private
+     */
+    function _onload(args, handler) {
+        args = $.grep(args, function(resource) {
+            var script = $('script[src="' + resource + '"]');
+            return !script.length || typeof script[0].onload === 'function';
+        });
+
+        if (typeof handler === 'function' && args.length) {
+            args.push(handler);
         }
-        return uniqueArr;
+
+        if (args.length) {
+            head.js.apply(head, args);
+        } else {
+            handler();
+        }
     }
 
-    function _asyncLoad() {
-        var x, s, i;
-        head.js.apply({}, _unique(_asyncQueue));
-        x = document.getElementsByTagName('script')[0];
-        for (i = 0; i < _cssQueue.length; i++) {
-            s = document.createElement('link');
-            s.type = 'text/css';
-            s.rel = 'stylesheet';
-            s.href = _cssQueue[i];
-            x.parentNode.appendChild(s);
-        }
-    }
-
-    function _loadScript() {
-        if (_syncQueue.length === 0) {
-            _asyncLoad();
+    /**
+     * Run initialization of a component
+     * @param {String} name
+     * @param {Array} args
+     * @private
+     */
+    function _initComponent(name, args) {
+        /*jshint validthis: true */
+        // create a complete copy of arguments
+        args = $.map($.makeArray(args), function(arg) {
+            return $.isArray(arg) ? [arg.slice()] :
+                $.isPlainObject(arg) ? $.extend(true, {}, arg) : arg;
+        });
+        var init = {
+            name: name,
+            args: args.length > 0 ? args : [{}],
+            resources: (_resources[name] || []).slice()
+        };
+        // Through event-listener 3-rd party developer can modify options and list of resources
+        $($.mage).trigger($.Event(name + 'init', {target: this}), init);
+        // Component name was deleted, so there's nothing else to do
+        if (!init.name) {
             return;
         }
-        _syncQueue = _unique(_syncQueue);
-        _syncQueue.push(_asyncLoad);
-        head.js.apply({}, _syncQueue);
+        // Build an initialization handler
+        var handler = $.proxy(function() {
+            if (typeof this[init.name] === 'function') {
+                this[init.name].apply(this, init.args);
+            } else if ($.mage.isDevMode()) {
+                console.error('Cannot initialize components "' + init.name + '"');
+            }
+        }, $(this));
+        _onload(init.resources, handler);
     }
 
-    $.extend(true, $, {
-        mage: {
-            language: {
-                cookieKey: 'language',
-                en: 'en',
-                code: 'en'
-            },
+    /**
+     * Define init-data from an element,
+     *     if JSON is not well-formed then evaluate init-data by manually
+     * @param {Element} elem
+     * @return {Object}
+     * @private
+     */
+    function _getInitData(elem) {
+        /*jshint evil:true*/
+        var inits = $(elem).data('mage-init') || {};
+        // in case it's not well-formed JSON inside data attribute, evaluate it manually
+        if (typeof inits === 'string') {
+            try {
+                inits = eval('(' + inits + ')');
+            } catch (e) {
+                inits = {};
+            }
+        }
+        return inits;
+    }
 
-            event: (function() {
-                this.trigger = function (customEvent, data) {
-                    $(document).triggerHandler(customEvent.toString(), data);
-                };
-                this.observe = function (customEvent, func) {
-                    $(document).on(customEvent.toString(), func);
-                };
-                this.removeObserver = function (customEvent, func) {
-                    $(document).unbind(customEvent, func);
-                };
-                return this;
-            }()),
+    /**
+     * Find all elements with data attribute and initialize them
+     * @param {Element} elem - context 
+     * @private
+     */
+    function _init(elem) {
+        $(elem).add('[data-mage-init]', elem).mage();
+    }
 
-            constant: {
-                KEY_BACKSPACE: 8,
-                KEY_TAB: 9,
-                KEY_RETURN: 13,
-                KEY_ESC: 27,
-                KEY_LEFT: 37,
-                KEY_UP: 38,
-                KEY_RIGHT: 39,
-                KEY_DOWN: 40,
-                KEY_DELETE: 46,
-                KEY_HOME: 36,
-                KEY_END: 35,
-                KEY_PAGEUP: 33,
-                KEY_PAGEDOWN: 34
-            },
+    $.extend($.mage, {
+        /**
+         * Handle all components declared via data attribute
+         * @return {Object} $.mage
+         */
+        init: function() {
+            _init(document);
+            /**
+             * Init components inside of dynamically updated elements
+             */
+            $('body').on('contentUpdated', function(e) {
+                _init(e.target);
+            });
+            return this;
+        },
 
-            load: (function() {
-                this.jsSync = function () {
-                    _addToQueue(arguments, _syncQueue);
-                    return _syncQueue.length;
-                };
-                this.js = function () {
-                    _addToQueue(arguments, _asyncQueue);
-                    return _asyncQueue.length;
-                };
-                this.css = function () {
-                    _addToQueue(arguments, _cssQueue);
-                    return _cssQueue.length;
-                };
-                this.language = function (lang, jsMapping) {
-                    var language = $.mage.language.code = lang;
-                    if (language != null && language !== $.mage.language.en) {
-                        _addToQueue(jsMapping.localize, _syncQueue);
-                    }
-                    return _syncQueue.length;
-                };
-                return this;
-            }())
+        /**
+         * Declare a new component based on already declared one in the mage widget
+         * @param {string} component - name of a new component
+         *      (can be the same as a name of super component)
+         * @param {string} from - name of super component
+         * @param {(undefined|Object|Array)} resources - list of resources
+         * @return {Object} $.mage
+         */
+        extend: function(component, from, resources) {
+            resources = $.merge(
+                (_resources[from] || []).slice(),
+                $.makeArray(resources)
+            );
+            this.component(component, resources);
+            return this;
+        },
+
+        /**
+         * Declare a new component or several components at a time in the mage widget
+         * @param {(string|Object)} component - name of component
+         *      or several components with lists of required resources
+         *      {component1: {Array}, component2: {Array}}
+         * @param {(string|Array)} component - URL of one resource or list of URLs
+         * @return {Object} $.mage
+         */
+        component: function(component) {
+            if ($.isPlainObject(component)) {
+                $.extend(_resources, component);
+            } else if (typeof component === 'string' && arguments[1]) {
+                _resources[component] = $.makeArray(arguments[1]);
+            }
+            return this;
+        },
+
+        /**
+         * Helper allows easily bind handler with component's initialisation
+         * @param {string} component - name of a component
+         *      which initialization should be customized
+         * @param {(string|Function)} selector [optional]- filter of component's elements
+         *      or a handler function if selector is not defined
+         * @param {Function} handler - handler function
+         * @return {Object} $.mage
+         */
+        onInit: function(component, selector, handler) {
+            if (!handler) {
+                handler = selector;
+                selector = null;
+            }
+            $(this).on(component + 'init', function(e, init) {
+                if (!selector || $(e.target).is(selector)) {
+                    handler.apply(init, init.args);
+                }
+            });
+            return this;
+        },
+
+        /**
+         * Load all resource for certain component or several components
+         * @param {String} component - name of a component
+         *     (several components may be passed also as separate arguments)
+         * @return {Object} $.mage
+         */
+        load: function() {
+            $.each(arguments, function(i, component) {
+                if (_resources[component] && _resources[component].length) {
+                    _onload(_resources[component]);
+                }
+            });
+            return this;
         }
     });
-
-    $(window).on('load', _loadScript);
-
 })(jQuery);
+
+(function($, window) {
+    "use strict";
+    $.extend($.mage, {
+            /**
+             * Method handling redirects and page refresh
+             * @param {String} url - redirect URL
+             * @param {(undefined|String)} type - 'assign', 'reload', 'replace'
+             * @param {(undefined|Number)} timeout - timeout in milliseconds before processing the redirect or reload
+             * @param {(undefined|Boolean)} forced - true|false used for 'reload' only
+             */
+            redirect: function(url, type, timeout, forced) {
+                forced = forced ? true : false;
+                timeout = timeout ? timeout : 0;
+                type = type ? type : "assign";
+                var _redirect = function() {
+                    window.location[type](type === 'reload' ? forced : url);
+                };
+                if (timeout) {
+                    setTimeout(_redirect, timeout);
+                } else {
+                    _redirect();
+                }
+            }
+    });
+})(jQuery, window);

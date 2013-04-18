@@ -29,7 +29,7 @@
  * Test class for Mage_Backend_Model_Session.
  *
  */
-class Mage_Backend_Model_SessionTest extends PHPUnit_Framework_TestCase
+class Mage_Backend_Model_SessionTest extends Mage_Backend_Area_TestCase
 {
     public function testContructor()
     {

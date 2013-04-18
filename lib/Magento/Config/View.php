@@ -88,6 +88,16 @@ class Magento_Config_View extends Magento_Config_XmlAbstract
     }
 
     /**
+     * Return copy of DOM
+     *
+     * @return Magento_Config_Dom
+     */
+    public function getDomConfigCopy()
+    {
+        return clone $this->_getDomConfigModel();
+    }
+
+    /**
      * Getter for initial view.xml contents
      *
      * @return string

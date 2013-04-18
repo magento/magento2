@@ -49,7 +49,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_ButtonsTest extends PHPUn
             'urlBuilder' => $this->_urlBuilder
         );
 
-        $this->_block = $helper->getBlock('Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_Buttons', $arguments);
+        $this->_block = $helper->getObject('Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_Buttons', $arguments);
     }
 
     public function testGetThemeId()
@@ -72,17 +72,17 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_ButtonsTest extends PHPUn
         $this->assertEquals('*/*/getLayoutUpdate', $this->_block->getViewLayoutUrl());
     }
 
-    public function testGetBackUrl()
+    public function testGetQuitUrl()
     {
         $this->_urlBuilder->expects($this->once())
             ->method('getUrl')
             ->will($this->returnArgument(0));
-        $this->assertEquals('*/*/', $this->_block->getBackUrl());
+        $this->assertEquals('*/*/quit', $this->_block->getQuitUrl());
     }
 
     public function testGetNavigationModeUrl()
     {
-        $this->_block->setThemeId(2);
+        $this->_block->setVirtualThemeId(2);
         $mode = Mage_DesignEditor_Model_State::MODE_NAVIGATION;
         $this->_urlBuilder->expects($this->once())
             ->method('getUrl')
@@ -96,7 +96,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_ButtonsTest extends PHPUn
 
     public function testGetDesignModeUrl()
     {
-        $this->_block->setThemeId(3);
+        $this->_block->setVirtualThemeId(3);
         $mode = Mage_DesignEditor_Model_State::MODE_DESIGN;
         $this->_urlBuilder->expects($this->once())
             ->method('getUrl')
@@ -104,5 +104,13 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_ButtonsTest extends PHPUn
             ->will($this->returnValue("*/*/launch/mode/{$mode}/theme_id/3/"));
 
         $this->assertEquals("*/*/launch/mode/{$mode}/theme_id/3/", $this->_block->getDesignModeUrl());
+    }
+
+    public function testGetSaveTemporaryLayoutUpdateUrl()
+    {
+        $this->_urlBuilder->expects($this->once())
+            ->method('getUrl')
+            ->will($this->returnArgument(0));
+        $this->assertEquals('*/*/saveTemporaryLayoutUpdate', $this->_block->getSaveTemporaryLayoutUpdateUrl());
     }
 }

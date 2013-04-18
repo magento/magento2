@@ -37,11 +37,6 @@ class Mage_Core_Helper_UrlTest extends PHPUnit_Framework_TestCase
         $this->_helper = Mage::helper('Mage_Core_Helper_Url');
     }
 
-    protected function tearDown()
-    {
-        $this->_helper = null;
-    }
-
     public function testGetCurrentUrl()
     {
         $_SERVER['HTTP_HOST'] = 'example.com';

@@ -37,7 +37,11 @@ class Mage_Backend_Controller_ActionAbstractTest extends Mage_Backend_Utility_Co
      */
     public function testPreDispatchWithEmptyUrlRedirectsToStartupPage()
     {
-        $expected = Mage::getSingleton('Mage_Backend_Model_Url')->getUrl('adminhtml/dashboard');
+        Mage::getConfig()->setCurrentAreaCode(Mage::helper("Mage_Backend_Helper_Data")->getAreaCode());
+        /** @var $backendUrlModel Mage_Backend_Model_Url */
+        $backendUrlModel = Mage::getObjectManager()->get('Mage_Backend_Model_Url');
+        $url = $backendUrlModel->getStartupPageUrl();
+        $expected = $backendUrlModel->getUrl($url);
         $this->dispatch('backend');
         $this->assertRedirect($this->stringStartsWith($expected));
     }
@@ -60,8 +64,8 @@ class Mage_Backend_Controller_ActionAbstractTest extends Mage_Backend_Utility_Co
             'password' => Magento_Test_Bootstrap::ADMIN_PASSWORD
         ));
 
-        $this->getRequest()->setPost($postLogin);
         $url = Mage::getSingleton('Mage_Backend_Model_Url')->getUrl('adminhtml/system_account/index');
+        $this->getRequest()->setPost($postLogin);
         $this->dispatch($url);
 
         $expected = 'backend/admin/system_account/index';
@@ -87,7 +91,7 @@ class Mage_Backend_Controller_ActionAbstractTest extends Mage_Backend_Utility_Co
         $this->_auth->login(Magento_Test_Bootstrap::ADMIN_NAME, Magento_Test_Bootstrap::ADMIN_PASSWORD);
 
         /** @var $acl Magento_Acl */
-        $acl = Mage::getSingleton('Mage_Core_Model_Acl_Builder')->getAcl();
+        $acl = Mage::getSingleton('Mage_Core_Model_Acl_Builder')->getAcl(Mage_Core_Model_App_Area::AREA_ADMINHTML);
         if ($isLimitedAccess) {
             $acl->deny(null, $resource);
         }

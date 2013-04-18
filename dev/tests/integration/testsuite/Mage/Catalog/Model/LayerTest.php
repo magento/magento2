@@ -43,11 +43,6 @@ class Mage_Catalog_Model_LayerTest extends PHPUnit_Framework_TestCase
         $this->_model->setCurrentCategory(4);
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testGetStateKey()
     {
         $this->assertEquals('STORE_1_CAT_4_CUSTGROUP_0', $this->_model->getStateKey());

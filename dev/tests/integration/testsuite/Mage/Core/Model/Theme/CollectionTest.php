@@ -37,8 +37,6 @@ class Mage_Core_Model_Theme_CollectionTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadThemesFromFileSystem()
     {
-        Mage::app()->getConfig()->getOptions()->setDesignDir(dirname(__DIR__));
-
         $baseDesignDir = implode(DS, array(__DIR__, '..', '_files', 'design'));
         $pathPattern = implode(DS, array('frontend', 'default', '*', 'theme.xml'));
 

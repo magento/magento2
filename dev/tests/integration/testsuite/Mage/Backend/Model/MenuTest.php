@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Backend_Model_Auth.
  */
-class Mage_Backend_Model_MenuTest extends PHPUnit_Framework_TestCase
+class Mage_Backend_Model_MenuTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @var Mage_Backend_Model_Menu
@@ -37,13 +37,10 @@ class Mage_Backend_Model_MenuTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        parent::setUp();
+        Mage::app()->loadArea(Mage_Core_Model_App_Area::AREA_ADMINHTML);
         $this->_model = Mage::getModel('Mage_Backend_Model_Auth');
         Mage::getConfig()->setCurrentAreaCode(Mage::helper('Mage_Backend_Helper_Data')->getAreaCode());
-    }
-
-    protected function tearDown()
-    {
-        $this->_model = null;
     }
 
     public function testMenuItemManipulation()
@@ -54,7 +51,7 @@ class Mage_Backend_Model_MenuTest extends PHPUnit_Framework_TestCase
         $itemFactory = Mage::getModel('Mage_Backend_Model_Menu_Item_Factory');
 
         // Add new item in top level
-        $menu->add($itemFactory->createFromArray(array(
+        $menu->add($itemFactory->create(array(
             'id' => 'Mage_Backend::system2',
             'title' => 'Extended System',
             'module' => 'Mage_Backend',
@@ -62,7 +59,7 @@ class Mage_Backend_Model_MenuTest extends PHPUnit_Framework_TestCase
         )));
 
          //Add submenu
-        $menu->add($itemFactory->createFromArray(array(
+        $menu->add($itemFactory->create(array(
             'id' => 'Mage_Backend::system2_acl',
             'title' => 'Acl',
             'module' => 'Mage_Backend',

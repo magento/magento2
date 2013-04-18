@@ -1,0 +1,9 @@
+{% if this.displayProductStockStatus() %}
+        {% if this.product.available %}
+<p class="availability in-stock">{{ this.__('Availability:') }} <span>{{ this.__('In stock') }}</span></p>
+        {% else %}
+<p class="availability out-of-stock">{{ this.__('Availability:') }} <span>{{ this.__('Out of stock') }}</span></p>
+        {%endif %}
+{% endif %}
+{{ this.getChildHtml('product_type_data_extra') }}
+{{ this.getPriceHtml(this.product) | raw }}

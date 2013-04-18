@@ -1,0 +1,577 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/*
+    Header
+-------------------------------------- */
+.header {
+    position: relative;
+    background: #f5f2ea;
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y1ZjJlYSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmMWVkZTMiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top, #f5f2ea 0%, #f1ede3 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f5f2ea), color-stop(100%, #f1ede3));
+    background: -webkit-linear-gradient(top, #f5f2ea 0%, #f1ede3 100%);
+    background: -o-linear-gradient(top, #f5f2ea 0%, #f1ede3 100%);
+    background: -ms-linear-gradient(top, #f5f2ea 0%, #f1ede3 100%);
+    background: linear-gradient(to bottom, #f5f2ea 0%, #f1ede3 100%);
+    z-index: 992;
+    padding: 0 20px;
+}
+
+.eq-ie8 .header {
+    background: #f5f2ea;
+}
+
+.header-inner {
+    min-width: 960px;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 7px 0;
+}
+
+.header .logo {
+    display: inline-block;
+    width: 100px;
+    height: 27px;
+    margin: 0;
+    text-indent: -999em;
+    position: relative;
+    z-index: 1;
+}
+
+.header .logo:before,
+.header .logo:after {
+    font-family: 'admin-icons';
+    font-size: 26px;
+    content: '\e00d';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    text-indent: 0;
+    line-height: 1;
+    font-weight: normal;
+}
+
+.header .logo:before {
+    content: '\e00d';
+    color: #f37b20;
+}
+
+.header .logo:after {
+    content: '\e00e';
+    color: #fab57f;
+}
+
+.header .logo span:before {
+    font-family: 'admin-icons';
+    content: '\e00f';
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 28px;
+    font-size: 65px;
+    margin-top: -17px;
+    text-indent: 0;
+    line-height: 1;
+    font-weight: normal;
+    color: #000;
+}
+
+.header-panel {
+    float: right;
+    font-size: 12px;
+}
+
+/*
+    Header Dropdown
+-------------------------------------- */
+.header-panel .dropdown-menu {
+    display: none;
+    width: 195px;
+    margin: 8px -87px 0 0;
+    border: 0;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0 2px 7px 2px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 2px 7px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 7px 2px rgba(0, 0, 0, 0.2);
+}
+
+.eq-ie8 .header-panel .dropdown-menu {
+    border: 1px solid #c3bcaf;
+}
+
+.header-panel .dropdown-menu > li {
+    position: relative;
+    padding: 20px 30px 13px 18px;
+    background: #f7f3eb;
+    border-bottom: 1px solid #f7e4d0;
+    color: #8C867E;
+    font: 11px/13px Arial, Helvetica, sans-serif;
+    white-space: normal;
+}
+
+.header-panel .dropdown-menu > li:first-child:before,
+.header-panel .dropdown-menu > li.first:before {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: -8px;
+    left: 50%;
+    margin-left: -5px;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: '\e029'; /* user icon */
+    color: #f7f3eb;
+    font-size: 13px;
+    text-shadow: 0 -1px 2px #bbb;
+}
+
+.header-panel .dropdown-menu > li:hover {
+    background: #fff;
+}
+
+.header-panel .dropdown-menu > li:first-child:hover:before,
+.header-panel .dropdown-menu > li.first:hover:before {
+    color: #fff;
+}
+
+.header-panel .dropdown-menu > li a {
+    display: block;
+    text-decoration: none;
+    color: #8c867e;
+    margin: 0 0 10px;
+}
+
+.header-panel .dropdown-menu > li a:hover {
+    text-decoration: underline;
+}
+
+.header-panel .dropdown-menu > li:first-child,
+.header-panel .dropdown-menu > li.first {
+    -moz-border-radius: 5px 5px 0 0;
+    -webkit-border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0;
+}
+
+.header-panel .dropdown-menu > li:last-child,
+.header-panel .dropdown-menu > li.last {
+    border-bottom: 0;
+    -moz-border-radius: 0 0 5px 5px;
+    -webkit-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
+}
+
+/*
+    Account
+-------------------------------------- */
+.header-panel .account {
+    position: relative;
+    float: left;
+    margin: 0 0 0 30px;
+    padding: 6px 0 0;
+}
+
+.header-panel .account > a {
+    color: #656057;
+    position: relative;
+    display: inline-block;
+    min-width: 20px;
+    text-decoration: none;
+    padding: 0 10px 0 0;
+}
+
+.header-panel .account > a:before {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    bottom: 0;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    font-size: 9px;
+    -webkit-font-smoothing: antialiased;
+    content: '\e02c'; /*  icon point down */
+}
+
+.header-panel .account img {
+    position: relative;
+    border-radius: 3px;
+    z-index: 1;
+}
+
+.no-js .header-panel .account:hover > a {
+    padding-bottom: 5px;
+    margin-bottom: -5px;
+}
+
+.header-panel .account.active .dropdown-menu,
+.no-js .header-panel .account:hover .dropdown-menu,
+.no-js .header-panel .account > a:focus + .dropdown-menu {
+    display: block;
+}
+
+/*
+    Link to store front
+-------------------------------------- */
+.header-panel .store-front {
+    color: #676056;
+    text-decoration: none;
+    position: relative;
+    padding: 6px 0 0 20px;
+    float: left;
+    margin: 0 0 0 30px;
+}
+
+.header-panel .store-front:before {
+    font-family: 'admin-icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: '\e005'; /* icon store info */
+    font-size: 17px;
+    position: absolute;
+    left: 0;
+    top: 4px;
+}
+
+/*
+    Messages
+-------------------------------------- */
+.header-panel .notifications {
+    position: relative;
+    float: left;
+    margin: 0 0 0 30px;
+    padding: 4px 0 0;
+}
+
+.header-panel .notifications-icon {
+    position: relative;
+    display: inline-block;
+    height: 13px;
+    line-height: 1em;
+    padding: 0 4px 0 3px;
+    text-align: center;
+    text-decoration: none;
+    background: #19a3d1;
+    box-shadow: 0 1px 1px #000;
+    border-radius: 2px;
+    vertical-align: middle;
+}
+
+.header-panel .notifications-icon:before {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    margin-top: -5px;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: '\e02c'; /* user icon */
+    font-size: 8px;
+    color: #19a3d1;
+    text-shadow: 0 1px 1px #000;
+}
+
+.eq-ie8 .header-panel .notifications-icon:before {
+    bottom: -7px;
+}
+
+.header-panel .notifications .value {
+    font-size: 10px;
+    font-weight: bold;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.header-panel .notifications.active .dropdown-menu {
+    display: block;
+    margin-top: 12px;
+}
+
+.header-panel .notifications > .dropdown-menu strong,
+.header-panel .account > .dropdown-menu a,
+.header-panel .search .autocomplete-results .title {
+    display: block;
+    color: #f58220;
+    font-family: "CallunaSans";
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.header-panel .notifications > .dropdown-menu > li:hover .action-close {
+    display: block;
+}
+
+.header-panel .notifications > .dropdown-menu > .new,
+.header-panel .notifications > .dropdown-menu > .new:hover {
+    background: #f47b20;
+    color: #fff;
+}
+
+.header-panel .notifications > .dropdown-menu > li.new:first-child:before,
+.header-panel .notifications > .dropdown-menu > li.new.first:before,
+.header-panel .notifications > .dropdown-menu > li.new:first-child:hover:before,
+.header-panel .notifications > .dropdown-menu > li.new.first:hover:before {
+    color: #f47b20;
+}
+
+.header-panel .notifications > .dropdown-menu > .new strong,
+.header-panel .notifications > .dropdown-menu > .new div,
+.header-panel .notifications > .dropdown-menu > .new a,
+.header-panel .notifications > .dropdown-menu > .new time,
+.header-panel .notifications > .dropdown-menu .new .action-close:hover,
+.header-panel .notifications > .dropdown-menu .new .action-close:focus {
+    color: #fff;
+}
+
+.header-panel .notifications > .dropdown-menu time {
+    display: block;
+    margin-top: 10px;
+}
+
+.header-panel .notifications > .dropdown-menu a:focus ~ .action-close,
+.header-panel .notifications > .dropdown-menu .action-close:focus {
+    display: block;
+}
+
+.header-panel .notifications > .dropdown-menu .action-close {
+    position: absolute;
+    display: none;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 15px;
+    padding-left: 3px;
+    text-indent: -999em;
+    overflow: hidden;
+}
+
+.header-panel .notifications > .dropdown-menu .action-close:hover {
+    color: #f47b20;
+}
+
+.header-panel .notifications > .dropdown-menu .action-close:before {
+    content: '\00D7\00A0';
+    display: block;
+    text-indent: 0;
+}
+
+.eq-ie8 .header-panel .notifications > .dropdown-menu .action-close:before {
+    line-height: .666;
+    padding-left: 2px;
+}
+
+.header .header-panel .notifications .dropdown-menu > li.last {
+    padding: 0;
+}
+
+.header .header-panel .notifications .action-more {
+    display: block;
+    background: #676056;
+    font-size: 13px;
+    height: 29px;
+    width: 100%;
+    border: 0;
+    color: #fff;
+    text-shadow: none;
+    line-height: 2.2;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 1px 2px #000;
+    text-align: center;
+    margin: 0;
+}
+
+.header .header-panel .notifications .action-more:hover {
+    text-decoration: none;
+}
+
+.eq-ie8 .header .header-panel .notifications .action-more {
+    margin-bottom: -1px;
+}
+
+/*
+    Help
+-------------------------------------- */
+.header-panel .help {
+    float: left;
+    margin: 0 0 0 30px;
+    padding: 6px 0 0;
+}
+
+/*
+    Search
+-------------------------------------- */
+.search {
+    position: relative;
+    float: left;
+    margin: -4px 0 -5px 50px;
+}
+
+.search form {
+    position: relative;
+}
+
+.search input {
+    position: relative;
+    display: none;
+    width: 50px;
+    height: 36px;
+    line-height: 2;
+    margin: 0;
+    padding: 4px 25px 4px 4px;
+    background: #fff;
+}
+
+.header .search .ajax-loading:before {
+    display: block;
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: -20px;
+    margin: 0;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    background-image: url(../mui/images/ajax-loader-small.gif);
+}
+
+.search .dropdown-menu {
+    display: block;
+    right: auto;
+    margin-right: 0;
+    width: 100%;
+}
+
+.autocomplete-results {
+    left: 0 !important; /* TODO: Because of script bug in IE9 */
+    right: 0;
+}
+
+.eq-ie8 .autocomplete-results {
+    margin-top: -10px;
+}
+
+.autocomplete-results .title {
+    display: block;
+}
+
+.autocomplete-results .type {
+    margin: 0 0 10px;
+}
+
+.header.active .search {
+    margin-left: 30px;
+}
+
+.header.active .search input {
+    display: inline-block;
+}
+
+.no-js .search input {
+    display: inline-block;
+    width: 350px;
+}
+
+.search button[type="submit"],
+.search button[type="submit"]:hover,
+.search button[type="submit"]:active,
+.search button[type="submit"]:focus {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    overflow: hidden;
+    text-indent: -999em;
+    color: #676056;
+    text-shadow: 0 1px 0 #fff;
+    box-shadow: none;
+}
+
+.search button[type="submit"]:hover,
+.header.active .search button[type="submit"],
+.header.active .search button[type="submit"]:hover,
+.header.active .search button[type="submit"]:active,
+.header.active .search button[type="submit"]:focus {
+    color: #201f1c;
+}
+
+.eq-ie9 .search button[type="submit"] {
+    top: 4px;
+}
+
+.search button[type="submit"]:before {
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: '\e01f'; /* user icon */
+    text-indent: 0;
+    font-size: 18px;
+    line-height: 1.7;
+    text-align: center;
+}
+
+.eq-ie8 .search button[type="submit"]:before {
+    line-height: 1.3;
+}
+
+/*
+    Clearfix
+-------------------------------------- */
+.header-panel:before,
+.header-panel:after,
+.header-inner:before,
+.header-inner:after,
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+
+.header-panel:after,
+.header-inner:after,
+.clearfix:after {
+    clear: both;
+}

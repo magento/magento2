@@ -32,11 +32,6 @@ class Mage_Core_Model_Layout_ElementTest extends PHPUnit_Framework_TestCase
      */
     protected $_model;
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testPrepare()
     {
         /**

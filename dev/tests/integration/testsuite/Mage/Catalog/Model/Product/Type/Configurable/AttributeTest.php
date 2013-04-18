@@ -37,10 +37,6 @@ class Mage_Catalog_Model_Product_Type_Configurable_AttributeTest extends PHPUnit
         $this->_model = Mage::getModel('Mage_Catalog_Model_Product_Type_Configurable_Attribute');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
     public function testAddPrice()
     {
         $this->assertEmpty($this->_model->getPrices());

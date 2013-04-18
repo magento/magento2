@@ -30,7 +30,7 @@ require_once realpath(dirname(__FILE__) . '/../../../../../../../')
 /**
  * Tools_Migration_System_Configuration_Parser test case
  */
-class Tools_Migration_System_Configuration_ParserTest extends PHPUnit_Framework_TestCase
+class Tools_Migration_System_Configuration_ParserTest extends Magento_Framework_TestCase
 {
     /**
      * @var Tools_Migration_System_Configuration_Parser
@@ -99,24 +99,24 @@ XML;
  */
 
 XMLCOMMENT;
-        $expected = array(
-            'comment' => $comment,
-            'sections' => array(
-                'some_section' => array(
-                    'label' => array('#text' => 'Section Name'),
-                    'tab' => array('#text' => 'test'),
-                    'frontend_type' => array('#text' => 'text'),
-                    'sort_order' => array('#text' => '140'),
-                    'show_in_default' => array('#text' => '1'),
-                    'show_in_website' => array('#text' => '1'),
-                    'show_in_store' => array('#text' => '1'),
-                    'resource' => array('#text' => 'Mage_Some::resource'),
-                    '@attributes' => array('translate' => 'label', 'module' => 'Mage_Some')
-                )
+        $sections = array(
+            'some_section' => array(
+                'label' => array('#text' => 'Section Name'),
+                'tab' => array('#text' => 'test'),
+                'frontend_type' => array('#text' => 'text'),
+                'sort_order' => array('#text' => '140'),
+                'show_in_default' => array('#text' => '1'),
+                'show_in_website' => array('#text' => '1'),
+                'show_in_store' => array('#text' => '1'),
+                'resource' => array('#text' => 'Mage_Some::resource'),
+                '@attributes' => array('translate' => 'label', 'module' => 'Mage_Some')
             )
         );
         $dom = new DOMDocument();
         $dom->loadXML($xml);
-        $this->assertEquals($expected, $this->_parser->parse($dom));
+
+        $parsedXml = $this->_parser->parse($dom);
+        $this->assertEqualNormalizingNewlines($comment, $parsedXml['comment']);
+        $this->assertEquals($sections, $parsedXml['sections']);
     }
 }

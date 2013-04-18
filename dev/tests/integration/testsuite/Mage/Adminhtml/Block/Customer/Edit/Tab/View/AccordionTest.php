@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Adminhtml_Block_Customer_Edit_Tab_View_AccordionTest extends PHPUnit_Framework_TestCase
+class Mage_Adminhtml_Block_Customer_Edit_Tab_View_AccordionTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @var Mage_Adminhtml_Block_Customer_Edit_Tab_View_Accordion
@@ -34,6 +34,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View_AccordionTest extends PHPUnit_
 
     protected function setUp()
     {
+        parent::setUp();
         /** @var $customer Mage_Customer_Model_Customer */
         $customer = Mage::getModel('Mage_Customer_Model_Customer');
         $customer->load(1);
@@ -41,11 +42,6 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View_AccordionTest extends PHPUnit_
         /** @var $layout Mage_Core_Model_Layout */
         $layout = Mage::getModel('Mage_Core_Model_Layout', array('area' => Mage_Core_Model_App_Area::AREA_ADMINHTML));
         $this->_block = $layout->createBlock('Mage_Adminhtml_Block_Customer_Edit_Tab_View_Accordion');
-    }
-
-    protected function tearDown()
-    {
-        $this->_block = null;
     }
 
     /**

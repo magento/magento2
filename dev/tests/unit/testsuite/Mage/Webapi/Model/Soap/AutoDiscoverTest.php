@@ -33,7 +33,7 @@ class Mage_Webapi_Model_Soap_AutoDiscoverTest extends PHPUnit_Framework_TestCase
     /** @var Mage_Webapi_Model_Soap_AutoDiscover */
     protected $_autoDiscover;
 
-    /** @var Mage_Core_Model_Cache */
+    /** @var Mage_Core_Model_CacheInterface */
     protected $_cacheMock;
 
     /** @var Mage_Webapi_Model_Config_Soap */
@@ -67,12 +67,12 @@ class Mage_Webapi_Model_Soap_AutoDiscoverTest extends PHPUnit_Framework_TestCase
         $wsdlFactory = $this->getMock(
             'Mage_Webapi_Model_Soap_Wsdl_Factory',
             array('create'),
-            array(new Magento_ObjectManager_Zend())
+            array(new Magento_ObjectManager_ObjectManager())
         );
         $wsdlFactory->expects($this->any())->method('create')->will($this->returnValue($this->_wsdlMock));
-        $helper = $this->getMock('Mage_Webapi_Helper_Config', array('__'));
+        $helper = $this->getMock('Mage_Webapi_Helper_Config', array('__'), array(), '', false, false);
         $helper->expects($this->any())->method('__')->will($this->returnArgument(0));
-        $this->_cacheMock = $this->getMockBuilder('Mage_Core_Model_Cache')->disableOriginalConstructor()->getMock();
+        $this->_cacheMock = $this->getMock('Mage_Core_Model_CacheInterface');
         /** Initialize SUT. */
         $this->_autoDiscover = new Mage_Webapi_Model_Soap_AutoDiscover(
             $this->_resourceConfigMock,
@@ -160,20 +160,20 @@ class Mage_Webapi_Model_Soap_AutoDiscoverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test handle method with loading wsdl from cache.
+     * Test handle method with loading WSDL from cache.
      */
     public function testHandleLoadWsdlFromCache()
     {
         /** Mock cache canUse method to return true. */
         $this->_cacheMock->expects($this->once())->method('canUse')->will($this->returnValue(true));
-        /** Mock cache load method to return cache Id. */
+        /** Mock cache load method to return cache ID. */
         $this->_cacheMock->expects($this->once())->method('load')->will($this->returnArgument(0));
         $requestedResources = array(
             'res1' => 'v1',
             'res2' => 'v2'
         );
         $result = $this->_autoDiscover->handle($requestedResources, 'http://magento.host');
-        /** Assert handle method will return string that starts with WSDL. */
+        /** Assert that handle method will return string that starts with WSDL. */
         $this->assertStringStartsWith(
             Mage_Webapi_Model_Soap_AutoDiscover::WSDL_CACHE_ID,
             $result,
@@ -202,7 +202,7 @@ class Mage_Webapi_Model_Soap_AutoDiscoverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data provider for generate() test
+     * Data provider for generate() test.
      *
      * @return array
      */
@@ -274,7 +274,7 @@ class Mage_Webapi_Model_Soap_AutoDiscoverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Create mock for DOMElement
+     * Create mock for DOMElement.
      *
      * @return PHPUnit_Framework_MockObject_MockObject
      */

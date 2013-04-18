@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_GeneralTest extends PHPUnit_Framework_TestCase
+class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_GeneralTest extends Mage_Backend_Area_TestCase
 {
     /** @var Mage_Core_Model_Layout */
     protected $_layout;
@@ -38,16 +38,11 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_GeneralTest extend
 
     protected function setUp()
     {
+        parent::setUp();
         $this->_layout = Mage::getModel('Mage_Core_Model_Layout');
         $this->_theme = Mage::getModel('Mage_Core_Model_Theme');
+        $this->_theme->setType(Mage_Core_Model_Theme::TYPE_VIRTUAL);
         $this->_block = $this->_layout->createBlock('Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General');
-    }
-
-    protected function tearDown()
-    {
-        $this->_theme = null;
-        $this->_layout = null;
-        $this->_block = null;
     }
 
     public function testToHtmlPreviewImageNote()

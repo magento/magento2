@@ -42,11 +42,6 @@ class Mage_Core_Controller_Varien_Router_BaseTest extends PHPUnit_Framework_Test
         $this->_model->setFront(Mage::getModel('Mage_Core_Controller_Varien_Front'));
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testCollectRoutes()
     {
         $this->_model->collectRoutes('frontend', 'standard');
@@ -67,7 +62,7 @@ class Mage_Core_Controller_Varien_Router_BaseTest extends PHPUnit_Framework_Test
 
     public function testMatch()
     {
-        if (!Magento_Test_Bootstrap::canTestHeaders()) {
+        if (!Magento_Test_Helper_Bootstrap::canTestHeaders()) {
             $this->markTestSkipped('Can\'t test get match without sending headers');
         }
 

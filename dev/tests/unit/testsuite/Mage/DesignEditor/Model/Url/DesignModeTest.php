@@ -41,16 +41,6 @@ class Mage_DesignEditor_Model_Url_DesignModeTest extends PHPUnit_Framework_TestC
         $this->_model = new Mage_DesignEditor_Model_Url_DesignMode($this->_testData);
     }
 
-    public function testGetRoutePath()
-    {
-        $this->assertEquals('#', $this->_model->getRoutePath());
-    }
-
-    public function testGetRouteUrl()
-    {
-        $this->assertEquals('#', $this->_model->getRouteUrl());
-    }
-
     public function testGetUrl()
     {
         $this->assertEquals('#', $this->_model->getUrl());

@@ -60,7 +60,7 @@ class Integrity_Theme_TemplateFilesTest extends Magento_Test_TestCase_IntegrityA
         foreach ($themes as $theme) {
             $layoutUpdate = Mage::getModel(
                 'Mage_Core_Model_Layout_Merge',
-                array('arguments' => array('area' => $theme->getArea(), 'themeId' => $theme->getId()))
+                array('arguments' => array('area' => $theme->getArea(), 'theme' => $theme->getId()))
             );
             $layoutTemplates = $this->_getLayoutTemplates($layoutUpdate->getFileLayoutUpdatesXml());
             foreach ($layoutTemplates as $templateData) {
@@ -137,9 +137,9 @@ class Integrity_Theme_TemplateFilesTest extends Magento_Test_TestCase_IntegrityA
     {
         $attributes = $xmlNode->attributes();
         if (isset($attributes['type'])) {
-            $class = Mage::getConfig()->getBlockClassName((string) $attributes['type']);
+            $class = (string) $attributes['type'];
         } else {
-            $class = Mage::getConfig()->getBlockClassName((string) $xmlNode);
+            $class = (string) $xmlNode;
         }
         $blockModule = substr($class, 0, strpos($class, '_Block'));
         return $blockModule;

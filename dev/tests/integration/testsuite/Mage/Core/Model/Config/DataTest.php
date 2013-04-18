@@ -37,19 +37,15 @@ class Mage_Core_Model_Config_DataTest extends PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        Mage::app()->getConfig()->saveConfig(self::SAMPLE_CONFIG_PATH, self::SAMPLE_VALUE);
+        Mage::getObjectManager()->get('Mage_Core_Model_Config_Storage_Writer_Db')
+            ->save(self::SAMPLE_CONFIG_PATH, self::SAMPLE_VALUE);
         self::_refreshConfiguration();
     }
 
     public static function tearDownAfterClass()
     {
-        Mage::app()->getConfig()->deleteConfig(self::SAMPLE_CONFIG_PATH);
+        Mage::getObjectManager()->get('Mage_Core_Model_Config_Storage_Writer_Db')->delete(self::SAMPLE_CONFIG_PATH);
         self::_refreshConfiguration();
-    }
-
-    protected function tearDown()
-    {
-        $this->_model = null;
     }
 
     /**
@@ -58,7 +54,7 @@ class Mage_Core_Model_Config_DataTest extends PHPUnit_Framework_TestCase
     protected static function _refreshConfiguration()
     {
         Mage::app()->cleanCache(array(Mage_Core_Model_Config::CACHE_TAG));
-        Magento_Test_Bootstrap::getInstance()->reinitialize();
+        Magento_Test_Helper_Bootstrap::getInstance()->reinitialize();
     }
 
     protected function setUp()

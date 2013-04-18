@@ -33,8 +33,8 @@ class Mage_Webapi_Block_Adminhtml_UserTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_block = $helper->getBlock('Mage_Webapi_Block_Adminhtml_User', array(
-            // TODO Remove injecting of 'urlBuilder' after MAGETWO-5038 complete
+        $this->_block = $helper->getObject('Mage_Webapi_Block_Adminhtml_User', array(
+            // TODO: Remove injecting of 'urlBuilder' after MAGETWO-5038 complete
             'urlBuilder' => $this->getMockBuilder('Mage_Backend_Model_Url')
                 ->disableOriginalConstructor()
                 ->getMock(),
@@ -42,7 +42,7 @@ class Mage_Webapi_Block_Adminhtml_UserTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test _construct method
+     * Test _construct method.
      */
     public function testConstruct()
     {
@@ -53,7 +53,7 @@ class Mage_Webapi_Block_Adminhtml_UserTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Asserts that block has button with id and label at level
+     * Asserts that block has button with ID and label at level.
      *
      * @param int $level
      * @param string $buttonId
@@ -64,10 +64,10 @@ class Mage_Webapi_Block_Adminhtml_UserTest extends PHPUnit_Framework_TestCase
         $buttonsProperty = new ReflectionProperty($this->_block, '_buttons');
         $buttonsProperty->setAccessible(true);
         $buttons = $buttonsProperty->getValue($this->_block);
-        $this->assertInternalType('array', $buttons, 'Cannot get bloc buttons');
+        $this->assertInternalType('array', $buttons, 'Cannot get block buttons.');
         $this->assertArrayHasKey($level, $buttons, "Block doesn't have buttons at level $level");
         $this->assertArrayHasKey($buttonId, $buttons[$level], "Block doesn't have '$buttonId' button at level $level");
-        $this->assertArrayHasKey('label', $buttons[$level][$buttonId], "Block button doesn't have label");
-        $this->assertEquals($label, $buttons[$level][$buttonId]['label'], "Block button label has unexpected value");
+        $this->assertArrayHasKey('label', $buttons[$level][$buttonId], "Block button doesn't have label.");
+        $this->assertEquals($label, $buttons[$level][$buttonId]['label'], "Block button label has unexpected value.");
     }
 }

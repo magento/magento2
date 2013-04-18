@@ -25,12 +25,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCase
+class Mage_Backend_Block_System_Config_FormTest extends Mage_Backend_Area_TestCase
 {
     public function testDependenceHtml()
     {
         /** @var $layout Mage_Core_Model_Layout */
-        $layout = Mage::getModel('Mage_Core_Model_Layout');
+        $layout = Mage::getModel('Mage_Core_Model_Layout', array('area' => 'adminhtml'));
         Mage::getConfig()->setCurrentAreaCode('adminhtml');
         /** @var $block Mage_Backend_Block_System_Config_Form */
         $block = $layout->createBlock('Mage_Backend_Block_System_Config_Form', 'block');
@@ -92,34 +92,62 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
         }
     }
 
+
+    /**
+     * @covers Mage_Backend_Block_System_Config_Form::initFields
+     * @param $section Mage_Backend_Model_Config_Structure_Element_Section
+     * @param $group Mage_Backend_Model_Config_Structure_Element_Group
+     * @param $field Mage_Backend_Model_Config_Structure_Element_Field
+     * @param array $configData
+     * @param bool $expectedUseDefault
+     * @dataProvider initFieldsInheritCheckboxDataProvider
+     * @magentoConfigFixture default/test_config_section/test_group_config_node/test_field_value config value
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function testInitFieldsUseConfigPath($section, $group, $field, array $configData, $expectedUseDefault)
+    {
+        Mage::getConfig()->setCurrentAreaCode('adminhtml');
+        $form = new Varien_Data_Form();
+        $fieldset = $form->addFieldset($section->getId() . '_' . $group->getId(), array());
+
+        /** @var $block Mage_Backend_Block_System_Config_FormStub */
+        $block = Mage::app()->getLayout()->createBlock('Mage_Backend_Block_System_Config_FormStub');
+        $block->setScope(Mage_Backend_Block_System_Config_Form::SCOPE_DEFAULT);
+        $block->setStubConfigData($configData);
+        $block->initFields($fieldset, $group, $section);
+
+        $fieldsetSel = 'fieldset';
+        $valueSel = sprintf('input#%s_%s_%s', $section->getId(), $group->getId(), $field->getId());
+        $fieldsetHtml = $fieldset->getElementHtml();
+
+        $this->assertSelectCount($fieldsetSel, true, $fieldsetHtml, 'Fieldset HTML is invalid');
+        $this->assertSelectCount($valueSel, true, $fieldsetHtml, 'Field input not found in fieldset HTML');
+    }
+
     /**
      * @return array
      */
     public function initFieldsInheritCheckboxDataProvider()
     {
+        Magento_Test_Helper_Bootstrap::getInstance()->reinitialize(array(
+            Mage::PARAM_BAN_CACHE => true,
+        ));
         Mage::getConfig()->setCurrentAreaCode('adminhtml');
-        Mage::getConfig()->setOptions(array('global_ban_use_cache' => 1));
+        Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::PART_CONFIG);
 
-        $configMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false, false);
+        $configMock = $this->getMock('Mage_Core_Model_Config_Modules_Reader', array(), array(), '', false, false);
         $configMock->expects($this->any())->method('getModuleConfigurationFiles')
             ->will($this->returnValue(array(__DIR__ . '/_files/test_section_config.xml')));
-        $configMock->expects($this->any())->method('getAreaConfig')->will($this->returnValue('adminhtml'));
-        $configMock->expects($this->any())
-            ->method('getModuleDir')
-            ->with('etc', 'Mage_Backend')
-            ->will(
-                $this->returnValue(
-                    realpath(__DIR__ . '/../../../../../../../../../app/code/core/Mage/Backend/etc')
-                )
-            );
+        $configMock->expects($this->any())->method('getModuleDir')
+            ->will($this->returnValue(BP . '/app/code/Mage/Backend/etc'));
 
-        $structureReader = Mage::getSingleton('Mage_Backend_Model_Config_Structure_Reader',
-            array('config' => $configMock)
-        );
-        /** @var Mage_Backend_Model_Config_Structure $structure  */
-        $structure = Mage::getSingleton('Mage_Backend_Model_Config_Structure', array(
-            'structureReader' => $structureReader,
+        Mage::getObjectManager()->configure(array(
+            'Mage_Backend_Model_Config_Structure_Reader' => array(
+                'parameters' => array('moduleReader' => $configMock)
+            )
         ));
+        /** @var Mage_Backend_Model_Config_Structure $structure  */
+        $structure = Mage::getSingleton('Mage_Backend_Model_Config_Structure');
 
         /** @var Mage_Backend_Model_Config_Structure_Element_Section $section  */
         $section = $structure->getElement('test_section');
@@ -132,11 +160,17 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
 
         $fieldPath = $field->getConfigPath();
 
+        /** @var Mage_Backend_Model_Config_Structure_Element_Field $field  */
+        $field2 = $structure->getElement('test_section/test_group/test_field_use_config');
+
+        $fieldPath2 = $field2->getConfigPath();
+
         return array(
             array($section, $group, $field, array(), true),
             array($section, $group, $field, array($fieldPath => null), false),
             array($section, $group, $field, array($fieldPath => ''), false),
             array($section, $group, $field, array($fieldPath => 'value'), false),
+            array($section, $group, $field2, array($fieldPath2 => 'config value'), true),
         );
     }
 

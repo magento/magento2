@@ -37,11 +37,6 @@ class Mage_PageCache_Model_ObserverTest extends PHPUnit_Framework_TestCase
         $this->_observer = Mage::getModel('Mage_PageCache_Model_Observer');
     }
 
-    protected function tearDown()
-    {
-        $this->_observer = null;
-    }
-
     /**
      * @magentoConfigFixture current_store system/external_page_cache/enabled 1
      */

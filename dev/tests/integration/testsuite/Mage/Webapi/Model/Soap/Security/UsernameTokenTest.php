@@ -35,34 +35,29 @@ class Mage_Webapi_Model_Soap_Security_UsernameTokenTest extends PHPUnit_Framewor
      */
     protected $_objectManager;
 
-    /** @var Mage_Webapi_Model_Acl_User_Factory */
-    protected $_userFactory;
+    /** @var Mage_Webapi_Model_Acl_User */
+    protected $_user;
 
     /**
      * Set up object manager and user factory.
      */
     protected function setUp()
     {
-        $this->_objectManager = new Magento_Test_ObjectManager();
-        $this->_userFactory = new Mage_Webapi_Model_Acl_User_Factory($this->_objectManager);
+        $this->_objectManager = Mage::getObjectManager();
+        $this->_objectManager->addSharedInstance(
+            Mage::getObjectManager()->get('Mage_Core_Model_Dir'),
+            'Mage_Core_Model_Dir'
+        );
+        $userFactory = new Mage_Webapi_Model_Acl_User_Factory($this->_objectManager);
+        $this->_user = $userFactory->create();
+        $this->_user->load('test_username', 'api_key');
     }
 
     /**
-     * Clean up.
-     */
-    protected function tearDown()
-    {
-        unset($this->_objectManager);
-        unset($this->_userFactory);
-    }
-
-    /**
-     * Test positive authenticate with text password type.
+     * Test positive authentication with text password type.
      */
     public function testAuthenticatePasswordText()
     {
-        $user = $this->_userFactory->create();
-        $user->load('test_username', 'api_key');
         /** @var Mage_Webapi_Model_Soap_Security_UsernameToken $usernameToken */
         $usernameToken = $this->_objectManager->create('Mage_Webapi_Model_Soap_Security_UsernameToken', array(
             'passwordType' => Mage_Webapi_Model_Soap_Security_UsernameToken::PASSWORD_TYPE_TEXT
@@ -70,26 +65,25 @@ class Mage_Webapi_Model_Soap_Security_UsernameTokenTest extends PHPUnit_Framewor
 
         $created = date('c');
         $nonce = base64_encode(mt_rand());
-        $authenticatedUser = $usernameToken->authenticate($user->getApiKey(), $user->getSecret(), $created, $nonce);
-        $this->assertEquals($user->getRoleId(), $authenticatedUser->getRoleId());
+        $authenticatedUser = $usernameToken->authenticate($this->_user->getApiKey(), $this->_user->getSecret(),
+            $created, $nonce);
+        $this->assertEquals($this->_user->getRoleId(), $authenticatedUser->getRoleId());
     }
 
     /**
-     * Test positive authenticate with digest password type
+     * Test positive authentication with digest password type.
      */
     public function testAuthenticatePasswordDigest()
     {
-        $user = $this->_userFactory->create();
-        $user->load('test_username', 'api_key');
         /** @var Mage_Webapi_Model_Soap_Security_UsernameToken $usernameToken */
         $usernameToken = $this->_objectManager->create('Mage_Webapi_Model_Soap_Security_UsernameToken');
 
         $created = date('c');
         $nonce = mt_rand();
-        $password = base64_encode(hash('sha1', $nonce . $created . $user->getSecret(), true));
+        $password = base64_encode(hash('sha1', $nonce . $created . $this->_user->getSecret(), true));
         $nonce = base64_encode($nonce);
-        $authenticatedUser = $usernameToken->authenticate($user->getApiKey(), $password, $created, $nonce);
-        $this->assertEquals($user->getRoleId(), $authenticatedUser->getRoleId());
+        $authenticatedUser = $usernameToken->authenticate($this->_user->getApiKey(), $password, $created, $nonce);
+        $this->assertEquals($this->_user->getRoleId(), $authenticatedUser->getRoleId());
     }
 
     /**
@@ -99,18 +93,16 @@ class Mage_Webapi_Model_Soap_Security_UsernameTokenTest extends PHPUnit_Framewor
      */
     public function testAuthenticateWithNonceUsed()
     {
-        $user = $this->_userFactory->create();
-        $user->load('test_username', 'api_key');
         /** @var Mage_Webapi_Model_Soap_Security_UsernameToken $usernameToken */
         $usernameToken = $this->_objectManager->create('Mage_Webapi_Model_Soap_Security_UsernameToken');
 
         $created = date('c');
         $nonce = mt_rand();
-        $password = base64_encode(hash('sha1', $nonce . $created . $user->getSecret(), true));
+        $password = base64_encode(hash('sha1', $nonce . $created . $this->_user->getSecret(), true));
         $nonce = base64_encode($nonce);
-        $authenticatedUser = $usernameToken->authenticate($user->getApiKey(), $password, $created, $nonce);
-        $this->assertEquals($user, $authenticatedUser);
+        $authenticatedUser = $usernameToken->authenticate($this->_user->getApiKey(), $password, $created, $nonce);
+        $this->assertEquals($this->_user, $authenticatedUser);
         // Try to authenticate with the same nonce and timestamp
-        $usernameToken->authenticate($user->getApiKey(), $password, $created, $nonce);
+        $usernameToken->authenticate($this->_user->getApiKey(), $password, $created, $nonce);
     }
 }

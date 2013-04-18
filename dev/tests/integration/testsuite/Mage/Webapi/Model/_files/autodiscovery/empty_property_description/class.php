@@ -31,6 +31,6 @@ class Vendor_Module_Controller_Webapi_Empty_Property_Description
      */
     public function createV1($data)
     {
-        // Body is intentionally left empty
+        // Body is intentionally left empty.
     }
 }

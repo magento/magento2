@@ -29,7 +29,11 @@
 /** @var $config Magento_Performance_Config */
 $config = require_once __DIR__ . '/framework/bootstrap.php';
 
-$shell = new Magento_Shell(true);
+$logWriter = new Zend_Log_Writer_Stream('php://output');
+$logWriter->setFormatter(new Zend_Log_Formatter_Simple('%message%' . PHP_EOL));
+$logger = new Zend_Log($logWriter);
+
+$shell = new Magento_Shell($logger);
 $scenarioHandler = new Magento_Performance_Scenario_Handler_FileFormat();
 $scenarioHandler
     ->register('jmx', new Magento_Performance_Scenario_Handler_Jmeter($shell))
@@ -41,15 +45,17 @@ $testsuite = new Magento_Performance_Testsuite($config, new Magento_Application(
 $scenarioTotalCount = count($config->getScenarios());
 $scenarioCount = 1;
 $scenarioFailCount = 0;
-$testsuite->onScenarioRun(function (Magento_Performance_Scenario $scenario) use (&$scenarioCount, $scenarioTotalCount) {
-    echo "Scenario $scenarioCount of $scenarioTotalCount: '{$scenario->getTitle()}'" . PHP_EOL;
-    $scenarioCount++;
-});
+$testsuite->onScenarioRun(
+    function (Magento_Performance_Scenario $scenario) use ($logger, &$scenarioCount, $scenarioTotalCount) {
+        $logger->log("Scenario $scenarioCount of $scenarioTotalCount: '{$scenario->getTitle()}'", Zend_Log::INFO);
+        $scenarioCount++;
+    }
+);
 $testsuite->onScenarioFailure(
-    function (Magento_Performance_Scenario_FailureException $scenarioFailure) use (&$scenarioFailCount) {
+    function (Magento_Performance_Scenario_FailureException $scenarioFailure) use ($logger, &$scenarioFailCount) {
         $scenario = $scenarioFailure->getScenario();
-        echo "Scenario '{$scenario->getTitle()}' has failed!" . PHP_EOL
-            . $scenarioFailure->getMessage() . PHP_EOL . PHP_EOL;
+        $logger->log("Scenario '{$scenario->getTitle()}' has failed!", Zend_Log::ERR);
+        $logger->log($scenarioFailure->getMessage(), Zend_Log::ERR);
         $scenarioFailCount++;
     }
 );
@@ -57,8 +63,8 @@ $testsuite->onScenarioFailure(
 $testsuite->run();
 
 if ($scenarioFailCount) {
-    echo "Failed $scenarioFailCount of $scenarioTotalCount scenario(s)" . PHP_EOL;
+    $logger->log("Failed $scenarioFailCount of $scenarioTotalCount scenario(s)", Zend_Log::INFO);
     exit(1);
 } else {
-    echo 'Successful' . PHP_EOL;
+    $logger->log('Successful', Zend_Log::INFO);
 }

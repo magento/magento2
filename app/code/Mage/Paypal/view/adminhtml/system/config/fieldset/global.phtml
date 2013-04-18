@@ -1,0 +1,555 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * @see Mage_Paypal_Block_Adminhtml_System_Config_Fieldset_Global
+ */
+?>
+<table class="paypal-selection" id="paypal_checkout" cellspacing="0">
+    <col width="75%" />
+    <col width="25%" />
+    <thead>
+        <tr>
+            <th><?php echo $this->escapeHtml($this->getFieldsetLabel()) ?></th>
+            <th class="paypal-selection-info"><a href="<?php echo $this->escapeHtml($this->getFieldsetHelpUrl()) ?>"><?php echo Mage::helper('Mage_Paypal_Helper_Data')->__('Help')?></a></th>
+        </tr>
+    </thead>
+    <tbody>
+<?php foreach($this->getElements() as $htmlId => $element): ?>
+        <tr>
+        <?php if ($this->getIsElementSimplified($element)):?>
+            <td colspan="2" class="paypal-selection-simplified">
+                <?php if ($this->hasInheritElement($element)): ?>
+                    <div><?php echo $this->getInheritElementHtml($element) ?><?php echo $this->getInheritElementLabelHtml($element) ?></div>
+                <?php endif;?>
+                <label for="<?php echo $htmlId?>"><?php echo $this->getElementHtml($element) ?><strong><?php echo $this->getElementLabelTextHtml($element)?></strong>&nbsp;&ndash; <?php echo $this->escapeHtml($this->getElementComment($element))?></label>
+            </td>
+        <?php else:?>
+            <td>
+                <?php if ($this->hasInheritElement($element)): ?>
+                    <div><?php echo $this->getInheritElementHtml($element) ?><?php echo $this->getInheritElementLabelHtml($element) ?></div>
+                <?php endif;?>
+                <label for="<?php echo $htmlId?>"><?php echo $this->getElementHtml($element) ?><strong><?php echo $this->getElementLabelTextHtml($element)?></strong>&nbsp;&ndash; <?php echo $this->getElementComment($element)?></label>
+            </td>
+            <td class="paypal-selection-info">
+                <?php if ($url = $this->getElementOriginalData($element, 'demo_url')):?>
+                    <a href="<?php echo $this->escapeHtml($url) ?>"><?php echo Mage::helper('Mage_Paypal_Helper_Data')->__('View Demo')?></a> |
+                <?php endif;?>
+                <?php if ($url = $this->getElementOriginalData($element, 'more_url')):?>
+                    <a href="<?php echo $this->escapeHtml($url) ?>"><?php echo Mage::helper('Mage_Paypal_Helper_Data')->__('Learn More')?></a>
+                <?php endif;?>
+            </td>
+        <?php endif;?>
+        </tr>
+<?php endforeach;?>
+    </tbody>
+</table>
+
+<script type="text/javascript">
+
+Event.observe(window, 'load', function() {
+    var pConfig = new PaypalConfig;
+    Element.observe('paypal_account_business_account', 'change', pConfig.trackBusinessAccount.bind(pConfig));
+    Element.observe('paypal_account_merchant_country', 'change', pConfig.trackMerchantCountry.bind(pConfig));
+    Element.observe('paypal_global_wpp', 'click', pConfig.trackWpp.bind(pConfig));
+    Element.observe('paypal_global_wpp_pe', 'click', pConfig.trackWppPe.bind(pConfig));
+    Element.observe('paypal_global_payflow_link', 'click', pConfig.trackWppPl.bind(pConfig));
+    Element.observe('paypal_global_payflow_advanced', 'click', pConfig.trackWppPa.bind(pConfig));
+    Element.observe('paypal_global_hosted_pro', 'click', pConfig.trackHss.bind(pConfig));
+    Element.observe('paypal_global_verisign', 'click', pConfig.trackPayflowpro.bind(pConfig));
+    ['ec','wps','ecpe'].each(function(m) {
+        Element.observe(pConfig.getMethodSwitcher(m).id, 'click', pConfig.trackMethod.bind(pConfig, m));
+    });
+    pConfig.fastMode = true;
+    pConfig.trackMerchantCountry();
+    pConfig.trackBusinessAccount();
+    pConfig.trackWpp();
+    pConfig.trackWppPl();
+    pConfig.trackWppPa();
+    pConfig.trackWppPe();
+    pConfig.trackWps();
+    pConfig.trackHss();
+    ['ec','wps','ecpe'].each(function(m) {
+        pConfig.trackMethod(m);
+    });
+    pConfig.trackPayflowpro();
+    pConfig.fastMode = false;
+    pConfig.destruct();
+});
+
+PaypalConfig = Class.create();
+PaypalConfig.prototype = {
+    initialize: function(){
+        this.methods = $H({
+                ec: $H({
+                    switcher: 'express',
+                    fieldset: 'express',
+                    backendConfig : $H(<?php echo $this->getElementBackendConfig(
+                        $this->getElement('paypal_global_express'));
+                    ?>)
+                }),
+                wps: $H({
+                    switcher: 'wps',
+                    fieldset: 'wps',
+                    backendConfig : $H(<?php echo $this->getElementBackendConfig(
+                        $this->getElement('paypal_global_wps'));
+                    ?>)
+                }),
+                wpp: $H({
+                    switcher: 'wpp',
+                    fieldset: 'wpp',
+                    backendConfig : $H(<?php echo $this->getElementBackendConfig(
+                        $this->getElement('paypal_global_wpp'));
+                    ?>)
+                }),
+                wpppe: $H({
+                    switcher: 'wpp_pe',
+                    fieldset: 'wpp_pe',
+                    backendConfig : $H(<?php echo $this->getElementBackendConfig(
+                        $this->getElement('paypal_global_wpp_pe'));
+                    ?>)
+                }),
+                wpppl: $H({
+                    switcher: 'payflow_link',
+                    fieldset: 'payflow_link',
+                    backendConfig : $H(<?php echo $this->getElementBackendConfig(
+                        $this->getElement('paypal_global_payflow_link'));
+                    ?>)
+                }),
+                wpppa: $H({
+                    switcher: 'payflow_advanced',
+                    fieldset: 'payflow_advanced',
+                    backendConfig : $H(<?php echo $this->getElementBackendConfig(
+                        $this->getElement('paypal_global_payflow_advanced'));
+                    ?>)
+                }),
+                ecpe: $H({
+                    switcher: 'express_pe',
+                    fieldset: 'express_pe',
+                    backendConfig : $H(<?php echo $this->getElementBackendConfig(
+                        $this->getElement('paypal_global_express_pe'));
+                    ?>)
+                }),
+                payflowpro: $H({
+                    switcher: 'verisign',
+                    fieldset: 'verisign',
+                    backendConfig : $H(<?php echo $this->getElementBackendConfig(
+                        $this->getElement('paypal_global_verisign'));
+                    ?>)
+                }),
+                hosted_pro: $H({
+                    switcher: 'hosted_pro',
+                    fieldset: 'hosted_pro',
+                    backendConfig : $H(<?php echo $this->getElementBackendConfig(
+                        $this->getElement('paypal_global_hosted_pro'));
+                    ?>)
+                })
+        });
+        this.disabledMethods = [];
+    },
+
+    getMethods: function()
+    {
+        return this.methods;
+    },
+
+    getMethod: function(method)
+    {
+        return this.methods.get(method);
+    },
+
+    isDisabled: function(method)
+    {
+        return this.disabledMethods.indexOf(method) != -1;
+    },
+
+    isHidden: function(method)
+    {
+        if (this.getMethod(method).get('hidden')) {
+            return true;
+        }
+        return false;
+    },
+
+    getMethodFieldset: function(method)
+    {
+        var fieldsetId = 'paypal_' + this.getMethod(method).get('fieldset');
+        return $(fieldsetId);
+    },
+
+    getMethodFieldsetHeadingLink: function(fieldset)
+    {
+        var heading = fieldset.previous('div');
+        return heading.down('a');
+    },
+
+    getMethodSwitcher: function(method)
+    {
+        var switcherId = 'paypal_global_' + this.getMethod(method).get('switcher');
+        return $(switcherId);
+    },
+
+    getMethodSwitcherValue: function(method)
+    {
+        var switcherValueId = 'paypal_global_' + this.getMethod(method).get('switcher') + '_value';
+        return $(switcherValueId);
+    },
+
+    getMethodSwitcherLabelText: function(method)
+    {
+        var switcherValueId = 'paypal_global_' + this.getMethod(method).get('switcher') + '_label_text';
+        return $(switcherValueId);
+    },
+
+    getMethodSwitcherInherit: function(method)
+    {
+        var inheritId = 'paypal_global_' + this.getMethod(method).get('switcher') + '_inherit';
+        return $(inheritId);
+    },
+
+    markMethodAsReadonly: function(method, readonly)
+    {
+        if (readonly == undefined) {
+            readonly = true;
+        }
+        if (this.isDisabled(method) && !readonly || this.isHidden(method)) {
+            return;
+        }
+        if (this.fastMode) {
+            this.getMethod(method).set('readonly', readonly);
+            return;
+        }
+        var inherit = this.getMethodSwitcherInherit(method);
+        if (inherit != undefined) {
+            inherit.disabled = readonly;
+            if (!inherit.disabled && inherit.checked) {
+                readonly = true;
+            }
+        }
+        this.getMethodSwitcherValue(method).value = this.getMethodSwitcher(method).checked ? '1' : '0';
+        this.getMethodSwitcher(method).disabled = readonly;
+    },
+
+    enableMethod: function(method, readonly)
+    {
+        if (this.isDisabled(method) || this.isHidden(method)) {
+            return;
+        }
+        readonly = (readonly == undefined ? false : readonly);
+        if (this.fastMode) {
+            this.getMethod(method).set('disabled', false);
+            this.getMethod(method).set('readonly', readonly);
+            return;
+        }
+        this.getMethodSwitcher(method).checked = true;
+        this.markMethodAsReadonly(method, readonly);
+        this.toggleFieldset(this.getMethodFieldset(method), this.getMethodSwitcher(method));
+    },
+
+    disableMethod: function(method, readonly)
+    {
+        if (this.isHidden(method)) {
+            return;
+        }
+        readonly = (readonly == undefined ? true : readonly);
+        if (this.fastMode) {
+            this.getMethod(method).set('disabled', true);
+            this.getMethod(method).set('readonly', readonly);
+            return;
+        }
+        this.getMethodSwitcher(method).checked = false;
+        this.markMethodAsReadonly(method, readonly);
+        this.toggleFieldset(this.getMethodFieldset(method), this.getMethodSwitcher(method));
+    },
+
+    toggleMethodVisibility: function(method, isHidden)
+    {
+        var selection = this.getMethodSwitcher(method).up('tr');
+        var fieldset = this.getMethodFieldset(method);
+        var fieldsetHead = fieldset.previous('div');
+        [selection, fieldset, fieldsetHead].each(function(e) {
+            isHidden ? e.hide() : e.show();
+        });
+        // do not show fieldset for turned off methods
+        if (!isHidden && !this.getMethodSwitcher(method).checked) {
+            fieldset.hide();
+        }
+        this.getMethod(method).set('hidden', isHidden);
+    },
+
+    hideMethod: function(method)
+    {
+        this.toggleMethodVisibility(method, true);
+    },
+
+    showMethod: function(method)
+    {
+        this.toggleMethodVisibility(method, false);
+    },
+
+    trackMethod: function(method)
+    {
+        var switcher = this.getMethodSwitcher(method);
+        if (!switcher.checked && this.fastMode || !this.fastMode) {
+            this.toggleFieldset(this.getMethodFieldset(method), switcher);
+        }
+        this.getMethodSwitcherValue(method).value = switcher.checked ? '1' : '0';
+    },
+
+    trackMerchantCountry: function()
+    {
+        this.disabledMethods = [];
+        this.getMethods().keys().each(function(methodKey) {
+            this.applyMethodConfig(methodKey);
+        }.bind(this));
+
+        this.trackBusinessAccount();
+        this.trackWpp();
+        this.trackWppPe();
+        this.trackWps();
+    },
+
+    applyMethodConfig: function(methodKey)
+    {
+        var country = $('paypal_account_merchant_country').value;
+        var config = this.getMethod(methodKey).get('backendConfig');
+        if (!config) {
+            return false;
+        }
+
+        var isMethodEnable = false;
+        var enableForCountries = config.get('enable_for_countries');
+        var disableForCountries = config.get('disable_for_countries');
+        var labels = config.get('labels');
+
+        if (enableForCountries
+            && (enableForCountries.indexOf(country) > -1 || enableForCountries.indexOf('all') > -1)) {
+            isMethodEnable = true;
+        }
+        if (disableForCountries
+            && (disableForCountries.indexOf(country) > -1 || disableForCountries.indexOf('all') > -1)) {
+            isMethodEnable = false;
+        }
+
+        if (isMethodEnable) {
+            this.showMethod(methodKey);
+            this.markMethodAsReadonly(methodKey, false);
+        } else {
+            this.disableMethod(methodKey);
+            this.disabledMethods.push(methodKey);
+            this.hideMethod(methodKey);
+        }
+
+        if (labels) {
+            var switcherLabelElement = this.getMethodSwitcherLabelText(methodKey);
+            var fieldsetLabelElement = this.getMethodFieldsetHeadingLink(this.getMethodFieldset(methodKey));
+            if (!labels['default']) {
+                labels['default'] = {
+                    switcher: switcherLabelElement.innerHTML,
+                    fieldset: fieldsetLabelElement.innerHTML
+                };
+            }
+            var labelConfig = labels[country];
+            if (!labelConfig) {
+                labelConfig = labels['default'];
+            }
+            switcherLabelElement.update(labelConfig['switcher']);
+            fieldsetLabelElement.update(labelConfig['fieldset']);
+        }
+    },
+
+    trackBusinessAccount: function()
+    {
+        var elem = $('paypal_account_business_account');
+
+        if (!jQuery.validator.validateElement(elem) || !elem.value) {
+            this.disableMethod('wps', true);
+            this.disableMethod('ec', true);
+            this.disabledMethods.push('wps','ec');
+        } else {
+            this.disabledMethods = this.disabledMethods.without('wps','ec');
+            this.markMethodAsReadonly('wps',false);
+            this.markMethodAsReadonly('ec',false);
+        }
+    },
+
+    trackWpp: function()
+    {
+        var enabled = this.getMethodSwitcher('wpp').checked;
+        var wpppeEnabled = this.getMethodSwitcher('wpppe').checked;
+
+        if (enabled) {
+            this.enableMethod('wpp',false);
+            if (!wpppeEnabled) {
+                this.enableMethod('ec',true);
+            }
+        } else {
+            this.disableMethod('wpp',false);
+            if (!wpppeEnabled) {
+                this.markMethodAsReadonly('ec',false);
+            }
+        }
+        this.trackWps();
+    },
+
+    trackWppPe: function()
+    {
+        this.trackMethod('wpppe');
+        this.trackEcpe();
+        this.trackWps();
+    },
+
+    trackWppPl: function()
+    {
+        this.trackMethod('wpppl');
+    },
+
+    trackWppPa: function()
+    {
+        this.trackMethod('wpppa');
+    },
+
+    trackHss: function()
+    {
+        this.trackMethod('hosted_pro');
+    },
+
+    trackPayflowpro: function()
+    {
+        this.trackMethod('payflowpro');
+        this.trackEcpe();
+    },
+
+    trackEcpe: function()
+    {
+        var wpppeEnabled = this.getMethodSwitcher('wpppe').checked;
+        if (wpppeEnabled) {
+            // Do not enable ecpe based on wpppe state on page load
+            if (!this.fastMode) {
+                this.enableMethod('ecpe',true);
+            } else {
+                this.markMethodAsReadonly('ecpe', true);
+            }
+            this.disableMethod('ec',true);
+            return;
+        } else {
+            if (!this.getMethodSwitcher('wpp').checked) {
+                this.markMethodAsReadonly('ec', false);
+            } else {
+                this.enableMethod('ec',true);
+            }
+        }
+        var disabled = !wpppeEnabled && !this.getMethodSwitcher('payflowpro').checked;
+        if (disabled) {
+            this.disableMethod('ecpe', true);
+        } else {
+            this.markMethodAsReadonly('ecpe', false);
+        }
+    },
+
+    trackWps: function()
+    {
+        var disabled = this.getMethodSwitcher('wpp').checked || this.getMethodSwitcher('wpppe').checked;
+        if (disabled) {
+            this.disableMethod('wps', true);
+        } else {
+            this.markMethodAsReadonly('wps',false);
+        }
+    },
+
+    enableRow: function(rowId)
+    {
+        $(rowId).select('input','select').each(function(e) {
+            e.disabled = false;
+        });
+        $(rowId).show();
+    },
+
+    disableRow: function(rowId)
+    {
+        $(rowId).select('input','select').each(function(e) {
+            e.disabled = true;
+        });
+        $(rowId).hide();
+    },
+
+    toggleFieldset: function(fieldset, checkbox)
+    {
+        var isHidden = !checkbox.checked;
+        this.toggleValueElements(checkbox, fieldset, isHidden);
+        isHidden ? fieldset.hide() : fieldset.show();
+        var heading = fieldset.previous('div');
+        var headingLink = this.getMethodFieldsetHeadingLink(fieldset);
+        isHidden ? heading.addClassName('disabled') : heading.removeClassName('disabled');
+        if (isHidden) {
+            headingLink.oldHref = headingLink.href;
+            headingLink.oldOnclick = headingLink.onclick;
+            headingLink.onclick = "return false;";
+            headingLink.href = "javascript:void(0)";
+        } else {
+            if (headingLink.oldOnclick && headingLink.oldHref) {
+                headingLink.onclick = headingLink.oldOnclick;
+                headingLink.href = headingLink.oldHref;
+            }
+        }
+    },
+
+    toggleValueElements: function(checkbox, container, checked)
+    {
+        var isDisabled = (checked != undefined ? checked : $(checkbox).checked);
+        var elemInherit, currIsDisabled;
+        $(container).select('select', 'input', 'textarea', 'button').each (function(elem) {
+            // avoid inherit checkbox functionality rewrite
+            currIsDisabled = isDisabled;
+            if (!currIsDisabled) {
+                elemInherit = $(elem.id + '_inherit');
+                if (elemInherit != undefined && elemInherit.checked) {
+                    currIsDisabled = true;
+                }
+            }
+            elem.disabled=currIsDisabled;
+            if (currIsDisabled) {
+                elem.addClassName('disabled');
+            } else {
+                elem.removeClassName('disabled');
+            }
+        });
+    },
+
+    destruct: function()
+    {
+        this.getMethods().each(function(method) {
+            if (method.value.get('disabled') != undefined) {
+                method.value.get('disabled') ? this.disableMethod(method.key) : this.enableMethod(method.key);
+            }
+            if (method.value.get('readonly') != undefined) {
+                this.markMethodAsReadonly(method.key, method.value.get('readonly'));
+            }
+        }.bind(this));
+    }
+}
+</script>

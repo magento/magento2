@@ -64,11 +64,6 @@ XML;
         $this->_model = new Mage_Core_Model_Config_Element($xml);
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testIs()
     {
         $element = $this->_model->is_test;

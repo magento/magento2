@@ -75,7 +75,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_ContainerTest extends PHPUnit_Fra
     {
         $arguments = $this->_getBlockArguments(array('expectedTranslation' => 'Visual Design Editor'));
         /** @var $block Mage_DesignEditor_Block_Adminhtml_Editor_Container */
-        $block = $this->_helper->getBlock('Mage_DesignEditor_Block_Adminhtml_Editor_Container', $arguments);
+        $block = $this->_helper->getObject('Mage_DesignEditor_Block_Adminhtml_Editor_Container', $arguments);
         $block->getHeaderText();
     }
 
@@ -90,7 +90,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_ContainerTest extends PHPUnit_Fra
         );
 
         /** @var $block Mage_DesignEditor_Block_Adminhtml_Editor_Container */
-        $block = $this->_helper->getBlock('Mage_DesignEditor_Block_Adminhtml_Editor_Container', $arguments);
+        $block = $this->_helper->getObject('Mage_DesignEditor_Block_Adminhtml_Editor_Container', $arguments);
         $block->setFrameUrl(self::FRAME_URL);
         $this->assertAttributeEquals(self::FRAME_URL, '_frameUrl', $block);
         $this->assertEquals(self::FRAME_URL, $block->getFrameUrl());
@@ -102,12 +102,12 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_ContainerTest extends PHPUnit_Fra
     public function testPrepareLayout()
     {
         $buttonTitle = 'Back';
-        $eventManager = $this->getMock('Mage_Core_Model_Event_Manager', array('dispatch'));
+        $eventManager = $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false);
         $arguments = $this->_getBlockArguments(array('expectedTranslation' => $buttonTitle));
         $arguments['eventManager'] = $eventManager;
 
         /** @var $block Mage_DesignEditor_Block_Adminhtml_Editor_Container */
-        $block = $this->_helper->getBlock('Mage_DesignEditor_Block_Adminhtml_Editor_Container', $arguments);
+        $block = $this->_helper->getObject('Mage_DesignEditor_Block_Adminhtml_Editor_Container', $arguments);
 
         $layout = $this->getMock('Mage_Core_Model_Layout', array(), array(), '', false);
         $block->setLayout($layout);

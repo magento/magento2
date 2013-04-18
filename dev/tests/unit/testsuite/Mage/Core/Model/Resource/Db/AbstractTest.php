@@ -42,7 +42,9 @@ class Mage_Core_Model_Resource_Db_AbstractTest extends PHPUnit_Framework_TestCas
 
     public function setUp()
     {
-        $this->_resource = $this->getMock('Mage_Core_Model_Resource', array('getConnection'));
+        $this->_resource = $this->getMock('Mage_Core_Model_Resource',
+            array('getConnection'), array(), '', false, false
+        );
         $this->_model = $this->getMock(
             'Mage_Core_Model_Resource_Db_Abstract',
             array('_construct', '_getWriteAdapter'),

@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Main_LayoutTest extends PHPUnit_Framework_TestCase
+class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Main_LayoutTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @var Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Main_Layout
@@ -34,6 +34,8 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Main_LayoutTest exten
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->_block = Mage::app()->getLayout()->createBlock(
             'Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Main_Layout',
             '',
@@ -42,13 +44,13 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Main_LayoutTest exten
         $this->_block->setLayout(Mage::app()->getLayout());
     }
 
-    protected function tearDown()
-    {
-        $this->_block = null;
-    }
-
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testGetLayoutsChooser()
     {
+        Mage::getDesign()->setArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->setDefaultDesignTheme();
+
         $actualHtml = $this->_block->getLayoutsChooser();
         $this->assertStringStartsWith('<select ', $actualHtml);
         $this->assertStringEndsWith('</select>', $actualHtml);

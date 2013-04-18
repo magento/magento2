@@ -28,7 +28,7 @@
 /**
  * Test class for block Mage_ImportExport_Block_Adminhtml_Export_Edit_Form
  */
-class Mage_ImportExport_Block_Adminhtml_Export_Edit_FormTest extends PHPUnit_Framework_TestCase
+class Mage_ImportExport_Block_Adminhtml_Export_Edit_FormTest extends Mage_Backend_Area_TestCase
 {
     /**
      * Testing model
@@ -58,12 +58,8 @@ class Mage_ImportExport_Block_Adminhtml_Export_Edit_FormTest extends PHPUnit_Fra
 
     public function setUp()
     {
+        parent::setUp();
         $this->_model = Mage::app()->getLayout()->createBlock('Mage_ImportExport_Block_Adminhtml_Export_Edit_Form');
-    }
-
-    public function tearDown()
-    {
-        unset($this->_model);
     }
 
     /**

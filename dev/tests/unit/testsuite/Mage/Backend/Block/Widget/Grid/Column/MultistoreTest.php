@@ -35,36 +35,36 @@ class Mage_Backend_Block_Widget_Grid_Column_MultistoreTest extends PHPUnit_Frame
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_appMock;
+    protected $_storeManagerMock;
 
     public function setUp()
     {
-        $this->_appMock = $this->getMock('Mage_Core_Model_App', array(), array(), '', false);
+        $this->_storeManagerMock = $this->getMock('Mage_Core_Model_StoreManager', array(), array(), '', false);
 
         $arguments = array(
-            'application' => $this->_appMock,
+            'storeManager' => $this->_storeManagerMock,
             'urlBuilder' => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false)
         );
 
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_model = $objectManagerHelper->getBlock('Mage_Backend_Block_Widget_Grid_Column_Multistore', $arguments);
+        $this->_model = $objectManagerHelper->getObject('Mage_Backend_Block_Widget_Grid_Column_Multistore', $arguments);
     }
 
     protected function tearDown()
     {
         unset($this->_model);
-        unset($this->_appMock);
+        unset($this->_storeManagerMock);
     }
 
     public function testIsDisplayedReturnsTrueInMultiStoreMode()
     {
-        $this->_appMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(false));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(false));
         $this->assertTrue($this->_model->isDisplayed());
     }
 
     public function testIsDisplayedReturnsFalseInSingleStoreMode()
     {
-        $this->_appMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
         $this->assertFalse($this->_model->isDisplayed());
     }
 }

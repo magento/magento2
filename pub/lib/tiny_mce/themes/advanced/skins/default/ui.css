@@ -19,10 +19,14 @@
 .defaultSkin table.mceLayout {border:0; border-left:1px solid #CCC; border-right:1px solid #CCC}
 .defaultSkin table.mceLayout tr.mceFirst td {border-top:1px solid #CCC}
 .defaultSkin table.mceLayout tr.mceLast td {border-bottom:1px solid #CCC}
-.defaultSkin table.mceToolbar, .defaultSkin tr.mceFirst .mceToolbar tr td, .defaultSkin tr.mceLast .mceToolbar tr td {border:0; margin:0; padding:0;}
-.defaultSkin td.mceToolbar {background:#F0F0EE; padding-top:1px; vertical-align:top}
+.defaultSkin table.mceToolbar,
+.defaultSkin tr.mceFirst .mceToolbar tr td,
+.defaultSkin tr.mceLast .mceToolbar tr td {border:0; margin:0; padding:0; background: #fff}
+.defaultSkin table.mceLayout td,
+.defaultSkin table.mceLayout td:hover {background:#fff;}
+.defaultSkin td.mceToolbar { padding-top:1px; vertical-align:top}
 .defaultSkin .mceIframeContainer {border-top:1px solid #CCC; border-bottom:1px solid #CCC}
-.defaultSkin .mceStatusbar {background:#F0F0EE; font-family:'MS Sans Serif',sans-serif,Verdana,Arial; font-size:9pt; line-height:16px; overflow:visible; color:#000; display:block; height:20px}
+.defaultSkin .mceStatusbar { font-family:'MS Sans Serif',sans-serif,Verdana,Arial; font-size:9pt; line-height:16px; overflow:visible; color:#000; display:block; height:20px}
 .defaultSkin .mceStatusbar div {float:left; margin:2px}
 .defaultSkin .mceStatusbar a.mceResize {display:block; float:right; background:url(../../img/icons.gif) -800px 0; width:20px; height:20px; cursor:se-resize; outline:0}
 .defaultSkin .mceStatusbar a:hover {text-decoration:underline}
@@ -35,8 +39,8 @@
 
 /* Button */
 .defaultSkin .mceButton {display:block; border:1px solid #F0F0EE; width:20px; height:20px; margin-right:1px}
-.defaultSkin a.mceButtonEnabled:hover {border:1px solid #0A246A; background-color:#B2BBD0}
-.defaultSkin a.mceButtonActive, .defaultSkin a.mceButtonSelected {border:1px solid #0A246A; background-color:#C2CBE0}
+.defaultSkin a.mceButtonEnabled:hover {border:1px solid #c0bbaf; background-color:#c0bbaf; }
+.defaultSkin a.mceButtonActive, .defaultSkin a.mceButtonSelected {border:1px solid #c0bbaf; background-color:#dbd6ce}
 .defaultSkin .mceButtonDisabled .mceIcon {opacity:0.3; -ms-filter:'alpha(opacity=30)'; filter:alpha(opacity=30)}
 .defaultSkin .mceButtonLabeled {width:auto}
 .defaultSkin .mceButtonLabeled span.mceIcon {float:left}
@@ -56,7 +60,7 @@
 .defaultSkin .mceListBoxMenu {overflow:auto; overflow-x:hidden}
 .defaultSkin .mceOldBoxModel .mceListBox .mceText {height:22px}
 .defaultSkin .mceOldBoxModel .mceListBox .mceOpen {width:11px; height:22px;}
-.defaultSkin select.mceNativeListBox {font-family:'MS Sans Serif',sans-serif,Verdana,Arial; font-size:7pt; background:#F0F0EE; border:1px solid gray; margin-right:2px;}
+.defaultSkin select.mceNativeListBox {font-family:'MS Sans Serif',sans-serif,Verdana,Arial; font-size:7pt; /*background:#F0F0EE;*/ border:1px solid gray; margin-right:2px;}
 
 /* SplitButton */
 .defaultSkin .mceSplitButton {width:32px; height:20px; direction:ltr}
@@ -65,10 +69,10 @@
 .defaultSkin .mceSplitButton span.mceAction {width:20px; background-image:url(../../img/icons.gif);}
 .defaultSkin .mceSplitButton a.mceOpen {width:9px; background:url(../../img/icons.gif) -741px 0; border:1px solid #F0F0EE;}
 .defaultSkin .mceSplitButton span.mceOpen {display:none}
-.defaultSkin table.mceSplitButtonEnabled:hover a.mceAction, .defaultSkin .mceSplitButtonHover a.mceAction, .defaultSkin .mceSplitButtonSelected a.mceAction {border:1px solid #0A246A; border-right:0; background-color:#B2BBD0}
-.defaultSkin table.mceSplitButtonEnabled:hover a.mceOpen, .defaultSkin .mceSplitButtonHover a.mceOpen, .defaultSkin .mceSplitButtonSelected a.mceOpen {background-color:#B2BBD0; border:1px solid #0A246A;}
+.defaultSkin table.mceSplitButtonEnabled:hover a.mceAction, .defaultSkin .mceSplitButtonHover a.mceAction, .defaultSkin .mceSplitButtonSelected a.mceAction {border:1px solid #c0bbaf; border-right:0; background-color:#dbd6ce}
+.defaultSkin table.mceSplitButtonEnabled:hover a.mceOpen, .defaultSkin .mceSplitButtonHover a.mceOpen, .defaultSkin .mceSplitButtonSelected a.mceOpen {background-color:#c0bbaf; border:1px solid #c0bbaf;}
 .defaultSkin .mceSplitButtonDisabled .mceAction, .defaultSkin .mceSplitButtonDisabled a.mceOpen {opacity:0.3; -ms-filter:'alpha(opacity=30)'; filter:alpha(opacity=30)}
-.defaultSkin .mceSplitButtonActive a.mceAction {border:1px solid #0A246A; background-color:#C2CBE0}
+.defaultSkin .mceSplitButtonActive a.mceAction {border:1px solid #c0bbaf; background-color:#dbd6ce}
 .defaultSkin .mceSplitButtonActive a.mceOpen {border-left:0;}
 
 /* ColorSplitButton */

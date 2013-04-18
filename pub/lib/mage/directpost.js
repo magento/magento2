@@ -54,7 +54,7 @@ directPost.prototype = {
         this.isValid = true;
         this.inputs.each(function(elemIndex) {
             if ($(this.code + '_' + elemIndex)) {
-                if (!Validation.validate($(this.code + '_' + elemIndex))) {
+                if (!jQuery.validator.validateElement($(this.code + '_' + elemIndex))) {
                     this.isValid = false;
                 }
             }

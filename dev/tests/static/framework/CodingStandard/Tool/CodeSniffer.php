@@ -56,6 +56,7 @@ class CodingStandard_Tool_CodeSniffer implements CodingStandard_ToolInterface
      *
      * @param string $rulesetDir Directory that locates the inspection rules
      * @param string $reportFile Destination file to write inspection report to
+     * @param CodingStandard_Tool_CodeSniffer_Wrapper $wrapper
      */
     public function __construct($rulesetDir, $reportFile, CodingStandard_Tool_CodeSniffer_Wrapper $wrapper)
     {
@@ -93,7 +94,6 @@ class CodingStandard_Tool_CodeSniffer implements CodingStandard_ToolInterface
             return preg_quote(str_replace('/', DIRECTORY_SEPARATOR, $item));
         }, $blackList);
 
-
         $this->_wrapper->checkRequirements();
         $settings = $this->_wrapper->getDefaults();
         $settings['files'] = $whiteList;
@@ -111,4 +111,13 @@ class CodingStandard_Tool_CodeSniffer implements CodingStandard_ToolInterface
         return $result;
     }
 
+    /**
+     * Get report file
+     *
+     * @return string
+     */
+    public function getReportFile()
+    {
+        return $this->_reportFile;
+    }
 }

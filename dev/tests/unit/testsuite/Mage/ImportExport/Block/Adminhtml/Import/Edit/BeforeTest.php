@@ -82,7 +82,7 @@ class Mage_ImportExport_Block_Adminhtml_Import_Edit_BeforeTest extends PHPUnit_F
 
     public function setUp()
     {
-        $coreHelper = $this->getMock('Mage_Core_Helper_Data', array('jsonEncode'));
+        $coreHelper = $this->getMock('Mage_Core_Helper_Data', array('jsonEncode'), array(), '', false, false);
         $coreHelper->expects($this->any())
             ->method('jsonEncode')
             ->will($this->returnCallback(array($this, 'jsonEncodeCallback')));
@@ -104,7 +104,7 @@ class Mage_ImportExport_Block_Adminhtml_Import_Edit_BeforeTest extends PHPUnit_F
             'urlBuilder' => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false)
         );
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_model = $objectManagerHelper->getBlock('Mage_ImportExport_Block_Adminhtml_Import_Edit_Before',
+        $this->_model = $objectManagerHelper->getObject('Mage_ImportExport_Block_Adminhtml_Import_Edit_Before',
             $arguments
         );
     }

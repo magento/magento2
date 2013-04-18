@@ -25,6 +25,16 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+// Copy images to tmp media path
+/** @var Mage_Catalog_Model_Product_Media_Config $config */
+$config = Mage::getSingleton('Mage_Catalog_Model_Product_Media_Config');
+$baseTmpMediaPath = $config->getBaseTmpMediaPath();
+
+/** @var Magento_Filesystem $filesystem */
+$filesystem = Mage::getObjectManager()->create('Magento_Filesystem');
+$filesystem->setIsAllowCreateDirectories(true);
+$filesystem->copy(dirname(__FILE__) . '/product_image.png', $baseTmpMediaPath . '/product_image.png');
+
 /** @var $productOne Mage_Catalog_Model_Product */
 $productOne = Mage::getModel('Mage_Catalog_Model_Product');
 $productOne->setId(1)
@@ -52,7 +62,7 @@ $productOne->setId(1)
     ->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)
     ->setStatus(Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
 
-    ->addImageToMediaGallery(dirname(__FILE__) . '/product_image.png', null, false, false)
+    ->addImageToMediaGallery($baseTmpMediaPath . '/product_image.png', null, false, false)
 
     ->save();
 

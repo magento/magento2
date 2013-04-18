@@ -31,9 +31,6 @@ class Mage_Adminhtml_Customer_GroupControllerTest extends Mage_Backend_Utility_C
     {
         $this->dispatch('backend/admin/customer_group/new');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertStringMatchesFormat(
-            '%a<div class="content-header"  data-ui-id="group-content-header" >%ANew Customer Group%a',
-            $responseBody
-        );
+        $this->assertRegExp('/<h1 class\="title">\s*New Group\s*<\/h1>/', $responseBody);
     }
 }

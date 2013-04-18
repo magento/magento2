@@ -52,7 +52,7 @@ class Mage_Webapi_Model_Soap_Security_UsernameTokenTest extends PHPUnit_Framewor
     {
         $this->_nonceStorageMock = $this->getMockBuilder('Mage_Webapi_Model_Soap_Security_UsernameToken_NonceStorage')
             ->disableOriginalConstructor()
-            ->setConstructorArgs(array('validateNonce'))
+            ->setMethods(array('validateNonce'))
             ->getMock();
         $this->_userMock = $this->getMockBuilder('Mage_Webapi_Model_Acl_User')
             ->disableOriginalConstructor()
@@ -119,7 +119,7 @@ class Mage_Webapi_Model_Soap_Security_UsernameTokenTest extends PHPUnit_Framewor
     }
 
     /**
-     * Data provider for testConstructNewUsernameToken
+     * Data provider for testConstructNewUsernameToken.
      *
      * @return array
      */
@@ -154,7 +154,7 @@ class Mage_Webapi_Model_Soap_Security_UsernameTokenTest extends PHPUnit_Framewor
     }
 
     /**
-     * Data provider for testConstructNewUsernameTokenWithInvalidCreatedDate
+     * Data provider for testConstructNewUsernameTokenWithInvalidCreatedDate.
      *
      * @return array
      */

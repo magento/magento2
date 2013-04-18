@@ -101,9 +101,10 @@ class Varien_Data_Form_Element_Editor extends Varien_Data_Form_Element_Textarea
             }
 
             $html = $this->_getButtonsHtml()
-                . '<textarea name="' . $this->getName() . '" title="' . $this->getTitle()  . $this->_getUiId()
-                . '" id="' . $this->getHtmlId() . '"'
-                . ' class="textarea ' . $this->getClass() . '" '
+                . '<textarea name="' . $this->getName() . '" title="' . $this->getTitle() . '" '
+                . $this->_getUiId()
+                . ' id="' . $this->getHtmlId() . '"'
+                . ' class="textarea' . $this->getClass() . '" '
                 . $this->serialize($this->getHtmlAttributes()) . ' >' . $this->getEscapedValue() . '</textarea>'
                 . $js . '
                 <script type="text/javascript">
@@ -176,7 +177,7 @@ class Varien_Data_Form_Element_Editor extends Varien_Data_Form_Element_Textarea
     {
         $html = $this->_getButtonHtml(array(
             'title'     => $this->translate('Show / Hide Editor'),
-            'class'     => 'show-hide',
+            'class'     => 'action-show-hide',
             'style'     => $visible ? '' : 'display:none',
             'id'        => 'toggle'.$this->getHtmlId(),
         ));
@@ -199,7 +200,7 @@ class Varien_Data_Form_Element_Editor extends Varien_Data_Form_Element_Textarea
                 'title'     => $this->translate('Insert Widget...'),
                 'onclick'   => "widgetTools.openDialog('" . $this->getConfig('widget_window_url') . "widget_target_id/"
                                . $this->getHtmlId() . "')",
-                'class'     => 'add-widget plugin',
+                'class'     => 'action-add-widget plugin',
                 'style'     => $visible ? '' : 'display:none',
             ));
         }
@@ -215,7 +216,7 @@ class Varien_Data_Form_Element_Editor extends Varien_Data_Form_Element_Textarea
                                     ? ('store/' . $this->getConfig('store_id') . '/')
                                     : '')
                                . "')",
-            'class'     => 'add-image plugin',
+            'class'     => 'action-add-image plugin',
             'style'     => $visible ? '' : 'display:none',
         ));
         }

@@ -34,7 +34,7 @@ require_once realpath(dirname(__FILE__) . '/../../../../../../../')
     . '/tools/migration/System/Configuration/Formatter.php';
 
 
-class Tools_Migration_System_Configuration_GeneratorTest extends PHPUnit_Framework_TestCase
+class Tools_Migration_System_Configuration_GeneratorTest extends Magento_Framework_TestCase
 {
     /**
      * @var Tools_Migration_System_Configuration_Generator
@@ -74,6 +74,9 @@ class Tools_Migration_System_Configuration_GeneratorTest extends PHPUnit_Framewo
     public function testCreateConfigurationGeneratesConfiguration()
     {
         $dom = new DOMDocument();
+        // On some machines formatOutput and preserveWhiteSpace must be set before calling loadXML
+        $dom->formatOutput = true;
+        $dom->preserveWhiteSpace = false;
         $dom->loadXML(
             preg_replace('/\n|\s{4}/', '', file_get_contents(__DIR__ . '/_files/convertedConfiguration.xml'))
         );
@@ -81,8 +84,6 @@ class Tools_Migration_System_Configuration_GeneratorTest extends PHPUnit_Framewo
         foreach ($stripComments->query('//comment()') as $comment) {
             $comment->parentNode->removeChild($comment);
         }
-        $dom->formatOutput = true;
-        $dom->preserveWhiteSpace = false;
         $expectedXml = $dom->saveXML();
 
         $this->_fileManagerMock->expects($this->once())->method('write')
@@ -103,7 +104,7 @@ class Tools_Migration_System_Configuration_GeneratorTest extends PHPUnit_Framewo
 
         $this->_loggerMock->expects($this->once())->method('add')->with(
             'someFile',
-            Tools_Migration_System_Configuration_LoggerAbstract:: FILE_KEY_VALID
+            Tools_Migration_System_Configuration_LoggerAbstract::FILE_KEY_VALID
         );
 
         $this->_model->createConfiguration('someFile', include __DIR__ . '/_files/mappedConfiguration.php');

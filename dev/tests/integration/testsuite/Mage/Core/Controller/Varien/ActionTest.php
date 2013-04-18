@@ -34,22 +34,19 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        Mage::getDesign()->setArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->setDefaultDesignTheme();
+
         $this->_model = $this->getMockForAbstractClass(
             'Mage_Core_Controller_Varien_Action',
             array(
                 new Magento_Test_Request(),
                 new Magento_Test_Response(),
-                'frontend',
                 Mage::getObjectManager(),
                 Mage::getObjectManager()->get('Mage_Core_Controller_Varien_Front'),
-                Mage::getObjectManager()->get('Mage_Core_Model_Layout_Factory')
+                Mage::getObjectManager()->get('Mage_Core_Model_Layout_Factory'),
+                'frontend'
             )
         );
-    }
-
-    protected function tearDown()
-    {
-        $this->_model = null;
     }
 
     public function testHasAction()
@@ -156,6 +153,9 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function addActionLayoutHandlesDataProvider()
     {
         return array(
@@ -191,6 +191,9 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function addActionLayoutHandlesInheritedDataProvider()
     {
         return array(
@@ -276,11 +279,10 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoConfigFixture               install/design/theme/full_name   default/basic
-     * @magentoConfigFixture               adminhtml/design/theme/full_name default/basic
-     * @magentoConfigFixture current_store design/theme/full_name           default/demo
-     * @magentoAppIsolation  enabled
-     *
+     * @magentoConfigFixture install/design/theme/full_name default/basic
+     * @magentoConfigFixture frontend/design/theme/full_name default/demo
+     * @magentoConfigFixture adminhtml/design/theme/full_name default/basic
+     * @magentoAppIsolation enabled
      * @dataProvider controllerAreaDesignDataProvider
      *
      * @param string $controllerClass
@@ -291,6 +293,7 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
     public function testPreDispatch($controllerClass, $expectedArea, $expectedStore, $expectedDesign)
     {
         Mage::getConfig()->setCurrentAreaCode($expectedArea);
+
         /** @var $controller Mage_Core_Controller_Varien_Action */
         $controller = Mage::getObjectManager()->create($controllerClass,
             array(
@@ -307,6 +310,9 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function controllerAreaDesignDataProvider()
     {
         return array(
@@ -331,6 +337,9 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($caughtException, $message);
     }
 
+    /**
+     * @return array
+     */
     public function controllerAreaSetDataProvider()
     {
         return array(

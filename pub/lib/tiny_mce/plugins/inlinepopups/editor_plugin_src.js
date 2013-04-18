@@ -36,7 +36,7 @@
 			var t = this;
 
 			t.parent(ed);
-			t.zIndex = 300000;
+			t.zIndex = 1000;
 			t.count = 0;
 			t.windows = {};
 		},

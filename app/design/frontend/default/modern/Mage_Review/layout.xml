@@ -60,8 +60,7 @@ Product reviews page
             <action method="setTemplate"><template>2columns-left.phtml</template></action>
         </reference>
         <reference name="head">
-            <action method="addJs"><file>varien/product.js</file></action>
-            <action method="addJs"><file>varien/configurable.js</file></action>
+            <action method="addCss"><file>Mage_Catalog::zoom.css</file></action>
         </reference>
         <reference name="content">
             <block type="Mage_Review_Block_Product_View" name="product.info" template="Mage_Catalog::product/view.phtml">

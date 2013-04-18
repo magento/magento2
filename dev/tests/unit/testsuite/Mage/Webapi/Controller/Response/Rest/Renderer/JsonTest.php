@@ -1,6 +1,6 @@
 <?php
 /**
- * Test Json Renderer for REST.
+ * Test JSON Renderer for REST.
  *
  * Magento
  *
@@ -34,7 +34,7 @@ class Mage_Webapi_Controller_Response_Rest_Renderer_JsonTest extends PHPUnit_Fra
     protected function setUp()
     {
         /** Prepare mocks and objects for SUT constructor. */
-        $this->_helperMock = $this->getMockBuilder('Mage_Core_Helper_Data')->getMock();
+        $this->_helperMock = $this->getMockBuilder('Mage_Core_Helper_Data')->disableOriginalConstructor()->getMock();
         $helperFactoryMock = $this->getMock('Mage_Core_Model_Factory_Helper');
         $helperFactoryMock->expects($this->any())->method('get')->will($this->returnValue($this->_helperMock));
         /** Initialize SUT. */
@@ -50,18 +50,18 @@ class Mage_Webapi_Controller_Response_Rest_Renderer_JsonTest extends PHPUnit_Fra
     }
 
     /**
-     * Test render method
+     * Test render method.
      */
     public function testRender()
     {
         $arrayToRender = array('key' => 'value');
-        /** Assert jsonEncode method in mocked helper will run once */
+        /** Assert that jsonEncode method in mocked helper will run once */
         $this->_helperMock->expects($this->once())->method('jsonEncode');
         $this->_restJsonRenderer->render($arrayToRender);
     }
 
     /**
-     * Test GetMimeType method
+     * Test GetMimeType method.
      */
     public function testGetMimeType()
     {

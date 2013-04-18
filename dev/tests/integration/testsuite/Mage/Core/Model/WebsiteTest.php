@@ -38,11 +38,6 @@ class Mage_Core_Model_WebsiteTest extends PHPUnit_Framework_TestCase
         $this->_model->load(1);
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testLoad()
     {
         /* Test loading by id */
@@ -194,7 +189,7 @@ class Mage_Core_Model_WebsiteTest extends PHPUnit_Framework_TestCase
         );
 
         /* emulate admin store */
-        Mage::app()->getStore()->setId(Mage_Core_Model_App::ADMIN_STORE_ID);
+        Mage::app()->getStore()->setId(Mage_Core_Model_AppInterface::ADMIN_STORE_ID);
         $crud = new Magento_Test_Entity($this->_model, array('name' => 'new name'));
         $crud->testCrud();
     }

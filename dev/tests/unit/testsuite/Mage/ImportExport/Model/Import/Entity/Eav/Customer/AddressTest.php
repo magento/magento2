@@ -175,43 +175,11 @@ class Mage_ImportExport_Model_Import_Entity_Eav_Customer_AddressTest extends PHP
             ->method('__')
             ->will($this->returnArgument(0));
 
-        /** @var $attributeCollection Varien_Data_Collection|PHPUnit_Framework_TestCase */
-        $attributeCollection = $this->getMock('Varien_Data_Collection', array('getEntityTypeCode'));
-        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        foreach ($this->_attributes as $attributeData) {
-            $arguments = $objectManagerHelper->getConstructArguments(Magento_Test_Helper_ObjectManager::MODEL_ENTITY);
-            $arguments['data'] = $attributeData;
-            $attribute = $this->getMockForAbstractClass('Mage_Eav_Model_Entity_Attribute_Abstract',
-                $arguments, '', true, true, true, array('_construct', 'getBackend')
-            );
-            $attribute->expects($this->any())
-                ->method('getBackend')
-                ->will($this->returnSelf());
-            $attribute->expects($this->any())
-                ->method('getTable')
-                ->will($this->returnValue($attributeData['table']));
-            $attributeCollection->addItem($attribute);
-        }
+        $attributeCollection = $this->_createAttrCollectionMock();
 
-        /** @var $customerStorage Mage_ImportExport_Model_Resource_Customer_Storage */
-        $customerStorage = $this->getMock('Mage_ImportExport_Model_Resource_Customer_Storage', array('load'),
-            array(), '', false);
-        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        foreach ($this->_customers as $customerData) {
-            $arguments = $objectManagerHelper->getConstructArguments(Magento_Test_Helper_ObjectManager::MODEL_ENTITY);
-            $arguments['data'] = $customerData;
-            /** @var $customer Mage_Customer_Model_Customer */
-            $customer = $this->getMock('Mage_Customer_Model_Customer', array('_construct'), $arguments);
-            $customerStorage->addCustomer($customer);
-        }
+        $customerStorage = $this->_createCustomerStorageMock();
 
-        $customerEntity = $this->getMock('stdClass', array('filterEntityCollection', 'setParameters'));
-        $customerEntity->expects($this->any())
-            ->method('filterEntityCollection')
-            ->will($this->returnArgument(0));
-        $customerEntity->expects($this->any())
-            ->method('setParameters')
-            ->will($this->returnSelf());
+        $customerEntity = $this->_createCustomerEntityMock();
 
         $addressCollection = new Varien_Data_Collection();
         foreach ($this->_addresses as $address) {
@@ -223,7 +191,7 @@ class Mage_ImportExport_Model_Import_Entity_Eav_Customer_AddressTest extends PHP
             $regionCollection->addItem(new Varien_Object($region));
         }
 
-        $mageHelper = $this->getMock('Mage_ImportExport_Helper_Data', array('__'));
+        $mageHelper = $this->getMock('Mage_ImportExport_Helper_Data', array('__'), array(), '', false, false);
         $mageHelper->expects($this->any())
             ->method('__')
             ->will($this->returnArgument(0));
@@ -232,7 +200,9 @@ class Mage_ImportExport_Model_Import_Entity_Eav_Customer_AddressTest extends PHP
             'data_source_model'            => $dataSourceModel,
             'connection'                   => $connection,
             'json_helper'                  => 'not_used',
-            'string_helper'                => new Mage_Core_Helper_String(),
+            'string_helper'                => new Mage_Core_Helper_String(
+                $this->getMock('Mage_Core_Helper_Context', array(), array(), '', false, false)
+            ),
             'page_size'                    => 1,
             'max_data_size'                => 1,
             'bunch_size'                   => 1,
@@ -255,6 +225,69 @@ class Mage_ImportExport_Model_Import_Entity_Eav_Customer_AddressTest extends PHP
     }
 
     /**
+     * Create mock of attribute collection, so it can be used for tests
+     *
+     * @return PHPUnit_Framework_MockObject_MockObject|Varien_Data_Collection
+     */
+    protected function _createAttrCollectionMock()
+    {
+        $attributeCollection = $this->getMock('Varien_Data_Collection', array('getEntityTypeCode'));
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        foreach ($this->_attributes as $attributeData) {
+            $arguments = $objectManagerHelper->getConstructArguments('Mage_Eav_Model_Entity_Attribute_Abstract');
+            $arguments['data'] = $attributeData;
+            $attribute = $this->getMockForAbstractClass('Mage_Eav_Model_Entity_Attribute_Abstract',
+                $arguments, '', true, true, true, array('_construct', 'getBackend')
+            );
+            $attribute->expects($this->any())
+                ->method('getBackend')
+                ->will($this->returnSelf());
+            $attribute->expects($this->any())
+                ->method('getTable')
+                ->will($this->returnValue($attributeData['table']));
+            $attributeCollection->addItem($attribute);
+        }
+        return $attributeCollection;
+    }
+
+    /**
+     * Create mock of customer storage, so it can be used for tests
+     *
+     * @return PHPUnit_Framework_MockObject_MockObject|Mage_ImportExport_Model_Resource_Customer_Storage
+     */
+    protected function _createCustomerStorageMock()
+    {
+        $customerStorage = $this->getMock('Mage_ImportExport_Model_Resource_Customer_Storage', array('load'),
+            array(), '', false);
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        foreach ($this->_customers as $customerData) {
+            $arguments = $objectManagerHelper->getConstructArguments('Mage_Customer_Model_Customer');
+            $arguments['data'] = $customerData;
+            /** @var $customer Mage_Customer_Model_Customer */
+            $customer = $this->getMock('Mage_Customer_Model_Customer', array('_construct'), $arguments);
+            $customerStorage->addCustomer($customer);
+        }
+        return $customerStorage;
+    }
+
+    /**
+     * Create simple mock of customer entity, so it can be used for tests
+     *
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function _createCustomerEntityMock()
+    {
+        $customerEntity = $this->getMock('stdClass', array('filterEntityCollection', 'setParameters'));
+        $customerEntity->expects($this->any())
+            ->method('filterEntityCollection')
+            ->will($this->returnArgument(0));
+        $customerEntity->expects($this->any())
+            ->method('setParameters')
+            ->will($this->returnSelf());
+        return $customerEntity;
+    }
+
+    /**
      * Get websites stub
      *
      * @param bool $withDefault
@@ -267,7 +300,7 @@ class Mage_ImportExport_Model_Import_Entity_Eav_Customer_AddressTest extends PHP
             unset($websites[0]);
         }
         foreach ($this->_websites as $id => $code) {
-            if (!$withDefault && $id == Mage_Core_Model_App::ADMIN_STORE_ID) {
+            if (!$withDefault && $id == Mage_Core_Model_AppInterface::ADMIN_STORE_ID) {
                 continue;
             }
             $websiteData = array(

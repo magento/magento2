@@ -1,4 +1,0 @@
-<input id="%htmlId%_upload" type="file" name="image" data-url="%uploadImage%" style="display: none;" />
-<input id="%htmlId%" name="%htmlId%" data-ui-id="form-element-%htmlId%" value="%imageValue%" type="hidden"/>
-<img align="left" src="%imageUrl%" id="%htmlId%_image" title="%imageUrl%" alt="%imageUrl%" class="base-image-uploader" onclick="jQuery('#%htmlId%_upload').trigger('click')"/>
-<script>/* <![CDATA[ */jQuery(function(){BaseImageUploader(%htmlId%, 999); });/*]]>*/</script>

@@ -31,14 +31,44 @@
 class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var string
+     * @var Magento_Test_Bootstrap|PHPUnit_Framework_MockObject_MockObject
      */
-    protected static $_magentoDir;
-    protected static $_testsDir;
-    protected static $_localXmlFile;
-    protected static $_tmpDir;
-    protected static $_globalEtcFiles;
-    protected static $_moduleEtcFiles;
+    protected $_object;
+
+    /**
+     * Setting values required to be specified
+     *
+     * @var array
+     */
+    protected $_requiredSettings = array(
+        'TESTS_LOCAL_CONFIG_FILE'       => 'etc/local-mysql.xml',
+        'TESTS_LOCAL_CONFIG_EXTRA_FILE' => 'etc/integration-tests-config.xml',
+    );
+
+    /**
+     * @var Magento_Test_Bootstrap_Settings
+     */
+    protected $_settings;
+
+    /**
+     * @var Magento_Test_Bootstrap_Environment|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_envBootstrap;
+
+    /**
+     * @var Magento_Test_Bootstrap_DocBlock|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_docBlockBootstrap;
+
+    /**
+     * @var Magento_Test_Bootstrap_Profiler|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_profilerBootstrap;
+
+    /**
+     * @var Magento_Test_Bootstrap_Memory
+     */
+    protected $_memoryBootstrap;
 
     /**
      * @var Magento_Shell|PHPUnit_Framework_MockObject_MockObject
@@ -46,256 +76,235 @@ class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
     protected $_shell;
 
     /**
-     * @var Magento_Test_Db_DbAbstract|PHPUnit_Framework_MockObject_MockObject
+     * @var string
      */
-    protected $_db;
-
-    /**
-     * @var Magento_Test_Bootstrap|PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_bootstrap;
-
-    /**
-     * Calculate directories
-     */
-    public static function setUpBeforeClass()
-    {
-        self::$_magentoDir     = realpath(dirname(__FILE__) . '/../../../../../../../../..');
-        self::$_testsDir       = realpath(dirname(__FILE__) . '/../../../../../..');
-        self::$_localXmlFile   = realpath(dirname(__FILE__) . '/../../../../../../etc/local-mysql.xml.dist');
-        self::$_globalEtcFiles = realpath(dirname(__FILE__) . '/../../../../../../../../../app/etc/*.xml');
-        self::$_moduleEtcFiles = realpath(dirname(__FILE__) . '/../../../../../../../../../app/etc/modules/*.xml');
-        self::$_tmpDir         = realpath(dirname(__FILE__) . '/../../../../../../tmp');
-    }
+    protected $_integrationTestsDir;
 
     protected function setUp()
     {
+        $this->_integrationTestsDir = realpath(__DIR__ . '/../../../../../../');
+        $this->_settings = new Magento_Test_Bootstrap_Settings($this->_integrationTestsDir, $this->_requiredSettings);
+        $this->_envBootstrap = $this->getMock(
+            'Magento_Test_Bootstrap_Environment', array('emulateHttpRequest', 'emulateSession')
+        );
+        $this->_docBlockBootstrap = $this->getMock(
+            'Magento_Test_Bootstrap_DocBlock', array('registerAnnotations'), array(__DIR__)
+        );
+        $profilerDriver = $this->getMock('Magento_Profiler_Driver_Standard', array('registerOutput'));
+        $this->_profilerBootstrap = $this->getMock(
+            'Magento_Test_Bootstrap_Profiler', array('registerFileProfiler', 'registerBambooProfiler'),
+            array($profilerDriver)
+        );
+        $this->_memoryBootstrap = $this->getMock(
+            'Magento_Test_Bootstrap_Memory', array('activateStatsDisplaying', 'activateLimitValidation'),
+            array(), '', false
+        );
         $this->_shell = $this->getMock('Magento_Shell', array('execute'));
-        $this->_db = $this->getMock(
-            'Magento_Test_Db_DbAbstract',
-            array('cleanup'),
-            array('host', 'user', 'password', 'schema', self::$_tmpDir, $this->_shell)
+        $this->_object = new Magento_Test_Bootstrap(
+            $this->_settings, $this->_envBootstrap, $this->_docBlockBootstrap, $this->_profilerBootstrap,
+            $this->_shell, __DIR__
         );
-        /* Suppress calling the constructor at this step */
-        $this->_bootstrap = $this->getMock(
-            'Magento_Test_Bootstrap',
-            array(
-                'initialize',
-                '_verifyDirectories',
-                '_instantiateDb',
-                '_isInstalled',
-                '_emulateEnvironment',
-                '_ensureDirExists',
-                '_install',
-                '_cleanupFilesystem',
-            ),
-            array(),
-            '',
-            false
-        );
-        /* Setup expectations for methods that are being called within the constructor */
-        $this->_bootstrap
-            ->expects($this->any())
-            ->method('_instantiateDb')
-            ->will($this->returnValue($this->_db))
-        ;
-        /* Call constructor explicitly */
-        $this->_callBootstrapConstructor();
     }
 
     protected function tearDown()
     {
+        $this->_object = null;
+        $this->_settings = null;
+        $this->_envBootstrap = null;
+        $this->_docBlockBootstrap = null;
+        $this->_profilerBootstrap = null;
+        $this->_memoryBootstrap = null;
         $this->_shell = null;
-        $this->_db = null;
-        $this->_bootstrap = null;
     }
 
     /**
-     * Explicitly call the constructor method of the underlying bootstrap object
-     *
-     * @param string|null $localXmlFile
-     * @param bool $isCleanupEnabled
+     * @param array $fixtureSettings
+     * @return Magento_Test_Application|PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _callBootstrapConstructor($localXmlFile = null, $isCleanupEnabled = false)
+    protected function _injectApplicationMock(array $fixtureSettings = array())
     {
-        $this->_bootstrap->__construct(
-            self::$_magentoDir,
-            self::$_testsDir,
-            ($localXmlFile ? $localXmlFile : self::$_localXmlFile),
-            self::$_globalEtcFiles,
-            self::$_moduleEtcFiles,
-            '',
-            self::$_tmpDir,
-            $this->_shell,
-            $isCleanupEnabled
+        $fixtureSettings += $this->_requiredSettings;
+        $application = $this->getMock(
+            'Magento_Test_Application', array('cleanup', 'isInstalled', 'initialize', 'install'), array(), '', false
         );
-    }
-
-    /**
-     * @expectedException Magento_Exception
-     */
-    public function testGetInstance()
-    {
-        Magento_Test_Bootstrap::getInstance();
-    }
-
-    /**
-     * @depends testGetInstance
-     */
-    public function testSetGetInstance()
-    {
-        Magento_Test_Bootstrap::setInstance($this->_bootstrap);
-        $this->assertSame($this->_bootstrap, Magento_Test_Bootstrap::getInstance());
-    }
-
-    public function testCanTestHeaders()
-    {
-        if (!function_exists('xdebug_get_headers')) {
-            $this->assertFalse(Magento_Test_Bootstrap::canTestHeaders(), 'Expected inability to test headers.');
-            return;
-        }
-        $expectedHeader = 'SomeHeader: header-value';
-        $expectedCookie = 'Set-Cookie: SomeCookie=cookie-value';
-
-        /* Make sure that chosen reference samples are unique enough to rely on them */
-        $actualHeaders = xdebug_get_headers();
-        $this->assertNotContains($expectedHeader, $actualHeaders);
-        $this->assertNotContains($expectedCookie, $actualHeaders);
-
-        /* Determine whether header-related functions can be in fact called with no error */
-        $expectedCanTest = true;
-        set_error_handler(function () use (&$expectedCanTest) {
-            $expectedCanTest = false;
-        });
-        header($expectedHeader);
-        setcookie('SomeCookie', 'cookie-value');
-        restore_error_handler();
-
-        $this->assertEquals($expectedCanTest, Magento_Test_Bootstrap::canTestHeaders());
-
-        if ($expectedCanTest) {
-            $actualHeaders = xdebug_get_headers();
-            $this->assertContains($expectedHeader, $actualHeaders);
-            $this->assertContains($expectedCookie, $actualHeaders);
-        }
-    }
-
-    public function testConstructorInstallation()
-    {
-        $this->_bootstrap
-            ->expects($this->atLeastOnce())
-            ->method('_isInstalled')
-            ->will($this->returnValue(false))
+        $settings = new Magento_Test_Bootstrap_Settings($this->_integrationTestsDir, $fixtureSettings);
+        // prevent calling the constructor because of mocking the method it invokes
+        $this->_object = $this->getMock(
+            'Magento_Test_Bootstrap', array('_createApplication', '_createMemoryBootstrap'), array(), '', false
+        );
+        $this->_object
+            ->expects($this->any())
+            ->method('_createApplication')
+            ->will($this->returnValue($application))
         ;
-        $this->_bootstrap
+        // invoke the constructor explicitly
+        $this->_object->__construct(
+            $settings, $this->_envBootstrap, $this->_docBlockBootstrap, $this->_profilerBootstrap,
+            $this->_shell, __DIR__
+        );
+        $this->_object
+            ->expects($this->any())
+            ->method('_createMemoryBootstrap')
+            ->will($this->returnValue($this->_memoryBootstrap))
+        ;
+        return $application;
+    }
+
+    public function testGetApplication()
+    {
+        $application = $this->_object->getApplication();
+        $this->assertInstanceOf('Magento_Test_Application', $application);
+        $this->assertStringStartsWith(__DIR__ . '/sandbox-mysql-', $application->getInstallDir());
+        $this->assertInstanceOf('Magento_Test_Db_Mysql', $application->getDbInstance());
+        $this->assertSame($application, $this->_object->getApplication());
+    }
+
+    public function testGetDbVendorName()
+    {
+        $this->assertEquals('mysql', $this->_object->getDbVendorName());
+    }
+
+    public function testRunBootstrapEnvironment()
+    {
+        $this->_injectApplicationMock();
+        $this->_envBootstrap
             ->expects($this->once())
-            ->method('_install')
+            ->method('emulateHttpRequest')
+            ->with($this->identicalTo($_SERVER))
         ;
-        $this->_callBootstrapConstructor();
+        $this->_envBootstrap
+            ->expects($this->once())
+            ->method('emulateSession')
+            ->with($this->identicalTo(isset($_SESSION) ? $_SESSION : null))
+        ;
+        $this->_object->runBootstrap();
     }
 
-    public function testConstructorInitialization()
+    public function testRunBootstrapProfilerDisabled()
     {
-        $this->_bootstrap
-            ->expects($this->atLeastOnce())
-            ->method('_isInstalled')
+        $this->_injectApplicationMock();
+        $this->_profilerBootstrap
+            ->expects($this->never())
+            ->method($this->anything())
+        ;
+        $this->_object->runBootstrap();
+    }
+
+    public function testRunBootstrapProfilerEnabled()
+    {
+        $baseDir = $this->_integrationTestsDir;
+        $dirSep = DIRECTORY_SEPARATOR;
+        $this->_injectApplicationMock(array(
+            'TESTS_PROFILER_FILE'                   => 'profiler.csv',
+            'TESTS_BAMBOO_PROFILER_FILE'            => 'profiler_bamboo.csv',
+            'TESTS_BAMBOO_PROFILER_METRICS_FILE'    => 'profiler_metrics.php',
+        ));
+        $this->_profilerBootstrap
+            ->expects($this->once())
+            ->method('registerFileProfiler')
+            ->with("{$baseDir}{$dirSep}profiler.csv")
+        ;
+        $this->_profilerBootstrap
+            ->expects($this->once())
+            ->method('registerBambooProfiler')
+            ->with("{$baseDir}{$dirSep}profiler_bamboo.csv", "{$baseDir}{$dirSep}profiler_metrics.php")
+        ;
+        $this->_object->runBootstrap();
+    }
+
+    public function testRunBootstrapMemoryWatch()
+    {
+        $this->_injectApplicationMock(array(
+            'TESTS_MEM_USAGE_LIMIT' => 100,
+            'TESTS_MEM_LEAK_LIMIT'  => 60,
+        ));
+        $this->_object
+            ->expects($this->once())
+            ->method('_createMemoryBootstrap')
+            ->with(100, 60)
+            ->will($this->returnValue($this->_memoryBootstrap))
+        ;
+        $this->_memoryBootstrap
+            ->expects($this->once())
+            ->method('activateStatsDisplaying')
+        ;
+        $this->_memoryBootstrap
+            ->expects($this->once())
+            ->method('activateLimitValidation')
+        ;
+        $this->_object->runBootstrap();
+    }
+
+    public function testRunBootstrapDocBlockAnnotations()
+    {
+        $this->_injectApplicationMock();
+        $this->_docBlockBootstrap
+            ->expects($this->once())
+            ->method('registerAnnotations')
+            ->with($this->isInstanceOf('Magento_Test_Application'))
+        ;
+        $this->_object->runBootstrap();
+    }
+
+    public function testRunBootstrapAppCleanup()
+    {
+        $application = $this->_injectApplicationMock(array(
+            'TESTS_CLEANUP' => 'enabled',
+        ));
+        $application
+            ->expects($this->once())
+            ->method('cleanup')
+        ;
+        $this->_object->runBootstrap();
+    }
+
+    public function testRunBootstrapAppInitialize()
+    {
+        $application = $this->_injectApplicationMock();
+        $application
+            ->expects($this->once())
+            ->method('isInstalled')
             ->will($this->returnValue(true))
         ;
-        $this->_bootstrap
+        $application
             ->expects($this->once())
             ->method('initialize')
         ;
-        $this->_callBootstrapConstructor();
-    }
-
-    public function testConstructorCleanupDisabled()
-    {
-        $this->_db
+        $application
+            ->expects($this->never())
+            ->method('install')
+        ;
+        $application
             ->expects($this->never())
             ->method('cleanup')
         ;
-        $this->_bootstrap
-            ->expects($this->never())
-            ->method('_cleanupFilesystem')
-        ;
-        $this->_callBootstrapConstructor(null, false);
+        $this->_object->runBootstrap();
     }
 
-    public function testConstructorCleanupEnabled()
+    public function testRunBootstrapAppInstall()
     {
-        $this->_db
+        $adminUserName = Magento_Test_Bootstrap::ADMIN_NAME;
+        $adminPassword = Magento_Test_Bootstrap::ADMIN_PASSWORD;
+        $adminRoleName = Magento_Test_Bootstrap::ADMIN_ROLE_NAME;
+        $application = $this->_injectApplicationMock();
+        $application
             ->expects($this->once())
+            ->method('isInstalled')
+            ->will($this->returnValue(false))
+        ;
+        $application
+            ->expects($this->once())
+            ->method('install')
+            ->with($adminUserName, $adminPassword, $adminRoleName)
+        ;
+        $application
+            ->expects($this->never())
+            ->method('initialize')
+        ;
+        $application
+            ->expects($this->never())
             ->method('cleanup')
         ;
-        $this->_bootstrap
-            ->expects($this->once())
-            ->method('_cleanupFilesystem')
-        ;
-        $this->_callBootstrapConstructor(null, true);
-    }
-
-    /**
-     * @dataProvider constructorExceptionDataProvider
-     * @expectedException Magento_Exception
-     */
-    public function testConstructorException($localXmlFile)
-    {
-        $this->_callBootstrapConstructor($localXmlFile);
-    }
-
-    public function constructorExceptionDataProvider()
-    {
-        return array(
-            'non existing local.xml' => array('local-non-existing.xml'),
-            'invalid local.xml'      => array(dirname(__FILE__) . '/Bootstrap/_files/local-invalid.xml'),
-        );
-    }
-
-    /**
-     * @dataProvider getDbVendorNameDataProvider
-     */
-    public function testGetDbVendorName($localXmlFile, $expectedDbVendorName)
-    {
-        $this->_callBootstrapConstructor($localXmlFile);
-        $this->assertEquals($expectedDbVendorName, $this->_bootstrap->getDbVendorName());
-    }
-
-    public function getDbVendorNameDataProvider()
-    {
-        return array(
-            'mysql'  => array(self::$_localXmlFile, 'mysql'),
-            'custom' => array(realpath(__DIR__ . '/Bootstrap/_files/local-custom.xml'), 'mssql'),
-        );
-    }
-
-    /**
-     * @dataProvider cleanupDirExceptionDataProvider
-     * @expectedException Magento_Exception
-     */
-    public function testCleanupDirException($optionCode)
-    {
-        $this->_bootstrap->cleanupDir($optionCode);
-    }
-
-    /**
-     * @return array
-     */
-    public function cleanupDirExceptionDataProvider()
-    {
-        return array(
-            'etc'   => array('etc_dir'),
-            'var'   => array('var_dir'),
-            'media' => array('media_dir'),
-        );
-    }
-
-    public function testGetTmpDir()
-    {
-        $this->assertEquals(self::$_tmpDir, $this->_bootstrap->getTmpDir());
-    }
-
-    public function testGetTestsDir()
-    {
-        $this->assertEquals(self::$_testsDir, $this->_bootstrap->getTestsDir());
+        $this->_object->runBootstrap();
     }
 }

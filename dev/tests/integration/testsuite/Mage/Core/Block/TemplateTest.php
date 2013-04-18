@@ -35,14 +35,12 @@ class Mage_Core_Block_TemplateTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $params = array(
-            'layout' => Mage::getObjectManager()->create('Mage_Core_Model_Layout', array(), false)
+            'layout' => Mage::getObjectManager()->create('Mage_Core_Model_Layout', array())
         );
-        $this->_block = Mage::app()->getLayout()->createBlock('Mage_Core_Block_Template', '', $params);
-    }
-
-    protected function tearDown()
-    {
-        $this->_block = null;
+        $context = Mage::getObjectManager()->create('Mage_Core_Block_Template_Context', $params);
+        $this->_block = Mage::app()->getLayout()->createBlock('Mage_Core_Block_Template', '',
+            array('context' => $context)
+        );
     }
 
     public function testConstruct()
@@ -60,30 +58,6 @@ class Mage_Core_Block_TemplateTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('value', $this->_block->getTemplate());
     }
 
-    /**
-     * @magentoConfigFixture frontend/design/theme/full_name default/demo
-     * @magentoConfigFixture adminhtml/design/theme/full_name default/basic
-     * @magentoAppIsolation enabled
-     */
-    public function testGetTemplateFile()
-    {
-        Mage::app()->getConfig()->getOptions()->setDesignDir(__DIR__ . DIRECTORY_SEPARATOR . '_files');
-
-        // with template
-        $template = 'dummy.phtml';
-        $this->_block->setTemplate($template);
-        $file = $this->_block->getTemplateFile();
-        $this->assertContains('frontend', $file);
-        $this->assertStringEndsWith($template, $file);
-
-
-        // change area
-        $this->_block->setArea('adminhtml');
-        $file = $this->_block->getTemplateFile();
-        $this->assertContains('adminhtml', $file);
-        $this->assertStringEndsWith($template, $file);
-    }
-
     public function testGetArea()
     {
         $this->assertEquals('frontend', $this->_block->getArea());
@@ -91,22 +65,6 @@ class Mage_Core_Block_TemplateTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('some_area', $this->_block->getArea());
         $this->_block->setArea('another_area');
         $this->assertEquals('another_area', $this->_block->getArea());
-    }
-
-    /**
-     * @magentoAppIsolation enabled
-     * @covers Mage_Core_Block_Template::assign
-     * @covers Mage_Core_Block_Template::setScriptPath
-     * @covers Mage_Core_Block_Template::fetchView
-     */
-    public function testAssign()
-    {
-        Mage::app()->getConfig()->getOptions()->setDesignDir(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files');
-
-        $this->_block->assign(array('varOne' => 'value1', 'varTwo' => 'value2'))
-            ->setScriptPath(__DIR__ . DIRECTORY_SEPARATOR . '_files');
-        $template = __DIR__ . DIRECTORY_SEPARATOR . '_files/template_test_assign.phtml';
-        $this->assertEquals('value1, value2', $this->_block->fetchView($template));
     }
 
     public function testGetDirectOutput()
@@ -122,34 +80,6 @@ class Mage_Core_Block_TemplateTest extends PHPUnit_Framework_TestCase
     public function testGetShowTemplateHints()
     {
         $this->assertFalse($this->_block->getShowTemplateHints());
-    }
-
-    /**
-     * @covers Mage_Core_Block_Template::fetchView
-     * @covers Mage_Core_Block_Abstract::setLayout
-     * @covers Mage_Core_Block_Abstract::getLayout
-     * @see testAssign
-     */
-    public function testFetchView()
-    {
-        $layout = Mage::getModel('Mage_Core_Model_Layout');
-        $layout->setDirectOutput(true);
-        $this->_block->setLayout($layout);
-        $this->assertTrue($this->_block->getDirectOutput());
-
-        $this->assertEmpty($this->_block->fetchView(uniqid('invalid_filename.phtml')));
-    }
-
-    /**
-     * @magentoAppIsolation enabled
-     */
-    public function testRenderView()
-    {
-        $this->assertEmpty($this->_block->renderView());
-        Mage::app()->getConfig()->getOptions()->setDesignDir(__DIR__ . DIRECTORY_SEPARATOR . '_files');
-        Mage::getDesign()->setDesignTheme('default/demo');
-        $this->_block->setTemplate('dummy.phtml');
-        $this->assertEquals('1234567890', $this->_block->renderView());
     }
 
     /**

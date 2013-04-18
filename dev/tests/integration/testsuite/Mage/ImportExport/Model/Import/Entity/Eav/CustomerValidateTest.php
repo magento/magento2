@@ -76,15 +76,6 @@ class Mage_ImportExport_Model_Import_Entity_Eav_CustomerValidateTest extends PHP
     }
 
     /**
-     * Unset created data during tests
-     */
-    protected function tearDown()
-    {
-        unset($this->_model, $this->_customerData);
-        parent::tearDown();
-    }
-
-    /**
      * Test which check duplicated data validation
      */
     public function testValidateRowDuplicateEmail()

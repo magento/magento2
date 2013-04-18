@@ -34,7 +34,7 @@ class Mage_Eav_Model_Attribute_Data_TextTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $helper = $this->getMock('Mage_Core_Helper_String', array('__'));
+        $helper = $this->getMock('Mage_Core_Helper_String', array('__'), array(), '', false, false);
         $helper->expects($this->any())
             ->method('__')
             ->will($this->returnArgument(0))
@@ -52,9 +52,7 @@ class Mage_Eav_Model_Attribute_Data_TextTest extends PHPUnit_Framework_TestCase
 
         $attributeClass = 'Mage_Eav_Model_Entity_Attribute_Abstract';
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        $arguments = $objectManagerHelper->getConstructArguments(
-            Magento_Test_Helper_ObjectManager::MODEL_ENTITY, $attributeClass, array('data' => $attributeData)
-        );
+        $arguments = $objectManagerHelper->getConstructArguments($attributeClass, array('data' => $attributeData));
 
         /** @var $attribute Mage_Eav_Model_Entity_Attribute_Abstract|PHPUnit_Framework_MockObject_MockObject */
         $attribute = $this->getMock($attributeClass, array('_init'), $arguments);

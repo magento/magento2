@@ -27,16 +27,16 @@
  */
 
 require dirname(__DIR__) . '/app/bootstrap.php';
-
+Magento_Profiler::start('mage');
 Mage::register('custom_entry_point', true);
 umask(0);
 
 try {
-    Mage::app('admin')->setUseSessionInUrl(false);
-    Mage::app()->requireInstalledInstance();
-    Mage::getConfig()->init()->loadEventObservers('crontab');
-    Mage::app()->addEventArea('crontab');
-    Mage::dispatchEvent('default');
+    $params = array(Mage::PARAM_RUN_CODE => 'admin');
+    $config = new Mage_Core_Model_Config_Primary(BP, $params);
+    $entryPoint = new Mage_Core_Model_EntryPoint_Cron($config);
+    $entryPoint->processRequest();
 } catch (Exception $e) {
     Mage::printException($e);
 }
+Magento_Profiler::stop('mage');

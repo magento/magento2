@@ -59,7 +59,7 @@ class Integrity_Mage_Widget_TemplateFilesTest extends PHPUnit_Framework_TestCase
             /** @var $instance Mage_Widget_Model_Widget_Instance */
             $instance = Mage::getModel('Mage_Widget_Model_Widget_Instance');
             $config = $instance->setType($row['type'])->getWidgetConfig();
-            $class = Mage::getConfig()->getBlockClassName($row['type']);
+            $class = $row['type'];
             if (is_subclass_of($class, 'Mage_Core_Block_Template')) {
                 $templates = $config->xpath('/widgets/' . $row['code'] . '/parameters/template/values/*/value');
                 foreach ($templates as $template) {

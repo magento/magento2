@@ -32,6 +32,7 @@ $product->setTypeId('simple')
     ->setName('Simple Product')
     ->setSku('simple')
     ->setPrice(10)
+    ->setTaxClassId(0)
     ->setStockData(
         array(
             'use_config_manage_stock'   => 1,

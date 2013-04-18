@@ -73,7 +73,7 @@ class Mage_Backend_Model_Widget_Grid_TotalsTest extends PHPUnit_Framework_TestCa
         );
 
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_model = $objectManagerHelper->getModel('Mage_Backend_Model_Widget_Grid_Totals', $arguments);
+        $this->_model = $objectManagerHelper->getObject('Mage_Backend_Model_Widget_Grid_Totals', $arguments);
 
         // setup columns
         $columns = array(

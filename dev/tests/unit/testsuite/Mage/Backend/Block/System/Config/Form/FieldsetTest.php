@@ -75,7 +75,7 @@ class Mage_Backend_Block_System_Config_Form_FieldsetTest extends PHPUnit_Framewo
             )
         );
         $helper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_object = $helper->getBlock('Mage_Backend_Block_System_Config_Form_Fieldset', $data);
+        $this->_object = $helper->getObject('Mage_Backend_Block_System_Config_Form_Fieldset', $data);
 
         $this->_testData = array(
             'htmlId' => 'test_field_id',
@@ -117,10 +117,12 @@ class Mage_Backend_Block_System_Config_Form_FieldsetTest extends PHPUnit_Framewo
 
         $this->_elementMock->expects($this->any())->method('getSortedElements')->will($this->returnValue(array()));
 
-        $expected = '<div><div><div  class="entry-edit-head collapseable" >';
+        $expected = '<div class="entry-edit-head collapseable" id="' . $this->_testData['htmlId'] . '-head">';
 
-        $expected .= '<a id="' . $this->_testData['htmlId'] . '-head" href="#"'
-            . ' onclick="Fieldset.toggleCollapse(\'' . $this->_testData['htmlId'] . '\', \'\'); '
+        $expected .= '<span id="' . $this->_testData['htmlId'] . '-link" class="entry-edit-head-link"></span>';
+
+        $expected .= '<a id="' . $this->_testData['htmlId'] . '-head" href="#' . $this->_testData['htmlId']
+            . '-link" onclick="Fieldset.toggleCollapse(\'' . $this->_testData['htmlId'] . '\', \'\'); '
             . 'return false;">' . $this->_testData['legend'] . '</a>';
 
         $expected .= '</div><input id="' . $this->_testData['htmlId']
@@ -137,7 +139,7 @@ class Mage_Backend_Block_System_Config_Form_FieldsetTest extends PHPUnit_Framewo
         $expected .= '<colgroup class="value" />';
         $expected .= '<colgroup class="scope-label" />';
         $expected .= '<colgroup class="" />';
-        $expected .= '<tbody></tbody></table></fieldset></div></div>';
+        $expected .= '<tbody></tbody></table></fieldset>';
 
         $this->assertEquals($expected, $this->_object->render($this->_elementMock));
     }

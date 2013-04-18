@@ -43,20 +43,18 @@ class Integrity_Modular_AclConfigFilesTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $readerMock = $this->getMock('Magento_Acl_Config_Reader', array('getShemaFile'), array(), '', false);
+        $readerMock = $this->getMock('Magento_Acl_Config_Reader', array('_merge', '_extractData'), array(), '', false);
         $this->_schemeFile = $readerMock->getSchemaFile();
         $this->_prepareFileList();
     }
 
     /**
      * Prepare file list of ACL resources
-     *
-     * @return void
      */
     protected function _prepareFileList()
     {
         if (empty($this->_fileList)) {
-            $this->_fileList = glob(Mage::getBaseDir('app') . '/*/*/*/*/etc/adminhtml/acl.xml');
+            $this->_fileList = glob(Mage::getBaseDir('app') . '/*/*/*/etc/adminhtml/acl.xml');
         }
     }
 
@@ -71,7 +69,7 @@ class Integrity_Modular_AclConfigFilesTest extends PHPUnit_Framework_TestCase
         $result = $domConfig->validate($this->_schemeFile, $errors);
         $message = "Invalid XML-file: {$file}\n";
         foreach ($errors as $error) {
-            $message .= "{$error->message} Line: {$error->line}\n";
+            $message .= "$error\n";
         }
         $this->assertTrue($result, $message);
     }

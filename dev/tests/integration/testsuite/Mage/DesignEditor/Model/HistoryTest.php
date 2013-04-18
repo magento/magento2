@@ -104,6 +104,22 @@ class Mage_DesignEditor_Model_HistoryTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Add Xml changes test
+     *
+     * @dataProvider getXmlChanges
+     * @param string $changes
+     * @param array $result
+     */
+    public function testAddXmlChanges($changes, $result)
+    {
+        $historyModel = $this->getClearHistoryModel();
+        $collection = $historyModel->addXmlChanges($changes)->getChanges();
+
+        $this->assertEquals($result, $collection->toArray());
+
+    }
+
+    /**
      * Get change
      *
      * @return array
@@ -190,5 +206,73 @@ class Mage_DesignEditor_Model_HistoryTest extends PHPUnit_Framework_TestCase
                 'action_name'           => 'remove',
             ),
         )));
+    }
+
+    /**
+     * Get xml changes data provider
+     *
+     * @return array
+     */
+    public function getXmlChanges()
+    {
+        return array(
+            array(
+                'xml' => '<move element="customer_account_navigation" after="-" destination="right"/>',
+                'expected result' => array(array(
+                        'element_name'          => 'customer_account_navigation',
+                        'destination_order'     => '-',
+                        'origin_order'          => '-',
+                        'destination_container' => 'right',
+                        'origin_container'      => 'right',
+                        'type'                  => 'layout',
+                        'action_name'           => 'move',
+                        'element'               => 'customer_account_navigation',
+                        'after'                 => '-',
+                        'destination'           => 'right',
+                        'id'                    => 'customer_account_navigation',
+                        'system'                => '1'
+                ))
+            ),
+            array(
+                'xml' => '<remove name="category.products"/>',
+                'expected result' => array(array(
+                        'element_name' => 'category.products',
+                        'type'         => 'layout',
+                        'action_name'  => 'remove',
+                        'name'         => 'category.products',
+                        'id'           => 'category.products',
+                        'system'       => '1'
+                ))
+            ),
+            array(
+                'xml' => '<move element="customer_account_navigation" after="-" destination="right"/>
+                    <remove name="category.products"/>',
+                'expected result' => array(
+                    array(
+                        'element_name'          => 'customer_account_navigation',
+                        'destination_order'     => '-',
+                        'origin_order'          => '-',
+                        'destination_container' => 'right',
+                        'origin_container'      => 'right',
+                        'type'                  => 'layout',
+                        'action_name'           => 'move',
+                        'element'               => 'customer_account_navigation',
+                        'after'                 => '-',
+                        'destination'           => 'right',
+                        'id'                    => 'customer_account_navigation',
+                        'system'                => '1'
+                    ),
+                    array(
+                        'element_name' => 'category.products',
+                        'type'         => 'layout',
+                        'action_name'  => 'remove',
+                        'name'         => 'category.products',
+                        'id'           => 'category.products',
+                        'system'       => '1'
+                    )
+                )
+
+            )
+        );
     }
 }

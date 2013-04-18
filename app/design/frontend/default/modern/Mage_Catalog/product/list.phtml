@@ -96,15 +96,8 @@ $_imageSize = $this->getVar('product_list_image_size', 'Mage_Catalog');
         <?php endforeach; ?>
     </ol>
     <script type="text/javascript">
-        //<![CDATA[
-        (function($) {
-            $.mage.event.observe('mage.grid.initialize', function (event, initData) {
-                initData.listId = '#products-list';
-            });
-            $.mage.load.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/grid.js') ?>");
-            $.mage.load.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/mage-attributes-processing.js') ?>");
-        })(jQuery);
-        //]]>
+        jQuery('#products-list').decorate('list');
+        head.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/mage-attributes-processing.js') ?>");
     </script>
     <?php else: ?>
 
@@ -158,16 +151,8 @@ $_imageSize = $this->getVar('product_list_image_size', 'Mage_Catalog');
         <?php endif ?>
         <?php endforeach ?>
     <script type="text/javascript">
-        //<![CDATA[
-        (function($) {
-            $.mage.event.observe('mage.grid.initialize', function (event, initData) {
-                initData.genericSelector = 'ul.products-grid > li';
-                initData.decoratorParam = ['odd', 'even', 'first', 'last'];
-            });
-            $.mage.load.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/grid.js') ?>");
-            $.mage.load.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/mage-attributes-processing.js') ?>");
-        })(jQuery);
-        //]]>
+        jQuery('ul.products-grid > li').decorate('generic', ['odd', 'even', 'first', 'last']);
+        head.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/mage-attributes-processing.js') ?>");
     </script>
     <?php endif; ?>
 

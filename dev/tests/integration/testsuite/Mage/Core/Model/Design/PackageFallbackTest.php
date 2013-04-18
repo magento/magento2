@@ -27,30 +27,24 @@
 
 /**
  * Tests for the view layer fallback mechanism
- *
- * @magentoDbIsolation enabled
+ * @magentoDataFixture Mage/Core/Model/_files/design/themes.php
  */
 class Mage_Core_Model_Design_PackageFallbackTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Mage_Core_Model_Design_Package
      */
-    protected $_model;
+    protected $_model = null;
 
     protected function setUp()
     {
-        /** @var $themeUtility Mage_Core_Utility_Theme */
-        $themeUtility = Mage::getModel('Mage_Core_Utility_Theme', array(
-            dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'design',
-            Mage::getModel('Mage_Core_Model_Design_Package')
+        Magento_Test_Helper_Bootstrap::getInstance()->reinitialize(array(
+            Mage::PARAM_APP_DIRS => array(
+                Mage_Core_Model_Dir::THEMES => dirname(__DIR__) . '/_files/design'
+            )
         ));
-        $themeUtility->registerThemes()->setDesignTheme('test/default', 'frontend');;
-        $this->_model = $themeUtility->getDesign();
-    }
-
-    protected function tearDown()
-    {
-        $this->_model = null;
+        $this->_model = Mage::getObjectManager()->create('Mage_Core_Model_Design_Package');
+        $this->_model->setDesignTheme('test/default');
     }
 
     public function testGetFilename()

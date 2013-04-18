@@ -1,6 +1,6 @@
 <?php
 /**
- * Test for Mage_Webapi_Block_Adminhtml_User_Edit_Tabs block
+ * Test for Mage_Webapi_Block_Adminhtml_User_Edit_Tabs block.
  *
  * Magento
  *
@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Mage_Webapi_Block_Adminhtml_User_Edit_TabsTest extends PHPUnit_Framework_TestCase
+class Mage_Webapi_Block_Adminhtml_User_Edit_TabsTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @var Magento_Test_ObjectManager
@@ -42,6 +42,8 @@ class Mage_Webapi_Block_Adminhtml_User_Edit_TabsTest extends PHPUnit_Framework_T
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->_objectManager = Mage::getObjectManager();
         $this->_layout = $this->_objectManager->get('Mage_Core_Model_Layout');
         $this->_block = $this->_layout->createBlock('Mage_Webapi_Block_Adminhtml_User_Edit_Tabs',
@@ -55,11 +57,11 @@ class Mage_Webapi_Block_Adminhtml_User_Edit_TabsTest extends PHPUnit_Framework_T
     }
 
     /**
-     * Test _beforeToHtml method
+     * Test _beforeToHtml method.
      */
     public function testBeforeToHtml()
     {
-        // TODO Move to unit tests after MAGETWO-4015 complete
+        // TODO: Move to unit tests after MAGETWO-4015 complete.
         /** @var Mage_Webapi_Block_Adminhtml_User_Edit_Tab_Main $mainTabBlock */
         $mainTabBlock = $this->_layout->addBlock(
             'Mage_Core_Block_Text',
@@ -107,7 +109,7 @@ class Mage_Webapi_Block_Adminhtml_User_Edit_TabsTest extends PHPUnit_Framework_T
     }
 
     /**
-     * Get protected _tabs property of Mage_Backend_Block_Widget_Tabs block
+     * Get protected _tabs property of Mage_Backend_Block_Widget_Tabs block.
      *
      * @param Mage_Backend_Block_Widget_Tabs $tabs
      * @return array
@@ -124,7 +126,7 @@ class Mage_Webapi_Block_Adminhtml_User_Edit_TabsTest extends PHPUnit_Framework_T
             $this->fail('Cannot get tabs value');
 
         }
-        $this->assertInternalType('array', $result, 'Tabs value expected to be an array');
+        $this->assertInternalType('array', $result, 'Tabs value is expected to be an array');
         return $result;
     }
 }

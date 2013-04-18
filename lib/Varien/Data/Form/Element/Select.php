@@ -44,7 +44,13 @@ class Varien_Data_Form_Element_Select extends Varien_Data_Form_Element_Abstract
     public function getElementHtml()
     {
         $this->addClass('select');
-        $html = '<select id="'.$this->getHtmlId().'" name="'.$this->getName().'" '.$this->serialize($this->getHtmlAttributes()). $this->_getUiId() .'>'."\n";
+
+        $html = '';
+        if ($this->getBeforeElementHtml()) {
+            $html .= '<label class="addbefore" for="' . $this->getHtmlId() . '">' . $this->getBeforeElementHtml() . '</label>';
+        }
+
+        $html .= '<select id="'.$this->getHtmlId().'" name="'.$this->getName().'" '.$this->serialize($this->getHtmlAttributes()). $this->_getUiId() .'>'."\n";
 
         $value = $this->getValue();
         if (!is_array($value)) {
@@ -74,7 +80,11 @@ class Varien_Data_Form_Element_Select extends Varien_Data_Form_Element_Abstract
         }
 
         $html.= '</select>'."\n";
-        $html.= $this->getAfterElementHtml();
+        if ($this->getAfterElementHtml()) {
+            $html.= '<label class="addafter" for="' . $this->getHtmlId() . '">'
+                . "\n{$this->getAfterElementHtml()}\n"
+                . '</label>' . "\n";
+        }
         return $html;
     }
 

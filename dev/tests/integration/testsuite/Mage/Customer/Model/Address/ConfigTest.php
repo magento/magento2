@@ -37,11 +37,6 @@ class Mage_Customer_Model_Address_ConfigTest extends PHPUnit_Framework_TestCase
         $this->_model= Mage::getModel('Mage_Customer_Model_Address_Config');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Mage/Customer/_files/address_formats.php

@@ -58,7 +58,7 @@ class Mage_Adminhtml_CustomerControllerTest extends Mage_Backend_Utility_Control
     {
         $this->getRequest()->setPost(array());
         $this->dispatch('backend/admin/customer/save');
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key'));
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl));
     }
 
     public function testSaveActionWithInvalidFormData()
@@ -74,12 +74,12 @@ class Mage_Adminhtml_CustomerControllerTest extends Mage_Backend_Utility_Control
         /**
          * Check that errors was generated and set to session
          */
-        $this->assertNotEmpty(Mage::getSingleton('Mage_Backend_Model_Session')->getMessages(false)->getErrors());
+        $this->assertSessionMessages($this->logicalNot($this->isEmpty()), Mage_Core_Model_Message::ERROR);
         /**
          * Check that customer data were set to session
          */
         $this->assertEquals($post, Mage::getSingleton('Mage_Backend_Model_Session')->getCustomerData());
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key'));
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new'));
     }
 
     public function testSaveActionWithInvalidCustomerAddressData()
@@ -101,12 +101,12 @@ class Mage_Adminhtml_CustomerControllerTest extends Mage_Backend_Utility_Control
         /**
          * Check that errors was generated and set to session
          */
-        $this->assertNotEmpty(Mage::getSingleton('Mage_Backend_Model_Session')->getMessages(false)->getErrors());
+        $this->assertSessionMessages($this->logicalNot($this->isEmpty()), Mage_Core_Model_Message::ERROR);
         /**
          * Check that customer data were set to session
          */
         $this->assertEquals($post, Mage::getSingleton('Mage_Backend_Model_Session')->getCustomerData());
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key'));
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new'));
     }
 
     /**
@@ -143,7 +143,7 @@ class Mage_Adminhtml_CustomerControllerTest extends Mage_Backend_Utility_Control
         /**
          * Check that errors was generated and set to session
          */
-        $this->assertEmpty(Mage::getSingleton('Mage_Backend_Model_Session')->getMessages(false)->getErrors());
+        $this->assertSessionMessages($this->isEmpty(), Mage_Core_Model_Message::ERROR);
         /**
          * Check that customer data were set to session
          */
@@ -152,11 +152,7 @@ class Mage_Adminhtml_CustomerControllerTest extends Mage_Backend_Utility_Control
         /**
          * Check that success message is set
          */
-        $this->assertCount(1,
-            Mage::getSingleton('Mage_Backend_Model_Session')
-                ->getMessages(false)->getItemsByType(Mage_Core_Model_Message::SUCCESS),
-            'Success message was not set'
-        );
+        $this->assertSessionMessages($this->logicalNot($this->isEmpty()), Mage_Core_Model_Message::SUCCESS);
 
         /**
          * Check that customer id set and addresses saved
@@ -166,7 +162,7 @@ class Mage_Adminhtml_CustomerControllerTest extends Mage_Backend_Utility_Control
         $this->assertCount(1, $customer->getAddressesCollection());
 
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl
-            . 'edit/id/' . $customer->getId() . '/back/1/key/')
+            . 'edit/id/' . $customer->getId() . '/back/1')
         );
     }
 
@@ -223,9 +219,9 @@ class Mage_Adminhtml_CustomerControllerTest extends Mage_Backend_Utility_Control
         /**
          * Check that success message is set
          */
-        $successMessages = Mage::getSingleton('Mage_Backend_Model_Session')
-            ->getMessages(false)->getItemsByType(Mage_Core_Model_Message::SUCCESS);
-        $this->assertEquals('The customer has been saved.', current($successMessages)->getCode());
+        $this->assertSessionMessages(
+            $this->equalTo(array('The customer has been saved.')), Mage_Core_Model_Message::SUCCESS
+        );
 
         /**
          * Check that customer id set and addresses saved
@@ -272,9 +268,10 @@ class Mage_Adminhtml_CustomerControllerTest extends Mage_Backend_Utility_Control
         /*
         * Check that error message is set
         */
-        $errorMessages = Mage::getSingleton('Mage_Backend_Model_Session')
-            ->getMessages(false)->getErrors();
-        $this->assertEquals('This customer email already exists', current($errorMessages)->getCode());
+        $this->assertSessionMessages(
+            $this->equalTo(array('This customer email already exists')),
+            Mage_Core_Model_Message::ERROR
+        );
         $this->assertEquals($post, Mage::getSingleton('Mage_Backend_Model_Session')->getCustomerData());
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'edit/key/'));
     }

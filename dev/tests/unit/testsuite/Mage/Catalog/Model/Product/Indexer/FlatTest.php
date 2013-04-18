@@ -43,7 +43,7 @@ class Mage_Catalog_Model_Product_Indexer_FlatTest extends PHPUnit_Framework_Test
     public function setUp()
     {
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_model = $objectManagerHelper->getModel('Mage_Catalog_Model_Product_Indexer_Flat');
+        $this->_model = $objectManagerHelper->getObject('Mage_Catalog_Model_Product_Indexer_Flat');
         $this->_event = $this->getMock('Mage_Index_Model_Event',
             array('getFlatHelper', 'getEntity', 'getType', 'getDataObject'), array(), '', false
         );
@@ -51,7 +51,7 @@ class Mage_Catalog_Model_Product_Indexer_FlatTest extends PHPUnit_Framework_Test
 
     public function testMatchEventAvailability()
     {
-        $flatHelper = $this->getMock('Mage_Catalog_Helper_Product_Flat');
+        $flatHelper = $this->getMock('Mage_Catalog_Helper_Product_Flat', array(), array(), '', false, false);
         $flatHelper->expects($this->any())
             ->method('isAvailable')
             ->will($this->returnValue(false));

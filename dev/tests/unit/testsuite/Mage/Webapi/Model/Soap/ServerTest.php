@@ -25,14 +25,19 @@
  */
 class Mage_Webapi_Model_Soap_ServerTest extends PHPUnit_Framework_TestCase
 {
+    const WEBAPI_AREA_FRONT_NAME = 'webapi';
+
     /** @var Mage_Webapi_Model_Soap_Server */
     protected $_soapServer;
 
     /** @var Mage_Core_Model_App */
-    protected $_applicationMock;
+    protected $_appMock;
 
     /** @var Mage_Core_Model_Store */
     protected $_storeMock;
+
+    /** @var Mage_Core_Model_Config */
+    protected $_configMock;
 
     /** @var Mage_Webapi_Controller_Request_Soap */
     protected $_requestMock;
@@ -44,8 +49,13 @@ class Mage_Webapi_Model_Soap_ServerTest extends PHPUnit_Framework_TestCase
     {
         /** Init all dependencies for SUT. */
         $this->_storeMock = $this->getMockBuilder('Mage_Core_Model_Store')->disableOriginalConstructor()->getMock();
-        $this->_applicationMock = $this->getMockBuilder('Mage_Core_Model_App')->disableOriginalConstructor()->getMock();
-        $this->_applicationMock->expects($this->any())->method('getStore')->will($this->returnValue($this->_storeMock));
+        $this->_configMock = $this->getMockBuilder('Mage_Core_Model_Config')->disableOriginalConstructor()->getMock();
+        $this->_configMock->expects($this->any())->method('getAreaFrontName')->will(
+            $this->returnValue(self::WEBAPI_AREA_FRONT_NAME)
+        );
+        $this->_appMock = $this->getMockBuilder('Mage_Core_Model_App')->disableOriginalConstructor()->getMock();
+        $this->_appMock->expects($this->any())->method('getStore')->will($this->returnValue($this->_storeMock));
+        $this->_appMock->expects($this->any())->method('getConfig')->will($this->returnValue($this->_configMock));
         $this->_requestMock = $this->getMockBuilder('Mage_Webapi_Controller_Request_Soap')->disableOriginalConstructor()
             ->getMock();
         $this->_domDocumentFactory = $this->getMockBuilder('Magento_DomDocument_Factory')
@@ -53,7 +63,7 @@ class Mage_Webapi_Model_Soap_ServerTest extends PHPUnit_Framework_TestCase
 
         /** Init SUT. */
         $this->_soapServer = new Mage_Webapi_Model_Soap_Server(
-            $this->_applicationMock,
+            $this->_appMock,
             $this->_requestMock,
             $this->_domDocumentFactory
         );
@@ -64,7 +74,7 @@ class Mage_Webapi_Model_Soap_ServerTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->_soapServer);
-        unset($this->_applicationMock);
+        unset($this->_appMock);
         unset($this->_requestMock);
         unset($this->_storeMock);
         parent::tearDown();
@@ -76,7 +86,11 @@ class Mage_Webapi_Model_Soap_ServerTest extends PHPUnit_Framework_TestCase
     public function testGetApiCharset()
     {
         $this->_storeMock->expects($this->once())->method('getConfig')->will($this->returnValue('Windows-1251'));
-        $this->assertEquals('Windows-1251', $this->_soapServer->getApiCharset(), 'Wrong API charset encoding getting.');
+        $this->assertEquals(
+            'Windows-1251',
+            $this->_soapServer->getApiCharset(),
+            'API charset encoding getting is invalid.'
+        );
     }
 
     /**
@@ -88,7 +102,7 @@ class Mage_Webapi_Model_Soap_ServerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             Mage_Webapi_Model_Soap_Server::SOAP_DEFAULT_ENCODING,
             $this->_soapServer->getApiCharset(),
-            'Wrong default API charset encoding getting.'
+            'Default API charset encoding getting is invalid.'
         );
     }
 
@@ -104,8 +118,8 @@ class Mage_Webapi_Model_Soap_ServerTest extends PHPUnit_Framework_TestCase
             $this->returnValue(array('res' => 'v1'))
         );
         $actualResult = $this->_soapServer->generateUri();
-        $expectedResult = 'http://magento.com/api/soap?resources%5Bres%5D=v1';
-        $this->assertEquals($expectedResult, $actualResult, 'Wrong URI generation with default parameter.');
+        $expectedResult = 'http://magento.com/' . self::WEBAPI_AREA_FRONT_NAME . '/soap?resources%5Bres%5D=v1';
+        $this->assertEquals($expectedResult, $actualResult, 'URI generation with default parameter is invalid.');
     }
 
     /**
@@ -133,10 +147,10 @@ class Mage_Webapi_Model_Soap_ServerTest extends PHPUnit_Framework_TestCase
         $this->_storeMock->expects($this->once())->method('getBaseUrl')->will(
             $this->returnValue('http://magento.com/')
         );
-        $expectedResult = 'http://magento.com/' . Mage_Webapi_Controller_Router_Route_Webapi::API_AREA_NAME . '/'
+        $expectedResult = 'http://magento.com/' . self::WEBAPI_AREA_FRONT_NAME . '/'
             . Mage_Webapi_Controller_Front::API_TYPE_SOAP;
         $actualResult = $this->_soapServer->getEndpointUri();
-        $this->assertEquals($expectedResult, $actualResult, 'Wrong endpoint URI building.');
+        $this->assertEquals($expectedResult, $actualResult, 'Endpoint URI building is invalid.');
     }
 
     /**
@@ -147,7 +161,7 @@ class Mage_Webapi_Model_Soap_ServerTest extends PHPUnit_Framework_TestCase
         /** Init Exception. */
         $exception = new Exception();
         $faultResult = $this->_soapServer->fault($exception);
-        /** Assert returned object is instance of SoapFault class. */
+        /** Assert that returned object is instance of SoapFault class. */
         $this->assertInstanceOf('SoapFault', $faultResult, 'SoapFault was not returned.');
     }
 
@@ -158,7 +172,7 @@ class Mage_Webapi_Model_Soap_ServerTest extends PHPUnit_Framework_TestCase
     {
         /** Mock Webapi Soap fault. */
         $apiFault = $this->getMockBuilder('Mage_Webapi_Model_Soap_Fault')->disableOriginalConstructor()->getMock();
-        /** Assert mocked fault toXml method will be executed once. */
+        /** Assert that mocked fault toXml method will be executed once. */
         $apiFault->expects($this->once())->method('toXml');
         $this->_soapServer->fault($apiFault);
     }
@@ -168,25 +182,26 @@ class Mage_Webapi_Model_Soap_ServerTest extends PHPUnit_Framework_TestCase
      */
     public function providerForGenerateUriTest()
     {
+        $webapiFrontName = self::WEBAPI_AREA_FRONT_NAME;
         return array(
             //Each array contains isWsdl flag, resources, expected URI and assert message.
             'Several resources' => array(
                 false,
                 array('customer' => 'v1', 'product' => 'v2'),
-                'http://magento.com/api/soap?resources%5Bcustomer%5D=v1&resources%5Bproduct%5D=v2',
-                'Wrong URI generation with several resources.'
+                "http://magento.com/$webapiFrontName/soap?resources%5Bcustomer%5D=v1&resources%5Bproduct%5D=v2",
+                'URI generation with several resources is invalid.'
             ),
             'Several resources with WSDL' => array(
                 true,
                 array('customer' => 'v1', 'product' => 'v2'),
-                'http://magento.com/api/soap?resources%5Bcustomer%5D=v1&resources%5Bproduct%5D=v2&wsdl=1',
-                'Wrong URI generation with several resources and WSDL.'
+                "http://magento.com/$webapiFrontName/soap?resources%5Bcustomer%5D=v1&resources%5Bproduct%5D=v2&wsdl=1",
+                'URI generation with several resources and WSDL is invalid.'
             ),
             'Empty resources list' => array(
                 true,
                 array(),
-                'http://magento.com/api/soap?wsdl=1',
-                'Wrong URI generation without resources.'
+                "http://magento.com/$webapiFrontName/soap?wsdl=1",
+                'URI generation without resources is invalid.'
             ),
         );
     }

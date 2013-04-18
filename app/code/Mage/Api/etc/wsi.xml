@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:typens="urn:{{var wsdl.name}}"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             name="{{var wsdl.name}}"
+             targetNamespace="urn:{{var wsdl.name}}">
+    <wsdl:types>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:{{var wsdl.name}}">
+            <xsd:complexType name="associativeEntity">
+                <xsd:sequence>
+                    <xsd:element name="key" type="xsd:string" />
+                    <xsd:element name="value" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="associativeArray">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" maxOccurs="unbounded" name="complexObjectArray" type="typens:associativeEntity" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="associativeMultiEntity">
+                <xsd:sequence>
+                    <xsd:element name="key" type="xsd:string" />
+                    <xsd:element name="value" type="typens:ArrayOfString" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="associativeMultiArray">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" maxOccurs="unbounded" name="complexObjectArray" type="typens:associativeMultiEntity" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="complexFilter">
+                <xsd:sequence>
+                    <xsd:element name="key" type="xsd:string" />
+                    <xsd:element name="value" type="typens:associativeEntity" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="complexFilterArray">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" maxOccurs="unbounded" name="complexObjectArray" type="typens:complexFilter" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="filters">
+                <xsd:sequence>
+                    <xsd:element name="filter" type="typens:associativeArray" minOccurs="0" />
+                    <xsd:element name="complex_filter" type="typens:complexFilterArray" minOccurs="0" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfString">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" maxOccurs="unbounded" name="complexObjectArray" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfInt">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" maxOccurs="unbounded" name="complexObjectArray" type="xsd:int" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="apiMethodEntity">
+                <xsd:sequence>
+                    <xsd:element name="title" type="xsd:string" />
+                    <xsd:element name="path" type="xsd:string" />
+                    <xsd:element name="name" type="xsd:string" />
+                    <xsd:element name="aliases" type="typens:ArrayOfString" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfApiMethods">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" maxOccurs="unbounded" name="complexObjectArray" type="typens:apiMethodEntity" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="apiEntity">
+                <xsd:sequence>
+                    <xsd:element name="title" type="xsd:string" />
+                    <xsd:element name="name" type="xsd:string" />
+                    <xsd:element name="aliases" type="typens:ArrayOfString" />
+                    <xsd:element name="methods" type="typens:ArrayOfApiMethods" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfApis">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" maxOccurs="unbounded" name="complexObjectArray" type="typens:apiEntity" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="existsFaltureEntity">
+                <xsd:sequence>
+                    <xsd:element name="code" type="xsd:string" />
+                    <xsd:element name="message" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfExistsFaltures">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" maxOccurs="unbounded" name="complexObjectArray" type="typens:existsFaltureEntity" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+
+
+            <xsd:element name="callParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="sessionId" type="xsd:string" />
+                        <xsd:element minOccurs="1" maxOccurs="1" name="apiPath" type="xsd:string" />
+                        <xsd:element minOccurs="1" maxOccurs="1" name="args" type="xsd:anyType" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="callResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="result" type="xsd:anyType" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="multiCallParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="sessionId" type="xsd:string" />
+                        <xsd:element minOccurs="1" maxOccurs="1" name="calls" type="xsd:anyType" />
+                        <xsd:element minOccurs="1" maxOccurs="1" name="options" type="xsd:anyType" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="multiCallResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="result" type="xsd:anyType" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="endSessionParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="sessionId" type="xsd:string" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="endSessionResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="result" type="xsd:boolean" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="loginParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="username" type="xsd:string" />
+                        <xsd:element minOccurs="1" maxOccurs="1" name="apiKey" type="xsd:string" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="loginResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="result" type="xsd:string" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="resourcesRequestParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="sessionId" type="xsd:string" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="resourcesResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="result" type="typens:ArrayOfApis" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="globalFaultsParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="sessionId" type="xsd:string" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="globalFaultsResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="result" type="typens:ArrayOfExistsFaltures" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="resourceFaultsParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="sessionId" type="xsd:string" />
+                        <xsd:element minOccurs="1" maxOccurs="1" name="resourceName" type="xsd:string" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="resourceFaultsResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="result" type="typens:ArrayOfExistsFaltures" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="startSessionResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="result" type="xsd:string" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="call">
+        <wsdl:part name="parameters" element="typens:callParam" />
+    </wsdl:message>
+    <wsdl:message name="callResponse">
+        <wsdl:part name="parameters" element="typens:callResponseParam" />
+    </wsdl:message>
+    <wsdl:message name="multiCall">
+        <wsdl:part name="parameters" element="typens:multiCallParam" />
+    </wsdl:message>
+    <wsdl:message name="multiCallResponse">
+        <wsdl:part name="parameters" element="typens:multiCallResponseParam" />
+    </wsdl:message>
+    <wsdl:message name="endSession">
+        <wsdl:part name="parameters" element="typens:endSessionParam" />
+    </wsdl:message>
+    <wsdl:message name="endSessionResponse">
+        <wsdl:part name="parameters" element="typens:endSessionResponseParam" />
+    </wsdl:message>
+    <wsdl:message name="login">
+        <wsdl:part name="parameters" element="typens:loginParam" />
+    </wsdl:message>
+    <wsdl:message name="loginResponse">
+        <wsdl:part name="parameters" element="typens:loginResponseParam" />
+    </wsdl:message>
+    <wsdl:message name="resourcesRequest">
+        <wsdl:part name="parameters" element="typens:resourcesRequestParam" />
+    </wsdl:message>
+    <wsdl:message name="resourcesResponse">
+        <wsdl:part name="parameters" element="typens:resourcesResponseParam" />
+    </wsdl:message>
+    <wsdl:message name="globalFaults">
+        <wsdl:part name="parameters" element="typens:globalFaultsParam" />
+    </wsdl:message>
+    <wsdl:message name="globalFaultsResponse">
+        <wsdl:part name="parameters" element="typens:globalFaultsResponseParam" />
+    </wsdl:message>
+    <wsdl:message name="resourceFaults">
+        <wsdl:part name="parameters" element="typens:resourceFaultsParam" />
+    </wsdl:message>
+    <wsdl:message name="resourceFaultsResponse">
+        <wsdl:part name="parameters" element="typens:resourceFaultsResponseParam" />
+    </wsdl:message>
+    <wsdl:message name="startSession" />
+    <wsdl:message name="startSessionResponse">
+        <wsdl:part name="parameters" element="typens:startSessionResponseParam" />
+    </wsdl:message>
+    <wsdl:portType name="{{var wsdl.handler}}PortType">
+        <wsdl:operation name="call">
+            <wsdl:documentation>Call api functionality</wsdl:documentation>
+            <wsdl:input message="typens:call" />
+            <wsdl:output message="typens:callResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="multiCall">
+            <wsdl:documentation>Multiple calls of resource functionality</wsdl:documentation>
+            <wsdl:input message="typens:multiCall" />
+            <wsdl:output message="typens:multiCallResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="endSession">
+            <wsdl:documentation>End web service session</wsdl:documentation>
+            <wsdl:input message="typens:endSession" />
+            <wsdl:output message="typens:endSessionResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="login">
+            <wsdl:documentation>Login user and retrive session id</wsdl:documentation>
+            <wsdl:input message="typens:login" />
+            <wsdl:output message="typens:loginResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="startSession">
+            <wsdl:documentation>Start web service session</wsdl:documentation>
+            <wsdl:input message="typens:startSession" />
+            <wsdl:output message="typens:startSessionResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="resources">
+            <wsdl:documentation>List of available resources</wsdl:documentation>
+            <wsdl:input message="typens:resourcesRequest" />
+            <wsdl:output message="typens:resourcesResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="globalFaults">
+            <wsdl:documentation>List of global faults</wsdl:documentation>
+            <wsdl:input message="typens:globalFaults" />
+            <wsdl:output message="typens:globalFaultsResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="resourceFaults">
+            <wsdl:documentation>List of resource faults</wsdl:documentation>
+            <wsdl:input message="typens:resourceFaults" />
+            <wsdl:output message="typens:resourceFaultsResponse" />
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="{{var wsdl.handler}}Binding" type="typens:{{var wsdl.handler}}PortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+        <wsdl:operation name="call">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="multiCall">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="endSession">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="login">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="startSession">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="resources">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="globalFaults">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="resourceFaults">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="{{var wsdl.name}}Service">
+        <wsdl:port name="{{var wsdl.handler}}Port" binding="typens:{{var wsdl.handler}}Binding">
+            <soap:address location="{{var wsdl.url}}" />
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

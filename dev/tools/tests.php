@@ -25,15 +25,16 @@
  */
 
 $commands = array(
-    'unit'                  => array('../tests/unit', ''),
-    'unit-performance'      => array('../tests/performance/framework/tests/unit', ''),
-    'unit-static'           => array('../tests/static/framework/tests/unit', ''),
-    'unit-integration'      => array('../tests/integration/framework/tests/unit', ''),
-    'integration'           => array('../tests/integration', ''),
-    'integration-integrity' => array('../tests/integration', ' testsuite/integrity'),
-    'static-default'        => array('../tests/static', ''),
-    'static-legacy'         => array('../tests/static', ' testsuite/Legacy'),
-    'static-integration'    => array('../tests/static', ' testsuite/Exemplar'),
+    'unit'                   => array('../tests/unit', ''),
+    'unit-performance'       => array('../tests/performance/framework/tests/unit', ''),
+    'unit-static'            => array('../tests/static/framework/tests/unit', ''),
+    'unit-integration'       => array('../tests/integration/framework/tests/unit', ''),
+    'integration'            => array('../tests/integration', ''),
+    'integration-integrity'  => array('../tests/integration', ' testsuite/integrity'),
+    'static-default'         => array('../tests/static', ''),
+    'static-legacy'          => array('../tests/static', ' testsuite/Legacy'),
+    'static-integration-php' => array('../tests/static', ' testsuite/Php/Exemplar'),
+    'static-integration-js'  => array('../tests/static', ' testsuite/Js/Exemplar'),
 );
 $types = array(
     'all'             => array_keys($commands),
@@ -41,7 +42,7 @@ $types = array(
     'integration'     => array('integration'),
     'integration-all' => array('integration', 'integration-integrity'),
     'static'          => array('static-default'),
-    'static-all'      => array('static-default', 'static-legacy', 'static-integration'),
+    'static-all'      => array('static-default', 'static-legacy', 'static-integration-php', 'static-integration-js'),
     'integrity'       => array('static-default', 'static-legacy', 'integration-integrity'),
     'legacy'          => array('static-legacy'),
     'default'         => array(

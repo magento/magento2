@@ -57,14 +57,8 @@ class Mage_Backend_Block_Widget_Grid_ColumnTest extends PHPUnit_Framework_TestCa
             'urlBuilder' => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false)
         );
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_block = $objectManagerHelper->getBlock('Mage_Backend_Block_Widget_Grid_Column', $arguments);
-    }
-
-    protected function tearDown()
-    {
-        unset($this->_layoutMock);
-        unset($this->_blockMock);
-        unset($this->_block);
+        $this->_block = $objectManagerHelper->getObject('Mage_Backend_Block_Widget_Grid_Column', $arguments);
+        $this->_block->setId('id');
     }
 
     public function testGetFilterWhenFilterSetFalse()
@@ -128,7 +122,6 @@ class Mage_Backend_Block_Widget_Grid_ColumnTest extends PHPUnit_Framework_TestCa
 
     /**
      * @covers Mage_Backend_Block_Widget_Grid_Column::getFilter
-     * @covers Mage_Backend_Block_Widget_Grid_Column::_getFilterType
      */
     public function testGetFilterWithInvalidFilterTypeWhenUseDefaultFilter()
     {
@@ -144,7 +137,6 @@ class Mage_Backend_Block_Widget_Grid_ColumnTest extends PHPUnit_Framework_TestCa
 
     /**
      * @covers Mage_Backend_Block_Widget_Grid_Column::getFilter
-     * @covers Mage_Backend_Block_Widget_Grid_Column::_getFilterType
      */
     public function testGetFilterWhenUseCustomFilter()
     {
@@ -214,7 +206,6 @@ class Mage_Backend_Block_Widget_Grid_ColumnTest extends PHPUnit_Framework_TestCa
 
     /**
      * @covers Mage_Backend_Block_Widget_Grid_Column::getRenderer
-     * @covers Mage_Backend_Block_Widget_Grid_Column::_getRendererType
      */
     public function testGetRendererWheRendererSetFalse()
     {
@@ -234,7 +225,6 @@ class Mage_Backend_Block_Widget_Grid_ColumnTest extends PHPUnit_Framework_TestCa
 
     /**
      * @covers Mage_Backend_Block_Widget_Grid_Column::getRenderer
-     * @covers Mage_Backend_Block_Widget_Grid_Column::_getRendererType
      * @covers Mage_Backend_Block_Widget_Grid_Column::setRendererType
      */
     public function testGetRendererWhenUseCustomRenderer()
@@ -278,47 +268,47 @@ class Mage_Backend_Block_Widget_Grid_ColumnTest extends PHPUnit_Framework_TestCa
 
     public function testGetHeaderHtmlPropertyWhenHeaderCssClassEmpty()
     {
-        $this->assertEmpty($this->_block->getHeaderHtmlProperty());
+        $this->assertEquals(' class=" col-id"', $this->_block->getHeaderHtmlProperty());
     }
 
     public function testGetHeaderHtmlPropertyWhenHeaderCssClassIsSet()
     {
         $this->_block->setData('header_css_class', 'test');
-        $this->assertEquals(' class="test"', $this->_block->getHeaderHtmlProperty());
+        $this->assertEquals(' class="test col-id"', $this->_block->getHeaderHtmlProperty());
     }
 
     public function testAddHeaderCssClassWhenHeaderCssClassEmpty()
     {
         $this->_block->addHeaderCssClass('test');
-        $this->assertEquals(' class="test"', $this->_block->getHeaderHtmlProperty());
+        $this->assertEquals(' class="test col-id"', $this->_block->getHeaderHtmlProperty());
     }
 
     public function testAddHeaderCssClassWhenHeaderCssClassIsSet()
     {
         $this->_block->setData('header_css_class', 'test1');
         $this->_block->addHeaderCssClass('test2');
-        $this->assertEquals(' class="test1 test2"', $this->_block->getHeaderHtmlProperty());
+        $this->assertEquals(' class="test1 test2 col-id"', $this->_block->getHeaderHtmlProperty());
     }
 
     public function testGetHeaderCssClassWhenNotSortable()
     {
         $this->_block->setData('header_css_class', 'test');
         $this->_block->setSortable(false);
-        $this->assertEquals('test no-link', $this->_block->getHeaderCssClass());
+        $this->assertEquals('test no-link col-id', $this->_block->getHeaderCssClass());
     }
 
     public function testGetHeaderCssClassWhenIsSortable()
     {
         $this->_block->setData('header_css_class', 'test');
         $this->_block->setSortable(true);
-        $this->assertEquals('test', $this->_block->getHeaderCssClass());
+        $this->assertEquals('test col-id', $this->_block->getHeaderCssClass());
     }
 
     public function testGetCssClassWithAlignAndEditableAndWithoutColumnCssClass()
     {
         $this->_block->setAlign('left');
         $this->_block->setEditable(true);
-        $this->assertEquals('a-left editable', $this->_block->getCssClass());
+        $this->assertEquals('a-left editable col-id', $this->_block->getCssClass());
     }
 
     public function testGetCssClassWithAlignAndEditableAndWithColumnCssClass()
@@ -327,12 +317,12 @@ class Mage_Backend_Block_Widget_Grid_ColumnTest extends PHPUnit_Framework_TestCa
         $this->_block->setEditable(true);
         $this->_block->setData('column_css_class', 'test');
 
-        $this->assertEquals('a-left test editable', $this->_block->getCssClass());
+        $this->assertEquals('a-left test editable col-id', $this->_block->getCssClass());
     }
 
     public function testGetCssClassWithoutAlignEditableAndColumnCssClass()
     {
-        $this->assertEmpty($this->_block->getCssClass());
+        $this->assertEquals(' col-id', $this->_block->getCssClass());
     }
 
     public function testSetGetGrid()
@@ -366,7 +356,7 @@ class Mage_Backend_Block_Widget_Grid_ColumnTest extends PHPUnit_Framework_TestCa
         );
 
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        $block = $objectManagerHelper->getBlock('Mage_Backend_Block_Widget_Grid_Column', $arguments);
+        $block = $objectManagerHelper->getObject('Mage_Backend_Block_Widget_Grid_Column', $arguments);
         $this->assertEquals($expected, $block->isGrouped());
     }
 

@@ -71,7 +71,7 @@ class Varien_Data_Form_Abstract extends Varien_Object
     }
 
     /**
-     * Enter description here...
+     * Add element type
      *
      * @param string $type
      * @param string $className
@@ -84,7 +84,7 @@ class Varien_Data_Form_Abstract extends Varien_Object
     }
 
     /**
-     * Enter description here...
+     * Get elements collection
      *
      * @return Varien_Data_Form_Element_Collection
      */
@@ -150,9 +150,8 @@ class Varien_Data_Form_Abstract extends Varien_Object
     {
         if (isset($this->_types[$type])) {
             $className = $this->_types[$type];
-        }
-        else {
-            $className = 'Varien_Data_Form_Element_'.ucfirst(strtolower($type));
+        } else {
+            $className = 'Varien_Data_Form_Element_' . ucfirst(strtolower($type));
         }
         $element = new $className($config);
         $element->setId($elementId);
@@ -173,24 +172,25 @@ class Varien_Data_Form_Abstract extends Varien_Object
     }
 
     /**
-     * Enter description here...
+     * Add fieldset
      *
      * @param string $elementId
      * @param array $config
      * @param bool|string|null $after
-     *
+     * @param bool $isAdvanced
      * @return Varien_Data_Form_Element_Fieldset
      */
-    public function addFieldset($elementId, $config, $after = false)
+    public function addFieldset($elementId, $config, $after = false, $isAdvanced = false)
     {
         $element = new Varien_Data_Form_Element_Fieldset($config);
         $element->setId($elementId);
+        $element->setAdvanced($isAdvanced);
         $this->addElement($element, $after);
         return $element;
     }
 
     /**
-     * Enter description here...
+     * Add column element
      *
      * @param string $elementId
      * @param array $config
@@ -206,7 +206,7 @@ class Varien_Data_Form_Abstract extends Varien_Object
     }
 
     /**
-     * Enter description here...
+     * Convert elements to array
      *
      * @param array $arrAttributes
      * @return array

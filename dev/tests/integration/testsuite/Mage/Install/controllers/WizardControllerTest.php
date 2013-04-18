@@ -30,76 +30,86 @@ class Mage_Install_WizardControllerTest extends Magento_Test_TestCase_Controller
     /**
      * @var string
      */
-    protected static $_tmpMediaDir;
+    protected static $_tmpDir;
 
     /**
-     * @var string
+     * @var array
      */
-    protected static $_tmpThemeDir;
+    protected static $_params = array();
 
     public static function setUpBeforeClass()
     {
-        parent::setUpBeforeClass();
-        self::$_tmpMediaDir = realpath(Magento_Test_Bootstrap::getInstance()->getTmpDir())
-            . DIRECTORY_SEPARATOR . 'media';
-        self::$_tmpThemeDir = self::$_tmpMediaDir . DIRECTORY_SEPARATOR . 'theme';
+        $tmpDir = Magento_Test_Helper_Bootstrap::getInstance()->getAppInstallDir() . DIRECTORY_SEPARATOR . __CLASS__;
+        if (is_file($tmpDir)) {
+            unlink($tmpDir);
+        } elseif (is_dir($tmpDir)) {
+            Varien_Io_File::rmdirRecursive($tmpDir);
+        }
+        // deliberately create a file instead of directory to emulate broken access to static directory
+        touch($tmpDir);
+        self::$_tmpDir = $tmpDir;
+
+        // emulate invalid installation date, so that application will think it is not installed
+        self::$_params = array(Mage::PARAM_CUSTOM_LOCAL_CONFIG
+            => sprintf(Mage_Core_Model_Config_Primary::CONFIG_TEMPLATE_INSTALL_DATE, 'invalid')
+        );
     }
 
-    public function setUp()
-    {
-        parent::setUp();
-        // emulate non-installed application
-        $this->_runOptions[Mage_Core_Model_Config::OPTION_LOCAL_CONFIG_EXTRA_DATA]
-            = sprintf(Mage_Core_Model_Config::CONFIG_TEMPLATE_INSTALL_DATE, 'invalid');
-    }
-
-    public function tearDown()
-    {
-        Varien_Io_File::rmdirRecursive(self::$_tmpMediaDir);
-        parent::tearDown();
-    }
-
-    /**
-     * @magentoAppIsolation enabled
-     */
     public function testPreDispatch()
     {
-        $this->dispatch('install/index');
+        Magento_Test_Helper_Bootstrap::getInstance()->reinitialize(self::$_params);
+        Mage::getObjectManager()->configure(array(
+            'preferences' => array(
+                'Mage_Core_Controller_Request_Http' => 'Magento_Test_Request',
+                'Mage_Core_Controller_Response_Http' => 'Magento_Test_Response'
+            )
+        ));
+        $this->dispatch('install/wizard');
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
     }
 
-    public function testPreDispatchNonWritableMedia()
+    /**
+     * @param string $action
+     * @dataProvider actionsDataProvider
+     * @expectedException Magento_BootstrapException
+     */
+    public function testPreDispatchImpossibleToRenderPage($action)
     {
-        mkdir(self::$_tmpMediaDir, 0444);
-        $this->_runOptions['media_dir'] = self::$_tmpMediaDir;
-
-        $this->_testInstallProhibitedWhenNonWritable(self::$_tmpMediaDir);
-    }
-
-    public function testPreDispatchNonWritableTheme()
-    {
-        mkdir(self::$_tmpMediaDir, 0777);
-        $this->_runOptions['media_dir'] = self::$_tmpMediaDir;
-
-        mkdir(self::$_tmpThemeDir, 0444);
-        $this->_testInstallProhibitedWhenNonWritable(self::$_tmpThemeDir);
+        $params = self::$_params;
+        $params[Mage::PARAM_APP_DIRS][Mage_Core_Model_Dir::STATIC_VIEW] = self::$_tmpDir;
+        Magento_Test_Helper_Bootstrap::getInstance()->reinitialize($params);
+        Mage::getObjectManager()->configure(array(
+            'preferences' => array(
+                'Mage_Core_Controller_Request_Http' => 'Magento_Test_Request',
+                'Mage_Core_Controller_Response_Http' => 'Magento_Test_Response'
+            )
+        ));
+        $this->dispatch("install/wizard/{$action}");
     }
 
     /**
-     * Tests that when $nonWritableDir folder is read-only, the installation controller prohibits continuing
-     * installation and points to fix issue with theme directory.
-     *
-     * @param string $nonWritableDir
+     * @return array
      */
-    protected function _testInstallProhibitedWhenNonWritable($nonWritableDir)
+    public function actionsDataProvider()
     {
-        if (is_writable($nonWritableDir)) {
-            $this->markTestSkipped("Current OS doesn't support setting write-access for folders via mode flags");
-        }
-
-        $this->dispatch('install/index');
-
-        $this->assertEquals(503, $this->getResponse()->getHttpResponseCode());
-        $this->assertContains(self::$_tmpThemeDir, $this->getResponse()->getBody());
+        return array(
+            array('index'),
+            array('begin'),
+            array('beginPost'),
+            array('locale'),
+            array('localeChange'),
+            array('localePost'),
+            array('download'),
+            array('downloadPost'),
+            array('downloadAuto'),
+            array('install'),
+            array('downloadManual'),
+            array('config'),
+            array('configPost'),
+            array('installDb'),
+            array('administrator'),
+            array('administratorPost'),
+            array('end'),
+        );
     }
 }

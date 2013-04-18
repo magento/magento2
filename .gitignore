@@ -13,7 +13,8 @@ atlassian*
 /app/config_sandbox
 /app/etc/local.xml
 /app/etc/local.xml.*
-/app/etc/modules/XEnterprise_Enabler.xml
+/app/etc/modules/XEnterprise_Edition.xml
+/app/etc/modules/XSaas_Edition.xml
 /downloader/.cache
 /downloader/cache.cfg
 /downloader/connect.cfg
@@ -28,5 +29,7 @@ atlassian*
 /pub/media/*
 /pub/media/customer/*
 /pub/media/downloadable/*
+/pub/static/*
+!/pub/static/.htaccess
 /var/*
-
+*swp

@@ -26,10 +26,10 @@
  */
 
 require_once (realpath(dirname(__FILE__) . '/../../../../../../../../../../')
-    . '/app/code/core/Mage/Backend/Controller/System/ConfigAbstract.php');
+    . '/app/code/Mage/Backend/Controller/System/ConfigAbstract.php');
 
 require_once (realpath(dirname(__FILE__) . '/../../../../../../../../../../')
-    . '/app/code/core/Mage/Backend/controllers/Adminhtml/System/Config/SaveController.php');
+    . '/app/code/Mage/Backend/controllers/Adminhtml/System/Config/SaveController.php');
 
 class Mage_Backend_Adminhtml_System_Config_SaveControllerTest extends PHPUnit_Framework_TestCase
 {
@@ -87,7 +87,7 @@ class Mage_Backend_Adminhtml_System_Config_SaveControllerTest extends PHPUnit_Fr
     {
         $this->_requestMock = $this->getMock('Mage_Core_Controller_Request_Http', array(), array(), '', false, false);
         $responseMock = $this->getMock('Mage_Core_Controller_Response_Http', array(), array(), '', false, false);
-        $objectManagerMock = $this->getMock('Magento_ObjectManager_Zend', array(), array(), '', false, false);
+        $objectManagerMock = $this->getMock('Magento_ObjectManager');
         $frontControllerMock = $this->getMock('Mage_Core_Controller_Varien_Front', array(), array(), '', false, false);
         $authorizationMock = $this->getMock('Mage_Core_Model_Authorization', array(), array(), '', false, false);
         $this->_configMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false, false);
@@ -123,23 +123,27 @@ class Mage_Backend_Adminhtml_System_Config_SaveControllerTest extends PHPUnit_Fr
         $helperMock->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
         $responseMock->expects($this->once())->method('setRedirect')->with('*/system_config/edit');
 
-        $this->_controller = new Mage_Backend_Adminhtml_System_Config_SaveController($this->_requestMock,
-            $responseMock,
-            null,
-            $objectManagerMock,
-            $frontControllerMock,
-            $authorizationMock,
-            $configStructureMock,
-            $this->_configMock,
-            $this->_configFactoryMock,
-            $this->_eventManagerMock,
-            $this->_appMock,
-            $this->_authMock,
-            $this->_layoutMock,
+        $this->_controller = $this->getMock(
+            'Mage_Backend_Adminhtml_System_Config_SaveController',
+            array('deniedAction'),
             array(
-                'helper' => $helperMock,
-                'session' => $this->_sessionMock,
-            )
+                $this->_requestMock,
+                $responseMock,
+                $objectManagerMock,
+                $frontControllerMock,
+                $authorizationMock,
+                $configStructureMock,
+                $this->_configMock,
+                $this->_configFactoryMock,
+                $this->_eventManagerMock,
+                $this->_appMock,
+                $this->_authMock,
+                $this->_layoutMock,
+                null,
+                array(
+                    'helper' => $helperMock,
+                    'session' => $this->_sessionMock,
+                ))
         );
     }
 

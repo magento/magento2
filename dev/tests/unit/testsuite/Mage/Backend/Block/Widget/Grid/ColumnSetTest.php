@@ -102,7 +102,7 @@ class Mage_Backend_Block_Widget_Grid_ColumnSetTest extends PHPUnit_Framework_Tes
         );
 
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_block = $objectManagerHelper->getBlock('Mage_Backend_Block_Widget_Grid_ColumnSet', $arguments);
+        $this->_block = $objectManagerHelper->getObject('Mage_Backend_Block_Widget_Grid_ColumnSet', $arguments);
         $this->_block->setNameInLayout('grid.columnSet');
 
     }
@@ -184,7 +184,7 @@ class Mage_Backend_Block_Widget_Grid_ColumnSetTest extends PHPUnit_Framework_Tes
 
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         /** @var $model Mage_Backend_Block_Widget_Grid_ColumnSet */
-        $model = $objectManagerHelper->getBlock('Mage_Backend_Block_Widget_Grid_ColumnSet', $arguments);
+        $model = $objectManagerHelper->getObject('Mage_Backend_Block_Widget_Grid_ColumnSet', $arguments);
 
         $url = $model->getRowUrl($itemMock);
         $this->assertEquals('http://localhost/mng/item/edit', $url);

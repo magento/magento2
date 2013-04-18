@@ -44,15 +44,15 @@ class Mage_Core_Model_Url_RewriteFactoryTest extends PHPUnit_Framework_TestCase
         'key' => 'value'
     );
 
-    public function testCreateFromArray()
+    public function testCreate()
     {
         $objectManagerMock = $this->getMock('Magento_ObjectManager', array(), array(), '', false);
         $objectManagerMock->expects($this->once())
             ->method('create')
-            ->with(self::EXPECTED_CLASS_NAME, $this->_arguments, false)
+            ->with(self::EXPECTED_CLASS_NAME, $this->_arguments)
             ->will($this->returnValue(self::CREATE_RESULT));
 
         $factory = new Mage_Core_Model_Url_RewriteFactory($objectManagerMock);
-        $this->assertEquals(self::CREATE_RESULT, $factory->createFromArray($this->_arguments));
+        $this->assertEquals(self::CREATE_RESULT, $factory->create($this->_arguments));
     }
 }

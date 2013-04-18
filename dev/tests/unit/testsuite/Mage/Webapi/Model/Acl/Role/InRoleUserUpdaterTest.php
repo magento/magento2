@@ -1,6 +1,6 @@
 <?php
 /**
- * Test class for Mage_Webapi_Model_Acl_Role_InRoleUserUpdater
+ * Test class for Mage_Webapi_Model_Acl_Role_InRoleUserUpdater.
  *
  * Magento
  *
@@ -46,7 +46,7 @@ class Mage_Webapi_Model_Acl_Role_InRoleUserUpdaterTest extends PHPUnit_Framework
             ->with($roleId)->will($this->returnValue($expectedValues));
 
         /** @var Mage_Webapi_Model_Acl_Role_InRoleUserUpdater $model */
-        $model = $helper->getModel('Mage_Webapi_Model_Acl_Role_InRoleUserUpdater', array(
+        $model = $helper->getObject('Mage_Webapi_Model_Acl_Role_InRoleUserUpdater', array(
             'request' => $request,
             'userResource' => $userResource
         ));

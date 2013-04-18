@@ -46,7 +46,7 @@
     </div>
     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <?php echo $this->getChildHtml('form_before') ?>
-    <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post">
+    <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post" id="form-validate">
         <fieldset>
             <table id="shopping-cart-table" class="data-table cart-table">
                 <col width="1" />
@@ -165,3 +165,16 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    (function($) {
+        head.js(
+            "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
+            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
+            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
+            function() {
+                $('#form-validate').validation();
+            });
+    })(jQuery);
+</script>

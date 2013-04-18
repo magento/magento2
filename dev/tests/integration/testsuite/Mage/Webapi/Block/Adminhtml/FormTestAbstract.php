@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Mage_Webapi_Block_Adminhtml_FormTestAbstract extends PHPUnit_Framework_TestCase
+class Mage_Webapi_Block_Adminhtml_FormTestAbstract extends Mage_Backend_Area_TestCase
 {
     /**
      * Form class must be defined in children.
@@ -59,6 +59,7 @@ class Mage_Webapi_Block_Adminhtml_FormTestAbstract extends PHPUnit_Framework_Tes
 
     protected function setUp()
     {
+        parent::setUp();
         $this->_objectManager = Mage::getObjectManager();
         $this->_urlBuilder = $this->getMockBuilder('Mage_Backend_Model_Url')
             ->disableOriginalConstructor()
@@ -66,7 +67,7 @@ class Mage_Webapi_Block_Adminhtml_FormTestAbstract extends PHPUnit_Framework_Tes
         $this->_layout = $this->_objectManager->get('Mage_Core_Model_Layout');
         $this->_blockFactory = $this->_objectManager->get('Mage_Core_Model_BlockFactory');
         $this->_block = $this->_blockFactory->createBlock($this->_formClass, array(
-            'urlBuilder' => $this->_urlBuilder
+            'context' => Mage::getModel('Mage_Core_Block_Template_Context', array('urlBuilder' => $this->_urlBuilder))
         ));
         $this->_layout->addBlock($this->_block);
     }
@@ -78,11 +79,11 @@ class Mage_Webapi_Block_Adminhtml_FormTestAbstract extends PHPUnit_Framework_Tes
     }
 
     /**
-     * Test _prepareForm method
+     * Test _prepareForm method.
      */
     public function testPrepareForm()
     {
-        // TODO Move to unit tests after MAGETWO-4015 complete
+        // TODO: Move to unit tests after MAGETWO-4015 complete.
         $this->assertEmpty($this->_block->getForm());
 
         $this->_urlBuilder->expects($this->once())

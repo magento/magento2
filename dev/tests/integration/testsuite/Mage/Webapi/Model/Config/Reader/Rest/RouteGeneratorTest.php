@@ -1,6 +1,6 @@
 <?php
 /**
- * File with unit tests for REST routes generator class: Mage_Webapi_Model_Config_Reader_Rest_RouteGenerator
+ * File with unit tests for REST routes generator class: Mage_Webapi_Model_Config_Reader_Rest_RouteGenerator.
  *
  * Magento
  *
@@ -43,7 +43,11 @@ class Mage_Webapi_Model_Config_Reader_Rest_RouteGeneratorTest extends PHPUnit_Fr
 
     protected function setUp()
     {
-        $helper = $this->getMock('Mage_Webapi_Helper_Config', array('__'));
+        $helper = $this->getMock(
+            'Mage_Webapi_Helper_Config',
+            array('__'),
+            array(Mage::getObjectManager()->get('Mage_Core_Helper_Context'))
+        );
         $this->_model = new Mage_Webapi_Model_Config_Reader_Rest_RouteGenerator($helper);
     }
 
@@ -204,7 +208,7 @@ class Mage_Webapi_Model_Config_Reader_Rest_RouteGeneratorTest extends PHPUnit_Fr
     }
 
     /**
-     * Check if list of REST routes are equal.
+     * Check if list of REST routes is equal.
      *
      * @param array $expectedRoutes
      * @param array $actualRoutes

@@ -38,7 +38,7 @@ class Mage_Core_Controller_Varien_Action_FactoryTest extends PHPUnit_Framework_T
     /**
      * ObjectManager mock for tests
      *
-     * @var Magento_ObjectManager_Zend
+     * @var Magento_ObjectManager
      */
     protected $_objectManager;
 
@@ -51,7 +51,7 @@ class Mage_Core_Controller_Varien_Action_FactoryTest extends PHPUnit_Framework_T
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento_ObjectManager_Zend', array('create'), array(), '', false);
+        $this->_objectManager = $this->getMock('Magento_ObjectManager');
     }
 
     public function testConstruct()

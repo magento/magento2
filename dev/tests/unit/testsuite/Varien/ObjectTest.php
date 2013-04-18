@@ -28,7 +28,7 @@
 /**
  * Varien_Object test case.
  */
-class Varien_ObjectTest extends PHPUnit_Framework_TestCase
+class Varien_ObjectTest extends Magento_Framework_TestCase
 {
     /**
      * @var Varien_Object
@@ -296,25 +296,25 @@ string',
 <key2><![CDATA[value2]]></key2>
 </item>
 ';
-        $this->assertEquals($xml, $this->_object->toXml());
+        $this->assertXmlStringEqualsXmlString($xml, $this->_object->toXml());
 
         $xml = '<item>
 <key2><![CDATA[value2]]></key2>
 </item>
 ';
-        $this->assertEquals($xml, $this->_object->toXml(array('key2')));
+        $this->assertXmlStringEqualsXmlString($xml, $this->_object->toXml(array('key2')));
 
         $xml = '<my_item>
 <key1><![CDATA[value1]]></key1>
 <key2><![CDATA[value2]]></key2>
 </my_item>
 ';
-        $this->assertEquals($xml, $this->_object->toXml(array(), 'my_item'));
+        $this->assertXmlStringEqualsXmlString($xml, $this->_object->toXml(array(), 'my_item'));
 
         $xml = '<key1><![CDATA[value1]]></key1>
 <key2><![CDATA[value2]]></key2>
 ';
-        $this->assertEquals($xml, $this->_object->toXml(array(), false));
+        $this->assertEqualNormalizingNewlines($xml, $this->_object->toXml(array(), false));
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
 <item>
@@ -322,7 +322,7 @@ string',
 <key2><![CDATA[value2]]></key2>
 </item>
 ';
-        $this->assertEquals($xml, $this->_object->toXml(array(), 'item', true));
+        $this->assertXmlStringEqualsXmlString($xml, $this->_object->toXml(array(), 'item', true));
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
 <item>
@@ -330,7 +330,7 @@ string',
 <key2>value2</key2>
 </item>
 ';
-        $this->assertEquals($xml, $this->_object->__toXml(array(), 'item', true, false));
+        $this->assertXmlStringEqualsXmlString($xml, $this->_object->__toXml(array(), 'item', true, false));
     }
 
     /**

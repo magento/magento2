@@ -34,11 +34,6 @@ class Mage_Tax_Model_ConfigTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getModel('Mage_Tax_Model_Config');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testSetPriceIncludesTax()
     {
         $this->assertFalse($this->_model->priceIncludesTax());

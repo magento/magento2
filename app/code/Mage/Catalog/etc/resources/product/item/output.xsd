@@ -1,0 +1,289 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:mage="http://www.magento.com">
+    <xs:complexType name="product">
+        <xs:sequence>
+            <xs:element name="entityId" type="xs:integer" />
+            <xs:element name="sku">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="64"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="shortDescription" type="xs:string"/>
+            <xs:element name="price" type="mage:price"/>
+            <xs:element name="specialPrice" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="specialPrice" type="mage:price"/>
+                        <xs:element name="specialFromDate" type="xs:dateTime" minOccurs="0"/>
+                        <xs:element name="specialToDate" type="xs:dateTime" minOccurs="0"/>
+                        <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="productType" type="xs:string"/>
+            <xs:element name="isSaleable" type="xs:boolean"/>
+            <xs:element name="isGrouped" type="xs:boolean"/>
+            <xs:element name="options" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="optionList" type="mage:option"/>
+                        <xs:element name="jsonConfig" type="xs:string" />
+                        <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="storeId" type="xs:integer" />
+            <xs:element name="defaultQuantity" type="xs:integer" />
+            <xs:element name="attributesData" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="label" type="xs:string"/>
+                        <xs:element name="value" type="xs:string" />
+                        <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="cost" type="mage:price" minOccurs="0"/>
+            <xs:element name="weight" type="xs:decimal"/>
+            <xs:element name="manufacturer" type="xs:integer" minOccurs="0"/>
+            <xs:element name="metaTitle" type="xs:string" minOccurs="0"/>
+            <xs:element name="metaKeyword" type="xs:string" minOccurs="0"/>
+            <xs:element name="metaDescription" minOccurs="0">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="255"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="images" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="image" type="xs:anyURI" minOccurs="0"/>
+                        <xs:element name="smallImage" type="xs:anyURI" minOccurs="0"/>
+                        <xs:element name="thumbnail" type="xs:anyURI" minOccurs="0"/>
+                        <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="websiteIds">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:string" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="mediaGallery" type="mage:media_gallery" minOccurs="0"/>
+            <xs:element name="oldId" type="xs:integer" minOccurs="0"/>
+            <xs:element name="groupPrice" type="mage:price" minOccurs="0"/>
+            <xs:element name="tierPrice" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="tierPrice" type="mage:tier_price" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="color" type="xs:integer" minOccurs="0"/>
+            <xs:element name="newsFromDate" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="newsToDate" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="gallery" type="xs:string" minOccurs="0"/>
+            <xs:element name="status" type="xs:integer"/>
+            <xs:element name="urlKey" type="xs:string" minOccurs="0"/>
+            <xs:element name="urlPath" type="xs:string" minOccurs="0"/>
+            <xs:element name="minimalPrice" type="mage:price" minOccurs="0"/>
+            <xs:element name="isRecurring" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="recurringProfile" type="xs:string" minOccurs="0"/>
+            <xs:element name="visibility" type="xs:integer"/>
+            <xs:element name="customDesign" type="xs:string" minOccurs="0"/>
+            <xs:element name="customDesignFrom" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="customDesignTo" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="customLayoutUpdate" type="xs:string" minOccurs="0"/>
+            <xs:element name="pageLayout" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="categoryIds" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="optionsContainer" type="xs:string" minOccurs="0"/>
+            <xs:element name="requiredOptions" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="hasOptions" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="createdAt" type="xs:dateTime"/>
+            <xs:element name="updatedAt" type="xs:dateTime"/>
+            <xs:element name="countryOfManufacture" type="xs:string" minOccurs="0"/>
+            <xs:element name="msrpEnabled" type="xs:integer" minOccurs="0"/>
+            <xs:element name="msrpDisplayActualPriceType" type="xs:integer" minOccurs="0"/>
+            <xs:element name="msrp" type="mage:price" minOccurs="0"/>
+            <xs:element name="isInStock" type="xs:boolean"/>
+            <xs:element name="qty" type="xs:decimal"/>
+            <xs:element name="bundle" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="priceType" type="xs:integer"/>
+                        <xs:element name="skuType" type="xs:integer"/>
+                        <xs:element name="weightType" type="xs:integer"/>
+                        <xs:element name="priceView" type="xs:integer"/>
+                        <xs:element name="shipmentType" type="xs:integer"/>
+                        <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="downloadable" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="linksPurchasedSeparately" type="xs:boolean"/>
+                        <xs:element name="samplesTitle" type="xs:string"/>
+                        <xs:element name="linksTitle" type="xs:string"/>
+                        <xs:element name="linksExist" type="xs:boolean" minOccurs="0"/>
+                        <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="giftMessageAvailable" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="taxClassId" type="xs:string"/>
+            <xs:element name="enableGooglecheckout" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="giftcard" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="giftcardAmounts">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="amount" type="mage:price" maxOccurs="unbounded"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="allowOpenAmount" type="xs:boolean"/>
+                        <xs:element name="openAmountMin" type="mage:price" minOccurs="0"/>
+                        <xs:element name="openAmountMax" type="mage:price" minOccurs="0"/>
+                        <xs:element name="giftcardType" type="xs:integer"/>
+                        <xs:element name="isRedeemable" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="useConfigIsRedeemable" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="lifetime" type="xs:integer" minOccurs="0"/>
+                        <xs:element name="useConfigLifetime" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="emailTemplate" type="xs:string" minOccurs="0"/>
+                        <xs:element name="useConfigEmailTemplate" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="allowMessage" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="useConfigAllowMessage" type="xs:boolean" minOccurs="0"/>
+                        <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="isReturnable" type="xs:integer" minOccurs="0"/>
+            <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="media_gallery">
+        <xs:sequence>
+            <xs:element name="images">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="image" type="mage:gallery_image" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="gallery_image">
+        <xs:sequence>
+            <xs:element name="valueId" type="xs:integer"/>
+            <xs:element name="file" type="xs:string"/>
+            <xs:element name="label" type="xs:string"/>
+            <xs:element name="position" type="xs:integer"/>
+            <xs:element name="isDisabled" type="xs:boolean"/>
+            <xs:element name="labelDefault" type="xs:string"/>
+            <xs:element name="positionDefault" type="xs:integer"/>
+            <xs:element name="isDisabledDefault" type="xs:boolean"/>
+            <xs:element name="url" type="xs:anyURI"/>
+            <xs:element name="id" type="xs:integer"/>
+            <xs:element name="path" type="xs:string"/>
+            <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="price">
+        <xs:sequence>
+            <xs:element name="amount" type="xs:decimal"/>
+            <xs:element name="currencyCode" type="xs:string"/>
+            <xs:element name="formattedPrice" type="xs:string"/>
+            <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="tier_price">
+        <xs:sequence>
+            <xs:element name="priceId" type="xs:integer"/>
+            <xs:element name="websiteId" type="xs:integer"/>
+            <xs:element name="allGroups" type="xs:integer"/>
+            <xs:element name="customerGroup" type="xs:integer"/>
+            <xs:element name="price" type="mage:price"/>
+            <xs:element name="priceQty" type="xs:decimal"/>
+            <xs:element name="websitePrice" type="mage:price"/>
+            <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="option">
+        <xs:sequence>
+            <xs:element name="id" type="xs:integer" />
+            <xs:element name="type" type="xs:string" />
+            <xs:element name="isRequired" type="xs:boolean" />
+            <xs:element name="title" type="xs:string" />
+            <xs:element name="formattedPrice" type="xs:string" />
+            <xs:element name="decoratedIsLast" type="xs:string" />
+            <xs:any processContents="lax" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="related_products">
+        <xs:sequence>
+            <xs:element name="items">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="item" type="mage:related_product" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="products">
+        <xs:sequence>
+            <xs:element name="items">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="item" type="mage:product" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="related_product">
+        <xs:sequence>
+            <xs:element name="thumbnailUrl" type="xs:integer" />
+            <xs:element name="thumbnailSize" type="xs:string" />
+            <xs:element name="composite" type="xs:boolean" />
+            <xs:element name="saleable" type="xs:boolean" />
+            <xs:element name="hasRequiredOptions" type="xs:boolean" />
+            <xs:element name="productUrl" type="xs:string" />
+            <xs:element name="name" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

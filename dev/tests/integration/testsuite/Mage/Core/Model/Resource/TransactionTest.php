@@ -37,11 +37,6 @@ class Mage_Core_Model_Resource_TransactionTest extends PHPUnit_Framework_TestCas
         $this->_model = Mage::getResourceModel('Mage_Core_Model_Resource_Transaction');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testSaveDelete()
     {
         $first  = Mage::getModel('Mage_Core_Model_Store_Group');
@@ -71,7 +66,7 @@ class Mage_Core_Model_Resource_TransactionTest extends PHPUnit_Framework_TestCas
         $this->assertNotEmpty($first->getId());
         $this->assertNotEmpty($second->getId());
 
-        Mage::app()->getStore()->setId(Mage_Core_Model_App::ADMIN_STORE_ID);
+        Mage::app()->getStore()->setId(Mage_Core_Model_AppInterface::ADMIN_STORE_ID);
         $this->_model->delete();
 
         $test  = Mage::getModel('Mage_Core_Model_Store_Group');

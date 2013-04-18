@@ -37,11 +37,6 @@ class Mage_Shipping_Helper_DataTest extends PHPUnit_Framework_TestCase
         $this->_helper = Mage::helper('Mage_Shipping_Helper_Data');
     }
 
-    protected function tearDown()
-    {
-        $this->_helper = null;
-    }
-
     /**
      * @param string $modelName
      * @param string $getIdMethod

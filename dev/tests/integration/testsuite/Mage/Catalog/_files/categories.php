@@ -116,6 +116,9 @@ $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
     ->setSku('simple')
     ->setPrice(10)
     ->setWeight(18)
+    ->setStockData(array(
+        'use_config_manage_stock' => 0,
+    ))
     ->setCategoryIds(array(2,3,4))
     ->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)
     ->setStatus(Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
@@ -131,6 +134,9 @@ $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
     ->setSku('12345') // SKU intentionally contains digits only
     ->setPrice(45.67)
     ->setWeight(56)
+    ->setStockData(array(
+        'use_config_manage_stock' => 0,
+    ))
     ->setCategoryIds(array(5))
     ->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)
     ->setStatus(Mage_Catalog_Model_Product_Status::STATUS_ENABLED)

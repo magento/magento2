@@ -1,3 +1,277 @@
+2.0.0.0-dev44
+=============
+* Product creating & editing:
+  * Added ability to control base text styling without WYSIWYG when editing description fields
+  * Added validation for price and quantity fields
+  * Removed category suggest limit
+* Product template management: 
+  * Automatically update Product Template when modifying structure in Create Product flow
+  * Improvements to change attribute set functionality
+* Refactored JavaScript to use JQuery library:
+  * Refactored the following pages: catalog tags, one page checkout, multishipping checkout, gift options, gift messages (across the board)
+  * Converted jQuery popupwindow.js plugin to a jQuery widget
+  * Replaced Prototype code for Switch/Maestro and Solo credit card with jQuery widget
+  * Replaced Prototype Validation with jQuery validation plugin
+  * Converted credit card payment tool tip to jQuery in all themes
+  * Removed legacy JS files from all themes
+* Various improvements in look & feel of backend UI:
+  * Styling of components: catalog, sales, customers, reports, CMS, newsletter
+  * Generic styling: grids, popup windows
+  * Changes to support IE browser
+* Enhancements in "suggest" JavaScript widget:
+  * Ability to delete selected item using keyboard
+  * Ability to display all available search items, if "recent items" is empty
+  * Fixes of behavior of currently selected elements and "spinner"
+  * Display "No Records" message in suggest widget if all items already selected
+  * Fixed suggest widget to no longer show deleted items
+* Improved `Magento_Test_Helper_ObjectManager` in unit tests to discover types of constructor arguments
+* Removed workaround of unsetting objects referenced in `tearDown()` of integration tests
+* Updated Menu and Navigation layout, including redesigned backend menu item System -> My Account
+* Made store address format consistent with format of shipping origin address
+* Added ability to navigate directly to a section in backend system configuration, with corresponding accordion expanded
+* Removed some of unnecessary coupling between several modules
+* General improvements to unit and integration test code coverage, as well as compliance with coding standards
+* Application framework:
+  * Implemented ability to compress/decompress data in a cache backend
+  * Verified ability to disable in configuration triggering of system upgrade
+  * Abolished code pools and the mechanism of overriding files using include\_path (without alternative)
+  * Implemented segmentation of cache by types -- ability to assign separate cache configuration per type. Reviewed and verified possibility to isolate configuration cache segment
+  * Segregated application configuration into several layers. Primary configuration is used by the object manager and loaded before application is initialized
+  * Instead of `Zend\Di`, implemented `Magento\ObjectManager` library that has less features and suits Magento application needs better in terms of performance
+  * Introduced "context" object as dependencies for super-classes (`Mage_Core_Model_Abstract`, `Mage_Core_Block_Abstract`, etc) to reduce complexity of their constructors' API
+  * Implemented tools for pre-populating all auto-generated proxy and factory classes, used by dependency injection framework
+  * Replaced "developer" mode with general "mode", that has 3 states: developer, default, production
+  * In "production" mode, the application will not invoke fallback for static view files (images, CSS-files, JavaScript). Instead, it will assume that they are already placed in a fully qualified location. Added tools for populating static view files from `app` directory into `pub/static`
+  * Introduced support for Twig templating
+    * template rendering, including phtml, was abstracted into a `Mage_Core_Block_Template_Engine` to make support for other template engines easier
+    * included Magento-specific Twig functions and filters
+    * phtml templates can now only access public methods of the corresponding Block class
+    * ability to define dependencies on data provided by a service that is then made available to the templates -- eliminates some of the code in Blocks
+  * Introduced support for webhooks and callbacks: outbound HTTP requests for notifications and real-time integrations
+  * Added ability to define options for System Configuration select fields in XML: static options are defined inline, dynamic options can reuse data provided by a service  
+* Moved product business logic found in blocks into `Mage_Catalog_Service_Product` to consolidate logic into a single structure that both controllers and web services can invoke
+* Converted product view page to demonstrate use of Twig templates and services
+* Updated shipping carrier `collectRates` logic to support remote callbacks and converted the FedEx shipping carrier to comply with the same interface
+* Added webhook support for the following topics: `customer/created`, `customer/updated`, `customer/deleted`, and `order/created`
+* Visual design editor:
+  * Ability to view all CSS-files of a theme
+  * Ported numerous features of visual design editor from Magento Go 1.x to Magento Core 2.x: style editing, managing catalog images
+  * Various improvements in UI
+  * Improved image sizing functionality
+  * Improved test coverage
+  * Ability to launch physical themes, including workflow preview mode and workflow design mode
+  * Ability to duplicate existing themes for customization
+* GitHub requests
+  * [#162](https://github.com/magento/magento2/pull/162) -- classmap needs to be prepended to autoloader stack to have any effect
+  * [#179](https://github.com/magento/magento2/pull/179) -- fix that makes `Mage_Install` compatible with the new version of SimpleXml
+  * [#180](https://github.com/magento/magento2/pull/180) -- fixed `getBaseUrl()` when type was injected via setter
+  * [#203](https://github.com/magento/magento2/pull/203) -- fixed problem with login in to backend area on php 5.4
+  * [#216](https://github.com/magento/magento2/pull/216) -- explicit nullification of `$_store` in `Mage_Core_Model_Sore_Storage_Db->_initStores()`
+  * [#220](https://github.com/magento/magento2/pull/220) -- make topmenu HTML editable by an event
+  * [#221](https://github.com/magento/magento2/pull/221) -- changed minimum required PHP version from PHP 5.2.3 to 5.3.3
+* Bug fixes:
+  * Restored missing Paypal configuration options
+  * Fixed numerous display issues on the following pages: admin login, product management, category management, CMS poll, VDE, tax, shipping
+  * Fixed XSS vulnerability related to customer data & bundle options
+  * Fixed "Preview Theme" functionality
+  * Fixed JS File upload problem with Internet Explorer
+  * Replaced `truncateOptions` function in `varien/js.js` with inline widget
+  * Fixed broken XPaths in `SystemConfiguration.yml`
+  * Fixed jQuery metadata plugin's data attribute scanning for validation
+  * Synchronized default value of `quantity_and_stock_status` with Stock Availability control
+  * Fixed display of G.T. Purchased column in Order grid when order in non-default currency
+  * Fixed Foreign Key support for MS SQL
+  * Fixed "Create Customer" functionality on New Order screen
+  * Restored State/Province field to Review Order page
+  * Fixed Add New Tax Rate functionality
+  * Fixed problem with displaying New Shopping Cart Price Rule tab
+  * Fixed problem of configurable product options getting lost when adding product to wishlist
+  * Fixed UPS Shipping label printing
+  * Fixed performance issue with Catalog Management
+  * Fixed input file type validation when importing customers
+  * Fixed custom product placeholder image display
+  * Added missing files referenced by `quick\_style.css`
+  * Fixed validation error messaging and message placement
+  * Fixed access problem to SOAP/XML User and Roles pages
+  * Fixed access problem created when editing your own permissions
+  * Several fixes for problems with cleaning cache in tag scope
+  * Fixed invalid link problem in Gift Card email
+  * Fixed problem with deleting selected product category after changing attribute set
+  * Fixed theme management for Windows by adopting `Magento_Filesystem` abstraction to access directories
+  * Fixed cart rendering in case of empty cart
+  * Remove duplicate "Link to Store Front" link from admin, made obsolete by "Customer View" link
+  * Removed "Flat Rate" from pre-installed shipping methods
+
+2.0.0.0-dev43
+=============
+* Implemented functional limitation that restricts max number of catalog products in the system
+* Implemented cache backend library model for MongoDB
+* Converted some more grids in backend from PHP implementation to declarations in layout
+* Removed `app/etc/local.xml.additional` sample file, moved detailed description of possible configuration options to documentation
+* Refactored `Mage_Core_Model_EntryPointAbstract` to emphasize method `processRequest()` as abstract
+* Moved declaration of functional limitations to the nodes `limitations/store` and `limitations/admin_account`
+* Bug fixes:
+  * Fixed JavaScript and markup issues on product editing page in backend that caused erroneous sending of AJAX-queries and not rendering validation messages
+  * Fixed issues of application initialization in cases when `var` directory doesn't have writable permissions. Writable directories are validated at an early stage of initialization
+  * Fixed array sorting issues in test `Magento_Filesystem_Adapter_LocalTest::testGetNestedKeys()` that caused occasional failures
+
+2.0.0.0-dev42
+=============
+* Application initialization improvements:
+  * Removed application initialization responsibility from `Mage` class
+  * Introduces entry points, which are responsible for different types of requests processing: HTTP, media, cron, indexing, console installing, etc.
+  * New configuration classes are introduced and each of them is responsible for specific section of configuration
+  * Class rewrites functionality removed from `Mage_Core_Model_Config` model. DI configuration should be used for rewriting classes
+* Added ability to configure object manager with array in addition to object and scalar values
+* VDE improvements:
+  * Theme CSS files viewing and uploading/downloading of custom CSS file
+  * Updated styling of VDE Tools panel
+* Refactored various components to an analogous jQuery widget:
+  * Refactored components:
+    * Category navigation
+    * Products management and gallery
+    * Send to friend
+    * Sales components, including orders and returns
+    * Retrieve shipping rates and add/remove coupon in shopping cart
+    * Customer address and address book
+    * Customer wishlist
+    * "Contact Us" form
+    * CAPTCHA
+    * Weee
+  * New tabs widget is used instead of `Varien.Tabs`
+  * Refactored `Varien.dateRangeDate` and `Varien.FileElement`
+  * Replaced `$.mage.constants` with jQuery UI `$.ui.keyCode` for keyboard key codes
+* Refactored configurable attribute, category parent and attribute set selectors to use suggest widget
+* Bug fixes:
+  * Improvements and bug fixes in new backend theme
+  * Image, categories attributes and virtual/downloadable fields are displayed on Update Attributes page, where they shouldn't be present
+  * Undefined config property in `reloadOptionLabels()` function in `configurable.js` (Chrome)
+  * Impossible to edit existing customer/product tax class
+  * Incorrect format of customer's "Date of Birth"
+  * Theme preview images are absent in VDE
+  * Search by backslash doesn't work for Categories field on product creation page
+  * Impossible to assign a category to a product, if category name contains HTML tag
+  * Incorrect URL generated for logo image
+
+2.0.0.0-dev41
+=============
+* All-new look & feel of backend UI -- "Magento 2 backend" theme
+  * This theme includes "Magento User Interface Library" -- a set of reusable CSS-classes, icons and fonts
+* Theme editing features (in backend UI):
+  * Ability to view static resources, such as CSS and JavaScript files, which are inherited by virtual themes from physical themes and application, and library
+  * Ability to upload and edit custom CSS/JavaScript code assigned to a particular virtual theme
+  * Ability to manage image and font assets for virtual themes
+  * The uploaded or edited theme resources are used in page generation
+  * Ability to rename virtual themes
+  * Physical themes are read-only
+* Visual design editor:
+  * Ability to enter a "Design Mode" directly from the list of "My Customizations" in "Design Gallery"
+  * Updated styling of theme selector and VDE toolbars
+* Added functional limitations (managed through configuration files):
+  * Ability to limit maximum number of store views in the system
+  * Ability to limit maximum number of admin user records in the system
+* Introduced mechanism of early discovery of memory leaks in integration tests:
+  * Added ability to integration testing framework to detect usage of memory and estimate memory leaks using OS tools outside of PHP process
+  * Also ability to set memory usage threshold which would deliberately trigger error, if integration tests reach it
+* Refactoring in integration tests:
+  * Broke down `Magento_Test_Bootstrap` into smaller testable classes
+  * Minimized amount of logic in `bootstrap.php` of integration tests
+  * Factored out memory utility functions from memory integration tests into a separate helper
+  * Removed hard-coding of the default setting values from `Magento_Test_Bootstrap` in favor of requiring some crucial settings
+  * Fixed integration tests dependency on `app/etc/local.xml`, changes in which were involved into the sandbox hash calculation `dev/tests/integration/tmp/sandbox-<db_vendor>-<hash>`
+* Improvements in JavaScript widget "Suggest" (`pub/lib/mage/backend/suggest.js`):
+  * Added ability to set callback for "item selection"
+  * Added ability to provide a template in widget options
+  * Implemented "multiple suggestions" ability directly in this widget and removed the "multisuggest" widget
+* Converted several grids in backend from PHP implementation to declarations in layout
+* Other various improvements:
+  * Factored out logic of handling theme images from `Mage_Core_Model_Theme` into `Mage_Core_Model_Theme_Image`
+  * Ability to filter file extensions in uploader component
+  * Publication of resources linked in CSS-files will only log error instead of crashing page generation process
+* Bug fixes:
+  * Fixed several memory leaks in different places, related with dispatching controller actions multiple times in integration tests and with excessive reference to `Mage_Core_Model_App` object
+  * Fixed integration test in `Mage_Install` module that verifies encryption key length
+  * Fixed DHL shipping carrier declaration in config that caused inability to use it with shopping cart price rules
+  * Fixed issues in generating of configurable product variations when the button "Generate" is invoked second time
+  * Fixed an error that caused inability to create a theme in Windows environment in developer mode
+  * Fixed various errors in JavaScript tests for visual design editor
+  * Fixed broken "Edit" link on backend product management page
+
+2.0.0.0-dev40
+=============
+* Implemented ability to customize all the main directory paths for the application, i.e. locations of `var`, `etc`, `media` and other directories
+* Implemented ability to pass application configuration data from the environment
+* Magento Web API changes:
+  * Added SOAP V2 API coverage from Magento 1.x
+  * Improved integration testing framework to develop Web API tests. Covered SOAP V2 API with positive integration tests.
+  * Changed `Mage_Webapi` module front name from `api` to `webapi`
+* Improvements for product creation UI:
+  * Implemented AJAX suggestions popup and categories tree popup for convenient assignment of categories
+  * Moved selection of Bundle and Grouped sub-products to the "General" tab, implemented popup grids for them
+  * Made "Weight" checkbox to be selected by default for a Configurable product
+* Implemented integration test to measure and control PHP memory leak on application reinitialization
+* Changed format of configuration files for static tests that search for obsolete Magento 1.x code
+* Bug fixes:
+  * Fixed Web API WSDL incompatibility with C# and Java
+  * Fixed issue, that Magento duplicated custom options field for a product, if creating them via a multi-call to API
+  * Fixed `shoppingCartPaymentList` method in Web API, which was throwing exception "Object has no 'code' property"
+  * Fixed invalid Wishlist link and several invalid links in Checkout on frontend store view
+  * Made Stock Status in 'quantity_and_stock_status' attribute editable again for a Configurable product
+  * Fixed issue, that it was not possible to save Customer after first save, because "Date Of Birth" format was reported by Magento to be incorrect
+  * Fixed fatal error in Code Sniffer exemplar test
+  * Fixed wrong failures of `Varien_Db_Adapter_Pdo_MysqlTest::testWaitTimeout()` integration test in developer mode
+  * Fixed issue, that mass-action column in backend grids moved to another position in single store mode
+
+2.0.0.0-dev39
+=============
+* Visual design editor improvements:
+  * VDE changes can be saved to DB for current store and theme. Layout updates composed by VDE are combined into one record
+  * Introduced temporary layout changes which should store non-applied modifications made during VDE functioning. Added new column `updated_at` to `core_layout_update` table for this, added observers and cron jobs to clean outdated layout updates
+  * Added `vde/` prefix to all links inside VDE frame
+  * Disabled caching (layout, blocks HTML, etc) in Design mode
+  * Reviewed and improved "Quit" action to properly cleanup session, cache and cookies
+  * Visual enhancements added when block is being dragged (block display, highlighting, cursor shape)
+  * Added ability to set placeholder for a draggable block in VDE canvas
+  * Fixed sorting of items within container
+  * Improved logic of VDE canvas iframe sizing according to window size to have one scroll bar and static toolbar at the bottom of the page
+* Improved themes management:
+  * New separate tab on theme edit page which allows to view and download CSS files used on frontend. Files are divided to framework files, library files and theme files
+  * Added an ability to upload and store custom CSS file which can be applied on frontend
+  * Improved renaming of virtual themes, restricted modifying of physical themes
+* Implemented changes in product creation process in admin interface:
+  * Added "Variations" block with configurable product attributes in "General" tab. With this block all final prices of configurable product variations can be easily added and configured in one place. Easy sorting mechanism helps understand the order of applying price modifications. "Variations" block can be reloaded itself without reloading all product creation page. All product variations are being created automatically with saving the parent configurable product
+  * Improved image management control. Multiple image control is placed in General tab. It provides easier upload and basic management of product's images than image gallery does.
+  * Changed Save button on product edit page. Save button is implemented as a split-button with the following options: "Save & New", "Save & Duplicate", "Save & Close"
+* Changed representation of a configurable product's image on frontend to use product's variation image instead of parent product's one
+* Implemented js-plugin `mage` to give an ability to extend Magento js-code and modify initializing parameters during the runtime. Replaced instantiation of `form` and `validation` instances with `mage` widget
+* Implemented autocomplete js-component on backend based on jQuery-ui
+* Refactored frontend design theme to use jQuery library instead of Prototype for the following frontend components:
+  * Varien Product class – class handles product price calculations on the client side as product price options are changed: `Product.Config`, `Product.Zoom`, `Product.Super`, `Product.OptionsPrice`
+  * `RegionUpdater` & `ZipUpdater` classes – classes handle dynamically changing State/Province field from drop down to text field depending on selected country. They also handle "required" setting for State/Province and Zip/Postal Code fields.
+  * `Varien.searchForm` – class handles quick search autocomplete functionality
+* `VarienForm` class is deprecated
+* Improved floating toolbar in backend
+* Refactored the following grids in backend to make them configurable through layout, rather than hard-coded: `Mage_Adminhtml_Block_Newsletter_Queue_Grid`, `Mage_Adminhtml_Block_Report_Refresh_Statistics`
+* Dependency injection improvements:
+  * Added ability to generate proxy and factory classes on-the-fly for use with DI implementations. Generators can be managed in DI configuration
+  * Implemented tools (shell scripts) that allow generating skeletons of factory and proxy classes for use with DI implementations
+  * Added ability to set preferences to object manager and specify them through configuration
+* Refactored the following modules to utilize `Magento_Filesystem` library instead of using built-in PHP core functions directly: `Mage_Adminhtml`, `Mage_Backend`, `Mage_Backup`, `Mage_Captcha`, `Mage_Catalog`, `Mage_Cms`, `Mage_Connect`, `Mage_Core`, `Mage_Install`
+* Bug fixes:
+  * Fixed bug with incorrect order processing in `Mage_Authorizenet_Model_Directpost`
+  * Fixed bug with unnecessary "loading" image on Category field during product editing in backend
+  * Fixed bug in `Mage_Adminhtml_CustomerController` with error message during subscription to newsletter
+  * Fixed bug in custom option template with incorrect import of custom option during product creation
+  * Fixed JavaScript bug with image uploader control on product edit page on backend in IE9
+  * Fixed bug with incorrect CSS directives in `app/code/core/Mage/Adminhtml/view/adminhtml/catalog.xml`
+  * Replaced usages of Validation Prototype class with jQuery analog in modules `Manage Attributes Sets`, `Reports` and `Order`
+  * Fixed bug with Javascript errors in "accordion" tabs and incorrect tab content during product creation.
+  * Fixed XSS vulnerability in configurable product on backend product page
+  * Fixed inability to update values in PayPal system configuration
+  * Fixed "The command line is too long" error triggered by static code analysis CLI tools when the lists become too large
+  * Fixed inability to create shipping label for DHL caused by wrong logo image path
+  * Fixed inactive navigation menu item of "Import/Export Tax Rates" page
+
 2.0.0.0-dev38
 =============
 * Changed application initialization procedure

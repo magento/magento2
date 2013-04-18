@@ -32,7 +32,7 @@ class Mage_DesignEditor_Model_Url_NavigationModeTest extends PHPUnit_Framework_T
      */
     const FRONT_NAME = 'vde';
     const ROUTE_PATH = 'design';
-    const VALID_URL = 'http://test.com';
+    const BASE_URL   = 'http://test.com';
     /**#@-*/
 
     /**
@@ -41,7 +41,7 @@ class Mage_DesignEditor_Model_Url_NavigationModeTest extends PHPUnit_Framework_T
     protected $_model;
 
     /**
-     * @var Mage_DesignEditor_Helper_Data
+     * @var Mage_DesignEditor_Helper_Data|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_helper;
 
@@ -53,7 +53,9 @@ class Mage_DesignEditor_Model_Url_NavigationModeTest extends PHPUnit_Framework_T
     public function setUp()
     {
         $this->_helper = $this->getMock('Mage_DesignEditor_Helper_Data', array('getFrontName'), array(), '', false);
+        $requestMock = $this->getMock('Mage_Core_Controller_Request_Http', array(), array(), '', false);
         $this->_model = new Mage_DesignEditor_Model_Url_NavigationMode($this->_helper, $this->_testData);
+        $this->_model->setRequest($requestMock);
     }
 
     public function testConstruct()
@@ -62,18 +64,40 @@ class Mage_DesignEditor_Model_Url_NavigationModeTest extends PHPUnit_Framework_T
         $this->assertAttributeEquals($this->_testData, '_data', $this->_model);
     }
 
-    public function testGetRoutePath()
+    public function testGetRouteUrl()
     {
-        $this->_helper->expects($this->once())
+        $this->_helper->expects($this->any())
             ->method('getFrontName')
             ->will($this->returnValue(self::FRONT_NAME));
 
-        $this->_model->setData('route_path', self::ROUTE_PATH);
-        $this->assertEquals(self::FRONT_NAME . '/' . self::ROUTE_PATH, $this->_model->getRoutePath());
-    }
+        $store = $this->getMock('Mage_Core_Model_Store',
+            array('getBaseUrl', 'isAdmin', 'isAdminUrlSecure', 'isFrontUrlSecure'),
+            array(), '', false
+        );
+        $store->expects($this->any())
+            ->method('getBaseUrl')
+            ->will($this->returnValue(self::BASE_URL));
 
-    public function testGetRouteUrl()
-    {
-        $this->assertEquals(self::VALID_URL, $this->_model->getRouteUrl(self::VALID_URL));
+        $store->expects($this->any())
+            ->method('isAdmin')
+            ->will($this->returnValue(false));
+
+        $store->expects($this->any())
+            ->method('isAdminUrlSecure')
+            ->will($this->returnValue(false));
+
+        $store->expects($this->any())
+            ->method('isFrontUrlSecure')
+            ->will($this->returnValue(false));
+
+        $this->_model->setData('store', $store);
+        $this->_model->setData('type', null);
+        $this->_model->setData('route_front_name', self::FRONT_NAME);
+
+        $sourceUrl   = self::BASE_URL . '/' . self::ROUTE_PATH;
+        $expectedUrl = self::BASE_URL . '/' . self::FRONT_NAME . '/' . self::ROUTE_PATH;
+
+        $this->assertEquals($expectedUrl, $this->_model->getRouteUrl($sourceUrl));
+        $this->assertEquals($expectedUrl, $this->_model->getRouteUrl($expectedUrl));
     }
 }

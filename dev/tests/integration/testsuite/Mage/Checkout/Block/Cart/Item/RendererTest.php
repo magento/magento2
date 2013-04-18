@@ -27,6 +27,7 @@
 
 /**
  * @magentoDataFixture Mage/Catalog/_files/product_with_image.php
+ * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
  */
 class Mage_Checkout_Block_Cart_Item_RendererTest extends PHPUnit_Framework_TestCase
 {
@@ -44,11 +45,6 @@ class Mage_Checkout_Block_Cart_Item_RendererTest extends PHPUnit_Framework_TestC
         $product->load(1);
         $item->setProduct($product);
         $this->_block->setItem($item);
-    }
-
-    protected function tearDown()
-    {
-        $this->_block = null;
     }
 
     public function testThumbnail()

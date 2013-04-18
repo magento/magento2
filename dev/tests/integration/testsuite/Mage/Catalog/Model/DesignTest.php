@@ -40,11 +40,6 @@ class Mage_Catalog_Model_DesignTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getModel('Mage_Catalog_Model_Design');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * @dataProvider getThemeModel
      */

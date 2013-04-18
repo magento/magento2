@@ -46,11 +46,14 @@ Default layout, loads most of the pages
                 <action method="addItemRender"><type>grouped</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Grouped</block><template>cart/sidebar/default.phtml</template></action>
                 <action method="addItemRender"><type>configurable</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Configurable</block><template>cart/sidebar/default.phtml</template></action>
                 <container name="cart_sidebar.extra_actions" as="extra_actions" label="Shopping Cart Sidebar Extra Actions" module="Mage_Checkout"/>
+				<!-- FIXME: make the silly topcart log error go away -->
+				<container name="topCart.extra_actions" as="extra_actions" label="My Cart Extra Actions" module="Mage_Checkout"/>
             </block>
         </reference>
-        <reference name="head">
-            <block type="Mage_Core_Block_Template" name="optional_zip_countries" as="optional_zip_countries" template="Mage_Directory::js/optional_zip_countries.phtml" />
-        </reference>
+
+			<reference name="head">
+				<block type="Mage_Core_Block_Template" name="optional_zip_countries" as="optional_zip_countries" template="Mage_Directory::js/optional_zip_countries.phtml" />
+			</reference>
 
     </default>
 

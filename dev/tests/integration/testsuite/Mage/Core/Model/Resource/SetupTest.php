@@ -39,21 +39,12 @@ class Mage_Core_Model_Resource_SetupTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testSetTable()
     {
         $this->_model->setTable('test_name', 'test_real_name');
         $this->assertEquals('test_real_name', $this->_model->getTable('test_name'));
     }
 
-    /**
-     * @covers Mage_Core_Model_Resource_Setup::applyAllUpdates
-     * @covers Mage_Core_Model_Resource_Setup::applyAllDataUpdates
-     */
     public function testApplyAllDataUpdates()
     {
         /*reset versions*/
@@ -61,9 +52,11 @@ class Mage_Core_Model_Resource_SetupTest extends PHPUnit_Framework_TestCase
         Mage::getResourceModel('Mage_Core_Model_Resource_Resource')->setDataVersion('adminnotification_setup', false);
         $this->_model->deleteTableRow('core_resource', 'code', 'adminnotification_setup');
         $this->_model->getConnection()->dropTable($this->_model->getTable('adminnotification_inbox'));
+        /** @var $updater Mage_Core_Model_Db_Updater */
+        $updater = Mage::getSingleton('Mage_Core_Model_Db_Updater');
         try {
-            $this->_model->applyAllUpdates();
-            $this->_model->applyAllDataUpdates();
+            $updater->updateScheme();
+            $updater->updateData();
         } catch (Exception $e) {
             $this->fail("Impossible to continue other tests, because database is broken: {$e}");
         }

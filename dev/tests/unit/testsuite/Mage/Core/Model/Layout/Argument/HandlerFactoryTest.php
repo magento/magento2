@@ -42,7 +42,7 @@ class Mage_Core_Model_Layout_Argument_HandlerFactoryTest extends PHPUnit_Framewo
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento_ObjectManager_Zend', array('create'), array(), '', false);
+        $this->_objectManagerMock = $this->getMock('Magento_ObjectManager');
         $this->_model = new Mage_Core_Model_Layout_Argument_HandlerFactory($this->_objectManagerMock);
     }
 

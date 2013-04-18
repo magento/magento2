@@ -31,18 +31,30 @@
 class Magento_Test_Annotation_AppIsolationTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Test_Annotation_AppIsolation|PHPUnit_Framework_MockObject_MockObject
+     * @var Magento_Test_Annotation_AppIsolation
      */
     protected $_object;
 
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_application;
+
     protected function setUp()
     {
-        $this->_object = $this->getMock('Magento_Test_Annotation_AppIsolation', array('_isolateApp'));
+        $this->_application = $this->getMock('Magento_Test_Application', array('reinitialize'), array(), '', false);
+        $this->_object = new Magento_Test_Annotation_AppIsolation($this->_application);
+    }
+
+    protected function tearDown()
+    {
+        $this->_application = null;
+        $this->_object = null;
     }
 
     public function testStartTestSuite()
     {
-        $this->_object->expects($this->once())->method('_isolateApp');
+        $this->_application->expects($this->once())->method('reinitialize');
         $this->_object->startTestSuite();
     }
 
@@ -67,7 +79,7 @@ class Magento_Test_Annotation_AppIsolationTest extends PHPUnit_Framework_TestCas
 
     public function testEndTestIsolationDefault()
     {
-        $this->_object->expects($this->never())->method('_isolateApp');
+        $this->_application->expects($this->never())->method('reinitialize');
         $this->_object->endTest($this);
     }
 
@@ -75,7 +87,7 @@ class Magento_Test_Annotation_AppIsolationTest extends PHPUnit_Framework_TestCas
     {
         /** @var $controllerTest Magento_Test_TestCase_ControllerAbstract */
         $controllerTest = $this->getMockForAbstractClass('Magento_Test_TestCase_ControllerAbstract');
-        $this->_object->expects($this->once())->method('_isolateApp');
+        $this->_application->expects($this->once())->method('reinitialize');
         $this->_object->endTest($controllerTest);
     }
 
@@ -84,7 +96,7 @@ class Magento_Test_Annotation_AppIsolationTest extends PHPUnit_Framework_TestCas
      */
     public function testEndTestIsolationDisabled()
     {
-        $this->_object->expects($this->never())->method('_isolateApp');
+        $this->_application->expects($this->never())->method('reinitialize');
         $this->_object->endTest($this);
     }
 
@@ -93,7 +105,7 @@ class Magento_Test_Annotation_AppIsolationTest extends PHPUnit_Framework_TestCas
      */
     public function testEndTestIsolationEnabled()
     {
-        $this->_object->expects($this->once())->method('_isolateApp');
+        $this->_application->expects($this->once())->method('reinitialize');
         $this->_object->endTest($this);
     }
 }

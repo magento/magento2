@@ -107,7 +107,7 @@ class Mage_Webapi_Controller_Dispatcher_RestTest extends PHPUnit_Framework_TestC
         $this->_authenticationMock->expects($this->once())->method('authenticate')->will(
             $this->throwException($logicalException)
         );
-        /** Assert setException method will be executed with thrown logical Exception. */
+        /** Assert that setException method will be executed with thrown logical Exception. */
         $this->_responseMock->expects($this->once())->method('setException')->with($this->equalTo($logicalException));
 
         $this->_restDispatcher->dispatch();
@@ -124,7 +124,7 @@ class Mage_Webapi_Controller_Dispatcher_RestTest extends PHPUnit_Framework_TestC
             ->getMock();
         $routeMock->expects($this->any())->method('getResourceName');
         $this->_routerMock->expects($this->once())->method('match')->will($this->returnValue($routeMock));
-        /** Mock Api Config getMethodNameByOperation method to return isDeleted method of Varien_Onject. */
+        /** Mock Api Config getMethodNameByOperation method to return isDeleted method of Varien_Object. */
         $this->_apiConfigMock->expects($this->once())->method('getMethodNameByOperation')->will(
             $this->returnValue('isDeleted')
         );
@@ -132,9 +132,9 @@ class Mage_Webapi_Controller_Dispatcher_RestTest extends PHPUnit_Framework_TestC
         $this->_apiConfigMock->expects($this->once())->method('identifyVersionSuffix')->will($this->returnValue(''));
         $this->_apiConfigMock->expects($this->once())->method('checkDeprecationPolicy');
         $this->_authorizationMock->expects($this->once())->method('checkResourceAcl');
-        /** Create fake controller mock, e. g. Varien_Object object. */
+        /** Create fake controller mock, e.g., Varien_Object object. */
         $controllerMock = $this->getMockBuilder('Varien_Object')->disableOriginalConstructor()->getMock();
-        /** Assert isDeleted method will be executed once. */
+        /** Assert that isDeleted method will be executed once. */
         $controllerMock->expects($this->once())->method('isDeleted');
         /** Mock factory mock to return fake action controller. */
         $this->_controllerFactory->expects($this->once())->method('createActionController')->will(
@@ -144,7 +144,7 @@ class Mage_Webapi_Controller_Dispatcher_RestTest extends PHPUnit_Framework_TestC
         $this->_restPresentation->expects($this->once())->method('fetchRequestData')->will(
             $this->returnValue(array())
         );
-        /** Assert response sendResponse method will be executed once. */
+        /** Assert that response sendResponse method will be executed once. */
         $this->_responseMock->expects($this->once())->method('sendResponse');
 
         $this->_restDispatcher->dispatch();

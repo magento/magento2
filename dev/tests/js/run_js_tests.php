@@ -138,17 +138,19 @@ Varien_Io_File::rmdirRecursive($testOutput);
 mkdir($testOutput);
 
 $command
-    = 'java -jar "' . $jsTestDriver . '" --config "' . $jsTestDriverConf . '" --port ' . $port .
-    ' --browser "' . $browser . '" --tests all --testOutput "' . $testOutput . '"';
+    = 'java -jar "' . $jsTestDriver . '" --config "' . $jsTestDriverConf . '" --reset --port ' . $port .
+    ' --browser "' . $browser . '" --raiseOnFailure true --tests all --testOutput "' . $testOutput . '"';
 
 echo $command . PHP_EOL;
 
 if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
     system($command);
 } else {
+    $commandFile = __DIR__ . '/run_js_tests.sh';
+    $fh = fopen($commandFile, 'w');
+
     $shellCommand
-        = '#!/bin/bash
-        LSOF=`/usr/sbin/lsof -i :' . $port . ' -t`
+        = 'LSOF=`/usr/sbin/lsof -i :' . $port . ' -t`
         if [ "$LSOF" != "" ];
         then
             kill -9 $LSOF
@@ -162,17 +164,21 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             exit 1
         fi
 
-        $XVFB :99 -nolisten inet6 -screen 0 1024x768x24 -ac &
-        PID_XVFB="$!"         # take the process ID
-        export DISPLAY=:99.0  # set display to use that of the Xvfb
+        $XVFB :99 -nolisten inet6 -ac &
+        PID_XVFB="$!"        # take the process ID
+        export DISPLAY=:99   # set display to use that of the Xvfb
 
         # run the tests
         ' . $command . '
 
-        kill $PID_XVFB       # shut down Xvfb (firefox will shut down cleanly by JsTestDriver)
+        kill -9 $PID_XVFB    # shut down Xvfb (firefox will shut down cleanly by JsTestDriver)
         echo "Done."';
 
-    system($shellCommand);
+    fwrite($fh, $shellCommand . PHP_EOL);
+    fclose($fh);
+    chmod($commandFile, 0750);
+
+    exec($commandFile);
 }
 
 /**

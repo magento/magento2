@@ -26,8 +26,7 @@
  */
 
 $model = new Mage_Catalog_Model_Resource_Eav_Attribute(
-    new Mage_Core_Model_Event_Manager(),
-    new Mage_Core_Model_Cache()
+    Mage::getModel('Mage_Core_Model_Context')
 );
 $model->setName('user_attribute')
     ->setId(1)

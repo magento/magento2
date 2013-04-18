@@ -52,18 +52,14 @@ class Mage_Tag_Block_Product_ResultTest extends PHPUnit_Framework_TestCase
         $this->_layout = Mage::getModel('Mage_Core_Model_Layout');
         $this->_layout->addBlock('Mage_Core_Block_Text', 'root');
         $this->_layout->addBlock('Mage_Core_Block_Text', 'head');
-        $this->_block = $this->_layout->createBlock('Mage_Tag_Block_Product_Result', 'test',
+        $context = Mage::getObjectManager()->create('Mage_Core_Block_Template_Context',
             array('layout' => $this->_layout)
+        );
+        $this->_block = $this->_layout->createBlock('Mage_Tag_Block_Product_Result', 'test',
+            array('context' => $context)
         );
         $this->_child = Mage::getObjectManager()->create('Mage_Core_Block_Text');
         $this->_layout->addBlock($this->_child, 'search_result_list', 'test');
-    }
-
-    protected function tearDown()
-    {
-        $this->_block = null;
-        $this->_layout = null;
-        $this->_child = null;
     }
 
     public function testSetListOrders()

@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Backend_Block_Widget
  */
-class Mage_Backend_Block_WidgetTest extends PHPUnit_Framework_TestCase
+class Mage_Backend_Block_WidgetTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @covers Mage_Backend_Block_Widget::getButtonHtml

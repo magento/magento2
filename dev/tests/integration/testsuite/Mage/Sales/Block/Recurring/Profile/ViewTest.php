@@ -53,7 +53,6 @@ class Mage_Sales_Block_Recurring_Profile_ViewTest extends PHPUnit_Framework_Test
 
     public function tearDown()
     {
-
         Mage::unregister('current_recurring_profile');
         $this->_profile = null;
         $this->_block = null;

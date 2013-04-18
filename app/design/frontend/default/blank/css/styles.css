@@ -1031,7 +1031,7 @@ tr.summary-details-excluded { font-style:italic; }
 /*.opc .active .step-title a { display:none; }*/
 
 .opc .step { border-top:1px solid #ddd; padding:10px; position:relative; }
-.opc .step .tool-tip { right:10px; }
+.opc .step .tool-tip { right:0; bottom: 0; margin: 0 0 30px 0; }
 
 .opc .order-review {}
 .opc .order-review .authentication {}
@@ -1043,7 +1043,7 @@ tr.summary-details-excluded { font-style:italic; }
 .checkout-progress li.active { border-top-color:#000; color:#000; }
 
 .multiple-checkout { position:relative; }
-.multiple-checkout .tool-tip { top:50%; margin-top:-120px; right:10px; }
+.multiple-checkout .tool-tip { top:50%; margin-top:-70px; right:10px; }
 .multiple-checkout .grand-total { font-size:1.5em; text-align:right; }
 .multiple-checkout .grand-total big {}
 .multiple-checkout .grand-total .price {}

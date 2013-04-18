@@ -74,10 +74,10 @@ class Mage_Backend_Model_Menu_BuilderTest extends PHPUnit_Framework_TestCase
     {
         $item1 = $this->getMock("Mage_Backend_Model_Menu_Item", array(), array(), '', false);
         $item1->expects($this->once())->method('getChildren')->will($this->returnValue($this->_menuMock));
-        $this->_factoryMock->expects($this->any())->method('createFromArray')->will($this->returnValue($item1));
+        $this->_factoryMock->expects($this->any())->method('create')->will($this->returnValue($item1));
 
         $item2 = $this->getMock("Mage_Backend_Model_Menu_Item", array(), array(), '', false);
-        $this->_factoryMock->expects($this->at(1))->method('createFromArray')->will($this->returnValue($item2));
+        $this->_factoryMock->expects($this->at(1))->method('create')->will($this->returnValue($item2));
 
         $this->_menuMock->expects($this->at(0))
             ->method('add')
@@ -148,7 +148,7 @@ class Mage_Backend_Model_Menu_BuilderTest extends PHPUnit_Framework_TestCase
     public function testGetResultSkipItemsWithInvalidParent()
     {
         $item1 = $this->getMock("Mage_Backend_Model_Menu_Item", array(), array(), '', false);
-        $this->_factoryMock->expects($this->any())->method('createFromArray')
+        $this->_factoryMock->expects($this->any())->method('create')
             ->will($this->returnValue($item1));
 
         $this->_model->processCommand(new Mage_Backend_Model_Menu_Builder_Command_Add(array(

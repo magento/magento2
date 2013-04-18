@@ -98,10 +98,7 @@
     <?php if ($this->reportAction == 'print'): ?>
     <div class="trace-container">
         <div class="trace">
-            <pre><?php echo $this->reportData[0] ?><br />
-<strong>Trace:</strong>
-<?php echo htmlspecialchars($this->reportData[1]) ?><br />
-</pre>
+            <pre><?php echo htmlspecialchars($this->reportData[0]) ?></pre>
         </div>
     </div>
     <?php endif; ?>

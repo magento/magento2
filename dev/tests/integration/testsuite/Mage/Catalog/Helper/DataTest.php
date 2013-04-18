@@ -37,11 +37,6 @@ class Mage_Catalog_Helper_DataTest extends PHPUnit_Framework_TestCase
         $this->_helper = Mage::helper('Mage_Catalog_Helper_Data');
     }
 
-    protected function tearDown()
-    {
-        $this->_helper = null;
-    }
-
     /**
      * @magentoDataFixture Mage/Catalog/_files/categories.php
      */

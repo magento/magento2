@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:typens="urn:{{var wsdl.name}}"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             name="{{var wsdl.name}}"
+             targetNamespace="urn:{{var wsdl.name}}">
+    <wsdl:types>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:{{var wsdl.name}}">
+            <xsd:complexType name="giftMessageEntity">
+                <xsd:sequence>
+                    <xsd:element name="from" type="xsd:string" minOccurs="0" />
+                    <xsd:element name="to" type="xsd:string" minOccurs="0" />
+                    <xsd:element name="message" type="xsd:string" minOccurs="0" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="giftMessageResponse">
+                <xsd:sequence>
+                    <xsd:element name="entityId" type="xsd:string" minOccurs="0" />
+                    <xsd:element name="result" type="xsd:boolean" minOccurs="0" />
+                    <xsd:element name="error" type="xsd:string" minOccurs="0" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="giftMessageResponseArray">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" maxOccurs="unbounded" name="complexObjectArray" type="typens:giftMessageResponse" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="giftMessageAssociativeProductsEntity">
+                <xsd:sequence>
+                    <xsd:element name="product" type="typens:shoppingCartProductEntity" />
+                    <xsd:element name="message" type="typens:giftMessageEntity" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="giftMessageAssociativeProductsEntityArray">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" maxOccurs="unbounded" name="complexObjectArray" type="typens:giftMessageAssociativeProductsEntity" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+
+            <xsd:element name="giftMessageForQuoteRequestParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="sessionId" type="xsd:string" />
+                        <xsd:element minOccurs="1" maxOccurs="1" name="quoteId" type="xsd:string" />
+                        <xsd:element minOccurs="1" maxOccurs="1" name="giftMessage" type="typens:giftMessageEntity" />
+                        <xsd:element minOccurs="0" maxOccurs="1" name="store" type="xsd:string" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="giftMessageForQuoteResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="result" type="typens:giftMessageResponse" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="giftMessageForQuoteItemRequestParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="sessionId" type="xsd:string" />
+                        <xsd:element minOccurs="1" maxOccurs="1" name="quoteItemId" type="xsd:string" />
+                        <xsd:element minOccurs="1" maxOccurs="1" name="giftMessage" type="typens:giftMessageEntity" />
+                        <xsd:element minOccurs="0" maxOccurs="1" name="store" type="xsd:string" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="giftMessageForQuoteItemResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="result" type="typens:giftMessageResponse" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="giftMessageForQuoteProductRequestParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="sessionId" type="xsd:string" />
+                        <xsd:element minOccurs="1" maxOccurs="1" name="quoteId" type="xsd:string" />
+                        <xsd:element minOccurs="1" maxOccurs="1" name="productsAndMessages" type="typens:giftMessageAssociativeProductsEntityArray" />
+                        <xsd:element minOccurs="0" maxOccurs="1" name="store" type="xsd:string" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="giftMessageForQuoteProductResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="result" type="typens:giftMessageResponseArray" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="giftMessageForQuoteRequest">
+        <wsdl:part name="parameters" element="typens:giftMessageForQuoteRequestParam" />
+    </wsdl:message>
+    <wsdl:message name="giftMessageForQuoteResponse">
+        <wsdl:part name="parameters" element="typens:giftMessageForQuoteResponseParam" />
+    </wsdl:message>
+    <wsdl:message name="giftMessageForQuoteItemRequest">
+        <wsdl:part name="parameters" element="typens:giftMessageForQuoteItemRequestParam" />
+    </wsdl:message>
+    <wsdl:message name="giftMessageForQuoteItemResponse">
+        <wsdl:part name="parameters" element="typens:giftMessageForQuoteItemResponseParam" />
+    </wsdl:message>
+    <wsdl:message name="giftMessageForQuoteProductRequest">
+        <wsdl:part name="parameters" element="typens:giftMessageForQuoteProductRequestParam" />
+    </wsdl:message>
+    <wsdl:message name="giftMessageForQuoteProductResponse">
+        <wsdl:part name="parameters" element="typens:giftMessageForQuoteProductResponseParam" />
+    </wsdl:message>
+    <wsdl:portType name="{{var wsdl.handler}}PortType">
+        <wsdl:operation name="giftMessageSetForQuote">
+            <wsdl:documentation>Set a gift message to the cart</wsdl:documentation>
+            <wsdl:input message="typens:giftMessageForQuoteRequest" />
+            <wsdl:output message="typens:giftMessageForQuoteResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="giftMessageSetForQuoteItem">
+            <wsdl:documentation>Setting a gift messages to the quote item</wsdl:documentation>
+            <wsdl:input message="typens:giftMessageForQuoteItemRequest" />
+            <wsdl:output message="typens:giftMessageForQuoteItemResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="giftMessageSetForQuoteProduct">
+            <wsdl:documentation>Setting a gift messages to the quote items by products</wsdl:documentation>
+            <wsdl:input message="typens:giftMessageForQuoteProductRequest" />
+            <wsdl:output message="typens:giftMessageForQuoteProductResponse" />
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="{{var wsdl.handler}}Binding" type="typens:{{var wsdl.handler}}PortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+        <wsdl:operation name="giftMessageSetForQuote">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="giftMessageSetForQuoteItem">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="giftMessageSetForQuoteProduct">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+</wsdl:definitions>

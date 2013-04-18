@@ -30,7 +30,7 @@ body          { background:#f2f2f2 url(../images/bkg_body.gif) 0 0 repeat; font:
 
 img           { border:0; vertical-align:top; }
 
-a             { color:#4f8100; text-decoration:none; }
+a,.l          { color:#4f8100; text-decoration:none; }
 a:hover       { text-decoration:underline; }
 :focus        { outline:0; }
 
@@ -86,6 +86,7 @@ ul,ol         { list-style:none; }
 .no-margin    { margin:0 !important; }
 .no-padding   { padding:0 !important; }
 .no-bg        { background:none !important; }
+.clear        { clear: both; }
 /* ======================================================================================= */
 
 
@@ -1206,7 +1207,7 @@ tr.summary-details-excluded { font-style:italic; }
 .sp-methods { margin:0 0 8px; }
 .sp-methods dt { margin:13px 0 5px; font-weight:bold; }
 .sp-methods dd {}
-.sp-methods dd li { margin:5px 0; }
+.sp-methods dd li { margin:5px 0; position: relative;}
 .sp-methods label { font-weight:bold; color:#555; }
 .sp-methods .price { font-weight:bold; }
 .sp-methods .form-list { padding-left:20px; }
@@ -1337,7 +1338,7 @@ tr.summary-details-excluded { font-style:italic; }
 .opc .active .step-title a { display:none; }
 
 .opc .step { border:1px solid #ddd; border-top:0; background:#fbfbfb; padding:15px 30px; position:relative; }
-.opc .step .tool-tip { right:30px; }
+.opc .step .tool-tip { right:20px; bottom: 0; margin: 0 0 30px 0; }
 
 #opc-login h3 { font-size:13px; border-bottom:1px solid #e4e4e4; padding-bottom:2px; text-transform:uppercase; }
 #opc-login h4 { font-size:1em; font-weight:bold; margin:0; color:#2f2f2f; }
@@ -1372,7 +1373,7 @@ tr.summary-details-excluded { font-style:italic; }
 
 .multiple-checkout .gift-messages { margin:15px 0 0; }
 
-.multiple-checkout .tool-tip { top:50%; margin-top:-120px; right:20px; }
+.multiple-checkout .tool-tip { top:50%; margin-top:-230px; right:20px; }
 
 .multiple-checkout .col2-set,
 .multiple-checkout .col3-set { background:#fbfbfb; border:1px solid #ddd; margin:0 0 25px; padding:20px; }

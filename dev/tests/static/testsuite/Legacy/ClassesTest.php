@@ -61,8 +61,8 @@ class Legacy_ClassesTest extends PHPUnit_Framework_TestCase
             # ::getModel ::getSingleton ::getResourceModel ::getResourceSingleton
             \:\:get(?:Resource)?(?:Model | Singleton)\(\s*[\'"]([^\'"]+)[\'"]\s*[\),]
 
-            # addBlock createBlock getBlockClassName getBlockSingleton
-            | (?:addBlock | createBlock | getBlockClassName | getBlockSingleton)\(\s*[\'"]([^\'"]+)[\'"]\s*[\),]
+            # addBlock createBlock getBlockSingleton
+            | (?:addBlock | createBlock | getBlockSingleton)\(\s*[\'"]([^\'"]+)[\'"]\s*[\),]
 
             # Mage::helper ->helper
             | (?:Mage\:\:|\->)helper\(\s*[\'"]([^\'"]+)[\'"]\s*\)

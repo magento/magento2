@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Adminhtml_Block_Report_Sales_Bestsellers_GridTest extends PHPUnit_Framework_TestCase
+class Mage_Adminhtml_Block_Report_Sales_Bestsellers_GridTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @var Mage_Adminhtml_Block_Report_Sales_Bestsellers_Grid
@@ -34,12 +34,8 @@ class Mage_Adminhtml_Block_Report_Sales_Bestsellers_GridTest extends PHPUnit_Fra
 
     protected function setUp()
     {
+        parent::setUp();
         $this->_block = Mage::app()->getLayout()->createBlock('Mage_Adminhtml_Block_Report_Sales_Bestsellers_Grid');
-    }
-
-    protected function tearDown()
-    {
-        $this->_block = null;
     }
 
     public function testGetResourceCollectionName()

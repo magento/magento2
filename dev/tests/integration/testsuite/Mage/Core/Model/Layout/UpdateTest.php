@@ -37,11 +37,6 @@ class Mage_Core_Model_Layout_UpdateTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getModel('Mage_Core_Model_Layout_Update');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testConstructor()
     {
         $this->_model = Mage::getModel('Mage_Core_Model_Layout_Update');

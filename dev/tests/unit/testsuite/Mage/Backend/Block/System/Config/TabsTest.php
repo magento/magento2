@@ -68,7 +68,7 @@ class Mage_Backend_Block_System_Config_TabsTest extends PHPUnit_Framework_TestCa
             'layout' => $layoutMock,
         );
         $helper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_object = $helper->getBlock('Mage_Backend_Block_System_Config_Tabs', $data);
+        $this->_object = $helper->getObject('Mage_Backend_Block_System_Config_Tabs', $data);
     }
 
     protected function tearDown()

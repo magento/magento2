@@ -33,6 +33,6 @@ class Vendor_Module_Webapi_Resource_Invalid
      */
     public function updateV1($resourceId)
     {
-        // Body is intentionally left empty
+        // Body is intentionally left empty.
     }
 }

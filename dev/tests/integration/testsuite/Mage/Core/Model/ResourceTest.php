@@ -35,11 +35,6 @@ class Mage_Core_Model_ResourceTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getModel('Mage_Core_Model_Resource');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     /**
      * @magentoConfigFixture global/resources/db/table_prefix prefix_
      */
@@ -60,7 +55,8 @@ class Mage_Core_Model_ResourceTest extends PHPUnit_Framework_TestCase
      */
     public function testProfilerInit()
     {
-        $connReadConfig = Mage::getConfig()->getResourceConnectionConfig('core_read');
+        $connReadConfig = Mage::getSingleton('Mage_Core_Model_Config_Resource')
+            ->getResourceConnectionConfig('core_read');
         $profilerConfig = $connReadConfig->addChild('profiler');
         $profilerConfig->addChild('class', 'Mage_Core_Model_Resource_Db_Profiler');
         $profilerConfig->addChild('enabled', 'true');

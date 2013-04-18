@@ -31,9 +31,6 @@
         <reference name="root">
             <action method="setTemplate"><template>2columns-left.phtml</template></action>
         </reference>
-        <reference name="head">
-            <action method="addJs"><file>varien/product.js</file></action>
-        </reference>
         <reference name="content">
             <block type="Mage_Sendfriend_Block_Send" name="sendfriend.send" template="send.phtml" />
         </reference>

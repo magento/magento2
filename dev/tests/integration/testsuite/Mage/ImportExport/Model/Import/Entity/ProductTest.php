@@ -44,11 +44,6 @@ class Mage_ImportExport_Model_Import_Entity_ProductTest extends PHPUnit_Framewor
         $this->_model = Mage::getModel('Mage_ImportExport_Model_Import_Entity_Product');
     }
 
-    public function tearDown()
-    {
-        unset($this->_model);
-    }
-
     /**
      * Options for assertion
      *
@@ -417,7 +412,7 @@ class Mage_ImportExport_Model_Import_Entity_ProductTest extends PHPUnit_Framewor
      */
     public function testSaveMediaImage()
     {
-        if (Magento_Test_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
+        if (Magento_Test_Helper_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
             $this->markTestIncomplete('bug: MAGETWO-4227');
         }
         $attribute = Mage::getModel('Mage_Catalog_Model_Entity_Attribute');

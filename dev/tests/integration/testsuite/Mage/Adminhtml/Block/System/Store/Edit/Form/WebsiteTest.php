@@ -28,13 +28,17 @@
 /**
  * @magentoAppIsolation enabled
  */
-class Mage_Adminhtml_Block_System_Store_Edit_Form_WebsiteTest extends PHPUnit_Framework_TestCase
+class Mage_Adminhtml_Block_System_Store_Edit_Form_WebsiteTest extends Mage_Backend_Area_TestCase
 {
-    /** @var Mage_Adminhtml_Block_System_Store_Edit_Form_Website */
+    /**
+     * @var Mage_Adminhtml_Block_System_Store_Edit_Form_Website
+     */
     protected $_block;
 
-    public static function setUpBeforeClass()
+    protected function setUp()
     {
+        parent::setUp();
+
         $registryData = array(
             'store_type' => 'website',
             'store_data' => Mage::getModel('Mage_Core_Model_Website'),
@@ -43,23 +47,20 @@ class Mage_Adminhtml_Block_System_Store_Edit_Form_WebsiteTest extends PHPUnit_Fr
         foreach ($registryData as $key => $value) {
             Mage::register($key, $value);
         }
-    }
 
-    public static function tearDownAfterClass()
-    {
-        Mage::unregister('store_type');
-        Mage::unregister('store_data');
-        Mage::unregister('store_action');
-    }
-
-    public function setUp()
-    {
         /** @var $layout Mage_Core_Model_Layout */
         $layout = Mage::getModel('Mage_Core_Model_Layout');
 
         $this->_block = $layout->createBlock('Mage_Adminhtml_Block_System_Store_Edit_Form_Website');
 
         $this->_block->toHtml();
+    }
+
+    protected function tearDown()
+    {
+        Mage::unregister('store_type');
+        Mage::unregister('store_data');
+        Mage::unregister('store_action');
     }
 
     public function testPrepareForm()

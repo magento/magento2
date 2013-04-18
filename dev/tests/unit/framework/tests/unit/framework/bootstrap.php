@@ -30,5 +30,7 @@ require __DIR__ . '/../../../../../../../app/autoload.php';
 Magento_Autoload_IncludePath::addIncludePath(array(
     $rootDir . '/lib/',
     $rootDir . '/dev/tests/unit/framework/',
-    $rootDir . '/app/code/core/',
+    $rootDir . '/app/code/',
+    $rootDir . '/app'
 ));
+Mage::setIsSerializable(false);

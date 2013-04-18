@@ -29,6 +29,30 @@ class Magento_Test_TestCase_ControllerAbstractTest extends Magento_Test_TestCase
 {
     protected $_bootstrap;
 
+    protected function setUp()
+    {
+        if (!Mage::getObjectManager()) {
+            Mage::setObjectManager(
+                new Magento_Test_ObjectManager(
+                    new Magento_ObjectManager_Definition_Runtime(),
+                    $this->getMock('Mage_Core_Model_Config_Primary', array(), array(), '', false)
+                )
+            );
+        }
+        parent::setUp();
+
+        // emulate session messages
+        $messagesCollection = new Mage_Core_Model_Message_Collection();
+        $messagesCollection
+            ->add(new Mage_Core_Model_Message_Warning('some_warning'))
+            ->add(new Mage_Core_Model_Message_Error('error_one'))
+            ->add(new Mage_Core_Model_Message_Error('error_two'))
+            ->add(new Mage_Core_Model_Message_Notice('some_notice'))
+        ;
+        $sessionModelFixture = new Varien_Object(array('messages' => $messagesCollection));
+        $this->_objectManager->addSharedInstance($sessionModelFixture, 'Mage_Core_Model_Session');
+    }
+
     /**
      * Bootstrap instance getter.
      * Mocking real bootstrap
@@ -43,17 +67,9 @@ class Magento_Test_TestCase_ControllerAbstractTest extends Magento_Test_TestCase
         return $this->_bootstrap;
     }
 
-    public function testSetUp()
-    {
-        $this->assertInternalType('array', $this->_runOptions);
-        $this->assertArrayHasKey('request', $this->_runOptions);
-        $this->assertInstanceOf('Magento_Test_Request', $this->_runOptions['request']);
-        $this->assertArrayHasKey('response', $this->_runOptions);
-        $this->assertInstanceOf('Magento_Test_Response', $this->_runOptions['response']);
-    }
-
     public function testGetRequest()
     {
+        $this->_objectManager = $this->getMock('Magento_Test_ObjectManager', array(), array(), '', false);
         $request = $this->getRequest();
         $this->assertInstanceOf('Magento_Test_Request', $request);
         $this->assertSame($request, $this->getRequest());
@@ -61,6 +77,7 @@ class Magento_Test_TestCase_ControllerAbstractTest extends Magento_Test_TestCase
 
     public function testGetResponse()
     {
+        $this->_objectManager = $this->getMock('Magento_Test_ObjectManager', array(), array(), '', false);
         $response = $this->getResponse();
         $this->assertInstanceOf('Magento_Test_Response', $response);
         $this->assertSame($response, $this->getResponse());
@@ -71,6 +88,7 @@ class Magento_Test_TestCase_ControllerAbstractTest extends Magento_Test_TestCase
      */
     public function testAssert404NotFound()
     {
+        $this->_objectManager = $this->getMock('Magento_Test_ObjectManager', array(), array(), '', false);
         $this->getRequest()->setActionName('noRoute');
         $this->getResponse()->setBody(
             '404 Not Found test <h3>We are sorry, but the page you are looking for cannot be found.</h3>'
@@ -91,6 +109,7 @@ class Magento_Test_TestCase_ControllerAbstractTest extends Magento_Test_TestCase
      */
     public function testAssertRedirectFailure()
     {
+        $this->_objectManager = $this->getMock('Magento_Test_ObjectManager', array(), array(), '', false);
         $this->assertRedirect();
     }
 
@@ -99,6 +118,7 @@ class Magento_Test_TestCase_ControllerAbstractTest extends Magento_Test_TestCase
      */
     public function testAssertRedirect()
     {
+        $this->_objectManager = $this->getMock('Magento_Test_ObjectManager', array(), array(), '', false);
         /*
          * Prevent calling Mage_Core_Controller_Response_Http::setRedirect() because it executes Mage::dispatchEvent(),
          * which requires fully initialized application environment intentionally not available for unit tests
@@ -107,5 +127,39 @@ class Magento_Test_TestCase_ControllerAbstractTest extends Magento_Test_TestCase
         $setRedirectMethod->invoke($this->getResponse(), 'http://magentocommerce.com');
         $this->assertRedirect();
         $this->assertRedirect($this->equalTo('http://magentocommerce.com'));
+    }
+
+    /**
+     * @param array $expectedMessages
+     * @param string|null $messageTypeFilter
+     * @dataProvider assertSessionMessagesDataProvider
+     */
+    public function testAssertSessionMessagesSuccess(array $expectedMessages, $messageTypeFilter)
+    {
+        $constraint = $this->getMock('PHPUnit_Framework_Constraint', array('toString', 'matches'));
+        $constraint
+            ->expects($this->once())
+            ->method('matches')
+            ->with($expectedMessages)
+            ->will($this->returnValue(true))
+        ;
+        $this->assertSessionMessages($constraint, $messageTypeFilter);
+    }
+
+    public function assertSessionMessagesDataProvider()
+    {
+        return array(
+            'no message type filtering' => array(array('some_warning', 'error_one', 'error_two', 'some_notice'), null),
+            'message type filtering'    => array(array('error_one', 'error_two'), Mage_Core_Model_Message::ERROR),
+        );
+    }
+
+    /**
+     * @expectedException PHPUnit_Framework_ExpectationFailedException
+     * @expectedExceptionMessage Session messages do not meet expectations
+     */
+    public function testAssertSessionMessagesFailure()
+    {
+        $this->assertSessionMessages($this->isEmpty());
     }
 }

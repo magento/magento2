@@ -39,14 +39,19 @@ class Mage_Core_Model_TemplateTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = $this->getMockForAbstractClass('Mage_Core_Model_Template', array(
-            $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false),
-            $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false),
-            array(
-                'area' => Mage_Core_Model_App_Area::AREA_FRONTEND,
-                'store' => 1
+        $helper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_model = $this->getMockForAbstractClass(
+            'Mage_Core_Model_Template',
+            $helper->getConstructArguments(
+                'Mage_Core_Model_Template',
+                array(
+                    'data' => array(
+                        'area' => Mage_Core_Model_App_Area::AREA_FRONTEND,
+                        'store' => 1
+                    )
+                )
             )
-        ));
+        );
     }
 
     /**

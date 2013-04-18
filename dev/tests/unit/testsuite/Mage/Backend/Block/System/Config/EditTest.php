@@ -96,7 +96,7 @@ class Mage_Backend_Block_System_Config_EditTest extends PHPUnit_Framework_TestCa
         );
 
         $helper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_object = $helper->getBlock('Mage_Backend_Block_System_Config_Edit', $data);
+        $this->_object = $helper->getObject('Mage_Backend_Block_System_Config_Edit', $data);
     }
 
     public function testGetSaveButtonHtml()

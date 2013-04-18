@@ -26,18 +26,6 @@
 /*global FORM_KEY:true*/
 jQuery(function ($) {
     'use strict';
-    // @TODO move isJSON method inside file with utility functions
-    $.extend(true, $, {
-        mage: {
-            isJSON : function(json){
-                json = json.replace(/\\["\\\/bfnrtu]/g, '@');
-                json = json.replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']');
-                json = json.replace(/(?:^|:|,)(?:\s*\[)+/g, '');
-                return (/^[\],:{}\s]*$/.test(json));
-            }
-        }
-    });
-
     $.ajaxSetup({
         /*
          * @type {string}
@@ -50,27 +38,24 @@ jQuery(function ($) {
          * @param {Object}
          */
         beforeSend: function(jqXHR, settings) {
+            var form_key = typeof FORM_KEY !== 'undefined' ? FORM_KEY : null;
             if (!settings.url.match(new RegExp('[?&]isAjax=true',''))) {
                 settings.url = settings.url.match(
                     new RegExp('\\?',"g")) ?
                     settings.url + '&isAjax=true' :
                     settings.url + '?isAjax=true';
             }
-            if ($.type(settings.data) === "string" &&
-                settings.data.indexOf('form_key=') === -1
-            ) {
+            if (!settings.data) {
+                settings.data = {
+                    form_key: form_key
+                };
+            } else if ($.type(settings.data) === "string" &&
+                settings.data.indexOf('form_key=') === -1) {
                 settings.data += '&' + $.param({
-                    form_key: FORM_KEY
+                    form_key: form_key
                 });
-            } else {
-                if (!settings.data) {
-                    settings.data = {
-                        form_key: FORM_KEY
-                    };
-                }
-                if (!settings.data.form_key) {
-                    settings.data.form_key = FORM_KEY;
-                }
+            } else if($.isPlainObject(settings.data) && !settings.data.form_key) {
+                settings.data.form_key = form_key;
             }
         },
 
@@ -81,40 +66,42 @@ jQuery(function ($) {
          */
         complete: function(jqXHR) {
             if (jqXHR.readyState === 4) {
-                if($.mage.isJSON(jqXHR.responseText)) {
+                try {
                     var jsonObject = jQuery.parseJSON(jqXHR.responseText);
                     if (jsonObject.ajaxExpired && jsonObject.ajaxRedirect) {
                         window.location.replace(jsonObject.ajaxRedirect);
                     }
-                }
+                } catch(e) {}
             }
         }
     });
 
     var bootstrap = function() {
-        /*
-         * Initialization of button widgets
+        /**
+         * Init all components defined via data-mage-init attribute
+         * and subscribe init action on contentUpdated event
          */
-        $('*[data-widget-button]').button();
+        $.mage.init();
 
         /*
          * Show loader on ajax send
          */
         $('body').on('ajaxSend processStart', function(e, jqxhr, settings) {
-            if (settings && settings.showLoader) {
-                $(e.target).loader({
-                    icon: $('#loading_mask_loader img').attr('src')
-                }).loader('show');
+            if (settings && settings.showLoader || e.type === 'processStart') {
+                $(e.target).mage('loader', {
+                    icon: $('#loading_mask_loader img').attr('src'),
+                    showOnInit: true
+                });
             }
         });
 
         /*
          * Initialization of notification widget
          */
-        if ($('#messages').length) {
-            $('#messages').notification();
-        }
+        $('body').mage('notification');
+
+        $('.content-header:not(.skip-header)').mage('floatingHeader');
     };
 
-    $(document).ready(bootstrap);
+    $(bootstrap);
 });

@@ -40,11 +40,6 @@ class Mage_CatalogRule_Model_RuleTest extends PHPUnit_Framework_TestCase
         $this->_object = Mage::getModel('Mage_CatalogRule_Model_Rule');
     }
 
-    protected function tearDown()
-    {
-        $this->_object = null;
-    }
-
     /**
      * @magentoAppIsolation enabled
      * @covers Mage_CatalogRule_Model_Rule::calcProductPriceRule

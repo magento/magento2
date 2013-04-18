@@ -1,20 +1,21 @@
 .mselect-list {
-    position:relative;
+    position: relative;
+}
+
+.mselect-list .block-footer {
+    padding: 8px 0;
 }
 
 .mselect-items-wrapper {
-    padding: 3px;
     min-height: 80px;
-    border: 1px solid #bbb;
-    border-radius: 4px;
-    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
 }
 
 .mselect-fixed {
-    overflow-x:hidden;
-    overflow-y:auto;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
-
 
 .mselect-list-item {
     position: relative;
@@ -22,62 +23,96 @@
 }
 
 .mselect-list-item:hover {
-    background: #f9f9f9;
+    background: #eef8fc;
 }
 
 .mselect-list-item label {
-    width:100%;
-    display:block;
+    width: 100%;
+    display: block;
 }
 
 .mselect-input-container {
-    position:relative;
-    margin:5px 10px;
-    display:none;
+    position: relative;
+    display: none;
+    margin: 5px 0;
 }
 
 .mselect-input {
     width: 99%;
     margin:0;
 }
-
-.mselect-list-item input:checked + span {
-    background: #e6e6e6;
+.mselect-list-item .mselect-checked + span {
+    background: #cdecf6;
 }
 
-.mselect-list-item .mselect-checked + span {
-    background: #e6e6e6;
+.mselect-list-item input:checked + span {
+    background: #cdecf6;
+}
+
+.mselect-list-item .mselect-checked + span:before {
+    color: #7ba4b1;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    vertical-align: baseline;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: "\e067";
+}
+
+.mselect-list-item input:checked + span:before {
+    color: #7ba4b1;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    vertical-align: baseline;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: "\e067";
 }
 
 .mselect-list-item input[type='checkbox'] {
     position: absolute;
-    left:-9999px;
+    left: -9999px;
     opacity: 0;
 }
 
 .mselect-list-item.mselect-disabled label span {
-    color:#999;
+    color: #999;
     cursor: default;
 }
+
 .mselect-list-item.mselect-disabled:hover {
     background: #fff;
 }
 
-.mselect-list-item label>span {
+.mselect-list-item label > span {
     display: block;
-    padding: 5px 50px 5px 5px;
+    padding: 5px 50px 5px 20px;
+    font-size: 13px;
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
 
 .mselect-list-item label span form {
     position: relative;
-    margin-right: -45px;
+    margin: 0 -45px 0 -15px;
     z-index: 2;
 }
 
 .mselect-list-item input[type='text'] {
     padding-right: 45px;
+    width: 100%;
+}
+
+.mselect-list-item input::-ms-clear {
+    display: none;
 }
 
 .mselect-cancel,
@@ -86,43 +121,85 @@
 .mselect-save {
     width: 16px;
     height: 16px;
+    padding: 0;
     position: absolute;
     cursor: pointer;
-    background: url(../images/icons-sprite.png) no-repeat;
-    text-indent: -9999px;
+    font-size: 0;
 }
 
 .mselect-cancel {
     right: 5px;
-    top: 7px;
-    background-position:-312px 0;
+    top: 3px;
     padding: 0;
 }
 
 .mselect-edit {
-    background-position: 0 -72px;
-    top: 5px;
+    top: 2px;
     right: 30px;
     display: none;
 }
 
 .mselect-delete {
-    background-position: -456px -0;
     display: none;
-    top: 5px;
+    top: 2px;
     right: 5px;
 }
 
 .mselect-save,
-.mselect-save:hover {
-    background:url(../images/icons-sprite.png) no-repeat -72px -72px;
+.mselect-save:hover,
+.mselect-save:focus {
     display: block;
-    top: 6px;
+    top: 4px;
     right: 25px;
     border: none;
-    padding: 0;
-    margin: 0;
-    filter:none;
+    background: none;
+    filter: none;
+}
+
+.mselect-cancel:before,
+.mselect-edit:before,
+.mselect-delete:before,
+.mselect-save:before {
+    font-size: 16px;
+    color: #666;
+    color: rgba(20,20,20,0.3);
+    vertical-align: baseline;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+}
+
+.mselect-cancel:active,
+.mselect-edit:active,
+.mselect-delete:active,
+.mselect-save:active {
+    box-shadow: none;
+}
+
+.mselect-cancel:hover:before,
+.mselect-edit:hover:before,
+.mselect-delete:hover:before,
+.mselect-save:hover:before {
+    color: #333;
+    color: rgba(20,20,20,0.6);
+}
+
+.mselect-cancel:before {
+    content: "\e069"
+}
+
+.mselect-edit:before {
+    content: "\e05b"
+}
+
+.mselect-delete:before {
+    content: "\e07f"
+}
+
+.mselect-save:before {
+    content: "\e067";
 }
 
 .mselect-list-item:hover .mselect-delete,
@@ -137,108 +214,6 @@
     display: none;
 }
 
-/* Temporary styles */
-.mselect-list {
-    width: 278px;
-    background: #fff;
-    border:1px solid #C4C1BC;
-}
-.mselect-list .block-content {
-    padding:0 10px;
-}
-
-.mselect-list .block-footer {
-    padding: 5px 10px;
-    background:#F0F2F4;
-    border-top:1px solid #ddd;
-    box-shadow:0 1px 5px 0 #ddd inset;
-}
-
-.mselect-list-item label {
-    font-size: 12px;
-    color: #333;
-    font: 12px normal Arial, Helvetica,sans-serif;
-}
-
-.mselect-list-item form {
-    display: block;
-}
-
-.mselect-list input[type=text] {
-    font:13px/18px Arial, Helvetica, sans-serif;
-    display: inline-block;
-    width:100%;
-    height:28px;
-    padding: 4px 50px 4px 4px;
-    margin: 0 0 8px;
-    color: #333;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
-    box-sizing:border-box;
-    border-radius: 3px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
-    -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
-    -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
-    -o-transition: border linear 0.2s, box-shadow linear 0.2s;
-    transition: border linear 0.2s, box-shadow linear 0.2s;
-}
-
-.mselect-list input[type=text]:focus {
-    border-color: rgba(82, 168, 236, 0.8);
-    outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-}
-
-.mselect-button-add,
-.mselect-button-add-disabled {
-    height: 16px;
-    line-height: 16px;
-    border-width:1px;
-    border-style:solid;
-    border-color:#ed6502 #a04300 #a04300 #ed6502;
-    padding:0 7px 1px 7px;
-    color:#fff;
-    font:bold 12px arial, helvetica, sans-serif;
-    cursor:pointer;
-    background:#FFAC47;
-    background: -moz-linear-gradient(top,  #ffac47 0%, #f56c06 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffac47), color-stop(100%,#f56c06));
-    background: -webkit-linear-gradient(top,  #ffac47 0%,#f56c06 100%);
-    background: -o-linear-gradient(top,  #ffac47 0%,#f56c06 100%);
-    background: -ms-linear-gradient(top,  #ffac47 0%,#f56c06 100%);
-    background: linear-gradient(to bottom,  #ffac47 0%,#f56c06 100%);
-
-}
-
-.mselect-button-add:hover {
-    background:#f77c16;
-    background: -moz-linear-gradient(top,  #f9dcba 0%, #fc7e21 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f9dcba), color-stop(100%,#fc7e21));
-    background: -webkit-linear-gradient(top,  #f9dcba 0%,#fc7e21 100%);
-    background: -o-linear-gradient(top,  #f9dcba 0%,#fc7e21 100%);
-    background: -ms-linear-gradient(top,  #f9dcba 0%,#fc7e21 100%);
-    background: linear-gradient(to bottom,  #f9dcba 0%,#fc7e21 100%);
-}
-
-.mselect-button-add:active {
-    background:#f77c16;
-    background: -moz-linear-gradient(top,  #cf5a01 1%, #f77c16 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#cf5a01), color-stop(100%,#f77c16));
-    background: -webkit-linear-gradient(top,  #cf5a01 1%,#f77c16 100%);
-    background: -o-linear-gradient(top,  #cf5a01 1%,#f77c16 100%);
-    background: -ms-linear-gradient(top,  #cf5a01 1%,#f77c16 100%);
-    background: linear-gradient(to bottom,  #cf5a01 1%,#f77c16 100%);
-}
-
-.mselect-button-add-disabled {
-    background: #ccc;
-    color: #fafafa;
-    border:1px solid #999;
+.mselect-input-container .mselect-save {
+    top: 3px;
 }

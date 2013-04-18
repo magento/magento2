@@ -37,43 +37,45 @@ class Mage_Catalog_Model_ObserverTest extends PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_requestMock;
+
     protected function setUp()
     {
         $this->_model = new Mage_Catalog_Model_Observer();
+        $this->_requestMock = $this->getMock('Mage_Core_Controller_Request_Http', array(), array(), '', false);
     }
 
     public function testTransitionProductTypeSimple()
     {
-        $this->markTestIncomplete('MAGETWO-4796');
         $product = new Varien_Object(array('type_id' => 'simple'));
-        $this->_observer = new Varien_Event_Observer(array('product' => $product));
+        $this->_observer = new Varien_Event_Observer(array('product' => $product, 'request' => $this->_requestMock));
         $this->_model->transitionProductType($this->_observer);
         $this->assertEquals('simple', $product->getTypeId());
     }
 
     public function testTransitionProductTypeVirtual()
     {
-        $this->markTestIncomplete('MAGETWO-4796');
         $product = new Varien_Object(array('type_id' => 'virtual', 'is_virtual' => ''));
-        $this->_observer = new Varien_Event_Observer(array('product' => $product));
+        $this->_observer = new Varien_Event_Observer(array('product' => $product, 'request' => $this->_requestMock));
         $this->_model->transitionProductType($this->_observer);
         $this->assertEquals('virtual', $product->getTypeId());
     }
 
     public function testTransitionProductTypeSimpleToVirtual()
     {
-        $this->markTestIncomplete('MAGETWO-4796');
         $product = new Varien_Object(array('type_id' => 'simple', 'is_virtual' => ''));
-        $this->_observer = new Varien_Event_Observer(array('product' => $product));
+        $this->_observer = new Varien_Event_Observer(array('product' => $product, 'request' => $this->_requestMock));
         $this->_model->transitionProductType($this->_observer);
         $this->assertEquals('virtual', $product->getTypeId());
     }
 
     public function testTransitionProductTypeVirtualToSimple()
     {
-        $this->markTestIncomplete('MAGETWO-4796');
         $product = new Varien_Object(array('type_id' => 'virtual'));
-        $this->_observer = new Varien_Event_Observer(array('product' => $product));
+        $this->_observer = new Varien_Event_Observer(array('product' => $product, 'request' => $this->_requestMock));
         $this->_model->transitionProductType($this->_observer);
         $this->assertEquals('simple', $product->getTypeId());
     }

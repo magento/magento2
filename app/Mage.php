@@ -29,12 +29,82 @@
  */
 final class Mage
 {
+    const DEFAULT_ERROR_HANDLER = 'mageCoreErrorHandler';
+
+    /**
+     * Application initialization option to specify custom product edition label
+     */
+    const PARAM_EDITION = 'edition';
+
+    /**
+     * Application run code
+     */
+    const PARAM_RUN_CODE = 'MAGE_RUN_CODE';
+
+    /**
+     * Application run type (store|website)
+     */
+    const PARAM_RUN_TYPE = 'MAGE_RUN_TYPE';
+
+    /**
+     * Application run code
+     */
+    const PARAM_MODE = 'MAGE_MODE';
+
+    /**
+     * Base directory
+     */
+    const PARAM_BASEDIR = 'base_dir';
+
+    /**
+     * Custom application dirs
+     */
+    const PARAM_APP_DIRS = 'app_dirs';
+
+    /**
+     * Custom application uris
+     */
+    const PARAM_APP_URIS = 'app_uris';
+
+    /**
+     * Allowed modules
+     */
+    const PARAM_ALLOWED_MODULES = 'allowed_modules';
+
+    /**
+     * Caching params
+     */
+    const PARAM_CACHE_OPTIONS = 'cache_options';
+
+    /**
+     * Disallow cache
+     */
+    const PARAM_BAN_CACHE = 'global_ban_use_cache';
+
+    /**
+     * Custom local configuration file name
+     */
+    const PARAM_CUSTOM_LOCAL_FILE = 'custom_local_xml';
+
+    /**
+     * Custom local configuration
+     */
+    const PARAM_CUSTOM_LOCAL_CONFIG = 'custom_local_config';
+
+    /**
+     * Product edition labels
+     */
+    const EDITION_COMMUNITY    = 'Community';
+    const EDITION_ENTERPRISE   = 'Enterprise';
+    const EDITION_PROFESSIONAL = 'Professional';
+    const EDITION_GO           = 'Go';
+
     /**
      * Registry collection
      *
      * @var array
      */
-    static private $_registry                   = array();
+    static private $_registry = array();
 
     /**
      * Application root absolute path
@@ -58,13 +128,6 @@ final class Mage
     static private $_config;
 
     /**
-     * Event Collection Object
-     *
-     * @var Varien_Event_Collection
-     */
-    static private $_events;
-
-    /**
      * Object manager interface
      *
      * @var Magento_ObjectManager
@@ -83,21 +146,14 @@ final class Mage
      *
      * @var bool
      */
-    static private $_isDownloader               = false;
-
-    /**
-     * Is developer mode flag
-     *
-     * @var bool
-     */
-    static private $_isDeveloperMode            = false;
+    static private $_isDownloader = false;
 
     /**
      * Is allow throw Exception about headers already sent
      *
      * @var bool
      */
-    public static $headersSentThrowsException   = true;
+    public static $headersSentThrowsException  = true;
 
     /**
      * Logger entities
@@ -114,14 +170,6 @@ final class Mage
     protected static $_design;
 
     /**
-     * Magento edition constants
-     */
-    const EDITION_COMMUNITY    = 'Community';
-    const EDITION_ENTERPRISE   = 'Enterprise';
-    const EDITION_PROFESSIONAL = 'Professional';
-    const EDITION_GO           = 'Go';
-
-    /**
      * Current Magento edition.
      *
      * @var string
@@ -135,6 +183,13 @@ final class Mage
      * @var bool
      */
     static private $_isSerializable = true;
+
+    /**
+     * Update mode flag
+     *
+     * @var bool
+     */
+    static private $_updateMode = false;
 
     /**
      * Gets the current Magento version string
@@ -163,7 +218,7 @@ final class Mage
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '38',
+            'number'    => '44',
         );
     }
 
@@ -179,6 +234,16 @@ final class Mage
     }
 
     /**
+     * Set edition
+     *
+     * @param string $edition
+     */
+    public static function setEdition($edition)
+    {
+        self::$_currentEdition = $edition;
+    }
+
+    /**
      * Set all my static data to defaults
      *
      */
@@ -189,12 +254,11 @@ final class Mage
         self::$_appRoot         = null;
         self::$_app             = null;
         self::$_config          = null;
-        self::$_events          = null;
         self::$_objects         = null;
         self::$_isDownloader    = false;
-        self::$_isDeveloperMode = false;
         self::$_loggers         = array();
         self::$_design          = null;
+        self::$_objectManager   = null;
         // do not reset $headersSentThrowsException
     }
 
@@ -218,6 +282,8 @@ final class Mage
      * @param mixed $value
      * @param bool $graceful
      * @throws Mage_Core_Exception
+     *
+     * @deprecated use Mage_Core_Model_Registry::register
      */
     public static function register($key, $value, $graceful = false)
     {
@@ -234,6 +300,8 @@ final class Mage
      * Unregister a variable from register by key
      *
      * @param string $key
+     *
+     * @deprecated use Mage_Core_Model_Registry::unregister
      */
     public static function unregister($key)
     {
@@ -250,6 +318,8 @@ final class Mage
      *
      * @param string $key
      * @return mixed
+     *
+     * @deprecated use Mage_Core_Model_Registry::registry
      */
     public static function registry($key)
     {
@@ -278,16 +348,6 @@ final class Mage
     }
 
     /**
-     * Retrieve Events Collection
-     *
-     * @return Varien_Event_Collection $collection
-     */
-    public static function getEvents()
-    {
-        return self::$_events;
-    }
-
-    /**
      * Varien Objects Cache
      *
      * @param string $key optional, if specified will load this key
@@ -311,9 +371,9 @@ final class Mage
      * @param string $type
      * @return string
      */
-    public static function getBaseDir($type = 'base')
+    public static function getBaseDir($type = Mage_Core_Model_Dir::ROOT)
     {
-        return self::getConfig()->getOptions()->getDir($type);
+        return self::getSingleton('Mage_Core_Model_Dir')->getDir($type);
     }
 
     /**
@@ -325,7 +385,7 @@ final class Mage
      */
     public static function getModuleDir($type, $moduleName)
     {
-        return self::getConfig()->getModuleDir($type, $moduleName);
+        return self::getObjectManager()->get('Mage_Core_Model_Config_Modules_Reader')->getModuleDir($type, $moduleName);
     }
 
     /**
@@ -378,8 +438,7 @@ final class Mage
      */
     public static function getUrl($route = '', $params = array())
     {
-        return self::getObjectManager()->create('Mage_Core_Model_Url', array('data' => array()))
-            ->getUrl($route, $params);
+        return self::getObjectManager()->create('Mage_Core_Model_Url')->getUrl($route, $params);
     }
 
     /**
@@ -398,6 +457,9 @@ final class Mage
     /**
      * Retrieve a config instance
      *
+     * This method doesn't suit Magento 2 anymore, it is left only until refactoring, when all calls
+     * to Mage::getConfig() will be removed in favor of config dependency injection.
+     *
      * @return Mage_Core_Model_Config
      */
     public static function getConfig()
@@ -409,26 +471,6 @@ final class Mage
     }
 
     /**
-     * Add observer to even object
-     *
-     * @param string $eventName
-     * @param callback $callback
-     * @param array $data
-     * @param string $observerName
-     * @param string $observerClass
-     * @return Varien_Event_Collection
-     */
-    public static function addObserver($eventName, $callback, $data = array(), $observerName = '', $observerClass = '')
-    {
-        if ($observerClass == '') {
-            $observerClass = 'Varien_Event_Observer';
-        }
-        $observer = self::getObjectManager()->create($observerClass);
-        $observer->setName($observerName)->addData($data)->setEventName($eventName)->setCallback($callback);
-        return self::getEvents()->addObserver($observer);
-    }
-
-    /**
      * Dispatch event
      *
      * Calls all observer callbacks registered for this event
@@ -436,14 +478,12 @@ final class Mage
      *
      * @param string $name
      * @param array $data
-     * @return Mage_Core_Model_App
+     *
+     * @deprecated use Mage_Core_Model_Event_Manager::dispatch
      */
     public static function dispatchEvent($name, array $data = array())
     {
-        Magento_Profiler::start('EVENT:' . $name, array('group' => 'EVENT', 'name' => $name));
-        $result = self::app()->dispatchEvent($name, $data);
-        Magento_Profiler::stop('EVENT:'.$name);
-        return $result;
+        return Mage::getSingleton('Mage_Core_Model_Event_Manager')->dispatch($name, $data);
     }
 
     /**
@@ -459,37 +499,22 @@ final class Mage
         if (!is_array($arguments)) {
             $arguments = array($arguments);
         }
-        return self::getObjectManager()->create($modelClass, $arguments, false);
+        return self::getObjectManager()->create($modelClass, $arguments);
     }
 
     /**
      * Retrieve model object singleton
      *
      * @param   string $modelClass
-     * @param   array $arguments
      * @return  Mage_Core_Model_Abstract
      */
-    public static function getSingleton($modelClass = '', array $arguments=array())
+    public static function getSingleton($modelClass = '')
     {
         $registryKey = '_singleton/'.$modelClass;
         if (!self::registry($registryKey)) {
-            self::register($registryKey, self::getObjectManager()->get($modelClass, $arguments));
+            self::register($registryKey, self::getObjectManager()->get($modelClass));
         }
         return self::registry($registryKey);
-    }
-
-    /**
-     * Initialize object manager with definitions file
-     *
-     * @static
-     * @param string $definitionsFile
-     * @param Magento_ObjectManager $objectManager
-     */
-    public static function initializeObjectManager(
-        $definitionsFile = null,
-        Magento_ObjectManager $objectManager = null
-    ) {
-        self::$_objectManager = $objectManager ?: new Magento_ObjectManager_Zend($definitionsFile);
     }
 
     /**
@@ -500,10 +525,20 @@ final class Mage
      */
     public static function getObjectManager()
     {
-        if (!self::$_objectManager) {
-            self::initializeObjectManager();
-        }
         return self::$_objectManager;
+    }
+
+    /**
+     * Set application object manager
+     * @param Magento_ObjectManager $objectManager
+     */
+    public static function setObjectManager(Magento_ObjectManager $objectManager)
+    {
+        if (!self::$_objectManager) {
+            self::$_objectManager = $objectManager;
+        } else {
+            throw new LogicException('Only one object manager can be used in application');
+        }
     }
 
     /**
@@ -522,17 +557,16 @@ final class Mage
     }
 
     /**
-     * Retrieve resource vodel object singleton
+     * Retrieve resource model object singleton
      *
      * @param   string $modelClass
-     * @param   array $arguments
      * @return  object
      */
-    public static function getResourceSingleton($modelClass = '', array $arguments = array())
+    public static function getResourceSingleton($modelClass = '')
     {
         $registryKey = '_resource_singleton/'.$modelClass;
         if (!self::registry($registryKey)) {
-            self::register($registryKey, self::getObjectManager()->get($modelClass, $arguments));
+            self::register($registryKey, self::getObjectManager()->get($modelClass));
         }
         return self::registry($registryKey);
     }
@@ -564,8 +598,7 @@ final class Mage
 
         $registryKey = '_helper/' . $name;
         if (!self::registry($registryKey)) {
-            $helperClass = self::getConfig()->getHelperClassName($name);
-            self::register($registryKey, self::getObjectManager()->get($helperClass));
+            self::register($registryKey, self::getObjectManager()->get($name));
         }
         return self::registry($registryKey);
     }
@@ -578,14 +611,22 @@ final class Mage
      */
     public static function getResourceHelper($moduleName)
     {
-        $connectionModel = self::getConfig()->getResourceConnectionModel('core');
+        $connectionModel = self::getObjectManager()
+            ->get('Mage_Core_Model_Config_Resource')
+            ->getResourceConnectionModel('core');
 
         $helperClassName = $moduleName . '_Model_Resource_Helper_' . ucfirst($connectionModel);
         $connection = strtolower($moduleName);
         if (substr($moduleName, 0, 5) == 'Mage_') {
             $connection = substr($connection, 5);
         }
-        return self::getObjectManager()->get($helperClassName, array('modulePrefix' => $connection));
+        $key = 'resourceHelper/' . $connection;
+        if (!self::registry($key)) {
+            self::register(
+                $key, self::getObjectManager()->create($helperClassName, array('modulePrefix' => $connection))
+            );
+        }
+        return self::registry($key);
     }
 
     /**
@@ -618,115 +659,27 @@ final class Mage
     }
 
     /**
-     * Get initialized application object.
+     * Get application object.
      *
-     * @param string $code
-     * @param string $type
-     * @param string|array $options
      * @return Mage_Core_Model_App
      */
-    public static function app($code = '', $type = 'store', $options = array())
+    public static function app()
     {
         if (null === self::$_app) {
             self::$_app = self::getObjectManager()->get('Mage_Core_Model_App');
-            self::$_events = new Varien_Event_Collection();
-
-            Magento_Profiler::start('self::app::init');
-            self::$_app->init($code, $type, $options);
-            Magento_Profiler::stop('self::app::init');
         }
         return self::$_app;
     }
 
     /**
-     * @static
-     * @param string $areaCode
-     */
-    public static function setCurrentArea($areaCode)
-    {
-        self::getObjectManager()->loadAreaConfiguration($areaCode);
-    }
-
-    /**
-     * @static
-     * @param string $code
-     * @param string $type
-     * @param array $options
-     * @param string|array $modules
-     */
-    public static function init($code = '', $type = 'store', $options = array(), $modules = array())
-    {
-        try {
-            self::$_app = self::getObjectManager()->create('Mage_Core_Model_App');
-
-            if (!empty($modules)) {
-                self::$_app->initSpecified($code, $type, $options, $modules);
-            } else {
-                self::$_app->init($code, $type, $options);
-            }
-        } catch (Mage_Core_Model_Session_Exception $e) {
-            header('Location: ' . self::getBaseUrl());
-            die;
-        } catch (Mage_Core_Model_Store_Exception $e) {
-            require_once(self::getBaseDir() . DS . 'pub' . DS . 'errors' . DS . '404.php');
-            die;
-        } catch (Exception $e) {
-            self::printException($e);
-            die;
-        }
-    }
-
-    /**
-     * Front end main entry point
-     *
-     * @param string $code
-     * @param string $type
-     * @param string|array $options
-     */
-    public static function run($code = '', $type = 'store', $options = array())
-    {
-        try {
-            Magento_Profiler::start('mage');
-            if (isset($options['edition'])) {
-                self::$_currentEdition = $options['edition'];
-            }
-            self::$_app    = self::getObjectManager()->get('Mage_Core_Model_App');
-            if (isset($options['request'])) {
-                self::$_app->setRequest($options['request']);
-            }
-            if (isset($options['response'])) {
-                self::$_app->setResponse($options['response']);
-            }
-            self::$_events = new Varien_Event_Collection();
-            self::$_app->run(array(
-                'scope_code' => $code,
-                'scope_type' => $type,
-                'options'    => $options,
-            ));
-            Magento_Profiler::stop('mage');
-        } catch (Mage_Core_Model_Session_Exception $e) {
-            header('Location: ' . self::getBaseUrl());
-        } catch (Mage_Core_Model_Store_Exception $e) {
-            require_once(self::getBaseDir() . '/pub/errors/404.php');
-        } catch (Exception $e) {
-            self::printException($e);
-        }
-    }
-
-    /**
-     * Shortcut for the application "is installed" getter
+     * Check if application is installed
      *
      * @return bool
-     * @throws Magento_Exception
-     *
-     * @todo Remove in favour of Mage_Core_Model_App::isInstalled() as soon as dependencies on application are injected
+     * @deprecated use Mage_Core_Model_App_State::isInstalled()
      */
     public static function isInstalled()
     {
-        if (!self::$_app) {
-            throw new Magento_Exception('Application instance has not been initialized yet.');
-        }
-        return self::$_app->isInstalled();
+        return (bool) Mage::getSingleton('Mage_Core_Model_Config_Primary')->getInstallDate();
     }
 
     /**
@@ -768,25 +721,25 @@ final class Mage
     }
 
     /**
-     * Set enabled developer mode
-     *
-     * @param bool $mode
-     * @return bool
-     */
-    public static function setIsDeveloperMode($mode)
-    {
-        self::$_isDeveloperMode = (bool)$mode;
-        return self::$_isDeveloperMode;
-    }
-
-    /**
      * Retrieve enabled developer mode
      *
      * @return bool
+     * @deprecated use Mage_Core_Model_App_State::getMode()
      */
     public static function getIsDeveloperMode()
     {
-        return self::$_isDeveloperMode;
+        $objectManager = self::getObjectManager();
+        if (!$objectManager) {
+            return false;
+        }
+
+        $appState = $objectManager->get('Mage_Core_Model_App_State');
+        if (!$appState) {
+            return false;
+        }
+
+        $mode = $appState->getMode();
+        return $mode == Mage_Core_Model_App_State::MODE_DEVELOPER;
     }
 
     /**
@@ -797,7 +750,7 @@ final class Mage
      */
     public static function printException(Exception $e, $extra = '')
     {
-        if (self::$_isDeveloperMode) {
+        if (self::getIsDeveloperMode()) {
             print '<pre>';
 
             if (!empty($extra)) {
@@ -831,66 +784,18 @@ final class Mage
             } catch (Exception $e) {
             }
 
-            require_once(self::getBaseDir() . DS . 'pub' . DS . 'errors' . DS . 'report.php');
+            require_once(self::getBaseDir(Mage_Core_Model_Dir::PUB) . DS . 'errors' . DS . 'report.php');
         }
 
         die();
     }
 
     /**
-     * Define system folder directory url by virtue of running script directory name
-     * Try to find requested folder by shifting to domain root directory
-     *
-     * @param   string  $folder
-     * @param   boolean $exitIfNot
-     * @return  string
-     */
-    public static function getScriptSystemUrl($folder, $exitIfNot = false)
-    {
-        $runDirUrl  = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
-        $runDir     = rtrim(dirname($_SERVER['SCRIPT_FILENAME']), DS);
-
-        $baseUrl    = null;
-        if (is_dir($runDir.'/'.$folder)) {
-            $baseUrl = str_replace(DS, '/', $runDirUrl);
-        } else {
-            $runDirUrlArray = explode('/', $runDirUrl);
-            $runDirArray    = explode('/', $runDir);
-            $count          = count($runDirArray);
-
-            for ($i=0; $i < $count; $i++) {
-                array_pop($runDirUrlArray);
-                array_pop($runDirArray);
-                $_runDir = implode('/', $runDirArray);
-                if (!empty($_runDir)) {
-                    $_runDir .= '/';
-                }
-
-                if (is_dir($_runDir.$folder)) {
-                    $_runDirUrl = implode('/', $runDirUrlArray);
-                    $baseUrl    = str_replace(DS, '/', $_runDirUrl);
-                    break;
-                }
-            }
-        }
-
-        if (is_null($baseUrl)) {
-            $errorMessage = "Unable detect system directory: $folder";
-            if ($exitIfNot) {
-                // exit because of infinity loop
-                exit($errorMessage);
-            } else {
-                self::printException(new Exception(), $errorMessage);
-            }
-        }
-
-        return $baseUrl;
-    }
-
-    /**
      * Set is downloader flag
      *
      * @param bool $flag
+     *
+     * @deprecated use Mage_Core_Model_App_State::setIsDownloader()
      */
     public static function setIsDownloader($flag = true)
     {
@@ -902,6 +807,8 @@ final class Mage
      *
      * @static
      * @param bool $value
+     *
+     * @deprecated use Mage_Core_Model_App_State::setIsSerializable()
      */
     public static function setIsSerializable($value = true)
     {
@@ -913,9 +820,35 @@ final class Mage
      *
      * @static
      * @return bool
+     *
+     * @deprecated use Mage_Core_Model_App_State::getIsSerializable()
      */
     public static function getIsSerializable()
     {
         return self::$_isSerializable;
+    }
+
+    /**
+     * Set update mode flag
+     *
+     * @param bool $value
+     *
+     * @deprecated use Mage_Core_Model_App_State::setUpdateMode()
+     */
+    public static function setUpdateMode($value)
+    {
+        self::$_updateMode = $value;
+
+    }
+
+    /**
+     * Get update mode flag
+     * @return bool
+     *
+     * @deprecated use Mage_Core_Model_App_State::setUpdateMode()
+     */
+    public static function getUpdateMode()
+    {
+        return self::$_updateMode;
     }
 }

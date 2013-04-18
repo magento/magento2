@@ -31,6 +31,6 @@ class Invalid_Resource_Name
      */
     public function createV1($data)
     {
-        // Body is intentionally left empty
+        // Body is intentionally left empty.
     }
 }

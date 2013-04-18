@@ -62,14 +62,14 @@ XML;
         $this->assertXmlStringEqualsXmlString(
             $expectedResult,
             $actualXml,
-            'Wrong soap fault message with default parameters.'
+            'Wrong SOAP fault message with default parameters.'
         );
     }
 
     public function testToXmlDeveloperModeOn()
     {
         $actualXml = $this->_soapFault->toXml(true);
-        $this->assertContains('<ExceptionTrace>', $actualXml, 'Exception trace not found in XML.');
+        $this->assertContains('<ExceptionTrace>', $actualXml, 'Exception trace is not found in XML.');
     }
 
     /**
@@ -101,17 +101,17 @@ XML;
      */
     public function dataProviderForGetSoapFaultMessageTest()
     {
-        /** Include file with all expected soap fault XMLs. */
+        /** Include file with all expected SOAP fault XMLs. */
         $expectedXmls = include __DIR__ . '/../../_files/soap_fault/soap_fault_expected_xmls.php';
         return array(
-            //Each array contains data for SOAP Fault Message, Expected XML and Assert Message.
+            //Each array contains data for SOAP Fault Message, Expected XML, and Assert Message.
             array(
                 'Fault reason',
                 'Sender',
                 'cn',
                 array('key1' => 'value1', 'key2' => 'value2'),
                 $expectedXmls['expectedResultArrayDataDetails'],
-                'Wrong soap fault message with associated array data details.'
+                'SOAP fault message with associated array data details is invalid.'
             ),
             array(
                 'Fault reason',
@@ -119,7 +119,7 @@ XML;
                 'en',
                 array('value1', 'value2'),
                 $expectedXmls['expectedResultIndexArrayDetails'],
-                'Wrong soap fault message with index array data details.'
+                'SOAP fault message with index array data details is invalid.'
             ),
             array(
                 'Fault reason',
@@ -127,7 +127,7 @@ XML;
                 'en',
                 array(),
                 $expectedXmls['expectedResultEmptyArrayDetails'],
-                'Wrong soap fault message with empty array data details.'
+                'SOAP fault message with empty array data details is invalid.'
             ),
             array(
                 'Fault reason',
@@ -135,7 +135,7 @@ XML;
                 'en',
                 (object)array('key' => 'value'),
                 $expectedXmls['expectedResultObjectDetails'],
-                'Wrong soap fault message with object data details.'
+                'SOAP fault message with object data details is invalid.'
             ),
             array(
                 'Fault reason',
@@ -143,7 +143,7 @@ XML;
                 'en',
                 'String details',
                 $expectedXmls['expectedResultStringDetails'],
-                'Wrong soap fault message with string data details.'
+                'SOAP fault message with string data details is invalid.'
             ),
             array(
                 'Fault reason',
@@ -151,7 +151,7 @@ XML;
                 'en',
                 array('key' => array('sub_key' => 'value')),
                 $expectedXmls['expectedResultComplexDataDetails'],
-                'Wrong soap fault message with complex data details.'
+                'SOAP fault message with complex data details is invalid.'
             ),
         );
     }

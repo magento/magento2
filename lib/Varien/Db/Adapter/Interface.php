@@ -650,10 +650,10 @@ interface Varien_Db_Adapter_Interface
     /**
      * Set cache adapter
      *
-     * @param Zend_Cache_Backend_Interface $adapter
+     * @param Magento_Cache_FrontendInterface $adapter
      * @return Varien_Db_Adapter_Interface
      */
-    public function setCacheAdapter($adapter);
+    public function setCacheAdapter(Magento_Cache_FrontendInterface $adapter);
 
     /**
      * Allow DDL caching

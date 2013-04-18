@@ -27,22 +27,36 @@
 class Varien_Cache_Core extends Zend_Cache_Core
 {
     /**
+     * Available options
+     *
+     * ====> (array) backend_decorators :
+     * - array of decorators to decorate cache backend. Each element of this array should contain:
+     * -- 'class' - concrete decorator, descendant of Magento_Cache_Backend_Decorator_Abstract
+     * -- 'options' - optional array of specific decorator options
+     * @var array
+     */
+    protected $_specificOptions = array(
+        'backend_decorators'    => array(),
+        'disable_save'          => false,
+    );
+
+    /**
      * Make and return a cache id
      *
      * Checks 'cache_id_prefix' and returns new id with prefix or simply the id if null
      *
-     * @param  string $id Cache id
+     * @param  string $cacheId Cache id
      * @return string Cache id (with or without prefix)
      */
-    protected function _id($id)
+    protected function _id($cacheId)
     {
-        if ($id !== null) {
-            $id = preg_replace('/([^a-zA-Z0-9_]{1,1})/', '_', $id);
+        if ($cacheId !== null) {
+            $cacheId = preg_replace('/([^a-zA-Z0-9_]{1,1})/', '_', $cacheId);
             if (isset($this->_options['cache_id_prefix'])) {
-                $id = $this->_options['cache_id_prefix'] . $id;
+                $cacheId = $this->_options['cache_id_prefix'] . $cacheId;
             }
         }
-        return $id;
+        return $cacheId;
     }
 
     /**
@@ -62,18 +76,23 @@ class Varien_Cache_Core extends Zend_Cache_Core
     /**
      * Save some data in a cache
      *
-     * @param  mixed $data           Data to put in cache (can be another type than string if automatic_serialization is on)
-     * @param  string $id             Cache id (if not set, the last cache id will be used)
-     * @param  array $tags           Cache tags
-     * @param  int $specificLifetime If != false, set a specific lifetime for this cache record (null => infinite lifetime)
-     * @param  int   $priority         integer between 0 (very low priority) and 10 (maximum priority) used by some particular backends
-     * @throws Zend_Cache_Exception
-     * @return boolean True if no problem
+     * @param  mixed $data                  Data to put in cache (can be another type than string if
+     *                                      automatic_serialization is on)
+     * @param  null|string $cacheId         Cache id (if not set, the last cache id will be used)
+     * @param  array $tags                  Cache tags
+     * @param  bool|int $specificLifetime   If != false, set a specific lifetime for this cache record
+     *                                      (null => infinite lifetime)
+     * @param  int $priority                integer between 0 (very low priority) and 10 (maximum priority) used by
+     *                                      some particular backends
+     * @return boolean                      True if no problem
      */
-    public function save($data, $id = null, $tags = array(), $specificLifetime = false, $priority = 8)
+    public function save($data, $cacheId = null, $tags = array(), $specificLifetime = false, $priority = 8)
     {
+        if ($this->getOption('disable_save')) {
+            return true;
+        }
         $tags = $this->_tags($tags);
-        return parent::save($data, $id, $tags, $specificLifetime, $priority);
+        return parent::save($data, $cacheId, $tags, $specificLifetime, $priority);
     }
 
     /**
@@ -126,5 +145,52 @@ class Varien_Cache_Core extends Zend_Cache_Core
     {
         $tags = $this->_tags($tags);
         return parent::getIdsNotMatchingTags($tags);
+    }
+
+    /**
+     * Set the backend
+     *
+     * @param  Zend_Cache_Backend $backendObject
+     * @return void
+     */
+    public function setBackend(Zend_Cache_Backend $backendObject)
+    {
+        $backendObject = $this->_decorateBackend($backendObject);
+        parent::setBackend($backendObject);
+    }
+
+    /**
+     * Decorate cache backend with additional functionality
+     *
+     * @param Zend_Cache_Backend
+     * @return Zend_Cache_Backend
+     */
+    protected function _decorateBackend(Zend_Cache_Backend $backendObject)
+    {
+        if (!is_array($this->_specificOptions['backend_decorators'])) {
+            Zend_Cache::throwException("'backend_decorator' option should be an array");
+        }
+
+        foreach ($this->_specificOptions['backend_decorators'] as $decoratorName => $decoratorOptions) {
+            if (!is_array($decoratorOptions) || !array_key_exists('class', $decoratorOptions)) {
+                Zend_Cache::throwException("Concrete decorator options in '" . $decoratorName
+                    . "' should be an array containing 'class' key" );
+            }
+            $classOptions = array_key_exists('options', $decoratorOptions) ? $decoratorOptions['options'] : array();
+            $classOptions['concrete_backend'] = $backendObject;
+
+            if (!class_exists($decoratorOptions['class'])) {
+                Zend_Cache::throwException("Class '" . $decoratorOptions['class'] . "' specified in '"
+                    . $decoratorName . "' does not exist");
+            }
+
+            $backendObject = new $decoratorOptions['class']($classOptions);
+            if (!($backendObject instanceof Magento_Cache_Backend_Decorator_DecoratorAbstract)) {
+                Zend_Cache::throwException("Decorator in '" . $decoratorName
+                    . "' should extend Magento_Cache_Backend_Decorator_DecoratorAbstract");
+            }
+        }
+
+        return $backendObject;
     }
 }

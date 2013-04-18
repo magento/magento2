@@ -1,3 +1,7 @@
+Options None
+<IfModule mod_rewrite.c>
+    RewriteEngine Off
+</IfModule>
 <FilesMatch "\.(xml|phtml)$">
     Deny from all
 </FilesMatch>

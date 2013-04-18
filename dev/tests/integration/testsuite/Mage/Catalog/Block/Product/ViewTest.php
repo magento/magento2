@@ -42,6 +42,11 @@ class Mage_Catalog_Block_Product_ViewTest extends PHPUnit_Framework_TestCase
      */
     protected $_product;
 
+    /**
+     * @var Mage_Catalog_Model_Datasource_Config
+     */
+    protected $_dsConfig;
+
     protected function setUp()
     {
         $this->_block = Mage::getObjectManager()->create('Mage_Catalog_Block_Product_View');
@@ -49,12 +54,6 @@ class Mage_Catalog_Block_Product_ViewTest extends PHPUnit_Framework_TestCase
         $this->_product->load(1);
         Mage::unregister('product');
         Mage::register('product', $this->_product);
-    }
-
-    protected function tearDown()
-    {
-        $this->_block = null;
-        $this->_product = null;
     }
 
     public function testSetLayout()

@@ -1,0 +1,89 @@
+{#
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+#}
+{% set fileInfo = option.fileInfo %}
+{% set fileName = 'options_' ~ option.id ~ '_file' %}
+{% set fieldNameAction = fileName ~ '_action' %}
+
+{% set fileExists = fileInfo.hasData %}
+{% set fileName = 'options_' ~ option.id ~ '_file' %}
+{% set fieldNameAction = fileName ~ '_action' %}
+{% if fileExists %}
+    {% set fieldValueAction = 'save_old' %}
+{% else %}
+    {% set fieldValueAction = 'save_new' %}
+{% endif %}
+{% set fileNamed = fileName ~ '_name' %}
+
+
+<script type="text/javascript">
+    //<![CDATA[
+    (function($) {
+        head.js("{{ viewFileUrl('Mage_Catalog::js/file-option.js')}}", function() {
+            $({{ "#input-box-" ~ fileName  }}).fileOption({
+                fileName: '{{ fileName  }}',
+                fileNamed: '{{ fileNamed }}',
+                fieldNameAction: '{{ fieldNameAction  }}',
+                changeFileSelector: '#change-{{ fileName  }}',
+                deleteFileSelector: '#delete-{{ fileName  }}'
+            });
+        });
+    })(jQuery);
+    //]]>
+</script>
+
+<dt><label {% if option.isRequired %} class="required" {% endif %}> {% if option.isRequired %}<em>*</em> {% endif %} {{ option.title }} </label>
+    {{ option.formattedPrice|raw }}</dt>
+
+<dd{% if option.decoratedIsLast %} class="last"{% endif %}>
+{% if fileExists %}
+<span class="{{ fileNamed }}">{{ fileInfo.title }}</span>
+
+<a href="javascript:void(0)" class="label" id="change-{{ fileName }}" >
+    {{ 'Change'|translate }}
+</a>&nbsp;
+
+
+{% if not option.isRequired %}
+<input type="checkbox" id="delete-{{ fileName }}" />
+<span class="label">{{ 'Delete'|translate }}</span>
+{% endif %}
+{% endif %}
+
+<div id="input-box-{{ fileName }}" {{ fileExists ? 'style="display:none"' : '' }}>
+
+<input type="file" name="{{ fileName}}" class="product-custom-option{{ option.isRequired ? ' required' : '' }}" {{ fileExists ? 'disabled="disabled"' : '' }} />
+<input type="hidden" name="{{ fieldNameAction }}" value="{{ fieldValueAction }}" />
+{% if option.fileExtension %}
+<p class="no-margin">{{ 'Allowed file extensions to upload'|translate }}: <strong>{{ option.fileExtension }}</strong></p>
+{% endif %}
+{% if (option.imageSizeX > 0) %}
+<p class="no-margin">{{ 'Maximum image width'|translate}}: <strong>{{ option.imageSizeX }} {{ 'px.'|translate}}</strong></p>
+{% endif %}
+{% if (option.imageSizeY > 0) %}
+<p class="no-margin">{{ 'Maximum image height'|translate}}: <strong>{{ option.imageSizeY }} {{ 'px.'|translate}}</strong></p>
+{% endif %}
+</div>
+
+</dd>

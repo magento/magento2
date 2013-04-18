@@ -42,11 +42,6 @@ class Mage_Checkout_Block_Onepage_Payment_MethodsTest extends PHPUnit_Framework_
             ->createBlock('Mage_Checkout_Block_Onepage_Payment_Methods');
     }
 
-    protected function tearDown()
-    {
-        $this->_block = null;
-    }
-
     public function testGetMethodTitleAndMethodLabelAfterHtml()
     {
         $expectedTitle = 'Free Method';

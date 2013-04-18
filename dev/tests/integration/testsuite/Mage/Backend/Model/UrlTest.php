@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Backend_Model_Url.
  */
-class Mage_Backend_Model_UrlTest extends PHPUnit_Framework_TestCase
+class Mage_Backend_Model_UrlTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @var Mage_Backend_Model_Url
@@ -37,12 +37,8 @@ class Mage_Backend_Model_UrlTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        parent::setUp();
         $this->_model = Mage::getModel('Mage_Backend_Model_Url');
-    }
-
-    protected function tearDown()
-    {
-        $this->_model = null;
     }
 
     /**

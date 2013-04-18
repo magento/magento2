@@ -37,11 +37,6 @@ class Mage_Core_Model_Resource_ConfigTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getResourceModel('Mage_Core_Model_Resource_Config');
     }
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
-
     public function testSaveDeleteConfig()
     {
         $connection = $this->_model->getReadConnection();

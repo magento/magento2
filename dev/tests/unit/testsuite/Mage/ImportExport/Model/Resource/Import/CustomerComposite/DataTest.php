@@ -86,7 +86,10 @@ class Mage_ImportExport_Model_Resource_Import_CustomerComposite_DataTest extends
         $resourceModelMock->createConnection('core_write', '', array());
 
         $data = array(
-            'json_helper' => new Mage_Core_Helper_Data(),
+            'json_helper' => new Mage_Core_Helper_Data(
+                $this->getMock('Mage_Core_Helper_Context', array(), array(), '', false, false),
+                $this->getMock('Mage_Core_Model_Config_Modules', array(), array(), '', false, false)
+            ),
             'resource'    => $resourceModelMock,
             'entity_type' => $entityType
         );

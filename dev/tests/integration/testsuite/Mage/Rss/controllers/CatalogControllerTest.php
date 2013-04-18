@@ -27,6 +27,11 @@
 
 class Mage_Rss_CatalogControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {
+    protected function setUp()
+    {
+        parent::setUp();
+        Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::PART_CONFIG);
+    }
     /**
      * @param string $action
      * @dataProvider actionNoFeedDataProvider
@@ -163,7 +168,7 @@ class Mage_Rss_CatalogControllerTest extends Magento_Test_TestCase_ControllerAbs
      */
     protected function _loginAdmin()
     {
-        Mage::getDesign()->setArea('adminhtml');
+        Mage::getDesign()->setArea('adminhtml')->setDefaultDesignTheme();
         $this->getRequest()->setServer(array(
             'PHP_AUTH_USER' => Magento_Test_Bootstrap::ADMIN_NAME,
             'PHP_AUTH_PW' => Magento_Test_Bootstrap::ADMIN_PASSWORD

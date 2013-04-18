@@ -89,6 +89,6 @@ class Mage_Backend_Block_System_Config_Form_Field_ImportTest extends PHPUnit_Fra
         $testString = $this->_object->getElementHtml();
         $this->assertStringStartsWith('<input id="time_condition" type="hidden" name="test_name" value="', $testString);
         $this->assertStringEndsWith('<input id="test_html_id" name="test_name"  data-ui-id="form-element-test_name"' .
-                                    ' value="" type="file"/>' . "\n", $testString);
+                                    ' value="" type="file"/>', $testString);
     }
 }

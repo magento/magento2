@@ -35,6 +35,8 @@ class Mage_Widget_Adminhtml_WidgetControllerTest extends Mage_Backend_Utility_Co
         $this->getRequest()->setPost('widget', '{"widget_type":"Mage_Cms_Block_Widget_Page_Link","values":{}}');
         $this->dispatch('backend/admin/widget/loadOptions');
         $output = $this->getResponse()->getBody();
-        $this->assertRegExp('/<label for="options_fieldset[a-z\d]+_page_id"[^>]*>CMS Page/', $output);
+        //searching for label with text "CMS Page"
+        $this->assertContains('data-ui-id="wysiwyg-widget-options-fieldset-element-label-parameters-page-id-label" >'
+            . '<span>CMS Page', $output);
     }
 }

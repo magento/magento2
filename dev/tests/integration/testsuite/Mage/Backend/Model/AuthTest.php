@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Backend_Model_Auth.
  */
-class Mage_Backend_Model_AuthTest extends PHPUnit_Framework_TestCase
+class Mage_Backend_Model_AuthTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @var Mage_Backend_Model_Auth
@@ -37,12 +37,10 @@ class Mage_Backend_Model_AuthTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = Mage::getModel('Mage_Backend_Model_Auth');
-    }
+        parent::setUp();
 
-    protected function tearDown()
-    {
-        $this->_model = null;
+        Mage::app()->loadArea(Mage_Core_Model_App_Area::AREA_ADMINHTML);
+        $this->_model = Mage::getModel('Mage_Backend_Model_Auth');
     }
 
     /**

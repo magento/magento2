@@ -24,27 +24,22 @@
  */
 MediabrowserUtility = {
     openDialog: function(url, width, height, title, options) {
-        if ($('browser_window') && typeof(Windows) != 'undefined') {
-            Windows.focus('browser_window');
-            return;
-        }
-        this.dialogWindow = Dialog.info(null, Object.extend({
-            closable:     true,
-            resizable:    false,
-            draggable:    true,
-            className:    'magento',
-            windowClassName:    'popup-window',
-            title:        title || 'Insert File...',
-            top:          50,
-            width:        width || 950,
-            height:       height || 600,
-            zIndex:       options && options.zIndex || 1000,
-            recenterAuto: false,
-            hideEffect:   Element.hide,
-            showEffect:   Element.show,
-            id:           'browser_window',
-            onClose: this.closeDialog.bind(this)
-        }, options || {}));
+        var windowId = 'modal_dialog_message';
+        jQuery('body').append('<div class="popup-window magento_message" id="' + windowId + '"></div>');
+        jQuery('#' + windowId).dialog({
+            autoOpen:   false,
+            title:      title || 'Insert File...',
+            modal:      true,
+            resizable:  false,
+            width:      width || 950,
+            close:      function(event, ui) {
+                jQuery(this).dialog('destroy');
+                jQuery('#' + windowId).remove();
+            }
+        });
+
+        jQuery('#' + windowId).dialog('open');
+
         new Ajax.Updater('modal_dialog_message', url, {evalScripts: true});
     },
     closeDialog: function(window) {
@@ -54,7 +49,7 @@ MediabrowserUtility = {
         if (window) {
             // IE fix - hidden form select fields after closing dialog
             WindowUtilities._showSelect();
-            window.close();
+            jQuery('#modal_dialog_message').dialog('close');
         }
     }
 };
@@ -181,7 +176,7 @@ Mediabrowser.prototype = {
         var targetEl = this.getTargetElement();
         if (! targetEl) {
             alert("Target element not found for content update");
-            Windows.close('browser_window');
+            jQuery('#modal_dialog_message').dialog('close');
             return;
         }
 
@@ -199,7 +194,7 @@ Mediabrowser.prototype = {
                     if (this.getMediaBrowserOpener()) {
                         self.blur();
                     }
-                    Windows.close('browser_window');
+                    jQuery('#modal_dialog_message').dialog('close');
                     if (targetEl.tagName.toLowerCase() == 'input') {
                         targetEl.value = transport.responseText;
                     } else {

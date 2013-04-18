@@ -28,10 +28,10 @@ interface Magento_Filesystem_StreamInterface
     /**
      * Opens the stream in the specified mode
      *
-     * @param Magento_Filesystem_Stream_Mode $mode
+     * @param Magento_Filesystem_Stream_Mode|string $mode
      * @throws Magento_Filesystem_Exception
      */
-    public function open(Magento_Filesystem_Stream_Mode $mode);
+    public function open($mode);
 
     /**
      * Reads the specified number of bytes from the current position.
@@ -116,4 +116,19 @@ interface Magento_Filesystem_StreamInterface
      * @throws Magento_Filesystem_Exception
      */
     public function eof();
+
+    /**
+     * Portable advisory file locking
+     *
+     * @param bool $exclusive
+     * @throws Magento_Filesystem_Exception
+     */
+    public function lock($exclusive = true);
+
+    /**
+     * File unlocking
+     *
+     * @throws Magento_Filesystem_Exception
+     */
+    public function unlock();
 }

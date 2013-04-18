@@ -33,7 +33,7 @@ $addressData = array(
     'telephone'  => '11111111',
     'country_id' => 'US',
 );
-$billingAddress = Mage::getModel('Mage_Sales_Model_Order_Address', $addressData);
+$billingAddress = Mage::getModel('Mage_Sales_Model_Order_Address', array('data' => $addressData));
 $shippingAddress = clone $billingAddress;
 
 $item = Mage::getModel('Mage_Sales_Model_Order_Item');

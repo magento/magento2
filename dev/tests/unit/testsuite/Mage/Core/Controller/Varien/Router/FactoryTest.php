@@ -41,7 +41,7 @@ class Mage_Core_Controller_Varien_Router_FactoryTest extends PHPUnit_Framework_T
     /**
      * ObjectManager mock for tests
      *
-     * @var Magento_ObjectManager_Zend
+     * @var Magento_ObjectManager|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManager;
 
@@ -54,7 +54,7 @@ class Mage_Core_Controller_Varien_Router_FactoryTest extends PHPUnit_Framework_T
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento_ObjectManager_Zend', array('get'), array(), '', false);
+        $this->_objectManager = $this->getMock('Magento_ObjectManager');
         $this->_controller = new Mage_Core_Controller_Varien_Router_Factory($this->_objectManager);
     }
 
@@ -66,7 +66,7 @@ class Mage_Core_Controller_Varien_Router_FactoryTest extends PHPUnit_Framework_T
     public function testCreateRouterNoArguments()
     {
         $this->_objectManager->expects($this->once())
-            ->method('get')
+            ->method('create')
             ->with(self::CLASS_NAME)
             ->will($this->returnValue('TestRouterInstance'));
 
@@ -86,7 +86,7 @@ class Mage_Core_Controller_Varien_Router_FactoryTest extends PHPUnit_Framework_T
         );
 
         $this->_objectManager->expects($this->once())
-            ->method('get')
+            ->method('create')
             ->with(self::CLASS_NAME, $arguments)
             ->will($this->returnValue('TestRouterInstance'));
 

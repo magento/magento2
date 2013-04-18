@@ -34,8 +34,8 @@ class Mage_Sales_Model_Order_Shipment_TrackTest extends PHPUnit_Framework_TestCa
 
     protected function setUp()
     {
-        $helper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_model = $helper->getModel('Mage_Sales_Model_Order_Shipment_Track');
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_model = $objectManagerHelper->getObject('Mage_Sales_Model_Order_Shipment_Track');
     }
 
     public function testAddData()
@@ -65,5 +65,38 @@ class Mage_Sales_Model_Order_Shipment_TrackTest extends PHPUnit_Framework_TestCa
 
         $this->_model->setShipment($shipmentMock);
         $this->assertEquals($storeId, $this->_model->getStoreId());
+    }
+
+    public function testSetGetNumber()
+    {
+        $this->assertNull($this->_model->getNumber());
+        $this->assertNull($this->_model->getTrackNumber());
+
+        $this->_model->setNumber('test');
+
+        $this->assertEquals('test', $this->_model->getNumber());
+        $this->assertEquals('test', $this->_model->getTrackNumber());
+    }
+
+    /**
+     * @dataProvider isCustomDataProvider
+     * @param bool $expectedResult
+     * @param string $carrierCodeToSet
+     */
+    public function testIsCustom($expectedResult, $carrierCodeToSet)
+    {
+        $this->_model->setCarrierCode($carrierCodeToSet);
+        $this->assertEquals($expectedResult, $this->_model->isCustom());
+    }
+
+    /**
+     * @return array
+     */
+    public static function isCustomDataProvider()
+    {
+        return array(
+            array(true, Mage_Sales_Model_Order_Shipment_Track::CUSTOM_CARRIER_CODE),
+            array(false, 'ups'),
+        );
     }
 }

@@ -34,7 +34,8 @@ class Mage_Bundle_Model_Product_TypeTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Bundle_Model_Product_Type();
+        $filesystem = $this->getMockBuilder('Magento_Filesystem')->disableOriginalConstructor()->getMock();
+        $this->_model = new Mage_Bundle_Model_Product_Type($filesystem);
     }
 
     public function testHasWeightTrue()

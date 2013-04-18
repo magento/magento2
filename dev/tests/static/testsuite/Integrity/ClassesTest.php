@@ -47,7 +47,7 @@ class Integrity_ClassesTest extends PHPUnit_Framework_TestCase
             \:\:get(?:ResourceModel | BlockSingleton | Model | Singleton)?\(\s*[\'"]([a-z\d_]+)[\'"]\s*[\),]
 
             # various methods, first argument
-            | \->(?:initReport | addBlock | createBlock | setDataHelperName | getBlockClassName | _?initLayoutMessages
+            | \->(?:initReport | addBlock | createBlock | setDataHelperName | _?initLayoutMessages
                 | setAttributeModel | setBackendModel | setFrontendModel | setSourceModel | setModel
             )\(\s*\'([a-z\d_]+)\'\s*[\),]
 
@@ -172,7 +172,7 @@ class Integrity_ClassesTest extends PHPUnit_Framework_TestCase
                     continue;
                 }
                 $this->assertTrue(isset(self::$_existingClasses[$class])
-                    || Utility_Files::init()->codePoolClassFileExists($class)
+                    || Utility_Files::init()->classFileExists($class)
                 );
                 self::$_existingClasses[$class] = 1;
             } catch (PHPUnit_Framework_AssertionFailedError $e) {

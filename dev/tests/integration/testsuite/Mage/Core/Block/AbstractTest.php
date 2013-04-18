@@ -44,38 +44,34 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         Mage::getDesign()->setDefaultDesignTheme();
-        $this->_block = $this->getMockForAbstractClass('Mage_Core_Block_Abstract',
-            $this->_getBlockDependencies()
-        );
+        $this->_block = $this->getMockForAbstractClass('Mage_Core_Block_Abstract', array(
+            Mage::getSingleton('Mage_Core_Block_Context'),
+            array('module_name' => 'Mage_Core')
+        ));
     }
 
     /**
-     * Retrieve block dependencies
+     * Checks, that not existing image in CSS not affected own publication
      *
-     * @return array
+     * @magentoAppIsolation enabled
      */
-    protected function _getBlockDependencies()
+    public function testCssWithWrongImage()
     {
-        return array(
-            'request'         => Mage::getObjectManager()->create('Mage_Core_Controller_Request_Http', array(), false),
-            'layout'          => Mage::getObjectManager()->create('Mage_Core_Model_Layout'),
-            'eventManager'    => Mage::getObjectManager()->create('Mage_Core_Model_Event_Manager', array(), false),
-            'urlBuilder'      => Mage::getObjectManager()->create('Mage_Core_Model_Url', array(), false),
-            'translator'      => Mage::getObjectManager()->create('Mage_Core_Model_Translate', array(), false),
-            'cache'           => Mage::getObjectManager()->create('Mage_Core_Model_Cache', array(), false),
-            'designPackage'   => Mage::getObjectManager()->get('Mage_Core_Model_Design_Package'),
-            'session'         => Mage::getObjectManager()->create('Mage_Core_Model_Session', array(), false),
-            'storeConfig'     => Mage::getObjectManager()->create('Mage_Core_Model_Store_Config', array(), false),
-            'frontController' => Mage::getObjectManager()->create('Mage_Core_Controller_Varien_Front', array(), false),
-            'helperFactory'   => Mage::getObjectManager()->create('Mage_Core_Model_Factory_Helper', array(), false),
-            'data'            => array('module_name' => 'Mage_Core')
-        );
-    }
+        $dirPath = __DIR__ . DIRECTORY_SEPARATOR . '_files';
+        /** @var $dirs Mage_Core_Model_Dir */
+        $dirs = Mage::getObjectManager()->get('Mage_Core_Model_Dir');
 
-    protected function tearDown()
-    {
-        $this->_block = null;
-        $this->_layout = null;
+        $prepareFileName = new ReflectionMethod($dirs, '_setDir');
+        $prepareFileName->setAccessible(true);
+        $prepareFileName->invoke($dirs, Mage_Core_Model_Dir::THEMES, $dirPath);
+
+        $cssUrl = $this->_block->getViewFileUrl('css/wrong.css', array(
+            'area'    => 'frontend',
+            'package' => 'default',
+            'theme'   => 'demo',
+            'locale'  => 'en_US'
+        ));
+        $this->assertStringMatchesFormat('%s/css/wrong.css', $cssUrl);
     }
 
     public function testGetRequest()
@@ -424,14 +420,19 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
     public function testGetChildData()
     {
         $parent = $this->_createBlockWithLayout('parent', 'parent');
-        $block = $this->_createBlockWithLayout('block', 'block', 'Mage_Core_Block_Template');
-        $block->setSomeValue('value');
+        $block = $this->_createBlockWithLayout('block', 'block');
+        $block->setSomeProperty('some_value');
         $parent->setChild('block1', $block);
-        $this->assertEquals(
-            array('type' => 'Mage_Core_Block_TemplateMock', 'some_value' => 'value'),
-            $parent->getChildData('block1')
-        );
-        $this->assertEquals('value', $parent->getChildData('block1', 'some_value'));
+
+        // all child data
+        $actualChildData = $parent->getChildData('block1');
+        $this->assertArrayHasKey('some_property', $actualChildData);
+        $this->assertEquals('some_value', $actualChildData['some_property']);
+
+        // specific child data key
+        $this->assertEquals('some_value', $parent->getChildData('block1', 'some_property'));
+
+        // non-existing child block
         $this->assertNull($parent->getChildData('unknown_block'));
     }
 
@@ -480,9 +481,11 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
      *
      * @magentoAppIsolation enabled
      */
-    public function testGetViewUrl()
+    public function testGetViewFileUrl()
     {
-        $this->assertStringStartsWith('http://localhost/pub/media/theme/frontend/', $this->_block->getViewFileUrl());
+        $this->assertStringStartsWith(
+            'http://localhost/pub/static/frontend/', $this->_block->getViewFileUrl()
+        );
         $this->assertStringEndsWith('css/styles.css', $this->_block->getViewFileUrl('css/styles.css'));
 
         /**
@@ -638,27 +641,6 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * App isolation is enabled, because config options object is affected
-     *
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
-     */
-    public function testGetVar()
-    {
-        /** @var $themeUtility Mage_Core_Utility_Theme */
-        $themeUtility = Mage::getModel('Mage_Core_Utility_Theme', array(
-            dirname(__DIR__) . '/Model/_files/design/'
-        ));
-        $themeUtility->registerThemes()->setDesignTheme('test/default', 'frontend');
-
-        $this->assertEquals('Core Value1', $this->_block->getVar('var1'));
-        $this->assertEquals('value1', $this->_block->getVar('var1', 'Namespace_Module'));
-        $this->_block->setModuleName('Namespace_Module');
-        $this->assertEquals('value1', $this->_block->getVar('var1'));
-        $this->assertEquals(false, $this->_block->getVar('unknown_var'));
-    }
-
-    /**
      * Create <N> sample blocks
      *
      * @param int $qty
@@ -700,7 +682,10 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
     ) {
         $mockClass = $type . 'Mock';
         if (!isset(self::$_mocks[$mockClass])) {
-            self::$_mocks[$mockClass] = $this->getMockForAbstractClass($type, $this->_getBlockDependencies(),
+            self::$_mocks[$mockClass] = $this->getMockForAbstractClass($type, array(
+                    Mage::getSingleton('Mage_Core_Block_Context'),
+                    array('module_name' => 'Mage_Core')
+                ),
                 $type . 'Mock'
             );
         }

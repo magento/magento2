@@ -27,6 +27,7 @@
 
 /** @var $product Mage_Catalog_Model_Product */
 $product = Mage::getModel('Mage_Catalog_Model_Product');
+$product->isObjectNew(true);
 $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
     ->setId(1)
     ->setAttributeSetId(4)
@@ -34,6 +35,9 @@ $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
     ->setName('Simple Product')
     ->setSku('simple')
     ->setPrice(10)
+    ->setWeight(1)
+    ->setShortDescription("Short description")
+    ->setTaxClassId(0)
     ->setTierPrice(
         array(
             array(

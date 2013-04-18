@@ -32,5 +32,9 @@
     </testsuite>
     <php>
         <ini name="date.timezone" value="America/Los_Angeles"/>
+        <ini name="memory_limit" value="512M"/>
     </php>
+    <listeners>
+        <listener class="Magento_Test_Listener_GarbageCleanup" file="framework/Magento/Test/Listener/GarbageCleanup.php"/>
+    </listeners>
 </phpunit>

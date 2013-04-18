@@ -96,7 +96,8 @@ class Mage_Core_Model_Resource_SessionTest extends PHPUnit_Framework_TestCase
      */
     protected function _prepareResourceMock($connection)
     {
-        $resource = $this->getMock('Mage_Core_Model_Resource', array('getTableName', 'getConnection'));
+        $resource = $this->getMock('Mage_Core_Model_Resource', array('getTableName', 'getConnection'),
+            array(), '', false, false);
         $resource->expects($this->once())
             ->method('getTableName')
             ->will($this->returnValue(self::SESSION_TABLE));

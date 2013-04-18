@@ -44,9 +44,10 @@ class Mage_Eav_Model_Entity_AbstractTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $attribute1SetInfo
-     * @param array $attribute2SetInfo
+     * @param array $attribute1Sort
+     * @param array $attribute2Sort
      * @param float $expected
+     *
      * @dataProvider compareAttributesDataProvider
      */
     public function testCompareAttributes($attribute1Sort, $attribute2Sort, $expected)
@@ -240,12 +241,24 @@ class Mage_Eav_Model_Entity_AbstractTest extends PHPUnit_Framework_TestCase
         $attributes[$code] = $attribute;
 
 
-        /** @var $model Mage_Eav_Model_Entity_Abstract */
-        $model = $this->getMock('Mage_Eav_Model_Entity_Abstract', null, array(array(
+        $data = array(
             'type' => $entityType,
             'entityTable' => 'entityTable',
             'attributesByCode' => $attributes,
-        )));
+        );
+        /** @var $model PHPUnit_Framework_MockObject_MockObject */
+        $model = $this->getMockForAbstractClass(
+            'Mage_Eav_Model_Entity_Abstract',
+            array($data),
+            '',
+            true,
+            true,
+            true,
+            array('_getConfig')
+        );
+
+        $configMock = $this->getMock('Mage_Eav_Model_Config', array(), array(), '', false);
+        $model->expects($this->any())->method('_getConfig')->will($this->returnValue($configMock));
 
         $model->setConnection($this->_getAdapterMock());
         $model->isPartialSave(true);

@@ -52,13 +52,13 @@ class Mage_Webapi_Model_Authorization_Loader_RuleTest extends PHPUnit_Framework_
 
         $this->_acl = $this->getMock('Magento_Acl', array('has', 'hasRole', 'allow'), array(), '', false);
 
-        $this->_model = $helper->getModel('Mage_Webapi_Model_Authorization_Loader_Rule', array(
+        $this->_model = $helper->getObject('Mage_Webapi_Model_Authorization_Loader_Rule', array(
             'ruleResource' => $this->_ruleResource,
         ));
     }
 
     /**
-     * Test for Mage_Webapi_Model_Authorization_Loader_Rule::populateAcl
+     * Test for Mage_Webapi_Model_Authorization_Loader_Rule::populateAcl.
      */
     public function testPopulateAcl()
     {
@@ -97,7 +97,7 @@ class Mage_Webapi_Model_Authorization_Loader_RuleTest extends PHPUnit_Framework_
     }
 
     /**
-     * Test for Mage_Webapi_Model_Authorization_Loader_Rule::populateAcl without rules
+     * Test for Mage_Webapi_Model_Authorization_Loader_Rule::populateAcl without rules.
      */
     public function testPopulateAclWithoutRules()
     {

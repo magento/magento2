@@ -37,13 +37,9 @@ class Mage_GiftMessage_Block_Message_InlineTest extends PHPUnit_Framework_TestCa
         $this->_block = Mage::app()->getLayout()->createBlock('Mage_GiftMessage_Block_Message_Inline');
     }
 
-    protected function tearDown()
-    {
-        $this->_block = null;
-    }
-
     /**
      * @magentoDataFixture Mage/Catalog/_files/product_with_image.php
+     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      */
     public function testThumbnail()
     {

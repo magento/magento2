@@ -43,8 +43,8 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends PHPUnit_Fra
             ->getMock();
 
         $helper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_block = $helper->getBlock('Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_Resource', array(
-            // TODO Remove injecting of 'urlBuilder' and 'authorizationConfig' after MAGETWO-5038 complete
+        $this->_block = $helper->getObject('Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_Resource', array(
+            // TODO: Remove injecting of 'urlBuilder' and 'authorizationConfig' after MAGETWO-5038 complete
             'urlBuilder' => $this->getMockBuilder('Mage_Backend_Model_Url')
                 ->disableOriginalConstructor()
                 ->getMock(),
@@ -56,7 +56,7 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends PHPUnit_Fra
     }
 
     /**
-     * Test isEverythingAllowed method
+     * Test isEverythingAllowed method.
      *
      * @dataProvider isEverythingAllowedDataProvider
      * @param array $selectedResources
@@ -85,11 +85,11 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends PHPUnit_Fra
     public function isEverythingAllowedDataProvider()
     {
         return array(
-            'Not Everything Allowed' => array(
+            'Not everything is allowed' => array(
                 array('customer', 'customer/get'),
                 false
             ),
-            'Everything Allowed' => array(
+            'Everything is allowed' => array(
                 array('customer', 'customer/get', Mage_Webapi_Model_Authorization::API_ACL_RESOURCES_ROOT_ID),
                 true
             )

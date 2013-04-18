@@ -1,6 +1,6 @@
 <?php
 /**
- * Test for Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_Resource block
+ * Test for Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_Resource block.
  *
  * Magento
  *
@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends PHPUnit_Framework_TestCase
+class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends Mage_Backend_Area_TestCase
 {
     /**
      * @var Magento_Test_ObjectManager
@@ -57,6 +57,8 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends PHPUnit_Fra
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->_authorizationConfig = $this->getMockBuilder('Mage_Webapi_Model_Authorization_Config')
             ->disableOriginalConstructor()
             ->setMethods(array('getAclResourcesAsArray'))
@@ -84,7 +86,7 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends PHPUnit_Fra
     }
 
     /**
-     * Test _prepareForm method
+     * Test _prepareForm method.
      *
      * @dataProvider prepareFormDataProvider
      * @param array $originResTree
@@ -93,7 +95,7 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends PHPUnit_Fra
      */
     public function testPrepareForm($originResTree, $selectedRes, $expectedRes)
     {
-        // TODO Move to unit tests after MAGETWO-4015 complete
+        // TODO: Move to unit tests after MAGETWO-4015 complete.
         $apiRole = new Varien_Object(array(
             'role_id' => 1
         ));

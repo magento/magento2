@@ -38,7 +38,7 @@ class Varien_Data_Form_Element_Date extends Varien_Data_Form_Element_Abstract
      */
     protected $_value;
 
-    public function __construct($attributes=array())
+    public function __construct($attributes = array())
     {
         parent::__construct($attributes);
         $this->setType('text');
@@ -104,8 +104,7 @@ class Varien_Data_Form_Element_Date extends Varien_Data_Form_Element_Abstract
         }
         try {
             $this->_value = new Zend_Date($value, $format, $locale);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->_value = '';
         }
         return $this;
@@ -124,7 +123,7 @@ class Varien_Data_Form_Element_Date extends Varien_Data_Form_Element_Abstract
             return '';
         }
         if (null === $format) {
-            $format = $this->getFormat();
+            $format = $this->getDateFormat();
         }
         return $this->_value->toString($format);
     }
@@ -148,49 +147,43 @@ class Varien_Data_Form_Element_Date extends Varien_Data_Form_Element_Abstract
      * - the value must be instantiated (Zend_Date)
      * - output format must be set (compatible with Zend_Date)
      *
+     * @throws Exception
      * @return string
      */
     public function getElementHtml()
     {
         $this->addClass('input-text');
-
-        $html = sprintf(
-            '<input name="%s" id="%s" value="%s" %s style="width:110px !important;" ' . $this->_getUiId('hidden') . '/>',
-            $this->getName(), $this->getHtmlId(), $this->_escape($this->getValue()), $this->serialize($this->getHtmlAttributes()),
-            $this->getImage(), $this->getHtmlId(), 'Select Date', ($this->getDisabled() ? 'display:none;' : '')
-        );
         $dateFormat = $this->getDateFormat();
         $timeFormat = $this->getTimeFormat();
         if (empty($dateFormat)) {
-            throw new Exception('Output format is not specified. Please, specify "format" key in constructor, or set it using setFormat().');
+            throw new Exception('Output format is not specified. '
+                . 'Please, specify "format" key in constructor, or set it using setFormat().');
         }
 
-        $html .= sprintf('
-            <script type="text/javascript">
-            //<![CDATA[
-            (function($) {
-                $("#%s").calendar({
-                    dateFormat: "%s",
-                    showsTime: %s,
-                    timeFormat: "%s",
-                    buttonImage: "%s",
-                    buttonText: "%s",
-                    disabled: %s
-                })
-            })(jQuery)
-            //]]>
-            </script>',
+        $dataInit = 'data-mage-init="'
+            . $this->_escape(json_encode(
+                array(
+                    'calendar' => array(
+                        'dateFormat' => $dateFormat,
+                        'showsTime' => !empty($timeFormat),
+                        'timeFormat' => $timeFormat,
+                        'buttonImage' => $this->getImage(),
+                        'buttonText' => 'Select Date',
+                        'disabled' => $this->getDisabled(),
+                    )
+                )
+            ))
+            . '"';
+
+        $html = sprintf(
+            '<input name="%s" id="%s" value="%s" %s %s />',
+            $this->getName(),
             $this->getHtmlId(),
-            $dateFormat,
-            $timeFormat ? 'true' : 'false',
-            $timeFormat ?: '',
-            $this->getImage(),
-            'Select Date',
-            ($this->getDisabled() ? 'true' : 'false')
+            $this->_escape($this->getValue()),
+            $this->serialize($this->getHtmlAttributes()),
+            $dataInit
         );
-
         $html .= $this->getAfterElementHtml();
-
         return $html;
     }
 }

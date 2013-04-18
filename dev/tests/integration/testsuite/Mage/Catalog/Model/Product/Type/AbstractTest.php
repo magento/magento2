@@ -34,12 +34,9 @@ class Mage_Catalog_Model_Product_Type_AbstractTest extends PHPUnit_Framework_Tes
 
     protected function setUp()
     {
-        $this->_model = $this->getMockForAbstractClass('Mage_Catalog_Model_Product_Type_Abstract');
-    }
-
-    protected function tearDown()
-    {
-        $this->_model = null;
+        $this->_model = $this->getMockBuilder('Mage_Catalog_Model_Product_Type_Abstract')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
     }
 
     public function testGetRelationInfo()
@@ -114,16 +111,11 @@ class Mage_Catalog_Model_Product_Type_AbstractTest extends PHPUnit_Framework_Tes
 
     public function testGetAttributeById()
     {
-        $product = Mage::getModel('Mage_Catalog_Model_Product');
-        $product->load(1); // fixture
+        /** @var $product Mage_Catalog_Model_Product */
+        $product = Mage::getModel('Mage_Catalog_Model_Product')->load(1);
+
         $this->assertNull($this->_model->getAttributeById(-1, $product));
-
-        // @bug: MAGE-2831
-        //$this->assertNull($this->_model->getAttributeById(null, $product));
-
-        $this->assertInstanceOf(
-            'Mage_Catalog_Model_Resource_Eav_Attribute', $this->_model->getAttributeById(null, $product)
-        );
+        $this->assertNull($this->_model->getAttributeById(null, $product));
 
         $sku = Mage::getSingleton('Mage_Eav_Model_Config')->getAttribute('catalog_product', 'sku');
         $this->assertSame($sku, $this->_model->getAttributeById($sku->getId(), $product));

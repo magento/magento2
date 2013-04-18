@@ -41,6 +41,10 @@
                     <label>Test Field</label>
                     <config_path>test_section/test_group/test_field</config_path>
                 </field>
+                <field id="test_field_use_config" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" type="text" sortOrder="20">
+                    <label>Test Field</label>
+                    <config_path>test_config_section/test_group_config_node/test_field_value</config_path>
+                </field>
             </group>
         </section>
     </system>

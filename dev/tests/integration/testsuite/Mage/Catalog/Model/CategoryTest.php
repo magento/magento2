@@ -67,6 +67,10 @@ class Mage_Catalog_Model_CategoryTest extends PHPUnit_Framework_TestCase
     {
         self::$_objectManager = Mage::getObjectManager();
 
+        if (Magento_Test_Helper_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
+            self::markTestIncomplete('Bug MAGETWO-8513');
+        }
+
         // get list of not existing tables
         /** @var $application Mage_Core_Model_App */
         $application = self::$_objectManager->get('Mage_Core_Model_App');
@@ -138,12 +142,6 @@ class Mage_Catalog_Model_CategoryTest extends PHPUnit_Framework_TestCase
         $application  = self::$_objectManager->get('Mage_Core_Model_App');
         $this->_store = $application->getStore();
         $this->_model = self::$_objectManager->create('Mage_Catalog_Model_Category');
-    }
-
-    protected function tearDown()
-    {
-        unset($this->_store);
-        unset($this->_model);
     }
 
     public function testGetUrlInstance()
@@ -221,6 +219,23 @@ class Mage_Catalog_Model_CategoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Mage::app()->getStore()->getId(), $this->_model->getStoreId());
         $this->_model->setStoreId(1000);
         $this->assertEquals(1000, $this->_model->getStoreId());
+    }
+
+    /**
+     * @magentoDataFixture Mage/Core/_files/store.php
+     * @magentoAppIsolation enabled
+     */
+    public function testSetStoreIdWithNonNumericValue()
+    {
+        /** @var $store Mage_Core_Model_Store */
+        $store = Mage::getModel('Mage_Core_Model_Store');
+        $store->load('fixturestore');
+
+        $this->assertNotEquals($this->_model->getStoreId(), $store->getId());
+
+        $this->_model->setStoreId('fixturestore');
+
+        $this->assertEquals($this->_model->getStoreId(), $store->getId());
     }
 
     public function testGetUrl()

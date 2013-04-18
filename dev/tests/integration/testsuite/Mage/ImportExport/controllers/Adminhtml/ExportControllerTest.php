@@ -99,7 +99,7 @@ class Mage_ImportExport_Adminhtml_ExportControllerTest extends Mage_Backend_Util
         $this->dispatch('backend/admin/export/index');
 
         $body = $this->getResponse()->getBody();
-        $this->assertSelectCount('div#head-base_fieldset', 1, $body);
-        $this->assertSelectCount('div#base_fieldset', 1, $body);
+        $this->assertSelectCount('fieldset#base_fieldset', 1, $body);
+        $this->assertSelectCount('fieldset#base_fieldset div.field', 2, $body);
     }
 }

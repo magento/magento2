@@ -26,21 +26,17 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-require_once __DIR__ . '/../app/bootstrap.php';
-
-$varDirectory = BP . DS . Mage_Core_Model_Config_Options::VAR_DIRECTORY;
-$publicDirectory = BP . DS . Mage_Core_Model_Config_Options::PUB_DIRECTORY;
-$configCacheFile = $varDirectory . DS . 'resource_config.json';
+require dirname(__DIR__) . '/app/bootstrap.php';
 
 $mediaDirectory = null;
 $allowedResources = array();
-
+$configCacheFile = dirname(__DIR__) . '/var/resource_config.json';
 if (file_exists($configCacheFile) && is_readable($configCacheFile)) {
     $config = json_decode(file_get_contents($configCacheFile), true);
 
     //checking update time
     if (filemtime($configCacheFile) + $config['update_time'] > time()) {
-        $mediaDirectory = trim(str_replace($publicDirectory, '', $config['media_directory']), DS);
+        $mediaDirectory = trim(str_replace(__DIR__, '', $config['media_directory']), DS);
         $allowedResources = array_merge($allowedResources, $config['allowed_resources']);
     }
 }
@@ -49,7 +45,7 @@ $request = new Zend_Controller_Request_Http();
 
 $pathInfo = str_replace('..', '', ltrim($request->getPathInfo(), '/'));
 
-$filePath = str_replace('/', DS, $publicDirectory . DS . $pathInfo);
+$filePath = str_replace('/', DS, __DIR__ . DS . $pathInfo);
 
 if ($mediaDirectory) {
     if (0 !== stripos($pathInfo, $mediaDirectory . '/') || is_dir($filePath)) {
@@ -60,19 +56,28 @@ if ($mediaDirectory) {
     checkResource($relativeFilename, $allowedResources);
     sendFile($filePath);
 }
+try {
+    $params = $_SERVER;
+    if (empty($mediaDirectory)) {
+        $params[Mage::PARAM_ALLOWED_MODULES] = array('Mage_Core');
+        $params[Mage::PARAM_CACHE_OPTIONS]['frontend_options']['disable_save'] = true;
+    }
 
-$appOptions = new Mage_Core_Model_App_Options($_SERVER);
-if (empty($mediaDirectory)) {
-    Mage::init($appOptions->getRunCode(), $appOptions->getRunType(), $appOptions->getRunOptions());
-} else {
-    $appRunOptions = array_merge($appOptions->getRunOptions(), array('cache' => array('disallow_save' => true)));
-    Mage::init($appOptions->getRunCode(), $appOptions->getRunType(), $appRunOptions, array('Mage_Core'));
+    $config = new Mage_Core_Model_Config_Primary(dirname(__DIR__), $params);
+    $entryPoint = new Mage_Core_Model_EntryPoint_Media($config);
+    $entryPoint->processRequest();
+    if (!Mage::isInstalled()) {
+        sendNotFoundPage();
+    }
+} catch (Mage_Core_Model_Store_Exception $e) {
+    sendNotFoundPage();
+} catch (Exception $e) {
+    Mage::printException($e);
 }
-Mage::app()->requireInstalledInstance();
 
 if (!$mediaDirectory) {
     $config = Mage_Core_Model_File_Storage::getScriptConfig();
-    $mediaDirectory = str_replace($publicDirectory, '', $config['media_directory']);
+    $mediaDirectory = str_replace(__DIR__, '', $config['media_directory']);
     $allowedResources = array_merge($allowedResources, $config['allowed_resources']);
 
     $relativeFilename = str_replace($mediaDirectory . '/', '', $pathInfo);
@@ -93,11 +98,11 @@ if (0 !== stripos($pathInfo, $mediaDirectory . '/')) {
 }
 
 try {
-    $databaseFileSotrage = Mage::getModel('Mage_Core_Model_File_Storage_Database');
-    $databaseFileSotrage->loadByFilename($relativeFilename);
+    $databaseFileStorage = Mage::getModel('Mage_Core_Model_File_Storage_Database');
+    $databaseFileStorage->loadByFilename($relativeFilename);
 } catch (Exception $e) {
 }
-if ($databaseFileSotrage->getId()) {
+if ($databaseFileStorage->getId()) {
     $directory = dirname($filePath);
     if (!is_dir($directory)) {
         mkdir($directory, 0777, true);
@@ -106,7 +111,7 @@ if ($databaseFileSotrage->getId()) {
     $fp = fopen($filePath, 'w');
     if (flock($fp, LOCK_EX | LOCK_NB)) {
         ftruncate($fp, 0);
-        fwrite($fp, $databaseFileSotrage->getContent());
+        fwrite($fp, $databaseFileStorage->getContent());
     }
     flock($fp, LOCK_UN);
     fclose($fp);

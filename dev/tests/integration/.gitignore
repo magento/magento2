@@ -2,3 +2,5 @@
 /etc/*.xml
 !/etc/integration-test-config.xml
 /tmp/
+/var/
+phpunit.php

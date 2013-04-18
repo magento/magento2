@@ -35,9 +35,15 @@ class Magento_Filesystem_Stream_LocalTest extends PHPUnit_Framework_TestCase
      */
     protected $_writeFileName;
 
+    /**
+     * @var string
+     */
+    protected $_openedFile;
+
     protected function setUp()
     {
-        $this->_stream = new Magento_Filesystem_Stream_Local(__DIR__ . DS . '..' . DS . '_files' . DS . 'popup.csv');
+        $this->_openedFile = __DIR__ . DS . '..' . DS . '_files' . DS . 'popup.csv';
+        $this->_stream = new Magento_Filesystem_Stream_Local($this->_openedFile);
         $this->_writeFileName = __DIR__ . DS . '..' . DS . '_files' . DS . 'new.css';
     }
 
@@ -108,9 +114,21 @@ class Magento_Filesystem_Stream_LocalTest extends PHPUnit_Framework_TestCase
     public function testClose()
     {
         $this->_stream->open(new Magento_Filesystem_Stream_Mode('r'));
+        $this->_stream->lock();
+        $this->assertAttributeEquals(true, '_isLocked', $this->_stream);
         $this->_stream->close();
+        $this->assertAttributeEquals(false, '_isLocked', $this->_stream);
         $this->assertAttributeEquals(null, '_mode', $this->_stream);
         $this->assertAttributeEquals(null, '_fileHandle', $this->_stream);
+    }
+
+    public function testLock()
+    {
+        $this->_stream->open(new Magento_Filesystem_Stream_Mode('r'));
+        $this->_stream->lock(true);
+        $this->assertAttributeEquals(true, '_isLocked', $this->_stream);
+        $this->_stream->unlock();
+        $this->assertAttributeEquals(false, '_isLocked', $this->_stream);
     }
 
     public function testFlush()

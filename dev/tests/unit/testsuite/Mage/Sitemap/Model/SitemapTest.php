@@ -37,7 +37,7 @@ class Mage_Sitemap_Model_SitemapTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $helperMockCore = $this->getMock('Mage_Core_Helper_Data', array('__'));
+        $helperMockCore = $this->getMock('Mage_Core_Helper_Data', array('__'), array(), '', false, false);
         $helperMockCore->expects($this->any())
             ->method('__')
             ->will($this->returnArgument(0));
@@ -54,7 +54,8 @@ class Mage_Sitemap_Model_SitemapTest extends PHPUnit_Framework_TestCase
             'getMaximumLinesNumber',
             'getMaximumFileSize',
             'getEnableSubmissionRobots'
-        ));
+         ), array(), '', false, false
+        );
         $helperMockSitemap->expects($this->any())
             ->method('__')
             ->will($this->returnArgument(0));

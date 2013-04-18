@@ -53,7 +53,9 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = $this->getMockBuilder('Mage_Customer_Helper_Data')
+            ->disableOriginalConstructor()
             ->getMock();
+
         $helper->expects($this->any())
             ->method('__')
             ->will($this->returnArgument(0));
@@ -69,7 +71,9 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
         $this->_customer = $this->getMockBuilder('Mage_Customer_Model_Customer')
             ->setMethods(array('save', 'generatePassword', 'getOrigData', 'sendNewAccountEmail', 'getConfirmation',
                 'getPrimaryAddress', 'getAddresses', 'getAdditionalAddresses', 'load', 'getId', 'changePassword',
-                'sendPasswordReminderEmail', 'addAddress', 'getAddressItemById', 'getAddressesCollection'))
+                'sendPasswordReminderEmail', 'addAddress', 'getAddressItemById', 'getAddressesCollection',
+                'hashPassword')
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $this->_customerFactory->expects($this->any())
@@ -220,6 +224,7 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
                 ->method('generatePassword')
                 ->will($this->returnValue('generated_password'));
         }
+        
         $this->_customer->expects($this->once())
             ->method('save');
 

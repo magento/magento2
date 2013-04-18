@@ -49,7 +49,7 @@ class Magento_Acl_ResourceFactoryTest extends PHPUnit_Framework_TestCase
 
         $this->_expectedObject = $this->getMock('Magento_Acl_Resource', array(), array(), '', false);
 
-        $this->_model = $helper->getModel('Magento_Acl_ResourceFactory', array(
+        $this->_model = $helper->getObject('Magento_Acl_ResourceFactory', array(
             'objectManager' => $this->_objectManager,
         ));
     }
@@ -59,7 +59,7 @@ class Magento_Acl_ResourceFactoryTest extends PHPUnit_Framework_TestCase
         $arguments = array('5', '6');
         $this->_objectManager->expects($this->once())
             ->method('create')
-            ->with('Magento_Acl_Resource', $arguments, false)
+            ->with('Magento_Acl_Resource', $arguments)
             ->will($this->returnValue($this->_expectedObject));
         $this->assertEquals($this->_expectedObject, $this->_model->createResource($arguments));
     }

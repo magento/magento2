@@ -25,7 +25,7 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<!-- Basic configuration for Magento application framework. See also local.xml.additional for more options. -->
+<!-- Basic configuration for Magento application framework. -->
 <config>
     <global>
         <install>

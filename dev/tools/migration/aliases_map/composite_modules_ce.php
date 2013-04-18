@@ -29,8 +29,8 @@
  */
 
 require_once realpath(dirname(dirname(dirname(dirname(__DIR__)))))
-    . '/app/code/core/Mage/Core/Model/Resource/Setup.php';
+    . '/app/code/Mage/Core/Model/Resource/Setup.php';
 require_once realpath(dirname(dirname(dirname(dirname(__DIR__)))))
-    . '/app/code/core/Mage/Core/Model/Resource/Setup/Migration.php';
+    . '/app/code/Mage/Core/Model/Resource/Setup/Migration.php';
 
 return Mage_Core_Model_Resource_Setup_Migration::getCompositeModules();

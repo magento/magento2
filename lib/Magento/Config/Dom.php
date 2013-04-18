@@ -179,9 +179,9 @@ class Magento_Config_Dom
      *
      * @param DOMDocument $dom
      * @param string $schemaFileName
-     * @return array
+     * @return array of errors
      */
-    protected function _validateDomDocument(DOMDocument $dom, $schemaFileName)
+    public static function validateDomDocument(DOMDocument $dom, $schemaFileName)
     {
         libxml_use_internal_errors(true);
         $result = $dom->schemaValidate($schemaFileName);
@@ -222,7 +222,7 @@ class Magento_Config_Dom
         $dom = new DOMDocument();
         $dom->loadXML($xml);
         if ($this->_schemaFile) {
-            $errors = $this->_validateDomDocument($dom, $this->_schemaFile);
+            $errors = self::validateDomDocument($dom, $this->_schemaFile);
             if (count($errors)) {
                 throw new Magento_Config_Dom_ValidationException(implode("\n", $errors));
             }
@@ -239,7 +239,7 @@ class Magento_Config_Dom
      */
     public function validate($schemaFileName, &$errors = array())
     {
-        $errors = $this->_validateDomDocument($this->_dom, $schemaFileName);
+        $errors = self::validateDomDocument($this->_dom, $schemaFileName);
         return !count($errors);
     }
 }
