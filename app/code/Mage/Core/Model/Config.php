@@ -208,7 +208,7 @@ class Mage_Core_Model_Config implements Mage_Core_Model_ConfigInterface
                     continue;
                 }
                 /**
-                 * TODO: Check of 'routers' nodes existance is excessive:
+                 * TODO: Check of 'routers' nodes existence is excessive:
                  * TODO: 'routers' check is moved Mage_Core_Model_Config::getRouters()
                  */
 

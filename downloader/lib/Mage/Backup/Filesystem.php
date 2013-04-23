@@ -249,7 +249,7 @@ class Mage_Backup_Filesystem extends Mage_Backup_Abstract
     }
 
     /**
-     * Check backups directory existance and whether it's writeable
+     * Check backups directory existence and whether it's writeable
      *
      * @throws Mage_Exception
      */
