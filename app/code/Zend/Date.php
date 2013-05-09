@@ -3724,7 +3724,7 @@ class Zend_Date extends Zend_Date_DateObject
 
     /**
      * Sets a new month
-     * The month can be a number or a string. Setting months lower then 0 and greater than 12
+     * The month can be a number or a string. Setting months lower than 0 and greater than 12
      * will result in adding or subtracting the relevant year. (12 months equal one year)
      * If a localized monthname is given it will be parsed with the default locale or the optional
      * set locale.
@@ -3743,7 +3743,7 @@ class Zend_Date extends Zend_Date_DateObject
 
     /**
      * Adds months to the existing date object.
-     * The month can be a number or a string. Adding months lower then 0 and greater than 12
+     * The month can be a number or a string. Adding months lower than 0 and greater than 12
      * will result in adding or subtracting the relevant year. (12 months equal one year)
      * If a localized monthname is given it will be parsed with the default locale or the optional
      * set locale.
@@ -3762,7 +3762,7 @@ class Zend_Date extends Zend_Date_DateObject
 
     /**
      * Subtracts months from the existing date object.
-     * The month can be a number or a string. Subtracting months lower then 0 and greater than 12
+     * The month can be a number or a string. Subtracting months lower than 0 and greater than 12
      * will result in adding or subtracting the relevant year. (12 months equal one year)
      * If a localized monthname is given it will be parsed with the default locale or the optional
      * set locale.
@@ -3867,7 +3867,7 @@ class Zend_Date extends Zend_Date_DateObject
 
     /**
      * Sets a new day
-     * The day can be a number or a string. Setting days lower then 0 or greater than the number of this months days
+     * The day can be a number or a string. Setting days lower than 0 or greater than the number of this months days
      * will result in adding or subtracting the relevant month.
      * If a localized dayname is given it will be parsed with the default locale or the optional
      * set locale.
@@ -3887,7 +3887,7 @@ class Zend_Date extends Zend_Date_DateObject
 
     /**
      * Adds days to the existing date object.
-     * The day can be a number or a string. Adding days lower then 0 or greater than the number of this months days
+     * The day can be a number or a string. Adding days lower than 0 or greater than the number of this months days
      * will result in adding or subtracting the relevant month.
      * If a localized dayname is given it will be parsed with the default locale or the optional
      * set locale.
@@ -3905,7 +3905,7 @@ class Zend_Date extends Zend_Date_DateObject
 
     /**
      * Subtracts days from the existing date object.
-     * The day can be a number or a string. Subtracting days lower then 0 or greater than the number of this months days
+     * The day can be a number or a string. Subtracting days lower than 0 or greater than the number of this months days
      * will result in adding or subtracting the relevant month.
      * If a localized dayname is given it will be parsed with the default locale or the optional
      * set locale.
