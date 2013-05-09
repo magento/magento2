@@ -89,7 +89,7 @@ class Mage_Core_Model_Locale_Config
         'KGS' /*Kyrgystan Som*/,    'LAK' /*Laotian Kip*/,      'LVL' /*Latvian Lats*/,             'LBP' /*Lebanese Pound*/,
         'LSL' /*Lesotho Loti*/,     'LRD' /*Liberian Dollar*/,  'LYD' /*Libyan Dinar*/,             'LTL' /*Lithuanian Lita*/,
         'MOP' /*Macao Pataca*/,     'MKD' /*Macedonian Denar*/, 'MGA' /*Malagasy Ariary*/,          'MWK' /*Malawi Kwacha*/,
-        'MYR' /*Malaysian Ringgit*/,'MVR' /*Maldive Islands Rufiyaa*/,'LSM' /*Ma loti*/,             'MRO' /*Mauritania Ouguiya*/,
+        'MYR' /*Malaysian Ringgit*/,'MVR' /*Maldive Islands Rufiyaa*/,'LSM' /*Maloti*/,             'MRO' /*Mauritania Ouguiya*/,
         'MUR' /*Mauritius Rupee*/,  'MXN' /*Mexican Peso*/,     'MDL' /*Moldovan Leu*/,             'MNT' /*Mongolian*/,
         'MAD' /*Moroccan Dirham*/,  'MZN' /*Mozambique Metical*/,'MMK' /*Myanmar Kyat*/,            'NAD' /*Namibia Dollar*/,
         'NPR' /*Nepalese Rupee*/,   'ANG' /*Netherlands Antillan Guilder*/,'YTL' /*New Turkish Lira*/,'NZD' /*New Zealand Dollar*/,
