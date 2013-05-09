@@ -3353,7 +3353,7 @@
           </xs:element>
           <xs:element name="ErrorLabels" type="ns:ShippingDocument" minOccurs="0" maxOccurs="unbounded">
             <xs:annotation>
-              <xs:documentation>Empty unless error label behavior is PACKAGE_ERROR_LABELS and one or more errors occured during transaction processing.</xs:documentation>
+              <xs:documentation>Empty unless error label behavior is PACKAGE_ERROR_LABELS and one or more errors occurred during transaction processing.</xs:documentation>
             </xs:annotation>
           </xs:element>
         </xs:sequence>

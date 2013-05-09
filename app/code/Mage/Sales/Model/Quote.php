@@ -1897,7 +1897,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
     /**
      * Return quote checkout method code
      *
-     * @param boolean $originalMethod if true return defined method from begining
+     * @param boolean $originalMethod if true return defined method from beginning
      * @return string
      */
     public function getCheckoutMethod($originalMethod = false)

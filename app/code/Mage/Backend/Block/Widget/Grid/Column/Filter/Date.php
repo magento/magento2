@@ -158,7 +158,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Date extends Mage_Backend_Blo
                 Mage::app()->getStore()->getConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE)
             );
 
-            //set begining of day
+            //set beginning of day
             $dateObj->setHour(00);
             $dateObj->setMinute(00);
             $dateObj->setSecond(00);

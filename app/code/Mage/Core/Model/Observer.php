@@ -96,7 +96,7 @@ class Mage_Core_Model_Observer
                 $flagData = $flag->getFlagData();
                 if (isset($flagData['has_errors']) && $flagData['has_errors']) {
                     $severity       = Mage_AdminNotification_Model_Inbox::SEVERITY_MAJOR;
-                    $title          = Mage::helper('Mage_Adminhtml_Helper_Data')->__('An error has occured while syncronizing media storages.');
+                    $title          = Mage::helper('Mage_Adminhtml_Helper_Data')->__('An error has occurred while syncronizing media storages.');
                     $description    = Mage::helper('Mage_Adminhtml_Helper_Data')->__('One or more media files failed to be synchronized during the media storages syncronization process. Refer to the log file for details.');
                 } else {
                     $severity       = Mage_AdminNotification_Model_Inbox::SEVERITY_NOTICE;

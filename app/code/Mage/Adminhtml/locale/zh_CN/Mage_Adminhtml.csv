@@ -100,7 +100,7 @@
 "All valid rates have been saved.","所有有效的评级均已保存。"
 "Always (during development)","总是（在开发过程中）"
 "Amounts","数量"
-"An error has occured while syncronizing media storages.","同步媒体存储时遇到了错误。"
+"An error has occurred while syncronizing media storages.","同步媒体存储时遇到了错误。"
 "An error occurred while clearing the JavaScript/CSS cache.","清空 JavaScript/CSS 缓存时发生错误。"
 "An error occurred while clearing the image cache.","清空图像缓存时发生错误。"
 "An error occurred while deleting URL Rewrite.","删除 URL 重写时出错。"

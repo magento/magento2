@@ -681,7 +681,7 @@ class Mage_CatalogInventory_Model_Observer
     }
 
     /**
-     * Refresh stock index for specific stock items after succesful order placement
+     * Refresh stock index for specific stock items after successful order placement
      *
      * @param $observer
      */
