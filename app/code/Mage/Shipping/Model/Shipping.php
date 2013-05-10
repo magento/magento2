@@ -224,7 +224,7 @@ class Mage_Shipping_Model_Shipping
 
     /**
      * Compose Packages For Carrier.
-     * Devides order into items and items into parts if it's neccesary
+     * Devides order into items and items into parts if it's necessary
      *
      * @param Mage_Shipping_Model_Carrier_Abstract $carrier
      * @param Mage_Shipping_Model_Rate_Request $request

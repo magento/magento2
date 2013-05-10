@@ -141,7 +141,7 @@ class Mage_Checkout_Model_Cart_Api extends Mage_Checkout_Model_Api_Resource
     }
 
     /**
-     * Check wether we can use this payment method with current quote
+     * Check whether we can use this payment method with current quote
      *
      * @param Mage_Payment_Model_Method_Abstract $method
      * @param Mage_Sales_Model_Quote $quote

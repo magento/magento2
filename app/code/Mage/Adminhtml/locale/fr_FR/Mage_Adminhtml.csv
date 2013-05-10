@@ -100,7 +100,7 @@
 "All valid rates have been saved.","Tous les taux valides ont été sauvegardés."
 "Always (during development)","Toujours (durant le développement)"
 "Amounts","Montants"
-"An error has occured while syncronizing media storages.","Une erreur est survenue lors de la synchronisation."
+"An error has occurred while syncronizing media storages.","Une erreur est survenue lors de la synchronisation."
 "An error occurred while clearing the JavaScript/CSS cache.","Une erreur s'est produite lors de la suppression du cache JavaScript/CSS."
 "An error occurred while clearing the image cache.","Une erreur s'est produite lors de la suppression du cache de l'image."
 "An error occurred while deleting URL Rewrite.","Un erreur s'est produite lors de l'effacement de URL de réécriture."

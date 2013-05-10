@@ -163,7 +163,7 @@
             </sidebar>
             <payment_failed>
                 <identity>general</identity>
-                <reciever>general</reciever>
+                <receiver>general</receiver>
                 <template>checkout_payment_failed_template</template>
             </payment_failed>
         </checkout>

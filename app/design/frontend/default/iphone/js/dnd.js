@@ -9,7 +9,7 @@
 
 //Description
 // Because this library was designed to run without requiring any other libraries, several basic helper functions were implemented
-// 6 helper functons in this webkit_tools class have been taked directly from Prototype 1.6.1 (http://prototypejs.org/) (c) 2005-2009 Sam Stephenson
+// 6 helper functions in this webkit_tools class have been taked directly from Prototype 1.6.1 (http://prototypejs.org/) (c) 2005-2009 Sam Stephenson
 
 var webkit_tools =
 {
@@ -60,7 +60,7 @@ var webkit_tools =
 
     //DESCRIPTION
     //    This function was taken from the internet (http://robertnyman.com/2006/04/24/get-the-rendered-style-of-an-element/) and returns
-    //    the computed style of an element independantly from the browser
+    //    the computed style of an element independently from the browser
     //INPUT
     //    oELM (DOM ELEMENT) element whose style should be extracted
     //    strCssRule element
@@ -300,7 +300,7 @@ var webkit_droppables = function()
 
     this.process = function(index, draggableRoot, e)
     {
-        //only perform update if a change has occured
+        //only perform update if a change has occurred
         if(this.lastIndex != index)
         {
             //remove previous

@@ -483,7 +483,7 @@ implements Mage_HTTP_IClient
 
 
     /**
-     * Parse headers - CURL callback functin
+     * Parse headers - CURL callback function
      *
      * @param resource $ch curl handle, not needed
      * @param string $data

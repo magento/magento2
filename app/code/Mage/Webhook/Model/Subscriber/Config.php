@@ -43,17 +43,17 @@ class Mage_Webhook_Model_Subscriber_Config
 
         $errors = array();
 
-        foreach ($subscriberConfig as $extentionId => $subscriberData) {
+        foreach ($subscriberConfig as $extensionId => $subscriberData) {
             if (!$this->_validateConfigData($subscriberData)) {
                 $errors[] = Mage::helper('Mage_Webhook_Helper_Data')
-                    ->__("Invalid config data for subscriber '%s'.", $extentionId);
+                    ->__("Invalid config data for subscriber '%s'.", $extensionId);
                 continue;
             }
 
-            $subscribers = $subscriberCollection->getItemsByColumnValue('extension_id', $extentionId);
+            $subscribers = $subscriberCollection->getItemsByColumnValue('extension_id', $extensionId);
             if (empty($subscribers)) {
                 // add new subscriber
-                $this->_addSubscriberFromConfigData($extentionId, $subscriberData);
+                $this->_addSubscriberFromConfigData($extensionId, $subscriberData);
                 continue;
             } else {
                 // get first subscriber from array
@@ -94,17 +94,17 @@ class Mage_Webhook_Model_Subscriber_Config
         return is_array($data) && isset($data['name']);
     }
 
-    protected function _addSubscriberFromConfigData($extentionId, array $configData)
+    protected function _addSubscriberFromConfigData($extensionId, array $configData)
     {
         /** @var $subscriber Mage_Webhook_Model_Subscriber */
-        $subscriber = $this->_createSubscriber($extentionId);
+        $subscriber = $this->_createSubscriber($extensionId);
         return $this->_updateSubscriberFromConfigData($subscriber, $configData);
     }
 
-    protected function _createSubscriber($extentionId)
+    protected function _createSubscriber($extensionId)
     {
         $subscriber = Mage::getModel('Mage_Webhook_Model_Subscriber')
-            ->setExtensionId($extentionId)
+            ->setExtensionId($extensionId)
             ->setStatus(Mage_Webhook_Model_Subscriber::STATUS_INACTIVE);
         return $subscriber;
     }

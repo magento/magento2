@@ -111,7 +111,7 @@ class Mage_User_Adminhtml_AuthController extends Mage_Backend_Controller_ActionA
     /**
      * Reset forgotten password
      *
-     * Used to handle data recieved from reset forgotten password form
+     * Used to handle data received from reset forgotten password form
      */
     public function resetPasswordPostAction()
     {

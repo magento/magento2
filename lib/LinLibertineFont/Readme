@@ -14,7 +14,7 @@ The font files are available as TTF (TrueType) and OTF (OpenType) fonts. The TTF
 Most often TTF is the better supported format though OTF has advances in printing. Decide yourself what is better for your purpose. OpenType-features are equally available in both fonts. Note that OpenOffice doesn’t support OTFs, yet.
 
 4. HINTING
-The TrueType-hinting is a complex technique and our editor FontForge doesn't support full possibilities (but is alot better version by version)... Since version 2.7 also the normal TTFs are hinted. If you don't like this, send me a mail. You may also try the OpenTypes (which contain PS-Hintings which are quite good supported by fontforge).
+The TrueType-hinting is a complex technique and our editor FontForge doesn't support full possibilities (but is a lot better version by version)... Since version 2.7 also the normal TTFs are hinted. If you don't like this, send me a mail. You may also try the OpenTypes (which contain PS-Hintings which are quite good supported by fontforge).
 
 5. DOWNLOAD AND CONTACT
 We publish our fonts at http://linuxlibertine.sf.net.

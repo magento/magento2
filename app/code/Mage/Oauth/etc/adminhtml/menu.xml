@@ -27,7 +27,7 @@
 -->
 <config>
     <menu>
-        <!-- Menu elements has been disabled untill 3-legged oAuth functionality is needed. -->
+        <!-- Menu elements has been disabled until 3-legged oAuth functionality is needed. -->
         <!--<add id="Mage_Oauth::system_legacy_api_oauth_consumer" title="REST - OAuth Consumers"-->
              <!--module="Mage_Oauth" sortOrder="50" parent="Mage_Api::system_legacy_api"-->
              <!--action="adminhtml/oauth_consumer" resource="Mage_Oauth::consumer"/>-->

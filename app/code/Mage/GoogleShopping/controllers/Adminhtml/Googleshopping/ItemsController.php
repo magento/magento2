@@ -144,7 +144,7 @@ class Mage_GoogleShopping_Adminhtml_Googleshopping_ItemsController extends Mage_
         } catch (Exception $e) {
             $flag->unlock();
             $notifier->addMajor(
-                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('An error has occured while adding products to google shopping account.'),
+                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('An error has occurred while adding products to google shopping account.'),
                 $e->getMessage()
             );
             Mage::logException($e);
@@ -184,7 +184,7 @@ class Mage_GoogleShopping_Adminhtml_Googleshopping_ItemsController extends Mage_
         } catch (Exception $e) {
             $flag->unlock();
             Mage::getModel('Mage_AdminNotification_Model_Inbox')->addMajor(
-                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('An error has occured while deleting products from google shopping account.'),
+                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('An error has occurred while deleting products from google shopping account.'),
                 Mage::helper('Mage_GoogleShopping_Helper_Data')->__('One or more products were not deleted from google shopping account. Refer to the log file for details.')
             );
             Mage::logException($e);
@@ -224,7 +224,7 @@ class Mage_GoogleShopping_Adminhtml_Googleshopping_ItemsController extends Mage_
         } catch (Exception $e) {
             $flag->unlock();
             Mage::getModel('Mage_AdminNotification_Model_Inbox')->addMajor(
-                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('An error has occured while deleting products from google shopping account.'),
+                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('An error has occurred while deleting products from google shopping account.'),
                 Mage::helper('Mage_GoogleShopping_Helper_Data')->__('One or more products were not deleted from google shopping account. Refer to the log file for details.')
             );
             Mage::logException($e);
