@@ -94,7 +94,7 @@
                 </div>
             </div>
             <div class="col-2 col-wide">
-                <?php echo $this->helper('Mage_GiftMessage_Helper_Message')->getInline('multishipping_adress_checkbox', $_address); ?>
+                <?php echo $this->helper('Mage_GiftMessage_Helper_Message')->getInline('multishipping_address_checkbox', $_address); ?>
                 <h3><?php echo $this->__('Items') ?> <span class="separator">|</span> <a href="<?php echo $this->getItemsEditUrl($_address) ?>"><?php echo $this->__('Edit Items') ?></a></h3>
                 <table class="data-table" id="shipping-table-<?php echo $_address->getId() ?>">
                     <col />
@@ -117,7 +117,7 @@
                     </tbody>
                 </table>
                 <script type="text/javascript">(function($) {$('#shipping-table-<?php echo $_address->getId()?>').decorate('table')})(jQuery)</script>
-                <?php echo $this->helper('Mage_GiftMessage_Helper_Message')->getInline('multishipping_adress', $_address); ?>
+                <?php echo $this->helper('Mage_GiftMessage_Helper_Message')->getInline('multishipping_address', $_address); ?>
             </div>
         </div>
         <?php endforeach; ?>

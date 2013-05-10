@@ -27,7 +27,7 @@
 
 /**
  * Catalog EAV collection resource abstract model
- * Implement using diferent stores for retrieve attribute values
+ * Implement using different stores for retrieve attribute values
  *
  * @category    Mage
  * @package     Mage_Catalog

@@ -147,12 +147,12 @@
     z-index: 1;
 }
 
-.address-list li.adress-list-actions:before,
-.address-list li.adress-list-actions:after {
+.address-list li.address-list-actions:before,
+.address-list li.address-list-actions:after {
     display: none;
 }
 
-.address-list li.adress-list-actions {
+.address-list li.address-list-actions {
     padding: 20px 0 0 0;
     border: 0;
     background: none;
@@ -160,7 +160,7 @@
     cursor: default;
 }
 
-.address-list li.adress-list-actions:first-child {
+.address-list li.address-list-actions:first-child {
     padding: 0;
 }
 

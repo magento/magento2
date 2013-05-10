@@ -68,7 +68,7 @@
             </li>
             <?php endforeach; ?>
             <?php endif; ?>
-            <li class="adress-list-actions last"><?php echo $this->getAddNewButtonHtml() ?></li>
+            <li class="address-list-actions last"><?php echo $this->getAddNewButtonHtml() ?></li>
         </ul>
 
         <!-- Template for adding address item to list -->
@@ -233,7 +233,7 @@ addressesModel.prototype = {
             deleteButtonId ++;
             template    += this.prepareTemplate(this.itemTemplate.innerHTML).replace('delete_button', 'delete_button'+ deleteButtonId);
             template    += '</li>';
-            Element.insert(this.itemContainer.down('.adress-list-actions'), {before: template});
+            Element.insert(this.itemContainer.down('.address-list-actions'), {before: template});
             var newItem = $(this.baseItemId+this.itemCount);
             newItem.isNewAddress = true;
             newItem.formBlock = newForm;

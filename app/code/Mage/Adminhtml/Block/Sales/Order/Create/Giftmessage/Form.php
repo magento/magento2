@@ -153,7 +153,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Giftmessage_Form extends Mage_Admi
             $this->_prepareVisibleFields($fieldset);
         }
 
-        // Set default sender and recipient from billing and shipping adresses
+        // Set default sender and recipient from billing and shipping addresses
         if(!$this->getMessage()->getSender()) {
             $this->getMessage()->setSender($this->getDefaultSender());
         }

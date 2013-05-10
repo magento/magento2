@@ -260,7 +260,7 @@ class Mage_Sales_Model_Quote_Address extends Mage_Customer_Model_Address_Abstrac
     }
 
     /**
-     * Declare adress quote model object
+     * Declare address quote model object
      *
      * @param   Mage_Sales_Model_Quote $quote
      * @return  Mage_Sales_Model_Quote_Address
