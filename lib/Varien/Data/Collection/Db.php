@@ -693,11 +693,11 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
      */
     public function printLogQuery($printQuery = false, $logQuery = false, $sql = null)
     {
-        if ($printQuery) {
+        if ($printQuery || $this->getFlag('print_query')) {
             echo is_null($sql) ? $this->getSelect()->__toString() : $sql;
         }
 
-        if ($logQuery) {
+        if ($logQuery || $this->getFlag('log_query')) {
             Mage::log(is_null($sql) ? $this->getSelect()->__toString() : $sql);
         }
         return $this;
