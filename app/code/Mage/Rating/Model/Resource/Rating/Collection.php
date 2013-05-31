@@ -41,6 +41,12 @@ class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resou
     protected $_app;
 
     /**
+     * Add store data flag
+     * @var bool
+     */
+    protected $_addStoreDataFlag = false;
+
+    /**
      * Collection constructor
      *
      * @param Mage_Core_Model_Resource_Db_Abstract $resource
@@ -113,7 +119,7 @@ class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resou
     /**
      * Set store filter
      *
-     * @param int_type $storeId
+     * @param int $storeId
      * @return Mage_Rating_Model_Resource_Rating_Collection
      */
     public function setStoreFilter($storeId)
@@ -252,19 +258,75 @@ class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resou
         return $this;
     }
 
+
+    /**
+     * Add stores data to collection
+     *
+     * @return Mage_Rating_Model_Resource_Rating_Collection
+     */
+    public function addStoreData() {
+        if (!$this->_app->isSingleStoreMode()) {
+            if (!$this->_isCollectionLoaded) {
+                $this->_addStoreDataFlag = true;
+            } elseif (!$this->_addStoreDataFlag) {
+                $this->_addStoreData();
+            }
+        }
+
+        return $this;
+    }
+
     /**
      * Add stores to collection
+     *
+     * @todo mate method deprecated
      *
      * @return Mage_Rating_Model_Resource_Rating_Collection
      */
     public function addStoresToCollection()
     {
-        if ($this->_app->isSingleStoreMode()) {
+        return $this->addStoreData();
+    }
+
+    /**
+     * Set Active Filter
+     *
+     * @param bool $isActive
+     * @return Mage_Rating_Model_Resource_Rating_Collection
+     */
+    public function setActiveFilter($isActive = true)
+    {
+        $this->getSelect()->where('main_table.is_active=?', $isActive);
+        return $this;
+    }
+
+    /**
+     * Load data
+     *
+     * @param boolean $printQuery
+     * @param boolean $logQuery
+     * @return Mage_Review_Model_Resource_Review_Collection
+     */
+    public function load($printQuery = false, $logQuery = false)
+    {
+        if ($this->isLoaded()) {
             return $this;
         }
-        if (!$this->_isCollectionLoaded) {
-            return $this;
+        Mage::dispatchEvent('rating_rating_collection_load_before', array('collection' => $this));
+        parent::load($printQuery, $logQuery);
+        if ($this->_addStoreDataFlag) {
+            $this->_addStoreData();
         }
+        return $this;
+    }
+
+    /**
+     * Add store data
+     *
+     * @return Mage_Review_Model_Resource_Review_Collection
+     */
+    protected function _addStoreData()
+    {
         $ratingIds = array();
         foreach ($this as $item) {
             $ratingIds[] = $item->getId();
@@ -291,18 +353,7 @@ class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resou
                 $item->setStores(array_merge($item->getStores(), array($row['store_id'])));
             }
         }
-        return $this;
-    }
 
-    /**
-     * Set Active Filter
-     *
-     * @param bool $isActive
-     * @return Mage_Rating_Model_Resource_Rating_Collection
-     */
-    public function setActiveFilter($isActive = true)
-    {
-        $this->getSelect()->where('main_table.is_active=?', $isActive);
         return $this;
     }
 }
