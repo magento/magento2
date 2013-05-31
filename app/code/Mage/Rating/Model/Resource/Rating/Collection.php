@@ -105,7 +105,7 @@ class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resou
     }
 
     /**
-     * set order by position field
+     * Set order by position field
      *
      * @param   string $dir
      * @return  Mage_Rating_Model_Resource_Rating_Collection
@@ -258,7 +258,6 @@ class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resou
         return $this;
     }
 
-
     /**
      * Add stores data to collection
      *
@@ -337,14 +336,14 @@ class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resou
         }
         $adapter = $this->getConnection();
 
-        $inCond = $adapter->prepareSqlCondition('rating_id', array(
+        $inCondition = $adapter->prepareSqlCondition('rating_id', array(
             'in' => $ratingIds
         ));
 
         $this->_select = $adapter
             ->select()
             ->from($this->getTable('rating_store'))
-            ->where($inCond);
+            ->where($inCondition);
 
         $data = $adapter->fetchAll($this->_select);
         if (is_array($data) && count($data) > 0) {
