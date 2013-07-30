@@ -74,8 +74,10 @@ class Mage_Checkout_Model_Cart_Api extends Mage_Checkout_Model_Api_Resource
             $quote = Mage::getModel('Mage_Sales_Model_Quote');
             $quote->setStoreId($storeId)
                     ->setIsActive(false)
-                    ->setIsMultiShipping(false)
-                    ->save();
+                    ->setIsMultiShipping(false);
+            $quote->getBillingAddress();
+            $quote->getShippingAddress();
+            $quote->save();
         } catch (Mage_Core_Exception $e) {
             $this->_fault('create_quote_fault', $e->getMessage());
         }
