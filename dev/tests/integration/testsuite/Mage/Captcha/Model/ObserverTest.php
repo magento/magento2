@@ -27,14 +27,11 @@
 
 /**
  * Test captcha observer behavior
+ *
+ * @magentoAppArea adminhtml
  */
 class Mage_Captcha_Model_ObserverTest extends Magento_Test_TestCase_ControllerAbstract
 {
-    protected function setUp()
-    {
-        parent::setUp();
-        Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::PART_CONFIG);
-    }
     /**
      * @magentoConfigFixture admin_store admin/captcha/forms backend_login
      * @magentoConfigFixture admin_store admin/captcha/enable 1
@@ -58,7 +55,7 @@ class Mage_Captcha_Model_ObserverTest extends Magento_Test_TestCase_ControllerAb
         );
         $this->getRequest()->setPost($post);
         $this->dispatch('backend/admin');
-        $this->assertContains(Mage::helper('Mage_Captcha')->__('Incorrect CAPTCHA.'), $this->getResponse()->getBody());
+        $this->assertContains(Mage::helper('Mage_Captcha')->__('Incorrect CAPTCHA'), $this->getResponse()->getBody());
     }
 
     /**
@@ -121,7 +118,7 @@ class Mage_Captcha_Model_ObserverTest extends Magento_Test_TestCase_ControllerAb
         $this->getRequest()->setPost(array('email'   => 'dummy@dummy.com', 'captcha' => '1234'));
         $this->dispatch('backend/admin/auth/forgotpassword');
         $this->assertSessionMessages(
-            $this->equalTo(array('Incorrect CAPTCHA.')), Mage_Core_Model_Message::ERROR, 'Mage_Backend_Model_Session'
+            $this->equalTo(array('Incorrect CAPTCHA')), Mage_Core_Model_Message::ERROR, 'Mage_Backend_Model_Session'
         );
     }
 }

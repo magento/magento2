@@ -28,7 +28,7 @@ class Mage_Adminhtml_DashboardControllerTest extends PHPUnit_Framework_TestCase
         $fixture = uniqid();
         /** @var $request Mage_Core_Controller_Request_Http|PHPUnit_Framework_MockObject_MockObject */
         $request = $this->getMockForAbstractClass('Mage_Core_Controller_Request_Http');
-        $request->setParam('ga', urlencode(base64_encode(serialize(array(1)))));
+        $request->setParam('ga', urlencode(base64_encode(json_encode(array(1)))));
         $request->setParam('h', $fixture);
 
         $tunnelResponse = new Zend_Http_Response(200, array('Content-Type' => 'test_header'), 'success_msg');
@@ -67,7 +67,7 @@ class Mage_Adminhtml_DashboardControllerTest extends PHPUnit_Framework_TestCase
         $fixture = uniqid();
         /** @var $request Mage_Core_Controller_Request_Http|PHPUnit_Framework_MockObject_MockObject */
         $request = $this->getMockForAbstractClass('Mage_Core_Controller_Request_Http');
-        $request->setParam('ga', urlencode(base64_encode(serialize(array(1)))));
+        $request->setParam('ga', urlencode(base64_encode(json_encode(array(1)))));
         $request->setParam('h', $fixture);
 
         /** @var $helper Mage_Adminhtml_Helper_Dashboard_Data|PHPUnit_Framework_MockObject_MockObject */
@@ -116,17 +116,21 @@ class Mage_Adminhtml_DashboardControllerTest extends PHPUnit_Framework_TestCase
         if (!$objectManager) {
             $objectManager = new Magento_ObjectManager_ObjectManager();
         }
+        $rewriteFactory = $this->getMock('Mage_Core_Model_Url_RewriteFactory', array('create'), array(), '', false);
+        $helper = new Magento_Test_Helper_ObjectManager($this);
+        $varienFront = $helper->getObject('Mage_Core_Controller_Varien_Front',
+            array('rewriteFactory' => $rewriteFactory)
+        );
 
-        $routerFactory  = $this->getMock('Mage_Core_Controller_Varien_Router_Factory', array(), array(), '', false);
-        $rewriteFactory = $this->getMock('Mage_Core_Model_Url_RewriteFactory', array(), array(), '', false);
-        $varienFront = new Mage_Core_Controller_Varien_Front($routerFactory, $rewriteFactory);
-        $layoutFactory = $this->getMock('Mage_Core_Model_Layout_Factory', array(), array(), '', false);
+        $arguments = array(
+            'request' => $request,
+            'response' => $response,
+            'objectManager' => $objectManager,
+            'frontController' => $varienFront,
 
-        return $this->getMock('Mage_Adminhtml_DashboardController', array('__'), array(
-            $request, $response, $objectManager,
-            $varienFront, $layoutFactory, null,
-            array('helper' => 1, 'session' => 1, 'translator' => 1)
-        ));
+        );
+        $context = $helper->getObject('Mage_Backend_Controller_Context', $arguments);
+        return $this->getMock('Mage_Adminhtml_DashboardController', array('__'), array($context));
     }
 }
 

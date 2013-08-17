@@ -133,6 +133,14 @@
                     </inventory>
                 </observers>
             </sales_model_service_quote_submit_failure>
+            <paypal_payment_cancel>
+                <observers>
+                    <inventory>
+                        <class>Mage_CatalogInventory_Model_Observer</class>
+                        <method>revertQuoteInventory</method>
+                    </inventory>
+                </observers>
+            </paypal_payment_cancel>
             <sales_order_item_cancel>
                 <observers>
                     <inventory>
@@ -235,13 +243,6 @@
         </index>
     </global>
     <frontend>
-        <layout>
-            <updates>
-                <cataloginventory module="Mage_CatalogInventory">
-                    <file>layout.xml</file>
-                </cataloginventory>
-            </updates>
-        </layout>
         <translate>
             <modules>
                 <Mage_CatalogInventory>
@@ -253,13 +254,6 @@
         </translate>
     </frontend>
     <adminhtml>
-        <layout>
-            <updates>
-                <cataloginventory module="Mage_CatalogInventory">
-                    <file>layout.xml</file>
-                </cataloginventory>
-            </updates>
-        </layout>
         <translate>
             <modules>
                 <Mage_CatalogInventory>

@@ -55,9 +55,7 @@ class Mage_Adminhtml_Report_ProductController extends Mage_Adminhtml_Controller_
      */
     public function soldAction()
     {
-        $this->_title($this->__('Reports'))
-             ->_title($this->__('Products'))
-             ->_title($this->__('Products Ordered'));
+        $this->_title($this->__('Ordered Products Report'));
         $this->_initAction()
             ->_setActiveMenu('Mage_Reports::report_products_sold')
             ->_addBreadcrumb(
@@ -99,7 +97,7 @@ class Mage_Adminhtml_Report_ProductController extends Mage_Adminhtml_Controller_
      */
     public function viewedAction()
     {
-        $this->_title($this->__('Reports'))->_title($this->__('Products'))->_title($this->__('Most Viewed'));
+        $this->_title($this->__('Product Views Report'));
 
         $this->_showLastExecutionTime(Mage_Reports_Model_Flag::REPORT_PRODUCT_VIEWED_FLAG_CODE, 'viewed');
 
@@ -151,9 +149,7 @@ class Mage_Adminhtml_Report_ProductController extends Mage_Adminhtml_Controller_
      */
     public function lowstockAction()
     {
-        $this->_title($this->__('Reports'))
-             ->_title($this->__('Products'))
-             ->_title($this->__('Low Stock'));
+        $this->_title($this->__('Low Stock Report'));
 
         $this->_initAction()
             ->_setActiveMenu('Mage_Reports::report_products_lowstock')
@@ -199,9 +195,7 @@ class Mage_Adminhtml_Report_ProductController extends Mage_Adminhtml_Controller_
      */
     public function downloadsAction()
     {
-        $this->_title($this->__('Reports'))
-             ->_title($this->__('Products'))
-             ->_title($this->__('Downloads'));
+        $this->_title($this->__('Downloads Report'));
 
         $this->_initAction()
             ->_setActiveMenu('Mage_Downloadable::report_products_downloads')
@@ -250,16 +244,16 @@ class Mage_Adminhtml_Report_ProductController extends Mage_Adminhtml_Controller_
     {
         switch ($this->getRequest()->getActionName()) {
             case 'viewed':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::viewed');
+                return $this->_authorization->isAllowed('Mage_Reports::viewed');
                 break;
             case 'sold':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::sold');
+                return $this->_authorization->isAllowed('Mage_Reports::sold');
                 break;
             case 'lowstock':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::lowstock');
+                return $this->_authorization->isAllowed('Mage_Reports::lowstock');
                 break;
             default:
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::report_products');
+                return $this->_authorization->isAllowed('Mage_Reports::report_products');
                 break;
         }
     }

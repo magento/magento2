@@ -46,6 +46,7 @@ $orderItem->setProductId($product->getId())->setQtyOrdered(2);
 /** @var Mage_Sales_Model_Order $order */
 $order = Mage::getModel('Mage_Sales_Model_Order');
 $order->setIncrementId('100000001')
+    ->setState(Mage_Sales_Model_Order::STATE_PROCESSING)
     ->setSubtotal(100)
     ->setBaseSubtotal(100)
     ->setCustomerIsGuest(true)

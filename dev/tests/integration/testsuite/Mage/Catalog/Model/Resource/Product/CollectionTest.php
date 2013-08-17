@@ -66,4 +66,23 @@ class Mage_Catalog_Model_Resource_Product_CollectionTest extends PHPUnit_Framewo
             array(array('sku', 'name', 'sku'), array('name', 'sku')),
         );
     }
+
+    /**
+     * @magentoDataFixture Mage/Catalog/Model/Resource/_files/url_rewrites.php
+     * @magentoConfigFixture current_store catalog/seo/product_use_categories 1
+     */
+    public function testAddUrlRewrite()
+    {
+        $this->_collection->addUrlRewrite(3);
+        $expectedResult = array(
+            'category-1/url-key.html',
+            'category-1/url-key-1.html',
+            'category-1/url-key-2.html',
+            'category-1/url-key-5.html',
+            'category-1/url-key-1000.html',
+            'category-1/url-key-999.html',
+            'category-1/url-key-asdf.html',
+        );
+        $this->assertEquals($expectedResult, $this->_collection->getColumnValues('request_path'));
+    }
 }

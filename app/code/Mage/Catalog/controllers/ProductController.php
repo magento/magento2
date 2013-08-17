@@ -68,11 +68,12 @@ class Mage_Catalog_ProductController
     public function viewAction()
     {
         // Get initial data from request
-        $categoryId = (int) $this->getRequest()->getParam('category', false);
-        $productId  = (int) $this->getRequest()->getParam('id');
+        $categoryId = (int)$this->getRequest()->getParam('category', false);
+        $productId  = (int)$this->getRequest()->getParam('id');
         $specifyOptions = $this->getRequest()->getParam('options');
 
         // Prepare helper and params
+        /** @var Mage_Catalog_Helper_Product_View $viewHelper */
         $viewHelper = Mage::helper('Mage_Catalog_Helper_Product_View');
 
         $params = new Varien_Object();
@@ -83,16 +84,14 @@ class Mage_Catalog_ProductController
         try {
             $viewHelper->prepareAndRender($productId, $this, $params);
         } catch (Exception $e) {
-            /** @var $logger Mage_Core_Model_Logger */
-            $logger = $this->_objectManager->get('Mage_Core_Model_Logger');
             if ($e->getCode() == $viewHelper->ERR_NO_PRODUCT_LOADED) {
-                if (isset($_GET['store'])  && !$this->getResponse()->isRedirect()) {
+                if (isset($_GET['store']) && !$this->getResponse()->isRedirect()) {
                     $this->_redirect('');
                 } elseif (!$this->getResponse()->isRedirect()) {
                     $this->_forward('noRoute');
                 }
             } else {
-                $logger->logException($e);
+                Mage::logException($e);
                 $this->_forward('noRoute');
             }
         }
@@ -113,17 +112,5 @@ class Mage_Catalog_ProductController
         }
         $this->loadLayout();
         $this->renderLayout();
-    }
-
-    /**
-     * Test action for product service
-     * @todo remove
-     */
-    public function serviceAction()
-    {
-        /** @var $product Mage_Catalog_Service_Product */
-        $productService = Mage::getObjectManager()->create('Mage_Catalog_Service_Product');
-        $data = $productService->item(2);
-        die(nl2br(print_r($data, true)));
     }
 }

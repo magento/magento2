@@ -189,7 +189,7 @@ class Mage_Eav_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribute_Ab
 
             // save default date value as timestamp
             if ($hasDefaultValue) {
-                $format = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
+                $format = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT);
                 try {
                     $defaultValue = Mage::app()->getLocale()->date($defaultValue, $format, null, false)->toValue();
                     $this->setDefaultValue($defaultValue);

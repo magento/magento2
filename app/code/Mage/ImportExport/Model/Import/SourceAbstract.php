@@ -178,6 +178,6 @@ abstract class Mage_ImportExport_Model_Import_SourceAbstract implements Seekable
                 }
             } while ($this->_key != -1);
         }
-        throw new OutOfBoundsException('Invalid seek position');
+        throw new OutOfBoundsException('Please correct the seek position.');
     }
 }

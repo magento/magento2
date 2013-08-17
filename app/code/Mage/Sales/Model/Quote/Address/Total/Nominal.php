@@ -89,7 +89,7 @@ class Mage_Sales_Model_Quote_Address_Total_Nominal extends Mage_Sales_Model_Quot
         if ($items) {
             $address->addTotal(array(
                 'code'    => $this->getCode(),
-                'title'   => Mage::helper('Mage_Sales_Helper_Data')->__('Nominal Items'),
+                'title'   => Mage::helper('Mage_Sales_Helper_Data')->__('Subscription Items'),
                 'items'   => $items,
                 'area'    => 'footer',
             ));

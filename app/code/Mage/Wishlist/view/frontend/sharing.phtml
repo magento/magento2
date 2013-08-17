@@ -23,9 +23,11 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
+/** @var $this Mage_Wishlist_Block_Customer_Sharing */
 ?>
 <div class="page-title">
-    <h1><?php echo $this->__('Share Your Wishlist') ?></h1>
+    <h1><?php echo $this->__('Share Your Wish List') ?></h1>
 </div>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <form action="<?php echo $this->getSendUrl() ?>" id="form-validate" method="post">
@@ -34,7 +36,7 @@
         <h2 class="legend"><?php echo $this->__('Sharing Information') ?></h2>
         <ul class="form-list">
             <li class="wide">
-                <label for="email_address" class="required"><em>*</em><?php echo $this->__('Email addresses, separated by commas') ?></label>
+                <label for="email_address" class="required"><em>*</em><?php echo $this->__('Email addresses, separated by commas (max %d addresses)', $this->getEmailSharingLimit()); ?></label>
                 <div class="input-box">
                     <textarea name="emails" cols="60" rows="5" id="email_address" data-validate="{required:true,'validate-emails':true}"><?php echo $this->getEnteredData('emails') ?></textarea>
                 </div>
@@ -42,7 +44,7 @@
             <li class="wide">
                 <label for="message"><?php echo $this->__('Message') ?></label>
                 <div class="input-box">
-                    <textarea id="message" name="message" cols="60" rows="5"><?php echo $this->getEnteredData('message') ?></textarea>
+                    <textarea id="message" name="message" cols="60" rows="5" class="validate-length maximum-length-<?php echo $this->getTextSharingLimit();?>"><?php echo $this->getEnteredData('message') ?></textarea>
                 </div>
             </li>
             <?php if($this->helper('Mage_Wishlist_Helper_Data')->isRssAllow()): ?>
@@ -58,7 +60,7 @@
     <div class="buttons-set form-buttons">
         <p class="required"><?php echo $this->__('* Required Fields') ?></p>
         <p class="back-link"><a href="<?php echo $this->getBackUrl(); ?>"><small>&laquo; </small><?php echo $this->__('Back')?></a></p>
-        <button type="submit" title="<?php echo $this->__('Share Wishlist') ?>" class="button"><span><span><?php echo $this->__('Share Wishlist') ?></span></span></button>
+        <button type="submit" title="<?php echo $this->__('Share Wish List') ?>" class="button"><span><span><?php echo $this->__('Share Wish List') ?></span></span></button>
     </div>
 </form>
 <script type="text/javascript">

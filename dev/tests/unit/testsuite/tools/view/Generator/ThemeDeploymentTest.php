@@ -29,12 +29,20 @@ require_once realpath(dirname(__FILE__) . '/../../../../../../') . '/tools/view/
 class Tools_View_Generator_ThemeDeploymentTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var Mage_Core_Helper_Css
+     */
+    protected $_cssHelper;
+
+    /**
      * @var string
      */
     protected $_tmpDir;
 
     protected function setUp()
     {
+        $filesystem =  new Magento_Filesystem(new Magento_Filesystem_Adapter_Local());
+        $dirs = new Mage_Core_Model_Dir($filesystem->normalizePath(__DIR__ . '/../../../..'));
+        $this->_cssHelper = new Mage_Core_Helper_Css($filesystem, $dirs);
         $this->_tmpDir = TESTS_TEMP_DIR . DIRECTORY_SEPARATOR . 'tool_theme_deployment';
         mkdir($this->_tmpDir);
     }
@@ -53,7 +61,7 @@ class Tools_View_Generator_ThemeDeploymentTest extends PHPUnit_Framework_TestCas
     public function testConstructorException($permitted, $forbidden, $exceptionMessage)
     {
         $this->setExpectedException('Magento_Exception', $exceptionMessage);
-        new Generator_ThemeDeployment($this->_tmpDir, $permitted, $forbidden);
+        new Generator_ThemeDeployment($this->_cssHelper, $this->_tmpDir, $permitted, $forbidden);
     }
 
     public static function constructorExceptionDataProvider()
@@ -86,7 +94,7 @@ class Tools_View_Generator_ThemeDeploymentTest extends PHPUnit_Framework_TestCas
         $forbidden = __DIR__ . '/_files/ThemeDeployment/run/forbidden.php';
         $fixture = include  __DIR__ . '/_files/ThemeDeployment/run/fixture.php';
 
-        $object = new Generator_ThemeDeployment($this->_tmpDir, $permitted, $forbidden);
+        $object = new Generator_ThemeDeployment($this->_cssHelper, $this->_tmpDir, $permitted, $forbidden);
         $object->run($fixture['copyRules']);
 
         // Verify expected paths
@@ -142,7 +150,7 @@ class Tools_View_Generator_ThemeDeploymentTest extends PHPUnit_Framework_TestCas
         $forbidden = __DIR__ . '/_files/ThemeDeployment/run/forbidden.php';
         $fixture = include  __DIR__ . '/_files/ThemeDeployment/run/fixture.php';
 
-        $object = new Generator_ThemeDeployment($this->_tmpDir, $permitted, $forbidden, true);
+        $object = new Generator_ThemeDeployment($this->_cssHelper, $this->_tmpDir, $permitted, $forbidden, true);
         $object->run($fixture['copyRules']);
 
         $actualPaths = $this->_getRelativePaths($this->_tmpDir);
@@ -160,7 +168,7 @@ class Tools_View_Generator_ThemeDeploymentTest extends PHPUnit_Framework_TestCas
         $forbidden = __DIR__ . '/_files/ThemeDeployment/run/forbidden_without_php.php';
         $fixture = include  __DIR__ . '/_files/ThemeDeployment/run/fixture.php';
 
-        $object = new Generator_ThemeDeployment($this->_tmpDir, $permitted, $forbidden, true);
+        $object = new Generator_ThemeDeployment($this->_cssHelper, $this->_tmpDir, $permitted, $forbidden, true);
         $object->run($fixture['copyRules']);
     }
 
@@ -168,7 +176,7 @@ class Tools_View_Generator_ThemeDeploymentTest extends PHPUnit_Framework_TestCas
     {
         $permitted = __DIR__ . '/_files/ThemeDeployment/run/permitted_cased_js.php';
 
-        $object = new Generator_ThemeDeployment($this->_tmpDir, $permitted);
+        $object = new Generator_ThemeDeployment($this->_cssHelper, $this->_tmpDir, $permitted);
         $copyRules = array(
             array(
                 'source' => __DIR__ . '/_files/ThemeDeployment/run/source_cased_js',

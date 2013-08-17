@@ -200,7 +200,8 @@ class Mage_Bundle_Block_Catalog_Product_View_Type_Bundle_Option extends Mage_Bun
         $price = 0;
         $store = $this->getProduct()->getStore();
         if ($_selection) {
-            $price = $this->getProduct()->getPriceModel()->getSelectionPreFinalPrice($this->getProduct(), $_selection);
+            $price = $this->getProduct()->getPriceModel()
+                ->getSelectionPreFinalPrice($this->getProduct(), $_selection, 1);
             if (is_numeric($price)) {
                 $price = $this->helper('Mage_Core_Helper_Data')->currencyByStore($price, $store, false);
             }

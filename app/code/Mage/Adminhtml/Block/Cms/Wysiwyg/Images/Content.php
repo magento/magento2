@@ -41,35 +41,28 @@ class Mage_Adminhtml_Block_Cms_Wysiwyg_Images_Content extends Mage_Adminhtml_Blo
         parent::_construct();
         $this->_headerText = $this->helper('Mage_Cms_Helper_Data')->__('Media Storage');
         $this->_removeButton('back')->_removeButton('edit');
-        $this->_addButton('newfolder', array(
+        $this->_addButton('new_folder', array(
             'class'   => 'save',
             'label'   => $this->helper('Mage_Cms_Helper_Data')->__('Create Folder...'),
             'type'    => 'button',
-            'onclick' => 'MediabrowserInstance.newFolder();'
         ));
 
         $this->_addButton('delete_folder', array(
             'class'   => 'delete no-display',
             'label'   => $this->helper('Mage_Cms_Helper_Data')->__('Delete Folder'),
             'type'    => 'button',
-            'onclick' => 'MediabrowserInstance.deleteFolder();',
-            'id'      => 'button_delete_folder'
         ));
 
         $this->_addButton('delete_files', array(
             'class'   => 'delete no-display',
             'label'   => $this->helper('Mage_Cms_Helper_Data')->__('Delete File'),
             'type'    => 'button',
-            'onclick' => 'MediabrowserInstance.deleteFiles();',
-            'id'      => 'button_delete_files'
         ));
 
         $this->_addButton('insert_files', array(
             'class'   => 'save no-display primary',
             'label'   => $this->helper('Mage_Cms_Helper_Data')->__('Insert File'),
             'type'    => 'button',
-            'onclick' => 'MediabrowserInstance.insert();',
-            'id'      => 'button_insert_files'
         ));
     }
 
@@ -94,15 +87,16 @@ class Mage_Adminhtml_Block_Cms_Wysiwyg_Images_Content extends Mage_Adminhtml_Blo
 
         $setupObject->setData(array(
             'newFolderPrompt'                 => $this->helper('Mage_Cms_Helper_Data')->__('New Folder Name:'),
-            'deleteFolderConfirmationMessage' => $this->helper('Mage_Cms_Helper_Data')->__('Are you sure you want to delete current folder?'),
-            'deleteFileConfirmationMessage'   => $this->helper('Mage_Cms_Helper_Data')->__('Are you sure you want to delete the selected file?'),
+            'deleteFolderConfirmationMessage' => $this->helper('Mage_Cms_Helper_Data')->__('Are you sure you want to delete this folder?'),
+            'deleteFileConfirmationMessage'   => $this->helper('Mage_Cms_Helper_Data')->__('Are you sure you want to delete this file?'),
             'targetElementId' => $this->getTargetElementId(),
             'contentsUrl'     => $this->getContentsUrl(),
             'onInsertUrl'     => $this->getOnInsertUrl(),
             'newFolderUrl'    => $this->getNewfolderUrl(),
             'deleteFolderUrl' => $this->getDeletefolderUrl(),
             'deleteFilesUrl'  => $this->getDeleteFilesUrl(),
-            'headerText'      => $this->getHeaderText()
+            'headerText'      => $this->getHeaderText(),
+            'showBreadcrumbs' => true
         ));
 
         return Mage::helper('Mage_Core_Helper_Data')->jsonEncode($setupObject);

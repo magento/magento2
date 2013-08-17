@@ -52,6 +52,13 @@
                 </sitemap_generate_error_email_template>
             </email>
         </template>
+        <di>
+            <Mage_Sitemap_Model_Sitemap>
+                <parameters>
+                    <resource><instance>Mage_Sitemap_Model_Resource_Sitemap</instance></resource>
+                </parameters>
+            </Mage_Sitemap_Model_Sitemap>
+        </di>
     </global>
     <adminhtml>
         <translate>
@@ -63,13 +70,6 @@
                 </Mage_Sitemap>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <sitemap module="Mage_Sitemap">
-                    <file>layout.xml</file>
-                </sitemap>
-            </updates>
-        </layout>
     </adminhtml>
     <default>
         <sitemap>

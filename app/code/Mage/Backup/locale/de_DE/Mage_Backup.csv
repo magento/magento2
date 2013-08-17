@@ -33,7 +33,7 @@
 "Put store on the maintenance mode while backup's creation","Setzen Sie den Shop während des Anlegens der Sicherungskopie in den Wartungsmodus."
 "Rollback","Rollback"
 "Scheduled Backup Settings","Einstellungen für die planmäßige Datensicherung"
-"Size, Bytes","Größe, Bytes"
+"Size (bytes)","Größe, Bytes"
 "Start Time","Startzeit"
 "System Backup","Systemsicherung"
 "System couldn't put store on the maintenance mode","Das System konnte den Shop nicht in den Wartungsmodus setzen."

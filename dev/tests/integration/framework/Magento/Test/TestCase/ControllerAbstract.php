@@ -70,7 +70,7 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
     }
 
     /**
-     * Bootstrap application before eny test
+     * Bootstrap application before any test
      */
     protected function setUp()
     {
@@ -185,7 +185,7 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
      */
     public function assertRedirect(PHPUnit_Framework_Constraint $urlConstraint = null)
     {
-        $this->assertTrue($this->getResponse()->isRedirect());
+        $this->assertTrue($this->getResponse()->isRedirect(), 'Redirect was expected, but none was performed.');
         if ($urlConstraint) {
             $actualUrl = '';
             foreach ($this->getResponse()->getHeaders() as $header) {

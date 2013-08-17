@@ -162,11 +162,11 @@ class Mage_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
             $mailTemplate->addBcc($copyTo);
         }
 
-        $_reciever = Mage::getStoreConfig('checkout/payment_failed/reciever', $checkout->getStoreId());
+        $_receiver = Mage::getStoreConfig('checkout/payment_failed/receiver', $checkout->getStoreId());
         $sendTo = array(
             array(
-                'email' => Mage::getStoreConfig('trans_email/ident_'.$_reciever.'/email', $checkout->getStoreId()),
-                'name'  => Mage::getStoreConfig('trans_email/ident_'.$_reciever.'/name', $checkout->getStoreId())
+                'email' => Mage::getStoreConfig('trans_email/ident_'.$_receiver.'/email', $checkout->getStoreId()),
+                'name'  => Mage::getStoreConfig('trans_email/ident_'.$_receiver.'/name', $checkout->getStoreId())
             )
         );
 

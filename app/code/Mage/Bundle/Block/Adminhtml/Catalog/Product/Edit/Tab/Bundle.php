@@ -38,13 +38,6 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle extends Mage_A
 
     protected $_template = 'product/edit/bundle.phtml';
 
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setSkipGenerateContent(true);
-
-    }
-
     public function getTabUrl()
     {
         return $this->getUrl('*/bundle_product_edit/form', array('_current' => true));
@@ -122,5 +115,15 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle extends Mage_A
     public function isHidden()
     {
         return false;
+    }
+
+    /**
+     * Get parent tab code
+     *
+     * @return string
+     */
+    public function getParentTab()
+    {
+        return 'product-details';
     }
 }

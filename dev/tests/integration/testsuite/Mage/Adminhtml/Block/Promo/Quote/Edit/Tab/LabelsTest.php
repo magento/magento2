@@ -21,7 +21,11 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_LabelsTest extends Mage_Backend_Area_TestCase
+
+/**
+ * @magentoAppArea adminhtml
+ */
+class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_LabelsTest extends PHPUnit_Framework_TestCase
 {
     public function testConstruct()
     {

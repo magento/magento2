@@ -120,6 +120,6 @@ class Mage_Tag_Block_Product_Result extends Mage_Catalog_Block_Product_Abstract
 
     public function getNoResultText()
     {
-        return Mage::helper('Mage_Tag_Helper_Data')->__('No matches found.');
+        return Mage::helper('Mage_Tag_Helper_Data')->__('We didn\'t find any matches.');
     }
 }

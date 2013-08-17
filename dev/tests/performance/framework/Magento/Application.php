@@ -197,10 +197,7 @@ class Magento_Application
     {
         if (!Mage::getObjectManager()) {
             $config = new Mage_Core_Model_Config_Primary(BP, $_SERVER);
-            $definitionFactory = new Mage_Core_Model_ObjectManager_DefinitionFactory();
-            $definitions =  $definitionFactory->create($config);
-            $objectManager = new Mage_Core_Model_ObjectManager($definitions, $config);
-            Mage::setObjectManager($objectManager);
+            Mage::setObjectManager(new Mage_Core_Model_ObjectManager($config));
         }
 
         /** @var $app Mage_Core_Model_App */

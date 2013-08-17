@@ -36,6 +36,9 @@
         </Mage_Contacts>
     </modules>
     <frontend>
+        <secure_url>
+            <customer>/contacts/</customer>
+        </secure_url>
         <routers>
             <contacts>
                 <use>standard</use>
@@ -54,13 +57,6 @@
                 </Mage_Contacts>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <contact module="Mage_Contacts">
-                    <file>layout.xml</file>
-                </contact>
-            </updates>
-        </layout>
     </frontend>
     <global>
         <resources>

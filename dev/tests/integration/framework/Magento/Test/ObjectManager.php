@@ -48,15 +48,13 @@ class Magento_Test_ObjectManager extends Mage_Core_Model_ObjectManager
         }
 
         Mage_Core_Model_Config_Base::destroy();
-        $sharedInstances = array('Magento_ObjectManager' => $this);
+        $sharedInstances = array('Magento_ObjectManager' => $this, 'Mage_Core_Model_ObjectManager' => $this);
         if (isset($this->_sharedInstances['Mage_Core_Model_Resource'])) {
             $sharedInstances['Mage_Core_Model_Resource'] = $this->_sharedInstances['Mage_Core_Model_Resource'];
         }
         $this->_sharedInstances = $sharedInstances;
-        $this->_nonShared = array();
-        $this->_arguments = array();
-        $this->_preferences = array();
         $this->_creationStack = array();
+        $this->_config->clean();
 
         return $this;
     }

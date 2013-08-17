@@ -113,7 +113,7 @@ class Mage_Adminhtml_RatingController extends Mage_Adminhtml_Controller_Action
                     }
                 }
 
-                Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(Mage::helper('Mage_Adminhtml_Helper_Data')->__('The rating has been saved.'));
+                Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(Mage::helper('Mage_Adminhtml_Helper_Data')->__('You saved the rating.'));
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->setRatingData(false);
 
                 $this->_redirect('*/*/');
@@ -136,7 +136,7 @@ class Mage_Adminhtml_RatingController extends Mage_Adminhtml_Controller_Action
                 /* @var $model Mage_Rating_Model_Rating */
                 $model->load($this->getRequest()->getParam('id'))
                     ->delete();
-                Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(Mage::helper('Mage_Adminhtml_Helper_Data')->__('The rating has been deleted.'));
+                Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(Mage::helper('Mage_Adminhtml_Helper_Data')->__('You deleted the rating.'));
                 $this->_redirect('*/*/');
             } catch (Exception $e) {
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError($e->getMessage());
@@ -148,16 +148,14 @@ class Mage_Adminhtml_RatingController extends Mage_Adminhtml_Controller_Action
 
     protected function _initEnityId()
     {
-        $this->_title($this->__('Catalog'))
-             ->_title($this->__('Reviews and Ratings'))
-             ->_title($this->__('Manage Ratings'));
+        $this->_title($this->__('Ratings'));
 
         Mage::register('entityId', Mage::getModel('Mage_Rating_Model_Rating_Entity')->getIdByCode('product'));
     }
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Rating::ratings');
+        return $this->_authorization->isAllowed('Mage_Rating::ratings');
     }
 
 }

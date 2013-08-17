@@ -52,19 +52,20 @@ class Mage_DesignEditor_Model_Editor_Tools_Controls_Factory
     protected $_objectManager;
 
     /**
-     * @var Mage_Core_Model_Design_Package
+     * @var Mage_Core_Model_View_FileSystem
      */
-    protected $_design;
+    protected $_viewFileSystem;
 
-    /*
-     * Initialize dependencies
+    /**
+     * @param Magento_ObjectManager $objectManager
+     * @param Mage_Core_Model_View_FileSystem $viewFileSystem
      */
     public function __construct(
         Magento_ObjectManager $objectManager,
-        Mage_Core_Model_Design_Package $package
+        Mage_Core_Model_View_FileSystem $viewFileSystem
     ) {
         $this->_objectManager = $objectManager;
-        $this->_design = $package;
+        $this->_viewFileSystem = $viewFileSystem;
     }
 
     /**
@@ -80,8 +81,8 @@ class Mage_DesignEditor_Model_Editor_Tools_Controls_Factory
         if (!isset($this->_fileNames[$type])) {
             throw new Magento_Exception("Unknown control configuration type: \"{$type}\"");
         }
-        return $this->_design->getFilename($this->_fileNames[$type], array(
-            'area'       => Mage_Core_Model_Design_Package::DEFAULT_AREA,
+        return $this->_viewFileSystem->getFilename($this->_fileNames[$type], array(
+            'area'       => Mage_Core_Model_View_DesignInterface::DEFAULT_AREA,
             'themeModel' => $theme
         ));
     }
@@ -91,12 +92,17 @@ class Mage_DesignEditor_Model_Editor_Tools_Controls_Factory
      *
      * @param string $type
      * @param Mage_Core_Model_Theme $theme
+     * @param Mage_Core_Model_Theme $parentTheme
      * @param array $files
      * @return Mage_DesignEditor_Model_Editor_Tools_Controls_Configuration
      * @throws Magento_Exception
      */
-    public function create($type, Mage_Core_Model_Theme $theme = null, array $files = array())
-    {
+    public function create(
+        $type,
+        Mage_Core_Model_Theme $theme = null,
+        Mage_Core_Model_Theme $parentTheme = null,
+        array $files = array()
+    ) {
         $files[] = $this->_getFilePathByType($type, $theme);
         switch ($type) {
             case self::TYPE_QUICK_STYLES:
@@ -114,7 +120,8 @@ class Mage_DesignEditor_Model_Editor_Tools_Controls_Factory
         return Mage::getObjectManager()->create(
             'Mage_DesignEditor_Model_Editor_Tools_Controls_Configuration', array(
                 'configuration' => $config,
-                'theme'         => $theme
+                'theme'         => $theme,
+                'parentTheme'   => $parentTheme
         ));
     }
 }

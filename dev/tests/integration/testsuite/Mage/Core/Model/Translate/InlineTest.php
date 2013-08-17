@@ -32,6 +32,9 @@ class Mage_Core_Model_Translate_InlineTest extends PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    /**
+     * @var string
+     */
     protected $_storeId = 'default';
 
     public static function setUpBeforeClass()
@@ -55,55 +58,6 @@ class Mage_Core_Model_Translate_InlineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider processAjaxPostDataProvider
-     */
-    public function testProcessAjaxPost($originalText, $translatedText, $isPerStore = null)
-    {
-        $inputArray = array(array('original' => $originalText, 'custom' => $translatedText));
-        if ($isPerStore !== null) {
-            $inputArray[0]['perstore'] = $isPerStore;
-        }
-        $this->_model->processAjaxPost($inputArray);
-
-        $model = Mage::getModel('Mage_Core_Model_Translate_String');
-        $model->load($originalText);
-        try {
-            $this->assertEquals($translatedText, $model->getTranslate());
-            $model->delete();
-        } catch (Exception $e) {
-            Mage::logException($e);
-            $model->delete();
-        }
-    }
-
-    public function processAjaxPostDataProvider()
-    {
-        return array(
-            array('original text 1', 'translated text 1'),
-            array('original text 2', 'translated text 2', true),
-        );
-    }
-
-    /**
-     * @dataProvider stripInlineTranslationsDataProvider
-     */
-    public function testStripInlineTranslations($originalText, $expectedText)
-    {
-        $actualText = $originalText;
-        $this->_model->stripInlineTranslations($actualText);
-        $this->assertEquals($expectedText, $actualText);
-    }
-
-    public function stripInlineTranslationsDataProvider()
-    {
-        $originalText = '{{{first}}{{second}}{{third}}{{fourth}}}';
-        return array(
-            array($originalText, 'first'),
-            array(array($originalText), array('first')),
-        );
-    }
-
-    /**
      * @param string $originalText
      * @param string $expectedText
      * @dataProvider processResponseBodyDataProvider
@@ -111,7 +65,7 @@ class Mage_Core_Model_Translate_InlineTest extends PHPUnit_Framework_TestCase
     public function testProcessResponseBody($originalText, $expectedText)
     {
         $actualText = $originalText;
-        $this->_model->processResponseBody($actualText);
+        $this->_model->processResponseBody($actualText, false);
         $this->markTestIncomplete('Bug MAGE-2494');
 
         $expected = new DOMDocument;
@@ -125,6 +79,9 @@ class Mage_Core_Model_Translate_InlineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function processResponseBodyDataProvider()
     {
         $originalText = file_get_contents(__DIR__ . '/_files/_inline_page_original.html');
@@ -140,12 +97,5 @@ class Mage_Core_Model_Translate_InlineTest extends PHPUnit_Framework_TestCase
             'html string' => array($originalText, $expectedText),
             'html array'  => array(array($originalText), array($expectedText)),
         );
-    }
-
-    public function testSetGetIsJson()
-    {
-        $this->assertFalse($this->_model->getIsJson());
-        $this->_model->setIsJson(true);
-        $this->assertTrue($this->_model->getIsJson());
     }
 }

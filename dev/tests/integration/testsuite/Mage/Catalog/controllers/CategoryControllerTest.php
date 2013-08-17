@@ -43,35 +43,33 @@ class Mage_Catalog_CategoryControllerTest extends Magento_Test_TestCase_Controll
         return array(
             'category without children' => array(
                 '$categoryId' => 5,
-                '$expectedProductCount' => 1,
                 array(
                     'catalog_category_view_type_default',
                     'catalog_category_view_type_default_without_children',
                 ),
                 array(
-                    'categorypath-category-1-category-1-1-category-1-1-1-html',
-                    'category-category-1-1-1',
-                    '<title>Category 1.1.1 - Category 1.1 - Category 1</title>',
-                    '<h1>Category 1.1.1</h1>',
-                    'Simple Product Two',
-                    '$45.67',
+                    '%acategorypath-category-1-category-1-1-category-1-1-1-html%a',
+                    '%acategory-category-1-1-1%a',
+                    '%a<title>Category 1.1.1 - Category 1.1 - Category 1</title>%a',
+                    '%a<h1%S>%SCategory 1.1.1%S</h1>%a',
+                    '%aSimple Product Two%a',
+                    '%a$45.67%a',
                 ),
             ),
             'anchor category' => array(
                 '$categoryId' => 4,
-                '$expectedProductCount' => 2,
                 array(
                     'catalog_category_view_type_layered',
                 ),
                 array(
-                    'categorypath-category-1-category-1-1-html',
-                    'category-category-1-1',
-                    '<title>Category 1.1 - Category 1</title>',
-                    '<h1>Category 1.1</h1>',
-                    'Simple Product',
-                    '$10.00',
-                    'Simple Product Two',
-                    '$45.67',
+                    '%acategorypath-category-1-category-1-1-html%a',
+                    '%acategory-category-1-1%a',
+                    '%a<title>Category 1.1 - Category 1</title>%a',
+                    '%a<h1%S>%SCategory 1.1%S</h1>%a',
+                    '%aSimple Product%a',
+                    '%a$10.00%a',
+                    '%aSimple Product Two%a',
+                    '%a$45.67%a',
                 ),
             ),
         );
@@ -80,7 +78,7 @@ class Mage_Catalog_CategoryControllerTest extends Magento_Test_TestCase_Controll
     /**
      * @dataProvider getViewActionDataProvider
      */
-    public function testViewAction($categoryId, $expectedProductCount, array $expectedHandles, array $expectedContent)
+    public function testViewAction($categoryId, array $expectedHandles, array $expectedContent)
     {
         $this->dispatch("catalog/category/view/id/$categoryId");
 
@@ -102,11 +100,8 @@ class Mage_Catalog_CategoryControllerTest extends Magento_Test_TestCase_Controll
 
         /* Response content */
         foreach ($expectedContent as $expectedText) {
-            $this->assertContains($expectedText, $responseBody);
+            $this->assertStringMatchesFormat($expectedText, $responseBody);
         }
-
-        $actualProductCount = substr_count($responseBody, '<h2 class="product-name">');
-        $this->assertEquals($expectedProductCount, $actualProductCount, 'Number of products on the page.');
     }
 
     public function testViewActionNoCategoryId()

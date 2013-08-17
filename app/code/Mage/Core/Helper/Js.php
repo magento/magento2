@@ -68,18 +68,26 @@ class Mage_Core_Helper_Js extends Mage_Core_Helper_Abstract
     protected $_configCacheType;
 
     /**
+     * @var Mage_Core_Model_View_Url
+     */
+    protected $_viewUrl;
+
+    /**
      * @param Mage_Core_Helper_Context $context
      * @param Mage_Core_Model_Config_Modules_Reader $configReader
      * @param Mage_Core_Model_Cache_Type_Config $configCacheType
+     * @param Mage_Core_Model_View_Url $viewUrl
      */
     public function __construct(
         Mage_Core_Helper_Context $context,
         Mage_Core_Model_Config_Modules_Reader $configReader,
-        Mage_Core_Model_Cache_Type_Config $configCacheType
+        Mage_Core_Model_Cache_Type_Config $configCacheType,
+        Mage_Core_Model_View_Url $viewUrl
     ) {
         parent::__construct($context);
         $this->_configReader = $configReader;
         $this->_configCacheType = $configCacheType;
+        $this->_viewUrl = $viewUrl;
     }
 
     /**
@@ -122,7 +130,7 @@ class Mage_Core_Helper_Js extends Mage_Core_Helper_Abstract
      */
     public function includeScript($file)
     {
-        return '<script type="text/javascript" src="' . Mage::getDesign()->getViewFileUrl($file) . '"></script>' . "\n";
+        return '<script type="text/javascript" src="' . $this->_viewUrl->getViewFileUrl($file) . '"></script>' . "\n";
     }
 
     /**

@@ -42,16 +42,19 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends PHPUnit_Fra
             ->setMethods(array('getResourceIdsByRole'))
             ->getMock();
 
+        $rootResource = new Mage_Core_Model_Acl_RootResource('Mage_Webapi');
+
         $helper = new Magento_Test_Helper_ObjectManager($this);
         $this->_block = $helper->getObject('Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_Resource', array(
             // TODO: Remove injecting of 'urlBuilder' and 'authorizationConfig' after MAGETWO-5038 complete
             'urlBuilder' => $this->getMockBuilder('Mage_Backend_Model_Url')
                 ->disableOriginalConstructor()
                 ->getMock(),
-            'authorizationConfig' => $this->getMockBuilder('Mage_Webapi_Model_Authorization_Config')
+            'authorizationConfig' => $this->getMockBuilder('Mage_Webapi_Model_Acl_Loader_Resource_ConfigReader')
                 ->disableOriginalConstructor()
                 ->getMock(),
-            'ruleResource' => $this->_ruleResource
+            'ruleResource' => $this->_ruleResource,
+            'rootResource' => $rootResource
         ));
     }
 
@@ -90,7 +93,7 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends PHPUnit_Fra
                 false
             ),
             'Everything is allowed' => array(
-                array('customer', 'customer/get', Mage_Webapi_Model_Authorization::API_ACL_RESOURCES_ROOT_ID),
+                array('customer', 'customer/get', 'Mage_Webapi'),
                 true
             )
         );

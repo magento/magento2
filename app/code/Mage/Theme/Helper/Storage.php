@@ -55,6 +55,16 @@ class Mage_Theme_Helper_Storage extends Mage_Core_Helper_Abstract
     const NODE_ROOT = 'root';
 
     /**
+     * Display name for images storage type
+     */
+    const IMAGES = 'Images';
+
+    /**
+     * Display name for fonts storage type
+     */
+    const FONTS = 'Fonts';
+
+    /**
      * Current directory path
      *
      * @var string
@@ -81,20 +91,20 @@ class Mage_Theme_Helper_Storage extends Mage_Core_Helper_Abstract
     protected $_session;
 
     /**
-     * @var Mage_Core_Model_Theme_Factory
+     * @var Mage_Core_Model_Theme_FlyweightFactory
      */
     protected $_themeFactory;
 
     /**
      * @param Magento_Filesystem $filesystem
      * @param Mage_Backend_Model_Session $session
-     * @param Mage_Core_Model_Theme_Factory $themeFactory
+     * @param Mage_Core_Model_Theme_FlyweightFactory $themeFactory
      * @param Mage_Core_Helper_Context $context
      */
     public function __construct(
         Magento_Filesystem $filesystem,
         Mage_Backend_Model_Session $session,
-        Mage_Core_Model_Theme_Factory $themeFactory,
+        Mage_Core_Model_Theme_FlyweightFactory $themeFactory,
         Mage_Core_Helper_Context $context
     ) {
         parent::__construct($context);
@@ -154,7 +164,7 @@ class Mage_Theme_Helper_Storage extends Mage_Core_Helper_Abstract
     {
         if (null === $this->_storageRoot) {
             $this->_storageRoot = implode(Magento_Filesystem::DIRECTORY_SEPARATOR, array(
-                Magento_Filesystem::fixSeparator($this->_getTheme()->getCustomizationPath()),
+                Magento_Filesystem::fixSeparator($this->_getTheme()->getCustomization()->getCustomizationPath()),
                 $this->getStorageType()
             ));
         }
@@ -170,8 +180,8 @@ class Mage_Theme_Helper_Storage extends Mage_Core_Helper_Abstract
     protected function _getTheme()
     {
         $themeId = $this->_getRequest()->getParam(self::PARAM_THEME_ID);
-        $theme = $this->_themeFactory->create();
-        if (!$themeId || $themeId && !$theme->load($themeId)->getId()) {
+        $theme = $this->_themeFactory->create($themeId);
+        if (!$themeId || !$theme) {
             throw new InvalidArgumentException('Theme was not found.');
         }
         return $theme;
@@ -232,7 +242,7 @@ class Mage_Theme_Helper_Storage extends Mage_Core_Helper_Abstract
                 if ($this->_filesystem->isDirectory($path)
                     && $this->_filesystem->isPathInDirectory($path, $currentPath)
                 ) {
-                    $currentPath = $this->_filesystem->getAbsolutePath($path);
+                    $currentPath = $this->_filesystem->normalizePath($path);
                 }
             }
             $this->_currentPath = $currentPath;
@@ -308,6 +318,28 @@ class Mage_Theme_Helper_Storage extends Mage_Core_Helper_Abstract
         }
 
         return $extensions;
+    }
+
+    /**
+     * Get storage type name for display.
+     *
+     * @return string
+     * @throws Magento_Exception
+     */
+    public function getStorageTypeName()
+    {
+        switch ($this->getStorageType()) {
+            case Mage_Theme_Model_Wysiwyg_Storage::TYPE_FONT:
+                $name = self::FONTS;
+                break;
+            case Mage_Theme_Model_Wysiwyg_Storage::TYPE_IMAGE:
+                $name = self::IMAGES;
+                break;
+            default:
+                throw new Magento_Exception('Invalid type');
+        }
+
+        return $name;
     }
 
     /**

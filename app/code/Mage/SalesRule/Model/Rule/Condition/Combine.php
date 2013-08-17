@@ -27,12 +27,19 @@
 
 class Mage_SalesRule_Model_Rule_Condition_Combine extends Mage_Rule_Model_Condition_Combine
 {
-    public function __construct()
+    /**
+     * @param Mage_Rule_Model_Condition_Context $context
+     * @param array $data
+     */
+    public function __construct(Mage_Rule_Model_Condition_Context $context, array $data = array())
     {
-        parent::__construct();
+        parent::__construct($context, $data);
         $this->setType('Mage_SalesRule_Model_Rule_Condition_Combine');
     }
 
+    /**
+     * @return array
+     */
     public function getNewChildSelectOptions()
     {
         $addressCondition = Mage::getModel('Mage_SalesRule_Model_Rule_Condition_Address');
@@ -60,7 +67,8 @@ class Mage_SalesRule_Model_Rule_Condition_Combine extends Mage_Rule_Model_Condit
 
         $additional = new Varien_Object();
         Mage::dispatchEvent('salesrule_rule_condition_combine', array('additional' => $additional));
-        if ($additionalConditions = $additional->getConditions()) {
+        $additionalConditions = $additional->getConditions();
+        if ($additionalConditions) {
             $conditions = array_merge_recursive($conditions, $additionalConditions);
         }
 

@@ -21,6 +21,10 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+/**
+ * @magentoAppArea adminhtml
+ */
 class Mage_Paypal_Adminhtml_Paypal_ReportsControllerTest extends Mage_Backend_Utility_Controller
 {
     /**
@@ -36,7 +40,7 @@ class Mage_Paypal_Adminhtml_Paypal_ReportsControllerTest extends Mage_Backend_Ut
     {
         $this->dispatch('backend/admin/paypal_reports/fetch');
         $this->assertSessionMessages(
-            $this->equalTo(array("Failed to fetch reports from 'login@127.0.0.1'.")), Mage_Core_Model_Message::ERROR
+            $this->equalTo(array("We couldn't fetch reports from 'login@127.0.0.1'.")), Mage_Core_Model_Message::ERROR
         );
     }
 }

@@ -57,9 +57,9 @@ class Mage_Core_Block_Context implements Magento_ObjectManager_ContextInterface
     protected $_cache;
 
     /**
-     * @var Mage_Core_Model_Design_Package
+     * @var Mage_Core_Model_View_DesignInterface
      */
-    protected $_designPackage;
+    protected $_design;
 
     /**
      * @var Mage_Core_Model_Session
@@ -82,17 +82,31 @@ class Mage_Core_Block_Context implements Magento_ObjectManager_ContextInterface
     protected $_helperFactory;
 
     /**
+     * @var Mage_Core_Model_View_Url
+     */
+    protected $_viewUrl;
+
+    /**
+     * View config model
+     *
+     * @var Mage_Core_Model_View_Config
+     */
+    protected $_viewConfig;
+
+    /**
      * @param Mage_Core_Controller_Request_Http $request
      * @param Mage_Core_Model_Layout $layout
      * @param Mage_Core_Model_Event_Manager $eventManager
      * @param Mage_Core_Model_UrlInterface $urlBuilder
      * @param Mage_Core_Model_Translate $translator
      * @param Mage_Core_Model_CacheInterface $cache
-     * @param Mage_Core_Model_Design_Package $designPackage
+     * @param Mage_Core_Model_View_DesignInterface $design
      * @param Mage_Core_Model_Session_Abstract $session
      * @param Mage_Core_Model_Store_Config $storeConfig
      * @param Mage_Core_Controller_Varien_Front $frontController
      * @param Mage_Core_Model_Factory_Helper $helperFactory
+     * @param Mage_Core_Model_View_Url $viewUrl
+     * @param Mage_Core_Model_View_Config $viewConfig
      * @param array $data
      */
     public function __construct(
@@ -102,11 +116,13 @@ class Mage_Core_Block_Context implements Magento_ObjectManager_ContextInterface
         Mage_Core_Model_UrlInterface $urlBuilder,
         Mage_Core_Model_Translate $translator,
         Mage_Core_Model_CacheInterface $cache,
-        Mage_Core_Model_Design_Package $designPackage,
+        Mage_Core_Model_View_DesignInterface $design,
         Mage_Core_Model_Session_Abstract $session,
         Mage_Core_Model_Store_Config $storeConfig,
         Mage_Core_Controller_Varien_Front $frontController,
         Mage_Core_Model_Factory_Helper $helperFactory,
+        Mage_Core_Model_View_Url $viewUrl,
+        Mage_Core_Model_View_Config $viewConfig,
         array $data = array()
     ) {
         $this->_request         = $request;
@@ -115,11 +131,13 @@ class Mage_Core_Block_Context implements Magento_ObjectManager_ContextInterface
         $this->_urlBuilder      = $urlBuilder;
         $this->_translator      = $translator;
         $this->_cache           = $cache;
-        $this->_designPackage   = $designPackage;
+        $this->_design   = $design;
         $this->_session         = $session;
         $this->_storeConfig     = $storeConfig;
         $this->_frontController = $frontController;
         $this->_helperFactory   = $helperFactory;
+        $this->_viewUrl         = $viewUrl;
+        $this->_viewConfig      = $viewConfig;
     }
 
     /**
@@ -131,11 +149,11 @@ class Mage_Core_Block_Context implements Magento_ObjectManager_ContextInterface
     }
 
     /**
-     * @return Mage_Core_Model_Design_Package
+     * @return Mage_Core_Model_View_DesignInterface
      */
     public function getDesignPackage()
     {
-        return $this->_designPackage;
+        return $this->_design;
     }
 
     /**
@@ -208,5 +226,21 @@ class Mage_Core_Block_Context implements Magento_ObjectManager_ContextInterface
     public function getUrlBuilder()
     {
         return $this->_urlBuilder;
+    }
+
+    /**
+     * @return Mage_Core_Model_View_Url
+     */
+    public function getViewUrl()
+    {
+        return $this->_viewUrl;
+    }
+
+    /**
+     * @return Mage_Core_Model_View_Config
+     */
+    public function getViewConfig()
+    {
+        return $this->_viewConfig;
     }
 }

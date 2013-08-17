@@ -31,7 +31,7 @@
  * @package     Mage_Paypal
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Paypal_Block_Adminhtml_Settlement_Report extends Mage_Adminhtml_Block_Widget_Grid_Container
+class Mage_Paypal_Block_Adminhtml_Settlement_Report extends Mage_Backend_Block_Widget_Grid_Container
 {
     /**
      * Prepare grid container, add additional buttons
@@ -43,8 +43,8 @@ class Mage_Paypal_Block_Adminhtml_Settlement_Report extends Mage_Adminhtml_Block
         $this->_headerText = Mage::helper('Mage_Paypal_Helper_Data')->__('PayPal Settlement Reports');
         parent::_construct();
         $this->_removeButton('add');
-        $message = Mage::helper('Mage_Paypal_Helper_Data')->__('Connecting to PayPal SFTP server to fetch new reports. Are you sure you want to proceed?');
-        if (true == Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Paypal::fetch')) {
+        $message = Mage::helper('Mage_Paypal_Helper_Data')->__('We are connecting to the PayPal SFTP server to retrieve new reports. Are you sure you want to continue?');
+        if (true == $this->_authorization->isAllowed('Mage_Paypal::fetch')) {
             $this->_addButton('fetch', array(
                 'label'   => Mage::helper('Mage_Paypal_Helper_Data')->__('Fetch Updates'),
                 'onclick' => "confirmSetLocation('{$message}', '{$this->getUrl('*/*/fetch')}')",

@@ -48,7 +48,7 @@ class Mage_Paypal_Model_System_Config_Backend_Cert extends Mage_Core_Model_Confi
         $tmpPath = $_FILES['groups']['tmp_name'][$this->getGroupId()]['fields'][$this->getField()]['value'];
         if ($tmpPath && file_exists($tmpPath)) {
             if (!filesize($tmpPath)) {
-                Mage::throwException(Mage::helper('Mage_Paypal_Helper_Data')->__('PayPal certificate file is empty.'));
+                Mage::throwException(Mage::helper('Mage_Paypal_Helper_Data')->__('The PayPal certificate file is empty.'));
             }
             $this->setValue($_FILES['groups']['name'][$this->getGroupId()]['fields'][$this->getField()]['value']);
             $content = Mage::helper('Mage_Core_Helper_Data')->encrypt(file_get_contents($tmpPath));

@@ -31,9 +31,9 @@
             <version>1.6.0.4</version>
             <active>true</active>
             <depends>
-                <Mage_Rule/>
-                <Mage_Catalog/>
-                <Mage_Customer/>
+                <Mage_Rule />
+                <Mage_Catalog />
+                <Mage_Customer />
             </depends>
         </Mage_CatalogRule>
     </modules>
@@ -62,12 +62,32 @@
                     </catalogrule>
                 </observers>
             </catalog_product_type_configurable_price>
+            <catalogrule_apply_all>
+                <observers>
+                    <catalogrule>
+                        <class>Mage_CatalogRule_Model_Observer</class>
+                        <method>processApplyAll</method>
+                    </catalogrule>
+                </observers>
+            </catalogrule_apply_all>
         </events>
         <catalogrule>
             <related_cache_types>
-                <block_html/>
+                <block_html />
             </related_cache_types>
         </catalogrule>
+        <di>
+            <Mage_CatalogRule_Model_Rule_Job>
+                <parameters>
+                    <helper>
+                        <instance>Mage_CatalogRule_Helper_Data</instance>
+                    </helper>
+                </parameters>
+            </Mage_CatalogRule_Model_Rule_Job>
+            <Mage_CatalogRule_Model_Resource_Rule_Collection>
+                <shared>0</shared>
+            </Mage_CatalogRule_Model_Resource_Rule_Collection>
+        </di>
     </global>
     <frontend>
         <events>
@@ -181,4 +201,4 @@
             </catalog_product_get_final_price>
         </events>
     </crontab>
-</config>
+</config>

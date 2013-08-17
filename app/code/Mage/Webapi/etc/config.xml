@@ -31,9 +31,9 @@
             <version>1.0.0.3</version>
             <active>true</active>
             <depends>
-                <Mage_Core/>
-                <Mage_Oauth/>
-                <Mage_Backend/>
+                <Mage_Core />
+                <Mage_Oauth />
+                <Mage_Backend />
             </depends>
         </Mage_Webapi>
     </modules>
@@ -44,13 +44,6 @@
                 <front_controller>Mage_Webapi_Controller_Front</front_controller>
                 <!--TODO: Utilize base action controller from config, not constant-->
                 <base_controller>Mage_Webapi_Controller_ActionAbstract</base_controller>
-                <acl>
-                    <policy>Magento_Authorization_Policy_Acl</policy>
-                    <resourceLoader>Mage_Webapi_Model_Authorization_Loader_Resource</resourceLoader>
-                    <roleLoader>Mage_Webapi_Model_Authorization_Loader_Role</roleLoader>
-                    <ruleLoader>Mage_Webapi_Model_Authorization_Loader_Rule</ruleLoader>
-                    <roleLocator>Mage_Webapi_Model_Authorization_RoleLocator</roleLocator>
-                </acl>
             </webapi>
         </areas>
         <resources>
@@ -78,7 +71,6 @@
                             <type>application/json</type>
                             <model>Mage_Webapi_Controller_Request_Rest_Interpreter_Json</model>
                         </application_json>
-
                         <!-- XML -->
                         <application_xml>
                             <type>application/xml</type>
@@ -105,7 +97,6 @@
                             <type>application/json</type>
                             <model>Mage_Webapi_Controller_Response_Rest_Renderer_Json</model>
                         </application_json>
-
                         <!-- XML -->
                         <text_xml>
                             <type>text/xml</type>
@@ -124,6 +115,59 @@
             </rest>
         </webapi>
         <di>
+            <preferences>
+                <Magento_Authorization_Policy>Magento_Authorization_Policy_Acl</Magento_Authorization_Policy>
+                <Magento_Authorization_RoleLocator>Mage_Webapi_Model_Authorization_RoleLocator</Magento_Authorization_RoleLocator>
+                <Magento_Acl_Loader_Resource_ConfigReader_FileListInterface>Mage_Webapi_Model_Acl_Loader_Resource_ConfigReader_FileList</Magento_Acl_Loader_Resource_ConfigReader_FileListInterface>
+            </preferences>
+            <Magento_Acl_Builder>
+                <parameters>
+                    <resourceLoader>
+                        <instance>Mage_Webapi_Model_Authorization_Loader_Resource</instance>
+                    </resourceLoader>
+                    <roleLoader>
+                        <instance>Mage_Webapi_Model_Authorization_Loader_Role</instance>
+                    </roleLoader>
+                    <ruleLoader>
+                        <instance>Mage_Webapi_Model_Authorization_Loader_Rule</instance>
+                    </ruleLoader>
+                </parameters>
+            </Magento_Acl_Builder>
+            <Mage_Webapi_Model_Acl_Builder>
+                <parameters>
+                    <cache>
+                        <instance>Mage_Webapi_Model_Acl_Cache</instance>
+                    </cache>
+                    <resourceLoader>
+                        <instance>Mage_Webapi_Model_Authorization_Loader_Resource</instance>
+                    </resourceLoader>
+                    <roleLoader>
+                        <instance>Mage_Webapi_Model_Authorization_Loader_Role</instance>
+                    </roleLoader>
+                    <ruleLoader>
+                        <instance>Mage_Webapi_Model_Authorization_Loader_Rule</instance>
+                    </ruleLoader>
+                </parameters>
+            </Mage_Webapi_Model_Acl_Builder>
+            <Mage_Webapi_Model_Authorization_Policy_Acl>
+                <parameters>
+                    <aclBuilder>
+                        <instance>Mage_Webapi_Model_Acl_Builder</instance>
+                    </aclBuilder>
+                </parameters>
+            </Mage_Webapi_Model_Authorization_Policy_Acl>
+            <Mage_Webapi_Model_Acl_Cache>
+                <parameters>
+                    <cacheKey>api_acl_resources</cacheKey>
+                </parameters>
+            </Mage_Webapi_Model_Acl_Cache>
+            <Mage_Core_Model_Acl_RootResource>
+                <parameters>
+                    <identifier>
+                        <instance>Mage_Webapi</instance>
+                    </identifier>
+                </parameters>
+            </Mage_Core_Model_Acl_RootResource>
             <Mage_Webapi_Controller_Router_Route>
                 <shared>0</shared>
             </Mage_Webapi_Controller_Router_Route>
@@ -141,7 +185,9 @@
             </Magento_Server_Reflection>
             <Mage_Webapi_Model_Authorization_Loader_Resource>
                 <parameters>
-                    <configuration>Mage_Webapi_Model_Authorization_Config</configuration>
+                    <reader>
+                        <instance>Mage_Webapi_Model_Acl_Loader_Resource_ConfigReader</instance>
+                    </reader>
                 </parameters>
             </Mage_Webapi_Model_Authorization_Loader_Resource>
         </di>
@@ -158,12 +204,5 @@
         </routers>
     </admin>
     <adminhtml>
-        <layout>
-            <updates>
-                <webapi_permissions module="Mage_Webapi">
-                    <file>layout.xml</file>
-                </webapi_permissions>
-            </updates>
-        </layout>
     </adminhtml>
 </config>

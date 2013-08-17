@@ -21,35 +21,36 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 class Mage_Log_Model_EntryPoint_Shell extends Mage_Core_Model_EntryPointAbstract
 {
     /**
-     * @param string $baseDir
-     * @param array $params
+     * Filename of the entry point script
+     *
+     * @var string
      */
-    public function __construct($baseDir, array $params = array())
-    {
-        $entryPoint = $params['entryPoint'];
-        unset($params['entryPoint']);
-        parent::__construct(new Mage_Core_Model_Config_Primary($baseDir, $params));
-        $this->_objectManager->configure(array(
-            'Mage_Log_Model_Shell' => array(
-                'parameters' => array(
-                    'entryPoint' => $entryPoint,
-                )
-            )
-        ));
+    protected $_entryFileName;
+
+    /**
+     * @param Mage_Core_Model_Config_Primary $config
+     * @param string $entryFileName  filename of the entry point script
+     * @param Magento_ObjectManager $objectManager
+     */
+    public function __construct(
+        Mage_Core_Model_Config_Primary $config,
+        $entryFileName,
+        Magento_ObjectManager $objectManager = null
+    ) {
+        parent::__construct($config, $objectManager);
+        $this->_entryFileName = $entryFileName;
     }
 
     /**
      * Process request to application
      */
-    public function processRequest()
+    protected function _processRequest()
     {
         /** @var $shell Mage_Log_Model_Shell */
-        $shell = $this->_objectManager->create('Mage_Log_Model_Shell');
+        $shell = $this->_objectManager->create('Mage_Log_Model_Shell', array('entryPoint' => $this->_entryFileName));
         $shell->run();
     }
-
 }

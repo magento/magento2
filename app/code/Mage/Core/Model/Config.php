@@ -39,6 +39,11 @@ class Mage_Core_Model_Config implements Mage_Core_Model_ConfigInterface
     const CACHE_TAG = 'CONFIG';
 
     /**
+     * Default configuration scope
+     */
+    const SCOPE_DEFAULT = 'default';
+
+    /**
      * Stores configuration scope
      */
     const SCOPE_STORES = 'stores';
@@ -167,14 +172,14 @@ class Mage_Core_Model_Config implements Mage_Core_Model_ConfigInterface
     protected $_invalidator;
 
     /**
-     * @param Magento_ObjectManager $objectManager
+     * @param Mage_Core_Model_ObjectManager $objectManager
      * @param Mage_Core_Model_Config_StorageInterface $storage
      * @param Mage_Core_Model_AppInterface $app
      * @param Mage_Core_Model_Config_Modules_Reader $moduleReader
      * @param Mage_Core_Model_Config_InvalidatorInterface $invalidator
      */
     public function __construct(
-        Magento_ObjectManager $objectManager,
+        Mage_Core_Model_ObjectManager $objectManager,
         Mage_Core_Model_Config_StorageInterface $storage,
         Mage_Core_Model_AppInterface $app,
         Mage_Core_Model_Config_Modules_Reader $moduleReader,
@@ -187,7 +192,7 @@ class Mage_Core_Model_Config implements Mage_Core_Model_ConfigInterface
         $this->_config = $this->_storage->getConfiguration();
         $this->_moduleReader = $moduleReader;
         $this->_invalidator = $invalidator;
-        $this->_objectManager->configure($this->getNode('global/di')->asArray());
+        $this->_objectManager->loadArea('global', $this);
         Magento_Profiler::stop('config_load');
     }
 
@@ -399,25 +404,6 @@ class Mage_Core_Model_Config implements Mage_Core_Model_ConfigInterface
     }
 
     /**
-     * Check if specified module is enabled
-     *
-     * @param string $moduleName
-     * @return bool
-     */
-    public function isModuleEnabled($moduleName)
-    {
-        if (!$this->getNode('modules/' . $moduleName)) {
-            return false;
-        }
-
-        $isActive = $this->getNode('modules/' . $moduleName . '/active');
-        if (!$isActive || !in_array((string)$isActive, array('true', '1'))) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * Get module directory by directory type
      *
      * @param   string $type
@@ -511,21 +497,6 @@ class Mage_Core_Model_Config implements Mage_Core_Model_ConfigInterface
             return null;
         }
         return $rootNode->$name ? $rootNode->$name->children() : null;
-    }
-
-    /**
-     * Get standard path variables.
-     *
-     * To be used in blocks, templates, etc.
-     *
-     * @return array
-     */
-    public function getPathVars()
-    {
-        $path = array();
-        $path['baseUrl'] = Mage::getBaseUrl();
-        $path['baseSecureUrl'] = Mage::getBaseUrl('link', true);
-        return $path;
     }
 
     /**

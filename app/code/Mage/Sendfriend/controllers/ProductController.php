@@ -121,14 +121,14 @@ class Mage_Sendfriend_ProductController extends Mage_Core_Controller_Front_Actio
 
         if ($model->getMaxSendsToFriend() && $model->isExceedLimit()) {
             Mage::getSingleton('Mage_Catalog_Model_Session')->addNotice(
-                $this->__('The messages cannot be sent more than %d times in an hour', $model->getMaxSendsToFriend())
+                $this->__('You can\'t send messages more than %d times an hour.', $model->getMaxSendsToFriend())
             );
         }
 
         $this->loadLayout();
         $this->_initLayoutMessages('Mage_Catalog_Model_Session');
 
-        Mage::dispatchEvent('sendfriend_product', array('product' => $product));
+        $this->_eventManager->dispatch('sendfriend_product', array('product' => $product));
         $data = Mage::getSingleton('Mage_Catalog_Model_Session')->getSendfriendFormData();
         if ($data) {
             Mage::getSingleton('Mage_Catalog_Model_Session')->setSendfriendFormData(true);
@@ -187,7 +187,7 @@ class Mage_Sendfriend_ProductController extends Mage_Core_Controller_Front_Actio
                     }
                 }
                 else {
-                    Mage::getSingleton('Mage_Catalog_Model_Session')->addError($this->__('There were some problems with the data.'));
+                    Mage::getSingleton('Mage_Catalog_Model_Session')->addError($this->__('We found some problems with the data.'));
                 }
             }
         }

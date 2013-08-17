@@ -62,17 +62,17 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Toolbar_Add extends Mag
         return Mage::helper('Mage_Catalog_Helper_Data')->__('Add New Attribute Set');
     }
 
-    protected function getSaveButtonHtml()
+    public function getSaveButtonHtml()
     {
         return $this->getChildHtml('save_button');
     }
 
-    protected function getBackButtonHtml()
+    public function getBackButtonHtml()
     {
         return $this->getChildHtml('back_button');
     }
 
-    protected function getFormHtml()
+    public function getFormHtml()
     {
         return $this->getChildHtml('setForm');
     }

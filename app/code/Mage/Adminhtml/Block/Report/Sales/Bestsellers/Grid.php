@@ -49,7 +49,7 @@ class Mage_Adminhtml_Block_Report_Sales_Bestsellers_Grid extends Mage_Adminhtml_
     protected function _prepareColumns()
     {
         $this->addColumn('period', array(
-            'header'        => Mage::helper('Mage_Sales_Helper_Data')->__('Period'),
+            'header'        => Mage::helper('Mage_Sales_Helper_Data')->__('Interval'),
             'index'         => 'period',
             'sortable'      => false,
             'period_type'   => $this->getPeriodType(),
@@ -61,7 +61,7 @@ class Mage_Adminhtml_Block_Report_Sales_Bestsellers_Grid extends Mage_Adminhtml_
         ));
 
         $this->addColumn('product_name', array(
-            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Product Name'),
+            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Product'),
             'index'     => 'product_name',
             'type'      => 'string',
             'sortable'  => false,
@@ -86,7 +86,7 @@ class Mage_Adminhtml_Block_Report_Sales_Bestsellers_Grid extends Mage_Adminhtml_
         ));
 
         $this->addColumn('qty_ordered', array(
-            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Quantity Ordered'),
+            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Order Quantity'),
             'index'     => 'qty_ordered',
             'type'      => 'number',
             'total'     => 'sum',

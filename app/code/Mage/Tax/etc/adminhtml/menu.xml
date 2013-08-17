@@ -29,7 +29,7 @@
     <menu>
         <add id="Mage_Tax::sales_tax" title="Taxes" module="Mage_Tax" sortOrder="20" parent="Mage_Adminhtml::stores" resource="Mage_Tax::manage_tax"/>
         <add id="Mage_Tax::sales_tax_rules" title="Tax Rules" module="Mage_Tax" sortOrder="10" parent="Mage_Tax::sales_tax" action="adminhtml/tax_rule" resource="Mage_Tax::manage_tax"/>
-        <add id="Mage_Tax::sales_tax_rates" title="Tax Zones &amp; Rates" module="Mage_Tax" sortOrder="20" parent="Mage_Tax::sales_tax" action="adminhtml/tax_rate" resource="Mage_Tax::manage_tax"/>
+        <add id="Mage_Tax::sales_tax_rates" title="Tax Zones and Rates" module="Mage_Tax" sortOrder="20" parent="Mage_Tax::sales_tax" action="adminhtml/tax_rate" resource="Mage_Tax::manage_tax"/>
         <add id="Mage_Tax::system_convert_tax" title="Import/Export Tax Rates" sortOrder="30" module="Mage_Tax" parent="Mage_Adminhtml::system_convert" action="adminhtml/tax_rate/importExport" resource="Mage_Tax::import_export"/>
     </menu>
 </config>

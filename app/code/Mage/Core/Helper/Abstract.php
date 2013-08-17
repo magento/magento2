@@ -26,6 +26,8 @@
 
 /**
  * Abstract helper
+ *
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class Mage_Core_Helper_Abstract
 {
@@ -58,11 +60,17 @@ abstract class Mage_Core_Helper_Abstract
     protected $_translator;
 
     /**
+     * @var Mage_Core_Model_ModuleManager
+     */
+    private $_moduleManager;
+
+    /**
      * @param Mage_Core_Helper_Context $context
      */
     public function __construct(Mage_Core_Helper_Context $context)
     {
         $this->_translator = $context->getTranslator();
+        $this->_moduleManager = $context->getModuleManager();
     }
 
     /**
@@ -148,21 +156,14 @@ abstract class Mage_Core_Helper_Abstract
      *
      * @param string $moduleName Full module name
      * @return boolean
+     * @deprecated use Mage_Core_Model_ModuleManager::isOutputEnabled()
      */
     public function isModuleOutputEnabled($moduleName = null)
     {
         if ($moduleName === null) {
             $moduleName = $this->_getModuleName();
         }
-
-        if (!$this->isModuleEnabled($moduleName)) {
-            return false;
-        }
-
-        if (Mage::getStoreConfigFlag('advanced/modules_disable_output/' . $moduleName)) {
-            return false;
-        }
-        return true;
+        return $this->_moduleManager->isOutputEnabled($moduleName);
     }
 
     /**
@@ -170,22 +171,14 @@ abstract class Mage_Core_Helper_Abstract
      *
      * @param string $moduleName the full module name, example Mage_Core
      * @return boolean
+     * @deprecated use Mage_Core_Model_ModuleManager::isEnabled()
      */
     public function isModuleEnabled($moduleName = null)
     {
         if ($moduleName === null) {
             $moduleName = $this->_getModuleName();
         }
-
-        if (!Mage::getConfig()->getNode('modules/' . $moduleName)) {
-            return false;
-        }
-
-        $isActive = Mage::getConfig()->getNode('modules/' . $moduleName . '/active');
-        if (!$isActive || !in_array((string)$isActive, array('true', '1'))) {
-            return false;
-        }
-        return true;
+        return $this->_moduleManager->isEnabled($moduleName);
     }
 
     /**

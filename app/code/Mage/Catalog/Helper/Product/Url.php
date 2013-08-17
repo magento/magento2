@@ -130,6 +130,9 @@ class Mage_Catalog_Helper_Product_Url extends Mage_Core_Helper_Url
      */
     public function format($string)
     {
-        return strtr($string, $this->getConvertTable());
+        $string = strtr($string, $this->getConvertTable());
+        return '"libiconv"' == ICONV_IMPL
+            ? iconv(Mage_Core_Helper_String::ICONV_CHARSET, 'ascii//ignore//translit', $string)
+            : $string;
     }
 }

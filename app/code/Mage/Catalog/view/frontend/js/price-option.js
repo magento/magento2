@@ -196,11 +196,7 @@
                         } else if (value.indexOf('price-excluding-tax-') >= 0) {
                             price = updatedPrice.priceExclTax;
                         } else if (value.indexOf('old-price-') >= 0) {
-                            if (this.options.priceConfig.showIncludeTax || this.options.priceConfig.showBothPrices) {
-                                price = updatedPrice.priceInclTax;
-                            } else {
-                                price = updatedPrice.priceExclTax;
-                            }
+                            price = updatedPrice.productOldPrice;
                         } else {
                             price = this.options.priceConfig.showIncludeTax ?
                                 updatedPrice.priceInclTax : updatedPrice.priceExclTax;

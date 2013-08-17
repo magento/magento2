@@ -31,9 +31,13 @@ $containerId = $element->getFieldsetContainerId();
 $id = $element->getHtmlId();
 $isCollapsable = $element->getCollapsable();
 $isWrapped = $containerId || $element->getHeaderBar() || $isCollapsable;
-$titleActions = $element->getHeaderBar() ? '<div class="actions">' . $element->getHeaderBar() . '</div>' : '';
+$titleActions = '<div class="actions">' . $element->getHeaderBar() . '</div>';
 $isField = $element->getFieldsetType() == 'field';
 $advancedAfter = $element->getAdvancedPosition() == 'after'; // To place advanced options inside or after fieldset
+$advancedLabel = $element->getAdvancedLabel();
+if (!isset($advancedLabel)) {
+    $advancedLabel = Mage::helper('Mage_Backend_Helper_Data')->__('Additional Settings');
+}
 
 $cssClass = ($isField) ? 'field ' . $element->getClass() : 'fieldset ' . $element->getClass();
 
@@ -51,14 +55,18 @@ if ($isField) {
 */ ?>
 
 <?php if ($isWrapped): ?>
-    <div class="fieldset-wrapper <?php echo ($isCollapsable) ? 'collapsable-wrapper ' : ''; ?>" id="<?php echo $containerId ? $containerId : $id . '-wrapper';?>">
+    <div class="fieldset-wrapper <?php echo ($isCollapsable) ? 'collapsable-wrapper ' : ''; ?>"
+        id="<?php echo $containerId ? $containerId : $id . '-wrapper';?>"
+        data-role="<?php echo $id ?>-wrapper">
         <div class="fieldset-wrapper-title">
             <strong class="title"<?php echo ($isCollapsable) ? ' data-toggle="collapse" data-target="#' . $id . '-content"' : ''; ?>>
                 <span><?php echo $element->getLegend() ?></span>
             </strong>
             <?php echo $titleActions; ?>
         </div>
-        <div class="fieldset-wrapper-content<?php echo ($isCollapsable) ? ' collapse' : ''; ?>" id="<?php echo $id ?>-content">
+        <div class="fieldset-wrapper-content<?php echo ($isCollapsable) ? ' collapse' : ''; ?>"
+            id="<?php echo $id ?>-content"
+            data-role="<?php echo $id ?>-content">
 <?php endif; ?>
 
     <?php if (!$element->getNoContainer()): ?>
@@ -96,7 +104,7 @@ if ($isField) {
             <?php echo (!$element->getNoContainer() && $advancedAfter)  ? '</fieldset>' : ''?>
             <details class="details" id="details<?php echo $id ?>">
                 <summary class="details-summary" id="details-summary<?php echo $id ?>">
-                    <span><?php echo $element->getAdvancedLabel() ?></span>
+                    <span><?php echo $advancedLabel ?></span>
                 </summary>
                 <div class="details-content" id="details-content<?php echo $id ?>">
                     <?php echo $element->getAdvancedChildrenHtml(); ?>

@@ -97,13 +97,13 @@
                 </Mage_Newsletter>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <newsletters module="Mage_Newsletter">
-                    <file>layout.xml</file>
-                </newsletters>
-            </updates>
-        </layout>
+        <di>
+            <Mage_Newsletter_Model_Session>
+                <parameters>
+                    <sessionName>adminhtml</sessionName>
+                </parameters>
+            </Mage_Newsletter_Model_Session>
+        </di>
     </adminhtml>
     <frontend>
         <events>
@@ -142,16 +142,16 @@
                 </Mage_Newsletter>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <newsletter module="Mage_Newsletter">
-                    <file>layout.xml</file>
-                </newsletter>
-            </updates>
-        </layout>
         <secure_url>
             <newsletter_manage>/newsletter/manage/</newsletter_manage>
         </secure_url>
+        <di>
+            <Mage_Newsletter_Model_Session>
+                <parameters>
+                    <sessionName>frontend</sessionName>
+                </parameters>
+            </Mage_Newsletter_Model_Session>
+        </di>
     </frontend>
     <default>
         <newsletter>

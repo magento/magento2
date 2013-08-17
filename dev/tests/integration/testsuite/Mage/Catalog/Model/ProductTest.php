@@ -79,29 +79,6 @@ class Mage_Catalog_Model_ProductTest extends PHPUnit_Framework_TestCase
         $crud->testCrud();
     }
 
-    /**
-     * @magentoConfigFixture limitations/catalog_product 1
-     * @magentoDataFixture Mage/Catalog/_files/product_simple.php
-     */
-    public function testSaveRestricted()
-    {
-        $this->setExpectedException('Mage_Core_Exception', 'Maximum allowed number of products is reached.');
-        $product = Mage::getModel('Mage_Catalog_Model_Product');
-        $product->setName('test')->save();
-    }
-
-    /**
-     * @magentoConfigFixture limitations/catalog_product 1
-     * @magentoDataFixture Mage/Catalog/_files/product_simple.php
-     */
-    public function testValidateRestricted()
-    {
-        $this->setExpectedException('Mage_Core_Exception', 'Maximum allowed number of products is reached.');
-        /** @var $product Mage_Catalog_Model_Product */
-        $product = Mage::getModel('Mage_Catalog_Model_Product');
-        $product->validate();
-    }
-
     public function testCleanCache()
     {
         Mage::app()->saveCache('test', 'catalog_product_999', array('catalog_product_999'));

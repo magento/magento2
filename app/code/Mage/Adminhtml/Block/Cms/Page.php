@@ -61,7 +61,7 @@ class Mage_Adminhtml_Block_Cms_Page extends Mage_Adminhtml_Block_Widget_Grid_Con
      */
     protected function _isAllowedAction($resourceId)
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($resourceId);
+        return $this->_authorization->isAllowed($resourceId);
     }
 
 }

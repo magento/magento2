@@ -39,15 +39,15 @@ class Mage_Tag_Model_Resource_Reports_Customer_Detail_Collection extends Mage_Ta
     protected $_request;
 
     /**
+     * @param Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy
      * @param Mage_Core_Controller_Request_Http $request
-     * @param null $resource
      */
     public function __construct(
-        Mage_Core_Controller_Request_Http $request,
-        $resource = null)
-    {
+        Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy,
+        Mage_Core_Controller_Request_Http $request
+    ) {
         $this->_request = $request;
-        parent::__construct($resource);
+        parent::__construct($fetchStrategy);
     }
 
     /**

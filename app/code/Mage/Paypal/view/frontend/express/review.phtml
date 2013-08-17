@@ -31,17 +31,12 @@ $shippingAddress = $this->getShippingAddress();
 <div class="page-title">
     <h1><?php echo $this->__('Review Order') ?></h1>
 </div>
-<?php echo $this->getMessagesBlock()->toHtml() ?>
-<script type="text/javascript">
-//<![CDATA[
-    var countryRegions = <?php echo $this->helper('Mage_Directory_Helper_Data')->getRegionJson() ?>
-//]]>
-</script>
+<?php echo $this->getLayout()->renderElement('messages') ?>
 <h2 class="sub-title">
     Please confirm your addresses
 </h2>
 <div class="paypal-review-order">
-    <form method="post" id="order_review_form" action="<?php echo $this->getPlaceOrderUrl() ?>">
+    <form method="post" id="order-review-form" action="<?php echo $this->getPlaceOrderUrl() ?>">
     <?php if(!$billingBlock->isCustomerLoggedIn()): ?>
         <div class="info-set col2-set">
             <h2 class="legend"><?php echo $this->__('Customer Information') ?></h2>
@@ -95,77 +90,26 @@ $shippingAddress = $this->getShippingAddress();
     </div>
         <?php echo $this->getChildHtml('agreements'); ?>
         <div class="buttons-set buttons-set-order" id="review-buttons-container">
-            <button type="button" id="review_button" value="<?php echo $this->__('Place Order') ?>" class="button btn-checkout"><span><span><?php echo $this->__('Place Order') ?></span></span></button>
-            <button type="button" id="review_submit" value="<?php echo $this->__('Place Order') ?>" class="button btn-checkout"><span><span><?php echo $this->__('Place Order') ?></span></span></button>
-            <button type="button" id="update_order" class="button btn-checkout"><span><span><?php echo $this->__('Update Order Data') ?></span></span></button>
+            <button type="button" id="review-button" value="<?php echo $this->__('Place Order') ?>" class="button btn-checkout"><span><span><?php echo $this->__('Place Order') ?></span></span></button>
+            <button type="button" id="review-submit" value="<?php echo $this->__('Place Order') ?>" class="button btn-checkout"><span><span><?php echo $this->__('Place Order') ?></span></span></button>
+            <button type="button" id="update-order" class="button btn-checkout"><span><span><?php echo $this->__('Update Order Data') ?></span></span></button>
             <span class="please-wait" id="review-please-wait" style="display:none;">
-                <img src="<?php echo $this->getViewFileUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Submitting order information...') ?>" title="<?php echo $this->__('Submitting order information...') ?>" class="v-middle" /> <?php echo $this->__('Submitting order information...') ?>
+                <img src="<?php echo $this->getViewFileUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Submitting order information') ?>" title="<?php echo $this->__('Submitting order information') ?>" class="v-middle" /> <?php echo $this->__('Submitting order information') ?>
             </span>
         </div>
     </form>
 </div>
 <script type="text/javascript">
-//<![CDATA[
-// submit buttons are not needed when submitting with ajax
-$('review_submit').hide();
-if ($('update_shipping_method_submit')) {
-    $('update_shipping_method_submit').hide();
-}
-
-<?php if ($this->getUseAjax()):?>
-    OrderReviewController.prototype._submitOrder = function() {
-        if (this._canSubmitOrder) {
-            if (this._pleaseWait) {
-                this._pleaseWait.show();
-            }
-            new Ajax.Request(this.form.action, {
-                parameters: {isAjax: 1, method: 'POST'},
-                onSuccess: function(transport) {
-                    try{
-                        response = eval('(' + transport.responseText + ')');
-                    } catch (e) {
-                        response = {};
-                    }
-                    if (response.redirect) {
-                        setLocation(response.redirect);
-                        return;
-                    }
-                    if (response.success) {
-                        setLocation('<?php echo $this->getSuccessUrl()?>');
-                        return;
-                    } else {
-                        var msg = response.error_messages;
-                        if (typeof(msg)=='object') {
-                            msg = msg.join("\n");
-                        }
-                        if (msg) {
-                            $('review-please-wait').hide();
-                            alert(msg);
-                            return;
-                        }
-                    }
-                    $('review-please-wait').hide();
-                    alert('<?php echo $this->jsQuoteEscape($this->__('Unknown Error. Please try again later.')); ?>');
-                    return;
-                },
-                onFailure: function(){
-                    alert('<?php echo $this->jsQuoteEscape($this->__('Server Error. Please try again.')) ?>');
-                    $('review-please-wait').hide();
-                }
+    head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
+        "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
+        "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+        "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
+        "<?php echo $this->getViewFileUrl('Mage_Paypal::order-review.js') ?>",
+        function() {
+            jQuery('#order-review-form').validation().orderReview({
+                shippingMethodUpdateUrl: '<?php echo $this->escapeHtml($this->getUpdateShippingMethodsUrl()) ?>',
+                updateOrderSubmitUrl: '<?php echo $this->escapeHtml($this->getUpdateOrderSubmitUrl()) ?>',
+                isAjax: <?php echo $this->getUseAjax() ? 'true' : 'false' ?>
             });
-        }
-    }
-<?php endif ?>
-PayPalExpressAjax = new OrderReviewController($('order_review_form'), $('review_button'),
-    'shipping_method', null, 'details-reload'
-);
-PayPalExpressAjax.addPleaseWait($('review-please-wait'));
-PayPalExpressAjax.setShippingAddressContainer($('shipping-address'));
-PayPalExpressAjax.setShippingMethodContainer('shipping-method-container');
-PayPalExpressAjax.shippingMethodsUpdateUrl = '<?php echo $this->escapeHtml($this->getUpdateShippingMethodsUrl()) ?>';
-PayPalExpressAjax.setUpdateButton($('update_order'),'<?php echo $this->escapeHtml($this->getUpdateOrderSubmitUrl()) ?>','details-reload');
-if ($('billing:as_shipping')) {
-    PayPalExpressAjax.setCopyElement($('billing:as_shipping'));
-}
-//]]>
+        });
 </script>

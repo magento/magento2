@@ -36,21 +36,20 @@ $_helper = $this->helper('Mage_Authorizenet_Helper_Data');
 <html>
 <head>
 <script type="text/javascript">
-//<![CDATA[
-<?php if (isset($_params['redirect'])): ?>
-window.location="<?php echo $this->escapeUrl($_params['redirect']) ?>";
-<?php endif; ?>
-<?php if (isset($_params['redirect_parent'])): ?>
-window.top.location="<?php echo $this->escapeUrl($_params['redirect_parent']) ?>";
-<?php endif; ?>
-<?php if (isset($_params['error_msg'])): ?>
-window.top.directPostModel.showError(<?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode($_params['error_msg']) ?>);
-<?php if (isset($_params['x_invoice_num'])): ?>
-window.top.directPostModel.successUrl="<?php echo $_helper->getSuccessOrderUrl($_params) ?>";
-<?php endif; ?>
-<?php endif; ?>
-//]]>
+    <?php if (isset($_params['redirect'])): ?>
+        window.location="<?php echo $this->escapeUrl($_params['redirect']) ?>";
+    <?php endif; ?>
+    <?php if (isset($_params['redirect_parent'])): ?>
+        window.top.location="<?php echo $this->escapeUrl($_params['redirect_parent']) ?>";
+    <?php endif; ?>
+    <?php if (isset($_params['error_msg'])): ?>
+        alert(<?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode($_params['error_msg']) ?>);
+        <?php if (isset($_params['x_invoice_num'])): ?>
+            window.top.location = "<?php echo $_helper->getSuccessOrderUrl($_params) ?>";
+        <?php endif; ?>
+    <?php endif; ?>
 </script>
 </head>
-<body></body>
+<body>
+</body>
 </html>

@@ -231,7 +231,6 @@ $map = array(
     'admin/xmlconnect/templates' => 'Mage_XmlConnect::templates',
     'admin/xmlconnect' => 'Mage_XmlConnect::xmlconnect',
     'admin/xmlconnect/queue' => 'Mage_XmlConnect::xmlconnect_queue',
-    'admin/system/config/moneybookers' => 'Phoenix_Moneybookers::moneybookers',
     'admin/system/config/facebook' => 'Social_Facebook::facebook',
 );
 

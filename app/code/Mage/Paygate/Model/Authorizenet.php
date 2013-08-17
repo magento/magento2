@@ -325,7 +325,7 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
     public function authorize(Varien_Object $payment, $amount)
     {
         if ($amount <= 0) {
-            Mage::throwException(Mage::helper('Mage_Paygate_Helper_Data')->__('Invalid amount for authorization.'));
+            Mage::throwException(Mage::helper('Mage_Paygate_Helper_Data')->__('This is an invalid amount for authorization.'));
         }
 
         $this->_initCardsStorage($payment);
@@ -351,7 +351,7 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
     public function capture(Varien_Object $payment, $amount)
     {
         if ($amount <= 0) {
-            Mage::throwException(Mage::helper('Mage_Paygate_Helper_Data')->__('Invalid amount for capture.'));
+            Mage::throwException(Mage::helper('Mage_Paygate_Helper_Data')->__('This is an invalid amount for capture.'));
         }
         $this->_initCardsStorage($payment);
         if ($this->_isPreauthorizeCapture($payment)) {
@@ -426,7 +426,7 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
                 $cardsStorage->getCapturedAmount() - $cardsStorage->getRefundedAmount()
             ) < $requestedAmount
         ) {
-            Mage::throwException(Mage::helper('Mage_Paygate_Helper_Data')->__('Invalid amount for refund.'));
+            Mage::throwException(Mage::helper('Mage_Paygate_Helper_Data')->__('This is an invalid amount for refund.'));
         }
 
         $messages = array();
@@ -474,7 +474,7 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
      */
     public function cancelPartialAuthorization(Mage_Payment_Model_Info $payment) {
         if (!$payment->getAdditionalInformation($this->_splitTenderIdKey)) {
-            Mage::throwException(Mage::helper('Mage_Paygate_Helper_Data')->__('Invalid split tenderId ID.'));
+            Mage::throwException(Mage::helper('Mage_Paygate_Helper_Data')->__('This is an invalid split tenderId ID.'));
         }
 
         $request = $this->_getRequest();
@@ -493,7 +493,7 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
                 $this->setPartialAuthorizationLastActionState(self::PARTIAL_AUTH_ALL_CANCELED);
                 return;
             default:
-                Mage::throwException(Mage::helper('Mage_Paygate_Helper_Data')->__('Payment canceling error.'));
+                Mage::throwException(Mage::helper('Mage_Paygate_Helper_Data')->__('Something went wrong while canceling the payment.'));
         }
 
     }
@@ -517,11 +517,11 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
         switch ($requestType) {
             case self::REQUEST_TYPE_AUTH_ONLY:
                 $newTransactionType = Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH;
-                $defaultExceptionMessage = Mage::helper('Mage_Paygate_Helper_Data')->__('Payment authorization error.');
+                $defaultExceptionMessage = Mage::helper('Mage_Paygate_Helper_Data')->__('Something went wrong while authorizing the payment.');
                 break;
             case self::REQUEST_TYPE_AUTH_CAPTURE:
                 $newTransactionType = Mage_Sales_Model_Order_Payment_Transaction::TYPE_CAPTURE;
-                $defaultExceptionMessage = Mage::helper('Mage_Paygate_Helper_Data')->__('Payment capturing error.');
+                $defaultExceptionMessage = Mage::helper('Mage_Paygate_Helper_Data')->__('Something went wrong while capturing the payment.');
                 break;
         }
 
@@ -615,14 +615,14 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
                 $this->setPartialAuthorizationLastActionState(self::PARTIAL_AUTH_DATA_CHANGED);
                 $quotePayment->setAdditionalInformation($payment->getAdditionalInformation());
                 throw new Mage_Payment_Model_Info_Exception(
-                    Mage::helper('Mage_Paygate_Helper_Data')->__('Shopping cart contents and/or address has been changed.')
+                    Mage::helper('Mage_Paygate_Helper_Data')->__('The shopping cart contents and/or address has been changed.')
                 );
             }
         }
 
         $amount = $amount - $this->getCardsStorage()->getProcessedAmount();
         if ($amount <= 0) {
-            Mage::throwException(Mage::helper('Mage_Paygate_Helper_Data')->__('Invalid amount for partial authorization.'));
+            Mage::throwException(Mage::helper('Mage_Paygate_Helper_Data')->__('This is an invalid amount for partial authorization.'));
         }
         $payment->setAmount($amount);
         $request = $this->_buildRequest($payment);
@@ -695,7 +695,7 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
                 $cardsStorage->getProcessedAmount() - $cardsStorage->getCapturedAmount()
             ) < $requestedAmount
         ) {
-            Mage::throwException(Mage::helper('Mage_Paygate_Helper_Data')->__('Invalid amount for capture.'));
+            Mage::throwException(Mage::helper('Mage_Paygate_Helper_Data')->__('This is an invalid amount for capture.'));
         }
 
         $messages = array();
@@ -783,7 +783,7 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
                 $exceptionMessage = $this->_wrapGatewayError($result->getResponseReasonText());
                 break;
             default:
-                $exceptionMessage = Mage::helper('Mage_Paygate_Helper_Data')->__('Payment capturing error.');
+                $exceptionMessage = Mage::helper('Mage_Paygate_Helper_Data')->__('Something went wrong while capturing the payment.');
                 break;
         }
 
@@ -867,7 +867,7 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
                 $exceptionMessage = $this->_wrapGatewayError($result->getResponseReasonText());
                 break;
             default:
-                $exceptionMessage = Mage::helper('Mage_Paygate_Helper_Data')->__('Payment voiding error.');
+                $exceptionMessage = Mage::helper('Mage_Paygate_Helper_Data')->__('Something went wrong while voiding the payment.');
                 break;
         }
 
@@ -949,7 +949,7 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
                 $exceptionMessage = $this->_wrapGatewayError($result->getResponseReasonText());
                 break;
             default:
-                $exceptionMessage = Mage::helper('Mage_Paygate_Helper_Data')->__('Payment refunding error.');
+                $exceptionMessage = Mage::helper('Mage_Paygate_Helper_Data')->__('Something went wrong while refunding the payment.');
                 break;
         }
 
@@ -1091,7 +1091,7 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
                         $this->_clearAssignedData($quotePayment);
                         $this->setPartialAuthorizationLastActionState(self::PARTIAL_AUTH_CARDS_LIMIT_EXCEEDED);
                         $quotePayment->setAdditionalInformation($orderPayment->getAdditionalInformation());
-                        $exceptionMessage = Mage::helper('Mage_Paygate_Helper_Data')->__('You have reached the maximum number of credit card allowed to be used for the payment.');
+                        $exceptionMessage = Mage::helper('Mage_Paygate_Helper_Data')->__('You have reached the maximum number of credit cards allowed to be used for the payment.');
                         break;
                     }
                     $orderPayment->setAdditionalInformation($this->_splitTenderIdKey, $response->getSplitTenderId());
@@ -1111,7 +1111,7 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
                     $this->setPartialAuthorizationLastActionState(self::PARTIAL_AUTH_LAST_DECLINED);
                     $quotePayment->setAdditionalInformation($orderPayment->getAdditionalInformation());
                     $exceptionMessage = $this->_wrapGatewayError(
-                            Mage::helper('Mage_Paygate_Helper_Data')->__('Payment partial authorization error.')
+                            Mage::helper('Mage_Paygate_Helper_Data')->__('Something went wrong while authorizing the partial payment.')
                         );
             }
         } catch (Exception $e) {
@@ -1320,7 +1320,7 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
         }
         else {
              Mage::throwException(
-                Mage::helper('Mage_Paygate_Helper_Data')->__('Error in payment gateway.')
+                Mage::helper('Mage_Paygate_Helper_Data')->__('Something went wrong in the payment gateway.')
             );
         }
 

@@ -44,6 +44,13 @@
                     <element name="stock_data" type="typens:catalogInventoryStockItemUpdateEntity" minOccurs="0" />
                 </all>
             </complexType>
+            <complexType name="catalogInventoryStockItemUpdateEntityArray">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="typens:catalogInventoryStockItemUpdateEntity[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
         </schema>
     </types>
     <message name="catalogInventoryStockItemListRequest">
@@ -61,6 +68,14 @@
     <message name="catalogInventoryStockItemUpdateResponse">
         <part name="result" type="xsd:int" />
     </message>
+    <message name="catalogInventoryStockItemMultiUpdateRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="productIds" type="typens:ArrayOfString"/>
+        <part name="productsData" type="typens:catalogInventoryStockItemUpdateEntityArray"/>
+    </message>
+    <message name="catalogInventoryStockItemMultiUpdateResponse">
+        <part name="result" type="xsd:boolean"/>
+    </message>
     <portType name="{{var wsdl.handler}}PortType">
         <operation name="catalogInventoryStockItemList">
             <documentation>Retrieve stock data by product ids</documentation>
@@ -71,6 +86,11 @@
             <documentation>Update product stock data</documentation>
             <input message="typens:catalogInventoryStockItemUpdateRequest" />
             <output message="typens:catalogInventoryStockItemUpdateResponse" />
+        </operation>
+        <operation name="catalogInventoryStockItemMultiUpdate">
+            <documentation>Stock item multi update</documentation>
+            <input message="typens:catalogInventoryStockItemMultiUpdateRequest"/>
+            <output message="typens:catalogInventoryStockItemMultiUpdateResponse"/>
         </operation>
     </portType>
     <binding name="{{var wsdl.handler}}Binding" type="typens:{{var wsdl.handler}}PortType">
@@ -91,6 +111,17 @@
             </input>
             <output>
                 <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+        <operation name="catalogInventoryStockItemMultiUpdate">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
             </output>
         </operation>
     </binding>

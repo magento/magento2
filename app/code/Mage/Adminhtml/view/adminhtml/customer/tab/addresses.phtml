@@ -68,7 +68,7 @@
             </li>
             <?php endforeach; ?>
             <?php endif; ?>
-            <li class="adress-list-actions last"><?php echo $this->getAddNewButtonHtml() ?></li>
+            <li class="address-list-actions last"><?php echo $this->getAddNewButtonHtml() ?></li>
         </ul>
 
         <!-- Template for adding address item to list -->
@@ -233,7 +233,7 @@ addressesModel.prototype = {
             deleteButtonId ++;
             template    += this.prepareTemplate(this.itemTemplate.innerHTML).replace('delete_button', 'delete_button'+ deleteButtonId);
             template    += '</li>';
-            Element.insert(this.itemContainer.down('.adress-list-actions'), {before: template});
+            Element.insert(this.itemContainer.down('.address-list-actions'), {before: template});
             var newItem = $(this.baseItemId+this.itemCount);
             newItem.isNewAddress = true;
             newItem.formBlock = newForm;
@@ -506,6 +506,7 @@ addressesModel.prototype = {
                 this.countryEl = countryElement;
                 if (countryElement.value) {
                     var url = this.regionsUrl + 'parent/' + countryElement.value;
+                    console.log(url);
                     this.loader.load(url, {}, this.refreshRegionField.bind(this));
                 } else {
                     // Set empty text field in region
@@ -541,7 +542,8 @@ addressesModel.prototype = {
             html+= '<option value=""></option>';
             for (var i in data){
                 if(data[i].label) {
-                    html+= '<option value="'+data[i].value+'"';
+                    var val = (data[i].value == 0) ? '' : data[i].value;
+                    html+= '<option value="'+val+'"';
                     if(this.regionElement.value && (this.regionElement.value == data[i].value || this.regionElement.value == data[i].label)){
                         html+= ' selected="selected"';
                     }
@@ -600,7 +602,7 @@ addressesModel.prototype = {
             label = $$('label[for="' + currentElement.id + '"]')[0];
             if (label) {
                 wildCard = label.down('em') || label.down('span.required');
-                if (!that.showAllRegions) {
+                if (!that.showAllRegions && label.up('tr')) {
                     if (regionRequired) {
                         label.up('tr').show();
                     } else {

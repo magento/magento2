@@ -81,7 +81,7 @@
                             <label for="shipping:region" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
                             <div class="input-box">
                                 <select id="shipping:region_id" name="shipping[region_id]" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;">
-                                    <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+                                    <option value=""><?php echo $this->__('Please select a region, state or province.') ?></option>
                                 </select>
                                 <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>" title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('region') ?>" style="display:none;" />
                             </div>
@@ -143,6 +143,7 @@
             "<?php echo $this->getViewFileUrl('Mage_Checkout::js/region-updater.js') ?>",
             function() {
                 $('#shipping\\:country_id').regionUpdater({
+                    optionalRegionAllowed: <?php echo (Mage::getStoreConfig('general/region/display_all')? 'true' : 'false'); ?>,
                     regionListId: '#shipping\\:region_id',
                     regionInputId: '#shipping\\:region',
                     postcodeId: '#shipping\\:postcode',

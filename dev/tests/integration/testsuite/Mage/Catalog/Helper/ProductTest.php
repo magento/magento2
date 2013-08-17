@@ -58,15 +58,7 @@ class Mage_Catalog_Helper_ProductTest extends PHPUnit_Framework_TestCase
         /** @var $product Mage_Catalog_Model_Product */
         $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->setPrice(49.95);
-        // the helper->getPrice is deprecated and should throw an exception
-        try {
-            $this->_helper->getPrice($product);
-            $this->assertEquals("Shouldn't be able to call Mage_Catalog_Helper_Product::getPrice",
-                    null);
-        } catch (Exception $ex) {
-            $this->assertEquals("Shouldn't call Mage_Catalog_Helper_Product::getPrice",
-                    $ex->getMessage());
-        }
+        $this->assertEquals(49.95, $this->_helper->getPrice($product));
     }
 
     public function testGetFinalPrice()
@@ -74,15 +66,7 @@ class Mage_Catalog_Helper_ProductTest extends PHPUnit_Framework_TestCase
         /** @var $product Mage_Catalog_Model_Product */
         $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->setFinalPrice(49.95);
-        // the helper->getFinalPrice is deprecated and should throw an exception
-        try {
-            $this->_helper->getFinalPrice($product);
-            $this->assertEquals("Shouldn't be able to call Mage_Catalog_Helper_Product::getFinalPrice",
-                    null);
-        } catch (Exception $ex) {
-            $this->assertEquals("Shouldn't call Mage_Catalog_Helper_Product::getFinalPrice",
-                    $ex->getMessage());
-        }
+        $this->assertEquals(49.95, $this->_helper->getFinalPrice($product));
     }
 
     public function testGetImageUrl()

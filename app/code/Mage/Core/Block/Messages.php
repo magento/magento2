@@ -258,6 +258,35 @@ class Mage_Core_Block_Messages extends Mage_Core_Block_Template
      */
     public function getGroupedHtml()
     {
+        $html = $this->_renderMessagesByType();
+        $this->_dispatchRenderGroupedAfterEvent($html);
+        return $html;
+    }
+
+    /**
+     * Dispatch render after event
+     *
+     * @param $html
+     */
+    protected function _dispatchRenderGroupedAfterEvent(&$html)
+    {
+        $transport = new Varien_Object(array('output' => $html));
+        $params = array(
+            'element_name' => $this->getNameInLayout(),
+            'layout'       => $this->getLayout(),
+            'transport'    => $transport,
+        );
+        $this->_eventManager->dispatch('core_message_block_render_grouped_html_after', $params);
+        $html = $transport->getData('output');
+    }
+
+    /**
+     * Render messages in HTML format grouped by type
+     *
+     * @return string
+     */
+    protected function _renderMessagesByType()
+    {
         $html = '';
         foreach ($this->getMessageTypes() as $type) {
             if ($messages = $this->getMessages($type)) {
@@ -294,7 +323,7 @@ class Mage_Core_Block_Messages extends Mage_Core_Block_Template
         if ($this->getTemplate()) {
             $html = parent::_toHtml();
         } else {
-            $html = $this->getGroupedHtml();
+            $html = $this->_renderMessagesByType();
         }
         return $html;
     }

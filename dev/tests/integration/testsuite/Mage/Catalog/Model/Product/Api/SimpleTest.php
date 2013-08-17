@@ -61,17 +61,6 @@ class Mage_Catalog_Model_Product_Api_SimpleTest extends Mage_Catalog_Model_Produ
     }
 
     /**
-     * @magentoConfigFixture limitations/catalog_product 1
-     * @magentoDataFixture Mage/Catalog/_files/product_simple.php
-     * @expectedException SoapFault
-     * @expectedExceptionMessage Maximum allowed number of products is reached.
-     */
-    public function testCreateLimitationReached()
-    {
-        $this->_createProductWithApi(require __DIR__ . '/_files/_data/simple_product_data.php');
-    }
-
-    /**
      * Test product resource post with all fields
      *
      * @param array $productData
@@ -125,8 +114,8 @@ class Mage_Catalog_Model_Product_Api_SimpleTest extends Mage_Catalog_Model_Produ
         $specialCharsData = require __DIR__ . '/_files/_data/simple_product_special_chars_data.php';
 
         return array(
-            array($specialCharsData),
-            array($productData),
+            'data with special chars' => array($specialCharsData),
+            'simple data'             => array($productData),
         );
     }
 
@@ -215,7 +204,7 @@ class Mage_Catalog_Model_Product_Api_SimpleTest extends Mage_Catalog_Model_Produ
         $data = require __DIR__ . '/_files/ProductData.php';
 
         //generate numeric sku
-        $data['create_with_attributes_soapv2']->sku = rand(1000000, 99999999);
+        $data['create_with_attributes_soapv2']['sku'] = rand(1000000, 99999999);
 
         $productId = Magento_Test_Helper_Api::call($this, 'catalogProductCreate', $data['create']);
 
@@ -346,11 +335,9 @@ class Mage_Catalog_Model_Product_Api_SimpleTest extends Mage_Catalog_Model_Produ
         $productData = $productData['create_full']['soap'];
         $productData['set'] = 9999;
 
-        try {
-            Magento_Test_Helper_Api::call($this, 'catalogProductCreate', $productData);
-        } catch (Exception $e) {
-            $this->assertEquals('Product attribute set does not exist.', $e->getMessage(), 'Invalid exception message');
-        }
+        Magento_Test_Helper_Api::callWithException($this, 'catalogProductCreate',
+            $productData, 'Product attribute set does not exist.'
+        );
 
         // find not product (category) attribute set identifier to try other error message
         /** @var $entity Mage_Eav_Model_Entity_Type */
@@ -367,15 +354,9 @@ class Mage_Catalog_Model_Product_Api_SimpleTest extends Mage_Catalog_Model_Produ
 
         $productData['set'] = $categoryAttrSetId;
 
-        try {
-            Magento_Test_Helper_Api::call($this, 'catalogProductCreate', $productData);
-        } catch (Exception $e) {
-            $this->assertEquals(
-                'Product attribute set does not belong to catalog product entity type.',
-                $e->getMessage(),
-                'Invalid exception message'
-            );
-        }
+        Magento_Test_Helper_Api::callWithException($this, 'catalogProductCreate',
+            $productData, 'Product attribute set does not belong to catalog product entity type.'
+        );
     }
 
     /**

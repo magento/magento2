@@ -171,24 +171,30 @@ abstract class Mage_Backend_Model_Config_Structure_ElementAbstract
      */
     public function isVisible()
     {
+        $showInScope = array(
+            Mage_Backend_Model_Config_ScopeDefiner::SCOPE_STORE => $this->_hasVisibilityValue('showInStore'),
+            Mage_Backend_Model_Config_ScopeDefiner::SCOPE_WEBSITE => $this->_hasVisibilityValue('showInWebsite'),
+            Mage_Backend_Model_Config_ScopeDefiner::SCOPE_DEFAULT => $this->_hasVisibilityValue('showInDefault'),
+        );
+
         if ($this->_application->isSingleStoreMode()) {
-            return !(isset($this->_data['hide_in_single_store_mode']) && $this->_data['hide_in_single_store_mode']);
+            $result = !$this->_hasVisibilityValue('hide_in_single_store_mode')
+                && array_sum($showInScope);
+            return $result;
         }
 
-        $result = false;
-        switch ($this->_scope) {
-            case Mage_Backend_Model_Config_ScopeDefiner::SCOPE_STORE:
-                $result = isset($this->_data['showInStore']) && $this->_data['showInStore'];
-                break;
-            case Mage_Backend_Model_Config_ScopeDefiner::SCOPE_WEBSITE:
-                $result = isset($this->_data['showInWebsite']) && $this->_data['showInWebsite'];
-                break;
-            case Mage_Backend_Model_Config_ScopeDefiner::SCOPE_DEFAULT:
-                $result = isset($this->_data['showInDefault']) && $this->_data['showInDefault'];
-                break;
-        }
+        return !empty($showInScope[$this->_scope]);
+    }
 
-        return $result;
+    /**
+     * Retrieve value of visibility flag
+     *
+     * @param string $key
+     * @return bool
+     */
+    protected function _hasVisibilityValue($key)
+    {
+        return isset($this->_data[$key]) && $this->_data[$key];
     }
 
     /**
@@ -202,6 +208,19 @@ abstract class Mage_Backend_Model_Config_Structure_ElementAbstract
     }
 
     /**
+     * Retrieve config path for given id
+     *
+     * @param string $fieldId
+     * @param string $fieldPrefix
+     * @return string
+     */
+    protected function _getPath($fieldId, $fieldPrefix = '')
+    {
+        $path = isset($this->_data['path']) ? $this->_data['path'] : '';
+        return $path . '/' . $fieldPrefix . $fieldId;
+    }
+
+    /**
      * Retrieve element config path
      *
      * @param string $fieldPrefix
@@ -209,7 +228,6 @@ abstract class Mage_Backend_Model_Config_Structure_ElementAbstract
      */
     public function getPath($fieldPrefix = '')
     {
-        $path = isset($this->_data['path']) ? $this->_data['path'] : '';
-        return $path . '/' . $fieldPrefix . $this->getId();
+        return $this->_getPath($this->getId(), $fieldPrefix);
     }
 }

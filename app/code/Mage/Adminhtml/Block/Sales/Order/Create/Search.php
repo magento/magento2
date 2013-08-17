@@ -43,7 +43,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Search extends Mage_Adminhtml_Bloc
 
     public function getHeaderText()
     {
-        return Mage::helper('Mage_Sales_Helper_Data')->__('Please Select Products to Add');
+        return Mage::helper('Mage_Sales_Helper_Data')->__('Please select products.');
     }
 
     public function getButtonsHtml()

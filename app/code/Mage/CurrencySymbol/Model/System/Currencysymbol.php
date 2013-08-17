@@ -158,7 +158,7 @@ class Mage_CurrencySymbol_Model_System_Currencysymbol
 
         $currentSymbols = $this->_unserializeStoreConfig(self::XML_PATH_CUSTOM_CURRENCY_SYMBOL);
 
-        /** @var $locale Mage_Core_Model_Locale */
+        /** @var $locale Mage_Core_Model_LocaleInterface */
         $locale = Mage::app()->getLocale();
         foreach ($allowedCurrencies as $code) {
             if (!$symbol = $locale->getTranslation($code, 'currencysymbol')) {

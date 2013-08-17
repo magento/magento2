@@ -23,36 +23,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true*/
-(function($, window, document, undefined) {
+(function($, window, document) {
     "use strict";
-
-    $(document).on("login:setMethod", function() {
-        $("[role='guest_checkout'], [role='register_during_checkout']").hide();
+    $(document).on("login",function() {
+        $("[data-captcha='guest_checkout'], [data-captcha='register_during_checkout']").hide();
         var type = ($("#login\\:guest").is(':checked')) ? 'guest_checkout' : 'register_during_checkout';
         $("[role='" + type + "']").show();
-    });
-
-    $(document).on('billing-request:completed', function() {
-        if (typeof window.checkout !== 'undefined') {
+    }).on('billingSave', function() {
             $(".captcha-reload:visible").trigger("click");
-        }
-    });
+        });
 })(jQuery, window, document);
-
-/**
- * Need to remove when we refactor onepage checkout
- * @deprecated
- */
-document.observe('login:setMethod', function() {
-    "use strict";
-    jQuery(document).trigger('login:setMethod');
-});
-
-/**
- * Need to remove when we refactor onepage checkout
- * @deprecated
- */
-document.observe('billing-request:completed', function() {
-    "use strict";
-    jQuery(document).trigger('billing-request:completed');
-});

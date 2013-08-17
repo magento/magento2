@@ -60,16 +60,6 @@ abstract class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_BlockAbstract ex
     }
 
     /**
-     * Check if visual editor is in design mode
-     *
-     * @return bool
-     */
-    public function isDesignMode()
-    {
-        return $this->getMode() == Mage_DesignEditor_Model_State::MODE_DESIGN;
-    }
-
-    /**
      * Check if visual editor is in navigation mode
      *
      * @return bool

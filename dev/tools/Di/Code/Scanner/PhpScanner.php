@@ -29,9 +29,11 @@ class PhpScanner extends FileScanner
     /**
      * Regular expression pattern
      *
+     * Searches for factories specified in php files
+     *
      * @var string
      */
-    protected $_pattern = '/[ \\b\n\'"\(]{1}([A-Z]{1}[a-zA-Z0-9]*_[A-Z]{1}[a-zA-Z0-9_]*(Proxy|Factory))[ \\b\n\'"]{1}/';
+    protected $_pattern = '/[ \\b\n\'"\(]{1}([A-Z]{1}[a-zA-Z0-9]*_[A-Z]{1}[a-zA-Z0-9_]*(Factory))[ \\b\n\'"]{1}/';
 
     /**
      * Prepare file content

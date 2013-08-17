@@ -30,6 +30,23 @@
 class Mage_Core_Model_Resource_Layout_Update extends Mage_Core_Model_Resource_Db_Abstract
 {
     /**
+     * @var Magento_Cache_FrontendInterface
+     */
+    private $_cache;
+
+    /**
+     * @param Mage_Core_Model_Resource $resource
+     * @param Magento_Cache_FrontendInterface $cache
+     */
+    public function __construct(
+        Mage_Core_Model_Resource $resource,
+        Magento_Cache_FrontendInterface $cache
+    ) {
+        parent::__construct($resource);
+        $this->_cache = $cache;
+    }
+
+    /**
      * Define main table
      */
     protected function _construct()
@@ -41,24 +58,18 @@ class Mage_Core_Model_Resource_Layout_Update extends Mage_Core_Model_Resource_Db
      * Retrieve layout updates by handle
      *
      * @param string $handle
-     * @param array $params
+     * @param Mage_Core_Model_Theme $theme
+     * @param Mage_Core_Model_Store $store
      * @return string
      */
-    public function fetchUpdatesByHandle($handle, $params = array())
+    public function fetchUpdatesByHandle($handle, Mage_Core_Model_Theme $theme, Mage_Core_Model_Store $store)
     {
         $bind = array(
-            'store_id' => Mage::app()->getStore()->getId(),
-            'theme_id' => Mage::getDesign()->getDesignTheme()->getThemeId(),
+            'layout_update_handle' => $handle,
+            'theme_id' => $theme->getId(),
+            'store_id' => $store->getId(),
         );
-
-        foreach ($params as $key => $value) {
-            if (isset($bind[$key])) {
-                $bind[$key] = $value;
-            }
-        }
-        $bind['layout_update_handle'] = $handle;
         $result = '';
-
         $readAdapter = $this->_getReadAdapter();
         if ($readAdapter) {
             $select = $this->_getFetchUpdatesByHandleSelect();
@@ -112,7 +123,7 @@ class Mage_Core_Model_Resource_Layout_Update extends Mage_Core_Model_Resource_Db
                 'is_temporary'     => (int)$object->getIsTemporary(),
             ));
         }
-        Mage::app()->cleanCache(array('layout', Mage_Core_Model_Layout_Merge::LAYOUT_GENERAL_CACHE_TAG));
+        $this->_cache->clean();
         return parent::_afterSave($object);
     }
 }

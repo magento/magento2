@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Core_Model_Theme_FileTest extends PHPUnit_Framework_TestCase
+class Mage_Core_Model_Theme_FilesTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Mage_Core_Model_Theme_File
@@ -74,26 +74,5 @@ class Mage_Core_Model_Theme_FileTest extends PHPUnit_Framework_TestCase
 
         $crud = new Magento_Test_Entity($this->_model, array('file_path' => 'rename.css'));
         $crud->testCrud();
-    }
-
-    public function testGetFullPath()
-    {
-        $this->assertNull($this->_model->getFullPath());
-
-        $this->_model->setData($this->_data);
-        $this->_model->setId('test');
-        $this->assertStringEndsWith('main.css', $this->_model->getFullPath());
-    }
-
-    public function testGetAsset()
-    {
-        $this->assertNull($this->_model->getAsset());
-        $this->_model->setData($this->_data);
-        $this->_model->setId('test');
-
-        $asset = $this->_model->getAsset();
-        $this->assertInstanceOf('Mage_Core_Model_Page_Asset_PublicFile', $asset);
-        $assetTwo = $this->_model->getAsset();
-        $this->assertNotSame($asset, $assetTwo, '"getAsset()" must return new instance every time');
     }
 }

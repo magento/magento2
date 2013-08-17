@@ -36,6 +36,20 @@
 class Mage_Backend_Model_Config extends Varien_Object
 {
     /**
+     * Config data for sections
+     *
+     * @var array
+     */
+    protected $_configData;
+
+    /**
+     * Root config node
+     *
+     * @var Mage_Core_Model_Config_Element
+     */
+    protected $_configRoot;
+
+    /**
      * Event dispatcher
      *
      * @var Mage_Core_Model_Event_Manager
@@ -87,9 +101,14 @@ class Mage_Backend_Model_Config extends Varien_Object
     /**
      * Config data factory
      *
-     * @var Mage_Backend_Model_Config_Loader
+     * @var Mage_Core_Model_Config_DataFactory
      */
     protected $_configDataFactory;
+
+    /**
+     * @var Mage_Core_Model_StoreManagerInterface
+     */
+    protected $_storeManager;
 
     /**
      * @param Mage_Core_Model_App $application
@@ -98,7 +117,8 @@ class Mage_Backend_Model_Config extends Varien_Object
      * @param Mage_Backend_Model_Config_Structure $configStructure
      * @param Mage_Core_Model_Resource_Transaction_Factory $transactionFactory
      * @param Mage_Backend_Model_Config_Loader $configLoader
-     * @param Mage_Core_Model_Config_Data_Factory $configDataFactory
+     * @param Mage_Core_Model_Config_DataFactory $configDataFactory
+     * @param Mage_Core_Model_StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
@@ -108,9 +128,11 @@ class Mage_Backend_Model_Config extends Varien_Object
         Mage_Backend_Model_Config_Structure $configStructure,
         Mage_Core_Model_Resource_Transaction_Factory $transactionFactory,
         Mage_Backend_Model_Config_Loader $configLoader,
-        Mage_Core_Model_Config_Data_Factory $configDataFactory,
+        Mage_Core_Model_Config_DataFactory $configDataFactory,
+        Mage_Core_Model_StoreManagerInterface $storeManager,
         array $data = array()
     ) {
+        parent::__construct($data);
         $this->_eventManager = $eventManager;
         $this->_configStructure = $configStructure;
         $this->_transactionFactory = $transactionFactory;
@@ -118,13 +140,14 @@ class Mage_Backend_Model_Config extends Varien_Object
         $this->_application = $application;
         $this->_configLoader = $configLoader;
         $this->_configDataFactory = $configDataFactory;
-        parent::__construct($data);
+        $this->_storeManager = $storeManager;
     }
 
     /**
      * Save config section
      * Require set: section, website, store and groups
      *
+     * @throws Exception
      * @return Mage_Backend_Model_Config
      */
     public function save()
@@ -157,8 +180,31 @@ class Mage_Backend_Model_Config extends Varien_Object
             );
         }
 
-        $deleteTransaction->delete();
-        $saveTransaction->save();
+        try {
+            $deleteTransaction->delete();
+            $saveTransaction->save();
+
+            // re-init configuration
+            $this->_eventManager->dispatch('application_process_reinit_config');
+            $this->_storeManager->reinitStores();
+
+            $this->_eventManager->dispatch('admin_system_config_section_save_after', array(
+                'website' => $this->getWebsite(),
+                'store' => $this->getStore(),
+                'section' => $this->getSection()
+            ));
+
+            // website and store codes can be used in event implementation, so set them as well
+            $this->_eventManager->dispatch("admin_system_config_changed_section_{$this->getSection()}", array(
+                'website' => $this->getWebsite(),
+                'store' => $this->getStore()
+            ));
+        } catch (Exception $e) {
+            // re-init configuration
+            $this->_eventManager->dispatch('application_process_reinit_config');
+            $this->_storeManager->reinitStores();
+            throw $e;
+        }
 
         return $this;
     }
@@ -306,10 +352,12 @@ class Mage_Backend_Model_Config extends Varien_Object
      */
     public function load()
     {
-        $this->_validate();
-        $this->_getScope();
-
-        return $this->_getConfig(false);
+        if (is_null($this->_configData)) {
+            $this->_validate();
+            $this->_getScope();
+            $this->_configData = $this->_getConfig(false);
+        }
+        return $this->_configData;
     }
 
     /**
@@ -355,15 +403,19 @@ class Mage_Backend_Model_Config extends Varien_Object
         if ($this->getStore()) {
             $scope   = 'stores';
             $scopeId = (int) $this->_appConfig->getNode('stores/' . $this->getStore() . '/system/store/id');
+            $scopeCode = $this->getStore();
         } elseif ($this->getWebsite()) {
             $scope   = 'websites';
             $scopeId = (int) $this->_appConfig->getNode('websites/' . $this->getWebsite() . '/system/website/id');
+            $scopeCode = $this->getWebsite();
         } else {
             $scope   = 'default';
             $scopeId = 0;
+            $scopeCode = '';
         }
         $this->setScope($scope);
         $this->setScopeId($scopeId);
+        $this->setScopeCode($scopeCode);
     }
 
     /**
@@ -400,5 +452,44 @@ class Mage_Backend_Model_Config extends Varien_Object
             $dataObject->setWebsiteCode($singleStoreWebsite->getCode());
             $dataObject->setScopeId($singleStoreWebsite->getId());
         }
+    }
+
+    /**
+     * Get config data value
+     *
+     * @param string $path
+     * @param null|bool $inherit
+     * @param null|array $configData
+     * @return Varien_Simplexml_Element
+     */
+    public function getConfigDataValue($path, &$inherit = null, $configData = null)
+    {
+        $this->load();
+        if (is_null($configData)) {
+            $configData = $this->_configData;
+        }
+        if (isset($configData[$path])) {
+            $data = $configData[$path];
+            $inherit = false;
+        } else {
+            $data = $this->getConfigRoot()->descend($path);
+            $inherit = true;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Get config root node for current scope
+     *
+     * @return Mage_Core_Model_Config_Element
+     */
+    public function getConfigRoot()
+    {
+        if (is_null($this->_configRoot)) {
+            $this->load();
+            $this->_configRoot = Mage::getConfig()->getNode(null, $this->getScope(), $this->getScopeCode());
+        }
+        return $this->_configRoot;
     }
 }

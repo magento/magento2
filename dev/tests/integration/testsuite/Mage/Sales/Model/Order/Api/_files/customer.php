@@ -31,8 +31,6 @@ $customer->setStoreId(1)
     ->setLastname('Test')
     ->setMiddlename('Test')
     ->setGroupId(1)
-    ->setRewardUpdateNotification(1)
-    ->setRewardWarningNotification(1)
     ->save();
 Mage::register('customer', $customer);
 

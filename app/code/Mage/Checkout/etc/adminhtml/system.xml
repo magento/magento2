@@ -94,8 +94,8 @@
                     <label>Payment Failed Email Sender</label>
                     <source_model>Mage_Backend_Model_Config_Source_Email_Identity</source_model>
                 </field>
-                <field id="reciever" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Payment Failed Email Reciever</label>
+                <field id="receiver" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Payment Failed Email Receiver</label>
                     <source_model>Mage_Backend_Model_Config_Source_Email_Identity</source_model>
                 </field>
                 <field id="template" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">

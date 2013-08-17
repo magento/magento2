@@ -54,7 +54,8 @@
 <script id="custom-option-select-type-row-template" type="text/x-jquery-tmpl">
     <tr id="product_option_${id}_select_${select_id}">
         <td class="col-draggable">
-            <div data-role="grip" class="draggable-handle" title="<?php echo $this->__('Sort Custom Option'); ?>"></div>
+            <div data-role="draggable-handle" class="draggable-handle"
+                 title="<?php echo $this->__('Sort Custom Option'); ?>"></div>
             <input name="product[options][${id}][values][${select_id}][sort_order]" type="hidden" value="${sort_order}">
         </td>
         <td class="col-name select-opt-title">

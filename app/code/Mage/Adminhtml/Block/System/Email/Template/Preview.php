@@ -65,7 +65,7 @@ class Mage_Adminhtml_Block_System_Email_Template_Preview extends Mage_Adminhtml_
         $template->setDesignConfig(
             array(
                 'area' => Mage::getDesign()->getArea(),
-                'store' => Mage::getSingleton('Mage_Core_Model_StoreManager')->getDefaultStoreView()->getId()
+                'store' => Mage::getSingleton('Mage_Core_Model_StoreManagerInterface')->getDefaultStoreView()->getId()
             )
         );
         $templateProcessed = $template->getProcessedTemplate($vars, true);

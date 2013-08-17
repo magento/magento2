@@ -59,7 +59,7 @@ class Generator_Config
         if (isset($cmdOptions['destination'])) {
             $destinationDir = $cmdOptions['destination'];
         } else {
-            $dirs = new Mage_Core_Model_Dir(new Magento_Filesystem(new Magento_Filesystem_Adapter_Local), $sourceDir);
+            $dirs = new Mage_Core_Model_Dir($sourceDir);
             $destinationDir = $dirs->getDir(Mage_Core_Model_Dir::STATIC_VIEW);
         }
         if (!is_dir($destinationDir)) {

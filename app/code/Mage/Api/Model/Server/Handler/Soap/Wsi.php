@@ -75,7 +75,7 @@ class Mage_Api_Model_Server_Handler_Soap_Wsi extends Mage_Api_Model_Server_Handl
 
         $args = $this->prepareArgs($methodParams, $args);
 
-        $res = $this->call($sessionId, $apiKey, $args);
+        $res = $this->_call($sessionId, $apiKey, $args);
 
         $obj = $helper->wsiArrayPacker($res);
         $stdObj = new stdClass();
@@ -128,7 +128,7 @@ class Mage_Api_Model_Server_Handler_Soap_Wsi extends Mage_Api_Model_Server_Handl
 
         $modelName = $this->_prepareResourceModelName((string)$resources->$resourceName->model);
 
-        $modelClass = Mage::getConfig()->getModelClassName($modelName);
+        $modelClass = $modelName;
 
         $method = (isset($methodInfo->method) ? (string)$methodInfo->method : $methodName);
 
@@ -179,4 +179,16 @@ class Mage_Api_Model_Server_Handler_Soap_Wsi extends Mage_Api_Model_Server_Handl
         return $callArgs;
     }
 
+    /**
+     * End web service session
+     *
+     * @param object $request
+     * @return stdClass
+     */
+    public function endSession($request)
+    {
+        $stdObject = new stdClass();
+        $stdObject->result = parent::endSession($request->sessionId);
+        return $stdObject;
+    }
 }

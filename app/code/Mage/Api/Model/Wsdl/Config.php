@@ -104,8 +104,7 @@ class Mage_Api_Model_Wsdl_Config extends Mage_Api_Model_Wsdl_Config_Base
 
     public function init()
     {
-        $cacheId = 'wsdl_config_global';
-        $cachedXml = $this->_configCacheType->load($cacheId);
+        $cachedXml = $this->_configCacheType->load($this->_cacheId);
         if ($cachedXml) {
             $this->loadString($cachedXml);
         } else {
@@ -130,7 +129,7 @@ class Mage_Api_Model_Wsdl_Config extends Mage_Api_Model_Wsdl_Config_Base
                 $this->_configReader->loadModulesConfiguration('wsdl.xml', $this, $mergeWsdl);
             }
 
-            $this->_configCacheType->save($this->getXmlString(), $cacheId);
+            $this->_configCacheType->save($this->getXmlString(), $this->_cacheId);
         }
         return $this;
     }

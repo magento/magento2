@@ -44,8 +44,8 @@ class Mage_Payment_Block_Catalog_Product_View_ProfileTest extends PHPUnit_Framew
 
         $html = $block->getDateHtml();
         $this->assertNotEmpty($html);
-        $dateFormat = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
-        $timeFormat = Mage::app()->getLocale()->getTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
+        $dateFormat = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT);
+        $timeFormat = Mage::app()->getLocale()->getTimeFormat(Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT);
         $this->assertContains('dateFormat: "' . $dateFormat . '",', $html);
         $this->assertContains('timeFormat: "' . $timeFormat . '",', $html);
     }

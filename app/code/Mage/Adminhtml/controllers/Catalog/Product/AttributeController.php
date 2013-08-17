@@ -34,6 +34,24 @@
 
 class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_Controller_Action
 {
+    /**
+     * @var Magento_Cache_FrontendInterface
+     */
+    private $_attributeLabelCache;
+
+    /**
+     * @param Mage_Backend_Controller_Context $context
+     * @param Magento_Cache_FrontendInterface $attributeLabelCache
+     * @param string|null $areaCode
+     */
+    public function __construct(
+        Mage_Backend_Controller_Context $context,
+        Magento_Cache_FrontendInterface $attributeLabelCache,
+        $areaCode = null
+    ) {
+        parent::__construct($context, $areaCode);
+        $this->_attributeLabelCache = $attributeLabelCache;
+    }
 
     protected $_entityTypeId;
 
@@ -46,20 +64,24 @@ class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_
 
     protected function _initAction()
     {
-        $this->_title($this->__('Catalog'))
-             ->_title($this->__('Attributes'))
-             ->_title($this->__('Manage Attributes'));
+        $this->_title($this->__('Product Attributes'));
 
         if($this->getRequest()->getParam('popup')) {
-            $this->loadLayout('popup');
+            $this->loadLayout(array('popup', $this->getDefaultLayoutHandle() . '_popup'));
+            $this->getLayout()->getBlock('root')->addBodyClass('attribute-popup');
         } else {
             $this->loadLayout()
-                ->_addBreadcrumb(Mage::helper('Mage_Catalog_Helper_Data')->__('Catalog'), Mage::helper('Mage_Catalog_Helper_Data')->__('Catalog'))
+                ->_addBreadcrumb(
+                    Mage::helper('Mage_Catalog_Helper_Data')->__('Catalog'),
+                    Mage::helper('Mage_Catalog_Helper_Data')->__('Catalog')
+                )
                 ->_addBreadcrumb(
                     Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Product Attributes'),
-                    Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Product Attributes'))
-            ;
+                    Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Product Attributes')
+                );
+                $this->_setActiveMenu('Mage_Catalog::catalog_attributes_attributes');
         }
+
         return $this;
     }
 
@@ -67,7 +89,6 @@ class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_
     {
         $this->_initAction()
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Product_Attribute'))
-            ->_setActiveMenu('Mage_Catalog::catalog_attributes_attributes')
             ->renderLayout();
     }
 
@@ -79,6 +100,7 @@ class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_
     public function editAction()
     {
         $id = $this->getRequest()->getParam('attribute_id');
+        /** @var $model Mage_Catalog_Model_Resource_Eav_Attribute */
         $model = Mage::getModel('Mage_Catalog_Model_Resource_Eav_Attribute')
             ->setEntityTypeId($this->_entityTypeId);
         if ($id) {
@@ -86,7 +108,7 @@ class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_
 
             if (! $model->getId()) {
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError(
-                    Mage::helper('Mage_Catalog_Helper_Data')->__('This attribute no longer exists'));
+                    Mage::helper('Mage_Catalog_Helper_Data')->__('This attribute no longer exists.'));
                 $this->_redirect('*/*/');
                 return;
             }
@@ -105,12 +127,16 @@ class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_
         if (! empty($data)) {
             $model->addData($data);
         }
+        $attributeData = $this->getRequest()->getParam('attribute');
+        if (!empty($attributeData) && $id === null) {
+            $model->addData($attributeData);
+        }
 
         Mage::register('entity_attribute', $model);
 
         $this->_initAction();
 
-        $this->_title($id ? $model->getName() : $this->__('New Attribute'));
+        $this->_title($id ? $model->getName() : $this->__('New Product Attribute'));
 
         $item = $id ? Mage::helper('Mage_Catalog_Helper_Data')->__('Edit Product Attribute')
                     : Mage::helper('Mage_Catalog_Helper_Data')->__('New Product Attribute');
@@ -129,53 +155,77 @@ class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_
         $response = new Varien_Object();
         $response->setError(false);
 
-        $attributeCode  = $this->getRequest()->getParam('attribute_code');
-        $attributeId    = $this->getRequest()->getParam('attribute_id');
+        $attributeCode = $this->getRequest()->getParam('attribute_code');
+        $frontendLabel = $this->getRequest()->getParam('frontend_label');
+        $attributeCode = $attributeCode ?: $this->generateCode($frontendLabel[0]);
+        $attributeId = $this->getRequest()->getParam('attribute_id');
         $attribute = Mage::getModel('Mage_Catalog_Model_Resource_Eav_Attribute')
             ->loadByCode($this->_entityTypeId, $attributeCode);
 
         if ($attribute->getId() && !$attributeId) {
-            $response->setAttributes(array(
-                'attribute_code' =>  Mage::helper('Mage_Catalog_Helper_Data')->__('Attribute with the same code already exists')
-            ));
+            if (strlen($this->getRequest()->getParam('attribute_code'))) {
+                $response->setAttributes(
+                    array(
+                        'attribute_code' => Mage::helper('Mage_Catalog_Helper_Data')->__('An attribute with this code already exists.')
+                    )
+                );
+            } else {
+                $response->setAttributes(
+                    array(
+                        'attribute_label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Attribute with the same code (%s) already exists.', $attributeCode)
+                    )
+                );
+            }
             $response->setError(true);
         }
+        if ($this->getRequest()->has('new_attribute_set_name')) {
+            $setName = $this->getRequest()->getParam('new_attribute_set_name');
+            /** @var $attributeSet Mage_Eav_Model_Entity_Attribute_Set */
+            $attributeSet = $this->_objectManager->create('Mage_Eav_Model_Entity_Attribute_Set');
+            $attributeSet->setEntityTypeId($this->_entityTypeId)->load($setName, 'attribute_set_name');
+            if ($attributeSet->getId()) {
+                $setName = $this->_objectManager->get('Mage_Core_Helper_Data')->escapeHtml($setName);
+                $this->_getSession()->addError(
+                    $this->_objectManager->get('Mage_Catalog_Helper_Data')->__('Attribute Set with name \'%s\' already exists.', $setName)
+                );
 
+                $this->_initLayoutMessages('Mage_Adminhtml_Model_Session');
+                $response->setError(true);
+                $response->setMessage($this->getLayout()->getMessagesBlock()->getGroupedHtml());
+            }
+        }
         $this->getResponse()->setBody($response->toJson());
     }
 
     /**
-     * Filter post data
+     * Generate code from label
      *
-     * @param array $data
-     * @return array
+     * @param string $label
+     * @return string
      */
-    protected function _filterPostData($data)
+    private function generateCode($label)
     {
-        if ($data) {
-            /** @var $helperCatalog Mage_Catalog_Helper_Data */
-            $helperCatalog = Mage::helper('Mage_Catalog_Helper_Data');
-            //labels
-            foreach ($data['frontend_label'] as &$value) {
-                if ($value) {
-                    $value = $helperCatalog->stripTags($value);
-                }
-            }
+        $code = substr(preg_replace(
+            '/[^a-z_0-9]/',
+            '_',
+            $this->_objectManager->create('Mage_Catalog_Model_Product_Url')->formatUrlKey($label)
+        ), 0, 30);
+        $validatorAttrCode = new Zend_Validate_Regex(array('pattern' => '/^[a-z][a-z_0-9]{0,29}[a-z0-9]$/'));
+        if (!$validatorAttrCode->isValid($code)) {
+            $code = 'attr_' . ($code ?: substr(md5(time()), 0, 8));
         }
-        return $data;
+        return $code;
     }
 
     public function saveAction()
     {
         $data = $this->getRequest()->getPost();
-        $groupId = $this->getRequest()->getParam('group');
-
         if ($data) {
             /** @var $session Mage_Backend_Model_Auth_Session */
             $session = Mage::getSingleton('Mage_Adminhtml_Model_Session');
 
             $isNewAttributeSet = false;
-            if (isset($data['new_attribute_set_name']) && !empty($data['new_attribute_set_name'])) {
+            if (!empty($data['new_attribute_set_name'])) {
                 /** @var $attributeSet Mage_Eav_Model_Entity_Attribute_Set */
                 $attributeSet = Mage::getModel('Mage_Eav_Model_Entity_Attribute_Set');
                 $name = Mage::helper('Mage_Adminhtml_Helper_Data')->stripTags($data['new_attribute_set_name']);
@@ -193,56 +243,39 @@ class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_
                 }
 
                 try {
-                    $attributeSet->setAttributeSetName($name)
-                        ->validate();
+                    $attributeSet->setAttributeSetName($name)->validate();
                     $attributeSet->save();
-                    $attributeSet->initFromSkeleton($this->getRequest()->getParam('set'))
-                        ->save();
-
-                    /** @var $requestedGroup Mage_Catalog_Model_Product_Attribute_Group */
-                    $requestedGroup = Mage::getModel('Mage_Catalog_Model_Product_Attribute_Group')->load($groupId);
-
-                    if (!$requestedGroup->getId()) {
-                        throw Mage::exception('Mage_Adminhtml',
-                            $this->_helper('Mage_Catalog_Helper_Data')->__('Specified Attribute group id is invalid.')
-                        );
-                    }
-
-                    foreach ($attributeSet->getGroups() as $group) {
-                        if ($group->getAttributeGroupName() == $requestedGroup->getAttributeGroupName()) {
-                            $targetGroupId = $group->getAttributeGroupId();
-                            break;
-                        }
-                    }
-
+                    $attributeSet->initFromSkeleton($this->getRequest()->getParam('set'))->save();
                     $isNewAttributeSet = true;
                 } catch (Mage_Core_Exception $e) {
                     $session->addError($e->getMessage());
                 } catch (Exception $e) {
-                    $session->addException($e, Mage::helper('Mage_Catalog_Helper_Data')->__('An error occurred while saving the attribute set.'));
+                    $session->addException($e, Mage::helper('Mage_Catalog_Helper_Data')->__('Something went wrong saving the attribute.'));
                 }
             }
 
             $redirectBack   = $this->getRequest()->getParam('back', false);
-            /* @var $model Mage_Catalog_Model_Entity_Attribute */
+            /* @var $model Mage_Catalog_Model_Resource_Eav_Attribute */
             $model = Mage::getModel('Mage_Catalog_Model_Resource_Eav_Attribute');
             /* @var $helper Mage_Catalog_Helper_Product */
             $helper = Mage::helper('Mage_Catalog_Helper_Product');
 
             $id = $this->getRequest()->getParam('attribute_id');
 
-            //validate attribute_code
-            if (isset($data['attribute_code'])) {
-                $validatorAttrCode = new Zend_Validate_Regex(array('pattern' => '/^[a-z][a-z_0-9]{1,254}$/'));
-                if (!$validatorAttrCode->isValid($data['attribute_code'])) {
+            $attributeCode = $this->getRequest()->getParam('attribute_code');
+            $frontendLabel = $this->getRequest()->getParam('frontend_label');
+            $attributeCode = $attributeCode ?: $this->generateCode($frontendLabel[0]);
+            if (strlen($this->getRequest()->getParam('attribute_code')) > 0) {
+                $validatorAttrCode = new Zend_Validate_Regex(array('pattern' => '/^[a-z][a-z_0-9]{0,30}$/'));
+                if (!$validatorAttrCode->isValid($attributeCode)) {
                     $session->addError(
-                        Mage::helper('Mage_Catalog_Helper_Data')->__('Attribute code is invalid. Please use only letters (a-z), numbers (0-9) or underscore(_) in this field, first character should be a letter.')
+                        Mage::helper('Mage_Catalog_Helper_Data')->__('Attribute code "%s" is invalid. Please use only letters (a-z), numbers (0-9) or underscore(_) in this field, first character should be a letter.', $attributeCode)
                     );
                     $this->_redirect('*/*/edit', array('attribute_id' => $id, '_current' => true));
                     return;
                 }
             }
-
+            $data['attribute_code'] = $attributeCode;
 
             //validate frontend_input
             if (isset($data['frontend_input'])) {
@@ -259,18 +292,16 @@ class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_
 
             if ($id) {
                 $model->load($id);
-
                 if (!$model->getId()) {
                     $session->addError(
-                        Mage::helper('Mage_Catalog_Helper_Data')->__('This Attribute no longer exists'));
+                        Mage::helper('Mage_Catalog_Helper_Data')->__('This attribute no longer exists.'));
                     $this->_redirect('*/*/');
                     return;
                 }
-
                 // entity type check
                 if ($model->getEntityTypeId() != $this->_entityTypeId) {
                     $session->addError(
-                        Mage::helper('Mage_Catalog_Helper_Data')->__('This attribute cannot be updated.'));
+                        Mage::helper('Mage_Catalog_Helper_Data')->__('You can\'t update your attribute.'));
                     $session->setAttributeData($data);
                     $this->_redirect('*/*/');
                     return;
@@ -287,15 +318,12 @@ class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_
                 $data['backend_model'] = $helper->getAttributeBackendModelByInputType($data['frontend_input']);
             }
 
-            if (!isset($data['is_configurable'])) {
-                $data['is_configurable'] = 0;
-            }
-            if (!isset($data['is_filterable'])) {
-                $data['is_filterable'] = 0;
-            }
-            if (!isset($data['is_filterable_in_search'])) {
-                $data['is_filterable_in_search'] = 0;
-            }
+            $data += array(
+                'is_configurable' => 0,
+                'is_filterable' => 0,
+                'is_filterable_in_search' => 0,
+                'apply_to' => array(),
+            );
 
             if (is_null($model->getIsUserDefined()) || $model->getIsUserDefined() != 0) {
                 $data['backend_type'] = $model->getBackendTypeByInput($data['frontend_input']);
@@ -306,16 +334,10 @@ class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_
                 $data['default_value'] = $this->getRequest()->getParam($defaultValueField);
             }
 
-            if(!isset($data['apply_to'])) {
-                $data['apply_to'] = array();
-            }
             if (!$model->getIsUserDefined() && $model->getId()) {
-                //Unset attribute field for system attributes
-                unset($data['apply_to']);
+                unset($data['apply_to']); //Unset attribute field for system attributes
             }
 
-            //filter
-            $data = $this->_filterPostData($data);
             $model->addData($data);
 
             if (!$id) {
@@ -323,12 +345,21 @@ class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_
                 $model->setIsUserDefined(1);
             }
 
-            if ($this->getRequest()->getParam('set') && $groupId) {
+            $groupCode = $this->getRequest()->getParam('group');
+            if ($this->getRequest()->getParam('set') && $groupCode) {
                 // For creating product attribute on product page we need specify attribute set and group
-
                 $attributeSetId = $isNewAttributeSet ? $attributeSet->getId() : $this->getRequest()->getParam('set');
-                $attributeGroupId = $isNewAttributeSet ? $targetGroupId : $groupId;
-
+                $groupCollection = $isNewAttributeSet
+                    ? $attributeSet->getGroups()
+                    : Mage::getResourceModel('Mage_Eav_Model_Resource_Entity_Attribute_Group_Collection')
+                        ->setAttributeSetFilter($attributeSetId)
+                        ->load();
+                foreach ($groupCollection as $group) {
+                    if ($group->getAttributeGroupCode() == $groupCode) {
+                        $attributeGroupId = $group->getAttributeGroupId();
+                        break;
+                    }
+                }
                 $model->setAttributeSetId($attributeSetId);
                 $model->setAttributeGroupId($attributeGroupId);
             }
@@ -336,21 +367,19 @@ class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_
             try {
                 $model->save();
                 $session->addSuccess(
-                    Mage::helper('Mage_Catalog_Helper_Data')->__('The product attribute has been saved.'));
+                    Mage::helper('Mage_Catalog_Helper_Data')->__('You saved the product attribute.'));
 
-                /**
-                 * Clear translation cache because attribute labels are stored in translation
-                 */
-                Mage::app()->cleanCache(array(Mage_Core_Model_Translate::CACHE_TAG));
+                $this->_attributeLabelCache->clean();
                 $session->setAttributeData(false);
                 if ($this->getRequest()->getParam('popup')) {
                     $requestParams = array(
                         'id'       => $this->getRequest()->getParam('product'),
                         'attribute'=> $model->getId(),
-                        '_current' => true
+                        '_current' => true,
+                        'product_tab' => $this->getRequest()->getParam('product_tab'),
                     );
                     if ($isNewAttributeSet) {
-                        $requestParams['new_attribute_set_id'] = $attributeSetId;
+                        $requestParams['new_attribute_set_id'] = $attributeSet->getId();
                     }
                     $this->_redirect('adminhtml/catalog_product/addAttribute', $requestParams);
                 } elseif ($redirectBack) {
@@ -397,7 +426,7 @@ class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_
             }
         }
         Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError(
-            Mage::helper('Mage_Catalog_Helper_Data')->__('Unable to find an attribute to delete.'));
+            Mage::helper('Mage_Catalog_Helper_Data')->__('We can\'t find an attribute to delete.'));
         $this->_redirect('*/*/');
     }
 
@@ -419,6 +448,6 @@ class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Catalog::attributes_attributes');
+        return $this->_authorization->isAllowed('Mage_Catalog::attributes_attributes');
     }
 }

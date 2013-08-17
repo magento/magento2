@@ -71,7 +71,7 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
             'name'         => $this->getFilterElementName($attribute->getAttributeCode()) . '[]',
             'id'           => $this->getFilterElementId($attribute->getAttributeCode()),
             'class'        => 'input-text input-text-range-date',
-            'date_format'  => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
+            'date_format'  => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT),
             'image'        => $this->getViewFileUrl('images/grid-cal.gif')
         );
         /** @var $selectBlock Mage_Core_Block_Html_Date */
@@ -231,7 +231,7 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
         parent::_prepareColumns();
 
         $this->addColumn('skip', array(
-            'header'     => Mage::helper('Mage_ImportExport_Helper_Data')->__('Skip'),
+            'header'     => Mage::helper('Mage_ImportExport_Helper_Data')->__('Exclude'),
             'type'       => 'checkbox',
             'name'       => 'skip',
             'field_name' => Mage_ImportExport_Model_Export::FILTER_ELEMENT_SKIP . '[]',

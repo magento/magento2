@@ -40,18 +40,11 @@ class Mage_Catalog_Model_Product_Api_AttributeTest extends PHPUnit_Framework_Tes
             )
         );
 
-        try {
-            Magento_Test_Helper_Api::call($this, 'catalogProductAttributeCreate', array('data' => $attributeData));
-
-            $this->fail('Exception with message like "invalid attribute code" expected but not thrown');
-        } catch (Exception $e) {
-            $this->assertEquals(103, $e->faultcode, 'Unexpected fault code');
-            $this->assertEquals(
-                'Attribute code is invalid. Please use only letters (a-z), numbers (0-9), '
-                    . 'or underscore(_) in this field. First character should be a letter.',
-                $e->getMessage(),
-                'Unexpected exception messsage'
-            );
-        }
+        $expectedMessage = 'Please correct the attribute code. Use only letters (a-z), numbers (0-9)'
+            .' or underscores (_) in this field, and begin the code with a letter.';
+        $exception = Magento_Test_Helper_Api::callWithException($this,
+            'catalogProductAttributeCreate', array('data' => $attributeData), $expectedMessage
+        );
+        $this->assertEquals(103, $exception->faultcode, 'Unexpected fault code');
     }
 }

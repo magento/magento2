@@ -66,18 +66,18 @@ class Mage_SalesRule_Model_Resource_Report_Collection extends Mage_Sales_Model_R
      * Initialize custom resource model
      *
      */
-    public function __construct()
-    {
-        parent::_construct();
-        $this->setModel('Mage_Adminhtml_Model_Report_Item');
-        $this->_resource = Mage::getResourceModel('Mage_Sales_Model_Resource_Report')->init($this->_aggregationTable);
-        $this->setConnection($this->getResource()->getReadConnection());
+    public function __construct(
+        Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy,
+        Mage_Sales_Model_Resource_Report $resource
+    ) {
+        $resource->init($this->_aggregationTable);
+        parent::__construct($fetchStrategy, $resource);
     }
 
     /**
      * collect columns for collection
      *
-     * @return unknown
+     * @return array
      */
     protected function _getSelectedColumns()
     {
@@ -136,7 +136,7 @@ class Mage_SalesRule_Model_Resource_Report_Collection extends Mage_Sales_Model_R
             ));
         }
 
-        return $this;
+        return parent::_initSelect();
     }
 
     /**

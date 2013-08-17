@@ -472,39 +472,26 @@ class Mage_ImportExport_Model_Import_EntityAbstractTest extends PHPUnit_Framewor
     /**
      * Data provide which retrieve data for test attributes
      *
-     * @static
      * @return array
      */
-    public static function attributeList()
+    public function attributeList()
     {
         $longString = str_pad('', Mage_ImportExport_Model_Import_EntityAbstract::DB_MAX_TEXT_LENGTH, 'x');
 
         return array(
             array(
-                array(
-                    'code'          => 'test1',
-                    'type'          => 'decimal',
-                    'valid_value'   => 1.5,
-                    'invalid_value' => 'test'
-                )
+                $this->_getDataSet('test1', 'decimal', 1.5, 'test')
             ),
             array(
-                array(
-                    'code'          => 'test2',
-                    'type'          => 'varchar',
-                    'valid_value'   => 'test string',
-                    'invalid_value' => substr($longString, 0,
+                $this->_getDataSet('test2', 'varchar', 'test string',
+                    substr($longString, 0,
                         Mage_ImportExport_Model_Import_EntityAbstract::DB_MAX_VARCHAR_LENGTH
                     )
                 )
             ),
             array(
-                array(
-                    'code'          => 'test3',
-                    'type'          => 'select',
-                    'valid_value'   => 'test2',
-                    'invalid_value' => 'custom',
-                    'options'       => array(
+                $this->_getDataSet('test3', 'select', 'test2', 'custom', null,
+                    array(
                         'test1' => 1,
                         'test2' => 2,
                         'test3' => 3
@@ -512,12 +499,8 @@ class Mage_ImportExport_Model_Import_EntityAbstractTest extends PHPUnit_Framewor
                 )
             ),
             array(
-                array(
-                    'code'          => 'test4',
-                    'type'          => 'multiselect',
-                    'valid_value'   => 'test2',
-                    'invalid_value' => 'custom',
-                    'options'       => array(
+                $this->_getDataSet('test4', 'multiselect', 'test2', 'custom', null,
+                    array(
                         'test1' => 1,
                         'test2' => 2,
                         'test3' => 3
@@ -525,39 +508,88 @@ class Mage_ImportExport_Model_Import_EntityAbstractTest extends PHPUnit_Framewor
                 )
             ),
             array(
-                array(
-                    'code'          => 'test5',
-                    'type'          => 'int',
-                    'valid_value'   => 100,
-                    'invalid_value' => 'custom'
-                )
+                $this->_getDataSet('test5', 'int', 100, 'custom')
+            ),
+            array(
+                $this->_getDataSet('test6', 'datetime', '2012-06-15 15:50', '2012-30-30')
+            ),
+            array(
+                $this->_getDataSet('test7', 'text', 'test string', $longString)
+            ),
+            array(
+                $this->_getDataSet('test8', 'int', 1, 1, true)
+            ),
+            array(
+                $this->_getDataSet('test9', 'datetime', '2012-02-29', '02/29/2012 11:12:67')
+            ),
+            array(
+                $this->_getDataSet('test10', 'datetime', '29.02.2012', '11.02.4 11:12:59')
+            ),
+            array(
+                $this->_getDataSet('test11', 'datetime', '02/29/2012', '2012-13-29 21:12:59')
+            ),
+            array(
+                $this->_getDataSet('test12', 'datetime', '02/29/2012 11:12:59', '32.12.2012')
             ),
             array(
                 array(
-                    'code'          => 'test6',
+                    'code'          => 'test7',
                     'type'          => 'datetime',
-                    'valid_value'   => '2012-06-15 15:50',
-                    'invalid_value' => '2012-30-30'
+                    'valid_value'   => '2012-02-29',
+                    'invalid_value' => '02/29/2012 11:12:67'
                 )
             ),
             array(
                 array(
                     'code'          => 'test7',
-                    'type'          => 'text',
-                    'valid_value'   => 'test string',
-                    'invalid_value' => $longString
+                    'type'          => 'datetime',
+                    'valid_value'   => '29.02.2012',
+                    'invalid_value' => '11.02.4 11:12:59'
                 )
             ),
             array(
                 array(
-                    'code'          => 'test8',
-                    'type'          => 'int',
-                    'is_unique'     => true,
-                    'valid_value'   => 1,
-                    'invalid_value' => 1
+                    'code'          => 'test7',
+                    'type'          => 'datetime',
+                    'valid_value'   => '02/29/2012',
+                    'invalid_value' => '2012-13-29 21:12:59'
+                )
+            ),
+            array(
+                array(
+                    'code'          => 'test7',
+                    'type'          => 'datetime',
+                    'valid_value'   => '02/29/2012 11:12:59',
+                    'invalid_value' => '32.12.2012'
                 )
             )
         );
+    }
+
+    /**
+     * @param string $code
+     * @param string $type
+     * @param int|string $validValue
+     * @param $invalidValue
+     * @param null $isUnique
+     * @param null $options
+     * @return array
+     */
+    protected function _getDataSet($code, $type, $validValue, $invalidValue, $isUnique = null, $options = null)
+    {
+        $dataSet = array(
+            'code'          => $code,
+            'type'          => $type,
+            'valid_value'   => $validValue,
+            'invalid_value' => $invalidValue
+        );
+        if ($isUnique !== null) {
+            $dataSet['is_unique'] = $isUnique;
+        }
+        if ($options !== null) {
+            $dataSet['options'] = $options;
+        }
+        return $dataSet;
     }
 
     /**
@@ -565,7 +597,7 @@ class Mage_ImportExport_Model_Import_EntityAbstractTest extends PHPUnit_Framewor
      *
      * @covers Mage_ImportExport_Model_Import_EntityAbstract::validateData
      * @expectedException Mage_Core_Exception
-     * @expectedExceptionMessage Can not find required columns: %s
+     * @expectedExceptionMessage Cannot find required columns: %s
      */
     public function testValidateDataPermanentAttributes()
     {

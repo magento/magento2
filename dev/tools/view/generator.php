@@ -47,28 +47,35 @@ Usage: php -f generator.php -- [--source <dir>] [--destination <dir>] [--dry-run
 USAGE
 );
 
+$logWriter = new Zend_Log_Writer_Stream('php://output');
+$logWriter->setFormatter(new Zend_Log_Formatter_Simple('%message%' . PHP_EOL));
+$logger = new Zend_Log($logWriter);
+
 $options = getopt('', array('help', 'dry-run', 'source:', 'destination:'));
 if (isset($options['help'])) {
-    echo SYNOPSIS;
+    $logger->log(SYNOPSIS, Zend_Log::INFO);
     exit(0);
 }
 
-echo "Deploying...\n";
+$logger->log('Deploying...', Zend_Log::INFO);
 try {
     $config = new Generator_Config(BP, $options);
 
     $filesystem = new Magento_Filesystem(new Magento_Filesystem_Adapter_Local);
-    $dirs = new Mage_Core_Model_Dir($filesystem, $config->getSourceDir());
+    $dirs = new Mage_Core_Model_Dir($config->getSourceDir());
     $objectManager = new Magento_ObjectManager_ObjectManager();
 
     $themes = new Mage_Core_Model_Theme_Collection($filesystem, $objectManager, $dirs);
     $themes->setItemObjectClass('Generator_ThemeLight');
     $themes->addDefaultPattern('*');
 
-    $generator = new Generator_CopyRule($filesystem, $themes, new Mage_Core_Model_Design_Fallback_List_View($dirs));
+    $fallbackFactory = new Mage_Core_Model_Design_Fallback_Factory($dirs);
+    $generator = new Generator_CopyRule($filesystem, $themes, $fallbackFactory->createViewFileRule());
     $copyRules = $generator->getCopyRules();
 
+    $cssHelper = new Mage_Core_Helper_Css($filesystem, $dirs);
     $deployment = new Generator_ThemeDeployment(
+        $cssHelper,
         $config->getDestinationDir(),
         __DIR__ . '/config/permitted.php',
         __DIR__ . '/config/forbidden.php',
@@ -76,7 +83,7 @@ try {
     );
     $deployment->run($copyRules);
 } catch (Exception $e) {
-    echo 'Error: ' . $e->getMessage();
+    $logger->log('Error: ' . $e->getMessage(), Zend_Log::ERR);
     exit(1);
 }
-echo "Completed successfully.";
+$logger->log('Completed successfully.', Zend_Log::INFO);

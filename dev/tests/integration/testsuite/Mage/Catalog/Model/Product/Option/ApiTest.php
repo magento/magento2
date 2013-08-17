@@ -230,7 +230,7 @@ class Mage_Catalog_Model_Product_Option_ApiTest extends PHPUnit_Framework_TestCa
             $option['additional_fields'] = array($option['additional_fields']);
         }
 
-        return Magento_Test_Helper_Api::call(
+        Magento_Test_Helper_Api::callWithException(
             $this,
             'catalogProductCustomOptionUpdate',
             array(
@@ -254,8 +254,8 @@ class Mage_Catalog_Model_Product_Option_ApiTest extends PHPUnit_Framework_TestCa
         ) {
             $option['additional_fields'] = array($option['additional_fields']);
         }
-        $this->setExpectedException('SoapFault');
-        Magento_Test_Helper_Api::call(
+
+        Magento_Test_Helper_Api::callWithException(
             $this,
             'catalogProductCustomOptionAdd',
             array(
@@ -275,12 +275,11 @@ class Mage_Catalog_Model_Product_Option_ApiTest extends PHPUnit_Framework_TestCa
 
         $option = $customOptions['field'];
         $option['additional_fields'] = array();
-
-        $this->setExpectedException('SoapFault', 'Provided data is invalid.');
-        Magento_Test_Helper_Api::call(
+        Magento_Test_Helper_Api::callWithException(
             $this,
             'catalogProductCustomOptionAdd',
-            array('productId' => $fixtureProductId, 'data' => $option)
+            array('productId' => $fixtureProductId, 'data' => $option),
+            'Provided data is invalid.'
         );
     }
 
@@ -298,8 +297,8 @@ class Mage_Catalog_Model_Product_Option_ApiTest extends PHPUnit_Framework_TestCa
         ) {
             $option['additional_fields'] = array($option['additional_fields']);
         }
-        $this->setExpectedException('SoapFault');
-        Magento_Test_Helper_Api::call(
+
+        Magento_Test_Helper_Api::callWithException(
             $this,
             'catalogProductCustomOptionAdd',
             array(
@@ -316,9 +315,7 @@ class Mage_Catalog_Model_Product_Option_ApiTest extends PHPUnit_Framework_TestCa
     public function testCustomOptionListExceptionProductNotExists()
     {
         $store = (string)self::$_customOptionFixture->store;
-
-        $this->setExpectedException('SoapFault');
-        Magento_Test_Helper_Api::call(
+        Magento_Test_Helper_Api::callWithException(
             $this,
             'catalogProductCustomOptionList',
             array(
@@ -334,9 +331,7 @@ class Mage_Catalog_Model_Product_Option_ApiTest extends PHPUnit_Framework_TestCa
     public function testCustomOptionListExceptionStoreNotExists()
     {
         $fixtureProductId = Mage::registry('productData')->getId();
-
-        $this->setExpectedException('SoapFault');
-        Magento_Test_Helper_Api::call(
+        Magento_Test_Helper_Api::callWithException(
             $this,
             'catalogProductCustomOptionList',
             array(
@@ -348,26 +343,28 @@ class Mage_Catalog_Model_Product_Option_ApiTest extends PHPUnit_Framework_TestCa
 
     /**
      * Test option add with invalid type
-     *
-     * @expectedException SoapFault
      */
     public function testCustomOptionUpdateExceptionInvalidType()
     {
         $optionsToUpdate = Magento_Test_Helper_Api::simpleXmlToArray(
             self::$_customOptionFixture->customOptionsToUpdate
         );
-        $option = (array)reset(self::$_createdOptionAfter);
 
+        $option = array();
+        foreach (self::$_createdOptionAfter as $optionObject) {
+            $options = (array)$optionObject;
+            if (array_key_exists($options['type'], $optionsToUpdate)) {
+                $option = (array) $options;
+                break;
+            }
+        }
         $toUpdateValues = $optionsToUpdate[$option['type']];
         $toUpdateValues['type'] = 'unknown_type';
-
         $this->_updateOption($option['option_id'], $toUpdateValues);
     }
 
     /**
      * Test option remove and exception
-     *
-     * @expectedException SoapFault
      * @depends testCustomOptionUpdateExceptionInvalidType
      */
     public function testCustomOptionRemove()
@@ -387,7 +384,7 @@ class Mage_Catalog_Model_Product_Option_ApiTest extends PHPUnit_Framework_TestCa
         }
 
         // Delete exception test
-        Magento_Test_Helper_Api::call(
+        Magento_Test_Helper_Api::callWithException(
             $this,
             'catalogProductCustomOptionRemove',
             array('optionId' => mt_rand(99999, 999999))

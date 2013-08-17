@@ -46,9 +46,7 @@ class Mage_Adminhtml_Api_RoleController extends Mage_Adminhtml_Controller_Action
 
     public function indexAction()
     {
-        $this->_title($this->__('System'))
-             ->_title($this->__('Web Services'))
-             ->_title($this->__('Roles'));
+        $this->_title($this->__('Roles'));
 
         $this->_initAction();
 
@@ -68,9 +66,7 @@ class Mage_Adminhtml_Api_RoleController extends Mage_Adminhtml_Controller_Action
 
     public function editRoleAction()
     {
-        $this->_title($this->__('System'))
-             ->_title($this->__('Web Services'))
-             ->_title($this->__('Roles'));
+        $this->_title($this->__('Roles'));
 
         $this->_initAction();
 
@@ -126,12 +122,12 @@ class Mage_Adminhtml_Api_RoleController extends Mage_Adminhtml_Controller_Action
         $rid        = $this->getRequest()->getParam('role_id', false);
         $role = Mage::getModel('Mage_Api_Model_Roles')->load($rid);
         if (!$role->getId() && $rid) {
-            Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError($this->__('This Role no longer exists'));
+            Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError($this->__('This role no longer exists.'));
             $this->_redirect('*/*/');
             return;
         }
 
-        $resource   = explode(',', $this->getRequest()->getParam('resource', false));
+        $resource   = $this->getRequest()->getParam('resource', false);
         $roleUsers  = $this->getRequest()->getParam('in_role_user', null);
         parse_str($roleUsers, $roleUsers);
         $roleUsers = array_keys($roleUsers);
@@ -166,7 +162,7 @@ class Mage_Adminhtml_Api_RoleController extends Mage_Adminhtml_Controller_Action
             }
 
             $rid = $role->getId();
-            Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess($this->__('The role has been saved.'));
+            Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess($this->__('You saved the role.'));
         } catch (Exception $e) {
             Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError($this->__('An error occurred while saving this role.'));
         }
@@ -212,6 +208,6 @@ class Mage_Adminhtml_Api_RoleController extends Mage_Adminhtml_Controller_Action
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Api::roles');
+        return $this->_authorization->isAllowed('Mage_Api::roles');
     }
 }

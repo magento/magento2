@@ -48,11 +48,11 @@ class Mage_Core_Model_DesignTest extends PHPUnit_Framework_TestCase
      */
     public function testChangeDesign()
     {
-        $designPackage = Mage::getModel('Mage_Core_Model_Design_Package');
+        $design = Mage::getModel('Mage_Core_Model_View_DesignInterface');
         $storeId = Mage::app()->getAnyStoreView()->getId(); // fixture design_change
-        $design = Mage::getModel('Mage_Core_Model_Design');
-        $design->loadChange($storeId)->changeDesign($designPackage);
-        $this->assertEquals('default/modern', $designPackage->getDesignTheme()->getThemePath());
+        $designChange = Mage::getModel('Mage_Core_Model_Design');
+        $designChange->loadChange($storeId)->changeDesign($design);
+        $this->assertEquals('default/blank', $design->getDesignTheme()->getThemePath());
     }
 
     public function testCRUD()
@@ -162,10 +162,17 @@ class Mage_Core_Model_DesignTest extends PHPUnit_Framework_TestCase
         }
 
         $store = Mage::app()->getStore($storeCode);
-        $store->setConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE, $storeTimezone);
+        $store->setConfig(Mage_Core_Model_LocaleInterface::XML_PATH_DEFAULT_TIMEZONE, $storeTimezone);
+        $storeId = $store->getId();
 
-        $design = Mage::getModel('Mage_Core_Model_Design');
-        $design->loadChange($store->getId());
+        /** @var $locale Mage_Core_Model_LocaleInterface|PHPUnit_Framework_MockObject_MockObject */
+        $locale = $this->getMock('Mage_Core_Model_LocaleInterface');
+        $locale->expects($this->once())
+            ->method('storeTimeStamp')
+            ->with($storeId)
+            ->will($this->returnValue($storeDatetime)); // store time must stay unchanged during test execution
+        $design = Mage::getModel('Mage_Core_Model_Design', array('locale' => $locale));
+        $design->loadChange($storeId);
         $actualDesign = $design->getDesign();
 
         $this->assertEquals($expectedDesign, $actualDesign);

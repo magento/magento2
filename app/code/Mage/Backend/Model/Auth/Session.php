@@ -48,16 +48,14 @@ class Mage_Backend_Model_Auth_Session
     /**
      * Access Control List builder
      *
-     * @var Mage_Core_Model_Acl_Builder
+     * @var Magento_Acl_Builder
      */
     protected $_aclBuilder;
 
     /**
-     * Class constructor
-     *
-     * @param array $data
+     * @param Magento_Acl_Builder $aclBuilder
      */
-    public function __construct(Mage_Core_Model_Acl_Builder $aclBuilder)
+    public function __construct(Magento_Acl_Builder $aclBuilder)
     {
         $this->_aclBuilder = $aclBuilder;
         $this->init('admin');
@@ -79,7 +77,7 @@ class Mage_Backend_Model_Auth_Session
     public function init($namespace, $sessionName = null)
     {
         parent::init($namespace, $sessionName);
-        $this->isFirstPageAfterLogin();
+        // @todo implement solution that keeps is_first_visit flag in session during redirects
         return $this;
     }
 
@@ -98,7 +96,7 @@ class Mage_Backend_Model_Auth_Session
             return $this;
         }
         if (!$this->getAcl() || $user->getReloadAclFlag()) {
-            $this->setAcl($this->_aclBuilder->getAcl(Mage_Core_Model_App_Area::AREA_ADMINHTML));
+            $this->setAcl($this->_aclBuilder->getAcl());
         }
         if ($user->getReloadAclFlag()) {
             $user->unsetData('password');
@@ -109,9 +107,6 @@ class Mage_Backend_Model_Auth_Session
 
     /**
      * Check current user permission on resource and privilege
-     *
-     * Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Catalog::catalog')
-     * Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Catalog::catalog')
      *
      * @param   string $resource
      * @param   string $privilege
@@ -200,7 +195,7 @@ class Mage_Backend_Model_Auth_Session
             }
 
             $this->setIsFirstPageAfterLogin(true);
-            $this->setAcl($this->_aclBuilder->getAcl(Mage_Core_Model_App_Area::AREA_ADMINHTML));
+            $this->setAcl($this->_aclBuilder->getAcl());
             $this->setUpdatedAt(time());
         }
         return $this;

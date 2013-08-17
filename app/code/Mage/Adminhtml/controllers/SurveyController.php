@@ -53,7 +53,6 @@ class Mage_Adminhtml_SurveyController extends Mage_Adminhtml_Controller_Action
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')
-            ->isAllowed(Mage_Backend_Model_Acl_Config::ACL_RESOURCE_ALL);
+        return $this->_authorization->isAllowed(null);
     }
 }

@@ -99,7 +99,7 @@ class Mage_Adminhtml_Block_Sales_Order_Status_New_Form extends Mage_Adminhtml_Bl
         $labels = $model ? $model->getStoreLabels() : array();
         $fieldset = $form->addFieldset('store_labels_fieldset', array(
             'legend' => Mage::helper('Mage_Sales_Helper_Data')->__('Store View Specific Labels'),
-            'table_class' => 'form-list stores-tree',
+            'class' => 'store-scope',
         ));
         $renderer = $this->getLayout()->createBlock('Mage_Backend_Block_Store_Switcher_Form_Renderer_Fieldset');
         $fieldset->setRenderer($renderer);

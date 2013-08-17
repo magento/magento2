@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Mage_Core
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,103 +26,45 @@ class Mage_Core_Model_Design_Fallback_Rule_ThemeTest extends PHPUnit_Framework_T
 {
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Each element should implement Mage_Core_Model_Design_Fallback_Rule_RuleInterface
-     */
-    public function testConstructExceptionNotAnInterface()
-    {
-        $rules = array('not an interface');
-        new Mage_Core_Model_Design_Fallback_Rule_Theme($rules);
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage $params["theme"] should be passed and should implement Mage_Core_Model_ThemeInterface
+     * @expectedExceptionMessage Parameter "theme" should be specified and should implement the theme interface
      */
     public function testGetPatternDirsException()
     {
-        $simpleRuleMockOne = $this->getMock(
-            'Mage_Core_Model_Design_Fallback_Rule_Simple',
-            array(),
-            array('pattern')
-        );
-
-        $model = new Mage_Core_Model_Design_Fallback_Rule_Theme(array($simpleRuleMockOne));
-        $model->getPatternDirs(array());
+        $rule = $this->getMockForAbstractClass('Mage_Core_Model_Design_Fallback_Rule_RuleInterface');
+        $object = new Mage_Core_Model_Design_Fallback_Rule_Theme($rule);
+        $object->getPatternDirs(array());
     }
 
     public function testGetPatternDirs()
     {
-        $parentThemePath = 'parent_package/parent_theme';
-        $parentTheme = $this->getMock('Mage_Core_Model_Theme', array('getThemePath'), array(), '', false);
-        $parentTheme->expects($this->any())
-            ->method('getThemePath')
-            ->will($this->returnValue($parentThemePath));
+        $parentTheme = $this->getMockForAbstractClass('Mage_Core_Model_ThemeInterface');
+        $parentTheme->expects($this->any())->method('getThemePath')->will($this->returnValue('package/parent_theme'));
 
-        $themePath = 'package/theme';
-        $theme = $this->getMock('Mage_Core_Model_Theme', array('getThemePath', 'getParentTheme'), array(), '', false);
-        $theme->expects($this->any())
-            ->method('getThemePath')
-            ->will($this->returnValue($themePath));
+        $theme = $this->getMockForAbstractClass('Mage_Core_Model_ThemeInterface');
+        $theme->expects($this->any())->method('getThemePath')->will($this->returnValue('package/current_theme'));
+        $theme->expects($this->any())->method('getParentTheme')->will($this->returnValue($parentTheme));
 
-        $theme->expects($this->any())
-            ->method('getParentTheme')
-            ->will($this->returnValue($parentTheme));
-
-        $patternOne = '<theme_path> one';
-        $patternTwo = '<theme_path> two';
-
-        $mapOne = array(
+        $ruleDirsMap = array(
             array(
-                array('theme' => $theme, 'theme_path' => $theme->getThemePath()),
-                array('package/theme one')
+                array('theme_path' => 'package/current_theme'),
+                array('package/current_theme/path/one', 'package/current_theme/path/two')
             ),
             array(
-                array('theme' => $theme, 'theme_path' => $parentTheme->getThemePath()),
-                array('parent_package/parent_theme one')
+                array('theme_path' => 'package/parent_theme'),
+                array('package/parent_theme/path/one', 'package/parent_theme/path/two')
             )
         );
+        $rule = $this->getMockForAbstractClass('Mage_Core_Model_Design_Fallback_Rule_RuleInterface');
+        $rule->expects($this->any())->method('getPatternDirs')->will($this->returnValueMap($ruleDirsMap));
 
-        $mapTwo = array(
-            array(
-                array('theme' => $theme, 'theme_path' => $theme->getThemePath()),
-                array('package/theme two')
-            ),
-            array(
-                array('theme' => $theme, 'theme_path' => $parentTheme->getThemePath()),
-                array('parent_package/parent_theme two')
-            )
-        );
-
-        $simpleRuleMockOne = $this->getMock(
-            'Mage_Core_Model_Design_Fallback_Rule_Simple',
-            array('getPatternDirs'),
-            array($patternOne)
-        );
-
-        $simpleRuleMockTwo = $this->getMock(
-            'Mage_Core_Model_Design_Fallback_Rule_Simple',
-            array('getPatternDirs'),
-            array($patternTwo)
-        );
-
-        $simpleRuleMockOne->expects($this->any())
-            ->method('getPatternDirs')
-            ->will($this->returnValueMap($mapOne));
-
-        $simpleRuleMockTwo->expects($this->any())
-            ->method('getPatternDirs')
-            ->will($this->returnValueMap($mapTwo));
-
-        $params = array('theme' => $theme);
-        $model = new Mage_Core_Model_Design_Fallback_Rule_Theme(array($simpleRuleMockOne, $simpleRuleMockTwo));
+        $object = new Mage_Core_Model_Design_Fallback_Rule_Theme($rule);
 
         $expectedResult = array(
-            'package/theme one',
-            'package/theme two',
-            'parent_package/parent_theme one',
-            'parent_package/parent_theme two'
+            'package/current_theme/path/one',
+            'package/current_theme/path/two',
+            'package/parent_theme/path/one',
+            'package/parent_theme/path/two',
         );
-
-        $this->assertEquals($expectedResult, $model->getPatternDirs($params));
+        $this->assertEquals($expectedResult, $object->getPatternDirs(array('theme' => $theme)));
     }
 }

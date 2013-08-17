@@ -66,7 +66,7 @@ class Mage_Adminhtml_Sales_Order_EditController extends Mage_Adminhtml_Sales_Ord
      */
     public function indexAction()
     {
-        $this->_title($this->__('Sales'))->_title($this->__('Orders'))->_title($this->__('Edit Order'));
+        $this->_title($this->__('Orders'))->_title($this->__('Edit Order'));
         $this->loadLayout();
 
         $this->_initSession()
@@ -81,6 +81,6 @@ class Mage_Adminhtml_Sales_Order_EditController extends Mage_Adminhtml_Sales_Ord
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::actions_edit');
+        return $this->_authorization->isAllowed('Mage_Sales::actions_edit');
     }
 }

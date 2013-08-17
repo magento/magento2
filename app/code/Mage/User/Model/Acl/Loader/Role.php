@@ -24,7 +24,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_User_Model_Acl_Loader_Role implements Magento_Acl_Loader
+class Mage_User_Model_Acl_Loader_Role implements Magento_Acl_LoaderInterface
 {
     /**
      * @var Mage_Core_Model_Resource

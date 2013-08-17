@@ -176,7 +176,7 @@ class Mage_Core_Model_AppTest extends PHPUnit_Framework_TestCase
     public function testGetLocale()
     {
         $locale = $this->_model->getLocale();
-        $this->assertInstanceOf('Mage_Core_Model_Locale', $locale);
+        $this->assertInstanceOf('Mage_Core_Model_LocaleInterface', $locale);
         $this->assertSame($locale, $this->_model->getLocale());
     }
 
@@ -255,7 +255,11 @@ class Mage_Core_Model_AppTest extends PHPUnit_Framework_TestCase
     public function testSetGetResponse()
     {
         $this->assertInstanceOf('Mage_Core_Controller_Response_Http', $this->_model->getResponse());
-        $expectedHeader = array('name' => 'Content-Type', 'value' => 'text/html; charset=UTF-8', 'replace' => false);
+        $expectedHeader = array(
+            'name' => 'Content-Type',
+            'value' => 'text/html; charset=UTF-8',
+            'replace' => false
+        );
         $this->assertContains($expectedHeader, $this->_model->getResponse()->getHeaders());
         $response = new Magento_Test_Response();
         $this->_model->setResponse($response);

@@ -37,11 +37,11 @@ $page//->setId(100) // doesn't work: it triggers update
     ->save();
 
 $page = Mage::getModel('Mage_Cms_Model_Page');
-$page->setTitle('Cms Page Design Modern')
-    ->setIdentifier('page_design_modern')
+$page->setTitle('Cms Page Design Blank')
+    ->setIdentifier('page_design_blank')
     ->setStores(array(0))
     ->setIsActive(1)
-    ->setContent('<h1>Cms Page Design Modern Title</h1>')
+    ->setContent('<h1>Cms Page Design Blank Title</h1>')
     ->setRootTemplate('one_column')
-    ->setCustomTheme('default/modern')
+    ->setCustomTheme('default/blank')
     ->save();

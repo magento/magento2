@@ -35,6 +35,11 @@ class Magento_Profiler_Driver_Standard_Output_FirebugTest extends PHPUnit_Framew
         $this->_output = new Magento_Profiler_Driver_Standard_Output_Firebug();
     }
 
+    protected function tearDown()
+    {
+        ob_end_flush();
+    }
+
     public function testGetAndSetRequest()
     {
         $this->assertInstanceOf('Zend_Controller_Request_Abstract', $this->_output->getRequest());

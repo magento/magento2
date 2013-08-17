@@ -182,6 +182,9 @@ class Magento_Test_Helper_ObjectManager
     public function getConstructArguments($className, array $arguments = array())
     {
         $constructArguments = array();
+        if (!method_exists($className, '__construct')) {
+            return $constructArguments;
+        }
         $method = new ReflectionMethod($className, '__construct');
 
         foreach ($method->getParameters() as $parameter) {

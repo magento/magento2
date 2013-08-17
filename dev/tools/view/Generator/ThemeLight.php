@@ -60,4 +60,12 @@ class Generator_ThemeLight extends Varien_Object implements Mage_Core_Model_Them
     {
         return $this->getData('parent_theme');
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCode()
+    {
+        return (string)$this->getData('code');
+    }
 }

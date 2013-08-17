@@ -28,11 +28,6 @@ namespace Magento\Code\Generator\TestAsset;
 class SourceClassWithNamespaceFactory
 {
     /**
-     * Entity class name
-     */
-    const CLASS_NAME = 'Magento\Code\Generator\TestAsset\SourceClassWithNamespace';
-
-    /**
      * Object Manager instance
      *
      * @var \Magento_ObjectManager
@@ -40,13 +35,22 @@ class SourceClassWithNamespaceFactory
     protected $_objectManager = null;
 
     /**
+     * Instance name to create
+     *
+     * @var string
+     */
+    protected $_instanceName = null;
+
+    /**
      * Factory constructor
      *
      * @param \Magento_ObjectManager $objectManager
+     * @param string $instanceName
      */
-    public function __construct(\Magento_ObjectManager $objectManager)
+    public function __construct(\Magento_ObjectManager $objectManager, $instanceName = 'Magento\Code\Generator\TestAsset\SourceClassWithNamespace')
     {
         $this->_objectManager = $objectManager;
+        $this->_instanceName = $instanceName;
     }
 
     /**
@@ -57,6 +61,6 @@ class SourceClassWithNamespaceFactory
      */
     public function create(array $data = array())
     {
-        return $this->_objectManager->create(self::CLASS_NAME, $data);
+        return $this->_objectManager->create($this->_instanceName, $data);
     }
 }

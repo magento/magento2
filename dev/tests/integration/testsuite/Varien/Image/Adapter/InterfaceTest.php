@@ -33,8 +33,8 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_adapters = array(
-        Varien_Image_Adapter::ADAPTER_GD2,
-        Varien_Image_Adapter::ADAPTER_IM
+        Mage_Core_Model_Image_AdapterFactory::ADAPTER_GD2,
+        Mage_Core_Model_Image_AdapterFactory::ADAPTER_IM
     );
 
     /**
@@ -45,10 +45,10 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
      */
     protected function _prepareData($data)
     {
-        $result   = array();
-        foreach ($this->_adapters as $adapter) {
+        $result = array();
+        foreach ($this->_adapters as $adapterType) {
             foreach ($data as $row) {
-                $row[] = Varien_Image_Adapter::factory($adapter);
+                $row[] = $adapterType;
                 $result[] = $row;
             }
         }
@@ -96,7 +96,7 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
      */
     protected function _getFixture($pattern)
     {
-        $dir  = dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files'. DIRECTORY_SEPARATOR;
+        $dir = dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
         $data = glob($dir . $pattern);
 
         if (!empty($data)) {
@@ -125,15 +125,14 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
      * Checks is adapter testable.
      * Mark test as skipped if not
      *
-     * @param Varien_Image_Adapter_Abstract $adapter
+     * @param string $adapterType
      */
-    protected function _isAdapterAvailable($adapter)
+    protected function _getAdapter($adapterType)
     {
-        if (substr(PHP_OS, 0, 3) == 'WIN' && $adapter instanceof Varien_Image_Adapter_ImageMagick) {
-            $this->markTestSkipped("ImageMagick is not working correctly on Windows");
-        }
         try {
-            $adapter->checkDependencies();
+            $objectManager = Mage::getObjectManager();
+            $adapter = $objectManager->get('Mage_Core_Model_Image_AdapterFactory')->create($adapterType);
+            return $adapter;
         } catch (Exception $e) {
             $this->markTestSkipped($e->getMessage());
         }
@@ -141,35 +140,34 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
 
     /**
      * Checks if all dependencies are loaded
-     * @param Varien_Image_Adapter_Abstract $adapter
+     * @param string $adapterType
      *
      * @dataProvider adaptersDataProvider
      */
-    public function testCheckDependencies($adapter)
+    public function testCheckDependencies($adapterType)
     {
-        $this->_isAdapterAvailable($adapter);
+        $this->_getAdapter($adapterType);
     }
 
     public function adaptersDataProvider()
     {
-        $data = array();
-        foreach ($this->_adapters as $adapter) {
-            $data[] = array(Varien_Image_Adapter::factory($adapter));
-        }
-        return $data;
+        return array(
+            array(Mage_Core_Model_Image_AdapterFactory::ADAPTER_GD2),
+            array(Mage_Core_Model_Image_AdapterFactory::ADAPTER_IM),
+        );
     }
 
     /**
      * @param string $image
-     * @param Varien_Image_Adapter_Abstract $adapter
+     * @param string $adapterType
      *
      * @depends testCheckDependencies
      * @dataProvider openDataProvider
      */
-    public function testOpen($image, $adapter)
+    public function testOpen($image, $adapterType)
     {
-        $this->_isAdapterAvailable($adapter);
-        try  {
+        $adapter = $this->_getAdapter($adapterType);
+        try {
             $adapter->open($image);
         } catch (Exception $e) {
             $result = $this->_isFormatSupported($image, $adapter);
@@ -188,26 +186,26 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param Varien_Image_Adapter_Abstract $adapter
+     * @param string $adapterType
      * @dataProvider adaptersDataProvider
      */
-    public function testGetImage($adapter)
+    public function testGetImage($adapterType)
     {
-        $this->_isAdapterAvailable($adapter);
+        $adapter = $this->_getAdapter($adapterType);
         $adapter->open($this->_getFixture('image_adapters_test.png'));
         $this->assertNotEmpty($adapter->getImage());
     }
 
     /**
      * @param string $image
-     * @param Varien_Image_Adapter_Abstract $adapter
+     * @param string $adapterType
      *
      * @dataProvider openDataProvider
      * @depends testOpen
      */
-    public function testImageSize($image, $adapter)
+    public function testImageSize($image, $adapterType)
     {
-        $this->_isAdapterAvailable($adapter);
+        $adapter = $this->_getAdapter($adapterType);
         try {
             $adapter->open($image);
             $this->assertEquals($this->_getFixtureImageSize(), array(
@@ -223,14 +221,14 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
     /**
      * @param string $image
      * @param array $tempPath (dirName, newName)
-     * @param Varien_Image_Adapter_Abstract $adapter
+     * @param string $adapterType
      *
      * @dataProvider saveDataProvider
      * @depends testOpen
      */
-    public function testSave($image, $tempPath, $adapter)
+    public function testSave($image, $tempPath, $adapterType)
     {
-        $this->_isAdapterAvailable($adapter);
+        $adapter = $this->_getAdapter($adapterType);
         $adapter->open($image);
         try {
             call_user_func_array(array($adapter, 'save'), $tempPath);
@@ -260,14 +258,14 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
     /**
      * @param string $image
      * @param array $dims (width, height)
-     * @param Varien_Image_Adapter_Abstract $adapter
+     * @param string $adapterType
      *
      * @dataProvider resizeDataProvider
      * @depends testOpen
      */
-    public function testResize($image, $dims, $adapter)
+    public function testResize($image, $dims, $adapterType)
     {
-        $this->_isAdapterAvailable($adapter);
+        $adapter = $this->_getAdapter($adapterType);
         $adapter->open($image);
         try {
             $adapter->resize($dims[0], $dims[1]);
@@ -313,14 +311,14 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
      * @param string $image
      * @param int $angle
      * @param array $pixel
-     * @param Varien_Image_Adapter_Abstract $adapter
+     * @param string $adapterType
      *
      * @dataProvider rotateDataProvider
      * @depends testOpen
      */
-    public function testRotate($image, $angle, $pixel, $adapter)
+    public function testRotate($image, $angle, $pixel, $adapterType)
     {
-        $this->_isAdapterAvailable($adapter);
+        $adapter = $this->_getAdapter($adapterType);
         $adapter->open($image);
 
         $size = array(
@@ -335,7 +333,7 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
             $adapter->getOriginalWidth(),
             $adapter->getOriginalHeight()
         ));
-        $colorAfter  = $adapter->getColorAt($newPixel['x'], $newPixel['y']);
+        $colorAfter = $adapter->getColorAt($newPixel['x'], $newPixel['y']);
 
         $result = $this->_compareColors($colorBefore, $colorAfter);
         $this->assertTrue($result, join(',', $colorBefore) . ' not equals ' . join(',', $colorAfter));
@@ -352,7 +350,7 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
      */
     protected function _convertCoordinates($pixel, $angle, $oldSize, $size)
     {
-        $angle  = $angle * pi() / 180;
+        $angle = $angle * pi() / 180;
         $center = array(
             'x' => $oldSize[0] / 2,
             'y' => $oldSize[1] / 2,
@@ -361,8 +359,8 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
         $pixel['x'] -= $center['x'];
         $pixel['y'] -= $center['y'];
         return array(
-            'x' => round($size[0]/2 + $pixel['x'] * cos($angle) + $pixel['y'] * sin($angle), 0),
-            'y' => round($size[1]/2 + $pixel['y'] * cos($angle) - $pixel['x'] * sin($angle), 0)
+            'x' => round($size[0] / 2 + $pixel['x'] * cos($angle) + $pixel['y'] * sin($angle), 0),
+            'y' => round($size[1] / 2 + $pixel['y'] * cos($angle) - $pixel['x'] * sin($angle), 0)
         );
     }
 
@@ -403,14 +401,15 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
      * @param string $position
      * @param int $colorX
      * @param int $colorY
-     * @param Varien_Image_Adapter_Abstract $adapter
+     * @param string $adapterType
      *
      * @dataProvider imageWatermarkDataProvider
      * @depends testOpen
      */
-    public function testWatermark($image, $watermark, $width, $height, $opacity, $position, $colorX, $colorY, $adapter)
-    {
-        $this->_isAdapterAvailable($adapter);
+    public function testWatermark(
+        $image, $watermark, $width, $height, $opacity, $position, $colorX, $colorY, $adapterType
+    ) {
+        $adapter = $this->_getAdapter($adapterType);
         $adapter->open($image);
         $pixel = $this->_prepareColor(array('x' => $colorX, 'y' => $colorY), $position, $adapter);
 
@@ -420,9 +419,9 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
             ->setWatermarkImageOpacity($opacity)
             ->setWatermarkPosition($position)
             ->watermark($watermark);
-        $colorAfter  = $adapter->getColorAt($pixel['x'], $pixel['y']);
+        $colorAfter = $adapter->getColorAt($pixel['x'], $pixel['y']);
 
-        $result  = $this->_compareColors($colorBefore, $colorAfter);
+        $result = $this->_compareColors($colorBefore, $colorAfter);
         $message = join(',', $colorBefore) . ' not equals ' . join(',', $colorAfter);
         $this->assertFalse($result, $message);
     }
@@ -505,7 +504,7 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
     {
         switch ($position) {
             case Varien_Image_Adapter_Abstract::POSITION_BOTTOM_RIGHT:
-                $pixel['x'] = $adapter->getOriginalWidth()  - 1;
+                $pixel['x'] = $adapter->getOriginalWidth() - 1;
                 $pixel['y'] = $adapter->getOriginalHeight() - 1;
                 break;
             case Varien_Image_Adapter_Abstract::POSITION_BOTTOM_LEFT:
@@ -519,6 +518,10 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
             case Varien_Image_Adapter_Abstract::POSITION_TOP_RIGHT:
                 $pixel['x'] = $adapter->getOriginalWidth() - 1;
                 $pixel['y'] = 1;
+                break;
+            case Varien_Image_Adapter_Abstract::POSITION_CENTER:
+                $pixel['x'] = $adapter->getOriginalWidth() / 2;
+                $pixel['y'] = $adapter->getOriginalHeight() / 2;
                 break;
             case Varien_Image_Adapter_Abstract::POSITION_STRETCH:
             case Varien_Image_Adapter_Abstract::POSITION_TILE:
@@ -535,19 +538,19 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
      * @param int $top
      * @param int $right
      * @param int $bottom
-     * @param Varien_Image_Adapter_Abstract $adapter
+     * @param string $adapterType
      *
      * @dataProvider cropDataProvider
      * @depends testOpen
      */
-    public function testCrop($image, $left, $top, $right, $bottom, $adapter)
+    public function testCrop($image, $left, $top, $right, $bottom, $adapterType)
     {
-        $this->_isAdapterAvailable($adapter);
+        $adapter = $this->_getAdapter($adapterType);
         $adapter->open($image);
 
         $expectedSize = array(
-            $adapter->getOriginalWidth()  - $left - $right,
-            $adapter->getOriginalHeight() - $top  - $bottom
+            $adapter->getOriginalWidth() - $left - $right,
+            $adapter->getOriginalHeight() - $top - $bottom
         );
 
         $adapter->crop($top, $left, $right, $bottom);
@@ -576,5 +579,83 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
                 0, 0, 0, 0
             )
         ));
+    }
+
+    /**
+     * @dataProvider createPngFromStringDataProvider
+     *
+     * @param array $pixe1
+     * @param array $expectedColor1
+     * @param array $pixe2
+     * @param array $expectedColor2
+     * @param string $adapterType
+     */
+    public function testCreatePngFromString($pixel1, $expectedColor1, $pixel2, $expectedColor2, $adapterType)
+    {
+        $adapter = $this->_getAdapter($adapterType);
+        $adapter->createPngFromString('T', Mage::getBaseDir() . '/lib/LinLibertineFont/LinLibertine_Re-4.4.1.ttf');
+        $adapter->refreshImageDimensions();
+
+        $color1 = $adapter->getColorAt($pixel1['x'], $pixel1['y']);
+        $this->assertEquals($expectedColor1, $color1);
+
+        $color2 = $adapter->getColorAt($pixel2['x'], $pixel2['y']);
+        $this->assertEquals($expectedColor2, $color2);
+    }
+
+    /**
+     * We use different points for same cases for different adapters because of different antialiasing behavior
+     * @link http://php.net/manual/en/function.imageantialias.php
+     * @return array
+     */
+    public function createPngFromStringDataProvider()
+    {
+        return array(
+            array(
+                array('x' => 5, 'y' => 8),
+                'expectedColor1' => array('red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 0),
+                array('x' => 0, 'y' => 15),
+                'expectedColor2' => array('red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 127),
+                Mage_Core_Model_Image_AdapterFactory::ADAPTER_GD2
+            ),
+            array(
+                array('x' => 4, 'y' => 7),
+                'expectedColor1' => array('red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 0),
+                array('x' => 0, 'y' => 15),
+                'expectedColor2' => array('red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 127),
+                Mage_Core_Model_Image_AdapterFactory::ADAPTER_IM
+            ),
+            array(
+                array('x' => 1, 'y' => 14),
+                'expectedColor1' => array('red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 127),
+                array('x' => 5, 'y' => 12),
+                'expectedColor2' => array('red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 0),
+                Mage_Core_Model_Image_AdapterFactory::ADAPTER_GD2
+            ),
+            array(
+                array('x' => 1, 'y' => 14),
+                'expectedColor1' => array('red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 127),
+                array('x' => 4, 'y' => 10),
+                'expectedColor2' => array('red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 0),
+                Mage_Core_Model_Image_AdapterFactory::ADAPTER_IM
+            ),
+        );
+    }
+
+    public function testValidateUploadFile()
+    {
+        $objectManager = Mage::getObjectManager();
+        $imageAdapter = $objectManager->get('Mage_Core_Model_Image_AdapterFactory')->create();
+        $this->assertTrue($imageAdapter->validateUploadFile($this->_getFixture('magento_thumbnail.jpg')));
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testValidateUploadFileException()
+    {
+        $objectManager = Mage::getObjectManager();
+        $imageAdapter = $objectManager->get('Mage_Core_Model_Image_AdapterFactory')->create();
+        $imageAdapter->validateUploadFile(__FILE__);
     }
 }

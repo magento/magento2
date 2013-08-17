@@ -78,7 +78,7 @@
                 </field>
                 <field id="continue_shopping_url" translate="label comment" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Continue Shopping URL</label>
-                    <comment>Optional, leave empty for home page.</comment>
+                    <comment>Optional, leave empty for home page</comment>
                 </field>
                 <field id="hide_cart_contents" translate="label comment" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Hide Cart Contents</label>

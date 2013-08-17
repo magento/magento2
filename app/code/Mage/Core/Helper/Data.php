@@ -37,8 +37,6 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_PATH_ENCRYPTION_MODEL             = 'global/helpers/core/encryption_model';
     const XML_PATH_DEV_ALLOW_IPS                = 'dev/restrict/allow_ips';
     const XML_PATH_CONNECTION_TYPE              = 'global/resources/default_setup/connection/type';
-    const XML_PATH_IMAGE_ADAPTER                = 'dev/image/adapter';
-    const XML_PATH_STATIC_FILE_SIGNATURE        = 'dev/static/sign';
 
     const CHARS_LOWERS                          = 'abcdefghijklmnopqrstuvwxyz';
     const CHARS_UPPERS                          = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -74,10 +72,10 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
     protected $_encryptor = null;
 
     protected $_allowedFormats = array(
-        Mage_Core_Model_Locale::FORMAT_TYPE_FULL,
-        Mage_Core_Model_Locale::FORMAT_TYPE_LONG,
-        Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM,
-        Mage_Core_Model_Locale::FORMAT_TYPE_SHORT
+        Mage_Core_Model_LocaleInterface::FORMAT_TYPE_FULL,
+        Mage_Core_Model_LocaleInterface::FORMAT_TYPE_LONG,
+        Mage_Core_Model_LocaleInterface::FORMAT_TYPE_MEDIUM,
+        Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT
     );
 
     /**
@@ -180,11 +178,11 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
      * Format date using current locale options and time zone.
      *
      * @param   date|Zend_Date|null $date
-     * @param   string              $format   See Mage_Core_Model_Locale::FORMAT_TYPE_* constants
+     * @param   string              $format   See Mage_Core_Model_LocaleInterface::FORMAT_TYPE_* constants
      * @param   bool                $showTime Whether to include time
      * @return  string
      */
-    public function formatDate($date = null, $format = Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, $showTime = false)
+    public function formatDate($date = null, $format = Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT, $showTime = false)
     {
         if (!in_array($format, $this->_allowedFormats, true)) {
             return $date;
@@ -198,7 +196,7 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
                 null,
                 null
             );
-        } else if (!$date instanceof Zend_Date) {
+        } elseif (!$date instanceof Zend_Date) {
             $date = Mage::app()->getLocale()->date(strtotime($date), null, null);
         }
 
@@ -219,7 +217,7 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
      * @param   bool                $showDate
      * @return  string
      */
-    public function formatTime($time = null, $format = Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, $showDate = false)
+    public function formatTime($time = null, $format = Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT, $showDate = false)
     {
         if (!in_array($format, $this->_allowedFormats, true)) {
             return $time;
@@ -292,6 +290,7 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @param string $password
      * @param string|integer|boolean $salt
+     * @return string
      */
     public function getHash($password, $salt = false)
     {
@@ -314,61 +313,67 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::app()->getStore($store)->getId();
     }
 
-    public function removeAccents($string, $german=false)
+    /**
+     * Remove accents
+     *
+     * @param string $string
+     * @param bool $german
+     * @return string
+     */
+    public function removeAccents($string, $german = false)
     {
         static $replacements;
 
         if (empty($replacements[$german])) {
-            $subst = array(
+            $substitutions = array(
                 // single ISO-8859-1 letters
-                192=>'A', 193=>'A', 194=>'A', 195=>'A', 196=>'A', 197=>'A', 199=>'C',
-                208=>'D', 200=>'E', 201=>'E', 202=>'E', 203=>'E', 204=>'I', 205=>'I',
-                206=>'I', 207=>'I', 209=>'N', 210=>'O', 211=>'O', 212=>'O', 213=>'O',
-                214=>'O', 216=>'O', 138=>'S', 217=>'U', 218=>'U', 219=>'U', 220=>'U',
-                221=>'Y', 142=>'Z', 224=>'a', 225=>'a', 226=>'a', 227=>'a', 228=>'a',
-                229=>'a', 231=>'c', 232=>'e', 233=>'e', 234=>'e', 235=>'e', 236=>'i',
-                237=>'i', 238=>'i', 239=>'i', 241=>'n', 240=>'o', 242=>'o', 243=>'o',
-                244=>'o', 245=>'o', 246=>'o', 248=>'o', 154=>'s', 249=>'u', 250=>'u',
-                251=>'u', 252=>'u', 253=>'y', 255=>'y', 158=>'z',
+                192 => 'A', 193 => 'A', 194 => 'A', 195 => 'A', 196 => 'A', 197 => 'A', 199 => 'C',
+                208 => 'D', 200 => 'E', 201 => 'E', 202 => 'E', 203 => 'E', 204 => 'I', 205 => 'I',
+                206 => 'I', 207 => 'I', 209 => 'N', 210 => 'O', 211 => 'O', 212 => 'O', 213 => 'O',
+                214 => 'O', 216 => 'O', 138 => 'S', 217 => 'U', 218 => 'U', 219 => 'U', 220 => 'U',
+                221 => 'Y', 142 => 'Z', 224 => 'a', 225 => 'a', 226 => 'a', 227 => 'a', 228 => 'a',
+                229 => 'a', 231 => 'c', 232 => 'e', 233 => 'e', 234 => 'e', 235 => 'e', 236 => 'i',
+                237 => 'i', 238 => 'i', 239 => 'i', 241 => 'n', 240 => 'o', 242 => 'o', 243 => 'o',
+                244 => 'o', 245 => 'o', 246 => 'o', 248 => 'o', 154 => 's', 249 => 'u', 250 => 'u',
+                251 => 'u', 252 => 'u', 253 => 'y', 255 => 'y', 158 => 'z',
                 // HTML entities
-                258=>'A', 260=>'A', 262=>'C', 268=>'C', 270=>'D', 272=>'D', 280=>'E',
-                282=>'E', 286=>'G', 304=>'I', 313=>'L', 317=>'L', 321=>'L', 323=>'N',
-                327=>'N', 336=>'O', 340=>'R', 344=>'R', 346=>'S', 350=>'S', 354=>'T',
-                356=>'T', 366=>'U', 368=>'U', 377=>'Z', 379=>'Z', 259=>'a', 261=>'a',
-                263=>'c', 269=>'c', 271=>'d', 273=>'d', 281=>'e', 283=>'e', 287=>'g',
-                305=>'i', 322=>'l', 314=>'l', 318=>'l', 324=>'n', 328=>'n', 337=>'o',
-                341=>'r', 345=>'r', 347=>'s', 351=>'s', 357=>'t', 355=>'t', 367=>'u',
-                369=>'u', 378=>'z', 380=>'z',
+                258 => 'A', 260 => 'A', 262 => 'C', 268 => 'C', 270 => 'D', 272 => 'D', 280 => 'E',
+                282 => 'E', 286 => 'G', 304 => 'I', 313 => 'L', 317 => 'L', 321 => 'L', 323 => 'N',
+                327 => 'N', 336 => 'O', 340 => 'R', 344 => 'R', 346 => 'S', 350 => 'S', 354 => 'T',
+                356 => 'T', 366 => 'U', 368 => 'U', 377 => 'Z', 379 => 'Z', 259 => 'a', 261 => 'a',
+                263 => 'c', 269 => 'c', 271 => 'd', 273 => 'd', 281 => 'e', 283 => 'e', 287 => 'g',
+                305 => 'i', 322 => 'l', 314 => 'l', 318 => 'l', 324 => 'n', 328 => 'n', 337 => 'o',
+                341 => 'r', 345 => 'r', 347 => 's', 351 => 's', 357 => 't', 355 => 't', 367 => 'u',
+                369 => 'u', 378 => 'z', 380 => 'z',
                 // ligatures
-                198=>'Ae', 230=>'ae', 140=>'Oe', 156=>'oe', 223=>'ss',
+                198 => 'Ae', 230 => 'ae', 140 => 'Oe', 156 => 'oe', 223 => 'ss',
             );
 
             if ($german) {
                 // umlauts
-                $subst = array_merge($subst, array(
-                    196=>'Ae', 228=>'ae', 214=>'Oe', 246=>'oe', 220=>'Ue', 252=>'ue'
-                ));
+                $germanReplacements = array(
+                    196 => 'Ae', 228 => 'ae', 214 => 'Oe', 246 => 'oe', 220 => 'Ue', 252 => 'ue'
+                );
+                $substitutions = $germanReplacements + $substitutions;
             }
 
             $replacements[$german] = array();
-            foreach ($subst as $k=>$v) {
-                $replacements[$german][$k<256 ? chr($k) : '&#'.$k.';'] = $v;
+            foreach ($substitutions as $code => $value) {
+                $replacements[$german][$code < 256 ? chr($code) : '&#' . $code . ';'] = $value;
             }
         }
 
         // convert string from default database format (UTF-8)
         // to encoding which replacement arrays made with (ISO-8859-1)
-        if ($s = @iconv('UTF-8', 'ISO-8859-1', $string)) {
-            $string = $s;
+        if ($convertedString = @iconv('UTF-8', 'ISO-8859-1', $string)) {
+            $string = $convertedString;
         }
-
         // Replace
         $string = strtr($string, $replacements[$german]);
-
         return $string;
     }
 
-    public function isDevAllowed($storeId=null)
+    public function isDevAllowed($storeId = null)
     {
         $allow = true;
 
@@ -506,8 +511,7 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
                 $isEven = !$isEven;
                 $i++;
                 $this->_decorateArrayObject($element, $keyIsLast, ($i === $count), $forceSetAll || ($i === $count));
-            }
-            elseif (is_array($element)) {
+            } elseif (is_array($element)) {
                 if ($forceSetAll || (0 === $i)) {
                     $array[$key][$keyIsFirst] = (0 === $i);
                 }
@@ -536,7 +540,8 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
      * @param mixed $value
      * @param bool $dontSkip
      */
-    private function _decorateArrayObject($element, $key, $value, $dontSkip) {
+    private function _decorateArrayObject($element, $key, $value, $dontSkip)
+    {
         if ($dontSkip && $element instanceof Varien_Object) {
             $element->setData($key, $value);
         }
@@ -593,13 +598,11 @@ XML;
                     }
                     $hasStringKey = true;
                     $xml->$key = $value;
-                }
-                elseif (is_int($key)) {
+                } elseif (is_int($key)) {
                     $hasNumericKey = true;
                     $xml->{$rootName}[$key] = $value;
                 }
-            }
-            else {
+            } else {
                 self::_assocToXml($value, $key, $xml->$key);
             }
         }
@@ -625,15 +628,13 @@ XML;
                 foreach ($value->$key as $v) {
                     $array[$key][$i++] = (string)$v;
                 }
-            }
-            else {
+            } else {
                 // try to transform it into string value, trimming spaces between elements
                 $array[$key] = trim((string)$value);
                 if (empty($array[$key]) && !empty($value)) {
                     $array[$key] = self::xmlToAssoc($value);
-                }
-                // untrim strings values
-                else {
+                } else {
+                    // untrim strings values
                     $array[$key] = (string)$value;
                 }
             }
@@ -652,12 +653,8 @@ XML;
     public function jsonEncode($valueToEncode, $cycleCheck = false, $options = array())
     {
         $json = Zend_Json::encode($valueToEncode, $cycleCheck, $options);
-        /* @var $inline Mage_Core_Model_Translate_Inline */
-        $inline = Mage::getSingleton('Mage_Core_Model_Translate_Inline');
-        if ($inline->isAllowed()) {
-            $inline->setIsJson(true);
-            $inline->processResponseBody($json);
-            $inline->setIsJson(false);
+        if ($this->_translator->isAllowed()) {
+            $this->_translator->processResponseBody($json, true);
         }
 
         return $json;
@@ -668,6 +665,7 @@ XML;
      * encoded in the JSON format
      *
      * @param string $encodedValue
+     * @param int $objectDecodeType
      * @return mixed
      */
     public function jsonDecode($encodedValue, $objectDecodeType = Zend_Json::TYPE_ARRAY)
@@ -677,12 +675,13 @@ XML;
 
     /**
      * Generate a hash from unique ID
-     * @param $prefix
+     *
+     * @param string $prefix
      * @return string
      */
     public function uniqHash($prefix = '')
     {
-        return $prefix . md5(uniqid(microtime().mt_rand(), true));
+        return $prefix . md5(uniqid(microtime() . mt_rand(), true));
     }
 
     /**
@@ -801,26 +800,6 @@ XML;
     }
 
     /**
-     * Returns image adapter type
-     *
-     * @return string
-     */
-    public function getImageAdapterType()
-    {
-        return Mage::getStoreConfig(self::XML_PATH_IMAGE_ADAPTER);
-    }
-
-    /**
-     * Check if static files have to be signed
-     *
-     * @return bool
-     */
-    public function isStaticFilesSigned()
-    {
-        return (bool) Mage::getStoreConfig(self::XML_PATH_STATIC_FILE_SIGNATURE);
-    }
-
-    /**
      * Check if Single-Store mode is enabled in configuration
      *
      * This flag only shows that admin does not want to show certain UI components at backend (like store switchers etc)
@@ -831,5 +810,15 @@ XML;
     public function isSingleStoreModeEnabled()
     {
         return (bool) Mage::getStoreConfig(self::XML_PATH_SINGLE_STORE_MODE_ENABLED);
+    }
+
+    /**
+     * Returns the translate model for this instance.
+     *
+     * @return Mage_Core_Model_Translate
+     */
+    public function getTranslator()
+    {
+        return $this->_translator;
     }
 }

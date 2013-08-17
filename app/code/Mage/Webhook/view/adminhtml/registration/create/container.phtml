@@ -27,7 +27,7 @@
         <div class="section main">
             <h3>
                 <?php echo $this->__('Creating API User for ') ?>
-                <em><?php echo $this->getSubscriber()->getName() ?></em>
+                <em><?php echo $this->getSubscriptionName() ?></em>
             </h3>
 
             <div class="api_form">
@@ -38,12 +38,12 @@
     </div>
     <div class="bottom">
         <div class="buttons">
-            <button id='createWebhookSubscriberApiUser' onclick="jQuery('form').validate();jQuery('.api_form form').submit();">
+            <button id='createWebhookSubscriptionApiUser' onclick="jQuery('form').validate();jQuery('.api_form form').submit();">
                 <span>
                     <?php echo $this->__('Create') ?>
                 </span>
             </button>
-            <button id='cancelWebhookSubscriberApiUser' onclick="window.parent.location.reload(); return false;">
+            <button id='cancelWebhookSubscriptionApiUser' onclick="window.parent.location.reload(); return false;">
                 <span>
                     <?php echo $this->__('Cancel') ?>
                 </span>

@@ -45,6 +45,11 @@
                     <xsd:element name="stock_data" type="typens:catalogInventoryStockItemUpdateEntity" minOccurs="0" />
                 </xsd:sequence>
             </xsd:complexType>
+            <xsd:complexType name="catalogInventoryStockItemUpdateEntityArray">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" maxOccurs="unbounded" name="complexObjectArray" type="typens:catalogInventoryStockItemUpdateEntity" />
+                </xsd:sequence>
+            </xsd:complexType>
 
 
             <xsd:element name="catalogInventoryStockItemListRequestParam">
@@ -78,6 +83,22 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
+            <xsd:element name="catalogInventoryStockItemMultiUpdateRequestParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="sessionId" type="xsd:string" />
+                        <xsd:element minOccurs="1" maxOccurs="1" name="productIds" type="typens:ArrayOfString" />
+                        <xsd:element minOccurs="1" maxOccurs="1" name="productsData" type="typens:catalogInventoryStockItemUpdateEntityArray" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="catalogInventoryStockItemMultiUpdateResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="result" type="xsd:boolean" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
         </xsd:schema>
     </wsdl:types>
     <wsdl:message name="catalogInventoryStockItemListRequest">
@@ -92,6 +113,12 @@
     <wsdl:message name="catalogInventoryStockItemUpdateResponse">
         <wsdl:part name="parameters" element="typens:catalogInventoryStockItemUpdateResponseParam" />
     </wsdl:message>
+    <wsdl:message name="catalogInventoryStockItemMultiUpdateRequest">
+        <wsdl:part name="parameters" element="typens:catalogInventoryStockItemMultiUpdateRequestParam" />
+    </wsdl:message>
+    <wsdl:message name="catalogInventoryStockItemMultiUpdateResponse">
+        <wsdl:part name="parameters" element="typens:catalogInventoryStockItemMultiUpdateResponseParam" />
+    </wsdl:message>
     <wsdl:portType name="{{var wsdl.handler}}PortType">
         <wsdl:operation name="catalogInventoryStockItemList">
             <wsdl:documentation>Retrieve stock data by product ids</wsdl:documentation>
@@ -102,6 +129,11 @@
             <wsdl:documentation>Update product stock data</wsdl:documentation>
             <wsdl:input message="typens:catalogInventoryStockItemUpdateRequest" />
             <wsdl:output message="typens:catalogInventoryStockItemUpdateResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="catalogInventoryStockItemMultiUpdate">
+            <wsdl:documentation>Stock item multi update</wsdl:documentation>
+            <wsdl:input message="typens:catalogInventoryStockItemMultiUpdateRequest" />
+            <wsdl:output message="typens:catalogInventoryStockItemMultiUpdateResponse" />
         </wsdl:operation>
     </wsdl:portType>
     <wsdl:binding name="{{var wsdl.handler}}Binding" type="typens:{{var wsdl.handler}}PortType">
@@ -116,6 +148,15 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="catalogInventoryStockItemUpdate">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="catalogInventoryStockItemMultiUpdate">
             <soap:operation soapAction="" />
             <wsdl:input>
                 <soap:body use="literal" />

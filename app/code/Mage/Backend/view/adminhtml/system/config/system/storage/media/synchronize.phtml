@@ -136,17 +136,9 @@
                         enableStorageSelection();
                         $('sync_span').addClassName('no-display');
 
-                        if (response.state == '<?php echo Mage_Core_Model_File_Storage_Flag::STATE_NOTIFIED ?>') {
-                            if (response.html && response.html != '') {
-                                $$('.message-system').each(function(e) {
-                                    if (!e.hasClassName('message-system')) {
-                                        e.hide();
-                                    }
-                                });
-
-                                Element.insert($('anchor-content'), {'before': response.html});
-                            }
-
+                        if (response.state == '<?php echo Mage_Core_Model_File_Storage_Flag::STATE_FINISHED ?>') {
+                            window.location.reload();
+                        } else if (response.state == '<?php echo Mage_Core_Model_File_Storage_Flag::STATE_NOTIFIED ?>') {
                             if (response.has_errors) {
                                 enableSyncButton();
                             } else {
@@ -187,5 +179,9 @@
 //]]>
 </script>
 
-<?php echo $this->getButtonHtml() ?><span class="sync-indicator no-display" id="sync_span"><img alt="Synchronize" style="margin:0 5px" src="<?php echo $this->getViewFileUrl('images/process_spinner.gif') ?>"/><span id="sync_message_span"></span></span>
+<?php echo $this->getButtonHtml() ?>
+<span class="sync-indicator no-display" id="sync_span">
+    <img alt="Synchronize" style="margin:0 5px" src="<?php echo $this->getViewFileUrl('images/process_spinner.gif') ?>"/>
+    <span id="sync_message_span"></span>
+</span>
 <input type="hidden" id="synchronize-validation-input" class="required-synchronize no-display"/>

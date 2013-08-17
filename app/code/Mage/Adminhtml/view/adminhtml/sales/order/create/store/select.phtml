@@ -25,9 +25,9 @@
  */
 ?>
 <?php /* @var $this Mage_Adminhtml_Block_Sales_Order_Create_Store_Select */ ?>
-<div class="store-scope">
-    <?php echo $this->getHintHtml() ?>
+<div class="store-scope form-inline">
     <div class="tree-store-scope">
+    <?php $showHelpHint = 0; ?>
     <?php foreach ($this->getWebsiteCollection() as $_website): ?>
         <?php $showWebsite=false; ?>
         <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
@@ -35,16 +35,33 @@
             <?php foreach ($this->getStoreCollection($_group) as $_store): ?>
                 <?php if ($showWebsite == false): ?>
                     <?php $showWebsite = true; ?>
-                    <h3><?php echo $this->escapeHtml($_website->getName()) ?></h3>
+                    <div class="field field-website_label">
+                        <label class="label" for=""><span><?php echo $this->escapeHtml($_website->getName()) ?></span></label>
+                        <div class="control"></div>
+                        <?php if ($showHelpHint == 0):
+                            echo $this->getHintHtml();
+                            $showHelpHint = 1;
+                        endif; ?>
+                    </div>
                 <?php endif; ?>
                 <?php if ($showGroup == false): ?>
                     <?php $showGroup = true; ?>
-                    <h4 style="margin-left:12px;"><?php echo $this->escapeHtml($_group->getName()) ?></h4>
+                    <div class="field field-group_label">
+                        <label class="label" for=""><span><?php echo $this->escapeHtml($_group->getName()) ?></span></label>
+                        <div class="control"></div>
+                    </div>
                 <?php endif; ?>
-                <span class="field-row" style="margin-left:28px;">
-                    <input type="radio" id="store_<?php echo $_store->getId() ?>" class="radio" onclick="order.setStoreId('<?php echo $_store->getId() ?>')"/>
-                    <label for="store_<?php echo $_store->getId() ?>" class="inline"><?php echo $this->escapeHtml($_store->getName()) ?></label>
-                </span>
+                <div class="field field-store_label">
+                     <label class="label" for=""><span><?php echo $this->escapeHtml($_group->getName()) ?></span></label>
+                    <div class="control">
+                        <div class="nested">
+                            <div class="field choice">
+                                <input type="radio" id="store_<?php echo $_store->getId() ?>" class="radio" onclick="order.setStoreId('<?php echo $_store->getId() ?>')"/>
+                                <label for="store_<?php echo $_store->getId() ?>"><?php echo $this->escapeHtml($_store->getName()) ?></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             <?php endforeach; ?>
             <?php if ($showGroup): ?>
             <?php endif; ?>

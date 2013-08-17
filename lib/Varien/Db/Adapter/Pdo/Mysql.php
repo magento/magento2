@@ -1885,7 +1885,7 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
                 }
             } elseif (is_string($v)) {
                 $value = sprintf('VALUES(%s)', $this->quoteIdentifier($v));
-                $field = $v;
+                $field = $this->quoteIdentifier($v);
             }
 
             if ($field && $value) {

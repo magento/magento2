@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Mage_Paypal
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -43,5 +40,31 @@ class Mage_Paypal_ExpressControllerTest extends Magento_Test_TestCase_Controller
         $this->assertContains('Simple Product', $html);
         $this->assertContains('Review', $html);
         $this->assertContains('/paypal/express/placeOrder/', $html);
+    }
+
+    /**
+     * @magentoDataFixture Mage/Paypal/_files/quote_payment_express.php
+     * @magentoConfigFixture current_store paypal/general/business_account merchant_2012050718_biz@example.com
+     */
+    public function testCancelAction()
+    {
+        $quote = $this->_objectManager->create('Mage_Sales_Model_Quote');
+        $quote->load('test02', 'reserved_order_id');
+        $order = $this->_objectManager->create('Mage_Sales_Model_Order');
+        $order->load('100000002', 'increment_id');
+        $session = $this->_objectManager->get('Mage_Checkout_Model_Session');
+        $session->setLastRealOrderId($order->getRealOrderId())
+            ->setLastOrderId($order->getId())
+            ->setLastQuoteId($order->getQuoteId())
+            ->setQuoteId($order->getQuoteId());
+        $paypalSession = $this->_objectManager->get('Mage_Paypal_Model_Session');
+        $paypalSession->setExpressCheckoutToken('token');
+
+        $this->dispatch('paypal/express/cancel');
+
+        $order->load('100000002', 'increment_id');
+        $this->assertEquals('canceled', $order->getState());
+        $this->assertEquals($session->getQuote()->getGrandTotal(), $quote->getGrandTotal());
+        $this->assertEquals($session->getQuote()->getItemsCount(), $quote->getItemsCount());
     }
 }

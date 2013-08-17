@@ -27,8 +27,9 @@
 
 /**
  * Test for Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_Edit
+ * @magentoAppArea adminhtml
  */
-class Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_EditTest extends Mage_Backend_Area_TestCase
+class Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_EditTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Test prepare layout

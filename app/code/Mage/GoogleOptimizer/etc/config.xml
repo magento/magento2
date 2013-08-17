@@ -19,8 +19,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_GoogleOptimizer
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -28,9 +26,10 @@
 <config>
     <modules>
         <Mage_GoogleOptimizer>
-            <version>1.6.0.0</version>
+            <version>2.0.0.0</version>
             <active>true</active>
             <depends>
+                <Mage_GoogleAnalytics/>
                 <Mage_Catalog/>
                 <Mage_Cms/>
             </depends>
@@ -45,33 +44,64 @@
             </googleoptimizer_setup>
         </resources>
         <events>
-            <cms_page_load_after>
+            <catalog_product_save_after>
                 <observers>
                     <googleoptimizer_observer>
-                        <class>Mage_GoogleOptimizer_Model_Observer</class>
-                        <method>appendToPageGoogleOptimizerScripts</method>
+                        <class>Mage_GoogleOptimizer_Model_Observer_Product_Save</class>
+                        <method>saveGoogleExperimentScript</method>
                     </googleoptimizer_observer>
                 </observers>
-            </cms_page_load_after>
+            </catalog_product_save_after>
+            <catalog_product_delete_after>
+                <observers>
+                    <googleoptimizer_observer>
+                        <class>Mage_GoogleOptimizer_Model_Observer_Product_Delete</class>
+                        <method>deleteProductGoogleExperimentScript</method>
+                    </googleoptimizer_observer>
+                </observers>
+            </catalog_product_delete_after>
+            <catalog_category_save_after>
+                <observers>
+                    <googleoptimizer_observer>
+                        <class>Mage_GoogleOptimizer_Model_Observer_Category_Save</class>
+                        <method>saveGoogleExperimentScript</method>
+                    </googleoptimizer_observer>
+                </observers>
+            </catalog_category_save_after>
+            <catalog_category_delete_after>
+                <observers>
+                    <googleoptimizer_observer>
+                        <class>Mage_GoogleOptimizer_Model_Observer_Category_Delete</class>
+                        <method>deleteCategoryGoogleExperimentScript</method>
+                    </googleoptimizer_observer>
+                </observers>
+            </catalog_category_delete_after>
+            <cms_page_save_after>
+                <observers>
+                    <googleoptimizer_observer>
+                        <class>Mage_GoogleOptimizer_Model_Observer_CmsPage_Save</class>
+                        <method>saveGoogleExperimentScript</method>
+                    </googleoptimizer_observer>
+                </observers>
+            </cms_page_save_after>
+            <cms_page_delete_after>
+                <observers>
+                    <googleoptimizer_observer>
+                        <class>Mage_GoogleOptimizer_Model_Observer_CmsPage_Delete</class>
+                        <method>deleteCmsGoogleExperimentScript</method>
+                    </googleoptimizer_observer>
+                </observers>
+            </cms_page_delete_after>
+            <adminhtml_catalog_category_tabs>
+                <observers>
+                    <googleoptimizer_observer>
+                        <class>Mage_GoogleOptimizer_Model_Observer_Block_Category_Tab</class>
+                        <method>addGoogleExperimentTab</method>
+                    </googleoptimizer_observer>
+                </observers>
+            </adminhtml_catalog_category_tabs>
         </events>
     </global>
-    <admin>
-        <attributes>
-            <name/>
-            <short_description/>
-            <description/>
-            <image/>
-        </attributes>
-        <routers>
-            <adminhtml>
-                <args>
-                    <modules>
-                        <Mage_GoogleOptimizer before="Mage_Adminhtml">Mage_GoogleOptimizer_Adminhtml</Mage_GoogleOptimizer>
-                    </modules>
-                </args>
-            </adminhtml>
-        </routers>
-    </admin>
     <frontend>
         <translate>
             <modules>
@@ -82,39 +112,6 @@
                 </Mage_GoogleOptimizer>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <googleoptimizer module="Mage_GoogleOptimizer">
-                    <file>layout.xml</file>
-                </googleoptimizer>
-            </updates>
-        </layout>
-        <events>
-            <catalog_product_load_after>
-                <observers>
-                    <googleoptimizer_observer>
-                        <class>Mage_GoogleOptimizer_Model_Observer</class>
-                        <method>appendToProductGoogleOptimizerScripts</method>
-                    </googleoptimizer_observer>
-                </observers>
-            </catalog_product_load_after>
-            <catalog_category_load_after>
-                <observers>
-                    <googleoptimizer_observer>
-                        <class>Mage_GoogleOptimizer_Model_Observer</class>
-                        <method>appendToCategoryGoogleOptimizerScripts</method>
-                    </googleoptimizer_observer>
-                </observers>
-            </catalog_category_load_after>
-            <catalog_helper_output_construct>
-                <observers>
-                    <googleoptimizer>
-                        <class>Mage_GoogleOptimizer_Model_Observer</class>
-                        <method>assignHandlers</method>
-                    </googleoptimizer>
-                </observers>
-            </catalog_helper_output_construct>
-        </events>
     </frontend>
     <adminhtml>
         <translate>
@@ -126,119 +123,6 @@
                 </Mage_GoogleOptimizer>
             </modules>
         </translate>
-        <events>
-            <catalog_product_load_after>
-                <observers>
-                    <googleoptimizer_observer>
-                        <class>Mage_GoogleOptimizer_Model_Observer</class>
-                        <method>appendToProductGoogleOptimizerScripts</method>
-                    </googleoptimizer_observer>
-                </observers>
-            </catalog_product_load_after>
-            <catalog_product_prepare_save>
-                <observers>
-                    <googleoptimizer_observer>
-                        <class>Mage_GoogleOptimizer_Model_Observer</class>
-                        <method>prepareProductGoogleOptimizerScripts</method>
-                    </googleoptimizer_observer>
-                </observers>
-            </catalog_product_prepare_save>
-            <catalog_product_save_after>
-                <observers>
-                    <googleoptimizer_observer>
-                        <class>Mage_GoogleOptimizer_Model_Observer</class>
-                        <method>saveProductGoogleOptimizerScripts</method>
-                    </googleoptimizer_observer>
-                </observers>
-            </catalog_product_save_after>
-            <catalog_product_delete_after>
-                <observers>
-                    <googleoptimizer_observer>
-                        <class>Mage_GoogleOptimizer_Model_Observer</class>
-                        <method>deleteProductGoogleOptimizerScripts</method>
-                    </googleoptimizer_observer>
-                </observers>
-            </catalog_product_delete_after>
-            <catalog_category_load_after>
-                <observers>
-                    <googleoptimizer_observer>
-                        <class>Mage_GoogleOptimizer_Model_Observer</class>
-                        <method>appendToCategoryGoogleOptimizerScripts</method>
-                    </googleoptimizer_observer>
-                </observers>
-            </catalog_category_load_after>
-            <catalog_category_prepare_save>
-                <observers>
-                    <googleoptimizer_observer>
-                        <class>Mage_GoogleOptimizer_Model_Observer</class>
-                        <method>prepareCategoryGoogleOptimizerScripts</method>
-                    </googleoptimizer_observer>
-                </observers>
-            </catalog_category_prepare_save>
-            <catalog_category_save_after>
-                <observers>
-                    <googleoptimizer_observer>
-                        <class>Mage_GoogleOptimizer_Model_Observer</class>
-                        <method>saveCategoryGoogleOptimizerScripts</method>
-                    </googleoptimizer_observer>
-                </observers>
-            </catalog_category_save_after>
-            <catalog_category_delete_after>
-                <observers>
-                    <googleoptimizer_observer>
-                        <class>Mage_GoogleOptimizer_Model_Observer</class>
-                        <method>deleteCategoryGoogleOptimizerScripts</method>
-                    </googleoptimizer_observer>
-                </observers>
-            </catalog_category_delete_after>
-            <adminhtml_catalog_category_tabs>
-                <observers>
-                    <googleoptimizer_observer>
-                        <class>Mage_GoogleOptimizer_Model_Observer</class>
-                        <method>addCategoryGoogleOptimizerTab</method>
-                    </googleoptimizer_observer>
-                </observers>
-            </adminhtml_catalog_category_tabs>
-            <cms_page_load_after>
-                <observers>
-                    <googleoptimizer_observer>
-                        <class>Mage_GoogleOptimizer_Model_Observer</class>
-                        <method>appendToPageGoogleOptimizerScripts</method>
-                    </googleoptimizer_observer>
-                </observers>
-            </cms_page_load_after>
-            <cms_page_prepare_save>
-                <observers>
-                    <googleoptimizer_observer>
-                        <class>Mage_GoogleOptimizer_Model_Observer</class>
-                        <method>preparePageGoogleOptimizerScripts</method>
-                    </googleoptimizer_observer>
-                </observers>
-            </cms_page_prepare_save>
-            <cms_page_save_after>
-                <observers>
-                    <googleoptimizer_observer>
-                        <class>Mage_GoogleOptimizer_Model_Observer</class>
-                        <method>savePageGoogleOptimizerScripts</method>
-                    </googleoptimizer_observer>
-                </observers>
-            </cms_page_save_after>
-            <cms_page_delete_after>
-                <observers>
-                    <googleoptimizer_observer>
-                        <class>Mage_GoogleOptimizer_Model_Observer</class>
-                        <method>deletePageGoogleOptimizerScripts</method>
-                    </googleoptimizer_observer>
-                </observers>
-            </cms_page_delete_after>
-        </events>
-        <layout>
-            <updates>
-                <googleoptimizer module="Mage_GoogleOptimizer">
-                    <file>layout.xml</file>
-                </googleoptimizer>
-            </updates>
-        </layout>
     </adminhtml>
     <default>
         <google>

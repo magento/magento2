@@ -31,6 +31,7 @@ return array(
     array('_alias', 'Mage_Core_Block_Abstract'),
     array('_anonSuffix'),
     array('_baseDirCache', 'Mage_Core_Model_Config'),
+    array('_cacheConf'),
     array('_canUseLocalModules'),
     array('_checkedProductsQty', 'Mage_CatalogInventory_Model_Observer'),
     array('_children', 'Mage_Core_Block_Abstract'),

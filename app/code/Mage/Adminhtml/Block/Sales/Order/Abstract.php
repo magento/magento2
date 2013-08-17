@@ -49,7 +49,7 @@ class Mage_Adminhtml_Block_Sales_Order_Abstract extends Mage_Adminhtml_Block_Wid
         if (Mage::registry('order')) {
             return Mage::registry('order');
         }
-        Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('Cannot get order instance'));
+        Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('We cannot get the order instance.'));
     }
 
     public function getPriceDataObject()

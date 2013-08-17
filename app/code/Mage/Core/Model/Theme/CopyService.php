@@ -30,23 +30,57 @@
 class Mage_Core_Model_Theme_CopyService
 {
     /**
-     * @var Magento_ObjectManager
-     */
-    protected $_objectManager;
-
-    /**
      * @var Magento_Filesystem
      */
     protected $_filesystem;
 
     /**
-     * @param Magento_ObjectManager $objectManager
-     * @param Magento_Filesystem $filesystem
+     * @var Mage_Core_Model_Theme_FileFactory
      */
-    public function __construct(Magento_ObjectManager $objectManager, Magento_Filesystem $filesystem)
-    {
-        $this->_objectManager = $objectManager;
+    protected $_fileFactory;
+
+    /**
+     * @var Mage_Core_Model_Layout_Link
+     */
+    protected $_link;
+
+    /**
+     * @var Mage_Core_Model_Layout_UpdateFactory
+     */
+    protected $_updateFactory;
+
+    /**
+     * @var Mage_Core_Model_Event_Manager
+     */
+    protected $_eventManager;
+
+    /**
+     * @var Mage_Core_Model_Theme_Customization_Path
+     */
+    protected $_customizationPath;
+
+    /**
+     * @param Magento_Filesystem $filesystem
+     * @param Mage_Core_Model_Theme_FileFactory $fileFactory
+     * @param Mage_Core_Model_Layout_Link $link
+     * @param Mage_Core_Model_Layout_UpdateFactory $updateFactory
+     * @param Mage_Core_Model_Event_Manager $eventManager
+     * @param Mage_Core_Model_Theme_Customization_Path $customization
+     */
+    public function __construct(
+        Magento_Filesystem $filesystem,
+        Mage_Core_Model_Theme_FileFactory $fileFactory,
+        Mage_Core_Model_Layout_Link $link,
+        Mage_Core_Model_Layout_UpdateFactory $updateFactory,
+        Mage_Core_Model_Event_Manager $eventManager,
+        Mage_Core_Model_Theme_Customization_Path $customization
+    ) {
         $this->_filesystem = $filesystem;
+        $this->_fileFactory = $fileFactory;
+        $this->_link = $link;
+        $this->_updateFactory = $updateFactory;
+        $this->_eventManager = $eventManager;
+        $this->_customizationPath = $customization;
     }
 
     /**
@@ -58,7 +92,9 @@ class Mage_Core_Model_Theme_CopyService
     public function copy(Mage_Core_Model_Theme $source, Mage_Core_Model_Theme $target)
     {
         $this->_copyDatabaseCustomization($source, $target);
+        $this->_copyLayoutCustomization($source, $target);
         $this->_copyFilesystemCustomization($source, $target);
+        $this->_eventManager->dispatch('theme_copy_after', array('sourceTheme' => $source, 'targetTheme' => $target));
     }
 
     /**
@@ -70,13 +106,13 @@ class Mage_Core_Model_Theme_CopyService
     protected function _copyDatabaseCustomization(Mage_Core_Model_Theme $source, Mage_Core_Model_Theme $target)
     {
         /** @var $themeFile Mage_Core_Model_Theme_File */
-        foreach ($target->getFiles() as $themeFile) {
+        foreach ($target->getCustomization()->getFiles() as $themeFile) {
             $themeFile->delete();
         }
         /** @var $newFile Mage_Core_Model_Theme_File */
-        foreach ($source->getFiles() as $themeFile) {
+        foreach ($source->getCustomization()->getFiles() as $themeFile) {
             /** @var $newThemeFile Mage_Core_Model_Theme_File */
-            $newThemeFile = $this->_objectManager->create('Mage_Core_Model_Theme_File');
+            $newThemeFile = $this->_fileFactory->create();
             $newThemeFile->setData(array(
                 'theme_id'      => $target->getId(),
                 'file_path'     => $themeFile->getFilePath(),
@@ -89,16 +125,56 @@ class Mage_Core_Model_Theme_CopyService
     }
 
     /**
+     * Add layout links to general layout updates for themes
+     *
+     * @param Mage_Core_Model_Theme $source
+     * @param Mage_Core_Model_Theme $target
+     */
+    protected function _copyLayoutCustomization(Mage_Core_Model_Theme $source, Mage_Core_Model_Theme $target)
+    {
+        $update = $this->_updateFactory->create();
+        /** @var $targetUpdates Mage_Core_Model_Resource_Layout_Update_Collection */
+        $targetUpdates = $update->getCollection();
+        $targetUpdates->addThemeFilter($target->getId());
+        $targetUpdates->delete();
+
+        /** @var $sourceCollection Mage_Core_Model_Resource_Layout_Link_Collection */
+        $sourceCollection = $this->_link->getCollection();
+        $sourceCollection->addThemeFilter($source->getId());
+        /** @var $layoutLink Mage_Core_Model_Layout_Link */
+        foreach ($sourceCollection as $layoutLink) {
+            /** @var $update Mage_Core_Model_Layout_Update */
+            $update = $this->_updateFactory->create();
+            $update->load($layoutLink->getLayoutUpdateId());
+            if ($update->getId()) {
+                $update->setId(null);
+                $update->save();
+                $layoutLink->setThemeId($target->getId());
+                $layoutLink->setLayoutUpdateId($update->getId());
+                $layoutLink->setId(null);
+                $layoutLink->save();
+            }
+        }
+    }
+
+    /**
      * Copy customizations stored in a file system from one theme to another, overriding existing data
      *
-     * @param $source
-     * @param $target
+     * @param Mage_Core_Model_Theme $source
+     * @param Mage_Core_Model_Theme $target
      */
     protected function _copyFilesystemCustomization(Mage_Core_Model_Theme $source, Mage_Core_Model_Theme $target)
     {
-        $sourcePath = $source->getCustomizationPath();
-        $targetPath = $target->getCustomizationPath();
-        if ($sourcePath && $targetPath && $this->_filesystem->isDirectory($sourcePath)) {
+        $sourcePath = $this->_customizationPath->getCustomizationPath($source);
+        $targetPath = $this->_customizationPath->getCustomizationPath($target);
+
+        if (!$sourcePath || !$targetPath) {
+            return;
+        }
+
+        $this->_deleteFilesRecursively($targetPath);
+
+        if ($this->_filesystem->isDirectory($sourcePath)) {
             $this->_copyFilesRecursively($sourcePath, $sourcePath, $targetPath);
         }
     }
@@ -120,6 +196,18 @@ class Mage_Core_Model_Theme_CopyService
                 $filePath = substr($path, strlen($baseDir) + 1);
                 $this->_filesystem->copy($path, $targetDir . '/' . $filePath, $baseDir, $targetDir);
             }
+        }
+    }
+
+    /**
+     * Delete all files in a directory recursively
+     *
+     * @param string $targetDir
+     */
+    protected function _deleteFilesRecursively($targetDir)
+    {
+        foreach ($this->_filesystem->searchKeys($targetDir, '*') as $path) {
+            $this->_filesystem->delete($path);
         }
     }
 }

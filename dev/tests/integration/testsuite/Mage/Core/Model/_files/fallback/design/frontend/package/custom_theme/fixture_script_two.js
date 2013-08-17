@@ -23,4 +23,4 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-/* fixture skin file located inside the default skin of the custom theme */
+/* Non-modular file in package/custom_theme */

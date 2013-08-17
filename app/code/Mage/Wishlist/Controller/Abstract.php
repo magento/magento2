@@ -119,7 +119,7 @@ abstract class Mage_Wishlist_Controller_Abstract extends Mage_Core_Controller_Fr
                 }
             } catch (Exception $e) {
                 Mage::logException($e);
-                $messages[] = Mage::helper('Mage_Wishlist_Helper_Data')->__('Cannot add the item to shopping cart.');
+                $messages[] = Mage::helper('Mage_Wishlist_Helper_Data')->__('We cannot add this item to your shopping cart.');
             }
         }
 
@@ -141,7 +141,7 @@ abstract class Mage_Wishlist_Controller_Abstract extends Mage_Core_Controller_Fr
             foreach ($notSalable as $item) {
                 $products[] = '"' . $item->getProduct()->getName() . '"';
             }
-            $messages[] = Mage::helper('Mage_Wishlist_Helper_Data')->__('Unable to add the following product(s) to shopping cart: %s.', join(', ', $products));
+            $messages[] = Mage::helper('Mage_Wishlist_Helper_Data')->__('We couldn\'t add the following product(s) to the shopping cart: %s.', join(', ', $products));
         }
 
         if ($hasOptions) {
@@ -149,7 +149,7 @@ abstract class Mage_Wishlist_Controller_Abstract extends Mage_Core_Controller_Fr
             foreach ($hasOptions as $item) {
                 $products[] = '"' . $item->getProduct()->getName() . '"';
             }
-            $messages[] = Mage::helper('Mage_Wishlist_Helper_Data')->__('Product(s) %s have required options. Each of them can be added to cart separately only.', join(', ', $products));
+            $messages[] = Mage::helper('Mage_Wishlist_Helper_Data')->__('Product(s) %s have required options. Each product can only be added individually.', join(', ', $products));
         }
 
         if ($messages) {
@@ -175,7 +175,7 @@ abstract class Mage_Wishlist_Controller_Abstract extends Mage_Core_Controller_Fr
                 $wishlist->save();
             }
             catch (Exception $e) {
-                Mage::getSingleton('Mage_Wishlist_Model_Session')->addError($this->__('Cannot update wishlist'));
+                Mage::getSingleton('Mage_Wishlist_Model_Session')->addError($this->__('We can\'t update wish list.'));
                 $redirectUrl = $indexUrl;
             }
 

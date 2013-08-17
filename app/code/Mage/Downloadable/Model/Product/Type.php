@@ -194,13 +194,13 @@ class Mage_Downloadable_Model_Product_Type extends Mage_Catalog_Model_Product_Ty
             if (isset($data['link'])) {
                 $_deleteItems = array();
                 foreach ($data['link'] as $linkItem) {
-                    if ($linkItem['is_delete'] == '1') {
+                    if (isset($linkItem['is_delete']) && $linkItem['is_delete'] == '1') {
                         if ($linkItem['link_id']) {
                             $_deleteItems[] = $linkItem['link_id'];
                         }
                     } else {
                         unset($linkItem['is_delete']);
-                        if (!$linkItem['link_id']) {
+                        if (isset($linkItem['link_id']) && !$linkItem['link_id']) {
                             unset($linkItem['link_id']);
                         }
                         $files = array();
@@ -232,7 +232,9 @@ class Mage_Downloadable_Model_Product_Type extends Mage_Catalog_Model_Product_Ty
                                 $linkModel->setSampleUrl($sample['url']);
                             }
                             $linkModel->setSampleType($sample['type']);
-                            $sampleFile = Mage::helper('Mage_Core_Helper_Data')->jsonDecode($sample['file']);
+                            if (isset($sample['file'])) {
+                                $sampleFile = Mage::helper('Mage_Core_Helper_Data')->jsonDecode($sample['file']);
+                            }
                         }
                         if ($linkModel->getLinkType() == Mage_Downloadable_Helper_Download::LINK_TYPE_FILE) {
                             $linkFileName = Mage::helper('Mage_Downloadable_Helper_File')->moveFileFromTmp(

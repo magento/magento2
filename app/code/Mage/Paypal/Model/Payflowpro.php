@@ -338,10 +338,14 @@ class Mage_Paypal_Model_Payflowpro extends  Mage_Payment_Model_Method_Cc
         $client = new Varien_Http_Client();
         $result = new Varien_Object();
 
-        $_config = array('maxredirects'=>5, 'timeout'=>30);
+        $_config = array(
+            'maxredirects' => 5,
+            'timeout'    => 30,
+            'verifypeer' => $this->getConfigData('verify_peer')
+        );
 
         $_isProxy = $this->getConfigData('use_proxy', false);
-        if($_isProxy){
+        if ($_isProxy){
             $_config['proxy'] = $this->getConfigData('proxy_host')
                 . ':'
                 . $this->getConfigData('proxy_port');//http://proxy.shr.secureserver.net:3128',
@@ -486,7 +490,7 @@ class Mage_Paypal_Model_Payflowpro extends  Mage_Payment_Model_Method_Cc
     protected function _processErrors(Varien_Object $response)
     {
         if ($response->getResultCode() == self::RESPONSE_CODE_VOID_ERROR) {
-            throw new Mage_Paypal_Exception(Mage::helper('Mage_Paypal_Helper_Data')->__('You cannot void a verification transaction'));
+            throw new Mage_Paypal_Exception(Mage::helper('Mage_Paypal_Helper_Data')->__('You cannot void a verification transaction.'));
         } elseif ($response->getResultCode() != self::RESPONSE_CODE_APPROVED
             && $response->getResultCode() != self::RESPONSE_CODE_FRAUDSERVICE_FILTER) {
             Mage::throwException($response->getRespmsg());

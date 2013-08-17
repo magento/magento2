@@ -37,11 +37,6 @@
         </Mage_Customer>
     </modules>
     <global>
-        <service-calls>
-            <customer>
-                <file>Mage_Customer/service-calls.xml</file>
-            </customer>
-        </service-calls>
         <customer>
             <address>
                 <formats>
@@ -99,6 +94,11 @@
                     <file>email/password_new.html</file>
                     <type>html</type>
                 </customer_password_remind_email_template>
+                <customer_password_reset_password_template translate="label" module="Mage_Customer">
+                    <label>Reset Password</label>
+                    <file>email/password_reset.html</file>
+                    <type>html</type>
+                </customer_password_reset_password_template>
             </email>
         </template>
         <events>
@@ -118,45 +118,7 @@
                     </customer_addres_after_save_viv_observer>
                 </observers>
             </customer_address_save_after>
-            <customer_save_commit_after>
-                <observers>
-                    <customer_saved_event>
-                        <class>Mage_Customer_Model_Customer_Webhook_Observer</class>
-                        <method>dispatchCustomerEvent</method>
-                    </customer_saved_event>
-                </observers>
-            </customer_save_commit_after>
-            <customer_delete_commit_after>
-                <observers>
-                    <customer_deleted_event>
-                        <class>Mage_Customer_Model_Customer_Webhook_Observer</class>
-                        <method>dispatchCustomerDeletedEvent</method>
-                    </customer_deleted_event>
-                </observers>
-            </customer_delete_commit_after>
         </events>
-        <webhook>
-            <webhooks>
-                <customer>
-                    <created>
-                        <label>Customer Created</label>
-                        <type>inform</type>
-                    </created>
-                    <updated>
-                        <label>Customer Updated</label>
-                        <type>inform</type>
-                    </updated>
-                    <deleted>
-                        <label>Customer Deleted</label>
-                        <type>inform</type>
-                    </deleted>
-                </customer>
-                <customer_customer_authenticated>
-                    <label>Customer Authenticated</label>
-                    <type>inform</type>
-                </customer_customer_authenticated>
-            </webhooks>
-        </webhook>
     </global>
     <adminhtml>
         <translate>
@@ -168,6 +130,13 @@
                 </Mage_Customer>
             </modules>
         </translate>
+        <di>
+            <Mage_Customer_Model_Session>
+                <parameters>
+                    <sessionName>adminhtml</sessionName>
+                </parameters>
+            </Mage_Customer_Model_Session>
+        </di>
     </adminhtml>
     <frontend>
         <secure_url>
@@ -201,13 +170,13 @@
                 </Mage_Customer>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <customer module="Mage_Customer">
-                    <file>layout.xml</file>
-                </customer>
-            </updates>
-        </layout>
+        <di>
+            <Mage_Customer_Model_Session>
+                <parameters>
+                    <sessionName>frontend</sessionName>
+                </parameters>
+            </Mage_Customer_Model_Session>
+        </di>
     </frontend>
     <default>
         <customer>
@@ -233,6 +202,7 @@
                 <forgot_email_template>customer_password_forgot_email_template</forgot_email_template>
                 <remind_email_template>customer_password_remind_email_template</remind_email_template>
                 <reset_link_expiration_period>1</reset_link_expiration_period>
+                <reset_password_template>customer_password_reset_password_template</reset_password_template>
             </password>
             <address>
                 <street_lines>2</street_lines>

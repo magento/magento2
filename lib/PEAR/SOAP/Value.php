@@ -129,7 +129,7 @@ class SOAP_Value
      *                           - 'keep_arrays_flat': use the tag name
      *                             multiple times for each element when
      *                             passing in an array in literal mode
-     *                           - 'no_type_prefix': supress adding of the
+     *                           - 'no_type_prefix': suppress adding of the
      *                             namespace prefix
      */
     function SOAP_Value($name = '', $type = false, $value = null,

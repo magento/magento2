@@ -207,6 +207,10 @@
                         <code>1032</code>
                         <message>One of quotes could not be saved during moving product(s) operation.</message>
                     </product_move_quote_save_fault>
+                    <product_not_exists>
+                        <code>1033</code>
+                        <message>Product does not exist.</message>
+                    </product_not_exists>
                 </faults>
             </cart_product>
             <cart_customer translate="title" module="Mage_Checkout">

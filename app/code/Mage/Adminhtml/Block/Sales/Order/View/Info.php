@@ -39,7 +39,7 @@ class Mage_Adminhtml_Block_Sales_Order_View_Info extends Mage_Adminhtml_Block_Sa
     protected function _beforeToHtml()
     {
         if (!$this->getParentBlock()) {
-            Mage::throwException(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Invalid parent block for this block.'));
+            Mage::throwException(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Please correct the parent block for this block.'));
         }
         $this->setOrder($this->getParentBlock()->getOrder());
 

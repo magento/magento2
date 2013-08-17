@@ -65,16 +65,6 @@ class Mage_Webapi_Model_Soap_Security_UsernameTokenTest extends PHPUnit_Framewor
     }
 
     /**
-     * Clean up.
-     */
-    protected function tearDown()
-    {
-        unset($this->_nonceStorageMock);
-        unset($this->_userMock);
-        unset($this->_userFactoryMock);
-    }
-
-    /**
      * Test construction of object with valid datetime input.
      *
      * @dataProvider validDateTimeProvider()
@@ -85,7 +75,8 @@ class Mage_Webapi_Model_Soap_Security_UsernameTokenTest extends PHPUnit_Framewor
         $username = 'test_user';
         $password = 'test_password';
         $nonce = mt_rand();
-        $tokenPassword = base64_encode(hash('sha1', $nonce . $validDateTime . $password, true));
+        $data = $nonce . $validDateTime . $password;
+        $tokenPassword = base64_encode(hash('sha1', $data, true));
         $tokenNonce = base64_encode($nonce);
         $this->_nonceStorageMock
             ->expects($this->once())

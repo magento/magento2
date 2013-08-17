@@ -175,12 +175,11 @@ class Mage_Captcha_Helper_Data extends Mage_Core_Helper_Abstract
     public function getImgDir($website = null)
     {
         $mediaDir =  $this->_dirs->getDir(Mage_Core_Model_Dir::MEDIA);
-        $captchaDir = Magento_Filesystem::getPathFromArray(array($mediaDir, 'captcha',
-            $this->_app->getWebsite($website)->getCode()));
+        $captchaDir = $mediaDir . '/captcha/' . $this->_app->getWebsite($website)->getCode();
         $this->_filesystem->setWorkingDirectory($mediaDir);
         $this->_filesystem->setIsAllowCreateDirectories(true);
         $this->_filesystem->ensureDirectoryExists($captchaDir, 0775);
-        return $captchaDir . Magento_Filesystem::DIRECTORY_SEPARATOR;
+        return $captchaDir . '/';
     }
 
     /**

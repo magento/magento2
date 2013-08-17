@@ -57,7 +57,7 @@ class Mage_Tag_Block_Adminhtml_Grid_All extends Mage_Adminhtml_Block_Widget_Grid
             'index'     => 'name',
         ));
         $this->addColumn('total_used', array(
-            'header'    => Mage::helper('Mage_Tag_Helper_Data')->__('# of Uses'),
+            'header'    => Mage::helper('Mage_Tag_Helper_Data')->__('Uses'),
             'width'     => '140px',
             'align'     => 'center',
             'index'     => 'total_used',

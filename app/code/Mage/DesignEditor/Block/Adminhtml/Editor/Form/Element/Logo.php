@@ -43,11 +43,11 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Form_Element_Logo
     protected function _addFields()
     {
         $uploaderData = $this->getComponent('logo-uploader');
-        $uploaderTitle = sprintf('%s {%s: url(%s)}',
+        $uploaderTitle = $this->_escape(sprintf('%s {%s: url(%s)}',
             $uploaderData['selector'],
             $uploaderData['attribute'],
             $uploaderData['value']
-        );
+        ));
         $uploaderId = $this->getComponentId('logo-uploader');
         $this->addField($uploaderId, 'logo-uploader', array(
             'name'     => $uploaderId,

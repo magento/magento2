@@ -39,15 +39,43 @@
     </div>
 </div>
 
-<ul id="js-files-container" class="js-files-container ui-sortable">
-    <?php echo $this->getChildBlock('theme.edit.tabs.tab.js.items')->setJsFiles($this->getJsFiles())->toHtml(); ?>
-</ul>
+<div class="no-display" id="js-uploaded-file-template">
+    <input class="up" type="button" value="">
+    <input class="down" type="button" value="">
+    <input type="hidden" name="js_order[${id}]" value="1">
+
+    <div class="js-file">
+        ${name}
+        <div class="remove-js">
+            <input type="checkbox" id="remove_js_files_${id}" name="js_removed_files[]" value="${id}" />
+            <label for="remove_js_files_${id}"><?php echo $this->__('Remove') ?></label>
+        </div>
+    </div>
+
+    <input type="hidden" name="js_uploaded_files[]" value="${temporary}" />
+</div>
+
+<div class="no-display" id="no-js-files-found-template">
+    <span class="filename"><?php echo $this->__('We found no files.') ?></span>
+</div>
+
+
+<ul id="js-files-container" class="js-files-container ui-sortable" ></ul>
 
 <script type="text/javascript">
-(function($) {
-    $(function() {
-        $('.ui-sortable').sortable();
-        $('.ui-sortable').disableSelection();
+jQuery(function($) {
+    $('.ui-sortable').sortable();
+    $('.ui-sortable').disableSelection();
+
+    $('#js-files-container').themeJsList({
+        templateId : '#js-uploaded-file-template',
+        emptyTemplateId : '#no-js-files-found-template',
+        refreshFileListEvent : 'refreshJsList',
+        prefixItemId : 'js-file-'
     });
-})(jQuery);
+    $('body').trigger(
+        'refreshJsList',
+        {jsList: <?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode($this->getJsFiles()) ?>}
+    );
+});
 </script>

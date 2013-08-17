@@ -23,11 +23,7 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-?>
-<?php
-/**
- * @var $this Mage_Backend_Block_Widget_Form_Container
- */
+/** @var $this Mage_Backend_Block_Widget_Form_Container */
  ?>
 <?php echo $this->getFormInitScripts() ?>
 <div class="page-actions" <?php echo $this->getUiId('content-header') ?>><?php echo $this->getButtonsHtml('header') ?></div>
@@ -39,6 +35,17 @@
 <?php endif; ?>
 <script type="text/javascript">
     jQuery('#edit_form').mage('form')
-        .mage('validation', {validationUrl: '<?php echo $this->getValidationUrl() ?>'});
+        .mage('validation', {
+            validationUrl: '<?php echo $this->getValidationUrl() ?>',
+            highlight: function(element) {
+                var detailsElement = jQuery(element).closest('details');
+                if (detailsElement.length && detailsElement.is('.details')) {
+                    var summaryElement = detailsElement.find('summary');
+                    if (summaryElement.length && summaryElement.attr('aria-expanded') === "false") {
+                        summaryElement.trigger('click');
+                    }
+                }
+            }
+        });
 </script>
 <?php echo $this->getFormScripts() ?>

@@ -42,12 +42,11 @@
 
         <section class="page-content" id="anchor-content">
             <?php echo $this->getChildHtml('main-top'); ?>
-            <div id="messages" class="messages">
+            <div id="messages" data-container-for="messages" class="messages">
                 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
             </div>
 
             <?php if($this->getChildHtml('left')): ?>
-
                 <div id="page:main-container" class="<?php echo $this->getContainerCssClass() ?> col-2-left-layout">
                     <div class="main-col" id="content">
                         <?php echo $this->getChildHtml('content') ?>
@@ -57,7 +56,6 @@
                         <?php echo $this->getChildHtml('left') ?>
                     </div>
                 </div>
-
             <?php else: ?>
                 <div id="page:main-container" class="col-1-layout">
                     <?php echo $this->getChildHtml('content') ?>

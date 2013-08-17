@@ -41,7 +41,6 @@
         <di>
             <preferences>
                 <Mage_Core_Model_Cookie>Magento_Test_Cookie</Mage_Core_Model_Cookie>
-                <Magento_Datasource_Config_Interface>Mage_Core_Model_Datasource_Config</Magento_Datasource_Config_Interface>
             </preferences>
         </di>
         <dev>
@@ -49,6 +48,26 @@
                 <allow_map_update>0</allow_map_update>
             </design_fallback>
         </dev>
+        <search>
+            <solr>
+                <servers>
+                    <masters>
+                        <server1>
+                            <host>127.0.0.1</host>
+                            <port>8983</port>
+                            <timeout>15</timeout>
+                        </server1>
+                    </masters>
+                    <slaves>
+                        <server1>
+                            <host>127.0.0.1</host>
+                            <port>8888</port>
+                            <timeout>15</timeout>
+                        </server1>
+                    </slaves>
+                </servers>
+            </solr>
+        </search>
     </global>
     <frontend>
         <translate>

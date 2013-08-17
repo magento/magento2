@@ -53,7 +53,7 @@
             try {
                 var response = $.parseJSON(jqXHR.responseText);
                 if (response && response.error && response.message) {
-                    this.element.append($.tmpl('globalNotification', response));
+                    this.element.find('[data-container-for=messages]').append($.tmpl('globalNotification', response));
                 }
             } catch(e) {}
         }

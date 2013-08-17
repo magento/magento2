@@ -129,20 +129,4 @@ class Mage_Index_Model_Resource_Event extends Mage_Core_Model_Resource_Db_Abstra
         );
         return $this;
     }
-
-    /**
-     * Retrieve unprocessed events list by specified process
-     *
-     * @param Mage_Index_Model_Process $process
-     * @return array
-     */
-    public function getUnprocessedEvents($process)
-    {
-        $select = $this->_getReadAdapter()->select()
-            ->from($this->getTable('index_process_event'))
-            ->where('process_id = ?', $process->getId())
-            ->where('status = ?', Mage_Index_Model_Process::EVENT_STATUS_NEW);
-
-        return $this->_getReadAdapter()->fetchAll($select);
-    }
 }

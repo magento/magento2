@@ -58,13 +58,6 @@
                 </args>
             </persistent>
         </routers>
-        <layout>
-            <updates>
-                <persistent module="Mage_Persistent">
-                    <file>layout.xml</file>
-                </persistent>
-            </updates>
-        </layout>
         <events>
             <customer_login>
                 <observers>

@@ -29,6 +29,6 @@ $storeId = Mage::app()->getAnyStoreView()->getId();
 /** @var $change Mage_Core_Model_Design */
 $change = Mage::getModel('Mage_Core_Model_Design');
 $change->setStoreId($storeId)
-    ->setDesign('default/modern')
+    ->setDesign('default/blank')
     ->setDateFrom('2001-01-01 01:01:01')
     ->save(); // creating with predefined ID doesn't work for some reason

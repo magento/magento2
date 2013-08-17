@@ -49,10 +49,14 @@ class Mage_DesignEditor_Model_Editor_Tools_QuickStyles_Form_Builder
      */
     protected $_elementsFactory;
 
-    /** @var Mage_DesignEditor_Model_Editor_Tools_Controls_Factory */
+    /**
+     * @var Mage_DesignEditor_Model_Editor_Tools_Controls_Factory
+     */
     protected $_configFactory;
 
-    /** @var Mage_DesignEditor_Model_Config_Control_QuickStyles */
+    /**
+     * @var Mage_DesignEditor_Model_Editor_Tools_Controls_Configuration
+     */
     protected $_config;
 
     /**
@@ -87,24 +91,60 @@ class Mage_DesignEditor_Model_Editor_Tools_QuickStyles_Form_Builder
      */
     public function create(array $data = array())
     {
-        $this->_config = $this->_configFactory->create(
-            Mage_DesignEditor_Model_Editor_Tools_Controls_Factory::TYPE_QUICK_STYLES,
-            $data['theme']
-        );
-
-        /** @var $form Varien_Data_Form */
-        $form = $this->_formFactory->create($data);
-
-        $this->_addElementTypes($form);
+        $isFilePresent = true;
+        try {
+            $this->_config = $this->_configFactory->create(
+                Mage_DesignEditor_Model_Editor_Tools_Controls_Factory::TYPE_QUICK_STYLES,
+                $data['theme'],
+                $data['parent_theme']
+            );
+        } catch (Magento_Exception $e) {
+            $isFilePresent = false;
+        }
 
         if (!isset($data['tab'])) {
             throw new InvalidArgumentException((sprintf('Invalid controls tab "%s".', $data['tab'])));
         }
 
-        $columns = $this->_initColumns($form, $data['tab']);
-        $this->_populateColumns($columns, $data['tab']);
+        if ($isFilePresent) {
+            /** @var $form Varien_Data_Form */
+            $form = $this->_formFactory->create($data);
 
+            $this->_addElementTypes($form);
+
+            $columns = $this->_initColumns($form, $data['tab']);
+            $this->_populateColumns($columns, $data['tab']);
+        } else {
+            $form = new Varien_Data_Form(array('action' => '#'));
+        }
+
+        if ($this->_isFormEmpty($form)) {
+            $hintMessage = $this->__('Sorry, but you cannot edit these theme styles.');
+            $form->addField($data['tab'] . '-tab-error', 'note', array(
+                'after_element_html' => '<p class="error-notice">' . $hintMessage . '</p>'
+            ), '^');
+        }
         return $form;
+    }
+
+    /**
+     * Check is any elements present in form
+     *
+     * @param Varien_Data_Form $form
+     * @return bool
+     */
+    protected function _isFormEmpty($form)
+    {
+        $isEmpty = true;
+        /** @var  $elements Varien_Data_Form_Element_Collection */
+        $elements = $form->getElements();
+        foreach ($elements as $element) {
+            if ($element->getElements()->count()) {
+                $isEmpty = false;
+                break;
+            }
+        }
+        return $isEmpty;
     }
 
     /**
@@ -185,11 +225,11 @@ class Mage_DesignEditor_Model_Editor_Tools_QuickStyles_Form_Builder
             $config['title'] = $label;
         } else {
             $config['value'] = $control['value'];
-            $config['title'] = sprintf('%s {%s: %s}',
+            $config['title'] = htmlspecialchars(sprintf('%s {%s: %s}',
                 $control['selector'],
                 $control['attribute'],
                 $control['value']
-            );
+            ), ENT_COMPAT);
             if (isset($control['options'])) {
                 $config['options'] =  $control['options'];
             }

@@ -27,21 +27,6 @@
 <?php /** @var $this Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Js */ ?>
 <?php echo $this->getFormHtml(); ?>
 
-<li class="no-display" id="js-uploaded-file-template">
-    <input class="up" type="button" value="">
-    <input class="down" type="button" value="">
-    <input type="hidden" name="js_order[${id}]" value="1">
-    <div class="js-file">
-        ${name}
-        <div class="remove-js">
-            <input type="checkbox" id="remove_js_files_${id}" name="js_removed_files[]" value="${id}" />
-            <label for="remove_js_files_${id}"><?php echo $this->__('Remove') ?></label>
-        </div>
-    </div>
-
-    <input type="hidden" name="js_uploaded_files[]" value="${temporary}" />
-</li>
-
 <script type="text/javascript">
     (function ($) {
 
@@ -61,7 +46,10 @@
                     data.fileId =  Math.random().toString(36).substr(2,9);
                     var progressTmpl = $('#js-file-uploader-template').children(':first').clone();
                     progressTmpl.attr('id', data.fileId);
-                    var fileInfoHtml = progressTmpl.html().replace('{{size}}', byteConvert(file.size))
+                    var fileSize = typeof(file.size) == "undefined"
+                        ? $.mage.__('We cannot detect a size.')
+                        : byteConvert(file.size);
+                    var fileInfoHtml = progressTmpl.html().replace('{{size}}', fileSize)
                         .replace('{{name}}', file.name);
                     progressTmpl.html(fileInfoHtml) ;
                     progressTmpl.appendTo('#js-file-uploader');
@@ -95,16 +83,13 @@
                     $(progressSelector).removeClass('upload-progress').addClass('upload-success');
 
                     $('#' + data.fileId).delay(2000).fadeOut(2000);
-                    var progressTmpl = $('#js-uploaded-file-template').clone();
-                    progressTmpl.attr('id', data.fileId + 'asd');
-
-                    var fileInfoHtml = progressTmpl.tmpl(data.result.file);
-
-                    progressTmpl.html(fileInfoHtml) ;
-                    progressTmpl.removeClass('no-display');
-                    progressTmpl.appendTo('#js-files-container');
+                    $('body').trigger('refreshJsList', {jsList : data.result.files});
                 } else {
                     $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+                    /** fix for ie 8 to display error message if file wasn't uploaded */
+                    if ($.browser.msie && $.browser.version == '8.0') {
+                        alert(data.result.message);
+                    }
                 }
 
                 $('.ui-sortable').sortable('initButtons');
@@ -131,7 +116,7 @@
                 $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
 
                 $(this).val('');
-                alert($.mage.__('File extension not known or unsupported type.'));
+                alert($.mage.__("We don't recognize this file extension."));
             }
         });
 

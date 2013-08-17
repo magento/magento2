@@ -321,11 +321,13 @@ class Magento_Profiler
     /**
      * Init profiler
      *
-     * @param array $config
+     * @param array|string $config
+     * @param string $baseDir
+     * @param boolean $isAjax
      */
-    public static function applyConfig(array $config)
+    public static function applyConfig($config, $baseDir, $isAjax = false)
     {
-        $config = self::_parseConfig($config);
+        $config = self::_parseConfig($config, $baseDir, $isAjax);
         if ($config['driverConfigs']) {
             foreach ($config['driverConfigs'] as $driverConfig) {
                 self::add($config['driverFactory']->create($driverConfig));
@@ -339,42 +341,40 @@ class Magento_Profiler
     /**
      * Parses config
      *
-     * @param array $config
+     * @param array|string $profilerConfig
+     * @param string $baseDir
+     * @param boolean $isAjax
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected static function _parseConfig(array $config)
+    protected static function _parseConfig($profilerConfig, $baseDir, $isAjax)
     {
-        if (isset($config['drivers']) && is_array($config['drivers'])) {
-            $driverConfigs = $config['drivers'];
-        } elseif (isset($config['driver'])) {
-            $driverConfigs = array($config['driver']);
+        $config = array(
+            'baseDir' => $baseDir,
+            'tagFilters' => array()
+        );
+
+        if (is_scalar($profilerConfig)) {
+            $config['drivers'] = array(
+                array(
+                    'output' => $isAjax ? 'firebug' : (is_numeric($profilerConfig) ? 'html' : $profilerConfig)
+                )
+            );
         } else {
-            $driverConfigs = array();
+            $config = array_merge($config, $profilerConfig);
         }
 
-        if (isset($config['driverFactory'])) {
-            $driverFactory = $config['driverFactory'];
-        } else {
-            $driverFactory = new Magento_Profiler_Driver_Factory();
-        }
-
-        if (isset($config['tagFilters']) && is_array($config['tagFilters'])) {
-            $tagFilters = $config['tagFilters'];
-        } else {
-            $tagFilters = array();
-        }
-
-        if (isset($config['baseDir'])) {
-            $baseDir = $config['baseDir'];
-        } else {
-            $baseDir = null;
-        }
+        $driverConfigs = (array) (isset($config['drivers']) ? $config['drivers'] : array());
+        $driverFactory = isset($config['driverFactory'])
+            ? $config['driverFactory']
+            : new Magento_Profiler_Driver_Factory();
+        $tagFilters = (array) (isset($config['tagFilters']) ? $config['tagFilters'] : array());
 
         $result = array(
-            'driverConfigs' => self::_parseDriverConfigs($driverConfigs, $baseDir),
+            'driverConfigs' => self::_parseDriverConfigs($driverConfigs, $config['baseDir']),
             'driverFactory' => $driverFactory,
             'tagFilters' => $tagFilters,
-            'baseDir' => $baseDir
+            'baseDir' => $config['baseDir']
         );
         return $result;
     }

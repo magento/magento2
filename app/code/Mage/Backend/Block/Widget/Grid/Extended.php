@@ -181,7 +181,7 @@ class Mage_Backend_Block_Widget_Grid_Extended
     protected function _construct()
     {
         parent::_construct();
-        $this->_emptyText = Mage::helper('Mage_Backend_Helper_Data')->__('No records found.');
+        $this->_emptyText = Mage::helper('Mage_Backend_Helper_Data')->__('We couldn\'t find any records.');
         $this->_exportPath = Mage::getBaseDir('var') . DS . 'export';
     }
 
@@ -280,7 +280,7 @@ class Mage_Backend_Block_Widget_Grid_Extended
             );
             $this->getColumnSet()->getChildBlock($columnId)->setGrid($this);
         } else {
-            throw new Exception(Mage::helper('Mage_Backend_Helper_Data')->__('Wrong column format.'));
+            throw new Exception(Mage::helper('Mage_Backend_Helper_Data')->__('Please correct the column format and try again.'));
         }
 
         $this->_lastColumnId = $columnId;
@@ -976,7 +976,7 @@ class Mage_Backend_Block_Widget_Grid_Extended
         $name = md5(microtime());
         $file = $this->_exportPath . DS . $name . '.csv';
 
-        $this->_filesystem->setIsAllowCreateDirectories(true);
+        $this->_filesystem->setIsAllowCreateDirectories(true)->ensureDirectoryExists($this->_exportPath);
         $stream = $this->_filesystem->createAndOpenStream($file, 'w+', $this->_exportPath);
         $stream->lock(true);
         $stream->writeCsv($this->_getExportHeaders());
@@ -1111,7 +1111,7 @@ class Mage_Backend_Block_Widget_Grid_Extended
         $name = md5(microtime());
         $file = $this->_exportPath . DS . $name . '.xml';
 
-        $this->_filesystem->setIsAllowCreateDirectories(true);
+        $this->_filesystem->setIsAllowCreateDirectories(true)->ensureDirectoryExists($this->_exportPath);
         $stream = $this->_filesystem->createAndOpenStream($file, 'w+', $this->_exportPath);
         $stream->lock(true);
 

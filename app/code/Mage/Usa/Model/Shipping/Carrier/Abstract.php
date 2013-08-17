@@ -208,7 +208,7 @@ abstract class Mage_Usa_Model_Shipping_Carrier_Abstract extends Mage_Shipping_Mo
         }
 
         if (!$errorMsg && !$request->getDestPostcode() && $this->isZipCodeRequired($request->getDestCountryId())) {
-            $errorMsg = Mage::helper('Mage_Shipping_Helper_Data')->__('This shipping method is not available, please specify ZIP-code');
+            $errorMsg = Mage::helper('Mage_Shipping_Helper_Data')->__('This shipping method is not available. Please specify the zip code.');
         }
 
         if ($errorMsg && $showMethod) {

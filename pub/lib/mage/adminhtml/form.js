@@ -420,36 +420,75 @@ FormElementDependenceController.prototype = {
         var shouldShowUp = true;
         for (var idFrom in valuesFrom) {
             var from = $(idFrom);
-            if (valuesFrom[idFrom] instanceof Array) {
-                if (!from || valuesFrom[idFrom].indexOf(from.value) == -1) {
-                    shouldShowUp = false;
-                }
-            } else {
-                if (!from || from.value != valuesFrom[idFrom]) {
+            if (from) {
+                var values = valuesFrom[idFrom]['values'];
+                var isInArray = values.indexOf(from.value) != -1;
+                var isNegative = valuesFrom[idFrom]['negative'];
+                if (!from || isInArray && isNegative || !isInArray && !isNegative) {
                     shouldShowUp = false;
                 }
             }
         }
 
         // toggle target row
+        var headElement = $(idTo + '-head'),
+            inputs = $(idTo).up(this._config.levels_up).select('input', 'select', 'td');
         if (shouldShowUp) {
             var currentConfig = this._config;
-            $(idTo).up(this._config.levels_up).select('input', 'select', 'td').each(function (item) {
-                // don't touch hidden inputs (and Use Default inputs too), bc they may have custom logic
-                if ((!item.type || item.type != 'hidden') && !($(item.id+'_inherit') && $(item.id+'_inherit').checked)
-                    && !(currentConfig.can_edit_price != undefined && !currentConfig.can_edit_price)) {
-                    item.disabled = false;
+            if (inputs) {
+                inputs.each(function (item) {
+                    // don't touch hidden inputs (and Use Default inputs too), bc they may have custom logic
+                    if ((!item.type || item.type != 'hidden') && !($(item.id+'_inherit') && $(item.id+'_inherit').checked)
+                        && !(currentConfig.can_edit_price != undefined && !currentConfig.can_edit_price)) {
+                        item.disabled = false;
+                        jQuery(item).removeClass('ignore-validate');
+                    }
+                });
+            }
+            if (headElement) {
+                headElement.show();
+                if (headElement.hasClassName('open')) {
+                    $(idTo).show();
+                } else {
+                    $(idTo).hide();
                 }
-            });
-            $(idTo).up(this._config.levels_up).show();
+            } else {
+                $(idTo).show();
+                if (['input', 'select'].indexOf($(idTo).tagName.toLowerCase()) != -1) {
+                    $(idTo).disabled = false;
+                    jQuery('#' + idTo).removeClass('ignore-validate');
+                }
+            }
         } else {
-            $(idTo).up(this._config.levels_up).select('input', 'select', 'td').each(function (item){
-                // don't touch hidden inputs (and Use Default inputs too), bc they may have custom logic
-                if ((!item.type || item.type != 'hidden') && !($(item.id+'_inherit') && $(item.id+'_inherit').checked)) {
-                    item.disabled = true;
-                }
-            });
-            $(idTo).up(this._config.levels_up).hide();
+            if (inputs) {
+                inputs.each(function (item){
+                    // don't touch hidden inputs (and Use Default inputs too), bc they may have custom logic
+                    if ((!item.type || item.type != 'hidden') && !($(item.id+'_inherit') && $(item.id+'_inherit').checked)) {
+                        item.disabled = true;
+                        jQuery(item).addClass('ignore-validate');
+                    }
+                });
+            }
+            if (headElement) {
+                headElement.hide();
+            }
+            $(idTo).hide();
+            if (['input', 'select'].indexOf($(idTo).tagName.toLowerCase()) != -1) {
+                $(idTo).disabled = true;
+                jQuery('#' + idTo).addClass('ignore-validate');
+            }
+
+        }
+        var rowElement = $('row_' + idTo);
+        if (rowElement == undefined) {
+            rowElement = $(idTo).up(this._config.levels_up);
+        }
+        if (rowElement) {
+            if (shouldShowUp) {
+                rowElement.show();
+            } else {
+                rowElement.hide();
+            }
         }
     }
 };

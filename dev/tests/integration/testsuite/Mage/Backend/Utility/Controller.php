@@ -46,7 +46,6 @@ class Mage_Backend_Utility_Controller extends Magento_Test_TestCase_ControllerAb
     {
         parent::setUp();
 
-        Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::PART_CONFIG);
         Mage::getSingleton('Mage_Backend_Model_Url')->turnOffSecretKey();
 
         $this->_auth = Mage::getSingleton('Mage_Backend_Model_Auth');
@@ -59,10 +58,7 @@ class Mage_Backend_Utility_Controller extends Magento_Test_TestCase_ControllerAb
         $this->_auth->logout();
         $this->_auth = null;
         $this->_session = null;
-
         Mage::getSingleton('Mage_Backend_Model_Url')->turnOnSecretKey();
-        Mage::getConfig()->setCurrentAreaCode(null);
-
         parent::tearDown();
     }
 

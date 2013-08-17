@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Mage_Core_Model_Config_Primary extends Mage_Core_Model_Config_Base implements Magento_ObjectManager_Configuration
+class Mage_Core_Model_Config_Primary extends Mage_Core_Model_Config_Base
 {
     /**
      * Install date xpath
@@ -73,11 +73,14 @@ class Mage_Core_Model_Config_Primary extends Mage_Core_Model_Config_Base impleme
         parent::__construct('<config/>');
         $this->_params = $params;
         $this->_dir = $dir ?: new Mage_Core_Model_Dir(
-            new Magento_Filesystem(new Magento_Filesystem_Adapter_Local()),
             $baseDir,
             $this->getParam(Mage::PARAM_APP_URIS, array()),
             $this->getParam(Mage::PARAM_APP_DIRS, array())
         );
+        Magento_Autoload_IncludePath::addIncludePath(array(
+            $this->_dir->getDir(Mage_Core_Model_Dir::GENERATION)
+        ));
+
         $this->_loader = $loader ?: new Mage_Core_Model_Config_Loader_Primary(
             new Mage_Core_Model_Config_Loader_Local(
                 $this->_dir->getDir(Mage_Core_Model_Dir::CONFIG),
@@ -100,6 +103,16 @@ class Mage_Core_Model_Config_Primary extends Mage_Core_Model_Config_Base impleme
     public function getParam($name, $defaultValue = null)
     {
         return isset($this->_params[$name]) ? $this->_params[$name] : $defaultValue;
+    }
+
+    /**
+     * Get application init params
+     *
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->_params;
     }
 
     /**
@@ -156,7 +169,7 @@ class Mage_Core_Model_Config_Primary extends Mage_Core_Model_Config_Base impleme
         } else if (isset($pathInfo['relativePath'])) {
             return $this->_dir->getDir(Mage_Core_Model_Dir::ROOT) . DIRECTORY_SEPARATOR . $pathInfo['relativePath'];
         } else {
-            return $this->_dir->getDir(Mage_Core_Model_Dir::DI) . DIRECTORY_SEPARATOR . 'definitions.php';
+            return $this->_dir->getDir(Mage_Core_Model_Dir::DI);
         }
     }
 
@@ -178,50 +191,28 @@ class Mage_Core_Model_Config_Primary extends Mage_Core_Model_Config_Base impleme
     public function configure(Magento_ObjectManager $objectManager)
     {
         Magento_Profiler::start('initial');
+
         $objectManager->configure(array(
-            'Mage_Core_Model_App_State' => array(
-                'parameters' => array(
-                    'mode' => $this->getParam(Mage::PARAM_MODE, Mage_Core_Model_App_State::MODE_DEFAULT),
-                ),
-            ),
             'Mage_Core_Model_Config_Loader_Local' => array(
                 'parameters' => array(
-                    'customFile' => $this->getParam(Mage::PARAM_CUSTOM_LOCAL_FILE),
-                    'customConfig' => $this->getParam(Mage::PARAM_CUSTOM_LOCAL_CONFIG)
-                )
-            ),
-            'Mage_Core_Model_Config_Loader_Modules' => array(
-                'parameters' => array(
-                    'allowedModules' => $this->getParam(Mage::PARAM_ALLOWED_MODULES, array())
+                    'configDirectory' => $this->_dir->getDir(Mage_Core_Model_Dir::CONFIG),
                 )
             ),
             'Mage_Core_Model_Cache_Frontend_Factory' => array(
                 'parameters' => array(
-                    'enforcedOptions' => $this->getParam(Mage::PARAM_CACHE_OPTIONS, array()),
                     'decorators' => $this->_getCacheFrontendDecorators(),
                 )
             ),
-            'Mage_Core_Model_Cache_Types' => array(
-                'parameters' => array(
-                    'banAll' => $this->getParam(Mage::PARAM_BAN_CACHE, false),
-                )
-            ),
-            'Mage_Core_Model_StoreManager' => array(
-                'parameters' => array(
-                    'scopeCode' => $this->getParam(Mage::PARAM_RUN_CODE, ''),
-                    'scopeType' => $this->getParam(Mage::PARAM_RUN_TYPE, 'store'),
-                )
-            )
         ));
 
-        $configurators = $this->getNode('global/configurators');
-        if ($configurators) {
-            $configurators = $configurators->asArray();
-            if (count($configurators)) {
-                foreach ($configurators as $configuratorClass) {
-                    /** @var $configurator  Magento_ObjectManager_Configuration*/
-                    $configurator = $objectManager->create($configuratorClass, array('params' => $this->_params));
-                    $configurator->configure($objectManager);
+        $dynamicConfigurators = $this->getNode('global/configurators');
+        if ($dynamicConfigurators) {
+            $dynamicConfigurators = $dynamicConfigurators->asArray();
+            if (count($dynamicConfigurators)) {
+                foreach ($dynamicConfigurators as $configuratorClass) {
+                    /** @var $dynamicConfigurator Mage_Core_Model_ObjectManager_DynamicConfigInterface*/
+                    $dynamicConfigurator = $objectManager->create($configuratorClass);
+                    $objectManager->configure($dynamicConfigurator->getConfiguration());
                 }
             }
         }
@@ -245,8 +236,8 @@ class Mage_Core_Model_Config_Primary extends Mage_Core_Model_Config_Base impleme
         $result = array();
         // mark all cache entries with a special tag to be able to clean only cache belonging to the application
         $result[] = array(
-            'class' => 'Magento_Cache_Frontend_Decorator_TagMarker',
-            'parameters' => array('tag' => Mage_Core_Model_AppInterface::CACHE_TAG),
+            'class' => 'Magento_Cache_Frontend_Decorator_TagScope',
+            'parameters' => array('tag' => 'MAGE'),
         );
         if (Magento_Profiler::isEnabled()) {
             $result[] = array(

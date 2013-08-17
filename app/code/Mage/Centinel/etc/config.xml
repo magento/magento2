@@ -86,16 +86,16 @@
                 </args>
             </centinel>
         </routers>
-        <layout>
-            <updates>
-                <centinel module="Mage_Centinel">
-                    <file>layout.xml</file>
-                </centinel>
-            </updates>
-        </layout>
         <secure_url>
             <centinel>/centinel/</centinel>
         </secure_url>
+        <di>
+            <Mage_Centinel_Model_Session>
+                <parameters>
+                    <sessionName>frontend</sessionName>
+                </parameters>
+            </Mage_Centinel_Model_Session>
+        </di>
     </frontend>
     <adminhtml>
         <events>
@@ -118,13 +118,13 @@
                 </Mage_Centinel>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <centinel module="Mage_Centinel">
-                    <file>layout.xml</file>
-                </centinel>
-            </updates>
-        </layout>
+        <di>
+            <Mage_Centinel_Model_Session>
+                <parameters>
+                    <sessionName>adminhtml</sessionName>
+                </parameters>
+            </Mage_Centinel_Model_Session>
+        </di>
     </adminhtml>
     <admin>
          <routers>

@@ -79,7 +79,7 @@ class Mage_Oauth_Block_Adminhtml_Oauth_AuthorizedTokens_Grid extends Mage_Adminh
         ));
 
         $this->addColumn('name', array(
-            'header'    => $this->__('Application Name'),
+            'header'    => $this->__('Application'),
             'index'     => 'name',
             'escape'    => true,
         ));
@@ -218,6 +218,6 @@ class Mage_Oauth_Block_Adminhtml_Oauth_AuthorizedTokens_Grid extends Mage_Adminh
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Oauth::authorizedTokens');
+        return $this->_authorization->isAllowed('Mage_Oauth::authorizedTokens');
     }
 }

@@ -88,7 +88,7 @@ class Mage_Adminhtml_Block_System_Design_Edit extends Mage_Adminhtml_Block_Widge
         if (Mage::registry('design')->getId()) {
             $header = Mage::helper('Mage_Core_Helper_Data')->__('Edit Design Change');
         } else {
-            $header = Mage::helper('Mage_Core_Helper_Data')->__('New Design Change');
+            $header = Mage::helper('Mage_Core_Helper_Data')->__('New Store Design Change');
         }
         return $header;
     }

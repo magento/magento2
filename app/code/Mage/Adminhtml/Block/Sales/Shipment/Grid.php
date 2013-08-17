@@ -73,70 +73,70 @@ class Mage_Adminhtml_Block_Sales_Shipment_Grid extends Mage_Adminhtml_Block_Widg
     protected function _prepareColumns()
     {
         $this->addColumn('increment_id', array(
-            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Shipment #'),
-            'index'     => 'increment_id',
-            'type'      => 'text',
-            'header_css_class'  => 'col-shipment-number',
-            'column_css_class'  => 'col-shipment-number'
+            'header' => Mage::helper('Mage_Sales_Helper_Data')->__('Shipment'),
+            'index' => 'increment_id',
+            'type' => 'text',
+            'header_css_class' => 'col-shipment-number',
+            'column_css_class' => 'col-shipment-number'
         ));
 
         $this->addColumn('created_at', array(
-            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Date Shipped'),
-            'index'     => 'created_at',
-            'type'      => 'datetime',
-            'header_css_class'  => 'col-period',
-            'column_css_class'  => 'col-period'
+            'header' => Mage::helper('Mage_Sales_Helper_Data')->__('Ship Date'),
+            'index' => 'created_at',
+            'type' => 'datetime',
+            'header_css_class' => 'col-period',
+            'column_css_class' => 'col-period'
         ));
 
         $this->addColumn('order_increment_id', array(
-            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Order #'),
-            'index'     => 'order_increment_id',
-            'type'      => 'text',
-            'header_css_class'  => 'col-order-number',
-            'column_css_class'  => 'col-order-number'
+            'header' => Mage::helper('Mage_Sales_Helper_Data')->__('Order'),
+            'index' => 'order_increment_id',
+            'type' => 'text',
+            'header_css_class' => 'col-order-number',
+            'column_css_class' => 'col-order-number'
         ));
 
         $this->addColumn('order_created_at', array(
-            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Order Date'),
-            'index'     => 'order_created_at',
-            'type'      => 'datetime',
-            'header_css_class'  => 'col-period',
-            'column_css_class'  => 'col-period'
+            'header' => Mage::helper('Mage_Sales_Helper_Data')->__('Order Date'),
+            'index' => 'order_created_at',
+            'type' => 'datetime',
+            'header_css_class' => 'col-period',
+            'column_css_class' => 'col-period'
         ));
 
         $this->addColumn('shipping_name', array(
-            'header' => Mage::helper('Mage_Sales_Helper_Data')->__('Ship to Name'),
+            'header' => Mage::helper('Mage_Sales_Helper_Data')->__('Ship-to Name'),
             'index' => 'shipping_name',
-            'header_css_class'  => 'col-memo',
-            'column_css_class'  => 'col-memo'
+            'header_css_class' => 'col-memo',
+            'column_css_class' => 'col-memo'
         ));
 
         $this->addColumn('total_qty', array(
-            'header' => Mage::helper('Mage_Sales_Helper_Data')->__('Total Qty'),
+            'header' => Mage::helper('Mage_Sales_Helper_Data')->__('Total Quantity'),
             'index' => 'total_qty',
-            'type'  => 'number',
-            'header_css_class'  => 'col-qty',
-            'column_css_class'  => 'col-qty'
+            'type' => 'number',
+            'header_css_class' => 'col-qty',
+            'column_css_class' => 'col-qty'
         ));
 
         $this->addColumn('action',
             array(
-                'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Action'),
-                'type'      => 'action',
-                'getter'     => 'getId',
-                'actions'   => array(
+                'header' => Mage::helper('Mage_Sales_Helper_Data')->__('Action'),
+                'type' => 'action',
+                'getter' => 'getId',
+                'actions' => array(
                     array(
                         'caption' => Mage::helper('Mage_Sales_Helper_Data')->__('View'),
-                        'url'     => array('base'=>'*/sales_shipment/view'),
-                        'field'   => 'shipment_id'
+                        'url' => array('base' => '*/sales_shipment/view'),
+                        'field' => 'shipment_id'
                     )
                 ),
-                'filter'    => false,
-                'sortable'  => false,
+                'filter' => false,
+                'sortable' => false,
                 'is_system' => true,
-                'header_css_class'  => 'col-actions',
-                'column_css_class'  => 'col-actions'
-        ));
+                'header_css_class' => 'col-actions',
+                'column_css_class' => 'col-actions'
+            ));
 
         $this->addExportType('*/*/exportCsv', Mage::helper('Mage_Sales_Helper_Data')->__('CSV'));
         $this->addExportType('*/*/exportExcel', Mage::helper('Mage_Sales_Helper_Data')->__('Excel XML'));
@@ -152,15 +152,13 @@ class Mage_Adminhtml_Block_Sales_Shipment_Grid extends Mage_Adminhtml_Block_Widg
      */
     public function getRowUrl($row)
     {
-        if (!Mage::getSingleton('Mage_Core_Model_Authorization')
-            ->isAllowed(Mage_Backend_Model_Acl_Config::ACL_RESOURCE_ALL)
-        ) {
+        if (!$this->_authorization->isAllowed(null)) {
             return false;
         }
 
         return $this->getUrl('*/sales_shipment/view',
             array(
-                'shipment_id'=> $row->getId(),
+                'shipment_id' => $row->getId(),
             )
         );
     }
@@ -177,13 +175,13 @@ class Mage_Adminhtml_Block_Sales_Shipment_Grid extends Mage_Adminhtml_Block_Widg
         $this->getMassactionBlock()->setUseSelectAll(false);
 
         $this->getMassactionBlock()->addItem('pdfshipments_order', array(
-             'label'=> Mage::helper('Mage_Sales_Helper_Data')->__('PDF Packing Slips'),
-             'url'  => $this->getUrl('*/sales_shipment/pdfshipments'),
+            'label' => Mage::helper('Mage_Sales_Helper_Data')->__('PDF Packing Slips'),
+            'url' => $this->getUrl('*/sales_shipment/pdfshipments'),
         ));
 
         $this->getMassactionBlock()->addItem('print_shipping_label', array(
-             'label'=> Mage::helper('Mage_Sales_Helper_Data')->__('Print Shipping Labels'),
-             'url'  => $this->getUrl('*/sales_order_shipment/massPrintShippingLabel'),
+            'label' => Mage::helper('Mage_Sales_Helper_Data')->__('Print Shipping Labels'),
+            'url' => $this->getUrl('*/sales_order_shipment/massPrintShippingLabel'),
         ));
 
         return $this;

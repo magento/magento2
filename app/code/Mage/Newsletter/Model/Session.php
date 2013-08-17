@@ -34,9 +34,14 @@
 
 class Mage_Newsletter_Model_Session extends Mage_Core_Model_Session_Abstract
 {
-    public function __construct()
+    /**
+     * Class constructor. Initialize session namespace
+     *
+     * @param string $sessionName
+     */
+    public function __construct($sessionName = null)
     {
-        $this->init('newsletter');
+        $this->init('newsletter', $sessionName);
     }
 
     public function addError($message)

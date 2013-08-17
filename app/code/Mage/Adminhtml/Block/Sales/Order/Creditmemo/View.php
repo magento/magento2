@@ -67,7 +67,7 @@ class Mage_Adminhtml_Block_Sales_Order_Creditmemo_View extends Mage_Adminhtml_Bl
             $this->addButton('send_notification', array(
                 'label'     => Mage::helper('Mage_Sales_Helper_Data')->__('Send Email'),
                 'onclick'   => 'confirmSetLocation(\''
-                . Mage::helper('Mage_Sales_Helper_Data')->__('Are you sure you want to send Creditmemo email to customer?')
+                . Mage::helper('Mage_Sales_Helper_Data')->__('Are you sure you want to send a Credit memo email to customer?')
                 . '\', \'' . $this->getEmailUrl() . '\')'
             ));
         }
@@ -118,7 +118,7 @@ class Mage_Adminhtml_Block_Sales_Order_Creditmemo_View extends Mage_Adminhtml_Bl
     public function getHeaderText()
     {
         if ($this->getCreditmemo()->getEmailSent()) {
-            $emailSent = Mage::helper('Mage_Sales_Helper_Data')->__('the credit memo email was sent');
+            $emailSent = Mage::helper('Mage_Sales_Helper_Data')->__('The credit memo email was sent');
         }
         else {
             $emailSent = Mage::helper('Mage_Sales_Helper_Data')->__('the credit memo email is not sent');
@@ -229,6 +229,6 @@ class Mage_Adminhtml_Block_Sales_Order_Creditmemo_View extends Mage_Adminhtml_Bl
      */
     public function _isAllowedAction($resourceId)
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($resourceId);
+        return $this->_authorization->isAllowed($resourceId);
     }
 }

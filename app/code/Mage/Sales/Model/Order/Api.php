@@ -173,12 +173,12 @@ class Mage_Sales_Model_Order_Api extends Mage_Sales_Model_Api_Resource
      * @param boolean $notify Should customer be notified about status change
      * @return boolean Is method executed successfully
      */
-    public function addComment($orderIncrementId, $status, $comment = null, $notify = false)
+    public function addComment($orderIncrementId, $status, $comment = '', $notify = false)
     {
         $order = $this->_initOrder($orderIncrementId);
 
-        $order->addStatusToHistory($status, $comment, $notify);
-
+        $historyItem = $order->addStatusHistoryComment($comment, $status);
+        $historyItem->setIsCustomerNotified($notify)->save();
 
         try {
             if ($notify && $comment) {

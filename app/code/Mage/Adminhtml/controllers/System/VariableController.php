@@ -53,7 +53,7 @@ class Mage_Adminhtml_System_VariableController extends Mage_Adminhtml_Controller
      */
     protected function _initVariable()
     {
-        $this->_title($this->__('System'))->_title($this->__('Custom Variables'));
+        $this->_title($this->__('Custom Variables'));
 
         $variableId = $this->getRequest()->getParam('variable_id', null);
         $storeId = (int)$this->getRequest()->getParam('store', 0);
@@ -73,7 +73,7 @@ class Mage_Adminhtml_System_VariableController extends Mage_Adminhtml_Controller
      */
     public function indexAction()
     {
-        $this->_title($this->__('System'))->_title($this->__('Custom Variables'));
+        $this->_title($this->__('Custom Variables'));
 
         $this->_initLayout();
         $this->renderLayout();
@@ -96,7 +96,7 @@ class Mage_Adminhtml_System_VariableController extends Mage_Adminhtml_Controller
     {
         $variable = $this->_initVariable();
 
-        $this->_title($variable->getId() ? $variable->getCode() : $this->__('New Variable'));
+        $this->_title($variable->getId() ? $variable->getCode() : $this->__('New Custom Variable'));
 
         $this->_initLayout()
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_System_Variable_Edit'))
@@ -140,7 +140,7 @@ class Mage_Adminhtml_System_VariableController extends Mage_Adminhtml_Controller
             try {
                 $variable->save();
                 $this->_getSession()->addSuccess(
-                    Mage::helper('Mage_Adminhtml_Helper_Data')->__('The custom variable has been saved.')
+                    Mage::helper('Mage_Adminhtml_Helper_Data')->__('You saved the custom variable.')
                 );
                 if ($back) {
                     $this->_redirect('*/*/edit', array('_current' => true, 'variable_id' => $variable->getId()));
@@ -169,7 +169,7 @@ class Mage_Adminhtml_System_VariableController extends Mage_Adminhtml_Controller
             try {
                 $variable->delete();
                 $this->_getSession()->addSuccess(
-                    Mage::helper('Mage_Adminhtml_Helper_Data')->__('The custom variable has been deleted.')
+                    Mage::helper('Mage_Adminhtml_Helper_Data')->__('You deleted the customer.')
                 );
             } catch (Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
@@ -200,6 +200,6 @@ class Mage_Adminhtml_System_VariableController extends Mage_Adminhtml_Controller
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Adminhtml::variable');
+        return $this->_authorization->isAllowed('Mage_Adminhtml::variable');
     }
 }

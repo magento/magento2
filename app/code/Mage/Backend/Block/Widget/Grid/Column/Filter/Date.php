@@ -47,7 +47,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Date extends Mage_Backend_Blo
     public function getHtml()
     {
         $htmlId = Mage::helper('Mage_Core_Helper_Data')->uniqHash($this->_getHtmlId());
-        $format = $this->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
+        $format = $this->getLocale()->getDateFormat(Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT);
         $html = '<div class="range" id="' . $htmlId . '_range"><div class="range-line date">'
             . '<input type="text" name="' . $this->_getHtmlName() . '[from]" id="' . $htmlId . '_from"'
                 . ' value="' . $this->getEscapedValue('from') . '" class="input-text no-changes" placeholder="' . $this->__('From') . '" '
@@ -82,7 +82,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Date extends Mage_Backend_Blo
     {
         $value = $this->getValue($index);
         if ($value instanceof Zend_Date) {
-            return $value->toString($this->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT));
+            return $value->toString($this->getLocale()->getDateFormat(Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT));
         }
         return $value;
     }
@@ -131,7 +131,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Date extends Mage_Backend_Blo
     /**
      * Retrieve locale
      *
-     * @return Mage_Core_Model_Locale
+     * @return Mage_Core_Model_LocaleInterface
      */
     public function getLocale()
     {
@@ -155,10 +155,10 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Date extends Mage_Backend_Blo
 
             //set default timezone for store (admin)
             $dateObj->setTimezone(
-                Mage::app()->getStore()->getConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE)
+                Mage::app()->getStore()->getConfig(Mage_Core_Model_LocaleInterface::XML_PATH_DEFAULT_TIMEZONE)
             );
 
-            //set begining of day
+            //set beginning of day
             $dateObj->setHour(00);
             $dateObj->setMinute(00);
             $dateObj->setSecond(00);
@@ -167,7 +167,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Date extends Mage_Backend_Blo
             $dateObj->set($date, Zend_Date::DATE_SHORT, $locale);
 
             //convert store date to default date in UTC timezone without DST
-            $dateObj->setTimezone(Mage_Core_Model_Locale::DEFAULT_TIMEZONE);
+            $dateObj->setTimezone(Mage::DEFAULT_TIMEZONE);
 
             return $dateObj;
         } catch (Exception $e) {

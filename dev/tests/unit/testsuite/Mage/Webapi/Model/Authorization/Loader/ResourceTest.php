@@ -41,7 +41,7 @@ class Mage_Webapi_Model_Authorization_Loader_ResourceTest extends PHPUnit_Framew
     protected $_helper;
 
     /**
-     * @var Mage_Webapi_Model_Authorization_Config
+     * @var Mage_Webapi_Model_Acl_Loader_Resource_ConfigReader
      */
     protected $_config;
 
@@ -50,6 +50,7 @@ class Mage_Webapi_Model_Authorization_Loader_ResourceTest extends PHPUnit_Framew
      */
     protected function setUp()
     {
+        $fixturePath = __DIR__ . '/../../_files/';
         $this->_helper = new Magento_Test_Helper_ObjectManager($this);
 
         $resource = new Magento_Acl_Resource('test resource');
@@ -61,19 +62,20 @@ class Mage_Webapi_Model_Authorization_Loader_ResourceTest extends PHPUnit_Framew
             ->method('createResource')
             ->will($this->returnValue($resource));
 
-        $this->_config = $this->getMock('Mage_Webapi_Model_Authorization_Config',
+        $this->_config = $this->getMock('Mage_Webapi_Model_Acl_Loader_Resource_ConfigReader',
             array('getAclResources', 'getAclVirtualResources'), array(), '', false);
         $this->_config->expects($this->once())
             ->method('getAclResources')
-            ->will($this->returnValue($this->getResourceXPath()->query('/config/acl/resources/*')));
+            ->will($this->returnValue(include $fixturePath . 'acl.php'));
 
         $this->_model = $this->_helper->getObject('Mage_Webapi_Model_Authorization_Loader_Resource', array(
             'resourceFactory' => $resourceFactory,
-            'configuration' => $this->_config,
+            'reader' => $this->_config,
         ));
 
-        $this->_acl = $this->getMock('Magento_Acl', array('has', 'addResource', 'deny', 'getResources'), array(), '',
-            false);
+        $this->_acl = $this->getMock(
+            'Magento_Acl', array('has', 'addResource', 'deny', 'getResources'), array(), '', false
+        );
     }
 
     /**

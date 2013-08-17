@@ -27,15 +27,16 @@
 
 /**
  * Test class for Mage_Adminhtml_Block_Cms_Page_Edit_Tab_Design
+ * @magentoAppArea adminhtml
  */
-class Mage_Adminhtml_Block_Cms_Page_Edit_Tab_DesignTest extends Mage_Backend_Area_TestCase
+class Mage_Adminhtml_Block_Cms_Page_Edit_Tab_DesignTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @magentoDataFixture Mage/Core/_files/init_adminhtml_design.php
      * @magentoAppIsolation enabled
      */
     public function testPrepareForm()
     {
+        Mage::getDesign()->setArea(Mage_Core_Model_App_Area::AREA_ADMINHTML)->setDefaultDesignTheme();
         Mage::getConfig()->setCurrentAreaCode(Mage::helper('Mage_Backend_Helper_Data')->getAreaCode());
         Mage::register('cms_page', Mage::getObjectManager()->create('Mage_Cms_Model_Page'));
 

@@ -250,7 +250,7 @@ abstract class Mage_Wishlist_Block_Abstract extends Mage_Catalog_Block_Product_A
      */
     public function getFormatedDate($date)
     {
-        return $this->formatDate($date, Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM);
+        return $this->formatDate($date, Mage_Core_Model_LocaleInterface::FORMAT_TYPE_MEDIUM);
     }
 
     /**

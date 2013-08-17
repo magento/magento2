@@ -39,6 +39,9 @@
                 </field>
                 <field id="account" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Account Number</label>
+                    <depends>
+                        <field id="*/*/active">1</field>
+                    </depends>
                 </field>
             </group>
         </section>

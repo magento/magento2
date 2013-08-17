@@ -63,7 +63,7 @@ class Varien_Db_Adapter_Pdo_MysqlTest extends PHPUnit_Framework_TestCase
 
         $this->_adapter = $this->getMock(
             'Varien_Db_Adapter_Pdo_Mysql',
-            array('_connect', '_beginTransaction', '_commit', '_rollBack'),
+            array('_connect', '_beginTransaction', '_commit', '_rollBack', 'query'),
             array(
                 'dbname' => 'not_exists',
                 'username' => 'not_valid',
@@ -378,5 +378,31 @@ class Varien_Db_Adapter_Pdo_MysqlTest extends PHPUnit_Framework_TestCase
 
         $this->_adapter->beginTransaction();
         $this->_adapter->commit();
+    }
+
+    /**
+     * Test that column names are quoted in ON DUPLICATE KEY UPDATE section
+     */
+    public function testInsertOnDuplicateWithQuotedColumnName()
+    {
+        $table = 'some_table';
+        $data = array(
+            'index' => 'indexValue',
+            'row' => 'rowValue',
+            'select' => 'selectValue',
+            'insert' => 'insertValue',
+        );
+        $fields = array('select', 'insert');
+        $sqlQuery = "INSERT INTO `some_table` (`index`,`row`,`select`,`insert`) VALUES (?, ?, ?, ?) "
+            . "ON DUPLICATE KEY UPDATE `select` = VALUES(`select`), `insert` = VALUES(`insert`)";
+
+        $stmtMock = $this->getMock('Zend_Db_Statement_Pdo', array(), array(), '', false);
+        $bind = array('indexValue', 'rowValue', 'selectValue', 'insertValue');
+        $this->_adapter->expects($this->once())
+            ->method('query')
+            ->with($sqlQuery, $bind)
+            ->will($this->returnValue($stmtMock));
+
+        $this->_adapter->insertOnDuplicate($table, $data, $fields);
     }
 }

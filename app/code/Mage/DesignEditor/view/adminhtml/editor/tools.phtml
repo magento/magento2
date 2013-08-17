@@ -47,9 +47,47 @@
                     <?php echo join('', $this->getTabHandles()) ?>
                 </ul>
             </div>
+            <div data-translate-container class="vde-tools-menu">
+                <div data-translate-menu class="text-menu-show hidden">
+                    <div data-translate-selected="text" class="text-menu-div">
+                        <span data-translate-img="text" class="text-menu-text-off"></span>
+                        <span data-translate-label="text" class="text-menu-label"><?php echo $this->__('Page Text'); ?></span>
+                    </div>
+
+                    <div data-translate-selected="script" class="text-menu-div">
+                        <span data-translate-img="script" class="text-menu-script-off"></span>
+                        <span data-translate-label="script" class="text-menu-label"><?php echo $this->__('Variable Text'); ?></span>
+                    </div>
+
+                    <div data-translate-selected="alt" class="text-menu-div">
+                        <span data-translate-img="alt" class="text-menu-alt-off"></span>
+                        <span data-translate-label="alt" class="text-menu-label"><?php echo $this->__('Alternative Text'); ?></span>
+                    </div>
+                </div>
+                <div data-tip="translate" class="tip hidden">
+                    <h1 data-tip-text><?php echo $this->__('Toggle Page Text'); ?></h1>
+                    <p><?php echo $this->__('(Hold down button for options)'); ?></p>
+                </div>
+                <ul class="vde-tab-controls" data-editing="translate">
+                    <li data-translate-edit="text" class="item-text-edit text-edit-text-off">
+                        <a vde-translate>
+                            <span><?php echo $this->__('Edit Text'); ?></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </footer>
 </section>
+
+<div class="vde-message no-display" id="vde-message-template">
+    <div class="message-inner">
+        <div class="message-content">${message}</div>
+        <button class="action-close" title="<?php echo $this->__('Close Message'); ?>">
+            <span><?php echo $this->__('Close Message'); ?></span>
+        </button>
+    </div>
+</div>
 
 <script type="text/javascript">
 (function($) {
@@ -68,29 +106,16 @@
         saveQuickStylesUrl: '<?php echo $this->getSaveUrl(); ?>'
     });
 
-    $(document).ready(function() {
-        var eventData = {
-            elements: {
-                click: [
-                    '#vde-tab-quick-styles .element-image-uploader',
-                    '#vde-tab-quick-styles .element-background .element-checkbox'
-                ],
-                mousedown: ['#vde-tab-quick-styles .color-box'],
-                focus: [
-                    '#vde-tab-quick-styles .element-color-picker input',
-                    '#vde-tab-quick-styles .element-font-picker select'
-                ]
-            }
-        };
-        $('body').trigger('registerElements', eventData);
-    });
-
     $('[class^="action-"][href="#vde-tab-custom"]').on('click.activateCustomCodeTab', function() {
         $('.vde-tab-controls a[href="#vde-tab-custom"]').trigger('click');
     });
 
     $('.action-edit[href="#vde-tab-custom"]').on('click.focusOnCustomCodeTextarea', function() {
         $('#custom_code').focus();
+    });
+
+    $('.vde-tools').vdeMessage({
+        messageTemplateId: '#vde-message-template'
     });
 })(window.jQuery);
 </script>

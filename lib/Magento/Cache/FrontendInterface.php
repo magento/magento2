@@ -74,8 +74,7 @@ interface Magento_Cache_FrontendInterface
     /**
      * Retrieve backend instance
      *
-     * @return Zend_Cache_Backend_Interface|Zend_Cache_Backend
-     * @todo remove as soon as direct backend manipulations are eliminated
+     * @return Zend_Cache_Backend_Interface
      */
     public function getBackend();
 

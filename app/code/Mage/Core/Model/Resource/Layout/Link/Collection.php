@@ -39,6 +39,18 @@ class Mage_Core_Model_Resource_Layout_Link_Collection extends Mage_Core_Model_Re
     }
 
     /**
+     * Add filter by theme id
+     *
+     * @param int $themeId
+     * @return $this
+     */
+    public function addThemeFilter($themeId)
+    {
+        $this->addFieldToFilter('theme_id', $themeId);
+        return $this;
+    }
+
+    /**
      * Join with layout update table
      *
      * @param array $fields

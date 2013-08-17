@@ -27,11 +27,14 @@
 
 /** @var $product Mage_Catalog_Model_Product */
 $product = Mage::getModel('Mage_Catalog_Model_Product');
+
 $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
     ->setId(10)
     ->setAttributeSetId(4)
     ->setName('Simple Product')
     ->setSku('simple1')
+    ->setIsObjectNew(true)
+    ->setTaxClassId('none')
     ->setDescription('description')
     ->setShortDescription('short description')
     ->setOptionsContainer('container1')
@@ -65,6 +68,8 @@ $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
     ->setAttributeSetId(4)
     ->setName('Simple Product2')
     ->setSku('simple2')
+    ->setIsObjectNew()
+    ->setTaxClassId('none')
     ->setDescription('description')
     ->setShortDescription('short description')
     ->setEnableGooglecheckout(false)
@@ -101,6 +106,8 @@ $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
     ->setAttributeSetId(4)
     ->setName('Simple Product 3')
     ->setSku('simple3')
+    ->setIsObjectNew()
+    ->setTaxClassId('none')
     ->setDescription('description')
     ->setShortDescription('short description')
     ->setMsrpEnabled(

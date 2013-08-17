@@ -404,7 +404,7 @@ class Mage_Sales_Model_Order_Creditmemo extends Mage_Sales_Model_Abstract
             $baseAvailableRefund = $this->getOrder()->getBaseTotalPaid()- $this->getOrder()->getBaseTotalRefunded();
 
             Mage::throwException(
-                Mage::helper('Mage_Sales_Helper_Data')->__('Maximum amount available to refund is %s', $this->getOrder()->formatBasePrice($baseAvailableRefund))
+                Mage::helper('Mage_Sales_Helper_Data')->__('The most money available to refund is %s.', $this->getOrder()->formatBasePrice($baseAvailableRefund))
             );
         }
         $order = $this->getOrder();
@@ -508,7 +508,7 @@ class Mage_Sales_Model_Order_Creditmemo extends Mage_Sales_Model_Abstract
     {
         if ($this->getId()) {
             Mage::throwException(
-                Mage::helper('Mage_Sales_Helper_Data')->__('Cannot register an existing credit memo.')
+                Mage::helper('Mage_Sales_Helper_Data')->__('We cannot register an existing credit memo.')
             );
         }
 

@@ -38,13 +38,34 @@ class Mage_User_Block_Role_Tab_Edit extends Mage_Backend_Block_Widget_Form
     protected $_template = 'role/edit.phtml';
 
     /**
+     * Root ACL Resource
+     *
+     * @var Mage_Core_Model_Acl_RootResource
+     */
+    protected $_rootResource;
+
+    /**
+     * @param Mage_Backend_Block_Template_Context $context
+     * @param Mage_Core_Model_Acl_RootResource $rootResource
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Backend_Block_Template_Context $context,
+        Mage_Core_Model_Acl_RootResource $rootResource,
+        array $data = array()
+    ) {
+        parent::__construct($context, $data);
+        $this->_rootResource = $rootResource;
+    }
+
+    /**
      * Get tab label
      *
      * @return string
      */
     public function getTabLabel()
     {
-        return Mage::helper('Mage_User_Helper_Data')->__('Role Resources');
+        return $this->helper('Mage_User_Helper_Data')->__('Role Resources');
     }
 
     /**
@@ -77,10 +98,8 @@ class Mage_User_Block_Role_Tab_Edit extends Mage_Backend_Block_Widget_Form
         return false;
     }
 
-
     /**
      * Class constructor
-     *
      */
     protected function _construct()
     {
@@ -88,9 +107,7 @@ class Mage_User_Block_Role_Tab_Edit extends Mage_Backend_Block_Widget_Form
 
         $rid = Mage::app()->getRequest()->getParam('rid', false);
 
-        $acl = Mage::getSingleton('Mage_Core_Model_Acl_Builder')->getAcl(
-            Mage_Core_Model_App_Area::AREA_ADMINHTML
-        );
+        $acl = Mage::getSingleton('Magento_Acl_Builder')->getAcl();
         $rulesSet = Mage::getResourceModel('Mage_User_Model_Resource_Rules_Collection')->getByRoles($rid)->load();
 
         $selectedResourceIds = array();
@@ -103,8 +120,6 @@ class Mage_User_Block_Role_Tab_Edit extends Mage_Backend_Block_Widget_Form
         }
 
         $this->setSelectedResources($selectedResourceIds);
-
-
     }
 
     /**
@@ -114,83 +129,45 @@ class Mage_User_Block_Role_Tab_Edit extends Mage_Backend_Block_Widget_Form
      */
     public function isEverythingAllowed()
     {
-        return in_array(Mage_Backend_Model_Acl_Config::ACL_RESOURCE_ALL, $this->getSelectedResources());
+        return in_array($this->_rootResource->getId(), $this->getSelectedResources());
     }
 
     /**
      * Get Json Representation of Resource Tree
      *
-     * @return string
-     */
-    public function getResTreeJson()
-    {
-
-        /** @var $aclConfig Mage_Backend_Model_Acl_Config */
-        $aclConfig = Mage::getSingleton('Mage_Backend_Model_Acl_Config');
-        $resources = $aclConfig->getAclResources();
-
-        $adminNode = $resources->item(1);
-        $rootArray = $this->_getNodeJson($adminNode, 1);
-
-        $json = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(
-            isset($rootArray['children']) ? $rootArray['children'] : array()
-        );
-
-        return $json;
-    }
-
-    /**
-     * Compare two nodes of the Resource Tree
-     *
-     * @param array $a
-     * @param array $b
-     * @return boolean
-     */
-    protected function _sortTree($nodeA, $nodeB)
-    {
-        return $nodeA['sortOrder']<$nodeB['sortOrder'] ? -1 : ($nodeA['sortOrder']>$nodeB['sortOrder'] ? 1 : 0);
-    }
-
-    /**
-     * Get Node Json
-     *
-     * @param mixed $node
-     * @param int $level
      * @return array
      */
-    protected function _getNodeJson(DomElement $node, $level = 0)
+    public function getTree()
     {
-        $item = array();
-        $selres = $this->getSelectedResources();
-        if ($level != 0) {
-            $item['text'] = Mage::helper('Mage_User_Helper_Data')->__((string)$node->getAttribute('title'));
-            // @codingStandardsIgnoreStart
-            $item['sortOrder'] = $node->hasAttribute('sortOrder') ? (string)$node->getAttribute('sortOrder') : 0;
-            // @codingStandardsIgnoreEnd
-            $item['id'] = (string)$node->getAttribute('id');
+        /** @var $reader Magento_Acl_Loader_Resource_ConfigReaderInterface */
+        $reader = Mage::getSingleton('Magento_Acl_Loader_Resource_ConfigReaderInterface');
+        $resources = $reader->getAclResources();
+        $rootArray = $this->_mapResources(
+            isset($resources[1]['children']) ? $resources[1]['children'] : array()
+        );
+        return $rootArray;
+    }
 
-            if (in_array($item['id'], $selres)) {
-                $item['checked'] = true;
-            }
-        }
-        $children = $node->childNodes;
-        if (!empty($children)) {
+    /**
+     * Map resources
+     *
+     * @param array $resources
+     * @return array
+     */
+    protected function _mapResources(array $resources)
+    {
+        $output = array();
+        foreach ($resources as $resource) {
+            $item = array();
+            $item['attr']['data-id'] = $resource['id'];
+            $item['data'] = $this->__($resource['title']);
             $item['children'] = array();
-            //$item['cls'] = 'fiche-node';
-            foreach ($children as $child) {
-                if ($child instanceof DOMElement) {
-                    if (!(string)$child->getAttribute('title')) {
-                        continue;
-                    }
-                    if ($level != 0) {
-                        $item['children'][] = $this->_getNodeJson($child, $level+1);
-                    } else {
-                        $item = $this->_getNodeJson($child, $level+1);
-                    }
-                }
+            if (isset($resource['children'])) {
+                $item['state'] = 'open';
+                $item['children'] = $this->_mapResources($resource['children']);
             }
-            usort($item['children'], array($this, '_sortTree'));
+            $output[] = $item;
         }
-        return $item;
+        return $output;
     }
 }

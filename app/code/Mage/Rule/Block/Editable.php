@@ -25,14 +25,15 @@
  */
 
 
-class Mage_Rule_Block_Editable extends Mage_Core_Block_Abstract
+class Mage_Rule_Block_Editable
+    extends Mage_Core_Block_Abstract
     implements Varien_Data_Form_Element_Renderer_Interface
 {
     /**
      * Render element
      *
-     * @param Varien_Data_Form_Element_Abstract $element
      * @see Varien_Data_Form_Element_Renderer_Interface::render()
+     * @param Varien_Data_Form_Element_Abstract $element
      * @return string
      */
     public function render(Varien_Data_Form_Element_Abstract $element)
@@ -56,10 +57,11 @@ class Mage_Rule_Block_Editable extends Mage_Core_Block_Abstract
                 . ($element->getParamId() ? ' id="' . $element->getParamId() . '"' : '') . '>'
                 . '<a href="javascript:void(0)" class="label">';
 
-            $translate = Mage::getSingleton('Mage_Core_Model_Translate_Inline');
-
-            $html .= $translate->isAllowed() ? $coreHelper->escapeHtml($valueName) :
-                $coreHelper->escapeHtml($stringHelper->truncate($valueName, 33, '...'));
+            if ($this->_translator->isAllowed()) {
+                $html .= $coreHelper->escapeHtml($valueName);
+            } else {
+                $html .= $coreHelper->escapeHtml($stringHelper->truncate($valueName, 33, '...'));
+            }
 
             $html .= '</a><span class="element"> ' . $element->getElementHtml();
 

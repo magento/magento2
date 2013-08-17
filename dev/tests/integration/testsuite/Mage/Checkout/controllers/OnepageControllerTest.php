@@ -47,7 +47,7 @@ class Mage_Checkout_OnepageControllerTest extends Magento_Test_TestCase_Controll
         $html = $this->getResponse()->getBody();
         $this->assertContains('<li id="opc-payment"', $html);
         $this->assertContains('<dl class="sp-methods" id="checkout-payment-method-load">', $html);
-        $this->assertContains('<form id="co-billing-form" action="">', $html);
+        $this->assertSelectCount('form[id="co-billing-form"][action=""]', 1, $html);
     }
 
     /**

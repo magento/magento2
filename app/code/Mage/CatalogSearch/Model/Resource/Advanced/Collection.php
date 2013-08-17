@@ -91,7 +91,7 @@ class Mage_CatalogSearch_Model_Resource_Advanced_Collection extends Mage_Catalog
                             $conditionData[] = array ('like' => $conditionValue['like']);
                         }
                         elseif (isset($conditionValue['from']) && isset($conditionValue['to'])) {
-                            $invalidDateMessage = Mage::helper('Mage_CatalogSearch_Helper_Data')->__('Specified date is invalid.');
+                            $invalidDateMessage = Mage::helper('Mage_CatalogSearch_Helper_Data')->__('Please specify correct data.');
                             if ($conditionValue['from']) {
                                 if (!Zend_Date::isDate($conditionValue['from'])) {
                                     Mage::throwException($invalidDateMessage);

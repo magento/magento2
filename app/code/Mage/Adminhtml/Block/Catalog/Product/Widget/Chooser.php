@@ -243,7 +243,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Widget_Chooser extends Mage_Adminhtml
             'column_css_class'  => 'col-sku'
         ));
         $this->addColumn('chooser_name', array(
-            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Product Name'),
+            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Product'),
             'name'      => 'chooser_name',
             'index'     => 'name',
             'header_css_class'  => 'col-product',

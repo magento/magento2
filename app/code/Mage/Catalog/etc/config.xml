@@ -28,13 +28,13 @@
 <config>
     <modules>
         <Mage_Catalog>
-            <version>1.6.0.0.22</version>
+            <version>1.6.0.0.23</version>
             <active>true</active>
             <depends>
-                <Mage_Eav/>
-                <Mage_Cms/>
-                <Mage_Index/>
-                <Mage_Customer/>
+                <Mage_Eav />
+                <Mage_Cms />
+                <Mage_Index />
+                <Mage_Customer />
             </depends>
         </Mage_Catalog>
     </modules>
@@ -70,6 +70,14 @@
             </indexer>
         </index>
         <events>
+            <catalog_category_save_commit_after>
+                <observers>
+                    <fulltext_reindex>
+                        <class>Mage_Catalog_Model_Observer_Reindex</class>
+                        <method>fulltextReindex</method>
+                    </fulltext_reindex>
+                </observers>
+            </catalog_category_save_commit_after>
             <log_log_clean_after>
                 <observers>
                     <catalog_product_compare_item>
@@ -110,8 +118,8 @@
                         <price_model>Mage_Catalog_Model_Product_Type_Grouped_Price</price_model>
                         <composite>1</composite>
                         <allow_product_types>
-                            <simple/>
-                            <virtual/>
+                            <simple />
+                            <virtual />
                         </allow_product_types>
                         <index_priority>50</index_priority>
                         <price_indexer>Mage_Catalog_Model_Resource_Product_Indexer_Price_Grouped</price_indexer>
@@ -122,8 +130,8 @@
                         <price_model>Mage_Catalog_Model_Product_Type_Configurable_Price</price_model>
                         <composite>1</composite>
                         <allow_product_types>
-                            <simple/>
-                            <virtual/>
+                            <simple />
+                            <virtual />
                         </allow_product_types>
                         <index_priority>30</index_priority>
                         <price_indexer>Mage_Catalog_Model_Resource_Product_Indexer_Price_Configurable</price_indexer>
@@ -217,33 +225,33 @@
                 </flat>
                 <attributes>
                     <unassignable>
-                        <image/>
-                        <name/>
-                        <description/>
-                        <short_description/>
-                        <sku/>
-                        <price/>
-                        <status/>
-                        <visibility/>
-                        <weight/>
-                        <category_ids/>
-                        <quantity_and_stock_status/>
-                        <available_sort_by/>
-                        <default_sort_by/>
-                        <filter_price_range/>
-                        <image/>
-                        <category_ids/>
-                        <media_gallery_content/>
-                        <group_price/>
-                        <tier_price/>
-                        <recurring_profileinit_may_fail/>
-                        <gift_message_available/>
-                        <inventory_manage_stock/>
+                        <image />
+                        <name />
+                        <description />
+                        <short_description />
+                        <sku />
+                        <price />
+                        <status />
+                        <visibility />
+                        <weight />
+                        <category_ids />
+                        <quantity_and_stock_status />
+                        <available_sort_by />
+                        <default_sort_by />
+                        <filter_price_range />
+                        <image />
+                        <category_ids />
+                        <media_gallery_content />
+                        <group_price />
+                        <tier_price />
+                        <recurring_profileinit_may_fail />
+                        <gift_message_available />
+                        <inventory_manage_stock />
                     </unassignable>
                     <used_in_autogeneration>
-                        <name/>
-                        <description/>
-                        <sku/>
+                        <name />
+                        <description />
+                        <sku />
                     </used_in_autogeneration>
                     <weight>
                         <type_switcher translate="label">
@@ -261,30 +269,30 @@
                 <sku>
                     <code>sku</code>
                     <locked_fields>
-                        <is_global/>
-                        <is_unique/>
+                        <is_global />
+                        <is_unique />
                     </locked_fields>
                 </sku>
                 <url_key>
                     <code>url_key</code>
                     <locked_fields>
-                        <is_unique/>
+                        <is_unique />
                     </locked_fields>
                 </url_key>
                 <status>
                     <code>status</code>
                     <locked_fields>
-                        <is_configurable/>
-                        <is_filterable/>
-                        <is_filterable_in_search/>
+                        <is_configurable />
+                        <is_filterable />
+                        <is_filterable_in_search />
                     </locked_fields>
                 </status>
                 <visibility>
                     <code>visibility</code>
                     <locked_fields>
-                        <is_configurable/>
-                        <is_filterable/>
-                        <is_filterable_in_search/>
+                        <is_configurable />
+                        <is_filterable />
+                        <is_filterable_in_search />
                     </locked_fields>
                 </visibility>
             </catalog_product>
@@ -299,11 +307,22 @@
                 </product>
             </catalog>
         </session>
-        <service-calls>
-            <catalog>
-                <file>Mage_Catalog/service-calls.xml</file>
-            </catalog>
-        </service-calls>
+        <di>
+            <Mage_Catalog_Model_Product_Attribute_Api>
+                <parameters>
+                    <attributeLabelCache>
+                        <instance>Mage_Core_Model_Cache_Type_Translate</instance>
+                    </attributeLabelCache>
+                </parameters>
+            </Mage_Catalog_Model_Product_Attribute_Api>
+            <Mage_Catalog_Model_Product_Attribute_Api_V2>
+                <parameters>
+                    <attributeLabelCache>
+                        <instance>Mage_Core_Model_Cache_Type_Translate</instance>
+                    </attributeLabelCache>
+                </parameters>
+            </Mage_Catalog_Model_Product_Attribute_Api_V2>
+        </di>
     </global>
     <adminhtml>
         <translate>
@@ -325,6 +344,13 @@
                 </observers>
             </cms_wysiwyg_images_static_urls_allowed>
         </events>
+        <di>
+            <Mage_Catalog_Model_Session>
+                <parameters>
+                    <sessionName>adminhtml</sessionName>
+                </parameters>
+            </Mage_Catalog_Model_Session>
+        </di>
     </adminhtml>
     <frontend>
         <routers>
@@ -377,16 +403,6 @@
                 </Mage_Catalog>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <catalog module="Mage_Catalog">
-                    <file>layout.xml</file>
-                </catalog>
-                <map module="Mage_Catalog">
-                    <file>msrp.xml</file>
-                </map>
-            </updates>
-        </layout>
         <catalog>
             <per_page_values>
                 <grid>9,15,30</grid>
@@ -396,36 +412,43 @@
         <product>
             <collection>
                 <attributes>
-                    <name/>
-                    <url_key/>
-                    <price/>
-                    <special_price/>
-                    <special_from_date/>
-                    <special_to_date/>
-                    <short_description/>
-                    <thumbnail/>
-                    <small_image/>
-                    <image_label/>
-                    <thumbnail_label/>
-                    <small_image_label/>
-                    <tax_class_id/>
-                    <status/>
-                    <news_from_date/>
-                    <news_to_date/>
-                    <created_at/>
-                    <updated_at/>
+                    <name />
+                    <url_key />
+                    <price />
+                    <special_price />
+                    <special_from_date />
+                    <special_to_date />
+                    <short_description />
+                    <thumbnail />
+                    <small_image />
+                    <image_label />
+                    <thumbnail_label />
+                    <small_image_label />
+                    <tax_class_id />
+                    <status />
+                    <news_from_date />
+                    <news_to_date />
+                    <created_at />
+                    <updated_at />
                 </attributes>
             </collection>
         </product>
         <category>
             <collection>
                 <attributes>
-                    <name/>
-                    <url_key/>
-                    <is_active/>
+                    <name />
+                    <url_key />
+                    <is_active />
                 </attributes>
             </collection>
         </category>
+        <di>
+            <Mage_Catalog_Model_Session>
+                <parameters>
+                    <sessionName>frontend</sessionName>
+                </parameters>
+            </Mage_Catalog_Model_Session>
+        </di>
     </frontend>
     <default>
         <catalog>

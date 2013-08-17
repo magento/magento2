@@ -23,6 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
+.js-files-container {
+    margin: 20px 0;
+    padding: 0;
+    list-style: none;
+}
+
 .js-files-container .js-file {
     background: url("Mage_Theme::/images/js_icon.gif") no-repeat scroll 5px 50% #ECECEC;
     border: 1px solid #CCCCCC;
@@ -31,7 +37,7 @@
 }
 
 .js-files-container li {
-    padding: 1px 1px 1px 14px;
+    padding: 1px 1px 1px 30px;
     position: relative;
     z-index: 1;
 }
@@ -59,6 +65,7 @@
     top: -1px;
     width: 15px;
 }
+
 .js-files-container li .up {
     background: url("Mage_Theme::/images/bkg_movable-arrows.png") no-repeat scroll 50% 3px #ECECEC;
 }
@@ -68,6 +75,19 @@
     bottom: 0;
     top: auto;
 }
-.js-files-container .js-file .remove-js{
+
+.js-files-container .js-file .remove-js {
     float: right;
+}
+
+.eq-ie8 .js-files-container li input[type="button"],
+.eq-ie8 .js-files-container li input[type="button"]:hover,
+.eq-ie8 .js-files-container li input[type="button"]:active,
+.eq-ie8 .js-files-container li input[type="button"]:focus,
+.eq-ie8 .js-files-container li input[type="button"][disabled] {
+    filter: none;
+}
+
+#theme_js .uploader {
+    padding-left: 30px;
 }

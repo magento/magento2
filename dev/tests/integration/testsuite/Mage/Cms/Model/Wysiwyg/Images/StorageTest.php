@@ -69,7 +69,10 @@ class Mage_Cms_Model_Wysiwyg_Images_StorageTest extends PHPUnit_Framework_TestCa
     public function testGetThumbsPath()
     {
         $filesystem = new Magento_Filesystem(new Magento_Filesystem_Adapter_Local);
-        $model = new Mage_Cms_Model_Wysiwyg_Images_Storage($filesystem);
+        $objectManager = Mage::getObjectManager();
+        $imageFactory = $objectManager->get('Mage_Core_Model_Image_AdapterFactory');
+        $viewUrl = $objectManager->get('Mage_Core_Model_View_Url');
+        $model = new Mage_Cms_Model_Wysiwyg_Images_Storage($filesystem, $imageFactory, $viewUrl);
         $this->assertStringStartsWith(
             realpath(Magento_Test_Helper_Bootstrap::getInstance()->getAppInstallDir()),
             $model->getThumbsPath()

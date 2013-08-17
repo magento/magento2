@@ -36,12 +36,22 @@ class Mage_Core_Model_ObserverTest extends PHPUnit_Framework_TestCase
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_themeMock;
+    protected $_themeCustomization;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_assetFactory;
 
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_assetsMock;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_configMock;
 
     /**
      * @var Mage_Core_Model_Observer
@@ -64,21 +74,35 @@ class Mage_Core_Model_ObserverTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->_cacheFrontendMock))
         ;
 
-        $this->_themeMock = $this->getMock('Mage_Core_Model_Theme', array('getFiles'), array(), '', false);
+        $this->_themeCustomization = $this->getMock('Mage_Core_Model_Theme_Customization', array(), array(), '', false);
+        $themeMock = $this->getMock('Mage_Core_Model_Theme', array('getCustomization'), array(), '', false);
+        $themeMock->expects($this->any())->method('getCustomization')
+            ->will($this->returnValue($this->_themeCustomization));
 
-        $designPackageMock = $this->getMock(
-            'Mage_Core_Model_Design_Package', array('getDesignTheme'), array(), '', false
-        );
-        $designPackageMock
+        $designMock = $this->getMock('Mage_Core_Model_View_DesignInterface');
+        $designMock
             ->expects($this->any())
             ->method('getDesignTheme')
-            ->will($this->returnValue($this->_themeMock))
+            ->will($this->returnValue($themeMock))
         ;
 
         $this->_assetsMock = $this->getMock('Mage_Core_Model_Page_Asset_Collection');
+        $this->_configMock = $this->getMock('Mage_Core_Model_ConfigInterface',
+            array(), array(), '', false, false);
 
-        $this->_model = new Mage_Core_Model_Observer(
-            $this->_frontendPoolMock, $designPackageMock, new Mage_Core_Model_Page($this->_assetsMock)
+        $this->_assetFactory = $this->getMock('Mage_Core_Model_Page_Asset_PublicFileFactory',
+            array('create'), array(), '', false);
+
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_model = $objectManagerHelper->getObject(
+            'Mage_Core_Model_Observer',
+            array(
+                'cacheFrontendPool' => $this->_frontendPoolMock,
+                'design'            => $designMock,
+                'page'              => new Mage_Core_Model_Page($this->_assetsMock),
+                'config'            => $this->_configMock,
+                'assetFileFactory'  => $this->_assetFactory
+            )
         );
     }
 
@@ -86,8 +110,9 @@ class Mage_Core_Model_ObserverTest extends PHPUnit_Framework_TestCase
     {
         $this->_cacheFrontendMock = null;
         $this->_frontendPoolMock = null;
-        $this->_themeMock = null;
+        $this->_themeCustomization = null;
         $this->_assetsMock = null;
+        $this->_configMock = null;
         $this->_model = null;
     }
     
@@ -111,23 +136,31 @@ class Mage_Core_Model_ObserverTest extends PHPUnit_Framework_TestCase
     public function testApplyThemeCustomization()
     {
         $asset = new Mage_Core_Model_Page_Asset_Remote('http://127.0.0.1/test.css');
-        $file = $this->getMock('Mage_Core_Model_Theme_File', array('getAsset', 'getFilePath'), array(), '', false);
-        $file->expects($this->once())
-            ->method('getAsset')
+        $file = $this->getMock('Mage_Core_Model_Theme_File', array(), array(), '', false);
+        $fileService = $this->getMock('Mage_Core_Model_Theme_Customization_File_Css', array(), array(), '', false);
+
+        $fileService->expects($this->atLeastOnce())->method('getContentType')->will($this->returnValue('css'));
+
+        $file->expects($this->any())->method('getCustomizationService')->will($this->returnValue($fileService));
+        $file->expects($this->atLeastOnce())->method('getFullPath')->will($this->returnValue('test.css'));
+
+        $this->_assetFactory->expects($this->any())
+            ->method('create')
+            ->with(array('file' => 'test.css', 'contentType' => 'css'))
             ->will($this->returnValue($asset));
-        $file->expects($this->once())
-            ->method('getFilePath')
-            ->will($this->returnValue('test.css'));
 
-        $this->_themeMock->expects($this->once())
-            ->method('getFiles')
-            ->will($this->returnValue(array($file)));
+        $this->_themeCustomization->expects($this->once())->method('getFiles')->will($this->returnValue(array($file)));
 
-        $this->_assetsMock->expects($this->once())
-            ->method('add')
-            ->with('test.css', $asset);
+        $this->_assetsMock->expects($this->once())->method('add')->with($this->anything(), $asset);
 
         $observer = new Varien_Event_Observer;
         $this->_model->applyThemeCustomization($observer);
+    }
+
+    public function testProcessReinitConfig()
+    {
+        $observer = new Varien_Event_Observer;
+        $this->_configMock->expects($this->once())->method('reinit');
+        $this->_model->processReinitConfig($observer);
     }
 }

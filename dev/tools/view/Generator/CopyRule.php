@@ -79,18 +79,25 @@ class Generator_CopyRule
      */
     public function getCopyRules()
     {
-        $params = array(
-            'namespace' => $this->_composePlaceholder('namespace'),
-            'module'    => $this->_composePlaceholder('module'),
-        );
         $result = array();
         /** @var $theme Mage_Core_Model_ThemeInterface */
         foreach ($this->_themes as $theme) {
             $area = $theme->getArea();
-            $params['area'] = $area;
-            $params['theme'] = $theme;
-            $patternDirs = $this->_fallbackRule->getPatternDirs($params);
-            foreach (array_reverse($patternDirs) as $pattern) {
+            $nonModularLocations = $this->_fallbackRule->getPatternDirs(array(
+                'area'      => $area,
+                'theme'     => $theme,
+            ));
+            $modularLocations = $this->_fallbackRule->getPatternDirs(array(
+                'area'      => $area,
+                'theme'     => $theme,
+                'namespace' => $this->_composePlaceholder('namespace'),
+                'module'    => $this->_composePlaceholder('module'),
+            ));
+            $allDirPatterns = array_merge(
+                array_reverse($modularLocations),
+                array_reverse($nonModularLocations)
+            );
+            foreach ($allDirPatterns as $pattern) {
                 $pattern = Magento_Filesystem::fixSeparator($pattern);
                 foreach ($this->_getMatchingDirs($pattern) as $srcDir) {
                     $paramsFromDir = $this->_parsePlaceholders($srcDir, $pattern);

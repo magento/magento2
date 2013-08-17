@@ -28,7 +28,7 @@
 <div class="page-title">
     <h1><?php echo $this->__('Review Order') ?></h1>
 </div>
-<?php echo $this->getMessagesBlock()->toHtml() ?>
+<?php echo $this->getLayout()->renderElement('messages') ?>
 
 <?php if ($this->getShippingAddress()): ?>
 <div class="info-set col2-set">
@@ -49,35 +49,35 @@
                 <h3><?php echo $this->__('Shipping Method') ?></h3>
             </div>
             <div class="box-content">
-                <form method="post" id="shipping_method_form" action="<?php echo $this->escapeHtml($this->getShippingMethodSubmitUrl()) ?>">
-                <?php if ($this->getCanEditShippingMethod() || !$this->getCurrentShippingRate()):?>
+                <form method="post" id="shipping-method-form" action="<?php echo $this->escapeHtml($this->getShippingMethodSubmitUrl()) ?>">
+                    <?php if ($this->getCanEditShippingMethod() || !$this->getCurrentShippingRate()):?>
                     <?php if ($groups = $this->getShippingRateGroups()):?>
                         <?php $currentRate = $this->getCurrentShippingRate(); ?>
-                            <fieldset>
-                                <select name="shipping_method" id="shipping_method" style="width:250px;" class="required-entry">
+                        <fieldset>
+                            <select name="shipping_method" id="shipping-method" style="width:250px;" class="required-entry">
                                 <?php if (!$currentRate):?>
-                                    <option value=""><?php echo $this->__('Please select a shipping method...') ?></option>
+                                <option value=""><?php echo $this->__('Please select a shipping method...') ?></option>
                                 <?php endif;?>
                                 <?php foreach ($groups as $code => $rates):?>
-                                    <optgroup label="<?php echo $this->escapeHtml($this->getCarrierName($code)) ?>" style="font-style:normal;">
+                                <optgroup label="<?php echo $this->escapeHtml($this->getCarrierName($code)) ?>" style="font-style:normal;">
                                     <?php foreach ($rates as $rate):?>
-                                        <option value="<?php echo $this->renderShippingRateValue($rate)?>"<?php echo ($currentRate === $rate) ? ' selected="selected"' : '' ;?>>
-                                            <?php echo $this->renderShippingRateOption($rate)?>
-                                        </option>
+                                    <option value="<?php echo $this->renderShippingRateValue($rate)?>"<?php echo ($currentRate === $rate) ? ' selected="selected"' : '' ;?>>
+                                        <?php echo $this->renderShippingRateOption($rate)?>
+                                    </option>
                                     <?php endforeach;?>
-                                    </optgroup>
+                                </optgroup>
                                 <?php endforeach;?>
-                                </select>
-                            </fieldset>
-                            <p class="actions">
-                                <button id="update_shipping_method_submit" type="submit" class="button"><span><span><?php echo $this->__('Update Shipping Method') ?></span></span></button>
-                            </p>
-                    <?php else: ?>
+                            </select>
+                        </fieldset>
+                        <p class="actions">
+                            <button id="update-shipping-method-submit" type="submit" class="button"><span><span><?php echo $this->__('Update Shipping Method') ?></span></span></button>
+                        </p>
+                        <?php else: ?>
                         <p><strong><?php echo $this->__('Sorry, no quotes are available for this order at this time.') ?></strong></p>
-                    <?php endif;?>
-                <?php else: ?>
+                        <?php endif;?>
+                    <?php else: ?>
                     <p><strong><?php echo $this->renderShippingRateOption($this->getCurrentShippingRate())?></strong></p>
-                <?php endif; ?>
+                    <?php endif; ?>
                 </form>
             </div>
         </div>
@@ -120,72 +120,29 @@
         <?php echo $this->getChildHtml('details') ?>
     </div>
 </div>
-<form method="post" id="order_review_form" action="<?php echo $this->getPlaceOrderUrl() ?>">
+<form method="post" id="order-review-form" action="<?php echo $this->getPlaceOrderUrl() ?>">
     <?php echo $this->getChildHtml('agreements'); ?>
     <div class="buttons-set buttons-set-order" id="review-buttons-container">
-        <button type="button" id="review_button" value="<?php echo $this->__('Place Order') ?>" class="button btn-checkout"><span><span><?php echo $this->__('Place Order') ?></span></span></button>
-        <button type="button" id="review_submit" value="<?php echo $this->__('Place Order') ?>" class="button btn-checkout"><span><span><?php echo $this->__('Place Order') ?></span></span></button>
+        <button type="button" id="review-button" value="<?php echo $this->__('Place Order') ?>" class="button btn-checkout"><span><span><?php echo $this->__('Place Order') ?></span></span></button>
+        <button type="button" id="review-submit" value="<?php echo $this->__('Place Order') ?>" class="button btn-checkout"><span><span><?php echo $this->__('Place Order') ?></span></span></button>
         <span class="please-wait" id="review-please-wait" style="display:none;">
             <img src="<?php echo $this->getViewFileUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Submitting order information...') ?>" title="<?php echo $this->__('Submitting order information...') ?>" class="v-middle" /> <?php echo $this->__('Submitting order information...') ?>
         </span>
     </div>
 </form>
 <script type="text/javascript">
-//<![CDATA[
-// submit buttons are not needed when submitting with ajax
-$('review_submit').hide();
-if ($('update_shipping_method_submit')) {
-    $('update_shipping_method_submit').hide();
-}
-
-<?php if ($this->getUseAjax()):?>
-    OrderReviewController.prototype._submitOrder = function() {
-        if (this._canSubmitOrder) {
-            if (this._pleaseWait) {
-                this._pleaseWait.show();
-            }
-            new Ajax.Request(this.form.action, {
-                parameters: {isAjax: 1, method: 'POST'},
-                onSuccess: function(transport) {
-                    try{
-                        response = eval('(' + transport.responseText + ')');
-                    } catch (e) {
-                        response = {};
-                    }
-                    if (response.redirect) {
-                        setLocation(response.redirect);
-                        return;
-                    }
-                    if (response.success) {
-                        setLocation('<?php echo $this->getSuccessUrl()?>');
-                        return;
-                    } else {
-                        var msg = response.error_messages;
-                        if (typeof(msg)=='object') {
-                            msg = msg.join("\n");
-                        }
-                        if (msg) {
-                            $('review-please-wait').hide();
-                            alert(msg);
-                            return;
-                        }
-                    }
-                    $('review-please-wait').hide();
-                    alert('<?php echo $this->jsQuoteEscape($this->__('Unknown Error. Please try again later.')); ?>');
-                    return;
-                },
-                onFailure: function(){
-                    alert('<?php echo $this->jsQuoteEscape($this->__('Server Error. Please try again.')) ?>');
-                    $('review-please-wait').hide();
-                }
+    head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
+        "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
+        "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+        "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
+        "<?php echo $this->getViewFileUrl('Mage_Paypal::order-review.js') ?>",
+        function() {
+            jQuery('#order-review-form').validation().orderReview({
+                shippingSubmitFormSelector: '#shipping-method-form',
+                shippingSelector:'#shipping-method',
+                shippingMethodUpdateUrl: '<?php echo $this->escapeHtml($this->getUpdateShippingMethodsUrl()) ?>',
+                updateOrderSubmitUrl: '<?php echo $this->escapeHtml($this->getUpdateOrderSubmitUrl()) ?>',
+                isAjax: <?php echo $this->getUseAjax() ? 'true' : 'false' ?>
             });
-        }
-    }
-<?php endif ?>
-
-PayPalExpressAjax = new OrderReviewController($('order_review_form'), $('review_button'),
-    $('shipping_method'), $('shipping_method_form'), 'details-reload'
-);
-PayPalExpressAjax.addPleaseWait($('review-please-wait'));
-//]]>
+        });
 </script>

@@ -34,21 +34,34 @@
 class Mage_Sales_Model_Order_Grid_Massaction_ItemsUpdater implements Mage_Core_Model_Layout_Argument_UpdaterInterface
 {
     /**
+     * @var Magento_AuthorizationInterface
+     */
+    protected $_authorization;
+
+    /**
+     * @param Magento_AuthorizationInterface $authorization
+     */
+    public function __construct(Magento_AuthorizationInterface $authorization)
+    {
+        $this->_authorization = $authorization;
+    }
+
+    /**
      * Remove massaction items in case they disallowed for user
      * @param mixed $argument
      * @return mixed
      */
     public function update($argument)
     {
-        if (false === Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::cancel')) {
+        if (false === $this->_authorization->isAllowed('Mage_Sales::cancel')) {
             unset($argument['cancel_order']);
         }
 
-        if (false === Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::hold')) {
+        if (false === $this->_authorization->isAllowed('Mage_Sales::hold')) {
             unset($argument['hold_order']);
         }
 
-        if (false === Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::unhold')) {
+        if (false === $this->_authorization->isAllowed('Mage_Sales::unhold')) {
             unset($argument['unhold_order']);
         }
 

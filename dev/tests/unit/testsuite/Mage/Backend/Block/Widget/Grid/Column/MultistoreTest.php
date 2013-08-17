@@ -39,7 +39,7 @@ class Mage_Backend_Block_Widget_Grid_Column_MultistoreTest extends PHPUnit_Frame
 
     public function setUp()
     {
-        $this->_storeManagerMock = $this->getMock('Mage_Core_Model_StoreManager', array(), array(), '', false);
+        $this->_storeManagerMock = $this->getMock('Mage_Core_Model_StoreManagerInterface');
 
         $arguments = array(
             'storeManager' => $this->_storeManagerMock,

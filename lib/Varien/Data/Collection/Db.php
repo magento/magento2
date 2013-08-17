@@ -49,14 +49,7 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
     protected $_select;
 
     /**
-     * Cache configuration array
-     *
-     * @var array
-     */
-    protected $_cacheConf = null;
-
-    /**
-     * Identifier fild name for collection items
+     * Identifier field name for collection items
      *
      * Can be used by collections with items without defined
      *
@@ -101,11 +94,18 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
     protected $_isOrdersRendered = false;
 
     /**
-     * @param Zend_Db_Adapter_Abstract|null $conn
+     * @var Varien_Data_Collection_Db_FetchStrategyInterface
      */
-    public function __construct($conn = null)
+    private $_fetchStrategy;
+
+    /**
+     * @param Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy
+     * @param Zend_Db_Adapter_Abstract|Varien_Db_Adapter_Interface $conn
+     */
+    public function __construct(Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy, $conn = null)
     {
         parent::__construct();
+        $this->_fetchStrategy = $fetchStrategy;
         if (!is_null($conn)) {
             $this->setConnection($conn);
         }
@@ -121,24 +121,6 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
     public function addBindParam($name, $value)
     {
         $this->_bindParams[$name] = $value;
-        return $this;
-    }
-
-    /**
-     * Initialize collection cache
-     *
-     * @param $object
-     * @param string $idPrefix
-     * @param array $tags
-     * @return Varien_Data_Collection_Db
-     */
-    public function initCache($object, $idPrefix, $tags)
-    {
-        $this->_cacheConf = array(
-            'object'    => $object,
-            'prefix'    => $idPrefix,
-            'tags'      => $tags
-        );
         return $this;
     }
 
@@ -302,7 +284,7 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
     }
 
     /**
-     * Add ORDERBY to the end or to the beginning
+     * Add ORDER BY to the end or to the beginning
      *
      * @param string $field
      * @param string $direction
@@ -612,7 +594,7 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
 
     /**
      * Convert items array to hash for select options
-     * unsing fetchItem method
+     * using fetchItem method
      *
      * The difference between _toOptionHash() and this one is that this
      * method fetch items one by one and does not load all collection items at once
@@ -645,14 +627,26 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
             $this->_renderFilters()
                  ->_renderOrders()
                  ->_renderLimit();
-            $this->_data = $this->_fetchAll($this->_select);
+            $select = $this->_prepareSelect($this->getSelect());
+            $this->_data = $this->_fetchAll($select);
             $this->_afterLoadData();
         }
         return $this->_data;
     }
 
     /**
-     * Proces loaded collection data
+     * Prepare select for load
+     *
+     * @param Zend_Db_Select $select
+     * @return Zend_Db_Select
+     */
+    protected function _prepareSelect(Zend_Db_Select $select)
+    {
+        return $select;
+    }
+
+    /**
+     * Process loaded collection data
      *
      * @return Varien_Data_Collection_Db
      */
@@ -693,14 +687,24 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
      */
     public function printLogQuery($printQuery = false, $logQuery = false, $sql = null)
     {
-        if ($printQuery) {
+        if ($printQuery || $this->getFlag('print_query')) {
             echo is_null($sql) ? $this->getSelect()->__toString() : $sql;
         }
 
-        if ($logQuery) {
-            Mage::log(is_null($sql) ? $this->getSelect()->__toString() : $sql);
+        if ($logQuery || $this->getFlag('log_query')) {
+            $this->_logQuery($sql);
         }
         return $this;
+    }
+
+    /**
+     * Log query
+     *
+     * @param string $sql
+     */
+    protected function _logQuery($sql)
+    {
+        Mage::log(is_null($sql) ? $this->getSelect()->__toString() : $sql);
     }
 
     /**
@@ -721,104 +725,12 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
     /**
      * Fetch collection data
      *
-     * @param   Zend_Db_Select $select
-     * @return  array
-     */
-    protected function _fetchAll($select)
-    {
-        if ($this->_canUseCache()) {
-            $data = $this->_loadCache($select);
-            if ($data) {
-                $data = unserialize($data);
-            } else {
-                $data = $this->getConnection()->fetchAll($select, $this->_bindParams);
-                $this->_saveCache($data, $select);
-            }
-        } else {
-            $data = $this->getConnection()->fetchAll($select, $this->_bindParams);
-        }
-        return $data;
-    }
-
-    /**
-     * Load cached data for select
-     *
      * @param Zend_Db_Select $select
-     * @return string|boolean
-     */
-    protected function _loadCache($select)
-    {
-        $data = false;
-        $object = $this->_getCacheInstance();
-        if ($object) {
-            $data = $object->load($this->_getSelectCacheId($select));
-        }
-        return $data;
-    }
-
-    /**
-     * Save collection data to cache
-     *
-     * @param array $data
-     * @param Zend_Db_Select $select
-     * @return Varien_Data_Collection_Db
-     */
-    protected function _saveCache($data, $select)
-    {
-        $object = $this->_getCacheInstance();
-        $object->save(serialize($data), $this->_getSelectCacheId($select), $this->_getCacheTags());
-        return $this;
-    }
-
-    /**
-     * Check if cache can be used for collection data
-     *
-     * @return bool
-     */
-    protected function _canUseCache()
-    {
-        return $this->_getCacheInstance();
-    }
-
-    /**
-     * Get cache identifier base on select
-     *
-     * @param Zend_Db_Select|string $select
-     * @return string
-     */
-    protected function _getSelectCacheId($select)
-    {
-        $id = md5((string)$select);
-        if (isset($this->_cacheConf['prefix'])) {
-            $id = $this->_cacheConf['prefix'].'_'.$id;
-        }
-        return $id;
-    }
-
-    /**
-     * Retrieve cache instance
-     *
-     * @return Zend_Cache_Core
-     */
-    protected function _getCacheInstance()
-    {
-        if (isset($this->_cacheConf['object'])) {
-            return $this->_cacheConf['object'];
-        }
-        return false;
-    }
-
-    /**
-     * Get cache tags list
-     *
      * @return array
      */
-    protected function _getCacheTags()
+    protected function _fetchAll(Zend_Db_Select $select)
     {
-        if (isset($this->_cacheConf['tags'])) {
-            return $this->_cacheConf['tags'];
-        }
-        return array();
+        return $this->_fetchStrategy->fetchAll($select, $this->_bindParams);
     }
 
     /**

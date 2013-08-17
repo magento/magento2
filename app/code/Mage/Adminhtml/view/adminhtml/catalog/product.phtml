@@ -29,11 +29,9 @@
  * @see Mage_Adminhtml_Block_Catalog_Product
  */
 ?>
-<div class="page-actions">
-    <?php if( !$this->isSingleStoreMode() ): ?>
-        <?php echo $this->getChildHtml('store_switcher');?>
-    <?php endif;?>
-    <?php echo $this->getButtonsHtml() ?>
-</div>
+<?php if( !$this->isSingleStoreMode() ): ?>
+    <?php echo $this->getChildHtml('store_switcher');?>
+<?php endif;?>
 
+<div class="page-actions<?php if( !$this->isSingleStoreMode() ): ?> page-actions-multiple-stores<?php endif;?>"><?php echo $this->getButtonsHtml() ?></div>
 <?php echo $this->getGridHtml() ?>

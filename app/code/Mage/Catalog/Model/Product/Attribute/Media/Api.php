@@ -35,7 +35,6 @@ class Mage_Catalog_Model_Product_Attribute_Media_Api extends Mage_Catalog_Model_
 {
     /**
      * Attribute code for media gallery
-     *
      */
     const ATTRIBUTE_CODE = 'media_gallery';
 
@@ -50,13 +49,27 @@ class Mage_Catalog_Model_Product_Attribute_Media_Api extends Mage_Catalog_Model_
         'image/png'  => 'png'
     );
 
-    /** @var Mage_Catalog_Model_Product_Media_Config */
+    /**
+     * @var Mage_Catalog_Model_Product_Media_Config
+     */
     protected $_mediaConfig;
 
-    public function __construct(Mage_Catalog_Model_Product_Media_Config $mediaConfig)
-    {
+    /**
+     * @var Mage_Core_Model_Image_Factory
+     */
+    protected $_imageFactory;
+
+    /**
+     * @param Mage_Catalog_Model_Product_Media_Config $mediaConfig
+     * @param Mage_Core_Model_Image_Factory $imageFactory
+     */
+    public function __construct(
+        Mage_Catalog_Model_Product_Media_Config $mediaConfig,
+        Mage_Core_Model_Image_Factory $imageFactory
+    ) {
         $this->_mediaConfig = $mediaConfig;
         $this->_storeIdSessionField = 'product_store_id';
+        $this->_imageFactory = $imageFactory;
     }
 
     /**
@@ -130,7 +143,7 @@ class Mage_Catalog_Model_Product_Attribute_Media_Api extends Mage_Catalog_Model_
         }
 
         if (!isset($this->_mimeTypes[$data['file']['mime']])) {
-            $this->_fault('data_invalid', Mage::helper('Mage_Catalog_Helper_Data')->__('Invalid image type.'));
+            $this->_fault('data_invalid', Mage::helper('Mage_Catalog_Helper_Data')->__('Please correct the image type.'));
         }
 
         $fileContent = @base64_decode($data['file']['content'], true);
@@ -160,8 +173,7 @@ class Mage_Catalog_Model_Product_Attribute_Media_Api extends Mage_Catalog_Model_
 
             // try to create Image object - it fails with Exception if image is not supported
             try {
-                $adapter = Mage::helper('Mage_Core_Helper_Data')->getImageAdapterType();
-                new Varien_Image($tmpDirectory . DS . $fileName, $adapter);
+                $this->_imageFactory->create($tmpDirectory . DS . $fileName);
             } catch (Exception $e) {
                 // Remove temporary directory
                 $ioAdapter->rmdir($tmpDirectory, true);
@@ -190,7 +202,7 @@ class Mage_Catalog_Model_Product_Attribute_Media_Api extends Mage_Catalog_Model_
         } catch (Mage_Core_Exception $e) {
             $this->_fault('not_created', $e->getMessage());
         } catch (Exception $e) {
-            $this->_fault('not_created', Mage::helper('Mage_Catalog_Helper_Data')->__('Cannot create image.'));
+            $this->_fault('not_created', Mage::helper('Mage_Catalog_Helper_Data')->__('We can\'t create the image.'));
         }
 
         return $gallery->getBackend()->getRenamedImage($file);
@@ -219,12 +231,12 @@ class Mage_Catalog_Model_Product_Attribute_Media_Api extends Mage_Catalog_Model_
 
         if (isset($data['file']['mime']) && isset($data['file']['content'])) {
             if (!isset($this->_mimeTypes[$data['file']['mime']])) {
-                $this->_fault('data_invalid', Mage::helper('Mage_Catalog_Helper_Data')->__('Invalid image type.'));
+                $this->_fault('data_invalid', Mage::helper('Mage_Catalog_Helper_Data')->__('Please correct the image type.'));
             }
 
             $fileContent = @base64_decode($data['file']['content'], true);
             if (!$fileContent) {
-                $this->_fault('data_invalid', Mage::helper('Mage_Catalog_Helper_Data')->__('Image content is not valid base64 data.'));
+                $this->_fault('data_invalid', Mage::helper('Mage_Catalog_Helper_Data')->__('The image content is not valid base64 data.'));
             }
 
             unset($data['file']['content']);
@@ -236,7 +248,7 @@ class Mage_Catalog_Model_Product_Attribute_Media_Api extends Mage_Catalog_Model_
                 $ioAdapter->write(basename($fileName), $fileContent, 0666);
 
             } catch(Exception $e) {
-                $this->_fault('not_created', Mage::helper('Mage_Catalog_Helper_Data')->__('Can\'t create image.'));
+                $this->_fault('not_created', Mage::helper('Mage_Catalog_Helper_Data')->__('We can\'t create the image.'));
             }
         }
 

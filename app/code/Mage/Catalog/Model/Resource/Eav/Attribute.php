@@ -119,7 +119,7 @@ class Mage_Catalog_Model_Resource_Eav_Attribute extends Mage_Eav_Model_Entity_At
             }
             if (($this->_data['is_global'] != $this->_origData['is_global'])
                 && $this->_getResource()->isUsedBySuperProducts($this)) {
-                Mage::throwException(Mage::helper('Mage_Catalog_Helper_Data')->__('Scope must not be changed, because the attribute is used in configurable products.'));
+                Mage::throwException(Mage::helper('Mage_Catalog_Helper_Data')->__('Do not change the scope. This attribute is used in configurable products.'));
             }
         }
         if ($this->getFrontendInput() == 'price') {

@@ -37,9 +37,10 @@
     <div class="store-scope">
         <?php echo $this->getHintHtml() ?>
         <div class="store-tree">
-            <?php foreach ($this->getWebsiteCollection() as $_website): ?>
+            <?php $_websites = $this->getWebsiteCollection() ?>
+            <?php foreach ($_websites as $_website): ?>
             <div class="website-name">
-                <input name="product[website_ids][]" value="<?php echo $_website->getId() ?>" <?php if ($this->isReadonly()): ?>  disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="product_website_<?php echo $_website->getId() ?>" type="checkbox"<?php if ($this->hasWebsite($_website->getId())): ?> checked="checked"<?php endif; ?> />
+                <input name="product[website_ids][]" value="<?php echo $_website->getId() ?>" <?php if ($this->isReadonly()): ?>  disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="product_website_<?php echo $_website->getId() ?>" type="checkbox"<?php if ($this->hasWebsite($_website->getId()) || !$this->getProductId() && count($_websites) === 1): ?> checked="checked"<?php endif; ?> />
                 <label for="product_website_<?php echo $_website->getId() ?>"><?php echo $this->escapeHtml($_website->getName()) ?></label>
             </div>
             <dl class="webiste-groups" id="product_website_<?php echo $_website->getId() ?>_data">

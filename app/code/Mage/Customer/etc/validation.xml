@@ -31,7 +31,6 @@
             <rule name="check_eav">
                 <entity_constraints>
                     <constraint alias="eav_data_validator" class="Mage_Eav_Model_Validator_Attribute_Data" />
-                    <constraint alias="eav_validator" class="Mage_Eav_Model_Validator_Attribute_Data"/>
                 </entity_constraints>
             </rule>
         </rules>

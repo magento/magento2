@@ -55,21 +55,21 @@ NOTE: Regarding styles - if we leave it this way, we'll move it to boxes.css
     $this->setDateInput('d',
         '<div class="dob-day">
              <input type="text" id="' . $this->getFieldId('day') . '" name="' . $this->getFieldName('day') . '" value="' . $this->getDay() . '" title="' . $this->__('Day') . '" class="input-text validate-custom" ' . $this->getFieldParams() . ' />
-             <label for="' . $this->getFieldId('day') . '">' . $this->__('DD') . '</label>
+             <label for="' . $this->getFieldId('day') . '">' . $this->__('Day (DD)') . '</label>
          </div>'
     );
 
     $this->setDateInput('m',
         '<div class="dob-month">
              <input type="text" id="' . $this->getFieldId('month') . '" name="' . $this->getFieldName('month') . '" value="' . $this->getMonth()  . '" title="' . $this->__('Month')  . '" class="input-text validate-custom" ' . $this->getFieldParams()  . ' />
-             <label for="' . $this->getFieldId('month') . '">' . $this->__('MM')  . '</label>
+             <label for="' . $this->getFieldId('month') . '">' . $this->__('Month (MM)')  . '</label>
          </div>'
     );
 
     $this->setDateInput('y',
         '<div class="dob-year">
              <input type="text" id="' . $this->getFieldId('year') . '" name="' . $this->getFieldName('year') . '" value="' . $this->getYear()  . '" title="' . $this->__('Year')  . '" class="input-text validate-custom" ' . $this->getFieldParams()  . ' />
-             <label for="' . $this->getFieldId('year') . '">' . $this->__('YYYY')  . '</label>
+             <label for="' . $this->getFieldId('year') . '">' . $this->__('Year (YYYY)')  . '</label>
          </div>'
     );
 ?>

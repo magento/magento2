@@ -33,7 +33,7 @@ abstract class Mage_Checkout_Model_Cart_AbstractTest extends PHPUnit_Framework_T
      */
     protected function _getQuote()
     {
-        /** @var $session Mage_Checkout_Model_Session */
+        /** @var Mage_Checkout_Model_Session $session */
         $session = Mage::getModel('Mage_Checkout_Model_Session');
         /** @var Mage_Sales_Model_Quote $quote */
         $quote = $session->getQuote();

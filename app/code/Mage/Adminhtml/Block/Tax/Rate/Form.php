@@ -32,7 +32,7 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 
-class Mage_Adminhtml_Block_Tax_Rate_Form extends Mage_Adminhtml_Block_Widget_Form
+class Mage_Adminhtml_Block_Tax_Rate_Form extends Mage_Backend_Block_Widget_Form
 {
     const FORM_ELEMENT_ID = 'rate-form';
 
@@ -53,7 +53,7 @@ class Mage_Adminhtml_Block_Tax_Rate_Form extends Mage_Adminhtml_Block_Widget_For
         $rateObject = new Varien_Object(Mage::getSingleton('Mage_Tax_Model_Calculation_Rate')->getData());
         $form = new Varien_Data_Form();
 
-        $countries = Mage::getModel('Mage_Directory_Model_Config_Source_Country')->toOptionArray();
+        $countries = Mage::getModel('Mage_Directory_Model_Config_Source_Country')->toOptionArray(false, 'US');
         unset($countries[0]);
 
         if (!$rateObject->hasTaxCountryId()) {
@@ -75,7 +75,8 @@ class Mage_Adminhtml_Block_Tax_Rate_Form extends Mage_Adminhtml_Block_Widget_For
             $regions = array(array('value' => '', 'label' => '*'));
         }
 
-        $fieldset = $form->addFieldset('base_fieldset', array('legend' => Mage::helper('Mage_Tax_Helper_Data')->__('Tax Rate Information')));
+        $legend = $this->getShowLegend() ? Mage::helper('Mage_Tax_Helper_Data')->__('Tax Rate Information') : '';
+        $fieldset = $form->addFieldset('base_fieldset', array('legend' => $legend));
 
         if ($rateObject->getTaxCalculationRateId() > 0) {
             $fieldset->addField('tax_calculation_rate_id', 'hidden', array(
@@ -92,19 +93,6 @@ class Mage_Adminhtml_Block_Tax_Rate_Form extends Mage_Adminhtml_Block_Widget_For
             'required' => true,
         ));
 
-        $fieldset->addField('tax_country_id', 'select', array(
-            'name'     => 'tax_country_id',
-            'label'    => Mage::helper('Mage_Tax_Helper_Data')->__('Country'),
-            'required' => true,
-            'values'   => $countries
-        ));
-
-        $fieldset->addField('tax_region_id', 'select', array(
-            'name'   => 'tax_region_id',
-            'label'  => Mage::helper('Mage_Tax_Helper_Data')->__('State'),
-            'values' => $regions
-        ));
-
         $fieldset->addField('zip_is_range', 'checkbox', array(
             'name'    => 'zip_is_range',
             'label'   => Mage::helper('Mage_Tax_Helper_Data')->__('Zip/Post is Range'),
@@ -118,7 +106,7 @@ class Mage_Adminhtml_Block_Tax_Rate_Form extends Mage_Adminhtml_Block_Widget_For
         $fieldset->addField('tax_postcode', 'text', array(
             'name'  => 'tax_postcode',
             'label' => Mage::helper('Mage_Tax_Helper_Data')->__('Zip/Post Code'),
-            'note'  => Mage::helper('Mage_Tax_Helper_Data')->__("'*' - matches any; 'xyz*' - matches any that begins on 'xyz' and not longer than %d.", Mage::helper('Mage_Tax_Helper_Data')->getPostCodeSubStringLength()),
+            'note'  => Mage::helper('Mage_Tax_Helper_Data')->__("'*' - matches any; 'xyz*' - matches any that begins on 'xyz' and are not longer than %d.", Mage::helper('Mage_Tax_Helper_Data')->getPostCodeSubStringLength()),
         ));
 
         $fieldset->addField('zip_from', 'text', array(
@@ -137,6 +125,19 @@ class Mage_Adminhtml_Block_Tax_Rate_Form extends Mage_Adminhtml_Block_Widget_For
             'maxlength' => 9,
             'class'     => 'validate-digits',
             'css_class'     => 'hidden',
+        ));
+
+        $fieldset->addField('tax_region_id', 'select', array(
+            'name'   => 'tax_region_id',
+            'label'  => Mage::helper('Mage_Tax_Helper_Data')->__('State'),
+            'values' => $regions
+        ));
+
+        $fieldset->addField('tax_country_id', 'select', array(
+            'name'     => 'tax_country_id',
+            'label'    => Mage::helper('Mage_Tax_Helper_Data')->__('Country'),
+            'required' => true,
+            'values'   => $countries
         ));
 
         $fieldset->addField('rate', 'text', array(
@@ -166,6 +167,12 @@ class Mage_Adminhtml_Block_Tax_Rate_Form extends Mage_Adminhtml_Block_Widget_For
         }
         $form->setValues($rateData);
         $this->setForm($form);
+
+        $this->setChild(
+            'form_after',
+            $this->getLayout()->createBlock('Mage_Core_Block_Template')
+                ->setTemplate('Mage_Adminhtml::tax/rate/js.phtml')
+        );
 
         return parent::_prepareForm();
     }

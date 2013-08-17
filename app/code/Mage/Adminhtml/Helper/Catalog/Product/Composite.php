@@ -114,7 +114,7 @@ class Mage_Adminhtml_Helper_Catalog_Product_Composite extends Mage_Core_Helper_A
                 ->setStoreId($currentStoreId)
                 ->load($configureResult->getProductId());
             if (!$product->getId()) {
-                Mage::throwException($this->__('Product is not loaded.'));
+                Mage::throwException($this->__('The product is not loaded.'));
             }
             Mage::register('current_product', $product);
             Mage::register('product', $product);

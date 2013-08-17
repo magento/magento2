@@ -46,7 +46,7 @@ class Mage_CatalogInventory_Block_Qtyincrements extends Mage_Core_Block_Template
      *
      * @return Mage_Catalog_Model_Product
      */
-    protected function _getProduct()
+    public function getProduct()
     {
         return Mage::registry('current_product');
     }
@@ -58,7 +58,7 @@ class Mage_CatalogInventory_Block_Qtyincrements extends Mage_Core_Block_Template
      */
     public function getProductName()
     {
-        return $this->_getProduct()->getName();
+        return $this->getProduct()->getName();
     }
 
     /**
@@ -69,8 +69,8 @@ class Mage_CatalogInventory_Block_Qtyincrements extends Mage_Core_Block_Template
     public function getProductQtyIncrements()
     {
         if ($this->_qtyIncrements === null) {
-            $this->_qtyIncrements = $this->_getProduct()->getStockItem()->getQtyIncrements();
-            if (!$this->_getProduct()->isSaleable()) {
+            $this->_qtyIncrements = $this->getProduct()->getStockItem()->getQtyIncrements();
+            if (!$this->getProduct()->isSaleable()) {
                 $this->_qtyIncrements = false;
             }
         }

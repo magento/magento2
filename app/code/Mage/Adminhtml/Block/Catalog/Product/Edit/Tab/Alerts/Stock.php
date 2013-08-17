@@ -80,13 +80,13 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Alerts_Stock extends Mage_Ad
         ));
 
         $this->addColumn('add_date', array(
-            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Date Subscribed'),
+            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Subscribe Date'),
             'index'     => 'add_date',
             'type'      => 'date'
         ));
 
         $this->addColumn('send_date', array(
-            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Last Notification'),
+            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Last Notified'),
             'index'     => 'send_date',
             'type'      => 'date'
         ));

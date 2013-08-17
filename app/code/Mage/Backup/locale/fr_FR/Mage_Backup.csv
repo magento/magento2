@@ -33,7 +33,7 @@
 "Put store on the maintenance mode while backup's creation","Mettre une réserve sur le mode de maintenance lors de la création de la copie de sauvegarde"
 "Rollback","Réduction"
 "Scheduled Backup Settings","Paramètres de la sauvegarde programmée"
-"Size, Bytes","Taille, Bytes"
+"Size (bytes)","Taille, Bytes"
 "Start Time","Date de début"
 "System Backup","Sauvegarde du système"
 "System couldn't put store on the maintenance mode","Le système n'a pas pu mettre de réserves sur le mode maintenance"

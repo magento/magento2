@@ -27,8 +27,10 @@
 
 /**
  * Test class for Mage_Backend_Model_Auth.
+ *
+ * @magentoAppArea adminhtml
  */
-class Mage_Backend_Model_MenuTest extends Mage_Backend_Area_TestCase
+class Mage_Backend_Model_MenuTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Mage_Backend_Model_Menu

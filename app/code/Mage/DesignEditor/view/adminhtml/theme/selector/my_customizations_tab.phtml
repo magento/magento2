@@ -30,11 +30,9 @@
 <div class="themes-unassigned"><?php echo $this->getChildHtml('unassigned.theme.list') ?></div>
 
 <script type="text/javascript">
-    <?php if ($this->getTabId()): ?>
-        (function ($) {
-            $('a[name="<?php echo $this->getTabId() ?>"]').on("click", function(event) {
-                $('.infinite_scroll').infinite_scroll('setLocked', true)
-            })
-        })(jQuery);
-    <?php endif; ?>
+    (function ($) {
+        $(document).ready(function() {
+            $('body').themeDelete();
+        });
+    })(jQuery);
 </script>

@@ -1,5 +1,7 @@
 <?php
 /**
+ * Event resource
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,6 +27,9 @@
  */
 class Mage_Webhook_Model_Resource_Event extends Mage_Core_Model_Resource_Db_Abstract
 {
+    /**
+     * Initialize resource model
+     */
     public function _construct()
     {
         $this->_init('webhook_event', 'event_id');

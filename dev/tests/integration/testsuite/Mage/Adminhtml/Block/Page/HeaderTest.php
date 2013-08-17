@@ -27,8 +27,9 @@
 
 /**
  * Test Mage_Adminhtml_Block_Page_Header
+ * @magentoAppArea adminhtml
  */
-class Mage_Adminhtml_Block_Page_HeaderTest extends Mage_Backend_Area_TestCase
+class Mage_Adminhtml_Block_Page_HeaderTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Mage_Adminhtml_Block_Page_Header

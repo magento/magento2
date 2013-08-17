@@ -92,7 +92,10 @@ class Legacy_ClassesTest extends PHPUnit_Framework_TestCase
 
         // check ->_init | parent::_init
         $skipForInit = implode('|',
-            array('id', '[\w\d_]+_id', 'pk', 'code', 'status', 'serial_number', 'entity_pk_value', 'currency_code')
+            array(
+                'id', '[\w\d_]+_id', 'pk', 'code', 'status', 'serial_number',
+                'entity_pk_value', 'currency_code', 'unique_key',
+            )
         );
         Utility_Classes::getAllMatches($contents, '/
             (?:parent\:\: | \->)_init\(\s*[\'"]([^\'"]+)[\'"]\s*\)

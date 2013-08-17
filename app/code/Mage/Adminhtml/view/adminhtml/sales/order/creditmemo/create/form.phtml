@@ -40,7 +40,7 @@
                     <span class="title"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Payment Information') ?></span>
                 </div>
                 <div><?php echo $this->getChildHtml('order_payment') ?></div>
-                <div class="order-payment-currency"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Order was placed using %s', $_order->getOrderCurrencyCode()) ?></div>
+                <div class="order-payment-currency"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('The order was placed using %s.', $_order->getOrderCurrencyCode()) ?></div>
                 <?php /*if ($this->getCreditmemo()->canRefund()): ?>
                 <input type="checkbox" name="creditmemo[do_refund]" id="creditmemo_do_refund" value="1" checked/>
                 <label for="creditmemo_do_refund" class="normal"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Refund Amount') ?></label>

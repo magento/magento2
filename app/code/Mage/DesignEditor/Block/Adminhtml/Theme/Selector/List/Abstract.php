@@ -24,38 +24,23 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+// @codingStandardsIgnoreStart
 /**
  * Abstract theme list
  *
  * @method Mage_Core_Model_Resource_Theme_Collection getCollection()
- * @method Mage_Core_Block_Template setCollection(Mage_Core_Model_Resource_Theme_Collection $collection)
+ * @method bool|null getIsFirstEntrance()
+ * @method bool|null getHasThemeAssigned()
+ * @method Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract setHasThemeAssigned(bool $flag)
+ * @method Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract|Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Available setCollection(Mage_Core_Model_Resource_Theme_Collection $collection)
+ * @method Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract setIsFirstEntrance(bool $flag)
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+// @codingStandardsIgnoreEnd
 abstract class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
-    extends Mage_Core_Block_Template
+    extends Mage_Backend_Block_Template
 {
-    /**
-     * Application model
-     *
-     * @var Mage_Core_Model_App
-     */
-    protected $_app;
-
-    /**
-     * @param Mage_Core_Block_Template_Context $context
-     * @param Mage_Core_Model_App $app
-     * @param array $data
-     */
-    public function __construct(
-        Mage_Core_Block_Template_Context $context,
-        Mage_Core_Model_App $app,
-        array $data = array()
-    ) {
-        $this->_app = $app;
-        parent::__construct($context, $data);
-    }
-
     /**
      * Get tab title
      *
@@ -84,49 +69,37 @@ abstract class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
     {
         /** @var $itemBlock Mage_DesignEditor_Block_Adminhtml_Theme */
         $itemBlock = $this->getChildBlock('theme');
-
         $themeCollection = $this->getCollection();
 
         $items = array();
-        /** @var $theme Mage_Core_Model_Theme */
-        foreach ($themeCollection as $theme) {
-            $itemBlock->setTheme($theme);
-            $this->_addThemeButtons($itemBlock);
-            $items[] = $this->getChildHtml('theme', false);
+        if (!empty($themeCollection)) {
+            /** @var $theme Mage_Core_Model_Theme */
+            foreach ($themeCollection as $theme) {
+                $itemBlock->setTheme($theme);
+                $this->_addThemeButtons($itemBlock);
+                $items[] = $this->getChildHtml('theme', false);
+            }
         }
-
         return $items;
     }
 
     /**
-     * Get assign to storeview button
+     * Add duplicate button
      *
      * @param Mage_DesignEditor_Block_Adminhtml_Theme $themeBlock
-     * @return Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
+     * @return $this
      */
-    protected function _addAssignButtonHtml($themeBlock)
+    protected function _addDuplicateButtonHtml($themeBlock)
     {
         $themeId = $themeBlock->getTheme()->getId();
-        $message = $this->__('You are about to apply this theme for your live store, are you really want to do this?');
 
         /** @var $assignButton Mage_Backend_Block_Widget_Button */
-        $assignButton = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button');
+        $assignButton = $this->getLayout()->createBlock('Mage_DesignEditor_Block_Adminhtml_Theme_Button');
         $assignButton->setData(array(
-            'label'   => $this->__('Assign to a Storeview'),
-            'data_attribute'  => array(
-                'mage-init' => array(
-                    'button' => array(
-                        'event' => 'assign',
-                        'target' => 'body',
-                        'eventData' => array(
-                            'theme_id'        => $themeId,
-                            'confirm_message' =>  $message
-                        )
-                    ),
-                ),
-            ),
-            'class'   => 'save action-theme-assign primary',
-            'target'  => '_blank'
+            'title' => $this->__('Duplicate'),
+            'label' => $this->__('Duplicate'),
+            'class'   => 'action-duplicate',
+            'href'   => $this->getUrl('*/*/duplicate', array('theme_id' => $themeId))
         ));
 
         $themeBlock->addButton($assignButton);
@@ -134,33 +107,49 @@ abstract class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
     }
 
     /**
-     * Get preview button
+     * Get assign to store-view button
+     *
+     * This button used on "Available Themes" tab and "My Customizations" tab
      *
      * @param Mage_DesignEditor_Block_Adminhtml_Theme $themeBlock
-     * @return Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
+     * @return $this
      */
-    protected function _addPreviewButtonHtml($themeBlock)
+    protected function _addAssignButtonHtml($themeBlock)
     {
-        /** @var $previewButton Mage_Backend_Block_Widget_Button */
-        $previewButton = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button');
-        $previewButton->setData(array(
-            'id'        => 'theme-preview-' . $themeBlock->getTheme()->getId(),
-            'label'     => $this->__('Preview Theme'),
-            'class'     => 'action-theme-preview',
-            'data_attribute' => array(
+        if ($this->getHasThemeAssigned()) {
+            // @codingStandardsIgnoreStart
+            $message = $this->__('You chose a new theme for your live store. Click "OK" to replace your current theme.');
+            // @codingStandardsIgnoreEnd
+        } else {
+            // @codingStandardsIgnoreStart
+            $message = $this->__('You chose a theme for your new store. Click "OK" to go live. You can always modify or switch themes in "My Customizations" and "Available Themes."');
+            // @codingStandardsIgnoreEnd
+        }
+        $themeId = $themeBlock->getTheme()->getId();
+
+        /** @var $assignButton Mage_Backend_Block_Widget_Button */
+        $assignButton = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button');
+        $assignButton->setData(array(
+            'label'   => $this->__('Assign to a Store View'),
+            'data_attribute'  => array(
                 'mage-init' => array(
                     'button' => array(
-                        'event' => 'preview',
-                        'target' => 'body',
+                        'event'     => 'assign',
+                        'target'    => 'body',
                         'eventData' => array(
-                            'preview_url' => $this->_getPreviewUrl($themeBlock->getTheme()->getId())
+                            'theme_id' => $themeId,
+                            'confirm'  => array(
+                                'message' =>  $message,
+                                'title'   =>  $this->__('Assign New Theme')
+                            )
                         )
                     ),
                 ),
-            )
+            ),
+            'class'   => 'save action-theme-assign primary',
         ));
 
-        $themeBlock->addButton($previewButton);
+        $themeBlock->addButton($assignButton);
         return $this;
     }
 
@@ -168,26 +157,18 @@ abstract class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
      * Get edit button
      *
      * @param Mage_DesignEditor_Block_Adminhtml_Theme $themeBlock
-     * @return Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
+     * @return $this
      */
     protected function _addEditButtonHtml($themeBlock)
     {
         /** @var $editButton Mage_Backend_Block_Widget_Button */
-        $editButton = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button');
+        $editButton = $this->getLayout()->createBlock('Mage_DesignEditor_Block_Adminhtml_Theme_Button');
         $editButton->setData(array(
-            'label'     => $this->__('Edit'),
-            'class'     => 'add action-edit',
-            'data_attribute' => array(
-                'mage-init' => array(
-                    'button' => array(
-                        'event' => 'preview',
-                        'target' => 'body',
-                        'eventData' => array(
-                            'preview_url' => $this->_getEditUrl($themeBlock->getTheme()->getId())
-                        )
-                    ),
-                ),
-            )
+            'title'  => $this->__('Edit'),
+            'label'  => $this->__('Edit'),
+            'class'  => 'action-edit',
+            'href'   => $this->_getEditUrl($themeBlock->getTheme()->getId()),
+            'target' => 'edittheme',
         ));
 
         $themeBlock->addButton($editButton);
@@ -218,7 +199,7 @@ abstract class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
     {
         return $this->getUrl('*/*/launch', array(
             'theme_id' => $themeId,
-            'mode'     => Mage_DesignEditor_Model_State::MODE_DESIGN
+            'mode'     => Mage_DesignEditor_Model_State::MODE_NAVIGATION
         ));
     }
 }

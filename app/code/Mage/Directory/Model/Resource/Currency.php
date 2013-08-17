@@ -169,7 +169,7 @@ class Mage_Directory_Model_Resource_Currency extends Mage_Core_Model_Resource_Db
                 $adapter->insertOnDuplicate($this->_currencyRateTable, $data, array('rate'));
             }
         } else {
-            Mage::throwException(Mage::helper('Mage_Directory_Helper_Data')->__('Invalid rates received'));
+            Mage::throwException(Mage::helper('Mage_Directory_Helper_Data')->__('Please correct the rates received'));
         }
     }
 

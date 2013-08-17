@@ -129,13 +129,6 @@
                 </observers>
             </sales_convert_order_item_to_quote_item>
         </events>
-        <layout>
-            <updates>
-                <giftmessage module="Mage_GiftMessage">
-                    <file>layout.xml</file>
-                </giftmessage>
-            </updates>
-        </layout>
     </adminhtml>
     <frontend>
         <events>

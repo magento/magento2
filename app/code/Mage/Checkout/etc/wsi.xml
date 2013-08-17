@@ -178,10 +178,6 @@
                     <xsd:element name="gift_cards_amount" type="xsd:string" minOccurs="0"/>
                     <xsd:element name="base_gift_cards_amount" type="xsd:string" minOccurs="0"/>
                     <xsd:element name="gift_cards_amount_used" type="xsd:string" minOccurs="0"/>
-                    <xsd:element name="use_reward_points" type="xsd:string" minOccurs="0"/>
-                    <xsd:element name="reward_points_balance" type="xsd:string" minOccurs="0"/>
-                    <xsd:element name="base_reward_currency_amount" type="xsd:string" minOccurs="0"/>
-                    <xsd:element name="reward_currency_amount" type="xsd:string" minOccurs="0"/>
                     <xsd:element name="shipping_address" type="typens:shoppingCartAddressEntity" minOccurs="0"/>
                     <xsd:element name="billing_address" type="typens:shoppingCartAddressEntity" minOccurs="0"/>
                     <xsd:element name="items" type="typens:shoppingCartItemEntityArray" minOccurs="0"/>
@@ -219,6 +215,7 @@
                     <xsd:element name="sku" type="xsd:string" minOccurs="0"/>
                     <xsd:element name="qty" type="xsd:double" minOccurs="0"/>
                     <xsd:element name="options" type="typens:associativeArray" minOccurs="0"/>
+                    <xsd:element name="configurable_options" type="typens:associativeArray" minOccurs="0"/>
                     <xsd:element name="bundle_option" type="typens:associativeArray" minOccurs="0"/>
                     <xsd:element name="bundle_option_qty" type="typens:associativeArray" minOccurs="0"/>
                     <xsd:element name="links" type="typens:ArrayOfString" minOccurs="0"/>
@@ -350,7 +347,7 @@
                         <xsd:element minOccurs="1" maxOccurs="1" name="sessionId" type="xsd:string" />
                         <xsd:element minOccurs="1" maxOccurs="1" name="quoteId" type="xsd:int" />
                         <xsd:element minOccurs="0" maxOccurs="1" name="store" type="xsd:string" />
-                        <xsd:element minOccurs="0" maxOccurs="1" name="licenses" type="typens:ArrayOfString" />
+                        <xsd:element minOccurs="0" maxOccurs="1" name="agreements" type="typens:ArrayOfString" />
                         <xsd:element minOccurs="0" maxOccurs="1" name="paymentData" type="typens:shoppingCartPaymentMethodEntity" />
                     </xsd:sequence>
                 </xsd:complexType>

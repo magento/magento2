@@ -175,8 +175,8 @@ class Mage_Rss_Block_Wishlist extends Mage_Wishlist_Block_Abstract
         }
         else {
             $rssObj->_addHeader(array(
-                'title'         => Mage::helper('Mage_Rss_Helper_Data')->__('Cannot retrieve the wishlist'),
-                'description'   => Mage::helper('Mage_Rss_Helper_Data')->__('Cannot retrieve the wishlist'),
+                'title'         => Mage::helper('Mage_Rss_Helper_Data')->__('We cannot retrieve the wish list.'),
+                'description'   => Mage::helper('Mage_Rss_Helper_Data')->__('We cannot retrieve the wish list.'),
                 'link'          => Mage::getUrl(),
                 'charset'       => 'UTF-8',
             ));

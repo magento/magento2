@@ -52,13 +52,6 @@
                 </Mage_Rss>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <rss module="Mage_Rss">
-                    <file>layout.xml</file>
-                </rss>
-            </updates>
-        </layout>
     </adminhtml>
     <frontend>
         <translate>
@@ -84,12 +77,5 @@
                 </args>
             </rss>
         </routers>
-        <layout>
-            <updates>
-                <rss module="Mage_Rss">
-                    <file>layout.xml</file>
-                </rss>
-            </updates>
-        </layout>
     </frontend>
 </config>

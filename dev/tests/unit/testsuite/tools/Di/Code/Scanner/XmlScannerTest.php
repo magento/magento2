@@ -65,6 +65,7 @@ class Magento_Tools_Di_Code_Scanner_XmlScannerTest extends PHPUnit_Framework_Tes
             'Mage_Core_Model_Cache_Proxy',
             'Mage_Backend_Block_Menu_Proxy',
             'Mage_Core_Model_StoreManager_Proxy',
+            'Mage_Core_Model_Layout_Factory',
         );
         $this->assertEquals($expected, $actual);
     }

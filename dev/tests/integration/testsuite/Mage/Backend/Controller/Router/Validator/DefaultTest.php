@@ -27,8 +27,9 @@
 
 /**
  * Test class Mage_Backend_Controller_Router_Default
+ * @magentoAppArea adminhtml
  */
-class Mage_Backend_Controller_Router_Validator_DefaultTest extends Mage_Backend_Area_TestCase
+class Mage_Backend_Controller_Router_Validator_DefaultTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @magentoConfigFixture global/areas/adminhtml/frontName 0

@@ -77,7 +77,12 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Sku extends Mage_Eav_Model_En
         $increment = $this->_getLastSimilarAttributeValueIncrement($attribute, $object);
         $attributeValue = $object->getData($attribute->getAttributeCode());
         while (!$entity->checkAttributeUniqueValue($attribute, $object)) {
-            $object->setData($attribute->getAttributeCode(), trim($attributeValue) . '-' . ++$increment);
+            $sku = trim($attributeValue);
+            if (strlen($sku . '-' . ++$increment) > self::SKU_MAX_LENGTH) {
+                $sku = substr($sku, 0, -strlen($increment) - 1);
+            }
+            $sku = $sku . '-' . $increment;
+            $object->setData($attribute->getAttributeCode(), $sku);
         }
     }
 

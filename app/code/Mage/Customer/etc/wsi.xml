@@ -14,10 +14,16 @@
                     <xsd:element name="email" type="xsd:string" minOccurs="0" />
                     <xsd:element name="firstname" type="xsd:string" minOccurs="0" />
                     <xsd:element name="lastname" type="xsd:string" minOccurs="0" />
+                    <xsd:element name="middlename" type="xsd:string" minOccurs="0" />
                     <xsd:element name="password" type="xsd:string" minOccurs="0" />
                     <xsd:element name="website_id" type="xsd:int" minOccurs="0" />
                     <xsd:element name="store_id" type="xsd:int" minOccurs="0" />
                     <xsd:element name="group_id" type="xsd:int" minOccurs="0" />
+                    <xsd:element name="prefix" type="xsd:string" minOccurs="0" />
+                    <xsd:element name="suffix" type="xsd:string" minOccurs="0" />
+                    <xsd:element name="dob" type="xsd:string" minOccurs="0" />
+                    <xsd:element name="taxvat" type="xsd:string" minOccurs="0" />
+                    <xsd:element name="gender" type="xsd:int" minOccurs="0" />
                 </xsd:sequence>
             </xsd:complexType>
             <xsd:complexType name="customerCustomerEntity">

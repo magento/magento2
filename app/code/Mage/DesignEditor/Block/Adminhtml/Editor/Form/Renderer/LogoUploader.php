@@ -37,6 +37,11 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Form_Renderer_LogoUploader
     extends Mage_DesignEditor_Block_Adminhtml_Editor_Form_Renderer_ImageUploader
 {
     /**
+     * @var Mage_DesignEditor_Model_Theme_Context
+     */
+    protected $_themeContext;
+
+    /**
      * Set of templates to render
      *
      * Upper is rendered first and is inserted into next using <?php echo $this->getHtml() ?>
@@ -49,15 +54,19 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Form_Renderer_LogoUploader
     );
 
     /**
-     * Return theme identification number
+     * Initialize dependencies
      *
-     * @return int|null
+     * @param Mage_Backend_Block_Template_Context $context
+     * @param Mage_DesignEditor_Model_Theme_Context $themeContext
+     * @param array $data
      */
-    protected function getThemeId()
-    {
-        /** @var $helper Mage_DesignEditor_Helper_Data */
-        $helper = $this->_helperFactory->get('Mage_DesignEditor_Helper_Data');
-        return $helper->getVirtualThemeId();
+    public function __construct(
+        Mage_Backend_Block_Template_Context $context,
+        Mage_DesignEditor_Model_Theme_Context $themeContext,
+        array $data = array()
+    ) {
+        $this->_themeContext = $themeContext;
+        parent::__construct($context, $data);
     }
 
     /**
@@ -69,7 +78,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Form_Renderer_LogoUploader
     public function getLogoUploadUrl($store)
     {
         return $this->getUrl('*/system_design_editor_tools/uploadStoreLogo',
-            array('theme_id' => $this->getThemeId(), 'store_id' => $store->getId())
+            array('theme_id' => $this->_themeContext->getEditableTheme()->getId(), 'store_id' => $store->getId())
         );
     }
 
@@ -82,7 +91,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Form_Renderer_LogoUploader
     public function getLogoRemoveUrl($store)
     {
         return $this->getUrl('*/system_design_editor_tools/removeStoreLogo',
-            array('theme_id' => $this->getThemeId(), 'store_id' => $store->getId())
+            array('theme_id' => $this->_themeContext->getEditableTheme()->getId(), 'store_id' => $store->getId())
         );
     }
 
@@ -90,23 +99,27 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Form_Renderer_LogoUploader
      * Get logo image
      *
      * @param Mage_Core_Model_Store $store
-     * @return string|bool
+     * @return string|null
      */
     public function getLogoImage($store)
     {
-        return (null !== $store) ? $this->_storeConfig->getConfig('design/header/logo_src', $store->getId()) : null;
+        $image = null;
+        if (null !== $store) {
+            $image = basename($this->_storeConfig->getConfig('design/header/logo_src', $store->getId()));
+        }
+        return $image;
     }
 
     /**
      * Get stores list
      *
-     * @return mixed
+     * @return Mage_Core_Model_Store|null
      */
     public function getStoresList()
     {
-        $stores = Mage::getObjectManager()->get('Mage_Core_Model_Theme_Service')->getStoresByThemes();
-        return isset($stores[$this->getThemeId()])
-            ? $stores[$this->getThemeId()]
+        $stores = Mage::getObjectManager()->get('Mage_Theme_Model_Config_Customization')->getStoresByThemes();
+        return isset($stores[$this->_themeContext->getEditableTheme()->getId()])
+            ? $stores[$this->_themeContext->getEditableTheme()->getId()]
             : null;
     }
 }

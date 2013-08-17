@@ -24,62 +24,108 @@
 class Magento_Cache_Frontend_Decorator_TagScopeTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var string
+     * @var Magento_Cache_Frontend_Decorator_TagScope
      */
-    protected $_tagForTests = 'bird';
+    protected $_object;
 
     /**
-     * @var CacheScopeCleanVerification
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_cache;
+    protected $_frontend;
 
     public function setUp()
     {
-        include_once __DIR__ . '/_files/CacheScopeCleanVerification.php';
-        $this->_cache = new CacheScopeCleanVerification();
+        $this->_frontend = $this->getMock('Magento_Cache_FrontendInterface');
+        $this->_object = new Magento_Cache_Frontend_Decorator_TagScope($this->_frontend, 'enforced_tag');
+    }
+
+    protected function tearDown()
+    {
+        $this->_object = null;
+        $this->_frontend = null;
+    }
+
+    public function testGetTag()
+    {
+        $this->assertEquals('enforced_tag', $this->_object->getTag());
+    }
+
+    public function testSave()
+    {
+        $expectedResult = new stdClass();
+        $this->_frontend
+            ->expects($this->once())
+            ->method('save')
+            ->with('test_value', 'test_id', array('test_tag_one', 'test_tag_two', 'enforced_tag'), 111)
+            ->will($this->returnValue($expectedResult))
+        ;
+        $actualResult = $this->_object->save('test_value', 'test_id', array('test_tag_one', 'test_tag_two'), 111);
+        $this->assertSame($expectedResult, $actualResult);
+    }
+
+    public function testCleanModeAll()
+    {
+        $expectedResult = new stdClass();
+        $this->_frontend
+            ->expects($this->once())
+            ->method('clean')
+            ->with(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('enforced_tag'))
+            ->will($this->returnValue($expectedResult))
+        ;
+        $actualResult = $this->_object->clean(
+            Zend_Cache::CLEANING_MODE_ALL, array('ignored_tag_one', 'ignored_tag_two')
+        );
+        $this->assertSame($expectedResult, $actualResult);
+    }
+
+    public function testCleanModeMatchingTag()
+    {
+        $expectedResult = new stdClass();
+        $this->_frontend
+            ->expects($this->once())
+            ->method('clean')
+            ->with(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('test_tag_one', 'test_tag_two', 'enforced_tag'))
+            ->will($this->returnValue($expectedResult))
+        ;
+        $actualResult = $this->_object->clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('test_tag_one', 'test_tag_two')
+        );
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
-     * @param string $mode
-     * @param array $tags
-     * @param array $expectedRecordsLeft
-     * @dataProvider cleanDataProvider
+     * @param bool $fixtureResultOne
+     * @param bool $fixtureResultTwo
+     * @param bool $expectedResult
+     * @dataProvider cleanModeMatchingAnyTagDataProvider
      */
-    public function testClean($mode, $tags, $expectedRecordsLeft)
+    public function testCleanModeMatchingAnyTag($fixtureResultOne, $fixtureResultTwo, $expectedResult)
     {
-        $frontend = $this->getMock('Magento_Cache_FrontendInterface');
-        $frontend->expects($this->any())
+        $this->_frontend
+            ->expects($this->at(0))
             ->method('clean')
-            ->will($this->returnCallback(array($this->_cache, 'clean')));
-
-        $object = new Magento_Cache_Frontend_Decorator_TagScope($frontend, $this->_tagForTests);
-        $object->clean($mode, $tags);
-        $this->assertEquals($expectedRecordsLeft, $this->_cache->getRecordIds());
+            ->with(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('test_tag_one', 'enforced_tag'))
+            ->will($this->returnValue($fixtureResultOne))
+        ;
+        $this->_frontend
+            ->expects($this->at(1))
+            ->method('clean')
+            ->with(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('test_tag_two', 'enforced_tag'))
+            ->will($this->returnValue($fixtureResultTwo))
+        ;
+        $actualResult = $this->_object->clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('test_tag_one', 'test_tag_two')
+        );
+        $this->assertEquals($expectedResult, $actualResult);
     }
 
-    public function cleanDataProvider()
+    public function cleanModeMatchingAnyTagDataProvider()
     {
         return array(
-            Zend_Cache::CLEANING_MODE_ALL => array(
-                Zend_Cache::CLEANING_MODE_ALL,
-                array(),
-                array('elephant', 'man', 'raccoon')
-            ),
-            'tags must be ignored in CLEANING_MODE_ALL' => array(
-                Zend_Cache::CLEANING_MODE_ALL,
-                array('big'),
-                array('elephant', 'man', 'raccoon')
-            ),
-            Zend_Cache::CLEANING_MODE_MATCHING_TAG => array(
-                Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-                array('big'),
-                array('elephant', 'man', 'raccoon', 'turkey', 'pigeon')
-            ),
-            Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG => array(
-                Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-                array('big', 'small'),
-                array('elephant', 'man', 'raccoon', 'turkey')
-            ),
+            'failure, failure' => array(false,  false,  false),
+            'failure, success' => array(false,  true,   true),
+            'success, failure' => array(true,   false,  true),
+            'success, success' => array(true,   true,   true),
         );
     }
 }

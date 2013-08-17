@@ -144,13 +144,13 @@ class Mage_Webapi_Model_Acl_UserTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCollection()
     {
+        $fetchStrategy = $this->getMockForAbstractClass('Varien_Data_Collection_Db_FetchStrategyInterface');
+
         /** @var PHPUnit_Framework_MockObject_MockObject $collection */
         $collection = $this->getMock(
             'Mage_Webapi_Model_Resource_Acl_User_Collection',
             array('_initSelect', 'setModel'),
-            array('resource' => $this->_userResource),
-            '',
-            true
+            array($fetchStrategy, $this->_userResource)
         );
 
         $collection->expects($this->any())->method('setModel')->with('Mage_Webapi_Model_Acl_User');

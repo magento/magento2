@@ -199,6 +199,15 @@
     border-right: 1px solid #c0bbaf;
 }
 
+.popup-window .grid .data td:first-child {
+    border-left-width: 0;
+}
+
+.popup-window .grid .data td:last-child {
+    border-left-width: 0;
+    border-right-width: 0;
+}
+
 .popup-window .grid .data tr:last-child td {
     border-bottom-color: #c0bbaf;
 }
@@ -421,10 +430,10 @@
 .ui-dialog .ui-dialog-titlebar-close {
     background: none;
     cursor: pointer;
-    margin: 0px;
+    margin: 0;
     padding: 0;
     position: absolute;
-    top: 18px;
+    top: 22px;
     right: 16px;
     height: 16px;
     width: 16px;
@@ -479,12 +488,8 @@
     border: none;
 }
 
-.ui-dialog .ui-dialog-buttonset {
-    text-align: right;
-}
-
 .ui-dialog .ui-dialog-buttonset button {
-    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .ui-resizable {

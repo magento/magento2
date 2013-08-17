@@ -59,12 +59,28 @@ class Mage_Index_Model_ProcessTest extends PHPUnit_Framework_TestCase
      */
     protected $_processFile;
 
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_resourceMock;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_eventRepositoryMock;
+
     protected function setUp()
     {
         $this->_objectManager = Mage::getObjectManager();
 
+        $this->_eventRepositoryMock = $this->getMock(
+            'Mage_Index_Model_EventRepository', array(), array(), '', false
+        );
+
         // get existing indexer process
-        $this->_model = $this->_objectManager->create('Mage_Index_Model_Process');
+        $this->_model = $this->_objectManager->create(
+            'Mage_Index_Model_Process', array('eventRepository' => $this->_eventRepositoryMock)
+        );
         $this->_model->load(self::INDEXER_CODE, 'indexer_code');
         if ($this->_model->isObjectNew()) {
             $this->markTestIncomplete('Can\'t run test without ' . self::INDEXER_CODE . ' indexer.');
@@ -140,5 +156,19 @@ class Mage_Index_Model_ProcessTest extends PHPUnit_Framework_TestCase
         }
 
         $this->assertFalse($this->_processFile->isProcessLocked(true));
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     */
+    public function testReindexAllDoesntTriggerUnprocessedEventFetchingInManualMode()
+    {
+        $collection = $this->_objectManager->create('Mage_Index_Model_Resource_Event_Collection');
+        $this->_model->setMode(Mage_Index_Model_Process::MODE_REAL_TIME);
+        $this->_model->setStatus(Mage_Index_Model_Process::STATUS_PENDING);
+        $this->_eventRepositoryMock->expects($this->once())->method('getUnprocessed')
+            ->will($this->returnValue($collection));
+        $this->_eventRepositoryMock->expects($this->never())->method('hasUnprocessed');
+        $this->_model->reindexAll();
     }
 }

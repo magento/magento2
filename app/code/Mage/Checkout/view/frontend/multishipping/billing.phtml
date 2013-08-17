@@ -97,7 +97,15 @@
                 function() {
                     jQuery('#multishipping-billing-form').payment({
                         checkoutPrice: <?php echo (float)$this->getQuoteBaseGrandTotal(); ?>
-                    }).validation();
+                    }).validation({
+                        errorPlacement: function(error, element) {
+                            if (element.attr('data-validate') && element.attr('data-validate').indexOf('validate-cc-ukss') >= 0) {
+                                element.parents('form').find('[data-validation-msg="validate-cc-ukss"]').html(error);
+                            } else {
+                                element.after(error);
+                            }
+                        }
+                    });
                 });
     </script>
 </div>

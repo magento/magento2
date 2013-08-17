@@ -28,9 +28,24 @@
 class Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_JsTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Theme id of virtual theme
+     */
+    const TEST_THEME_ID = 15;
+
+    /**
      * @var Mage_Backend_Model_Url|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_urlBuilder;
+
+    /**
+     * @var Mage_DesignEditor_Model_Theme_Context|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_themeContext;
+
+    /**
+     * @var Mage_Core_Model_Theme|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_theme;
 
     /**
      * @var Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Js|PHPUnit_Framework_MockObject_MockObject
@@ -40,18 +55,24 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_JsTest extends PHPUnit
     public function setUp()
     {
         $this->_urlBuilder = $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false);
+        $this->_themeContext = $this->getMock('Mage_DesignEditor_Model_Theme_Context', array(), array(), '', false);
+        $this->_theme = $this->getMock('Mage_Core_Model_Theme', array('getId', 'getCustomization'), array(), '', false);
+        $this->_theme->expects($this->any())->method('getId')->will($this->returnValue(self::TEST_THEME_ID));
+        $this->_themeContext->expects($this->any())->method('getEditableTheme')
+            ->will($this->returnValue($this->_theme));
+        $this->_themeContext->expects($this->any())->method('getStagingTheme')
+            ->will($this->returnValue($this->_theme));
 
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         $constructArguments = $objectManagerHelper->getConstructArguments(
             'Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Js',
             array(
-                 'config'     => $this->getMock('Mage_Core_Model_Config', array(), array(), '', false),
-                 'service'    => $this->getMock('Mage_Core_Model_Theme_Service', array(), array(), '', false),
-                 'urlBuilder' => $this->_urlBuilder
+                'urlBuilder' => $this->_urlBuilder,
+                'themeContext' => $this->_themeContext
         ));
         $this->_model = $this->getMock(
             'Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Js',
-            array('__'),
+            array('__', 'helper'),
             $constructArguments
         );
     }
@@ -60,6 +81,8 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_JsTest extends PHPUnit
     {
         $this->_model = null;
         $this->_urlBuilder = null;
+        $this->_themeContext = null;
+        $this->_theme = null;
     }
 
     /**
@@ -67,16 +90,10 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_JsTest extends PHPUnit
      */
     public function testGetDownloadCustomCssUrl()
     {
-        $themeId = 15;
-        $theme = $this->getMockBuilder('Mage_Core_Model_Theme')->disableOriginalConstructor()->getMock();
-        $theme->expects($this->once())->method('getId')->will($this->returnValue($themeId));
-
-        $this->_model->setTheme($theme);
         $expectedUrl = 'some_url';
-
         $this->_urlBuilder->expects($this->once())
             ->method('getUrl')
-            ->with('*/system_design_editor_tools/uploadjs', array('id' => $themeId))
+            ->with('*/system_design_editor_tools/uploadjs', array('theme_id' => self::TEST_THEME_ID))
             ->will($this->returnValue($expectedUrl));
 
         $this->assertEquals($expectedUrl, $this->_model->getJsUploadUrl());
@@ -87,15 +104,10 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_JsTest extends PHPUnit
      */
     public function testGetJsReorderUrl()
     {
-        $themeId = 8;
-        $theme = $this->getMockBuilder('Mage_Core_Model_Theme')->disableOriginalConstructor()->getMock();
-        $theme->expects($this->once())->method('getId')->will($this->returnValue($themeId));
-        $this->_model->setTheme($theme);
-
         $expectedUrl = 'some_url';
         $this->_urlBuilder->expects($this->once())
             ->method('getUrl')
-            ->with('*/system_design_editor_tools/reorderjs', array('id' => $themeId))
+            ->with('*/system_design_editor_tools/reorderjs', array('theme_id' => self::TEST_THEME_ID))
             ->will($this->returnValue($expectedUrl));
 
         $this->assertEquals($expectedUrl, $this->_model->getJsReorderUrl());
@@ -113,25 +125,21 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_JsTest extends PHPUnit
     }
 
     /**
-     * @covers Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Js::getJsFiles
+     * @covers Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Js::getFiles
      */
     public function testGetJsFiles()
     {
-        $filesCollection = $this->getMockBuilder('Mage_Core_Model_Resource_Theme_File_Collection')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customization = $this->getMock('Mage_Core_Model_Theme_Customization', array(), array(), '', false);
+        $this->_theme->expects($this->any())->method('getCustomization')->will($this->returnValue($customization));
 
-        $theme = $this->getMockBuilder('Mage_Core_Model_Theme')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getCustomizationData'))
-            ->getMock();
+        $customization->expects($this->once())
+            ->method('getFilesByType')
+            ->with(Mage_Core_Model_Theme_Customization_File_Js::TYPE)
+            ->will($this->returnValue(array()));
+        $helperMock = $this->getMock('Mage_Core_Helper_Data', array(), array(), '', false);
+        $this->_model->expects($this->once())->method('helper')->with('Mage_Core_Helper_Data')
+            ->will($this->returnValue($helperMock));
 
-        $theme->expects($this->once())
-            ->method('getCustomizationData')
-            ->with(Mage_Core_Model_Theme_Customization_Files_Js::TYPE)
-            ->will($this->returnValue($filesCollection));
-
-        $this->_model->setTheme($theme);
-        $this->assertEquals($filesCollection, $this->_model->getJsFiles());
+        $this->_model->getFiles();
     }
 }

@@ -484,7 +484,7 @@ class Zend_Rest_Server implements Zend_Server_Interface
             $xmlResponse->appendChild($element);
             $code = $exception->getCode();
         } elseif (($exception !== null) || 'rest' == $function) {
-            $xmlResponse->appendChild($dom->createElement('message', 'An unknown error occured. Please try again.'));
+            $xmlResponse->appendChild($dom->createElement('message', 'An unknown error occurred. Please try again.'));
         } else {
             $xmlResponse->appendChild($dom->createElement('message', 'Call to ' . $method . ' failed.'));
         }

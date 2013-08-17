@@ -39,12 +39,11 @@ class Mage_Sales_Model_Resource_Report_Invoiced_Collection_Invoiced
      * Initialize custom resource model
      *
      */
-    public function __construct()
-    {
-        parent::_construct();
-        $this->setModel('Mage_Adminhtml_Model_Report_Item');
-        $this->_resource = Mage::getResourceModel('Mage_Sales_Model_Resource_Report')
-            ->init('sales_invoiced_aggregated');
-        $this->setConnection($this->getResource()->getReadConnection());
+    public function __construct(
+        Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy,
+        Mage_Sales_Model_Resource_Report $resource
+    ) {
+        $resource->init('sales_invoiced_aggregated');
+        parent::__construct($fetchStrategy, $resource);
     }
 }

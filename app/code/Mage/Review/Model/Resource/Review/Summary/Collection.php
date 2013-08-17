@@ -45,13 +45,14 @@ class Mage_Review_Model_Resource_Review_Summary_Collection extends Varien_Data_C
      * Enter description here ...
      *
      */
-    public function __construct()
-    {
-        $resources = Mage::getSingleton('Mage_Core_Model_Resource');
+    public function __construct(
+        Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy,
+        Mage_Core_Model_Resource $resource
+    ) {
         $this->_setIdFieldName('primary_id');
 
-        parent::__construct($resources->getConnection('review_read'));
-        $this->_summaryTable = $resources->getTableName('review_entity_summary');
+        parent::__construct($fetchStrategy, $resource->getConnection('review_read'));
+        $this->_summaryTable = $resource->getTableName('review_entity_summary');
 
         $this->_select->from($this->_summaryTable);
 

@@ -26,28 +26,27 @@
 class Mage_Webapi_Model_Authorization
 {
     /**
-     * Web API ACL config's resources root ID.
+     * @var Magento_AuthorizationInterface
      */
-    const API_ACL_RESOURCES_ROOT_ID = 'Mage_Webapi';
+    protected $_authorization;
 
-    /** @var Mage_Core_Model_Authorization */
-    protected $_coreAuthorization;
-
-    /** @var Mage_Webapi_Helper_Data */
+    /**
+     * @var Mage_Webapi_Helper_Data
+     */
     protected $_helper;
 
     /**
      * Initialize dependencies.
      *
      * @param Mage_Webapi_Helper_Data $helper
-     * @param Mage_Core_Model_Authorization $coreAuthorization
+     * @param Magento_AuthorizationInterface $authorization
      */
     public function __construct(
         Mage_Webapi_Helper_Data $helper,
-        Mage_Core_Model_Authorization $coreAuthorization
+        Magento_AuthorizationInterface $authorization
     ) {
         $this->_helper = $helper;
-        $this->_coreAuthorization = $coreAuthorization;
+        $this->_authorization = $authorization;
     }
 
     /**
@@ -59,9 +58,9 @@ class Mage_Webapi_Model_Authorization
      */
     public function checkResourceAcl($resource, $method)
     {
-        $coreAuthorization = $this->_coreAuthorization;
+        $coreAuthorization = $this->_authorization;
         if (!$coreAuthorization->isAllowed($resource . Mage_Webapi_Model_Acl_Rule::RESOURCE_SEPARATOR . $method)
-            && !$coreAuthorization->isAllowed(Mage_Webapi_Model_Authorization::API_ACL_RESOURCES_ROOT_ID)
+            && !$coreAuthorization->isAllowed(null)
         ) {
             throw new Mage_Webapi_Exception(
                 $this->_helper->__('Access to resource is forbidden.'),

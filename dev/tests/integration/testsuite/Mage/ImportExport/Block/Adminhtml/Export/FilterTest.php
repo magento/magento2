@@ -32,11 +32,11 @@ class Mage_ImportExport_Block_Adminhtml_Export_FilterTest
     extends PHPUnit_Framework_TestCase
 {
     /**
-     * @magentoDataFixture Mage/Core/_files/init_adminhtml_design.php
      * @magentoAppIsolation enabled
      */
     public function testGetDateFromToHtmlWithValue()
     {
+        Mage::getDesign()->setArea(Mage_Core_Model_App_Area::AREA_ADMINHTML)->setDefaultDesignTheme();
         $block = Mage::getObjectManager()->create('Mage_ImportExport_Block_Adminhtml_Export_Filter');
         $method = new ReflectionMethod(
                     'Mage_ImportExport_Block_Adminhtml_Export_Filter', '_getDateFromToHtmlWithValue');
@@ -54,7 +54,7 @@ class Mage_ImportExport_Block_Adminhtml_Export_FilterTest
         $html = $method->invoke($block, $attribute, null);
         $this->assertNotEmpty($html);
 
-        $dateFormat = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
+        $dateFormat = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT);
         $pieces = array_filter(explode('<strong>', $html));
         foreach ($pieces as $piece) {
             $this->assertContains('dateFormat: "' . $dateFormat . '",', $piece);

@@ -23,4 +23,4 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-/* fixture skin file located inside the library folder */
+/* Fixture js lib file */

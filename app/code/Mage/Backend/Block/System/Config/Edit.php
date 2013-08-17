@@ -58,12 +58,12 @@ class Mage_Backend_Block_System_Config_Edit extends Mage_Backend_Block_Widget
     protected $_configStructure;
 
     /**
-     * @param Mage_Core_Block_Template_Context $context
+     * @param Mage_Backend_Block_Template_Context $context
      * @param Mage_Backend_Model_Config_Structure $configStructure
      * @param array $data
      */
     public function __construct(
-        Mage_Core_Block_Template_Context $context,
+        Mage_Backend_Block_Template_Context $context,
         Mage_Backend_Model_Config_Structure $configStructure,
         array $data = array()
     ) {
@@ -89,7 +89,7 @@ class Mage_Backend_Block_System_Config_Edit extends Mage_Backend_Block_Widget
 
         $this->addChild('save_button', 'Mage_Backend_Block_Widget_Button', array(
             'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Save Config'),
-            'class' => 'save',
+            'class' => 'save primary',
             'data_attribute'  => array(
                 'mage-init' => array(
                     'button' => array('event' => 'save', 'target' => '#config-edit-form'),

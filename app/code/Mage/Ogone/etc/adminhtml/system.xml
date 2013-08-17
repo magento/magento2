@@ -74,7 +74,7 @@
                 <field id="shamode" translate="label comment tooltip" type="select" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Hash All Parameters</label>
                     <comment>
-                        <![CDATA[Enabling this feature needs adjusting "Technical information > Global security parameters" on merchant administration.]]>
+                        <![CDATA[To enable this feature, please edit your global security parameters.]]>
                     </comment>
                     <tooltip>
                         <![CDATA[To hash <strong>all parameters</strong>, select the following options in the "Global security parameters" fieldset: <ul><li>Each parameter followed by the pass phrase.</li><li>"Hash algorithm" same as "Hashing Algorithm" below</li><li>UTF-8</li></ul>]]>
@@ -95,7 +95,7 @@
                 <field id="payment_action" translate="label comment" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Payment Action</label>
                     <source_model>Mage_Ogone_Model_Source_PaymentAction</source_model>
-                    <comment>If you choose "No Operation", Ogone will use default payment procedure setup in Ogone configuration.</comment>
+                    <comment>If you choose "No Operation", Ogone will use the default payment procedure in your Ogone setup.</comment>
                 </field>
                 <field id="template" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Payment Template</label>
@@ -108,25 +108,25 @@
                 <field id="bgcolor" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Background Color of Ogone Template</label>
                     <comment>
-                        <![CDATA[E.g: "white".]]>
+                        <![CDATA[E.g: "white"]]>
                     </comment>
                 </field>
                 <field id="txtcolor" translate="label comment" type="text" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Text Color of the Ogone Template</label>
                     <comment>
-                        <![CDATA[E.g: "black".]]>
+                        <![CDATA[E.g: "black"]]>
                     </comment>
                 </field>
                 <field id="tblbgcolor" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Table Background Color of the Ogone Template</label>
                     <comment>
-                        <![CDATA[E.g: "white".]]>
+                        <![CDATA[E.g: "white"]]>
                     </comment>
                 </field>
                 <field id="tbltxtcolor" translate="label comment" type="text" sortOrder="75" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Table Text Color of the Ogone Template</label>
                     <comment>
-                        <![CDATA[E.g: "black".]]>
+                        <![CDATA[E.g: "black"]]>
                     </comment>
                 </field>
                 <field id="buttonbgcolor" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -135,13 +135,13 @@
                 <field id="buttontxtcolor" translate="label comment" type="text" sortOrder="85" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Button Text Color of the Ogone Template</label>
                     <comment>
-                        <![CDATA[E.g: "white".]]>
+                        <![CDATA[E.g: "white"]]>
                     </comment>
                 </field>
                 <field id="fonttype" translate="label comment" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Font Family of the Ogone Template</label>
                     <comment>
-                        <![CDATA[E.g: "Verdana".]]>
+                        <![CDATA[E.g: "Verdana"]]>
                     </comment>
                 </field>
                 <field id="logo" translate="label comment" type="text" sortOrder="95" showInDefault="1" showInWebsite="1" showInStore="1">

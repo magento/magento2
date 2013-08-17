@@ -108,15 +108,16 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes extends Mage_Admi
                 );
             }
 
-            // Add new attribute button if it is not an image tab
+            // Add new attribute controls if it is not an image tab
             if (!$form->getElement('media_gallery')
-                && Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Catalog::attributes_attributes')
+                && $this->_authorization->isAllowed('Mage_Catalog::attributes_attributes')
                 && $isWrapped
             ) {
-                $headerBar = $this->getLayout()
+                $attributeCreate = $this->getLayout()
                     ->createBlock('Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes_Create');
 
-                $headerBar->getConfig()
+                $attributeCreate->getConfig()
+                    ->setAttributeGroupCode($group->getAttributeGroupCode())
                     ->setTabId('group_' . $group->getId())
                     ->setGroupId($group->getId())
                     ->setStoreId($form->getDataObject()->getStoreId())
@@ -124,7 +125,14 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes extends Mage_Admi
                     ->setTypeId($form->getDataObject()->getTypeId())
                     ->setProductId($form->getDataObject()->getId());
 
-                $fieldset->setHeaderBar($headerBar->toHtml());
+                $attributeSearch = $this->getLayout()
+                    ->createBlock('Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes_Search')
+                    ->setGroupId($group->getId())
+                    ->setGroupCode($group->getAttributeGroupCode());
+
+                $attributeSearch->setAttributeCreate($attributeCreate->toHtml());
+
+                $fieldset->setHeaderBar($attributeSearch->toHtml());
             }
 
             $values = $product->getData();

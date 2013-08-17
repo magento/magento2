@@ -75,8 +75,12 @@ class Mage_Catalog_ProductControllerTest extends Magento_Test_TestCase_Controlle
         $this->assertContains('Add to Cart', $responseBody);
         /* Meta info */
         $this->assertContains('<title>Simple Product 1 Meta Title</title>', $responseBody);
-        $this->assertContains('<meta name="keywords" content="Simple Product 1 Meta Keyword" />', $responseBody);
-        $this->assertContains('<meta name="description" content="Simple Product 1 Meta Description" />', $responseBody);
+        $this->assertSelectCount('meta[name="keywords"][content="Simple Product 1 Meta Keyword"]', 1, $responseBody);
+        $this->assertSelectCount(
+            'meta[name="description"][content="Simple Product 1 Meta Description"]',
+            1,
+            $responseBody
+        );
     }
 
     /**
@@ -86,9 +90,7 @@ class Mage_Catalog_ProductControllerTest extends Magento_Test_TestCase_Controlle
     {
         $this->dispatch('catalog/product/view/id/1');
         $html = $this->getResponse()->getBody();
-        $format = '%Aclass="product-options" id="product-options-wrapper">%A'
-            . '<div class="product-options-bottom">%A<div class="add-to-cart">%A<ul class="add-to-links">%A';
-        $this->assertStringMatchesFormat($format, $html);
+        $this->assertSelectCount('#product-options-wrapper', 1, $html);
     }
 
     public function testViewActionNoProductId()

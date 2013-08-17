@@ -27,15 +27,13 @@
  * @method Mage_Webapi_Model_Acl_Role getApiRole() getApiRole()
  * @method Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_Resource setSelectedResources() setSelectedResources(array $srIds)
  * @method array getSelectedResources() getSelectedResources()
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_Resource extends Mage_Backend_Block_Widget_Form
 {
     /**
-     * @var Mage_Webapi_Model_Authorization_Config
+     * @var Magento_Acl_Loader_Resource_ConfigReaderInterface
      */
-    protected $_authorizationConfig;
+    protected $_reader;
 
     /**
      * @var Mage_Webapi_Model_Resource_Acl_Rule
@@ -53,20 +51,30 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_Resource extends Mage_Backend_Bl
     protected $_selResourcesIds;
 
     /**
-     * @param Mage_Core_Block_Template_Context $context
-     * @param Mage_Webapi_Model_Authorization_Config $authorizationConfig
+     * Root ACL Resource
+     *
+     * @var Mage_Core_Model_Acl_RootResource
+     */
+    protected $_rootResource;
+
+    /**
+     * @param Mage_Backend_Block_Template_Context $context
+     * @param Magento_Acl_Loader_Resource_ConfigReaderInterface $configReader
      * @param Mage_Webapi_Model_Resource_Acl_Rule $ruleResource
+     * @param Mage_Core_Model_Acl_RootResource $rootResource
      * @param array $data
      */
     public function __construct(
-        Mage_Core_Block_Template_Context $context,
-        Mage_Webapi_Model_Authorization_Config $authorizationConfig,
+        Mage_Backend_Block_Template_Context $context,
+        Magento_Acl_Loader_Resource_ConfigReaderInterface $configReader,
         Mage_Webapi_Model_Resource_Acl_Rule $ruleResource,
+        Mage_Core_Model_Acl_RootResource $rootResource,
         array $data = array()
     ) {
         parent::__construct($context, $data);
-        $this->_authorizationConfig = $authorizationConfig;
+        $this->_reader = $configReader;
         $this->_ruleResource = $ruleResource;
+        $this->_rootResource = $rootResource;
     }
 
     /**
@@ -76,22 +84,40 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_Resource extends Mage_Backend_Bl
      */
     protected function _prepareForm()
     {
-        $this->_aclResourcesTree = $this->_authorizationConfig->getAclResourcesAsArray(false);
-        $selectedResources = $this->_getSelectedResourcesIds();
-
-        if ($selectedResources) {
-            $selResourcesCallback = function (&$resourceItem) use ($selectedResources, &$selResourcesCallback) {
-                if (in_array($resourceItem['id'], $selectedResources)) {
-                    $resourceItem['checked'] = true;
-                }
-                if (!empty($resourceItem['children'])) {
-                    array_walk($resourceItem['children'], $selResourcesCallback);
-                }
-            };
-            array_walk($this->_aclResourcesTree, $selResourcesCallback);
-        }
-
+        /** @var $translator Mage_Webapi_Helper_Data */
+        $translator = $this->helper('Mage_Webapi_Helper_Data');
+        $resources = $this->_reader->getAclResources();
+        $this->_aclResourcesTree = $this->_mapResources(
+            isset($resources[1]['children']) ? $resources[1]['children'] : array(),
+            $translator
+        );
         return parent::_prepareForm();
+    }
+
+    /**
+     * Map resources
+     *
+     * @param array $resources
+     * @param Mage_Webapi_Helper_Data $translator
+     * @return array
+     */
+    protected function _mapResources(array $resources, Mage_Webapi_Helper_Data $translator)
+    {
+        $output = array();
+        foreach ($resources as $resource) {
+            $item = array();
+            $item['id'] = $resource['id'];
+            $item['text'] = $translator->__($resource['title']);
+            if (in_array($item['id'], $this->_getSelectedResourcesIds())) {
+                $item['checked'] = true;
+            }
+            $item['children'] = array();
+            if (isset($resource['children'])) {
+                $item['children'] = $this->_mapResources($resource['children'], $translator);
+            }
+            $output[] = $item;
+        }
+        return $output;
     }
 
     /**
@@ -101,7 +127,7 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_Resource extends Mage_Backend_Bl
      */
     public function isEverythingAllowed()
     {
-        return in_array(Mage_Webapi_Model_Authorization::API_ACL_RESOURCES_ROOT_ID, $this->_getSelectedResourcesIds());
+        return in_array($this->_rootResource->getId(), $this->_getSelectedResourcesIds());
     }
 
     /**

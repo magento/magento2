@@ -142,7 +142,6 @@
                 <free_method>FEDEX_GROUND</free_method>
                 <handling>0</handling>
                 <model>Mage_Usa_Model_Shipping_Carrier_Fedex</model>
-                <!--<service>Mage_Usa_Model_Shipping_Carrier_Service_Fedex</service>-->
                 <packaging>YOUR_PACKAGING</packaging>
                 <title>Federal Express</title>
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>

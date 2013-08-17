@@ -87,7 +87,7 @@ class Mage_Catalog_Model_Indexer_Url extends Mage_Index_Model_Indexer_Abstract
      */
     public function getDescription()
     {
-        return Mage::helper('Mage_Catalog_Helper_Data')->__('Index product and categories URL rewrites');
+        return Mage::helper('Mage_Catalog_Helper_Data')->__('Index product and categories URL Redirects');
     }
 
     /**

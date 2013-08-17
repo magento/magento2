@@ -124,7 +124,7 @@
                 <label>Design Theme</label>
                 <field id="theme_id" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Design Theme</label>
-                    <source_model>Mage_Core_Model_Theme::getLabelsCollectionForSystemConfiguration</source_model>
+                    <source_model>Mage_Core_Model_Theme_Label::getLabelsCollectionForSystemConfiguration</source_model>
                     <backend_model>Mage_Core_Model_Design_Backend_Theme</backend_model>
                     <comment><![CDATA[If no value is specified, the system default will be used. The system default may be modified by third party extensions.]]></comment>
                 </field>
@@ -235,6 +235,10 @@
                 <label>JavaScript Settings</label>
                 <field id="merge_files" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Merge JavaScript Files</label>
+                    <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
+                </field>
+                <field id="minify_files" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Minify JavaScript Files</label>
                     <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
                 </field>
             </group>
@@ -412,7 +416,7 @@
                     <source_model>Mage_Backend_Model_Config_Source_Email_Template</source_model>
                 </field>
                 <field id="forgot_email_identity" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Forgot Password Email Sender</label>
+                    <label>Forgot and Reset Email Sender</label>
                     <source_model>Mage_Backend_Model_Config_Source_Email_Identity</source_model>
                 </field>
                 <field id="password_reset_link_expiration_period" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -500,12 +504,7 @@
                 </field>
                 <field id="redirect_to_base" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Auto-redirect to Base URL</label>
-                    <!--<source_model>Mage_Backend_Model_Config_Source_Web_Redirect</source_model>-->
-                    <options>
-                        <option label="No">0</option>
-                        <option label="Yes (302 Found)">1</option>
-                        <option label="Yes (301 Moved Permanently)">301</option>
-                    </options>
+                    <source_model>Mage_Backend_Model_Config_Source_Web_Redirect</source_model>
                     <comment>I.e. redirect from http://example.com/store/ to http://www.example.com/store/</comment>
                 </field>
             </group>
@@ -531,6 +530,11 @@
                 </field>
                 <field id="base_static_url" translate="label comment" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Base URL for Static View Files</label>
+                    <backend_model>Mage_Backend_Model_Config_Backend_Baseurl</backend_model>
+                    <comment>May be empty or start with {{unsecure_base_url}} placeholder.</comment>
+                </field>
+                <field id="base_cache_url" translate="label comment" type="text" sortOrder="26" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Base URL for View Files Cache</label>
                     <backend_model>Mage_Backend_Model_Config_Backend_Baseurl</backend_model>
                     <comment>May be empty or start with {{unsecure_base_url}} placeholder.</comment>
                 </field>
@@ -560,6 +564,11 @@
                 </field>
                 <field id="base_static_url" translate="label comment" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Secure Base URL for Static View Files</label>
+                    <backend_model>Mage_Backend_Model_Config_Backend_Baseurl</backend_model>
+                    <comment>May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.</comment>
+                </field>
+                <field id="base_cache_url" translate="label comment" type="text" sortOrder="26" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Secure Base URL for View Files Cache</label>
                     <backend_model>Mage_Backend_Model_Config_Backend_Baseurl</backend_model>
                     <comment>May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.</comment>
                 </field>

@@ -41,14 +41,13 @@ class Mage_Core_Helper_ThemeTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSafePath($filePath, $basePath, $expectedResult)
     {
-        /** @var $design Mage_Core_Model_Design_Package */
-        $design = $this->getMock('Mage_Core_Model_Design_Package', null, array(), '', false);
-
         /** @var $dirs Mage_Core_Model_Dir */
         $dirs = $this->getMock('Mage_Core_Model_Dir', null, array(), '', false);
 
-        /** @var $layoutMergeFactory Mage_Core_Model_Layout_Merge_Factory */
-        $layoutMergeFactory = $this->getMock('Mage_Core_Model_Layout_Merge_Factory', null, array(), '', false);
+        /** @var $layoutMergeFactory Mage_Core_Model_Layout_MergeFactory */
+        $layoutMergeFactory = $this->getMock('Mage_Core_Model_Layout_MergeFactory', array('create'),
+            array(), '', false
+        );
 
         /** @var $themeCollection Mage_Core_Model_Resource_Theme_Collection */
         $themeCollection = $this->getMock('Mage_Core_Model_Resource_Theme_Collection', null, array(), '', false);
@@ -56,15 +55,14 @@ class Mage_Core_Helper_ThemeTest extends PHPUnit_Framework_TestCase
         /** @var $context Mage_Core_Helper_Context */
         $context = $this->getMock('Mage_Core_Helper_Context', null, array(), '', false);
 
-        $themeFactory = $this->getMockBuilder('Mage_Core_Model_Theme_Factory')->disableOriginalConstructor()->getMock();
+        $fileSystem = $this->getMockBuilder('Mage_Core_Model_View_FileSystem')->disableOriginalConstructor()->getMock();
 
         $helper = new Mage_Core_Helper_Theme(
             $context,
-            $design,
             $dirs,
             $layoutMergeFactory,
             $themeCollection,
-            $themeFactory
+            $fileSystem
         );
 
         $result = $helper->getSafePath($filePath, $basePath);
@@ -97,7 +95,21 @@ class Mage_Core_Helper_ThemeTest extends PHPUnit_Framework_TestCase
         // 2. Get theme model
         $theme = $this->_getTheme($themeId, $themeArea);
 
-        // 3. Get Design Package model
+        // 3. Get dirs model
+        $dirs = $this->_getDirs();
+
+        // 4. Get layout merge model and factory
+        $layoutMergeFactory = $this->_getLayoutMergeFactory($layoutStr);
+
+        // 5.
+        /** @var $themeCollection Mage_Core_Model_Resource_Theme_Collection */
+        $themeCollection = $this->getMock('Mage_Core_Model_Resource_Theme_Collection', null, array(), '', false);
+
+        // 6.
+        /** @var $context Mage_Core_Helper_Context */
+        $context = $this->getMock('Mage_Core_Helper_Context', null, array(), '', false);
+
+        // 7. Get view file system model mock
         $params = array(
             'area'       => $themeArea,
             'themeModel' => $theme,
@@ -113,33 +125,19 @@ class Mage_Core_Helper_ThemeTest extends PHPUnit_Framework_TestCase
             array('Mage_Core::test23.css', $params, '/zzz/qqq/test23.css'),
             array('test24.css', $params, '/zzz/qqq/test24.css'),
         );
-        $design = $this->_getDesign($map);
+        $fileSystem = $this->_getFileSystem($map);
 
-        // 4. Get dirs model
-        $dirs = $this->_getDirs();
-
-        // 5. Get layout merge model and factory
-        $layoutMergeFactory = $this->_getLayoutMergeFactory($layoutStr);
-
-        /** @var $themeCollection Mage_Core_Model_Resource_Theme_Collection */
-        $themeCollection = $this->getMock('Mage_Core_Model_Resource_Theme_Collection', null, array(), '', false);
-
-        /** @var $context Mage_Core_Helper_Context */
-        $context = $this->getMock('Mage_Core_Helper_Context', null, array(), '', false);
-
-        $themeFactory = $this->getMockBuilder('Mage_Core_Model_Theme_Factory')->disableOriginalConstructor()->getMock();
-
-        // 6. Run tested method
+        // 8. Run tested method
         $helper = new Mage_Core_Helper_Theme(
             $context,
-            $design,
             $dirs,
             $layoutMergeFactory,
             $themeCollection,
-            $themeFactory
+            $fileSystem
         );
         $result = $helper->getCssFiles($theme);
 
+        // 9. Compare actual result with expected data
         $this->assertEquals($expectedResult, $result);
     }
 
@@ -495,7 +493,7 @@ class Mage_Core_Helper_ThemeTest extends PHPUnit_Framework_TestCase
      */
     protected function _getTheme($themeId, $themeArea)
     {
-        /** @var $theme Mage_Core_Model_Theme */
+        /** @var $theme Mage_Core_Model_Theme|PHPUnit_Framework_MockObject_MockObject */
         $theme = $this->getMock('Mage_Core_Model_Theme',
             array('getThemeId', 'getArea', 'getThemeTitle'), array(), '', false
         );
@@ -514,22 +512,23 @@ class Mage_Core_Helper_ThemeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @param array $map
-     * @return Mage_Core_Model_Design_Package|\PHPUnit_Framework_MockObject_MockObject
+     * @return Mage_Core_Model_View_FileSystem|PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getDesign($map)
+    protected function _getFileSystem($map)
     {
-        /** @var $design Mage_Core_Model_Design_Package */
-        $design = $this->getMock('Mage_Core_Model_Design_Package', array('getViewFile'), array(), '', false);
-        $design->expects($this->any())
+        /** @var $fileSystem Mage_Core_Model_View_FileSystem|PHPUnit_Framework_MockObject_MockObject */
+        $fileSystem = $this->getMockBuilder('Mage_Core_Model_View_FileSystem', array())
+            ->disableOriginalConstructor()->getMock();
+        $fileSystem->expects($this->any())
             ->method('getViewFile')
             ->will($this->returnValueMap($map));
 
-        return $design;
+        return $fileSystem;
     }
 
     /**
      * @param string $layoutStr
-     * @return Mage_Core_Model_Layout_Merge_Factory|PHPUnit_Framework_MockObject_MockObject
+     * @return Mage_Core_Model_Layout_MergeFactory|PHPUnit_Framework_MockObject_MockObject
      */
     protected function _getLayoutMergeFactory($layoutStr)
     {
@@ -543,8 +542,8 @@ class Mage_Core_Helper_ThemeTest extends PHPUnit_Framework_TestCase
             ->method('getFileLayoutUpdatesXml')
             ->will($this->returnValue($layoutElement));
 
-        /** @var $layoutMergeFactory Mage_Core_Model_Layout_Merge_Factory */
-        $layoutMergeFactory = $this->getMock('Mage_Core_Model_Layout_Merge_Factory',
+        /** @var $layoutMergeFactory Mage_Core_Model_Layout_MergeFactory */
+        $layoutMergeFactory = $this->getMock('Mage_Core_Model_Layout_MergeFactory',
             array('create'), array(), '', false
         );
         $layoutMergeFactory->expects($this->any())
@@ -608,24 +607,26 @@ class Mage_Core_Helper_ThemeTest extends PHPUnit_Framework_TestCase
         $themeCollection = $this->_getThemeCollection();
 
         // 3. Get Design Package model
-        /** @var $design Mage_Core_Model_Design_Package */
-        $design = $this->getMock('Mage_Core_Model_Design_Package', null, array(), '', false);
 
         // 4. Get dirs model
         $dirs = $this->_getDirs();
 
         // 5. Get layout merge model and factory
-        /** @var $layoutMergeFactory Mage_Core_Model_Layout_Merge_Factory|PHPUnit_Framework_MockObject_MockObject */
-        $layoutMergeFactory = $this->getMock('Mage_Core_Model_Layout_Merge_Factory', null, array(), '', false);
+        /** @var $layoutMergeFactory Mage_Core_Model_Layout_MergeFactory|PHPUnit_Framework_MockObject_MockObject */
+        $layoutMergeFactory = $this->getMock('Mage_Core_Model_Layout_MergeFactory',
+            array('create'), array(), '', false
+        );
 
         /** @var $context Mage_Core_Helper_Context */
         $context = $this->getMock('Mage_Core_Helper_Context', null, array(), '', false);
 
-        $themeFactory = $this->getMockBuilder('Mage_Core_Model_Theme_Factory')->disableOriginalConstructor()->getMock();
+        /** @var $fileSystem Mage_Core_Model_View_FileSystem|PHPUnit_Framework_MockObject_MockObject */
+        $fileSystem = $this->getMockBuilder('Mage_Core_Model_View_FileSystem', array())
+            ->disableOriginalConstructor()->getMock();
 
-        /** @var $helper Mage_Core_Helper_Theme */
+        /** @var $helper Mage_Core_Helper_Theme|PHPUnit_Framework_MockObject_MockObject */
         $helper = $this->getMock('Mage_Core_Helper_Theme', array('getCssFiles', '__'), array(
-            $context, $design, $dirs, $layoutMergeFactory, $themeCollection, $themeFactory
+            $context, $dirs, $layoutMergeFactory, $themeCollection, $fileSystem
         ));
         $helper->expects($this->once())
             ->method('getCssFiles')

@@ -49,15 +49,13 @@ class Mage_Reports_Model_Resource_Report_Product_Viewed_Collection
      * Initialize custom resource model
      *
      */
-    public function __construct()
-    {
-        parent::_construct();
+    public function __construct(
+        Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy,
+        Mage_Sales_Model_Resource_Report $resource
+    ) {
+        $resource->init(Mage_Reports_Model_Resource_Report_Product_Viewed::AGGREGATION_DAILY);
+        parent::__construct($fetchStrategy, $resource);
         $this->setModel('Mage_Adminhtml_Model_Report_Item');
-        $this->_resource = Mage::getResourceModel('Mage_Sales_Model_Resource_Report')
-            ->init(Mage_Reports_Model_Resource_Report_Product_Viewed::AGGREGATION_DAILY);
-        $this->setConnection($this->getResource()->getReadConnection());
-        // overwrite default behaviour
-        $this->_applyFilters = false;
     }
 
     /**

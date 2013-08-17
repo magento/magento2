@@ -69,13 +69,13 @@ class Mage_Adminhtml_Block_Dashboard_Tab_Customers_Newest extends Mage_Adminhtml
     protected function _prepareColumns()
     {
         $this->addColumn('name', array(
-            'header'    => $this->__('Customer Name'),
+            'header'    => $this->__('Customer'),
             'sortable'  => false,
             'index'     => 'name'
         ));
 
         $this->addColumn('orders_count', array(
-            'header'    => $this->__('Number of Orders'),
+            'header'    => $this->__('Orders'),
             'sortable'  => false,
             'index'     => 'orders_count',
             'type'      => 'number'
@@ -84,7 +84,7 @@ class Mage_Adminhtml_Block_Dashboard_Tab_Customers_Newest extends Mage_Adminhtml
         $baseCurrencyCode = (string) Mage::app()->getStore((int)$this->getParam('store'))->getBaseCurrencyCode();
 
         $this->addColumn('orders_avg_amount', array(
-            'header'    => $this->__('Average Order Amount'),
+            'header'    => $this->__('Average'),
             'align'     => 'right',
             'sortable'  => false,
             'type'      => 'currency',
@@ -94,7 +94,7 @@ class Mage_Adminhtml_Block_Dashboard_Tab_Customers_Newest extends Mage_Adminhtml
         ));
 
         $this->addColumn('orders_sum_amount', array(
-            'header'    => $this->__('Total Order Amount'),
+            'header'    => $this->__('Total'),
             'align'     => 'right',
             'sortable'  => false,
             'type'      => 'currency',

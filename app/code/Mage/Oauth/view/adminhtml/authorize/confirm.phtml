@@ -34,7 +34,7 @@
     <div class="login-box">
         <div class="login-form">
             <h1><?php echo $this->__('Confirmation Of Authorization') ?></h1>
-            <?php echo $this->getMessagesBlock()->toHtml() ?>
+            <?php echo $this->getLayout()->renderElement('messages') ?>
             <?php if (!$this->getHasException()): ?>
                 <p><?php echo $this->__('Give the verifier code to application administrator') ?></p>
                 <p style="font-size: 14px;"><?php echo $this->__('Verifier code: %s', $this->getVerifier()) ?></p>

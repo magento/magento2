@@ -65,7 +65,7 @@ if (Mage::helper('Mage_Weee_Helper_Data')->typeOfDisplay($_product, array(1,2,4)
                     <?php echo $this->__('Buy %1$s for %2$s', $_price['price_qty'], $_price['formated_price_incl_weee_only']); ?>
                     <?php if ($_weeeTaxAttributes): ?>
                     (<small>
-                    <?php echo $this->__('%1$s incl tax.', $_price['formated_price_incl_weee']); ?>
+                    <?php echo $this->__('%1$s incl tax', $_price['formated_price_incl_weee']); ?>
                     <?php $separator = ' + '; foreach ($_weeeTaxAttributes as $_attribute): ?>
                         <?php echo $separator; ?>
                         <?php echo $_attribute->getName(); ?>: <?php echo Mage::helper('Mage_Core_Helper_Data')->currency($_attribute->getAmount()); ?>
@@ -77,7 +77,7 @@ if (Mage::helper('Mage_Weee_Helper_Data')->typeOfDisplay($_product, array(1,2,4)
                     <?php echo $this->__('Buy %1$s for %2$s', $_price['price_qty'], $_price['formated_price_incl_weee_only']); ?>
                     <?php if ($_weeeTaxAttributes): ?>
                     (<small>
-                    <?php echo $this->__('%1$s incl tax.', $_price['formated_price_incl_weee']); ?>
+                    <?php echo $this->__('%1$s incl tax', $_price['formated_price_incl_weee']); ?>
                     <?php $separator = ' + '; foreach ($_weeeTaxAttributes as $_attribute): ?>
                         <?php echo $separator; ?>
                         <?php echo $_attribute->getName(); ?>: <?php echo Mage::helper('Mage_Core_Helper_Data')->currency($_attribute->getAmount()+$_attribute->getTaxAmount()); ?>

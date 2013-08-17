@@ -53,7 +53,9 @@
         </h3>
         <ul <?php echo $this->getUiId('tab', $tabGroupId) ?> class="tabs">
             <?php foreach ($tabs as $_tab): ?>
-            <?php if (!$this->canShowTab($_tab) || $_tab->getGroupCode() != $tabGroupCode || $_tab->getParentTab()): continue; endif;?>
+            <?php if (!$this->canShowTab($_tab) || $_tab->getParentTab()
+                || ($_tab->getGroupCode() && $_tab->getGroupCode() != $tabGroupCode)
+                || (!$_tab->getGroupCode() && $isBasic)): continue; endif;?>
             <?php $_tabClass = 'tab-item-link ' . $this->getTabClass($_tab) . ' ' . (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>
             <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $this->getTabUrl($_tab) != '#') ? 'link' : '' ?>
             <?php $_tabHref = $this->getTabUrl($_tab) == '#' ? '#' . $this->getTabId($_tab) . '_content' : $this->getTabUrl($_tab) ?>

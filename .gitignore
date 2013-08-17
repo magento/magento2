@@ -10,11 +10,11 @@ atlassian*
 /sitemap
 /.htaccess.orig
 /.idea
+/.gitattributes
 /app/config_sandbox
 /app/etc/local.xml
 /app/etc/local.xml.*
-/app/etc/modules/XEnterprise_Edition.xml
-/app/etc/modules/XSaas_Edition.xml
+/app/etc/modules/*.xml
 /downloader/.cache
 /downloader/cache.cfg
 /downloader/connect.cfg
@@ -26,10 +26,10 @@ atlassian*
 /lib/flex/varien/.flexLibProperties
 /lib/flex/varien/.project
 /lib/flex/varien/.settings
+/pub/cache/*
 /pub/media/*
 /pub/media/customer/*
 /pub/media/downloadable/*
 /pub/static/*
 !/pub/static/.htaccess
 /var/*
-*swp

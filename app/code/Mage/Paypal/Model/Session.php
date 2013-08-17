@@ -32,8 +32,13 @@
  */
 class Mage_Paypal_Model_Session extends Mage_Core_Model_Session_Abstract
 {
-    public function __construct()
+    /**
+     * Class constructor. Initialize session namespace
+     *
+     * @param string $sessionName
+     */
+    public function __construct($sessionName = null)
     {
-        $this->init('paypal');
+        $this->init('paypal', $sessionName);
     }
 }

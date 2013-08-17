@@ -75,21 +75,21 @@ class Mage_Adminhtml_Block_Sales_Order_View_Tab_Creditmemos
     protected function _prepareColumns()
     {
         $this->addColumn('increment_id', array(
-            'header' => Mage::helper('Mage_Sales_Helper_Data')->__('Credit Memo #'),
+            'header' => Mage::helper('Mage_Sales_Helper_Data')->__('Credit Memo'),
             'index' => 'increment_id',
             'header_css_class'  => 'col-memo',
             'column_css_class'  => 'col-memo'
         ));
 
         $this->addColumn('billing_name', array(
-            'header' => Mage::helper('Mage_Sales_Helper_Data')->__('Bill to Name'),
+            'header' => Mage::helper('Mage_Sales_Helper_Data')->__('Bill-to Name'),
             'index' => 'billing_name',
             'header_css_class'  => 'col-name',
             'column_css_class'  => 'col-name'
         ));
 
         $this->addColumn('created_at', array(
-            'header' => Mage::helper('Mage_Sales_Helper_Data')->__('Created At'),
+            'header' => Mage::helper('Mage_Sales_Helper_Data')->__('Created'),
             'index' => 'created_at',
             'type' => 'datetime',
             'header_css_class'  => 'col-period',

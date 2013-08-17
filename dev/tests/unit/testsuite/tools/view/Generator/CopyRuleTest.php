@@ -54,8 +54,7 @@ class Tools_View_Generator_CopyRuleTest extends PHPUnit_Framework_TestCase
         ));
         $this->_themeCollection = $this->getMock('Mage_Core_Model_Theme_Collection', array('isLoaded'), array(
             $this->_filesystem,
-            $this->getMockForAbstractClass('Magento_ObjectManager'),
-            new Mage_Core_Model_Dir($this->_filesystem, __DIR__)
+            new Mage_Core_Model_Dir(__DIR__)
         ));
         $this->_themeCollection->expects($this->any())->method('isLoaded')->will($this->returnValue(true));
         $this->_fallbackRule = $this->getMockForAbstractClass('Mage_Core_Model_Design_Fallback_Rule_RuleInterface');
@@ -108,8 +107,8 @@ class Tools_View_Generator_CopyRuleTest extends PHPUnit_Framework_TestCase
         $patternDirMap = array();
         $filesystemGlobMap = array();
         foreach ($fixture as $fixtureInfo) {
-            $patternDirMap[] = $fixtureInfo['pattern_dir_map'];
-            $filesystemGlobMap[] = $fixtureInfo['filesystem_glob_map'];
+            $patternDirMap = array_merge($patternDirMap, $fixtureInfo['pattern_dir_map']);
+            $filesystemGlobMap = array_merge($filesystemGlobMap, $fixtureInfo['filesystem_glob_map']);
         }
 
         return array(

@@ -27,8 +27,10 @@
 
 /**
  * Test class for Mage_Backend_Block_Widget
+ *
+ * @magentoAppArea adminhtml
  */
-class Mage_Backend_Block_WidgetTest extends Mage_Backend_Area_TestCase
+class Mage_Backend_Block_WidgetTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @covers Mage_Backend_Block_Widget::getButtonHtml

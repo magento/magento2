@@ -296,7 +296,7 @@ class Mage_Catalog_Model_Product_Type_Grouped extends Mage_Catalog_Model_Product
                             }
 
                             if (!isset($_result[0])) {
-                                return Mage::helper('Mage_Checkout_Helper_Data')->__('Cannot process the item.');
+                                return Mage::helper('Mage_Checkout_Helper_Data')->__('We cannot process the item.');
                             }
 
                             if ($isStrictProcessMode) {

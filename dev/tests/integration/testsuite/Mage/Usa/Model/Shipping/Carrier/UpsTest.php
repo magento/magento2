@@ -24,10 +24,21 @@
 
 class Mage_Usa_Model_Shipping_Carrier_UpsTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Mage_Usa_Model_Shipping_Carrier_Ups
+     */
+    private $_object;
+
+    public function setUp()
+    {
+        $simplexmlFactory = $this->getMock('Mage_Usa_Model_Simplexml_ElementFactory', array(), array(), '', false);
+        /** @var $simplexmlFactory Mage_Usa_Model_Simplexml_ElementFactory */
+        $this->_object = new Mage_Usa_Model_Shipping_Carrier_Ups($simplexmlFactory);
+    }
+
     public function testGetShipAcceptUrl()
     {
-        $object = new Mage_Usa_Model_Shipping_Carrier_Ups();
-        $this->assertEquals($object->getShipAcceptUrl(), 'https://wwwcie.ups.com/ups.app/xml/ShipAccept');
+        $this->assertEquals($this->_object->getShipAcceptUrl(), 'https://wwwcie.ups.com/ups.app/xml/ShipAccept');
     }
 
     /**
@@ -37,14 +48,12 @@ class Mage_Usa_Model_Shipping_Carrier_UpsTest extends PHPUnit_Framework_TestCase
      */
     public function testGetShipAcceptUrlLive()
     {
-        $object = new Mage_Usa_Model_Shipping_Carrier_Ups();
-        $this->assertEquals($object->getShipAcceptUrl(), 'https://onlinetools.ups.com/ups.app/xml/ShipAccept');
+        $this->assertEquals($this->_object->getShipAcceptUrl(), 'https://onlinetools.ups.com/ups.app/xml/ShipAccept');
     }
 
     public function testGetShipConfirmUrl()
     {
-        $object = new Mage_Usa_Model_Shipping_Carrier_Ups();
-        $this->assertEquals($object->getShipConfirmUrl(), 'https://wwwcie.ups.com/ups.app/xml/ShipConfirm');
+        $this->assertEquals($this->_object->getShipConfirmUrl(), 'https://wwwcie.ups.com/ups.app/xml/ShipConfirm');
     }
 
     /**
@@ -54,7 +63,6 @@ class Mage_Usa_Model_Shipping_Carrier_UpsTest extends PHPUnit_Framework_TestCase
      */
     public function testGetShipConfirmUrlLive()
     {
-        $object = new Mage_Usa_Model_Shipping_Carrier_Ups();
-        $this->assertEquals($object->getShipConfirmUrl(), 'https://onlinetools.ups.com/ups.app/xml/ShipConfirm');
+        $this->assertEquals($this->_object->getShipConfirmUrl(), 'https://onlinetools.ups.com/ups.app/xml/ShipConfirm');
     }
 }

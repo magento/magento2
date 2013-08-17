@@ -38,11 +38,11 @@ class Mage_ProductAlert_Block_Email_StockTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      * @magentoDataFixture Mage/Catalog/_files/product_with_image.php
      */
     public function testThumbnail()
     {
+        Mage::app()->getArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->load();
         $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->load(1);
 

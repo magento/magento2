@@ -125,7 +125,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Search_Grid extends Mage_Adminhtml
             'index'     => 'entity_id'
         ));
         $this->addColumn('name', array(
-            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Product Name'),
+            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Product'),
             'renderer'  => 'Mage_Adminhtml_Block_Sales_Order_Create_Search_Grid_Renderer_Product',
             'index'     => 'name'
         ));
@@ -159,7 +159,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Search_Grid extends Mage_Adminhtml
         $this->addColumn('qty', array(
             'filter'    => false,
             'sortable'  => false,
-            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Qty To Add'),
+            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Quantity'),
             'renderer'  => 'Mage_Adminhtml_Block_Sales_Order_Create_Search_Grid_Renderer_Qty',
             'name'      => 'qty',
             'inline_css'=> 'qty',

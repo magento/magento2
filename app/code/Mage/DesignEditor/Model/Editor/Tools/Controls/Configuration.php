@@ -47,7 +47,7 @@ class Mage_DesignEditor_Model_Editor_Tools_Controls_Configuration
     protected $_configuration;
 
     /**
-     * @var Mage_Core_Model_Design_Package
+     * @var Mage_Core_Model_View_DesignInterface
      */
     protected $_design;
 
@@ -60,6 +60,11 @@ class Mage_DesignEditor_Model_Editor_Tools_Controls_Configuration
      * @var Mage_Core_Model_Theme
      */
     protected $_theme;
+
+    /**
+     * @var Mage_Core_Model_Theme
+     */
+    protected $_parentTheme;
 
     /**
      * @var Magento_Config_View
@@ -86,26 +91,39 @@ class Mage_DesignEditor_Model_Editor_Tools_Controls_Configuration
     protected $_controlList = array();
 
     /**
+     * View config model
+     *
+     * @var Mage_Core_Model_View_Config
+     */
+    protected $_viewConfigLoader;
+
+    /**
      * Initialize dependencies
      *
-     * @param Mage_Core_Model_Design_Package $design
+     * @param Mage_Core_Model_View_DesignInterface $design
      * @param Magento_Filesystem $filesystem
      * @param Mage_Core_Model_Event_Manager $eventDispatcher
+     * @param Mage_Core_Model_View_Config $viewConfig
      * @param Mage_DesignEditor_Model_Config_Control_Abstract|null $configuration
      * @param Mage_Core_Model_Theme|null $theme
+     * @param Mage_Core_Model_Theme $parentTheme
      */
     public function __construct(
-        Mage_Core_Model_Design_Package $design,
+        Mage_Core_Model_View_DesignInterface $design,
         Magento_Filesystem $filesystem,
         Mage_Core_Model_Event_Manager $eventDispatcher,
+        Mage_Core_Model_View_Config $viewConfig,
         Mage_DesignEditor_Model_Config_Control_Abstract $configuration = null,
-        Mage_Core_Model_Theme $theme = null
+        Mage_Core_Model_Theme $theme = null,
+        Mage_Core_Model_Theme $parentTheme = null
     ) {
         $this->_configuration = $configuration;
         $this->_theme = $theme;
+        $this->_parentTheme = $parentTheme ?: $theme->getParentTheme();
         $this->_design = $design;
         $this->_filesystem = $filesystem;
         $this->_eventDispatcher = $eventDispatcher;
+        $this->_viewConfigLoader = $viewConfig;
         $this->_initViewConfigs()->_loadControlsData();
     }
 
@@ -116,13 +134,13 @@ class Mage_DesignEditor_Model_Editor_Tools_Controls_Configuration
      */
     protected function _initViewConfigs()
     {
-        $this->_viewConfig = $this->_design->getViewConfig(array(
-            'area'       => Mage_Core_Model_Design_Package::DEFAULT_AREA,
+        $this->_viewConfig = $this->_viewConfigLoader->getViewConfig(array(
+            'area'       => Mage_Core_Model_View_DesignInterface::DEFAULT_AREA,
             'themeModel' => $this->_theme
         ));
-        $this->_viewConfigParent = $this->_design->getViewConfig(array(
-            'area'       => Mage_Core_Model_Design_Package::DEFAULT_AREA,
-            'themeModel' => $this->_theme->getParentTheme()
+        $this->_viewConfigParent = $this->_viewConfigLoader->getViewConfig(array(
+            'area'       => Mage_Core_Model_View_DesignInterface::DEFAULT_AREA,
+            'themeModel' => $this->_parentTheme
         ));
         return $this;
     }
@@ -261,7 +279,9 @@ class Mage_DesignEditor_Model_Editor_Tools_Controls_Configuration
             }
         }
         $this->_saveViewConfiguration($configDom);
-        $this->_eventDispatcher->dispatch('save_xml_configuration', array('configuration' => $this));
+        $this->_eventDispatcher->dispatch('save_view_configuration', array(
+            'configuration' => $this, 'theme' => $this->_theme
+        ));
         return $this;
     }
 
@@ -276,16 +296,6 @@ class Mage_DesignEditor_Model_Editor_Tools_Controls_Configuration
     }
 
     /**
-     * Get theme
-     *
-     * @return Mage_Core_Model_Theme
-     */
-    public function getTheme()
-    {
-        return $this->_theme;
-    }
-
-    /**
      * Save customized DOM of view configuration
      *
      * @param DOMDocument $config
@@ -293,7 +303,7 @@ class Mage_DesignEditor_Model_Editor_Tools_Controls_Configuration
      */
     protected function _saveViewConfiguration(DOMDocument $config)
     {
-        $targetPath = $this->_theme->getCustomViewConfigPath();
+        $targetPath = $this->_theme->getCustomization()->getCustomViewConfigPath();
         $this->_filesystem->setIsAllowCreateDirectories(true)->write($targetPath, $config->saveXML());
         return $this;
     }

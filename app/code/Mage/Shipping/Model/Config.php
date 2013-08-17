@@ -82,7 +82,7 @@ class Mage_Shipping_Model_Config extends Varien_Object
      *
      * @param   string $carrierCode
      * @param   mixed $store
-     * @return  bool|Mage_Model_Shipping_Carrier_Abstract
+     * @return  Mage_Usa_Model_Shipping_Carrier_Abstract
      */
     public function getCarrierInstance($carrierCode, $store = null)
     {
@@ -103,34 +103,22 @@ class Mage_Shipping_Model_Config extends Varien_Object
      */
     protected function _getCarrier($code, $config, $store = null)
     {
-        $arguments = array();
         if (!isset($config['model'])) {
-            if (isset($config['service'])) {
-                $modelName = 'Mage_Shipping_Model_Carrier_ServiceAdapter';
-                $arguments['serviceClassName'] = $config['service'];
-            } else {
-                return false;
-            }
-        } else {
-            $modelName = $config['model'];
+            return false;
         }
+        $modelName = $config['model'];
 
         /**
          * Added protection from not existing models usage.
          * Related with module uninstall process
          */
         try {
-            $carrier = Mage::getModel($modelName, $arguments);
+            $carrier = Mage::getModel($modelName);
         } catch (Exception $e) {
             Mage::logException($e);
             return false;
         }
-        $carrier->setId($code);
-        if ($store) {
-            $carrier->setStore($store);
-        }
-        // Carrier code needs to be injected to allow for dynamic reusable carrier models.
-        $carrier->setCarrierCode($code);
+        $carrier->setId($code)->setStore($store);
         self::$_carriers[$code] = $carrier;
         return self::$_carriers[$code];
     }

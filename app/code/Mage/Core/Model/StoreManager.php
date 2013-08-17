@@ -90,8 +90,8 @@ class Mage_Core_Model_StoreManager implements Mage_Core_Model_StoreManagerInterf
         Mage_Core_Model_Store_StorageFactory $factory,
         Mage_Core_Controller_Request_Http $request,
         Mage_Core_Model_Factory_Helper $helperFactory,
-        $scopeCode,
-        $scopeType
+        $scopeCode = '',
+        $scopeType = 'store'
     ) {
         $this->_factory = $factory;
         $this->_request = $request;

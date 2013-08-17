@@ -61,15 +61,19 @@ class Mage_Backend_Block_System_Config_Form_Field_Regexceptions
     public function renderCellTemplate($columnName)
     {
         if ($columnName == 'value' && isset($this->_columns[$columnName])) {
+            /** @var $label Mage_Core_Model_Theme_Label */
+            $label = Mage::getModel('Mage_Core_Model_Theme_Label');
+            $options = $label->getLabelsCollection($this->__('-- No Theme --'));
             $element = new Varien_Data_Form_Element_Select();
             $element
                 ->setForm($this->getForm())
                 ->setName($this->_getCellInputElementName($columnName))
                 ->setHtmlId($this->_getCellInputElementId('#{_id}', $columnName))
-                ->setValues(Mage::getModel('Mage_Core_Model_Theme')->getLabelsCollection($this->__('-- No Theme --')));
+                ->setValues($options);
             return str_replace("\n", '', $element->getElementHtml());
         }
 
         return parent::renderCellTemplate($columnName);
     }
+
 }

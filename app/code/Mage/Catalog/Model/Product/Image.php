@@ -62,8 +62,26 @@ class Mage_Catalog_Model_Product_Image extends Mage_Core_Model_Abstract
     protected $_filesystem;
 
     /**
+     * @var Mage_Core_Model_Image_Factory
+     */
+    protected $_imageFactory;
+
+    /**
+     * @var Mage_Core_Model_View_Url
+     */
+    protected $_viewUrl;
+
+    /**
+     * @var Mage_Core_Model_View_FileSystem
+     */
+    protected $_viewFileSystem;
+
+    /**
      * @param Mage_Core_Model_Context $context
      * @param Magento_Filesystem $filesystem
+     * @param Mage_Core_Model_Image_Factory $imageFactory
+     * @param Mage_Core_Model_View_Url $viewUrl
+     * @param Mage_Core_Model_View_FileSystem $viewFileSystem
      * @param Mage_Core_Model_Resource_Abstract $resource
      * @param Varien_Data_Collection_Db $resourceCollection
      * @param array $data
@@ -71,6 +89,9 @@ class Mage_Catalog_Model_Product_Image extends Mage_Core_Model_Abstract
     public function __construct(
         Mage_Core_Model_Context $context,
         Magento_Filesystem $filesystem,
+        Mage_Core_Model_Image_Factory $imageFactory,
+        Mage_Core_Model_View_Url $viewUrl,
+        Mage_Core_Model_View_FileSystem $viewFileSystem,
         Mage_Core_Model_Resource_Abstract $resource = null,
         Varien_Data_Collection_Db $resourceCollection = null,
         array $data = array()
@@ -82,9 +103,13 @@ class Mage_Catalog_Model_Product_Image extends Mage_Core_Model_Abstract
         $this->_filesystem->ensureDirectoryExists($baseDir);
         $this->_filesystem->setIsAllowCreateDirectories(false);
         $this->_filesystem->setWorkingDirectory($baseDir);
+        $this->_imageFactory = $imageFactory;
+        $this->_viewUrl = $viewUrl;
+        $this->_viewFileSystem = $viewFileSystem;
     }
 
     /**
+     * @param $width
      * @return Mage_Catalog_Model_Product_Image
      */
     public function setWidth($width)
@@ -322,7 +347,7 @@ class Mage_Catalog_Model_Product_Image extends Mage_Core_Model_Abstract
         $baseFile = $baseDir . $file;
 
         if (!$file || !$this->_filesystem->isFile($baseFile)) {
-            throw new Exception(Mage::helper('Mage_Catalog_Helper_Data')->__('Image file was not found.'));
+            throw new Exception(Mage::helper('Mage_Catalog_Helper_Data')->__('We can\'t find the image file.'));
         }
 
         $this->_baseFile = $baseFile;
@@ -391,8 +416,7 @@ class Mage_Catalog_Model_Product_Image extends Mage_Core_Model_Abstract
     public function getImageProcessor()
     {
         if (!$this->_processor) {
-            $adapter = Mage::helper('Mage_Core_Helper_Data')->getImageAdapterType();
-            $this->_processor = new Varien_Image($this->getBaseFile(), $adapter);
+            $this->_processor = $this->_imageFactory->create($this->getBaseFile());
         }
         $this->_processor->keepAspectRatio($this->_keepAspectRatio);
         $this->_processor->keepFrame($this->_keepFrame);
@@ -513,7 +537,7 @@ class Mage_Catalog_Model_Product_Image extends Mage_Core_Model_Abstract
     public function getUrl()
     {
         if ($this->_newFile === true) {
-            $url = Mage::getDesign()->getViewFileUrl(
+            $url = $this->_viewUrl->getViewFileUrl(
                 "Mage_Catalog::images/product/placeholder/{$this->getDestinationSubdir()}.jpg"
             );
         } else {
@@ -596,7 +620,7 @@ class Mage_Catalog_Model_Product_Image extends Mage_Core_Model_Abstract
         } elseif ($this->_fileExists($baseDir . '/watermark/' . $file)) {
             $filePath = $baseDir . '/watermark/' . $file;
         } else {
-            $viewFile = Mage::getDesign()->getViewFile($file);
+            $viewFile = $this->_viewFileSystem->getViewFile($file);
             if ($this->_filesystem->isFile($viewFile)) {
                 $filePath = $viewFile;
             }

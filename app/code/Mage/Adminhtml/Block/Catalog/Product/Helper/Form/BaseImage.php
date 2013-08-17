@@ -56,6 +56,11 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_BaseImage extends Varien_
     protected $_fileConfig;
 
     /**
+     * @var Mage_Core_Model_View_Url
+     */
+    protected $_viewUrl;
+
+    /**
      * Constructor
      *
      * @param array $attributes
@@ -63,6 +68,8 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_BaseImage extends Varien_
     public function __construct(array $attributes = array())
     {
         parent::__construct($attributes);
+
+        $this->_viewUrl = Mage::getModel('Mage_Core_Model_View_Url');
 
         $this->_url = isset($attributes['url']) ? $attributes['url']
             : Mage::getModel('Mage_Backend_Model_Url');
@@ -103,7 +110,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_BaseImage extends Varien_
     {
         $htmlId = $this->_coreHelper->escapeHtml($this->getHtmlId());
         $uploadUrl = $this->_coreHelper->escapeHtml($this->_getUploadUrl());
-        $spacerImage = Mage::getDesign()->getViewFileUrl('images/spacer.gif');
+        $spacerImage = $this->_viewUrl->getViewFileUrl('images/spacer.gif');
         /** @var $product Mage_Catalog_Model_Product */
         $html = <<<HTML
 <div id="{$htmlId}-container" class="images"
@@ -116,18 +123,20 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_BaseImage extends Varien_
         <p class="image-placeholder-text">{$this->__('Click here or drag and drop to add images')}</p>
     </div>
     <script id="{$htmlId}-template" class="image-template" type="text/x-jquery-tmpl">
-        <div class="image" data-image-label="{$this->__('Main')}" data-image-hidden-label="{$this->__('Hidden')}">
+        <div class="image">
             <img class="spacer" src="{$spacerImage}"/>
             <img class="product-image" src="\${url}" data-position="\${position}" alt="\${label}" />
             <div class="actions">
                 <button class="action-delete" data-role="delete-button" title="{$this->__('Delete image')}">
                     <span>{$this->__('Delete image')}</span>
                 </button>
-                <button class="action-make-main" data-role="make-main-button" title="{$this->__('Make Base')}">
+                <button class="action-make-base" data-role="make-base-button" title="{$this->__('Make Base')}">
                     <span>{$this->__('Make Base')}</span>
                 </button>
                 <div class="draggable-handle"></div>
             </div>
+            <div class="image-label"></div>
+            <div class="image-fade"><span>{$this->__('Hidden')}</span></div>
         </div>
     </script>
 </div>
@@ -138,7 +147,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_BaseImage extends Varien_
     (function($) {
         'use strict';
 
-        $('[data-activate-tab="image-management"]')
+        $('[data-activate-tab=image-management]')
             .on('click.toggleImageManagementTab', function() {
                 $('#product_info_tabs_image-management').trigger('click');
             });

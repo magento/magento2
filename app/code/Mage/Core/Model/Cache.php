@@ -154,10 +154,9 @@ class Mage_Core_Model_Cache implements Mage_Core_Model_CacheInterface
         } else {
             /** @deprecated special case of cleaning by empty tags is deprecated after 2.0.0.0-dev42 */
             $result = false;
-            $markerCacheTag = Mage_Core_Model_AppInterface::CACHE_TAG;
             /** @var $cacheFrontend Magento_Cache_FrontendInterface */
             foreach ($this->_frontendPool as $cacheFrontend) {
-                if ($cacheFrontend->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array($markerCacheTag))) {
+                if ($cacheFrontend->clean()) {
                     $result = true;
                 }
             }
@@ -239,7 +238,7 @@ class Mage_Core_Model_Cache implements Mage_Core_Model_CacheInterface
             $helper = $this->_helperFactory->get('Mage_Core_Helper_Data');
             foreach ($config->children() as $type => $node) {
                 $typeInstance = $this->_getTypeInstance($type);
-                if ($typeInstance instanceof Magento_Cache_Frontend_Decorator_TagMarker) {
+                if ($typeInstance instanceof Magento_Cache_Frontend_Decorator_TagScope) {
                     $typeTags = $typeInstance->getTag();
                 } else {
                     $typeTags = '';

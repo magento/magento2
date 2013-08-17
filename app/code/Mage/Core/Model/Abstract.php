@@ -29,6 +29,7 @@
  * Abstract model class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class Mage_Core_Model_Abstract extends Varien_Object
 {

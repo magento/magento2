@@ -77,7 +77,7 @@ class Mage_Adminhtml_Block_Report_Product_Lowstock_Grid extends Mage_Adminhtml_B
     protected function _prepareColumns()
     {
         $this->addColumn('name', array(
-            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Product Name'),
+            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Product'),
             'sortable'  =>false,
             'index'     =>'name',
             'header_css_class'  => 'col-product',
@@ -85,7 +85,7 @@ class Mage_Adminhtml_Block_Report_Product_Lowstock_Grid extends Mage_Adminhtml_B
         ));
 
         $this->addColumn('sku', array(
-            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Product SKU'),
+            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('SKU'),
             'sortable'  =>false,
             'index'     =>'sku',
             'header_css_class'  => 'col-sku',
@@ -93,7 +93,7 @@ class Mage_Adminhtml_Block_Report_Product_Lowstock_Grid extends Mage_Adminhtml_B
         ));
 
         $this->addColumn('qty', array(
-            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Stock Qty'),
+            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Stock Quantity'),
             'sortable'  =>false,
             'filter'    =>'Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Range',
             'index'     =>'qty',

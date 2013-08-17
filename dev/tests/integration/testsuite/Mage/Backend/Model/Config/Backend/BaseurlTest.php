@@ -21,7 +21,11 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Mage_Backend_Model_Config_Backend_BaseurlTest extends Mage_Backend_Area_TestCase
+
+/**
+ * @magentoAppArea adminhtml
+ */
+class Mage_Backend_Model_Config_Backend_BaseurlTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @param string $path
@@ -57,6 +61,12 @@ class Mage_Backend_Model_Config_Backend_BaseurlTest extends Mage_Backend_Area_Te
             array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_URL, $basePlaceholder),
             array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_LINK_URL, $unsecurePlaceholder),
             array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_LINK_URL, $unsecureSuffix),
+            array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_STATIC_URL, ''),
+            array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_STATIC_URL, $unsecurePlaceholder),
+            array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_STATIC_URL, $unsecureSuffix),
+            array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_CACHE_URL, ''),
+            array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_CACHE_URL, $unsecurePlaceholder),
+            array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_CACHE_URL, $unsecureSuffix),
             array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_MEDIA_URL, ''),
             array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_MEDIA_URL, $unsecurePlaceholder),
             array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_MEDIA_URL, $unsecureSuffix),
@@ -68,6 +78,12 @@ class Mage_Backend_Model_Config_Backend_BaseurlTest extends Mage_Backend_Area_Te
             array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_URL, $basePlaceholder),
             array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_LINK_URL, $securePlaceholder),
             array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_LINK_URL, $secureSuffix),
+            array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_STATIC_URL, ''),
+            array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_STATIC_URL, $securePlaceholder),
+            array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_STATIC_URL, $secureSuffix),
+            array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_CACHE_URL, ''),
+            array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_CACHE_URL, $securePlaceholder),
+            array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_CACHE_URL, $secureSuffix),
             array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_MEDIA_URL, ''),
             array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_MEDIA_URL, $securePlaceholder),
             array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_MEDIA_URL, $secureSuffix),
@@ -79,6 +95,12 @@ class Mage_Backend_Model_Config_Backend_BaseurlTest extends Mage_Backend_Area_Te
             array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_URL, $unsecurePlaceholder),
             array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_LINK_URL, $unsecurePlaceholder),
             array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_LINK_URL, $unsecureSuffix),
+            array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_STATIC_URL, ''),
+            array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_STATIC_URL, $unsecurePlaceholder),
+            array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_STATIC_URL, $unsecureSuffix),
+            array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_CACHE_URL, ''),
+            array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_CACHE_URL, $unsecurePlaceholder),
+            array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_CACHE_URL, $unsecureSuffix),
             array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_MEDIA_URL, ''),
             array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_MEDIA_URL, $unsecurePlaceholder),
             array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_MEDIA_URL, $unsecureSuffix),
@@ -131,6 +153,8 @@ class Mage_Backend_Model_Config_Backend_BaseurlTest extends Mage_Backend_Area_Te
             array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_LINK_URL, $baseSuffix),
             array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_LINK_URL, $unsecureWrongSuffix),
             array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_MEDIA_URL, $unsecureWrongSuffix),
+            array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_STATIC_URL, $unsecureWrongSuffix),
+            array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_CACHE_URL, $unsecureWrongSuffix),
             array(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_LIB_URL, $unsecureWrongSuffix),
 
             // secure base URLs
@@ -142,6 +166,8 @@ class Mage_Backend_Model_Config_Backend_BaseurlTest extends Mage_Backend_Area_Te
             array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_LINK_URL, $baseSuffix),
             array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_LINK_URL, $secureWrongSuffix),
             array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_MEDIA_URL, $secureWrongSuffix),
+            array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_STATIC_URL, $secureWrongSuffix),
+            array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_CACHE_URL, $secureWrongSuffix),
             array(Mage_Core_Model_Store::XML_PATH_SECURE_BASE_LIB_URL, $secureWrongSuffix),
         );
     }

@@ -56,7 +56,7 @@ class Mage_Adminhtml_Block_Checkout_Agreement_Grid extends Mage_Adminhtml_Block_
 
         $this->addColumn('name',
             array(
-                'header'=>Mage::helper('Mage_Checkout_Helper_Data')->__('Condition Name'),
+                'header'=>Mage::helper('Mage_Checkout_Helper_Data')->__('Condition'),
                 'index' => 'name',
                 'header_css_class'  => 'col-name',
                 'column_css_class'  => 'col-name'

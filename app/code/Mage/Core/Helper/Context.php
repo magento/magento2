@@ -31,18 +31,33 @@ class Mage_Core_Helper_Context implements Magento_ObjectManager_ContextInterface
     protected $_translator;
 
     /**
-     * @param Mage_Core_Model_Translate $translator
+     * @var Mage_Core_Model_ModuleManager
      */
-    public function __construct(Mage_Core_Model_Translate $translator)
+    protected $_moduleManager;
+
+    /**
+     * @param Mage_Core_Model_Translate $translator
+     * @param Mage_Core_Model_ModuleManager $moduleManager
+     */
+    public function __construct(Mage_Core_Model_Translate $translator, Mage_Core_Model_ModuleManager $moduleManager)
     {
         $this->_translator = $translator;
+        $this->_moduleManager = $moduleManager;
     }
 
     /**
-     * @return \Mage_Core_Model_Translate
+     * @return Mage_Core_Model_Translate
      */
     public function getTranslator()
     {
         return $this->_translator;
+    }
+
+    /**
+     * @return Mage_Core_Model_ModuleManager
+     */
+    public function getModuleManager()
+    {
+        return $this->_moduleManager;
     }
 }

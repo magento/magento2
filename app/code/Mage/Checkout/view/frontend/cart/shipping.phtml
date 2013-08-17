@@ -42,7 +42,7 @@
                     <label for="region_id"<?php if ($this->isStateProvinceRequired()) echo ' class="required"' ?>><?php if ($this->isStateProvinceRequired()) echo '<em>*</em>' ?><?php echo $this->__('State/Province') ?></label>
                     <div class="input-box">
                         <select id="region_id" name="region_id" title="<?php echo $this->__('State/Province') ?>" style="display:none;"<?php echo ($this->isStateProvinceRequired() ? ' class="validate-select"' : '') ?>>
-                            <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+                            <option value=""><?php echo $this->__('Please select a region, state or province.') ?></option>
                         </select>
                         <input type="text" id="region" name="region" value="<?php echo $this->escapeHtml($this->getEstimateRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text" style="display:none;" />
                    </div>
@@ -77,6 +77,7 @@
                     "<?php echo $this->getViewFileUrl('Mage_Checkout::js/region-updater.js') ?>",
                     function() {
                         $('#country').regionUpdater({
+                            optionalRegionAllowed: <?php echo (Mage::getStoreConfig('general/region/display_all')? 'true' : 'false'); ?>,
                             regionListId: '#region_id',
                             regionInputId: '#region',
                             postcodeId: '#postcode',

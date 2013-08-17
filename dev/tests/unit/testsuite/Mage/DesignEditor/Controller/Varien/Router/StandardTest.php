@@ -35,7 +35,7 @@ class Mage_DesignEditor_Controller_Varien_Router_StandardTest extends PHPUnit_Fr
     /**
      * Test VDE front name prefix
      */
-    const VDE_FRONT_NAME = 'test_front_name';
+    const VDE_FRONT_NAME = 'test_front_name/test_mode_type/test_theme_id';
 
     /**
      * Test VDE configuration data
@@ -53,11 +53,6 @@ class Mage_DesignEditor_Controller_Varien_Router_StandardTest extends PHPUnit_Fr
      * @var Mage_DesignEditor_Controller_Varien_Router_Standard
      */
     protected $_model;
-
-    public function tearDown()
-    {
-        unset($this->_model);
-    }
 
     /**
      * @param Mage_Core_Controller_Request_Http $request
@@ -95,7 +90,7 @@ class Mage_DesignEditor_Controller_Varien_Router_StandardTest extends PHPUnit_Fr
         $vdeUrl    = self::TEST_HOST . '/' . self::VDE_FRONT_NAME . self::TEST_PATH;
         $notVdeUrl = self::TEST_HOST . self::TEST_PATH;
 
-        $silencedMethods = array('_canBeStoreCodeInUrl');
+        $silencedMethods = array('_isFrontArea');
         $excludedRouters = array(
             'admin' => 'admin router',
             'vde'   => 'vde router',
@@ -106,8 +101,7 @@ class Mage_DesignEditor_Controller_Varien_Router_StandardTest extends PHPUnit_Fr
         $routerMockedMethods = array('match');
 
         $matchedController = $this->getMockForAbstractClass('Mage_Core_Controller_Varien_ActionAbstract', array(), '',
-            false
-        );
+            false);
 
         // method "match" will be invoked for this router because it's first in the list
         $matchedRouter = $this->getMock(
@@ -186,7 +180,7 @@ class Mage_DesignEditor_Controller_Varien_Router_StandardTest extends PHPUnit_Fr
         $objectManager      = $this->getMock('Magento_ObjectManager');
         $filesystem         = $this->getMockBuilder('Magento_Filesystem')->disableOriginalConstructor()->getMock();
 
-        $helper         = $this->_getHelperMock();
+        $helper         = $this->_getHelperMock($isVde);
         $backendSession = $this->_getBackendSessionMock($isVde, $isLoggedIn);
         $stateModel     = $this->_getStateModelMock($routers);
         $configuration  = $this->_getConfigurationMock($isVde, $isLoggedIn, $isConfiguration);
@@ -229,14 +223,15 @@ class Mage_DesignEditor_Controller_Varien_Router_StandardTest extends PHPUnit_Fr
     }
 
     /**
+     * @param bool $isVde
      * @return PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getHelperMock()
+    protected function _getHelperMock($isVde)
     {
-        $helper = $this->getMock('Mage_DesignEditor_Helper_Data', array('getFrontName'), array(), '', false);
-        $helper->expects($this->atLeastOnce())
-            ->method('getFrontName')
-            ->will($this->returnValue(self::VDE_FRONT_NAME));
+        $helper = $this->getMock('Mage_DesignEditor_Helper_Data', array('isVdeRequest'), array(), '', false);
+        $helper->expects($this->once())
+            ->method('isVdeRequest')
+            ->will($this->returnValue($isVde));
         return $helper;
     }
 

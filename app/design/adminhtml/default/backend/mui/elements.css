@@ -42,32 +42,45 @@
 .tooltip .help {
     display: inline-block;
     position: relative;
-    margin: 7px 0 0 15px;
+    margin-left: 8px;
 }
 
+.tooltip .help span,
 .tooltip .help a {
     display: block;
-    width: 14px;
-    height: 14px;
+    width: 15px;
+    height: 15px;
     text-decoration: none;
     text-indent: -999em;
     cursor: help;
 }
 
+.tooltip .help span:before,
 .tooltip .help a:before {
     position: absolute;
+    height: 15px;
+    width: 15px;
+    z-index: 1;
     top: 0;
     left: 0;
     text-indent: 0;
-    font: 11px/11px bold Arial, Verdana, sans-serif;
-    text-align: center;
-    color: #aaa;
-    height: 12px;
-    width: 12px;
-    background: #fff;
-    border: 1px #aaa solid;
-    border-radius: 7px;
-    content: "?";
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: '\e049';
+    font-size: 15px;
+    line-height: 15px;
+    color: #b6aea3;
+    color: rgba(103, 96, 86, .4);
+    overflow: hidden;
+}
+
+.tooltip .help span:hover:before,
+.tooltip .help a:hover:before {
+    color: #9c958a;
+    color: rgba(103, 96, 86, .6);
 }
 
 .tooltip-content {

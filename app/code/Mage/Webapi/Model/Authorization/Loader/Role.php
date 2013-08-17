@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Mage_Webapi_Model_Authorization_Loader_Role implements Magento_Acl_Loader
+class Mage_Webapi_Model_Authorization_Loader_Role implements Magento_Acl_LoaderInterface
 {
     /**
      * @var Mage_Webapi_Model_Resource_Acl_Role
@@ -61,7 +61,7 @@ class Mage_Webapi_Model_Authorization_Loader_Role implements Magento_Acl_Loader
         $roleList = $this->_roleResource->getRolesIds();
         foreach ($roleList as $roleId) {
             /** @var $aclRole Mage_Webapi_Model_Authorization_Role */
-            $aclRole = $this->_roleFactory->createRole(array($roleId));
+            $aclRole = $this->_roleFactory->createRole(array('roleId' => $roleId));
             $acl->addRole($aclRole);
             //Deny all privileges to Role. Some of them could be allowed later by whitelist
             $acl->deny($aclRole);

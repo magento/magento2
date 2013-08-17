@@ -35,7 +35,10 @@ class Mage_Core_Model_Resource_Layout_Update_CollectionTest extends Mage_Core_Mo
      */
     protected function _getCollection(Zend_Db_Select $select)
     {
-        return new Mage_Core_Model_Resource_Layout_Update_Collection($this->_getResource($select));
+        return new Mage_Core_Model_Resource_Layout_Update_Collection(
+            $this->getMockForAbstractClass('Varien_Data_Collection_Db_FetchStrategyInterface'),
+            $this->_getResource($select)
+        );
     }
 
     public function testAddThemeFilter()

@@ -38,6 +38,9 @@
         <testsuite name="Code Integrity Tests">
             <directory>testsuite/Integrity</directory>
         </testsuite>
+        <testsuite name="Twig Syntax Checker">
+            <directory>testsuite/Twig/TwigExtensionTest.php</directory>
+        </testsuite>
     </testsuites>
     <php>
         <ini name="date.timezone" value="America/Los_Angeles"/>

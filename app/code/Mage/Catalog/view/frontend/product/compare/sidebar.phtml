@@ -56,9 +56,9 @@ $_items = $_helper->getItemCount() > 0 ? $_helper->getItemCollection() : null;
             (function($) {
                 head.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/compare.js') ?>", function() {
                     $('#compare-items').compareItems({
-                        removeConfirmMessage: '<?php echo $this->__('Are you sure you would like to remove this item from the compare products?') ?>',
+                        removeConfirmMessage: '<?php echo $this->__('Are you sure you want to remove this item from the compared products?') ?>',
                         removeSelector: '#compare-items a.btn-remove',
-                        clearAllConfirmMessage: '<?php echo $this->__('Are you sure you would like to remove all products from your comparison?') ?>',
+                        clearAllConfirmMessage: '<?php echo $this->__('Are you sure you want to remove all products from your comparison?') ?>',
                         clearAllSelector: '#compare-clear-all'
                     });
                 });

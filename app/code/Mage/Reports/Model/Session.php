@@ -35,11 +35,12 @@
 class Mage_Reports_Model_Session extends Mage_Core_Model_Session_Abstract
 {
     /**
-     * Initialize session name space
+     * Class constructor. Initialize session namespace
      *
+     * @param string $sessionName
      */
-    public function __construct()
+    public function __construct($sessionName = null)
     {
-        $this->init('reports');
+        $this->init('reports', $sessionName);
     }
 }

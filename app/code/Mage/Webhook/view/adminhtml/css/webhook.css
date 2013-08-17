@@ -116,32 +116,3 @@ input.monospace {
     width: auto;
     margin-left: 2em;
 }
-
-/**********************************
-*** Section for displaying tree ***
-**********************************/
-
-
-/*ul.tree ul ul:not(:last-of-type),*/
-ul.tree ul ul.not-last-of-type {
-    list-style-type: none;
-    background: url(../images/tree/vline.png) repeat-y;
-    margin: 0;
-    padding-left: 2em;
-}
-
-ul.tree ul {
-    margin-left: 10px;
-}
-
-ul.tree ul li {
-    margin: 0;
-    padding: 0 12px;
-    line-height: 20px;
-    background: url(../images/tree/node.png) no-repeat;
-}
-
-/*ul.tree ul li:last-of-type,*/
-ul.tree ul li.last-of-type {
-    background: #fff url(../images/tree/lastnode.png) no-repeat;
-}

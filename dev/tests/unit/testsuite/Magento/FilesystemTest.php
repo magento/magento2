@@ -803,105 +803,58 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider absolutePathDataProvider
+     * @dataProvider normalizePathDataProvider
      * @param string $path
+     * @param bool $isRelative
      * @param string $expected
      */
-    public function testGetAbsolutePath($path, $expected)
+    public function testNormalizePath($path, $isRelative, $expected)
     {
-        $this->assertEquals($expected, Magento_Filesystem::getAbsolutePath($path));
+        $this->assertEquals($expected, Magento_Filesystem::normalizePath($path, $isRelative));
     }
 
     /**
      * @return array
      */
-    public function absolutePathDataProvider()
+    public static function normalizePathDataProvider()
     {
         return array(
-            array('/tmp/../file.txt', '/file.txt'),
-            array('/tmp/../etc/mysql/file.txt', '/etc/mysql/file.txt'),
-            array('/tmp/../file.txt', '/file.txt'),
-            array('/tmp/./file.txt', '/tmp/file.txt'),
-            array('/tmp/./../file.txt', '/file.txt'),
-            array('/tmp/../../../file.txt', '/file.txt'),
-            array('../file.txt', '/file.txt'),
-            array('/../file.txt', '/file.txt'),
-            array('/tmp/path/file.txt', '/tmp/path/file.txt'),
-            array('/tmp/path', '/tmp/path'),
-            array('C:\\Windows', 'C:/Windows'),
-            array('C:\\Windows\\system32\\..', 'C:/Windows'),
+            array('/tmp/../file.txt', false, '/file.txt'),
+            array('/tmp/../etc/mysql/file.txt', false, '/etc/mysql/file.txt'),
+            array('/tmp/./file.txt', false, '/tmp/file.txt'),
+            array('/tmp/./../file.txt', false, '/file.txt'),
+            array('/tmp/path/file.txt', false, '/tmp/path/file.txt'),
+            array('/tmp/path\file.txt', false, '/tmp/path/file.txt'),
+            array('/tmp/path', false, '/tmp/path'),
+            array('../tmp/path', true, '../tmp/path'),
+            array('../tmp/../../path', true, '../../path'),
+            array('C:\\Windows', false, 'C:/Windows'),
+            array('C:\\Windows\\system32\\..', false, 'C:/Windows'),
         );
     }
 
-    /**
-     * @dataProvider pathDataProvider
-     * @param array $parts
-     * @param string $expected
-     * @param bool $isAbsolute
-     */
-    public function testGetPathFromArray(array $parts, $expected, $isAbsolute)
-    {
-        $expected = Magento_Filesystem::fixSeparator($expected);
-        $this->assertEquals($expected, Magento_Filesystem::getPathFromArray($parts, $isAbsolute));
-    }
 
     /**
-     * @return array
-     */
-    public function pathDataProvider()
-    {
-        return array(
-            array(array('etc', 'mysql', 'my.cnf'), '/etc/mysql/my.cnf',true),
-            array(array('etc', 'mysql', 'my.cnf'), 'etc/mysql/my.cnf', false),
-            array(array('C:', 'Windows', 'my.cnf'), 'C:/Windows/my.cnf', false),
-            array(array('C:', 'Windows', 'my.cnf'), 'C:/Windows/my.cnf', true),
-            array(array('C:', 'Windows', 'my.cnf'), 'C:\\Windows/my.cnf', true),
-        );
-    }
-
-    /**
-     * @dataProvider pathDataProvider
-     * @param array $expected
      * @param string $path
+     * @param bool $isRelative
+     * @dataProvider normalizePathExceptionDataProvider
      */
-    public function testGetPathAsArray(array $expected, $path)
+    public function testNormalizePathException($path, $isRelative)
     {
-        $this->assertEquals($expected, Magento_Filesystem::getPathAsArray($path));
-    }
-
-    /**
-     * @dataProvider isAbsolutePathDataProvider
-     * @param bool $isReal
-     * @param string $path
-     */
-    public function testIsAbsolutePath($isReal, $path)
-    {
-        $this->assertEquals($isReal, Magento_Filesystem::isAbsolutePath($path));
+        $this->setExpectedException('Magento_Filesystem_Exception', "Invalid path '{$path}'.");
+        Magento_Filesystem::normalizePath($path, $isRelative);
     }
 
     /**
      * @return array
      */
-    public function isAbsolutePathDataProvider()
+    public static function normalizePathExceptionDataProvider()
     {
         return array(
-            array(true, '/tmp/file.txt'),
-            array(false, '/tmp/../etc/mysql/my.cnf'),
-            array(false, '/tmp/../tmp/file.txt'),
-            array(false, 'C:\Temp\..\tmpfile.txt'),
-            array(true, 'C:\Temp\tmpfile.txt'),
-            array(true, '/tmp/'),
-            array(true, '/tmp'),
+            array('./../file.txt', false),
+            array('/../file.txt', false),
+            array('/tmp/../../file.txt', false),
         );
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Path must contain at least one node
-     */
-    public function testGetPathFromArrayException()
-    {
-        Magento_Filesystem::getPathFromArray(array());
     }
 
     /**
@@ -929,7 +882,11 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
      */
     public function testIsPathInDirectory($path, $directory, $expectedValue)
     {
-        $this->assertEquals($expectedValue, Magento_Filesystem::isPathInDirectory($path, $directory));
+        $adapterMock = $this->getMockBuilder('Magento_Filesystem_AdapterInterface')
+            ->getMock();
+
+        $filesystem = new Magento_Filesystem($adapterMock);
+        $this->assertEquals($expectedValue, $filesystem->isPathInDirectory($path, $directory));
     }
 
     /**

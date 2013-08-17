@@ -40,25 +40,24 @@ class Mage_ImportExport_Block_Adminhtml_Import_Edit_Form extends Mage_Adminhtml_
      */
     protected function _prepareForm()
     {
-        $helper = Mage::helper('Mage_ImportExport_Helper_Data');
         $form = new Varien_Data_Form(array(
             'id'      => 'edit_form',
             'action'  => $this->getUrl('*/*/validate'),
             'method'  => 'post',
-            'enctype' => 'multipart/form-data'
+            'enctype' => 'multipart/form-data',
         ));
 
         // base fieldset
         /** @var $importEntity Mage_ImportExport_Model_Source_Import_Entity */
         $importEntity = Mage::getModel('Mage_ImportExport_Model_Source_Import_Entity');
-        $fieldsets['base'] = $form->addFieldset('base_fieldset', array('legend' => $helper->__('Import Settings')));
+        $fieldsets['base'] = $form->addFieldset('base_fieldset', array('legend' => $this->__('Import Settings')));
         $fieldsets['base']->addField('entity', 'select', array(
             'name'     => 'entity',
-            'title'    => $helper->__('Entity Type'),
-            'label'    => $helper->__('Entity Type'),
+            'title'    => $this->__('Entity Type'),
+            'label'    => $this->__('Entity Type'),
             'required' => true,
             'onchange' => 'varienImport.handleEntityTypeSelector();',
-            'values'   => $importEntity->toOptionArray()
+            'values'   => $importEntity->toOptionArray(),
         ));
 
         // add behaviour fieldsets
@@ -67,34 +66,34 @@ class Mage_ImportExport_Block_Adminhtml_Import_Edit_Form extends Mage_Adminhtml_
             $fieldsets[$behaviorCode] = $form->addFieldset(
                 $behaviorCode . '_fieldset',
                 array(
-                    'legend' => $helper->__('Import Behavior'),
-                    'style'  => 'display:none',
+                    'legend' => $this->__('Import Behavior'),
+                    'class'  => 'no-display',
                 )
             );
             /** @var $behaviorSource Mage_ImportExport_Model_Source_Import_BehaviorAbstract */
             $behaviorSource = Mage::getModel($behaviorClass);
             $fieldsets[$behaviorCode]->addField($behaviorCode, 'select', array(
                 'name'     => 'behavior',
-                'title'    => $helper->__('Import Behavior'),
-                'label'    => $helper->__('Import Behavior'),
+                'title'    => $this->__('Import Behavior'),
+                'label'    => $this->__('Import Behavior'),
                 'required' => true,
                 'disabled' => true,
-                'values'   => $behaviorSource->toOptionArray()
+                'values'   => $behaviorSource->toOptionArray(),
             ));
         }
 
         // fieldset for file uploading
         $fieldsets['upload'] = $form->addFieldset('upload_file_fieldset',
             array(
-                'legend' => $helper->__('File to Import'),
-                'style'  => 'display:none'
+                'legend' => $this->__('File to Import'),
+                'class'  => 'no-display',
             )
         );
         $fieldsets['upload']->addField(Mage_ImportExport_Model_Import::FIELD_NAME_SOURCE_FILE, 'file', array(
             'name'     => Mage_ImportExport_Model_Import::FIELD_NAME_SOURCE_FILE,
-            'label'    => $helper->__('Select File to Import'),
-            'title'    => $helper->__('Select File to Import'),
-            'required' => true
+            'label'    => $this->__('Select File to Import'),
+            'title'    => $this->__('Select File to Import'),
+            'required' => true,
         ));
 
         $form->setUseContainer(true);

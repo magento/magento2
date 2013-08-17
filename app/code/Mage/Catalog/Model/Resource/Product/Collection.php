@@ -1129,50 +1129,30 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
      */
     protected function _addUrlRewrite()
     {
-        $urlRewrites = null;
-        if ($this->_cacheConf) {
-            if (!($urlRewrites = Mage::app()->loadCache($this->_cacheConf['prefix'] . 'urlrewrite'))) {
-                $urlRewrites = null;
-            } else {
-                $urlRewrites = unserialize($urlRewrites);
+        $productIds = array();
+        foreach ($this->getItems() as $item) {
+            $productIds[] = $item->getEntityId();
+        }
+        if (!count($productIds)) {
+            return;
+        }
+
+        $select = $this->getConnection()->select()
+            ->from($this->getTable('core_url_rewrite'), array('product_id', 'request_path'))
+            ->where('store_id = ?', Mage::app()->getStore()->getId())
+            ->where('is_system = ?', 1)
+            ->where('category_id = ? OR category_id IS NULL', $this->_urlRewriteCategory)
+            ->where('product_id IN(?)', $productIds)
+            ->order('category_id ' . self::SORT_ORDER_DESC); // more priority is data with category id
+        $urlRewrites = array();
+
+        foreach ($this->getConnection()->fetchAll($select) as $row) {
+            if (!isset($urlRewrites[$row['product_id']])) {
+                $urlRewrites[$row['product_id']] = $row['request_path'];
             }
         }
 
-        if (!$urlRewrites) {
-            $productIds = array();
-            foreach($this->getItems() as $item) {
-                $productIds[] = $item->getEntityId();
-            }
-            if (!count($productIds)) {
-                return;
-            }
-
-            $select = $this->getConnection()->select()
-                ->from($this->getTable('core_url_rewrite'), array('product_id', 'request_path'))
-                ->where('store_id = ?', Mage::app()->getStore()->getId())
-                ->where('is_system = ?', 1)
-                ->where('category_id = ? OR category_id IS NULL', $this->_urlRewriteCategory)
-                ->where('product_id IN(?)', $productIds)
-                ->order('category_id ' . self::SORT_ORDER_DESC); // more priority is data with category id
-            $urlRewrites = array();
-
-            foreach ($this->getConnection()->fetchAll($select) as $row) {
-                if (!isset($urlRewrites[$row['product_id']])) {
-                    $urlRewrites[$row['product_id']] = $row['request_path'];
-                }
-            }
-
-            if ($this->_cacheConf) {
-                Mage::app()->saveCache(
-                    serialize($urlRewrites),
-                    $this->_cacheConf['prefix'] . 'urlrewrite',
-                    array_merge($this->_cacheConf['tags'], array(Mage_Catalog_Model_Product_Url::CACHE_TAG)),
-                    $this->_cacheLifetime
-                );
-            }
-        }
-
-        foreach($this->getItems() as $item) {
+        foreach ($this->getItems() as $item) {
             if (isset($urlRewrites[$item->getEntityId()])) {
                 $item->setData('request_path', $urlRewrites[$item->getEntityId()]);
             } else {

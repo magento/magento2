@@ -64,7 +64,7 @@ class Mage_Poll_VoteController extends Mage_Core_Controller_Front_Action
 
             $poll->addVote($vote);
             Mage::getSingleton('Mage_Core_Model_Session')->setJustVotedPoll($pollId);
-            Mage::dispatchEvent(
+            $this->_eventManager->dispatch(
                 'poll_vote_add',
                 array(
                     'poll'  => $poll,

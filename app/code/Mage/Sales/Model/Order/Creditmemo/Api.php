@@ -201,12 +201,12 @@ class Mage_Sales_Model_Order_Creditmemo_Api extends Mage_Sales_Model_Api_Resourc
         $creditmemo = $this->_getCreditmemo($creditmemoIncrementId);
 
         if (!$creditmemo->canCancel()) {
-            $this->_fault('status_not_changed', Mage::helper('Mage_Sales_Helper_Data')->__('Credit memo cannot be canceled.'));
+            $this->_fault('status_not_changed', Mage::helper('Mage_Sales_Helper_Data')->__('We can\'t cancel the credit memo'));
         }
         try {
             $creditmemo->cancel()->save();
         } catch (Exception $e) {
-            $this->_fault('status_not_changed', Mage::helper('Mage_Sales_Helper_Data')->__('Credit memo canceling problem.'));
+            $this->_fault('status_not_changed', Mage::helper('Mage_Sales_Helper_Data')->__('Something went wrong while canceling the credit memo.'));
         }
 
         return true;

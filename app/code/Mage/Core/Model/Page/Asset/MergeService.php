@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_Core
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -47,21 +45,39 @@ class Mage_Core_Model_Page_Asset_MergeService
     private $_storeConfig;
 
     /**
-     * @var Mage_Core_Model_Design_Package
+     * @var Magento_Filesystem
      */
-    private $_designPackage;
+    private $_filesystem;
+
+    /**
+     * @var Mage_Core_Model_Dir
+     */
+    private $_dirs;
+
+    /**
+     * @var Mage_Core_Model_App_State
+     */
+    private $_state;
 
     /**
      * @param Magento_ObjectManager $objectManager
      * @param Mage_Core_Model_Store_Config $storeConfig
-     * @param Mage_Core_Model_Design_Package $designPackage
+     * @param Magento_Filesystem $filesystem,
+     * @param Mage_Core_Model_Dir $dirs
+     * @param Mage_Core_Model_App_State $state
      */
-    public function __construct(Magento_ObjectManager $objectManager, Mage_Core_Model_Store_Config $storeConfig,
-        Mage_Core_Model_Design_Package $designPackage
+    public function __construct(
+        Magento_ObjectManager $objectManager,
+        Mage_Core_Model_Store_Config $storeConfig,
+        Magento_Filesystem $filesystem,
+        Mage_Core_Model_Dir $dirs,
+        Mage_Core_Model_App_State $state
     ) {
         $this->_objectManager = $objectManager;
         $this->_storeConfig = $storeConfig;
-        $this->_designPackage = $designPackage;
+        $this->_filesystem = $filesystem;
+        $this->_dirs = $dirs;
+        $this->_state = $state;
     }
 
     /**
@@ -69,27 +85,45 @@ class Mage_Core_Model_Page_Asset_MergeService
      *
      * @param array $assets
      * @param string $contentType
-     * @return array
+     * @return array|Iterator
      * @throws InvalidArgumentException
      */
     public function getMergedAssets(array $assets, $contentType)
     {
-        $isCss = $contentType == Mage_Core_Model_Design_Package::CONTENT_TYPE_CSS;
-        $isJs = $contentType == Mage_Core_Model_Design_Package::CONTENT_TYPE_JS;
+        $isCss = $contentType == Mage_Core_Model_View_Publisher::CONTENT_TYPE_CSS;
+        $isJs = $contentType == Mage_Core_Model_View_Publisher::CONTENT_TYPE_JS;
         if (!$isCss && !$isJs) {
             throw new InvalidArgumentException("Merge for content type '$contentType' is not supported.");
         }
 
-        if ($this->_designPackage->isMergingViewFilesAllowed()) {
-            $isCssMergeEnabled = $this->_storeConfig->getConfigFlag(self::XML_PATH_MERGE_CSS_FILES);
-            $isJsMergeEnabled = $this->_storeConfig->getConfigFlag(self::XML_PATH_MERGE_JS_FILES);
-            if (($isCss && $isCssMergeEnabled) || ($isJs && $isJsMergeEnabled)) {
-                $assets = array(
-                    $this->_objectManager->create('Mage_Core_Model_Page_Asset_Merged', array('assets' => $assets))
-                );
+        $isCssMergeEnabled = $this->_storeConfig->getConfigFlag(self::XML_PATH_MERGE_CSS_FILES);
+        $isJsMergeEnabled = $this->_storeConfig->getConfigFlag(self::XML_PATH_MERGE_JS_FILES);
+        if (($isCss && $isCssMergeEnabled) || ($isJs && $isJsMergeEnabled)) {
+            if ($this->_state->getMode() == Mage_Core_Model_App_State::MODE_PRODUCTION) {
+                $mergeStrategyClass = 'Mage_Core_Model_Page_Asset_MergeStrategy_FileExists';
+            } else {
+                $mergeStrategyClass = 'Mage_Core_Model_Page_Asset_MergeStrategy_Checksum';
             }
+            $mergeStrategy = $this->_objectManager->get($mergeStrategyClass);
+
+            $assets = $this->_objectManager->create(
+                'Mage_Core_Model_Page_Asset_Merged', array('assets' => $assets, 'mergeStrategy' => $mergeStrategy)
+            );
         }
 
         return $assets;
+    }
+
+    /**
+     * Remove all merged js/css files
+     */
+    public function cleanMergedJsCss()
+    {
+        $mergedDir = $this->_dirs->getDir(Mage_Core_Model_Dir::PUB_VIEW_CACHE) . '/'
+            . Mage_Core_Model_Page_Asset_Merged::PUBLIC_MERGE_DIR;
+        $this->_filesystem->delete($mergedDir);
+
+        $this->_objectManager->get('Mage_Core_Helper_File_Storage_Database')
+            ->deleteFolder($mergedDir);
     }
 }

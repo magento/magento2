@@ -38,16 +38,18 @@ class Mage_Adminhtml_Helper_Media_Js extends Mage_Core_Helper_Js
     /**
      * @param Mage_Core_Helper_Context $context
      * @param Mage_Core_Model_Config_Modules_Reader $configReader
+     * @param Mage_Core_Model_Cache_Type_Config $configCacheType
      */
     public function __construct(
         Mage_Core_Helper_Context $context,
-        Mage_Core_Model_Config_Modules_Reader $configReader
-    ) {
-        parent::__construct($context, $configReader);
-
+        Mage_Core_Model_Config_Modules_Reader $configReader,
+        Mage_Core_Model_Cache_Type_Config $configCacheType
+    )
+    {
+        parent::__construct($context, $configReader, $configCacheType);
         $this->_translateData = array(
             'Complete' => $this->__('Complete'),
-            'File size should be more than 0 bytes' => $this->__('File size should be more than 0 bytes'),
+            'The file size should be more than 0 bytes.' => $this->__('The file size should be more than 0 bytes.'),
             'Upload Security Error' => $this->__('Upload Security Error'),
             'Upload HTTP Error'     => $this->__('Upload HTTP Error'),
             'Upload I/O Error'     => $this->__('Upload I/O Error'),
@@ -57,7 +59,7 @@ class Mage_Adminhtml_Helper_Media_Js extends Mage_Core_Helper_Js
             'Mb' => $this->__('Mb'),
             'Kb' => $this->__('Kb'),
             'b' => $this->__('b')
-         );
+        );
     }
 
     /**

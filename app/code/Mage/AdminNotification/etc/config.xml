@@ -28,7 +28,7 @@
 <config>
     <modules>
         <Mage_AdminNotification>
-            <version>1.6.0.0</version>
+            <version>2.0.0.0</version>
             <active>true</active>
             <depends>
                <Mage_Core/>
@@ -65,7 +65,32 @@
                 </observers>
             </controller_action_predispatch>
         </events>
+        <di>
+            <Mage_AdminNotification_Model_System_MessageList>
+                <parameters>
+                    <messages>
+                        <baseurl>Mage_AdminNotification_Model_System_Message_Baseurl</baseurl>
+                        <security>Mage_AdminNotification_Model_System_Message_Security</security>
+                        <cache>Mage_AdminNotification_Model_System_Message_CacheOutdated</cache>
+                        <survey>Mage_AdminNotification_Model_System_Message_Survey</survey>
+                        <media_synchronization_error>Mage_AdminNotification_Model_System_Message_Media_Synchronization_Error</media_synchronization_error>
+                        <media_synchronization_success>Mage_AdminNotification_Model_System_Message_Media_Synchronization_Success</media_synchronization_success>
+                    </messages>
+                </parameters>
+            </Mage_AdminNotification_Model_System_MessageList>
+        </di>
     </adminhtml>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <adminnotification before="Mage_Adminhtml">Mage_AdminNotification_Adminhtml</adminnotification>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
     <default>
         <system>
             <adminnotification>

@@ -51,8 +51,6 @@ $elementName = $this->getElement()->getName() . '[images]';
 
     <script id="<?php echo $this->getHtmlId() ?>-template" type="text/x-jquery-tmpl">
         <div class="image item {{if disabled == 1 }}hidden-for-front{{/if}}"
-             data-image-label="<?php echo $this->__('Main') ?>"
-             data-image-hidden-label="<?php echo $this->__('Hidden') ?>"
              data-role="image">
             <input type="hidden" name="<?php echo $elementName ?>[${file_id}][position]" value="${position}" class="position"/>
             <input type="hidden" name="<?php echo $elementName ?>[${file_id}][file]" value="${file}"/>
@@ -73,11 +71,13 @@ $elementName = $this->getElement()->getName() . '[images]';
                 <button type="button" class="action-delete" data-role="delete-button" title="<?php echo $this->__('Delete image') ?>">
                     <span> <?php echo $this->__('Delete image') ?></span >
                 </button>
-                <button type="button" class="action-make-main" data-role="make-main-button" title="<?php echo $this->__('Make Base') ?>">
+                <button type="button" class="action-make-base" data-role="make-base-button" title="<?php echo $this->__('Make Base') ?>">
                     <span><?php echo $this->__('Make Base') ?></span >
                 </button >
                 <div class="draggable-handle" ></div >
             </div >
+            <div class="image-label"></div>
+            <div class="image-fade"><span><?php echo $this->__('Hidden') ?></span></div>
         </div>
     </script>
     <script class="dialog-template" type="text/x-jquery-tmpl"  data-title="Image Options">
@@ -89,14 +89,14 @@ $elementName = $this->getElement()->getName() . '[images]';
                 <strong class="image-name">${label}</strong>
 
                 <button type="button" class="action-remove"
-                        title="<?php echo $this->__('Remove image'); ?>">
-                    <span><?php echo $this->__('Remove image'); ?></span>
+                        title="<?php echo $this->__('Remove Image'); ?>">
+                    <span><?php echo $this->__('Remove Image'); ?></span>
                 </button>
 
-                <fieldset class="fieldset fieldset-alt">
+                <fieldset class="fieldset fieldset-image-panel">
                     <div class="field field-image-description">
                         <label class="label" for="image-description">
-                            <span><?php echo $this->__('Alt text')?></span>
+                            <span><?php echo $this->__('Alt Text')?></span>
                         </label>
                         <div class="control">
                             <textarea id="image-description"
@@ -134,7 +134,7 @@ $elementName = $this->getElement()->getName() . '[images]';
                                    value="1"
                                    name="<?php echo $elementName ?>[${file_id}][disabled]"
                             {{if disabled == 1 }}checked="checked"{{/if}} />
-                            <span><?php echo $this->__('Hide from product page')?></span>
+                            <span><?php echo $this->__('Hide from Product Page')?></span>
                         </label>
                     </div>
                 </fieldset>

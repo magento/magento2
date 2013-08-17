@@ -37,7 +37,7 @@ class Mage_Core_Model_Theme_Domain_Virtual
     protected $_theme;
 
     /**
-     * @var Mage_Core_Model_Theme_Factory $themeFactory
+     * @var Mage_Core_Model_ThemeFactory $themeFactory
      */
     protected $_themeFactory;
 
@@ -54,28 +54,28 @@ class Mage_Core_Model_Theme_Domain_Virtual
     protected $_themeCopyService;
 
     /**
-     * Theme service model
+     * Theme customization config
      *
-     * @var Mage_Core_Model_Theme_Service
+     * @var Mage_Theme_Model_Config_Customization
      */
-    protected $_service;
+    protected $_customizationConfig;
 
     /**
      * @param Mage_Core_Model_Theme $theme
-     * @param Mage_Core_Model_Theme_Factory $themeFactory
+     * @param Mage_Core_Model_ThemeFactory $themeFactory
      * @param Mage_Core_Model_Theme_CopyService $themeCopyService
-     * @param Mage_Core_Model_Theme_Service $service
+     * @param Mage_Theme_Model_Config_Customization $customizationConfig
      */
     public function __construct(
         Mage_Core_Model_Theme $theme,
-        Mage_Core_Model_Theme_Factory $themeFactory,
+        Mage_Core_Model_ThemeFactory $themeFactory,
         Mage_Core_Model_Theme_CopyService $themeCopyService,
-        Mage_Core_Model_Theme_Service $service
+        Mage_Theme_Model_Config_Customization $customizationConfig
     ) {
         $this->_theme = $theme;
         $this->_themeFactory = $themeFactory;
         $this->_themeCopyService = $themeCopyService;
-        $this->_service = $service;
+        $this->_customizationConfig = $customizationConfig;
     }
 
     /**
@@ -96,13 +96,33 @@ class Mage_Core_Model_Theme_Domain_Virtual
     }
 
     /**
+     * Get 'physical' theme
+     *
+     * @return Mage_Core_Model_Theme
+     */
+    public function getPhysicalTheme()
+    {
+        /** @var $parentTheme Mage_Core_Model_Theme */
+        $parentTheme = $this->_theme->getParentTheme();
+        while ($parentTheme && !$parentTheme->isPhysical()) {
+            $parentTheme = $parentTheme->getParentTheme();
+        }
+
+        if (!$parentTheme || !$parentTheme->getId()) {
+            return null;
+        }
+
+        return $parentTheme;
+    }
+
+    /**
      * Check if theme is assigned to ANY store
      *
      * @return bool
      */
     public function isAssigned()
     {
-        return $this->_service->isThemeAssignedToStore($this->_theme);
+        return $this->_customizationConfig->isThemeAssignedToStore($this->_theme);
     }
 
     /**

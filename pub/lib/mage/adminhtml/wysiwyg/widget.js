@@ -40,17 +40,33 @@ var widgetTools = {
         }
     },
 
+    dialogOpened : false,
+
+    getMaxZIndex: function() {
+        var max = 0, i;
+        var cn = document.body.childNodes;
+        for (i = 0; i < cn.length; i++) {
+            var el = cn[i];
+            var zIndex = el.nodeType == 1 ? parseInt(el.style.zIndex, 10) || 0 : 0;
+            if (zIndex < 10000) {
+                max = Math.max(max, zIndex);
+            }
+        }
+        return max + 10;
+    },
+
     openDialog: function(widgetUrl) {
-        if (jQuery('.ui-dialog-content').size()) {
+        if (this.dialogOpened) {
             return
         }
-
+        var oThis = this;
         this.dialogWindow = jQuery('<div/>').dialog({
             autoOpen:   false,
             title:      jQuery.mage.__('Insert Widget...'),
             modal:      true,
             resizable:  false,
             width:      950,
+            zIndex:     this.getMaxZIndex(),
             dialogClass: 'popup-window',
             open: function () {
                 var dialog = jQuery(this).addClass('loading magento_message')
@@ -61,9 +77,10 @@ var widgetTools = {
             },
             close: function(event, ui) {
                 jQuery(this).dialog('destroy').remove();
+                oThis.dialogOpened = false;
             }
         });
-
+        this.dialogOpened = true;
         this.dialogWindow.dialog('open');
     }
 }
@@ -234,7 +251,7 @@ WysiwygWidget.Widget.prototype = {
                     onComplete: function(transport) {
                         try {
                             widgetTools.onAjaxSuccess(transport);
-                            jQuery('.ui-dialog-content').dialog('destroy').remove();
+                            widgetTools.dialogWindow.dialog('close');
 
                             if (typeof(tinyMCE) != "undefined" && tinyMCE.activeEditor) {
                                 tinyMCE.activeEditor.focus();
@@ -359,6 +376,7 @@ WysiwygWidget.chooser.prototype = {
             title:      this.config.buttons.open,
             modal:      true,
             resizable:  false,
+            zIndex:     widgetTools.getMaxZIndex(),
             width:      900,
             dialogClass: 'popup-window',
             open: function () {

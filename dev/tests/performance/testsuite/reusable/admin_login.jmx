@@ -62,7 +62,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert login form shown" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="1661392365">Log in to Admin Panel</stringProp>
+              <stringProp name="1661392365">Log into Magento Admin Page</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>

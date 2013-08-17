@@ -235,7 +235,7 @@ class Mage_Core_Model_CacheTest extends PHPUnit_Framework_TestCase
         $this->_cacheFrontendMock
             ->expects($this->once())
             ->method('clean')
-            ->with(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array(Mage_Core_Model_AppInterface::CACHE_TAG))
+            ->with(Zend_Cache::CLEANING_MODE_ALL)
             ->will($this->returnValue(true))
         ;
         $this->assertTrue($this->_model->clean());

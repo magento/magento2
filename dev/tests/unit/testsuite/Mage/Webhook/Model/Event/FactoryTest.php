@@ -1,5 +1,7 @@
 <?php
 /**
+ * Mage_Webhook_Model_Event_Factory
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -26,66 +28,66 @@
 class Mage_Webhook_Model_Event_FactoryTest extends PHPUnit_Framework_TestCase
 {
     /** @var Mage_Webhook_Model_Event_Factory */
-    protected $_object;
+    protected $_factory;
 
-    /** @var Magento_ObjectManager */
+    /** @var PHPUnit_Framework_MockObject_MockObject */
     protected $_objectManager;
+
+    /** @var PHPUnit_Framework_MockObject_MockObject */
+    protected $_arrayConverter;
 
     public function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento_ObjectManager');
-
-        $this->_object = new Mage_Webhook_Model_Event_Factory($this->_objectManager);
-    }
-
-    /**
-     * @dataProvider eventDataDatasource
-     */
-    public function testCreateCallbackEvent($eventData)
-    {
-        $classMock = $this->setupObjectManager('Mage_Webhook_Model_Event_Callback', $eventData);
-        $event = $this->_object->createEvent(Mage_Webhook_Model_Event_Interface::EVENT_TYPE_CALLBACK, $eventData);
-        $this->assertEquals($classMock, $event);
-    }
-    /**
-     * @dataProvider eventDataDatasource
-     */
-    public function testCreateInformEvent($eventData)
-    {
-        $classMock = $this->setupObjectManager('Mage_Webhook_Model_Event', $eventData);
-        $event = $this->_object->createEvent(Mage_Webhook_Model_Event_Interface::EVENT_TYPE_INFORM, $eventData);
-        $this->assertEquals($classMock, $event);
-    }
-
-    public function setupObjectManager($className, $data)
-    {
-        $classMock = $this->getMock($className, array(), array(), '', false);
-        $this->getMockBuilder($className)
+        $this->_objectManager = $this->getMockBuilder('Magento_ObjectManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_objectManager->expects($this->once())
-            ->method('create')
-            ->with($this->equalTo($className), $this->equalTo($data))
-            ->will($this->returnValue($classMock));
-        return $classMock;
+        $this->_arrayConverter = $this->getMockBuilder('Varien_Convert_Object')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_factory = new Mage_Webhook_Model_Event_Factory($this->_objectManager, $this->_arrayConverter);
     }
 
-    public function eventDataDatasource()
+    public function testCreate()
     {
-        return array(
-            array( array(
-                'mapping' => array(),
-                'bodyData'  => array(),
-                'headers'   => array(),
-                'topic'     => 'some/topic',
-                'status'    => Mage_Webhook_Model_Event::READY_TO_SEND
-            )),
-            array( array(
-                'mapping' => array(),
-                'bodyData'  => array(),
-                'headers'   => array(),
-                'topic'     => 'some/topic'
-            ))
-        );
+        $webhookEvent = $this->getMockBuilder('Mage_Webhook_Model_Event')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $topic = 'TEST_TOPIC';
+        $data = 'TEST_DATA';
+        $array = 'TEST_ARRAY';
+        $this->_arrayConverter->expects($this->once())
+            ->method('convertDataToArray')
+            ->with($this->equalTo($data))
+            ->will($this->returnValue($array));
+        $this->_objectManager->expects($this->once())
+            ->method('create')
+            ->with(
+                $this->equalTo('Mage_Webhook_Model_Event'),
+                $this->equalTo(
+                    array(
+                         'data' => array(
+                             'topic'     => $topic,
+                             'body_data' => serialize($array),
+                             'status'    => Magento_PubSub_EventInterface::READY_TO_SEND
+                         )
+                    )
+                )
+            )
+            ->will($this->returnValue($webhookEvent));
+        $webhookEvent->expects($this->once())
+            ->method('setDataChanges')
+            ->with($this->equalTo(true))
+            ->will($this->returnSelf());
+        $this->assertSame($webhookEvent, $this->_factory->create($topic, $data));
+    }
+
+    public function testCreateEmpty()
+    {
+        $testValue = "test value";
+        $this->_objectManager->expects($this->once())
+            ->method('create')
+            ->with($this->equalTo('Mage_Webhook_Model_Event'))
+            ->will($this->returnValue($testValue));
+        $this->assertSame($testValue, $this->_factory->createEmpty());
     }
 }

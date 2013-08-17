@@ -36,13 +36,14 @@
                 <?php echo $this->getBlockHtml('formkey')?>
                 <fieldset>
                     <span class="field-row">
-                        <label><?php echo $this->__('Actions') ?></label>
-                        <select id="<?php echo $this->getHtmlId() ?>-select" class="required-entry select absolute-advice local-validation">
-                            <option value=""></option>
-                            <?php foreach ($this->getItems() as $_item): ?>
-                                <option value="<?php echo $_item->getId() ?>"<?php echo ($_item->getSelected() ? ' selected="selected"' : '')?>><?php echo $_item->getLabel() ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                        <label><?php echo $this->__('Actions') ?>
+                            <select id="<?php echo $this->getHtmlId() ?>-select" class="required-entry select absolute-advice local-validation">
+                                <option value=""></option>
+                                <?php foreach ($this->getItems() as $_item): ?>
+                                    <option value="<?php echo $_item->getId() ?>"<?php echo ($_item->getSelected() ? ' selected="selected"' : '')?>><?php echo $_item->getLabel() ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </label>
                     </span>
                     <span class="outer-span" id="<?php echo $this->getHtmlId() ?>-form-hiddens"></span>
                     <span class="outer-span" id="<?php echo $this->getHtmlId() ?>-form-additional"></span>

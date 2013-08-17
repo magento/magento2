@@ -26,7 +26,7 @@
  */
 
 /**
- * Test theme model
+ * Test theme image model
  */
 class Mage_Core_Model_Theme_ImageTest extends PHPUnit_Framework_TestCase
 {
@@ -36,138 +36,195 @@ class Mage_Core_Model_Theme_ImageTest extends PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var Magento_ObjectManager|PHPUnit_Framework_MockObject_MockObject
+     * @var Magento_Filesystem|PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_objectManager;
+    protected $_filesystemMock;
 
     /**
-     * @var Magento_Filesystem
+     * @var Varien_Image|PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_filesystem;
+    protected $_imageMock;
 
     /**
-     * @var Mage_Core_Helper_Data
+     * @var Mage_Core_Model_Theme_Image_Uploader|PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_helper;
+    protected $_uploaderMock;
+
+    /**
+     * @var Mage_Core_Model_Theme|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_themeMock;
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento_ObjectManager', get_class_methods('Magento_ObjectManager'),
-            array(), '', false);
-        $this->_helper = $this->getMock('Mage_Core_Helper_Data', array(), array(), '', false);
-        $this->_filesystem = $this->getMock('Magento_Filesystem', array(), array(), '', false);
-        $this->_model = new Mage_Core_Model_Theme_Image($this->_objectManager, $this->_helper, $this->_filesystem);
-        $this->_model->setTheme($this->getMock('Mage_Core_Model_Theme', array(), array(), '', false));
+        $this->_filesystemMock = $this->getMock('Magento_Filesystem', array(), array(), '', false, false);
+        $imageFactory = $this->getMock('Mage_Core_Model_Image_Factory', array(), array(), '', false, false);
+        $this->_imageMock = $this->getMock('Varien_Image', array(), array(), '', false, false);
+        $imageFactory->expects($this->any())->method('create')->will($this->returnValue($this->_imageMock));
+
+        $this->_themeMock = $this->getMock('Mage_Core_Model_Theme', null, array(), '', false, false);
+        $this->_uploaderMock = $this->getMock('Mage_Core_Model_Theme_Image_Uploader',
+            array(), array(), 'Mage_Core_Model_Theme_Image_UploaderProxy', false, false);
+        $logger = $this->getMock('Mage_Core_Model_Logger', array(), array(), '', false, false);
+
+        $this->_model = new Mage_Core_Model_Theme_Image(
+            $this->_filesystemMock,
+            $imageFactory,
+            $this->_uploaderMock,
+            $this->_getImagePathMock(),
+            $logger,
+            $this->_themeMock
+        );
+    }
+
+    protected function tearDown()
+    {
+        $this->_model = null;
+        $this->_filesystemMock = null;
+        $this->_imageMock = null;
+        $this->_uploaderMock = null;
+        $this->_themeMock = null;
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|Mage_Core_Model_Design_Package
+     * @return PHPUnit_Framework_MockObject_MockObject|Mage_Core_Model_Theme_Image_Path
      */
-    protected function _getDesignMock()
+    protected function _getImagePathMock()
     {
-        $designMock = $this->getMock('Mage_Core_Model_Design_Package', array('getViewFileUrl', 'getPublicDir'),
-            array(), '', false);
-        $designMock->expects($this->any())
-            ->method('getPublicDir')
-            ->will($this->returnValue('pub/media/theme'));
-        $this->_objectManager->expects($this->any())
-            ->method('get')
-            ->with($this->equalTo('Mage_Core_Model_Design_Package'))
-            ->will($this->returnValue($designMock));
-        return $designMock;
+        $imagePathMock = $this->getMock('Mage_Core_Model_Theme_Image_Path', array(), array(), '', false);
+        $testBaseUrl = 'http://localhost/media_path/';
+        $imagePathMock->expects($this->any())->method('getPreviewImageDirectoryUrl')
+            ->will($this->returnValue($testBaseUrl));
+        $imagePathMock->expects($this->any())->method('getPreviewImageDefaultUrl')
+            ->will($this->returnValue($testBaseUrl . 'test_default_preview.png'));
+
+        $testBaseDir = '/media_path/';
+        $imagePathMock->expects($this->any())->method('getImagePreviewDirectory')
+            ->will($this->returnValue($testBaseDir . 'theme/preview'));
+        $imagePathMock->expects($this->any())->method('getTemporaryDirectory')
+            ->will($this->returnValue($testBaseDir . 'tmp'));
+        return $imagePathMock;
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|Mage_Core_Model_Dir
+     * Sample theme data
+     *
+     * @return array
      */
-    protected function _getDirMock()
+    protected function _getThemeSampleData()
     {
-        $dirMock = $this->getMock('Mage_Core_Model_Dir', array('getDir'), array(), '', false);
-        $dirMock->expects($this->any())
-            ->method('getDir')
-            ->with($this->equalTo(Mage_Core_Model_Dir::MEDIA))
-            ->will($this->returnValue('pub/media'));
-        $this->_objectManager->expects($this->any())
-            ->method('get')
-            ->with($this->equalTo('Mage_Core_Model_Dir'))
-            ->will($this->returnValue($dirMock));
-        return $dirMock;
-    }
-
-    public function testSavePreviewImage()
-    {
-        $this->_model->setTheme($this->getMock('Mage_Core_Model_Theme', array(), array(), '', false));
-        $this->assertInstanceOf('Mage_Core_Model_Theme_Image', $this->_model->savePreviewImage());
+        return array(
+            'theme_id'             => 1,
+            'theme_title'          => 'Sample theme',
+            'preview_image'        => 'images/preview.png',
+            'magento_version_from' => '2.0.0.0-dev1',
+            'magento_version_to'   => '*',
+            'area'                 => Mage_Core_Model_App_Area::AREA_FRONTEND,
+            'type'                 => Mage_Core_Model_Theme::TYPE_VIRTUAL
+        );
     }
 
     /**
-     * @return string
+     * @covers Mage_Core_Model_Theme_Image::__construct
      */
-    public function testGetPreviewImageDirectoryUrl()
+    public function testConstructor()
     {
-        $store = $this->getMock('Mage_Core_Model_Store', array('getBaseUrl'), array(), '', false);
-        $app = $this->getMock('Mage_Core_Model_App', array('getStore'), array(), '', false);
-        $app->expects($this->once())->method('getStore')->will($this->returnValue($store));
-        $this->_objectManager->expects($this->once())
-            ->method('get')
-            ->with('Mage_Core_Model_App')
-            ->will($this->returnValue($app));
-
-        $store->expects($this->once())->method('getBaseUrl')
-            ->with(Mage_Core_Model_Store::URL_TYPE_MEDIA)->will($this->returnValue('http://example.com/media/'));
-        $expectedValue = 'http://example.com/media/theme/preview/';
-        $this->assertEquals($expectedValue, $this->_model->getPreviewImageDirectoryUrl());
-        return $expectedValue;
+        $themeImage = new Mage_Core_Model_Theme_Image(
+            $this->_filesystemMock,
+            $this->getMock('Mage_Core_Model_Image_Factory', array(), array(), '', false, false),
+            $this->_uploaderMock,
+            $this->_getImagePathMock(),
+            $this->getMock('Mage_Core_Model_Logger', array(), array(), '', false, false),
+            $this->_themeMock
+        );
+        $this->assertNotEmpty($themeImage);
     }
 
+    /**
+     * @covers Mage_Core_Model_Theme_Image::createPreviewImage
+     */
+    public function testCreatePreviewImage()
+    {
+        $this->_themeMock->setData($this->_getThemeSampleData());
+        $this->_themeMock->setData('preview_image', null);
+        $this->_imageMock->expects($this->once())->method('save')->with('/media_path/theme/preview', $this->anything());
+        $this->_model->createPreviewImage('/some/path/to/image.png');
+        $this->assertNotNull($this->_themeMock->getData('preview_image'));
+    }
+
+    /**
+     * @covers Mage_Core_Model_Theme_Image::createPreviewImageCopy
+     */
     public function testCreatePreviewImageCopy()
     {
-        $fileName = $this->_getDirMock()->getDir(Mage_Core_Model_Dir::MEDIA)
-            . DIRECTORY_SEPARATOR . 'theme'
-            . DIRECTORY_SEPARATOR . 'preview'
-            . DIRECTORY_SEPARATOR . 'image.jpg';
+        $previewImage = 'test_preview.png';
+        $this->_themeMock->setData($this->_getThemeSampleData());
+        $this->_themeMock->setData('preview_image', $previewImage);
 
-        $this->_filesystem->expects($this->any())
-            ->method('copy')
-            ->with($this->equalTo($fileName), $this->equalTo($fileName))
-            ->will($this->returnValue(true));
-
-        $themeMock = $this->getMock('Mage_Core_Model_Theme', array('getPreviewImage'), array(), '', false);
-        $themeMock->expects($this->any())
-            ->method('getPreviewImage')
-            ->will($this->returnValue('image.jpg'));
-
-        $this->_model->setTheme($themeMock);
-
-        $this->assertInstanceOf('Mage_Core_Model_Theme_Image', $this->_model->createPreviewImageCopy());
-        $this->assertEquals('image.jpg', $this->_model->getPreviewImage());
+        $this->_filesystemMock->expects($this->any())->method('copy')
+            ->with('/media_path/theme/preview', $this->anything());
+        $this->assertFalse($this->_model->createPreviewImageCopy($previewImage));
+        $this->assertEquals($previewImage, $this->_themeMock->getData('preview_image'));
     }
 
     /**
-     * @depends testGetPreviewImageDirectoryUrl
+     * @covers Mage_Core_Model_Theme_Image::removePreviewImage
      */
-    public function testGetPreviewImageUrl($previewDirUrl)
+    public function testRemovePreviewImage()
     {
-        /** @var $model PHPUnit_Framework_MockObject_MockObject|Mage_Core_Model_Theme_Image */
-        $model = $this->getMock(
-            'Mage_Core_Model_Theme_Image', array('getPreviewImageDirectoryUrl'), array(), '', false
-        );
-        $model->expects($this->once())->method('getPreviewImageDirectoryUrl')->will($this->returnValue($previewDirUrl));
-        $theme = $this->getMock('Mage_Core_Model_Theme', array('getPreviewImage'), array(), '', false);
-        $theme->expects($this->exactly(2))->method('getPreviewImage')->will($this->returnValue('images/logo.gif'));
-        $model->setTheme($theme);
-        $this->assertEquals('http://example.com/media/theme/preview/images/logo.gif', $model->getPreviewImageUrl());
+        $this->_themeMock->setData($this->_getThemeSampleData());
+        $this->_themeMock->setData('preview_image', 'test.png');
+        $this->_filesystemMock->expects($this->once())->method('delete');
+        $this->_model->removePreviewImage();
+        $this->assertNull($this->_themeMock->getData('preview_image'));
     }
 
-    public function testGetPreviewImageUrlDefault()
+    /**
+     * @covers Mage_Core_Model_Theme_Image::removePreviewImage
+     */
+    public function testRemoveEmptyPreviewImage()
     {
-        $theme = $this->getMock('Mage_Core_Model_Theme', array('getPreviewImage'), array(), '', false);
-        $theme->expects($this->once())->method('getPreviewImage')->will($this->returnValue(false));
-        $expectedValue = 'http://example.com/pub/static/_module/Mage_Core/theme/default_preview.jpg';
-        $designPackage = $this->_getDesignMock();
-        $designPackage->expects($this->once())->method('getViewFileUrl')->with('Mage_Core::theme/default_preview.jpg')
-            ->will($this->returnValue($expectedValue));
-        $this->_model->setTheme($theme);
-        $this->assertEquals($expectedValue, $this->_model->getPreviewImageUrl());
+        $this->_themeMock->setData($this->_getThemeSampleData());
+        $this->_themeMock->setData('preview_image', null);
+        $this->_filesystemMock->expects($this->never())->method('delete');
+        $this->_model->removePreviewImage();
+        $this->assertNull($this->_themeMock->getData('preview_image'));
+    }
+
+    /**
+     * @covers Mage_Core_Model_Theme_Image::uploadPreviewImage
+     */
+    public function testUploadPreviewImage()
+    {
+        $scope = 'test_scope';
+        $tmpFilePath = '/media_path/tmp/temporary.png';
+        $this->_themeMock->setData($this->_getThemeSampleData());
+        $this->_themeMock->setData('preview_image', 'test.png');
+        $this->_uploaderMock->expects($this->once())->method('uploadPreviewImage')->with($scope, '/media_path/tmp')
+            ->will($this->returnValue($tmpFilePath));
+        $this->_filesystemMock->expects($this->at(0))->method('delete')->with($this->stringContains('test.png'));
+        $this->_filesystemMock->expects($this->at(1))->method('delete')->with($tmpFilePath);
+        $this->_model->uploadPreviewImage($scope);
+    }
+
+    /**
+     * @covers Mage_Core_Model_Theme_Image::getPreviewImageUrl
+     */
+    public function testGetPreviewImageUrl()
+    {
+        $this->_themeMock->setData($this->_getThemeSampleData());
+        $this->_themeMock->setData('preview_image', 'preview/image.png');
+        $this->assertEquals('http://localhost/media_path/preview/image.png', $this->_model->getPreviewImageUrl());
+    }
+
+    /**
+     * @covers Mage_Core_Model_Theme_Image::getPreviewImageUrl
+     */
+    public function testGetDefaultPreviewImageUrl()
+    {
+        $this->_themeMock->setData($this->_getThemeSampleData());
+        $this->_themeMock->setData('preview_image', null);
+        $this->assertEquals('http://localhost/media_path/test_default_preview.png',
+            $this->_model->getPreviewImageUrl());
     }
 }

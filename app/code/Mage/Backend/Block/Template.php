@@ -32,10 +32,24 @@
  * @author     Magento Core Team <core@magentocommerce.com>
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Mage_Backend_Block_Template extends Mage_Core_Block_Template
 {
+    /**
+     * @var Magento_AuthorizationInterface
+     */
+    protected $_authorization;
+
+    /**
+     * @param Mage_Backend_Block_Template_Context $context
+     * @param array $data
+     */
+    public function __construct(Mage_Backend_Block_Template_Context $context, array $data = array())
+    {
+        $this->_authorization = $context->getAuthorization();
+        parent::__construct($context, $data);
+    }
+
     /**
      * Retrieve Session Form Key
      *
@@ -61,6 +75,16 @@ class Mage_Backend_Block_Template extends Mage_Core_Block_Template
             $moduleName = $this->getModuleName();
         }
         return !Mage::getStoreConfigFlag('advanced/modules_disable_output/' . $moduleName);
+    }
+    
+    /**
+     * Make this public so that templates can use it properly with template engine
+     * 
+     * @return Magento_AuthorizationInterface
+     */
+    public function getAuthorization() 
+    {
+        return $this->_authorization;
     }
 
     /**

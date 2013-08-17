@@ -25,7 +25,7 @@
  */
 ?>
 <?php echo $this->getChildHtml('items_before'); ?>
-<div id="checkout-review-table-wrapper">
+<div id="checkout-review-table-wrapper" data-mage-init="{paymentAuthentication:{}}">
     <table class="data-table" id="checkout-review-table">
         <?php if ($this->helper('Mage_Tax_Helper_Data')->displayCartBothPrices()): $colspan = $rowspan = 2; else: $colspan = $rowspan = 1; endif; ?>
         <col />
@@ -62,7 +62,7 @@
 </div>
 <?php echo $this->getChildHtml('items_after'); ?>
 <script type="text/javascript">jQuery('#checkout-review-table').decorate('table')</script>
-<div id="checkout-review-submit">
+<div id="checkout-review-submit" data-mage-init="{paymentAuthentication:{}}">
     <?php echo $this->getChildHtml('agreements') ?>
     <div class="buttons-set" id="review-buttons-container">
         <p class="f-left"><?php echo $this->__('Forgot an Item?') ?> <a href="<?php echo $this->getUrl('checkout/cart') ?>"><?php echo $this->__('Edit Your Cart') ?></a></p>

@@ -27,10 +27,10 @@
 class Mage_Eav_Model_Entity_Attribute_Backend_Datetime extends Mage_Eav_Model_Entity_Attribute_Backend_Abstract
 {
     /**
-     * Formating date value before save
+     * Formatting date value before save
      *
      * Should set (bool, string) correct type for empty value from html form,
-     * neccessary for farther proccess, else date string
+     * necessary for further process, else date string
      *
      * @param Varien_Object $object
      * @throws Mage_Eav_Exception
@@ -84,7 +84,7 @@ class Mage_Eav_Model_Entity_Attribute_Backend_Datetime extends Mage_Eav_Model_En
         // parse this date in current locale, do not apply GMT offset
         else {
             $date = Mage::app()->getLocale()->date($date,
-               Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
+               Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT),
                null, false
             );
         }

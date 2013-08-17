@@ -47,6 +47,8 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
     const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'customer/password/forgot_email_template';
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
 
+    const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
+
     const XML_PATH_DEFAULT_EMAIL_DOMAIN         = 'customer/create_account/email_domain';
     const XML_PATH_IS_CONFIRM                   = 'customer/create_account/confirm';
     const XML_PATH_CONFIRM_EMAIL_TEMPLATE       = 'customer/create_account/email_confirmation_template';
@@ -119,6 +121,39 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
      * @var boolean
      */
     private static $_isConfirmationRequired;
+
+    /** @var Mage_Core_Model_Sender */
+    protected $_sender;
+
+    /** @var Mage_Core_Model_StoreManager */
+    protected $_storeManager;
+
+    /** @var Mage_Eav_Model_Config */
+    protected $_config;
+
+    /**
+     * @param Mage_Core_Model_Context $context
+     * @param Mage_Core_Model_Sender $sender
+     * @param Mage_Core_Model_StoreManager $storeManager
+     * @param Mage_Eav_Model_Config $config
+     * @param Mage_Core_Model_Resource_Abstract|null $resource
+     * @param Varien_Data_Collection_Db|null $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Core_Model_Context $context,
+        Mage_Core_Model_Sender $sender,
+        Mage_Core_Model_StoreManager $storeManager,
+        Mage_Eav_Model_Config $config,
+        Mage_Core_Model_Resource_Abstract $resource = null,
+        Varien_Data_Collection_Db $resourceCollection = null,
+        array $data = array()
+    ) {
+        $this->_sender = $sender;
+        $this->_storeManager = $storeManager;
+        $this->_config = $config;
+        parent::__construct($context, $resource, $resourceCollection, $data);
+    }
 
     /**
      * Initialize customer model
@@ -221,16 +256,16 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
     public function getName()
     {
         $name = '';
-        $config = Mage::getSingleton('Mage_Eav_Model_Config');
-        if ($config->getAttribute('customer', 'prefix')->getIsVisible() && $this->getPrefix()) {
+
+        if ($this->_config->getAttribute('customer', 'prefix')->getIsVisible() && $this->getPrefix()) {
             $name .= $this->getPrefix() . ' ';
         }
         $name .= $this->getFirstname();
-        if ($config->getAttribute('customer', 'middlename')->getIsVisible() && $this->getMiddlename()) {
+        if ($this->_config->getAttribute('customer', 'middlename')->getIsVisible() && $this->getMiddlename()) {
             $name .= ' ' . $this->getMiddlename();
         }
         $name .=  ' ' . $this->getLastname();
-        if ($config->getAttribute('customer', 'suffix')->getIsVisible() && $this->getSuffix()) {
+        if ($this->_config->getAttribute('customer', 'suffix')->getIsVisible() && $this->getSuffix()) {
             $name .= ' ' . $this->getSuffix();
         }
         return $name;
@@ -553,9 +588,9 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
     public function sendNewAccountEmail($type = 'registered', $backUrl = '', $storeId = '0')
     {
         $types = array(
-            'registered'   => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,  // welcome email, when confirmation is disabled
-            'confirmed'    => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE, // welcome email, when confirmation is enabled
-            'confirmation' => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,   // email with confirmation link
+            'registered'     => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,  // welcome email, when confirmation is disabled
+            'confirmed'      => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE, // welcome email, when confirmation is enabled
+            'confirmation'   => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,   // email with confirmation link
         );
         if (!isset($types[$type])) {
             Mage::throwException(
@@ -609,7 +644,7 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
     public function sendPasswordReminderEmail()
     {
         $storeId = $this->getStoreId();
-        if (is_null($storeId)) {
+        if (Mage_Core_Model_AppInterface::ADMIN_STORE_ID == $storeId && ($this->getWebsiteId() * 1)) {
             $storeId = $this->_getWebsiteStoreId();
         }
 
@@ -622,8 +657,8 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
     /**
      * Send corresponding email template
      *
-     * @param string $emailTemplate configuration path of email template
-     * @param string $emailSender configuration path of email identity
+     * @param string $template configuration path of email template
+     * @param string $sender configuration path of email identity
      * @param array $templateParams
      * @param int|null $storeId
      * @return Mage_Customer_Model_Customer
@@ -658,8 +693,32 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
         }
 
         $this->_sendEmailTemplate(self::XML_PATH_FORGOT_EMAIL_TEMPLATE, self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-            array('customer' => $this), $storeId);
+            array('customer' => $this), $storeId
+        );
 
+        return $this;
+    }
+
+    /**
+     * Send email to when password is resetting
+     *
+     * @return Mage_Customer_Model_Customer
+     */
+    public function sendPasswordResetNotificationEmail()
+    {
+        $storeId = $this->getStoreId();
+        if (!$storeId) {
+            $storeId = $this->_getWebsiteStoreId();
+        }
+
+        $this->_sender->send(
+            $this->getEmail(),
+            $this->getName(),
+            self::XML_PATH_RESET_PASSWORD_TEMPLATE,
+            self::XML_PATH_FORGOT_EMAIL_IDENTITY,
+            array('customer' => $this),
+            $storeId
+        );
         return $this;
     }
 
@@ -796,22 +855,10 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
         }
 
         if (!Zend_Validate::is($this->getEmail(), 'EmailAddress')) {
-            $errors[] = Mage::helper('Mage_Customer_Helper_Data')->__('Invalid email address "%s".', $this->getEmail());
+            $errors[] = Mage::helper('Mage_Customer_Helper_Data')->__('Please correct this email address: "%s".', $this->getEmail());
         }
 
-        $password = $this->getPassword();
-        if (!$this->getId() && !Zend_Validate::is($password, 'NotEmpty')) {
-            $errors[] = Mage::helper('Mage_Customer_Helper_Data')->__('The password cannot be empty.');
-        }
-        if (strlen($password) && !Zend_Validate::is($password, 'StringLength', array(6))) {
-            $errors[] = Mage::helper('Mage_Customer_Helper_Data')->__('The minimum password length is %s', 6);
-        }
-        $confirmation = $this->getConfirmation();
-        if ($password != $confirmation) {
-            $errors[] = Mage::helper('Mage_Customer_Helper_Data')->__('Please make sure your passwords match.');
-        }
-
-        $entityType = Mage::getSingleton('Mage_Eav_Model_Config')->getEntityType('customer');
+        $entityType = $this->_config->getEntityType('customer');
         $attribute = Mage::getModel('Mage_Customer_Model_Attribute')->loadByCode($entityType, 'dob');
         if ($attribute->getIsRequired() && '' == trim($this->getDob())) {
             $errors[] = Mage::helper('Mage_Customer_Helper_Data')->__('The Date of Birth is required.');
@@ -1019,14 +1066,14 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
     /**
      * Get either first store ID from a set website or the provided as default
      *
-     * @param int|string|null $storeId
+     * @param int|string|null $defaultStoreId
      *
      * @return int
      */
     protected function _getWebsiteStoreId($defaultStoreId = null)
     {
         if ($this->getWebsiteId() != 0 && empty($defaultStoreId)) {
-            $storeIds = Mage::app()->getWebsite($this->getWebsiteId())->getStoreIds();
+            $storeIds = $this->_storeManager->getWebsite($this->getWebsiteId())->getStoreIds();
             reset($storeIds);
             $defaultStoreId = current($storeIds);
         }

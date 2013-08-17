@@ -45,7 +45,7 @@ class Mage_Catalog_Model_Resource_Category_Attribute_Source_Page extends Mage_Ea
             $this->_options = Mage::getResourceModel('Mage_Cms_Model_Resource_Block_Collection')
                 ->load()
                 ->toOptionArray();
-            array_unshift($this->_options, array('value' => '', 'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Please select a static block ...')));
+            array_unshift($this->_options, array('value' => '', 'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Please select a static block.')));
         }
         return $this->_options;
     }

@@ -131,7 +131,7 @@ class Legacy_LayoutTest extends PHPUnit_Framework_TestCase
             $this->assertContains('::', $action->getAtrtibute('helper'));
         }
 
-        if (false !== strpos($layoutFile, 'app/code/Mage/Adminhtml/view/adminhtml/sales.xml')) {
+        if (false !== strpos($layoutFile, 'app/code/Mage/Adminhtml/view/adminhtml/layout/adminhtml_sales_order')) {
             $this->markTestIncomplete("The file {$layoutFile} has to use Mage_Core_Block_Text_List, \n"
                 . 'there is no solution to get rid of it right now.'
             );

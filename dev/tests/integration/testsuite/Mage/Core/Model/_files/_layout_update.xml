@@ -45,12 +45,6 @@
       </block>
       <block type="Mage_Adminhtml_Block_Page_Header" name="header" as="header"/>
       <block type="Mage_Backend_Block_Menu" name="menu" as="menu"/>
-      <block type="Mage_Core_Block_Text_List" name="notifications" as="notifications">
-         <block type="Mage_Adminhtml_Block_Notification_Baseurl" name="notification_baseurl" as="notification_baseurl" template="notification/baseurl.phtml"/>
-         <block type="Mage_Adminhtml_Block_Cache_Notifications" name="cache_notifications" template="system/cache/notifications.phtml"/>
-         <block type="Mage_Adminhtml_Block_Notification_Survey" name="notification_survey" template="notification/survey.phtml"/>
-         <block type="Mage_Adminhtml_Block_Notification_Security" name="notification_security" as="notification_security" template="notification/security.phtml"/>
-      </block>
       <block type="Mage_Core_Block_Messages" name="messages" as="messages"/>
       <block type="Mage_Core_Block_Text" as="no_name"/>
    </block>
@@ -69,9 +63,5 @@
     <remove name="test.nonexisting.block"/>
     <reference name="test.nonexisting.block">
         <action method="getSomething"/>
-    </reference>
-    <reference name="notifications">
-       <block type="Mage_Index_Block_Adminhtml_Notifications" name="index_notifications" template="index/notifications.phtml" before="-"/>
-       <block class="Mage_Index_Block_Adminhtml_Notifications" name="index_notifications_copy" template="index/notifications.phtml" after="-"/>
     </reference>
 </layout>

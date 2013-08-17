@@ -40,9 +40,10 @@ class Mage_Adminhtml_Block_System_Variable_Edit extends Mage_Adminhtml_Block_Wid
      */
     protected function _construct()
     {
-        parent::_construct();
         $this->_objectId = 'variable_id';
         $this->_controller = 'system_variable';
+
+        parent::_construct();
     }
 
     /**

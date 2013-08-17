@@ -25,6 +25,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * @magentoAppArea adminhtml
+ */
 class Mage_User_Block_Role_Grid_UserTest extends PHPUnit_Framework_TestCase
 {
     /**

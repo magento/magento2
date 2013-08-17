@@ -78,9 +78,7 @@ class Mage_Tag_Adminhtml_TagController extends Mage_Adminhtml_Controller_Action
      */
     public function indexAction()
     {
-        $this->_title($this->__('Catalog'))
-             ->_title($this->__('Tags'))
-             ->_title($this->__('All Tags'));
+        $this->_title($this->__('All Tags'));
 
         $this->_initAction()
             ->_addBreadcrumb(
@@ -126,8 +124,7 @@ class Mage_Tag_Adminhtml_TagController extends Mage_Adminhtml_Controller_Action
      */
     public function editAction()
     {
-        $this->_title($this->__('Catalog'))
-             ->_title($this->__('Tags'));
+        $this->_title($this->__('Tags'));
 
         if (! (int) $this->getRequest()->getParam('store')) {
             return $this->_redirect(
@@ -138,7 +135,7 @@ class Mage_Tag_Adminhtml_TagController extends Mage_Adminhtml_Controller_Action
 
         if (! ($model = $this->_initTag())) {
             Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError(
-                Mage::helper('Mage_Tag_Helper_Data')->__('Wrong tag was specified.')
+                Mage::helper('Mage_Tag_Helper_Data')->__('Please correct the tag and try again.')
             );
             return $this->_redirect('*/*/index', array('store' => $this->getRequest()->getParam('store')));
         }
@@ -153,7 +150,7 @@ class Mage_Tag_Adminhtml_TagController extends Mage_Adminhtml_Controller_Action
 
         Mage::register('tag_tag', $model);
 
-        $this->_initAction()->renderLayout();
+        $this->_initAction()->_setActiveMenu('Mage_Tag::catalog_tag_all')->renderLayout();
     }
 
     /**
@@ -174,7 +171,7 @@ class Mage_Tag_Adminhtml_TagController extends Mage_Adminhtml_Controller_Action
 
             if (!$model = $this->_initTag()) {
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError(
-                    Mage::helper('Mage_Tag_Helper_Data')->__('Wrong tag was specified.')
+                    Mage::helper('Mage_Tag_Helper_Data')->__('Please correct the tag and try again.')
                 );
                 return $this->_redirect('*/*/index', array('store' => $data['store']));
             }
@@ -193,7 +190,7 @@ class Mage_Tag_Adminhtml_TagController extends Mage_Adminhtml_Controller_Action
                 $model->save();
 
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(
-                    Mage::helper('Mage_Tag_Helper_Data')->__('The tag has been saved.')
+                    Mage::helper('Mage_Tag_Helper_Data')->__('You saved the tag.')
                 );
 
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->setTagData(false);
@@ -238,7 +235,7 @@ class Mage_Tag_Adminhtml_TagController extends Mage_Adminhtml_Controller_Action
                 $session->addError($e->getMessage());
             }
         } else {
-            $session->addError(Mage::helper('Mage_Tag_Helper_Data')->__('Unable to find a tag to delete.'));
+            $session->addError(Mage::helper('Mage_Tag_Helper_Data')->__('We can\'t find a tag to delete.'));
         }
 
         $this->getResponse()->setRedirect($this->getUrl('*/tag/' . $this->getRequest()->getParam('ret', 'index')));
@@ -250,9 +247,7 @@ class Mage_Tag_Adminhtml_TagController extends Mage_Adminhtml_Controller_Action
      */
     public function pendingAction()
     {
-        $this->_title($this->__('Catalog'))
-             ->_title($this->__('Tags'))
-             ->_title($this->__('Pending Tags'));
+        $this->_title($this->__('Pending Tags'));
 
         $this->_initAction()
             ->_addBreadcrumb(
@@ -268,7 +263,7 @@ class Mage_Tag_Adminhtml_TagController extends Mage_Adminhtml_Controller_Action
      */
     public function assignedAction()
     {
-        $this->_title($this->__('Tags'))->_title($this->__('Assigned'));
+        $this->_title($this->__('Assigned'));
 
         $this->_initTag();
         $this->loadLayout();
@@ -324,7 +319,7 @@ class Mage_Tag_Adminhtml_TagController extends Mage_Adminhtml_Controller_Action
                     $tag->delete();
                 }
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(
-                    $this->__('Total of %d record(s) have been deleted.', count($tagIds))
+                    $this->__('A total of %d record(s) have been deleted.', count($tagIds))
                 );
             } catch (Exception $e) {
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError($e->getMessage());
@@ -354,7 +349,7 @@ class Mage_Tag_Adminhtml_TagController extends Mage_Adminhtml_Controller_Action
                      $tag->save();
                 }
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(
-                    $this->__('Total of %d record(s) have been updated.', count($tagIds))
+                    $this->__('A total of %d record(s) have been updated.', count($tagIds))
                 );
             } catch (Exception $e) {
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError($e->getMessage());
@@ -371,6 +366,6 @@ class Mage_Tag_Adminhtml_TagController extends Mage_Adminhtml_Controller_Action
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Tag::tag_all');
+        return $this->_authorization->isAllowed('Mage_Tag::tag_all');
     }
 }

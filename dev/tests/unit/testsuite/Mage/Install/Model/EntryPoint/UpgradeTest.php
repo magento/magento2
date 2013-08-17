@@ -42,6 +42,8 @@ class Mage_Install_Model_EntryPoint_UpgradeTest extends PHPUnit_Framework_TestCa
     {
         $this->_config = $this->getMock('Mage_Core_Model_Config_Primary', array('getParam'), array(), '', false);
 
+        $dirVerification = $this->getMock('Mage_Core_Model_Dir_Verification', array(), array(), '', false);
+
         $cacheFrontend = $this->getMockForAbstractClass('Magento_Cache_FrontendInterface');
         $cacheFrontend->expects($this->once())->method('clean')->with('all', array());
         $cacheFrontendPool = $this->getMock(
@@ -67,6 +69,7 @@ class Mage_Install_Model_EntryPoint_UpgradeTest extends PHPUnit_Framework_TestCa
             array('Mage_Core_Model_Db_Updater', $update),
             array('Mage_Core_Model_Config_Primary', $this->_config),
             array('Mage_Index_Model_Indexer', $this->_indexer),
+            array('Mage_Core_Model_Dir_Verification', $dirVerification),
         )));
     }
 
@@ -82,8 +85,8 @@ class Mage_Install_Model_EntryPoint_UpgradeTest extends PHPUnit_Framework_TestCa
         $this->_indexer->expects($this->exactly($reindexReqCount))->method('reindexRequired');
         $this->_config->expects($this->once())->method('getParam')->with(Mage_Install_Model_EntryPoint_Upgrade::REINDEX)
             ->will($this->returnValue($reindexMode));
-        Mage::reset(); // hack to reset object manager if it happens to be set in this class already
-        $upgrade = new Mage_Install_Model_EntryPoint_Upgrade($this->_config, $this->_objectManager);
+        $upgrade = $this->getMock('Mage_Install_Model_EntryPoint_Upgrade', array('_setGlobalObjectManager'),
+            array($this->_config, $this->_objectManager));
         $upgrade->processRequest();
     }
 

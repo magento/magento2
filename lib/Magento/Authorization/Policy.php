@@ -1,5 +1,7 @@
 <?php
 /**
+ * Responsible for internal authorization decision making based on provided role, resource and privilege
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -18,13 +20,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Framework
- * @subpackage  Authorization
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 interface Magento_Authorization_Policy
 {
     /**

@@ -84,6 +84,7 @@
         <xs:attribute name="showInStore" type="xs:int" use="optional" />
         <xs:attribute name="showInWebsite" type="xs:int" use="optional" />
         <xs:attribute name="advanced" type="xs:boolean" use="optional" />
+        <xs:attribute name="extends" type="xs:string" use="optional" />
     </xs:attributeGroup>
 
     <xs:element name="tab">
@@ -150,11 +151,14 @@
                     <xs:element name="clone_fields" type="xs:int" />
                     <xs:element name="expanded" type="xs:int" />
                     <xs:element name="help_url" type="typeUrl" />
+                    <xs:element name="more_url" type="typeUrl" />
+                    <xs:element name="demo_link" type="typeUrl" />
                     <xs:element name="comment" type="xs:string" />
                     <xs:element name="hide_in_single_store_mode" type="xs:int" />
                     <xs:element ref="field" />
                     <xs:element ref="group" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element ref="depends" />
+                    <xs:element ref="attribute" />
                 </xs:choice>
             </xs:sequence>
 
@@ -201,6 +205,7 @@
                     <xs:element name="button_label" type="xs:string" />
                     <xs:element name="hide_in_single_store_mode" type="xs:int" />
                     <xs:element name="upload_dir" type="typeUploadDir" />
+                    <xs:element ref="source_service" />
                     <xs:element ref="options" />
                     <xs:element ref="depends" />
                     <xs:element ref="attribute" />
@@ -222,20 +227,38 @@
         </xs:unique>
     </xs:element>
 
+    <xs:element name="source_service">
+        <xs:annotation>
+            <xs:documentation>
+                Service used to populate select options
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="service_call" type="xs:string" use="required" />
+                    <xs:attribute name="idField" type="xs:string" use="optional" />
+                    <xs:attribute name="labelField" type="xs:string" use="optional" />
+                    <xs:attribute name="includeEmptyValueOption" type="xs:boolean" use="optional" />
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="options">
         <xs:annotation>
             <xs:documentation>
-                Options of a field
+                Options of a select field
             </xs:documentation>
         </xs:annotation>
 
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="option" maxOccurs="unbounded" minOccurs="0">
+                <xs:element name="option" maxOccurs="unbounded" minOccurs="1">
                     <xs:complexType>
                         <xs:annotation>
                             <xs:documentation>
-                                Option of a field
+                                Option of a select field
                             </xs:documentation>
                         </xs:annotation>
 
@@ -247,11 +270,6 @@
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>
-
-            <xs:attribute name="service-call" type="xs:string" use="optional" />
-            <xs:attribute name="idField" type="xs:string" use="optional" />
-            <xs:attribute name="labelField" type="xs:string" use="optional" />
-            <xs:attribute name="includeSelectLine" type="xs:string" use="optional" />
         </xs:complexType>
     </xs:element>
 
@@ -368,6 +386,7 @@
                             <xs:extension base="xs:string">
                                 <xs:attribute name="id" type="typeElementPath" use="required" />
                                 <xs:attribute name="separator" type='xs:string' use='optional' />
+                                <xs:attribute name="negative" type='xs:int' use='optional' />
                             </xs:extension>
                         </xs:simpleContent>
                     </xs:complexType>
@@ -444,7 +463,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Z]+[a-z0-9]{1,}(_[A-Z][A-Z0-9a-z]+){1,}(::[A-Z0-9a-z_]+)?" />
+            <xs:pattern value="[A-Za-z0-9_:]+" />
             <xs:minLength value="5" />
         </xs:restriction>
     </xs:simpleType>
@@ -482,9 +501,9 @@
     </xs:complexType>
 
     <xs:simpleType name="typeUrlRestriction">
-       <xs:restriction base="xs:anyURI">
-           <xs:minLength value="3" />
-       </xs:restriction>
+        <xs:restriction base="xs:anyURI">
+            <xs:minLength value="3" />
+        </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="typeUrl" mixed="true">
         <xs:annotation>

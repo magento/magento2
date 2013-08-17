@@ -104,7 +104,7 @@ class Mage_Sendfriend_Model_Sendfriend extends Mage_Core_Model_Abstract
     public function send()
     {
         if ($this->isExceedLimit()){
-            Mage::throwException(Mage::helper('Mage_Sendfriend_Helper_Data')->__('You have exceeded limit of %d sends in an hour', $this->getMaxSendsToFriend()));
+            Mage::throwException(Mage::helper('Mage_Sendfriend_Helper_Data')->__('You\'ve met your limit of %d sends in an hour.', $this->getMaxSendsToFriend()));
         }
 
         /* @var $translate Mage_Core_Model_Translate */
@@ -168,7 +168,7 @@ class Mage_Sendfriend_Model_Sendfriend extends Mage_Core_Model_Abstract
 
         $email = $this->getSender()->getEmail();
         if (empty($email) OR !Zend_Validate::is($email, 'EmailAddress')) {
-            $errors[] = Mage::helper('Mage_Sendfriend_Helper_Data')->__('Invalid sender email.');
+            $errors[] = Mage::helper('Mage_Sendfriend_Helper_Data')->__('Invalid Sender Email');
         }
 
         $message = $this->getSender()->getMessage();
@@ -183,7 +183,7 @@ class Mage_Sendfriend_Model_Sendfriend extends Mage_Core_Model_Abstract
         // validate recipients email addresses
         foreach ($this->getRecipients()->getEmails() as $email) {
             if (!Zend_Validate::is($email, 'EmailAddress')) {
-                $errors[] = Mage::helper('Mage_Sendfriend_Helper_Data')->__('An invalid email address for recipient was entered.');
+                $errors[] = Mage::helper('Mage_Sendfriend_Helper_Data')->__('Please enter a correct recipient email address.');
                 break;
             }
         }

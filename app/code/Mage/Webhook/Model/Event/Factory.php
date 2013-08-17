@@ -1,5 +1,7 @@
 <?php
 /**
+ * Creates new Mage_Webhook_Model_Event objects.
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -23,38 +25,55 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * WebHooks Event factory
- */
-class Mage_Webhook_Model_Event_Factory
+class Mage_Webhook_Model_Event_Factory implements Magento_PubSub_Event_FactoryInterface
 {
     /**
-     * Object Manager
-     *
      * @var Magento_ObjectManager
      */
     protected $_objectManager;
 
+    /** @var Varien_Convert_Object  */
+    private  $_arrayConverter;
+
     /**
+     * Initialize the class
+     *
      * @param Magento_ObjectManager $objectManager
+     * @param Varien_Convert_Object $arrayConverter
      */
-    public function __construct(Magento_ObjectManager $objectManager)
-    {
+    public function __construct(
+        Magento_ObjectManager $objectManager,
+        Varien_Convert_Object $arrayConverter
+    ) {
         $this->_objectManager = $objectManager;
+        $this->_arrayConverter = $arrayConverter;
     }
 
     /**
-     * @param array $arguments
-     * @return Mage_Webhook_Model_Event_Interface
+     * Create event
+     *
+     * @param string $topic Topic on which to publish data
+     * @param array $data Data to be published.  Should only contain primitives
+     * @return Mage_Webhook_Model_Event
      */
-    public function createEvent($eventType, $eventData)
+    public function create($topic, $data)
     {
-        switch ($eventType) {
-            case Mage_Webhook_Model_Event_Interface::EVENT_TYPE_CALLBACK:
-                return $this->_objectManager->create('Mage_Webhook_Model_Event_Callback', $eventData);
-            case Mage_Webhook_Model_Event_Interface::EVENT_TYPE_INFORM:
-                return $this->_objectManager->create('Mage_Webhook_Model_Event', $eventData);
-        }
+        return $this->_objectManager->create('Mage_Webhook_Model_Event', array(
+            'data' => array(
+                'topic' => $topic,
+                'body_data' => serialize($this->_arrayConverter->convertDataToArray($data)),
+                'status' => Magento_PubSub_EventInterface::READY_TO_SEND
+            )
+        ))->setDataChanges(true);
+    }
+
+    /**
+     * Return the empty instance of Event
+     *
+     * @return Mage_Webhook_Model_Event
+     */
+    public function createEmpty()
+    {
+        return $this->_objectManager->create('Mage_Webhook_Model_Event');
     }
 }

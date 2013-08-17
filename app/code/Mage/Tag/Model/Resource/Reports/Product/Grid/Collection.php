@@ -39,13 +39,15 @@ class Mage_Tag_Model_Resource_Reports_Product_Grid_Collection extends Mage_Tag_M
     protected $_model;
 
     /**
+     * @param Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy
      * @param Mage_Tag_Model_Tag $tagModel
-     * @param null $resource
      */
-    public function __construct(Mage_Tag_Model_Tag $tagModel, $resource = null)
-    {
+    public function __construct(
+        Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy,
+        Mage_Tag_Model_Tag $tagModel
+    ) {
         $this->_model = $tagModel;
-        parent::__construct($resource);
+        parent::__construct($fetchStrategy);
     }
 
     /**

@@ -29,7 +29,12 @@
  * @see Mage_Paypal_Block_System_Config_Fieldset_Hint
  */
 ?>
+<?php
+    if ($this->getHelpLink()):
+?>
 <div class="paypal-payment-notice">
-    <h4><?php echo Mage::helper('Mage_Paypal_Helper_Data')->__('Looking for PayPal? We have our own tab to the left under Sales.')?></h4>
-    <p><a href="<?php echo $this->escapeHtml($this->getUrl('adminhtml/system_config/edit', array('section' => 'paypal'))) ?>"><?php echo Mage::helper('Mage_Paypal_Helper_Data')->__('View PayPal solutions.')?></a></p>
+    <?php echo Mage::helper('Mage_Paypal_Helper_Data')->__('Not sure what PayPal payment method to use? Click <a href="%s" target="_blank">here</a> to learn more.', $this->getHelpLink()); ?>
 </div>
+<?php
+    endif;
+?>

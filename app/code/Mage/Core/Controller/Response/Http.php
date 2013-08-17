@@ -104,4 +104,22 @@ class Mage_Core_Controller_Response_Http extends Zend_Controller_Response_Http
 
         return parent::setRedirect(self::$_transportObject->getUrl(), self::$_transportObject->getCode());
     }
+
+    /**
+     * Get header value by name.
+     * Returns first found header by passed name.
+     * If header with specified name was not found returns false.
+     *
+     * @param string $name
+     * @return array|bool
+     */
+    public function getHeader($name)
+    {
+        foreach ($this->_headers as $header) {
+            if ($header['name'] == $name) {
+                return $header;
+            }
+        }
+        return false;
+    }
 }

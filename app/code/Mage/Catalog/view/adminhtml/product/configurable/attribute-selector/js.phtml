@@ -30,7 +30,7 @@
 jQuery(function($) {
     var options = <?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode($this->getSuggestWidgetOptions())?>;
     $('#configurable-attribute-selector')
-        .suggest(options)
+        .mage('suggest', options)
         .on('suggestselect', function (event, ui) {
             if (ui.item.id) {
                 $('#configurable-attributes-container').trigger('add', ui.item);

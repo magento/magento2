@@ -45,13 +45,6 @@
         </routers>
     </admin>
     <adminhtml>
-        <layout>
-            <updates>
-                <connect module="Mage_Connect">
-                    <file>layout.xml</file>
-                </connect>
-            </updates>
-        </layout>
         <translate>
             <modules>
                 <Mage_Connect>

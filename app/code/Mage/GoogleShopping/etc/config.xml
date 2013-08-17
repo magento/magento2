@@ -44,6 +44,8 @@
             </googleshopping_setup>
         </resources>
     </global>
+    <frontend>
+    </frontend>
     <admin>
         <routers>
             <adminhtml>
@@ -91,13 +93,6 @@
                 </observers>
             </controller_action_predispatch_adminhtml>
         </events>
-        <layout>
-            <updates>
-                <googleshopping module="Mage_GoogleShopping">
-                    <file>layout.xml</file>
-                </googleshopping>
-            </updates>
-        </layout>
     </adminhtml>
     <default>
         <google>

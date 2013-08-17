@@ -64,7 +64,7 @@ class Mage_Adminhtml_Tax_ClassController extends Mage_Adminhtml_Controller_Actio
         } catch (Exception $e) {
             $responseContent = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
                 'success' => false,
-                'error_message' => Mage::helper('Mage_Tax_Helper_Data') ->__('There was an error saving tax class.'),
+                'error_message' => Mage::helper('Mage_Tax_Helper_Data') ->__('Something went wrong saving this tax class.'),
                 'class_id' => '',
                 'class_name' => ''
             ));
@@ -79,9 +79,9 @@ class Mage_Adminhtml_Tax_ClassController extends Mage_Adminhtml_Controller_Actio
     {
         $classId = (int)$this->getRequest()->getParam('class_id');
         try {
-            $classModel = Mage::getModel('Mage_Tax_Model_Class')->load($classId);
-            Mage::register('tax_class_model', $classModel);
-            $this->_checkTaxClassUsage($classModel);
+            /** @var $classModel Mage_Tax_Model_Class */
+            $classModel = $this->_objectManager->create('Mage_Tax_Model_Class')->load($classId);
+            $classModel->checkClassCanBeDeleted();
             $classModel->delete();
             $responseContent = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
                 'success' => true,
@@ -95,7 +95,7 @@ class Mage_Adminhtml_Tax_ClassController extends Mage_Adminhtml_Controller_Actio
         } catch (Exception $e) {
             $responseContent = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
                 'success' => false,
-                'error_message' => Mage::helper('Mage_Tax_Helper_Data')->__('An error occurred while deleting this tax class.')
+                'error_message' => Mage::helper('Mage_Tax_Helper_Data')->__('Something went wrong deleting this tax class.')
             ));
         }
         $this->getResponse()->setBody($responseContent);
@@ -129,38 +129,11 @@ class Mage_Adminhtml_Tax_ClassController extends Mage_Adminhtml_Controller_Actio
      */
     protected function _processClassName($className)
     {
-        $className = trim(strip_tags($className));
+        $className = trim(Mage::helper('Mage_Tax_Helper_Data')->escapeHtml($className));
         if ($className == '') {
             Mage::throwException(Mage::helper('Mage_Tax_Helper_Data') ->__('Invalid name of tax class specified.'));
         }
         return $className;
-    }
-
-    /**
-     * Check if customer tax class exists and has not been used yet (in Tax Rules or Customer Groups)
-     *
-     * @param Mage_Tax_Model_Class $classModel
-     * @throws Mage_Core_Exception
-     */
-    protected function _checkTaxClassUsage(Mage_Tax_Model_Class $classModel)
-    {
-        if (!$classModel->getId()) {
-            Mage::throwException(Mage::helper('Mage_Tax_Helper_Data')->__('This class no longer exists.'));
-        }
-
-        $ruleCollection = Mage::getModel('Mage_Tax_Model_Calculation_Rule')->getCollection()
-            ->setClassTypeFilter($classModel->getClassType(), $classModel->getId());
-
-        if ($ruleCollection->getSize() > 0) {
-            Mage::throwException(Mage::helper('Mage_Tax_Helper_Data')->__('You cannot delete this tax class as it is used in Tax Rules. You have to delete the rules it is used in first.'));
-        }
-
-        $customerGroupCollection = Mage::getModel('Mage_Customer_Model_Group')->getCollection()
-            ->addFieldToFilter('tax_class_id', $classModel->getId());
-        $groupCount = $customerGroupCollection->getSize();
-        if ($groupCount > 0) {
-            Mage::throwException(Mage::helper('Mage_Tax_Helper_Data')->__('You cannot delete this tax class as it is used for %d customer groups.', $groupCount));
-        }
     }
 
     /**
@@ -170,6 +143,6 @@ class Mage_Adminhtml_Tax_ClassController extends Mage_Adminhtml_Controller_Actio
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Tax::manage_tax');
+        return $this->_authorization->isAllowed('Mage_Tax::manage_tax');
     }
 }

@@ -28,28 +28,38 @@
         options: {
             img: '',
             alt: '[TR]',
-            template: '<img alt="${alt}" src="${img}">',
+            template: '#translate-inline-icon',
             zIndex: 2000,
             editSelector: '[data-translate]',
             delay: 2000,
-            offsetTop: -3
+            offsetTop: -3,
+            singleElement: true
         },
         /**
          * editTriger creation
          * @protected
          */
         _create: function() {
-            $.template(this.widgetName, this.options.template);
-            this.trigger = $.tmpl(this.widgetName, this.options)
-                .css({
-                    position: 'absolute',
-                    cursor: 'pointer',
-                    display: 'none',
-                    'z-index': this.options.zIndex
-                })
-                .appendTo('body');
-
+            $(this.options.template).template(this.widgetName);
+            this._initTrigger();
             this._bind();
+        },
+        _getCss: function() {
+            return {
+                position: 'absolute',
+                cursor: 'pointer',
+                display: 'none',
+                'z-index': this.options.zIndex
+            };
+        },
+        _createTrigger: function(appendTo) {
+            return $.tmpl(this.widgetName, this.options)
+                .css(this._getCss())
+                .data('role', 'edit-trigger-element')
+                .appendTo(appendTo);
+        },
+        _initTrigger: function() {
+            this.trigger = this._createTrigger($('body'));
         },
         /**
          * Bind on mousemove event
@@ -72,7 +82,7 @@
          */
         hide: function() {
             this.currentTarget = null;
-            if (this.trigger.is(':visible')) {
+            if (this.trigger && this.trigger.is(':visible')) {
                 this.trigger.hide();
             }
         },
@@ -117,7 +127,7 @@
             e.preventDefault();
             e.stopImmediatePropagation();
             $(this.currentTarget).trigger('edit.' + this.widgetName);
-            this.trigger.hide();
+            this.hide(true);
         },
         /**
          * Destroy editTriger
@@ -146,8 +156,8 @@
         /**
          * Added setTimeout on trigger hide
          */
-        hide: function() {
-            if(this.options.delay){
+        hide: function(immediate) {
+            if(!immediate && this.options.delay){
                 if(!this.timer){
                     this.timer = setTimeout($.proxy(function() {
                         editTriggerPrototype.hide.apply(this, arguments);

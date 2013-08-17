@@ -32,14 +32,14 @@ class Mage_Backend_Model_Config_Loader
     /**
      * Config data factory
      *
-     * @var Mage_Core_Model_Config_Data_Factory
+     * @var Mage_Core_Model_Config_DataFactory
      */
     protected $_configDataFactory;
 
     /**
-     * @param Mage_Core_Model_Config_Data_Factory $configDataFactory
+     * @param Mage_Core_Model_Config_DataFactory $configDataFactory
      */
-    public function __construct(Mage_Core_Model_Config_Data_Factory $configDataFactory)
+    public function __construct(Mage_Core_Model_Config_DataFactory $configDataFactory)
     {
         $this->_configDataFactory = $configDataFactory;
     }

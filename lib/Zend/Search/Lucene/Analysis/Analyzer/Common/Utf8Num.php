@@ -95,7 +95,7 @@ class Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num extends Zend_Search_Lu
         do {
             if (! preg_match('/[\p{L}\p{N}]+/u', $this->_input, $match, PREG_OFFSET_CAPTURE, $this->_bytePosition)) {
                 // It covers both cases a) there are no matches (preg_match(...) === 0)
-                // b) error occured (preg_match(...) === FALSE)
+                // b) error occurred (preg_match(...) === FALSE)
                 return null;
             }
 

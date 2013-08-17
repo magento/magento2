@@ -47,7 +47,7 @@
                 <field id="max_query_words" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Maximum Query Words Count</label>
                     <validate>validate-digits</validate>
-                    <comment>Applies for "Like" search type only.</comment>
+                    <comment>Applies for "Like" search type only</comment>
                 </field>
                 <field id="search_type" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Search Type</label>

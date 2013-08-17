@@ -70,7 +70,7 @@ class Mage_Adminhtml_Block_Dashboard_Tab_Products_Ordered extends Mage_Adminhtml
     {
 
         $this->addColumn('name', array(
-            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Product Name'),
+            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Product'),
             'sortable'  => false,
             'index'     => 'product_name'
         ));
@@ -85,7 +85,7 @@ class Mage_Adminhtml_Block_Dashboard_Tab_Products_Ordered extends Mage_Adminhtml
         ));
 
         $this->addColumn('ordered_qty', array(
-            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Quantity Ordered'),
+            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Order Quantity'),
             'width'     => '120px',
             'align'     => 'right',
             'sortable'  => false,

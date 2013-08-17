@@ -65,11 +65,11 @@ class Mage_Core_Model_Encryption
     public function setHelper($helper)
     {
         if (!is_string($helper)) {
-            if ($helper instanceof Mage_Core_Helper_Data) {
+            if ($helper instanceof Mage_Core_Helper_Abstract) {
                 $helper = get_class($helper);
             } else {
                 throw new InvalidArgumentException(
-                    'Input parameter "$helper" must be either "string" or instance of "Mage_Core_Helper_Data"'
+                    'Input parameter "$helper" must be either "string" or instance of "Mage_Core_Helper_Abstract"'
                 );
             }
         }

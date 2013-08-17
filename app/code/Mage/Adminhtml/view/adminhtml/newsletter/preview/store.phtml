@@ -26,30 +26,34 @@
 ?>
 
 <?php if ($websites = $this->getWebsites()): ?>
-<label for="store_switcher"><?php echo $this->__('Choose Store View:') ?></label>
-<select name="store_switcher" id="store_switcher">
-    <?php foreach ($websites as $website): ?>
-        <?php $showWebsite=false; ?>
-        <?php foreach ($website->getGroups() as $group): ?>
-            <?php $showGroup=false; ?>
-            <?php foreach ($this->getStores($group) as $store): ?>
-                <?php if ($showWebsite == false): ?>
-                    <?php $showWebsite = true; ?>
-                    <optgroup label="<?php echo $website->getName() ?>"></optgroup>
-                <?php endif; ?>
-                <?php if ($showGroup == false): ?>
-                    <?php $showGroup = true; ?>
-                    <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $group->getName() ?>">
-                <?php endif; ?>
-                <option value="<?php echo $store->getId() ?>"<?php if($this->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $store->getName() ?></option>
+<div class="field field-store-switcher">
+    <label class="label" for="store_switcher"><?php echo $this->__('Choose Store View:') ?></label>
+    <div class="control">
+        <select name="store_switcher" id="store_switcher">
+            <?php foreach ($websites as $website): ?>
+                <?php $showWebsite=false; ?>
+                <?php foreach ($website->getGroups() as $group): ?>
+                    <?php $showGroup=false; ?>
+                    <?php foreach ($this->getStores($group) as $store): ?>
+                        <?php if ($showWebsite == false): ?>
+                            <?php $showWebsite = true; ?>
+                            <optgroup label="<?php echo $website->getName() ?>"></optgroup>
+                        <?php endif; ?>
+                        <?php if ($showGroup == false): ?>
+                            <?php $showGroup = true; ?>
+                            <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $group->getName() ?>">
+                        <?php endif; ?>
+                        <option value="<?php echo $store->getId() ?>"<?php if($this->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $store->getName() ?></option>
+                    <?php endforeach; ?>
+                    <?php if ($showGroup): ?>
+                        </optgroup>
+                    <?php endif; ?>
+                <?php endforeach; ?>
             <?php endforeach; ?>
-            <?php if ($showGroup): ?>
-                </optgroup>
-            <?php endif; ?>
-        <?php endforeach; ?>
-    <?php endforeach; ?>
-</select>
-<?php echo $this->getHintHtml() ?>
+        </select>
+    </div>
+    <?php echo $this->getHintHtml() ?>
+</div>
 <script type="text/javascript">
 //<![CDATA[
 Event.observe($('store_switcher'), 'change', function(event) {

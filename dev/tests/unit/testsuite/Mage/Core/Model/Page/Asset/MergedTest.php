@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Mage_Core
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -35,17 +32,22 @@ class Mage_Core_Model_Page_Asset_MergedTest extends PHPUnit_Framework_TestCase
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_designPackage;
+    protected $_objectManager;
 
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_coreHelper;
+    protected $_logger;
 
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_filesystem;
+    protected $_dirs;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_mergeStrategy;
 
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
@@ -61,22 +63,27 @@ class Mage_Core_Model_Page_Asset_MergedTest extends PHPUnit_Framework_TestCase
     {
         $this->_assetJsOne = $this->getMockForAbstractClass('Mage_Core_Model_Page_Asset_MergeableInterface');
         $this->_assetJsOne->expects($this->any())->method('getContentType')->will($this->returnValue('js'));
-        $this->_assetJsOne->expects($this->any())->method('getSourceFile')->will($this->returnValue('script_one.js'));
+        $this->_assetJsOne->expects($this->any())->method('getSourceFile')
+            ->will($this->returnValue('/pub/script_one.js'));
 
         $this->_assetJsTwo = $this->getMockForAbstractClass('Mage_Core_Model_Page_Asset_MergeableInterface');
         $this->_assetJsTwo->expects($this->any())->method('getContentType')->will($this->returnValue('js'));
-        $this->_assetJsTwo->expects($this->any())->method('getSourceFile')->will($this->returnValue('script_two.js'));
+        $this->_assetJsTwo->expects($this->any())->method('getSourceFile')
+            ->will($this->returnValue('/pub/script_two.js'));
 
-        $this->_designPackage = $this->getMock(
-            'Mage_Core_Model_Design_Package', array('mergeFiles', 'getPublicFileUrl'), array(), '', false
+        $this->_logger = $this->getMock('Mage_Core_Model_Logger', array('logException'), array(), '', false);
+
+        $this->_dirs = $this->getMock('Mage_Core_Model_Dir', array(), array(), '', false);
+
+        $this->_mergeStrategy = $this->getMock('Mage_Core_Model_Page_Asset_MergeStrategyInterface');
+
+        $this->_objectManager = $this->getMockForAbstractClass(
+            'Magento_ObjectManager', array(), '', true, true, true, array('create')
         );
 
-        $this->_coreHelper = $this->getMock('Mage_Core_Helper_Data', array('isStaticFilesSigned'), array(), '', false);
-
-        $this->_filesystem = $this->getMock('Magento_Filesystem', array('getMTime'), array(), '', false);
-
         $this->_object = new Mage_Core_Model_Page_Asset_Merged(
-            $this->_designPackage, $this->_coreHelper, $this->_filesystem, array($this->_assetJsOne, $this->_assetJsTwo)
+            $this->_objectManager, $this->_logger, $this->_dirs, $this->_mergeStrategy,
+            array($this->_assetJsOne, $this->_assetJsTwo)
         );
     }
 
@@ -87,7 +94,7 @@ class Mage_Core_Model_Page_Asset_MergedTest extends PHPUnit_Framework_TestCase
     public function testConstructorNothingToMerge()
     {
         $this->_object = new Mage_Core_Model_Page_Asset_Merged(
-            $this->_designPackage, $this->_coreHelper, $this->_filesystem, array()
+            $this->_objectManager, $this->_logger, $this->_dirs, $this->_mergeStrategy, array()
         );
     }
 
@@ -99,7 +106,8 @@ class Mage_Core_Model_Page_Asset_MergedTest extends PHPUnit_Framework_TestCase
     {
         $assetUrl = new Mage_Core_Model_Page_Asset_Remote('http://example.com/style.css', 'css');
         $this->_object = new Mage_Core_Model_Page_Asset_Merged(
-            $this->_designPackage, $this->_coreHelper, $this->_filesystem, array($this->_assetJsOne, $assetUrl)
+            $this->_objectManager, $this->_logger, $this->_dirs, $this->_mergeStrategy,
+            array($this->_assetJsOne, $assetUrl)
         );
     }
 
@@ -114,31 +122,75 @@ class Mage_Core_Model_Page_Asset_MergedTest extends PHPUnit_Framework_TestCase
         $assetCss->expects($this->any())->method('getSourceFile')->will($this->returnValue('style.css'));
 
         $this->_object = new Mage_Core_Model_Page_Asset_Merged(
-            $this->_designPackage, $this->_coreHelper, $this->_filesystem, array($this->_assetJsOne, $assetCss)
+            $this->_objectManager, $this->_logger, $this->_dirs, $this->_mergeStrategy,
+            array($this->_assetJsOne, $assetCss)
         );
     }
 
-    public function testGetUrl()
+    public function testIteratorInterfaceMerge()
     {
-        $url = 'http://127.0.0.1/magento/merged.js';
-        $this->_designPackage
-            ->expects($this->at(0))
+        $mergedFile = '/_merged/19b2d7c942efeb2327eadbcf04635b02.js';
+
+        $this->_logger->expects($this->never())->method('logException');
+
+        $publicFiles = array(
+            '/pub/script_one.js' => '/pub/script_one.js',
+            '/pub/script_two.js' => '/pub/script_two.js'
+        );
+
+        $this->_mergeStrategy
+            ->expects($this->once())
             ->method('mergeFiles')
-            ->with(array('script_one.js', 'script_two.js'), 'js')
-            ->will($this->returnValue('merged.js'))
+            ->with($publicFiles, $mergedFile, 'js')
+            ->will($this->returnValue(null));
+
+        $mergedAsset = $this->getMockForAbstractClass('Mage_Core_Model_Page_Asset_MergeableInterface');
+        $this->_objectManager
+            ->expects($this->once())
+            ->method('create')
+            ->with('Mage_Core_Model_Page_Asset_PublicFile', array('file' => $mergedFile, 'contentType' => 'js'))
+            ->will($this->returnValue($mergedAsset))
         ;
-        $this->_designPackage
-            ->expects($this->at(1))
-            ->method('getPublicFileUrl')
-            ->with('merged.js')
-            ->will($this->returnValue($url))
-        ;
-        $this->assertEquals($url, $this->_object->getUrl());
-        $this->assertEquals($url, $this->_object->getUrl(), 'URL calculation should occur only once.');
+
+        $expectedResult = array($mergedAsset);
+        $this->_assertIteratorEquals($expectedResult, $this->_object);
+        $this->_assertIteratorEquals($expectedResult, $this->_object); // ensure merging happens only once
     }
 
-    public function testGetContentType()
+    public function testIteratorInterfaceMergeFailure()
     {
-        $this->assertEquals('js', $this->_object->getContentType());
+        $mergeError = new Exception('File not found');
+        $assetBroken = $this->getMockForAbstractClass('Mage_Core_Model_Page_Asset_MergeableInterface');
+        $assetBroken->expects($this->any())->method('getContentType')->will($this->returnValue('js'));
+        $assetBroken->expects($this->any())->method('getSourceFile')
+            ->will($this->throwException($mergeError));
+
+        $this->_object = new Mage_Core_Model_Page_Asset_Merged(
+            $this->_objectManager, $this->_logger, $this->_dirs, $this->_mergeStrategy,
+            array($this->_assetJsOne, $this->_assetJsTwo, $assetBroken)
+        );
+
+
+        $this->_objectManager->expects($this->never())->method('create');
+        $this->_logger->expects($this->once())->method('logException')->with($this->identicalTo($mergeError));
+
+        $expectedResult = array($this->_assetJsOne, $this->_assetJsTwo, $assetBroken);
+        $this->_assertIteratorEquals($expectedResult, $this->_object);
+        $this->_assertIteratorEquals($expectedResult, $this->_object); // ensure merging attempt happens only once
+    }
+
+    /**
+     * Assert that iterator items equal to expected ones
+     *
+     * @param array $expectedItems
+     * @param Iterator $actual
+     */
+    protected function _assertIteratorEquals(array $expectedItems, Iterator $actual)
+    {
+        $actualItems = array();
+        foreach ($actual as $actualItem) {
+            $actualItems[] = $actualItem;
+        }
+        $this->assertEquals($expectedItems, $actualItems);
     }
 }

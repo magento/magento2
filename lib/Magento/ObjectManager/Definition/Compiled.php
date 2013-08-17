@@ -75,4 +75,14 @@ abstract class Magento_ObjectManager_Definition_Compiled implements Magento_Obje
         }
         return null;
     }
+
+    /**
+     * Retrieve list of all classes covered with definitions
+     *
+     * @return array
+     */
+    public function getClasses()
+    {
+        return array_keys($this->_definitions);
+    }
 }

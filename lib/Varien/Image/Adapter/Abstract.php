@@ -48,6 +48,10 @@ abstract class Varien_Image_Adapter_Abstract
     const POSITION_TILE = 'tile';
     const POSITION_CENTER = 'center';
 
+    /**
+     * Default font size
+     */
+    const DEFAULT_FONT_SIZE = 15;
 
     protected $_fileType;
     protected $_fileName ;
@@ -63,6 +67,7 @@ abstract class Varien_Image_Adapter_Abstract
     protected $_watermarkHeigth;
     protected $_watermarkImageOpacity;
     protected $_quality;
+    protected $_fontSize = self::DEFAULT_FONT_SIZE;
 
     protected $_keepAspectRatio;
     protected $_keepFrame;
@@ -96,6 +101,29 @@ abstract class Varien_Image_Adapter_Abstract
     abstract public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false);
 
     abstract public function checkDependencies();
+
+    /**
+     * Create Image from string
+     *
+     * @param string $text
+     * @param string $font Path to font file
+     * @return Varien_Image_Adapter_Abstract
+     */
+    abstract public function createPngFromString($text, $font = '');
+
+    /**
+     * Reassign image dimensions
+     */
+    abstract public function refreshImageDimensions();
+
+    /**
+     * Returns rgba array of the specified pixel
+     *
+     * @param int $x
+     * @param int $y
+     * @return array
+     */
+    abstract public function getColorAt($x, $y);
 
     /**
      * Initialize default values
@@ -525,5 +553,26 @@ abstract class Varien_Image_Adapter_Abstract
     protected function _canProcess()
     {
         return !empty($this->_fileName);
+    }
+
+    /**
+     * Check - is this file an image
+     *
+     * @param string $filePath
+     * @return bool
+     * @throws InvalidArgumentException
+     */
+    public function validateUploadFile($filePath)
+    {
+        if (!file_exists($filePath)) {
+            throw new InvalidArgumentException ("File '{$filePath}' does not exists.");
+        }
+        if (!getimagesize($filePath)) {
+            throw new InvalidArgumentException ('Disallowed file type.');
+        }
+        $this->checkDependencies();
+        $this->open($filePath);
+
+        return $this->getMimeType() !== null;
     }
 }

@@ -9,6 +9,7 @@ Mage/Catalog/Model/Category/Attribute/Source
 Zend
 downloader
 dev
+errors
 Mysql
 lib/Varien/Db
 sql
@@ -71,7 +72,7 @@ lib/Mage/HTTP/Client
 lib/Magento/Acl
 lib/PEAR
 lib/phpseclib
-lib/twig12
+lib/Twig
 lib/Varien/Convert
 Mage/Cron/Model
 Mage/SalesRule/Model/Resource/Report/Rule
@@ -80,3 +81,4 @@ Mage/Connect/Block/Adminhtml/Extension/Custom/Edit
 Mage/Tax/Model/Sales/Total/Quote/Nominal
 Mage/Theme/Block/Adminhtml/System/Design/Theme/Edit
 Mage/User/Block/User/Edit
+var/generation

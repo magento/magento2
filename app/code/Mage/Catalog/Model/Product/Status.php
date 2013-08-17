@@ -28,7 +28,6 @@
 /**
  * Product status functionality model
  *
- * @method Mage_Catalog_Model_Resource_Product_Status _getResource()
  * @method Mage_Catalog_Model_Resource_Product_Status getResource()
  * @method int getProductId()
  * @method Mage_Catalog_Model_Product_Status setProductId(int $value)

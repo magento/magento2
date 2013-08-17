@@ -39,7 +39,7 @@
                     <depends>
                         <field id="enabled">1</field>
                     </depends>
-                    <comment>If empty, default value will be used.</comment>
+                    <comment>If you leave this empty, we'll use the default value.</comment>
                 </field>
                 <field id="control" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>External Cache Control</label>

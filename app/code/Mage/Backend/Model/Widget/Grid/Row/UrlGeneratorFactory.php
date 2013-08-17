@@ -52,13 +52,13 @@ class Mage_Backend_Model_Widget_Grid_Row_UrlGeneratorFactory
      *
      * @param string $generatorClassName
      * @param array $arguments
-     * @return Mage_Backend_Model_Widget_Grid_Row_UrlGenerator
+     * @return Mage_Backend_Model_Widget_Grid_Row_Row_Generator_UrlGenerator
      * @throws InvalidArgumentException
      */
     public function createUrlGenerator($generatorClassName, array $arguments = array())
     {
         $rowUrlGenerator = $this->_objectManager->create($generatorClassName, $arguments);
-        if (false === ($rowUrlGenerator instanceof Mage_Backend_Model_Widget_Grid_Row_UrlGenerator)) {
+        if (false === ($rowUrlGenerator instanceof Mage_Backend_Model_Widget_Grid_Row_GeneratorInterface)) {
             throw new InvalidArgumentException('Passed wrong parameters');
         }
 

@@ -44,16 +44,16 @@ class Varien_Io_Sftp extends Varien_Io_Abstract implements Varien_Io_Interface
      */
     protected $_connection = null;
 
-
     /**
      * Open a SFTP connection to a remote site.
      *
      * @param array $args Connection arguments
-     * @param string $args[host] Remote hostname
-     * @param string $args[username] Remote username
-     * @param string $args[password] Connection password
-     * @param int $args[timeout] Connection timeout [=10]
-     *
+     *        string $args[host] Remote hostname
+     *        string $args[username] Remote username
+     *        string $args[password] Connection password
+     *        int $args[timeout] Connection timeout [=10]
+     * @return void
+     * @throws Exception
      */
     public function open(array $args = array())
     {
@@ -75,34 +75,36 @@ class Varien_Io_Sftp extends Varien_Io_Abstract implements Varien_Io_Interface
 
     /**
      * Close a connection
-     *
      */
     public function close()
     {
-        return $this->_connection->disconnect();
+        $this->_connection->disconnect();
     }
 
     /**
      * Create a directory
      *
-     * @param $mode Ignored here; uses logged-in user's umask
-     * @param $recursive Analogous to mkdir -p
+     * @param string $dir
+     * @param int $mode ignored here; uses logged-in user's umask
+     * @param bool $recursive analogous to mkdir -p
      *
      * Note: if $recursive is true and an error occurs mid-execution,
      * false is returned and some part of the hierarchy might be created.
      * No rollback is performed.
+     *
+     * @return bool
      */
-    public function mkdir($dir, $mode=0777, $recursive=true)
+    public function mkdir($dir, $mode = 0777, $recursive = true)
     {
         if ($recursive) {
             $no_errors = true;
-            $dirlist = explode('/', $dir);
-            reset($dirlist);
-            $cwd = $this->_connection->pwd();
-            while ($no_errors && ($dir_item = next($dirlist))) {
+            $dirList = explode('/', $dir);
+            reset($dirList);
+            $currentWorkingDir = $this->_connection->pwd();
+            while ($no_errors && ($dir_item = next($dirList))) {
                 $no_errors = ($this->_connection->mkdir($dir_item) && $this->_connection->chdir($dir_item));
             }
-            $this->_connection->chdir($cwd);
+            $this->_connection->chdir($currentWorkingDir);
             return $no_errors;
         } else {
             return $this->_connection->mkdir($dir);
@@ -111,20 +113,19 @@ class Varien_Io_Sftp extends Varien_Io_Abstract implements Varien_Io_Interface
 
     /**
      * Delete a directory
-     *
      */
     public function rmdir($dir, $recursive=false)
     {
         if ($recursive) {
             $no_errors = true;
-            $cwd = $this->_connection->pwd();
+            $currentWorkingDir = $this->pwd();
             if(!$this->_connection->chdir($dir)) {
                 throw new Exception("chdir(): $dir: Not a directory");
             }
             $list = $this->_connection->nlist();
             if (!count($list)) {
                 // Go back
-                $this->_connection->chdir($pwd);
+                $this->_connection->chdir($currentWorkingDir);
                 return $this->rmdir($dir, false);
             } else {
                 foreach ($list as $filename) {
@@ -136,7 +137,8 @@ class Varien_Io_Sftp extends Varien_Io_Abstract implements Varien_Io_Interface
                     }
                 }
             }
-            $no_errors = $no_errors && ($this->_connection->chdir($pwd) && $this->_connection->rmdir($dir));
+            $no_errors = $no_errors &&
+                ($this->_connection->chdir($currentWorkingDir) && $this->_connection->rmdir($dir));
             return $no_errors;
         } else {
             return $this->_connection->rmdir($dir);
@@ -145,7 +147,6 @@ class Varien_Io_Sftp extends Varien_Io_Abstract implements Varien_Io_Interface
 
     /**
      * Get current working directory
-     *
      */
     public function pwd()
     {
@@ -163,28 +164,37 @@ class Varien_Io_Sftp extends Varien_Io_Abstract implements Varien_Io_Interface
 
     /**
      * Read a file
-     *
+     * @param string $filename remote file name
+     * @param string|null $destination local file name (optional)
+     * @return mixed
      */
-    public function read($filename, $dest=null)
+    public function read($filename, $destination = null)
     {
-        if (is_null($dest)) {
-            $dest = false;
+        if (is_null($destination)) {
+            $destination = false;
         }
-        return $this->_connection->get($filename, $dest);
+        return $this->_connection->get($filename, $destination);
     }
 
     /**
      * Write a file
-     * @param $src Must be a local file name
+     *
+     * @param string $filename
+     * @param string $source string data or local file name
+     * @param int $mode ignored parameter
+     * @return bool
      */
-    public function write($filename, $src, $mode=null)
+    public function write($filename, $source, $mode = null)
     {
-        return $this->_connection->put($filename, $src);
+        $mode = is_readable($source) ? NET_SFTP_LOCAL_FILE : NET_SFTP_STRING;
+        return $this->_connection->put($filename, $source, $mode);
     }
 
     /**
      * Delete a file
      *
+     * @param string $filename
+     * @return bool
      */
     public function rm($filename)
     {
@@ -194,15 +204,21 @@ class Varien_Io_Sftp extends Varien_Io_Abstract implements Varien_Io_Interface
     /**
      * Rename or move a directory or a file
      *
+     * @param string $source
+     * @param string $destination
+     * @return bool
      */
-    public function mv($src, $dest)
+    public function mv($source, $destination)
     {
-        return $this->_connection->rename($src, $dest);
+        return $this->_connection->rename($source, $destination);
     }
 
     /**
-     * Chamge mode of a directory or a file
+     * Change mode of a directory or a file
      *
+     * @param string $filename
+     * @param int $mode
+     * @return mixed
      */
     public function chmod($filename, $mode)
     {
@@ -212,21 +228,29 @@ class Varien_Io_Sftp extends Varien_Io_Abstract implements Varien_Io_Interface
     /**
      * Get list of cwd subdirectories and files
      *
+     * @param null $grep ignored parameter
+     * @return array
      */
-    public function ls($grep=null)
+    public function ls($grep = null)
     {
         $list = $this->_connection->nlist();
-        $pwd = $this->pwd();
+        $currentWorkingDir = $this->pwd();
         $result = array();
         foreach($list as $name) {
             $result[] = array(
                 'text' => $name,
-                'id' => "{$pwd}{$name}",
+                'id' => "{$currentWorkingDir}{$name}",
             );
         }
         return $result;
     }
 
+
+    /**
+     * Returns a list of files in the current directory
+     *
+     * @return mixed
+     */
     public function rawls()
     {
         $list = $this->_connection->rawlist();

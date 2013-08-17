@@ -32,12 +32,6 @@ interface Mage_Core_Model_AppInterface extends Mage_Core_Model_StoreManagerInter
     const DISTRO_LOCALE_CODE = 'en_US';
 
     /**
-     * Cache tag for all cache data exclude config cache
-     *
-     */
-    const CACHE_TAG = 'MAGE';
-
-    /**
      * Default store Id (for install)
      */
     const DISTRO_STORE_ID       = 1;
@@ -123,7 +117,7 @@ interface Mage_Core_Model_AppInterface extends Mage_Core_Model_StoreManagerInter
     /**
      * Retrieve application locale object
      *
-     * @return Mage_Core_Model_Locale
+     * @return Mage_Core_Model_LocaleInterface
      */
     public function getLocale();
 

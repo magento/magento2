@@ -101,6 +101,6 @@ abstract class Mage_Oauth_Block_Authorize_Abstract extends Mage_Core_Block_Templ
             'area'     => 'adminhtml',
             'package'  => 'default'
         );
-        return Mage::getDesign()->getFilename($this->getTemplate(), $params);
+        return $this->_viewFileSystem->getFilename($this->getTemplate(), $params);
     }
 }

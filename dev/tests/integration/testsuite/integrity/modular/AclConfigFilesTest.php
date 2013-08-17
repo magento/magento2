@@ -43,19 +43,10 @@ class Integrity_Modular_AclConfigFilesTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $readerMock = $this->getMock('Magento_Acl_Config_Reader', array('_merge', '_extractData'), array(), '', false);
+        $readerMock = $this->getMock('Magento_Acl_Loader_Resource_ConfigReader_Xml',
+            array('_merge', '_extractData'), array(), '', false
+        );
         $this->_schemeFile = $readerMock->getSchemaFile();
-        $this->_prepareFileList();
-    }
-
-    /**
-     * Prepare file list of ACL resources
-     */
-    protected function _prepareFileList()
-    {
-        if (empty($this->_fileList)) {
-            $this->_fileList = glob(Mage::getBaseDir('app') . '/*/*/*/etc/adminhtml/acl.xml');
-        }
     }
 
     /**
@@ -79,30 +70,11 @@ class Integrity_Modular_AclConfigFilesTest extends PHPUnit_Framework_TestCase
      */
     public function aclConfigFileDataProvider()
     {
-        $this->_prepareFileList();
+        $fileList = glob(Mage::getBaseDir('app') . '/*/*/*/etc/adminhtml/acl.xml');
         $dataProviderResult = array();
-        foreach ($this->_fileList as $file) {
+        foreach ($fileList as $file) {
             $dataProviderResult[$file] = array($file);
         }
         return $dataProviderResult;
-    }
-
-    /**
-     * Test merged ACL configuration
-     */
-    public function testMergedConfiguration()
-    {
-        /** @var $dom Magento_Acl_Config_Reader **/
-        $dom = Mage::getModel('Magento_Acl_Config_Reader', array('configFiles' => $this->_fileList))
-            ->getAclResources();
-
-        $domConfig = new Magento_Acl_Config_Reader_Dom($dom->saveXML());
-        $errors = array();
-        $result = $domConfig->validate($this->_schemeFile, $errors);
-        $message = "Invalid merged ACL config\n";
-        foreach ($errors as $error) {
-            $message .= "{$error->message} Line: {$error->line}\n";
-        }
-        $this->assertTrue($result, $message);
     }
 }

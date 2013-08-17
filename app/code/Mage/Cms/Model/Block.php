@@ -52,6 +52,13 @@ class Mage_Cms_Model_Block extends Mage_Core_Model_Abstract
     const CACHE_TAG     = 'cms_block';
     protected $_cacheTag= 'cms_block';
 
+    /**
+     * Prefix of model events names
+     *
+     * @var string
+     */
+    protected $_eventPrefix = 'cms_block';
+
     protected function _construct()
     {
         $this->_init('Mage_Cms_Model_Resource_Block');
@@ -70,7 +77,7 @@ class Mage_Cms_Model_Block extends Mage_Core_Model_Abstract
             return parent::_beforeSave();
         }
         Mage::throwException(
-            Mage::helper('Mage_Cms_Helper_Data')->__('The static block content cannot contain  directive with its self.')
+            Mage::helper('Mage_Cms_Helper_Data')->__('Make sure that static block content does not reference the block itself.')
         );
     }
 }

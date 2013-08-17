@@ -82,7 +82,7 @@ class Mage_Oauth_Block_Adminhtml_Oauth_Admin_Token_Grid extends Mage_Adminhtml_B
         ));
 
         $this->addColumn('name', array(
-            'header'    => $this->__('Application Name'),
+            'header'    => $this->__('Application'),
             'index'     => 'name',
             'escape'    => true,
         ));

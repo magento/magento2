@@ -23,20 +23,20 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-/* Widget: Recently Viewed Proructs */
+/* Widget: Recently Viewed Products */
 .widget-viewed { display:block; }
 .col-main .widget-viewed { margin:7px 0; }
 .widget-viewed .products-grid .product-image,
 .widget-viewed .products-list .product-image { width:85px; height:85px; }
 .widget-viewed .products-list .product-shop { margin-left:100px; }
 .sidebar .widget-viewed .block { font-size:11px; line-height:1.25; }
-.sidebar .widget-viewed .block-title strong { background:url(Mage_Catalog::images/i_block-list.gif) 0 0 no-repeat; padding-left:21px; }
+.sidebar .widget-viewed .block-title strong { background:url(images/i_widget-list.gif) 0 0 no-repeat; padding-left:21px; }
 
-/* Widget: Recently Compared Proructs */
+/* Widget: Recently Compared Products */
 .widget-compared { display:block;}
 .col-main .widget-compared { margin:7px 0; }
 .widget-compared .products-grid .product-image,
 .widget-compared .products-list .product-image { width:85px; height:85px; }
 .widget-compared .products-list .product-shop { margin-left:100px; }
 .sidebar .widget-compared .block { font-size:11px; line-height:1.25; }
-.sidebar .widget-compared .block-title strong { background:url(Mage_Catalog::images/i_block-list.gif) 0 0 no-repeat; padding-left:21px; }
+.sidebar .widget-compared .block-title strong { background:url(images/i_widget-list.gif) 0 0 no-repeat; padding-left:21px; }

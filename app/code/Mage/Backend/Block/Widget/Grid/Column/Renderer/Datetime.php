@@ -52,7 +52,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Datetime
             if (is_null(self::$_format)) {
                 try {
                     self::$_format = Mage::app()->getLocale()->getDateTimeFormat(
-                        Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM
+                        Mage_Core_Model_LocaleInterface::FORMAT_TYPE_MEDIUM
                     );
                 }
                 catch (Exception $e) {

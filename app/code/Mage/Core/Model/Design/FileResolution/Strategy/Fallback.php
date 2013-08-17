@@ -33,49 +33,37 @@ class Mage_Core_Model_Design_FileResolution_Strategy_Fallback
     Mage_Core_Model_Design_FileResolution_Strategy_ViewInterface
 {
     /**
-     * @var array
+     * @var Mage_Core_Model_Design_Fallback_Factory
      */
-    protected $_themeList = array();
+    protected $_fallbackFactory;
 
     /**
-     * @var Mage_Core_Model_Design_Fallback_List_File
+     * @var Mage_Core_Model_Design_Fallback_Rule_RuleInterface
      */
-    protected $_fallbackFile;
+    protected $_ruleFile;
 
     /**
-     * @var Mage_Core_Model_Design_Fallback_List_Locale
+     * @var Mage_Core_Model_Design_Fallback_Rule_RuleInterface
      */
-    protected $_fallbackLocale;
+    protected $_ruleLocaleFile;
 
     /**
-     * @var Mage_Core_Model_Design_Fallback_List_View
+     * @var Mage_Core_Model_Design_Fallback_Rule_RuleInterface
      */
-    protected $_fallbackViewFile;
+    protected $_ruleViewFile;
 
     /**
-     * Constructor.
+     * Constructor
      *
-     * @param Magento_ObjectManager $objectManager
      * @param Magento_Filesystem $filesystem
-     * @param Mage_Core_Model_Dir $dirs
-     * @param Mage_Core_Model_Design_Fallback_List_File $fallbackFile
-     * @param Mage_Core_Model_Design_Fallback_List_Locale $fallbackLocale
-     * @param Mage_Core_Model_Design_Fallback_List_View $fallbackViewFile
+     * @param Mage_Core_Model_Design_Fallback_Factory $fallbackFactory
      */
     public function __construct(
-        Magento_ObjectManager $objectManager,
         Magento_Filesystem $filesystem,
-        Mage_Core_Model_Dir $dirs,
-        Mage_Core_Model_Design_Fallback_List_File $fallbackFile,
-        Mage_Core_Model_Design_Fallback_List_Locale $fallbackLocale,
-        Mage_Core_Model_Design_Fallback_List_View $fallbackViewFile
+        Mage_Core_Model_Design_Fallback_Factory $fallbackFactory
     ) {
-        $this->_dirs = $dirs;
-        $this->_objectManager = $objectManager;
         $this->_filesystem = $filesystem;
-        $this->_fallbackFile = $fallbackFile;
-        $this->_fallbackLocale = $fallbackLocale;
-        $this->_fallbackViewFile = $fallbackViewFile;
+        $this->_fallbackFactory = $fallbackFactory;
     }
 
     /**
@@ -89,14 +77,11 @@ class Mage_Core_Model_Design_FileResolution_Strategy_Fallback
      */
     public function getFile($area, Mage_Core_Model_Theme $themeModel, $file, $module = null)
     {
-        $params = array();
+        $params = array('area' => $area, 'theme' => $themeModel, 'namespace' => null, 'module' => null);
         if ($module) {
-            list($params['namespace'], $params['module']) = explode('_', $module);
-        } else {
-            $params['namespace'] = null;
-            $params['module'] = null;
+            list($params['namespace'], $params['module']) = explode('_', $module, 2);
         }
-        return $this->_getFallbackFile($area, $themeModel, $file, $this->_fallbackFile, $params);
+        return $this->_resolveFile($this->_getFileRule(), $file, $params);
     }
 
     /**
@@ -110,9 +95,8 @@ class Mage_Core_Model_Design_FileResolution_Strategy_Fallback
      */
     public function getLocaleFile($area, Mage_Core_Model_Theme $themeModel, $locale, $file)
     {
-        $params = array('locale' => $locale);
-
-        return $this->_getFallbackFile($area, $themeModel, $file, $this->_fallbackLocale, $params);
+        $params = array('area' => $area, 'theme' => $themeModel, 'locale' => $locale);
+        return $this->_resolveFile($this->_getLocaleFileRule(), $file, $params);
     }
 
     /**
@@ -127,39 +111,67 @@ class Mage_Core_Model_Design_FileResolution_Strategy_Fallback
      */
     public function getViewFile($area, Mage_Core_Model_Theme $themeModel, $locale, $file, $module = null)
     {
-        $params = array();
+        $params = array(
+            'area' => $area, 'theme' => $themeModel, 'locale' => $locale, 'namespace' => null, 'module' => null
+        );
         if ($module) {
-            list($params['namespace'], $params['module']) = explode('_', $module);
-        } else {
-            $params['namespace'] = null;
-            $params['module'] = null;
+            list($params['namespace'], $params['module']) = explode('_', $module, 2);
         }
-        $params['locale'] = $locale;
+        return $this->_resolveFile($this->_getViewFileRule(), $file, $params);
+    }
 
-        return $this->_getFallbackFile($area, $themeModel, $file, $this->_fallbackViewFile, $params);
+    /**
+     * Retrieve fallback rule for dynamic view files
+     *
+     * @return Mage_Core_Model_Design_Fallback_Rule_RuleInterface
+     */
+    protected function _getFileRule()
+    {
+        if (!$this->_ruleFile) {
+            $this->_ruleFile = $this->_fallbackFactory->createFileRule();
+        }
+        return $this->_ruleFile;
+    }
+
+    /**
+     * Retrieve fallback rule for locale files
+     *
+     * @return Mage_Core_Model_Design_Fallback_Rule_RuleInterface
+     */
+    protected function _getLocaleFileRule()
+    {
+        if (!$this->_ruleLocaleFile) {
+            $this->_ruleLocaleFile = $this->_fallbackFactory->createLocaleFileRule();
+        }
+        return $this->_ruleLocaleFile;
+    }
+
+    /**
+     * Retrieve fallback rule for static view files
+     *
+     * @return Mage_Core_Model_Design_Fallback_Rule_RuleInterface
+     */
+    protected function _getViewFileRule()
+    {
+        if (!$this->_ruleViewFile) {
+            $this->_ruleViewFile = $this->_fallbackFactory->createViewFileRule();
+        }
+        return $this->_ruleViewFile;
     }
 
     /**
      * Get path of file after using fallback rules
      *
-     * @param string $area
-     * @param Mage_Core_Model_Theme $themeModel
+     * @param Mage_Core_Model_Design_Fallback_Rule_RuleInterface $fallbackRule
      * @param string $file
-     * @param Mage_Core_Model_Design_Fallback_Rule_RuleInterface $fallbackList
-     * @param array $specificParams
+     * @param array $params
      * @return string
      */
-    protected function _getFallbackFile($area, Mage_Core_Model_Theme $themeModel, $file,
-        Mage_Core_Model_Design_Fallback_Rule_RuleInterface $fallbackList, $specificParams = array()
+    protected function _resolveFile(
+        Mage_Core_Model_Design_Fallback_Rule_RuleInterface $fallbackRule, $file, $params = array()
     ) {
-        $params = array(
-            'area'          => $area,
-            'theme'         => $themeModel,
-        );
-        $params = array_merge($params, $specificParams);
         $path = '';
-
-        foreach ($fallbackList->getPatternDirs($params) as $dir) {
+        foreach ($fallbackRule->getPatternDirs($params) as $dir) {
             $path = str_replace('/', DIRECTORY_SEPARATOR, "{$dir}/{$file}");
             if ($this->_filesystem->has($path)) {
                 return $path;

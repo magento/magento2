@@ -35,6 +35,21 @@
 class Mage_User_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
 {
     /**
+     * @var Magento_Acl_CacheInterface
+     */
+    protected $_aclCache;
+
+    /**
+     * @param Mage_Core_Model_Resource $resource
+     * @param Magento_Acl_CacheInterface $aclCache
+     */
+    public function __construct(Mage_Core_Model_Resource $resource, Magento_Acl_CacheInterface $aclCache)
+    {
+        $this->_aclCache = $aclCache;
+        parent::__construct($resource);
+    }
+
+    /**
      * Define main table
      *
      */
@@ -215,6 +230,7 @@ class Mage_User_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
 
             $insertData = $this->_prepareDataForTable($data, $this->getTable('admin_role'));
             $this->_getWriteAdapter()->insert($this->getTable('admin_role'), $insertData);
+            $this->_aclCache->clean();
         }
     }
 
@@ -237,6 +253,7 @@ class Mage_User_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
      *
      * @param Mage_Core_Model_Abstract $user
      * @return bool
+     * @throws Mage_Core_Exception
      */
     public function delete(Mage_Core_Model_Abstract $user)
     {
@@ -411,37 +428,11 @@ class Mage_User_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
     }
 
     /**
-     * Whether functional restrictions allow to create a new user
-     *
-     * @return bool
-     */
-    public function canCreateUser()
-    {
-        $maxUserCount = (string)Mage::getConfig()->getNode('limitations/admin_account');
-        if ('0' === $maxUserCount) {
-            return false;
-        }
-        $maxUserCount = (int)$maxUserCount;
-        return ($maxUserCount ? $this->_getTotalUserCount() < $maxUserCount : true);
-    }
-
-    /**
-     * Whether the functional limitations permit a user saving
-     *
-     * @param Mage_Core_Model_Abstract $user
-     * @return bool
-     */
-    public function isUserSavingAllowed(Mage_Core_Model_Abstract $user)
-    {
-        return (!$user->isObjectNew() || $this->canCreateUser());
-    }
-
-    /**
-     * Retrieve the total user count bypassing any restrictions/filters applied to collections
+     * Retrieve the total user count bypassing any filters applied to collections
      *
      * @return int
      */
-    protected function _getTotalUserCount()
+    public function countAll()
     {
         $adapter = $this->_getReadAdapter();
         $select = $adapter->select();
@@ -463,27 +454,6 @@ class Mage_User_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
             Zend_Validate_Callback::INVALID_VALUE
         );
 
-        $userSavingAllowance = new Zend_Validate_Callback(array($this, 'isUserSavingAllowed'));
-        $userSavingAllowance->setMessage(
-            $this->getMessageUserCreationProhibited(), Zend_Validate_Callback::INVALID_VALUE
-        );
-
-        /** @var $validator Magento_Validator_Composite_VarienObject */
-        $validator = new Magento_Validator_Composite_VarienObject;
-        $validator
-            ->addRule($userIdentity)
-            ->addRule($userSavingAllowance)
-        ;
-        return $validator;
-    }
-
-    /**
-     * Return the error message to be used when the user creation is prohibited due to the functional restrictions
-     *
-     * @return string
-     */
-    public static function getMessageUserCreationProhibited()
-    {
-        return Mage::helper('Mage_User_Helper_Data')->__('You are using the maximum number of admin accounts allowed.');
+        return $userIdentity;
     }
 }

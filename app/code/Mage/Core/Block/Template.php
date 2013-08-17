@@ -75,6 +75,11 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
     protected $_filesystem;
 
     /**
+     * @var Mage_Core_Model_View_FileSystem
+     */
+    protected $_viewFileSystem;
+
+    /**
      * Path to template file in theme.
      *
      * @var string
@@ -82,32 +87,21 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
     protected $_template;
 
     /**
-     * @var Mage_Core_Block_Template_Engine_Factory
+     * @var Mage_Core_Model_TemplateEngine_Factory
      */
     protected $_tmplEngineFactory;
-
-    /**
-     * @var Magento_Datasource_Factory
-     */
-    protected $_dataSourceFactory;
-
-    /**
-     * @var array
-     */
-    protected $_renderers = array();
-
+    
     /**
      * @param Mage_Core_Block_Template_Context $context
      * @param array $data
      */
-    public function __construct(Mage_Core_Block_Template_Context $context,
-            array $data = array())
+    public function __construct(Mage_Core_Block_Template_Context $context, array $data = array())
     {
         $this->_dirs = $context->getDirs();
         $this->_logger = $context->getLogger();
         $this->_filesystem = $context->getFilesystem();
+        $this->_viewFileSystem = $context->getViewFileSystem();
         $this->_tmplEngineFactory = $context->getEngineFactory();
-        $this->_dataSourceFactory = $context->getDataSourceFactory();
         parent::__construct($context, $data);
     }
 
@@ -163,7 +157,7 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
         if ($area) {
             $params['area'] = $area;
         }
-        $templateName = $this->_designPackage->getFilename($this->getTemplate(), $params);
+        $templateName = $this->_viewFileSystem->getFilename($this->getTemplate(), $params);
         return $templateName;
     }
 
@@ -259,15 +253,13 @@ HTML;
         }
 
         try {
-            if ((Magento_Filesystem::isPathInDirectory($fileName, $this->_dirs->getDir(Mage_Core_Model_Dir::APP))
-                || Magento_Filesystem::isPathInDirectory($fileName, $this->_dirs->getDir(Mage_Core_Model_Dir::THEMES))
+            if (($this->_filesystem->isPathInDirectory($fileName, $this->_dirs->getDir(Mage_Core_Model_Dir::APP))
+                || $this->_filesystem->isPathInDirectory($fileName, $this->_dirs->getDir(Mage_Core_Model_Dir::THEMES))
                 || $this->_getAllowSymlinks()) && $this->_filesystem->isFile($fileName)
             ) {
-                $extension = substr($fileName, strrpos($fileName, '.')+1);
+                $extension = pathinfo($fileName, PATHINFO_EXTENSION); 
                 $templateEngine = $this->_tmplEngineFactory->get($extension);
-                if ($templateEngine != null) {
-                    $templateEngine->render($this, $fileName, $this->_viewVars);
-                }
+                echo $templateEngine->render($this, $fileName, $this->_viewVars);
             } else {
                 $this->_logger->log("Invalid template file: '{$fileName}'", Zend_Log::CRIT);
             }
@@ -356,77 +348,5 @@ HTML;
             $this->_allowSymlinks = $this->_storeConfig->getConfigFlag(self::XML_PATH_TEMPLATE_ALLOW_SYMLINK);
         }
         return $this->_allowSymlinks;
-    }
-
-    /**
-     * @param $namespace
-     * @param $staticType
-     * @param $dynamicType
-     * @param $type
-     * @param $template
-     * @param string $dataSourceName
-     * @param array $data
-     * @return $this
-     */
-    public function addAdjustableRenderer($namespace, $staticType, $dynamicType, $type, $template,
-                                          $dataSourceName = '', $data = array())
-    {
-        if (!isset($namespace)) {
-            $this->_renderers[$namespace] = array();
-        }
-        if (!isset($namespace)) {
-            $this->_renderers[$namespace][$staticType] = array();
-        }
-        $this->_renderers[$namespace][$staticType][$dynamicType] = array(
-            'type' => $type,
-            'template' => $template,
-            'dataSourceName' => $dataSourceName,
-            'data' => $data
-        );
-        return $this;
-    }
-
-    /**
-     * @param $namespace
-     * @param $staticType
-     * @param $dynamicType
-     * @return null
-     */
-    public function getRendererOptions($namespace, $staticType, $dynamicType)
-    {
-        if (!isset($this->_renderers[$namespace])) {
-            return null;
-        }
-        if (!isset($this->_renderers[$namespace][$staticType])) {
-            return null;
-        }
-        if (!isset($this->_renderers[$namespace][$staticType][$dynamicType])) {
-            return null;
-        }
-        return $this->_renderers[$namespace][$staticType][$dynamicType];
-    }
-
-    /**
-     * @param $namespace
-     * @param $staticType
-     * @param $dynamicType
-     * @param $data
-     */
-    public function executeRenderer($namespace, $staticType, $dynamicType, $data = array())
-    {
-        if ($options = $this->getRendererOptions($namespace, $staticType, $dynamicType)) {
-            $dictionary = array();
-            if (!empty($options['dataSourceName'])) {
-                $dictionary = $this->_dataSourceFactory->get($options['dataSourceName']);
-            }
-            /** @var $block Mage_Core_Block_Template */
-            $block = $this->getLayout()->createBlock($options['type'], '')
-                ->setData($data)
-                ->assign($dictionary)
-                ->setTemplate($options['template'])
-                ->assign($data);
-
-            echo $block->toHtml();
-        }
     }
 }

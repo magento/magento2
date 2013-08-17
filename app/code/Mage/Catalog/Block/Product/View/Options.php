@@ -201,13 +201,4 @@ class Mage_Catalog_Block_Product_View_Options extends Mage_Core_Block_Template
             ->setOption($option)
             ->toHtml();
     }
-
-    public function getOption($id)
-    {
-        foreach($this->getOptions() as $option) {
-            if ($option->getOptionId() == $id) {
-                return $option;
-            }
-        }
-    }
 }

@@ -97,7 +97,7 @@
             <li>
                 <label for="<?php echo $_code ?>_cc_issue"><?php echo $this->__('Issue Number') ?>:</label>
                 <span class="input-box">
-                    <input type="text" title="<?php echo $this->__('Issue Number') ?>" class="input-text validate-cc-ukss cvv" id="<?php echo $_code ?>_cc_issue" name="payment[cc_ss_issue]" value="" />
+                    <input type="text" title="<?php echo $this->__('Issue Number') ?>" class="input-text cvv" id="<?php echo $_code ?>_cc_issue" name="payment[cc_ss_issue]" value="" data-validate='{"validate-cc-ukss":true}'/>
                 </span>
             </li>
 
@@ -105,14 +105,14 @@
                 <label for="<?php echo $_code ?>_start_month"><?php echo $this->__('Start Date') ?>:</label>
                 <div class="input-box">
                     <div class="v-fix">
-                        <select id="<?php echo $_code ?>_start_month" name="payment[cc_ss_start_month]" class="validate-cc-ukss month">
+                        <select id="<?php echo $_code ?>_start_month" name="payment[cc_ss_start_month]" class="month" data-validate='{"validate-cc-ukss":true}'>
                         <?php foreach ($this->getCcMonths() as $k=>$v): ?>
                             <option value="<?php echo $k?$k:'' ?>"<?php if($k==$this->getInfoData('cc_ss_start_month')): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
                         <?php endforeach ?>
                         </select>
                     </div>
                     <div class="v-fix">
-                        <select id="<?php echo $_code ?>_start_year" name="payment[cc_ss_start_year]" class="validate-cc-ukss year">
+                        <select id="<?php echo $_code ?>_start_year" name="payment[cc_ss_start_year]" class="year" data-validate='{"validate-cc-ukss":true}'>
                         <?php foreach ($this->getSsStartYears() as $k=>$v): ?>
                             <option value="<?php echo $k?$k:'' ?>"<?php if($k==$this->getInfoData('cc_ss_start_year')): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
                         <?php endforeach ?>
@@ -120,7 +120,7 @@
                     </div>
                 </div>
             </li>
-            <li class="adv-container">&nbsp;</li>
+            <li class="adv-container" data-validation-msg="validate-cc-ukss">&nbsp;</li>
         </ul>
         <script type="text/javascript">
             head.js("<?php echo $this->getViewFileUrl('Mage_Payment::cc-type.js')?>", function() {

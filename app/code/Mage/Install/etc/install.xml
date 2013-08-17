@@ -72,18 +72,5 @@
                 </media>
             </writeable>
         </filesystem>
-        <php>
-            <extensions>
-                <spl/>
-                <dom/>
-                <simplexml/>
-                <mcrypt/>
-                <hash/>
-                <curl/>
-                <iconv/>
-                <ctype/>
-                <gd/>
-            </extensions>
-        </php>
     </check>
 </config>

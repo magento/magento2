@@ -117,10 +117,10 @@ class Mage_ImportExport_Model_Import_Entity_Eav_CustomerImportTest extends PHPUn
      * @covers Mage_ImportExport_Model_Import_Entity_Eav_Customer::_deleteCustomers
      *
      * @magentoDataFixture Mage/ImportExport/_files/customers.php
-     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      */
     public function testDeleteData()
     {
+        Mage::app()->getArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->load();
         $source = new Mage_ImportExport_Model_Import_Source_Csv(__DIR__ . '/_files/customers_to_import.csv');
 
         /** @var $customerCollection Mage_Customer_Model_Resource_Customer_Collection */

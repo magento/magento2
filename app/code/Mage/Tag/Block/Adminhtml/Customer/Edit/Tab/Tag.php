@@ -25,19 +25,10 @@
  *
  * @method Mage_Tag_Block_Adminhtml_Customer_Edit_Tab_Tag setTitle() setTitle(string $title)
  * @method string getTitle() getTitle()
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Mage_Tag_Block_Adminhtml_Customer_Edit_Tab_Tag extends Mage_Backend_Block_Template
     implements Mage_Backend_Block_Widget_Tab_Interface
 {
-    /**
-     * Array of data helpers
-     *
-     * @var array
-     */
-    protected $_helpers;
-
     /**
      * Current customer
      *
@@ -46,29 +37,14 @@ class Mage_Tag_Block_Adminhtml_Customer_Edit_Tab_Tag extends Mage_Backend_Block_
     protected $_customer;
 
     /**
-     * Backend auth session
-     *
-     * @var Mage_Core_Model_Authorization
-     */
-    protected $_authSession;
-
-    /**
-     * @param Mage_Core_Block_Template_Context $context
-     * @param Mage_Core_Model_Authorization $authSession
+     * @param Mage_Backend_Block_Template_Context $context
      * @param array $data
      */
-    public function __construct(Mage_Core_Block_Template_Context $context,
-        Mage_Core_Model_Authorization $authSession,
-        array $data = array()
-    ) {
+    public function __construct(Mage_Backend_Block_Template_Context $context, array $data = array())
+    {
         parent::__construct($context, $data);
-
-        $this->_authSession = $authSession;
-        if (isset($data['helpers'])) {
-            $this->_helpers = $data['helpers'];
-        }
         $this->setId('tags');
-        $this->setTitle($this->_helper('Mage_Tag_Helper_Data')->__('Product Tags'));
+        $this->setTitle($this->_helperFactory->get('Mage_Tag_Helper_Data')->__('Product Tags'));
     }
 
     /**
@@ -93,17 +69,6 @@ class Mage_Tag_Block_Adminhtml_Customer_Edit_Tab_Tag extends Mage_Backend_Block_
         }
 
         return $this->_customer;
-    }
-
-    /**
-     * Helper getter
-     *
-     * @param string $helperName
-     * @return Mage_Core_Helper_Abstract
-     */
-    protected function _helper($helperName)
-    {
-        return isset($this->_helpers[$helperName]) ? $this->_helpers[$helperName] : Mage::helper($helperName);
     }
 
     /**
@@ -136,7 +101,7 @@ class Mage_Tag_Block_Adminhtml_Customer_Edit_Tab_Tag extends Mage_Backend_Block_
         if (!$this->getCustomer()) {
             return false;
         }
-        return $this->getCustomer()->getId() && $this->_authSession->isAllowed('Mage_Tag::tag_all');
+        return $this->getCustomer()->getId() && $this->_authorization->isAllowed('Mage_Tag::tag_all');
     }
 
     /**

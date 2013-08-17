@@ -55,7 +55,7 @@ class Mage_Adminhtml_Cms_BlockController extends Mage_Adminhtml_Controller_Actio
      */
     public function indexAction()
     {
-        $this->_title($this->__('CMS'))->_title($this->__('Static Blocks'));
+        $this->_title($this->__('Blocks'));
 
         $this->_initAction();
         $this->renderLayout();
@@ -75,7 +75,7 @@ class Mage_Adminhtml_Cms_BlockController extends Mage_Adminhtml_Controller_Actio
      */
     public function editAction()
     {
-        $this->_title($this->__('CMS'))->_title($this->__('Static Blocks'));
+        $this->_title($this->__('Blocks'));
 
         // 1. Get ID and create model
         $id = $this->getRequest()->getParam('block_id');
@@ -188,7 +188,7 @@ class Mage_Adminhtml_Cms_BlockController extends Mage_Adminhtml_Controller_Actio
             }
         }
         // display error message
-        Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError(Mage::helper('Mage_Cms_Helper_Data')->__('Unable to find a block to delete.'));
+        Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError(Mage::helper('Mage_Cms_Helper_Data')->__('We can\'t find a block to delete.'));
         // go to grid
         $this->_redirect('*/*/');
     }
@@ -200,6 +200,6 @@ class Mage_Adminhtml_Cms_BlockController extends Mage_Adminhtml_Controller_Actio
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Cms::block');
+        return $this->_authorization->isAllowed('Mage_Cms::block');
     }
 }

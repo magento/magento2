@@ -62,7 +62,7 @@ class Mage_Adminhtml_Block_Api_Grid_Role extends Mage_Adminhtml_Block_Widget_Gri
         ));
 
         $this->addColumn('role_name', array(
-            'header'    =>Mage::helper('Mage_Adminhtml_Helper_Data')->__('Role Name'),
+            'header'    =>Mage::helper('Mage_Adminhtml_Helper_Data')->__('Role'),
             'index'     =>'role_name'
         ));
 

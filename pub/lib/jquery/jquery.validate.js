@@ -332,7 +332,7 @@
 
                 $(this.currentForm)
                     .validateDelegate(":text, [type='password'], [type='file'], select, textarea, " +
-                    "[type='number'], [type='search'] ,[type='tel'], [type='url'], " +
+                    "[type='number'], [type='search'], input.search, [type='tel'], [type='url'], " +
                     "[type='email'], [type='datetime'], [type='date'], [type='month'], " +
                     "[type='week'], [type='time'], [type='datetime-local'], " +
                     "[type='range'], [type='color'] ",
@@ -564,7 +564,7 @@
                         }
                     } catch (e) {
                         if (this.settings.debug && window.console) {
-                            console.log("exception occured when checking element " + element.id + ", check the '" + rule.method + "' method", e);
+                            console.log("exception occurred when checking element " + element.id + ", check the '" + rule.method + "' method", e);
                         }
                         throw e;
                     }

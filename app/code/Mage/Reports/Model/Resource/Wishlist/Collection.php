@@ -111,10 +111,10 @@ class Mage_Reports_Model_Resource_Wishlist_Collection extends Mage_Core_Model_Re
         $countSelect = $collection->getSelectCountSql();
         $countSelect->joinLeft(
                 array('wt' => $this->getWishlistTable()),
-                'wt.customer_id=e.entity_id',
+                'wt.customer_id = e.entity_id',
                 array()
             )
-            ->where('wt.shared=1')
+            ->where('wt.shared > 0')
             ->group('wt.wishlist_id');
         return $countSelect->getAdapter()->fetchOne($countSelect);
     }

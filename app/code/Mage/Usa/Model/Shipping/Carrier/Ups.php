@@ -123,6 +123,23 @@ class Mage_Usa_Model_Shipping_Carrier_Ups
     protected $_customizableContainerTypes = array('CP', 'CSP');
 
     /**
+     * Factory for Mage_Usa_Model_Simplexml_Element
+     *
+     * @var Mage_Usa_Model_Simplexml_ElementFactory
+     */
+    protected $_simpleXmlElementFactory;
+
+    /**
+     * Usp constructor
+     *
+     * @param Mage_Usa_Model_Simplexml_ElementFactory $simpleXmlElementFactory
+     */
+    public function __construct(Mage_Usa_Model_Simplexml_ElementFactory $simpleXmlElementFactory)
+    {
+        $this->_simpleXmlElementFactory = $simpleXmlElementFactory;
+    }
+
+    /**
      * Collect and get rates
      *
      * @param Mage_Shipping_Model_Rate_Request $request
@@ -454,7 +471,7 @@ class Mage_Usa_Model_Shipping_Carrier_Ups
                         break;
                     case 5:
                         $errorTitle = $row[1];
-                        Mage::log(Mage::helper('Mage_Usa_Helper_Data')->__('Unknown error') . ': ' . $errorTitle);
+                        Mage::log(Mage::helper('Mage_Usa_Helper_Data')->__('Sorry, something went wrong. Please try again or contact us and we\'ll try to help.') . ': ' . $errorTitle);
                         break;
                     case 6:
                         if (in_array($row[3], $allowedMethods)) {
@@ -1020,7 +1037,7 @@ XMLRequest;
                                 $cost = (float)$cost * $this->_getBaseCurrencyRate($responseCurrencyCode);
                             } else {
                                 $errorTitle = Mage::helper('Mage_Directory_Helper_Data')->__(
-                                    'Can\'t convert rate from "%s-%s".',
+                                    'We can\'t convert a rate from "%s-%s".',
                                     $responseCurrencyCode,
                                     $this->_request->getPackageCurrency()->getCode()
                                 );
@@ -1375,7 +1392,9 @@ XMLAuth;
             $itemsDesc[] = $item->getName();
         }
 
-        $xmlRequest = new SimpleXMLElement('<?xml version = "1.0" ?><ShipmentConfirmRequest xml:lang="en-US"/>');
+        $xmlRequest = $this->_simpleXmlElementFactory->create(
+            array('<?xml version = "1.0" ?><ShipmentConfirmRequest xml:lang="en-US"/>')
+        );
         $requestPart = $xmlRequest->addChild('Request');
         $requestPart->addChild('RequestAction', 'ShipConfirm');
         $requestPart->addChild('RequestOption', 'nonvalidate');
@@ -1509,7 +1528,7 @@ XMLAuth;
 
         $deliveryConfirmation = $packageParams->getDeliveryConfirmation();
         if ($deliveryConfirmation) {
-            /** @var $serviceOptionsNode SimpleXMLElement */
+            /** @var $serviceOptionsNode Mage_Usa_Model_Simplexml_Element */
             $serviceOptionsNode = null;
             switch ($this->_getDeliveryConfirmationLevel($request->getRecipientAddressCountryCode())) {
                 case self::DELIVERY_CONFIRMATION_PACKAGE:
@@ -1555,12 +1574,14 @@ XMLAuth;
     /**
      * Send and process shipment accept request
      *
-     * @param SimpleXMLElement
+     * @param Mage_Usa_Model_Simplexml_Element
      * @return Varien_Object
      */
-    protected function _sendShipmentAcceptRequest(SimpleXMLElement $shipmentConfirmResponse)
+    protected function _sendShipmentAcceptRequest(Mage_Usa_Model_Simplexml_Element $shipmentConfirmResponse)
     {
-        $xmlRequest = new SimpleXMLElement('<?xml version = "1.0" ?><ShipmentAcceptRequest/>');
+        $xmlRequest = $this->_simpleXmlElementFactory->create(
+            array('<?xml version = "1.0" ?><ShipmentAcceptRequest/>')
+        );
         $request = $xmlRequest->addChild('Request');
             $request->addChild('RequestAction', 'ShipAccept');
         $xmlRequest->addChild('ShipmentDigest', $shipmentConfirmResponse->ShipmentDigest);
@@ -1584,7 +1605,7 @@ XMLAuth;
         }
 
         try {
-            $response = new SimpleXMLElement($xmlResponse);
+            $response = $this->_simpleXmlElementFactory->create(array($xmlResponse));
         } catch (Exception $e) {
             $debugData['result'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
         }
@@ -1655,7 +1676,7 @@ XMLAuth;
         }
 
         try {
-            $response = new SimpleXMLElement($xmlResponse);
+            $response = $this->_simpleXmlElementFactory->create(array($xmlResponse));
         } catch (Exception $e) {
             $debugData['result'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
             $result->setErrors($e->getMessage());

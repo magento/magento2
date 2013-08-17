@@ -35,11 +35,6 @@ class Mage_Core_Model_Theme_Collection extends Varien_Data_Collection
     protected $_filesystem;
 
     /**
-     * @var Magento_ObjectManager
-     */
-    protected $_objectManager;
-
-    /**
      * Model of collection item
      *
      * @var string
@@ -62,28 +57,15 @@ class Mage_Core_Model_Theme_Collection extends Varien_Data_Collection
 
     /**
      * @param Magento_Filesystem $filesystem
-     * @param Magento_ObjectManager $objectManager
      * @param Mage_Core_Model_Dir $dirs
      */
     public function __construct(
         Magento_Filesystem $filesystem,
-        Magento_ObjectManager $objectManager,
         Mage_Core_Model_Dir $dirs
     ) {
-        $this->_filesystem = $filesystem;
-        $this->_objectManager = $objectManager;
-        $this->setBaseDir($dirs->getDir(Mage_Core_Model_Dir::THEMES));
         parent::__construct();
-    }
-
-    /**
-     * Retrieve collection empty item
-     *
-     * @return Varien_Object|Mage_Core_Model_ThemeInterface
-     */
-    public function getNewEmptyItem()
-    {
-        return $this->_objectManager->create($this->_itemObjectClass);
+        $this->_filesystem = $filesystem;
+        $this->setBaseDir($dirs->getDir(Mage_Core_Model_Dir::THEMES));
     }
 
     /**
@@ -166,11 +148,11 @@ class Mage_Core_Model_Theme_Collection extends Varien_Data_Collection
     /**
      * Fill collection with theme model loaded from filesystem
      *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
      * @param bool $printQuery
      * @param bool $logQuery
      * @return Mage_Core_Model_Theme_Collection
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
@@ -180,12 +162,9 @@ class Mage_Core_Model_Theme_Collection extends Varien_Data_Collection
 
         $pathsToThemeConfig = array();
         foreach ($this->getTargetPatterns() as $directoryPath) {
-            $pathsToThemeConfig = array_merge(
-                $pathsToThemeConfig,
-                str_replace('/', DIRECTORY_SEPARATOR,
-                    $this->_filesystem->searchKeys($this->getBaseDir(), $directoryPath)
-                )
-            );
+            $themeConfigs = $this->_filesystem->searchKeys($this->getBaseDir(), $directoryPath);
+            $themeConfigs = str_replace('/', DIRECTORY_SEPARATOR, $themeConfigs);
+            $pathsToThemeConfig = array_merge($pathsToThemeConfig, $themeConfigs);
         }
 
         $this->_loadFromFilesystem($pathsToThemeConfig)
@@ -209,9 +188,9 @@ class Mage_Core_Model_Theme_Collection extends Varien_Data_Collection
         foreach ($themeItems as $theme) {
             $parentThemePath = $theme->getParentThemePath();
             if ($parentThemePath) {
-                $id = $theme->getArea() . Mage_Core_Model_Theme::PATH_SEPARATOR . $parentThemePath;
-                if (isset($themeItems[$id])) {
-                    $theme->setParentTheme($themeItems[$id]);
+                $themePath = $theme->getArea() . Mage_Core_Model_ThemeInterface::PATH_SEPARATOR . $parentThemePath;
+                if (isset($themeItems[$themePath])) {
+                    $theme->setParentTheme($themeItems[$themePath]);
                 }
             }
         }
@@ -274,7 +253,9 @@ class Mage_Core_Model_Theme_Collection extends Varien_Data_Collection
         $parentTheme = $themeConfig->getParentTheme($packageCode, $themeCode);
 
         return array(
+            'code'                 => $packageCode . Mage_Core_Model_Theme::CODE_SEPARATOR . $themeCode,
             'parent_id'            => null,
+            'type'                 => Mage_Core_Model_Theme::TYPE_PHYSICAL,
             'theme_version'        => $themeConfig->getThemeVersion($packageCode, $themeCode),
             'theme_title'          => $themeConfig->getThemeTitle($packageCode, $themeCode),
             'preview_image'        => $media['preview_image'] ? $media['preview_image'] : null,
@@ -351,5 +332,17 @@ class Mage_Core_Model_Theme_Collection extends Varien_Data_Collection
     {
         $optionArray = $addEmptyField ? array('' => '') : array();
         return $optionArray + $this->_toOptionArray('theme_id', 'theme_title');
+    }
+
+    /**
+     * Checks that a theme present in filesystem collection
+     *
+     * @param Mage_Core_Model_ThemeInterface $theme
+     * @return bool
+     */
+    public function hasTheme(Mage_Core_Model_ThemeInterface $theme)
+    {
+        $themeItems = $this->getItems();
+        return $theme->getThemePath() && isset($themeItems[$theme->getFullPath()]);
     }
 }

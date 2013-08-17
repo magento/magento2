@@ -25,13 +25,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * @magentoAppArea adminhtml
+ */
 class Mage_Rss_CatalogControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {
-    protected function setUp()
-    {
-        parent::setUp();
-        Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::PART_CONFIG);
-    }
     /**
      * @param string $action
      * @dataProvider actionNoFeedDataProvider
@@ -48,7 +46,11 @@ class Mage_Rss_CatalogControllerTest extends Magento_Test_TestCase_ControllerAbs
      */
     public function actionNoFeedDataProvider()
     {
-        return array(array('new'), array('special'), array('salesrule'), array('tag'), array('category'));
+        $actions = array(array('new'), array('special'), array('salesrule'), array('category'));
+        if (Mage::getSingleton('Mage_Core_Helper_Data')->isModuleEnabled('Mage_Tag')) {
+            $actions[] = array('tag');
+        }
+        return $actions;
     }
 
     /**
@@ -91,6 +93,9 @@ class Mage_Rss_CatalogControllerTest extends Magento_Test_TestCase_ControllerAbs
      */
     public function testTagAction()
     {
+        if (!Mage::getSingleton('Mage_Core_Helper_Data')->isModuleEnabled('Mage_Tag')) {
+            $this->markTestSkipped('"Mage_Tag" module is required for this test.');
+        }
         $this->dispatch('rss/catalog/tag');
         // this test is also inaccurate without a fixture of product with tags
         $this->assertEquals('nofeed', $this->getRequest()->getActionName());

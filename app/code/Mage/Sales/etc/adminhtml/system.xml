@@ -39,7 +39,7 @@
                 <label>General</label>
                 <field id="hide_customer_ip" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Hide Customer IP</label>
-                    <comment>Controls whether customer IP is shown in orders, invoices, shipments, credit memos.</comment>
+                    <comment>Choose whether a customer IP is shown in orders, invoices, shipments, and credit memos.</comment>
                     <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
                 </field>
             </group>
@@ -76,7 +76,7 @@
                     <upload_dir config="system/filesystem/media" scope_info="1">sales/store/logo</upload_dir>
                     <base_url type="media" scope_info="1">sales/store/logo</base_url>
                     <comment>
-                        <![CDATA[Default logo, will be used in PDF and HTML documents.<br />(jpeg, tiff, png) If you see image distortion in PDF, try to use larger image]]>
+                        <![CDATA[Your default logo will be used in PDF and HTML documents.<br />(jpeg, tiff, png) If your pdf image is distorted, try to use larger file-size image.]]>
                     </comment>
                 </field>
                 <field id="logo_html" translate="label comment" type="image" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -100,11 +100,11 @@
                 </field>
                 <field id="amount" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Minimum Amount</label>
-                    <comment>Subtotal after discount.</comment>
+                    <comment>Subtotal after discount</comment>
                 </field>
                 <field id="description" translate="label comment" sortOrder="20" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Description Message</label>
-                    <comment>This message will be shown in shopping cart when subtotal after discount less than minimum amount.</comment>
+                    <comment>This message will be shown in the shopping cart when the subtotal (after discount) is lower than the minimum allowed amount.</comment>
                 </field>
                 <field id="error_message" translate="label" sortOrder="30" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Error to Show in Shopping Cart</label>
@@ -115,11 +115,11 @@
                 </field>
                 <field id="multi_address_description" translate="label comment" sortOrder="50" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Multi-address Description Message</label>
-                    <comment>If empty, the default description above will be used.</comment>
+                    <comment>We'll use the default description above if you leave this empty.</comment>
                 </field>
                 <field id="multi_address_error_message" translate="label comment" sortOrder="60" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Multi-address Error to Show in Shopping Cart</label>
-                    <comment>If empty, the default error above will be used.</comment>
+                    <comment>We'll use the default error above if you leave this empty.</comment>
                 </field>
             </group>
             <group id="dashboard" translate="label,comment" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -155,7 +155,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Order Email Copy To</label>
-                    <comment>Comma-separated.</comment>
+                    <comment>Comma-separated</comment>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Order Email Copy Method</label>
@@ -182,7 +182,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Order Comment Email Copy To</label>
-                    <comment>Comma-separated.</comment>
+                    <comment>Comma-separated</comment>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Order Comments Email Copy Method</label>
@@ -209,7 +209,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Invoice Email Copy To</label>
-                    <comment>Comma-separated.</comment>
+                    <comment>Comma-separated</comment>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Invoice Email Copy Method</label>
@@ -236,7 +236,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Invoice Comment Email Copy To</label>
-                    <comment>Comma-separated.</comment>
+                    <comment>Comma-separated</comment>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Invoice Comments Email Copy Method</label>
@@ -263,7 +263,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Shipment Email Copy To</label>
-                    <comment>Comma-separated.</comment>
+                    <comment>Comma-separated</comment>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Shipment Email Copy Method</label>
@@ -290,7 +290,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Shipment Comment Email Copy To</label>
-                    <comment>Comma-separated.</comment>
+                    <comment>Comma-separated</comment>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Shipment Comments Email Copy Method</label>
@@ -317,7 +317,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Credit Memo Email Copy To</label>
-                    <comment>Comma-separated.</comment>
+                    <comment>Comma-separated</comment>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Credit Memo Email Copy Method</label>
@@ -344,7 +344,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Credit Memo Comment Email Copy To</label>
-                    <comment>Comma-separated.</comment>
+                    <comment>Comma-separated</comment>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Credit Memo Comments Email Copy Method</label>

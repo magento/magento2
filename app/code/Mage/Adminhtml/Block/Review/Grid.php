@@ -122,7 +122,7 @@ class Mage_Adminhtml_Block_Review_Grid extends Mage_Backend_Block_Widget_Grid_Ex
         ));
 
         $this->addColumn('created_at', array(
-            'header'        => $helper->__('Created On'),
+            'header'        => $helper->__('Created'),
             'align'         => 'left',
             'type'          => 'datetime',
             'width'         => '100px',
@@ -180,7 +180,7 @@ class Mage_Adminhtml_Block_Review_Grid extends Mage_Backend_Block_Widget_Grid_Ex
          */
         if (!Mage::app()->isSingleStoreMode()) {
             $this->addColumn('visible_in', array(
-                'header'    => $helper->__('Visible In'),
+                'header'    => $helper->__('Visibility'),
                 'index'     => 'stores',
                 'type'      => 'store',
                 'store_view' => true,
@@ -196,7 +196,7 @@ class Mage_Adminhtml_Block_Review_Grid extends Mage_Backend_Block_Widget_Grid_Ex
         ));
 
         $this->addColumn('name', array(
-            'header'    => $helper->__('Product Name'),
+            'header'    => $helper->__('Product'),
             'align'     =>'left',
             'type'      => 'text',
             'index'     => 'name',
@@ -204,7 +204,7 @@ class Mage_Adminhtml_Block_Review_Grid extends Mage_Backend_Block_Widget_Grid_Ex
         ));
 
         $this->addColumn('sku', array(
-            'header'    => $helper->__('Product SKU'),
+            'header'    => $helper->__('SKU'),
             'align'     => 'right',
             'type'      => 'text',
             'width'     => '50px',

@@ -60,7 +60,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_CurrencyTest extends PHPUni
     protected function setUp()
     {
         $this->_appMock = $this->getMock('Mage_Core_Model_App', array(), array(), '', false);
-        $this->_localeMock = $this->getMock('Mage_Core_Model_Locale', array(), array(), '', false);
+        $this->_localeMock = $this->getMock('Mage_Core_Model_LocaleInterface');
         $this->_curLocatorMock = $this->getMock(
             'Mage_Directory_Model_Currency_DefaultLocator', array(), array(), '', false
         );

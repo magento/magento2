@@ -25,13 +25,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * @magentoAppArea adminhtml
+ */
 class Mage_Rss_OrderControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {
-    protected function setUp()
-    {
-        parent::setUp();
-        Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::PART_CONFIG);
-    }
     /**
      * Reuse URI for "new" action
      */

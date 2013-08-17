@@ -33,6 +33,25 @@
 class Mage_Adminhtml_Block_Sitemap_Grid_Renderer_Link extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
 {
     /**
+     * @var Magento_Filesystem $filesystem
+     */
+    protected $_filesystem;
+
+    /**
+     * @param Mage_Backend_Block_Context $context
+     * @param Magento_Filesystem $filesystem
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Backend_Block_Context $context,
+        Magento_Filesystem $filesystem,
+        array $data = array()
+    ) {
+        $this->_filesystem = $filesystem;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Prepare link to display in grid
      *
      * @param Varien_Object $row

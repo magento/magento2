@@ -125,7 +125,7 @@ class Mage_Adminhtml_Block_Catalog_Search_Edit_Form extends Mage_Adminhtml_Block
             'name'  => 'synonym_for',
             'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Synonym For'),
             'title' => Mage::helper('Mage_Catalog_Helper_Data')->__('Synonym For'),
-            'note'  => Mage::helper('Mage_Catalog_Helper_Data')->__('Will make search for the query above return results for this search.'),
+            'note'  => Mage::helper('Mage_Catalog_Helper_Data')->__('Will make search for the query above return results for this search'),
         ));
 
         $fieldset->addField('redirect', 'text', array(

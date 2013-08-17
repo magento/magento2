@@ -59,12 +59,12 @@ class Mage_Sales_Model_Resource_Report_Order_Collection extends Mage_Sales_Model
      * Initialize custom resource model
      *
      */
-    public function __construct()
-    {
-        parent::_construct();
-        $this->setModel('Mage_Adminhtml_Model_Report_Item');
-        $this->_resource = Mage::getResourceModel('Mage_Sales_Model_Resource_Report')->init($this->_aggregationTable);
-        $this->setConnection($this->getResource()->getReadConnection());
+    public function __construct(
+        Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy,
+        Mage_Sales_Model_Resource_Report $resource
+    ) {
+        $resource->init($this->_aggregationTable);
+        parent::__construct($fetchStrategy, $resource);
     }
 
     /**
@@ -123,6 +123,6 @@ class Mage_Sales_Model_Resource_Report_Order_Collection extends Mage_Sales_Model
         if (!$this->isTotals()) {
             $this->getSelect()->group($this->_periodFormat);
         }
-        return $this;
+        return parent::_initSelect();
     }
 }

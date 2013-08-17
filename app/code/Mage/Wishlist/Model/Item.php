@@ -242,7 +242,7 @@ class Mage_Wishlist_Model_Item extends Mage_Core_Model_Abstract
     public function validate()
     {
         if (!$this->getWishlistId()) {
-            Mage::throwException(Mage::helper('Mage_Wishlist_Helper_Data')->__('Cannot specify wishlist.'));
+            Mage::throwException(Mage::helper('Mage_Wishlist_Helper_Data')->__('We can\'t specify a wish list.'));
         }
         if (!$this->getProductId()) {
             Mage::throwException(Mage::helper('Mage_Wishlist_Helper_Data')->__('Cannot specify product.'));

@@ -27,12 +27,17 @@
 
 class Integrity_Theme_XmlFilesTest extends PHPUnit_Framework_TestCase
 {
+    const NO_VIEW_XML_FILES_MARKER = 'no-view-xml';
+
     /**
      * @param string $file
      * @dataProvider viewConfigFileDataProvider
      */
     public function testViewConfigFile($file)
     {
+        if ($file === self::NO_VIEW_XML_FILES_MARKER) {
+            $this->markTestSkipped('No view.xml files in themes.');
+        }
         $this->_validateConfigFile($file, Mage::getBaseDir('lib') . '/Magento/Config/etc/view.xsd');
     }
 
@@ -45,7 +50,7 @@ class Integrity_Theme_XmlFilesTest extends PHPUnit_Framework_TestCase
         foreach (glob(Mage::getBaseDir('design') . '/*/*/*/view.xml') as $file) {
             $result[$file] = array($file);
         }
-        return $result;
+        return $result === array() ? array(array(self::NO_VIEW_XML_FILES_MARKER)) : $result;
     }
 
     /**

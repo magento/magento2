@@ -35,6 +35,27 @@
 class Mage_Customer_Block_Account_Link extends Mage_Core_Block_Abstract
 {
     /**
+     * Customer session
+     *
+     * @var Mage_Customer_Model_Session
+     */
+    protected $_session;
+
+    /**
+     * @param Mage_Core_Block_Context $context
+     * @param Mage_Customer_Model_Session $session
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Core_Block_Context $context,
+        Mage_Customer_Model_Session $session,
+        array $data = array()
+    ) {
+        parent::__construct($context, $data);
+        $this->_session = $session;
+    }
+
+    /**
      * Add link to customer account page to the target block
      *
      * @param string $target
@@ -43,7 +64,7 @@ class Mage_Customer_Block_Account_Link extends Mage_Core_Block_Abstract
      */
     public function addAccountLink($target, $position)
     {
-        $helper = Mage::helper('Mage_Customer_Helper_Data');
+        $helper = $this->_helperFactory->get('Mage_Customer_Helper_Data');
         $this->_addLink(
             $target, $this->__('My Account'), $helper->getAccountUrl(), $this->__('My Account'), $position, '', ''
         );
@@ -62,8 +83,8 @@ class Mage_Customer_Block_Account_Link extends Mage_Core_Block_Abstract
     public function addRegisterLink($target, $position, $textBefore = '', $textAfter = '')
     {
 
-        if (!Mage::getSingleton('Mage_Customer_Model_Session')->isLoggedIn()) {
-            $helper = Mage::helper('Mage_Customer_Helper_Data');
+        if (!$this->_session->isLoggedIn()) {
+            $helper = $this->_helperFactory->get('Mage_Customer_Helper_Data');
             $this->_addLink(
                 $target,
                 $this->__('register'),
@@ -78,6 +99,37 @@ class Mage_Customer_Block_Account_Link extends Mage_Core_Block_Abstract
     }
 
     /**
+     * Remove link to customer registration page in the target block
+     *
+     * @param string $target
+     * @return Mage_Customer_Block_Account_Link
+     */
+    public function removeRegisterLink($target)
+    {
+        $helper = $this->_helperFactory->get('Mage_Customer_Helper_Data');
+        $this->_removeLink($target, $helper->getRegisterUrl());
+        return $this;
+    }
+
+    /**
+     * Add Log In link to the target block
+     *
+     * @param string $target
+     * @param int $position
+     * @return Mage_Customer_Block_Account_Link
+     */
+    public function addLogInLink($target, $position)
+    {
+        $helper = $this->_helperFactory->get('Mage_Customer_Helper_Data');
+        if (!$this->_session->isLoggedIn()) {
+            $this->_addLink(
+                $target, $this->__('Log In'), $helper->getLogoutUrl(), $this->__('Log In'), $position, '', ''
+            );
+        }
+        return $this;
+    }
+
+    /**
      * Add Log In/Out link to the target block
      *
      * @param string $target
@@ -86,8 +138,8 @@ class Mage_Customer_Block_Account_Link extends Mage_Core_Block_Abstract
      */
     public function addAuthLink($target, $position)
     {
-        $helper = Mage::helper('Mage_Customer_Helper_Data');
-        if (Mage::getSingleton('Mage_Customer_Model_Session')->isLoggedIn()) {
+        $helper = $this->_helperFactory->get('Mage_Customer_Helper_Data');
+        if ($this->_session->isLoggedIn()) {
             $this->_addLink(
                 $target, $this->__('Log Out'), $helper->getLogoutUrl(), $this->__('Log Out'), $position, '', ''
             );
@@ -117,6 +169,40 @@ class Mage_Customer_Block_Account_Link extends Mage_Core_Block_Abstract
         $target = $this->getLayout()->getBlock($target);
         if ($target && method_exists($target, 'addLink')) {
             $target->addLink($text, $url, $title, true, array(), $position, null, null, $textBefore, $textAfter);
+        }
+        return $this;
+    }
+
+    /**
+     * Remove Log In/Out link from the target block
+     *
+     * @param string $target
+     * @return Mage_Customer_Block_Account_Link
+     */
+    public function removeAuthLink($target)
+    {
+        $helper = $this->_helperFactory->get('Mage_Customer_Helper_Data');
+        if ($this->_session->isLoggedIn()) {
+            $this->_removeLink($target, $helper->getLogoutUrl());
+        } else {
+            $this->_removeLink($target, $helper->getLoginUrl());
+        }
+        return $this;
+    }
+
+    /**
+     * Remove link from the block with $target name
+     *
+     * @param string $target
+     * @param string $url
+     * @return Mage_Customer_Block_Account_Link
+     */
+    protected function _removeLink($target, $url)
+    {
+        /** @var $target Mage_Page_Block_Template_Links */
+        $target = $this->getLayout()->getBlock($target);
+        if ($target && method_exists($target, 'removeLinkByUrl')) {
+            $target->removeLinkByUrl($url);
         }
         return $this;
     }

@@ -13,7 +13,7 @@
 "var order.shipping_address.format('html')":"Shipping Address",
 "var order.shipping_description":"Shipping Description",
 "layout handle=\"sales_email_order_shipment_items\" shipment=$shipment order=$order":"Shipment Items Grid",
-"block type='core/template' area='frontend' template='email/order/shipment/track.phtml' shipment=$shipment order=$order":"Shipment Track Details",
+"block type='Mage_Core_Block_Template' area='frontend' template='email/shipment/track.phtml' shipment=$shipment order=$order":"Shipment Track Details",
 "var comment":"Shipment Comment"}
 @-->
 <!--@styles
@@ -96,7 +96,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                     </table>
                     <br/>
                     {{layout handle="sales_email_order_shipment_items" shipment=$shipment order=$order}}
-                    {{block type='core/template' area='frontend' template='email/order/shipment/track.phtml' shipment=$shipment order=$order}}
+                    {{block type='Mage_Core_Block_Template' area='frontend' template='Mage_Sales::email/shipment/track.phtml' shipment=$shipment order=$order}}
                     <p style="font-size:12px; margin:0 10px 10px 0">{{var comment}}</p>
                 </td>
             </tr>

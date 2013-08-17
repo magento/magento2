@@ -26,11 +26,6 @@
 class Magento_Code_Generator_TestAsset_SourceClassWithoutNamespaceProxy extends \Magento_Code_Generator_TestAsset_SourceClassWithoutNamespace
 {
     /**
-     * Entity class name
-     */
-    const CLASS_NAME = 'Magento_Code_Generator_TestAsset_SourceClassWithoutNamespace';
-
-    /**
      * Object Manager instance
      *
      * @var \Magento_ObjectManager
@@ -38,20 +33,38 @@ class Magento_Code_Generator_TestAsset_SourceClassWithoutNamespaceProxy extends 
     protected $_objectManager = null;
 
     /**
+     * Proxied instance name
+     *
+     * @var string
+     */
+    protected $_instanceName = null;
+
+    /**
      * Proxied instance
      *
-     * @var Magento_Code_Generator_TestAsset_SourceClassWithoutNamespace
+     * @var \Magento_Code_Generator_TestAsset_SourceClassWithoutNamespace
      */
     protected $_subject = null;
+
+    /**
+     * Instance shareability flag
+     *
+     * @var bool
+     */
+    protected $_isShared = null;
 
     /**
      * Proxy constructor
      *
      * @param \Magento_ObjectManager $objectManager
+     * @param string $instanceName
+     * @param bool $shared
      */
-    public function __construct(\Magento_ObjectManager $objectManager)
+    public function __construct(\Magento_ObjectManager $objectManager, $instanceName = 'Magento_Code_Generator_TestAsset_SourceClassWithoutNamespace', $shared = true)
     {
         $this->_objectManager = $objectManager;
+        $this->_instanceName = $instanceName;
+        $this->_isShared = $shared;
     }
 
     /**
@@ -59,7 +72,7 @@ class Magento_Code_Generator_TestAsset_SourceClassWithoutNamespaceProxy extends 
      */
     public function __sleep()
     {
-        return array('_subject');
+        return array('_subject', '_isShared');
     }
 
     /**
@@ -75,7 +88,22 @@ class Magento_Code_Generator_TestAsset_SourceClassWithoutNamespaceProxy extends 
      */
     public function __clone()
     {
-        $this->_subject = clone $this->_objectManager->get(self::CLASS_NAME);
+        $this->_subject = clone $this->_getSubject();
+    }
+
+    /**
+     * Get proxied instance
+     *
+     * @return \Magento_Code_Generator_TestAsset_SourceClassWithoutNamespace
+     */
+    protected function _getSubject()
+    {
+        if (!$this->_subject) {
+            $this->_subject = true === $this->_isShared
+                ? $this->_objectManager->get($this->_instanceName)
+                : $this->_objectManager->create($this->_instanceName);
+        }
+        return $this->_subject;
     }
 
     /**
@@ -83,10 +111,7 @@ class Magento_Code_Generator_TestAsset_SourceClassWithoutNamespaceProxy extends 
      */
     public function publicChildMethod(\Zend\Code\Generator\ClassGenerator $classGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = array())
     {
-        if (!$this->_subject) {
-            $this->_subject = $this->_objectManager->get(self::CLASS_NAME);
-        }
-        return $this->_subject->publicChildMethod($classGenerator, $param1, $param2, $param3, $array);
+        return $this->_getSubject()->publicChildMethod($classGenerator, $param1, $param2, $param3, $array);
     }
 
     /**
@@ -94,10 +119,7 @@ class Magento_Code_Generator_TestAsset_SourceClassWithoutNamespaceProxy extends 
      */
     public function publicMethodWithReference(\Zend\Code\Generator\ClassGenerator &$classGenerator, &$param1, array &$array)
     {
-        if (!$this->_subject) {
-            $this->_subject = $this->_objectManager->get(self::CLASS_NAME);
-        }
-        return $this->_subject->publicMethodWithReference($classGenerator, $param1, $array);
+        return $this->_getSubject()->publicMethodWithReference($classGenerator, $param1, $array);
     }
 
     /**
@@ -105,10 +127,7 @@ class Magento_Code_Generator_TestAsset_SourceClassWithoutNamespaceProxy extends 
      */
     public function publicChildWithoutParameters()
     {
-        if (!$this->_subject) {
-            $this->_subject = $this->_objectManager->get(self::CLASS_NAME);
-        }
-        return $this->_subject->publicChildWithoutParameters();
+        return $this->_getSubject()->publicChildWithoutParameters();
     }
 
     /**
@@ -116,10 +135,7 @@ class Magento_Code_Generator_TestAsset_SourceClassWithoutNamespaceProxy extends 
      */
     public function publicParentMethod(\Zend\Code\Generator\DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = array())
     {
-        if (!$this->_subject) {
-            $this->_subject = $this->_objectManager->get(self::CLASS_NAME);
-        }
-        return $this->_subject->publicParentMethod($docBlockGenerator, $param1, $param2, $param3, $array);
+        return $this->_getSubject()->publicParentMethod($docBlockGenerator, $param1, $param2, $param3, $array);
     }
 
     /**
@@ -127,9 +143,6 @@ class Magento_Code_Generator_TestAsset_SourceClassWithoutNamespaceProxy extends 
      */
     public function publicParentWithoutParameters()
     {
-        if (!$this->_subject) {
-            $this->_subject = $this->_objectManager->get(self::CLASS_NAME);
-        }
-        return $this->_subject->publicParentWithoutParameters();
+        return $this->_getSubject()->publicParentWithoutParameters();
     }
 }

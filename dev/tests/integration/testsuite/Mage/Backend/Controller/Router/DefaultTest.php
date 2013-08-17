@@ -25,7 +25,10 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Backend_Controller_Router_DefaultTest extends Mage_Backend_Area_TestCase
+/**
+ * @magentoAppArea adminhtml
+ */
+class Mage_Backend_Controller_Router_DefaultTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Mage_Backend_Controller_Router_Default
@@ -52,7 +55,7 @@ class Mage_Backend_Controller_Router_DefaultTest extends Mage_Backend_Area_TestC
 
     public function testRouterCannotProcessRequestsWithWrongFrontName()
     {
-        $request = $this->getMock('Mage_Core_Controller_Request_Http');
+        $request = $this->getMock('Mage_Core_Controller_Request_Http', array(), array(), '', false);
         $request->expects($this->once())
             ->method('getPathInfo')
             ->will($this->returnValue('frontend/admin/dashboard'));
@@ -63,7 +66,7 @@ class Mage_Backend_Controller_Router_DefaultTest extends Mage_Backend_Area_TestC
 
     public function testRouterCanProcessRequestsWithProperFrontName()
     {
-        $request = $this->getMock('Mage_Core_Controller_Request_Http');
+        $request = $this->getMock('Mage_Core_Controller_Request_Http', array(), array(), '', false);
         $request->expects($this->once())
             ->method('getPathInfo')
             ->will($this->returnValue('backend/admin/dashboard'));

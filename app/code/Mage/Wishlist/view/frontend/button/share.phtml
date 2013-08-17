@@ -23,8 +23,9 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-?>
 
-<?php if($this->getWishlist()->getItemsCount()): ?>
-    <button type="submit" name="save_and_share" title="<?php echo $this->__('Share Wishlist') ?>" class="button btn-share"><span><span><?php echo $this->__('Share Wishlist') ?></span></span></button>
+/** @var $this Mage_Wishlist_Block_Customer_Wishlist_Button */
+?>
+<?php if($this->getWishlist()->getItemsCount() && $this->getWishlist()->getShared() < $this->getConfig()->getSharingEmailLimit()): ?>
+    <button type="submit" name="save_and_share" title="<?php echo $this->__('Share Wish List') ?>" class="button btn-share"><span><span><?php echo $this->__('Share Wish List') ?></span></span></button>
 <?php endif;?>

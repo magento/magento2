@@ -119,7 +119,7 @@ class Mage_Directory_Model_Currency extends Mage_Core_Model_Abstract
         } elseif ($toCurrency instanceof Mage_Directory_Model_Currency) {
             $code = $toCurrency->getCurrencyCode();
         } else {
-            throw Mage::exception('Mage_Directory', Mage::helper('Mage_Directory_Helper_Data')->__('Invalid target currency.'));
+            throw Mage::exception('Mage_Directory', Mage::helper('Mage_Directory_Helper_Data')->__('Please correct the target currency.'));
         }
         $rates = $this->getRates();
         if (!isset($rates[$code])) {
@@ -142,7 +142,7 @@ class Mage_Directory_Model_Currency extends Mage_Core_Model_Abstract
         } elseif ($toCurrency instanceof Mage_Directory_Model_Currency) {
             $code = $toCurrency->getCurrencyCode();
         } else {
-            throw Mage::exception('Mage_Directory', Mage::helper('Mage_Directory_Helper_Data')->__('Invalid target currency.'));
+            throw Mage::exception('Mage_Directory', Mage::helper('Mage_Directory_Helper_Data')->__('Please correct the target currency.'));
         }
         $rates = $this->getRates();
         if (!isset($rates[$code])) {

@@ -42,7 +42,7 @@ html, body {
     display: none !important;
 }
 
-#activate-subscriber>.sh {
+#activate-subscription>.sh {
     background: transparent url("../images/ghost-dark.png") repeat 0% 0%;
     padding: 10px;
     border-radius: 15px;
@@ -55,7 +55,7 @@ html, body {
     z-index: 1000;
 }
 
-#activate-subscriber>.sh>.b {
+#activate-subscription>.sh>.b {
     height: 100%;
     border-radius: 7px;
     -webkit-border-radius: 7px;
@@ -63,7 +63,7 @@ html, body {
     /*position: relative;*/
 }
 
-#activate-subscriber>.sh>.b>.top {
+#activate-subscription>.sh>.b>.top {
     position: relative;
     -webkit-border-top-left-radius: 7px;
     -webkit-border-top-right-radius: 7px;
@@ -82,7 +82,7 @@ html, body {
     background: linear-gradient(top, #092023 0%, #425e66 100%);
 }
 
-#activate-subscriber>.sh>.b>.top>.close {
+#activate-subscription>.sh>.b>.top>.close {
     display: block;
     position: absolute;
     top: 4px;
@@ -93,12 +93,12 @@ html, body {
     text-decoration: none;
 }
 
-#activate-subscriber>.sh>.b>.top>.close:hover {
+#activate-subscription>.sh>.b>.top>.close:hover {
     color: #fff;
     text-decoration: underline;
 }
 
-#activate-subscriber>.sh>.b>iframe {
+#activate-subscription>.sh>.b>iframe {
     border-radius: 0px 0px 7px 7px;
     -webkit-border-radius: 0px 0px 7px 7px;
     -moz-border-radius: 0px 0px 7px 7px;

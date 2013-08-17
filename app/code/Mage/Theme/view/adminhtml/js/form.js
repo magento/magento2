@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 function parentThemeOnChange(selected, defaultsById) {
-    var statusBar = $$('.tab-item-link.active')[0];
+    var statusBar = $$('.tab-item-link')[0];
     var isChanged = statusBar.hasClassName('changed');
     if (!isChanged) {
         var defaults = defaultsById[selected];

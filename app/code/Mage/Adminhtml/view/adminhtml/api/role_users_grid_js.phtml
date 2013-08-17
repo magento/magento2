@@ -30,7 +30,7 @@
 <?php if( is_object($myBlock) && $myBlock->getJsObjectName() ): ?>
     var checkBoxes = $H({});
     var warning = false;
-    var inRoleUsers = $H(<?php echo $myBlock->_getUsers(true) ?>);
+    var inRoleUsers = $H(<?php echo $myBlock->getUsers(true) ?>);
     if (inRoleUsers.size() > 0) warning = true;
     $('in_role_user').value = inRoleUsers.toQueryString();
 

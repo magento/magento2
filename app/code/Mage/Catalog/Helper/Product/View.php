@@ -52,12 +52,10 @@ class Mage_Catalog_Helper_Product_View extends Mage_Core_Helper_Abstract
     /**
      * @param Mage_Core_Helper_Context $context
      * @param Mage_Core_Model_Config $config
-     * @param array $data
      */
     public function __construct(
         Mage_Core_Helper_Context $context,
-        Mage_Core_Model_Config $config,
-        array $data = array()
+        Mage_Core_Model_Config $config
     ) {
         parent::__construct($context);
         $this->_config = $config;

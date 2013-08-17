@@ -28,7 +28,7 @@
 <?php switch ($this->getType()): ?>
 <?php case 'onepage_checkout': ?>
     <div class="gift-messages">
-        <h3><?php echo $this->__('Do you have any gift items in your order?'); ?></h3>
+        <h3><?php echo $this->__('Does your order include gift items?'); ?></h3>
         <p>
             <input type="checkbox" name="allow_gift_messages" id="allow_gift_messages" value="1" data-selector='{"id":"#allow-gift-message-container"}'<?php if($this->getItemsHasMesssages() || $this->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
             <label for="allow_gift_messages"><?php echo $this->__('Add gift options.') ?></label>
@@ -37,13 +37,13 @@
     <div class="gift-messages-form" id="allow-gift-message-container">
         <div class="inner-box">
             <?php if ($this->isMessagesAvailable()): ?>
-                <h4><?php echo $this->__('Gift Options for the Entire Order.'); ?></h4>
+                <h4><?php echo $this->__('Gift Options for the Entire Order'); ?></h4>
                 <p>
                     <input type="checkbox" name="allow_gift_messages_for_order" id="allow_gift_messages_for_order" value="1" data-selector='{"id":"#allow-gift-messages-for-order-container"}'<?php if($this->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
                     <label for="allow_gift_messages_for_order"><?php echo $this->__('Add gift options for the Entire Order') ?></label>
                 </p>
                 <div class="allow-gift-messages-for-order-container" id="allow-gift-messages-for-order-container" style="display:none">
-                    <p><?php echo $this->__('You can leave this box blank if you do not wish to add a gift message for whole order.') ?></p>
+                    <p><?php echo $this->__('You can leave this box empty if you don\'t want to add a gift message for the whole order.') ?></p>
                     <input type="hidden" name="giftmessage[<?php echo $this->getEntity()->getId() ?>][type]"  value="quote" />
                     <ul class="form-list">
                         <li class="fields">
@@ -76,7 +76,7 @@
                     <label for="allow_gift_messages_for_items"><?php echo $this->__('Add gift options for Individual Items') ?></label>
                 </p>
                 <div id="allow-gift-messages-for-items-container">
-                 <p><?php echo $this->__('You can leave this box blank if you do not wish to add a gift message for the item.') ?></p>
+                 <p><?php echo $this->__('You can leave this box empty if you don\'t want to add a gift message to this item.') ?></p>
                  <ol>
                  <?php foreach($this->getItems() as $_index=>$_item): ?>
                  <?php $_product=$_item->getProduct() ?>
@@ -133,9 +133,9 @@
 <?php case 'multishipping_adress_checkbox': ?>
 
 <?php break; ?>
-<?php case 'multishipping_adress': ?>
+<?php case 'multishipping_address': ?>
     <div class="gift-messages">
-        <h3><?php echo $this->__('Do you have any gift items in your order?'); ?></h3>
+        <h3><?php echo $this->__('Does your order include gift items?'); ?></h3>
         <p>
             <input type="checkbox" name="allow_gift_messages_<?php echo $this->getEntity()->getId() ?>" id="allow_gift_messages_<?php echo $this->getEntity()->getId() ?>" value="1" data-selector='{"id":"#allow-gift-message-container-<?php echo $this->getEntity()->getId() ?>"}'<?php if($this->getItemsHasMesssages() || $this->getEntityHasMessage()): ?> checked="checked"<?php endif ?> class="checkbox" />
             <label for="allow_gift_messages_<?php echo $this->getEntity()->getId() ?>"><?php echo $this->__('Add gift options') ?></label>
@@ -144,13 +144,13 @@
     <div class="gift-messages-form" id="allow-gift-message-container-<?php echo $this->getEntity()->getId() ?>">
         <div class="inner-box">
             <?php if ($this->isMessagesAvailable()): ?>
-            <h4><?php echo $this->__('Gift Options for this address.'); ?></h4>
+            <h4><?php echo $this->__('Gift Options for this address'); ?></h4>
             <p>
                  <input type="checkbox" name="allow_gift_messages_for_order_<?php echo $this->getEntity()->getId() ?>" id="allow_gift_messages_for_order_<?php echo $this->getEntity()->getId() ?>" value="1" data-selector='{"id":"#allow-gift-messages-for-order-container-<?php echo $this->getEntity()->getId() ?>"}'<?php if($this->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
                  <label for="allow_gift_messages_for_order"><?php echo $this->__('Add gift options for the Entire Order') ?></label>
             </p>
             <div id="allow-gift-messages-for-order-container-<?php echo $this->getEntity()->getId() ?>">
-                <p><?php echo $this->__('You can leave this box blank if you do not wish to add a gift message for this address.') ?></p>
+                <p><?php echo $this->__('You can leave this box empty if you don\'t want to add a gift message for this address.') ?></p>
                 <input type="hidden" name="giftmessage[<?php echo $this->getEntity()->getId() ?>][type]" value="quote_address" />
                 <ul class="form-list">
                     <li class="fields">
@@ -183,7 +183,7 @@
                 <label for="allow_gift_messages_for_items_<?php echo $this->getEntity()->getId() ?>"><?php echo $this->__('Add gift options for Individual Items') ?></label>
             </p>
             <div id="allow-gift-messages-for-items-container-<?php echo $this->getEntity()->getId() ?>">
-             <p><?php echo $this->__('You can leave this box blank if you do not wish to add a gift message for the item.') ?></p>
+             <p><?php echo $this->__('You can leave this box empty if you don\'t want to add a gift message to this item.') ?></p>
              <ol>
              <?php foreach($this->getItems() as $_index=>$_item): ?>
              <?php $_product=$_item->getProduct() ?>

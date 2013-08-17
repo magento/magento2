@@ -157,4 +157,18 @@ class Mage_Core_Model_Resource_Layout_Update_Collection extends Mage_Core_Model_
 
         return $this;
     }
+
+    /**
+     * Delete updates in collection
+     *
+     * @return $this
+     */
+    public function delete()
+    {
+        /** @var $update Mage_Core_Model_Layout_Update */
+        foreach ($this->getItems() as $update) {
+            $update->delete();
+        }
+        return $this;
+    }
 }

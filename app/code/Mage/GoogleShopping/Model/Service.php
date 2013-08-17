@@ -55,7 +55,7 @@ class Mage_GoogleShopping_Model_Service extends Varien_Object
         $type = $this->getConfig()->getAccountType($storeId);
 
         // Create an authenticated HTTP client
-        $errorMsg = Mage::helper('Mage_GoogleShopping_Helper_Data')->__('Unable to connect to Google Content. Please, check Account settings in configuration.');
+        $errorMsg = Mage::helper('Mage_GoogleShopping_Helper_Data')->__('Sorry, but we can\'t connect to Google Content. Please check the account settings in your store configuration.');
         try {
             if (!Mage::registry($this->_clientRegistryId)) {
                 $client = Zend_Gdata_ClientLogin::getHttpClient($user, $pass,

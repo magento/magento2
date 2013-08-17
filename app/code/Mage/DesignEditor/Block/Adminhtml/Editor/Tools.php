@@ -30,12 +30,33 @@
  * @method string getMode()
  * @method Mage_DesignEditor_Block_Adminhtml_Editor_Tools setMode($mode)
  */
-class Mage_DesignEditor_Block_Adminhtml_Editor_Tools extends Mage_Core_Block_Template
+class Mage_DesignEditor_Block_Adminhtml_Editor_Tools extends Mage_Backend_Block_Template
 {
     /**
      * Alias of tab handle block in layout
      */
     const TAB_HANDLE_BLOCK_ALIAS = 'tab_handle';
+
+    /**
+     * @var Mage_DesignEditor_Model_Theme_Context
+     */
+    protected $_themeContext;
+
+    /**
+     * Initialize dependencies
+     *
+     * @param Mage_Backend_Block_Template_Context $context
+     * @param Mage_DesignEditor_Model_Theme_Context $themeContext
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Backend_Block_Template_Context $context,
+        Mage_DesignEditor_Model_Theme_Context $themeContext,
+        array $data = array()
+    ) {
+        $this->_themeContext = $themeContext;
+        parent::__construct($context, $data);
+    }
 
     /**
      * Get tabs data
@@ -44,11 +65,10 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools extends Mage_Core_Block_Tem
      */
     public function getTabs()
     {
-        $isDisabled = $this->getMode() == Mage_DesignEditor_Model_State::MODE_NAVIGATION;
         return array(
             array(
                 'is_hidden'     => false,
-                'is_disabled'   => $isDisabled,
+                'is_disabled'   => false,
                 'id'            => 'vde-tab-quick-styles',
                 'label'         => $this->__('Quick Styles'),
                 'content_block' => 'design_editor_tools_quick-styles',
@@ -56,7 +76,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools extends Mage_Core_Block_Tem
             ),
             array(
                 'is_hidden'     => true,
-                'is_disabled'   => $isDisabled,
+                'is_disabled'   => false,
                 'id'            => 'vde-tab-block',
                 'label'         => $this->__('Block'),
                 'content_block' => 'design_editor_tools_block',
@@ -64,7 +84,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools extends Mage_Core_Block_Tem
             ),
             array(
                 'is_hidden'     => true,
-                'is_disabled'   => $isDisabled,
+                'is_disabled'   => false,
                 'id'            => 'vde-tab-settings',
                 'label'         => $this->__('Settings'),
                 'content_block' => 'design_editor_tools_settings',
@@ -72,9 +92,9 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools extends Mage_Core_Block_Tem
             ),
             array(
                 'is_hidden'     => false,
-                'is_disabled'   => $isDisabled,
+                'is_disabled'   => false,
                 'id'            => 'vde-tab-code',
-                'label'         => $this->__('Code'),
+                'label'         => $this->__('Advanced'),
                 'content_block' => 'design_editor_tools_code',
                 'class'         => 'item-code'
             ),
@@ -120,18 +140,6 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools extends Mage_Core_Block_Tem
     }
 
     /**
-     * Return theme identification number
-     *
-     * @return int|null
-     */
-    protected function getThemeId()
-    {
-        /** @var $helper Mage_DesignEditor_Helper_Data */
-        $helper = $this->_helperFactory->get('Mage_DesignEditor_Helper_Data');
-        return $helper->getEditableThemeId();
-    }
-
-    /**
      * Get save url
      *
      * @return string
@@ -139,7 +147,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools extends Mage_Core_Block_Tem
     public function getSaveUrl()
     {
         return $this->getUrl('*/system_design_editor_tools/saveQuickStyles',
-            array('theme_id' => $this->getThemeId())
+            array('theme_id' => $this->_themeContext->getEditableTheme()->getId())
         );
     }
 }

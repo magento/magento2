@@ -361,7 +361,7 @@ abstract class Mage_Rule_Model_Abstract extends Mage_Core_Model_Abstract
             $toDate = new Zend_Date($toDate, Varien_Date::DATE_INTERNAL_FORMAT);
 
             if ($fromDate->compare($toDate) === 1) {
-                $result[] = Mage::helper('Mage_Rule_Helper_Data')->__('End Date must be greater than Start Date.');
+                $result[] = Mage::helper('Mage_Rule_Helper_Data')->__('End Date must follow Start Date.');
             }
         }
 

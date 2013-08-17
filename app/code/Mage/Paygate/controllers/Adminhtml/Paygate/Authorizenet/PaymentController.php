@@ -55,7 +55,7 @@ class Mage_Paygate_Adminhtml_Paygate_Authorizenet_PaymentController extends Mage
             $result['error_message'] = $e->getMessage();
         } catch (Exception $e) {
             Mage::logException($e);
-            $result['error_message'] = $this->__('There was an error canceling transactions. Please contact us or try again later.');
+            $result['error_message'] = $this->__('Something went wrong canceling the transactions.');
         }
 
         Mage::getSingleton('Mage_Adminhtml_Model_Session_Quote')->getQuote()->getPayment()->save();

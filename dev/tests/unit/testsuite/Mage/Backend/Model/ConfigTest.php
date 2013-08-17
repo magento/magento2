@@ -67,6 +67,11 @@ class Mage_Backend_Model_ConfigTest extends PHPUnit_Framework_TestCase
      */
     protected $_dataFactoryMock;
 
+    /**
+     * @var Mage_Core_Model_StoreManagerInterface
+     */
+    protected $_storeManager;
+
     public function setUp()
     {
         $this->_eventManagerMock = $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false);
@@ -83,7 +88,8 @@ class Mage_Backend_Model_ConfigTest extends PHPUnit_Framework_TestCase
         $this->_appConfigMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
         $this->_configLoaderMock = $this->getMock('Mage_Backend_Model_Config_Loader', array(), array(), '', false);
         $this->_applicationMock = $this->getMock('Mage_Core_Model_App', array(), array(), '', false);
-        $this->_dataFactoryMock = $this->getMock('Mage_Core_Model_Config_Data_Factory', array(), array(), '', false);
+        $this->_dataFactoryMock = $this->getMock('Mage_Core_Model_Config_DataFactory', array(), array(), '', false);
+        $this->_storeManager = $this->getMockForAbstractClass('Mage_Core_Model_StoreManagerInterface');
 
         $this->_model = new Mage_Backend_Model_Config(
             $this->_applicationMock,
@@ -92,7 +98,8 @@ class Mage_Backend_Model_ConfigTest extends PHPUnit_Framework_TestCase
             $structureMock,
             $this->_transFactoryMock,
             $this->_configLoaderMock,
-            $this->_dataFactoryMock
+            $this->_dataFactoryMock,
+            $this->_storeManager
         );
     }
 

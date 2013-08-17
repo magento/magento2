@@ -64,6 +64,7 @@ class Magento_Test_Bootstrap_DocBlock
                 new Magento_Test_Annotation_DbIsolation(),
                 new Magento_Test_Annotation_DataFixture($this->_fixturesBaseDir),
             ))),
+            new Magento_Test_Annotation_AppArea($application),
             new Magento_Test_Annotation_ConfigFixture(),
         ));
         Magento_Test_Event_PhpUnit::setDefaultEventManager($eventManager);

@@ -59,7 +59,7 @@ interface Zend_Queue_Adapter_AdapterInterface
      * Does a queue already exist?
      *
      * Use isSupported('isExists') to determine if an adapter can test for
-     * queue existance.
+     * queue existence.
      *
      * @param  string $name Queue name
      * @return boolean

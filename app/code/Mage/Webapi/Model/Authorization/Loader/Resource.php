@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Mage_Webapi_Model_Authorization_Loader_Resource extends Mage_Core_Model_Acl_Loader_Resource_ResourceAbstract
+class Mage_Webapi_Model_Authorization_Loader_Resource extends Magento_Acl_Loader_Resource
 {
     /**
      * Deny each resource for all roles.
@@ -44,7 +44,7 @@ class Mage_Webapi_Model_Authorization_Loader_Resource extends Mage_Core_Model_Ac
      */
     protected function _loadVirtualResources(Magento_Acl $acl)
     {
-        $virtualResources = $this->_config->getAclVirtualResources();
+        $virtualResources = $this->_configReader->getAclVirtualResources();
         /** @var $resourceConfig DOMElement */
         foreach ($virtualResources as $resourceConfig) {
             if (!($resourceConfig instanceof DOMElement)) {
@@ -54,7 +54,7 @@ class Mage_Webapi_Model_Authorization_Loader_Resource extends Mage_Core_Model_Ac
             $resourceId = $resourceConfig->getAttribute('id');
             if ($acl->has($parent) && !$acl->has($resourceId)) {
                 /** @var $resource Magento_Acl_Resource */
-                $resource = $this->_resourceFactory->createResource(array($resourceId));
+                $resource = $this->_resourceFactory->createResource(array('resourceId' => $resourceId));
                 $acl->addResource($resource, $parent);
             }
         }

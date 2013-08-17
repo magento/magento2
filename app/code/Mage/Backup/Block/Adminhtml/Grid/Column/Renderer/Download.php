@@ -43,7 +43,7 @@ class Mage_Backup_Block_Adminhtml_Grid_Column_Renderer_Download
     public function _getValue(Varien_Object $row)
     {
         $url7zip = $this->helper('Mage_Adminhtml_Helper_Data')
-            ->__('The archive can be uncompressed with <a href="%s">%s</a> on Windows systems', 'http://www.7-zip.org/',
+            ->__('The archive can be uncompressed with <a href="%s">%s</a> on Windows systems.', 'http://www.7-zip.org/',
             '7-Zip');
 
         return '<a href="' . $this->getUrl('*/*/download',

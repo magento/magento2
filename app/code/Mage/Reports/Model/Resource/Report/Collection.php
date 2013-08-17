@@ -91,6 +91,45 @@ class Mage_Reports_Model_Resource_Report_Collection extends Varien_Data_Collecti
     protected $_reportCollection = null;
 
     /**
+     * @var  Zend_DateFactory
+     */
+    protected $_dateFactory;
+
+    /**
+     * @var Mage_Core_Model_LocaleInterface
+     */
+    protected $_locale;
+
+    /**
+     * @var Mage_Reports_Helper_Data
+     */
+    protected $_helper;
+
+    /**
+     * @var Mage_Reports_Model_Resource_Report_Collection_Factory
+     */
+    protected $_collectionFactory;
+
+    /**
+     * @param Mage_Core_Model_LocaleInterface $locale
+     * @param Mage_Reports_Helper_Data $helper
+     * @param Zend_DateFactory $dateFactory
+     * @param Mage_Reports_Model_Resource_Report_Collection_Factory $collectionFactory
+     */
+    public function __construct(
+        Mage_Core_Model_LocaleInterface $locale,
+        Mage_Reports_Helper_Data $helper,
+        Zend_DateFactory $dateFactory,
+        Mage_Reports_Model_Resource_Report_Collection_Factory $collectionFactory
+    ) {
+        $this->_dateFactory = $dateFactory;
+        $this->_locale = $locale;
+        $this->_helper = $helper;
+        $this->_collectionFactory = $collectionFactory;
+        parent::__construct();
+    }
+
+    /**
      * Set period
      *
      * @param int $period
@@ -129,8 +168,8 @@ class Mage_Reports_Model_Resource_Report_Collection extends Varien_Data_Collecti
             if (!$this->_from && !$this->_to) {
                 return $this->_intervals;
             }
-            $dateStart  = new Zend_Date($this->_from);
-            $dateEnd    = new Zend_Date($this->_to);
+            $dateStart  =  $this->_dateFactory->create(array('date' => $this->_from));
+            $dateEnd    =  $this->_dateFactory->create(array('date' => $this->_to));
 
             $interval = array();
             $firstInterval = true;
@@ -148,6 +187,8 @@ class Mage_Reports_Model_Resource_Report_Collection extends Varien_Data_Collecti
                         $interval = $this->_getYearInterval($dateStart, $dateEnd, $firstInterval);
                         $firstInterval = false;
                         break;
+                    default:
+                        break(2);
                 }
                 $this->_intervals[$interval['period']] = new Varien_Object($interval);
             }
@@ -164,7 +205,7 @@ class Mage_Reports_Model_Resource_Report_Collection extends Varien_Data_Collecti
     protected function _getDayInterval(Zend_Date $dateStart)
     {
         $interval = array(
-                'period' => $dateStart->toString(Mage::app()->getLocale()->getDateFormat()),
+                'period' => $dateStart->toString($this->_locale->getDateFormat()),
                 'start'  => $dateStart->toString('yyyy-MM-dd HH:mm:ss'),
                 'end'    => $dateStart->toString('yyyy-MM-dd 23:59:59')
         );
@@ -238,9 +279,9 @@ class Mage_Reports_Model_Resource_Report_Collection extends Varien_Data_Collecti
     public function getPeriods()
     {
         return array(
-            'day'   => Mage::helper('Mage_Reports_Helper_Data')->__('Day'),
-            'month' => Mage::helper('Mage_Reports_Helper_Data')->__('Month'),
-            'year'  => Mage::helper('Mage_Reports_Helper_Data')->__('Year')
+            'day'   => $this->_helper->__('Day'),
+            'month' => $this->_helper->__('Month'),
+            'year'  => $this->_helper->__('Year')
         );
     }
 
@@ -259,7 +300,7 @@ class Mage_Reports_Model_Resource_Report_Collection extends Varien_Data_Collecti
     /**
      * Get store ids
      *
-     * @return arrays
+     * @return array
      */
     public function getStoreIds()
     {
@@ -322,8 +363,7 @@ class Mage_Reports_Model_Resource_Report_Collection extends Varien_Data_Collecti
         if ($this->_reportCollection === null) {
             return array();
         }
-        $collectionClass = $this->_reportCollection;
-        $reportResource = new $collectionClass();
+        $reportResource = $this->_collectionFactory->create($this->_reportCollection);
         $reportResource
             ->setDateRange($this->timeShift($fromDate), $this->timeShift($toDate))
             ->setStoreIds($this->getStoreIds());
@@ -362,7 +402,7 @@ class Mage_Reports_Model_Resource_Report_Collection extends Varien_Data_Collecti
      */
     public function timeShift($datetime)
     {
-        return Mage::app()->getLocale()
+        return $this->_locale
             ->utcDate(null, $datetime, true, Varien_Date::DATETIME_INTERNAL_FORMAT)
             ->toString(Varien_Date::DATETIME_INTERNAL_FORMAT);
     }

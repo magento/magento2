@@ -122,15 +122,33 @@ class Mage_ImportExport_Model_Export_Entity_Eav_Customer
      */
     public function export()
     {
-        $collection = $this->_prepareEntityCollection($this->_customerCollection);
-        $validAttributeCodes = $this->_getExportAttributeCodes();
+        $this->_prepareEntityCollection($this->_getEntityCollection());
         $writer = $this->getWriter();
 
         // create export file
-        $writer->setHeaderCols(array_merge($this->_permanentAttributes, $validAttributeCodes, array('password')));
-        $this->_exportCollectionByPages($collection);
+        $writer->setHeaderCols($this->_getHeaderColumns());
+        $this->_exportCollectionByPages($this->_getEntityCollection());
 
         return $writer->getContents();
+    }
+
+    /**
+     * Get customers collection
+     *
+     * @return Mage_Customer_Model_Resource_Customer_Collection
+     */
+    protected function _getEntityCollection()
+    {
+        return $this->_customerCollection;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _getHeaderColumns()
+    {
+        $validAttributeCodes = $this->_getExportAttributeCodes();
+        return array_merge($this->_permanentAttributes, $validAttributeCodes, array('password'));
     }
 
     /**

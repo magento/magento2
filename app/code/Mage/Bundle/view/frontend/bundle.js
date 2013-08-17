@@ -23,6 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true*/
+/*jshint loopfunc: true */
 (function($, undefined) {
     "use strict";
     $.widget('mage.bundleOption', {
@@ -33,6 +34,33 @@
             priceTemplate: '<span class="price">${formattedPrice}</span>'
         },
 
+        _init: function() {
+            if ("optionConfig" in this.options && "bundleConfig" in this.options) {
+                if ("defaultValues" in this.options.bundleConfig) {
+                    for (var key in this.options.bundleConfig.defaultValues) {
+                        if (this.options.optionConfig.options[key].isMulti) {
+                            var selected = [];
+                            $(this.options.bundleConfig.defaultValues[key]).each($.proxy(function(k, e) {
+                                selected.push(this.options.bundleConfig.defaultValues[key][k]);
+                            }, this));
+                            this.options.bundleConfig.selected[key] = selected;
+                        } else {
+                            var value = this.options.bundleConfig.defaultValues[key],
+                                qty = $('#bundle-option-' + key + '-qty-input').val();
+                            this.options.bundleConfig.options[key].selections[value].qty = parseInt(qty, 10);
+                            this.options.optionConfig.options[key].selections[value].qty = parseInt(qty, 10);
+                            this.options.bundleConfig.selected[key] = [value];
+                        }
+                    }
+                }
+
+                // Trigger Event to update Summary box
+                this.reloadPrice();
+                this.element.trigger('updateProductSummary', [
+                    {config: this.options.bundleConfig}
+                ]);
+            }
+        },
         _create: function() {
             $(this.options.productBundleSelector).each(
                 $.proxy(function(key, value) {
@@ -40,21 +68,43 @@
                         inputs = element.filter(":input"),
                         isNotCheckboxRadio = inputs.is(':not(":checkbox, :radio")');
                     element.on((isNotCheckboxRadio ? 'change' : 'click'), $.proxy(this.changeSelection, this));
+
+                    var _this = this;
+                    element.each(function() {
+                        var _elem = $(this),
+                            _elements;
+                        if (_elem.is(':not(":checkbox, select[multiple]")')) {
+                            if (_elem.closest('dd').find('input.qty').length) {
+                                _elements = _elem.closest('dd').find('input.qty');
+                            } else if (_elem.parentsUntil('nested.options-list').find('input.qty').length) {
+                                _elements = _elem.parentsUntil('nested.options-list').find('input.qty');
+                            } else {
+                                _elements = {};
+                            }
+                            _elements.each(function() {
+                                var _qty = $(this);
+                                _qty.on('blur', $.proxy(function() {
+                                    var parts = _qty.attr('id').split('-'),
+                                        value = _elem.val(),
+                                        quantity = parseInt(_qty.val(), 10);
+                                    if (quantity > 0 && _this.options.bundleConfig.options[parts[2]] &&
+                                        _this.options.bundleConfig.options[parts[2]].selections[value] &&
+                                        _this.options.optionConfig.options[parts[2]].selections[_elem.val()] &&
+                                        _this.options.optionConfig.options[parts[2]]
+                                    ) {
+                                        _this.options.bundleConfig.options[parts[2]].selections[value].qty = parseInt(quantity, 10);
+                                        _this.options.optionConfig.options[parts[2]].selections[_elem.val()].qty = parseInt(quantity, 10);
+                                    }
+                                    _this.reloadPrice();
+                                    _this.element.trigger('updateProductSummary', [
+                                        {config: _this.options.bundleConfig}
+                                    ]);
+                                }, this));
+                            });
+                        }
+                    });
                 }, this)
             );
-            $(this.options.bundleConfig.defaultValues).each(function(key, ele) {
-                if (this.options.optionConfig.options[ele].isMulti) {
-                    var selected = [];
-                    $(this.options.bundleConfig.defaultValues[ele]).each(function(k, e) {
-                        selected.push(this.options.bundleConfig.defaultValues[e]);
-                    });
-                    var parts = ele.attr('id').split('-');
-                    this.options.bundleConfig.selected[parts[2]] = selected;
-                } else {
-                    this.options.bundleConfig.selected[ele] = [this.options.bundleConfig.defaultValues[ele]];
-                }
-            });
-            this.reloadPrice();
         },
 
         _formatCurrency: function(price, format, showPlus) {
@@ -100,15 +150,18 @@
                     selected.push(element.val());
                     config.selected[parts[2]] = selected;
                 } else if (element.is('input')) {
-                    if (element.is(":radio:checked")) {
-                            selected.push(element.val());
-                            config.selected[parts[2]] = selected;
-                    }
                     if (element.is(":checkbox")) {
                         if (element.is(":checked")) {
-                            config.selected[parts[2]].push(element.val());
+                            selected.push(element.val());
+                            if (parts[2] in config.selected) {
+                                config.selected[parts[2]].push(selected);
+                            } else {
+                                config.selected[parts[2]] = [selected];
+                            }
                         } else {
-                            config.selected[parts[2]].splice($.inArray(element.val(), config.selected[parts[2]]), 1);
+                            config.selected[parts[2]] = $.grep(config.selected[parts[2]], function(e) {
+                                return e[0] != element.val();
+                            });
                         }
                     }
                 }
@@ -120,23 +173,27 @@
                 }
                 this.populateQty(parts[2], element.val());
             }
+            // Trigger Event to update Summary box
             this.reloadPrice();
+            this.element.trigger('updateProductSummary', [
+                {config: this.options.bundleConfig}
+            ]);
         },
 
         reloadPrice: function() {
             if (this.options.bundleConfig) {
                 var optionPrice = {
-                        excludeTax: 0,
-                        includeTax: 0,
-                        price: 0,
-                        update: function(price, excludeTax, includeTax) {
-                            this.price += price;
-                            this.excludeTax += excludeTax;
-                            this.includeTax += includeTax;
-                        }
-                    };
+                    excludeTax: 0,
+                    includeTax: 0,
+                    price: 0,
+                    update: function(price, excludeTax, includeTax) {
+                        this.price += price;
+                        this.excludeTax += excludeTax;
+                        this.includeTax += includeTax;
+                    }
+                };
                 $.each(this.options.bundleConfig.selected, $.proxy(function(index, value) {
-                    if (this.options.bundleConfig.options[index]) {
+                    if (value !== undefined && this.options.bundleConfig.options[index]) {
                         $.each(value, $.proxy(function(key, element) {
                             if (element !== '' && element !== 'none' && element !== undefined && element !== null) {
                                 if ($.isArray(element)) {
@@ -242,6 +299,10 @@
             } else {
                 this.showQtyInput(optionId, this.options.optionConfig.options[optionId].selections[selectionId].qty, false);
             }
+            this.reloadPrice();
+            this.element.trigger('updateProductSummary', [
+                {config: this.options.bundleConfig}
+            ]);
         },
 
         showQtyInput: function(optionId, value, canEdit) {

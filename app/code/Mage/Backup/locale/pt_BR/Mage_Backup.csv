@@ -33,7 +33,7 @@
 "Put store on the maintenance mode while backup's creation","Colocar loja em modo de manutenção durante a criação de backup"
 "Rollback","Reversão"
 "Scheduled Backup Settings","Configurações de backup agendado"
-"Size, Bytes","Tamanho, Bytes"
+"Size (bytes)","Tamanho, Bytes"
 "Start Time","Tempo de Início"
 "System Backup","Backup do sistema"
 "System couldn't put store on the maintenance mode","O sistema não conseguiu colocar a loja em modo de manutenção"

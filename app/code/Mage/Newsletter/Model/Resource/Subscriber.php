@@ -167,7 +167,7 @@ class Mage_Newsletter_Model_Resource_Subscriber extends Mage_Core_Model_Resource
         }
         catch (Exception $e) {
             $this->_write->rollBack();
-            Mage::throwException(Mage::helper('Mage_Newsletter_Helper_Data')->__('Cannot mark as received subscriber.'));
+            Mage::throwException(Mage::helper('Mage_Newsletter_Helper_Data')->__('We cannot mark as received subscriber.'));
         }
         return $this;
     }

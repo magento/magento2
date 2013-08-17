@@ -1,5 +1,7 @@
 <?php
 /**
+ * Google Optimizer Category Block
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -18,35 +20,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_GoogleOptimizer
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
-/**
- * Google Optimizer Category Block
- *
- * @category   Mage
- * @package    Mage_GoogleOptimizer
- * @author     Magento Core Team <core@magentocommerce.com>
- */
-class Mage_GoogleOptimizer_Block_Code_Category extends Mage_GoogleOptimizer_Block_Code
+class Mage_GoogleOptimizer_Block_Code_Category extends Mage_GoogleOptimizer_Block_CodeAbstract
 {
-    protected function _initGoogleOptimizerModel()
-    {
-        $this->_setGoogleOptimizerModel($this->getGoogleOptimizer());
-        return parent::_initGoogleOptimizerModel();
-    }
-
-    public function getCategory()
-    {
-        return Mage::registry('current_category');
-    }
-
-    public function getGoogleOptimizer()
-    {
-        return $this->getCategory()->getGoogleOptimizerScripts();
-    }
+    /**
+     * @var Entity name in registry
+     */
+    protected $_registryName = 'current_category';
 }

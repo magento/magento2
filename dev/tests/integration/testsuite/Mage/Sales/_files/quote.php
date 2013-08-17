@@ -24,7 +24,7 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+Mage::app()->loadArea('frontend');
 $product = Mage::getModel('Mage_Catalog_Model_Product');
 $product->setTypeId('simple')
     ->setId(1)

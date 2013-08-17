@@ -25,6 +25,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * @magentoAppArea adminhtml
+ */
 class Mage_Adminhtml_Catalog_Product_AttributeControllerTest extends Mage_Backend_Utility_Controller
 {
     /**
@@ -74,6 +77,51 @@ class Mage_Adminhtml_Catalog_Product_AttributeControllerTest extends Mage_Backen
     }
 
     /**
+     * @magentoDataFixture Mage/Core/_files/db_translate_admin_store.php
+     * @magentoDataFixture Mage/Adminhtml/controllers/_files/cache/all_types_enabled.php
+     * @magentoDataFixture Mage/Catalog/controllers/_files/attribute_user_defined.php
+     * @magentoAppIsolation enabled
+     */
+    public function testSaveActionCleanAttributeLabelCache()
+    {
+        // ensure string translation is cached
+        $this->_translate('Fixture String');
+        /** @var Mage_Core_Model_Resource_Translate_String $translateString */
+        $translateString = Mage::getModel('Mage_Core_Model_Resource_Translate_String');
+        $translateString->saveTranslate(
+            'Fixture String', 'New Db Translation', 'en_US', Mage_Core_Model_AppInterface::ADMIN_STORE_ID
+        );
+        $this->assertEquals(
+            'Fixture Db Translation', $this->_translate('Fixture String'), 'Translation is expected to be cached'
+        );
+
+        $postData = $this->_getAttributeData() + array('attribute_id' => 1);
+        $this->getRequest()->setPost($postData);
+        $this->dispatch('backend/admin/catalog_product_attribute/save');
+
+        $this->assertEquals(
+            'New Db Translation', $this->_translate('Fixture String'), 'Translation cache is expected to be flushed'
+        );
+    }
+
+    /**
+     * Return translation for a string literal belonging to backend area
+     *
+     * @param string $string
+     * @return string
+     */
+    protected function _translate($string)
+    {
+        // emulate admin store and design
+        Mage::app()->setCurrentStore(Mage_Core_Model_AppInterface::ADMIN_STORE_ID);
+        Mage::getDesign()->setDesignTheme(1);
+        /** @var Mage_Core_Model_Translate $translate */
+        $translate = Mage::getModel('Mage_Core_Model_Translate');
+        $translate->init(Mage_Backend_Helper_Data::BACKEND_AREA_CODE, null);
+        return $translate->translate(array($string));
+    }
+
+    /**
      * Get attribute data for post
      *
      * @return array
@@ -81,7 +129,7 @@ class Mage_Adminhtml_Catalog_Product_AttributeControllerTest extends Mage_Backen
     protected function _getAttributeData()
     {
         return array(
-            'is_global' => '2',
+            'is_global' => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE,
             'default_value_text' => '0',
             'default_value_yesno' => '0',
             'default_value_date' => '',
@@ -99,16 +147,10 @@ class Mage_Adminhtml_Catalog_Product_AttributeControllerTest extends Mage_Backen
             'is_visible_on_front' => '0',
             'used_in_product_listing' => '1',
             'used_for_sort_by' => '0',
-            'apply_to' => array(
-        'simple', 'configurable'),
+            'apply_to' => array('simple', 'configurable'),
             'frontend_label' => array(
-        0 => 'Allow Open Amount',
-        1 => ''),
-            'default' => array(
-        0 => '0'),
-            'option' => array(
-        'delete' => array(
-            0 => '',
-            1 => '')));
+                Mage_Core_Model_AppInterface::ADMIN_STORE_ID => 'Fixture String',
+            ),
+        );
     }
 }

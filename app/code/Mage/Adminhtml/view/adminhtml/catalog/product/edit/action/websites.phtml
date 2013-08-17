@@ -24,76 +24,82 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="entry-edit">
-    <div class="entry-edit-head">
-        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Add Product To Websites') ?></h4>
+
+<div class="fieldset-wrapper" id="add-products-to-website-wrapper">
+    <div class="fieldset-wrapper-title">
+        <strong class="title">
+            <span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Add Product To Websites') ?></span>
+        </strong>
     </div>
-    <fieldset id="grop_fields">
-    <?php foreach ($this->getWebsiteCollection() as $_website): ?>
-    <div>
-        <div class="website-name">
-            <input name="add_website_ids[]" value="<?php echo $_website->getId() ?>" <?php if($this->getWebsitesReadonly()): ?>disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="add_product_website_<?php echo $_website->getId() ?>" type="checkbox" />
-            <big><strong><label for="add_product_website_<?php echo $_website->getId() ?>"><?php echo $this->escapeHtml($_website->getName()) ?></label></strong></big>
-        </div>
-        <div class="webiste-groups" id="add_product_website_<?php echo $_website->getId() ?>_data">
-        <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
-            <h4><?php echo $this->escapeHtml($_group->getName()) ?></h4>
-            <div class="group-stores">
-            <table>
-            <?php foreach ($this->getStoreCollection($_group) as $_store): ?>
-                <tr>
-                    <td><?php echo $this->escapeHtml($_store->getName()) ?></td>
-                    <td>&nbsp;</td>
-                </tr>
+    <div class="fieldset-wrapper-content" id="add-products-to-website-content">
+        <fieldset class="fieldset" id="grop_fields">
+            <?php foreach ($this->getWebsiteCollection() as $_website): ?>
+                <div class="website-name">
+                    <input name="add_website_ids[]" value="<?php echo $_website->getId() ?>" <?php if($this->getWebsitesReadonly()): ?>disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="add_product_website_<?php echo $_website->getId() ?>" type="checkbox" />
+                    <strong><label for="add_product_website_<?php echo $_website->getId() ?>"><?php echo $this->escapeHtml($_website->getName()) ?></label></strong>
+                </div>
+                <div class="webiste-groups" id="add_product_website_<?php echo $_website->getId() ?>_data">
+                    <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
+                        <h4><?php echo $this->escapeHtml($_group->getName()) ?></h4>
+                        <div class="group-stores">
+                            <table class="data-table">
+                                <?php foreach ($this->getStoreCollection($_group) as $_store): ?>
+                                    <tr>
+                                        <td><?php echo $this->escapeHtml($_store->getName()) ?></td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </table>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             <?php endforeach; ?>
-            </table>
-            </div>
-        <?php endforeach; ?>
-        </div>
+        </fieldset>
     </div>
-    <?php endforeach; ?>
-    </fieldset>
 </div>
 
-<div class="entry-edit">
-    <div class="entry-edit-head">
-        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Remove Product From Websites') ?></h4>
+<div class="fieldset-wrapper" id="remove-products-to-website-wrapper">
+    <div class="fieldset-wrapper-title">
+        <strong class="title">
+            <span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Remove Product From Websites') ?></span>
+        </strong>
     </div>
-    <fieldset id="grop_fields">
-        <ul class="messages">
-            <li class="notice-msg">
-                <ul>
-                    <li><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__("Items that you do not want to show in the catalog or search results should have status 'Disabled' in the desired store.") ?></li>
-                </ul>
-            </li>
-        </ul>
-    <?php foreach ($this->getWebsiteCollection() as $_website): ?>
-    <div>
-        <div class="website-name">
-            <input name="remove_website_ids[]" value="<?php echo $_website->getId() ?>" <?php if($this->getWebsitesReadonly()): ?>disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="remove_product_website_<?php echo $_website->getId() ?>" type="checkbox"/>
-            <big><strong><label for="remove_product_website_<?php echo $_website->getId() ?>"><?php echo $this->escapeHtml($_website->getName()) ?></label></strong></big>
-        </div>
-        <div class="webiste-groups" id="remove_product_website_<?php echo $_website->getId() ?>_data">
-        <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
-            <h4><?php echo $this->escapeHtml($_group->getName()) ?></h4>
-            <div class="group-stores">
-            <table>
-            <?php foreach ($this->getStoreCollection($_group) as $_store): ?>
-                <tr>
-                    <td><?php echo $this->escapeHtml($_store->getName()) ?></td>
-                    <td>&nbsp;</td>
-                </tr>
+    <div class="fieldset-wrapper-content" id="remove-products-to-website-content">
+        <fieldset class="fieldset" id="grop_fields">
+            <ul class="messages">
+                <li class="notice-msg">
+                    <ul>
+                        <li><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__("Items that you do not want to show in the catalog or search results should have status 'Disabled' in the desired store.") ?></li>
+                    </ul>
+                </li>
+            </ul>
+            <?php foreach ($this->getWebsiteCollection() as $_website): ?>
+                <div class="website-name">
+                    <input name="remove_website_ids[]" value="<?php echo $_website->getId() ?>" <?php if($this->getWebsitesReadonly()): ?>disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="remove_product_website_<?php echo $_website->getId() ?>" type="checkbox"/>
+                    <strong><label for="remove_product_website_<?php echo $_website->getId() ?>"><?php echo $this->escapeHtml($_website->getName()) ?></label></strong>
+                </div>
+                <div class="webiste-groups" id="remove_product_website_<?php echo $_website->getId() ?>_data">
+                    <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
+                        <h4><?php echo $this->escapeHtml($_group->getName()) ?></h4>
+                        <div class="group-stores">
+                            <table class="data-table">
+                                <?php foreach ($this->getStoreCollection($_group) as $_store): ?>
+                                    <tr>
+                                        <td><?php echo $this->escapeHtml($_store->getName()) ?></td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </table>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             <?php endforeach; ?>
-            </table>
-            </div>
-        <?php endforeach; ?>
-        </div>
+        </fieldset>
     </div>
-    <?php endforeach; ?>
-    </fieldset>
 </div>
+
 <script type="text/javascript">
-//<![CDATA[
+    //<![CDATA[
     var productWebsiteCheckboxes = $$('.website-checkbox');
 
     for(var i=0;i<productWebsiteCheckboxes.length;i++){
@@ -116,5 +122,5 @@
             }
         }
     }
-//]]>
+    //]]>
 </script>

@@ -23,43 +23,23 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-/*
 ?>
-<div style="width:587px;margin:20px;position:relative;margin-left:-294px;left:50%">
-    <div style="position:absolute;right:1px;top:0px;left: expression(parentNode.offsetWidth - offsetWidth - 1 + 'px');">
-        <div style="padding:5px;height:15px;width:15px;background-color:#F4F4F4" id="dashboard_<?php echo $this->getHtmlId() ?>_cal_div"><img src="<?php echo Mage::getDesign()->getViewFileUrl('images/grid-cal.gif') ?>" onclick="toggleCal('<?php echo $this->getHtmlId() ?>')" /></div>
-        <div style="padding:5px;display:none;width:200px;" id="dashboard_<?php echo $this->getHtmlId() ?>_range_div" class="switcher">
-            <?php echo $this->__('Select Range') ?>:
-            <select name="period" id="order_<?php echo $this->getHtmlId() ?>_period" onchange="changePeriod(this)">
-                <?php foreach ($this->helper('Mage_Adminhtml_Helper_Dashboard_Data')->getDatePeriods() as $_value=>$_label): ?>
-                    <?php if(in_array($_value, array('custom'))) continue; ?>
-                    <option value="<?php echo $_value ?>" <?php if($this->getRequest()->getParam('period')==$_value): ?> selected<?php endif; ?>><?php echo $_label ?></option>
+<div class="dashboard-diagram">
+    <div class="store-switcher">
+        <label><?php echo $this->__('Select Range') ?>:
+            <select name="period" id="order_<?php echo $this->getHtmlId() ?>_period" onchange="changeDiagramsPeriod(this);">
+                <?php foreach ($this->helper('Mage_Adminhtml_Helper_Dashboard_Data')->getDatePeriods() as $value => $label): ?>
+                    <?php if(in_array($value, array('custom'))) continue; ?>
+                    <option value="<?php echo $value ?>" <?php if ($this->getRequest()->getParam('period') == $value): ?> selected="selected"<?php endif; ?>><?php echo $label ?></option>
                 <?php endforeach; ?>
             </select>
-            <img src="<?php echo Mage::getDesign()->getViewFileUrl('images/dashboard-close.gif') ?>" onclick="toggleCal('<?php echo $this->getHtmlId() ?>')" />
-        </div>
+        </label>
     </div>
+<?php
+    $containerStyle = "width:{$this->getWidth()}px;height:{$this->getHeight()}px; margin:0 auto;";
+?>
     <?php if($this->getCount()): ?>
-    <img src="<?php echo $this->getChartUrl() ?>" />
-    <?php else: ?>
-    <div align="center" style="width:587px;height:300px;"><?php echo $this->__('No Data Found') ?></div>
-    <?php endif; ?>
-</div>
-<?php */ ?>
-<div class="dashboard-diagram">
-    <div class="store-switcher"><?php echo $this->__('Select Range') ?>:
-        <select name="period" id="order_<?php echo $this->getHtmlId() ?>_period" onchange="changeDiagramsPeriod(this);">
-            <?php foreach ($this->helper('Mage_Adminhtml_Helper_Dashboard_Data')->getDatePeriods() as $_value=>$_label): ?>
-                <?php if(in_array($_value, array('custom'))) continue; ?>
-                <option value="<?php echo $_value ?>" <?php if($this->getRequest()->getParam('period')==$_value): ?> selected="selected"<?php endif; ?>><?php echo $_label ?></option>
-            <?php endforeach; ?>
-        </select>
-    </div>
-    <?php
-    $_containerStyle = "width:{$this->getWidth()}px;height:{$this->getHeight()}px; margin:0 auto;";
-    ?>
-    <?php if($this->getCount()): ?>
-    <div style="<?php echo $_containerStyle?>"><img src="<?php echo $this->getChartUrl(false) ?>" alt="chart" title="chart" /></div>
+    <div style="<?php echo $containerStyle?>"><img src="<?php echo $this->getChartUrl(false) ?>" alt="chart" title="chart" /></div>
     <?php else: ?>
     <div class="dashboard-diagram-nodata"><?php echo $this->__('No Data Found') ?></div>
     <?php endif; ?>

@@ -27,8 +27,9 @@
 
 /**
  * Test class for Mage_Reports_Block_Adminhtml_Grid
+ * @magentoAppArea adminhtml
  */
-class Mage_Reports_Block_Adminhtml_GridTest extends Mage_Backend_Area_TestCase
+class Mage_Reports_Block_Adminhtml_GridTest extends PHPUnit_Framework_TestCase
 {
     public function testGetDateFormat()
     {

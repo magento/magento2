@@ -73,7 +73,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_ContainerTest extends PHPUnit_Fra
 
     public function testGetHeaderText()
     {
-        $arguments = $this->_getBlockArguments(array('expectedTranslation' => 'Visual Design Editor'));
+        $arguments = $this->_getBlockArguments(array('expectedTranslation' => 'Store Designer'));
         /** @var $block Mage_DesignEditor_Block_Adminhtml_Editor_Container */
         $block = $this->_helper->getObject('Mage_DesignEditor_Block_Adminhtml_Editor_Container', $arguments);
         $block->getHeaderText();

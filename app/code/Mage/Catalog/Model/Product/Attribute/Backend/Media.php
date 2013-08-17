@@ -324,7 +324,7 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
         $mediaAttribute = null, $move = false, $exclude = true
     ) {
         if (!$this->_filesystem->isFile($file, $this->_baseTmpMediaPath)) {
-            Mage::throwException(Mage::helper('Mage_Catalog_Helper_Data')->__('Image does not exist.'));
+            Mage::throwException(Mage::helper('Mage_Catalog_Helper_Data')->__('The image does not exist.'));
         }
 
         Mage::dispatchEvent('catalog_product_media_add_image', array('product' => $product, 'image' => $file));
@@ -332,7 +332,7 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
         $pathinfo = pathinfo($file);
         $imgExtensions = array('jpg','jpeg','gif','png');
         if (!isset($pathinfo['extension']) || !in_array(strtolower($pathinfo['extension']), $imgExtensions)) {
-            Mage::throwException(Mage::helper('Mage_Catalog_Helper_Data')->__('Invalid image file type.'));
+            Mage::throwException(Mage::helper('Mage_Catalog_Helper_Data')->__('Please correct the image file type.'));
         }
 
         $fileName       = Mage_Core_Model_File_Uploader::getCorrectFileName($pathinfo['basename']);
@@ -359,7 +359,7 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
             }
         } catch (Exception $e) {
             Mage::throwException(
-                Mage::helper('Mage_Catalog_Helper_Data')->__('Failed to move file: %s', $e->getMessage())
+                Mage::helper('Mage_Catalog_Helper_Data')->__('We couldn\'t move this file: %s.', $e->getMessage())
             );
         }
 
@@ -680,7 +680,7 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
             $file = $this->_mediaConfig->getMediaPath($file);
             Mage::throwException(
                 Mage::helper('Mage_Catalog_Helper_Data')
-                    ->__('Failed to copy file %s. Please, delete media with non-existing images and try again.', $file)
+                    ->__('We couldn\'t copy file %s. Please delete media with non-existing images and try again.', $file)
             );
         }
     }

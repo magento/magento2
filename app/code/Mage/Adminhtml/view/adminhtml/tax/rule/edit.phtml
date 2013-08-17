@@ -38,6 +38,7 @@
             this._getFormData(this.options.itemRateDefault);
         },
         open: function() {
+            var zipIsRange = this.uiDialog.find('#zip_is_range');
             if (this._trigger('beforeOpen', null, this) === false) {
                 return;
             }
@@ -45,8 +46,10 @@
             if (this.options.itemRate && !$.isEmptyObject(this.options.itemRate)) {
                 this._applyItem(this.options.itemRate);
             }
+            zipIsRange.attr('checked', zipIsRange.val() == 1);
+            zipIsRange.trigger('change');
+            updater.update();
             $.ui.dialog.prototype.open.apply(this);
-
         },
         close: function() {
             $.ui.dialog.prototype.close.apply(this);
@@ -54,9 +57,11 @@
         _applyItem: function(rate) {
             var dialogElement = this.uiDialog;
             $.each(rate, function(key, value) {
+                if (!value) {
+                    value = '';
+                }
                 dialogElement.find('[name="' + key + '"]').attr('value', value);
             });
-
         },
         updateItemRate: function() {
             this._getFormData(this.options.itemRate);
@@ -75,11 +80,12 @@
         this.isEntityEditable = this.settings.is_entity_editable || false;
 
         this.edit = function() {
-            var that = $(this),
-                    index = that.parent().index(),
-                    select = that.closest('.mselect-list').prev(),
-                    id = select.find('option').eq(index).attr('value'),
-                    item;
+            var listItem = $(this).closest('.mselect-list-item');
+            var that = listItem.children('.mselect-edit');
+            var index = listItem.index(),
+                select = that.closest('.mselect-list').prevAll('.multiselect:first'),
+                id = select.find('option').eq(index).attr('value'),
+                item;
 
             for(var i = 0, c = taxRateCollection.length; i < c; i++) {
                 if (taxRateCollection[i].tax_calculation_rate_id == id) {
@@ -91,7 +97,7 @@
             $('#tax-rate-form')
                     .dialogRates({itemRate: item})
                     .dialogRates('open');
-        }
+        };
 
         TaxRateEditableMultiselect.prototype.init = function () {
             var options = {
@@ -102,20 +108,23 @@
                     var select = $('#tax_rate');
                     select.append('<option value="" selected="selected">' + value + '</option>');
                     var mselectItemHtml = $(options.item.replace(/%value%|%label%/gi, value)
-                            .replace(/%mselectDisabledClass%|%iseditable%|%isremovable%/gi, '')
-                            .replace(/%mselectListItemClass%/gi, options.mselectListItemClass))
-                            .find('[type=checkbox]')
-                            .attr('checked', true)
-                            .addClass(options.mselectCheckedClass)
-                            .end();
-                    var itemsWrapper = select.next().find('.' + options.mselectItemsWrapperClass + '');
+                        .replace(/%mselectDisabledClass%|%iseditable%|%isremovable%/gi, '')
+                        .replace(/%mselectListItemClass%/gi, options.mselectListItemClass))
+                        .find('[type=checkbox]')
+                        .attr('checked', true)
+                        .addClass(options.mselectCheckedClass)
+                        .end();
+                    var itemsWrapper = select.nextAll('section.block:first')
+                        .find('.' + options.mselectItemsWrapperClass + '');
                     itemsWrapper.children('.' + options.mselectListItemClass + '').length
-                            ? itemsWrapper.children('.' + options.mselectListItemClass + ':last').after(mselectItemHtml)
-                            : itemsWrapper.prepend(mselectItemHtml);
+                        ? itemsWrapper.children('.' + options.mselectListItemClass + ':last').after(mselectItemHtml)
+                        : itemsWrapper.prepend(mselectItemHtml);
                 }
             };
-            var taxRateField = $('#tax_rate').parent(),
-                    taxRateForm = $('#tax-rate-form');
+            var taxRate = $('#tax_rate'),
+                taxRateField = taxRate.parent(),
+                taxRateForm = $('#tax-rate-form'),
+                taxRateFormElement = $('#<?php echo Mage_Adminhtml_Block_Tax_Rate_Form::FORM_ELEMENT_ID ?>');
 
             if (!this.isEntityEditable) {
                 // Override default layout of editable multiselect
@@ -132,7 +141,7 @@
                 options['mselectInputSubmitCallback'] = null;
             }
 
-            $('#tax_rate').multiselect(options);
+            taxRate.multiselect(options);
 
             taxRateField.find('.mselect-button-add').off('click');
 
@@ -178,6 +187,7 @@
                         el[el.is(':checked') ? 'addClass' : 'removeClass'](checkedClassName);
                     })
                     .on('dblclick.mselect-list-item', '.mselect-list-item label span', this.edit);
+            taxRateFormElement.mage('form').mage('validation');
 
             taxRateForm.dialogRates({
                 title: '<?php echo Mage::helper('Mage_Tax_Helper_Data')->__('Tax Rate'); ?>',
@@ -200,7 +210,9 @@
                             delete itemRateData.itemElement;
                         }
 
-                        $('body').loadingPopup();
+                        if (!taxRateFormElement.validation().valid()) {
+                            return;
+                        }
 
                         var ajaxOptions = {
                             type: 'POST',
@@ -228,7 +240,6 @@
                                 } else {
                                     alert(result.error_message);
                                 }
-                                $('body').trigger('hideLoadingPopup');
                             }
                         };
                         $.ajax(ajaxOptions);
@@ -239,34 +250,11 @@
                     'class': 'action-cancel',
                     click: function() {
                         $(this).dialogRates("close");
+                        taxRateFormElement.data('validation').clearError();
                     }
                 }]
             });
         }
-    }
-
-    $(document).ready(function () {
-        'use strict';
-      
-        $('#zip_is_range').on('change.zipRange', function(){
-
-            var elem = $(this),
-                zipFrom =$('.ui-dialog .field-zip_from'),
-                zipTo =$('.ui-dialog .field-zip_to'),
-                zipCode =$('.ui-dialog .field-tax_postcode');
-
-            if (elem.is(':checked')) {
-                zipCode.addClass('hidden');
-                zipFrom.removeClass('hidden');
-                zipTo.removeClass('hidden');
-
-            } else {
-                zipCode.removeClass('hidden');
-                zipFrom.addClass('hidden');
-                zipTo.addClass('hidden');
-            }
-
-        });
-    });
+    };
 })(jQuery);
 </script>

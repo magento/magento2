@@ -46,7 +46,6 @@ class Mage_Backend_Adminhtml_AuthController extends Mage_Backend_Controller_Acti
             $this->_redirect(Mage::getSingleton('Mage_Backend_Model_Url')->getStartupPageUrl());
             return;
         }
-
         $this->loadLayout();
         $this->renderLayout();
     }

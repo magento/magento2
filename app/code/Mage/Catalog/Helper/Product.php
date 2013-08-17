@@ -26,8 +26,6 @@
 
 /**
  * Catalog category helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
 {
@@ -53,9 +51,27 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
      */
     protected $_productUrlSuffix = array();
 
+    /**
+     * @var array
+     */
     protected $_statuses;
 
     protected $_priceBlock;
+
+    /**
+     * @var Mage_Core_Model_View_Url
+     */
+    protected $_viewUrl;
+
+    /**
+     * @param Mage_Core_Helper_Context $context
+     * @param Mage_Core_Model_View_Url $viewUrl
+     */
+    public function __construct(Mage_Core_Helper_Context $context, Mage_Core_Model_View_Url $viewUrl)
+    {
+        parent::__construct($context);
+        $this->_viewUrl = $viewUrl;
+    }
 
     /**
      * Retrieve product view page url
@@ -67,8 +83,7 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
     {
         if ($product instanceof Mage_Catalog_Model_Product) {
             return $product->getProductUrl();
-        }
-        elseif (is_numeric($product)) {
+        } elseif (is_numeric($product)) {
             return Mage::getModel('Mage_Catalog_Model_Product')->load($product)->getProductUrl();
         }
         return false;
@@ -79,11 +94,10 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
      *
      * @param   Mage_Catalog_Model_Product $product
      * @return  float
-     * @deprecated call Mage_Catalog_Mode_Product::getPrice
      */
     public function getPrice($product)
     {
-    	throw new Exception("Shouldn't call Mage_Catalog_Helper_Product::getPrice");
+        return $product->getPrice();
     }
 
     /**
@@ -91,11 +105,10 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
      *
      * @param   Mage_Catalog_Model_Product $product
      * @return  float
-     * @deprecated call Mage_Catalog_Mode_Product::getFinalPrice
      */
     public function getFinalPrice($product)
     {
-    	throw new Exception("Shouldn't call Mage_Catalog_Helper_Product::getFinalPrice");
+        return $product->getFinalPrice();
     }
 
     /**
@@ -107,9 +120,10 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
     public function getImageUrl($product)
     {
         $url = false;
+        $attribute = $product->getResource()->getAttribute('image');
         if (!$product->getImage()) {
-            $url = Mage::getDesign()->getViewFileUrl('Mage_Catalog::images/product/placeholder/image.jpg');
-        } elseif ($attribute = $product->getResource()->getAttribute('image')) {
+            $url = $this->_viewUrl->getViewFileUrl('Mage_Catalog::images/product/placeholder/image.jpg');
+        } elseif ($attribute) {
             $url = $attribute->getFrontend()->getUrl($product);
         }
         return $url;
@@ -124,9 +138,10 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
     public function getSmallImageUrl($product)
     {
         $url = false;
+        $attribute = $product->getResource()->getAttribute('small_image');
         if (!$product->getSmallImage()) {
-            $url = Mage::getDesign()->getViewFileUrl('Mage_Catalog::images/product/placeholder/small_image.jpg');
-        } elseif ($attribute = $product->getResource()->getAttribute('small_image')) {
+            $url = $this->_viewUrl->getViewFileUrl('Mage_Catalog::images/product/placeholder/small_image.jpg');
+        } elseif ($attribute) {
             $url = $attribute->getFrontend()->getUrl($product);
         }
         return $url;
@@ -143,10 +158,15 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
         return '';
     }
 
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @return string
+     */
     public function getEmailToFriendUrl($product)
     {
         $categoryId = null;
-        if ($category = Mage::registry('current_category')) {
+        $category = Mage::registry('current_category');
+        if ($category) {
             $categoryId = $category->getId();
         }
         return $this->_getUrl('sendfriend/product/send', array(
@@ -155,9 +175,12 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
         ));
     }
 
+    /**
+     * @return array
+     */
     public function getStatuses()
     {
-        if(is_null($this->_statuses)) {
+        if (null === $this->_statuses) {
             $this->_statuses = array();
             // Mage::getModel('Mage_Catalog_Model_Product_Status')->getResourceCollection()->load();
         }
@@ -168,7 +191,8 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
     /**
      * Check if a product can be shown
      *
-     * @param  Mage_Catalog_Model_Product|int $product
+     * @param Mage_Catalog_Model_Product|int $product
+     * @param string $where
      * @return boolean
      */
     public function canShow($product, $where = 'catalog')

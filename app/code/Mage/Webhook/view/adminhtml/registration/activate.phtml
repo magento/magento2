@@ -25,27 +25,15 @@
 <div class="outer">
     <div class="center">
         <div class="section main">
-            <h3><?php echo $this->__('The ') ?>
-                <em><?php echo $this->getSubscriber()->getName() ?></em>
-                <?php echo $this->__(' subscriber is requesting permissions to the following:') ?> </h3>
+            <h3><?php echo $this->__('The <em>%s</em> subscription is requesting permissions to the following:', $this->getSubscriptionName()) ?> </h3>
 
 
             <div  class="section hooks">
                 <h4><?php echo $this->__('Events') ?></h4>
 
                 <ul>
-                    <?php foreach ($this->getSubscriber()->getTopics() as $hook) : ?>
+                    <?php foreach ($this->getSubscriptionTopics() as $hook) : ?>
                         <li><code><?php echo $hook ?></code></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-
-            <div class="section resources">
-                <h4><?php echo $this->__('Resources') ?></h4>
-
-                <ul class="tree">
-                    <?php foreach ($this->getSubscriber()->getRequiredPermissions() as $resource) : ?>
-                    <li><?php echo $resource ?></li>
                     <?php endforeach; ?>
                 </ul>
             </div>
@@ -53,12 +41,12 @@
     </div>
     <div class="bottom">
         <div class="buttons">
-            <button id="allowActivateSubscriber" onclick="document.location = '<?php echo $this->getAcceptUrl() ?>'; return false;">
+            <button id="allowActivateSubscription" onclick="document.location = '<?php echo $this->getAcceptUrl() ?>'; return false;">
                 <span>
                     <?php echo $this->__('Allow') ?>
                 </span>
             </button>
-            <button id="denyActivateSubscriber" onclick="window.parent.location.reload(); return false;">
+            <button id="denyActivateSubscription" onclick="window.parent.location.reload(); return false;">
                 <span>
                     <?php echo $this->__('Deny') ?>
                 </span>

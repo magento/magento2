@@ -26,9 +26,6 @@
 
 /**
  * Block that renders Custom tab
- *
- * @method Mage_Core_Model_Theme getTheme()
- * @method setTheme($theme)
  */
 class Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_ImageSizing extends Mage_Backend_Block_Widget_Form
 {
@@ -43,20 +40,39 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_ImageSizing extends Ma
     protected $_controlFactory;
 
     /**
-     * @param Mage_Core_Block_Template_Context $context
+     * @var Mage_DesignEditor_Model_Theme_Context
+     */
+    protected $_themeContext;
+
+    /**
+     * @param Mage_Backend_Block_Template_Context $context
      * @param Mage_Eav_Model_Config $eavConfig
      * @param Mage_DesignEditor_Model_Editor_Tools_Controls_Factory $controlFactory
+     * @param Mage_DesignEditor_Model_Theme_Context $themeContext
      * @param array $data
      */
     public function __construct(
-        Mage_Core_Block_Template_Context $context,
+        Mage_Backend_Block_Template_Context $context,
         Mage_Eav_Model_Config $eavConfig,
         Mage_DesignEditor_Model_Editor_Tools_Controls_Factory $controlFactory,
+        Mage_DesignEditor_Model_Theme_Context $themeContext,
         array $data = array()
     ) {
+        parent::__construct($context, $data);
         $this->_eavConfig = $eavConfig;
         $this->_controlFactory = $controlFactory;
-        parent::__construct($context, $data);
+        $this->_themeContext = $themeContext;
+    }
+
+    /**
+     * Returns url to save action of image sizing
+     *
+     * @return string
+     */
+    public function getImageSizingUrl()
+    {
+        return $this->getUrl('*/system_design_editor_tools/saveImageSizing',
+            array('theme_id' => $this->_themeContext->getEditableTheme()->getId()));
     }
 
     /**
@@ -76,24 +92,52 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_ImageSizing extends Ma
         $form->setFieldNameSuffix('imagesizing');
         $form->addType('button_button', 'Mage_DesignEditor_Block_Adminhtml_Editor_Form_Element_Button');
 
+        $isFilePresent = true;
         try{
             /** @var $controlsConfig Mage_DesignEditor_Model_Editor_Tools_Controls_Configuration */
             $controlsConfig = $this->_controlFactory->create(
                 Mage_DesignEditor_Model_Editor_Tools_Controls_Factory::TYPE_IMAGE_SIZING,
-                $this->getTheme()
+                $this->_themeContext->getStagingTheme()
             );
-
-            $whiteBorder = $controlsConfig->getControlData('product_image_border');
-            $controls = $controlsConfig->getAllControlsData();
         } catch (Magento_Exception $e) {
-            $whiteBorder = array();
-            $controls = array();
+            $isFilePresent = false;
         }
 
+        if ($isFilePresent) {
+            $this->_initFormElements($controlsConfig, $form);
+        } else {
+            $hintMessage = $this->__('Sorry, but you cannot resize images for this theme.');
+            $form->addField('imagesize-tab-error', 'note', array(
+                'after_element_html' => '<p class="error-notice">' . $hintMessage . '</p>'
+            ));
+        }
+
+        return parent::_prepareForm();
+    }
+
+    /**
+     * Initialize form elements
+     *
+     * @param Mage_DesignEditor_Model_Editor_Tools_Controls_Configuration $controlsConfig
+     * @param Varien_Data_Form $form
+     * @return Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_ImageSizing
+     */
+    protected function _initFormElements($controlsConfig, $form)
+    {
+        $hintMessage =  $this->__('Please enter values for height and width.'
+            . ' Use the chain icon if you want height and width to match.'
+            . ' Be sure to see how it looks in your store.'
+            . ' You may need to update your custom CSS file.');
+
+        $form->addField('information_hint', 'note', array(
+            'after_element_html' => '<p class="note">' . $hintMessage . '</p>'));
+
+        $whiteBorder = $controlsConfig->getControlData('product_image_border');
         if ($whiteBorder) {
             $this->_addWhiteBorderElement($whiteBorder);
         }
 
+        $controls = $controlsConfig->getAllControlsData();
         foreach ($controls as $name => $control ) {
             if ($control['type'] != 'image-sizing') {
                 continue;
@@ -108,21 +152,22 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_ImageSizing extends Ma
         ));
         $this->_addElementTypes($fieldset);
 
-        $fieldset->addField('save_image_sizing', 'button_button', array(
-            'name'  => 'save_image_sizing',
-            'title' => $this->__('Update'),
-            'value' => $this->__('Update'),
-            'data-mage-init' => $this->helper('Mage_Backend_Helper_Data')->escapeHtml(json_encode(array(
-                'button' => array(
-                    'event'  => 'saveForm',
-                    'target' => 'body'
-                )
-            )))
-        ));
-
-        parent::_prepareForm();
-        return parent::_prepareForm();
+        if ($whiteBorder || $controls) {
+            $fieldset->addField('save_image_sizing', 'button_button', array(
+                'name'  => 'save_image_sizing',
+                'title' => $this->__('Update'),
+                'value' => $this->__('Update'),
+                'data-mage-init' => $this->helper('Mage_Backend_Helper_Data')->escapeHtml(json_encode(array(
+                    'button' => array(
+                        'event'  => 'saveForm',
+                        'target' => 'body'
+                    )
+                )))
+            ));
+        }
+        return $this;
     }
+
 
     /**
      * Add white border checkbox to form
@@ -134,7 +179,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_ImageSizing extends Ma
     {
         /** @var $form Varien_Data_Form */
         $form = $this->getForm();
-        $fieldMessage = $this->__('Add the white borders to the images that do not match the container size.');
+        $fieldMessage = $this->__('Add white borders to images that are smaller than the container.');
         foreach ($control['components'] as $name => $component) {
             $form->addField('add_white_borders_hidden', 'hidden', array(
                 'name'  => $name,
@@ -147,10 +192,9 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_ImageSizing extends Ma
                 'after_element_html' => $fieldMessage
             ));
         }
-        /** @todo Get valid message from PO */
-        $hintMessage =  $this->__('If an image goes beyond the container edges,'
-            . ' it will be re-scaled to match the container size.'
-            . ' By default, the white borders will be added to an image to fill in the container space');
+        /** Get valid message from PO */
+        $hintMessage =  $this->__('If an image is too big,'
+            . '  we automatically make it smaller and add white borders to fill the container.');
         $form->addField('add_white_borders_hint', 'note', array(
             'after_element_html' => '<p class="description">' . $hintMessage . '</p>'));
 

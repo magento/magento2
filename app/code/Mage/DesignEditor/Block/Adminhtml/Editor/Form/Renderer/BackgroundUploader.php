@@ -31,23 +31,32 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Form_Renderer_BackgroundUploader
     extends Mage_DesignEditor_Block_Adminhtml_Editor_Form_Renderer
 {
     /**
+     * @var Mage_DesignEditor_Model_Theme_Context
+     */
+    protected $_themeContext;
+
+    /**
+     * Initialize dependencies
+     *
+     * @param Mage_Backend_Block_Template_Context $context
+     * @param Mage_DesignEditor_Model_Theme_Context $themeContext
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Backend_Block_Template_Context $context,
+        Mage_DesignEditor_Model_Theme_Context $themeContext,
+        array $data = array()
+    ) {
+        $this->_themeContext = $themeContext;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Path to template file in theme.
      *
      * @var string
      */
     protected $_template = 'Mage_DesignEditor::editor/form/renderer/background-uploader.phtml';
-
-    /**
-     * Return theme identification number
-     *
-     * @return int|null
-     */
-    protected function getThemeId()
-    {
-        /** @var $helper Mage_DesignEditor_Helper_Data */
-        $helper = $this->_helperFactory->get('Mage_DesignEditor_Helper_Data');
-        return $helper->getEditableThemeId();
-    }
 
     /**
      * Get URL of image upload action
@@ -57,7 +66,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Form_Renderer_BackgroundUploader
     public function getImageUploadUrl()
     {
         return $this->getUrl('*/system_design_editor_tools/uploadQuickStyleImage',
-            array('theme_id' => $this->getThemeId())
+            array('theme_id' => $this->_themeContext->getEditableTheme()->getId())
         );
     }
 
@@ -69,7 +78,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Form_Renderer_BackgroundUploader
     public function getImageRemoveUrl()
     {
         return $this->getUrl('*/system_design_editor_tools/removeQuickStyleImage',
-            array('theme_id' => $this->getThemeId())
+            array('theme_id' => $this->_themeContext->getEditableTheme()->getId())
         );
     }
 }

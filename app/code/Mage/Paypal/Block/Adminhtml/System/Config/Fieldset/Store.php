@@ -30,7 +30,7 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Paypal_Block_Adminhtml_System_Config_Fieldset_Store
-    extends Mage_Backend_Block_Abstract
+    extends Mage_Backend_Block_Template
     implements Varien_Data_Form_Element_Renderer_Interface
 {
     /**
@@ -48,7 +48,8 @@ class Mage_Paypal_Block_Adminhtml_System_Config_Fieldset_Store
      */
     public function render(Varien_Data_Form_Element_Abstract $element)
     {
-        return $this->toHtml();
+        $html = Mage::getModel('Mage_Core_Model_StoreManagerInterface')->isSingleStoreMode() ? '' : $this->toHtml();
+        return $html;
     }
 
     /**

@@ -1,5 +1,4 @@
 pub/lib/head.load.min.js
-pub/lib/json2.js
 pub/lib/mage/adminhtml
 pub/lib/mage/backend/editablemultiselect.js
 pub/lib/mage/captcha.js

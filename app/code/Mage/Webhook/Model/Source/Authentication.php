@@ -1,5 +1,7 @@
 <?php
 /**
+ * The list of available authentication types
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -23,23 +25,24 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * The list of available authentication types
- */
 class Mage_Webhook_Model_Source_Authentication
 {
-    /**
-     * Path to environments section in the config
-     * @var string
-     */
-    const XML_PATH_AUTHENTICATIONS = 'global/webhook/authentication_types';
+    /** @var Mage_Core_Model_Translate $_translator */
+    private $_translator;
+
+    /** @var array $_authenticationTypes */
+    private $_authenticationTypes;
+
 
     /**
-     * Cash of options
-     * @var null|array
+     * @param array $authenticationTypes
+     * @param Mage_Core_Model_Translate $translator
      */
-    protected $_options = null;
+    public function __construct(array $authenticationTypes, Mage_Core_Model_Translate $translator)
+    {
+        $this->_translator = $translator;
+        $this->_authenticationTypes = $authenticationTypes;
+    }
 
     /**
      * Get available authentication types
@@ -48,27 +51,21 @@ class Mage_Webhook_Model_Source_Authentication
      */
     public function toOptionArray()
     {
-        if ($this->_options) {
-            return $this->_options;
-        }
+        return $this->_authenticationTypes;
 
-        $this->_options = array();
-
-        $config = Mage::getConfig()->getNode(self::XML_PATH_AUTHENTICATIONS);
-        if (!$config) {
-            return $this->_options;
-        }
-        $this->_options = $config->asArray();
-
-        return $this->_options;
     }
 
+    /**
+     * Return authentications for use by a form
+     *
+     * @return array
+     */
     public function getAuthenticationsForForm()
     {
         $elements = array();
-        foreach ($this->toOptionArray() as $authName => $authentication) {
+        foreach ($this->_authenticationTypes as $authName => $authentication) {
             $elements[] = array(
-                'label' => Mage::helper('Mage_Webhook_Helper_Data')->__($authentication['label']),
+                'label' => $this->_translator->translate(array($authentication)),
                 'value' => $authName,
             );
         }

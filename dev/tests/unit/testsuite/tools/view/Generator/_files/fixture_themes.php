@@ -45,14 +45,24 @@ return array(
     'theme_customizing_one_module' => array(
         'theme' => $themeOne,
         'pattern_dir_map' => array(
-            array('namespace' => '%namespace%', 'module' => '%module%', 'area' => 'area_one', 'theme' => $themeOne),
             array(
-                '/base/dir/area_one/fixture/theme_one',
-                '/base/dir/area_one/fixture/theme_one/%namespace%_%module%',
+                array('area' => 'area_one', 'theme' => $themeOne),
+                array(
+                    '/base/dir/area_one/fixture/theme_one',
+                ),
+            ),
+            array(
+                array('area' => 'area_one', 'theme' => $themeOne, 'namespace' => '%namespace%', 'module' => '%module%'),
+                array(
+                    '/base/dir/area_one/fixture/theme_one/%namespace%_%module%',
+                ),
             ),
         ),
         'filesystem_glob_map' => array(
-            '/base/dir/area_one/fixture/theme_one/', '*_*', array('/base/dir/area_one/fixture/theme_one/Mage_Core')
+            array(
+                '/base/dir/area_one/fixture/theme_one/', '*_*',
+                array('/base/dir/area_one/fixture/theme_one/Mage_Core'),
+            ),
         ),
         'expected_result' => array(
             array(
@@ -78,18 +88,27 @@ return array(
     'theme_customizing_two_modules' => array(
         'theme' => $themeTwo,
         'pattern_dir_map' => array(
-            array('namespace' => '%namespace%', 'module' => '%module%', 'area' => 'area_one', 'theme' => $themeTwo),
             array(
-                '/base/dir/area_one/fixture/theme_two',
-                '/base/dir/area_one/fixture/theme_two/%namespace%_%module%',
+                array('area' => 'area_one', 'theme' => $themeTwo),
+                array(
+                    '/base/dir/area_one/fixture/theme_two',
+                ),
+            ),
+            array(
+                array('area' => 'area_one', 'theme' => $themeTwo, 'namespace' => '%namespace%', 'module' => '%module%'),
+                array(
+                    '/base/dir/area_one/fixture/theme_two/%namespace%_%module%',
+                ),
             ),
         ),
         'filesystem_glob_map' => array(
-            '/base/dir/area_one/fixture/theme_two/', '*_*',
             array(
-                '/base/dir/area_one/fixture/theme_two/Fixture_ModuleOne',
-                '/base/dir/area_one/fixture/theme_two/Fixture_ModuleTwo',
-            )
+                '/base/dir/area_one/fixture/theme_two/', '*_*',
+                array(
+                    '/base/dir/area_one/fixture/theme_two/Fixture_ModuleOne',
+                    '/base/dir/area_one/fixture/theme_two/Fixture_ModuleTwo',
+                ),
+            ),
         ),
         'expected_result' => array(
             array(
@@ -124,14 +143,26 @@ return array(
     'theme_customizing_no_modules' => array(
         'theme' => $themeThree,
         'pattern_dir_map' => array(
-            array('namespace' => '%namespace%', 'module' => '%module%', 'area' => 'area_two', 'theme' => $themeThree),
             array(
-                '/base/dir/area_two/fixture/theme_three',
-                '/base/dir/area_two/fixture/theme_three/%namespace%_%module%',
+                array('area' => 'area_two', 'theme' => $themeThree),
+                array(
+                    '/base/dir/area_two/fixture/theme_three',
+                ),
+            ),
+            array(
+                array(
+                    'area' => 'area_two', 'theme' => $themeThree, 'namespace' => '%namespace%', 'module' => '%module%'
+                ),
+                array(
+                    '/base/dir/area_two/fixture/theme_three/%namespace%_%module%',
+                ),
             ),
         ),
         'filesystem_glob_map' => array(
-            '/base/dir/area_two/fixture/theme_three/', '*_*', array()
+            array(
+                '/base/dir/area_two/fixture/theme_three/', '*_*',
+                array(),
+            ),
         ),
         'expected_result' => array(
             array(
@@ -148,14 +179,26 @@ return array(
     'fallback_pattern_mixing_slashes' => array(
         'theme' => $themeFour,
         'pattern_dir_map' => array(
-            array('namespace' => '%namespace%', 'module' => '%module%', 'area' => 'area_two', 'theme' => $themeFour),
             array(
-                '/base/dir/area_two\\fixture\\theme_four',
-                '/base/dir/area_two\\fixture\\theme_four\\%namespace%_%module%',
+                array('area' => 'area_two', 'theme' => $themeFour),
+                array(
+                    '/base/dir/area_two\\fixture\\theme_four',
+                ),
+            ),
+            array(
+                array(
+                    'area' => 'area_two', 'theme' => $themeFour, 'namespace' => '%namespace%', 'module' => '%module%'
+                ),
+                array(
+                    '/base/dir/area_two\\fixture\\theme_four\\%namespace%_%module%',
+                ),
             ),
         ),
         'filesystem_glob_map' => array(
-            '/base/dir/area_two/fixture/theme_four/', '*_*', array()
+            array(
+                '/base/dir/area_two/fixture/theme_four/', '*_*',
+                array(),
+            ),
         ),
         'expected_result' => array(
             array(

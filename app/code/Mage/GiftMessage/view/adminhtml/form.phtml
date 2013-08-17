@@ -36,10 +36,10 @@
     <?php endif; ?>
 </form>
 <?php elseif($this->getSaveMode()=='save'): ?>
-<h3><?php echo Mage::helper('Mage_GiftMessage_Helper_Data')->__('The gift message has been saved') ?></h3>
+<h3><?php echo Mage::helper('Mage_GiftMessage_Helper_Data')->__('The gift message has been saved.') ?></h3>
 <br /><?php echo $this->getCloseButtonHtml() ?>
 <?php else: ?>
-<h3><?php echo Mage::helper('Mage_GiftMessage_Helper_Data')->__('The gift message has been removed') ?></h3>
+<h3><?php echo Mage::helper('Mage_GiftMessage_Helper_Data')->__('The gift message has been removed.') ?></h3>
 <br /><?php echo $this->getCloseButtonHtml() ?>
 <?php endif; ?>
 <script type="text/javascript">

@@ -29,7 +29,9 @@
  */
 ?>
 <html>
-<head></head>
+<head>
+    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('jquery/jquery.js')?>"></script>
+</head>
 <body>
     <form id="token_form" method="POST" action="<?php echo $this->getTransactionUrl() ?>">
         <input type="hidden" name="SECURETOKEN" value="<?php echo $this->getSecureToken(); ?>" />
@@ -37,9 +39,8 @@
         <input type="hidden" name="MODE" value="<?php echo $this->isTestMode() ? 'TEST' : 'LIVE'; ?>" />
     </form>
     <script type="text/javascript">
-    //<![CDATA[
-        document.getElementById('token_form').submit();
-    //]]>
+        // this is NOT tested.
+        jQuery('#token_form').submit();
     </script>
 </body>
 </html>

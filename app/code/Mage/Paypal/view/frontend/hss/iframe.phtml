@@ -28,21 +28,4 @@
 <div id="iframe-warning" class="warning-message">
     <?php echo $this->__('Please do not refresh the page until you complete payment.') ?>
 </div>
-<iframe id="hss-iframe" style="display:none;" scrolling="no" frameborder="0" border="0" src="<?php echo $this->getFrameActionUrl() ?>" height="610" width="570"></iframe>
-<script type="text/javascript">
-//<![CDATA[
-var headers = $$('#' + checkout.accordion.container.readAttribute('id') + ' .section');
-headers.each(function(header) {
-    header.removeClassName('allow');
-});
-$('hss-iframe').observe('load', function(){
-    $('hss-iframe').show();
-    $('iframe-warning').show();
-    checkout.loadWaiting = 'review';
-    checkout.setLoadWaiting(false);
-    if (checkout.accordion.currentSection == 'opc-review') {
-        $('checkout-review-submit').hide();
-    }
-});
-//]]>
-</script>
+<iframe id="hss-iframe" data-container="paypal-iframe" class="no-display" scrolling="no" frameborder="0" border="0" src="<?php echo $this->getFrameActionUrl() ?>" height="610" width="570"></iframe>

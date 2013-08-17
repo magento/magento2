@@ -113,13 +113,6 @@
         </routers>
     </admin>
     <adminhtml>
-        <layout>
-            <updates>
-                <importexport module="Mage_ImportExport">
-                    <file>layout.xml</file>
-                </importexport>
-            </updates>
-        </layout>
         <translate>
             <modules>
                 <Mage_ImportExport>

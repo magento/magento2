@@ -206,7 +206,7 @@ class Mage_Paypal_Model_Pro
             $api->setPayment($payment)->setAuthorizationId($authTransactionId)->callDoVoid();
             $this->importPaymentInfo($api, $payment);
         } else {
-            Mage::throwException(Mage::helper('Mage_Paypal_Helper_Data')->__('Authorization transaction is required to void.'));
+            Mage::throwException(Mage::helper('Mage_Paypal_Helper_Data')->__('You need an authorization transaction to void.'));
         }
     }
 
@@ -263,7 +263,7 @@ class Mage_Paypal_Model_Pro
             $api->callRefundTransaction();
             $this->_importRefundResultToPayment($api, $payment, $canRefundMore);
         } else {
-            Mage::throwException(Mage::helper('Mage_Paypal_Helper_Data')->__('Impossible to issue a refund transaction because the capture transaction does not exist.'));
+            Mage::throwException(Mage::helper('Mage_Paypal_Helper_Data')->__('We can\'t issue a refund transaction because there is no capture transaction.'));
         }
     }
 
@@ -280,11 +280,25 @@ class Mage_Paypal_Model_Pro
     }
 
     /**
+     * Check whether can do payment review
      *
-     * @param Mage_Sales_Model_Order_Payment $payment
+     * @param Mage_Payment_Model_Info $payment
      * @return bool
      */
     public function canReviewPayment(Mage_Payment_Model_Info $payment)
+    {
+        $pendingReason = $payment->getAdditionalInformation(Mage_Paypal_Model_Info::PENDING_REASON_GLOBAL);
+        return $this->_isPaymentReviewRequired($payment)
+            && $pendingReason != Mage_Paypal_Model_Info::PAYMENTSTATUS_REVIEW;
+    }
+
+    /**
+     * Check whether payment review is required
+     *
+     * @param Mage_Payment_Model_Info $payment
+     * @return bool
+     */
+    protected function _isPaymentReviewRequired(Mage_Payment_Model_Info $payment)
     {
         return Mage_Paypal_Model_Info::isPaymentReviewRequired($payment);
     }
@@ -342,15 +356,15 @@ class Mage_Paypal_Model_Pro
     {
         $errors = array();
         if (strlen($profile->getSubscriberName()) > 32) { // up to 32 single-byte chars
-            $errors[] = Mage::helper('Mage_Paypal_Helper_Data')->__('Subscriber name is too long.');
+            $errors[] = Mage::helper('Mage_Paypal_Helper_Data')->__('The subscriber name is too long.');
         }
         $refId = $profile->getInternalReferenceId(); // up to 127 single-byte alphanumeric
         if (strlen($refId) > 127) { //  || !preg_match('/^[a-z\d\s]+$/i', $refId)
-            $errors[] = Mage::helper('Mage_Paypal_Helper_Data')->__('Merchant reference ID format is not supported.');
+            $errors[] = Mage::helper('Mage_Paypal_Helper_Data')->__('The merchant\'s reference ID format is not supported.');
         }
         $scheduleDescr = $profile->getScheduleDescription(); // up to 127 single-byte alphanumeric
         if (strlen($refId) > 127) { //  || !preg_match('/^[a-z\d\s]+$/i', $scheduleDescr)
-            $errors[] = Mage::helper('Mage_Paypal_Helper_Data')->__('Schedule description is too long.');
+            $errors[] = Mage::helper('Mage_Paypal_Helper_Data')->__('The schedule description is too long.');
         }
         if ($errors) {
             Mage::throwException(implode(' ', $errors));

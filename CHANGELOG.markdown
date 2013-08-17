@@ -1,10 +1,339 @@
+2.0.0.0-dev45
+=============
+* Product management improvements:
+  * Added ability to create variation on the Product creation page
+  * Added ability to add attributes on the Product creation page. Attribute values also can be added directly from the Product creation page
+  * Removed "Delete" button from the Product Edit page. Products can be deleted from Products Grid only
+  * Enhanced Product Edit page
+  * Improved visual styles and business logic for new category creation from product creation page
+  * Updated button names for Grouped and Bundle products, added an ability to translate them
+  * Changed design of all popup windows on product creation page
+  * Simplified UI to add an attribute: made less fields there by default, restructured element positions, hidden rarely-used controls
+  * Created a popup to select image for product variations
+* JavaScript improvements:
+  * Eliminated `json2.js` library since JSON parsing is bundled in all supported browsers
+  * `Ajax.Autocompleter` is replaced with jQuery suggest widget for search in backend
+  * `jsTree` jQuery plugin is utilized for User Roles, Api Roles, CMS Pages and URL Rewrites management pages in backend
+  * Improved jQuery validation for credit cards
+  * Added support of `$.mage.component` in some frontend themes
+  * Further refactoring of JavaScript to use JQuery library:
+     * Scripts are converted in the following modules and components: Centinel, Authorize.net, Payflow Link, Payflow Pro, Paygate, Paypal Express, Checkout, Captcha
+     * Refactored Prototype-based implementation of validation in "New Category" dialog to use jQuery
+     * Removing Prototype inclusion in several places
+  * Enhanced menu behavior in backend
+* VDE improvements:
+  * Implemented inline translate tool for VDE
+     * Added new dedicated button "T" in interface
+     * 3 different modes: Page Text, Variable Text (for script texts), Alternative Text (for attributes)
+     * Independent enabling of inline translation on frontend and in VDE
+  * Modified some text messages in VDE and in themes management
+  * Added ability to upload, browse and delete images and fonts that can be used in custom CSS
+  * Added ability to duplicate a theme
+  * Added ability to revert theme modifications to a last saved checkpoint
+  * Improved theme's background image handling
+  * Added alert, when deleting a block
+  * Removed drag-n-drop feature
+  * Refined and streamlined interface
+* HTML improvements:
+  * Enhanced accessibility in admin by labeling form fields
+* Payment improvements:
+  * Incorporated changes to the PayPal UI configuration from CE 1.7.0.1
+     * Moved PayPal configuration to the Payment Methods menu section
+     * Set the default value of the cUrl `VERIFYPEER` option to `true` for PayPal and added the ability to change this value
+     * Changed the design and position of the configuration field tooltips
+  * Removed support of Moneybookers payment method and underlying module in favor of 3rd party extensions
+  * Implemented support of PayPal IPN protocol HTTP 1.1
+  * Implemented a single place to configure credentials for Payflow Link and Express Checkout
+* System Configuration improvements:
+  * Added the functionality for creating nested field sets
+  * Implemented the support for the extended and shared configuration fields
+  * Added the ability to define dependencies between fields from different field sets
+* `Varien_Image` library refactored:
+  * Created adapters factory instead of class `Varien_Image_Adapter`
+  * Refactored ImageMagick and GD adapters to make them testable
+  * Added feature of generating image from text
+* Support of Google services:
+  * Changed module `Mage_GoogleOptimizer` to support Google Content Experiment instead of Google Optimizer
+  * Implemented support of Google AdWords on the checkout success page
+* DI improvements:
+  * Added ability to configure DI for individual class instances
+  * Added ability to pass differently configured instances to different parts of the system
+  * Refactored proxy and factory generation mechanism
+* Layout improvements:
+  * Implemented all-new mechanism of layout merging and customization:
+     * Convention over configuration approach is used, i.e. there is no need to declare layout files in module configs anymore
+     * Added support for merged modular layout files in a theme instead of single `local.xml` theme file
+     * All theme `local.xml` files are broken down and moved to theme modular layout files
+     * All the layout files are broken into smaller ones - one layout handle per one file, so that code duplication cane reduced, when overriding layout files in themes
+     * Covered new layout customization mechanism with integrity tests
+  * Relocated several files, declared in layouts
+  * Streamlined several design customizations
+* Various improvements:
+  * Refactored fallback paths to prevent searching of modular view files in non-module context, covered application with appropriate integrity test
+  * Added configuration for limits on sending wishlist emails
+  * Refactored default theme fixture in integration tests in order to divide it into smaller and easier to understand fixtures
+  * Moved Currency Symbol module files from Adminhtml module to the module itself
+  * "Contact Us" page is available through HTTPS only
+  * Language selector for backend interface removed from footer. Language can be chosen on My Account page or on backend user edit page
+  * Updated page titles in backend
+  * Improved mechanism of notification and system messages in backend. All related blocks and controllers are moved to AdminNotification module. Enhanced visual representations of notifications: bubble for unread messages, popup for notifications and their descriptions
+  * Updated text of some system messages, backend interface messages, backend menu items
+  * Several classes are refactored to use Event Manager instead of `Mage::dispatchEvent()`
+  * Improved test coverage of entry point classes
+  * Improved authorization logic to be reusable with minimal configuration changes
+  * Introduced App Area in Integration Testing Framework
+  * Improved media entry point
+  * Added plugins/interceptors support for easier extensibility of Magento functionality
+  * Added `application_process_reinit_config` event, so that it is possible to react, when Magento config gets reinitialized
+  * Added "less" to a list of files that are not published to the public directory during deployment process
+  * Eliminated requirement of write access to `pub/static` directory in "production" mode. "Developer" and "default" modes still require write access to this directory
+  * Improved test coverage of recently introduced `Mage_Core_Model_Config_` classes
+  * Added proper description to the error message, shown when uploading too big file with a content to import
+  * Refactored `Mage_Core_Model_Design_Package` - broken it down into several smaller classes according to the sets of responsibilities
+  * Refactored Theme and Theme Service models to follow best practices of OOP design
+  * Removed legacy API tests
+  * Improved transparency of cache control by tag scope in the framework
+  * Improved verification process for the application directories write-access by moving it to the top-level of framework initialization
+  * Introduced separate configurable application directory to be used for merged Javascript files
+  * Implemented support for minification of Javascript files; JSMin library adapter is created
+  * Implemented explicit usage of cache type in collections; engaged it for website, store and store view collections; added tests for a number of collections
+  * Implemented explicit usage of cache types in translations
+  * Implemented explicit usage of cache types in layouts
+  * Removed ability to set limits on maximal amount of categories, products, websites, stores, store views and admin users as an unusable feature
+  * Improved and simplified path normalization methods in `Magento_Filesystem` component
+  * Implemented proper exceptions instead of PHP warnings in `Magento_Filesystem` component
+  * Introduced `Mage_Core_Model_ModuleManager` to provide "enabled" information about modules
+  * Enabled following cache types in integration tests to improve performance: configuration, layouts, translations, EAV
+  * Improved and refreshed design for backend
+  * Removed "demo_blue", "iphone" and "modern" themes
+  * Converted more backend grids from PHP implementation to layout declarations
+  * Refactored experimental implementation of Service Calls Framework
+     * All code from to `lib/Magento/Datasource` and `app/code/Mage/Core/Datasource` moved to `app/code/Mage/Core/DataService`
+     * Added service calls support in Layout model
+     * Fixed bugs and architectural flaws
+     * Changed service calls declaration
+     * Improved test coverage
+     * Introduced mechanism to retrieve values from nested arrays by path
+     * Added Invoker class to invoke service calls by given name
+     * Added ability to define system configuration options via service calls. Refactored implementation for select field in XML
+  * Refactored support of Twig templates
+     * Removed experimental implementation of product view page with Twig templates
+     * Template abstraction moved to separate module `Mage_Core_Model_TemplateEngine`
+     * Modified various blocks and templates due to inability to call protected methods from templates
+     * Improved test coverage
+  * Refactored support for webhooks
+     * Code that provides communication with outbound endpoint moved to library `Magento_Outbound`
+     * Code that provides implementation of publish-subscribe mechanism and instruments moved to library `Magento_PubSub`
+     * Removed experimental webhook implementation in client code
+     * Used WebApi mechanism to provide authorization
+     * Improved UI for working with webhooks in Magento backend
+     * Improved test coverage
+  * Removed support of callbacks from the framework
+* GitHub requests:
+  * [#71](https://github.com/magento/magento2/pull/71) -- Add event prefix for Cms blocks
+  * [#108](https://github.com/magento/magento2/pull/108) -- Fix issue with `PHP_VERSION` on Ubuntu servers
+  * [#110](https://github.com/magento/magento2/pull/110) -- Fixes `Varien_Io_Sftp::write`, `Varien_Db_Adapter_Pdo_Mysql::insertOnDuplicate`
+  * [#123](https://github.com/magento/magento2/pull/123) -- Performance problem & memory leak in `Mage_Index_Model_Process`
+  * [#125](https://github.com/magento/magento2/pull/125) -- Ability to disable triggering controller action
+  * [#148](https://github.com/magento/magento2/pull/148) -- Fixed readability
+  * [#156](https://github.com/magento/magento2/pull/156) -- Event `adminhtml_cms_page_edit_tab_content_prepare_form` and `$form->setValues($model->getData());` in wrong order
+  * [#161](https://github.com/magento/magento2/pull/161) -- FIXED `http://www.magentocommerce.com/bug-tracking/issue/?issue=7419`
+  * [#176](https://github.com/magento/magento2/pull/176) -- Add print/log query flags to collection
+  * [#202](https://github.com/magento/magento2/pull/202) -- Installer fails to detect `InnoDB` on `MySQL 5.6+`
+  * [#215](https://github.com/magento/magento2/pull/215) -- There is no sort-order "best value"
+  * [#217](https://github.com/magento/magento2/pull/217) -- Update `app/code/core/Mage/Adminhtml/locale/de_DE/Mage_Adminhtml.csv`
+  * [#243](https://github.com/magento/magento2/pull/243) -- Fix helper for determining system memory usage on Windows (pull request for issue #237)
+  * [#267](https://github.com/magento/magento2/pull/267) -- Issue with camel case in cusutom defined source models
+* Bug fixes:
+  * Fixed absence of a product for store view created after the product
+  * Fixed incorrectly displayed or absent product image on configurable product pages
+  * Fixed incorrectly displayed Tier Price message for Bundle product in backend
+  * Fixed absence of configured options, when composite product is edited from wishlist
+  * Fixed inability to set product rating from backend
+  * Fixed bug with adding product with decimal quantity
+  * Fixed bug with incorrect theme saving when wrong preview file is uploaded
+  * Fixed incorrectly displayed error message when unsupported JavaScript file is uploaded while editing a theme
+  * Fixed bug with incorrect price and stock availability information
+  * Fixed absence of "Delete" button on Widget Instance and Edit Custom Variable pages
+  * Fixed inability to change PayPal configuration
+  * Fixed inventory return after cancelling order, paid with PayPal Website Payment Standard method
+  * Fixed removal of all the items from shopping cart, when cancelling payment by PayPal Website Payment Standard method
+  * Fixed issue with customer address saved in `sales_flat_quote_address` table as `null` or as default address instead of new one during checkout
+  * Fixed hard dependency on GD extension during installation. Now the application can be installed if any of GD or ImageMagick extension is enabled
+  * Fixed handling of creation a customer with already existing e-mail in backend
+  * Fixed exception on customer edit page, when profiler is enabled
+  * Fixed removal of "NOT LOGGED IN" customer group, when attempting to delete nonexistent group
+  * Fixed absence of a welcome email for a new customer that is created in backend
+  * Added validation of customer DOB
+  * Fixed bugs related to "Add Store Code to Urls" configuration setting: the setting applied to backend and produced exceptions on frontend
+  * Fixed inability to edit Newsletter Template
+  * Fixed inability to preview Newsletter Template while creating it
+  * Fixed inability to save Configuration from "Web" tab
+  * Fixed incorrect roles assignment for backend users
+  * Fixed incorrect message during checkout via Authorize.Net
+  * Fixed inability to create order in backend with Authorize.Net as payment method
+  * Fixed unexpected alert during one-page checkout
+  * Fixed bug with broken RSS link on some pages
+  * Fixed inability to delete non-empty customer groups
+  * Fixed bug with absent tracking number in notification email
+  * Fixed JS bug in bundle products
+  * Fixed bug with missing product configuration in bundle products
+  * Fixed absence of a summary for a configured bundle product on Product View page
+  * Fixed bug with missing wishlist grid on customer configuration page
+  * Added validation for the "Weight" field in Product Create/Modify admin form
+  * Fixed infinite loop in reports, when one of the GET-parameters was not submitted
+  * Fixed integration test that failed at the midnight
+  * Fixed image placeholder, being displayed instead of Base image, in Product View page
+  * Fixed multiple bugs in IE 8 and 9
+  * Restored export for table rates
+  * Fixed weight calculation for DHL
+  * Fixed anchor categories, which didn't show products from child categories
+  * Fixed exception, when applying catalog price rules
+  * Disabled "State" dropdown for Tax Rates in countries, where there are no states
+  * Fixed inability to save a CMS page
+  * Fixed Javascript calendar in backend Customer grid
+  * Fixed issues with fields validation on order management page
+  * Fixed taxes on Bundle product page
+  * Fixed "Rating isn't available" message on Edit Review page
+  * Fixed lack of data in New Order emails, when order is composed at backend
+  * Fixed exception message, when importing wrong tax rates file
+  * Fixed editable multiselect control - new value was not shown there, when added
+  * Fixed exception, when saving a configurable product without associated products
+  * Fixed inability to properly save system configuration, when submitting files there
+  * Fixed performance issue with excessive generation of category menu on "Add to Cart" page
+  * Fixed amounts, being shown in a wrong currency, when viewing created order
+  * Fixed calculation for amount of items, remaining in an order, after shipping and invoicing
+  * Fixed wrong price, calculated, when ordering multiple bundle products in backend
+  * Fixed issues with changing order statuses in backend
+  * Tested backend design, fixed the discovered issues - general and browser-related bugs
+  * Fixed order items, that have been shipped with Free Shipping method, to have "free shipping" status
+  * Fixed issue with a State field being required in countries, where it is not mandatory
+  * Fixed inability to upload a file via File custom option, when ordering a product at frontend
+  * Fixed incorrect cron timezone settings
+  * Fixed performance issues with product saving in case of concurrent search requests
+  * Fixed bug in migration script
+  * Fixed incorrect email when "Send auto-generated password" was hit
+  * Fixed bug with missing category image
+  * Fixed incorrect handling of `GET` parameter `isAjax` after session expiration
+  * Fixed incorrect translation of "month" field for customer's birthday
+  * Fixed Google Analytics script inclusion
+  * Fixed bug with excessive custom rewrites after reindex
+  * Fixed performance tests failure on login page
+  * Fixed incorrect value for average rating on Edit Review page
+  * Fixed bug with incorrect module configuration overriding
+  * Fixed exception in Nominal Tax model
+  * Fixed bug in sitemap URL used in `robots.txt`
+  * Fixed bug with incorrect `custom_design` field value during export
+  * Fixed bug with incorrect RSS title
+  * Fixed CSS style for validation message in CMS widgets
+  * Fixed bugs in `Mage_Tag` module on product creation page
+  * Fixed incorrect Products In Cart report
+  * Fixed incorrect price for bundles with default quantity more than 1
+  * Fixed displaying of "Import Behavior" section in the `System -> Import` page
+  * Fixed exception, when importing a CSV file with Byte Order Mark
+  * Removed remains of code pools in JavaScript tests
+  * Fixed bugs in shipping label creation
+  * Fixed inability to save some sections of configuration
+  * Fixed bug with empty "New Shipment" e-mail
+  * Fixed inability to save Attribute Set in IE8
+  * Fixed wrong tax summary for partial invoices and credit memos
+  * Fixed bug with categories custom design, where the chosen theme was not applied
+  * Fixed empty list of themes in CMS pages and Frontend Apps backend sections
+  * Fixed fatal error, when trying to access a customer account in a non-installed Magento
+  * Fixed Javascript error, when accessing system Design configuration in Chrome
+  * Fixed wrong representation of a widget on frontend, after hiding and showing WYSIWYG editor during CMS page modification
+  * Fixed exception, when using 2-level cache backend
+  * Fixed random test failures in `Mage_CatalogSearch_Block_Advanced_ResultTest`
+  * Fixed duplication of a view file signature, e.g. "file.ext?mtime?mtime"
+  * Prevented tracking of merged Javascript files metadata (and re-merging them) in production mode
+  * Fixed incorrect memory usage calculation in Integration tests
+  * Fixed issues in performance test scenarios
+  * Fixed inability to delete customer's address on frontend
+  * Fixed incorrect "No file chosen" message, shown after a successful upload of product image placeholder in Chrome
+  * Made "Print Order" page to display theme-customized logo instead of a default one
+  * Fixed other bugs in management of categories, products, product attributes, product templates (attribute sets), customers, taxes and tax rules
+  * Product creation fixes:
+     * Fixed inability to search and select category in IE8, including via mouse
+     * Fixed usability of category search tree field to not hang after entering each symbol
+     * Fixed inability to select/change attribute for product variations (configurable product) in IE8
+     * Fixed field highlighting and error placement after validation on "Create Category" dialog
+     * Fixed validation of parent category to be a require field
+     * Fixed bug with displaying special price for a product on frontend after the product template is switched to one without special price
+     * Fixed incorrectly displayed regular price for products with catalog price rule applied
+     * Fixed inability to upload an image in the WYSIWYG editor
+     * Fixed Javascript error, when replacing variation image in IE
+     * Fixed Javascript errors in production mode
+     * Unified look of all the popups
+     * Removed "Add Attribute" link, when Product Details section is collapsed
+     * Fixed issue with product template selector menu, which was not shown
+  * Shopping Cart Price Rule fixes:
+     * Fixed inability to save Shopping Cart Price Rule with Coupon = "No Coupon"
+     * Fixed saving of Shopping Cart Price Rule having specific coupon
+     * Fixed absence of fields on rule information tab
+  * Payment fixes:
+     * Fixed PayPal Pro (formerly Website Payment Pro) to pass shipping address in request to PayPal service
+     * Fixed triggering of a credit memo creation when Charge Back notification comes from PayPal
+     * Fixed emptying shopping cart after canceling on PayPal page
+     * Fixed error "10431-Item amount is invalid." when a Shopping Cart Price Rule is applied in Express Checkout Payflow Edition
+     * Fixed PayPal Payments Pro Hosted Solution to send "City" in place of the "State" parameter for UK and CA, if Region/State is disabled in the configuration
+     * Fixed ability to invoice order without providing payment using Google Checkout API
+     * Fixed validation of a Discover card number
+     * Fixed issues in configuration for payment methods: absence of "Sort Order" field, excessive fields with class name as a value, issues with form elements and groups
+     * Fixed exception, when using 2-level cache backend
+     * Fixed inability to place order with PayPal Payments Advanced and Payflow Link payment methods
+  * VDE fixes:
+     * Removed full file path information from the title of an uploaded store logo
+     * Fixed bugs in VDE with color picker, file uploader, themes assigning, Remove and Update buttons for custom CSS
+     * Fixed hint for the Scripts palette in dock
+     * Fixed inability to upload more than one Javascript file
+     * Fixed bug with improper scaling images in UI
+     * Fixed inability to preview and edit a physical theme
+     * Fixed inability to delete a block
+     * Fixed inability to delete a background image
+     * Fixed preview of a virtual theme in production mode
+     * Fixed JavaScript tests
+     * Fixed bugs with inline translation
+     * Added validation to the theme name field
+     * Fixed absence of error message in IE, when uploading unsupported file type in Theme Javascript
+     * Fixed corrupting of a `custom.css` file, when saving Custom CSS text
+     * Fixed wrong design of "Chain" and "Reset to Original" image buttons
+     * Fixed color picker, being cut off by small browser window
+     * Fixed bottom indent in "Quick Styles" panel - it was too big
+     * Fixed corrupted layout of "Image Sizing" tab, when resizing browser window
+     * Fixed "We found no files", being displayed all the time in the form to upload theme Javascript files
+  * API fixes:
+     * Added missing fields to SOAP API
+     * Fixed inability to set default customer address
+     * Fixed error message, when saving a customer with wrong email address
+     * Fixed inability to create partial order shipment
+     * Fixed absence of special price information in return of `productGetSpecialPrice` method
+     * Fixed incorrect content length of server response
+     * Fixed absence of `productAttributeAddOption`, `catalogProductAttributeUpdate`, `catalogProductAttributeTypes`, `catalogProductAttributeRemoveOption` and `catalogProductAttributeInfo` methods with WS-I mode enabled
+     * Fixed absence of `catalogProductDownloadableLinkList` method
+     * Fixed bug with incorrect credit memo creation when order item id is set
+     * Fixed bug with inability to update stock status or price of multiple products in one call
+     * Fixed `shoppingCartOrderWithPaymentRequestParam` method description in WSDL
+     * Fixed inability to add comment to order without changing order status
+     * Fixed incorrect redirect after SOAP POST request
+     * Fixed inability to end session by `endSession` method
+     * Fixed Save button for Web Services User Roles in backend
+     * Fixed memory issue due to incorrect filtering for the single field in `salesOrderList` method
+     * Fixed bug with getting product information by numeric SKU
+     * Fixed inability to add configurable product by `cart_product.add` method
+     * Fixed ACL initialization in WebApi
+     * Fixed bug with the same cache key used for both WS-I and non WS-I WSDL files
+     * Fixed bug with updating shopping cart by `shoppingCartProductUpdate` method
+     * Fixed product id validation in `shoppingCartProductAdd` method
+     * Fixed absence of tracking number in `salesOrderShipmentInfo` method response
+     * Fixed absence of tracking number in shipment transactional email
+
 2.0.0.0-dev44
 =============
 * Product creating & editing:
   * Added ability to control base text styling without WYSIWYG when editing description fields
   * Added validation for price and quantity fields
   * Removed category suggest limit
-* Product template management: 
+* Product template management:
   * Automatically update Product Template when modifying structure in Create Product flow
   * Improvements to change attribute set functionality
 * Refactored JavaScript to use JQuery library:
@@ -48,7 +377,7 @@
     * phtml templates can now only access public methods of the corresponding Block class
     * ability to define dependencies on data provided by a service that is then made available to the templates -- eliminates some of the code in Blocks
   * Introduced support for webhooks and callbacks: outbound HTTP requests for notifications and real-time integrations
-  * Added ability to define options for System Configuration select fields in XML: static options are defined inline, dynamic options can reuse data provided by a service  
+  * Added ability to define options for System Configuration select fields in XML: static options are defined inline, dynamic options can reuse data provided by a service
 * Moved product business logic found in blocks into `Mage_Catalog_Service_Product` to consolidate logic into a single structure that both controllers and web services can invoke
 * Converted product view page to demonstrate use of Twig templates and services
 * Updated shipping carrier `collectRates` logic to support remote callbacks and converted the FedEx shipping carrier to comply with the same interface
@@ -119,7 +448,7 @@
 =============
 * Application initialization improvements:
   * Removed application initialization responsibility from `Mage` class
-  * Introduces entry points, which are responsible for different types of requests processing: HTTP, media, cron, indexing, console installing, etc.
+  * Introduced entry points, which are responsible for different types of requests processing: HTTP, media, cron, indexing, console installing, etc.
   * New configuration classes are introduced and each of them is responsible for specific section of configuration
   * Class rewrites functionality removed from `Mage_Core_Model_Config` model. DI configuration should be used for rewriting classes
 * Added ability to configure object manager with array in addition to object and scalar values

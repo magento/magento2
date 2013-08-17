@@ -1,5 +1,7 @@
 <?php
 /**
+ * Creates a block given failed registration
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -23,24 +25,34 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 class Mage_Webhook_Block_Adminhtml_Registration_Failed extends Mage_Backend_Block_Template
 {
-    public function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('registration/failed.phtml');
+    /** @var  Mage_Backend_Model_Session */
+    protected $_session;
+
+    /**
+     * @param Mage_Backend_Model_Session $session
+     * @param Mage_Backend_Block_Template_Context $context
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Backend_Model_Session $session,
+        Mage_Backend_Block_Template_Context $context,
+        array $data = array()
+    ) {
+        parent::__construct($context, $data);
+        $this->_session = $session;
     }
 
+    /**
+     * Get error message produced on failure
+     *
+     * @return string The error message produced upon failure
+     */
     public function getSessionError()
     {
-        return $this->_getSession()->getMessages(true)
+        return $this->_session->getMessages(true)
             ->getLastAddedMessage()
             ->toString();
-    }
-
-    protected function _getSession()
-    {
-        return Mage::getSingleton('Mage_Backend_Model_Session');
     }
 }

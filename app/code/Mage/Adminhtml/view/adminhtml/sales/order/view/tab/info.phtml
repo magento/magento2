@@ -41,7 +41,7 @@
                 <span class="title"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Payment Information') ?></span>
             </div>
             <div><?php echo $this->getPaymentHtml() ?></div>
-            <div class="order-payment-currency"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Order was placed using %s', $_order->getOrderCurrencyCode()) ?></div>
+            <div class="order-payment-currency"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('The order was placed using %s.', $_order->getOrderCurrencyCode()) ?></div>
         </div>
     </div>
     <?php if (!$_order->getIsVirtual()): ?>

@@ -87,7 +87,7 @@
         <script type="text/javascript">$('order-shipping-method-choose').show();</script>
     <?php endif; ?>
 <?php elseif($this->getIsRateRequest()): ?>
-    <strong><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Sorry, no quotes are available for this order at this time.') ?></strong>
+    <strong><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Sorry, no quotes are available for this order.') ?></strong>
 <?php else: ?>
     <div id="order-shipping-method-summary">
         <a href="#" onclick="order.loadShippingRates();return false">
@@ -96,7 +96,7 @@
         <input type="hidden" name="order[has_shipping]" value="" class="required-entry" />
     </div>
 <?php endif; ?>
-<div style="display:none;" id="shipping-method-overlay" class="overlay"><span><?php echo $this->__('Shipping method selection is not applicable') ?></span></div>
+<div style="display:none;" id="shipping-method-overlay" class="overlay"><span><?php echo $this->__('You don\'t need to select a shipping method.') ?></span></div>
 <script type="text/javascript">
 order.overlay('shipping-method-overlay', <?php if ($this->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
 order.overlay('address-shipping-overlay', <?php if ($this->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);

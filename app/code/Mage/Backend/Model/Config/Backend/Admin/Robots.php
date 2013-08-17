@@ -59,7 +59,7 @@ class Mage_Backend_Model_Config_Backend_Admin_Robots extends Mage_Core_Model_Con
     ) {
         parent::__construct($context, $resource, $resourceCollection, $data);
         $this->_filesystem = $filesystem;
-        $this->_filePath = Magento_Filesystem::getAbsolutePath(Mage::getBaseDir() . DS . 'robots.txt');
+        $this->_filePath = Mage::getBaseDir() . '/robots.txt';
     }
 
 

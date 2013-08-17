@@ -36,9 +36,7 @@ class Mage_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Contro
 {
     public function indexAction()
     {
-        $this->_title($this->__('Catalog'))
-             ->_title($this->__('Attributes'))
-             ->_title($this->__('Manage Attribute Sets'));
+        $this->_title($this->__('Product Templates'));
 
         $this->_setTypeId();
 
@@ -55,9 +53,7 @@ class Mage_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Contro
 
     public function editAction()
     {
-        $this->_title($this->__('Catalog'))
-             ->_title($this->__('Attributes'))
-             ->_title($this->__('Manage Attribute Sets'));
+        $this->_title($this->__('Product Templates'));
 
         $this->_setTypeId();
         $attributeSet = Mage::getModel('Mage_Eav_Model_Entity_Attribute_Set')
@@ -141,7 +137,7 @@ class Mage_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Contro
                 $model->initFromSkeleton($this->getRequest()->getParam('skeleton_set'));
             }
             $model->save();
-            $this->_getSession()->addSuccess(Mage::helper('Mage_Catalog_Helper_Data')->__('The attribute set has been saved.'));
+            $this->_getSession()->addSuccess(Mage::helper('Mage_Catalog_Helper_Data')->__('You saved the attribute set.'));
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             $hasError = true;
@@ -185,15 +181,13 @@ class Mage_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Contro
 
     public function addAction()
     {
-        $this->_title($this->__('Catalog'))
-             ->_title($this->__('Attributes'))
-             ->_title($this->__('Manage Attribute Sets'))
-             ->_title($this->__('New Set'));
+        $this->_title($this->__('New Product Template'));
 
         $this->_setTypeId();
 
         $this->loadLayout();
         $this->_setActiveMenu('Mage_Catalog::catalog_attributes_sets');
+
 
         $this->_addContent(
             $this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Toolbar_Add')
@@ -230,7 +224,7 @@ class Mage_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Contro
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Catalog::sets');
+        return $this->_authorization->isAllowed('Mage_Catalog::sets');
     }
 
     /**

@@ -59,7 +59,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Container extends Mage_Backend_Bl
      */
     public function getHeaderText()
     {
-        return $this->_helperFactory->get('Mage_DesignEditor_Helper_Data')->__('Visual Design Editor');
+        return $this->_helperFactory->get('Mage_DesignEditor_Helper_Data')->__('Store Designer');
     }
 
     /**
@@ -81,15 +81,5 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Container extends Mage_Backend_Bl
     public function getFrameUrl()
     {
         return $this->_frameUrl;
-    }
-
-    /**
-     * Get virtual theme url
-     *
-     * @return string
-     */
-    public function getVirtualThemeCreationUrl()
-    {
-        return $this->getUrl('*/*/createVirtualTheme', array('theme_id' => $this->getTheme()->getId()));
     }
 }

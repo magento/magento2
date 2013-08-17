@@ -1,5 +1,7 @@
 <?php
 /**
+ * The list of available formats
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -23,57 +25,54 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * The list of available formats
- */
 class Mage_Webhook_Model_Source_Format
 {
-    /**
-     * Path to environments section in the config
-     * @var string
-     */
-    const XML_PATH_FORMATS = 'global/webhook/formats';
+    /** @var Mage_Core_Model_Translate  */
+    private $_translator;
+
+    /** @var string[] $_formats */
+    private $_formats;
 
     /**
-     * Cash of options
+     * Cache of options
+     *
      * @var null|array
      */
     protected $_options = null;
 
     /**
+     * @param Mage_Core_Model_Translate $translator
+     * @param string[] $formats
+     */
+    public function __construct(array $formats, Mage_Core_Model_Translate $translator)
+    {
+        $this->_translator = $translator;
+        $this->_formats = $formats;
+    }
+
+    /**
      * Get available formats
      *
-     * @return array
+     * @return string[]
      */
     public function toOptionArray()
     {
-        if ($this->_options) {
-            return $this->_options;
-        }
-
-        $this->_options = array();
-
-        $config = Mage::getConfig()->getNode(self::XML_PATH_FORMATS);
-        if (!$config) {
-            return $this->_options;
-        }
-        $this->_options = $config->asArray();
-
-        return $this->_options;
+        return $this->_formats;
     }
 
+    /**
+     * Return non-empty formats for use by a form
+     *
+     * @return array
+     */
     public function getFormatsForForm()
     {
         $elements = array();
-        // process groups
-        foreach ($this->toOptionArray() as $formatName => $format) {
-            if (!empty($format['label'])) {
-                $elements[] = array(
-                    'label' => Mage::helper('Mage_Webhook_Helper_Data')->__($format['label']),
-                    'value' => $formatName,
-                );
-            }
+        foreach ($this->_formats as $formatName => $format) {
+            $elements[] = array(
+                'label' => $this->_translator->translate(array($format)),
+                'value' => $formatName,
+            );
         }
 
         return $elements;

@@ -49,7 +49,7 @@ class Mage_ImportExport_Helper_Data extends Mage_Core_Helper_Data
     {
         $maxImageSize = Mage::getObjectManager()->get('Magento_File_Size')->getMaxFileSizeInMb();
         if ($maxImageSize) {
-            $message = $this->__('Total size of uploadable files must not exceed %sM', $maxImageSize);
+            $message = $this->__('The total size of the uploadable files can\'t be more that %sM', $maxImageSize);
         } else {
             $message = $this->__('System doesn\'t allow to get file upload settings');
         }

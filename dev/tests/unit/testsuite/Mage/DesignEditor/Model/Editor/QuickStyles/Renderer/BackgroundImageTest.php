@@ -46,6 +46,20 @@ class Mage_DesignEditor_Model_Editor_Tools_QuickStyles_Renderer_BackgroundImageT
     }
 
     /**
+     * @cover Mage_DesignEditor_Model_Editor_Tools_QuickStyles_Renderer_BackgroundImage::toCss
+     * @dataProvider backgroundImageDataClearDefault
+     */
+    public function testToCssClearDefault($expectedResult, $data)
+    {
+        /** @var $rendererModel Mage_DesignEditor_Model_Editor_Tools_QuickStyles_Renderer_BackgroundImage */
+        $rendererModel = $this->getMock(
+            'Mage_DesignEditor_Model_Editor_Tools_QuickStyles_Renderer_BackgroundImage', null, array(), '', false
+        );
+
+        $this->assertEquals($expectedResult, $rendererModel->toCss($data));
+    }
+
+    /**
      * @return array
      */
     public function backgroundImageData()
@@ -58,6 +72,23 @@ class Mage_DesignEditor_Model_Editor_Tools_QuickStyles_Renderer_BackgroundImageT
                 'selector'  => '.header',
                 'attribute' => 'background-image',
                 'value'     => 'path/image.gif',
+            ),
+        ));
+    }
+
+    /**
+     * @return array
+     */
+    public function backgroundImageDataClearDefault()
+    {
+        return array(array(
+            'expected_result' => ".header { background-image: none; }",
+            'data'            => array(
+                'type'      => 'image-uploader',
+                'default'   => 'bg.gif',
+                'selector'  => '.header',
+                'attribute' => 'background-image',
+                'value'     => '',
             ),
         ));
     }

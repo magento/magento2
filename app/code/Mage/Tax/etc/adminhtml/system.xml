@@ -59,13 +59,13 @@
                 </field>
                 <field id="price_includes_tax" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Catalog Prices</label>
-                    <comment>Whether catalog prices entered by admin include tax.</comment>
+                    <comment>This sets whether catalog prices entered by admin include tax.</comment>
                     <backend_model>Mage_Tax_Model_Config_Price_Include</backend_model>
                     <source_model>Mage_Tax_Model_System_Config_Source_PriceType</source_model>
                 </field>
                 <field id="shipping_includes_tax" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Shipping Prices</label>
-                    <comment>Whether shipping amounts entered by admin or obtained from gateways include tax.</comment>
+                    <comment>This sets whether shipping amounts entered by admin or obtained from gateways include tax.</comment>
                     <backend_model>Mage_Tax_Model_Config_Price_Include</backend_model>
                     <source_model>Mage_Tax_Model_System_Config_Source_PriceType</source_model>
                 </field>

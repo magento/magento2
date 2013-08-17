@@ -52,7 +52,7 @@ class Mage_Adminhtml_Block_Report_Sales_Tax_Grid extends Mage_Adminhtml_Block_Re
     protected function _prepareColumns()
     {
         $this->addColumn('period', array(
-            'header'            => Mage::helper('Mage_Sales_Helper_Data')->__('Period'),
+            'header'            => Mage::helper('Mage_Sales_Helper_Data')->__('Interval'),
             'index'             => 'period',
             'sortable'          => false,
             'period_type'       => $this->getPeriodType(),
@@ -83,7 +83,7 @@ class Mage_Adminhtml_Block_Report_Sales_Tax_Grid extends Mage_Adminhtml_Block_Re
         ));
 
         $this->addColumn('orders_count', array(
-            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Number of Orders'),
+            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Orders'),
             'index'     => 'orders_count',
             'total'     => 'sum',
             'type'      => 'number',

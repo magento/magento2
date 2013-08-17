@@ -61,4 +61,14 @@ class Magento_ObjectManager_Definition_Runtime implements Magento_ObjectManager_
         }
         return $this->_definitions[$className];
     }
+
+    /**
+     * Retrieve list of all classes covered with definitions
+     *
+     * @return array
+     */
+    public function getClasses()
+    {
+        return array();
+    }
 }

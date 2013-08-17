@@ -48,7 +48,7 @@ class Mage_ImportExport_Model_Config
         foreach (Mage::getConfig()->getNode($configKey)->asCanonicalArray() as $entityType => $entityParams) {
             if (empty($entityParams['model_token'])) {
                 Mage::throwException(
-                    Mage::helper('Mage_ImportExport_Helper_Data')->__('Node does not has model token tag')
+                    Mage::helper('Mage_ImportExport_Helper_Data')->__('Please provide a correct model token tag.')
                 );
             }
             $entities[$entityType] = array(

@@ -60,7 +60,12 @@
          */
         _deleteAddress: function(e) {
             if (confirm(this.options.deleteConfirmMessage)) {
-                window.location = this.options.deleteUrlPrefix + $(e.target).data('address');
+                if (typeof $(e.target).parent().data('address') !== 'undefined') {
+                    window.location = this.options.deleteUrlPrefix + $(e.target).parent().data('address');
+                }
+                else {
+                    window.location = this.options.deleteUrlPrefix + $(e.target).data('address');
+                }
             }
             return false;
         }

@@ -505,6 +505,9 @@
                 <is_nominal>
                     <to_order_item>*</to_order_item>
                 </is_nominal>
+                <free_shipping>
+                    <to_order_item>*</to_order_item>
+                </free_shipping>
             </sales_convert_quote_item>
             <sales_convert_order>
                 <customer_id>
@@ -808,6 +811,9 @@
                     <to_cm_item>*</to_cm_item>
                     <to_quote_item>*</to_quote_item>
                 </base_cost>
+                <free_shipping>
+                    <to_quote_item>*</to_quote_item>
+                </free_shipping>
             </sales_convert_order_item>
             <customer_account>
                 <id>

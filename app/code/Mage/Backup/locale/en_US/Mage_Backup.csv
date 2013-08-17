@@ -33,7 +33,7 @@
 "Put store on the maintenance mode while backup's creation","Put store on the maintenance mode while backup's creation"
 "Rollback","Rollback"
 "Scheduled Backup Settings","Scheduled Backup Settings"
-"Size, Bytes","Size, Bytes"
+"Size (bytes)","Size (bytes)"
 "Start Time","Start Time"
 "System Backup","System Backup"
 "System couldn't put store on the maintenance mode","System couldn't put store on the maintenance mode"

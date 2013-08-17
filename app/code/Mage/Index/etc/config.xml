@@ -45,9 +45,7 @@
             </index_setup>
         </resources>
         <index>
-            <indexer>
-
-            </indexer>
+            <indexer></indexer>
         </index>
         <events>
             <store_save_commit_after>
@@ -120,13 +118,6 @@
         </routers>
     </admin>
     <adminhtml>
-        <layout>
-            <updates>
-                <index module="Mage_Index">
-                    <file>layout.xml</file>
-                </index>
-            </updates>
-        </layout>
         <translate>
             <modules>
                 <Mage_Index>
@@ -136,5 +127,14 @@
                 </Mage_Index>
             </modules>
         </translate>
+        <di>
+            <Mage_AdminNotification_Model_System_MessageList>
+                <parameters>
+                    <messages>
+                        <indexer>Mage_Index_Model_System_Message_IndexOutdated</indexer>
+                    </messages>
+                </parameters>
+            </Mage_AdminNotification_Model_System_MessageList>
+        </di>
     </adminhtml>
 </config>

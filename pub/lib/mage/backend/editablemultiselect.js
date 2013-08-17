@@ -208,20 +208,21 @@
                             + result[entityValueName] + '</option>');
                         // Add editable multiselect item
                         var mselectItemHtml = $(options.item.replace(/%value%|%label%/gi, result[entityValueName])
-                            .replace(/%mselectDisabledClass%|%iseditable%|%isremovable%/gi, '')
-                            .replace(/%mselectListItemClass%/gi, options.mselectListItemClass))
-                            .find('[type=checkbox]')
-                            .attr('checked', true)
-                            .addClass(options.mselectCheckedClass)
-                            .end();
-                        var itemsWrapper = select.next().find('.' + options.mselectItemsWrapperClass + '');
+                                .replace(/%mselectDisabledClass%|%iseditable%|%isremovable%/gi, '')
+                                .replace(/%mselectListItemClass%/gi, options.mselectListItemClass))
+                                .find('[type=checkbox]')
+                                .attr('checked', true)
+                                .addClass(options.mselectCheckedClass)
+                                .end(),
+                            sectionBlock = select.nextAll('section.block:first'),
+                            itemsWrapper = sectionBlock.find('.' + options.mselectItemsWrapperClass + '');
                         itemsWrapper.children('.' + options.mselectListItemClass + '').length
                             ? itemsWrapper.children('.' + options.mselectListItemClass + ':last').after(mselectItemHtml)
                             : itemsWrapper.prepend(mselectItemHtml);
                         // Trigger blur event on input field, that is used to add new value, to hide it
                         var inputSelector = '.' + options.mselectInputContainerClass + ' [type=text].'
                             + options.mselectInputClass + '';
-                        select.next().find(inputSelector).trigger('blur');
+                        sectionBlock.find(inputSelector).trigger('blur');
                     } else {
                         alert(result.error_message);
                     }

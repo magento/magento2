@@ -1,5 +1,7 @@
 <?php
 /**
+ * The list of available hooks
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -23,38 +25,35 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * The list of available hooks
- */
 class Mage_Webhook_Model_Source_Hook
 {
     /**
      * Path to environments section in the config
-     * @var string
      */
     const XML_PATH_WEBHOOK = 'global/webhook/webhooks';
 
     /**
-     * Type for inform webhook
-     */
-    const INFORM_TYPE = 'inform';
-
-    /**
-     * Type for callback webhook
-     */
-    const CALLBACK_TYPE = 'callback';
-
-    /**
-     * The default type for a webhook if no type subelement exists.
-     */
-    const DEFAULT_TYPE = self::INFORM_TYPE;
-
-    /**
-     * Cash of options
+     * Cache of options
+     *
      * @var null|array
      */
     protected $_options = null;
+
+    /** @var Mage_Core_Model_Translate  */
+    private $_translator;
+
+    /** @var  Mage_Core_Model_Config */
+    private $_config;
+
+    /**
+     * @param Mage_Core_Model_Translate $translator
+     * @param Mage_Core_Model_Config $config
+     */
+    public function __construct(Mage_Core_Model_Translate $translator, Mage_Core_Model_Config $config )
+    {
+        $this->_translator = $translator;
+        $this->_config = $config;
+    }
 
     /**
      * Get available topics
@@ -63,21 +62,23 @@ class Mage_Webhook_Model_Source_Hook
      */
     public function toOptionArray()
     {
-        if ($this->_options) {
-            return $this->_options;
-        }
+        if (!$this->_options) {
+            $this->_options = array();
 
-        $this->_options = array();
-
-        $config = Mage::getConfig()->getNode(self::XML_PATH_WEBHOOK);
-        if (!$config) {
-            return $this->_options;
+            $configElement = $this->_config->getNode(self::XML_PATH_WEBHOOK);
+            if ($configElement) {
+                $this->_options = $configElement->asArray();
+            }
         }
-        $this->_options = $config->asArray();
 
         return $this->_options;
     }
 
+    /**
+     * Scan config element to retrieve topics
+     *
+     * @return array
+     */
     public function getTopicsForForm()
     {
         $elements = array();
@@ -88,14 +89,13 @@ class Mage_Webhook_Model_Source_Hook
         return $elements;
     }
 
-    // TODO: Consider making elements a reference
     /**
      * Recursive helper function to dynamically build topic information for our form.
      * Seeks out nodes under 'webhook' stopping when it finds a leaf that contains 'label'
      * The value is constructed using the XML tree parents.
-     * @param $node
-     * @param $path
-     * @param $elements
+     * @param array $node
+     * @param array $path
+     * @param array $elements
      * @return array
      */
     protected function _getTopicsForForm($node, $path, $elements)
@@ -103,16 +103,7 @@ class Mage_Webhook_Model_Source_Hook
         if (!empty($node['label'])) {
             $value = join('/', $path);
 
-            $type = self::DEFAULT_TYPE;
-            if (!empty($node['type'])) {
-                $type = $node['type'];
-            }
-
-            $label = Mage::helper('Mage_Webhook_Helper_Data')->__($node['label']);
-
-            if ($type === self::CALLBACK_TYPE) {
-                $label = Mage::helper('Mage_Webhook_Helper_Data')->__('%s (Callback)', $label);
-            }
+            $label = $this->_translator->translate(array($node['label']));
 
             $elements[] = array(
                 'label' => $label,

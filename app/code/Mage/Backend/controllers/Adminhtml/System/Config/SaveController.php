@@ -43,72 +43,29 @@ class Mage_Backend_Adminhtml_System_Config_SaveController extends Mage_Backend_C
     protected $_configFactory;
 
     /**
-     * Core Config Model
-     *
-     * @var Mage_Core_Model_Config
+     * @var Magento_Cache_FrontendInterface
      */
-    protected $_configModel;
+    protected $_cache;
 
     /**
-     * Event manager model
-     *
-     * @var Mage_Core_Model_Event_Manager
-     */
-    protected $_eventManager;
-
-    /**
-     * Application model
-     *
-     * @var Mage_Core_Model_App
-     */
-    protected $_app;
-
-    /**
-     * Constructor
-     *
-     * @param Mage_Core_Controller_Request_Http $request
-     * @param Mage_Core_Controller_Response_Http $response
-     * @param Magento_ObjectManager $objectManager
-     * @param Mage_Core_Controller_Varien_Front $frontController
-     * @param Mage_Core_Model_Authorization $authorization
+     * @param Mage_Backend_Controller_Context $context
      * @param Mage_Backend_Model_Config_Structure $configStructure
-     * @param Mage_Core_Model_Config $configModel
      * @param Mage_Backend_Model_Config_Factory $configFactory
-     * @param Mage_Core_Model_Event_Manager $eventManager
-     * @param Mage_Core_Model_App $app
      * @param Mage_Backend_Model_Auth_StorageInterface $authSession
-     * @param Mage_Core_Model_Layout_Factory $layoutFactory
+     * @param Magento_Cache_FrontendInterface $cache
      * @param string $areaCode
-     * @param array $invokeArgs
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        Mage_Core_Controller_Request_Http $request,
-        Mage_Core_Controller_Response_Http $response,
-        Magento_ObjectManager $objectManager,
-        Mage_Core_Controller_Varien_Front $frontController,
-        Mage_Core_Model_Authorization $authorization,
+        Mage_Backend_Controller_Context $context,
         Mage_Backend_Model_Config_Structure $configStructure,
-        Mage_Core_Model_Config $configModel,
         Mage_Backend_Model_Config_Factory $configFactory,
-        Mage_Core_Model_Event_Manager $eventManager,
-        Mage_Core_Model_App $app,
         Mage_Backend_Model_Auth_StorageInterface $authSession,
-        Mage_Core_Model_Layout_Factory $layoutFactory,
-        $areaCode = null,
-        array $invokeArgs = array()
+        Magento_Cache_FrontendInterface $cache,
+        $areaCode = null
     ) {
-        parent::__construct($request, $response, $objectManager, $frontController,
-            $authorization, $configStructure, $authSession, $layoutFactory, $areaCode, $invokeArgs
-        );
-
-        $this->_authorization = $authorization;
-        $this->_configStructure = $configStructure;
+        parent::__construct($context, $configStructure, $authSession, $areaCode);
         $this->_configFactory = $configFactory;
-        $this->_eventManager = $eventManager;
-        $this->_app = $app;
-        $this->_configModel = $configModel;
+        $this->_cache = $cache;
     }
 
     /**
@@ -137,28 +94,19 @@ class Mage_Backend_Adminhtml_System_Config_SaveController extends Mage_Backend_C
             $configModel = $this->_configFactory->create(array('data' => $configData));
             $configModel->save();
 
-            // re-init configuration
-            $this->_configModel->reinit();
-
-            $this->_eventManager->dispatch('admin_system_config_section_save_after', array(
-                'website' => $website, 'store' => $store, 'section' => $section
-            ));
-
-            $this->_app->reinitStores();
-
-            // website and store codes can be used in event implementation, so set them as well
-            $this->_eventManager->dispatch("admin_system_config_changed_section_{$section}", array(
-                'website' => $website, 'store' => $store
-            ));
-            $this->_session->addSuccess($this->_getHelper()->__('The configuration has been saved.'));
+            $this->_session->addSuccess(
+                $this->_getHelper()->__('You saved the configuration.')
+            );
         } catch (Mage_Core_Exception $e) {
             $messages = explode("\n", $e->getMessage());
             foreach ($messages as $message) {
                 $this->_session->addError($message);
             }
         } catch (Exception $e) {
-            $this->_session->addException($e,
-                $this->_getHelper()->__('An error occurred while saving this configuration:') . ' ' . $e->getMessage());
+            $this->_session->addException(
+                $e,
+                $this->_getHelper()->__('An error occurred while saving this configuration:') . ' ' . $e->getMessage()
+            );
         }
 
         $this->_saveState($this->getRequest()->getPost('config_state'));
@@ -182,8 +130,12 @@ class Mage_Backend_Adminhtml_System_Config_SaveController extends Mage_Backend_C
              */
             foreach ($files['name'] as $groupName => $group) {
                 $data = $this->_processNestedGroups($group);
-                if (false == empty($data)) {
-                    $groups[$groupName] = $data;
+                if (!empty($data)) {
+                    if (!empty($groups[$groupName])) {
+                        $groups[$groupName] = array_merge_recursive((array)$groups[$groupName], $data);
+                    } else {
+                        $groups[$groupName] = $data;
+                    }
                 }
             }
         }
@@ -202,7 +154,7 @@ class Mage_Backend_Adminhtml_System_Config_SaveController extends Mage_Backend_C
 
         if (isset($group['fields']) && is_array($group['fields'])) {
             foreach ($group['fields'] as $fieldName => $field) {
-                if (false == empty($field['value'])) {
+                if (!empty($field['value'])) {
                     $data['fields'][$fieldName] = array('value' => $field['value']);
                 }
             }
@@ -211,7 +163,7 @@ class Mage_Backend_Adminhtml_System_Config_SaveController extends Mage_Backend_C
         if (isset($group['groups']) && is_array($group['groups'])) {
             foreach ($group['groups'] as $groupName => $groupData) {
                 $nestedGroup = $this->_processNestedGroups($groupData);
-                if (false == empty($nestedGroup)) {
+                if (!empty($nestedGroup)) {
                     $data['groups'][$groupName] = $nestedGroup;
                 }
             }
@@ -236,8 +188,6 @@ class Mage_Backend_Adminhtml_System_Config_SaveController extends Mage_Backend_C
      */
     protected function _saveAdvanced()
     {
-        $this->_app->cleanCache(array('layout', Mage_Core_Model_Layout_Merge::LAYOUT_GENERAL_CACHE_TAG));
+        $this->_cache->clean();
     }
-
-
 }

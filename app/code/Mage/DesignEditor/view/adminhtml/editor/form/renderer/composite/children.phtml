@@ -31,7 +31,7 @@ $element = $this->getElement();
 ?>
 
 <?php /** @var $child Varien_Data_Form_Element_Abstract */ ?>
-<?php foreach ($element->getSortedElements() as $child): ?>
+<?php foreach ($element->getElements() as $child): ?>
     <?php echo $child->toHtml(); ?>
 <?php endforeach; ?>
 

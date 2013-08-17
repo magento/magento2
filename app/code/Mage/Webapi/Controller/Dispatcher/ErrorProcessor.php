@@ -147,10 +147,10 @@ class Mage_Webapi_Controller_Dispatcher_ErrorProcessor
         $trace = 'Trace is not available.',
         $httpCode = self::DEFAULT_ERROR_HTTP_CODE
     ) {
-        if (strstr($_SERVER['HTTP_ACCEPT'], 'json')) {
+        if (isset($_SERVER['HTTP_ACCEPT']) && strstr($_SERVER['HTTP_ACCEPT'], 'json')) {
             $output = $this->_formatError($errorMessage, $trace, $httpCode, self::DATA_FORMAT_JSON);
             $mimeType = 'application/json';
-        } elseif (strstr($_SERVER['HTTP_ACCEPT'], 'xml')) {
+        } elseif (isset($_SERVER['HTTP_ACCEPT']) && strstr($_SERVER['HTTP_ACCEPT'], 'xml')) {
             $output = $this->_formatError($errorMessage, $trace, $httpCode, self::DATA_FORMAT_XML);
             $mimeType = 'application/xml';
         } else {

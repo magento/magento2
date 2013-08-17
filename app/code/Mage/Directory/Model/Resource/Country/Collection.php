@@ -35,6 +35,43 @@
 class Mage_Directory_Model_Resource_Country_Collection extends Mage_Core_Model_Resource_Db_Collection_Abstract
 {
     /**
+     * String helper
+     *
+     * @var Mage_Core_Helper_String
+     */
+    protected $_stringHelper;
+
+    /**
+     * Locale model
+     *
+     * @var Mage_Core_Model_LocaleInterface
+     */
+    protected $_locale;
+
+    /**
+     * @param Mage_Core_Helper_String $stringHelper
+     * @param Mage_Core_Model_LocaleInterface $locale
+     * @param Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy
+     * @param Mage_Core_Model_Resource_Db_Abstract $resource
+     */
+    public function __construct(
+        Mage_Core_Helper_String $stringHelper,
+        Mage_Core_Model_LocaleInterface $locale,
+        Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy,
+        $resource = null
+    ) {
+        parent::__construct($fetchStrategy, $resource);
+        $this->_stringHelper = $stringHelper;
+        $this->_locale = $locale;
+    }
+    /**
+     * Foreground countries
+     *
+     * @var array
+     */
+    protected $_foregroundCountries = array();
+
+    /**
      * Define main table
      *
      */
@@ -133,7 +170,7 @@ class Mage_Directory_Model_Resource_Country_Collection extends Mage_Core_Model_R
     /**
      * Convert collection items to select options array
      *
-     * @param string $emptyLabel
+     * @param string|boolean $emptyLabel
      * @return array
      */
     public function toOptionArray($emptyLabel = ' ')
@@ -142,15 +179,19 @@ class Mage_Directory_Model_Resource_Country_Collection extends Mage_Core_Model_R
 
         $sort = array();
         foreach ($options as $data) {
-            $name = Mage::app()->getLocale()->getCountryTranslation($data['value']);
+            $name = $this->_locale->getCountryTranslation($data['value']);
             if (!empty($name)) {
                 $sort[$name] = $data['value'];
             }
         }
-
-        Mage::helper('Mage_Core_Helper_String')->ksortMultibyte($sort);
+        $this->_stringHelper->ksortMultibyte($sort);
+        foreach (array_reverse($this->_foregroundCountries) as $foregroundCountry) {
+            $name = array_search($foregroundCountry, $sort);
+            unset($sort[$name]);
+            $sort = array($name => $foregroundCountry) + $sort;
+        }
         $options = array();
-        foreach ($sort as $label=>$value) {
+        foreach ($sort as $label => $value) {
             $options[] = array(
                'value' => $value,
                'label' => $label
@@ -162,5 +203,20 @@ class Mage_Directory_Model_Resource_Country_Collection extends Mage_Core_Model_R
         }
 
         return $options;
+    }
+
+    /**
+     * Set foreground countries array
+     *
+     * @param string|array $foregroundCountries
+     * @return Mage_Directory_Model_Resource_Country_Collection
+     */
+    public function setForegroundCountries($foregroundCountries)
+    {
+        if (empty($foregroundCountries)) {
+            return $this;
+        }
+        $this->_foregroundCountries = (array)$foregroundCountries;
+        return $this;
     }
 }

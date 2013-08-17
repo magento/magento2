@@ -50,6 +50,15 @@
 }
 
 .header .logo {
+    display: block;
+    width: 109px;
+    height: 27px;
+    text-indent: -999em;
+    background: url(Mage_Backend::images/logo-magento-small.png) no-repeat;
+    margin: 0;
+}
+/*
+.header .logo {
     display: inline-block;
     width: 100px;
     height: 27px;
@@ -96,7 +105,7 @@
     line-height: 1;
     font-weight: normal;
     color: #000;
-}
+}*/
 
 .header-panel {
     float: right;
@@ -131,25 +140,6 @@
     color: #8C867E;
     font: 11px/13px Arial, Helvetica, sans-serif;
     white-space: normal;
-}
-
-.header-panel .dropdown-menu > li:first-child:before,
-.header-panel .dropdown-menu > li.first:before {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    top: -8px;
-    left: 50%;
-    margin-left: -5px;
-    font-family: 'MUI-Icons';
-    font-style: normal;
-    speak: none;
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-    content: '\e029'; /* user icon */
-    color: #f7f3eb;
-    font-size: 13px;
-    text-shadow: 0 -1px 2px #bbb;
 }
 
 .header-panel .dropdown-menu > li:hover {
@@ -268,29 +258,32 @@
 .header-panel .notifications {
     position: relative;
     float: left;
-    margin: 0 0 0 30px;
-    padding: 4px 0 0;
+    margin: 0 6px 0 21px;
+    padding: 9px 0 0;
 }
 
 .header-panel .notifications-icon {
     position: relative;
     display: inline-block;
-    height: 13px;
-    line-height: 1em;
-    padding: 0 4px 0 3px;
-    text-align: center;
+    height: 12px;
+    width: 17px;
     text-decoration: none;
-    background: #19a3d1;
-    box-shadow: 0 1px 1px #000;
+    text-align: center;
+    background: #cac2b5;
+    box-shadow: 0 1px 0 #fff;
     border-radius: 2px;
-    vertical-align: middle;
+}
+
+.header-panel .notifications-icon:hover,
+.header-panel .notifications-icon:active {
+    background: #b0a798;
 }
 
 .header-panel .notifications-icon:before {
     position: absolute;
     left: 0;
     right: 0;
-    top: 100%;
+    bottom: -7px;
     margin-top: -5px;
     font-family: 'MUI-Icons';
     font-style: normal;
@@ -299,27 +292,256 @@
     -webkit-font-smoothing: antialiased;
     content: '\e02c'; /* user icon */
     font-size: 8px;
-    color: #19a3d1;
-    text-shadow: 0 1px 1px #000;
+    color: #cac2b5;
+    text-shadow: 0 1px 0 #fff;
+}
+
+.header-panel .notifications-icon:hover:before,
+.header-panel .notifications-icon:active:before {
+    color: #b0a798;
 }
 
 .eq-ie8 .header-panel .notifications-icon:before {
-    bottom: -7px;
+    bottom: -6px;
 }
 
 .header-panel .notifications .value {
-    font-size: 10px;
+    font-size: 9px;
     font-weight: bold;
+    line-height: 11px;
     color: #fff;
-    white-space: nowrap;
+    padding: 1px 3px;
+    min-width: 10px;
+    background: #f58220;
+    border: 1px solid #bd5100;
+    border-radius: 4px;
+    box-shadow: 0 1px 0 #31302b;
+    left: 6px;
+    top: -5px;
+    position: absolute;
 }
 
 .header-panel .notifications.active .dropdown-menu {
     display: block;
     margin-top: 12px;
+    border: 2px solid #676056;
+    width: 288px;
+    margin: 8px -52px 0 0;
 }
 
-.header-panel .notifications > .dropdown-menu strong,
+.header-panel .dropdown-menu > li {
+    background: #fff;
+    border-bottom: 0;
+    color: #8c867e;
+    position: relative;
+    padding: 13px 26px 14px 16px;
+    font: 11px/13px Arial, Helvetica, sans-serif;
+    white-space: normal;
+}
+
+.header-panel .dropdown-menu > li:after {
+    border-bottom: 1px solid #f7e4d0;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 2px;
+    content: '';
+    width: 284px;
+}
+
+.header-panel .dropdown-menu > li:last-child:after,
+.header-panel .dropdown-menu > li.last:after {
+    display: none;
+}
+
+.header-panel .notifications > .dropdown-menu .notification-description {
+    max-height: 40px;
+    overflow: hidden;
+    display: block;
+    font-family: Helvetica, Arial, sans-serif;
+    color: #676056;
+}
+
+.header-panel .notifications > .dropdown-menu .notification-entry {
+    display: none;
+}
+
+.header-panel .notifications .dropdown-menu:before,
+.header-panel .notifications .dropdown-menu:after {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    right: 55px;
+    top: -10px;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    content: '\e029'; /* user icon */
+    color: #fff;
+    z-index: 2;
+}
+
+.header-panel .notifications .dropdown-menu:after {
+    color: #676056;
+    font-size: 17px;
+    height: 12px;
+    right: 57px;
+    top: -14px;
+    z-index: 1;
+}
+
+.header-panel .notifications > .dropdown-menu .notification-entry:first-child {display: block;}
+.header-panel .notifications > .dropdown-menu .notification-entry:first-child + .notification-entry {display: block;}
+.header-panel .notifications > .dropdown-menu .notification-entry:first-child + .notification-entry + .notification-entry {display: block;}
+.header-panel .notifications > .dropdown-menu .notification-entry:first-child + .notification-entry + .notification-entry + .notification-entry {display: block;}
+.header-panel .notifications > .dropdown-menu .notification-entry:first-child + .notification-entry + .notification-entry + .notification-entry + .notification-entry {display: block;}
+
+.header-panel .notifications > .dropdown-menu .notification-entry:nth-child(-n+5) {
+    display: block;
+}
+
+.header-panel .notifications > .dropdown-menu .notification-entry .notification-dialog-content {
+    display: none;
+}
+
+/*
+    Notification entry dialog
+-------------------------------------- */
+
+.notification-entry-dialog .notification-dialog-content,
+.notification-entry-dialog .ui-dialog-buttonpane {
+    background: #fefaf6;
+}
+
+.notification-entry-dialog .ui-dialog-titlebar {
+    background: #f9f1e8;
+}
+
+.notification-entry-dialog .ui-dialog-title {
+    font-size: 22px;
+    padding-left: 24px;
+}
+
+.notification-entry-dialog-critical .ui-dialog-titlebar {
+    background: #fee4d0;
+}
+
+.notification-entry-dialog-critical .ui-dialog-title {
+    padding-left: 54px;
+}
+
+.notification-entry-dialog-critical .ui-dialog-title:before {
+    content: "\e086";
+    font-family: 'MUI-Icons';
+    color: #c00815;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 26px;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    left: 21px;
+    position: absolute;
+    top: 16px;
+}
+
+.notification-entry-dialog  .ui-dialog-titlebar-close:before {
+    font-size: 15px;
+}
+
+.notification-entry-dialog .notification-dialog-content {
+    padding-top: 19px;
+    padding-bottom: 16px;
+}
+
+.notification-entry-dialog .notification-dialog-content strong {
+    display: block;
+    color: #f58220;
+    font-family: "CallunaSans";
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.notification-entry-dialog .notification-dialog-content .notification-description {
+    display: block;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.42;
+    padding: 3px 0 7px;
+}
+
+.notification-entry-dialog .notification-dialog-content time {
+    color: #8c867e;
+    font-size: 13px;
+    font-family: Helvetica, Arial, sans-serif;
+    position: absolute;
+    right: 17px;
+    bottom: 27px;
+    text-align: right;
+}
+
+.notification-entry-dialog .notification-dialog-content .actions {
+    margin-bottom: 22px;
+}
+
+.notification-entry-dialog .notification-dialog-content .actions a {
+    color: #676056;
+    position: relative;
+    margin-right: 20px;
+}
+
+.notification-entry-dialog .notification-dialog-content .actions a:after {
+    content: "\e084";
+    font-family: 'MUI-Icons';
+    color: #6a5f54;
+    font-size: 12px;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    position: absolute;
+    right: -17px;
+    top: -2px;
+}
+
+.notification-entry-dialog .ui-dialog-buttonset {
+    text-align: left;
+}
+
+.notification-entry-dialog .ui-dialog-buttonpane {
+    margin: 0;
+    padding: 0 24px 22px;
+}
+
+.notification-entry-dialog .ui-dialog-buttonset button[class^="action-"] {
+    background-image: none;
+    margin: 0 16px 0 0;
+    vertical-align: middle;
+    text-shadow: none;
+    box-shadow: none;
+    border: 0;
+}
+
+.notification-entry-dialog .ui-dialog-buttonset .action-acknowledge {
+    background-color: #f47b20;
+    border: 0;
+    padding: 5px 15px;
+}
+
+.notification-entry-dialog .ui-dialog-buttonset .action-acknowledge:hover {
+    background-color: #e47821;
+}
+
+.notification-entry-dialog .ui-dialog-buttonset .action-cancel {
+    background-color: #dbd6ce;
+    border: 0;
+    padding: 5px 15px;
+}
+
+.notification-entry-dialog .ui-dialog-buttonset .action-cancel:hover {
+    background-color: #d3cdc4;
+}
+
 .header-panel .account > .dropdown-menu a,
 .header-panel .search .autocomplete-results .title {
     display: block;
@@ -328,6 +550,60 @@
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 5px;
+}
+
+.header-panel .notifications > .dropdown-menu li > strong {
+    display: block;
+    font-family: "CallunaSans";
+    font-size: 14px;
+    font-weight: 500;
+    color: #f47b20;
+    max-height: 34px;
+    overflow: hidden;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+.header-panel .notifications > .dropdown-menu li.notification-critical strong {
+    padding-left: 30px;
+    position: relative;
+}
+
+.header-panel .notifications > .dropdown-menu li.notification-critical > strong:before {
+    display: block;
+    content: "\e086";
+    font-family: 'MUI-Icons';
+    color: #c00815;
+    font-size: 19px;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    position: absolute;
+    left: 0;
+    top: 5px;
+}
+
+.header-panel .notifications > .dropdown-menu > li:hover {
+    background: #f7f3eb;
+    cursor: pointer;
+    margin-top: -1px;
+    padding-top: 14px;
+    z-index: 2;
+}
+.eq-ie8 .header-panel .notifications > .dropdown-menu > li:hover,
+.header-panel .notifications > .dropdown-menu > li:first-child:hover,
+.header-panel .notifications > .dropdown-menu > li.first:hover,
+.header-panel .notifications > .dropdown-menu > li:last-child:hover,
+.header-panel .notifications > .dropdown-menu > li.last:hover {
+    margin-top: 0;
+    padding-top: 13px;
+}
+
+.header-panel .dropdown-menu > li:hover:after {
+    display: none;
+}
+
+.eq-ie8 .header-panel .dropdown-menu > li:hover:after {
+    display: block;
 }
 
 .header-panel .notifications > .dropdown-menu > li:hover .action-close {
@@ -357,8 +633,11 @@
 }
 
 .header-panel .notifications > .dropdown-menu time {
+    color: #8c867e;
     display: block;
-    margin-top: 10px;
+    margin-top: 7px;
+    font-size: 10px;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 .header-panel .notifications > .dropdown-menu a:focus ~ .action-close,
@@ -369,28 +648,33 @@
 .header-panel .notifications > .dropdown-menu .action-close {
     position: absolute;
     display: none;
-    top: 0;
-    right: 0;
+    top: 8px;
+    right: 4px;
     width: 20px;
-    height: 15px;
-    padding-left: 3px;
+    height: 20px;
     text-indent: -999em;
     overflow: hidden;
+    color: #cac2b5;
 }
 
 .header-panel .notifications > .dropdown-menu .action-close:hover {
-    color: #f47b20;
+    color: #b0a789;
 }
 
 .header-panel .notifications > .dropdown-menu .action-close:before {
-    content: '\00D7\00A0';
     display: block;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 19px;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    content: '\e07f'; /* trashbin icon */
     text-indent: 0;
 }
 
-.eq-ie8 .header-panel .notifications > .dropdown-menu .action-close:before {
-    line-height: .666;
-    padding-left: 2px;
+.eq-ie8 .header-panel .notifications > .dropdown-menu .action-close {
+    filter: none;
 }
 
 .header .header-panel .notifications .dropdown-menu > li.last {
@@ -400,17 +684,20 @@
 .header .header-panel .notifications .action-more {
     display: block;
     background: #676056;
-    font-size: 13px;
-    height: 29px;
-    width: 100%;
     border: 0;
-    color: #fff;
+    color: #f7f3eb;
+    font-size: 13px;
+    font-weight: bold;
+    height: 23px;
+    width: 100%;
+    line-height: 23px;
     text-shadow: none;
-    line-height: 2.2;
-    border-radius: 0 0 5px 5px;
-    box-shadow: 0 1px 2px #000;
     text-align: center;
     margin: 0;
+}
+
+.eq-ie8 .header .header-panel .notifications .action-more {
+    filter: none;
 }
 
 .header .header-panel .notifications .action-more:hover {
@@ -467,6 +754,14 @@
     background-image: url(../mui/images/ajax-loader-small.gif);
 }
 
+.header .search .mage-suggest {
+    border: none;
+}
+
+.header .search .mage-suggest::after {
+    content: '';
+}
+
 .search .dropdown-menu {
     display: block;
     right: auto;
@@ -520,6 +815,7 @@
     color: #676056;
     text-shadow: 0 1px 0 #fff;
     box-shadow: none;
+    filter: none;
 }
 
 .search button[type="submit"]:hover,

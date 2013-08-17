@@ -29,17 +29,11 @@
  * @see Mage_Paypal_Block_Adminhtml_System_Config_ApiWizard
  */
 ?>
-<table>
-    <tr>
-        <td>
-            <button style="" onclick="javascript:window.open('<?php echo $this->getButtonUrl()?>', 'apiwizard','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,left=100, top=100, width=380, height=470'); return false;" class="scalable" type="button" id="<?php echo $this->getHtmlId() ?>">
-                <span><span><span><?php echo $this->escapeHtml($this->getButtonLabel()); ?></span></span></span>
-            </button>
-        </td>
-        <td>
-            <button style="" onclick="javascript:window.open('<?php echo $this->getSandboxButtonUrl()?>', 'apiwizard','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,left=100, top=100, width=380, height=470'); return false;" class="scalable" type="button" id="<?php echo $this->getSandboxHtmlId() ?>">
-                <span><span><span><?php echo $this->escapeHtml($this->getSandboxButtonLabel()); ?></span></span></span>
-            </button>
-        </td>
-    </tr>
-</table>
+<div class="pp-buttons-container">
+    <button onclick="javascript:window.open('<?php echo $this->getButtonUrl()?>', 'apiwizard','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,left=100, top=100, width=380, height=470'); return false;" class="scalable" type="button" id="<?php echo $this->getHtmlId() ?>">
+        <span><span><span><?php echo $this->escapeHtml($this->getButtonLabel()); ?></span></span></span>
+    </button>
+    <button onclick="javascript:window.open('<?php echo $this->getSandboxButtonUrl()?>', 'apiwizard','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,left=100, top=100, width=380, height=470'); return false;" class="scalable" type="button" id="<?php echo $this->getSandboxHtmlId() ?>">
+        <span><span><span><?php echo $this->escapeHtml($this->getSandboxButtonLabel()); ?></span></span></span>
+    </button>
+</div>

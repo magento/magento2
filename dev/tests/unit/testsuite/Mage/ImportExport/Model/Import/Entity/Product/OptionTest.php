@@ -434,12 +434,17 @@ class Mage_ImportExport_Model_Import_Entity_Product_OptionTest extends PHPUnit_F
             ->method('getProductEntitiesInfo')
             ->will($this->returnValue($products));
 
-        $optionCollection = $this->getMock(
-            'Varien_Data_Collection_Db',
-            array('reset', 'addProductToFilter', 'getSelect', '_fetchAll', 'getNewEmptyItem')
+        $fetchStrategy = $this->getMockForAbstractClass(
+            'Varien_Data_Collection_Db_FetchStrategyInterface', array('fetchAll')
         );
 
-        $select = $this->getMock('stdClass', array('join', 'where'));
+        $optionCollection = $this->getMock(
+            'Varien_Data_Collection_Db',
+            array('reset', 'addProductToFilter', 'getSelect', 'getNewEmptyItem'),
+            array($fetchStrategy)
+        );
+
+        $select = $this->getMock('Zend_Db_Select', array('join', 'where'), array(), '', false);
         $select->expects($this->any())
             ->method('join')
             ->will($this->returnSelf());
@@ -469,8 +474,8 @@ class Mage_ImportExport_Model_Import_Entity_Product_OptionTest extends PHPUnit_F
             }
         }
 
-        $optionCollection->expects($this->any())
-            ->method('_fetchAll')
+        $fetchStrategy->expects($this->any())
+            ->method('fetchAll')
             ->will($this->returnValue($optionsData));
 
         $collectionIterator = $this->getMock('stdClass', array('iterate'));

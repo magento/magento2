@@ -23,108 +23,73 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+/** @var $this Mage_Eav_Block_Adminhtml_Attribute_Edit_Options_Options */
 ?>
-<?php
-/**
- * Attribute options control
- *
- * @var $this Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tab_Options
- */
-?>
-
-<fieldset class="fieldset">
-    <legend class="legend"><span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Titles (Size, Color, etc.)') ?></span></legend>
-    <br>
-    <div class="message message-info">
-        <div class="message-inner">
-            <div class="message-content"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('If you do not specify an option value for a specific store view then the default (Admin) value will be used.') ?></div>
-        </div>
-    </div>
-
-    <table class="data-table" id="attribute-labels-table">
-        <thead>
-            <tr>
-                <?php foreach ($this->getStores() as $_store): ?>
-                    <th class="col-store-view"><?php echo $_store->getName() ?></th>
-                <?php endforeach; ?>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <?php $_labels = $this->getLabelValues() ?>
-                <?php foreach ($this->getStores() as $_store): ?>
-                <td class="col-store-view">
-                    <input class="input-text<?php if ($_store->getId() == Mage_Core_Model_App::ADMIN_STORE_ID): ?> required-option<?php endif; ?>" type="text" name="frontend_label[<?php echo $_store->getId() ?>]" value="<?php echo $this->escapeHtml($_labels[$_store->getId()]) ?>"<?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/>
-                </td>
-                <?php endforeach; ?>
-            </tr>
-        </tbody>
-    </table>
-</fieldset>
-
 <fieldset class="fieldset">
     <legend class="legend"><span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Options (values of your attribute)') ?></span></legend>
-    <br>
-    <div id="matage-options-panel">
+    <div id="manage-options-panel">
         <table class="data-table" cellspacing="0">
             <thead>
-            <tr id="attribute-options-table">
-                <th class="col-default"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Is Default') ?></th>
-                <?php
-                $storelist = $this->getStores();
-                foreach ($storelist as $_store):
-                    ?>
-                    <th><?php echo $_store->getName() ?></th>
+                <tr id="attribute-options-table">
+                    <th class="col-draggable"></th>
+                    <th class="col-default"><?php echo $this->__('Is Default') ?></th>
+                    <?php
+                    $storelist = $this->getStores();
+                    foreach ($storelist as $_store):
+                        ?>
+                        <th><?php echo $_store->getName() ?></th>
                     <?php endforeach;
-                $storetotal = count($storelist) + 3;
-                ?>
-                <th class="col-position"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Position') ?></th>
-                <th class="col-delete">&nbsp;</th>
-            </tr>
+                    $storetotal = count($storelist) + 3;
+                    ?>
+                    <th class="col-delete">&nbsp;</th>
+                </tr>
             </thead>
-            <tr class="no-display template" id="row-template">
-                <td class="col-default"><input class="input-radio" type="radio" name="default[]" value="{{id}}" <?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/></td>
-                <?php foreach ($this->getStores() as $_store): ?>
-                <td class="col-{{id}}"><input name="option[value][{{id}}][<?php echo $_store->getId() ?>]" value="{{store<?php echo $_store->getId() ?>}}" class="input-text<?php if ($_store->getId() == Mage_Core_Model_App::ADMIN_STORE_ID): ?> required-option<?php endif; ?>" type="text" <?php if ($this->getReadOnly() || $this->canManageOptionDefaultOnly()):?> disabled="disabled"<?php endif;?>/></td>
-                <?php endforeach; ?>
-                <td class="col-position"><input class="input-text" type="text" name="option[order][{{id}}]" value="{{sort_order}}" <?php if ($this->getReadOnly() || $this->canManageOptionDefaultOnly()):?> disabled="disabled"<?php endif;?>/></td>
-                <td>
-                    <input type="hidden" class="delete-flag" name="option[delete][{{id}}]" value="" />
-                    <?php if (!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()):?>
-                    <?php echo $this->getDeleteButtonHtml() ?>
-                    <?php endif;?>
-                </td>
-            </tr>
+            <tbody data-role="options-container"></tbody>
             <tfoot>
-            <th colspan="<?php echo $storetotal; ?>">
-                <?php if (!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()):?>
-                <?php echo $this->getAddNewButtonHtml() ?>
-                <?php endif;?>
-            </th>
+                <th colspan="<?php echo $storetotal; ?>">
+                    <?php if (!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()):?>
+                        <button id="add_new_option_button" title="<?php echo $this->__('Add Option'); ?>"
+                            type="button" class="action- scalable add">
+                             <span><?php echo $this->__('Add Option'); ?></span>
+                        </button>
+                    <?php endif; ?>
+                </th>
             </tfoot>
         </table>
         <input type="hidden" id="option-count-check" value="" />
     </div>
-</fieldset>
-<script type="text/javascript">
+    <script id="row-template" type="text/x-jquery-tmpl">
+         <tr>
+            <td class="col-draggable">
+                <?php if (!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()): ?>
+                    <div data-role="draggable-handle" class="draggable-handle" title="<?php echo $this->__('Sort Option'); ?>"></div>
+                <?php endif; ?>
+                <input data-role="order" type="hidden" name="option[order][{{id}}]"  value="{{sort_order}}" <?php if ($this->getReadOnly() || $this->canManageOptionDefaultOnly()): ?> disabled="disabled"<?php endif; ?>/>
+            </td>
+            <td class="col-default">
+                <input class="input-radio" type="{{intype}}" name="default[]" value="{{id}}" {{checked}}<?php if ($this->getReadOnly()):?>disabled="disabled"<?php endif;?>/>
+            </td>
+            <?php foreach ($this->getStores() as $_store): ?>
+            <td class="col-{{id}}"><input name="option[value][{{id}}][<?php echo $_store->getId() ?>]" value="{{store<?php echo $_store->getId() ?>}}" class="input-text<?php if ($_store->getId() == Mage_Core_Model_App::ADMIN_STORE_ID): ?> required-option<?php endif; ?>" type="text" <?php if ($this->getReadOnly() || $this->canManageOptionDefaultOnly()):?> disabled="disabled"<?php endif;?>/></td>
+            <?php endforeach; ?>
+            <td id="delete_button_container_{{id}}" class="col-delete">
+                <input type="hidden" class="delete-flag" name="option[delete][{{id}}]" value="" />
+                <?php if (!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()):?>
+                    <button title="<?php echo $this->__('Delete') ?>" type="button"
+                        class="action- scalable delete delete-option"
+                        >
+                        <span><?php echo $this->__('Delete') ?></span>
+                    </button>
+                <?php endif;?>
+            </td>
+        </tr>
+    </script>
+    <script type="text/javascript">
     //<![CDATA[
     var optionDefaultInputType = 'radio';
 
     // IE removes quotes from element.innerHTML whenever it thinks they're not needed, which breaks html.
-    var templateText =
-            '<tr class="option-row">'+
-                    '<td class="col-default"><input class="input-radio" type="{{intype}}" name="default[]" value="{{id}}" {{checked}} <?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/><\/td>'+
-            <?php foreach ($this->getStores() as $_store): ?>
-                    '<td><input name="option[value][{{id}}][<?php echo $_store->getId() ?>]" value="{{store<?php echo $_store->getId() ?>}}" class="input-text<?php if ($_store->getId() == Mage_Core_Model_App::ADMIN_STORE_ID): ?> required-option<?php endif; ?>" type="text" <?php if ($this->getReadOnly() || $this->canManageOptionDefaultOnly()):?> disabled="disabled"<?php endif;?><?php if ($_store->getId() == Mage_Core_Model_App::ADMIN_STORE_ID && $this->canManageOptionDefaultOnly()):?> style="width:196px"<?php endif;?> /><\/td>'+
-                <?php endforeach; ?>
-                    '<td><input class="input-text" type="text" name="option[order][{{id}}]" value="{{sort_order}}" <?php if ($this->getReadOnly() || $this->canManageOptionDefaultOnly()):?> disabled="disabled"<?php endif;?>/><\/td>'+
-                    '<td id="delete_button_container_{{id}}" class="col-delete">'+
-                    '<input type="hidden" class="delete-flag" name="option[delete][{{id}}]" value="" />'+
-            <?php if (!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()):?>
-                <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getDeleteButtonHtml()) ?> +
-                <?php endif;?>
-                    '<\/td>'+
-                    '<\/tr>';
+    var templateText = $('row-template').innerHTML;
 
     var attributeOption = {
         table: $('attribute-options-table'),
@@ -137,13 +102,17 @@
             this.template = new Template(this.templateText, this.templateSyntax);
             var isNewOption = false;
             if (typeof data.id == 'undefined') {
-                data = {'id': 'option_' + this.itemCount};
+                data = {
+                    'id': 'option_' + this.itemCount,
+                    'sort_order': this.itemCount + 1
+                };
                 isNewOption = true;
             }
             if (!data.intype) {
                 data.intype = optionDefaultInputType;
             }
-            Element.insert(this.table, {after: this.template.evaluate(data)});
+
+            Element.insert($$('[data-role=options-container]')[0], this.template.evaluate(data));
             if (isNewOption && !this.isReadOnly) {
                 this.enableNewOptionDeleteButton(data.id);
             }
@@ -155,7 +124,7 @@
         remove: function(event) {
             var element = $(Event.findElement(event, 'tr')); // !!! Button already have table parent in safari
             // Safari workaround
-            element.ancestors().each(function(parentItem){
+            element.ancestors().each(function(parentItem) {
                 if (parentItem.hasClassName('option-row')) {
                     element = parentItem;
                     throw $break;
@@ -188,24 +157,38 @@
         },
         bindRemoveButtons: function() {
             var buttons = $$('.delete-option');
-            for(var i=0;i<buttons.length;i++){
-                if(!$(buttons[i]).binded){
+            for (var i = 0; i < buttons.length; i++) {
+                if (!$(buttons[i]).binded) {
                     $(buttons[i]).binded = true;
                     Event.observe(buttons[i], 'click', this.remove.bind(this));
                 }
             }
         }
     }
-    if ($('row-template')) {
-        $('row-template').remove();
-    }
+
     attributeOption.bindRemoveButtons();
 
-if ($('add_new_option_button')) {
-    Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption));
-}
-<?php foreach ($this->getOptionValues() as $_value): ?>
+    if ($('add_new_option_button')) {
+        Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption));
+    }
+    <?php foreach ($this->getOptionValues() as $_value): ?>
     attributeOption.add(<?php echo $_value->toJson() ?>);
-        <?php endforeach; ?>
+    <?php endforeach; ?>
+    <?php if (!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()):?>
+    jQuery(function($) {
+        $('[data-role=options-container]').sortable({
+            distance: 8,
+            tolerance: "pointer",
+            cancel: 'input, button',
+            axis: 'y',
+            update: function() {
+                $('[data-role=options-container] [data-role=order]').each(function(index, element) {
+                    $(element).val(index + 1);
+                });
+            }
+        });
+    });
+    <?php endif; ?>
     //]]>
-</script>
+    </script>
+</fieldset>

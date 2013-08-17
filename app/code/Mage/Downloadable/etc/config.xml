@@ -115,13 +115,6 @@
                 </create>
             </order>
         </sales>
-        <layout>
-            <updates>
-                <downloadable module="Mage_Downloadable">
-                    <file>layout.xml</file>
-                </downloadable>
-            </updates>
-        </layout>
         <events>
             <catalog_product_prepare_save>
                 <observers>
@@ -188,13 +181,6 @@
                 </Mage_Downloadable>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <downloadable module="Mage_Downloadable">
-                    <file>layout.xml</file>
-                </downloadable>
-            </updates>
-        </layout>
         <events>
             <sales_order_item_save_commit_after>
                 <observers>

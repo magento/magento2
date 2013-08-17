@@ -39,7 +39,28 @@ class Mage_Wishlist_Block_Customer_Sharing extends Mage_Core_Block_Template
      *
      * @param array
      */
-    protected  $_enteredData = null;
+    protected $_enteredData = null;
+
+    /**
+     * Wishlist configuration
+     *
+     * @var Mage_Wishlist_Model_Config
+     */
+    protected $_wishlistConfig;
+
+    /**
+     * @param Mage_Core_Block_Template_Context $context
+     * @param Mage_Wishlist_Model_Config $wishlistConfig
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Core_Block_Template_Context $context,
+        Mage_Wishlist_Model_Config $wishlistConfig,
+        array $data = array()
+    ) {
+        $this->_wishlistConfig = $wishlistConfig;
+        parent::__construct($context, $data);
+    }
 
     /**
      * Prepare Global Layout
@@ -50,7 +71,7 @@ class Mage_Wishlist_Block_Customer_Sharing extends Mage_Core_Block_Template
     {
         $headBlock = $this->getLayout()->getBlock('head');
         if ($headBlock) {
-            $headBlock->setTitle($this->__('Wishlist Sharing'));
+            $headBlock->setTitle($this->__('Wish List Sharing'));
         }
     }
 
@@ -93,5 +114,25 @@ class Mage_Wishlist_Block_Customer_Sharing extends Mage_Core_Block_Template
     public function getBackUrl()
     {
         return $this->getUrl('*/*/index');
+    }
+
+    /**
+     * Retrieve number of emails allowed for sharing
+     *
+     * @return int
+     */
+    public function getEmailSharingLimit()
+    {
+        return $this->_wishlistConfig->getSharingEmailLimit();
+    }
+
+    /**
+     * Retrieve maximum email length allowed for sharing
+     *
+     * @return int
+     */
+    public function getTextSharingLimit()
+    {
+        return $this->_wishlistConfig->getSharingTextLimit();
     }
 }

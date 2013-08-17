@@ -58,22 +58,21 @@ class Mage_Catalog_Model_Resource_Product_Collection_AssociatedProduct
     /**
      * Collection constructor
      *
+     * @param Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy
      * @param Mage_Core_Model_Registry $registryManager
      * @param Mage_Catalog_Model_Product_Type_Configurable $productType
      * @param Mage_Catalog_Helper_Product_Configuration $configurationHelper
-     * @param null $resource
      */
     public function __construct(
+        Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy,
         Mage_Core_Model_Registry $registryManager,
         Mage_Catalog_Model_Product_Type_Configurable $productType,
-        Mage_Catalog_Helper_Product_Configuration $configurationHelper,
-        $resource = null
+        Mage_Catalog_Helper_Product_Configuration $configurationHelper
     ) {
         $this->_registryManager = $registryManager;
         $this->_productType = $productType;
         $this->_configurationHelper = $configurationHelper;
-
-        parent::__construct($resource);
+        parent::__construct($fetchStrategy);
     }
 
     /**
@@ -97,13 +96,12 @@ class Mage_Catalog_Model_Resource_Product_Collection_AssociatedProduct
     }
 
     /**
-     * Prepare select for load
-     *
-     * @param Varien_Db_Select $select
-     * @return string
+     * Add attributes to select
      */
-    public function _prepareSelect(Varien_Db_Select $select)
+    public function _initSelect()
     {
+        parent::_initSelect();
+
         $allowedProductTypes = array();
         foreach ($this->_configurationHelper->getConfigurableAllowedTypes() as $type) {
             $allowedProductTypes[] = $type->getName();
@@ -119,6 +117,6 @@ class Mage_Catalog_Model_Resource_Product_Collection_AssociatedProduct
             ->addFilterByRequiredOptions()
             ->joinAttribute('name', 'catalog_product/name', 'entity_id', null, 'inner');
 
-        return parent::_prepareSelect($select);
+        return $this;
     }
 }

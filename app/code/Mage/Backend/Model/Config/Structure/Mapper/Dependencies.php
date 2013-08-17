@@ -30,6 +30,21 @@
 class Mage_Backend_Model_Config_Structure_Mapper_Dependencies extends Mage_Backend_Model_Config_Structure_MapperAbstract
 {
     /**
+     * Class that can convert relative paths from "depends" node to absolute
+     *
+     * @var Mage_Backend_Model_Config_Structure_Mapper_Helper_RelativePathConverter
+     */
+    protected $_pathConverter;
+
+    /**
+     * @param Mage_Backend_Model_Config_Structure_Mapper_Helper_RelativePathConverter $pathConverted
+     */
+    public function __construct(Mage_Backend_Model_Config_Structure_Mapper_Helper_RelativePathConverter $pathConverted)
+    {
+        $this->_pathConverter = $pathConverted;
+    }
+
+    /**
      * Apply map
      *
      * @param array $data
@@ -92,23 +107,8 @@ class Mage_Backend_Model_Config_Structure_Mapper_Dependencies extends Mage_Backe
     protected function _getDependPath($field, $config)
     {
         $dependPath = $field['id'];
-        if (strpos($dependPath, '/') === false) {
-            $dependPath = '*/*/' .  $dependPath;
-        }
         $elementPath = $config['path'] . '/' . $config['id'];
 
-        $dependPathParts = explode('/', $dependPath);
-        $elementPathParts = explode('/', $elementPath);
-        $output = array();
-        foreach ($dependPathParts as $index => $path) {
-            if ($path === '*') {
-                if (false == array_key_exists($index, $elementPathParts)) {
-                    throw new InvalidArgumentException('Invalid relative depends structure');
-                }
-                $path = $elementPathParts[$index];
-            }
-            $output[$index] = $path;
-        }
-        return $output;
+        return explode('/', $this->_pathConverter->convert($elementPath, $dependPath));
     }
 }

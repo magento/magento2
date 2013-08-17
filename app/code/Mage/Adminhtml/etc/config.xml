@@ -51,6 +51,15 @@
                 </observers>
             </admin_user_authenticate_after>
         </events>
+        <di>
+            <Mage_Adminhtml_Catalog_Product_AttributeController>
+                <parameters>
+                    <attributeLabelCache>
+                        <instance>Mage_Core_Model_Cache_Type_Translate</instance>
+                    </attributeLabelCache>
+                </parameters>
+            </Mage_Adminhtml_Catalog_Product_AttributeController>
+        </di>
     </global>
     <admin>
         <routers>
@@ -66,14 +75,6 @@
     </admin>
     <adminhtml>
         <events>
-            <core_locale_set_locale>
-                <observers>
-                    <bind_locale>
-                        <class>Mage_Adminhtml_Model_Observer</class>
-                        <method>bindLocale</method>
-                    </bind_locale>
-                </observers>
-            </core_locale_set_locale>
             <admin_system_config_changed_section_admin>
                 <observers>
                     <bind_locale>
@@ -106,75 +107,14 @@
                 </Mage_Adminhtml>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <admin module="Mage_Adminhtml">
-                    <file>admin.xml</file>
-                </admin>
-                <adminhtml module="Mage_Adminhtml">
-                    <file>main.xml</file>
-                </adminhtml>
-                <adminnotification module="Mage_Adminhtml">
-                    <file>adminnotification.xml</file>
-                </adminnotification>
-                <backup module="Mage_Adminhtml">
-                    <file>backup.xml</file>
-                </backup>
-                <catalog module="Mage_Adminhtml">
-                    <file>catalog.xml</file>
-                </catalog>
-                <cms module="Mage_Adminhtml">
-                    <file>cms.xml</file>
-                </cms>
-                <customer module="Mage_Adminhtml">
-                    <file>customer.xml</file>
-                </customer>
-                <design module="Mage_Adminhtml">
-                    <file>system/design/design.xml</file>
-                </design>
-                <newsletter module="Mage_Adminhtml">
-                    <file>newsletter.xml</file>
-                </newsletter>
-                <promo module="Mage_Adminhtml">
-                    <file>promo.xml</file>
-                </promo>
-                <rating module="Mage_Adminhtml">
-                    <file>rating.xml</file>
-                </rating>
-                <report module="Mage_Adminhtml">
-                    <file>report.xml</file>
-                </report>
-                <sales module="Mage_Adminhtml">
-                    <file>sales.xml</file>
-                </sales>
-                <store module="Mage_Adminhtml">
-                    <file>system/store/store.xml</file>
-                </store>
-                <system module="Mage_Adminhtml">
-                    <file>system/email/template.xml</file>
-                </system>
-                <tax module="Mage_Adminhtml">
-                    <file>tax.xml</file>
-                </tax>
-                <urlrewrite module="Mage_Adminhtml">
-                    <file>urlrewrite.xml</file>
-                </urlrewrite>
-                <system_variable module="Mage_Adminhtml">
-                    <file>variable.xml</file>
-                </system_variable>
-                <system_search module="Mage_Adminhtml">
-                    <file>search.xml</file>
-                </system_search>
-            </updates>
-        </layout>
         <sales>
             <order>
                 <create>
                     <available_product_types>
-                        <simple/>
-                        <virtual/>
-                        <configurable/>
-                        <grouped/>
+                        <simple />
+                        <virtual />
+                        <configurable />
+                        <grouped />
                     </available_product_types>
                 </create>
             </order>

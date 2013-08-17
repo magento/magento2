@@ -70,9 +70,12 @@ class Mage_Tax_Model_Calculation_Rate extends Mage_Core_Model_Abstract
      */
     protected function _beforeSave()
     {
-        if ($this->getCode() === '' || $this->getTaxCountryId() === '' || $this->getRate() === ''
-            || $this->getZipIsRange() && ($this->getZipFrom() === '' || $this->getZipTo() === '')
-        ) {
+        $isWrongRange = $this->getZipIsRange() && ($this->getZipFrom() === '' || $this->getZipTo() === '');
+
+        $isEmptyValues = $this->getCode() === '' || $this->getTaxCountryId() === '' || $this->getRate() === ''
+            || $this->getTaxPostcode() === '';
+
+        if ($isEmptyValues || $isWrongRange) {
             Mage::throwException(Mage::helper('Mage_Tax_Helper_Data')->__('Please fill all required fields with valid information.'));
         }
 
@@ -142,7 +145,7 @@ class Mage_Tax_Model_Calculation_Rate extends Mage_Core_Model_Abstract
     protected function _beforeDelete()
     {
         if ($this->_isInRule()) {
-            Mage::throwException(Mage::helper('Mage_Tax_Helper_Data')->__('Tax rate cannot be removed. It exists in tax rule'));
+            Mage::throwException(Mage::helper('Mage_Tax_Helper_Data')->__('The tax rate cannot be removed. It exists in a tax rule.'));
         }
         return parent::_beforeDelete();
     }

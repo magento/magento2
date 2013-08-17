@@ -52,26 +52,27 @@ class Mage_Tag_Block_Adminhtml_Customer_Edit_Tab_TagTest extends PHPUnit_Framewo
     /**
      * Array of data helpers
      *
-     * @var array
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_helpers;
+    protected $_helperMock;
 
     public function setUp()
     {
-        $dataHelper = $this->getMock('stdClass', array('__'));
-        $dataHelper->expects($this->any())
+        $this->_helperMock = $this->getMock('Mage_Tag_Helper_Data', array(), array(), '', false);
+        $this->_helperMock->expects($this->any())
             ->method('__')
             ->will($this->returnArgument(0));
 
-        $this->_helpers = array('Mage_Tag_Helper_Data' => $dataHelper);
-        $authSession = $this->getMock('Mage_Core_Model_Authorization', array(), array(), '', false);
+
+        $authorization = $this->getMock('Magento_AuthorizationInterface');
+        $helperFactoryMock = $this->getMock('Mage_Core_Model_Factory_Helper', array(), array(), '', false);
+        $helperFactoryMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($this->_helperMock));
 
         $arguments = array(
-            'authSession' => $authSession,
-            'urlBuilder' => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false),
-            'data' => array(
-                'helpers' => $this->_helpers,
-            )
+            'authorization' => $authorization,
+            'helperFactory' => $helperFactoryMock,
         );
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject('Mage_Tag_Block_Adminhtml_Customer_Edit_Tab_Tag', $arguments);
@@ -99,17 +100,20 @@ class Mage_Tag_Block_Adminhtml_Customer_Edit_Tab_TagTest extends PHPUnit_Framewo
                 ->will($this->returnValue($isCustomerExist));
         }
 
-        $authSession = $this->getMock('Mage_Core_Model_Authorization', array('isAllowed'), array(), '', false);
-        $authSession->expects($this->any())
+        $authorization = $this->getMock('Magento_AuthorizationInterface');
+        $authorization->expects($this->any())
             ->method('isAllowed')
             ->will($this->returnValue($isAllowed));
 
+
+        $helperFactoryMock = $this->getMock('Mage_Core_Model_Factory_Helper', array(), array(), '', false);
+        $helperFactoryMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($this->_helperMock));
+
         $arguments = array(
-            'authSession' => $authSession,
-            'urlBuilder' => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false),
-            'data' => array(
-                'helpers' => $this->_helpers,
-            )
+            'authorization' => $authorization,
+            'helperFactory' => $helperFactoryMock,
         );
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject('Mage_Tag_Block_Adminhtml_Customer_Edit_Tab_Tag', $arguments);

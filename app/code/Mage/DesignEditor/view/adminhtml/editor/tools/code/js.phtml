@@ -25,9 +25,7 @@
  */
 ?>
 <?php /** @var $this Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Js */ ?>
-<div id="vde-tab-js-messages-placeholder">
-    <?php echo $this->getChildHtml('messages') ?>
-</div>
+<div id="vde-tab-js-messages-placeholder"></div>
 <div class="files-wrapper">
     <div class="files-list">
         <div class="files-list-header">
@@ -37,11 +35,12 @@
                 <?php echo $this->getFormHtml() ?>
             </span>
         </div>
+        <div>
+            <p><?php echo $this->__('Drag and drop files to reorder them.'); ?></p>
+        </div>
         <div id="js-file-uploader" class="uploader"></div>
         <div class="files-list-content">
-            <ul class="items ui-sortable">
-                <?php echo $this->getChildBlock('design.editor.tools.code.js.items')->setJsFiles($this->getJsFiles())->toHtml(); ?>
-            </ul>
+            <ul class="items ui-sortable"></ul>
         </div>
     </div>
 </div>
@@ -55,8 +54,29 @@
         <div class="clear"></div>
     </div>
 </div>
+
+
+<li class="js-file item no-display" id="js-uploaded-file-template">
+    <span class="filename" title="${name}">${name}</span>
+    <a href="#" class="action-delete" title="<?php echo $this->__('Delete File'); ?>" data-id="${id}">
+        <span><?php echo $this->__('Delete File'); ?></span>
+    </a>
+</li>
+
+<li class="no-display" id="js-empty-template">
+    <span class="filename"><?php echo $this->__('We found no javascript files.') ?></span>
+</li>
+
 <script type="text/javascript">
     (function ($) {
+        $('#vde-tab-js .files-list-content .items').themeJsList({
+            templateId : '#js-uploaded-file-template',
+            emptyTemplateId: '#js-empty-template',
+            refreshFileListEvent : 'refreshJsList',
+            prefixItemId: 'js-file-'
+        });
+        $('body').trigger('refreshJsList', {jsList : <?php echo $this->getFiles() ?>});
+
         $('#vde-tab-js .js-file .action-delete').live('click', function() {
             if (!confirm('<?php echo $this->getConfirmMessageDelete() ?>')) {
                 return false;
@@ -68,12 +88,14 @@
                 dataType: 'json'
             }).done(function(data) {
                 if (!data.error) {
-                    $('#vde-tab-js .files-list-content .items').html(data.content);
+                    $('body').trigger('refreshJsList', {jsList : data.files});
                     $('#vde-tab-js .files-list-content .items').trigger('refreshIframe');
                 }
-                if (data.message_html) {
-                    $('#vde-tab-js-messages-placeholder').append(data.message_html);
-                }
+
+                $('#vde-tab-js .js-file .action-delete').trigger('addMessage', {
+                    containerId : '#vde-tab-js-messages-placeholder',
+                    message : data.message
+                });
             });
 
             return false;
@@ -95,8 +117,11 @@
                     data.fileId =  Math.random().toString(36).substr(2,9);
                     var progressTmpl = $('#js-file-uploader-template').children(':first').clone();
                     progressTmpl.attr('id', data.fileId);
-                    var fileInfoHtml = progressTmpl.html().replace('{{size}}', byteConvert(file.size))
-                            .replace('{{name}}', file.name);
+                    var fileSize = typeof(file.size) == "undefined"
+                        ? $.mage.__('We could not detect a size.')
+                        : byteConvert(file.size);
+                    var fileInfoHtml = progressTmpl.html().replace('{{size}}', fileSize)
+                        .replace('{{name}}', file.name);
                     progressTmpl.html(fileInfoHtml) ;
                     progressTmpl.appendTo('#js-file-uploader');
                 });
@@ -112,18 +137,19 @@
                 var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
                 $(progressSelector).css('width','100%');
 
-                var contentArea = $('#vde-tab-js .files-list-content .items');
                 $(this).val('');
                 if (!data.result.error) {
                     $(progressSelector).removeClass('upload-progress').addClass('upload-success');
-                    contentArea.html(data.result.content);
+                    $('#js_files_uploader').trigger('refreshJsList', {jsList : data.result.files});
                 } else {
                     $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
                 }
                 $('#' + data.fileId).delay(2000).fadeOut(2000);
-                if (data.result.message_html) {
-                    $('#vde-tab-js-messages-placeholder').append(data.result.message_html);
-                }
+
+                $('#js_files_uploader').trigger('addMessage', {
+                    containerId: '#vde-tab-js-messages-placeholder',
+                    message: data.result.message
+                });
             },
 
             /**
@@ -151,7 +177,7 @@
                 $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
 
                 $(this).val('');
-                alert($.mage.__('File extension not known or unsupported type.'));
+                alert($.mage.__('We don\'t recognize or support this file extension type.'));
             }
         });
 
@@ -166,23 +192,17 @@
                     showLoader: false,
                     success: $.proxy(function(response) {
                         $('.ui-sortable').trigger('refreshIframe');
-                        if (response.message_html) {
-                            $('#vde-tab-custom-messages-placeholder').append(response.message_html);
-                        }
+                        $('.ui-sortable').trigger('addMessage', {
+                            containerId : '#vde-tab-custom-messages-placeholder',
+                            message : response.message
+                        });
                     }, this),
                     error: $.proxy(function() {
-                        alert($.mage.__('Error: unknown error.'));
+                        alert($.mage.__('Sorry, there was an unknown error.'));
                     }, this)
                 });
             }
         });
         $('.ui-sortable').disableSelection();
-
-        $(document).ready(function() {
-            var eventData = {
-                elements: {click: ['#js_files_uploader']}
-            };
-            $('body').trigger('registerElements', eventData);
-        });
     })(jQuery);
 </script>

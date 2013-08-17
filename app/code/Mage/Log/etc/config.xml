@@ -37,6 +37,13 @@
         </Mage_Log>
     </modules>
     <global>
+        <di>
+            <Mage_Log_Model_Shell_Command_Clean>
+                <parametes>
+                    <storeManager>Mage_Core_Model_StoreManager_Proxy</storeManager>
+                </parametes>
+            </Mage_Log_Model_Shell_Command_Clean>
+        </di>
         <ignoredModules>
             <entities>
                 <install/>

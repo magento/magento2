@@ -27,8 +27,9 @@
 
 /**
  * @magentoAppIsolation enabled
+ * @magentoAppArea adminhtml
  */
-class Mage_Adminhtml_Block_System_Store_Edit_Form_GroupTest extends Mage_Backend_Area_TestCase
+class Mage_Adminhtml_Block_System_Store_Edit_Form_GroupTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Mage_Adminhtml_Block_System_Store_Edit_Form_Group

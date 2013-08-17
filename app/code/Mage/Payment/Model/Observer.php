@@ -34,6 +34,18 @@
 class Mage_Payment_Model_Observer
 {
     /**
+     * @var Magento_ObjectManager
+     */
+    protected $_objectManager;
+
+    /**
+     * @param Magento_ObjectManager $objectManager
+     */
+    public function __construct(Magento_ObjectManager $objectManager)
+    {
+        $this->_objectManager = $objectManager;
+    }
+    /**
      * Set forced canCreditmemo flag
      *
      * @param Varien_Event_Observer $observer
@@ -121,6 +133,26 @@ class Mage_Payment_Model_Observer
         if($payment->getMethod() === Mage_Payment_Model_Method_Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE) {
             $payment->setAdditionalInformation('instructions',
                 $payment->getMethodInstance()->getInstructions());
+        }
+    }
+
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function updateOrderStatusForPaymentMethods(Varien_Event_Observer $observer)
+    {
+        if ($observer->getEvent()->getState() !== Mage_Sales_Model_Order::STATE_NEW) {
+            return;
+        }
+        $status = $observer->getEvent()->getStatus();
+        $defaultStatus = $this->_objectManager->get('Mage_Sales_Model_Order_Config')
+            ->getStateDefaultStatus(Mage_Sales_Model_Order::STATE_NEW);
+        $methods = $this->_objectManager->get('Mage_Payment_Model_Config')->getActiveMethods();
+        foreach ($methods as $method) {
+            if ($method->getConfigData('order_status') == $status) {
+                $this->_objectManager->get('Mage_Core_Model_Resource_Config')
+                    ->saveConfig('payment/' . $method->getCode() . '/order_status', $defaultStatus, 'default', 0);
+            }
         }
     }
 }

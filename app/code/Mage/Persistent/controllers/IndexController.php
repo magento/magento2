@@ -81,7 +81,7 @@ class Mage_Persistent_IndexController extends Mage_Core_Controller_Front_Action
      */
     protected function _cleanup()
     {
-        Mage::dispatchEvent('persistent_session_expired');
+        $this->_eventManager->dispatch('persistent_session_expired');
         $customerSession = Mage::getSingleton('Mage_Customer_Model_Session');
         $customerSession
             ->setCustomerId(null)
@@ -121,7 +121,7 @@ class Mage_Persistent_IndexController extends Mage_Core_Controller_Front_Action
     public function expressCheckoutAction()
     {
         Mage::getSingleton('Mage_Core_Model_Session')->addNotice(
-            Mage::helper('Mage_Persistent_Helper_Data')->__('Shopping cart has been updated with appropriate prices')
+            Mage::helper('Mage_Persistent_Helper_Data')->__('Your shopping cart has been updated with new prices.')
         );
         $this->_redirect('checkout/cart');
     }

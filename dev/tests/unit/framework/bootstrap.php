@@ -32,7 +32,6 @@ Magento_Autoload_IncludePath::addIncludePath(array(
     realpath(__DIR__ . '/../../../../app'),
     realpath(__DIR__ . '/../../../../app/code'),
     realpath(__DIR__ . '/../../../../lib'),
-    realpath(__DIR__ . '/../../../../var/generation'),
 ));
 define('BP', realpath(__DIR__ . '/../../../../'));
 define('TESTS_TEMP_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tmp');

@@ -48,7 +48,6 @@ class Mage_Bundle_ProductControllerTest extends Magento_Test_TestCase_Controller
         $actualLinkCount = substr_count($responseBody, '>Bundle Product Items<');
         $this->assertEquals(1, $actualLinkCount, 'Bundle product options should appear on the page exactly once.');
         $this->assertNotContains('class="options-container-big"', $responseBody);
-        $this->assertStringMatchesFormat('%Aclass="product-options" id="product-options-wrapper">%A'
-            . 'for="bundle-option-%A', $responseBody);
+        $this->assertSelectCount('#product-options-wrapper', 1, $responseBody);
     }
 }

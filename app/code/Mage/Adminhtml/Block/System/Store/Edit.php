@@ -43,8 +43,8 @@ class Mage_Adminhtml_Block_System_Store_Edit extends Mage_Adminhtml_Block_Widget
         switch (Mage::registry('store_type')) {
             case 'website':
                 $this->_objectId = 'website_id';
-                $saveLabel   = Mage::helper('Mage_Core_Helper_Data')->__('Save Website');
-                $deleteLabel = Mage::helper('Mage_Core_Helper_Data')->__('Delete Website');
+                $saveLabel   = Mage::helper('Mage_Core_Helper_Data')->__('Save Web Site');
+                $deleteLabel = Mage::helper('Mage_Core_Helper_Data')->__('Delete Web Site');
                 $deleteUrl   = $this->getUrl(
                     '*/*/deleteWebsite',
                     array('item_id' => Mage::registry('store_data')->getId())
@@ -102,8 +102,8 @@ class Mage_Adminhtml_Block_System_Store_Edit extends Mage_Adminhtml_Block_Widget
     {
         switch (Mage::registry('store_type')) {
             case 'website':
-                $editLabel = Mage::helper('Mage_Core_Helper_Data')->__('Edit Website');
-                $addLabel  = Mage::helper('Mage_Core_Helper_Data')->__('New Website');
+                $editLabel = Mage::helper('Mage_Core_Helper_Data')->__('Edit Web Site');
+                $addLabel  = Mage::helper('Mage_Core_Helper_Data')->__('New Web Site');
                 break;
             case 'group':
                 $editLabel = Mage::helper('Mage_Core_Helper_Data')->__('Edit Store');

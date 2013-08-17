@@ -44,11 +44,6 @@
                 </setup>
             </review_setup>
         </resources>
-        <service-calls>
-            <review>
-                <file>Mage_Review/service-calls.xml</file>
-            </review>
-        </service-calls>
     </global>
     <adminhtml>
         <translate>
@@ -70,6 +65,13 @@
                 </observers>
             </catalog_product_delete_after_done>
         </events>
+        <di>
+            <Mage_Review_Model_Session>
+                <parameters>
+                    <sessionName>adminhtml</sessionName>
+                </parameters>
+            </Mage_Review_Model_Session>
+        </di>
     </adminhtml>
     <frontend>
         <routers>
@@ -90,13 +92,6 @@
                 </Mage_Review>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <review module="Mage_Review">
-                    <file>layout.xml</file>
-                </review>
-            </updates>
-        </layout>
         <events>
             <tag_tag_product_collection_load_after>
                 <observers>
@@ -120,6 +115,13 @@
         <secure_url>
             <review_customer>/review/customer/</review_customer>
         </secure_url>
+        <di>
+            <Mage_Review_Model_Session>
+                <parameters>
+                    <sessionName>frontend</sessionName>
+                </parameters>
+            </Mage_Review_Model_Session>
+        </di>
     </frontend>
     <default>
         <catalog>

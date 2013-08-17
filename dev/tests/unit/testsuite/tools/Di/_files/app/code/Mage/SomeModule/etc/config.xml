@@ -31,6 +31,12 @@
                 <!--<Mage_Core_Model_Config_InvalidatorInterface>Mage_Core_Model_Config_Invalidator_Proxy</Mage_Core_Model_Config_InvalidatorInterface>-->
                 <Mage_Core_Model_CacheInterface>Mage_Core_Model_Cache_Proxy</Mage_Core_Model_CacheInterface>
             </preferences>
+            <custom_cache_instance>
+                <type>Mage_Core_Model_Cache</type>
+                <plugins>
+                    <tag><instance>Mage_Core_Model_Cache_TagPlugin</instance></tag>
+                </plugins>
+            </custom_cache_instance>
         </di>
     </global>
 </config>

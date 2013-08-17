@@ -41,7 +41,7 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
      * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_formMock;
-    
+
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
@@ -51,12 +51,12 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
      * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_urlModelMock;
-    
+
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_formFactoryMock;
-    
+
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
@@ -192,6 +192,7 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
         $groupMock->expects($this->once())->method('populateFieldset');
         $groupMock->expects($this->once())->method('shouldCloneFields')->will($this->returnValue(true));
         $groupMock->expects($this->once())->method('getCloneModel')->will($this->returnValue($cloneModelMock));
+        $groupMock->expects($this->once())->method('getData')->will($this->returnValue('some group data'));
         $groupMock->expects($this->once())
             ->method('getDependencies')->with('store_code')->will($this->returnValue(array()));
 
@@ -213,6 +214,7 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
             'legend' => 'label',
             'comment' => 'comment',
             'expanded' => false,
+            'group' => 'some group data'
         );
         $this->_formMock->expects($this->once())->method('addFieldset')->with('section_id_group_id', $params)
             ->will($this->returnValue($formFieldsetMock));
@@ -271,6 +273,8 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
         $fieldMock->expects($this->once())->method('showInDefault')->will($this->returnValue(false));
         $fieldMock->expects($this->any())->method('showInWebsite')->will($this->returnValue(false));
         $fieldMock->expects($this->once())->method('getData')->will($this->returnValue('fieldData'));
+        $fieldMock->expects($this->any())->method('getRequiredFields')->will($this->returnValue(array()));
+        $fieldMock->expects($this->any())->method('getRequiredGroups')->will($this->returnValue(array()));
 
 
         $fields = array($fieldMock);

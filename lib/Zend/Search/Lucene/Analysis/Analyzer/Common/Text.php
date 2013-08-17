@@ -77,7 +77,7 @@ class Zend_Search_Lucene_Analysis_Analyzer_Common_Text extends Zend_Search_Lucen
         do {
             if (! preg_match('/[a-zA-Z]+/', $this->_input, $match, PREG_OFFSET_CAPTURE, $this->_position)) {
                 // It covers both cases a) there are no matches (preg_match(...) === 0)
-                // b) error occured (preg_match(...) === FALSE)
+                // b) error occurred (preg_match(...) === FALSE)
                 return null;
             }
 

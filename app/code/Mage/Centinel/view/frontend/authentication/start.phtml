@@ -24,7 +24,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<form name="validation_form" id="validation_form" action="<?php echo $this->getAcsUrl();?>" method="post">
+<form name="validation-form" id="validation-form" action="<?php echo $this->getAcsUrl();?>" method="post">
     <fieldset>
         <input type="hidden" name="PaReq" value="<?php echo $this->getPaReq()?>" />
         <input type="hidden" name="TermUrl" value="<?php echo $this->getTermUrl()?>" />
@@ -32,9 +32,8 @@
     </fieldset>
 </form>
 <script type="text/javascript">
-//<![CDATA[
-window.onload = function(){
-    document.getElementById('validation_form').submit();
-};
-//]]>
+    window.onload = function () {
+        parent.jQuery('[data-container="body"]').trigger("paymentAuthentication", {state: "start"});
+        document.getElementById('validation-form').submit();
+    }
 </script>

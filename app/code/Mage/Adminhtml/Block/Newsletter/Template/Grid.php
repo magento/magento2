@@ -31,10 +31,21 @@
  * @package    Mage_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Adminhtml_Block_Newsletter_Template_Grid extends Mage_Adminhtml_Block_Widget_Grid
+class Mage_Adminhtml_Block_Newsletter_Template_Grid extends Mage_Backend_Block_Widget_Grid_Extended
 {
-    protected function _construct()
-    {
+    /**
+     * @param Mage_Backend_Block_Template_Context $context
+     * @param Mage_Core_Model_StoreManagerInterface $storeManager
+     * @param Mage_Core_Model_Url $urlModel
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Backend_Block_Template_Context $context,
+        Mage_Core_Model_StoreManagerInterface $storeManager,
+        Mage_Core_Model_Url $urlModel,
+        array $data = array()
+    ) {
+        parent::__construct($context, $storeManager, $urlModel, $data);
         $this->setEmptyText(Mage::helper('Mage_Newsletter_Helper_Data')->__('No Templates Found'));
     }
 
@@ -52,14 +63,14 @@ class Mage_Adminhtml_Block_Newsletter_Template_Grid extends Mage_Adminhtml_Block
     {
         $this->addColumn('template_code',
             array(
-                'header'    =>  Mage::helper('Mage_Newsletter_Helper_Data')->__('ID'),
+                'header'    => Mage::helper('Mage_Newsletter_Helper_Data')->__('ID'),
                 'index'     => 'template_id',
                 'header_css_class'  => 'col-id',
                 'column_css_class'  => 'col-id'
         ));
         $this->addColumn('code',
             array(
-                'header'    => Mage::helper('Mage_Newsletter_Helper_Data')->__('Template Name'),
+                'header'    => Mage::helper('Mage_Newsletter_Helper_Data')->__('Template'),
                 'index'     => 'template_code',
                 'header_css_class'  => 'col-template',
                 'column_css_class'  => 'col-template'
@@ -67,7 +78,7 @@ class Mage_Adminhtml_Block_Newsletter_Template_Grid extends Mage_Adminhtml_Block
 
         $this->addColumn('added_at',
             array(
-                'header'    => Mage::helper('Mage_Newsletter_Helper_Data')->__('Date Added'),
+                'header'    => Mage::helper('Mage_Newsletter_Helper_Data')->__('Added'),
                 'index'     => 'added_at',
                 'gmtoffset' => true,
                 'type'      => 'datetime',
@@ -77,7 +88,7 @@ class Mage_Adminhtml_Block_Newsletter_Template_Grid extends Mage_Adminhtml_Block
 
         $this->addColumn('modified_at',
             array(
-                'header'    => Mage::helper('Mage_Newsletter_Helper_Data')->__('Date Updated'),
+                'header'    => Mage::helper('Mage_Newsletter_Helper_Data')->__('Updated'),
                 'index'     => 'modified_at',
                 'gmtoffset' => true,
                 'type'      => 'datetime',
@@ -97,7 +108,7 @@ class Mage_Adminhtml_Block_Newsletter_Template_Grid extends Mage_Adminhtml_Block
             array(
                 'header'    => Mage::helper('Mage_Newsletter_Helper_Data')->__('Sender'),
                 'index'     => 'template_sender_email',
-                'renderer' => 'Mage_Adminhtml_Block_Newsletter_Template_Grid_Renderer_Sender',
+                'renderer'  => 'Mage_Adminhtml_Block_Newsletter_Template_Grid_Renderer_Sender',
                 'header_css_class'  => 'col-sender',
                 'column_css_class'  => 'col-sender'
         ));

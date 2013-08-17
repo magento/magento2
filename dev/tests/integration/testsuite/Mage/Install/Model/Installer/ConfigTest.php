@@ -48,7 +48,6 @@ class Mage_Install_Model_Installer_ConfigTest extends PHPUnit_Framework_TestCase
         $config->expects($this->once())->method('getDistroBaseUrl')->will($this->returnValue('http://example.com/'));
         $expectedContents = "test; <![CDATA[d-d-d-d-d]]>; <![CDATA[http://example.com/]]>; {{unknown}}";
         $dirs = new Mage_Core_Model_Dir(
-            Mage::getObjectManager()->get('Magento_Filesystem'),
             self::$_tmpDir,
             array(),
             array(Mage_Core_Model_Dir::CONFIG => self::$_tmpDir)

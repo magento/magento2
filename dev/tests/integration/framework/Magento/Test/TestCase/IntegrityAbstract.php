@@ -78,8 +78,13 @@ abstract class Magento_Test_TestCase_IntegrityAbstract extends PHPUnit_Framework
      */
     protected function _getDesignThemes()
     {
-        /** @var $themeCollection Mage_Core_Model_Resource_Theme_Collection */
+        $themeItems = array();
+        /** @var $themeCollection Mage_Core_Model_Theme_Collection */
         $themeCollection = Mage::getObjectManager()->create('Mage_Core_Model_Resource_Theme_Collection');
-        return $themeCollection->getItems();
+        /** @var $theme Mage_Core_Model_Theme */
+        foreach ($themeCollection as $theme) {
+            $themeItems[$theme->getId()] = $theme;
+        }
+        return $themeItems;
     }
 }

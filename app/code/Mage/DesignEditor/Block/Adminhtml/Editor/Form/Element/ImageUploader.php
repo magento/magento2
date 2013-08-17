@@ -41,20 +41,12 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Form_Element_ImageUploader
     protected $_acceptTypesDefault = 'image/*';
 
     /**
-     * Ability to upload multiple files by default is disabled for backgrounds
-     */
-    protected $_multipleFiles = true;
-
-    /**
      * Constructor helper
      */
     public function _construct()
     {
         parent::_construct();
-
         $this->setAccept($this->_acceptTypesDefault);
-        $this->setMultiple($this->_multipleFiles);
-
         $this->addClass('element-' . self::CONTROL_TYPE);
     }
 }

@@ -28,7 +28,7 @@
 <config>
     <system>
         <section id="payment">
-            <group id="authorizenet" translate="label" module="Mage_Paygate" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="authorizenet" translate="label" module="Mage_Paygate" type="text" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Authorize.net</label>
                 <comment>
                     <![CDATA[<a href="http://celinks.magento.com/authorize_netRegistration" target="_blank">Click here to sign up for an Authorize.net account</a>]]>
@@ -126,7 +126,7 @@
                 </field>
                 <field id="centinel_api_url" translate="label comment" type="text" sortOrder="135" showInDefault="1" showInWebsite="1">
                     <label>Centinel API URL</label>
-                    <comment>If empty, a default value will be used. Custom URL may be provided by CardinalCommerce agreement.</comment>
+                    <comment>If you leave this empty, we'll use a default value. The custom URL may be provided by CardinalCommerce agreement.</comment>
                     <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
                     <depends>
                         <field id="centinel">1</field>

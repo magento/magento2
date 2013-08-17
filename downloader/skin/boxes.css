@@ -153,6 +153,7 @@ BOXES
 
 /* Connect Package */
 .connect-packages table    { table-layout:fixed; margin:6px 0; }
+.eq-ie8 .connect-packages table    { table-layout:auto; }
 .connect-packages td,.connect-packages th {
     padding:3px 5px;
     border-right:solid 1px #ccc;

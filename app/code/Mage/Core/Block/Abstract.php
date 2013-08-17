@@ -42,9 +42,9 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
     implements Mage_Core_Block
 {
     /**
-     * @var Mage_Core_Model_Design_Package
+     * @var Mage_Core_Model_View_DesignInterface
      */
-    protected $_designPackage;
+    protected $_design;
 
     /**
      * @var Mage_Core_Model_Session
@@ -120,8 +120,22 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
      */
     protected $_frontController;
 
-    /** @var \Mage_Core_Model_Factory_Helper */
+    /**
+     * @var Mage_Core_Model_Factory_Helper
+     */
     protected $_helperFactory;
+
+    /**
+     * @var Mage_Core_Model_View_Url
+     */
+    protected $_viewUrl;
+
+    /**
+     * View config model
+     *
+     * @var Mage_Core_Model_View_Config
+     */
+    protected $_viewConfig;
 
     /**
      * @param Mage_Core_Block_Context $context
@@ -135,11 +149,13 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
         $this->_urlBuilder      = $context->getUrlBuilder();
         $this->_translator      = $context->getTranslator();
         $this->_cache           = $context->getCache();
-        $this->_designPackage   = $context->getDesignPackage();
+        $this->_design          = $context->getDesignPackage();
         $this->_session         = $context->getSession();
         $this->_storeConfig     = $context->getStoreConfig();
         $this->_frontController = $context->getFrontController();
         $this->_helperFactory   = $context->getHelperFactory();
+        $this->_viewUrl         = $context->getViewUrl();
+        $this->_viewConfig      = $context->getViewConfig();
         parent::__construct($data);
         $this->_construct();
     }
@@ -720,7 +736,7 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
     public function getViewFileUrl($file = null, array $params = array())
     {
         try {
-            return Mage::getDesign()->getViewFileUrl($file, $params);
+            return $this->_viewUrl->getViewFileUrl($file, $params);
         } catch (Magento_Exception $e) {
             Mage::logException($e);
             return $this->_getNotFoundUrl();
@@ -786,8 +802,9 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
      * @param   bool $showTime
      * @return  string
      */
-    public function formatDate($date = null, $format =  Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, $showTime = false)
-    {
+    public function formatDate(
+        $date = null, $format =  Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT, $showTime = false
+    ) {
         return $this->helper('Mage_Core_Helper_Data')->formatDate($date, $format, $showTime);
     }
 
@@ -799,8 +816,9 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
      * @param   bool $showDate
      * @return  string
      */
-    public function formatTime($time = null, $format =  Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, $showDate = false)
-    {
+    public function formatTime(
+        $time = null, $format = Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT, $showDate = false
+    ) {
         return $this->helper('Mage_Core_Helper_Data')->formatTime($time, $format, $showDate);
     }
 
@@ -1078,6 +1096,6 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
     public function getVar($name, $module = null)
     {
         $module = $module ?: $this->getModuleName();
-        return $this->_designPackage->getViewConfig()->getVarValue($module, $name);
+        return $this->_viewConfig->getViewConfig()->getVarValue($module, $name);
     }
 }

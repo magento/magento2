@@ -26,8 +26,6 @@
 
 /**
  * System / Cache Management / Cache type "Layouts"
- *
- * @todo utilize the class for all manipulations with the cache type
  */
 class Mage_Core_Model_Cache_Type_Layout extends Magento_Cache_Frontend_Decorator_TagScope
 {

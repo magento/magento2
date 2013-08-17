@@ -31,7 +31,9 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                             <p style="border:1px solid #E0E0E0; font-size:12px; line-height:16px; margin:0; padding:13px 18px; background:#f9f9f9;">
                                 Use the following values when prompted to log in:<br/>
                                 <strong>E-mail</strong>: {{var customer.email}}<br/>
-                                <strong>Password</strong>: {{escapehtml var=$customer.password}}<p>
+                                <strong>Password</strong>: Only you know that! (Hint: It’s the password you created at {{var store.getFrontendName()}})<br/>
+                                Forgot your Account password? No problems. Click <a href="{{store url="customer/account/createpassword/" _query_id=$customer.id _query_token=$customer.rp_token}}">here</a> to reset it.</p>
+                            </p>
                             <p style="font-size:12px; line-height:16px; margin:0 0 8px 0;">When you log in to your account, you will be able to do the following:</p>
                             <ul style="font-size:12px; line-height:16px; margin:0 0 16px 0; padding:0;">
                                 <li style="list-style:none inside; padding:0 0 0 10px;">&ndash; Proceed through checkout faster when making a purchase</li>

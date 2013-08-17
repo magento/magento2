@@ -30,33 +30,33 @@
 ?>
 <html>
 <head>
-<script type="text/javascript">
-//<![CDATA[
-if (window.top == window.self) {
-    window.location = "<?php echo $this->getUrl('checkout/cart') ?>";
-}
-<?php if ($this->getGotoSection()): ?>
-    for (var s = 0; s < window.top.checkout.steps.length; s++) {
-        if (window.top.checkout.steps[s] == '<?php echo $this->getGotoSection() ?>') {
-            break;
-        }
-        if (window.top.document.getElementById('opc-' + window.top.checkout.steps[s])) {
-            window.top.document.getElementById('opc-' + window.top.checkout.steps[s]).addClassName('allow');
-        }
-    }
-    window.top.checkout.gotoSection("<?php echo $this->getGotoSection() ?>");
-    window.top.document.getElementById('checkout-review-submit').show();
-    window.top.document.getElementById('iframe-warning').hide();
-    <?php if ($this->getErrorMsg()): ?>
-        alert('<?php echo $this->getErrorMsg() ?>');
-    <?php endif; ?>
-<?php elseif ($this->getGotoSuccessPage()) : ?>
-    window.top.location="<?php echo $this->getUrl('checkout/onepage/success') ?>";
-<?php else : ?>
-    window.top.location="<?php echo $this->getUrl('checkout/cart') ?>";
-<?php endif; ?>
-//]]>
-</script>
+    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('jquery/jquery.js')?>"></script>
 </head>
-<body></body>
+<body>
+    <script type="text/javascript">
+        // this code is NOT tested!
+        if (window.top == window.self) {
+            window.location = "<?php echo $this->getUrl('checkout/cart') ?>";
+        }
+        <?php if ($this->getGotoSection()): ?>
+            parent.jQuery.each(parent.jQuery('[id^="opc-"]'), function() {
+                var step = parent.jQuery(this).attr('id').substring(4);
+                if (step === '<?php echo $this->getGotoSection() ?>') {
+                    return;
+                }
+                step.addClass('allow');
+            });
+            parent.jQuery('#checkoutSteps').trigger('gotoSection', '<?php echo $this->getGotoSection() ?>');
+            parent.jQuery('#checkout-review-submit').show();
+            parent.jQuery('#iframe-warning').hide();
+            <?php if ($this->getErrorMsg()): ?>
+                alert('<?php echo $this->getErrorMsg() ?>');
+            <?php endif; ?>
+        <?php elseif ($this->getGotoSuccessPage()) : ?>
+            window.top.location = "<?php echo $this->getUrl('checkout/onepage/success') ?>";
+        <?php else : ?>
+            window.top.location = "<?php echo $this->getUrl('checkout/cart') ?>";
+        <?php endif; ?>
+    </script>
+</body>
 </html>

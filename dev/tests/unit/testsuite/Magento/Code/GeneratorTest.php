@@ -39,7 +39,8 @@ class Magento_Code_GeneratorTest extends PHPUnit_Framework_TestCase
      */
     protected $_expectedEntities = array(
         'factory' => Magento_Code_Generator_Factory::ENTITY_TYPE,
-        'proxy'   => Magento_Code_Generator_Proxy::ENTITY_TYPE
+        'proxy'   => Magento_Code_Generator_Proxy::ENTITY_TYPE,
+        'interceptor' => Magento_Code_Generator_Interceptor::ENTITY_TYPE,
     );
 
     /**

@@ -373,7 +373,7 @@ class Mage_Checkout_Model_Type_Multishipping extends Mage_Checkout_Model_Type_Ab
             if (isset($methods[$address->getId()])) {
                 $address->setShippingMethod($methods[$address->getId()]);
             } elseif (!$address->getShippingMethod()) {
-                Mage::throwException(Mage::helper('Mage_Checkout_Helper_Data')->__('Please select shipping methods for all addresses'));
+                Mage::throwException(Mage::helper('Mage_Checkout_Helper_Data')->__('Please select shipping methods for all addresses.'));
             }
         }
         $this->save();
@@ -462,13 +462,13 @@ class Mage_Checkout_Model_Type_Multishipping extends Mage_Checkout_Model_Type_Ab
     {
         $quote = $this->getQuote();
         if (!$quote->getIsMultiShipping()) {
-            Mage::throwException(Mage::helper('Mage_Checkout_Helper_Data')->__('Invalid checkout type.'));
+            Mage::throwException(Mage::helper('Mage_Checkout_Helper_Data')->__('Invalid checkout type'));
         }
 
         /** @var $paymentMethod Mage_Payment_Model_Method_Abstract */
         $paymentMethod = $quote->getPayment()->getMethodInstance();
         if (!empty($paymentMethod) && !$paymentMethod->isAvailable($quote)) {
-            Mage::throwException(Mage::helper('Mage_Checkout_Helper_Data')->__('Please specify payment method.'));
+            Mage::throwException(Mage::helper('Mage_Checkout_Helper_Data')->__('Please specify a payment method.'));
         }
 
         $addresses = $quote->getAllShippingAddresses();

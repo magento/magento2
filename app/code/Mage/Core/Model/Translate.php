@@ -26,6 +26,9 @@
 
 /**
  * Translate model
+ *
+ * @todo Remove this suppression when jira entry MAGETWO-8296 is completed.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Mage_Core_Model_Translate
 {
@@ -38,11 +41,6 @@ class Mage_Core_Model_Translate
      * Scope separator
      */
     const SCOPE_SEPARATOR   = '::';
-
-    /**
-     * Cache tag
-     */
-    const CACHE_TAG         = Mage_Core_Model_Cache_Type_Translate::CACHE_TAG;
 
     /**
      * Configuration area key
@@ -91,11 +89,6 @@ class Mage_Core_Model_Translate
     protected $_config;
 
     /**
-     * @var bool
-     */
-    protected $_useCache = true;
-
-    /**
      * Cache identifier
      *
      * @var string
@@ -124,6 +117,11 @@ class Mage_Core_Model_Translate
     protected $_translateInline;
 
     /**
+     * @var Mage_Core_Model_Translate_InlineInterface
+     */
+    protected $_inlineInterface;
+
+    /**
      * Configuration flag to local enable inline translations
      *
      * @var boolean
@@ -138,46 +136,68 @@ class Mage_Core_Model_Translate
     protected $_localeHierarchy = array();
 
     /**
-     * @var Mage_Core_Model_Design_Package
+     * @var Mage_Core_Model_View_DesignInterface
      */
-    protected $_designPackage;
+    protected $_viewDesign;
+
+    /**
+     * @var Mage_Core_Model_Translate_Factory
+     */
+    protected $_translateFactory;
+
+    /**
+     * @var Magento_Cache_FrontendInterface $cache
+     */
+    private $_cache;
+
+    /**
+     * @var Mage_Core_Model_View_FileSystem
+     */
+    protected $_viewFileSystem;
 
     /**
      * Initialize translate model
      *
-     * @param Mage_Core_Model_Design_Package $designPackage
+     * @param Mage_Core_Model_View_DesignInterface $viewDesign
      * @param Mage_Core_Model_Locale_Hierarchy_Loader $loader
+     * @param Mage_core_Model_Translate_Factory $translateFactory
+     * @param Magento_Cache_FrontendInterface $cache
+     * @param Mage_Core_Model_View_FileSystem $viewFileSystem
      */
     public function __construct(
-        Mage_Core_Model_Design_Package $designPackage,
-        Mage_Core_Model_Locale_Hierarchy_Loader $loader
+        Mage_Core_Model_View_DesignInterface $viewDesign,
+        Mage_Core_Model_Locale_Hierarchy_Loader $loader,
+        Mage_Core_Model_Translate_Factory $translateFactory,
+        Magento_Cache_FrontendInterface $cache,
+        Mage_Core_Model_View_FileSystem $viewFileSystem
     ) {
-        $this->_designPackage = $designPackage;
+        $this->_viewDesign = $viewDesign;
         $this->_localeHierarchy = $loader->load();
+        $this->_translateFactory = $translateFactory;
+        $this->_cache = $cache;
+        $this->_viewFileSystem = $viewFileSystem;
     }
 
     /**
      * Initialization translation data
      *
      * @param string $area
+     * @param Varien_Object $initParams
      * @param bool $forceReload
      * @return Mage_Core_Model_Translate
      */
-    public function init($area, $forceReload = false)
+    public function init($area, $initParams = null, $forceReload = false)
     {
         $this->setConfig(array(self::CONFIG_KEY_AREA => $area));
 
-        $this->_translateInline = Mage::getSingleton('Mage_Core_Model_Translate_Inline')
-            ->isAllowed($area == 'adminhtml' ? 'admin' : null);
+        $this->_translateInline = $this->getInlineObject($initParams)->isAllowed(
+            $area == Mage_Backend_Helper_Data::BACKEND_AREA_CODE ? 'admin' : null);
 
         if (!$forceReload) {
-            if ($this->_canUseCache()) {
-                $this->_data = $this->_loadCache();
-                if ($this->_data !== false) {
-                    return $this;
-                }
+            $this->_data = $this->_loadCache();
+            if ($this->_data !== false) {
+                return $this;
             }
-            Mage::app()->removeCache($this->getCacheId());
         }
 
         $this->_data = array();
@@ -190,7 +210,7 @@ class Mage_Core_Model_Translate
         $this->_loadThemeTranslation($forceReload);
         $this->_loadDbTranslation($forceReload);
 
-        if (!$forceReload && $this->_canUseCache()) {
+        if (!$forceReload) {
             $this->_saveCache();
         }
 
@@ -232,7 +252,7 @@ class Mage_Core_Model_Translate
             $this->_config[self::CONFIG_KEY_STORE] = Mage::app()->getStore()->getId();
         }
         if (!isset($this->_config[self::CONFIG_KEY_DESIGN_THEME])) {
-            $this->_config[self::CONFIG_KEY_DESIGN_THEME] = $this->_designPackage->getDesignTheme()->getId();
+            $this->_config[self::CONFIG_KEY_DESIGN_THEME] = $this->_viewDesign->getDesignTheme()->getId();
         }
         return $this;
     }
@@ -249,6 +269,45 @@ class Mage_Core_Model_Translate
             return $this->_config[$key];
         }
         return null;
+    }
+
+    /**
+     * Determine if translation is enabled and allowed.
+     *
+     * @param mixed $store
+     * @return bool
+     */
+    public function isAllowed($store = null)
+    {
+        /** @todo see jira entry MAGETWO-8296 */
+        return $this->getInlineObject()->isAllowed($store);
+    }
+
+    /**
+     * Parse and save edited translate
+     *
+     * @param array $translate
+     * @return Mage_Core_Model_Translate_TranslateInterface
+     */
+    public function processAjaxPost($translate)
+    {
+        Mage::getObjectManager()->get('Mage_Core_Model_CacheInterface')
+            ->invalidateType(Mage_Core_Model_Cache_Type_Translate::TYPE_IDENTIFIER);
+        Mage::getObjectManager()->get('Mage_Core_Model_Translate_InlineParser')
+            ->processAjaxPost($translate, $this->getInlineObject());
+    }
+
+    /**
+     * Replace translation templates with HTML fragments
+     *
+     * @param array|string $body
+     * @param bool $isJson
+     * @return Mage_Core_Model_Translate_InlineInterface
+     */
+    public function processResponseBody(&$body,
+        $isJson = Mage_Core_Model_Translate_InlineParser::JSON_FLAG_DEFAULT_STATE
+    ) {
+        return $this->getInlineObject()->processResponseBody($body, $isJson);
     }
 
     /**
@@ -348,7 +407,7 @@ class Mage_Core_Model_Translate
 
         $requiredLocaleList = $this->_composeRequiredLocaleList($this->getLocale());
         foreach ($requiredLocaleList as $locale) {
-            $file = $this->_designPackage->getLocaleFileName('translate.csv', array('locale' => $locale));
+            $file = $this->_viewFileSystem->getLocaleFileName('translate.csv', array('locale' => $locale));
             $this->_addData(
                 $this->_getFileData($file),
                 self::CONFIG_KEY_DESIGN_THEME . $this->_config[self::CONFIG_KEY_DESIGN_THEME],
@@ -426,7 +485,7 @@ class Mage_Core_Model_Translate
      */
     public function getLocale()
     {
-        if (is_null($this->_locale)) {
+        if (null === $this->_locale) {
             $this->_locale = Mage::app()->getLocale()->getLocaleCode();
         }
         return $this->_locale;
@@ -461,7 +520,7 @@ class Mage_Core_Model_Translate
      */
     public function getTranslate()
     {
-        if (is_null($this->_translate)) {
+        if (null === $this->_translate) {
             $this->_translate = new Zend_Translate('array', $this->getData(), $this->getLocale());
         }
         return $this->_translate;
@@ -523,14 +582,10 @@ class Mage_Core_Model_Translate
      */
     protected function _isEmptyTranslateArg($text)
     {
-        if (is_string($text) && '' == $text
-            || is_null($text)
-            || is_bool($text) && false === $text
-            || is_object($text) && '' == $text->getText()
-        ) {
-            return true;
+        if (is_object($text) && is_callable(array($text, 'getText'))) {
+            $text = $text->getText();
         }
-        return false;
+        return empty($text);
     }
 
     /**
@@ -539,9 +594,9 @@ class Mage_Core_Model_Translate
      * @param bool $flag
      * @return Mage_Core_Model_Translate
      */
-    public function setTranslateInline($flag = null)
+    public function setTranslateInline($flag = false)
     {
-        $this->_canUseInline = (bool)$flag;
+        $this->_canUseInline = $flag;
         return $this;
     }
 
@@ -564,7 +619,7 @@ class Mage_Core_Model_Translate
     public function getCacheId()
     {
         if (is_null($this->_cacheId)) {
-            $this->_cacheId = 'translate';
+            $this->_cacheId = Mage_Core_Model_Cache_Type_Translate::TYPE_IDENTIFIER;
             if (isset($this->_config[self::CONFIG_KEY_LOCALE])) {
                 $this->_cacheId .= '_' . $this->_config[self::CONFIG_KEY_LOCALE];
             }
@@ -584,40 +639,26 @@ class Mage_Core_Model_Translate
     /**
      * Loading data cache
      *
-     * @return  array | false
+     * @return array|bool
      */
     protected function _loadCache()
     {
-        if (!$this->_canUseCache()) {
-            return false;
+        $data = $this->_cache->load($this->getCacheId());
+        if ($data) {
+            $data = unserialize($data);
         }
-        $data = Mage::app()->loadCache($this->getCacheId());
-        $data = unserialize($data);
         return $data;
     }
 
     /**
      * Saving data cache
      *
-     * @return  Mage_Core_Model_Translate
+     * @return Mage_Core_Model_Translate
      */
     protected function _saveCache()
     {
-        if (!$this->_canUseCache()) {
-            return $this;
-        }
-        Mage::app()->saveCache(serialize($this->getData()), $this->getCacheId(), array(self::CACHE_TAG), false);
+        $this->_cache->save(serialize($this->getData()), $this->getCacheId(), array(), false);
         return $this;
-    }
-
-    /**
-     * Check cache usage availability
-     *
-     * @return bool
-     */
-    protected function _canUseCache()
-    {
-        return Mage::app()->useCache(Mage_Core_Model_Cache_Type_Translate::TYPE_IDENTIFIER);
     }
 
     /**
@@ -637,5 +678,24 @@ class Mage_Core_Model_Translate
             $translated = $text;
         }
         return $translated;
+    }
+
+    /**
+     * Returns the translate interface object.
+     *
+     * @param Varien_Object $initParams
+     * @return Mage_Core_Model_Translate_InlineInterface
+     */
+    private function getInlineObject($initParams = null)
+    {
+        if (null === $this->_inlineInterface) {
+            if ($initParams === null) {
+                $this->_inlineInterface = $this->_translateFactory->create();
+            } else {
+                $this->_inlineInterface = $this->_translateFactory
+                    ->create($initParams->getParams(), $initParams->getInlineType());
+            }
+        }
+        return $this->_inlineInterface;
     }
 }

@@ -26,6 +26,13 @@
 
 /**
  * Layout Link model class
+ *
+ * @method int getStoreId()
+ * @method int getThemeId()
+ * @method int getLayoutUpdateId()
+ * @method Mage_Core_Model_Layout_Link setStoreId($id)
+ * @method Mage_Core_Model_Layout_Link setThemeId($id)
+ * @method Mage_Core_Model_Layout_Link setLayoutUpdateId($id)
  */
 class Mage_Core_Model_Layout_Link extends Mage_Core_Model_Abstract
 {

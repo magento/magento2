@@ -65,8 +65,8 @@ class Mage_Wishlist_IndexControllerTest extends Magento_Test_TestCase_Controller
     {
         $this->dispatch('wishlist/index/index');
         $body = $this->getResponse()->getBody();
-        $this->assertStringMatchesFormat('%A<img src="%Asmall_image.jpg" %A alt="Simple Product"%A/>%A', $body);
-        $this->assertStringMatchesFormat('%A<textarea name="description[%d]"%A', $body);
+        $this->assertSelectCount('img[src~="small_image.jpg"][alt="Simple Product"]', 1, $body);
+        $this->assertSelectCount('textarea[name~="description"]', 1, $body);
     }
 
     /**

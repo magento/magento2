@@ -90,7 +90,7 @@ class Mage_Adminhtml_Block_Cms_Page_Edit extends Mage_Adminhtml_Block_Widget_For
      */
     protected function _isAllowedAction($resourceId)
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($resourceId);
+        return $this->_authorization->isAllowed($resourceId);
     }
 
     /**
@@ -115,15 +115,6 @@ class Mage_Adminhtml_Block_Cms_Page_Edit extends Mage_Adminhtml_Block_Widget_For
      */
     protected function _prepareLayout()
     {
-        $tabsBlock = $this->getLayout()->getBlock('cms_page_edit_tabs');
-        if ($tabsBlock) {
-            $tabsBlockJsObject = $tabsBlock->getJsObjectName();
-            $tabsBlockPrefix   = $tabsBlock->getId() . '_';
-        } else {
-            $tabsBlockJsObject = 'page_tabsJsTabs';
-            $tabsBlockPrefix   = 'page_tabs_';
-        }
-
         $this->_formScripts[] = "
             function toggleEditor() {
                 if (tinyMCE.getInstanceById('page_content') == null) {
@@ -131,24 +122,7 @@ class Mage_Adminhtml_Block_Cms_Page_Edit extends Mage_Adminhtml_Block_Widget_For
                 } else {
                     tinyMCE.execCommand('mceRemoveControl', false, 'page_content');
                 }
-            }
-            (function($) {
-                'use strict';
-
-                head.js('{$this->getViewFileUrl('mage/backend/tabs.js')}', function() {
-                    $(\"#{$tabsBlock->getId()}\")
-                        .tabs('option', 'tabsBlockPrefix', '" . $tabsBlockPrefix . "')
-                        .tabs('option', 'tabIdArgument', 'active_tab');
-                });
-            })(jQuery);
-            jQuery(function() {
-                var tabsElement = jQuery(\"#" . $tabsBlock->getId() ."\");
-                tabsElement.on('tabscreate', function() {
-                    tabsElement
-                        .tabs('option', 'tabsBlockPrefix', '" . $tabsBlockPrefix . "')
-                        .tabs('option', 'tabIdArgument', 'active_tab');
-                });
-            });
+            };
         ";
         return parent::_prepareLayout();
     }

@@ -30,10 +30,10 @@
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <?php if($this->getResultCount()): ?>
     <p class="advanced-search-amount">
-        <?php echo $this->helper('Mage_CatalogSearch_Helper_Data')->__('<strong>%d item(s)</strong> were found using the following search criteria', $this->getResultCount()); ?>
+        <?php echo $this->helper('Mage_CatalogSearch_Helper_Data')->__('<strong>%d item(s)</strong> were found using the following search criteria.', $this->getResultCount()); ?>
     </p>
 <?php else: ?>
-    <p class="error-msg"><?php echo $this->helper('Mage_CatalogSearch_Helper_Data')->__('No items were found using the following search criteria.');?> <a href="<?php echo $this->getFormUrl(); ?>"><?php echo $this->helper('Mage_CatalogSearch_Helper_Data')->__('Modify your search'); ?></a></p>
+    <p class="error-msg"><?php echo $this->helper('Mage_CatalogSearch_Helper_Data')->__('We didn\'t find any items using this search criteria.');?> <a href="<?php echo $this->getFormUrl(); ?>"><?php echo $this->helper('Mage_CatalogSearch_Helper_Data')->__('Modify your search'); ?></a></p>
 <?php endif; ?>
 
 <div class="advanced-search-summary">

@@ -50,7 +50,7 @@
 </script>
 <script id="bundle-option-selection-row-template" type="text/x-jquery-tmpl">
     <td class="col-draggable">
-        <span data-role="grip" class="draggable-handle"></span>
+        <span data-role="draggable-handle" class="draggable-handle"></span>
         <input type="hidden" id="<?php echo $this->getFieldId() ?>_id_{{index}}"
                name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][selection_id]"
                value="{{selection_id}}"/>
@@ -144,7 +144,7 @@ Bundle.Selection.prototype = {
 
             var checkRowBySku = function (sku) {
                 sku = $.trim(sku);
-                $grid('.sku').filter(function () {
+                $grid.find('.sku').filter(function () {
                     return $.trim($(this).text()) == sku;
                 }).closest('tr').find('.checkbox').prop({checked: true});
             };

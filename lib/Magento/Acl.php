@@ -1,5 +1,7 @@
 <?php
 /**
+ * ACL. Can be queried for relations between roles and resources.
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -18,33 +20,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Framework
- * @subpackage  Acl
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-/**
- * Access Control List. Is used to store and check permissions of users.
  */
 class Magento_Acl extends Zend_Acl
 {
     /**
      * Permission level to deny access
-     *
      */
     const RULE_PERM_DENY = 0;
     
     /**
-     * Permission level to inheric access from parent role
-     *
+     * Permission level to inherit access from parent role
      */
     const RULE_PERM_INHERIT = 1;
     
     /**
      * Permission level to allow access
-     *
      */
     const RULE_PERM_ALLOW = 2;
 

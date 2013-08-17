@@ -42,4 +42,11 @@ interface Magento_ObjectManager_Definition
      * @return array|null
      */
     public function getParameters($className);
+
+    /**
+     * Retrieve list of all classes covered with definitions
+     *
+     * @return array
+     */
+    public function getClasses();
 }

@@ -23,25 +23,21 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+ /** @var $this Mage_Adminhtml_Block_Cms_Wysiwyg_Images_Content */
 ?>
-<?php
-/**
- * Wysiwyg Images content template
- *
- * @see Mage_Adminhtml_Block_Cms_Wysiwyg_Images_Content
- */
-?>
-<?php echo $this->getChildHtml('wysiwyg_images.js') ?>
 
-<div class="insert-title" id="content_header">
-    <div class="insert-title-inner">
-        <div class="insert-actions">
-            <?php echo $this->getButtonsHtml() ?>
+<div data-mage-init="{mediabrowser: <?php echo $this->escapeHtml($this->getFilebrowserSetupObject()); ?>}">
+    <div style="float:right; width: 79%">
+        <div class="insert-title" id="content_header">
+            <div class="insert-title-inner">
+                <div class="insert-actions">
+                    <?php echo $this->getButtonsHtml() ?>
+                </div>
+                <div class="title"><?php echo $this->getHeaderText() ?></div>
+            </div>
         </div>
-        <div class="title"><?php echo $this->getHeaderText() ?></div>
+        <div id="contents-uploader"><?php echo $this->getChildHtml('wysiwyg_images.uploader') ?></div>
+        <div id="contents"></div>
     </div>
+    <div style="float:left;  width: 20%"><?php echo $this->getChildHtml('wysiwyg_images.tree') ?></div>
 </div>
-
-<div id="contents-uploader"><?php echo $this->getChildHtml('wysiwyg_images.uploader') ?></div>
-<div id="contents"></div>
-<div id="contents-newfolder" class="no-display"><?php echo $this->getChildHtml('wysiwyg_images.newfolder') ?></div>

@@ -60,6 +60,10 @@ class Mage_Catalog_Block_Category_View extends Mage_Core_Block_Template
                 $title = $this->helper('Mage_Rss_Helper_Data')->__('%s RSS Feed',$this->getCurrentCategory()->getName());
                 $headBlock->addRss($title, $this->getRssLink());
             }
+            $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
+            if ($pageMainTitle) {
+                $pageMainTitle->setPageTitle($this->getCurrentCategory()->getName());
+            }
         }
 
         return $this;

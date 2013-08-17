@@ -33,7 +33,7 @@
     if (checkBoxes.size() > 0) {
         warning = true;
     }
-    $('in_role_user').value = checkBoxes.toQueryString();
+    jQuery('#in_role_user').val(checkBoxes.toQueryString());
 
     function registerUserRole(grid, element, checked)
     {
@@ -102,13 +102,14 @@
             roleUsersRowInit(<?php echo $myBlock->getJsObjectName() ?>, row);
         });
     }
-
-<?php echo $myBlock->getJsObjectName() ?>.rowClickCallback = roleUsersRowClick;
-<?php echo $myBlock->getJsObjectName() ?>.initRowCallback = roleUsersRowInit;
-<?php echo $myBlock->getJsObjectName() ?>.checkboxCheckCallback = registerUserRole;
-<?php echo $myBlock->getJsObjectName() ?>.checkCheckboxes = massSelectUsers;
-<?php echo $myBlock->getJsObjectName() ?>.rows.each(function(row){roleUsersRowInit(<?php echo $myBlock->getJsObjectName() ?>, row)});
-    $('in_role_user_old').value = $('in_role_user').value;
+    jQuery(function() {
+        <?php echo $myBlock->getJsObjectName() ?>.rowClickCallback = roleUsersRowClick;
+        <?php echo $myBlock->getJsObjectName() ?>.initRowCallback = roleUsersRowInit;
+        <?php echo $myBlock->getJsObjectName() ?>.checkboxCheckCallback = registerUserRole;
+        <?php echo $myBlock->getJsObjectName() ?>.checkCheckboxes = massSelectUsers;
+        <?php echo $myBlock->getJsObjectName() ?>.rows.each(function(row){roleUsersRowInit(<?php echo $myBlock->getJsObjectName() ?>, row)});
+        $('in_role_user_old').value = $('in_role_user').value;
+    });
 <?php endif; ?>
 //-->
 </script>

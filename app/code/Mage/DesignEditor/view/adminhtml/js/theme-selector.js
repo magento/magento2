@@ -122,7 +122,7 @@
                 }, this),
                 error: $.proxy(function() {
                     this._cancelEdit();
-                    alert($.mage.__('Error: unknown error.'));
+                    alert($.mage.__('Sorry, there was an unknown error.'));
                 }, this)
             });
         },
@@ -174,17 +174,13 @@
 
     $( document ).ready(function( ) {
         var body = $('body');
-        body.on('preview', function(event, data) {
-            window.open(data.preview_url);
-        });
-        body.on('edit', function(event, data) {
-            window.open(data.edit_url);
-        });
-        body.on('delete', function(event, data) {
-            deleteConfirm($.mage.__('Are you sure you want to do this?'), data.url);
-        });
         body.on('loaded', function() {
             body.trigger('contentUpdated');
+        });
+        $('.action-duplicate').on('click', function() {
+            $('body').loadingPopup({
+                timeout: false
+            });
         });
     });
 

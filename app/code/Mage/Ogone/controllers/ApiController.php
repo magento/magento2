@@ -95,13 +95,13 @@ class Mage_Ogone_ApiController extends Mage_Core_Controller_Front_Action
         }
 
         if (!$hashValidationResult) {
-            $this->_getCheckout()->addError($this->__('The hash is not valid'));
+            $this->_getCheckout()->addError($this->__('The hash is not valid.'));
             return false;
         }
 
         $order = $this->_getOrder();
         if (!$order->getId()){
-            $this->_getCheckout()->addError($this->__('The order is not valid'));
+            $this->_getCheckout()->addError($this->__('The order is not valid.'));
             return false;
         }
 
@@ -395,10 +395,10 @@ class Mage_Ogone_ApiController extends Mage_Core_Controller_Front_Action
         $exception = '';
         switch($params['STATUS']) {
             case Mage_Ogone_Model_Api::OGONE_PAYMENT_UNCERTAIN_STATUS :
-                $exception = Mage::helper('Mage_Ogone_Helper_Data')->__('Payment uncertain: A technical problem arose during payment process, giving unpredictable result');
+                $exception = Mage::helper('Mage_Ogone_Helper_Data')->__('Something went wrong during the payment process, and so the result is unpredictable.');
                 break;
             case Mage_Ogone_Model_Api::OGONE_AUTH_UKNKOWN_STATUS :
-                $exception = Mage::helper('Mage_Ogone_Helper_Data')->__('Authorization not known: A technical problem arose during authorization process, giving unpredictable result');
+                $exception = Mage::helper('Mage_Ogone_Helper_Data')->__('Something went wrong during the authorization process, and so the result is unpredictable.');
                 break;
             default:
                 $exception = Mage::helper('Mage_Ogone_Helper_Data')->__('Unknown exception');
@@ -421,7 +421,7 @@ class Mage_Ogone_ApiController extends Mage_Core_Controller_Front_Action
                 }
                 $order->save();
             }catch(Exception $e) {
-                $this->_getCheckout()->addError(Mage::helper('Mage_Ogone_Helper_Data')->__('The order cannot be saved for a system reason.'));
+                $this->_getCheckout()->addError(Mage::helper('Mage_Ogone_Helper_Data')->__('Something went wrong while saving this order.'));
             }
         } else {
             $this->_getCheckout()->addError(Mage::helper('Mage_Ogone_Helper_Data')->__('Exception not defined'));
@@ -453,8 +453,8 @@ class Mage_Ogone_ApiController extends Mage_Core_Controller_Front_Action
     protected function _declineProcess()
     {
         $status     = Mage_Ogone_Model_Api::DECLINE_OGONE_STATUS;
-        $comment    = Mage::helper('Mage_Ogone_Helper_Data')->__('Declined Order on Ogone side.');
-        $this->_getCheckout()->addError(Mage::helper('Mage_Ogone_Helper_Data')->__('Payment transaction has been declined.'));
+        $comment    = Mage::helper('Mage_Ogone_Helper_Data')->__('Declined Order on Ogone side');
+        $this->_getCheckout()->addError(Mage::helper('Mage_Ogone_Helper_Data')->__('The payment transaction has been declined.'));
         $this->_cancelOrder($status, $comment);
     }
 
@@ -484,7 +484,7 @@ class Mage_Ogone_ApiController extends Mage_Core_Controller_Front_Action
     public function _cancelProcess()
     {
         $status     = Mage_Ogone_Model_Api::CANCEL_OGONE_STATUS;
-        $comment    = Mage::helper('Mage_Ogone_Helper_Data')->__('The order was canceled on ogone side.');
+        $comment    = Mage::helper('Mage_Ogone_Helper_Data')->__('The order was canceled on the Ogone side.');
         $this->_cancelOrder($status, $comment);
         return $this;
     }
@@ -506,7 +506,7 @@ class Mage_Ogone_ApiController extends Mage_Core_Controller_Front_Action
             $order->setState(Mage_Sales_Model_Order::STATE_CANCELED, $status, $comment);
             $order->save();
         }catch(Exception $e) {
-            $this->_getCheckout()->addError(Mage::helper('Mage_Ogone_Helper_Data')->__('The order cannot be canceled for a system reason.'));
+            $this->_getCheckout()->addError(Mage::helper('Mage_Ogone_Helper_Data')->__('Something went wrong while canceling this order.'));
         }
 
         $this->_redirect('checkout/cart');

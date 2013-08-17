@@ -23,7 +23,11 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Mage_Webapi_Block_Adminhtml_FormTestAbstract extends Mage_Backend_Area_TestCase
+
+/**
+ * @magentoAppArea adminhtml
+ */
+class Mage_Webapi_Block_Adminhtml_FormTestAbstract extends PHPUnit_Framework_TestCase
 {
     /**
      * Form class must be defined in children.
@@ -67,7 +71,10 @@ class Mage_Webapi_Block_Adminhtml_FormTestAbstract extends Mage_Backend_Area_Tes
         $this->_layout = $this->_objectManager->get('Mage_Core_Model_Layout');
         $this->_blockFactory = $this->_objectManager->get('Mage_Core_Model_BlockFactory');
         $this->_block = $this->_blockFactory->createBlock($this->_formClass, array(
-            'context' => Mage::getModel('Mage_Core_Block_Template_Context', array('urlBuilder' => $this->_urlBuilder))
+            'context' => Mage::getModel(
+                'Mage_Backend_Block_Template_Context',
+                array('urlBuilder' => $this->_urlBuilder)
+            )
         ));
         $this->_layout->addBlock($this->_block);
     }

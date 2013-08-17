@@ -46,11 +46,11 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Form_Element_Font
         $colorData = $this->getComponent('color-picker');
 
         $fontHtmlId = $this->getComponentId('font-picker');
-        $fontTitle = sprintf("%s {%s: %s}",
+        $fontTitle = $this->_escape(sprintf("%s {%s: %s}",
             $fontData['selector'],
             $fontData['attribute'],
             $fontData['value']
-        );
+        ));
         $this->addField($fontHtmlId, 'font-picker', array(
             'name'    => $fontHtmlId,
             'value'   => $fontData['value'],
@@ -59,11 +59,11 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Form_Element_Font
             'label'   => null,
         ));
 
-        $colorTitle = sprintf("%s {%s: %s}",
+        $colorTitle = $this->_escape(sprintf("%s {%s: %s}",
             $colorData['selector'],
             $colorData['attribute'],
             $colorData['value']
-        );
+        ));
         $colorHtmlId = $this->getComponentId('color-picker');
         $this->addField($colorHtmlId, 'color-picker', array(
             'name'  => $colorHtmlId,

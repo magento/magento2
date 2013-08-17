@@ -50,7 +50,7 @@ class Mage_Core_Model_Registry
      */
     public function register($key, $value, $graceful = false)
     {
-       Mage::register($key, $value, $graceful);
+        Mage::register($key, $value, $graceful);
     }
 
     /**

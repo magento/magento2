@@ -51,7 +51,7 @@ class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resou
      * @param  $store
      * @return bool
      */
-    public function add($quoteId, $productsData, $store=null)
+    public function add($quoteId, $productsData, $store = null)
     {
         $quote = $this->_getQuote($quoteId, $store);
         if (empty($store)) {
@@ -70,8 +70,14 @@ class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resou
             } else if (isset($productItem['sku'])) {
                 $productByItem = $this->_getProduct($productItem['sku'], $store, "sku");
             } else {
-                $errors[] = Mage::helper('Mage_Checkout_Helper_Data')->__("One item of products do not have identifier or sku");
+                $errors[] = Mage::helper('Mage_Checkout_Helper_Data')
+                    ->__("One item of products do not have identifier or sku");
                 continue;
+            }
+            /** 'configurable_options' array items are expected in the following format 'attribute ID' => 'option ID'*/
+            if (isset($productItem['configurable_options']) and is_array($productItem['configurable_options'])) {
+                $productItem['super_attribute'] = $productItem['configurable_options'];
+                unset($productItem['configurable_options']);
             }
 
             $productRequest = $this->_getProductRequest($productItem);
@@ -91,7 +97,7 @@ class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resou
 
         try {
             $quote->collectTotals()->save();
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->_fault("add_product_quote_save_fault", $e->getMessage());
         }
 
@@ -104,7 +110,7 @@ class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resou
      * @param  $store
      * @return bool
      */
-    public function update($quoteId, $productsData, $store=null)
+    public function update($quoteId, $productsData, $store = null)
     {
         $quote = $this->_getQuote($quoteId, $store);
         if (empty($store)) {
@@ -123,15 +129,20 @@ class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resou
             } else if (isset($productItem['sku'])) {
                 $productByItem = $this->_getProduct($productItem['sku'], $store, "sku");
             } else {
-                $errors[] = Mage::helper('Mage_Checkout_Helper_Data')->__("One item of products do not have identifier or sku");
+                $errors[] = Mage::helper('Mage_Checkout_Helper_Data')
+                    ->__("One item of products do not have identifier or sku");
                 continue;
             }
 
             /** @var $quoteItem Mage_Sales_Model_Quote_Item */
-            $quoteItem = $this->_getQuoteItemByProduct($quote, $productByItem,
-                $this->_getProductRequest($productItem));
+            $quoteItem = $this->_getQuoteItemByProduct(
+                $quote,
+                $productByItem,
+                $this->_getProductRequest($productItem)
+            );
             if (is_null($quoteItem->getId())) {
-                $errors[] = Mage::helper('Mage_Checkout_Helper_Data')->__("One item of products is not belong any of quote item");
+                $errors[] = Mage::helper('Mage_Checkout_Helper_Data')
+                    ->__("One item of products is not belong any of quote item");
                 continue;
             }
 
@@ -145,8 +156,8 @@ class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resou
         }
 
         try {
-            $quote->save();
-        } catch(Exception $e) {
+            $quote->collectTotals()->save();
+        } catch (Exception $e) {
             $this->_fault("update_product_quote_save_fault", $e->getMessage());
         }
 
@@ -159,7 +170,7 @@ class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resou
      * @param  $store
      * @return bool
      */
-    public function remove($quoteId, $productsData, $store=null)
+    public function remove($quoteId, $productsData, $store = null)
     {
         $quote = $this->_getQuote($quoteId, $store);
         if (empty($store)) {
@@ -178,16 +189,21 @@ class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resou
             } else if (isset($productItem['sku'])) {
                 $productByItem = $this->_getProduct($productItem['sku'], $store, "sku");
             } else {
-                $errors[] = Mage::helper('Mage_Checkout_Helper_Data')->__("One item of products do not have identifier or sku");
+                $errors[] = Mage::helper('Mage_Checkout_Helper_Data')
+                    ->__("One item of products do not have identifier or sku");
                 continue;
             }
 
             try {
                 /** @var $quoteItem Mage_Sales_Model_Quote_Item */
-                $quoteItem = $this->_getQuoteItemByProduct($quote, $productByItem,
-                    $this->_getProductRequest($productItem));
+                $quoteItem = $this->_getQuoteItemByProduct(
+                    $quote,
+                    $productByItem,
+                    $this->_getProductRequest($productItem)
+                );
                 if (is_null($quoteItem->getId())) {
-                    $errors[] = Mage::helper('Mage_Checkout_Helper_Data')->__("One item of products is not belong any of quote item");
+                    $errors[] = Mage::helper('Mage_Checkout_Helper_Data')
+                        ->__("One item of products is not belong any of quote item");
                     continue;
                 }
                 $quote->removeItem($quoteItem->getId());
@@ -201,8 +217,8 @@ class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resou
         }
 
         try {
-            $quote->save();
-        } catch(Exception $e) {
+            $quote->collectTotals()->save();
+        } catch (Exception $e) {
             $this->_fault("remove_product_quote_save_fault", $e->getMessage());
         }
 
@@ -230,13 +246,13 @@ class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resou
             /** @var $item Mage_Sales_Model_Quote_Item */
             $product = $item->getProduct();
             $productsResult[] = array( // Basic product data
-                'product_id'   => $product->getId(),
-                'sku'          => $product->getSku(),
-                'name'         => $product->getName(),
-                'set'          => $product->getAttributeSetId(),
-                'type'         => $product->getTypeId(),
+                'product_id' => $product->getId(),
+                'sku' => $product->getSku(),
+                'name' => $product->getName(),
+                'set' => $product->getAttributeSetId(),
+                'type' => $product->getTypeId(),
                 'category_ids' => $product->getCategoryIds(),
-                'website_ids'  => $product->getWebsiteIds()
+                'website_ids' => $product->getWebsiteIds()
             );
         }
 
@@ -249,7 +265,7 @@ class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resou
      * @param  $store
      * @return bool
      */
-    public function moveToCustomerQuote($quoteId, $productsData, $store=null)
+    public function moveToCustomerQuote($quoteId, $productsData, $store = null)
     {
         $quote = $this->_getQuote($quoteId, $store);
 
@@ -281,28 +297,33 @@ class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resou
         }
 
         $errors = array();
-        foreach($productsData as $key => $productItem){
+        foreach ($productsData as $key => $productItem) {
             if (isset($productItem['product_id'])) {
                 $productByItem = $this->_getProduct($productItem['product_id'], $store, "id");
             } else if (isset($productItem['sku'])) {
                 $productByItem = $this->_getProduct($productItem['sku'], $store, "sku");
             } else {
-                $errors[] = Mage::helper('Mage_Checkout_Helper_Data')->__("One item of products do not have identifier or sku");
+                $errors[] = Mage::helper('Mage_Checkout_Helper_Data')
+                    ->__("One item of products do not have identifier or sku");
                 continue;
             }
 
             try {
                 /** @var $quoteItem Mage_Sales_Model_Quote_Item */
-                $quoteItem = $this->_getQuoteItemByProduct($quote, $productByItem,
-                    $this->_getProductRequest($productItem));
-                if($quoteItem && $quoteItem->getId()){
+                $quoteItem = $this->_getQuoteItemByProduct(
+                    $quote,
+                    $productByItem,
+                    $this->_getProductRequest($productItem)
+                );
+                if ($quoteItem && $quoteItem->getId()) {
                     $newQuoteItem = clone $quoteItem;
                     $newQuoteItem->setId(null);
                     $customerQuote->addItem($newQuoteItem);
                     $quote->removeItem($quoteItem->getId());
                     unset($productsData[$key]);
                 } else {
-                     $errors[] = Mage::helper('Mage_Checkout_Helper_Data')->__("One item of products is not belong any of quote item");
+                    $errors[] = Mage::helper('Mage_Checkout_Helper_Data')
+                        ->__("One item of products is not belong any of quote item");
                 }
             } catch (Mage_Core_Exception $e) {
                 $errors[] = $e->getMessage();
@@ -314,15 +335,10 @@ class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resou
         }
 
         try {
-            $customerQuote
-                ->collectTotals()
-                ->save();
-
-            $quote
-                ->collectTotals()
-                ->save();
+            $customerQuote->collectTotals()->save();
+            $quote->collectTotals()->save();
         } catch (Exception $e) {
-             $this->_fault("product_move_quote_save_fault", $e->getMessage());
+            $this->_fault("product_move_quote_save_fault", $e->getMessage());
         }
 
         return true;

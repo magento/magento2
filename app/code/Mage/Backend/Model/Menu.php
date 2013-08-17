@@ -118,6 +118,7 @@ class Mage_Backend_Model_Menu extends ArrayObject
      * @param string $itemId
      * @param string $toItemId
      * @param int $sortIndex
+     * @throws InvalidArgumentException
      */
     public function move($itemId, $toItemId, $sortIndex = null)
     {
@@ -215,6 +216,44 @@ class Mage_Backend_Model_Menu extends ArrayObject
             }
         }
         return $result;
+    }
+
+    /**
+     * Get parent items by item id
+     *
+     * @param string $itemId
+     * @return Mage_Backend_Model_Menu_Item[]
+     */
+    public function getParentItems($itemId)
+    {
+        $parents = array();
+        $this->_findParentItems($this, $itemId, $parents);
+        return array_reverse($parents);
+    }
+
+    /**
+     * Find parent items
+     *
+     * @param Mage_Backend_Model_Menu $menu
+     * @param string $itemId
+     * @param array $parents
+     * @return bool
+     */
+    protected function _findParentItems($menu, $itemId, &$parents)
+    {
+        foreach ($menu as $item) {
+            /** @var $item Mage_Backend_Model_Menu_Item */
+            if ($item->getId() == $itemId) {
+                return true;
+            }
+            if ($item->hasChildren()) {
+                if ($this->_findParentItems($item->getChildren(), $itemId, $parents)) {
+                    $parents[] = $item;
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

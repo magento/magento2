@@ -56,9 +56,7 @@ class Mage_Adminhtml_Cms_PageController extends Mage_Adminhtml_Controller_Action
      */
     public function indexAction()
     {
-        $this->_title($this->__('CMS'))
-             ->_title($this->__('Pages'))
-             ->_title($this->__('Manage Content'));
+        $this->_title($this->__('Pages'));
 
         $this->_initAction();
         $this->renderLayout();
@@ -78,9 +76,7 @@ class Mage_Adminhtml_Cms_PageController extends Mage_Adminhtml_Controller_Action
      */
     public function editAction()
     {
-        $this->_title($this->__('CMS'))
-             ->_title($this->__('Pages'))
-             ->_title($this->__('Manage Content'));
+        $this->_title($this->__('Pages'));
 
         // 1. Get ID and create model
         $id = $this->getRequest()->getParam('page_id');
@@ -136,7 +132,7 @@ class Mage_Adminhtml_Cms_PageController extends Mage_Adminhtml_Controller_Action
 
             $model->setData($data);
 
-            Mage::dispatchEvent('cms_page_prepare_save', array('page' => $model, 'request' => $this->getRequest()));
+            $this->_eventManager->dispatch('cms_page_prepare_save', array('page' => $model, 'request' => $this->getRequest()));
 
             //validating
             if (!$this->_validatePostData($data)) {
@@ -168,7 +164,7 @@ class Mage_Adminhtml_Cms_PageController extends Mage_Adminhtml_Controller_Action
             }
             catch (Exception $e) {
                 $this->_getSession()->addException($e,
-                    Mage::helper('Mage_Cms_Helper_Data')->__('An error occurred while saving the page.'));
+                    Mage::helper('Mage_Cms_Helper_Data')->__('Something went wrong while saving the page.'));
             }
 
             $this->_getSession()->setFormData($data);
@@ -196,12 +192,12 @@ class Mage_Adminhtml_Cms_PageController extends Mage_Adminhtml_Controller_Action
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(
                     Mage::helper('Mage_Cms_Helper_Data')->__('The page has been deleted.'));
                 // go to grid
-                Mage::dispatchEvent('adminhtml_cmspage_on_delete', array('title' => $title, 'status' => 'success'));
+                $this->_eventManager->dispatch('adminhtml_cmspage_on_delete', array('title' => $title, 'status' => 'success'));
                 $this->_redirect('*/*/');
                 return;
 
             } catch (Exception $e) {
-                Mage::dispatchEvent('adminhtml_cmspage_on_delete', array('title' => $title, 'status' => 'fail'));
+                $this->_eventManager->dispatch('adminhtml_cmspage_on_delete', array('title' => $title, 'status' => 'fail'));
                 // display error message
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError($e->getMessage());
                 // go back to edit form
@@ -210,7 +206,7 @@ class Mage_Adminhtml_Cms_PageController extends Mage_Adminhtml_Controller_Action
             }
         }
         // display error message
-        Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError(Mage::helper('Mage_Cms_Helper_Data')->__('Unable to find a page to delete.'));
+        Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError(Mage::helper('Mage_Cms_Helper_Data')->__('We can\'t find a page to delete.'));
         // go to grid
         $this->_redirect('*/*/');
     }
@@ -225,13 +221,13 @@ class Mage_Adminhtml_Cms_PageController extends Mage_Adminhtml_Controller_Action
         switch ($this->getRequest()->getActionName()) {
             case 'new':
             case 'save':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Cms::save');
+                return $this->_authorization->isAllowed('Mage_Cms::save');
                 break;
             case 'delete':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Cms::page_delete');
+                return $this->_authorization->isAllowed('Mage_Cms::page_delete');
                 break;
             default:
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Cms::page');
+                return $this->_authorization->isAllowed('Mage_Cms::page');
                 break;
         }
     }

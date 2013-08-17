@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
  * Magento
@@ -72,6 +72,7 @@
         <xs:attribute name="module" type="typeModule" use="optional" />
         <xs:attribute name="title" type="typeTitle" use="optional" />
         <xs:attribute name="sortOrder" type="xs:int" use="optional" />
+        <xs:attribute name="disabled" type="xs:boolean" use="optional" />
     </xs:complexType>
 
     <xs:simpleType name="typeId">

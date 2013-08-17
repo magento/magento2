@@ -23,13 +23,16 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint jquery:true*/
+/*global alert*/
 (function($) {
     'use strict';
     $.widget('vde.quickStyleElement', {
         options: {
             changeEvent: 'change.quickStyleElement',
             focusEvent: 'focus.quickStyleElement',
-            saveQuickStylesUrl: null
+            saveQuickStylesUrl: null,
+            backgroundSelector: '.color-box',
+            controlSelector: '.control'
         },
 
         _init: function() {
@@ -37,22 +40,29 @@
         },
 
         _bind: function() {
-            this.element.on(this.options.changeEvent, $.proxy(this._onChange, this));
-            this.element.on(this.options.focusEvent, $.proxy(this._onFocus, this));
+
+            this.element.on(this.options.changeEvent, $.proxy(this._onChange, this))
+                .on(this.options.focusEvent, $.proxy(this._onFocus, this));
         },
 
         _onFocus: function() {
-            this.oldValue = $(this.element).val();
+            this.oldValue = this.element.val();
         },
 
         _onChange: function() {
-            if (this.element.attr('type') == 'checkbox') {
+            if (this.element.attr('type') === 'checkbox') {
                 this.element.trigger('quickStyleElementBeforeChange');
             }
 
-            if (this.oldValue != $(this.element).val() || this.element.attr('type') == 'checkbox') {
-                this._send()
+            if (this.oldValue !== this.element.val() || this.element.attr('type') === 'checkbox') {
+                this._send();
             }
+        },
+
+        _setSwitchColor: function() {
+            this.element.closest(this.options.controlSelector)
+                .find(this.options.backgroundSelector)
+                .css('background-color', this.element.val());
         },
 
         _send: function() {
@@ -63,17 +73,19 @@
 
             $.ajax({
                 type: 'POST',
-                url:  this.options.saveQuickStylesUrl,
+                url: this.options.saveQuickStylesUrl,
                 data: data,
                 dataType: 'json',
+                global: false,
                 success: $.proxy(function(response) {
                     if (response.error) {
                         alert(response.message);
                     }
+                    this._setSwitchColor();
                     this.element.trigger('refreshIframe');
                 }, this),
                 error: function() {
-                    alert($.mage.__('Error: unknown error.'));
+                    alert($.mage.__('Sorry, there was an unknown error.'));
                 }
             });
         }

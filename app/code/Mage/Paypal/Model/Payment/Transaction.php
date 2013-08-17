@@ -224,7 +224,7 @@ class Mage_Paypal_Model_Payment_Transaction extends Mage_Core_Model_Abstract
     protected function _verifyTxnId($txnId)
     {
         if (null !== $txnId && 0 == strlen($txnId)) {
-            Mage::throwException(Mage::helper('Mage_Paypal_Helper_Data')->__('Transaction ID must not be empty.'));
+            Mage::throwException(Mage::helper('Mage_Paypal_Helper_Data')->__('You need to enter a transaction ID.'));
         }
     }
 

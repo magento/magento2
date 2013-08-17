@@ -71,7 +71,7 @@ class Mage_Persistent_Model_Persistent_Config
         if (is_null($this->_xmlConfig)) {
             $filePath = $this->_configFilePath;
             if (!is_file($filePath) || !is_readable($filePath)) {
-                Mage::throwException(Mage::helper('Mage_Persistent_Helper_Data')->__('Cannot load configuration from file %s.', $filePath));
+                Mage::throwException(Mage::helper('Mage_Persistent_Helper_Data')->__('We cannot load the configuration from file %s.', $filePath));
             }
             $xml = file_get_contents($filePath);
             $this->_xmlConfig = new Varien_Simplexml_Element($xml);

@@ -28,6 +28,28 @@
 class Mage_Backend_Model_Config_Structure_Element_Dependency_MapperTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Field prefix
+     */
+    const FIELD_PREFIX = 'prefix_';
+
+    /**
+     * Value in store
+     */
+    const VALUE_IN_STORE = 'value in store';
+
+    /**#@+
+     * Field ids
+     */
+    const FIELD_ID1 = 'field id 1';
+    const FIELD_ID2 = 'field id 2';
+    /**#@-*/
+
+    /**
+     * Store code
+     */
+    const STORE_CODE = 'some store code';
+
+    /**
      * @var Mage_Backend_Model_Config_Structure_Element_Dependency_Mapper
      */
     protected $_model;
@@ -43,159 +65,192 @@ class Mage_Backend_Model_Config_Structure_Element_Dependency_MapperTest extends 
     protected $_configStructureMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_fieldMock;
-
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_storeMock;
-
-    /**
      * Test data
      *
      * @var array
      */
     protected $_testData;
 
+    /**
+     * Mock of dependency field factory
+     *
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_fieldFactoryMock;
+
     public function setUp()
     {
-        $this->_applicationMock = $this->getMock('Mage_Core_Model_App', array(), array(), '', false);
-        $this->_configStructureMock = $this->getMock(
-            'Mage_Backend_Model_Config_Structure', array(), array(), '', false
-        );
-        $this->_fieldMock = $this->getMock(
-            'Mage_Backend_Model_Config_Structure_Element_Field', array(), array(), '', false
-        );
-
-        $this->_storeMock = $this->getMock(
-            'Mage_Core_Model_Store', array(), array(), '', false
-        );
-
         $this->_testData = array(
-            'field_4' => array(
-                'id' => 'section_2/group_3/field_4',
-                'value' => 'someValue',
-                'dependPath' => array(
-                    'section_2',
-                    'group_3',
-                    'field_4',
-                ),
+            'field_x' => array(
+                'id' => self::FIELD_ID1,
+            ),
+            'field_y' => array(
+                'id' => self::FIELD_ID2,
             ),
         );
 
-        $this->_configStructureMock->expects($this->once())
-            ->method('getElement')->with('section_2/group_3/field_4')->will($this->returnValue($this->_fieldMock));
-
+        $this->_applicationMock = $this->getMockBuilder('Mage_Core_Model_App')
+            ->setMethods(array('getStore'))
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_configStructureMock = $this->getMockBuilder('Mage_Backend_Model_Config_Structure')
+            ->setMethods(array('getElement'))
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_fieldFactoryMock = $this
+            ->getMockBuilder('Mage_Backend_Model_Config_Structure_Element_Dependency_FieldFactory')
+            ->setMethods(array('create'))
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_model = new Mage_Backend_Model_Config_Structure_Element_Dependency_Mapper(
-            $this->_applicationMock,
-            $this->_configStructureMock
-        );
+            $this->_applicationMock, $this->_configStructureMock, $this->_fieldFactoryMock);
     }
 
-    public function testGetDependenciesWhenDependentValueIsNotEqualValueInStoreAndDependentIsInvisible()
+    protected function tearDown()
     {
-        $this->_applicationMock->expects($this->once())
-            ->method('getStore')->with('store_code')->will($this->returnValue($this->_storeMock));
-
-        $this->_fieldMock->expects($this->once())
-            ->method('getPath')->with('prefix')->will($this->returnValue('field_path'));
-
-        $this->_fieldMock->expects($this->once())->method('isVisible')->will($this->returnValue(false));
-
-        $this->_storeMock->expects($this->once())->method('getConfig')->with('field_path')->will($this->returnValue(1));
-
-        $actual = $this->_model->getDependencies($this->_testData, 'store_code', 'prefix');
-
-        $expected = array('section_2_group_3_prefixfield_4' => 'someValue');
-
-        $this->assertEquals($expected, $actual);
+        unset($this->_model);
+        unset($this->_configStructureMock);
+        unset($this->_applicationMock);
+        unset($this->_fieldFactoryMock);
+        unset($this->_testData);
     }
 
-    public function testGetDependenciesWhenDependentValueIsArray()
+    /**
+     * @param bool $isValueSatisfy
+     * @dataProvider getDependenciesDataProvider
+     */
+    public function testGetDependenciesWhenDependentIsInvisible($isValueSatisfy)
     {
-        $testData = array(
-            'field_4' => array(
-                'id' => 'section_2/group_3/field_4',
-                'value' => 'value1,value2',
-                'separator' => ',',
-                'dependPath' => array(
-                    'section_2',
-                    'group_3',
-                    'field_4',
-                ),
-            ),
-        );
-        $this->_applicationMock->expects($this->once())
-            ->method('getStore')->with('store_code')->will($this->returnValue($this->_storeMock));
-
-        $this->_fieldMock->expects($this->once())
-            ->method('getPath')->with('prefix')->will($this->returnValue('field_path'));
-
-        $this->_fieldMock->expects($this->once())->method('isVisible')->will($this->returnValue(false));
-
-        $this->_storeMock->expects($this->once())
-            ->method('getConfig')->with('field_path')->will($this->returnValue('value2'));
-
-        $actual = $this->_model->getDependencies($testData, 'store_code', 'prefix');
+        $storeMock = $this->getMockBuilder('Mage_Core_Model_Store')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_applicationMock->expects($this->exactly(count($this->_testData)))
+            ->method('getStore')
+            ->with(self::STORE_CODE)
+            ->will($this->returnValue($storeMock));
 
         $expected = array();
-
+        $rowData = array_values($this->_testData);
+        for ($i = 0; $i < count($this->_testData); ++$i) {
+            $data = $rowData[$i];
+            $dependentPath = 'some path ' . $i;
+            $field = $this->_getField(false, $dependentPath,
+                'Mage_Backend_Model_Config_Structure_Element_Field_' . (string)$isValueSatisfy . $i);
+            $this->_configStructureMock->expects($this->at($i))
+                ->method('getElement')
+                ->with($data['id'])
+                ->will($this->returnValue($field));
+            $dependencyField = $this->_getDependencyField($isValueSatisfy, false, $data['id'],
+                'Mage_Backend_Model_Config_Structure_Element_Dependency_Field_' . (string)$isValueSatisfy . $i);
+            $this->_fieldFactoryMock->expects($this->at($i))
+                ->method('create')
+                ->with(array('fieldData' => $data, 'fieldPrefix' => self::FIELD_PREFIX))
+                ->will($this->returnValue($dependencyField));
+            $storeMock->expects($this->at($i))
+                ->method('getConfig')
+                ->with($dependentPath)
+                ->will($this->returnValue(self::VALUE_IN_STORE));
+            if (!$isValueSatisfy) {
+                $expected[$data['id']] = $dependencyField;
+            }
+        }
+        $actual = $this->_model->getDependencies($this->_testData, self::STORE_CODE, self::FIELD_PREFIX);
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetDependenciesWhenDependentValueIsEqualValueInStoreAndDependentIsInvisible()
+    public function getDependenciesDataProvider()
     {
-        $this->_fieldMock->expects($this->once())->method('isVisible')->will($this->returnValue(false));
-
-        $this->_applicationMock->expects($this->once())
-            ->method('getStore')->with('store_code')->will($this->returnValue($this->_storeMock));
-
-        $this->_fieldMock->expects($this->once())
-            ->method('getPath')->with('prefix')->will($this->returnValue('field_path'));
-
-        $this->_storeMock->expects($this->once())
-            ->method('getConfig')->with('field_path')->will($this->returnValue('someValue'));
-
-        $actual = $this->_model->getDependencies($this->_testData, 'store_code', 'prefix');
-
-        $expected = array();
-
-        $this->assertEquals($expected, $actual);
+        return array(
+            array(true),
+            array(false),
+        );
     }
 
     public function testGetDependenciesIsVisible()
     {
-        $this->_fieldMock->expects($this->once())->method('isVisible')->will($this->returnValue(true));
+        $this->_applicationMock->expects($this->never())
+            ->method('getStore');
 
-        $actual = $this->_model->getDependencies($this->_testData, 'store_code', 'prefix');
-
-        $expected = array('section_2_group_3_prefixfield_4' => 'someValue');
-
+        $expected = array();
+        $rowData = array_values($this->_testData);
+        for ($i = 0; $i < count($this->_testData); ++$i) {
+            $data = $rowData[$i];
+            $field = $this->_getField(true, 'some path',
+                'Mage_Backend_Model_Config_Structure_Element_Field_visible_' . $i);
+            $this->_configStructureMock->expects($this->at($i))
+                ->method('getElement')
+                ->with($data['id'])
+                ->will($this->returnValue($field));
+            $dependencyField = $this->_getDependencyField((bool)$i, true, $data['id'],
+                'Mage_Backend_Model_Config_Structure_Element_Dependency_Field_visible_' . $i);
+            $this->_fieldFactoryMock->expects($this->at($i))
+                ->method('create')
+                ->with(array('fieldData' => $data, 'fieldPrefix' => self::FIELD_PREFIX))
+                ->will($this->returnValue($dependencyField));
+            $expected[$data['id']] = $dependencyField;
+        }
+        $actual = $this->_model->getDependencies($this->_testData, self::STORE_CODE, self::FIELD_PREFIX);
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetDependenciesWithSeparator()
+    /**
+     * Get dependency field mock
+     *
+     * @param bool $isValueSatisfy
+     * @param bool $isFieldVisible
+     * @param string $fieldId
+     * @param string $mockClassName
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function _getDependencyField($isValueSatisfy, $isFieldVisible, $fieldId, $mockClassName)
     {
-        $testData = array(
-            'field_4' => array(
-                'id' => 'section_2/group_3/field_4',
-                'value' => 'value1,value2',
-                'separator' => ',',
-                'dependPath' => array(
-                    'section_2',
-                    'group_3',
-                    'field_4',
-                ),
-            ),
-        );
-        $this->_fieldMock->expects($this->once())->method('isVisible')->will($this->returnValue(true));
+        $field = $this->getMockBuilder('Mage_Backend_Model_Config_Structure_Element_Dependency_Field')
+            ->setMethods(array('isValueSatisfy', 'getId'))
+            ->setMockClassName($mockClassName)
+            ->disableOriginalConstructor()
+            ->getMock();
+        if ($isFieldVisible) {
+            $field->expects($isFieldVisible ? $this->never() : $this->once())
+                ->method('isValueSatisfy');
+        } else {
+            $field->expects($this->once())
+                ->method('isValueSatisfy')
+                ->with(self::VALUE_IN_STORE)
+                ->will($this->returnValue($isValueSatisfy));
+        }
+        $field->expects(($isFieldVisible || !$isValueSatisfy) ? $this->once() : $this->never())
+            ->method('getId')
+            ->will($this->returnValue($fieldId));
+        return $field;
+    }
 
-        $actual = $this->_model->getDependencies($testData, 'store_code', 'prefix');
-
-        $expected = array('section_2_group_3_prefixfield_4' => array('value1', 'value2'));
-
-        $this->assertEquals($expected, $actual);
+    /**
+     * Get field mock
+     *
+     * @param bool $isVisible
+     * @param string $path
+     * @param string $mockClassName
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function _getField($isVisible, $path, $mockClassName)
+    {
+        $field = $this->getMockBuilder('Mage_Backend_Model_Config_Structure_Element_Field')
+            ->setMethods(array('isVisible', 'getPath'))
+            ->setMockClassName($mockClassName)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $field->expects($this->once())
+            ->method('isVisible')
+            ->will($this->returnValue($isVisible));
+        if ($isVisible) {
+            $field->expects($this->never())
+                ->method('getPath');
+        } else {
+            $field->expects($isVisible ? $this->never() : $this->once())
+                ->method('getPath')
+                ->with(self::FIELD_PREFIX)
+                ->will($this->returnValue($path));
+        }
+        return $field;
     }
 }

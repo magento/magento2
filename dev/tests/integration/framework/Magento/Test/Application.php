@@ -35,6 +35,11 @@
 class Magento_Test_Application
 {
     /**
+     * Default application area
+     */
+    const DEFAULT_APP_AREA = 'global';
+
+    /**
      * DB vendor adapter instance
      *
      * @var Magento_Test_Db_DbAbstract
@@ -89,6 +94,13 @@ class Magento_Test_Application
     protected $_appMode;
 
     /**
+     * Application area
+     *
+     * @var null
+     */
+    protected $_appArea = null;
+
+    /**
      * Constructor
      *
      * @param Magento_Test_Db_DbAbstract $dbInstance
@@ -111,12 +123,15 @@ class Magento_Test_Application
         $this->_installDir = $installDir;
         $this->_installEtcDir = "$installDir/etc";
 
+        $generationDir = "$installDir/generation";
         $this->_initParams = array(
             Mage::PARAM_APP_DIRS => array(
                 Mage_Core_Model_Dir::CONFIG      => $this->_installEtcDir,
                 Mage_Core_Model_Dir::VAR_DIR     => $installDir,
                 Mage_Core_Model_Dir::MEDIA       => "$installDir/media",
-                Mage_Core_Model_Dir::STATIC_VIEW => "$installDir/static",
+                Mage_Core_Model_Dir::STATIC_VIEW => "$installDir/pub_static",
+                Mage_Core_Model_Dir::PUB_VIEW_CACHE => "$installDir/pub_cache",
+                Mage_Core_Model_Dir::GENERATION => $generationDir,
             ),
             Mage::PARAM_MODE => $appMode
         );
@@ -172,20 +187,25 @@ class Magento_Test_Application
         Mage::$headersSentThrowsException = false;
         $config = new Mage_Core_Model_Config_Primary(BP, $this->_customizeParams($overriddenParams));
         if (!Mage::getObjectManager()) {
-            $definition = new Magento_ObjectManager_Definition_Runtime();
-            $definitionDecorator = new Magento_Code_Generator_DefinitionDecorator($definition);
-            $objectManager = new Magento_Test_ObjectManager($definitionDecorator, $config);
+            $objectManager = new Magento_Test_ObjectManager($config, new Magento_Test_ObjectManager_Config());
             Mage::setObjectManager($objectManager);
         } else {
-            $config->configure(Mage::getObjectManager());
-            Mage::getObjectManager()->addSharedInstance($config, 'Mage_Core_Model_Config_Primary');
-            Mage::getObjectManager()->addSharedInstance($config->getDirectories(), 'Mage_Core_Model_Dir');
+            $objectManager = Mage::getObjectManager();
+            $config->configure($objectManager);
+            $objectManager->addSharedInstance($config, 'Mage_Core_Model_Config_Primary');
+            $objectManager->addSharedInstance($config->getDirectories(), 'Mage_Core_Model_Dir');
         }
 
-        Mage::getObjectManager()->get('Mage_Core_Model_Resource')
+        $objectManager->get('Mage_Core_Model_Resource')
             ->setResourceConfig(Mage::getObjectManager()->get('Mage_Core_Model_Config_Resource'));
-        Mage::getObjectManager()->get('Mage_Core_Model_Resource')
+        $objectManager->get('Mage_Core_Model_Resource')
             ->setCache(Mage::getObjectManager()->get('Mage_Core_Model_CacheInterface'));
+
+        /** @var Mage_Core_Model_Dir_Verification $verification */
+        $verification = $objectManager->get('Mage_Core_Model_Dir_Verification');
+        $verification->createAndVerifyDirectories();
+
+        $this->loadArea(Magento_Test_Application::DEFAULT_APP_AREA);
     }
 
     /**
@@ -268,10 +288,13 @@ class Magento_Test_Application
         $updater->updateScheme();
         $updater->updateData();
 
-        /* Enable configuration cache by default in order to improve tests performance */
+        /* Enable cross-cutting caches in order to improve tests performance */
         /** @var $cacheTypes Mage_Core_Model_Cache_Types */
         $cacheTypes = Mage::getObjectManager()->get('Mage_Core_Model_Cache_Types');
         $cacheTypes->setEnabled(Mage_Core_Model_Cache_Type_Config::TYPE_IDENTIFIER, true);
+        $cacheTypes->setEnabled(Mage_Core_Model_Cache_Type_Layout::TYPE_IDENTIFIER, true);
+        $cacheTypes->setEnabled(Mage_Core_Model_Cache_Type_Translate::TYPE_IDENTIFIER, true);
+        $cacheTypes->setEnabled(Mage_Eav_Model_Cache_Type::TYPE_IDENTIFIER, true);
         $cacheTypes->persist();
 
         /* Fill installation date in local.xml to indicate that application is installed */
@@ -316,6 +339,7 @@ class Magento_Test_Application
         Varien_Data_Form::setElementRenderer(null);
         Varien_Data_Form::setFieldsetRenderer(null);
         Varien_Data_Form::setFieldsetElementRenderer(null);
+        $this->_appArea = null;
 
         if ($resource) {
             Mage::register('_singleton/Mage_Core_Model_Resource', $resource);
@@ -382,5 +406,32 @@ class Magento_Test_Application
             'role_name'  => $user->getFirstname(),
         ));
         $roleUser->save();
+    }
+
+    /**
+     * Ge current application area
+     *
+     * @return string
+     */
+    public function getArea()
+    {
+        return $this->_appArea;
+    }
+
+    /**
+     * Load application area
+     *
+     * @param $area
+     */
+    public function loadArea($area)
+    {
+        $this->_appArea = $area;
+        if ($area == Magento_Test_Application::DEFAULT_APP_AREA) {
+            Mage::app()->loadAreaPart($area, Mage_Core_Model_App_Area::PART_CONFIG);
+            Mage::app()->loadAreaPart($area, Mage_Core_Model_App_Area::PART_EVENTS);
+        } else {
+            Mage::app()->loadArea($area);
+            Mage::getConfig()->setCurrentAreaCode($area);
+        }
     }
 }

@@ -41,7 +41,7 @@ class Mage_Wishlist_Block_Customer_Sidebar extends Mage_Wishlist_Block_Abstract
      */
     public function getTitle()
     {
-        return $this->__('My Wishlist <small>(%d)</small>', $this->getItemCount());
+        return $this->__('My Wish List <small>(%d)</small>', $this->getItemCount());
     }
 
     /**

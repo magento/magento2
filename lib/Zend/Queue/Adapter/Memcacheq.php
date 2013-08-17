@@ -128,7 +128,7 @@ class Zend_Queue_Adapter_Memcacheq extends Zend_Queue_Adapter_AdapterAbstract
      *
      * Throws an exception if the adapter cannot determine if a queue exists.
      * use isSupported('isExists') to determine if an adapter can test for
-     * queue existance.
+     * queue existence.
      *
      * @param  string $name
      * @return boolean

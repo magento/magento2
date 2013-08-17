@@ -57,6 +57,10 @@ class Mage_Backend_Block_System_Config_Form_FieldsetTest extends PHPUnit_Framewo
      */
     protected $_layoutMock;
 
+    /**
+     * @var Magento_Test_Helper_ObjectManager
+     */
+    protected $_testHelper;
 
     protected function setUp()
     {
@@ -74,8 +78,8 @@ class Mage_Backend_Block_System_Config_Form_FieldsetTest extends PHPUnit_Framewo
                 'group' => $groupMock
             )
         );
-        $helper = new Magento_Test_Helper_ObjectManager($this);
-        $this->_object = $helper->getObject('Mage_Backend_Block_System_Config_Form_Fieldset', $data);
+        $this->_testHelper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_object = $this->_testHelper->getObject('Mage_Backend_Block_System_Config_Form_Fieldset', $data);
 
         $this->_testData = array(
             'htmlId' => 'test_field_id',
@@ -87,7 +91,7 @@ class Mage_Backend_Block_System_Config_Form_FieldsetTest extends PHPUnit_Framewo
         );
 
         $this->_elementMock = $this->getMock('Varien_Data_Form_Element_Text',
-            array('getHtmlId' , 'getName', 'getExpanded', 'getSortedElements', 'getLegend', 'getComment'),
+            array('getHtmlId' , 'getName', 'getExpanded', 'getElements', 'getLegend', 'getComment'),
             array(),
             '',
             false,
@@ -115,33 +119,12 @@ class Mage_Backend_Block_System_Config_Form_FieldsetTest extends PHPUnit_Framewo
         $this->_layoutMock->expects($this->any())->method('helper')
             ->with('Mage_Core_Helper_Js')->will($this->returnValue($helperMock));
 
-        $this->_elementMock->expects($this->any())->method('getSortedElements')->will($this->returnValue(array()));
-
-        $expected = '<div class="entry-edit-head collapseable" id="' . $this->_testData['htmlId'] . '-head">';
-
-        $expected .= '<span id="' . $this->_testData['htmlId'] . '-link" class="entry-edit-head-link"></span>';
-
-        $expected .= '<a id="' . $this->_testData['htmlId'] . '-head" href="#' . $this->_testData['htmlId']
-            . '-link" onclick="Fieldset.toggleCollapse(\'' . $this->_testData['htmlId'] . '\', \'\'); '
-            . 'return false;">' . $this->_testData['legend'] . '</a>';
-
-        $expected .= '</div><input id="' . $this->_testData['htmlId']
-            . '-state" name="config_state[]" type="hidden" value="1" />';
-
-        $expected .= '<fieldset class="config collapseable test_fieldset_css'
-            . '" id="' . $this->_testData['htmlId']
-            . '"><legend>' . $this->_testData['legend'] . '</legend>';
-
-        $expected .= '<span class="comment" style="display: block;">' . $this->_testData['comment'] . '</span>';
-
-        $expected .= '<table cellspacing="0" class="form-list">';
-        $expected .= '<colgroup class="label" />';
-        $expected .= '<colgroup class="value" />';
-        $expected .= '<colgroup class="scope-label" />';
-        $expected .= '<colgroup class="" />';
-        $expected .= '<tbody></tbody></table></fieldset>';
-
-        $this->assertEquals($expected, $this->_object->render($this->_elementMock));
+        $collection = $this->_testHelper->getObject('Varien_Data_Form_Element_Collection');
+        $this->_elementMock->expects($this->any())->method('getElements')->will($this->returnValue($collection));
+        $actualHtml = $this->_object->render($this->_elementMock);
+        $this->assertContains($this->_testData['htmlId'], $actualHtml);
+        $this->assertContains($this->_testData['legend'], $actualHtml);
+        $this->assertContains($this->_testData['comment'], $actualHtml);
     }
 
     public function testRenderWithStoredElements()
@@ -166,8 +149,13 @@ class Mage_Backend_Block_System_Config_Form_FieldsetTest extends PHPUnit_Framewo
         $fieldMock->expects($this->any())->method('getTooltip')->will($this->returnValue('test_field_tootip'));
         $fieldMock->expects($this->any())->method('toHtml')->will($this->returnValue('test_field_toHTML'));
 
-        $this->_elementMock->expects($this->any())->method('getSortedElements')
-            ->will($this->returnValue( array($fieldMock))
+        $helper = new Magento_Test_Helper_ObjectManager($this);
+        $collection = $helper->getObject('Varien_Data_Form_Element_Collection', array(
+            'container' => $this->getMock('Varien_Data_Form_Abstract')
+        ));
+        $collection->add($fieldMock);
+        $this->_elementMock->expects($this->any())->method('getElements')
+            ->will($this->returnValue($collection)
         );
 
         $actual = $this->_object->render($this->_elementMock);
@@ -177,7 +165,5 @@ class Mage_Backend_Block_System_Config_Form_FieldsetTest extends PHPUnit_Framewo
         $expected = '<div id="row_test_field_id_comment" class="system-tooltip-box"'
             .' style="display:none;">test_field_tootip</div>';
         $this->assertContains($expected, $actual);
-
-        $this->assertContains("$$('#test_field_id table')[0].addClassName('system-tooltip-wrap');", $actual);
     }
 }

@@ -202,7 +202,7 @@ class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Main
             'label' => Mage::helper('Mage_SalesRule_Helper_Data')->__('Uses per Customer'),
         ));
 
-        $dateFormat = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
+        $dateFormat = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT);
         $fieldset->addField('from_date', 'date', array(
             'name'   => 'from_date',
             'label'  => Mage::helper('Mage_SalesRule_Helper_Data')->__('From Date'),

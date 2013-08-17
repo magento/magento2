@@ -49,14 +49,14 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Toolbar_Main extends Ma
         return parent::_prepareLayout();
     }
 
-    protected function getNewButtonHtml()
+    public function getNewButtonHtml()
     {
         return $this->getChildHtml('addButton');
     }
 
     protected function _getHeader()
     {
-        return Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Attribute Sets');
+        return Mage::helper('Mage_Catalog_Helper_Data')->__('Product Templates');
     }
 
     protected function _toHtml()

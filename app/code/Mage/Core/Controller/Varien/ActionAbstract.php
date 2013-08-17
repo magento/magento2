@@ -80,6 +80,9 @@ abstract class Mage_Core_Controller_Varien_ActionAbstract implements Mage_Core_C
      */
     public function getResponse()
     {
+        if (!$this->_response->getHeader('X-Frame-Options')) {
+            $this->_response->setHeader('X-Frame-Options', 'SAMEORIGIN');
+        }
         return $this->_response;
     }
 

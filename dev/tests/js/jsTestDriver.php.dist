@@ -48,12 +48,14 @@ return array(
         '/pub/lib/mage/loader.js',
         '/pub/lib/mage/edit-trigger.js',
         '/pub/lib/mage/translate-inline.js',
+        '/pub/lib/mage/translate-inline-vde.js',
         '/pub/lib/mage/backend/form.js',
         '/pub/lib/mage/backend/button.js',
         '/pub/lib/mage/backend/tabs.js',
         '/pub/lib/mage/validation.js',
         '/pub/lib/mage/validation/validation.js',
-        '/pub/lib/mage/backend/suggest.js'
+        '/pub/lib/mage/backend/menu.js',
+        '/pub/lib/mage/backend/suggest.js',
         '/pub/lib/mage/backend/tree-suggest.js'
     ),
     'test' => array('/dev/tests/js/testsuite'),

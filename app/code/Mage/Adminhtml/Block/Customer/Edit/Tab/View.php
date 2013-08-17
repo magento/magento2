@@ -80,7 +80,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View
     {
         return Mage::helper('Mage_Core_Helper_Data')->formatDate(
             $this->getCustomer()->getCreatedAtTimestamp(),
-            Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM,
+            Mage_Core_Model_LocaleInterface::FORMAT_TYPE_MEDIUM,
             true
         );
     }
@@ -92,13 +92,13 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View
             $this->getCustomer()->getCreatedAtTimestamp(),
             true
         );
-        return $this->formatDate($date, Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true);
+        return $this->formatDate($date, Mage_Core_Model_LocaleInterface::FORMAT_TYPE_MEDIUM, true);
     }
 
     public function getStoreCreateDateTimezone()
     {
         return Mage::app()->getStore($this->getCustomer()->getStoreId())
-            ->getConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+            ->getConfig(Mage_Core_Model_LocaleInterface::XML_PATH_DEFAULT_TIMEZONE);
     }
 
     /**
@@ -112,7 +112,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View
         if ($date) {
             return Mage::helper('Mage_Core_Helper_Data')->formatDate(
                 $date,
-                Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM,
+                Mage_Core_Model_LocaleInterface::FORMAT_TYPE_MEDIUM,
                 true
             );
         }
@@ -127,7 +127,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View
                 $date,
                 true
             );
-            return $this->formatDate($date, Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true);
+            return $this->formatDate($date, Mage_Core_Model_LocaleInterface::FORMAT_TYPE_MEDIUM, true);
         }
         return Mage::helper('Mage_Customer_Helper_Data')->__('Never');
     }
@@ -135,7 +135,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View
     public function getStoreLastLoginDateTimezone()
     {
         return Mage::app()->getStore($this->getCustomer()->getStoreId())
-            ->getConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+            ->getConfig(Mage_Core_Model_LocaleInterface::XML_PATH_DEFAULT_TIMEZONE);
     }
 
     public function getCurrentStatus()

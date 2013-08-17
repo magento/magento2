@@ -93,6 +93,6 @@ class Mage_Adminhtml_Block_Sales_Order_View_Tab_Transactions
      */
     public function isHidden()
     {
-        return !Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::transactions_fetch');
+        return !$this->_authorization->isAllowed('Mage_Sales::transactions_fetch');
     }
 }

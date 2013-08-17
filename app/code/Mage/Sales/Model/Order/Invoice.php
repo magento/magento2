@@ -176,13 +176,6 @@ class Mage_Sales_Model_Order_Invoice extends Mage_Sales_Model_Abstract
      */
     protected $_wasPayCalled = false;
 
-    public function __destruct()
-    {
-        if ($this->_saveBeforeDestruct) {
-            $this->save();
-        }
-    }
-
     /**
      * Initialize invoice resource model
      */
@@ -310,30 +303,18 @@ class Mage_Sales_Model_Order_Invoice extends Mage_Sales_Model_Abstract
     }
 
     /**
-     * Check invice void action availability
+     * Check invoice void action availability
      *
      * @return bool
      */
     public function canVoid()
     {
-        $canVoid = false;
         if ($this->getState() == self::STATE_PAID) {
-            $canVoid = $this->getCanVoidFlag();
-            /**
-             * If we not retrieve negative answer from payment yet
-             */
-            if (is_null($canVoid)) {
-                $canVoid = $this->getOrder()->getPayment()->canVoid($this);
-                if ($canVoid === false) {
-                    $this->setCanVoidFlag(false);
-                    $this->_saveBeforeDestruct = true;
-                }
-            }
-            else {
-                $canVoid = (bool) $canVoid;
+            if (is_null($this->getCanVoidFlag())) {
+                return (bool)$this->getOrder()->getPayment()->canVoid($this);
             }
         }
-        return $canVoid;
+        return (bool)$this->getCanVoidFlag();
     }
 
     /**
@@ -610,7 +591,7 @@ class Mage_Sales_Model_Order_Invoice extends Mage_Sales_Model_Abstract
     public function register()
     {
         if ($this->getId()) {
-            Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('Cannot register existing invoice'));
+            Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('We cannot register an existing invoice'));
         }
 
         foreach ($this->getAllItems() as $item) {

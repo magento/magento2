@@ -111,7 +111,7 @@ class Zend_Tool_Project_Profile extends Zend_Tool_Project_Profile_Resource_Conta
     /**
      * isLoadableFromFile() - can a profile be loaded from a file
      *
-     * wether or not a profile can be loaded from the
+     * whether or not a profile can be loaded from the
      * file in attribute 'projectProfileFile', or from a file named
      * '.zfproject.xml' inside a directory in key 'projectDirectory'
      *

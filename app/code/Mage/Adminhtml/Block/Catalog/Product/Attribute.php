@@ -38,7 +38,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute extends Mage_Adminhtml_Bloc
     protected function _construct()
     {
         $this->_controller = 'catalog_product_attribute';
-        $this->_headerText = Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Attributes');
+        $this->_headerText = Mage::helper('Mage_Catalog_Helper_Data')->__('Product Attributes');
         $this->_addButtonLabel = Mage::helper('Mage_Catalog_Helper_Data')->__('Add New Attribute');
         parent::_construct();
     }

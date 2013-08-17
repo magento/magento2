@@ -44,7 +44,7 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
 
     public function testSetDefaultTags()
     {
-        $expected = array('tenantId' => '12345');
+        $expected = array('some_key' => 'some_value');
         Magento_Profiler::setDefaultTags($expected);
         $this->assertAttributeEquals($expected, '_defaultTags', 'Magento_Profiler');
     }
@@ -368,7 +368,7 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
             ->with($driverConfig)
             ->will($this->returnValue($mockDriver));
 
-        Magento_Profiler::applyConfig($config);
+        Magento_Profiler::applyConfig($config, '');
         $this->assertAttributeEquals(array(
             $mockDriver
         ), '_drivers', 'Magento_Profiler');
@@ -383,17 +383,19 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider parseConfigDataProvider
      * @param array $data
+     * @param boolean $isAjax
      * @param array $expected
      */
-    public function testParseConfig(array $data, array $expected)
+    public function testParseConfig($data, $isAjax, $expected)
     {
         $method = new ReflectionMethod('Magento_Profiler', '_parseConfig');
         $method->setAccessible(true);
-        $this->assertEquals($expected, $method->invoke(null, $data));
+        $this->assertEquals($expected, $method->invoke(null, $data, '', $isAjax));
     }
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function parseConfigDataProvider()
     {
@@ -402,6 +404,7 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
         return array(
             'Empty configuration' => array(
                 array(),
+                false,
                 array(
                     'driverConfigs' => array(),
                     'driverFactory' => $driverFactory,
@@ -420,6 +423,7 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
                     'tagFilters' => array('key' => 'value'),
                     'baseDir' => '/custom/base/dir'
                 ),
+                false,
                 array(
                     'driverConfigs' => array(
                         array(
@@ -438,6 +442,7 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
                         'foo' => 1
                     )
                 ),
+                false,
                 array(
                     'driverConfigs' => array(array(
                         'type' => 'foo'
@@ -453,6 +458,7 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
                         'foo'
                     )
                 ),
+                false,
                 array(
                     'driverConfigs' => array(array(
                         'type' => 'foo'
@@ -468,11 +474,36 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
                         'foo' => 0
                     )
                 ),
+                false,
                 array(
                     'driverConfigs' => array(),
                     'driverFactory' => $driverFactory,
                     'tagFilters' => array(),
                     'baseDir' => null,
+                )
+            ),
+            'Ajax call' => array(
+                1,
+                true,
+                array(
+                    'driverConfigs' => array(array(
+                        'output' => 'firebug'
+                    )),
+                    'driverFactory' => $driverFactory,
+                    'tagFilters' => array(),
+                    'baseDir' => '',
+                )
+            ),
+            'Non ajax call' => array(
+                1,
+                false,
+                array(
+                    'driverConfigs' => array(array(
+                        'output' => 'html'
+                    )),
+                    'driverFactory' => $driverFactory,
+                    'tagFilters' => array(),
+                    'baseDir' => '',
                 )
             )
         );

@@ -27,6 +27,7 @@ var varienGrid = new Class.create();
 varienGrid.prototype = {
     initialize:function (containerId, url, pageVar, sortVar, dirVar, filterVar) {
         this.containerId = containerId;
+        jQuery('#' + containerId).data('gridObject', this);
         this.url = url;
         this.pageVar = pageVar || false;
         this.sortVar = sortVar || false;
@@ -89,6 +90,7 @@ varienGrid.prototype = {
                 }
             }
         }
+        jQuery('#' + this.containerId).trigger('gridinit', this)
     },
     initGridAjax:function () {
         this.initGrid();
@@ -106,9 +108,6 @@ varienGrid.prototype = {
                 }
             }
         }
-    },
-    getContainerId:function () {
-        return this.containerId;
     },
     rowMouseOver:function (event) {
         var element = Event.findElement(event, 'tr');
@@ -160,63 +159,74 @@ varienGrid.prototype = {
             this.reload(this.addVarToUrl(element.name, element.value));
         }
     },
+
+    _onAjaxSeccess: function(data, textStatus, transport) {
+        try {
+            var responseText = transport.responseText;
+
+            if (transport.responseText.isJSON()) {
+                var response = transport.responseText.evalJSON()
+                if (response.error) {
+                    alert(response.message);
+                }
+                if (response.ajaxExpired && response.ajaxRedirect) {
+                    setLocation(response.ajaxRedirect);
+                }
+            } else {
+                /**
+                 * For IE <= 7.
+                 * If there are two elements, and first has name, that equals id of second.
+                 * In this case, IE will choose one that is above
+                 *
+                 * @see https://prototype.lighthouseapp.com/projects/8886/tickets/994-id-selector-finds-elements-by-name-attribute-in-ie7
+                 */
+                var divId = $(this.containerId);
+                if (divId.id == this.containerId) {
+                    divId.update(responseText);
+                } else {
+                    $$('div[id="' + this.containerId + '"]')[0].update(responseText);
+                }
+            }
+        } catch (e) {
+            var divId = $(this.containerId);
+            if (divId.id == this.containerId) {
+                divId.update(responseText);
+            } else {
+                $$('div[id="' + this.containerId + '"]')[0].update(responseText);
+            }
+        }
+        jQuery('#' + this.containerId).trigger('contentUpdated');
+    },
+
     reload:function (url, onSuccessCallback) {
         this.reloadParams = this.reloadParams || {};
         this.reloadParams.form_key = FORM_KEY;
         url = url || this.url;
-        if(this.useAjax){
-            new Ajax.Request(url + (url.match(new RegExp('\\?')) ? '&ajax=true' : '?ajax=true' ), {
-                loaderArea: this.containerId,
-                parameters: jQuery.param(this.reloadParams),
-                evalScripts: true,
-                onFailure: this._processFailure.bind(this),
-                onComplete: this.initGridAjax.bind(this),
-                onSuccess: function(transport) {
-                    try {
-                        var responseText = transport.responseText;
-
-                        if (transport.responseText.isJSON()) {
-                            var response = transport.responseText.evalJSON()
-                            if (response.error) {
-                                alert(response.message);
-                            }
-                            if(response.ajaxExpired && response.ajaxRedirect) {
-                                setLocation(response.ajaxRedirect);
-                            }
-                        } else {
-                            /**
-                             * For IE <= 7.
-                             * If there are two elements, and first has name, that equals id of second.
-                             * In this case, IE will choose one that is above
-                             *
-                             * @see https://prototype.lighthouseapp.com/projects/8886/tickets/994-id-selector-finds-elements-by-name-attribute-in-ie7
-                             */
-                            var divId = $(this.containerId);
-                            if (divId.id == this.containerId) {
-                                divId.update(responseText);
-                            } else {
-                                $$('div[id="'+this.containerId+'"]')[0].update(responseText);
-                            }
-                        }
-                        if (onSuccessCallback && typeof(onSuccessCallback) === "function") {
-                            // execute the callback, passing parameters as necessary
-                            onSuccessCallback();
-                        }
-                    } catch (e) {
-                        var divId = $(this.containerId);
-                        if (divId.id == this.containerId) {
-                            divId.update(responseText);
-                        } else {
-                            $$('div[id="'+this.containerId+'"]')[0].update(responseText);
-                        }
+        if (this.useAjax) {
+            var ajaxSettings = {
+                url: url + (url.match(new RegExp('\\?')) ? '&ajax=true' : '?ajax=true' ),
+                showLoader: true,
+                method: 'post',
+                context: jQuery('#' + this.containerId),
+                data: this.reloadParams,
+                error: this._processFailure.bind(this),
+                complete: this.initGridAjax.bind(this),
+                dataType: 'html',
+                success: function(data, textStatus, transport) {
+                    this._onAjaxSeccess(data, textStatus, transport);
+                    if (onSuccessCallback && typeof(onSuccessCallback) === "function") {
+                        // execute the callback, passing parameters as necessary
+                        onSuccessCallback();
                     }
                 }.bind(this)
-            });
-            return;
-        }
-        else{
-            if(this.reloadParams){
-                $H(this.reloadParams).each(function(pair){
+            };
+            jQuery('#' + this.containerId).trigger('gridajaxsettings', ajaxSettings);
+            var ajaxRequest = jQuery.ajax(ajaxSettings);
+            jQuery('#' + this.containerId).trigger('gridajax', ajaxRequest);
+            return ajaxRequest;
+        } else {
+            if (this.reloadParams) {
+                $H(this.reloadParams).each(function(pair) {
                     url = this.addVarToUrl(pair.key, pair.value);
                 }.bind(this));
             }
@@ -323,6 +333,7 @@ varienGrid.prototype = {
     },
     setCheckboxChecked:function (element, checked) {
         element.checked = checked;
+        jQuery(element).trigger('change');
         element.setHasChanges({});
         if (this.checkboxCheckCallback) {
             this.checkboxCheckCallback(this, element, checked);
@@ -479,8 +490,8 @@ varienGridMassaction.prototype = {
             if($(tdElement).down('a') || $(tdElement).down('select')) {
                 return;
             }
-            if (trElement.title) {
-                setLocation(trElement.title);
+            if (trElement.title && trElement.title.strip() != '#') {
+                this.getOldCallback('row_click')(grid, evt);
             }
             else{
                 var checkbox = Element.select(trElement, 'input');
@@ -502,6 +513,7 @@ varienGridMassaction.prototype = {
            this.setCheckbox(Event.element(evt));
         } else if (checkbox = this.findCheckbox(evt)) {
            checkbox.checked = !checkbox.checked;
+           jQuery(checkbox).trigger('change');
            this.setCheckbox(checkbox);
         }
     },
@@ -534,6 +546,7 @@ varienGridMassaction.prototype = {
     checkCheckboxes: function() {
         this.getCheckboxes().each(function(checkbox) {
             checkbox.checked = varienStringArray.has(checkbox.value, this.checkedString);
+            jQuery(checkbox).trigger('change');
         }.bind(this));
     },
     selectAll: function() {

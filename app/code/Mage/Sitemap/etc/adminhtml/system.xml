@@ -40,7 +40,7 @@
                 <field id="priority" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Priority</label>
                     <backend_model>Mage_Sitemap_Model_Config_Backend_Priority</backend_model>
-                    <comment>Valid values range: from 0.0 to 1.0.</comment>
+                    <comment>Valid values range from 0.0 to 1.0.</comment>
                 </field>
             </group>
             <group id="product" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -52,7 +52,7 @@
                 <field id="priority" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Priority</label>
                     <backend_model>Mage_Sitemap_Model_Config_Backend_Priority</backend_model>
-                    <comment>Valid values range: from 0.0 to 1.0.</comment>
+                    <comment>Valid values range from 0.0 to 1.0.</comment>
                 </field>
                 <field id="image_include" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Add Images into Sitemap</label>
@@ -68,7 +68,7 @@
                 <field id="priority" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Priority</label>
                     <backend_model>Mage_Sitemap_Model_Config_Backend_Priority</backend_model>
-                    <comment>Valid values range: from 0.0 to 1.0.</comment>
+                    <comment>Valid values range from 0.0 to 1.0.</comment>
                 </field>
             </group>
             <group id="generate" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">

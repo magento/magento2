@@ -32,7 +32,7 @@
                 <resource id="Mage_Adminhtml::stores">
                     <resource id="Mage_Adminhtml::stores_settings">
                         <resource id="Mage_Adminhtml::config">
-                            <resource id="Mage_Wishlist::config_wishlist" module="Mage_Wishlist" title="Wishlist Section" sortOrder="80" />
+                            <resource id="Mage_Wishlist::config_wishlist" module="Mage_Wishlist" title="Wish List Section" sortOrder="80" />
                         </resource>
                     </resource>
                 </resource>

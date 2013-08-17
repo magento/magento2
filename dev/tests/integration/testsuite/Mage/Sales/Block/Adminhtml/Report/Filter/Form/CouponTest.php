@@ -28,7 +28,11 @@
 /**
  * Test for Mage_Index_Model_Lock_Storage
  */
-class Mage_Sales_Block_Adminhtml_Report_Filter_Form_CouponTest extends Mage_Backend_Area_TestCase
+
+/**
+ * @magentoAppArea adminhtml
+ */
+class Mage_Sales_Block_Adminhtml_Report_Filter_Form_CouponTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Application object

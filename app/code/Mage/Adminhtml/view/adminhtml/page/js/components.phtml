@@ -32,63 +32,81 @@
  */
 ?>
 <script type="text/javascript">
-    (function($) {
-        "use strict";
-        $.mage.isDevMode(<?php echo Mage::getIsDeveloperMode() ?>);
+(function($) {
+    'use strict';
+    $.mage.isDevMode(<?php echo Mage::getIsDeveloperMode() ?>);
 
-        /**
-         * Declaration of resources needed for defined components
-         */
-        $.mage.component({
-            form: [
-                '<?php echo $this->getViewFileUrl('jquery/jquery.tmpl.min.js') ?>',
-                '<?php echo $this->getViewFileUrl('mage/backend/form.js') ?>'
-            ],
-            button: [
-                '<?php echo $this->getViewFileUrl('mage/backend/button.js') ?>'
-            ],
-            actionLink: [
-                '<?php echo $this->getViewFileUrl('mage/backend/action-link.js') ?>'
-            ],
-            validation: [
-                /* validation widget also requires jQuery validate plug-in, but this plug-in
-                        need to be included directly in head because in some cases need to add validation rules
-                        before validation widget is instantiated
-                */
-                '<?php echo $this->getViewFileUrl('mage/translate.js') ?>',
-                '<?php echo $this->getViewFileUrl('mage/validation.js') ?>',
-                '<?php echo $this->getViewFileUrl('mage/backend/validation.js') ?>'
-            ],
-            notification: [
-                '<?php echo $this->getViewFileUrl('jquery/jquery.tmpl.min.js') ?>',
-                '<?php echo $this->getViewFileUrl('mage/backend/notification.js') ?>'
-            ],
-            loader: [
-                '<?php echo $this->getViewFileUrl('jquery/jquery.tmpl.min.js') ?>',
-                '<?php echo $this->getViewFileUrl('mage/translate.js') ?>',
-                '<?php echo $this->getViewFileUrl('mage/loader.js') ?>'
-            ],
-            floatingHeader: [
-                '<?php echo $this->getViewFileUrl('mage/backend/floating-header.js') ?>',
-            ],
-            suggest: [
-                '<?php echo $this->getViewFileUrl('jquery/jquery.tmpl.min.js') ?>',
-                '<?php echo $this->getViewFileUrl('json2.js') ?>',
-                '<?php echo $this->getViewFileUrl('mage/backend/suggest.js') ?>'
-            ]
-        })
-        /**
-         * Declaration of resources for components (based on previously defined components)
-         */
-        .extend('treeSuggest', 'suggest', [
+    /**
+     * Declaration of resources needed for defined components
+     */
+    $.mage.component({
+        form: [
+            '<?php echo $this->getViewFileUrl('jquery/jquery.tmpl.min.js') ?>',
+            '<?php echo $this->getViewFileUrl('mage/backend/form.js') ?>'
+        ],
+        button: [
+            '<?php echo $this->getViewFileUrl('mage/backend/button.js') ?>'
+        ],
+        actionLink: [
+            '<?php echo $this->getViewFileUrl('mage/backend/action-link.js') ?>'
+        ],
+        validation: [
+            /* validation widget also requires jQuery validate plug-in, but this plug-in
+                    need to be included directly in head because in some cases need to add validation rules
+                    before validation widget is instantiated
+            */
+            '<?php echo $this->getViewFileUrl('mage/translate.js') ?>',
+            '<?php echo $this->getViewFileUrl('mage/validation.js') ?>',
+            '<?php echo $this->getViewFileUrl('mage/backend/validation.js') ?>'
+        ],
+        notification: [
+            '<?php echo $this->getViewFileUrl('jquery/jquery.tmpl.min.js') ?>',
+            '<?php echo $this->getViewFileUrl('mage/backend/notification.js') ?>'
+        ],
+        loader: [
+            '<?php echo $this->getViewFileUrl('jquery/jquery.tmpl.min.js') ?>',
+            '<?php echo $this->getViewFileUrl('mage/translate.js') ?>',
+            '<?php echo $this->getViewFileUrl('mage/loader.js') ?>'
+        ],
+        floatingHeader: [
+            '<?php echo $this->getViewFileUrl('mage/backend/floating-header.js') ?>'
+        ],
+        suggest: [
+            '<?php echo $this->getViewFileUrl('jquery/jquery.tmpl.min.js') ?>',
+            '<?php echo $this->getViewFileUrl('mage/backend/menu.js') ?>',
+            '<?php echo $this->getViewFileUrl('mage/backend/suggest.js') ?>'
+        ],
+        mediabrowser: [
+            '<?php echo $this->getViewFileUrl('jquery/jstree/jquery.jstree.js') ?>'
+        ],
+        rolesTree: [
+            '<?php echo $this->getViewFileUrl('jquery/jstree/jquery.hotkeys.js')?>',
+            '<?php echo $this->getViewFileUrl('jquery/jstree/jquery.jstree.js')?>',
+            '<?php echo $this->getViewFileUrl('Mage_User::js/roles-tree.js')?>'
+        ],
+        folderTree: [
+            '<?php echo $this->getViewFileUrl('jquery/jstree/jquery.hotkeys.js')?>',
+            '<?php echo $this->getViewFileUrl('jquery/jstree/jquery.jstree.js') ?>',
+            '<?php echo $this->getViewFileUrl('Mage_Cms::js/folder-tree.js') ?>'
+        ],
+        categoryTree: [
             '<?php echo $this->getViewFileUrl('jquery/jstree/jquery.hotkeys.js') ?>',
             '<?php echo $this->getViewFileUrl('jquery/jstree/jquery.jstree.js') ?>',
-            '<?php echo $this->getViewFileUrl('mage/backend/tree-suggest.js') ?>'
-        ])
-        /**
-         * Load resources in advance for components which needed to be instantiated without delay.
-         */
-        .load('loader');
-    })(jQuery);
+            '<?php echo $this->getViewFileUrl('Mage_Catalog::js/category-tree.js') ?>'
+        ]
+    })
+    /**
+     * Declaration of resources for components (based on previously defined components)
+     */
+    .extend('treeSuggest', 'suggest', [
+        '<?php echo $this->getViewFileUrl('jquery/jstree/jquery.hotkeys.js') ?>',
+        '<?php echo $this->getViewFileUrl('jquery/jstree/jquery.jstree.js') ?>',
+        '<?php echo $this->getViewFileUrl('mage/backend/tree-suggest.js') ?>'
+    ])
+    /**
+     * Load resources in advance for components which needed to be instantiated without delay.
+     */
+    .load('loader');
+})(jQuery);
 </script>
 <?php echo $this->getChildHtml() ?>

@@ -27,15 +27,16 @@
 
 /**
  * Test class for Mage_Adminhtml_Block_Newsletter_Queue_Edit_Form
+ * @magentoAppArea adminhtml
  */
-class Mage_Adminhtml_Block_Newsletter_Queue_Edit_FormTest extends Mage_Backend_Area_TestCase
+class Mage_Adminhtml_Block_Newsletter_Queue_Edit_FormTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @magentoDataFixture Mage/Core/_files/init_adminhtml_design.php
      * @magentoAppIsolation enabled
      */
     public function testPrepareForm()
     {
+        Mage::getDesign()->setArea(Mage_Core_Model_App_Area::AREA_ADMINHTML)->setDefaultDesignTheme();
         Mage::getConfig()->setCurrentAreaCode(Mage::helper('Mage_Backend_Helper_Data')->getAreaCode());
         $block = Mage::getObjectManager()->create('Mage_Adminhtml_Block_Newsletter_Queue_Edit_Form');
         $prepareFormMethod = new ReflectionMethod(

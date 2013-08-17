@@ -150,8 +150,8 @@ class Mage_Core_Model_Cache_Frontend_FactoryTest extends PHPUnit_Framework_TestC
                 case 'Magento_Cache_Frontend_Adapter_Zend':
                     return new $class($params['frontend']);
                 case 'CacheDecoratorDummy':
-                    $frontend = $params[0];
-                    unset($params[0]);
+                    $frontend = $params['frontend'];
+                    unset($params['frontend']);
                     return new $class($frontend, $params);
                 default:
                     throw new Exception("Test is not designed to create {$class} objects");

@@ -7,7 +7,7 @@
 "escapehtml var=$customer.name":"Customer Name",
 "var customer.email":"Customer Email",
 "store url=\"customer/account/confirm/\" _query_id=$customer.id _query_key=$customer.confirmation _query_back_url=$back_url":"Confirmation Url",
-"escapehtml var=$customer.password":"Customer password"}
+"var store.getFrontendName()|escape":"Store Name"}
 @-->
 
 <!--@styles
@@ -35,12 +35,14 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                             <p style="border:1px solid #E0E0E0; font-size:12px; line-height:16px; margin:0 0 16px 0; padding:13px 18px; background:#f9f9f9;">
                                 Use the following values when prompted to log in:<br/>
                                 <strong>E-mail:</strong> {{var customer.email}}<br/>
-                                <strong>Password:</strong> {{escapehtml var=$customer.password}}<p>
+                                <strong>Password:</strong> Only you know that! (Hint: It’s the password you created at {{var store.getFrontendName()|escape}})<br/>
+                                Forgot your Account password? No problems. Click <a href="{{store url="customer/account/createpassword/" _query_id=$customer.id _query_token=$customer.rp_token}}">here</a> to reset it.
+                            </p>
                             <p style="font-size:12px; line-height:16px; margin:0;">If you have any questions about your account or any other matter, please feel free to contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}" style="color:#1E7EC8;">{{config path='trans_email/ident_support/email'}}</a> or by phone at {{config path='general/store_information/phone'}}.</p>
                         </td>
                     </tr>
                     <tr>
-                        <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA; text-align:center;"><center><p style="font-size:12px; margin:0;">Thank you again, <strong>{{var store.getFrontendName()}}</strong></p></center></td>
+                        <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA; text-align:center;"><center><p style="font-size:12px; margin:0;">Thank you again, <strong>{{var store.getFrontendName()|escape}}</strong></p></center></td>
                     </tr>
                 </table>
             </td>

@@ -31,7 +31,7 @@
  * @package    Mage_CurrencySymbol
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_CurrencySymbol_Block_Adminhtml_System_Currencysymbol extends Mage_Adminhtml_Block_Widget_Form
+class Mage_CurrencySymbol_Block_Adminhtml_System_Currencysymbol extends Mage_Backend_Block_Widget_Form
 {
     /**
      * Constructor. Initialization required variables for class instance.
@@ -67,7 +67,7 @@ class Mage_CurrencySymbol_Block_Adminhtml_System_Currencysymbol extends Mage_Adm
      */
     public function getHeader()
     {
-        return Mage::helper('Mage_Adminhtml_Helper_Data')->__('Manage Currency Symbols');
+        return Mage::helper('Mage_Adminhtml_Helper_Data')->__('Currency Symbols');
     }
 
     /**

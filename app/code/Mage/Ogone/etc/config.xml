@@ -95,13 +95,6 @@
         </sales>
     </global>
     <frontend>
-        <layout>
-            <updates>
-                <ogone module="Mage_Ogone">
-                    <file>layout.xml</file>
-                </ogone>
-            </updates>
-        </layout>
         <secure_url>
             <ogone_api>/ogone/api</ogone_api>
         </secure_url>

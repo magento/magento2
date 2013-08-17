@@ -31,7 +31,13 @@
     <div class="add-to-cart">
         <?php if (!$_product->isGrouped()): ?>
         <label for="qty"><?php echo $this->__('Qty:') ?></label>
-        <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" data-validate="{required:true,digits:true}"/>
+        <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>"
+               title="<?php echo $this->__('Qty') ?>" class="input-text qty"
+            <?php if ($_product->getStockItem() && $_product->getStockItem()->getIsQtyDecimal()) : ?>
+                data-validate="{required:true, 'validate-greater-than-zero':true}"/>
+            <?php else: ?>
+                data-validate="{required:true, digits:true}"/>
+            <?php endif; ?>
         <?php endif; ?>
         <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" id="product-updatecart-button"><span><span><?php echo $buttonTitle ?></span></span></button>
         <?php echo $this->getChildHtml('', true) ?>

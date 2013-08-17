@@ -49,7 +49,7 @@
                 <resource id="Mage_Adminhtml::stores" module="Mage_Adminhtml" title="Stores" sortOrder="80">
                     <resource id="Mage_Adminhtml::stores_settings" title="Settings" module="Mage_Adminhtml" sortOrder="10">
                         <resource id="Mage_Adminhtml::store" title="All Stores" module="Mage_Adminhtml" sortOrder="10"/>
-                        <resource id="Mage_Adminhtml::config" title="Configurations" module="Mage_Adminhtml" sortOrder="20">
+                        <resource id="Mage_Adminhtml::config" title="Configuration" module="Mage_Adminhtml" sortOrder="20">
                             <resource id="Mage_Adminhtml::advanced" module="Mage_Adminhtml" title="Advanced Section" sortOrder="90" />
                             <resource id="Mage_Adminhtml::config_admin" title="Advanced Admin Section" sortOrder="100" />
                             <resource id="Mage_Adminhtml::config_design" title="Design Section" sortOrder="40" />

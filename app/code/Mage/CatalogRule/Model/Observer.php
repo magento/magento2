@@ -83,6 +83,24 @@ class Mage_CatalogRule_Model_Observer
     }
 
     /**
+     * Apply all catalog price rules
+     *
+     * Fire the same name process as catalog rule model
+     * Event name "apply_catalog_price_rules"
+     *
+     * @param  Varien_Event_Observer $observer
+     * @return Mage_CatalogRule_Model_Observer
+     */
+    public function processApplyAll(Varien_Event_Observer $observer)
+    {
+        Mage::getModel('Mage_CatalogRule_Model_Rule')->applyAll();
+        Mage::getModel('Mage_CatalogRule_Model_Flag')->loadSelf()
+            ->setState(0)
+            ->save();
+        return $this;
+    }
+
+    /**
      * Apply catalog price rules to product on frontend
      *
      * @param   Varien_Event_Observer $observer

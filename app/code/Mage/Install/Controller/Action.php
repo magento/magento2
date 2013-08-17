@@ -60,8 +60,8 @@ class Mage_Install_Controller_Action extends Mage_Core_Controller_Varien_Action
      */
     protected function _initDefaultTheme($areaCode)
     {
-        /** @var $design Mage_Core_Model_Design_Package */
-        $design = Mage::getObjectManager()->get('Mage_Core_Model_Design_Package');
+        /** @var $design Mage_Core_Model_View_DesignInterface */
+        $design = Mage::getObjectManager()->get('Mage_Core_Model_View_DesignInterface');
         /** @var $themesCollection Mage_Core_Model_Theme_Collection */
         $themesCollection = Mage::getObjectManager()->create('Mage_Core_Model_Theme_Collection');
         $themeModel = $themesCollection->addDefaultPattern($areaCode)

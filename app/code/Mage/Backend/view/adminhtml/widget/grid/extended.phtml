@@ -61,61 +61,66 @@ $numColumns = sizeof($this->getColumns());
             </div>
             <?php if ($this->getExportTypes()): ?>
             <div class="export">
-                <?php echo $this->__('Export to:') ?>
-                <select name="<?php echo $this->getId() ?>_export" id="<?php echo $this->getId() ?>_export"
-                        style="width:8em;">
-                    <?php foreach ($this->getExportTypes() as $_type): ?>
-                    <option value="<?php echo $_type->getUrl() ?>"><?php echo $_type->getLabel() ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <label><?php echo $this->__('Export to:') ?>
+                    <select name="<?php echo $this->getId() ?>_export" id="<?php echo $this->getId() ?>_export"
+                            style="width:8em;">
+                        <?php foreach ($this->getExportTypes() as $_type): ?>
+                        <option value="<?php echo $_type->getUrl() ?>"><?php echo $_type->getLabel() ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
                 <?php echo $this->getExportButtonHtml() ?>
             </div>
             <?php endif; ?>
             <?php if ($this->getPagerVisibility()): ?>
             <div class="pager">
-                <?php echo $this->__('Page') ?>
+                <label>
+                    <?php echo $this->__('Page') ?>
 
-                <?php $_curPage = $this->getCollection()->getCurPage() ?>
-                <?php $_lastPage = $this->getCollection()->getLastPageNumber() ?>
+                    <?php $_curPage = $this->getCollection()->getCurPage() ?>
+                    <?php $_lastPage = $this->getCollection()->getLastPageNumber() ?>
 
-                <?php if ($_curPage > 1): ?>
-                    <a href="#" title="<?php echo $this->__('Previous page') ?>" class="action-previous" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage - 1) ?>');return false;"><?php echo $this->__('Previous page') ?></a>
-                <?php else: ?>
-                    <span class="action-previous disabled"><?php echo $this->__('Previous page') ?></span>
-                <?php endif; ?>
+                    <?php if ($_curPage > 1): ?>
+                        <a href="#" title="<?php echo $this->__('Previous page') ?>" class="action-previous" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage - 1) ?>');return false;"><?php echo $this->__('Previous page') ?></a>
+                    <?php else: ?>
+                        <span class="action-previous disabled"><?php echo $this->__('Previous page') ?></span>
+                    <?php endif; ?>
 
-                <input type="text" name="<?php echo $this->getVarNamePage() ?>" value="<?php echo $_curPage ?>"
-                       class="input-text page"
-                       onkeypress="<?php echo $this->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')"/>
+                    <input type="text" name="<?php echo $this->getVarNamePage() ?>" value="<?php echo $_curPage ?>"
+                           class="input-text page"
+                           onkeypress="<?php echo $this->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')"/>
 
-                <?php if ($_curPage < $_lastPage): ?>
-                    <a href="#" title="<?php echo $this->__('Next page') ?>" class="action-next" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage + 1) ?>');return false;"><?php echo $this->__('Next page') ?></a>
-                <?php else: ?>
-                    <span class="action-next disabled"><?php echo $this->__('Next page') ?></span>
-                <?php endif; ?>
+                    <?php if ($_curPage < $_lastPage): ?>
+                        <a href="#" title="<?php echo $this->__('Next page') ?>" class="action-next" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage + 1) ?>');return false;"><?php echo $this->__('Next page') ?></a>
+                    <?php else: ?>
+                        <span class="action-next disabled"><?php echo $this->__('Next page') ?></span>
+                    <?php endif; ?>
 
-                <?php echo $this->__('of %s pages', $this->getCollection()->getLastPageNumber()) ?>
+                    <?php echo $this->__('of %s pages', $this->getCollection()->getLastPageNumber()) ?>
+                </label>
                 <span class="separator">|</span>
-                <?php echo $this->__('View') ?>
-                <select name="<?php echo $this->getVarNameLimit() ?>"
-                        onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)">
-                    <option value="20"<?php if ($this->getCollection()->getPageSize() == 20): ?>
-                            selected="selected"<?php endif; ?>>20
-                    </option>
-                    <option value="30"<?php if ($this->getCollection()->getPageSize() == 30): ?>
-                            selected="selected"<?php endif; ?>>30
-                    </option>
-                    <option value="50"<?php if ($this->getCollection()->getPageSize() == 50): ?>
-                            selected="selected"<?php endif; ?>>50
-                    </option>
-                    <option value="100"<?php if ($this->getCollection()->getPageSize() == 100): ?>
-                            selected="selected"<?php endif; ?>>100
-                    </option>
-                    <option value="200"<?php if ($this->getCollection()->getPageSize() == 200): ?>
-                            selected="selected"<?php endif; ?>>200
-                    </option>
-                </select>
-                <?php echo $this->__('per page') ?>
+                <label>
+                    <?php echo $this->__('View') ?>
+                    <select name="<?php echo $this->getVarNameLimit() ?>"
+                            onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)">
+                        <option value="20"<?php if ($this->getCollection()->getPageSize() == 20): ?>
+                                selected="selected"<?php endif; ?>>20
+                        </option>
+                        <option value="30"<?php if ($this->getCollection()->getPageSize() == 30): ?>
+                                selected="selected"<?php endif; ?>>30
+                        </option>
+                        <option value="50"<?php if ($this->getCollection()->getPageSize() == 50): ?>
+                                selected="selected"<?php endif; ?>>50
+                        </option>
+                        <option value="100"<?php if ($this->getCollection()->getPageSize() == 100): ?>
+                                selected="selected"<?php endif; ?>>100
+                        </option>
+                        <option value="200"<?php if ($this->getCollection()->getPageSize() == 200): ?>
+                                selected="selected"<?php endif; ?>>200
+                        </option>
+                    </select>
+                    <?php echo $this->__('per page') ?>
+                </label>
                 <span class="separator">|</span>
                 <?php echo $this->__('Total %d records found', $this->getCollection()->getSize()) ?>
                 <span id="<?php echo $this->getHtmlId() ?>-total-count"
@@ -146,7 +151,7 @@ $numColumns = sizeof($this->getColumns());
             <tr class="headings">
                 <?php foreach ($this->getColumns() as $_column): ?>
                 <th<?php echo $_column->getHeaderHtmlProperty() ?>>
-                    <span><?php echo $_column->getHeaderHtml() ?></span>
+                        <span><?php echo $_column->getHeaderHtml() ?></span>
                 </th>
                 <?php endforeach; ?>
             </tr>
@@ -175,21 +180,20 @@ $numColumns = sizeof($this->getColumns());
                 <?php if (($this->getCollection()->getSize() > 0) && (!$this->getIsCollapsed())): ?>
                 <?php foreach ($this->getCollection() as $_index => $_item): ?>
                 <tr title="<?php echo $this->getRowUrl($_item) ?>"<?php if ($_class = $this->getRowClass($_item)): ?>
-                    class="<?php echo $_class; ?>"<?php endif;?> >
-                    <?php $i = 0;foreach ($this->getColumns() as $_column): ?>
-
-                    <?php if ($this->shouldRenderCell($_item, $_column)): ?>
-                        <?php $_rowspan = $this->getRowspan($_item, $_column); ?>
-                        <td <?php echo ($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>">
-                            <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
-                        </td>
-                        <?php if ($this->shouldRenderEmptyCell($_item, $_column)): ?>
-                            <td colspan="<?php echo $this->getEmptyCellColspan($_item)?>"
-                                class="last"><?php echo $this->getEmptyCellLabel()?></td>
-                            <?php endif; ?>
-                        <?php endif; ?>
-
-                    <?php endforeach; ?>
+                    class="<?php echo $_class; ?>"<?php endif;?> ><?php
+                    $i = 0;
+                    foreach ($this->getColumns() as $_column):
+                        if ($this->shouldRenderCell($_item, $_column)):
+                            $_rowspan = $this->getRowspan($_item, $_column);
+                            ?><td <?php echo ($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>">
+                                <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+                            </td><?php
+                            if ($this->shouldRenderEmptyCell($_item, $_column)):
+                                ?><td colspan="<?php echo $this->getEmptyCellColspan($_item)?>"
+                                    class="last"><?php echo $this->getEmptyCellLabel()?></td><?php
+                            endif;
+                        endif;
+                    endforeach; ?>
                 </tr>
                     <?php if ($_multipleRows = $this->getMultipleRows($_item)): ?>
                         <?php foreach ($_multipleRows as $_i): ?>

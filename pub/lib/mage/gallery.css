@@ -1,0 +1,307 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     js
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+.product-view #base-image {
+    cursor: default;
+    display: block;
+}
+
+/** Common styling */
+#magento-zoom-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+#magento-zoom-loading,
+#magento-zoom-track {
+    position: absolute;
+    z-index: 9999;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    cursor: pointer;
+}
+
+#magento-zoom-loading {
+    background: rgba(0, 0, 0, .3);
+}
+
+#magento-zoom-text {
+    background: #000;
+    color: #fefefe;
+    text-align: center;
+    padding: 7px 10px;
+    border-radius: 5px;
+    position: absolute;
+    height: 20px;
+    line-height: 20px;
+    width: 100px;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+}
+
+/** Zoom specific */
+#magento-zoom-track.non-active {
+    cursor: default;
+}
+
+#magento-zoom-track {
+    z-index: 3;
+}
+
+#magento-zoom-lens {
+    display: block;
+    position: absolute;
+    background: #fff;
+}
+
+#magento-zoom-wrapper .zoom-activated {
+    cursor: move;
+}
+
+.magento-zoom {
+    display: block;
+}
+
+.magento-zoom-enlarged {
+    position: absolute;
+    z-index: 9999;
+    overflow: hidden;
+    background: #fff;
+/*     background: rgba(255, 255, 255, .95);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#CC000000, endColorstr=#CC000000); */
+    zoom: 1;
+    outline:4px solid #675f55;
+}
+.magento-zoom-enlarged img {
+    position: absolute;
+}
+
+/** Lightbox */
+#magento-zoom-gallery-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 9999;
+    padding:14px;
+    border:1px solid #837d75;
+    cursor: pointer;
+    background: #fff;
+}
+#magento-zoom-gallery-close:before {
+    content:'';
+    display: block;
+    width: 12px;
+    height: 12px;
+    background: url(../images/bkg_gallery.png) -80px -12px no-repeat;
+    cursor: pointer;
+}
+
+#magento-zoom-gallery-close:hover:before {
+    background-position: -80px 0;
+}
+
+.magento-zoom-enlarged.lightbox {
+    position: fixed;
+    height: auto !important;
+    width: auto !important;
+    left: 0 !important;
+    top: 0 !important;
+    right: 0;
+    bottom: 0;
+    outline:0;
+    background-color: #fff!important;
+}
+
+body.js-lightbox {
+    width:100%;
+    height:100%;
+    position: relative;
+    overflow: hidden;
+    padding:15px;
+    -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+.magento-zoom-enlarged.lightbox #magento-zoom-enlarged-controls img {
+    position: absolute;
+    max-width: 100%;
+    max-height: 100%;
+    margin:auto;
+    left:0!important;
+    right:0!important;
+    top:0!important;
+    bottom:0!important;
+    display: block;
+}
+
+
+
+.lightbox #magento-zoom-enlarged-controls {
+    top: 15px;
+    left:15px;
+    right:15px;
+    bottom:15px;
+    position: absolute;
+    -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
+.lightbox #magento-zoom-enlarged-inner {
+}
+
+.lightbox #magento-zoom-gallery-thumbs {
+    padding: 15px;
+    border-top: 1px solid #ddd;
+    background: #fff;
+    position: absolute;
+    bottom:0;
+}
+
+.lightbox #magento-zoom-gallery-thumbs [rel$=-slide] {
+    position: absolute;
+    z-index: 999;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    cursor: pointer;
+    background: #fff url(../images/bkg_gallery.png) 0 50% no-repeat;
+}
+
+.lightbox #magento-zoom-gallery-thumbs [rel$=-prev-slide] {
+    background-position: 0 50%;
+    left: 0;
+}
+
+.lightbox #magento-zoom-gallery-thumbs [rel$=-prev-slide]:hover {
+    background-position: -40px 50%;
+}
+
+.lightbox #magento-zoom-gallery-thumbs [rel$=-next-slide] {
+    background-position: -20px 50%;
+    right: 0;
+}
+
+.lightbox #magento-zoom-gallery-thumbs [rel$=-next-slide]:hover {
+    background-position: -60px 50%;
+}
+
+.lightbox #magento-zoom-gallery-thumbs ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 5000px;
+    position: relative;
+}
+
+.lightbox #magento-zoom-gallery-thumbs li {
+    float: left;
+    margin: 0 0 0 18px !important;
+}
+
+.lightbox #magento-zoom-gallery-thumbs li:first-child {
+    margin-left: 2px !important;
+}
+
+.lightbox #magento-zoom-gallery-thumbs a {
+    border: 1px solid transparent;
+    display: block;
+}
+
+.lightbox #magento-zoom-gallery-thumbs a > img {
+    position: static;
+}
+
+.lightbox #magento-zoom-gallery-thumbs .active {
+    border-color: #837d75;
+}
+
+.lightbox #magento-zoom-enlarged-controls {
+    /* position: relative; */
+    text-align: center;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.lightbox #magento-zoom-enlarged-controls [rel] {
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    width: 50%;
+    cursor: pointer;
+    z-index: 9999;
+}
+.lightbox #magento-zoom-enlarged-controls [rel]:before {
+    content:'';
+    display: inline-block;
+    background: url(../images/bkg_gallery.png) 0 50% no-repeat;
+    width:42px;
+    height:24px;
+    overflow: hidden;
+    position: absolute;
+    top:50%;
+    margin-top:-12px;
+}
+.lightbox #magento-zoom-enlarged-controls [rel$="-prev"] {
+    left: -25px;
+    padding-left: 25px;
+    text-align:left;
+}
+.lightbox #magento-zoom-enlarged-controls [rel$="-prev"]:before {
+    background-position: -83px 50%;
+    left:25px;
+}
+
+.lightbox #magento-zoom-enlarged-controls [rel$="-prev"]:hover:before {
+    background-position: -587px 50%;
+}
+
+.lightbox #magento-zoom-enlarged-controls [rel$="-next"] {
+    right: -25px;
+    text-align:right;
+    padding-right: 25px;
+}
+.lightbox #magento-zoom-enlarged-controls [rel$="-next"]:before {
+    background-position: -1105px 50%;
+    right:25px;
+}
+.lightbox #magento-zoom-enlarged-controls [rel$="-next"]:hover:before {
+    background-position: -1624px 50%;
+}
+
+.lightbox #magento-zoom-enlarged-controls > img {
+    width: auto;
+    height: auto;
+    max-height: 100%;
+    max-width: 100%;
+}

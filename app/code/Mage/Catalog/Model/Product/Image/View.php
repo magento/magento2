@@ -60,11 +60,6 @@ class Mage_Catalog_Model_Product_Image_View extends Varien_Object
     const WHITE_BORDERS_MODULE = 'Mage_Catalog';
 
     /**
-     * @var Mage_Core_Model_Design_Package
-     */
-    protected $_designPackage;
-
-    /**
      * @var Magento_Config_View
      */
     protected $_configView;
@@ -90,17 +85,24 @@ class Mage_Catalog_Model_Product_Image_View extends Varien_Object
     protected $_module;
 
     /**
+     * View config model
+     *
+     * @var Mage_Core_Model_View_Config
+     */
+    protected $_viewConfig;
+
+    /**
      * @param Mage_Catalog_Helper_Image $helperImage
-     * @param Mage_Core_Model_Design_Package $designPackage
+     * @param Mage_Core_Model_View_Config $viewConfig
      * @param array $data
      */
     public function __construct(
         Mage_Catalog_Helper_Image $helperImage,
-        Mage_Core_Model_Design_Package $designPackage,
+        Mage_Core_Model_View_Config $viewConfig,
         array $data = array()
     ) {
         $this->_helperImage = $helperImage;
-        $this->_designPackage = $designPackage;
+        $this->_viewConfig = $viewConfig;
         parent::__construct($data);
     }
 
@@ -195,7 +197,7 @@ class Mage_Catalog_Model_Product_Image_View extends Varien_Object
     protected function _getConfigView()
     {
         if (null === $this->_configView) {
-            $this->_configView = $this->_designPackage->getViewConfig();
+            $this->_configView = $this->_viewConfig->getViewConfig();
         }
         return $this->_configView;
     }

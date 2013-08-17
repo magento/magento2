@@ -23,39 +23,70 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+/* @var $this Mage_Backend_Block_Store_Switcher */
 ?>
-<?php /* @var $this Mage_Core_Block_Template */ ?>
 <?php if ($websites = $this->getWebsites()): ?>
-<div class="store-switcher">
-    <label for="store_switcher"><?php echo $this->__('Choose Store View:') ?></label>
-    <select name="store_switcher" id="store_switcher" onchange="return switchStore(this);"<?php echo $this->getUiId()?>>
-    <?php if ($this->hasDefaultOption()): ?>
-        <option value=""><?php echo $this->getDefaultStoreName() ?></option>
-    <?php endif; ?>
-        <?php foreach ($websites as $website): ?>
-            <?php $showWebsite = false; ?>
-            <?php foreach ($website->getGroups() as $group): ?>
-                <?php $showGroup = false; ?>
-                <?php foreach ($this->getStores($group) as $store): ?>
-                    <?php if ($showWebsite == false): ?>
-                        <?php $showWebsite = true; ?>
-                        <optgroup label="<?php echo $this->escapeHtml($website->getName()) ?>"></optgroup>
-                    <?php endif; ?>
-                    <?php if ($showGroup == false): ?>
-                        <?php $showGroup = true; ?>
-                        <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
-                    <?php endif; ?>
-                    <option value="<?php echo $this->escapeHtml($store->getId()) ?>"<?php if ($this->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($store->getName()) ?></option>
+    <div class="store-switcher-alt">
+        <input type="hidden" name="store_switcher" id="store_switcher"
+            data-role="store-id"
+            value="<?php echo $this->escapeHtml($this->getStoreId()) ?>"
+            onchange="return switchStore(this);"<?php echo $this->getUiId()?> />
+        <strong class="store-selected" data-toggle="dropdown">
+            <?php echo $this->getCurrentStoreName() ?>
+        </strong>
+
+        <ul class="dropdown-menu" data-role="stores-list">
+            <?php if ($this->hasDefaultOption()): ?>
+                <li class="store-switcher-all">
+                    <a data-value=""
+                       href="#">
+                        <?php echo $this->getDefaultStoreName() ?>
+                    </a>
+                </li>
+            <?php endif; ?>
+            <?php foreach ($websites as $website): ?>
+                <?php $showWebsite = false; ?>
+                <?php foreach ($website->getGroups() as $group): ?>
+                    <?php $showGroup = false; ?>
+                    <?php foreach ($this->getStores($group) as $store): ?>
+                        <?php if ($showWebsite == false): ?>
+                            <?php $showWebsite = true; ?>
+                            <li class="store-switcher-website">
+                                <strong><?php echo $this->escapeHtml($website->getName()) ?></strong>
+                            </li>
+                        <?php endif; ?>
+                        <?php if ($showGroup == false): ?>
+                            <?php $showGroup = true; ?>
+                            <li class="store-switcher-store">
+                                <strong><?php echo $this->escapeHtml($group->getName()) ?></strong>
+                            </li>
+                        <?php endif; ?>
+                        <li class="store-switcher-store-view">
+                            <?php if ($store->getId() == $this->getStoreId()) { ?>
+                                <strong><?php echo $this->escapeHtml($store->getName()) ?></strong>
+                            <?php } else { ?>
+                                <a data-value="<?php echo $this->escapeHtml($store->getId()) ?>"
+                                   href="#">
+                                    <?php echo $this->escapeHtml($store->getName()) ?>
+                                </a>
+                            <?php }?>
+                        </li>
+                    <?php endforeach; ?>
                 <?php endforeach; ?>
-                <?php if ($showGroup): ?>
-                    </optgroup>
-                <?php endif; ?>
             <?php endforeach; ?>
-        <?php endforeach; ?>
-    </select>
-    <?php echo $this->getHintHtml() ?>
-</div>
+        </ul>
+    </div>
 <script type="text/javascript">
+    (function($) {
+        var $storesList = $('[data-role=stores-list]');
+        $storesList.on('click', '[data-value]', function(event) {
+            var val = $(event.target).data('value');
+            var storeSwitcher = $('[data-role=store-id]');
+            if (val != storeSwitcher.val()) {
+                storeSwitcher.val(val).trigger('change');
+            }
+        });
+    })(jQuery)
     function switchStore(obj) {
         var storeParam = obj.value ? 'store/' + obj.value + '/' : '';
         if (obj.switchParams) {

@@ -57,16 +57,34 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
     protected $_filesystem;
 
     /**
+     * @var Mage_Core_Model_Image_AdapterFactory
+     */
+    protected $_imageFactory;
+
+    /**
+     * @var Mage_Core_Model_View_Url
+     */
+    protected $_viewUrl;
+
+    /**
      * Constructor
      *
      * @param Magento_Filesystem $filesystem
+     * @param Mage_Core_Model_Image_AdapterFactory $imageFactory
+     * @param Mage_Core_Model_View_Url $viewUrl
      * @param array $data
      */
-    public function __construct(Magento_Filesystem $filesystem, array $data = array())
-    {
+    public function __construct(
+        Magento_Filesystem $filesystem,
+        Mage_Core_Model_Image_AdapterFactory $imageFactory,
+        Mage_Core_Model_View_Url $viewUrl,
+        array $data = array()
+    ) {
         $this->_filesystem = $filesystem;
         $this->_filesystem->setIsAllowCreateDirectories(true);
         $this->_filesystem->setWorkingDirectory($this->getHelper()->getStorageRoot());
+        $this->_imageFactory = $imageFactory;
+        $this->_viewUrl = $viewUrl;
         parent::__construct($data);
     }
 
@@ -79,7 +97,8 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
     public function getDirsCollection($path)
     {
         if (Mage::helper('Mage_Core_Helper_File_Storage_Database')->checkDbUsage()) {
-            $subDirectories = Mage::getModel('Mage_Core_Model_File_Storage_Directory_Database')->getSubdirectories($path);
+            $subDirectories = Mage::getModel('Mage_Core_Model_File_Storage_Directory_Database')
+                ->getSubdirectories($path);
             foreach ($subDirectories as $directory) {
                 $fullPath = rtrim($path, DS) . DS . $directory['name'];
                 $this->_filesystem->ensureDirectoryExists($fullPath, 0777, $path);
@@ -156,8 +175,9 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
             if ($this->isImage($item->getBasename())) {
                 $thumbUrl = $this->getThumbnailUrl($item->getFilename(), true);
                 // generate thumbnail "on the fly" if it does not exists
-                if(! $thumbUrl) {
-                    $thumbUrl = Mage::getSingleton('Mage_Backend_Model_Url')->getUrl('*/*/thumbnail', array('file' => $item->getId()));
+                if (!$thumbUrl) {
+                    $thumbUrl = Mage::getSingleton('Mage_Backend_Model_Url')
+                        ->getUrl('*/*/thumbnail', array('file' => $item->getId()));
                 }
 
                 $size = @getimagesize($item->getFilename());
@@ -167,7 +187,7 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
                     $item->setHeight($size[1]);
                 }
             } else {
-                $thumbUrl = Mage::getDesign()->getViewFileUrl(self::THUMB_PLACEHOLDER_PATH_SUFFIX);
+                $thumbUrl = $this->_viewUrl->getViewFileUrl(self::THUMB_PLACEHOLDER_PATH_SUFFIX);
             }
 
             $item->setThumbUrl($thumbUrl);
@@ -202,7 +222,7 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
     public function createDirectory($name, $path)
     {
         if (!preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
-            Mage::throwException(Mage::helper('Mage_Cms_Helper_Data')->__('Invalid folder name. Please, use alphanumeric characters, underscores and dashes.'));
+            Mage::throwException(Mage::helper('Mage_Cms_Helper_Data')->__('Please correct the folder name. Use only letters, numbers, underscores and dashes.'));
         }
         if (!$this->_filesystem->isDirectory($path) || !$this->_filesystem->isWritable($path)) {
             $path = $this->getHelper()->getStorageRoot();
@@ -211,7 +231,7 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
         $newPath = $path . DS . $name;
 
         if ($this->_filesystem->isDirectory($newPath, $path)) {
-            Mage::throwException(Mage::helper('Mage_Cms_Helper_Data')->__('A directory with the same name already exists. Please try another folder name.'));
+            Mage::throwException(Mage::helper('Mage_Cms_Helper_Data')->__('We found a directory with the same name. Please try another folder name.'));
         }
 
         $this->_filesystem->createDirectory($newPath);
@@ -229,7 +249,7 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
             );
             return $result;
         } Catch (Magento_Filesystem_Exception $e) {
-            Mage::throwException(Mage::helper('Mage_Cms_Helper_Data')->__('Cannot create new directory.'));
+            Mage::throwException(Mage::helper('Mage_Cms_Helper_Data')->__('We cannot create a new directory.'));
         }
     }
 
@@ -246,7 +266,9 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
         $pathCmp = rtrim($path, DS);
 
         if ($rootCmp == $pathCmp) {
-            Mage::throwException(Mage::helper('Mage_Cms_Helper_Data')->__('Cannot delete root directory %s.', $path));
+            Mage::throwException(
+                Mage::helper('Mage_Cms_Helper_Data')->__('We cannot delete root directory %s.', $path)
+            );
         }
 
 
@@ -256,7 +278,7 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
         try {
             $this->_filesystem->delete($path);
         } catch (Magento_Filesystem_Exception $e) {
-            Mage::throwException(Mage::helper('Mage_Cms_Helper_Data')->__('Cannot delete directory %s.', $path));
+            Mage::throwException(Mage::helper('Mage_Cms_Helper_Data')->__('We cannot delete directory %s.', $path));
         }
 
         if (strpos($pathCmp, $rootCmp) === 0) {
@@ -301,7 +323,8 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
     public function uploadFile($targetPath, $type = null)
     {
         $uploader = new Mage_Core_Model_File_Uploader('image');
-        if ($allowed = $this->getAllowedExtensions($type)) {
+        $allowed = $this->getAllowedExtensions($type);
+        if ($allowed) {
             $uploader->setAllowedExtensions($allowed);
         }
         $uploader->setAllowRenameFiles(true);
@@ -309,7 +332,7 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
         $result = $uploader->save($targetPath);
 
         if (!$result) {
-            Mage::throwException( Mage::helper('Mage_Cms_Helper_Data')->__('Cannot upload file.') );
+            Mage::throwException(Mage::helper('Mage_Cms_Helper_Data')->__('We cannot upload the file.') );
         }
 
         // create thumbnail
@@ -381,7 +404,8 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
     public function resizeFile($source, $keepRation = true)
     {
         if (!$this->_filesystem->isFile($source)
-            || !$this->_filesystem->isReadable($source)) {
+            || !$this->_filesystem->isReadable($source)
+        ) {
             return false;
         }
 
@@ -392,8 +416,7 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
         if (!$this->_filesystem->isWritable($targetDir)) {
             return false;
         }
-        $adapter = Mage::helper('Mage_Core_Helper_Data')->getImageAdapterType();
-        $image = Varien_Image_Adapter::factory($adapter);
+        $image = $this->_imageFactory->create();
         $image->open($source);
         $width = $this->getConfigData('resize_width');
         $height = $this->getConfigData('resize_height');
@@ -425,7 +448,7 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
     /**
      * Return thumbnails directory path for file/current directory
      *
-     * @param string $filePath Path to the file
+     * @param bool|string $filePath Path to the file
      * @return string
      */
     public function getThumbsPath($filePath = false)
@@ -480,7 +503,7 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
      */
     public function getConfigAsArray()
     {
-        if (! $this->_configAsArray) {
+        if (!$this->_configAsArray) {
             $this->_configAsArray = $this->getConfig()->asCanonicalArray();
         }
 
@@ -497,7 +520,7 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
     public function getConfigData($key, $default=false)
     {
         $configArray = $this->getConfigAsArray();
-        $key = (string) $key;
+        $key = (string)$key;
 
         return array_key_exists($key, $configArray) ? $configArray[$key] : $default;
     }

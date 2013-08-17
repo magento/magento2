@@ -36,9 +36,9 @@
                 <?php echo $this->getChildHtml('cards') ?>
                 <div class="release-amounts">
                     <?php echo $this->getCancelButtonHtml()?>
-                    <p class="note"><?php echo $this->__('To cancel pending authorizations and release amounts that have already been processed during this payment, click Cancel.') ?></p>
+                    <p class="note"><?php echo $this->__('Click "Cancel" to remove any pending status and release money already processed during this payment.') ?></p>
                 </div>
-                <?php echo $this->showNoticeMessage($this->__('Please enter another credit card number to complete your purchase.')) ?>
+                <?php echo $this->showNoticeMessage($this->__('Please enter a different credit card number to complete your purchase.')) ?>
                     <script type="text/javascript">
                     //<![CDATA[
                     function cancelPaymentAuthorizations(){

@@ -108,9 +108,11 @@
     bottom: 0;
     margin: auto;
     width: 100%;
+    z-index: 1;
 }
 
-.image.base-image:before {
+.image-label {
+    visibility: hidden;
     position: absolute;
     top: 0;
     left: 0;
@@ -118,10 +120,15 @@
     height: 33px;
     background: url(Mage_Backend::images/gallery-image-base-label.png) no-repeat;
     content: '';
-    z-index: 1;
+    z-index: 2;
 }
 
-.image.hidden-for-front:after {
+.image.base-image .image-label {
+    visibility: visible;
+}
+
+.image-fade {
+    visibility: hidden;
     position: absolute;
     left: 0;
     right: 0;
@@ -134,10 +141,19 @@
     color: #a69a8f;
     font: 18px/110px 'CallunaSans', Arial, sans-serif;
     font-weight: 500;
-    z-index: 1;
+    z-index: 3;
 }
 
-.gallery .image.hidden-for-front:after {
+.eq-ie8 .image-fade {
+    background: #f7f2ec;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+}
+
+.image.hidden-for-front .image-fade {
+    visibility: visible;
+}
+
+.gallery .image.hidden-for-front .image-fade {
     line-height: 160px;
 }
 
@@ -158,6 +174,7 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    z-index: 1;
 }
 
 .image .actions [class^="action-"],
@@ -179,7 +196,7 @@
     z-index: 2;
 }
 
-.image .action-make-main {
+.image .action-make-base {
     position: absolute;
     bottom: 20px;
     left: 10%;
@@ -188,7 +205,7 @@
     margin: auto;
 }
 
-.image.base-image .action-make-main {
+.image.base-image .action-make-base {
     display: none;
 }
 
@@ -364,18 +381,25 @@
     color: #a29c94;
     font: 12px/1.333 Arial, Verdana, sans-serif;
     text-decoration: underline;
-    margin: 0 0 42px 0;
+    margin: 0 0 46px 0;
 }
 
-.image-panel-controls .fieldset-alt {
+.image-panel-controls .fieldset-image-panel {
     padding: 0 5px 0 0;
 }
 
-.image-panel-controls .fieldset-alt .field {
-    margin-bottom: 25px;
+.image-panel-controls .fieldset-image-panel .field {
+    margin-bottom: 30px;
 }
 
-.image-panel-controls .fieldset-alt .field > .control,
+.image-panel-controls .fieldset-image-panel .label {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 10px;
+    padding-top: 0;
+}
+
+.image-panel-controls .fieldset-image-panel .field > .control,
 .image-panel-controls textarea {
     width: 100%;
     resize: vertical;
@@ -407,19 +431,12 @@
 }
 
 /* action in fieldset wrapper */
-.fieldset-wrapper-title .action-add,
-.fieldset-wrapper-title .action-add:hover,
-.fieldset-wrapper-title .action-add:focus,
-.fieldset-wrapper-title .action-add:active,
-.fieldset-wrapper-title .action-add:hover {
-    font-size: 12px;
-    color: #a29c94;
-    text-decoration: underline;
-    margin: 4px 20px 0 0;
+#group-fields-product-details-wrapper .attribute-selector {
+    visibility: hidden;
 }
 
-.fieldset-wrapper-title .action-add:hover {
-    color: #000;
+#group-fields-product-details-wrapper.opened .attribute-selector {
+    visibility: visible;
 }
 
 .action-manage-images {
@@ -480,6 +497,43 @@
     top: 30px;
 }
 
+.field-tax_class_id .addon select {
+    border-radius: 4px;
+}
+
+.actions-select .dropdown-menu {
+    margin-top: 1px;
+    min-width: 38px;
+}
+
+.actions-select .dropdown-menu li {
+    padding: 5px;
+    text-align: center;
+}
+
+.actions-select .action-toggle,
+.actions-select .action-toggle:hover,
+.actions-select .action-toggle:active,
+.actions-select .action-toggle:focus,
+.actions-select .action-toggle[disabled] {
+    background: #fff;
+    padding: 4px 4px 3px 7px;
+    color: #888;
+    filter: none;
+}
+
+.actions-select .action-toggle > span {
+    display: inline-block;
+    font-family: Arial, Verdana, sans-serif;
+    margin-right: 3px;
+}
+
+.actions-select .action-toggle:before {
+    display: inline-block;
+    float: right;
+    color: #888;
+}
+
 /* Variations Search Field */
 #variations-search-field {
     margin-bottom: 16px;
@@ -506,6 +560,10 @@
     margin-bottom: 23px;
 }
 
+#configurable-attributes-container .col-name {
+    width: 65%;
+}
+
 #configurable-attributes-container .col-include {
     width: 80px;
 }
@@ -516,11 +574,24 @@
 
 #configurable-attributes-container .col-change-price {
     width: 150px;
-    white-space: nowrap;
 }
 
 #configurable-attributes-container .field-change-pricing .field {
     float: left;
+}
+
+#configurable-attributes-container .field-change-pricing .field-pricing-value {
+    width: 75px;
+}
+
+#configurable-attributes-container .field-change-pricing .action-toggle {
+    min-width: 40px;
+}
+
+@media screen and (max-width: 960px) {
+    [class^="fields-group-"] .field {
+        width: auto !important;
+    }
 }
 
 #configurable-attributes-container .field-pricing-value .control {
@@ -538,7 +609,8 @@
     border-radius: 0 4px 4px 0;
 }
 
-#generate-variations-button {
+/* "Generate Variations" button */
+.generate {
     margin-bottom: 18px;
 }
 
@@ -546,17 +618,80 @@
     margin-bottom: 10px;
 }
 
+/* Variations Image Uploader */
+.eq-ie8 .actions-image-uploader .action-upload {
+    filter: none;
+}
+
+.actions-image-uploader .action-toggle,
+.actions-image-uploader .action-toggle:hover,
+.actions-image-uploader .action-toggle:active,
+.actions-image-uploader .action-toggle:focus,
+.actions-image-uploader .action-toggle[disabled] {
+    position: relative;
+    height: 33px;
+    padding-left: 2px;
+    padding-right: 2px;
+    background: #fff;
+    filter: none;
+    color: #888;
+}
+
+.actions-image-uploader.active .action-toggle {
+    border-radius: 0 5px 0 0;
+}
+
+.actions-image-uploader.active .action-toggle:after {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background: #fff;
+    z-index: 991;
+    content: '';
+}
+
+.actions-image-uploader .dropdown-menu {
+    margin-top: -1px;
+    border-radius: 3px 0 3px 3px;
+}
+
+#product-variations-matrix img.variation {
+    position: relative;
+    border: 0;
+    width: 32px;
+    height: 32px;
+    z-index: 2;
+}
+
 #product-variations-matrix .action-upload {
+    position: relative;
+    border: 1px solid #b7b2a7;
     background: #fff;
     border-radius: 0;
-    border: 1px solid #b7b2a7;
     padding: 0;
     width: 31px;
     height: 31px;
-    line-height: 30px;
+    line-height: 31px;
     text-align: center;
     color: #9f9a91;
     overflow: hidden;
+    cursor: default;
+    filter: none;
+}
+
+#product-variations-matrix .action-upload input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 31px;
+    height: 31px;
+    background: none;
+    border: 500px solid transparent;
+    font-size: 10em;
+    z-index: 3;
+    cursor: pointer;
 }
 
 #product-variations-matrix .action-upload:hover {
@@ -571,6 +706,28 @@
     -webkit-font-smoothing: antialiased;
     content: '\e02d'; /* plus icon */
     font-size: 22px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    text-align: center;
+}
+
+#product-variations-matrix .action-upload.loading:before {
+    content: '';
+}
+
+#product-variations-matrix .action-upload.loading:after {
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    width: 31px;
+    height: 31px;
+    z-index: 4;
 }
 
 #product-variations-matrix .action-upload span,
@@ -605,7 +762,7 @@
 }
 
 #product-variations-matrix .col-name > input {
-    width: 75%;
+    width: 88%;
 }
 
 #product-variations-matrix .col-actions {
@@ -624,6 +781,12 @@
 #product-variations-matrix .col-qty,
 #product-variations-matrix .col-weight {
     width: 5%;
+}
+
+/* Select Associated Product popup window */
+#configurable_associated_products_grid .filter-actions,
+#configurable_associated_products_grid .filter {
+    display: none;
 }
 
 #product_options_container .data-table td,
@@ -646,6 +809,7 @@
 
 .mage-new-category-dialog .ui-dialog-content .fieldset {
     padding: 0;
+    margin: 0;
 }
 
 .mage-new-category-dialog .ui-dialog-content .label {
@@ -660,9 +824,8 @@
     text-align: left;
 }
 
-.mage-new-category-dialog .ui-dialog-buttonset [class^="action-"],
-.mage-new-category-dialog .ui-dialog-buttonset .action-cancel:hover {
-    margin: 0 25px 0 0;
+.mage-new-category-dialog .ui-dialog-buttonset .action-create {
+    margin: 0 0 0 25%;
     vertical-align: middle;
 }
 
@@ -704,6 +867,14 @@
 
 #grouped_grid .col-qty {
     width: 7%;
+}
+
+.ui-dialog.grouped .massaction {
+    display: none;
+}
+
+.ui-dialog.grouped .col-entity_id {
+    width: 2%;
 }
 
 /*
@@ -759,4 +930,36 @@
 
 .tiers_table .col-price {
     width: 15%;
+}
+
+.new-variation-set {
+    margin-left: 2.127659574%;
+}
+
+.not-applicable-attribute {
+    display: none;
+}
+
+.attribute-selector {
+    margin: -3px -4px 0 0;
+}
+
+.attribute-selector .dropdown-menu {
+    left: auto;
+    right: 0;
+}
+
+.attribute-selector .action-choose {
+    margin: 0;
+}
+
+.attribute-selector .mage-suggest-dropdown > ul {
+    position: relative;
+    max-height: 200px;
+    overflow: auto;
+    z-index: 1;
+}
+
+.attribute-selector .dropdown-menu .actions {
+    padding: 14px 12px;
 }

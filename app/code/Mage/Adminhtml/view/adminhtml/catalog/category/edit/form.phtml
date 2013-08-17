@@ -39,7 +39,7 @@
     <?php echo $this->getTabsHtml() ?>
 <?php else: ?>
 <div class="messages warning-msg">
-    <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Set root category for this store in the <a href="%s">configuration</a>', $this->getStoreConfigurationUrl()) ?>
+    <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Set root category for this store in the <a href="%s">configuration</a>.', $this->getStoreConfigurationUrl()) ?>
 </div>
 <?php endif; ?>
 <iframe name="iframeSave" style="display:none; width:100%;"

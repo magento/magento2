@@ -25,7 +25,10 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Adminhtml_Controller_ActionTest extends Magento_Test_TestCase_ControllerAbstract
+/**
+ * @magentoAppArea adminhtml
+ */
+class Mage_Adminhtml_Controller_ActionTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Mage_Adminhtml_Controller_Action|PHPUnit_Framework_MockObject_MockObject
@@ -34,22 +37,17 @@ class Mage_Adminhtml_Controller_ActionTest extends Magento_Test_TestCase_Control
 
     protected function setUp()
     {
+        $arguments = array(
+            'request' => new Magento_Test_Request(),
+            'response' => new Magento_Test_Response(),
+        );
         $this->_model = $this->getMockForAbstractClass(
             'Mage_Adminhtml_Controller_Action',
             array(
-                'request'         => new Magento_Test_Request(),
-                'response'        => new Magento_Test_Response(),
-                'objectManager'   => Mage::getObjectManager(),
-                'frontController' => Mage::getObjectManager()->get('Mage_Core_Controller_Varien_Front'),
-                'layoutFactory'   => Mage::getObjectManager()->get('Mage_Core_Model_Layout_Factory'),
+                'context'         => Mage::getObjectManager()->create('Mage_Backend_Controller_Context', $arguments),
                 'areaCode'        => 'adminhtml'
             )
         );
-    }
-
-    public function testConstruct()
-    {
-        $this->assertInstanceOf('Mage_Backend_Controller_ActionAbstract', $this->_model);
     }
 
     /**

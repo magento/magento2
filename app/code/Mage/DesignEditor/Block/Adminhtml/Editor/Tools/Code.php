@@ -25,7 +25,7 @@
  */
 
 /**
- * Block that renders Code tab (or Scripts tab)
+ * Block that renders Code tab (or Advanced tab)
  */
 class Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code
     extends Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Tabs_Abstract
@@ -38,7 +38,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code
     /**
      * Tab HTML title
      */
-    protected $_title = 'Scripts';
+    protected $_title = 'Advanced';
 
     /**
      * Get tabs data

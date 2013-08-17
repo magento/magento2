@@ -28,9 +28,13 @@
 class Mage_SalesRule_Model_Rule_Condition_Product_Found
     extends Mage_SalesRule_Model_Rule_Condition_Product_Combine
 {
-    public function __construct()
+    /**
+     * @param Mage_Rule_Model_Condition_Context $context
+     * @param array $data
+     */
+    public function __construct(Mage_Rule_Model_Condition_Context $context, array $data = array())
     {
-        parent::__construct();
+        parent::__construct($context, $data);
         $this->setType('Mage_SalesRule_Model_Rule_Condition_Product_Found');
     }
 
@@ -50,9 +54,10 @@ class Mage_SalesRule_Model_Rule_Condition_Product_Found
 
     public function asHtml()
     {
-        $html = $this->getTypeElement()->getHtml() . Mage::helper('Mage_SalesRule_Helper_Data')->__("If an item is %s in the cart with %s of these conditions true:", $this->getValueElement()->getHtml(), $this->getAggregatorElement()->getHtml());
+        $html = $this->getTypeElement()->getHtml()
+            . Mage::helper('Mage_SalesRule_Helper_Data')->__("If an item is %s in the cart with %s of these conditions true:", $this->getValueElement()->getHtml(), $this->getAggregatorElement()->getHtml());
         if ($this->getId() != '1') {
-            $html.= $this->getRemoveLinkHtml();
+            $html .= $this->getRemoveLinkHtml();
         }
         return $html;
     }
@@ -65,7 +70,7 @@ class Mage_SalesRule_Model_Rule_Condition_Product_Found
      */
     public function validate(Varien_Object $object)
     {
-        $all = $this->getAggregator()==='all';
+        $all = $this->getAggregator() === 'all';
         $true = (bool)$this->getValue();
         $found = false;
         foreach ($object->getAllItems() as $item) {
@@ -84,9 +89,7 @@ class Mage_SalesRule_Model_Rule_Condition_Product_Found
         // found an item and we're looking for existing one
         if ($found && $true) {
             return true;
-        }
-        // not found and we're making sure it doesn't exist
-        elseif (!$found && !$true) {
+        } elseif (!$found && !$true) { // not found and we're making sure it doesn't exist
             return true;
         }
         return false;

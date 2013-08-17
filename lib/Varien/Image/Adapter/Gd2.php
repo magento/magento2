@@ -513,7 +513,7 @@ class Varien_Image_Adapter_Gd2 extends Varien_Image_Adapter_Abstract
     /**
      * Reassign image dimensions
      */
-    private function refreshImageDimensions()
+    public function refreshImageDimensions()
     {
         $this->_imageSrcWidth = imagesx($this->_imageHandler);
         $this->_imageSrcHeight = imagesy($this->_imageHandler);
@@ -553,5 +553,88 @@ class Varien_Image_Adapter_Gd2 extends Varien_Image_Adapter_Abstract
     {
         $colorIndex = imagecolorat($this->_imageHandler, $x, $y);
         return imagecolorsforindex($this->_imageHandler, $colorIndex);
+    }
+
+    /**
+     * Create Image from string
+     *
+     * @param string $text
+     * @param string $font
+     * @return Varien_Image_Adapter_Abstract
+     */
+    public function createPngFromString($text, $font = '')
+    {
+        $error = false;
+        $this->_resized = true;
+        try {
+            $this->_createImageFromTtfText($text, $font);
+        } catch (Exception $e) {
+            $error = true;
+        }
+
+        if ($error || empty($this->_imageHandler)) {
+            $this->_createImageFromText($text);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Create Image using standard font
+     *
+     * @param $text
+     */
+    protected function _createImageFromText($text)
+    {
+        $width = imagefontwidth($this->_fontSize) * strlen($text);
+        $height = imagefontheight($this->_fontSize);
+
+        $this->_createEmptyImage($width, $height);
+
+        $black = imagecolorallocate($this->_imageHandler, 0, 0, 0);
+        imagestring($this->_imageHandler, $this->_fontSize, 0, 0, $text, $black);
+    }
+
+    /**
+     * Create Image using ttf font
+     * Note: This function requires both the GD library and the FreeType library
+     *
+     * @param string $text
+     * @param string $font
+     * @throws Exception
+     */
+    protected function _createImageFromTtfText($text, $font)
+    {
+        $boundingBox = imagettfbbox($this->_fontSize, 0, $font, $text);
+        $width = abs($boundingBox[4]) + abs($boundingBox[0]);
+        $height = abs($boundingBox[5]) + abs($boundingBox[1]);
+
+        $this->_createEmptyImage($width, $height);
+
+        $black = imagecolorallocate($this->_imageHandler, 0, 0, 0);
+        $result = imagettftext($this->_imageHandler, $this->_fontSize, 0, 0, $height - abs($boundingBox[1]),
+            $black, $font, $text);
+        if ($result === false) {
+            throw new Exception('Unable to create TTF text');
+        }
+    }
+
+    /**
+     * Create empty image with transparent background
+     *
+     * @param $width
+     * @param $height
+     */
+    protected function _createEmptyImage($width, $height)
+    {
+        $this->_fileType = IMAGETYPE_PNG;
+        $image = imagecreatetruecolor($width, $height);
+        $colorWhite = imagecolorallocatealpha($image, 255, 255, 255, 127);
+
+        imagealphablending($image, true);
+        imagesavealpha($image, true);
+
+        imagefill($image, 0, 0, $colorWhite);
+        $this->_imageHandler = $image;
     }
 }

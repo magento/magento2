@@ -22,6 +22,7 @@
  * @license http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 //Set up customer fixture
+Mage::app()->loadArea('adminhtml');
 require 'customer.php';
 /** @var $customer Mage_Customer_Model_Customer */
 //Set up customer address fixture
@@ -47,7 +48,7 @@ $quote->setStoreId(1)
     ->assignCustomerWithAddressChange($customer)
     ->setCheckoutMethod($customer->getMode())
     ->setPasswordHash($customer->encryptPassword($customer->getPassword()))
-    ->addProduct($product->load($product->getId()), 2);
+    ->addProduct($product->load($product->getId()), 5);
 
 /** @var $rate Mage_Sales_Model_Quote_Address_Rate */
 $rate = Mage::getModel('Mage_Sales_Model_Quote_Address_Rate');

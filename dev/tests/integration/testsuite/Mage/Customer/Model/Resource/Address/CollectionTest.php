@@ -30,7 +30,7 @@ class Mage_Customer_Model_Resource_Address_CollectionTest extends PHPUnit_Framew
 
     public function testSetCustomerFilter()
     {
-        $collection = new Mage_Customer_Model_Resource_Address_Collection;
+        $collection = Mage::getModel('Mage_Customer_Model_Resource_Address_Collection');
         $select = $collection->getSelect();
         $this->assertSame($collection, $collection->setCustomerFilter(array(1, 2)));
         $customer = Mage::getObjectManager()->create('Mage_Customer_Model_Customer');

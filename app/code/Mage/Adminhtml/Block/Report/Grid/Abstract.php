@@ -41,7 +41,7 @@ class Mage_Adminhtml_Block_Report_Grid_Abstract extends Mage_Adminhtml_Block_Wid
         if (isset($this->_columnGroupBy)) {
             $this->isColumnGrouped($this->_columnGroupBy, true);
         }
-        $this->setEmptyCellLabel(Mage::helper('Mage_Reports_Helper_Data')->__('No records found for this period.'));
+        $this->setEmptyCellLabel(Mage::helper('Mage_Reports_Helper_Data')->__('We couldn\'t find records for this period.'));
     }
 
     public function getResourceCollectionName()

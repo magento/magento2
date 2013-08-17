@@ -347,7 +347,7 @@ class Mage_Paypal_Model_Direct extends Mage_Payment_Model_Method_Cc
         try {
             $api->callGetTransactionDetails();
         } catch (Mage_Core_Exception $e) {
-            // if we recieve errors, but DoDirectPayment response is Success, then set Pending status for transaction
+            // if we receive errors, but DoDirectPayment response is Success, then set Pending status for transaction
             $payment->setIsTransactionPending(true);
         }
         $this->_importResultToPayment($api, $payment);

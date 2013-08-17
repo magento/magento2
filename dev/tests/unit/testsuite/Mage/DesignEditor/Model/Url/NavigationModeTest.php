@@ -31,7 +31,7 @@ class Mage_DesignEditor_Model_Url_NavigationModeTest extends PHPUnit_Framework_T
      * Test route params
      */
     const FRONT_NAME = 'vde';
-    const ROUTE_PATH = 'design';
+    const ROUTE_PATH = 'some-rout-url/page.html';
     const BASE_URL   = 'http://test.com';
     /**#@-*/
 
@@ -48,12 +48,17 @@ class Mage_DesignEditor_Model_Url_NavigationModeTest extends PHPUnit_Framework_T
     /**
      * @var array
      */
-    protected $_testData = array(1,'test');
+    protected $_testData = array('themeId' => 1, 'mode' => 'test');
 
     public function setUp()
     {
-        $this->_helper = $this->getMock('Mage_DesignEditor_Helper_Data', array('getFrontName'), array(), '', false);
-        $requestMock = $this->getMock('Mage_Core_Controller_Request_Http', array(), array(), '', false);
+        $this->_helper = $this->getMock('Mage_DesignEditor_Helper_Data', array('getFrontName'),
+            array(), '', false);
+        $requestMock = $this->getMock('Mage_Core_Controller_Request_Http', array('getAlias'), array(), '', false);
+        $requestMock->expects($this->any())->method('getAlias')->will($this->returnValueMap(array(
+             array('editorMode', 'navigation'),
+             array('themeId', 1)
+        )));
         $this->_model = new Mage_DesignEditor_Model_Url_NavigationMode($this->_helper, $this->_testData);
         $this->_model->setRequest($requestMock);
     }
@@ -95,9 +100,11 @@ class Mage_DesignEditor_Model_Url_NavigationModeTest extends PHPUnit_Framework_T
         $this->_model->setData('route_front_name', self::FRONT_NAME);
 
         $sourceUrl   = self::BASE_URL . '/' . self::ROUTE_PATH;
-        $expectedUrl = self::BASE_URL . '/' . self::FRONT_NAME . '/' . self::ROUTE_PATH;
+        $expectedUrl = self::BASE_URL . '/' . self::FRONT_NAME . '/' . $this->_testData['mode'] . '/'
+            . $this->_testData['themeId'] . '/' . self::ROUTE_PATH;
 
         $this->assertEquals($expectedUrl, $this->_model->getRouteUrl($sourceUrl));
+        $this->assertEquals($this->_model, $this->_model->setType(null));
         $this->assertEquals($expectedUrl, $this->_model->getRouteUrl($expectedUrl));
     }
 }

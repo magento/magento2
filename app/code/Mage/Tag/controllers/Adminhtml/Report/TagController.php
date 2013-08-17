@@ -50,9 +50,7 @@ class Mage_Tag_Adminhtml_Report_TagController extends Mage_Adminhtml_Controller_
 
     public function customerAction()
     {
-        $this->_title($this->__('Reports'))
-             ->_title($this->__('Tags'))
-             ->_title($this->__('Customers'));
+        $this->_title($this->__('Customer Report'));
 
         $this->_initAction()
             ->_setActiveMenu('Mage_Tag::report_tags_customer')
@@ -84,9 +82,7 @@ class Mage_Tag_Adminhtml_Report_TagController extends Mage_Adminhtml_Controller_
 
     public function productAction()
     {
-        $this->_title($this->__('Reports'))
-             ->_title($this->__('Tags'))
-             ->_title($this->__('Products'));
+        $this->_title($this->__('Product Report'));
 
         $this->_initAction()
             ->_setActiveMenu('Mage_Tag::report_tags_product')
@@ -121,7 +117,7 @@ class Mage_Tag_Adminhtml_Report_TagController extends Mage_Adminhtml_Controller_
     {
         $this->_title($this->__('Reports'))
              ->_title($this->__('Tags'))
-             ->_title($this->__('Popular'));
+             ->_title($this->__('Popularity Report'));
 
         $this->_initAction()
             ->_setActiveMenu('Mage_Tag::report_tags_popular')
@@ -283,19 +279,19 @@ class Mage_Tag_Adminhtml_Report_TagController extends Mage_Adminhtml_Controller_
     {
         switch ($this->getRequest()->getActionName()) {
             case 'customer':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::tags_customer');
+                return $this->_authorization->isAllowed('Mage_Reports::tags_customer');
                 break;
             case 'product':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::tags_product');
+                return $this->_authorization->isAllowed('Mage_Reports::tags_product');
                 break;
             case 'productAll':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::tags_product');
+                return $this->_authorization->isAllowed('Mage_Reports::tags_product');
                 break;
             case 'popular':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::popular');
+                return $this->_authorization->isAllowed('Mage_Reports::popular');
                 break;
             default:
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::tags');
+                return $this->_authorization->isAllowed('Mage_Reports::tags');
                 break;
         }
     }

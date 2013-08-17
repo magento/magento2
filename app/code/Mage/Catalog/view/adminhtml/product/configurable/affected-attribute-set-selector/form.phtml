@@ -26,7 +26,7 @@
 
 /* @var $this Mage_Core_Block_Template */
 ?>
-<div id="<?php echo $this->getNameInLayout() ?>" style="display:none">
+<div id="<?php echo $this->getNameInLayout() ?>" style="display:none" data-role="dialog" data-id="affected-attribute-set-selector">
     <form action="">
         <ul class="messages">
             <li class="notice-msg">
@@ -37,10 +37,10 @@
             <li class="error-msg" style="display:none">
             </li>
         </ul>
-        <div id="affected-attribute-set-current-container">
+        <div id="affected-attribute-set-current-container" data-role="container" data-id="current-attribute-set">
             <label>
                 <input type="radio" name="affected-attribute-set" value="current" checked="checked" />
-                <?php echo $this->helper('Mage_Catalog_Helper_Data')->__('Add configurable attributes to the current set ("%s")', $this->getLayout()->getBlock('product_edit')->getAttributeSetName())?>
+                <?php echo $this->helper('Mage_Catalog_Helper_Data')->__('Add configurable attributes to the current set ("<span data-role="name-container">%s</span>")', $this->getLayout()->getBlock('product_edit')->getAttributeSetName())?>
             </label>
         </div>
         <div id="affected-attribute-set-new-container">

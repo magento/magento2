@@ -55,7 +55,7 @@ class Mage_Usa_Block_Adminhtml_Dhl_Unitofmeasure extends Mage_Backend_Block_Syst
         $kgWeight = 70;
 
         $this->setDivideOrderWeightNoteKg(
-            $this->jsQuoteEscape($this->__('Allows breaking total order weight into smaller pieces if it exeeds %s %s to ensure accurate calculation of shipping charges.', $kgWeight, 'kg'))
+            $this->jsQuoteEscape($this->__('This allows breaking total order weight into smaller pieces if it exceeds %s %s to ensure accurate calculation of shipping charges.', $kgWeight, 'kg'))
         );
 
         $weight = round(
@@ -63,7 +63,7 @@ class Mage_Usa_Block_Adminhtml_Dhl_Unitofmeasure extends Mage_Backend_Block_Syst
                 $kgWeight, Zend_Measure_Weight::KILOGRAM, Zend_Measure_Weight::POUND), 3);
 
         $this->setDivideOrderWeightNoteLbp(
-            $this->jsQuoteEscape($this->__('Allows breaking total order weight into smaller pieces if it exeeds %s %s to ensure accurate calculation of shipping charges.', $weight, 'pounds'))
+            $this->jsQuoteEscape($this->__('This allows breaking total order weight into smaller pieces if it exceeds %s %s to ensure accurate calculation of shipping charges.', $weight, 'pounds'))
         );
 
         $this->setTemplate('dhl/unitofmeasure.phtml');

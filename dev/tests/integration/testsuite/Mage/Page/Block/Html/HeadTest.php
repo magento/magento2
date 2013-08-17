@@ -55,6 +55,8 @@ class Mage_Page_Block_Html_HeadTest extends PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store dev/js/merge_files 0
+     * @magentoConfigFixture current_store dev/js/minify_files 0
      */
     public function testGetCssJsHtml()
     {
@@ -105,6 +107,8 @@ class Mage_Page_Block_Html_HeadTest extends PHPUnit_Framework_TestCase
     /**
      * Both existing and non-existent JS and CSS links are specified
      * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store dev/js/merge_files 0
+     * @magentoConfigFixture current_store dev/js/minify_files 0
      */
     public function testGetCssJsHtmlMixedLinks()
     {
@@ -124,6 +128,32 @@ class Mage_Page_Block_Html_HeadTest extends PHPUnit_Framework_TestCase
             . '<link rel="stylesheet" type="text/css" media="print"'
             . ' href="http://localhost/pub/static/frontend/default/demo/en_US/css/styles.css" />'
             . "\n", $this->_block->getCssJsHtml());
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store dev/js/minify_files 1
+     */
+    public function testGetCssJsHtmlJsMinified()
+    {
+        $this->_block->addJs('varien/js.js');
+        $this->assertStringMatchesFormat(
+            '<script type="text/javascript" src="http://localhost/pub/cache/minify/%s_js.min.js"></script>',
+            $this->_block->getCssJsHtml()
+        );
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store dev/js/minify_files 0
+     */
+    public function testGetCssJsHtmlJsNotMinified()
+    {
+        $this->_block->addJs('varien/js.js');
+        $this->assertSame(
+            '<script type="text/javascript" src="http://localhost/pub/lib/varien/js.js"></script>' . "\n",
+            $this->_block->getCssJsHtml()
+        );
     }
 
     /**

@@ -132,13 +132,32 @@ class Mage_Captcha_Model_Default extends Zend_Captcha_Image implements Mage_Capt
      */
     public function isRequired($login = null)
     {
-        if ($this->_isUserAuth() || !$this->_isEnabled() || !in_array($this->_formId, $this->_getTargetForms())) {
+        if (($this->_isUserAuth() && !$this->isShownToLoggedInUser())
+            || !$this->_isEnabled()
+            || !in_array($this->_formId, $this->_getTargetForms())
+        ) {
             return false;
         }
 
         return ($this->_isShowAlways() || $this->_isOverLimitAttempts($login)
             || $this->getSession()->getData($this->_getFormIdKey('show_captcha'))
         );
+    }
+
+    /**
+     * Check if CAPTCHA has to be shown to logged in user on this form
+     *
+     * @return boolean
+     */
+    public function isShownToLoggedInUser()
+    {
+        $forms = (array)$this->_getHelper()->getConfigNode('shown_to_logged_in_user');
+        foreach ($forms as $formId => $isShownToLoggedIn) {
+            if ($isShownToLoggedIn && $this->_formId == $formId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

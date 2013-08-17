@@ -498,7 +498,7 @@
         <xs:annotation>
           <xs:documentation>
             For international multiple piece shipments, commodity information must be passed in the Master and on each child transaction.
-            If this shipment cotains more than four commodities line items, the four highest valued should be included in the first 4 occurances for this request.
+            If this shipment cotains more than four commodity line items, the four highest valued should be included in the first 4 occurrences for this request.
           </xs:documentation>
         </xs:annotation>
         <xs:sequence>
@@ -3353,7 +3353,7 @@
           </xs:element>
           <xs:element name="ErrorLabels" type="ns:ShippingDocument" minOccurs="0" maxOccurs="unbounded">
             <xs:annotation>
-              <xs:documentation>Empty unless error label behavior is PACKAGE_ERROR_LABELS and one or more errors occured during transaction processing.</xs:documentation>
+              <xs:documentation>Empty unless error label behavior is PACKAGE_ERROR_LABELS and one or more errors occurred during transaction processing.</xs:documentation>
             </xs:annotation>
           </xs:element>
         </xs:sequence>

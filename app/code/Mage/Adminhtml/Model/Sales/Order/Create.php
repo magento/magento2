@@ -283,7 +283,7 @@ class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object implements M
             if (!$orderItem->getParentItem()) {
                 $qty = $orderItem->getQtyOrdered();
                 if (!$order->getReordered()) {
-                    $qty -= $orderItem->getQtyShipped() + $orderItem->getQtyInvoiced();
+                    $qty -= max($orderItem->getQtyShipped(), $orderItem->getQtyInvoiced());
                 }
 
                 if ($qty > 0) {
@@ -590,7 +590,7 @@ class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object implements M
                         }
                     }
                     if (!$wishlist) {
-                        Mage::throwException(Mage::helper('Mage_Wishlist_Helper_Data')->__('Could not find wishlist'));
+                        Mage::throwException(Mage::helper('Mage_Wishlist_Helper_Data')->__('We couldn\'t find this wish list.'));
                     }
                     $wishlist->setStore($this->getSession()->getStore())
                         ->setSharedStoreIds($this->getSession()->getStore()->getWebsite()->getStoreIds());
@@ -742,7 +742,7 @@ class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object implements M
                 ->load($product);
             if (!$product->getId()) {
                 Mage::throwException(
-                    Mage::helper('Mage_Adminhtml_Helper_Data')->__('Failed to add a product to cart by id "%s".', $productId)
+                    Mage::helper('Mage_Adminhtml_Helper_Data')->__('We could not add a product to cart by the ID "%s".', $productId)
                 );
             }
         }
@@ -1575,19 +1575,19 @@ class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object implements M
 
         if (!$this->getQuote()->isVirtual()) {
             if (!$this->getQuote()->getShippingAddress()->getShippingMethod()) {
-                $this->_errors[] = Mage::helper('Mage_Adminhtml_Helper_Data')->__('Shipping method must be specified.');
+                $this->_errors[] = Mage::helper('Mage_Adminhtml_Helper_Data')->__('You need to specify a shipping method.');
             }
         }
 
         if (!$this->getQuote()->getPayment()->getMethod()) {
-            $this->_errors[] = Mage::helper('Mage_Adminhtml_Helper_Data')->__('Payment method must be specified.');
+            $this->_errors[] = Mage::helper('Mage_Adminhtml_Helper_Data')->__('A payment method must be specified.');
         } else {
             $method = $this->getQuote()->getPayment()->getMethodInstance();
             if (!$method) {
-                $this->_errors[] = Mage::helper('Mage_Adminhtml_Helper_Data')->__('Payment method instance is not available.');
+                $this->_errors[] = Mage::helper('Mage_Adminhtml_Helper_Data')->__('This payment method instance is not available.');
             } else {
                 if (!$method->isAvailable($this->getQuote())) {
-                    $this->_errors[] = Mage::helper('Mage_Adminhtml_Helper_Data')->__('Payment method is not available.');
+                    $this->_errors[] = Mage::helper('Mage_Adminhtml_Helper_Data')->__('This payment method is not available.');
                 } else {
                     try {
                         $method->validate();

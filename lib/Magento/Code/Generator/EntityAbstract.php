@@ -183,14 +183,6 @@ abstract class Magento_Code_Generator_EntityAbstract
      */
     protected function _getClassProperties()
     {
-        // const CLASS_NAME = '<source_class_name>';
-        $className = array(
-            'name'         => 'CLASS_NAME',
-            'const'        => true,
-            'defaultValue' => $this->_getSourceClassName(),
-            'docblock'     => array('shortDescription' => 'Entity class name'),
-        );
-
         // protected $_objectManager = null;
         $objectManager = array(
             'name'       => '_objectManager',
@@ -203,7 +195,7 @@ abstract class Magento_Code_Generator_EntityAbstract
             ),
         );
 
-        return array($className, $objectManager);
+        return array($objectManager);
     }
 
     /**
@@ -211,26 +203,7 @@ abstract class Magento_Code_Generator_EntityAbstract
      *
      * @return array
      */
-    protected function _getDefaultConstructorDefinition()
-    {
-        // public function __construct(\Magento_ObjectManager $objectManager)
-        return array(
-            'name'       => '__construct',
-            'parameters' => array(
-                array('name' => 'objectManager', 'type' => '\Magento_ObjectManager'),
-            ),
-            'body' => '$this->_objectManager = $objectManager;',
-            'docblock' => array(
-                'shortDescription' => ucfirst(static::ENTITY_TYPE) . ' constructor',
-                'tags'             => array(
-                    array(
-                        'name'        => 'param',
-                        'description' => '\Magento_ObjectManager $objectManager'
-                    ),
-                ),
-            ),
-        );
-    }
+    protected abstract function _getDefaultConstructorDefinition();
 
     /**
      * Returns list of methods for class generator
@@ -274,7 +247,21 @@ abstract class Magento_Code_Generator_EntityAbstract
 
         $autoloader = $this->_autoloader;
 
-        if (!$autoloader::getFile($sourceClassName)) {
+        // @todo the controller handling logic below must be removed when controllers become PSR-0 compliant
+        $controllerSuffix = 'Controller';
+        $pathParts = explode('_', $sourceClassName);
+        if (strrpos($sourceClassName, $controllerSuffix) === strlen($sourceClassName) - strlen($controllerSuffix)
+            && isset($pathParts[2])
+            && !in_array($pathParts[2], array('Block', 'Helper', 'Model'))
+        ) {
+            $controllerPath = preg_replace('/^([0-9A-Za-z]*)_([0-9A-Za-z]*)/', '\\1_\\2_controllers', $sourceClassName);
+            $filePath = stream_resolve_include_path(str_replace('_', DIRECTORY_SEPARATOR, $controllerPath) . '.php');
+            $isSourceClassValid = !empty($filePath);
+        } else {
+            $isSourceClassValid =$autoloader::getFile($sourceClassName);
+        }
+
+        if (!$isSourceClassValid) {
             $this->_addError('Source class ' . $sourceClassName . ' doesn\'t exist.');
             return false;
         } elseif ($autoloader::getFile($resultClassName)) {
@@ -300,7 +287,7 @@ abstract class Magento_Code_Generator_EntityAbstract
      */
     protected function _getClassDocBlock()
     {
-        $description = ucfirst(static::ENTITY_TYPE) . ' class for ' . $this->_getSourceClassName();
+        $description = ucfirst(static::ENTITY_TYPE) . ' class for \\' . $this->_getSourceClassName();
         return array('shortDescription' => $description);
     }
 
@@ -347,5 +334,38 @@ abstract class Magento_Code_Generator_EntityAbstract
         $value = new \Zend\Code\Generator\ValueGenerator(null, \Zend\Code\Generator\ValueGenerator::TYPE_NULL);
 
         return $value;
+    }
+
+    /**
+     * Retrieve method parameter info
+     *
+     * @param ReflectionParameter $parameter
+     * @return array
+     */
+    protected function _getMethodParameterInfo(ReflectionParameter $parameter)
+    {
+        $parameterInfo = array(
+            'name' => $parameter->getName(),
+            'passedByReference' => $parameter->isPassedByReference()
+        );
+
+        if ($parameter->isArray()) {
+            $parameterInfo['type'] = 'array';
+        } elseif ($parameter->getClass()) {
+            $parameterInfo['type'] = $this->_getFullyQualifiedClassName($parameter->getClass()->getName());
+        }
+
+        if ($parameter->isOptional() && $parameter->isDefaultValueAvailable()) {
+            $defaultValue = $parameter->getDefaultValue();
+            if (is_string($defaultValue)) {
+                $parameterInfo['defaultValue'] = $this->_escapeDefaultValue($parameter->getDefaultValue());
+            } elseif ($defaultValue === null) {
+                $parameterInfo['defaultValue'] = $this->_getNullDefaultValue();
+            } else {
+                $parameterInfo['defaultValue'] = $defaultValue;
+            }
+        }
+
+        return $parameterInfo;
     }
 }

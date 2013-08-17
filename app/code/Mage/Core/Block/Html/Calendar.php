@@ -68,11 +68,11 @@ class Mage_Core_Block_Html_Calendar extends Mage_Core_Block_Template
         // define default format and tooltip format
         $this->assign(
             'defaultFormat',
-            $helper->jsonEncode(Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM))
+            $helper->jsonEncode(Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_LocaleInterface::FORMAT_TYPE_MEDIUM))
         );
         $this->assign(
             'toolTipFormat',
-            $helper->jsonEncode(Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_LONG))
+            $helper->jsonEncode(Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_LocaleInterface::FORMAT_TYPE_LONG))
         );
 
         // get days and months for en_US locale - calendar will parse exactly in this locale
@@ -105,6 +105,6 @@ class Mage_Core_Block_Html_Calendar extends Mage_Core_Block_Template
      */
     public function getStoreTimestamp($store = null)
     {
-        return Mage::getSingleton('Mage_Core_Model_Locale')->storeTimeStamp($store);
+        return Mage::getSingleton('Mage_Core_Model_LocaleInterface')->storeTimeStamp($store);
     }
 }

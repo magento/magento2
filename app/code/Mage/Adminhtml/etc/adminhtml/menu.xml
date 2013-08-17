@@ -38,7 +38,7 @@
         <add id="Mage_Adminhtml::system_variable" title="Custom Variables" module="Mage_Adminhtml" sortOrder="20" parent="Mage_Adminhtml::system_other_settings" action="adminhtml/system_variable" resource="Mage_Adminhtml::variable"/>
         <add id="Mage_Adminhtml::system_cache" title="Cache Management" module="Mage_Adminhtml" sortOrder="10" parent="Mage_Adminhtml::system_tools" action="adminhtml/cache" resource="Mage_Adminhtml::cache"/>
         <add id="Mage_Adminhtml::system_store" title="All Stores" module="Mage_Core" sortOrder="10" parent="Mage_Adminhtml::stores_settings" action="adminhtml/system_store/" resource="Mage_Adminhtml::store"/>
-        <add id="Mage_Adminhtml::system_config" title="Configurations" module="Mage_Adminhtml" sortOrder="20" parent="Mage_Adminhtml::stores_settings" action="adminhtml/system_config" resource="Mage_Adminhtml::config"/>
+        <add id="Mage_Adminhtml::system_config" title="Configuration" module="Mage_Adminhtml" sortOrder="20" parent="Mage_Adminhtml::stores_settings" action="adminhtml/system_config" resource="Mage_Adminhtml::config"/>
 
         <add id="Mage_Catalog::inventory" title="Inventory" module="Mage_Catalog" sortOrder="10" parent="Mage_Catalog::catalog" dependsOnModule="Mage_Catalog" resource="Mage_Catalog::catalog"/>
 

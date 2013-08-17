@@ -71,7 +71,7 @@ class Mage_Catalog_Block_Navigation extends Mage_Core_Block_Template
         $shortCacheId = array(
             'CATALOG_NAVIGATION',
             Mage::app()->getStore()->getId(),
-            Mage::getDesign()->getDesignTheme()->getCacheKey(),
+            Mage::getDesign()->getDesignTheme()->getId(),
             Mage::getSingleton('Mage_Customer_Model_Session')->getCustomerGroupId(),
             'template' => $this->getTemplate(),
             'name' => $this->getNameInLayout(),

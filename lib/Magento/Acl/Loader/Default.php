@@ -1,5 +1,7 @@
 <?php
 /**
+ * Default acl loader. Used as a fallback when no loaders were defined. Doesn't change ACL object passed.
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -18,19 +20,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Framework
- * @subpackage  Acl
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Default acl loader. Used as a fallback when no loaders were defined. Doesn't change ACL object passed.
- */
-class Magento_Acl_Loader_Default implements Magento_Acl_Loader
+class Magento_Acl_Loader_Default implements Magento_Acl_LoaderInterface
 {
-
     /**
      * Don't do anything to acl object.
      *

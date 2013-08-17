@@ -44,7 +44,7 @@ class Mage_Newsletter_Model_TemplateTest extends PHPUnit_Framework_TestCase
      * @magentoConfigFixture                    install/design/theme/full_name   default/basic
      * @magentoConfigFixture                    adminhtml/design/theme/full_name default/basic
      * @magentoConfigFixture current_store      design/theme/full_name           default/iphone
-     * @magentoConfigFixture fixturestore_store design/theme/full_name           default/demo_blue
+     * @magentoConfigFixture fixturestore_store design/theme/full_name           default/blank
      * @magentoAppIsolation  enabled
      * @dataProvider         getProcessedTemplateDataProvider
      */
@@ -70,7 +70,7 @@ class Mage_Newsletter_Model_TemplateTest extends PHPUnit_Framework_TestCase
             'install'        => array('install',   'default',      'default/demo'),
             'backend'        => array('adminhtml', 'admin',        'default/basic'),
             'frontend'       => array('frontend',  'default',      'default/iphone'),
-            'frontend store' => array('frontend',  'fixturestore', 'default/demo_blue'),
+            'frontend store' => array('frontend',  'fixturestore', 'default/blank'),
         );
     }
 

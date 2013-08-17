@@ -91,17 +91,27 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_Buttons_SaveTest extends 
         $block->init();
         $data = $block->getData();
         $options = $block->getOptions();
+        
+        
+
+        
+         
 
         $mainAction = json_decode($data['data_attribute']['mage-init'], true);
-        $this->assertNotEmpty($mainAction['button']['eventData']['confirm_message']);
-        $mainAction['button']['eventData']['confirm_message'] = 0;
+        if ($mainAction['button']['eventData']['confirm'] !== false) {
+            $this->assertNotEmpty($mainAction['button']['eventData']['confirm']['message']);
+            $this->assertNotEmpty($mainAction['button']['eventData']['confirm']['title']);
+        }
+
+        $mainAction['button']['eventData']['confirm'] = array();
 
         $this->assertEquals($expected, $mainAction);
         foreach ($options as $option) {
             $action = json_decode($option['data_attribute']['mage-init'], true);
 
-            $this->assertNotEmpty($action['button']['eventData']['confirm_message']);
-            $action['button']['eventData']['confirm_message'] = 0;
+            $this->assertNotEmpty($action['button']['eventData']['confirm']['message']);
+            $this->assertNotEmpty($action['button']['eventData']['confirm']['title']);
+            $action['button']['eventData']['confirm'] = array();
 
             $isFound = false;
             foreach ($expectedOptions as $expectedOption) {
@@ -133,7 +143,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_Buttons_SaveTest extends 
                         'target'    => 'body',
                         'eventData' => array(
                             'theme_id'        => 123,
-                            'confirm_message' => 0
+                            'confirm' => array()
                         )
                     )
                 ),
@@ -143,12 +153,12 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_Buttons_SaveTest extends 
                 $this->_getThemeMock(Mage_Core_Model_Theme::TYPE_VIRTUAL, true),
                 array(
                     'button' => array(
-                        'event'     => 'save-and-assign',
+                        'event'     => 'save',
                         'target'    => 'body',
                         'eventData' => array(
                             'theme_id'        => 123,
                             'save_url'        => $this->_url,
-                            'confirm_message' => 0
+                            'confirm' => array()
                         )
                     )
                 ),
@@ -163,7 +173,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_Buttons_SaveTest extends 
                         'eventData' => array(
                             'theme_id'        => 123,
                             'save_url'        => $this->_url,
-                            'confirm_message' => 0
+                            'confirm' => array()
                         )
                     ),
                 ),
@@ -175,7 +185,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_Buttons_SaveTest extends 
                             'eventData' => array(
                                 'theme_id' => 123,
                                 'save_url' => $this->_url,
-                                'confirm_message' => 0
+                                'confirm' => array()
                             )
                         ),
                     ),
@@ -186,7 +196,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_Buttons_SaveTest extends 
                             'eventData' => array(
                                 'theme_id' => 123,
                                 'save_url' => $this->_url,
-                                'confirm_message' => 0
+                                'confirm' => array()
                             )
                         ),
                     )

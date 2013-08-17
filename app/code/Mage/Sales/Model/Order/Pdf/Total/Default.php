@@ -27,12 +27,51 @@
 /**
  * Sales Order Total PDF model
  *
+ * @method Mage_Sales_Model_Order getOrder()
+ *
  * @category   Mage
  * @package    Mage_Sales
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Sales_Model_Order_Pdf_Total_Default extends Varien_Object
 {
+    /**
+     * @var Mage_Tax_Helper_Data
+     */
+    protected $_taxHelper;
+
+    /**
+     * @var Mage_Tax_Model_Calculation
+     */
+    protected $_taxCalculation;
+
+    /**
+     * @var Mage_Tax_Model_Sales_Order_Tax
+     */
+    protected $_taxOrder;
+
+    /**
+     * Initialize dependencies
+     *
+     * @param Mage_Core_Block_Template_Context $context
+     * @param Mage_Tax_Helper_Data $taxHelper
+     * @param Mage_Tax_Model_Calculation $taxCalculation
+     * @param Magento_ObjectManager $objectManager
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Core_Block_Template_Context $context,
+        Mage_Tax_Helper_Data $taxHelper,
+        Mage_Tax_Model_Calculation $taxCalculation,
+        Magento_ObjectManager $objectManager,
+        array $data = array()
+    ){
+        $this->_taxHelper = $taxHelper;
+        $this->_taxCalculation = $taxCalculation;
+        $this->_taxOrder = $objectManager->create('Mage_Tax_Model_Sales_Order_Tax');
+        parent::__construct($context, $data);
+    }
+
     /**
      * Get array of arrays with totals information for display in PDF
      * array(
@@ -48,10 +87,10 @@ class Mage_Sales_Model_Order_Pdf_Total_Default extends Varien_Object
     {
         $amount = $this->getOrder()->formatPriceTxt($this->getAmount());
         if ($this->getAmountPrefix()) {
-            $amount = $this->getAmountPrefix().$amount;
+            $amount = $this->getAmountPrefix() . $amount;
         }
 
-        $title = Mage::helper('Mage_Sales_Helper_Data')->__($this->getTitle());
+        $title = $this->_taxHelper->__($this->getTitle());
         if ($this->getTitleSourceField()) {
             $label = $title . ' (' . $this->getTitleDescription() . '):';
         } else {
@@ -80,24 +119,21 @@ class Mage_Sales_Model_Order_Pdf_Total_Default extends Varien_Object
      */
     public function getFullTaxInfo()
     {
-        $taxClassAmount = Mage::helper('Mage_Tax_Helper_Data')->getCalculatedTaxes($this->getOrder());
         $fontSize       = $this->getFontSize() ? $this->getFontSize() : 7;
+        $taxClassAmount = $this->_taxHelper->getCalculatedTaxes($this->getOrder());
+        $shippingTax    = $this->_taxHelper->getShippingTax($this->getOrder());
+        $taxClassAmount = array_merge($shippingTax, $taxClassAmount);
 
         if (!empty($taxClassAmount)) {
-            $shippingTax    = Mage::helper('Mage_Tax_Helper_Data')->getShippingTax($this->getOrder());
-            $taxClassAmount = array_merge($shippingTax, $taxClassAmount);
-
             foreach ($taxClassAmount as &$tax) {
                 $percent          = $tax['percent'] ? ' (' . $tax['percent']. '%)' : '';
-                $tax['amount']    = $this->getAmountPrefix().$this->getOrder()->formatPriceTxt($tax['tax_amount']);
-                $tax['label']     = Mage::helper('Mage_Tax_Helper_Data')->__($tax['title']) . $percent . ':';
+                $tax['amount']    = $this->getAmountPrefix() . $this->getOrder()->formatPriceTxt($tax['tax_amount']);
+                $tax['label']     = $this->_taxHelper->__($tax['title']) . $percent . ':';
                 $tax['font_size'] = $fontSize;
             }
         } else {
-            $rates    = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Tax_Collection')
-                ->loadByOrder($this->getOrder())
-                ->toArray();
-            $fullInfo = Mage::getSingleton('Mage_Tax_Model_Calculation')->reproduceProcess($rates['items']);
+            $rates = $this->_taxOrder->getCollection()->loadByOrder($this->getOrder())->toArray();
+            $fullInfo = $this->_taxCalculation->reproduceProcess($rates['items']);
             $tax_info = array();
 
             if ($fullInfo) {
@@ -113,7 +149,7 @@ class Mage_Sales_Model_Order_Pdf_Total_Default extends Varien_Object
 
                         $tax_info[] = array(
                             'amount'    => $this->getAmountPrefix() . $this->getOrder()->formatPriceTxt($_amount),
-                            'label'     => Mage::helper('Mage_Tax_Helper_Data')->__($rate['title']) . $percent . ':',
+                            'label'     => $this->_taxHelper->__($rate['title']) . $percent . ':',
                             'font_size' => $fontSize
                         );
                     }

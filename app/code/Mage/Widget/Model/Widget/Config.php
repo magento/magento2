@@ -33,6 +33,20 @@
  */
 class Mage_Widget_Model_Widget_Config extends Varien_Object
 {
+    /**
+     * @var Mage_Core_Model_View_Url
+     */
+    protected $_viewUrl;
+
+    /**
+     * @param Mage_Core_Model_View_Url $viewUrl
+     * @param array $data
+     */
+    public function __construct(Mage_Core_Model_View_Url $viewUrl, array $data = array())
+    {
+        $this->_viewUrl = $viewUrl;
+        parent::__construct($data);
+    }
 
     /**
      * Return config settings for widgets insertion plugin based on editor element config
@@ -42,9 +56,11 @@ class Mage_Widget_Model_Widget_Config extends Varien_Object
      */
     public function getPluginSettings($config)
     {
+        $url = $this->_viewUrl->getViewFileUrl(
+            'mage/adminhtml/wysiwyg/tiny_mce/plugins/magentowidget/editor_plugin.js'
+        );
         $settings = array(
-            'widget_plugin_src'   =>
-                Mage::getDesign()->getViewFileUrl('mage/adminhtml/wysiwyg/tiny_mce/plugins/magentowidget/editor_plugin.js'),
+            'widget_plugin_src'   => $url,
             'widget_placeholders' => Mage::getModel('Mage_Widget_Model_Widget')->getPlaceholderImageUrls(),
             'widget_window_url'   => $this->getWidgetWindowUrl($config)
         );

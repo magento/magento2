@@ -46,7 +46,7 @@ class Mage_Backend_Model_Authorization_RoleLocatorTest extends PHPUnit_Framework
             '',
             false
         );
-        $this->_model = new Mage_Backend_Model_Authorization_RoleLocator(array('session' => $this->_sessionMock));
+        $this->_model = new Mage_Backend_Model_Authorization_RoleLocator($this->_sessionMock);
     }
 
     public function testGetAclRoleIdReturnsCurrentUserAclRoleId()

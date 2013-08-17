@@ -57,44 +57,50 @@
     <script src="<?php echo $this->getViewFileUrl('scriptaculous/effects.js') ?>"></script>
     <script src="<?php echo $this->getViewFileUrl('mage/captcha.js') ?>"></script>
     <script src="<?php echo $this->getViewFileUrl('lib/modernizr.js') ?>"></script>
+    <script src="<?php echo $this->getViewFileUrl('js/head.js') ?>"></script>
+
 <body id="page-login" class="page-login" onload="document.forms['login-form'].username.focus();">
-<div class="wrapper">
-    <header class="header">
-        <div class="logo" title="<?php echo $this->__('Magento Admin Panel') ?>"><span><?php echo $this->__('Magento Admin Panel') ?></span></div>
-    </header>
-    <div class="form-login form-inline">
-            <div id="messages">
-                <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    <div class="wrapper">
+        <div class="wrapper-inner">
+            <div class="form-login form-inline">
+                <header class="header">
+                    <div class="logo" title="<?php echo $this->__('Magento Admin Panel') ?>"><span><?php echo $this->__('Magento Admin Panel') ?></span></div>
+                </header>
+                <div id="messages" data-container-for="messages">
+                    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+                </div>
+                <form method="post" action="" id="login-form">
+                    <fieldset class="fieldset">
+                        <legend class="legend"><span><?php echo Mage::helper('Mage_Backend_Helper_Data')->__('Welcome') ?></span></legend><br/>
+                        <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
+                        <div class="field field-username">
+                            <label for="username" class="label"><span><?php echo Mage::helper('Mage_Backend_Helper_Data')->__('User Name:') ?></span></label>
+                            <div class="control">
+                                <input type="text" id="username" name="login[username]" value="" class="required-entry input-text" placeholder="user name" />
+                            </div>
+                        </div>
+                        <div class="field field-password">
+                            <label for="login" class="label"><?php echo Mage::helper('Mage_Backend_Helper_Data')->__('Password:') ?></label>
+                            <div class="control">
+                                <input type="password" id="login" name="login[password]" class="required-entry input-text" value="" placeholder="password" />
+                            </div>
+                        </div>
+                        <?php echo $this->getChildHtml('form.additional.info'); ?>
+                        <div class="form-actions">
+                            <?php echo $this->getChildHtml('form.buttons'); ?>
+                        </div>
+                    </fieldset>
+                </form>
+                <script type="text/javascript">
+                    jQuery('#login-form').form().validation();
+                </script>
             </div>
-            <form method="post" action="" id="login-form">
-                <fieldset class="fieldset">
-                    <legend class="legend"><span><?php echo Mage::helper('Mage_Backend_Helper_Data')->__('Log in to Admin Panel') ?></span></legend><br/>
-                    <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
-                    <div class="field field-username">
-                        <label for="username" class="label"><span><?php echo Mage::helper('Mage_Backend_Helper_Data')->__('User Name:') ?></span></label>
-                        <div class="control">
-                            <input type="text" id="username" name="login[username]" value="" class="required-entry input-text" />
-                        </div>
-                    </div>
-                    <div class="field field-password">
-                        <label for="login" class="label"><?php echo Mage::helper('Mage_Backend_Helper_Data')->__('Password:') ?></label>
-                        <div class="control">
-                            <input type="password" id="login" name="login[password]" class="required-entry input-text" value="" />
-                        </div>
-                    </div>
-                    <?php echo $this->getChildHtml('form.additional.info'); ?>
-                    <div class="form-actions">
-                        <?php echo $this->getChildHtml('form.buttons'); ?>
-                    </div>
-                </fieldset>
-            </form>
-            <script type="text/javascript">
-                jQuery('#login-form').form().validation();
-            </script>
+        </div>
     </div>
     <footer class="footer">
         <div class="footer-content">
-        <?php echo Mage::helper('Mage_Backend_Helper_Data')->__('Magento&reg is a trademark of X.commerce, Inc. Copyright &copy; %s X.commerce, Inc.', date('Y')) ?>
+            <div class="footer-copyright"><?php echo Mage::helper('Mage_Backend_Helper_Data')->__('Magento&reg is a trademark of X.commerce, Inc. Copyright &copy; %s X.commerce, Inc.', date('Y')) ?></div>
         </div>
     </footer>
-</div>
+</body>
+</html>

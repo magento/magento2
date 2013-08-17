@@ -90,7 +90,7 @@
             <button type="submit" class="button<?php if (!$this->canSend()):?> disabled<?php endif ?>"<?php if (!$this->canSend()):?> disabled="disabled"<?php endif ?>><span><span><?php echo $this->__('Send Email') ?></span></span></button>
             <div id="max-recipient-message" style="display:none;">
                 <?php if ($this->getMaxRecipients()): ?>
-                  <p class="limit"><?php echo $this->__('Maximum %d email addresses allowed.', $this->getMaxRecipients()) ?></p>
+                  <p class="limit"><?php echo $this->__('Maximum %d email addresses allowed', $this->getMaxRecipients()) ?></p>
                 <?php endif; ?>
             </div>
             <?php if (1 < $this->getMaxRecipients()): ?>

@@ -25,6 +25,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * @magentoAppArea adminhtml
+ */
 class Mage_User_Model_UserTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -281,9 +284,9 @@ class Mage_User_Model_UserTest extends PHPUnit_Framework_TestCase
 
     /**
      * @expectedException Mage_Core_Exception
-     * @expectedExceptionMessage User Name is required field.
-     * @expectedExceptionMessage First Name is required field.
-     * @expectedExceptionMessage Last Name is required field.
+     * @expectedExceptionMessage User Name is a required field.
+     * @expectedExceptionMessage First Name is a required field.
+     * @expectedExceptionMessage Last Name is a required field.
      * @expectedExceptionMessage Please enter a valid email.
      * @expectedExceptionMessage Password is required field.
      * @magentoDbIsolation enabled
@@ -296,7 +299,7 @@ class Mage_User_Model_UserTest extends PHPUnit_Framework_TestCase
 
     /**
      * @expectedException Mage_Core_Exception
-     * @expectedExceptionMessage Password confirmation must be same as password.
+     * @expectedExceptionMessage Your password confirmation must match your password.
      * @magentoDbIsolation enabled
      */
     public function testBeforeSavePasswordsDoNotMatch()
@@ -308,7 +311,7 @@ class Mage_User_Model_UserTest extends PHPUnit_Framework_TestCase
 
     /**
      * @expectedException Mage_Core_Exception
-     * @expectedExceptionMessage Password must be at least
+     * @expectedExceptionMessage Your password must include both numeric and alphabetic characters.
      * @magentoDbIsolation enabled
      */
     public function testBeforeSavePasswordTooShort()
@@ -320,7 +323,7 @@ class Mage_User_Model_UserTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider beforeSavePasswordInsecureDataProvider
      * @expectedException Mage_Core_Exception
-     * @expectedExceptionMessage Password must include both numeric and alphabetic characters.
+     * @expectedExceptionMessage Your password must include both numeric and alphabetic characters.
      * @magentoDbIsolation enabled
      * @param string $password
      */

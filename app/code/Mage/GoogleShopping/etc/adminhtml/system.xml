@@ -52,6 +52,9 @@
                     <label>Update Google Shopping Item when Product is Updated</label>
                     <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
                 </field>
+                <field id="verify_meta_tag" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Verifying Meta Tag</label>
+                </field>
                 <field id="debug" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Debug</label>
                     <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>

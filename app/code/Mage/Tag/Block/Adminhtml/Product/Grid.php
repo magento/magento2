@@ -85,12 +85,12 @@ class Mage_Tag_Block_Adminhtml_Product_Grid extends Mage_Adminhtml_Block_Widget_
         ));
 
         $this->addColumn('name', array(
-            'header'    => Mage::helper('Mage_Tag_Helper_Data')->__('Product Name'),
+            'header'    => Mage::helper('Mage_Tag_Helper_Data')->__('Product'),
             'index'     => 'name',
         ));
 
         $this->addColumn('popularity', array(
-            'header'        => Mage::helper('Mage_Tag_Helper_Data')->__('# of Uses'),
+            'header'        => Mage::helper('Mage_Tag_Helper_Data')->__('Uses'),
             'width'         => '50px',
             'align'         => 'right',
             'index'         => 'popularity',

@@ -30,9 +30,9 @@
 class Mage_Core_Model_Page_Asset_ViewFile implements Mage_Core_Model_Page_Asset_MergeableInterface
 {
     /**
-     * @var Mage_Core_Model_Design_Package
+     * @var Mage_Core_Model_View_Url
      */
-    private $_designPackage;
+    protected $_viewUrl;
 
     /**
      * @var string
@@ -45,17 +45,20 @@ class Mage_Core_Model_Page_Asset_ViewFile implements Mage_Core_Model_Page_Asset_
     private $_contentType;
 
     /**
-     * @param Mage_Core_Model_Design_Package $designPackage
+     * @param Mage_Core_Model_View_Url $viewUrl
      * @param string $file
      * @param string $contentType
      * @throws InvalidArgumentException
      */
-    public function __construct(Mage_Core_Model_Design_Package $designPackage, $file, $contentType)
-    {
+    public function __construct(
+        Mage_Core_Model_View_Url $viewUrl,
+        $file,
+        $contentType
+    ) {
         if (empty($file)) {
             throw new InvalidArgumentException("Parameter 'file' must not be empty");
         }
-        $this->_designPackage = $designPackage;
+        $this->_viewUrl = $viewUrl;
         $this->_file = $file;
         $this->_contentType = $contentType;
     }
@@ -65,7 +68,7 @@ class Mage_Core_Model_Page_Asset_ViewFile implements Mage_Core_Model_Page_Asset_
      */
     public function getUrl()
     {
-        return $this->_designPackage->getViewFileUrl($this->_file);
+        return $this->_viewUrl->getViewFileUrl($this->_file);
     }
 
     /**
@@ -81,6 +84,6 @@ class Mage_Core_Model_Page_Asset_ViewFile implements Mage_Core_Model_Page_Asset_
      */
     public function getSourceFile()
     {
-        return $this->_file;
+        return $this->_viewUrl->getViewFilePublicPath($this->_file);
     }
 }

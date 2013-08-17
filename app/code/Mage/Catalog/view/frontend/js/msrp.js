@@ -27,7 +27,8 @@
 (function($) {
     $.widget('mage.addToCart', {
         options: {
-            groupedProductContainer: '.grouped-items-table'
+            groupedProductContainer: '.grouped-items-table',
+            showAddToCart: true
         },
 
         _create: function() {
@@ -50,6 +51,9 @@
                     var width = $('#map-popup').width();
                     var offsetX = e.pageX - (width / 2) + "px";
                     $('#map-popup').css({left: offsetX, top: e.pageY}).show();
+                    if (!this.options.showAddToCart) {
+                        $('#map-popup-content > .map-popup-checkout').hide();
+                    }
                     $('#map-popup-content').show();
                     $('#map-popup-text').addClass('map-popup-only-text').show();
                     $('#map-popup-text-what-this').hide();

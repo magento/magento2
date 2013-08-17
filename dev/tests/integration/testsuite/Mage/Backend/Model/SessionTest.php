@@ -28,8 +28,9 @@
 /**
  * Test class for Mage_Backend_Model_Session.
  *
+ * @magentoAppArea adminhtml
  */
-class Mage_Backend_Model_SessionTest extends Mage_Backend_Area_TestCase
+class Mage_Backend_Model_SessionTest extends PHPUnit_Framework_TestCase
 {
     public function testContructor()
     {

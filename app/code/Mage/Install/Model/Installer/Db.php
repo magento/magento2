@@ -68,7 +68,7 @@ class Mage_Install_Model_Installer_Db extends Mage_Install_Model_Installer_Abstr
             $dbModel = ($data['db_model']);
 
             if (!$resource = $this->_getDbResource($dbModel)) {
-                Mage::throwException(Mage::helper('Mage_Install_Helper_Data')->__('No resource for %s DB model.', $dbModel));
+                Mage::throwException(Mage::helper('Mage_Install_Helper_Data')->__('There is no resource for %s DB model.', $dbModel));
             }
 
             $resource->setConfig($data);
@@ -113,7 +113,7 @@ class Mage_Install_Model_Installer_Db extends Mage_Install_Model_Installer_Abstr
         }
         catch (Exception $e) {
             Mage::logException($e);
-            Mage::throwException(Mage::helper('Mage_Install_Helper_Data')->__('Database connection error.'));
+            Mage::throwException(Mage::helper('Mage_Install_Helper_Data')->__('Something went wrong while connecting to the database.'));
         }
 
         return $data;
@@ -128,7 +128,7 @@ class Mage_Install_Model_Installer_Db extends Mage_Install_Model_Installer_Abstr
     protected function _getCheckedData($data)
     {
         if (!isset($data['db_name']) || empty($data['db_name'])) {
-            Mage::throwException(Mage::helper('Mage_Install_Helper_Data')->__('Database Name cannot be empty.'));
+            Mage::throwException(Mage::helper('Mage_Install_Helper_Data')->__('The Database Name field cannot be empty.'));
         }
         //make all table prefix to lower letter
         if ($data['db_prefix'] != '') {
@@ -138,7 +138,7 @@ class Mage_Install_Model_Installer_Db extends Mage_Install_Model_Installer_Abstr
         if ($data['db_prefix'] != '') {
             if (!preg_match('/^[a-z]+[a-z0-9_]*$/', $data['db_prefix'])) {
                 Mage::throwException(
-                    Mage::helper('Mage_Install_Helper_Data')->__('The table prefix should contain only letters (a-z), numbers (0-9) or underscores (_), the first character should be a letter.')
+                    Mage::helper('Mage_Install_Helper_Data')->__('The table prefix should contain only letters (a-z), numbers (0-9) or underscores (_); the first character should be a letter.')
                 );
             }
         }

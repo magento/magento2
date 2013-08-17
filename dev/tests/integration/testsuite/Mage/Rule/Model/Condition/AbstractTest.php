@@ -34,7 +34,7 @@ class Mage_Rule_Model_Condition_AbstractTest extends PHPUnit_Framework_TestCase
     {
         /** @var Mage_Rule_Model_Condition_Abstract $model */
         $model = $this->getMockForAbstractClass('Mage_Rule_Model_Condition_Abstract', array(), '',
-            true, true, true, array('getValueElementRenderer'));
+            false, true, true, array('getValueElementRenderer'));
         $model->expects($this->any())
              ->method('getValueElementRenderer')
              ->will($this->returnValue(Mage::getObjectManager()->create('Mage_Rule_Block_Editable')));

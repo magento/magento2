@@ -26,11 +26,8 @@
 
 /**
  * Theme file uploader service
- *
- * @method Mage_Theme_Model_Uploader_Service setUploadedJsFile(Mage_Core_Model_Theme_File $file)
- * @method Mage_Core_Model_Theme_File getUploadedJsFile()
  */
-class Mage_Theme_Model_Uploader_Service extends Mage_Core_Model_Abstract
+class Mage_Theme_Model_Uploader_Service
 {
     /**
      * Css file upload limit
@@ -64,13 +61,6 @@ class Mage_Theme_Model_Uploader_Service extends Mage_Core_Model_Abstract
     protected $_fileSize;
 
     /**
-     * Files js model
-     *
-     * @var Mage_Core_Model_Theme_Customization_Files_Js
-     */
-    protected $_filesJs;
-
-    /**
      * File uploader
      *
      * @var Mage_Core_Model_File_Uploader
@@ -78,117 +68,94 @@ class Mage_Theme_Model_Uploader_Service extends Mage_Core_Model_Abstract
     protected $_uploader;
 
     /**
-     * Object manager
-     *
-     * @var Magento_ObjectManager
+     * @var Mage_Core_Model_File_Uploader
      */
-    protected $_objectManager;
+    protected $_uploaderFactory;
 
     /**
-     * @param Mage_Core_Model_Context $context
+     * @var Mage_Core_Helper_Data
+     */
+    protected $_helper;
+
+    /**
      * @param Varien_Io_File $fileIo
      * @param Magento_File_Size $fileSize
-     * @param Mage_Core_Model_Theme_Customization_Files_Js $filesJs
-     * @param Magento_ObjectManager $objectManager
-     * @param Mage_Core_Model_Resource_Abstract $resource
-     * @param Varien_Data_Collection_Db $resourceCollection
-     * @param array $data
+     * @param Mage_Core_Model_File_UploaderFactory $uploaderFactory
+     * @param Mage_Core_Helper_Data $helper
      */
     public function __construct(
-        Mage_Core_Model_Context $context,
         Varien_Io_File $fileIo,
         Magento_File_Size $fileSize,
-        Mage_Core_Model_Theme_Customization_Files_Js $filesJs,
-        Magento_ObjectManager $objectManager,
-        Mage_Core_Model_Resource_Abstract $resource = null,
-        Varien_Data_Collection_Db $resourceCollection = null,
-        array $data = array()
+        Mage_Core_Model_File_UploaderFactory $uploaderFactory,
+        Mage_Core_Helper_Data $helper
     ) {
         $this->_fileIo = $fileIo;
         $this->_fileSize = $fileSize;
-        $this->_filesJs = $filesJs;
-        $this->_objectManager = $objectManager;
-        parent::__construct($context, $resource, $resourceCollection, $data);
+        $this->_uploaderFactory = $uploaderFactory;
+        $this->_helper = $helper;
     }
 
     /**
      * Upload css file
      *
      * @param string $file - Key in the $_FILES array
-     * @return Mage_Theme_Model_Uploader_Service
+     * @return array
      * @throws Mage_Core_Exception
      */
     public function uploadCssFile($file)
     {
         /** @var $fileUploader Mage_Core_Model_File_Uploader */
-        $fileUploader = $this->_objectManager->create('Mage_Core_Model_File_Uploader', array('fileId' => $file));
+        $fileUploader = $this->_uploaderFactory->create(array('fileId' => $file));
         $fileUploader->setAllowedExtensions(array('css'));
         $fileUploader->setAllowRenameFiles(true);
         $fileUploader->setAllowCreateFolders(true);
 
         $isValidFileSize = $this->_validateFileSize($fileUploader->getFileSize(), $this->getCssUploadMaxSize());
         if (!$isValidFileSize) {
-            throw new Mage_Core_Exception($this->_objectManager->get('Mage_Core_Helper_Data')->__(
-                'CSS file size should be less than %sM.', $this->getCssUploadMaxSizeInMb()
+            throw new Mage_Core_Exception($this->_helper->__(
+                'The CSS file must be less than %sM.', $this->getCssUploadMaxSizeInMb()
             ));
         }
 
         $file = $fileUploader->validateFile();
-        $this->setFilePath($file['tmp_name']);
-        return $this;
+        return array('filename' => $file['name'], 'content' => $this->getFileContent($file['tmp_name']));
     }
 
     /**
      * Upload js file
      *
      * @param string $file - Key in the $_FILES array
-     * @param Mage_Core_Model_Theme $theme
-     * @param bool $saveAsTmp
-     * @return Mage_Theme_Model_Uploader_Service
+     * @return array
      * @throws Mage_Core_Exception
      */
-    public function uploadJsFile($file, $theme, $saveAsTmp = true)
+    public function uploadJsFile($file)
     {
         /** @var $fileUploader Mage_Core_Model_File_Uploader */
-        $fileUploader = $this->_objectManager->create('Mage_Core_Model_File_Uploader', array('fileId' => $file));
+        $fileUploader = $this->_uploaderFactory->create(array('fileId' => $file));
         $fileUploader->setAllowedExtensions(array('js'));
         $fileUploader->setAllowRenameFiles(true);
         $fileUploader->setAllowCreateFolders(true);
 
         $isValidFileSize = $this->_validateFileSize($fileUploader->getFileSize(), $this->getJsUploadMaxSize());
         if (!$isValidFileSize) {
-            throw new Mage_Core_Exception($this->_objectManager->get('Mage_Core_Helper_Data')->__(
-                'JS file size should be less than %sM.', $this->getJsUploadMaxSizeInMb()
+            throw new Mage_Core_Exception($this->_helper->__(
+                'The JS file must be less than %sM.', $this->getJsUploadMaxSizeInMb()
             ));
         }
 
         $file = $fileUploader->validateFile();
-        $this->setFilePath($file['tmp_name']);
-        $file['content'] = $this->getFileContent();
-
-        $themeFile = $this->_filesJs->saveJsFile($theme, $file, $saveAsTmp);
-        $this->setUploadedJsFile($themeFile);
-        return $this;
-    }
-
-    /**
-     * Get js files object
-     *
-     * @return Mage_Core_Model_Theme_Customization_Files_Js
-     */
-    public function getJsFiles()
-    {
-        return $this->_filesJs;
+        return array('filename' => $file['name'], 'content' => $this->getFileContent($file['tmp_name']));
     }
 
     /**
      * Get uploaded file content
      *
+     * @param string $filePath
      * @return string
      */
-    public function getFileContent()
+    public function getFileContent($filePath)
     {
-        return $this->_fileIo->read($this->getFilePath());
+        return $this->_fileIo->read($filePath);
     }
 
     /**

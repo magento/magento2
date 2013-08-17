@@ -35,7 +35,7 @@ class Mage_Adminhtml_Customer_GroupController extends Mage_Adminhtml_Controller_
 {
     protected function _initGroup()
     {
-        $this->_title($this->__('Customers'))->_title($this->__('Customer Groups'));
+        $this->_title($this->__('Customer Groups'));
 
         Mage::register('current_group', Mage::getModel('Mage_Customer_Model_Group'));
         $groupId = $this->getRequest()->getParam('id');
@@ -49,7 +49,7 @@ class Mage_Adminhtml_Customer_GroupController extends Mage_Adminhtml_Controller_
      */
     public function indexAction()
     {
-        $this->_title($this->__('Customers'))->_title($this->__('Customer Groups'));
+        $this->_title($this->__('Customer Groups'));
 
         $this->loadLayout();
         $this->_setActiveMenu('Mage_Customer::customer_group');
@@ -77,7 +77,7 @@ class Mage_Adminhtml_Customer_GroupController extends Mage_Adminhtml_Controller_
             $this->_addBreadcrumb(Mage::helper('Mage_Customer_Helper_Data')->__('New Group'), Mage::helper('Mage_Customer_Helper_Data')->__('New Customer Groups'));
         }
 
-        $this->_title($currentGroup->getId() ? $currentGroup->getCode() : $this->__('New Group'));
+        $this->_title($currentGroup->getId() ? $currentGroup->getCode() : $this->__('New Customer Group'));
 
         $this->getLayout()->addBlock('Mage_Adminhtml_Block_Customer_Group_Edit', 'group', 'content')
             ->setEditMode((bool)Mage::registry('current_group')->getId());
@@ -134,10 +134,14 @@ class Mage_Adminhtml_Customer_GroupController extends Mage_Adminhtml_Controller_
      */
     public function deleteAction()
     {
-        $customerGroup = Mage::getModel('Mage_Customer_Model_Group');
-        if ($id = (int)$this->getRequest()->getParam('id')) {
+        if ($id = $this->getRequest()->getParam('id')) {
+            $customerGroup = Mage::getModel('Mage_Customer_Model_Group')->load($id);
+            if (!$customerGroup->getId()) {
+                Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError(Mage::helper('Mage_Customer_Helper_Data')->__('The customer group no longer exists.'));
+                $this->_redirect('*/*/');
+                return;
+            }
             try {
-                $customerGroup->load($id);
                 $customerGroup->delete();
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(Mage::helper('Mage_Customer_Helper_Data')->__('The customer group has been deleted.'));
                 $this->getResponse()->setRedirect($this->getUrl('*/customer_group'));
@@ -154,6 +158,6 @@ class Mage_Adminhtml_Customer_GroupController extends Mage_Adminhtml_Controller_
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Customer::group');
+        return $this->_authorization->isAllowed('Mage_Customer::group');
     }
 }

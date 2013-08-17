@@ -35,7 +35,7 @@ jQuery(function($) {
                 $form.find('form').validation().data('validator').resetForm();
             };
 
-        $('#product-edit-form').append($('<input>', {
+        $('[data-form=edit-product]').append($('<input>', {
             type: 'hidden',
             name: 'new-variations-attribute-set-id',
             id: 'new-variations-attribute-set-id'
@@ -59,6 +59,7 @@ jQuery(function($) {
                 }, {
                     text: '<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Confirm'); ?>',
                     id: '<?php echo $this->getJsId('confirm-button') ?>',
+                    'class': 'primary',
                     click: function() {
                         if ($form.find('input[name=affected-attribute-set]:checked').val() == 'current') {
                             $('#new-variations-attribute-set-id').val($('#attribute_set_id').val());
@@ -124,7 +125,9 @@ jQuery(function($) {
                     $('#new-variations-attribute-set-id').val($('#attribute_set_id').val());
                     return; // all selected configurable attributes belong to current attribute set
                 }
-                if (!$('.associated-matrix-product-id:checked').closest('tr').has('input[name$="[name]"]').length) {
+                if (!$('[data-role=product-variations-matrix] [data-column=entity_id]:checked')
+                    .closest('tr').has('input[name$="[name]"]').length
+                ) {
                     return; // no new simple products to save from matrix: uniting attribute set is not needed
                 }
 

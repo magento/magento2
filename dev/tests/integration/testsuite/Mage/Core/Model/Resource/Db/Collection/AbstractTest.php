@@ -33,7 +33,7 @@ class Mage_Core_Model_Resource_Db_Collection_AbstractTest extends PHPUnit_Framew
     {
         $resourceModel = Mage::getObjectManager()->get('Mage_Core_Model_Resource');
         $resource = $this->getMockForAbstractClass('Mage_Core_Model_Resource_Db_Abstract',
-            array('resource' => $resourceModel), '', true, true, true, array('getMainTable', 'getIdFieldName')
+            array($resourceModel), '', true, true, true, array('getMainTable', 'getIdFieldName')
         );
 
         $resource->expects($this->any())
@@ -43,9 +43,11 @@ class Mage_Core_Model_Resource_Db_Collection_AbstractTest extends PHPUnit_Framew
             ->method('getIdFieldName')
             ->will($this->returnValue('website_id'));
 
+        $fetchStrategy = $this->getMockForAbstractClass('Varien_Data_Collection_Db_FetchStrategyInterface');
+
         $this->_model = $this->getMockForAbstractClass(
             'Mage_Core_Model_Resource_Db_Collection_Abstract',
-            array($resource)
+            array($fetchStrategy, $resource)
         );
     }
 

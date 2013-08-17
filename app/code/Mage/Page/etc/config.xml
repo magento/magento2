@@ -31,7 +31,7 @@
             <version>1.6.0.0</version>
             <active>true</active>
             <depends>
-                <Mage_Core/>
+                <Mage_Core />
             </depends>
         </Mage_Page>
     </modules>
@@ -39,7 +39,9 @@
         <di>
             <Mage_Core_Model_Page>
                 <parameters>
-                    <assets>Mage_Page_Model_Asset_GroupedCollection</assets>
+                    <assets>
+                        <instance>Mage_Page_Model_Asset_GroupedCollection</instance>
+                    </assets>
                 </parameters>
             </Mage_Core_Model_Page>
             <Mage_Page_Model_Asset_GroupedCollection>
@@ -87,16 +89,6 @@
                 </Mage_Page>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <page module="Mage_Page">
-                    <file>layout.xml</file>
-                </page>
-                <page_addons module="Mage_Page">
-                    <file>layout_addons.xml</file>
-                </page_addons>
-            </updates>
-        </layout>
     </frontend>
     <adminhtml>
         <translate>
@@ -160,7 +152,7 @@ Disallow: /*SID=
                 <welcome>Default welcome msg!</welcome>
             </header>
             <footer translate="copyright" module="Mage_Page">
-                <copyright>&amp;copy; 2012 Magento Demo Store. All Rights Reserved.</copyright>
+                <copyright>&amp;copy; 2013 Magento Demo Store. All Rights Reserved.</copyright>
             </footer>
         </design>
         <system>

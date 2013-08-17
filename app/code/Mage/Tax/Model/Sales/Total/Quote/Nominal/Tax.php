@@ -64,4 +64,22 @@ class Mage_Tax_Model_Sales_Total_Quote_Nominal_Tax extends Mage_Tax_Model_Sales_
     {
         return $address->getAllNominalItems();
     }
+
+    /**
+     * Process model configuration array
+     *
+     * This method can be used for changing totals collect sort order
+     *
+     * @param array $config
+     * @param int|string|Mage_Core_Model_Store $store
+     * @return array
+     */
+    public function processConfigArray($config, $store)
+    {
+        /**
+         * Nominal totals use sort_order configuration node to define the order (not before or after nodes)
+         * If there is a requirement to change the order, in which nominal total is calculated, change sort_order
+         */
+        return $config;
+    }
 }

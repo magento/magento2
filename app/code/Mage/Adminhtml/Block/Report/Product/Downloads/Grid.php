@@ -71,7 +71,7 @@ class Mage_Adminhtml_Block_Report_Product_Downloads_Grid extends Mage_Adminhtml_
     protected function _prepareColumns()
     {
         $this->addColumn('name', array(
-            'header'    => Mage::helper('Mage_Reports_Helper_Data')->__('Product Name'),
+            'header'    => Mage::helper('Mage_Reports_Helper_Data')->__('Product'),
             'index'     => 'name',
             'header_css_class'  => 'col-product',
             'column_css_class'  => 'col-product'
@@ -85,7 +85,7 @@ class Mage_Adminhtml_Block_Report_Product_Downloads_Grid extends Mage_Adminhtml_
         ));
 
         $this->addColumn('sku', array(
-            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Product SKU'),
+            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('SKU'),
             'index'     =>'sku',
             'header_css_class'  => 'col-sku',
             'column_css_class'  => 'col-sku'

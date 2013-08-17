@@ -956,13 +956,11 @@ AdminOrder.prototype = {
             this.loadingAreas.push('message');
         }
 
-        for(var i=0; i<this.loadingAreas.length; i++){
+        for (var i = 0; i < this.loadingAreas.length; i++) {
             var id = this.loadingAreas[i];
-            if($(this.getAreaId(id))){
+            if ($(this.getAreaId(id))) {
                 if ('message' != id || response[id]) {
-                    var wrapper = new Element('div');
-                    wrapper.update(response[id] ? response[id] : '');
-                    $(this.getAreaId(id)).update(wrapper.innerHTML);
+                    $(this.getAreaId(id)).update(response[id]);
                 }
                 if ($(this.getAreaId(id)).callback) {
                     this[$(this.getAreaId(id)).callback]();

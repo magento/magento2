@@ -26,8 +26,6 @@
 
 /**
  * System / Cache Management / Cache type "Collections Data"
- *
- * @todo utilize the class for all manipulations with the cache type
  */
 class Mage_Core_Model_Cache_Type_Collection extends Magento_Cache_Frontend_Decorator_TagScope
 {

@@ -150,7 +150,7 @@ class Mage_Newsletter_Model_Queue extends Mage_Core_Model_Template
             $this->setQueueStartAt(null);
         } else {
             $locale = Mage::app()->getLocale();
-            $format = $locale->getDateTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM);
+            $format = $locale->getDateTimeFormat(Mage_Core_Model_LocaleInterface::FORMAT_TYPE_MEDIUM);
             $time = $locale->date($startAt, $format)->getTimestamp();
             $this->setQueueStartAt(Mage::getModel('Mage_Core_Model_Date')->gmtDate(null, $time));
         }

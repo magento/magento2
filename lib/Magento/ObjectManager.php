@@ -29,19 +29,19 @@ interface Magento_ObjectManager
     /**
      * Create new object instance
      *
-     * @param string $className
+     * @param string $type
      * @param array $arguments
      * @return mixed
      */
-    public function create($className, array $arguments = array());
+    public function create($type, array $arguments = array());
 
     /**
      * Retrieve cached object instance
      *
-     * @param string $className
+     * @param string $type
      * @return mixed
      */
-    public function get($className);
+    public function get($type);
 
     /**
      * Configure object manager

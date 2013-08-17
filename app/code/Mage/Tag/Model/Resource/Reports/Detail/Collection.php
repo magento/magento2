@@ -45,18 +45,18 @@ class Mage_Tag_Model_Resource_Reports_Detail_Collection
     protected $_request;
 
     /**
+     * @param Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy
      * @param Mage_Tag_Model_Tag $tagModel
      * @param Mage_Core_Controller_Request_Http $request
-     * @param null $resource
      */
     public function __construct(
+        Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy,
         Mage_Tag_Model_Tag $tagModel,
-        Mage_Core_Controller_Request_Http $request,
-        $resource = null)
-    {
+        Mage_Core_Controller_Request_Http $request
+    ) {
         $this->_model = $tagModel;
         $this->_request = $request;
-        parent::__construct($resource);
+        parent::__construct($fetchStrategy);
     }
 
     /**

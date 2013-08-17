@@ -27,9 +27,13 @@
 
 class Mage_Rule_Model_Action_Collection extends Mage_Rule_Model_Action_Abstract
 {
-    public function __construct()
+    /**
+     * @param Mage_Core_Model_View_Url $viewUrl
+     * @param array $data
+     */
+    public function __construct(Mage_Core_Model_View_Url $viewUrl, array $data = array())
     {
-        parent::__construct();
+        parent::__construct($viewUrl, $data);
         $this->setActions(array());
         $this->setType('Mage_Rule_Model_Action_Collection');
     }
@@ -43,7 +47,9 @@ class Mage_Rule_Model_Action_Collection extends Mage_Rule_Model_Action_Abstract
      *   {action::asArray}
      * )
      *
+     * @param array $arrAttributes
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function asArray(array $arrAttributes = array())
     {
@@ -93,40 +99,56 @@ class Mage_Rule_Model_Action_Collection extends Mage_Rule_Model_Action_Abstract
         }
         return $html;
     }
-   public function getNewChildElement()
-   {
-       return $this->getForm()->addField('action:'.$this->getId().':new_child', 'select', array(
-           'name'=>'rule[actions]['.$this->getId().'][new_child]',
-           'values'=>$this->getNewChildSelectOptions(),
-           'value_name'=>$this->getNewChildName(),
-       ))->setRenderer(Mage::getBlockSingleton('Mage_Rule_Block_Newchild'));
+
+    public function getNewChildElement()
+    {
+        return $this->getForm()->addField('action:' . $this->getId() . ':new_child', 'select', array(
+            'name' => 'rule[actions][' . $this->getId() . '][new_child]',
+            'values' => $this->getNewChildSelectOptions(),
+            'value_name' => $this->getNewChildName(),
+        ))->setRenderer(Mage::getBlockSingleton('Mage_Rule_Block_Newchild'));
     }
 
+    /**
+     * @return string
+     */
     public function asHtmlRecursive()
     {
-        $html = $this->asHtml().'<ul id="action:'.$this->getId().':children">';
+        $html = $this->asHtml() . '<ul id="action:' . $this->getId() . ':children">';
         foreach ($this->getActions() as $cond) {
-            $html .= '<li>'.$cond->asHtmlRecursive().'</li>';
+            $html .= '<li>' . $cond->asHtmlRecursive() . '</li>';
         }
-        $html .= '<li>'.$this->getNewChildElement()->getHtml().'</li></ul>';
+        $html .= '<li>' . $this->getNewChildElement()->getHtml() . '</li></ul>';
         return $html;
     }
 
-    public function asString($format='')
+    /**
+     * @param string $format
+     * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function asString($format = '')
     {
         $str = Mage::helper('Mage_Rule_Helper_Data')->__("Perform following actions");
         return $str;
     }
 
-    public function asStringRecursive($level=0)
+    /**
+     * @param int $level
+     * @return string
+     */
+    public function asStringRecursive($level = 0)
     {
         $str = $this->asString();
         foreach ($this->getActions() as $action) {
-            $str .= "\n".$action->asStringRecursive($level+1);
+            $str .= "\n" . $action->asStringRecursive($level + 1);
         }
         return $str;
     }
 
+    /**
+     * @return $this
+     */
     public function process()
     {
         foreach ($this->getActions() as $action) {

@@ -90,7 +90,7 @@ class Mage_Adminhtml_Block_Sales_Order_Shipment_Packaging extends Mage_Adminhtml
         $data = array(
             'createLabelUrl'            => $createLabelUrl,
             'itemsGridUrl'              => $itemsGridUrl,
-            'errorQtyOverLimit'         => Mage::helper('Mage_Sales_Helper_Data')->__('The quantity you want to add exceeds the total shipped quantity for some of selected Product(s)'),
+            'errorQtyOverLimit'         => Mage::helper('Mage_Sales_Helper_Data')->__('You are trying to add a quantity for some products that doesn\'t match the quantity that was shipped.'),
             'titleDisabledSaveBtn'      => Mage::helper('Mage_Sales_Helper_Data')->__('Products should be added to package(s)'),
             'validationErrorMsg'        => Mage::helper('Mage_Sales_Helper_Data')->__('The value that you entered is not valid.'),
             'shipmentItemsQty'          => $itemsQty,

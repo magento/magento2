@@ -219,7 +219,8 @@ class Inspection_WordsFinder
      */
     protected function _findWords($file)
     {
-        $checkContents = !$this->_isBinaryFile($file);
+        // MAGETWO-1569: Yaml files are not checked until license placeholder replacement is implemented for them
+        $checkContents = !$this->_isBinaryFile($file) && pathinfo($file, PATHINFO_EXTENSION) !== 'yml';
 
         $relPath = $this->_getRelPath($file);
         $contents = $checkContents ? file_get_contents($file) : '';

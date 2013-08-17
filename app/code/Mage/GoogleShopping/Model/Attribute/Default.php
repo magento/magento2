@@ -133,7 +133,7 @@ class Mage_GoogleShopping_Model_Attribute_Default extends Mage_GoogleShopping_Mo
     {
         if (is_object($value) || ((string)$value != $value)) {
             Mage::throwException(
-                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('The attribute "%s" has incorrect type for Google Shopping. The product with this attribute hasn\'t been updated in Google Content.', $name)
+                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('Please correct the attribute "%s" type for Google Shopping. The product with this attribute hasn\'t been updated in Google Content.', $name)
             );
         }
         $attribute = $entry->getContentAttributeByName($name);

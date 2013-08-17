@@ -29,8 +29,6 @@
  * Custom Zend_Controller_Request_Http class (formally)
  *
  * Allows dispatching before and after events for each controller action
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Core_Controller_Request_Http extends Zend_Controller_Request_Http
 {
@@ -43,7 +41,6 @@ class Mage_Core_Controller_Request_Http extends Zend_Controller_Request_Http
      * @var string
      */
     protected $_originalPathInfo= '';
-    protected $_storeCode       = null;
     protected $_requestString   = '';
 
     /**
@@ -90,33 +87,6 @@ class Mage_Core_Controller_Request_Http extends Zend_Controller_Request_Http
         return $this->_originalPathInfo;
     }
 
-    public function getStoreCodeFromPath()
-    {
-        if (!$this->_storeCode) {
-            // get store view code
-            if ($this->_canBeStoreCodeInUrl()) {
-                $p = explode('/', trim($this->getPathInfo(), '/'));
-                $storeCode = $p[0];
-
-                $stores = Mage::app()->getStores(true, true);
-
-                if ($storeCode !== '' && isset($stores[$storeCode])) {
-                    array_shift($p);
-                    $this->setPathInfo(implode('/', $p));
-                    $this->_storeCode = $storeCode;
-                    Mage::app()->setCurrentStore($storeCode);
-                }
-                else {
-                    $this->_storeCode = Mage::app()->getStore()->getCode();
-                }
-            } else {
-                $this->_storeCode = Mage::app()->getStore()->getCode();
-            }
-
-        }
-        return $this->_storeCode;
-    }
-
     /**
      * Set the PATH_INFO string
      * Set the ORIGINAL_PATH_INFO string
@@ -146,29 +116,39 @@ class Mage_Core_Controller_Request_Http extends Zend_Controller_Request_Http
                 $pathInfo = $requestUri;
             }
 
-            if ($this->_canBeStoreCodeInUrl()) {
-                $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
-                $storeCode = $pathParts[0];
+            $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
+            $storeCode = $pathParts[0];
 
-                if (!$this->isDirectAccessFrontendName($storeCode)) {
-                    $stores = Mage::app()->getStores(true, true);
-                    if ($storeCode!=='' && isset($stores[$storeCode])) {
+            if ($this->_isFrontArea($storeCode)) {
+                $stores = Mage::app()->getStores(true, true);
+                if (isset($stores[$storeCode]) && $stores[$storeCode]->isUseStoreInUrl()) {
+                    if (!$this->isDirectAccessFrontendName($storeCode)) {
                         Mage::app()->setCurrentStore($storeCode);
                         $pathInfo = '/'.(isset($pathParts[1]) ? $pathParts[1] : '');
-                    }
-                    elseif ($storeCode !== '') {
+                    } elseif (!empty($storeCode)) {
                         $this->setActionName('noRoute');
                     }
                 }
             }
 
-            $this->_originalPathInfo = (string) $pathInfo;
+            $this->_originalPathInfo = (string)$pathInfo;
 
-            $this->_requestString = $pathInfo . ($pos!==false ? substr($requestUri, $pos) : '');
+            $this->_requestString = $pathInfo . ($pos !== false ? substr($requestUri, $pos) : '');
         }
 
-        $this->_pathInfo = (string) $pathInfo;
+        $this->_pathInfo = (string)$pathInfo;
         return $this;
+    }
+
+    /**
+     * Check area by store code
+     *
+     * @param string $storeCode
+     * @return boolean
+     */
+    protected function _isFrontArea($storeCode)
+    {
+        return $storeCode != Mage::helper('Mage_Backend_Helper_Data')->getAreaFrontName();
     }
 
     /**
@@ -185,16 +165,6 @@ class Mage_Core_Controller_Request_Http extends Zend_Controller_Request_Http
         }
         $this->setPathInfo($pathInfo);
         return $this;
-    }
-
-    /**
-     * Check if can be store code as part of url
-     *
-     * @return bool
-     */
-    protected function _canBeStoreCodeInUrl()
-    {
-        return Mage::isInstalled() && Mage::getStoreConfigFlag(Mage_Core_Model_Store::XML_PATH_STORE_IN_URL);
     }
 
     /**
@@ -228,18 +198,21 @@ class Mage_Core_Controller_Request_Http extends Zend_Controller_Request_Http
         return $this->_directFrontNames;
     }
 
-    public function getOriginalRequest()
-    {
-        $request = new Zend_Controller_Request_Http();
-        $request->setPathInfo($this->getOriginalPathInfo());
-        return $request;
-    }
-
+    /**
+     * Get request string
+     *
+     * @return string
+     */
     public function getRequestString()
     {
         return $this->_requestString;
     }
 
+    /**
+     * Get base path
+     *
+     * @return string
+     */
     public function getBasePath()
     {
         $path = parent::getBasePath();
@@ -251,6 +224,11 @@ class Mage_Core_Controller_Request_Http extends Zend_Controller_Request_Http
         return $path;
     }
 
+    /**
+     * Get base url
+     *
+     * @return string
+     */
     public function getBaseUrl()
     {
         $url = parent::getBaseUrl();
@@ -258,11 +236,19 @@ class Mage_Core_Controller_Request_Http extends Zend_Controller_Request_Http
         return $url;
     }
 
+    /**
+     * Set route name
+     *
+     * @param string $route
+     * @return $this
+     */
     public function setRouteName($route)
     {
         $this->_route = $route;
         $router = Mage::app()->getFrontController()->getRouterByRoute($route);
-        if (!$router) return $this;
+        if (!$router) {
+            return $this;
+        }
         $module = $router->getFrontNameByRoute($route);
         if ($module) {
             $this->setModuleName($module);
@@ -305,8 +291,7 @@ class Mage_Core_Controller_Request_Http extends Zend_Controller_Request_Http
     {
         if (is_array($key)) {
             $_POST = $key;
-        }
-        else {
+        } else {
             $_POST[$key] = $value;
         }
         return $this;
@@ -343,6 +328,7 @@ class Mage_Core_Controller_Request_Http extends Zend_Controller_Request_Http
     {
         return $this->_module;
     }
+
     /**
      * Retrieve the controller name
      *
@@ -352,6 +338,7 @@ class Mage_Core_Controller_Request_Http extends Zend_Controller_Request_Http
     {
         return $this->_controller;
     }
+
     /**
      * Retrieve the action name
      *

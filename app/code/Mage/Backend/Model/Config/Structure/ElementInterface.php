@@ -61,5 +61,13 @@ interface Mage_Backend_Model_Config_Structure_ElementInterface
      * @return bool
      */
     public function isVisible();
+
+    /**
+     * Retrieve arbitrary element attribute
+     *
+     * @param string $key
+     * @return mixed
+     */
+    public function getAttribute($key);
 }
 

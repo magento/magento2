@@ -64,7 +64,7 @@ class Mage_Paypal_Model_Cert extends Mage_Core_Model_Abstract
     public function getCertPath()
     {
         if (!$this->getContent()) {
-            Mage::throwException(Mage::helper('Mage_Paypal_Helper_Data')->__('PayPal certificate does not exist.'));
+            Mage::throwException(Mage::helper('Mage_Paypal_Helper_Data')->__('The PayPal certificate does not exist.'));
         }
 
         $certFileName = sprintf('cert_%s_%s.pem', $this->getWebsiteId(), strtotime($this->getUpdatedAt()));

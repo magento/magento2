@@ -38,11 +38,11 @@
             var widget = this;
             this._on({
                 //Add new tax item
-                'click [data-action=""add-fpt-item""]': function (event) {
+                'click [data-action=add-fpt-item]': function (event) {
                     this.addItem(event);
                 },
                 //Delete tax item
-                'click [data-action=""delete-fpt-item""]': function (event) {
+                'click [data-action=delete-fpt-item]': function (event) {
                     var parent = $(event.target).closest('[data-role="fpt-item-row"]');
                     parent.find('[data-role="delete-fpt-item"]').val(1);
                     parent.addClass('ignore-validate').hide();

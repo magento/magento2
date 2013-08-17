@@ -114,10 +114,13 @@ abstract class Mage_Backend_Block_Widget_Grid_Column_Renderer_Abstract
                 $className = 'sort-arrow-' . $dir;
             }
             $out = '<a href="#" name="' . $this->getColumn()->getId() . '" title="' . $nDir
-                   . '" class="' . $className . '"><span class="sort-title">'
-                   . $this->getColumn()->getHeader().'</span></a>';
+                . '" class="' . $className . '">'.'<label class="sort-title" for='.$this->getColumn()->getHtmlId()
+                .'>'
+                . $this->getColumn()->getHeader().'</label></a>';
         } else {
-            $out = $this->getColumn()->getHeader();
+            $out = '<label for='.$this->getColumn()->getHtmlId().'>'
+                .$this->getColumn()->getHeader()
+                .'</label>';
         }
         return $out;
     }

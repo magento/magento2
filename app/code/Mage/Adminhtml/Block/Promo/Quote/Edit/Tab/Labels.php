@@ -31,17 +31,17 @@ class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Labels
     /**
      * Store manager instance
      *
-     * @var Mage_Core_Model_StoreManager
+     * @var Mage_Core_Model_StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param Mage_Core_Block_Template_Context $context
-     * @param Mage_Core_Model_StoreManager $storeManager
+     * @param Mage_Backend_Block_Template_Context $context
+     * @param Mage_Core_Model_StoreManagerInterface $storeManager
      * @param array $data
      */
-    public function __construct(Mage_Core_Block_Template_Context $context,
-        Mage_Core_Model_StoreManager $storeManager,
+    public function __construct(Mage_Backend_Block_Template_Context $context,
+        Mage_Core_Model_StoreManagerInterface $storeManager,
         array $data = array()
     ) {
         $this->_storeManager = $storeManager;
@@ -131,7 +131,7 @@ class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Labels
     {
         $fieldset = $form->addFieldset('store_labels_fieldset', array(
             'legend' => Mage::helper('Mage_SalesRule_Helper_Data')->__('Store View Specific Labels'),
-            'table_class' => 'form-list stores-tree',
+            'class' => 'store-scope',
         ));
         $renderer = $this->getLayout()->createBlock('Mage_Backend_Block_Store_Switcher_Form_Renderer_Fieldset');
         $fieldset->setRenderer($renderer);

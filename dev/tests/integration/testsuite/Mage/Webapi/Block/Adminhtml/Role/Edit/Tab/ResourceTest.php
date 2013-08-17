@@ -23,7 +23,11 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends Mage_Backend_Area_TestCase
+
+/**
+ * @magentoAppArea adminhtml
+ */
+class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Magento_Test_ObjectManager
@@ -36,12 +40,12 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends Mage_Backen
     protected $_layout;
 
     /**
-     * @var Mage_Webapi_Model_Authorization_Config|PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_authorizationConfig;
+    protected $_configReader;
 
     /**
-     * @var Mage_Webapi_Model_Resource_Acl_Rule|PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_ruleResource;
 
@@ -59,9 +63,9 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends Mage_Backen
     {
         parent::setUp();
 
-        $this->_authorizationConfig = $this->getMockBuilder('Mage_Webapi_Model_Authorization_Config')
+        $this->_configReader = $this->getMockBuilder('Mage_Webapi_Model_Acl_Loader_Resource_ConfigReader')
             ->disableOriginalConstructor()
-            ->setMethods(array('getAclResourcesAsArray'))
+            ->setMethods(array('getAclResources'))
             ->getMock();
 
         $this->_ruleResource = $this->getMockBuilder('Mage_Webapi_Model_Resource_Acl_Rule')
@@ -73,7 +77,7 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends Mage_Backen
         $this->_layout = $this->_objectManager->get('Mage_Core_Model_Layout');
         $this->_blockFactory = $this->_objectManager->get('Mage_Core_Model_BlockFactory');
         $this->_block = $this->_blockFactory->createBlock('Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_Resource', array(
-            'authorizationConfig' => $this->_authorizationConfig,
+            'configReader' => $this->_configReader,
             'ruleResource' => $this->_ruleResource
         ));
         $this->_layout->addBlock($this->_block);
@@ -82,7 +86,7 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends Mage_Backen
     protected function tearDown()
     {
         $this->_objectManager->removeSharedInstance('Mage_Core_Model_Layout');
-        unset($this->_objectManager, $this->_layout, $this->_authorizationConfig, $this->_blockFactory, $this->_block);
+        unset($this->_objectManager, $this->_layout, $this->_configReader, $this->_blockFactory, $this->_block);
     }
 
     /**
@@ -103,9 +107,8 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends Mage_Backen
 
         $this->_block->setApiRole($apiRole);
 
-        $this->_authorizationConfig->expects($this->once())
-            ->method('getAclResourcesAsArray')
-            ->with(false)
+        $this->_configReader->expects($this->once())
+            ->method('getAclResources')
             ->will($this->returnValue($originResTree));
 
         $this->_ruleResource->expects($this->once())
@@ -124,38 +127,62 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends Mage_Backen
     public function prepareFormDataProvider()
     {
         $resourcesTree = array(
+            array('id' => 'All'),
             array(
-                'id' => 'customer',
-                'text' => 'Manage Customers',
-                'sortOrder' => 20,
+                'id' => 'Admin',
                 'children' => array(
                     array(
-                        'id' => 'customer/get',
-                        'text' => 'Get Customer',
+                        'id' => 'customer',
+                        'title' => 'Manage Customers',
                         'sortOrder' => 20,
-                        'children' => array(),
-                    ),
-                    array(
-                        'id' => 'customer/create',
-                        'text' => 'Create Customer',
-                        'sortOrder' => 30,
-                        'children' => array(),
+                        'children' => array(
+                            array(
+                                'id' => 'customer/get',
+                                'title' => 'Get Customer',
+                                'sortOrder' => 20,
+                                'children' => array(),
+                            ),
+                            array(
+                                'id' => 'customer/create',
+                                'title' => 'Create Customer',
+                                'sortOrder' => 30,
+                                'children' => array(),
+                            )
+                        )
                     )
                 )
             )
         );
-        $resTreeCustomerGet = $resourcesTree;
-        $resTreeCustomerGet[0]['children'][0]['checked'] = true;
+        $expected = array(
+            array(
+                'id' => 'customer',
+                'text' => 'Manage Customers',
+                'children' => array(
+                    array(
+                        'id' => 'customer/get',
+                        'text' => 'Get Customer',
+                        'children' => array()
+                    ),
+                    array(
+                        'id' => 'customer/create',
+                        'text' => 'Create Customer',
+                        'children' => array()
+                    ),
+                )
+            )
+        );
+        $expectedSelected = $expected;
+        $expectedSelected[0]['children'][0]['checked'] = true;
         return array(
             'Empty Selected Resources' => array(
                 'originResourcesTree' => $resourcesTree,
                 'selectedResources' => array(),
-                'expectedResourcesTree' => $resourcesTree
+                'expectedResourcesTree' => $expected
             ),
             'One Selected Resource' => array(
                 'originResourcesTree' => $resourcesTree,
                 'selectedResources' => array('customer/get'),
-                'expectedResourcesTree' => $resTreeCustomerGet
+                'expectedResourcesTree' => $expectedSelected
             )
         );
     }

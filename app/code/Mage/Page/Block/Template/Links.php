@@ -232,4 +232,14 @@ class Mage_Page_Block_Template_Links extends Mage_Core_Block_Template
         return $position;
     }
 
+    /**
+     * Render Block
+     *
+     * @param Mage_Core_Block_Abstract $block
+     * @return string
+     */
+    public function renderBlock(Mage_Core_Block_Abstract $block)
+    {
+        return $this->getLayout()->renderElement($block->getNameInLayout());
+    }
 }

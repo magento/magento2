@@ -24,7 +24,7 @@
  */
 /*jshint jquery:true browser:true */
 /*global FORM_KEY:true*/
-jQuery(function ($) {
+(function ($) {
     'use strict';
     $.ajaxSetup({
         /*
@@ -104,4 +104,4 @@ jQuery(function ($) {
     };
 
     $(bootstrap);
-});
+})(jQuery);

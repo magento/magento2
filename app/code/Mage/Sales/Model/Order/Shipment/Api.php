@@ -119,58 +119,6 @@ class Mage_Sales_Model_Order_Shipment_Api extends Mage_Sales_Model_Api_Resource
     }
 
     /**
-     * Create new shipment for order
-     *
-     * @param string $orderIncrementId
-     * @param array $itemsQty
-     * @param string $comment
-     * @param booleam $email
-     * @param boolean $includeComment
-     * @return string
-     */
-    public function create($orderIncrementId, $itemsQty = array(), $comment = null, $email = false,
-        $includeComment = false
-    ) {
-        $order = Mage::getModel('Mage_Sales_Model_Order')->loadByIncrementId($orderIncrementId);
-
-        /**
-          * Check order existing
-          */
-        if (!$order->getId()) {
-             $this->_fault('order_not_exists');
-        }
-
-        /**
-         * Check shipment create availability
-         */
-        if (!$order->canShip()) {
-             $this->_fault('data_invalid', Mage::helper('Mage_Sales_Helper_Data')->__('Cannot do shipment for order.'));
-        }
-
-         /* @var $shipment Mage_Sales_Model_Order_Shipment */
-        $shipment = $order->prepareShipment($itemsQty);
-        if ($shipment) {
-            $shipment->register();
-            $shipment->addComment($comment, $email && $includeComment);
-            if ($email) {
-                $shipment->setEmailSent(true);
-            }
-            $shipment->getOrder()->setIsInProcess(true);
-            try {
-                $transactionSave = Mage::getModel('Mage_Core_Model_Resource_Transaction')
-                    ->addObject($shipment)
-                    ->addObject($shipment->getOrder())
-                    ->save();
-                $shipment->sendEmail($email, ($includeComment ? $comment : ''));
-            } catch (Mage_Core_Exception $e) {
-                $this->_fault('data_invalid', $e->getMessage());
-            }
-            return $shipment->getIncrementId();
-        }
-        return null;
-    }
-
-    /**
      * Add tracking number to order
      *
      * @param string $shipmentIncrementId
@@ -192,7 +140,7 @@ class Mage_Sales_Model_Order_Shipment_Api extends Mage_Sales_Model_Api_Resource
         $carriers = $this->_getCarriers($shipment);
 
         if (!isset($carriers[$carrier])) {
-            $this->_fault('data_invalid', Mage::helper('Mage_Sales_Helper_Data')->__('Invalid carrier specified.'));
+            $this->_fault('data_invalid', Mage::helper('Mage_Sales_Helper_Data')->__('We don\'t recognize the carrier you selected.'));
         }
 
         $track = Mage::getModel('Mage_Sales_Model_Order_Shipment_Track')

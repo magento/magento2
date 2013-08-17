@@ -43,11 +43,15 @@ class Mage_Captcha_Model_DefaultTest extends PHPUnit_Framework_TestCase
         'length' => '4-5',
         'symbols' => 'ABCDEFGHJKMnpqrstuvwxyz23456789',
         'case_sensitive' => '0',
+        'shown_to_logged_in_user' => array(
+            'contact_us' => 1,
+        ),
         'always_for' => array(
             'user_create',
             'user_forgotpassword',
             'guest_checkout',
             'register_during_checkout',
+            'contact_us',
         ),
     );
 
@@ -313,5 +317,26 @@ class Mage_Captcha_Model_DefaultTest extends PHPUnit_Framework_TestCase
         }
 
         throw new InvalidArgumentException('Unknow id = ' . $hashName);
+    }
+
+    /**
+     * @param boolean $expectedResult
+     * @param string $formId
+     * @dataProvider isShownToLoggedInUserDataProvider
+     */
+    public function testIsShownToLoggedInUser($expectedResult, $formId)
+    {
+        $captcha = new Mage_Captcha_Model_Default($this->_objectManager, array('formId' => $formId));
+        $this->assertEquals($expectedResult, $captcha->isShownToLoggedInUser());
+    }
+
+    public function isShownToLoggedInUserDataProvider()
+    {
+        return array(
+            array(true, 'contact_us'),
+            array(false, 'user_create'),
+            array(false, 'user_forgotpassword'),
+            array(false, 'guest_checkout'),
+        );
     }
 }

@@ -179,7 +179,7 @@ class Mage_GoogleShopping_Block_Adminhtml_Types_Edit_Attributes
      * @param mixed $data
      * @return string
      */
-    public function toJson($data)
+    public function jsonFormat($data)
     {
         return Mage::helper('Mage_Core_Helper_Data')->jsonEncode($data);
     }

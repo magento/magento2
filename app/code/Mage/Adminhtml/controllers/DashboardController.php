@@ -102,7 +102,8 @@ class Mage_Adminhtml_DashboardController extends Mage_Adminhtml_Controller_Actio
             $helper = $this->_objectManager->get('Mage_Adminhtml_Helper_Dashboard_Data');
             $newHash = $helper->getChartDataHash($gaData);
             if ($newHash == $gaHash) {
-                if ($params = unserialize(base64_decode(urldecode($gaData)))) {
+                $params = json_decode(base64_decode(urldecode($gaData)), true);
+                if ($params) {
                     try {
                         /** @var $httpClient Varien_Http_Client */
                         $httpClient = $this->_objectManager->create('Varien_Http_Client');
@@ -131,6 +132,6 @@ class Mage_Adminhtml_DashboardController extends Mage_Adminhtml_Controller_Actio
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Adminhtml::dashboard');
+        return $this->_authorization->isAllowed('Mage_Adminhtml::dashboard');
     }
 }

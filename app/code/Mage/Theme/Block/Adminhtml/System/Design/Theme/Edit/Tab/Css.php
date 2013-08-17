@@ -51,13 +51,13 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
     protected $_customCssFile;
 
     /**
-     * @param Mage_Core_Block_Template_Context $context
+     * @param Mage_Backend_Block_Template_Context $context
      * @param Magento_ObjectManager $objectManager
      * @param Mage_Theme_Model_Uploader_Service $uploaderService
      * @param array $data
      */
     public function __construct(
-        Mage_Core_Block_Template_Context $context,
+        Mage_Backend_Block_Template_Context $context,
         Magento_ObjectManager $objectManager,
         Mage_Theme_Model_Uploader_Service $uploaderService,
         array $data = array()
@@ -77,12 +77,13 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
         $this->setForm($form);
         $this->_addThemeCssFieldset();
 
-        $this->_customCssFile = $this->_getCurrentTheme()
-            ->getCustomizationData(Mage_Core_Model_Theme_Customization_Files_Css::TYPE)->getFirstItem();
-
+        $customFiles = $this->_getCurrentTheme()->getCustomization()->getFilesByType(
+            Mage_Theme_Model_Theme_Customization_File_CustomCss::TYPE
+        );
+        $this->_customCssFile = reset($customFiles);
         $this->_addCustomCssFieldset();
 
-        $formData['custom_css_content'] = $this->_customCssFile->getContent();
+        $formData['custom_css_content'] = $this->_customCssFile ? $this->_customCssFile->getContent() : null;
 
         /** @var $session Mage_Backend_Model_Session */
         $session = $this->_objectManager->get('Mage_Backend_Model_Session');
@@ -174,7 +175,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
             'onclick' => "setLocation('" . $this->getUrl('*/*/downloadCustomCss', array(
                 'theme_id' => $this->_getCurrentTheme()->getId())) . "');"
         );
-        if (!$this->_customCssFile->getContent()) {
+        if (!$this->_customCssFile) {
             $downloadButtonConfig['disabled'] = 'disabled';
         }
         $themeFieldset->addField('css_download_button', 'button', $downloadButtonConfig);
@@ -193,7 +194,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
                 ))
                 . "', null, null,'"
                 . $this->quoteEscape(
-                    $this->__('Upload Images...'), true
+                    $this->__('Upload Images'), true
                 )
                 . "');"
         ));
@@ -217,7 +218,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
                 ))
                 . "', null, null,'"
                 . $this->quoteEscape(
-                    $this->__('Upload fonts...'), true
+                    $this->__('Upload Fonts'), true
                 )
                 . "');",
         ));
@@ -245,13 +246,13 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css
     {
         $messages = array(
             $this->__('Allowed file types *.css.'),
-            $this->__('The file you upload will replace the existing custom.css file (shown below).')
+            $this->__('This file will replace the current custom.css file and can\'t be more than 2 MB.')
         );
         $maxFileSize = $this->_objectManager->get('Magento_File_Size')->getMaxFileSizeInMb();
         if ($maxFileSize) {
             $messages[] = $this->__('Max file size to upload %sM', $maxFileSize);
         } else {
-            $messages[] = $this->__('System doesn\'t allow to get file upload settings');
+            $messages[] = $this->__('Something is wrong with the file upload settings.');
         }
 
         return implode('<br />', $messages);

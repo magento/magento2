@@ -83,7 +83,7 @@ class Mage_Adminhtml_Block_Dashboard_Searches_Last extends Mage_Adminhtml_Block_
         ));
 
         $this->addColumn('popularity', array(
-            'header'    => $this->__('Number of Uses'),
+            'header'    => $this->__('Uses'),
             'sortable'  => false,
             'index'     => 'popularity',
             'type'      => 'number'

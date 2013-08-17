@@ -71,13 +71,13 @@ class Mage_Newsletter_ManageController extends Mage_Core_Controller_Front_Action
             ->setIsSubscribed((boolean)$this->getRequest()->getParam('is_subscribed', false))
             ->save();
             if ((boolean)$this->getRequest()->getParam('is_subscribed', false)) {
-                Mage::getSingleton('Mage_Customer_Model_Session')->addSuccess($this->__('The subscription has been saved.'));
+                Mage::getSingleton('Mage_Customer_Model_Session')->addSuccess($this->__('We saved the subscription.'));
             } else {
-                Mage::getSingleton('Mage_Customer_Model_Session')->addSuccess($this->__('The subscription has been removed.'));
+                Mage::getSingleton('Mage_Customer_Model_Session')->addSuccess($this->__('We removed the subscription.'));
             }
         }
         catch (Exception $e) {
-            Mage::getSingleton('Mage_Customer_Model_Session')->addError($this->__('An error occurred while saving your subscription.'));
+            Mage::getSingleton('Mage_Customer_Model_Session')->addError($this->__('Something went wrong while saving your subscription.'));
         }
         $this->_redirect('customer/account/');
     }

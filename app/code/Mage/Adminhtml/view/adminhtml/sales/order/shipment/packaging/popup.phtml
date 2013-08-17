@@ -82,7 +82,7 @@ $girthEnabled = Mage::helper('Mage_Usa_Helper_Data')->displayGirthValue($shippin
                         <td class="col-type">
                             <?php $containers = $this->getContainers(); ?>
                             <select name="package_container" onchange="packaging.changeContainerType(this);packaging.checkSizeAndGirthParameter(this, <?php echo  $girthEnabled ?>);"<?php if (empty($containers)):?>
-                                    title="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Package types are disregarded for USPS domestic shipments.') ?>"
+                                    title="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('USPS domestic shipments don\'t use package types.') ?>"
                                     disabled="" class="disabled"
                                 <?php endif; ?>>
                                 <?php foreach ($this->getContainers() as $key => $value): ?>
@@ -197,7 +197,7 @@ $girthEnabled = Mage::helper('Mage_Usa_Helper_Data')->displayGirthValue($shippin
                                     <span><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Add Selected Product(s) to Package') ?></span>
                                 </button>
                             </div>
-                            <div class="title"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Please Select Products to Add') ?></div>
+                            <div class="title"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Please select products.') ?></div>
                         </div>
                         <div class="grid_prepare"></div>
                     </div>

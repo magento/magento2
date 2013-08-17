@@ -178,10 +178,6 @@
                     <element name="gift_cards_amount" type="xsd:string" minOccurs="0"/>
                     <element name="base_gift_cards_amount" type="xsd:string" minOccurs="0"/>
                     <element name="gift_cards_amount_used" type="xsd:string" minOccurs="0"/>
-                    <element name="use_reward_points" type="xsd:string" minOccurs="0"/>
-                    <element name="reward_points_balance" type="xsd:string" minOccurs="0"/>
-                    <element name="base_reward_currency_amount" type="xsd:string" minOccurs="0"/>
-                    <element name="reward_currency_amount" type="xsd:string" minOccurs="0"/>
                     <element name="shipping_address" type="typens:shoppingCartAddressEntity" minOccurs="0"/>
                     <element name="billing_address" type="typens:shoppingCartAddressEntity" minOccurs="0"/>
                     <element name="items" type="typens:shoppingCartItemEntityArray" minOccurs="0"/>
@@ -224,6 +220,7 @@
                     <element name="sku" type="xsd:string" minOccurs="0"/>
                     <element name="qty" type="xsd:double" minOccurs="0"/>
                     <element name="options" type="typens:associativeArray" minOccurs="0"/>
+                    <element name="configurable_options" type="typens:associativeArray" minOccurs="0"/>
                     <element name="bundle_option" type="typens:associativeArray" minOccurs="0"/>
                     <element name="bundle_option_qty" type="typens:associativeArray" minOccurs="0"/>
                     <element name="links" type="typens:ArrayOfString" minOccurs="0"/>
@@ -350,7 +347,7 @@
         <part name="sessionId" type="xsd:string"/>
         <part name="quoteId" type="xsd:int"/>
         <part name="store" type="xsd:string"/>
-        <part name="licenses" type="typens:ArrayOfString"/>
+        <part name="agreements" type="typens:ArrayOfString"/>
         <part name="paymentData" type="typens:shoppingCartPaymentMethodEntity"/>
     </message>
     <message name="shoppingCartOrderWithPaymentResponse">

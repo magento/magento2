@@ -62,12 +62,12 @@
                 self._switchToType($type.val());
             });
 
-            $('#product-edit-form-tabs').on('contentUpdated', function() {
+            $('[data-form=edit-product] [data-role=tabs]').on('contentUpdated', function() {
                 self._switchToType($type.val());
                 self.$is_virtual.trigger('change');
             });
 
-            $("#product_info_tabs").on("beforePanelsMove tabscreate tabsactivate", function(event) {
+            $("#product_info_tabs").on("beforePanelsMove tabscreate tabsactivate", function() {
                 self._switchToType($type.val());
                 self.$is_virtual.trigger('change');
             });
@@ -105,16 +105,15 @@
          * @private
          */
         _switchToType: function(typeCode) {
-            var self = this;
             $('[data-apply-to]:not(.removed)').each(function(index, element) {
                 var attrContainer = $(element),
                     applyTo = attrContainer.data('applyTo') || [];
                 var $inputs = attrContainer.find('select, input, textarea');
                 if (applyTo.length === 0 || $.inArray(typeCode, applyTo) !== -1) {
-                    attrContainer.show();
+                    attrContainer.removeClass('not-applicable-attribute');
                     $inputs.removeClass('ignore-validate');
                 } else {
-                    attrContainer.hide();
+                    attrContainer.addClass('not-applicable-attribute');
                     $inputs.addClass('ignore-validate');
                 }
             });

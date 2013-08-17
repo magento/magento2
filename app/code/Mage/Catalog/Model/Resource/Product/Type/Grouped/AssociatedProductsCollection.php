@@ -46,13 +46,12 @@ class Mage_Catalog_Model_Resource_Product_Type_Grouped_AssociatedProductsCollect
     }
 
     /**
-     * Prepare select for load
-     *
-     * @param Varien_Db_Select $select
-     * @return string
+     * @inheritdoc
      */
-    public function _prepareSelect(Varien_Db_Select $select)
+    public function _initSelect()
     {
+        parent::_initSelect();
+
         $allowProductTypes = array();
         $allowProductTypeNodes = Mage::getConfig()
             ->getNode(Mage_Catalog_Model_Config::XML_PATH_GROUPED_ALLOWED_PRODUCT_TYPES)->children();
@@ -61,10 +60,12 @@ class Mage_Catalog_Model_Resource_Product_Type_Grouped_AssociatedProductsCollect
         }
 
         $this->setProduct($this->_getProduct())
-            ->addAttributeToSelect('*')
+            ->addAttributeToSelect('name')
+            ->addAttributeToSelect('price')
+            ->addAttributeToSelect('sku')
             ->addFilterByRequiredOptions()
             ->addAttributeToFilter('type_id', $allowProductTypes);
 
-        return parent::_prepareSelect($select);
+        return $this;
     }
 }

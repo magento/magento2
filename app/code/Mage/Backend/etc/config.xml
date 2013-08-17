@@ -31,7 +31,7 @@
             <version>2.0.0.0</version>
             <active>true</active>
             <depends>
-                <Mage_Directory/>
+                <Mage_Directory />
             </depends>
         </Mage_Backend>
     </modules>
@@ -45,9 +45,8 @@
                     </admin>
                 </routers>
                 <frontName>backend</frontName>
-                <auth/>
+                <auth />
                 <acl>
-                    <resourceLoader>Mage_Backend_Model_Acl_Loader_Resource</resourceLoader>
                     <roleLocator>Mage_Backend_Model_Authorization_RoleLocator</roleLocator>
                     <policy>Magento_Authorization_Policy_Acl</policy>
                 </acl>
@@ -64,6 +63,27 @@
             <preferences>
                 <Mage_Core_Model_Config_Storage_WriterInterface>Mage_Core_Model_Config_Storage_Writer_Db</Mage_Core_Model_Config_Storage_WriterInterface>
             </preferences>
+            <Mage_Backend_Controller_Context>
+                <parameters>
+                    <translator>
+                        <instance>Mage_Core_Model_Translate_Proxy</instance>
+                    </translator>
+                </parameters>
+            </Mage_Backend_Controller_Context>
+            <Mage_Backend_Controller_Router_Default>
+                <parameters>
+                    <controllerFactory>
+                        <instance>Mage_Backend_Controller_Factory</instance>
+                    </controllerFactory>
+                </parameters>
+            </Mage_Backend_Controller_Router_Default>
+            <Mage_Backend_Adminhtml_System_Config_SaveController>
+                <parameters>
+                    <cache>
+                        <instance>Mage_Core_Model_Cache_Type_Layout</instance>
+                    </cache>
+                </parameters>
+            </Mage_Backend_Adminhtml_System_Config_SaveController>
         </di>
     </global>
     <admin>
@@ -78,20 +98,45 @@
         </routers>
     </admin>
     <adminhtml>
-        <layout>
-            <updates>
-                <backend module='Mage_Backend'>
-                    <file>layout.xml</file>
-                </backend>
-            </updates>
-        </layout>
+        <events>
+            <translate_initialization_before>
+                <observers>
+                    <initialize_translation>
+                        <class>Mage_Backend_Model_Observer</class>
+                        <method>initializeTranslation</method>
+                    </initialize_translation>
+                </observers>
+            </translate_initialization_before>
+        </events>
         <di>
             <preferences>
+                <Magento_Authorization_Policy>Magento_Authorization_Policy_Acl</Magento_Authorization_Policy>
+                <Magento_Authorization_RoleLocator>Mage_Backend_Model_Authorization_RoleLocator</Magento_Authorization_RoleLocator>
+                <Magento_Acl_Loader_Resource_ConfigReaderInterface>Magento_Acl_Loader_Resource_ConfigReader_Xml</Magento_Acl_Loader_Resource_ConfigReaderInterface>
+                <Magento_Acl_Loader_Resource_ConfigReader_FileListInterface>Mage_Backend_Model_Acl_Config_FileList</Magento_Acl_Loader_Resource_ConfigReader_FileListInterface>
+                <Mage_Core_Model_LocaleInterface>Mage_Backend_Model_Locale</Mage_Core_Model_LocaleInterface>
                 <Mage_Core_Model_UrlInterface>Mage_Backend_Model_Url</Mage_Core_Model_UrlInterface>
                 <Mage_Backend_Model_Auth_StorageInterface>Mage_Backend_Model_Auth_Session</Mage_Backend_Model_Auth_StorageInterface>
                 <Mage_Backend_Model_Config_Structure_SearchInterface>Mage_Backend_Model_Config_Structure</Mage_Backend_Model_Config_Structure_SearchInterface>
                 <Mage_Backend_Model_Config_Backend_File_RequestData_Interface>Mage_Backend_Model_Config_Backend_File_RequestData</Mage_Backend_Model_Config_Backend_File_RequestData_Interface>
             </preferences>
+            <Magento_Acl_Builder>
+                <parameters>
+                    <resourceLoader>
+                        <instance>Magento_Acl_Loader_Resource</instance>
+                    </resourceLoader>
+                </parameters>
+            </Magento_Acl_Builder>
+            <Mage_Core_Model_Acl_Cache>
+                <parameters>
+                    <cacheKey>backend_acl_resources</cacheKey>
+                </parameters>
+            </Mage_Core_Model_Acl_Cache>
+            <Mage_Core_Model_Acl_RootResource>
+                <parameters>
+                    <identifier>Mage_Adminhtml::all</identifier>
+                </parameters>
+            </Mage_Core_Model_Acl_RootResource>
             <Mage_Core_Model_Session>
                 <parameters>
                     <sessionName>adminhtml</sessionName>
@@ -108,31 +153,41 @@
             </Mage_Backend_Model_Config_Structure_Element_Iterator_Group>
             <Mage_Backend_Model_Config_Structure_Element_Iterator_Field>
                 <parameters>
-                    <groupFlyweight>Mage_Backend_Model_Config_Structure_Element_Group_Proxy</groupFlyweight>
+                    <groupFlyweight>
+                        <instance>Mage_Backend_Model_Config_Structure_Element_Group_Proxy</instance>
+                    </groupFlyweight>
                 </parameters>
                 <shared>0</shared>
             </Mage_Backend_Model_Config_Structure_Element_Iterator_Field>
             <Mage_Backend_Model_Config_Structure_Element_Dependency_Mapper>
                 <parameters>
-                    <fieldLocator>Mage_Backend_Model_Config_Structure_Search_Proxy</fieldLocator>
+                    <fieldLocator>
+                        <instance>Mage_Backend_Model_Config_Structure_Search_Proxy</instance>
+                    </fieldLocator>
                 </parameters>
                 <shared>0</shared>
             </Mage_Backend_Model_Config_Structure_Element_Dependency_Mapper>
             <Mage_Backend_Model_Config_Structure_Element_Tab>
                 <parameters>
-                    <childrenIterator>Mage_Backend_Model_Config_Structure_Element_Iterator_Section</childrenIterator>
+                    <childrenIterator>
+                        <instance>Mage_Backend_Model_Config_Structure_Element_Iterator_Section</instance>
+                    </childrenIterator>
                 </parameters>
                 <shared>0</shared>
             </Mage_Backend_Model_Config_Structure_Element_Tab>
             <Mage_Backend_Model_Config_Structure_Element_Section>
                 <parameters>
-                    <childrenIterator>Mage_Backend_Model_Config_Structure_Element_Iterator_Group</childrenIterator>
+                    <childrenIterator>
+                        <instance>Mage_Backend_Model_Config_Structure_Element_Iterator_Group</instance>
+                    </childrenIterator>
                 </parameters>
                 <shared>0</shared>
             </Mage_Backend_Model_Config_Structure_Element_Section>
             <Mage_Backend_Model_Config_Structure_Element_Group>
                 <parameters>
-                    <childrenIterator>Mage_Backend_Model_Config_Structure_Element_Iterator_Field</childrenIterator>
+                    <childrenIterator>
+                        <instance>Mage_Backend_Model_Config_Structure_Element_Iterator_Field</instance>
+                    </childrenIterator>
                 </parameters>
                 <shared>0</shared>
             </Mage_Backend_Model_Config_Structure_Element_Group>

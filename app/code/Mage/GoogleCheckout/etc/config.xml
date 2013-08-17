@@ -80,13 +80,6 @@
                 </args>
             </googlecheckout>
         </routers>
-        <layout>
-            <updates>
-                <googlecheckout module="Mage_GoogleCheckout">
-                    <file>layout.xml</file>
-                </googlecheckout>
-            </updates>
-        </layout>
     </frontend>
     <adminhtml>
         <translate>

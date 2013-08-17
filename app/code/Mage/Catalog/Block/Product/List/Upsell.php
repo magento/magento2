@@ -100,9 +100,6 @@ class Mage_Catalog_Block_Product_List_Upsell extends Mage_Catalog_Block_Product_
 
     public function getItemCollection()
     {
-        if ($this->_itemCollection === null) {
-            $this->_prepareData();
-        }
         return $this->_itemCollection;
     }
 

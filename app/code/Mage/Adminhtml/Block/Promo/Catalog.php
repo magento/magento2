@@ -33,14 +33,14 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 
-class Mage_Adminhtml_Block_Promo_Catalog extends Mage_Adminhtml_Block_Widget_Grid_Container
+class Mage_Adminhtml_Block_Promo_Catalog extends Mage_Backend_Block_Widget_Grid_Container
 {
     protected function _construct()
     {
         $this->_addButton('apply_rules', array(
             'label'     => Mage::helper('Mage_CatalogRule_Helper_Data')->__('Apply Rules'),
             'onclick'   => "location.href='".$this->getUrl('*/*/applyRules')."'",
-            'class'     => '',
+            'class'     => 'apply',
         ));
 
         $this->_controller = 'promo_catalog';

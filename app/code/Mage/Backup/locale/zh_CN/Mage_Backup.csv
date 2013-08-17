@@ -33,7 +33,7 @@
 "Put store on the maintenance mode while backup's creation","在创建备份时将店铺置于维护模式"
 "Rollback","回滚"
 "Scheduled Backup Settings","计划备份设置"
-"Size, Bytes","大小，字节"
+"Size (bytes)","大小，字节"
 "Start Time","开始时间"
 "System Backup","系统备份"
 "System couldn't put store on the maintenance mode","系统没有将店铺置于维护模式"

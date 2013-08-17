@@ -34,7 +34,8 @@ class Varien_Data_Collection_DbTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_collection = new Varien_Data_Collection_Db;
+        $fetchStrategy = $this->getMockForAbstractClass('Varien_Data_Collection_Db_FetchStrategyInterface');
+        $this->_collection = new Varien_Data_Collection_Db($fetchStrategy);
     }
 
     protected function tearDown()
@@ -209,6 +210,55 @@ class Varien_Data_Collection_DbTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Zend_Db_Select', $clonedCollection->getSelect());
         $this->assertNotSame($clonedCollection->getSelect(), $this->_collection->getSelect(),
             'Collection was cloned but $this->_select in both initial and cloned collections reference the same object'
+        );
+    }
+
+    /**
+     * @param bool $printQuery
+     * @param bool $printFlag
+     * @param string $query
+     * @param string $expected
+     *
+     * @dataProvider printLogQueryPrintingDataProvider
+     */
+    public function testPrintLogQueryPrinting($printQuery, $printFlag, $query, $expected)
+    {
+        $this->expectOutputString($expected);
+        $this->_collection->setFlag('print_query', $printFlag);
+        $this->_collection->printLogQuery($printQuery, false, $query);
+    }
+
+    public function printLogQueryPrintingDataProvider()
+    {
+        return array(
+            array(false, false, 'some_query', ''),
+            array(true,  false, 'some_query', 'some_query'),
+            array(false,  true, 'some_query', 'some_query'),
+        );
+    }
+
+    /**
+     * @param bool $logQuery
+     * @param bool $logFlag
+     * @param int $expectedCalls
+     *
+     * @dataProvider printLogQueryLoggingDataProvider
+     */
+    public function testPrintLogQueryLogging($logQuery, $logFlag, $expectedCalls)
+    {
+        $fetchStrategy = $this->getMock('Varien_Data_Collection_Db_FetchStrategyInterface');
+        $collection = $this->getMock('Varien_Data_Collection_Db', array('_logQuery'), array($fetchStrategy));
+        $collection->setFlag('log_query', $logFlag);
+        $collection->expects($this->exactly($expectedCalls))->method('_logQuery');
+        $collection->printLogQuery(false, $logQuery, 'some_query');
+    }
+
+    public function printLogQueryLoggingDataProvider()
+    {
+        return array(
+            array(true, false, 1),
+            array(false, true, 1),
+            array(false, false, 0),
         );
     }
 }

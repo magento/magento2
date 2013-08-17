@@ -77,7 +77,7 @@ class Mage_Adminhtml_Block_Cms_Page_Edit_Tab_Main
             'title'     => Mage::helper('Mage_Cms_Helper_Data')->__('URL Key'),
             'required'  => true,
             'class'     => 'validate-identifier',
-            'note'      => Mage::helper('Mage_Cms_Helper_Data')->__('Relative to Website Base URL'),
+            'note'      => Mage::helper('Mage_Cms_Helper_Data')->__('Relative to Web Site Base URL'),
             'disabled'  => $isElementDisabled
         ));
 
@@ -172,6 +172,6 @@ class Mage_Adminhtml_Block_Cms_Page_Edit_Tab_Main
      */
     protected function _isAllowedAction($resourceId)
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($resourceId);
+        return $this->_authorization->isAllowed($resourceId);
     }
 }

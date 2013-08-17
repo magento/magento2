@@ -35,6 +35,47 @@
 class Mage_Paypal_Model_Payflowlink extends Mage_Paypal_Model_Payflowpro
 {
     /**
+     * Default layout template
+     */
+    const LAYOUT_TEMPLATE = 'minLayout';
+
+    /**
+     * Controller for callback urls
+     *
+     * @var string
+     */
+    protected $_callbackController = 'payflow';
+
+    /**
+     * Response params mappings
+     *
+     * @var array
+     */
+    protected $_responseParamsMappings = array(
+        'firstname' => 'billtofirstname',
+        'lastname' => 'billtolastname',
+        'address' => 'billtostreet',
+        'city' => 'billtocity',
+        'state' => 'billtostate',
+        'zip' => 'billtozip',
+        'country' => 'billtocountry',
+        'phone' => 'billtophone',
+        'email' => 'billtoemail',
+        'nametoship' => 'shiptofirstname',
+        'addresstoship' => 'shiptostreet',
+        'citytoship' => 'shiptocity',
+        'statetoship' => 'shiptostate',
+        'ziptoship' => 'shiptozip',
+        'countrytoship' => 'shiptocountry',
+        'phonetoship' => 'shiptophone',
+        'emailtoship' => 'shiptoemail',
+        'faxtoship' => 'shiptofax',
+        'method' => 'tender',
+        'cscmatch' => 'cvv2match',
+        'type' => 'trxtype',
+    );
+
+    /**
      * Payment method code
      */
     protected $_code = Mage_Paypal_Model_Config::METHOD_PAYFLOWLINK;
@@ -158,6 +199,24 @@ class Mage_Paypal_Model_Payflowlink extends Mage_Paypal_Model_Payflowpro
         foreach ($postData as $key => $val) {
             $this->getResponse()->setData(strtolower($key), $val);
         }
+        foreach ($this->_responseParamsMappings as $originKey => $key) {
+            $data = $this->getResponse()->getData($key);
+            if (isset($data)) {
+                $this->getResponse()->setData($originKey, $data);
+            }
+        }
+        // process AVS data separately
+        $avsAddr = $this->getResponse()->getData('avsaddr');
+        $avsZip = $this->getResponse()->getData('avszip');
+        if (isset($avsAddr) && isset($avsZip)) {
+            $this->getResponse()->setData('avsdata', $avsAddr . $avsZip);
+        }
+        // process Name separately
+        $firstnameParameter = $this->getResponse()->getData('billtofirstname');
+        $lastnameParameter = $this->getResponse()->getData('billtolastname');
+        if (isset($firstnameParameter) && isset($lastnameParameter)) {
+            $this->getResponse()->setData('name', $firstnameParameter . ' ' . $lastnameParameter);
+        }
         return $this;
     }
 
@@ -231,7 +290,7 @@ class Mage_Paypal_Model_Payflowlink extends Mage_Paypal_Model_Payflowpro
                 ->setIsActive(false)
                 ->save();
         } catch (Exception $e) {
-            Mage::throwException(Mage::helper('Mage_Paypal_Helper_Data')->__('Can not send new order email.'));
+            Mage::throwException(Mage::helper('Mage_Paypal_Helper_Data')->__('We cannot send the new order email.'));
         }
     }
 
@@ -378,13 +437,26 @@ class Mage_Paypal_Model_Payflowlink extends Mage_Paypal_Model_Payflowpro
     protected function _buildBasicRequest(Varien_Object $payment)
     {
         $request = Mage::getModel('Mage_Paypal_Model_Payflow_Request');
+        $cscEditable = $this->getConfigData('csc_editable');
         $request
             ->setUser($this->getConfigData('user', $this->_getStoreId()))
             ->setVendor($this->getConfigData('vendor', $this->_getStoreId()))
             ->setPartner($this->getConfigData('partner', $this->_getStoreId()))
             ->setPwd($this->getConfigData('pwd', $this->_getStoreId()))
             ->setVerbosity($this->getConfigData('verbosity', $this->_getStoreId()))
-            ->setTender(self::TENDER_CC);
+            ->setData('BNCODE', $this->getConfigData('bncode'))
+            ->setTender(self::TENDER_CC)
+            ->setCancelurl($this->_getCallbackUrl('cancelPayment'))
+            ->setErrorurl($this->_getCallbackUrl('returnUrl'))
+            ->setSilentpost('TRUE')
+            ->setSilentposturl($this->_getCallbackUrl('silentPost'))
+            ->setReturnurl($this->_getCallbackUrl('returnUrl'))
+            ->setTemplate(self::LAYOUT_TEMPLATE)
+            ->setDisablereceipt('TRUE')
+            ->setCscrequired($cscEditable && $this->getConfigData('csc_required') ? 'TRUE' : 'FALSE')
+            ->setCscedit($cscEditable ? 'TRUE' : 'FALSE')
+            ->setEmailcustomer($this->getConfigData('email_confirmation') ? 'TRUE' : 'FALSE')
+            ->setUrlmethod($this->getConfigData('url_method'));
         return $request;
     }
 
@@ -553,5 +625,44 @@ class Mage_Paypal_Model_Payflowlink extends Mage_Paypal_Model_Payflowpro
     protected function _getDocumentFromResponse()
     {
         return null;
+    }
+
+
+    /**
+     * Get callback controller
+     *
+     * @return string
+     */
+    public function getCallbackController()
+    {
+        return $this->_callbackController;
+    }
+
+    /**
+     * Get callback url
+     *
+     * @param string $actionName
+     * @return string
+     */
+    protected function _getCallbackUrl($actionName)
+    {
+        $request = Mage::app()->getRequest();
+        if ($request->getParam('website')) {
+            /** @var $website Mage_Core_Model_Website */
+            $website = Mage::getModel('Mage_Core_Model_Website')->load($request->getParam('website'));
+            $secure = Mage::getStoreConfigFlag(
+                Mage_Core_Model_Url::XML_PATH_SECURE_IN_FRONT,
+                $website->getDefaultStore()
+            );
+            $path = $secure
+                ? Mage_Core_Model_Store::XML_PATH_SECURE_BASE_LINK_URL
+                : Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_LINK_URL;
+            $websiteUrl = Mage::getStoreConfig($path, $website->getDefaultStore());
+        } else {
+            $secure = Mage::getStoreConfigFlag(Mage_Core_Model_Url::XML_PATH_SECURE_IN_FRONT);
+            $websiteUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK, $secure);
+        }
+
+        return $websiteUrl . 'paypal/' . $this->getCallbackController() . '/' . $actionName;
     }
 }

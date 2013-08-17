@@ -36,7 +36,7 @@
             <h1><?php echo $this->__('Log In') ?></h1>
         </div>
         <div class="form-box">
-            <?php echo $this->getMessagesBlock()->toHtml() ?>
+            <?php echo $this->getLayout()->renderElement('messages') ?>
             <?php if (!$this->getHasException()) : ?>
             <form method="post" action="<?php echo $this->getPostActionUrl() ?>" id="login-form">
                 <fieldset class="fieldset">

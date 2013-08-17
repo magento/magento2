@@ -67,7 +67,7 @@
                 </field>
                 <field id="grid_per_page" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Products per Page on Grid Default Value</label>
-                    <comment>Must be in the allowed values list.</comment>
+                    <comment>Must be in the allowed values list</comment>
                     <validate>validate-per-page-value</validate>
                 </field>
                 <field id="list_per_page_values" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -77,7 +77,7 @@
                 </field>
                 <field id="list_per_page" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Products per Page on List Default Value</label>
-                    <comment>Must be in the allowed values list.</comment>
+                    <comment>Must be in the allowed values list</comment>
                     <validate>validate-per-page-value</validate>
                 </field>
                 <field id="flat_catalog_category" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -98,7 +98,7 @@
                 </field>
                 <field id="list_allow_all" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Allow All Products per Page</label>
-                    <comment>Whether to show "All" option in the "Show X Per Page" dropdown.</comment>
+                    <comment>Whether to show "All" option in the "Show X Per Page" dropdown</comment>
                     <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
                 </field>
                 <field id="parse_url_directives" translate="label comment" type="select" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -123,12 +123,12 @@
                 <field id="category_url_suffix" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Category URL Suffix</label>
                     <backend_model>Mage_Catalog_Model_System_Config_Backend_Catalog_Url_Rewrite_Suffix</backend_model>
-                    <comment>Cache refresh needed.</comment>
+                    <comment>You need to refresh the cache.</comment>
                 </field>
                 <field id="product_url_suffix" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Product URL Suffix</label>
                     <backend_model>Mage_Catalog_Model_System_Config_Backend_Catalog_Url_Rewrite_Suffix</backend_model>
-                    <comment>Cache refresh needed.</comment>
+                    <comment>You need to refresh the cache.</comment>
                 </field>
                 <field id="product_use_categories" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Use Categories Path for Product URLs</label>
@@ -155,7 +155,7 @@
                 <label>Price</label>
                 <field id="scope" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Catalog Price Scope</label>
-                    <comment><![CDATA[Defines the base currency scope ("Currency Setup" > "Currency Options" > "Base Currency").]]></comment>
+                    <comment><![CDATA[This defines the base currency scope ("Currency Setup" > "Currency Options" > "Base Currency").]]></comment>
                     <source_model>Mage_Catalog_Model_Config_Source_Price_Scope</source_model>
                     <hide_in_single_store_mode>1</hide_in_single_store_mode>
                 </field>
@@ -224,7 +224,7 @@
                 </field>
                 <field id="year_range" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Year Range</label>
-                    <comment>Use four-digit year format.</comment>
+                    <comment>Please use a four-digit year format.</comment>
                     <frontend_model>Mage_Adminhtml_Block_Catalog_Form_Renderer_Config_YearRange</frontend_model>
                 </field>
             </group>
@@ -258,7 +258,7 @@
             <group id="wysiwyg">
                 <field id="use_static_urls_in_catalog" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Use Static URLs for Media Content in WYSIWYG for Catalog</label>
-                    <comment>Applicable to catalog products and categories only. Any media content will be inserted into editor as a static URL. It is not updated if the system configuration base URL changes.</comment>
+                    <comment>This applies only to catalog products and categories. Media content will be inserted into the editor as a static URL. Media content is not updated if the system configuration base URL changes.</comment>
                     <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
                 </field>
             </group>
@@ -274,7 +274,7 @@
                     <label>Apply MAP (Default Value)</label>
                     <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
                     <comment>
-                        <![CDATA[<strong style="color:red">Warning!</strong> Applying MAP by default will hide all product prices on the frontend.]]>
+                        <![CDATA[<strong style="color:red">Warning!</strong> Applying MAP by default will hide all product prices on the front end.]]>
                     </comment>
                 </field>
                 <field id="display_price_type" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">

@@ -92,7 +92,7 @@ class Mage_Catalog_Model_Product_Attribute_Tierprice_Api extends Mage_Catalog_Mo
             if (is_array($errors = $product->validate())) {
                 $strErrors = array();
                 foreach($errors as $code=>$error) {
-                    $strErrors[] = ($error === true)? Mage::helper('Mage_Catalog_Helper_Data')->__('Value for "%s" is invalid.', $code) : Mage::helper('Mage_Catalog_Helper_Data')->__('Value for "%s" is invalid: %s', $code, $error);
+                    $strErrors[] = ($error === true)? Mage::helper('Mage_Catalog_Helper_Data')->__('Please correct the value for "%s".', $code) : Mage::helper('Mage_Catalog_Helper_Data')->__('Please correct the value for "%s": %s.', $code, $error);
                 }
                 $this->_fault('data_invalid', implode("\n", $strErrors));
             }
@@ -144,7 +144,7 @@ class Mage_Catalog_Model_Product_Attribute_Tierprice_Api extends Mage_Catalog_Mo
             }
 
             if (intval($tierPrice['website']) > 0 && !in_array($tierPrice['website'], $product->getWebsiteIds())) {
-                $this->_fault('data_invalid', Mage::helper('Mage_Catalog_Helper_Data')->__('Invalid tier prices. The product is not associated to the requested website.'));
+                $this->_fault('data_invalid', Mage::helper('Mage_Catalog_Helper_Data')->__('We found invalid tier prices: the product is not associated with the requested website.'));
             }
 
             if (!isset($tierPrice['customer_group_id'])) {

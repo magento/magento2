@@ -61,10 +61,10 @@
         <message>Please use only letters (a-z or A-Z) or numbers (0-9) or spaces and # only in this field.</message>
     </validate-street>
     <validate-phone-strict translate="message" module="Mage_Core">
-        <message>Please enter a valid phone number. For example (123) 456-7890 or 123-456-7890.</message>
+        <message>Please enter a valid phone number (for example, (123) 456-7890 or 123-456-7890).</message>
     </validate-phone-strict>
     <validate-phone-lax translate="message" module="Mage_Core">
-        <message>Please enter a valid phone number. For example (123) 456-7890 or 123-456-7890.</message>
+        <message>Please enter a valid phone number (for example, (123) 456-7890 or 123-456-7890).</message>
     </validate-phone-lax>
     <validate-fax translate="message" module="Mage_Core">
         <message>Please enter a valid fax number. For example (123) 456-7890 or 123-456-7890.</message>
@@ -94,7 +94,7 @@
         <message>Please enter a valid URL. Protocol is required (http://, https:// or ftp://)</message>
     </validate-url>
     <validate-clean-url translate="message" module="Mage_Core">
-        <message>Please enter a valid URL. For example http://www.example.com or www.example.com</message>
+        <message>Please enter a valid URL (for examples, http://www.example.com or www.example.com).</message>
     </validate-clean-url>
     <validate-identifier translate="message" module="Mage_Core">
         <message>Please enter a valid URL Key. For example "example-page", "example-page.html" or "anotherlevel/example-page".</message>
@@ -115,7 +115,7 @@
         <message>Please use this date format: dd/mm/yyyy. For example 17/03/2006 for the 17th of March, 2006.</message>
     </validate-date-au>
     <validate-currency-dollar translate="message" module="Mage_Core">
-        <message>Please enter a valid $ amount. For example $100.00.</message>
+        <message>Please enter a valid dollar amount (for example, $100.00).</message>
     </validate-currency-dollar>
     <validate-one-required translate="message" module="Mage_Core">
         <message>Please select one of the above options.</message>

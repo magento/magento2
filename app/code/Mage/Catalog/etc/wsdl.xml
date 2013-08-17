@@ -139,6 +139,13 @@
                     <element name="configurable_attributes" type="typens:catalogProductConfigurableAttributesEntityArray" minOccurs="0"/>
                 </all>
             </complexType>
+            <complexType name="catalogProductCreateEntityArray">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="typens:catalogProductCreateEntity[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
             <complexType name="catalogProductAttributeSetEntity">
                 <all>
                     <element name="set_id" type="xsd:int" minOccurs="0"/>
@@ -636,6 +643,13 @@
                     <element name="sort_order" type="xsd:string" minOccurs="0" maxOccurs="1" />
                 </all>
             </complexType>
+            <complexType name="catalogProductSpecialPriceReturnEntity">
+                <all>
+                    <element name="special_price" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                    <element name="special_from_date" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                    <element name="special_to_date" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                </all>
+            </complexType>
         </schema>
     </types>
     <message name="catalogProductCurrentStoreRequest">
@@ -684,6 +698,16 @@
     <message name="catalogProductUpdateResponse">
         <part name="result" type="xsd:boolean"/>
     </message>
+    <message name="catalogProductMultiUpdateRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="productIds" type="typens:ArrayOfString"/>
+        <part name="productData" type="typens:catalogProductCreateEntityArray"/>
+        <part name="store" type="xsd:string"/>
+        <part name="identifierType" type="xsd:string"/>
+    </message>
+    <message name="catalogProductMultiUpdateResponse">
+        <part name="result" type="xsd:boolean"/>
+    </message>
     <message name="catalogProductSetSpecialPriceRequest">
         <part name="sessionId" type="xsd:string"/>
         <part name="product" type="xsd:string"/>
@@ -703,7 +727,7 @@
         <part name="productIdentifierType" type="xsd:string"/>
     </message>
     <message name="catalogProductGetSpecialPriceResponse">
-        <part name="result" type="typens:catalogProductReturnEntity"/>
+        <part name="result" type="typens:catalogProductSpecialPriceReturnEntity"/>
     </message>
     <message name="catalogProductDeleteRequest">
         <part name="sessionId" type="xsd:string"/>
@@ -839,7 +863,7 @@
         <part name="data" type="typens:catalogProductAttributeEntityToUpdate"/>
     </message>
     <message name="catalogProductAttributeUpdateResponse">
-        <part name="result" type="xsd:boolean" />
+        <part name="result" type="xsd:boolean"/>
     </message>
     <message name="catalogProductAttributeAddOptionRequest">
         <part name="sessionId" type="xsd:string"/>
@@ -1310,6 +1334,11 @@
             <input message="typens:catalogProductUpdateRequest"/>
             <output message="typens:catalogProductUpdateResponse"/>
         </operation>
+        <operation name="catalogProductMultiUpdate">
+            <documentation>Product multi update</documentation>
+            <input message="typens:catalogProductMultiUpdateRequest"/>
+            <output message="typens:catalogProductMultiUpdateResponse"/>
+        </operation>
         <operation name="catalogProductSetSpecialPrice">
             <documentation>Update product special price</documentation>
             <input message="typens:catalogProductSetSpecialPriceRequest"/>
@@ -1746,6 +1775,17 @@
             </output>
         </operation>
         <operation name="catalogProductUpdate">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="catalogProductMultiUpdate">
             <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
             <input>
                 <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"

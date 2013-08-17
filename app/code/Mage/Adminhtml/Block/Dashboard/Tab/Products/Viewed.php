@@ -66,7 +66,7 @@ class Mage_Adminhtml_Block_Dashboard_Tab_Products_Viewed extends Mage_Adminhtml_
     protected function _prepareColumns()
     {
         $this->addColumn('name', array(
-            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Product Name'),
+            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Product'),
             'sortable'  => false,
             'index'     =>'name'
         ));
@@ -81,7 +81,7 @@ class Mage_Adminhtml_Block_Dashboard_Tab_Products_Viewed extends Mage_Adminhtml_
         ));
 
         $this->addColumn('views', array(
-            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Number of Views'),
+            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Views'),
             'width'     =>'120px',
             'align'     =>'right',
             'sortable'  => false,

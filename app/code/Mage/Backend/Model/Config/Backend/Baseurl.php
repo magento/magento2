@@ -24,6 +24,29 @@
 class Mage_Backend_Model_Config_Backend_Baseurl extends Mage_Core_Model_Config_Data
 {
     /**
+     * @var Mage_Core_Model_Page_Asset_MergeService
+     */
+    protected $_mergeService;
+
+    /**
+     * @param Mage_Core_Model_Context $context
+     * @param Mage_Core_Model_Page_Asset_MergeService $mergeService
+     * @param Mage_Core_Model_Resource_Abstract $resource
+     * @param Varien_Data_Collection_Db $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Core_Model_Context $context,
+        Mage_Core_Model_Page_Asset_MergeService $mergeService,
+        Mage_Core_Model_Resource_Abstract $resource = null,
+        Varien_Data_Collection_Db $resourceCollection = null,
+        array $data = array()
+    ) {
+        $this->_mergeService = $mergeService;
+        parent::__construct($context, $resource, $resourceCollection, $data);
+    }
+
+    /**
      * Validate a base URL field value
      *
      * @return Mage_Backend_Model_Config_Backend_Baseurl
@@ -62,6 +85,7 @@ class Mage_Backend_Model_Config_Backend_Baseurl extends Mage_Core_Model_Config_D
                 $this->_assertStartsWithValuesOrUrl($placeholders, $value);
                 break;
             case Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_STATIC_URL:
+            case Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_CACHE_URL:
             case Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_LIB_URL:
             case Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_MEDIA_URL:
                 $this->_assertStartsWithValuesOrUrlOrEmpty($placeholders, $value);
@@ -89,6 +113,7 @@ class Mage_Backend_Model_Config_Backend_Baseurl extends Mage_Core_Model_Config_D
                 $this->_assertStartsWithValuesOrUrl($placeholders, $value);
                 break;
             case Mage_Core_Model_Store::XML_PATH_SECURE_BASE_STATIC_URL:
+            case Mage_Core_Model_Store::XML_PATH_SECURE_BASE_CACHE_URL:
             case Mage_Core_Model_Store::XML_PATH_SECURE_BASE_LIB_URL:
             case Mage_Core_Model_Store::XML_PATH_SECURE_BASE_MEDIA_URL:
                 $this->_assertStartsWithValuesOrUrlOrEmpty($placeholders, $value);
@@ -192,7 +217,7 @@ class Mage_Backend_Model_Config_Backend_Baseurl extends Mage_Core_Model_Config_D
                 case Mage_Core_Model_Store::XML_PATH_SECURE_BASE_URL:
                 case Mage_Core_Model_Store::XML_PATH_SECURE_BASE_MEDIA_URL:
                 case Mage_Core_Model_Store::XML_PATH_SECURE_BASE_LIB_URL:
-                    Mage::getDesign()->cleanMergedJsCss();
+                    $this->_mergeService->cleanMergedJsCss();
                     break;
             }
         }

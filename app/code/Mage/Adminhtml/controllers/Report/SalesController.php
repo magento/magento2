@@ -47,7 +47,7 @@ class Mage_Adminhtml_Report_SalesController extends Mage_Adminhtml_Controller_Re
 
     public function salesAction()
     {
-        $this->_title($this->__('Reports'))->_title($this->__('Sales'))->_title($this->__('Sales'));
+        $this->_title($this->__('Sales Report'));
 
         $this->_showLastExecutionTime(Mage_Reports_Model_Flag::REPORT_ORDER_FLAG_CODE, 'sales');
 
@@ -68,7 +68,7 @@ class Mage_Adminhtml_Report_SalesController extends Mage_Adminhtml_Controller_Re
 
     public function bestsellersAction()
     {
-        $this->_title($this->__('Reports'))->_title($this->__('Products'))->_title($this->__('Bestsellers'));
+        $this->_title($this->__('Best Sellers Report'));
 
         $this->_showLastExecutionTime(Mage_Reports_Model_Flag::REPORT_BESTSELLERS_FLAG_CODE, 'bestsellers');
 
@@ -153,7 +153,7 @@ class Mage_Adminhtml_Report_SalesController extends Mage_Adminhtml_Controller_Re
 
     public function taxAction()
     {
-        $this->_title($this->__('Reports'))->_title($this->__('Sales'))->_title($this->__('Tax'));
+        $this->_title($this->__('Tax Report'));
 
         $this->_showLastExecutionTime(Mage_Reports_Model_Flag::REPORT_TAX_FLAG_CODE, 'tax');
 
@@ -196,7 +196,7 @@ class Mage_Adminhtml_Report_SalesController extends Mage_Adminhtml_Controller_Re
 
     public function shippingAction()
     {
-        $this->_title($this->__('Reports'))->_title($this->__('Sales'))->_title($this->__('Shipping'));
+        $this->_title($this->__('Shipping Report'));
 
         $this->_showLastExecutionTime(Mage_Reports_Model_Flag::REPORT_SHIPPING_FLAG_CODE, 'shipping');
 
@@ -239,7 +239,7 @@ class Mage_Adminhtml_Report_SalesController extends Mage_Adminhtml_Controller_Re
 
     public function invoicedAction()
     {
-        $this->_title($this->__('Reports'))->_title($this->__('Sales'))->_title($this->__('Total Invoiced'));
+        $this->_title($this->__('Invoice Report'));
 
         $this->_showLastExecutionTime(Mage_Reports_Model_Flag::REPORT_INVOICE_FLAG_CODE, 'invoiced');
 
@@ -282,7 +282,7 @@ class Mage_Adminhtml_Report_SalesController extends Mage_Adminhtml_Controller_Re
 
     public function refundedAction()
     {
-        $this->_title($this->__('Reports'))->_title($this->__('Sales'))->_title($this->__('Total Refunded'));
+        $this->_title($this->__('Refunds Report'));
 
         $this->_showLastExecutionTime(Mage_Reports_Model_Flag::REPORT_REFUNDED_FLAG_CODE, 'refunded');
 
@@ -325,7 +325,7 @@ class Mage_Adminhtml_Report_SalesController extends Mage_Adminhtml_Controller_Re
 
     public function couponsAction()
     {
-        $this->_title($this->__('Reports'))->_title($this->__('Sales'))->_title($this->__('Coupons'));
+        $this->_title($this->__('Coupons Report'));
 
         $this->_showLastExecutionTime(Mage_Reports_Model_Flag::REPORT_COUPONS_FLAG_CODE, 'coupons');
 
@@ -375,31 +375,31 @@ class Mage_Adminhtml_Report_SalesController extends Mage_Adminhtml_Controller_Re
     {
         switch ($this->getRequest()->getActionName()) {
             case 'sales':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::salesroot_sales');
+                return $this->_authorization->isAllowed('Mage_Reports::salesroot_sales');
                 break;
             case 'tax':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::tax');
+                return $this->_authorization->isAllowed('Mage_Reports::tax');
                 break;
             case 'shipping':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::shipping');
+                return $this->_authorization->isAllowed('Mage_Reports::shipping');
                 break;
             case 'invoiced':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::invoiced');
+                return $this->_authorization->isAllowed('Mage_Reports::invoiced');
                 break;
             case 'refunded':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::refunded');
+                return $this->_authorization->isAllowed('Mage_Reports::refunded');
                 break;
             case 'coupons':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::coupons');
+                return $this->_authorization->isAllowed('Mage_Reports::coupons');
                 break;
             case 'shipping':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::shipping');
+                return $this->_authorization->isAllowed('Mage_Reports::shipping');
                 break;
             case 'bestsellers':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::bestsellers');
+                return $this->_authorization->isAllowed('Mage_Reports::bestsellers');
                 break;
             default:
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::salesroot');
+                return $this->_authorization->isAllowed('Mage_Reports::salesroot');
                 break;
         }
     }

@@ -43,7 +43,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Related extends Mage_Adminht
         $this->setId('related_product_grid');
         $this->setDefaultSort('entity_id');
         $this->setUseAjax(true);
-        if ($this->_getProduct()&& $this->_getProduct()->getId()) {
+        if ($this->getProduct()&& $this->getProduct()->getId()) {
             $this->setDefaultFilter(array('in_products' => 1));
         }
         if ($this->isReadonly()) {
@@ -56,7 +56,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Related extends Mage_Adminht
      *
      * @return Mage_Catalog_Model_Product
      */
-    protected function _getProduct()
+    public function getProduct()
     {
         return Mage::registry('current_product');
     }
@@ -97,7 +97,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Related extends Mage_Adminht
     {
         $collection = Mage::getModel('Mage_Catalog_Model_Product_Link')->useRelatedLinks()
             ->getProductCollection()
-            ->setProduct($this->_getProduct())
+            ->setProduct($this->getProduct())
             ->addAttributeToSelect('*');
 
         if ($this->isReadonly()) {
@@ -119,7 +119,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Related extends Mage_Adminht
      */
     public function isReadonly()
     {
-        return $this->_getProduct() && $this->_getProduct()->getRelatedReadonly();
+        return $this->getProduct() && $this->getProduct()->getRelatedReadonly();
     }
 
     /**
@@ -171,7 +171,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Related extends Mage_Adminht
             ->toOptionHash();
 
         $this->addColumn('set_name', array(
-            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Attrib. Set Name'),
+            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Attribute Set'),
             'index'     => 'attribute_set_id',
             'type'      => 'options',
             'options'   => $sets,
@@ -219,8 +219,8 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Related extends Mage_Adminht
             'type'              => 'number',
             'validate_class'    => 'validate-number',
             'index'             => 'position',
-            'editable'          => !$this->_getProduct()->getRelatedReadonly(),
-            'edit_only'         => !$this->_getProduct()->getId(),
+            'editable'          => !$this->getProduct()->getRelatedReadonly(),
+            'edit_only'         => !$this->getProduct()->getId(),
             'header_css_class'  => 'col-position',
             'column_css_class'  => 'col-position'
         ));

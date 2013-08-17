@@ -24,10 +24,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 class Mage_Sales_Model_Order_Status extends Mage_Core_Model_Abstract
 {
-
     protected function _construct()
     {
         $this->_init('Mage_Sales_Model_Resource_Order_Status');
@@ -36,11 +34,12 @@ class Mage_Sales_Model_Order_Status extends Mage_Core_Model_Abstract
     /**
      * Assign order status to particular state
      *
-     * @param string  $state
+     * @param string $state
      * @param boolean $isDefault make the status as default one for state
+     * @throws Exception
      * @return Mage_Sales_Model_Order_Status
      */
-    public function assignState($state, $isDefault=false)
+    public function assignState($state, $isDefault = false)
     {
         $this->_getResource()->beginTransaction();
         try {
@@ -56,7 +55,8 @@ class Mage_Sales_Model_Order_Status extends Mage_Core_Model_Abstract
     /**
      * Unassigns order status from particular state
      *
-     * @param string  $state
+     * @param string $state
+     * @throws Exception
      * @return Mage_Sales_Model_Order_Status
      */
     public function unassignState($state)
@@ -65,6 +65,8 @@ class Mage_Sales_Model_Order_Status extends Mage_Core_Model_Abstract
         try {
             $this->_getResource()->unassignState($this->getStatus(), $state);
             $this->_getResource()->commit();
+            $params = array('status' => $this->getStatus(), 'state' => $state);
+            $this->_eventDispatcher->dispatch('sales_order_status_unassign', $params);
         } catch (Exception $e) {
             $this->_getResource()->rollBack();
             throw $e;
@@ -93,7 +95,7 @@ class Mage_Sales_Model_Order_Status extends Mage_Core_Model_Abstract
      * @param mixed $store
      * @return string
      */
-    public function getStoreLabel($store=null)
+    public function getStoreLabel($store = null)
     {
         $store = Mage::app()->getStore($store);
         $label = false;
@@ -110,6 +112,7 @@ class Mage_Sales_Model_Order_Status extends Mage_Core_Model_Abstract
      * Load default status per state
      *
      * @param string $state
+     * @return Mage_Sales_Model_Order_Status
      */
     public function loadDefaultByState($state)
     {

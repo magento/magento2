@@ -43,11 +43,17 @@ class Mage_ImportExport_Model_Import_Uploader extends Mage_Core_Model_File_Uploa
     );
     const DEFAULT_FILE_TYPE = 'application/octet-stream';
 
-    function __construct($filePath = null)
+    /**
+     * @var Mage_Core_Model_Image_AdapterFactory
+     */
+    protected $_imageFactory;
+
+    function __construct(Mage_Core_Model_Image_AdapterFactory $imageFactory, $filePath = null)
     {
         if (!is_null($filePath)) {
             $this->_setUploadFile($filePath);
         }
+        $this->_imageFactory = $imageFactory;
     }
 
     /**
@@ -59,8 +65,8 @@ class Mage_ImportExport_Model_Import_Uploader extends Mage_Core_Model_File_Uploa
         $this->setAllowCreateFolders(true);
         $this->setFilesDispersion(true);
         $this->setAllowedExtensions(array_keys($this->_allowedMimeTypes));
-        $this->addValidateCallback('catalog_product_image',
-                Mage::helper('Mage_Catalog_Helper_Image'), 'validateUploadFile');
+        $imageAdapter = $this->_imageFactory->create();
+        $this->addValidateCallback('catalog_product_image', $imageAdapter, 'validateUploadFile');
         $this->_uploadType = self::SINGLE_STYLE;
     }
 

@@ -133,4 +133,27 @@ class Mage_Core_Model_Resource_Store_Group extends Mage_Core_Model_Resource_Db_A
 
         return $this;
     }
+
+    /**
+     * Count number of all entities in the system
+     *
+     * By default won't count admin store
+     *
+     * @param bool $countAdmin
+     * @return int
+     */
+    public function countAll($countAdmin = false)
+    {
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()->from(array('main' => $this->getMainTable()), 'COUNT(*)');
+        if (!$countAdmin) {
+            $select->joinLeft(
+                array('core_website' => $this->getTable('core_website')),
+                'core_website.website_id = main.website_id',
+                null
+            )
+            ->where(sprintf('%s <> %s', $adapter->quoteIdentifier('code'), $adapter->quote('admin')));
+        }
+        return (int)$adapter->fetchOne($select);
+    }
 }

@@ -28,11 +28,12 @@
 <config>
     <modules>
         <Mage_DesignEditor>
-            <version>1.0.0.1</version>
+            <version>1.0.0.3</version>
             <active>true</active>
             <depends>
                 <Mage_Adminhtml/>
                 <Mage_Page/>
+                <Mage_Theme/>
             </depends>
         </Mage_DesignEditor>
     </modules>
@@ -46,15 +47,44 @@
             </designeditor_setup>
         </resources>
         <events>
-            <save_xml_configuration>
+            <save_view_configuration>
                 <observers>
-                    <save_xml_configuration_observer>
+                    <save_view_configuration_observer>
                         <class>Mage_DesignEditor_Model_Observer</class>
                         <method>saveQuickStyles</method>
-                    </save_xml_configuration_observer>
+                    </save_view_configuration_observer>
+                    <design_editor_change_timestamp>
+                        <class>Mage_DesignEditor_Model_Observer</class>
+                        <method>saveChangeTime</method>
+                    </design_editor_change_timestamp>
                 </observers>
-            </save_xml_configuration>
+            </save_view_configuration>
+            <theme_copy_after>
+                <observers>
+                    <copy_theme_change_time>
+                        <class>Mage_DesignEditor_Model_Observer</class>
+                        <method>copyChangeTime</method>
+                    </copy_theme_change_time>
+                </observers>
+            </theme_copy_after>
+            <theme_file_save_after>
+                <observers>
+                    <theme_file_save>
+                        <class>Mage_DesignEditor_Model_Observer</class>
+                        <method>saveChangeTime</method>
+                    </theme_file_save>
+                </observers>
+            </theme_file_save_after>
         </events>
+        <di>
+            <Mage_DesignEditor_Model_Resource_Layout_Update>
+                <parameters>
+                    <cache>
+                        <instance>Mage_Core_Model_Cache_Type_Layout</instance>
+                    </cache>
+                </parameters>
+            </Mage_DesignEditor_Model_Resource_Layout_Update>
+        </di>
     </global>
     <default>
         <web>
@@ -66,15 +96,13 @@
                 </vde>
             </routers>
         </web>
+        <theme>
+            <customization>
+                <quick_style_css>Mage_DesignEditor_Model_Theme_Customization_File_QuickStyleCss</quick_style_css>
+            </customization>
+        </theme>
     </default>
     <frontend>
-        <layout>
-            <updates>
-                <designeditor module="Mage_DesignEditor">
-                    <file>layout.xml</file>
-                </designeditor>
-            </updates>
-        </layout>
         <routers>
             <designeditor>
                 <use>standard</use>
@@ -86,62 +114,14 @@
         </routers>
     </frontend>
     <adminhtml>
-        <layout>
-            <updates>
-                <designeditor module="Mage_DesignEditor">
-                    <file>layout.xml</file>
-                </designeditor>
-            </updates>
-        </layout>
     </adminhtml>
     <vde>
         <design_editor>
             <frontName>vde</frontName>
-            <defaultHandle>default</defaultHandle>
             <disabledCacheTypes>
                 <block_html />
-                <layout />
                 <config />
             </disabledCacheTypes>
-            <layout_update>
-                <days_to_expire>5</days_to_expire>
-            </layout_update>
-            <block>
-                <white_list>
-                    <mage_core_block_template>Mage_Core_Block_Template</mage_core_block_template>
-                    <mage_page_block>Mage_Page_Block_</mage_page_block>
-                    <mage_designeditor_block>Mage_DesignEditor_Block_</mage_designeditor_block>
-                    <mage_checkout_block_onepage>Mage_Checkout_Block_Onepage_</mage_checkout_block_onepage>
-                    <mage_customer_block_account_navigation>Mage_Customer_Block_Account_Navigation</mage_customer_block_account_navigation>
-                    <mage_paypal_block_express_review_details>Mage_Paypal_Block_Express_Review_Details</mage_paypal_block_express_review_details>
-                    <mage_poll_block_activepoll>Mage_Poll_Block_ActivePoll</mage_poll_block_activepoll>
-                    <mage_sales_block_guest_links>Mage_Sales_Block_Guest_Links</mage_sales_block_guest_links>
-                    <mage_catalog_block_product_compare_sidebar>Mage_Catalog_Block_Product_Compare_Sidebar</mage_catalog_block_product_compare_sidebar>
-                    <mage_checkout_block_cart_sidebar>Mage_Checkout_Block_Cart_Sidebar</mage_checkout_block_cart_sidebar>
-                    <mage_wishlist_block_customer_sidebar>Mage_Wishlist_Block_Customer_Sidebar</mage_wishlist_block_customer_sidebar>
-                    <mage_reports_block_product_viewed>Mage_Reports_Block_Product_Viewed</mage_reports_block_product_viewed>
-                    <mage_reports_block_product_compared>Mage_Reports_Block_Product_Compared</mage_reports_block_product_compared>
-                    <mage_sales_block_reorder_sidebar>Mage_Sales_Block_Reorder_Sidebar</mage_sales_block_reorder_sidebar>
-                    <mage_paypal_block_express_shortcut>Mage_Paypal_Block_Express_Shortcut</mage_paypal_block_express_shortcut>
-                    <mage_paypaluk_block_express_shortcut>Mage_PaypalUk_Block_Express_Shortcut</mage_paypaluk_block_express_shortcut>
-                </white_list>
-                <black_list>
-                    <mage_page_block_html_pager>Mage_Page_Block_Html_Pager</mage_page_block_html_pager>
-                    <mage_page_block_switch>Mage_Page_Block_Switch</mage_page_block_switch>
-                </black_list>
-            </block>
-            <container>
-                <white_list>
-                    <root>root</root>
-                    <head>head</head>
-                    <after_body_start>after_body_start</after_body_start>
-                    <header>header</header>
-                    <footer>footer</footer>
-                    <before_body_end>before_body_end</before_body_end>
-                    <top_links>top.links</top_links>
-                    <top_menu>top.menu</top_menu>
-                </white_list>
-            </container>
         </design_editor>
         <events>
             <controller_action_layout_generate_blocks_after>
@@ -152,6 +132,14 @@
                     </vde_editor>
                 </observers>
             </controller_action_layout_generate_blocks_after>
+            <translate_initialization_before>
+                <observers>
+                    <initialize_translation>
+                        <class>Mage_DesignEditor_Model_Observer</class>
+                        <method>initializeTranslation</method>
+                    </initialize_translation>
+                </observers>
+            </translate_initialization_before>
         </events>
     </vde>
     <admin>
@@ -165,16 +153,4 @@
             </adminhtml>
         </routers>
     </admin>
-    <crontab>
-        <jobs>
-            <design_editor_clear_layout_updates>
-                <schedule>
-                    <cron_expr>0 0 * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>Mage_DesignEditor_Model_Observer::clearLayoutUpdates</model>
-                </run>
-            </design_editor_clear_layout_updates>
-        </jobs>
-    </crontab>
 </config>

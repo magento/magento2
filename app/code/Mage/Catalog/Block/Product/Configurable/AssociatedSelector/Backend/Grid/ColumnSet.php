@@ -81,7 +81,7 @@ class Mage_Catalog_Block_Product_Configurable_AssociatedSelector_Backend_Grid_Co
      *
      * @return Mage_Catalog_Model_Product
      */
-    protected function _getProduct()
+    public function getProduct()
     {
         return $this->_registryManager->registry('current_product');
     }
@@ -95,7 +95,7 @@ class Mage_Catalog_Block_Product_Configurable_AssociatedSelector_Backend_Grid_Co
     {
         parent::_prepareLayout();
 
-        $product = $this->_getProduct();
+        $product = $this->getProduct();
         $attributes = $this->_productType->getUsedProductAttributes($product);
         foreach ($attributes as $attribute) {
             /** @var $attribute Mage_Catalog_Model_Entity_Attribute */

@@ -63,13 +63,6 @@ class Mage_Reports_Model_Resource_Report_Collection_Abstract extends Mage_Core_M
     protected $_storesIds          = 0;
 
     /**
-     * Does filters should be applied
-     *
-     * @var bool
-     */
-    protected $_applyFilters       = true;
-
-    /**
      * Is totals
      *
      * @var bool
@@ -212,18 +205,6 @@ class Mage_Reports_Model_Resource_Report_Collection_Abstract extends Mage_Core_M
     }
 
     /**
-     * Set apply filters flag
-     *
-     * @param boolean $flag
-     * @return Mage_Sales_Model_Resource_Report_Collection_Abstract
-     */
-    public function setApplyFilters($flag)
-    {
-        $this->_applyFilters = $flag;
-        return $this;
-    }
-
-    /**
      * Getter/Setter for isTotals
      *
      * @param null|boolean $flag
@@ -264,24 +245,15 @@ class Mage_Reports_Model_Resource_Report_Collection_Abstract extends Mage_Core_M
     }
 
     /**
-     * Load data
-     * Redeclare parent load method just for adding method _beforeLoad
+     * Apply filters common to reports
      *
-     * @param bool $printQuery
-     * @param bool $logQuery
-     * @return Mage_Sales_Model_Resource_Report_Collection_Abstract
+     * @return Mage_Core_Model_Resource_Db_Collection_Abstract
      */
-    public function load($printQuery = false, $logQuery = false)
+    protected function _initSelect()
     {
-        if ($this->isLoaded()) {
-            return $this;
-        }
-        $this->_initSelect();
-        if ($this->_applyFilters) {
-            $this->_applyDateRangeFilter();
-            $this->_applyStoresFilter();
-            $this->_applyCustomFilter();
-        }
-        return parent::load($printQuery, $logQuery);
+        $this->_applyDateRangeFilter();
+        $this->_applyStoresFilter();
+        $this->_applyCustomFilter();
+        return $this;
     }
 }

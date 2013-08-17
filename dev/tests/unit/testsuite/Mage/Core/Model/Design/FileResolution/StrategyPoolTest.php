@@ -56,14 +56,7 @@ class Mage_Core_Model_Design_StrategyPoolTest extends PHPUnit_Framework_TestCase
         $this->_objectManager = $this->getMock('Mage_Core_Model_ObjectManager', array(), array(), '', false);
         $this->_appState = $this->getMock('Mage_Core_Model_App_State', array(), array(), '', false);
 
-        $dirFilesystem = $this->getMock('Magento_Filesystem', array(), array(), '', false);
-        $dirFilesystem->expects($this->any())
-            ->method('isDirectory')
-            ->will($this->returnValue(true));
-        $dirFilesystem->expects($this->any())
-            ->method('isWritable')
-            ->will($this->returnValue(true));
-        $this->_dirs = new Mage_Core_Model_Dir($dirFilesystem, 'base_dir');
+        $this->_dirs = new Mage_Core_Model_Dir('base_dir');
 
         $this->_filesystem = $this->getMock('Magento_Filesystem', array(), array(), '', false);
 

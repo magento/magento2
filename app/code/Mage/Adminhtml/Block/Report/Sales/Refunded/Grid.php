@@ -51,7 +51,7 @@ class Mage_Adminhtml_Block_Report_Sales_Refunded_Grid extends Mage_Adminhtml_Blo
     protected function _prepareColumns()
     {
         $this->addColumn('period', array(
-            'header'        => Mage::helper('Mage_Sales_Helper_Data')->__('Period'),
+            'header'        => Mage::helper('Mage_Sales_Helper_Data')->__('Interval'),
             'index'         => 'period',
             'sortable'      => false,
             'period_type'   => $this->getPeriodType(),
@@ -63,7 +63,7 @@ class Mage_Adminhtml_Block_Report_Sales_Refunded_Grid extends Mage_Adminhtml_Blo
         ));
 
         $this->addColumn('orders_count', array(
-            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Number of Refunded Orders'),
+            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Refunded Orders'),
             'index'     => 'orders_count',
             'type'      => 'number',
             'total'     => 'sum',
@@ -91,7 +91,7 @@ class Mage_Adminhtml_Block_Report_Sales_Refunded_Grid extends Mage_Adminhtml_Blo
         ));
 
         $this->addColumn('online_refunded', array(
-            'header'        => Mage::helper('Mage_Sales_Helper_Data')->__('Online Refunded'),
+            'header'        => Mage::helper('Mage_Sales_Helper_Data')->__('Online Refunds'),
             'type'          => 'currency',
             'currency_code' => $currencyCode,
             'index'         => 'online_refunded',
@@ -103,7 +103,7 @@ class Mage_Adminhtml_Block_Report_Sales_Refunded_Grid extends Mage_Adminhtml_Blo
         ));
 
         $this->addColumn('offline_refunded', array(
-            'header'        => Mage::helper('Mage_Sales_Helper_Data')->__('Offline Refunded'),
+            'header'        => Mage::helper('Mage_Sales_Helper_Data')->__('Offline Refunds'),
             'type'          => 'currency',
             'currency_code' => $currencyCode,
             'index'         => 'offline_refunded',

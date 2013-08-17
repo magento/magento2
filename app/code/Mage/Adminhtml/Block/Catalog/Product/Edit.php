@@ -39,6 +39,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit extends Mage_Adminhtml_Block_Wid
     {
         parent::_construct();
         $this->setId('product_edit');
+        $this->setUseContainer(true);
     }
 
     /**
@@ -81,16 +82,6 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit extends Mage_Adminhtml_Block_Wid
             ));
         }
 
-        if (!$this->getRequest()->getParam('popup')) {
-            if ($this->getProduct()->isDeleteable()) {
-                $this->addChild('delete_button', 'Mage_Adminhtml_Block_Widget_Button', array(
-                    'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Delete'),
-                    'onclick' => 'confirmSetLocation(\''
-                        . Mage::helper('Mage_Catalog_Helper_Data')->__('Are you sure?') . '\', \'' . $this->getDeleteUrl() . '\')',
-                    'class' => 'delete'
-                ));
-            }
-        }
         if (!$this->getProduct()->isReadonly()) {
             $this->addChild('save-split-button', 'Mage_Backend_Block_Widget_Button_Split', array(
                 'id' => 'save-split-button',
@@ -181,11 +172,6 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit extends Mage_Adminhtml_Block_Wid
     public function getIsGrouped()
     {
         return $this->getProduct()->isGrouped();
-    }
-
-    public function getDeleteUrl()
-    {
-        return $this->getUrl('*/*/delete', array('_current'=>true));
     }
 
     public function getDuplicateUrl()
@@ -298,49 +284,39 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit extends Mage_Adminhtml_Block_Wid
                 'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Save & Edit'),
                 'data_attribute' => array(
                     'mage-init' => array(
-                        'button' => array('event' => 'saveAndContinueEdit', 'target' => '#product-edit-form'),
+                        'button' => array('event' => 'saveAndContinueEdit', 'target' => '[data-form=edit-product]'),
                     ),
                 ),
                 'default' => true,
             );
         }
 
-        /** @var $limitation Mage_Catalog_Model_Product_Limitation */
-        $limitation = Mage::getObjectManager()->get('Mage_Catalog_Model_Product_Limitation');
-        if ($this->_isProductNew()) {
-            $showAddNewButtons = !$limitation->isCreateRestricted(2);
-        } else {
-            $showAddNewButtons = !$limitation->isCreateRestricted();
-        }
-        if ($showAddNewButtons) {
+        $options[] = array(
+            'id' => 'new-button',
+            'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Save & New'),
+            'data_attribute' => array(
+                'mage-init' => array(
+                    'button' => array('event' => 'saveAndNew', 'target' => '[data-form=edit-product]'),
+                ),
+            ),
+        );
+        if (!$this->getRequest()->getParam('popup') && $this->getProduct()->isDuplicable()) {
             $options[] = array(
-                'id' => 'new-button',
-                'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Save & New'),
+                'id' => 'duplicate-button',
+                'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Save & Duplicate'),
                 'data_attribute' => array(
                     'mage-init' => array(
-                        'button' => array('event' => 'saveAndNew', 'target' => '#product-edit-form'),
+                        'button' => array('event' => 'saveAndDuplicate', 'target' => '[data-form=edit-product]'),
                     ),
                 ),
             );
-            if (!$this->getRequest()->getParam('popup') && $this->getProduct()->isDuplicable()) {
-                $options[] = array(
-                    'id' => 'duplicate-button',
-                    'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Save & Duplicate'),
-                    'data_attribute' => array(
-                        'mage-init' => array(
-                            'button' => array('event' => '', 'target' => '#product-edit-form'),
-                        ),
-                    ),
-                    'onclick' => $this->_isProductNew() ? '' : 'setLocation(\'' . $this->getDuplicateUrl() . '\')',
-                );
-            }
         }
         $options[] = array(
             'id' => 'close-button',
             'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Save & Close'),
             'data_attribute' => array(
                 'mage-init' => array(
-                    'button' => array('event' => 'save', 'target' => '#product-edit-form'),
+                    'button' => array('event' => 'save', 'target' => '[data-form=edit-product]'),
                 ),
             ),
         );

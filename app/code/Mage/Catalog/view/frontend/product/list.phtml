@@ -40,6 +40,7 @@ $_helper = $this->helper('Mage_Catalog_Helper_Output');
 <?php else: ?>
 <div class="category-products">
     <?php echo $this->getToolbarHtml() ?>
+    <?php echo $this->getAdditionalHtml() ?>
     <?php // List mode ?>
     <?php if ($this->getMode() != 'grid'): ?>
     <?php $_iterator = 0; ?>
@@ -79,10 +80,10 @@ $_helper = $this->helper('Mage_Catalog_Helper_Output');
                         <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped ?>"
                            class="link-learn"><?php echo $this->__('Learn More') ?></a>
                     </div>
-                    <ul class="add-to-links">
+                    <ul class="add-to-links" data-role="add-to-links">
                         <?php if ($this->helper('Mage_Wishlist_Helper_Data')->isAllow()) : ?>
                         <li><a href="<?php echo $this->helper('Mage_Wishlist_Helper_Data')->getAddUrl($_product) ?>"
-                               class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
+                               class="link-wishlist" data-action="add-to-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
                         <?php endif; ?>
                         <?php if ($_compareUrl = $this->getAddToCompareUrl($_product)): ?>
                         <li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>"
@@ -134,10 +135,10 @@ $_helper = $this->helper('Mage_Catalog_Helper_Output');
                 <?php else: ?>
                 <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
                 <?php endif; ?>
-                <ul class="add-to-links">
+                <ul class="add-to-links" data-role="add-to-links">
                     <?php if ($this->helper('Mage_Wishlist_Helper_Data')->isAllow()) : ?>
                     <li><a href="<?php echo $this->helper('Mage_Wishlist_Helper_Data')->getAddUrl($_product) ?>"
-                           class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
+                           class="link-wishlist" data-action="add-to-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
                     <?php endif; ?>
                     <?php if ($_compareUrl = $this->getAddToCompareUrl($_product)): ?>
                     <li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>"

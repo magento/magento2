@@ -1191,7 +1191,7 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
     protected function _getUploader()
     {
         if (is_null($this->_fileUploader)) {
-            $this->_fileUploader    = new Mage_ImportExport_Model_Import_Uploader();
+            $this->_fileUploader = Mage::getModel('Mage_ImportExport_Model_Import_Uploader');
 
             $this->_fileUploader->init();
 

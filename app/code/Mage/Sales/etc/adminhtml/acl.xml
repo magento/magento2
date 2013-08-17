@@ -68,7 +68,7 @@
                 </resource>
                 <resource id="Mage_Adminhtml::stores">
                     <resource id="Mage_Adminhtml::stores_settings">
-                        <resource id="Mage_Sales::order_statuses"  module="Mage_Sales" title="Order Statuses" sortOrder="40" />
+                        <resource id="Mage_Sales::order_statuses"  module="Mage_Sales" title="Order Status" sortOrder="40" />
                         <resource id="Mage_Adminhtml::config">
                             <resource id="Mage_Sales::config_sales" title="Sales Section" module="Mage_Sales" sortOrder="60" />
                             <resource id="Mage_Sales::sales_email" title="Sales Emails Section" module="Mage_Sales" sortOrder="65" />

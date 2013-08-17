@@ -24,20 +24,19 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="entry-edit" id="export_filter_container" style="display:none;">
-    <div class="entry-edit-head">
-        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('Entity Attributes'); ?></h4>
-    </div>
+<fieldset class="fieldset" id="export_filter_container" style="display:none;">
+    <legend class="legend">
+        <span><?php echo $this->__('Entity Attributes'); ?></span>
+    </legend>
+    <br />
     <form id="export_filter_form" action="<?php echo $this->getUrl('*/*/export') ?>" method="post">
         <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
-        <div id="export_filter_grid_container" class="fieldset"><!-- --></div>
+        <div id="export_filter_grid_container"><!-- --></div>
     </form>
-    <div class="a-right">
-        <button class="scalable" type="button" onclick="getFile();"><span><span><span><?php
-            echo $this->__('Continue')
-        ?></span></span></span></button>
-    </div>
-</div>
+    <button class="action- scalable" type="button" onclick="getFile();"><span><?php
+        echo $this->__('Continue')
+    ?></span></button>
+</fieldset>
 <script type="text/javascript">
 //<![CDATA[
    $('entity').selectedIndex = 0; // forced resetting entity selector after page refresh

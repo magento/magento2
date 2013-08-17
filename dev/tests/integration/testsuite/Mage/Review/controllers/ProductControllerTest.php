@@ -45,7 +45,7 @@ class Mage_Review_ProductControllerTest extends Magento_Test_TestCase_Controller
     public function listActionDesignDataProvider()
     {
         return array(
-            'custom product design' => array(2, 'default/demo_blue'),
+            'custom product design' => array(2, 'default/blank'),
         );
     }
 }

@@ -123,13 +123,18 @@ class Mage_Catalog_Model_Product_Api extends Mage_Catalog_Model_Api_Resource
      *
      * @param int|string $productId
      * @param string|int $store
-     * @param array $attributes
+     * @param array      $attributes
+     * @param string     $identifierType
      * @return array
      */
     public function info($productId, $store = null, $attributes = null, $identifierType = null)
     {
-        $product = $this->_getProduct($productId, $store, $identifierType);
+        // make sku flag case-insensitive
+        if (!empty($identifierType)) {
+            $identifierType = strtolower($identifierType);
+        }
 
+        $product = $this->_getProduct($productId, $store, $identifierType);
 
         $result = array( // Basic product data
             'product_id' => $product->getId(),
@@ -197,7 +202,7 @@ class Mage_Catalog_Model_Product_Api extends Mage_Catalog_Model_Api_Resource
                 $strErrors = array();
                 foreach($errors as $code => $error) {
                     if ($error === true) {
-                        $error = Mage::helper('Mage_Catalog_Helper_Data')->__('Attribute "%s" is invalid.', $code);
+                        $error = Mage::helper('Mage_Catalog_Helper_Data')->__('Please correct attribute "%s".', $code);
                     }
                     $strErrors[] = $error;
                 }
@@ -235,9 +240,9 @@ class Mage_Catalog_Model_Product_Api extends Mage_Catalog_Model_Api_Resource
                 $strErrors = array();
                 foreach($errors as $code => $error) {
                     if ($error === true) {
-                        $error = Mage::helper('Mage_Catalog_Helper_Data')->__('Value for "%s" is invalid.', $code);
+                        $error = Mage::helper('Mage_Catalog_Helper_Data')->__('Please correct the value for "%s".', $code);
                     } else {
-                        $error = Mage::helper('Mage_Catalog_Helper_Data')->__('Value for "%s" is invalid: %s', $code, $error);
+                        $error = Mage::helper('Mage_Catalog_Helper_Data')->__('Please correct the value for "%s": %s.', $code, $error);
                     }
                     $strErrors[] = $error;
                 }

@@ -27,6 +27,8 @@
 
 /**
  * Test class for Mage_User_Adminhtml_AuthController.
+ *
+ * @magentoAppArea adminhtml
  */
 class Mage_User_Adminhtml_AuthControllerTest extends Mage_Backend_Utility_Controller
 {
@@ -168,7 +170,8 @@ class Mage_User_Adminhtml_AuthControllerTest extends Mage_Backend_Utility_Contro
         $this->dispatch('backend/admin/auth/resetpasswordpost');
 
         $this->assertSessionMessages(
-            $this->equalTo(array('Password confirmation must be same as password.')), Mage_Core_Model_Message::ERROR
+            $this->equalTo(array('Your password confirmation must match your password.')),
+            Mage_Core_Model_Message::ERROR
         );
         $this->assertRedirect();
     }

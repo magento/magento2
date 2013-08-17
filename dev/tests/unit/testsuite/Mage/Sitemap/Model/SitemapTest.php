@@ -102,7 +102,7 @@ class Mage_Sitemap_Model_SitemapTest extends PHPUnit_Framework_TestCase
      * Check not allowed sitemap path validation
      *
      * @expectedException Mage_Core_Exception
-     * @expectedExceptionMessage Please define correct path
+     * @expectedExceptionMessage Please define a correct path.
      */
     public function testNotAllowedPath()
     {
@@ -150,7 +150,7 @@ class Mage_Sitemap_Model_SitemapTest extends PHPUnit_Framework_TestCase
      * Check not writable sitemap path validation
      *
      * @expectedException Mage_Core_Exception
-     * @expectedExceptionMessage Please make sure that "%s" is writable by web-server.
+     * @expectedExceptionMessage Please make sure that "%s" is writable by the web-server.
      */
     public function testPathNotWritable()
     {
@@ -180,7 +180,7 @@ class Mage_Sitemap_Model_SitemapTest extends PHPUnit_Framework_TestCase
      * Check invalid chars in sitemap filename validation
      *
      * @expectedException Mage_Core_Exception
-     * @expectedExceptionMessage Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) in the filename. No spaces or other characters are allowed.
+     * @expectedExceptionMessage Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename. No spaces or other characters are allowed.
      */
     //@codingStandardsIgnoreEnd
     public function testFilenameInvalidChars()
@@ -463,15 +463,24 @@ class Mage_Sitemap_Model_SitemapTest extends PHPUnit_Framework_TestCase
     {
         $methods = array('_construct', '_getResource', '_getBaseDir', '_getFileObject', '_afterSave',
             '_getStoreBaseUrl', '_getCurrentDateTime', '_getCategoryItemsCollection', '_getProductItemsCollection',
-            '_getPageItemsCollection', '_getDocumentRoot');
+            '_getPageItemsCollection', '_getDocumentRoot', '_getFilesystem');
         if ($mockBeforeSave) {
             $methods[] = '_beforeSave';
         }
+
         /** @var $model Mage_Sitemap_Model_Sitemap */
         $model = $this->getMockBuilder('Mage_Sitemap_Model_Sitemap')
             ->setMethods($methods)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $adapterMock = $this->getMockBuilder('Magento_Filesystem_AdapterInterface')
+            ->getMock();
+        $filesystem = new Magento_Filesystem($adapterMock);
+
+        $model->expects($this->any())
+            ->method('_getFilesystem')
+            ->will($this->returnValue($filesystem));
         $model->expects($this->any())
             ->method('_getResource')
             ->will($this->returnValue($this->_resourceMock));
@@ -556,9 +565,18 @@ class Mage_Sitemap_Model_SitemapTest extends PHPUnit_Framework_TestCase
     {
         /** @var $model Mage_Sitemap_Model_Sitemap */
         $model = $this->getMockBuilder('Mage_Sitemap_Model_Sitemap')
-            ->setMethods(array('_getStoreBaseUrl', '_getDocumentRoot', '_getBaseDir'))
+            ->setMethods(array('_getStoreBaseUrl', '_getDocumentRoot', '_getBaseDir', '_getFilesystem'))
             ->disableOriginalConstructor()
             ->getMock();
+
+        $adapterMock = $this->getMockBuilder('Magento_Filesystem_AdapterInterface')
+            ->getMock();
+
+        $filesystem = new Magento_Filesystem($adapterMock);
+
+        $model->expects($this->any())
+            ->method('_getFilesystem')
+            ->will($this->returnValue($filesystem));
 
         $model->expects($this->any())
             ->method('_getStoreBaseUrl')
@@ -595,6 +613,12 @@ class Mage_Sitemap_Model_SitemapTest extends PHPUnit_Framework_TestCase
                 'c:\\http\\mage2\\', 'c:\\http\\mage2\\',
                 '/sitemaps/store2', 'sitemap.xml',
                 'http://store.com/sitemaps/store2/sitemap.xml'
+            ),
+            array(
+                'http://store.com/builds/regression/ee/',
+                '/var/www/html', '/opt/builds/regression/ee',
+                '/', 'sitemap.xml',
+                'http://store.com/builds/regression/ee/sitemap.xml'
             ),
             array(
                 'http://store.com/store2',

@@ -86,9 +86,7 @@ class Mage_Theme_Model_Wysiwyg_StorageTest extends PHPUnit_Framework_TestCase
     public function testCreateThumbnail()
     {
         $image = 'some_image.jpg';
-        $imagePath = $this->_filesystem->getAbsolutePath(
-            implode(DIRECTORY_SEPARATOR, array(realpath(__DIR__), '_files', 'theme' , 'image', $image))
-        );
+        $imagePath = realpath(__DIR__) . "/_files/theme/image/{$image}";
         $tmpImagePath = $this->_copyFileToTmpCustomizationPath($imagePath);
 
         $method = $this->_getMethod('_createThumbnail');

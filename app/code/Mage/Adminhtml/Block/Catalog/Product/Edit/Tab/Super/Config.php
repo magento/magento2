@@ -32,10 +32,10 @@
  * @package    Mage_Adminhtml
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config extends Mage_Adminhtml_Block_Widget
-    implements Mage_Adminhtml_Block_Widget_Tab_Interface
+class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config
+    extends Mage_Backend_Block_Widget
+    implements Mage_Backend_Block_Widget_Tab_Interface
 {
-
     protected $_template = 'catalog/product/edit/super/config.phtml';
 
     /**
@@ -117,35 +117,80 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config extends Mage_Ad
         ));
         $this->addChild('super_settings', 'Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings');
 
-        if ($this->getProduct()->getId()) {
-            $this->setChild('simple',
-                $this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Simple',
-                    'catalog.product.edit.tab.super.config.simple')
-            );
-
-            $this->addChild('create_from_configurable', 'Mage_Adminhtml_Block_Widget_Button', array(
-                'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Copy From Configurable'),
-                'class' => 'add',
-                'onclick' => 'superProduct.createNewProduct()'
-            ));
-        }
+// @todo: Remove unused code and blocks
+//        if ($this->getProduct()->getId()) {
+//            $this->setChild('simple',
+//                $this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Simple',
+//                    'catalog.product.edit.tab.super.config.simple')
+//            );
+//
+//            $this->addChild('create_from_configurable', 'Mage_Adminhtml_Block_Widget_Button', array(
+//                'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Copy From Configurable'),
+//                'class' => 'add',
+//                'onclick' => 'superProduct.createNewProduct()'
+//            ));
+//        }
 
         $this->addChild(
             'generate',
             'Mage_Backend_Block_Widget_Button',
             array(
-                'id' => 'generate-variations-button',
                 'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Generate Variations'),
+                'class' => 'generate',
                 'data_attribute' => array(
                     'mage-init' => array(
                         'button' => array(
                             'event' => 'generate',
                             'target' => '#product-variations-matrix',
                             'eventData' => array(
-                                'url' => $this->getUrl('*/*/variationsMatrix', array('_current' => true)),
+                                'url' => $this->getUrl('*/*/generateVariations', array('_current' => true)),
                             ),
                         ),
                     ),
+                    'action' => 'generate',
+                ),
+            )
+        );
+        $this->addChild(
+            'add_attribute',
+            'Mage_Backend_Block_Widget_Button',
+            array(
+                'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Create New Variation Set'),
+                'class' => 'new-variation-set',
+                'data_attribute' => array(
+                    'mage-init' => array(
+                        'configurableAttribute' => array(
+                            'url' => $this->getUrl(
+                                '*/catalog_product_attribute/new',
+                                array(
+                                    'store' => $this->getProduct()->getStoreId(),
+                                    'product_tab' => 'variations',
+                                    'popup' => 1,
+                                    '_query' => array(
+                                        'attribute' => array(
+                                            'is_global' => 1,
+                                            'frontend_input' => 'select',
+                                            'is_configurable' => 1
+                                        ),
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ),
+            )
+        );
+        $this->addChild(
+            'add_option',
+            'Mage_Backend_Block_Widget_Button',
+            array(
+                'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Add Option'),
+                'class' => 'action- scalable add',
+                'data_attribute' => array(
+                    'mage-init' => array(
+                        'button' => array('event' => 'add-option'),
+                    ),
+                    'action' => 'add-option',
                 ),
             )
         );
@@ -379,5 +424,15 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config extends Mage_Ad
         return $this->getProduct()->isConfigurable()
             ? array_filter($this->_getProductType()->getUsedProductAttributes($this->getProduct()))
             : array();
+    }
+
+    /**
+     * Get parent tab code
+     *
+     * @return string
+     */
+    public function getParentTab()
+    {
+        return 'product-details';
     }
 }

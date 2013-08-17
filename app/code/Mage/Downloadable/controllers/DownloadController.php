@@ -156,7 +156,7 @@ class Mage_Downloadable_DownloadController extends Mage_Core_Controller_Front_Ac
         $id = $this->getRequest()->getParam('id', 0);
         $linkPurchasedItem = Mage::getModel('Mage_Downloadable_Model_Link_Purchased_Item')->load($id, 'link_hash');
         if (! $linkPurchasedItem->getId() ) {
-            $this->_getCustomerSession()->addNotice(Mage::helper('Mage_Downloadable_Helper_Data')->__("Requested link does not exist."));
+            $this->_getCustomerSession()->addNotice(Mage::helper('Mage_Downloadable_Helper_Data')->__("We can't find the link you requested."));
             return $this->_redirect('*/customer/products');
         }
         if (!Mage::helper('Mage_Downloadable_Helper_Data')->getIsShareable($linkPurchasedItem)) {
@@ -177,7 +177,7 @@ class Mage_Downloadable_DownloadController extends Mage_Core_Controller_Front_Ac
             }
             $linkPurchased = Mage::getModel('Mage_Downloadable_Model_Link_Purchased')->load($linkPurchasedItem->getPurchasedId());
             if ($linkPurchased->getCustomerId() != $customerId) {
-                $this->_getCustomerSession()->addNotice(Mage::helper('Mage_Downloadable_Helper_Data')->__("Requested link does not exist."));
+                $this->_getCustomerSession()->addNotice(Mage::helper('Mage_Downloadable_Helper_Data')->__("We can't find the link you requested."));
                 return $this->_redirect('*/customer/products');
             }
         }
@@ -211,7 +211,7 @@ class Mage_Downloadable_DownloadController extends Mage_Core_Controller_Front_Ac
             }
             catch (Exception $e) {
                 $this->_getCustomerSession()->addError(
-                    Mage::helper('Mage_Downloadable_Helper_Data')->__('An error occurred while getting the requested content. Please contact the store owner.')
+                    Mage::helper('Mage_Downloadable_Helper_Data')->__('Something went wrong while getting the requested content.')
                 );
             }
         } elseif ($status == Mage_Downloadable_Model_Link_Purchased_Item::LINK_STATUS_EXPIRED) {
@@ -222,7 +222,7 @@ class Mage_Downloadable_DownloadController extends Mage_Core_Controller_Front_Ac
             $this->_getCustomerSession()->addNotice(Mage::helper('Mage_Downloadable_Helper_Data')->__('The link is not available.'));
         } else {
             $this->_getCustomerSession()->addError(
-                Mage::helper('Mage_Downloadable_Helper_Data')->__('An error occurred while getting the requested content. Please contact the store owner.')
+                Mage::helper('Mage_Downloadable_Helper_Data')->__('Something went wrong while getting the requested content.')
             );
         }
         return $this->_redirect('*/customer/products');

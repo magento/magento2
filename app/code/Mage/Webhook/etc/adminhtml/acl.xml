@@ -31,7 +31,7 @@
             <resource id="Mage_Adminhtml::admin">
                 <resource id="Mage_Adminhtml::system">
                     <resource id="Mage_Webapi::webapi">
-                        <resource id="Mage_Webhook::webhook" title="WebHook Subscribers" sortOrder="15" />
+                        <resource id="Mage_Webhook::webhook" title="WebHook Subscriptions" sortOrder="15" />
                     </resource>
                 </resource>
             </resource>

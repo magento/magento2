@@ -28,11 +28,12 @@
  * @var $this Mage_Page_Block_Html_Title
  */
 $titleId = ($this->getTitleId()) ? ' id="' . $this->getTitleId() . '"' : '';
-$titlePrefix = ($this->getTitlePrefix()) ? '<span class="page-title-prefix">' . $this->getTitlePrefix() . '</span> ' : '';
-$titleSuffix = ($this->getTitleSuffix()) ? ' <span class="page-title-suffix">' . $this->getTitleSuffix() . '</span>' : '';
+$titleClass = ($this->getTitleClass()) ? ' ' . $this->getTitleClass() : '';
+$titlePrefix = ($this->getTitlePrefix()) ? '<span class="page-title-prefix">' . $this->getTitlePrefix() . '</span>' : '';
+$titleSuffix = ($this->getTitleSuffix()) ? '<span class="page-title-suffix">' . $this->getTitleSuffix() . '</span>' : '';
 $title = $titlePrefix . $this->escapeHtml($this->getPageTitle()) . $titleSuffix;
 ?>
-<div class="page-title">
+<div class="page-title<?php echo $titleClass; ?>">
     <div class="page-title-inner">
         <h1 class="title"<?php echo $titleId?>><?php echo $title ?></h1>
         <?php echo $this->getChildHtml(); ?>

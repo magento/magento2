@@ -433,7 +433,7 @@ class Mage_ImportExport_Model_Import_Entity_ProductTest extends PHPUnit_Framewor
         $data = 'data://text/plain;base64,' . base64_encode($data);
         $fixture = new Mage_ImportExport_Model_Import_Source_Csv($data);
 
-        foreach (new Mage_Catalog_Model_Resource_Product_Collection as $product) {
+        foreach (Mage::getModel('Mage_Catalog_Model_Resource_Product_Collection') as $product) {
             $this->fail("Unexpected precondition - product exists: '{$product->getId()}'.");
         }
 

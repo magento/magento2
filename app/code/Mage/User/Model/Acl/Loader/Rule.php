@@ -24,18 +24,26 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_User_Model_Acl_Loader_Rule implements Magento_Acl_Loader
+class Mage_User_Model_Acl_Loader_Rule implements Magento_Acl_LoaderInterface
 {
     /**
      * @var Mage_Core_Model_Resource
      */
     protected $_resource;
 
-    public function __construct(array $data = array())
-    {
-        $this->_resource = isset($data['resource'])
-            ? $data['resource']
-            : Mage::getSingleton('Mage_Core_Model_Resource');
+    /**
+     * @param Mage_Core_Model_Acl_RootResource $rootResource
+     * @param Mage_Core_Model_Resource $resource
+     * @param array $data
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter):
+     */
+    public function __construct(
+        Mage_Core_Model_Acl_RootResource $rootResource,
+        Mage_Core_Model_Resource $resource,
+        array $data = array()
+    ) {
+        $this->_resource = $resource;
+        $this->_rootResource = $rootResource;
     }
 
     /**
@@ -59,13 +67,15 @@ class Mage_User_Model_Acl_Loader_Rule implements Magento_Acl_Loader
             $resource = $rule['resource_id'];
             $privileges = !empty($rule['privileges']) ? explode(',', $rule['privileges']) : null;
 
-            if ( $rule['permission'] == 'allow') {
-                if ($resource === Mage_Backend_Model_Acl_Config::ACL_RESOURCE_ALL) {
-                    $acl->allow($role, null, $privileges);
+            if ($acl->has($resource)) {
+                if ($rule['permission'] == 'allow') {
+                    if ($resource === $this->_rootResource->getId()) {
+                        $acl->allow($role, null, $privileges);
+                    }
+                    $acl->allow($role, $resource, $privileges);
+                } else if ($rule['permission'] == 'deny') {
+                    $acl->deny($role, $resource, $privileges);
                 }
-                $acl->allow($role, $resource, $privileges);
-            } else if ( $rule['permission'] == 'deny' ) {
-                $acl->deny($role, $resource, $privileges);
             }
         }
     }

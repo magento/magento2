@@ -25,157 +25,230 @@
  */
 ?>
 <script type="text/javascript">
-//<![CDATA[
-function toggleValueElementsWithCheckbox(checkbox) {
-    var td = $(checkbox.parentNode);
-    var checkboxes = td.getElementsBySelector('input[type="checkbox"]');
-    var inputs = td.getElementsBySelector('input[type!="checkbox"]', 'select', 'textarea');
-    if (checkboxes.size()>1) {
-        inputs.each(function(input){
-            input.disabled = (!checkbox.checked || checkboxes[0].checked);
-            checkboxes[0].disabled = !checkbox.checked;
-        });
-    } else {
-        inputs.each(function(input){
-            input.disabled = !checkbox.checked;
-        });
+    //<![CDATA[
+    function toggleValueElementsWithCheckbox(checkbox) {
+        var td = $(checkbox).up('.field');
+        var checkboxes = td.getElementsBySelector('input[type="checkbox"]');
+        var inputs = td.getElementsBySelector('input[type!="checkbox"]', 'select', 'textarea');
+        if (checkboxes.size()>1) {
+            inputs.each(function(input){
+                input.disabled = (!checkbox.checked || checkboxes[0].checked);
+                checkboxes[0].disabled = !checkbox.checked;
+            });
+        } else {
+            inputs.each(function(input){
+                input.disabled = !checkbox.checked;
+            });
+        }
     }
-}
-//]]>
+    //]]>
 </script>
 
-<div class="entry-edit">
-    <div class="entry-edit-head">
-        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Advanced Inventory') ?></h4>
+<div class="fieldset-wrapper form-inline">
+    <div class="fieldset-wrapper-title">
+        <strong class="title">
+            <span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Advanced Inventory') ?></span>
+        </strong>
     </div>
-    <fieldset>
-        <legend><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Advanced Inventory') ?></legend>
-        <table cellspacing="0" class="form-list" id="table_cataloginventory">
-            <tr>
-                <td class="label"><label for="inventory_manage_stock"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Stock') ?></label></td>
-                <td class="value"><select id="inventory_manage_stock" name="<?php echo $this->getFieldSuffix() ?>[manage_stock]" class="select" disabled="disabled">
+    <div class="fieldset-wrapper-content">
+        <fieldset class="fieldset" id="table_cataloginventory">
+            <div class="field">
+                <label class="label" for="inventory_manage_stock">
+                    <span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Stock') ?></span>
+                </label>
+                <div class="control">
+                    <select id="inventory_manage_stock" name="<?php echo $this->getFieldSuffix() ?>[manage_stock]" class="select" disabled="disabled">
                         <option value="1"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Yes') ?></option>
                         <option value="0"<?php if ($this->getConfigFieldValue('manage_stock') == 0): ?> selected="selected"<?php endif; ?>><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('No') ?></option>
                     </select>
+                </div>
+                <div class="field-service" value-scope="<?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?>">
                     <input name="<?php echo $this->getFieldSuffix() ?>[use_config_manage_stock]" type="checkbox" id="inventory_use_config_manage_stock" onclick="toggleValueElements(this, this.parentNode, $('inventory_manage_stock_checkbox'));" value="1" checked="checked" disabled="disabled" />
                     <label for="inventory_use_config_manage_stock" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Config Settings') ?></label>
-                    <input type="checkbox" id="inventory_manage_stock_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
-                    <label for="inventory_manage_stock_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
-                </td>
-                <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
-            </tr>
-            <tr>
-                <td class="label"><label for="inventory_qty"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Qty') ?><span class="required">*</span></label></td>
-                <td class="value">
+                    <span class="attribute-change-checkbox">
+                        <input type="checkbox" id="inventory_manage_stock_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
+                        <label for="inventory_manage_stock_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field required">
+                <label class="label" for="inventory_qty">
+                    <span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Qty') ?></span>
+                </label>
+                <div class="control">
                     <input type="text" class="input-text required-entry validate-number" id="inventory_qty" name="<?php echo $this->getFieldSuffix() ?>[qty]" value="<?php echo $this->getDefaultConfigValue('qty')*1 ?>" disabled="disabled" />
-                    <input type="checkbox" id="inventory_qty_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
-                    <label for="inventory_qty_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
-                </td>
-                <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
-            </tr>
-            <tr>
-                <td class="label"><label for="inventory_min_qty"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Minimum Qty for Item\'s Status to be Out of Stock') ?></label></td>
-                <td class="value"><input type="text" class="input-text validate-number" id="inventory_min_qty" name="<?php echo $this->getFieldSuffix() ?>[min_qty]" value="<?php echo $this->getDefaultConfigValue('min_qty')*1 ?>" disabled="disabled" />
+                </div>
+                <div class="field-service" value-scope="<?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?>">
+                    <span class="attribute-change-checkbox">
+                        <input type="checkbox" id="inventory_qty_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
+                        <label for="inventory_qty_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label" for="inventory_min_qty">
+                    <span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Minimum Qty for Item\'s Status to be Out of Stock') ?></span>
+                </label>
+                <div class="control">
+                    <input type="text" class="input-text validate-number" id="inventory_min_qty" name="<?php echo $this->getFieldSuffix() ?>[min_qty]" value="<?php echo $this->getDefaultConfigValue('min_qty')*1 ?>" disabled="disabled" />
+                </div>
+                <div class="field-service" value-scope="<?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?>">
                     <input type="checkbox" id="inventory_use_config_min_qty" name="<?php echo $this->getFieldSuffix() ?>[use_config_min_qty]" value="1" onclick="toggleValueElements(this, this.parentNode, $('inventory_min_qty_checkbox'));" checked="checked" disabled="disabled" />
                     <label for="inventory_use_config_min_qty" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Config Settings') ?></label>
-                    <input type="checkbox" id="inventory_min_qty_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
-                    <label for="inventory_min_qty_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
-                </td>
-                <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
-            </tr>
-            <tr>
-                <td class="label"><label for="inventory_min_sale_qty"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Minimum Qty Allowed in Shopping Cart') ?></label></td>
-                <td class="value"><input type="text" class="input-text validate-number" id="inventory_min_sale_qty" name="<?php echo $this->getFieldSuffix() ?>[min_sale_qty]" value="<?php echo $this->getDefaultConfigValue('min_sale_qty')*1 ?>" disabled="disabled" />
+                    <span class="attribute-change-checkbox">
+                        <input type="checkbox" id="inventory_min_qty_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
+                        <label for="inventory_min_qty_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label" for="inventory_min_sale_qty">
+                    <span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Minimum Qty Allowed in Shopping Cart') ?></span>
+                </label>
+                <div class="control">
+                    <input type="text" class="input-text validate-number" id="inventory_min_sale_qty" name="<?php echo $this->getFieldSuffix() ?>[min_sale_qty]" value="<?php echo $this->getDefaultConfigValue('min_sale_qty')*1 ?>" disabled="disabled" />
+                </div>
+                <div class="field-service" value-scope="<?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?>">
                     <input type="checkbox" id="inventory_use_config_min_sale_qty" name="<?php echo $this->getFieldSuffix() ?>[use_config_min_sale_qty]" value="1" onclick="toggleValueElements(this, this.parentNode, $('inventory_min_sale_qty_checkbox'));" checked="checked" disabled="disabled" />
                     <label for="inventory_use_config_min_sale_qty" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Config Settings') ?></label>
-                    <input type="checkbox" id="inventory_min_sale_qty_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
-                    <label for="inventory_min_sale_qty_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
-                </td>
-                <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
-            </tr>
-            <tr>
-                <td class="label"><label for="inventory_max_sale_qty"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Maximum Qty Allowed in Shopping Cart') ?></label></td>
-                <td class="value"><input type="text" class="input-text validate-number" id="inventory_max_sale_qty" name="<?php echo $this->getFieldSuffix() ?>[max_sale_qty]" value="<?php echo $this->getDefaultConfigValue('max_sale_qty')*1 ?>" disabled="disabled" />
+                    <span class="attribute-change-checkbox">
+                        <input type="checkbox" id="inventory_min_sale_qty_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
+                        <label for="inventory_min_sale_qty_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label" for="inventory_max_sale_qty">
+                    <span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Maximum Qty Allowed in Shopping Cart') ?></span>
+                </label>
+                <div class="control">
+                    <input type="text" class="input-text validate-number" id="inventory_max_sale_qty" name="<?php echo $this->getFieldSuffix() ?>[max_sale_qty]" value="<?php echo $this->getDefaultConfigValue('max_sale_qty')*1 ?>" disabled="disabled" />
+                </div>
+                <div class="field-service" value-scope="<?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?>">
                     <input type="checkbox" id="inventory_use_config_max_sale_qty" name="<?php echo $this->getFieldSuffix() ?>[use_config_max_sale_qty]" value="1" onclick="toggleValueElements(this, this.parentNode, $('inventory_max_sale_checkbox'));" checked="checked" disabled="disabled" />
                     <label for="inventory_use_config_max_sale_qty" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Config Settings') ?></label>
-                    <input type="checkbox" id="inventory_max_sale_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
-                    <label for="inventory_max_sale_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
-                </td>
-                <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
-            </tr>
-            <tr>
-                <td class="label"><label for="inventory_is_qty_decimal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Qty Uses Decimals') ?></label></td>
-                <td class="value"><select id="inventory_is_qty_decimal" name="<?php echo $this->getFieldSuffix() ?>[is_qty_decimal]" class="select" disabled="disabled">
+                    <span class="attribute-change-checkbox">
+                        <input type="checkbox" id="inventory_max_sale_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
+                        <label for="inventory_max_sale_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label" for="inventory_is_qty_decimal">
+                    <span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Qty Uses Decimals') ?></span>
+                </label>
+                <div class="control">
+                    <select id="inventory_is_qty_decimal" name="<?php echo $this->getFieldSuffix() ?>[is_qty_decimal]" class="select" disabled="disabled">
                         <option value="0"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('No') ?></option>
                         <option value="1"<?php if ($this->getDefaultConfigValue('is_qty_decimal')==1): ?> selected="selected"<?php endif; ?>><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Yes') ?></option>
                     </select>
-                    <input type="checkbox" id="inventory_is_qty_decimal_checkbox"    onclick="toggleValueElementsWithCheckbox(this)" />
-                    <label for="inventory_is_qty_decimal_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
-                </td>
-                <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
-            </tr>
-            <tr>
-                <td class="label"><label for="inventory_backorders"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Backorders') ?></label></td>
-                <td class="value"><select id="inventory_backorders" name="<?php echo $this->getFieldSuffix() ?>[backorders]" class="select" disabled="disabled">
+                </div>
+                <div class="field-service" value-scope="<?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?>">
+                    <span class="attribute-change-checkbox">
+                        <input type="checkbox" id="inventory_is_qty_decimal_checkbox"    onclick="toggleValueElementsWithCheckbox(this)" />
+                        <label for="inventory_is_qty_decimal_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label" for="inventory_backorders">
+                    <span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Backorders') ?></span>
+                </label>
+                <div class="control">
+                    <select id="inventory_backorders" name="<?php echo $this->getFieldSuffix() ?>[backorders]" class="select" disabled="disabled">
                         <?php foreach ($this->getBackordersOption() as $option): ?>
-                        <?php $_selected = ($option['value'] == $this->getDefaultConfigValue('backorders')) ? ' selected="selected"' : '' ?>
-                        <option value="<?php echo $option['value'] ?>"<?php echo $_selected ?>><?php echo $option['label'] ?></option>
+                            <?php $_selected = ($option['value'] == $this->getDefaultConfigValue('backorders')) ? ' selected="selected"' : '' ?>
+                            <option value="<?php echo $option['value'] ?>"<?php echo $_selected ?>><?php echo $option['label'] ?></option>
                         <?php endforeach; ?>
                     </select>
+                </div>
+                <div class="field-service" value-scope="<?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?>">
                     <input type="checkbox" id="inventory_use_config_backorders" name="<?php echo $this->getFieldSuffix() ?>[use_config_backorders]" value="1" onclick="toggleValueElements(this, this.parentNode, $('inventory_backorders_checkbox'));" checked="checked" disabled="disabled" />
                     <label for="inventory_use_config_backorders" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Config Settings') ?></label>
-                    <input type="checkbox" id="inventory_backorders_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
-                    <label for="inventory_backorders_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
-                </td>
-                <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
-            </tr>
-            <tr>
-                <td class="label"><label for="inventory_notify_stock_qty"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Notify for Quantity Below') ?></label></td>
-                <td class="value"><input type="text" class="input-text validate-number" id="inventory_notify_stock_qty" name="<?php echo $this->getFieldSuffix() ?>[notify_stock_qty]" value="<?php echo $this->getDefaultConfigValue('notify_stock_qty')*1 ?>" disabled="disabled" />
+                    <span class="attribute-change-checkbox">
+                        <input type="checkbox" id="inventory_backorders_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
+                        <label for="inventory_backorders_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label" for="inventory_notify_stock_qty">
+                    <span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Notify for Quantity Below') ?></span>
+                </label>
+                <div class="control">
+                    <input type="text" class="input-text validate-number" id="inventory_notify_stock_qty" name="<?php echo $this->getFieldSuffix() ?>[notify_stock_qty]" value="<?php echo $this->getDefaultConfigValue('notify_stock_qty')*1 ?>" disabled="disabled" />
+                </div>
+                <div class="field-service" value-scope="<?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?>">
                     <input type="checkbox" id="inventory_use_config_notify_stock_qty" name="<?php echo $this->getFieldSuffix() ?>[use_config_notify_stock_qty]" value="1" onclick="toggleValueElements(this, this.parentNode, $('inventory_notify_stock_qty_checkbox'));" checked="checked" disabled="disabled" />
                     <label for="inventory_use_config_notify_stock_qty" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Config Settings') ?></label>
-                    <input type="checkbox" id="inventory_notify_stock_qty_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
-                    <label for="inventory_notify_stock_qty_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
-                </td>
-                <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
-            </tr>
+                    <span class="attribute-change-checkbox">
+                        <input type="checkbox" id="inventory_notify_stock_qty_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
+                        <label for="inventory_notify_stock_qty_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
+                    </span>
+                </div>
+            </div>
 
-            <tr>
-                <td class="label"><label for="inventory_enable_qty_increments"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Enable Qty Increments') ?></label></td>
-                <td class="value"><select id="inventory_enable_qty_increments" name="<?php echo $this->getFieldSuffix() ?>[enable_qty_increments]" class="select" disabled="disabled">
+            <div class="field">
+                <label class="label" for="inventory_enable_qty_increments">
+                    <span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Enable Qty Increments') ?></span>
+                </label>
+                <div class="control">
+                    <select id="inventory_enable_qty_increments" name="<?php echo $this->getFieldSuffix() ?>[enable_qty_increments]" class="select" disabled="disabled">
                         <option value="1"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Yes') ?></option>
                         <option value="0"<?php if ($this->getDefaultConfigValue('enable_qty_increments') == 0): ?> selected="selected"<?php endif; ?>><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('No') ?></option>
                     </select>
+                </div>
+                <div class="field-service" value-scope="<?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?>">
                     <input type="checkbox" id="inventory_use_config_enable_qty_increments" name="<?php echo $this->getFieldSuffix() ?>[use_config_enable_qty_increments]" value="1" onclick="toggleValueElements(this, this.parentNode, [$('inventory_enable_qty_increments_checkbox')]);" checked="checked" disabled="disabled" />
                     <label for="inventory_use_config_enable_qty_increments" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Config Settings') ?></label>
-                    <input type="checkbox" id="inventory_enable_qty_increments_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
-                    <label for="inventory_enable_qty_increments_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
-                </td>
-                <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
-            </tr>
-            <tr>
-                <td class="label"><label for="inventory_qty_increments"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Qty Increments') ?></label></td>
-                <td class="value">
+                    <span class="attribute-change-checkbox">
+                        <input type="checkbox" id="inventory_enable_qty_increments_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
+                        <label for="inventory_enable_qty_increments_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label" for="inventory_qty_increments">
+                    <span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Qty Increments') ?></span>
+                </label>
+                <div class="control">
                     <input type="text" class="input-text validate-number" id="inventory_qty_increments" name="<?php echo $this->getFieldSuffix() ?>[qty_increments]" value="<?php echo $this->getDefaultConfigValue('qty_increments')*1 ?>" disabled="disabled" />
+                </div>
+                <div class="field-service" value-scope="<?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?>">
                     <input type="checkbox" id="inventory_use_config_qty_increments" name="<?php echo $this->getFieldSuffix() ?>[use_config_qty_increments]" value="1" onclick="toggleValueElements(this, this.parentNode, [$('inventory_qty_increments_checkbox')]);" checked="checked" disabled="disabled" />
                     <label for="inventory_use_config_qty_increments" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Config Settings') ?></label>
-                    <input type="checkbox" id="inventory_qty_increments_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
-                    <label for="inventory_qty_increments_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
-                </td>
-                <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
-            </tr>
+                    <span class="attribute-change-checkbox">
+                        <input type="checkbox" id="inventory_qty_increments_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
+                        <label for="inventory_qty_increments_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
+                    </span>
+                </div>
+            </div>
 
-            <tr>
-                <td class="label"><label for="inventory_stock_availability"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Stock Availability') ?></label></td>
-                <td class="value"><select id="inventory_stock_availability" name="<?php echo $this->getFieldSuffix() ?>[is_in_stock]" class="select" disabled="disabled">
+            <div class="field">
+                <label class="label" for="inventory_stock_availability">
+                    <span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Stock Availability') ?></span>
+                </label>
+                <div class="control">
+                    <select id="inventory_stock_availability" name="<?php echo $this->getFieldSuffix() ?>[is_in_stock]" class="select" disabled="disabled">
                         <option value="1"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('In Stock') ?></option>
                         <option value="0"<?php if ($this->getDefaultConfigValue('is_in_stock')==0): ?> selected<?php endif; ?>><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Out of Stock') ?></option>
                     </select>
-                    <input type="checkbox" id="inventory_stock_availability_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
-                    <label for="inventory_stock_availability_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
-                </td>
-                <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
-            </tr>
-        </table>
-    </fieldset>
+                </div>
+                <div class="field-service" value-scope="<?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?>">
+                    <span class="attribute-change-checkbox">
+                        <input type="checkbox" id="inventory_stock_availability_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
+                        <label for="inventory_stock_availability_checkbox" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?></label>
+                    </span>
+                </div>
+            </div>
+        </fieldset>
+    </div>
 </div>

@@ -65,7 +65,7 @@ class Mage_GiftMessage_Helper_Message extends Mage_Core_Helper_Data
      */
     public function getInline($type, Varien_Object $entity, $dontDisplayContainer=false)
     {
-        if (!in_array($type, array('onepage_checkout','multishipping_adress'))
+        if (!in_array($type, array('onepage_checkout','multishipping_address'))
             && !$this->isMessagesAvailable($type, $entity)
         ) {
             return '';

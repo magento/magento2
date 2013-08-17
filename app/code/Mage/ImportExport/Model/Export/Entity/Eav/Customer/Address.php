@@ -167,6 +167,28 @@ class Mage_ImportExport_Model_Export_Entity_Eav_Customer_Address
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function _getHeaderColumns()
+    {
+        return array_merge(
+            $this->_permanentAttributes,
+            $this->_getExportAttributeCodes(),
+            array_keys(self::$_defaultAddressAttributeMapping)
+        );
+    }
+
+    /**
+     * Get customers collection
+     *
+     * @return Mage_Customer_Model_Resource_Address_Collection
+     */
+    protected function _getEntityCollection()
+    {
+        return $this->_addressCollection;
+    }
+
+    /**
      * Export process
      *
      * @return string
@@ -174,19 +196,13 @@ class Mage_ImportExport_Model_Export_Entity_Eav_Customer_Address
     public function export()
     {
         // skip and filter by customer address attributes
-        $this->_addressCollection = $this->_prepareEntityCollection($this->_addressCollection);
-        $this->_addressCollection->setCustomerFilter(array_keys($this->_customers));
+        $this->_prepareEntityCollection($this->_getEntityCollection());
+        $this->_getEntityCollection()->setCustomerFilter(array_keys($this->_customers));
 
         // prepare headers
-        $this->getWriter()->setHeaderCols(
-            array_merge(
-                $this->_permanentAttributes,
-                $this->_getExportAttributeCodes(),
-                array_keys(self::$_defaultAddressAttributeMapping)
-            )
-        );
+        $this->getWriter()->setHeaderCols($this->_getHeaderColumns());
 
-        $this->_exportCollectionByPages($this->_addressCollection);
+        $this->_exportCollectionByPages($this->_getEntityCollection());
 
         return $this->getWriter()->getContents();
     }

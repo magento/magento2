@@ -25,8 +25,8 @@
  */
 ?>
 <div class="page-actions">
-    <button class="action-default primary" onclick="window.location='<?php echo $this->getCreateUrl() ?>'">
-        <?php echo Mage::helper('Mage_Newsletter_Helper_Data')->__('Add New Template'); ?>
+    <button class="action- add default" onclick="window.location='<?php echo $this->getCreateUrl() ?>'">
+        <span><?php echo Mage::helper('Mage_Newsletter_Helper_Data')->__('Add New Template'); ?></span>
     </button>
 </div>
 <?php echo $this->getChildHtml('grid') ?>

@@ -42,13 +42,6 @@ class Mage_Core_Helper_Theme extends Mage_Core_Helper_Abstract
         '//reference[@name="head"]/action[@method="addCss" or @method="addCssIe"]/*[1]';
 
     /**
-     * Design model
-     *
-     * @var Mage_Core_Model_Design_Package
-     */
-    protected $_design;
-
-    /**
      * Directories
      *
      * @var Mage_Core_Model_Dir
@@ -58,7 +51,7 @@ class Mage_Core_Helper_Theme extends Mage_Core_Helper_Abstract
     /**
      * Layout merge factory
      *
-     * @var Mage_Core_Model_Layout_Merge_Factory
+     * @var Mage_Core_Model_Layout_MergeFactory
      */
     protected $_layoutMergeFactory;
 
@@ -70,31 +63,28 @@ class Mage_Core_Helper_Theme extends Mage_Core_Helper_Abstract
     protected $_themeCollection;
 
     /**
-     * @var Mage_Core_Model_Theme_Factory
+     * @var Mage_Core_Model_View_FileSystem
      */
-    protected $_themeFactory;
+    protected $_viewFileSystem;
 
     /**
      * @param Mage_Core_Helper_Context $context
-     * @param Mage_Core_Model_Design_Package $design
      * @param Mage_Core_Model_Dir $dirs
-     * @param Mage_Core_Model_Layout_Merge_Factory $layoutMergeFactory
+     * @param Mage_Core_Model_Layout_MergeFactory $layoutMergeFactory
      * @param Mage_Core_Model_Resource_Theme_Collection $themeCollection
-     * @param Mage_Core_Model_Theme_Factory $themeFactory
+     * @param Mage_Core_Model_View_FileSystem $viewFileSystem
      */
     public function __construct(
         Mage_Core_Helper_Context $context,
-        Mage_Core_Model_Design_Package $design,
         Mage_Core_Model_Dir $dirs,
-        Mage_Core_Model_Layout_Merge_Factory $layoutMergeFactory,
+        Mage_Core_Model_Layout_MergeFactory $layoutMergeFactory,
         Mage_Core_Model_Resource_Theme_Collection $themeCollection,
-        Mage_Core_Model_Theme_Factory $themeFactory
+        Mage_Core_Model_View_FileSystem $viewFileSystem
     ) {
-        $this->_design = $design;
         $this->_dirs = $dirs;
         $this->_layoutMergeFactory = $layoutMergeFactory;
         $this->_themeCollection = $themeCollection;
-        $this->_themeFactory = $themeFactory;
+        $this->_viewFileSystem = $viewFileSystem;
         parent::__construct($context);
     }
 
@@ -111,12 +101,8 @@ class Mage_Core_Helper_Theme extends Mage_Core_Helper_Abstract
      */
     public function getCssFiles($theme)
     {
-        $arguments = array(
-            'area'  => $theme->getArea(),
-            'theme' => $theme->getThemeId()
-        );
         /** @var $layoutMerge Mage_Core_Model_Layout_Merge */
-        $layoutMerge = $this->_layoutMergeFactory->create(array('arguments' => $arguments));
+        $layoutMerge = $this->_layoutMergeFactory->create(array('theme' => $theme));
         $layoutElement = $layoutMerge->getFileLayoutUpdatesXml();
 
         $elements = array_merge(
@@ -134,7 +120,7 @@ class Mage_Core_Helper_Theme extends Mage_Core_Helper_Abstract
         $files = array();
         foreach ($elements as $fileId) {
             $fileId = (string)$fileId;
-            $path = $this->_design->getViewFile($fileId, $params);
+            $path = $this->_viewFileSystem->getViewFile($fileId, $params);
             $file = array(
                 'id'       => $fileId,
                 'path'     => Magento_Filesystem::fixSeparator($path),
@@ -395,55 +381,5 @@ class Mage_Core_Helper_Theme extends Mage_Core_Helper_Abstract
     public function getSafePath($filePath, $basePath)
     {
         return ltrim(str_ireplace($basePath, '', $filePath), '\\/');
-    }
-
-    /**
-     * Load theme by theme id
-     * Method also checks if theme actually loaded and if theme is editable
-     *
-     * @param int $themeId
-     * @return Mage_Core_Model_Theme
-     * @throws Mage_Core_Exception
-     */
-    public function loadEditableTheme($themeId)
-    {
-        $theme = $this->_loadTheme($themeId);
-        if (!$theme->isEditable()) {
-            throw new Mage_Core_Exception($this->__('Theme "%s" is not editable.', $themeId));
-        }
-        return $theme;
-    }
-
-    /**
-     * Load theme by theme id
-     * Method also checks if theme actually loaded and if theme is visible
-     *
-     * @param int $themeId
-     * @return Mage_Core_Model_Theme
-     * @throws Mage_Core_Exception
-     */
-    public function loadVisibleTheme($themeId)
-    {
-        $theme = $this->_loadTheme($themeId);
-        if (!$theme->isVisible()) {
-            throw new Mage_Core_Exception($this->__('Theme "%s" is not visible.', $themeId));
-        }
-        return $theme;
-    }
-
-    /**
-     * Load theme by theme id and checks if theme actually loaded
-     *
-     * @param $themeId
-     * @return Mage_Core_Model_Theme
-     * @throws Mage_Core_Exception
-     */
-    protected function _loadTheme($themeId)
-    {
-        $theme = $this->_themeFactory->create();
-        if (!($themeId && $theme->load($themeId)->getId())) {
-            throw new Mage_Core_Exception($this->__('Theme "%s" was not found.', $themeId));
-        }
-        return $theme;
     }
 }

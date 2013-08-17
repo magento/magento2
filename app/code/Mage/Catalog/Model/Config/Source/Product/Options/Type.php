@@ -47,6 +47,9 @@ class Mage_Catalog_Model_Config_Source_Product_Options_Type implements Mage_Core
             $types = array();
             $typesPath = self::PRODUCT_OPTIONS_GROUPS_PATH . '/' . $group->getName() . '/types';
             foreach (Mage::getConfig()->getNode($typesPath)->children() as $type) {
+                if (isset($type->disabled) && (string)$type->disabled) {
+                    continue;
+                }
                 $labelPath = self::PRODUCT_OPTIONS_GROUPS_PATH . '/' . $group->getName() . '/types/' . $type->getName()
                     . '/label';
                 $types[] = array(
@@ -57,10 +60,12 @@ class Mage_Catalog_Model_Config_Source_Product_Options_Type implements Mage_Core
 
             $labelPath = self::PRODUCT_OPTIONS_GROUPS_PATH . '/' . $group->getName() . '/label';
 
-            $groups[] = array(
-                'label' => $helper->__((string) Mage::getConfig()->getNode($labelPath)),
-                'value' => $types
-            );
+            if (count($types)) {
+                $groups[] = array(
+                    'label' => $helper->__((string) Mage::getConfig()->getNode($labelPath)),
+                    'value' => $types
+                );
+            }
         }
 
         return $groups;

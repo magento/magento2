@@ -51,11 +51,6 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
                                     </admin>
                                 </routers>
                                 <frontName>backend</frontName>
-                                <acl>
-                                    <resourceLoader>resourceLoader</resourceLoader>
-                                    <roleLocator>roleLocator</roleLocator>
-                                    <policy>policy</policy>
-                                </acl>
                             </adminhtml>
                         </areas>
                         <resources>
@@ -75,12 +70,8 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
                 </config>';
 
         $configBase = new Mage_Core_Model_Config_Base($xml);
-        $objectManagerMock = $this->getMock('Magento_ObjectManager');
-        $objectManagerMock->expects($this->once())->method('configure')->with(array(
-            'Mage_Core_Model_Cache' => array(
-                'parameters' => array('one' => 'two')
-            )
-        ));
+        $objectManagerMock = $this->getMock('Mage_Core_Model_ObjectManager', array(), array(), '', false);
+        $objectManagerMock->expects($this->once())->method('loadArea')->with('global');
         $appMock = $this->getMock('Mage_Core_Model_AppInterface');
         $configStorageMock = $this->getMock('Mage_Core_Model_Config_StorageInterface');
         $configStorageMock->expects($this->any())->method('getConfiguration')->will($this->returnValue($configBase));
@@ -92,14 +83,10 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function tearDown()
-    {
-        unset($this->_model);
-    }
-
     public function testGetXpathMissingXpath()
     {
         $xpath = $this->_model->getXpath('global/resources/module_setup/setup/module1');
+        $xpath = $xpath; // PHPMD bug: unused local variable warning
         $this->assertEquals(false, $xpath);
     }
 
@@ -107,9 +94,10 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
     {
         /** @var Mage_Core_Model_Config_Element $tmp */
         $node = 'Module';
-        $expected = array( 0 => $node );
+        $expected = array($node);
 
         $xpath = $this->_model->getXpath('global/resources/module_setup/setup/module');
+        $xpath = $xpath; // PHPMD bug: unused local variable warning
         $this->assertEquals($expected, $xpath);
     }
 
@@ -119,7 +107,7 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
 
         /** @var Mage_Core_Model_Config_Element $tmp */
         $node = 'true';
-        $expected = array( 0 => $node );
+        $expected = array($node);
 
         $actual = $this->_model->getXpath('modules/Module/active');
         $this->assertEquals($expected, $actual);
@@ -155,11 +143,6 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
                     ),
                 ),
                 'frontName' => 'backend',
-                'acl' => array(
-                    'resourceLoader' => 'resourceLoader',
-                    'roleLocator' => 'roleLocator',
-                    'policy' => 'policy',
-                ),
             ),
         );
 
@@ -175,11 +158,6 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
                 'class' => 'class',
                 'base_controller' => 'base_controller',
                 'frontName' => 'backend',
-                'acl' => array(
-                    'resourceLoader' => 'resourceLoader',
-                    'roleLocator' => 'roleLocator',
-                    'policy' => 'policy',
-                ),
                 'area' => 'adminhtml',
             ),
         );
@@ -190,11 +168,5 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
     public function testGetModuleConfig()
     {
         $this->assertInstanceOf('Mage_Core_Model_Config_Element', $this->_model->getModuleConfig('Module'));
-    }
-
-    public function testIsModuleEnabled()
-    {
-        $this->_model->setNode('modules/Module/active', 'true');
-        $this->assertEquals(true, $this->_model->isModuleEnabled('Module'));
     }
 }

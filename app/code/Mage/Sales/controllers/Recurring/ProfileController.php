@@ -56,7 +56,7 @@ class Mage_Sales_Recurring_ProfileController extends Mage_Core_Controller_Front_
      */
     public function indexAction()
     {
-        $this->_title($this->__('Recurring Profiles'));
+        $this->_title($this->__('Recurring Billing Profiles'));
         $this->loadLayout();
         $this->_initLayoutMessages('Mage_Customer_Model_Session');
         $this->renderLayout();
@@ -120,7 +120,7 @@ class Mage_Sales_Recurring_ProfileController extends Mage_Core_Controller_Front_
         } catch (Mage_Core_Exception $e) {
             $this->_session->addError($e->getMessage());
         } catch (Exception $e) {
-            $this->_session->addError($this->__('Failed to update the profile.'));
+            $this->_session->addError($this->__('We couldn\'t update the profile.'));
             Mage::logException($e);
         }
         if ($profile) {
@@ -148,7 +148,7 @@ class Mage_Sales_Recurring_ProfileController extends Mage_Core_Controller_Front_
         } catch (Mage_Core_Exception $e) {
             $this->_session->addError($e->getMessage());
         } catch (Exception $e) {
-            $this->_session->addError($this->__('Failed to update the profile.'));
+            $this->_session->addError($this->__('We couldn\'t update the profile.'));
             Mage::logException($e);
         }
         if ($profile) {
@@ -165,7 +165,7 @@ class Mage_Sales_Recurring_ProfileController extends Mage_Core_Controller_Front_
     {
         try {
             $profile = $this->_initProfile();
-            $this->_title($this->__('Recurring Profiles'))->_title($this->__('Profile #%s', $profile->getReferenceId()));
+            $this->_title($this->__('Recurring Billing Profiles'))->_title($this->__('Profile #%s', $profile->getReferenceId()));
             $this->loadLayout();
             $this->_initLayoutMessages('Mage_Customer_Model_Session');
             $navigationBlock = $this->getLayout()->getBlock('customer_account_navigation');
@@ -192,7 +192,7 @@ class Mage_Sales_Recurring_ProfileController extends Mage_Core_Controller_Front_
     {
         $profile = Mage::getModel('Mage_Sales_Model_Recurring_Profile')->load($this->getRequest()->getParam('profile'));
         if (!$profile->getId()) {
-            Mage::throwException($this->__('Specified profile does not exist.'));
+            Mage::throwException($this->__('We can\'t find the profile you specified.'));
         }
         Mage::register('current_recurring_profile', $profile);
         return $profile;

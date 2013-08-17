@@ -82,7 +82,7 @@ class Mage_ImportExport_Model_Export extends Mage_ImportExport_Model_Abstract
                 } catch (Exception $e) {
                     Mage::logException($e);
                     Mage::throwException(
-                        Mage::helper('Mage_ImportExport_Helper_Data')->__('Invalid entity model')
+                        Mage::helper('Mage_ImportExport_Helper_Data')->__('Please enter a correct entity model')
                     );
                 }
                 if (!($this->_entityAdapter instanceof Mage_ImportExport_Model_Export_Entity_Abstract)
@@ -101,11 +101,11 @@ class Mage_ImportExport_Model_Export extends Mage_ImportExport_Model_Abstract
                 if ($this->getEntity() != $this->_entityAdapter->getEntityTypeCode()) {
                     Mage::throwException(
                         Mage::helper('Mage_ImportExport_Helper_Data')
-                            ->__('Input entity code is not equal to entity adapter code')
+                            ->__('The input entity code is not equal to entity adapter code.')
                     );
                 }
             } else {
-                Mage::throwException(Mage::helper('Mage_ImportExport_Helper_Data')->__('Invalid entity'));
+                Mage::throwException(Mage::helper('Mage_ImportExport_Helper_Data')->__('Please enter a correct entity.'));
             }
             $this->_entityAdapter->setParameters($this->getData());
         }
@@ -129,7 +129,7 @@ class Mage_ImportExport_Model_Export extends Mage_ImportExport_Model_Abstract
                 } catch (Exception $e) {
                     Mage::logException($e);
                     Mage::throwException(
-                        Mage::helper('Mage_ImportExport_Helper_Data')->__('Invalid entity model')
+                        Mage::helper('Mage_ImportExport_Helper_Data')->__('Please enter a correct entity model')
                     );
                 }
                 if (! $this->_writer instanceof Mage_ImportExport_Model_Export_Adapter_Abstract) {
@@ -141,7 +141,7 @@ class Mage_ImportExport_Model_Export extends Mage_ImportExport_Model_Abstract
                     );
                 }
             } else {
-                Mage::throwException(Mage::helper('Mage_ImportExport_Helper_Data')->__('Invalid file format'));
+                Mage::throwException(Mage::helper('Mage_ImportExport_Helper_Data')->__('Please correct the file format.'));
             }
         }
         return $this->_writer;
@@ -176,7 +176,7 @@ class Mage_ImportExport_Model_Export extends Mage_ImportExport_Model_Abstract
             return $result;
         } else {
             Mage::throwException(
-                Mage::helper('Mage_ImportExport_Helper_Data')->__('No filter data provided')
+                Mage::helper('Mage_ImportExport_Helper_Data')->__('Please provide filter data.')
             );
         }
     }
@@ -215,7 +215,7 @@ class Mage_ImportExport_Model_Export extends Mage_ImportExport_Model_Abstract
             return self::FILTER_TYPE_INPUT;
         } else {
             Mage::throwException(
-                Mage::helper('Mage_ImportExport_Helper_Data')->__('Can not determine attribute filter type')
+                Mage::helper('Mage_ImportExport_Helper_Data')->__('Cannot determine attribute filter type')
             );
         }
     }

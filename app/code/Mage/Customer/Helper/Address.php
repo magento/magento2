@@ -120,8 +120,8 @@ class Mage_Customer_Helper_Address extends Mage_Core_Helper_Abstract
      */
     public function getConfig($key, $store = null)
     {
-        /** @var $storeManager Mage_Core_Model_StoreManager */
-        $storeManager = Mage::getObjectManager()->get('Mage_Core_Model_StoreManager');
+        /** @var $storeManager Mage_Core_Model_StoreManagerInterface */
+        $storeManager = Mage::getObjectManager()->get('Mage_Core_Model_StoreManagerInterface');
         /** @var $store Mage_Core_Model_Store */
         $store = $storeManager->getStore($store);
 

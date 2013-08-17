@@ -30,7 +30,7 @@
 <?php $stores = $this->getStoresList(); ?>
 
 <?php if(null === $stores): ?>
-    <?php echo $this->__('Please assign theme to specific store. And then upload store logo.'); ?>
+    <?php echo $this->__('Please assign this theme to a store view and upload your store logo.'); ?>
 <?php else: ?>
     <?php foreach ($stores as $store): ?>
         <?php $elementId = $element->getHtmlId() . '-' . $store->getId(); ?>

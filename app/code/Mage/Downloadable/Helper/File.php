@@ -67,7 +67,7 @@ class Mage_Downloadable_Helper_File extends Mage_Core_Helper_Abstract
                         $baseTmpPath, $basePath, $file[0]['file']
                     );
                 } catch (Exception $e) {
-                    Mage::throwException(Mage::helper('Mage_Downloadable_Helper_Data')->__('An error occurred while saving the file(s).'));
+                    Mage::throwException(Mage::helper('Mage_Downloadable_Helper_Data')->__('Something went wrong while saving the file(s).'));
                 }
             }
             return $fileName;

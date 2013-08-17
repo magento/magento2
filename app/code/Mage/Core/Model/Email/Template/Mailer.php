@@ -61,6 +61,7 @@ class Mage_Core_Model_Email_Template_Mailer extends Varien_Object
      */
     public function send()
     {
+        /** @var $emailTemplate Mage_Core_Model_Email_Template */
         $emailTemplate = Mage::getModel('Mage_Core_Model_Email_Template');
         // Send all emails from corresponding list
         while (!empty($this->_emailInfos)) {
@@ -68,11 +69,13 @@ class Mage_Core_Model_Email_Template_Mailer extends Varien_Object
             // Handle "Bcc" recepients of the current email
             $emailTemplate->addBcc($emailInfo->getBccEmails());
             // Set required design parameters and delegate email sending to Mage_Core_Model_Email_Template
-            $emailTemplate->setDesignConfig(array(
+            $designConfig = array(
                 'area' => Mage_Core_Model_App_Area::AREA_FRONTEND,
                 'store' => $this->getStoreId()
-            ))
-                ->sendTransactional(
+            );
+            $emailTemplate->setDesignConfig($designConfig);
+
+            $emailTemplate->sendTransactional(
                 $this->getTemplateId(),
                 $this->getSender(),
                 $emailInfo->getToEmails(),

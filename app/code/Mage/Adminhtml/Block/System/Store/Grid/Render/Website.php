@@ -38,7 +38,7 @@ class Mage_Adminhtml_Block_System_Store_Grid_Render_Website
 
     public function render(Varien_Object $row)
     {
-        return '<a title="' . Mage::helper('Mage_Core_Helper_Data')->__('Edit Website') . '"
+        return '<a title="' . Mage::helper('Mage_Core_Helper_Data')->__('Edit Web Site') . '"
             href="' . $this->getUrl('*/*/editWebsite', array('website_id' => $row->getWebsiteId())) . '">'
             . $this->escapeHtml($row->getData($this->getColumn()->getIndex())) . '</a>';
     }

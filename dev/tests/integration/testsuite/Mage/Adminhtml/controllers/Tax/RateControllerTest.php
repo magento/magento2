@@ -25,6 +25,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * @magentoAppArea adminhtml
+ */
 class Mage_Adminhtml_Tax_RateControllerTest extends Mage_Backend_Utility_Controller
 {
     /**
@@ -44,6 +47,7 @@ class Mage_Adminhtml_Tax_RateControllerTest extends Mage_Backend_Utility_Control
         $rateId = $result['tax_calculation_rate_id'];
         /** @var $rate Mage_Tax_Model_Calculation_Rate */
         $rate = Mage::getModel('Mage_Tax_Model_Calculation_Rate')->load($rateId, 'tax_calculation_rate_id');
+
         $this->assertEquals($expectedData['zip_is_range'], $rate->getZipIsRange());
         $this->assertEquals($expectedData['zip_from'], $rate->getZipFrom());
         $this->assertEquals($expectedData['zip_to'], $rate->getZipTo());
@@ -87,6 +91,124 @@ class Mage_Adminhtml_Tax_RateControllerTest extends Mage_Backend_Utility_Control
                     'zip_to' => null,
                     'tax_postcode' => '*',
                 )
+            )
+        );
+    }
+
+    /**
+     * Test wrong data conditions
+     *
+     * @dataProvider ajaxSaveActionDataInvalidDataProvider
+     */
+    public function testAjaxSaveActionInvalidData($postData, $expectedData)
+    {
+        $this->getRequest()->setPost($postData);
+
+        $this->dispatch('backend/admin/tax_rate/ajaxSave');
+
+        $jsonBody = $this->getResponse()->getBody();
+        $result = Mage::helper('Mage_Core_Helper_Data')->jsonDecode($jsonBody);
+
+        $this->assertEquals($expectedData['success'], $result['success']);
+        $this->assertArrayHasKey('error_message', $result);
+        $this->assertGreaterThan(1, strlen($result['error_message']));
+    }
+
+    /**
+     * Data provider for testAjaxSaveActionInvalidData
+     *
+     * @return array
+     */
+    public function ajaxSaveActionDataInvalidDataProvider()
+    {
+        $expectedData = array(
+            'success' => false,
+            'error_message' => 'Please fill all required fields with valid information.'
+        );
+        return array(
+            array(
+                // Zip as range but no range values provided
+                array(
+                    'rate' => rand(1, 10000),
+                    'tax_country_id' => 'US',
+                    'tax_region_id' => '0',
+                    'code' => 'Rate ' . uniqid(),
+                    'zip_is_range' => '1',
+                    'zip_from' => '',
+                    'zip_to' => '',
+                    'tax_postcode' => '*',
+                ),
+                $expectedData
+            ),
+            // Code is empty
+            array(
+                array(
+                    'rate' => rand(1, 10000),
+                    'tax_country_id' => 'US',
+                    'tax_region_id' => '0',
+                    'code' => '',
+                    'zip_is_range' => '0',
+                    'zip_from' => '10000',
+                    'zip_to' => '20000',
+                    'tax_postcode' => '*',
+                ),
+                $expectedData
+            ),
+            // Country ID empty
+            array(
+                array(
+                    'rate' => rand(1, 10000),
+                    'tax_country_id' => '',
+                    'tax_region_id' => '0',
+                    'code' => 'Rate ' . uniqid(),
+                    'zip_is_range' => '0',
+                    'zip_from' => '10000',
+                    'zip_to' => '20000',
+                    'tax_postcode' => '*',
+                ),
+                $expectedData
+            ),
+            // Rate empty
+            array(
+                array(
+                    'rate' => '',
+                    'tax_country_id' => 'US',
+                    'tax_region_id' => '0',
+                    'code' => 'Rate ' . uniqid(),
+                    'zip_is_range' => '0',
+                    'zip_from' => '10000',
+                    'zip_to' => '20000',
+                    'tax_postcode' => '*',
+                ),
+                $expectedData
+            ),
+            // Tax zip code is empty
+            array(
+                array(
+                    'rate' => rand(1, 10000),
+                    'tax_country_id' => 'US',
+                    'tax_region_id' => '0',
+                    'code' => 'Rate ' . uniqid(),
+                    'zip_is_range' => '0',
+                    'zip_from' => '10000',
+                    'zip_to' => '20000',
+                    'tax_postcode' => '',
+                ),
+                $expectedData
+            ),
+            // All params empty
+            array(
+                array(
+                    'rate' => '',
+                    'tax_country_id' => '',
+                    'tax_region_id' => '1',
+                    'code' => '',
+                    'zip_is_range' => '0',
+                    'zip_from' => '',
+                    'zip_to' => '',
+                    'tax_postcode' => '',
+                ),
+                $expectedData
             ),
         );
     }

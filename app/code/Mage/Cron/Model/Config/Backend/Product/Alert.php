@@ -75,7 +75,7 @@ class Mage_Cron_Model_Config_Backend_Product_Alert extends Mage_Core_Model_Confi
                 ->setPath(self::CRON_MODEL_PATH)
                 ->save();
         } catch (Exception $e) {
-            throw new Exception(Mage::helper('Mage_Cron_Helper_Data')->__('Unable to save the cron expression.'));
+            throw new Exception(Mage::helper('Mage_Cron_Helper_Data')->__('We can\'t save the Cron expression.'));
         }
     }
 }

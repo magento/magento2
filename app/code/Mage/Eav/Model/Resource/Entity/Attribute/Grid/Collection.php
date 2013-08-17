@@ -40,14 +40,17 @@ class Mage_Eav_Model_Resource_Entity_Attribute_Grid_Collection
     protected $_registryManager;
 
     /**
-     * @param Mage_Core_Model_Resource_Db_Abstract $resource
+     * @param Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy
      * @param Mage_Core_Model_Registry $registryManager
+     * @param Mage_Core_Model_Resource_Db_Abstract $resource
      */
     public function __construct(
-        Mage_Core_Model_Registry $registryManager, Mage_Core_Model_Resource_Db_Abstract $resource = null
+        Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy,
+        Mage_Core_Model_Registry $registryManager,
+        Mage_Core_Model_Resource_Db_Abstract $resource = null
     ) {
         $this->_registryManager = $registryManager;
-        parent::__construct($resource);
+        parent::__construct($fetchStrategy, $resource);
     }
 
     /**

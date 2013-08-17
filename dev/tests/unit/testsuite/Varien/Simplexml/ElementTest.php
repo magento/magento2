@@ -79,7 +79,7 @@ class Varien_Simplexml_ElementTest extends PHPUnit_Framework_TestCase
 </root>
 
 XML;
-        $this->assertXmlStringEqualsXmlString($expected, $xml->asNiceXml());
+        $this->assertEquals($expected, $xml->asNiceXml());
     }
 
 }

@@ -108,7 +108,7 @@ class Mage_Widget_Block_Adminhtml_Widget_Options extends Mage_Adminhtml_Block_Wi
     {
         // get configuration node and translation helper
         if (!$this->getWidgetType()) {
-            Mage::throwException($this->__('Widget Type is not specified'));
+            Mage::throwException($this->__('Please specify a Widget Type.'));
         }
         $config = Mage::getSingleton('Mage_Widget_Model_Widget')->getConfigAsObject($this->getWidgetType());
         if (!$config->getParameters()) {

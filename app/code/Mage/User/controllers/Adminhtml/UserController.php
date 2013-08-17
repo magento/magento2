@@ -39,16 +39,7 @@ class Mage_User_Adminhtml_UserController extends Mage_Backend_Controller_ActionA
 
     public function indexAction()
     {
-        $this->_title($this->__('System'))
-             ->_title($this->__('Permissions'))
-             ->_title($this->__('Users'));
-        /** @var $model Mage_User_Model_Resource_User */
-        $model = Mage::getObjectManager()->get('Mage_User_Model_Resource_User');
-        if (!$model->canCreateUser()) {
-            /** @var $session Mage_Adminhtml_Model_Session */
-            $session = Mage::getSingleton('Mage_Adminhtml_Model_Session');
-            $session->addNotice($model->getMessageUserCreationProhibited());
-        }
+        $this->_title($this->__('Users'));
         $this->_initAction();
         $this->renderLayout();
     }
@@ -60,9 +51,7 @@ class Mage_User_Adminhtml_UserController extends Mage_Backend_Controller_ActionA
 
     public function editAction()
     {
-        $this->_title($this->__('System'))
-             ->_title($this->__('Permissions'))
-             ->_title($this->__('Users'));
+        $this->_title($this->__('Users'));
 
         $userId = $this->getRequest()->getParam('user_id');
         $model = Mage::getModel('Mage_User_Model_User');
@@ -70,16 +59,18 @@ class Mage_User_Adminhtml_UserController extends Mage_Backend_Controller_ActionA
         if ($userId) {
             $model->load($userId);
             if (! $model->getId()) {
-                Mage::getSingleton('Mage_Backend_Model_Session')->addError($this->__('This user no longer exists.'));
+                $this->_session->addError($this->__('This user no longer exists.'));
                 $this->_redirect('*/*/');
                 return;
             }
+        } else {
+            $model->setInterfaceLocale(Mage_Core_Model_LocaleInterface::DEFAULT_LOCALE);
         }
 
         $this->_title($model->getId() ? $model->getName() : $this->__('New User'));
 
         // Restore previously entered form data from session
-        $data = Mage::getSingleton('Mage_Backend_Model_Session')->getUserData(true);
+        $data = $this->_session->getUserData(true);
         if (!empty($data)) {
             $model->setData($data);
         }
@@ -115,9 +106,18 @@ class Mage_User_Adminhtml_UserController extends Mage_Backend_Controller_ActionA
         if (count($uRoles)) {
             $model->setRoleId($uRoles[0]);
         }
+
+        $currentUser = $this->_objectManager->get('Mage_Backend_Model_Auth_Session')->getUser();
+        if ($userId == $currentUser->getId()
+            && $this->_objectManager->get('Mage_Core_Model_Locale_Validator')->isValid($data['interface_locale'])
+        ) {
+            $this->_objectManager->get('Mage_Backend_Model_Locale_Manager')
+                ->switchBackendInterfaceLocale($data['interface_locale']);
+        }
+
         try {
             $model->save();
-            $this->_getSession()->addSuccess($this->__('The user has been saved.'));
+            $this->_getSession()->addSuccess($this->__('You saved the user.'));
             $this->_getSession()->setUserData(false);
             $this->_redirect('*/*/');
         } catch (Mage_Core_Exception $e) {
@@ -150,7 +150,7 @@ class Mage_User_Adminhtml_UserController extends Mage_Backend_Controller_ActionA
 
         if ($userId = $this->getRequest()->getParam('user_id')) {
             if ( $currentUser->getId() == $userId ) {
-                Mage::getSingleton('Mage_Backend_Model_Session')->addError(
+                $this->_session->addError(
                     $this->__('You cannot delete your own account.')
                 );
                 $this->_redirect('*/*/edit', array('user_id' => $userId));
@@ -160,17 +160,17 @@ class Mage_User_Adminhtml_UserController extends Mage_Backend_Controller_ActionA
                 $model = Mage::getModel('Mage_User_Model_User');
                 $model->setId($userId);
                 $model->delete();
-                Mage::getSingleton('Mage_Backend_Model_Session')->addSuccess($this->__('The user has been deleted.'));
+                $this->_session->addSuccess($this->__('You deleted the user.'));
                 $this->_redirect('*/*/');
                 return;
             }
             catch (Exception $e) {
-                Mage::getSingleton('Mage_Backend_Model_Session')->addError($e->getMessage());
+                $this->_session->addError($e->getMessage());
                 $this->_redirect('*/*/edit', array('user_id' => $this->getRequest()->getParam('user_id')));
                 return;
             }
         }
-        Mage::getSingleton('Mage_Backend_Model_Session')->addError($this->__('Unable to find a user to delete.'));
+        $this->_session->addError($this->__('We can\'t find a user to delete.'));
         $this->_redirect('*/*/');
     }
 
@@ -195,7 +195,7 @@ class Mage_User_Adminhtml_UserController extends Mage_Backend_Controller_ActionA
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_User::acl_users');
+        return $this->_authorization->isAllowed('Mage_User::acl_users');
     }
 
 }

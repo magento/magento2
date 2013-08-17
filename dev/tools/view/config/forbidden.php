@@ -34,4 +34,5 @@ return array(
     'phtml',
     'xml',
     'csv',
+    'less',
 );

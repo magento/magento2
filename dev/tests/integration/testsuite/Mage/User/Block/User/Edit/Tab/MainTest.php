@@ -25,6 +25,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * @magentoAppArea adminhtml
+ */
 class Mage_User_Block_User_Edit_Tab_MainTest extends Mage_Backend_Utility_Controller
 {
     /**

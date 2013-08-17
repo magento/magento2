@@ -26,21 +26,42 @@
 
 /**
  * Adminhtml media library uploader
- *
- * @category   Mage
- * @package    Mage_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Adminhtml_Block_Media_Uploader extends Mage_Adminhtml_Block_Widget
 {
-
+    /**
+     * @var Varien_Object
+     */
     protected $_config;
 
+    /**
+     * @var string
+     */
     protected $_template = 'media/uploader.phtml';
+
+    /**
+     * @var Mage_Core_Model_View_Url
+     */
+    protected $_viewUrl;
+
+    /**
+     * @param Mage_Backend_Block_Template_Context $context
+     * @param Mage_Core_Model_View_Url $viewUrl
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Backend_Block_Template_Context $context,
+        Mage_Core_Model_View_Url $viewUrl,
+        array $data = array()
+    ) {
+        $this->_viewUrl = $viewUrl;
+        parent::__construct($context, $data);
+    }
 
     protected function _construct()
     {
         parent::_construct();
+
         $this->setId($this->getId() . '_Uploader');
 
         $this->getConfig()->setUrl(Mage::getModel('Mage_Backend_Model_Url')->addSessionParam()->getUrl('*/*/upload'));
@@ -55,7 +76,7 @@ class Mage_Adminhtml_Block_Media_Uploader extends Mage_Adminhtml_Block_Widget
                 'label' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Media (.avi, .flv, .swf)'),
                 'files' => array('*.avi', '*.flv', '*.swf')
             ),
-            'all'    => array(
+            'all' => array(
                 'label' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('All Files'),
                 'files' => array('*.*')
             )
@@ -71,7 +92,7 @@ class Mage_Adminhtml_Block_Media_Uploader extends Mage_Adminhtml_Block_Widget
     {
         $head = $this->getLayout()->getBlock('head');
         if ($head) {
-            $head->addCss('Mage_Adminhtml::jquery/fileUploader/css/jquery.fileupload-ui.css');
+            $head->addCss('jquery/fileUploader/css/jquery.fileupload-ui.css');
         }
         return parent::_prepareLayout();
     }
@@ -103,7 +124,7 @@ class Mage_Adminhtml_Block_Media_Uploader extends Mage_Adminhtml_Block_Widget
      */
     public function getConfig()
     {
-        if(is_null($this->_config)) {
+        if (null === $this->_config) {
             $this->_config = new Varien_Object();
         }
 
@@ -121,6 +142,6 @@ class Mage_Adminhtml_Block_Media_Uploader extends Mage_Adminhtml_Block_Widget
      */
     public function getUploaderUrl($url)
     {
-        return Mage::getDesign()->getViewFileUrl($url);
+        return $this->_viewUrl->getViewFileUrl($url);
     }
 }

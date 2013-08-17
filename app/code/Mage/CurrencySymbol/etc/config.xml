@@ -62,13 +62,6 @@
     </admin>
 
     <adminhtml>
-        <layout>
-            <updates>
-                <currencysymbol module="Mage_CurrencySymbol">
-                    <file>layout.xml</file>
-                </currencysymbol>
-            </updates>
-        </layout>
         <translate>
             <modules>
                 <Mage_CurrencySymbol>

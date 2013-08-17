@@ -103,7 +103,7 @@ class Mage_GoogleShopping_Model_MassOperations
                 } catch (Zend_Db_Statement_Exception $e) {
                     $message = $e->getMessage();
                     if ($e->getCode() == self::ERROR_CODE_SQL_UNIQUE_INDEX) {
-                        $message = Mage::helper('Mage_GoogleShopping_Helper_Data')->__("The Google Content item for product '%s' (in '%s' store) has already exist.", $product->getName(), Mage::app()->getStore($product->getStoreId())->getName());
+                        $message = Mage::helper('Mage_GoogleShopping_Helper_Data')->__("The Google Content item for product '%s' (in '%s' store) already exists.", $product->getName(), Mage::app()->getStore($product->getStoreId())->getName());
                     }
                     $errors[] = $message;
                 } catch (Mage_Core_Exception $e) {
@@ -121,7 +121,7 @@ class Mage_GoogleShopping_Model_MassOperations
         if ($totalAdded > 0) {
             $this->_getNotifier()->addNotice(
                 Mage::helper('Mage_GoogleShopping_Helper_Data')->__('Products were added to Google Shopping account.'),
-                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('Total of %d product(s) have been added to Google Content.', $totalAdded)
+                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('A total of %d product(s) have been added to Google Content.', $totalAdded)
             );
         }
 
@@ -204,10 +204,10 @@ class Mage_GoogleShopping_Model_MassOperations
 
         $this->_getNotifier()->addNotice(
             Mage::helper('Mage_GoogleShopping_Helper_Data')->__('Product synchronization with Google Shopping completed'),
-            Mage::helper('Mage_GoogleShopping_Helper_Data')->__('Total of %d items(s) have been deleted; total of %d items(s) have been updated.', $totalDeleted, $totalUpdated)
+            Mage::helper('Mage_GoogleShopping_Helper_Data')->__('A total of %d items(s) have been deleted; a total of %d items(s) have been updated.', $totalDeleted, $totalUpdated)
         );
         if ($totalFailed > 0 || count($errors)) {
-            array_unshift($errors, Mage::helper('Mage_GoogleShopping_Helper_Data')->__("Cannot update %s items.", $totalFailed));
+            array_unshift($errors, Mage::helper('Mage_GoogleShopping_Helper_Data')->__("We cannot update %s items.", $totalFailed));
             $this->_getNotifier()->addMajor(
                 Mage::helper('Mage_GoogleShopping_Helper_Data')->__('Errors happened during synchronization with Google Shopping'),
                 $errors

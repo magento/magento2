@@ -31,6 +31,8 @@
  * @category   Mage
  * @package    Mage_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
+ *
+ * @method array getAffectedProductIds()
  */
 class Mage_Catalog_Model_Category extends Mage_Catalog_Model_Abstract
 {
@@ -194,17 +196,17 @@ class Mage_Catalog_Model_Category extends Mage_Catalog_Model_Abstract
 
         if (!$parent->getId()) {
             Mage::throwException(
-                Mage::helper('Mage_Catalog_Helper_Data')->__('Category move operation is not possible: the new parent category was not found.')
+                Mage::helper('Mage_Catalog_Helper_Data')->__('Sorry, but we can\'t move the category because we can\'t find the new parent category you selected.')
             );
         }
 
         if (!$this->getId()) {
             Mage::throwException(
-                Mage::helper('Mage_Catalog_Helper_Data')->__('Category move operation is not possible: the current category was not found.')
+                Mage::helper('Mage_Catalog_Helper_Data')->__('Sorry, but we can\'t move the category because we can\'t find the new category you selected.')
             );
         } elseif ($parent->getId() == $this->getId()) {
             Mage::throwException(
-                Mage::helper('Mage_Catalog_Helper_Data')->__('Category move operation is not possible: parent category is equal to child category.')
+                Mage::helper('Mage_Catalog_Helper_Data')->__('We can\'t perform this category move operation because the parent category matches the child category.')
             );
         }
 

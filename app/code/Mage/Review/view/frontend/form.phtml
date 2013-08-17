@@ -112,7 +112,7 @@
     </script>
     <?php else: ?>
     <p class="review-nologged" id="review-form">
-        <?php echo $this->__('Only registered users can write reviews. Please, <a href="%s">log in</a> or <a href="%s">register</a>', $this->getLoginLink(), Mage::helper('Mage_Customer_Helper_Data')->getRegisterUrl()) ?>
+        <?php echo $this->__('Only registered users can write reviews. Please, <a href="%s">log in</a> or <a href="%s">sign up</a>.', $this->getLoginLink(), Mage::helper('Mage_Customer_Helper_Data')->getRegisterUrl()) ?>
     </p>
     <?php endif ?>
 </div>

@@ -168,6 +168,15 @@ class Error_Processor
     }
 
     /**
+     * Process no cache error
+     */
+    public function processNoCache()
+    {
+        $this->pageTitle = 'Error : cached config data is unavailable';
+        $this->_renderPage('nocache.phtml');
+    }
+
+    /**
      * Process 404 error
     */
     public function process404()

@@ -23,22 +23,21 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 class Mage_Backend_Model_Authorization_RoleLocator implements Magento_Authorization_RoleLocator
 {
     /**
+     * Authentication service
+     *
      * @var Mage_Backend_Model_Auth_Session
      */
     protected $_session;
 
     /**
-     * @param array $data
+     * @param Mage_Backend_Model_Auth_Session $session
      */
-    public function __construct(array $data = array())
+    public function __construct(Mage_Backend_Model_Auth_Session $session)
     {
-        $this->_session = isset($data['session']) ?
-            $data['session'] :
-            Mage::getSingleton('Mage_Backend_Model_Auth_Session');
+        $this->_session = $session;
     }
 
     /**

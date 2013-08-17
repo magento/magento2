@@ -38,14 +38,14 @@ class Mage_Core_Model_Theme_Domain_FactoryTest extends PHPUnit_Framework_TestCas
         $themeMock = $this->getMock('Mage_Core_Model_Theme', array('getType'), array(), '', false);
         $themeMock->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue(Mage_Core_Model_Theme::TYPE_PHYSICAL));
+            ->will($this->returnValue(Mage_Core_Model_Theme::TYPE_VIRTUAL));
 
         $newThemeMock = $this->getMock('Mage_Core_Model_Theme', array(), array(), '', false);
 
         $objectManager = $this->getMock('Magento_ObjectManager', array(), array('create'), '', false);
         $objectManager->expects($this->once())
             ->method('create')
-            ->with('Mage_Core_Model_Theme_Domain_Physical', array('theme' => $themeMock))
+            ->with('Mage_Core_Model_Theme_Domain_Virtual', array('theme' => $themeMock))
             ->will($this->returnValue($newThemeMock));
 
         $themeDomainFactory = new Mage_Core_Model_Theme_Domain_Factory($objectManager);

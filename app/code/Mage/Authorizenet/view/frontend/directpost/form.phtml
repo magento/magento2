@@ -37,9 +37,9 @@ $_orderUrl = $this->helper('Mage_Authorizenet_Helper_Data')->getPlaceOrderFrontU
 ?>
 <div class="buttons-set">
 <!-- IFRAME for request to Authorize.net -->
-<iframe id="directpost-iframe" allowtransparency="true" frameborder="0"  name="iframeDirectPost" style="display:none;width:100%;background-color:transparent" src="<?php echo $this->getViewFileUrl('blank.html') ?>"></iframe>
+<iframe id="directpost-iframe" data-container="authorize-net-iframe" allowtransparency="true" frameborder="0"  name="iframeDirectPost" style="display:none;width:100%;background-color:transparent" src="<?php echo $this->getViewFileUrl('blank.html') ?>"></iframe>
 
-<form id="co-directpost-form" action="#" method="post">
+<form id="co-directpost-form" action="#" method="post" data-mage-init="{directpost: {methodCode:'<?php echo $_code ?>', controller:'<?php echo $_controller ?>', orderSaveUrl:'<?php echo $_orderUrl ?>', cgiUrl:'<?php echo $_method->getCgiUrl() ?>', nativeAction:'<?php echo $this->getUrl('checkout/onepage/saveOrder', array('_secure' => $this->getRequest()->isSecure())) ?>'}, validation: []}">
 <fieldset>
 <dl class="sp-methods">
 <dt class="a-center"><?php echo $this->__('Credit Card Information') ?></dt>
@@ -48,7 +48,7 @@ $_orderUrl = $this->helper('Mage_Authorizenet_Helper_Data')->getPlaceOrderFrontU
     <li>
         <label for="<?php echo $_code ?>_cc_type" class="required"><em>*</em><?php echo $this->__('Credit Card Type') ?></label>
         <div class="input-box">
-            <select id="<?php echo $_code ?>_cc_type" name="payment[cc_type]" class="required-entry validate-cc-type-select">
+            <select id="<?php echo $_code ?>_cc_type" data-container="cc-type" name="payment[cc_type]" data-validate='{required:true, "validate-cc-type-select":"#<?php echo $_code ?>_cc_number"}'>
                 <option value=""><?php echo $this->__('--Please Select--')?></option>
             <?php $_ccType = $_form->getInfoData('cc_type') ?>
             <?php foreach ($_form->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
@@ -60,14 +60,14 @@ $_orderUrl = $this->helper('Mage_Authorizenet_Helper_Data')->getPlaceOrderFrontU
     <li>
         <label for="<?php echo $_code ?>_cc_number" class="required"><em>*</em><?php echo $this->__('Credit Card Number') ?></label>
         <div class="input-box">
-            <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text validate-cc-number validate-cc-type" value="" />
+            <input type="text" id="<?php echo $_code ?>_cc_number" data-container="cc-number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text" value="" data-validate='{required:true, "validate-cc-number":"#<?php echo $_code ?>_cc_type", "validate-cc-type":"#<?php echo $_code ?>_cc_type"}' autocomplete="off"/>
         </div>
     </li>
     <li id="<?php echo $_code ?>_cc_type_exp_div">
         <label for="<?php echo $_code ?>_expiration" class="required"><em>*</em><?php echo $this->__('Expiration Date') ?></label>
         <div class="input-box">
             <div class="v-fix">
-                <select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month validate-cc-exp required-entry">
+                <select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" data-container="cc-month" class="month" data-validate='{required:true, "validate-cc-exp":"#<?php echo $_code ?>_expiration_yr"}'>
                 <?php $_ccExpMonth = $_form->getInfoData('cc_exp_month') ?>
                 <?php foreach ($_form->getCcMonths() as $k=>$v): ?>
                     <option value="<?php echo $k?$k:'' ?>"<?php if($k==$_ccExpMonth): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
@@ -76,7 +76,7 @@ $_orderUrl = $this->helper('Mage_Authorizenet_Helper_Data')->getPlaceOrderFrontU
             </div>
             <div class="v-fix">
                 <?php $_ccExpYear = $_form->getInfoData('cc_exp_year') ?>
-                <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year required-entry">
+                <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year" data-container="cc-year" data-validate='{required:true}'>
                 <?php foreach ($_form->getCcYears() as $k=>$v): ?>
                     <option value="<?php echo $k?$k:'' ?>"<?php if($k==$_ccExpYear): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
                 <?php endforeach ?>
@@ -90,9 +90,9 @@ $_orderUrl = $this->helper('Mage_Authorizenet_Helper_Data')->getPlaceOrderFrontU
         <label for="<?php echo $_code ?>_cc_cid" class="required"><em>*</em><?php echo $this->__('Card Verification Number') ?></label>
         <div class="input-box">
             <div class="v-fix">
-                <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv required-entry validate-cc-cvn" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="" />
+                <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" data-container="cc-cvv" class="input-text cvv" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="" data-validate='{required:true, "validate-cc-cvn":"#<?php echo $_code ?>_cc_type"}' autocomplete="off"/>
             </div>
-            <a href="#" id="directpost-cvv-what-is-this" style="cursor:help; margin-left:5px;"><?php echo $this->__('What is this?') ?></a>
+            <a href="#" id="directpost-cvv-what-is-this" style="cursor:help; margin-left:5px;" data-mage-init='{toggleAdvanced: {toggleContainers:"#directpost-tool-tip"}}'><?php echo $this->__('What is this?') ?></a>
         </div>
     </li>
     <?php endif; ?>
@@ -102,34 +102,7 @@ $_orderUrl = $this->helper('Mage_Authorizenet_Helper_Data')->getPlaceOrderFrontU
 </fieldset>
 </form>
 </div>
-<div class="tool-tip" id="directpost-tool-tip" style="display:none;">
-    <div class="btn-close"><a href="#" id="directpost-tool-tip-close" title="<?php echo $this->__('Close') ?>"><?php echo $this->__('Close') ?></a></div>
+<div class="tool-tip hidden" id="directpost-tool-tip">
+    <div class="btn-close"><a href="#" id="directpost-tool-tip-close" title="<?php echo $this->__('Close') ?>" data-mage-init='{toggleAdvanced: {toggleContainers:"#directpost-tool-tip"}}'><?php echo $this->__('Close') ?></a></div>
     <div class="tool-tip-content"><img src="<?php echo $this->getViewFileUrl('Mage_Checkout::cvv.gif') ?>" alt="<?php echo $this->__('Card Verification Number Visual Reference') ?>" title="<?php echo $this->__('Card Verification Number Visual Reference') ?>" /></div>
 </div>
-<script type="text/javascript">
-//<![CDATA[
-if ($('directpost-cvv-what-is-this')) {
-    $('directpost-cvv-what-is-this').observe('click', toggleCvvToolTip);
-}
-jQuery('#co-directpost-form').mage('validation');
-function toggleCvvToolTip(event){
-    if($('directpost-tool-tip')){
-        $('directpost-tool-tip').setStyle({
-            top: (Event.pointerY(event)-560)+'px'
-        })
-        $('directpost-tool-tip').toggle();
-    }
-    Event.stop(event);
-}
-if($('directpost-tool-tip-close')){
-    Event.observe($('directpost-tool-tip-close'), 'click', toggleCvvToolTip);
-}
-directPostModel = new directPost(
-    '<?php echo $_code ?>',
-    'directpost-iframe',
-    '<?php echo $_controller ?>',
-    '<?php echo $_orderUrl ?>',
-    '<?php echo $_method->getCgiUrl() ?>',
-    '<?php echo $this->getUrl('checkout/onepage/saveOrder', array('_secure' => $this->getRequest()->isSecure())) ?>');
-//]]>
-</script>

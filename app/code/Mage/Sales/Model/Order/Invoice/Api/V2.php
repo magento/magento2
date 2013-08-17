@@ -59,7 +59,7 @@ class Mage_Sales_Model_Order_Invoice_Api_V2 extends Mage_Sales_Model_Order_Invoi
          * Check invoice create availability
          */
         if (!$order->canInvoice()) {
-            $this->_fault('data_invalid', Mage::helper('Mage_Sales_Helper_Data')->__('Cannot do invoice for order.'));
+            $this->_fault('data_invalid', Mage::helper('Mage_Sales_Helper_Data')->__('We cannot create an invoice for this order.'));
         }
 
         $invoice = $order->prepareInvoice($itemsQty);

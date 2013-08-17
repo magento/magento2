@@ -49,9 +49,9 @@
             </header>
             <div class="popup-content">
                 <p class="message-text">
-                    <?php echo $this->__("The backup's creation process will take time.")?><br>
-                    <?php echo $this->__('You will need to wait when the action ends.')?><br>
-                    <?php echo $this->__('Do you really want to proceed?')?>
+                    <?php echo $this->__("It will take time to create a backup.")?><br>
+                    <?php echo $this->__('Please wait until the action ends.')?><br>
+                    <?php echo $this->__('Are you sure you want to continue?')?>
                 </p>
                 <button type="button" onclick="backup.requestBackupOptions()"><?php echo $this->__('OK')?></button>
                 <button type="button" onclick="backup.hidePopups()"><?php echo $this->__('Cancel')?></button>
@@ -68,7 +68,7 @@
             </header>
             <div class="popup-content">
                 <div style="display: none;"><ul class="messages"></ul></div>
-                <p class="message-text"><?php echo $this->__('Please specify backup creation options')?></p>
+                <p class="message-text"><?php echo $this->__('Please specify backup creation option.')?></p>
                 <form action="" method="post" id="backup-form">
                     <div class="form-list question">
 
@@ -78,7 +78,7 @@
 
                         <div class="maintenance-checkbox-container">
                             <input type="checkbox" name="maintenance_mode" value="1" id="backup_maintenance_mode"/>
-                            <label for="backup_maintenance_mode"><?php echo $this->__('Put store on the maintenance mode while backup creation')?></label>
+                            <label for="backup_maintenance_mode"><?php echo $this->__('Please put your store into maintenance mode during backup.')?></label>
                         </div>
 
                         <div id="exclude-media-checkbox-container" style="display: none;">
@@ -99,12 +99,12 @@
     <div class="popup popup-notice">
         <div class="popup-inner">
             <header class="popup-header">
-                <h2 class="popup-title"><?php echo $this->__('Please enter password') ?></h2>
+                <h2 class="popup-title"><?php echo $this->__('Please enter a password.') ?></h2>
             </header>
             <div class="popup-content">
                 <div class="backup-messages" style="display: none;"><ul class="messages"></ul></div>
                 <p class="message-text">
-                    <?php echo $this->__('Please enter password to confirm rollback.')?><br>
+                    <?php echo $this->__('Please enter the password to confirm rollback.')?><br>
                     <?php echo $this->__('This action cannot be undone.')?>
                 </p>
                 <p class="message-text"><?php echo $this->__('Are you sure you want to proceed?')?></p>
@@ -116,7 +116,7 @@
 
                         <div class="maintenance-checkbox-container">
                             <input type="checkbox" name="maintenance_mode" value="1" id="rollback_maintenance_mode"/>
-                            <label for="rollback_maintenance_mode"><?php echo $this->__('Put store on the maintenance mode while rollback processing')?></label>
+                            <label for="rollback_maintenance_mode"><?php echo $this->__('Please put your store into maintenance mode during rollback processing.')?></label>
                         </div>
 
                         <div id="use-ftp-checkbox-row" style="display: none;">

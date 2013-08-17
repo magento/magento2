@@ -36,7 +36,7 @@ class Mage_Adminhtml_Newsletter_SubscriberController extends Mage_Adminhtml_Cont
 
     public function indexAction()
     {
-        $this->_title($this->__('Newsletter'))->_title($this->__('Newsletter Subscribers'));
+        $this->_title($this->__('Newsletter Subscribers'));
 
         if ($this->getRequest()->getParam('ajax')) {
             $this->_forward('grid');
@@ -50,31 +50,25 @@ class Mage_Adminhtml_Newsletter_SubscriberController extends Mage_Adminhtml_Cont
         $this->_addBreadcrumb(Mage::helper('Mage_Newsletter_Helper_Data')->__('Newsletter'), Mage::helper('Mage_Newsletter_Helper_Data')->__('Newsletter'));
         $this->_addBreadcrumb(Mage::helper('Mage_Newsletter_Helper_Data')->__('Subscribers'), Mage::helper('Mage_Newsletter_Helper_Data')->__('Subscribers'));
 
-        $this->_addContent(
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Newsletter_Subscriber','subscriber')
-        );
-
         $this->renderLayout();
     }
 
     public function gridAction()
     {
-        $this->loadLayout();
-        $this->getResponse()->setBody(
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Newsletter_Subscriber_Grid')->toHtml()
-        );
-    }
+        $this->loadLayout(false);
+        $this->renderLayout();
+     }
 
     /**
      * Export subscribers grid to CSV format
      */
     public function exportCsvAction()
     {
-        $fileName   = 'subscribers.csv';
-        $content    = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Newsletter_Subscriber_Grid')
-            ->getCsvFile();
+        $this->loadLayout();
+        $fileName = 'subscribers.csv';
+        $content = $this->getLayout()->getChildBlock('adminhtml.newslettrer.subscriber.grid', 'grid.export');
 
-        $this->_prepareDownloadResponse($fileName, $content);
+        $this->_prepareDownloadResponse($fileName, $content->getCsvFile($fileName));
     }
 
     /**
@@ -82,18 +76,17 @@ class Mage_Adminhtml_Newsletter_SubscriberController extends Mage_Adminhtml_Cont
      */
     public function exportXmlAction()
     {
-        $fileName   = 'subscribers.xml';
-        $content    = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Newsletter_Subscriber_Grid')
-            ->getExcelFile();
-
-        $this->_prepareDownloadResponse($fileName, $content);
+        $this->loadLayout();
+        $fileName = 'subscribers.xml';
+        $content = $this->getLayout()->getChildBlock('adminhtml.newslettrer.subscriber.grid', 'grid.export');
+        $this->_prepareDownloadResponse($fileName, $content->getExcelFile($fileName));
     }
 
     public function massUnsubscribeAction()
     {
         $subscribersIds = $this->getRequest()->getParam('subscriber');
         if (!is_array($subscribersIds)) {
-             Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError(Mage::helper('Mage_Newsletter_Helper_Data')->__('Please select subscriber(s)'));
+             Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError(Mage::helper('Mage_Newsletter_Helper_Data')->__('Please select one or more subscribers.'));
         }
         else {
             try {
@@ -102,7 +95,7 @@ class Mage_Adminhtml_Newsletter_SubscriberController extends Mage_Adminhtml_Cont
                     $subscriber->unsubscribe();
                 }
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(
-                    Mage::helper('Mage_Adminhtml_Helper_Data')->__('Total of %d record(s) were updated', count($subscribersIds))
+                    Mage::helper('Mage_Adminhtml_Helper_Data')->__('A total of %d record(s) were updated.', count($subscribersIds))
                 );
             } catch (Exception $e) {
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError($e->getMessage());
@@ -116,7 +109,7 @@ class Mage_Adminhtml_Newsletter_SubscriberController extends Mage_Adminhtml_Cont
     {
         $subscribersIds = $this->getRequest()->getParam('subscriber');
         if (!is_array($subscribersIds)) {
-             Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError(Mage::helper('Mage_Newsletter_Helper_Data')->__('Please select subscriber(s)'));
+             Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError(Mage::helper('Mage_Newsletter_Helper_Data')->__('Please select one or more subscribers.'));
         }
         else {
             try {
@@ -137,6 +130,6 @@ class Mage_Adminhtml_Newsletter_SubscriberController extends Mage_Adminhtml_Cont
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Newsletter::subscriber');
+        return $this->_authorization->isAllowed('Mage_Newsletter::subscriber');
     }
 }

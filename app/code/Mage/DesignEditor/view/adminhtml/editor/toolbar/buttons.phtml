@@ -28,20 +28,7 @@
 
 <a href="<?php echo $this->getHomeLink() ?>" class="logo" title="<?php echo $this->__('Magento Admin Panel') ?>"><span><?php echo $this->__('Magento Admin Panel') ?></span></a>
 
-<div class="switcher" onselectstart="return false;">
-    <input type="checkbox" id="product-online-switcher" name="design-mode" <?php if(!$this->isNavigationMode()): ?> checked="checked"<?php endif; ?>>
-    <label class="switcher-label" for="product-online-switcher" data-mage-init="<?php echo $this->getSwitchModeButtonInitData() ?>" data-text-on="<?php echo $this->__('Design Mode'); ?>" data-text-off="<?php echo $this->__('Design Mode'); ?>" title="<?php echo $this->__('Design Mode status'); ?>"></label>
-</div>
-
-<div id="vde_toolbar_buttons" <?php echo $this->getUiId()?>>
-    <?php /** @TODO View layout button is temporary hidden  */?>
-    <?php /*if ($this->isDesignMode()) : ?>
-        <?php echo $this->getViewLayoutButtonHtml(); ?>
-    <?php endif;*/ ?>
-
-    <?php /** @TODO Quit button is hidden  */ ?>
-    <?php //echo $this->getQuitButtonHtml(); ?>
-
+<div id="vde_toolbar_button_save" class="vde_toolbar_buttons" <?php echo $this->getUiId()?>>
     <?php echo $this->getChildBlock('design_editor_toolbar_buttons_save')->init()->toHtml(); ?>
-
 </div>
+<?php echo $this->getChildBlock('design_editor_toolbar_buttons_edit')->init()->toHtml(); ?>

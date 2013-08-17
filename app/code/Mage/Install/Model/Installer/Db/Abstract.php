@@ -34,6 +34,21 @@
 abstract class Mage_Install_Model_Installer_Db_Abstract
 {
     /**
+     * Resource model
+     *
+     * @var Mage_Core_Model_Resource
+     */
+    protected $_resource;
+
+    /**
+     * @param Mage_Core_Model_Resource $resource
+     */
+    public function __construct(Mage_Core_Model_Resource $resource)
+    {
+        $this->_resource = $resource;
+    }
+
+    /**
      *  Adapter instance
      *
      * @var Varien_Db_Adapter_Interface
@@ -124,8 +139,7 @@ abstract class Mage_Install_Model_Installer_Db_Abstract
     protected function _getConnection()
     {
         if (!isset($this->_connection)) {
-            $resource   = Mage::getSingleton('Mage_Core_Model_Resource');
-            $connection = $resource->createConnection('install', $this->getType(), $this->getConnectionData());
+            $connection = $this->_resource->createConnection('install', $this->getType(), $this->getConnectionData());
             $this->_connection = $connection;
         }
         return $this->_connection;

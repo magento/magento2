@@ -28,75 +28,13 @@
  * @var $this Mage_Paypal_Block_Adminhtml_System_Config_Payflowlink_Advanced
  */
 ?>
-<div style="padding-bottom: 1em;max-width: 800px;">
-    <strong style="color:red"><?php echo $this->__('Important: ') ?></strong>
-    <?php echo $this->__('To use PayPal Payments Advanced you must configure some settings in your PayPal Payments Advanced account by logging into') ?> <a href="https://manager.paypal.com/"><?php echo $this->__('PayPal Manager'); ?></a>.
-    <?php echo $this->__(' You will need to navigate to your ') ?>
-    <span style="text-decoration: underline"><?php echo $this->__('Service Settings') ?></span>
-    <?php echo $this->__(' and go to the ') ?>
-    <span style="text-decoration: underline"><?php echo $this->__('Set up & Customize') ?></span>
-    <?php echo $this->__(' sections for your Hosted Checkout Pages.') ?>
-    <div style="border: 1px solid black;margin:2em;">
-        <ul style="list-style:none;padding:0 2em;">
-            <li>
-                <strong style="text-transform: capitalize"><?php echo $this->__('1. set up') ?></strong> Please copy and paste the following required values to your PayPal Payments Advanced Set Up section:
-                <ul style="list-style:lower-latin;padding:0 2em;">
-                    <li>
-                        Under Display <span style="text-decoration: underline">Options on Payment Page</span>, enter the following:
-                        <ul style="list-style:lower-roman;padding:0 2em;">
-                            <li>
-                                <span style="text-decoration: underline">Cancel URL</span>:<br />
-                                <a href="<?php echo $this->getFrontendUrl('paypal/payflowadvanced/cancelPayment') ?>" onclick="return false;">
-                                    <?php echo $this->getFrontendUrl('paypal/payflowadvanced/cancelPayment') ?>
-                                </a>
-                            </li>
-                            <li>
-                                <span style="text-decoration: underline">Error URL</span>:<br />
-                                <a href="<?php echo $this->getFrontendUrl('paypal/payflowadvanced/returnUrl') ?>" onclick="return false;">
-                                    <?php echo $this->getFrontendUrl('paypal/payflowadvanced/returnUrl') ?>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        Under <span style="text-decoration: underline">Use Silent Post for Data Transfer</span>, please set as the following:
-                        <ul style="list-style:lower-roman;padding:0 2em;">
-                            <li><span style="text-decoration: underline">Use Silent Post</span>: select <strong>YES</strong></li>
-                            <li>
-                                Enter the following for <span style="text-decoration: underline">Silent Post URL</span>:<br />
-                                <a href="<?php echo $this->getFrontendUrl('paypal/payflowadvanced/silentPost') ?>" onclick="return false;">
-                                    <?php echo $this->getFrontendUrl('paypal/payflowadvanced/silentPost') ?>
-                                </a>
-                            </li>
-                            <li>
-                                Enter the following for <span style="text-decoration: underline">Return URL when Silent Post fails</span>:<br />
-                                <a href="<?php echo $this->getFrontendUrl('paypal/payflowadvanced/returnUrl') ?>" onclick="return false;">
-                                    <?php echo $this->getFrontendUrl('paypal/payflowadvanced/returnUrl') ?>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        Under <span style="text-decoration: underline">Security Options</span>, please set as the following:
-                        <ul style="list-style:lower-roman;padding:0 2em;">
-                            <li><span style="text-decoration: underline">AVS</span>: Select <strong>NO</strong></li>
-                            <li><span style="text-decoration: underline">CSC</span>: Select <strong>NO</strong></li>
-                            <li><span style="text-decoration: underline">Enable Secure Token</span>: select <strong>YES</strong></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    <div style="border: 1px solid black;margin:2em;">
-        <ul style="list-style:none;padding:0 2em;">
-            <li>
-                <strong style="text-transform: capitalize"><?php echo $this->__('2. customize') ?></strong> Please set the following required values in the Customize section of your Hosted Checkout Page settings:
-                <ul style="list-style:lower-latin;padding:0 2em;">
-                <li>
-                    Select <span style="text-decoration: underline">Layout C</span>
-                </li>
-            </li>
-        </ul>
-    </div>
+<div class="payflow-settings-notice">
+    <strong class="important-label"><?php echo $this->__('Important: ') ?></strong>
+    <?php echo $this->__('To use PayPal Payments Advanced, you must configure  your PayPal Payments Advanced account on the PayPal website.'); ?>
+    <?php echo $this->__('Once you log into your PayPal Advanced account, navigate to the Service Settings - Hosted Checkout Pages - Set Up menu and set the options described below') ?>
+    <ul class="options-list">
+        <li><strong>AVS:</strong> No</li>
+        <li><strong>CSC:</strong> No</li>
+        <li><strong>Enable Secure Token:</strong> Yes</li>
+    </ul>
 </div>

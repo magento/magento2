@@ -136,7 +136,7 @@ class Mage_Review_Block_Customer_List extends Mage_Customer_Block_Account_Dashbo
      */
     public function dateFormat($date)
     {
-        return $this->formatDate($date, Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
+        return $this->formatDate($date, Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT);
     }
 
     /**

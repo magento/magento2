@@ -128,12 +128,22 @@ class Mage_Connect_Package
     protected $_config = null;
 
     /**
+     * General purpose Magento util
+     *
+     * @var Mage_Util
+     */
+    protected $_util = null;
+
+    /**
      * Creates a package object (empty, or from existing archive, or from package definition xml)
      *
      * @param null|string|resource $source
+     * @param Mage_Util|null $util
+     * @throws Mage_Exception
      */
-    public function __construct($source=null)
+    public function __construct($source = null, Mage_Util $util = null)
     {
+        $this->_util = $util ? $util : new Mage_Util();
         libxml_use_internal_errors(true);
 
         if (is_string($source)) {
@@ -576,7 +586,7 @@ END;
         $max = $this->getDependencyPhpVersionMax();
 
         $minOk = $min? version_compare(PHP_VERSION, $min, ">=") : true;
-        $maxOk = $max? version_compare(PHP_VERSION, $max, "<=") : true;
+        $maxOk = $max? version_compare($this->_util->getTrimmedPhpVersion(), $max, "<=") : true;
 
         if(!$minOk || !$maxOk) {
             $err = "requires PHP version ";

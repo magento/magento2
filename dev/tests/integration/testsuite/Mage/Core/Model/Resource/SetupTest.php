@@ -52,6 +52,7 @@ class Mage_Core_Model_Resource_SetupTest extends PHPUnit_Framework_TestCase
         Mage::getResourceModel('Mage_Core_Model_Resource_Resource')->setDataVersion('adminnotification_setup', false);
         $this->_model->deleteTableRow('core_resource', 'code', 'adminnotification_setup');
         $this->_model->getConnection()->dropTable($this->_model->getTable('adminnotification_inbox'));
+        $this->_model->getConnection()->dropTable($this->_model->getTable('admin_system_messages'));
         /** @var $updater Mage_Core_Model_Db_Updater */
         $updater = Mage::getSingleton('Mage_Core_Model_Db_Updater');
         try {

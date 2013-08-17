@@ -27,8 +27,10 @@
 
 /**
  * @magentoDataFixture Mage/Backend/Block/_files/backend_theme.php
+ *
+ * @magentoAppArea adminhtml
  */
-class Mage_Backend_Block_Widget_Grid_MassactionTest extends Mage_Backend_Area_TestCase
+class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Mage_Backend_Block_Widget_Grid_Massaction
@@ -70,7 +72,7 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends Mage_Backend_Area_Te
         ));
 
         Mage::app()->getConfig()->setNode(
-            'adminhtml/' . Mage_Core_Model_Design_Package::XML_PATH_THEME,
+            'adminhtml/' . Mage_Core_Model_View_Design::XML_PATH_THEME,
             'test/default'
         );
     }

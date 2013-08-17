@@ -26,6 +26,7 @@
 
 /**
  * Role collection test
+ * @magentoAppArea adminhtml
  */
 class Mage_User_Model_Resource_Role_CollectionTest extends PHPUnit_Framework_TestCase
 {

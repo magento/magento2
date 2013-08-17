@@ -240,16 +240,6 @@
                     <element name="gift_cards_invoiced" type="xsd:string" minOccurs="0" />
                     <element name="base_gift_cards_refunded" type="xsd:string" minOccurs="0" />
                     <element name="gift_cards_refunded" type="xsd:string" minOccurs="0" />
-                    <element name="reward_points_balance" type="xsd:string" minOccurs="0" />
-                    <element name="base_reward_currency_amount" type="xsd:string" minOccurs="0" />
-                    <element name="reward_currency_amount" type="xsd:string" minOccurs="0" />
-                    <element name="base_rwrd_crrncy_amt_invoiced" type="xsd:string" minOccurs="0" />
-                    <element name="rwrd_currency_amount_invoiced" type="xsd:string" minOccurs="0" />
-                    <element name="base_rwrd_crrncy_amnt_refnded" type="xsd:string" minOccurs="0" />
-                    <element name="rwrd_crrncy_amnt_refunded" type="xsd:string" minOccurs="0" />
-                    <element name="reward_points_balance_refunded" type="xsd:string" minOccurs="0" />
-                    <element name="reward_points_balance_refund" type="xsd:string" minOccurs="0" />
-                    <element name="reward_salesrule_points" type="xsd:string" minOccurs="0" />
                     <element name="firstname" type="xsd:string" minOccurs="0" />
                     <element name="lastname" type="xsd:string" minOccurs="0" />
                     <element name="telephone" type="xsd:string" minOccurs="0" />
@@ -465,7 +455,7 @@
                     <element name="is_active" type="xsd:string" minOccurs="0" />
                     <element name="carrier_code" type="xsd:string" minOccurs="0" />
                     <element name="title" type="xsd:string" minOccurs="0" />
-                    <element name="number" type="xsd:string" minOccurs="0" />
+                    <element name="track_number" type="xsd:string" minOccurs="0" />
                     <element name="order_id" type="xsd:string" minOccurs="0" />
                     <element name="track_id" type="xsd:string" minOccurs="0" />
                 </all>
@@ -670,10 +660,6 @@
                     <element name="gw_items_tax_amount" type="xsd:string" minOccurs="0" />
                     <element name="gw_card_base_tax_amount" type="xsd:string" minOccurs="0" />
                     <element name="gw_card_tax_amount" type="xsd:string" minOccurs="0" />
-                    <element name="base_reward_currency_amount" type="xsd:string" minOccurs="0" />
-                    <element name="reward_currency_amount" type="xsd:string" minOccurs="0" />
-                    <element name="reward_points_balance" type="xsd:string" minOccurs="0" />
-                    <element name="reward_points_balance_refund" type="xsd:string" minOccurs="0" />
                     <element name="creditmemo_id" type="xsd:string" minOccurs="0" />
                     <element name="items" type="typens:salesOrderCreditmemoItemEntityArray" minOccurs="0" />
                     <element name="comments" type="typens:salesOrderCreditmemoCommentEntityArray" minOccurs="0" />
@@ -921,7 +907,7 @@
     </message>
     <message name="salesOrderCreditmemoCreateRequest">
         <part name="sessionId" type="xsd:string" />
-        <part name="creditmemoIncrementId" type="xsd:string" />
+        <part name="orderIncrementId" type="xsd:string" />
         <part name="creditmemoData" type="typens:salesOrderCreditmemoData" />
         <part name="comment" type="xsd:string" />
         <part name="notifyCustomer" type="xsd:int" />

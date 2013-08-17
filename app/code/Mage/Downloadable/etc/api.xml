@@ -30,22 +30,22 @@
         <resources>
             <catalog_product_downloadable_link translate="title" module="Mage_Downloadable">
                 <model>Mage_Downloadable_Model_Link_Api</model>
-                <title>Category API</title>
-                <acl>downloadable/link</acl>
+                <title>Downloadable Product API</title>
+                <acl>catalog/product/downloadable_link</acl>
                 <methods>
                     <add translate="title" module="Mage_Downloadable">
                         <title>Add links and samples to downloadable product</title>
                         <method>add</method>
-                        <acl>downloadable/link/add</acl>
+                        <acl>catalog/product/downloadable_link/add</acl>
                     </add>
                     <list translate="title" module="Mage_Downloadable">
                         <title>Retrieve links and samples list from downloadable product</title>
                         <method>items</method>
-                        <acl>downloadable/link/list</acl>
+                        <acl>catalog/product/downloadable_link/list</acl>
                     </list>
                     <remove translate="title" module="Mage_Downloadable">
                         <title>Remove links and samples from downloadable product</title>
-                        <acl>downloadable/link/remove</acl>
+                        <acl>catalog/product/downloadable_link/remove</acl>
                     </remove>
                 </methods>
                 <faults module="Mage_Downloadable">

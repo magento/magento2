@@ -1,5 +1,7 @@
 <?php
 /**
+ * Acl object factory.
+ *
  * Magento
  *
  * NOTICE OF LICENSE

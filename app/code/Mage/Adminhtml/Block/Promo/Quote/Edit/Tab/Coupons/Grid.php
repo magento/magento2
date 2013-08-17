@@ -78,7 +78,7 @@ class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Coupons_Grid extends Mage_Adminh
         ));
 
         $this->addColumn('created_at', array(
-            'header' => Mage::helper('Mage_SalesRule_Helper_Data')->__('Created On'),
+            'header' => Mage::helper('Mage_SalesRule_Helper_Data')->__('Created'),
             'index'  => 'created_at',
             'type'   => 'datetime',
             'align'  => 'center',
@@ -86,7 +86,7 @@ class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Coupons_Grid extends Mage_Adminh
         ));
 
         $this->addColumn('used', array(
-            'header'   => Mage::helper('Mage_SalesRule_Helper_Data')->__('Used'),
+            'header'   => Mage::helper('Mage_SalesRule_Helper_Data')->__('Uses'),
             'index'    => 'times_used',
             'width'    => '100',
             'type'     => 'options',

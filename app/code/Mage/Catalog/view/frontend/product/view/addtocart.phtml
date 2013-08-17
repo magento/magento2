@@ -31,7 +31,12 @@
     <?php if (!$_product->isGrouped()): ?>
     <label for="qty"><?php echo $this->__('Qty:') ?></label>
     <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>"
-           title="<?php echo $this->__('Qty') ?>" class="input-text qty" data-validate="{required:true,digits:true}"/>
+            title="<?php echo $this->__('Qty') ?>" class="input-text qty"
+        <?php if ($_product->getStockItem() && $_product->getStockItem()->getIsQtyDecimal()) : ?>
+            data-validate="{required:true, 'validate-greater-than-zero':true}"/>
+        <?php else: ?>
+            data-validate="{required:true, digits:true}"/>
+        <?php endif; ?>
     <?php endif; ?>
     <button type="submit" title="<?php echo $buttonTitle ?>" class="button btn-cart" id="product-addtocart-button">
         <span><span><?php echo $buttonTitle ?></span></span></button>
@@ -41,47 +46,8 @@
 
 <script type="text/javascript">
     (function ($) {
-        head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>", function () {
-                $('#product_addtocart_form').validation({
-                    errorPlacement: function (error, element) {
-                        if (element.attr('data-validate') && element.attr('data-validate').indexOf('validate-one-checkbox-required-by-name') > 0) {
-                            error.appendTo('#links-advice-container');
-                        } else if (element.attr('data-validate')&& element.attr('data-validate').indexOf('validate-grouped-qty') > 0) {
-                            $('#super-product-table').siblings(this.errorElement + '.' + this.errorClass).remove();
-                            $('#super-product-table').after(error);
-                        } else if (element.is(':radio, :checkbox')) {
-                            element.closest('ul').after(error);
-                        } else {
-                            element.after(error);
-                        }
-                    },
-                    highlight: function (element, errorClass) {
-                        if ($(element).attr('data-validate') && $(element).attr('data-validate').indexOf('validate-required-datetime') > 0) {
-                            $(element).parent().find('.datetime-picker').each(function() {
-                                $(this).removeClass(errorClass);
-                                if ($(this).val().length === 0) {
-                                    $(this).addClass(errorClass);
-                                }
-                            });
-                        } else if ($(element).is(':radio, :checkbox')) {
-                            $(element).closest('ul').addClass(errorClass);
-                        } else {
-                            $(element).addClass(errorClass);
-                        }
-                    },
-                    unhighlight: function (element, errorClass) {
-                        if ($(element).attr('data-validate') && $(element).attr('data-validate').indexOf('validate-required-datetime') > 0) {
-                            $(element).parent().find('.datetime-picker').removeClass(errorClass);
-                        } else if ($(element).is(':radio, :checkbox')) {
-                            $(element).closest('ul').removeClass(errorClass);
-                        } else {
-                            $(element).removeClass(errorClass);
-                        }
-                    }
-                });
-            });
+        $.mage.extend('validation', 'validation',
+            '<?php echo $this->getViewFileUrl('Mage_Catalog::product/view/validation.js'); ?>');
+        $('#product_addtocart_form').mage('validation');
     })(jQuery);
 </script>

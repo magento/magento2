@@ -27,36 +27,14 @@
 
 class Mage_Core_Model_Resource_Layout_UpdateTest extends PHPUnit_Framework_TestCase
 {
-    /*
-     * Test theme id
-     */
-    protected $_themeId;
-
     /**
-     * @var Magento_ObjectManager
+     * @var Mage_Core_Model_Resource_Layout_Update
      */
-    protected $_objectManager;
-
-    /**
-     * @var Mage_Core_Model_Design_Package
-     */
-    protected $_designPackage;
+    protected $_resourceModel;
 
     protected function setUp()
     {
-        $this->_objectManager = Mage::getObjectManager();
-        $this->_designPackage = $this->_objectManager->get('Mage_Core_Model_Design_Package');
-
-        $this->_themeId = $this->_designPackage->getDesignTheme()->getThemeId();
-        /** @var $theme Mage_Core_Model_Theme */
-        $theme = $this->_objectManager->create('Mage_Core_Model_Theme');
-        $theme->load('Test Theme', 'theme_title');
-        $this->_designPackage->getDesignTheme()->setThemeId($theme->getId());
-    }
-
-    protected function tearDown()
-    {
-        $this->_designPackage->getDesignTheme()->setThemeId($this->_themeId);
+        $this->_resourceModel = Mage::getModel('Mage_Core_Model_Resource_Layout_Update');
     }
 
     /**
@@ -64,9 +42,33 @@ class Mage_Core_Model_Resource_Layout_UpdateTest extends PHPUnit_Framework_TestC
      */
     public function testFetchUpdatesByHandle()
     {
-        /** @var $resourceLayoutUpdate Mage_Core_Model_Resource_Layout_Update */
-        $resourceLayoutUpdate = $this->_objectManager->create('Mage_Core_Model_Resource_Layout_Update');
-        $result = $resourceLayoutUpdate->fetchUpdatesByHandle('test_handle');
+        /** @var $theme Mage_Core_Model_Theme */
+        $theme = Mage::getModel('Mage_Core_Model_Theme');
+        $theme->load('Test Theme', 'theme_title');
+        $result = $this->_resourceModel->fetchUpdatesByHandle('test_handle', $theme, Mage::app()->getStore());
         $this->assertEquals('not_temporary', $result);
+    }
+
+    /**
+     * @magentoDataFixture Mage/Adminhtml/controllers/_files/cache/all_types_enabled.php
+     * @magentoDataFixture Mage/Adminhtml/controllers/_files/cache/application_cache.php
+     * @magentoDataFixture Mage/Core/_files/layout_cache.php
+     */
+    public function testSaveAfterClearCache()
+    {
+        /** @var $appCache Mage_Core_Model_Cache */
+        $appCache = Mage::getSingleton('Mage_Core_Model_Cache');
+        /** @var Mage_Core_Model_Cache_Type_Layout $layoutCache */
+        $layoutCache = Mage::getSingleton('Mage_Core_Model_Cache_Type_Layout');
+
+        $this->assertNotEmpty($appCache->load('APPLICATION_FIXTURE'));
+        $this->assertNotEmpty($layoutCache->load('LAYOUT_CACHE_FIXTURE'));
+
+        /** @var $layoutUpdate Mage_Core_Model_Layout_Update */
+        $layoutUpdate = Mage::getModel('Mage_Core_Model_Layout_Update');
+        $this->_resourceModel->save($layoutUpdate);
+
+        $this->assertNotEmpty($appCache->load('APPLICATION_FIXTURE'), 'Non-layout cache must be kept');
+        $this->assertFalse($layoutCache->load('LAYOUT_CACHE_FIXTURE'), 'Layout cache must be erased');
     }
 }

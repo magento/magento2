@@ -63,7 +63,10 @@ class Mage_Core_Model_ObserverTest extends PHPUnit_Framework_TestCase
         $themeRegistration = $this->getMock(
             'Mage_Core_Model_Theme_Registration',
             array('register'),
-            array($this->_objectManager->create('Mage_Core_Model_Theme'))
+            array(
+                $this->_objectManager->create('Mage_Core_Model_Resource_Theme_CollectionFactory'),
+                $this->_objectManager->create('Mage_Core_Model_Theme_Collection')
+            )
         );
         $themeRegistration->expects($this->once())
             ->method('register')

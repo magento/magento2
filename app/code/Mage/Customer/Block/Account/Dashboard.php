@@ -92,7 +92,7 @@ class Mage_Customer_Block_Account_Dashboard extends Mage_Core_Block_Template
     public function getSubscriptionText()
     {
         if($this->getSubscriptionObject()->isSubscribed()) {
-            return Mage::helper('Mage_Customer_Helper_Data')->__('You are currently subscribed to our newsletter.');
+            return Mage::helper('Mage_Customer_Helper_Data')->__('You subscribe to our newsletter.');
         }
 
         return Mage::helper('Mage_Customer_Helper_Data')->__('You are currently not subscribed to our newsletter.');

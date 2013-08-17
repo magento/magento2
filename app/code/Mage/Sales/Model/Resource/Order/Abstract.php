@@ -105,7 +105,7 @@ abstract class Mage_Sales_Model_Resource_Order_Abstract extends Mage_Sales_Model
 
         if (!in_array($alias, $this->getGridColumns())) {
             Mage::throwException(
-                Mage::helper('Mage_Sales_Helper_Data')->__('Please specify a valid grid column alias name that exists in grid table.')
+                Mage::helper('Mage_Sales_Helper_Data')->__('Please specify a valid grid column alias name that exists in the grid table.')
             );
         }
 

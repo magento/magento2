@@ -140,7 +140,7 @@ class Mage_Sales_Block_Adminhtml_Recurring_Profile_Edit_Form extends Mage_Backen
         $schedule->addField('start_date_is_editable', 'select', array(
             'name'    => 'start_date_is_editable',
             'label'   => Mage::helper('Mage_Sales_Helper_Data')->__('Customer Can Define Start Date'),
-            'comment' => Mage::helper('Mage_Sales_Helper_Data')->__('Whether buyer can define the date when billing for the profile begins.'),
+            'comment' => Mage::helper('Mage_Sales_Helper_Data')->__('Select whether buyer can define the date when billing for the profile begins.'),
             'options' => $noYes,
             'disabled' => $this->_isReadOnly
         ));

@@ -45,7 +45,7 @@
                 </field>
                 <field id="test_mode" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Test Mode</label>
-                    <comment>Overrides API URL that may be specified by a payment method.</comment>
+                    <comment>This overrides any API URL that may be specified by a payment method.</comment>
                     <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
                 </field>
                 <field id="debug" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">

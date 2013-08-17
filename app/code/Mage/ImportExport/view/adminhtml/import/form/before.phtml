@@ -30,26 +30,34 @@
 <script type="text/javascript">
 //<![CDATA[
     // Temporary Class will be replaced after refactoring of import/export functionality
-    VarienImport = Class.create();
-    VarienImport.prototype = {
-        initialize: function() {
-            /**
-             * Name and ID for iframe for data POST-ing.
-             * @type {string}
-             */
-            this.ifrElemName = 'import_post_target_frame';
+    var varienImport = {
+        /**
+         * Name and ID for iframe for data POST-ing.
+         * @type {string}
+         */
+        ifrElemName: 'import_post_target_frame',
 
-            /**
-             * List of existing behavior sets
-             * @type {Array}
-             */
-            this.uniqueBehaviors = <?php echo $this->getUniqueBehaviors() ?>;
+        /**
+         * List of existing behavior sets
+         * @type {Array}
+         */
+        uniqueBehaviors: <?php echo $this->getUniqueBehaviors() ?>,
 
-            /**
-             * Behaviour codes for import entities
-             * @type {Array}
-             */
-            this.entityBehaviors = <?php echo $this->getEntityBehaviors() ?>;
+        /**
+         * Behaviour codes for import entities
+         * @type {Array}
+         */
+        entityBehaviors: <?php echo $this->getEntityBehaviors() ?>,
+
+        /**
+         * Reset selected index
+         * @param {string} elementId
+         */
+        resetSelectIndex: function(elementId) {
+            var element = jQuery('#' + elementId);
+            if (element) {
+                element[0].selectedIndex = 0;
+            }
         },
 
         /**
@@ -66,20 +74,21 @@
 
         /**
          * Show/hide one behavior fieldset
-         * @param {string} behavior
+         * @param {string} behaviorId
          * @param {boolean} isShow
          */
-        showBehaviorFieldset: function(behavior, isShow) {
-            var behaviorFieldset = behavior + '_fieldset';
+        showBehaviorFieldset: function(behaviorId, isShow) {
+            var behaviorFieldset = jQuery('#' + behaviorId + '_fieldset'),
+                behavior = jQuery('#' + behaviorId);
             if (isShow) {
-                $(behaviorFieldset).show();
-                $(behavior).enable();
-                $(behavior).addClassName('required-entry');
+                behaviorFieldset.show();
+                behavior.prop('disabled', false);
+                behavior.addClass('required-entry');
             } else {
-                $(behaviorFieldset).hide();
-                $(behavior).selectedIndex = 0;
-                $(behavior).disable();
-                $(behavior).removeClassName('required-entry');
+                behaviorFieldset.hide();
+                this.resetSelectIndex(behaviorId);
+                behavior.prop('disabled', 'disabled');
+                behavior.removeClass('required-entry');
             }
         },
 
@@ -89,9 +98,9 @@
          */
         showUploadFile: function(isShow) {
             if (isShow == true) {
-                $('upload_file_fieldset').show();
+                jQuery('#upload_file_fieldset').show();
             } else {
-                $('upload_file_fieldset').hide();
+                jQuery('#upload_file_fieldset').hide();
             }
         },
 
@@ -99,8 +108,9 @@
          * Handle value change in entity type selector
          */
         handleEntityTypeSelector: function() {
-            if ($('entity') && $F('entity')) {
-                this.showBehavior($F('entity'));
+            var entity = jQuery('#entity');
+            if (entity && entity.val()) {
+                this.showBehavior(entity.val());
                 this.showUploadFile(true);
             } else {
                 this.showBehavior(false);
@@ -140,7 +150,7 @@
          */
         postToFrameComplete: function(response) {
             jQuery('body').loader('hide');
-            $(this.ifrElemName).remove();
+            jQuery('#' + this.ifrElemName).remove();
             this.postToFrameProcessResponse(response);
         },
 
@@ -193,12 +203,10 @@
          * @param {string} sourceFileField
          */
         startImport: function(newActionUrl, sourceFileField) {
-            $(sourceFileField).removeClassName('required-entry');
+            jQuery('#' + sourceFileField).removeClass('required-entry');
             this.postToFrame(newActionUrl);
-            $(sourceFileField).addClassName('required-entry');
+            jQuery('#' + sourceFileField).addClass('required-entry');
         }
     };
-
-    varienImport = new VarienImport();
 //]]>
 </script>

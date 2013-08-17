@@ -35,12 +35,11 @@
             this._bindCheckboxHandlers();
             this._bindAddSelectionDialog();
             this._hideProductTypeSwitcher();
-            this._bindPanelVisibilityToggler();
         },
         _initOptionBoxes: function () {
             this.element.sortable({
                 axis: 'y',
-                handle: '[data-role="grip"]',
+                handle: '[data-role=draggable-handle]',
                 items: '.option-box',
                 update: this._updateOptionBoxPositions,
                 tolerance: 'pointer'
@@ -63,7 +62,7 @@
         _initSortableSelections: function () {
             this.element.find('.option-box .form-list tbody').sortable({
                 axis: 'y',
-                handle: '[data-role="grip"]',
+                handle: '[data-role=draggable-handle]',
                 helper: function(event, ui) {
                     ui.children().each(function() {
                         $(this).width($(this).width());
@@ -81,7 +80,8 @@
                     $selectionGrid = $optionBox.find('.selection-search'),
                     optionIndex = $optionBox.attr('id').replace('bundle_option_', ''),
                     productIds = [],
-                    productSkus = [];
+                    productSkus = [],
+                    selectedProductList = {};
 
                 $optionBox.find('[name$="[product_id]"]').each(function () {
                     if (!$(this).closest('tr').find('[name$="[delete]"]').val()) {
@@ -93,36 +93,43 @@
                 bSelection.gridSelection.set(optionIndex, $H({}));
                 bSelection.gridRemoval = $H({});
                 bSelection.gridSelectedProductSkus = productSkus;
+                $selectionGrid.on('change', '.col-id input', function () {//_on can't be used because of grid reloading
+                    var tr = $(this).closest('tr');
+                    if ($(this).is(':checked')) {
+                        selectedProductList[$(this).val()] = {
+                            name: $.trim(tr.find('.col-name').html()),
+                            sku: $.trim(tr.find('.col-sku').html()),
+                            product_id: $(this).val(),
+                            option_id: $('bundle_selection_id_' + optionIndex).val(),
+                            selection_price_value: 0,
+                            selection_qty: 1
+                        };
+                    } else {
+                        delete selectedProductList[$(this).val()];
+                    }
+                });
                 $selectionGrid.dialog({
                     title: $optionBox.find('input[name$="[title]"]').val() === '' ?
-                        'Add Products to New Option' :
-                        'Add Products to Option "' +
-                            $('<div>').text($optionBox.find('input[name$="[title]"]').val()).html() + '"',
+                        $.mage.__('Add Products to New Option') :
+                        $.mage.__('Add Products to Option "%s"')
+                            .replace('%s',($('<div>').text($optionBox.find('input[name$="[title]"]').val()).html())),
                     autoOpen: false,
                     minWidth: 980,
+                    'class': 'bundle',
                     modal: true,
                     resizable: true,
                     buttons: [{
-                        text: 'Cancel',
+                        text: $.mage.__('Cancel'),
                         click: function() {
                             $selectionGrid.dialog('close');
                         }
                     }, {
-                        text: 'Apply Changes',
-                        'class': 'add',
+                        text: $.mage.__('Add Selected Products'),
+                        'class': 'add primary',
                         click: function() {
-                            bSelection.gridSelection.get(optionIndex).each(
-                                function(pair) {
-                                    bSelection.addRow(optionIndex, {
-                                        name: pair.value.get('name'),
-                                        selection_price_value: 0,
-                                        selection_qty: 1,
-                                        sku: pair.value.get('sku'),
-                                        product_id: pair.key,
-                                        option_id: $('bundle_selection_id_' + optionIndex).val()
-                                    });
-                                }
-                            );
+                            $.each(selectedProductList, function() {
+                                window.bSelection.addRow(optionIndex, this);
+                            });
                             bSelection.gridRemoval.each(
                                 function(pair) {
                                     $optionBox.find('.col-sku').filter(function () {
@@ -159,14 +166,6 @@
         },
         _hideProductTypeSwitcher: function () {
             $('#weight_and_type_switcher, label[for=weight_and_type_switcher]').hide();
-        },
-        _bindPanelVisibilityToggler: function () {
-            var element = this.element;
-            this._on('#product_info_tabs', {
-                tabsbeforeactivate: function (event, ui) {
-                    element[$(ui.newPanel).find('#attribute-name-container').length ? 'show' : 'hide']();
-                }
-            });
         },
         _bindCheckboxHandlers: function () {
             this._on({

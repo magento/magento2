@@ -528,7 +528,7 @@ class Mage_Wishlist_Model_Wishlist extends Mage_Core_Model_Abstract
             $item = $this->getItem((int)$itemId);
         }
         if (!$item) {
-            Mage::throwException(Mage::helper('Mage_Wishlist_Helper_Data')->__('Cannot specify wishlist item.'));
+            Mage::throwException(Mage::helper('Mage_Wishlist_Helper_Data')->__('We can\'t specify a wish list item.'));
         }
 
         $product = $item->getProduct();

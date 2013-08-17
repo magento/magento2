@@ -64,7 +64,7 @@ class Mage_Adminhtml_Block_Report_Product_Viewed_Grid extends Mage_Adminhtml_Blo
     protected function _prepareColumns()
     {
         $this->addColumn('period', array(
-            'header'        => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Period'),
+            'header'        => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Interval'),
             'index'         => 'period',
             'width'         => 100,
             'sortable'      => false,
@@ -77,7 +77,7 @@ class Mage_Adminhtml_Block_Report_Product_Viewed_Grid extends Mage_Adminhtml_Blo
         ));
 
         $this->addColumn('product_name', array(
-            'header'    => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Product Name'),
+            'header'    => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Product'),
             'index'     => 'product_name',
             'type'      => 'string',
             'sortable'  => false,
@@ -102,7 +102,7 @@ class Mage_Adminhtml_Block_Report_Product_Viewed_Grid extends Mage_Adminhtml_Blo
         ));
 
         $this->addColumn('views_num', array(
-            'header'    => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Number of Views'),
+            'header'    => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Views'),
             'index'     => 'views_num',
             'type'      => 'number',
             'total'     => 'sum',

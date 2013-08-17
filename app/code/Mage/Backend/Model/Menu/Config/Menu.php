@@ -62,6 +62,7 @@ class Mage_Backend_Model_Menu_Config_Menu extends Magento_Config_XmlAbstract
      *
      * @param DOMDocument $domDocument
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _extractData(DOMDocument $domDocument)
     {

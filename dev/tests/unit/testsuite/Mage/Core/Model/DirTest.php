@@ -24,16 +24,6 @@
 class Mage_Core_Model_DirTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Test_Helper_FileSystem
-     */
-    protected $_filesystemHelper;
-
-    public function setUp()
-    {
-        $this->_filesystemHelper = new Magento_Test_Helper_FileSystem($this);
-    }
-
-    /**
      * @param string $code
      * @param string $value
      * @expectedException InvalidArgumentException
@@ -41,7 +31,7 @@ class Mage_Core_Model_DirTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidUri($code, $value)
     {
-        $this->_filesystemHelper->createDirInstance(__DIR__, array($code => $value));
+        new Mage_Core_Model_Dir(__DIR__, array($code => $value));
     }
 
     /**
@@ -64,7 +54,7 @@ class Mage_Core_Model_DirTest extends PHPUnit_Framework_TestCase
 
     public function testGetUri()
     {
-        $dir = $this->_filesystemHelper->createDirInstance(__DIR__, array(
+        $dir = new Mage_Core_Model_Dir(__DIR__, array(
             Mage_Core_Model_Dir::PUB   => '',
             Mage_Core_Model_Dir::MEDIA => 'test',
             'custom' => 'test2'
@@ -92,8 +82,8 @@ class Mage_Core_Model_DirTest extends PHPUnit_Framework_TestCase
             Mage_Core_Model_Dir::MEDIA => __DIR__ . '/media',
             'custom' => 'test2'
         );
-        $default = $this->_filesystemHelper->createDirInstance(__DIR__);
-        $custom = $this->_filesystemHelper->createDirInstance(__DIR__, array(), $fixtureDirs);
+        $default = new Mage_Core_Model_Dir(__DIR__);
+        $custom = new Mage_Core_Model_Dir(__DIR__, array(), $fixtureDirs);
         foreach (array_keys($fixtureDirs) as $dirCode ) {
             $this->assertEquals($default->getUri($dirCode), $custom->getUri($dirCode));
         }
@@ -103,7 +93,7 @@ class Mage_Core_Model_DirTest extends PHPUnit_Framework_TestCase
     {
         $newRoot = __DIR__ . DIRECTORY_SEPARATOR . 'root';
         $newMedia = __DIR__ . DIRECTORY_SEPARATOR . 'media';
-        $dir = $this->_filesystemHelper->createDirInstance(__DIR__, array(), array(
+        $dir = new Mage_Core_Model_Dir(__DIR__, array(), array(
             Mage_Core_Model_Dir::ROOT => $newRoot,
             Mage_Core_Model_Dir::MEDIA => $newMedia,
             'custom' => 'test2'
@@ -131,8 +121,8 @@ class Mage_Core_Model_DirTest extends PHPUnit_Framework_TestCase
             Mage_Core_Model_Dir::MEDIA => 'test',
             'custom' => 'test2'
         );
-        $default = $this->_filesystemHelper->createDirInstance(__DIR__);
-        $custom = $this->_filesystemHelper->createDirInstance(__DIR__, $fixtureUris);
+        $default = new Mage_Core_Model_Dir(__DIR__);
+        $custom = new Mage_Core_Model_Dir(__DIR__, $fixtureUris);
         foreach (array_keys($fixtureUris) as $dirCode ) {
             $this->assertEquals($default->getDir($dirCode), $custom->getDir($dirCode));
         }

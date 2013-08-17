@@ -43,8 +43,8 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_BlockAbstractTest extends
 
     public function testGetMode()
     {
-        $this->_block->setMode(Mage_DesignEditor_Model_State::MODE_DESIGN);
-        $this->assertEquals(Mage_DesignEditor_Model_State::MODE_DESIGN, $this->_block->getMode());
+        $this->_block->setMode(Mage_DesignEditor_Model_State::MODE_NAVIGATION);
+        $this->assertEquals(Mage_DesignEditor_Model_State::MODE_NAVIGATION, $this->_block->getMode());
     }
 
     public function testSetMode()
@@ -53,21 +53,12 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_BlockAbstractTest extends
         $this->assertAttributeEquals(Mage_DesignEditor_Model_State::MODE_NAVIGATION, '_mode', $this->_block);
     }
 
-    public function testIsDesignMode()
-    {
-        $this->_block->setMode(Mage_DesignEditor_Model_State::MODE_DESIGN);
-        $this->assertTrue($this->_block->isDesignMode());
-
-        $this->_block->setMode(Mage_DesignEditor_Model_State::MODE_NAVIGATION);
-        $this->assertFalse($this->_block->isDesignMode());
-    }
-
     public function testIsNavigationMode()
     {
         $this->_block->setMode(Mage_DesignEditor_Model_State::MODE_NAVIGATION);
         $this->assertTrue($this->_block->isNavigationMode());
 
-        $this->_block->setMode(Mage_DesignEditor_Model_State::MODE_DESIGN);
+        $this->_block->setMode('model_that_is_not_exist');
         $this->assertFalse($this->_block->isNavigationMode());
     }
 }

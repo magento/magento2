@@ -116,11 +116,11 @@ abstract class Mage_Eav_Model_Entity_Collection_Abstract extends Varien_Data_Col
     /**
      * Collection constructor
      *
-     * @param Mage_Core_Model_Resource_Abstract $resource
+     * @param Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy
      */
-    public function __construct($resource = null)
+    public function __construct(Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy)
     {
-        parent::__construct();
+        parent::__construct($fetchStrategy);
         $this->_construct();
         $this->setConnection($this->getEntity()->getReadConnection());
         $this->_prepareStaticFields();
@@ -688,7 +688,7 @@ abstract class Mage_Eav_Model_Entity_Collection_Abstract extends Varien_Data_Col
         if (isset($this->_joinFields[$alias])) {
             throw Mage::exception(
                 'Mage_Eav',
-                Mage::helper('Mage_Eav_Helper_Data')->__('Joined field with this alias is already declared')
+                Mage::helper('Mage_Eav_Helper_Data')->__('A joined field with this alias is already declared.')
             );
         }
 
@@ -768,7 +768,7 @@ abstract class Mage_Eav_Model_Entity_Collection_Abstract extends Varien_Data_Col
             if (isset($this->_joinFields[$alias])) {
                 throw Mage::exception(
                     'Mage_Eav',
-                    Mage::helper('Mage_Eav_Helper_Data')->__('A joint field with this alias (%s) is already declared', $alias)
+                    Mage::helper('Mage_Eav_Helper_Data')->__('A joint field with this alias (%s) is already declared.', $alias)
                 );
             }
             $this->_joinFields[$alias] = array(
@@ -1484,16 +1484,15 @@ abstract class Mage_Eav_Model_Entity_Collection_Abstract extends Varien_Data_Col
     /**
      * Prepare select for load
      *
-     * @param Varien_Db_Select $select OPTIONAL
-     * @return string
+     * @param Zend_Db_Select $select
+     * @return Zend_Db_Select
      */
-    public function _prepareSelect(Varien_Db_Select $select)
+    public function _prepareSelect(Zend_Db_Select $select)
     {
         if ($this->_useAnalyticFunction) {
             $helper = Mage::getResourceHelper('Mage_Core');
-            return $helper->getQueryUsingAnalyticFunction($select);
+            $select = $helper->getQueryUsingAnalyticFunction($select);
         }
-
-        return (string)$select;
+        return $select;
     }
 }

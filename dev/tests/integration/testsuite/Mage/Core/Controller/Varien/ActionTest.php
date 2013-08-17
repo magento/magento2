@@ -34,18 +34,16 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        Mage::getConfig();
         Mage::getDesign()->setArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->setDefaultDesignTheme();
-
+        $arguments = array(
+            'request'  => new Magento_Test_Request(),
+            'response' => new Magento_Test_Response(),
+        );
+        $context = Mage::getObjectManager()->create('Mage_Core_Controller_Varien_Action_Context', $arguments);
         $this->_model = $this->getMockForAbstractClass(
             'Mage_Core_Controller_Varien_Action',
-            array(
-                new Magento_Test_Request(),
-                new Magento_Test_Response(),
-                Mage::getObjectManager(),
-                Mage::getObjectManager()->get('Mage_Core_Controller_Varien_Front'),
-                Mage::getObjectManager()->get('Mage_Core_Model_Layout_Factory'),
-                'frontend'
-            )
+            array($context, 'frontend')
         );
     }
 
@@ -97,6 +95,7 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLayout($controllerClass, $expectedArea)
     {
+        Mage::getConfig()->setCurrentAreaCode($expectedArea);
         /** @var $controller Mage_Core_Controller_Varien_Action */
         $controller = Mage::getObjectManager()->create($controllerClass, array('areaCode' => $expectedArea));
         $this->assertInstanceOf('Mage_Core_Model_Layout', $controller->getLayout());
@@ -247,11 +246,16 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
         $request = new Magento_Test_Request();
         $request->setDispatched();
 
+        $arguments = array(
+            'request'  => $request,
+            'response' => new Magento_Test_Response(),
+        );
+        $context = Mage::getObjectManager()->create('Mage_Core_Controller_Varien_Action_Context', $arguments);
+
         /* Area-specific controller is used because area must be known at the moment of loading the design */
         $this->_model = Mage::getObjectManager()->create('Mage_Core_Controller_Front_Action',
             array(
-                'request'  => $request,
-                'response' => new Magento_Test_Response(),
+                'context'  => $context,
                 'areaCode' => 'frontend'
             )
         );
@@ -289,16 +293,19 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
      * @param string $expectedArea
      * @param string $expectedStore
      * @param string $expectedDesign
+     * @param string $context
      */
-    public function testPreDispatch($controllerClass, $expectedArea, $expectedStore, $expectedDesign)
+    public function testPreDispatch($controllerClass, $expectedArea, $expectedStore, $expectedDesign, $context)
     {
         Mage::getConfig()->setCurrentAreaCode($expectedArea);
+        Mage::app()->loadArea($expectedArea);
 
         /** @var $controller Mage_Core_Controller_Varien_Action */
+        $context = Mage::getObjectManager()->create($context, array('response' => new Magento_Test_Response()));
         $controller = Mage::getObjectManager()->create($controllerClass,
             array(
                 'areaCode' => $expectedArea,
-                'response' => new Magento_Test_Response(),
+                'context' => $context,
             )
         );
         $controller->preDispatch();
@@ -316,9 +323,27 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
     public function controllerAreaDesignDataProvider()
     {
         return array(
-            'install'  => array('Mage_Install_Controller_Action',    'install',   'default', 'default/basic'),
-            'frontend' => array('Mage_Core_Controller_Front_Action', 'frontend',  'default', 'default/demo'),
-            'backend'  => array('Mage_Adminhtml_Controller_Action',  'adminhtml', 'admin',   'default/basic'),
+            'install' => array(
+                'Mage_Install_Controller_Action',
+                'install',
+                'default',
+                'default/basic',
+                'Mage_Core_Controller_Varien_Action_Context'
+            ),
+            'frontend' => array(
+                'Mage_Core_Controller_Front_Action',
+                'frontend',
+                'default',
+                'default/demo',
+                'Mage_Core_Controller_Varien_Action_Context'
+            ),
+            'backend' => array(
+                'Mage_Adminhtml_Controller_Action',
+                'adminhtml',
+                'admin',
+                'default/basic',
+                'Mage_Backend_Controller_Context'
+            ),
         );
     }
 

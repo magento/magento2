@@ -84,6 +84,13 @@ class Mage_Cms_Block_Page extends Mage_Core_Block_Abstract
             $head->setDescription($page->getMetaDescription());
         }
 
+        $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
+        if ($pageMainTitle) {
+            // Setting empty page title if content heading is absent
+            $cmsTitle = $page->getContentHeading() ? : ' ';
+            $pageMainTitle->setPageTitle($this->escapeHtml($cmsTitle));
+        }
+
         return parent::_prepareLayout();
     }
 
@@ -98,7 +105,7 @@ class Mage_Cms_Block_Page extends Mage_Core_Block_Abstract
         $helper = Mage::helper('Mage_Cms_Helper_Data');
         $processor = $helper->getPageTemplateProcessor();
         $html = $processor->filter($this->getPage()->getContent());
-        $html = $this->getMessagesBlock()->toHtml() . $html;
+        $html = $this->getLayout()->renderElement('messages') . $html;
         return $html;
     }
 }

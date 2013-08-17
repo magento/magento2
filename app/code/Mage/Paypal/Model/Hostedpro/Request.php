@@ -136,7 +136,7 @@ class Mage_Paypal_Model_Hostedpro_Request extends Varien_Object
 
             'template'              => 'templateD',
             'showBillingAddress'    => 'false',
-            'showShippingAddress'   => 'false',
+            'showShippingAddress'   => 'true',
             'showBillingEmail'      => 'false',
             'showBillingPhone'      => 'false',
             'showCustomerName'      => 'false',
@@ -164,7 +164,7 @@ class Mage_Paypal_Model_Hostedpro_Request extends Varien_Object
             'tax'           => $this->_formatPrice($order->getBaseTaxAmount()),
             'shipping'      => $this->_formatPrice($order->getBaseShippingAmount()),
             'invoice'       => $order->getIncrementId(),
-            'address_override' => 'false',
+            'address_override' => 'true',
             'currency_code'    => $order->getBaseCurrencyCode(),
             'buyer_email'      => $order->getCustomerEmail()
         );
@@ -194,7 +194,7 @@ class Mage_Paypal_Model_Hostedpro_Request extends Varien_Object
             'first_name'=> $address->getFirstname(),
             'last_name' => $address->getLastname(),
             'city'      => $address->getCity(),
-            'state'     => $address->getRegion(),
+            'state'     => $address->getRegionCode() ? $address->getRegionCode() : $address->getCity(),
             'zip'       => $address->getPostcode(),
             'country'   => $address->getCountry(),
         );
@@ -221,7 +221,7 @@ class Mage_Paypal_Model_Hostedpro_Request extends Varien_Object
             'billing_first_name'=> $address->getFirstname(),
             'billing_last_name' => $address->getLastname(),
             'billing_city'      => $address->getCity(),
-            'billing_state'     => $address->getRegion(),
+            'billing_state'     => $address->getRegionCode() ? $address->getRegionCode() : $address->getCity(),
             'billing_zip'       => $address->getPostcode(),
             'billing_country'   => $address->getCountry(),
         );

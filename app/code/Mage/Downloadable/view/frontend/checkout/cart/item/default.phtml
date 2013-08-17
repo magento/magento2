@@ -74,7 +74,7 @@
     </td>
     <?php if ($this->helper('Mage_Wishlist_Helper_Data')->isAllowInCart()) : ?>
     <td class="a-center">
-        <a href="<?php echo $this->helper('Mage_Wishlist_Helper_Data')->getMoveFromCartUrl($_item->getId()); ?>" class="link-wishlist"><?php echo $this->__('Move'); ?></a>
+        <a href="<?php echo $this->helper('Mage_Wishlist_Helper_Data')->getMoveFromCartUrl($_item->getId()); ?>" class="link-wishlist" data-action="add-to-wishlist"><?php echo $this->__('Move'); ?></a>
     </td>
     <?php endif ?>
 <?php if ($canApplyMsrp): ?>
@@ -83,8 +83,20 @@
             <span class="cart-msrp-unit"><?php echo $this->__('See price before order confirmation.'); ?></span>
             <?php $helpLinkId = 'cart-msrp-help-' . $_item->getId(); ?>
             <a id="<?php echo $helpLinkId ?>" href="#" class="map-help-link"><?php echo $this->__("What's this?"); ?></a>
+            <?php $_product = $_item->getProduct(); ?>
             <script type="text/javascript">
-                Catalog.Map.addHelpLink($('<?php echo $helpLinkId ?>'), "<?php echo $this->__("What's this?") ?>");
+                (function ($) {
+                    head.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/msrp.js') ?>", function () {
+                        $('#<?php echo $helpLinkId ?>').addToCart({
+                            popupId: "#<?php echo $helpLinkId ?>",
+                            productName: '<?php echo $_product->getName() ?>',
+                            realPrice: '<?php echo $this->helper('Mage_Checkout_Helper_Data')->formatPrice($_item->getCalculationPrice()) ?>',
+                            msrpPrice: '<?php echo $this->helper('Mage_Core_Helper_Data')->currency($_product->getMsrp(),true,true) ?>',
+                            closeButtonId: '#map-popup-close',
+                            showAddToCart: false
+                        });
+                    });
+                })(jQuery);
             </script>
         </span>
     </td>

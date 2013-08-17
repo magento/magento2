@@ -115,7 +115,7 @@ class Mage_Backend_Block_Widget_Button extends Mage_Backend_Block_Widget
         );
         if ($this->getDataAttribute()) {
             foreach ($this->getDataAttribute() as $key => $attr) {
-                $attributes['data-' . $key] = json_encode($attr);
+                $attributes['data-' . $key] = is_scalar($attr) ? $attr : json_encode($attr);
             }
         }
         return $attributes;

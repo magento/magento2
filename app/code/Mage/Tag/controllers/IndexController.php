@@ -53,7 +53,7 @@ class Mage_Tag_IndexController extends Mage_Core_Controller_Front_Action
             $product = Mage::getModel('Mage_Catalog_Model_Product')
                 ->load($productId);
             if (!$product->getId()) {
-                $session->addError($this->__('Unable to save tag(s).'));
+                $session->addError($this->__('We couldn\'t save the tag(s).'));
             } else {
                 try {
                     $customerId = $customerSession->getCustomerId();
@@ -89,7 +89,7 @@ class Mage_Tag_IndexController extends Mage_Core_Controller_Front_Action
                     $this->_fillMessageBox($counter);
                 } catch (Exception $e) {
                     Mage::logException($e);
-                    $session->addError($this->__('Unable to save tag(s).'));
+                    $session->addError($this->__('We couldn\'t save the tag(s).'));
                 }
             }
         }
@@ -161,7 +161,7 @@ class Mage_Tag_IndexController extends Mage_Core_Controller_Front_Action
         if (count($counter[Mage_Tag_Model_Tag::ADD_STATUS_REJECTED])) {
             foreach ($counter[Mage_Tag_Model_Tag::ADD_STATUS_REJECTED] as $tagName) {
                 $session->addNotice(
-                    $this->__('Tag "%s" has been rejected by administrator.', $helper->escapeHtml($tagName))
+                    $this->__('Tag "%s" has been rejected by the administrator.', $helper->escapeHtml($tagName))
                 );
             }
         }

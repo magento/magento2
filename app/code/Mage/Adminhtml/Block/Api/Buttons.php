@@ -42,11 +42,13 @@ class Mage_Adminhtml_Block_Api_Buttons extends Mage_Adminhtml_Block_Template
             'onclick'   => 'window.location.reload()'
         ));
 
-        $this->addChild('saveButton', 'Mage_Adminhtml_Block_Widget_Button', array(
-            'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Save Role'),
+        $this->addChild('saveButton', 'Mage_Backend_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_User_Helper_Data')->__('Save Role'),
             'class' => 'save',
-            'data_attr'  => array(
-                'widget-button' => array('event' => 'save', 'related' => '#role-edit-form')
+            'data_attribute'  => array(
+                'mage-init' => array(
+                    'button' => array('event' => 'save', 'target' => '#role-edit-form')
+                )
             )
         ));
 

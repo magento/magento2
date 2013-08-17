@@ -1,5 +1,7 @@
 <?php
 /**
+ * Stores event information in Magento database
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -23,12 +25,11 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Mage_Webhook_Model_Event extends Mage_Core_Model_Abstract implements Mage_Webhook_Model_Event_Interface
+class Mage_Webhook_Model_Event extends Mage_Core_Model_Abstract implements Magento_PubSub_EventInterface
 {
-    const PREPARING     = 0;
-    const READY_TO_SEND = 1;
-    const PROCESSED     = 2;
-
+    /**
+     * Initialize Model
+     */
     public function _construct()
     {
         parent::_construct();
@@ -37,13 +38,14 @@ class Mage_Webhook_Model_Event extends Mage_Core_Model_Abstract implements Mage_
 
     /**
      * Prepare data to be saved to database
-     * @return Mage_Core_Model_Abstract
+     *
+     * @return Mage_Webhook_Model_Event
      */
     protected function _beforeSave()
     {
         parent::_beforeSave();
-
         if ($this->isObjectNew()) {
+            $this->markAsReadyToSend();
             $this->setCreatedAt($this->_getResource()->formatDate(true));
         } elseif ($this->getId() && !$this->hasData('updated_at')) {
             $this->setUpdatedAt($this->_getResource()->formatDate(true));
@@ -51,11 +53,22 @@ class Mage_Webhook_Model_Event extends Mage_Core_Model_Abstract implements Mage_
         return $this;
     }
 
+    /**
+     * Prepare data before set
+     *
+     * @param array $data
+     * @return Mage_Webhook_Model_Event
+     */
     public function setBodyData(array $data)
     {
         return $this->setData('body_data', serialize($data));
     }
 
+    /**
+     * Prepare data before return
+     *
+     * @return array
+     */
     public function getBodyData()
     {
         $data = $this->getData('body_data');
@@ -65,11 +78,22 @@ class Mage_Webhook_Model_Event extends Mage_Core_Model_Abstract implements Mage_
         return array();
     }
 
+    /**
+     * Prepare headers before set
+     *
+     * @param array $headers
+     * @return Mage_Webhook_Model_Event
+     */
     public function setHeaders(array $headers)
     {
         return $this->setData('headers', serialize($headers));
     }
 
+    /**
+     * Prepare headers before return
+     *
+     * @return array
+     */
     public function getHeaders()
     {
         $headers = $this->getData('headers');
@@ -79,37 +103,54 @@ class Mage_Webhook_Model_Event extends Mage_Core_Model_Abstract implements Mage_
         return array();
     }
 
+    /**
+     * Prepare options before set
+     *
+     * @param array $options
+     * @return Mage_Webhook_Model_Event
+     */
     public function setOptions(array $options)
     {
         return $this->setData('options', serialize($options));
     }
 
-    public function getOptions()
-    {
-        $options = $this->getData('options');
-        if (!is_null($options)) {
-            return unserialize($options);
-        }
-        return array();
-    }
-
-    public function getMapping()
-    {
-        return $this->getData('mapping');
-    }
-
+    /**
+     * Return status. Enable compatibility with interface
+     *
+     * @return null|int
+     */
     public function getStatus()
     {
         return $this->getData('status');
     }
 
+    /**
+     * Return topic and enable compatibility with interface
+     *
+     * @return null|string
+     */
     public function getTopic()
     {
         return $this->getData('topic');
     }
 
-    public function setTopic($topic)
+    /**
+     * Mark event as ready to send
+     *
+     * @return Magento_PubSub_EventInterface
+     */
+    public function markAsReadyToSend()
     {
-        return $this->setData('topic', $topic);
+        $this->setData('status', Magento_PubSub_EventInterface::READY_TO_SEND);
+    }
+
+    /**
+     * Mark event as processed
+     *
+     * @return Magento_PubSub_EventInterface
+     */
+    public function markAsProcessed()
+    {
+        $this->setData('status', Magento_PubSub_EventInterface::PROCESSED);
     }
 }

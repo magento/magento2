@@ -121,10 +121,10 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Edit_Form extends Mage_Adminhtml_B
                 $categoryStores = (array) $category->getStoreIds();
                 $entityStores = array_intersect($entityStores, $categoryStores);
             }
+            // @codingStandardsIgnoreStart
             if (!$entityStores) {
                 throw new Mage_Core_Model_Store_Exception(
-                    Mage::helper('Mage_Adminhtml_Helper_Data')
-                        ->__('Chosen product does not associated with any website, so URL rewrite is not possible.')
+                    Mage::helper('Mage_Adminhtml_Helper_Data')->__('We can\'t set up a URL rewrite because the product you chose is not associated with a website.')
                 );
             }
             $this->_requireStoresFilter = true;
@@ -132,12 +132,12 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Edit_Form extends Mage_Adminhtml_B
             $entityStores = (array) $category->getStoreIds();
             if (!$entityStores) {
                 throw new Mage_Core_Model_Store_Exception(
-                    Mage::helper('Mage_Adminhtml_Helper_Data')
-                        ->__('Chosen category does not associated with any website, so URL rewrite is not possible.')
+                    Mage::helper('Mage_Adminhtml_Helper_Data')->__('We can\'t set up a URL rewrite because the category your chose is not associated with a website.')
                 );
             }
             $this->_requireStoresFilter = true;
         }
+        // @codingStandardsIgnoreEnd
 
         return $entityStores;
     }

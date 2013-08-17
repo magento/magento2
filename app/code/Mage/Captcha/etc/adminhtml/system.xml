@@ -115,7 +115,7 @@
                 <field id="forms" translate="label comment" type="multiselect" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Forms</label>
                     <source_model>Mage_Captcha_Model_Config_Form_Frontend</source_model>
-                    <comment>CAPTCHA for "Create user" and "Forgot password" forms is always enabled if chosen</comment>
+                    <comment>CAPTCHA for "Create user" and "Forgot password" forms is always enabled if chosen.</comment>
                     <depends>
                         <field id="enable">1</field>
                     </depends>

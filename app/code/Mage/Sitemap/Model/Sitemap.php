@@ -109,6 +109,29 @@ class Mage_Sitemap_Model_Sitemap extends Mage_Core_Model_Abstract
     private $_crlf = array("win" => "\r\n", "unix" => "\n", "mac" => "\r");
 
     /**
+     * @var Magento_Filesystem $filesystem
+     */
+    protected $_filesystem;
+
+    /**
+     * @param Mage_Core_Model_Context $context
+     * @param Mage_Core_Model_Resource_Abstract $resource
+     * @param Varien_Data_Collection_Db $resourceCollection
+     * @param Magento_Filesystem $filesystem
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Core_Model_Context $context,
+        Mage_Core_Model_Resource_Abstract $resource = null,
+        Varien_Data_Collection_Db $resourceCollection = null,
+        Magento_Filesystem $filesystem,
+        array $data = array()
+    ) {
+        $this->_filesystem = $filesystem;
+        parent::__construct($context, $resource, $resourceCollection, $data);
+    }
+
+    /**
      * Init model
      */
     protected function _construct()
@@ -224,7 +247,7 @@ class Mage_Sitemap_Model_Sitemap extends Mage_Core_Model_Abstract
         /** @var $helper Mage_Sitemap_Helper_Data */
         $helper = Mage::helper('Mage_Sitemap_Helper_Data');
         if (!$file->allowedPath($realPath, $this->_getBaseDir())) {
-            Mage::throwException($helper->__('Please define correct path'));
+            Mage::throwException($helper->__('Please define a correct path.'));
         }
         /**
          * Check exists and writeable path
@@ -235,14 +258,14 @@ class Mage_Sitemap_Model_Sitemap extends Mage_Core_Model_Abstract
         }
 
         if (!$file->isWriteable($realPath)) {
-            Mage::throwException($helper->__('Please make sure that "%s" is writable by web-server.',
+            Mage::throwException($helper->__('Please make sure that "%s" is writable by the web-server.',
                 $this->getSitemapPath()));
         }
         /**
          * Check allow filename
          */
         if (!preg_match('#^[a-zA-Z0-9_\.]+$#', $this->getSitemapFilename())) {
-            Mage::throwException($helper->__('Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) in the filename. No spaces or other characters are allowed.'));
+            Mage::throwException($helper->__('Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename. No spaces or other characters are allowed.'));
         }
         if (!preg_match('#\.xml$#', $this->getSitemapFilename())) {
             $this->setSitemapFilename($this->getSitemapFilename() . '.xml');
@@ -584,9 +607,18 @@ class Mage_Sitemap_Model_Sitemap extends Mage_Core_Model_Abstract
 
         $documentRoot = trim(str_replace('\\', '/', $this->_getDocumentRoot()), '/');
         $baseDir = trim(str_replace('\\', '/', $this->_getBaseDir()), '/');
-        $installationFolder = trim(str_replace($documentRoot, '', $baseDir), '/');
 
-        return rtrim($url . '/' . $installationFolder, '/');
+        if ($this->_getFilesystem()->isPathInDirectory($baseDir, $documentRoot)) {
+            //case when basedir is in document root
+            $installationFolder = trim(str_replace($documentRoot, '', $baseDir), '/');
+            $storeDomain = rtrim($url . '/' . $installationFolder, '/');
+        } else {
+            //case when documentRoot contains symlink to basedir
+            $url = $this->_getStoreBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+            $storeDomain = rtrim($url, '/');
+        }
+
+        return $storeDomain;
     }
 
     /**
@@ -639,6 +671,16 @@ class Mage_Sitemap_Model_Sitemap extends Mage_Core_Model_Abstract
         }
 
         $robotsFileHandler->write($robotsFileName, $robotsFullText);
+    }
+
+    /**
+     * Get Magento_Filesystem object
+     *
+     * @return Magento_Filesystem
+     */
+    protected function _getFilesystem()
+    {
+        return $this->_filesystem;
     }
 
     /**

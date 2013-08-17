@@ -34,7 +34,7 @@ define('BP', dirname(__DIR__));
  * Environment initialization
  */
 error_reporting(E_ALL | E_STRICT);
-ini_set('display_errors', 1);
+#ini_set('display_errors', 1);
 umask(0);
 
 /**
@@ -47,7 +47,6 @@ require_once __DIR__ . '/autoload.php';
 Magento_Autoload_IncludePath::addIncludePath(array(
     BP . DS . 'app' . DS . 'code',
     BP . DS . 'lib',
-    BP . DS . 'var' . DS . 'generation',
 ));
 $classMapPath = BP . DS . 'var/classmap.ser';
 if (file_exists($classMapPath)) {
@@ -86,21 +85,10 @@ HTML;
         }
         exit;
     }
+
     if (!empty($_SERVER['MAGE_PROFILER'])) {
-        $profilerConfigData = $_SERVER['MAGE_PROFILER'];
-
-        $profilerConfig = array(
-            'baseDir' => dirname(__DIR__),
-            'tagFilters' => array()
-        );
-
-        if (is_scalar($profilerConfigData)) {
-            $profilerConfig['driver'] = array(
-                'output' => is_numeric($profilerConfigData) ? 'html' : $profilerConfigData
-            );
-        } elseif (is_array($profilerConfigData)) {
-            $profilerConfig = array_merge($profilerConfig, $profilerConfigData);
-        }
-        Magento_Profiler::applyConfig($profilerConfig);
+        Magento_Profiler::applyConfig($_SERVER['MAGE_PROFILER'], dirname(__DIR__), !empty($_REQUEST['isAjax']));
     }
 }
+set_error_handler(Mage::DEFAULT_ERROR_HANDLER);
+date_default_timezone_set(Mage::DEFAULT_TIMEZONE);

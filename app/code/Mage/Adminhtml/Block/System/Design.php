@@ -37,7 +37,7 @@ class Mage_Adminhtml_Block_System_Design extends Mage_Adminhtml_Block_Template
             'class'   => 'add'
         ));
 
-        $this->getLayout()->getBlock('page-title')->setPageTitle('Schedule');
+        $this->getLayout()->getBlock('page-title')->setPageTitle('Store Design Schedule');
 
         return parent::_prepareLayout();
     }

@@ -57,14 +57,14 @@ class Mage_Adminhtml_Block_System_Email_Template_Edit extends Mage_Adminhtml_Blo
     protected $_template = 'system/email/template/edit.phtml';
 
     /**
-     * @param Mage_Core_Block_Template_Context $context
+     * @param Mage_Backend_Block_Template_Context $context
      * @param Mage_Core_Model_Registry $registry
      * @param Mage_Backend_Model_Menu_Config $menuConfig
      * @param Mage_Backend_Model_Config_Structure $configStructure
      * @param array $data
      */
     public function __construct(
-        Mage_Core_Block_Template_Context $context,
+        Mage_Backend_Block_Template_Context $context,
         Mage_Core_Model_Registry $registry,
         Mage_Backend_Model_Menu_Config $menuConfig,
         Mage_Backend_Model_Config_Structure $configStructure,

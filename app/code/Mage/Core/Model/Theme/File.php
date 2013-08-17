@@ -26,64 +26,62 @@
 
 /**
  * Theme files model class
- *
- * @method int getThemeId()
- * @method string getFileType()
- * @method string getContent()
- * @method string getOrder()
- * @method bool getIsTemporary()
- * @method setThemeId(int $id)
- * @method setFileName(string $filename)
- * @method setFileType(string $type)
- * @method setContent(string $content)
- * @method setSortOrder(string $order)
- * @method Mage_Core_Model_Theme_File setUpdatedAt($time)
- * @method Mage_Core_Model_Theme_File setLayoutLinkId($id)
- * @method string getFilePath() Relative path to file
- * @method int getLayoutLinkId()
  */
-class Mage_Core_Model_Theme_File extends Mage_Core_Model_Abstract
+class Mage_Core_Model_Theme_File extends Mage_Core_Model_Abstract implements Mage_Core_Model_Theme_FileInterface
 {
     /**
-     * Css file type
+     * {@inheritdoc}
+     *
+     * @var string
      */
-    const TYPE_CSS = 'css';
+    protected $_eventPrefix = 'theme_file';
 
     /**
-     * Js file type
+     * {@inheritdoc}
+     *
+     * @var string
      */
-    const TYPE_JS = 'js';
+    protected $_eventObject = 'file';
 
     /**
-     * @var Varien_Io_File
+     * @var Mage_Core_Model_Theme
      */
-    protected $_ioFile;
+    protected $_theme;
 
     /**
-     * @var Magento_ObjectManager
+     * @var Mage_Core_Model_Theme_Customization_FileServiceFactory
      */
-    protected $_objectManager;
+    protected $_fileServiceFactory;
+
+    /**
+     * @var Mage_Core_Model_Theme_Customization_FileInterface
+     */
+    protected $_fileService;
+
+    /**
+     * @var Mage_Core_Model_Theme_FlyweightFactory
+     */
+    protected $_themeFactory;
 
     /**
      * @param Mage_Core_Model_Context $context
-     * @param Varien_Io_File $ioFile
-     * @param Magento_ObjectManager $objectManager
+     * @param Mage_Core_Model_Theme_FlyweightFactory $themeFactory
+     * @param Mage_Core_Model_Theme_Customization_FileServiceFactory $fileServiceFactory
      * @param Mage_Core_Model_Resource_Abstract $resource
      * @param Varien_Data_Collection_Db $resourceCollection
      * @param array $data
      */
     public function __construct(
         Mage_Core_Model_Context $context,
-        Varien_Io_File $ioFile,
-        Magento_ObjectManager $objectManager,
+        Mage_Core_Model_Theme_FlyweightFactory $themeFactory,
+        Mage_Core_Model_Theme_Customization_FileServiceFactory $fileServiceFactory,
         Mage_Core_Model_Resource_Abstract $resource = null,
         Varien_Data_Collection_Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct($context, $resource, $resourceCollection, $data);
-
-        $this->_ioFile = $ioFile;
-        $this->_objectManager = $objectManager;
+        $this->_themeFactory = $themeFactory;
+        $this->_fileServiceFactory = $fileServiceFactory;
     }
 
     /**
@@ -95,127 +93,122 @@ class Mage_Core_Model_Theme_File extends Mage_Core_Model_Abstract
     }
 
     /**
-     * Get theme model
+     * {@inheritdoc}
      *
-     * @return Mage_Core_Model_Theme
+     * @return $this
+     */
+    public function setCustomizationService(Mage_Core_Model_Theme_Customization_FileInterface $fileService)
+    {
+        $this->_fileService = $fileService;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws UnexpectedValueException
+     */
+    public function getCustomizationService()
+    {
+        if (!$this->_fileService && $this->hasData('file_type')) {
+            $this->_fileService = $this->_fileServiceFactory->create($this->getData('file_type'));
+        } elseif (!$this->_fileService) {
+            throw new UnexpectedValueException('Type of file is empty');
+        }
+        return $this->_fileService;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTheme(Mage_Core_Model_Theme $theme)
+    {
+        $this->_theme = $theme;
+        $this->setData('theme_id', $theme->getId());
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
      * @throws Magento_Exception
      */
     public function getTheme()
     {
-        if ($this->hasData('theme')) {
-            return $this->getData('theme');
-        }
-
-        /** @var $theme Mage_Core_Model_Theme */
-        $theme = $this->_objectManager->create('Mage_Core_Model_Theme');
-        $themeId = $this->getData('theme_id');
-        if ($themeId && $theme->load($themeId)->getId()) {
-            $this->setData('theme', $theme);
-        } else {
+        $theme = $this->_themeFactory->create($this->getData('theme_id'));
+        if (!$theme) {
             throw new Magento_Exception('Theme id should be set');
         }
         return $theme;
     }
 
     /**
-     * Create/update/delete file after save
-     * Delete file if only file is empty
-     *
-     * @return Mage_Core_Model_Theme_File
+     * {@inheritdoc}
      */
-    protected function _afterSave()
+    public function setFileName($fileName)
     {
-        if ($this->hasContent()) {
-            $this->_saveFile();
-        } else {
-            $this->delete();
-        }
-        return parent::_afterSave();
+        $this->setData('file_name', $fileName);
+        return $this;
     }
 
     /**
-     * Delete file form file system after delete form db
-     *
-     * @return Mage_Core_Model_Theme_File
-     */
-    protected function _afterDelete()
-    {
-        $this->_deleteFile();
-        return parent::_afterDelete();
-    }
-
-    /**
-     * Create/update file in file system
-     *
-     * @return bool|int
-     */
-    protected function _saveFile()
-    {
-        $filePath = $this->getFullPath();
-        $this->_ioFile->checkAndCreateFolder(dirname($filePath));
-        $result = $this->_ioFile->write($filePath, $this->getContent());
-        return $result;
-    }
-
-    /**
-     * Delete file form file system
-     *
-     * @return bool
-     */
-    protected function _deleteFile()
-    {
-        $result = $this->_ioFile->rm($this->getFullPath());
-        return $result;
-    }
-
-    /**
-     * Check if file has content
-     *
-     * @return bool
-     */
-    public function hasContent()
-    {
-        return (bool)trim($this->getContent());
-    }
-
-    /**
-     * Get file name of customization file
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getFileName()
     {
-        return basename($this->getFilePath());
+        return $this->getData('file_name') ?: basename($this->getData('file_path'));
     }
 
     /**
-     * Return absolute path to file of customization
-     *
-     * @return null|string
+     * {@inheritdoc}
      */
     public function getFullPath()
     {
-        $path = null;
-        if ($this->getId()) {
-            $path = $this->getTheme()->getCustomizationPath() . DIRECTORY_SEPARATOR . $this->getFilePath();
-            $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
-        }
-        return $path;
+        return $this->getCustomizationService()->getFullPath($this);
     }
 
     /**
-     * Retrieve a page asset representing a theme file
-     *
-     * @return Mage_Core_Model_Page_Asset_AssetInterface|null
+     * @return string
      */
-    public function getAsset()
+    public function getContent()
     {
-        if ($this->hasContent()) {
-            return $this->_objectManager->create(
-                'Mage_Core_Model_Page_Asset_PublicFile',
-                array('file' => $this->getFullPath(), 'contentType' => $this->getFileType())
-            );
-        }
-        return null;
+        return $this->getData('content');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFileInfo()
+    {
+        return array(
+            'id'        => $this->getId(),
+            'name'      => $this->getFileName(),
+            'temporary' => $this->getData('is_temporary') ? $this->getId() : 0
+        );
+    }
+
+    /**
+     * Prepare file before it will be saved
+     *
+     * @return $this
+     */
+    protected function _beforeSave()
+    {
+        $fileService = $this->getCustomizationService();
+        $fileService->prepareFile($this);
+        $fileService->save($this);
+        return parent::_beforeSave();
+    }
+
+    /**
+     * Prepare file before it will be deleted
+     *
+     * @return $this
+     */
+    protected function _beforeDelete()
+    {
+        $fileService = $this->getCustomizationService();
+        $fileService->delete($this);
+        return parent::_beforeDelete();
     }
 }

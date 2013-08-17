@@ -27,15 +27,16 @@
 
 /**
  * Test class for Mage_Adminhtml_Block_System_Design_Edit_Tab_General
+ * @magentoAppArea adminhtml
  */
-class Mage_Adminhtml_Block_System_Design_Edit_Tab_GeneralTest extends Mage_Backend_Area_TestCase
+class Mage_Adminhtml_Block_System_Design_Edit_Tab_GeneralTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @magentoDataFixture Mage/Core/_files/init_adminhtml_design.php
      * @magentoAppIsolation enabled
      */
     public function testPrepareForm()
     {
+        Mage::getDesign()->setArea(Mage_Core_Model_App_Area::AREA_ADMINHTML)->setDefaultDesignTheme();
         Mage::register('design', Mage::getObjectManager()->create('Mage_Core_Model_Design'));
         $layout = Mage::getObjectManager()->create('Mage_Core_Model_Layout');
         $block = $layout->addBlock('Mage_Adminhtml_Block_System_Design_Edit_Tab_General');

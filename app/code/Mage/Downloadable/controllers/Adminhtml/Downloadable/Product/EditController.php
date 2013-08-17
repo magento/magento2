@@ -124,7 +124,7 @@ class Mage_Downloadable_Adminhtml_Downloadable_Product_EditController extends Ma
             try {
                 $this->_processDownload($resource, $resourceType);
             } catch (Mage_Core_Exception $e) {
-                $this->_getCustomerSession()->addError(Mage::helper('Mage_Downloadable_Helper_Data')->__('An error occurred while getting the requested content.'));
+                $this->_getCustomerSession()->addError(Mage::helper('Mage_Downloadable_Helper_Data')->__('Something went wrong while getting the requested content.'));
             }
         }
         exit(0);

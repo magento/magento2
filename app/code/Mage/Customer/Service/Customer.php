@@ -41,12 +41,12 @@ class Mage_Customer_Service_Customer
     protected $_translateHelper = null;
 
     /**
-     * @var Mage_Customer_Model_Customer_Factory
+     * @var Mage_Customer_Model_CustomerFactory
      */
     protected $_customerFactory = null;
 
     /**
-     * @var Mage_Customer_Model_Address_Factory
+     * @var Mage_Customer_Model_AddressFactory
      */
     protected $_addressFactory = null;
 
@@ -65,14 +65,14 @@ class Mage_Customer_Service_Customer
      * Constructor
      *
      * @param Mage_Customer_Helper_Data $helper
-     * @param Mage_Customer_Model_Customer_Factory $customerFactory
-     * @param Mage_Customer_Model_Address_Factory $addressFactory
+     * @param Mage_Customer_Model_CustomerFactory $customerFactory
+     * @param Mage_Customer_Model_AddressFactory $addressFactory
      * @param bool $isAdminStore
      */
     public function __construct(
         Mage_Customer_Helper_Data $helper,
-        Mage_Customer_Model_Customer_Factory $customerFactory,
-        Mage_Customer_Model_Address_Factory $addressFactory,
+        Mage_Customer_Model_CustomerFactory $customerFactory,
+        Mage_Customer_Model_AddressFactory $addressFactory,
         $isAdminStore = true
     ) {
         $this->_translateHelper = $helper;
@@ -81,19 +81,6 @@ class Mage_Customer_Service_Customer
         $this->_isAdminStore = $isAdminStore;
     }
 
-    /**
-     * @return array
-     */
-    public function getCustomerGroups()
-    {
-        $optionsResource =  new Mage_Customer_Model_Resource_Group_Collection();
-        $groups = array();
-        foreach ($optionsResource->setRealGroupsFilter()->loadData() as $group) {
-            $groups[] = $group->getData();
-        }
-        return $groups;
-    }
-    
     /**
      * Set is admin store flag.
      *
@@ -346,6 +333,8 @@ class Mage_Customer_Service_Customer
             $storeId = $customer->getSendemailStoreId();
 
             if ($isNewCustomer) {
+                $newResetPasswordLinkToken = $this->_translateHelper->generateResetPasswordLinkToken();
+                $customer->changeResetPasswordLinkToken($newResetPasswordLinkToken);
                 $customer->sendNewAccountEmail('registered', '', $storeId);
             } elseif (!$customer->getConfirmation()) {
                 // Confirm not confirmed customer

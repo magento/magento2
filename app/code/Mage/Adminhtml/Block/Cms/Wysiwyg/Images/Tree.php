@@ -41,6 +41,7 @@ class Mage_Adminhtml_Block_Cms_Wysiwyg_Images_Tree extends Mage_Adminhtml_Block_
      */
     public function getTreeJson()
     {
+        /** @var Mage_Cms_Helper_Wysiwyg_Images $helper */
         $helper = Mage::helper('Mage_Cms_Helper_Wysiwyg_Images');
         $storageRoot = $helper->getStorageRoot();
         $collection = Mage::registry('storage')->getDirsCollection($helper->getCurrentPath());
@@ -49,6 +50,7 @@ class Mage_Adminhtml_Block_Cms_Wysiwyg_Images_Tree extends Mage_Adminhtml_Block_
             $jsonArray[] = array(
                 'text'  => $helper->getShortFilename($item->getBasename(), 20),
                 'id'    => $helper->convertPathToId($item->getFilename()),
+                'path' => substr($item->getFilename(), strlen($storageRoot)),
                 'cls'   => 'folder'
             );
         }
@@ -82,18 +84,33 @@ class Mage_Adminhtml_Block_Cms_Wysiwyg_Images_Tree extends Mage_Adminhtml_Block_
      */
     public function getTreeCurrentPath()
     {
-        $treePath = '/root';
+        $treePath = array('root');
         if ($path = Mage::registry('storage')->getSession()->getCurrentPath()) {
             $helper = Mage::helper('Mage_Cms_Helper_Wysiwyg_Images');
             $path = str_replace($helper->getStorageRoot(), '', $path);
-            $relative = '';
-            foreach (explode(DS, $path) as $dirName) {
+            $relative = array();
+            foreach (explode(DIRECTORY_SEPARATOR, $path) as $dirName) {
                 if ($dirName) {
-                    $relative .= DS . $dirName;
-                    $treePath .= '/' . $helper->idEncode($relative);
+                    $relative[] =  $dirName;
+                    $treePath[] =  $helper->idEncode(implode(DIRECTORY_SEPARATOR, $relative));
                 }
             }
         }
         return $treePath;
+    }
+
+    /**
+     * Get tree widget options
+     * @return array
+     */
+    public function getTreeWidgetOptions()
+    {
+        return array(
+            "folderTree" => array(
+                "rootName" => $this->getRootNodeName(),
+                "url" => $this->getTreeLoaderUrl(),
+                "currentPath"=> array_reverse($this->getTreeCurrentPath()),
+            )
+        );
     }
 }

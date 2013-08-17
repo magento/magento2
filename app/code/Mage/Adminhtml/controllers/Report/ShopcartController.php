@@ -44,9 +44,7 @@ class Mage_Adminhtml_Report_ShopcartController extends Mage_Adminhtml_Controller
 
     public function customerAction()
     {
-        $this->_title($this->__('Reports'))
-             ->_title($this->__('Shopping Cart'))
-             ->_title($this->__('Customer Shopping Carts'));
+        $this->_title($this->__('Customer Shopping Carts'));
 
         $this->_initAction()
             ->_setActiveMenu('Mage_Reports::report_shopcart_customer')
@@ -81,9 +79,7 @@ class Mage_Adminhtml_Report_ShopcartController extends Mage_Adminhtml_Controller
 
     public function productAction()
     {
-        $this->_title($this->__('Reports'))
-             ->_title($this->__('Shopping Cart'))
-             ->_title($this->__('Products in Carts'));
+        $this->_title($this->__('Products in Carts'));
 
         $this->_initAction()
             ->_setActiveMenu('Mage_Reports::report_shopcart_product')
@@ -118,9 +114,7 @@ class Mage_Adminhtml_Report_ShopcartController extends Mage_Adminhtml_Controller
 
     public function abandonedAction()
     {
-        $this->_title($this->__('Reports'))
-             ->_title($this->__('Shopping Cart'))
-             ->_title($this->__('Abandoned Carts'));
+        $this->_title($this->__('Abandoned Carts'));
 
         $this->_initAction()
             ->_setActiveMenu('Mage_Reports::report_shopcart_abandoned')
@@ -157,17 +151,16 @@ class Mage_Adminhtml_Report_ShopcartController extends Mage_Adminhtml_Controller
     {
         switch ($this->getRequest()->getActionName()) {
             case 'customer':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')
-                    ->isAllowed(Mage_Backend_Model_Acl_Config::ACL_RESOURCE_ALL);
+                return $this->_authorization->isAllowed(null);
                 break;
             case 'product':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::product');
+                return $this->_authorization->isAllowed('Mage_Reports::product');
                 break;
             case 'abandoned':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::abandoned');
+                return $this->_authorization->isAllowed('Mage_Reports::abandoned');
                 break;
             default:
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::shopcart');
+                return $this->_authorization->isAllowed('Mage_Reports::shopcart');
                 break;
         }
     }

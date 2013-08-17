@@ -136,7 +136,9 @@ class Mage_Backend_Model_Auth
     public function login($username, $password)
     {
         if (empty($username) || empty($password)) {
-            self::throwException(Mage::helper('Mage_Backend_Helper_Data')->__('Invalid User Name or Password.'));
+            self::throwException(
+                Mage::helper('Mage_Backend_Helper_Data')->__('Please correct the user name or password.')
+            );
         }
 
         try {
@@ -151,7 +153,9 @@ class Mage_Backend_Model_Auth
             }
 
             if (!$this->getAuthStorage()->getUser()) {
-                self::throwException(Mage::helper('Mage_Backend_Helper_Data')->__('Invalid User Name or Password.'));
+                self::throwException(
+                    Mage::helper('Mage_Backend_Helper_Data')->__('Please correct the user name or password.')
+                );
             }
 
         } catch (Mage_Backend_Model_Auth_Plugin_Exception $e) {
@@ -159,7 +163,9 @@ class Mage_Backend_Model_Auth
             throw $e;
         } catch (Mage_Core_Exception $e) {
             Mage::dispatchEvent('backend_auth_user_login_failed', array('user_name' => $username, 'exception' => $e));
-            self::throwException(Mage::helper('Mage_Backend_Helper_Data')->__('Invalid User Name or Password.'));
+            self::throwException(
+                Mage::helper('Mage_Backend_Helper_Data')->__('Please correct the user name or password.')
+            );
         }
     }
 

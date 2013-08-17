@@ -43,7 +43,7 @@
                         <?php $this->getChildBlock('items')->setItems($this->getWishlistItems()); ?>
                         <?php echo $this->getChildHtml('items');?>
                 <?php else: ?>
-                    <p class="wishlist-empty"><?php echo $this->__('You have no items in your wishlist.') ?></p>
+                    <p class="wishlist-empty"><?php echo $this->__('You have no items in your wish list.') ?></p>
                 <?php endif ?>
                 <div class="buttons-set buttons-set2">
                     <?php echo $this->getChildHtml('control_buttons');?>
@@ -69,7 +69,7 @@
                     "<?php echo $this->getViewFileUrl('Mage_Wishlist::wishlist.js')?>", function() {
                         $('#wishlist-view-form').wishlist({
                             addToCartUrl: '<?php echo $this->getItemAddToCartUrl('%item%');?>' ,
-                            confirmRemoveMessage: '<?php echo $this->__('Are you sure you want to remove this product from your wishlist?') ?>',
+                            confirmRemoveMessage: '<?php echo $this->__('Are you sure you want to remove this product from your wish list?') ?>',
                             addAllToCartUrl : '<?php echo $this->getUrl('*/*/allcart', array('wishlist_id' => $this->getWishlistInstance()->getId())) ?>',
                             commentString : '<?php echo $this->helper('Mage_Wishlist_Helper_Data')->defaultCommentString()?>'
                         });

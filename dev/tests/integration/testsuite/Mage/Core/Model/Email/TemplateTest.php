@@ -46,7 +46,9 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
             ->setMethods(array('_getMail'))
             ->setConstructorArgs(array(
                 Mage::getSingleton('Mage_Core_Model_Context'),
-                Mage::getObjectManager()->create('Magento_Filesystem')
+                Mage::getObjectManager()->create('Magento_Filesystem'),
+                Mage::getObjectManager()->create('Mage_Core_Model_View_Url'),
+                Mage::getObjectManager()->create('Mage_Core_Model_View_FileSystem')
             ))
             ->getMock();
         $this->_model->expects($this->any())->method('_getMail')->will($this->returnCallback(array($this, 'getMail')));
@@ -99,12 +101,12 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Mage/Core/_files/store.php
-     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      */
     public function testGetProcessedTemplate()
     {
-        $this->_setBlueThemeForFixtureStore();
-        $expectedViewUrl = 'static/frontend/default/demo_blue/en_US/Mage_Page/favicon.ico';
+        Mage::app()->getArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->load();
+        $this->_setBlankThemeForFixtureStore();
+        $expectedViewUrl = 'static/frontend/default/blank/en_US/Mage_Page/favicon.ico';
         $this->_model->setTemplateText('{{view url="Mage_Page::favicon.ico"}}');
         $this->assertStringEndsNotWith($expectedViewUrl, $this->_model->getProcessedTemplate());
         $this->_model->setDesignConfig(array(
@@ -114,27 +116,27 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Set 'default/demo_blue' for the 'fixturestore' store.
+     * Set 'default/blank' for the 'fixturestore' store.
      * Application isolation is required, if a test uses this method.
      */
-    protected function _setBlueThemeForFixtureStore()
+    protected function _setBlankThemeForFixtureStore()
     {
         $theme = Mage::getModel('Mage_Core_Model_Theme');
-        $theme->load('default/demo_blue', 'theme_path');
+        $theme->load('default/blank', 'theme_path');
         Mage::app()->getStore('fixturestore')
-            ->setConfig(Mage_Core_Model_Design_Package::XML_PATH_THEME_ID, $theme->getId());
+            ->setConfig(Mage_Core_Model_View_Design::XML_PATH_THEME_ID, $theme->getId());
     }
 
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Mage/Core/_files/design_change.php
-     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      */
     public function testGetProcessedTemplateDesignChange()
     {
+        Mage::app()->getArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->load();
         $this->_model->setTemplateText('{{view url="Mage_Page::favicon.ico"}}');
         $this->assertStringEndsWith(
-            'static/frontend/default/modern/en_US/Mage_Page/favicon.ico',
+            'static/frontend/default/blank/en_US/Mage_Page/favicon.ico',
             $this->_model->getProcessedTemplate()
         );
     }
@@ -142,12 +144,12 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Mage/Core/_files/store.php
-     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      */
     public function testGetProcessedTemplateSubject()
     {
-        $this->_setBlueThemeForFixtureStore();
-        $expectedViewUrl = 'static/frontend/default/demo_blue/en_US/Mage_Page/favicon.ico';
+        Mage::app()->getArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->load();
+        $this->_setBlankThemeForFixtureStore();
+        $expectedViewUrl = 'static/frontend/default/blank/en_US/Mage_Page/favicon.ico';
         $this->_model->setTemplateSubject('{{view url="Mage_Page::favicon.ico"}}');
         $this->assertStringEndsNotWith($expectedViewUrl, $this->_model->getProcessedTemplateSubject(array()));
         $this->_model->setDesignConfig(array(
@@ -161,10 +163,10 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
      * @covers Mage_Core_Model_Email_Template::addBcc
      * @covers Mage_Core_Model_Email_Template::setReturnPath
      * @covers Mage_Core_Model_Email_Template::setReplyTo
-     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      */
     public function testSend()
     {
+        Mage::app()->getArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->load();
         $this->_mail->expects($this->exactly(2))->method('send');
         $this->_mail->expects($this->once())->method('addBcc')->with('bcc@example.com');
         $this->_mail->expects($this->once())->method('setReturnPath')->with('return@example.com');
@@ -182,11 +184,9 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->_model->send('test@example.com'));
     }
 
-    /**
-     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
-     */
     public function testSendMultipleRecipients()
     {
+        Mage::app()->getArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->load();
         $this->_mail->expects($this->at(0))->method('addTo')->with('one@example.com', '=?utf-8?B?TmFtZSBPbmU=?=');
         $this->_mail->expects($this->at(1))->method('addTo')->with('two@example.com', '=?utf-8?B?dHdv?=');
         $this->assertTrue($this->_model->send(array('one@example.com', 'two@example.com'), array('Name One')));
@@ -202,11 +202,9 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
         $this->assertSame($exception, $this->_model->getSendingException());
     }
 
-    /**
-     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
-     */
     public function testSendTransactional()
     {
+        Mage::app()->getArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->load();
         $this->_model->sendTransactional('customer_create_account_email_template',
             array('name' => 'Sender Name', 'email' => 'sender@example.com'), 'recipient@example.com', 'Recipient Name'
         );

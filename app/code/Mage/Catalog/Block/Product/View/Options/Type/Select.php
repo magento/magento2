@@ -99,7 +99,7 @@ class Mage_Catalog_Block_Product_View_Options_Type_Select
         if ($_option->getType() == Mage_Catalog_Model_Product_Option::OPTION_TYPE_RADIO
             || $_option->getType() == Mage_Catalog_Model_Product_Option::OPTION_TYPE_CHECKBOX
             ) {
-            $selectHtml = '<ul id="options-'.$_option->getId().'-list" class="options-list">';
+            $selectHtml = '<div class="options-list nested" id="options-'.$_option->getId().'-list">';
             $require = ($_option->getIsRequire()) ? ' required' : '';
             $arraySign = '';
             switch ($_option->getType()) {
@@ -107,11 +107,11 @@ class Mage_Catalog_Block_Product_View_Options_Type_Select
                     $type = 'radio';
                     $class = 'radio';
                     if (!$_option->getIsRequire()) {
-                        $selectHtml .= '<li><input type="radio" id="options_' . $_option->getId() . '" class="'
+                        $selectHtml .= '<div class="field choice"><input type="radio" id="options_' . $_option->getId() . '" class="'
                             . $class . ' product-custom-option" name="options[' . $_option->getId() . ']"'
                             . ($this->getSkipJsReloadPrice() ? '' : ' onclick="opConfig.reloadPrice()"')
-                            . ' value="" checked="checked" /><span class="label"><label for="options_'
-                            . $_option->getId() . '">' . $this->__('None') . '</label></span></li>';
+                            . ' value="" checked="checked" /><label class="label" for="options_'
+                            . $_option->getId() . '"><span>' . $this->__('None') . '</span></label></div>';
                     }
                     break;
                 case Mage_Catalog_Model_Product_Option::OPTION_TYPE_CHECKBOX:
@@ -136,17 +136,17 @@ class Mage_Catalog_Block_Product_View_Options_Type_Select
                     $checked = $configValue == $htmlValue ? 'checked' : '';
                 }
 
-                $selectHtml .= '<li>' . '<input type="' . $type . '" class="' . $class . ' ' . $require
-                    . ' product-custom-option"'
+                $selectHtml .= '<div class="field choice '. $require .'">' . '<input type="' . $type . '" class="' . $class . ' '
+                    . $require . ' product-custom-option"'
                     . ($this->getSkipJsReloadPrice() ? '' : ' onclick="opConfig.reloadPrice()"')
                     . ' name="options[' . $_option->getId() . ']' . $arraySign . '" id="options_' . $_option->getId()
                     . '_' . $count . '" value="' . $htmlValue . '" ' . $checked . ' price="'
                     . $this->helper('Mage_Core_Helper_Data')->currencyByStore($_value->getPrice(true), $store, false) . '" />'
-                    . '<span class="label"><label for="options_' . $_option->getId() . '_' . $count . '">'
-                    . $_value->getTitle() . ' ' . $priceStr . '</label></span>';
-                $selectHtml .= '</li>';
+                    . '<label class="label" for="options_' . $_option->getId() . '_' . $count . '"><span>'
+                    . $_value->getTitle() . '</span>' . $priceStr . '</label>';
+                $selectHtml .= '</div>';
             }
-            $selectHtml .= '</ul>';
+            $selectHtml .= '</div>';
 
             return $selectHtml;
         }

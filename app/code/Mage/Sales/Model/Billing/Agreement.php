@@ -205,10 +205,10 @@ class Mage_Sales_Model_Billing_Agreement extends Mage_Payment_Model_Billing_Agre
     {
         $result = parent::isValid();
         if (!$this->getCustomerId()) {
-            $this->_errors[] = Mage::helper('Mage_Payment_Helper_Data')->__('Customer ID is not set.');
+            $this->_errors[] = Mage::helper('Mage_Payment_Helper_Data')->__('The customer ID is not set.');
         }
         if (!$this->getStatus()) {
-            $this->_errors[] = Mage::helper('Mage_Payment_Helper_Data')->__('Billing Agreement status is not set.');
+            $this->_errors[] = Mage::helper('Mage_Payment_Helper_Data')->__('The Billing Agreement status is not set.');
         }
         return $result && empty($this->_errors);
     }

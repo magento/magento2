@@ -37,7 +37,7 @@
         </div>
         <div class="form-box">
             <div id="messages">
-                <?php echo $this->getMessagesBlock()->toHtml() ?>
+                <?php echo $this->getLayout()->renderElement('messages') ?>
             </div>
             <button type="submit" class="button" onclick="window.close();" title="<?php echo $this->__('Close') ?>">
                 <span><span><?php echo $this->__('Close') ?></span></span>

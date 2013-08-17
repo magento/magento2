@@ -31,7 +31,7 @@
             <label>Payment Methods</label>
             <tab>sales</tab>
             <resource>Mage_Payment::payment</resource>
-            <group id="ccsave" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="ccsave" translate="label" type="text" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Saved CC</label>
                 <field id="active" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Enabled</label>
@@ -95,7 +95,7 @@
                 </field>
                 <field id="model"></field>
             </group>
-            <group id="checkmo" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="checkmo" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Check / Money Order</label>
                 <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Enabled</label>
@@ -135,7 +135,7 @@
                 </field>
                 <field id="model"></field>
             </group>
-            <group id="free" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="free" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Zero Subtotal Checkout</label>
                 <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Enabled</label>
@@ -170,7 +170,7 @@
                 </field>
                 <field id="model"></field>
             </group>
-            <group id="purchaseorder" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="purchaseorder" translate="label" type="text" sortOrder="32" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Purchase Order</label>
                 <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Enabled</label>
@@ -204,7 +204,7 @@
                 </field>
                 <field id="model"></field>
             </group>
-            <group id="banktransfer" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="banktransfer" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Bank Transfer Payment</label>
                 <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Enabled</label>
@@ -239,7 +239,7 @@
                     <label>Sort Order</label>
                 </field>
             </group>
-            <group id="cashondelivery" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="cashondelivery" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Cash On Delivery Payment</label>
                 <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Enabled</label>

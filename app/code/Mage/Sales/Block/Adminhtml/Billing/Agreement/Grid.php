@@ -93,7 +93,7 @@ class Mage_Sales_Block_Adminhtml_Billing_Agreement_Grid extends Mage_Adminhtml_B
         ));
 
         $this->addColumn('customer_email', array(
-            'header'            => Mage::helper('Mage_Sales_Helper_Data')->__('Customer Email'),
+            'header'            => Mage::helper('Mage_Sales_Helper_Data')->__('Email'),
             'index'             => 'customer_email',
             'type'              => 'text',
             'header_css_class'  => 'col-mail',
@@ -101,7 +101,7 @@ class Mage_Sales_Block_Adminhtml_Billing_Agreement_Grid extends Mage_Adminhtml_B
         ));
 
         $this->addColumn('customer_firstname', array(
-            'header'            => Mage::helper('Mage_Sales_Helper_Data')->__('Customer Name'),
+            'header'            => Mage::helper('Mage_Sales_Helper_Data')->__('First Name'),
             'index'             => 'customer_firstname',
             'type'              => 'text',
             'escape'            => true,
@@ -110,7 +110,7 @@ class Mage_Sales_Block_Adminhtml_Billing_Agreement_Grid extends Mage_Adminhtml_B
         ));
 
         $this->addColumn('customer_lastname', array(
-            'header'            => Mage::helper('Mage_Sales_Helper_Data')->__('Customer Last Name'),
+            'header'            => Mage::helper('Mage_Sales_Helper_Data')->__('Last Name'),
             'index'             => 'customer_lastname',
             'type'              => 'text',
             'escape'            => true,
@@ -145,7 +145,7 @@ class Mage_Sales_Block_Adminhtml_Billing_Agreement_Grid extends Mage_Adminhtml_B
         ));
 
         $this->addColumn('created_at', array(
-            'header'            => Mage::helper('Mage_Sales_Helper_Data')->__('Created At'),
+            'header'            => Mage::helper('Mage_Sales_Helper_Data')->__('Created'),
             'index'             => 'agreement_created_at',
             'type'              => 'datetime',
             'align'             => 'center',
@@ -156,7 +156,7 @@ class Mage_Sales_Block_Adminhtml_Billing_Agreement_Grid extends Mage_Adminhtml_B
         ));
 
         $this->addColumn('updated_at', array(
-            'header'            => Mage::helper('Mage_Sales_Helper_Data')->__('Updated At'),
+            'header'            => Mage::helper('Mage_Sales_Helper_Data')->__('Updated'),
             'index'             => 'agreement_updated_at',
             'type'              => 'datetime',
             'align'             => 'center',

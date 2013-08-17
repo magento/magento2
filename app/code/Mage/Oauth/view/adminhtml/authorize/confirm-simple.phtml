@@ -36,7 +36,7 @@
             <h1><?php echo $this->__('Confirmation Of Authorization') ?></h1>
         </div>
         <div class="form-box">
-            <?php echo $this->getMessagesBlock()->toHtml() ?>
+            <?php echo $this->getLayout()->renderElement('messages') ?>
             <?php if ($this->getVerifier()): ?>
                 <h2><?php echo $this->__('Authorization confirmed') ?></h2>
                 <p><?php echo $this->__('Give the verifier code to application administrator') ?></p>

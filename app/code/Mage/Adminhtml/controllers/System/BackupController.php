@@ -38,7 +38,7 @@ class Mage_Adminhtml_System_BackupController extends Mage_Adminhtml_Controller_A
      */
     public function indexAction()
     {
-        $this->_title($this->__('System'))->_title($this->__('Tools'))->_title($this->__('Backups'));
+        $this->_title($this->__('Backups'));
 
         if($this->getRequest()->getParam('ajax')) {
             $this->_forward('grid');
@@ -46,7 +46,7 @@ class Mage_Adminhtml_System_BackupController extends Mage_Adminhtml_Controller_A
         }
 
         $this->loadLayout();
-        $this->_setActiveMenu('Mage_Adminhtml::system');
+        $this->_setActiveMenu('Mage_Backup::system_tools_backup');
         $this->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('System'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('System'));
         $this->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Tools'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Tools'));
         $this->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Backups'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Backup'));
@@ -104,10 +104,10 @@ class Mage_Adminhtml_System_BackupController extends Mage_Adminhtml_Controller_A
 
                 if (!$turnedOn) {
                     $response->setError(
-                        Mage::helper('Mage_Backup_Helper_Data')->__('You do not have sufficient permissions to enable Maintenance Mode during this operation.')
-                            . ' ' . Mage::helper('Mage_Backup_Helper_Data')->__('Please either unselect the "Put store on the maintenance mode" checkbox or update your permissions to proceed with the backup."')
+                        Mage::helper('Mage_Backup_Helper_Data')->__('You need more permissions to activate maintenance mode right now.')
+                            . ' ' . Mage::helper('Mage_Backup_Helper_Data')->__('To continue with the backup, you need to either deselect "Put store on the maintenance mode" or update your permissions.')
                     );
-                    $backupManager->setErrorMessage(Mage::helper('Mage_Backup_Helper_Data')->__("System couldn't put store on the maintenance mode"));
+                    $backupManager->setErrorMessage(Mage::helper('Mage_Backup_Helper_Data')->__("Something went wrong putting your store into maintenance mode."));
                     return $this->getResponse()->setBody($response->toJson());
                 }
             }
@@ -125,13 +125,13 @@ class Mage_Adminhtml_System_BackupController extends Mage_Adminhtml_Controller_A
 
             $response->setRedirectUrl($this->getUrl('*/*/index'));
         } catch (Mage_Backup_Exception_NotEnoughFreeSpace $e) {
-            $errorMessage = Mage::helper('Mage_Backup_Helper_Data')->__('Not enough free space to create backup.');
+            $errorMessage = Mage::helper('Mage_Backup_Helper_Data')->__('You need more free space to create a backup.');
         } catch (Mage_Backup_Exception_NotEnoughPermissions $e) {
             Mage::log($e->getMessage());
-            $errorMessage = Mage::helper('Mage_Backup_Helper_Data')->__('Not enough permissions to create backup.');
+            $errorMessage = Mage::helper('Mage_Backup_Helper_Data')->__('You need more permissions to create a backup.');
         } catch (Exception  $e) {
             Mage::log($e->getMessage());
-            $errorMessage = Mage::helper('Mage_Backup_Helper_Data')->__('An error occurred while creating the backup.');
+            $errorMessage = Mage::helper('Mage_Backup_Helper_Data')->__('Something went wrong creating the backup.');
         }
 
         if (!empty($errorMessage)) {
@@ -222,8 +222,8 @@ class Mage_Adminhtml_System_BackupController extends Mage_Adminhtml_Controller_A
             );
 
             if (!$passwordValid) {
-                $response->setError(Mage::helper('Mage_Backup_Helper_Data')->__('Invalid Password.'));
-                $backupManager->setErrorMessage(Mage::helper('Mage_Backup_Helper_Data')->__('Invalid Password.'));
+                $response->setError(Mage::helper('Mage_Backup_Helper_Data')->__('Please correct the password.'));
+                $backupManager->setErrorMessage(Mage::helper('Mage_Backup_Helper_Data')->__('Please correct the password.'));
                 return $this->getResponse()->setBody($response->toJson());
             }
 
@@ -232,10 +232,10 @@ class Mage_Adminhtml_System_BackupController extends Mage_Adminhtml_Controller_A
 
                 if (!$turnedOn) {
                     $response->setError(
-                        Mage::helper('Mage_Backup_Helper_Data')->__('You do not have sufficient permissions to enable Maintenance Mode during this operation.')
-                            . ' ' . Mage::helper('Mage_Backup_Helper_Data')->__('Please either unselect the "Put store on the maintenance mode" checkbox or update your permissions to proceed with the rollback."')
+                        Mage::helper('Mage_Backup_Helper_Data')->__('You need more permissions to activate maintenance mode right now.')
+                            . ' ' . Mage::helper('Mage_Backup_Helper_Data')->__('To continue with the rollback, you need to either deselect "Put store on the maintenance mode" or update your permissions.')
                     );
-                    $backupManager->setErrorMessage(Mage::helper('Mage_Backup_Helper_Data')->__("System couldn't put store on the maintenance mode"));
+                    $backupManager->setErrorMessage(Mage::helper('Mage_Backup_Helper_Data')->__("Something went wrong putting your store into maintenance mode."));
                     return $this->getResponse()->setBody($response->toJson());
                 }
             }
@@ -265,14 +265,14 @@ class Mage_Adminhtml_System_BackupController extends Mage_Adminhtml_Controller_A
 
             $response->setRedirectUrl($this->getUrl('*'));
         } catch (Mage_Backup_Exception_CantLoadSnapshot $e) {
-            $errorMsg = Mage::helper('Mage_Backup_Helper_Data')->__('Backup file not found');
+            $errorMsg = Mage::helper('Mage_Backup_Helper_Data')->__('The backup file was not found.');
         } catch (Mage_Backup_Exception_FtpConnectionFailed $e) {
-            $errorMsg = Mage::helper('Mage_Backup_Helper_Data')->__('Failed to connect to FTP');
+            $errorMsg = Mage::helper('Mage_Backup_Helper_Data')->__('We couldn\'t connect to the FTP.');
         } catch (Mage_Backup_Exception_FtpValidationFailed $e) {
             $errorMsg = Mage::helper('Mage_Backup_Helper_Data')->__('Failed to validate FTP');
         } catch (Mage_Backup_Exception_NotEnoughPermissions $e) {
             Mage::log($e->getMessage());
-            $errorMsg = Mage::helper('Mage_Backup_Helper_Data')->__('Not enough permissions to perform rollback');
+            $errorMsg = Mage::helper('Mage_Backup_Helper_Data')->__('You need more permissions to create a backup.');
         } catch (Exception $e) {
             Mage::log($e->getMessage());
             $errorMsg = Mage::helper('Mage_Backup_Helper_Data')->__('Failed to rollback');
@@ -310,7 +310,7 @@ class Mage_Adminhtml_System_BackupController extends Mage_Adminhtml_Controller_A
         $resultData->setDeleteResult(array());
         Mage::register('backup_manager', $resultData);
 
-        $deleteFailMessage = Mage::helper('Mage_Backup_Helper_Data')->__('Failed to delete one or several backups.');
+        $deleteFailMessage = Mage::helper('Mage_Backup_Helper_Data')->__('We couldn\'t delete one or more backups.');
 
         try {
             $allBackupsDeleted = true;
@@ -357,16 +357,6 @@ class Mage_Adminhtml_System_BackupController extends Mage_Adminhtml_Controller_A
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Backup::backup');
-    }
-
-    /**
-     * Retrive adminhtml session model
-     *
-     * @return Mage_Adminhtml_Model_Session
-     */
-    protected function _getSession()
-    {
-        return Mage::getSingleton('Mage_Adminhtml_Model_Session');
+        return $this->_authorization->isAllowed('Mage_Backup::backup');
     }
 }

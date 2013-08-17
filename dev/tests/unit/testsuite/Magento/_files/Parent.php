@@ -21,6 +21,28 @@
  * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+require_once __DIR__ . '/Interface.php';
 class Magento_Test_Di_Parent implements Magento_Test_Di_Interface
 {
+    /**
+     * @var string
+     */
+    protected $_wrapperSymbol;
+
+    /**
+     * @param string $wrapperSymbol
+     */
+    public function __construct($wrapperSymbol = '|')
+    {
+        $this->_wrapperSymbol = $wrapperSymbol;
+    }
+
+    /**
+     * @param string $param
+     * @return mixed
+     */
+    public function wrap($param)
+    {
+        return $this->_wrapperSymbol . $param . $this->_wrapperSymbol;
+    }
 }

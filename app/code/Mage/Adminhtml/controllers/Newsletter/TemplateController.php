@@ -39,7 +39,7 @@ class Mage_Adminhtml_Newsletter_TemplateController extends Mage_Adminhtml_Contro
      */
     protected function _isAllowed ()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')
+        return $this->_authorization
             ->isAllowed('Mage_Newsletter::template');
     }
 
@@ -50,7 +50,7 @@ class Mage_Adminhtml_Newsletter_TemplateController extends Mage_Adminhtml_Contro
      */
     protected function _setTitle()
     {
-        return $this->_title($this->__('Newsletter'))->_title($this->__('Newsletter Templates'));
+        return $this->_title($this->__('Newsletter Templates'));
     }
 
     /**

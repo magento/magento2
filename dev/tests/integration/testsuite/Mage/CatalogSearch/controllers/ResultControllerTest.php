@@ -42,7 +42,7 @@ class Mage_CatalogSearch_ResultControllerTest extends Magento_Test_TestCase_Cont
         $responseBody = $this->getResponse()->getBody();
 
         $this->assertNotContains('Search:', $responseBody);
-        $this->assertContains('Suche:', $responseBody);
+        $this->assertStringMatchesFormat('%aSuche%s:%a', $responseBody);
 
         $this->assertNotContains('Search entire store here...', $responseBody);
         $this->assertContains('Den gesamten Shop durchsuchen...', $responseBody);

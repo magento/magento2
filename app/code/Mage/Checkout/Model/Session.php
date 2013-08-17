@@ -51,11 +51,28 @@ class Mage_Checkout_Model_Session extends Mage_Core_Model_Session_Abstract
     protected $_loadInactive = false;
 
     /**
-     * Class constructor. Initialize checkout session namespace
+     * Loaded order instance
+     *
+     * @var Mage_Sales_Model_Order
      */
-    public function __construct()
-    {
-        $this->init('checkout');
+    protected $_order;
+
+    /**
+     * @var Mage_Sales_Model_OrderFactory
+     */
+    protected $_orderFactory;
+
+    /**
+     * Class constructor. Initialize checkout session namespace
+     * @param Mage_Sales_Model_OrderFactory $orderFactory
+     * @param string $sessionName
+     */
+    public function __construct(
+        Mage_Sales_Model_OrderFactory $orderFactory,
+        $sessionName = null
+    ) {
+        $this->_orderFactory = $orderFactory;
+        $this->init('checkout', $sessionName);
     }
 
     /**
@@ -390,5 +407,23 @@ class Mage_Checkout_Model_Session extends Mage_Core_Model_Session_Abstract
         $this->_quote = $quote;
         $this->setQuoteId($quote->getId());
         return $this;
+    }
+
+    /**
+     * Get order instance based on last order ID
+     *
+     * @return Mage_Sales_Model_Order
+     */
+    public function getLastRealOrder()
+    {
+        $orderId = $this->getLastRealOrderId();
+        if ($this->_order !== null && $orderId == $this->_order->getIncrementId()) {
+            return $this->_order;
+        }
+        $this->_order = $this->_orderFactory->create();
+        if ($orderId) {
+            $this->_order->loadByIncrementId($orderId);
+        }
+        return $this->_order;
     }
 }

@@ -149,8 +149,6 @@ class Mage_Install_Model_Installer extends Varien_Object
     {
         try {
             Mage::getModel('Mage_Install_Model_Installer_Filesystem')->install();
-
-            Mage::getModel('Mage_Install_Model_Installer_Env')->install();
             $result = true;
         } catch (Exception $e) {
             $result = false;
@@ -253,10 +251,10 @@ class Mage_Install_Model_Installer extends Varien_Object
          */
         $locale = $this->getDataModel()->getLocaleData();
         if (!empty($locale['locale'])) {
-            $setupModel->setConfigData(Mage_Core_Model_Locale::XML_PATH_DEFAULT_LOCALE, $locale['locale']);
+            $setupModel->setConfigData(Mage_Core_Model_LocaleInterface::XML_PATH_DEFAULT_LOCALE, $locale['locale']);
         }
         if (!empty($locale['timezone'])) {
-            $setupModel->setConfigData(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE, $locale['timezone']);
+            $setupModel->setConfigData(Mage_Core_Model_LocaleInterface::XML_PATH_DEFAULT_TIMEZONE, $locale['timezone']);
         }
         if (!empty($locale['currency'])) {
             $setupModel->setConfigData(Mage_Directory_Model_Currency::XML_PATH_CURRENCY_BASE, $locale['currency']);
@@ -297,6 +295,8 @@ class Mage_Install_Model_Installer extends Varien_Object
      */
     public function createAdministrator($data)
     {
+        // Mage_User_Model_User belongs to adminhtml area
+        Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML, Mage_Core_Model_App_Area::PART_CONFIG);
         /** @var $user Mage_User_Model_User */
         $user = Mage::getModel('Mage_User_Model_User');
         $user->loadByUsername($data['username']);
@@ -304,6 +304,7 @@ class Mage_Install_Model_Installer extends Varien_Object
             ->setForceNewPassword(true) // run-time flag to force saving of the entered password
             ->setRoleId(1)
             ->save();
+        $this->_refreshConfig();
     }
 
     /**

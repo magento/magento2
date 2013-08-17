@@ -38,7 +38,7 @@ class Mage_Core_Controller_Varien_Action_FactoryTest extends PHPUnit_Framework_T
     /**
      * ObjectManager mock for tests
      *
-     * @var Magento_ObjectManager
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManager;
 
@@ -62,9 +62,9 @@ class Mage_Core_Controller_Varien_Action_FactoryTest extends PHPUnit_Framework_T
 
     public function testCreateController()
     {
-        $this->_objectManager->expects($this->once())
+        $this->_objectManager->expects($this->at(1))
             ->method('create')
-            ->with(self::CONTROLLER_NAME, array())
+            ->with(self::CONTROLLER_NAME)
             ->will($this->returnValue('TestControllerInstance'));
 
         $this->_model = new Mage_Core_Controller_Varien_Action_Factory($this->_objectManager);

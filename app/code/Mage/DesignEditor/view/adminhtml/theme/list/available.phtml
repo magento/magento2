@@ -28,9 +28,6 @@
 
 <div class="infinite_scroll">
     <ul class="themes" id="available-themes-container"></ul>
-    <div class="theme-loader">
-        <img src="<?php echo $this->getViewFileUrl('images/ajax-loader-tr.gif') ?>"/>
-    </div>
 </div>
 
 <script type="text/javascript">
@@ -41,10 +38,8 @@
                     url : '<?php echo $this->getUrl('*/*/loadthemelist') ?>',
                     loadDataOnCreate : false
                 });
-                $('.infinite_scroll').infinite_scroll('setLocked', true);
 
                 $('a[name="<?php echo $this->getTabId() ?>"]').on("click", function(event) {
-                    $('.infinite_scroll').infinite_scroll('setLocked', false);
                     $('.infinite_scroll').infinite_scroll('loadDataIsContainerEmpty');
                 });
             <?php endif; ?>

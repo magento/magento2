@@ -105,7 +105,7 @@ abstract class Mage_ImportExport_Model_Import_Entity_Product_Type_Abstract
         if ($this->isSuitable()) {
             if (!isset($params[0]) || !isset($params[1])
                 || !is_object($params[0]) || !($params[0] instanceof Mage_ImportExport_Model_Import_Entity_Product)) {
-                Mage::throwException(Mage::helper('Mage_ImportExport_Helper_Data')->__('Invalid parameters'));
+                Mage::throwException(Mage::helper('Mage_ImportExport_Helper_Data')->__('Please correct the parameters.'));
             }
             $this->_entityModel = $params[0];
             $this->_type        = $params[1];

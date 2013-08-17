@@ -151,12 +151,13 @@ class Mage_Catalog_Model_UrlTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             'simple-product-1.html',
-            $this->_model->getUnusedPath(1, 'simple-product.html', 'product/2')
+            $this->_model->getUnusedPath(1, 'simple-product.html', 'product/2', 'simple-product')
         );
 
         $this->markTestIncomplete('Bug MAGETWO-144');
 
-        $this->assertEquals('category-3.html', $this->_model->getUnusedPath(1, 'category-2.html', 'category/5'));
+        $this->assertEquals('category-3.html', $this->_model->getUnusedPath(1, 'category-2.html', 'category/5',
+            'category-2'));
     }
 
     public function testGetProductUrlSuffix()

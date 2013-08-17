@@ -123,7 +123,7 @@
                         <label for="region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
                         <div class="input-box">
                             <select id="region_id" name="region_id" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;">
-                                <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+                                <option value=""><?php echo $this->__('Please select a region, state or province.') ?></option>
                             </select>
 
                             <input type="text" id="region" name="region" value="<?php echo $this->escapeHtml($this->getRegion()) ?>" title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('region') ?>" style="display:none;" />
@@ -206,6 +206,7 @@
                     });
                     <?php if($this->getShowAddressFields()): ?>
                     $('#country').regionUpdater({
+                        optionalRegionAllowed: <?php echo (Mage::getStoreConfig('general/region/display_all')? 'true' : 'false'); ?>,
                         regionListId: '#region_id',
                         regionInputId: '#region',
                         postcodeId: '#zip',

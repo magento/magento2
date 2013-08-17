@@ -25,7 +25,10 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Backend_Block_System_Config_FormTest extends Mage_Backend_Area_TestCase
+/**
+ * @magentoAppArea adminhtml
+ */
+class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCase
 {
     public function testDependenceHtml()
     {
@@ -56,10 +59,12 @@ class Mage_Backend_Block_System_Config_FormTest extends Mage_Backend_Area_TestCa
      */
     public function testInitFieldsUseDefaultCheckbox($section, $group, $field, array $configData, $expectedUseDefault)
     {
+        $this->markTestIncomplete('MAGETWO-9058');
         Mage::getConfig()->setCurrentAreaCode('adminhtml');
         $form = new Varien_Data_Form();
         $fieldset = $form->addFieldset($section->getId() . '_' . $group->getId(), array());
 
+        /* @TODO Eliminate stub by proper mock / config fixture usage */
         /** @var $block Mage_Backend_Block_System_Config_FormStub */
         $block = Mage::app()->getLayout()->createBlock('Mage_Backend_Block_System_Config_FormStub');
         $block->setScope(Mage_Backend_Block_System_Config_Form::SCOPE_WEBSITES);
@@ -106,10 +111,12 @@ class Mage_Backend_Block_System_Config_FormTest extends Mage_Backend_Area_TestCa
      */
     public function testInitFieldsUseConfigPath($section, $group, $field, array $configData, $expectedUseDefault)
     {
+        $this->markTestIncomplete('MAGETWO-9058');
         Mage::getConfig()->setCurrentAreaCode('adminhtml');
         $form = new Varien_Data_Form();
         $fieldset = $form->addFieldset($section->getId() . '_' . $group->getId(), array());
 
+        /* @TODO Eliminate stub by proper mock / config fixture usage */
         /** @var $block Mage_Backend_Block_System_Config_FormStub */
         $block = Mage::app()->getLayout()->createBlock('Mage_Backend_Block_System_Config_FormStub');
         $block->setScope(Mage_Backend_Block_System_Config_Form::SCOPE_DEFAULT);
@@ -125,6 +132,7 @@ class Mage_Backend_Block_System_Config_FormTest extends Mage_Backend_Area_TestCa
     }
 
     /**
+     * @TODO data provider should be static
      * @return array
      */
     public function initFieldsInheritCheckboxDataProvider()
@@ -164,7 +172,6 @@ class Mage_Backend_Block_System_Config_FormTest extends Mage_Backend_Area_TestCa
         $field2 = $structure->getElement('test_section/test_group/test_field_use_config');
 
         $fieldPath2 = $field2->getConfigPath();
-
         return array(
             array($section, $group, $field, array(), true),
             array($section, $group, $field, array($fieldPath => null), false),
@@ -227,7 +234,7 @@ class Mage_Backend_Block_System_Config_FormTest extends Mage_Backend_Area_TestCa
             /** @var $element Varien_Data_Form_Element_Fieldset */
             $this->assertInstanceOf('Varien_Data_Form_Element_Fieldset', $element);
             $this->assertArrayHasKey($element->getId(), $expectedIds);
-            $fields = $element->getSortedElements();
+            $fields = $element->getElements();
             $this->assertEquals(count($expectedIds[$element->getId()]), count($fields));
             foreach ($element->getElements() as $field) {
                 $this->assertArrayHasKey($field->getId(), $expectedIds[$element->getId()]);

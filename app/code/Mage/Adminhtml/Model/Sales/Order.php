@@ -78,7 +78,7 @@ class Mage_Adminhtml_Model_Sales_Order
         }
         if ($hasBadItems) {
             $this->_getSession()->addError(
-                Mage::helper('Mage_Adminhtml_Helper_Data')->__('Some of the ordered items do not exist in the catalog anymore and will be removed if you try to edit the order.')
+                Mage::helper('Mage_Adminhtml_Helper_Data')->__('Some items in this order are no longer in our catalog.')
             );
         }
         return $this;

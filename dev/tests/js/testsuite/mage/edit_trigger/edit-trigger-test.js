@@ -29,14 +29,18 @@ EditTriggerTest.prototype.testInit = function() {
     editTrigger.editTrigger('destroy');
 };
 EditTriggerTest.prototype.testCreate = function() {
+    /*:DOC += <script id="translate-inline-icon" type="text/x-jQuery-tmpl">
+          <img alt="${alt}" src="${img}" height="16" width="16" class="translate-edit-icon">
+      </script>
+     */
     var options = {
             img: 'img.gif',
             alt: 'translate',
-            template: '<img class="edit-trigger" alt="${alt}" src="${img}">'
         },
         editTrigger = jQuery(document).editTrigger(options);
-    var trigger = jQuery('.edit-trigger');
-    assertEquals(true, trigger.is('img'));
+    var trigger = jQuery('.translate-edit-icon');
+    assertNotNull(trigger);
+    assertTrue(trigger.is('img'));
     assertEquals(true, trigger.attr('src') === options.img);
     assertEquals(true, trigger.attr('alt') === options.alt);
     assertEquals(true, trigger.is(':hidden'));
@@ -46,13 +50,15 @@ EditTriggerTest.prototype.testShowHideOnMouseMove = function() {
     /*:DOC += <div class="container" style="height:100px;">
      <div class="edit">text</div>
      </div>
+     <script id="translate-inline-icon" type="text/x-jQuery-tmpl">
+          <img alt="${alt}" src="${img}" height="16" width="16" class="translate-edit-icon">
+      </script>
      */
     var editTrigger = jQuery(document).editTrigger({
             editSelector: '.edit',
             delay: 0,
-            template: '<img class="edit-trigger" alt="${alt}" src="${img}">'
         }),
-        trigger = jQuery('.edit-trigger'),
+        trigger = jQuery('.translate-edit-icon'),
         editElement = jQuery('.edit'),
         container = jQuery('.container');
     editElement.trigger('mousemove');
@@ -62,15 +68,18 @@ EditTriggerTest.prototype.testShowHideOnMouseMove = function() {
     editTrigger.editTrigger('destroy');
 };
 EditTriggerTest.prototype.testTriggerClick = function() {
-    /*:DOC += <div class="edit">text</div>*/
+    /*:DOC += <div class="edit">text</div>
+     <script id="translate-inline-icon" type="text/x-jQuery-tmpl">
+          <img alt="${alt}" src="${img}" height="16" width="16" class="translate-edit-icon">
+      </script>
+    */
     var editTrigger = jQuery(document).editTrigger({
             editSelector: '.edit',
-            template: '<img class="edit-trigger" alt="${alt}" src="${img}">'
         }),
-        trigger = jQuery('.edit-trigger'),
+        trigger = jQuery('.translate-edit-icon'),
         editElement = jQuery('.edit'),
         editTriggered = false;
-    $(document).on('edit.editTrigger', function(){editTriggered = true});
+    $(document).on('edit.editTrigger', function() { editTriggered = true; });
     editElement.trigger('mousemove');
     trigger.trigger('click');
     assertEquals(true, editTriggered);
@@ -96,13 +105,15 @@ EditTriggerTestAsync.prototype.testHideEditTriggerWithDelay = function(queue) {
     /*:DOC += <div class="container" style="height:100px;">
      <div class="edit">text</div>
      </div>
+     <script id="translate-inline-icon" type="text/x-jQuery-tmpl">
+          <img alt="${alt}" src="${img}" height="16" width="16" class="translate-edit-icon">
+     </script>
      */
     var editTrigger = jQuery(document).editTrigger({
             editSelector: '.edit',
             delay: 1000,
-            template: '<img class="edit-trigger" alt="${alt}" src="${img}">'
         }),
-        trigger = jQuery('.edit-trigger'),
+        trigger = jQuery('.translate-edit-icon'),
         editElement = jQuery('.edit'),
         container = jQuery('.container'),
         visibleOnMouseout,

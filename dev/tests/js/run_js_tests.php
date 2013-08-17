@@ -167,9 +167,11 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
         $XVFB :99 -nolisten inet6 -ac &
         PID_XVFB="$!"        # take the process ID
         export DISPLAY=:99   # set display to use that of the Xvfb
+        USER=`whoami`
+        SUDO=`which sudo`
 
         # run the tests
-        ' . $command . '
+        $SUDO -u $USER ' . $command . '
 
         kill -9 $PID_XVFB    # shut down Xvfb (firefox will shut down cleanly by JsTestDriver)
         echo "Done."';

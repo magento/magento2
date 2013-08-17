@@ -41,7 +41,7 @@ class Mage_Tag_Adminhtml_CustomerController extends Mage_Adminhtml_Controller_Ac
      */
     protected function _initCustomer($idFieldName = 'id')
     {
-        $this->_title($this->__('Customers'))->_title($this->__('Manage Customers'));
+        $this->_title($this->__('Customers'))->_title($this->__('Customers'));
 
         $customerId = (int) $this->getRequest()->getParam($idFieldName);
         $customer   = Mage::getModel('Mage_Customer_Model_Customer');

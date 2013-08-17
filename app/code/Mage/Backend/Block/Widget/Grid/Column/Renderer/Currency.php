@@ -52,7 +52,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Currency
     /**
      * Locale
      *
-     * @var Mage_Core_Model_Locale
+     * @var Mage_Core_Model_LocaleInterface
      */
     protected $_locale;
 
@@ -62,16 +62,16 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Currency
     protected $_currencyLocator;
 
     /**
-     * @param Mage_Core_Block_Template_Context $context
+     * @param Mage_Backend_Block_Context $context
      * @param Mage_Core_Model_App $app
-     * @param Mage_Core_Model_Locale $locale
+     * @param Mage_Core_Model_LocaleInterface $locale
      * @param Mage_Directory_Model_Currency_DefaultLocator $currencyLocator
      * @param array $data
      */
     public function __construct(
-        Mage_Core_Block_Template_Context $context,
+        Mage_Backend_Block_Context $context,
         Mage_Core_Model_App $app,
-        Mage_Core_Model_Locale $locale,
+        Mage_Core_Model_LocaleInterface $locale,
         Mage_Directory_Model_Currency_DefaultLocator $currencyLocator,
         array $data = array()
     ) {

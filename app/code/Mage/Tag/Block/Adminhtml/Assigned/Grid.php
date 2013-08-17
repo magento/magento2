@@ -195,7 +195,7 @@ class Mage_Tag_Block_Adminhtml_Assigned_Grid extends Mage_Adminhtml_Block_Widget
 
         $this->addColumn('set_name',
             array(
-                'header'    => Mage::helper('Mage_Tag_Helper_Data')->__('Attrib. Set Name'),
+                'header'    => Mage::helper('Mage_Tag_Helper_Data')->__('Attribute Set'),
                 'width'     => 100,
                 'index'     => 'attribute_set_id',
                 'type'      => 'options',

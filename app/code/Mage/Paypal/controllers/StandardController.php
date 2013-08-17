@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_Paypal
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 
 /**
  * Paypal Standard Checkout Controller
@@ -42,7 +39,7 @@ class Mage_Paypal_StandardController extends Mage_Core_Controller_Front_Action
     /**
      *  Get order
      *
-     *  @return	  Mage_Sales_Model_Order
+     *  @return	Mage_Sales_Model_Order
      */
     public function getOrder()
     {
@@ -53,11 +50,10 @@ class Mage_Paypal_StandardController extends Mage_Core_Controller_Front_Action
 
     /**
      * Send expire header to ajax response
-     *
      */
     protected function _expireAjax()
     {
-        if (!Mage::getSingleton('Mage_Checkout_Model_Session')->getQuote()->hasItems()) {
+        if (!$this->_objectManager->get('Mage_Checkout_Model_Session')->getQuote()->hasItems()) {
             $this->getResponse()->setHeader('HTTP/1.1','403 Session Expired');
             exit;
         }
@@ -70,16 +66,15 @@ class Mage_Paypal_StandardController extends Mage_Core_Controller_Front_Action
      */
     public function getStandard()
     {
-        return Mage::getSingleton('Mage_Paypal_Model_Standard');
+        return $this->_objectManager->get('Mage_Paypal_Model_Standard');
     }
 
     /**
      * When a customer chooses Paypal on Checkout/Payment page
-     *
      */
     public function redirectAction()
     {
-        $session = Mage::getSingleton('Mage_Checkout_Model_Session');
+        $session = $this->_objectManager->get('Mage_Checkout_Model_Session');
         $session->setPaypalStandardQuoteId($session->getQuoteId());
         $this->loadLayout(false)->renderLayout();
         $session->unsQuoteId();
@@ -91,13 +86,22 @@ class Mage_Paypal_StandardController extends Mage_Core_Controller_Front_Action
      */
     public function cancelAction()
     {
-        $session = Mage::getSingleton('Mage_Checkout_Model_Session');
+        $session = $this->_objectManager->get('Mage_Checkout_Model_Session');
         $session->setQuoteId($session->getPaypalStandardQuoteId(true));
+
         if ($session->getLastRealOrderId()) {
-            $order = Mage::getModel('Mage_Sales_Model_Order')->loadByIncrementId($session->getLastRealOrderId());
+            $order = $this->_objectManager->create('Mage_Sales_Model_Order')
+                ->loadByIncrementId($session->getLastRealOrderId());
             if ($order->getId()) {
+                $this->_objectManager->get('Mage_Core_Model_Event_Manager')->dispatch(
+                    'paypal_payment_cancel',
+                    array(
+                        'order' => $order,
+                        'quote' => $session->getQuote()
+                ));
                 $order->cancel()->save();
             }
+            $this->_objectManager->get('Mage_Paypal_Helper_Checkout')->restoreQuote();
         }
         $this->_redirect('checkout/cart');
     }
@@ -108,11 +112,11 @@ class Mage_Paypal_StandardController extends Mage_Core_Controller_Front_Action
      * variables.  However, you don't want to "process" the order until you
      * get validation from the IPN.
      */
-    public function  successAction()
+    public function successAction()
     {
-        $session = Mage::getSingleton('Mage_Checkout_Model_Session');
+        $session = $this->_objectManager->get('Mage_Checkout_Model_Session');
         $session->setQuoteId($session->getPaypalStandardQuoteId(true));
-        Mage::getSingleton('Mage_Checkout_Model_Session')->getQuote()->setIsActive(false)->save();
+        $session->getQuote()->setIsActive(false)->save();
         $this->_redirect('checkout/onepage/success', array('_secure'=>true));
     }
 }

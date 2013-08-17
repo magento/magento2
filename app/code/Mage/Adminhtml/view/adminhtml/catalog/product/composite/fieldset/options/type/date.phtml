@@ -66,7 +66,7 @@
                 if (dateTimeParts[i].val() == "") return false;
             }
             return true;
-        }, '<?php echo $this->jsQuoteEscape( Mage::helper('Mage_Catalog_Helper_Data')->__('This is a required option') )?>');
+        }, '<?php echo $this->jsQuoteEscape( Mage::helper('Mage_Catalog_Helper_Data')->__('This is a required option.') )?>');
 <?php else: ?>
         jQuery.validator.addMethod('validate-datetime-<?php echo $_optionId ?>', function(v) {
             var dateTimeParts = jQuery('.datetime-picker[id^="options_<?php echo $_optionId ?>"]');

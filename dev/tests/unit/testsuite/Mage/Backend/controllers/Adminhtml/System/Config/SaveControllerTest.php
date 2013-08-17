@@ -25,11 +25,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-require_once (realpath(dirname(__FILE__) . '/../../../../../../../../../../')
-    . '/app/code/Mage/Backend/Controller/System/ConfigAbstract.php');
-
-require_once (realpath(dirname(__FILE__) . '/../../../../../../../../../../')
-    . '/app/code/Mage/Backend/controllers/Adminhtml/System/Config/SaveController.php');
+require_once __DIR__ . '/../../../../../../../../../../app/code/Mage/Backend/Controller/System/ConfigAbstract.php';
+require_once __DIR__
+    . '/../../../../../../../../../../app/code/Mage/Backend/controllers/Adminhtml/System/Config/SaveController.php';
 
 class Mage_Backend_Adminhtml_System_Config_SaveControllerTest extends PHPUnit_Framework_TestCase
 {
@@ -51,11 +49,6 @@ class Mage_Backend_Adminhtml_System_Config_SaveControllerTest extends PHPUnit_Fr
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_configMock;
-
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_eventManagerMock;
 
     /**
@@ -71,26 +64,18 @@ class Mage_Backend_Adminhtml_System_Config_SaveControllerTest extends PHPUnit_Fr
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_layoutMock;
-
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_appMock;
-
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_sectionMock;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_cacheMock;
 
     public function setUp()
     {
         $this->_requestMock = $this->getMock('Mage_Core_Controller_Request_Http', array(), array(), '', false, false);
         $responseMock = $this->getMock('Mage_Core_Controller_Response_Http', array(), array(), '', false, false);
-        $objectManagerMock = $this->getMock('Magento_ObjectManager');
-        $frontControllerMock = $this->getMock('Mage_Core_Controller_Varien_Front', array(), array(), '', false, false);
-        $authorizationMock = $this->getMock('Mage_Core_Model_Authorization', array(), array(), '', false, false);
-        $this->_configMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false, false);
+
         $configStructureMock = $this->getMock('Mage_Backend_Model_Config_Structure',
             array(), array(), '', false, false
         );
@@ -98,7 +83,7 @@ class Mage_Backend_Adminhtml_System_Config_SaveControllerTest extends PHPUnit_Fr
             array(), array(), '', false, false
         );
         $this->_eventManagerMock = $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false, false);
-        $this->_appMock = $this->getMock('Mage_Core_Model_App', array(), array(), '', false, false);
+
         $helperMock = $this->getMock('Mage_Backend_Helper_Data', array(), array(), '', false, false);
         $this->_sessionMock = $this->getMock('Mage_Backend_Model_Session',
             array('addSuccess', 'addException'), array(), '', false, false
@@ -108,13 +93,11 @@ class Mage_Backend_Adminhtml_System_Config_SaveControllerTest extends PHPUnit_Fr
             array('getUser'), array(), '', false, false
         );
 
-        $this->_layoutMock = $this->getMock('Mage_Core_Model_Layout_Factory',
-            array(), array(), '', false, false
-        );
-
         $this->_sectionMock = $this->getMock(
             'Mage_Backend_Model_Config_Structure_Element_Section', array(), array(), '', false
         );
+
+        $this->_cacheMock = $this->getMockForAbstractClass('Magento_Cache_FrontendInterface');
 
         $configStructureMock->expects($this->any())->method('getElement')
             ->will($this->returnValue($this->_sectionMock));
@@ -123,35 +106,34 @@ class Mage_Backend_Adminhtml_System_Config_SaveControllerTest extends PHPUnit_Fr
         $helperMock->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
         $responseMock->expects($this->once())->method('setRedirect')->with('*/system_config/edit');
 
+        $helper = new Magento_Test_Helper_ObjectManager($this);
+        $arguments = array(
+            'request' => $this->_requestMock,
+            'response' => $responseMock,
+            'session' => $this->_sessionMock,
+            'helper' => $helperMock,
+            'eventManager' => $this->_eventManagerMock,
+        );
+
+        $context = $helper->getObject('Mage_Backend_Controller_Context', $arguments);
         $this->_controller = $this->getMock(
             'Mage_Backend_Adminhtml_System_Config_SaveController',
             array('deniedAction'),
             array(
-                $this->_requestMock,
-                $responseMock,
-                $objectManagerMock,
-                $frontControllerMock,
-                $authorizationMock,
+                $context,
                 $configStructureMock,
-                $this->_configMock,
                 $this->_configFactoryMock,
-                $this->_eventManagerMock,
-                $this->_appMock,
                 $this->_authMock,
-                $this->_layoutMock,
+                $this->_cacheMock,
                 null,
-                array(
-                    'helper' => $helperMock,
-                    'session' => $this->_sessionMock,
-                ))
+            )
         );
     }
 
     public function testIndexActionWithAllowedSection()
     {
         $this->_sectionMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
-        $this->_configMock->expects($this->once())->method('reinit');
-        $this->_sessionMock->expects($this->once())->method('addSuccess')->with('The configuration has been saved.');
+        $this->_sessionMock->expects($this->once())->method('addSuccess')->with('You saved the configuration.');
 
         $groups = array('some_key' => 'some_value');
         $requestParamMap = array(
@@ -188,7 +170,6 @@ class Mage_Backend_Adminhtml_System_Config_SaveControllerTest extends PHPUnit_Fr
 
         $backendConfigMock = $this->getMock('Mage_Backend_Model_Config', array(), array(), '', false, false);
         $backendConfigMock->expects($this->never())->method('save');
-        $this->_configMock->expects($this->never())->method('reinit');
         $this->_eventManagerMock->expects($this->never())->method('dispatch');
         $this->_sessionMock->expects($this->never())->method('addSuccess');
         $this->_sessionMock->expects($this->once())->method('addException');
@@ -217,7 +198,8 @@ class Mage_Backend_Adminhtml_System_Config_SaveControllerTest extends PHPUnit_Fr
     {
         $this->_sectionMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
 
-        $groups = array('some.key' => 'some.val');
+        $fixturePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
+        $groups = require_once($fixturePath . 'groups_array.php');
         $requestParamMap = array(
             array('section', null, 'test_section'),
             array('website', null, 'test_website'),
@@ -229,7 +211,6 @@ class Mage_Backend_Adminhtml_System_Config_SaveControllerTest extends PHPUnit_Fr
             array('config_state', null, 'test_config_state'),
         );
 
-        $fixturePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
         $files = require_once($fixturePath . 'files_array.php');
 
         $this->_requestMock->expects($this->any())->method('getPost')->will($this->returnValueMap($requestPostMap));
@@ -271,9 +252,9 @@ class Mage_Backend_Adminhtml_System_Config_SaveControllerTest extends PHPUnit_Fr
             ->will($this->returnValue($backendConfigMock));
         $backendConfigMock->expects($this->once())->method('save');
 
-        $this->_appMock->expects($this->once())
-            ->method('cleanCache')
-            ->with(array('layout', Mage_Core_Model_Layout_Merge::LAYOUT_GENERAL_CACHE_TAG));
+        $this->_cacheMock->expects($this->once())
+            ->method('clean')
+            ->with(Zend_Cache::CLEANING_MODE_ALL);
         $this->_controller->indexAction();
     }
 }

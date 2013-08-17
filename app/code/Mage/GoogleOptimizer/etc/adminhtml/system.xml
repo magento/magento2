@@ -19,8 +19,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_GoogleOptimizer
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -28,11 +26,13 @@
 <config>
     <system>
         <section id="google" translate="label" module="Mage_GoogleOptimizer">
-            <group id="optimizer" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Google Website Optimizer</label>
-                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enable</label>
+            <group id="analytics">
+                <field id="experiments" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Content Experiments</label>
                     <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
+                    <depends>
+                        <field id="*/*/active">1</field>
+                    </depends>
                 </field>
             </group>
         </section>

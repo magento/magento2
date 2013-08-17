@@ -57,7 +57,7 @@
                 </field>
                 <field id="maintenance" translate="label comment" module="Mage_Backup" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Maintenance Mode</label>
-                    <comment>Put store on the maintenance mode while backup's creation</comment>
+                    <comment>Please put your store into maintenance mode during backup.</comment>
                     <depends>
                         <field id="enabled">1</field>
                     </depends>

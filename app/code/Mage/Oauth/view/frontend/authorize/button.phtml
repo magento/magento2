@@ -33,7 +33,7 @@
     <div class="page-title">
         <h1><?php echo $this->__('Authorize application') ?></h1>
     </div>
-    <?php echo $this->getMessagesBlock()->toHtml() ?>
+    <?php echo $this->getLayout()->renderElement('messages'); ?>
 
     <?php if (!$this->getHasException()): ?>
         <h2><?php echo $this->__('<strong>%s</strong> requests access to your account', $this->escapeHtml($this->getConsumer()->getName())); ?></h2>

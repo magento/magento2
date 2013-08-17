@@ -25,6 +25,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * @magentoAppArea adminhtml
+ */
 class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Backend_Utility_Controller
 {
     /**
@@ -48,7 +51,7 @@ class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Backend_Utility
         $this->dispatch('backend/admin/catalog_category/save');
 
         $this->assertSessionMessages(
-            $this->equalTo(array('The category has been saved.')), Mage_Core_Model_Message::SUCCESS
+            $this->equalTo(array('You saved the category.')), Mage_Core_Model_Message::SUCCESS
         );
 
         /** @var $category Mage_Catalog_Model_Category */

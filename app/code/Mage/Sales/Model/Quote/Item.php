@@ -625,7 +625,7 @@ class Mage_Sales_Model_Quote_Item extends Mage_Sales_Model_Quote_Item_Abstract
             $option->setItem($this);
         }
         else {
-            Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('Invalid item option format.'));
+            Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('We found an invalid item option format.'));
         }
 
         if ($exOption = $this->getOptionByCode($option->getCode())) {

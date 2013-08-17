@@ -109,7 +109,10 @@ class Mage_PaypalUk_Model_Api_Nvp extends Mage_Paypal_Model_Api_Nvp
         'LOCALECODE' => 'locale_code',
 
         // transaction info
-        'PPREF' => 'paypal_transaction_id', //We need to store paypal trx id for correct IPN working
+        //We need to store paypal trx id for correct IPN working
+        'PAYMENTINFO_0_TRANSACTIONID' => 'paypal_transaction_id',
+        'TRANSACTIONID' => 'paypal_transaction_id',
+        'REFUNDTRANSACTIONID' => 'paypal_transaction_id',
         'PNREF' => 'transaction_id',
         'ORIGID' => 'authorization_id',
         'CAPTURECOMPLETE' => 'complete_type',
@@ -119,6 +122,7 @@ class Mage_PaypalUk_Model_Api_Nvp extends Mage_Paypal_Model_Api_Nvp
 
         // payment/billing info
         'CURRENCY' => 'currency_code',
+        'PAYMENTSTATUS' => 'payment_status',
         'PENDINGREASON' => 'pending_reason',
         'PAYERID' => 'payer_id',
         'PAYERSTATUS' => 'payer_status',
@@ -166,7 +170,7 @@ class Mage_PaypalUk_Model_Api_Nvp extends Mage_Paypal_Model_Api_Nvp
         'TAXAMT', 'FREIGHTAMT'
     );
     protected $_doDirectPaymentResponse = array(
-        'PNREF', 'PPREF', 'CORRELATIONID', 'CVV2MATCH', 'AVSADDR', 'AVSZIP', 'PENDINGREASON'
+        'PNREF', 'PAYMENTINFO_0_TRANSACTIONID', 'CORRELATIONID', 'CVV2MATCH', 'AVSADDR', 'AVSZIP', 'PENDINGREASON'
     );
     /**#@-*/
 
@@ -176,7 +180,7 @@ class Mage_PaypalUk_Model_Api_Nvp extends Mage_Paypal_Model_Api_Nvp
      * @var array
      */
     protected $_doCaptureRequest = array('ORIGID', 'CAPTURECOMPLETE', 'AMT', 'TENDER', 'NOTE', 'INVNUM');
-    protected $_doCaptureResponse = array('PNREF', 'PPREF');
+    protected $_doCaptureResponse = array('PNREF', 'TRANSACTIONID');
     /**#@-*/
 
     /**
@@ -199,7 +203,7 @@ class Mage_PaypalUk_Model_Api_Nvp extends Mage_Paypal_Model_Api_Nvp
      * @var array
      */
     protected $_refundTransactionRequest = array('ORIGID', 'TENDER');
-    protected $_refundTransactionResponse = array('PNREF', 'PPREF');
+    protected $_refundTransactionResponse = array('PNREF', 'REFUNDTRANSACTIONID');
     /**#@-*/
 
     /**#@+
@@ -230,7 +234,7 @@ class Mage_PaypalUk_Model_Api_Nvp extends Mage_Paypal_Model_Api_Nvp
         'TENDER', 'TOKEN', 'PAYERID', 'AMT', 'CURRENCY', 'CUSTIP', 'BUTTONSOURCE', 'NOTIFYURL',
     );
     protected $_doExpressCheckoutPaymentResponse = array(
-        'PNREF', 'PPREF', 'REPMSG', 'AMT', 'PENDINGREASON',
+        'PNREF', 'PAYMENTINFO_0_TRANSACTIONID', 'REPMSG', 'AMT', 'PENDINGREASON',
         'CVV2MATCH', 'AVSADDR', 'AVSZIP', 'CORRELATIONID'
     );
     /**#@-*/
@@ -301,14 +305,20 @@ class Mage_PaypalUk_Model_Api_Nvp extends Mage_Paypal_Model_Api_Nvp
      * @var array
      */
     protected $_lineItemTotalExportMap = array(
+        Mage_Paypal_Model_Cart::TOTAL_TAX       => 'TAXAMT',
+        Mage_Paypal_Model_Cart::TOTAL_SHIPPING  => 'FREIGHTAMT',
+    );
+
+    protected $_lineItemsExportRequestTotalsFormat = array(
+        'amount' => 'PAYMENTREQUEST_%d_ITEMAMT',
         Mage_Paypal_Model_Cart::TOTAL_TAX      => 'TAXAMT',
         Mage_Paypal_Model_Cart::TOTAL_SHIPPING => 'FREIGHTAMT',
     );
 
     protected $_lineItemExportItemsFormat = array(
-        'name'   => 'L_NAME%d',
-        'qty'    => 'L_QTY%d',
-        'amount' => 'L_COST%d',
+        'name'   => 'L_PAYMENTREQUEST_%d_NAME%d',
+        'qty'    => 'L_PAYMENTREQUEST_%d_QTY%d',
+        'amount' => 'L_PAYMENTREQUEST_%d_AMT%d',
     );
     /**#@-*/
 
@@ -328,7 +338,7 @@ class Mage_PaypalUk_Model_Api_Nvp extends Mage_Paypal_Model_Api_Nvp
      * @var array
      */
     protected $_requiredResponseParams = array(
-        self::DO_DIRECT_PAYMENT => array('RESULT', 'PNREF', 'PPREF')
+        self::DO_DIRECT_PAYMENT => array('RESULT', 'PNREF', 'PAYMENTINFO_0_TRANSACTIONID')
     );
 
     /**
@@ -585,5 +595,117 @@ class Mage_PaypalUk_Model_Api_Nvp extends Mage_Paypal_Model_Api_Nvp
             $request['SHIPTOCOUNTRY'] = 'US';
             $request['SHIPTOSTATE']   = 'PR';
         }
+    }
+
+    /**
+     * Retrieve headers for request.
+     * This is a hack to make Payflow work with negative values for items like discount has.
+     *
+     * @return array
+     */
+    protected function _getHeaderListForRequest()
+    {
+        return array('PAYPAL-NVP: Y');
+    }
+
+    /**
+     * Additional response processing.
+     * Hack to cut off length from API type response params.
+     *
+     * @param  array $response
+     *
+     * @return array
+     */
+    protected function _postProcessResponse($response)
+    {
+        foreach ($response as $key => $value) {
+            $pos = strpos($key, '[');
+
+            if ($pos === false) {
+                continue;
+            }
+
+            unset($response[$key]);
+
+            if ($pos !== 0) {
+                $modifiedKey = substr($key, 0, $pos);
+                $response[$modifiedKey] = $value;
+            }
+        }
+
+        return $response;
+    }
+
+    /**
+     * Prepare line items request.
+     * Returns true if there were line items added.
+     *
+     * @param array &$request
+     * @param int $i
+     *
+     * @return bool|null
+     */
+    protected function _exportLineItems(array &$request, $i = 0)
+    {
+        return $this->_preparePaymentRequestLineItems($request, 0, $i);
+    }
+
+    /**
+     * NVP doesn't support passing discount total as a separate amount - add it as a line item.
+     * This is a hack for proper line items display for order at PP EC side using Payflow through API.
+     *
+     * @link https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_SetExpressCheckout
+     *
+     * @param array &$request
+     * @param int $requestNum
+     * @param int $itemNum
+     *
+     * @return bool|null
+     */
+    protected function _preparePaymentRequestLineItems(array &$request, $requestNum = 0, $itemNum = 0)
+    {
+        if (!$this->_cart) {
+            return;
+        }
+
+        $this->_cart->isDiscountAsItem(true);
+
+        // always add cart totals, even if line items are not requested
+        if ($this->_lineItemTotalExportMap) {
+            foreach ($this->_cart->getTotals() as $key => $total) {
+                if (isset($this->_lineItemTotalExportMap[$key])) { // !empty($total)
+                    $privateKey = $this->_lineItemTotalExportMap[$key];
+                    $request[$privateKey] = $this->_filterAmount($total);
+                } elseif (isset($this->_lineItemsExportRequestTotalsFormat[$key])) {
+                    $privateKey = sprintf($this->_lineItemsExportRequestTotalsFormat[$key], $requestNum);
+                    $request[$privateKey] = $this->_filterAmount($total);
+                }
+            }
+        }
+
+        // add cart line items
+        $items = $this->_cart->getItems();
+        if (empty($items) || !$this->getIsLineItemsEnabled()) {
+            return;
+        }
+
+        $result = null;
+        foreach ($items as $item) {
+            foreach ($this->_lineItemExportItemsFormat as $publicKey => $privateFormat) {
+                $result = true;
+                $value = $item->getDataUsingMethod($publicKey);
+                if (isset($this->_lineItemExportItemsFilters[$publicKey])) {
+                    $callback = $this->_lineItemExportItemsFilters[$publicKey];
+                    $value = call_user_func(array($this, $callback), $value);
+                }
+                if (is_float($value)) {
+                    $value = $this->_filterAmount($value);
+                }
+                $request[sprintf($privateFormat, $requestNum, $itemNum)] = $value;
+            }
+            $itemNum++;
+        }
+
+        return $result;
     }
 }

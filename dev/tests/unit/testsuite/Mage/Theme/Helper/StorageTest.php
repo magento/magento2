@@ -40,7 +40,7 @@ class Mage_Theme_Helper_StorageTest extends PHPUnit_Framework_TestCase
     protected $_session;
 
     /**
-     * @var Mage_Core_Model_Theme_Factory|PHPUnit_Framework_MockObject_MockObject
+     * @var Mage_Core_Model_Theme_FlyweightFactory|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_themeFactory;
 
@@ -67,7 +67,8 @@ class Mage_Theme_Helper_StorageTest extends PHPUnit_Framework_TestCase
         $this->_request = $this->getMock('Zend_Controller_Request_Http', array('getParam'), array(), '', false);
         $this->_filesystem = $this->getMock('Magento_Filesystem', array(), array(), '', false);
         $this->_session = $this->getMock('Mage_Backend_Model_Session', array(), array(), '', false);
-        $this->_themeFactory = $this->getMock('Mage_Core_Model_Theme_Factory', array('create'), array(), '', false);
+        $this->_themeFactory = $this->getMock('Mage_Core_Model_Theme_FlyweightFactory', array('create'), array(),
+            '', false);
 
         $this->_storageHelper = $this->getMock('Mage_Theme_Helper_Storage',
             array('_getRequest', 'urlDecode'), array(), '', false
@@ -149,19 +150,13 @@ class Mage_Theme_Helper_StorageTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValueMap($requestMap));
 
         $themeModel = $this->getMock('Mage_Core_Model_Theme', array(), array(), '', false);
-        $themeModel->expects($this->atLeastOnce())
-            ->method('load')
-            ->with($themeId)
-            ->will($this->returnSelf());
-        $themeModel->expects($this->atLeastOnce())
-            ->method('getId')
-            ->will($this->returnValue($themeId));
-        $themeModel->expects($this->atLeastOnce())
+        $this->_themeFactory->expects($this->any())->method('create')->will($this->returnValue($themeModel));
+        $themeModel->expects($this->any())->method('getId')->will($this->returnValue($themeId));
+        $customization = $this->getMock('Mage_Core_Model_Theme_Customization', array(), array(), '', false);
+        $themeModel->expects($this->any())->method('getCustomization')->will($this->returnValue($customization));
+        $customization->expects($this->any())
             ->method('getCustomizationPath')
             ->will($this->returnValue($this->_customizationPath));
-        $this->_themeFactory->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($themeModel));
 
         $expectedStorageRoot = implode(Magento_Filesystem::DIRECTORY_SEPARATOR, array(
             $this->_customizationPath,
@@ -205,8 +200,7 @@ class Mage_Theme_Helper_StorageTest extends PHPUnit_Framework_TestCase
             ->with($imagePath)
             ->will($this->returnValue(true));
 
-        $filesystem = $this->_filesystem;
-        $filesystem::staticExpects($this->atLeastOnce())
+        $this->_filesystem->expects($this->atLeastOnce())
             ->method('isPathInDirectory')
             ->with($imagePath, $storageRoot)
             ->will($this->returnValue(true));

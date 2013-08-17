@@ -69,7 +69,7 @@ class Mage_User_Adminhtml_AuthController extends Mage_Backend_Controller_ActionA
                 $this->getResponse()->setRedirect(Mage::helper('Mage_Backend_Helper_Data')->getHomePageUrl());
                 return;
             } else {
-                $this->_getSession()->addError($this->__('Invalid email address.'));
+                $this->_getSession()->addError($this->__('Please correct this email address:'));
             }
         } elseif (!empty($params)) {
             $this->_getSession()->addError(Mage::helper('Mage_User_Helper_Data')->__('The email address is empty.'));
@@ -111,7 +111,7 @@ class Mage_User_Adminhtml_AuthController extends Mage_Backend_Controller_ActionA
     /**
      * Reset forgotten password
      *
-     * Used to handle data recieved from reset forgotten password form
+     * Used to handle data received from reset forgotten password form
      */
     public function resetPasswordPostAction()
     {
@@ -176,7 +176,7 @@ class Mage_User_Adminhtml_AuthController extends Mage_Backend_Controller_ActionA
         ) {
             throw Mage::exception(
                 'Mage_Core',
-                Mage::helper('Mage_User_Helper_Data')->__('Invalid password reset token.')
+                Mage::helper('Mage_User_Helper_Data')->__('Please correct the password reset token.')
             );
         }
 
@@ -185,7 +185,7 @@ class Mage_User_Adminhtml_AuthController extends Mage_Backend_Controller_ActionA
         if (!$user->getId()) {
             throw Mage::exception(
                 'Mage_Core',
-                Mage::helper('Mage_User_Helper_Data')->__('Wrong account specified.')
+                Mage::helper('Mage_User_Helper_Data')->__('Please specify the correct account and try again.')
             );
         }
 

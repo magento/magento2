@@ -41,14 +41,14 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
     protected $_createdCustomer;
 
     /**
-     * @var Mage_Customer_Model_Customer_Factory
+     * @var Mage_Customer_Model_CustomerFactory
      */
     protected $_customerFactory = null;
 
     protected function setUp()
     {
         $this->_objectManager = Mage::getObjectManager();
-        $this->_customerFactory = new Mage_Customer_Model_Customer_Factory($this->_objectManager);
+        $this->_customerFactory = $this->_objectManager->get('Mage_Customer_Model_CustomerFactory');
         $this->_model = $this->_objectManager->create('Mage_Customer_Service_Customer');
     }
 
@@ -306,11 +306,11 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
     /**
      * @param array $customerData
      * @magentoDataFixture Mage/Customer/_files/customer.php
-     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      * @dataProvider updateDataProvider
      */
     public function testUpdate($customerData)
     {
+        Mage::app()->getArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->load();
         $expected = $this->_customerFactory->create()
             ->load(1);
 
@@ -361,11 +361,11 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
      * @param string $exceptionName
      * @param string $exceptionMessage
      * @magentoDataFixture Mage/Customer/_files/customer.php
-     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      * @dataProvider updateExceptionsDataProvider
      */
     public function testUpdateExceptions($customerData, $exceptionName, $exceptionMessage = '')
     {
+        Mage::app()->getArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->load();
         $this->setExpectedException($exceptionName, $exceptionMessage);
         $this->_model->update(1, $customerData);
     }

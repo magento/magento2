@@ -59,7 +59,7 @@ class Mage_CatalogSearch_Block_Advanced_ResultTest extends PHPUnit_Framework_Tes
         $category->expects($this->atLeastOnce())
             ->method('getAvailableSortByOptions')
             ->will($this->returnValue($sortOptions));
-        $category->setId(rand(1, 1000)); // Any id - just for layer navigation
+        $category->setId(100500); // Any id - just for layer navigation
         Mage::getSingleton('Mage_Catalog_Model_Layer')->setCurrentCategory($category);
 
         $childBlock = $this->_layout->addBlock('Mage_Core_Block_Text', 'search_result_list', 'block');

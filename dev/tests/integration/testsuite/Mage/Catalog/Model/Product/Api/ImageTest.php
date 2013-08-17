@@ -109,15 +109,13 @@ class Mage_Catalog_Model_Product_Api_ImageTest extends PHPUnit_Framework_TestCas
             file_get_contents(dirname(__FILE__) . '/_files/_data/files/test.txt')
         );
 
-        try {
-            Magento_Test_Helper_Api::call(
-                $this,
-                'catalogProductAttributeMediaCreate',
-                array('productId' => $product->getSku(), 'data' => $requestData)
-            );
-        } catch (Exception $e) {
-            $this->assertEquals('Unsupported image format.', $e->getMessage(), 'Invalid exception message');
-        }
+        Magento_Test_Helper_Api::callWithException(
+            $this,
+            'catalogProductAttributeMediaCreate',
+            array('productId' => $product->getSku(), 'data' => $requestData),
+            'Unsupported image format.'
+        );
+
         // reload product to reflect changes done by API request
         $product->load($product->getId());
 
@@ -130,7 +128,7 @@ class Mage_Catalog_Model_Product_Api_ImageTest extends PHPUnit_Framework_TestCas
      * Tests an invalid image for product creation
      *
      * @dataProvider invalidImageProvider
-     * @param strign $invalidImgPath Absolute path to invalid image file
+     * @param string $invalidImgPath Absolute path to invalid image file
      */
     public function testCreateInvalidImage($invalidImgPath)
     {
@@ -139,16 +137,13 @@ class Mage_Catalog_Model_Product_Api_ImageTest extends PHPUnit_Framework_TestCas
 
         // Not an image file with JPG extension
         $requestData['file']['content'] = base64_encode(file_get_contents($invalidImgPath));
+        Magento_Test_Helper_Api::callWithException(
+            $this,
+            'catalogProductAttributeMediaCreate',
+            array('productId' => $product->getSku(), 'data' => $requestData),
+            'Unsupported image format.'
+        );
 
-        try {
-            Magento_Test_Helper_Api::call(
-                $this,
-                'catalogProductAttributeMediaCreate',
-                array('productId' => $product->getSku(), 'data' => $requestData)
-            );
-        } catch (Exception $e) {
-            $this->assertEquals('Unsupported image format.', $e->getMessage(), 'Invalid exception message');
-        }
         // reload product to reflect changes done by API request
         $product->load($product->getId());
 

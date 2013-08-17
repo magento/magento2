@@ -41,6 +41,16 @@
                     <label>Email Template</label>
                     <source_model>Mage_Backend_Model_Config_Source_Email_Template</source_model>
                 </field>
+                <field id="number_limit" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Max Emails Allowed to be Sent</label>
+                    <comment>10 by default. Max - 10000</comment>
+                    <validate>validate-digits validate-digits-range digits-range-1-10000</validate>
+                </field>
+                <field id="text_limit" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Email Text Length Limit</label>
+                    <comment>255 by default</comment>
+                    <validate>validate-digits validate-digits-range digits-range-1-10000</validate>
+                </field>
             </group>
             <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>General Options</label>
@@ -50,9 +60,9 @@
                 </field>
             </group>
             <group id="wishlist_link" translate="label" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0">
-                <label>My Wishlist Link</label>
+                <label>My Wish List Link</label>
                 <field id="use_qty" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Display Wishlist Summary</label>
+                    <label>Display Wish List Summary</label>
                     <source_model>Mage_Wishlist_Model_Config_Source_Summary</source_model>
                 </field>
             </group>

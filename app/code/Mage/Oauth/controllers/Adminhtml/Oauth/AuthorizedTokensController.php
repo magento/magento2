@@ -40,9 +40,7 @@ class Mage_Oauth_Adminhtml_Oauth_AuthorizedTokensController extends Mage_Adminht
      */
     public function preDispatch()
     {
-        $this->_title($this->__('System'))
-                ->_title($this->__('OAuth'))
-                ->_title($this->__('Authorized Tokens'));
+        $this ->_title($this->__('Authorized Tokens'));
         parent::preDispatch();
         return $this;
     }
@@ -161,7 +159,7 @@ class Mage_Oauth_Adminhtml_Oauth_AuthorizedTokensController extends Mage_Adminht
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Oauth::authorizedTokens');
+        return $this->_authorization->isAllowed('Mage_Oauth::authorizedTokens');
     }
 
     /**

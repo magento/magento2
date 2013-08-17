@@ -100,7 +100,7 @@ class Mage_Sales_Billing_AgreementController extends Mage_Core_Controller_Front_
                 $this->_getSession()->addError($e->getMessage());
             } catch (Exception $e) {
                 Mage::logException($e);
-                $this->_getSession()->addError($this->__('Failed to start billing agreement wizard.'));
+                $this->_getSession()->addError($this->__('We couldn\'t start the billing agreement wizard.'));
             }
         }
         $this->_redirect('*/*/');
@@ -131,7 +131,7 @@ class Mage_Sales_Billing_AgreementController extends Mage_Core_Controller_Front_
                 $this->_getSession()->addError($e->getMessage());
             } catch (Exception $e) {
                 Mage::logException($e);
-                $this->_getSession()->addError($this->__('Failed to finish billing agreement wizard.'));
+                $this->_getSession()->addError($this->__('We couldn\'t finish the billing agreement wizard.'));
             }
             $this->_redirect('*/*/index');
         }
@@ -162,7 +162,7 @@ class Mage_Sales_Billing_AgreementController extends Mage_Core_Controller_Front_
                 $this->_getSession()->addError($e->getMessage());
             } catch (Exception $e) {
                 Mage::logException($e);
-                $this->_getSession()->addError($this->__('Failed to cancel the billing agreement.'));
+                $this->_getSession()->addError($this->__('We couldn\'t cancel the billing agreement.'));
             }
         }
         $this->_redirect('*/*/view', array('_current' => true));
@@ -179,7 +179,7 @@ class Mage_Sales_Billing_AgreementController extends Mage_Core_Controller_Front_
         if ($agreementId) {
             $billingAgreement = Mage::getModel('Mage_Sales_Model_Billing_Agreement')->load($agreementId);
             if (!$billingAgreement->getAgreementId()) {
-                $this->_getSession()->addError($this->__('Wrong billing agreement ID specified.'));
+                $this->_getSession()->addError($this->__('Please specify the correct billing agreement ID and try again.'));
                 $this->_redirect('*/*/');
                 return false;
             }

@@ -45,11 +45,12 @@ class Mage_Backend_Block_System_Config_Form_Fieldset
      */
     public function render(Varien_Data_Form_Element_Abstract $element)
     {
+        $this->setElement($element);
         $html = $this->_getHeaderHtml($element);
 
-        foreach ($element->getSortedElements() as $field) {
+        foreach ($element->getElements() as $field) {
             if ($field instanceof Varien_Data_Form_Element_Fieldset) {
-                $html .= '<tr><td colspan="4">' . $field->toHtml() . '</td></tr>';
+                $html .= '<tr id="row_' . $field->getHtmlId() . '"><td colspan="4">' . $field->toHtml() . '</td></tr>';
             } else {
                 $html .= $field->toHtml();
             }
@@ -68,30 +69,71 @@ class Mage_Backend_Block_System_Config_Form_Fieldset
      */
     protected function _getHeaderHtml($element)
     {
-        $default = !$this->getRequest()->getParam('website') && !$this->getRequest()->getParam('store');
+        if ($element->getIsNested()) {
+            $html = '<tr class="nested"><td colspan="4"><div class="' . $this->_getFrontendClass($element) . '">';
+        } else {
+            $html = '<div class="' . $this->_getFrontendClass($element) . '">';
+        }
 
-        $html = '';
-        $html = '<div class="entry-edit-head collapseable" id="' . $element->getHtmlId() . '-head">'
-            . '<span id="' . $element->getHtmlId() . '-link" class="entry-edit-head-link"></span>'
-            . '<a id="' . $element->getHtmlId() . '-head" href="#' . $element->getHtmlId()
-            . '-link" onclick="Fieldset.toggleCollapse(\'' . $element->getHtmlId() . '\', \''
-            . $this->getUrl('*/*/state') . '\'); return false;">' . $element->getLegend() . '</a></div>';
+        $html .= '<div class="entry-edit-head collapseable">'
+            . '<span id="' . $element->getHtmlId() . '-link" class="entry-edit-head-link"></span>';
+
+        $html .= $this->_getHeaderTitleHtml($element);
+
+        $html .= '</div>';
         $html .= '<input id="'.$element->getHtmlId() . '-state" name="config_state[' . $element->getId()
             . ']" type="hidden" value="' . (int)$this->_isCollapseState($element) . '" />';
         $html .= '<fieldset class="' . $this->_getFieldsetCss() . '" id="' . $element->getHtmlId() . '">';
         $html .= '<legend>' . $element->getLegend() . '</legend>';
 
-        if ($element->getComment()) {
-            $html .= '<span class="comment" style="display: block;">' . $element->getComment() . '</span>';
-        }
+        $html .= $this->_getHeaderCommentHtml($element);
+
         // field label column
         $html .= '<table cellspacing="0" class="form-list"><colgroup class="label" /><colgroup class="value" />';
-        if (!$default) {
+        if ($this->getRequest()->getParam('website') || $this->getRequest()->getParam('store')) {
             $html .= '<colgroup class="use-default" />';
         }
         $html .= '<colgroup class="scope-label" /><colgroup class="" /><tbody>';
 
         return $html;
+    }
+
+    /**
+     * Get frontend class
+     *
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function _getFrontendClass($element)
+    {
+        $group = $element->getGroup();
+        $cssClass = isset($group['fieldset_css']) ? $group['fieldset_css'] : '';
+        return 'section-config' . (empty($cssClass) ? '' : ' ' . $cssClass);
+    }
+
+    /**
+     * Return header title part of html for fieldset
+     *
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @return string
+     */
+    protected function _getHeaderTitleHtml($element)
+    {
+        return '<a id="' . $element->getHtmlId() . '-head" href="#' . $element->getHtmlId()
+            . '-link" onclick="Fieldset.toggleCollapse(\'' . $element->getHtmlId() . '\', \''
+            . $this->getUrl('*/*/state') . '\'); return false;">' . $element->getLegend() . '</a>';
+    }
+
+    /**
+     * Return header comment part of html for fieldset
+     *
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @return string
+     */
+    protected function _getHeaderCommentHtml($element)
+    {
+        return $element->getComment() ? '<div class="comment">' . $element->getComment() . '</div>' : '';
     }
 
     /**
@@ -101,7 +143,7 @@ class Mage_Backend_Block_System_Config_Form_Fieldset
      */
     protected function _getFieldsetCss()
     {
-        /** @var Mage_Backend_Model_Config_Structure_Element_Group $group  */
+        /** @var Mage_Backend_Model_Config_Structure_Element_Group $group */
         $group = $this->getGroup();
         $configCss = $group->getFieldsetCss();
         return 'config collapseable' . ($configCss ? ' ' . $configCss: '');
@@ -116,18 +158,21 @@ class Mage_Backend_Block_System_Config_Form_Fieldset
      */
     protected function _getFooterHtml($element)
     {
-        $tooltipsExist = false;
         $html = '</tbody></table>';
-        foreach ($element->getSortedElements() as $field) {
+        foreach ($element->getElements() as $field) {
             if ($field->getTooltip()) {
-                $tooltipsExist = true;
                 $html .= sprintf('<div id="row_%s_comment" class="system-tooltip-box" style="display:none;">%s</div>',
                     $field->getId(), $field->getTooltip()
                 );
             }
         }
-        $html .= '</fieldset>' . $this->_getExtraJs($element, $tooltipsExist);
-        $html .= '';
+        $html .= '</fieldset>' . $this->_getExtraJs($element);
+
+        if ($element->getIsNested()) {
+            $html .= '</td></tr>';
+        } else {
+            $html .= '</div>';
+        }
         return $html;
     }
 
@@ -137,61 +182,12 @@ class Mage_Backend_Block_System_Config_Form_Fieldset
      * - apply collapse;
      *
      * @param Varien_Data_Form_Element_Abstract $element
-     * @param bool $tooltipsExist Init tooltips observer or not
      * @return string
      */
-    protected function _getExtraJs($element, $tooltipsExist = false)
+    protected function _getExtraJs($element)
     {
         $htmlId = $element->getHtmlId();
         $output = "Fieldset.applyCollapse('{$htmlId}');";
-        if ($tooltipsExist) {
-            $output.= "$$('#{$htmlId} table')[0].addClassName('system-tooltip-wrap');
-                   $$('#{$htmlId} table tbody tr').each(function(tr) {
-                       Event.observe(tr, 'mouseover', function (event) {
-                           var relatedTarget = $(event.relatedTarget || event.fromElement);
-                           if (relatedTarget && (relatedTarget == this || relatedTarget.descendantOf(this))) {
-                               return;
-                           }
-                           showTooltip(event);
-                       });
-                       Event.observe(tr, 'mouseout', function (event) {
-                           var relatedTarget = $(event.relatedTarget || event.toElement);
-                           if (relatedTarget && (relatedTarget == this || relatedTarget.childOf(this))) {
-                               return;
-                           }
-                           hideTooltip(event);
-                       });
-                   });
-                   $$('#{$htmlId} table')[0].select('input','select').each(function(field) {
-                       Event.observe(field, 'focus', function (event) {
-                           showTooltip(event);
-                       });
-                       Event.observe(field, 'blur', function (event) {
-                           hideTooltip(event);
-                       });
-                   });
-                   function showTooltip(event) {
-                       var tableHeight = Event.findElement(event, 'table').getStyle('height');
-                       var tr = Event.findElement(event, 'tr');
-                       var id = tr.id + '_comment';
-                       $$('div.system-tooltip-box').invoke('hide');
-                       if ($(id)) {
-                           $(id).show().setStyle({height : tableHeight});
-                           if (document.viewport.getWidth() < 1200) {
-                               $(id).addClassName('system-tooltip-small').setStyle({height : 'auto'});
-                           } else {
-                               $(id).removeClassName('system-tooltip-small');
-                           }
-                       }
-                   };
-                   function hideTooltip(event) {
-                       var tr = Event.findElement(event, 'tr');
-                       var id = tr.id + '_comment';
-                       if ($(id)) {
-                           setTimeout(function() { $(id).hide(); }, 1);
-                       }
-                   };";
-        }
         return $this->helper('Mage_Core_Helper_Js')->getScript($output);
     }
 

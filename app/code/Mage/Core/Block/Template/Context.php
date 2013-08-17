@@ -31,12 +31,12 @@ class Mage_Core_Block_Template_Context extends Mage_Core_Block_Context
     protected $_filesystem;
 
     /**
-     * @var Magento_Datasource_Factory
+     * @var Mage_Core_Model_View_FileSystem
      */
-    protected $_dataSourceFactory;
+    protected $_viewFileSystem;
 
     /**
-     * @var Mage_Core_Block_Template_Engine_Factory
+     * @var Mage_Core_Model_TemplateEngine_Factory
      */
     protected $_engineFactory;
 
@@ -47,15 +47,18 @@ class Mage_Core_Block_Template_Context extends Mage_Core_Block_Context
      * @param Mage_Core_Model_UrlInterface $urlBuilder
      * @param Mage_Core_Model_Translate $translator
      * @param Mage_Core_Model_CacheInterface $cache
-     * @param Mage_Core_Model_Design_Package $designPackage
+     * @param Mage_Core_Model_View_DesignInterface $design
      * @param Mage_Core_Model_Session $session
      * @param Mage_Core_Model_Store_Config $storeConfig
      * @param Mage_Core_Controller_Varien_Front $frontController
      * @param Mage_Core_Model_Factory_Helper $helperFactory
+     * @param Mage_Core_Model_View_Url $viewUrl
+     * @param Mage_Core_Model_View_Config $viewConfig
      * @param Mage_Core_Model_Dir $dirs
      * @param Mage_Core_Model_Logger $logger
      * @param Magento_Filesystem $filesystem
-     * @param Magento_Datasource_Factory
+     * @param Mage_Core_Model_View_FileSystem $viewFileSystem
+     * @param Mage_Core_Model_TemplateEngine_Factory $engineFactory
      */
     public function __construct(
         Mage_Core_Controller_Request_Http $request,
@@ -64,26 +67,28 @@ class Mage_Core_Block_Template_Context extends Mage_Core_Block_Context
         Mage_Core_Model_UrlInterface $urlBuilder,
         Mage_Core_Model_Translate $translator,
         Mage_Core_Model_CacheInterface $cache,
-        Mage_Core_Model_Design_Package $designPackage,
+        Mage_Core_Model_View_DesignInterface $design,
         Mage_Core_Model_Session $session,
         Mage_Core_Model_Store_Config $storeConfig,
         Mage_Core_Controller_Varien_Front $frontController,
         Mage_Core_Model_Factory_Helper $helperFactory,
+        Mage_Core_Model_View_Url $viewUrl,
+        Mage_Core_Model_View_Config $viewConfig,
         Mage_Core_Model_Dir $dirs,
         Mage_Core_Model_Logger $logger,
         Magento_Filesystem $filesystem,
-        Magento_Datasource_Factory $dataSourceFactory,
-        Mage_Core_Block_Template_Engine_Factory $engineFactory
+        Mage_Core_Model_View_FileSystem $viewFileSystem,
+        Mage_Core_Model_TemplateEngine_Factory $engineFactory
     ) {
         parent::__construct(
             $request, $layout, $eventManager, $urlBuilder, $translator, $cache,
-            $designPackage, $session, $storeConfig, $frontController, $helperFactory
+            $design, $session, $storeConfig, $frontController, $helperFactory, $viewUrl, $viewConfig
         );
 
         $this->_dirs = $dirs;
         $this->_logger = $logger;
         $this->_filesystem = $filesystem;
-        $this->_dataSourceFactory = $dataSourceFactory;
+        $this->_viewFileSystem = $viewFileSystem;
         $this->_engineFactory = $engineFactory;
     }
 
@@ -117,18 +122,19 @@ class Mage_Core_Block_Template_Context extends Mage_Core_Block_Context
     }
 
     /**
-     * Get datasource factory instance
-     * @return Magento_Datasource_Factory
+     * Get view file system model
+     *
+     * @return Mage_Core_Model_View_FileSystem
      */
-    public function getDataSourceFactory()
+    public function getViewFileSystem()
     {
-        return $this->_dataSourceFactory;
+        return $this->_viewFileSystem;
     }
 
     /**
      * Get the template engine factory instance
      *
-     * @return Mage_Core_Block_Template_Engine_Factory
+     * @return Mage_Core_Model_TemplateEngine_Factory
      */
     public function getEngineFactory()
     {

@@ -30,33 +30,33 @@
  */
 ?>
 <?php if ($this->isShow()): ?>
-<div class="store-switcher">
-    <label for="store_switcher"><?php echo $this->__('Show Report For:') ?></label>
-    <select name="store_switcher" id="store_switcher" onchange="return switchStore(this);">
-        <option value=""><?php echo $this->__('All Websites') ?></option>
-        <?php foreach ($this->getWebsiteCollection() as $_website): ?>
-            <?php $showWebsite=false; ?>
-            <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
-                <?php $showGroup=false; ?>
-                <?php foreach ($this->getStoreCollection($_group) as $_store): ?>
-                    <?php if ($showWebsite == false): ?>
-                        <?php $showWebsite = true; ?>
-                            <option website="true" value="<?php echo $_website->getId() ?>"<?php if($this->getRequest()->getParam('website') == $_website->getId()): ?> selected<?php endif; ?>>
-                                <?php echo $_website->getName() ?>
-                            </option>
-                    <?php endif; ?>
-                    <?php if ($showGroup == false): ?>
-                        <?php $showGroup = true; ?>
-                        <option group="true" value="<?php echo $_group->getId() ?>"<?php if($this->getRequest()->getParam('group') == $_group->getId()): ?> selected<?php endif; ?>>&nbsp;&nbsp;&nbsp;<?php echo $_group->getName() ?></option>
-                    <?php endif; ?>
-                    <option value="<?php echo $_store->getId() ?>"<?php if($this->getStoreId() == $_store->getId()): ?> selected<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $_store->getName() ?></option>
+<div class="field field-store-switcher">
+    <label class="label" for="store_switcher"><?php echo $this->__('Show Report For:') ?></label>
+    <div class="control">
+        <select name="store_switcher" id="store_switcher" onchange="return switchStore(this);">
+            <option value=""><?php echo $this->__('All Websites') ?></option>
+            <?php foreach ($this->getWebsiteCollection() as $_website): ?>
+                <?php $showWebsite=false; ?>
+                <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
+                    <?php $showGroup=false; ?>
+                    <?php foreach ($this->getStoreCollection($_group) as $_store): ?>
+                        <?php if ($showWebsite == false): ?>
+                            <?php $showWebsite = true; ?>
+                                <option website="true" value="<?php echo $_website->getId() ?>"<?php if($this->getRequest()->getParam('website') == $_website->getId()): ?> selected<?php endif; ?>>
+                                    <?php echo $_website->getName() ?>
+                                </option>
+                        <?php endif; ?>
+                        <?php if ($showGroup == false): ?>
+                            <?php $showGroup = true; ?>
+                            <option group="true" value="<?php echo $_group->getId() ?>"<?php if($this->getRequest()->getParam('group') == $_group->getId()): ?> selected<?php endif; ?>>&nbsp;&nbsp;&nbsp;<?php echo $_group->getName() ?></option>
+                        <?php endif; ?>
+                        <option value="<?php echo $_store->getId() ?>"<?php if($this->getStoreId() == $_store->getId()): ?> selected<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $_store->getName() ?></option>
+                    <?php endforeach; ?>
                 <?php endforeach; ?>
             <?php endforeach; ?>
-        <?php endforeach; ?>
-    </select>
-    <div class="tooltip">
-        <span class="help"><?php echo $this->getHintHtml() ?></span>
+        </select>
     </div>
+    <?php echo $this->getHintHtml() ?>
 </div>
 <script type="text/javascript">
     function switchStore(obj){

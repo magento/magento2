@@ -280,7 +280,7 @@ TEMPLATE;
         $dom = $this->_model->getResultDomDocument();
         $expectedDom = new DOMDocument();
         $expectedDom->formatOutput = true;
-        $this->assertXmlStringEqualsXmlString($expectedDocument, $dom->saveXML($dom->documentElement));
+        $this->assertEquals($expectedDocument, $dom->saveXML($dom->documentElement));
     }
 
     public function testParseAdminhtmlFiles()

@@ -266,11 +266,11 @@
             $.each(this.tabs, $.proxy(function(i, tab) {
                 $(this._getPanelForTab(tab))
                     .off('changed' + this.eventNamespace)
-                    .off('highlight' + this.eventNamespace)
+                    .off('highlight.validate' + this.eventNamespace)
                     .off('focusin' + this.eventNamespace)
 
                     .on('changed' + this.eventNamespace, {index: i}, $.proxy(this._onContentChange, this))
-                    .on('highlight' + this.eventNamespace, {index: i}, $.proxy(this._onInvalid, this))
+                    .on('highlight.validate' + this.eventNamespace, {index: i}, $.proxy(this._onInvalid, this))
                     .on('focusin' + this.eventNamespace, {index: i}, $.proxy(this._onFocus, this));
             }, this));
 

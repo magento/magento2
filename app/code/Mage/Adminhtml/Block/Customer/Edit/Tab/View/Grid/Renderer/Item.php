@@ -31,10 +31,9 @@
  * @package    Mage_Adminhtml
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Adminhtml_Block_Customer_Edit_Tab_View_Grid_Renderer_Item extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
+class Mage_Adminhtml_Block_Customer_Edit_Tab_View_Grid_Renderer_Item
+    extends Mage_Backend_Block_Widget_Grid_Column_Renderer_Abstract
 {
-    protected $_template = 'customer/edit/tab/view/grid/item.phtml';
-
     /**
      * Returns helper for product type
      *
@@ -121,6 +120,30 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View_Grid_Renderer_Item extends Mag
     public function render(Varien_Object $item)
     {
         $this->setItem($item);
-        return $this->toHtml();
+        $product = $this->getProduct();
+        $options = $this->getOptionList();
+        return $options ? $this->_renderItemOptions($product, $options) : $this->escapeHtml($product->getName());
+    }
+
+    /**
+     * Render product item with options
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @param array $options
+     * @return string
+     */
+    protected function _renderItemOptions(Mage_Catalog_Model_Product $product, array $options)
+    {
+        $html = '<div class="bundle-product-options">'
+            . '<strong>' . $this->escapeHtml($product->getName()) . '</strong>'
+            . '<dl>';
+        foreach ($options as $option) {
+            $formattedOption = $this->getFormattedOptionValue($option);
+            $html .= '<dt>' . $this->escapeHtml($option['label']) . '</dt>';
+            $html .= '<dd>' . $this->escapeHtml($formattedOption['value']) . '</dd>';
+        }
+        $html .= '</dl></div>';
+
+        return $html;
     }
 }

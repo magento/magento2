@@ -190,7 +190,7 @@ class Mage_Sales_Model_Order_Shipment extends Mage_Sales_Model_Abstract
     {
         if ($this->getId()) {
             Mage::throwException(
-                Mage::helper('Mage_Sales_Helper_Data')->__('Cannot register existing shipment')
+                Mage::helper('Mage_Sales_Helper_Data')->__('We cannot register an existing shipment')
             );
         }
 
@@ -408,6 +408,7 @@ class Mage_Sales_Model_Order_Shipment extends Mage_Sales_Model_Abstract
             $customerName = $order->getCustomerName();
         }
 
+        /** @var $mailer Mage_Core_Model_Email_Template_Mailer */
         $mailer = Mage::getModel('Mage_Core_Model_Email_Template_Mailer');
         if ($notifyCustomer) {
             $emailInfo = Mage::getModel('Mage_Core_Model_Email_Info');
@@ -538,7 +539,7 @@ class Mage_Sales_Model_Order_Shipment extends Mage_Sales_Model_Abstract
     {
         if ((!$this->getId() || null !== $this->_items) && !count($this->getAllItems())) {
             Mage::throwException(
-                Mage::helper('Mage_Sales_Helper_Data')->__('Cannot create an empty shipment.')
+                Mage::helper('Mage_Sales_Helper_Data')->__('We cannot create an empty shipment.')
             );
         }
 

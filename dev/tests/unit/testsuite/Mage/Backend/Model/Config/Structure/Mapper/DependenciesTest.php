@@ -34,7 +34,9 @@ class Mage_Backend_Model_Config_Structure_Mapper_DependenciesTest extends PHPUni
 
     public function setUp()
     {
-        $this->_model = new Mage_Backend_Model_Config_Structure_Mapper_Dependencies();
+        $this->_model = new Mage_Backend_Model_Config_Structure_Mapper_Dependencies(
+            new Mage_Backend_Model_Config_Structure_Mapper_Helper_RelativePathConverter()
+        );
     }
 
     public function testMap()

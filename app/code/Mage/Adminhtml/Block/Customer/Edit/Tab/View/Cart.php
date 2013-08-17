@@ -70,13 +70,13 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View_Cart extends Mage_Adminhtml_Bl
     protected function _prepareColumns()
     {
         $this->addColumn('product_id', array(
-            'header' => Mage::helper('Mage_Customer_Helper_Data')->__('Product ID'),
+            'header' => Mage::helper('Mage_Customer_Helper_Data')->__('ID'),
             'index' => 'product_id',
             'width' => '100px',
         ));
 
         $this->addColumn('name', array(
-            'header' => Mage::helper('Mage_Customer_Helper_Data')->__('Product Name'),
+            'header' => Mage::helper('Mage_Customer_Helper_Data')->__('Product'),
             'index' => 'name',
         ));
 
@@ -117,7 +117,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View_Cart extends Mage_Adminhtml_Bl
 
     public function getHeadersVisibility()
     {
-        return ($this->getCollection()->getSize() > 0);
+        return ($this->getCollection()->getSize() >= 0);
     }
 
 }

@@ -34,6 +34,7 @@ class Mage_Backend_Model_Config_Structure_Mapper_Factory
     const MAPPER_IGNORE                 = 'ignore';
     const MAPPER_DEPENDENCIES           = 'dependencies';
     const MAPPER_ATTRIBUTE_INHERITANCE  = 'attribute_inheritance';
+    const MAPPER_EXTENDS                = 'extends';
 
     /**
      * @var Magento_ObjectManager
@@ -49,6 +50,7 @@ class Mage_Backend_Model_Config_Structure_Mapper_Factory
         self::MAPPER_IGNORE => 'Mage_Backend_Model_Config_Structure_Mapper_Ignore',
         self::MAPPER_DEPENDENCIES => 'Mage_Backend_Model_Config_Structure_Mapper_Dependencies',
         self::MAPPER_ATTRIBUTE_INHERITANCE => 'Mage_Backend_Model_Config_Structure_Mapper_Attribute_Inheritance',
+        self::MAPPER_EXTENDS => 'Mage_Backend_Model_Config_Structure_Mapper_Extends',
     );
 
     public function __construct(Magento_ObjectManager $objectManager)

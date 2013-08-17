@@ -90,6 +90,7 @@ return array(
             'Checkout' => array(
                 'file' => 'testsuite/checkout.jmx',
                 'fixtures' => array(
+                    'testsuite/fixtures/shipping_flatrate_enabled.php',
                     'testsuite/fixtures/catalog_product.php',
                 ),
             ),

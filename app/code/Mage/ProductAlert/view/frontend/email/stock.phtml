@@ -41,7 +41,7 @@
             <?php else: ?>
                 <strong><?php echo $this->__('Price:') ?></strong> <?php echo Mage::helper('Mage_Core_Helper_Data')->currency($_product->getPrice()) ?>
             <?php endif; ?></p>
-            <p><small><a href="<?php echo $this->getProductUnsubscribeUrl($_product->getId()) ?>"><?php echo $this->__('Click here not to receive alerts for this product') ?></a></small></p>
+            <p><small><a href="<?php echo $this->getProductUnsubscribeUrl($_product->getId()) ?>"><?php echo $this->__('Click here not to receive alerts for this product.') ?></a></small></p>
         </td>
     </tr>
 <?php endforeach; ?>

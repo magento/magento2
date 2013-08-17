@@ -276,7 +276,7 @@ class Mage_Core_Model_App_Proxy implements Mage_Core_Model_AppInterface
     /**
      * Retrieve application locale object
      *
-     * @return Mage_Core_Model_Locale
+     * @return Mage_Core_Model_LocaleInterface
      */
     public function getLocale()
     {

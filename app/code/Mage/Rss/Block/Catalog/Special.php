@@ -126,7 +126,7 @@ class Mage_Rss_Block_Catalog_Special extends Mage_Rss_Block_Catalog_Abstract
                     } else {
                         $special = '';
                         if ($result['use_special']) {
-                            $special = '<br />' . Mage::helper('Mage_Catalog_Helper_Data')->__('Special Expires On: %s', $this->formatDate($result['special_to_date'], Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM));
+                            $special = '<br />' . Mage::helper('Mage_Catalog_Helper_Data')->__('Special Expires On: %s', $this->formatDate($result['special_to_date'], Mage_Core_Model_LocaleInterface::FORMAT_TYPE_MEDIUM));
                         }
                         $html .= sprintf('<p>%s %s%s</p>',
                             Mage::helper('Mage_Catalog_Helper_Data')->__('Price: %s', Mage::helper('Mage_Core_Helper_Data')->currency($result['price'])),

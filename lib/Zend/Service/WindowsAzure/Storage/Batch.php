@@ -210,7 +210,7 @@ class Zend_Service_WindowsAzure_Storage_Batch
         
         // Error?
         if (count($errors[2]) > 0) {
-            throw new Zend_Service_WindowsAzure_Exception('An error has occured while committing a batch: ' . $errors[2][0]);
+            throw new Zend_Service_WindowsAzure_Exception('An error has occurred while committing a batch: ' . $errors[2][0]);
         }
         
         // Return

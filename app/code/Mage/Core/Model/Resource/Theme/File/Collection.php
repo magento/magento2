@@ -57,7 +57,7 @@ class Mage_Core_Model_Resource_Theme_File_Collection extends Mage_Core_Model_Res
      * @param string $direction
      * @return Mage_Core_Model_Resource_Theme_File_Collection
      */
-    public function setDefaultOrder($direction)
+    public function setDefaultOrder($direction = self::SORT_ORDER_ASC)
     {
         return $this->setOrder('sort_order', $direction);
     }

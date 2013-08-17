@@ -56,46 +56,46 @@ class Mage_Adminhtml_Block_Api_Tab_Rolesedit extends Mage_Adminhtml_Block_Widget
         //->assign('checkedResources', join(',', $selrids));
     }
 
+    /**
+     * Get is everything allowed
+     *
+     * @return bool
+     */
     public function getEverythingAllowed()
     {
         return in_array('all', $this->getSelectedResources());
     }
 
-    public function getResTreeJson()
+    /**
+     * Get Resource Tree
+     *
+     * @return array
+     */
+    public function getTree()
     {
-        $rid = Mage::app()->getRequest()->getParam('rid', false);
-        $resources = Mage::getModel('Mage_Api_Model_Roles')->getResourcesTree();
-
-        $rootArray = $this->_getNodeJson($resources,1);
-
-        $json = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(isset($rootArray['children']) ? $rootArray['children'] : array());
-
-        return $json;
+        $resource = Mage::getModel('Mage_Api_Model_Roles')->getResourcesTree();
+        $rootArray = $this->_mapResources($resource);
+        return $rootArray['children'];
     }
 
-    protected function _sortTree($a, $b)
-    {
-        return $a['sort_order']<$b['sort_order'] ? -1 : ($a['sort_order']>$b['sort_order'] ? 1 : 0);
-    }
-
-
-    protected function _getNodeJson($node, $level=0)
+    /**
+     * Map resources
+     *
+     * @param $resources
+     * @return array
+     */
+    protected function _mapResources($resources)
     {
         $item = array();
-        $selres = $this->getSelectedResources();
 
-        if ($level != 0) {
-            $item['text']= (string)$node->title;
-            $item['sort_order']= isset($node->sort_order) ? (string)$node->sort_order : 0;
-            $item['id']  = (string)$node->attributes()->aclpath;
+        $item['data'] = (string)$resources->title;
+        $item['sort_order']= isset($resources->sort_order) ? (string)$resources->sort_order : 0;
+        $item['attr']['data-id'] = (string)$resources->attributes()->aclpath;
 
-            if (in_array($item['id'], $selres))
-                $item['checked'] = true;
-        }
-        if (isset($node->children)) {
-            $children = $node->children->children();
+        if (isset($resources->children)) {
+            $children = $resources->children->children();
         } else {
-            $children = $node->children();
+            $children = $resources->children();
         }
         if (empty($children)) {
             return $item;
@@ -103,14 +103,10 @@ class Mage_Adminhtml_Block_Api_Tab_Rolesedit extends Mage_Adminhtml_Block_Widget
 
         if ($children) {
             $item['children'] = array();
-            //$item['cls'] = 'fiche-node';
             foreach ($children as $child) {
-                if ($child->getName()!='title' && $child->getName()!='sort_order' && $child->attributes()->module) {
-                    if ($level != 0) {
-                        $item['children'][] = $this->_getNodeJson($child, $level+1);
-                    } else {
-                        $item = $this->_getNodeJson($child, $level+1);
-                    }
+                if ($child->getName() != 'title' && $child->getName() != 'sort_order' && $child->attributes()->module) {
+                    $item['state'] = 'open';
+                    $item['children'][] = $this->_mapResources($child);
                 }
             }
             if (!empty($item['children'])) {
@@ -118,5 +114,17 @@ class Mage_Adminhtml_Block_Api_Tab_Rolesedit extends Mage_Adminhtml_Block_Widget
             }
         }
         return $item;
+    }
+
+    /**
+     * Sort tree by sort order
+     *
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
+    protected function _sortTree($a, $b)
+    {
+        return $a['sort_order'] < $b['sort_order'] ? -1 : ($a['sort_order'] > $b['sort_order'] ? 1 : 0);
     }
 }

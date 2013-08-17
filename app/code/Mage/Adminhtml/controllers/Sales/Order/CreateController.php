@@ -140,7 +140,7 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
             'session'            => $this->_getSession(),
         );
 
-        Mage::dispatchEvent('adminhtml_sales_order_create_process_data_before', $eventData);
+        $this->_eventManager->dispatch('adminhtml_sales_order_create_process_data_before', $eventData);
 
         /**
          * Saving order data
@@ -251,7 +251,7 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
             'request'            => $this->getRequest()->getPost(),
         );
 
-        Mage::dispatchEvent('adminhtml_sales_order_create_process_data', $eventData);
+        $this->_eventManager->dispatch('adminhtml_sales_order_create_process_data', $eventData);
 
         $this->_getOrderCreateModel()
             ->saveQuote();
@@ -328,7 +328,7 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
      */
     public function indexAction()
     {
-        $this->_title($this->__('Sales'))->_title($this->__('Orders'))->_title($this->__('New Order'));
+        $this->_title($this->__('Orders'))->_title($this->__('New Order'));
         $this->_initSession();
         $this->loadLayout();
 
@@ -494,8 +494,8 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
                 ->createOrder();
 
             $this->_getSession()->clear();
-            Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess($this->__('The order has been created.'));
-            if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::actions_view')) {
+            Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess($this->__('You created the order.'));
+            if ($this->_authorization->isAllowed('Mage_Sales::actions_view')) {
                 $this->_redirect('*/sales_order/view', array('order_id' => $order->getId()));
             } else {
                 $this->_redirect('*/sales_order/index');
@@ -543,7 +543,7 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
                 $aclResource = 'Mage_Sales::actions';
                 break;
         }
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($aclResource);
+        return $this->_authorization->isAllowed($aclResource);
     }
 
     /*

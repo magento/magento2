@@ -45,7 +45,7 @@ class Mage_Adminhtml_Block_System_Store_Edit_Form_Website extends Mage_Adminhtml
             $websiteModel->setData($postData['website']);
         }
         $fieldset = $form->addFieldset('website_fieldset', array(
-            'legend' => Mage::helper('Mage_Core_Helper_Data')->__('Website Information')
+            'legend' => Mage::helper('Mage_Core_Helper_Data')->__('Web Site Information')
         ));
         /* @var $fieldset Varien_Data_Form */
 

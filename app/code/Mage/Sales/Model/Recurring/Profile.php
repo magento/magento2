@@ -350,7 +350,7 @@ class Mage_Sales_Model_Recurring_Profile extends Mage_Payment_Model_Recurring_Pr
 
         // state
         if (!in_array($this->getState(), $this->getAllStates(false), true)) {
-            $this->_errors['state'][] = Mage::helper('Mage_Sales_Helper_Data')->__('Wrong state: "%s".', $this->getState());
+            $this->_errors['state'][] = Mage::helper('Mage_Sales_Helper_Data')->__('Wrong state: "%s"', $this->getState());
         }
 
         return empty($this->_errors);
@@ -436,9 +436,9 @@ class Mage_Sales_Model_Recurring_Profile extends Mage_Payment_Model_Recurring_Pr
             case 'state':
                 return Mage::helper('Mage_Sales_Helper_Data')->__('Profile State');
             case 'created_at':
-                return Mage::helper('Mage_Adminhtml_Helper_Data')->__('Created At');
+                return Mage::helper('Mage_Adminhtml_Helper_Data')->__('Created');
             case 'updated_at':
-                return Mage::helper('Mage_Adminhtml_Helper_Data')->__('Updated At');
+                return Mage::helper('Mage_Adminhtml_Helper_Data')->__('Updated');
             default:
                 return parent::getFieldLabel($field);
         }
@@ -454,7 +454,7 @@ class Mage_Sales_Model_Recurring_Profile extends Mage_Payment_Model_Recurring_Pr
     {
         switch ($field) {
             case 'order_item_id':
-                return Mage::helper('Mage_Sales_Helper_Data')->__('Original order item that recurring payment profile correspondss to.');
+                return Mage::helper('Mage_Sales_Helper_Data')->__('Original order item that recurring payment profile corresponds to');
             default:
                 return parent::getFieldComment($field);
         }

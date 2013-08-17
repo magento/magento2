@@ -69,10 +69,11 @@ class Mage_Sales_Model_Resource_Sale_Collection extends Varien_Data_Collection_D
      * Set sales order entity and establish read connection
      *
      */
-    public function __construct()
-    {
-        $conn = Mage::getResourceSingleton('Mage_Sales_Model_Resource_Order')->getReadConnection();
-        $this->setConnection($conn);
+    public function __construct(
+        Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy,
+        Mage_Sales_Model_Resource_Order $resource
+    ) {
+        parent::__construct($fetchStrategy, $resource->getReadConnection());
     }
 
     /**

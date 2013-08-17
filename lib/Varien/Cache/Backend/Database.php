@@ -57,11 +57,13 @@ class Varien_Cache_Backend_Database extends Zend_Cache_Backend implements Zend_C
      * @var array available options
      */
     protected $_options = array(
-        'adapter'           => '',
-        'adapter_callback'  => '',
-        'data_table'        => '',
-        'tags_table'        => '',
-        'store_data'        => true,
+        'adapter'             => '',
+        'adapter_callback'    => '',
+        'data_table'          => '',
+        'data_table_callback' => '',
+        'tags_table'          => '',
+        'tags_table_callback' => '',
+        'store_data'          => true,
     );
 
     protected $_adapter = null;
@@ -79,8 +81,11 @@ class Varien_Cache_Backend_Database extends Zend_Cache_Backend implements Zend_C
                 Zend_Cache::throwException('Option "adapter" should be declared and extend Zend_Db_Adapter_Abstract!');
             }
         }
-        if (empty($this->_options['data_table']) || empty ($this->_options['tags_table'])) {
-            Zend_Cache::throwException('Options "data_table" and "tags_table" should be declared!');
+        if (empty($this->_options['data_table']) && empty($this->_options['data_table_callback'])) {
+            Zend_Cache::throwException('Option "data_table" or "data_table_callback" should be declared!');
+        }
+        if (empty($this->_options['tags_table']) && empty($this->_options['tags_table_callback'])) {
+            Zend_Cache::throwException('Option "tags_table" or "tags_table_callback" should be declared!');
         }
     }
 
@@ -113,6 +118,12 @@ class Varien_Cache_Backend_Database extends Zend_Cache_Backend implements Zend_C
      */
     protected function _getDataTable()
     {
+        if (empty($this->_options['data_table'])) {
+            $this->setOption('data_table', call_user_func($this->_options['data_table_callback']));
+            if (empty($this->_options['data_table'])) {
+                Zend_Cache::throwException('Failed to detect data_table option');
+            }
+        }
         return $this->_options['data_table'];
     }
 
@@ -123,6 +134,12 @@ class Varien_Cache_Backend_Database extends Zend_Cache_Backend implements Zend_C
      */
     protected function _getTagsTable()
     {
+        if (empty($this->_options['tags_table'])) {
+            $this->setOption('tags_table', call_user_func($this->_options['tags_table_callback']));
+            if (empty($this->_options['tags_table'])) {
+                Zend_Cache::throwException('Failed to detect tags_table option');
+            }
+        }
         return $this->_options['tags_table'];
     }
 

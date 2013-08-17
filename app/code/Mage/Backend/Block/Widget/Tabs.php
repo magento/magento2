@@ -113,7 +113,9 @@ class Mage_Backend_Block_Widget_Tabs extends Mage_Backend_Block_Widget
         } elseif (is_string($tab)) {
             $this->_addTabByName($tab, $tabId);
         } else {
-            throw new Exception(Mage::helper('Mage_Backend_Helper_Data')->__('Wrong tab configuration.'));
+            throw new Exception(
+                Mage::helper('Mage_Backend_Helper_Data')->__('Please correct the tab configuration and try again.')
+            );
         }
 
         if (is_null($this->_tabs[$tabId]->getUrl())) {
@@ -158,7 +160,9 @@ class Mage_Backend_Block_Widget_Tabs extends Mage_Backend_Block_Widget
         }
 
         if (!($this->_tabs[$tabId] instanceof Mage_Backend_Block_Widget_Tab_Interface)) {
-            throw new Exception(Mage::helper('Mage_Backend_Helper_Data')->__('Wrong tab configuration.'));
+            throw new Exception(
+                Mage::helper('Mage_Backend_Helper_Data')->__('Please correct the tab configuration and try again.')
+            );
         }
     }
 

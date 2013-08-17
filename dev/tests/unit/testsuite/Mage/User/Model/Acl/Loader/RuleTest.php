@@ -37,12 +37,19 @@ class Mage_User_Model_Acl_Loader_RuleTest extends PHPUnit_Framework_TestCase
      */
     protected $_resourceMock;
 
+    /**
+     * @var Mage_Core_Model_Acl_RootResource
+     */
+    protected $_rootResourceMock;
+
     public function setUp()
     {
         $this->_resourceMock = $this->getMock('Mage_Core_Model_Resource', array(), array(), '', false, false);
-        $this->_model = new Mage_User_Model_Acl_Loader_Rule(array(
-            'resource' => $this->_resourceMock
-        ));
+        $this->_rootResourceMock = new Mage_Core_Model_Acl_RootResource('Mage_Adminhtml::all');
+        $this->_model = new Mage_User_Model_Acl_Loader_Rule(
+            $this->_rootResourceMock,
+            $this->_resourceMock
+        );
     }
 
     public function testPopulateAcl()
@@ -71,10 +78,11 @@ class Mage_User_Model_Acl_Loader_RuleTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($adapterMock));
 
         $aclMock = $this->getMock('Magento_Acl');
-        $aclMock->expects($this->at(0))->method('allow')->with('G1', null, null);
-        $aclMock->expects($this->at(1))->method('allow')->with('G1', 'Mage_Adminhtml::all', null);
-        $aclMock->expects($this->at(2))->method('allow')->with('U2', 1, null);
-        $aclMock->expects($this->at(3))->method('deny')->with('U3', 1, null);
+        $aclMock->expects($this->any())->method('has')->will($this->returnValue(true));
+        $aclMock->expects($this->at(1))->method('allow')->with('G1', null, null);
+        $aclMock->expects($this->at(2))->method('allow')->with('G1', 'Mage_Adminhtml::all', null);
+        $aclMock->expects($this->at(4))->method('allow')->with('U2', 1, null);
+        $aclMock->expects($this->at(6))->method('deny')->with('U3', 1, null);
 
         $this->_model->populateAcl($aclMock);
     }

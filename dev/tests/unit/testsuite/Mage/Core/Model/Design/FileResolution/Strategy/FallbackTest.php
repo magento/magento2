@@ -31,29 +31,24 @@
 class Mage_Core_Model_Design_FileResolution_Strategy_FallbackTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_ObjectManager
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_objectManager;
+    protected $_fallbackFactory;
 
     /**
-     * @var Mage_Core_Model_Design_Fallback_List_File
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_fallbackFile;
 
     /*
-     * @var Mage_Core_Model_Design_Fallback_List_Locale
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_fallbackLocale;
 
     /**
-     * @var Mage_Core_Model_Design_Fallback_List_View
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_fallbackViewFile;
-
-    /**
-     * @var Mage_Core_Model_Dir
-     */
-    protected $_dirs;
 
     /**
      * @var Mage_Core_Model_Theme
@@ -62,21 +57,28 @@ class Mage_Core_Model_Design_FileResolution_Strategy_FallbackTest extends PHPUni
 
     public function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento_ObjectManager');
-        $this->_dirs = $this->getMock('Mage_Core_Model_Dir', array(), array(), '', false);
-        $this->_fallbackFile =
-            $this->getMock('Mage_Core_Model_Design_Fallback_List_File', array(), array($this->_dirs));
-        $this->_fallbackLocale =
-            $this->getMock('Mage_Core_Model_Design_Fallback_List_Locale', array(), array($this->_dirs));
-        $this->_fallbackViewFile =
-            $this->getMock('Mage_Core_Model_Design_Fallback_List_View', array(), array($this->_dirs));
+        $this->_fallbackFile = $this->getMockForAbstractClass('Mage_Core_Model_Design_Fallback_Rule_RuleInterface');
+        $this->_fallbackLocale = $this->getMockForAbstractClass('Mage_Core_Model_Design_Fallback_Rule_RuleInterface');
+        $this->_fallbackViewFile = $this->getMockForAbstractClass('Mage_Core_Model_Design_Fallback_Rule_RuleInterface');
+
+        $this->_fallbackFactory = $this->getMock(
+            'Mage_Core_Model_Design_Fallback_Factory',
+            array('createLocaleFileRule', 'createFileRule', 'createViewFileRule'),
+            array($this->getMock('Mage_Core_Model_Dir', array(), array(), '', false))
+        );
+        $this->_fallbackFactory
+            ->expects($this->any())->method('createLocaleFileRule')->will($this->returnValue($this->_fallbackLocale));
+        $this->_fallbackFactory
+            ->expects($this->any())->method('createFileRule')->will($this->returnValue($this->_fallbackFile));
+        $this->_fallbackFactory
+            ->expects($this->any())->method('createViewFileRule')->will($this->returnValue($this->_fallbackViewFile));
+
         $this->_theme = $this->getMock('Mage_Core_Model_Theme', array(), array(), '', false);
     }
 
     public function tearDown()
     {
-        $this->_objectManager = null;
-        $this->_dirs = null;
+        $this->_fallbackFactory = null;
         $this->_fallbackFile = null;
         $this->_fallbackLocale = null;
         $this->_fallbackViewFile = null;
@@ -90,8 +92,7 @@ class Mage_Core_Model_Design_FileResolution_Strategy_FallbackTest extends PHPUni
     {
         $filesystem = $this->_getFileSystemMock($targetFile);
 
-        $fallback = new Mage_Core_Model_Design_FileResolution_Strategy_Fallback($this->_objectManager, $filesystem,
-            $this->_dirs, $this->_fallbackFile, $this->_fallbackLocale, $this->_fallbackViewFile);
+        $fallback = new Mage_Core_Model_Design_FileResolution_Strategy_Fallback($filesystem, $this->_fallbackFactory);
 
         $params = array('area' => 'area', 'theme' => $this->_theme, 'namespace' => $namespace, 'module' => $module);
 
@@ -146,8 +147,7 @@ class Mage_Core_Model_Design_FileResolution_Strategy_FallbackTest extends PHPUni
     {
         $filesystem = $this->_getFileSystemMock($targetFile);
 
-        $fallback = new Mage_Core_Model_Design_FileResolution_Strategy_Fallback($this->_objectManager, $filesystem,
-            $this->_dirs, $this->_fallbackFile, $this->_fallbackLocale, $this->_fallbackViewFile);
+        $fallback = new Mage_Core_Model_Design_FileResolution_Strategy_Fallback($filesystem, $this->_fallbackFactory);
 
         $params = array('area' => 'area', 'theme' => $this->_theme, 'locale' => 'locale');
 
@@ -182,8 +182,7 @@ class Mage_Core_Model_Design_FileResolution_Strategy_FallbackTest extends PHPUni
     {
         $filesystem = $this->_getFileSystemMock($targetFile);
 
-        $fallback = new Mage_Core_Model_Design_FileResolution_Strategy_Fallback($this->_objectManager, $filesystem,
-            $this->_dirs, $this->_fallbackFile, $this->_fallbackLocale, $this->_fallbackViewFile);
+        $fallback = new Mage_Core_Model_Design_FileResolution_Strategy_Fallback($filesystem, $this->_fallbackFactory);
 
         $params = array('area' => 'area', 'theme' => $this->_theme, 'namespace' => $namespace, 'module' => $module,
             'locale' => 'locale');

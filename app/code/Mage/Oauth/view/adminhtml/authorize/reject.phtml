@@ -36,7 +36,7 @@
     <div class="login-box">
         <div class="login-form">
             <h1><?php echo $this->__('Rejection Of Authorization') ?></h1>
-            <?php echo $this->getMessagesBlock()->toHtml() ?>
+            <?php echo $this->getLayout()->renderElement('messages') ?>
         </div>
         <p class="legal"><?php echo $this->__('Magento&reg is a trademark of X.commerce, Inc. Copyright &copy; %s X.commerce, Inc.', date('Y')) ?></p>
         <div class="bottom"></div>

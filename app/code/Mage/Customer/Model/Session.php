@@ -57,14 +57,19 @@ class Mage_Customer_Model_Session extends Mage_Core_Model_Session_Abstract
         return Mage::getSingleton('Mage_Customer_Model_Config_Share');
     }
 
-    public function __construct()
+    /**
+     * Class constructor. Initialize session namespace
+     *
+     * @param string $sessionName
+     */
+    public function __construct($sessionName = null)
     {
         $namespace = 'customer';
         if ($this->getCustomerConfigShare()->isWebsiteScope()) {
             $namespace .= '_' . (Mage::app()->getStore()->getWebsite()->getCode());
         }
 
-        $this->init($namespace);
+        $this->init($namespace, $sessionName);
         Mage::dispatchEvent('customer_session_init', array('customer_session'=>$this));
     }
 

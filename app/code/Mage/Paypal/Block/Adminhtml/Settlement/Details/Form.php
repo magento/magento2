@@ -73,7 +73,7 @@ class Mage_Paypal_Block_Adminhtml_Settlement_Details_Form extends Mage_Adminhtml
                         'label' => $settlement->getFieldLabel('transaction_initiation_date'),
                         'value' => $coreHelper->formatDate(
                             $model->getData('transaction_initiation_date'),
-                            Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM,
+                            Mage_Core_Model_LocaleInterface::FORMAT_TYPE_MEDIUM,
                             true
                         )
                     ),
@@ -81,7 +81,7 @@ class Mage_Paypal_Block_Adminhtml_Settlement_Details_Form extends Mage_Adminhtml
                         'label' => $settlement->getFieldLabel('transaction_completion_date'),
                         'value' => $coreHelper->formatDate(
                             $model->getData('transaction_completion_date'),
-                            Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM,
+                            Mage_Core_Model_LocaleInterface::FORMAT_TYPE_MEDIUM,
                             true
                         )
                     ),

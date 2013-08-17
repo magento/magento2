@@ -56,7 +56,7 @@ class Mage_Adminhtml_Block_Review_Product_Grid extends Mage_Adminhtml_Block_Cata
 
         if ((int)$this->getRequest()->getParam('store', 0)) {
             $this->addColumn('custom_name', array(
-                    'header'    => Mage::helper('Mage_Review_Helper_Data')->__('Name in Store'),
+                    'header'    => Mage::helper('Mage_Review_Helper_Data')->__('Product Store Name'),
                     'index'     => 'custom_name'
             ));
         }
@@ -74,7 +74,7 @@ class Mage_Adminhtml_Block_Review_Product_Grid extends Mage_Adminhtml_Block_Cata
         ));
 
         $this->addColumn('qty', array(
-                'header'    => Mage::helper('Mage_Review_Helper_Data')->__('Qty'),
+                'header'    => Mage::helper('Mage_Review_Helper_Data')->__('Quantity'),
                 'width'     => '130px',
                 'type'      => 'number',
                 'index'     => 'qty'

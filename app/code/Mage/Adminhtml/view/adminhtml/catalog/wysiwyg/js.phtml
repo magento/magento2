@@ -33,14 +33,17 @@ var catalogWysiwygEditor = {
     overlayHideEffectOptions : null,
     open : function(editorUrl, elementId) {
         if (editorUrl && elementId) {
-            new Ajax.Request(editorUrl, {
-                parameters: {
-                    element_id: elementId+'_editor',
+           jQuery.ajax({
+                url: editorUrl,
+                data: {
+                    element_id: elementId + '_editor',
                     store_id: '<?php echo $this->getStoreId() ?>'
                 },
-                onSuccess: function(transport) {
+                showLoader: true,
+                dataType: 'html',
+                success: function(data, textStatus, transport) {
                     try {
-                        this.openDialogWindow(transport.responseText, elementId);
+                        this.openDialogWindow(data, elementId);
                     } catch(e) {
                         alert(e.message);
                     }
@@ -53,7 +56,7 @@ var catalogWysiwygEditor = {
         this.overlayHideEffectOptions = Windows.overlayHideEffectOptions;
         Windows.overlayShowEffectOptions = {duration:0};
         Windows.overlayHideEffectOptions = {duration:0};
-
+        tinyMCE.editors[elementId].save();
         Dialog.confirm(content, {
             draggable:true,
             resizable:true,
@@ -63,7 +66,6 @@ var catalogWysiwygEditor = {
             title:'WYSIWYG Editor',
             width:950,
             height:555,
-            zIndex:1000,
             recenterAuto:false,
             hideEffect:Element.hide,
             showEffect:Element.show,
@@ -75,10 +77,8 @@ var catalogWysiwygEditor = {
             onClose: this.closeDialogWindow.bind(this),
             firedElementId: elementId
         });
-
+        $(elementId + '_editor').value = $(elementId).value;
         content.evalScripts.bind(content).defer();
-        tinyMCE.editors[elementId].save();
-        $(elementId+'_editor').value = $(elementId).value;
     },
     okDialogWindow : function(dialogWindow) {
         if (dialogWindow.options.firedElementId) {
@@ -102,7 +102,11 @@ var catalogWysiwygEditor = {
         }
 
         //IE fix - blocked form fields after closing
-        $(dialogWindow.options.firedElementId).focus();
+        try {
+            $(dialogWindow.options.firedElementId).focus();
+        } catch (e) {
+            //ie8 cannot focus hidden elements
+        }
 
         //destroy the instance of editor
         wysiwygObj = eval('wysiwyg'+dialogWindow.options.firedElementId+'_editor');

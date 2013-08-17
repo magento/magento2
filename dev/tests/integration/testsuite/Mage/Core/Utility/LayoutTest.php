@@ -32,11 +32,6 @@ class Mage_Core_Utility_LayoutTest extends PHPUnit_Framework_TestCase
      */
     protected $_utility;
 
-    public static function setUpBeforeClass()
-    {
-        Mage::app()->getCacheInstance()->banUse('layout');
-    }
-
     protected function setUp()
     {
         $this->_utility = new Mage_Core_Utility_Layout($this);

@@ -180,7 +180,7 @@ class Mage_Paypal_Model_Express_Checkout
         if ($this->_config->areButtonsDynamic()) {
             $cacheId = self::PAL_CACHE_ID . Mage::app()->getStore()->getId();
             $pal = $this->_configCacheType->load($cacheId);
-            if (-1 == $pal) {
+            if (self::PAL_CACHE_ID == $pal) {
                 $pal = null;
             } elseif (!$pal) {
                 $pal = null;
@@ -190,7 +190,7 @@ class Mage_Paypal_Model_Express_Checkout
                     $pal = $this->_api->getPal();
                     $this->_configCacheType->save($pal, $cacheId);
                 } catch (Exception $e) {
-                    $this->_configCacheType->save(-1, $cacheId);
+                    $this->_configCacheType->save(self::PAL_CACHE_ID, $cacheId);
                     Mage::logException($e);
                 }
             }
@@ -269,7 +269,7 @@ class Mage_Paypal_Model_Express_Checkout
         $this->_quote->collectTotals();
 
         if (!$this->_quote->getGrandTotal() && !$this->_quote->hasNominalItems()) {
-            Mage::throwException(Mage::helper('Mage_Paypal_Helper_Data')->__('PayPal does not support processing orders with zero amount. To complete your purchase, proceed to the standard checkout process.'));
+            Mage::throwException(Mage::helper('Mage_Paypal_Helper_Data')->__('PayPal can\'t process orders with a zero balance due. To finish your purchase, please go through the standard checkout process.'));
         }
 
         $this->_quote->reserveOrderId()->save();
@@ -298,7 +298,7 @@ class Mage_Paypal_Model_Express_Checkout
             $this->_api->setRequireBillingAddress(1);
         }
 
-        // supress or export shipping address
+        // suppress or export shipping address
         if ($this->_quote->getIsVirtual()) {
             if ($this->_config->requireBillingAddress == Mage_Paypal_Model_Config::REQUIRE_BILLING_ADDRESS_VIRTUAL) {
                 $this->_api->setRequireBillingAddress(1);

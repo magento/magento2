@@ -383,7 +383,7 @@ class Mage_Core_Model_Url extends Varien_Object implements Mage_Core_Model_UrlIn
     /**
      * Set Route Parameters
      *
-     * @param array $data
+     * @param string $data
      * @return Mage_Core_Model_Url
      */
     public function setRoutePath($data)
@@ -393,17 +393,17 @@ class Mage_Core_Model_Url extends Varien_Object implements Mage_Core_Model_UrlIn
         }
 
         $this->unsetData('route_path');
-        $a = explode('/', $data);
+        $routePieces = explode('/', $data);
 
-        $route = array_shift($a);
+        $route = array_shift($routePieces);
         if ('*' === $route) {
             $route = $this->getRequest()->getRequestedRouteName();
         }
         $this->setRouteName($route);
 
         $controller = '';
-        if (!empty($a)) {
-            $controller = array_shift($a);
+        if (!empty($routePieces)) {
+            $controller = array_shift($routePieces);
             if ('*' === $controller) {
                 $controller = $this->getRequest()->getRequestedControllerName();
             }
@@ -411,19 +411,19 @@ class Mage_Core_Model_Url extends Varien_Object implements Mage_Core_Model_UrlIn
         $this->setControllerName($controller);
 
         $action = '';
-        if (!empty($a)) {
-            $action = array_shift($a);
+        if (!empty($routePieces)) {
+            $action = array_shift($routePieces);
             if ('*' === $action) {
                 $action = $this->getRequest()->getRequestedActionName();
             }
         }
         $this->setActionName($action);
 
-        if (!empty($a)) {
-            while (!empty($a)) {
-                $key = array_shift($a);
-                if (!empty($a)) {
-                    $value = array_shift($a);
+        if (!empty($routePieces)) {
+            while (!empty($routePieces)) {
+                $key = array_shift($routePieces);
+                if (!empty($routePieces)) {
+                    $value = array_shift($routePieces);
                     $this->setRouteParam($key, $value);
                 }
             }

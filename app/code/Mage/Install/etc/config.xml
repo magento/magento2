@@ -87,13 +87,6 @@
                 </Mage_Install>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <install module="Mage_Install">
-                    <file>layout.xml</file>
-                </install>
-            </updates>
-        </layout>
         <eula_file>LICENSE.html</eula_file>
     </install>
 </config>

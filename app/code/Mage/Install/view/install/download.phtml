@@ -44,7 +44,7 @@ function startInstall(state)
 
 function installSuccess()
 {
-    alert("<?php echo $this->__("All packages were installed, click 'OK' to continue with installation.") ?>");
+    alert("<?php echo $this->__("All packages were installed. Click 'OK' to continue with installation.") ?>");
     location.href = "<?php echo $this->getNextUrl() ?>";
     $$('button').each(function(el) {
         el.disabled = true;
@@ -54,7 +54,7 @@ function installSuccess()
 
 function installFailure()
 {
-    alert("<?php echo $this->__("There was a problem installing Magento packages. Please read the log, correct errors and try again.") ?>\n<?php echo $this->__("Alternatively you could try the 'Manual Downloads and Upgrades' method.") ?>");
+    alert("<?php echo $this->__("Something went wrong installing the Magento packages. Please read the log, correct any errors and try again.") ?>\n<?php echo $this->__('As another option, you could try the "Manual Downloads and Upgrades" method.') ?>");
     $$('button').each(function(el) {
         el.disabled = true;
         el.removeClassName('disabled');
@@ -90,7 +90,7 @@ function installFailure()
     <p><?php echo $this->__("In other cases you will need to make Magento files writeable for the user that the web server process is running under.") ?></p>
 
         <h4><?php echo $this->__("Preferred stability: %s", $this->__("BETA")) ?></h4>
-        <p><?php echo $this->__("Currently this is the most stable state available for Magento packages.") ?><br/><?php echo $this->__("Choose this if you would like to test frontend and backend functionality.") ?></p>
+        <p><?php echo $this->__("This is the most stable state available for Magento packages.") ?><br/><?php echo $this->__("Choose this if you would like to test storefront and admin functionality.") ?></p>
         <p><button class="form-button" type="button" onclick="startInstall('beta')"><span><?php echo $this->__('Proceed With Automatic Download (%s)', $this->__('Beta')) ?></span></button></p>
 <br/>
         <h4><?php echo $this->__("Preferred stability: %s", $this->__("ALPHA")) ?></h4>
@@ -115,7 +115,7 @@ function installFailure()
 ./pear install mage-core/Interface_Frontend_Default mage-core/Interface_Adminhtml_Default
 
 </pre>
-    <p><?php echo $this->__("After successfull installation please click the button below.") ?></p>
+    <p><?php echo $this->__("Click the button below when the installation is finished.") ?></p>
 
     <p><button class="form-button" type="submit" onclick="$('continue').value='manual'"><span><?php echo $this->__('Continue After Manual Download') ?></span></button></p>
 </fieldset>

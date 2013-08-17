@@ -43,9 +43,7 @@ class Mage_Core_Model_Theme_RegistrationTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_theme = Mage::getModel('Mage_Core_Model_Theme');
-        $this->_model = $this->getMockBuilder('Mage_Core_Model_Theme_Registration')
-            ->setMethods(null)
-            ->setConstructorArgs(array('theme' => $this->_theme));
+        $this->_model = Mage::getModel('Mage_Core_Model_Theme_Registration', array('theme' => $this->_theme));
     }
 
     /**
@@ -58,7 +56,7 @@ class Mage_Core_Model_Theme_RegistrationTest extends PHPUnit_Framework_TestCase
     {
         $basePath = realpath(__DIR__ . '/../_files/design');
         $pathPattern = implode(DIRECTORY_SEPARATOR, array('frontend', '*', '*', 'theme.xml'));
-        $this->_model->getMock()->register($basePath, $pathPattern);
+        $this->_model->register($basePath, $pathPattern);
         return $this;
     }
 

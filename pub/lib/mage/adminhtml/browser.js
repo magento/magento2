@@ -22,369 +22,332 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-MediabrowserUtility = {
-    openDialog: function(url, width, height, title, options) {
-        var windowId = 'modal_dialog_message';
-        jQuery('body').append('<div class="popup-window magento_message" id="' + windowId + '"></div>');
-        jQuery('#' + windowId).dialog({
-            autoOpen:   false,
-            title:      title || 'Insert File...',
-            modal:      true,
-            resizable:  false,
-            width:      width || 950,
-            close:      function(event, ui) {
-                jQuery(this).dialog('destroy');
-                jQuery('#' + windowId).remove();
+/*jshint browser:true jquery:true*/
+(function($) {
+    $(function() {
+        $.mage.load('mediabrowser');
+    });
+    window.MediabrowserUtility = {
+        windowId: 'modal_dialog_message',
+        getMaxZIndex: function() {
+            var max = 0, i;
+            var cn = document.body.childNodes;
+            for (i = 0; i < cn.length; i++) {
+                var el = cn[i];
+                var zIndex = el.nodeType == 1 ? parseInt(el.style.zIndex, 10) || 0 : 0;
+                if (zIndex < 10000) {
+                    max = Math.max(max, zIndex);
+                }
             }
-        });
-
-        jQuery('#' + windowId).dialog('open');
-
-        new Ajax.Updater('modal_dialog_message', url, {evalScripts: true});
-    },
-    closeDialog: function(window) {
-        if (!window) {
-            window = this.dialogWindow;
-        }
-        if (window) {
-            // IE fix - hidden form select fields after closing dialog
-            WindowUtilities._showSelect();
-            jQuery('#modal_dialog_message').dialog('close');
-        }
-    }
-};
-
-Mediabrowser = Class.create();
-Mediabrowser.prototype = {
-    targetElementId: null,
-    contentsUrl: null,
-    onInsertUrl: null,
-    newFolderUrl: null,
-    deleteFolderUrl: null,
-    deleteFilesUrl: null,
-    headerText: null,
-    tree: null,
-    currentNode: null,
-    storeId: null,
-    initialize: function (setup) {
-        this.newFolderPrompt = setup.newFolderPrompt;
-        this.deleteFolderConfirmationMessage = setup.deleteFolderConfirmationMessage;
-        this.deleteFileConfirmationMessage = setup.deleteFileConfirmationMessage;
-        this.targetElementId = setup.targetElementId;
-        this.contentsUrl = setup.contentsUrl;
-        this.onInsertUrl = setup.onInsertUrl;
-        this.newFolderUrl = setup.newFolderUrl;
-        this.deleteFolderUrl = setup.deleteFolderUrl;
-        this.deleteFilesUrl = setup.deleteFilesUrl;
-        this.headerText = setup.headerText;
-    },
-    setTree: function (tree) {
-        this.tree = tree;
-        this.currentNode = tree.getRootNode();
-    },
-
-    getTree: function (tree) {
-        return this.tree;
-    },
-
-    selectFolder: function (node, event) {
-        this.currentNode = node;
-        this.hideFileButtons();
-        this.activateBlock('contents');
-
-        if(node.id == 'root') {
-            this.hideElement('button_delete_folder');
-        } else {
-            this.showElement('button_delete_folder');
-        }
-
-        this.updateHeader(this.currentNode);
-        this.drawBreadcrumbs(this.currentNode);
-
-        this.showElement('loading-mask');
-        new Ajax.Request(this.contentsUrl, {
-            parameters: {node: this.currentNode.id},
-            evalJS: true,
-            onSuccess: function(transport) {
-                try {
-                    this.currentNode.select();
-                    this.onAjaxSuccess(transport);
-                    this.hideElement('loading-mask');
-                    if ($('contents') != undefined) {
-                        $('contents').update(transport.responseText);
-                        $$('div.filecnt').each(function(s) {
-                            Event.observe(s.id, 'click', this.selectFile.bind(this));
-                            Event.observe(s.id, 'dblclick', this.insert.bind(this));
-                        }.bind(this));
-                    }
-                } catch(e) {
-                    alert(e.message);
+            return max + 10;
+        },
+        openDialog: function(url, width, height, title, options) {
+            var windowId = this.windowId,
+                content = '<div class="popup-window magento_message" id="' + windowId + '"></div>';
+            $(content).dialog($.extend({
+                autoOpen: true,
+                title: title || 'Insert File...',
+                modal: true,
+                resizable: false,
+                width: width || 1000,
+                height: height || 600,
+                zIndex: this.getMaxZIndex(),
+                open: function() {
+                    $.ajax({
+                        url: url,
+                        type: 'get',
+                        context: $(this),
+                        showLoader: true
+                    }).done(function(data) {
+                        this.html(data).trigger('contentUpdated');
+                    });
+                },
+                close: function(event, ui) {
+                    $(this).dialog('destroy');
+                    $('#' + windowId).remove();
                 }
-            }.bind(this)
-        });
-    },
-
-    selectFolderById: function (nodeId) {
-        var node = this.tree.getNodeById(nodeId);
-        if (node.id) {
-            this.selectFolder(node);
+            }, options));
+        },
+        closeDialog: function(win) {
+            win = win || window;
+            win.jQuery('#' + this.windowId).dialog('close');
         }
-    },
+    };
 
-    selectFile: function (event) {
-        var div = Event.findElement(event, 'DIV');
-        $$('div.filecnt.selected[id!="' + div.id + '"]').each(function(e) {
-            e.removeClassName('selected');
-        })
-        div.toggleClassName('selected');
-        if(div.hasClassName('selected')) {
-            this.showFileButtons();
-        } else {
-            this.hideFileButtons();
-        }
-    },
-
-    showFileButtons: function () {
-        this.showElement('button_delete_files');
-        this.showElement('button_insert_files');
-    },
-
-    hideFileButtons: function () {
-        this.hideElement('button_delete_files');
-        this.hideElement('button_insert_files');
-    },
-
-    handleUploadComplete: function(files) {
-        $$('div[class*="file-row complete"]').each(function(e) {
-            $(e.id).remove();
-        });
-        this.selectFolder(this.currentNode);
-    },
-
-    insert: function(event) {
-        var div;
-        if (event != undefined) {
-            div = Event.findElement(event, 'DIV');
-        } else {
-            $$('div.selected').each(function (e) {
-                div = $(e.id);
+    $.widget("mage.mediabrowser", {
+        eventPrefix: "mediabrowser",
+        options: {
+            targetElementId: null,
+            contentsUrl: null,
+            onInsertUrl: null,
+            newFolderUrl: null,
+            deleteFolderUrl: null,
+            deleteFilesUrl: null,
+            headerText: null,
+            tree: null,
+            currentNode: null,
+            storeId: null,
+            showBreadcrumbs: null,
+            hidden: 'no-display'
+        },
+        /**
+         * Proxy creation
+         * @protected
+         */
+        _create: function() {
+            this._on({
+                'click [data-row=file]': 'selectFile',
+                'dblclick [data-row=file]': 'insert',
+                'click #new_folder': 'newFolder',
+                'click #delete_folder': 'deleteFolder',
+                'click #delete_files': 'deleteFiles',
+                'click #insert_files': 'insertSelectedFiles',
+                'fileuploaddone': '_uploadDone',
+                'click [data-row=breadcrumb]': 'selectFolder'
             });
-        }
-        if ($(div.id) == undefined) {
-            return false;
-        }
-        var targetEl = this.getTargetElement();
-        if (! targetEl) {
-            alert("Target element not found for content update");
-            jQuery('#modal_dialog_message').dialog('close');
-            return;
-        }
+            this.activeNode = null;
+            //tree dont use event bubbling
+            this.tree = this.element.find('[data-role=tree]');
+            this.tree.on("select_node.jstree", $.proxy(this._selectNode, this));
+        },
 
-        var params = {filename:div.id, node:this.currentNode.id, store:this.storeId};
+        _selectNode: function(event, data) {
+            var node = data.rslt.obj.data('node');
+            this.activeNode = node;
+            this.element.find('#delete_files, #insert_files').toggleClass(this.options.hidden, true);
+            this.element.find('#contents').toggleClass(this.options.hidden, false);
+            this.element.find('#delete_folder').toggleClass(this.options.hidden, node.id == 'root');
+            this.element.find('#content_header_text').html(node.id == 'root' ? this.headerText : node.text);
 
-        if (targetEl.tagName.toLowerCase() == 'textarea') {
-            params.as_is = 1;
-        }
+            this.drawBreadcrumbs(data);
+            this.loadFileList(node);
+        },
 
-        new Ajax.Request(this.onInsertUrl, {
-            parameters: params,
-            onSuccess: function(transport) {
-                try {
-                    this.onAjaxSuccess(transport);
-                    if (this.getMediaBrowserOpener()) {
-                        self.blur();
-                    }
-                    jQuery('#modal_dialog_message').dialog('close');
-                    if (targetEl.tagName.toLowerCase() == 'input') {
-                        targetEl.value = transport.responseText;
-                    } else {
-                        updateElementAtCursor(targetEl, transport.responseText);
-                        if (varienGlobalEvents) {
-                            varienGlobalEvents.fireEvent('tinymceChange');
-                        }
-                    }
-                } catch (e) {
-                    alert(e.message);
+        reload : function() {
+            return this.loadFileList(this.activeNode);
+        },
+
+        insertAtCursor: function(element, value) {
+            if ('selection' in document) {
+                //For browsers like Internet Explorer
+                element.focus();
+                sel = document.selection.createRange();
+                sel.text = value;
+                element.focus();
+            } else if (element.selectionStart || element.selectionStart == '0') {
+                //For browsers like Firefox and Webkit based
+                var startPos = element.selectionStart;
+                var endPos = element.selectionEnd;
+                var scrollTop = element.scrollTop;
+                element.value = element.value.substring(0, startPos) + value + element.value.substring(startPos, endPos)
+                    + element.value.substring(endPos, element.value.length);
+                element.focus();
+                element.selectionStart = startPos + value.length;
+                element.selectionEnd = ((startPos + value.length) + element.value.substring(startPos, endPos).length);
+                element.scrollTop = scrollTop;
+            } else {
+                element.value += value;
+                element.focus();
+            }
+        },
+
+        loadFileList: function(node) {
+            var contentBlock = this.element.find('#contents');
+            return $.ajax({
+                url: this.options.contentsUrl,
+                type: 'GET',
+                dataType: 'html',
+                data: {
+                    form_key: FORM_KEY,
+                    node: node.id
+                },
+                context: contentBlock,
+                showLoader: true
+            }).done(function(data) {
+                contentBlock.html(data).trigger('contentUpdated');
+            });
+        },
+
+        selectFolder: function(event) {
+            this.element.find('[data-id="'+ $(event.currentTarget).data('node').id +'"]>a').click();
+        },
+
+        insertSelectedFiles: function(event) {
+            this.element.find('[data-row=file].selected').trigger('dblclick');
+        },
+        
+        selectFile: function(event) {
+            var fileRow = $(event.currentTarget);
+            fileRow.toggleClass('selected');
+            this.element.find('[data-row=file]').not(fileRow).removeClass('selected');
+            this.element.find('#delete_files, #insert_files')
+                .toggleClass(this.options.hidden, !fileRow.is('.selected'));
+            fileRow.trigger('selectfile');
+        },
+
+        _uploadDone: function(event) {
+            this.element.find('.file-row').remove();
+            this.reload();
+        },
+
+        insert: function(event) {
+            var fileRow = $(event.currentTarget);
+
+            if (!fileRow.prop('id')) {
+                return false;
+            }
+            var targetEl = this.getTargetElement();
+
+            if (!targetEl.length) {
+                MediabrowserUtility.closeDialog();
+                throw "Target element not found for content update";
+            }
+
+            $.ajax({
+                url: this.options.onInsertUrl,
+                data: {
+                    filename: fileRow.attr('id'),
+                    node: this.activeNode.id,
+                    store: this.options.storeId,
+                    as_is: targetEl.is('textarea') ? 1 : 0,
+                    form_key: FORM_KEY
+                },
+                context: this.element,
+                showLoader: true
+            }).done($.proxy(function(data) {
+                if (targetEl.is('textarea')) {
+                    this.insertAtCursor(targetEl.get(0), data);
+                } else {
+                    targetEl.val(data).trigger('change');
                 }
-            }.bind(this)
-        });
-    },
+                MediabrowserUtility.closeDialog();
+                targetEl.focus();
+            }, this));
+        },
 
-    /**
-     * Find document target element in next order:
-     *  in acive file browser opener:
-     *  - input field with ID: "src" in opener window
-     *  - input field with ID: "href" in opener window
-     *  in document:
-     *  - element with target ID
-     *
-     * return HTMLelement | null
-     */
-    getTargetElement: function() {
-        if (typeof(tinyMCE) != 'undefined' && tinyMCE.get(this.targetElementId)) {
-            if ((opener = this.getMediaBrowserOpener())) {
-                var targetElementId = tinyMceEditors.get(this.targetElementId).getMediaBrowserTargetElementId();
-                return opener.document.getElementById(targetElementId);
+        /**
+         * Find document target element in next order:
+         *  in acive file browser opener:
+         *  - input field with ID: "src" in opener window
+         *  - input field with ID: "href" in opener window
+         *  in document:
+         *  - element with target ID
+         *
+         * return HTMLelement | null
+         */
+        getTargetElement: function() {
+            if (typeof(tinyMCE) != 'undefined' && tinyMCE.get(this.options.targetElementId)) {
+                var opener = this.getMediaBrowserOpener() || window;
+                var targetElementId = tinyMceEditors.get(this.options.targetElementId).getMediaBrowserTargetElementId();
+                return jQuery(opener.document.getElementById(targetElementId));
+            } else {
+                return $('#' + this.options.targetElementId);
+            }
+        },
+
+        /**
+         * Return opener Window object if it exists, not closed and editor is active
+         *
+         * return object | null
+         */
+        getMediaBrowserOpener: function() {
+            if (typeof(tinyMCE) != 'undefined'
+                && tinyMCE.get(this.options.targetElementId)
+                && typeof(tinyMceEditors) != 'undefined'
+                && !tinyMceEditors.get(this.options.targetElementId).getMediaBrowserOpener().closed) {
+                return tinyMceEditors.get(this.options.targetElementId).getMediaBrowserOpener();
             } else {
                 return null;
             }
-        } else {
-            return document.getElementById(this.targetElementId);
-        }
-    },
+        },
 
-    /**
-     * Return opener Window object if it exists, not closed and editor is active
-     *
-     * return object | null
-     */
-    getMediaBrowserOpener: function() {
-         if (typeof(tinyMCE) != 'undefined'
-             && tinyMCE.get(this.targetElementId)
-             && typeof(tinyMceEditors) != 'undefined'
-             && ! tinyMceEditors.get(this.targetElementId).getMediaBrowserOpener().closed) {
-             return tinyMceEditors.get(this.targetElementId).getMediaBrowserOpener();
-         } else {
-             return null;
-         }
-    },
-
-    newFolder: function() {
-        var folderName = prompt(this.newFolderPrompt);
-        if (!folderName) {
-            return false;
-        }
-        new Ajax.Request(this.newFolderUrl, {
-            parameters: {name: folderName},
-            onSuccess: function(transport) {
-                try {
-                    this.onAjaxSuccess(transport);
-                    if (transport.responseText.isJSON()) {
-                        var response = transport.responseText.evalJSON()
-                        var newNode = new Ext.tree.AsyncTreeNode({
-                            text: response.short_name,
-                            draggable:false,
-                            id:response.id,
-                            expanded: true
-                        });
-                        var child = this.currentNode.appendChild(newNode);
-                        this.tree.expandPath(child.getPath(), '', function(success, node) {
-                            this.selectFolder(node);
-                        }.bind(this));
-                    }
-                } catch (e) {
-                    alert(e.message);
-                }
-            }.bind(this)
-        })
-    },
-
-    deleteFolder: function() {
-        if (!confirm(this.deleteFolderConfirmationMessage)) {
-            return false;
-        }
-        new Ajax.Request(this.deleteFolderUrl, {
-            onSuccess: function(transport) {
-                try {
-                    this.onAjaxSuccess(transport);
-                    var parent = this.currentNode.parentNode;
-                    parent.removeChild(this.currentNode);
-                    this.selectFolder(parent);
-                }
-                catch (e) {
-                    alert(e.message);
-                }
-            }.bind(this)
-        })
-    },
-
-    deleteFiles: function() {
-        if (!confirm(this.deleteFileConfirmationMessage)) {
-            return false;
-        }
-        var ids = [];
-        var i = 0;
-        $$('div.selected').each(function (e) {
-            ids[i] = e.id;
-            i++;
-        });
-        new Ajax.Request(this.deleteFilesUrl, {
-            parameters: {files: Object.toJSON(ids)},
-            onSuccess: function(transport) {
-                try {
-                    this.onAjaxSuccess(transport);
-                    this.selectFolder(this.currentNode);
-                } catch(e) {
-                    alert(e.message);
-                }
-            }.bind(this)
-        });
-    },
-
-    drawBreadcrumbs: function(node) {
-        if ($('breadcrumbs') != undefined) {
-            $('breadcrumbs').remove();
-        }
-        if (node.id == 'root') {
-            return;
-        }
-        var path = node.getPath().split('/');
-        var breadcrumbs = '';
-        for(var i = 0, length = path.length; i < length; i++) {
-            if (path[i] == '') {
-                continue;
+        newFolder: function() {
+            var folderName = prompt(this.options.newFolderPrompt, '');
+            if (!folderName) {
+                return false;
             }
-            var currNode = this.tree.getNodeById(path[i]);
-            if (currNode.id) {
-                breadcrumbs += '<li>';
-                breadcrumbs += '<a href="#" onclick="MediabrowserInstance.selectFolderById(\'' + currNode.id + '\');">' + currNode.text + '</a>';
-                if(i < (length - 1)) {
-                    breadcrumbs += ' <span>/</span>';
+            return $.ajax({
+                url: this.options.newFolderUrl,
+                dataType: 'json',
+                data: {
+                    name: folderName,
+                    node: this.activeNode.id,
+                    store: this.options.storeId,
+                    form_key: FORM_KEY
+                },
+                context: this.element,
+                showLoader: true
+            }).done($.proxy(function(data) {
+                if (data.error) {
+                    window.alert(data.message);
+                } else {
+                    this.tree.jstree('refresh',  this.element.find('[data-id="' + this.activeNode.id + '"]'));
                 }
-                breadcrumbs += '</li>';
+            }, this));
+        },
+
+        deleteFolder: function() {
+            if (!confirm(this.options.deleteFolderConfirmationMessage)) {
+                return false;
             }
-        }
 
-        if (breadcrumbs != '') {
-            breadcrumbs = '<ul class="breadcrumbs" id="breadcrumbs">' + breadcrumbs + '</ul>';
-            $('content_header').insert({after: breadcrumbs});
-        }
-    },
+            $.ajax({
+                url: this.options.deleteFolderUrl,
+                dataType: 'json',
+                data: {
+                    node: this.activeNode.id,
+                    store: this.options.storeId,
+                    form_key: FORM_KEY
+                },
+                context: this.element,
+                showLoader: true
+            }).done($.proxy(function(data) {
+                this.tree.jstree('refresh', this.activeNode.id);
+            }, this));
+        },
 
-    updateHeader: function(node) {
-        var header = (node.id == 'root' ? this.headerText : node.text);
-        if ($('content_header_text') != undefined) {
-            $('content_header_text').innerHTML = header;
-        }
-    },
-
-    activateBlock: function(id) {
-        //$$('div [id^=contents]').each(this.hideElement);
-        this.showElement(id);
-    },
-
-    hideElement: function(id) {
-        if ($(id) != undefined) {
-            $(id).addClassName('no-display');
-            $(id).hide();
-        }
-    },
-
-    showElement: function(id) {
-        if ($(id) != undefined) {
-            $(id).removeClassName('no-display');
-            $(id).show();
-        }
-    },
-
-    onAjaxSuccess: function(transport) {
-        if (transport.responseText.isJSON()) {
-            var response = transport.responseText.evalJSON()
-            if (response.error) {
-                throw response;
-            } else if (response.ajaxExpired && response.ajaxRedirect) {
-                setLocation(response.ajaxRedirect);
+        deleteFiles: function() {
+            if (!confirm(this.options.deleteFileConfirmationMessage)) {
+                return false;
             }
+            var selectedFiles = this.element.find('[data-row=file].selected');
+            var ids = selectedFiles.map(function(index, file) {
+                return $(this).attr('id');
+            }).toArray();
+
+            $.ajax({
+                url: this.options.deleteFilesUrl,
+                data: {
+                    files: ids,
+                    store: this.options.storeId,
+                    form_key: FORM_KEY
+                },
+                context: this.element,
+                showLoader: true
+            }).done($.proxy(function(data) {
+                this.reload();
+            }, this));
+        },
+
+        drawBreadcrumbs: function(data) {
+            if (this.element.find('#breadcrumbs').length) {
+                this.element.find('#breadcrumbs').remove();
+            }
+            var node = data.rslt.obj.data('node');
+            if (node.id == 'root') {
+                return;
+            }
+            var breadcrumbs = $('<ul class="breadcrumbs" id="breadcrumbs" />');
+            $(data.rslt.obj.parents('[data-id]').get().reverse()).add(data.rslt.obj).each(function(index, element){
+                var node = $(element).data('node');
+                if (index > 0) {
+                    breadcrumbs.append($('<li>\/</li>'));
+                }
+                breadcrumbs.append($('<li />').data('node', node).attr('data-row', 'breadcrumb').text(node.text));
+
+            });
+
+            breadcrumbs.insertAfter(this.element.find('#content_header'))
         }
-    }
-};
+    });
+})(jQuery);

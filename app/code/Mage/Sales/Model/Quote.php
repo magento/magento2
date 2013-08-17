@@ -905,7 +905,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
          */
         if ($item->isNominal() && $this->hasItems() || $this->hasNominalItems()) {
             Mage::throwException(
-                Mage::helper('Mage_Sales_Helper_Data')->__('Nominal item can be purchased standalone only. To proceed please remove other items from the quote.')
+                Mage::helper('Mage_Sales_Helper_Data')->__('Sorry, but items with payment agreements must be ordered one at a time To continue, please remove or buy the other items in your cart, then order this item by itself.')
             );
         }
 
@@ -935,7 +935,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
             $request = new Varien_Object(array('qty'=>$request));
         }
         if (!($request instanceof Varien_Object)) {
-            Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('Invalid request for adding product to quote.'));
+            Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('We found an invalid request for adding product to quote.'));
         }
 
         $cartCandidates = $product->getTypeInstance()
@@ -1084,7 +1084,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
     {
         $item = $this->getItemById($itemId);
         if (!$item) {
-            Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('Wrong quote item id to update configuration.'));
+            Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('This is the wrong quote item id to update configuration.'));
         }
         $productId = $item->getProduct()->getId();
 
@@ -1897,7 +1897,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
     /**
      * Return quote checkout method code
      *
-     * @param boolean $originalMethod if true return defined method from begining
+     * @param boolean $originalMethod if true return defined method from beginning
      * @return string
      */
     public function getCheckoutMethod($originalMethod = false)

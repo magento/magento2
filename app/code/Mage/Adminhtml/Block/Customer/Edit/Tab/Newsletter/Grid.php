@@ -74,7 +74,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Newsletter_Grid extends Mage_Adminh
         ));
 
         $this->addColumn('start_at', array(
-            'header'    =>  Mage::helper('Mage_Customer_Helper_Data')->__('Newsletter Start'),
+            'header'    =>  Mage::helper('Mage_Customer_Helper_Data')->__('Start date'),
             'type'      =>  'datetime',
             'align'     =>  'center',
             'index'     =>  'queue_start_at',
@@ -82,7 +82,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Newsletter_Grid extends Mage_Adminh
         ));
 
         $this->addColumn('finish_at', array(
-            'header'    =>  Mage::helper('Mage_Customer_Helper_Data')->__('Newsletter Finish'),
+            'header'    =>  Mage::helper('Mage_Customer_Helper_Data')->__('End Date'),
             'type'      =>  'datetime',
             'align'     =>  'center',
             'index'     =>  'queue_finish_at',
@@ -91,7 +91,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Newsletter_Grid extends Mage_Adminh
         ));
 
         $this->addColumn('letter_sent_at', array(
-            'header'    =>  Mage::helper('Mage_Customer_Helper_Data')->__('Newsletter Received'),
+            'header'    =>  Mage::helper('Mage_Customer_Helper_Data')->__('Receive Date'),
             'type'      =>  'datetime',
             'align'     =>  'center',
             'index'     =>  'letter_sent_at',

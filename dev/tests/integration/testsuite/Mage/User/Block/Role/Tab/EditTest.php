@@ -25,6 +25,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * @magentoAppArea adminhtml
+ */
 class Mage_User_Block_Role_Tab_EditTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -34,8 +37,6 @@ class Mage_User_Block_Role_Tab_EditTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        Mage::getConfig()->setCurrentAreaCode('adminhtml');
-
         $roleAdmin = Mage::getModel('Mage_User_Model_Role');
         $roleAdmin->load(Magento_Test_Bootstrap::ADMIN_ROLE_NAME, 'role_name');
         Mage::app()->getRequest()->setParam('rid', $roleAdmin->getId());
@@ -47,17 +48,14 @@ class Mage_User_Block_Role_Tab_EditTest extends PHPUnit_Framework_TestCase
     {
         $this->assertNotEmpty($this->_block->getSelectedResources());
         $this->assertContains(
-            Mage_Backend_Model_Acl_Config::ACL_RESOURCE_ALL,
+            'Mage_Adminhtml::all',
             $this->_block->getSelectedResources()
         );
     }
 
-    public function testGetResTreeJson()
+    public function testGetTree()
     {
-        $encodedTree = $this->_block->getResTreeJson();
+        $encodedTree = $this->_block->getTree();
         $this->assertNotEmpty($encodedTree);
-
-        $decodedTree = Mage::helper('Mage_Core_Helper_Data')->jsonDecode($encodedTree);
-        $this->assertNotEmpty($decodedTree);
     }
 }

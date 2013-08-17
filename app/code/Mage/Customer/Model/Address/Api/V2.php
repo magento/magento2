@@ -58,14 +58,6 @@ class Mage_Customer_Model_Address_Api_V2 extends Mage_Customer_Model_Address_Api
             }
         }
 
-        if (isset($addressData->is_default_billing)) {
-            $address->setIsDefaultBilling($addressData->is_default_billing);
-        }
-
-        if (isset($addressData->is_default_shipping)) {
-            $address->setIsDefaultShipping($addressData->is_default_shipping);
-        }
-
         $address->setCustomerId($customer->getId());
 
         $valid = $address->validate();
@@ -76,6 +68,7 @@ class Mage_Customer_Model_Address_Api_V2 extends Mage_Customer_Model_Address_Api
 
         try {
             $address->save();
+            $this->_saveDefaultAddresses($addressData, $address);
         } catch (Mage_Core_Exception $e) {
             $this->_fault('data_invalid', $e->getMessage());
         }
@@ -126,8 +119,8 @@ class Mage_Customer_Model_Address_Api_V2 extends Mage_Customer_Model_Address_Api
      */
     public function update($addressId, $addressData)
     {
-        $address = Mage::getModel('Mage_Customer_Model_Address')
-            ->load($addressId);
+        /** @var $address Mage_Customer_Model_Address */
+        $address = Mage::getModel('Mage_Customer_Model_Address')->load($addressId);
 
         if (!$address->getId()) {
             $this->_fault('not_exists');
@@ -139,14 +132,6 @@ class Mage_Customer_Model_Address_Api_V2 extends Mage_Customer_Model_Address_Api
             }
         }
 
-        if (isset($addressData->is_default_billing)) {
-            $address->setIsDefaultBilling($addressData->is_default_billing);
-        }
-
-        if (isset($addressData->is_default_shipping)) {
-            $address->setIsDefaultShipping($addressData->is_default_shipping);
-        }
-
         $valid = $address->validate();
         if (is_array($valid)) {
             $this->_fault('data_invalid', implode("\n", $valid));
@@ -154,10 +139,39 @@ class Mage_Customer_Model_Address_Api_V2 extends Mage_Customer_Model_Address_Api
 
         try {
             $address->save();
+            $this->_saveDefaultAddresses($addressData, $address);
         } catch (Mage_Core_Exception $e) {
             $this->_fault('data_invalid', $e->getMessage());
         }
 
         return true;
+    }
+
+    /**
+     * Process default billing and shipping addresses.
+     *
+     * @param object $addressData
+     * @param Mage_Customer_Model_Address $address
+     */
+    protected function _saveDefaultAddresses($addressData, $address)
+    {
+        if (isset($addressData->is_default_billing) || isset($addressData->is_default_shipping)) {
+            $customer = $address->getCustomer();
+            if (isset($addressData->is_default_billing)) {
+                if ($addressData->is_default_billing) {
+                    $customer->setDefaultBilling($address->getId());
+                } else {
+                    $customer->setDefaultBilling(null);
+                }
+            }
+            if (isset($addressData->is_default_shipping)) {
+                if ($addressData->is_default_shipping) {
+                    $customer->setDefaultShipping($address->getId());
+                } else {
+                    $customer->setDefaultShipping(null);
+                }
+            }
+            $customer->save();
+        }
     }
 } // Class Mage_Customer_Model_Address_Api End

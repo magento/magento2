@@ -70,7 +70,7 @@ class Mage_Review_ProductController extends Mage_Core_Controller_Front_Action
      */
     protected function _initProduct()
     {
-        Mage::dispatchEvent('review_controller_product_init_before', array('controller_action'=>$this));
+        $this->_eventManager->dispatch('review_controller_product_init_before', array('controller_action'=>$this));
         $categoryId = (int) $this->getRequest()->getParam('category', false);
         $productId  = (int) $this->getRequest()->getParam('id');
 
@@ -85,8 +85,8 @@ class Mage_Review_ProductController extends Mage_Core_Controller_Front_Action
         }
 
         try {
-            Mage::dispatchEvent('review_controller_product_init', array('product'=>$product));
-            Mage::dispatchEvent('review_controller_product_init_after', array(
+            $this->_eventManager->dispatch('review_controller_product_init', array('product'=>$product));
+            $this->_eventManager->dispatch('review_controller_product_init_after', array(
                 'product'           => $product,
                 'controller_action' => $this
             ));
@@ -195,7 +195,7 @@ class Mage_Review_ProductController extends Mage_Core_Controller_Front_Action
                 }
                 catch (Exception $e) {
                     $session->setFormData($data);
-                    $session->addError($this->__('Unable to post the review.'));
+                    $session->addError($this->__('We cannot post the review.'));
                 }
             }
             else {
@@ -206,7 +206,7 @@ class Mage_Review_ProductController extends Mage_Core_Controller_Front_Action
                     }
                 }
                 else {
-                    $session->addError($this->__('Unable to post the review.'));
+                    $session->addError($this->__('We cannot post the review.'));
                 }
             }
         }

@@ -243,16 +243,6 @@
                     <xsd:element name="gift_cards_invoiced" type="xsd:string" minOccurs="0" />
                     <xsd:element name="base_gift_cards_refunded" type="xsd:string" minOccurs="0" />
                     <xsd:element name="gift_cards_refunded" type="xsd:string" minOccurs="0" />
-                    <xsd:element name="reward_points_balance" type="xsd:string" minOccurs="0" />
-                    <xsd:element name="base_reward_currency_amount" type="xsd:string" minOccurs="0" />
-                    <xsd:element name="reward_currency_amount" type="xsd:string" minOccurs="0" />
-                    <xsd:element name="base_rwrd_crrncy_amt_invoiced" type="xsd:string" minOccurs="0" />
-                    <xsd:element name="rwrd_currency_amount_invoiced" type="xsd:string" minOccurs="0" />
-                    <xsd:element name="base_rwrd_crrncy_amnt_refnded" type="xsd:string" minOccurs="0" />
-                    <xsd:element name="rwrd_crrncy_amnt_refunded" type="xsd:string" minOccurs="0" />
-                    <xsd:element name="reward_points_balance_refunded" type="xsd:string" minOccurs="0" />
-                    <xsd:element name="reward_points_balance_refund" type="xsd:string" minOccurs="0" />
-                    <xsd:element name="reward_salesrule_points" type="xsd:string" minOccurs="0" />
                     <xsd:element name="firstname" type="xsd:string" minOccurs="0" />
                     <xsd:element name="lastname" type="xsd:string" minOccurs="0" />
                     <xsd:element name="telephone" type="xsd:string" minOccurs="0" />
@@ -456,7 +446,7 @@
                     <xsd:element name="is_active" type="xsd:string" minOccurs="0" />
                     <xsd:element name="carrier_code" type="xsd:string" minOccurs="0" />
                     <xsd:element name="title" type="xsd:string" minOccurs="0" />
-                    <xsd:element name="number" type="xsd:string" minOccurs="0" />
+                    <xsd:element name="track_number" type="xsd:string" minOccurs="0" />
                     <xsd:element name="order_id" type="xsd:string" minOccurs="0" />
                     <xsd:element name="track_id" type="xsd:string" minOccurs="0" />
                 </xsd:sequence>
@@ -651,10 +641,6 @@
                     <xsd:element name="gw_items_tax_amount" type="xsd:string" minOccurs="0" maxOccurs="1" />
                     <xsd:element name="gw_card_base_tax_amount" type="xsd:string" minOccurs="0" maxOccurs="1" />
                     <xsd:element name="gw_card_tax_amount" type="xsd:string" minOccurs="0" maxOccurs="1" />
-                    <xsd:element name="base_reward_currency_amount" type="xsd:string" minOccurs="0" maxOccurs="1" />
-                    <xsd:element name="reward_currency_amount" type="xsd:string" minOccurs="0" maxOccurs="1" />
-                    <xsd:element name="reward_points_balance" type="xsd:string" minOccurs="0" maxOccurs="1" />
-                    <xsd:element name="reward_points_balance_refund" type="xsd:string" minOccurs="0" maxOccurs="1" />
                     <xsd:element name="creditmemo_id" type="xsd:string" minOccurs="0" maxOccurs="1" />
                     <xsd:element name="items" type="typens:salesOrderCreditmemoItemEntityArray" minOccurs="0" maxOccurs="1" />
                     <xsd:element name="comments" type="typens:salesOrderCreditmemoCommentEntityArray" minOccurs="0" maxOccurs="1" />
@@ -1102,7 +1088,7 @@
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:element minOccurs="1" maxOccurs="1" name="sessionId" type="xsd:string" />
-                        <xsd:element minOccurs="1" maxOccurs="1" name="creditmemoIncrementId" type="xsd:string" />
+                        <xsd:element minOccurs="1" maxOccurs="1" name="orderIncrementId" type="xsd:string" />
                         <xsd:element minOccurs="0" maxOccurs="1" name="creditmemoData" type="typens:salesOrderCreditmemoData" />
                         <xsd:element minOccurs="0" maxOccurs="1" name="comment" type="xsd:string" />
                         <xsd:element minOccurs="0" maxOccurs="1" name="notifyCustomer" type="xsd:int" />

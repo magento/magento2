@@ -182,7 +182,7 @@ class Mage_Media_Model_File_Image extends Mage_Core_Model_Resource_Abstract
         }
 
         if(!$result) {
-            Mage::throwException(Mage::helper('Mage_Media_Helper_Data')->__('An error occurred while creating the image.'));
+            Mage::throwException(Mage::helper('Mage_Media_Helper_Data')->__('Something went wrong while creating the image.'));
         }
 
         return $this;

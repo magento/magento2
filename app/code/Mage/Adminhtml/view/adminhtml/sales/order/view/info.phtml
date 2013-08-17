@@ -151,7 +151,7 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
         <?php /* Billing Address */?>
         <div class="fieldset-wrapper">
             <div class="fieldset-wrapper-title">
-                <?php if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::actions_edit')) : ?>
+                <?php if ($this->getAuthorization()->isAllowed('Mage_Sales::actions_edit')) : ?>
                 <div class="actions"><?php echo $this->getAddressEditLink($_order->getBillingAddress()); ?></div>
                 <?php endif; ?>
                 <span class="title"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Billing Address') ?></span>
@@ -164,7 +164,7 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
         <?php /* Shipping Address */ ?>
         <div class="fieldset-wrapper">
             <div class="fieldset-wrapper-title">
-                <?php if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::actions_edit')) : ?>
+                <?php if ($this->getAuthorization()->isAllowed('Mage_Sales::actions_edit')) : ?>
                 <div class="actions"><?php echo $this->getAddressEditLink($_order->getShippingAddress()); ?></div>
                 <?php endif; ?>
                 <span class="title"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Shipping Address') ?></span>

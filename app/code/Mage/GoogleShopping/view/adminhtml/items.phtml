@@ -28,20 +28,16 @@
 <?php echo $this->getCaptchaHtml() ?>
 
 <?php echo $this->getStoreSwitcherHtml() ?>
-<div class="entry-edit">
-    <div class="entry-edit-head">
-        <div style="float: right;"></div>
-        <h4 class="fieldset-legend"><?php echo $this->__('Google Content Items') ?></h4>
-    </div>
-    <?php echo $this->getChildHtml('item') ?>
+<div class="grid-title">
+    <span class="title"><?php echo $this->__('Google Content Items') ?></span>
 </div>
-<div class="entry-edit">
-    <div class="entry-edit-head">
-        <div style="float: right;"><?php echo $this->getAddButtonHtml() ?></div>
-        <h4 class="fieldset-legend"><?php echo $this->__('Available Products') ?></h4>
-    </div>
-    <?php echo $this->getChildHtml('product') ?>
+<?php echo $this->getChildHtml('item') ?>
+
+<div class="grid-title">
+    <div class="page-actions"><?php echo $this->getAddButtonHtml() ?></div>
+    <span class="title"><?php echo $this->__('Available Products') ?></span>
 </div>
+<?php echo $this->getChildHtml('product') ?>
 
 <script type="text/javascript">
 //<![CDATA[

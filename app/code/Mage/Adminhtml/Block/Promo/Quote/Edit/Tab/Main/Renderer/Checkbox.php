@@ -46,14 +46,19 @@ class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Main_Renderer_Checkbox
         $checkbox = new Varien_Data_Form_Element_Checkbox($element->getData());
         $checkbox->setForm($element->getForm());
 
-        $elementHtml = $checkbox->getElementHtml() . sprintf(
-            '<label for="%s"><b>%s</b></label><p class="note">%s</p>',
-            $element->getHtmlId(), $element->getLabel(), $element->getNote()
+        $elementHtml = sprintf(
+            '<div class="field no-label field-%s with-note">'
+                    . '<div class="control">'
+                        . '<div class="nested">'
+                            . '<div class="field choice"> %s'
+                                .'<label class="label" for="%s">%s</label>'
+                                . '<p class="note">%s</p>'
+                            . '</div>'
+                        . '</div>'
+                    . '</div>'
+                . '</div>',
+            $element->getHtmlId(), $checkbox->getElementHtml(), $element->getHtmlId(), $element->getLabel(), $element->getNote()
         );
-        $html  = '<td class="label">&nbsp;</td>';
-        $html .= '<td class="value">' . $elementHtml . '</td>';
-
-        return $html;
+        return $elementHtml;
     }
-
 }

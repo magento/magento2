@@ -100,6 +100,11 @@ final class Mage
     const EDITION_GO           = 'Go';
 
     /**
+     * Default timezone
+     */
+    const DEFAULT_TIMEZONE  = 'UTC';
+
+    /**
      * Registry collection
      *
      * @var array
@@ -165,7 +170,7 @@ final class Mage
     /**
      * Design object
      *
-     * @var Mage_Core_Model_Design_Package
+     * @var Mage_Core_Model_View_DesignInterface
      */
     protected static $_design;
 
@@ -218,7 +223,7 @@ final class Mage
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '44',
+            'number'    => '45',
         );
     }
 
@@ -444,12 +449,12 @@ final class Mage
     /**
      * Get design package singleton
      *
-     * @return Mage_Core_Model_Design_Package
+     * @return Mage_Core_Model_View_DesignInterface
      */
     public static function getDesign()
     {
         if (!self::$_design) {
-            self::$_design = self::getObjectManager()->get('Mage_Core_Model_Design_Package');
+            self::$_design = self::getObjectManager()->get('Mage_Core_Model_View_DesignInterface');
         }
         return self::$_design;
     }

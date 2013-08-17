@@ -94,10 +94,10 @@ abstract class Mage_Payment_Model_Billing_AgreementAbstract extends Mage_Core_Mo
     {
         $this->_errors = array();
         if (is_null($this->getPaymentMethodInstance()) || !$this->getPaymentMethodInstance()->getCode()) {
-            $this->_errors[] = Mage::helper('Mage_Payment_Helper_Data')->__('Payment method code is not set.');
+            $this->_errors[] = Mage::helper('Mage_Payment_Helper_Data')->__('The payment method code is not set.');
         }
         if (!$this->getReferenceId()) {
-            $this->_errors[] = Mage::helper('Mage_Payment_Helper_Data')->__('Reference ID is not set.');
+            $this->_errors[] = Mage::helper('Mage_Payment_Helper_Data')->__('The reference ID is not set.');
         }
         return empty($this->_errors);
     }

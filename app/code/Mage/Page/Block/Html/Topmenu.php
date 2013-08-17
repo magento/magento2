@@ -46,6 +46,16 @@ class Mage_Page_Block_Html_Topmenu extends Mage_Core_Block_Template
     public function _construct()
     {
         $this->_menu = new Varien_Data_Tree_Node(array(), 'root', new Varien_Data_Tree());
+
+        // enabling the cache for this topmenu to not expire until changes made in admin area
+        // this is to prevent the menu from being rebuild every request and to prevent new categories from showing up
+        // immediately
+        $this->addData(array(
+            'cache_lifetime'    => false,
+            'cache_tags'        => array(
+                Mage_Core_Model_Store_Group::CACHE_TAG
+            ),
+        ));
     }
 
     /**
@@ -55,7 +65,7 @@ class Mage_Page_Block_Html_Topmenu extends Mage_Core_Block_Template
      * @param string $childrenWrapClass
      * @return string
      */
-    public function getHtml($outermostClass = '', $childrenWrapClass = '')
+    public function getHtml($outermostClass = '', $childrenWrapClass = '', $limit = 0)
     {
         $this->_eventManager->dispatch('page_block_html_topmenu_gethtml_before', array(
             'menu' => $this->_menu
@@ -64,7 +74,7 @@ class Mage_Page_Block_Html_Topmenu extends Mage_Core_Block_Template
         $this->_menu->setOutermostClass($outermostClass);
         $this->_menu->setChildrenWrapClass($childrenWrapClass);
 
-        $html = $this->_getHtml($this->_menu, $childrenWrapClass);
+        $html = $this->_getHtml($this->_menu, $childrenWrapClass, $limit);
 
         $transportObject = new Varien_Object(array('html' => $html));
         $this->_eventManager->dispatch('page_block_html_topmenu_gethtml_after', array(
@@ -76,13 +86,106 @@ class Mage_Page_Block_Html_Topmenu extends Mage_Core_Block_Template
     }
 
     /**
+     * Count All Subnavigation Items
+     *
+     * @param Mage_Backend_Model_Menu $items
+     * @return int
+     */
+    protected function _countItems($items)
+    {
+        $total = $items->count();
+        foreach ($items as $item) {
+            /** @var $item Mage_Backend_Model_Menu_Item */
+            if ($item->hasChildren()) {
+                $total += $this->_countItems($item->getChildren());
+            }
+        }
+        return $total;
+    }
+
+    /**
+     * Building Array with Column Brake Stops
+     *
+     * @param Mage_Backend_Model_Menu $items
+     * @param int $limit
+     * @return array
+     * @todo: Add Depth Level limit, and better logic for columns
+     */
+    protected function _columnBrake($items, $limit)
+    {
+        $total = $this->_countItems($items);
+
+        if ($total <= $limit) {
+            return;
+        }
+        $result[] = array(
+                'total' => $total,
+                'max'   => (int)ceil($total / ceil($total / $limit))
+            );
+
+        $count = 0;
+        $firstCol = true;
+        foreach ($items as $item) {
+            $place = $this->_countItems($item->getChildren()) + 1;
+            $count += $place;
+            if ($place >= $limit) {
+                $colbrake = !$firstCol;
+                $count = 0;
+            } elseif ($count >= $limit) {
+                $colbrake = !$firstCol;
+                $count = $place;
+            } else {
+                $colbrake = false;
+            }
+            $result[] = array(
+                'place' => $place,
+                'colbrake' => $colbrake
+            );
+            $firstCol = false;
+        }
+        return $result;
+    }
+
+    /**
+     * Add sub menu HTML code for current menu item
+     *
+     * @param $menuItem Mage_Backend_Model_Menu_Item
+     * @param $level int
+     * @param $limit int
+     * @return string HTML code
+     */
+    protected function _addSubMenu($child, $childLevel, $childrenWrapClass, $limit)
+    {
+        $html = '';
+        if (!$child->hasChildren()) {
+            return $html;
+        }
+        if (!empty($childrenWrapClass)) {
+            $html .= '<div class="' . $childrenWrapClass . '">';
+        }
+        $colStops = null;
+        if ($childLevel == 0 && $limit) {
+            $colStops = $this->_columnBrake($child->getChildren(), $limit);
+        }
+        $html .= '<ul class="level' . $childLevel . '">';
+        $html .= $this->_getHtml($child, $childrenWrapClass, $limit, $colStops);
+        $html .= '</ul>';
+
+        if (!empty($childrenWrapClass)) {
+            $html .= '</div>';
+        }
+        return $html;
+    }
+
+
+    /**
      * Recursively generates top menu html from data that is specified in $menuTree
      *
      * @param Varien_Data_Tree_Node $menuTree
      * @param string $childrenWrapClass
      * @return string
      */
-    protected function _getHtml(Varien_Data_Tree_Node $menuTree, $childrenWrapClass)
+    protected function _getHtml(Varien_Data_Tree_Node $menuTree, $childrenWrapClass, $limit, $colBrakes = array())
     {
         $html = '';
 
@@ -91,6 +194,7 @@ class Mage_Page_Block_Html_Topmenu extends Mage_Core_Block_Template
         $childLevel = is_null($parentLevel) ? 0 : $parentLevel + 1;
 
         $counter = 1;
+        $itemPosition = 1;
         $childrenCount = $children->count();
 
         $parentPositionClass = $menuTree->getPositionClass();
@@ -111,25 +215,21 @@ class Mage_Page_Block_Html_Topmenu extends Mage_Core_Block_Template
                 $child->setClass($outermostClass);
             }
 
+            if (count($colBrakes) && $colBrakes[$counter]['colbrake']) {
+                $html .= '</ul></li><li class="column"><ul>';
+            }
+
             $html .= '<li ' . $this->_getRenderedMenuItemAttributes($child) . '>';
             $html .= '<a href="' . $child->getUrl() . '" ' . $outermostClassCode . '><span>'
-                . $this->escapeHtml($child->getName()) . '</span></a>';
-
-            if ($child->hasChildren()) {
-                if (!empty($childrenWrapClass)) {
-                    $html .= '<div class="' . $childrenWrapClass . '">';
-                }
-                $html .= '<ul class="level' . $childLevel . '">';
-                $html .= $this->_getHtml($child, $childrenWrapClass);
-                $html .= '</ul>';
-
-                if (!empty($childrenWrapClass)) {
-                    $html .= '</div>';
-                }
-            }
-            $html .= '</li>';
-
+                . $this->escapeHtml($child->getName()) . '</span></a>'
+                . $this->_addSubMenu($child, $childLevel, $childrenWrapClass, $limit)
+                . '</li>';
+            $itemPosition++;
             $counter++;
+        }
+
+        if (count($colBrakes) && $limit) {
+            $html = '<li class="column"><ul>' . $html . '</ul></li>';
         }
 
         return $html;

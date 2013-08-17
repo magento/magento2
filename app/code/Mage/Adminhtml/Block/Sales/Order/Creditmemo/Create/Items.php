@@ -53,7 +53,7 @@ class Mage_Adminhtml_Block_Sales_Order_Creditmemo_Create_Items extends Mage_Admi
             if ($this->getCreditmemo()->getInvoice() && $this->getCreditmemo()->getInvoice()->getTransactionId()) {
                 $this->addChild('submit_button', 'Mage_Adminhtml_Block_Widget_Button', array(
                     'label'     => Mage::helper('Mage_Sales_Helper_Data')->__('Refund'),
-                    'class'     => 'save submit-button',
+                    'class'     => 'save submit-button refund',
                     'onclick'   => 'disableElements(\'submit-button\');submitCreditMemo()',
                 ));
             }

@@ -106,7 +106,7 @@ class Mage_Api_Model_Server
             $adapterModel = Mage::getModel((string) $adapters[$adapterCode]->model);
 
             if (!($adapterModel instanceof Mage_Api_Model_Server_Adapter_Soap)) {
-                Mage::throwException(Mage::helper('Mage_Api_Helper_Data')->__('Invalid webservice adapter specified.'));
+                Mage::throwException(Mage::helper('Mage_Api_Helper_Data')->__('Please correct the webservice adapter specified.'));
             }
             $this->_adapter = $adapterModel;
             $this->_api     = $adapterCode;
@@ -118,13 +118,13 @@ class Mage_Api_Model_Server
             $handlers = $helper->getHandlers();
 
             if (!isset($handlers->$handler)) {
-                Mage::throwException(Mage::helper('Mage_Api_Helper_Data')->__('Invalid webservice handler specified.'));
+                Mage::throwException(Mage::helper('Mage_Api_Helper_Data')->__('Please correct the webservice handler specified.'));
             }
-            $handlerClassName = Mage::getConfig()->getModelClassName((string) $handlers->$handler->model);
+            $handlerClassName = (string) $handlers->$handler->model;
 
             $this->_adapter->setHandler($handlerClassName);
         } else {
-            Mage::throwException(Mage::helper('Mage_Api_Helper_Data')->__('Invalid webservice adapter specified.'));
+            Mage::throwException(Mage::helper('Mage_Api_Helper_Data')->__('Please correct the webservice adapter specified.'));
         }
         return $this;
     }

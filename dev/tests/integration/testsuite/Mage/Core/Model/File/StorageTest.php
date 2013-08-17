@@ -34,7 +34,7 @@ class Mage_Core_Model_File_StorageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetScriptConfig()
     {
-        $config = Mage_Core_Model_File_Storage::getScriptConfig();
+        $config = Mage::getModel('Mage_Core_Model_File_Storage')->getScriptConfig();
         $this->assertInternalType('array', $config);
         $this->assertArrayHasKey('media_directory', $config);
         $this->assertArrayHasKey('allowed_resources', $config);

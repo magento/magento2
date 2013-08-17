@@ -30,19 +30,19 @@
 class Mage_Core_Model_Theme_Registration
 {
     /**
+     * @var Mage_Core_Model_Resource_Theme_CollectionFactory
+     */
+    protected $_collectionFactory;
+
+    /**
      * Collection of themes in file-system
      *
      * @var Mage_Core_Model_Theme_Collection
      */
-    protected $_collection;
+    protected $_themeCollection;
 
     /**
-     * @var Mage_Core_Model_Theme
-     */
-    protected $_theme;
-
-    /**
-     * Allowed sequence relation by type
+     * Allowed sequence relation by type, array(parent theme, child theme)
      *
      * @var array
      */
@@ -62,14 +62,17 @@ class Mage_Core_Model_Theme_Registration
     );
 
     /**
-     * Init theme model
+     * Initialize dependencies
      *
-     * @param Mage_Core_Model_Theme $theme
+     * @param Mage_Core_Model_Resource_Theme_CollectionFactory $collectionFactory
+     * @param Mage_Core_Model_Theme_Collection $filesystemCollection
      */
-    public function __construct(Mage_Core_Model_Theme $theme)
-    {
-        $this->_theme = $theme;
-        $this->_collection = $this->_theme->getCollectionFromFilesystem();
+    public function __construct(
+        Mage_Core_Model_Resource_Theme_CollectionFactory $collectionFactory,
+        Mage_Core_Model_Theme_Collection $filesystemCollection
+    ) {
+        $this->_collectionFactory = $collectionFactory;
+        $this->_themeCollection = $filesystemCollection;
     }
 
     /**
@@ -82,16 +85,16 @@ class Mage_Core_Model_Theme_Registration
     public function register($baseDir = '', $pathPattern = '')
     {
         if (!empty($baseDir)) {
-            $this->_collection->setBaseDir($baseDir);
+            $this->_themeCollection->setBaseDir($baseDir);
         }
 
         if (empty($pathPattern)) {
-            $this->_collection->addDefaultPattern('*');
+            $this->_themeCollection->addDefaultPattern('*');
         } else {
-            $this->_collection->addTargetPattern($pathPattern);
+            $this->_themeCollection->addTargetPattern($pathPattern);
         }
 
-        foreach ($this->_collection as $theme) {
+        foreach ($this->_themeCollection as $theme) {
             $this->_registerThemeRecursively($theme);
         }
 
@@ -132,10 +135,32 @@ class Mage_Core_Model_Theme_Registration
             $theme->setParentId($parentTheme->getId());
         }
 
-        $theme->getThemeImage()->savePreviewImage();
+        $this->_savePreviewImage($theme);
         $theme->setType(Mage_Core_Model_Theme::TYPE_PHYSICAL);
         $theme->save();
 
+        return $this;
+    }
+
+    /**
+     * Save preview image for theme
+     *
+     * @param Mage_Core_Model_Theme $theme
+     * @return $this
+     */
+    protected function _savePreviewImage(Mage_Core_Model_Theme $theme)
+    {
+        $themeDirectory = $theme->getData('theme_directory');
+        if (!$theme->getPreviewImage() || !$themeDirectory) {
+            return $this;
+        }
+        $currentWorkingDir = getcwd();
+        chdir($themeDirectory);
+        $imagePath = realpath($theme->getPreviewImage());
+        if (0 === strpos($imagePath, $themeDirectory)) {
+            $theme->getThemeImage()->createPreviewImage($imagePath);
+        }
+        chdir($currentWorkingDir);
         return $this;
     }
 
@@ -147,7 +172,7 @@ class Mage_Core_Model_Theme_Registration
      */
     public function getThemeFromDb($fullPath)
     {
-        return $this->_theme->getCollection()->getThemeByFullPath($fullPath);
+        return $this->_collectionFactory->create()->getThemeByFullPath($fullPath);
     }
 
     /**
@@ -157,10 +182,10 @@ class Mage_Core_Model_Theme_Registration
      */
     public function checkPhysicalThemes()
     {
-        $themes = $this->_theme->getCollection()->addFieldToFilter('type', Mage_Core_Model_Theme::TYPE_PHYSICAL);
+        $themes = $this->_collectionFactory->create()->addTypeFilter(Mage_Core_Model_Theme::TYPE_PHYSICAL);
         /** @var $theme Mage_Core_Model_Theme */
         foreach ($themes as $theme) {
-            if (!$theme->isPresentInFilesystem()) {
+            if (!$this->_themeCollection->hasTheme($theme)) {
                 $theme->setType(Mage_Core_Model_Theme::TYPE_VIRTUAL)->save();
             }
         }
@@ -176,7 +201,7 @@ class Mage_Core_Model_Theme_Registration
     {
         foreach ($this->_forbiddenRelations as $typesSequence) {
             list($parentType, $childType) = $typesSequence;
-            $collection = $this->_theme->getCollection();
+            $collection = $this->_collectionFactory->create();
             $collection->addTypeRelationFilter($parentType, $childType);
             /** @var $theme Mage_Core_Model_Theme */
             foreach ($collection as $theme) {

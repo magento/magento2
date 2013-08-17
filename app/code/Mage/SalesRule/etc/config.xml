@@ -104,6 +104,11 @@
                 </charset>
             </coupon>
         </salesrule>
+        <di>
+            <Mage_SalesRule_Model_Resource_Rule_Collection>
+                <shared>0</shared>
+            </Mage_SalesRule_Model_Resource_Rule_Collection>
+        </di>
     </global>
     <adminhtml>
         <translate>

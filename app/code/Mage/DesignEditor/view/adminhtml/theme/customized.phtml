@@ -33,15 +33,14 @@
 <li class="theme" id="theme-id-<?php echo $this->getTheme()->getId() ?>" data-widget-options="<?php echo $this->escapeHtml($this->getOptionsJson()); ?>">
     <div class="theme-content">
         <img class="theme-preview-image" src="<?php echo $this->getTheme()->getThemeImage()->getPreviewImageUrl() ?>" alt="<?php echo $themeTitle ?>"/>
-        <article class="theme-data">
-            <h4 class="theme-title" title="<?php echo $themeTitle ?>"><?php echo $themeTitle ?></h4>
-            <div class="actions">
-                <button type="button" class="action-duplicate">
-                    <span><?php echo $this->__('Duplicate'); ?></span>
-                </button>
-                <?php echo $this->getButtonsHtml() ?>
-            </div>
-        </article>
+        <?php if (!$this->getTheme()->getAssignedStores()): ?>
+            <article class="theme-data">
+                <h4 class="theme-title" title="<?php echo $themeTitle ?>"><?php echo $themeTitle ?></h4>
+                <div class="actions">
+                    <?php echo $this->getButtonsHtml() ?>
+                </div>
+            </article>
+        <?php endif; ?>
     </div>
     <?php if ($this->getTheme()->getAssignedStores()): ?>
         <div class="theme-assigned-data">
@@ -56,9 +55,6 @@
                 <span><?php echo implode(', ', $this->getStoresTitles()) ?></span>
             </p>
             <div class="actions">
-                <button type="button" class="action-duplicate">
-                    <span><?php echo $this->__('Duplicate'); ?></span>
-                </button>
                 <?php echo $this->getButtonsHtml() ?>
             </div>
         </div>

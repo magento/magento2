@@ -28,9 +28,28 @@
         <di>
             <Mage_Core_Model_Cache>
                 <parameters>
-                    <storeManager>Mage_Core_Model_StoreManager_Proxy</storeManager>
+                    <storeManager>
+                        <instance>customStoreManagerProxy</instance>
+                    </storeManager>
                 </parameters>
             </Mage_Core_Model_Cache>
+            <Mage_Core_Controller_Varien_Action_Context>
+                <plugins>
+                    <first><instance>Mage_Core_Model_Action_Plugin</instance></first>
+                    <second><instance>Custom_PageCache_Model_Action_Plugin</instance></second>
+                </plugins>
+                <parameters>
+                    <layoutFactory>
+                        <instance>customLayoutFactory</instance>
+                    </layoutFactory>
+                </parameters>
+            </Mage_Core_Controller_Varien_Action_Context>
+            <customStoreManagerProxy>
+                <type>Mage_Core_Model_StoreManager_Proxy</type>
+            </customStoreManagerProxy>
+            <customLayoutFactory>
+                <type>Mage_Core_Model_Layout_Factory</type>
+            </customLayoutFactory>
         </di>
     </global>
 </config>

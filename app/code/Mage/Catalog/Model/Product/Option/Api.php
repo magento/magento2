@@ -33,6 +33,19 @@
  */
 class Mage_Catalog_Model_Product_Option_Api extends Mage_Catalog_Model_Api_Resource
 {
+    /**
+     * @var Mage_Core_Controller_Request_Http
+     */
+    protected $_request = null;
+
+    /**
+     * @param Mage_Core_Controller_Request_Http $request
+     */
+    public function __construct(
+        Mage_Core_Controller_Request_Http $request
+    ) {
+        $this->_request = $request;
+    }
 
     /**
      * Add custom option to product
@@ -167,7 +180,10 @@ class Mage_Catalog_Model_Product_Option_Api extends Mage_Catalog_Model_Api_Resou
                 // because it is not used for options changing in observers
                 Mage::dispatchEvent(
                     'catalog_product_prepare_save',
-                    array('product' => $product, 'request' => new Mage_Core_Controller_Request_Http())
+                    array(
+                        'product' => $product,
+                        'request' => $this->_request
+                    )
                 );
 
                 $product->save();

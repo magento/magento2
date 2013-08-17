@@ -36,11 +36,13 @@ $note = $element->getNote() ? '<div class="note">' . $element->getNote() . '</di
 $elementBeforeLabel = $element->getExtType() == 'checkbox' || $element->getExtType() == 'radio';
 $addOn = $element->getBeforeElementHtml() || $element->getAfterElementHtml();
 $fieldId = ($element->getHtmlId()) ? ' id="attribute-' . $element->getHtmlId() . '-container"' : '';
+$entity = $element->getEntityAttribute();
 $fieldClass = "field field-{$element->getId()} {$element->getCssClass()}";
 $fieldClass .= ($elementBeforeLabel) ? ' choice' : '';
 $fieldClass .= ($addOn) ? ' with-addon' : '';
 $fieldClass .= ($element->getRequired()) ? ' required' : '';
 $fieldClass .= ($note) ? ' with-note' : '';
+$fieldClass .= ($entity && $entity->getIsUserDefined()) ? ' user-defined type-' . $entity->getFrontendInput() : '';
 
 $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
     . $this->getUiId('form-field', $element->getId());

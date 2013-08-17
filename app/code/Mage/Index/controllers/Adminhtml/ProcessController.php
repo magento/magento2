@@ -48,7 +48,7 @@ class Mage_Index_Adminhtml_ProcessController extends Mage_Adminhtml_Controller_A
      */
     public function listAction()
     {
-        $this->_title($this->__('System'))->_title($this->__('Index Management'));
+        $this->_title($this->__('Index Management'));
 
         $this->loadLayout();
         $this->_setActiveMenu('Mage_Index::system_index');
@@ -238,6 +238,6 @@ class Mage_Index_Adminhtml_ProcessController extends Mage_Adminhtml_Controller_A
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Index::index');
+        return $this->_authorization->isAllowed('Mage_Index::index');
     }
 }

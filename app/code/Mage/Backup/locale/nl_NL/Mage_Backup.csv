@@ -33,7 +33,7 @@
 "Put store on the maintenance mode while backup's creation","Zet store op de onderhoudsmodus, tijdens het maken van back-up's"
 "Rollback","Terugrollen"
 "Scheduled Backup Settings","Geplande Back-up Instellingen"
-"Size, Bytes","Grootte, bytes"
+"Size (bytes)","Grootte, bytes"
 "Start Time","Begintijd"
 "System Backup","Systeem Back-up"
 "System couldn't put store on the maintenance mode","Systeem kon store niet in de onderhoudsmodus zetten"

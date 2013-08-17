@@ -105,7 +105,10 @@ class Mage_Checkout_Block_Cart_Item_Renderer extends Mage_Core_Block_Template
             $product = $this->getProduct();
             if ($this->getProduct()->isConfigurable()) {
                 $children = $this->getItem()->getChildren();
-                if (isset($children[0]) && $children[0]->getProduct()->getThumbnail() != 'no_selection') {
+                if (isset($children[0])
+                    && $children[0]->getProduct()->getThumbnail()
+                    && $children[0]->getProduct()->getThumbnail() != 'no_selection'
+                ) {
                     $product = $children[0]->getProduct();
                 }
             }

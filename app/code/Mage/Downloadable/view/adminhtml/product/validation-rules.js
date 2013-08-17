@@ -24,6 +24,7 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+/*global newFileContainer:true, alertAlreadyDisplayed:true, alert:true, linkType:true*/
 (function ($) {
     $.validator.addMethod('validate-downloadable-file', function(v,element) {
         var elmParent = $(element).parent(),

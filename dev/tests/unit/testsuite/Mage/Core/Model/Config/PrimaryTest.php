@@ -75,7 +75,7 @@ class Mage_Core_Model_Config_PrimaryTest extends PHPUnit_Framework_TestCase
     public function testGetDefinitionPathReturnsDefaultPathIfNothingSpecified()
     {
         $this->_model = new Mage_Core_Model_Config_Primary(BP, array(), $this->_dirMock, $this->_loaderMock);
-        $expectedPath = '/path_to_root/var/di' . DIRECTORY_SEPARATOR . 'definitions.php';
+        $expectedPath = '/path_to_root/var/di';
         $this->assertEquals($expectedPath, $this->_model->getDefinitionPath());
     }
 

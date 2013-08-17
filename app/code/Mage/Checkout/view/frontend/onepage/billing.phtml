@@ -89,10 +89,10 @@
                     <div class="field">
                         <label for="billing:region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
                         <div class="input-box">
-                            <select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;">
+                            <select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;" <?php if (Mage::app()->getConfig()->getNode('general/region/display_all') === 0) { ?>disabled="disabled"<?php } ?>>
                                 <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
                             </select>
-                            <input type="text" id="billing:region" name="billing[region]" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('region') ?>" style="display:none;" />
+                            <input type="text" id="billing:region" name="billing[region]" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('region') ?>" style="display:none;" <?php if (Mage::app()->getConfig()->getNode('general/region/display_all') === 0) { ?>disabled="disabled"<?php } ?>/>
                         </div>
                     </div>
                 </li>
@@ -204,6 +204,7 @@
             "<?php echo $this->getViewFileUrl('Mage_Checkout::js/region-updater.js') ?>",
             function() {
                 $('#billing\\:country_id').regionUpdater({
+                    optionalRegionAllowed: <?php echo (Mage::getStoreConfig('general/region/display_all')? 'true' : 'false'); ?>,
                     regionListId: '#billing\\:region_id',
                     regionInputId: '#billing\\:region',
                     postcodeId: '#billing\\:postcode',

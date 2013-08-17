@@ -37,13 +37,13 @@
     <div class="col-1">
         <h3><?php if( $this->isAllowedGuestCheckout() ): ?><?php echo $this->__('Checkout as a Guest or Register') ?><?php else: ?><?php echo $this->__('Register to Create an Account') ?><?php endif; ?></h3>
         <?php if( $this->isAllowedGuestCheckout() ): ?>
-            <p><?php echo $this->__('Register with us for future convenience:') ?></p>
+            <p><?php echo $this->__('Sign up with us to save time on your next checkout:') ?></p>
         <?php else: ?>
             <p><strong><?php echo $this->__('Register and save time!') ?></strong><br />
-            <?php echo $this->__('Register with us for future convenience:') ?></p>
+            <?php echo $this->__('Sign up with us to save time on your next checkout:') ?></p>
             <ul>
                 <li><?php echo $this->__('Fast and easy check out') ?></li>
-                <li><?php echo $this->__('Easy access to your order history and status') ?></li>
+                <li><?php echo $this->__('Get easy access to your order history and status.') ?></li>
             </ul>
         <?php endif; ?>
         <?php if( $this->isAllowedGuestCheckout() ): ?>
@@ -58,10 +58,10 @@
                 </li>
             </ul>
             <h4><?php echo $this->__('Register and save time!') ?></h4>
-            <p><?php echo $this->__('Register with us for future convenience:') ?></p>
+            <p><?php echo $this->__('Sign up with us to save time on your next checkout:') ?></p>
             <ul class="ul">
                 <li><?php echo $this->__('Fast and easy check out') ?></li>
-                <li><?php echo $this->__('Easy access to your order history and status') ?></li>
+                <li><?php echo $this->__('Get easy access to your order history and status.') ?></li>
             </ul>
         <?php else: ?>
             <input type="hidden" name="checkout_method" id="login:register" value="register" checked="checked" />

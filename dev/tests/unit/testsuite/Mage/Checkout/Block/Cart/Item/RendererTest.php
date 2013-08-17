@@ -34,13 +34,11 @@ class Mage_Checkout_Block_Cart_Item_RendererTest extends PHPUnit_Framework_TestC
         $configView = $this->getMock('Magento_Config_View', array('getVarValue'), array(), '', false);
         $configView->expects($this->any())->method('getVarValue')->will($this->returnValue(75));
 
-        $designPackage = $this->getMock(
-            'Mage_Core_Model_Design_Package', array('getViewConfig'), array(), '', false
-        );
-        $designPackage->expects($this->any())->method('getViewConfig')->will($this->returnValue($configView));
+        $configManager = $this->getMock('Mage_Core_Model_View_Config', array(), array(), '', false);
+        $configManager->expects($this->any())->method('getViewConfig')->will($this->returnValue($configView));
 
         $configurable = $objectManagerHelper->getObject('Mage_Checkout_Block_Cart_Item_Renderer_Configurable',
-            array('designPackage' => $designPackage));
+            array('viewConfig' => $configManager));
 
         $product = $this->getMock('Mage_Catalog_Model_Product', array('isConfigurable'), array(), '', false);
         $product->expects($this->any())->method('isConfigurable')->will($this->returnValue(true));

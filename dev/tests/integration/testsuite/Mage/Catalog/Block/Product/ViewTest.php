@@ -42,11 +42,6 @@ class Mage_Catalog_Block_Product_ViewTest extends PHPUnit_Framework_TestCase
      */
     protected $_product;
 
-    /**
-     * @var Mage_Catalog_Model_Datasource_Config
-     */
-    protected $_dsConfig;
-
     protected function setUp()
     {
         $this->_block = Mage::getObjectManager()->create('Mage_Catalog_Block_Product_View');

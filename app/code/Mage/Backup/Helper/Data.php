@@ -60,12 +60,22 @@ class Mage_Backup_Helper_Data extends Mage_Core_Helper_Abstract
     protected $_filesystem;
 
     /**
+     * @var Magento_AuthorizationInterface
+     */
+    protected $_authorization;
+
+    /**
      * @param Mage_Core_Helper_Context $context
      * @param Magento_Filesystem $filesystem
+     * @param Magento_AuthorizationInterface $authorization
      */
-    public function __construct(Mage_Core_Helper_Context $context, Magento_Filesystem $filesystem)
-    {
+    public function __construct(
+        Mage_Core_Helper_Context $context,
+        Magento_Filesystem $filesystem,
+        Magento_AuthorizationInterface $authorization
+    ) {
         parent::__construct($context);
+        $this->_authorization = $authorization;
         $this->_filesystem = $filesystem;
     }
 
@@ -166,7 +176,7 @@ class Mage_Backup_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function isRollbackAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Backup::rollback' );
+        return $this->_authorization->isAllowed('Mage_Backup::rollback' );
     }
 
     /**
@@ -242,7 +252,7 @@ class Mage_Backup_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $messagesMap = array(
             self::TYPE_SYSTEM_SNAPSHOT => $this->__('The system backup has been created.'),
-            self::TYPE_SNAPSHOT_WITHOUT_MEDIA => $this->__('The system (excluding Media) backup has been created.'),
+            self::TYPE_SNAPSHOT_WITHOUT_MEDIA => $this->__('The system backup (excluding media) has been created.'),
             self::TYPE_MEDIA => $this->__('The database and media backup has been created.'),
             self::TYPE_DB => $this->__('The database backup has been created.')
         );

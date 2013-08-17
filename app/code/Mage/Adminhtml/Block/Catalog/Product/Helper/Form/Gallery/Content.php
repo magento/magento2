@@ -105,7 +105,6 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Gallery_Content extends M
                 foreach ($value['images'] as &$image) {
                     $image['url'] = Mage::getSingleton('Mage_Catalog_Model_Product_Media_Config')
                         ->getMediaUrl($image['file']);
-                    $image['label'] = substr($image['file'], strrpos($image['file'], '/') + 1);
                 }
                 return Mage::helper('Mage_Core_Helper_Data')->jsonEncode($value['images']);
             }

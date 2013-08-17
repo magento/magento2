@@ -123,7 +123,7 @@
             }
 
             if($F('code').blank() || $F('code')==templateControl.templateName) {
-               value = prompt('<?php echo Mage::helper('Mage_Newsletter_Helper_Data')->__('Please enter new template name') ?>', templateControl.templateName + '<?php echo Mage::helper('Mage_Newsletter_Helper_Data')->__(' Copy') ?>');
+               value = prompt('<?php echo Mage::helper('Mage_Newsletter_Helper_Data')->__('Please enter new template name.') ?>', templateControl.templateName + '<?php echo Mage::helper('Mage_Newsletter_Helper_Data')->__(' Copy') ?>');
                if(!value) {
                    if(value !== null) {
                        $('code').value = '';

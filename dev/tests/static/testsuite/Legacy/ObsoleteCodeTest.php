@@ -82,7 +82,6 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
      */
     protected static function _populateList(array &$list, array &$errors, $filePattern, $hasScope = true)
     {
-
         foreach (glob(__DIR__ . '/_files/' . $filePattern) as $file) {
             foreach (self::_readList($file) as $row) {
                 list($item, $scope, $replacement) = self::_padRow($row, $hasScope);
@@ -225,7 +224,7 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
                     $content,
                     $message
                 );
-                if ($this->_isSubclassOf($content, $class)) {
+                if ($this->_isClassOrInterface($content, $class) || $this->_isDirectDescendant($content, $class)) {
                     $this->_assertNotRegExp('/function\s*' . $quotedMethod . '\s*\(/iS', $content, $message);
                     $this->_assertNotRegExp('/this->' . $quotedMethod . '\s*\(/iS', $content, $message);
                     $this->_assertNotRegExp(
@@ -290,20 +289,6 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
             'Backwards-incompatible change: method _setActiveMenu()'
                 . ' must be invoked with menu item identifier than xpath for menu item'
         );
-
-        $this->assertEquals(0,
-            preg_match('#Mage::getSingleton\([\'"]Mage_Backend_Model_Auth_Session[\'"]\)'
-                . '([\s]+)?->isAllowed\(#Ui', $content),
-            'Backwards-incompatible change: method isAllowed()'
-                . ' must be invoked from Mage::getSingleton(\'Mage_Code_Model_Authorization\')->isAllowed($resource)'
-        );
-
-        $this->_assertNotRegExp(
-            '#Mage::getSingleton\([\'"]Mage_Core_Model_Authorization[\'"]\)'
-                . '([\s]+)?->isAllowed\([\'"]([\w\d/_]+)[\'"]\)#Ui',
-            $content,
-            'Backwards-incompatible change: method isAllowed()'
-                . ' must be invoked with acl item identifier than xpath for acl item');
     }
 
     /**
@@ -314,7 +299,7 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
         foreach (self::$_attributes as $row) {
             list($attribute, $class, $replacement) = $row;
             if ($class) {
-                if (!$this->_isSubclassOf($content, $class)) {
+                if (!$this->_isClassOrInterface($content, $class) && !$this->_isDirectDescendant($content, $class)) {
                     continue;
                 }
                 $fullyQualified = "{$class}::\${$attribute}";
@@ -356,10 +341,16 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
             if ($class) {
                 $fullyQualified = "{$class}::{$constant}";
                 $regex = preg_quote($fullyQualified, '/');
-                if ($this->_isSubclassOf($content, $class)) {
-                    $regex .= '|' . preg_quote("self::{$constant}", '/')
-                        . '|' . preg_quote("parent::{$constant}", '/')
+                if ($this->_isClassOrInterface($content, $class)) {
+                    $regex .= '|' . $this->_getClassConstantDefinitionRegExp($constant)
+                        . '|' . preg_quote("self::{$constant}", '/')
                         . '|' . preg_quote("static::{$constant}", '/');
+                } else if ($this->_isDirectDescendant($content, $class)) {
+                    $regex .= '|' . preg_quote("parent::{$constant}", '/');
+                    if (!$this->_isClassConstantDefined($content, $constant)) {
+                        $regex .= '|' . preg_quote("self::{$constant}", '/')
+                            . '|' . preg_quote("static::{$constant}", '/');
+                    }
                 }
             } else {
                 $fullyQualified = $constant;
@@ -369,6 +360,29 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
                 $this->_suggestReplacement(sprintf("Constant '%s' is obsolete.", $fullyQualified), $replacement)
             );
         }
+    }
+
+    /**
+     * Whether a class constant is defined in the content or not
+     *
+     * @param string $content
+     * @param string $constant
+     * @return bool
+     */
+    protected function _isClassConstantDefined($content, $constant)
+    {
+        return (bool)preg_match('/' . $this->_getClassConstantDefinitionRegExp($constant) . '/iS', $content);
+    }
+
+    /**
+     * Retrieve a PCRE matching a class constant definition
+     *
+     * @param string $constant
+     * @return string
+     */
+    protected function _getClassConstantDefinitionRegExp($constant)
+    {
+        return '\bconst\s+' . preg_quote($constant, '/') . '\b';
     }
 
     /**
@@ -382,18 +396,32 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Analyze contents of a file to determine whether this is declaration of or a direct descendant of specified class
+     * Analyze contents to determine whether this is declaration of specified class/interface
      *
      * @param string $content
-     * @param string $class
+     * @param string $name
      * @return bool
      */
-    protected function _isSubclassOf($content, $class)
+    protected function _isClassOrInterface($content, $name)
     {
-        if (!$class) {
-            return false;
-        }
-        return (bool)preg_match('/(class|extends|implements)\s+' . preg_quote($class, '/') . '(\s|;)/S', $content);
+        $name = preg_quote($name, '/');
+        return (bool)preg_match('/\b(?:class|interface)\s+' . $name . '\b[^{]*\{/iS', $content);
+    }
+
+    /**
+     * Analyze contents to determine whether this is a direct descendant of specified class/interface
+     *
+     * @param string $content
+     * @param string $name
+     * @return bool
+     */
+    protected function _isDirectDescendant($content, $name)
+    {
+        $name = preg_quote($name, '/');
+        return (bool)preg_match(
+            '/\s+extends\s+' . $name . '\b|\s+implements\s+[^{]*\b' . $name . '\b[^{]*\{/iS',
+            $content
+        );
     }
 
     /**

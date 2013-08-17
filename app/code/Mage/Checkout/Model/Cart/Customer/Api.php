@@ -88,6 +88,7 @@ class Mage_Checkout_Model_Cart_Customer_Api extends Mage_Checkout_Model_Api_Reso
             $quote->setCustomer($customer)
                 ->setCheckoutMethod($customer->getMode())
                 ->setPasswordHash($customer->encryptPassword($customer->getPassword()))
+                ->collectTotals()
                 ->save();
         } catch (Mage_Core_Exception $e) {
             $this->_fault('customer_not_set', $e->getMessage());
@@ -179,8 +180,7 @@ class Mage_Checkout_Model_Cart_Customer_Api extends Mage_Checkout_Model_Api_Reso
         }
 
         try {
-            $quote->collectTotals()
-                ->save();
+            $quote->collectTotals()->save();
         } catch (Exception $e) {
             $this->_fault('address_is_not_set', $e->getMessage());
         }

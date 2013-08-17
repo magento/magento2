@@ -71,13 +71,6 @@
                 </observers>
             </googlecheckout_block_link_html_before>
         </events>
-        <layout>
-            <updates>
-                <googleanalytics module="Mage_GoogleAnalytics">
-                    <file>layout.xml</file>
-                </googleanalytics>
-            </updates>
-        </layout>
     </frontend>
     <adminhtml>
         <translate>

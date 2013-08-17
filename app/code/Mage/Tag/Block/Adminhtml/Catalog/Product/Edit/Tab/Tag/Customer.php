@@ -45,49 +45,14 @@ class Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_Tag_Customer
     const TAB_ID = 'customers_tags';
 
     /**
-     * Array of data helpers
-     *
-     * @var array
-     */
-    protected $_helpers;
-
-    /**
-     * Authentication session
-     *
-     * @var Mage_Core_Model_Authorization
-     */
-    protected $_authSession;
-
-    /**
-     * @param Mage_Core_Block_Template_Context $context
-     * @param Mage_Core_Model_Authorization $authSession
+     * @param Mage_Backend_Block_Template_Context $context
      * @param array $data
      */
-    public function __construct(
-        Mage_Core_Block_Template_Context $context,
-        Mage_Core_Model_Authorization $authSession,
-        array $data = array()
-    ) {
-        parent::__construct($context, $data);
-
-        if (isset($data['helpers'])) {
-            $this->_helpers = $data['helpers'];
-        }
-
-        $this->_authSession = $authSession;
-        $this->setId(self::TAB_ID);
-        $this->setTitle($this->_helper('Mage_Tag_Helper_Data')->__('Customers Tagged Product'));
-    }
-
-    /**
-     * Helper getter
-     *
-     * @param string $helperName
-     * @return Mage_Core_Helper_Abstract
-     */
-    protected function _helper($helperName)
+    public function __construct(Mage_Backend_Block_Template_Context $context, array $data = array())
     {
-        return isset($this->_helpers[$helperName]) ? $this->_helpers[$helperName] : Mage::helper($helperName);
+        parent::__construct($context, $data);
+        $this->setId(self::TAB_ID);
+        $this->setTitle($this->_helperFactory->get('Mage_Tag_Helper_Data')->__('Customers Tagged Product'));
     }
 
     /**
@@ -117,7 +82,7 @@ class Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_Tag_Customer
      */
     public function canShowTab()
     {
-        return $this->_authSession->isAllowed('Mage_Tag::tag_all');
+        return $this->_authorization->isAllowed('Mage_Tag::tag_all');
     }
 
     /**
@@ -157,6 +122,14 @@ class Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_Tag_Customer
      */
     public function getAfter()
     {
-        return 'reviews';
+        return 'product-reviews';
+    }
+
+    /**
+     * @return string
+     */
+    public function getGroupCode()
+    {
+        return Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs::ADVANCED_TAB_GROUP_CODE;
     }
 }

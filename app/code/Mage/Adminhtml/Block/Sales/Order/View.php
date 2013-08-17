@@ -54,7 +54,7 @@ class Mage_Adminhtml_Block_Sales_Order_View extends Mage_Adminhtml_Block_Widget_
 
         if ($this->_isAllowedAction('Mage_Sales::actions_edit') && $order->canEdit()) {
             $onclickJs = 'deleteConfirm(\''
-                . Mage::helper('Mage_Sales_Helper_Data')->__('Are you sure? This order will be canceled and a new one will be created instead')
+                . Mage::helper('Mage_Sales_Helper_Data')->__('Are you sure? This order will be canceled and a new one will be created instead.')
                 . '\', \'' . $this->getEditUrl() . '\');';
             $this->_addButton('order_edit', array(
                 'label'    => Mage::helper('Mage_Sales_Helper_Data')->__('Edit'),
@@ -72,7 +72,7 @@ class Mage_Adminhtml_Block_Sales_Order_View extends Mage_Adminhtml_Block_Widget_
             if ($nonEditableTypes) {
                 $this->_updateButton('order_edit', 'onclick',
                     'if (!confirm(\'' .
-                    Mage::helper('Mage_Sales_Helper_Data')->__('This order contains (%s) items and therefore cannot be edited through the admin interface at this time, if you wish to continue editing the (%s) items will be removed, the order will be canceled and a new order will be placed.', implode(', ', $nonEditableTypes), implode(', ', $nonEditableTypes)) . '\')) return false;' . $onclickJs
+                    Mage::helper('Mage_Sales_Helper_Data')->__('This order contains (%s) items and therefore cannot be edited through the admin interface. If you wish to continue editing, the (%s) items will be removed, the order will be canceled and a new order will be placed.', implode(', ', $nonEditableTypes), implode(', ', $nonEditableTypes)) . '\')) return false;' . $onclickJs
                 );
             }
         }
@@ -86,7 +86,7 @@ class Mage_Adminhtml_Block_Sales_Order_View extends Mage_Adminhtml_Block_Widget_
         }
 
         if ($this->_isAllowedAction('Mage_Sales::emails') && !$order->isCanceled()) {
-            $message = Mage::helper('Mage_Sales_Helper_Data')->__('Are you sure you want to send order email to customer?');
+            $message = Mage::helper('Mage_Sales_Helper_Data')->__('Are you sure you want to send an order email to customer?');
             $this->addButton('send_notification', array(
                 'label'     => Mage::helper('Mage_Sales_Helper_Data')->__('Send Email'),
                 'onclick'   => "confirmSetLocation('{$message}', '{$this->getEmailUrl()}')",
@@ -94,7 +94,7 @@ class Mage_Adminhtml_Block_Sales_Order_View extends Mage_Adminhtml_Block_Widget_
         }
 
         if ($this->_isAllowedAction('Mage_Sales::creditmemo') && $order->canCreditmemo()) {
-            $message = Mage::helper('Mage_Sales_Helper_Data')->__('This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you wish to proceed?');
+            $message = Mage::helper('Mage_Sales_Helper_Data')->__('This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?');
             $onClick = "setLocation('{$this->getCreditmemoUrl()}')";
             if ($order->getPayment()->getMethodInstance()->isGateway()) {
                 $onClick = "confirmSetLocation('{$message}', '{$this->getCreditmemoUrl()}')";
@@ -278,7 +278,7 @@ class Mage_Adminhtml_Block_Sales_Order_View extends Mage_Adminhtml_Block_Widget_
 
     protected function _isAllowedAction($resourceId)
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($resourceId);
+        return $this->_authorization->isAllowed($resourceId);
     }
 
     /**

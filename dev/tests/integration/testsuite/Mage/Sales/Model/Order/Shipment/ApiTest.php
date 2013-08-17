@@ -26,6 +26,45 @@
 class Mage_Sales_Model_Order_Shipment_ApiTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Ensure that partial shipment works correctly.
+     *
+     * @magentoDataFixture Mage/Sales/Model/Order/Api/_files/order_with_shipping.php
+     */
+    public function testPartialShipmentCreate()
+    {
+        $order = $this->_getOrderFixture();
+        $items = $order->getAllItems();
+        $this->assertCount(1, $items, "Exactly one order item was expected to exist.");
+        /** @var Mage_Sales_Model_Order_Item $orderItem */
+        $orderItem = reset($items);
+        $qtyToShip = 3;
+        $this->assertGreaterThan(
+            $qtyToShip,
+            $orderItem->getQtyOrdered(),
+            "Product quantity ordered must more than $qtyToShip for this test."
+        );
+        /** Create partial shipment via API. */
+        $shipmentIncrementId = Magento_Test_Helper_Api::call(
+            $this,
+            'salesOrderShipmentCreate',
+            array(
+                'orderIncrementId' => $this->_getOrderFixture()->getIncrementId(),
+                'itemsQty' => array(
+                    (object)array('order_item_id' => $orderItem->getId(), 'qty' => $qtyToShip)
+                )
+            )
+        );
+        $this->assertGreaterThan(0, (int)$shipmentIncrementId, 'Shipment was not created.');
+        /** Ensure that shipment was created partially. */
+        $shipment = Mage::getModel('Mage_Sales_Model_Order_Shipment')->load($shipmentIncrementId, 'increment_id');
+        $this->assertEquals(
+            $qtyToShip,
+            (int)$shipment->getTotalQty(),
+            "Items quantity shipped is invalid, partial shipment failed."
+        );
+    }
+
+    /**
      * Test retrieving the list of shipments related to the order via API.
      *
      * @magentoDataFixture Mage/Sales/Model/Order/Api/_files/shipment.php
@@ -260,9 +299,10 @@ class Mage_Sales_Model_Order_Shipment_ApiTest extends PHPUnit_Framework_TestCase
      */
     protected function _getOrderFixture()
     {
-        /** @var $order Mage_Sales_Model_Order */
-        $order = Mage::registry('order');
-        return $order;
+        /** @var $order Mage_Sales_Model_Resource_Order_Collection */
+        $orderCollection = Mage::getModel('Mage_Sales_Model_Resource_Order_Collection');
+        $this->assertCount(1, $orderCollection->getItems());
+        return $orderCollection->getFirstItem();
     }
 
     /**
@@ -272,8 +312,9 @@ class Mage_Sales_Model_Order_Shipment_ApiTest extends PHPUnit_Framework_TestCase
      */
     protected function _getShipmentFixture()
     {
-        /** @var $shipment Mage_Sales_Model_Order_Shipment */
-        $shipment = Mage::registry('shipment');
-        return $shipment;
+        /** @var $order Mage_Sales_Model_Resource_Order_Shipment_Collection */
+        $collection = Mage::getModel('Mage_Sales_Model_Resource_Order_Shipment_Collection');
+        $this->assertCount(1, $collection->getItems());
+        return $collection->getFirstItem();
     }
 }

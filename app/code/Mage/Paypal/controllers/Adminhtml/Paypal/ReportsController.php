@@ -33,14 +33,12 @@
  */
 class Mage_Paypal_Adminhtml_Paypal_ReportsController extends Mage_Adminhtml_Controller_Action
 {
-
     /**
      * Grid action
      */
     public function indexAction()
     {
         $this->_initAction()
-            ->_addContent($this->getLayout()->createBlock('Mage_Paypal_Block_Adminhtml_Settlement_Report'))
             ->renderLayout();
     }
 
@@ -49,10 +47,8 @@ class Mage_Paypal_Adminhtml_Paypal_ReportsController extends Mage_Adminhtml_Cont
      */
     public function gridAction()
     {
-        $this->loadLayout();
-        $this->getResponse()->setBody(
-            $this->getLayout()->createBlock('Mage_Paypal_Block_Adminhtml_Settlement_Report_Grid')->toHtml()
-        );
+        $this->loadLayout(false);
+        $this->renderLayout();
     }
 
     /**
@@ -84,17 +80,17 @@ class Mage_Paypal_Adminhtml_Paypal_ReportsController extends Mage_Adminhtml_Cont
             /* @var $reports Mage_Paypal_Model_Report_Settlement */
             $credentials = $reports->getSftpCredentials();
             if (empty($credentials)) {
-                Mage::throwException(Mage::helper('Mage_Paypal_Helper_Data')->__('Nothing to fetch because of an empty configuration.'));
+                Mage::throwException(Mage::helper('Mage_Paypal_Helper_Data')->__('We found nothing to fetch because of an empty configuration.'));
             }
             foreach ($credentials as $config) {
                 try {
                     $fetched = $reports->fetchAndSave(Mage_Paypal_Model_Report_Settlement::createConnection($config));
                     $this->_getSession()->addSuccess(
-                        Mage::helper('Mage_Paypal_Helper_Data')->__("Fetched %s report rows from '%s@%s'.", $fetched, $config['username'], $config['hostname'])
+                        Mage::helper('Mage_Paypal_Helper_Data')->__("We fetched %s report rows from '%s@%s'.", $fetched, $config['username'], $config['hostname'])
                     );
                 } catch (Exception $e) {
                     $this->_getSession()->addError(
-                        Mage::helper('Mage_Paypal_Helper_Data')->__("Failed to fetch reports from '%s@%s'.", $config['username'], $config['hostname'])
+                        Mage::helper('Mage_Paypal_Helper_Data')->__("We couldn't fetch reports from '%s@%s'.", $config['username'], $config['hostname'])
                     );
                     Mage::logException($e);
                 }
@@ -113,7 +109,7 @@ class Mage_Paypal_Adminhtml_Paypal_ReportsController extends Mage_Adminhtml_Cont
      */
     protected function _initAction()
     {
-        $this->_title($this->__('Reports'))->_title($this->__('Sales'))->_title($this->__('PayPal Settlement Reports'));
+        $this->_title($this->__('PayPal Settlement Reports'));
         $this->loadLayout()
             ->_setActiveMenu('Mage_Paypal::report_salesroot_paypal_settlement_reports')
             ->_addBreadcrumb(Mage::helper('Mage_Paypal_Helper_Data')->__('Reports'), Mage::helper('Mage_Paypal_Helper_Data')->__('Reports'))
@@ -131,13 +127,13 @@ class Mage_Paypal_Adminhtml_Paypal_ReportsController extends Mage_Adminhtml_Cont
         switch ($this->getRequest()->getActionName()) {
             case 'index':
             case 'details':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Paypal::paypal_settlement_reports_view');
+                return $this->_authorization->isAllowed('Mage_Paypal::paypal_settlement_reports_view');
                 break;
             case 'fetch':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Paypal::fetch');
+                return $this->_authorization->isAllowed('Mage_Paypal::fetch');
                 break;
             default:
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Paypal::paypal_settlement_reports');
+                return $this->_authorization->isAllowed('Mage_Paypal::paypal_settlement_reports');
                 break;
         }
     }

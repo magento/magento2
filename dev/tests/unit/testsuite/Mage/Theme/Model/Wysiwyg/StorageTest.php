@@ -59,11 +59,13 @@ class Mage_Theme_Model_Wysiwyg_StorageTest extends PHPUnit_Framework_TestCase
         $this->_filesystem = $this->getMock('Magento_Filesystem', array(), array(), '', false);
         $this->_helperStorage = $this->getMock('Mage_Theme_Helper_Storage', array(), array(), '', false);
         $this->_objectManager = $this->getMock('Magento_ObjectManager', array(), array(), '', false);
+        $this->_imageFactory = $this->getMock('Mage_Core_Model_Image_AdapterFactory', array(), array(), '', false);
 
         $this->_storageModel = new Mage_Theme_Model_Wysiwyg_Storage(
             $this->_filesystem,
             $this->_helperStorage,
-            $this->_objectManager
+            $this->_objectManager,
+            $this->_imageFactory
         );
 
         $this->_storageRoot = Magento_Filesystem::DIRECTORY_SEPARATOR . 'root';
@@ -107,17 +109,7 @@ class Mage_Theme_Model_Wysiwyg_StorageTest extends PHPUnit_Framework_TestCase
 
         /** Prepare image */
 
-        $dataHelper = $this->getMock('Mage_Core_Helper_Data', array(), array(), '', false);
-        $imageAdapter= $this->getMock('Varien_Image_Adapter', array('factory'), array(), '', false);
         $image = $this->getMock('Varien_Image_Adapter_Gd2', array(), array(), '', false);
-
-        $this->_objectManager->expects($this->at(1))
-            ->method('get')
-            ->will($this->returnValue($dataHelper));
-
-        $dataHelper->expects($this->once())
-            ->method('getImageAdapterType')
-            ->will($this->returnValue(Varien_Image_Adapter::ADAPTER_GD2));
 
         $image->expects($this->once())
             ->method('open')
@@ -135,13 +127,9 @@ class Mage_Theme_Model_Wysiwyg_StorageTest extends PHPUnit_Framework_TestCase
             ->method('save')
             ->will($this->returnValue(true));
 
-        $imageAdapter->staticExpects($this->at(0))
-            ->method('factory')
+        $this->_imageFactory->expects($this->at(0))
+            ->method('create')
             ->will($this->returnValue($image));
-
-        $this->_objectManager->expects($this->at(2))
-            ->method('get')
-            ->will($this->returnValue($imageAdapter));
 
         /** Prepare session */
 
@@ -495,25 +483,25 @@ class Mage_Theme_Model_Wysiwyg_StorageTest extends PHPUnit_Framework_TestCase
 
         $filesystem = $this->_filesystem;
         $filesystem::staticExpects($this->once())
-            ->method('getAbsolutePath')
+            ->method('normalizePath')
             ->with($imagePath)
             ->will($this->returnValue($imagePath));
 
-        $filesystem::staticExpects($this->any())
+        $this->_filesystem->expects($this->any())
             ->method('isPathInDirectory')
             ->with($imagePath, $storagePath)
             ->will($this->returnValue(true));
 
-        $filesystem::staticExpects($this->any())
+        $this->_filesystem->expects($this->any())
             ->method('isPathInDirectory')
             ->with($imagePath, $this->_storageRoot)
             ->will($this->returnValue(true));
 
-        $this->_filesystem->expects($this->at(0))
+        $this->_filesystem->expects($this->at(2))
             ->method('delete')
             ->with($imagePath);
 
-        $this->_filesystem->expects($this->at(1))
+        $this->_filesystem->expects($this->at(3))
             ->method('delete')
             ->with($thumbnailDir . Magento_Filesystem::DIRECTORY_SEPARATOR . $image);
 

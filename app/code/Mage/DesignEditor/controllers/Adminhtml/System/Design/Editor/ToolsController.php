@@ -26,40 +26,55 @@
 
 /**
  * Backend controller for the design editor
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Mage_DesignEditor_Adminhtml_System_Design_Editor_ToolsController extends Mage_Adminhtml_Controller_Action
 {
+    /**
+     * Initialize theme context model
+     *
+     * @return Mage_DesignEditor_Model_Theme_Context
+     */
+    protected function _initContext()
+    {
+        $themeId = (int)$this->getRequest()->getParam('theme_id');
+        /** @var Mage_DesignEditor_Model_Theme_Context $themeContext */
+        $themeContext = $this->_objectManager->get('Mage_DesignEditor_Model_Theme_Context');
+        return $themeContext->setEditableThemeById($themeId);
+    }
+
     /**
      *  Upload custom CSS action
      */
     public function uploadAction()
     {
-        /** @var $themeCss Mage_Core_Model_Theme_Customization_Files_Css */
-        $themeCss = $this->_objectManager->create('Mage_Core_Model_Theme_Customization_Files_Css');
+        /** @var $cssService Mage_Theme_Model_Theme_Customization_File_CustomCss */
+        $cssService = $this->_objectManager->get('Mage_Theme_Model_Theme_Customization_File_CustomCss');
+        /** @var $singleFile Mage_Theme_Model_Theme_SingleFile */
+        $singleFile = $this->_objectManager->create('Mage_Theme_Model_Theme_SingleFile',
+            array('fileService' => $cssService));
         /** @var $serviceModel Mage_Theme_Model_Uploader_Service */
         $serviceModel = $this->_objectManager->get('Mage_Theme_Model_Uploader_Service');
         try {
-            $theme = $this->_getEditableTheme();
-            $cssFileContent = $serviceModel->uploadCssFile(
+            $themeContext = $this->_initContext();
+            $editableTheme = $themeContext->getStagingTheme();
+            $cssFileData = $serviceModel->uploadCssFile(
                 Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Custom::FILE_ELEMENT_NAME
-            )->getFileContent();
-            $themeCss->setDataForSave(
-                array(Mage_Core_Model_Theme_Customization_Files_Css::CUSTOM_CSS => $cssFileContent)
             );
-            $themeCss->saveData($theme);
-            $response = array('error' => false, 'content' => $cssFileContent);
-            $this->_session->addSuccess($this->__('Success: Theme custom css was saved.'));
+            $singleFile->update($editableTheme, $cssFileData['content']);
+            $response = array(
+                'success' => true,
+                'message' => $this->__('You updated the custom.css file.'),
+                'content' => $cssFileData['content']
+            );
         } catch (Mage_Core_Exception $e) {
-            $this->_session->addError($e->getMessage());
             $response = array('error' => true, 'message' => $e->getMessage());
+            $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         } catch (Exception $e) {
-            $errorMessage = $this->__('Cannot upload css file');
-            $this->_session->addError($errorMessage);
-            $response = array('error' => true, 'message' => $errorMessage);
+            $response = array('error' => true, 'message' => $this->__('We cannot upload the CSS file.'));
             $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         }
-        $this->loadLayout();
-        $response['message_html'] = $this->getLayout()->getMessagesBlock()->toHtml();
         $this->getResponse()->setBody($this->_objectManager->get('Mage_Core_Helper_Data')->jsonEncode($response));
     }
 
@@ -69,27 +84,27 @@ class Mage_DesignEditor_Adminhtml_System_Design_Editor_ToolsController extends M
     public function saveCssContentAction()
     {
         $customCssContent = (string)$this->getRequest()->getParam('custom_css_content', '');
+        /** @var $cssService Mage_Theme_Model_Theme_Customization_File_CustomCss */
+        $cssService = $this->_objectManager->get('Mage_Theme_Model_Theme_Customization_File_CustomCss');
+        /** @var $singleFile Mage_Theme_Model_Theme_SingleFile */
+        $singleFile = $this->_objectManager->create('Mage_Theme_Model_Theme_SingleFile',
+            array('fileService' => $cssService));
         try {
-            $theme = $this->_getEditableTheme();
-            /** @var $themeCss Mage_Core_Model_Theme_Customization_Files_Css */
-            $themeCss = $this->_objectManager->create('Mage_Core_Model_Theme_Customization_Files_Css');
-            $themeCss->setDataForSave(
-                array(Mage_Core_Model_Theme_Customization_Files_Css::CUSTOM_CSS => $customCssContent)
+            $themeContext = $this->_initContext();
+            $editableTheme = $themeContext->getStagingTheme();
+            $customCss = $singleFile->update($editableTheme, $customCssContent);
+            $response = array(
+                'success'  => true,
+                'filename' => $customCss->getFileName(),
+                'message'  => $this->__('You updated the %s file.', $customCss->getFileName())
             );
-            $theme->setCustomization($themeCss)->save();
-            $response = array('error' => false);
-            $this->_session->addSuccess($this->__('Theme custom css was saved.'));
         } catch (Mage_Core_Exception $e) {
-            $this->_session->addError($e->getMessage());
             $response = array('error' => true, 'message' => $e->getMessage());
+            $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         } catch (Exception $e) {
-            $errorMessage = $this->__('Cannot save custom css');
-            $this->_session->addError($errorMessage);
-            $response = array('error' => true, 'message' => $errorMessage);
+            $response = array('error' => true, 'message' => $this->__('We can\'t save the custom css file.'));
             $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         }
-        $this->loadLayout();
-        $response['message_html'] = $this->getLayout()->getMessagesBlock()->toHtml();
         $this->getResponse()->setBody($this->_objectManager->get('Mage_Core_Helper_Data')->jsonEncode($response));
     }
 
@@ -99,18 +114,11 @@ class Mage_DesignEditor_Adminhtml_System_Design_Editor_ToolsController extends M
     public function jsListAction()
     {
         try {
-            $theme = $this->_getEditableTheme();
-            $this->loadLayout();
-
-            /** @var $filesJs Mage_Core_Model_Theme_Customization_Files_Js */
-            $filesJs = $this->_objectManager->create('Mage_Core_Model_Theme_Customization_Files_Js');
-            $customJsFiles = $theme->setCustomization($filesJs)
-                ->getCustomizationData(Mage_Core_Model_Theme_Customization_Files_Js::TYPE);
-
-            $jsItemsBlock = $this->getLayout()->getBlock('design_editor_tools_code_js_items');
-            $jsItemsBlock->setJsFiles($customJsFiles);
-
-            $result = array('error' => false, 'content' => $jsItemsBlock->toHtml());
+            $themeContext = $this->_initContext();
+            $editableTheme = $themeContext->getStagingTheme();
+            $customization = $editableTheme->getCustomization();
+            $customJsFiles = $customization->getFilesByType(Mage_Core_Model_Theme_Customization_File_Js::TYPE);
+            $result = array('error' => false, 'files' => $customization->generateFileInfo($customJsFiles));
             $this->getResponse()->setBody($this->_objectManager->get('Mage_Core_Helper_Data')->jsonEncode($result));
         } catch (Exception $e) {
             $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
@@ -124,23 +132,26 @@ class Mage_DesignEditor_Adminhtml_System_Design_Editor_ToolsController extends M
     {
         /** @var $serviceModel Mage_Theme_Model_Uploader_Service */
         $serviceModel = $this->_objectManager->get('Mage_Theme_Model_Uploader_Service');
+        /** @var $jsService Mage_Core_Model_Theme_Customization_File_Js */
+        $jsService = $this->_objectManager->create('Mage_Core_Model_Theme_Customization_File_Js');
         try {
-            $theme = $this->_getEditableTheme();
-            $serviceModel->uploadJsFile('js_files_uploader', $theme, false);
-            $theme->setCustomization($serviceModel->getJsFiles())->save();
+            $themeContext = $this->_initContext();
+            $editableTheme = $themeContext->getStagingTheme();
+            $jsFileData = $serviceModel->uploadJsFile('js_files_uploader');
+            $jsFile = $jsService->create();
+            $jsFile->setTheme($editableTheme);
+            $jsFile->setFileName($jsFileData['filename']);
+            $jsFile->setData('content', $jsFileData['content']);
+            $jsFile->save();
             $this->_forward('jsList');
             return;
         } catch (Mage_Core_Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
             $response = array('error' => true, 'message' => $e->getMessage());
+            $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         } catch (Exception $e) {
-            $errorMessage = $this->__('Cannot upload js file');
-            $this->_getSession()->addError($errorMessage);
-            $response = array('error' => true, 'message' => $errorMessage);
+            $response = array('error' => true, 'message' => $this->__('We cannot upload the JS file.'));
             $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         }
-        $this->loadLayout();
-        $response['message_html'] = $this->getLayout()->getMessagesBlock()->toHtml();
         $this->getResponse()->setBody($this->_objectManager->get('Mage_Core_Helper_Data')->jsonEncode($response));
     }
 
@@ -151,15 +162,9 @@ class Mage_DesignEditor_Adminhtml_System_Design_Editor_ToolsController extends M
     {
         $removeJsFiles = (array)$this->getRequest()->getParam('js_removed_files');
         try {
-            $theme = $this->_getEditableTheme();
-
-            /** @var $themeJs Mage_Core_Model_Theme_Customization_Files_Js */
-            $themeJs = $this->_objectManager->create('Mage_Core_Model_Theme_Customization_Files_Js');
-            $theme->setCustomization($themeJs);
-
-            $themeJs->setDataForDelete($removeJsFiles);
-            $theme->save();
-
+            $themeContext = $this->_initContext();
+            $editableTheme = $themeContext->getStagingTheme();
+            $editableTheme->getCustomization()->delete($removeJsFiles);
             $this->_forward('jsList');
         } catch (Exception $e) {
             $this->_redirectUrl($this->_getRefererUrl());
@@ -173,26 +178,20 @@ class Mage_DesignEditor_Adminhtml_System_Design_Editor_ToolsController extends M
     public function reorderJsAction()
     {
         $reorderJsFiles = (array)$this->getRequest()->getParam('js_order', array());
-        /** @var $themeJs Mage_Core_Model_Theme_Customization_Files_Js */
-        $themeJs = $this->_objectManager->create('Mage_Core_Model_Theme_Customization_Files_Js');
         try {
-            $theme = $this->_getEditableTheme();
-            $themeJs->setJsOrderData($reorderJsFiles);
-            $theme->setCustomization($themeJs);
-            $theme->save();
-
+            $themeContext = $this->_initContext();
+            $editableTheme = $themeContext->getStagingTheme();
+            $editableTheme->getCustomization()->reorder(
+                Mage_Core_Model_Theme_Customization_File_Js::TYPE, $reorderJsFiles
+            );
             $result = array('success' => true);
         } catch (Mage_Core_Exception $e) {
-            $this->_session->addError($e->getMessage());
             $result = array('error' => true, 'message' => $e->getMessage());
+            $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         } catch (Exception $e) {
-            $errorMessage = $this->__('Cannot upload css file');
-            $this->_session->addError($errorMessage);
-            $result = array('error' => true, 'message' => $errorMessage);
+            $result = array('error' => true, 'message' => $this->__('We cannot upload the CSS file.'));
             $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         }
-        $this->loadLayout();
-        $result['message_html'] = $this->getLayout()->getMessagesBlock()->toHtml();
         $this->getResponse()->setBody($this->_objectManager->get('Mage_Core_Helper_Data')->jsonEncode($result));
     }
 
@@ -209,24 +208,22 @@ class Mage_DesignEditor_Adminhtml_System_Design_Editor_ToolsController extends M
             'Mage_DesignEditor_Model_Editor_Tools_ImageSizing_Validator'
         );
         try {
+            $themeContext = $this->_initContext();
             $configuration = $configFactory->create(
-                Mage_DesignEditor_Model_Editor_Tools_Controls_Factory::TYPE_IMAGE_SIZING, $this->_getEditableTheme()
+                Mage_DesignEditor_Model_Editor_Tools_Controls_Factory::TYPE_IMAGE_SIZING,
+                $themeContext->getStagingTheme(),
+                $themeContext->getEditableTheme()->getParentTheme()
             );
             $imageSizing = $imageSizingValidator->validate($configuration->getAllControlsData(), $imageSizing);
             $configuration->saveData($imageSizing);
-            $this->_session->addSuccess('Image sizes are saved.');
-            $result = array('success' => true);
+            $result = array('success' => true, 'message' => $this->__('We saved the image sizes.'));
         } catch (Mage_Core_Exception $e) {
-            $this->_session->addError($e->getMessage());
             $result = array('error' => true, 'message' => $e->getMessage());
+            $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         } catch (Exception $e) {
-            $errorMessage = $this->__('Cannot save image sizes.');
-            $this->_session->addError($errorMessage);
-            $result = array('error' => true, 'message' => $errorMessage);
+            $result = array('error' => true, 'message' => $this->__('We can\'t save image sizes.'));
             $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         }
-        $this->loadLayout();
-        $result['message_html'] = $this->getLayout()->getMessagesBlock()->toHtml();
         $this->getResponse()->setBody($this->_objectManager->get('Mage_Core_Helper_Data')->jsonEncode($result));
 
     }
@@ -238,15 +235,18 @@ class Mage_DesignEditor_Adminhtml_System_Design_Editor_ToolsController extends M
     {
         /** @var $uploaderModel Mage_DesignEditor_Model_Editor_Tools_QuickStyles_ImageUploader */
         $uploaderModel = $this->_objectManager->get('Mage_DesignEditor_Model_Editor_Tools_QuickStyles_ImageUploader');
-        /** @var $configFactory Mage_DesignEditor_Model_Editor_Tools_Controls_Factory */
-        $configFactory = $this->_objectManager->create('Mage_DesignEditor_Model_Editor_Tools_Controls_Factory');
         try {
-            $theme = $this->_getEditableTheme();
+            /** @var $configFactory Mage_DesignEditor_Model_Editor_Tools_Controls_Factory */
+            $configFactory = $this->_objectManager->create('Mage_DesignEditor_Model_Editor_Tools_Controls_Factory');
+            $themeContext = $this->_initContext();
+            $editableTheme = $themeContext->getStagingTheme();
             $keys = array_keys($this->getRequest()->getFiles());
-            $result = $uploaderModel->setTheme($theme)->uploadFile($keys[0]);
+            $result = $uploaderModel->setTheme($editableTheme)->uploadFile($keys[0]);
 
             $configuration = $configFactory->create(
-                Mage_DesignEditor_Model_Editor_Tools_Controls_Factory::TYPE_QUICK_STYLES, $theme
+                Mage_DesignEditor_Model_Editor_Tools_Controls_Factory::TYPE_QUICK_STYLES,
+                $editableTheme,
+                $themeContext->getEditableTheme()->getParentTheme()
             );
             $configuration->saveData(array($keys[0] => $result['css_path']));
 
@@ -254,8 +254,10 @@ class Mage_DesignEditor_Adminhtml_System_Design_Editor_ToolsController extends M
         } catch (Mage_Core_Exception $e) {
             $this->_session->addError($e->getMessage());
             $response = array('error' => true, 'message' => $e->getMessage());
+            $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         } catch (Exception $e) {
-            $errorMessage = $this->__('Cannot upload image file');
+            $errorMessage = $this->__('Something went wrong uploading the image.' .
+                ' Please check the file format and try again (JPEG, GIF, or PNG).');
             $response = array('error' => true, 'message' => $errorMessage);
             $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         }
@@ -273,22 +275,27 @@ class Mage_DesignEditor_Adminhtml_System_Design_Editor_ToolsController extends M
         /** @var $uploaderModel Mage_DesignEditor_Model_Editor_Tools_QuickStyles_ImageUploader */
         $uploaderModel = $this->_objectManager->get('Mage_DesignEditor_Model_Editor_Tools_QuickStyles_ImageUploader');
         try {
-            $theme = $this->_getEditableTheme();
-            $result = $uploaderModel->setTheme($theme)->removeFile($fileName);
+            $themeContext = $this->_initContext();
+            $editableTheme = $themeContext->getStagingTheme();
+            $result = $uploaderModel->setTheme($editableTheme)->removeFile($fileName);
 
             /** @var $configFactory Mage_DesignEditor_Model_Editor_Tools_Controls_Factory */
             $configFactory = $this->_objectManager->create('Mage_DesignEditor_Model_Editor_Tools_Controls_Factory');
 
             $configuration = $configFactory->create(
-                Mage_DesignEditor_Model_Editor_Tools_Controls_Factory::TYPE_QUICK_STYLES, $theme
+                Mage_DesignEditor_Model_Editor_Tools_Controls_Factory::TYPE_QUICK_STYLES,
+                $editableTheme,
+                $themeContext->getEditableTheme()->getParentTheme()
             );
             $configuration->saveData(array($elementName => ''));
 
             $response = array('error' => false, 'content' => $result);
         } catch (Mage_Core_Exception $e) {
             $response = array('error' => true, 'message' => $e->getMessage());
+            $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         } catch (Exception $e) {
-            $errorMessage = $this->__('Cannot upload image file');
+            $errorMessage = $this->__('Something went wrong uploading the image.' .
+                ' Please check the file format and try again (JPEG, GIF, or PNG).');
             $response = array('error' => true, 'message' => $errorMessage);
             $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         }
@@ -304,30 +311,36 @@ class Mage_DesignEditor_Adminhtml_System_Design_Editor_ToolsController extends M
     {
         $storeId = (int)$this->getRequest()->getParam('store_id');
         $themeId = (int)$this->getRequest()->getParam('theme_id');
-        /** @var $helper Mage_Core_Helper_Theme */
-        $helper = $this->_objectManager->get('Mage_Core_Helper_Theme');
         try {
-            $theme = $helper->loadVisibleTheme($themeId);
-            if (!$theme->getId() || ($theme->getType() != Mage_Core_Model_Theme::TYPE_VIRTUAL)) {
-                throw new Mage_Core_Exception($this->__('Theme "%s" was not found.', $theme->getId()));
+            /** @var $theme Mage_Core_Model_Theme */
+            $theme = $this->_objectManager->create('Mage_Core_Model_Theme');
+            if (!$theme->load($themeId)->getId() || !$theme->isEditable()) {
+                throw new Mage_Core_Exception(
+                    $this->__('The file can\'t be found or edited.')
+                );
             }
 
-            /** @var $themeService Mage_Core_Model_Theme_Service */
-            $themeService = $this->_objectManager->get('Mage_Core_Model_Theme_Service');
+            /** @var $customizationConfig Mage_Theme_Model_Config_Customization */
+            $customizationConfig = $this->_objectManager->get('Mage_Theme_Model_Config_Customization');
             $store = $this->_objectManager->get('Mage_Core_Model_Store')->load($storeId);
 
-            if (!$themeService->isThemeAssignedToSpecificStore($theme, $store)) {
-                throw new Mage_Core_Exception($this->__('Theme is not assigned to any store.', $theme->getId()));
+            if (!$customizationConfig->isThemeAssignedToStore($theme, $store)) {
+                throw new Mage_Core_Exception($this->__('This theme is not assigned to a store view.',
+                    $theme->getId()));
             }
             /** @var $storeLogo Mage_DesignEditor_Model_Editor_Tools_QuickStyles_LogoUploader */
             $storeLogo = $this->_objectManager->get('Mage_DesignEditor_Model_Editor_Tools_QuickStyles_LogoUploader');
             $storeLogo->setScope('stores')->setScopeId($store->getId())->setPath('design/header/logo_src')->save();
 
-            $response = array('error' => false, 'content' => array('name' => $storeLogo->getValue()));
+            $this->_reinitSystemConfiguration();
+
+            $response = array('error' => false, 'content' => array('name' => basename($storeLogo->getValue())));
         } catch (Mage_Core_Exception $e) {
             $response = array('error' => true, 'message' => $e->getMessage());
+            $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         } catch (Exception $e) {
-            $errorMessage = $this->__('Cannot upload image file');
+            $errorMessage = $this->__('Something went wrong uploading the image.' .
+                ' Please check the file format and try again (JPEG, GIF, or PNG).');
             $response = array('error' => true, 'message' => $errorMessage);
             $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         }
@@ -343,31 +356,36 @@ class Mage_DesignEditor_Adminhtml_System_Design_Editor_ToolsController extends M
     {
         $storeId = (int)$this->getRequest()->getParam('store_id');
         $themeId = (int)$this->getRequest()->getParam('theme_id');
-        /** @var $helper Mage_Core_Helper_Theme */
-        $helper = $this->_objectManager->get('Mage_Core_Helper_Theme');
         try {
-            $theme = $helper->loadVisibleTheme($themeId);
-            if (!$theme->getId() || ($theme->getType() != Mage_Core_Model_Theme::TYPE_VIRTUAL)) {
-                throw new Mage_Core_Exception($this->__('Theme "%s" was not found.', $theme->getId()));
+            /** @var $theme Mage_Core_Model_Theme */
+            $theme = $this->_objectManager->create('Mage_Core_Model_Theme');
+            if (!$theme->load($themeId)->getId() || !$theme->isEditable()) {
+                throw new Mage_Core_Exception(
+                    $this->__('The file can\'t be found or edited.')
+                );
             }
 
-            /** @var $themeService Mage_Core_Model_Theme_Service */
-            $themeService = $this->_objectManager->get('Mage_Core_Model_Theme_Service');
+            /** @var $customizationConfig Mage_Theme_Model_Config_Customization */
+            $customizationConfig = $this->_objectManager->get('Mage_Theme_Model_Config_Customization');
             $store = $this->_objectManager->get('Mage_Core_Model_Store')->load($storeId);
 
-            if (!$themeService->isThemeAssignedToSpecificStore($theme, $store)) {
-                throw new Mage_Core_Exception($this->__('Theme is not assigned to any store.', $theme->getId()));
+            if (!$customizationConfig->isThemeAssignedToStore($theme, $store)) {
+                throw new Mage_Core_Exception($this->__('This theme is not assigned to a store view.',
+                    $theme->getId()));
             }
 
             $this->_objectManager->get('Mage_Backend_Model_Config_Backend_Store')
                 ->setScope('stores')->setScopeId($store->getId())->setPath('design/header/logo_src')
                 ->setValue('')->save();
 
+            $this->_reinitSystemConfiguration();
             $response = array('error' => false, 'content' => array());
         } catch (Mage_Core_Exception $e) {
             $response = array('error' => true, 'message' => $e->getMessage());
+            $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         } catch (Exception $e) {
-            $errorMessage = $this->__('Cannot upload image file');
+            $errorMessage = $this->__('Something went wrong uploading the image.' .
+                ' Please check the file format and try again (JPEG, GIF, or PNG).');
             $response = array('error' => true, 'message' => $errorMessage);
             $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         }
@@ -382,40 +400,37 @@ class Mage_DesignEditor_Adminhtml_System_Design_Editor_ToolsController extends M
         $controlId = $this->getRequest()->getParam('id');
         $controlValue = $this->getRequest()->getParam('value');
         try {
+            $themeContext = $this->_initContext();
             /** @var $configFactory Mage_DesignEditor_Model_Editor_Tools_Controls_Factory */
             $configFactory = $this->_objectManager->create('Mage_DesignEditor_Model_Editor_Tools_Controls_Factory');
             $configuration = $configFactory->create(
                 Mage_DesignEditor_Model_Editor_Tools_Controls_Factory::TYPE_QUICK_STYLES,
-                $this->_getEditableTheme()
+                $themeContext->getStagingTheme(),
+                $themeContext->getEditableTheme()->getParentTheme()
             );
             $configuration->saveData(array($controlId => $controlValue));
             $response = array('success' => true);
         } catch (Mage_Core_Exception $e) {
-            $this->_session->addError($e->getMessage());
             $response = array('error' => true, 'message' => $e->getMessage());
+            $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         } catch (Exception $e) {
-            $errorMessage = $this->__('Error while saving quick style "%s"', 'some_style_id');
-            $this->_session->addError($errorMessage);
+            $errorMessage = $this->__('Something went wrong uploading the image.' .
+                ' Please check the file format and try again (JPEG, GIF, or PNG).');
             $response = array('error' => true, 'message' => $errorMessage);
             $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
         }
-
-        $this->loadLayout();
-        $response['message_html'] = $this->getLayout()->getMessagesBlock()->toHtml();
         $this->getResponse()->setBody($this->_objectManager->get('Mage_Core_Helper_Data')->jsonEncode($response));
     }
 
     /**
-     * Get theme launched in editor
+     * Re-init system configuration
      *
-     * @return Mage_Core_Model_Theme
+     * @return Mage_Core_Model_Config
      */
-    protected function _getEditableTheme()
+    protected function _reinitSystemConfiguration()
     {
-        /** @var $dataHelper Mage_DesignEditor_Helper_Data */
-        $dataHelper = $this->_objectManager->get('Mage_DesignEditor_Helper_Data');
-        /** @var $helper Mage_Core_Helper_Theme */
-        $helper = $this->_objectManager->get('Mage_Core_Helper_Theme');
-        return $helper->loadEditableTheme($dataHelper->getEditableThemeId());
+        /** @var $configModel Mage_Core_Model_Config */
+        $configModel = $this->_objectManager->get('Mage_Core_Model_Config');
+        return $configModel->reinit();
     }
 }

@@ -62,7 +62,7 @@ class Mage_ImportExport_Adminhtml_ImportController extends Mage_Adminhtml_Contro
      */
     protected function _isAllowed()
     {
-        return $this->_objectManager->get('Mage_Core_Model_Authorization')->isAllowed('Mage_ImportExport::import');
+        return $this->_authorization->isAllowed('Mage_ImportExport::import');
     }
 
     /**
@@ -101,7 +101,7 @@ class Mage_ImportExport_Adminhtml_ImportController extends Mage_Adminhtml_Contro
                 return;
             }
             $resultBlock->addAction('hide', array('edit_form', 'upload_button', 'messages'))
-                ->addSuccess($this->__('Import successfully done.'));
+                ->addSuccess($this->__('Import successfully done'));
             $this->renderLayout();
         } else {
             $this->_redirect('*/*/index');
@@ -156,7 +156,7 @@ class Mage_ImportExport_Adminhtml_ImportController extends Mage_Adminhtml_Contro
                     );
                 }
             } catch (Exception $e) {
-                $resultBlock->addNotice($this->__('Please fix errors and re-upload file'))
+                $resultBlock->addNotice($this->__('Please fix errors and re-upload file.'))
                     ->addError($e->getMessage());
             }
             $this->renderLayout();
@@ -182,11 +182,11 @@ class Mage_ImportExport_Adminhtml_ImportController extends Mage_Adminhtml_Contro
     ) {
         if ($import->getProcessedRowsCount() == $import->getInvalidRowsCount()) {
             $resultBlock->addNotice(
-                $this->__('File is totally invalid. Please fix errors and re-upload file')
+                $this->__('File is totally invalid. Please fix errors and re-upload file.')
             );
         } elseif ($import->getErrorsCount() >= $import->getErrorsLimit()) {
             $resultBlock->addNotice(
-                $this->__('Errors limit (%d) reached. Please fix errors and re-upload file',
+                $this->__('Errors limit (%d) reached. Please fix errors and re-upload file.',
                     $import->getErrorsLimit()
                 )
             );

@@ -85,13 +85,6 @@
                 </Mage_ProductAlert>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <productalert module="Mage_ProductAlert">
-                    <file>layout.xml</file>
-                </productalert>
-            </updates>
-        </layout>
         <routers>
             <productalert>
                 <use>standard</use>

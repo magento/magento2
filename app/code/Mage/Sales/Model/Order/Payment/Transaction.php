@@ -189,7 +189,7 @@ class Mage_Sales_Model_Order_Payment_Transaction extends Mage_Core_Model_Abstrac
         if (empty($txnId)) {
             if ('' == $this->getTxnId()) {
                 Mage::throwException(
-                    Mage::helper('Mage_Sales_Helper_Data')->__('Parent transaction ID must have a transaction ID.')
+                    Mage::helper('Mage_Sales_Helper_Data')->__('The parent transaction ID must have a transaction ID.')
                 );
             }
         } else {
@@ -665,7 +665,7 @@ class Mage_Sales_Model_Order_Payment_Transaction extends Mage_Core_Model_Abstrac
         $payment = $this->_verifyPaymentObject(true);
         $paymentId = $payment ? $payment->getId() : $this->_getData('payment_id');
         if (!$paymentId) {
-            Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('At least a payment ID must be set.'));
+            Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('At minimum, you need to set a payment ID.'));
         }
 
         $this->setOrder(true);
@@ -772,7 +772,7 @@ class Mage_Sales_Model_Order_Payment_Transaction extends Mage_Core_Model_Abstrac
             case self::TYPE_REFUND:
                 break;
             default:
-                Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('Unsupported transaction type "%s".', $txnType));
+                Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('We found an unsupported transaction type "%s".', $txnType));
         }
     }
 
@@ -787,7 +787,7 @@ class Mage_Sales_Model_Order_Payment_Transaction extends Mage_Core_Model_Abstrac
     {
         if (!$this->_paymentObject || !$this->getOrderId()) {
             if (!$dryRun) {
-                Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('Proper payment object must be set.'));
+                Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('Please set a proper payment object.'));
             }
         }
         return $this->_paymentObject;
@@ -801,7 +801,7 @@ class Mage_Sales_Model_Order_Payment_Transaction extends Mage_Core_Model_Abstrac
     protected function _verifyTxnId($txnId)
     {
         if (null !== $txnId && 0 == strlen($txnId)) {
-            Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('Transaction ID must not be empty.'));
+            Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('The Transaction ID field cannot be empty.'));
         }
     }
 
@@ -813,7 +813,7 @@ class Mage_Sales_Model_Order_Payment_Transaction extends Mage_Core_Model_Abstrac
     protected function _verifyThisTransactionExists()
     {
         if (!$this->getId()) {
-            Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('This operation requires an existing transaction object.'));
+            Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('You can\'t do this without a transaction object.'));
         }
         $this->_verifyTxnType();
     }

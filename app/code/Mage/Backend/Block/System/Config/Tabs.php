@@ -73,12 +73,12 @@ class Mage_Backend_Block_System_Config_Tabs extends Mage_Backend_Block_Widget
     protected $_storeCode;
 
     /**
-     * @param Mage_Core_Block_Template_Context $context
+     * @param Mage_Backend_Block_Template_Context $context
      * @param Mage_Backend_Model_Config_Structure $configStructure
      * @param array $data
      */
     public function __construct(
-        Mage_Core_Block_Template_Context $context,
+        Mage_Backend_Block_Template_Context $context,
         Mage_Backend_Model_Config_Structure $configStructure,
         array $data = array()
     ) {

@@ -38,7 +38,7 @@
                 <span class="title"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Payment Information') ?></span>
             </div>
             <div><?php echo $this->getChildHtml('order_payment') ?></div>
-            <div class="order-payment-currency"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Order was placed using %s', $_order->getOrderCurrencyCode()) ?></div>
+            <div class="order-payment-currency"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('The order was placed using %s.', $_order->getOrderCurrencyCode()) ?></div>
         </div>
     </div>
     <?php if (!$_order->getIsVirtual()): ?>
@@ -72,7 +72,7 @@
                 <input type="checkbox" name="invoice[do_shipment]" id="invoice_do_shipment" value="1" <?php echo $this->hasInvoiceShipmentTypeMismatch()?' disabled="disabled"':'' ?> />
             </div>
             <?php if ($this->hasInvoiceShipmentTypeMismatch()): ?>
-                <small><?php echo $this->__('Some items in this order have different invoice and shipment types. You can create shipment only after the invoice is created.') ?></small>
+                <small><?php echo $this->__('Invoice and shipment types do not match for some items on this order. You can create a shipment only after creating the invoice.') ?></small>
                 <?php endif; ?>
             <?php endif; ?>
             <div id="tracking" style="display:none;"><?php echo $this->getChildHtml('tracking',false) ?></div>

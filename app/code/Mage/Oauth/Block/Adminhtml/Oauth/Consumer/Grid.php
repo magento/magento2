@@ -52,7 +52,7 @@ class Mage_Oauth_Block_Adminhtml_Oauth_Consumer_Grid extends Mage_Adminhtml_Bloc
         $this->setDefaultSort('entity_id')
             ->setDefaultDir(Varien_Db_Select::SQL_DESC);
 
-        $this->_editAllow = Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Oauth::consumer_edit');
+        $this->_editAllow = $this->_authorization->isAllowed('Mage_Oauth::consumer_edit');
     }
 
     /**
@@ -84,7 +84,7 @@ class Mage_Oauth_Block_Adminhtml_Oauth_Consumer_Grid extends Mage_Adminhtml_Bloc
         ));
 
         $this->addColumn('created_at', array(
-            'header' => Mage::helper('Mage_Oauth_Helper_Data')->__('Created At'), 'index' => 'created_at'
+            'header' => Mage::helper('Mage_Oauth_Helper_Data')->__('Created'), 'index' => 'created_at'
         ));
 
         return parent::_prepareColumns();

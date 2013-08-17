@@ -114,19 +114,24 @@ class Mage_Backend_Model_Config_Structure_Element_CompositeAbstractTest extends 
         $this->_applicationMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
         $this->_iteratorMock->expects($this->once())->method('current')->will($this->returnValue(true));
         $this->_iteratorMock->expects($this->once())->method('valid')->will($this->returnValue(true));
+        $this->_model->setData(array('showInDefault' => 'true'), 'default');
         $this->assertTrue($this->_model->isVisible());
     }
 
     public function testIsVisibleReturnsTrueIfElementHasFrontEndModel()
     {
         $this->_applicationMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
-        $this->_model->setData(array('frontend_model' => 'Model_Name'), 'scope');
+        $this->_model->setData(array(
+            'showInDefault' => 'true',
+            'frontend_model' => 'Model_Name'
+        ), 'default');
         $this->assertTrue($this->_model->isVisible());
     }
 
     public function testIsVisibleReturnsFalseIfElementHasNoChildrenAndFrontendModel()
     {
         $this->_applicationMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_model->setData(array('showInDefault' => 'true'), 'default');
         $this->assertFalse($this->_model->isVisible());
     }
 }

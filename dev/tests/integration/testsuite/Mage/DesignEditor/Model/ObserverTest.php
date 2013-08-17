@@ -51,13 +51,13 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
         $pageAssets = $page->getAssets();
 
         $fixtureAssets = array(
-            array('name'   => 'test_css', 'type' => Mage_Core_Model_Design_Package::CONTENT_TYPE_CSS,
+            array('name'   => 'test_css', 'type' => Mage_Core_Model_View_Publisher::CONTENT_TYPE_CSS,
                   'params' => array()),
-            array('name'   => 'test_css_vde', 'type' => Mage_Core_Model_Design_Package::CONTENT_TYPE_CSS,
+            array('name'   => 'test_css_vde', 'type' => Mage_Core_Model_View_Publisher::CONTENT_TYPE_CSS,
                   'params' => array('flag_name' => 'vde_design_mode')),
-            array('name'   => 'test_js', 'type' => Mage_Core_Model_Design_Package::CONTENT_TYPE_JS,
+            array('name'   => 'test_js', 'type' => Mage_Core_Model_View_Publisher::CONTENT_TYPE_JS,
                   'params' => array()),
-            array('name'   => 'test_js_vde', 'type' => Mage_Core_Model_Design_Package::CONTENT_TYPE_JS,
+            array('name'   => 'test_js_vde', 'type' => Mage_Core_Model_View_Publisher::CONTENT_TYPE_JS,
                   'params' => array('flag_name' => 'vde_design_mode')),
         );
 

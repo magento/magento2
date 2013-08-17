@@ -1,5 +1,7 @@
 <?php
 /**
+ * Event resource Collection
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -23,7 +25,6 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 class Mage_Webhook_Model_Resource_Event_Collection extends Mage_Core_Model_Resource_Db_Collection_Abstract
 {
     public function _construct()

@@ -49,9 +49,7 @@ class Mage_Adminhtml_Report_ReviewController extends Mage_Adminhtml_Controller_A
 
     public function customerAction()
     {
-        $this->_title($this->__('Reports'))
-             ->_title($this->__('Reviews'))
-             ->_title($this->__('Customers Reviews'));
+        $this->_title($this->__('Customer Reviews Report'));
 
         $this->_initAction()
             ->_setActiveMenu('Mage_Review::report_review_customer')
@@ -87,9 +85,7 @@ class Mage_Adminhtml_Report_ReviewController extends Mage_Adminhtml_Controller_A
 
     public function productAction()
     {
-        $this->_title($this->__('Reports'))
-             ->_title($this->__('Reviews'))
-             ->_title($this->__('Products Reviews'));
+        $this->_title($this->__('Product Reviews Report'));
 
         $this->_initAction()
             ->_setActiveMenu('Mage_Review::report_review_product')
@@ -124,10 +120,7 @@ class Mage_Adminhtml_Report_ReviewController extends Mage_Adminhtml_Controller_A
 
     public function productDetailAction()
     {
-        $this->_title($this->__('Reports'))
-             ->_title($this->__('Reviews'))
-             ->_title($this->__('Product Reviews'))
-             ->_title($this->__('Details'));
+        $this->_title($this->__('Details'));
 
         $this->_initAction()
             ->_setActiveMenu('Mage_Review::report_review')
@@ -165,13 +158,13 @@ class Mage_Adminhtml_Report_ReviewController extends Mage_Adminhtml_Controller_A
     {
         switch ($this->getRequest()->getActionName()) {
             case 'customer':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::review_customer');
+                return $this->_authorization->isAllowed('Mage_Reports::review_customer');
                 break;
             case 'product':
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::review_product');
+                return $this->_authorization->isAllowed('Mage_Reports::review_product');
                 break;
             default:
-                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::review');
+                return $this->_authorization->isAllowed('Mage_Reports::review');
                 break;
         }
     }

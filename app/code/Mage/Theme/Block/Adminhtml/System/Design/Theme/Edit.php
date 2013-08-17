@@ -40,6 +40,10 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit extends Mage_Backend_B
         $this->_controller = 'Adminhtml_System_Design_Theme';
         $this->setId('theme_edit');
 
+        if (is_object($this->getLayout()->getBlock('page-title'))) {
+            $this->getLayout()->getBlock('page-title')->setPageTitle($this->getHeaderText());
+        }
+
         /** @var $theme Mage_Core_Model_Theme */
         $theme = $this->_getCurrentTheme();
         if ($theme) {
@@ -63,10 +67,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit extends Mage_Backend_B
 
             if ($theme->isDeletable()) {
                 if ($theme->hasChildThemes()) {
-                    $message = join(' ', array(
-                        $this->__('Theme contains child themes. Their parent will be modified.'),
-                        $this->__('Are you sure you want to do this?')
-                    ));
+                    $message = $this->__('Are you sure you want to delete this theme?');
                     $onClick = sprintf("deleteConfirm('%s', '%s')",
                         $message,
                         $this->getUrl('*/*/delete', array('id' => $theme->getId()))

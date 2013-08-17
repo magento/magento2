@@ -41,6 +41,7 @@ class Integrity_Modular_BlockInstantiationTest extends Magento_Test_TestCase_Int
      */
     public function testBlockInstantiation($module, $class, $area)
     {
+        $this->assertNotEmpty($module);
         $this->assertTrue(class_exists($class), "Block class: {$class}");
         Mage::getConfig()->setCurrentAreaCode($area);
         $block = Mage::getModel($class);
@@ -53,53 +54,70 @@ class Integrity_Modular_BlockInstantiationTest extends Magento_Test_TestCase_Int
     public function allBlocksDataProvider()
     {
         $blockClass = '';
-        $skipBlocks = array(
-                // blocks with abstract constructor arguments
-                // TODO: need to figure out how these typically work
-                "Mage_Adminhtml_Block_System_Email_Template",
-                "Mage_Adminhtml_Block_System_Email_Template_Edit",
-                "Mage_Backend_Block_System_Config_Edit",
-                "Mage_Backend_Block_System_Config_Form",
-                "Mage_Backend_Block_System_Config_Tabs",
-                );
-
         try {
             /** @var $website Mage_Core_Model_Website */
             Mage::app()->getStore()->setWebsiteId(0);
 
+            $enabledModules = $this->_getEnabledModules();
+            $skipBlocks = $this->_getBlocksToSkip();
             $templateBlocks = array();
             $blockMods = Utility_Classes::collectModuleClasses('Block');
             foreach ($blockMods as $blockClass => $module) {
-                if (!in_array($module, $this->_getEnabledModules())) {
-                    continue;
-                }
-                if (in_array($blockClass, $skipBlocks)) {
+                if (!isset($enabledModules[$module]) || isset($skipBlocks[$blockClass])) {
                     continue;
                 }
                 $class = new ReflectionClass($blockClass);
                 if ($class->isAbstract() || !$class->isSubclassOf('Mage_Core_Block_Template')) {
                     continue;
                 }
-
-                $area = 'frontend';
-                if ($module == 'Mage_Install') {
-                    $area = 'install';
-                } elseif ($module == 'Mage_Adminhtml' || strpos($blockClass, '_Adminhtml_')
-                        || strpos($blockClass, '_Backend_')
-                        || $class->isSubclassOf('Mage_Backend_Block_Template')) {
-                    $area = 'adminhtml';
-                }
-
-                Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_ADMINHTML,
-                    Mage_Core_Model_App_Area::PART_CONFIG);
-
-                $templateBlocks[$module . ', ' . $blockClass . ', ' . $area] =
-                    array($module, $blockClass, $area);
+                $templateBlocks = $this->_addBlock($module, $blockClass, $class, $templateBlocks);
             }
             return $templateBlocks;
         } catch (Exception $e) {
             trigger_error("Corrupted data provider. Last known block instantiation attempt: '{$blockClass}'."
                 . " Exception: {$e}", E_USER_ERROR);
         }
+    }
+
+    /**
+     * Loads block classes, that should not be instantiated during the instantiation test
+     *
+     * @return array
+     */
+    protected function _getBlocksToSkip()
+    {
+        $result = array();
+        foreach (glob(__DIR__ . '/_files/skip_blocks*.php') as $file) {
+            $blocks = include $file;
+            $result = array_merge($result, $blocks);
+        }
+        return array_combine($result, $result);
+    }
+
+    /**
+     * @param $module
+     * @param $blockClass
+     * @param $class
+     * @param $templateBlocks
+     * @return mixed
+     */
+    private function _addBlock($module, $blockClass, $class, $templateBlocks)
+    {
+        $area = 'frontend';
+        if ($module == 'Mage_Install') {
+            $area = 'install';
+        } elseif ($module == 'Mage_Adminhtml' || strpos($blockClass, '_Adminhtml_')
+            || strpos($blockClass, '_Backend_')
+            || $class->isSubclassOf('Mage_Backend_Block_Template')
+        ) {
+            $area = 'adminhtml';
+        }
+        Mage::app()->loadAreaPart(
+            Mage_Core_Model_App_Area::AREA_ADMINHTML,
+            Mage_Core_Model_App_Area::PART_CONFIG
+        );
+        $templateBlocks[$module . ', ' . $blockClass . ', ' . $area]
+            = array($module, $blockClass, $area);
+        return $templateBlocks;
     }
 }

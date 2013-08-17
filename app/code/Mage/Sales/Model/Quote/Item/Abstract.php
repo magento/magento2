@@ -269,7 +269,7 @@ abstract class Mage_Sales_Model_Quote_Item_Abstract extends Mage_Core_Model_Abst
             $this->setMessage($e->getMessage());
         } catch (Exception $e){
             $this->setHasError(true);
-            $this->setMessage(Mage::helper('Mage_Sales_Helper_Data')->__('Item qty declaration error.'));
+            $this->setMessage(Mage::helper('Mage_Sales_Helper_Data')->__('Item qty declaration error'));
         }
 
         try {
@@ -281,9 +281,9 @@ abstract class Mage_Sales_Model_Quote_Item_Abstract extends Mage_Core_Model_Abst
                 ->addMessage(Mage::helper('Mage_Sales_Helper_Data')->__('Some of the products below do not have all the required options.'));
         } catch (Exception $e) {
             $this->setHasError(true)
-                ->setMessage(Mage::helper('Mage_Sales_Helper_Data')->__('Item options declaration error.'));
+                ->setMessage(Mage::helper('Mage_Sales_Helper_Data')->__('Something went wrong during the item options declaration.'));
             $this->getQuote()->setHasError(true)
-                ->addMessage(Mage::helper('Mage_Sales_Helper_Data')->__('Items options declaration error.'));
+                ->addMessage(Mage::helper('Mage_Sales_Helper_Data')->__('We found an item options declaration error.'));
         }
 
         if ($this->getProduct()->getHasError()) {

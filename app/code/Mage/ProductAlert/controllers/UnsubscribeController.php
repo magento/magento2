@@ -60,7 +60,7 @@ class Mage_ProductAlert_UnsubscribeController extends Mage_Core_Controller_Front
         $product = Mage::getModel('Mage_Catalog_Model_Product')->load($productId);
         if (!$product->getId() || !$product->isVisibleInCatalog()) {
             /* @var $product Mage_Catalog_Model_Product */
-            Mage::getSingleton('Mage_Customer_Model_Session')->addError($this->__('The product is not found.'));
+            Mage::getSingleton('Mage_Customer_Model_Session')->addError($this->__('We can\'t find the product.'));
             $this->_redirect('customer/account/');
             return ;
         }
@@ -75,7 +75,7 @@ class Mage_ProductAlert_UnsubscribeController extends Mage_Core_Controller_Front
                 $model->delete();
             }
 
-            $session->addSuccess($this->__('The alert subscription has been deleted.'));
+            $session->addSuccess($this->__('You deleted the alert subscription.'));
         }
         catch (Exception $e) {
             $session->addException($e, $this->__('Unable to update the alert subscription.'));

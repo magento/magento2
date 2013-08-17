@@ -53,16 +53,14 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Tab_CssTest extends PHPUnit
      */
     protected function _prepareModelArguments()
     {
-        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
-        $filesystemHelper = new Magento_Test_Helper_FileSystem($this);
-
         $this->_objectManager = $this->getMock('Magento_ObjectManager');
-        
+
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         $constructArguments = $objectManagerHelper->getConstructArguments(
             'Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css',
             array(
                  'objectManager'   => $this->_objectManager,
-                 'dirs'            => $filesystemHelper->createDirInstance(__DIR__),
+                 'dirs'            => new Mage_Core_Model_Dir(__DIR__),
                  'uploaderService' => $this->getMock('Mage_Theme_Model_Uploader_Service', array(), array(), '', false),
                  'urlBuilder'      => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false)
             )
@@ -88,7 +86,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Tab_CssTest extends PHPUnit
 
         $result = $method->invokeArgs($this->_model, array());
         $expectedResult = 'Allowed file types *.css.<br />';
-        $expectedResult .= 'The file you upload will replace the existing custom.css file (shown below).<br />';
+        $expectedResult .= 'This file will replace the current custom.css file and can\'t be more than 2 MB.<br />';
         $expectedResult .= sprintf(
             'Max file size to upload %sM',
             $sizeModel->getMaxFileSizeInMb()

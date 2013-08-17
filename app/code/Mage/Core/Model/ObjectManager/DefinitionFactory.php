@@ -22,9 +22,32 @@
  *
  * @copyright {@copyright}
  * @license   {@license_link}
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Mage_Core_Model_ObjectManager_DefinitionFactory
 {
+    /**
+     * Format of definitions
+     *
+     * @var string
+     */
+    protected $_definitionFormat;
+
+    /**
+     * @var Mage_Core_Model_Config_Primary
+     */
+    protected $_config;
+
+    /**
+     * @param Mage_Core_Model_Config_Primary $config
+     */
+    public function __construct(Mage_Core_Model_Config_Primary $config)
+    {
+        $this->_config = $config;
+        $this->_definitionFormat = $config->getDefinitionFormat();
+    }
+
     /**
      * Get definition model name
      *
@@ -46,29 +69,26 @@ class Mage_Core_Model_ObjectManager_DefinitionFactory
     /**
      * Create object manager definition reader based on configuration
      *
-     * @param Mage_Core_Model_Config_Primary $config
      * @return Magento_ObjectManager_Definition
      */
-    public function create(Mage_Core_Model_Config_Primary $config)
+    public function createClassDefinition()
     {
         Magento_Profiler::start('di_definitions_create');
-        $definitions = $config->getParam('definitions', false);
+        $definitions = $this->_config->getParam('definitions', false);
         if (!$definitions) { // check whether definitions were provided as application init param
-            $path = $config->getDefinitionPath();
+            $path = $this->_config->getDefinitionPath() . DIRECTORY_SEPARATOR . 'definitions.php';
             if (is_readable($path)) {
                 $definitions = file_get_contents($path);
             }
         }
         if ($definitions) {
-            $format = $config->getDefinitionFormat();
             if (is_string($definitions)) {
-                $extractor = $format == 'igbinary' ? 'igbinary_unserialize' : 'unserialize';
-                $definitions = $extractor($definitions);
+                $definitions = $this->_unpack($definitions);
             }
-            $definitionModel = $this->_getDefinitionModel($format);
+            $definitionModel = $this->_getDefinitionModel($this->_definitionFormat);
             $output = new $definitionModel($definitions);
         } else {
-            $genDir = $config->getDirectories()->getDir(Mage_Core_Model_Dir::VAR_DIR) . '/generation';
+            $genDir = $this->_config->getDirectories()->getDir(Mage_Core_Model_Dir::GENERATION);
             $autoloader = new Magento_Autoload_IncludePath();
             $generatorIo = new Magento_Code_Generator_Io(new Varien_Io_File(), $autoloader, $genDir);
             $generator = new Magento_Code_Generator_Class(
@@ -79,5 +99,32 @@ class Mage_Core_Model_ObjectManager_DefinitionFactory
         }
         Magento_Profiler::stop('di_definitions_create');
         return $output;
+    }
+
+    /**
+     * Retrieve list of plugin definitions
+     *
+     * @return Magento_ObjectManager_Interception_Definition
+     */
+    public function createPluginDefinition()
+    {
+        $path = $this->_config->getDefinitionPath() . DIRECTORY_SEPARATOR . 'plugins.php';
+        if (is_readable($path)) {
+            return new Magento_ObjectManager_Interception_Definition_Compiled($this->_unpack(file_get_contents($path)));
+        } else {
+            return new Magento_ObjectManager_Interception_Definition_Runtime();
+        }
+    }
+
+    /**
+     * Uncompress definitions
+     *
+     * @param string $definitions
+     * @return mixed
+     */
+    protected function _unpack($definitions)
+    {
+        $extractor = $this->_definitionFormat == 'igbinary' ? 'igbinary_unserialize' : 'unserialize';
+        return $extractor($definitions);
     }
 }

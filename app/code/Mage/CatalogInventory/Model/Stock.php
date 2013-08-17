@@ -137,7 +137,7 @@ class Mage_CatalogInventory_Model_Stock extends Mage_Core_Model_Abstract
             $item->setData($itemInfo);
             if (!$item->checkQty($qtys[$item->getProductId()])) {
                 $this->_getResource()->commit();
-                Mage::throwException(Mage::helper('Mage_CatalogInventory_Helper_Data')->__('Not all products are available in the requested quantity'));
+                Mage::throwException(Mage::helper('Mage_CatalogInventory_Helper_Data')->__('Not all of your products are available in the requested quantity.'));
             }
             $item->subtractQty($qtys[$item->getProductId()]);
             if (!$item->verifyStock() || $item->verifyNotification()) {
@@ -182,7 +182,7 @@ class Mage_CatalogInventory_Model_Stock extends Mage_Core_Model_Abstract
             }
         }
         else {
-            Mage::throwException(Mage::helper('Mage_CatalogInventory_Helper_Data')->__('Cannot specify product identifier for the order item.'));
+            Mage::throwException(Mage::helper('Mage_CatalogInventory_Helper_Data')->__('We cannot specify a product identifier for the order item.'));
         }
         return $this;
     }

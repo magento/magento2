@@ -83,7 +83,7 @@ abstract class Mage_Eav_Model_Attribute_Data_Abstract
     protected $_extractedData       = array();
 
     /**
-     * Mage_Core_Model_Locale FORMAT
+     * Mage_Core_Model_LocaleInterface FORMAT
      *
      * @var string
      */
@@ -256,7 +256,7 @@ abstract class Mage_Eav_Model_Attribute_Data_Abstract
         if (is_null($format)) {
             // get format
             if (is_null($this->_dateFilterFormat)) {
-                $this->_dateFilterFormat = Mage_Core_Model_Locale::FORMAT_TYPE_SHORT;
+                $this->_dateFilterFormat = Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT;
             }
             return Mage::app()->getLocale()->getDateFormat($this->_dateFilterFormat);
         } else if ($format === false) {
@@ -310,7 +310,7 @@ abstract class Mage_Eav_Model_Attribute_Data_Abstract
                         Zend_Validate_Alnum::INVALID
                     );
                     $validator->setMessage(
-                        $this->_translationHelper->__('"%s" has not only alphabetic and digit characters.', $label),
+                        $this->_translationHelper->__('"%s" contains non-alphabetic or non-numeric characters.', $label),
                         Zend_Validate_Alnum::NOT_ALNUM
                     );
                     $validator->setMessage(
@@ -328,7 +328,7 @@ abstract class Mage_Eav_Model_Attribute_Data_Abstract
                         Zend_Validate_Digits::INVALID
                     );
                     $validator->setMessage(
-                        $this->_translationHelper->__('"%s" contains not only digit characters.', $label),
+                        $this->_translationHelper->__('"%s" contains non-numeric characters.', $label),
                         Zend_Validate_Digits::NOT_DIGITS
                     );
                     $validator->setMessage(
@@ -346,7 +346,7 @@ abstract class Mage_Eav_Model_Attribute_Data_Abstract
                         Zend_Validate_Alpha::INVALID
                     );
                     $validator->setMessage(
-                        $this->_translationHelper->__('"%s" has not only alphabetic characters.', $label),
+                        $this->_translationHelper->__('"%s" contains non-alphabetic characters.', $label),
                         Zend_Validate_Alpha::NOT_ALPHA
                     );
                     $validator->setMessage(
@@ -409,35 +409,35 @@ abstract class Mage_Eav_Model_Attribute_Data_Abstract
                         Zend_Validate_EmailAddress::LENGTH_EXCEEDED
                     );
                     $validator->setMessage(
-                        $this->_translationHelper->__("'%value%' appears to be an IP address, but IP addresses are not allowed"),
+                        $this->_translationHelper->__("'%value%' appears to be an IP address, but IP addresses are not allowed."),
                         Zend_Validate_Hostname::IP_ADDRESS_NOT_ALLOWED
                     );
                     $validator->setMessage(
-                        $this->_translationHelper->__("'%value%' appears to be a DNS hostname but cannot match TLD against known list"),
+                        $this->_translationHelper->__("'%value%' appears to be a DNS hostname but cannot match TLD against known list."),
                         Zend_Validate_Hostname::UNKNOWN_TLD
                     );
                     $validator->setMessage(
-                        $this->_translationHelper->__("'%value%' appears to be a DNS hostname but contains a dash in an invalid position"),
+                        $this->_translationHelper->__("'%value%' appears to be a DNS hostname but contains a dash in an invalid position."),
                         Zend_Validate_Hostname::INVALID_DASH
                     );
                     $validator->setMessage(
-                        $this->_translationHelper->__("'%value%' appears to be a DNS hostname but cannot match against hostname schema for TLD '%tld%'"),
+                        $this->_translationHelper->__("'%value%' appears to be a DNS hostname but cannot match against hostname schema for TLD '%tld%'."),
                         Zend_Validate_Hostname::INVALID_HOSTNAME_SCHEMA
                     );
                     $validator->setMessage(
-                        $this->_translationHelper->__("'%value%' appears to be a DNS hostname but cannot extract TLD part"),
+                        $this->_translationHelper->__("'%value%' appears to be a DNS hostname but cannot extract TLD part."),
                         Zend_Validate_Hostname::UNDECIPHERABLE_TLD
                     );
                     $validator->setMessage(
-                        $this->_translationHelper->__("'%value%' does not appear to be a valid local network name"),
+                        $this->_translationHelper->__("'%value%' does not appear to be a valid local network name."),
                         Zend_Validate_Hostname::INVALID_LOCAL_NAME
                     );
                     $validator->setMessage(
-                        $this->_translationHelper->__("'%value%' appears to be a local network name but local network names are not allowed"),
+                        $this->_translationHelper->__("'%value%' appears to be a local network name but local network names are not allowed."),
                         Zend_Validate_Hostname::LOCAL_NAME_NOT_ALLOWED
                     );
                     $validator->setMessage(
-                        $this->_translationHelper->__("'%value%' appears to be a DNS hostname but the given punycode notation cannot be decoded"),
+                        $this->_translationHelper->__("'%value%' appears to be a DNS hostname but the given punycode notation cannot be decoded."),
                         Zend_Validate_Hostname::CANNOT_DECODE_PUNYCODE
                     );
                     if (!$validator->isValid($value)) {

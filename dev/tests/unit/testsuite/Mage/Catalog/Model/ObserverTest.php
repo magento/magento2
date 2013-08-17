@@ -79,4 +79,20 @@ class Mage_Catalog_Model_ObserverTest extends PHPUnit_Framework_TestCase
         $this->_model->transitionProductType($this->_observer);
         $this->assertEquals('simple', $product->getTypeId());
     }
+
+    public function testTransitionProductTypeConfigurableToSimple()
+    {
+        $product = new Varien_Object(array('type_id' => 'configurable'));
+        $this->_observer = new Varien_Event_Observer(array('product' => $product, 'request' => $this->_requestMock));
+        $this->_model->transitionProductType($this->_observer);
+        $this->assertEquals('simple', $product->getTypeId());
+    }
+
+    public function testTransitionProductTypeConfigurableToVirtual()
+    {
+        $product = new Varien_Object(array('type_id' => 'configurable', 'is_virtual' => '1'));
+        $this->_observer = new Varien_Event_Observer(array('product' => $product, 'request' => $this->_requestMock));
+        $this->_model->transitionProductType($this->_observer);
+        $this->assertEquals('virtual', $product->getTypeId());
+    }
 }

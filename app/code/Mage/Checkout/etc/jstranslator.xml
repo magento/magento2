@@ -28,19 +28,19 @@
 <jstranslator>
     <!-- opcheckout.js -->
     <validate-guest translate="message" module="Mage_Checkout">
-        <message>Please choose to register or to checkout as a guest</message>
+        <message>Please choose to register or to checkout as a guest.</message>
     </validate-guest>
     <validate-shipping-methods-not-available translate="message" module="Mage_Checkout">
-        <message>Your order cannot be completed at this time as there is no shipping methods available for it. Please make necessary changes in your shipping address.</message>
+        <message>We are not able to ship to the selected shipping address. Please choose another address or edit the current address.</message>
     </validate-shipping-methods-not-available>
     <validate-shipping-methods-required translate="message" module="Mage_Checkout">
-        <message>Please specify shipping method.</message>
+        <message>Please specify a shipping method.</message>
     </validate-shipping-methods-required>
     <validate-payment-methods-not-available translate="message" module="Mage_Checkout">
-        <message>Your order cannot be completed at this time as there is no payment methods available for it.</message>
+        <message>We can't complete your order because you don't have a payment method available.</message>
     </validate-payment-methods-not-available>
     <validate-shipping-methods-required translate="message" module="Mage_Checkout">
-        <message>Please specify payment method.</message>
+        <message>Please specify a payment method.</message>
     </validate-shipping-methods-required>
     <!-- end opcheckout.js -->
 </jstranslator>

@@ -119,7 +119,7 @@ class Mage_Core_Model_Locale_Config
      */
     public function getAllowedLocales()
     {
-        $configData = Mage::getConfig()->getNode(Mage_Core_Model_Locale::XML_PATH_ALLOW_CODES);
+        $configData = Mage::getConfig()->getNode(Mage_Core_Model_LocaleInterface::XML_PATH_ALLOW_CODES);
         if ($configData) {
             $configData = $configData->asArray();
         }
@@ -138,7 +138,7 @@ class Mage_Core_Model_Locale_Config
      */
     public function getAllowedCurrencies()
     {
-        $configData = Mage::getConfig()->getNode(Mage_Core_Model_Locale::XML_PATH_ALLOW_CURRENCIES);
+        $configData = Mage::getConfig()->getNode(Mage_Core_Model_LocaleInterface::XML_PATH_ALLOW_CURRENCIES);
         if ($configData) {
             $configData = $configData->asArray();
         }

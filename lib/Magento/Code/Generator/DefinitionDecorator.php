@@ -82,4 +82,14 @@ class Magento_Code_Generator_DefinitionDecorator implements Magento_ObjectManage
         }
         return $this->_decoratedDefinition->getParameters($className);
     }
+
+    /**
+     * Retrieve list of all classes covered with definitions
+     *
+     * @return array
+     */
+    public function getClasses()
+    {
+        $this->_decoratedDefinition->getClasses();
+    }
 }

@@ -93,7 +93,7 @@ class Mage_Catalog_Block_Product_View_Options_Type_Date extends Mage_Catalog_Blo
             ->setName('options['.$this->getOption()->getId().'][date]')
             ->setClass('product-custom-option datetime-picker input-text')
             ->setImage($this->getViewFileUrl('Mage_Core::calendar.gif'))
-            ->setDateFormat(Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT))
+            ->setDateFormat(Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT))
             ->setValue($value)
             ->setYearsRange($yearStart . ':' . $yearEnd);
 

@@ -139,7 +139,7 @@ class Mage_Sales_Model_Order_Invoice_Api extends Mage_Sales_Model_Api_Resource
          * Check invoice create availability
          */
         if (!$order->canInvoice()) {
-            $this->_fault('data_invalid', Mage::helper('Mage_Sales_Helper_Data')->__('Cannot do invoice for order.'));
+            $this->_fault('data_invalid', Mage::helper('Mage_Sales_Helper_Data')->__('We cannot create an invoice for this order.'));
         }
 
         $invoice = $order->prepareInvoice($itemsQty);
@@ -220,7 +220,7 @@ class Mage_Sales_Model_Order_Invoice_Api extends Mage_Sales_Model_Api_Resource
         if (!$invoice->canCapture()) {
             $this->_fault(
                 'status_not_changed',
-                Mage::helper('Mage_Sales_Helper_Data')->__('Invoice cannot be captured.')
+                Mage::helper('Mage_Sales_Helper_Data')->__('Sorry, but we cannot capture the invoice.')
             );
         }
 
@@ -236,7 +236,7 @@ class Mage_Sales_Model_Order_Invoice_Api extends Mage_Sales_Model_Api_Resource
         } catch (Exception $e) {
             $this->_fault(
                 'status_not_changed',
-                Mage::helper('Mage_Sales_Helper_Data')->__('Invoice capturing problem.')
+                Mage::helper('Mage_Sales_Helper_Data')->__('Sorry, but something went wrong capturing the invoice.')
             );
         }
 
@@ -262,7 +262,7 @@ class Mage_Sales_Model_Order_Invoice_Api extends Mage_Sales_Model_Api_Resource
         if (!$invoice->canVoid()) {
             $this->_fault(
                 'status_not_changed',
-                Mage::helper('Mage_Sales_Helper_Data')->__('Invoice cannot be voided.')
+                Mage::helper('Mage_Sales_Helper_Data')->__('Sorry, but we cannot void the invoice.')
             );
         }
 
@@ -301,7 +301,7 @@ class Mage_Sales_Model_Order_Invoice_Api extends Mage_Sales_Model_Api_Resource
         if (!$invoice->canCancel()) {
             $this->_fault(
                 'status_not_changed',
-                Mage::helper('Mage_Sales_Helper_Data')->__('Invoice cannot be canceled.')
+                Mage::helper('Mage_Sales_Helper_Data')->__('Sorry, but we cannot cancel the invoice.')
             );
         }
 
@@ -317,7 +317,7 @@ class Mage_Sales_Model_Order_Invoice_Api extends Mage_Sales_Model_Api_Resource
         } catch (Exception $e) {
             $this->_fault(
                 'status_not_changed',
-                Mage::helper('Mage_Sales_Helper_Data')->__('Invoice canceling problem.')
+                Mage::helper('Mage_Sales_Helper_Data')->__('Something went wrong canceling the invoice.')
             );
         }
 

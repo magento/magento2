@@ -140,13 +140,13 @@ class Mage_Eav_Model_Attribute_Data_Date extends Mage_Eav_Model_Attribute_Data_A
                 case Mage_Eav_Model_Attribute_Data::OUTPUT_FORMAT_TEXT:
                 case Mage_Eav_Model_Attribute_Data::OUTPUT_FORMAT_HTML:
                 case Mage_Eav_Model_Attribute_Data::OUTPUT_FORMAT_PDF:
-                    $this->_dateFilterFormat(Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM);
+                    $this->_dateFilterFormat(Mage_Core_Model_LocaleInterface::FORMAT_TYPE_MEDIUM);
                     break;
             }
             $value = $this->_applyOutputFilter($value);
         }
 
-        $this->_dateFilterFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
+        $this->_dateFilterFormat(Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT);
 
         return $value;
     }

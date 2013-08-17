@@ -33,18 +33,24 @@ class Mage_DesignEditor_Model_Config_QuickStylesTest extends PHPUnit_Framework_T
     protected $_model;
 
     /**
-     * @var Mage_Core_Model_Design_Package
+     * @var Mage_Core_Model_View_DesignInterface
      */
     protected $_design;
+
+    /**
+     * @var Mage_Core_Model_View_FileSystem
+     */
+    protected $_viewFileSystem;
 
     /**
      * Initialize dependencies
      */
     protected function setUp()
     {
-        $this->_design = Mage::getObjectManager()->get('Mage_Core_Model_Design_Package');
-        $this->_design->setDesignTheme('package/test', Mage_Core_Model_Design_Package::DEFAULT_AREA);
-        $quickStylesPath = $this->_design->getFilename('Mage_DesignEditor::controls/quick_styles.xml');
+        $this->_design = Mage::getObjectManager()->get('Mage_Core_Model_View_DesignInterface');
+        $this->_design->setDesignTheme('package/test', Mage_Core_Model_View_DesignInterface::DEFAULT_AREA);
+        $this->_viewFileSystem = Mage::getObjectManager()->get('Mage_Core_Model_View_FileSystem');
+        $quickStylesPath = $this->_viewFileSystem->getFilename('Mage_DesignEditor::controls/quick_styles.xml');
         $this->assertFileExists($quickStylesPath);
         $this->_model = Mage::getObjectManager()->create('Mage_DesignEditor_Model_Config_Control_QuickStyles',
             array('configFiles' => array($quickStylesPath)));

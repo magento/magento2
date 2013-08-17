@@ -61,9 +61,7 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
             <div class="field-service" value-scope="<?php echo $element->getScopeLabel()?>">
             </div>
         <?php endif;?>
-        <div class="tooltip">
-            <span class="help"><?php echo $this->getHintHtml() ?></span>
-        </div>
+        <?php echo $this->getHintHtml() ?>
     </div>
     <?php endif; ?>
 <?php endif; ?>

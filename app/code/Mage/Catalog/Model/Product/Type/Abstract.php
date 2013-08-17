@@ -426,7 +426,7 @@ abstract class Mage_Catalog_Model_Product_Type_Abstract
                         } catch (Magento_Filesystem_Exception $e) {
                             Mage::throwException(
                                 $this->_helper('Mage_Catalog_Helper_Data')
-                                    ->__("Cannot create writeable directory '%s'.", $path)
+                                    ->__("We can't create writeable directory \"%s\".", $path)
                             );
                         }
 
@@ -439,7 +439,7 @@ abstract class Mage_Catalog_Model_Product_Type_Abstract
                             if (isset($queueOptions['option'])) {
                                 $queueOptions['option']->setIsValid(false);
                             }
-                            Mage::throwException($this->_helper('Mage_Catalog_Helper_Data')->__("File upload failed"));
+                            Mage::throwException($this->_helper('Mage_Catalog_Helper_Data')->__("The file upload failed."));
                         }
                         $this->_helper('Mage_Core_Helper_File_Storage_Database')->saveFile($dst);
                         break;
@@ -544,7 +544,7 @@ abstract class Mage_Catalog_Model_Product_Type_Abstract
                     if (!$customOption || strlen($customOption->getValue()) == 0) {
                         $product->setSkipCheckRequiredOption(true);
                         Mage::throwException(
-                            $this->_helper('Mage_Catalog_Helper_Data')->__('The product has required options')
+                            $this->_helper('Mage_Catalog_Helper_Data')->__('The product has required options.')
                         );
                     }
                 }
@@ -956,7 +956,7 @@ abstract class Mage_Catalog_Model_Product_Type_Abstract
             $errors[] = $e->getMessages();
         } catch (Exception $e) {
             Mage::logException($e);
-            $errors[] = $this->_helper('Mage_Catalog_Helper_Data')->__('There was an error while request processing.');
+            $errors[] = $this->_helper('Mage_Catalog_Helper_Data')->__('Something went wrong while processing the request.');
         }
 
         return $errors;

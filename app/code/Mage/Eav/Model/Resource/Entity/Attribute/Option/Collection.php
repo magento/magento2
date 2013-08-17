@@ -128,7 +128,6 @@ class Mage_Eav_Model_Resource_Entity_Attribute_Option_Collection extends Mage_Co
         return $this->_toOptionArray('option_id', $valueKey);
     }
 
-
     /**
      * Set order by position or alphabetically by values in admin
      *

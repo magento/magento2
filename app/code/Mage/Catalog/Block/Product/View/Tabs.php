@@ -24,35 +24,37 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 /**
  * Product information tabs
- *
- * @category   Mage
- * @package    Mage_Catalog
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Catalog_Block_Product_View_Tabs extends Mage_Core_Block_Template
 {
+    /**
+     * Configured tabs
+     *
+     * @var array
+     */
     protected $_tabs = array();
 
     /**
      * Add tab to the container
      *
+     * @param string $alias
      * @param string $title
      * @param string $block
      * @param string $template
+     * @param string $header
      */
-    function addTab($alias, $title, $block, $template)
+    public function addTab($alias, $title, $block, $template, $header = null)
     {
-
         if (!$title || !$block || !$template) {
-            return false;
+            return;
         }
 
         $this->_tabs[] = array(
             'alias' => $alias,
-            'title' => $title
+            'title' => $title,
+            'header' => $header,
         );
 
         $this->setChild($alias,
@@ -61,7 +63,12 @@ class Mage_Catalog_Block_Product_View_Tabs extends Mage_Core_Block_Template
             );
     }
 
-    function getTabs()
+    /**
+     * Return configured tabs
+     *
+     * @return array
+     */
+    public function getTabs()
     {
         return $this->_tabs;
     }

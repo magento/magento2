@@ -208,7 +208,7 @@ class Mage_Checkout_Model_Cart extends Varien_Object implements Mage_Checkout_Mo
             || !is_array($product->getWebsiteIds())
             || !in_array($currentWebsiteId, $product->getWebsiteIds())
         ) {
-            Mage::throwException(Mage::helper('Mage_Checkout_Helper_Data')->__('The product could not be found.'));
+            Mage::throwException(Mage::helper('Mage_Checkout_Helper_Data')->__('We can\'t find the product.'));
         }
         return $product;
     }
@@ -323,12 +323,12 @@ class Mage_Checkout_Model_Cart extends Varien_Object implements Mage_Checkout_Mo
 
             if (!$allAvailable) {
                 $this->getCheckoutSession()->addError(
-                    Mage::helper('Mage_Checkout_Helper_Data')->__('Some of the requested products are unavailable.')
+                    Mage::helper('Mage_Checkout_Helper_Data')->__("We don't have some of the products you want.")
                 );
             }
             if (!$allAdded) {
                 $this->getCheckoutSession()->addError(
-                    Mage::helper('Mage_Checkout_Helper_Data')->__('Some of the requested products are not available in the desired quantity.')
+                    Mage::helper('Mage_Checkout_Helper_Data')->__("We don't have as many of some products as you want.")
                 );
             }
         }
@@ -424,7 +424,7 @@ class Mage_Checkout_Model_Cart extends Varien_Object implements Mage_Checkout_Mo
 
         if ($qtyRecalculatedFlag) {
             $session->addNotice(
-                Mage::helper('Mage_Checkout_Helper_Data')->__('Some products quantities were recalculated because of quantity increment mismatch')
+                Mage::helper('Mage_Checkout_Helper_Data')->__('Some products quantities were recalculated because of quantity increment mismatch.')
             );
         }
 
@@ -563,7 +563,7 @@ class Mage_Checkout_Model_Cart extends Varien_Object implements Mage_Checkout_Mo
         try {
             $item = $this->getQuote()->getItemById($itemId);
             if (!$item) {
-                Mage::throwException(Mage::helper('Mage_Checkout_Helper_Data')->__('Quote item does not exist.'));
+                Mage::throwException(Mage::helper('Mage_Checkout_Helper_Data')->__('This quote item does not exist.'));
             }
             $productId = $item->getProduct()->getId();
             $product = $this->_getProduct($productId);

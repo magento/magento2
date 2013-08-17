@@ -31,7 +31,7 @@
                 loaderText: $.mage.__('Please wait...'),
                 imgAlt: $.mage.__('Loading...')
             },
-            template: '<div class="loading-mask">' +
+            template: '<div class="loading-mask" data-role="loader">' +
                          '<div class="loader">'+
                             '<img {{if texts.imgAlt}}alt="${texts.imgAlt}"{{/if}} src="${icon}">'+
                             '<p>{{if texts.loaderText}}${texts.loaderText}{{/if}}</p>' +
@@ -65,14 +65,34 @@
         _bind: function() {
             this.element.on('ajaxComplete ajaxError processStop', function(e) {
                 e.stopImmediatePropagation();
-                $($(e.target).is(document) ? 'body' : e.target).loader('hide');
+                $($(e.currentTarget).is(document) ? 'body' : e.currentTarget).loader('hide');
             });
+            this._on({
+                'show.loader': 'show',
+                'hide.loader': 'hide',
+                'contentUpdated.loader': '_contentUpdated'
+            });
+        },
+
+        /**
+         * Verify loader present after content updated
+         *
+         * @param event
+         * @private
+         */
+        _contentUpdated: function(event) {
+            if (!this.element.find('[data-role="loader"]').length) {
+                this._render();
+            }
         },
 
         /**
          * Show loader
          */
         show: function() {
+            if (!this.element.find('[data-role="loader"]').length) {
+                this._render();
+            }
             this.loader.show();
         },
 
@@ -80,7 +100,9 @@
          * Hide loader
          */
         hide: function() {
-            this.loader.hide();
+            if (this.loader) {
+                this.loader.hide();
+            }
         },
 
         /**

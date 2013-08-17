@@ -33,22 +33,20 @@ class Mage_Core_Model_Page_Asset_PublicFileTest extends PHPUnit_Framework_TestCa
     protected $_object;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var Mage_Core_Model_View_Url|PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_designPackage;
+    protected $_viewUrl;
 
     protected function setUp()
     {
-        $this->_designPackage = $this->getMock(
-            'Mage_Core_Model_Design_Package', array('getPublicFileUrl'), array(), '', false
-        );
-        $this->_object = new Mage_Core_Model_Page_Asset_PublicFile($this->_designPackage, 'test/style.css', 'css');
+        $this->_viewUrl = $this->getMock('Mage_Core_Model_View_Url', array(), array(), '', false);
+        $this->_object = new Mage_Core_Model_Page_Asset_PublicFile($this->_viewUrl, 'test/style.css', 'css');
     }
 
     public function testGetUrl()
     {
         $url = 'http://127.0.0.1/magento/test/style.css';
-        $this->_designPackage
+        $this->_viewUrl
             ->expects($this->once())
             ->method('getPublicFileUrl')
             ->with('test/style.css')
@@ -60,5 +58,10 @@ class Mage_Core_Model_Page_Asset_PublicFileTest extends PHPUnit_Framework_TestCa
     public function testGetContentType()
     {
         $this->assertEquals('css', $this->_object->getContentType());
+    }
+
+    public function testGetSourceFile()
+    {
+        $this->assertSame('test/style.css', $this->_object->getSourceFile());
     }
 }

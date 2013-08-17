@@ -22,7 +22,7 @@
  */
 
 ;
-(function($) {
+(function($, document) {
     'use strict';
 
     $.widget('mage.globalSearch', {
@@ -92,7 +92,7 @@
 
     $.widget('mage.globalNavigation', {
         options: {
-            menuCategory: '.level-0.parent',
+            menuCategory: '.level-0',
             menuLinks: 'a',
             itemsConfig: null,
             hoverIntentConfig: {
@@ -113,18 +113,7 @@
                 .hoverIntent($.extend({}, this.options.hoverIntentConfig, {
                     over: !config.open ? this._hoverEffects : $.noop,
                     out: !config.close ? this._leaveEffects : $.noop
-                }))
-                .on('hover', function() {
-                    $(this)
-                        .addClass('recent')
-                        .siblings('.level-0')
-                        .removeClass('recent');
-                    /*                    $(this)
-                     .siblings('.level-0')
-                     .removeClass('hover')
-                     .find('> .submenu')
-                     .hide();*/
-                });
+                }));
             if (config.open) {
                 category.on(config.open, this._hoverEffects);
             }
@@ -159,6 +148,10 @@
         },
 
         _hoverEffects: function (e) {
+            $(this)
+                .addClass('hover recent')
+                .siblings('.level-0').removeClass('recent hover');
+
             var targetSubmenu = $(e.target).closest('.submenu');
             if(targetSubmenu.length && targetSubmenu.is(':visible')) {
                 return;
@@ -166,12 +159,6 @@
             var availableWidth = parseInt($(this).parent().css('width')) - $(this).position().left,
                 submenu = $('> .submenu', this),
                 colsWidth = 0;
-
-            $(this)
-                .addClass('hover')
-/*                .siblings('.level-0.parent')
-                .find('> .submenu').hide()*/
-                ;
 
             submenu.show();
 
@@ -384,12 +371,34 @@
                 .trigger('change');
         }
     };
+    var updateColorPickerValues = function() {
+        $('.element-color-picker').each(function(){
+            var _this = $(this);
+            _this.find('.color-box.active').removeClass('active');
+            if (_this.find('.farbtastic').is(':visible')) {
+                _this
+                    .find('.farbtastic').hide()
+                    .end()
+                    .find('input').trigger('change.quickStyleElement');
+            }
+        });
+    };
+
+    var toggleColorPickerPosition = function () {
+        var colorPicker = $('.farbtastic:visible'),
+            colorPickerWidth = 350;
+
+        colorPicker.offset() && colorPicker.toggleClass('vertical', parseInt(colorPicker.offset().left, 10) + colorPickerWidth > $(window).width());
+    };
 
     $(document).ready(function() {
         $('.header-panel .search').globalSearch();
         $('.navigation').globalNavigation({
             categoriesConfig: {
                 '[data-ui-id="menu-mage-adminhtml-system"]': {
+                    open: 'click'
+                },
+                '[data-ui-id="menu-mage-adminhtml-stores"]': {
                     open: 'click'
                 }
             }
@@ -398,8 +407,9 @@
         $('details').details();
         $('.page-actions').floatingHeader();
         $('[data-store-label]').useDefault();
-        $('.collapse').collapsable();
 
+        /* @TODO refactor collapsable as widget and avoid logic binding with such a general selectors */
+        $('.collapse').collapsable();
         $.each($('.entry-edit'), function(i, entry) {
             $('.collapse:first', entry).collapse('show');
         });
@@ -414,24 +424,31 @@
             });
         });
 
-        $('.element-color-picker input')
-            .on('blur', function() {
-                $(this).siblings('.color-box')
-                    .removeClass('active')
-                    .find('.farbtastic').hide();
-                $(this).trigger('change.quickStyleElement');
+        $(document).on('click', function(e) {
+            var target = $(e.target);
+            if (target.closest('.control').find('.color-box').length < 1) {
+                updateColorPickerValues();
+            }
+        });
+        $(window)
+            .on('resize.vdeColorPicker', function () {
+                this.vdeColorPickerTimeoutId && clearTimeout(this.vdeColorPickerTimeoutId);
+
+                this.vdeColorPickerTimeoutId = setTimeout(function() {
+                    toggleColorPickerPosition();
+                }, 500);
             });
 
         $('.color-box')
             .on('click.showColorPicker', function() {
+                updateColorPickerValues();  // Update values is other color picker is not closed yet
                 $(this)
                     .addClass('active')
-                    .siblings('input').focus();
-                $(this)
-                    .find('.farbtastic')
-                        .show();
+                    .siblings('input').trigger('focus.quickStyleElement')
+                    .end()
+                    .find('.farbtastic').show();
+                toggleColorPickerPosition();
             });
-
         switcherForIe8();
     });
 
@@ -439,4 +456,4 @@
         $('details').details();
         switcherForIe8();
     });
-})(window.jQuery);
+})(window.jQuery, document);

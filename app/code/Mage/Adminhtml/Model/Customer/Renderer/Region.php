@@ -92,7 +92,8 @@ class Mage_Adminhtml_Model_Customer_Renderer_Region implements Varien_Data_Form_
                  . $element->serialize($htmlAttributes) .'>' . "\n";
             foreach ($regionCollection as $region) {
                 $selected = ($regionId==$region['value']) ? ' selected="selected"' : '';
-                $html.= '<option value="' . (int)$region['value'] . '"' . $selected . '>'
+                $regionVal = (0 == $region['value']) ? '' : (int)$region['value'];
+                $html.= '<option value="' . $regionVal . '"' . $selected . '>'
                     . Mage::helper('Mage_Adminhtml_Helper_Data')->escapeHtml(Mage::helper('Mage_Directory_Helper_Data')->__($region['label']))
                     . '</option>';
             }

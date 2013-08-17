@@ -57,7 +57,7 @@
                     </div>
                     <div class="box-content">
                         <?php if (!($_shippingRateGroups = $this->getShippingRates($_address))): ?>
-                            <p><?php echo $this->__('Sorry, no quotes are available for this order at this time.') ?></p>
+                            <p><?php echo $this->__('Sorry, no quotes are available for this order.') ?></p>
                         <?php else: ?>
                         <dl class="sp-methods">
                             <?php $_sole = count($_shippingRateGroups) == 1; foreach ($_shippingRateGroups as $code => $_rates): ?>
@@ -117,7 +117,7 @@
                     </tbody>
                 </table>
                 <script type="text/javascript">(function($) {$('#shipping-table-<?php echo $_address->getId()?>').decorate('table')})(jQuery)</script>
-                <?php echo $this->helper('Mage_GiftMessage_Helper_Message')->getInline('multishipping_adress', $_address); ?>
+                <?php echo $this->helper('Mage_GiftMessage_Helper_Message')->getInline('multishipping_address', $_address); ?>
             </div>
         </div>
         <?php endforeach; ?>

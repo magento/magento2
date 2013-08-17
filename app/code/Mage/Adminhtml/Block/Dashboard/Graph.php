@@ -190,7 +190,7 @@ class Mage_Adminhtml_Block_Dashboard_Graph extends Mage_Adminhtml_Block_Dashboar
             $this->setAxisLabels($axis, $this->getRowsData($attr, true));
         }
 
-        $timezoneLocal = Mage::app()->getStore()->getConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+        $timezoneLocal = Mage::app()->getStore()->getConfig(Mage_Core_Model_LocaleInterface::XML_PATH_DEFAULT_TIMEZONE);
 
         list ($dateStart, $dateEnd) = Mage::getResourceModel('Mage_Reports_Model_Resource_Order_Collection')
             ->getDateRange($this->getDataHelper()->getParam('period'), '', '', true);
@@ -426,7 +426,7 @@ class Mage_Adminhtml_Block_Dashboard_Graph extends Mage_Adminhtml_Block_Dashboar
             }
             return self::API_URL . '?' . implode('&', $p);
         } else {
-            $gaData = urlencode(base64_encode(serialize($params)));
+            $gaData = urlencode(base64_encode(json_encode($params)));
             $gaHash = Mage::helper('Mage_Adminhtml_Helper_Dashboard_Data')->getChartDataHash($gaData);
             $params = array('ga' => $gaData, 'h' => $gaHash);
             return $this->getUrl('*/*/tunnel', array('_query' => $params));

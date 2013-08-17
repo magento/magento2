@@ -32,11 +32,11 @@ class Mage_Eav_Block_Adminhtml_Attribute_Edit_Main_AbstractTest
     extends PHPUnit_Framework_TestCase
 {
     /**
-     * @magentoDataFixture Mage/Core/_files/init_adminhtml_design.php
      * @magentoAppIsolation enabled
      */
     public function testPrepareForm()
     {
+        Mage::getDesign()->setArea(Mage_Core_Model_App_Area::AREA_ADMINHTML)->setDefaultDesignTheme();
         $entityType = Mage::getSingleton('Mage_Eav_Model_Config')->getEntityType('customer');
         $model = Mage::getObjectManager()->create('Mage_Customer_Model_Attribute');
         $model->setEntityTypeId($entityType->getId());
@@ -44,7 +44,7 @@ class Mage_Eav_Block_Adminhtml_Attribute_Edit_Main_AbstractTest
 
         $block = $this->getMockForAbstractClass(
             'Mage_Eav_Block_Adminhtml_Attribute_Edit_Main_Abstract',
-            array(Mage::getSingleton('Mage_Core_Block_Template_Context'))
+            array(Mage::getSingleton('Mage_Backend_Block_Template_Context'))
         )
         ->setLayout(Mage::getObjectManager()->create('Mage_Core_Model_Layout'));
 

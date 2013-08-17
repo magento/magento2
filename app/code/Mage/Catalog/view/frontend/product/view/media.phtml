@@ -37,7 +37,7 @@
 <?php if ($_product->getImage() != 'no_selection' && $_product->getImage()): ?>
 <p class="product-image product-image-zoom">
     <?php
-        $_img = '<img id="image" src="'.$this->helper('Mage_Catalog_Helper_Image')->init($_product, 'image').'" alt="'.$this->escapeHtml($this->getImageLabel()).'" title="'.$this->escapeHtml($this->getImageLabel()).'" />';
+        $_img = '<img data-role="base-image" id="image" src="'.$this->helper('Mage_Catalog_Helper_Image')->init($_product, 'image').'" alt="'.$this->escapeHtml($this->getImageLabel()).'" title="'.$this->escapeHtml($this->getImageLabel()).'" />';
         echo $_helper->productAttribute($_product, $_img, 'image');
     ?>
 </p>
@@ -60,7 +60,7 @@
 <?php else: ?>
 <p class="product-image">
     <?php
-        $_img = '<img src="'.$this->getBaseImageUrl($_product).'" alt="'.$this->escapeHtml($this->getImageLabel()).'" title="'.$this->escapeHtml($this->getImageLabel()).'" />';
+        $_img = '<img data-role="base-image" src="'.$this->getBaseImageUrl($_product).'" alt="'.$this->escapeHtml($this->getImageLabel()).'" title="'.$this->escapeHtml($this->getImageLabel()).'" />';
         echo $_helper->productAttribute($_product, $_img, 'image');
     ?>
 </p>

@@ -70,9 +70,7 @@ BundleControl.prototype = {
         if (selectionOptions.can_change_qty) {
             elem.removeClassName('qty-disabled');
             elem.disabled = false;
-            if (elem.value == '0') {
-                elem.value = default_qty || 1;
-            }
+            elem.value = default_qty || 1;
         } else {
             elem.addClassName('qty-disabled');
             elem.disabled = true;

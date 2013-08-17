@@ -27,8 +27,9 @@
 
 /**
  * Tests for block Mage_ImportExport_Block_Adminhtml_Import_Edit_FormTest
+ * @magentoAppArea adminhtml
  */
-class Mage_ImportExport_Block_Adminhtml_Import_Edit_FormTest extends Mage_Backend_Area_TestCase
+class Mage_ImportExport_Block_Adminhtml_Import_Edit_FormTest extends PHPUnit_Framework_TestCase
 {
     /**
      * List of expected fieldsets in import edit form

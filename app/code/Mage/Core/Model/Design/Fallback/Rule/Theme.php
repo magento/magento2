@@ -18,63 +18,51 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_Core
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Class with substitution parameters to values considering theme hierarchy
+ * An aggregate of a fallback rule that propagates it to every theme according to a hierarchy
  */
 class Mage_Core_Model_Design_Fallback_Rule_Theme implements Mage_Core_Model_Design_Fallback_Rule_RuleInterface
 {
     /**
-     * @var Mage_Core_Model_Design_Fallback_Rule_RuleInterface[]
+     * @var Mage_Core_Model_Design_Fallback_Rule_RuleInterface
      */
-    protected $_rules;
+    private $_rule;
 
     /**
      * Constructor
      *
-     * @param array $rules Rules to be propagated to every theme involved into inheritance
-     * @throws InvalidArgumentException
+     * @param Mage_Core_Model_Design_Fallback_Rule_RuleInterface $rule
      */
-    public function __construct(array $rules)
+    public function __construct(Mage_Core_Model_Design_Fallback_Rule_RuleInterface $rule)
     {
-        foreach ($rules as $rule) {
-            if (!($rule instanceof Mage_Core_Model_Design_Fallback_Rule_RuleInterface)) {
-                throw new InvalidArgumentException(
-                    'Each element should implement Mage_Core_Model_Design_Fallback_Rule_RuleInterface'
-                );
-            }
-        }
-        $this->_rules = $rules;
+        $this->_rule = $rule;
     }
 
     /**
-     * Get ordered list of folders to search for a file
+     * Propagate an underlying fallback rule to every theme in a hierarchy: parent, grandparent, etc.
      *
-     * @param array $params - array of parameters
-     * @return array of folders to perform a search
+     * {@inheritdoc}
      * @throws InvalidArgumentException
      */
     public function getPatternDirs(array $params)
     {
         if (!array_key_exists('theme', $params) || !($params['theme'] instanceof Mage_Core_Model_ThemeInterface)) {
             throw new InvalidArgumentException(
-                '$params["theme"] should be passed and should implement Mage_Core_Model_ThemeInterface'
+                'Parameter "theme" should be specified and should implement the theme interface.'
             );
         }
         $result = array();
         /** @var $theme Mage_Core_Model_ThemeInterface */
         $theme = $params['theme'];
+        unset($params['theme']);
         while ($theme) {
             if ($theme->getThemePath()) {
                 $params['theme_path'] = $theme->getThemePath();
-                foreach ($this->_rules as $rule) {
-                    $result = array_merge($result, $rule->getPatternDirs($params));
-                }
+                $result = array_merge($result, $this->_rule->getPatternDirs($params));
             }
             $theme = $theme->getParentTheme();
         }

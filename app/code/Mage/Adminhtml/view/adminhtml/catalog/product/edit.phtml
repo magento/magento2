@@ -37,7 +37,8 @@
                 <span><?php echo $this->getAttributeSetName()?></span>
             </button>
             <ul class="dropdown-menu">
-                <input type="search" id="product-template-suggest" placeholder="start typing to search template"/>
+                <input type="text" id="product-template-suggest" class="search"
+                       placeholder="start typing to search template"/>
             </ul>
         </div>
     </div>
@@ -64,18 +65,21 @@
     <?php echo $this->getBackButtonHtml() ?>
 </div>
 
-<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="product-edit-form" enctype="multipart/form-data">
+<?php if ($this->getUseContainer()): ?>
+<form action="<?php echo $this->getSaveUrl() ?>" method="post" enctype="multipart/form-data"
+      data-form="edit-product" data-product-id="<?php echo $this->getProduct()->getId()?>">
+<?php endif; ?>
     <?php echo $this->getBlockHtml('formkey')?>
-    <div id="product-edit-form-tabs"></div>
+    <div data-role="tabs" id="product-edit-form-tabs"></div> <?php /* @TODO: remove id after elimination of setDestElementId('product-edit-form-tabs') */?>
     <?php echo $this->getChildHtml('product-type-tabs') ?>
-    <input type="hidden" id="attribute_set_id" value="<?php echo $this->getProduct()->getAttributeSetId()?>"/>
     <input type="hidden" id="product_type_id" value="<?php echo $this->getProduct()->getTypeId()?>"/>
     <input type="hidden" id="attribute_set_id" value="<?php echo $this->getProduct()->getAttributeSetId()?>"/>
+<?php if ($this->getUseContainer()): ?>
 </form>
+<?php endif; ?>
 <script type="text/javascript">
-
 jQuery(function($) {
-    var $form = $('#product-edit-form');
+    var $form = $('[data-form=edit-product]');
     $form.data('typeSwitcher', new TypeSwitcher(<?php echo $this->getTypeSwitcherData();?>).bindAll());
 
     $('#meta_description').on('change keyup paste', function () {
@@ -84,18 +88,34 @@ jQuery(function($) {
             $(this).val($(this).val().substr(0, maxLength));
         }
     });
-    $form.mage('form').mage('validation', {validationUrl: '<?php echo $this->getValidationUrl() ?>'});
-
-    $('#product_info_tabs').on('tabsbeforeactivate tabscreate', function (event, ui) {
-        var action = $(ui.newPanel || ui.panel).find('#attribute-name-container').length ? 'show' : 'hide';
-        $('#config_super_product, #grouped_product_container')[action]();
+    $form.mage('form', {
+        handlersData: {
+            save: {},
+            saveAndContinueEdit: {
+                action: {
+                    args: {back: 'edit'}
+                }
+            },
+            saveAndNew: {
+                action: {
+                    args: {back: 'new'}
+                }
+            },
+            saveAndDuplicate: {
+                action: {
+                    args: {back: 'duplicate'}
+                }
+            }
+        }
     });
+    $form.mage('validation', {validationUrl: '<?php echo $this->getValidationUrl() ?>'});
 
     var masks = <?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode($this->getFieldsAutogenerationMasks())?>;
     var availablePlaceholders = <?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode($this->getAttributesAllowedForAutogeneration())?>;
     var Autogenerator = function(masks) {
         this._masks = masks || {};
         this._fieldReverseIndex = this._buildReverseIndex(this._masks);
+        this.form = $('[data-form=edit-product], #drawer-form');
     };
 
     $.extend(Autogenerator.prototype, {
@@ -108,17 +128,24 @@ jQuery(function($) {
             var self = this;
             var elementSelector = _(this._masks).keys().map(function(key) {
                 return '#' + key;
-            }).join(',')
-            $("#product_info_tabs").on("tabscreate", $.proxy(function(event, ui) {
-                $('#product-edit-form').on(
-                    'focus blur change keyup click',
+            }).join(',');
+            var disabler = function() {
+                this.form.on(
+                    'change init',
                     elementSelector,
                     $.proxy(function(event) {
-                        var $element = $(event.currentTarget);
+                        var $element = $(event.target);
+                        if (event.type == 'init' && $element.data('disablerInited')) {
+                            return;
+                        } else {
+                            $element.data('disablerInited', true);
+                        }
                         $element.data(this.data.disabled, $element.val().replace(/\s/g, '') != '');
                     }, this)
-                ).find(elementSelector).trigger('change');
-            }, this));
+                ).find(elementSelector).trigger('init');
+            };
+            disabler.call(this);
+            $("#product_info_tabs").on("tabscreate tabsactivate", $.proxy(disabler, this));
 
             $.each(this._masks, function(field, mask) {
                 var $field = $('#' + field);
@@ -143,14 +170,12 @@ jQuery(function($) {
                             return $('#' + maskfieldName.slice(2, -2)).val();
                         });
                         $el.val(value);
-
                     });
                 };
                 if ($field.length) {
-                    $('#product-edit-form').on(events || 'keyup change blur click paste', '#' + field, filler);
+                    self.form.on('keyup change blur click paste', '#' + field, filler);
                     $field.trigger('change');
                 }
-
             });
         },
         _buildReverseIndex: function(masks) {
@@ -171,27 +196,28 @@ jQuery(function($) {
 
     $form.data('autogenerator', new Autogenerator(masks).bindAll());
 
-    $('.widget-button-save .item-default, #save-split-button-duplicate-button[onclick=""]').parent().hide();
-    $(window).load(function() {
-        if ($.trim($('#name').val()) == '') {
-            $('#name').focus();
-        }
+    $('.widget-button-save .item-default').parent().hide();
 
-        $('#product-online-switcher')
-            .prop('checked', $('#status').val() == '1')
-            .trigger('change');
-    });
+    $('#product-online-switcher')
+        .prop('checked', $('#status').val() == '1')
+        .trigger('change');
 
     $('#product-online-switcher').on('change', function(event) {
         $('#status').val($(this).prop('checked') ? '1' : '2');
     });
 
     $form.on('changeAttributeSet', function(event, data) {
+        if (data.label) {
+            $('#product-template-suggest-container .action-toggle>span').text(data.label);
+            $('[data-id=affected-attribute-set-selector] [data-id=current-attribute-set] [data-role=name-container]').text(data.label);
+        }
+        $('#product-template-suggest').suggest('option', "currentlySelected", data.id).val('');
+
         var uri = document.location.href.replace(/(\/|&|\?)?\bset(\/|=)\d+/g, '').replace(/#[^#]*$/, '');
         uri += /\?/.test(uri) ? '&' : '?';
         uri += 'set=' + window.encodeURIComponent(data.id);
 
-        var $form = $('#product-edit-form');
+        var $form = $('[data-form=edit-product]');
         $form.attr('action', $form.attr('action').replace(/(\/|&|\?)?\bset(\/|=)\d+/g, ''));
         $form.find('#attribute_set_id').attr('name', 'set').val(data.id);
         $.ajax({
@@ -210,15 +236,15 @@ jQuery(function($) {
             var nameMapper = function() {
                 return $(this).attr('name');
             };
-
+            var activeTabId = $('.ui-tabs-active>a').attr('id');
             //add new tab tabs or reorder
             $page.find('#product_info_tabs .tabs').each(function(i, tabContainer) {
                 $newPage.find('#product_info_tabs .tabs').each(function(j, newTabContainer) {
                     if (i != j) {
-                        return
+                        return;
                     }
                     var $tabContainer = $(tabContainer);
-                    $(tabContainer).find('li').removeClass(removedElementClass)
+                    $(tabContainer).find('li').removeClass(removedElementClass);
                     var $tabs = $(tabContainer)
                         .find('li:not(.' + removedElementClass + ')  .tab-item-link.user-defined:not(.ajax)');
                     var $newTabs = $(newTabContainer).find('.tab-item-link.user-defined:not(.ajax)'),
@@ -229,7 +255,7 @@ jQuery(function($) {
                         _.difference(tabsNames, $newTabs.map(nameMapper).toArray()),
                         function(index, tabName) {
                             $tabContainer.find('[name=' + tabName + ']').closest('li')
-                                .addClass(removedElementClass)
+                                .addClass(removedElementClass);
                             $page.find('#' + tabName)
                                 .addClass(removedElementClass)
                                 .addClass('ignore-validate');
@@ -264,7 +290,7 @@ jQuery(function($) {
                 return $(this).data('elementId');
             };
             //add new element elements or reorder
-            $page.find('#product-edit-form-tabs .fieldset, #product_info_tabs .fieldset')
+            $page.find('[data-form=edit-product] [data-role=tabs] .fieldset, #product_info_tabs .fieldset')
                 .removeClass('ignore-validate')
                 .removeClass(removedElementClass)
                 .each(function(i, fieldSet) {
@@ -311,8 +337,12 @@ jQuery(function($) {
                     });
                 });
             });
-
-           $('#product_info_tabs').tabs('refresh').tabs("option", "active", 0);
+            if (!$('#' + activeTabId).closest('li').hasClass(removedElementClass)) {
+                $('#' + activeTabId).trigger('click');
+            } else {
+                $('#product_info_tabs').tabs("option", "active", 0);
+            }
+            $('#product_info_tabs').tabs('refresh');
         });
 
     });

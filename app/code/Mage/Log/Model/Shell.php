@@ -34,41 +34,22 @@
 class Mage_Log_Model_Shell extends Mage_Core_Model_ShellAbstract
 {
     /**
-     * Converts count to human view
-     *
-     * @param int $number
-     * @return string
+     * @var Mage_Log_Model_Shell_Command_Factory
      */
-    protected function _humanCount($number)
-    {
-        if ($number < 1000) {
-            return $number;
-        } else if ($number >= 1000 && $number < 1000000) {
-            return sprintf('%.2fK', $number / 1000);
-        } else if ($number >= 1000000 && $number < 1000000000) {
-            return sprintf('%.2fM', $number / 1000000);
-        } else {
-            return sprintf('%.2fB', $number / 1000000000);
-        }
-    }
+    protected $_commandFactory;
 
     /**
-     * Converts size to human view
-     *
-     * @param int $number
-     * @return string
+     * @param Mage_Log_Model_Shell_Command_Factory $commandFactory
+     * @param Magento_Filesystem $filesystem
+     * @param $entryPoint
      */
-    protected function _humanSize($number)
-    {
-        if ($number < 1000) {
-            return sprintf('%d b', $number);
-        } else if ($number >= 1000 && $number < 1000000) {
-            return sprintf('%.2fKb', $number / 1000);
-        } else if ($number >= 1000000 && $number < 1000000000) {
-            return sprintf('%.2fMb', $number / 1000000);
-        } else {
-            return sprintf('%.2fGb', $number / 1000000000);
-        }
+    public function __construct(
+        Mage_Log_Model_Shell_Command_Factory $commandFactory,
+        Magento_Filesystem $filesystem,
+        $entryPoint
+    ) {
+        parent::__construct($filesystem, $entryPoint);
+        $this->_commandFactory = $commandFactory;
     }
 
     /**
@@ -83,53 +64,14 @@ class Mage_Log_Model_Shell extends Mage_Core_Model_ShellAbstract
         }
 
         if ($this->getArg('clean')) {
-            $days = $this->getArg('days');
-            if ($days > 0) {
-                Mage::app()->getStore()->setConfig(Mage_Log_Model_Log::XML_LOG_CLEAN_DAYS, $days);
-            }
-            /** @var $model Mage_Log_Model_Log */
-            $model = Mage::getModel('Mage_Log_Model_Log');
-            $model->clean();
-            echo "Log cleaned\n";
-        } else if ($this->getArg('status')) {
-            /** @var $resource Mage_Log_Model_Resource_Shell */
-            $resource = Mage::getModel('Mage_Log_Model_Resource_Shell');
-            $tables = $resource->getTablesInfo();
-
-            $line = '-----------------------------------+------------+------------+------------+' . "\n";
-            echo $line;
-            echo sprintf('%-35s|', 'Table Name');
-            echo sprintf(' %-11s|', 'Rows');
-            echo sprintf(' %-11s|', 'Data Size');
-            echo sprintf(' %-11s|', 'Index Size');
-            echo "\n";
-            echo $line;
-
-            $rows = 0;
-            $dataLength = 0;
-            $indexLength = 0;
-            foreach ($tables as $table) {
-                $rows += $table['rows'];
-                $dataLength += $table['data_length'];
-                $indexLength += $table['index_length'];
-
-                echo sprintf('%-35s|', $table['name']);
-                echo sprintf(' %-11s|', $this->_humanCount($table['rows']));
-                echo sprintf(' %-11s|', $this->_humanSize($table['data_length']));
-                echo sprintf(' %-11s|', $this->_humanSize($table['index_length']));
-                echo "\n";
-            }
-
-            echo $line;
-            echo sprintf('%-35s|', 'Total');
-            echo sprintf(' %-11s|', $this->_humanCount($rows));
-            echo sprintf(' %-11s|', $this->_humanSize($dataLength));
-            echo sprintf(' %-11s|', $this->_humanSize($indexLength));
-            echo "\n";
-            echo $line;
+            $output = $this->_commandFactory->createCleanCommand($this->getArg('days'))->execute();
+        } elseif ($this->getArg('status')) {
+            $output = $this->_commandFactory->createStatusCommand()->execute();
         } else {
-            echo $this->getUsageHelp();
+            $output = $this->getUsageHelp();
         }
+
+        echo $output;
 
         return $this;
     }

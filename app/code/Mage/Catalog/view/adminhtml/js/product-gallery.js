@@ -30,7 +30,7 @@
      */
     $.widget('mage.productGallery', {
         options: {
-            imageSelector: '[data-role="image"]',
+            imageSelector: '[data-role=image]',
             template: '.image-template',
             types: null,
             initialized: false
@@ -62,18 +62,18 @@
                 setImageType: '_setImageType',
                 setPosition: '_setPosition',
                 resort: '_resort',
-                'mouseup [data-role="delete-button"]': function(event) {
+                'mouseup [data-role=delete-button]': function(event) {
                     event.preventDefault();
                     var $imageContainer = $(event.currentTarget).closest(this.options.imageSelector);
-                    this.element.find('[data-role="dialog"]').trigger('close');
+                    this.element.find('[data-role=dialog]').trigger('close');
                     this.element.trigger('removeItem', $imageContainer.data('imageData'));
                 },
-                'mouseup [data-role="make-main-button"]': function(event) {
+                'mouseup [data-role=make-base-button]': function(event) {
                     event.preventDefault();
                     event.stopImmediatePropagation();
                     var $imageContainer = $(event.currentTarget).closest(this.options.imageSelector);
                     var imageData = $imageContainer.data('imageData');
-                    this.setMain(imageData);
+                    this.setBase(imageData);
                 }
             };
             this._on(events);
@@ -94,7 +94,7 @@
          * @param {Object} imageData
          * @private
          */
-        setMain: function(imageData) {
+        setBase: function(imageData) {
             var baseImage = this.options.types.image;
             var sameImages = $.grep(
                 $.map(this.options.types, function(el) {
@@ -113,7 +113,7 @@
                 });
                 if (isImageOpened) {
                     this.element.find('.item').addClass('selected');
-                    this.element.find('[data-role="type-selector"]').prop({'checked': true});
+                    this.element.find('[data-role=type-selector]').prop({'checked': true});
                 }
             }, this));
         },
@@ -153,7 +153,7 @@
             if (!this.options.initialized && this.options.images.length === 0 ||
                 this.options.initialized && this.element.find(this.options.imageSelector + ':not(.removed)').length == 1
             ) {
-                this.setMain(imageData);
+                this.setBase(imageData);
             }
             $.each(this.options.types, $.proxy(function(index, image) {
                 if (imageData.file == image.value) {
@@ -250,12 +250,12 @@
         _bind: function() {
             this._super();
             var events = {
-                'change [data-role="visibility-trigger"]': '_changeVisibility',
-                'change [data-role="type-selector"]': '_changeType'
+                'change [data-role=visibility-trigger]': '_changeVisibility',
+                'change [data-role=type-selector]': '_changeType'
             };
 
-            events['click [data-role="close-panel"]'] = $.proxy(function() {
-                this.element.find('[data-role="dialog"]').trigger('close');
+            events['click [data-role=close-panel]'] = $.proxy(function() {
+                this.element.find('[data-role=dialog]').trigger('close');
             }, this);
             events['mouseup ' + this.options.imageSelector] = function(event) {
                 if (!$(event.currentTarget).is('.ui-sortable-helper')) {
@@ -264,16 +264,16 @@
                 }
             };
             events['click .action-remove'] = function (event) {
-                var $imageContainer = $(event.currentTarget).closest('[data-role="dialog"]').data('imageContainer');
-                this.element.find('[data-role="dialog"]').trigger('close');
+                var $imageContainer = $(event.currentTarget).closest('[data-role=dialog]').data('imageContainer');
+                this.element.find('[data-role=dialog]').trigger('close');
                 this.element.trigger('removeItem', $imageContainer.data('imageData'));
             };
             this._on(events);
-            this.element.on('sortstart addItem', $.proxy(function() {
-                this.element.find('[data-role="dialog"]').trigger('close');
+            this.element.on('sortstart', $.proxy(function() {
+                this.element.find('[data-role=dialog]').trigger('close');
             }, this));
 
-            this.element.on('change', '[data-role="type-selector"]', function() {
+            this.element.on('change', '[data-role=type-selector]', function() {
                 var parent = $(this).closest('.item'),
                     selectedClass = 'selected';
                 parent.toggleClass(selectedClass, $(this).prop('checked'));
@@ -292,7 +292,7 @@
                 imageWidth = image.width(),
                 pointer = $('.image-pointer', panel),
                 pointerWidth = pointer.width(),
-                padding = 15,
+                padding = -3,
                 pointerOffset = posX + padding + pointerWidth / 2 + imageWidth / 2;
 
             pointer.css({left: pointerOffset});
@@ -309,7 +309,7 @@
             if ($imageContainer.is('.removed') || (dialogElement && dialogElement.is(':visible'))) {
                 return;
             }
-            this.element.find('[data-role="dialog"]').trigger('close');
+            this.element.find('[data-role=dialog]').trigger('close');
             if (!dialogElement) {
                 var $template = this.element.find(this.options.dialogTemplate),
                     imageCountInRow = 5;
@@ -332,7 +332,7 @@
                             .slideDown(400);
 
                         $(event.target)
-                            .find('[data-role="type-selector"]')
+                            .find('[data-role=type-selector]')
                             .each($.proxy(function(index, checkbox) {
                                 var $checkbox = $(checkbox),
                                     parent = $checkbox.closest('.item'),
@@ -366,7 +366,7 @@
          */
         _changeVisibility: function(event) {
             var $checkbox = $(event.currentTarget);
-            var $imageContainer = $checkbox.closest('[data-role="dialog"]').data('imageContainer');
+            var $imageContainer = $checkbox.closest('[data-role=dialog]').data('imageContainer');
             $imageContainer.toggleClass('hidden-for-front', $checkbox.is(':checked'));
         },
 
@@ -377,7 +377,7 @@
          */
         _changeType: function(event) {
             var $checkbox = $(event.currentTarget);
-            var $imageContainer = $checkbox.closest('[data-role="dialog"]').data('imageContainer');
+            var $imageContainer = $checkbox.closest('[data-role=dialog]').data('imageContainer');
             this.element.trigger('setImageType', {
                 type: $checkbox.val(),
                 imageData: $checkbox.is(':checked') ? $imageContainer.data('imageData') : null

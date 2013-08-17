@@ -46,10 +46,12 @@ class Mage_Checkout_Model_Api_Resource_Product extends Mage_Checkout_Model_Api_R
      */
     protected function _getProduct($productId, $store = null, $identifierType = null)
     {
-        $product = Mage::helper('Mage_Catalog_Helper_Product')->getProduct($productId,
-                        $this->_getStoreId($store),
-                        $identifierType
+        $product = Mage::helper('Mage_Catalog_Helper_Product')->getProduct(
+            $productId, $this->_getStoreId($store), $identifierType
         );
+        if (is_null($product->getId())) {
+            $this->_fault('product_not_exists');
+        }
         return $product;
     }
 

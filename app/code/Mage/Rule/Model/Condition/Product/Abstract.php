@@ -182,11 +182,11 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
             }
             if (!$hashedReady) {
                 $hashedOptions = array();
-                foreach ($selectOptions as $o) {
-                    if (is_array($o['value'])) {
+                foreach ($selectOptions as $option) {
+                    if (is_array($option['value'])) {
                         continue; // We cannot use array as index
                     }
-                    $hashedOptions[$o['value']] = $o['label'];
+                    $hashedOptions[$option['value']] = $option['label'];
                 }
                 $this->setData('value_option', $hashedOptions);
             }
@@ -201,10 +201,10 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
      * @param mixed $option
      * @return string
      */
-    public function getValueOption($option=null)
+    public function getValueOption($option = null)
     {
         $this->_prepareValueOptions();
-        return $this->getData('value_option'.(!is_null($option) ? '/'.$option : ''));
+        return $this->getData('value_option' . (!is_null($option) ? '/'.$option : ''));
     }
 
     /**
@@ -228,13 +228,16 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
         $html = '';
 
         switch ($this->getAttribute()) {
-            case 'sku': case 'category_ids':
-                $image = Mage::getDesign()->getViewFileUrl('images/rule_chooser_trigger.gif');
+            case 'sku':
+            case 'category_ids':
+                $image = $this->_viewUrl->getViewFileUrl('images/rule_chooser_trigger.gif');
                 break;
         }
 
         if (!empty($image)) {
-            $html = '<a href="javascript:void(0)" class="rule-chooser-trigger"><img src="' . $image . '" alt="" class="v-middle rule-chooser-trigger" title="' . Mage::helper('Mage_Rule_Helper_Data')->__('Open Chooser') . '" /></a>';
+            $html = '<a href="javascript:void(0)" class="rule-chooser-trigger"><img src="' . $image
+                . '" alt="" class="v-middle rule-chooser-trigger" title="'
+                . Mage::helper('Mage_Rule_Helper_Data')->__('Open Chooser') . '" /></a>';
         }
         return $html;
     }
@@ -281,7 +284,7 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
      */
     public function getInputType()
     {
-        if ($this->getAttribute()==='attribute_set_id') {
+        if ($this->getAttribute() === 'attribute_set_id') {
             return 'select';
         }
         if (!is_object($this->getAttributeObject())) {
@@ -315,7 +318,7 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
      */
     public function getValueElementType()
     {
-        if ($this->getAttribute()==='attribute_set_id') {
+        if ($this->getAttribute() === 'attribute_set_id') {
             return 'select';
         }
         if (!is_object($this->getAttributeObject())) {
@@ -348,7 +351,7 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
         if (is_object($this->getAttributeObject())) {
             switch ($this->getAttributeObject()->getFrontendInput()) {
                 case 'date':
-                    $element->setImage(Mage::getDesign()->getViewFileUrl('images/grid-cal.gif'));
+                    $element->setImage($this->_viewUrl->getViewFileUrl('images/grid-cal.gif'));
                     break;
             }
         }
@@ -365,15 +368,17 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
     {
         $url = false;
         switch ($this->getAttribute()) {
-            case 'sku': case 'category_ids':
-                $url = 'adminhtml/promo_widget/chooser'
-                    .'/attribute/'.$this->getAttribute();
+            case 'sku':
+            case 'category_ids':
+                $url = 'adminhtml/promo_widget/chooser/attribute/' . $this->getAttribute();
                 if ($this->getJsFormObject()) {
-                    $url .= '/form/'.$this->getJsFormObject();
+                    $url .= '/form/' . $this->getJsFormObject();
                 }
                 break;
+            default:
+                break;
         }
-        return $url!==false ? Mage::helper('Mage_Adminhtml_Helper_Data')->getUrl($url) : '';
+        return $url !== false ? Mage::helper('Mage_Adminhtml_Helper_Data')->getUrl($url) : '';
     }
 
     /**
@@ -384,13 +389,18 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
     public function getExplicitApply()
     {
         switch ($this->getAttribute()) {
-            case 'sku': case 'category_ids':
+            case 'sku':
+            case 'category_ids':
                 return true;
+            default:
+                break;
         }
         if (is_object($this->getAttributeObject())) {
             switch ($this->getAttributeObject()->getFrontendInput()) {
                 case 'date':
                     return true;
+                default:
+                    break;
             }
         }
         return false;
@@ -412,7 +422,8 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
             if (isset($arr['value'])) {
                 if (!empty($arr['operator'])
                     && in_array($arr['operator'], array('!()', '()'))
-                    && false !== strpos($arr['value'], ',')) {
+                    && false !== strpos($arr['value'], ',')
+                ) {
 
                     $tmp = array();
                     foreach (explode(',', $arr['value']) as $value) {
@@ -444,7 +455,7 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
 
         if ('category_ids' == $attrCode) {
             return $this->validateAttribute($object->getAvailableInCategories());
-        } elseif (! isset($this->_entityAttributeValues[$object->getId()])) {
+        } elseif (!isset($this->_entityAttributeValues[$object->getId()])) {
             if (!$object->getResource()) {
                 return false;
             }
@@ -468,11 +479,11 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
             // remember old attribute state
             $oldAttrValue = $object->hasData($attrCode) ? $object->getData($attrCode) : null;
 
-            foreach ($this->_entityAttributeValues[$object->getId()] as $storeId => $value) {
+            foreach ($this->_entityAttributeValues[$object->getId()] as $value) {
                 $attr = $object->getResource()->getAttribute($attrCode);
                 if ($attr && $attr->getBackendType() == 'datetime') {
                     $value = strtotime($value);
-                } else if ($attr && $attr->getFrontendInput() == 'multiselect') {
+                } elseif ($attr && $attr->getFrontendInput() == 'multiselect') {
                     $value = strlen($value) ? explode(',', $value) : array();
                 }
 
@@ -490,7 +501,7 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
                 $object->setData($attrCode, $oldAttrValue);
             }
 
-            return (bool) $result;
+            return (bool)$result;
         }
     }
 
@@ -502,15 +513,15 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
      */
     public function getOperatorForValidate()
     {
-        $op = $this->getOperator();
+        $operator = $this->getOperator();
         if ($this->getInputType() == 'category') {
-            if ($op == '==') {
-                $op = '{}';
-            } elseif ($op == '!=') {
-                $op = '!{}';
+            if ($operator == '==') {
+                $operator = '{}';
+            } elseif ($operator == '!=') {
+                $operator = '!{}';
             }
         }
 
-        return $op;
+        return $operator;
     }
 }

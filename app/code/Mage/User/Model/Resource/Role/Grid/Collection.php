@@ -36,13 +36,11 @@ class Mage_User_Model_Resource_Role_Grid_Collection extends Mage_User_Model_Reso
 {
     /**
      * Prepare select for load
-     *
-     * @param Varien_Db_Select $select
-     * @return string
      */
-    protected function _prepareSelect(Varien_Db_Select $select)
+    protected function _initSelect()
     {
+        parent::_initSelect();
         $this->addFieldToFilter('role_type', 'G');
-        return parent::_prepareSelect($select);
+        return $this;
     }
 }

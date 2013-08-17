@@ -43,7 +43,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Alerts_Price extends Mage_Ad
         $this->setDefaultSort('DESC');
         $this->setUseAjax(true);
         $this->setFilterVisibility(false);
-        $this->setEmptyText(Mage::helper('Mage_Catalog_Helper_Data')->__('There are no customers for this alert'));
+        $this->setEmptyText(Mage::helper('Mage_Catalog_Helper_Data')->__('There are no customers for this alert.'));
     }
 
     protected function _prepareCollection()
@@ -88,13 +88,13 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Alerts_Price extends Mage_Ad
         ));
 
         $this->addColumn('add_date', array(
-            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Date Subscribed'),
+            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Subscribe Date'),
             'index'     => 'add_date',
             'type'      => 'date'
         ));
 
         $this->addColumn('last_send_date', array(
-            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Last Notification'),
+            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Last Notified'),
             'index'     => 'last_send_date',
             'type'      => 'date'
         ));

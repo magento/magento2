@@ -72,24 +72,23 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
 
     public function testGetVar()
     {
-        $design = $this->getMock('Mage_Core_Model_Design_Package', array('getViewConfig'),
-            array(), '', false, false
-        );
+        $config = $this->getMock('Magento_Config_View', array('getVarValue'), array(), '', false);
+        $module = uniqid();
+        $config->expects($this->at(0))->method('getVarValue')->with('Mage_Core', 'v1')->will($this->returnValue('one'));
+        $config->expects($this->at(1))->method('getVarValue')->with($module, 'v2')->will($this->returnValue('two'));
+
+        $configManager = $this->getMock('Mage_Core_Model_View_Config', array(), array(), '', false);
+        $configManager->expects($this->exactly(2))->method('getViewConfig')->will($this->returnValue($config));
+
         /** @var $block Mage_Core_Block_Abstract|PHPUnit_Framework_MockObject_MockObject */
         $params = array(
-            'designPackage' => $design,
+            'viewConfig' => $configManager,
         );
         $helper = new Magento_Test_Helper_ObjectManager($this);
         $block = $this->getMockForAbstractClass('Mage_Core_Block_Abstract',
             $helper->getConstructArguments('Mage_Core_Block_Abstract', $params),
             uniqid('Mage_Core_Block_Abstract_')
         );
-
-        $config = $this->getMock('Magento_Config_View', array('getVarValue'), array(), '', false);
-        $design->expects($this->exactly(2))->method('getViewConfig')->will($this->returnValue($config));
-        $module = uniqid();
-        $config->expects($this->at(0))->method('getVarValue')->with('Mage_Core', 'v1')->will($this->returnValue('one'));
-        $config->expects($this->at(1))->method('getVarValue')->with($module, 'v2')->will($this->returnValue('two'));
 
         $this->assertEquals('one', $block->getVar('v1'));
         $this->assertEquals('two', $block->getVar('v2', $module));

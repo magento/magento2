@@ -114,13 +114,30 @@ class Mage_Backend_Model_Config_Structure_ElementAbstractTest extends PHPUnit_Fr
     public function testIsVisibleReturnsTrueInSingleStoreModeForNonHiddenElements()
     {
         $this->_applicationMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_model->setData(array('showInDefault' => 1, 'showInStore' => 0, 'showInWebsite' => 0),
+            Mage_Backend_Model_Config_ScopeDefiner::SCOPE_DEFAULT);
         $this->assertTrue($this->_model->isVisible());
     }
 
     public function testIsVisibleReturnsFalseInSingleStoreModeForHiddenElements()
     {
         $this->_applicationMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
-        $this->_model->setData(array('hide_in_single_store_mode' => 1), 'scope');
+        $this->_model->setData(
+            array('hide_in_single_store_mode' => 1, 'showInDefault' => 1, 'showInStore' => 0, 'showInWebsite' => 0),
+            Mage_Backend_Model_Config_ScopeDefiner::SCOPE_DEFAULT
+        );
+        $this->assertFalse($this->_model->isVisible());
+    }
+
+    /**
+     * Invisible elements is contains showInDefault="0" showInWebsite="0" showInStore="0"
+     */
+    public function testIsVisibleReturnsFalseInSingleStoreModeForInvisibleElements()
+    {
+        $this->_applicationMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_model->setData(array('showInDefault' => 0, 'showInStore' => 0, 'showInWebsite' => 0),
+            Mage_Backend_Model_Config_ScopeDefiner::SCOPE_DEFAULT
+        );
         $this->assertFalse($this->_model->isVisible());
     }
 

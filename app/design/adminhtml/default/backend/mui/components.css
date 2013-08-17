@@ -199,7 +199,8 @@ a.logo {
 .form-search label {
     vertical-align:top;
 }
-.form-search input[type=search] {
+.form-search input[type=search],
+.form-search input.search {
     margin-bottom:0;
     min-width:160px;
 }

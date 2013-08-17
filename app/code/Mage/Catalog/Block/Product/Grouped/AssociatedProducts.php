@@ -41,4 +41,14 @@ class Mage_Catalog_Block_Product_Grouped_AssociatedProducts extends Mage_Backend
     {
         return Mage::helper('Mage_Catalog_Helper_Data')->__('Grouped Products');
     }
+
+    /**
+     * Get parent tab code
+     *
+     * @return string
+     */
+    public function getParentTab()
+    {
+        return 'product-details';
+    }
 }

@@ -27,18 +27,26 @@
 
 class Mage_CatalogRule_Model_Rule_Action_Collection extends Mage_Rule_Model_Action_Collection
 {
-    public function __construct()
+    /**
+     * @param Mage_Core_Model_View_Url $viewUrl
+     */
+    public function __construct(Mage_Core_Model_View_Url $viewUrl)
     {
-        parent::__construct();
+        parent::__construct($viewUrl);
         $this->setType('Mage_CatalogRule_Model_Rule_Action_Collection');
     }
 
+    /**
+     * @return array
+     */
     public function getNewChildSelectOptions()
     {
         $actions = parent::getNewChildSelectOptions();
         $actions = array_merge_recursive($actions, array(
-            array('value'=>'Mage_CatalogRule_Model_Rule_Action_Product', 'label'=>Mage::helper('Mage_CatalogInventory_Helper_Data')->__('Update the Product'))
-        ));
+            array(
+                'value' => 'Mage_CatalogRule_Model_Rule_Action_Product',
+                'label' => Mage::helper('Mage_CatalogInventory_Helper_Data')->__('Update the Product')
+        )));
         return $actions;
     }
 }

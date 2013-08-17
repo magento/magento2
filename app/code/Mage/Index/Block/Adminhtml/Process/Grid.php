@@ -41,6 +41,31 @@ class Mage_Index_Block_Adminhtml_Process_Grid extends Mage_Adminhtml_Block_Widge
     protected $_massactionBlockName = 'Mage_Index_Block_Adminhtml_Process_Grid_Massaction';
 
     /**
+     * Event repository
+     *
+     * @var Mage_Index_Model_EventRepository
+     */
+    protected $_eventRepository;
+
+    /**
+     * @param Mage_Backend_Block_Template_Context $context
+     * @param Mage_Core_Model_StoreManagerInterface $storeManager
+     * @param Mage_Core_Model_Url $urlModel
+     * @param Mage_Index_Model_EventRepository $eventRepository
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Backend_Block_Template_Context $context,
+        Mage_Core_Model_StoreManagerInterface $storeManager,
+        Mage_Core_Model_Url $urlModel,
+        Mage_Index_Model_EventRepository $eventRepository,
+        array $data = array()
+    ) {
+        parent::__construct($context, $storeManager, $urlModel, $data);
+        $this->_eventRepository = $eventRepository;
+    }
+
+    /**
      * Class constructor
      */
     protected function _construct()
@@ -81,7 +106,7 @@ class Mage_Index_Block_Adminhtml_Process_Grid extends Mage_Adminhtml_Block_Widge
             }
             $item->setName($item->getIndexer()->getName());
             $item->setDescription($item->getIndexer()->getDescription());
-            $item->setUpdateRequired($item->getUnprocessedEventsCollection()->count() > 0 ? 1 : 0);
+            $item->setUpdateRequired($this->_eventRepository->hasUnprocessed($item) ? 1 : 0);
             if ($item->isLocked()) {
                 $item->setStatus(Mage_Index_Model_Process::STATUS_RUNNING);
             }
@@ -96,7 +121,6 @@ class Mage_Index_Block_Adminhtml_Process_Grid extends Mage_Adminhtml_Block_Widge
      */
     protected function _prepareColumns()
     {
-        $baseUrl = $this->getUrl();
         $this->addColumn('indexer_code', array(
             'header'    => Mage::helper('Mage_Index_Helper_Data')->__('Index'),
             'width'     => '180',
@@ -143,7 +167,7 @@ class Mage_Index_Block_Adminhtml_Process_Grid extends Mage_Adminhtml_Block_Widge
         ));
 
         $this->addColumn('ended_at', array(
-            'header'    => Mage::helper('Mage_Index_Helper_Data')->__('Updated At'),
+            'header'    => Mage::helper('Mage_Index_Helper_Data')->__('Updated'),
             'type'      => 'datetime',
             'width'     => '180',
             'align'     => 'left',
@@ -237,7 +261,7 @@ class Mage_Index_Block_Adminhtml_Process_Grid extends Mage_Adminhtml_Block_Widge
      */
     public function decorateDate($value, $row, $column, $isExport)
     {
-        if(!$value) {
+        if (!$value) {
             return $this->__('Never');
         }
         return $value;

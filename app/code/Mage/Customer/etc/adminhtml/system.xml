@@ -56,32 +56,22 @@
                 <field id="auto_group_assign" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable Automatic Assignment to Customer Group</label>
                     <comment>To show VAT number on frontend, set Show VAT Number on Frontend option to Yes.</comment>
-                    <!--<source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>-->
-                    <options>
-                        <option label="Yes">1</option>
-                        <option label="No">0</option>
-                    </options>
+                    <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
                 </field>
                 <field id="tax_calculation_address_type" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Tax Calculation Based On</label>
-                    <!--<source_model>Mage_Customer_Model_Config_Source_Address_Type</source_model>-->
-                    <options>
-                        <option label="Billing Address">{{Mage_Customer_Model_Address_Abstract::TYPE_BILLING}}</option>
-                        <option label="Shipping Address">{{Mage_Customer_Model_Address_Abstract::TYPE_SHIPPING}}</option>
-                    </options>
+                    <source_model>Mage_Customer_Model_Config_Source_Address_Type</source_model>
                     <depends>
                         <field id="auto_group_assign">1</field>
                     </depends>
                 </field>
                 <field id="default_group" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Default Group</label>
-                    <!--<source_model>Mage_Customer_Model_Config_Source_Group</source_model>-->
-                    <options service-call="customerGroups" idField="customer_group_id" labelField="customer_group_code" />
+                    <source_model>Mage_Customer_Model_Config_Source_Group</source_model>
                 </field>
                 <field id="viv_domestic_group" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Group for Valid VAT ID - Domestic</label>
-                    <!--<source_model>Mage_Customer_Model_Config_Source_Group</source_model>-->
-                    <options service-call="customerGroups" idField="customer_group_id" labelField="customer_group_code" />
+                    <source_model>Mage_Customer_Model_Config_Source_Group</source_model>
                     <depends>
                         <field id="auto_group_assign">1</field>
                     </depends>
@@ -161,11 +151,15 @@
                     <label>Remind Email Template</label>
                     <source_model>Mage_Backend_Model_Config_Source_Email_Template</source_model>
                 </field>
-                <field id="forgot_email_identity" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Forgot and Remind Email Sender</label>
+                <field id="reset_password_template" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Reset Password Template</label>
+                    <source_model>Mage_Backend_Model_Config_Source_Email_Template</source_model>
+                </field>
+                <field id="forgot_email_identity" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Password Template Email Sender</label>
                     <source_model>Mage_Backend_Model_Config_Source_Email_Identity</source_model>
                 </field>
-                <field id="reset_link_expiration_period" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="reset_link_expiration_period" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Recovery Link Expiration Period (days)</label>
                     <comment>Please enter a number 1 or greater in this field.</comment>
                     <validate>required-entry validate-digits validate-digits-range digits-range-1-</validate>

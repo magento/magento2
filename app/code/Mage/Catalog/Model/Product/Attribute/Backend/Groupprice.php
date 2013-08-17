@@ -52,6 +52,6 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Groupprice
      */
     protected function _getDuplicateErrorMessage()
     {
-        return Mage::helper('Mage_Catalog_Helper_Data')->__('Duplicate website group price customer group.');
+        return Mage::helper('Mage_Catalog_Helper_Data')->__('We found a duplicate website group price customer group.');
     }
 }

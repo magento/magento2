@@ -89,7 +89,7 @@ class Mage_Adminhtml_Poll_AnswerController extends Mage_Adminhtml_Controller_Act
             $data = Zend_Json::decode($post['data']);
             try {
                 if( trim($data['answer_title']) == '' ) {
-                    throw new Exception(Mage::helper('Mage_Poll_Helper_Data')->__('Invalid Answer.'));
+                    throw new Exception(Mage::helper('Mage_Poll_Helper_Data')->__('Invalid Answer'));
                 }
                 $model = Mage::getModel('Mage_Poll_Model_Poll_Answer');
                 $model->setData($data)
@@ -118,14 +118,14 @@ class Mage_Adminhtml_Poll_AnswerController extends Mage_Adminhtml_Controller_Act
             }
         } else {
             $response->setError(1);
-            $response->setMessage(Mage::helper('Mage_Poll_Helper_Data')->__('Unable to find an answer to delete.'));
+            $response->setMessage(Mage::helper('Mage_Poll_Helper_Data')->__('We can\'t find an answer to delete.'));
         }
         $this->getResponse()->setBody( $response->toJson() );
     }
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Poll::poll');
+        return $this->_authorization->isAllowed('Mage_Poll::poll');
     }
 
 }

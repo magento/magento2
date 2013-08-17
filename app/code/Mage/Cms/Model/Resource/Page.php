@@ -95,7 +95,7 @@ class Mage_Cms_Model_Resource_Page extends Mage_Core_Model_Resource_Db_Abstract
         }
 
         if ($this->isNumericPageIdentifier($object)) {
-            Mage::throwException(Mage::helper('Mage_Cms_Helper_Data')->__('The page URL key cannot consist only of numbers.'));
+            Mage::throwException(Mage::helper('Mage_Cms_Helper_Data')->__('The page URL key cannot be made of only numbers.'));
         }
 
         // modify create / update dates

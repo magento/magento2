@@ -40,13 +40,13 @@ class Varien_Image
     /**
      * Constructor
      *
-     * @param Varien_Image_Adapter $adapter. Default value is GD2
+     * @param Varien_Image_Adapter_Abstract $adapter. Default value is GD2
      * @param string $fileName
      * @return void
      */
-    function __construct($fileName=null, $adapter=Varien_Image_Adapter::ADAPTER_GD2)
+    function __construct(Varien_Image_Adapter_Abstract $adapter, $fileName = null)
     {
-        $this->_getAdapter($adapter);
+        $this->_adapter = $adapter;
         $this->_fileName = $fileName;
         if( isset($fileName) ) {
             $this->open();
@@ -61,13 +61,13 @@ class Varien_Image
      */
     public function open()
     {
-        $this->_getAdapter()->checkDependencies();
+        $this->_adapter->checkDependencies();
 
         if( !file_exists($this->_fileName) ) {
             throw new Exception("File '{$this->_fileName}' does not exists.");
         }
 
-        $this->_getAdapter()->open($this->_fileName);
+        $this->_adapter->open($this->_fileName);
     }
 
     /**
@@ -78,7 +78,7 @@ class Varien_Image
      */
     public function display()
     {
-        $this->_getAdapter()->display();
+        $this->_adapter->display();
     }
 
     /**
@@ -91,7 +91,7 @@ class Varien_Image
      */
     public function save($destination=null, $newFileName=null)
     {
-        $this->_getAdapter()->save($destination, $newFileName);
+        $this->_adapter->save($destination, $newFileName);
     }
 
     /**
@@ -103,7 +103,7 @@ class Varien_Image
      */
     public function rotate($angle)
     {
-        $this->_getAdapter()->rotate($angle);
+        $this->_adapter->rotate($angle);
     }
 
     /**
@@ -118,7 +118,7 @@ class Varien_Image
      */
     public function crop($top=0, $left=0, $right=0, $bottom=0)
     {
-        $this->_getAdapter()->crop($top, $left, $right, $bottom);
+        $this->_adapter->crop($top, $left, $right, $bottom);
     }
 
     /**
@@ -131,32 +131,32 @@ class Varien_Image
      */
     public function resize($width, $height = null)
     {
-        $this->_getAdapter()->resize($width, $height);
+        $this->_adapter->resize($width, $height);
     }
 
     public function keepAspectRatio($value)
     {
-        return $this->_getAdapter()->keepAspectRatio($value);
+        return $this->_adapter->keepAspectRatio($value);
     }
 
     public function keepFrame($value)
     {
-        return $this->_getAdapter()->keepFrame($value);
+        return $this->_adapter->keepFrame($value);
     }
 
     public function keepTransparency($value)
     {
-        return $this->_getAdapter()->keepTransparency($value);
+        return $this->_adapter->keepTransparency($value);
     }
 
     public function constrainOnly($value)
     {
-        return $this->_getAdapter()->constrainOnly($value);
+        return $this->_adapter->constrainOnly($value);
     }
 
     public function backgroundColor($value)
     {
-        return $this->_getAdapter()->backgroundColor($value);
+        return $this->_adapter->backgroundColor($value);
     }
 
     /**
@@ -167,7 +167,7 @@ class Varien_Image
      */
     public function quality($value)
     {
-        return $this->_getAdapter()->quality($value);
+        return $this->_adapter->quality($value);
     }
 
     /**
@@ -186,7 +186,7 @@ class Varien_Image
         if( !file_exists($watermarkImage) ) {
             throw new Exception("Required file '{$watermarkImage}' does not exists.");
         }
-        $this->_getAdapter()->watermark($watermarkImage, $positionX, $positionY, $watermarkImageOpacity, $repeat);
+        $this->_adapter->watermark($watermarkImage, $positionX, $positionY, $watermarkImageOpacity, $repeat);
     }
 
     /**
@@ -197,7 +197,7 @@ class Varien_Image
      */
     public function getMimeType()
     {
-        return $this->_getAdapter()->getMimeType();
+        return $this->_adapter->getMimeType();
     }
 
     /**
@@ -231,7 +231,7 @@ class Varien_Image
      */
     public function setImageBackgroundColor($color)
     {
-        $this->_getAdapter()->imageBackgroundColor = intval($color);
+        $this->_adapter->imageBackgroundColor = intval($color);
     }
 
     /**
@@ -242,7 +242,7 @@ class Varien_Image
      */
     public function setWatermarkPosition($position)
     {
-        $this->_getAdapter()->setWatermarkPosition($position);
+        $this->_adapter->setWatermarkPosition($position);
         return $this;
     }
 
@@ -254,7 +254,7 @@ class Varien_Image
      */
     public function setWatermarkImageOpacity($imageOpacity)
     {
-        $this->_getAdapter()->setWatermarkImageOpacity($imageOpacity);
+        $this->_adapter->setWatermarkImageOpacity($imageOpacity);
         return $this;
     }
 
@@ -266,7 +266,7 @@ class Varien_Image
      */
     public function setWatermarkWidth($width)
     {
-        $this->_getAdapter()->setWatermarkWidth($width);
+        $this->_adapter->setWatermarkWidth($width);
         return $this;
     }
 
@@ -278,23 +278,10 @@ class Varien_Image
      */
     public function setWatermarkHeight($height)
     {
-        $this->_getAdapter()->setWatermarkHeight($height);
+        $this->_adapter->setWatermarkHeight($height);
         return $this;
     }
 
-    /**
-     * Retrieve image adapter object
-     *
-     * @param string $adapter
-     * @return Varien_Image_Adapter_Abstract
-     */
-    protected function _getAdapter($adapter=null)
-    {
-        if( !isset($this->_adapter) ) {
-            $this->_adapter = Varien_Image_Adapter::factory( $adapter );
-        }
-        return $this->_adapter;
-    }
 
     /**
      * Retrieve original image width
@@ -303,7 +290,7 @@ class Varien_Image
      */
     public function getOriginalWidth()
     {
-        return $this->_getAdapter()->getOriginalWidth();
+        return $this->_adapter->getOriginalWidth();
     }
 
     /**
@@ -313,6 +300,19 @@ class Varien_Image
      */
     public function getOriginalHeight()
     {
-        return $this->_getAdapter()->getOriginalHeight();
+        return $this->_adapter->getOriginalHeight();
+    }
+
+    /**
+     * Create Image from string
+     *
+     * @param string $text
+     * @param string $font Path to font file
+     * @return Varien_Image
+     */
+    public function createPngFromString($text, $font = '')
+    {
+        $this->_adapter->createPngFromString($text, $font);
+        return $this;
     }
 }

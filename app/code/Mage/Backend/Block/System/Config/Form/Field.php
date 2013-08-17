@@ -34,7 +34,7 @@
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Mage_Backend_Block_System_Config_Form_Field
-    extends Mage_Backend_Block_Abstract
+    extends Mage_Backend_Block_Template
     implements Varien_Data_Form_Element_Renderer_Interface
 {
     /**
@@ -45,12 +45,12 @@ class Mage_Backend_Block_System_Config_Form_Field
     protected $_application;
 
     /**
-     * @param Mage_Core_Block_Template_Context $context
+     * @param Mage_Backend_Block_Template_Context $context
      * @param Mage_Core_Model_App $application
      * @param array $data
      */
     public function __construct(
-        Mage_Core_Block_Template_Context $context,
+        Mage_Backend_Block_Template_Context $context,
         Mage_Core_Model_App $application,
         array $data = array()
     ) {
@@ -77,7 +77,6 @@ class Mage_Backend_Block_System_Config_Form_Field
      */
     public function render(Varien_Data_Form_Element_Abstract $element)
     {
-        $htmlId = $element->getHtmlId();
         $isCheckboxRequired = $this->_isInheritCheckboxRequired($element);
 
         // Disable element if value is inherited from other scope. Flag has to be set before the value is rendered.
@@ -85,8 +84,8 @@ class Mage_Backend_Block_System_Config_Form_Field
             $element->setDisabled(true);
         }
 
-        $html = '<tr id="row_' . $htmlId . '">';
-        $html .= '<td class="label"><label for="' . $htmlId . '">' . $element->getLabel() . '</label></td>';
+        $html = '<td class="label"><label for="' . $element->getHtmlId() . '">'
+            . $element->getLabel() . '</label></td>';
         $html .= $this->_renderValue($element);
 
         if ($isCheckboxRequired) {
@@ -96,8 +95,7 @@ class Mage_Backend_Block_System_Config_Form_Field
         $html .= $this->_renderScopeLabel($element);
         $html .= $this->_renderHint($element);
 
-        $html .= '</tr>';
-        return $html;
+        return $this->_decorateRowHtml($element, $html);
     }
 
     /**
@@ -108,8 +106,15 @@ class Mage_Backend_Block_System_Config_Form_Field
      */
     protected function _renderValue(Varien_Data_Form_Element_Abstract $element)
     {
-        $html = '<td class="value">';
-        $html .= $this->_getElementHtml($element);
+        if ($element->getTooltip()) {
+            $html = '<td class="value with-tooltip">';
+            $html .= $this->_getElementHtml($element);
+            $html .= '<div class="tooltip"><span class="help"><span></span></span>';
+            $html .= '<div class="tooltip-content">' . $element->getTooltip() . '</div></div>';
+        } else {
+            $html = '<td class="value">';
+            $html .= $this->_getElementHtml($element);
+        }
         if ($element->getComment()) {
             $html .= '<p class="note"><span>' . $element->getComment() . '</span></p>';
         }
@@ -196,5 +201,17 @@ class Mage_Backend_Block_System_Config_Form_Field
         }
         $html .= '</td>';
         return $html;
+    }
+
+    /**
+     * Decorate field row html
+     *
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @param string $html
+     * @return string
+     */
+    protected function _decorateRowHtml($element, $html)
+    {
+        return '<tr id="row_' . $element->getHtmlId() . '">' . $html . '</tr>';
     }
 }

@@ -56,16 +56,19 @@ class Mage_ImportExport_Model_Resource_CollectionByPagesIteratorTest extends PHP
         /** @var $callbackMock PHPUnit_Framework_MockObject_MockObject */
         $callbackMock = $this->getMock('stdClass', array('callback'));
 
+        $fetchStrategy = $this->getMockForAbstractClass('Varien_Data_Collection_Db_FetchStrategyInterface');
+
+        $select = $this->getMock('Zend_Db_Select', array(), array(), '', false);
+
         /** @var $collectionMock Varien_Data_Collection_Db|PHPUnit_Framework_MockObject_MockObject */
         $collectionMock = $this->getMock('Varien_Data_Collection_Db',
-            array('clear', 'setPageSize', 'setCurPage', 'count', 'getLastPageNumber'),
-            array(), '', false, false
+            array('clear', 'setPageSize', 'setCurPage', 'count', 'getLastPageNumber', 'getSelect'),
+            array($fetchStrategy)
         );
 
-        $adapter = $this->getMockForAbstractClass(
-            'Zend_Db_Adapter_Abstract', array(), '', false, true, true, array('fetchAll')
-        );
-        $collectionMock->setConnection($adapter);
+        $collectionMock->expects($this->any())
+            ->method('getSelect')
+            ->will($this->returnValue($select));
 
         $collectionMock->expects($this->exactly($pageCount + 1))
             ->method('clear')

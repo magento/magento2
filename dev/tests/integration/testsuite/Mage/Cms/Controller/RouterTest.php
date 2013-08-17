@@ -34,11 +34,14 @@ class Mage_Cms_Controller_RouterTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->markTestIncomplete('MAGETWO-3393');
         $this->_model = new Mage_Cms_Controller_Router(
             Mage::getObjectManager()->get('Mage_Core_Controller_Varien_Action_Factory'),
             new Mage_Core_Model_Event_ManagerStub(
-                $this->getMock('Mage_Core_Model_ObserverFactory', array(), array(), '', false),
-                $this->getMock('Mage_Core_Model_Event_Config', array(), array(), '', false)
+                $this->getMockForAbstractClass('Mage_Core_Model_Event_InvokerInterface', array(), '', false),
+                $this->getMock('Mage_Core_Model_Event_Config', array(), array(), '', false),
+                $this->getMock('Varien_EventFactory', array(), array(), '', false),
+                $this->getMock('Varien_Event_ObserverFactory', array(), array(), '', false)
             )
         );
     }
@@ -48,6 +51,7 @@ class Mage_Cms_Controller_RouterTest extends PHPUnit_Framework_TestCase
      */
     public function testMatch()
     {
+        $this->markTestIncomplete('MAGETWO-3393');
         $request = new Mage_Core_Controller_Request_Http();
         //Open Node
         Mage::getObjectManager()->get('Mage_Core_Controller_Response_Http')

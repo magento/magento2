@@ -64,8 +64,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Cart extends Mage_Adminhtml_Block_W
 
         if ($quote) {
             $collection = $quote->getItemsCollection(false);
-        }
-        else {
+        } else {
             $collection = new Varien_Data_Collection();
         }
 
@@ -76,16 +75,19 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Cart extends Mage_Adminhtml_Block_W
         return parent::_prepareCollection();
     }
 
+    /**
+     * @return Mage_Backend_Block_Widget_Grid_Extended
+     */
     protected function _prepareColumns()
     {
         $this->addColumn('product_id', array(
-            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Product ID'),
+            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('ID'),
             'index'     => 'product_id',
             'width'     => '100px',
         ));
 
         $this->addColumn('name', array(
-            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Product Name'),
+            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Product'),
             'index'     => 'name',
             'renderer'  => 'Mage_Adminhtml_Block_Customer_Edit_Tab_View_Grid_Renderer_Item'
         ));
@@ -97,7 +99,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Cart extends Mage_Adminhtml_Block_W
         ));
 
         $this->addColumn('qty', array(
-            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Qty'),
+            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Quantity'),
             'index'     => 'qty',
             'type'      => 'number',
             'width'     => '60px',
@@ -146,18 +148,25 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Cart extends Mage_Adminhtml_Block_W
      *
      * @return Mage_Customer_Model_Customer
      */
-    public function getCustomer() {
+    public function getCustomer()
+    {
         return Mage::registry('current_customer');
     }
 
+    /**
+     * @return string
+     */
     public function getGridUrl()
     {
         return $this->getUrl('*/*/cart', array('_current'=>true, 'website_id' => $this->getWebsiteId()));
     }
 
+    /**
+     * @return string
+     */
     public function getGridParentHtml()
     {
-        $templateName = Mage::getDesign()->getFilename($this->_parentTemplate, array('_relative' => true));
+        $templateName = $this->_viewFileSystem->getFilename($this->_parentTemplate, array('_relative' => true));
         return $this->fetchView($templateName);
     }
 

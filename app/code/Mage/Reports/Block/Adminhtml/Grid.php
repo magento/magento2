@@ -96,7 +96,7 @@ class Mage_Reports_Block_Adminhtml_Grid extends Mage_Backend_Block_Widget_Grid
     /**
      * Locale instance
      *
-     * @var Mage_Core_Model_Locale
+     * @var Mage_Core_Model_LocaleInterface
      */
     protected $_locale;
 
@@ -153,7 +153,7 @@ class Mage_Reports_Block_Adminhtml_Grid extends Mage_Backend_Block_Widget_Grid
                     $collection->setInterval($from, $to);
                 }
                 catch (Exception $e) {
-                    $this->_errors[] = Mage::helper('Mage_Reports_Helper_Data')->__('Invalid date specified.');
+                    $this->_errors[] = Mage::helper('Mage_Reports_Helper_Data')->__('Invalid date specified');
                 }
             }
 
@@ -295,7 +295,7 @@ class Mage_Reports_Block_Adminhtml_Grid extends Mage_Backend_Block_Widget_Grid
      */
     public function getDateFormat()
     {
-        return $this->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
+        return $this->getLocale()->getDateFormat(Mage_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT);
     }
 
     /**
@@ -358,7 +358,7 @@ class Mage_Reports_Block_Adminhtml_Grid extends Mage_Backend_Block_Widget_Grid
     /**
      * Retrieve locale
      *
-     * @return Mage_Core_Model_Locale
+     * @return Mage_Core_Model_LocaleInterface
      */
     public function getLocale()
     {

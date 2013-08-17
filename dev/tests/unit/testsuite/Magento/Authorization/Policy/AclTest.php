@@ -33,10 +33,14 @@ class Magento_Authorization_Policy_AclTest extends PHPUnit_Framework_TestCase
 
     protected $_aclMock;
 
+    protected $_aclBuilderMock;
+
     public function setUp()
     {
         $this->_aclMock = $this->getMock('Magento_Acl');
-        $this->_model = new Magento_Authorization_Policy_Acl($this->_aclMock);
+        $this->_aclBuilderMock = $this->getMock('Magento_Acl_Builder', array(), array(), '', false);
+        $this->_aclBuilderMock->expects($this->any())->method('getAcl')->will($this->returnValue($this->_aclMock));
+        $this->_model = new Magento_Authorization_Policy_Acl($this->_aclBuilderMock);
     }
 
     public function testIsAllowedReturnsTrueIfResourceIsAllowedToRole()

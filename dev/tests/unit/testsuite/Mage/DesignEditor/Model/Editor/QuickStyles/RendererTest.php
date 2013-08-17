@@ -66,7 +66,7 @@ class Mage_DesignEditor_Model_Editor_Tools_QuickStyles_RendererTest
     public function sampleData()
     {
         return array(array(
-            'expected_result' => "css_string\r\ncss_string\r\ncss_string\r\ncss_string\r\n",
+            'expected_result' => "css_string\ncss_string\ncss_string\ncss_string\n",
             'data'            => array(
                 'header-background' => array(
                     'type'       => 'background',

@@ -26,157 +26,175 @@
 (function($) {
     'use strict';
     $.widget('mage.groupedProduct', {
+        /**
+         * Create widget
+         * @private
+         */
         _create: function () {
-            this.$grid = this.element.find('#grouped_grid');
-            this.$popup = this.element.find('#grouped_grid_popup');
+            this.$grid = this.element.find('[data-role=grouped-product-grid]');
+            this.$grid.sortable({
+                distance: 8,
+                items: '[data-role=row]',
+                tolerance: "pointer",
+                cancel: ':input',
+                update: $.proxy(function() {
+                    this.element.trigger('resort');
+                }, this)
+            });
+
+            this.$template = this.element.find('#group-product-template');
+            $.each(
+                this.$grid.data('products'),
+                $.proxy(function(index, product) {
+                    this._add(null, product);
+                }, this)
+            );
+
+            this._on({
+                'add': '_add',
+                'resort': '_resort',
+                'click [data-column=actions] [data-role=delete]': '_remove'
+            });
 
             this._bindDialog();
-            this._bindEventHandlers();
-            if (!$.isArray(this.options.gridData) || this.options.gridData.length) {
-                this._initGridWithData(this.options.gridData);
-            }
-            this._displayGridRow(this.options.associatedProductIds);
-            this._updatePopupGrid();
-            this._updateHiddenField(this.options.associatedProductIds);
-            this._sortGridByPosition();
+            this._updateGridVisibility();
         },
 
+        /**
+         * Add product to grouped grid
+         * @param event
+         * @param product
+         * @private
+         */
+        _add: function(event, product) {
+            var productExists = this.$grid.find('[data-role=id]')
+                .filter(function(index, element) { return $(element).val() == product.id; }).length;
+            if (!productExists) {
+                this.$template.tmpl(product).appendTo(this.$grid.find('tbody'));
+            }
+        },
+
+        /**
+         * Remove product
+         * @param event
+         * @private
+         */
+        _remove: function(event) {
+            $(event.target).closest('[data-role=row]').remove();
+            this.element.trigger('resort');
+            this._updateGridVisibility();
+        },
+
+        /**
+         * Resort products
+         * @private
+         */
+        _resort: function() {
+            this.element.find('[data-role=position]').each($.proxy(function(index, element) {
+                $(element).val(index + 1);
+            }, this));
+        },
+
+        /**
+         * Create dialog for show product
+         *
+         * @private
+         */
         _bindDialog: function () {
             var widget = this;
-            $('#grouped-product-popup').dialog({
-                title: 'Add Products to Group',
+            var selectedProductList = {};
+            var popup =  $('[data-role=add-product-dialog]');
+            popup.dialog({
+                title: $.mage.__('Add Products to Group'),
                 autoOpen: false,
                 minWidth: 980,
                 modal: true,
                 resizable: true,
+                dialogClass: 'grouped',
                 buttons: [{
                     id: 'grouped-product-dialog-cancel-button',
-                    text: 'Cancel',
+                    text: $.mage.__('Cancel'),
                     click: function () {
-                        widget._updatePopupGrid();
                         $(this).dialog('close');
                     }
                 }, {
                     id: 'grouped-product-dialog-apply-button',
-                    text: 'Apply Changes',
-                    'class': 'add',
+                    text: $.mage.__('Add Selected Products'),
+                    'class': 'add primary',
                     click: function () {
-                        var ids = widget._getSelectedIds();
-                        widget._displayGridRow(ids);
-                        widget._updateHiddenField(ids);
-                        $(this).dialog('close');
+                       $.each(selectedProductList, function(index, product) {
+                            widget._add(null, product);
+                       });
+                       widget._resort();
+                       widget._updateGridVisibility();
+                       $(this).dialog('close');
                     }
                 }]
             });
-        },
 
-        _bindEventHandlers: function () {
-            var widget = this;
-            $('#grouped-add-products').on('click', function () {
-                $('#grouped-product-popup').dialog('open');
-                return false;
-            });
-            this.$grid.on('click', '.grouped-product-delete button', function () {
-                $(this).closest('tr').hide().addClass('ignore-validate');
-                widget._updatePopupGrid();
-                widget._updateHiddenField(widget._getSelectedIds());
-                widget._updateGridVisibility();
-            });
-            this.$grid.on('change keyup', 'input[type="text"]', function () {
-                widget._updateHiddenField(widget._getSelectedIds());
-            });
-            this.options.grid.rowClickCallback = function () {};
-            this.options.gridPopup.rowClickCallback = function (grid, event) {
-                event.stopPropagation();
-                if (!this.rows || !this.rows.length) {
-                    return;
-                }
-                $(event.target).parent().find('td.col-select input[type="checkbox"]').click();
-                return false;
-            };
-        },
-
-        updateRowsPositions: function () {
-            $.each(this.$grid.find('input[name="position"]'), function (index) {
-                $(this).val(index);
-            });
-            this._updateHiddenField(this._getSelectedIds());
-        },
-
-        _updateHiddenField: function (ids) {
-            var gridData = {}, widget = this;
-            $.each(this.$grid.find('input[name="entity_id"]'), function () {
-                var $idContainer = $(this),
-                    inArray = $.inArray($idContainer.val(), ids) !== -1;
-                if (inArray) {
-                    var data = {};
-                    $.each(widget.options.fieldsToSave, function (k, v) {
-                        data[v] = $idContainer.closest('tr').find('input[name="' + v + '"]').val();
-                    });
-                    gridData[$idContainer.val()] = data;
+            popup.on('click', '[data-role=row]', function(event) {
+                var target = $(event.target);
+                if (!target.is('input')) {
+                    target.closest('[data-role=row]')
+                        .find('[data-column=entity_id] input')
+                        .prop('checked', function(element, value) { return !value; })
+                        .trigger('change');
                 }
             });
-            widget.options.$hiddenInput.val(JSON.stringify(gridData));
-        },
 
-        _displayGridRow: function (ids) {
-            var displayedRows = 0;
-            $.each(this.$grid.find('input[name="entity_id"]'), function () {
-                var $idContainer = $(this),
-                    inArray = $.inArray($idContainer.val(), ids) !== -1;
-                $idContainer.closest('tr').toggle(inArray).toggleClass('ignore-validate', !inArray);
-                if (inArray) {
-                    displayedRows++;
-                }
-            });
-            this._updateGridVisibility(displayedRows);
-        },
-
-        _initGridWithData: function (gridData) {
-            $.each(this.$grid.find('input[name="entity_id"]'), function () {
-                var $idContainer = $(this),
-                    id = $idContainer.val();
-                if (!gridData[id]) {
-                    return true;
-                }
-                $.each(gridData[id], function (fieldName, data) {
-                    $idContainer.closest('tr').find('input[name="' + fieldName + '"]').val(data);
-                });
-            });
-        },
-
-        _getSelectedIds: function () {
-            var ids = [];
-            $.each(this.$popup.find('td.col-select input[type="checkbox"]:checked'),
-                function () {
-                    ids.push($(this).val());
-                }
+            popup.on(
+                'change',
+                '[data-role=row] [data-column=entity_id] input',
+                $.proxy(function(event) {
+                    var element = $(event.target);
+                    var product = {};
+                    if (element.is(':checked')) {
+                        product.id = element.val();
+                        product.qty = 0;
+                        element.closest('[data-role=row]').find('[data-column]').each(function(index, element) {
+                            product[$(element).data('column')] = $.trim($(element).text());
+                        });
+                        selectedProductList[product.id] = product;
+                    } else {
+                        delete selectedProductList[element.val()];
+                    }
+                }, this)
             );
-            return ids;
-        },
 
-        _updatePopupGrid: function () {
-            var $popup = this.$popup;
-            $.each(this.$grid.find('input[name="entity_id"]'), function () {
-                var id = $(this).val();
-                $popup.find('input[type=checkbox][value="' + id + '"]')
-                    .prop({checked: !$(this).closest('tr').hasClass('ignore-validate')});
+            var gridPopup = this.options.gridPopup;
+
+            $('[data-role=add-product]').on('click', function(event) {
+                event.preventDefault();
+                popup.dialog('open');
+                gridPopup.reload();
+                selectedProductList = {};
             });
+
+            $('#' + gridPopup.containerId)
+                .on('gridajaxsettings', function(event, ajaxSettings) {
+                    var ids = widget.$grid.find('[data-role=id]').map(function(index, element) {
+                        return $(element).val();
+                    }).toArray();
+                    ajaxSettings.data.filter = $.extend(ajaxSettings.data.filter || {}, {'entity_id': ids});
+                })
+                .on('gridajax', function(event, ajaxRequest) {
+                    ajaxRequest.done(function() {
+                        popup.find('[data-role=row] [data-column=entity_id] input')
+                            .each(function(index, element) {
+                                var $element = $(element);
+                                $element.prop('checked', !!selectedProductList[$element.val()]);
+                            });
+                    });
+                });
         },
 
-        _sortGridByPosition: function () {
-            var rows = this.$grid.find('tbody tr');
-            rows.sort(function (a, b) {
-                var valueA = $(a).find('input[name="position"]').val(),
-                    valueB = $(b).find('input[name="position"]').val();
-                return (valueA < valueB) ? -1 : (valueA > valueB) ? 1 : 0;
-            });
-            this.$grid.find('tbody').html(rows);
-        },
-
-        _updateGridVisibility: function (showGrid) {
-            showGrid = showGrid || this.element.find('#grouped_grid_table tbody tr:visible').length > 0;
-            this.element.find('.grid-wrapper').toggle(showGrid);
+        /**
+         * Show or hide message
+         * @private
+         */
+        _updateGridVisibility: function () {
+            var showGrid = this.element.find('[data-role=id]').length > 0;
+            this.element.find('.grid-container').toggle(showGrid);
             this.element.find('.no-products-message').toggle(!showGrid);
         }
     });

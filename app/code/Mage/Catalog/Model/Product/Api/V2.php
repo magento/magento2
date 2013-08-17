@@ -39,10 +39,16 @@ class Mage_Catalog_Model_Product_Api_V2 extends Mage_Catalog_Model_Product_Api
      * @param int|string $productId
      * @param string|int $store
      * @param stdClass $attributes
+     * @param string $identifierType if set to sku, then consider the productId to be a SKU even if it is numeric
      * @return array
      */
     public function info($productId, $store = null, $attributes = null, $identifierType = null)
     {
+        // make sku flag case-insensitive
+        if (!empty($identifierType)) {
+            $identifierType = strtolower($identifierType);
+        }
+
         $product = $this->_getProduct($productId, $store, $identifierType);
 
         $result = array( // Basic product data
@@ -159,11 +165,12 @@ class Mage_Catalog_Model_Product_Api_V2 extends Mage_Catalog_Model_Product_Api
              */
             if (is_array($errors = $product->validate())) {
                 $strErrors = array();
-                foreach($errors as $code => $error) {
+                foreach ($errors as $code => $error) {
                     if ($error === true) {
-                        $error = Mage::helper('Mage_Catalog_Helper_Data')->__('Value for "%s" is invalid.', $code);
+                        $error = Mage::helper('Mage_Catalog_Helper_Data')->__('Please correct the value for "%s".', $code);
                     } else {
-                        $error = Mage::helper('Mage_Catalog_Helper_Data')->__('Value for "%s" is invalid: %s', $code, $error);
+                        $error = Mage::helper('Mage_Catalog_Helper_Data')->__('Please correct the value for "%s": %s',
+                            $code, $error);
                     }
                     $strErrors[] = $error;
                 }
@@ -179,11 +186,46 @@ class Mage_Catalog_Model_Product_Api_V2 extends Mage_Catalog_Model_Product_Api
     }
 
     /**
+     * Update multiple products information at once
+     *
+     * @param array      $productIds
+     * @param array      $productData
+     * @param string|int $store
+     * @param string     $identifierType
+     * @return boolean
+     */
+    public function multiUpdate($productIds, $productData, $store = null, $identifierType = null)
+    {
+        if (count($productIds) != count($productData)) {
+            $this->_fault('multi_update_not_match');
+        }
+
+        $productData = (array)$productData;
+        $failMessages = array();
+
+        foreach ($productIds as $index => $productId) {
+            try {
+                $this->update($productId, $productData[$index], $store, $identifierType);
+            } catch (Mage_Api_Exception $e) {
+                $failMessages[] = sprintf("Product ID %d:\n %s", $productId, $e->getMessage());
+            }
+        }
+
+        if (empty($failMessages)) {
+            return true;
+        } else {
+            $this->_fault('partially_updated', implode("\n", $failMessages));
+        }
+
+        return false;
+    }
+
+    /**
      *  Set additional data before product saved
      *
-     *  @param    Mage_Catalog_Model_Product $product
-     *  @param    array $productData
-     *  @return   object
+     * @param Mage_Catalog_Model_Product $product
+     * @param array $productData
+     * @return object
      */
     protected function _prepareDataForSave ($product, $productData)
     {
@@ -235,7 +277,8 @@ class Mage_Catalog_Model_Product_Api_V2 extends Mage_Catalog_Model_Product_Api
                 if (is_string($website)) {
                     try {
                         $website = Mage::app()->getWebsite($website)->getId();
-                    } catch (Exception $e) { }
+                    } catch (Exception $e) {
+                    }
                 }
             }
             $product->setWebsiteIds($productData->websites);
@@ -297,12 +340,14 @@ class Mage_Catalog_Model_Product_Api_V2 extends Mage_Catalog_Model_Product_Api
      */
     public function getSpecialPrice($productId, $store = null)
     {
-        $attributes = new stdClass();
-        $attributes->attributes = array(
-            'special_price',
-            'special_from_date',
-            'special_to_date'
+        $product = $this->_getProduct($productId, $store);
+
+        $result = array(
+            'special_price'     => $product->getSpecialPrice(),
+            'special_from_date' => $product->getSpecialFromDate(),
+            'special_to_date'   => $product->getSpecialToDate(),
         );
-        return $this->info($productId, $store, $attributes);
+
+        return $result;
     }
 }

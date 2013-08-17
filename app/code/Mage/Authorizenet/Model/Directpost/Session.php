@@ -35,10 +35,12 @@ class Mage_Authorizenet_Model_Directpost_Session extends Mage_Core_Model_Session
 {
     /**
      * Class constructor. Initialize session namespace
+     *
+     * @param string $sessionName
      */
-    public function __construct()
+    public function __construct($sessionName = null)
     {
-        $this->init('authorizenet_directpost');
+        $this->init('authorizenet_directpost', $sessionName);
     }
 
     /**

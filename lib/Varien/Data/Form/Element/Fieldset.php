@@ -24,7 +24,6 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 /**
  * Form fieldset
  *
@@ -35,29 +34,6 @@
 class Varien_Data_Form_Element_Fieldset extends Varien_Data_Form_Element_Abstract
 {
     /**
-     * Sort child elements by specified data key
-     *
-     * @var string
-     */
-    protected $_sortChildrenByKey = '';
-
-    /**
-     * Children sort direction
-     *
-     * @var int
-     */
-    protected $_sortChildrenDirection = SORT_ASC;
-
-    /**
-     * Label for Advanced section
-     *
-     * @var string
-     */
-    protected $_labelAdvanceSection = '';
-
-    /**
-     * Enter description here...
-     *
      * @param array $attributes
      */
     public function __construct($attributes = array())
@@ -66,43 +42,68 @@ class Varien_Data_Form_Element_Fieldset extends Varien_Data_Form_Element_Abstrac
         $this->_renderer = Varien_Data_Form::getFieldsetRenderer();
         $this->setType('fieldset');
         if (isset($attributes['advancedSection'])) {
-            $this->_labelAdvanceSection = $attributes['advancedSection'];
-        } else {
-            $this->_labelAdvanceSection = Mage::helper('Mage_Core_Helper_Data')->__('Additional Settings');
+            $this->setAdvancedLabel($attributes['advancedSection']);
         }
     }
 
     /**
-     * Enter description here...
+     * Get elements html
      *
      * @return string
      */
     public function getElementHtml()
     {
-        $html = '<fieldset id="'.$this->getHtmlId().'"'.$this->serialize(array('class')) . $this->_getUiId() . '>'."\n";
+        $html = '<fieldset id="' . $this->getHtmlId() . '"' . $this->serialize(array('class'))
+            . $this->_getUiId() . '>' . "\n";
         if ($this->getLegend()) {
-            $html.= '<legend ' . $this->_getUiId('legend') . '>'.$this->getLegend().'</legend>'."\n";
+            $html.= '<legend ' . $this->_getUiId('legend') . '>' . $this->getLegend() . '</legend>' . "\n";
         }
         $html.= $this->getChildrenHtml();
-        $html.= '</fieldset>'."\n";
+        $html.= '</fieldset>' . "\n";
         $html.= $this->getAfterElementHtml();
         return $html;
     }
 
     /**
-     * Enter description here...
+     * Get Children element's array
+     *
+     * @return array
+     */
+    public function getChildren()
+    {
+        $elements = array();
+        foreach ($this->getElements() as $element) {
+            if ($element->getType() != 'fieldset') {
+                $elements[] = $element;
+            }
+        }
+        return $elements;
+    }
+
+    /**
+     * Get Children element's html
      *
      * @return string
      */
     public function getChildrenHtml()
     {
-        $html = '';
-        foreach ($this->getSortedElements() as $element) {
-            if ($element->getType() != 'fieldset') {
-                $html.= $element->toHtml();
+        return $this->_elementsToHtml($this->getChildren());
+    }
+
+    /**
+     * Get Basic elements' array
+     *
+     * @return array
+     */
+    public function getBasicChildren()
+    {
+        $elements = array();
+        foreach ($this->getElements() as $element) {
+            if (!$element->isAdvanced()) {
+                $elements[] = $element;
             }
         }
-        return $html;
+        return $elements;
     }
 
     /**
@@ -112,13 +113,7 @@ class Varien_Data_Form_Element_Fieldset extends Varien_Data_Form_Element_Abstrac
      */
     public function getBasicChildrenHtml()
     {
-        $html = '';
-        foreach ($this->getSortedElements() as $element) {
-            if (!$element->isAdvanced()) {
-                $html.= $element->toHtml();
-            }
-        }
-        return $html;
+        return $this->_elementsToHtml($this->getBasicChildren());
     }
 
     /**
@@ -128,13 +123,23 @@ class Varien_Data_Form_Element_Fieldset extends Varien_Data_Form_Element_Abstrac
      */
     public function getCountBasicChildren()
     {
-        $count = 0;
+        return count($this->getBasicChildren());
+    }
+
+    /**
+     * Get Advanced elements'
+     *
+     * @return string
+     */
+    public function getAdvancedChildren()
+    {
+        $elements = array();
         foreach ($this->getElements() as $element) {
-            if (!$element->isAdvanced()) {
-                $count += 1;
+            if ($element->isAdvanced()) {
+                $elements[] = $element;
             }
         }
-        return $count;
+        return $elements;
     }
 
     /**
@@ -144,13 +149,7 @@ class Varien_Data_Form_Element_Fieldset extends Varien_Data_Form_Element_Abstrac
      */
     public function getAdvancedChildrenHtml()
     {
-        $html = '';
-        foreach ($this->getSortedElements() as $element) {
-            if ($element->isAdvanced()) {
-                $html.= $element->toHtml();
-            }
-        }
-        return $html;
+        return $this->_elementsToHtml($this->getAdvancedChildren());
     }
 
     /**
@@ -169,25 +168,19 @@ class Varien_Data_Form_Element_Fieldset extends Varien_Data_Form_Element_Abstrac
     }
 
     /**
-     * Set advanced label
+     * Get SubFieldset
      *
-     * @param string $labelAdvanced
-     * @return Varien_Data_Form_Element_Fieldset
+     * @return array
      */
-    public function setAdvancedLabel($labelAdvanced)
+    public function getSubFieldset()
     {
-        $this->_labelAdvanceSection = $labelAdvanced;
-        return $this;
-    }
-
-    /**
-     * Get advanced label
-     *
-     * @return string
-     */
-    public function getAdvancedLabel()
-    {
-        return $this->_labelAdvanceSection;
+        $elements = array();
+        foreach ($this->getElements() as $element) {
+            if ($element->getType() == 'fieldset' && !$element->isAdvanced()) {
+                $elements[] = $element;
+            }
+        }
+        return $elements;
     }
 
     /**
@@ -197,13 +190,7 @@ class Varien_Data_Form_Element_Fieldset extends Varien_Data_Form_Element_Abstrac
      */
     public function getSubFieldsetHtml()
     {
-        $html = '';
-        foreach ($this->getSortedElements() as $element) {
-            if ($element->getType() == 'fieldset' && !$element->isAdvanced()) {
-                $html.= $element->toHtml();
-            }
-        }
-        return $html;
+        return $this->_elementsToHtml($this->getSubFieldset());
     }
 
     /**
@@ -213,14 +200,14 @@ class Varien_Data_Form_Element_Fieldset extends Varien_Data_Form_Element_Abstrac
      */
     public function getDefaultHtml()
     {
-        $html = '<div><h4 class="icon-head head-edit-form fieldset-legend">'.$this->getLegend().'</h4>'."\n";
+        $html = '<div><h4 class="icon-head head-edit-form fieldset-legend">' . $this->getLegend() . '</h4>' . "\n";
         $html.= $this->getElementHtml();
         $html.= '</div>';
         return $html;
     }
 
     /**
-     * Enter description here...
+     * Add field to fieldset
      *
      * @param string $elementId
      * @param string $type
@@ -239,46 +226,17 @@ class Varien_Data_Form_Element_Fieldset extends Varien_Data_Form_Element_Abstrac
     }
 
     /**
-     * Commence sorting elements by values by specified data key
+     * Return elements as html string
      *
-     * @param string $key
-     * @param int $direction
-     * @return Varien_Data_Form_Element_Fieldset
+     * @param array $elements
+     * @return string
      */
-    public function setSortElementsByAttribute($key, $direction = SORT_ASC)
+    protected function _elementsToHtml($elements)
     {
-        $this->_sortChildrenByKey = $key;
-        $this->_sortDirection = $direction;
-        return $this;
-    }
-
-    /**
-     * Get sorted elements as array
-     *
-     * @return array
-     */
-    public function getSortedElements()
-    {
-        $elements = array();
-        // sort children by value by specified key
-        if ($this->_sortChildrenByKey) {
-            $sortKey = $this->_sortChildrenByKey;
-            $uniqueIncrement = 0; // in case if there are elements with same values
-            foreach ($this->getElements() as $e) {
-                $key = '_' . $uniqueIncrement;
-                if ($e->hasData($sortKey)) {
-                    $key = $e->getDataUsingMethod($sortKey) . $key;
-                }
-                $elements[$key] = $e;
-                $uniqueIncrement++;
-            }
-            ksort($elements, $this->_sortChildrenDirection);
-            $elements = array_values($elements);
-        } else {
-            foreach ($this->getElements() as $element) {
-                $elements[] = $element;
-            }
+        $html = '';
+        foreach ($elements as $element) {
+            $html .= $element->toHtml();
         }
-        return $elements;
+        return $html;
     }
 }

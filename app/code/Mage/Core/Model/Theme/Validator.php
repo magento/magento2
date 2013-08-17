@@ -48,7 +48,7 @@ class Mage_Core_Model_Theme_Validator
      *
      * @var array
      */
-    protected $_errorMessages = array();
+    protected $_errorMessages;
 
     /**
      * Initialize validators
@@ -58,6 +58,7 @@ class Mage_Core_Model_Theme_Validator
         $this->_helper = $helper;
         $this->_setVersionValidators();
         $this->_setTypeValidators();
+        $this->_setTitleValidators();
     }
 
     /**
@@ -79,6 +80,27 @@ class Mage_Core_Model_Theme_Validator
             ->addDataValidators('magento_version_to', $versionValidators)
             ->addDataValidators('magento_version_from', $versionValidators);
 
+        return $this;
+    }
+
+    /**
+     * Set title validators
+     *
+     * @return $this
+     */
+    protected function _setTitleValidators()
+    {
+        $titleValidators = array(
+            array(
+                'name' => 'not_empty',
+                'class' => 'Zend_Validate_NotEmpty',
+                'break' => true,
+                'options' => array(),
+                'message' => $this->_helper->__('Field title can\'t be empty')
+            )
+        );
+
+        $this->addDataValidators('theme_title', $titleValidators);
         return $this;
     }
 
@@ -189,6 +211,7 @@ class Mage_Core_Model_Theme_Validator
      */
     public function validate(Varien_Object $data)
     {
+        $this->_errorMessages = array();
         foreach ($this->_dataValidators as $dataKey => $validators) {
             if (!isset($data[$dataKey]) || !$data->dataHasChangedFor($dataKey)) {
                 continue;

@@ -1,5 +1,8 @@
 <?php
 /**
+ * Event manager
+ * Used to dispatch global events
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -18,14 +21,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_Core
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-/**
- * Event manager. Used to dispatch global events
  */
 class Mage_Core_Model_Event_Manager
 {
@@ -37,49 +34,50 @@ class Mage_Core_Model_Event_Manager
     protected $_events = array();
 
     /**
-     * Observer model factory
+     * Event invoker
      *
-     * @var Mage_Core_Model_ObserverFactory
+     * @var Mage_Core_Model_Event_InvokerInterface
      */
-    protected $_observerFactory;
+    protected $_invoker;
 
     /**
-     * Observer model factory
+     * Event config
      *
      * @var Mage_Core_Model_Event_Config
      */
     protected $_eventConfig;
 
     /**
-     * @param Mage_Core_Model_ObserverFactory $observerFactory
-     * @param Mage_Core_Model_Event_Config $eventConfig
+     * Varien event factory
+     *
+     * @var Varien_EventFactory
      */
-    public function __construct(
-        Mage_Core_Model_ObserverFactory $observerFactory,
-        Mage_Core_Model_Event_Config $eventConfig
-    ) {
-        $this->_observerFactory = $observerFactory;
-        $this->_eventConfig = $eventConfig;
-        $this->addEventArea(Mage_Core_Model_App_Area::AREA_GLOBAL);
-    }
+    protected $_eventFactory;
 
     /**
-     * Performs non-existent observer method calls protection
+     * Varien event observer factory
      *
-     * @param object $object
-     * @param string $method
-     * @param Varien_Event_Observer $observer
-     * @return Mage_Core_Model_App
-     * @throws Mage_Core_Exception
+     * @var Varien_Event_ObserverFactory
      */
-    protected function _callObserverMethod($object, $method, $observer)
-    {
-        if (method_exists($object, $method)) {
-            $object->$method($observer);
-        } elseif (Mage::getIsDeveloperMode()) {
-            Mage::throwException('Method "' . $method . '" is not defined in "' . get_class($object) . '"');
-        }
-        return $this;
+    protected $_eventObserverFactory;
+
+    /**
+     * @param Mage_Core_Model_Event_InvokerInterface $invoker
+     * @param Mage_Core_Model_Event_Config $eventConfig
+     * @param Varien_EventFactory $eventFactory
+     * @param Varien_Event_ObserverFactory $eventObserverFactory
+     */
+    public function __construct(
+        Mage_Core_Model_Event_InvokerInterface $invoker,
+        Mage_Core_Model_Event_Config $eventConfig,
+        Varien_EventFactory $eventFactory,
+        Varien_Event_ObserverFactory $eventObserverFactory
+    ) {
+        $this->_invoker = $invoker;
+        $this->_eventConfig = $eventConfig;
+        $this->_eventFactory = $eventFactory;
+        $this->_eventObserverFactory = $eventObserverFactory;
+        $this->addEventArea(Mage_Core_Model_App_Area::AREA_GLOBAL);
     }
 
     /**
@@ -94,39 +92,25 @@ class Mage_Core_Model_Event_Manager
     public function dispatch($eventName, array $data = array())
     {
         Magento_Profiler::start('EVENT:' . $eventName, array('group' => 'EVENT', 'name' => $eventName));
-        foreach ($this->_events as $area => $events) {
-            if (false == isset($events[$eventName])) {
+        foreach ($this->_events as $areaEvents) {
+            if (!isset($areaEvents[$eventName])) {
                 continue;
             }
 
-            $event = new Varien_Event($data);
+            /** @var $event Varien_Event */
+            $event = $this->_eventFactory->create(array('data' => $data));
             $event->setName($eventName);
-            $observer = new Varien_Event_Observer();
+            /** @var $observer Varien_Event_Observer */
+            $observer = $this->_eventObserverFactory->create();
 
-            foreach ($this->_events[$area][$eventName] as $obsName => $obsConfiguration) {
-                $observer->setData(array('event' => $event));
+            foreach ($areaEvents[$eventName] as $obsName => $obsConfiguration) {
+                $observer->setData(array_merge(array('event' => $event), $data));
+
                 Magento_Profiler::start('OBSERVER:' . $obsName);
-                switch ($obsConfiguration['type']) {
-                    case 'disabled':
-                        break;
-                    case 'object':
-                    case 'model':
-                        $method = $obsConfiguration['method'];
-                        $observer->addData($data);
-                        $object = $this->_observerFactory->create($obsConfiguration['model']);
-                        $this->_callObserverMethod($object, $method, $observer);
-                        break;
-                    default:
-                        $method = $obsConfiguration['method'];
-                        $observer->addData($data);
-                        $object = $this->_observerFactory->get($obsConfiguration['model']);
-                        $this->_callObserverMethod($object, $method, $observer);
-                        break;
-                }
+                $this->_invoker->dispatch($obsConfiguration, $observer);
                 Magento_Profiler::stop('OBSERVER:' . $obsName);
             }
         }
-
         Magento_Profiler::stop('EVENT:' . $eventName);
     }
 

@@ -78,7 +78,7 @@ class Mage_Sales_Block_Order_Comments extends Mage_Core_Block_Template
             } else if ($entity instanceof Mage_Sales_Model_Order_Shipment) {
                 $collectionClass = 'Mage_Sales_Model_Resource_Order_Shipment_Comment_Collection';
             } else {
-                Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('Invalid entity model'));
+                Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('We found an invalid entity model.'));
             }
 
             $this->_commentCollection = Mage::getResourceModel($collectionClass);

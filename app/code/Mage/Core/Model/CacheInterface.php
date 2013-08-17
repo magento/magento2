@@ -32,7 +32,7 @@ interface Mage_Core_Model_CacheInterface
     /**
      * Get cache frontend API object
      *
-     * @return Zend_Cache_Core
+     * @return Magento_Cache_FrontendInterface
      */
     public function getFrontend();
 

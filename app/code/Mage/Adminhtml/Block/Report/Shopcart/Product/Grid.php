@@ -61,7 +61,7 @@ class Mage_Adminhtml_Block_Report_Shopcart_Product_Grid extends Mage_Adminhtml_B
         ));
 
         $this->addColumn('name', array(
-            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Product Name'),
+            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Product'),
             'index'     =>'name',
             'header_css_class'  => 'col-product',
             'column_css_class'  => 'col-product'

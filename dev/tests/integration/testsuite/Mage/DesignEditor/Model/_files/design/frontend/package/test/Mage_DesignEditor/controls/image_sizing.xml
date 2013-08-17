@@ -27,8 +27,8 @@
  */
  -->
 <controls>
-    <!-- Up Sell Product List -->
-    <control name="product-list" title="Up Sell Product List">
+    <!-- Up-sell Products List -->
+    <control name="product-list" title="Up-sell Products List">
         <type>image-sizing</type>
         <components>
             <control name="image-type">

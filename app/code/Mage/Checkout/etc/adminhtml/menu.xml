@@ -27,6 +27,6 @@
 -->
 <config>
     <menu>
-        <add id="Mage_Checkout::sales_checkoutagreement" title="Terms &amp; Conditions" module="Mage_Checkout" sortOrder="30" parent="Mage_Adminhtml::stores_settings" action="adminhtml/checkout_agreement/" resource="Mage_Checkout::checkoutagreement"/>
+        <add id="Mage_Checkout::sales_checkoutagreement" title="Terms and Conditions" module="Mage_Checkout" sortOrder="30" parent="Mage_Adminhtml::stores_settings" action="adminhtml/checkout_agreement/" resource="Mage_Checkout::checkoutagreement"/>
     </menu>
 </config>

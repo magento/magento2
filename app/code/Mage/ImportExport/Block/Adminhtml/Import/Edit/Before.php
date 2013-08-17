@@ -48,12 +48,13 @@ class Mage_ImportExport_Block_Adminhtml_Import_Edit_Before extends Mage_Backend_
     protected $_importModel;
 
     /**
-     * @param Mage_Core_Block_Template_Context $context
+     * @param Mage_Backend_Block_Template_Context $context
      * @param Mage_Core_Helper_Data $coreHelper
      * @param Mage_ImportExport_Model_Import $importModel
      * @param array $data
      */
-    public function __construct( Mage_Core_Block_Template_Context $context,
+    public function __construct(
+        Mage_Backend_Block_Template_Context $context,
         Mage_Core_Helper_Data $coreHelper,
         Mage_ImportExport_Model_Import $importModel,
         array $data = array()

@@ -50,8 +50,7 @@ class Mage_CurrencySymbol_Adminhtml_System_CurrencysymbolController extends Mage
                 Mage::helper('Mage_CurrencySymbol_Helper_Data')->__('Manage Currency Rates')
             );
 
-        $this->_title($this->__('System'))
-            ->_title($this->__('Manage Currency Symbols'));
+        $this->_title($this->__('Currency Symbols'));
         $this->renderLayout();
     }
 
@@ -70,7 +69,7 @@ class Mage_CurrencySymbol_Adminhtml_System_CurrencysymbolController extends Mage
         try {
             Mage::getModel('Mage_CurrencySymbol_Model_System_Currencysymbol')->setCurrencySymbolsData($symbolsDataArray);
             Mage::getSingleton('Mage_Connect_Model_Session')->addSuccess(
-                Mage::helper('Mage_CurrencySymbol_Helper_Data')->__('Custom currency symbols were applied successfully.')
+                Mage::helper('Mage_CurrencySymbol_Helper_Data')->__('The custom currency symbols were applied.')
             );
         } catch (Exception $e) {
             Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError($e->getMessage());
@@ -95,6 +94,6 @@ class Mage_CurrencySymbol_Adminhtml_System_CurrencysymbolController extends Mage
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_CurrencySymbol::symbols');
+        return $this->_authorization->isAllowed('Mage_CurrencySymbol::symbols');
     }
 }

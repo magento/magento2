@@ -25,11 +25,16 @@
  */
 
 
-/** @var $themeCollection Mage_Core_Model_Resource_Theme_Collection */
-$themeCollection = Mage::getResourceModel('Mage_Core_Model_Resource_Theme_Collection');
+/** @var $resourceCollection Mage_Core_Model_Resource_Theme_Collection */
+$resourceCollection = Mage::getResourceModel('Mage_Core_Model_Resource_Theme_Collection');
+
+/** @var $filesystemCollection Mage_Core_Model_Theme_Collection */
+$filesystemCollection = Mage::getModel('Mage_Core_Model_Theme_Collection');
+$filesystemCollection->addDefaultPattern('*');
+
 /** @var $theme Mage_Core_Model_Theme */
-foreach ($themeCollection as $theme) {
-    $themeType = $theme->isPresentInFilesystem()
+foreach ($resourceCollection as $theme) {
+    $themeType = $filesystemCollection->hasTheme($theme)
         ? Mage_Core_Model_Theme::TYPE_PHYSICAL
         : Mage_Core_Model_Theme::TYPE_VIRTUAL;
     $theme->setType($themeType)->save();

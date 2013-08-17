@@ -53,7 +53,7 @@ class Mage_Adminhtml_Block_System_Store_Edit_Form_Group extends Mage_Adminhtml_B
             $websites = Mage::getModel('Mage_Core_Model_Website')->getCollection()->toOptionArray();
             $fieldset->addField('group_website_id', 'select', array(
                 'name'      => 'group[website_id]',
-                'label'     => Mage::helper('Mage_Core_Helper_Data')->__('Website'),
+                'label'     => Mage::helper('Mage_Core_Helper_Data')->__('Web Site'),
                 'value'     => $groupModel->getWebsiteId(),
                 'values'    => $websites,
                 'required'  => true,

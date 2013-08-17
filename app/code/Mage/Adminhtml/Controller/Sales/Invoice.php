@@ -48,7 +48,7 @@ class Mage_Adminhtml_Controller_Sales_Invoice extends Mage_Adminhtml_Controller_
     protected function _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('Mage_Sales::sales_order')
+            ->_setActiveMenu('Mage_Sales::sales_invoice')
             ->_addBreadcrumb($this->__('Sales'), $this->__('Sales'))
             ->_addBreadcrumb($this->__('Invoices'),$this->__('Invoices'));
         return $this;
@@ -70,7 +70,7 @@ class Mage_Adminhtml_Controller_Sales_Invoice extends Mage_Adminhtml_Controller_
      */
     public function indexAction()
     {
-        $this->_title($this->__('Sales'))->_title($this->__('Invoices'));
+        $this->_title($this->__('Invoices'));
 
         $this->_initAction()
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Sales_Invoice'))
@@ -103,7 +103,7 @@ class Mage_Adminhtml_Controller_Sales_Invoice extends Mage_Adminhtml_Controller_
                     $historyItem->setIsCustomerNotified(1);
                     $historyItem->save();
                 }
-                $this->_getSession()->addSuccess(Mage::helper('Mage_Sales_Helper_Data')->__('The message has been sent.'));
+                $this->_getSession()->addSuccess(Mage::helper('Mage_Sales_Helper_Data')->__('We sent the message.'));
                 $this->_redirect('*/sales_invoice/view', array(
                     'order_id'  => $invoice->getOrder()->getId(),
                     'invoice_id'=> $invoiceId,
@@ -148,7 +148,7 @@ class Mage_Adminhtml_Controller_Sales_Invoice extends Mage_Adminhtml_Controller_
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::sales_invoice');
+        return $this->_authorization->isAllowed('Mage_Sales::sales_invoice');
     }
 
 }

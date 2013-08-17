@@ -47,8 +47,6 @@
         <group_id>1</group_id>
         <password_hash>a8b291d2f4aaf60d138d3e7ee0c20b1b48e48395cea59ed0c94de6b139a0cd86:4M</password_hash>
         <prefix></prefix>
-        <reward_update_notification>1</reward_update_notification>
-        <reward_warning_notification>1</reward_warning_notification>
         <suffix></suffix>
         <taxvat></taxvat>
     </customer>

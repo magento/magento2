@@ -41,7 +41,7 @@ class Mage_Adminhtml_Block_Api_User_Edit_Tab_Roles extends Mage_Adminhtml_Block_
     protected function _addColumnFilterToCollection($column)
     {
         if ($column->getId() == 'assigned_user_role') {
-            $userRoles = $this->_getSelectedRoles();
+            $userRoles = $this->getSelectedRoles();
             if (empty($userRoles)) {
                 $userRoles = 0;
             }
@@ -76,7 +76,7 @@ class Mage_Adminhtml_Block_Api_User_Edit_Tab_Roles extends Mage_Adminhtml_Block_
             'header'    => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Assigned'),
             'type'      => 'radio',
             'html_name' => 'roles[]',
-            'values'    => $this->_getSelectedRoles(),
+            'values'    => $this->getSelectedRoles(),
             'align'     => 'center',
             'index'     => 'role_id'
         ));
@@ -89,7 +89,7 @@ class Mage_Adminhtml_Block_Api_User_Edit_Tab_Roles extends Mage_Adminhtml_Block_
         ));*/
 
         $this->addColumn('role_name', array(
-            'header'    =>Mage::helper('Mage_Adminhtml_Helper_Data')->__('Role Name'),
+            'header'    =>Mage::helper('Mage_Adminhtml_Helper_Data')->__('Role'),
             'index'     =>'role_name'
         ));
 
@@ -101,7 +101,7 @@ class Mage_Adminhtml_Block_Api_User_Edit_Tab_Roles extends Mage_Adminhtml_Block_
         return $this->getUrl('*/*/rolesGrid', array('user_id' => Mage::registry('api_user')->getUserId()));
     }
 
-    protected function _getSelectedRoles($json=false)
+    public function getSelectedRoles($json=false)
     {
         if ( $this->getRequest()->getParam('user_roles') != "" ) {
             return $this->getRequest()->getParam('user_roles');

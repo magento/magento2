@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_Core
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -32,7 +30,7 @@ interface Mage_Core_Model_Design_Fallback_Rule_RuleInterface
     /**
      * Get ordered list of folders to search for a file
      *
-     * @param array $params - array of parameters
+     * @param array $params Values to substitute placeholders with
      * @return array folders to perform a search
      */
     public function getPatternDirs(array $params);

@@ -53,6 +53,8 @@ class Mage_Core_Controller_Varien_Action_Factory
      */
     public function createController($controllerName, array $arguments = array())
     {
+        $context = $this->_objectManager->create('Mage_Core_Controller_Varien_Action_Context', $arguments);
+        $arguments['context'] = $context;
         return $this->_objectManager->create($controllerName, $arguments);
     }
 }

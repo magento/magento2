@@ -30,7 +30,7 @@ class Mage_Backend_Model_Config_Structure_Element_Section
     /**
      * Authorization service
      *
-     * @var Mage_Core_Model_Authorization
+     * @var Magento_AuthorizationInterface
      */
     protected $_authorization;
 
@@ -38,13 +38,13 @@ class Mage_Backend_Model_Config_Structure_Element_Section
      * @param Mage_Core_Model_Factory_Helper $helperFactory
      * @param Mage_Core_Model_App $application
      * @param Mage_Backend_Model_Config_Structure_Element_Iterator $childrenIterator
-     * @param Mage_Core_Model_Authorization $authorization
+     * @param Magento_AuthorizationInterface $authorization
      */
     public function __construct(
         Mage_Core_Model_Factory_Helper $helperFactory,
         Mage_Core_Model_App $application,
         Mage_Backend_Model_Config_Structure_Element_Iterator $childrenIterator,
-        Mage_Core_Model_Authorization $authorization
+        Magento_AuthorizationInterface $authorization
     ) {
         parent::__construct($helperFactory, $application, $childrenIterator);
         $this->_authorization = $authorization;

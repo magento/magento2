@@ -48,7 +48,7 @@ class Mage_Adminhtml_Controller_Sales_Creditmemo extends Mage_Adminhtml_Controll
     protected function _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('Mage_Sales::sales_order')
+            ->_setActiveMenu('Mage_Sales::sales_creditmemo')
             ->_addBreadcrumb($this->__('Sales'), $this->__('Sales'))
             ->_addBreadcrumb($this->__('Credit Memos'),$this->__('Credit Memos'));
         return $this;
@@ -91,7 +91,7 @@ class Mage_Adminhtml_Controller_Sales_Creditmemo extends Mage_Adminhtml_Controll
                     $historyItem->save();
                 }
 
-                $this->_getSession()->addSuccess(Mage::helper('Mage_Sales_Helper_Data')->__('The message was sent.'));
+                $this->_getSession()->addSuccess(Mage::helper('Mage_Sales_Helper_Data')->__('We sent the message.'));
                 $this->_redirect('*/sales_order_creditmemo/view', array(
                     'creditmemo_id' => $creditmemoId
                 ));
@@ -136,6 +136,6 @@ class Mage_Adminhtml_Controller_Sales_Creditmemo extends Mage_Adminhtml_Controll
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::sales_creditmemo');
+        return $this->_authorization->isAllowed('Mage_Sales::sales_creditmemo');
     }
 }

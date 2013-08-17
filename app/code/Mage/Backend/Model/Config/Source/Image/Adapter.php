@@ -35,8 +35,10 @@ class Mage_Backend_Model_Config_Source_Image_Adapter implements Mage_Core_Model_
     public function toOptionArray()
     {
         return array(
-            Varien_Image_Adapter::ADAPTER_IM  => Mage::helper('Mage_Backend_Helper_Data')->__('ImageMagick'),
-            Varien_Image_Adapter::ADAPTER_GD2 => Mage::helper('Mage_Backend_Helper_Data')->__('PHP GD2'),
+            Mage_Core_Model_Image_AdapterFactory::ADAPTER_IM  =>
+                Mage::helper('Mage_Backend_Helper_Data')->__('ImageMagick'),
+            Mage_Core_Model_Image_AdapterFactory::ADAPTER_GD2 =>
+                Mage::helper('Mage_Backend_Helper_Data')->__('PHP GD2'),
         );
     }
 }

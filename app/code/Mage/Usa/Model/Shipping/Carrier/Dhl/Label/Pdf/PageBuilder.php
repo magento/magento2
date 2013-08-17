@@ -51,10 +51,16 @@ class Mage_Usa_Model_Shipping_Carrier_Dhl_Label_Pdf_PageBuilder
     protected $_page;
 
     /**
+     * @var Mage_Core_Model_View_FileSystem
+     */
+    protected $_viewFileSystem;
+
+    /**
      * Create font instances
      */
-    public function __construct()
+    public function __construct(Mage_Core_Model_View_FileSystem $viewFileSystem)
     {
+        $this->_viewFileSystem = $viewFileSystem;
         $this->_fontNormal = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA);
         $this->_fontBold = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_BOLD);
     }
@@ -114,7 +120,7 @@ class Mage_Usa_Model_Shipping_Carrier_Dhl_Label_Pdf_PageBuilder
         $y = $this->_y(0);
 
         $image = new Zend_Pdf_Resource_Image_Jpeg(
-            Mage::getDesign()->getViewFile('Mage_Usa::dhl/logo.jpg', array('theme' => false))
+            $this->_viewFileSystem->getViewFile('Mage_Usa::dhl/logo.jpg', array('theme' => false))
         );
         $this->_page->drawImage($image, $x + 191, $this->_y(27), $x + 287, $this->_y(1));
 

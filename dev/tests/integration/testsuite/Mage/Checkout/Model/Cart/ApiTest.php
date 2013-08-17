@@ -54,6 +54,33 @@ class Mage_Checkout_Model_Cart_ApiTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Negative test for adding a non-existing product to shopping cart.
+     *
+     * @magentoDataFixture Mage/Checkout/_files/quote.php
+     */
+    public function testProductAddToCartWithNonExistingProduct()
+    {
+        /** @var Mage_Sales_Model_Resource_Quote_Collection $quoteCollection */
+        $quoteCollection = Mage::getModel('Mage_Sales_Model_Resource_Quote_Collection');
+        $quote = $quoteCollection->getFirstItem();
+        $productId = "0";
+
+        $errorCode = 1033;
+        $errorMessage = 'Product does not exist.';
+        $exception = Magento_Test_Helper_Api::callWithException(
+            $this,
+            'shoppingCartProductAdd',
+            array(
+                'quoteId' => $quote->getId(),
+                'productsData' => array(
+                    (object)array('product_id' => $productId, 'qty' => 1)
+                )
+            )
+        );
+        $this->_assertError($errorCode, $errorMessage, $exception->faultcode, $exception->faultstring);
+    }
+
+    /**
      * Test for product with custom options add to shopping cart.
      *
      * @magentoDataFixture Mage/Catalog/_files/product_with_options.php
@@ -156,6 +183,7 @@ class Mage_Checkout_Model_Cart_ApiTest extends PHPUnit_Framework_TestCase
      *
      * @magentoDataFixture Mage/Checkout/_files/quote_with_check_payment.php
      * @magentoAppIsolation enabled
+     * @magentoAppArea adminhtml
      */
     public function testCreateOrder()
     {
@@ -183,6 +211,7 @@ class Mage_Checkout_Model_Cart_ApiTest extends PHPUnit_Framework_TestCase
      * @magentoConfigFixture current_store carriers/flatrate/active 1
      * @magentoDataFixture Mage/Checkout/_files/quote_with_ccsave_payment.php
      * @magentoAppIsolation enabled
+     * @magentoAppArea adminhtml
      */
     public function testCreateOrderWithPayment()
     {
@@ -235,21 +264,18 @@ class Mage_Checkout_Model_Cart_ApiTest extends PHPUnit_Framework_TestCase
 
         $errorCode = 1075;
         $errorMessage = 'The requested Payment Method is not available.';
-        try {
-            Magento_Test_Helper_Api::call(
-                $this,
-                'shoppingCartOrderWithPayment',
-                array(
-                    'quoteId' => $quote->getId(),
-                    'store' => null,
-                    'agreements' => null,
-                    'paymentData' => (object)$paymentMethod
-                )
-            );
-            $this->fail('Expected error exception was not raised.');
-        } catch (SoapFault $e) {
-            $this->_assertError($errorCode, $errorMessage, $e->faultcode, $e->faultstring);
-        }
+
+        $exception = Magento_Test_Helper_Api::callWithException(
+            $this,
+            'shoppingCartOrderWithPayment',
+            array(
+                'quoteId' => $quote->getId(),
+                'store' => null,
+                'agreements' => null,
+                'paymentData' => (object)$paymentMethod
+            )
+        );
+        $this->_assertError($errorCode, $errorMessage, $exception->faultcode, $exception->faultstring);
     }
 
     /**
@@ -263,21 +289,18 @@ class Mage_Checkout_Model_Cart_ApiTest extends PHPUnit_Framework_TestCase
         $quote = $this->_getQuoteFixture();
         $errorCode = 1071;
         $errorMessage = 'Payment method data is empty.';
-        try {
-            Magento_Test_Helper_Api::call(
-                $this,
-                'shoppingCartOrderWithPayment',
-                array(
-                    'quoteId' => $quote->getId(),
-                    'store' => null,
-                    'agreements' => null,
-                    'paymentData' => array()
-                )
-            );
-            $this->fail('Expected error exception was not raised.');
-        } catch (SoapFault $e) {
-            $this->_assertError($errorCode, $errorMessage, $e->faultcode, $e->faultstring);
-        }
+
+        $exception = Magento_Test_Helper_Api::callWithException(
+            $this,
+            'shoppingCartOrderWithPayment',
+            array(
+                'quoteId' => $quote->getId(),
+                'store' => null,
+                'agreements' => null,
+                'paymentData' => array()
+            )
+        );
+        $this->_assertError($errorCode, $errorMessage, $exception->faultcode, $exception->faultstring);
     }
 
     /**
@@ -300,22 +323,18 @@ class Mage_Checkout_Model_Cart_ApiTest extends PHPUnit_Framework_TestCase
             'cc_cid' => '000',
         );
         $errorCode = 1075;
-        $errorMessage = 'Incorrect credit card expiration date.';
-        try {
-            Magento_Test_Helper_Api::call(
-                $this,
-                'shoppingCartOrderWithPayment',
-                array(
-                    'quoteId' => $quote->getId(),
-                    'store' => null,
-                    'agreements' => null,
-                    'paymentData' => (object)$paymentMethod
-                )
-            );
-            $this->fail('Expected error exception was not raised.');
-        } catch (SoapFault $e) {
-            $this->_assertError($errorCode, $errorMessage, $e->faultcode, $e->faultstring);
-        }
+        $errorMessage = 'We found an incorrect credit card expiration date.';
+        $exception = Magento_Test_Helper_Api::callWithException(
+            $this,
+            'shoppingCartOrderWithPayment',
+            array(
+                'quoteId' => $quote->getId(),
+                'store' => null,
+                'agreements' => null,
+                'paymentData' => (object)$paymentMethod
+            )
+        );
+        $this->_assertError($errorCode, $errorMessage, $exception->faultcode, $exception->faultstring);
     }
 
     /**

@@ -31,100 +31,81 @@ $this->startSetup();
 $connection = $this->getConnection();
 
 /**
- * Create new table 'webhook_subscriber'
+ * Create new table 'webhook_subscription'
  */
-$subscriberTable = $this->getConnection()
-    ->newTable($this->getTable('webhook_subscriber'))
-    ->addColumn('subscriber_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
+$subscriptionTable = $connection->newTable($this->getTable('webhook_subscription'))
+    ->addColumn('subscription_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
         array('identity'  => true, 'unsigned'  => true, 'nullable'  => false, 'primary'   => true),
-        'Subscriber Id')
+        'Subscription Id')
     ->addColumn('name', Varien_Db_Ddl_Table::TYPE_TEXT, 255,
         array('nullable' =>false),
-        'Subscriber Name')
-    ->addColumn('endpoint_url', Varien_Db_Ddl_Table::TYPE_TEXT, 255,
-        array('nullable' =>false),
-        'Endpoint URL')
-    ->addColumn('authentication_type', Varien_Db_Ddl_Table::TYPE_TEXT, 40,
-        array('nullable' =>false),
-        'Authentication Type')
+        'Subscription Name')
     ->addColumn('registration_mechanism', Varien_Db_Ddl_Table::TYPE_TEXT, 40,
         array('nullable' =>false),
         'Registration Mechanism')
-    ->addColumn('encoding', Varien_Db_Ddl_Table::TYPE_TEXT, 40,
-        array('nullable' =>false), 'Encoding')
-    ->addColumn('format', Varien_Db_Ddl_Table::TYPE_TEXT, 40,
-        array('nullable' =>false),
-        'Data Format')
     ->addColumn('status', Varien_Db_Ddl_Table::TYPE_INTEGER, null,
         array('unsigned' => true, 'nullable' => false, 'default'  => 0),
         'Status')
     ->addColumn('version', Varien_Db_Ddl_Table::TYPE_TEXT, 50, array(),
         'Extension Version')
-    ->addColumn('extension_id', Varien_Db_Ddl_Table::TYPE_TEXT, 255, array(),
-        'Extension Id')
-    ->addColumn('api_user_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
-    'unsigned' => true, 'nullable' => true),
-        'Webapi User Id')
+    ->addColumn('alias', Varien_Db_Ddl_Table::TYPE_TEXT, 255, array(),
+        'Alias')
     ->addColumn('updated_at', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null, array(),
         'Updated At')
-    ->addIndex(
-        $this->getIdxName('webhook_subscriber', array('subscriber_id', 'api_user_id'),
-            Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE),
-        array('subscriber_id', 'api_user_id'),
-        array('type' => Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE))
+    ->addColumn('endpoint_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
+        array('nullable' => true,'default'  => NULL,'unsigned' => true),
+        'Subscription Endpoint')
     ->addForeignKey(
-        $this->getFkName('webhook_subscriber', 'api_user_id', 'webapi_user', 'user_id'),
-        'api_user_id',
-        $this->getTable('webapi_user'),
-        'user_id',
+        'FK_WEBHOOK_SUBSCRIPTION_ENDPOINT_ID',
+        'endpoint_id',
+        $this->getTable('outbound_endpoint'),
+        'endpoint_id',
         Varien_Db_Ddl_Table::ACTION_SET_NULL,
         Varien_Db_Ddl_Table::ACTION_CASCADE)
     ->setOption('collate', null)
-    ->setOption('comment', 'Subscriber');
-$this->getConnection()->createTable($subscriberTable);
+    ->setOption('comment', 'Subscription');
+$connection->createTable($subscriptionTable);
 
 /**
- * Create table 'webhook_subscriber_hook'
+ * Create table 'webhook_subscription_hook'
  */
-$hookTable = $this->getConnection()->newTable($this->getTable('webhook_subscriber_hook'))
+$hookTable = $connection->newTable($this->getTable('webhook_subscription_hook'))
     ->addColumn('hook_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10, array(
         'identity'  => true,
         'unsigned'  => true,
         'nullable'  => false,
         'primary'   => true,
     ), 'Hook Id')
-    ->addColumn('subscriber_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
+    ->addColumn('subscription_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
         'unsigned'  => true,
         'nullable'  => false,
-    ), 'Subscriber Id')
+    ), 'Subscription Id')
     ->addColumn('topic', Varien_Db_Ddl_Table::TYPE_TEXT, 255, array(
     ), 'Hook Topic')
     ->addIndex(
-        $this->getIdxName('webhook_subscriber_hook', array('topic')),
+        $this->getIdxName('webhook_subscription_hook', array('topic')),
         array('topic'))
     ->addForeignKey(
-        'FK_WEBHOOK_SUBSCRIBER_SUBSCRIBER_ID',
-        'subscriber_id',
-        $this->getTable('webhook_subscriber'),
-        'subscriber_id',
+        'FK_WEBHOOK_SUBSCRIPTION_SUBSCRIPTION_ID',
+        'subscription_id',
+        $this->getTable('webhook_subscription'),
+        'subscription_id',
         Varien_Db_Ddl_Table::ACTION_CASCADE,
         Varien_Db_Ddl_Table::ACTION_CASCADE
     )
     ->setOption('collate', null)
     ->setOption('comment', 'Webhook');
-$this->getConnection()->createTable($hookTable);
+$connection->createTable($hookTable);
 
 /**
  * Create table 'webhook_event'
  */
-$eventTable = $this->getConnection()->newTable($this->getTable('webhook_event'))
+$eventTable = $connection->newTable($this->getTable('webhook_event'))
     ->addColumn('event_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
         array('identity'  => true, 'unsigned'  => true, 'nullable'  => false, 'primary'   => true),
         'Event Id')
     ->addColumn('topic', Varien_Db_Ddl_Table::TYPE_TEXT, 255,
         array('nullable' => false), 'Hook Topic')
-    ->addColumn('format', Varien_Db_Ddl_Table::TYPE_TEXT, '255', array(),
-        'Format')
     ->addColumn('body_data', Varien_Db_Ddl_Table::TYPE_VARBINARY, '4M',
         array('nullable' => false),
         'Serialized Data Array')
@@ -141,7 +122,7 @@ $eventTable = $this->getConnection()->newTable($this->getTable('webhook_event'))
     ->addIndex($this->getIdxName('webhook_event', array('status')), array('status'))
     ->setOption('collate', null)
     ->setOption('comment', 'Queued Event Data');
-$this->getConnection()->createTable($eventTable);
+$connection->createTable($eventTable);
 
 /**
  * Create table 'webhook_dispatch_job'
@@ -153,9 +134,9 @@ $dispatchJobTable = $connection->newTable($this->getTable('webhook_dispatch_job'
     ->addColumn('event_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null,
         array('unsigned'  => true, 'nullable'  => false),
         'Event Id')
-    ->addColumn('subscriber_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null,
+    ->addColumn('subscription_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null,
         array('unsigned'  => true, 'nullable'  => false),
-        'Subscriber Id')
+        'Subscription Id')
     ->addColumn('status', Varien_Db_Ddl_Table::TYPE_SMALLINT, null,
         array('nullable'  => false, 'default'  => '0'),
         'Status')
@@ -173,9 +154,9 @@ $dispatchJobTable = $connection->newTable($this->getTable('webhook_dispatch_job'
         'Retry At')
     ->addForeignKey(
         'FK_WEBHOOK_SERVICE_DISPATCHER_ID',
-        'subscriber_id',
-        $this->getTable('webhook_subscriber'),
-        'subscriber_id',
+        'subscription_id',
+        $this->getTable('webhook_subscription'),
+        'subscription_id',
         Varien_Db_Ddl_Table::ACTION_CASCADE,
         Varien_Db_Ddl_Table::ACTION_CASCADE
     )
@@ -189,7 +170,53 @@ $dispatchJobTable = $connection->newTable($this->getTable('webhook_dispatch_job'
     )
     ->setOption('collate', null)
     ->setOption('comment', 'Dispatch Jobs');
-$this->getConnection()->createTable($dispatchJobTable);
+$connection->createTable($dispatchJobTable);
+
+/**
+ * Create table 'outbound_endpoint' *
+ */
+$outboundEndpointTbl = $connection->newTable($this->getTable('outbound_endpoint'))
+    ->addColumn('endpoint_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
+        array('identity'  => true, 'unsigned'  => true, 'nullable'  => false, 'primary'   => true),
+        'Endpoint Id')
+    ->addColumn('name', Varien_Db_Ddl_Table::TYPE_TEXT, 255,
+        array('nullable' =>false),
+        'Endpoint Name')
+    ->addColumn('endpoint_url', Varien_Db_Ddl_Table::TYPE_TEXT, 255,
+        array('nullable' =>false),
+        'Endpoint URL')
+    ->addColumn('authentication_type', Varien_Db_Ddl_Table::TYPE_TEXT, 40,
+        array('nullable' =>false),
+        'Authentication Type')
+    ->addColumn('format', Varien_Db_Ddl_Table::TYPE_TEXT, 40,
+        array('nullable' =>false),
+        'Data Format')
+    ->addColumn('status', Varien_Db_Ddl_Table::TYPE_INTEGER, null,
+        array('unsigned' => true, 'nullable' => false, 'default'  => 0),
+        'Status')
+    ->addColumn('alias', Varien_Db_Ddl_Table::TYPE_TEXT, 255, array(),
+        'Alias')
+    ->addColumn('api_user_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
+                                                                             'unsigned' => true, 'nullable' => true),
+        'Webapi User Id')
+    ->addColumn('updated_at', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null, array(),
+        'Updated At')
+    ->addColumn('timeout_in_secs', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array( 'nullable' => false, 'default' => 5),
+        'Timeout in seconds')
+    ->addIndex(
+        $this->getIdxName('outbound_endpoint', array('endpoint_id', 'alias'),
+            Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE),
+        array('endpoint_id', 'alias'),
+        array('type' => Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE))
+    ->addForeignKey(
+        $this->getFkName('outbound_endpoint', 'api_user_id', 'webapi_user', 'user_id'),
+        'api_user_id',
+        $this->getTable('webapi_user'),
+        'user_id',
+        Varien_Db_Ddl_Table::ACTION_SET_NULL,
+        Varien_Db_Ddl_Table::ACTION_CASCADE)
+    ->setOption('collate', null)
+    ->setOption('comment', 'Endpoint for outbound messages');
+$connection->createTable($outboundEndpointTbl);
 
 $this->endSetup();
-

@@ -189,7 +189,7 @@ class Mage_Connect_Structures_Node
     }
 
     /**
-     * Test wether this node has an arc to the target node
+     * Test whether this node has an arc to the target node
      * Returns true if the two nodes are connected
      * @return boolean   
      */

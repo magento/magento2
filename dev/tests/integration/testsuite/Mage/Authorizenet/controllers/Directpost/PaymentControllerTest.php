@@ -31,9 +31,10 @@ class Mage_Authorizenet_Directpost_PaymentControllerTest extends Magento_Test_Te
     {
         $this->getRequest()->setPost('controller_action_name', 'onepage');
         $this->dispatch('authorizenet/directpost_payment/response');
+        // @codingStandardsIgnoreStart
         $this->assertContains(
-            'authorizenet/directpost_payment/redirect/success/0/error_msg/Response hash validation failed.'
-                . ' Transaction declined.',
+            'authorizenet/directpost_payment/redirect/success/0/error_msg/The transaction was declined because the response hash validation failed.',
+        // @codingStandardsIgnoreEnd
             $this->getResponse()->getBody()
         );
     }
@@ -44,7 +45,7 @@ class Mage_Authorizenet_Directpost_PaymentControllerTest extends Magento_Test_Te
         $this->getRequest()->setParam('error_msg', 'Error message');
         $this->dispatch('authorizenet/directpost_payment/redirect');
         $this->assertContains(
-            'window.top.directPostModel.showError("Error message");',
+            'alert("Error message");',
             $this->getResponse()->getBody()
         );
     }

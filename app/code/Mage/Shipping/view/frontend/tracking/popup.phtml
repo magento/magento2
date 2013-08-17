@@ -56,7 +56,7 @@
                     <?php if($track->getErrorMessage()): ?>
                     <tr>
                         <th class="label"><?php echo $this->__('Error:'); ?></th>
-                        <td class="error"><?php echo $this->__('Tracking information is currently not available. Please '); if ($this->getContactUsEnabled()) : ?><a href="<?php echo $this->getContactUs() ?>" title="<?php echo $this->__('contact us') ?>" onclick="this.target='_blank'"><?php echo $this->__('contact us') ?></a><?php echo $this->__(' for more information or '); endif; echo $this->__('email us at '); ?><a href="mailto:<?php echo $this->getStoreSupportEmail() ?>"><?php echo $this->getStoreSupportEmail() ?></a></td>
+                        <td class="error"><?php echo $this->__('Tracking information is not available. Please '); if ($this->getContactUsEnabled()) : ?><a href="<?php echo $this->getContactUs() ?>" title="<?php echo $this->__('contact us') ?>" onclick="this.target='_blank'"><?php echo $this->__('contact us') ?></a><?php echo $this->__(' for more information or '); endif; echo $this->__('email us at '); ?><a href="mailto:<?php echo $this->getStoreSupportEmail() ?>"><?php echo $this->getStoreSupportEmail() ?></a></td>
                     </tr>
                     <?php elseif($track->getTrackSummary()): ?>
                     <tr>

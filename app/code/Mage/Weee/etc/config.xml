@@ -162,13 +162,6 @@
                 </Mage_Weee>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <weee module='Mage_Weee'>
-                    <file>layout.xml</file>
-                </weee>
-            </updates>
-        </layout>
     </adminhtml>
     <default>
         <sales>
@@ -197,13 +190,6 @@
         </general>
     </default>
     <frontend>
-        <layout>
-            <updates>
-                <weee module="Mage_Weee">
-                    <file>layout.xml</file>
-                </weee>
-            </updates>
-        </layout>
         <translate>
             <modules>
                 <Mage_Weee>

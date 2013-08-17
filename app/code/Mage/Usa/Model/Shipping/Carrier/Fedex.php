@@ -113,8 +113,21 @@ class Mage_Usa_Model_Shipping_Carrier_Fedex
      */
     protected $_customizableContainerTypes = array('YOUR_PACKAGING');
 
-    public function __construct()
+    /**
+     * Factory for Mage_Usa_Model_Simplexml_Element
+     *
+     * @var Mage_Usa_Model_Simplexml_ElementFactory
+     */
+    protected $_simpleXmlElementFactory;
+
+    /**
+     * Fedex constructor
+     *
+     * @param Mage_Usa_Model_Simplexml_ElementFactory $simpleXmlElementFactory
+     */
+    public function __construct(Mage_Usa_Model_Simplexml_ElementFactory $simpleXmlElementFactory)
     {
+        $this->_simpleXmlElementFactory = $simpleXmlElementFactory;
         parent::__construct();
         $wsdlBasePath = Mage::getModuleDir('etc', 'Mage_Usa')  . DS . 'wsdl' . DS . 'FedEx' . DS;
         $this->_shipServiceWsdl = $wsdlBasePath . 'ShipService_v10.wsdl';
@@ -568,7 +581,9 @@ class Mage_Usa_Model_Shipping_Carrier_Fedex
     protected function _getXmlQuotes()
     {
         $r = $this->_rawRequest;
-        $xml = new SimpleXMLElement('<?xml version = "1.0" encoding = "UTF-8"?><FDXRateAvailableServicesRequest/>');
+        $xml = $this->_simpleXmlElementFactory->create(
+            array('<?xml version = "1.0" encoding = "UTF-8"?><FDXRateAvailableServicesRequest/>')
+        );
 
         $xml->addAttribute('xmlns:api', 'http://www.fedex.com/fsmapi');
         $xml->addAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
@@ -659,7 +674,7 @@ class Mage_Usa_Model_Shipping_Carrier_Fedex
                } elseif (is_object($xml->SoftError) && is_object($xml->SoftError->Message)) {
                    $errorTitle = (string)$xml->SoftError->Message;
                } else {
-                   $errorTitle = 'Unknown error';
+                   $errorTitle = 'Sorry, something went wrong. Please try again or contact us and we\'ll try to help.';
                }
 
                $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
@@ -710,7 +725,8 @@ class Mage_Usa_Model_Shipping_Carrier_Fedex
      * Parse XML string and return XML document object or false
      *
      * @param string $xmlContent
-     * @return SimpleXMLElement|bool
+     * @return Mage_Usa_Model_Simplexml_Element|bool
+     * @throws Exception
      */
     protected function _parseXml($xmlContent)
     {

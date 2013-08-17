@@ -62,15 +62,21 @@ class Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_TagTestCaseAbstract exte
             ->method('__')
             ->will($this->returnArgument(0));
 
-        $authSession = $this->getMock('Mage_Core_Model_Authorization', array('isAllowed'), array(), '', false);
-        $authSession->expects($this->any())
+        $authorization = $this->getMock('Magento_AuthorizationInterface');
+        $authorization->expects($this->any())
             ->method('isAllowed')
-            ->will($this->returnCallback(array($this, 'isAllowedCallback')));
+            ->with('Mage_Tag::tag_all')
+            ->will($this->returnValue(true));
+
+        $helperFactoryMock = $this->getMock('Mage_Core_Model_Factory_Helper', array(), array(), '', false);
+        $helperFactoryMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($helperMock));
 
         $data = array(
-            'authSession' => $authSession,
-            'urlBuilder' => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false),
-            'data'        => array('helpers' => array('Mage_Tag_Helper_Data' => $helperMock))
+            'authorization' => $authorization,
+            'helperFactory' => $helperFactoryMock,
+
         );
         $this->_model = $objectManagerHelper->getObject($this->_modelName, $data);
     }
@@ -110,15 +116,6 @@ class Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_TagTestCaseAbstract exte
         $this->assertTrue($this->_model->canShowTab());
     }
 
-    /**
-     * @param string $data
-     * @return bool
-     */
-    public function isAllowedCallback($data)
-    {
-        return $data == 'Mage_Tag::tag_all';
-    }
-
     protected function _testIsHidden()
     {
         $this->assertFalse($this->_model->isHidden());
@@ -131,6 +128,6 @@ class Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_TagTestCaseAbstract exte
 
     protected function _testGetAfter()
     {
-        $this->assertEquals('reviews', $this->_model->getAfter());
+        $this->assertEquals('product-reviews', $this->_model->getAfter());
     }
 }

@@ -167,8 +167,8 @@ class Mage_CatalogInventory_Block_Adminhtml_Form_Field_Stock extends Varien_Data
                         manageStockField = $('#inventory_manage_stock'),
                         useConfigManageStockField = $('#inventory_use_config_manage_stock');
 
-                    var disabler = function() {
-                        var hasVariation = $('#config_super_product-wrapper').is('.opened');
+                    var disabler = function(event) {
+                        var hasVariation = $('[data-panel=product-variations]').is('.opened');
                         if ((productType == 'configurable' && hasVariation)
                             || productType == 'grouped'
                             || productType == 'bundle'//@TODO move this check to Mage_Bundle after refactoring as widget
@@ -177,12 +177,8 @@ class Mage_CatalogInventory_Block_Adminhtml_Form_Field_Stock extends Varien_Data
                             return;
                         }
                         var manageStockValue = (qty.val() === '') ? 0 : 1;
-                        if (manageStockValue) {
-                            stockAvailabilityField.prop('disabled', false);
-                        } else {
-                            stockAvailabilityField.prop('disabled', true);
-                        }
-                        if (manageStockField.val() != manageStockValue) {
+                        stockAvailabilityField.prop('disabled', !manageStockValue);
+                        if (manageStockField.val() != manageStockValue && !(event && event.type == 'keyup')) {
                             if (useConfigManageStockField.val() == 1) {
                                 useConfigManageStockField.removeAttr('checked').val(0);
                             }
@@ -203,6 +199,10 @@ class Mage_CatalogInventory_Block_Adminhtml_Form_Field_Stock extends Varien_Data
                             $('#' + fieldsAssociations[id]).val($(this).val());
                         } else {
                             $('#' + getKeyByValue(fieldsAssociations, id)).val($(this).val());
+                        }
+
+                        if ($('#inventory_manage_stock').length) {
+                            fireEvent($('#inventory_manage_stock').get(0), 'change');
                         }
                     };
                     //Get key by value from object

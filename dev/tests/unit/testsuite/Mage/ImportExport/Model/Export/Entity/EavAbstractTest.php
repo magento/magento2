@@ -65,10 +65,11 @@ class Mage_ImportExport_Model_Export_Entity_EavAbstractTest extends PHPUnit_Fram
     {
         $method = new ReflectionMethod($this->_model, '_addAttributesToCollection');
         $method->setAccessible(true);
-        $stubCollection = new Stub_ImportExport_Model_Export_Entity_Eav_Collection();
-        $stubCollection = $method->invoke($this->_model, $stubCollection);
-
-        $this->assertEquals($this->_expectedAttributes, $stubCollection->getSelectedAttributes());
+        $stubCollection = $this->getMock(
+            'Mage_Eav_Model_Entity_Collection_Abstract', array('addAttributeToSelect'), array(), '', false
+        );
+        $stubCollection->expects($this->once())->method('addAttributeToSelect')->with($this->_expectedAttributes);
+        $method->invoke($this->_model, $stubCollection);
     }
 
     /**
@@ -120,52 +121,5 @@ class Mage_ImportExport_Model_Export_Entity_EavAbstractTest extends PHPUnit_Fram
         }
 
         $this->assertEquals($expected, $row, 'Attributes were not added to result row');
-    }
-}
-/**
- * Stub class which used for test which check list of attributes which will be fetched from DB
- */
-class Stub_ImportExport_Model_Export_Entity_Eav_Collection extends Mage_Eav_Model_Entity_Collection_Abstract
-{
-    /**
-     * Selected attribute(s)
-     *
-     * @var array|int|Mage_Core_Model_Config_Element|string
-     */
-    protected $_selectedAttributes;
-
-    /**
-     * Join type
-     *
-     * @var string
-     */
-    protected $_joinType;
-
-    public function __construct()
-    {
-    }
-
-    /**
-     * Stub method which save selected attribute(s) into private variable
-     *
-     * @param array|int|Mage_Core_Model_Config_Element|string $attribute
-     * @param bool $joinType
-     * @return Stub_ImportExport_Model_Export_Entity_Eav_Collection
-     */
-    public function addAttributeToSelect($attribute, $joinType = false)
-    {
-        $this->_selectedAttributes = $attribute;
-        $this->_joinType = $joinType;
-        return $this;
-    }
-
-    /**
-     * Retrieve selected attribute(s)
-     *
-     * @return array|int|Mage_Core_Model_Config_Element|string
-     */
-    public function getSelectedAttributes()
-    {
-        return $this->_selectedAttributes;
     }
 }

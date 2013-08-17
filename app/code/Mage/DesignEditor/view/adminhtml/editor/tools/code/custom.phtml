@@ -25,30 +25,44 @@
  */
 ?>
 <?php /** @var $this Mage_DesignEditor_Block_Adminhtml_Editor_Tools_Code_Custom */ ?>
-<div id="vde-tab-custom-messages-placeholder">
-    <?php echo $this->getChildHtml('messages') ?>
-</div>
+<div id="vde-tab-custom-messages-placeholder"></div>
 <div class="custom-code-description">
-    <h5 class="title"><?php echo $this->__('Custom CSS'); ?></h5>
-    <p><?php echo $this->__('Update the custom.css file to right in order to overwrite the default styles.'); ?></p>
-    <p><?php echo $this->__('Or, replace, delete or download the file:'); ?></p>
+    <p><?php echo $this->__('Update the CSS code to overwrite the default styles or upload your own CSS file.'); ?></p>
+    <h4><?php echo $this->__('Custom CSS'); ?></h4>
     <div class="custom-file">
-        <span class="filename"><?php echo $this->getCustomFileName() ?></span>
-
-        <button onclick="document.location='<?php echo $this->getDownloadCustomCssUrl($this->getTheme()) ?>'" class="action-download" title="<?php echo $this->__('Download file'); ?>">
-            <span><?php echo $this->__('Download file'); ?></span>
-        </button>
-        <span class="action-add" title="<?php echo $this->__('Upload File'); ?>">
+        <span data-action="add" class="action-add" title="<?php echo $this->__('Upload File'); ?>">
             <span><?php echo $this->__('Upload File'); ?></span>
             <?php echo $this->getFormHtml() ?>
         </span>
+        <label for="<?php echo $this->getFileElementName() ?>"><?php echo $this->__('Upload Custom CSS'); ?></label>
+        <div class="uploaded-file-wrapper" data-file="uploaded-css">
+            <div class="uploaded-css">
+                <div class="file-row">
+                    <span id="custom-file-name" class="label"><?php echo $this->getCustomFileName() ?></span>
+                    <button data-action="delete" class="action-delete" title="<?php echo $this->__('Delete File'); ?>">
+                        <span><?php echo $this->__('Delete File'); ?></span>
+                    </button>
+                    <button data-action="download" class="action-download" title="<?php echo $this->__('Download File'); ?>">
+                        <span><?php echo $this->__('Download File'); ?></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="manage-assets-buttons">
+        <button data-manage="images" class="action-image-assets" title="<?php echo $this->__('Image Assets'); ?>">
+            <span><?php echo $this->__('Image Assets'); ?></span>
+        </button>
+        <button data-manage="fonts" class="action-font-assets" title="<?php echo $this->__('Font Assets'); ?>">
+            <span><?php echo $this->__('Font Assets'); ?></span>
+        </button>
     </div>
 </div>
 <div class="custom-code">
     <div class="textarea-container">
-        <textarea name="custom_code" id="custom_code" cols="30" rows="10"><?php echo $this->getCustomCssContent($this->getTheme()) ?></textarea>
+        <textarea name="custom_code" id="custom_code" cols="30" rows="10"><?php echo $this->getCustomCssContent() ?></textarea>
     </div>
-    <button class="action-update" title="<?php echo $this->__('Update'); ?>">
+    <button data-action="update" class="action-update primary" title="<?php echo $this->__('Update'); ?>">
         <span><?php echo $this->__('Update'); ?></span>
     </button>
 </div>
@@ -56,21 +70,31 @@
 
 <script type="text/javascript">
     (function ($) {
-        $('#vde-tab-custom').customCssPanel({
-            saveCustomCssUrl: '<?php echo $this->getSaveCustomCssUrl($this->getTheme()) ?>'
+        $('[data-manage="fonts"]').on('click', function() {
+            MediabrowserUtility.openDialog(
+                '<?php echo $this->getMediaBrowserUrl('custom_code', Mage_Theme_Model_Wysiwyg_Storage::TYPE_FONT) ?>',
+                null,
+                null,
+                '<?php echo $this->quoteEscape($this->__('Font Assets'), true); ?>'
+            );
         });
-
-        $(document).ready(function() {
-            var eventData = {
-                elements: {focus: ['#vde-tab-custom .action-update', '#custom_code', '#css_file_uploader']}
-            };
-            $('body').trigger('registerElements', eventData);
+        $('[data-manage="images"]').on('click', function() {
+            MediabrowserUtility.openDialog(
+                '<?php echo $this->getMediaBrowserUrl('custom_code', Mage_Theme_Model_Wysiwyg_Storage::TYPE_IMAGE) ?>',
+                null,
+                null,
+                '<?php echo $this->quoteEscape($this->__('Image Assets'), true); ?>'
+            );
+        });
+        $('#vde-tab-custom').customCssPanel({
+            saveCustomCssUrl: '<?php echo $this->getSaveCustomCssUrl() ?>',
+            downloadCustomCssUrl: '<?php echo $this->getDownloadCustomCssUrl() ?>'
         });
 
         $( '#' + '<?php echo $this->getFileElementName() ?>' ).fileupload({
             dataType: 'json',
             replaceFileInput: false,
-            url : '<?php echo $this->getUrl('*/system_design_editor_tools/upload', array('theme' => $this->getTheme()->getThemeId())) ?>',
+            url : '<?php echo $this->getUploadUrl() ?>',
 
             /**
              * Handler of "file selected" event
@@ -89,16 +113,28 @@
             done: function (e, data) {
                 var contentArea = $('#custom_code');
                 contentArea.val('');
-                $('#css_uploader_button').attr('disabled', 'disabled');
+                $(this).val('');
+                $('#css_uploader_button').attr('disabled', true);
                 if (!data.result.error) {
                     contentArea.val(data.result.content);
                     $('#vde-tab-custom').customCssPanel('updateButtons');
                     $('#vde-tab-custom').trigger('refreshIframe');
                 }
 
-                if (data.result.message_html) {
-                    $('#vde-tab-custom-messages-placeholder').append(data.result.message_html);
-                }
+                $('#vde-tab-custom').trigger('addMessage', {
+                    containerId: '#vde-tab-custom-messages-placeholder',
+                    message: data.result.message
+                });
+                $('.vde-tools-content').trigger('resize.vdeToolsResize');
+            },
+
+            /**
+             * Handle on "upload ajax request fail" event
+             * @param e
+             * @param data
+             */
+            fail: function (e, data) {
+                $('#vde-tab-custom').customCssPanel('updateButtons');
             }
         });
     })(jQuery);

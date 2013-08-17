@@ -82,7 +82,7 @@ class Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_Tag_Customer_Grid
         ));
 
         $this->addColumn('name', array(
-            'header' => Mage::helper('Mage_Tag_Helper_Data')->__('Tag Name'),
+            'header' => Mage::helper('Mage_Tag_Helper_Data')->__('Tag'),
             'index'  => 'name',
         ));
 

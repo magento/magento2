@@ -74,7 +74,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Widge
 
         if (Mage::registry('current_customer')->getId()) {
 
-            if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::actions_view')) {
+            if ($this->_authorization->isAllowed('Mage_Sales::actions_view')) {
                 $this->addTab('orders', array(
                     'label'     => Mage::helper('Mage_Customer_Helper_Data')->__('Orders'),
                     'class'     => 'ajax',
@@ -94,7 +94,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Widge
                 'url'       => $this->getUrl('*/*/wishlist', array('_current' => true)),
             ));
 
-            if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Newsletter::subscriber')) {
+            if ($this->_authorization->isAllowed('Mage_Newsletter::subscriber')) {
                 $this->addTab('newsletter', array(
                     'label'     => Mage::helper('Mage_Customer_Helper_Data')->__('Newsletter'),
                     'content'   => $this->getLayout()
@@ -102,7 +102,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Widge
                 ));
             }
 
-            if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Review::reviews_all')) {
+            if ($this->_authorization->isAllowed('Mage_Review::reviews_all')) {
                 $this->addTab('reviews', array(
                     'label'     => Mage::helper('Mage_Customer_Helper_Data')->__('Product Reviews'),
                     'class'     => 'ajax',

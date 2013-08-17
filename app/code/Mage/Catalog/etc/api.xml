@@ -163,6 +163,10 @@
                         <title>Update product</title>
                         <acl>catalog/product/update</acl>
                     </update>
+                    <multiUpdate translate="title" module="Mage_Catalog">
+                        <title>Multi update product</title>
+                        <acl>catalog/product/update</acl>
+                    </multiUpdate>
                     <delete translate="title" module="Mage_Catalog">
                         <title>Delete product</title>
                         <acl>catalog/product/delete</acl>
@@ -209,6 +213,14 @@
                         <code>106</code>
                         <message>Product attribute set does not belong to catalog product entity type.</message>
                     </product_attribute_set_not_valid>
+                    <multi_update_not_match>
+                        <code>107</code>
+                        <message>Quantity of product IDs and product data should match. No changes made.</message>
+                    </multi_update_not_match>
+                    <partially_updated>
+                        <code>108</code>
+                        <message>There was an error during one or more products update. See error log for details.</message>
+                    </partially_updated>
                 </faults>
             </catalog_product>
             <catalog_product_attribute translate="title" module="Mage_Catalog">
@@ -273,7 +285,7 @@
                    </invalid_parameters>
                    <invalid_code>
                        <code>103</code>
-                       <message>Attribute code is invalid. Please use only letters (a-z), numbers (0-9), or underscore(_) in this field. First character should be a letter.</message>
+                       <message>Please correct the attribute code. Use only letters (a-z), numbers (0-9) or underscores (_) in this field, and begin the code with a letter.</message>
                    </invalid_code>
                    <invalid_frontend_input>
                        <code>104</code>
@@ -285,11 +297,11 @@
                    </unable_to_save>
                    <can_not_delete>
                        <code>106</code>
-                       <message>This attribute cannot be deleted.</message>
+                       <message>You can't delete this attribute.</message>
                    </can_not_delete>
                    <can_not_edit>
                        <code>107</code>
-                       <message>This attribute cannot be edited.</message>
+                       <message>You can't edit this attribute.</message>
                    </can_not_edit>
                    <unable_to_add_option>
                        <code>108</code>

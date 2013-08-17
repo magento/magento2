@@ -75,12 +75,18 @@ class Mage_Backend_Block_Widget_Form_Element_Dependence extends Mage_Backend_Blo
      *
      * @param string $fieldName
      * @param string $fieldNameFrom
-     * @param string|array $refValues
+     * @param Mage_Backend_Model_Config_Structure_Element_Dependency_Field|string $refField
      * @return Mage_Backend_Block_Widget_Form_Element_Dependence
      */
-    public function addFieldDependence($fieldName, $fieldNameFrom, $refValues)
+    public function addFieldDependence($fieldName, $fieldNameFrom, $refField)
     {
-        $this->_depends[$fieldName][$fieldNameFrom] = $refValues;
+        if (!is_object($refField)) {
+            $refField = Mage::getModel('Mage_Backend_Model_Config_Structure_Element_Dependency_Field', array(
+                'fieldData' => array('value' => (string)$refField),
+                'fieldPrefix' => '',
+            ));
+        }
+        $this->_depends[$fieldName][$fieldNameFrom] = $refField;
         return $this;
     }
 
@@ -120,8 +126,12 @@ class Mage_Backend_Block_Widget_Form_Element_Dependence extends Mage_Backend_Blo
     {
         $result = array();
         foreach ($this->_depends as $to => $row) {
-            foreach ($row as $from => $value) {
-                $result[$this->_fields[$to]][$this->_fields[$from]] = $value;
+            foreach ($row as $from => $field) {
+                /** @var $field Mage_Backend_Model_Config_Structure_Element_Dependency_Field */
+                $result[$this->_fields[$to]][$this->_fields[$from]] = array(
+                    'values' => $field->getValues(),
+                    'negative' => $field->isNegative(),
+                );
             }
         }
         return Mage::helper('Mage_Core_Helper_Data')->jsonEncode($result);

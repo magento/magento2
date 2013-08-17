@@ -85,13 +85,6 @@
                 </args>
             </sendfriend>
         </routers>
-        <layout>
-            <updates>
-                <sendfriend module="Mage_Sendfriend">
-                    <file>layout.xml</file>
-                </sendfriend>
-            </updates>
-        </layout>
         <translate>
             <modules>
                 <Mage_Sendfriend>

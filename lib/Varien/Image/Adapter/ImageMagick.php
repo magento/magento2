@@ -369,7 +369,7 @@ class Varien_Image_Adapter_ImageMagick extends Varien_Image_Adapter_Abstract
     /**
      * Reassign image dimensions
      */
-    private function refreshImageDimensions()
+    public function refreshImageDimensions()
     {
         $this->_imageSrcWidth  = $this->_imageHandler->getImageWidth();
         $this->_imageSrcHeight = $this->_imageHandler->getImageHeight();
@@ -401,7 +401,7 @@ class Varien_Image_Adapter_ImageMagick extends Varien_Image_Adapter_Abstract
     }
 
     /**
-     * Returns rgb array of the specified pixel
+     * Returns rgba array of the specified pixel
      *
      * @param int $x
      * @param int $y
@@ -411,7 +411,14 @@ class Varien_Image_Adapter_ImageMagick extends Varien_Image_Adapter_Abstract
     {
         $pixel = $this->_imageHandler->getImagePixelColor($x, $y);
 
-        return explode(',', $pixel->getColorAsString());
+        $color = $pixel->getColor();
+        $rgbaColor = array(
+            'red' => $color['r'],
+            'green' => $color['g'],
+            'blue' => $color['b'],
+            'alpha' => (1 - $color['a']) * 127,
+        );
+        return $rgbaColor;
     }
 
     /**
@@ -426,5 +433,78 @@ class Varien_Image_Adapter_ImageMagick extends Varien_Image_Adapter_Abstract
             throw new LogicException(self::ERROR_WRONG_IMAGE);
         }
         return true;
+    }
+
+    /**
+     * Create Image from string
+     *
+     * @param string $text
+     * @param string $font
+     * @return Varien_Image_Adapter_Abstract
+     */
+    public function createPngFromString($text, $font = '')
+    {
+        $image = $this->_getImagickObject();
+        $draw = $this->_getImagickDrawObject();
+        $color = $this->_getImagickPixelObject('#000000');
+        $background = $this->_getImagickPixelObject('#ffffff00'); // Transparent
+
+        if (!empty($font)) {
+            if (method_exists($image, 'setFont')) {
+                $image->setFont($font);
+            } elseif (method_exists($draw, 'setFont')) {
+                $draw->setFont($font);
+            }
+        }
+
+        $draw->setFontSize($this->_fontSize);
+        $draw->setFillColor($color);
+        $draw->setStrokeAntialias(true);
+        $draw->setTextAntialias(true);
+
+        $metrics = $image->queryFontMetrics($draw, $text);
+
+        $draw->annotation(0, $metrics['ascender'], $text);
+
+        $height = abs($metrics['ascender']) + abs($metrics['descender']);
+        $image->newImage($metrics['textWidth'], $height, $background);
+        $this->_fileType = IMAGETYPE_PNG;
+        $image->setImageFormat('png');
+        $image->drawImage($draw);
+        $this->_imageHandler = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get Imagick object
+     *
+     * @param mixed $files
+     * @return Imagick
+     */
+    protected function _getImagickObject($files = null)
+    {
+        return new Imagick($files);
+    }
+
+    /**
+     * Get ImagickDraw object
+     *
+     * @return ImagickDraw
+     */
+    protected function _getImagickDrawObject()
+    {
+        return new ImagickDraw();
+    }
+
+    /**
+     * Get ImagickPixel object
+     *
+     * @param string|null $color
+     * @return ImagickPixel
+     */
+    protected function _getImagickPixelObject($color = null)
+    {
+        return new ImagickPixel($color);
     }
 }

@@ -81,7 +81,7 @@ class Mage_Adminhtml_Block_Report_Review_Detail_Grid extends Mage_Adminhtml_Bloc
         ));
 
         $this->addColumn('created_at', array(
-            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Created At'),
+            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Created'),
             'index'     =>'created_at',
             'width'     =>'200px',
             'type'      =>'datetime'

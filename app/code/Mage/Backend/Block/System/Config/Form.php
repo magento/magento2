@@ -133,7 +133,7 @@ class Mage_Backend_Block_System_Config_Form extends Mage_Backend_Block_Widget_Fo
     protected $_coreConfig;
 
     /**
-     * @param Mage_Core_Block_Template_Context $context
+     * @param Mage_Backend_Block_Template_Context $context
      * @param Mage_Backend_Model_Config_Factory $configFactory
      * @param Varien_Data_Form_Factory $formFactory
      * @param Mage_Backend_Model_Config_Clone_Factory $cloneModelFactory
@@ -144,7 +144,7 @@ class Mage_Backend_Block_System_Config_Form extends Mage_Backend_Block_Widget_Fo
      * @param array $data
      */
     public function __construct(
-        Mage_Core_Block_Template_Context $context,
+        Mage_Backend_Block_Template_Context $context,
         Mage_Backend_Model_Config_Factory $configFactory,
         Varien_Data_Form_Factory $formFactory,
         Mage_Backend_Model_Config_Clone_Factory $cloneModelFactory,
@@ -239,7 +239,8 @@ class Mage_Backend_Block_System_Config_Form extends Mage_Backend_Block_Widget_Fo
         $fieldsetConfig = array(
             'legend' => $group->getLabel(),
             'comment' => $group->getComment(),
-            'expanded' => $group->isExpanded()
+            'expanded' => $group->isExpanded(),
+            'group' => $group->getData()
         );
 
         $fieldset = $form->addFieldset($this->_generateElementId($group->getPath()), $fieldsetConfig);
@@ -307,7 +308,7 @@ class Mage_Backend_Block_System_Config_Form extends Mage_Backend_Block_Widget_Fo
             if ($element instanceof Mage_Backend_Model_Config_Structure_Element_Group) {
                 $this->_initGroup($element, $section, $fieldset);
             } else {
-                $path = $element->getPath($fieldPrefix);
+                $path = $element->getConfigPath() ?: $element->getPath($fieldPrefix);
                 if ($element->getSectionId() != $section->getId()) {
                     $groupPath = $element->getGroupPath();
                     if (!isset($extraConfigGroups[$groupPath])) {
@@ -373,6 +374,8 @@ class Mage_Backend_Block_System_Config_Form extends Mage_Backend_Block_Widget_Fo
         $dependencies = $field->getDependencies($fieldPrefix, $this->getStoreCode());
         $this->_populateDependenciesBlock($dependencies, $elementId, $elementName);
 
+        $sharedClass = $this->_getSharedCssClass($field);
+        $requiresClass = $this->_getRequiresCssClass($field, $fieldPrefix);
 
         $formField = $fieldset->addField($elementId, $field->getType(), array(
             'name' => $elementName,
@@ -382,7 +385,7 @@ class Mage_Backend_Block_System_Config_Form extends Mage_Backend_Block_Widget_Fo
             'hint' => $field->getHint(),
             'value' => $data,
             'inherit' => $inherit,
-            'class' => $field->getFrontendClass(),
+            'class' => $field->getFrontendClass() . $sharedClass . $requiresClass,
             'field_config' => $field->getData(),
             'scope' => $this->getScope(),
             'scope_id' => $this->getScopeId(),
@@ -413,12 +416,13 @@ class Mage_Backend_Block_System_Config_Form extends Mage_Backend_Block_Widget_Fo
      */
     protected function _populateDependenciesBlock(array $dependencies, $elementId, $elementName)
     {
-        foreach ($dependencies as $dependentId => $dependentValue) {
-            $fieldNameFrom = $this->_generateElementName($dependentId, null, '_');
+        foreach ($dependencies as $dependentField) {
+            /** @var $dependentField Mage_Backend_Model_Config_Structure_Element_Dependency_Field */
+            $fieldNameFrom = $this->_generateElementName($dependentField->getId(), null, '_');
             $this->_getDependence()
                 ->addFieldMap($elementId, $elementName)
-                ->addFieldMap($this->_generateElementId($dependentId), $fieldNameFrom)
-                ->addFieldDependence($elementName, $fieldNameFrom, $dependentValue);
+                ->addFieldMap($this->_generateElementId($dependentField->getId()), $fieldNameFrom)
+                ->addFieldDependence($elementName, $fieldNameFrom, $dependentField);
         }
     }
 
@@ -656,5 +660,42 @@ class Mage_Backend_Block_System_Config_Form extends Mage_Backend_Block_Widget_Fo
     public function getStoreCode()
     {
         return $this->getRequest()->getParam('store', '');
+    }
+
+    /**
+     * Get css class for "shared" functionality
+     *
+     * @param Mage_Backend_Model_Config_Structure_Element_Field $field
+     * @return string
+     */
+    protected function _getSharedCssClass(Mage_Backend_Model_Config_Structure_Element_Field $field)
+    {
+        $sharedClass = '';
+        if ($field->getAttribute('shared') && $field->getConfigPath()) {
+            $sharedClass = ' shared shared-' . str_replace('/', '-', $field->getConfigPath());
+            return $sharedClass;
+        }
+        return $sharedClass;
+    }
+
+    /**
+     * Get css class for "requires" functionality
+     *
+     * @param Mage_Backend_Model_Config_Structure_Element_Field $field
+     * @param $fieldPrefix
+     * @return string
+     */
+    protected function _getRequiresCssClass(Mage_Backend_Model_Config_Structure_Element_Field $field, $fieldPrefix)
+    {
+        $requiresClass = '';
+        $requiredPaths = array_merge($field->getRequiredFields($fieldPrefix), $field->getRequiredGroups($fieldPrefix));
+        if (!empty($requiredPaths)) {
+            $requiresClass = ' requires';
+            foreach ($requiredPaths as $requiredPath) {
+                $requiresClass .= ' requires-' . $this->_generateElementId($requiredPath);
+            }
+            return $requiresClass;
+        }
+        return $requiresClass;
     }
 }

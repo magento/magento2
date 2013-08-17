@@ -118,7 +118,7 @@ class Mage_Sales_Helper_Guest extends Mage_Core_Helper_Data
         }
 
         Mage::getSingleton('Mage_Core_Model_Session')->addError(
-            $this->__('Entered data is incorrect. Please try again.')
+            $this->__('You entered incorrect data. Please try again.')
         );
         Mage::app()->getResponse()->setRedirect(Mage::getUrl('sales/guest/form'));
         return false;

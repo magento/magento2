@@ -48,24 +48,28 @@ $numColumns = sizeof($this->getColumns());
         <?php if ($this->getDateFilterVisibility()): ?>
         <div class="filter" id="<?php echo $this->getSuffixId('period_date_range')?>">
             <div class="date">
-                <label class="required"><?php echo $this->__('From') ?>:</label>
-                <input class="input-text no-changes required-entry" type="text" id="<?php echo $this->getSuffixId('period_date_from')?>" name="report_from" value="<?php echo $this->getFilter('report_from') ?>">
+                <label class="required"><?php echo $this->__('From') ?>:
+                    <input class="input-text no-changes required-entry" type="text" id="<?php echo $this->getSuffixId('period_date_from')?>" name="report_from" value="<?php echo $this->getFilter('report_from') ?>">
+                </label>
                 <div id="<?php echo $this->getSuffixId('period_date_from_advice')?>"></div>
             </div>
 
             <div class="date">
-                <label class="required"><?php echo $this->__('To') ?>:</label>
-                <input class="input-text no-changes required-entry" type="text" id="<?php echo $this->getSuffixId('period_date_to')?>" name="report_to" value="<?php echo $this->getFilter('report_to') ?>" />
+                <label class="required"><?php echo $this->__('To') ?>:
+                    <input class="input-text no-changes required-entry" type="text" id="<?php echo $this->getSuffixId('period_date_to')?>" name="report_to" value="<?php echo $this->getFilter('report_to') ?>" />
+                </label>
                 <div id="<?php echo $this->getSuffixId('period_date_to_advice')?>"></div>
             </div>
 
             <div class="show-by">
-                <?php echo $this->__('Show By') ?>:
-                <select name="report_period" id="<?php echo $this->getSuffixId('report_period')?>">
-                    <?php foreach ($this->getPeriods() as $_value => $_label): ?>
-                    <option value="<?php echo $_value ?>" <?php if ($this->getFilter('report_period') == $_value): ?> selected<?php endif; ?>><?php echo $_label ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <label>
+                    <?php echo $this->__('Show By') ?>:
+                    <select name="report_period" id="<?php echo $this->getSuffixId('report_period')?>">
+                        <?php foreach ($this->getPeriods() as $_value => $_label): ?>
+                        <option value="<?php echo $_value ?>" <?php if ($this->getFilter('report_period') == $_value): ?> selected<?php endif; ?>><?php echo $_label ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
                 <?php echo $this->getRefreshButtonHtml() ?>
             </div>
             <script type="text/javascript">

@@ -39,12 +39,12 @@ abstract class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_TabAbstract
     protected $_objectManager;
 
     /**
-     * @param Mage_Core_Block_Template_Context $context
+     * @param Mage_Backend_Block_Template_Context $context
      * @param Magento_ObjectManager $objectManager
      * @param array $data
      */
     public function __construct(
-        Mage_Core_Block_Template_Context $context,
+        Mage_Backend_Block_Template_Context $context,
         Magento_ObjectManager $objectManager,
         array $data = array()
     ) {

@@ -66,21 +66,21 @@ class Varien_Data_Form_Element_Time extends Varien_Data_Form_Element_Abstract
         }
 
         $html = '<input type="hidden" id="' . $this->getHtmlId() . '" ' . $this->_getUiId() . '/>';
-        $html .= '<select name="'. $this->getName() . '" '.$this->serialize($this->getHtmlAttributes()).' style="width:40px" ' . $this->_getUiId('hour') . '>'."\n";
+        $html .= '<select name="'. $this->getName() . '" style="width:50px" '.$this->serialize($this->getHtmlAttributes()) . $this->_getUiId('hour') . '>'."\n";
         for( $i=0;$i<24;$i++ ) {
             $hour = str_pad($i, 2, '0', STR_PAD_LEFT);
             $html.= '<option value="'.$hour.'" '. ( ($value_hrs == $i) ? 'selected="selected"' : '' ) .'>' . $hour . '</option>';
         }
         $html.= '</select>'."\n";
 
-        $html.= '&nbsp;:&nbsp;<select name="'. $this->getName() . '" '.$this->serialize($this->getHtmlAttributes()).' style="width:40px" ' . $this->_getUiId('minute') . '>'."\n";
+        $html.= ':&nbsp;<select name="'. $this->getName() . '" style="width:50px" '.$this->serialize($this->getHtmlAttributes()) . $this->_getUiId('minute') . '>'."\n";
         for( $i=0;$i<60;$i++ ) {
             $hour = str_pad($i, 2, '0', STR_PAD_LEFT);
             $html.= '<option value="'.$hour.'" '. ( ($value_min == $i) ? 'selected="selected"' : '' ) .'>' . $hour . '</option>';
         }
         $html.= '</select>'."\n";
 
-        $html.= '&nbsp;:&nbsp;<select name="'. $this->getName() . '" '.$this->serialize($this->getHtmlAttributes()).' style="width:40px" ' . $this->_getUiId('second') . '>'."\n";
+        $html.= ':&nbsp;<select name="'. $this->getName() . '" style="width:50px" '.$this->serialize($this->getHtmlAttributes()) . $this->_getUiId('second') . '>'."\n";
         for( $i=0;$i<60;$i++ ) {
             $hour = str_pad($i, 2, '0', STR_PAD_LEFT);
             $html.= '<option value="'.$hour.'" '. ( ($value_sec == $i) ? 'selected="selected"' : '' ) .'>' . $hour . '</option>';

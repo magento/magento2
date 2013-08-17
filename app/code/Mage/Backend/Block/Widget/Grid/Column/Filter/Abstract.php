@@ -81,9 +81,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Abstract extends Mage_Backend
      */
     protected function _getHtmlId()
     {
-        return $this->getColumn()->getGrid()->getId() . '_'
-            . $this->getColumn()->getGrid()->getVarNameFilter() . '_'
-            . $this->getColumn()->getId();
+        return $this->getColumn()->getHtmlId();
     }
 
     /**
@@ -94,7 +92,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Abstract extends Mage_Backend
      */
     public function getEscapedValue($index = null)
     {
-        return htmlspecialchars($this->getValue($index));
+        return htmlspecialchars((string)$this->getValue($index));
     }
 
     /**

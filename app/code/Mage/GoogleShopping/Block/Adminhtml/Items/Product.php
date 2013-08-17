@@ -96,7 +96,7 @@ class Mage_GoogleShopping_Block_Adminhtml_Items_Product extends Mage_Adminhtml_B
             'index'     => 'entity_id'
         ));
         $this->addColumn('name', array(
-            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Product Name'),
+            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Product'),
             'index'     => 'name',
             'column_css_class'=> 'name'
         ));
@@ -117,7 +117,7 @@ class Mage_GoogleShopping_Block_Adminhtml_Items_Product extends Mage_Adminhtml_B
 
         $this->addColumn('set_name',
             array(
-                'header'=> Mage::helper('Mage_Catalog_Helper_Data')->__('Attrib. Set Name'),
+                'header'=> Mage::helper('Mage_Catalog_Helper_Data')->__('Attribute Set'),
                 'width' => '100px',
                 'index' => 'attribute_set_id',
                 'type'  => 'options',

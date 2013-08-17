@@ -74,7 +74,7 @@ class Mage_Adminhtml_Model_LayoutUpdate_Validator extends Zend_Validate_Abstract
             $this->_messageTemplates = array(
                 self::PROTECTED_ATTR_HELPER_IN_TAG_ACTION_VAR =>
                     Mage::helper('Mage_Adminhtml_Helper_Data')->__('Helper attributes should not be used in custom layout updates.'),
-                self::XML_INVALID => Mage::helper('Mage_Adminhtml_Helper_Data')->__('XML data is invalid.'),
+                self::XML_INVALID => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Please correct the XML data and try again.'),
             );
         }
         return $this;

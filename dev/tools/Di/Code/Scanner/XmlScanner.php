@@ -53,4 +53,23 @@ class XmlScanner extends FileScanner
 
         return $output;
     }
+
+    /**
+     * Filter found entities if needed
+     *
+     * @param array $output
+     * @return array
+     */
+    protected function _filterEntities(array $output)
+    {
+        $filteredEntities = array();
+        foreach ($output as $className) {
+            $entityName = rtrim(preg_replace('/(Proxy|Factory)$/', '', $className), '_');
+            // Skip aliases that are declared in Di configuration
+            if (class_exists($entityName)) {
+                array_push($filteredEntities, $className);
+            }
+        }
+        return $filteredEntities;
+    }
 }

@@ -43,7 +43,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Crosssell extends Mage_Admin
         $this->setId('cross_sell_product_grid');
         $this->setDefaultSort('entity_id');
         $this->setUseAjax(true);
-        if ($this->_getProduct() && $this->_getProduct()->getId()) {
+        if ($this->getProduct() && $this->getProduct()->getId()) {
             $this->setDefaultFilter(array('in_products'=>1));
         }
         if ($this->isReadonly()) {
@@ -56,7 +56,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Crosssell extends Mage_Admin
      *
      * @return Mage_Catalog_Model_Product
      */
-    protected function _getProduct()
+    public function getProduct()
     {
         return Mage::registry('current_product');
     }
@@ -98,7 +98,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Crosssell extends Mage_Admin
         /* @var $collection Mage_Catalog_Model_Resource_Product_Link_Product_Collection */
         $collection = Mage::getModel('Mage_Catalog_Model_Product_Link')->useCrossSellLinks()
             ->getProductCollection()
-            ->setProduct($this->_getProduct())
+            ->setProduct($this->getProduct())
             ->addAttributeToSelect('*');
 
         if ($this->isReadonly()) {
@@ -122,7 +122,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Crosssell extends Mage_Admin
      */
     public function isReadonly()
     {
-        return $this->_getProduct() && $this->_getProduct()->getCrosssellReadonly();
+        return $this->getProduct() && $this->getProduct()->getCrosssellReadonly();
     }
 
     /**
@@ -174,7 +174,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Crosssell extends Mage_Admin
             ->toOptionHash();
 
         $this->addColumn('set_name', array(
-            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Attrib. Set Name'),
+            'header'    => Mage::helper('Mage_Catalog_Helper_Data')->__('Attribute Set'),
             'index'     => 'attribute_set_id',
             'type'      => 'options',
             'options'   => $sets,
@@ -224,7 +224,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Crosssell extends Mage_Admin
             'validate_class'    => 'validate-number',
             'index'             => 'position',
             'editable'          => !$this->isReadonly(),
-            'edit_only'         => !$this->_getProduct()->getId(),
+            'edit_only'         => !$this->getProduct()->getId(),
             'header_css_class'  => 'col-position',
             'column_css_class'  => 'col-position'
         ));

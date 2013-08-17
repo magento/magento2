@@ -78,8 +78,8 @@ class Mage_Webapi_Model_Authorization_Loader_RoleTest extends PHPUnit_Framework_
         $roleTwo = new Mage_Webapi_Model_Authorization_Role(4);
         $roleIds = array(3, 4);
         $createRoleMap = array(
-            array(array(3), $roleOne),
-            array(array(4), $roleTwo),
+            array(array('roleId' => 3), $roleOne),
+            array(array('roleId' => 4), $roleTwo),
         );
         $this->_resourceModelMock->expects($this->once())
             ->method('getRolesIds')

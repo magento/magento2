@@ -90,13 +90,13 @@ class Mage_Adminhtml_Block_Cms_Block_Grid extends Mage_Adminhtml_Block_Widget_Gr
         ));
 
         $this->addColumn('creation_time', array(
-            'header'    => Mage::helper('Mage_Cms_Helper_Data')->__('Date Created'),
+            'header'    => Mage::helper('Mage_Cms_Helper_Data')->__('Created'),
             'index'     => 'creation_time',
             'type'      => 'datetime',
         ));
 
         $this->addColumn('update_time', array(
-            'header'    => Mage::helper('Mage_Cms_Helper_Data')->__('Last Modified'),
+            'header'    => Mage::helper('Mage_Cms_Helper_Data')->__('Modified'),
             'index'     => 'update_time',
             'type'      => 'datetime',
         ));

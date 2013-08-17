@@ -55,8 +55,7 @@ class Mage_Core_Model_Theme_Domain_Factory
      * Create new config object
      *
      * @param Mage_Core_Model_Theme $theme
-     * @return Mage_Core_Model_Theme_Domain_Physical|Mage_Core_Model_Theme_Domain_Virtual|
-     * Mage_Core_Model_Theme_Domain_Staging
+     * @return Mage_Core_Model_Theme_Domain_Virtual|Mage_Core_Model_Theme_Domain_Staging
      * @throws Mage_Core_Exception
      */
     public function create(Mage_Core_Model_Theme $theme)

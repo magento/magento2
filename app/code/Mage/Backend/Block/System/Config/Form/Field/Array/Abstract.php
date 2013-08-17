@@ -81,7 +81,7 @@ abstract class Mage_Backend_Block_System_Config_Form_Field_Array_Abstract
             $this->_addButtonLabel = $this->helper('Mage_Backend_Helper_Data')->__('Add');
         }
         parent::_construct();
-
+        
     }
 
     /**
@@ -102,34 +102,6 @@ abstract class Mage_Backend_Block_System_Config_Form_Field_Array_Abstract
         if ((!empty($params['renderer'])) && ($params['renderer'] instanceof Mage_Core_Block_Abstract)) {
             $this->_columns[$name]['renderer'] = $params['renderer'];
         }
-    }
-
-    /**
-     * Returns the list of columns
-     *
-     * @return array
-     */
-    public function getColumns()
-    {
-        return $this->_columns;
-    }
-
-    /**
-     * Whether or not to add the "Add After" button
-     */
-    public function isAddAfter()
-    {
-        return $this->_addAfter;
-    }
-
-    /**
-     * Label for the Add button
-     *
-     * @return string
-     */
-    public function getAddButtonLabel()
-    {
-        return $this->_addButtonLabel;
     }
 
     /**
@@ -277,5 +249,25 @@ abstract class Mage_Backend_Block_System_Config_Form_Field_Array_Abstract
             throw new Exception('At least one column must be defined.');
         }
         return parent::_toHtml();
+    }
+
+    /**
+     * Returns true if the addAfter directive is set
+     *
+     * @return bool
+     */
+    public function isAddAfter()
+    {
+        return $this->_addAfter;
+    }
+
+    /**
+     * Returns columns array
+     *
+     * @return array
+     */
+    public function getColumns()
+    {
+        return $this->_columns;
     }
 }

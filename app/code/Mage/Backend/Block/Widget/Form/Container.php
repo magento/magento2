@@ -70,7 +70,7 @@ class Mage_Backend_Block_Widget_Form_Container extends Mage_Backend_Block_Widget
 
         $this->_addButton('save', array(
             'label'     => $this->__('Save'),
-            'class'     => 'save',
+            'class'     => 'save primary',
             'data_attribute'  => array(
                 'mage-init' => array(
                     'button' => array('event' => 'save', 'target' => '#edit_form'),
@@ -194,5 +194,4 @@ class Mage_Backend_Block_Widget_Form_Container extends Mage_Backend_Block_Widget
         $this->getChildBlock('form')->setDataObject($object);
         return $this->setData('data_object', $object);
     }
-
 }

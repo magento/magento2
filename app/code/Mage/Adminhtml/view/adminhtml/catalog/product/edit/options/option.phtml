@@ -27,7 +27,7 @@
 <?php /** @var $this Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_Option */ ?>
 <?php echo $this->getTemplatesHtml() ?>
 <script id="custom-option-base-template" type="text/x-jquery-tmpl">
-    <div class="fieldset-wrapper collapsable-wrapper opened form-list" id="option_${id}">
+    <div class="fieldset-wrapper collapsable-wrapper opened" id="option_${id}">
         <div class="fieldset-wrapper-title">
             <strong class="title" data-toggle="collapse" data-target="#${id}-content">
                 <span id="option_${id}_header_title">${title}</span>
@@ -37,7 +37,8 @@
                     <span><?php echo $this->__('Delete Custom Option'); ?></span>
                 </button>
             </div>
-            <div id="<?php echo $this->getFieldId() ?>_${id}_move" data-role="grip" class="draggable-handle" title="<?php echo $this->__('Sort Custom Options'); ?>"></div>
+            <div id="<?php echo $this->getFieldId() ?>_${id}_move" data-role="draggable-handle" class="draggable-handle"
+                 title="<?php echo $this->__('Sort Custom Options'); ?>"></div>
         </div>
         <div class="fieldset-wrapper-content in collapse" id="${id}-content">
             <fieldset class="fieldset">
@@ -66,7 +67,7 @@
 
                     <div class="field field-option-input-type required">
                         <label class="label" for="<?php echo $this->getFieldId() ?>_${id}_title">
-                            <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Option Title') ?>
+                            <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Input Type') ?>
                         </label>
                         <div class="control opt-type">
                             <?php echo $this->getTypeSelectHtml() ?>
@@ -84,7 +85,7 @@
                     </div>
                 </fieldset>
             </fieldset>
-        </div>
+        </div>    
     </div>
 </script>
 
@@ -94,22 +95,6 @@
 <?php endif; ?>
 <script type="text/javascript">
 jQuery(function ($) {
-    $.validator.addMethod(
-        'required-option-select', function (value, element) {
-            return (value !== '');
-        }, <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode(Mage::helper('Mage_Catalog_Helper_Data')->__('Select type of option.')); ?>);
-    $.validator.addMethod(
-        'required-option-select-type-rows', function (value, element) {
-            var optionContainerElm = element.up('div[id*=_type_]');
-            var selectTypesFlag = false;
-            var selectTypeElements = $('#' + optionContainerElm.id + ' .select-type-title');
-            selectTypeElements.each(function () {
-                if ($(this).attr('id') && $(this).closest('tr').is(':visible')) {
-                    selectTypesFlag = true;
-                }
-            });
-            return selectTypesFlag;
-        }, <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode(Mage::helper('Mage_Catalog_Helper_Data')->__('Please add rows to option.')); ?>);
     var fieldSet = $('#Custom_Options');
     fieldSet.customOptions(<?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode(
         array(
@@ -121,7 +106,6 @@ jQuery(function ($) {
             'itemCount' => $this->getItemCount()
         )
     )?>);
-    head.js('<?php echo $this->getViewFileUrl('Mage_Adminhtml::validation-rules.js'); ?>');
     //adding data to templates
     <?php /** @var $_value Varien_Object */ ?>
     <?php foreach ($this->getOptionValues() as $_value): ?>

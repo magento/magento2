@@ -1,6 +1,6 @@
 <?php
 /**
- * Unit test for customer service layer Mage_Customer_Service_Customer
+ * Mage_Customer_Service_Customer
  *
  * Magento
  *
@@ -31,39 +31,43 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
     protected $_service;
 
     /**
-     * @var Mage_Customer_Model_Customer_Factory
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_customerFactory;
 
     /**
-     * @var Mage_Customer_Model_Address_Factory
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_addressFactory;
 
     /**
-     * @var Mage_Customer_Model_Customer
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_customer;
 
+    /** @var Mage_Customer_Helper_Data|PHPUnit_Framework_MockObject_MockObject */
+    protected $_helperMock;
+
     /**
-     * @var Mage_Customer_Model_Address
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_address;
 
     protected function setUp()
     {
-        $helper = $this->getMockBuilder('Mage_Customer_Helper_Data')
+        $this->_helperMock = $this->getMockBuilder('Mage_Customer_Helper_Data')
             ->disableOriginalConstructor()
+            ->setMethods(array('generateResetPasswordLinkToken', '__'))
             ->getMock();
 
-        $helper->expects($this->any())
+        $this->_helperMock->expects($this->any())
             ->method('__')
             ->will($this->returnArgument(0));
-        $this->_customerFactory = $this->getMockBuilder('Mage_Customer_Model_Customer_Factory')
+        $this->_customerFactory = $this->getMockBuilder('Mage_Customer_Model_CustomerFactory')
             ->disableOriginalConstructor()
             ->setMethods(array('create'))
             ->getMock();
-        $this->_addressFactory = $this->getMockBuilder('Mage_Customer_Model_Address_Factory')
+        $this->_addressFactory = $this->getMockBuilder('Mage_Customer_Model_AddressFactory')
             ->disableOriginalConstructor()
             ->setMethods(array('create'))
             ->getMock();
@@ -72,7 +76,7 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
             ->setMethods(array('save', 'generatePassword', 'getOrigData', 'sendNewAccountEmail', 'getConfirmation',
                 'getPrimaryAddress', 'getAddresses', 'getAdditionalAddresses', 'load', 'getId', 'changePassword',
                 'sendPasswordReminderEmail', 'addAddress', 'getAddressItemById', 'getAddressesCollection',
-                'hashPassword')
+                'hashPassword', 'changeResetPasswordLinkToken')
             )
             ->disableOriginalConstructor()
             ->getMock();
@@ -85,10 +89,14 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->_address));
 
-        $this->_service = new Mage_Customer_Service_Customer($helper, $this->_customerFactory, $this->_addressFactory);
+        $this->_service = new Mage_Customer_Service_Customer($this->_helperMock, $this->_customerFactory,
+            $this->_addressFactory
+        );
     }
 
     /**
+     * Create mock address for use in tests
+     *
      * @param bool $hasChanges
      * @param int $addressId
      * @return PHPUnit_Framework_MockObject_MockObject
@@ -193,9 +201,6 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * Test beforeSave and afterSave callback are set correctly
-     */
     public function testSetAfterSaveCallback()
     {
         $this->assertInstanceOf('Mage_Customer_Service_Customer', $this->_service->setAfterSaveCallback('intval'));
@@ -299,6 +304,82 @@ class Mage_Customer_Service_CustomerTest extends PHPUnit_Framework_TestCase
         $this->_customer->expects($this->any())
             ->method('getConfirmation')
             ->will($this->returnValue(false));
+
+        $this->assertInstanceOf('Mage_Customer_Model_Customer', $this->_service->create($customerData));
+    }
+
+    /**
+     * Test that email is send for registered users
+     */
+    public function testSendWelcomeEmailRegistered()
+    {
+        $storeId = 1;
+        $type = 'registered';
+        $customerData = array(
+            'sendemail_store_id' => $storeId,
+            'website_id' => 1,
+            'sendemail' => true,
+            'autogenerate_password' => true
+        );
+        $hash = 1234567890;
+
+        $this->_customer->expects($this->once())
+            ->method('sendNewAccountEmail')
+            ->with($type, '', $storeId);
+        $this->_customer->expects($this->once())
+            ->method('save');
+        $this->_customer->expects($this->any())
+            ->method('getOrigData')
+            ->with($this->equalTo('id'))
+            ->will($this->returnValue(false));
+
+        $this->_helperMock->expects($this->once())
+            ->method('generateResetPasswordLinkToken')
+            ->will($this->returnValue($hash));
+
+        $this->_customer->expects($this->once())->method('changeResetPasswordLinkToken')->with($this->equalTo($hash));
+        $this->_customer->expects($this->once())
+            ->method('sendNewAccountEmail')
+            ->with(
+                $this->equalTo($type),
+                $this->equalTo(''),
+                $this->equalTo($storeId)
+            );
+
+        $this->assertInstanceOf('Mage_Customer_Model_Customer', $this->_service->create($customerData));
+    }
+
+    /**
+     * Test that email is send in case when user is confirmed
+     */
+    public function testSendWelcomeEmailConfirmed()
+    {
+        $storeId = 1;
+        $type = 'confirmed';
+        $customerData = array(
+            'sendemail_store_id' => $storeId,
+            'website_id' => 1,
+            'sendemail' => true,
+            'autogenerate_password' => true
+        );
+
+        $this->_customer->expects($this->once())
+            ->method('sendNewAccountEmail')
+            ->with($type, '', $storeId);
+        $this->_customer->expects($this->once())
+            ->method('save');
+        $this->_customer->expects($this->any())
+            ->method('getOrigData')
+            ->with($this->equalTo('id'))
+            ->will($this->returnValue(true));
+
+        $this->_customer->expects($this->once())
+            ->method('sendNewAccountEmail')
+            ->with(
+                $this->equalTo($type),
+                $this->equalTo(''),
+                $this->equalTo($storeId)
+            );
 
         $this->assertInstanceOf('Mage_Customer_Model_Customer', $this->_service->create($customerData));
     }

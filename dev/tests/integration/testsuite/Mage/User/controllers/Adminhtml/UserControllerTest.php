@@ -25,6 +25,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * @magentoAppArea adminhtml
+ */
 class Mage_User_Adminhtml_UserControllerTest extends Mage_Backend_Utility_Controller
 {
     public function testIndexAction()
@@ -33,17 +36,6 @@ class Mage_User_Adminhtml_UserControllerTest extends Mage_Backend_Utility_Contro
         $response = $this->getResponse()->getBody();
         $this->assertContains('Users', $response);
         $this->assertSelectCount('#permissionsUserGrid_table', 1, $response);
-    }
-
-    /**
-     * @magentoConfigFixture limitations/admin_account 1
-     */
-    public function testIndexActionLimitedUsers()
-    {
-        $this->dispatch('backend/admin/user/index');
-        $response = $this->getResponse()->getBody();
-        $this->assertNotContains('Add New User', $response);
-        $this->assertContains(Mage_User_Model_Resource_User::getMessageUserCreationProhibited(), $response);
     }
 
     public function testSaveActionNoData()
@@ -77,7 +69,7 @@ class Mage_User_Adminhtml_UserControllerTest extends Mage_Backend_Utility_Contro
     {
         $this->_createNew();
         $this->assertSessionMessages(
-            $this->equalTo(array('The user has been saved.')), Mage_Core_Model_Message::SUCCESS
+            $this->equalTo(array('You saved the user.')), Mage_Core_Model_Message::SUCCESS
         );
         $this->assertRedirect($this->stringContains('backend/admin/user/index/'));
     }
@@ -97,20 +89,6 @@ class Mage_User_Adminhtml_UserControllerTest extends Mage_Backend_Utility_Contro
             'password_confirmation' => 'password_with_1_number',
         ));
         $this->dispatch('backend/admin/user/save');
-    }
-
-    /**
-     * @magentoDbIsolation enabled
-     * @magentoConfigFixture limitations/admin_account 1
-     */
-    public function testSaveActionLimitedUsers()
-    {
-        $this->_createNew();
-        $this->assertSessionMessages(
-            $this->equalTo(array('You are using the maximum number of admin accounts allowed.')),
-            Mage_Core_Model_Message::ERROR
-        );
-        $this->assertRedirect($this->stringContains('backend/admin/user/edit/'));
     }
 
     public function testRoleGridAction()

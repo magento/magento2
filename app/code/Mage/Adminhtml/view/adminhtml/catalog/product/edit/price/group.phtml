@@ -46,7 +46,7 @@ $_showWebsite= $this->isMultiWebsites();
         <table cellspacing="0" class="data-table" id="group_prices_table">
             <thead>
                 <tr>
-                    <th <?php if (!$_showWebsite): ?>style="display: none;"<?php endif; ?>><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Website'); ?></th>
+                    <th <?php if (!$_showWebsite): ?>style="display: none;"<?php endif; ?>><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Web Site'); ?></th>
                     <th class="required"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Customer Group'); ?></th>
                     <th class="required"><?php echo $this->getPriceColumnHeader(Mage::helper('Mage_Catalog_Helper_Data')->__('Price')); ?></th>
                     <th class="col-delete"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Action'); ?></th>

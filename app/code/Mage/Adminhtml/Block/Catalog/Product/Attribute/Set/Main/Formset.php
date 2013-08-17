@@ -46,7 +46,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Main_Formset extends Ma
         $fieldset = $form->addFieldset('set_name', array('legend'=> Mage::helper('Mage_Catalog_Helper_Data')->__('Edit Set Name')));
         $fieldset->addField('attribute_set_name', 'text', array(
             'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Name'),
-            'note' => Mage::helper('Mage_Catalog_Helper_Data')->__('For internal use.'),
+            'note' => Mage::helper('Mage_Catalog_Helper_Data')->__('For internal use'),
             'name' => 'attribute_set_name',
             'required' => true,
             'class' => 'required-entry validate-no-html-tags',

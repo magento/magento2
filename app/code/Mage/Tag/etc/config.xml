@@ -29,7 +29,7 @@
     <modules>
         <Mage_Tag>
             <version>1.6.0.0</version>
-            <active>true</active>
+            <active>false</active>
             <depends>
                 <Mage_Catalog/>
                 <Mage_Customer/>
@@ -89,19 +89,16 @@
                 </Mage_Tag>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <tag module="Mage_Tag">
-                    <file>layout.xml</file>
-                </tag>
-                <tag_rss module="Mage_Tag">
-                    <file>rss.xml</file>
-                </tag_rss>
-            </updates>
-        </layout>
         <secure_url>
             <tag_customer>/tag/customer/</tag_customer>
         </secure_url>
+        <di>
+            <Mage_Tag_Model_Session>
+                <parameters>
+                    <sessionName>frontend</sessionName>
+                </parameters>
+            </Mage_Tag_Model_Session>
+        </di>
     </frontend>
     <admin>
         <routers>
@@ -135,21 +132,12 @@
                 </Mage_Tag>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <tag_product module="Mage_Tag">
-                    <file>product.xml</file>
-                </tag_product>
-                <tag_customer module="Mage_Tag">
-                    <file>customer.xml</file>
-                </tag_customer>
-                <tag module="Mage_Tag">
-                    <file>tag.xml</file>
-                </tag>
-                <tag_report module="Mage_Tag">
-                    <file>report.xml</file>
-                </tag_report>
-            </updates>
-        </layout>
+        <di>
+            <Mage_Tag_Model_Session>
+                <parameters>
+                    <sessionName>adminhtml</sessionName>
+                </parameters>
+            </Mage_Tag_Model_Session>
+        </di>
     </adminhtml>
 </config>

@@ -40,7 +40,7 @@ class Mage_Install_Model_EntryPoint_Upgrade extends Mage_Core_Model_EntryPointAb
     /**
      * Apply scheme & data updates
      */
-    public function processRequest()
+    protected function _processRequest()
     {
         /** @var $cacheFrontendPool Mage_Core_Model_Cache_Frontend_Pool */
         $cacheFrontendPool = $this->_objectManager->get('Mage_Core_Model_Cache_Frontend_Pool');

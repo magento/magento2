@@ -59,13 +59,6 @@
         </widget>
     </global>
     <frontend>
-        <layout>
-            <updates>
-                <widget module="Mage_Widget">
-                    <file>layout.xml</file>
-                </widget>
-            </updates>
-        </layout>
     </frontend>
     <adminhtml>
         <translate>
@@ -77,13 +70,6 @@
                 </Mage_Widget>
             </modules>
         </translate>
-        <layout>
-            <updates>
-                <widget module="Mage_Widget">
-                    <file>layout.xml</file>
-                </widget>
-            </updates>
-        </layout>
         <events>
             <cms_wysiwyg_config_prepare>
                 <observers>

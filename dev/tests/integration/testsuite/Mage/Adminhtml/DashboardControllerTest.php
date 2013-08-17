@@ -21,6 +21,10 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+/**
+ * @magentoAppArea adminhtml
+ */
 class Mage_Adminhtml_DashboardControllerTest extends Mage_Backend_Utility_Controller
 {
     public function testTunnelAction()
@@ -39,11 +43,19 @@ class Mage_Adminhtml_DashboardControllerTest extends Mage_Backend_Utility_Contro
             throw $e;
         }
 
-        $gaFixture = 'YTo5OntzOjM6ImNodCI7czoyOiJsYyI7czozOiJjaGYiO3M6Mzk6ImJnLHMsZjRmNGY0fGMsbGcsOTAsZmZmZmZ'
-            . 'mLDAuMSxlZGVkZWQsMCI7czozOiJjaG0iO3M6MTQ6IkIsZjRkNGIyLDAsMCwwIjtzOjQ6ImNoY28iO3M6NjoiZGI0ODE0IjtzOjM6ImN'
-            . 'oZCI7czoxNjoiZTpBQUFBQUFBQWYuQUFBQSI7czo0OiJjaHh0IjtzOjM6IngseSI7czo0OiJjaHhsIjtzOjc0OiIwOnwxMC8xMy8xMnw'
-            . 'xMC8xNC8xMnwxMC8xNS8xMnwxMC8xNi8xMnwxMC8xNy8xMnwxMC8xOC8xMnwxMC8xOS8xMnwxOnwwfDF8MiI7czozOiJjaHMiO3M6Nzo'
-            . 'iNTg3eDMwMCI7czozOiJjaGciO3M6MjI6IjE2LjY2NjY2NjY2NjY2Nyw1MCwxLDAiO30%3D';
+        $gaData = array(
+            'cht' => 'lc',
+            'chf' => 'bg,s,f4f4f4|c,lg,90,ffffff,0.1,ededed,0',
+            'chm' => 'B,f4d4b2,0,0,0',
+            'chco' => 'db4814',
+            'chd' => 'e:AAAAAAAAf.AAAA',
+            'chxt' => 'x,y',
+            'chxl' => '0:|10/13/12|10/14/12|10/15/12|10/16/12|10/17/12|10/18/12|10/19/12|1:|0|1|2',
+            'chs' => '587x300',
+            'chg' => '16.666666666667,50,1,0',
+        );
+        $gaFixture = urlencode(base64_encode(json_encode($gaData)));
+
         /** @var $helper Mage_Adminhtml_Helper_Dashboard_Data */
         $helper = Mage::helper('Mage_Adminhtml_Helper_Dashboard_Data') ;
         $hash = $helper->getChartDataHash($gaFixture);

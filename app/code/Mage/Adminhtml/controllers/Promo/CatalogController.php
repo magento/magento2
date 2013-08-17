@@ -53,7 +53,7 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
 
     public function indexAction()
     {
-        $this->_title($this->__('Promotions'))->_title($this->__('Catalog Price Rules'));
+        $this->_title($this->__('Catalog Price Rules'));
 
         $dirtyRules = Mage::getModel('Mage_CatalogRule_Model_Flag')->loadSelf();
         if ($dirtyRules->getState()) {
@@ -75,7 +75,7 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
 
     public function editAction()
     {
-        $this->_title($this->__('Promotions'))->_title($this->__('Catalog Price Rules'));
+        $this->_title($this->__('Catalog Price Rules'));
 
         $id = $this->getRequest()->getParam('id');
         $model = Mage::getModel('Mage_CatalogRule_Model_Rule');
@@ -91,7 +91,7 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
             }
         }
 
-        $this->_title($model->getRuleId() ? $model->getName() : $this->__('New Rule'));
+        $this->_title($model->getRuleId() ? $model->getName() : $this->__('New Catalog Price Rule'));
 
         // set entered data if was error when we do save
         $data = Mage::getSingleton('Mage_Adminhtml_Model_Session')->getPageData(true);
@@ -117,7 +117,7 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
         if ($this->getRequest()->getPost()) {
             try {
                 $model = Mage::getModel('Mage_CatalogRule_Model_Rule');
-                Mage::dispatchEvent(
+                $this->_eventManager->dispatch(
                     'adminhtml_controller_catalogrule_prepare_save',
                     array('request' => $this->getRequest())
                 );
@@ -282,13 +282,18 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
     {
         $errorMessage = Mage::helper('Mage_CatalogRule_Helper_Data')->__('Unable to apply rules.');
         try {
-            Mage::getModel('Mage_CatalogRule_Model_Rule')->applyAll();
-            Mage::getModel('Mage_CatalogRule_Model_Flag')->loadSelf()
-                ->setState(0)
-                ->save();
-            $this->_getSession()->addSuccess(Mage::helper('Mage_CatalogRule_Helper_Data')->__('The rules have been applied.'));
-        } catch (Mage_Core_Exception $e) {
-            $this->_getSession()->addError($errorMessage . ' ' . $e->getMessage());
+            /** @var $ruleJob Mage_CatalogRule_Model_Rule_Job */
+            $ruleJob = $this->_objectManager->get('Mage_CatalogRule_Model_Rule_Job');
+            $ruleJob->applyAll();
+
+            if ($ruleJob->hasSuccess()) {
+                $this->_getSession()->addSuccess($ruleJob->getSuccess());
+                Mage::getModel('Mage_CatalogRule_Model_Flag')->loadSelf()
+                    ->setState(0)
+                    ->save();
+            } elseif ($ruleJob->hasError()) {
+                $this->_getSession()->addError($errorMessage . ' ' . $ruleJob->getError());
+            }
         } catch (Exception $e) {
             $this->_getSession()->addError($errorMessage);
         }
@@ -297,7 +302,7 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_CatalogRule::promo_catalog');
+        return $this->_authorization->isAllowed('Mage_CatalogRule::promo_catalog');
     }
 
     /**

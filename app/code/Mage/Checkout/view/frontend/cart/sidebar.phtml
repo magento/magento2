@@ -48,7 +48,7 @@
             <p class="subtotal">
                 <?php if ($this->canApplyMsrp()): ?>
                 <span
-                    class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
+                    class="map-cart-sidebar-total"><?php echo $this->__('You will see the order total before you submit the order.'); ?></span>
                 <?php else: ?>
                 <span
                     class="label"><?php echo $this->__('Cart Subtotal:') ?></span> <?php echo Mage::helper('Mage_Checkout_Helper_Data')->formatPrice($this->getSubtotal()) ?>
@@ -83,7 +83,7 @@
                         checkoutUrl: '<?php echo $this->getCheckoutUrl();?>',
                         checkoutButton: '#sidebar-btn-checkout',
                         removeButton: '#cart-sidebar a.btn-remove',
-                        confirmMessage: '<?php echo $this->__('Are you sure you would like to remove this item from the shopping cart?') ?>'
+                        confirmMessage: '<?php echo $this->__('Are you sure you want to remove this item from the shopping cart?') ?>'
                     });
                 });
             })(jQuery);

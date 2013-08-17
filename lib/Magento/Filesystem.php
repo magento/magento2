@@ -55,7 +55,7 @@ class Magento_Filesystem
     public function __construct(Magento_Filesystem_AdapterInterface $adapter)
     {
         $this->_adapter = $adapter;
-        $this->_workingDirectory = self::getAbsolutePath(self::getPathFromArray(array(__DIR__, '..', '..')));
+        $this->_workingDirectory = self::normalizePath(__DIR__ . '/../..');
     }
 
     /**
@@ -67,7 +67,7 @@ class Magento_Filesystem
      */
     public function setWorkingDirectory($dir)
     {
-        $dir = self::getAbsolutePath($dir);
+        $dir = self::normalizePath($dir);
         if (!$this->_adapter->isDirectory($dir)) {
             throw new InvalidArgumentException(sprintf('Working directory "%s" does not exists', $dir));
         }
@@ -457,7 +457,7 @@ class Magento_Filesystem
     protected function _getCheckedPath($key, $workingDirectory = null)
     {
         $this->_checkPathInWorkingDirectory($key, $workingDirectory);
-        return self::getAbsolutePath($key);
+        return self::normalizePath($key);
     }
 
     /**
@@ -471,69 +471,41 @@ class Magento_Filesystem
     protected function _checkPathInWorkingDirectory($key, $workingDirectory = null)
     {
         $workingDirectory = $workingDirectory ? $workingDirectory : $this->_workingDirectory;
-        if (!self::isPathInDirectory($key, $workingDirectory)) {
+        if (!$this->isPathInDirectory($key, $workingDirectory)) {
             throw new InvalidArgumentException("Path '$key' is out of working directory '$workingDirectory'");
         }
     }
 
     /**
-     * Get absolute path.
-     *
-     * @param string $key
-     * @return string
-     */
-    public static function getAbsolutePath($key)
-    {
-        $path = self::getPathAsArray($key);
-        $realPath = array();
-        foreach ($path as $dir) {
-            if ('.' == $dir) {
-                continue;
-            }
-            if ('..' == $dir) {
-                if (count($realPath) > 0) {
-                    array_pop($realPath);
-                }
-                continue;
-            }
-            $realPath[] = $dir;
-        }
-        return self::getPathFromArray($realPath);
-    }
-
-    /**
-     * Get path as string from array.
-     *
-     * @param array $path
-     * @param bool $isAbsolute
-     * @return string
-     * @throws InvalidArgumentException
-     */
-    public static function getPathFromArray(array $path, $isAbsolute = true)
-    {
-        $path = array_map(array('Magento_Filesystem', 'fixSeparator'), $path);
-        if (!count($path)) {
-            throw new InvalidArgumentException('Path must contain at least one node');
-        }
-        $isWindows = preg_match('/\w:/', $path[0]);
-        $path = implode(self::DIRECTORY_SEPARATOR, $path);
-        if ($isAbsolute && !$isWindows) {
-            return self::DIRECTORY_SEPARATOR . ltrim($path, self::DIRECTORY_SEPARATOR);
-        } else {
-            return $path;
-        }
-    }
-
-    /**
-     * Get path as array
+     * Normalize the specified path by removing excessive '.', '..' and fixing directory separator
      *
      * @param string $path
-     * @return array
+     * @param bool $isRelative Flag that identify, that filename is relative, so '..' at the beginning is supported
+     * @return string
+     * @throws Magento_Filesystem_Exception if file can't be normalized
      */
-    public static function getPathAsArray($path)
+    public static function normalizePath($path, $isRelative = false)
     {
-        $path = self::fixSeparator($path);
-        return explode(self::DIRECTORY_SEPARATOR, ltrim($path, self::DIRECTORY_SEPARATOR));
+        $fixedPath = self::fixSeparator($path);
+        $parts = explode(self::DIRECTORY_SEPARATOR, $fixedPath);
+        $result = array();
+
+        foreach ($parts as $part) {
+            if ('..' === $part) {
+                if ($isRelative) {
+                    if (!count($result) || ($result[count($result) - 1] == '..')) {
+                        $result[] = $part;
+                    } else {
+                        array_pop($result);
+                    }
+                } else if (!array_pop($result)) {
+                    throw new Magento_Filesystem_Exception("Invalid path '{$path}'.");
+                }
+            } else if ('.' !== $part) {
+                $result[] = $part;
+            }
+        }
+        return implode(self::DIRECTORY_SEPARATOR, $result);
     }
 
     /**
@@ -549,25 +521,14 @@ class Magento_Filesystem
     }
 
     /**
-     * Check is path absolute
-     *
-     * @param string $path
-     * @return bool
-     */
-    public static function isAbsolutePath($path)
-    {
-        return self::fixSeparator($path) == self::getAbsolutePath($path);
-    }
-
-    /**
      * Checks is directory contains path
      *
      * @param string $path
      * @param string $directory
      * @return bool
      */
-    public static function isPathInDirectory($path, $directory)
+    public function isPathInDirectory($path, $directory)
     {
-        return 0 === strpos(self::getAbsolutePath($path), self::getAbsolutePath($directory));
+        return 0 === strpos(self::normalizePath($path), self::normalizePath($directory));
     }
 }

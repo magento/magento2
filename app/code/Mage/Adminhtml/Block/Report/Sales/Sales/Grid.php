@@ -51,7 +51,7 @@ class Mage_Adminhtml_Block_Report_Sales_Sales_Grid extends Mage_Adminhtml_Block_
     protected function _prepareColumns()
     {
         $this->addColumn('period', array(
-            'header'        => Mage::helper('Mage_Sales_Helper_Data')->__('Period'),
+            'header'        => Mage::helper('Mage_Sales_Helper_Data')->__('Interval'),
             'index'         => 'period',
             'sortable'      => false,
             'period_type'   => $this->getPeriodType(),

@@ -473,7 +473,7 @@
         <xs:annotation>
           <xs:documentation>
             For international multiple piece shipments, commodity information must be passed in the Master and on each child transaction.
-            If this shipment cotains more than four commodities line items, the four highest valued should be included in the first 4 occurances for this request.
+            If this shipment cotains more than four commodity line items, the four highest valued should be included in the first 4 occurrences for this request.
           </xs:documentation>
         </xs:annotation>
         <xs:sequence>
@@ -1006,7 +1006,7 @@
             <xs:annotation>
               <xs:documentation>
                 For international multiple piece shipments, commodity information must be passed in the Master and on each child transaction.
-                If this shipment cotains more than four commodities line items, the four highest valued should be included in the first 4 occurances for this request.
+                If this shipment cotains more than four commodity line items, the four highest valued should be included in the first 4 occurrences for this request.
               </xs:documentation>
             </xs:annotation>
           </xs:element>

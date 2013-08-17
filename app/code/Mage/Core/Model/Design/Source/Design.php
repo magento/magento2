@@ -30,6 +30,26 @@
 class Mage_Core_Model_Design_Source_Design extends Mage_Eav_Model_Entity_Attribute_Source_Abstract
 {
     /**
+     * @var Mage_Core_Helper_Data
+     */
+    protected $_helper;
+
+    /**
+     * @var Mage_Core_Model_Theme_Label
+     */
+    protected $_themeLabel;
+
+    /**
+     * @param Mage_Core_Helper_Data $helper
+     * @param Mage_Core_Model_Theme_Label $themeLabel
+     */
+    public function __construct(Mage_Core_Helper_Data $helper, Mage_Core_Model_Theme_Label $themeLabel)
+    {
+        $this->_helper = $helper;
+        $this->_themeLabel = $themeLabel;
+    }
+
+    /**
      * Retrieve All Design Theme Options
      *
      * @param bool $withEmpty add empty (please select) values to result
@@ -37,7 +57,7 @@ class Mage_Core_Model_Design_Source_Design extends Mage_Eav_Model_Entity_Attribu
      */
     public function getAllOptions($withEmpty = true)
     {
-        $label = $withEmpty ? Mage::helper('Mage_Core_Helper_Data')->__('-- Please Select --') : $withEmpty;
-        return $this->_options = Mage::getSingleton('Mage_Core_Model_Theme')->getLabelsCollection($label);
+        $label = $withEmpty ? $this->_helper->__('-- Please Select --') : $withEmpty;
+        return $this->_options = $this->_themeLabel->getLabelsCollection($label);
     }
 }

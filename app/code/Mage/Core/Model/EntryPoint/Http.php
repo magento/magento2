@@ -26,31 +26,12 @@
 class Mage_Core_Model_EntryPoint_Http extends Mage_Core_Model_EntryPointAbstract
 {
     /**
-     * @param Mage_Core_Model_Config_Primary $config
-     * @param Magento_ObjectManager $objectManager
-     * @throws Magento_BootstrapException
-     */
-    public function __construct(Mage_Core_Model_Config_Primary $config, Magento_ObjectManager $objectManager = null)
-    {
-        try {
-            parent::__construct($config, $objectManager);
-        } catch (Magento_BootstrapException $e) {
-            header('Content-Type: text/plain', true, 503);
-            echo $e->getMessage();
-            throw $e;
-        }
-    }
-
-    /**
-     * Run http application
+     * Process http request, output html page or proper information about an exception (if any)
      */
     public function processRequest()
     {
         try {
-            $request = $this->_objectManager->get('Mage_Core_Controller_Request_Http');
-            $response = $this->_objectManager->get('Mage_Core_Controller_Response_Http');
-            $handler = $this->_objectManager->get('Magento_Http_Handler_Composite');
-            $handler->handle($request, $response);
+            parent::processRequest();
         } catch (Mage_Core_Model_Session_Exception $e) {
             header('Location: ' . Mage::getBaseUrl());
         } catch (Mage_Core_Model_Store_Exception $e) {
@@ -61,5 +42,16 @@ class Mage_Core_Model_EntryPoint_Http extends Mage_Core_Model_EntryPointAbstract
         } catch (Exception $e) {
             Mage::printException($e);
         }
+    }
+
+    /**
+     * Run http application
+     */
+    protected function _processRequest()
+    {
+        $request = $this->_objectManager->get('Mage_Core_Controller_Request_Http');
+        $response = $this->_objectManager->get('Mage_Core_Controller_Response_Http');
+        $handler = $this->_objectManager->get('Magento_Http_Handler_Composite');
+        $handler->handle($request, $response);
     }
 }

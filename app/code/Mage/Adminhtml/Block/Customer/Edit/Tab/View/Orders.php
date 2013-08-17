@@ -64,25 +64,25 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View_Orders extends Mage_Adminhtml_
     {
 
         $this->addColumn('increment_id', array(
-            'header'    => Mage::helper('Mage_Customer_Helper_Data')->__('Order #'),
+            'header'    => Mage::helper('Mage_Customer_Helper_Data')->__('Order'),
             'align'     => 'center',
             'index'     => 'increment_id',
             'width'     => '100px',
         ));
 
         $this->addColumn('created_at', array(
-            'header'    => Mage::helper('Mage_Customer_Helper_Data')->__('Purchased At'),
+            'header'    => Mage::helper('Mage_Customer_Helper_Data')->__('Purchase Date'),
             'index'     => 'created_at',
             'type'      => 'datetime',
         ));
 
         $this->addColumn('billing_name', array(
-            'header'    => Mage::helper('Mage_Customer_Helper_Data')->__('Bill to Name'),
+            'header'    => Mage::helper('Mage_Customer_Helper_Data')->__('Bill-to Name'),
             'index'     => 'billing_name',
         ));
 
         $this->addColumn('shipping_name', array(
-            'header'    => Mage::helper('Mage_Customer_Helper_Data')->__('Shipped to Name'),
+            'header'    => Mage::helper('Mage_Customer_Helper_Data')->__('Shipped-to Name'),
             'index'     => 'shipping_name',
         ));
 
@@ -95,7 +95,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View_Orders extends Mage_Adminhtml_
 
         if (!Mage::app()->isSingleStoreMode()) {
             $this->addColumn('store_id', array(
-                'header'    => Mage::helper('Mage_Customer_Helper_Data')->__('Bought From'),
+                'header'    => Mage::helper('Mage_Customer_Helper_Data')->__('Purchase Point'),
                 'index'     => 'store_id',
                 'type'      => 'store',
                 'store_view' => true,
@@ -120,7 +120,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View_Orders extends Mage_Adminhtml_
 
     public function getHeadersVisibility()
     {
-        return ($this->getCollection()->getSize() > 0);
+        return ($this->getCollection()->getSize() >= 0);
     }
 
 }

@@ -305,8 +305,7 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
     {
         Magento_Profiler::start('CONFIGURABLE:'.__METHOD__, array('group' => 'CONFIGURABLE', 'method' => __METHOD__));
         if (!$product->hasData($this->_usedProducts)) {
-            if (is_null($requiredAttributeIds)
-                and is_null($product->getData($this->_configurableAttributes))) {
+            if (is_null($requiredAttributeIds) && is_null($product->getData($this->_configurableAttributes))) {
                 // If used products load before attributes, we will load attributes.
                 $this->getConfigurableAttributes($product);
                 // After attributes loading products loaded too.
@@ -535,17 +534,16 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
 
             foreach ($data as $attributeId => $attributeValue) {
                 if (isset($usedAttributes[$attributeId])) {
-                    $attribute = $usedAttributes[$attributeId];
-                    $label = $attribute->getLabel();
-                    $value = $attribute->getProductAttribute();
+                    $attribute = $usedAttributes[$attributeId]->getProductAttribute();
+                    $label = $attribute->getStoreLabel();
+                    $value = $attribute;
                     if ($value->getSourceModel()) {
                         $value = $value->getSource()->getOptionText($attributeValue);
-                    }
-                    else {
+                    } else {
                         $value = '';
                     }
 
-                    $attributes[] = array('label'=>$label, 'value'=>$value);
+                    $attributes[] = array('label' => $label, 'value' => $value);
                 }
             }
         }
@@ -1001,9 +999,12 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
             );
         }
 
-        if (!isset($postData['stock_data']['use_config_manage_stock'])) {
-            $postData['stock_data']['use_config_manage_stock'] = 0;
-        }
+        $postData['stock_data'] = $parentProduct->getStockData();
+        $postData['stock_data']['manage_stock'] = $postData['quantity_and_stock_status']['qty'] === '' ? 0 : 1;
+        $configDefaultValue = Mage::getSingleton('Mage_Core_Model_StoreManager')->getStore()
+            ->getConfig(Mage_CatalogInventory_Model_Stock_Item::XML_PATH_MANAGE_STOCK);
+        $postData['stock_data']['use_config_manage_stock'] =
+            $postData['stock_data']['manage_stock'] == $configDefaultValue ? 1 : 0;
         if (!empty($postData['image'])) {
             $postData['small_image'] = $postData['thumbnail'] = $postData['image'];
             $postData['media_gallery']['images'][] = array(

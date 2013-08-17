@@ -216,19 +216,6 @@ class Mage_Catalog_Helper_ImageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array(272, 261), $this->_init()->getOriginalSizeArray());
     }
 
-    public function testValidateUploadFile()
-    {
-        $this->assertTrue($this->_helper->validateUploadFile(self::$_fixtureMediaDir . '/m/a/magento_thumbnail.jpg'));
-    }
-
-    /**
-     * @expectedException Mage_Core_Exception
-     */
-    public function testValidateUploadFileException()
-    {
-        $this->_helper->validateUploadFile(__FILE__);
-    }
-
     /**
      * Initialize image by specified type
      *

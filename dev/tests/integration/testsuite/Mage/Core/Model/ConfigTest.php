@@ -81,13 +81,6 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_dir($this->_createModel()->getModuleDir('etc', 'Mage_Core')));
     }
 
-    public function testGetPathVars()
-    {
-        $result = $this->_createModel()->getPathVars();
-        $this->assertArrayHasKey('baseUrl', $result);
-        $this->assertArrayHasKey('baseSecureUrl', $result);
-    }
-
     public function testGetStoresConfigByPath()
     {
         $model = $this->_createModel();

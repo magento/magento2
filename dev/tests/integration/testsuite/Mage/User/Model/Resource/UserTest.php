@@ -21,6 +21,10 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+/**
+ * @magentoAppArea adminhtml
+ */
 class Mage_User_Model_Resource_UserTest extends PHPUnit_Framework_TestCase
 {
     /** @var Mage_User_Model_Resource_User */
@@ -31,32 +35,9 @@ class Mage_User_Model_Resource_UserTest extends PHPUnit_Framework_TestCase
         $this->_model = Mage::getResourceSingleton('Mage_User_Model_Resource_User');
     }
 
-    /**
-     * No node - no limitation
-     */
-    public function testCanCreateUserTrue()
+    public function testCountAll()
     {
-        $this->assertTrue($this->_model->canCreateUser());
-    }
-
-    /**
-     * Explicit zero - don't allow creating
-     *
-     * @magentoConfigFixture limitations/admin_account 0
-     */
-    public function testCanCreateUserZero()
-    {
-        $this->assertFalse($this->_model->canCreateUser());
-    }
-
-    /**
-     * Any other values - compare with users count
-     *
-     * @magentoConfigFixture limitations/admin_account 1
-     */
-    public function testCanCreateUserFalse()
-    {
-        $this->assertFalse($this->_model->canCreateUser());
+        $this->assertSame(1, $this->_model->countAll());
     }
 
     public function testGetValidationRulesBeforeSave()

@@ -29,7 +29,7 @@ class Mage_Adminhtml_System_DesignController extends Mage_Adminhtml_Controller_A
 {
     public function indexAction()
     {
-        $this->_title($this->__('System'))->_title($this->__('Design'));
+        $this->_title($this->__('Store Design'));
         $this->loadLayout();
         $this->_setActiveMenu('Mage_Adminhtml::system_design_schedule');
         $this->renderLayout();
@@ -48,10 +48,10 @@ class Mage_Adminhtml_System_DesignController extends Mage_Adminhtml_Controller_A
 
     public function editAction()
     {
-        $this->_title($this->__('System'))->_title($this->__('Design'));
+        $this->_title($this->__('Store Design'));
 
         $this->loadLayout();
-        $this->_setActiveMenu('Mage_Adminhtml::system');
+        $this->_setActiveMenu('Mage_Adminhtml::system_design_schedule');
         $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
 
         $id  = (int) $this->getRequest()->getParam('id');
@@ -61,7 +61,7 @@ class Mage_Adminhtml_System_DesignController extends Mage_Adminhtml_Controller_A
             $design->load($id);
         }
 
-        $this->_title($design->getId() ? $this->__('Edit Design Change') : $this->__('New Design Change'));
+        $this->_title($design->getId() ? $this->__('Edit Store Design Change') : $this->__('New Store Design Change'));
 
         Mage::register('design', $design);
 
@@ -88,7 +88,7 @@ class Mage_Adminhtml_System_DesignController extends Mage_Adminhtml_Controller_A
             try {
                 $design->save();
 
-                Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess($this->__('The design change has been saved.'));
+                Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess($this->__('You saved the design change.'));
             } catch (Exception $e){
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')
                     ->addError($e->getMessage())
@@ -110,7 +110,7 @@ class Mage_Adminhtml_System_DesignController extends Mage_Adminhtml_Controller_A
                 $design->delete();
 
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')
-                    ->addSuccess($this->__('The design change has been deleted.'));
+                    ->addSuccess($this->__('You deleted the design change.'));
             } catch (Mage_Exception $e) {
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')
                     ->addError($e->getMessage());
@@ -124,6 +124,6 @@ class Mage_Adminhtml_System_DesignController extends Mage_Adminhtml_Controller_A
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Adminhtml::design');
+        return $this->_authorization->isAllowed('Mage_Adminhtml::design');
     }
 }

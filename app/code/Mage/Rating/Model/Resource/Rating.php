@@ -36,21 +36,21 @@ class Mage_Rating_Model_Resource_Rating extends Mage_Core_Model_Resource_Db_Abst
     const RATING_STATUS_APPROVED = 'Approved';
 
     /**
-     * Application instance
+     * Store manager
      *
-     * @var Mage_Core_Model_App
+     * @var Mage_Core_Model_StoreManager
      */
-    protected $_app;
+    protected $_storeManager;
 
     /**
      * Class constructor
      *
      * @param Mage_Core_Model_Resource $resource
-     * @param Mage_Core_Model_App $app
+     * @param Mage_Core_Model_StoreManager $storeManager
      */
-    public function __construct(Mage_Core_Model_Resource $resource, Mage_Core_Model_App $app)
+    public function __construct(Mage_Core_Model_Resource $resource, Mage_Core_Model_StoreManager $storeManager)
     {
-        $this->_app = $app;
+        $this->_storeManager = $storeManager;
         parent::__construct($resource);
     }
 
@@ -337,7 +337,7 @@ class Mage_Rating_Model_Resource_Rating extends Mage_Core_Model_Resource_Db_Abst
             ->joinLeft(array('review_store' => $this->getTable('review_store')),
                 'rating_vote.review_id=review_store.review_id',
                 array('review_store.store_id'));
-        if (!$this->_app->isSingleStoreMode()) {
+        if (!$this->_storeManager->isSingleStoreMode()) {
             $select->join(
                 array('rating_store' => $this->getTable('rating_store')),
                 'rating_store.rating_id = rating_vote.rating_id AND rating_store.store_id = review_store.store_id',
@@ -382,11 +382,15 @@ class Mage_Rating_Model_Resource_Rating extends Mage_Core_Model_Resource_Db_Abst
                 ))
             ->joinLeft(array('review_store' => $this->getTable('review_store')),
                 'rating_vote.review_id = review_store.review_id',
-                array('review_store.store_id'))
-            ->join(array('rating_store' => $this->getTable('rating_store')),
+                array('review_store.store_id'));
+        if (!$this->_storeManager->isSingleStoreMode()) {
+            $select->join(
+                array('rating_store' => $this->getTable('rating_store')),
                 'rating_store.rating_id = rating_vote.rating_id AND rating_store.store_id = review_store.store_id',
-                array())
-            ->where('rating_vote.review_id = :review_id')
+                array()
+            );
+        }
+        $select->where('rating_vote.review_id = :review_id')
             ->group('rating_vote.review_id')
             ->group('review_store.store_id');
 

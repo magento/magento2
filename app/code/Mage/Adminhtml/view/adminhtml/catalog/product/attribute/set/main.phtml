@@ -92,7 +92,7 @@
 
                         this.ge = new Ext.tree.TreeEditor(tree, {
                             allowBlank:false,
-                            blankText:'<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('A name is required') ?>',
+                            blankText:'<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('A name is required.') ?>',
                             selectOnFocus:true,
                             cls:'folder'
                         });
@@ -216,7 +216,7 @@
                         }
 
                         if (editSet.ConfigurableNodeExists(editSet.currentNode)) {
-                            alert('<?php echo Mage::helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Catalog_Helper_Data')->__('This group contains attributes, used in configurable products. Please move these attributes to another group and try again.')) ?>');
+                            alert('<?php echo Mage::helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Catalog_Helper_Data')->__('This group contains attributes used in configurable products. Please move these attributes to another group and try again.')) ?>');
                             return;
                         }
 
@@ -265,7 +265,7 @@
                     },
 
                     addGroup : function() {
-                        var group_name = prompt("<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Please enter a new group name') ?>","");
+                        var group_name = prompt("<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Please enter a new group name.') ?>","");
                         group_name = group_name.strip();
                         if( group_name == '' ) {
                             this.addGroup();
@@ -302,17 +302,18 @@
 
                     validateGroupName : function(name, exceptNodeId) {
                         name = name.strip();
+                        var result = true;
                         if (name === '') {
-                            return false;
+                            result = false;
                         }
                         for (var i=0; i < TreePanels.root.childNodes.length; i++) {
                             if (TreePanels.root.childNodes[i].text.toLowerCase() == name.toLowerCase() && TreePanels.root.childNodes[i].id != exceptNodeId) {
-                                errorText = "<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Attribute group with the \"/name/\" name already exists') ?>";
+                                errorText = '<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('An attribute group named "/name/" already exists".') ?>';
                                 alert(errorText.replace("/name/",name));
-                                return false;
+                                result =  false;
                             }
                         }
-                        return true;
+                        return result;
                     },
 
                     save : function() {
@@ -345,7 +346,7 @@
                     },
 
                     failure : function(o) {
-                        alert('<?php echo Mage::helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Catalog_Helper_Data')->__('Unable to complete this request.')) ?>');
+                        alert('<?php echo Mage::helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Catalog_Helper_Data')->__('We\'re unable to complete this request.')) ?>');
                     },
 
                     groupBeforeMove : function(tree, nodeThis, oldParent, newParent) {
@@ -360,7 +361,7 @@
 
                     rightBeforeAppend : function(tree, nodeThis, node, newParent) {
                         if (node.attributes.is_user_defined == 0) {
-                            alert('<?php echo Mage::helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Catalog_Helper_Data')->__('You cannot remove system attribute from this set.')) ?>');
+                            alert('<?php echo Mage::helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Catalog_Helper_Data')->__('You cannot remove system attributes from this set.')) ?>');
                             return false;
                         }
                         else if (node.attributes.is_configurable == 1) {
@@ -379,7 +380,7 @@
                         }
 
                         if (node.attributes.is_unassignable == 0) {
-                            alert('<?php echo Mage::helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Catalog_Helper_Data')->__('You cannot remove system attribute from this set.')) ?>');
+                            alert('<?php echo Mage::helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Catalog_Helper_Data')->__('You cannot remove system attributes from this set.')) ?>');
                             return false;
                         } else if (node.attributes.is_configurable == 1) {
                             alert('<?php echo Mage::helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Catalog_Helper_Data')->__('This attribute is used in configurable products. You cannot remove it from the attribute set.')) ?>');

@@ -64,7 +64,7 @@ class Mage_Weee_Model_Attribute_Backend_Weee_Tax extends Mage_Catalog_Model_Prod
 
             if (!empty($dup[$key1])) {
                 Mage::throwException(
-                    Mage::helper('Mage_Catalog_Helper_Data')->__('Duplicate website, country and state tax found.')
+                    Mage::helper('Mage_Catalog_Helper_Data')->__('We found a duplicate website, country, and state tax.')
                 );
             }
             $dup[$key1] = 1;

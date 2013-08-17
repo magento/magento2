@@ -36,8 +36,10 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Button
     public function render(Varien_Object $row)
     {
         $buttonType = $this->getColumn()->getButtonType();
+        $buttonClass = $this->getColumn()->getButtonClass();
         return '<button'
             . ($buttonType ? ' type="' . $buttonType . '"' : '')
+            . ($buttonClass ? ' class="' . $buttonClass . '"' : '')
             .'>'
             . $this->getColumn()->getHeader()
             . '</button>';

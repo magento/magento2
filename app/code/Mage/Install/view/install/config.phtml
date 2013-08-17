@@ -61,7 +61,7 @@
                        class="input-text"/>
 
                 <p style="margin-top:4px; line-height:1.3em; color:#666;">
-                    <small><?php echo $this->__('Additional path added after Base URL to access your Administrative Panel (e.g. admin, backend, control etc.).') ?></small>
+                    <small><?php echo $this->__('This is the additional path used after your base URL to access your store Admin (e.g, Admin).') ?></small>
                 </p>
             </li>
             <li>
@@ -70,7 +70,7 @@
                 <label for="enable_charts"><?php echo $this->__('Enable Charts') ?></label><br/>
 
                 <p style="margin-top:4px; line-height:1.3em; color:#666;">
-                    <small><?php echo $this->__('Enable this option if you want the charts to be displayed on Dashboard.') ?></small>
+                    <small><?php echo $this->__('Enable this option if you want to see the charts on your dashboard.') ?></small>
                 </p>
             </li>
             <li>
@@ -115,7 +115,7 @@
                        data-validate="{required:true,'validate-url':true}" class="input-text"/>
 
                 <p style="margin-top:4px; line-height:1.3em; color:#666;">
-                    <small><?php echo $this->__('Provide a complete base URL for SSL connection. For example: %s', '<strong>https://www.mydomain.com/magento/</strong>') ?></small>
+                    <small><?php echo $this->__('Provide a complete base URL for SSL connection. For example: %s.', '<strong>https://www.mydomain.com/magento/</strong>') ?></small>
                 </p>
             </li>
             <li>
@@ -166,7 +166,7 @@
     })(jQuery);
 </script>
 <?php else: ?>
-<div><?php echo $this->__('Please set all required settings before clicking Continue') ?></div>
+<div><?php echo $this->__('Please set all required settings before clicking "Continue".') ?></div>
 <div class="button-set">
     <button id="btn-continue" class="form-button" type="button">
         <span><?php echo $this->__('Continue') ?></span></button>

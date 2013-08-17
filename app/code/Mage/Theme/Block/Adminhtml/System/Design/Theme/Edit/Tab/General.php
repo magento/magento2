@@ -40,6 +40,35 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General
     protected $_isThemeEditable = false;
 
     /**
+     * @var Mage_Core_Model_Theme_Image_Path
+     */
+    protected $_themeImagePath;
+
+    /**
+     * @var Magento_File_Size
+     */
+    protected $_fileSize;
+
+    /**
+     * @param Mage_Backend_Block_Template_Context $context
+     * @param Magento_ObjectManager $objectManager
+     * @param Mage_Core_Model_Theme_Image_Path $themeImagePath
+     * @param Magento_File_Size $fileSize
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Backend_Block_Template_Context $context,
+        Magento_ObjectManager $objectManager,
+        Mage_Core_Model_Theme_Image_Path $themeImagePath,
+        Magento_File_Size $fileSize,
+        array $data = array()
+    ) {
+        $this->_themeImagePath = $themeImagePath;
+        $this->_fileSize = $fileSize;
+        parent::__construct($context, $objectManager, $data);
+    }
+
+    /**
      * Create a form element with necessary controls
      *
      * @return Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General|Mage_Backend_Block_Widget_Form
@@ -108,10 +137,10 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General
             $parentTheme->load($formData['parent_id']);
         }
 
-        if ($this->_isThemeEditable) {
+        if ($this->_getCurrentTheme()->isObjectNew()) {
             $themeFieldset->addField('parent_id', 'select', array(
-                'label'    => $this->__('Parent theme'),
-                'title'    => $this->__('Parent theme'),
+                'label'    => $this->__('Parent Theme'),
+                'title'    => $this->__('Parent Theme'),
                 'name'     => 'parent_id',
                 'values'   => $themesCollections->toOptionArray(!$parentTheme->getId()),
                 'required' => true,
@@ -120,8 +149,8 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General
             ));
         } else if (!empty($formData['parent_id'])) {
             $themeFieldset->addField('parent_title', 'note', array(
-                'label'    => $this->__('Parent theme'),
-                'title'    => $this->__('Parent theme'),
+                'label'    => $this->__('Parent Theme'),
+                'title'    => $this->__('Parent Theme'),
                 'name'     => 'parent_title',
                 'text'     => $parentTheme->getId() ? $parentTheme->getThemeTitle() : ''
             ));
@@ -154,7 +183,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General
             $themeFieldset->addField('preview_image', 'image', array(
                 'label'    => $this->__('Theme Preview Image'),
                 'title'    => $this->__('Theme Preview Image'),
-                'name'     => 'preview_image',
+                'name'     => 'preview',
                 'required' => false,
                 'note'     => $this->_getPreviewImageNote()
             ));
@@ -162,9 +191,9 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General
             $themeFieldset->addField('preview_image', 'note', array(
                 'label'    => $this->__('Theme Preview Image'),
                 'title'    => $this->__('Theme Preview Image'),
-                'name'     => 'preview_image',
-                'after_element_html' => '<img width="50" src="' . $parentTheme->getThemeImage()
-                    ->getPreviewImageDirectoryUrl() . $formData['preview_image'] . '" />'
+                'name'     => 'preview',
+                'after_element_html' => '<img width="50" src="' . $this->_themeImagePath->getPreviewImageDirectoryUrl()
+                    . $formData['preview_image'] . '" />'
             ));
         }
 
@@ -276,7 +305,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General
         $defaults['magento_version_from'] = Mage::getVersion();
         $defaults['magento_version_to'] = '*';
         $defaults['theme_version'] = '0.0.0.1';
-        $defaults['theme_title'] = $this->__('New theme');
+        $defaults['theme_title'] = $this->__('New Theme');
 
         return $defaults;
     }
@@ -314,11 +343,11 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General
      */
     protected function _getPreviewImageNote()
     {
-        $maxImageSize = Mage::getObjectManager()->get('Magento_File_Size')->getMaxFileSizeInMb();
+        $maxImageSize = $this->_fileSize->getMaxFileSizeInMb();
         if ($maxImageSize) {
             return $this->__('Max image size %sM', $maxImageSize);
         } else {
-            return $this->__('System doesn\'t allow to get file upload settings');
+            return $this->__('Something is wrong with the file upload settings.');
         }
     }
 }

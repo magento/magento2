@@ -27,12 +27,12 @@
 /**
  * Page asset representing a local file that already has public access
  */
-class Mage_Core_Model_Page_Asset_PublicFile implements Mage_Core_Model_Page_Asset_AssetInterface
+class Mage_Core_Model_Page_Asset_PublicFile implements Mage_Core_Model_Page_Asset_LocalInterface
 {
     /**
-     * @var Mage_Core_Model_Design_Package
+     * @var Mage_Core_Model_View_Url
      */
-    private $_designPackage;
+    protected $_viewUrl;
 
     /**
      * @var string
@@ -45,13 +45,13 @@ class Mage_Core_Model_Page_Asset_PublicFile implements Mage_Core_Model_Page_Asse
     private $_contentType;
 
     /**
-     * @param Mage_Core_Model_Design_Package $designPackage
+     * @param Mage_Core_Model_View_Url $viewUrl
      * @param string $file
      * @param string $contentType
      */
-    public function __construct(Mage_Core_Model_Design_Package $designPackage, $file, $contentType)
+    public function __construct(Mage_Core_Model_View_Url $viewUrl, $file, $contentType)
     {
-        $this->_designPackage = $designPackage;
+        $this->_viewUrl = $viewUrl;
         $this->_file = $file;
         $this->_contentType = $contentType;
     }
@@ -61,7 +61,7 @@ class Mage_Core_Model_Page_Asset_PublicFile implements Mage_Core_Model_Page_Asse
      */
     public function getUrl()
     {
-        return $this->_designPackage->getPublicFileUrl($this->_file);
+        return $this->_viewUrl->getPublicFileUrl($this->_file);
     }
 
     /**
@@ -70,5 +70,13 @@ class Mage_Core_Model_Page_Asset_PublicFile implements Mage_Core_Model_Page_Asse
     public function getContentType()
     {
         return $this->_contentType;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSourceFile()
+    {
+        return $this->_file;
     }
 }

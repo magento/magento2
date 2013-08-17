@@ -37,18 +37,18 @@ class Mage_Adminhtml_Block_Rating_Edit_Tab_Form extends Mage_Backend_Block_Widge
     /**
      * Store manager instance
      *
-     * @var Mage_Core_Model_StoreManager
+     * @var Mage_Core_Model_StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param Mage_Core_Block_Template_Context $context
-     * @param Mage_Core_Model_StoreManager $storeManager
+     * @param Mage_Backend_Block_Template_Context $context
+     * @param Mage_Core_Model_StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
-        Mage_Core_Block_Template_Context $context,
-        Mage_Core_Model_StoreManager $storeManager,
+        Mage_Backend_Block_Template_Context $context,
+        Mage_Core_Model_StoreManagerInterface $storeManager,
         array $data = array()
     ) {
         $this->_storeManager = $storeManager;
@@ -179,7 +179,7 @@ class Mage_Adminhtml_Block_Rating_Edit_Tab_Form extends Mage_Backend_Block_Widge
 <ul class="messages">
     <li class="notice-msg">
         <ul>
-            <li>'.Mage::helper('Mage_Rating_Helper_Data')->__('If you do not specify a rating title for a store, the default value will be used.').'</li>
+            <li>'.Mage::helper('Mage_Rating_Helper_Data')->__('Please specify a rating title for a store, or we\'ll just use the default value.').'</li>
         </ul>
     </li>
 </ul>

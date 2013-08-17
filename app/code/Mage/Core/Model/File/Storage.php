@@ -217,7 +217,7 @@ class Mage_Core_Model_File_Storage extends Mage_Core_Model_Abstract
      *
      * @return array
      */
-    public static function getScriptConfig()
+    public function getScriptConfig()
     {
         $config = array();
         $config['media_directory'] = Mage::getBaseDir('media');

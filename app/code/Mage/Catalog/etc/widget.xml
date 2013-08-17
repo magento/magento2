@@ -102,7 +102,7 @@
             </template>
             <cache_lifetime translate="label description">
                 <label>Cache Lifetime (Seconds)</label>
-                <description>86400 by default, if not set. To refresh instantly, Clear the Blocks HTML Output Cache.</description>
+                <description>86400 by default, if not set. To refresh instantly, clear the Blocks HTML Output cache.</description>
                 <visible>1</visible>
                 <type>text</type>
             </cache_lifetime>

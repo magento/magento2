@@ -38,8 +38,8 @@ class Mage_Backend_Adminhtml_SystemController extends Mage_Backend_Controller_Ac
         $this->loadLayout();
         $this->_setActiveMenu('Mage_Adminhtml::system');
         $this->_addBreadcrumb(
-            Mage::helper('Mage_Backend_Helper_Data')->__('System'),
-            Mage::helper('Mage_Backend_Helper_Data')->__('System')
+            $this->_helper->__('System'),
+            $this->_helper->__('System')
         );
         $this->renderLayout();
     }
@@ -48,13 +48,13 @@ class Mage_Backend_Adminhtml_SystemController extends Mage_Backend_Controller_Ac
     {
         $storeId = (int) $this->getRequest()->getParam('store');
         if ($storeId) {
-            Mage::getSingleton('Mage_Backend_Model_Session')->setStoreId($storeId);
+            $this->_session->setStoreId($storeId);
         }
         $this->_redirectReferer();
     }
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Adminhtml::system');
+        return $this->_authorization->isAllowed('Mage_Adminhtml::system');
     }
 }

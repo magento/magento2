@@ -144,7 +144,9 @@ class Mage_ImportExport_Model_Export_Entity_Eav_Customer_AddressTest extends PHP
             ->method('iterate')
             ->will($this->returnCallback(array($this, 'iterate')));
 
-        $customerCollection = $this->getMock('Varien_Data_Collection_Db', array('addAttributeToSelect'));
+        $customerCollection = $this->getMock(
+            'Varien_Data_Collection_Db', array('addAttributeToSelect'), array(), '', false
+        );
 
         $customerEntity = $this->getMock('stdClass', array('filterEntityCollection', 'setParameters'));
         $customerEntity->expects($this->any())

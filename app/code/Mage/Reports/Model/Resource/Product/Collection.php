@@ -66,17 +66,15 @@ class Mage_Reports_Model_Resource_Product_Collection extends Mage_Catalog_Model_
 
     /**
      * Init main class options
-     *
      */
-    public function __construct()
-    {
-        $product = Mage::getResourceSingleton('Mage_Catalog_Model_Resource_Product');
-        /* @var $product Mage_Catalog_Model_Entity_Product */
+    public function __construct(
+        Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy,
+        Mage_Catalog_Model_Resource_Product $product
+    ) {
         $this->setProductEntityId($product->getEntityIdField());
         $this->setProductEntityTableName($product->getEntityTable());
         $this->setProductEntityTypeId($product->getTypeId());
-
-        parent::__construct();
+        parent::__construct($fetchStrategy);
     }
     /**
      * Set Type for COUNT SQL Select

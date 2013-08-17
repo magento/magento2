@@ -37,7 +37,7 @@ class Mage_ImportExport_Model_Import_Entity_CustomerCompositeTest extends PHPUni
     /**#@+
      * Source *.csv file names for different behaviors
      */
-    const UPDATE_FILE_PATTERN = 'customer_composite_update.*?\.csv';
+    const UPDATE_FILE_NAME = 'customer_composite_update.csv';
     const DELETE_FILE_NAME    = 'customer_composite_delete.csv';
     /**#@-*/
 
@@ -150,7 +150,6 @@ class Mage_ImportExport_Model_Import_Entity_CustomerCompositeTest extends PHPUni
      * @param array $errors
      *
      * @magentoDataFixture Mage/ImportExport/_files/customers_for_address_import.php
-     * @magentoDataFixture Mage/Core/_files/frontend_default_theme.php
      * @magentoAppIsolation enabled
      *
      * @dataProvider importDataDataProvider
@@ -158,6 +157,7 @@ class Mage_ImportExport_Model_Import_Entity_CustomerCompositeTest extends PHPUni
      */
     public function testImportData($behavior, $sourceFile, array $dataBefore, array $dataAfter, array $errors = array())
     {
+        Mage::app()->getArea(Mage_Core_Model_App_Area::AREA_FRONTEND)->load();
         // set entity adapter parameters
         $this->_entityAdapter->setParameters(array('behavior' => $behavior));
 
@@ -203,28 +203,13 @@ class Mage_ImportExport_Model_Import_Entity_CustomerCompositeTest extends PHPUni
             ),
         );
 
-        $directoryIterator = new DirectoryIterator($filesDirectory);
-        $iteratorIterator  = new IteratorIterator($directoryIterator);
-        $regexIterator     = new RegexIterator(
-            $iteratorIterator, '/' . self::UPDATE_FILE_PATTERN . '/i', RegexIterator::GET_MATCH
+        $sourceData['add_update_behavior'] = array(
+            '$behavior'   => Mage_ImportExport_Model_Import::BEHAVIOR_ADD_UPDATE,
+            '$sourceFile' => $filesDirectory . self::UPDATE_FILE_NAME,
+            '$dataBefore' => $this->_beforeImport,
+            '$dataAfter'  => $this->_afterImport,
+            '$errors'     => array(array(6)),     // row #6 has no website
         );
-
-        // get last matched update file
-        $updateFiles = array();
-        foreach ($regexIterator as $fileInfo) {
-            $updateFiles[] = $fileInfo[0];
-        }
-        if ($updateFiles) {
-            sort($updateFiles);
-            $updateFileName = end($updateFiles);
-            $sourceData['add_update_behavior'] = array(
-                '$behavior'   => Mage_ImportExport_Model_Import::BEHAVIOR_ADD_UPDATE,
-                '$sourceFile' => $filesDirectory . $updateFileName,
-                '$dataBefore' => $this->_beforeImport,
-                '$dataAfter'  => $this->_afterImport,
-                '$errors'     => array(array(6)),     // row #6 has no website
-            );
-        }
 
         return $sourceData;
     }

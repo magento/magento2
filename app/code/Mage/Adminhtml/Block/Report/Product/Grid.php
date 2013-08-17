@@ -74,7 +74,7 @@ class Mage_Adminhtml_Block_Report_Product_Grid extends Mage_Adminhtml_Block_Widg
         ));
 
         $this->addColumn('viewed', array(
-            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Number Viewed'),
+            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Viewed'),
             'width'     =>'50px',
             'align'     =>'right',
             'index'     =>'viewed',
@@ -82,7 +82,7 @@ class Mage_Adminhtml_Block_Report_Product_Grid extends Mage_Adminhtml_Block_Widg
         ));
 
         $this->addColumn('added', array(
-            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Number Added'),
+            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Added'),
             'width'     =>'50px',
             'align'     =>'right',
             'index'     =>'added',
@@ -90,7 +90,7 @@ class Mage_Adminhtml_Block_Report_Product_Grid extends Mage_Adminhtml_Block_Widg
         ));
 
         $this->addColumn('purchased', array(
-            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Number Purchased'),
+            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Purchased'),
             'width'     =>'50px',
             'align'     =>'right',
             'index'     =>'purchased',
@@ -98,7 +98,7 @@ class Mage_Adminhtml_Block_Report_Product_Grid extends Mage_Adminhtml_Block_Widg
         ));
 
         $this->addColumn('fulfilled', array(
-            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Number Fulfilled'),
+            'header'    =>Mage::helper('Mage_Reports_Helper_Data')->__('Fulfilled'),
             'width'     =>'50px',
             'align'     =>'right',
             'index'     =>'fulfilled',

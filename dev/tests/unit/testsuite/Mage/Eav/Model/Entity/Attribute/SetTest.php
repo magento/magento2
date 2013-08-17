@@ -95,7 +95,7 @@ class Mage_Eav_Model_Entity_Attribute_SetTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array('', 'Attribute set name is empty.'),
-            array('existing_name', 'Attribute set with the "%s" name already exists.')
+            array('existing_name', 'An attribute set with the "%s" name already exists.')
         );
     }
 }

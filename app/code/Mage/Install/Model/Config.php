@@ -36,7 +36,6 @@ class Mage_Install_Model_Config extends Varien_Simplexml_Config
 {
     const XML_PATH_WIZARD_STEPS     = 'wizard/steps';
     const XML_PATH_CHECK_WRITEABLE  = 'check/filesystem/writeable';
-    const XML_PATH_CHECK_EXTENSIONS = 'check/php/extensions';
 
     /**
      * @param Mage_Core_Model_Config_Modules_Reader $configReader
@@ -112,30 +111,4 @@ class Mage_Install_Model_Config extends Varien_Simplexml_Config
 
         return $paths;
     }
-
-    /**
-     * Retrieve required PHP extensions
-     *
-     * @return array
-     */
-    public function getExtensionsForCheck()
-    {
-        $res = array();
-        $items = (array) $this->getNode(self::XML_PATH_CHECK_EXTENSIONS);
-
-        foreach ($items as $name => $value) {
-            if (!empty($value)) {
-                $res[$name] = array();
-                foreach ($value as $subname => $subvalue) {
-                    $res[$name][] = $subname;
-                }
-            }
-            else {
-                $res[$name] = (array) $value;
-            }
-        }
-
-        return $res;
-    }
-
 }

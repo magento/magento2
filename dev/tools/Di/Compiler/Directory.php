@@ -48,6 +48,11 @@ class Directory
     protected $_log;
 
     /**
+     * @var array
+     */
+    protected $_relations;
+
+    /**
      * @param Log $log
      */
     public function __construct(Log $log)
@@ -87,6 +92,7 @@ class Directory
                     try {
                         $signatureReader = new \Magento_Code_Reader_ClassReader();
                         $this->_definitions[$className] = $signatureReader->getConstructor($className);
+                        $this->_relations[$className] = $signatureReader->getParents($className);
                     } catch (\ReflectionException $e) {
                         $this->_log->add(Log::COMPILATION_ERROR, $className, $e->getMessage());
                     }
@@ -103,6 +109,6 @@ class Directory
      */
     public function getResult()
     {
-        return $this->_definitions;
+        return array($this->_definitions, $this->_relations);
     }
 }

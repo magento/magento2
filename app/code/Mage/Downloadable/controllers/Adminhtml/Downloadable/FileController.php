@@ -87,7 +87,7 @@ class Mage_Downloadable_Adminhtml_Downloadable_FileController extends Mage_Admin
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Catalog::products');
+        return $this->_authorization->isAllowed('Mage_Catalog::products');
     }
 
 }

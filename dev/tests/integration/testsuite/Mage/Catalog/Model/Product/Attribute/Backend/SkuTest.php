@@ -56,11 +56,49 @@ class Mage_Catalog_Model_Product_Attribute_Backend_SkuTest extends PHPUnit_Frame
     }
 
     /**
+     * @param $product Mage_Catalog_Model_Product
+     * @dataProvider uniqueLongSkuDataProvider
+     * @magentoDbIsolation enabled
+     */
+    public function testGenerateUniqueLongSku($product)
+    {
+        $existedProduct = clone $product;
+        $existedProduct->setId(2);
+        $existedProduct->save();
+        $this->assertEquals('0123456789012345678901234567890123456789012345678901234567890123', $product->getSku());
+        $product->getResource()->getAttribute('sku')->getBackend()->beforeSave($product);
+        $this->assertEquals('01234567890123456789012345678901234567890123456789012345678901-1', $product->getSku());
+    }
+
+    /**
      * Returns simple product
      *
      * @return array
      */
     public function uniqueSkuDataProvider()
+    {
+        $product = $this->_getProduct();
+        return array(array($product));
+    }
+
+    /**
+     * Returns simple product
+     *
+     * @return array
+     */
+    public function uniqueLongSkuDataProvider()
+    {
+        $product = $this->_getProduct();
+        $product->setSku('0123456789012345678901234567890123456789012345678901234567890123'); //strlen === 64
+        return array(array($product));
+    }
+
+    /**
+     * Get product form data provider
+     *
+     * @return Mage_Catalog_Model_Product
+     */
+    protected function _getProduct()
     {
         /** @var $product Mage_Catalog_Model_Product */
         $product = Mage::getModel('Mage_Catalog_Model_Product');
@@ -76,13 +114,13 @@ class Mage_Catalog_Model_Product_Attribute_Backend_SkuTest extends PHPUnit_Frame
             ->setStatus(Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
             ->setCategoryIds(array(2))
             ->setStockData(
-            array(
-                'use_config_manage_stock' => 1,
-                'qty' => 100,
-                'is_qty_decimal' => 0,
-                'is_in_stock' => 1,
-            )
-        );
-        return array(array($product));
+                array(
+                    'use_config_manage_stock' => 1,
+                    'qty' => 100,
+                    'is_qty_decimal' => 0,
+                    'is_in_stock' => 1,
+                )
+            );
+        return $product;
     }
 }

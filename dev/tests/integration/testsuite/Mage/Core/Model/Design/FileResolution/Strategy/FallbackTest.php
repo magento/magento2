@@ -52,21 +52,14 @@ class Mage_Core_Model_Design_FileResolution_Strategy_FallbackTest extends PHPUni
     {
         // Prepare config with directories
         $dirs = new Mage_Core_Model_Dir(
-            Mage::getObjectManager()->get('Magento_Filesystem'),
             $this->_baseDir,
             array(),
             array(Mage_Core_Model_Dir::THEMES => $this->_viewDir)
         );
 
-        $fallbackFile = new Mage_Core_Model_Design_Fallback_List_File($dirs);
-        $fallbackLocale = new Mage_Core_Model_Design_Fallback_List_Locale($dirs);
-        $fallbackViewFile = new Mage_Core_Model_Design_Fallback_List_View($dirs);
-
         return Mage::getObjectManager()->create(
             'Mage_Core_Model_Design_FileResolution_Strategy_Fallback',
-            array('dirs' => $dirs, 'fallbackFile' => $fallbackFile, 'fallbackLocale' => $fallbackLocale,
-                'fallbackViewFile' => $fallbackViewFile
-            )
+            array('fallbackFactory' => new Mage_Core_Model_Design_Fallback_Factory($dirs))
         );
     }
 
@@ -113,35 +106,53 @@ class Mage_Core_Model_Design_FileResolution_Strategy_FallbackTest extends PHPUni
         }
     }
 
-    /**
-     * @return array
-     */
     public function getFileDataProvider()
     {
         return array(
-            'no default theme inheritance' => array(
-                'fixture_template.phtml', 'frontend', 'package/standalone_theme', null, null
+            'non-modular: no default inheritance' => array(
+                'fixture_template.phtml', 'frontend', 'package/standalone_theme', null,
+                null,
             ),
-            'same package & parent theme' => array(
-                'fixture_template_two.phtml', 'frontend', 'package/custom_theme3', null,
-                "%s/frontend/package/custom_theme/fixture_template_two.phtml",
+            'non-modular: inherit same package & parent theme' => array(
+                'fixture_template.phtml', 'frontend', 'package/custom_theme', null,
+                '%s/frontend/package/default/fixture_template.phtml',
             ),
-            'same package & grandparent theme' => array(
-                'fixture_template.phtml', 'frontend', 'package/custom_theme3', null,
-                "%s/frontend/package/default/fixture_template.phtml",
+            'non-modular: inherit same package & grandparent theme' => array(
+                'fixture_template.phtml', 'frontend', 'package/custom_theme2', null,
+                '%s/frontend/package/default/fixture_template.phtml',
             ),
-            'parent package & parent theme' => array(
+            'non-modular: inherit parent package & parent theme' => array(
                 'fixture_template_two.phtml', 'frontend', 'test/external_package_descendant', null,
-                "%s/frontend/package/custom_theme/fixture_template_two.phtml",
+                '%s/frontend/package/custom_theme/fixture_template_two.phtml',
             ),
-            'parent package & grandparent theme' => array(
+            'non-modular: inherit parent package & grandparent theme' => array(
                 'fixture_template.phtml', 'frontend', 'test/external_package_descendant', null,
-                "%s/frontend/package/default/fixture_template.phtml",
+                '%s/frontend/package/default/fixture_template.phtml',
             ),
-            'module file inherited by scheme' => array(
-                'theme_template.phtml', 'frontend', 'test/test_theme', 'Mage_Catalog',
-                "%s/frontend/test/default/Mage_Catalog/theme_template.phtml",
-            )
+            'modular: no default inheritance' => array(
+                'fixture_template.phtml', 'frontend', 'package/standalone_theme', 'Fixture_Module',
+                null,
+            ),
+            'modular: no fallback to non-modular file' => array(
+                'fixture_template.phtml', 'frontend', 'package/default', 'NonExisting_Module',
+                null,
+            ),
+            'modular: inherit same package & parent theme' => array(
+                'fixture_template.phtml', 'frontend', 'package/custom_theme', 'Fixture_Module',
+                '%s/frontend/package/default/Fixture_Module/fixture_template.phtml',
+            ),
+            'modular: inherit same package & grandparent theme' => array(
+                'fixture_template.phtml', 'frontend', 'package/custom_theme2', 'Fixture_Module',
+                '%s/frontend/package/default/Fixture_Module/fixture_template.phtml',
+            ),
+            'modular: inherit parent package & parent theme' => array(
+                'fixture_template_two.phtml', 'frontend', 'test/external_package_descendant', 'Fixture_Module',
+                '%s/frontend/package/custom_theme/Fixture_Module/fixture_template_two.phtml',
+            ),
+            'modular: inherit parent package & grandparent theme' => array(
+                'fixture_template.phtml', 'frontend', 'test/external_package_descendant', 'Fixture_Module',
+                '%s/frontend/package/default/Fixture_Module/fixture_template.phtml',
+            ),
         );
     }
 
@@ -154,7 +165,7 @@ class Mage_Core_Model_Design_FileResolution_Strategy_FallbackTest extends PHPUni
      *
      * @dataProvider getLocaleFileDataProvider
      */
-    public function testLocaleFileFallback($file, $area, $themePath, $locale, $expectedFilename)
+    public function testGetLocaleFile($file, $area, $themePath, $locale, $expectedFilename)
     {
         $model = $this->_buildModel($area, $themePath, $locale);
         $themeModel = $this->_getThemeModel($area, $themePath);
@@ -169,37 +180,45 @@ class Mage_Core_Model_Design_FileResolution_Strategy_FallbackTest extends PHPUni
         }
     }
 
-    /**
-     * @return array
-     */
     public function getLocaleFileDataProvider()
     {
         return array(
-            'no default theme inheritance' => array(
-                'fixture_translate.csv', 'frontend', 'package/standalone_theme', 'en_US', null
+            'no default inheritance' => array(
+                'fixture_translate.csv', 'frontend', 'package/standalone_theme', 'en_US',
+                null,
             ),
-            'parent theme' => array(
-                'fixture_translate_two.csv', 'frontend', 'package/custom_theme3', 'en_US',
-                "%s/frontend/package/custom_theme/locale/en_US/fixture_translate_two.csv",
+            'inherit same package & parent theme' => array(
+                'fixture_translate.csv', 'frontend', 'package/custom_theme', 'en_US',
+                '%s/frontend/package/default/locale/en_US/fixture_translate.csv',
             ),
-            'grandparent theme' => array(
-                'fixture_translate.csv', 'frontend', 'package/custom_theme3', 'en_US',
-                "%s/frontend/package/default/locale/en_US/fixture_translate.csv",
+            'inherit same package & grandparent theme' => array(
+                'fixture_translate.csv', 'frontend', 'package/custom_theme2', 'en_US',
+                '%s/frontend/package/default/locale/en_US/fixture_translate.csv',
+            ),
+            'inherit parent package & parent theme' => array(
+                'fixture_translate_two.csv', 'frontend', 'test/external_package_descendant', 'en_US',
+                '%s/frontend/package/custom_theme/locale/en_US/fixture_translate_two.csv',
+            ),
+            'inherit parent package & grandparent theme' => array(
+                'fixture_translate.csv', 'frontend', 'test/external_package_descendant', 'en_US',
+                '%s/frontend/package/default/locale/en_US/fixture_translate.csv',
             ),
         );
     }
 
     /**
-     * Test for the skin files fallback
+     * Test for the skin files fallback according to the themes inheritance
      *
      * @param string $file
      * @param string $area
      * @param string $themePath
-     * @param string|null $locale
-     * @param string|null $module
+     * @param string $locale
+     * @param string $module
      * @param string|null $expectedFilename
+     *
+     * @dataProvider getViewFileDataProvider
      */
-    protected function _testGetSkinFile($file, $area, $themePath, $locale, $module, $expectedFilename)
+    public function testGetViewFile($file, $area, $themePath, $locale, $module, $expectedFilename)
     {
         $model = $this->_buildModel($area, $themePath, $locale);
         $themeModel = $this->_getThemeModel($area, $themePath);
@@ -214,135 +233,84 @@ class Mage_Core_Model_Design_FileResolution_Strategy_FallbackTest extends PHPUni
         }
     }
 
-    /**
-     * Test for the skin files fallback according to the themes inheritance
-     *
-     * @param string $file
-     * @param string $area
-     * @param string $themePath
-     * @param string $locale
-     * @param string|null $expectedFilename
-     *
-     * @dataProvider getSkinFileThemeDataProvider
-     */
-    public function testGetSkinFileTheme($file, $area, $themePath, $locale, $expectedFilename)
-    {
-        $this->_testGetSkinFile($file, $area, $themePath, $locale, null, $expectedFilename);
-    }
-
-    /**
-     * @return array
-     */
-    public function getSkinFileThemeDataProvider()
+    public function getViewFileDataProvider()
     {
         return array(
-            'no default theme inheritance' => array(
-                'fixture_script_two.js', 'frontend', 'package/standalone_theme', 'en_US',
+            'non-modular: no default inheritance' => array(
+                'fixture_script.js', 'frontend', 'package/standalone_theme', null, null,
                 null,
             ),
-            'same theme & default skin' => array(
-                'fixture_script_two.js', 'frontend', 'package/custom_theme', 'en_US',
-                "%s/frontend/package/custom_theme/fixture_script_two.js",
+            'non-modular: inherit same package & parent theme' => array(
+                'fixture_script.js', 'frontend', 'package/custom_theme', null, null,
+                '%s/frontend/package/default/fixture_script.js',
             ),
-            'parent theme & same skin' => array(
-                'fixture_script.js', 'frontend', 'package/custom_theme3', 'en_US',
-                "%s/frontend/package/custom_theme2/fixture_script.js",
+            'non-modular: inherit same package & grandparent theme' => array(
+                'fixture_script.js', 'frontend', 'package/custom_theme2', null, null,
+                '%s/frontend/package/default/fixture_script.js',
             ),
-            'parent theme & default skin' => array(
-                'fixture_script_two.js', 'frontend', 'package/custom_theme3', 'en_US',
-                "%s/frontend/package/custom_theme/fixture_script_two.js",
+            'non-modular: inherit parent package & parent theme' => array(
+                'fixture_script_two.js', 'frontend', 'test/external_package_descendant', null, null,
+                '%s/frontend/package/custom_theme/fixture_script_two.js',
             ),
-            'grandparent theme & same skin' => array(
-                'fixture_script_three.js', 'frontend', 'package/custom_theme3',
-                'en_US',  null,
+            'non-modular: inherit parent package & grandparent theme' => array(
+                'fixture_script.js', 'frontend', 'test/external_package_descendant', null, null,
+                '%s/frontend/package/default/fixture_script.js',
             ),
-            'grandparent theme & default skin' => array(
-                'fixture_script_four.js', 'frontend', 'package/custom_theme3',
-                'en_US', "%s/frontend/package/default/fixture_script_four.js",
+            'non-modular: fallback to non-localized file' => array(
+                'fixture_script.js', 'frontend', 'package/default', 'en_US', null,
+                '%s/frontend/package/default/fixture_script.js',
             ),
-            'parent package & same theme & same skin' => array(
-                'fixture_script.js', 'frontend/test', 'external_package_descendant', 'en_US',
-                null,
+            'non-modular: localized file' => array(
+                'fixture_script.js', 'frontend', 'package/default', 'ru_RU', null,
+                '%s/frontend/package/default/locale/ru_RU/fixture_script.js',
             ),
-            'parent package & same theme & default skin' => array(
-                'fixture_script_two.js', 'frontend', 'test/external_package_descendant',
-                'en_US', "%s/frontend/package/custom_theme/fixture_script_two.js",
+            'non-modular: override js lib file' => array(
+                'mage/script.js', 'frontend', 'package/custom_theme', null, null,
+                '%s/frontend/package/custom_theme/mage/script.js',
             ),
-        );
-    }
-
-    /**
-     * Test for the skin files localization
-     *
-     * @param string $file
-     * @param string $area
-     * @param string $themePath
-     * @param string $locale
-     * @param string|null $module
-     * @param string|null $expectedFilename
-     *
-     * @dataProvider getSkinFileL10nDataProvider
-     */
-    public function testGetSkinFileL10n($file, $area, $themePath, $locale, $module, $expectedFilename)
-    {
-        $this->_testGetSkinFile($file, $area, $themePath, $locale, $module, $expectedFilename);
-    }
-
-    /**
-     * @return array
-     */
-    public function getSkinFileL10nDataProvider()
-    {
-        return array(
-            'general skin file' => array(
-                'fixture_script.js', 'frontend', 'package/custom_theme2', 'en_US', null,
-                "%s/frontend/package/custom_theme2/fixture_script.js"
-            ),
-            'localized skin file' => array(
-                'fixture_script.js', 'frontend', 'package/custom_theme2', 'ru_RU', null,
-                "%s/frontend/package/custom_theme2/locale/ru_RU/fixture_script.js",
-            ),
-            'general modular skin file' => array(
-                'fixture_script.js', 'frontend', 'package/custom_theme2', 'en_US',
-                'Fixture_Module',
-                "%s/frontend/package/custom_theme2/fixture_script.js",
-            ),
-            'localized modular skin file' => array(
-                'fixture_script.js', 'frontend', 'package/custom_theme2', 'ru_RU',
-                'Fixture_Module',
-                "%s/frontend/package/custom_theme2/locale/ru_RU/fixture_script.js",
-            ),
-        );
-    }
-
-    /**
-     * Test for the skin files fallback to the JavaScript libraries
-     *
-     * @param string $file
-     * @param string $area
-     * @param string $themePath
-     * @param string|null $expectedFilename
-     *
-     * @dataProvider getSkinFileJsLibDataProvider
-     */
-    public function testGetSkinFileJsLib($file, $area, $themePath, $expectedFilename)
-    {
-        $this->_testGetSkinFile($file, $area, $themePath, 'en_US', null, $expectedFilename);
-    }
-
-    /**
-     * @return array
-     */
-    public function getSkinFileJsLibDataProvider()
-    {
-        return array(
-            'lib file in theme' => array(
-                'mage/script.js', 'frontend', 'package/custom_theme2',
-                "%s/frontend/package/custom_theme2/mage/script.js",
-            ),
-            'lib file in js lib' => array(
-                'mage/script.js', 'frontend', 'package/custom_theme',
+            'non-modular: inherit js lib file' => array(
+                'mage/script.js', 'frontend', 'package/default', null, null,
                 '%s/pub/lib/mage/script.js',
+            ),
+            'modular: no default inheritance' => array(
+                'fixture_script.js', 'frontend', 'package/standalone_theme', null, 'Fixture_Module',
+                null,
+            ),
+            'modular: no fallback to non-modular file' => array(
+                'fixture_script.js', 'frontend', 'package/default', null, 'NonExisting_Module',
+                null,
+            ),
+            'modular: no fallback to js lib file' => array(
+                'mage/script.js', 'frontend', 'package/default', null, 'Fixture_Module',
+                null,
+            ),
+            'modular: no fallback to non-modular localized file' => array(
+                'fixture_script.js', 'frontend', 'package/default', 'ru_RU', 'NonExisting_Module',
+                null,
+            ),
+            'modular: inherit same package & parent theme' => array(
+                'fixture_script.js', 'frontend', 'package/custom_theme', null, 'Fixture_Module',
+                '%s/frontend/package/default/Fixture_Module/fixture_script.js',
+            ),
+            'modular: inherit same package & grandparent theme' => array(
+                'fixture_script.js', 'frontend', 'package/custom_theme2', null, 'Fixture_Module',
+                '%s/frontend/package/default/Fixture_Module/fixture_script.js',
+            ),
+            'modular: inherit parent package & parent theme' => array(
+                'fixture_script_two.js', 'frontend', 'test/external_package_descendant', null, 'Fixture_Module',
+                '%s/frontend/package/custom_theme/Fixture_Module/fixture_script_two.js',
+            ),
+            'modular: inherit parent package & grandparent theme' => array(
+                'fixture_script.js', 'frontend', 'test/external_package_descendant', null, 'Fixture_Module',
+                '%s/frontend/package/default/Fixture_Module/fixture_script.js',
+            ),
+            'modular: fallback to non-localized file' => array(
+                'fixture_script.js', 'frontend', 'package/default', 'en_US', 'Fixture_Module',
+                '%s/frontend/package/default/Fixture_Module/fixture_script.js',
+            ),
+            'modular: localized file' => array(
+                'fixture_script.js', 'frontend', 'package/custom_theme2', 'ru_RU', 'Fixture_Module',
+                '%s/frontend/package/default/locale/ru_RU/Fixture_Module/fixture_script.js',
             ),
         );
     }

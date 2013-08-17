@@ -50,7 +50,8 @@ class Magento_Code_Generator
      */
     protected $_generatedEntities = array(
         Magento_Code_Generator_Factory::ENTITY_TYPE,
-        Magento_Code_Generator_Proxy::ENTITY_TYPE
+        Magento_Code_Generator_Proxy::ENTITY_TYPE,
+        Magento_Code_Generator_Interceptor::ENTITY_TYPE,
     );
 
     /**
@@ -138,6 +139,11 @@ class Magento_Code_Generator
                     break;
                 case Magento_Code_Generator_Proxy::ENTITY_TYPE:
                     $this->_generator = new Magento_Code_Generator_Proxy($sourceClassName, $resultClassName,
+                        $this->_ioObject
+                    );
+                    break;
+                case Magento_Code_Generator_Interceptor::ENTITY_TYPE:
+                    $this->_generator = new Magento_Code_Generator_Interceptor($sourceClassName, $resultClassName,
                         $this->_ioObject
                     );
                     break;

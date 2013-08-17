@@ -33,6 +33,12 @@
  */
 class Mage_ImportExport_Model_Export_Entity_Product extends Mage_ImportExport_Model_Export_Entity_Abstract
 {
+    /**
+     * Attributes that should be exported
+     * @var array
+     */
+    protected $_bannedAttributes = array('media_gallery');
+
     const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/export_product_types';
 
     /**
@@ -123,20 +129,42 @@ class Mage_ImportExport_Model_Export_Entity_Product extends Mage_ImportExport_Mo
     protected $_attributeTypes = array();
 
     /**
-     * Constructor.
+     * Product collection
      *
-     * @return void
+     * @var Mage_Catalog_Model_Resource_Product_Collection
      */
-    public function __construct()
+    protected $_entityCollection;
+
+    /**
+     * Items per page for collection limitation
+     *
+     * @var null
+     */
+    protected $_itemsPerPage = null;
+
+    /**
+     * Header columns for export file
+     *
+     * @var array
+     */
+    protected $_headerColumns = array();
+
+    /**
+     * Constructor
+     *
+     * @param Mage_Catalog_Model_Resource_Product_Collection $collection
+     */
+    public function __construct(Mage_Catalog_Model_Resource_Product_Collection $collection)
     {
         parent::__construct();
 
         $this->_initTypeModels()
-                ->_initAttributes()
-                ->_initStores()
-                ->_initAttributeSets()
-                ->_initWebsites()
-                ->_initCategories();
+            ->_initAttributes()
+            ->_initStores()
+            ->_initAttributeSets()
+            ->_initWebsites()
+            ->_initCategories();
+        $this->_entityCollection = $collection;
     }
 
     /**
@@ -464,8 +492,129 @@ class Mage_ImportExport_Model_Export_Entity_Product extends Mage_ImportExport_Mo
     }
 
     /**
-     * Export process.
+     * @inheritdoc
+     */
+    public function _getHeaderColumns()
+    {
+        return $this->_headerColumns;
+    }
+
+    /**
+     * Set headers columns
      *
+     * @param array $customOptionsData
+     * @param array $configurableData
+     * @param array $stockItemRows
+     */
+    protected function _setHeaderColumns($customOptionsData, $configurableData, $stockItemRows)
+    {
+        if (!$this->_headerColumns) {
+            $customOptCols = array(
+                '_custom_option_store', '_custom_option_type', '_custom_option_title', '_custom_option_is_required',
+                '_custom_option_price', '_custom_option_sku', '_custom_option_max_characters',
+                '_custom_option_sort_order', '_custom_option_row_title', '_custom_option_row_price',
+                '_custom_option_row_sku', '_custom_option_row_sort'
+            );
+            $this->_headerColumns = array_merge(
+                array(
+                    self::COL_SKU, self::COL_STORE, self::COL_ATTR_SET,
+                    self::COL_TYPE, self::COL_CATEGORY, self::COL_ROOT_CATEGORY, '_product_websites'
+                ),
+                $this->_getExportAttrCodes(),
+                reset($stockItemRows) ? array_keys(end($stockItemRows)) : array(),
+                array(),
+                array(
+                    '_links_related_sku', '_links_related_position', '_links_crosssell_sku',
+                    '_links_crosssell_position', '_links_upsell_sku', '_links_upsell_position',
+                    '_associated_sku', '_associated_default_qty', '_associated_position'
+                ),
+                array('_tier_price_website', '_tier_price_customer_group', '_tier_price_qty', '_tier_price_price'),
+                array('_group_price_website', '_group_price_customer_group', '_group_price_price'),
+                array(
+                    '_media_attribute_id',
+                    '_media_image',
+                    '_media_label',
+                    '_media_position',
+                    '_media_is_disabled'
+                )
+            );
+            // have we merge custom options columns
+            if ($customOptionsData) {
+                $this->_headerColumns = array_merge($this->_headerColumns, $customOptCols);
+            }
+            // have we merge configurable products data
+            if ($configurableData) {
+                $this->_headerColumns = array_merge($this->_headerColumns, array(
+                    '_super_products_sku', '_super_attribute_code',
+                    '_super_attribute_option', '_super_attribute_price_corr'
+                ));
+            }
+        }
+    }
+
+    /**
+     * Get product collection
+     *
+     * @return Mage_Catalog_Model_Resource_Product_Collection
+     */
+    protected function _getEntityCollection()
+    {
+        return $this->_entityCollection;
+    }
+
+    /**
+     * Get items per page
+     *
+     * @return int
+     */
+    protected function _getItemsPerPage()
+    {
+        if (is_null($this->_itemsPerPage)) {
+            $memoryLimit = trim(ini_get('memory_limit'));
+            $lastMemoryLimitLetter = strtolower($memoryLimit[strlen($memoryLimit)-1]);
+            switch($lastMemoryLimitLetter) {
+                case 'g':
+                    $memoryLimit *= 1024;
+                case 'm':
+                    $memoryLimit *= 1024;
+                case 'k':
+                    $memoryLimit *= 1024;
+                    break;
+                default:
+                    // minimum memory required by Magento
+                    $memoryLimit = 250000000;
+            }
+
+            // Tested one product to have up to such size
+            $memoryPerProduct = 100000;
+            // Decrease memory limit to have supply
+            $memoryUsagePercent = 0.8;
+            // Minimum Products limit
+            $minProductsLimit = 500;
+
+            $this->_itemsPerPage = intval(($memoryLimit  * $memoryUsagePercent - memory_get_usage(true)) / $memoryPerProduct);
+            if ($this->_itemsPerPage < $minProductsLimit) {
+                $this->_itemsPerPage = $minProductsLimit;
+            }
+        }
+        return $this->_itemsPerPage;
+    }
+
+    /**
+     * Set page and page size to collection
+     *
+     * @param int $page
+     * @param int $pageSize
+     */
+    protected function _paginateCollection($page, $pageSize)
+    {
+        $this->_getEntityCollection()->setPage($page, $pageSize);
+    }
+
+    /**
+     * Export process
+     *
+     * @see https://jira.corp.x.com/browse/MAGETWO-7894
      * @return string
      */
     public function export()
@@ -473,42 +622,41 @@ class Mage_ImportExport_Model_Export_Entity_Product extends Mage_ImportExport_Mo
         //Execution time may be very long
         set_time_limit(0);
 
-        /** @var $collection Mage_Catalog_Model_Resource_Product_Collection */
-        $validAttrCodes  = $this->_getExportAttrCodes();
-        $writer          = $this->getWriter();
-        $defaultStoreId  = Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
-
-        $memoryLimit = trim(ini_get('memory_limit'));
-        $lastMemoryLimitLetter = strtolower($memoryLimit[strlen($memoryLimit)-1]);
-        switch($lastMemoryLimitLetter) {
-            case 'g':
-                $memoryLimit *= 1024;
-            case 'm':
-                $memoryLimit *= 1024;
-            case 'k':
-                $memoryLimit *= 1024;
-                break;
-            default:
-                // minimum memory required by Magento
-                $memoryLimit = 250000000;
-        }
-
-        // Tested one product to have up to such size
-        $memoryPerProduct = 100000;
-        // Decrease memory limit to have supply
-        $memoryUsagePercent = 0.8;
-        // Minimum Products limit
-        $minProductsLimit = 500;
-
-        $limitProducts = intval(($memoryLimit  * $memoryUsagePercent - memory_get_usage(true)) / $memoryPerProduct);
-        if ($limitProducts < $minProductsLimit) {
-            $limitProducts = $minProductsLimit;
-        }
-        $offsetProducts = 0;
-
+        $this->_prepareEntityCollection($this->_getEntityCollection());
+        $writer = $this->getWriter();
+        $page = 0;
         while (true) {
-            ++$offsetProducts;
+            ++$page;
+            $this->_paginateCollection($page, $this->_getItemsPerPage());
+            if ($this->_getEntityCollection()->count() == 0) {
+                break;
+            }
+            $exportData = $this->_getExportData();
+            if ($page == 1) {
+                $writer->setHeaderCols($this->_getHeaderColumns());
+            }
+            foreach ($exportData as $dataRow) {
+                $writer->writeRow($dataRow);
+            }
+            if ($this->_getEntityCollection()->getCurPage() >= $this->_getEntityCollection()->getLastPageNumber()) {
+                break;
+            }
+        }
+        return $writer->getContents();
+    }
 
+    /**
+     * Get export data for collection
+     *
+     * @return array
+     */
+    protected function _getExportData()
+    {
+        $exportData = array();
+        try {
+            $collection = $this->_getEntityCollection();
+            $validAttrCodes = $this->_getExportAttrCodes();
+            $defaultStoreId  = Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
             $dataRows        = array();
             $rowCategories   = array();
             $rowWebsites     = array();
@@ -519,20 +667,7 @@ class Mage_ImportExport_Model_Export_Entity_Product extends Mage_ImportExport_Mo
 
             // prepare multi-store values and system columns values
             foreach ($this->_storeIdToCode as $storeId => &$storeCode) { // go through all stores
-                $collection = $this->_prepareEntityCollection(
-                    Mage::getResourceModel('Mage_Catalog_Model_Resource_Product_Collection')
-                );
-                $collection
-                    ->setStoreId($storeId)
-                    ->setPage($offsetProducts, $limitProducts);
-                if ($collection->getCurPage() < $offsetProducts) {
-                    break;
-                }
-                $collection->load();
-
-                if ($collection->count() == 0) {
-                    break;
-                }
+                $collection->setStoreId($storeId);
 
                 if ($defaultStoreId == $storeId) {
                     $collection->addCategoryIds()->addWebsiteNamesToResult();
@@ -594,10 +729,6 @@ class Mage_ImportExport_Model_Export_Entity_Product extends Mage_ImportExport_Mo
                 $collection->clear();
             }
 
-            if ($collection->getCurPage() < $offsetProducts) {
-                break;
-            }
-
             // remove unused categories
             $allCategoriesIds = array_merge(array_keys($this->_categories), array_keys($this->_rootCategories));
             foreach ($rowCategories as &$categories) {
@@ -649,12 +780,6 @@ class Mage_ImportExport_Model_Export_Entity_Product extends Mage_ImportExport_Mo
             // prepare custom options information
             $customOptionsData    = array();
             $customOptionsDataPre = array();
-            $customOptCols        = array(
-                '_custom_option_store', '_custom_option_type', '_custom_option_title', '_custom_option_is_required',
-                '_custom_option_price', '_custom_option_sku', '_custom_option_max_characters',
-                '_custom_option_sort_order', '_custom_option_row_title', '_custom_option_row_price',
-                '_custom_option_row_sku', '_custom_option_row_sort'
-            );
 
             foreach ($this->_storeIdToCode as $storeId => &$storeCode) {
                 $options = Mage::getResourceModel('Mage_Catalog_Model_Resource_Product_Option_Collection')
@@ -742,47 +867,7 @@ class Mage_ImportExport_Model_Export_Entity_Product extends Mage_ImportExport_Mo
             }
             unset($customOptionsDataPre);
 
-            if ($offsetProducts == 1) {
-                // create export file
-                $headerCols = array_merge(
-                    array(
-                        self::COL_SKU, self::COL_STORE, self::COL_ATTR_SET,
-                        self::COL_TYPE, self::COL_CATEGORY, self::COL_ROOT_CATEGORY, '_product_websites'
-                    ),
-                    $validAttrCodes,
-                    reset($stockItemRows) ? array_keys(end($stockItemRows)) : array(),
-                    array(),
-                    array(
-                        '_links_related_sku', '_links_related_position', '_links_crosssell_sku',
-                        '_links_crosssell_position', '_links_upsell_sku', '_links_upsell_position',
-                        '_associated_sku', '_associated_default_qty', '_associated_position'
-                    ),
-                    array('_tier_price_website', '_tier_price_customer_group', '_tier_price_qty', '_tier_price_price'),
-                    array('_group_price_website', '_group_price_customer_group', '_group_price_price'),
-                    array(
-                        '_media_attribute_id',
-                        '_media_image',
-                        '_media_label',
-                        '_media_position',
-                        '_media_is_disabled'
-                    )
-                );
-
-                // have we merge custom options columns
-                if ($customOptionsData) {
-                    $headerCols = array_merge($headerCols, $customOptCols);
-                }
-
-                // have we merge configurable products data
-                if ($configurableData) {
-                    $headerCols = array_merge($headerCols, array(
-                        '_super_products_sku', '_super_attribute_code',
-                        '_super_attribute_option', '_super_attribute_price_corr'
-                    ));
-                }
-
-                $writer->setHeaderCols($headerCols);
-            }
+            $this->_setHeaderColumns($customOptionsData, $configurableData, $stockItemRows);
 
             foreach ($dataRows as $productId => &$productData) {
                 foreach ($productData as $storeId => &$dataRow) {
@@ -834,8 +919,7 @@ class Mage_ImportExport_Model_Export_Entity_Product extends Mage_ImportExport_Mo
                             }
                         }
                     }
-
-                    $writer->writeRow($dataRow);
+                    $exportData[] = $dataRow;
                 }
                 // calculate largest links block
                 $largestLinks = 0;
@@ -914,12 +998,14 @@ class Mage_ImportExport_Model_Export_Entity_Product extends Mage_ImportExport_Mo
                                 }
                             }
                         }
-                        $writer->writeRow($dataRow);
+                        $exportData[] = $dataRow;
                     }
                 }
             }
+        } catch (Exception $e) {
+            Mage::logException($e);
         }
-        return $writer->getContents();
+        return $exportData;
     }
 
     /**
@@ -933,6 +1019,10 @@ class Mage_ImportExport_Model_Export_Entity_Product extends Mage_ImportExport_Mo
         $validTypes = array_keys($this->_productTypeModels);
 
         foreach (parent::filterAttributeCollection($collection) as $attribute) {
+            if (in_array($attribute->getAttributeCode(), $this->_bannedAttributes)) {
+                $collection->removeItemByKey($attribute->getId());
+                continue;
+            }
             $attrApplyTo = $attribute->getApplyTo();
             $attrApplyTo = $attrApplyTo ? array_intersect($attrApplyTo, $validTypes) : $validTypes;
 

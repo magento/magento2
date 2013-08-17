@@ -37,7 +37,7 @@ abstract class Zend_TimeSync_Protocol
     protected $_socket;
 
     /**
-     * Exceptions that might have occured
+     * Exceptions that might have occurred
      *
      * @var array
      */

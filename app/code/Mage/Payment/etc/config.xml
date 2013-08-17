@@ -109,6 +109,14 @@
                     </payment_before_save>
                 </observers>
             </sales_order_payment_save_before>
+            <sales_order_status_unassign>
+                <observers>
+                    <sales_order_status_update>
+                        <class>Mage_Payment_Model_Observer</class>
+                        <method>updateOrderStatusForPaymentMethods</method>
+                    </sales_order_status_update>
+                </observers>
+            </sales_order_status_unassign>
         </events>
     </global>
     <frontend>
@@ -125,18 +133,12 @@
             <catalog_product_type_prepare_cart_options>
                 <observers>
                     <payment_recurring_profile_prepare_options>
-                        <class>Mage_Payment_Model_Observer</class>                        <method>prepareProductRecurringProfileOptions</method>
+                        <class>Mage_Payment_Model_Observer</class>
+                        <method>prepareProductRecurringProfileOptions</method>
                     </payment_recurring_profile_prepare_options>
                 </observers>
             </catalog_product_type_prepare_cart_options>
         </events>
-        <layout>
-            <updates>
-                <payment module="Mage_Payment">
-                    <file>layout.xml</file>
-                </payment>
-            </updates>
-        </layout>
     </frontend>
     <adminhtml>
         <translate>

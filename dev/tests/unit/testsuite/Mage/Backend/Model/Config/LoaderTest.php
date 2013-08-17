@@ -45,7 +45,7 @@ class Mage_Backend_Model_Config_LoaderTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_configDataFactory = $this->getMock(
-            'Mage_Core_Model_Config_Data_Factory', array('create', 'getCollection'), array(), '', false
+            'Mage_Core_Model_Config_DataFactory', array('create', 'getCollection'), array(), '', false
         );
         $this->_model = new Mage_Backend_Model_Config_Loader($this->_configDataFactory);
 

@@ -135,4 +135,49 @@ class Mage_ImportExport_Model_Import_Entity_AbstractTest extends PHPUnit_Framewo
         $this->_createSourceAdapterMock(array('_test1'));
         $this->_model->validateData();
     }
+
+    /**
+     * Test for method isAttributeValid()
+     *
+     * @dataProvider isAttributeValidDataProvider
+     * @covers Mage_ImportExport_Model_Import_Entity_Abstract::isAttributeValid
+     *
+     * @param string $attrCode
+     * @param array $attrParams
+     * @param array $rowData
+     * @param int $rowNum
+     * @param bool $expectedResult
+     */
+    public function testIsAttributeValid($attrCode, array $attrParams, array $rowData, $rowNum, $expectedResult)
+    {
+        $this->_createDataHelperMock();
+        $this->_createSourceAdapterMock(array('_test1'));
+        $this->assertEquals($expectedResult,
+            $this->_model->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum));
+    }
+
+    /**
+     * Data provider for testIsAttributeValid
+     *
+     * @return array
+     */
+    public function isAttributeValidDataProvider()
+    {
+        return array(
+            array('created_at', array('type' => 'datetime'), array('created_at' => '2012-02-29'), 1, true),
+            array('dob', array('type' => 'datetime'), array('dob' => '29.02.2012'), 1, true),
+            array('created_at', array('type' => 'datetime'), array('created_at' => '02/29/2012'), 1, true),
+            array('dob', array('type' => 'datetime'), array('dob' => '2012-02-29 21:12:59'), 1, true),
+            array('created_at', array('type' => 'datetime'), array('created_at' => '29.02.2012 11:12:59'), 1, true),
+            array('dob', array('type' => 'datetime'), array('dob' => '02/29/2012 11:12:59'), 1, true),
+            array('created_at', array('type' => 'datetime'), array('created_at' => '2012602-29'), 1, false),
+            array('dob', array('type' => 'datetime'), array('dob' => '32.12.2012'), 1, false),
+            array('created_at', array('type' => 'datetime'), array('created_at' => '02/30/-2012'), 1, false),
+            array('dob', array('type' => 'datetime'), array('dob' => '2012-13-29 21:12:59'), 1, false),
+            array('created_at', array('type' => 'datetime'), array('created_at' => '11.02.4 11:12:59'), 1, false),
+            array('dob', array('type' => 'datetime'), array('dob' => '02/29/2012 11:12:67'), 1, false)
+
+        );
+    }
+
 }

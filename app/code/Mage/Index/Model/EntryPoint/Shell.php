@@ -21,38 +21,47 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 class Mage_Index_Model_EntryPoint_Shell extends Mage_Core_Model_EntryPointAbstract
 {
     /**
-     * @param string $baseDir
-     * @param array $params
+     * Filename of the entry point script
+     *
+     * @var string
      */
-    public function __construct($baseDir, array $params = array())
-    {
-        $entryPoint = $params['entryPoint'];
-        unset($params['entryPoint']);
-        $config = new Mage_Core_Model_Config_Primary($baseDir, $params);
-        parent::__construct($config);
-        $this->_objectManager->configure(array(
-            'Mage_Index_Model_Shell' => array(
-                'parameters' => array(
-                    'entryPoint' => $entryPoint,
-                )
-            )
-        ));
+    protected $_entryFileName;
+
+    /**
+     * @var Mage_Index_Model_EntryPoint_Shell_ErrorHandler
+     */
+    protected $_errorHandler;
+
+    /**
+     * @param string $entryFileName filename of the entry point script
+     * @param Mage_Index_Model_EntryPoint_Shell_ErrorHandler $errorHandler
+     * @param Mage_Core_Model_Config_Primary $config
+     * @param Magento_ObjectManager $objectManager
+     */
+    public function __construct(
+        $entryFileName,
+        Mage_Index_Model_EntryPoint_Shell_ErrorHandler $errorHandler,
+        Mage_Core_Model_Config_Primary $config,
+        Magento_ObjectManager $objectManager = null
+    ) {
+        parent::__construct($config, $objectManager);
+        $this->_entryFileName = $entryFileName;
+        $this->_errorHandler = $errorHandler;
     }
 
     /**
      * Process request to application
      */
-    public function processRequest()
+    protected function _processRequest()
     {
         /** @var $shell Mage_Index_Model_Shell */
-        $shell = $this->_objectManager->create('Mage_Index_Model_Shell');
+        $shell = $this->_objectManager->create('Mage_Index_Model_Shell', array('entryPoint' => $this->_entryFileName));
         $shell->run();
         if ($shell->hasErrors()) {
-            exit(1);
+            $this->_errorHandler->terminate(1);
         }
     }
 }

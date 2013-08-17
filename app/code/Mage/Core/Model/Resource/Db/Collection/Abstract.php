@@ -122,11 +122,14 @@ abstract class Mage_Core_Model_Resource_Db_Collection_Abstract extends Varien_Da
     /**
      * Collection constructor
      *
+     * @param Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy
      * @param Mage_Core_Model_Resource_Db_Abstract $resource
      */
-    public function __construct($resource = null)
-    {
-        parent::__construct();
+    public function __construct(
+        Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy,
+        Mage_Core_Model_Resource_Db_Abstract $resource = null
+    ) {
+        parent::__construct($fetchStrategy);
         $this->_construct();
         $this->_resource = $resource;
         $this->setConnection($this->getResource()->getReadConnection());
@@ -497,29 +500,13 @@ abstract class Mage_Core_Model_Resource_Db_Collection_Abstract extends Varien_Da
         return $this->getConnection()->fetchCol($idsSelect, $this->_bindParams);
     }
 
-    public function getData()
-    {
-        if ($this->_data === null) {
-            $this->_renderFilters()
-                 ->_renderOrders()
-                 ->_renderLimit();
-            /**
-             * Prepare select for execute
-             * @var string $query
-             */
-            $query       = $this->_prepareSelect($this->getSelect());
-            $this->_data = $this->_fetchAll($query, $this->_bindParams);
-            $this->_afterLoadData();
-        }
-        return $this->_data;
-    }
-
     /**
      * Prepare select for load
      *
-     * @return string
+     * @param Zend_Db_Select $select
+     * @return Zend_Db_Select
      */
-    protected function _prepareSelect(Varien_Db_Select $select)
+    protected function _prepareSelect(Zend_Db_Select $select)
     {
         $helper = Mage::getResourceHelper('Mage_Core');
 
@@ -529,10 +516,10 @@ abstract class Mage_Core_Model_Resource_Db_Collection_Abstract extends Varien_Da
         }
 
         if ($this->_useAnalyticFunction) {
-            return $helper->getQueryUsingAnalyticFunction($select);
+            $select = $helper->getQueryUsingAnalyticFunction($select);
         }
 
-        return (string)$select;
+        return $select;
     }
     /**
      * Join table to collection select
@@ -642,56 +629,6 @@ abstract class Mage_Core_Model_Resource_Db_Collection_Abstract extends Varien_Da
             $item->save();
         }
         return $this;
-    }
-
-    /**
-     * Check if cache can be used for collection
-     *
-     * @return bool
-     */
-    protected function _canUseCache()
-    {
-        return Mage::getObjectManager()->get('Mage_Core_Model_CacheInterface')->canUse('collections')
-            && !empty($this->_cacheConf);
-    }
-
-    /**
-     * Load cached data for select
-     *
-     * @param Zend_Db_Select $select
-     * @return string | false
-     */
-    protected function _loadCache($select)
-    {
-        $data = Mage::getObjectManager()->get('Mage_Core_Model_CacheInterface')->load($this->_getSelectCacheId($select));
-        return $data;
-    }
-
-    /**
-     * Save collection data to cache
-     *
-     * @param array $data
-     * @param Zend_Db_Select $select
-     * @return Mage_Core_Model_Resource_Db_Collection_Abstract
-     */
-    protected function _saveCache($data, $select)
-    {
-        Mage::getObjectManager()->get('Mage_Core_Model_CacheInterface')->save(
-            serialize($data), $this->_getSelectCacheId($select), $this->_getCacheTags(), false
-        );
-        return $this;
-    }
-
-    /**
-     * Redeclared for processing cache tags throw application object
-     *
-     * @return array
-     */
-    protected function _getCacheTags()
-    {
-        $tags = parent::_getCacheTags();
-        $tags[] = Mage_Core_Model_Cache_Type_Collection::CACHE_TAG;
-        return $tags;
     }
 
     /**

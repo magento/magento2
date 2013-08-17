@@ -236,7 +236,7 @@ abstract class Mage_Catalog_Model_Layer_Filter_Abstract extends Varien_Object
     {
         $attribute = $this->getData('attribute_model');
         if (is_null($attribute)) {
-            Mage::throwException(Mage::helper('Mage_Catalog_Helper_Data')->__('The attribute model is not defined'));
+            Mage::throwException(Mage::helper('Mage_Catalog_Helper_Data')->__('The attribute model is not defined.'));
         }
         return $attribute;
     }

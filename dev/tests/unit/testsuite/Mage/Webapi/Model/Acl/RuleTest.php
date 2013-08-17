@@ -113,13 +113,13 @@ class Mage_Webapi_Model_Acl_RuleTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCollection()
     {
+        $fetchStrategy = $this->getMockForAbstractClass('Varien_Data_Collection_Db_FetchStrategyInterface');
+
         /** @var PHPUnit_Framework_MockObject_MockObject $collection */
         $collection = $this->getMock(
             'Mage_Webapi_Model_Resource_Acl_Rule_Collection',
             array('_initSelect', 'setModel', 'getSelect'),
-            array('resource' => $this->_ruleResource),
-            '',
-            true
+            array($fetchStrategy, $this->_ruleResource)
         );
         $collection->expects($this->any())->method('setModel')->with('Mage_Webapi_Model_Resource_Acl_Role');
         $collection->expects($this->any())

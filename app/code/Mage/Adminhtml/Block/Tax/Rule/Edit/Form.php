@@ -218,7 +218,7 @@ class Mage_Adminhtml_Block_Tax_Rule_Edit_Form extends Mage_Backend_Block_Widget_
      */
     public function getTaxRateDeleteUrl()
     {
-        return $this->getUrl('admin/tax_rate/ajaxDelete/');
+        return $this->getUrl('adminhtml/tax_rate/ajaxDelete/');
     }
 
     /**
@@ -228,6 +228,6 @@ class Mage_Adminhtml_Block_Tax_Rule_Edit_Form extends Mage_Backend_Block_Widget_
      */
     public function getTaxRateSaveUrl()
     {
-        return $this->getUrl('admin/tax_rate/ajaxSave/');
+        return $this->getUrl('adminhtml/tax_rate/ajaxSave/');
     }
 }

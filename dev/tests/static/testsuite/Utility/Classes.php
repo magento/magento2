@@ -53,7 +53,7 @@ class Utility_Classes
     }
 
     /**
-     * Get XML node text values or values of specified attribute using specified xPath
+     * Get XML node text values using specified xPath
      *
      * The node must contain specified attribute
      *
@@ -67,6 +67,23 @@ class Utility_Classes
         $nodes = $xml->xpath($xPath) ?: array();
         foreach ($nodes as $node) {
             $result[] = (string)$node;
+        }
+        return $result;
+    }
+
+    /**
+     * Get XML node names using specified xPath
+     *
+     * @param SimpleXMLElement $xml
+     * @param string $xpath
+     * @return array
+     */
+    public static function getXmlNodeNames(SimpleXMLElement $xml, $xpath)
+    {
+        $result = array();
+        $nodes = $xml->xpath($xpath) ?: array();
+        foreach ($nodes as $node) {
+            $result[] = $node->getName();
         }
         return $result;
     }
@@ -115,13 +132,12 @@ class Utility_Classes
         $classes = self::getXmlNodeValues($xml, '
             /config//resource_adapter | /config/*[not(name()="sections")]//class | //model
                 | //backend_model | //source_model | //price_model | //model_token | //writer_model | //clone_model
-                | //frontend_model | //working_model | //admin_renderer | //renderer'
+                | //frontend_model | //working_model | //admin_renderer | //renderer | /config/*/di/preferences/*'
         );
         $classes = array_merge($classes, self::getXmlAttributeValues($xml, '//@backend_model', 'backend_model'));
-        $nodes = $xml->xpath('/logging/*/expected_models/* | /logging/*/actions/*/expected_models/*') ?: array();
-        foreach ($nodes as $node) {
-            $classes[] = $node->getName();
-        }
+        $classes = array_merge($classes, self::getXmlNodeNames($xml,
+            '/logging/*/expected_models/* | /logging/*/actions/*/expected_models/* | /config/*/di/preferences/*'
+        ));
 
         $classes = array_map(array('Utility_Classes', 'getCallbackClass'), $classes);
         $classes = array_map('trim', $classes);

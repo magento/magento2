@@ -63,14 +63,15 @@ class Mage_Adminhtml_Block_Poll_Edit_Tab_Form extends Mage_Adminhtml_Block_Widge
         ));
 
         if (!Mage::app()->isSingleStoreMode()) {
-            $fieldset->addField('store_ids', 'multiselect', array(
+            $field = $fieldset->addField('store_ids', 'multiselect', array(
                 'label'     => Mage::helper('Mage_Poll_Helper_Data')->__('Visible In'),
                 'required'  => true,
                 'name'      => 'store_ids[]',
                 'values'    => Mage::getSingleton('Mage_Core_Model_System_Store')->getStoreValuesForForm(),
-                'value'     => Mage::registry('poll_data')->getStoreIds(),
-                'after_element_html' => Mage::getBlockSingleton('Mage_Backend_Block_Store_Switcher')->getHintHtml()
+                'value'     => Mage::registry('poll_data')->getStoreIds()
             ));
+            $renderer = $this->getLayout()->createBlock('Mage_Backend_Block_Store_Switcher_Form_Renderer_Fieldset_Element');
+            $field->setRenderer($renderer);
         }
         else {
             $fieldset->addField('store_ids', 'hidden', array(

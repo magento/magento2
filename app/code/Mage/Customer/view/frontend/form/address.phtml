@@ -75,7 +75,7 @@
                     <label for="region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
                     <div class="input-box">
                         <select id="region_id" name="region_id" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;">
-                            <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+                            <option value=""><?php echo $this->__('Please select a region, state or province.') ?></option>
                         </select>
                         <input type="text" id="region" name="region" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('region') ?>" style="display:none;" />
                     </div>
@@ -114,9 +114,9 @@
         <?php foreach ($primaryTypes as $code=>$type): ?>
             <li<?php if (!$address->isPrimary($type['address_type_id'])) echo ' class="control"' ?>>
             <?php if ($address->isPrimary($type['address_type_id'])): ?>
-                <strong><?php echo $this->__("This is My Default %s Address", ucfirst($type['name'])) ?></strong>
+                <strong><?php echo $this->__("This is my default %s address.", ucfirst($type['name'])) ?></strong>
             <?php else: ?>
-                <input type="checkbox" id="primary_<?php echo $code ?>" name="primary_types[]" value="<?php echo $type['address_type_id'] ?>" class="checkbox" /><label for="primary_<?php echo $code ?>"><?php echo $this->__("Use as My Default %s Address", ucfirst($type['name'])) ?></label>
+                <input type="checkbox" id="primary_<?php echo $code ?>" name="primary_types[]" value="<?php echo $type['address_type_id'] ?>" class="checkbox" /><label for="primary_<?php echo $code ?>"><?php echo $this->__("Use this as my default %s address.", ucfirst($type['name'])) ?></label>
             <?php endif ?>
             </li>
         <?php endforeach ?>
@@ -139,6 +139,7 @@
         "<?php echo $this->getViewFileUrl('Mage_Checkout::js/region-updater.js') ?>",
         function() {
             $('#country').regionUpdater({
+                optionalRegionAllowed: <?php echo (Mage::getStoreConfig('general/region/display_all')? 'true' : 'false'); ?>,
                 regionListId: '#region_id',
                 regionInputId: '#region',
                 postcodeId: '#zip',

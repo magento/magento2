@@ -44,16 +44,18 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit extends Mage_Adminhtml
 
         if($this->getRequest()->getParam('popup')) {
             $this->_removeButton('back');
-            $this->_addButton(
-                'save_in_new_set',
-                array(
-                    'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Save in New Attribute Set'),
-                    'class'     => 'save',
-                    'onclick'   => 'saveAttributeInNewSet(\''
-                        . Mage::helper('Mage_Catalog_Helper_Data')->__('Enter Name for New Attribute Set')
-                        . '\')',
-                )
-            );
+            if ($this->getRequest()->getParam('product_tab') != 'variations') {
+                $this->_addButton(
+                    'save_in_new_set',
+                    array(
+                        'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Save in New Attribute Set'),
+                        'class'     => 'save',
+                        'onclick'   => 'saveAttributeInNewSet(\''
+                            . Mage::helper('Mage_Catalog_Helper_Data')->__('Enter Name for New Attribute Set')
+                            . '\')',
+                    )
+                );
+            }
         } else {
             $this->_addButton(
                 'save_and_edit_button',
@@ -71,6 +73,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit extends Mage_Adminhtml
         }
 
         $this->_updateButton('save', 'label', Mage::helper('Mage_Catalog_Helper_Data')->__('Save Attribute'));
+        $this->_updateButton('save', 'class', 'save primary');
         $this->_updateButton('save', 'data_attribute', array(
             'mage-init' => array(
                 'button' => array('event' => 'save', 'target' => '#edit_form'),
@@ -118,6 +121,13 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit extends Mage_Adminhtml
      */
     public function getSaveUrl()
     {
-        return $this->getUrl('*/'.$this->_controller.'/save', array('_current'=>true, 'back'=>null));
+        return $this->getUrl(
+            '*/'.$this->_controller.'/save',
+            array(
+                '_current' => true,
+                'back' => null,
+                'product_tab' => $this->getRequest()->getParam('product_tab')
+            )
+        );
     }
 }

@@ -67,9 +67,6 @@ abstract class Mage_Catalog_Block_Product_View_Options_Abstract extends Mage_Cor
      */
     public function getProduct()
     {
-        if ($this->hasData('option')) {
-            return $this->getOption()->getProduct();
-        }
         return $this->_product;
     }
 
@@ -92,9 +89,6 @@ abstract class Mage_Catalog_Block_Product_View_Options_Abstract extends Mage_Cor
      */
     public function getOption()
     {
-        if ($this->hasData('option')) {
-            return $this->getData('option');
-        }
         return $this->_option;
     }
 

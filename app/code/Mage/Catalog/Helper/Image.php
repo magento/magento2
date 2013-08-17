@@ -109,6 +109,21 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
     protected $_placeholder;
 
     /**
+     * @var Mage_Core_Model_View_Url
+     */
+    protected $_viewUrl;
+
+    /**
+     * @param Mage_Core_Helper_Context $context
+     * @param Mage_Core_Model_View_Url $viewUrl
+     */
+    public function __construct(Mage_Core_Helper_Context $context, Mage_Core_Model_View_Url $viewUrl)
+    {
+        parent::__construct($context);
+        $this->_viewUrl = $viewUrl;
+    }
+
+    /**
      * Reset all previous data
      *
      * @return Mage_Catalog_Helper_Image
@@ -370,18 +385,9 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
                 $url = $model->saveFile()->getUrl();
             }
         } catch (Exception $e) {
-            $url = Mage::getDesign()->getViewFileUrl($this->getPlaceholder());
+            $url = $this->_viewUrl->getViewFileUrl($this->getPlaceholder());
         }
         return $url;
-    }
-
-    public function getDefaultImage()
-    {
-        $this->setProduct(Mage::getModel('Mage_Catalog_Model_Product'));
-        $this->_setModel(Mage::getModel('Mage_Catalog_Model_Product_Image'));
-        $this->_getModel()->setDestinationSubdir('image');
-        $this->_getModel()->setBaseFile(null);
-        return $this->__toString();
     }
 
     /**
@@ -620,22 +626,4 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
             $this->getOriginalHeight()
         );
     }
-
-    /**
-     * Check - is this file an image
-     *
-     * @param string $filePath
-     * @return bool
-     * @throws Mage_Core_Exception
-     */
-    public function validateUploadFile($filePath) {
-        if (!getimagesize($filePath)) {
-            Mage::throwException($this->__('Disallowed file type.'));
-        }
-
-        $adapter = Mage::helper('Mage_Core_Helper_Data')->getImageAdapterType();
-        $_processor = new Varien_Image($filePath, $adapter);
-        return $_processor->getMimeType() !== null;
-    }
-
 }

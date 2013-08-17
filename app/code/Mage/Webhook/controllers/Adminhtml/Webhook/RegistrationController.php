@@ -1,5 +1,7 @@
 <?php
 /**
+ * Registration controller
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -22,64 +24,100 @@
  * @package     Mage_Webhook
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
-class Mage_Webhook_Adminhtml_Webhook_RegistrationController extends Mage_Adminhtml_Controller_Action
+class Mage_Webhook_Adminhtml_Webhook_RegistrationController extends Mage_Backend_Controller_ActionAbstract
 {
+    const DATA_SUBSCRIPTION_ID = 'subscription_id';
+    const DATA_TOPICS = 'topics';
+    const DATA_NAME = 'name';
+
+    /** Key used to store subscription data into the registry */
+    const REGISTRY_KEY_CURRENT_SUBSCRIPTION = 'current_subscription';
+
+    /** Param keys used to extract subscription details from the Request */
+    const PARAM_SUBSCRIPTION_ID = 'id';
+    const PARAM_APIKEY = 'apikey';
+    const PARAM_APISECRET = 'apisecret';
+    const PARAM_EMAIL = 'email';
+    const PARAM_COMPANY = 'company';
+
+    /** @var Mage_Core_Model_Registry */
+    private $_registry;
+
+    /** @var Mage_Webhook_Service_SubscriptionV1Interface */
+    private $_subscriptionService;
+
+    /** @var Mage_Webhook_Model_Webapi_User_Factory */
+    private $_userFactory;
+
 
     /**
-     * Initialize general settings for subscriber
-     *
-     * @return Mage_Webhook_Model_Subscriber
+     * @param Mage_Webhook_Model_Webapi_User_Factory $userFactory
+     * @param Mage_Webhook_Service_SubscriptionV1Interface $subscriptionService
+     * @param Mage_Core_Model_Registry $registry
+     * @param Mage_Backend_Controller_Context $context
+     * @param string $areaCode
      */
-    protected function _initSubscriber()
-    {
-        $subscriber = Mage::getModel('Mage_Webhook_Model_Subscriber');
-        $subscriberId = (int) $this->getRequest()->getParam('id');
-        if ($subscriberId) {
-            $subscriber->load($subscriberId);
-        }
-        Mage::register('current_subscriber', $subscriber);
-
-        return $subscriber;
+    public function __construct(
+        Mage_Webhook_Model_Webapi_User_Factory $userFactory,
+        Mage_Webhook_Service_SubscriptionV1Interface $subscriptionService,
+        Mage_Core_Model_Registry $registry,
+        Mage_Backend_Controller_Context $context,
+        $areaCode = null
+    ) {
+        parent::__construct($context, $areaCode);
+        $this->_userFactory = $userFactory;
+        $this->_subscriptionService = $subscriptionService;
+        $this->_registry = $registry;
     }
 
     /**
-     * Activate subscriber
-     * Step 1 - display subscriber required resources
-     *
-     * @return void
+     * Activate subscription
+     * Step 1 - display subscription required resources
      */
     public function activateAction()
     {
-        $subscriber = $this->_initSubscriber();
-
-        $this->loadLayout();
-        $this->renderLayout();
+        try {
+            $this->_initSubscription();
+            $this->loadLayout();
+            $this->renderLayout();
+        } catch (Mage_Core_Exception $e) {
+            $this->_redirectFailed($e->getMessage());
+        }
     }
 
     /**
-     * Agree to provide required subscriber resources
+     * Agree to provide required subscription resources
      * Step 2 - redirect to specified auth action
      */
     public function acceptAction()
     {
-        $subscriber = $this->_initSubscriber();
+        try {
+            $subscriptionData = $this->_initSubscription();
 
-        $route = '*/webhook_registration/create_api_user';
-
-        $this->_redirect($route, array('id' => $subscriber->getId()));
+            $route = '*/webhook_registration/user';
+            $this->_redirect(
+                $route,
+                array(self::PARAM_SUBSCRIPTION_ID => $subscriptionData[self::DATA_SUBSCRIPTION_ID])
+            );
+        } catch (Mage_Core_Exception $e) {
+            $this->_redirectFailed($e->getMessage());
+        }
     }
 
     /**
-     * Start createApiUser
+     * Displays form for gathering api user data
      */
-    public function create_api_userAction()
+    public function userAction()
     {
-        $subscriber = $this->_initSubscriber();
-        $user = $subscriber->getApiUser();
-
-        $this->loadLayout();
-        $this->renderLayout();
+        try {
+            $this->_initSubscription();
+            $this->loadLayout();
+            $this->renderLayout();
+        } catch (Mage_Core_Exception $e) {
+            $this->_redirectFailed($e->getMessage());
+        }
     }
 
     /**
@@ -88,16 +126,20 @@ class Mage_Webhook_Adminhtml_Webhook_RegistrationController extends Mage_Adminht
     public function registerAction()
     {
         try {
-            /** @var Mage_Webhook_Model_Subscriber $subscriber */
-            $subscriber = $this->_initSubscriber();
-
-            $key = $this->getRequest()->getParam('apikey');
-            $secret = $this->getRequest()->getParam('apisecret');
-            $email = $this->getRequest()->getParam('email');
-            $company = $this->getRequest()->getParam('company');
+            $subscriptionData = $this->_initSubscription();
+            /** @var string $key */
+            $key = $this->getRequest()->getParam(self::PARAM_APIKEY);
+            /** @var string $secret */
+            $secret = $this->getRequest()->getParam(self::PARAM_APISECRET);
+            /** @var string $email */
+            $email = $this->getRequest()->getParam(self::PARAM_EMAIL);
+            /** @var string $company */
+            $company = $this->getRequest()->getParam(self::PARAM_COMPANY);
 
             if (empty($key) || empty($secret) || empty($email)) {
-                throw Mage::exception('Mage_Webhook', $this->__('API Key, API Secret and Contact Email are required fields.'));
+                throw new Mage_Webhook_Exception(
+                    $this->__('API Key, API Secret and Contact Email are required fields.')
+                );
             }
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -105,33 +147,26 @@ class Mage_Webhook_Adminhtml_Webhook_RegistrationController extends Mage_Adminht
                 return;
             }
 
-            $subscriber->createUserAndRole($email, $key, $secret, $company)
-            /* temporary solution in order not to catch an error */
-                ->setIsNewlyActivated(true)
-                ->setStatus(Mage_Webhook_Model_Subscriber::STATUS_ACTIVE)
-                ->save();
+            $userContext = array(
+                'email' => $email,
+                'key'       => $key,
+                'secret'    => $secret,
+                'company' => $company,
+            );
 
-            $this->_redirectSucceeded($subscriber);
+            /** @var string[] $topics */
+            $topics = $subscriptionData[self::DATA_TOPICS];
+            $userId = $this->_userFactory->createUser($userContext, $topics);
+
+            $subscriptionData['api_user_id'] = $userId;
+            $subscriptionData['status'] = Mage_Webhook_Model_Subscription::STATUS_ACTIVE;
+            $subscriptionData = $this->_subscriptionService->update($subscriptionData);
+
+            $this->_redirectSucceeded($subscriptionData);
 
         } catch (Mage_Core_Exception $e) {
             $this->_redirectFailed($e->getMessage());
-
-        } catch (Exception $e) {
-            Mage::logException($e);
-            $this->_redirectFailed($this->__('An unexpected error happened. Please try again.'));
         }
-    }
-
-    protected function _redirectSucceeded(Mage_Webhook_Model_Subscriber $subscriber)
-    {
-        $this->_getSession()->addSuccess($this->__("The subscriber '%s' has been activated.", $subscriber->getName()));
-        $this->_redirect('*/webhook_registration/succeeded', array('id' => $subscriber->getId()));
-    }
-
-    protected function _redirectFailed($errorMessage)
-    {
-        $this->_getSession()->addError($errorMessage);
-        $this->_redirect('*/webhook_registration/failed');
     }
 
     /**
@@ -139,18 +174,66 @@ class Mage_Webhook_Adminhtml_Webhook_RegistrationController extends Mage_Adminht
      */
     public function succeededAction()
     {
-        $this->loadLayout();
-        $this->renderLayout();
-        $subscriber = $this->_initSubscriber();
-        $this->_getSession()->addSuccess($this->__("The subscriber '%s' has been activated.", $subscriber->getName()));
+        try {
+            $this->loadLayout();
+            $this->renderLayout();
+            $subscriptionData = $this->_initSubscription();
+
+            $this->_getSession()->addSuccess(
+                $this->__('The subscription \'%s\' has been activated.',
+                    $subscriptionData[self::DATA_NAME])
+            );
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+        }
     }
 
     /**
-     * Redirect to this page when the authentication process is failed by some reasons
+     * Redirect to this action when the authentication process fails for any reason.
      */
     public function failedAction()
     {
         $this->loadLayout();
         $this->renderLayout();
+    }
+
+    /**
+     * Initialize general settings for subscription
+     *
+     * @throws Exception|Mage_Core_Exception if subscription can't be found
+     * @return array
+     */
+    protected function _initSubscription()
+    {
+        $subscriptionId = (int) $this->getRequest()->getParam(self::PARAM_SUBSCRIPTION_ID);
+        $subscriptionData = $this->_subscriptionService->get($subscriptionId);
+
+        $this->_registry->register(self::REGISTRY_KEY_CURRENT_SUBSCRIPTION, $subscriptionData);
+        return $subscriptionData;
+    }
+
+    /**
+     * Log successful subscription and redirect to success page
+     *
+     * @param array $subscriptionData
+     */
+    protected function _redirectSucceeded(array $subscriptionData)
+    {
+        $this->_getSession()->addSuccess(
+            $this->__('The subscription \'%s\' has been activated.', $subscriptionData[self::DATA_NAME])
+        );
+        $this->_redirect('*/webhook_registration/succeeded',
+            array(self::PARAM_SUBSCRIPTION_ID => $subscriptionData[self::DATA_SUBSCRIPTION_ID]));
+    }
+
+    /**
+     * Add error and redirect to failure page
+     *
+     * @param string $errorMessage
+     */
+    protected function _redirectFailed($errorMessage)
+    {
+        $this->_getSession()->addError($errorMessage);
+        $this->_redirect('*/webhook_registration/failed');
     }
 }

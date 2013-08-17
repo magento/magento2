@@ -36,26 +36,38 @@ class Mage_Core_Controller_Varien_ActionAbstractTest extends PHPUnit_Framework_T
     protected $_actionAbstract;
 
     /**
-     * @var Mage_Core_Controller_Request_Http
+     * @var Mage_Core_Controller_Request_Http|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_request;
 
     /**
-     * @var Mage_Core_Controller_Response_Http
+     * @var Mage_Core_Controller_Response_Http|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_response;
 
+    /**
+     * Setup before tests
+     *
+     * Create request, response and forward action (child of ActionAbstract)
+     */
     public function setUp()
     {
         $this->_request = $this->getMock('Mage_Core_Controller_Request_Http',
             array('getRequestedRouteName', 'getRequestedControllerName', 'getRequestedActionName'), array(), '', false
         );
         $this->_response = $this->getMock('Mage_Core_Controller_Response_Http', array(), array(), '', false);
+        $this->_response->headersSentThrowsException = false;
         $this->_actionAbstract = new Mage_Core_Controller_Varien_Action_Forward($this->_request, $this->_response,
             'Area'
         );
     }
 
+    /**
+     * Test for __construct method
+     *
+     * @test
+     * @covers Mage_Core_Controller_Varien_ActionAbstract::__construct
+     */
     public function testConstruct()
     {
         $this->assertAttributeInstanceOf('Mage_Core_Controller_Request_Http', '_request', $this->_actionAbstract);
@@ -63,16 +75,58 @@ class Mage_Core_Controller_Varien_ActionAbstractTest extends PHPUnit_Framework_T
         $this->assertAttributeEquals('Area', '_currentArea', $this->_actionAbstract);
     }
 
+    /**
+     * Test for getRequest method
+     *
+     * @test
+     * @covers Mage_Core_Controller_Varien_ActionAbstract::getRequest
+     */
     public function testGetRequest()
     {
         $this->assertEquals($this->_request, $this->_actionAbstract->getRequest());
     }
 
+    /**
+     * Test for getResponse method
+     *
+     * @test
+     * @covers Mage_Core_Controller_Varien_ActionAbstract::getResponse
+     */
     public function testGetResponse()
     {
         $this->assertEquals($this->_response, $this->_actionAbstract->getResponse());
     }
 
+    /**
+     * Test for getResponse method. Checks that response headers are set correctly
+     *
+     * @test
+     * @covers Mage_Core_Controller_Varien_ActionAbstract::getResponse
+     */
+    public function testResponseHeaders()
+    {
+        $request = new Mage_Core_Controller_Request_Http();
+        $response = new Mage_Core_Controller_Response_Http();
+        $response->headersSentThrowsException = false;
+        $action = new Mage_Core_Controller_Varien_Action_Forward($request, $response, 'Area');
+
+        $headers = array(
+            array(
+                'name' => 'X-Frame-Options',
+                'value' => 'SAMEORIGIN',
+                'replace' => false
+            )
+        );
+
+        $this->assertEquals($headers, $action->getResponse()->getHeaders());
+    }
+
+    /**
+     * Test for getFullActionName method
+     *
+     * @test
+     * @covers Mage_Core_Controller_Varien_ActionAbstract::getFullActionName
+     */
     public function testGetFullActionName()
     {
         $this->_request->expects($this->once())

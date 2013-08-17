@@ -224,21 +224,23 @@ class Utility_Files
             if ($params['include_code']) {
                 $files = self::_getFiles(
                     array("{$this->_path}/app/code/{$params['namespace']}/{$params['module']}"
-                        . "/view/{$params['area']}"),
+                        . "/view/{$params['area']}/layout"),
                     '*.xml'
                 );
             }
             if ($params['include_design']) {
+                $themeLayoutDir = "{$this->_path}/app/design/{$params['area']}/{$params['package']}/{$params['theme']}"
+                    . "/{$params['namespace']}_{$params['module']}/layout";
+                $dirPatterns = array(
+                    $themeLayoutDir,
+                    $themeLayoutDir . '/override',
+                    $themeLayoutDir . '/override/*/*',
+                );
                 $files = array_merge(
                     $files,
                     self::_getFiles(
-                        array("{$this->_path}/app/design/{$params['area']}/{$params['package']}/{$params['theme']}"
-                            . "/{$params['namespace']}_{$params['module']}"),
+                        $dirPatterns,
                         '*.xml'
-                    ),
-                    glob(
-                        "{$this->_path}/app/design/{$params['area']}/{$params['package']}/{$params['theme']}/local.xml",
-                        GLOB_NOSORT
                     )
                 );
             }
@@ -274,6 +276,26 @@ class Utility_Files
         $result = self::composeDataSets($files);
         self::$_cache[$key] = $result;
         return $result;
+    }
+
+    /**
+     * Returns list of Twig files in Magento app directory.
+     *
+     * @return array
+     */
+    public function getTwigFiles()
+    {
+        return self::_getFiles(array($this->_path . '/app'), '*.twig');
+    }
+
+    /**
+     * Returns list of Phtml files in Magento app directory.
+     *
+     * @return array
+     */
+    public function getPhtmlFiles()
+    {
+        return $this->getPhpFiles(false, false, true, true);
     }
 
     /**
