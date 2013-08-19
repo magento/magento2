@@ -249,7 +249,7 @@ class Mage_Sales_Model_Order_Creditmemo_Item extends Mage_Core_Model_Abstract
         $rowTotalInclTax     = $orderItem->getRowTotalInclTax();
         $baseRowTotalInclTax = $orderItem->getBaseRowTotalInclTax();
 
-        if (!$this->isLast()) {
+        if (!$this->isLast() && $orderItemQtyInvoiced > 0) {
             $availableQty = $orderItemQtyInvoiced - $orderItem->getQtyRefunded();
             $rowTotal     = $creditmemo->roundPrice($rowTotal / $availableQty * $this->getQty());
             $baseRowTotal = $creditmemo->roundPrice($baseRowTotal / $availableQty * $this->getQty(), 'base');
