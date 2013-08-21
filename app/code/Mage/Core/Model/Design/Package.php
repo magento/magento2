@@ -349,7 +349,7 @@ class Mage_Core_Model_Design_Package implements Mage_Core_Model_Design_PackageIn
      */
     protected function _extractScope($file, array &$params)
     {
-        if (preg_match('/\.\//', str_replace('\\', '/', $file))) {
+        if (strpos(str_replace('\\', '/', $file), './') !== false) {
             throw new Magento_Exception("File name '{$file}' is forbidden for security reasons.");
         }
         if (false !== strpos($file, self::SCOPE_SEPARATOR)) {
