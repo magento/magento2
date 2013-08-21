@@ -1420,7 +1420,7 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
      */
     public function addFilterByRequiredOptions()
     {
-        $this->addAttributeToFilter('required_options', array(array('neq' => '1'), array('null' => true)), 'left');
+        $this->addAttributeToFilter('required_options', array(array('neq' => 1), array('null' => true)), 'left');
         return $this;
     }
 
