@@ -39,7 +39,7 @@ class Mage_Adminhtml_Block_Report_Review_Detail extends Mage_Adminhtml_Block_Wid
     {
         $this->_controller = 'report_review_detail';
 
-        $product = Mage::getModel('Mage_Catalog_Model_Product')->load($this->getRequest()->getParam('id'));
+        $product = Mage::getModel('Mage_Catalog_Model_Product')->load((int)$this->getRequest()->getParam('id'));
         $this->_headerText = Mage::helper('Mage_Reports_Helper_Data')->__('Reviews for %s', $product->getName());
 
         parent::_construct();

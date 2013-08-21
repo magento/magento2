@@ -52,7 +52,7 @@ class Mage_Catalog_Block_Product_Send extends Mage_Catalog_Block_Product_Abstrac
 
     public function getProductId()
     {
-        return $this->getRequest()->getParam('id');
+        return (int) $this->getRequest()->getParam('id');
     }
 
     public function getMaxRecipients()

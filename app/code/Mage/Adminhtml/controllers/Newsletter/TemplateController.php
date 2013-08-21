@@ -102,7 +102,7 @@ class Mage_Adminhtml_Newsletter_TemplateController extends Mage_Adminhtml_Contro
         $this->_setTitle();
 
         $model = Mage::getModel('Mage_Newsletter_Model_Template');
-        if ($id = $this->getRequest()->getParam('id')) {
+        if ($id = (int)$this->getRequest()->getParam('id')) {
             $model->load($id);
         }
 
@@ -211,7 +211,7 @@ class Mage_Adminhtml_Newsletter_TemplateController extends Mage_Adminhtml_Contro
     public function deleteAction ()
     {
         $template = Mage::getModel('Mage_Newsletter_Model_Template')
-            ->load($this->getRequest()->getParam('id'));
+            ->load((int)$this->getRequest()->getParam('id'));
         if ($template->getId()) {
             try {
                 $template->delete();

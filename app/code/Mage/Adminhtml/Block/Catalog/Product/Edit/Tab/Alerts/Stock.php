@@ -48,10 +48,10 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Alerts_Stock extends Mage_Ad
 
     protected function _prepareCollection()
     {
-        $productId = $this->getRequest()->getParam('id');
+        $productId = (int) $this->getRequest()->getParam('id');
         $websiteId = 0;
         if ($store = $this->getRequest()->getParam('store')) {
-            $websiteId = Mage::app()->getStore($store)->getWebsiteId();
+            $websiteId = Mage::app()->getStore((int) $store)->getWebsiteId();
         }
         if (Mage::helper('Mage_Catalog_Helper_Data')->isModuleEnabled('Mage_ProductAlert')) {
             $collection = Mage::getModel('Mage_ProductAlert_Model_Stock')
@@ -101,10 +101,10 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Alerts_Stock extends Mage_Ad
 
     public function getGridUrl()
     {
-        $productId = $this->getRequest()->getParam('id');
+        $productId = (int) $this->getRequest()->getParam('id');
         $storeId   = $this->getRequest()->getParam('store', 0);
         if ($storeId) {
-            $storeId = Mage::app()->getStore($storeId)->getId();
+            $storeId = Mage::app()->getStore((int) $storeId)->getId();
         }
         return $this->getUrl('*/catalog_product/alertsStockGrid', array(
             'id'    => $productId,

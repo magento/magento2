@@ -158,7 +158,7 @@ class Mage_Customer_AddressController extends Mage_Core_Controller_Front_Action
         $customer = $this->_getSession()->getCustomer();
         /* @var Mage_Customer_Model_Address $address */
         $address  = Mage::getModel('Mage_Customer_Model_Address');
-        $addressId = $this->getRequest()->getParam('id');
+        $addressId = (int) $this->getRequest()->getParam('id');
         if ($addressId) {
             $existsAddress = $customer->getAddressById($addressId);
             if ($existsAddress->getId() && $existsAddress->getCustomerId() == $customer->getId()) {
@@ -179,7 +179,7 @@ class Mage_Customer_AddressController extends Mage_Core_Controller_Front_Action
 
     public function deleteAction()
     {
-        $addressId = $this->getRequest()->getParam('id', false);
+        $addressId = (int) $this->getRequest()->getParam('id', false);
 
         if ($addressId) {
             $address = Mage::getModel('Mage_Customer_Model_Address')->load($addressId);

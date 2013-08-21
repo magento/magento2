@@ -485,7 +485,7 @@ class Mage_Adminhtml_CustomerController extends Mage_Adminhtml_Controller_Action
     public function cartAction()
     {
         $this->_initCustomer();
-        $websiteId = $this->getRequest()->getParam('website_id');
+        $websiteId = (int)$this->getRequest()->getParam('website_id');
 
         // delete an item from cart
         $deleteItemId = $this->getRequest()->getPost('delete');
@@ -582,7 +582,7 @@ class Mage_Adminhtml_CustomerController extends Mage_Adminhtml_Controller_Action
             $customer = $this->_objectManager->create('Mage_Customer_Model_Customer');
             $customerId = $this->getRequest()->getParam('id');
             if ($customerId) {
-                $customer->load($customerId);
+                $customer->load((int)$customerId);
             }
 
             /* @var $customerForm Mage_Customer_Model_Form */
@@ -751,7 +751,7 @@ class Mage_Adminhtml_CustomerController extends Mage_Adminhtml_Controller_Action
             try {
                 foreach ($customersIds as $customerId) {
                     $customer = Mage::getModel('Mage_Customer_Model_Customer')->load($customerId);
-                    $customer->setGroupId($this->getRequest()->getParam('group'));
+                    $customer->setGroupId((int)$this->getRequest()->getParam('group'));
                     $customer->save();
                 }
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(

@@ -45,7 +45,7 @@ class Mage_Adminhtml_Block_Review_Edit extends Mage_Adminhtml_Block_Widget_Form_
         $actionPager = Mage::helper('Mage_Review_Helper_Action_Pager');
         $actionPager->setStorageId('reviews');
 
-        $reviewId = $this->getRequest()->getParam('id');
+        $reviewId = (int)$this->getRequest()->getParam('id');
         $prevId = $actionPager->getPreviousItemId($reviewId);
         $nextId = $actionPager->getNextItemId($reviewId);
         if ($prevId !== false) {

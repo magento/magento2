@@ -73,7 +73,7 @@ class Mage_SalesRule_Model_Resource_Coupon_Collection extends Mage_Core_Model_Re
      */
     public function addRuleIdsToFilter(array $ruleIds)
     {
-        $this->addFieldToFilter('rule_id', array('in' => $ruleIds));
+        $this->addFieldToFilter('rule_id', array('in' => array_map("intval", $ruleIds)));
         return $this;
     }
 

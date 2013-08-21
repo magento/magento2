@@ -100,7 +100,7 @@ class Mage_Core_Model_Resource_Store_Collection extends Mage_Core_Model_Resource
      */
     public function addGroupFilter($groupId)
     {
-        return $this->addFieldToFilter('main_table.group_id', array('in' => $groupId));
+        return $this->addFieldToFilter('main_table.group_id', array('in' => array_map("intval", (array)$groupId)));
     }
 
     /**
@@ -111,7 +111,7 @@ class Mage_Core_Model_Resource_Store_Collection extends Mage_Core_Model_Resource
      */
     public function addIdFilter($store)
     {
-        return $this->addFieldToFilter('main_table.store_id', array('in' => $store));
+        return $this->addFieldToFilter('main_table.store_id', array('in' => array_map("intval", (array)$store)));
     }
 
     /**
@@ -122,7 +122,7 @@ class Mage_Core_Model_Resource_Store_Collection extends Mage_Core_Model_Resource
      */
     public function addWebsiteFilter($website)
     {
-        return $this->addFieldToFilter('main_table.website_id', array('in' => $website));
+        return $this->addFieldToFilter('main_table.website_id', array('in' => array_map("intval", (array)$website)));
     }
 
     /**

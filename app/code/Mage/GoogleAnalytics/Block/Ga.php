@@ -79,7 +79,7 @@ _gaq.push(['_trackPageview'{$optPageURL}]);
             return;
         }
         $collection = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Collection')
-            ->addFieldToFilter('entity_id', array('in' => $orderIds))
+            ->addFieldToFilter('entity_id', array('in' => array_map("intval", $orderIds)))
         ;
         $result = array();
         foreach ($collection as $order) {

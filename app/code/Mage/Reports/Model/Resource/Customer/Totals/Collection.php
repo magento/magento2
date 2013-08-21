@@ -78,7 +78,7 @@ class Mage_Reports_Model_Resource_Customer_Totals_Collection extends Mage_Report
     public function setStoreIds($storeIds)
     {
         if ($storeIds) {
-            $this->addAttributeToFilter('store_id', array('in' => (array)$storeIds));
+            $this->addAttributeToFilter('store_id', array('in' => array_map("intval", (array)$storeIds)));
             $this->addSumAvgTotals(1)
                 ->orderByTotalAmount();
         } else {

@@ -118,7 +118,7 @@ class Mage_Oauth_Model_Resource_Token_Collection extends Mage_Core_Model_Resourc
      */
     public function addFilterById($id)
     {
-        $this->addFilter('main_table.entity_id', array('in' => $id), 'public');
+        $this->addFilter('main_table.entity_id', array('in' => array_map("intval", $id)), 'public');
         return $this;
     }
 

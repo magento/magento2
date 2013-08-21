@@ -38,7 +38,7 @@ class Mage_Tag_Block_Adminhtml_Report_Popular_Detail extends Mage_Backend_Block_
         $this->_blockGroup = 'Mage_Tag';
         $this->_controller = 'adminhtml_report_popular_detail';
 
-        $tag = Mage::getModel('Mage_Tag_Model_Tag')->load($this->getRequest()->getParam('id'));
+        $tag = Mage::getModel('Mage_Tag_Model_Tag')->load((int)$this->getRequest()->getParam('id'));
 
         $this->_headerText = Mage::helper('Mage_Tag_Helper_Data')->__('Tag "%s" details', $this->escapeHtml($tag->getName()));
         parent::_construct();

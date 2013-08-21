@@ -158,7 +158,7 @@ class Mage_Review_Model_Resource_Review_Product_Collection extends Mage_Catalog_
         }
 
         if (is_array($storesIds) && !empty($storesIds)) {
-            $inCond = $adapter->prepareSqlCondition('store.store_id', array('in' => $storesIds));
+            $inCond = $adapter->prepareSqlCondition('store.store_id', array('in' => array_map("intval", $storesIds)));
             $select->join(array('store' => $this->_reviewStoreTable),
                 'rt.review_id=store.review_id AND ' . $inCond,
                 array())
@@ -460,7 +460,7 @@ class Mage_Review_Model_Resource_Review_Product_Collection extends Mage_Catalog_
         $reviewsIds = $this->getColumnValues('review_id');
         $storesToReviews = array();
         if (count($reviewsIds)>0) {
-            $reviewIdCondition = $this->_getConditionSql('review_id', array('in' => $reviewsIds));
+            $reviewIdCondition = $this->_getConditionSql('review_id', array('in' => array_map("intval", $reviewsIds)));
             $storeIdCondition = $this->_getConditionSql('store_id', array('gt' => 0));
             $select = $adapter->select()
                 ->from($this->_reviewStoreTable)

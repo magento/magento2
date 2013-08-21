@@ -68,7 +68,7 @@ class Mage_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Controller_Act
 
     public function editAction()
     {
-        $id = $this->getRequest()->getParam('id');
+        $id = (int) $this->getRequest()->getParam('id');
         $model = Mage::getModel('Mage_SalesRule_Model_Rule');
 
         if ($id) {
@@ -122,7 +122,7 @@ class Mage_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Controller_Act
                     array('request' => $this->getRequest()));
                 $data = $this->getRequest()->getPost();
                 $data = $this->_filterDates($data, array('from_date', 'to_date'));
-                $id = $this->getRequest()->getParam('rule_id');
+                $id = (int) $this->getRequest()->getParam('rule_id');
                 if ($id) {
                     $model->load($id);
                     if ($id != $model->getId()) {
@@ -193,7 +193,7 @@ class Mage_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Controller_Act
 
     public function deleteAction()
     {
-        if ($id = $this->getRequest()->getParam('id')) {
+        if ($id = (int) $this->getRequest()->getParam('id')) {
             try {
                 $model = Mage::getModel('Mage_SalesRule_Model_Rule');
                 $model->load($id);
@@ -219,7 +219,7 @@ class Mage_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Controller_Act
 
     public function newConditionHtmlAction()
     {
-        $id = $this->getRequest()->getParam('id');
+        $id = (int) $this->getRequest()->getParam('id');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
 
@@ -243,7 +243,7 @@ class Mage_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Controller_Act
 
     public function newActionHtmlAction()
     {
-        $id = $this->getRequest()->getParam('id');
+        $id = (int) $this->getRequest()->getParam('id');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
 
@@ -339,7 +339,7 @@ class Mage_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Controller_Act
         if (is_array($codesIds)) {
 
             $couponsCollection = Mage::getResourceModel('Mage_SalesRule_Model_Resource_Coupon_Collection')
-                ->addFieldToFilter('coupon_id', array('in' => $codesIds));
+                ->addFieldToFilter('coupon_id', array('in' => array_map("intval", $codesIds)));
 
             foreach ($couponsCollection as $coupon) {
                 $coupon->delete();

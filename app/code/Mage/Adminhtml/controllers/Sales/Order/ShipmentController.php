@@ -57,8 +57,8 @@ class Mage_Adminhtml_Sales_Order_ShipmentController extends Mage_Adminhtml_Contr
         $this->_title($this->__('Sales'))->_title($this->__('Shipments'));
 
         $shipment = false;
-        $shipmentId = $this->getRequest()->getParam('shipment_id');
-        $orderId = $this->getRequest()->getParam('order_id');
+        $shipmentId = (int) $this->getRequest()->getParam('shipment_id');
+        $orderId = (int) $this->getRequest()->getParam('order_id');
         if ($shipmentId) {
             $shipment = Mage::getModel('Mage_Sales_Model_Order_Shipment')->load($shipmentId);
         } elseif ($orderId) {
@@ -338,8 +338,8 @@ class Mage_Adminhtml_Sales_Order_ShipmentController extends Mage_Adminhtml_Contr
      */
     public function removeTrackAction()
     {
-        $trackId    = $this->getRequest()->getParam('track_id');
-        $shipmentId = $this->getRequest()->getParam('shipment_id');
+        $trackId    = (int) $this->getRequest()->getParam('track_id');
+        $shipmentId = (int) $this->getRequest()->getParam('shipment_id');
         $track = Mage::getModel('Mage_Sales_Model_Order_Shipment_Track')->load($trackId);
         if ($track->getId()) {
             try {
@@ -377,8 +377,8 @@ class Mage_Adminhtml_Sales_Order_ShipmentController extends Mage_Adminhtml_Contr
      */
     public function viewTrackAction()
     {
-        $trackId    = $this->getRequest()->getParam('track_id');
-        $shipmentId = $this->getRequest()->getParam('shipment_id');
+        $trackId    = (int) $this->getRequest()->getParam('track_id');
+        $shipmentId = (int) $this->getRequest()->getParam('shipment_id');
         $track = Mage::getModel('Mage_Sales_Model_Order_Shipment_Track')->load($trackId);
         if ($track->getId()) {
             try {
@@ -606,7 +606,7 @@ class Mage_Adminhtml_Sales_Order_ShipmentController extends Mage_Adminhtml_Contr
                 array_filter($ids, 'intval');
                 if (!empty($ids)) {
                     $shipments = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Shipment_Collection')
-                        ->addFieldToFilter('entity_id', array('in' => $ids));
+                        ->addFieldToFilter('entity_id', array('in' => array_map("intval", $ids)));
                 }
                 break;
             case 'order_ids':
@@ -614,7 +614,7 @@ class Mage_Adminhtml_Sales_Order_ShipmentController extends Mage_Adminhtml_Contr
                 array_filter($ids, 'intval');
                 if (!empty($ids)) {
                     $shipments = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Shipment_Collection')
-                        ->setOrderFilter(array('in' => $ids));
+                        ->setOrderFilter(array('in' => array_map("intval", $ids)));
                 }
                 break;
         }

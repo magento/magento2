@@ -55,7 +55,7 @@ class Mage_Downloadable_Model_Resource_Link_Collection extends Mage_Core_Model_R
         } elseif ($product instanceof Mage_Catalog_Model_Product) {
             $this->addFieldToFilter('product_id', $product->getId());
         } else {
-            $this->addFieldToFilter('product_id', array('in' => $product));
+            $this->addFieldToFilter('product_id', array('in' => array_map("intval", $product)));
         }
 
         return $this;

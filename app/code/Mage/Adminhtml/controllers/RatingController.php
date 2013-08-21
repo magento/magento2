@@ -52,7 +52,7 @@ class Mage_Adminhtml_RatingController extends Mage_Adminhtml_Controller_Action
 
         $ratingModel = Mage::getModel('Mage_Rating_Model_Rating');
         if ($this->getRequest()->getParam('id')) {
-            $ratingModel->load($this->getRequest()->getParam('id'));
+            $ratingModel->load((int)$this->getRequest()->getParam('id'));
         }
 
         $this->_title($ratingModel->getId() ? $ratingModel->getRatingCode() : $this->__('New Rating'));
@@ -89,7 +89,7 @@ class Mage_Adminhtml_RatingController extends Mage_Adminhtml_Controller_Action
                     ->setRatingCodes($this->getRequest()->getParam('rating_codes'))
                     ->setStores($stores)
                     ->setPosition($position)
-                    ->setId($this->getRequest()->getParam('id'))
+                    ->setId((int)$this->getRequest()->getParam('id'))
                     ->setIsActive($isActive)
                     ->setEntityId(Mage::registry('entityId'))
                     ->save();
@@ -134,7 +134,7 @@ class Mage_Adminhtml_RatingController extends Mage_Adminhtml_Controller_Action
             try {
                 $model = Mage::getModel('Mage_Rating_Model_Rating');
                 /* @var $model Mage_Rating_Model_Rating */
-                $model->load($this->getRequest()->getParam('id'))
+                $model->load((int)$this->getRequest()->getParam('id'))
                     ->delete();
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(Mage::helper('Mage_Adminhtml_Helper_Data')->__('The rating has been deleted.'));
                 $this->_redirect('*/*/');

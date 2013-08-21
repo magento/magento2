@@ -127,7 +127,7 @@ class Mage_Review_Model_Resource_Review_Collection extends Mage_Core_Model_Resou
      */
     public function addStoreFilter($storeId)
     {
-        $inCond = $this->getConnection()->prepareSqlCondition('store.store_id', array('in' => $storeId));
+        $inCond = $this->getConnection()->prepareSqlCondition('store.store_id', array('in' => array_map("intval", $storeId)));
         $this->getSelect()->join(array('store'=>$this->_reviewStoreTable),
             'main_table.review_id=store.review_id',
             array());
@@ -281,7 +281,7 @@ class Mage_Review_Model_Resource_Review_Collection extends Mage_Core_Model_Resou
         $reviewsIds = $this->getColumnValues('review_id');
         $storesToReviews = array();
         if (count($reviewsIds)>0) {
-            $inCond = $adapter->prepareSqlCondition('review_id', array('in' => $reviewsIds));
+            $inCond = $adapter->prepareSqlCondition('review_id', array('in' => array_map("intval", $reviewsIds)));
             $select = $adapter->select()
                 ->from($this->_reviewStoreTable)
                 ->where($inCond);

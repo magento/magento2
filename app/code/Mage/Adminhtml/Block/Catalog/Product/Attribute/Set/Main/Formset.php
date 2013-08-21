@@ -40,7 +40,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Main_Formset extends Ma
     protected function _prepareForm()
     {
         $data = Mage::getModel('Mage_Eav_Model_Entity_Attribute_Set')
-            ->load($this->getRequest()->getParam('id'));
+            ->load((int)$this->getRequest()->getParam('id'));
 
         $form = new Varien_Data_Form();
         $fieldset = $form->addFieldset('set_name', array('legend'=> Mage::helper('Mage_Catalog_Helper_Data')->__('Edit Set Name')));

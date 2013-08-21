@@ -100,7 +100,7 @@ class Mage_Catalog_Model_Resource_Category_Collection extends Mage_Catalog_Model
             if (empty($categoryIds)) {
                 $condition = '';
             } else {
-                $condition = array('in' => $categoryIds);
+                $condition = array('in' => array_map("intval", $categoryIds));
             }
         } elseif (is_numeric($categoryIds)) {
             $condition = $categoryIds;

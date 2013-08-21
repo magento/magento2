@@ -103,7 +103,7 @@ class Mage_Sales_Model_Resource_Order_Item_Collection extends Mage_Sales_Model_R
     public function addIdFilter($item)
     {
         if (is_array($item)) {
-            $this->addFieldToFilter('item_id', array('in'=>$item));
+            $this->addFieldToFilter('item_id', array('in'=>array_map("intval",$item)));
         } elseif ($item instanceof Mage_Sales_Model_Order_Item) {
             $this->addFieldToFilter('item_id', $item->getId());
         } else {

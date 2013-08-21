@@ -38,8 +38,7 @@ class Mage_Adminhtml_Customer_GroupController extends Mage_Adminhtml_Controller_
         $this->_title($this->__('Customers'))->_title($this->__('Customer Groups'));
 
         Mage::register('current_group', Mage::getModel('Mage_Customer_Model_Group'));
-        $groupId = $this->getRequest()->getParam('id');
-        if (!is_null($groupId)) {
+        if ($groupId = (int)$this->getRequest()->getParam('id')) {
             Mage::registry('current_group')->load($groupId);
         }
 

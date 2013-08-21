@@ -77,7 +77,7 @@ class Mage_Reports_Model_Resource_Accounts_Collection extends Mage_Reports_Model
     public function setStoreIds($storeIds)
     {
         if ($storeIds) {
-            $this->addAttributeToFilter('store_id', array('in' => (array)$storeIds));
+            $this->addAttributeToFilter('store_id', array('in' => array_map("intval", (array)$storeIds)));
         }
         return $this;
     }

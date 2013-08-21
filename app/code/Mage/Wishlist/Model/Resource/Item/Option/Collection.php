@@ -98,7 +98,7 @@ class Mage_Wishlist_Model_Resource_Item_Option_Collection extends Mage_Core_Mode
             $this->_totalRecords = 0;
             $this->_setIsLoaded(true);
         } else if (is_array($item)) {
-            $this->addFieldToFilter('wishlist_item_id', array('in' => $item));
+            $this->addFieldToFilter('wishlist_item_id', array('in' => array_map('intval', $item)));
         } else if ($item instanceof Mage_Wishlist_Model_Item) {
             $this->addFieldToFilter('wishlist_item_id', $item->getId());
         } else {

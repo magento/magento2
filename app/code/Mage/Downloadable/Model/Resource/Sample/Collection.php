@@ -53,7 +53,7 @@ class Mage_Downloadable_Model_Resource_Sample_Collection extends Mage_Core_Model
         if (empty($product)) {
             $this->addFieldToFilter('product_id', '');
         } elseif (is_array($product)) {
-            $this->addFieldToFilter('product_id', array('in' => $product));
+            $this->addFieldToFilter('product_id', array('in' => array_map("intval", $product)));
         } else {
             $this->addFieldToFilter('product_id', $product);
         }

@@ -119,6 +119,6 @@ class Mage_Core_Model_Resource_Store_Group_Collection extends Mage_Core_Model_Re
      */
     public function addWebsiteFilter($website)
     {
-        return $this->addFieldToFilter('main_table.website_id', array('in' => $website));
+        return $this->addFieldToFilter('main_table.website_id', array('in' => array_map("intval", (array)$website)));
     }
 }

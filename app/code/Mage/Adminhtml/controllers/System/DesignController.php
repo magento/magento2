@@ -103,7 +103,7 @@ class Mage_Adminhtml_System_DesignController extends Mage_Adminhtml_Controller_A
 
     public function deleteAction()
     {
-        if ($id = $this->getRequest()->getParam('id')) {
+        if ($id = (int) $this->getRequest()->getParam('id')) {
             $design = Mage::getModel('Mage_Core_Model_Design')->load($id);
 
             try {

@@ -95,7 +95,7 @@ class Mage_Sales_Model_Resource_Sale_Collection extends Varien_Data_Collection_D
      */
     public function addStoreFilter($storeIds)
     {
-        return $this->addFieldToFilter('store_id', array('in' => $storeIds));
+        return $this->addFieldToFilter('store_id', array('in' => array_map("intval", $storeIds)));
     }
 
     /**

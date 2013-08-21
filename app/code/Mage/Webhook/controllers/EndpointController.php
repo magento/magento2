@@ -58,7 +58,7 @@ class Mage_Webhook_EndpointController extends Mage_Core_Controller_Front_Action
      */
     public function resttestAction()
     {
-        $subscriberId = $this->getRequest()->getParam('id');
+        $subscriberId = (int) $this->getRequest()->getParam('id');
         $subscriber = Mage::getModel('Mage_Webhook_Model_Subscriber')->load($subscriberId);
 
         $request = Mage::getModel('Mage_Webhook_Model_Transport_Http_Request')

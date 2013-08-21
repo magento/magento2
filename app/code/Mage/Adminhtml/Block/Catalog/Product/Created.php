@@ -145,7 +145,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Created extends Mage_Adminhtml_Block_
         if ($this->_product === null) {
             $this->_product = Mage::getModel('Mage_Catalog_Model_Product')
                 ->setStore(0)
-                ->load($this->getRequest()->getParam('id'));
+                ->load((int)$this->getRequest()->getParam('id'));
         }
         return $this->_product;
     }

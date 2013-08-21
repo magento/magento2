@@ -119,7 +119,7 @@ class Mage_Adminhtml_Catalog_Product_ReviewController extends Mage_Adminhtml_Con
 
     public function saveAction()
     {
-        if (($data = $this->getRequest()->getPost()) && ($reviewId = $this->getRequest()->getParam('id'))) {
+        if (($data = $this->getRequest()->getPost()) && ($reviewId = (int)$this->getRequest()->getParam('id'))) {
             $review = Mage::getModel('Mage_Review_Model_Review')->load($reviewId);
             $session = Mage::getSingleton('Mage_Adminhtml_Model_Session');
             if (! $review->getId()) {
@@ -175,7 +175,7 @@ class Mage_Adminhtml_Catalog_Product_ReviewController extends Mage_Adminhtml_Con
         $session    = Mage::getSingleton('Mage_Adminhtml_Model_Session');
 
         try {
-            Mage::getModel('Mage_Review_Model_Review')->setId($reviewId)
+            Mage::getModel('Mage_Review_Model_Review')->setId((int)$reviewId)
                 ->aggregate()
                 ->delete();
 
@@ -298,8 +298,7 @@ class Mage_Adminhtml_Catalog_Product_ReviewController extends Mage_Adminhtml_Con
     public function jsonProductInfoAction()
     {
         $response = new Varien_Object();
-        $id = $this->getRequest()->getParam('id');
-        if( intval($id) > 0 ) {
+        if($id = (int)$this->getRequest()->getParam('id')) {
             $product = Mage::getModel('Mage_Catalog_Model_Product')
                 ->load($id);
 
@@ -328,7 +327,7 @@ class Mage_Adminhtml_Catalog_Product_ReviewController extends Mage_Adminhtml_Con
             $review = Mage::getModel('Mage_Review_Model_Review')->setData($data);
 
             $product = Mage::getModel('Mage_Catalog_Model_Product')
-                ->load($productId);
+                ->load((int)$productId);
 
             try {
                 $review->setEntityId(1) // product

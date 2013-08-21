@@ -104,7 +104,7 @@ class Mage_Sales_DownloadController extends Mage_Core_Controller_Front_Action
      */
     public function downloadProfileCustomOptionAction()
     {
-        $recurringProfile = Mage::getModel('Mage_Sales_Model_Recurring_Profile')->load($this->getRequest()->getParam('id'));
+        $recurringProfile = Mage::getModel('Mage_Sales_Model_Recurring_Profile')->load((int)$this->getRequest()->getParam('id'));
 
         if (!$recurringProfile->getId()) {
             $this->_forward('noRoute');

@@ -43,7 +43,7 @@ class Mage_Customer_Block_Address_Edit extends Mage_Directory_Block_Data
         $this->_address = Mage::getModel('Mage_Customer_Model_Address');
 
         // Init address object
-        if ($id = $this->getRequest()->getParam('id')) {
+        if ($id = (int) $this->getRequest()->getParam('id')) {
             $this->_address->load($id);
             if ($this->_address->getCustomerId() != Mage::getSingleton('Mage_Customer_Model_Session')->getCustomerId()) {
                 $this->_address->setData(array());

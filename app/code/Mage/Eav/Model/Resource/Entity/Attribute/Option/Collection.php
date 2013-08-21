@@ -107,7 +107,7 @@ class Mage_Eav_Model_Resource_Entity_Attribute_Option_Collection extends Mage_Co
     }
 
     /**
-     * Add option id(s) frilter to collection
+     * Add option id(s) filter to collection
      *
      * @param int|array $optionId
      * @return Mage_Eav_Model_Resource_Entity_Attribute_Option_Collection

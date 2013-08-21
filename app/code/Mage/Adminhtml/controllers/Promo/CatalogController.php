@@ -77,7 +77,7 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
     {
         $this->_title($this->__('Promotions'))->_title($this->__('Catalog Price Rules'));
 
-        $id = $this->getRequest()->getParam('id');
+        $id = (int) $this->getRequest()->getParam('id');
         $model = Mage::getModel('Mage_CatalogRule_Model_Rule');
 
         if ($id) {
@@ -123,7 +123,7 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
                 );
                 $data = $this->getRequest()->getPost();
                 $data = $this->_filterDates($data, array('from_date', 'to_date'));
-                if ($id = $this->getRequest()->getParam('rule_id')) {
+                if ($id = (int)$this->getRequest()->getParam('rule_id')) {
                     $model->load($id);
                     if ($id != $model->getId()) {
                         Mage::throwException(Mage::helper('Mage_CatalogRule_Helper_Data')->__('Wrong rule specified.'));
@@ -184,7 +184,7 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
 
     public function deleteAction()
     {
-        if ($id = $this->getRequest()->getParam('id')) {
+        if ($id = (int)$this->getRequest()->getParam('id')) {
             try {
                 $model = Mage::getModel('Mage_CatalogRule_Model_Rule');
                 $model->load($id);
@@ -216,7 +216,7 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
 
     public function newConditionHtmlAction()
     {
-        $id = $this->getRequest()->getParam('id');
+        $id = (int)$this->getRequest()->getParam('id');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
 
@@ -253,7 +253,7 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
 
     public function newActionHtmlAction()
     {
-        $id = $this->getRequest()->getParam('id');
+        $id = (int)$this->getRequest()->getParam('id');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
 

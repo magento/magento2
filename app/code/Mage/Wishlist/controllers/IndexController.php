@@ -99,7 +99,7 @@ class Mage_Wishlist_IndexController
             /* @var Mage_Wishlist_Model_Wishlist $wishlist */
             $wishlist = Mage::getModel('Mage_Wishlist_Model_Wishlist');
             if ($wishlistId) {
-                $wishlist->load($wishlistId);
+                $wishlist->load((int)$wishlistId);
             } else {
                 $wishlist->loadByCustomer($customerId, true);
             }
@@ -691,7 +691,7 @@ class Mage_Wishlist_IndexController
      */
     public function downloadCustomOptionAction()
     {
-        $option = Mage::getModel('Mage_Wishlist_Model_Item_Option')->load($this->getRequest()->getParam('id'));
+        $option = Mage::getModel('Mage_Wishlist_Model_Item_Option')->load((int)$this->getRequest()->getParam('id'));
 
         if (!$option->getId()) {
             return $this->_forward('noRoute');

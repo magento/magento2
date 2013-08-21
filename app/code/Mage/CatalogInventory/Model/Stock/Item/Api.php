@@ -55,7 +55,7 @@ class Mage_CatalogInventory_Model_Stock_Item_Api extends Mage_Catalog_Model_Api_
         $collection = Mage::getModel('Mage_Catalog_Model_Product')
             ->getCollection()
             ->setFlag('require_stock_items', true)
-            ->addFieldToFilter('entity_id', array('in'=>$productIds));
+            ->addFieldToFilter('entity_id', array('in'=>array_map("intval", $productIds)));
 
         $result = array();
 

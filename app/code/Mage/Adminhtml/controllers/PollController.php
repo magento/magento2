@@ -50,7 +50,7 @@ class Mage_Adminhtml_PollController extends Mage_Adminhtml_Controller_Action
     {
         $this->_title($this->__('CMS'))->_title($this->__('Polls'));
 
-        $pollId     = $this->getRequest()->getParam('id');
+        $pollId     = (int)$this->getRequest()->getParam('id');
         $pollModel  = Mage::getModel('Mage_Poll_Model_Poll')->load($pollId);
 
         if ($pollModel->getId() || $pollId == 0) {
@@ -76,7 +76,7 @@ class Mage_Adminhtml_PollController extends Mage_Adminhtml_Controller_Action
 
     public function deleteAction()
     {
-        if ($id = $this->getRequest()->getParam('id')) {
+        if ($id = (int)$this->getRequest()->getParam('id')) {
             try {
                 $model = Mage::getModel('Mage_Poll_Model_Poll');
                 $model->setId($id);
@@ -133,7 +133,7 @@ class Mage_Adminhtml_PollController extends Mage_Adminhtml_Controller_Action
                       ->setClosed($this->getRequest()->getParam('closed'));
 
                 if( $this->getRequest()->getParam('id') > 0 ) {
-                    $pollModel->setId($this->getRequest()->getParam('id'));
+                    $pollModel->setId((int)$this->getRequest()->getParam('id'));
                 }
 
                 $stores = $this->getRequest()->getParam('store_ids');

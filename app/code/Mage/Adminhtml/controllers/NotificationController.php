@@ -47,7 +47,7 @@ class Mage_Adminhtml_NotificationController extends Mage_Adminhtml_Controller_Ac
 
     public function markAsReadAction()
     {
-        if ($id = $this->getRequest()->getParam('id')) {
+        if ($id = (int)$this->getRequest()->getParam('id')) {
             $session = Mage::getSingleton('Mage_Adminhtml_Model_Session');
             $model = Mage::getModel('Mage_AdminNotification_Model_Inbox')
                 ->load($id);
@@ -104,7 +104,7 @@ class Mage_Adminhtml_NotificationController extends Mage_Adminhtml_Controller_Ac
 
     public function removeAction()
     {
-        if ($id = $this->getRequest()->getParam('id')) {
+        if ($id = (int)$this->getRequest()->getParam('id')) {
             $session = Mage::getSingleton('Mage_Adminhtml_Model_Session');
             $model = Mage::getModel('Mage_AdminNotification_Model_Inbox')
                 ->load($id);
