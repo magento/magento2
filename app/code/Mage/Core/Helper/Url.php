@@ -133,7 +133,8 @@ class Mage_Core_Helper_Url extends Mage_Core_Helper_Abstract
         $regExpression = '/\\?[^#]*?(' . preg_quote($paramKey, '/') . '\\=[^#&]*&?)/' . ($caseSensitive ? '' : 'i');
         while (preg_match($regExpression, $url, $matches) !== 0) {
             $paramString = $matches[1];
-            if (preg_match('/&$/', $paramString) === 0) {
+            // if ampersand is at the end of $paramString
+            if (substr($paramString, -1, 1) != '&') {
                 $url = preg_replace('/(&|\\?)?' . preg_quote($paramString, '/') . '/', '', $url);
             } else {
                 $url = str_replace($paramString, '', $url);
