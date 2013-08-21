@@ -57,7 +57,7 @@ class Mage_GoogleAnalytics_Block_Ga extends Mage_Core_Block_Template
     {
         $pageName   = trim($this->getPageName());
         $optPageURL = '';
-        if ($pageName && preg_match('/^\/.*/i', $pageName)) {
+        if ($pageName && substr($pageName, 0, 1) == '/' && strlen($pageName) > 1) {
             $optPageURL = ", '{$this->jsQuoteEscape($pageName)}'";
         }
         return "
