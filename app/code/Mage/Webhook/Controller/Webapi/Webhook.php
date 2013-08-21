@@ -116,7 +116,7 @@ class Mage_Webhook_Controller_Webapi_Webhook extends Mage_Webapi_Controller_Acti
             $readableResources = array();
             foreach ($resourceIds as $resource) {
                 if (preg_match("/\/get/", $resource)) { // TODO: Should be allowed to be anything, not just get
-                    $result = preg_split("/\//", $resource);
+                    $result = explode("/", $resource);
                     $readableResources[] = $result[0];
                 }
             }
@@ -124,7 +124,7 @@ class Mage_Webhook_Controller_Webapi_Webhook extends Mage_Webapi_Controller_Acti
             $resultTopics = array();
             foreach($topics as $topic) {
                 $topic = str_replace("\/", "/", $topic);
-                $array = preg_split("/\//", $topic);
+                $array = explode("/", $topic);
                 if (in_array($array[0], $readableResources)) {
                     $resultTopics[] = $topic;
                 }
