@@ -27,6 +27,8 @@
 -->
 <config>
     <menu>
+        <add id="Mage_Catalog::inventory" title="Inventory" module="Mage_Catalog" sortOrder="10" parent="Mage_Catalog::catalog" dependsOnModule="Mage_Catalog" resource="Mage_Catalog::catalog"/>
+
         <add id="Mage_Catalog::catalog" title="Products" module="Mage_Catalog" sortOrder="20" dependsOnModule="Mage_Catalog" resource="Mage_Catalog::catalog"/>
         <add id="Mage_Catalog::catalog_products" title="Catalog" module="Mage_Catalog" sortOrder="10" parent="Mage_Catalog::inventory" action="adminhtml/catalog_product/" resource="Mage_Catalog::products"/>
         <add id="Mage_Catalog::catalog_categories" title="Categories" module="Mage_Catalog" sortOrder="20" parent="Mage_Catalog::inventory" action="adminhtml/catalog_category/" resource="Mage_Catalog::categories"/>
