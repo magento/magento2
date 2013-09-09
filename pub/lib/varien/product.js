@@ -581,7 +581,7 @@ Product.OptionsPrice.prototype = {
 
         this.optionPrices   = {};
         this.customPrices   = {};
-        this.containers     = {};
+        this.containers     = [];
 
         this.displayZeroPrice   = true;
 
@@ -641,13 +641,31 @@ Product.OptionsPrice.prototype = {
         var priceInclTax = optionPrices[3];
         optionPrices = optionPrices[0];
 
-        $H(this.containers).each(function(pair) {
+        var subPrice = 0;
+        var subPriceincludeTax = 0;
+        Object.values(this.customPrices).each(function(el){
+            if (el.excludeTax && el.includeTax) {
+                subPrice += parseFloat(el.excludeTax);
+                subPriceincludeTax += parseFloat(el.includeTax);
+            } else {
+                subPrice += parseFloat(el.price);
+                subPriceincludeTax += parseFloat(el.price);
+            }
+        });
+
+        var priceDiff = optionPrices + subPrice;
+        if (this.lastReloadPrice !== undefined && this.lastReloadPrice === priceDiff) {
+            return;
+        }
+        this.lastReloadPrice = priceDiff;
+
+        $A(this.containers).each(function(value) {
             var _productPrice;
             var _plusDisposition;
             var _minusDisposition;
             var _priceInclTax;
-            if ($(pair.value)) {
-                if (pair.value == 'old-price-'+this.productId && this.productOldPrice != this.productPrice) {
+            if ($(value)) {
+                if (value == 'old-price-'+this.productId && this.productOldPrice != this.productPrice) {
                     _productPrice = this.productOldPrice;
                     _plusDisposition = this.oldPlusDisposition;
                     _minusDisposition = this.oldMinusDisposition;
@@ -658,7 +676,7 @@ Product.OptionsPrice.prototype = {
                 }
                 _priceInclTax = priceInclTax;
 
-                if (pair.value == 'old-price-'+this.productId && optionOldPrice !== undefined) {
+                if (value == 'old-price-'+this.productId && optionOldPrice !== undefined) {
                     price = optionOldPrice+parseFloat(_productPrice);
                 } else if (this.specialTaxPrice == 'true' && this.priceInclTax !== undefined && this.priceExclTax !== undefined) {
                     price = optionPrices+parseFloat(this.priceExclTax);
@@ -682,17 +700,6 @@ Product.OptionsPrice.prototype = {
                     var incl = excl + tax;
                 }
 
-                var subPrice = 0;
-                var subPriceincludeTax = 0;
-                Object.values(this.customPrices).each(function(el){
-                    if (el.excludeTax && el.includeTax) {
-                        subPrice += parseFloat(el.excludeTax);
-                        subPriceincludeTax += parseFloat(el.includeTax);
-                    } else {
-                        subPrice += parseFloat(el.price);
-                        subPriceincludeTax += parseFloat(el.price);
-                    }
-                });
                 excl += subPrice;
                 incl += subPriceincludeTax;
 
@@ -708,11 +715,11 @@ Product.OptionsPrice.prototype = {
                 excl += parseFloat(nonTaxable);
                 incl += parseFloat(nonTaxable);
 
-                if (pair.value == 'price-including-tax-'+this.productId) {
+                if (value == 'price-including-tax-'+this.productId) {
                     price = incl;
-                } else if (pair.value == 'price-excluding-tax-'+this.productId) {
+                } else if (value == 'price-excluding-tax-'+this.productId) {
                     price = excl;
-                } else if (pair.value == 'old-price-'+this.productId) {
+                } else if (value == 'old-price-'+this.productId) {
                     if (this.showIncludeTax || this.showBothPrices) {
                         price = incl;
                     } else {
@@ -734,40 +741,35 @@ Product.OptionsPrice.prototype = {
                     formattedPrice = '';
                 }
 
-                if ($(pair.value).select('.price')[0]) {
-                    $(pair.value).select('.price')[0].innerHTML = formattedPrice;
-                    if ($(pair.value+this.duplicateIdSuffix) && $(pair.value+this.duplicateIdSuffix).select('.price')[0]) {
-                        $(pair.value+this.duplicateIdSuffix).select('.price')[0].innerHTML = formattedPrice;
+                if ($(value).select('.price')[0]) {
+                    $(value).select('.price')[0].innerHTML = formattedPrice;
+                    if ($(value+this.duplicateIdSuffix) && $(value+this.duplicateIdSuffix).select('.price')[0]) {
+                        $(value+this.duplicateIdSuffix).select('.price')[0].innerHTML = formattedPrice;
                     }
                 } else {
-                    $(pair.value).innerHTML = formattedPrice;
-                    if ($(pair.value+this.duplicateIdSuffix)) {
-                        $(pair.value+this.duplicateIdSuffix).innerHTML = formattedPrice;
+                    $(value).innerHTML = formattedPrice;
+                    if ($(value+this.duplicateIdSuffix)) {
+                        $(value+this.duplicateIdSuffix).innerHTML = formattedPrice;
                     }
                 }
             };
         }.bind(this));
 
         for (var i = 0; i < this.tierPrices.length; i++) {
+            var tierPrice = 0, tierPriceInclTax = 0;
             $$('.price.tier-' + i).each(function (el) {
-                var price = this.tierPrices[i] + parseFloat(optionPrices);
-                el.innerHTML = this.formatPrice(price);
+                tierPrice = this.tierPrices[i] + optionPrices + subPrice;
+                el.innerHTML = this.formatPrice(tierPrice);
             }, this);
             $$('.price.tier-' + i + '-incl-tax').each(function (el) {
-                var price = this.tierPricesInclTax[i] + parseFloat(optionPrices);
-                el.innerHTML = this.formatPrice(price);
+                tierPriceInclTax = this.tierPricesInclTax[i] + priceInclTax + subPriceincludeTax;
+                el.innerHTML = this.formatPrice(tierPriceInclTax);
             }, this);
             $$('.benefit').each(function (el) {
-                var parsePrice = function (html) {
-                    return parseFloat(/\d+\.?\d*/.exec(html));
-                };
-                var container = $(this.containers[3]) ? this.containers[3] : this.containers[0];
-                var price = parsePrice($(container).innerHTML);
-                var tierPrice = $$('.price.tier-' + i);
-                tierPrice = tierPrice.length ? parseInt(tierPrice[0].innerHTML, 10) : 0;
-                var $percent = Selector.findChildElements(el, ['.percent.tier-' + i]);
-                $percent.each(function (el) {
-                    el.innerHTML = Math.ceil(100 - ((100 / price) * tierPrice));
+                var showPrice = this.showIncludeTax ? tierPriceInclTax : tierPrice,
+                    percent = Math.ceil(100 - ((100 / price) * showPrice));
+                el.select('.percent.tier-' + i).each(function (el) {
+                    el.innerHTML =percent;
                 });
             }, this);
         }
