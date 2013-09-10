@@ -24,6 +24,12 @@
                     <xsd:element name="website_ids" type="typens:ArrayOfString" />
                 </xsd:sequence>
             </xsd:complexType>
+            <xsd:complexType name="catalogProductAdditionalAttributesEntity">
+                <xsd:sequence>
+                    <xsd:celement name="multi_data" type="typens:associativeMultiArray" minOccurs="0" />
+                    <xsd:element name="single_data" type="typens:associativeArray" minOccurs="0" />
+                </xsd:sequence>
+            </xsd:complexType>
             <xsd:complexType name="catalogProductRequestAttributes">
                 <xsd:sequence>
                     <xsd:element name="attributes" type="typens:ArrayOfString" minOccurs="0" />
@@ -123,7 +129,7 @@
                     <xsd:element name="custom_design" type="xsd:string" minOccurs="0" />
                     <xsd:element name="custom_layout_update" type="xsd:string" minOccurs="0" />
                     <xsd:element name="options_container" type="xsd:string" minOccurs="0" />
-                    <xsd:element name="additional_attributes" type="typens:associativeArray" minOccurs="0" />
+                    <xsd:element name="additional_attributes" type="typens:catalogProductAdditionalAttributesEntity" minOccurs="0" />
                     <xsd:element name="configurable_attributes" type="typens:catalogProductConfigurableAttributesEntityArray" minOccurs="0"/>
                 </xsd:sequence>
             </xsd:complexType>
