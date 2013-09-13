@@ -80,6 +80,7 @@ class Mage_Catalog_Block_Product_Price extends Mage_Core_Block_Template
         $prices = $product->getFormatedTierPrice();
 
         $res = array();
+        $i = 0;
         if (is_array($prices)) {
             foreach ($prices as $price) {
                 $price['price_qty'] = $price['price_qty'] * 1;
@@ -101,12 +102,15 @@ class Mage_Catalog_Block_Product_Price extends Mage_Core_Block_Template
                     $tierPrice = Mage::app()->getStore()->convertPrice(
                         Mage::helper('Mage_Tax_Helper_Data')->getPrice($product, $price['website_price'])
                     );
-                    $price['formated_price'] = Mage::app()->getStore()->formatPrice($tierPrice);
-                    $price['formated_price_incl_tax'] = Mage::app()->getStore()->formatPrice(
-                        Mage::app()->getStore()->convertPrice(
-                            Mage::helper('Mage_Tax_Helper_Data')->getPrice($product, $price['website_price'], true)
-                        )
+                    $price['formated_price'] = '<span class="price tier-' . $i . '">' .
+                        Mage::app()->getStore()->formatPrice($tierPrice, false) .
+                        '</<span>';
+                    $tierPriceInclTax = Mage::app()->getStore()->convertPrice(
+                        Mage::helper('Mage_Tax_Helper_Data')->getPrice($product, $price['website_price'], true)
                     );
+                    $price['formated_price_incl_tax'] = '<span class="price tier-' . $i . '-incl-tax">' .
+                        Mage::app()->getStore()->formatPrice($tierPriceInclTax, false) .
+                        '</span>';
 
                     if (Mage::helper('Mage_Catalog_Helper_Data')->canApplyMsrp($product)) {
                         $oldPrice = $product->getFinalPrice();
@@ -121,7 +125,7 @@ class Mage_Catalog_Block_Product_Price extends Mage_Core_Block_Template
                         $product->setFinalPrice($oldPrice);
                     }
 
-                    $res[] = $price;
+                    $res[$i++] = $price;
                 }
             }
         }

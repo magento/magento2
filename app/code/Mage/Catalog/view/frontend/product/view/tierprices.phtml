@@ -186,8 +186,8 @@ if (Mage::helper('Mage_Weee_Helper_Data')->typeOfDisplay($_product, array(1,2,4)
         <?php if (!$this->getInGrouped()): ?>
             <?php if(($_product->getPrice() == $_product->getFinalPrice() && $_product->getPrice() > $_price['price'])
             || ($_product->getPrice() != $_product->getFinalPrice() &&  $_product->getFinalPrice() > $_price['price'])): ?>
-                <?php echo $this->__('and') ?>&nbsp;<strong class="benefit"><?php echo $this->__('save')?>&nbsp;<span class="percent tier-<?php echo $_index;?>"><?php echo $_price['savePercent']?></span>%
-            <?php endif ?></strong>
+                <?php echo $this->__('and') ?>&nbsp;<strong class="benefit"><?php echo $this->__('save')?>&nbsp;<span class="percent tier-<?php echo $_index;?>"><?php echo $_price['savePercent']?></span>%</strong>
+            <?php endif ?>
         <?php endif; ?>
 
         <?php if ($_catalogHelper->isShowPriceOnGesture($_product)):?>
