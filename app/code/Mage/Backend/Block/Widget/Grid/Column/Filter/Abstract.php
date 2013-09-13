@@ -102,6 +102,13 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Abstract extends Mage_Backend
      */
     public function getCondition()
     {
+        // Support advanced filters by prefixing query with REGEXP or LIKE
+        if (substr($this->getValue(), 0, 7) == 'REGEXP ') {
+            return array('regexp' => substr($this->getValue(), 7));
+        }
+        if (substr($this->getValue(), 0, 5) == 'LIKE ') {
+            return array('like' => substr($this->getValue(), 5));
+        }
         $helper = Mage::getResourceHelper('Mage_Core');
         $likeExpression = $helper->addLikeEscape($this->getValue(), array('position' => 'any'));
         return array('like' => $likeExpression);
