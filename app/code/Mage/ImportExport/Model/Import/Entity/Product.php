@@ -746,6 +746,19 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                             } else {
                                 $linkedId = $this->_oldSku[$linkedSku]['entity_id'];
                             }
+                            
+                            if ($linkedId == null) {
+                                // Import file links to a SKU which is skipped for some reasons -> leads to a "NULL"
+                                // link causing fatal errors.
+                                Mage::logException(
+                                    new Exception(
+                                        sprintf('WARNING: Orphaned link skipped: From SKU %s (ID %d) to SKU %s, Link type id: %d',
+                                            $sku, $productId, $linkedSku, $linkId)
+                                    )
+                                );
+                                continue;
+                            }
+                            
                             $linkKey = "{$productId}-{$linkedId}-{$linkId}";
 
                             if (!isset($linkRows[$linkKey])) {
