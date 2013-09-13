@@ -220,18 +220,28 @@ class Mage_ImportExport_Model_Import_Entity_Product_Type_Configurable
      *
      * @return Mage_ImportExport_Model_Import_Entity_Product_Type_Configurable
      */
-    protected function _loadSkuSuperAttributeValues()
+    protected function _loadSkuSuperAttributeValues($bunch, $newSku, $oldSku)
     {
         if ($this->_superAttributes) {
             $attrSetIdToName   = $this->_entityModel->getAttrSetIdToName();
             $allowProductTypes = array();
-
+            
+            foreach ($bunch as $rowData){
+                if (!empty($rowData['_super_products_sku'])) {
+                    if (isset($newSku[$rowData['_super_products_sku']])) {
+                        $productIdArray[] = $newSku[$rowData['_super_products_sku']];
+                    } elseif (isset($oldSku[$rowData['_super_products_sku']])) {
+                        $productIdArray[] = $oldSku[$rowData['_super_products_sku']];
+                    }
+                }
+            }
             foreach (Mage::getConfig()
                     ->getNode('global/catalog/product/type/configurable/allow_product_types')->children() as $type) {
                 $allowProductTypes[] = $type->getName();
             }
             foreach (Mage::getResourceModel('Mage_Catalog_Model_Resource_Product_Collection')
                         ->addFieldToFilter('type_id', $allowProductTypes)
+                        ->addFieldToFilter ('entity_id', array('in' => $productIdArray))
                         ->addAttributeToSelect(array_keys($this->_superAttributes)) as $product) {
                 $attrSetName = $attrSetIdToName[$product->getAttributeSetId()];
 
@@ -362,7 +372,6 @@ class Mage_ImportExport_Model_Import_Entity_Product_Type_Configurable
         if ($this->_entityModel->getBehavior() == Mage_ImportExport_Model_Import::BEHAVIOR_APPEND) {
             $this->_loadSkuSuperData();
         }
-        $this->_loadSkuSuperAttributeValues();
 
         while ($bunch = $this->_entityModel->getNextBunch()) {
             $superAttributes = array(
@@ -372,6 +381,7 @@ class Mage_ImportExport_Model_Import_Entity_Product_Type_Configurable
                 'super_link' => array(),
                 'relation'   => array()
             );
+            $this->_loadSkuSuperAttributeValues($bunch, $newSku, $oldSku);
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum)) {
                     continue;
