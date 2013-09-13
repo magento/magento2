@@ -41,6 +41,12 @@ class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resou
     protected $_app;
 
     /**
+     * Add store data flag
+     * @var bool
+     */
+    protected $_addStoreDataFlag = false;
+
+    /**
      * Collection constructor
      *
      * @param Varien_Data_Collection_Db_FetchStrategyInterface $fetchStrategy
@@ -103,7 +109,7 @@ class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resou
     }
 
     /**
-     * set order by position field
+     * Set order by position field
      *
      * @param   string $dir
      * @return  Mage_Rating_Model_Resource_Rating_Collection
@@ -117,7 +123,7 @@ class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resou
     /**
      * Set store filter
      *
-     * @param int_type $storeId
+     * @param int $storeId
      * @return Mage_Rating_Model_Resource_Rating_Collection
      */
     public function setStoreFilter($storeId)
@@ -257,45 +263,32 @@ class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resou
     }
 
     /**
+     * Add stores data to collection
+     *
+     * @return Mage_Rating_Model_Resource_Rating_Collection
+     */
+    public function addStoreData() {
+        if (!$this->_app->isSingleStoreMode()) {
+            if (!$this->_isCollectionLoaded) {
+                $this->_addStoreDataFlag = true;
+            } elseif (!$this->_addStoreDataFlag) {
+                $this->_addStoreData();
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Add stores to collection
+     *
+     * @todo mate method deprecated
      *
      * @return Mage_Rating_Model_Resource_Rating_Collection
      */
     public function addStoresToCollection()
     {
-        if ($this->_app->isSingleStoreMode()) {
-            return $this;
-        }
-        if (!$this->_isCollectionLoaded) {
-            return $this;
-        }
-        $ratingIds = array();
-        foreach ($this as $item) {
-            $ratingIds[] = $item->getId();
-            $item->setStores(array());
-        }
-        if (!$ratingIds) {
-            return $this;
-        }
-        $adapter = $this->getConnection();
-
-        $inCond = $adapter->prepareSqlCondition('rating_id', array(
-            'in' => $ratingIds
-        ));
-
-        $this->_select = $adapter
-            ->select()
-            ->from($this->getTable('rating_store'))
-            ->where($inCond);
-
-        $data = $adapter->fetchAll($this->_select);
-        if (is_array($data) && count($data) > 0) {
-            foreach ($data as $row) {
-                $item = $this->getItemById($row['rating_id']);
-                $item->setStores(array_merge($item->getStores(), array($row['store_id'])));
-            }
-        }
-        return $this;
+        return $this->addStoreData();
     }
 
     /**
@@ -307,6 +300,63 @@ class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resou
     public function setActiveFilter($isActive = true)
     {
         $this->getSelect()->where('main_table.is_active=?', $isActive);
+        return $this;
+    }
+
+    /**
+     * Load data
+     *
+     * @param boolean $printQuery
+     * @param boolean $logQuery
+     * @return Mage_Review_Model_Resource_Review_Collection
+     */
+    public function load($printQuery = false, $logQuery = false)
+    {
+        if ($this->isLoaded()) {
+            return $this;
+        }
+        Mage::dispatchEvent('rating_rating_collection_load_before', array('collection' => $this));
+        parent::load($printQuery, $logQuery);
+        if ($this->_addStoreDataFlag) {
+            $this->_addStoreData();
+        }
+        return $this;
+    }
+
+    /**
+     * Add store data
+     *
+     * @return Mage_Review_Model_Resource_Review_Collection
+     */
+    protected function _addStoreData()
+    {
+        $ratingIds = array();
+        foreach ($this as $item) {
+            $ratingIds[] = $item->getId();
+            $item->setStores(array());
+        }
+        if (!$ratingIds) {
+            return $this;
+        }
+        $adapter = $this->getConnection();
+
+        $inCondition = $adapter->prepareSqlCondition('rating_id', array(
+            'in' => $ratingIds
+        ));
+
+        $this->_select = $adapter
+            ->select()
+            ->from($this->getTable('rating_store'))
+            ->where($inCondition);
+
+        $data = $adapter->fetchAll($this->_select);
+        if (is_array($data) && count($data) > 0) {
+            foreach ($data as $row) {
+                $item = $this->getItemById($row['rating_id']);
+                $item->setStores(array_merge($item->getStores(), array($row['store_id'])));
+            }
+        }
+
         return $this;
     }
 }
