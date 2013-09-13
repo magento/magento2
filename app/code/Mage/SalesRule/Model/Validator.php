@@ -670,6 +670,9 @@ class Mage_SalesRule_Model_Validator extends Mage_Core_Model_Abstract
                     if (!$rule->getActions()->validate($item)) {
                         continue;
                     }
+                    if ($item->getNoDiscount() === TRUE) {
+                        continue;
+                    }
                     $qty = $this->_getItemQty($item, $rule);
                     $ruleTotalItemsPrice += $this->_getItemPrice($item) * $qty;
                     $ruleTotalBaseItemsPrice += $this->_getItemBasePrice($item) * $qty;
