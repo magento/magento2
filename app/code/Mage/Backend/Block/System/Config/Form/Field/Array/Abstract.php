@@ -270,4 +270,14 @@ abstract class Mage_Backend_Block_System_Config_Form_Field_Array_Abstract
     {
         return $this->_columns;
     }
+
+    /**
+     * Return Add Button Label
+     *
+     * @return string
+     */
+    public function getAddButtonLabel()
+    {
+        return $this->_addButtonLabel;
+    }
 }
