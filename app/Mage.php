@@ -697,7 +697,7 @@ final class Mage
      */
     public static function log($message, $level = null, $file = 'system.log', $forceLog = false)
     {
-        $level = is_null($level) ? Zend_Log::DEBUG : $level;
+        $level = is_null($level) ? Zend_Log::INFO : $level;
         if (empty($file) || $file == 'system.log') {
             $file = 'system.log';
             $key = Mage_Core_Model_Logger::LOGGER_SYSTEM;
