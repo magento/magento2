@@ -57,7 +57,7 @@ class Mage_Sales_Model_Order_Creditmemo_Total_Tax extends Mage_Sales_Model_Order
                 $baseTax        = $baseOrderItemTax - $orderItem->getTaxRefunded();
                 $hiddenTax      = $orderItem->getHiddenTaxAmount() - $orderItem->getHiddenTaxRefunded();
                 $baseHiddenTax  = $orderItem->getBaseHiddenTaxAmount() - $orderItem->getBaseHiddenTaxRefunded();
-                if (!$item->isLast()) {
+                if (!$item->isLast() && $orderItemQty > 0) {
                     $availableQty  = $orderItemQty - $orderItem->getQtyRefunded();
                     $tax           = $creditmemo->roundPrice($tax / $availableQty * $item->getQty());
                     $baseTax       = $creditmemo->roundPrice($baseTax / $availableQty * $item->getQty(), 'base');
