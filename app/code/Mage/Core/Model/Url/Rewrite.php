@@ -249,7 +249,12 @@ class Mage_Core_Model_Url_Rewrite extends Mage_Core_Model_Abstract
             $this->setStoreId($currentStore->getId())->loadByIdPath($this->getIdPath());
 
             Mage::app()->getCookie()->set(Mage_Core_Model_Store::COOKIE_NAME, $currentStore->getCode(), true);
-            $targetUrl = $request->getBaseUrl(). '/' . $this->getRequestPath();
+            
+            if (Mage::getStoreConfig('web/url/use_store') && $storeCode = Mage::app()->getStore()->getCode()) {
+                $targetUrl = $request->getBaseUrl(). '/' . $storeCode . '/' .$this->getRequestPath();
+            } else {
+                $targetUrl = $request->getBaseUrl(). '/' . $this->getRequestPath();
+            }
 
             $this->_sendRedirectHeaders($targetUrl, true);
         }
