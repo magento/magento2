@@ -61,6 +61,14 @@
                 this.dobErrorMessage = $.mage.__('Please enter a valid day (1-%d).').replace('%d', validateDayInMonth);
                 return false;
             }
+            var today = new Date(),
+                dateEntered = new Date();
+            dateEntered.setFullYear(year, month - 1, day);
+            if (dateEntered > today) {
+                this.dobErrorMessage = $.mage.__('Please enter a date in the past.');
+                return false;
+            }
+
             day = day % 10 === day ? '0' + day : day;
             month = month % 10 === month ? '0' + month : month;
             $(element).val(month + '/' + day + '/' + year);

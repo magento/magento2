@@ -25,11 +25,28 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$baseDir = realpath(__DIR__ . '/../../../../');
-require $baseDir . '/app/autoload.php';
-Magento_Autoload_IncludePath::addIncludePath(array(
+define('DS', DIRECTORY_SEPARATOR);
+define('BP', realpath(__DIR__ . '/../../../../'));
+require BP . '/app/autoload.php';
+\Magento\Autoload\IncludePath::addIncludePath(array(
     __DIR__,
     dirname(__DIR__) . '/testsuite',
-    $baseDir . '/lib',
+    BP . '/lib',
 ));
-Utility_Files::init(new Utility_Files($baseDir));
+\Magento\TestFramework\Utility\Files::init(new \Magento\TestFramework\Utility\Files(BP));
+
+function tool_autoloader($className)
+{
+    if (strpos($className, 'Magento\\Tools\\') === false) {
+        return false;
+    }
+    $filePath = str_replace('\\', DS, $className);
+    $filePath = BP . DS . 'dev' . DS . 'tools' . DS . $filePath . '.php';
+
+    if (file_exists($filePath)) {
+        include_once($filePath);
+    } else {
+        return false;
+    }
+}
+spl_autoload_register('tool_autoloader');

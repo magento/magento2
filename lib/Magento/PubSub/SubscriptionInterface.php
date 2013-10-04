@@ -25,7 +25,9 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-interface Magento_PubSub_SubscriptionInterface extends Magento_Outbound_EndpointInterface
+namespace Magento\PubSub;
+
+interface SubscriptionInterface extends \Magento\Outbound\EndpointInterface
 {
 
     const STATUS_INACTIVE = 0;
@@ -51,14 +53,14 @@ interface Magento_PubSub_SubscriptionInterface extends Magento_Outbound_Endpoint
     /**
      * Get the status of this endpoint
      *
-     * @return int Should match one of the status constants in Magento_PubSub_SubscriptionInterface
+     * @return int Should match one of the status constants in \Magento\PubSub\SubscriptionInterface
      */
     public function getStatus();
 
     /**
      * Mark this subscription status as deactivated
      *
-     * @return Magento_PubSub_SubscriptionInterface The deactivated subscription
+     * @return \Magento\PubSub\SubscriptionInterface The deactivated subscription
      */
     public function deactivate();
 
@@ -66,7 +68,7 @@ interface Magento_PubSub_SubscriptionInterface extends Magento_Outbound_Endpoint
     /**
      * Mark this subscription status to activated
      *
-     * @return Magento_PubSub_SubscriptionInterface The activated subscription
+     * @return \Magento\PubSub\SubscriptionInterface The activated subscription
      */
     public function activate();
 
@@ -74,7 +76,14 @@ interface Magento_PubSub_SubscriptionInterface extends Magento_Outbound_Endpoint
     /**
      * Mark this subscription status to revoked
      *
-     * @return Magento_PubSub_SubscriptionInterface The revoked subscription
+     * @return \Magento\PubSub\SubscriptionInterface The revoked subscription
      */
     public function revoke();
+
+    /**
+     * Return endpoint with the subscription
+     *
+     * @return \Magento\Outbound\EndpointInterface
+     */
+    public function getEndpoint();
 }

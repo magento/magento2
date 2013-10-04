@@ -25,7 +25,9 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Outbound_Authentication_Hmac implements Magento_Outbound_AuthenticationInterface
+namespace Magento\Outbound\Authentication;
+
+class Hmac implements \Magento\Outbound\AuthenticationInterface
 {
     /**
      * The name of the header which stores the HMAC signature for client verification
@@ -42,13 +44,13 @@ class Magento_Outbound_Authentication_Hmac implements Magento_Outbound_Authentic
      */
     const SHA256_ALGORITHM = 'sha256';
 
-    /** @var Mage_Core_Model_StoreManagerInterface  */
+    /** @var \Magento\Core\Model\StoreManagerInterface  */
     private $_storeManager;
 
     /**
-     * @param Mage_Core_Model_StoreManagerInterface $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
-    public function __construct(Mage_Core_Model_StoreManagerInterface $storeManager)
+    public function __construct(\Magento\Core\Model\StoreManagerInterface $storeManager)
     {
         $this->_storeManager = $storeManager;
     }
@@ -57,16 +59,16 @@ class Magento_Outbound_Authentication_Hmac implements Magento_Outbound_Authentic
      * Get authentication signature to add to the headers
      *
      * @param string                         $body
-     * @param Magento_Outbound_UserInterface $user
+     * @param \Magento\Outbound\UserInterface $user
      *
-     * @throws LogicException
+     * @throws \LogicException
      * @return array Headers to add to message
      */
-    public function getSignatureHeaders($body, Magento_Outbound_UserInterface $user)
+    public function getSignatureHeaders($body, \Magento\Outbound\UserInterface $user)
     {
         $secret = $user->getSharedSecret();
         if ('' === $secret || is_null($secret)) {
-            throw new LogicException('The shared secret cannot be empty.');
+            throw new \LogicException('The shared secret cannot be empty.');
         }
 
         // Add HMAC Signature
@@ -82,6 +84,6 @@ class Magento_Outbound_Authentication_Hmac implements Magento_Outbound_Authentic
     protected function _getDomain()
     {
         return parse_url($this->_storeManager->getSafeStore()
-            ->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), PHP_URL_HOST);
+            ->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_WEB), PHP_URL_HOST);
     }
 }

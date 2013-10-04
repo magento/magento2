@@ -28,7 +28,9 @@
 /**
  * Acl resource
  */
-class Magento_Acl_Resource extends Zend_Acl_Resource
+namespace Magento\Acl;
+
+class Resource extends \Zend_Acl_Resource
 {
     
 }

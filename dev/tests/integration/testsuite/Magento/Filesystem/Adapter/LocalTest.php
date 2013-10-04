@@ -1,6 +1,6 @@
 <?php
 /**
- * Test for Magento_Filesystem_Adapter_Local
+ * Test for \Magento\Filesystem\Adapter\Local
  *
  * Magento
  *
@@ -23,29 +23,32 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
+namespace Magento\Filesystem\Adapter;
+
+class LocalTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Filesystem_Adapter_Local
+     * @var \Magento\Filesystem\Adapter\Local
      */
     protected $_adapter;
 
     protected function setUp()
     {
-        $this->_adapter = new Magento_Filesystem_Adapter_Local();
+        $this->_adapter = new \Magento\Filesystem\Adapter\Local();
 
-        Varien_Io_File::rmdirRecursive(self::_getTmpDir());
+        \Magento\Io\File::rmdirRecursive(self::_getTmpDir());
         mkdir(self::_getTmpDir());
     }
 
     protected function tearDown()
     {
-        Varien_Io_File::rmdirRecursive(self::_getTmpDir());
+        \Magento\Io\File::rmdirRecursive(self::_getTmpDir());
     }
 
     protected static function _getTmpDir()
     {
-        return Mage::getBaseDir(Mage_Core_Model_Dir::VAR_DIR) . DIRECTORY_SEPARATOR . __CLASS__;
+        return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Dir')
+            ->getDir(\Magento\Core\Model\Dir::VAR_DIR) . DIRECTORY_SEPARATOR . 'Magento\Filesystem\Adapter\LocalTest';
     }
 
     /**
@@ -98,7 +101,7 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Magento_Filesystem_Exception
+     * @expectedException \Magento\Filesystem\FilesystemException
      * @expectedExceptionMessage Failed to read contents of 'non-existing-file.txt'
      */
     public function testReadException()
@@ -131,8 +134,9 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
 
     public function testWriteException()
     {
-        $filename = "forbidden-symbol\0";
-        $this->setExpectedException('Magento_Filesystem_Exception', "Failed to write contents to '{$filename}'");
+        $filename = __DIR__;
+        $this->setExpectedException('Magento\Filesystem\FilesystemException',
+            "Failed to write contents to '{$filename}'");
         $this->_adapter->write($filename, 'any contents');
     }
 
@@ -147,8 +151,8 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
 
     public function testDeleteDir()
     {
-        $fileName = self::_getTmpDir() . '/new_directory/tempFile3.css';
         $dirName = self::_getTmpDir() . '/new_directory';
+        $fileName = $dirName . '/tempFile3.css';
         mkdir($dirName, 0755);
         file_put_contents($fileName, 'test data');
         $this->_adapter->delete($dirName);
@@ -177,8 +181,8 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
         if (substr(PHP_OS, 0, 3) == 'WIN') {
             $this->markTestSkipped("chmod may not work for Windows");
         }
-        $fileName = self::_getTmpDir() . 'new_directory2/tempFile3.css';
-        $dirName = self::_getTmpDir() . 'new_directory2';
+        $dirName = self::_getTmpDir() . '/new_directory2';
+        $fileName = $dirName . '/tempFile3.css';
         mkdir($dirName, 0777);
         file_put_contents($fileName, 'test data');
         $this->_adapter->changePermissions($dirName, 0755, true);
@@ -187,7 +191,7 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Magento_Filesystem_Exception
+     * @expectedException \Magento\Filesystem\FilesystemException
      * @expectedExceptionMessage Failed to change mode of 'non-existing-file.txt'
      */
     public function testChangePermissionsException()
@@ -202,7 +206,7 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Magento_Filesystem_Exception
+     * @expectedException \Magento\Filesystem\FilesystemException
      * @expectedExceptionMessage Failed to get hash of 'non-existing-file.txt'
      */
     public function testGetFileMd5Exception()
@@ -228,13 +232,13 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
     public function testCreateStream()
     {
         $stream = $this->_adapter->createStream(self::_getFixturesPath() . 'popup.csv');
-        $this->assertInstanceOf('Magento_Filesystem_Stream_Local', $stream);
+        $this->assertInstanceOf('Magento\Filesystem\Stream\Local', $stream);
     }
 
     /**
      * @param string $sourceName
      * @param string $targetName
-     * @throws Exception
+     * @throws \Exception
      * @dataProvider renameDataProvider
      */
     public function testRename($sourceName, $targetName)
@@ -257,7 +261,7 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Magento_Filesystem_Exception
+     * @expectedException \Magento\Filesystem\FilesystemException
      * @expectedExceptionMessage Failed to rename 'non-existing-file.txt' to 'any-new-file.txt'
      */
     public function testRenameException()
@@ -282,8 +286,8 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
 
     public function testCreateDirectoryException()
     {
-        $filename = "forbidden-symbol\0";
-        $this->setExpectedException('Magento_Filesystem_Exception', "Failed to create '{$filename}'");
+        $filename = __FILE__;
+        $this->setExpectedException('Magento\Filesystem\FilesystemException', "Failed to create '{$filename}'");
         $this->_adapter->createDirectory($filename, 0755);
     }
 
@@ -314,14 +318,10 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException Magento_Filesystem_Exception
-     * @expectedExceptionMessage
-     */
     public function testTouchException()
     {
-        $filename = "forbidden-symbol\0";
-        $this->setExpectedException('Magento_Filesystem_Exception', "Failed to touch '{$filename}'");
+        $filename = __FILE__ . '/invalid';
+        $this->setExpectedException('Magento\Filesystem\FilesystemException', "Failed to touch '{$filename}'");
         $this->_adapter->touch($filename);
     }
 
@@ -342,7 +342,7 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Magento_Filesystem_Exception
+     * @expectedException \Magento\Filesystem\FilesystemException
      * @expectedExceptionMessage Failed to copy 'non-existing-file.txt' to 'any-new-file.txt'
      */
     public function testCopyException()
@@ -359,7 +359,7 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Magento_Filesystem_Exception
+     * @expectedException \Magento\Filesystem\FilesystemException
      * @expectedExceptionMessage Failed to get modification time of 'non-existing-file.txt'
      */
     public function testGetMTimeException()
@@ -392,7 +392,7 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Magento_Filesystem_Exception
+     * @expectedException \Magento\Filesystem\FilesystemException
      * @expectedExceptionMessage Failed to get file size of 'non-existing-file.txt'
      */
     public function testGetFileSizeException()
@@ -436,7 +436,7 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Magento_Filesystem_Exception
+     * @expectedException \Magento\Filesystem\FilesystemException
      * @expectedExceptionMessage The directory '/unknown_directory' does not exist.
      */
     public function testGetNestedKeysInUnknownDirectory()
@@ -479,7 +479,8 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
     public function testSearchKeysException()
     {
         $pattern = str_repeat('1', 20000); // Overflow the glob() length limit (Win - 260b, Linux - 1k-8k)
-        $this->setExpectedException('Magento_Filesystem_Exception', "Failed to resolve the file pattern '{$pattern}'");
+        $this->setExpectedException('Magento\Filesystem\FilesystemException',
+            "Failed to resolve the file pattern '{$pattern}'");
         $this->_adapter->searchKeys($pattern);
     }
 }

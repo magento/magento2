@@ -1099,6 +1099,69 @@
                 return true;
             },
             'Please enter 6 or more characters. Leading or trailing spaces will be ignored.'
+        ],
+        'required-if-not-specified': [
+            function (value, element, params) {
+                var valid = false;
+
+                // if there is an alternate, determine its validity
+                var alternate = $(params);
+                if (alternate.length > 0) {
+                    valid = this.check(alternate);
+                    // if valid, it may be blank, so check for that
+                    if (valid) {
+                        var alternateValue = alternate.val();
+                        if (typeof alternateValue == 'undefined' || alternateValue.length === 0) {
+                            valid = false;
+                        }
+                    }
+                }
+
+                if (!valid)
+                    valid = !this.optional(element);
+
+                return valid;
+            },
+            'This is a required field.'
+        ],
+        'required-if-specified': [
+            function (value, element, params) {
+                var valid = true;
+
+                // if there is an dependent, determine its validity
+                var dependent = $(params);
+                if (dependent.length > 0) {
+                    valid = this.check(dependent);
+                    // if valid, it may be blank, so check for that
+                    if (valid) {
+                        var dependentValue = dependent.val();
+                        valid = typeof dependentValue != 'undefined' && dependentValue.length > 0;
+                    }
+                }
+
+                if (valid) {
+                    valid = !this.optional(element);
+                } else {
+                    valid = true; // dependent was not valid, so don't even check
+                }
+
+                return valid;
+            },
+            'This is a required field.'
+        ],
+        'validate-item-quantity': [
+            function (value, element, params) {
+                // obtain values for validation
+                var qty = $.mage.parseNumber(value);
+
+                // validate quantity
+                var isMinAllowedValid = typeof params.minAllowed === 'undefined' || (qty >= $.mage.parseNumber(params.minAllowed));
+                var isMaxAllowedValid = typeof params.maxAllowed === 'undefined'  || (qty <= $.mage.parseNumber(params.maxAllowed));
+                var isQtyIncrementsValid = typeof params.qtyIncrements === 'undefined'  || (qty % $.mage.parseNumber(params.qtyIncrements) === 0);
+
+                return isMaxAllowedValid && isMinAllowedValid && isQtyIncrementsValid && qty > 0;
+            },
+            ''
         ]
     };
 

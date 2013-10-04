@@ -28,25 +28,27 @@
  * TODO: eliminate dependency of an adapter and write access to file system
  * TODO: Goal: provide path to existing minified file w/o its creation
  */
-class Magento_Code_Minifier_Strategy_Lite implements Magento_Code_Minifier_StrategyInterface
+namespace Magento\Code\Minifier\Strategy;
+
+class Lite implements \Magento\Code\Minifier\StrategyInterface
 {
     /**
-     * @var Magento_Code_Minifier_AdapterInterface
+     * @var \Magento\Code\Minifier\AdapterInterface
      */
     protected $_adapter;
 
     /**
-     * @var Magento_Filesystem
+     * @var \Magento\Filesystem
      */
     protected $_filesystem;
 
     /**
-     * @param Magento_Code_Minifier_AdapterInterface $adapter
-     * @param Magento_Filesystem $filesystem
+     * @param \Magento\Code\Minifier\AdapterInterface $adapter
+     * @param \Magento\Filesystem $filesystem
      */
     public function __construct(
-        Magento_Code_Minifier_AdapterInterface $adapter,
-        Magento_Filesystem $filesystem
+        \Magento\Code\Minifier\AdapterInterface $adapter,
+        \Magento\Filesystem $filesystem
     ) {
         $this->_adapter = $adapter;
         $this->_filesystem = $filesystem;

@@ -23,6 +23,8 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Validator_File_IsImage extends Zend_Validate_File_IsImage implements Magento_Validator_ValidatorInterface
+namespace Magento\Validator\File;
+
+class IsImage extends \Zend_Validate_File_IsImage implements \Magento\Validator\ValidatorInterface
 {
 }

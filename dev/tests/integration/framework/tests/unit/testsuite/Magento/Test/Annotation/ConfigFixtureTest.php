@@ -26,19 +26,21 @@
  */
 
 /**
- * Test class for Magento_Test_Annotation_ConfigFixture.
+ * Test class for \Magento\TestFramework\Annotation\ConfigFixture.
  */
-class Magento_Test_Annotation_ConfigFixtureTest extends PHPUnit_Framework_TestCase
+namespace Magento\Test\Annotation;
+
+class ConfigFixtureTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Test_Annotation_ConfigFixture|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Annotation\ConfigFixture|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_object;
 
     protected function setUp()
     {
         $this->_object = $this->getMock(
-            'Magento_Test_Annotation_ConfigFixture',
+            'Magento\TestFramework\Annotation\ConfigFixture',
             array('_getConfigValue', '_setConfigValue')
         );
     }

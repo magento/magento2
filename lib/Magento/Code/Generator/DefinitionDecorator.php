@@ -24,7 +24,9 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Code_Generator_DefinitionDecorator implements Magento_ObjectManager_Definition
+namespace Magento\Code\Generator;
+
+class DefinitionDecorator implements \Magento\ObjectManager\Definition
 {
     /**
      * Processed classes list
@@ -36,26 +38,26 @@ class Magento_Code_Generator_DefinitionDecorator implements Magento_ObjectManage
     /**
      * Class generator
      *
-     * @var Magento_Code_Generator_Class
+     * @var \Magento\Code\Generator\ClassGenerator
      */
     protected $_generator;
 
     /**
      * Decorated objectManager definition
      *
-     * @var Magento_ObjectManager_Definition
+     * @var \Magento\ObjectManager\Definition
      */
     protected $_decoratedDefinition;
 
     /**
-     * @param Magento_ObjectManager_Definition $definition
-     * @param Magento_Code_Generator_Class $generator
+     * @param \Magento\ObjectManager\Definition $definition
+     * @param \Magento\Code\Generator\ClassGenerator $generator
      */
     public function __construct(
-        Magento_ObjectManager_Definition $definition, Magento_Code_Generator_Class $generator = null
+        \Magento\ObjectManager\Definition $definition, \Magento\Code\Generator\ClassGenerator $generator = null
     ) {
         $this->_decoratedDefinition = $definition;
-        $this->_generator = $generator ?: new Magento_Code_Generator_Class();
+        $this->_generator = $generator ?: new \Magento\Code\Generator\ClassGenerator();
     }
 
     /**
@@ -90,6 +92,6 @@ class Magento_Code_Generator_DefinitionDecorator implements Magento_ObjectManage
      */
     public function getClasses()
     {
-        $this->_decoratedDefinition->getClasses();
+        return $this->_decoratedDefinition->getClasses();
     }
 }

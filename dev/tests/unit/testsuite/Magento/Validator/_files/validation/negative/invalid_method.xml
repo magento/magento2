@@ -20,7 +20,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     Magento_Validator
+ * @package     \Magento\Validator
  * @subpackage  unit_tests
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
@@ -32,7 +32,7 @@
             <rule name="name_sku_and_price">
                 <property_constraints>
                     <property name="name">
-                        <constraint alias="some_validator" class="Magento_Validator_StringLenght">
+                        <constraint alias="some_validator" class="Magento\Validator_StringLenght">
                             <!-- attribute class is not allowed for method element -->
                             <method name="setOptions" class="Object">
                             </method>

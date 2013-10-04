@@ -23,10 +23,12 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Filesystem_Stream_Local implements Magento_Filesystem_StreamInterface
+namespace Magento\Filesystem\Stream;
+
+class Local implements \Magento\Filesystem\StreamInterface
 {
     /**
-     * @var Magento_Filesystem
+     * @var \Magento\Filesystem
      */
     protected $_filesystem;
 
@@ -40,7 +42,7 @@ class Magento_Filesystem_Stream_Local implements Magento_Filesystem_StreamInterf
     /**
      * Stream mode
      *
-     * @var Magento_Filesystem_Stream_Mode
+     * @var \Magento\Filesystem\Stream\Mode
      */
     protected $_mode;
 
@@ -71,17 +73,19 @@ class Magento_Filesystem_Stream_Local implements Magento_Filesystem_StreamInterf
     /**
      * Opens the stream in the specified mode
      *
-     * @param Magento_Filesystem_Stream_Mode|string $mode
-     * @throws Magento_Filesystem_Exception If stream cannot be opened
+     * @param \Magento\Filesystem\Stream\Mode|string $mode
+     * @throws \Magento\Filesystem\FilesystemException If stream cannot be opened
      */
     public function open($mode)
     {
         if (is_string($mode)) {
-            $mode = new Magento_Filesystem_Stream_Mode($mode);
+            $mode = new \Magento\Filesystem\Stream\Mode($mode);
         }
         $fileHandle = @fopen($this->_path, $mode->getMode());
         if (false === $fileHandle) {
-            throw new Magento_Filesystem_Exception(sprintf('The stream "%s" cannot be opened', $this->_path));
+            throw new \Magento\Filesystem\FilesystemException(
+                sprintf('The stream "%s" cannot be opened', $this->_path)
+            );
         }
         $this->_mode = $mode;
         $this->_fileHandle = $fileHandle;
@@ -92,14 +96,14 @@ class Magento_Filesystem_Stream_Local implements Magento_Filesystem_StreamInterf
      *
      * @param integer $count The number of bytes to read
      * @return string
-     * @throws Magento_Filesystem_Exception If stream wasn't read.
+     * @throws \Magento\Filesystem\FilesystemException If stream wasn't read.
      */
     public function read($count)
     {
         $this->_assertReadable();
         $result = @fread($this->_fileHandle, $count);
         if ($result === false) {
-            throw new Magento_Filesystem_Exception('Read of the stream caused an error.');
+            throw new \Magento\Filesystem\FilesystemException('Read of the stream caused an error.');
         }
         return $result;
     }
@@ -116,7 +120,7 @@ class Magento_Filesystem_Stream_Local implements Magento_Filesystem_StreamInterf
      * @param string $delimiter
      * @param string $enclosure
      * @return array|bool false on end of file
-     * @throws Magento_Filesystem_Exception
+     * @throws \Magento\Filesystem\FilesystemException
      */
     public function readCsv($count = 0, $delimiter = ',', $enclosure = '"')
     {
@@ -126,7 +130,7 @@ class Magento_Filesystem_Stream_Local implements Magento_Filesystem_StreamInterf
             return false;
         }
         if (!is_array($result)) {
-            throw new Magento_Filesystem_Exception('Read of the stream caused an error.');
+            throw new \Magento\Filesystem\FilesystemException('Read of the stream caused an error.');
         }
         return $result;
     }
@@ -136,14 +140,14 @@ class Magento_Filesystem_Stream_Local implements Magento_Filesystem_StreamInterf
      *
      * @param string $data
      * @return integer
-     * @throws Magento_Filesystem_Exception
+     * @throws \Magento\Filesystem\FilesystemException
      */
     public function write($data)
     {
         $this->_assertWritable();
         $result = @fwrite($this->_fileHandle, $data);
         if (false === $result) {
-            throw new Magento_Filesystem_Exception('Write to the stream caused an error.');
+            throw new \Magento\Filesystem\FilesystemException('Write to the stream caused an error.');
         }
         return $result;
     }
@@ -155,14 +159,14 @@ class Magento_Filesystem_Stream_Local implements Magento_Filesystem_StreamInterf
      * @param string $delimiter
      * @param string $enclosure
      * @return integer
-     * @throws Magento_Filesystem_Exception
+     * @throws \Magento\Filesystem\FilesystemException
      */
     public function writeCsv(array $data, $delimiter = ',', $enclosure = '"')
     {
         $this->_assertWritable();
         $result = fputcsv($this->_fileHandle, $data, $delimiter, $enclosure);
         if (false === $result) {
-            throw new Magento_Filesystem_Exception('Write to the stream caused an error.');
+            throw new \Magento\Filesystem\FilesystemException('Write to the stream caused an error.');
         }
         return $result;
     }
@@ -170,7 +174,7 @@ class Magento_Filesystem_Stream_Local implements Magento_Filesystem_StreamInterf
     /**
      * Closes the stream.
      *
-     * @throws Magento_Filesystem_Exception
+     * @throws \Magento\Filesystem\FilesystemException
      */
     public function close()
     {
@@ -181,7 +185,7 @@ class Magento_Filesystem_Stream_Local implements Magento_Filesystem_StreamInterf
         $result = @fclose($this->_fileHandle);
 
         if (false === $result) {
-            throw new Magento_Filesystem_Exception('Close of the stream caused an error.');
+            throw new \Magento\Filesystem\FilesystemException('Close of the stream caused an error.');
         }
 
         $this->_mode = null;
@@ -191,14 +195,14 @@ class Magento_Filesystem_Stream_Local implements Magento_Filesystem_StreamInterf
     /**
      * Flushes the output.
      *
-     * @throws Magento_Filesystem_Exception
+     * @throws \Magento\Filesystem\FilesystemException
      */
     public function flush()
     {
         $this->_assertOpened();
         $result = @fflush($this->_fileHandle);
         if (!$result) {
-            throw new Magento_Filesystem_Exception('Flush of the stream caused an error.');
+            throw new \Magento\Filesystem\FilesystemException('Flush of the stream caused an error.');
         }
     }
 
@@ -207,14 +211,14 @@ class Magento_Filesystem_Stream_Local implements Magento_Filesystem_StreamInterf
      *
      * @param int $offset
      * @param int $whence
-     * @throws Magento_Filesystem_Exception
+     * @throws \Magento\Filesystem\FilesystemException
      */
     public function seek($offset, $whence = SEEK_SET)
     {
         $this->_assertOpened();
         $result = fseek($this->_fileHandle, $offset, $whence);
         if (0 !== $result) {
-            throw new Magento_Filesystem_Exception('seek operation on the stream caused an error.');
+            throw new \Magento\Filesystem\FilesystemException('seek operation on the stream caused an error.');
         }
     }
 
@@ -222,14 +226,14 @@ class Magento_Filesystem_Stream_Local implements Magento_Filesystem_StreamInterf
      * Returns the current position
      *
      * @return int
-     * @throws Magento_Filesystem_Exception
+     * @throws \Magento\Filesystem\FilesystemException
      */
     public function tell()
     {
         $this->_assertOpened();
         $result = ftell($this->_fileHandle);
         if (false === $result) {
-            throw new Magento_Filesystem_Exception('tell operation on the stream caused an error.');
+            throw new \Magento\Filesystem\FilesystemException('tell operation on the stream caused an error.');
         }
         return $result;
     }
@@ -248,38 +252,38 @@ class Magento_Filesystem_Stream_Local implements Magento_Filesystem_StreamInterf
     /**
      * Asserts the stream is readable
      *
-     * @throws Magento_Filesystem_Exception
+     * @throws \Magento\Filesystem\FilesystemException
      */
     protected function _assertReadable()
     {
         $this->_assertOpened();
         if (false === $this->_mode->isReadAllowed()) {
-            throw new Magento_Filesystem_Exception('The stream does not allow read.');
+            throw new \Magento\Filesystem\FilesystemException('The stream does not allow read.');
         }
     }
 
     /**
      * Asserts the stream is writable
      *
-     * @throws Magento_Filesystem_Exception
+     * @throws \Magento\Filesystem\FilesystemException
      */
     protected function _assertWritable()
     {
         $this->_assertOpened();
         if (false === $this->_mode->isWriteAllowed()) {
-            throw new Magento_Filesystem_Exception('The stream does not allow write.');
+            throw new \Magento\Filesystem\FilesystemException('The stream does not allow write.');
         }
     }
 
     /**
      * Asserts the stream is opened
      *
-     * @throws Magento_Filesystem_Exception
+     * @throws \Magento\Filesystem\FilesystemException
      */
     protected function _assertOpened()
     {
         if (!$this->_fileHandle) {
-            throw new Magento_Filesystem_Exception(sprintf('The stream "%s" is not opened', $this->_path));
+            throw new \Magento\Filesystem\FilesystemException(sprintf('The stream "%s" is not opened', $this->_path));
         }
     }
 
@@ -287,7 +291,7 @@ class Magento_Filesystem_Stream_Local implements Magento_Filesystem_StreamInterf
      * Portable advisory file locking
      *
      * @param bool $exclusive
-     * @throws Magento_Filesystem_Exception
+     * @throws \Magento\Filesystem\FilesystemException
      */
     public function lock($exclusive = true)
     {
@@ -295,21 +299,25 @@ class Magento_Filesystem_Stream_Local implements Magento_Filesystem_StreamInterf
         $lock = $exclusive ? LOCK_EX : LOCK_SH;
         $this->_isLocked = flock($this->_fileHandle, $lock);
         if (!$this->_isLocked) {
-            throw new Magento_Filesystem_Exception(sprintf('The stream "%s" can not be locked', $this->_path));
+            throw new \Magento\Filesystem\FilesystemException(
+                sprintf('The stream "%s" can not be locked', $this->_path)
+            );
         }
     }
 
     /**
      * File unlocking
      *
-     * @throws Magento_Filesystem_Exception
+     * @throws \Magento\Filesystem\FilesystemException
      */
     public function unlock()
     {
         $this->_assertOpened();
         if ($this->_isLocked) {
             if (!flock($this->_fileHandle, LOCK_UN)) {
-                throw new Magento_Filesystem_Exception(sprintf('The stream "%s" can not be unlocked', $this->_path));
+                throw new \Magento\Filesystem\FilesystemException(
+                    sprintf('The stream "%s" can not be unlocked', $this->_path)
+                );
             }
         }
         $this->_isLocked = false;

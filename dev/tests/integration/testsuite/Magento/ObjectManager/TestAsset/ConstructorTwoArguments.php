@@ -25,23 +25,25 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_ObjectManager_TestAsset_ConstructorTwoArguments
-    extends Magento_ObjectManager_TestAsset_ConstructorOneArgument
+namespace Magento\ObjectManager\TestAsset;
+
+class ConstructorTwoArguments
+    extends \Magento\ObjectManager\TestAsset\ConstructorOneArgument
 {
     /**
-     * @var Magento_ObjectManager_TestAsset_Basic
+     * @var \Magento\ObjectManager\TestAsset\Basic
      */
     protected $_two;
 
     /**
      * Two arguments
      *
-     * @param Magento_ObjectManager_TestAsset_Basic $one
-     * @param Magento_ObjectManager_TestAsset_Basic $two
+     * @param \Magento\ObjectManager\TestAsset\Basic $one
+     * @param \Magento\ObjectManager\TestAsset\Basic $two
      */
     public function __construct(
-        Magento_ObjectManager_TestAsset_Basic $one,
-        Magento_ObjectManager_TestAsset_Basic $two
+        \Magento\ObjectManager\TestAsset\Basic $one,
+        \Magento\ObjectManager\TestAsset\Basic $two
     ) {
         parent::__construct($one);
         $this->_two = $two;

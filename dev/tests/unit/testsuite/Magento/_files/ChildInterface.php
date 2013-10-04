@@ -22,7 +22,9 @@
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-interface Magento_Test_Di_ChildInterface
+namespace Magento\Test\Di;
+
+interface ChildInterface
 {
 
 }

@@ -23,19 +23,21 @@
  * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_AclFactory
+namespace Magento;
+
+class AclFactory
 {
     /**
      * Object manager
      *
-     * @var Magento_ObjectManager
+     * @var \Magento\ObjectManager
      */
     private $_objectManager;
 
     /**
-     * @param Magento_ObjectManager $objectManager
+     * @param \Magento\ObjectManager $objectManager
      */
-    public function __construct(Magento_ObjectManager $objectManager)
+    public function __construct(\Magento\ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -43,10 +45,10 @@ class Magento_AclFactory
     /**
      * Create new magento acl instance
      *
-     * @return Magento_Acl
+     * @return \Magento\Acl
      */
     public function create()
     {
-        return $this->_objectManager->create('Magento_Acl');
+        return $this->_objectManager->create('Magento\Acl');
     }
 }

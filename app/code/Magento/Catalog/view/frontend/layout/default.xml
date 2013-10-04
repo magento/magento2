@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <referenceBlock name="head">
+        <block class="Magento\Page\Block\Html\Head\Css" name="magento-catalog-widgets-css">
+            <arguments>
+                <argument name="file" xsi:type="string">Magento_Catalog::widgets.css</argument>
+            </arguments>
+        </block>
+    </referenceBlock>
+    <referenceContainer name="left">
+        <block class="Magento\Core\Block\Template" name="left.permanent.callout" template="Magento_Page::callouts/left_col.phtml">
+            <action method="setImgSrc">
+                <argument name="src" xsi:type="string">Magento_Catalog::images/media/col_left_callout.jpg</argument>
+            </action>
+            <action method="setImgAlt">
+                <argument translate="true" name="alt" xsi:type="string">Our customer service is available 24/7.</argument>
+            </action>
+            <action method="setLinkUrl">
+                <argument name="url" xsi:type="string">checkout/cart</argument>
+            </action>
+        </block>
+    </referenceContainer>
+    <referenceContainer name="right">
+        <block class="Magento\Catalog\Block\Product\Compare\Sidebar" before="cart_sidebar" name="catalog.compare.sidebar" template="product/compare/sidebar.phtml"/>
+        <block class="Magento\Core\Block\Template" name="right.permanent.callout" template="Magento_Page::callouts/right_col.phtml">
+            <action method="setImgSrc">
+                <argument name="src" xsi:type="string">Magento_Catalog::images/media/col_right_callout.jpg</argument>
+            </action>
+            <action method="setImgAlt">
+                <argument translate="true" name="alt" xsi:type="string">Look for our special back-to-school items and save bunches!</argument>
+            </action>
+        </block>
+    </referenceContainer>
+    <block class="Magento\Catalog\Block\Product\Price\Template" name="catalog_product_price_template"/>
+    <referenceBlock name="catalog_product_price_template">
+        <action method="addPriceBlockType">
+            <argument name="type" xsi:type="string">msrp</argument>
+            <argument name="block" xsi:type="string">Magento\Catalog\Block\Product\Price</argument>
+            <argument name="template" xsi:type="string">product/price_msrp.phtml</argument>
+        </action>
+        <action method="addPriceBlockType">
+            <argument name="type" xsi:type="string">msrp_item</argument>
+            <argument name="block" xsi:type="string">Magento\Catalog\Block\Product\Price</argument>
+            <argument name="template" xsi:type="string">product/price_msrp_item.phtml</argument>
+        </action>
+        <action method="addPriceBlockType">
+            <argument name="type" xsi:type="string">msrp_noform</argument>
+            <argument name="block" xsi:type="string">Magento\Catalog\Block\Product\Price</argument>
+            <argument name="template" xsi:type="string">product/price_msrp_noform.phtml</argument>
+        </action>
+    </referenceBlock>
+</layout>

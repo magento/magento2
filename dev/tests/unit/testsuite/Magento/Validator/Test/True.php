@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     Magento_Validator
+ * @package     \Magento\Validator
  * @subpackage  unit_tests
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
@@ -28,7 +28,9 @@
 /**
  * Test validator that always returns TRUE
  */
-class Magento_Validator_Test_True extends Magento_Validator_ValidatorAbstract
+namespace Magento\Validator\Test;
+
+class True extends \Magento\Validator\AbstractValidator
 {
     /**
      * Validate value

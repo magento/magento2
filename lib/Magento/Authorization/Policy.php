@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-interface Magento_Authorization_Policy
+namespace Magento\Authorization;
+
+interface Policy
 {
     /**
      * Check whether given role has access to given resource

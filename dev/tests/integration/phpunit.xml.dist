@@ -31,11 +31,11 @@
     <testsuites>
         <!-- Memory tests run first to prevent influence of other tests on accuracy of memory measurements -->
         <testsuite name="Memory Usage Tests">
-            <file>testsuite/MemoryUsageTest.php</file>
+            <file>testsuite/Magento/MemoryUsageTest.php</file>
         </testsuite>
         <testsuite name="Magento Integration Tests">
             <directory suffix="Test.php">testsuite</directory>
-            <exclude>testsuite/integrity</exclude>
+            <exclude>testsuite/Magento/Test/Integrity</exclude>
             <exclude>testsuite/MemoryUsageTest.php</exclude>
         </testsuite>
     </testsuites>
@@ -43,12 +43,12 @@
     <filter>
         <whitelist>
             <!-- All CE modules -->
-            <directory suffix=".php">../../../app/code/Mage</directory>
+            <directory suffix=".php">../../../app/code/Magento</directory>
             <exclude>
                 <!-- Excluding installation and upgrade scripts -->
-                <directory>../../../app/code/Mage/*/sql</directory>
+                <directory>../../../app/code/Magento/*/sql</directory>
                 <!-- Excluding data installation and upgrade scripts -->
-                <directory>../../../app/code/Mage/*/data</directory>
+                <directory>../../../app/code/Magento/*/data</directory>
             </exclude>
         </whitelist>
     </filter>
@@ -60,9 +60,9 @@
         <!-- Local XML configuration file ('.dist' extension will be added, if the specified file doesn't exist) -->
         <const name="TESTS_LOCAL_CONFIG_FILE" value="etc/local-mysql.xml"/>
         <!-- Semicolon-separated 'glob' patterns, that match global XML configuration files -->
-        <const name="TESTS_GLOBAL_CONFIG_FILES" value="../../../app/etc/*.xml"/>
+        <const name="TESTS_GLOBAL_CONFIG_DIR" value="../../../app/etc"/>
         <!-- Semicolon-separated 'glob' patterns, that match module declaration XML configuration files -->
-        <const name="TESTS_MODULE_CONFIG_FILES" value="../../../app/etc/modules/*.xml;etc/modules/*.xml"/>
+        <const name="TESTS_MODULE_CONFIG_FILES" value="../../../app/etc/*/module.xml;etc/test/module.xml"/>
         <!-- Whether to cleanup the application before running tests or not -->
         <const name="TESTS_CLEANUP" value="enabled"/>
         <!-- Memory usage and estimated leaks thresholds -->
@@ -82,6 +82,6 @@
     </php>
     <!-- Test listeners -->
     <listeners>
-        <listener class="Magento_Test_Event_PhpUnit"/>
+        <listener class="Magento\TestFramework\Event\PhpUnit"/>
     </listeners>
 </phpunit>

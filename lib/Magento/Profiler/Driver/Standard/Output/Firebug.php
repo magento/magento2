@@ -23,15 +23,17 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Profiler_Driver_Standard_Output_Firebug extends Magento_Profiler_Driver_Standard_OutputAbstract
+namespace Magento\Profiler\Driver\Standard\Output;
+
+class Firebug extends \Magento\Profiler\Driver\Standard\AbstractOutput
 {
     /**
-     * @var Zend_Controller_Request_Abstract
+     * @var \Zend_Controller_Request_Abstract
      */
     protected $_request;
 
     /**
-     * @var Zend_Controller_Response_Abstract
+     * @var \Zend_Controller_Response_Abstract
      */
     protected $_response;
 
@@ -49,11 +51,11 @@ class Magento_Profiler_Driver_Standard_Output_Firebug extends Magento_Profiler_D
     /**
      * Display profiling results and flush output buffer
      *
-     * @param Magento_Profiler_Driver_Standard_Stat $stat
+     * @param \Magento\Profiler\Driver\Standard\Stat $stat
      */
-    public function display(Magento_Profiler_Driver_Standard_Stat $stat)
+    public function display(\Magento\Profiler\Driver\Standard\Stat $stat)
     {
-        $firebugMessage = new Zend_Wildfire_Plugin_FirePhp_TableMessage($this->_renderCaption());
+        $firebugMessage = new \Zend_Wildfire_Plugin_FirePhp_TableMessage($this->_renderCaption());
         $firebugMessage->setHeader(array_keys($this->_columns));
 
         foreach ($this->_getTimerIds($stat) as $timerId) {
@@ -64,10 +66,10 @@ class Magento_Profiler_Driver_Standard_Output_Firebug extends Magento_Profiler_D
             $firebugMessage->addRow($row);
         }
 
-        Zend_Wildfire_Plugin_FirePhp::send($firebugMessage);
+        \Zend_Wildfire_Plugin_FirePhp::send($firebugMessage);
 
         // setup the wildfire channel
-        $firebugChannel = Zend_Wildfire_Channel_HttpHeaders::getInstance();
+        $firebugChannel = \Zend_Wildfire_Channel_HttpHeaders::getInstance();
         $firebugChannel->setRequest($this->getRequest());
         $firebugChannel->setResponse($this->getResponse());
 
@@ -88,16 +90,16 @@ class Magento_Profiler_Driver_Standard_Output_Firebug extends Magento_Profiler_D
      */
     protected function _renderTimerId($timerId)
     {
-        $nestingSep = preg_quote(Magento_Profiler::NESTING_SEPARATOR, '/');
+        $nestingSep = preg_quote(\Magento\Profiler::NESTING_SEPARATOR, '/');
         return preg_replace('/.+?' . $nestingSep . '/', '. ', $timerId);
     }
 
     /**
      * Request setter
      *
-     * @param Zend_Controller_Request_Abstract $request
+     * @param \Zend_Controller_Request_Abstract $request
      */
-    public function setRequest(Zend_Controller_Request_Abstract $request)
+    public function setRequest(\Zend_Controller_Request_Abstract $request)
     {
         $this->_request = $request;
     }
@@ -105,12 +107,12 @@ class Magento_Profiler_Driver_Standard_Output_Firebug extends Magento_Profiler_D
     /**
      * Request getter
      *
-     * @return Zend_Controller_Request_Abstract
+     * @return \Zend_Controller_Request_Abstract
      */
     public function getRequest()
     {
         if (!$this->_request) {
-            $this->_request = new Zend_Controller_Request_Http();
+            $this->_request = new \Zend_Controller_Request_Http();
         }
         return $this->_request;
     }
@@ -118,9 +120,9 @@ class Magento_Profiler_Driver_Standard_Output_Firebug extends Magento_Profiler_D
     /**
      * Response setter
      *
-     * @param Zend_Controller_Response_Abstract $response
+     * @param \Zend_Controller_Response_Abstract $response
      */
-    public function setResponse(Zend_Controller_Response_Abstract $response)
+    public function setResponse(\Zend_Controller_Response_Abstract $response)
     {
         $this->_response = $response;
     }
@@ -128,12 +130,12 @@ class Magento_Profiler_Driver_Standard_Output_Firebug extends Magento_Profiler_D
     /**
      * Request getter
      *
-     * @return Zend_Controller_Response_Abstract
+     * @return \Zend_Controller_Response_Abstract
      */
     public function getResponse()
     {
         if (!$this->_response) {
-            $this->_response = new Zend_Controller_Response_Http();
+            $this->_response = new \Zend_Controller_Response_Http();
         }
         return $this->_response;
     }

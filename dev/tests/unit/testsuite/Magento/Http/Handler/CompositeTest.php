@@ -21,29 +21,31 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Http_Handler_CompositeTest extends PHPUnit_Framework_TestCase
+namespace Magento\Http\Handler;
+
+class CompositeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Http_Handler_Composite
+     * @var \Magento\HTTP\Handler\Composite
      */
     protected $_model;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_responseMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_handlerFactoryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $handlers = array(
             'app' => array(
@@ -57,12 +59,12 @@ class Magento_Http_Handler_CompositeTest extends PHPUnit_Framework_TestCase
         );
         $this->_requestMock = $this->getMock('Zend_Controller_Request_Http', array(), array(), '', false);
         $this->_responseMock = $this->getMock('Zend_Controller_Response_Http', array(), array(), '', false);
-        $this->_handlerFactoryMock = $this->getMock('Magento_Http_HandlerFactory', array(), array(), '', false, false);
-        $this->_handlerMock = $this->getMock('Magento_Http_HandlerInterface', array(), array(), '', false, false);
-        $this->_model = new Magento_Http_Handler_Composite($this->_handlerFactoryMock, $handlers);
+        $this->_handlerFactoryMock = $this->getMock('Magento\HTTP\HandlerFactory', array(), array(), '', false, false);
+        $this->_handlerMock = $this->getMock('Magento\HTTP\HandlerInterface', array(), array(), '', false, false);
+        $this->_model = new \Magento\HTTP\Handler\Composite($this->_handlerFactoryMock, $handlers);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->_requestMock);
         unset($this->_responseMock);
@@ -94,7 +96,7 @@ class Magento_Http_Handler_CompositeTest extends PHPUnit_Framework_TestCase
             ),
         );
 
-        $model = new Magento_Http_Handler_Composite($this->_handlerFactoryMock, $handlers);
+        $model = new \Magento\HTTP\Handler\Composite($this->_handlerFactoryMock, $handlers);
 
         $this->_handlerMock->expects($this->exactly(2))->method('handle')
             ->with($this->_requestMock, $this->_responseMock);

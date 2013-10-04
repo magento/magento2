@@ -25,11 +25,15 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Test_ResponseTest extends PHPUnit_Framework_TestCase
+namespace Magento\Test;
+
+class ResponseTest extends \PHPUnit_Framework_TestCase
 {
     public function testCanSendHeaders()
     {
-        $response = new Magento_Test_Response();
+        $response = new \Magento\TestFramework\Response(
+            $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false)
+        );
         $this->assertTrue($response->canSendHeaders());
         $this->assertTrue($response->canSendHeaders(false));
     }

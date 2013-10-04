@@ -23,12 +23,14 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Filesystem
+namespace Magento;
+
+class Filesystem
 {
     const DIRECTORY_SEPARATOR = '/';
 
     /**
-     * @var Magento_Filesystem_AdapterInterface
+     * @var \Magento\Filesystem\AdapterInterface
      */
     protected $_adapter;
 
@@ -50,9 +52,9 @@ class Magento_Filesystem
     /**
      * Initialize adapter and default working directory.
      *
-     * @param Magento_Filesystem_AdapterInterface $adapter
+     * @param \Magento\Filesystem\AdapterInterface $adapter
      */
-    public function __construct(Magento_Filesystem_AdapterInterface $adapter)
+    public function __construct(\Magento\Filesystem\AdapterInterface $adapter)
     {
         $this->_adapter = $adapter;
         $this->_workingDirectory = self::normalizePath(__DIR__ . '/../..');
@@ -62,14 +64,14 @@ class Magento_Filesystem
      * Sets working directory to restrict operations with filesystem.
      *
      * @param string $dir
-     * @return Magento_Filesystem
-     * @throws InvalidArgumentException
+     * @return \Magento\Filesystem
+     * @throws \InvalidArgumentException
      */
     public function setWorkingDirectory($dir)
     {
         $dir = self::normalizePath($dir);
         if (!$this->_adapter->isDirectory($dir)) {
-            throw new InvalidArgumentException(sprintf('Working directory "%s" does not exists', $dir));
+            throw new \InvalidArgumentException(sprintf('Working directory "%s" does not exists', $dir));
         }
         $this->_workingDirectory = $dir;
         return $this;
@@ -90,7 +92,7 @@ class Magento_Filesystem
      *
      * @param bool $allow
      * @param int $permissions
-     * @return Magento_Filesystem
+     * @return \Magento\Filesystem
      */
     public function setIsAllowCreateDirectories($allow, $permissions = null)
     {
@@ -315,7 +317,7 @@ class Magento_Filesystem
      * @param string $key
      * @param int $permissions
      * @param string|null $workingDirectory
-     * @throws Magento_Filesystem_Exception
+     * @throws \Magento\Filesystem\FilesystemException
      */
     public function ensureDirectoryExists($key, $permissions = 0777, $workingDirectory = null)
     {
@@ -323,7 +325,7 @@ class Magento_Filesystem
             if ($this->_isAllowCreateDirs) {
                 $this->createDirectory($key, $permissions, $workingDirectory);
             } else {
-                throw new Magento_Filesystem_Exception("Directory '$key' doesn't exist.");
+                throw new \Magento\Filesystem\FilesystemException("Directory '$key' doesn't exist.");
             }
         }
     }
@@ -375,16 +377,16 @@ class Magento_Filesystem
      *
      * @param string $key
      * @param string|null $workingDirectory
-     * @return Magento_Filesystem_StreamInterface
-     * @throws Magento_Filesystem_Exception
+     * @return \Magento\Filesystem\StreamInterface
+     * @throws \Magento\Filesystem\FilesystemException
      */
     public function createStream($key, $workingDirectory = null)
     {
         $key = $this->_getCheckedPath($key, $workingDirectory);
-        if ($this->_adapter instanceof Magento_Filesystem_Stream_FactoryInterface) {
+        if ($this->_adapter instanceof \Magento\Filesystem\Stream\FactoryInterface) {
             return $this->_adapter->createStream($key);
         } else {
-            throw new Magento_Filesystem_Exception("Filesystem doesn't support streams.");
+            throw new \Magento\Filesystem\FilesystemException("Filesystem doesn't support streams.");
         }
     }
 
@@ -392,16 +394,16 @@ class Magento_Filesystem
      * Creates stream object and opens it
      *
      * @param string $key
-     * @param Magento_Filesystem_Stream_Mode|string $mode
+     * @param \Magento\Filesystem\Stream\Mode|string $mode
      * @param string|null $workingDirectory
-     * @return Magento_Filesystem_StreamInterface
-     * @throws InvalidArgumentException
+     * @return \Magento\Filesystem\StreamInterface
+     * @throws \InvalidArgumentException
      */
     public function createAndOpenStream($key, $mode, $workingDirectory = null)
     {
         $stream = $this->createStream($key, $workingDirectory);
-        if (!$mode instanceof Magento_Filesystem_Stream_Mode && !is_string($mode)) {
-            throw new InvalidArgumentException('Wrong mode parameter');
+        if (!$mode instanceof \Magento\Filesystem\Stream\Mode && !is_string($mode)) {
+            throw new \InvalidArgumentException('Wrong mode parameter');
         }
         $stream->open($mode);
         return $stream;
@@ -425,12 +427,12 @@ class Magento_Filesystem
      * Check that file exists
      *
      * @param string $path
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     protected function _checkFileExists($path)
     {
         if (!$this->_adapter->isFile($path)) {
-            throw new InvalidArgumentException(sprintf('"%s" does not exists', $path));
+            throw new \InvalidArgumentException(sprintf('"%s" does not exists', $path));
         }
     }
 
@@ -438,12 +440,12 @@ class Magento_Filesystem
      * Check that file or directory exists
      *
      * @param string $path
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     protected function _checkExists($path)
     {
         if (!$this->_adapter->exists($path)) {
-            throw new InvalidArgumentException(sprintf('"%s" does not exists', $path));
+            throw new \InvalidArgumentException(sprintf('"%s" does not exists', $path));
         }
     }
 
@@ -466,13 +468,13 @@ class Magento_Filesystem
      * @param string $key
      * @param string|null $workingDirectory
      * @return string
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     protected function _checkPathInWorkingDirectory($key, $workingDirectory = null)
     {
         $workingDirectory = $workingDirectory ? $workingDirectory : $this->_workingDirectory;
         if (!$this->isPathInDirectory($key, $workingDirectory)) {
-            throw new InvalidArgumentException("Path '$key' is out of working directory '$workingDirectory'");
+            throw new \InvalidArgumentException("Path '$key' is out of working directory '$workingDirectory'");
         }
     }
 
@@ -482,7 +484,7 @@ class Magento_Filesystem
      * @param string $path
      * @param bool $isRelative Flag that identify, that filename is relative, so '..' at the beginning is supported
      * @return string
-     * @throws Magento_Filesystem_Exception if file can't be normalized
+     * @throws \Magento\Filesystem\FilesystemException if file can't be normalized
      */
     public static function normalizePath($path, $isRelative = false)
     {
@@ -499,7 +501,7 @@ class Magento_Filesystem
                         array_pop($result);
                     }
                 } else if (!array_pop($result)) {
-                    throw new Magento_Filesystem_Exception("Invalid path '{$path}'.");
+                    throw new \Magento\Filesystem\FilesystemException("Invalid path '{$path}'.");
                 }
             } else if ('.' !== $part) {
                 $result[] = $part;

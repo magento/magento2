@@ -20,8 +20,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Mage
- * @package    Mage
+ * @category   Magento
+ * @package    Magento
  * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -54,7 +54,7 @@ if (file_exists($configCacheFile) && is_readable($configCacheFile)) {
 }
 
 // Serve file if it's materialized
-$request = new Mage_Core_Model_File_Storage_Request(__DIR__);
+$request = new \Magento\Core\Model\File\Storage\Request(__DIR__);
 if ($mediaDirectory) {
     if (0 !== stripos($request->getPathInfo(), $mediaDirectory . '/') || is_dir($request->getFilePath())) {
         header('HTTP/1.0 404 Not Found');
@@ -68,7 +68,7 @@ if ($mediaDirectory) {
     }
 
     if (is_readable($request->getFilePath())) {
-        $transfer = new Varien_File_Transfer_Adapter_Http();
+        $transfer = new \Magento\File\Transfer\Adapter\Http();
         $transfer->send($request->getFilePath());
         exit;
     }
@@ -76,12 +76,12 @@ if ($mediaDirectory) {
 // Materialize file in application
 $params = $_SERVER;
 if (empty($mediaDirectory)) {
-    $params[Mage::PARAM_ALLOWED_MODULES] = array('Mage_Core');
-    $params[Mage::PARAM_CACHE_OPTIONS]['frontend_options']['disable_save'] = true;
+    $params[Magento_Core_Model_App::PARAM_ALLOWED_MODULES] = array('Magento_Core');
+    $params[Magento_Core_Model_App::PARAM_CACHE_OPTIONS]['frontend_options']['disable_save'] = true;
 }
 
-$config = new Mage_Core_Model_Config_Primary(dirname(__DIR__), $params);
-$entryPoint = new Mage_Core_Model_EntryPoint_Media(
+$config = new \Magento\Core\Model\Config\Primary(dirname(__DIR__), $params);
+$entryPoint = new \Magento\Core\Model\EntryPoint\Media(
     $config, $request, $isAllowed, __DIR__, $mediaDirectory, $configCacheFile, $relativeFilename
 );
 $entryPoint->processRequest();

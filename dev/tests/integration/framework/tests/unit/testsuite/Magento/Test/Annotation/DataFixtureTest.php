@@ -25,22 +25,27 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+
+namespace Magento\Test\Annotation;
+
 /**
- * Test class for Magento_Test_Annotation_DataFixture.
+ * Test class for \Magento\TestFramework\Annotation\DataFixture.
  *
  * @magentoDataFixture sampleFixtureOne
  */
-class Magento_Test_Annotation_DataFixtureTest extends PHPUnit_Framework_TestCase
+class DataFixtureTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Test_Annotation_DataFixture|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Annotation\DataFixture|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_object;
 
     protected function setUp()
     {
         $this->_object = $this->getMock(
-            'Magento_Test_Annotation_DataFixture', array('_applyOneFixture'), array(__DIR__ . '/_files')
+            'Magento\TestFramework\Annotation\DataFixture',
+            array('_applyOneFixture'),
+            array(__DIR__ . '/_files')
         );
     }
 
@@ -57,21 +62,21 @@ class Magento_Test_Annotation_DataFixtureTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Magento_Exception
+     * @expectedException \Magento\Exception
      */
     public function testConstructorException()
     {
-        new Magento_Test_Annotation_DataFixture(__DIR__ . '/non_existing_fixture_dir');
+        new \Magento\TestFramework\Annotation\DataFixture(__DIR__ . '/non_existing_fixture_dir');
     }
 
     public function testStartTestTransactionRequestClassAnnotation()
     {
-        $eventParam = new Magento_Test_Event_Param_Transaction();
+        $eventParam = new \Magento\TestFramework\Event\Param\Transaction();
         $this->_object->startTestTransactionRequest($this, $eventParam);
         $this->assertTrue($eventParam->isTransactionStartRequested());
         $this->assertFalse($eventParam->isTransactionRollbackRequested());
 
-        $eventParam = new Magento_Test_Event_Param_Transaction();
+        $eventParam = new \Magento\TestFramework\Event\Param\Transaction();
         $this->_object->startTransaction($this);
         $this->_object->startTestTransactionRequest($this, $eventParam);
         $this->assertFalse($eventParam->isTransactionStartRequested());
@@ -84,12 +89,12 @@ class Magento_Test_Annotation_DataFixtureTest extends PHPUnit_Framework_TestCase
      */
     public function testStartTestTransactionRequestMethodAnnotation()
     {
-        $eventParam = new Magento_Test_Event_Param_Transaction();
+        $eventParam = new \Magento\TestFramework\Event\Param\Transaction();
         $this->_object->startTestTransactionRequest($this, $eventParam);
         $this->assertTrue($eventParam->isTransactionStartRequested());
         $this->assertFalse($eventParam->isTransactionRollbackRequested());
 
-        $eventParam = new Magento_Test_Event_Param_Transaction();
+        $eventParam = new \Magento\TestFramework\Event\Param\Transaction();
         $this->_object->startTransaction($this);
         $this->_object->startTestTransactionRequest($this, $eventParam);
         $this->assertTrue($eventParam->isTransactionStartRequested());
@@ -98,11 +103,11 @@ class Magento_Test_Annotation_DataFixtureTest extends PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture fixture\path\must\not\contain\backslash.php
-     * @expectedException Magento_Exception
+     * @expectedException \Magento\Exception
      */
     public function testStartTestTransactionRequestInvalidPath()
     {
-        $this->_object->startTestTransactionRequest($this, new Magento_Test_Event_Param_Transaction());
+        $this->_object->startTestTransactionRequest($this, new \Magento\TestFramework\Event\Param\Transaction());
     }
 
     /**
@@ -111,12 +116,12 @@ class Magento_Test_Annotation_DataFixtureTest extends PHPUnit_Framework_TestCase
      */
     public function testEndTestTransactionRequestMethodAnnotation()
     {
-        $eventParam = new Magento_Test_Event_Param_Transaction();
+        $eventParam = new \Magento\TestFramework\Event\Param\Transaction();
         $this->_object->endTestTransactionRequest($this, $eventParam);
         $this->assertFalse($eventParam->isTransactionStartRequested());
         $this->assertFalse($eventParam->isTransactionRollbackRequested());
 
-        $eventParam = new Magento_Test_Event_Param_Transaction();
+        $eventParam = new \Magento\TestFramework\Event\Param\Transaction();
         $this->_object->startTransaction($this);
         $this->_object->endTestTransactionRequest($this, $eventParam);
         $this->assertFalse($eventParam->isTransactionStartRequested());

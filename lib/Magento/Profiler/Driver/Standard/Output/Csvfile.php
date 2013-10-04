@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Profiler_Driver_Standard_Output_Csvfile extends Magento_Profiler_Driver_Standard_OutputAbstract
+namespace Magento\Profiler\Driver\Standard\Output;
+
+class Csvfile extends \Magento\Profiler\Driver\Standard\AbstractOutput
 {
     const DEFAULT_FILEPATH = '/var/log/profiler.csv';
 
@@ -74,14 +76,14 @@ class Magento_Profiler_Driver_Standard_Output_Csvfile extends Magento_Profiler_D
     /**
      * Write profiling results to CSV-file
      *
-     * @param Magento_Profiler_Driver_Standard_Stat $stat
-     * @throws RuntimeException if output file cannot be opened
+     * @param \Magento\Profiler\Driver\Standard\Stat $stat
+     * @throws \RuntimeException if output file cannot be opened
      */
-    public function display(Magento_Profiler_Driver_Standard_Stat $stat)
+    public function display(\Magento\Profiler\Driver\Standard\Stat $stat)
     {
         $fileHandle = fopen($this->_filePath, 'w');
         if (!$fileHandle) {
-            throw new RuntimeException(sprintf('Can not open a file "%s".', $this->_filePath));
+            throw new \RuntimeException(sprintf('Can not open a file "%s".', $this->_filePath));
         }
 
         $lockRequired = (strpos($this->_filePath, 'php://') !== 0);
@@ -100,9 +102,9 @@ class Magento_Profiler_Driver_Standard_Output_Csvfile extends Magento_Profiler_D
      * Write content into an opened file handle
      *
      * @param resource $fileHandle
-     * @param Magento_Profiler_Driver_Standard_Stat $stat
+     * @param \Magento\Profiler\Driver\Standard\Stat $stat
      */
-    protected function _writeFileContent($fileHandle, Magento_Profiler_Driver_Standard_Stat $stat)
+    protected function _writeFileContent($fileHandle, \Magento\Profiler\Driver\Standard\Stat $stat)
     {
         foreach ($this->_getTimerIds($stat) as $timerName) {
             $row = array();

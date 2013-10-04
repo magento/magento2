@@ -25,6 +25,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_ObjectManager_TestAsset_InterfaceImplementation implements Magento_ObjectManager_TestAsset_Interface
+namespace Magento\ObjectManager\TestAsset;
+
+class InterfaceImplementation implements \Magento\ObjectManager\TestAsset\TestAssetInterface
 {
 }

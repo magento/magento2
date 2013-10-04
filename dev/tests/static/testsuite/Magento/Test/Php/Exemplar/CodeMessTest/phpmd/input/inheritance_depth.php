@@ -1,0 +1,15 @@
+<?php
+
+class Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_inheritance_depth {}
+
+class Foo02 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_inheritance_depth {}
+
+class Foo03 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_inheritance_depth {}
+
+class Foo04 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_inheritance_depth {}
+
+class Foo05 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_inheritance_depth {}
+
+class Foo06 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_inheritance_depth {}
+
+class Foo07 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_inheritance_depth {}

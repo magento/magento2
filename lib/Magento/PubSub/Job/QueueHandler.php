@@ -25,34 +25,44 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_PubSub_Job_QueueHandler
+namespace Magento\PubSub\Job;
+
+class QueueHandler
 {
     /**
-     * @var Magento_PubSub_Job_QueueReaderInterface
+     * @var \Magento\PubSub\Job\QueueReaderInterface
      */
-    protected $_jobQueue;
+    protected $_jobQueueReader;
 
     /**
-     * @var Magento_Outbound_TransportInterface
+     * @var \Magento\PubSub\Job\QueueWriterInterface
+     */
+    protected $_jobQueueWriter;
+
+    /**
+     * @var \Magento\Outbound\TransportInterface
      */
     protected $_transport;
 
     /**
-     * @var Magento_Outbound_Message_FactoryInterface
+     * @var \Magento\Outbound\Message\FactoryInterface
      */
     protected $_messageFactory;
 
     /**
-     * @param Magento_PubSub_Job_QueueReaderInterface $jobQueue
-     * @param Magento_Outbound_TransportInterface $transport
-     * @param Magento_Outbound_Message_FactoryInterface $messageFactory
+     * @param \Magento\PubSub\Job\QueueReaderInterface $jobQueueReader
+     * @param \Magento\PubSub\Job\QueueWriterInterface $jobQueueWriter
+     * @param \Magento\Outbound\TransportInterface $transport
+     * @param \Magento\Outbound\Message\FactoryInterface $messageFactory
      */
     public function __construct(
-        Magento_PubSub_Job_QueueReaderInterface $jobQueue,
-        Magento_Outbound_TransportInterface $transport,
-        Magento_Outbound_Message_FactoryInterface $messageFactory
+        \Magento\PubSub\Job\QueueReaderInterface $jobQueueReader,
+        \Magento\PubSub\Job\QueueWriterInterface $jobQueueWriter,
+        \Magento\Outbound\TransportInterface $transport,
+        \Magento\Outbound\Message\FactoryInterface $messageFactory
     ) {
-        $this->_jobQueue = $jobQueue;
+        $this->_jobQueueReader = $jobQueueReader;
+        $this->_jobQueueWriter = $jobQueueWriter;
         $this->_transport = $transport;
         $this->_messageFactory = $messageFactory;
     }
@@ -63,12 +73,19 @@ class Magento_PubSub_Job_QueueHandler
      */
     public function handle()
     {
-        $job = $this->_jobQueue->poll();
+        $job = $this->_jobQueueReader->poll();
         while (!is_null($job)) {
-            $message = $this->_messageFactory->create($job->getSubscription(), $job->getEvent());
+            $event = $job->getEvent();
+            $message = $this->_messageFactory->create($job->getSubscription()->getEndpoint(),
+                $event->getTopic(), $event->getBodyData());
             $response = $this->_transport->dispatch($message);
-            $job->handleResponse($response);
-            $job = $this->_jobQueue->poll();
+            if ($response->isSuccessful()) {
+                $job->complete();
+            } else {
+                $job->handleFailure();
+                $this->_jobQueueWriter->offer($job);
+            }
+            $job = $this->_jobQueueReader->poll();
         }
     }
 }

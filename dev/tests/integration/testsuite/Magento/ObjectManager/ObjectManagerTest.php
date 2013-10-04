@@ -19,31 +19,33 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     Magento_ObjectManager
+ * @package     \Magento\ObjectManager
  * @subpackage  integration_tests
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_ObjectManagerTest extends PHPUnit_Framework_TestCase
+namespace Magento\ObjectManager;
+
+class ObjectManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**#@+
      * Test classes for basic instantiation
      */
-    const TEST_CLASS           = 'Magento_ObjectManager_TestAsset_Basic';
-    const TEST_CLASS_INJECTION = 'Magento_ObjectManager_TestAsset_BasicInjection';
+    const TEST_CLASS           = 'Magento\ObjectManager\TestAsset\Basic';
+    const TEST_CLASS_INJECTION = 'Magento\ObjectManager\TestAsset\BasicInjection';
     /**#@-*/
 
     /**#@+
      * Test classes and interface to test preferences
      */
-    const TEST_INTERFACE                = 'Magento_ObjectManager_TestAsset_Interface';
-    const TEST_INTERFACE_IMPLEMENTATION = 'Magento_ObjectManager_TestAsset_InterfaceImplementation';
-    const TEST_CLASS_WITH_INTERFACE     = 'Magento_ObjectManager_TestAsset_InterfaceInjection';
+    const TEST_INTERFACE                = 'Magento\ObjectManager\TestAsset\TestAssetInterface';
+    const TEST_INTERFACE_IMPLEMENTATION = 'Magento\ObjectManager\TestAsset\InterfaceImplementation';
+    const TEST_CLASS_WITH_INTERFACE     = 'Magento\ObjectManager\TestAsset\InterfaceInjection';
     /**#@-*/
 
     /**
-     * @var Magento_ObjectManager
+     * @var \Magento\ObjectManager
      */
     protected static $_objectManager;
 
@@ -53,17 +55,17 @@ class Magento_ObjectManagerTest extends PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_numerableClasses = array(
-        0  => 'Magento_ObjectManager_TestAsset_ConstructorNoArguments',
-        1  => 'Magento_ObjectManager_TestAsset_ConstructorOneArgument',
-        2  => 'Magento_ObjectManager_TestAsset_ConstructorTwoArguments',
-        3  => 'Magento_ObjectManager_TestAsset_ConstructorThreeArguments',
-        4  => 'Magento_ObjectManager_TestAsset_ConstructorFourArguments',
-        5  => 'Magento_ObjectManager_TestAsset_ConstructorFiveArguments',
-        6  => 'Magento_ObjectManager_TestAsset_ConstructorSixArguments',
-        7  => 'Magento_ObjectManager_TestAsset_ConstructorSevenArguments',
-        8  => 'Magento_ObjectManager_TestAsset_ConstructorEightArguments',
-        9  => 'Magento_ObjectManager_TestAsset_ConstructorNineArguments',
-        10 => 'Magento_ObjectManager_TestAsset_ConstructorTenArguments',
+        0  => 'Magento\ObjectManager\TestAsset\ConstructorNoArguments',
+        1  => 'Magento\ObjectManager\TestAsset\ConstructorOneArgument',
+        2  => 'Magento\ObjectManager\TestAsset\ConstructorTwoArguments',
+        3  => 'Magento\ObjectManager\TestAsset\ConstructorThreeArguments',
+        4  => 'Magento\ObjectManager\TestAsset\ConstructorFourArguments',
+        5  => 'Magento\ObjectManager\TestAsset\ConstructorFiveArguments',
+        6  => 'Magento\ObjectManager\TestAsset\ConstructorSixArguments',
+        7  => 'Magento\ObjectManager\TestAsset\ConstructorSevenArguments',
+        8  => 'Magento\ObjectManager\TestAsset\ConstructorEightArguments',
+        9  => 'Magento\ObjectManager\TestAsset\ConstructorNineArguments',
+        10 => 'Magento\ObjectManager\TestAsset\ConstructorTenArguments',
     );
 
     /**
@@ -86,7 +88,7 @@ class Magento_ObjectManagerTest extends PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$_objectManager = new Magento_ObjectManager_ObjectManager();
+        self::$_objectManager = new \Magento\ObjectManager\ObjectManager();
         self::$_objectManager->configure(array(
             'preferences' => array(
                 self::TEST_INTERFACE => self::TEST_INTERFACE_IMPLEMENTATION

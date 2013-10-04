@@ -25,7 +25,9 @@
 /**
  * Interface of a cache frontend - an ultimate publicly available interface to an actual cache storage
  */
-interface Magento_Cache_FrontendInterface
+namespace Magento\Cache;
+
+interface FrontendInterface
 {
     /**
      * Test if a cache is available for the given id
@@ -69,19 +71,19 @@ interface Magento_Cache_FrontendInterface
      * @param array $tags
      * @return bool
      */
-    public function clean($mode = Zend_Cache::CLEANING_MODE_ALL, array $tags = array());
+    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = array());
 
     /**
      * Retrieve backend instance
      *
-     * @return Zend_Cache_Backend_Interface
+     * @return \Zend_Cache_Backend_Interface
      */
     public function getBackend();
 
     /**
-     * Retrieve frontend instance compatible with Zend_Locale_Data::setCache() to be used as a workaround
+     * Retrieve frontend instance compatible with \Zend_Locale_Data::setCache() to be used as a workaround
      *
-     * @return Zend_Cache_Core
+     * @return \Zend_Cache_Core
      */
     public function getLowLevelFrontend();
 }

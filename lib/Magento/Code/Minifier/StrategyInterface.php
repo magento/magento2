@@ -25,7 +25,9 @@
 /**
  * Interface for minification strategies
  */
-interface Magento_Code_Minifier_StrategyInterface
+namespace Magento\Code\Minifier;
+
+interface StrategyInterface
 {
     /**
      * Generates minified file

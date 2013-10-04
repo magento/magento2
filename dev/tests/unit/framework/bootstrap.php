@@ -18,27 +18,43 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     unit_tests
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-require __DIR__ . '/../../../../app/code/Mage/Core/functions.php';
-require __DIR__ . '/../../../../app/autoload.php';
-Magento_Autoload_IncludePath::addIncludePath(array(
-    __DIR__,
-    realpath(__DIR__ . '/../testsuite'),
-    realpath(__DIR__ . '/../../../../app'),
-    realpath(__DIR__ . '/../../../../app/code'),
-    realpath(__DIR__ . '/../../../../lib'),
-));
 define('BP', realpath(__DIR__ . '/../../../../'));
 define('TESTS_TEMP_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tmp');
 define('DS', DIRECTORY_SEPARATOR);
+require BP . '/app/code/Magento/Core/functions.php';
+require BP . '/app/autoload.php';
+\Magento\Autoload\IncludePath::addIncludePath(array(
+    __DIR__,
+    realpath(__DIR__ . '/../testsuite'),
+    realpath(BP . '/app'),
+    realpath(BP . '/app/code'),
+    realpath(BP . '/lib'),
+));
 if (is_dir(TESTS_TEMP_DIR)) {
-    Varien_Io_File::rmdirRecursive(TESTS_TEMP_DIR);
+    \Magento\Io\File::rmdirRecursive(TESTS_TEMP_DIR);
 }
 mkdir(TESTS_TEMP_DIR);
 
-Mage::setIsSerializable(false);
+\Magento\Phrase::setRenderer(new \Magento\Phrase\Renderer\Placeholder());
+
+function tool_autoloader($className)
+{
+    if (strpos($className, 'Magento\\Tools\\') === false) {
+        return false;
+    }
+    $filePath = str_replace('\\', DS, $className);
+    $filePath = BP . DS . 'dev' . DS . 'tools' . DS . $filePath . '.php';
+
+    if (file_exists($filePath)) {
+        include_once($filePath);
+    } else {
+        return false;
+    }
+}
+spl_autoload_register('tool_autoloader');
+error_reporting(E_ALL);
+ini_set('display_errors', 1);

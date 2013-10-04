@@ -25,7 +25,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Code_Generator_IoTest extends PHPUnit_Framework_TestCase
+namespace Magento\Code\Generator;
+
+class IoTest extends \PHPUnit_Framework_TestCase
 {
     /**#@+
      * Source and result class parameters
@@ -46,17 +48,17 @@ class Magento_Code_Generator_IoTest extends PHPUnit_Framework_TestCase
     protected $_generationDirectory;
 
     /**
-     * @var Magento_Code_Generator_Io
+     * @var \Magento\Code\Generator\Io
      */
     protected $_object;
 
     /**
-     * @var Varien_Io_File|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Io\File|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_ioObjectMock;
 
     /**
-     * @var Magento_Autoload_IncludePath|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Autoload\IncludePath|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_autoLoaderMock;
 
@@ -65,7 +67,7 @@ class Magento_Code_Generator_IoTest extends PHPUnit_Framework_TestCase
         $this->_generationDirectory
             = rtrim(self::GENERATION_DIRECTORY, self::DIRECTORY_SEPARATOR) . self::DIRECTORY_SEPARATOR;
 
-        $this->_ioObjectMock = $this->getMock('Varien_Io_File',
+        $this->_ioObjectMock = $this->getMock('Magento\Io\File',
             array('dirsep', 'isWriteable', 'mkdir', 'fileExists', 'write')
         );
         $this->_ioObjectMock->expects($this->any())
@@ -73,14 +75,14 @@ class Magento_Code_Generator_IoTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(self::DIRECTORY_SEPARATOR));
 
         $this->_autoLoaderMock = $this->getMock(
-            'Magento_Autoload_IncludePath', array('getFilePath'), array(), '', false
+            'Magento\Autoload\IncludePath', array('getFilePath'), array(), '', false
           );
         $this->_autoLoaderMock->staticExpects($this->any())
             ->method('getFilePath')
             ->with(self::CLASS_NAME)
             ->will($this->returnValue(self::CLASS_FILE_NAME));
 
-        $this->_object = new Magento_Code_Generator_Io($this->_ioObjectMock, $this->_autoLoaderMock,
+        $this->_object = new \Magento\Code\Generator\Io($this->_ioObjectMock, $this->_autoLoaderMock,
             self::GENERATION_DIRECTORY
         );
     }

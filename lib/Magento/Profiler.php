@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Profiler
+namespace Magento;
+
+class Profiler
 {
     /**
      * Separator literal to assemble timer identifier from timer names
@@ -138,9 +140,9 @@ class Magento_Profiler
     /**
      * Add profiler driver.
      *
-     * @param Magento_Profiler_DriverInterface $driver
+     * @param \Magento\Profiler\DriverInterface $driver
      */
-    public static function add(Magento_Profiler_DriverInterface $driver)
+    public static function add(\Magento\Profiler\DriverInterface $driver)
     {
         self::$_drivers[] = $driver;
         self::enable();
@@ -212,15 +214,15 @@ class Magento_Profiler
      * Clear collected statistics for specified timer or for whole profiler if timer id is omitted
      *
      * @param string|null $timerName
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function clear($timerName = null)
     {
         if (strpos($timerName, self::NESTING_SEPARATOR) !== false) {
-            throw new InvalidArgumentException('Timer name must not contain a nesting separator.');
+            throw new \InvalidArgumentException('Timer name must not contain a nesting separator.');
         }
         $timerId = self::_getTimerId($timerName);
-        /** @var Magento_Profiler_DriverInterface $driver */
+        /** @var \Magento\Profiler\DriverInterface $driver */
         foreach (self::$_drivers as $driver) {
             $driver->clear($timerId);
         }
@@ -247,7 +249,7 @@ class Magento_Profiler
      *
      * @param string $timerName
      * @param array|null $tags
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function start($timerName, array $tags = null)
     {
@@ -261,11 +263,11 @@ class Magento_Profiler
         }
 
         if (strpos($timerName, self::NESTING_SEPARATOR) !== false) {
-            throw new InvalidArgumentException('Timer name must not contain a nesting separator.');
+            throw new \InvalidArgumentException('Timer name must not contain a nesting separator.');
         }
 
         $timerId = self::_getTimerId($timerName);
-        /** @var Magento_Profiler_DriverInterface $driver */
+        /** @var \Magento\Profiler\DriverInterface $driver */
         foreach (self::$_drivers as $driver) {
             $driver->start($timerId, $tags);
         }
@@ -282,7 +284,7 @@ class Magento_Profiler
      * Only the latest started timer can be stopped.
      *
      * @param string|null $timerName
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function stop($timerName = null)
     {
@@ -298,7 +300,7 @@ class Magento_Profiler
                 $timerPosition = array_pop(self::$_pathIndex[$timerName]);
             }
             if ($timerPosition === false) {
-                throw new InvalidArgumentException(sprintf('Timer "%s" has not been started.', $timerName));
+                throw new \InvalidArgumentException(sprintf('Timer "%s" has not been started.', $timerName));
             } elseif ($timerPosition === 1) {
                 $timersToStop = 1;
             } else {
@@ -308,7 +310,7 @@ class Magento_Profiler
 
         for ($i = 0; $i < $timersToStop; $i++) {
             $timerId = self::_getTimerId();
-            /** @var Magento_Profiler_DriverInterface $driver */
+            /** @var \Magento\Profiler\DriverInterface $driver */
             foreach (self::$_drivers as $driver) {
                 $driver->stop($timerId);
             }
@@ -367,7 +369,7 @@ class Magento_Profiler
         $driverConfigs = (array) (isset($config['drivers']) ? $config['drivers'] : array());
         $driverFactory = isset($config['driverFactory'])
             ? $config['driverFactory']
-            : new Magento_Profiler_Driver_Factory();
+            : new \Magento\Profiler\Driver\Factory();
         $tagFilters = (array) (isset($config['tagFilters']) ? $config['tagFilters'] : array());
 
         $result = array(

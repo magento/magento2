@@ -2,3 +2,4 @@
 /etc/*.xml
 !/etc/integration-tests-config.xml
 /tmp/
+/var/

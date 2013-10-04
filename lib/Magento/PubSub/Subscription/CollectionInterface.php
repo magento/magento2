@@ -25,13 +25,15 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-interface Magento_PubSub_Subscription_CollectionInterface
+namespace Magento\PubSub\Subscription;
+
+interface CollectionInterface
 {
     /**
      * Return all subscriptions by topic
      *
      * @param string $topic
-     * @return Magento_PubSub_SubscriptionInterface[]
+     * @return \Magento\PubSub\SubscriptionInterface[]
      */
     public function getSubscriptionsByTopic($topic);
 }

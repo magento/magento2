@@ -1,3 +1,103 @@
+2.0.0.0-dev46
+=============
+* Translation mechanism improvements:
+  * Translate function ->__() was removed from Magento model interfaces. Global function __() was created
+  * Added I18n tools for translation dictionary generation and language package generation
+* Configuration improvements:
+  * Implemented Magento Config component that allows to create new configuration types in a simple way
+  * Improved default/store/website configuration
+     * config.xml file is designed to store only default/store/website configuration data
+     * concrete store/website configuration is loaded on demand
+  * Improved Install, Category, Product, EAV, Customer, Wishlist, PDF, VDE, Currency, Email Template, Crontab, Events, Routes, Modules, Locale, Import/Export, Indexer, Resources configuration segments:
+     * Configuration moved to separate files. Some parts are transformed to DI configuration and moved to `di.xml` files
+     * New configuration files are validated with XSD
+     * Format of the configuration changed to make possible its validation
+  * Improved configuration in `widget.xml`, `fieldset.xml`, `persistent.xml` and `install.xml` files:
+     * `install.xml` was renamed to `install_wizard.xml`
+     * The configuration is validated with XSD
+     * Format of the configuration changed to make possible its validation
+     * Some parts are transformed to DI configuration and moved to `di.xml` files
+  * Removed `jstranslate.xml` files and moved all message definitions to `Magento_Core_Helper_Js`.
+  * List of non-structured nodes from config.xml were transformed into DI configuration
+* JavaScript improvements:
+  * Prototype.js usages converted to jQuery:
+     * Deprecated prototype.js based method removed from app/code/Magento/Weee/view/frontend/tax-toggle.js
+     * Removed deprecated prototype.js based file: app/code/Magento/Checkout/view/frontend/opcheckout.js
+     * Updated to use jQuery redirectUrl widget vs prototype based solution:
+       * app/code/Magento/Oauth/view/adminhtml/authorize/form/login.phtml
+       * app/code/Magento/Oauth/view/frontend/authorize/form/login.phtml
+       * app/code/Magento/Catalog/view/frontend/product/list.phtml
+  * Removed file containing jQuery that did not meet the Magento 2 coding standard. Replaced with redirect-url widget
+     * app/code/Magento/Catalog/view/frontend/js/mage-attributes-processing.js
+  * Updated to meet Magento 2 coding standard: app/code/Magento/Checkout/view/frontend/cart/item/default.phtml
+  * Added jQuery widgets:
+    * mage.deletableItem - Widget to tag DOM element as deletable, by default on click
+    * mage.fieldsetControls & mage.fieldsetResetControl - Widget to easily reset a subset of form fields with a reset ui control
+    * mage.itemTable  - Widget to easily add a data template block dynamically on an event, by default click.
+    * mage.redirectUrl - Simple widget to allow for consistent javascript based redirects that meet the Magento 2 coding standard
+    * Added new validation rules for validation widget: 'required-if-not-specified', 'required-if-specified', and 'validate-item-quantity'
+* Various improvements:
+  * Changed VendorName from Mage to Magento
+  * Implemented PSR-0 and PSR-1 Coding Standards
+    * All Magento source code has been converted.
+    * Tests have been written to enforce PSR-0 and PSR-1 coding standards.
+  * Removed empty module setup models. Core resource setup model is used as a default setup model now. Custom setup model must be injected via DI configuration
+  * Removed some events (plugins must be used instead):
+    * adminhtml_widget_container_html_before
+    * admin_session_user_logout
+    * model_config_data_save_before
+    * admin_system_config_section_save_after
+    * backend_menu_load_after
+    * catalog_controller_category_init_before
+    * catalog_helper_output_construct
+    * catalog_controller_product_init
+    * catalog_category_tree_move_before
+    * catalog_category_tree_move_after
+    * catalog_product_website_update_before
+    * catalog_product_website_update
+    * catalog_product_media_save_before
+    * catalog_product_media_add_image
+    * catalog_product_type_grouped_price
+    * catalog_product_collection_load_before
+    * catalogsearch_index_process_start
+    * catalogsearch_index_process_complete
+    * cms_page_get_available_statuses
+    * cms_wysiwyg_config_prepare
+    * application_clean_cache
+    * theme_copy_after
+    * customer_registration_is_allowed
+    * log_log_clean_before
+    * log_log_clean_after
+    * sales_convert_quote_payment_to_order_payment
+    * sales_convert_quote_item_to_order_item
+    * sales_quote_config_get_product_attributes
+  * Removed the Poll module including references and dependencies to/on it.
+* Redesign and reimplementation of web services framework
+  * Removed the Api module and all existing SOAP V1, SOAP V2, and XML-RPC web services code
+  * Implemented new web services framework to support both REST and SOAP based off of a common service interface
+  * Implemented a 2-legged OAuth 1.0a based authentication mechanism for both REST and SOAP API calls
+* Layout improvements:
+  * Arbitrary handle name moved to handle node, id attribute
+  * New arguments format, which introduce argument types implemented
+  * Translation specified just on the level of node which is going to be translated
+  * XSD validation for Layouts XML added
+  * Referential integrity check with XSD introduced
+  * Added ability to update containers via references
+  * Type casting for all kind of types (url, option, array and simple types) added
+  * Covered introduced argument types with integrity test
+  * Types restrictions was implemented
+  * Removed access to direct execution of API through layout by removing <action> nodes
+  * Implemented ability to declare containers in layout that don't have any specific semantic value
+  * Removed handle declaration from layout update files. Name of the file stands for the handle ID and handle's attributes are defined in the root <layout> node
+* PHP 5.4 and 5.5 support:
+  * Made application compatible with PHP 5.4 and 5.5
+  * Removed workarounds for older PHP versions
+  * Minimum supported PHP version is set to 5.4.0
+* God Class Mage Eliminated
+* Fixed bugs:
+  * Fixed address field "State/Province" on frontend, which contained "[object Object]" items instead of necessary values
+  * Fixed overriding/extending of global plugin configuration in area specific configuration
+
 2.0.0.0-dev45
 =============
 * Product management improvements:
@@ -143,7 +243,7 @@
   * [#215](https://github.com/magento/magento2/pull/215) -- There is no sort-order "best value"
   * [#217](https://github.com/magento/magento2/pull/217) -- Update `app/code/core/Mage/Adminhtml/locale/de_DE/Mage_Adminhtml.csv`
   * [#243](https://github.com/magento/magento2/pull/243) -- Fix helper for determining system memory usage on Windows (pull request for issue #237)
-  * [#267](https://github.com/magento/magento2/pull/267) -- Issue with camel case in cusutom defined source models
+  * [#267](https://github.com/magento/magento2/pull/267) -- Issue with camel case in custom defined source models
 * Bug fixes:
   * Fixed absence of a product for store view created after the product
   * Fixed incorrectly displayed or absent product image on configurable product pages
@@ -585,7 +685,7 @@
   * Added ability to generate proxy and factory classes on-the-fly for use with DI implementations. Generators can be managed in DI configuration
   * Implemented tools (shell scripts) that allow generating skeletons of factory and proxy classes for use with DI implementations
   * Added ability to set preferences to object manager and specify them through configuration
-* Refactored the following modules to utilize `Magento_Filesystem` library instead of using built-in PHP core functions directly: `Mage_Adminhtml`, `Mage_Backend`, `Mage_Backup`, `Mage_Captcha`, `Mage_Catalog`, `Mage_Cms`, `Mage_Connect`, `Mage_Core`, `Mage_Install`
+* Refactored the following modules to utilize `Magento_Filesystem` library instead of using built-in PHP core functions directly: `Mage_Adminhtml`, `Mage_Backend`, `Mage_Backup`, `Mage_Captcha`, `Magento_Catalog`, `Mage_Cms`, `Mage_Connect`, `Mage_Core`, `Mage_Install`
 * Bug fixes:
   * Fixed bug with incorrect order processing in `Mage_Authorizenet_Model_Directpost`
   * Fixed bug with unnecessary "loading" image on Category field during product editing in backend
@@ -710,7 +810,7 @@
   * Refactored implementation of associated products in backend (admin) to make them configurable through grid layout, rather than hard-coded.
   * Enhanced product variation matrix for configurable products
   * Changed "Apply To" feature in product attributes management due to changes in product creation process
-* Fixed XSS vulnerabilities in `Mage_Wishlist_IndexController`, `Mage_Adminhtml_Block_Review_Edit_Form`, `Mage_Catalog_Product_CompareController`
+* Fixed XSS vulnerabilities in `Mage_Wishlist_IndexController`, `Mage_Adminhtml_Block_Review_Edit_Form`, `Magento_Catalog_Product_CompareController`
 * Bug fixes
   * Fixed error on `Catalog -> Google Content -> Manage Items page`
   * Fixed bug with "Update Attributes" mass action for products on backend caused by setting incorrect inheritance of `Mage_Adminhtml_Helper_Catalog_Product_Edit_Action_Attribute`
@@ -996,7 +1096,7 @@
   * Fixed absence of the success message upon newsletter template creation/deletion/queueing
   * Workaround for occasional segmentation fault in integration tests caused by `Mage_Core_Model_Resource_Setup_Migration`
 * GitHub requests:
-  * [#51](https://github.com/magento/magento2/issues/51) -- fixed managing of scope-spefic values for Categories
+  * [#51](https://github.com/magento/magento2/issues/51) -- fixed managing of scope-specific values for Categories
   * [#56](https://github.com/magento/magento2/pull/56) -- removed excessive semicolon in the CSS file
   * [#60](https://github.com/magento/magento2/issues/60) -- fixed taking bind parameters into account in `Mage_Core_Model_Resource_Db_Collection_Abstract::getAllIds()`
   * [#61](https://github.com/magento/magento2/pull/61) -- relocated declaration of the "Google Checkout" payment method into `Mage_GoogleCheckout` module from `Mage_Sales`
@@ -1396,3 +1496,4 @@ Deprecated code & minor fixes update:
 2.0.0.0-dev01
 =============
 * Added initial version of Magento 2.x CE to public repository
+

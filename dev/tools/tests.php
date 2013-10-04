@@ -30,11 +30,11 @@ $commands = array(
     'unit-static'            => array('../tests/static/framework/tests/unit', ''),
     'unit-integration'       => array('../tests/integration/framework/tests/unit', ''),
     'integration'            => array('../tests/integration', ''),
-    'integration-integrity'  => array('../tests/integration', ' testsuite/integrity'),
+    'integration-integrity'  => array('../tests/integration', ' testsuite/Magento/Test/Integrity'),
     'static-default'         => array('../tests/static', ''),
-    'static-legacy'          => array('../tests/static', ' testsuite/Legacy'),
-    'static-integration-php' => array('../tests/static', ' testsuite/Php/Exemplar'),
-    'static-integration-js'  => array('../tests/static', ' testsuite/Js/Exemplar'),
+    'static-legacy'          => array('../tests/static', ' testsuite/Magento/Test/Legacy'),
+    'static-integration-php' => array('../tests/static', ' testsuite/Magento/Test/Php/Exemplar'),
+    'static-integration-js'  => array('../tests/static', ' testsuite/Magento/Test/Js/Exemplar'),
 );
 $types = array(
     'all'             => array_keys($commands),

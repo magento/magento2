@@ -26,7 +26,7 @@
  */
 
 namespace Magento\Code\Generator\TestAsset;
-use Zend\Code\Generator\DocBlockGenerator;
+use \Zend\Code\Generator\DocBlockGenerator;
 
 class ParentClass
 {

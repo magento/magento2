@@ -22,15 +22,17 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Code_Minifier
+namespace Magento\Code;
+
+class Minifier
 {
     /**
-     * @var Magento_Code_Minifier_StrategyInterface
+     * @var \Magento\Code\Minifier\StrategyInterface
      */
     private $_strategy;
 
     /**
-     * @var Magento_Filesystem
+     * @var \Magento\Filesystem
      */
     private $_filesystem;
 
@@ -40,13 +42,13 @@ class Magento_Code_Minifier
     private $_baseDir;
 
     /**
-     * @param Magento_Code_Minifier_StrategyInterface $strategy
-     * @param Magento_Filesystem $filesystem
+     * @param \Magento\Code\Minifier\StrategyInterface $strategy
+     * @param \Magento\Filesystem $filesystem
      * @param string $baseDir
      */
     public function __construct(
-        Magento_Code_Minifier_StrategyInterface $strategy,
-        Magento_Filesystem $filesystem,
+        \Magento\Code\Minifier\StrategyInterface $strategy,
+        \Magento\Filesystem $filesystem,
         $baseDir
     ) {
         $this->_strategy = $strategy;

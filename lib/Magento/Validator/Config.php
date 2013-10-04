@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Validator_Config extends Magento_Config_XmlAbstract
+namespace Magento\Validator;
+
+class Config extends \Magento\Config\AbstractXml
 {
     /**#@+
      * Constraints types
@@ -35,7 +37,24 @@ class Magento_Validator_Config extends Magento_Config_XmlAbstract
     /**
      * @var string
      */
-    protected $_defaultBuilderClass = 'Magento_Validator_Builder';
+    protected $_defaultBuilderClass = 'Magento\Validator\Builder';
+
+    /**
+     * @var \Magento\Validator\UniversalFactory
+     */
+    protected $_builderFactory;
+
+    /**
+     * @param array $configFiles
+     * @param \Magento\Validator\UniversalFactory $builderFactory
+     */
+    public function __construct(
+        array $configFiles,
+        \Magento\Validator\UniversalFactory $builderFactory
+    ) {
+        parent::__construct($configFiles);
+        $this->_builderFactory = $builderFactory;
+    }
 
     /**
      * Create validator builder instance based on entity and group.
@@ -43,34 +62,35 @@ class Magento_Validator_Config extends Magento_Config_XmlAbstract
      * @param string $entityName
      * @param string $groupName
      * @param array|null $builderConfig
-     * @throws InvalidArgumentException
-     * @return Magento_Validator_Builder
+     * @throws \InvalidArgumentException
+     * @return \Magento\Validator\Builder
      */
     public function createValidatorBuilder($entityName, $groupName, array $builderConfig = null)
     {
         if (!isset($this->_data[$entityName])) {
-            throw new InvalidArgumentException(sprintf('Unknown validation entity "%s"', $entityName));
+            throw new \InvalidArgumentException(sprintf('Unknown validation entity "%s"', $entityName));
         }
 
         if (!isset($this->_data[$entityName][$groupName])) {
-            throw new InvalidArgumentException(sprintf('Unknown validation group "%s" in entity "%s"', $groupName,
+            throw new \InvalidArgumentException(sprintf('Unknown validation group "%s" in entity "%s"', $groupName,
                 $entityName));
         }
 
-        if (array_key_exists('builder', $this->_data[$entityName][$groupName])) {
-            $builderClass = $this->_data[$entityName][$groupName]['builder'];
-        } else {
-            $builderClass = $this->_defaultBuilderClass;
-        }
+        $builderClass = isset($this->_data[$entityName][$groupName]['builder'])
+            ? $this->_data[$entityName][$groupName]['builder'] : $this->_defaultBuilderClass;
 
         if (!class_exists($builderClass)) {
-            throw new InvalidArgumentException(sprintf('Builder class "%s" was not found', $builderClass));
+            throw new \InvalidArgumentException(sprintf('Builder class "%s" was not found', $builderClass));
         }
 
-        $builder = new $builderClass($this->_data[$entityName][$groupName]['constraints']);
-        if (!$builder instanceof Magento_Validator_Builder) {
-            throw new InvalidArgumentException(
-                sprintf('Builder "%s" must extend Magento_Validator_Builder', $builderClass));
+        $builder = $this->_builderFactory->create(
+            $builderClass,
+            array('constraints' => $this->_data[$entityName][$groupName]['constraints'])
+        );
+        if (!$builder instanceof \Magento\Validator\Builder) {
+            throw new \InvalidArgumentException(
+                sprintf('Builder "%s" must extend \Magento\Validator\Builder', $builderClass)
+            );
         }
         if ($builderConfig) {
             $builder->addConfigurations($builderConfig);
@@ -84,7 +104,7 @@ class Magento_Validator_Config extends Magento_Config_XmlAbstract
      * @param string $entityName
      * @param string $groupName
      * @param array|null $builderConfig
-     * @return Magento_Validator
+     * @return \Magento\Validator
      */
     public function createValidator($entityName, $groupName, array $builderConfig = null)
     {
@@ -96,14 +116,14 @@ class Magento_Validator_Config extends Magento_Config_XmlAbstract
     /**
      * Extract configuration data from the DOM structure
      *
-     * @param DOMDocument $dom
+     * @param \DOMDocument $dom
      * @return array
      */
-    protected function _extractData(DOMDocument $dom)
+    protected function _extractData(\DOMDocument $dom)
     {
         $result = array();
 
-        /** @var DOMElement $entity */
+        /** @var \DOMElement $entity */
         foreach ($dom->getElementsByTagName('entity') as $entity) {
             $result[$entity->getAttribute('name')] = $this->_extractEntityGroupsConstraintsData($entity);
         }
@@ -113,19 +133,19 @@ class Magento_Validator_Config extends Magento_Config_XmlAbstract
     /**
      * Extract constraints associated with entity group using rules
      *
-     * @param DOMElement $entity
+     * @param \DOMElement $entity
      * @return array
      */
-    protected function _extractEntityGroupsConstraintsData(DOMElement $entity)
+    protected function _extractEntityGroupsConstraintsData(\DOMElement $entity)
     {
         $result = array();
         $rulesConstraints = $this->_extractRulesConstraintsData($entity);
 
-        /** @var DOMElement $group */
+        /** @var \DOMElement $group */
         foreach ($entity->getElementsByTagName('group') as $group) {
             $groupConstraints = array();
 
-            /** @var DOMElement $use */
+            /** @var \DOMElement $use */
             foreach ($group->getElementsByTagName('use') as $use) {
                 $ruleName = $use->getAttribute('rule');
                 if (isset($rulesConstraints[$ruleName])) {
@@ -150,21 +170,21 @@ class Magento_Validator_Config extends Magento_Config_XmlAbstract
     /**
      * Extract constraints associated with rules
      *
-     * @param DOMElement $entity
+     * @param \DOMElement $entity
      * @return array
      */
-    protected function _extractRulesConstraintsData(DOMElement $entity)
+    protected function _extractRulesConstraintsData(\DOMElement $entity)
     {
         $rules = array();
-        /** @var DOMElement $rule */
+        /** @var \DOMElement $rule */
         foreach ($entity->getElementsByTagName('rule') as $rule) {
             $ruleName = $rule->getAttribute('name');
 
-            /** @var DOMElement $propertyConstraints */
+            /** @var \DOMElement $propertyConstraints */
             foreach ($rule->getElementsByTagName('property_constraints') as $propertyConstraints) {
-                /** @var DOMElement $property */
+                /** @var \DOMElement $property */
                 foreach ($propertyConstraints->getElementsByTagName('property') as $property) {
-                    /** @var DOMElement $constraint */
+                    /** @var \DOMElement $constraint */
                     foreach ($property->getElementsByTagName('constraint') as $constraint) {
                         $rules[$ruleName][] = array(
                             'alias' => $constraint->getAttribute('alias'),
@@ -177,9 +197,9 @@ class Magento_Validator_Config extends Magento_Config_XmlAbstract
                 }
             }
 
-            /** @var DOMElement $entityConstraints */
+            /** @var \DOMElement $entityConstraints */
             foreach ($rule->getElementsByTagName('entity_constraints') as $entityConstraints) {
-                /** @var DOMElement $constraint */
+                /** @var \DOMElement $constraint */
                 foreach ($entityConstraints->getElementsByTagName('constraint') as $constraint) {
                     $rules[$ruleName][] = array(
                         'alias' => $constraint->getAttribute('alias'),
@@ -197,10 +217,10 @@ class Magento_Validator_Config extends Magento_Config_XmlAbstract
     /**
      * Extract constraint options.
      *
-     * @param DOMElement $constraint
+     * @param \DOMElement $constraint
      * @return array|null
      */
-    protected function _extractConstraintOptions(DOMElement $constraint)
+    protected function _extractConstraintOptions(\DOMElement $constraint)
     {
         if (!$constraint->hasChildNodes()) {
             return null;
@@ -231,7 +251,7 @@ class Magento_Validator_Config extends Magento_Config_XmlAbstract
          * Read constraint configurator callback
          *
          * <constraint class="Constraint">
-         *     <callback class="Mage_Customer_Helper_Data" method="configureValidator"/>
+         *     <callback class="Magento\Customer\Helper\Data" method="configureValidator"/>
          * </constraint>
          */
         $callback = $this->_readCallback($children);
@@ -252,15 +272,15 @@ class Magento_Validator_Config extends Magento_Config_XmlAbstract
     /**
      * Get element children.
      *
-     * @param DOMElement $element
+     * @param \DOMElement $element
      * @return array
      */
     protected function _collectChildren($element)
     {
         $children = array();
-        /** @var $node DOMElement */
+        /** @var $node \DOMElement */
         foreach ($element->childNodes as $node) {
-            if (!$node instanceof DOMElement) {
+            if (!$node instanceof \DOMElement) {
                 continue;
             }
             $nodeName = strtolower($node->nodeName);
@@ -282,7 +302,7 @@ class Magento_Validator_Config extends Magento_Config_XmlAbstract
     {
         if (array_key_exists('argument', $children)) {
             $arguments = array();
-            /** @var $node DOMElement */
+            /** @var $node \DOMElement */
             foreach ($children['argument'] as $node) {
                 $nodeChildren = $this->_collectChildren($node);
                 $callback = $this->_readCallback($nodeChildren);
@@ -293,7 +313,7 @@ class Magento_Validator_Config extends Magento_Config_XmlAbstract
                     $arguments[] = $options;
                 } else {
                     $argument = $node->textContent;
-                    $arguments[] = new Magento_Validator_Constraint_Option(trim($argument));
+                    $arguments[] = new \Magento\Validator\Constraint\Option(trim($argument));
                 }
 
             }
@@ -312,9 +332,9 @@ class Magento_Validator_Config extends Magento_Config_XmlAbstract
     {
         if (array_key_exists('callback', $children)) {
             $callbacks = array();
-            /** @var $callbackData DOMElement */
+            /** @var $callbackData \DOMElement */
             foreach ($children['callback'] as $callbackData) {
-                $callbacks[] = new Magento_Validator_Constraint_Option_Callback(array(
+                $callbacks[] = new \Magento\Validator\Constraint\Option\Callback(array(
                     trim($callbackData->getAttribute('class')),
                     trim($callbackData->getAttribute('method'))
                 ), null, true);
@@ -334,7 +354,7 @@ class Magento_Validator_Config extends Magento_Config_XmlAbstract
     {
         if (array_key_exists('option', $children)) {
             $data = array();
-            /** @var $option DOMElement */
+            /** @var $option \DOMElement */
             foreach ($children['option'] as $option) {
                 $value = trim($option->textContent);
                 if ($option->hasAttribute('name')) {
@@ -343,7 +363,7 @@ class Magento_Validator_Config extends Magento_Config_XmlAbstract
                     $data[] = $value;
                 }
             }
-            return new Magento_Validator_Constraint_Option($data);
+            return new \Magento\Validator\Constraint\Option($data);
         }
         return null;
     }
@@ -372,7 +392,7 @@ class Magento_Validator_Config extends Magento_Config_XmlAbstract
     {
         if (array_key_exists('method', $children)) {
             $methods = array();
-            /** @var $method DOMElement */
+            /** @var $method \DOMElement */
             foreach ($children['method'] as $method) {
                 $children = $this->_collectChildren($method);
                 $methodName = $method->getAttribute('name');

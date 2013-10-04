@@ -22,11 +22,13 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Test_MemoryLimitTest extends PHPUnit_Framework_TestCase
+namespace Magento\Test;
+
+class MemoryLimitTest extends \PHPUnit_Framework_TestCase
 {
     public function testPrintHeader()
     {
-        $result = Magento_Test_MemoryLimit::printHeader();
+        $result = \Magento\TestFramework\MemoryLimit::printHeader();
         $this->assertNotEmpty($result);
         $this->assertStringEndsWith(PHP_EOL, $result);
     }
@@ -55,7 +57,7 @@ class Magento_Test_MemoryLimitTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException LogicException
+     * @expectedException \LogicException
      */
     public function testValidateUsageException()
     {
@@ -66,12 +68,13 @@ class Magento_Test_MemoryLimitTest extends PHPUnit_Framework_TestCase
     /**
      * @param string $memCap
      * @param string $leakCap
-     * @return Magento_Test_MemoryLimit
+     * @return \Magento\TestFramework\MemoryLimit
      */
     protected function _createObject($memCap, $leakCap)
     {
-        $helper = $this->getMock('Magento_Test_Helper_Memory', array('getRealMemoryUsage'), array(), '', false);
+        $helper = $this->getMock(
+            'Magento\TestFramework\Helper\Memory', array('getRealMemoryUsage'), array(), '', false);
         $helper->expects($this->any())->method('getRealMemoryUsage')->will($this->returnValue(1024 * 1024));
-        return new Magento_Test_MemoryLimit($memCap, $leakCap, $helper);
+        return new \Magento\TestFramework\MemoryLimit($memCap, $leakCap, $helper);
     }
 }

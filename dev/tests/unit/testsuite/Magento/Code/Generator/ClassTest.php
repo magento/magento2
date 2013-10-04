@@ -25,12 +25,14 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Code_Generator_ClassTest extends PHPUnit_Framework_TestCase
+namespace Magento\Code\Generator;
+
+class ClassTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test class name for generation test
      */
-    const TEST_CLASS_NAME = 'Magento_Code_Generator_TestAsset_TestGenerationClass';
+    const TEST_CLASS_NAME = 'Magento\Code\Generator\TestAsset\TestGenerationClass';
 
     /**
      * Expected arguments for test class constructor
@@ -45,14 +47,14 @@ class Magento_Code_Generator_ClassTest extends PHPUnit_Framework_TestCase
 
     public function testGenerateForConstructor()
     {
-        $generatorMock = $this->getMock('Magento_Code_Generator', array('generateClass'), array(), '', false);
+        $generatorMock = $this->getMock('Magento\Code\Generator', array('generateClass'), array(), '', false);
         foreach ($this->_expectedArguments as $order => $class) {
             $generatorMock->expects($this->at($order))
                 ->method('generateClass')
                 ->with($class);
         }
 
-        $classGenerator = new Magento_Code_Generator_Class($generatorMock);
+        $classGenerator = new \Magento\Code\Generator\ClassGenerator($generatorMock);
         $classGenerator->generateForConstructor(self::TEST_CLASS_NAME);
     }
 }

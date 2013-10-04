@@ -30,16 +30,16 @@
 <phpunit bootstrap="./framework/bootstrap.php">
     <testsuites>
         <testsuite name="Javascript Static Code Analysis">
-            <file>testsuite/Js/LiveCodeTest.php</file>
+            <file>testsuite/Magento/Test/Js/LiveCodeTest.php</file>
         </testsuite>
         <testsuite name="PHP Coding Standard Verification">
-            <file>testsuite/Php/LiveCodeTest.php</file>
+            <file>testsuite/Magento/Test/Php/LiveCodeTest.php</file>
         </testsuite>
         <testsuite name="Code Integrity Tests">
-            <directory>testsuite/Integrity</directory>
+            <directory>testsuite/Magento/Test/Integrity</directory>
         </testsuite>
         <testsuite name="Twig Syntax Checker">
-            <directory>testsuite/Twig/TwigExtensionTest.php</directory>
+            <directory>testsuite/Magento/Test/Twig/TwigExtensionTest.php</directory>
         </testsuite>
     </testsuites>
     <php>

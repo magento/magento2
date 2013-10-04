@@ -23,7 +23,9 @@
  * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-interface Magento_Acl_CacheInterface
+namespace Magento\Acl;
+
+interface CacheInterface
 {
     /**
      * Check whether ACL object is in cache
@@ -35,16 +37,16 @@ interface Magento_Acl_CacheInterface
     /**
      * Retrieve ACL object from cache
      *
-     * @return Magento_Acl
+     * @return \Magento\Acl
      */
     public function get();
 
     /**
      * Save ACL object to cache
      *
-     * @param Magento_Acl $acl
+     * @param \Magento\Acl $acl
      */
-    public function save(Magento_Acl $acl);
+    public function save(\Magento\Acl $acl);
 
     /**
      * Clear ACL instance cache

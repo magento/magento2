@@ -19,19 +19,21 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     Magento_Validator
+ * @package     \Magento\Validator
  * @subpackage  unit_tests
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Test case for Magento_Validator_Exception
+ * Test case for \Magento\Validator\ValidatorException
  */
-class Magento_Validator_ExceptionTest extends PHPUnit_Framework_TestCase
+namespace Magento\Validator;
+
+class ExceptionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Testing Magento_Validator_Exception::getMessage
+     * Testing \Magento\Validator\ValidatorException::getMessage
      */
     public function testGetMessage()
     {
@@ -45,7 +47,7 @@ class Magento_Validator_ExceptionTest extends PHPUnit_Framework_TestCase
                 'error3'
             )
         );
-        $exception = new Magento_Validator_Exception($messages);
+        $exception = new \Magento\Validator\ValidatorException($messages);
         $this->assertEquals($expectedMessage, $exception->getMessage());
     }
 }

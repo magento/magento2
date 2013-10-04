@@ -22,9 +22,11 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-/*jshint browser:true jquery:true*/
-(function($){
+/*jshint browser:true jquery:true */
+(function($, console) {
     $.widget("mage.loader", {
+        loaderStarted: 0,
+        spinner: $(undefined),
         options: {
             icon: '',
             texts: {
@@ -32,11 +34,11 @@
                 imgAlt: $.mage.__('Loading...')
             },
             template: '<div class="loading-mask" data-role="loader">' +
-                         '<div class="loader">'+
-                            '<img {{if texts.imgAlt}}alt="${texts.imgAlt}"{{/if}} src="${icon}">'+
-                            '<p>{{if texts.loaderText}}${texts.loaderText}{{/if}}</p>' +
-                         '</div>' +
-                      '</div>'
+                '<div class="loader">' +
+                '<img {{if texts.imgAlt}}alt="${texts.imgAlt}"{{/if}} src="${icon}">' +
+                '<p>{{if texts.loaderText}}${texts.loaderText}{{/if}}</p>' +
+                '</div>' +
+                '</div>'
         },
 
         /**
@@ -44,30 +46,17 @@
          * @protected
          */
         _create: function() {
-            this._render();
             this._bind();
         },
 
         /**
-         * Loader initialisation
-         * @private
-         */
-        _init: function() {
-            if (this.options.showOnInit) {
-                this.show();
-            }
-        },
-
-        /**
-         * Bind on ajax complete event
+         * Bind on ajax events
          * @protected
          */
         _bind: function() {
-            this.element.on('ajaxComplete ajaxError processStop', function(e) {
-                e.stopImmediatePropagation();
-                $($(e.currentTarget).is(document) ? 'body' : e.currentTarget).loader('hide');
-            });
             this._on({
+                'processStop': 'hide',
+                'processStart': 'show',
                 'show.loader': 'show',
                 'hide.loader': 'hide',
                 'contentUpdated.loader': '_contentUpdated'
@@ -77,32 +66,36 @@
         /**
          * Verify loader present after content updated
          *
+         * This will be cleaned up by the task MAGETWO-11070
+         *
          * @param event
          * @private
          */
         _contentUpdated: function(event) {
-            if (!this.element.find('[data-role="loader"]').length) {
-                this._render();
-            }
+            this.show();
         },
 
         /**
          * Show loader
          */
         show: function() {
-            if (!this.element.find('[data-role="loader"]').length) {
-                this._render();
-            }
-            this.loader.show();
+            this._render();
+            this.loaderStarted++;
+            this.spinner.show();
+            return false;
         },
 
         /**
          * Hide loader
          */
         hide: function() {
-            if (this.loader) {
-                this.loader.hide();
+            if (this.loaderStarted > 0) {
+                this.loaderStarted--;
+                if (this.loaderStarted === 0) {
+                    this.spinner.hide();
+                }
             }
+            return false;
         },
 
         /**
@@ -110,10 +103,11 @@
          * @protected
          */
         _render: function() {
-            this.loader = $.tmpl(this.options.template, this.options)
-                .css(this._getCssObj());
-
-            this.element.prepend(this.loader);
+            if (this.spinner.length === 0) {
+                this.spinner = $.tmpl(this.options.template, this.options)
+                    .css(this._getCssObj());
+            }
+            this.element.prepend(this.spinner);
         },
 
         /**
@@ -121,7 +115,7 @@
          * @protected
          */
         _getCssObj: function() {
-            var isBodyElement = this.element.is('body'),
+            var isBodyElement = this.element.is('[data-container=body]'),
                 width = isBodyElement ? $(window).width() : this.element.outerWidth(),
                 height = isBodyElement ? $(window).height() : this.element.outerHeight(),
                 position = isBodyElement ? 'fixed' : 'relative';
@@ -136,10 +130,64 @@
         /**
          * Destroy loader
          */
-        destroy: function() {
-            this.loader.remove();
-            this.element.off('ajaxComplete ajaxError processStop');
-            return $.Widget.prototype.destroy.call(this);
+        _destroy: function() {
+            this.spinner.remove();
         }
     });
-})(jQuery);
+
+    /**
+     * This widget takes care of registering the needed loader listeners on the body
+     */
+    $.widget("mage.loaderAjax", {
+        options: {
+            defaultContainer: '[data-container=body]'
+        },
+        _create: function() {
+            this._bind();
+            // There should only be one instance of this widget, and it should be attached
+            // to the body only. Having it on the page twice will trigger multiple processStarts.
+            if (!this.element.is(this.options.defaultContainer) && $.mage.isDevMode(undefined)) {
+                console.warn("This widget is intended to be attached to the body, not below.");
+            }
+        },
+        _bind: function() {
+            this._on(this.options.defaultContainer, {
+                'ajaxSend': '_onAjaxSend',
+                'ajaxComplete': '_onAjaxComplete'
+            });
+        },
+        _getJqueryObj: function(loaderContext) {
+            var ctx;
+            // Check to see if context is jQuery object or not.
+            if (loaderContext) {
+                if (loaderContext.jquery) {
+                    ctx = loaderContext;
+                } else {
+                    ctx = $(loaderContext);
+                }
+            } else {
+                ctx = $('[data-container="body"]');
+            }
+            return ctx;
+        },
+        _onAjaxSend: function(e, jqxhr, settings) {
+            if (settings && settings.showLoader) {
+                var ctx = this._getJqueryObj(settings.loaderContext);
+                ctx.trigger('processStart');
+
+                // Check to make sure the loader is there on the page if not report it on the console.
+                // NOTE that this check should be removed before going live. It is just an aid to help
+                // in finding the uses of the loader that maybe broken.
+                if (console && !ctx.parents('[data-role="loader"]').length) {
+                    console.warn('Expected to start loader but did not find one in the dom');
+                }
+            }
+        },
+        _onAjaxComplete: function(e, jqxhr, settings) {
+            if (settings && settings.showLoader) {
+                this._getJqueryObj(settings.loaderContext).trigger('processStop');
+            }
+        }
+
+    });
+})(jQuery, console);

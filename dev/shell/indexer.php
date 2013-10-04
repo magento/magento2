@@ -18,21 +18,21 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_Shell
+ * @category    Magento
+ * @package     Magento_Shell
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 require_once __DIR__ . '/../../app/bootstrap.php';
 $params = array(
-    Mage::PARAM_RUN_CODE => 'admin',
-    Mage::PARAM_RUN_TYPE => 'store',
+    \Magento\Core\Model\App::PARAM_RUN_CODE => 'admin',
+    \Magento\Core\Model\App::PARAM_RUN_TYPE => 'store',
 );
 
-$entryPoint = new Mage_Index_Model_EntryPoint_Shell(
+$entryPoint = new \Magento\Index\Model\EntryPoint\Shell(
     basename(__FILE__),
-    new Mage_Index_Model_EntryPoint_Shell_ErrorHandler(),
-    new Mage_Core_Model_Config_Primary(BP, $params)
+    new \Magento\Index\Model\EntryPoint\Shell\ErrorHandler(),
+    new \Magento\Core\Model\Config\Primary(BP, $params)
 );
 $entryPoint->processRequest();

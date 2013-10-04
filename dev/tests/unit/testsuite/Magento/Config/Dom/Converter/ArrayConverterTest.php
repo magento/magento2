@@ -21,10 +21,12 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Config_Dom_Converter_ArrayConverterTest extends PHPUnit_Framework_TestCase
+namespace Magento\Config\Dom\Converter;
+
+class ArrayConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Config_Dom_Converter_ArrayConverter
+     * @var \Magento\Config\Dom\Converter\ArrayConverter
      */
     protected $_model;
 
@@ -37,7 +39,7 @@ class Magento_Config_Dom_Converter_ArrayConverterTest extends PHPUnit_Framework_
 
     protected function setUp()
     {
-        $this->_model = new Magento_Config_Dom_Converter_ArrayConverter();
+        $this->_model = new \Magento\Config\Dom\Converter\ArrayConverter();
         $this->_fixturePath = realpath(__DIR__ . '/../../')
             . DIRECTORY_SEPARATOR . '_files'
             . DIRECTORY_SEPARATOR . 'dom'
@@ -56,7 +58,7 @@ class Magento_Config_Dom_Converter_ArrayConverterTest extends PHPUnit_Framework_
         $xmlPath = $this->_fixturePath . $xml;
         $expected = require ($this->_fixturePath . $array);
 
-        $dom = new DOMDocument();
+        $dom = new \DOMDocument();
         $dom->load($xmlPath);
 
         $actual = $this->_model->convert($dom->childNodes);

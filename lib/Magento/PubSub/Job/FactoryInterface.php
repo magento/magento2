@@ -1,6 +1,6 @@
 <?php
 /**
- * Factory for classes that implement Magento_PubSub_SubscriptionInterface
+ * Factory for classes that implement \Magento\PubSub\SubscriptionInterface
  *
  * Magento
  *
@@ -25,14 +25,16 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-interface Magento_PubSub_Job_FactoryInterface
+namespace Magento\PubSub\Job;
+
+interface FactoryInterface
 {
     /**
      * Create Job
      *
-     * @param Magento_PubSub_SubscriptionInterface $subscription
-     * @param Magento_PubSub_EventInterface $event
-     * @return Magento_PubSub_JobInterface|null
+     * @param \Magento\PubSub\SubscriptionInterface $subscription
+     * @param \Magento\PubSub\EventInterface $event
+     * @return \Magento\PubSub\JobInterface|null
      */
-    public function create(Magento_PubSub_SubscriptionInterface $subscription, Magento_PubSub_EventInterface $event);
+    public function create(\Magento\PubSub\SubscriptionInterface $subscription, \Magento\PubSub\EventInterface $event);
 }

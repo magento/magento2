@@ -21,8 +21,18 @@
  * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-interface Magento_ObjectManager_Relations
+namespace Magento\ObjectManager;
+
+interface Relations
 {
+    /**
+     * Check whether requested type is available for read
+     *
+     * @param string $type
+     * @return bool
+     */
+    public function has($type);
+
     /**
      * Retrieve list of parents
      *

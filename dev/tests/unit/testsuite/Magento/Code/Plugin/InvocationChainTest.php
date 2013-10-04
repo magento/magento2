@@ -24,20 +24,23 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-require_once __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'SimpleClass.php';
-require_once __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'SimpleClassPluginA.php';
-require_once __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'SimpleClassPluginB.php';
-require_once __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'SimpleObjectManager.php';
+namespace Magento\Code\Plugin;
 
-class Magento_Code_Plugin_InvocationChainTest extends PHPUnit_Framework_TestCase
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'GeneratorTest' . DIRECTORY_SEPARATOR . 'SimpleClass.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'GeneratorTest' . DIRECTORY_SEPARATOR . 'SimpleClassPluginA.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'GeneratorTest' . DIRECTORY_SEPARATOR . 'SimpleClassPluginB.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'GeneratorTest' . DIRECTORY_SEPARATOR . 'SimpleObjectManager.php';
+
+class InvocationChainTest extends \PHPUnit_Framework_TestCase
 {
     public function testProceed()
     {
-        $invocationChain = new Magento_Code_Plugin_InvocationChain(
-            new SimpleClass(),
+        $invocationChain = new \Magento\Code\Plugin\InvocationChain(
+            new \Magento\Code\Plugin\GeneratorTest\SimpleClass(),
             'doWork',
-            new SimpleObjectManager(),
-            array('SimpleClassPluginA', 'SimpleClassPluginB')
+            new \Magento\Code\Plugin\GeneratorTest\SimpleObjectManager(),
+            array('Magento\Code\Plugin\GeneratorTest\SimpleClassPluginA',
+                  'Magento\Code\Plugin\GeneratorTest\SimpleClassPluginB')
         );
         $this->assertEquals(
             '<PluginA><PluginB>simple class return value</PluginB></PluginA>',

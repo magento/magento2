@@ -1,6 +1,6 @@
 <?php
 /**
- * Magento_Outbound_Transport_Http
+ * \Magento\Outbound\Transport\Http
  *  
  * Magento
  *
@@ -27,19 +27,21 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Outbound_Transport_HttpTest extends PHPUnit_Framework_TestCase
+namespace Magento\Outbound\Transport;
+
+class HttpTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_mockVrnHttpAdptrCrl;
     
-    /** @var PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_mockMessage;
         
-    public function setUp() 
+    protected function setUp()
     {
-        $this->_mockVrnHttpAdptrCrl = $this->getMockBuilder('Varien_Http_Adapter_Curl')
+        $this->_mockVrnHttpAdptrCrl = $this->getMockBuilder('Magento\HTTP\Adapter\Curl')
             ->disableOriginalConstructor()->getMock();
-        $this->_mockMessage = $this->getMockBuilder('Magento_Outbound_Message')
+        $this->_mockMessage = $this->getMockBuilder('Magento\Outbound\Message')
             ->disableOriginalConstructor()->getMock();
         $this->_mockMessage->expects($this->any())
             ->method('getHeaders')
@@ -49,11 +51,11 @@ class Magento_Outbound_Transport_HttpTest extends PHPUnit_Framework_TestCase
     /**
      * Test case for when http adapter returns null
      * 
-     * @expectedException Zend_Http_Exception
+     * @expectedException \Zend_Http_Exception
      */   
     public function testNullResponse() 
     {
-        $uut = new Magento_Outbound_Transport_Http($this->_mockVrnHttpAdptrCrl);
+        $uut = new \Magento\Outbound\Transport\Http($this->_mockVrnHttpAdptrCrl);
         $this->_mockVrnHttpAdptrCrl->expects($this->any())
             ->method('read')
             ->will($this->returnValue(null));
@@ -62,7 +64,7 @@ class Magento_Outbound_Transport_HttpTest extends PHPUnit_Framework_TestCase
     
     public function testPositive()
     {
-        $uut = new Magento_Outbound_Transport_Http($this->_mockVrnHttpAdptrCrl);
+        $uut = new \Magento\Outbound\Transport\Http($this->_mockVrnHttpAdptrCrl);
         $this->_mockVrnHttpAdptrCrl->expects($this->any())
             ->method('read')
             ->will($this->returnValue("HTTP/2.0 200 OK\nHdrkey: Hdrval\n\nMessage Body"));
@@ -80,7 +82,7 @@ class Magento_Outbound_Transport_HttpTest extends PHPUnit_Framework_TestCase
      */
     public function testMessageTimeout($timeout, $expectedTimeout)
     {
-        $uut = new Magento_Outbound_Transport_Http($this->_mockVrnHttpAdptrCrl);
+        $uut = new \Magento\Outbound\Transport\Http($this->_mockVrnHttpAdptrCrl);
         $this->_mockMessage->expects($this->any())
             ->method('getTimeout')
             ->will($this->returnValue($timeout));
@@ -110,10 +112,10 @@ class Magento_Outbound_Transport_HttpTest extends PHPUnit_Framework_TestCase
     public function timeoutDataProvider()
     {
         return array(
-            array(0, Magento_Outbound_Message::DEFAULT_TIMEOUT),
-            array(null, Magento_Outbound_Message::DEFAULT_TIMEOUT),
+            array(0, \Magento\Outbound\Message::DEFAULT_TIMEOUT),
+            array(null, \Magento\Outbound\Message::DEFAULT_TIMEOUT),
             array(5, 5),
-            array(Magento_Outbound_Message::DEFAULT_TIMEOUT, Magento_Outbound_Message::DEFAULT_TIMEOUT)
+            array(\Magento\Outbound\Message::DEFAULT_TIMEOUT, \Magento\Outbound\Message::DEFAULT_TIMEOUT)
         );
     }
 }

@@ -25,34 +25,36 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Outbound_Message_Factory implements Magento_Outbound_Message_FactoryInterface
+namespace Magento\Outbound\Message;
+
+class Factory implements \Magento\Outbound\Message\FactoryInterface
 {
     /**
-     * @var Magento_ObjectManager
+     * @var \Magento\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var Magento_Outbound_Formatter_Factory
+     * @var \Magento\Outbound\Formatter\Factory
      */
     private $_formatterFactory;
 
     /**
-     * @var Magento_Outbound_Authentication_Factory
+     * @var \Magento\Outbound\Authentication\Factory
      */
     private $_authFactory;
 
     /**
      * initialize the class
      *
-     * @param Magento_ObjectManager $objectManager
-     * @param Magento_Outbound_Formatter_Factory $formatterFactory
-     * @param Magento_Outbound_Authentication_Factory $authFactory
+     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Outbound\Formatter\Factory $formatterFactory
+     * @param \Magento\Outbound\Authentication\Factory $authFactory
      */
     public function __construct(
-        Magento_ObjectManager $objectManager,
-        Magento_Outbound_Formatter_Factory $formatterFactory,
-        Magento_Outbound_Authentication_Factory $authFactory
+        \Magento\ObjectManager $objectManager,
+        \Magento\Outbound\Formatter\Factory $formatterFactory,
+        \Magento\Outbound\Authentication\Factory $authFactory
     ) {
         $this->_objectManager = $objectManager;
         $this->_formatterFactory = $formatterFactory;
@@ -60,34 +62,21 @@ class Magento_Outbound_Message_Factory implements Magento_Outbound_Message_Facto
     }
 
     /**
-     * Create a message for a given subscription and event
+     * Create a message for a given endpoint, topic and message data
      *
-     * @param Magento_Outbound_EndpointInterface $endpoint
-     * @param Magento_PubSub_EventInterface      $event
-     *
-     * @return Magento_Outbound_Message
-     */
-    public function create(Magento_Outbound_EndpointInterface $endpoint, Magento_PubSub_EventInterface $event)
-    {
-        return $this->createByData($endpoint, $event->getTopic(), $event->getBodyData());
-    }
-
-    /**
-     * Create a message for a given subscription and message data
-     *
-     * @param Magento_Outbound_EndpointInterface $endpoint
+     * @param \Magento\Outbound\EndpointInterface $endpoint
      * @param string                             $topic topic of the message
      * @param array                              $bodyData  body of the message
      *
-     * @return Magento_Outbound_Message
+     * @return \Magento\Outbound\Message
      */
-    public function createByData(Magento_Outbound_EndpointInterface $endpoint, $topic, array $bodyData)
+    public function create(\Magento\Outbound\EndpointInterface $endpoint, $topic, array $bodyData)
     {
         // Format first since that should turn the body from an array into a string
         $formatter = $this->_formatterFactory->getFormatter($endpoint->getFormat());
         $headers = array(
-            Magento_Outbound_Message_FactoryInterface::TOPIC_HEADER => $topic,
-            Magento_Outbound_FormatterInterface::CONTENT_TYPE_HEADER => $formatter->getContentType(),
+            \Magento\Outbound\Message\FactoryInterface::TOPIC_HEADER => $topic,
+            \Magento\Outbound\FormatterInterface::CONTENT_TYPE_HEADER => $formatter->getContentType(),
         );
         $formattedBody = $formatter->format($bodyData);
 
@@ -98,7 +87,7 @@ class Magento_Outbound_Message_Factory implements Magento_Outbound_Message_Facto
         );
 
         return $this->_objectManager->create(
-            'Magento_Outbound_Message',
+            'Magento\Outbound\Message',
             array(
                  'endpointUrl' => $endpoint->getEndpointUrl(),
                  'headers'     => $headers,

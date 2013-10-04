@@ -21,13 +21,15 @@
  * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Test_Di_Child_Circular extends Magento_Test_Di_Child
+namespace Magento\Test\Di\Child;
+
+class Circular extends \Magento\Test\Di\Child
 {
     /**
-     * @param Magento_Test_Di_Aggregate_Parent $aggregateParent
+     * @param \Magento\Test\Di\Aggregate\AggregateParent $aggregateParent
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __construct(Magento_Test_Di_Aggregate_Parent $aggregateParent)
+    public function __construct(\Magento\Test\Di\Aggregate\AggregateParent $aggregateParent)
     {
 
     }

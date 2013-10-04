@@ -21,7 +21,9 @@
  * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Config_Dom_Converter_ArrayConverter
+namespace Magento\Config\Dom\Converter;
+
+class ArrayConverter
 {
     const ATTRIBUTES = '__attributes__';
     const CONTENT = '__content__';
@@ -29,18 +31,18 @@ class Magento_Config_Dom_Converter_ArrayConverter
     /**
      * Convert dom node tree to array
      *
-     * @param DOMNodeList $input
+     * @param \DOMNodeList $input
      * @return array
      */
-    public function convert(DOMNodeList $input)
+    public function convert(\DOMNodeList $input)
     {
         $array = array();
 
-        /** @var $item DOMNode */
+        /** @var $item \DOMNode */
         foreach ($input as $item) {
             if ($item->nodeType == XML_ELEMENT_NODE) {
                 $arrayElement = array();
-                /** @var $attribute DOMNode */
+                /** @var $attribute \DOMNode */
                 foreach ($item->attributes as $attribute) {
                     if ($attribute->nodeType == XML_ATTRIBUTE_NODE) {
                         $arrayElement[self::ATTRIBUTES][$attribute->nodeName] = $attribute->nodeValue;

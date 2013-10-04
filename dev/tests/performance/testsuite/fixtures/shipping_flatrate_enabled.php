@@ -22,12 +22,17 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var Mage_Core_Model_Config_Data $configData */
-$configData = Mage::getModel('Mage_Core_Model_Config_Data');
+/** @var \Magento\TestFramework\Application $this */
+
+/**
+ * @var \Magento\Core\Model\Config\Value $configData
+ */
+$configData = $this->getObjectManager()->create('Magento\Core\Model\Config\Value');
 $configData->setPath('carriers/flatrate/active')
-    ->setScope(Mage_Core_Model_Config::SCOPE_DEFAULT)
+    ->setScope(\Magento\Core\Model\Config::SCOPE_DEFAULT)
     ->setScopeId(0)
     ->setValue(1)
     ->save();
 
-Mage::app()->cleanCache(array(Mage_Core_Model_Config::CACHE_TAG));
+$this->getObjectManager()->get('Magento\Core\Model\CacheInterface')
+    ->clean(array(\Magento\Core\Model\Config::CACHE_TAG));

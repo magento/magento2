@@ -1,6 +1,6 @@
 <?php
 /**
- * Magento_PubSub_Event_QueueWriter
+ * \Magento\PubSub\Event\QueueWriter
  *
  * Magento
  *
@@ -23,12 +23,14 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_PubSub_Event_QueueWriterTest extends PHPUnit_Framework_TestCase
+namespace Magento\PubSub\Event;
+
+class QueueWriterTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {
-        $event = new Magento_PubSub_Event('topic', array());
-        $queue = new Magento_PubSub_Event_QueueWriter();
+        $event = new \Magento\PubSub\Event('topic', array());
+        $queue = new \Magento\PubSub\Event\QueueWriter();
         $result = $queue->offer($event);
 
         $this->assertNull($result);

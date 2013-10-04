@@ -21,23 +21,25 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Cache_Frontend_Decorator_ProfilerTest extends PHPUnit_Framework_TestCase
+namespace Magento\Cache\Frontend\Decorator;
+
+class ProfilerTest extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    protected function setUp()
     {
-        Magento_Profiler::enable();
+        \Magento\Profiler::enable();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
-        Magento_Profiler::reset();
+        \Magento\Profiler::reset();
     }
 
     /**
      * @param string $method
      * @param array $params
-     * @param Zend_Cache_Backend $cacheBackend
-     * @param Zend_Cache_Core $cacheFrontend
+     * @param \Zend_Cache_Backend $cacheBackend
+     * @param \Zend_Cache_Core $cacheFrontend
      * @param string $expectedProfileId
      * @param array $expectedProfilerTags
      * @param mixed $expectedResult
@@ -47,7 +49,7 @@ class Magento_Cache_Frontend_Decorator_ProfilerTest extends PHPUnit_Framework_Te
         $expectedProfilerTags, $expectedResult
     ) {
         // Cache frontend setup
-        $frontendMock = $this->getMock('Magento_Cache_FrontendInterface');
+        $frontendMock = $this->getMock('Magento\Cache\FrontendInterface');
 
         $frontendMock->expects($this->any())
             ->method('getBackend')
@@ -58,18 +60,18 @@ class Magento_Cache_Frontend_Decorator_ProfilerTest extends PHPUnit_Framework_Te
             ->will($this->returnValue($cacheFrontend));
 
         // Profiler setup
-        $driver = $this->getMock('Magento_Profiler_DriverInterface');
+        $driver = $this->getMock('Magento\Profiler\DriverInterface');
         $driver->expects($this->once())
             ->method('start')
             ->with($expectedProfileId, $expectedProfilerTags);
         $driver->expects($this->once())
             ->method('stop')
             ->with($expectedProfileId);
-        Magento_Profiler::add($driver);
+        \Magento\Profiler::add($driver);
 
         // Test
-        $object = new Magento_Cache_Frontend_Decorator_Profiler($frontendMock, array('Zend_Cache_Backend_'));
-        $helper = new Magento_Test_Helper_ProxyTesting();
+        $object = new \Magento\Cache\Frontend\Decorator\Profiler($frontendMock, array('Zend_Cache_Backend_'));
+        $helper = new \Magento\TestFramework\Helper\ProxyTesting();
         $result = $helper->invokeWithExpectations($object, $frontendMock, $method, $params, $expectedResult);
         $this->assertSame($expectedResult, $result);
     }
@@ -79,9 +81,9 @@ class Magento_Cache_Frontend_Decorator_ProfilerTest extends PHPUnit_Framework_Te
      */
     public static function proxyMethodDataProvider()
     {
-        $backend = new Zend_Cache_Backend_BlackHole;;
-        $adaptee = PHPUnit_Framework_MockObject_Generator::getMock('Zend_Cache_Core', array(), array(), '', false);
-        $lowLevelFrontend = new Magento_Cache_Frontend_Adapter_Zend($adaptee);
+        $backend = new \Zend_Cache_Backend_BlackHole;;
+        $adaptee = \PHPUnit_Framework_MockObject_Generator::getMock('Zend_Cache_Core', array(), array(), '', false);
+        $lowLevelFrontend = new \Magento\Cache\Frontend\Adapter\Zend($adaptee);
 
         return array(
             array(
@@ -93,7 +95,7 @@ class Magento_Cache_Frontend_Decorator_ProfilerTest extends PHPUnit_Framework_Te
                 array(
                     'group'         => 'cache',
                     'operation'     => 'cache:test',
-                    'frontend_type' => 'Magento_Cache_Frontend_Adapter_Zend',
+                    'frontend_type' => 'Magento\Cache\Frontend\Adapter\Zend',
                     'backend_type'  => 'BlackHole',
                 ),
                 111
@@ -107,7 +109,7 @@ class Magento_Cache_Frontend_Decorator_ProfilerTest extends PHPUnit_Framework_Te
                 array(
                     'group'         => 'cache',
                     'operation'     => 'cache:load',
-                    'frontend_type' => 'Magento_Cache_Frontend_Adapter_Zend',
+                    'frontend_type' => 'Magento\Cache\Frontend\Adapter\Zend',
                     'backend_type'  => 'BlackHole',
                 ),
                 '111'
@@ -121,7 +123,7 @@ class Magento_Cache_Frontend_Decorator_ProfilerTest extends PHPUnit_Framework_Te
                 array(
                     'group'         => 'cache',
                     'operation'     => 'cache:save',
-                    'frontend_type' => 'Magento_Cache_Frontend_Adapter_Zend',
+                    'frontend_type' => 'Magento\Cache\Frontend\Adapter\Zend',
                     'backend_type'  => 'BlackHole',
                 ),
                 true
@@ -135,21 +137,21 @@ class Magento_Cache_Frontend_Decorator_ProfilerTest extends PHPUnit_Framework_Te
                 array(
                     'group'         => 'cache',
                     'operation'     => 'cache:remove',
-                    'frontend_type' => 'Magento_Cache_Frontend_Adapter_Zend',
+                    'frontend_type' => 'Magento\Cache\Frontend\Adapter\Zend',
                     'backend_type'  => 'BlackHole',
                 ),
                 true
             ),
             array(
                 'clean',
-                array(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('tag')),
+                array(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('tag')),
                 $backend,
                 $lowLevelFrontend,
                 'cache_clean',
                 array(
                     'group'         => 'cache',
                     'operation'     => 'cache:clean',
-                    'frontend_type' => 'Magento_Cache_Frontend_Adapter_Zend',
+                    'frontend_type' => 'Magento\Cache\Frontend\Adapter\Zend',
                     'backend_type'  => 'BlackHole',
                 ),
                 true

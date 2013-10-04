@@ -25,13 +25,15 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-interface Magento_PubSub_Event_QueueWriterInterface
+namespace Magento\PubSub\Event;
+
+interface QueueWriterInterface
 {
     /**
      * Adds the event to the queue.
      *
-     * @param Magento_PubSub_EventInterface $event
+     * @param \Magento\PubSub\EventInterface $event
      * @return null
      */
-    public function offer(Magento_PubSub_EventInterface $event);
+    public function offer(\Magento\PubSub\EventInterface $event);
 }

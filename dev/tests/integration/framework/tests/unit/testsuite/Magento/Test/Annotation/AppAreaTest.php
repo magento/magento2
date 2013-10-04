@@ -21,28 +21,30 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Test_Annotation_AppAreaTest extends PHPUnit_Framework_TestCase
+namespace Magento\Test\Annotation;
+
+class AppAreaTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Test_Annotation_AppArea
+     * @var \Magento\TestFramework\Annotation\AppArea
      */
     protected $_object;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_applicationMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_testCaseMock;
 
     protected function setUp()
     {
         $this->_testCaseMock = $this->getMock('PHPUnit_Framework_TestCase', array(), array(), '', false);
-        $this->_applicationMock = $this->getMock('Magento_Test_Application', array(), array(), '', false);
-        $this->_object = new Magento_Test_Annotation_AppArea($this->_applicationMock);
+        $this->_applicationMock = $this->getMock('Magento\TestFramework\Application', array(), array(), '', false);
+        $this->_object = new \Magento\TestFramework\Annotation\AppArea($this->_applicationMock);
     }
 
     /**
@@ -81,7 +83,7 @@ class Magento_Test_Annotation_AppAreaTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Magento_Exception
+     * @expectedException \Magento\Exception
      */
     public function testGetTestAppAreaWithInvalidArea()
     {

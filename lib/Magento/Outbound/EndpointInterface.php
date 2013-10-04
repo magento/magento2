@@ -26,7 +26,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-interface Magento_Outbound_EndpointInterface
+namespace Magento\Outbound;
+
+interface EndpointInterface
 {
     /**
      * Data formats
@@ -63,7 +65,7 @@ interface Magento_Outbound_EndpointInterface
     /**
      * Returns the user abstraction associated with this subscription or null if no user has been associated yet.
      *
-     * @return Magento_Outbound_UserInterface|null
+     * @return \Magento\Outbound\UserInterface|null
      */
     public function getUser();
 

@@ -25,15 +25,17 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-interface Magento_Outbound_AuthenticationInterface
+namespace Magento\Outbound;
+
+interface AuthenticationInterface
 {
     /**
      * Get authentication signature to add to the headers
      *
      * @param string                         $body
-     * @param Magento_Outbound_UserInterface $user
+     * @param \Magento\Outbound\UserInterface $user
      *
      * @return array Headers to add to message
      */
-    public function getSignatureHeaders($body, Magento_Outbound_UserInterface $user);
+    public function getSignatureHeaders($body, \Magento\Outbound\UserInterface $user);
 }

@@ -105,7 +105,7 @@
                 url: this.options.ajaxUrl,
                 type: 'POST',
                 data: parameters,
-                context: this.element,
+                loaderContext: this.element,
                 showLoader: true
             }).complete($.proxy(this._formSubmitComplete, this));
         },

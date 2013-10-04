@@ -1,6 +1,6 @@
 <?php
 /**
- * Magento_PubSub_Job_QueueHandler
+ * \Magento\PubSub\Job\QueueHandler
  *
  * Magento
  *
@@ -23,103 +23,113 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_PubSub_Job_QueueHandlerTest extends PHPUnit_Framework_TestCase
-{
+namespace Magento\PubSub\Job;
 
-    /** @var  Magento_PubSub_Job_QueueHandler */
+class QueueHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    /** @var  \Magento\PubSub\Job\QueueHandler */
     private $_queueHandler;
 
-    /** @var  PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $_subscriptionMockA;
 
-    /** @var  PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $_subscriptionMockB;
 
-    /** @var  PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $_eventMockA;
 
-    /** @var  PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $_eventMockB;
 
-    /** @var  PHPUnit_Framework_MockObject_MockObject */
-    private $_jobMockA;
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    private $_queueReaderMock;
 
-    /** @var  PHPUnit_Framework_MockObject_MockObject */
-    private $_jobMockB;
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    private $_queueWriterMock;
 
-    /** @var  PHPUnit_Framework_MockObject_MockObject */
-    private $_queueMock;
-
-    /** @var  PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $_messageMockA;
 
-    /** @var  PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $_messageMockB;
 
-    /** @var  PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $_msgFactoryMock;
 
-    /** @var  PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $_transportMock;
 
-    /** @var  int[] Expected response codes */
-    private $_responseCodes = array();
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    private $_endpointMockA;
 
-    /** @var  int[] Actual responce codes */
-    private $_expectedCodes;
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    private $_endpointMockB;
 
-    public function setUp()
+    protected function setUp()
     {
         // Object mocks
-        $this->_subscriptionMockA = $this->getMockBuilder('Mage_Webhook_Model_Subscription')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_subscriptionMockB = clone $this->_subscriptionMockA;
+        $this->_subscriptionMockA = $this->_makeMock('Magento\Webhook\Model\Subscription');
+        $this->_subscriptionMockB =  $this->_makeMock('Magento\Webhook\Model\Subscription');
+        $this->_eventMockA = $this->_makeMock('Magento\Webhook\Model\Event');
+        $this->_eventMockB = $this->_makeMock('Magento\Webhook\Model\Event');
+        $this->_msgFactoryMock = $this->_makeMock('Magento\Outbound\Message\Factory');
+        $this->_transportMock = $this->_makeMock('Magento\Outbound\Transport\Http');
+        $this->_queueReaderMock = $this->_makeMock('Magento\Webhook\Model\Job\QueueReader');
+        $this->_queueWriterMock = $this->_makeMock('Magento\Webhook\Model\Job\QueueWriter');
+        $this->_messageMockA = $this->_makeMock('Magento\Outbound\Message');
+        $this->_messageMockB = $this->_makeMock('Magento\Outbound\Message');
+        $this->_endpointMockA = $this->_makeMock('Magento\Outbound\EndpointInterface');
+        $this->_endpointMockB = $this->_makeMock('Magento\Outbound\EndpointInterface');
 
-        $this->_eventMockA = $this->getMockBuilder('Mage_Webhook_Model_Event')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_eventMockB = clone $this->_eventMockA;
+        $this->_subscriptionMockA->expects($this->any())
+            ->method('getEndpoint')
+            ->will($this->returnValue($this->_endpointMockA));
 
-        $this->_jobMockA = $this->getMockBuilder('Mage_Webhook_Model_Job')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_subscriptionMockB->expects($this->any())
+            ->method('getEndpoint')
+            ->will($this->returnValue($this->_endpointMockB));
 
-        $this->_msgFactoryMock = $this->getMockBuilder('Magento_Outbound_Message_Factory')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_eventMockA->expects($this->any())
+            ->method('getTopic')
+            ->will($this->returnValue('topicA'));
 
-        $this->_transportMock = $this->getMockBuilder('Magento_Outbound_Transport_Http')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_eventMockA->expects($this->any())
+            ->method('getBodyData')
+            ->will($this->returnValue(array('BodyDataA')));
 
-        $this->_queueMock = $this->getMockBuilder('Mage_Webhook_Model_Job_QueueReader')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_eventMockB->expects($this->any())
+            ->method('getTopic')
+            ->will($this->returnValue('topicB'));
 
-        $this->_messageMockA = $this->getMockBuilder('Magento_Outbound_Message')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_messageMockB = clone $this->_messageMockA;
-
+        $this->_eventMockB->expects($this->any())
+            ->method('getBodyData')
+            ->will($this->returnValue(array('BodyDataB')));
     }
 
     public function testHandle()
     {
         // Resources for stubs
         $jobMsgMap = array(
-            array($this->_subscriptionMockA, $this->_eventMockA, $this->_messageMockA),
-            array($this->_subscriptionMockB, $this->_eventMockB, $this->_messageMockB),
+            array($this->_endpointMockA, 'topicA', array('BodyDataA'), $this->_messageMockA),
+            array($this->_endpointMockB, 'topicB', array('BodyDataB'), $this->_messageMockB),
         );
 
-        $responseA = new Magento_Outbound_Transport_Http_Response(new Zend_Http_Response(200, array()));
-        $responseB = new Magento_Outbound_Transport_Http_Response(new Zend_Http_Response(404, array()));
+        $responseA = $this->_makeMock('Magento\Outbound\Transport\Http\Response');
+        $responseB = $this->_makeMock('Magento\Outbound\Transport\Http\Response');
+
+        $responseA->expects($this->once())
+            ->method('isSuccessful')
+            ->will($this->returnValue(true));
+
+        $responseB->expects($this->once())
+            ->method('isSuccessful')
+            ->will($this->returnValue(false));
 
         $msgResponseMap = array(
             array($this->_messageMockA, $responseA),
             array($this->_messageMockB, $responseB),
         );
-
 
         // Message factory create
         $this->_msgFactoryMock->expects($this->exactly(2))
@@ -132,51 +142,53 @@ class Magento_PubSub_Job_QueueHandlerTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValueMap($msgResponseMap));
 
         // Job stubs
-        $this->_jobMockA->expects($this->exactly(2))
-            ->method('handleResponse')
-            ->will($this->returnCallback(array($this, 'logCode')));
-        $this->_jobMockB = clone $this->_jobMockA;
+        $jobMockA = $this->_makeMock('Magento\Webhook\Model\Job');
+        $jobMockB = $this->_makeMock('Magento\Webhook\Model\Job');
 
-        $this->_jobMockA->expects($this->once())
+        $jobMockA->expects($this->once())
+            ->method('complete');
+
+        $jobMockB->expects($this->once())
+            ->method('handleFailure');
+
+        $jobMockA->expects($this->once())
             ->method('getSubscription')
             ->with()
             ->will($this->returnValue($this->_subscriptionMockA));
 
-        $this->_jobMockB->expects($this->once())
+        $jobMockB->expects($this->once())
             ->method('getSubscription')
             ->with()
             ->will($this->returnValue($this->_subscriptionMockB));
 
-        $this->_jobMockA->expects($this->once())
+        $jobMockA->expects($this->once())
             ->method('getEvent')
             ->with()
             ->will($this->returnValue($this->_eventMockA));
 
-        $this->_jobMockB->expects($this->exactly(2))
+        $jobMockB->expects($this->once())
             ->method('getEvent')
             ->with()
             ->will($this->returnValue($this->_eventMockB));
 
-        $this->_expectedCodes = array (200, 404);
-
         // Queue contains two jobs, and will then return null to stop the loop
-        $this->_queueMock->expects($this->exactly(3))
+        $this->_queueReaderMock->expects($this->exactly(3))
             ->method('poll')
             ->with()
             ->will($this->onConsecutiveCalls(
-                $this->_jobMockA,
-                $this->_jobMockB,
+                $jobMockA,
+                $jobMockB,
                 null
             ));
 
-        $this->_queueHandler = new Magento_PubSub_Job_QueueHandler(
-            $this->_queueMock,
+        $this->_queueHandler = new \Magento\PubSub\Job\QueueHandler(
+            $this->_queueReaderMock,
+            $this->_queueWriterMock,
             $this->_transportMock,
             $this->_msgFactoryMock
         );
 
         $this->_queueHandler->handle();
-        $this->assertEquals($this->_expectedCodes, $this->_responseCodes);
     }
 
     public function testHandleEmptyQueue()
@@ -184,7 +196,7 @@ class Magento_PubSub_Job_QueueHandlerTest extends PHPUnit_Framework_TestCase
         $this->_expectedCodes = array ();
 
         // Queue contains no jobs
-        $this->_queueMock->expects($this->once())
+        $this->_queueReaderMock->expects($this->once())
             ->method('poll')
             ->with()
             ->will($this->onConsecutiveCalls(
@@ -199,23 +211,26 @@ class Magento_PubSub_Job_QueueHandlerTest extends PHPUnit_Framework_TestCase
         $this->_transportMock->expects($this->never())
             ->method('dispatch');
 
-        $this->_queueHandler = new Magento_PubSub_Job_QueueHandler(
-            $this->_queueMock,
+        $this->_queueHandler = new \Magento\PubSub\Job\QueueHandler(
+            $this->_queueReaderMock,
+            $this->_queueWriterMock,
             $this->_transportMock,
             $this->_msgFactoryMock
         );
 
         $this->_queueHandler->handle();
-        $this->assertEquals($this->_expectedCodes, $this->_responseCodes);
     }
 
     /**
-     * Supplied as a callback function, receives the input to handleResponse and logs response codes
+     * Generates a mock object of the given class
      *
-     * @param Magento_Outbound_Transport_Http_Response $response
+     * @param string $className
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    public function logCode(Magento_Outbound_Transport_Http_Response $response)
+    private function _makeMock($className)
     {
-        $this->_responseCodes[] = $response->getStatusCode();
+        return $this->getMockBuilder($className)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }

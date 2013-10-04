@@ -25,7 +25,9 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Outbound_Message implements Magento_Outbound_MessageInterface
+namespace Magento\Outbound;
+
+class Message implements \Magento\Outbound\MessageInterface
 {
     /** default timeout value in seconds */
     const DEFAULT_TIMEOUT = 20;

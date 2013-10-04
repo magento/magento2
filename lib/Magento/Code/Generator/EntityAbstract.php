@@ -24,7 +24,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-abstract class Magento_Code_Generator_EntityAbstract
+namespace Magento\Code\Generator;
+
+abstract class EntityAbstract
 {
     /**
      * Entity type
@@ -51,55 +53,55 @@ abstract class Magento_Code_Generator_EntityAbstract
     private $_resultClassName;
 
     /**
-     * @var Magento_Code_Generator_Io
+     * @var \Magento\Code\Generator\Io
      */
     private $_ioObject;
 
     /**
      * Autoloader instance
      *
-     * @var Magento_Autoload_IncludePath
+     * @var \Magento\Autoload\IncludePath
      */
     private $_autoloader;
 
     /**
      * Class generator object
      *
-     * @var Magento_Code_Generator_CodeGenerator_Interface
+     * @var \Magento\Code\Generator\CodeGenerator\CodeGeneratorInterface
      */
     protected $_classGenerator;
 
     /**
      * @param string $sourceClassName
      * @param string $resultClassName
-     * @param Magento_Code_Generator_Io $ioObject
-     * @param Magento_Code_Generator_CodeGenerator_Interface $classGenerator
-     * @param Magento_Autoload_IncludePath $autoLoader
+     * @param \Magento\Code\Generator\Io $ioObject
+     * @param \Magento\Code\Generator\CodeGenerator\CodeGeneratorInterface $classGenerator
+     * @param \Magento\Autoload\IncludePath $autoLoader
      */
     public function __construct(
         $sourceClassName = null,
         $resultClassName = null,
-        Magento_Code_Generator_Io $ioObject = null,
-        Magento_Code_Generator_CodeGenerator_Interface $classGenerator = null,
-        Magento_Autoload_IncludePath $autoLoader = null
+        \Magento\Code\Generator\Io $ioObject = null,
+        \Magento\Code\Generator\CodeGenerator\CodeGeneratorInterface $classGenerator = null,
+        \Magento\Autoload\IncludePath $autoLoader = null
     ) {
         if ($autoLoader) {
             $this->_autoloader = $autoLoader;
         } else {
-            $this->_autoloader = new Magento_Autoload_IncludePath();
+            $this->_autoloader = new \Magento\Autoload\IncludePath();
         }
         if ($ioObject) {
             $this->_ioObject = $ioObject;
         } else {
-            $this->_ioObject = new Magento_Code_Generator_Io(new Varien_Io_File(), $this->_autoloader);
+            $this->_ioObject = new \Magento\Code\Generator\Io(new \Magento\Io\File(), $this->_autoloader);
         }
         if ($classGenerator) {
             $this->_classGenerator = $classGenerator;
         } else {
-            $this->_classGenerator = new Magento_Code_Generator_CodeGenerator_Zend();
+            $this->_classGenerator = new \Magento\Code\Generator\CodeGenerator\Zend();
         }
 
-        $this->_sourceClassName = ltrim($sourceClassName, Magento_Autoload_IncludePath::NS_SEPARATOR);
+        $this->_sourceClassName = ltrim($sourceClassName, \Magento\Autoload\IncludePath::NS_SEPARATOR);
         if ($resultClassName) {
             $this->_resultClassName = $resultClassName;
         } elseif ($sourceClassName) {
@@ -125,7 +127,7 @@ abstract class Magento_Code_Generator_EntityAbstract
                     $this->_addError('Can\'t generate source code.');
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->_addError($e->getMessage());
         }
         return false;
@@ -155,8 +157,8 @@ abstract class Magento_Code_Generator_EntityAbstract
      */
     protected function _getFullyQualifiedClassName($className)
     {
-        return Magento_Autoload_IncludePath::NS_SEPARATOR
-            . ltrim($className, Magento_Autoload_IncludePath::NS_SEPARATOR);
+        return \Magento\Autoload\IncludePath::NS_SEPARATOR
+            . ltrim($className, \Magento\Autoload\IncludePath::NS_SEPARATOR);
     }
 
     /**
@@ -190,7 +192,7 @@ abstract class Magento_Code_Generator_EntityAbstract
             'docblock'   => array(
                 'shortDescription' => 'Object Manager instance',
                 'tags'             => array(
-                    array('name' => 'var', 'description' => '\Magento_ObjectManager')
+                    array('name' => 'var', 'description' => '\Magento\ObjectManager')
                 )
             ),
         );
@@ -228,7 +230,7 @@ abstract class Magento_Code_Generator_EntityAbstract
 
     /**
      * @param string $message
-     * @return Magento_Code_Generator_EntityAbstract
+     * @return \Magento\Code\Generator\EntityAbstract
      */
     protected function _addError($message)
     {
@@ -339,10 +341,10 @@ abstract class Magento_Code_Generator_EntityAbstract
     /**
      * Retrieve method parameter info
      *
-     * @param ReflectionParameter $parameter
+     * @param \ReflectionParameter $parameter
      * @return array
      */
-    protected function _getMethodParameterInfo(ReflectionParameter $parameter)
+    protected function _getMethodParameterInfo(\ReflectionParameter $parameter)
     {
         $parameterInfo = array(
             'name' => $parameter->getName(),

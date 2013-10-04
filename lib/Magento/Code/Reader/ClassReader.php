@@ -21,32 +21,40 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Code_Reader_ClassReader
+namespace Magento\Code\Reader;
+
+class ClassReader
 {
     /**
      * Read class constructor signature
      *
      * @param string $className
      * @return array|null
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function getConstructor($className)
     {
-        $class = new ReflectionClass($className);
+        $class = new \ReflectionClass($className);
         $result = null;
         $constructor = $class->getConstructor();
         if ($constructor) {
             $result = array();
-            /** @var $parameter ReflectionParameter */
+            /** @var $parameter \ReflectionParameter */
             foreach ($constructor->getParameters() as $parameter) {
-                $result[] = array(
-                    $parameter->getName(),
-                    ($parameter->getClass() !== null) ? $parameter->getClass()->getName() : null,
-                    !$parameter->isOptional(),
-                    $parameter->isOptional() ?
-                        $parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null :
-                        null
-                );
+                try {
+                    $result[] = array(
+                        $parameter->getName(),
+                        ($parameter->getClass() !== null) ? $parameter->getClass()->getName() : null,
+                        !$parameter->isOptional(),
+                        $parameter->isOptional() ?
+                            $parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null :
+                            null
+                    );
+                } catch (\ReflectionException $e) {
+                    $message = $e->getMessage() . "\n";
+                    $message .= 'Are you sure that you didn\'t use virtual type in constructor signature?';
+                    throw new \ReflectionException($message, 0, $e);
+                }
             }
         }
         return $result;

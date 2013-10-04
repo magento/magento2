@@ -28,8 +28,15 @@
 /**
  * Theme configuration files handler
  */
-class Magento_Config_Theme extends Magento_Config_XmlAbstract
+namespace Magento\Config;
+
+class Theme extends \Magento\Config\AbstractXml
 {
+    /**
+     * Is used for separation path of themes
+     */
+    const THEME_PATH_SEPARATOR = '/';
+
     /**
      * Get absolute path to theme.xsd
      *
@@ -43,201 +50,73 @@ class Magento_Config_Theme extends Magento_Config_XmlAbstract
     /**
      * Extract configuration data from the DOM structure
      *
-     * @param DOMDocument $dom
+     * @param \DOMDocument $dom
      * @return array
      */
-    protected function _extractData(DOMDocument $dom)
+    protected function _extractData(\DOMDocument $dom)
     {
-        $result = array();
-        /** @var $packageNode DOMElement */
-        foreach ($dom->childNodes->item(0)/*root*/->childNodes as $packageNode) {
-            $packageCode = $packageNode->getAttribute('code');
-            $packageTitle = $packageNode->getElementsByTagName('title')->item(0)->nodeValue;
-            /** @var $themeNode DOMElement */
-            foreach ($packageNode->getElementsByTagName('theme') as $themeNode) {
-                /** @var $requirementsNode DOMElement */
-                $requirementsNode = $themeNode->getElementsByTagName('requirements')->item(0);
-                /** @var $versionNode DOMElement */
-                $versionNode = $requirementsNode->getElementsByTagName('magento_version')->item(0);
-                /** @var $mediaNode DOMElement */
-                $mediaNode = $themeNode->getElementsByTagName('media')->item(0);
+        /** @var $themeNode \DOMElement */
+        $themeNode = $dom->getElementsByTagName('theme')->item(0);
+        /** @var $mediaNode \DOMElement */
+        $mediaNode = $themeNode->getElementsByTagName('media')->item(0);
 
-                $themeVersion = $themeNode->getAttribute('version');
-                $themeCode = $themeNode->getAttribute('code');
-                $themeParentCode = $themeNode->getAttribute('parent') ?: null;
-                $themeFeatured = $themeNode->getAttribute('featured') ? true : false;
-                $themeTitle = $themeNode->getElementsByTagName('title')->item(0)->nodeValue;
-                $versionFrom = $versionNode->getAttribute('from');
-                $versionTo = $versionNode->getAttribute('to');
-                $previewImage = $mediaNode ? $mediaNode->getElementsByTagName('preview_image')->item(0)->nodeValue : '';
+        $themeVersionNode = $themeNode->getElementsByTagName('version')->item(0);
+        $themeParentNode = $themeNode->getElementsByTagName('parent')->item(0);
+        $themeTitleNode = $themeNode->getElementsByTagName('title')->item(0);
+        $previewImage = $mediaNode ? $mediaNode->getElementsByTagName('preview_image')->item(0)->nodeValue : '';
 
-                $result[$packageCode]['title'] = $packageTitle;
-                $result[$packageCode]['themes'][$themeCode] = array(
-                    'title'        => $themeTitle,
-                    'parent'       => $themeParentCode,
-                    'featured'     => $themeFeatured,
-                    'version'      => $themeVersion,
-                    'requirements' => array(
-                        'magento_version' => array(
-                            'from' => $versionFrom,
-                            'to'   => $versionTo,
-                        ),
-                    ),
-                    'media'        => array(
-                        'preview_image' => $previewImage
-                    ),
-                );
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Get package codes
-     *
-     * @return array
-     */
-    public function getPackageCodes()
-    {
-        return array_keys($this->_data);
-    }
-
-    /**
-     * Get theme codes in selected package
-     *
-     * @param string $package
-     * @return array
-     */
-    public function getPackageThemeCodes($package)
-    {
-        return array_keys($this->_data[$package]['themes']);
+        return array(
+            'title'   => $themeTitleNode->nodeValue,
+            'parent'  => $themeParentNode ? $themeParentNode->nodeValue : null,
+            'version' => $themeVersionNode ? $themeVersionNode->nodeValue : null,
+            'media'   => array(
+                'preview_image' => $previewImage
+            )
+        );
     }
 
     /**
      * Get title for specified package code
      *
-     * @param string $package
-     * @param string $theme
      * @return string
      */
-    public function getThemeVersion($package, $theme)
+    public function getThemeVersion()
     {
-        $this->_ensureThemeExists($package, $theme);
-        return $this->_data[$package]['themes'][$theme]['version'];
-    }
-
-    /**
-     * Get title for specified package code
-     *
-     * @param string $package
-     * @return string
-     */
-    public function getPackageTitle($package)
-    {
-        $this->_ensurePackageExists($package);
-        return $this->_data[$package]['title'];
+        return $this->_data['version'];
     }
 
     /**
      * Get title for specified theme and package code
      *
-     * @param string $package
-     * @param string $theme
      * @return string
      */
-    public function getThemeTitle($package, $theme)
+    public function getThemeTitle()
     {
-        $this->_ensureThemeExists($package, $theme);
-        return $this->_data[$package]['themes'][$theme]['title'];
+        return $this->_data['title'];
     }
 
     /**
      * Get theme media data
      *
-     * @param string $package
-     * @param string $theme
      * @return array
      */
-    public function getMedia($package, $theme)
+    public function getMedia()
     {
-        $this->_ensureThemeExists($package, $theme);
-        return $this->_data[$package]['themes'][$theme]['media'];
+        return $this->_data['media'];
     }
 
     /**
      * Retrieve a parent theme code
      *
-     * @param string $package
-     * @param string $theme
      * @return array|null
      */
-    public function getParentTheme($package, $theme)
+    public function getParentTheme()
     {
-        $this->_ensureThemeExists($package, $theme);
-        $parentTheme = $this->_data[$package]['themes'][$theme]['parent'];
+        $parentTheme = $this->_data['parent'];
         if (!$parentTheme) {
             return null;
         }
-        $result = explode('/', $parentTheme, 2);
-        if (count($result) > 1) {
-            return $result;
-        }
-        return array($package, $parentTheme);
-    }
-
-    /**
-     * Retrieve is theme featured
-     *
-     * @param string $package
-     * @param string $theme
-     * @return bool
-     */
-    public function isFeatured($package, $theme)
-    {
-        $this->_ensureThemeExists($package, $theme);
-        return $this->_data[$package]['themes'][$theme]['featured'];
-    }
-
-    /**
-     * Getter for Magento versions compatible with theme
-     *
-     * return an array with 'from' and 'to' keys
-     *
-     * @param string $package
-     * @param string $theme
-     * @return array
-     */
-    public function getCompatibleVersions($package, $theme)
-    {
-        $this->_ensureThemeExists($package, $theme);
-        return $this->_data[$package]['themes'][$theme]['requirements']['magento_version'];
-    }
-
-    /**
-     * Check whether a package is declared in the configuration
-     *
-     * @param string $package
-     * @throws Magento_Exception
-     */
-    protected function _ensurePackageExists($package)
-    {
-        if (!isset($this->_data[$package])) {
-            throw new Magento_Exception('Unknown design package "' . $package . '".');
-        }
-    }
-
-    /**
-     * Check whether a theme exists in a design package
-     *
-     * @param string $package
-     * @param string $theme
-     * @throws Magento_Exception
-     */
-    protected function _ensureThemeExists($package, $theme)
-    {
-        if (!isset($this->_data[$package]['themes'][$theme])) {
-            throw new Magento_Exception('Unknown theme "' . $theme . '" in "' . $package . '" package.');
-        }
+        return explode(self::THEME_PATH_SEPARATOR, $parentTheme);
     }
 
     /**
@@ -247,7 +126,7 @@ class Magento_Config_Theme extends Magento_Config_XmlAbstract
      */
     protected function _getInitialXml()
     {
-        return '<?xml version="1.0" encoding="UTF-8"?><design></design>';
+        return '<?xml version="1.0" encoding="UTF-8"?><theme></theme>';
     }
 
     /**
@@ -257,6 +136,6 @@ class Magento_Config_Theme extends Magento_Config_XmlAbstract
      */
     protected function _getIdAttributes()
     {
-        return array('/design/package' => 'code', '/design/package/theme' => 'code');
+        return array('/theme' => 'theme');
     }
 }

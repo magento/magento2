@@ -8,7 +8,7 @@
  * $params['MAGE_RUN_CODE'] = 'website2';
  * $params['MAGE_RUN_TYPE'] = 'website';
  * ...
- * $entryPoint = new Mage_Core_Model_EntryPoint_Http(new Mage_Core_Model_Config_Primary(BP, $params));
+ * $entryPoint = new \Magento\Core\Model\EntryPoint\Http(new \Magento\Core\Model\Config\Primary(BP, $params));
  * --------------------------------------------
  *
  * Magento
@@ -32,9 +32,9 @@
  * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-require dirname(__FILE__) . '/app/bootstrap.php';
+require __DIR__ . '/app/bootstrap.php';
 
-Magento_Profiler::start('mage');
-$entryPoint = new Mage_Core_Model_EntryPoint_Http(new Mage_Core_Model_Config_Primary(BP, $_SERVER));
+\Magento\Profiler::start('magento');
+$entryPoint = new \Magento\Core\Model\EntryPoint\Http(new \Magento\Core\Model\Config\Primary(BP, $_SERVER));
 $entryPoint->processRequest();
-Magento_Profiler::stop('mage');
+\Magento\Profiler::stop('magento');

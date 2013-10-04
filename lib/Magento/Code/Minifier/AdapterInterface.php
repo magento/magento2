@@ -25,7 +25,9 @@
 /**
  * Interface for minification adapters
  */
-interface Magento_Code_Minifier_AdapterInterface
+namespace Magento\Code\Minifier;
+
+interface AdapterInterface
 {
     /**
      * Minify content
