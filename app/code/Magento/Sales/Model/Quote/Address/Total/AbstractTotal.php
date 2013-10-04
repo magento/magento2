@@ -115,7 +115,7 @@ abstract class AbstractTotal
     }
 
     /**
-     * Set address shich can be used inside totals calculation
+     * Set address which can be used inside totals calculation
      *
      * @param   \Magento\Sales\Model\Quote\Address $address
      * @return  \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
@@ -239,7 +239,7 @@ abstract class AbstractTotal
     }
 
     /**
-     * Whether the item row total may be compouded with others
+     * Whether the item row total may be compounded with others
      *
      * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
      * @return bool

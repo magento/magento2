@@ -42,14 +42,14 @@ class Discount extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
          * So basically if we have invoice with positive discount and it
          * was not canceled we don't add shipping discount to this one.
          */
-        $addShippingDicount = true;
-        foreach ($invoice->getOrder()->getInvoiceCollection() as $previusInvoice) {
-            if ($previusInvoice->getDiscountAmount()) {
-                $addShippingDicount = false;
+        $addShippingDiscount = true;
+        foreach ($invoice->getOrder()->getInvoiceCollection() as $previousInvoice) {
+            if ($previousInvoice->getDiscountAmount()) {
+                $addShippingDiscount = false;
             }
         }
 
-        if ($addShippingDicount) {
+        if ($addShippingDiscount) {
             $totalDiscountAmount     = $totalDiscountAmount + $invoice->getOrder()->getShippingDiscountAmount();
             $baseTotalDiscountAmount = $baseTotalDiscountAmount + $invoice->getOrder()->getBaseShippingDiscountAmount();
         }

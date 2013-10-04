@@ -120,7 +120,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     }
 
     /**
-     * Add entity attribute. Overwrited for flat entities support
+     * Add entity attribute. Overwritten for flat entities support
      *
      * @param int|string $entityTypeId
      * @param string $code
