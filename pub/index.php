@@ -2,6 +2,15 @@
 /**
  * Public alias for the application entry point
  *
+ * Example - run a particular store or website:
+ * --------------------------------------------
+ * $params = $_SERVER;
+ * $params['MAGE_RUN_CODE'] = 'website2';
+ * $params['MAGE_RUN_TYPE'] = 'website';
+ * ...
+ * $entryPoint = new \Magento\Core\Model\EntryPoint\Http(new \Magento\Core\Model\Config\Primary(BP, $params));
+ * --------------------------------------------
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -24,9 +33,9 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 require __DIR__ . '/../app/bootstrap.php';
-Magento_Profiler::start('magento');
+\Magento\Profiler::start('magento');
 $params = $_SERVER;
 $params[\Magento\Core\Model\App::PARAM_APP_URIS][\Magento\Core\Model\Dir::PUB] = '';
 $entryPoint = new \Magento\Core\Model\EntryPoint\Http(new \Magento\Core\Model\Config\Primary(BP, $params));
 $entryPoint->processRequest();
-Magento_Profiler::stop('magento');
+\Magento\Profiler::stop('magento');
