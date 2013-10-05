@@ -13,7 +13,7 @@
 "Advanced","Avancé(e)"
 "After selecting a new media storage location, press the Synchronize button
                                 to transfer all media to that location. Media will not be available in the new
-                                location until the synchronization process is complete.","Après avoir sélectionn un nouveau lieu de stockage des médias, appuyez sur le bouton Synchroniser pour transférer tous les médias vers cet emplacement. Les médias ne seront disponibles dans le nouvel emplacement que lorsque la processus sera terminé."
+                                location until the synchronization process is complete.","Après avoir sélectionné un nouveau lieu de stockage des médias, appuyez sur le bouton Synchroniser pour transférer tous les médias vers cet emplacement. Les médias ne seront disponibles dans le nouvel emplacement que lorsque la processus sera terminé."
 "Allow Countries","Permettre pays"
 "Allow Symlinks","Autoriser les Symlinks"
 "Allowed IPs (comma separated)","IPs permis (séparés par virgule)"
@@ -24,7 +24,7 @@
 "An error occurred while saving. Please review the error log.","Une erreur est survenue durant sauvegarde. Veuillez consulter le journal de bord des erreurs."
 "Anchor Text for Next","Ancrer texte pour suivant"
 "Anchor Text for Previous","Ancrer texte pour précédent"
-"Anchor symbol (#) is not supported in request path","Le symbolr d'ancrage (#) n'est pas pris en charge dans la demande de chemin d'accès"
+"Anchor symbol (#) is not supported in request path","Le symbole d'ancrage (#) n'est pas pris en charge dans la demande de chemin d'accès"
 "Anchor symbol (#) is not supported in url rewrite suffix","Le symbole d'ancrage (#) n'est pas pris en charge dans le suffixe de réécriture de l'url"
 "Are you sure?","Etes-vous sûr ?"
 "Auto-redirect to Base URL","Redirige automatiquement vers base URL"

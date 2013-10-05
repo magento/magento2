@@ -86,7 +86,7 @@ class AdapterFactory
      * @param string $adapterType
      * @return \Magento\Image\Adapter\AbstractAdapter
      * @throws \InvalidArgumentException
-     * @throws \Exception if some of dependecies are missing
+     * @throws \Exception if some of dependencies are missing
      */
     public function create($adapterType = null)
     {

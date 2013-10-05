@@ -121,7 +121,7 @@ class DefinitionFactory
     }
 
     /**
-     * Retreive class relations list
+     * Retrieve class relations list
      *
      * @return \Magento\Core\Model\ObjectManager\Relations|\Magento\ObjectManager\Relations\Runtime
      */

@@ -48,7 +48,7 @@ abstract class Template extends \Magento\Core\Model\AbstractModel
     const DEFAULT_DESIGN_AREA = 'frontend';
 
     /**
-     * Configuration of desing package for template
+     * Configuration of design package for template
      *
      * @var \Magento\Object
      */
@@ -56,7 +56,7 @@ abstract class Template extends \Magento\Core\Model\AbstractModel
 
 
     /**
-     * Configuration of emulated desing package.
+     * Configuration of emulated design package.
      *
      * @var \Magento\Object|boolean
      */

@@ -59,7 +59,7 @@ class Http extends \Zend_Controller_Request_Http
     protected $_controllerModule = null;
 
     /**
-     * Streight request flag.
+     * Straight request flag.
      * If flag is determined no additional logic is applicable
      *
      * @var $_isStraight bool

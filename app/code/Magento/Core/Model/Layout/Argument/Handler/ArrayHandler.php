@@ -91,7 +91,7 @@ class ArrayHandler extends \Magento\Core\Model\Layout\Argument\AbstractHandler
     }
 
     /**
-     * Retrive value from Array argument
+     * Retrieve value from Array argument
      *
      * @param \Magento\Core\Model\Layout\Element $argument
      * @return array|null

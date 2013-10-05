@@ -346,7 +346,7 @@ abstract class AbstractModel extends \Magento\Object
     /**
      * Check whether model has changed data.
      * Can be overloaded in child classes to perform advanced check whether model needs to be saved
-     * e.g. usign resouceModel->hasDataChanged() or any other technique
+     * e.g. using resourceModel->hasDataChanged() or any other technique
      *
      * @return boolean
      */
@@ -673,7 +673,7 @@ abstract class AbstractModel extends \Magento\Object
     }
 
     /**
-     * Retreive entity id
+     * Retrieve entity id
      *
      * @return mixed
      */

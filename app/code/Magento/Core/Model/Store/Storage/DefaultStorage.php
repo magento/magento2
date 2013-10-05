@@ -67,7 +67,7 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
     }
 
     /**
-     * Initialize current applicaition store
+     * Initialize current application store
      */
     public function initCurrentStore()
     {
