@@ -24,11 +24,11 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="head">
+    <!--referenceBlock name="head">
         <block class="Magento\Page\Block\Html\Head\Css" name="magento-cms-widgets-css">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_VersionsCms::widgets.css</argument>
             </arguments>
         </block>
-    </referenceBlock>
+    </referenceBlock-->
 </layout>
