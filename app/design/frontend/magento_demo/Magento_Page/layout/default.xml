@@ -28,6 +28,9 @@
         <block class="Magento\Page\Block\Html\Head\Css" name="css-styles-css">
             <arguments>
                 <argument name="file" xsi:type="string">css/styles.css</argument>
+                <argument name="properties" xsi:type="array">
+                    <item name="attributes" xsi:type="string"/>
+                </argument>
             </arguments>
         </block>
         <block class="Magento\Page\Block\Html\Head\Css" name="css-styles-ie-css">
