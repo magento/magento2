@@ -69,9 +69,7 @@ class File extends \Magento\Core\Model\File\Storage\AbstractStorage
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\Date $dateModel
-     * @param \Magento\Core\Model\Resource\AbstractResource|\Magento\Core\Model\Resource\File\Storage\File $resource
-     * @param \Magento\Core\Model\Resource\File\Storage\File $fileResource
+     * @param \Magento\Core\Model\Resource\File\Storage\File $resource
      * @param \Magento\Data\Collection\Db|null $resourceCollection
      * @param array $data
      */
@@ -80,14 +78,11 @@ class File extends \Magento\Core\Model\File\Storage\AbstractStorage
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\Date $dateModel,
-        \Magento\Core\Model\Resource\AbstractResource $resource,
-        \Magento\Core\Model\Resource\File\Storage\File $fileResource,
+        \Magento\Core\Model\Resource\File\Storage\File $resource,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        parent::__construct($coreFileStorageDb, $context, $registry, $dateModel, $resource,
-            $fileResource, $resourceCollection, $data);
+        parent::__construct($coreFileStorageDb, $context, $registry, $resource, $resourceCollection, $data);
         $this->_setResourceModel('Magento\Core\Model\Resource\File\Storage\File');
         $this->_logger = $logger;
     }

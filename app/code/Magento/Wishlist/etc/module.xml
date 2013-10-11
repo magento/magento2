@@ -38,6 +38,7 @@
             <module name="Magento_Adminhtml"/>
             <module name="Magento_CatalogInventory"/>
             <module name="Magento_Tax"/>
+            <module name="Magento_Backend"/>
             <module name="Magento_Bundle" type="soft"/>
         </depends>
     </module>

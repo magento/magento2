@@ -35,12 +35,12 @@ class Calculation extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Rates cache
      *
-     * @var unknown
+     * @var array
      */
     protected $_ratesCache              = array();
 
     /**
-     * Primery key auto increment flag
+     * Primary key auto increment flag
      *
      * @var bool
      */
@@ -61,12 +61,12 @@ class Calculation extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Class constructor
      *
-     * @param \Magento\Tax\Helper\DataProxy $taxData
+     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Resource $resource
      */
     public function __construct(
-        \Magento\Tax\Helper\DataProxy $taxData,
+        \Magento\Tax\Helper\Data $taxData,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Resource $resource
     ) {

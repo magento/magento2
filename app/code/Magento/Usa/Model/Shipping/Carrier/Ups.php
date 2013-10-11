@@ -1440,7 +1440,7 @@ XMLAuth;
         }
 
         $xmlRequest = $this->_xmlElFactory->create(
-            array('<?xml version = "1.0" ?><ShipmentConfirmRequest xml:lang="en-US"/>')
+            array('data' => '<?xml version = "1.0" ?><ShipmentConfirmRequest xml:lang="en-US"/>')
         );
         $requestPart = $xmlRequest->addChild('Request');
         $requestPart->addChild('RequestAction', 'ShipConfirm');
@@ -1627,7 +1627,7 @@ XMLAuth;
     protected function _sendShipmentAcceptRequest(\Magento\Usa\Model\Simplexml\Element $shipmentConfirmResponse)
     {
         $xmlRequest = $this->_xmlElFactory->create(
-            array('<?xml version = "1.0" ?><ShipmentAcceptRequest/>')
+            array('data' => '<?xml version = "1.0" ?><ShipmentAcceptRequest/>')
         );
         $request = $xmlRequest->addChild('Request');
             $request->addChild('RequestAction', 'ShipAccept');
@@ -1652,7 +1652,7 @@ XMLAuth;
         }
 
         try {
-            $response = $this->_xmlElFactory->create(array($xmlResponse));
+            $response = $this->_xmlElFactory->create(array('data' => $xmlResponse));
         } catch (\Exception $e) {
             $debugData['result'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
         }
@@ -1723,7 +1723,7 @@ XMLAuth;
         }
 
         try {
-            $response = $this->_xmlElFactory->create(array($xmlResponse));
+            $response = $this->_xmlElFactory->create(array('data' => $xmlResponse));
         } catch (\Exception $e) {
             $debugData['result'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
             $result->setErrors($e->getMessage());

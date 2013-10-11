@@ -141,9 +141,6 @@ class Save extends \Magento\Object
                 break;
 
             default:
-                /**
-                 * @todo fix required parameter for `load` method
-                 */
                 $entityModel = $giftmessageModel->getEntityModelByType($entityType)
                     ->load($entityId);
                 break;
@@ -202,7 +199,7 @@ class Save extends \Magento\Object
      */
     public function setAllowQuoteItems($items)
     {
-        $this->_getSession()->setAllowQuoteItemsGiftMessage($items);
+        $this->_session->setAllowQuoteItemsGiftMessage($items);
         return $this;
     }
 
@@ -230,11 +227,11 @@ class Save extends \Magento\Object
      */
     public function getAllowQuoteItems()
     {
-        if (!is_array($this->_getSession()->getAllowQuoteItemsGiftMessage())) {
+        if (!is_array($this->_session->getAllowQuoteItemsGiftMessage())) {
             $this->setAllowQuoteItems(array());
         }
 
-        return $this->_getSession()->getAllowQuoteItemsGiftMessage();
+        return $this->_session->getAllowQuoteItemsGiftMessage();
     }
 
     /**
@@ -297,7 +294,7 @@ class Save extends \Magento\Object
         $deleteAllowedItems = array();
         foreach ($products as $productId=>$data) {
             $product = $this->_productFactory->create()
-                ->setStore($this->_getSession()->getStore())
+                ->setStore($this->_session->getStore())
                 ->load($productId);
             $item = $this->_getQuote()->getItemByProduct($product);
 

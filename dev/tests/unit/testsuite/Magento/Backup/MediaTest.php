@@ -30,16 +30,30 @@ namespace Magento\Backup;
 class MediaTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Core\Model\Dir
+     */
+    protected $_dirMock;
+
+    /**
+     * @var \Magento\Backup\Factory
+     */
+    protected $_backupFactoryMock;
+
+    protected function setUp()
+    {
+        $this->_dirMock = $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false);
+        $this->_backupFactoryMock = $this->getMock('Magento\Backup\Factory', array(), array(), '', false);
+    }
+    /**
      * @param string $action
      * @dataProvider actionProvider
      */
     public function testAction($action)
     {
-        $dir = $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false);
         $snapshot = $this->getMock(
             'Magento\Backup\Snapshot',
             array('create', 'rollback', 'getDbBackupFilename'),
-            array($dir)
+            array($this->_dirMock, $this->_backupFactoryMock)
         );
         $snapshot->expects($this->any())
             ->method('create')
@@ -85,8 +99,9 @@ class MediaTest extends \PHPUnit_Framework_TestCase
      */
     public function testProxyMethod($method, $parameter)
     {
-        $dir = $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false);
-        $snapshot = $this->getMock('Magento\Backup\Snapshot', array($method), array($dir));
+        $snapshot = $this->getMock('Magento\Backup\Snapshot',
+            array($method),
+            array($this->_dirMock, $this->_backupFactoryMock));
         $snapshot->expects($this->once())
             ->method($method)
             ->with($parameter)

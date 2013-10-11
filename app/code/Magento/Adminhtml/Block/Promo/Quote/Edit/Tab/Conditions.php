@@ -114,7 +114,7 @@ class Conditions
         $form->setHtmlIdPrefix('rule_');
 
         $renderer = $this->_rendererFieldset
-            ->setTemplate('promo/fieldset.phtml')
+            ->setTemplate('Magento_Adminhtml::promo/fieldset.phtml')
             ->setNewChildUrl($this->getUrl('*/promo_quote/newConditionHtml/form/rule_conditions_fieldset'));
 
         $fieldset = $form->addFieldset('conditions_fieldset', array(

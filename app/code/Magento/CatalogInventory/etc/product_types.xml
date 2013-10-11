@@ -26,10 +26,10 @@
 <config>
     <type name="simple" isQty="true" />
     <type name="virtual" isQty="true" />
-    <type name="configurable" isQty="true">
+    <type name="configurable">
         <stockIndexerModel instance="Magento\CatalogInventory\Model\Resource\Indexer\Stock\Configurable" />
     </type>
-    <type name="grouped" isQty="true">
+    <type name="grouped">
         <stockIndexerModel instance="Magento\CatalogInventory\Model\Resource\Indexer\Stock\Grouped" />
     </type>
 </config>

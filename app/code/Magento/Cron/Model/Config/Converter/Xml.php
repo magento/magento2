@@ -36,7 +36,7 @@ class Xml implements \Magento\Config\ConverterInterface
      *
      * @param mixed $source
      * @return array
-     * @throws LogicException
+     * @throws \InvalidArgumentException
      */
     public function convert($source)
     {
@@ -46,19 +46,20 @@ class Xml implements \Magento\Config\ConverterInterface
             return $output;
         }
 
-        /** @var DOMNodeList $jobs */
+        /** @var \DOMNodeList $jobs */
         $jobs = $source->getElementsByTagName('job');
-        /** @var DOMElement $jobConfig */
+        /** @var \DOMElement $jobConfig */
         foreach ($jobs as $jobConfig) {
             $jobName = $jobConfig->getAttribute('name');
 
             if (!$jobName) {
                 throw new \InvalidArgumentException('Attribute "name" does not exist');
             }
+            $config = array();
             $config['name'] = $jobName;
             $config += $this->_convertCronConfig($jobConfig);
 
-            /** @var DOMText $schedules */
+            /** @var \DOMText $schedules */
             foreach ($jobConfig->childNodes as $schedules) {
                 if ($schedules->nodeName == 'schedule') {
                     if (!empty($schedules->nodeValue)) {
@@ -76,7 +77,7 @@ class Xml implements \Magento\Config\ConverterInterface
     /**
      * Convert specific cron configurations
      *
-     * @param DOMElement $jobConfig
+     * @param \DOMElement $jobConfig
      * @return array
      * @throws \InvalidArgumentException
      */

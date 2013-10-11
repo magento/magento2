@@ -226,7 +226,6 @@ class User
             '_emailInfoFactory',
             '_mailer',
         ));
-        return $properties;
     }
 
     public function __wakeup()

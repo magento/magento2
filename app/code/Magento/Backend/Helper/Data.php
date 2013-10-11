@@ -75,17 +75,17 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_coreData = null;
 
     /**
-     * @var \Magento\Core\Model\AppProxy
+     * @var \Magento\Core\Model\App
      */
     protected $_app;
 
     /**
-     * @var \Magento\Backend\Model\UrlProxy
+     * @var \Magento\Backend\Model\Url
      */
     protected $_backendUrl;
 
     /**
-     * @var \Magento\Backend\Model\AuthProxy
+     * @var \Magento\Backend\Model\Auth
      */
     protected $_auth;
 
@@ -102,9 +102,9 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * @param \Magento\Core\Model\ConfigInterface $applicationConfig
      * @param \Magento\Core\Model\Config\Primary $primaryConfig
      * @param \Magento\Core\Model\RouterList $routerList
-     * @param \Magento\Core\Model\AppProxy $app
-     * @param \Magento\Backend\Model\UrlProxy $backendUrl
-     * @param \Magento\Backend\Model\AuthProxy $auth
+     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Backend\Model\Url $backendUrl
+     * @param \Magento\Backend\Model\Auth $auth
      * @param string $defaultAreaFrontName
      * @param string $backendFrontName
      *
@@ -116,9 +116,9 @@ class Data extends \Magento\Core\Helper\AbstractHelper
         \Magento\Core\Model\ConfigInterface $applicationConfig,
         \Magento\Core\Model\Config\Primary $primaryConfig,
         \Magento\Core\Model\RouterList $routerList,
-        \Magento\Core\Model\AppProxy $app,
-        \Magento\Backend\Model\UrlProxy $backendUrl,
-        \Magento\Backend\Model\AuthProxy $auth,
+        \Magento\Core\Model\App $app,
+        \Magento\Backend\Model\Url $backendUrl,
+        \Magento\Backend\Model\Auth $auth,
         $defaultAreaFrontName,
         $backendFrontName
     ) {

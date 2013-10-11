@@ -47,7 +47,7 @@ class Db
     /**
      * Backup resource helper
      *
-     * @var \Magento\Backup\Model\Resource\HelperFactory
+     * @var \Magento\Backup\Model\Resource\Helper
      */
     protected $_resourceHelper;
 
@@ -257,7 +257,7 @@ class Db
      */
     public function beginTransaction()
     {
-        $this->_resourceHelper->turnOnSerializableMode();
+        $this->_resourceHelper->prepareTransactionIsolationLevel();
         $this->_write->beginTransaction();
         return $this;
     }
@@ -270,7 +270,7 @@ class Db
     public function commitTransaction()
     {
         $this->_write->commit();
-        $this->_resourceHelper->turnOnReadCommittedMode();
+        $this->_resourceHelper->restoreTransactionIsolationLevel();
         return $this;
     }
 
@@ -282,6 +282,7 @@ class Db
     public function rollBackTransaction()
     {
         $this->_write->rollBack();
+        $this->_resourceHelper->restoreTransactionIsolationLevel();
         return $this;
     }
 

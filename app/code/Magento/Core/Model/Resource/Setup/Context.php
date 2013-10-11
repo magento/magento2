@@ -23,7 +23,7 @@
  */
 namespace Magento\Core\Model\Resource\Setup;
 
-class Context
+class Context implements \Magento\ObjectManager\ContextInterface
 {
     /**
      * @var \Magento\Core\Model\Logger

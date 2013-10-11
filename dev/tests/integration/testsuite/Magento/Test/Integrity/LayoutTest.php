@@ -163,7 +163,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $errors = array();
         foreach ($handles as $node) {
             if (!$node->xpath('@label')) {
-                $errors[] = $node->getName();
+                $nodeId = $node->getAttribute('id') ? ' id=' . $node->getAttribute('id') : '';
+                $errors[] = $node->getName() . $nodeId;
             }
         }
         if ($errors) {

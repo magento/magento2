@@ -27,7 +27,7 @@
  */
 
 require dirname(__DIR__) . '/app/bootstrap.php';
-Magento_Profiler::start('magento');
+\Magento\Profiler::start('magento');
 umask(0);
 
 try {
@@ -42,4 +42,4 @@ try {
     print $e->getMessage() . "\n\n";
     print $e->getTraceAsString();
 }
-Magento_Profiler::stop('magento');
+\Magento\Profiler::stop('magento');

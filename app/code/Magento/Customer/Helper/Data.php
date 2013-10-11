@@ -698,7 +698,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      */
     protected function _createVatNumberValidationSoapClient($trace = false)
     {
-        return new SoapClient(self::VAT_VALIDATION_WSDL_URL, array('trace' => $trace));
+        return new \SoapClient(self::VAT_VALIDATION_WSDL_URL, array('trace' => $trace));
     }
 
     /**

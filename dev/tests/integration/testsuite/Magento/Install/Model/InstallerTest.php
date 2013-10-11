@@ -39,15 +39,10 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      */
     protected static $_tmpConfigFile = '';
 
-    /**
-     * @var \Magento\Install\Model\Installer
-     */
-    protected $_model;
-
     public static function setUpBeforeClass()
     {
         self::$_tmpDir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Dir')
-            ->getDir(\Magento\Core\Model\Dir::VAR_DIR) . DIRECTORY_SEPARATOR . __CLASS__;
+            ->getDir(\Magento\Core\Model\Dir::VAR_DIR) . DIRECTORY_SEPARATOR . 'InstallerTest';
         self::$_tmpConfigFile = self::$_tmpDir . DIRECTORY_SEPARATOR . 'local.xml';
         mkdir(self::$_tmpDir);
     }
@@ -57,30 +52,27 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         \Magento\Io\File::rmdirRecursive(self::$_tmpDir);
     }
 
-    protected function setUp()
-    {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Install\Model\Installer');
-    }
-
     /**
      * Emulate configuration directory for the installer config model.
      * Method usage should be accompanied with '@magentoAppIsolation enabled' because of the object manager pollution.
      *
-     * @param string $dir
+     * @param bool $emulateConfig
+     * @return \Magento\Install\Model\Installer
      */
-    protected function _emulateInstallerConfigDir($dir)
+    protected function _getModel($emulateConfig = false)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $installerConfig = new \Magento\Install\Model\Installer\Config(
-            $objectManager->get('Magento\Install\Model\InstallerProxy'),
-            $objectManager->get('Magento\Core\Controller\Request\Http'),
-            new \Magento\Core\Model\Dir(__DIR__, array(), array(\Magento\Core\Model\Dir::CONFIG => $dir)),
-            $objectManager->get('Magento\Core\Model\Config\Resource'),
-            new \Magento\Filesystem(new \Magento\Filesystem\Adapter\Local()),
-            $objectManager->get('Magento\Core\Model\StoreManager')
-        );
-        $objectManager->addSharedInstance($installerConfig, 'Magento\Install\Model\Installer\Config');
+        if ($emulateConfig) {
+            $installerConfig = new \Magento\Install\Model\Installer\Config(
+                $objectManager->get('Magento\Install\Model\InstallerProxy'),
+                $objectManager->get('Magento\Core\Controller\Request\Http'),
+                new \Magento\Core\Model\Dir(__DIR__, array(), array(\Magento\Core\Model\Dir::CONFIG => self::$_tmpDir)),
+                new \Magento\Filesystem(new \Magento\Filesystem\Adapter\Local()),
+                $objectManager->get('Magento\Core\Model\StoreManager')
+            );
+            $objectManager->addSharedInstance($installerConfig, 'Magento\Install\Model\Installer\Config');
+        }
+        return $objectManager->create('Magento\Install\Model\Installer');
     }
 
     /**
@@ -103,7 +95,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $user->loadByUsername($userName);
         $this->assertEmpty($user->getId());
 
-        $this->_model->createAdministrator($userData + array('password' => $userPassword));
+        $this->_getModel()->createAdministrator($userData + array('password' => $userPassword));
 
         $user->loadByUsername($userName);
         $this->assertNotEmpty($user->getId());
@@ -122,16 +114,13 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      */
     public function testInstallEncryptionKey()
     {
-        $this->_emulateInstallerConfigDir(self::$_tmpDir);
-
         $keyPlaceholder = \Magento\Install\Model\Installer\Config::TMP_ENCRYPT_KEY_VALUE;
         $fixtureConfigData = "<key>$keyPlaceholder</key>";
         $expectedConfigData = '<key>d41d8cd98f00b204e9800998ecf8427e</key>';
 
         file_put_contents(self::$_tmpConfigFile, $fixtureConfigData);
         $this->assertEquals($fixtureConfigData, file_get_contents(self::$_tmpConfigFile));
-        $this->markTestIncomplete('MAGETWO-13717');
-        $this->_model->installEncryptionKey('d41d8cd98f00b204e9800998ecf8427e');
+        $this->_getModel(true)->installEncryptionKey('d41d8cd98f00b204e9800998ecf8427e');
         $this->assertEquals($expectedConfigData, file_get_contents(self::$_tmpConfigFile));
     }
 
@@ -142,11 +131,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      */
     public function testInstallEncryptionKeySizeViolation()
     {
-        $this->markTestIncomplete('MAGETWO-13717');
-        // isolate the application from the configuration pollution, if the test fails
-        $this->_emulateInstallerConfigDir(self::$_tmpDir);
-
-        $this->_model->installEncryptionKey(str_repeat('a', 57));
+        $this->_getModel(true)->installEncryptionKey(str_repeat('a', 57));
     }
 
     /**
@@ -155,7 +140,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     public function testGetValidEncryptionKey()
     {
         $validKey = 'abcdef1234567890';
-        $this->assertEquals($validKey, $this->_model->getValidEncryptionKey($validKey));
+        $this->assertEquals($validKey, $this->_getModel()->getValidEncryptionKey($validKey));
     }
 
     /**
@@ -165,8 +150,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetValidEncryptionKeySizeViolation()
     {
-        $this->markTestIncomplete('MAGETWO-13717');
-        $this->_model->getValidEncryptionKey(str_repeat('1', 57));
+        $this->_getModel()->getValidEncryptionKey(str_repeat('1', 57));
     }
 
     /**
@@ -174,9 +158,10 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetValidEncryptionKeyRandom()
     {
-        $actualKey = $this->_model->getValidEncryptionKey();
+        $model = $this->_getModel();
+        $actualKey = $model->getValidEncryptionKey();
         $this->assertRegExp('/^[a-f0-9]{32}$/', $actualKey);
-        $this->assertNotEquals($actualKey, $this->_model->getValidEncryptionKey());
+        $this->assertNotEquals($actualKey, $model->getValidEncryptionKey());
     }
 
     /**
@@ -185,11 +170,10 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      */
     public function testFinish()
     {
-        $this->_emulateInstallerConfigDir(self::$_tmpDir);
         $configFile = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInstallDir() . '/etc/local.xml';
         copy($configFile, self::$_tmpConfigFile);
 
-        $this->_model->finish();
+        $this->_getModel(true)->finish();
 
         /** @var $cacheState \Magento\Core\Model\Cache\StateInterface */
         $cacheState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

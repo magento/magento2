@@ -39,11 +39,11 @@ class Pear extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_session;
 
     /**
-     * @param \Magento\Install\Model\InstallerProxy $installer
+     * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Core\Model\Session\Generic $session
      */
     public function __construct(
-        \Magento\Install\Model\InstallerProxy $installer,
+        \Magento\Install\Model\Installer $installer,
         \Magento\Core\Model\Session\Generic $session
     ) {
         parent::__construct($installer);

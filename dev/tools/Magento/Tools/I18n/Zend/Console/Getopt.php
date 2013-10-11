@@ -1,6 +1,6 @@
 <?php
 /**
- * Zend\Console\Getopt is a class to parse options for command-line
+ * Zend_Console_Getopt is a class to parse options for command-line
  * applications.
  *
  * LICENSE
@@ -21,7 +21,7 @@
  */
 
 /**
- * Zend\Console\Getopt is a class to parse options for command-line
+ * Zend_Console_Getopt is a class to parse options for command-line
  * applications.
  *
  * Terminology:
@@ -124,9 +124,7 @@
  * @todo  Feature request to implement callbacks.
  *        e.g. if -a is specified, run function 'handleOptionA'().
  */
-namespace Magento\Tools\I18n\Zend\Console;
-
-class Getopt
+class Zend_Console_Getopt
 {
 
     /**

@@ -46,28 +46,74 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
      */
     protected static $_blackList = array();
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass() 
     {
         self::$_reportDir = \Magento\TestFramework\Utility\Files::init()->getPathToSource()
             . '/dev/tests/static/report';
         if (!is_dir(self::$_reportDir)) {
             mkdir(self::$_reportDir, 0777);
         }
-        self::$_whiteList = self::_readLists(__DIR__ . '/_files/whitelist/*.txt');
-        self::$_blackList = self::_readLists(__DIR__ . '/_files/blacklist/*.txt');
+        self::setupFileLists();
+    }
+
+    public static function setupFileLists($type = '')
+    {
+        if ($type != '' && !preg_match('/\/$/', $type)) {
+            $type = $type . '/';
+        }
+        self::$_whiteList = self::_readLists(__DIR__ . '/_files/'.$type.'whitelist/*.txt');
+        self::$_blackList = self::_readLists(__DIR__ . '/_files/'.$type.'blacklist/*.txt');
+    }
+
+    public function testCodeStylePsr2()
+    {
+        $this->markTestSkipped('Skipped');
+        $reportFile = self::$_reportDir . '/phpcs_psr2_report.xml';
+        $wrapper = new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper();
+        $codeSniffer = new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer(
+            'PSR2',
+            $reportFile,
+            $wrapper
+        );
+        if (!$codeSniffer->canRun()) {
+            $this->markTestSkipped('PHP Code Sniffer is not installed.');
+        }
+        if (version_compare($codeSniffer->version(), '1.4.7') === -1) {
+            $this->markTestSkipped('PHP Code Sniffer Build Too Old.');
+        }
+        self::setupFileLists('phpcs');
+        $result = $codeSniffer->run(self::$_whiteList, self::$_blackList, array('php'));
+        $this->assertFileExists($reportFile, 'Expected '.$reportFile.' to be created by phpcs run with PSR2 standard');
+        // disabling the assertEquals below to allow the test to not fail but just report PSR2 violations to everyone.
+        // It should be uncommented once compliance is required.
+        /*
+        $this->assertEquals(
+            0,
+            $result,
+            "PHP Code Sniffer has found $result error(s): See detailed report in $reportFile"
+        );
+         */
+        // Remove this echo when the assert can be uncommented out.
+        echo "PHP Code Sniffer has found $result error(s): See detailed report in $reportFile";
     }
 
     public function testCodeStyle()
     {
         $reportFile = self::$_reportDir . '/phpcs_report.xml';
         $wrapper = new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper();
-        $codeSniffer = new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer(realpath(__DIR__ . '/_files/phpcs'),
-            $reportFile, $wrapper);
+        $codeSniffer = new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer(
+            realpath(__DIR__ . '/_files/phpcs'),
+            $reportFile,
+            $wrapper
+        );
         if (!$codeSniffer->canRun()) {
             $this->markTestSkipped('PHP Code Sniffer is not installed.');
         }
-        $result = $codeSniffer->run(self::$_whiteList, self::$_blackList, array('php', 'phtml'));
-        $this->assertEquals(0, $result,
+        self::setupFileLists();
+        $result = $codeSniffer->run(self::$_whiteList, self::$_blackList, array('php','phtml'));
+        $this->assertEquals(
+            0,
+            $result,
             "PHP Code Sniffer has found $result error(s): See detailed report in $reportFile"
         );
     }
@@ -76,15 +122,18 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
     {
         $reportFile = self::$_reportDir . '/phpmd_report.xml';
         $codeMessDetector = new \Magento\TestFramework\CodingStandard\Tool\CodeMessDetector(
-            realpath(__DIR__ . '/_files/phpmd/ruleset.xml'), $reportFile
+            realpath(__DIR__ . '/_files/phpmd/ruleset.xml'),
+            $reportFile
         );
 
         if (!$codeMessDetector->canRun()) {
             $this->markTestSkipped('PHP Mess Detector is not available.');
         }
 
+        self::setupFileLists();
         $this->assertEquals(
-            \PHP_PMD_TextUI_Command::EXIT_SUCCESS, $codeMessDetector->run(self::$_whiteList, self::$_blackList),
+            \PHP_PMD_TextUI_Command::EXIT_SUCCESS,
+            $codeMessDetector->run(self::$_whiteList, self::$_blackList),
             "PHP Code Mess has found error(s): See detailed report in $reportFile"
         );
     }
@@ -99,12 +148,14 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('PHP Copy/Paste Detector is not available.');
         }
 
+        self::setupFileLists();
         $blackList = array();
         foreach (glob(__DIR__ . '/_files/phpcpd/blacklist/*.txt') as $list) {
             $blackList = array_merge($blackList, file($list, FILE_IGNORE_NEW_LINES));
         }
 
-        $this->assertTrue($copyPasteDetector->run(array(), $blackList),
+        $this->assertTrue(
+            $copyPasteDetector->run(array(), $blackList),
             "PHP Copy/Paste Detector has found error(s): See detailed report in $reportFile"
         );
     }

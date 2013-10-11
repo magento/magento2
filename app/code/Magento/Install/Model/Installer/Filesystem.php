@@ -67,13 +67,13 @@ class Filesystem extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_appRootDir;
 
     /**
-     * @param \Magento\Install\Model\InstallerProxy $installer
+     * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Install\Model\Config $installConfig
      * @param \Magento\Core\Model\Dir $dir
      */
     public function __construct(
-        \Magento\Install\Model\InstallerProxy $installer,
+        \Magento\Install\Model\Installer $installer,
         \Magento\Filesystem $filesystem,
         \Magento\Install\Model\Config $installConfig,
         \Magento\Core\Model\Dir $dir

@@ -41,15 +41,18 @@ class Config extends \Magento\Config\Data
     /**
      * Retrieve list of locked fields for attribute
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param AbstractAttribute $attribute
      * @return array
      */
-    public function getLockedFields(\Magento\Catalog\Model\Resource\Eav\Attribute $attribute)
+    public function getLockedFields(AbstractAttribute $attribute)
     {
         $allFields = $this->get(
             $attribute->getEntityType()->getEntityTypeCode() . '/attributes/' . $attribute->getAttributeCode()
         );
 
+        if (!is_array($allFields)) {
+            return array();
+        }
         $lockedFields = array();
         foreach (array_keys($allFields) as $fieldCode) {
             $lockedFields[$fieldCode] = $fieldCode;

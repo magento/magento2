@@ -194,7 +194,7 @@ class Fedex
      */
     protected function _createSoapClient($wsdl, $trace = false)
     {
-        $client = new SoapClient($wsdl, array('trace' => $trace));
+        $client = new \SoapClient($wsdl, array('trace' => $trace));
         $client->__setLocation($this->getConfigFlag('sandbox_mode')
             ? 'https://wsbeta.fedex.com:443/web-services/rate'
             : 'https://ws.fedex.com:443/web-services/rate'
@@ -632,7 +632,7 @@ class Fedex
     {
         $r = $this->_rawRequest;
         $xml = $this->_xmlElFactory->create(
-            array('<?xml version = "1.0" encoding = "UTF-8"?><FDXRateAvailableServicesRequest/>')
+            array('data' => '<?xml version = "1.0" encoding = "UTF-8"?><FDXRateAvailableServicesRequest/>')
         );
 
         $xml->addAttribute('xmlns:api', 'http://www.fedex.com/fsmapi');

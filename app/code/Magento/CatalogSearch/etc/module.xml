@@ -37,7 +37,8 @@
             <module name="Magento_Index"/>
             <module name="Magento_Eav"/>
             <module name="Magento_Backend"/>
-            <module name="Magento_Page" type="soft"/>
+            <module name="Magento_Adminhtml"/>
+            <module name="Magento_Page"/>
         </depends>
     </module>
 </config>

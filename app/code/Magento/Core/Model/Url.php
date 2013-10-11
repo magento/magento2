@@ -134,6 +134,26 @@ class Url extends \Magento\Object implements \Magento\Core\Model\UrlInterface
     protected $_coreData = null;
 
     /**
+     * @var \Magento\Core\Model\Store\Config
+     */
+    protected $_coreStoreConfig;
+
+    /**
+     * @var \Magento\Core\Model\App
+     */
+    protected $_app;
+
+    /**
+     * @var \Magento\Core\Model\StoreManager
+     */
+    protected $_storeManager;
+
+    /**
+     * @var \Magento\Core\Model\SessionProxy
+     */
+    protected $_session;
+
+    /**
      * Constructor
      *
      * By default is looking for first argument as array and assigns it as object
@@ -144,7 +164,7 @@ class Url extends \Magento\Object implements \Magento\Core\Model\UrlInterface
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Core\Model\StoreManager $storeManager
-     * @param \Magento\Core\Model\Session $session
+     * @param \Magento\Core\Model\SessionProxy $session
      * @param array $data
      */
     public function __construct(
@@ -153,7 +173,7 @@ class Url extends \Magento\Object implements \Magento\Core\Model\UrlInterface
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\App $app,
         \Magento\Core\Model\StoreManager $storeManager,
-        \Magento\Core\Model\Session $session,
+        \Magento\Core\Model\SessionProxy $session,
         array $data = array()
     ) {
         $this->_urlSecurityInfo = $urlSecurityInfo;

@@ -37,12 +37,12 @@ class UrlGenerator extends \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator
     protected $_authorization;
 
     /**
-     * @param \Magento\Backend\Model\UrlProxy $backendUrl
+     * @param \Magento\Backend\Model\Url $backendUrl
      * @param \Magento\AuthorizationInterface $authorization
      * @param array $args
      */
     public function __construct(
-        \Magento\Backend\Model\UrlProxy $backendUrl,
+        \Magento\Backend\Model\Url $backendUrl,
         \Magento\AuthorizationInterface $authorization,
         array $args = array()
     ) {

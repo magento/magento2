@@ -90,7 +90,7 @@ class Store
         if ($this->_appState->isInstalled()) {
             $store = $this->_storeFactory->create();
             $store->load($code);
-            $websiteConfig = $this->_sectionPool->getSection('website', $store->getWebsite()->getCode())->getValue();
+            $websiteConfig = $this->_sectionPool->getSection('website', $store->getWebsite()->getCode())->getSource();
             $config = array_replace_recursive($websiteConfig, $this->_initialConfig->getStore($code));
 
             $collection = $this->_collectionFactory->create(array('scope' => 'stores', 'scopeId' => $store->getId()));
@@ -100,7 +100,7 @@ class Store
             }
             $config = $this->_converter->convert($dbStoreConfig, $config);
         } else {
-            $websiteConfig = $this->_sectionPool->getSection('website', 'default')->getValue();
+            $websiteConfig = $this->_sectionPool->getSection('website', 'default')->getSource();
             $config = $this->_converter->convert($websiteConfig, $this->_initialConfig->getStore($code));
         }
         return $config;

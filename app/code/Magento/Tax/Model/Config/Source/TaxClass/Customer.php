@@ -29,6 +29,11 @@ namespace Magento\Tax\Model\Config\Source\TaxClass;
 class Customer implements \Magento\Core\Model\Option\ArrayInterface
 {
     /**
+     * @var \Magento\Tax\Model\TaxClass\Source\CustomerFactory
+     */
+    protected $_taxCustomerFactory;
+
+    /**
      * @param \Magento\Tax\Model\TaxClass\Source\CustomerFactory $taxCustomerFactory
      */
     public function __construct(\Magento\Tax\Model\TaxClass\Source\CustomerFactory $taxCustomerFactory)

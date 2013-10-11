@@ -28,8 +28,6 @@ namespace Magento\Core\Model\Config;
 class Resource extends \Magento\Config\Data\Scoped
     implements \Magento\Core\Model\Config\ResourceInterface
 {
-    const DEFAULT_READ_CONNECTION  = 'read';
-    const DEFAULT_WRITE_CONNECTION = 'write';
     const DEFAULT_SETUP_CONNECTION = 'default';
 
     /**

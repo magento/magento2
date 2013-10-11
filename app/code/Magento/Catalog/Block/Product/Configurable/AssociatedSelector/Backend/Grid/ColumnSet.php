@@ -131,7 +131,7 @@ class ColumnSet
         $result = array();
         foreach ($sourceModel->getAllOptions() as $option) {
             if ($option['value'] != '') {
-                $result[$option['value']] = $option['label'];
+                $result[] = $option;
             }
         }
         return $result;

@@ -94,9 +94,9 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Config\Share $configShare
      * @param \Magento\Core\Helper\Url $coreUrl
-     * @param \Magento\Customer\Helper\DataProxy $customerData
+     * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Core\Model\Session $session
-     * @param \Magento\Customer\Model\Resource\CustomerProxy $customerResource
+     * @param \Magento\Customer\Model\Resource\Customer $customerResource
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Core\Model\UrlFactory $urlFactory
      * @param array $data
@@ -107,9 +107,9 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Config\Share $configShare,
         \Magento\Core\Helper\Url $coreUrl,
-        \Magento\Customer\Helper\DataProxy $customerData,
+        \Magento\Customer\Helper\Data $customerData,
         \Magento\Core\Model\Session $session,
-        \Magento\Customer\Model\Resource\CustomerProxy $customerResource,
+        \Magento\Customer\Model\Resource\Customer $customerResource,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Core\Model\UrlFactory $urlFactory,
         array $data = array(),

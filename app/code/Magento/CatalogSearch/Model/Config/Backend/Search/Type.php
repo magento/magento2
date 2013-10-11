@@ -56,13 +56,13 @@ class Type extends \Magento\Core\Model\Config\Value
      * @param array $data
      */
     public function __construct(
+        \Magento\CatalogSearch\Model\Fulltext $catalogSearchFulltext,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Core\Model\Config $config,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
-        \Magento\CatalogSearch\Model\Fulltext $catalogSearchFulltext,
         array $data = array()
     ) {
         $this->_catalogSearchFulltext = $catalogSearchFulltext;

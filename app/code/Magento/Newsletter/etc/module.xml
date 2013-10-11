@@ -32,11 +32,12 @@
             <module name="Magento_Widget"/>
         </sequence>
         <depends>
-            <module name="Magento_Backend" type="soft"/>
             <module name="Magento_Core"/>
             <module name="Magento_Customer"/>
             <module name="Magento_Widget"/>
             <module name="Magento_Catalog"/>
+            <module name="Magento_Backend"/>
+            <module name="Magento_Page"/>
         </depends>
     </module>
 </config>

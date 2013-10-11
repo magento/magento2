@@ -55,7 +55,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'Magento\Checkout\Model\Session'
         );
 
-        $this->assertSelectCount('button.button.btn-cart[type="button"][title="Update Cart"]', 1, $response->getBody(),
+        $this->assertSelectCount('button[type="button"][title="Update Cart"]', 1, $response->getBody(),
             'Response for simple product doesn\'t contain "Update Cart" button');
     }
 
@@ -82,7 +82,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'Magento\Checkout\Model\Session'
         );
 
-        $this->assertSelectCount('button.button.btn-cart[type="button"][title="Update Cart"]', 1, $response->getBody(),
+        $this->assertSelectCount('button[type="button"][title="Update Cart"]', 1, $response->getBody(),
             'Response for simple product with custom option doesn\'t contain "Update Cart" button');
 
         $this->assertSelectCount('input.product-custom-option[type="text"]', 1, $response->getBody(),
@@ -112,7 +112,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'Magento\Checkout\Model\Session'
         );
 
-        $this->assertSelectCount('button.button.btn-cart[type="button"][title="Update Cart"]', 1, $response->getBody(),
+        $this->assertSelectCount('button[type="button"][title="Update Cart"]', 1, $response->getBody(),
             'Response for bundle product doesn\'t contain "Update Cart" button');
     }
 
@@ -139,10 +139,10 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'Magento\Checkout\Model\Session'
         );
 
-        $this->assertSelectCount('button.button.btn-cart[type="button"][title="Update Cart"]', 1, $response->getBody(),
+        $this->assertSelectCount('button[type="button"][title="Update Cart"]', 1, $response->getBody(),
             'Response for downloadable product doesn\'t contain "Update Cart" button');
 
-        $this->assertSelectCount('ul#downloadable-links-list.options-list', 1, $response->getBody(),
+        $this->assertSelectCount('#downloadable-links-list', 1, $response->getBody(),
             'Response for downloadable product doesn\'t contain links for download');
     }
 
@@ -169,7 +169,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'Magento\Checkout\Model\Session'
         );
 
-        $this->assertSelectCount('button.button.btn-cart[type="button"][title="Update Cart"]', 1, $response->getBody(),
+        $this->assertSelectCount('button[type="button"][title="Update Cart"]', 1, $response->getBody(),
             'Response for configurable product doesn\'t contain "Update Cart" button');
 
         $this->assertSelectCount('select.super-attribute-select', 1, $response->getBody(),

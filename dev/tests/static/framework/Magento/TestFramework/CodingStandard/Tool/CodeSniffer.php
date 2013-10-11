@@ -80,6 +80,16 @@ class CodeSniffer
     }
 
     /**
+     * Return the version of code sniffer found
+     *
+     * @return string
+     */
+    public function version()
+    {
+        return $this->_wrapper->version();
+    }
+
+    /**
      * Run tool for files cpecified
      *
      * @param array $whiteList Files/directories to be inspected

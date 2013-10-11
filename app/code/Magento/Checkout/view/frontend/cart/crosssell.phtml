@@ -41,7 +41,7 @@
             <div class="product-details">
                 <h3 class="product-name"><a href="<?php echo $_item->getProductUrl() ?>"><?php echo $this->escapeHtml($_item->getName()) ?></a></h3>
                 <?php echo $this->getPriceHtml($_item, true) ?>
-                <button type="button" title="<?php echo __('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_item) ?>')"><span><span><?php echo __('Add to Cart') ?></span></span></button>
+                <button type="button" title="<?php echo __('Add to Cart') ?>" class="button btn-cart" onclick="window.location.href='<?php echo $this->getAddToCartUrl($_item) ?>'"><span><span><?php echo __('Add to Cart') ?></span></span></button>
                 <ul class="add-to-links" data-role="add-to-links">
                     <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
                         <li><a href="<?php echo $this->getAddToWishlistUrl($_item) ?>" class="link-wishlist" data-action="add-to-wishlist"><?php echo __('Add to Wish List') ?></a></li>

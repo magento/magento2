@@ -153,15 +153,15 @@ class Files
     /**
      * Returns list of files, where expected to have class declarations
      *
+     * @param bool $asDataSet
      * @return array
      */
-    public function getClassFiles()
+    public function getClassFiles($asDataSet = true)
     {
         $key = __METHOD__ . $this->_path;
         if (isset(self::$_cache[$key])) {
-            return self::$_cache[$key];
-        }
-        if (!isset(self::$_cache[$key])) {
+            $files =  self::$_cache[$key];
+        } elseif (!isset(self::$_cache[$key])) {
             $files = array_merge(
                 self::_getFiles(array("{$this->_path}/app/code/Magento"), '*.php'),
                 self::_getFiles(array("{$this->_path}/dev/tests"), '*.php'),
@@ -170,10 +170,12 @@ class Files
                 self::_getFiles(array("{$this->_path}/downloader/lib/Magento"), '*.php'),
                 self::_getFiles(array("{$this->_path}/lib/Magento"), '*.php')
             );
+            self::$_cache[$key] = $files;
         }
-        $result = self::composeDataSets($files);
-        self::$_cache[$key] = $result;
-        return $result;
+        if ($asDataSet) {
+            return self::composeDataSets($files);
+        }
+        return $files;
     }
 
     /**

@@ -31,7 +31,8 @@
             productCustomSelector: '.product-custom-option',
             mapPopupPrice: '#map-popup-price',
             prices: {},
-            priceTemplate: '<span class="price">${formattedPrice}</span>'
+            priceTemplate: '<span class="price">${formattedPrice}</span>',
+            controlContainer: 'dd'
         },
         _create: function() {
 
@@ -167,7 +168,9 @@
                                     configOptions.includeTax, configOptions.oldPrice);
                             }
                         } else if (element.is(":file")) {
-                            if (element.val() || element.parent('div').siblings().length > 0) {
+                            var controlContainer = element.closest(this.options.controlContainer);
+
+                            if (element.val() || controlContainer.find('[id*="change-"]').length > 0) {
                                 optionPrice.update(configOptions.price, configOptions.excludeTax,
                                     configOptions.includeTax, configOptions.oldPrice);
                             }

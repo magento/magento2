@@ -24,12 +24,19 @@
 
 namespace Magento\Test\Tools\I18n\Code\Parser\Adapter;
 
+use Magento\TestFramework\Helper\ObjectManager;
+
 class JsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var string
      */
     protected $_testFile;
+
+    /**
+     * @var int
+     */
+    protected $_stringsCount;
 
     /**
      * @var \Magento\Tools\I18n\Code\Parser\Adapter\Js
@@ -40,24 +47,23 @@ class JsTest extends \PHPUnit_Framework_TestCase
     {
         // dev/tests/unit/testsuite/tools/I18n/Parser/Adapter/_files/file.js
         $this->_testFile = str_replace('\\', '/', realpath(dirname(__FILE__))) . '/_files/file.js';
+        $this->_stringsCount = count(file($this->_testFile));
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_adapter = $objectManagerHelper->getObject('Magento\Tools\I18n\Code\Parser\Adapter\Js');
+        $this->_adapter = (new ObjectManager($this))->getObject('Magento\Tools\I18n\Code\Parser\Adapter\Js');
     }
 
     public function testParse()
     {
-        $this->markTestSkipped('Lines move depending on license size in JS file');
         $expectedResult = array(
             array(
                 'phrase' => 'Phrase 1',
                 'file' => $this->_testFile,
-                'line' => 10,
+                'line' => $this->_stringsCount - 2,
             ),
             array(
                 'phrase' => 'Phrase 2 %1',
                 'file' => $this->_testFile,
-                'line' => 11,
+                'line' => $this->_stringsCount - 1,
             ),
         );
 

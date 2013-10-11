@@ -530,13 +530,19 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      */
     public function mageObsoleteDataProvider()
     {
-        $modules = include(__DIR__ . '/_files/' . 'mage_cleaned_modules.php');
-        $result = array();
-        foreach ($modules as $module) {
-            $result = array_merge_recursive(
-                $result, \Magento\TestFramework\Utility\Files::init()->getModulePhpFiles($module)
-            );
+        $blackList = include(
+            __DIR__ . DIRECTORY_SEPARATOR .'_files'
+            . DIRECTORY_SEPARATOR . 'blacklist'
+            . DIRECTORY_SEPARATOR . 'obsolete_mage.php'
+        );
+        $ignored = array();
+        $appPath = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
+        foreach ($blackList as $file) {
+            $ignored[] = realpath($appPath . DIRECTORY_SEPARATOR . $file);
         }
-        return $result;
+        $files = \Magento\TestFramework\Utility\Files::init()->getClassFiles(false);
+        $files = array_map('realpath', $files);
+        $files = array_diff($files, $ignored);
+        return \Magento\TestFramework\Utility\Files::composeDataSets($files);
     }
 }

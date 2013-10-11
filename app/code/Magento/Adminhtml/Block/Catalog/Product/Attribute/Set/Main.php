@@ -57,7 +57,7 @@ class Main extends \Magento\Backend\Block\Template
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Type
+     * @var \Magento\Eav\Model\Entity\TypeFactory
      */
     protected $_typeFactory;
 
@@ -72,7 +72,7 @@ class Main extends \Magento\Backend\Block\Template
     protected $_attributeFactory;
 
     /**
-     * @param \Magento\Eav\Model\Entity\Type $typeFactory
+     * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory
      * @param \Magento\Catalog\Model\Resource\Product\Type\Configurable\AttributeFactory $attributeFactory
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
@@ -83,7 +83,7 @@ class Main extends \Magento\Backend\Block\Template
      * @param array $data
      */
     public function __construct(
-        \Magento\Eav\Model\Entity\Type $typeFactory,
+        \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory,
         \Magento\Catalog\Model\Resource\Product\Type\Configurable\AttributeFactory $attributeFactory,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory,

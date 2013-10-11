@@ -151,7 +151,6 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
      */
     public function testAppendClassAliasReplace()
     {
-        $this->markTestIncomplete('Not merged');
         $moduleListMock = $this->getMock('Magento\Core\Model\ModuleListInterface');
         $moduleListMock->expects($this->once())
             ->method('getModule')

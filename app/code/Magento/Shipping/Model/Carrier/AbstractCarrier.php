@@ -578,7 +578,7 @@ abstract class AbstractCarrier extends \Magento\Object
     protected function _debug($debugData)
     {
         if ($this->getDebugFlag()) {
-            $this->_logAdapterFactory->creaye(array('fileName' => 'shipping_' . $this->getCarrierCode() . '.log'))
+            $this->_logAdapterFactory->create(array('fileName' => 'shipping_' . $this->getCarrierCode() . '.log'))
                ->setFilterDataKeys($this->_debugReplacePrivateDataKeys)
                ->log($debugData);
         }

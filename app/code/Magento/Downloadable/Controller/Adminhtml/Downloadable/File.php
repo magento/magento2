@@ -76,7 +76,7 @@ class File extends \Magento\Adminhtml\Controller\Action
         }
         $result = array();
         try {
-            $uploader = $this->_objectManager->create('Magento\Core\Model\File\Uploader', array('type' => $type));
+            $uploader = $this->_objectManager->create('Magento\Core\Model\File\Uploader', array('fileId' => $type));
             $uploader->setAllowRenameFiles(true);
             $uploader->setFilesDispersion(true);
             $result = $uploader->save($tmpPath);

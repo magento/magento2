@@ -36,7 +36,7 @@
             <module name="Magento_AdminNotification"/>
             <module name="Magento_Cron"/>
             <module name="Magento_Sendfriend"/>
-            <module name="Magento_Page" type="soft"/>
+            <module name="Magento_Page"/>
         </depends>
     </module>
 </config>

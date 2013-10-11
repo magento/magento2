@@ -136,7 +136,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_objectManager;
 
     /**
-     * @param \Magento\Install\Model\InstallerProxy $installer
+     * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Core\Model\Config\Resource $resourceConfig
      * @param \Magento\Core\Model\Db\UpdaterInterface $dbUpdater
      * @param \Magento\Filesystem $filesystem
@@ -147,7 +147,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      * @param \Magento\ObjectManager $objectManager
      */
     public function __construct(
-        \Magento\Install\Model\InstallerProxy $installer,
+        \Magento\Install\Model\Installer $installer,
         \Magento\Core\Model\Config\Resource $resourceConfig,
         \Magento\Core\Model\Db\UpdaterInterface $dbUpdater,
         \Magento\Filesystem $filesystem,

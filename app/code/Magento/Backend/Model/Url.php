@@ -92,7 +92,7 @@ class Url extends \Magento\Core\Model\Url
      * @param \Magento\Core\Model\Url\SecurityInfoInterface $securityInfo
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Core\Model\Session $coreSession
+     * @param \Magento\Core\Model\SessionProxy $coreSession
      * @param \Magento\Backend\Model\Menu\Config $menuConfig
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\App $app
@@ -107,7 +107,7 @@ class Url extends \Magento\Core\Model\Url
         \Magento\Core\Model\Url\SecurityInfoInterface $securityInfo,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Core\Model\Session $coreSession,
+        \Magento\Core\Model\SessionProxy $coreSession,
         \Magento\Backend\Model\Menu\Config $menuConfig,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\App $app,

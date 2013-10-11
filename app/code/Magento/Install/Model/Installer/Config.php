@@ -69,14 +69,14 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_storeManager;
 
     /**
-     * @param \Magento\Install\Model\InstallerProxy $installer
+     * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Core\Controller\Request\Http $request
      * @param \Magento\Core\Model\Dir $dirs
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Install\Model\InstallerProxy $installer,
+        \Magento\Install\Model\Installer $installer,
         \Magento\Core\Controller\Request\Http $request,
         \Magento\Core\Model\Dir $dirs,
         \Magento\Filesystem $filesystem,

@@ -28,10 +28,11 @@
     $.validator.addMethod(
         'validate-dob',
         function (val, element, params) {
-            $('.customer-dob').find('.' + this.settings.errorClass).removeClass(this.settings.errorClass);
-            var dayVal = $(params[0]).find('input:text').val(),
-                monthVal = $(params[1]).find('input:text').val(),
-                yearVal = $(params[2]).find('input:text').val(),
+            var dob = $(element).parents('.customer-dob');
+            $(dob).find('.' + this.settings.errorClass).removeClass(this.settings.errorClass);
+            var dayVal = $(dob).find(params[0]).find('input:text').val(),
+                monthVal = $(dob).find(params[1]).find('input:text').val(),
+                yearVal = $(dob).find(params[2]).find('input:text').val(),
                 dobLength = dayVal.length + monthVal.length + yearVal.length;
             if (params[3] && dobLength === 0) {
                 this.dobErrorMessage = 'This is a required field.';
@@ -53,12 +54,14 @@
                 return false;
             }
             if (year < 1900 || year > curYear) {
-                this.dobErrorMessage = $.mage.__('Please enter a valid year (1900-%d).').replace('%d', curYear);
+                this.dobErrorMessage =
+                    $.mage.__('Please enter a valid year (1900-%d).').replace('%d', curYear.toString());
                 return false;
             }
             var validateDayInMonth = new Date(year, month, 0).getDate();
             if (day < 1 || day > validateDayInMonth) {
-                this.dobErrorMessage = $.mage.__('Please enter a valid day (1-%d).').replace('%d', validateDayInMonth);
+                this.dobErrorMessage =
+                    $.mage.__('Please enter a valid day (1-%d).').replace('%d', validateDayInMonth.toString());
                 return false;
             }
             var today = new Date(),

@@ -159,8 +159,8 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Helper\Data $helper
      * @param \Magento\Core\Model\Dir $dir
-     * @param $resourceName
-     * @param $confPathToMapFile
+     * @param string $resourceName
+     * @param string $confPathToMapFile
      * @param string $moduleName
      * @param string $connectionName
      */

@@ -27,4 +27,7 @@
     <job name="job1" instance="Model1" method="method1">
         <schedule>30 2 * * *</schedule>
     </job>
+    <job name="job2" instance="Model2" method="method2">
+        <schedule>* * * * *</schedule>
+    </job>
 </config>

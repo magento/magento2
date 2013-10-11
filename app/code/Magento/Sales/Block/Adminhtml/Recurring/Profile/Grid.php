@@ -29,7 +29,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Recurring\Profile;
 
-class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
+class Grid extends \Magento\Adminhtml\Block\Widget\Grid
 {
     /**
      * Set ajax/session parameters
@@ -88,7 +88,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare grid collection object
      *
-     * @return \Magento\Sales\Block\Adminhtml\Recurring\Profile\Grid
+     * @return \Magento\Backend\Block\Widget\Grid
      */
     protected function _prepareCollection()
     {

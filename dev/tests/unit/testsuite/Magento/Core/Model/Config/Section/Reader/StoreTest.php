@@ -113,7 +113,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($storeId));
 
         $sectionMock = $this->getMock('Magento\Core\Model\Config\Data', array(), array(), '', false);
-        $sectionMock->expects($this->once())->method('getValue')->will($this->returnValue(array(
+        $sectionMock->expects($this->any())->method('getValue')->will($this->returnValue(array(
+            'config' => array('key0' => 'website_value0', 'key1' => 'website_value1'),
+        )));
+        $sectionMock->expects($this->once())->method('getSource')->will($this->returnValue(array(
             'config' => array('key0' => 'website_value0', 'key1' => 'website_value1'),
         )));
         $this->_sectionPullMock->expects($this->once())

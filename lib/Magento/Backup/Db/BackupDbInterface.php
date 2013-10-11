@@ -18,46 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup\Db;
 
-
-/**
- * Invoice backend model for parent attribute
- *
- * @category    Magento
- * @package     Magento_Sales
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento\Sales\Model\Resource\Order\Creditmemo\Attribute\Backend;
-
-class Parent
-    extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+interface BackupDbInterface
 {
     /**
-     * Method is invoked after save
+     * Create DB backup
      *
-     * @param \Magento\Object $object
-     * @return \Magento\Sales\Model\Resource\Order\Creditmemo\Attribute\Backend\Parent
+     * @param BackupInterface $backup
+     * @return void
      */
-    public function afterSave($object)
-    {
-        parent::afterSave($object);
-
-        /**
-         * Save creditmemo items
-         */
-        foreach ($object->getAllItems() as $item) {
-            $item->save();
-        }
-
-        foreach ($object->getCommentsCollection() as $comment) {
-            $comment->save();
-        }
-
-        return $this;
-    }
+    public function createBackup(\Magento\Backup\Db\BackupInterface $backup);
 }

@@ -44,6 +44,7 @@
             <module name="Magento_Customer"/>
             <module name="Magento_Backend"/>
             <module name="Magento_GiftMessage"/>
+            <module name="Magento_Page"/>
         </depends>
     </module>
 </config>

@@ -35,8 +35,7 @@ use Magento\Tools\Di\Compiler\Log\Log,
 $filePatterns = array(
     'php' => '/.*\.php$/',
     'etc' => '/\/app\/etc\/[a-z0-9\.]*\.xml$/',
-    'config' => '/\/etc\/(config([a-z0-9\.]*)?|adminhtml\/system)\.xml$/',
-    'di' => '/\/etc\/(di\/.*|adminhtml\/di|frontend\/di|di)\.xml$/',
+    'di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/',
     'view' => '/\/view\/[a-z0-9A-Z\/\.]*\.xml$/',
     'design' => '/\/app\/design\/[a-z0-9A-Z\/\._]*\.xml$/',
 );
@@ -79,7 +78,6 @@ try {
     $scanner = new Scanner\CompositeScanner();
     $scanner->addChild(new Scanner\PhpScanner(), 'php');
     $scanner->addChild(new Scanner\XmlScanner(), 'etc');
-    $scanner->addChild(new Scanner\XmlScanner(), 'config');
     $scanner->addChild(new Scanner\XmlScanner(), 'di');
     $scanner->addChild(new Scanner\XmlScanner(), 'view');
     $scanner->addChild(new Scanner\XmlScanner(), 'design');

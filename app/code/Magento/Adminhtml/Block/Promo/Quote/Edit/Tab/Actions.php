@@ -183,7 +183,7 @@ class Actions
         ));
 
         $renderer = $this->_rendererFieldset
-            ->setTemplate('promo/fieldset.phtml')
+            ->setTemplate('Magento_Adminhtml::promo/fieldset.phtml')
             ->setNewChildUrl($this->getUrl('*/promo_quote/newActionHtml/form/rule_actions_fieldset'));
 
         $fieldset = $form->addFieldset('actions_fieldset', array(

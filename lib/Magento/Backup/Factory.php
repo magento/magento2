@@ -1,5 +1,7 @@
 <?php
 /**
+ * Backup object factory.
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -18,44 +20,48 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category     Magento
- * @package      \Magento\Backup
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup;
 
-/**
- * Class to work with backups
- *
- * @category    Magento
- * @package     \Magento\Backup
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento;
-
-class Backup
+class Factory
 {
+    /**
+     * Object manager
+     *
+     * @var \Magento\ObjectManager
+     */
+    private $_objectManager;
+
     /**
      * List of supported a backup types
      *
      * @var array
      */
-    static protected $_allowedBackupTypes = array('db', 'snapshot', 'filesystem', 'media', 'nomedia');
+    private $_allowedTypes = array('db', 'snapshot', 'filesystem', 'media', 'nomedia');
 
     /**
-     * get Backup Instance By File Name
-     *
-     * @param  string $type
-     * @return \Magento\Backup\BackupInterface
+     * @param \Magento\ObjectManager $objectManager
      */
-    static public function getBackupInstance($type)
+    public function __construct(\Magento\ObjectManager $objectManager)
     {
-        $class = '\\Magento\Backup_' . ucfirst($type);
+        $this->_objectManager = $objectManager;
+    }
 
-        if (!in_array($type, self::$_allowedBackupTypes) || !class_exists($class, true)){
+    /**
+     * Create new backup instance
+     *
+     * @param string $type
+     * @return \Magento\Backup\BackupInterface
+     * @throws \Magento\Exception
+     */
+    public function create($type)
+    {
+        if (!in_array($type, $this->_allowedTypes)) {
             throw new \Magento\Exception('Current implementation not supported this type (' . $type . ') of backup.');
         }
-
-        return new $class();
+        $class = 'Magento\Backup\\' . ucfirst($type);
+        return $this->_objectManager->create($class);
     }
 }

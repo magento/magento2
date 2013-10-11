@@ -106,9 +106,7 @@
                         <argument name="actions" xsi:type="array">
                             <item name="rollback_action" xsi:type="array">
                                 <item name="caption" xsi:type="string" translate="true">Rollback</item>
-                                <item name="url" xsi:type="array">
-                                    <item name="base" xsi:type="string">#</item>
-                                </item>
+                                <item name="href" xsi:type="string">#</item>
                                 <item name="onclick" xsi:type="string">return backup.rollback('$type', '$time')</item>
                             </item>
                         </argument>

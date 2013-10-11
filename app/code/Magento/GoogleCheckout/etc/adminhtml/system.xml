@@ -74,7 +74,7 @@
                 </field>
                 <field id="order_status" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>New Order Status</label>
-                    <source_model>Magento\Sales\Model\Config\Source\Order\Status\New</source_model>
+                    <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                 </field>
                 <field id="continue_shopping_url" translate="label comment" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Continue Shopping URL</label>

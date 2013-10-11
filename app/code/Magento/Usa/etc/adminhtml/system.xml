@@ -95,7 +95,7 @@
                 </field>
                 <field id="shipment_requesttype" translate="label" type="select" sortOrder="85" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Packages Request Type</label>
-                    <source_model>Magento\Usa\Model\Shipping\Carrier\CarrierAbstract\Source\Requesttype</source_model>
+                    <source_model>Magento\Usa\Model\Shipping\Carrier\AbstractCarrier\Source\Requesttype</source_model>
                 </field>
                 <field id="shipment_type" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Shipment Type</label>
@@ -213,7 +213,7 @@
                 </field>
                 <field id="shipment_requesttype" translate="label" type="select" sortOrder="77" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Packages Request Type</label>
-                    <source_model>Magento\Usa\Model\Shipping\Carrier\CarrierAbstract\Source\Requesttype</source_model>
+                    <source_model>Magento\Usa\Model\Shipping\Carrier\AbstractCarrier\Source\Requesttype</source_model>
                 </field>
                 <field id="packaging" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Packaging</label>
@@ -308,7 +308,7 @@
                 </field>
                 <field id="shipment_requesttype" translate="label" type="select" sortOrder="47" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Packages Request Type</label>
-                    <source_model>Magento\Usa\Model\Shipping\Carrier\CarrierAbstract\Source\Requesttype</source_model>
+                    <source_model>Magento\Usa\Model\Shipping\Carrier\AbstractCarrier\Source\Requesttype</source_model>
                 </field>
                 <field id="container" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Container</label>
@@ -423,7 +423,7 @@
                 <field id="mode_xml" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Mode</label>
                     <comment>This enables or disables SSL verification of the Magento server by UPS.</comment>
-                    <source_model>Magento\Usa\Model\Shipping\Carrier\CarrierAbstract\Source\Mode</source_model>
+                    <source_model>Magento\Usa\Model\Shipping\Carrier\AbstractCarrier\Source\Mode</source_model>
                 </field>
                 <field id="debug" translate="label" type="select" sortOrder="920" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Debug</label>
@@ -455,11 +455,11 @@
                 </field>
                 <field id="mode" translate="label" type="select" sortOrder="54" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Mode</label>
-                    <source_model>Magento\Usa\Model\Shipping\Carrier\CarrierAbstract\Source\Mode</source_model>
+                    <source_model>Magento\Usa\Model\Shipping\Carrier\AbstractCarrier\Source\Mode</source_model>
                 </field>
                 <field id="shipment_requesttype" translate="label" type="select" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Packages Request Type</label>
-                    <source_model>Magento\Usa\Model\Shipping\Carrier\CarrierAbstract\Source\Requesttype</source_model>
+                    <source_model>Magento\Usa\Model\Shipping\Carrier\AbstractCarrier\Source\Requesttype</source_model>
                 </field>
                 <field id="container" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Container</label>

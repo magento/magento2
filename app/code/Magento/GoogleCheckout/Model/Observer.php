@@ -50,8 +50,8 @@ class Observer
      * @param ApiFactory $apiFactory
      */
     public function __construct(
-        ShippingFactory $shippingFactory,
-        ApiFactory $apiFactory
+        \Magento\GoogleCheckout\Model\ShippingFactory $shippingFactory,
+        \Magento\GoogleCheckout\Model\ApiFactory $apiFactory
     ) {
         $this->shippingFactory = $shippingFactory;
         $this->apiFactory = $apiFactory;

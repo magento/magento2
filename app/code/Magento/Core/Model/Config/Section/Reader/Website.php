@@ -88,7 +88,7 @@ class Website
     public function read($code)
     {
         $config = array_replace_recursive(
-            $this->_sectionPool->getSection('default')->getValue(), $this->_initialConfig->getWebsite($code)
+            $this->_sectionPool->getSection('default')->getSource(), $this->_initialConfig->getWebsite($code)
         );
 
         if ($this->_appState->isInstalled()) {

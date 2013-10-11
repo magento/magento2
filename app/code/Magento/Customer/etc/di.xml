@@ -46,12 +46,28 @@
         <param name="configShare">
             <instance type="Magento\Customer\Model\Config\Share\Proxy" />
         </param>
+        <param name="customerData">
+            <instance type="Magento\Customer\Helper\Data\Proxy" />
+        </param>
+        <param name="customerResource">
+            <instance type="Magento\Customer\Model\Resource\Customer\Proxy" />
+        </param>
     </type>
     <type name="Magento\Core\Model\Db\Updater">
         <param name="resourceList">
             <value>
                 <customer_setup>Magento\Customer\Model\Resource\Setup</customer_setup>
             </value>
+        </param>
+    </type>
+    <type name="Magento\Customer\Helper\Address">
+        <param name="addressConfig">
+            <instance type="Magento\Customer\Model\Address\Config\Proxy" />
+        </param>
+    </type>
+    <type name="Magento\Customer\Model\Config\Share">
+        <param name="customerResource">
+            <instance type="Magento\Customer\Model\Resource\Customer\Proxy" />
         </param>
     </type>
 </config>

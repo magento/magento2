@@ -76,8 +76,8 @@ if ($mediaDirectory) {
 // Materialize file in application
 $params = $_SERVER;
 if (empty($mediaDirectory)) {
-    $params[Magento_Core_Model_App::PARAM_ALLOWED_MODULES] = array('Magento_Core');
-    $params[Magento_Core_Model_App::PARAM_CACHE_OPTIONS]['frontend_options']['disable_save'] = true;
+    $params[\Magento\Core\Model\App::PARAM_ALLOWED_MODULES] = array('Magento_Core');
+    $params[\Magento\Core\Model\App::PARAM_CACHE_OPTIONS]['frontend_options']['disable_save'] = true;
 }
 
 $config = new \Magento\Core\Model\Config\Primary(dirname(__DIR__), $params);

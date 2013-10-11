@@ -45,6 +45,6 @@
     <?php endif; ?>
     <?php echo $this->getChildHtml() ?>
     <div class="buttons-set">
-        <button type="button" title="<?php echo __('Continue Shopping') ?>" class="button" onclick="setLocation('<?php echo $this->getContinueUrl() ?>')"><span><span><?php echo __('Continue Shopping') ?></span></span></button>
+        <button type="button" title="<?php echo __('Continue Shopping') ?>" class="button" onclick="window.location = '<?php echo $this->getContinueUrl() ?>';"><span><span><?php echo __('Continue Shopping') ?></span></span></button>
     </div>
 </div>

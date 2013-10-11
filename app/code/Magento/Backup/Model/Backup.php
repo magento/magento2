@@ -34,7 +34,7 @@
  */
 namespace Magento\Backup\Model;
 
-class Backup extends \Magento\Object
+class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterface
 {
     /* internal constants */
     const COMPRESS_RATE     = 9;
@@ -110,6 +110,43 @@ class Backup extends \Magento\Object
         $this->_locale = $locale;
         $this->_backendAuthSession = $authSession;
     }
+
+    /**
+     * Set backup time
+     *
+     * @param int $time
+     * @return \Magento\Backup\Db\BackupInterface
+     */
+    public function setTime($time)
+    {
+        $this->setData('time', $time);
+        return $this;
+    }
+
+    /**
+     * Set backup path
+     *
+     * @param string $path
+     * @return \Magento\Backup\Db\BackupInterface
+     */
+    public function setPath($path)
+    {
+        $this->setData('path', $path);
+        return $this;
+    }
+
+    /**
+     * Set backup name
+     *
+     * @param string $name
+     * @return \Magento\Backup\Db\BackupInterface
+     */
+    public function setName($name)
+    {
+        $this->setData('name', $name);
+        return $this;
+    }
+
 
     /**
      * Load backup file info

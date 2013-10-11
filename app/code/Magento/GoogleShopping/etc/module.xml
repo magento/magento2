@@ -37,6 +37,7 @@
             <module name="Magento_Customer"/>
             <module name="Magento_Eav"/>
             <module name="Magento_Tax"/>
+            <module name="Magento_Page"/>
         </depends>
     </module>
 </config>

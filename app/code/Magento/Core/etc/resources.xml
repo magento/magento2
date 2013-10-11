@@ -24,7 +24,5 @@
  */
 -->
 <config>
-    <resource  name="core_read" extends="default_read" />
-    <resource name="core_write" extends="default_write" />
     <resource name="core_setup" extends="default_setup" />
 </config>

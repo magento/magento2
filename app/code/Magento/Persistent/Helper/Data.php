@@ -200,7 +200,7 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function getPersistentConfigFilePath()
     {
-        return $this->_coreConfig->getModuleDir('etc', $this->_getModuleName()) . DS . $this->_configFileName;
+        return $this->_config->getModuleDir('etc', $this->_getModuleName()) . DS . $this->_configFileName;
     }
 
     /**

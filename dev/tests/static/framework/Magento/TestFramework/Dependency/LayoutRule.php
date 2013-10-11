@@ -232,7 +232,7 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
     /**
      * Check dependencies for <block> element
      *
-     * Ex.: <block type="{name}">
+     * Ex.: <block class="{name}">
      *      <block template="{path}">
      *
      * @param $currentModule
@@ -247,7 +247,7 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
     {
         $patterns = array(
             \Magento\Test\Integrity\DependencyTest::TYPE_HARD =>
-            '/(?<source><block.*type\s*=\s*[\'"](?<namespace>' . $this->_namespaces . ')[_\\\\]'
+            '/(?<source><block.*class\s*=\s*[\'"](?<namespace>' . $this->_namespaces . ')[_\\\\]'
                 . '(?<module>[A-Z][a-zA-Z]+)[_\\\\](?:[A-Z][a-zA-Z]+[_\\\\]?){1,}[\'"].*>)/',
             \Magento\Test\Integrity\DependencyTest::TYPE_SOFT =>
             '/(?<source><block.*template\s*=\s*[\'"](?<namespace>' . $this->_namespaces . ')[_\\\\]'

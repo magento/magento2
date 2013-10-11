@@ -76,7 +76,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
                 'schedule' => '* * * * *',
                 'instance' => 'Model2',
                 'method' => 'method2'
-            )
+            ),
         );
 
         $xmlFile = __DIR__ . '/../_files/crontab_valid.xml';
@@ -84,10 +84,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
         $dom->loadXML(file_get_contents($xmlFile));
         $result = $this->_converter->convert($dom);
 
-        $this->assertEquals($expected['job1']['schedule'], $result['job1']['schedule']);
-        $this->assertEquals($expected['job1']['name'], $result['job1']['name']);
-        $this->assertEquals($expected['job1']['instance'], $result['job1']['instance']);
-        $this->assertEquals($expected['job1']['method'], $result['job1']['method']);
+        $this->assertEquals($expected, $result);
     }
 
     /**

@@ -33,6 +33,8 @@
             <module name="Magento_Core"/>
             <module name="Magento_Webapi"/>
             <module name="Magento_Backend"/>
+            <module name="Magento_Page"/>
+            <module name="Magento_Adminhtml"/>
         </depends>
     </module>
 </config>

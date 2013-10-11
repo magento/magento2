@@ -49,7 +49,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_tmpConfigFile = TESTS_TEMP_DIR . DIRECTORY_SEPARATOR . 'local.xml';
         $this->_filesystemMock = $this->getMock('Magento\Filesystem', array(), array(), '', false);
         $this->_model = new \Magento\Install\Model\Installer\Config(
-            $this->getMock('Magento\Install\Model\InstallerProxy', array(), array(),
+            $this->getMock('Magento\Install\Model\Installer', array(), array(),
                 '', false),
             $this->getMock('Magento\Core\Controller\Request\Http', array(), array(), '', false),
             new \Magento\Core\Model\Dir(__DIR__, array(), array(\Magento\Core\Model\Dir::CONFIG => TESTS_TEMP_DIR)),

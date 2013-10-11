@@ -46,7 +46,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     protected $_areaFrontName = 'backendArea';
 
     /**
-     * @var \Magento\Core\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Core\Model\SessionProxy|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_coreSessionMock;
 
@@ -87,7 +87,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->_menuConfigMock = $this->getMock('Magento\Backend\Model\Menu\Config', array(), array(), '', false);
         $this->_menuConfigMock->expects($this->any())->method('getMenu')->will($this->returnValue($this->_menuMock));
 
-        $this->_coreSessionMock = $this->getMock('Magento\Core\Model\Session', array('getFormKey'), array(), '', false);
+        $this->_coreSessionMock = $this->getMock(
+            'Magento\Core\Model\SessionProxy', array('getFormKey'), array(), '', false
+        );
         $this->_coreSessionMock->expects($this->any())->method('getFormKey')->will($this->returnValue('salt'));
 
         $mockItem = $this->getMock('Magento\Backend\Model\Menu\Item', array(), array(), '', false);

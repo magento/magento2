@@ -96,7 +96,6 @@ class Collection extends \Magento\Data\Collection\Db
      * @param \Magento\Sales\Model\Resource\Order $resource
      * @param \Magento\Core\Model\Resource\Store\CollectionFactory $storeCollFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @todo: incorrect constructor
      */
     public function __construct(
         \Magento\Core\Model\Event\Manager $eventManager,
@@ -105,6 +104,7 @@ class Collection extends \Magento\Data\Collection\Db
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Sales\Model\Resource\Order $resource,
         \Magento\Core\Model\Resource\Store\CollectionFactory $storeCollFactory,
+        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         $this->_eventManager = $eventManager;

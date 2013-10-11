@@ -48,7 +48,7 @@ class CodeStyleTest extends \PHPUnit_Framework_TestCase
         self::$_reportFile = __DIR__ . '/../../../tmp/phpcs_report.xml';
         $wrapper = new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper();
         self::$_cmd = new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer(
-            realpath(__DIR__ . '/../CodeStyleTest/phpcs'), self::$_reportFile, $wrapper
+            realpath(__DIR__ . '/../_files/phpcs'), self::$_reportFile, $wrapper
         );
     }
 

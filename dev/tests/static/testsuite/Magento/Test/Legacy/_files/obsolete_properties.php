@@ -100,4 +100,5 @@ return array(
     array('static', 'Magento\Core\Model\Email\Template\Filter'),
     array('_useAnalyticFunction'),
     array('_defaultIndexer', 'Magento\CatalogInventory\Model\Resource\Indexer\Stock'),
+    array('_engine', 'Magento\CatalogSearch\Model\Resource\Fulltext'),
 );

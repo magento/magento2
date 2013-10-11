@@ -80,26 +80,32 @@ class Observer
     protected $_dir;
 
     /**
-     * Construct
-     * 
+     * @var \Magento\Backup\Factory
+     */
+    protected $_backupFactory;
+
+    /**
      * @param \Magento\Backup\Helper\Data $backupData
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Core\Model\Logger $logger
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\Backup\Factory $backupFactory
      */
     public function __construct(
         \Magento\Backup\Helper\Data $backupData,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Core\Model\Logger $logger,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Dir $dir
+        \Magento\Core\Model\Dir $dir,
+        \Magento\Backup\Factory $backupFactory
     ) {
         $this->_backupData = $backupData;
         $this->_coreRegistry = $coreRegistry;
         $this->_logger = $logger;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_dir = $dir;
+        $this->_backupFactory = $backupFactory;
     }
 
     /**
@@ -121,7 +127,7 @@ class Observer
 
         $this->_errors = array();
         try {
-            $backupManager = \Magento\Backup::getBackupInstance($type)
+            $backupManager = $this->_backupFactory->create($type)
                 ->setBackupExtension($this->_backupData->getExtensionByType($type))
                 ->setTime(time())
                 ->setBackupsDir($this->_backupData->getBackupsDir());

@@ -27,13 +27,6 @@ namespace Magento\Core\Model\Db;
 class Updater implements \Magento\Core\Model\Db\UpdaterInterface
 {
     /**
-     * Modules configuration
-     *
-     * @var \Magento\Core\Model\Config
-     */
-    protected $_config;
-
-    /**
      * Default setup class name
      *
      * @var string
@@ -86,7 +79,6 @@ class Updater implements \Magento\Core\Model\Db\UpdaterInterface
     protected $_resourceResolver;
 
     /**
-     * @param \Magento\Core\Model\Config $config
      * @param \Magento\Core\Model\Resource\SetupFactory $factory
      * @param \Magento\Core\Model\App\State $appState
      * @param \Magento\Core\Model\ModuleListInterface $moduleList
@@ -95,7 +87,6 @@ class Updater implements \Magento\Core\Model\Db\UpdaterInterface
      * @param bool $skipModuleUpdate
      */
     public function __construct(
-        \Magento\Core\Model\Config $config,
         \Magento\Core\Model\Resource\SetupFactory $factory,
         \Magento\Core\Model\App\State $appState,
         \Magento\Core\Model\ModuleListInterface $moduleList,
@@ -103,7 +94,6 @@ class Updater implements \Magento\Core\Model\Db\UpdaterInterface
         array $resourceList,
         $skipModuleUpdate = false
     ) {
-        $this->_config = $config;
         $this->_factory = $factory;
         $this->_appState = $appState;
         $this->_moduleList = $moduleList;

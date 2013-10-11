@@ -21,17 +21,26 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+namespace Magento\Page\Block;
+
 /**
  * Block representing link
  *
- * @method string getHref()
  * @method string getLabel()
+ * @method string getPath()
  * @method string getTitle()
  */
-namespace Magento\Page\Block;
-
 class Link extends \Magento\Core\Block\Template
 {
     /** @var string */
     protected $_template = 'Magento_Page::link.phtml';
+
+    /**
+     * @return string
+     */
+    public function getHref()
+    {
+        return $this->getUrl($this->getPath());
+    }
 }

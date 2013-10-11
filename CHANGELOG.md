@@ -1,3 +1,37 @@
+2.0.0.0-dev47
+=============
+* Fixed bugs:
+  * Fixed compilation of DI definitions
+  * Fixed direct injection of auto-generated proxy classes
+  * Fixed usages of auto-generated factories on the library level
+  * Fixed fatal error after saving customer address with VAT number
+  * Fixed fatal error caused by USPS shipping method with debug
+  * Fixed url to Tax Class controller
+  * Fixed incorrect subtotal displayed on the Order page
+  * Fixed incorrect arguments for shipping xml elements factory
+  * Fixed theme editing in developer mode (PHP 5.4)
+  * Fixed absent conditions during New Shopping Cart Price Rule creation
+  * Fixed fatal error while try to edit created configurable product while Dev Mode enabled (PHP 5.4)
+  * Fixed frontend error when persistent shopping cart functionality is enabled
+  * Fixed Tax tab
+  * Fixed broken link "Orders and returns" on frontend
+  * Fixed placing order within OnePageCheckout using online payment methods
+  * Fixed error when product is being added to order from backend if Gift Messages are enabled
+  * Fixed error when product is being added to cart if MAP is enabled
+  * Fixed error when product attribute template is being edited
+  * Fixed error when setting configuration for Google API
+  * Fixed backend issue when Stores>Configuration>System>Advanced page was not displayed and did not allow to save changes
+  * Fixed not executable button "Continue shopping" on Multi-shipping process
+  * Fixed error on adding product to shopping cart from cross-sells block
+  * Fixed fatal error on Recurring Billing Profiles page
+  * Fixed error on setting configuration for Catalog
+  * Fixed error on placing order with Configurable product
+  * Fixed issue with downloadable product creation
+  * Fixed error on update configuration for payment methods
+  * Fixed blank page on shopping cart if FedEx shipping method is enabled
+  * Fixed fatal error when SID presents in URL
+  * Fixed absence of selection of a role assigned to an admin user
+
 2.0.0.0-dev46
 =============
 * Translation mechanism improvements:
@@ -24,53 +58,53 @@
      * Deprecated prototype.js based method removed from app/code/Magento/Weee/view/frontend/tax-toggle.js
      * Removed deprecated prototype.js based file: app/code/Magento/Checkout/view/frontend/opcheckout.js
      * Updated to use jQuery redirectUrl widget vs prototype based solution:
-       * app/code/Magento/Oauth/view/adminhtml/authorize/form/login.phtml
-       * app/code/Magento/Oauth/view/frontend/authorize/form/login.phtml
-       * app/code/Magento/Catalog/view/frontend/product/list.phtml
+         * app/code/Magento/Oauth/view/adminhtml/authorize/form/login.phtml
+         * app/code/Magento/Oauth/view/frontend/authorize/form/login.phtml
+         * app/code/Magento/Catalog/view/frontend/product/list.phtml
   * Removed file containing jQuery that did not meet the Magento 2 coding standard. Replaced with redirect-url widget
      * app/code/Magento/Catalog/view/frontend/js/mage-attributes-processing.js
   * Updated to meet Magento 2 coding standard: app/code/Magento/Checkout/view/frontend/cart/item/default.phtml
   * Added jQuery widgets:
-    * mage.deletableItem - Widget to tag DOM element as deletable, by default on click
-    * mage.fieldsetControls & mage.fieldsetResetControl - Widget to easily reset a subset of form fields with a reset ui control
-    * mage.itemTable  - Widget to easily add a data template block dynamically on an event, by default click.
-    * mage.redirectUrl - Simple widget to allow for consistent javascript based redirects that meet the Magento 2 coding standard
-    * Added new validation rules for validation widget: 'required-if-not-specified', 'required-if-specified', and 'validate-item-quantity'
+     * mage.deletableItem - Widget to tag DOM element as deletable, by default on click
+     * mage.fieldsetControls & mage.fieldsetResetControl - Widget to easily reset a subset of form fields with a reset ui control
+     * mage.itemTable  - Widget to easily add a data template block dynamically on an event, by default click.
+     * mage.redirectUrl - Simple widget to allow for consistent javascript based redirects that meet the Magento 2 coding standard
+     * Added new validation rules for validation widget: 'required-if-not-specified', 'required-if-specified', and 'validate-item-quantity'
 * Various improvements:
   * Changed VendorName from Mage to Magento
   * Implemented PSR-0 and PSR-1 Coding Standards
-    * All Magento source code has been converted.
-    * Tests have been written to enforce PSR-0 and PSR-1 coding standards.
+     * All Magento source code has been converted.
+     * Tests have been written to enforce PSR-0 and PSR-1 coding standards.
   * Removed empty module setup models. Core resource setup model is used as a default setup model now. Custom setup model must be injected via DI configuration
   * Removed some events (plugins must be used instead):
-    * adminhtml_widget_container_html_before
-    * admin_session_user_logout
-    * model_config_data_save_before
-    * admin_system_config_section_save_after
-    * backend_menu_load_after
-    * catalog_controller_category_init_before
-    * catalog_helper_output_construct
-    * catalog_controller_product_init
-    * catalog_category_tree_move_before
-    * catalog_category_tree_move_after
-    * catalog_product_website_update_before
-    * catalog_product_website_update
-    * catalog_product_media_save_before
-    * catalog_product_media_add_image
-    * catalog_product_type_grouped_price
-    * catalog_product_collection_load_before
-    * catalogsearch_index_process_start
-    * catalogsearch_index_process_complete
-    * cms_page_get_available_statuses
-    * cms_wysiwyg_config_prepare
-    * application_clean_cache
-    * theme_copy_after
-    * customer_registration_is_allowed
-    * log_log_clean_before
-    * log_log_clean_after
-    * sales_convert_quote_payment_to_order_payment
-    * sales_convert_quote_item_to_order_item
-    * sales_quote_config_get_product_attributes
+     * adminhtml_widget_container_html_before
+     * admin_session_user_logout
+     * model_config_data_save_before
+     * admin_system_config_section_save_after
+     * backend_menu_load_after
+     * catalog_controller_category_init_before
+     * catalog_helper_output_construct
+     * catalog_controller_product_init
+     * catalog_category_tree_move_before
+     * catalog_category_tree_move_after
+     * catalog_product_website_update_before
+     * catalog_product_website_update
+     * catalog_product_media_save_before
+     * catalog_product_media_add_image
+     * catalog_product_type_grouped_price
+     * catalog_product_collection_load_before
+     * catalogsearch_index_process_start
+     * catalogsearch_index_process_complete
+     * cms_page_get_available_statuses
+     * cms_wysiwyg_config_prepare
+     * application_clean_cache
+     * theme_copy_after
+     * customer_registration_is_allowed
+     * log_log_clean_before
+     * log_log_clean_after
+     * sales_convert_quote_payment_to_order_payment
+     * sales_convert_quote_item_to_order_item
+     * sales_quote_config_get_product_attributes
   * Removed the Poll module including references and dependencies to/on it.
 * Redesign and reimplementation of web services framework
   * Removed the Api module and all existing SOAP V1, SOAP V2, and XML-RPC web services code

@@ -537,7 +537,7 @@ class Dhl
     {
         $r = $this->_rawRequest;
 
-        $xml = $this->_xmlElFactory->create(array('<?xml version = "1.0" encoding = "UTF-8"?><eCommerce/>'));
+        $xml = $this->_xmlElFactory->create(array('data' => '<?xml version = "1.0" encoding = "UTF-8"?><eCommerce/>'));
         $xml->addAttribute('action', 'Request');
         $xml->addAttribute('version', '1.1');
 
@@ -1105,7 +1105,7 @@ class Dhl
     {
         $r = $this->_rawTrackRequest;
 
-        $xml = $this->_xmlElFactory->create(array('<?xml version = "1.0" encoding = "UTF-8"?><eCommerce/>'));
+        $xml = $this->_xmlElFactory->create(array('data' => '<?xml version = "1.0" encoding = "UTF-8"?><eCommerce/>'));
         $xml->addAttribute('action', 'Request');
         $xml->addAttribute('version', '1.1');
 

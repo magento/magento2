@@ -330,18 +330,18 @@ class Helper extends \Magento\Core\Model\Resource\Helper
     }
 
     /**
-     * Turn on serializable mode
+     * Prepare transaction isolation level for backup process
      */
-    public function turnOnSerializableMode()
+    public function prepareTransactionIsolationLevel()
     {
-        $this->_getReadAdapter()->query("SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+        $this->_getWriteAdapter()->query('SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE');
     }
 
     /**
-     * Turn on read committed mode
+     * Restore transaction isolation level after backup
      */
-    public function turnOnReadCommittedMode()
+    public function restoreTransactionIsolationLevel()
     {
-        $this->_getReadAdapter()->query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED");
+        $this->_getWriteAdapter()->query('SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ');
     }
 }

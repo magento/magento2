@@ -34,7 +34,7 @@ class PhpScanner extends FileScanner
      * @var string
      */
     protected $_pattern =
-        '/[ \\b\n\'"\(\\\\]{1}([A-Z]{1}[a-zA-Z0-9]*\\\\[A-Z]{1}[a-zA-Z0-9\\\\]*(Factory))[ \\b\n\'"]{1}/';
+        '/[ \\b\n\'"\(\\\\]{1}([A-Z]{1}[a-zA-Z0-9]*(\\\\|_)[A-Z]{1}[a-zA-Z0-9\\\\_]*(Factory))[ \\b\n\'"]{1}/';
 
     /**
      * Prepare file content

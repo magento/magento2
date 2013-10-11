@@ -46,7 +46,7 @@
     </words>
     <whitelist>
         <item>
-            <path>CHANGELOG.markdown</path>
+            <path>CHANGELOG.md</path>
         </item>
         <item>
             <path>app/code/Magento/User/data/user_setup/data-upgrade-1.6.1.1-1.6.1.2.php</path>

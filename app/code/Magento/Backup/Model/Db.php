@@ -34,7 +34,7 @@
  */
 namespace Magento\Backup\Model;
 
-class Db
+class Db implements \Magento\Backup\Db\BackupDbInterface
 {
 
     /**
@@ -130,10 +130,10 @@ class Db
     /**
      * Create backup and stream write to adapter
      *
-     * @param \Magento\Backup\Model\Backup $backup
+     * @param \Magento\Backup\Db\BackupInterface $backup
      * @return \Magento\Backup\Model\Db
      */
-    public function createBackup(\Magento\Backup\Model\Backup $backup)
+    public function createBackup(\Magento\Backup\Db\BackupInterface $backup)
     {
         $backup->open(true);
 

@@ -58,13 +58,13 @@ class Db extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_dbConfig;
 
     /**
-     * @param \Magento\Install\Model\InstallerProxy $installer
+     * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Core\Model\Logger $logger
      * @param \Magento\Install\Model\Installer\Db\Factory $dbFactory
      * @param array $dbConfig
      */
     public function __construct(
-        \Magento\Install\Model\InstallerProxy $installer,
+        \Magento\Install\Model\Installer $installer,
         \Magento\Core\Model\Logger $logger,
         \Magento\Install\Model\Installer\Db\Factory $dbFactory,
         array $dbConfig

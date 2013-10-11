@@ -1,0 +1,40 @@
+# Files or directories that are excluded from static code analysis for any reason
+# Glob patterns are supported
+# Overrides the white list
+#
+# Formatter intorduces long line
+app/bootstrap.php
+# Formatter intorduces long line
+app/code/Magento/Adminhtml/Block/Catalog/Product/Edit/NewCategory.php
+# Formatter intorduces long line
+app/code/Magento/Adminhtml/Block/Catalog/Product/Edit/Tab/Attributes/Search.php
+# Formatter intorduces long line
+app/code/Magento/Adminhtml/Block/Catalog/Product/Helper/Form/Category.php
+# Formatter intorduces long line
+app/code/Magento/Adminhtml/Block/Catalog/Product/Helper/Form/Weight.php
+# Formatter intorduces long line
+app/code/Magento/Adminhtml/Block/Catalog/Product/Options/Ajax.php
+# Formatter intorduces long line
+app/code/Magento/Adminhtml/Block/Cms/Page/Edit/Tab/Design.php
+# Formatter intorduces long line
+app/code/Magento/Adminhtml/Block/Page/System/Config/Robots/Reset.php
+# Formatter intorduces long line
+app/code/Magento/Adminhtml/Block/System/Store/Edit.php
+# Not magento code
+app/code/Zend
+# Not magento code
+dev/tools/Magento/Tools/I18n/Zend
+# Not required to scan build director
+dev/build
+# Not magento code
+dev/tools/layout
+# Not magento code
+dev/tools/xml
+# PSR-1 not applied to
+dev/tests/functional
+# PSR-1 not applied to
+dev/tests/js
+# Example files that are expected to fail code sniffer
+dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeStyleTest/phpcs/input
+# Example files that are expected to fail code mess detector
+dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeMessTest/phpmd/input

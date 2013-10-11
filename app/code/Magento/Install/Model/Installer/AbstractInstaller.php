@@ -44,11 +44,10 @@ class AbstractInstaller
     protected $installer;
 
     /**
-     * @param \Magento\Install\Model\InstallerProxy $installer
+     * @param \Magento\Install\Model\Installer $installer
      */
-    public function __construct(
-        \Magento\Install\Model\InstallerProxy $installer
-    ) {
+    public function __construct(\Magento\Install\Model\Installer $installer)
+    {
         $this->_installer = $installer;
     }
 

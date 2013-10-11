@@ -889,7 +889,7 @@ class International
                 . 'xmlns:p2="http://www.dhl.com/DCTRequestdatatypes" '
                 . 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
                 . 'xsi:schemaLocation="http://www.dhl.com DCT-req.xsd "/>';
-        $xml = $this->_xmlElFactory->create(array($xmlStr));
+        $xml = $this->_xmlElFactory->create(array('data' => $xmlStr));
         $nodeGetQuote = $xml->addChild('GetQuote', '', '');
         $nodeRequest = $nodeGetQuote->addChild('Request');
 
@@ -1332,7 +1332,7 @@ class International
             . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
             . ' xsi:schemaLocation="http://www.dhl.com ship-val-req'
             . ($originRegion ? '_' . $originRegion : '') . '.xsd" />';
-        $xml = $this->_xmlElFactory->create(array($xmlStr));
+        $xml = $this->_xmlElFactory->create(array('data' => $xmlStr));
 
         $nodeRequest = $xml->addChild('Request', '', '');
         $nodeServiceHeader = $nodeRequest->addChild('ServiceHeader');
@@ -1615,7 +1615,7 @@ class International
             . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
             . ' xsi:schemaLocation="http://www.dhl.com TrackingRequestKnown.xsd" />';
 
-        $xml = $this->_xmlElFactory->create(array($xmlStr));
+        $xml = $this->_xmlElFactory->create(array('data' => $xmlStr));
 
         $requestNode = $xml->addChild('Request', '', '');
         $serviceHeaderNode = $requestNode->addChild('ServiceHeader', '', '');

@@ -775,7 +775,7 @@ class Item extends \Magento\Core\Model\AbstractModel
             return $this;
         }
 
-        $options = $this->_wishlOptCollFactory->addItemFilter($this);
+        $options = $this->_wishlOptCollFactory->create()->addItemFilter($this);
         if ($optionsFilter) {
             $options->addFieldToFilter('code', $optionsFilter);
         }

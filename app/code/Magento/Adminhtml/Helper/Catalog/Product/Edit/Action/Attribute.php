@@ -76,9 +76,9 @@ class Attribute extends \Magento\Backend\Helper\Data
      * @param \Magento\Core\Model\ConfigInterface $applicationConfig
      * @param \Magento\Core\Model\Config\Primary $primaryConfig
      * @param \Magento\Core\Model\RouterList $routerList
-     * @param \Magento\Core\Model\AppProxy $app
-     * @param \Magento\Backend\Model\UrlProxy $backendUrl
-     * @param \Magento\Backend\Model\AuthProxy $auth
+     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Backend\Model\Url $backendUrl
+     * @param \Magento\Backend\Model\Auth $auth
      * @param string $defaultAreaFrontName
      * @param string $backendFrontName
      */
@@ -91,9 +91,9 @@ class Attribute extends \Magento\Backend\Helper\Data
         \Magento\Core\Model\ConfigInterface $applicationConfig,
         \Magento\Core\Model\Config\Primary $primaryConfig,
         \Magento\Core\Model\RouterList $routerList,
-        \Magento\Core\Model\AppProxy $app,
-        \Magento\Backend\Model\UrlProxy $backendUrl,
-        \Magento\Backend\Model\AuthProxy $auth,
+        \Magento\Core\Model\App $app,
+        \Magento\Backend\Model\Url $backendUrl,
+        \Magento\Backend\Model\Auth $auth,
         $defaultAreaFrontName,
         $backendFrontName
     ) {

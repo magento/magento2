@@ -30,7 +30,7 @@ namespace Magento\DB;
 /**
  * Magento Library
  */
-require_once 'Magento/Db/Tree/Exception.php';
+require_once 'Magento/DB/Tree/TreeException.php';
 class Tree
 {
     private $_id;

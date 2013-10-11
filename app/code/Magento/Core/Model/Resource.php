@@ -181,7 +181,7 @@ class Resource
         if ($tableSuffix) {
             $tableName .= '_' . $tableSuffix;
         }
-        return $this->getConnection(\Magento\Core\Model\Config\Resource::DEFAULT_READ_CONNECTION)
+        return $this->getConnection('core_read')
             ->getTableName($tableName);
     }
 
@@ -237,7 +237,7 @@ class Resource
      */
     public function getIdxName($tableName, $fields, $indexType = \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX)
     {
-        return $this->getConnection(\Magento\Core\Model\Config\Resource::DEFAULT_READ_CONNECTION)
+        return $this->getConnection('core_read')
             ->getIndexName($this->getTableName($tableName), $fields, $indexType);
     }
 
@@ -252,7 +252,7 @@ class Resource
      */
     public function getFkName($priTableName, $priColumnName, $refTableName, $refColumnName)
     {
-        return $this->getConnection(\Magento\Core\Model\Config\Resource::DEFAULT_READ_CONNECTION)
+        return $this->getConnection('core_read')
             ->getForeignKeyName($this->getTableName($priTableName), $priColumnName,
                 $this->getTableName($refTableName), $refColumnName);
     }

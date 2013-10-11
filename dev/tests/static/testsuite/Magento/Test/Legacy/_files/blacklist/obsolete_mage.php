@@ -18,38 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
-/**
- *Quote address attribute backend parent resource model
- *
- * @category    Magento
- * @package     Magento_Sales
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento\Sales\Model\Resource\Quote\Address\Attribute\Backend;
-
-class Parent
-    extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
-{
-    /**
-     * Save items collection and shipping rates collection
-     *
-     * @param \Magento\Object $object
-     * @return \Magento\Sales\Model\Resource\Quote\Address\Attribute\Backend\Parent
-     */
-    public function afterSave($object)
-    {
-        parent::afterSave($object);
-        
-        $object->getItemsCollection()->save();
-        $object->getShippingRatesCollection()->save();
-        
-        return $this;
-    }
-}
+return array(
+    'downloader/app/Magento/Downloader/Controller.php',
+    'dev/tools/Magento/Tools/Translate/TranslateTool.php',
+    'dev/tools/Magento/Tools/Translate/generate.php',
+    'dev/tests/static/testsuite/Magento/Test/Legacy/ObsoleteCodeTest.php',
+    'dev/tests/static/framework/Magento/TestFramework/Dependency/TemplateRule.php',
+    'downloader/app/Magento/Downloader/Model/Session.php',
+    'downloader/lib/Magento/Backup/Db.php',
+    'downloader/lib/Magento/Backup/Snapshot.php',
+);

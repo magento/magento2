@@ -585,7 +585,7 @@ class Translate
         }
 
         if (!empty($_REQUEST['theme'])) {
-            $module = self::CONFIG_KEY_DESIGN_THEME . $_REQUEST['theme'];
+            $module = self::CONFIG_KEY_DESIGN_THEME . $_REQUEST['theme']['theme_title'];
         } else {
             $module = self::CONFIG_KEY_DESIGN_THEME . $this->_config[self::CONFIG_KEY_DESIGN_THEME];
         }

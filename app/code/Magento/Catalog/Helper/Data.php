@@ -485,8 +485,8 @@ class Data extends \Magento\Core\Helper\AbstractHelper
 
         if (is_numeric($product)) {
             /** @var \Magento\Catalog\Model\Product $product */
-            $product = $this->_productFactory->create();
-            $product->setStoreId($this->_storeManager->getStore()->getId())
+            $product = $this->_productFactory->create()
+                ->setStoreId($this->_storeManager->getStore()->getId())
                 ->load($product);
         }
 

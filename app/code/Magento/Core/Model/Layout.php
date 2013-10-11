@@ -949,7 +949,7 @@ class Layout extends \Magento\Simplexml\Config
         unset($options[self::CONTAINER_OPT_LABEL]);
         unset($options['type']);
         $allowedTags = array(
-            'dd', 'div', 'dl', 'fieldset', 'header', 'hgroup', 'ol', 'p', 'section','table', 'tfoot', 'ul'
+            'dd', 'div', 'dl', 'fieldset', 'header', 'footer', 'hgroup', 'ol', 'p', 'section','table', 'tfoot', 'ul'
         );
         if (!empty($options[self::CONTAINER_OPT_HTML_TAG])
             && !in_array($options[self::CONTAINER_OPT_HTML_TAG], $allowedTags)

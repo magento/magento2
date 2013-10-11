@@ -36,25 +36,16 @@ namespace Magento\Backup;
 class Db extends \Magento\Backup\AbstractBackup
 {
     /**
-     * @var \Magento\Backup\Model\BackupFactory
+     * @var \Magento\Backup\Db\BackupFactory
      */
     protected $_backupFactory;
 
     /**
-     * @var \Magento\Backup\Model\DbFactory
+     * @param \Magento\Backup\Db\BackupFactory $backupFactory
      */
-    protected $_backupDbFactory;
-
-    /**
-     * @param \Magento\Backup\Model\BackupFactory $backupFactory
-     * @param \Magento\Backup\Model\DbFactory $backupDbFactory
-     */
-    public function __construct(
-        \Magento\Backup\Model\BackupFactory $backupFactory,
-        \Magento\Backup\Model\DbFactory $backupDbFactory
-    ) {
+    public function __construct(\Magento\Backup\Db\BackupFactory $backupFactory)
+    {
         $this->_backupFactory = $backupFactory;
-        $this->_backupDbFactory = $backupDbFactory;
     }
 
     /**
@@ -117,14 +108,13 @@ class Db extends \Magento\Backup\AbstractBackup
 
         $this->_lastOperationSucceed = false;
 
-        $backup = $this->_backupFactory
-            ->create()
+        $backup = $this->_backupFactory->createBackupModel()
             ->setTime($this->getTime())
             ->setType($this->getType())
             ->setPath($this->getBackupsDir())
             ->setName($this->getName());
 
-        $backupDb = $this->_backupDbFactory->create();
+        $backupDb = $this->_backupFactory->createBackupDbModel();
         $backupDb->createBackup($backup);
 
         $this->_lastOperationSucceed = true;

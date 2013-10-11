@@ -32,7 +32,8 @@ class NomediaTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $dir = $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false);
-        $snapshot = $this->getMock('Magento\Backup\Snapshot', array('create'), array($dir));
+        $backupFactory = $this->getMock('Magento\Backup\Factory', array(), array(), '', false);
+        $snapshot = $this->getMock('Magento\Backup\Snapshot', array('create'), array($dir, $backupFactory));
         $snapshot->expects($this->any())
             ->method('create')
             ->will($this->returnValue(true));

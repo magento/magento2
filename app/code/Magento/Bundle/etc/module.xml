@@ -42,6 +42,7 @@
             <module name="Magento_Eav"/>
             <module name="Magento_Weee"/>
             <module name="Magento_GiftMessage"/>
+            <module name="Magento_Page"/>
         </depends>
     </module>
 </config>

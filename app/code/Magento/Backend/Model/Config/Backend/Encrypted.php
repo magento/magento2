@@ -103,16 +103,6 @@ class Encrypted
     }
 
     /**
-     * Get & decrypt old value from configuration
-     *
-     * @return string
-     */
-    public function getOldValue()
-    {
-        return $this->_coreData->decrypt(parent::getOldValue());
-    }
-
-    /**
      * Process config value
      *
      * @param string $value

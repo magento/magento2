@@ -43,6 +43,7 @@
             <module name="Magento_Weee"/>
             <module name="Magento_Wishlist"/>
             <module name="Magento_GiftMessage"/>
+            <module name="Magento_CatalogInventory"/>
         </depends>
     </module>
 </config>

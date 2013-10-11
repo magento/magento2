@@ -66,13 +66,21 @@
             </value>
         </param>
     </type>
-
     <type name="Magento\Backend\Helper\Data">
         <param name="defaultAreaFrontName">
             <value>backend</value>
         </param>
         <param name="backendFrontName">
             <value type="argument">Magento\Backend\Helper\Data::PARAM_BACKEND_FRONT_NAME</value>
+        </param>
+        <param name="app">
+            <instance type="Magento\Core\Model\App\Proxy" />
+        </param>
+        <param name="backendUrl">
+            <instance type="Magento\Backend\Model\Url\Proxy" />
+        </param>
+        <param name="auth">
+            <instance type="Magento\Backend\Model\Auth\Proxy" />
         </param>
     </type>
     <type name="Magento\Core\Model\NoRouteHandlerList">
@@ -83,6 +91,11 @@
                     <sortOrder>10</sortOrder>
                 </backend>
             </value>
+        </param>
+    </type>
+    <type name="Magento\Backend\Model\Widget\Grid\Row\UrlGenerator">
+        <param name="backendUrl">
+            <instance type="Magento\Backend\Model\Url\Proxy" />
         </param>
     </type>
 </config>
