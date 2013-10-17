@@ -283,7 +283,7 @@ class Mage_Catalog_Model_Product_Status extends Mage_Core_Model_Abstract
                 ->joinLeft(
                     array($tableName => $attributeTable),
                     "e.entity_id={$tableName}.entity_id"
-                        . " AND {$tableName}.attribute_id='{$attributeId}'"
+                        . " AND {$tableName}.attribute_id={$attributeId}"
                         . " AND {$tableName}.store_id='0'",
                     array());
             $valueExpr = $tableName . '.value';
@@ -295,13 +295,13 @@ class Mage_Catalog_Model_Product_Status extends Mage_Core_Model_Abstract
                 ->joinLeft(
                     array($valueTable1 => $attributeTable),
                     "e.entity_id={$valueTable1}.entity_id"
-                        . " AND {$valueTable1}.attribute_id='{$attributeId}'"
+                        . " AND {$valueTable1}.attribute_id={$attributeId}"
                         . " AND {$valueTable1}.store_id='0'",
                     array())
                 ->joinLeft(
                     array($valueTable2 => $attributeTable),
                     "e.entity_id={$valueTable2}.entity_id"
-                        . " AND {$valueTable2}.attribute_id='{$attributeId}'"
+                        . " AND {$valueTable2}.attribute_id={$attributeId}"
                         . " AND {$valueTable2}.store_id='{$collection->getStoreId()}'",
                     array()
                 );
