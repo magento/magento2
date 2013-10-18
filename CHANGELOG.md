@@ -11,7 +11,7 @@
   * Fixed error on creating shipment with bundle products
   * Fixed uninstallation via console installer
   * Fixed JavaScript error in bootstrap in IE8/9
-  * Fixed placing order within PayPal Payments Advanced and Payflow link
+  * Fixed placing order within PayPal Payments Advanced and Payflow Link
   * Fixed fatal error on placing order with Billing Agreement
 
 2.0.0.0-dev47
