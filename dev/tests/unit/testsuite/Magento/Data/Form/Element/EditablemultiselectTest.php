@@ -48,7 +48,7 @@ class EditablemultiselectTest extends \PHPUnit_Framework_TestCase
         $this->_model->setData(array('values' => $values, 'value' => $value));
     }
 
-    public function testGetElementHtmlRendersCustomAttributesWhenDisabled()
+    public function testGetElementHtmlRendersDataAttributesWhenDisabled()
     {
         $this->_model->setDisabled(true);
         $elementHtml = $this->_model->getElementHtml();

@@ -32,18 +32,23 @@ class ThemeHandlesTest extends \PHPUnit_Framework_TestCase
      */
     protected $_baseFrontendHandles = null;
 
-    /**
-     * Check that all handles declared in a theme layout are declared in base layouts
-     *
-     * @param string $handleName
-     * @dataProvider designHandlesDataProvider
-     */
-    public function testIsDesignHandleDeclaredInCode($handleName)
+    public function testIsDesignHandleDeclaredInCode()
     {
-        $this->assertContains(
-            $handleName,
-            $this->_getBaseFrontendHandles(),
-            "Handle '{$handleName}' is not declared in any module.'"
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * Check that all handles declared in a theme layout are declared in base layouts
+             *
+             * @param string $handleName
+             */
+            function ($handleName) {
+                $this->assertContains(
+                    $handleName,
+                    $this->_getBaseFrontendHandles(),
+                    "Handle '{$handleName}' is not declared in any module.'"
+                );
+            },
+            $this->designHandlesDataProvider()
         );
     }
 

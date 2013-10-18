@@ -1,6 +1,5 @@
 Find/Feed/Block/Adminhtml
 Magento/Adminhtml
-Magento/AdvancedCheckout/Block
 Magento/Authorizenet/Model
 Magento/Backend
 Magento/Bundle
@@ -32,14 +31,12 @@ Magento/Connect/Block/Adminhtml/Extension/Custom/Edit/Tab
 Magento/Catalog/Model/Template
 Magento/Cms/Model
 Magento/GiftMessage/Model
-Magento/GiftWrapping/Model
 Magento/GoogleShopping/Model/Attribute
 Magento/Oauth/Controller
 Magento/Sales/Block/Order
 Magento/Sales/Model/Resource/Helper
 Magento/Sales/Model/Resource/Order
 Magento/Catalog/Model/Resource/Product
-Magento/CatalogEvent/Block/Catalog/Category
 Magento/Checkout/Block/Onepage
 Magento/Core/Model/Design/Backend
 Magento/Core/Model/Layout/File/Source/Override
@@ -74,7 +71,6 @@ Magento/CatalogRule/Model
 Magento/Tax/Block/Checkout
 Magento/Tax/Model/Sales/Pdf
 Magento/Usa/Model/Shipping/Carrier
-Magento/VersionsCms/Block
 Magento/Webapi/Model
 Magento/Webhook/Model
 Magento/Widget/Model/Widget/Instance

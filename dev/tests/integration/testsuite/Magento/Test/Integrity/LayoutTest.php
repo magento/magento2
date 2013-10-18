@@ -31,8 +31,6 @@ namespace Magento\Test\Integrity;
 
 class LayoutTest extends \PHPUnit_Framework_TestCase
 {
-    const NO_OVERRIDDEN_THEMES_MARKER = 'no-overriden-themes';
-
     /**
      * Cached lists of files
      *
@@ -45,39 +43,44 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         self::$_cachedFiles = array(); // Free memory
     }
 
-    /**
-     * @param \Magento\Core\Model\Theme $theme
-     * @dataProvider areasAndThemesDataProvider
-     */
-    public function testHandlesHierarchy(\Magento\Core\Model\Theme $theme)
+    public function testHandlesHierarchy()
     {
-        $xml = $this->_composeXml($theme);
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param \Magento\Core\Model\Theme $theme
+             */
+            function (\Magento\Core\Model\Theme $theme) {
+                $xml = $this->_composeXml($theme);
 
-        /**
-         * There could be used an xpath "/layouts/*[@type or @owner or @parent]", but it randomly produced bugs, by
-         * selecting all nodes in depth. Thus it was refactored into manual nodes extraction.
-         */
-        $handles = array();
-        foreach ($xml->children() as $handleNode) {
-            if ($handleNode->getAttribute('type')
-                || $handleNode->getAttribute('owner')
-                || $handleNode->getAttribute('parent')
-            ) {
-                $handles[] = $handleNode;
-            }
-        }
+                /**
+                 * There could be used an xpath "/layouts/*[@type or @owner or @parent]", but it randomly produced bugs,
+                 * by selecting all nodes in depth. Thus it was refactored into manual nodes extraction.
+                 */
+                $handles = array();
+                foreach ($xml->children() as $handleNode) {
+                    if ($handleNode->getAttribute('type')
+                        || $handleNode->getAttribute('owner')
+                        || $handleNode->getAttribute('parent')
+                    ) {
+                        $handles[] = $handleNode;
+                    }
+                }
 
-        /** @var \Magento\Core\Model\Layout\Element $node */
-        $errors = array();
-        foreach ($handles as $node) {
-            $this->_collectHierarchyErrors($node, $xml, $errors);
-        }
+                /** @var \Magento\Core\Model\Layout\Element $node */
+                $errors = array();
+                foreach ($handles as $node) {
+                    $this->_collectHierarchyErrors($node, $xml, $errors);
+                }
 
-        if ($errors) {
-            $this->fail("There are errors while checking the page type and fragment types hierarchy at:\n"
-                . var_export($errors, 1)
-            );
-        }
+                if ($errors) {
+                    $this->fail("There are errors while checking the page type and fragment types hierarchy at:\n"
+                        . var_export($errors, 1)
+                    );
+                }
+            },
+            $this->areasAndThemesDataProvider()
+        );
     }
 
     /**
@@ -146,43 +149,55 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         return $result;
     }
 
-    /**
-     * @param \Magento\Core\Model\Theme $theme
-     * @dataProvider areasAndThemesDataProvider
-     */
-    public function testHandleLabels(\Magento\Core\Model\Theme $theme)
+    public function testHandleLabels()
     {
-        $xml = $this->_composeXml($theme);
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param \Magento\Core\Model\Theme $theme
+             */
+            function (\Magento\Core\Model\Theme $theme) {
+                $xml = $this->_composeXml($theme);
 
-        $xpath = '/layouts/*['
-            . '@type="' . \Magento\Core\Model\Layout\Merge::TYPE_PAGE . '"'
-            . ' or @type="' . \Magento\Core\Model\Layout\Merge::TYPE_FRAGMENT . '"]';
-        $handles = $xml->xpath($xpath) ?: array();
+                $xpath = '/layouts/*['
+                    . '@type="' . \Magento\Core\Model\Layout\Merge::TYPE_PAGE . '"'
+                    . ' or @type="' . \Magento\Core\Model\Layout\Merge::TYPE_FRAGMENT . '"]';
+                $handles = $xml->xpath($xpath) ?: array();
 
-        /** @var \Magento\Core\Model\Layout\Element $node */
-        $errors = array();
-        foreach ($handles as $node) {
-            if (!$node->xpath('@label')) {
-                $nodeId = $node->getAttribute('id') ? ' id=' . $node->getAttribute('id') : '';
-                $errors[] = $node->getName() . $nodeId;
-            }
-        }
-        if ($errors) {
-            $this->fail("The following handles must have label, but they don't have it:\n" . var_export($errors, 1));
-        }
+                /** @var \Magento\Core\Model\Layout\Element $node */
+                $errors = array();
+                foreach ($handles as $node) {
+                    if (!$node->xpath('@label')) {
+                        $nodeId = $node->getAttribute('id') ? ' id=' . $node->getAttribute('id') : '';
+                        $errors[] = $node->getName() . $nodeId;
+                    }
+                }
+                if ($errors) {
+                    $this->fail(
+                        'The following handles must have label, but they don\'t have it:' . PHP_EOL
+                            . var_export($errors, true)
+                    );
+                }
+            },
+            $this->areasAndThemesDataProvider()
+        );
     }
 
-    /**
-     * Check whether page types are declared only in layout update files allowed for it - base ones
-     *
-     * @dataProvider pageTypesDeclarationDataProvider
-     */
-    public function testPageTypesDeclaration(\Magento\Core\Model\Layout\File $layout)
+    public function testPageTypesDeclaration()
     {
-        $content = simplexml_load_file($layout->getFilename());
-        $this->assertEmpty(
-            $content->xpath(\Magento\Core\Model\Layout\Merge::XPATH_HANDLE_DECLARATION),
-            "Theme layout update '" . $layout->getFilename() . "' contains page type declaration(s)"
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * Check whether page types are declared only in layout update files allowed for it - base ones
+             */
+            function (\Magento\Core\Model\Layout\File $layout) {
+                $content = simplexml_load_file($layout->getFilename());
+                $this->assertEmpty(
+                    $content->xpath(\Magento\Core\Model\Layout\Merge::XPATH_HANDLE_DECLARATION),
+                    "Theme layout update '" . $layout->getFilename() . "' contains page type declaration(s)"
+                );
+            },
+            $this->pageTypesDeclarationDataProvider()
         );
     }
 
@@ -217,58 +232,70 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         return $result;
     }
 
-    /**
-     * Check, that for an overriding file ($themeFile) in a theme ($theme), there is a corresponding base file
-     *
-     * @param \Magento\Core\Model\Layout\File $themeFile
-     * @param \Magento\Core\Model\Theme $theme
-     * @dataProvider overrideBaseFilesDataProvider
-     */
-    public function testOverrideBaseFiles($themeFile, $theme)
+    public function testOverrideBaseFiles()
     {
-        if ($themeFile === self::NO_OVERRIDDEN_THEMES_MARKER) {
-            $this->markTestSkipped('No overriden themes.');
-        }
-        $baseFiles = self::_getCachedFiles($theme->getArea(), 'Magento\Core\Model\Layout\File\Source\Base', $theme);
-        $fileKey = $themeFile->getModule() . '/' . $themeFile->getName();
-        $this->assertArrayHasKey($fileKey, $baseFiles,
-            sprintf("Could not find base file, overridden by theme file '%s'.", $themeFile->getFilename())
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * Check, that for an overriding file ($themeFile) in a theme ($theme), there is a corresponding base file
+             *
+             * @param \Magento\Core\Model\Layout\File $themeFile
+             * @param \Magento\Core\Model\Theme $theme
+             */
+            function ($themeFile, $theme) {
+                $baseFiles = self::_getCachedFiles(
+                    $theme->getArea(),
+                    'Magento\Core\Model\Layout\File\Source\Base',
+                    $theme
+                );
+                $fileKey = $themeFile->getModule() . '/' . $themeFile->getName();
+                $this->assertArrayHasKey($fileKey, $baseFiles,
+                    sprintf("Could not find base file, overridden by theme file '%s'.", $themeFile->getFilename())
+                );
+            },
+            $this->overrideBaseFilesDataProvider()
         );
     }
 
-    /**
-     * Check, that for an ancestor-overriding file ($themeFile) in a theme ($theme), there is a corresponding file
-     * in that ancestor theme
-     *
-     * @param \Magento\Core\Model\Layout\File $themeFile
-     * @param \Magento\Core\Model\Theme $theme
-     * @dataProvider overrideThemeFilesDataProvider
-     */
-    public function testOverrideThemeFiles($themeFile, $theme)
+    public function testOverrideThemeFiles()
     {
-        if ($themeFile === self::NO_OVERRIDDEN_THEMES_MARKER) {
-            $this->markTestSkipped('No overridden themes.');
-        }
-        // Find an ancestor theme, where a file is to be overridden
-        $ancestorTheme = $theme;
-        while ($ancestorTheme = $ancestorTheme->getParentTheme()) {
-            if ($ancestorTheme == $themeFile->getTheme()) {
-                break;
-            }
-        }
-        $this->assertNotNull(
-            $ancestorTheme,
-            sprintf("Could not find ancestor theme '%s', its layout file is supposed to be overridden by file '%s'.",
-                $themeFile->getTheme()->getCode(), $themeFile->getFilename())
-        );
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * Check, that for an ancestor-overriding file ($themeFile) in a theme ($theme),
+             * there is a corresponding file in that ancestor theme
+             *
+             * @param \Magento\Core\Model\Layout\File $themeFile
+             * @param \Magento\Core\Model\Theme $theme
+             */
+            function ($themeFile, $theme) {
+                // Find an ancestor theme, where a file is to be overridden
+                $ancestorTheme = $theme;
+                while ($ancestorTheme = $ancestorTheme->getParentTheme()) {
+                    if ($ancestorTheme == $themeFile->getTheme()) {
+                        break;
+                    }
+                }
+                $this->assertNotNull(
+                    $ancestorTheme,
+                    sprintf(
+                        'Could not find ancestor theme "%s", '
+                            . 'its layout file is supposed to be overridden by file "%s".',
+                        $themeFile->getTheme()->getCode(),
+                        $themeFile->getFilename()
+                    )
+                );
 
-        // Search for the overridden file in the ancestor theme
-        $ancestorFiles = self::_getCachedFiles($ancestorTheme->getFullPath(),
-            'Magento\Core\Model\Layout\File\Source\Theme', $ancestorTheme);
-        $fileKey = $themeFile->getModule() . '/' . $themeFile->getName();
-        $this->assertArrayHasKey($fileKey, $ancestorFiles,
-            sprintf("Could not find original file in '%s' theme, overridden by file '%s'.",
-                $themeFile->getTheme()->getCode(), $themeFile->getFilename())
+                // Search for the overridden file in the ancestor theme
+                $ancestorFiles = self::_getCachedFiles($ancestorTheme->getFullPath(),
+                    'Magento\Core\Model\Layout\File\Source\Theme', $ancestorTheme);
+                $fileKey = $themeFile->getModule() . '/' . $themeFile->getName();
+                $this->assertArrayHasKey($fileKey, $ancestorFiles,
+                    sprintf("Could not find original file in '%s' theme, overridden by file '%s'.",
+                        $themeFile->getTheme()->getCode(), $themeFile->getFilename())
+                );
+            },
+            $this->overrideThemeFilesDataProvider()
         );
     }
 
@@ -285,7 +312,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         if (!isset(self::$_cachedFiles[$cacheKey])) {
             /* @var $fileList \Magento\Core\Model\Layout\File[] */
             $fileList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create($sourceClass)->getFiles($theme);
+                ->create($sourceClass)->getFiles($theme);
             $files = array();
             foreach ($fileList as $file) {
                 $files[$file->getModule() . '/' . $file->getName()] = true;
@@ -302,7 +329,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     {
         return $this->_retrieveFilesForEveryTheme(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Layout\File\Source\Override\Base')
+                ->create('Magento\Core\Model\Layout\File\Source\Override\Base')
         );
     }
 
@@ -313,7 +340,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     {
         return $this->_retrieveFilesForEveryTheme(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Layout\File\Source\Override\Theme')
+                ->create('Magento\Core\Model\Layout\File\Source\Override\Theme')
         );
     }
 
@@ -337,6 +364,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                 $result[] = array($file, $theme);
             }
         }
-        return $result === array() ? array(array(self::NO_OVERRIDDEN_THEMES_MARKER, '')) : $result;
+        return $result;
     }
 }

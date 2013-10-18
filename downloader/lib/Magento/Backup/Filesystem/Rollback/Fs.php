@@ -39,7 +39,7 @@ class Fs extends \Magento\Backup\Filesystem\Rollback\AbstractRollback
      * Files rollback implementation via local filesystem
      *
      * @see \Magento\Backup\Filesystem\Rollback\AbstractRollback::run()
-     * @throws Magento_MagentoException
+     * @throws \Magento\Exception
      */
     public function run()
     {

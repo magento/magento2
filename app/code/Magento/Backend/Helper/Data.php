@@ -75,7 +75,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_coreData = null;
 
     /**
-     * @var \Magento\Core\Model\App
+     * @var \Magento\Core\Model\AppInterface
      */
     protected $_app;
 
@@ -102,7 +102,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * @param \Magento\Core\Model\ConfigInterface $applicationConfig
      * @param \Magento\Core\Model\Config\Primary $primaryConfig
      * @param \Magento\Core\Model\RouterList $routerList
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Core\Model\AppInterface $app
      * @param \Magento\Backend\Model\Url $backendUrl
      * @param \Magento\Backend\Model\Auth $auth
      * @param string $defaultAreaFrontName
@@ -116,7 +116,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
         \Magento\Core\Model\ConfigInterface $applicationConfig,
         \Magento\Core\Model\Config\Primary $primaryConfig,
         \Magento\Core\Model\RouterList $routerList,
-        \Magento\Core\Model\App $app,
+        \Magento\Core\Model\AppInterface $app,
         \Magento\Backend\Model\Url $backendUrl,
         \Magento\Backend\Model\Auth $auth,
         $defaultAreaFrontName,

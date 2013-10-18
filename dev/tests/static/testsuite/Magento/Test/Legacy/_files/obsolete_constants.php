@@ -140,7 +140,6 @@ return array(
     array('XML_PATH_CACHE_BETA_TYPES'),
     array('XML_PATH_CHECK_EXTENSIONS', 'Magento\Install\Model\Config'),
     array('XML_PATH_CONNECTION_TYPE', 'Magento\Core\Model\Config\Resource'),
-    array('XML_PATH_CONTEXT_MENU_LAYOUTS', 'Magento\VersionsCms\Model\Hierarchy\Config'),
     array('XML_PATH_COUNTRY_DEFAULT', 'Magento\Paypal\Model\System\Config\Backend\MerchantCountry'),
     array('XML_PATH_DEFAULT_COUNTRY', 'Magento\Core\Model\Locale'),
     array('XML_PATH_DEFAULT_LOCALE', 'Magento\Core\Model\Locale',

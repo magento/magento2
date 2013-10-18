@@ -49,31 +49,29 @@ class SystemConfigTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * @dataProvider xmlDataProvider
-     */
-    public function testXmlFile($configFile)
+    public function testXmlFiles()
     {
-        $dom = new \DOMDocument();
-        $dom->loadXML(file_get_contents($configFile));
-        $this->assertNotNull($dom);
-        $optionsList = $dom->getElementsByTagName('options');
-        foreach ($optionsList as $options) {
-            /** @var $options \DOMNode */
-            if ($options->hasAttributes()) {
-                $serviceCallAttribute = $options->attributes->getNamedItem('service_call');
-                if (null != $serviceCallAttribute) {
-                    $serviceCall = $serviceCallAttribute->nodeValue;
-                    $this->assertTrue(
-                        in_array($serviceCall, self::$_serviceCalls), "Unknown service call: $serviceCall"
-                    );
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            function ($configFile) {
+                $dom = new \DOMDocument();
+                $dom->loadXML(file_get_contents($configFile));
+                $this->assertNotNull($dom);
+                $optionsList = $dom->getElementsByTagName('options');
+                foreach ($optionsList as $options) {
+                    /** @var $options \DOMNode */
+                    if ($options->hasAttributes()) {
+                        $serviceCallAttribute = $options->attributes->getNamedItem('service_call');
+                        if (null != $serviceCallAttribute) {
+                            $serviceCall = $serviceCallAttribute->nodeValue;
+                            $this->assertTrue(
+                                in_array($serviceCall, self::$_serviceCalls), "Unknown service call: $serviceCall"
+                            );
+                        }
+                    }
                 }
-            }
-        }
-    }
-
-    public function xmlDataProvider()
-    {
-        return \Magento\TestFramework\Utility\Files::init()->getConfigFiles('adminhtml/system.xml', array());
+            },
+            \Magento\TestFramework\Utility\Files::init()->getConfigFiles('adminhtml/system.xml', array())
+        );
     }
 }

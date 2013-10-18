@@ -37,19 +37,9 @@ class Service extends \Magento\Core\Helper\AbstractHelper
     /**#@-*/
 
     /**
-     * Consumer xpath settings
-     */
-    const XML_PATH_CONSUMER_EXPIRATION_PERIOD = 'oauth/consumer/expiration_period';
-
-    /**
      * Cleanup expiration period in minutes
      */
     const CLEANUP_EXPIRATION_PERIOD_DEFAULT = 120;
-
-    /**
-     * Consumer expiration period in seconds
-     */
-    const CONSUMER_EXPIRATION_PERIOD_DEFAULT = 300;
 
     /**
      * Query parameter as a sign that user rejects
@@ -183,16 +173,5 @@ class Service extends \Magento\Core\Helper\AbstractHelper
     {
         $minutes = (int) $this->_storeConfig->getConfig(self::XML_PATH_CLEANUP_EXPIRATION_PERIOD);
         return $minutes > 0 ? $minutes : self::CLEANUP_EXPIRATION_PERIOD_DEFAULT;
-    }
-
-    /**
-     * Get consumer expiration period value from system configuration in seconds
-     *
-     * @return int
-     */
-    public function getConsumerExpirationPeriod()
-    {
-        $seconds = (int)$this->_storeConfig->getConfig(self::XML_PATH_CONSUMER_EXPIRATION_PERIOD);
-        return $seconds > 0 ? $seconds : self::CONSUMER_EXPIRATION_PERIOD_DEFAULT;
     }
 }

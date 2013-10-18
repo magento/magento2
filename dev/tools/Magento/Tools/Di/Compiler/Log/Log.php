@@ -45,11 +45,22 @@ class Log
     protected $_entries = array();
 
     /**
-     * @param Writer\WriterInterface $writer
+     * Allowed log types
+     *
+     * @var array
      */
-    public function __construct(Writer\WriterInterface $writer)
+    protected $_allowedTypes;
+
+    /**
+     * @param Writer\WriterInterface $writer
+     * @param array $allowedTypes
+     */
+    public function __construct(Writer\WriterInterface $writer, $allowedTypes = array())
     {
         $this->_writer = $writer;
+        $this->_allowedTypes = empty($allowedTypes)
+            ? array(self::GENERATION_ERROR, self::COMPILATION_ERROR, self::GENERATION_SUCCESS)
+            : $allowedTypes;
     }
 
     /**
@@ -61,7 +72,9 @@ class Log
      */
     public function add($type, $key, $message = '')
     {
-        $this->_entries[$type][$key][] = $message;
+        if (in_array($type, $this->_allowedTypes)) {
+            $this->_entries[$type][$key][] = $message;
+        }
     }
 
     /**

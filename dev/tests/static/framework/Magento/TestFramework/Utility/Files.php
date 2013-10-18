@@ -153,29 +153,65 @@ class Files
     /**
      * Returns list of files, where expected to have class declarations
      *
+     * @param bool $appCode   application PHP-code
+     * @param bool $devTests
+     * @param bool $devTools
+     * @param bool $downloaderApp
+     * @param bool $downloaderLib
+     * @param bool $lib
      * @param bool $asDataSet
      * @return array
      */
-    public function getClassFiles($asDataSet = true)
-    {
-        $key = __METHOD__ . $this->_path;
-        if (isset(self::$_cache[$key])) {
-            $files =  self::$_cache[$key];
-        } elseif (!isset(self::$_cache[$key])) {
-            $files = array_merge(
-                self::_getFiles(array("{$this->_path}/app/code/Magento"), '*.php'),
-                self::_getFiles(array("{$this->_path}/dev/tests"), '*.php'),
-                self::_getFiles(array("{$this->_path}/dev/tools/Magento"), '*.php'),
-                self::_getFiles(array("{$this->_path}/downloader/app/Magento"), '*.php'),
-                self::_getFiles(array("{$this->_path}/downloader/lib/Magento"), '*.php'),
-                self::_getFiles(array("{$this->_path}/lib/Magento"), '*.php')
-            );
+    public function getClassFiles(
+        $appCode = true, $devTests = true, $devTools = true,
+        $downloaderApp = true, $downloaderLib = true, $lib = true, $asDataSet = true
+    ) {
+        $key = __METHOD__ .
+            "/{$this->_path}/{$appCode}/{$devTests}/{$devTools}/{$downloaderApp}/{$downloaderLib}/{$lib}";
+        if (!isset(self::$_cache[$key])) {
+            $files = array();
+            if ($appCode) {
+                $files = array_merge(
+                    $files,
+                    self::_getFiles(array("{$this->_path}/app/code/Magento"), '*.php')
+                );
+            }
+            if ($devTests) {
+                $files = array_merge(
+                    $files,
+                    self::_getFiles(array("{$this->_path}/dev/tests"), '*.php')
+                );
+            }
+            if ($devTools) {
+                $files = array_merge(
+                    $files,
+                    self::_getFiles(array("{$this->_path}/dev/tools/Magento"), '*.php')
+                );
+            }
+            if ($downloaderApp) {
+                $files = array_merge(
+                    $files,
+                    self::_getFiles(array("{$this->_path}/downloader/app/Magento"), '*.php')
+                );
+            }
+            if ($downloaderLib) {
+                $files = array_merge(
+                    $files,
+                    self::_getFiles(array("{$this->_path}/downloader/lib/Magento"), '*.php')
+                );
+            }
+            if ($lib) {
+                $files = array_merge(
+                    $files,
+                    self::_getFiles(array("{$this->_path}/lib/Magento"), '*.php')
+                );
+            }
             self::$_cache[$key] = $files;
         }
         if ($asDataSet) {
-            return self::composeDataSets($files);
+            return self::composeDataSets(self::$_cache[$key]);
         }
-        return $files;
+        return self::$_cache[$key];
     }
 
     /**
@@ -534,7 +570,15 @@ class Files
         $className = array_pop($classParts);
         $namespace = implode('\\', $classParts);
         $path = implode(DIRECTORY_SEPARATOR, explode('\\', $class)) . '.php';
-        $directories = array('/app/code/', '/lib/');
+        $directories = array(
+            '/app/code/', '/lib/', '/downloader/app/', '/downloader/lib/', '/dev/tools/',
+            '/dev/tests/api-functional/framework/', '/dev/tests/integration/framework/',
+            '/dev/tests/integration/framework/tests/unit/testsuite/', '/dev/tests/integration/testsuite/',
+            '/dev/tests/integration/testsuite/Magento/Test/Integrity/', '/dev/tests/performance/framework/',
+            '/dev/tests/static/framework/', '/dev/tests/static/testsuite/',
+            '/dev/tests/unit/framework/', '/dev/tests/unit/testsuite/',
+        );
+
         foreach ($directories as $dir) {
             $fullPath = str_replace('/', DIRECTORY_SEPARATOR, $this->_path . $dir . $path);
             /**

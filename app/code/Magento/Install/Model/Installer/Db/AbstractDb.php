@@ -73,13 +73,17 @@ abstract class AbstractDb
 
     /**
      * @param \Magento\Core\Model\Resource\Type\Db\Pdo\MysqlFactory $adapterFactory
+     * @param \Magento\Core\Model\Config\Local $localConfig
      * @param array $dbExtensions
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Type\Db\Pdo\MysqlFactory $adapterFactory, array $dbExtensions = array()
+        \Magento\Core\Model\Resource\Type\Db\Pdo\MysqlFactory $adapterFactory,
+        \Magento\Core\Model\Config\Local $localConfig,
+        array $dbExtensions = array()
     ) {
         $this->_adapterFactory = $adapterFactory;
         $this->_dbExtensions = $dbExtensions;
+        $this->_localConfig = $localConfig;
     }
 
     /**
@@ -121,13 +125,24 @@ abstract class AbstractDb
     public function getConnectionData()
     {
         if (!$this->_connectionData) {
-            $connectionData = array(
-                'host'      => $this->_configData['db_host'],
-                'username'  => $this->_configData['db_user'],
-                'password'  => $this->_configData['db_pass'],
-                'dbName'    => $this->_configData['db_name'],
-                'pdoType'   => $this->getPdoType()
-            );
+            if ($this->_configData) {
+                $connectionData = array(
+                    'host' => $this->_configData['db_host'],
+                    'username' => $this->_configData['db_user'],
+                    'password' => $this->_configData['db_pass'],
+                    'dbName' => $this->_configData['db_name'],
+                    'pdoType' => $this->getPdoType()
+                );
+            } else {
+                $default = $this->_localConfig->getConnection('default');
+                $connectionData = array(
+                    'host' => $default['host'],
+                    'username' => $default['username'],
+                    'password' => $default['password'],
+                    'dbName' => $default['dbName'],
+                    'pdoType' => $this->getPdoType()
+                );
+            }
             $this->_connectionData = $connectionData;
         }
         return $this->_connectionData;

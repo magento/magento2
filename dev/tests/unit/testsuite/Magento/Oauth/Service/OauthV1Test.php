@@ -42,9 +42,6 @@ class OauthV1Test extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Oauth\Model\Token */
     private $_tokenMock;
 
-    /** @var \Magento\Oauth\Helper\Service */
-    private $_helperMock;
-
     /** @var \Magento\Core\Model\StoreManagerInterface */
     private $_storeManagerMock;
 
@@ -56,6 +53,12 @@ class OauthV1Test extends \PHPUnit_Framework_TestCase
 
     /** @var  \Zend_Oauth_Http_Utility */
     private $_httpUtilityMock;
+
+    /** @var \Magento\Core\Model\Date */
+    private $_dateMock;
+
+    /** @var \Magento\Core\Model\Store */
+    protected $_storeMock;
 
     private $_oauthToken;
     private $_oauthSecret;
@@ -117,26 +120,37 @@ class OauthV1Test extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->_tokenMock));
 
-        $this->_helperMock = $this->getMockBuilder('Magento\Oauth\Helper\Service')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->_storeManagerMock = $this->getMockBuilder('Magento\Core\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->_storeMock = $this->getMockBuilder('Magento\Core\Model\Store')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnValue($this->_storeMock));
+        $this->_storeMock->expects($this->any())
+            ->method('getBaseUrl')
+            ->will($this->returnValue('http://www.my-store.com/'));
+
         $this->_httpClientMock = $this->getMockBuilder('Magento\HTTP\ZendClient')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->_httpUtilityMock = $this->getMock('Zend_Oauth_Http_Utility');
 
+        $this->_dateMock = $this->getMockBuilder('Magento\Core\Model\Date')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->_service = new \Magento\Oauth\Service\OauthV1(
             $this->_consumerFactory,
             $this->_nonceFactory,
             $this->_tokenFactory,
-            $this->_helperMock,
             $this->_storeManagerMock,
             $this->_httpClientMock,
-            $this->_httpUtilityMock
+            $this->_httpUtilityMock,
+            $this->_dateMock
         );
 
         $this->_oauthToken = $this->_generateRandomString(\Magento\Oauth\Model\Token::LENGTH_TOKEN);
@@ -149,9 +163,10 @@ class OauthV1Test extends \PHPUnit_Framework_TestCase
         unset($this->_consumerFactory);
         unset($this->_nonceFactory);
         unset($this->_tokenFactory);
-        unset($this->_helperMock);
         unset($this->_storeManagerMock);
+        unset($this->_storeMock);
         unset($this->_httpClientMock);
+        unset($this->_dateMock);
         unset($this->_service);
     }
 
@@ -202,15 +217,6 @@ class OauthV1Test extends \PHPUnit_Framework_TestCase
         $this->_consumerMock->expects($this->once())
             ->method('getData')
             ->will($this->returnValue($consumerData));
-        $storeMock = $this->getMockBuilder('Magento\Core\Model\Store')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_storeManagerMock->expects($this->once())
-            ->method('getStore')
-            ->will($this->returnValue($storeMock));
-        $storeMock->expects($this->once())
-            ->method('getBaseUrl')
-            ->will($this->returnValue('http://www.my-store.com/'));
         $this->_httpClientMock->expects($this->once())
             ->method('setUri')
             ->with('http://www.magento.com')
@@ -222,7 +228,7 @@ class OauthV1Test extends \PHPUnit_Framework_TestCase
             ->method('createVerifierToken')
             ->with($consumerId)
             ->will($this->returnSelf());
-        $this->_tokenMock->expects($this->once())
+        $this->_tokenMock->expects($this->any())
             ->method('getVerifier')
             ->will($this->returnValue($oauthVerifier));
 
@@ -290,7 +296,8 @@ class OauthV1Test extends \PHPUnit_Framework_TestCase
     public function testGetRequestTokenOutdatedConsumerKey()
     {
         $this->_setupConsumer();
-        $this->_helperMock->expects($this->any())->method('getConsumerExpirationPeriod')->will($this->returnValue(0));
+        $this->_dateMock->expects($this->any())->method('timestamp')->will($this->returnValue(9999999999));
+        $this->_storeMock->expects($this->once())->method('getConfig')->will($this->returnValue(0));
 
         $this->_service->getRequestToken($this->_getRequestTokenParams());
     }
@@ -321,10 +328,8 @@ class OauthV1Test extends \PHPUnit_Framework_TestCase
 
     protected function _makeValidExpirationPeriod()
     {
-        $this->_helperMock
-            ->expects($this->any())
-            ->method('getConsumerExpirationPeriod')
-            ->will($this->returnValue(2 * 24 * 60 * 60)); // 2 days
+        $this->_dateMock->expects($this->any())->method('timestamp')->will($this->returnValue(0));
+        $this->_storeMock->expects($this->once())->method('getConfig')->will($this->returnValue(300));
     }
 
     /**

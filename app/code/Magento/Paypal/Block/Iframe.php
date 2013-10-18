@@ -107,7 +107,7 @@ class Iframe extends \Magento\Payment\Block\Form
             $this->_paymentMethodCode = $paymentCode;
             $templatePath = str_replace('_', '', $paymentCode);
             $templateFile = "{$templatePath}/iframe.phtml";
-            if (file_exists($this->_viewFileSystem->getFilename($templateFile))) {
+            if (file_exists($this->_viewFileSystem->getFilename($templateFile, array('module' => 'Magento_Paypal')))) {
                 $this->setTemplate($templateFile);
             } else {
                 $this->setTemplate('hss/iframe.phtml');
@@ -127,9 +127,8 @@ class Iframe extends \Magento\Payment\Block\Form
             $this->_block = $this->getLayout()
                 ->createBlock('Magento\\Paypal\\Block\\'
                     . str_replace(' ', \Magento\Autoload\IncludePath::NS_SEPARATOR,
-                            ucwords(str_replace(\Magento\Autoload\IncludePath::NS_SEPARATOR, ' ', $this
-                                        ->_paymentMethodCode)))
-                    . '_Iframe');
+                            ucwords(str_replace('_', ' ', $this->_paymentMethodCode)))
+                    . '\\Iframe');
             if (!$this->_block instanceof \Magento\Paypal\Block\Iframe) {
                 throw new \Magento\Core\Exception('Invalid block type');
             }

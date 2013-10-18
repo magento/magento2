@@ -276,7 +276,7 @@ class Command
     public static function registerCommands()
     {
         $pathCommands = __DIR__.DIRECTORY_SEPARATOR.basename(__FILE__, ".php");
-        $f = new DirectoryIterator($pathCommands);
+        $f = new \DirectoryIterator($pathCommands);
         foreach($f as $file) {
             if (! $file->isFile()) {
                 continue;

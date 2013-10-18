@@ -1,6 +1,6 @@
 <?php
 /**
- * Files excluded from the integrity test for PSR-X standards
+ * Files excluded from the ClassesTest->testClassNamespace() for PSR-X standards
  *
  * Magento
  *

@@ -56,7 +56,7 @@ class OrdersUpdater implements \Magento\Core\Model\Layout\Argument\UpdaterInterf
      * @param mixed $argument
      * @throws \DomainException
      * @return mixed
-     * @throws DomainException
+     * @throws \DomainException
      */
     public function update($argument)
     {

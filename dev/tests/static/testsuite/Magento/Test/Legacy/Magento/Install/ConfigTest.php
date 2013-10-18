@@ -27,25 +27,22 @@ namespace Magento\Test\Legacy\Magento\Install;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @param string $file
-     * @dataProvider configFileDataProvider
-     */
-    public function testConfigFile($file)
+    public function testConfigFile()
     {
-        $xml = simplexml_load_file($file);
-        $path = '/config/check/php/extensions';
-        $this->assertEmpty(
-            $xml->xpath($path),
-            "Nodes from '{$path}' in install_wizard.xml have been moved to module.xml"
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $file
+             */
+            function ($file) {
+                $xml = simplexml_load_file($file);
+                $path = '/config/check/php/extensions';
+                $this->assertEmpty(
+                    $xml->xpath($path),
+                    "Nodes from '{$path}' in install_wizard.xml have been moved to module.xml"
+                );
+            },
+            \Magento\TestFramework\Utility\Files::init()->getConfigFiles('install_wizard.xml')
         );
-    }
-
-    /**
-     * @return array
-     */
-    public function configFileDataProvider()
-    {
-        return \Magento\TestFramework\Utility\Files::init()->getConfigFiles('install_wizard.xml');
     }
 }

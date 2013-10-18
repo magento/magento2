@@ -673,7 +673,7 @@ class Payment extends \Magento\Payment\Model\Info
      *
      * @see self::_void()
      * @param float $amount
-     * @return \Magento\Sales\Model\Payment
+     * @return \Magento\Sales\Model\Order\Payment
      */
     public function registerVoidNotification($amount = null)
     {

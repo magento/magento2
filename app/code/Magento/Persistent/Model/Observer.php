@@ -637,7 +637,7 @@ class Observer
      * Clear expired persistent sessions
      *
      * @param \Magento\Cron\Model\Schedule $schedule
-     * @return \Magento\Persistent\Model\Observer\Cron
+     * @return \Magento\Persistent\Model\Observer
      */
     public function clearExpiredCronJob(\Magento\Cron\Model\Schedule $schedule)
     {

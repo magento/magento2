@@ -33,6 +33,9 @@
         <param name="eventManager">
             <instance type="Magento\Core\Model\Event\Manager\Proxy" />
         </param>
+        <param name="customerSession">
+            <instance type="Magento\Customer\Model\Session\Proxy" />
+        </param>
     </type>
     <type name="Magento\Wishlist\Model\Wishlist">
         <param name="eventManager">

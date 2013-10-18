@@ -301,7 +301,7 @@ class Layer extends \Magento\Object
     /**
      * Get collection of all filterable attributes for layer products set
      *
-     * @return \Magento\Catalog\Model\Resource\Attribute\Collection
+     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
      */
     public function getFilterableAttributes()
     {

@@ -123,12 +123,12 @@ abstract class AbstractXml extends \Magento\Object
     /**
      * Google Checkout Request instance
      *
-     * @return GoogleRequest
+     * @return \GoogleRequest
      */
     public function getGRequest()
     {
         if (!$this->hasData('g_request')) {
-            $this->setData('g_request', new GoogleRequest(
+            $this->setData('g_request', new \GoogleRequest(
                 $this->getMerchantId(),
                 $this->getMerchantKey(),
                 $this->getServerType(),
@@ -150,7 +150,7 @@ abstract class AbstractXml extends \Magento\Object
      * Google Checkout Response instance
      *
      * @throws \Magento\Core\Exception
-     * @return GoogleResponse
+     * @return \GoogleResponse
      */
     public function getGResponse()
     {
@@ -160,7 +160,7 @@ abstract class AbstractXml extends \Magento\Object
             throw new \Magento\Core\Exception(__('GoogleCheckout is not configured'));
         }
         if (!$this->hasData('g_response')) {
-            $this->setData('g_response', new GoogleResponse(
+            $this->setData('g_response', new \GoogleResponse(
                 $this->getMerchantId(),
                 $this->getMerchantKey()
             ));

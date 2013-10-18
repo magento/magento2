@@ -1,3 +1,19 @@
+2.0.0.0-dev48
+=============
+* Various improvements:
+  * Added static integrity test for compilation of DI definitions
+  * Lightweight replacement for PhpUnit data providers is implemented and involved in static and integrity tests with big data providers (primarily file lists)
+* Fixed bugs:
+  * Fixed broken styles on front-end due to usage of nonexistent stylesheet
+  * Fixed plugins configuration inheritance for proxy classes
+  * Fixed OAuth consumer credentials expiry not being correctly calculated and added credentials HTTP post to the consumer endpoint
+  * Fixed Namespace class references
+  * Fixed error on creating shipment with bundle products
+  * Fixed uninstallation via console installer
+  * Fixed JavaScript error in bootstrap in IE8/9
+  * Fixed placing order within PayPal Payments Advanced and Payflow link
+  * Fixed fatal error on placing order with Billing Agreement
+
 2.0.0.0-dev47
 =============
 * Fixed bugs:

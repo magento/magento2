@@ -97,49 +97,58 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         )
     );
 
-    /**
-     * @param string $layoutFile
-     * @dataProvider layoutFileDataProvider
-     */
-    public function testLayoutFile($layoutFile)
+    public function testLayoutFile()
     {
-        $layoutXml = simplexml_load_file($layoutFile);
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $layoutFile
+             */
+            function ($layoutFile) {
+                $layoutXml = simplexml_load_file($layoutFile);
 
-        $this->_testObsoleteReferences($layoutXml);
+                $this->_testObsoleteReferences($layoutXml);
 
-        $selectorHeadBlock = '(name()="block" or name()="referenceBlock") and '
-            . '(@name="head" or @name="convert_root_head" or @name="vde_head")';
-        $this->assertSame(array(),
-            $layoutXml->xpath(
-                '//block[@class="Magento\Page\Block\Html\Head\Css" '
-                . 'or @class="Magento\Page\Block\Html\Head\Link" '
-                . 'or @class="Magento\Page\Block\Html\Head\Script"]'
-                . '/parent::*[not(' . $selectorHeadBlock . ')]'
-            ),
-            'Blocks \Magento\Page\Block\Html\Head\{Css,Link,Script} are allowed within the "head" block only. '
-            . 'Verify integrity of the nodes nesting.'
-        );
-        $this->assertSame(array(),
-            $layoutXml->xpath('/layout//*[@output="toHtml"]'), 'output="toHtml" is obsolete. Use output="1"'
-        );
-        foreach ($layoutXml as $handle) {
-            $this->assertNotContains((string)$handle['id'], $this->_obsoleteNodes, 'This layout handle is obsolete.');
-        }
-        foreach ($layoutXml->xpath('@helper') as $action) {
-            $this->assertNotContains('/', $action->getAttribute('helper'));
-            $this->assertContains('::', $action->getAttribute('helper'));
-        }
+                $selectorHeadBlock = '(name()="block" or name()="referenceBlock") and '
+                    . '(@name="head" or @name="convert_root_head" or @name="vde_head")';
+                $this->assertSame(array(),
+                    $layoutXml->xpath(
+                        '//block[@class="Magento\Page\Block\Html\Head\Css" '
+                            . 'or @class="Magento\Page\Block\Html\Head\Link" '
+                            . 'or @class="Magento\Page\Block\Html\Head\Script"]'
+                            . '/parent::*[not(' . $selectorHeadBlock . ')]'
+                    ),
+                    'Blocks \Magento\Page\Block\Html\Head\{Css,Link,Script} are allowed within the "head" block only. '
+                        . 'Verify integrity of the nodes nesting.'
+                );
+                $this->assertSame(array(),
+                    $layoutXml->xpath('/layout//*[@output="toHtml"]'), 'output="toHtml" is obsolete. Use output="1"'
+                );
+                foreach ($layoutXml as $handle) {
+                    $this->assertNotContains(
+                        (string)$handle['id'],
+                        $this->_obsoleteNodes,
+                        'This layout handle is obsolete.'
+                    );
+                }
+                foreach ($layoutXml->xpath('@helper') as $action) {
+                    $this->assertNotContains('/', $action->getAttribute('helper'));
+                    $this->assertContains('::', $action->getAttribute('helper'));
+                }
 
-        if (false !== strpos($layoutFile, 'app/code/Magento/Adminhtml/view/adminhtml/layout/adminhtml_sales_order')) {
-            $this->markTestIncomplete("The file {$layoutFile} has to use \Magento\Core\Block\Text\List, \n"
-                . 'there is no solution to get rid of it right now.'
-            );
-        }
-        $this->assertSame(array(),
-            $layoutXml->xpath('/layout//block[@class="Magento\Core\Block\Text\ListText"]'),
-            'The namespace Magento\Core\Block\Text;
-
-class ListText is not supposed to be used in layout anymore.'
+                if (false
+                    !== strpos($layoutFile, 'app/code/Magento/Adminhtml/view/adminhtml/layout/adminhtml_sales_order')
+                ) {
+                    $this->markTestIncomplete("The file {$layoutFile} has to use \\Magento\\Core\\Block\\Text\\List, \n"
+                            . 'there is no solution to get rid of it right now.'
+                    );
+                }
+                $this->assertSame(array(),
+                    $layoutXml->xpath('/layout//block[@class="Magento\Core\Block\Text\ListText"]'),
+                    'The class \Magento\Core\Block\Text\ListTest is not supposed to be used in layout anymore.'
+                );
+            },
+            \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()
         );
     }
 
@@ -161,28 +170,25 @@ class ListText is not supposed to be used in layout anymore.'
         }
     }
 
-    /**
-     * @return array
-     */
-    public function layoutFileDataProvider()
+    public function testActionNodeMethods()
     {
-        return \Magento\TestFramework\Utility\Files::init()->getLayoutFiles();
-    }
-
-    /**
-     * @param string $layoutFile
-     * @dataProvider layoutFileDataProvider
-     */
-    public function testActionNodeMethods($layoutFile)
-    {
-        $layoutXml = simplexml_load_file($layoutFile);
-        $methodFilter = '@method!="' . implode('" and @method!="', $this->getAllowedActionNodeMethods()) . '"';
-        foreach ($layoutXml->xpath('//action[' . $methodFilter . ']') as $node) {
-            $attributes = $node->attributes();
-            $this->fail(sprintf(
-                'Call of method "%s" via layout instruction <action> is not allowed.', $attributes['method']
-            ));
-        }
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $layoutFile
+             */
+            function ($layoutFile) {
+                $layoutXml = simplexml_load_file($layoutFile);
+                $methodFilter = '@method!="' . implode('" and @method!="', $this->getAllowedActionNodeMethods()) . '"';
+                foreach ($layoutXml->xpath('//action[' . $methodFilter . ']') as $node) {
+                    $attributes = $node->attributes();
+                    $this->fail(sprintf(
+                        'Call of method "%s" via layout instruction <action> is not allowed.', $attributes['method']
+                    ));
+                }
+            },
+            \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()
+        );
     }
 
     /**

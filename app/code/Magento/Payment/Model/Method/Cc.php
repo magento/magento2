@@ -118,7 +118,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Prepare info instance for save
      *
-     * @return \Magento\Payment\Model\AbstractModel
+     * @return \Magento\Payment\Model\Method\Cc
      */
     public function prepareSave()
     {
@@ -135,7 +135,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Validate payment method information object
      *
-     * @return  \Magento\Payment\Model\AbstractModel
+     * @return \Magento\Payment\Model\Method\Cc
      * @throws \Magento\Core\Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)

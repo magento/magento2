@@ -248,7 +248,7 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param string $paymentAction
      * @param object $stateObject
-     * @return \Magento\Payment\Model\AbstractModel|null
+     * @return \Magento\Payment\Model\Method\AbstractMethod|void
      */
     public function initialize($paymentAction, $stateObject)
     {

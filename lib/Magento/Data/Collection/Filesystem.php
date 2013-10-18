@@ -122,7 +122,7 @@ class Filesystem extends \Magento\Data\Collection
      * Set empty to not filter
      *
      * @param string $regex
-     * @return \Magento\Data\Collection_Files
+     * @return \Magento\Data\Collection\Filesystem
      */
     public function setDirsFilter($regex)
     {
@@ -135,7 +135,7 @@ class Filesystem extends \Magento\Data\Collection
      * Set empty to not filter
      *
      * @param string $regex
-     * @return \Magento\Data\Collection_Files
+     * @return \Magento\Data\Collection\Filesystem
      */
     public function setFilesFilter($regex)
     {
@@ -148,7 +148,7 @@ class Filesystem extends \Magento\Data\Collection
      * Set empty value to not use this filter
      *
      * @param string $regex
-     * @return \Magento\Data\Collection_Files
+     * @return \Magento\Data\Collection\Filesystem
      */
     public function setDisallowedFilesFilter($regex)
     {

@@ -101,7 +101,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        /** @var \Magento\Logging\Model\Config\Reader $configReader */
+        /** @var \Magento\Install\Model\Config\Reader $configReader */
         $configReader = $this->_objectManager->create(
             'Magento\Install\Model\Config\Reader', array(
                 'fileResolver' => $fileResolver,

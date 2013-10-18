@@ -32,25 +32,22 @@ namespace Magento\Test\Legacy;
 
 class ObsoleteAclTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @param string $aclFile
-     * @dataProvider aclFilesDataProvider
-     */
-    public function testAclDeclaration($aclFile)
+    public function testAclDeclarations()
     {
-        $aclXml = simplexml_load_file($aclFile);
-        $xpath = '/config/acl/*[boolean(./children) or boolean(./title)]';
-        $this->assertEmpty(
-            $aclXml->xpath($xpath),
-            'Obsolete acl structure detected in file ' . $aclFile . '.'
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $aclFile
+             */
+            function ($aclFile) {
+                $aclXml = simplexml_load_file($aclFile);
+                $xpath = '/config/acl/*[boolean(./children) or boolean(./title)]';
+                $this->assertEmpty(
+                    $aclXml->xpath($xpath),
+                    'Obsolete acl structure detected in file ' . $aclFile . '.'
+                );
+            },
+            \Magento\TestFramework\Utility\Files::init()->getMainConfigFiles()
         );
-    }
-
-    /**
-     * @return array
-     */
-    public function aclFilesDataProvider()
-    {
-        return \Magento\TestFramework\Utility\Files::init()->getMainConfigFiles();
     }
 }

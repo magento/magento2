@@ -313,7 +313,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Retrieve quote
      *
-     * @return \Magento\Sales\Model\Qoute
+     * @return \Magento\Sales\Model\Quote
      */
     public function getQuote()
     {

@@ -41,25 +41,18 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @dataProvider validateDataProvider
-     */
-    public function testLayouts($layout)
+    public function testLayouts()
     {
-        $dom = new \DOMDocument();
-        $dom->loadXML(file_get_contents($layout));
-        $errors = $this->_validateDomDocument($dom, $this->_schemaFile);
-        $this->assertTrue(empty($errors), print_r($errors, true));
-    }
-
-    /**
-     * @see self::testValidateLayouts
-     * @return array
-     * @throws \Exception
-     */
-    public function validateDataProvider()
-    {
-        return \Magento\TestFramework\Utility\Files::init()->getLayoutFiles();
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            function ($layout) {
+                $dom = new \DOMDocument();
+                $dom->loadXML(file_get_contents($layout));
+                $errors = $this->_validateDomDocument($dom, $this->_schemaFile);
+                $this->assertTrue(empty($errors), print_r($errors, true));
+            },
+            \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()
+        );
     }
 
     /**

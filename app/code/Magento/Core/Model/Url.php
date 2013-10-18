@@ -149,7 +149,7 @@ class Url extends \Magento\Object implements \Magento\Core\Model\UrlInterface
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\SessionProxy
+     * @var \Magento\Core\Model\Session
      */
     protected $_session;
 
@@ -164,7 +164,7 @@ class Url extends \Magento\Object implements \Magento\Core\Model\UrlInterface
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Core\Model\StoreManager $storeManager
-     * @param \Magento\Core\Model\SessionProxy $session
+     * @param \Magento\Core\Model\Session $session
      * @param array $data
      */
     public function __construct(
@@ -173,7 +173,7 @@ class Url extends \Magento\Object implements \Magento\Core\Model\UrlInterface
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\App $app,
         \Magento\Core\Model\StoreManager $storeManager,
-        \Magento\Core\Model\SessionProxy $session,
+        \Magento\Core\Model\Session $session,
         array $data = array()
     ) {
         $this->_urlSecurityInfo = $urlSecurityInfo;

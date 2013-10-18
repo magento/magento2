@@ -146,7 +146,7 @@ GiftOptionsPopup.prototype = {
             Event.observe(el, 'click', this.showItemGiftOptions.bind(this));
         }, this);
 
-        // Move giftcard popup to start of body, because soon it will contain FORM tag that can break DOM layout if within other FORM
+        // Move gift options popup to start of body, because soon it will contain FORM tag that can break DOM layout if within other FORM
         var oldPopupContainer = $('gift_options_configure');
         if (oldPopupContainer) {
             oldPopupContainer.remove();

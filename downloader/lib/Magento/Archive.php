@@ -49,7 +49,7 @@ class Archive
     /**
     * Current archiver is used for compress.
     *
-    * @var \Magento\Archiver_Tar|\Magento\Archiver_Gz|\Magento\Archiver_Bz
+    * @var \Magento\Archive\Tar|\Magento\Archive\Gz|\Magento\Archive\Bz
     */
     protected $_archiver=null;
 
@@ -77,7 +77,7 @@ class Archive
     * Create object of current archiver by $extension.
     *
     * @param string $extension
-    * @return \Magento\Archiver_Tar|\Magento\Archiver_Gz|\Magento\Archiver_Bz
+    * @return \Magento\Archive\Tar|\Magento\Archive\Gz|\Magento\Archive\Bz
     */
     protected function _getArchiver($extension)
     {

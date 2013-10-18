@@ -46,7 +46,7 @@ class Ftp extends \Magento\Backup\Filesystem\Rollback\AbstractRollback
      * Files rollback implementation via ftp
      *
      * @see \Magento\Backup\Filesystem\Rollback\AbstractRollback::run()
-     * @throws Magento_MagentoException
+     * @throws \Magento\Exception
      */
     public function run()
     {

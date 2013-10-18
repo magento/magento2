@@ -156,7 +156,7 @@ class Config implements \Magento\Interception\Config
                     $this->_intercepted[$type] = true;
                     return true;
                 }
-            } else if ($this->_relations->has($type)) {
+            } else if (substr($type, -5) != 'Proxy' && $this->_relations->has($type)) {
                 $relations = $this->_relations->getParents($type);
                 foreach ($relations as $relation) {
                     if ($relation && $this->_inheritInterception($relation)) {

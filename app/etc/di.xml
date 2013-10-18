@@ -241,4 +241,9 @@
             <value type="argument">Magento\Core\Model\Resource::PARAM_TABLE_PREFIX</value>
         </param>
     </type>
+    <type name="Magento\Core\Model\Url">
+        <param name="session">
+            <instance type="Magento\Core\Model\Session\Proxy" />
+        </param>
+    </type>
 </config>

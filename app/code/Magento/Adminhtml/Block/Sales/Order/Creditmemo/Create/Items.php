@@ -150,7 +150,7 @@ class Items extends \Magento\Adminhtml\Block\Sales\Items\AbstractItems
     /**
      * Retrieve creditmemo model instance
      *
-     * @return \Magento\Sales\Model\Creditmemo
+     * @return \Magento\Sales\Model\Order\Creditmemo
      */
     public function getCreditmemo()
     {

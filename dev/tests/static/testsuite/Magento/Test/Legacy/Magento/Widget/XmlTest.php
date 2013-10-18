@@ -34,41 +34,43 @@ namespace Magento\Test\Legacy\Magento\Widget;
 
 class XmlTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @param string $file
-     * @dataProvider widgetXmlFilesDataProvider
-     */
-    public function testClassFactoryNames($file)
+    public function testClassFactoryNames()
     {
-        $xml = simplexml_load_file($file);
-        $nodes = $xml->xpath('/widgets/*[@type]') ?: array();
-        /** @var \SimpleXMLElement $node */
-        foreach ($nodes as $node) {
-            $type = (string)$node['type'];
-            $this->assertNotRegExp('/\//', $type, "Factory name detected: {$type}.");
-        }
-    }
-
-    /**
-     * @param string $file
-     * @dataProvider widgetXmlFilesDataProvider
-     */
-    public function testBlocksIntoContainers($file)
-    {
-        $xml = simplexml_load_file($file);
-        $this->assertSame(array(), $xml->xpath('/widgets/*/supported_blocks'),
-            'Obsolete node: <supported_blocks>. To be replaced with <supported_containers>'
-        );
-        $this->assertSame(array(), $xml->xpath('/widgets/*/*/*/block_name'),
-            'Obsolete node: <block_name>. To be replaced with <container_name>'
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $file
+             */
+            function ($file) {
+                $xml = simplexml_load_file($file);
+                $nodes = $xml->xpath('/widgets/*[@type]') ?: array();
+                /** @var \SimpleXMLElement $node */
+                foreach ($nodes as $node) {
+                    $type = (string)$node['type'];
+                    $this->assertNotRegExp('/\//', $type, "Factory name detected: {$type}.");
+                }
+            },
+            \Magento\TestFramework\Utility\Files::init()->getConfigFiles('widget.xml')
         );
     }
 
-    /**
-     * @return array
-     */
-    public function widgetXmlFilesDataProvider()
+    public function testBlocksIntoContainers()
     {
-        return \Magento\TestFramework\Utility\Files::init()->getConfigFiles('widget.xml');
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $file
+             */
+            function ($file) {
+                $xml = simplexml_load_file($file);
+                $this->assertSame(array(), $xml->xpath('/widgets/*/supported_blocks'),
+                    'Obsolete node: <supported_blocks>. To be replaced with <supported_containers>'
+                );
+                $this->assertSame(array(), $xml->xpath('/widgets/*/*/*/block_name'),
+                    'Obsolete node: <block_name>. To be replaced with <container_name>'
+                );
+            },
+            \Magento\TestFramework\Utility\Files::init()->getConfigFiles('widget.xml')
+        );
     }
 }

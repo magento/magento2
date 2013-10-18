@@ -29,20 +29,25 @@ namespace Magento\Test\Legacy;
 
 class ObsoleteLayoutLocationTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @param string $location
-     * @dataProvider obsoleteLayoutLocationDataProvider
-     */
-    public function testObsoleteLayoutLocation($location)
+    public function testObsoleteLayoutLocation()
     {
-        $files = glob($location . '/*.xml');
-        $layoutFiles = array();
-        foreach ($files as $file) {
-            if (strpos(file_get_contents($file), '<layout') !== false) {
-                $layoutFiles[] = $file;
-            }
-        }
-        $this->assertEmpty($layoutFiles, 'Obsolete layout files found: ' . implode(', ', $layoutFiles));
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $location
+             */
+            function ($location) {
+                $files = glob($location . '/*.xml');
+                $layoutFiles = array();
+                foreach ($files as $file) {
+                    if (strpos(file_get_contents($file), '<layout') !== false) {
+                        $layoutFiles[] = $file;
+                    }
+                }
+                $this->assertEmpty($layoutFiles, 'Obsolete layout files found: ' . implode(', ', $layoutFiles));
+            },
+            self::obsoleteLayoutLocationDataProvider()
+        );
     }
 
     /**

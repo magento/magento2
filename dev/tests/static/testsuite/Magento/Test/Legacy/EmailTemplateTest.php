@@ -32,21 +32,21 @@ namespace Magento\Test\Legacy;
 
 class EmailTemplateTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @param string $file
-     * @dataProvider obsoleteDirectivesDataProvider
-     */
-    public function testObsoleteDirectives($file)
+    public function testObsoleteDirectives()
     {
-        $this->assertNotRegExp(
-            '/\{\{htmlescape.*?\}\}/i',
-            file_get_contents($file),
-            'Directive {{htmlescape}} is obsolete. Use {{escapehtml}} instead.'
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $file
+             */
+            function ($file) {
+                $this->assertNotRegExp(
+                    '/\{\{htmlescape.*?\}\}/i',
+                    file_get_contents($file),
+                    'Directive {{htmlescape}} is obsolete. Use {{escapehtml}} instead.'
+                );
+            },
+            \Magento\TestFramework\Utility\Files::init()->getEmailTemplates()
         );
-    }
-
-    public function obsoleteDirectivesDataProvider()
-    {
-        return \Magento\TestFramework\Utility\Files::init()->getEmailTemplates();
     }
 }

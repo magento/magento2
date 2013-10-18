@@ -49,7 +49,7 @@ class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
      * storeIds setter
      *
      * @param  array $storeIds
-     * @return \Magento\Adminhtml\Block\Report\Grid\Shopcart\AbstractShopcart
+     * @return \Magento\Adminhtml\Block\Report\Grid\Shopcart
      */
     public function setStoreIds($storeIds)
     {

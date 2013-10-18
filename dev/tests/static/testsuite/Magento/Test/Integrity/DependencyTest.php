@@ -263,46 +263,50 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         return $contents;
     }
 
-    /**
-     * Check undeclared modules dependencies for specified file
-     *
-     * @param string $fileType
-     * @param string $file
-     *
-     * @dataProvider getAllFiles
-     */
-    public function testUndeclared($fileType, $file)
+    public function testUndeclared()
     {
-        if (strpos($file, 'app/code') === false && !$this->_isThemeFile($file)) {
-            return;
-        }
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * Check undeclared modules dependencies for specified file
+             *
+             * @param string $fileType
+             * @param string $file
+             */
+            function ($fileType, $file) {
+                if (strpos($file, 'app/code') === false && !$this->_isThemeFile($file)) {
+                    return;
+                }
 
-        $module = $this->_getModuleName($file);
-        $contents = $this->_getCleanedFileContents($fileType, $file);
+                $module = $this->_getModuleName($file);
+                $contents = $this->_getCleanedFileContents($fileType, $file);
 
-        // Apply rules
-        $dependencies = array();
-        foreach (self::$_rulesInstances as $rule) {
-            /** @var \Magento\TestFramework\Dependency\RuleInterface $rule */
-            $dependencies = array_merge($dependencies,
-                $rule->getDependencyInfo($module, $fileType, $file, $contents));
-        }
+                // Apply rules
+                $dependencies = array();
+                foreach (self::$_rulesInstances as $rule) {
+                    /** @var \Magento\TestFramework\Dependency\RuleInterface $rule */
+                    $dependencies = array_merge($dependencies,
+                        $rule->getDependencyInfo($module, $fileType, $file, $contents));
+                }
 
-        // Collect dependencies
-        $undeclared = $this->_collectDependencies($module, $dependencies);
+                // Collect dependencies
+                $undeclared = $this->_collectDependencies($module, $dependencies);
 
-        // Prepare output message
-        $result = array();
-        foreach ($undeclared as $type => $modules) {
-            $modules = array_unique($modules);
-            if (!count($modules)) {
-                continue;
-            }
-            $result[] = sprintf("%s [%s]", $type, implode(', ', $modules));
-        }
-        if (count($result)) {
-            $this->fail('Module ' . $module . ' has undeclared module dependencies found: ' . implode(', ', $result));
-        }
+                // Prepare output message
+                $result = array();
+                foreach ($undeclared as $type => $modules) {
+                    $modules = array_unique($modules);
+                    if (!count($modules)) {
+                        continue;
+                    }
+                    $result[] = sprintf("%s [%s]", $type, implode(', ', $modules));
+                }
+                if (count($result)) {
+                    $this->fail('Module ' . $module . ' has undeclared dependencies: ' . implode(', ', $result));
+                }
+            },
+            $this->getAllFiles()
+        );
     }
 
     /**

@@ -30,7 +30,7 @@ namespace Magento\DB;
 /**
  * Magento Library
  */
-require_once 'Magento/DB/Tree/TreeException.php';
+require_once 'Tree/TreeException.php';
 class Tree
 {
     private $_id;
@@ -65,7 +65,7 @@ class Tree
 
     /**
      * @param array $config
-     * @throws \Magento\DB\Tree\Exception
+     * @throws \Magento\DB\Tree\TreeException
      */
     public function __construct($config = array())
     {

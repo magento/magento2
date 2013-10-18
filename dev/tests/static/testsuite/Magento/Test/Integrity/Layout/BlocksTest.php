@@ -62,33 +62,38 @@ class BlocksTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * Check that containers are not used as blocks in templates
-     *
-     * @param string $alias
-     * @param string $file
-     * @throws \Exception|PHPUnit_Framework_ExpectationFailedException
-     * @dataProvider getChildBlockDataProvider
-     */
-    public function testBlocksNotContainers($alias, $file)
+    public function testBlocksNotContainers()
     {
-        if (isset(self::$_containerAliases[$alias])) {
-            if (!isset(self::$_blockAliases[$alias])) {
-                $this->fail(
-                    "Element with alias '$alias' is used as a block in file '$file' via getChildBlock() method, "
-                    . "while '$alias' alias is declared as a container in file(s): "
-                    . join(', ', self::$_containerAliases[$alias]['files'])
-                );
-            } else {
-                $this->markTestIncomplete(
-                    "Element with alias '$alias' is used as a block in file '$file' via getChildBlock() method. "
-                    . "It's impossible to determine explicitly whether the element is a block or a container, "
-                    . "as it is declared as a container in file(s): "
-                    . join(', ', self::$_containerAliases[$alias]['files']) . " and as a block in file(s): "
-                    . join(', ', self::$_blockAliases[$alias]['files'])
-                );
-            }
-        }
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * Check that containers are not used as blocks in templates
+             *
+             * @param string $alias
+             * @param string $file
+             * @throws \Exception|PHPUnit_Framework_ExpectationFailedException
+             */
+            function ($alias, $file) {
+                if (isset(self::$_containerAliases[$alias])) {
+                    if (!isset(self::$_blockAliases[$alias])) {
+                        $this->fail(
+                            "Element with alias '$alias' is used as a block in file '$file' via getChildBlock() method,"
+                            . " while '$alias' alias is declared as a container in file(s): "
+                            . join(', ', self::$_containerAliases[$alias]['files'])
+                        );
+                    } else {
+                        $this->markTestIncomplete(
+                            "Element with alias '$alias' is used as a block in file '$file' via getChildBlock() method."
+                            . " It's impossible to determine explicitly whether the element is a block or a container, "
+                            . "as it is declared as a container in file(s): "
+                            . join(', ', self::$_containerAliases[$alias]['files']) . " and as a block in file(s): "
+                            . join(', ', self::$_blockAliases[$alias]['files'])
+                        );
+                    }
+                }
+            },
+            $this->getChildBlockDataProvider()
+        );
     }
 
     /**

@@ -70,37 +70,37 @@ class LayoutConfigTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * Given a layout file, test whether all of its service calls are valid
-     *
-     * @param $layoutFile
-     *
-     * @dataProvider xmlFileDataProvider
-     */
-    public function testXmlFile($layoutFile)
+    public function testXmlFiles()
     {
-        $dom = new \DOMDocument();
-        $dom->loadXML(file_get_contents($layoutFile));
-        $dataList = $dom->getElementsByTagName('data');
-        /** @var \DOMNode $data */
-        foreach ($dataList as $data) {
-            if ($data->hasAttributes()) {
-                /** @var \DOMNode $serviceCallAttribute */
-                $serviceCallAttribute = $data->attributes->getNamedItem('service_call');
-                if ($serviceCallAttribute) {
-                    /** @var string $serviceCall */
-                    $serviceCall = $serviceCallAttribute->nodeValue;
-                    $this->assertContains($serviceCall, self::$_serviceCalls, "Unknown service call: $serviceCall");
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * Given a layout file, test whether all of its service calls are valid
+             *
+             * @param $layoutFile
+             */
+            function ($layoutFile) {
+                $dom = new \DOMDocument();
+                $dom->loadXML(file_get_contents($layoutFile));
+                $dataList = $dom->getElementsByTagName('data');
+                /** @var \DOMNode $data */
+                foreach ($dataList as $data) {
+                    if ($data->hasAttributes()) {
+                        /** @var \DOMNode $serviceCallAttribute */
+                        $serviceCallAttribute = $data->attributes->getNamedItem('service_call');
+                        if ($serviceCallAttribute) {
+                            /** @var string $serviceCall */
+                            $serviceCall = $serviceCallAttribute->nodeValue;
+                            $this->assertContains(
+                                $serviceCall,
+                                self::$_serviceCalls,
+                                "Unknown service call: $serviceCall"
+                            );
+                        }
+                    }
                 }
-            }
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function xmlFileDataProvider()
-    {
-        return \Magento\TestFramework\Utility\Files::init()->getLayoutFiles();
+            },
+            \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()
+        );
     }
 }

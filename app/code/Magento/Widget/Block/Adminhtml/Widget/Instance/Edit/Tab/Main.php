@@ -133,7 +133,7 @@ class Main
     /**
      * Getter
      *
-     * @return Widget_Model_Widget_Instance
+     * @return \Magento\Widget\Model\Widget\Instance
      */
     public function getWidgetInstance()
     {

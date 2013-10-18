@@ -70,7 +70,7 @@ class NavigationModeTest extends \PHPUnit_Framework_TestCase
         $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
         $app = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
         $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
-        $session = $this->getMock('Magento\Core\Model\SessionProxy', array(), array(), '', false);
+        $session = $this->getMock('Magento\Core\Model\Session', array(), array(), '', false);
 
         $this->_model = new \Magento\DesignEditor\Model\Url\NavigationMode(
             $this->getMock('Magento\Core\Model\Url\SecurityInfoInterface'),

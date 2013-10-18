@@ -114,7 +114,7 @@ class Order extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
     {
         $googleShipItems = array();
         foreach ($items as $item) {
-            $googleShipItems[] = new GoogleShipItem($item);
+            $googleShipItems[] = new \GoogleShipItem($item);
         }
 
         $response = $this->getGRequest()

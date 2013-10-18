@@ -88,7 +88,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->_menuConfigMock->expects($this->any())->method('getMenu')->will($this->returnValue($this->_menuMock));
 
         $this->_coreSessionMock = $this->getMock(
-            'Magento\Core\Model\SessionProxy', array('getFormKey'), array(), '', false
+            'Magento\Core\Model\Session', array('getFormKey'), array(), '', false
         );
         $this->_coreSessionMock->expects($this->any())->method('getFormKey')->will($this->returnValue('salt'));
 
@@ -117,13 +117,13 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->_coreDataMock = $this->getMock('Magento\Core\Helper\Data', array('getHash'), array(), '', false);
         $this->_coreDataMock->expects($this->any())->method('getHash')->will($this->returnArgument(0));
 
-        $this->_authSessionMock = $this->getMock('Magento\Backend\Model\Auth\SessionProxy', array(), array(),
+        $this->_authSessionMock = $this->getMock('Magento\Backend\Model\Auth\Session', array(), array(),
             '', false, false);
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $helper->getObject('Magento\Backend\Model\Url', array(
             'coreStoreConfig' => $this->_storeConfigMock,
             'backendHelper'   => $helperMock,
-            'coreSession'     => $this->_coreSessionMock,
+            'session'         => $this->_coreSessionMock,
             'menuConfig'      => $this->_menuConfigMock,
             'coreData'        => $this->_coreDataMock,
             'authSession'     => $this->_authSessionMock

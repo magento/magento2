@@ -53,7 +53,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false, false),
             $this->getMock('Magento\Core\Model\App', array(), array(), '', false, false),
             $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false, false),
-            $this->getMock('Magento\Core\Model\SessionProxy', array(), array(), '', false, false)
+            $this->getMock('Magento\Core\Model\Session', array(), array(), '', false, false)
         );
     }
 

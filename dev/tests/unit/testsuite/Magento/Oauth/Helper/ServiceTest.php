@@ -139,21 +139,4 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(10));
         $this->assertEquals(10, $this->_oauthHelper->getCleanupExpirationPeriod());
     }
-
-    public function testGetConsumerExpirationPeriodZero()
-    {
-        $this->_storeConfigMock->expects($this->once())->method('getConfig')
-            ->will($this->returnValue(0));
-        $this->assertEquals(
-            \Magento\Oauth\Helper\Service::CONSUMER_EXPIRATION_PERIOD_DEFAULT,
-            $this->_oauthHelper->getConsumerExpirationPeriod()
-        );
-    }
-
-    public function testGetConsumerExpirationPeriodNonZero()
-    {
-        $this->_storeConfigMock->expects($this->once())->method('getConfig')
-            ->will($this->returnValue(10));
-        $this->assertEquals(10, $this->_oauthHelper->getConsumerExpirationPeriod());
-    }
 }

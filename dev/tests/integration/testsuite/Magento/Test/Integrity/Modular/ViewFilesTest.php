@@ -29,20 +29,26 @@ namespace Magento\Test\Integrity\Modular;
 
 class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
 {
-    /**
-     * @param string $application
-     * @param string $file
-     * @dataProvider viewFilesFromModulesViewDataProvider
-     */
-    public function testViewFilesFromModulesView($application, $file)
+    public function testViewFilesFromModulesView()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\View\DesignInterface')
-            ->setArea($application)
-            ->setDefaultDesignTheme();
-        $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\View\FileSystem')
-            ->getViewFile($file);
-        $this->assertFileExists($result);
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $application
+             * @param string $file
+             */
+            function ($application, $file) {
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                    ->get('Magento\Core\Model\View\DesignInterface')
+                    ->setArea($application)
+                    ->setDefaultDesignTheme();
+                $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                    ->get('Magento\Core\Model\View\FileSystem')
+                    ->getViewFile($file);
+                $this->assertFileExists($result);
+            },
+            $this->viewFilesFromModulesViewDataProvider()
+        );
     }
 
     /**
@@ -86,8 +92,8 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
                 continue;
             }
             foreach (new \RecursiveIteratorIterator(
-                         new \RecursiveDirectoryIterator($viewAppDir->getRealPath())) as $fileInfo
-            ) {
+                new \RecursiveDirectoryIterator($viewAppDir->getRealPath())
+            ) as $fileInfo) {
                 $references = $this->_findReferencesToViewFile($fileInfo);
                 if (!isset($files[$area])) {
                     $files[$area] = $references;
@@ -124,21 +130,27 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
         return $result;
     }
 
-    /**
-     * getViewUrl() hard-coded in the php-files
-     *
-     * @param string $application
-     * @param string $file
-     * @dataProvider viewFilesFromModulesCodeDataProvider
-     */
-    public function testViewFilesFromModulesCode($application, $file)
+    public function testViewFilesFromModulesCode()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\View\DesignInterface')
-            ->setArea($application)
-            ->setDefaultDesignTheme();
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\View\FileSystem');
-        $this->assertFileExists($filesystem->getViewFile($file));
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * getViewUrl() hard-coded in the php-files
+             *
+             * @param string $application
+             * @param string $file
+             */
+            function ($application, $file) {
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                    ->get('Magento\Core\Model\View\DesignInterface')
+                    ->setArea($application)
+                    ->setDefaultDesignTheme();
+                $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                    ->get('Magento\Core\Model\View\FileSystem');
+                $this->assertFileExists($filesystem->getViewFile($file));
+            },
+            $this->viewFilesFromModulesCodeDataProvider()
+        );
     }
 
     /**

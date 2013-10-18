@@ -52,7 +52,7 @@ class AbstractCompositeTest extends \PHPUnit_Framework_TestCase
     protected $_testData = array(
         'id' => 'elementId',
         'label' => 'Element Label',
-        'customAttribute' => 'Custom attribute value',
+        'someAttribute' => 'Some attribute value',
         'children' => array(
             'someGroup' => array()
         )

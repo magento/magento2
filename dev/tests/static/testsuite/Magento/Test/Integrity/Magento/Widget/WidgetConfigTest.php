@@ -27,29 +27,22 @@ namespace Magento\Test\Integrity\Magento\Widget;
 
 class WidgetConfigTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @param string $configFile
-     *
-     * @dataProvider xmlDataProvider
-     */
-    public function testXml($configFile)
+    public function testXmlFiles()
     {
-        $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource()
-            . '/app/code/Magento/Widget/etc/widget.xsd';
-        $this->_validateFileExpectSuccess($configFile, $schema);
-    }
-
-    /**
-     * Find all widget.xml files in Magento
-     *
-     * @return array of widget.xml file paths
-     */
-    public function xmlDataProvider()
-    {
-        $utilityFiles = \Magento\TestFramework\Utility\Files::init();
-        return array_merge(
-            $utilityFiles->getConfigFiles('widget.xml'),
-            $utilityFiles->getLayoutConfigFiles('widget.xml')
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $configFile
+             */
+            function ($configFile) {
+                $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource()
+                    . '/app/code/Magento/Widget/etc/widget.xsd';
+                $this->_validateFileExpectSuccess($configFile, $schema);
+            },
+            array_merge(
+                \Magento\TestFramework\Utility\Files::init()->getConfigFiles('widget.xml'),
+                \Magento\TestFramework\Utility\Files::init()->getLayoutConfigFiles('widget.xml')
+            )
         );
     }
 

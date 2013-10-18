@@ -27,18 +27,21 @@ namespace Magento\Test\Twig;
 
 class TwigExtensionTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @dataProvider listAllTwigFiles
-     */
-    public function testTwigTemplateValid($file, $runTest = true)
+    public function testTwigTemplatesValid()
     {
-        if (!$runTest) {
-            return;
-        }
-        exec('php ' . __DIR__ . "/_files/twig-lint.phar lint $file", $output, $returnVar);
-        $this->assertEquals(
-            0, $returnVar,
-            "File $file could not be validated by twig-lint.  The output is : \n" . implode("\n", $output)
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            function ($file, $runTest = true) {
+                if (!$runTest) {
+                    return;
+                }
+                exec('php ' . __DIR__ . "/_files/twig-lint.phar lint $file", $output, $returnVar);
+                $this->assertEquals(
+                    0, $returnVar,
+                    "File $file could not be validated by twig-lint.  The output is : \n" . implode("\n", $output)
+                );
+            },
+            $this->listAllTwigFiles()
         );
     }
 

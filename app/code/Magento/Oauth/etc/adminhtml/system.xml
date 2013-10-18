@@ -46,6 +46,14 @@
                     <label>Expiration Period</label>
                     <comment>Disable consumer key/secret credentials if not used within X seconds.</comment>
                 </field>
+                <field id="post_maxredirects" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>OAuth consumer credentials HTTP Post maxredirects</label>
+                    <comment>Number of maximum redirects for OAuth consumer credentials Post request.</comment>
+                </field>
+                <field id="post_timeout" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>OAuth consumer credentials HTTP Post timeout</label>
+                    <comment>Timeout for OAuth consumer credentials Post request within X seconds.</comment>
+                </field>
             </group>
         </section>
     </system>

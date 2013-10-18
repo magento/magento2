@@ -98,4 +98,9 @@
             <instance type="Magento\Backend\Model\Url\Proxy" />
         </param>
     </type>
+    <type name="Magento\Backend\Model\Url">
+        <param name="authSession">
+            <instance type="Magento\Backend\Model\Auth\Session\Proxy" />
+        </param>
+    </type>
 </config>

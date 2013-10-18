@@ -32,23 +32,29 @@ namespace Magento\Test\Legacy;
 
 class TableTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @dataProvider tableNameDataProvider
-     */
-    public function testTableName($filePath)
+    public function testTableName()
     {
-        $tables = self::extractTables($filePath);
-        $legacyTables = array();
-        foreach ($tables as $table) {
-            $tableName = $table['name'];
-            if (strpos($tableName, '/') === false) {
-                continue;
-            }
-            $legacyTables[] = $table;
-        }
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $filePath
+             */
+            function ($filePath) {
+                $tables = self::extractTables($filePath);
+                $legacyTables = array();
+                foreach ($tables as $table) {
+                    $tableName = $table['name'];
+                    if (strpos($tableName, '/') === false) {
+                        continue;
+                    }
+                    $legacyTables[] = $table;
+                }
 
-        $message = $this->_composeFoundsMessage($legacyTables);
-        $this->assertEmpty($message, $message);
+                $message = $this->_composeFoundsMessage($legacyTables);
+                $this->assertEmpty($message, $message);
+            },
+            \Magento\TestFramework\Utility\Files::init()->getPhpFiles()
+        );
     }
 
     /**
@@ -228,13 +234,5 @@ class TableTest extends \PHPUnit_Framework_TestCase
         $result = 'Legacy table names with slash must be fixed to direct table names. Found: '
             . implode(', ', $descriptions) . '.';
         return $result;
-    }
-
-    /**
-     * @return array
-     */
-    public function tableNameDataProvider()
-    {
-        return \Magento\TestFramework\Utility\Files::init()->getPhpFiles();
     }
 }

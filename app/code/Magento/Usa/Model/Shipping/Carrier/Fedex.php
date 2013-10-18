@@ -190,7 +190,7 @@ class Fedex
      *
      * @param string $wsdl
      * @param bool|int $trace
-     * @return SoapClient
+     * @return \SoapClient
      */
     protected function _createSoapClient($wsdl, $trace = false)
     {
@@ -206,7 +206,7 @@ class Fedex
     /**
      * Create rate soap client
      *
-     * @return SoapClient
+     * @return \SoapClient
      */
     protected function _createRateSoapClient()
     {
@@ -216,7 +216,7 @@ class Fedex
     /**
      * Create ship soap client
      *
-     * @return SoapClient
+     * @return \SoapClient
      */
     protected function _createShipSoapClient()
     {
@@ -226,7 +226,7 @@ class Fedex
     /**
      * Create track soap client
      *
-     * @return SoapClient
+     * @return \SoapClient
      */
     protected function _createTrackSoapClient()
     {

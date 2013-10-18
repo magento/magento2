@@ -107,7 +107,7 @@ class Layer extends \Magento\Catalog\Model\Layer
     /**
      * Get current layer product collection
      *
-     * @return \Magento\Catalog\Model\Resource\Eav\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
      */
     public function getProductCollection()
     {
@@ -124,7 +124,7 @@ class Layer extends \Magento\Catalog\Model\Layer
     /**
      * Prepare product collection
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Resource\Product\Collection $collection
+     * @param \Magento\Catalog\Model\Resource\Product\Attribute\Collection $collection
      * @return \Magento\Catalog\Model\Layer
      */
     public function prepareProductCollection($collection)
@@ -173,8 +173,8 @@ class Layer extends \Magento\Catalog\Model\Layer
     /**
      * Add filters to attribute collection
      *
-     * @param   \Magento\Catalog\Model\Resource\Eav\Resource\Product\Attribute\Collection $collection
-     * @return  \Magento\Catalog\Model\Resource\Eav\Resource\Product\Attribute\Collection
+     * @param   \Magento\Catalog\Model\Resource\Product\Attribute\Collection $collection
+     * @return  \Magento\Catalog\Model\Resource\Product\Attribute\Collection
      */
     protected function _prepareAttributeCollection($collection)
     {

@@ -123,7 +123,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * @param \Magento\Core\Helper\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Customer\Model\SessionProxy $customerSession
+     * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
@@ -133,7 +133,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
         \Magento\Core\Helper\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Customer\Model\SessionProxy $customerSession,
+        \Magento\Customer\Model\Session $customerSession,
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {

@@ -36,6 +36,8 @@
             </cleanup>
             <consumer>
                 <expiration_period>300</expiration_period>
+                <post_maxredirects>0</post_maxredirects>
+                <post_timeout>5</post_timeout>
             </consumer>
         </oauth>
     </default>

@@ -50,21 +50,28 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'Translation files exist, but not declared in configuration:' . "\n" . var_export($failures, 1));
     }
 
-    /**
-     * Verify whether all payment methods are declared in appropriate modules
-     *
-     * @dataProvider paymentMethodsDataProvider
-     */
-    public function testPaymentMethods($configFile, $moduleName)
+    public function testPaymentMethods()
     {
-        $config = simplexml_load_file($configFile);
-        $nodes = $config->xpath('/config/default/payment/*/model') ?: array();
-        $formalModuleName = str_replace('_', '\\', $moduleName);
-        foreach ($nodes as $node) {
-            $this->assertStringStartsWith($formalModuleName . '\Model\\', (string)$node,
-                "'$node' payment method is declared in '$configFile' module, but doesn't belong to '$moduleName' module"
-            );
-        }
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * Verify whether all payment methods are declared in appropriate modules
+             */
+            function ($configFile, $moduleName) {
+                $config = simplexml_load_file($configFile);
+                $nodes = $config->xpath('/config/default/payment/*/model') ?: array();
+                $formalModuleName = str_replace('_', '\\', $moduleName);
+                foreach ($nodes as $node) {
+                    $this->assertStringStartsWith(
+                        $formalModuleName . '\Model\\',
+                        (string)$node,
+                        "'$node' payment method is declared in '$configFile' module, "
+                            . "but doesn't belong to '$moduleName' module"
+                    );
+                }
+            },
+            $this->paymentMethodsDataProvider()
+        );
     }
 
     public function paymentMethodsDataProvider()

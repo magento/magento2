@@ -134,7 +134,7 @@ class Observer
      * @param $jobConfig
      * @param \Magento\Cron\Model\Schedule $schedule
      *
-     * @throws Exception
+     * @throws \Exception
      */
     protected function _runJob($scheduledTime, $currentTime, $jobConfig, $schedule)
     {

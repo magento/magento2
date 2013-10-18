@@ -46,7 +46,7 @@ class Url extends \Magento\Core\Model\Url
     /**
      * Authentication session
      *
-     * @var \Magento\Backend\Model\Auth\SessionProxy
+     * @var \Magento\Backend\Model\Auth\Session
      */
     protected $_session;
 
@@ -92,13 +92,13 @@ class Url extends \Magento\Core\Model\Url
      * @param \Magento\Core\Model\Url\SecurityInfoInterface $securityInfo
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Core\Model\SessionProxy $coreSession
+     * @param \Magento\Core\Model\Session $session
      * @param \Magento\Backend\Model\Menu\Config $menuConfig
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Core\Model\CacheInterface $cache
-     * @param \Magento\Backend\Model\Auth\SessionProxy $authSession
+     * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -107,19 +107,19 @@ class Url extends \Magento\Core\Model\Url
         \Magento\Core\Model\Url\SecurityInfoInterface $securityInfo,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Core\Model\SessionProxy $coreSession,
+        \Magento\Core\Model\Session $session,
         \Magento\Backend\Model\Menu\Config $menuConfig,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\App $app,
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Core\Model\CacheInterface $cache,
-        \Magento\Backend\Model\Auth\SessionProxy $authSession,
+        \Magento\Backend\Model\Auth\Session $authSession,
         array $data = array()
     ) {
-        parent::__construct($securityInfo, $coreStoreConfig, $coreData, $app, $storeManager, $coreSession, $data);
+        parent::__construct($securityInfo, $coreStoreConfig, $coreData, $app, $storeManager, $session, $data);
         $this->_startupMenuItemId = $coreStoreConfig->getConfig(self::XML_PATH_STARTUP_MENU_ITEM);
         $this->_backendHelper = $backendHelper;
-        $this->_coreSession = $coreSession;
+        $this->_coreSession = $session;
         $this->_menuConfig = $menuConfig;
         $this->_cache = $cache;
         $this->_session = $authSession;

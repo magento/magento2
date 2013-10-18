@@ -82,7 +82,7 @@ class Message extends \Magento\Core\Model\AbstractModel
      *
      * @param string $type
      *
-     * @return \Magento\Eav\Model\Entity\AbstractModel
+     * @return mixed
      */
     public function getEntityModelByType($type)
     {

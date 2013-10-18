@@ -73,39 +73,46 @@ class CodeStyleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $inputFile
-     * @param string $expectedResultFile
-     * @dataProvider ruleDataProvider
      * @depends testPhpCsAvailability
      */
-    public function testRule($inputFile, $expectedResultFile)
+    public function testRule()
     {
-        $expectedXml = simplexml_load_file($expectedResultFile);
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $inputFile
+             * @param string $expectedResultFile
+             */
+            function ($inputFile, $expectedResultFile) {
+                $expectedXml = simplexml_load_file($expectedResultFile);
 
-        // rule is not implemented
-        $elements = $expectedXml->xpath('/config/incomplete');
-        if ($elements) {
-            $message = (string)$elements[0];
-            $this->markTestIncomplete("Rule for the fixture '{$inputFile}' is not implemented. {$message}");
-        }
+                // rule is not implemented
+                $elements = $expectedXml->xpath('/config/incomplete');
+                if ($elements) {
+                    $message = (string)$elements[0];
+                    $this->markTestIncomplete("Rule for the fixture '{$inputFile}' is not implemented. {$message}");
+                }
 
-        // run additional methods before making test
-        $elements = $expectedXml->xpath('/config/run');
-        foreach ($elements as $element) {
-            $method = (string)$element->attributes()->method;
-            $this->$method();
-        }
+                // run additional methods before making test
+                $elements = $expectedXml->xpath('/config/run');
+                foreach ($elements as $element) {
+                    $method = (string)$element->attributes()->method;
+                    $this->$method();
+                }
 
-        self::$_cmd->run(array($inputFile));
-        $resultXml = simplexml_load_file(self::$_reportFile);
-        $this->_assertTotalErrorsAndWarnings($resultXml, $expectedXml);
-        $this->_assertErrors($resultXml, $expectedXml);
-        $this->_assertWarnings($resultXml, $expectedXml);
+                self::$_cmd->run(array($inputFile));
+                $resultXml = simplexml_load_file(self::$_reportFile);
+                $this->_assertTotalErrorsAndWarnings($resultXml, $expectedXml);
+                $this->_assertErrors($resultXml, $expectedXml);
+                $this->_assertWarnings($resultXml, $expectedXml);
 
-        // verify that there has been at least one assertion performed
-        if ($this->getCount() == 0) {
-            $this->fail("Broken test: there has no assertions been performed for the fixture '{$inputFile}'.");
-        }
+                // verify that there has been at least one assertion performed
+                if ($this->getCount() == 0) {
+                    $this->fail("Broken test: there has no assertions been performed for the fixture '{$inputFile}'.");
+                }
+            },
+            $this->ruleDataProvider()
+        );
     }
 
     /**

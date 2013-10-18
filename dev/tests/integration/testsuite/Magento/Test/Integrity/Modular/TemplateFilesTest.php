@@ -32,28 +32,33 @@ namespace Magento\Test\Integrity\Modular;
  */
 class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
 {
-    /**
-     * @param string $module
-     * @param string $template
-     * @param string $class
-     * @param string $area
-     * @dataProvider allTemplatesDataProvider
-     */
-    public function testAllTemplates($module, $template, $class, $area)
+    public function testAllTemplates()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\View\DesignInterface')
-            ->setDefaultDesignTheme();
-        // intentionally to make sure the module files will be requested
-        $params = array(
-            'area'       => $area,
-            'themeModel' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Theme'),
-            'module'     => $module
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $module
+             * @param string $template
+             * @param string $class
+             * @param string $area
+             */
+            function ($module, $template, $class, $area) {
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\View\DesignInterface')
+                    ->setDefaultDesignTheme();
+                // intentionally to make sure the module files will be requested
+                $params = array(
+                    'area'       => $area,
+                    'themeModel' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                        ->create('Magento\Core\Model\Theme'),
+                    'module'     => $module
+                );
+                $file = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()
+                    ->get('Magento\Core\Model\View\FileSystem')
+                    ->getFilename($template, $params);
+                $this->assertFileExists($file, "Block class: {$class}");
+            },
+            $this->allTemplatesDataProvider()
         );
-        $file = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()
-            ->get('Magento\Core\Model\View\FileSystem')
-            ->getFilename($template, $params);
-        $this->assertFileExists($file, "Block class: {$class}");
     }
 
     /**
@@ -106,7 +111,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
             return $templates;
         } catch (\Exception $e) {
             trigger_error("Corrupted data provider. Last known block instantiation attempt: '{$blockClass}'."
-                . " \Exception: {$e}", E_USER_ERROR);
+                . " Exception: {$e}", E_USER_ERROR);
         }
     }
 

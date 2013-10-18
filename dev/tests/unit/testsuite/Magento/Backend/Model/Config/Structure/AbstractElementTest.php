@@ -87,11 +87,11 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->_model->setData(array(
             'id' => 'elementId',
             'label' => 'Element Label',
-            'customAttribute' => 'Custom attribute value'
+            'someAttribute' => 'Some attribute value'
         ), 'someScope');
         $this->assertEquals('elementId', $this->_model->getAttribute('id'));
         $this->assertEquals('Element Label', $this->_model->getAttribute('label'));
-        $this->assertEquals('Custom attribute value', $this->_model->getAttribute('customAttribute'));
+        $this->assertEquals('Some attribute value', $this->_model->getAttribute('someAttribute'));
         $this->assertNull($this->_model->getAttribute('nonexistingAttribute'));
     }
 

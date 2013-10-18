@@ -55,7 +55,7 @@ class Form extends \Magento\Adminhtml\Block\Sales\Order\AbstractOrder
     /**
      * Retrieve creditmemo model instance
      *
-     * @return \Magento\Sales\Model\Creditmemo
+     * @return \Magento\Sales\Model\Order\Creditmemo
      */
     public function getCreditmemo()
     {

@@ -38,7 +38,7 @@ class Data
     implements \IteratorAggregate
 {
     /**
-     * @var IteratorIterator
+     * @var \Iterator
      */
     protected $_iterator = null;
 
@@ -75,7 +75,7 @@ class Data
     /**
      * Retrieve an external iterator
      *
-     * @return IteratorIterator
+     * @return \Iterator
      */
     public function getIterator()
     {

@@ -25,9 +25,9 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="head">
-        <block class="Magento\Page\Block\Html\Head\Css" name="magento-cms-widgets-css">
+        <block class="Magento\Page\Block\Html\Head\Css" name="magento-widget-widgets-css">
             <arguments>
-                <argument name="file" xsi:type="string">Magento_VersionsCms::widgets.css</argument>
+                <argument name="file" xsi:type="string">Magento_Widget::widgets.css</argument>
             </arguments>
         </block>
     </referenceBlock>

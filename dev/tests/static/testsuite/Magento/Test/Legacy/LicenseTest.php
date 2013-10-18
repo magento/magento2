@@ -32,25 +32,28 @@ namespace Magento\Test\Legacy;
 
 class LicenseTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @dataProvider legacyCommentDataProvider
-     */
-    public function testLegacyComment($filename)
+    public function testLegacyComment()
     {
-        $fileText = file_get_contents($filename);
-        if (!preg_match_all('#/\*\*.+@copyright.+?\*/#s', $fileText, $matches)) {
-            return;
-        }
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            function ($filename) {
+                $fileText = file_get_contents($filename);
+                if (!preg_match_all('#/\*\*.+@copyright.+?\*/#s', $fileText, $matches)) {
+                    return;
+                }
 
-        foreach ($matches[0] as $commentText) {
-            foreach (array('Irubin Consulting Inc', 'DBA Varien', 'Magento Inc') as $legacyText) {
-                $this->assertNotContains(
-                    $legacyText,
-                    $commentText,
-                    "The license of file {$filename} contains legacy text."
-                );
-            }
-        }
+                foreach ($matches[0] as $commentText) {
+                    foreach (array('Irubin Consulting Inc', 'DBA Varien', 'Magento Inc') as $legacyText) {
+                        $this->assertNotContains(
+                            $legacyText,
+                            $commentText,
+                            "The license of file {$filename} contains legacy text."
+                        );
+                    }
+                }
+            },
+            $this->legacyCommentDataProvider()
+        );
     }
 
     public function legacyCommentDataProvider()

@@ -83,7 +83,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             array('helperFactory' => $helperFactory)
         );
 
-        /** @var \Magento\Invitation\Block\Link $block */
+        /** @var \Magento\Checkout\Block\Link $block */
         $block = $this->_objectManagerHelper->getObject(
             'Magento\Checkout\Block\Link',
             array(

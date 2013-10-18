@@ -43,7 +43,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
     /**#@-*/
 
     /**
-     * @var MongoCollection|null
+     * @var \MongoCollection|null
      */
     protected $_collection = null;
 
@@ -68,7 +68,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      */
     public function __construct(array $options = array())
     {
-        if (!extension_loaded('mongo') || !version_compare(Mongo::VERSION, '1.2.11', '>=')) {
+        if (!extension_loaded('mongo') || !version_compare(\Mongo::VERSION, '1.2.11', '>=')) {
             \Zend_Cache::throwException(
                 "At least 1.2.11 version of 'mongo' extension is required for using MongoDb cache backend"
             );
@@ -82,12 +82,12 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
     /**
      * Get collection
      *
-     * @return MongoCollection
+     * @return \MongoCollection
      */
     protected function _getCollection()
     {
         if (null === $this->_collection) {
-            $connection = new Mongo($this->_options['connection_string'], $this->_options['mongo_options']);
+            $connection = new \Mongo($this->_options['connection_string'], $this->_options['mongo_options']);
             $database = $connection->selectDB($this->_options['db']);
             $this->_collection = $database->selectCollection($this->_options['collection']);
         }

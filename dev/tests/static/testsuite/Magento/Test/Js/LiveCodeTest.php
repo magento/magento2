@@ -93,21 +93,27 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
         self::$_whiteListJsFiles = array_filter(self::$_whiteListJsFiles, $filter);
     }
 
-    /**
-     * @dataProvider codeJsHintDataProvider
-     */
-    public function testCodeJsHint($filename)
+    public function testCodeJsHint()
     {
-        $cmd = new \Magento\TestFramework\Inspection\JsHint\Command($filename, self::$_reportFile);
-        $result = false;
-        try {
-            $result = $cmd->canRun();
-        } catch (\Exception $e) {
-            $this->markTestSkipped($e->getMessage());
-        }
-        if ($result) {
-            $this->assertTrue($cmd->run(array()), $cmd->getLastRunMessage());
-        }
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $filename
+             */
+            function ($filename) {
+                $cmd = new \Magento\TestFramework\Inspection\JsHint\Command($filename, self::$_reportFile);
+                $result = false;
+                try {
+                    $result = $cmd->canRun();
+                } catch (\Exception $e) {
+                    $this->markTestSkipped($e->getMessage());
+                }
+                if ($result) {
+                    $this->assertTrue($cmd->run(array()), $cmd->getLastRunMessage());
+                }
+            },
+            $this->codeJsHintDataProvider()
+        );
     }
 
     /**

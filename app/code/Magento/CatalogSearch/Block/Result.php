@@ -140,7 +140,7 @@ class Result extends \Magento\Core\Block\Template
     /**
      * Retrieve search list toolbar block
      *
-     * @return \Magento\Catalog\Block\Product\ProductList
+     * @return \Magento\Catalog\Block\Product\ListProduct
      */
     public function getListBlock()
     {

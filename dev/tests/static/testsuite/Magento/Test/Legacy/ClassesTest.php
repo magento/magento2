@@ -32,75 +32,68 @@ namespace Magento\Test\Legacy;
 
 class ClassesTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @param string $file
-     * @dataProvider phpCodeDataProvider
-     */
-    public function testPhpCode($file)
+    public function testPhpCode()
     {
-        $classes = \Magento\TestFramework\Utility\Classes::collectPhpCodeClasses(file_get_contents($file));
-        $this->_assertNonFactoryName($classes, $file);
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $file
+             */
+            function ($file) {
+                $classes = \Magento\TestFramework\Utility\Classes::collectPhpCodeClasses(file_get_contents($file));
+                $this->_assertNonFactoryName($classes, $file);
+            },
+            \Magento\TestFramework\Utility\Files::init()->getPhpFiles()
+        );
     }
 
-    /**
-     * @return array
-     */
-    public function phpCodeDataProvider()
+    public function testConfiguration()
     {
-        return \Magento\TestFramework\Utility\Files::init()->getPhpFiles();
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $path
+             */
+            function ($path) {
+                $xml = simplexml_load_file($path);
+
+                $classes = \Magento\TestFramework\Utility\Classes::collectClassesInConfig($xml);
+                $this->_assertNonFactoryName($classes, $path);
+
+                $modules = \Magento\TestFramework\Utility\Classes::getXmlAttributeValues($xml, '//@module', 'module');
+                $this->_assertNonFactoryName(array_unique($modules), $path, false, true);
+            },
+            \Magento\TestFramework\Utility\Files::init()->getConfigFiles()
+        );
     }
 
-    /**
-     * @param string $path
-     * @dataProvider configFileDataProvider
-     */
-    public function testConfiguration($path)
+    public function testLayouts()
     {
-        $xml = simplexml_load_file($path);
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $path
+             */
+            function ($path) {
+                $xml = simplexml_load_file($path);
+                $classes = \Magento\TestFramework\Utility\Classes::collectLayoutClasses($xml);
+                foreach (\Magento\TestFramework\Utility\Classes::getXmlAttributeValues($xml,
+                    '/layout//@helper', 'helper') as $class) {
+                    $classes[] = \Magento\TestFramework\Utility\Classes::getCallbackClass($class);
+                }
+                $classes =
+                    array_merge($classes, \Magento\TestFramework\Utility\Classes::getXmlAttributeValues($xml,
+                            '/layout//@module', 'module'));
+                $this->_assertNonFactoryName(array_unique($classes), $path);
 
-        $classes = \Magento\TestFramework\Utility\Classes::collectClassesInConfig($xml);
-        $this->_assertNonFactoryName($classes, $path);
-
-        $modules = \Magento\TestFramework\Utility\Classes::getXmlAttributeValues($xml, '//@module', 'module');
-        $this->_assertNonFactoryName(array_unique($modules), $path, false, true);
-    }
-
-    /**
-     * @return array
-     */
-    public function configFileDataProvider()
-    {
-        return \Magento\TestFramework\Utility\Files::init()->getConfigFiles();
-    }
-
-    /**
-     * @param string $path
-     * @dataProvider layoutFileDataProvider
-     */
-    public function testLayouts($path)
-    {
-        $xml = simplexml_load_file($path);
-        $classes = \Magento\TestFramework\Utility\Classes::collectLayoutClasses($xml);
-        foreach (\Magento\TestFramework\Utility\Classes::getXmlAttributeValues($xml,
-            '/layout//@helper', 'helper') as $class) {
-            $classes[] = \Magento\TestFramework\Utility\Classes::getCallbackClass($class);
-        }
-        $classes =
-            array_merge($classes, \Magento\TestFramework\Utility\Classes::getXmlAttributeValues($xml,
-                    '/layout//@module', 'module'));
-        $this->_assertNonFactoryName(array_unique($classes), $path);
-
-        $tabs =
-            \Magento\TestFramework\Utility\Classes::getXmlNodeValues($xml, '/layout//action[@method="addTab"]/block');
-        $this->_assertNonFactoryName(array_unique($tabs), $path, true);
-    }
-
-    /**
-     * @return array
-     */
-    public function layoutFileDataProvider()
-    {
-        return \Magento\TestFramework\Utility\Files::init()->getLayoutFiles();
+                $tabs = \Magento\TestFramework\Utility\Classes::getXmlNodeValues(
+                    $xml,
+                    '/layout//action[@method="addTab"]/block'
+                );
+                $this->_assertNonFactoryName(array_unique($tabs), $path, true);
+            },
+            \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()
+        );
     }
 
     /**

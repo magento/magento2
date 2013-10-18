@@ -56,7 +56,7 @@ class Factory
      *
      * @param string $url URL of a WSDL file
      * @param array $options Options including encoding, soap_version etc
-     * @return SoapServer
+     * @return \SoapServer
      */
     public function create($url, $options)
     {

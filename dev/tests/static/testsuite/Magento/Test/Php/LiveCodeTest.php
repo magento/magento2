@@ -65,6 +65,9 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
         self::$_blackList = self::_readLists(__DIR__ . '/_files/'.$type.'blacklist/*.txt');
     }
 
+    /**
+     * @TODO: combine with testCodeStyle
+     */
     public function testCodeStylePsr2()
     {
         $this->markTestSkipped('Skipped');
@@ -83,18 +86,16 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
         }
         self::setupFileLists('phpcs');
         $result = $codeSniffer->run(self::$_whiteList, self::$_blackList, array('php'));
-        $this->assertFileExists($reportFile, 'Expected '.$reportFile.' to be created by phpcs run with PSR2 standard');
-        // disabling the assertEquals below to allow the test to not fail but just report PSR2 violations to everyone.
-        // It should be uncommented once compliance is required.
-        /*
+        $this->assertFileExists(
+            $reportFile,
+            'Expected ' . $reportFile . ' to be created by phpcs run with PSR2 standard'
+        );
+        $this->markTestIncomplete("PHP Code Sniffer has found $result error(s): See detailed report in $reportFile");
         $this->assertEquals(
             0,
             $result,
             "PHP Code Sniffer has found $result error(s): See detailed report in $reportFile"
         );
-         */
-        // Remove this echo when the assert can be uncommented out.
-        echo "PHP Code Sniffer has found $result error(s): See detailed report in $reportFile";
     }
 
     public function testCodeStyle()

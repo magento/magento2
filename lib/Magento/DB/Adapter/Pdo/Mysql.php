@@ -3356,7 +3356,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
         }
 
         if (!$columns) {
-            throw new \Magento\DB\Exception('The columns for UPDATE statement are not defined');
+            throw new \Magento\DB\DBException('The columns for UPDATE statement are not defined');
         }
 
         $query = sprintf("%s\nSET %s", $query, implode(', ', $columns));

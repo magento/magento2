@@ -27,33 +27,20 @@ namespace Magento\TestFramework\Integrity;
 
 abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
 {
-    /** indicator no config file found */
-    const NO_CONFIG_FILE = 'no config file';
-
-    /**
-     * @param string $configFile
-     *
-     * @dataProvider configFilesDataProvider
-     */
-    public function testXml($configFile)
+    public function testXmlFiles()
     {
-        if ($configFile == self::NO_CONFIG_FILE) {
-            $this->markTestSkipped(
-                'There is no config file to test.'
-            );
-        }
-        $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getXsd();
-        $fileSchema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getFileXsd();
-        $this->_validateFileExpectSuccess($configFile, $schema, $fileSchema);
-    }
-
-    /**
-     * @return array
-     */
-    public function configFilesDataProvider()
-    {
-        $fileList = \Magento\TestFramework\Utility\Files::init()->getConfigFiles($this->_getXmlName());
-        return empty($fileList) ? array(self::NO_CONFIG_FILE => array(self::NO_CONFIG_FILE)) : $fileList;
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $configFile
+             */
+            function ($configFile) {
+                $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getXsd();
+                $fileSchema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getFileXsd();
+                $this->_validateFileExpectSuccess($configFile, $schema, $fileSchema);
+            },
+            \Magento\TestFramework\Utility\Files::init()->getConfigFiles($this->_getXmlName())
+        );
     }
 
     public function testSchemaUsingValidXml()

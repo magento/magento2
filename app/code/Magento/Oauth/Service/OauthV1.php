@@ -35,6 +35,36 @@ class OauthV1 implements \Magento\Oauth\Service\OauthV1Interface
      */
     const TIME_DEVIATION = 600;
 
+    /**
+     * Consumer xpath settings
+     */
+    const XML_PATH_CONSUMER_EXPIRATION_PERIOD = 'oauth/consumer/expiration_period';
+
+    /**
+     * Consumer expiration period in seconds
+     */
+    const CONSUMER_EXPIRATION_PERIOD_DEFAULT = 300;
+
+    /**
+     * Consumer HTTP POST maxredirects xpath
+     */
+    const XML_PATH_CONSUMER_POST_MAXREDIRECTS = 'oauth/consumer/post_maxredirects';
+
+    /**
+     * Consumer HTTPS POST maxredirects default
+     */
+    const CONSUMER_POST_MAXREDIRECTS = 0;
+
+    /**
+     * Consumer HTTP TIMEOUT xpath
+     */
+    const XML_PATH_CONSUMER_POST_TIMEOUT = 'oauth/consumer/post_timeout';
+
+    /**
+     * Consumer HTTP TIMEOUT default
+     */
+    const CONSUMER_POST_TIMEOUT = 5;
+
     /** @var  \Magento\Oauth\Model\Consumer\Factory */
     private $_consumerFactory;
 
@@ -43,9 +73,6 @@ class OauthV1 implements \Magento\Oauth\Service\OauthV1Interface
 
     /** @var  \Magento\Oauth\Model\Token\Factory */
     private $_tokenFactory;
-
-    /** @var  \Magento\Oauth\Helper\Service */
-    protected $_serviceHelper;
 
     /** @var  \Magento\Core\Model\StoreManagerInterface */
     protected $_storeManager;
@@ -56,31 +83,34 @@ class OauthV1 implements \Magento\Oauth\Service\OauthV1Interface
     /** @var  \Zend_Oauth_Http_Utility */
     protected $_httpUtility;
 
+    /** @var \Magento\Core\Model\Date */
+    protected $_date;
+
     /**
      * @param \Magento\Oauth\Model\Consumer\Factory $consumerFactory
      * @param \Magento\Oauth\Model\Nonce\Factory $nonceFactory
      * @param \Magento\Oauth\Model\Token\Factory $tokenFactory
-     * @param \Magento\Oauth\Helper\Service $serviceHelper
      * @param \Magento\Core\Model\StoreManagerInterface
      * @param \Magento\HTTP\ZendClient
      * @param \Zend_Oauth_Http_Utility $httpUtility
+     * @param \Magento\Core\Model\Date $date
      */
     public function __construct(
         \Magento\Oauth\Model\Consumer\Factory $consumerFactory,
         \Magento\Oauth\Model\Nonce\Factory $nonceFactory,
         \Magento\Oauth\Model\Token\Factory $tokenFactory,
-        \Magento\Oauth\Helper\Service $serviceHelper,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\HTTP\ZendClient $httpClient,
-        \Zend_Oauth_Http_Utility $httpUtility
+        \Zend_Oauth_Http_Utility $httpUtility,
+        \Magento\Core\Model\Date $date
     ) {
         $this->_consumerFactory = $consumerFactory;
         $this->_nonceFactory = $nonceFactory;
         $this->_tokenFactory = $tokenFactory;
         $this->_storeManager = $storeManager;
-        $this->_serviceHelper = $serviceHelper;
         $this->_httpClient = $httpClient;
         $this->_httpUtility = $httpUtility;
+        $this->_date = $date;
     }
 
     /**
@@ -117,17 +147,26 @@ class OauthV1 implements \Magento\Oauth\Service\OauthV1Interface
         try {
             $consumerData = $this->_getConsumer($request['consumer_id'])->getData();
             $storeBaseUrl = $this->_storeManager->getStore()->getBaseUrl();
-
-            $this->_httpClient->setUri($consumerData['http_post_url']);
-            $this->_httpClient->setParameterPost(array(
-                'oauth_consumer_key' => $consumerData['key'],
-                'oauth_consumer_secret' => $consumerData['secret'],
-                'store_base_url' => $storeBaseUrl
-            ));
-            // TODO: Uncomment this when there is a live http_post_url that we can actually post to.
-            //$this->_httpClient->request(\Magento\HTTP\ZendClient::POST);
-
             $verifier = $this->_tokenFactory->create()->createVerifierToken($request['consumer_id']);
+            $this->_httpClient->setUri($consumerData['http_post_url']);
+            $this->_httpClient->setParameterPost(
+                array(
+                    'oauth_consumer_key' => $consumerData['key'],
+                    'oauth_consumer_secret' => $consumerData['secret'],
+                    'store_base_url' => $storeBaseUrl,
+                    'oauth_verifier' => $verifier->getVerifier()
+                )
+            );
+            $maxredirects = $this->_getConfigValue(
+                self::XML_PATH_CONSUMER_POST_MAXREDIRECTS,
+                self::CONSUMER_POST_MAXREDIRECTS
+            );
+            $timeout = $this->_getConfigValue(
+                self::XML_PATH_CONSUMER_POST_TIMEOUT,
+                self::CONSUMER_POST_TIMEOUT
+            );
+            $this->_httpClient->setConfig(array('maxredirects' => $maxredirects, 'timeout' => $timeout));
+            $this->_httpClient->request(\Magento\HTTP\ZendClient::POST);
             return array('oauth_verifier' => $verifier->getVerifier());
         } catch (\Magento\Core\Exception $exception) {
             throw $exception;
@@ -142,34 +181,27 @@ class OauthV1 implements \Magento\Oauth\Service\OauthV1Interface
     public function getRequestToken($signedRequest)
     {
         $this->_validateVersionParam($signedRequest['oauth_version']);
-
         $consumer = $this->_getConsumerByKey($signedRequest['oauth_consumer_key']);
-
         // must use consumer within expiration period
-
         $consumerTS = strtotime($consumer->getCreatedAt());
-        if (time() - $consumerTS > $this->_serviceHelper->getConsumerExpirationPeriod()) {
+        $expiry = $this->_getConfigValue(
+            self::XML_PATH_CONSUMER_EXPIRATION_PERIOD,
+            self::CONSUMER_EXPIRATION_PERIOD_DEFAULT
+        );
+        if ($this->_date->timestamp() - $consumerTS > $expiry) {
             throw new \Magento\Oauth\Exception('', self::ERR_CONSUMER_KEY_INVALID);
         }
-
         $this->_validateNonce($signedRequest['oauth_nonce'], $consumer->getId(), $signedRequest['oauth_timestamp']);
-
         $token = $this->_getTokenByConsumer($consumer->getId());
-
         if ($token->getType() != \Magento\Oauth\Model\Token::TYPE_VERIFIER) {
             throw new \Magento\Oauth\Exception('', self::ERR_TOKEN_REJECTED);
         }
-
-        //OAuth clients are not sending the verifier param for requestToken requests
-        //$this->_validateVerifierParam($signedRequest['oauth_verifier'], $token->getVerifier());
-
         $this->_validateSignature(
             $signedRequest,
             $consumer->getSecret(),
             $signedRequest['http_method'],
             $signedRequest['request_url']
         );
-
         $requestToken = $token->createRequestToken($token->getId(), $consumer->getCallBackUrl());
         return array('oauth_token' => $requestToken->getToken(), 'oauth_token_secret' => $requestToken->getSecret());
     }
@@ -579,5 +611,16 @@ class OauthV1 implements \Magento\Oauth\Service\OauthV1Interface
                 throw new \Magento\Oauth\Exception($param, self::ERR_PARAMETER_ABSENT);
             }
         }
+    }
+
+    /**
+     * Get value from store configuration
+     *
+     * @return int
+     */
+    protected function _getConfigValue($xpath, $default)
+    {
+        $value = (int)$this->_storeManager->getStore()->getConfig($xpath);
+        return $value > 0 ? $value : $default;
     }
 }

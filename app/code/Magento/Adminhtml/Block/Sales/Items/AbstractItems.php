@@ -522,7 +522,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve invoice model instance
      *
-     * @return \Magento\Sales\Model\Invoice
+     * @return \Magento\Sales\Model\Order\Invoice
      */
     public function getInvoice()
     {

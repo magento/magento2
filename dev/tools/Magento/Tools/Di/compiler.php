@@ -44,6 +44,7 @@ try {
     $opt = new Zend_Console_Getopt(array(
         'serializer=w' => 'serializer function that should be used (serialize|binary) default = serialize',
         'verbose|v' => 'output report after tool run',
+        'log|l=s' => 'log level (all|error) default = all',
         'extra-classes-file=s' => 'path to file with extra proxies and factories to generate',
         'generation=s' => 'absolute path to generated classes, <magento_root>/var/generation by default',
         'di=s' => 'absolute path to DI definitions directory, <magento_root>/var/di by default'
@@ -65,7 +66,10 @@ try {
     );
 
     $writer = $opt->getOption('v') ? new Writer\Console() : new Writer\Quiet();
-    $log = new Log($writer);
+    $allowedLogTypes = $opt->getOption('log') == 'error' ?
+        array(Log::COMPILATION_ERROR, Log::GENERATION_ERROR)
+        : array();
+    $log = new Log($writer, $allowedLogTypes);
     $serializer = ($opt->getOption('serializer') == 'binary') ? new Serializer\Igbinary() : new Serializer\Standard();
 
     // 1 Code generation

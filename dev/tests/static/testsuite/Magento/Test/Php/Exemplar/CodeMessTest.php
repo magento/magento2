@@ -100,33 +100,33 @@ class CodeMessTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $inputFile
-     * @param string|array $expectedXpaths
      * @depends testRulesetFormat
      * @depends testPhpMdAvailability
-     * @dataProvider ruleViolationDataProvider
      */
-    public function testRuleViolation($inputFile, $expectedXpaths)
+    public function testRuleViolation()
     {
-        $this->assertNotEquals(\PHP_PMD_TextUI_Command::EXIT_SUCCESS, self::$_messDetector->run(
-            array($inputFile)), "PHP Mess Detector has failed to identify problem at the erroneous file {$inputFile}"
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $inputFile
+             * @param string|array $expectedXpaths
+             */
+            function ($inputFile, $expectedXpaths) {
+                $this->assertNotEquals(\PHP_PMD_TextUI_Command::EXIT_SUCCESS, self::$_messDetector->run(
+                    array($inputFile)),
+                    "PHP Mess Detector has failed to identify problem at the erroneous file {$inputFile}"
+                );
+
+                $actualReportXml = simplexml_load_file(self::$_reportFile);
+                $expectedXpaths = (array)$expectedXpaths;
+                foreach ($expectedXpaths as $expectedXpath) {
+                    $this->assertNotEmpty(
+                        $actualReportXml->xpath($expectedXpath),
+                        "Expected xpath: '$expectedXpath' for file: '$inputFile'"
+                    );
+                }
+            },
+            include(__DIR__ . '/_files/phpmd/data.php')
         );
-
-        $actualReportXml = simplexml_load_file(self::$_reportFile);
-        $expectedXpaths = (array)$expectedXpaths;
-        foreach ($expectedXpaths as $expectedXpath) {
-            $this->assertNotEmpty(
-                $actualReportXml->xpath($expectedXpath),
-                "Expected xpath: '$expectedXpath' for file: '$inputFile'"
-            );
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function ruleViolationDataProvider()
-    {
-        return include(__DIR__ . '/_files/phpmd/data.php');
     }
 }

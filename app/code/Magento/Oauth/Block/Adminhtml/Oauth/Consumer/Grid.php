@@ -71,7 +71,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         parent::_construct();
         $this->setId('consumerGrid');
         $this->setSaveParametersInSession(true);
-        $this->setDefaultSort('entity_id')->setDefaultDir(\Magento\Db\Select::SQL_DESC);
+        $this->setDefaultSort('entity_id')->setDefaultDir(\Magento\DB\Select::SQL_DESC);
         $this->_editAllow = $this->_authorization->isAllowed('Magento_Oauth::consumer_edit');
     }
 

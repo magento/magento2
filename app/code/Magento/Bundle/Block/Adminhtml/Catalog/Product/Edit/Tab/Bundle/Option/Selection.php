@@ -120,7 +120,7 @@ class Selection
     /**
      * Prepare block layout
      *
-     * @return \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle_Option_Selection
+     * @return \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Selection
      */
     protected function _prepareLayout()
     {

@@ -126,86 +126,74 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
         return include($file);
     }
 
-    /**
-     * @param string $file
-     * @dataProvider phpFileDataProvider
-     */
-    public function testPhpFile($file)
+    public function testPhpFiles()
     {
-        $content = file_get_contents($file);
-        $this->_testObsoleteClasses($content);
-        $this->_testObsoleteMethods($content, $file);
-        $this->_testGetChildSpecialCase($content, $file);
-        $this->_testGetOptionsSpecialCase($content);
-        $this->_testObsoleteMethodArguments($content);
-        $this->_testObsoleteProperties($content);
-        $this->_testObsoleteActions($content);
-        $this->_testObsoleteConstants($content);
-        $this->_testObsoletePropertySkipCalculate($content);
-        $this->_testObsoleteNamespace($file);
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $file
+             */
+            function ($file) {
+                $content = file_get_contents($file);
+                $this->_testObsoleteClasses($content);
+                $this->_testObsoleteMethods($content, $file);
+                $this->_testGetChildSpecialCase($content, $file);
+                $this->_testGetOptionsSpecialCase($content);
+                $this->_testObsoleteMethodArguments($content);
+                $this->_testObsoleteProperties($content);
+                $this->_testObsoleteActions($content);
+                $this->_testObsoleteConstants($content);
+                $this->_testObsoletePropertySkipCalculate($content);
+                $this->_testObsoleteNamespace($file);
+            },
+            \Magento\TestFramework\Utility\Files::init()->getPhpFiles()
+        );
     }
 
-    /**
-     * @return array
-     */
-    public function phpFileDataProvider()
+    public function testTemplateMageCalls()
     {
-        return \Magento\TestFramework\Utility\Files::init()->getPhpFiles();
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $file
+             */
+            function ($file) {
+                $content = file_get_contents($file);
+                $this->_assertNotRegExp('/\bMage::(\w+?)\(/iS', $content, "Static Method of 'Mage' class is obsolete.");
+            },
+            \Magento\TestFramework\Utility\Files::init()->getPhpFiles(false, false, true)
+        );
     }
 
-    /**
-     * @param string $file
-     * @dataProvider phtmlFileDataProvider
-     */
-    public function testTemplateMageCall($file)
+    public function testXmlFiles()
     {
-        $content = file_get_contents($file);
-        $this->_assertNotRegExp('/\bMage::(\w+?)\(/iS', $content, "Static Method of 'Mage' class is obsolete.");
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $file
+             */
+            function ($file) {
+                $content = file_get_contents($file);
+                $this->_testObsoleteClasses($content, $file);
+                $this->_testObsoleteNamespace($file);
+            },
+            \Magento\TestFramework\Utility\Files::init()->getXmlFiles()
+        );
     }
 
-    /**
-     * @return array
-     */
-    public function phtmlFileDataProvider()
+    public function testJsFiles()
     {
-        return \Magento\TestFramework\Utility\Files::init()->getPhpFiles(false, false, true);
-    }
-
-    /**
-     * @param string $file
-     * @dataProvider xmlFileDataProvider
-     */
-    public function testXmlFile($file)
-    {
-        $content = file_get_contents($file);
-        $this->_testObsoleteClasses($content, $file);
-        $this->_testObsoleteNamespace($file);
-    }
-
-    /**
-     * @return array
-     */
-    public function xmlFileDataProvider()
-    {
-        return \Magento\TestFramework\Utility\Files::init()->getXmlFiles();
-    }
-
-    /**
-     * @param string $file
-     * @dataProvider jsFileDataProvider
-     */
-    public function testJsFile($file)
-    {
-        $content = file_get_contents($file);
-        $this->_testObsoletePropertySkipCalculate($content);
-    }
-
-    /**
-     * @return array
-     */
-    public function jsFileDataProvider()
-    {
-        return \Magento\TestFramework\Utility\Files::init()->getJsFiles();
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $file
+             */
+            function ($file) {
+                $content = file_get_contents($file);
+                $this->_testObsoletePropertySkipCalculate($content);
+            },
+            \Magento\TestFramework\Utility\Files::init()->getJsFiles()
+        );
     }
 
     /**
@@ -510,18 +498,24 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(0, preg_match($regex, $content), $message);
     }
 
-    /**
-     * Check elimination of "Mage" class usages
-     *
-     * @dataProvider mageObsoleteDataProvider
-     * @param string $file
-     */
-    public function testMageMethodsObsolete($file)
+
+    public function testMageMethodsObsolete()
     {
-        $this->_assertNotRegExp(
-            '/[^a-z\d_]Mage::[^\s]+?\(/i',
-            file_get_contents($file),
-            '"Mage" class methods are obsolete'
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * Check elimination of "Mage" class usages
+             *
+             * @param string $file
+             */
+            function ($file) {
+                $this->_assertNotRegExp(
+                    '/[^a-z\d_]Mage::[^\s]+?\(/i',
+                    file_get_contents($file),
+                    '"Mage" class methods are obsolete'
+                );
+            },
+            $this->mageObsoleteDataProvider()
         );
     }
 
@@ -540,7 +534,8 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
         foreach ($blackList as $file) {
             $ignored[] = realpath($appPath . DIRECTORY_SEPARATOR . $file);
         }
-        $files = \Magento\TestFramework\Utility\Files::init()->getClassFiles(false);
+        $files = \Magento\TestFramework\Utility\Files::init()->
+            getClassFiles(true, true, true, true, true, true, false);
         $files = array_map('realpath', $files);
         $files = array_diff($files, $ignored);
         return \Magento\TestFramework\Utility\Files::composeDataSets($files);
