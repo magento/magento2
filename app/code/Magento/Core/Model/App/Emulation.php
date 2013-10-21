@@ -139,7 +139,7 @@ class Emulation extends \Magento\Object
     }
 
     /**
-     * Stop enviromment emulation
+     * Stop environment emulation
      *
      * Function restores initial store environment
      *

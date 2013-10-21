@@ -134,7 +134,6 @@ class String extends \Magento\Core\Helper\AbstractHelper
         foreach ($str as $part) {
             if ($this->strlen($part) >= $length) {
                 $lastDelimetr = $this->strpos($this->strrev($part), $needle);
-                $tmpNewStr = '';
                 $tmpNewStr = $this->substr($this->strrev($part), 0, $lastDelimetr)
                     . $insert . $this->substr($this->strrev($part), $lastDelimetr);
                 $newStr .= $this->strrev($tmpNewStr);

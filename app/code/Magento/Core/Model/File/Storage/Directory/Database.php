@@ -264,7 +264,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
     /**
      * Delete directory from database
      *
-     * @param string $path
+     * @param string $dirPath
      * @return \Magento\Core\Model\File\Storage\Directory\Database
      */
     public function deleteDirectory($dirPath)
