@@ -46,7 +46,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $layoutUtility = new \Magento\Core\Utility\Layout($this);
         $args = array(
             'context' => $objectManager->get('Magento\Core\Block\Template\Context'),
-            'layoutMergeFactory' => $this->getMock('Magento\Core\Model\Layout\MergeFactory',
+            'layoutProcessorFactory' => $this->getMock('Magento\View\Layout\ProcessorFactory',
                 array(), array(), '', false),
             'themesFactory' => $objectManager->get('Magento\Core\Model\Resource\Theme\CollectionFactory'),
             'data' => array(
@@ -58,11 +58,11 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         );
         $this->_block = $this->getMock(
             'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout',
-            array('_getLayoutMerge'), $args
+            array('_getLayoutProcessor'), $args
         );
         $this->_block
             ->expects($this->any())
-            ->method('_getLayoutMerge')
+            ->method('_getLayoutProcessor')
             ->will($this->returnCallback(
                 function () use ($layoutUtility) {
                     return $layoutUtility->getLayoutUpdateFromFixture(glob(__DIR__ . '/_files/layout/*.xml'));

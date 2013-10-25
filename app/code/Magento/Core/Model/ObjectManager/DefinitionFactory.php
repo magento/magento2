@@ -92,7 +92,7 @@ class DefinitionFactory
             $definitionModel = $this->_getDefinitionModel($this->_definitionFormat);
             $output = new $definitionModel($definitions);
         } else {
-            $genDir = $this->_config->getDirectories()->getDir(\Magento\Core\Model\Dir::GENERATION);
+            $genDir = $this->_config->getDirectories()->getDir(\Magento\App\Dir::GENERATION);
             $autoloader = new \Magento\Autoload\IncludePath();
             $generatorIo = new \Magento\Code\Generator\Io(new \Magento\Io\File(), $autoloader, $genDir);
             $generator = new \Magento\Code\Generator\ClassGenerator(

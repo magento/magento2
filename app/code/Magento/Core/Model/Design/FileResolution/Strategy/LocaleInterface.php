@@ -35,10 +35,10 @@ interface LocaleInterface
      * Get locale file name (e.g. file with translations)
      *
      * @param string $area
-     * @param \Magento\Core\Model\Theme $themeModel
+     * @param \Magento\View\Design\ThemeInterface $themeModel
      * @param string $locale
      * @param string $file
      * @return string
      */
-    public function getLocaleFile($area, \Magento\Core\Model\Theme $themeModel, $locale, $file);
+    public function getLocaleFile($area, \Magento\View\Design\ThemeInterface $themeModel, $locale, $file);
 }

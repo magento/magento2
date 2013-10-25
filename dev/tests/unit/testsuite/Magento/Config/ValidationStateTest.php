@@ -43,15 +43,15 @@ class ValidationStateTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                \Magento\Core\Model\App\State::MODE_DEVELOPER,
+                \Magento\App\State::MODE_DEVELOPER,
                 true
             ),
             array(
-                \Magento\Core\Model\App\State::MODE_DEFAULT,
+                \Magento\App\State::MODE_DEFAULT,
                 false
             ),
             array(
-                \Magento\Core\Model\App\State::MODE_PRODUCTION,
+                \Magento\App\State::MODE_PRODUCTION,
                 false
             ),
         );

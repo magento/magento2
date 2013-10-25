@@ -54,16 +54,12 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(array('match'))
             ->getMock();
-        $applicationMock = $this->getMockBuilder('Magento\Core\Model\App')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $configMock = $this->getMockBuilder('Magento\Core\Model\Config')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $applicationMock->expects($this->once())->method('getConfig')->will($this->returnValue($configMock));
-        $configMock->expects($this->once())->method('getAreaFrontName')->will($this->returnValue('rest'));
+        $areaListMock = $this->getMock('Magento\App\AreaList', array(), array(), '', false);
+        $configScopeMock = $this->getMock('Magento\Config\ScopeInterface');
+        $areaListMock->expects($this->once())->method('getFrontName')->will($this->returnValue('rest'));
         $this->_request = new \Magento\Webapi\Controller\Rest\Request(
-            $applicationMock,
+            $areaListMock,
+            $configScopeMock,
             $deserializerFactory
         );
         /** Initialize SUT. */

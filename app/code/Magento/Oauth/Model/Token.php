@@ -87,7 +87,7 @@ class Token extends \Magento\Core\Model\AbstractModel
     protected $_consumerFactory;
 
     /**
-     * @var \Magento\Core\Model\Url\Validator
+     * @var \Magento\Url\Validator
      */
     protected $urlValidator;
 
@@ -98,7 +98,7 @@ class Token extends \Magento\Core\Model\AbstractModel
 
     /**
      * @param \Magento\Oauth\Model\Consumer\Validator\KeyLengthFactory $keyLengthFactory
-     * @param \Magento\Core\Model\Url\Validator $urlValidator
+     * @param \Magento\Url\Validator $urlValidator
      * @param \Magento\Oauth\Model\Consumer\Factory $consumerFactory
      * @param \Magento\Oauth\Helper\Service $oauthData
      * @param \Magento\Core\Model\Context $context
@@ -109,7 +109,7 @@ class Token extends \Magento\Core\Model\AbstractModel
      */
     public function __construct(
         \Magento\Oauth\Model\Consumer\Validator\KeyLengthFactory $keyLengthFactory,
-        \Magento\Core\Model\Url\Validator $urlValidator,
+        \Magento\Url\Validator $urlValidator,
         \Magento\Oauth\Model\Consumer\Factory $consumerFactory,
         \Magento\Oauth\Helper\Service $oauthData,
         \Magento\Core\Model\Context $context,

@@ -53,10 +53,10 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
     protected function _buildModel()
     {
         // Prepare config with directories
-        $dirs = new \Magento\Core\Model\Dir(
+        $dirs = new \Magento\App\Dir(
             $this->_baseDir,
             array(),
-            array(\Magento\Core\Model\Dir::THEMES => $this->_viewDir)
+            array(\Magento\App\Dir::THEMES => $this->_viewDir)
         );
 
         return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

@@ -39,13 +39,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $params = array('layout' => $objectManager->create('Magento\Core\Model\Layout', array()));
         $context = $objectManager->create('Magento\Core\Block\Template\Context', $params);
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Core\Block\Template', '', array('context' => $context));
     }
 
     public function testConstruct()
     {
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Core\Block\Template', '', array('data' => array('template' => 'value')));
         $this->assertEquals('value', $block->getTemplate());
     }
@@ -65,21 +65,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('some_area', $this->_block->getArea());
         $this->_block->setArea('another_area');
         $this->assertEquals('another_area', $this->_block->getArea());
-    }
-
-    public function testGetDirectOutput()
-    {
-        $this->assertFalse($this->_block->getDirectOutput());
-
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout');
-        $layout->setDirectOutput(true);
-        $this->_block->setLayout($layout);
-        $this->assertTrue($this->_block->getDirectOutput());
-    }
-
-    public function testGetShowTemplateHints()
-    {
-        $this->assertFalse($this->_block->getShowTemplateHints());
     }
 
     /**

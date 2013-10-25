@@ -98,10 +98,10 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     /**
      * This method returns an indicator of whether or not the current request is for vde
      *
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @return bool
      */
-    public function isVdeRequest(\Magento\Core\Controller\Request\Http $request = null)
+    public function isVdeRequest(\Magento\App\RequestInterface $request = null)
     {
         if (null !== $request) {
             $result = false;
@@ -139,10 +139,10 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     /**
      * Sets the translation mode for the current request (null, text, script, or alt);
      *
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @return \Magento\DesignEditor\Helper\Data
      */
-    public function setTranslationMode(\Magento\Core\Controller\Request\Http $request)
+    public function setTranslationMode(\Magento\App\RequestInterface $request)
     {
         $this->_translationMode = $request->getParam(self::TRANSLATION_MODE, null);
         return $this;

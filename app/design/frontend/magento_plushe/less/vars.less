@@ -1,0 +1,131 @@
+// /**
+//  * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @package     magento2_reference
+//  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+// Primary colors
+@primary1: #f8f8f8;
+@primary2: #e5e5e5;
+@primary3: #c2c2c2;
+@primary4: #999;
+@primary5: #837d75;
+@primary6: #675f55;
+@primary7: #fff;
+@primeBlack: #7f7f7f;
+@primeBlackOpacity: rgba(0, 0, 0, 0.5);
+@commonBg: #fff;
+
+// Secondary colors
+@secondary1: #da370a;
+@secondary2: #55c2e6;
+
+// Buttons
+@primaryActionBg: @secondary1;
+@primaryActionBgH: darken(@secondary1, 10%);
+@primaryActionColor: #fff;
+
+@secondaryActionBg: @primary3;
+@secondaryActionBgH: darken(@primary3, 10%);
+@secondaryActionColor: #fff;
+
+@actionFont: 600 14px/16px;
+
+// Layout
+@LayoutMaxWidth: 1025px;
+@LayoutMinWidth: 1025px;
+
+// Links
+@link: #332e29;
+@linkHover: @secondary1;
+
+// Base font
+@baseFont: "sourcesanspro";
+@baseFontSizeBigger: 16px;
+@base-font-size: 14px; // re-declarate base font size for clearLess
+@baseFontSize: 14px;
+@baseFontSizeMiddle: 12px;
+@baseFontSizeSmall: 10px;
+@baseFontWeight: 400;
+@baseFontWeightLighter: 200;
+@baseFontWeightBolder: 700;
+@baseLineHeight: 1.33;
+@baseColor: @primary6;
+
+@pageMainBg: #fff;
+@headerBg: #d6d7d2;
+@headerBgImage: url("@{baseDir}/images/header-bg.jpg");
+@pageBottomBg: @pageMainBg;
+@footerBg: @pageMainBg;
+@textColor: @primary6;
+@linksColor: @primary6;
+@gutter-width: 0;
+@using-ieclasses: false;
+
+// Headings:
+// H1
+@h1font: 200 30px/1.2 @baseFont;
+@h1color: @primary6;
+
+// H2
+@h2font: 400 20px/1.2 @baseFont;
+@h2color: @primary6;
+
+// H3
+@h3font: 600 18px/1.2 @baseFont;
+@h3color: @primary6;
+
+// H4
+@h4font: 600 16px/1.2 @baseFont;
+@h4color: @primary6;
+
+// H5
+@h5font: 600 14px/1.2 @baseFont;
+@h5color: @primary6;
+
+// H6
+@h6font: 600 12px/1.2 @baseFont;
+@h6color: @primary6;
+
+// Forms
+@legendFontSize: 20px;
+@fieldBg: #fff;
+
+// Required fields and validation
+@requiredField:   #da370a;
+@nonValidHilight: #da370a;
+@validHilight:    #42b649;
+
+// Messages colors
+@messageIconColor: #fff;
+// Success message
+@messageSuccessColor:  #1b6720;
+@messageSuccessBg:     #d3edd5;
+@messageSuccessIconBg: #42b649;
+// Error message
+@messageErrorColor:  #911c00;
+@messageErrorBg:     #ffd9d0;
+@messageErrorIconBg: #ff3200;
+// Notice message, Info message
+@messageNoticeColor:  #926e00;
+@messageNoticeBg:     #ffedb8;
+@messageNoticeIconBg: #ffc000;

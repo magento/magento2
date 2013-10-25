@@ -75,7 +75,7 @@ class Observer
     /**
      * Directory model
      *
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
@@ -89,7 +89,7 @@ class Observer
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Core\Model\Logger $logger
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      * @param \Magento\Backup\Factory $backupFactory
      */
     public function __construct(
@@ -97,7 +97,7 @@ class Observer
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Core\Model\Logger $logger,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Dir $dir,
+        \Magento\App\Dir $dir,
         \Magento\Backup\Factory $backupFactory
     ) {
         $this->_backupData = $backupData;

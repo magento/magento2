@@ -99,7 +99,7 @@ class Process extends \Magento\Core\Model\AbstractModel
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -127,7 +127,7 @@ class Process extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Index\Model\Resource\Event $resourceEvent
      * @param \Magento\Index\Model\Indexer\Factory $indexerFactory
      * @param \Magento\Index\Model\Indexer $indexer
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Index\Model\Indexer\ConfigInterface $indexerConfig
      * @param \Magento\Core\Model\Registry $registry
@@ -143,7 +143,7 @@ class Process extends \Magento\Core\Model\AbstractModel
         \Magento\Index\Model\Resource\Event $resourceEvent,
         \Magento\Index\Model\Indexer\Factory $indexerFactory,
         \Magento\Index\Model\Indexer $indexer,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Context $context,
         \Magento\Index\Model\Indexer\ConfigInterface $indexerConfig,
         \Magento\Core\Model\Registry $registry,

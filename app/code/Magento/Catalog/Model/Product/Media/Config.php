@@ -39,7 +39,7 @@ class Config implements \Magento\Media\Model\Image\Config\ConfigInterface
     /**
      * Dir
      *
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
@@ -54,11 +54,11 @@ class Config implements \Magento\Media\Model\Image\Config\ConfigInterface
      * Construct
      *
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      */
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Dir $dir
+        \Magento\App\Dir $dir
     ) {
         $this->_storeManager = $storeManager;
         $this->_dir = $dir;
@@ -110,7 +110,7 @@ class Config implements \Magento\Media\Model\Image\Config\ConfigInterface
 
     public function getBaseMediaPath()
     {
-        return $this->_dir->getDir(\Magento\Core\Model\Dir::MEDIA) . DIRECTORY_SEPARATOR
+        return $this->_dir->getDir(\Magento\App\Dir::MEDIA) . DIRECTORY_SEPARATOR
             . 'catalog' . DIRECTORY_SEPARATOR . 'product';
     }
 
@@ -122,7 +122,7 @@ class Config implements \Magento\Media\Model\Image\Config\ConfigInterface
 
     public function getBaseTmpMediaPath()
     {
-        return $this->_dir->getDir(\Magento\Core\Model\Dir::MEDIA) . DIRECTORY_SEPARATOR
+        return $this->_dir->getDir(\Magento\App\Dir::MEDIA) . DIRECTORY_SEPARATOR
             . $this->getBaseTmpMediaPathAddition();
     }
 

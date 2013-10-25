@@ -182,10 +182,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $map = array(
-            array(\Magento\Core\Model\Dir::CACHE, 'CACHE_DIR'),
-            array(\Magento\Core\Model\Dir::CONFIG, 'CONFIG_DIR'),
+            array(\Magento\App\Dir::CACHE, 'CACHE_DIR'),
+            array(\Magento\App\Dir::CONFIG, 'CONFIG_DIR'),
         );
-        $dirs = $this->getMock('Magento\Core\Model\Dir', array('getDir'), array(), '', false);
+        $dirs = $this->getMock('Magento\App\Dir', array('getDir'), array(), '', false);
         $resource = $this->getMock('Magento\Core\Model\Resource', array(), array(), '', false);
         $dirs->expects($this->any())
             ->method('getDir')

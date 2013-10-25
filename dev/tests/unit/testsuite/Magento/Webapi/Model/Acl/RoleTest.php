@@ -77,7 +77,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
     protected function _createModel($roleService, $serviceCollection = null)
     {
         return $this->_helper->getObject('Magento\Webapi\Model\Acl\Role', array(
-            'eventDispatcher' => $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false),
+            'eventDispatcher' => $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false),
             'cacheManager' => $this->getMock('Magento\Core\Model\CacheInterface', array(), array(), '', false),
             'resource' => $roleService,
             'resourceCollection' => $serviceCollection
@@ -100,7 +100,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCollection()
     {
-        $eventManager = $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false);
+        $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         $fetchStrategy = $this->getMockForAbstractClass('Magento\Data\Collection\Db\FetchStrategyInterface');
         $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
         $logger = $this->getMock('Magento\Core\Model\Logger', array(), array(), '', false);

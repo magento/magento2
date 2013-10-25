@@ -64,7 +64,7 @@ class FlyweightFactory
      * @return \Magento\Core\Model\Theme|null
      * @throws \InvalidArgumentException
      */
-    public function create($themeKey, $area = \Magento\Core\Model\View\DesignInterface::DEFAULT_AREA)
+    public function create($themeKey, $area = \Magento\View\DesignInterface::DEFAULT_AREA)
     {
         if (is_numeric($themeKey)) {
             $themeModel = $this->_loadById($themeKey);
@@ -92,8 +92,8 @@ class FlyweightFactory
             return $this->_themes[$themeId];
         }
 
-        /** @var $themeModel \Magento\Core\Model\Theme */
-        $themeModel = $this->_objectManager->create('Magento\Core\Model\Theme');
+        /** @var $themeModel \Magento\View\Design\ThemeInterface */
+        $themeModel = $this->_objectManager->create('Magento\View\Design\ThemeInterface');
         $themeModel->load($themeId);
         return $themeModel;
     }
@@ -107,7 +107,7 @@ class FlyweightFactory
      */
     protected function _loadByPath($themePath, $area)
     {
-        $fullPath = $area . \Magento\Core\Model\ThemeInterface::PATH_SEPARATOR . $themePath;
+        $fullPath = $area . \Magento\View\Design\ThemeInterface::PATH_SEPARATOR . $themePath;
         if (isset($this->_themesByPath[$fullPath])) {
             return $this->_themesByPath[$fullPath];
         }
@@ -121,10 +121,10 @@ class FlyweightFactory
     /**
      * Add theme to shared collection
      *
-     * @param \Magento\Core\Model\Theme $themeModel
+     * @param \Magento\View\Design\ThemeInterface $themeModel
      * @return $this
      */
-    protected function _addTheme(\Magento\Core\Model\Theme $themeModel)
+    protected function _addTheme(\Magento\View\Design\ThemeInterface $themeModel)
     {
         if ($themeModel->getId()) {
             $this->_themes[$themeModel->getId()] = $themeModel;

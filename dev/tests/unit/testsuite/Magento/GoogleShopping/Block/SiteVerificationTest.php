@@ -46,7 +46,7 @@ class SiteVerificationTest extends \PHPUnit_Framework_TestCase
         $layout->expects($this->any())
             ->method('helper')->with('Magento\Core\Helper\Data')->will($this->returnValue($coreHelper));
         $context = $objectHelper->getObject('Magento\Core\Block\Context', array(
-            'eventManager' => $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false),
+            'eventManager' => $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false),
             'layout' => $layout,
             'helperFactory' => $helperFactory
         ));

@@ -73,7 +73,7 @@ class Images extends \Magento\Core\Helper\AbstractHelper
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -87,7 +87,7 @@ class Images extends \Magento\Core\Helper\AbstractHelper
     /**
      * Dir
      *
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
@@ -95,21 +95,21 @@ class Images extends \Magento\Core\Helper\AbstractHelper
      * Construct
      *
      * @param \Magento\Core\Helper\Context $context
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      */
     public function __construct(
         \Magento\Core\Helper\Context $context,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Backend\Helper\Data $backendData,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Filesystem $filesystem,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Dir $dir
+        \Magento\App\Dir $dir
     ) {
         parent::__construct($context);
         $this->_eventManager = $eventManager;
@@ -143,7 +143,7 @@ class Images extends \Magento\Core\Helper\AbstractHelper
      */
     public function getStorageRoot()
     {
-        return $this->_dir->getDir(\Magento\Core\Model\Dir::MEDIA) . DS
+        return $this->_dir->getDir(\Magento\App\Dir::MEDIA) . DS
             . \Magento\Cms\Model\Wysiwyg\Config::IMAGE_DIRECTORY . DS;
     }
 
@@ -305,7 +305,7 @@ class Images extends \Magento\Core\Helper\AbstractHelper
     public function getCurrentUrl()
     {
         if (!$this->_currentUrl) {
-            $path = str_replace($this->_dir->getDir(\Magento\Core\Model\Dir::MEDIA), '', $this->getCurrentPath());
+            $path = str_replace($this->_dir->getDir(\Magento\App\Dir::MEDIA), '', $this->getCurrentPath());
             $path = trim($path, DS);
             $mediaUrl = $this->_storeManager->getStore($this->_storeId)
                 ->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_MEDIA);

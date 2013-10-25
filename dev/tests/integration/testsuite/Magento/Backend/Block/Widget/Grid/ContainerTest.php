@@ -32,7 +32,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testPseudoConstruct()
     {
         /** @var $block \Magento\Backend\Block\Widget\Grid\Container */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Backend\Block\Widget\Grid\Container', '', array(
                 'data' => array(
                     \Magento\Backend\Block\Widget\Container::PARAM_CONTROLLER => 'widget',

@@ -81,7 +81,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -97,22 +97,22 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Core\Model\Logger $logger
      * @param \Magento\Catalog\Model\Resource\ProductFactory $productFactory
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
-     * @param \Magento\Core\Model\Dir $dirs
+     * @param \Magento\App\Dir $dirs
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute
      */
     public function __construct(
         \Magento\Core\Model\Logger $logger,
         \Magento\Catalog\Model\Resource\ProductFactory $productFactory,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
-        \Magento\Core\Model\Dir $dirs,
+        \Magento\App\Dir $dirs,
         \Magento\Filesystem $filesystem,
         \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute
     ) {
@@ -124,7 +124,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $this->_mediaConfig = $mediaConfig;
         $this->_filesystem = $filesystem;
         $this->_filesystem->setIsAllowCreateDirectories(true);
-        $this->_filesystem->setWorkingDirectory($dirs->getDir(\Magento\Core\Model\Dir::MEDIA));
+        $this->_filesystem->setWorkingDirectory($dirs->getDir(\Magento\App\Dir::MEDIA));
         $this->_baseMediaPath = $this->_mediaConfig->getBaseMediaPath();
         $this->_baseTmpMediaPath = $this->_mediaConfig->getBaseTmpMediaPath();
         $this->_filesystem->ensureDirectoryExists($this->_baseMediaPath);

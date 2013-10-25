@@ -269,7 +269,7 @@ abstract class AbstractElement extends \Magento\Data\Form\AbstractForm
             $html = '<label class="label" for="' . $this->getHtmlId() . $idSuffix . '"' . $this->_getUiId('label')
                 . '><span>'
                 . $this->_escape($this->getLabel())
-                . ($this->getRequired() ? ' <span class="required">*</span>' : '') . '</span></label>' . "\n";
+                . '</span></label>' . "\n";
         } else {
             $html = '';
         }

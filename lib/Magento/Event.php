@@ -50,7 +50,7 @@ class Event extends \Magento\Object
      *
      * @param array $data
      */
-    public function __construct(array $data=array())
+    public function __construct(array $data = array())
     {
         $this->_observers = new \Magento\Event\Observer\Collection();
         parent::__construct($data);

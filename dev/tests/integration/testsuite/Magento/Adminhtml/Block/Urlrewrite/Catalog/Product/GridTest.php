@@ -39,7 +39,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     public function testPrepareGrid()
     {
         /** @var $gridBlock \Magento\Adminhtml\Block\Urlrewrite\Catalog\Product\Grid */
-        $gridBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+        $gridBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Adminhtml\Block\Urlrewrite\Catalog\Product\Grid');
         $gridBlock->toHtml();
 

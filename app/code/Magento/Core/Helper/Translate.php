@@ -34,24 +34,24 @@ class Translate extends \Magento\Core\Helper\AbstractHelper
     /**
      * Design package instance
      *
-     * @var \Magento\Core\Model\View\DesignInterface
+     * @var \Magento\View\DesignInterface
      */
     protected $_design;
     
     /**
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
     /**
-     * @param \Magento\Core\Helper\Context $context
-     * @param \Magento\Core\Model\View\DesignInterface $design
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param Context $context
+     * @param \Magento\View\DesignInterface $design
+     * @param \Magento\Event\ManagerInterface $eventManager
      */
     public function __construct(
         \Magento\Core\Helper\Context $context,
-        \Magento\Core\Model\View\DesignInterface $design,
-        \Magento\Core\Model\Event\Manager $eventManager
+        \Magento\View\DesignInterface $design,
+        \Magento\Event\ManagerInterface $eventManager
     ) {
         $this->_eventManager = $eventManager;
         parent::__construct($context);

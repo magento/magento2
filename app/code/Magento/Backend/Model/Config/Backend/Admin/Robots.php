@@ -47,7 +47,7 @@ class Robots extends \Magento\Core\Model\Config\Value
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Core\Model\Config $config
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -58,7 +58,7 @@ class Robots extends \Magento\Core\Model\Config\Value
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Core\Model\Config $config,
         \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\Dir $dir,
+        \Magento\App\Dir $dir,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -73,7 +73,7 @@ class Robots extends \Magento\Core\Model\Config\Value
             $data
         );
         $this->_filesystem = $filesystem;
-        $this->_filePath = $dir->getDir(\Magento\Core\Model\Dir::ROOT) . '/robots.txt';
+        $this->_filePath = $dir->getDir(\Magento\App\Dir::ROOT) . '/robots.txt';
     }
 
     /**

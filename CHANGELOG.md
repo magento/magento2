@@ -1,3 +1,26 @@
+2.0.0.0-dev49
+=============
+* Various improvements:
+  * Unified Area configuration
+  * Moved EventManager to Magento\Event lib component
+  * Moved FrontController, Routers, Base Actions to Magento\App
+  * Created Magento\App component in library
+  * Declared public interfaces for View component into library
+  * Plushe theme is set as the default theme
+  * Refactor the Blacklist Pattern in the Integrity Test Suite's ClassesTest to Replace Blacklist.php Files
+  * Removed JavaScript unit test TreeSuggestTest.prototype.testBind as obsolete
+  * Introduced ability to register a template engine to process template files having certain extension
+  * Removed support of the Twig template engine along with the corresponding component from the library
+  * Removed layout flag that forced template blocks to output rendered content directly to a browser bypassing the response object
+  * Moved out responsibility of rendering template debugging hints from the template block to the plugin and decorator for a template engine
+* Fixed bugs:
+  * Fixed inability to create product if multiple attributes are assigned to attribute set
+  * Fixed inability to create a new widget instance
+  * Fixed error on Customers Segments Conditions tab while the 'Number of Orders' condition is chosen
+  * Fixed blank page when placing order via Ogone
+  * Fixed various UI issues in Admin Panel with layout, aligning, buttons and fields
+  * Fixed static tests failing to verify themes files
+
 2.0.0.0-dev48
 =============
 * Various improvements:

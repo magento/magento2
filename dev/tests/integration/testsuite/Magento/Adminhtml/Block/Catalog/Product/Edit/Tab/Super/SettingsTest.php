@@ -57,7 +57,7 @@ class SettingsTest extends \PHPUnit_Framework_TestCase
 
         $context = $objectManager->create('Magento\Backend\Block\Template\Context', array('urlBuilder' => $urlModel));
         /** @var $layout \Magento\Core\Model\Layout */
-        $layout = $objectManager->get('Magento\Core\Model\Layout');
+        $layout = $objectManager->get('Magento\View\LayoutInterface');
         /** @var $block \Magento\Adminhtml\Block\Catalog\Product\Edit\Tab\Super\Settings */
         $block = $layout->createBlock(
             'Magento\Adminhtml\Block\Catalog\Product\Edit\Tab\Super\Settings',

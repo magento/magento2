@@ -69,7 +69,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             $this->getLayout()->getBlock('page-title')->setPageTitle($this->getHeaderText());
         }
 
-        /** @var $theme \Magento\Core\Model\Theme */
+        /** @var $theme \Magento\View\Design\ThemeInterface */
         $theme = $this->_getCurrentTheme();
         if ($theme) {
             if ($theme->isEditable()) {
@@ -114,7 +114,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getHeaderText()
     {
-        /** @var $theme \Magento\Core\Model\Theme */
+        /** @var $theme \Magento\View\Design\ThemeInterface */
         $theme = $this->_getCurrentTheme();
         if ($theme->getId()) {
             $header = __('Theme: %1', $theme->getThemeTitle());

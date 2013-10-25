@@ -85,7 +85,7 @@ class Currencysymbol
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -134,7 +134,7 @@ class Currencysymbol
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Core\Model\System\Store $systemStore
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
@@ -144,7 +144,7 @@ class Currencysymbol
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Core\Model\System\Store $systemStore,
-        \Magento\Core\Model\Event\Manager $eventManager
+        \Magento\Event\ManagerInterface $eventManager
     ) {
         $this->_coreConfig = $coreConfig;
         $this->_configFactory = $configFactory;

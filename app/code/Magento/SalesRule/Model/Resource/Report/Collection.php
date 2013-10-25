@@ -66,7 +66,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
 
     /**
      * @param \Magento\SalesRule\Model\Resource\Report\RuleFactory $ruleFactory
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Core\Model\EntityFactory $entityFactory
@@ -74,7 +74,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      */
     public function __construct(
         \Magento\SalesRule\Model\Resource\Report\RuleFactory $ruleFactory,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Core\Model\EntityFactory $entityFactory,

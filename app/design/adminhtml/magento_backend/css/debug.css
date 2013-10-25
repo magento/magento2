@@ -384,18 +384,6 @@ ul.messages li.success-msg li:before {
     height: 100px;
 }
 
-.dashboard-container {
-    border-radius: 0;
-}
-
-.dashboard-container.col-2-left-layout:before {
-    left: 40%;
-}
-
-.dashboard-container #diagram_tab {
-    margin: 20px 20px 0;
-}
-
 /* TODO: arrange configuration tables */
 .accordion .collapseable.disabled {
     background: #f1f1f1;
@@ -438,6 +426,16 @@ ul.messages li.success-msg li:before {
     text-align: right;
 }
 
+.accordion .config .value .label {
+    padding: 6px 5px 0 15px;
+    vertical-align: top;
+    width: auto;
+}
+
+.accordion .config .value .label:first-child {
+    padding-left: 0;
+}
+
 .accordion .config .label label {
     padding-top: 6px;
 }
@@ -462,10 +460,13 @@ ul.messages li.success-msg li:before {
 .accordion .config select,
 .accordion .config textarea {
     width: 100%;
-    border-radius: 3px;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.accordion .config input.input-file {
+    margin-top: 4px;
 }
 
 .accordion .config select.select-date {
@@ -526,11 +527,11 @@ ul.messages li.success-msg li:before {
     margin:0;
 }
 
-
-
 .accordion .config .scope-label {
     color: #999;
     font-size: 12px;
+    letter-spacing: 0.05em;
+    padding: 15px 15px 0 0;
 }
 
 .accordion .config .note {

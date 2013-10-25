@@ -43,13 +43,13 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
              * @param string $area
              */
             function ($module, $template, $class, $area) {
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\View\DesignInterface')
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
                     ->setDefaultDesignTheme();
                 // intentionally to make sure the module files will be requested
                 $params = array(
                     'area'       => $area,
                     'themeModel' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                        ->create('Magento\Core\Model\Theme'),
+                        ->create('Magento\View\Design\ThemeInterface'),
                     'module'     => $module
                 );
                 $file = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()
@@ -98,7 +98,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
                     \Magento\Core\Model\App\Area::PART_CONFIG
                 );
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\Core\Model\Config\Scope')
+                    ->get('Magento\Config\ScopeInterface')
                     ->setCurrentScope($area);
 
                 $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($blockClass);

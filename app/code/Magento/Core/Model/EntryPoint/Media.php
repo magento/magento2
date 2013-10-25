@@ -110,7 +110,7 @@ class Media extends \Magento\Core\Model\AbstractEntryPoint
     protected function _processRequest()
     {
         try {
-            $appState = $this->_objectManager->get('Magento\Core\Model\App\State');
+            $appState = $this->_objectManager->get('Magento\App\State');
             if (!$appState->isInstalled()) {
                 $this->_response->sendNotFound();
                 return;

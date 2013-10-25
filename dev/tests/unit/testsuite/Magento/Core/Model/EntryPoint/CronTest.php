@@ -46,13 +46,13 @@ class CronTest extends \PHPUnit_Framework_TestCase
     public function testProcessRequest()
     {
         $appMock = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
-        $eventManagerMock = $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false);
-        $configScopeMock = $this->getMock('Magento\Core\Model\Config\Scope', array(), array(), '', false);
+        $eventManagerMock = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
+        $configScopeMock = $this->getMock('Magento\Config\Scope', array(), array(), '', false);
 
         $map = array(
             array('Magento\Core\Model\App', $appMock),
-            array('Magento\Core\Model\Event\Manager', $eventManagerMock),
-            array('Magento\Core\Model\Config\Scope', $configScopeMock),
+            array('Magento\Event\ManagerInterface', $eventManagerMock),
+            array('Magento\Config\ScopeInterface', $configScopeMock),
         );
 
         $this->_objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($map));

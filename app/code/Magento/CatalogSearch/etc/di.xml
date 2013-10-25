@@ -24,21 +24,6 @@
  */
 -->
 <config>
-    <type name="Magento\CatalogSearch\Model\Fulltext">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\CatalogSearch\Model\Resource\Advanced">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\CatalogSearch\Model\Resource\Fulltext">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
     <type name="Magento\CatalogSearch\Block\Layer">
         <param name="layer">
             <instance type="Magento\CatalogSearch\Model\Layer\Proxy" />

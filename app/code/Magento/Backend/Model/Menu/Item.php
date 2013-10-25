@@ -161,7 +161,7 @@ class Item
     /**
      * Module list
      *
-     * @var \Magento\Core\Model\ModuleListInterface
+     * @var \Magento\App\ModuleListInterface
      */
     protected $_moduleList;
 
@@ -172,7 +172,7 @@ class Item
      * @param \Magento\Backend\Model\MenuFactory $menuFactory
      * @param \Magento\Backend\Model\Url $urlModel
      * @param \Magento\Core\Helper\AbstractHelper $helper
-     * @param \Magento\Core\Model\ModuleListInterface $moduleList
+     * @param \Magento\App\ModuleListInterface $moduleList
      * @param array $data
      */
     public function __construct(
@@ -182,7 +182,7 @@ class Item
         \Magento\Backend\Model\MenuFactory $menuFactory,
         \Magento\Backend\Model\Url $urlModel,
         \Magento\Core\Helper\AbstractHelper $helper,
-        \Magento\Core\Model\ModuleListInterface $moduleList,
+        \Magento\App\ModuleListInterface $moduleList,
         array $data = array()
     ) {
         $this->_validator = $validator;
@@ -499,7 +499,7 @@ class Item
         $this->_storeConfig = $objectManager->get('Magento\Core\Model\Store\Config');
         $this->_menuFactory = $objectManager->get('Magento\Backend\Model\MenuFactory');
         $this->_urlModel = $objectManager->get('Magento\Backend\Model\Url');
-        $this->_moduleList = $objectManager->get('Magento\Core\Model\ModuleListInterface');
+        $this->_moduleList = $objectManager->get('Magento\App\ModuleListInterface');
         if ($this->_serializedSubmenu) {
             $this->_submenu = $this->_menuFactory->create();
             $this->_submenu->unserialize($this->_serializedSubmenu);

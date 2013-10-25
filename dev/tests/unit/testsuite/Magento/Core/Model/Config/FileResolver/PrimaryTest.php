@@ -36,10 +36,10 @@ class PrimaryTest extends \PHPUnit_Framework_TestCase
             . '_files' . DIRECTORY_SEPARATOR . 'primary'
             . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'etc';
 
-        $applicationDirsMock = $this->getMock('Magento\Core\Model\Dir', array(), array('getDir'), '', false);
+        $applicationDirsMock = $this->getMock('Magento\App\Dir', array(), array('getDir'), '', false);
         $applicationDirsMock->expects($this->any())
             ->method('getDir')
-            ->with(\Magento\Core\Model\Dir::CONFIG)
+            ->with(\Magento\App\Dir::CONFIG)
             ->will($this->returnValue($appConfigDir));
 
         $this->_model = new \Magento\Core\Model\Config\FileResolver\Primary($applicationDirsMock);

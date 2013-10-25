@@ -89,7 +89,7 @@ class Publisher implements \Magento\Core\Model\View\PublicFilesManagerInterface
     protected $_allowFilesDuplication;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
@@ -106,7 +106,7 @@ class Publisher implements \Magento\Core\Model\View\PublicFilesManagerInterface
      * @param \Magento\Core\Helper\Css $cssHelper
      * @param \Magento\Core\Model\View\Service $viewService
      * @param \Magento\Core\Model\View\FileSystem $viewFileSystem
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      * @param \Magento\Core\Model\Config\Modules\Reader $modulesReader
      * @param $allowFilesDuplication
      */
@@ -116,7 +116,7 @@ class Publisher implements \Magento\Core\Model\View\PublicFilesManagerInterface
         \Magento\Core\Helper\Css $cssHelper,
         \Magento\Core\Model\View\Service $viewService,
         \Magento\Core\Model\View\FileSystem $viewFileSystem,
-        \Magento\Core\Model\Dir $dir,
+        \Magento\App\Dir $dir,
         \Magento\Core\Model\Config\Modules\Reader $modulesReader,
         $allowFilesDuplication
     ) {
@@ -252,7 +252,7 @@ class Publisher implements \Magento\Core\Model\View\PublicFilesManagerInterface
      */
     protected function _needToProcessFile($filePath)
     {
-        $jsPath = $this->_dir->getDir(\Magento\Core\Model\Dir::PUB_LIB) . DS;
+        $jsPath = $this->_dir->getDir(\Magento\App\Dir::PUB_LIB) . DS;
         if (strncmp($filePath, $jsPath, strlen($jsPath)) === 0) {
             return false;
         }
@@ -271,7 +271,7 @@ class Publisher implements \Magento\Core\Model\View\PublicFilesManagerInterface
             return true;
         }
 
-        return ($this->_viewService->getAppMode() == \Magento\Core\Model\App\State::MODE_DEVELOPER)
+        return ($this->_viewService->getAppMode() == \Magento\App\State::MODE_DEVELOPER)
             && $this->_getExtension($filePath) == self::CONTENT_TYPE_CSS;
     }
 
@@ -296,7 +296,7 @@ class Publisher implements \Magento\Core\Model\View\PublicFilesManagerInterface
      */
     protected function _buildPublicViewRedundantFilename($file, array $params)
     {
-        /** @var $theme \Magento\Core\Model\Theme */
+        /** @var $theme \Magento\View\Design\ThemeInterface */
         $theme = $params['themeModel'];
         if ($theme->getThemePath()) {
             $designPath = str_replace('/', DS, $theme->getThemePath());
@@ -321,7 +321,7 @@ class Publisher implements \Magento\Core\Model\View\PublicFilesManagerInterface
      */
     protected function _buildPublicViewSufficientFilename($filename, array $params)
     {
-        $designDir = $this->_dir->getDir(\Magento\Core\Model\Dir::THEMES) . DS;
+        $designDir = $this->_dir->getDir(\Magento\App\Dir::THEMES) . DS;
         if (0 === strpos($filename, $designDir)) {
             // theme file
             $publicFile = substr($filename, strlen($designDir));
@@ -388,7 +388,7 @@ class Publisher implements \Magento\Core\Model\View\PublicFilesManagerInterface
             $filePath = $this->_viewService->extractScope($fileId, $params);
         } else {
             /* Check if module file overridden on theme level based on _module property and file path */
-            if ($params['module'] && strpos($parentFilePath, $this->_dir->getDir(\Magento\Core\Model\Dir::THEMES)) === 0) {
+            if ($params['module'] && strpos($parentFilePath, $this->_dir->getDir(\Magento\App\Dir::THEMES)) === 0) {
                 /* Add module directory to relative URL */
                 $filePath = dirname($params['module'] . '/' . $parentFileName)
                     . '/' . $fileId;

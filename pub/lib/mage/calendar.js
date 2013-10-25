@@ -196,10 +196,16 @@
                     to[this._picker()]('option', 'minDate', selectedDate);
                 }, this);
                 $.mage.calendar.prototype._initPicker.call(this, from);
+                from.on('change', $.proxy(function() {
+                    to[this._picker()]('option', 'minDate', from[this._picker()]('getDate'));
+                }, this));
                 this.options.onSelect = $.proxy(function(selectedDate) {
                     from[this._picker()]('option', 'maxDate', selectedDate);
                 }, this);
                 $.mage.calendar.prototype._initPicker.call(this, to);
+                to.on('change', $.proxy(function() {
+                    from[this._picker()]('option', 'maxDate', to[this._picker()]('getDate'));
+                }, this));
             }
         },
 

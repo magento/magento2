@@ -35,10 +35,10 @@ interface FileInterface
      * Get a usual file path (e.g. template)
      *
      * @param string $area
-     * @param \Magento\Core\Model\Theme $themeModel
+     * @param \Magento\View\Design\ThemeInterface $themeModel
      * @param string $file
      * @param string|null $module
      * @return string
      */
-    public function getFile($area, \Magento\Core\Model\Theme $themeModel, $file, $module = null);
+    public function getFile($area, \Magento\View\Design\ThemeInterface $themeModel, $file, $module = null);
 }

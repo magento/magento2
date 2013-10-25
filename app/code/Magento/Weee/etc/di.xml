@@ -40,8 +40,8 @@
             <instance type="Magento\Weee\Helper\Data\Proxy" />
         </param>
     </type>
-    <type name="Magento\Core\Model\Db\Updater">
-        <param name="resourceList">
+    <type name="Magento\App\Updater\SetupFactory">
+        <param name="resourceTypes">
             <value>
                 <weee_setup>Magento\Sales\Model\Resource\Setup</weee_setup>
             </value>

@@ -126,7 +126,7 @@ class File extends \Magento\Core\Model\AbstractModel
     /**
      * {@inheritdoc}
      */
-    public function setTheme(\Magento\Core\Model\Theme $theme)
+    public function setTheme(\Magento\View\Design\ThemeInterface $theme)
     {
         $this->_theme = $theme;
         $this->setData('theme_id', $theme->getId());

@@ -513,7 +513,7 @@ final class Controller
                     include_once self::$_instance->getBootstrapPath();
 
                     \Magento\Core\Model\ObjectManager::getInstance()
-                        ->get('Magento\Core\Model\App\State')
+                        ->get('Magento\App\State')
                         ->setIsDownloader();
                 }
                 \Magento\Core\Model\ObjectManager::getInstance()->get('Magento\Core\Model\App');
@@ -943,9 +943,9 @@ final class Controller
                 // reinit config and apply all updates
                 \Mage::app()->getConfig()->reinit();
 
-                /** @var $updater \Magento\Core\Model\Db\UpdaterInterface*/
+                /** @var $updater \Magento\App\UpdaterInterface*/
                 $updater = \Magento\Core\Model\ObjectManager::getInstance()
-                    ->get('Magento\Core\Model\Db\UpdaterInterface');
+                    ->get('Magento\App\UpdaterInterface');
                 $updater->updateScheme();
                 $updater->updateData();
                 $message .= 'Cache cleaned successfully';

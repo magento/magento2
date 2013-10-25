@@ -80,7 +80,7 @@ class Ipn
     protected $_orderFactory;
 
     /**
-     * @var \Magento\Core\Controller\Response\Http
+     * @var \Magento\App\ResponseInterface
      */
     protected $_responseHttp;
 
@@ -96,7 +96,7 @@ class Ipn
 
     /**
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Core\Controller\Response\Http $responseHttp
+     * @param \Magento\App\ResponseInterface $responseHttp
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
      * @param \Magento\Sales\Model\Recurring\ProfileFactory $profileFactory
      * @param \Magento\Paypal\Model\Info $paypalInfo
@@ -104,7 +104,7 @@ class Ipn
      */
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Core\Controller\Response\Http $responseHttp,
+        \Magento\App\ResponseInterface $responseHttp,
         \Magento\Paypal\Model\ConfigFactory $configFactory,
         \Magento\Sales\Model\Recurring\ProfileFactory $profileFactory,
         \Magento\Paypal\Model\Info $paypalInfo,

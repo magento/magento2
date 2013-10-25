@@ -28,7 +28,7 @@ namespace Magento\Webapi\Block\Adminhtml\User;
 class EditTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Controller\Request\Http|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\RequestInterface|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_request;
 
@@ -44,9 +44,8 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_request = $this->getMockBuilder('Magento\Core\Controller\Request\Http')
+        $this->_request = $this->getMockBuilder('Magento\App\Request\Http')
             ->disableOriginalConstructor()
-            ->setMethods(array('getParam'))
             ->getMock();
 
         $this->_request->expects($this->any())

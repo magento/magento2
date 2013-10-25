@@ -175,9 +175,9 @@ class Sitemap extends  \Magento\Adminhtml\Controller\Action
                 $fileName = $model->getSitemapFilename();
 
                 $filesystem->setWorkingDirectory(
-                    $this->_objectManager->get('Magento\Core\Model\Dir')->getDir() . $model->getSitemapPath()
+                    $this->_objectManager->get('Magento\App\Dir')->getDir() . $model->getSitemapPath()
                 );
-                $filePath = $this->_objectManager->get('Magento\Core\Model\Dir')->getDir()
+                $filePath = $this->_objectManager->get('Magento\App\Dir')->getDir()
                     . $model->getSitemapPath() . DS . $fileName;
 
                 if ($fileName && $filesystem->isFile($filePath)) {

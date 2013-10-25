@@ -32,7 +32,7 @@ namespace Magento\Theme\Model\Wysiwyg;
 class StorageTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Controller\Request\Http|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\RequestInterface|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_request;
 
@@ -62,11 +62,11 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->_filesystem = $this->_objectManager->get('Magento\Filesystem');
         $this->_filesystem->setIsAllowCreateDirectories(true);
 
-        /** @var $theme \Magento\Core\Model\Theme */
-        $theme = $this->_objectManager->create('Magento\Core\Model\Theme')->getCollection()->getFirstItem();
+        /** @var $theme \Magento\View\Design\ThemeInterface */
+        $theme = $this->_objectManager->create('Magento\View\Design\ThemeInterface')->getCollection()->getFirstItem();
 
-        /** @var $request \Magento\Core\Controller\Request\Http */
-        $request = $this->_objectManager->get('Magento\Core\Controller\Request\Http');
+        /** @var $request \Magento\App\Request\Http */
+        $request = $this->_objectManager->get('Magento\App\Request\Http');
         $request->setParam(\Magento\Theme\Helper\Storage::PARAM_THEME_ID, $theme->getId());
         $request->setParam(\Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE,
             \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE);

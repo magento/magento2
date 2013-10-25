@@ -77,7 +77,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             'flatResourceFactory' => $catFlatFactoryMock,
             'productResourceFactory' => $productFactoryMock,
         ));
-        $this->_requestMock = $this->getMock('Magento\Core\Controller\Request\Http', array(), array(), '', false);
+        $this->_requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false);
     }
 
     public function testTransitionProductTypeSimple()

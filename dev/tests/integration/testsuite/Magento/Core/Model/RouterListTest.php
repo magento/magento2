@@ -32,14 +32,14 @@ class RouterListTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\Core\Model\RouterList
+     * @var \Magento\App\RouterList
      */
     protected $_model;
 
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model = $this->_objectManager->create('Magento\Core\Model\RouterList');
+        $this->_model = $this->_objectManager->create('Magento\App\RouterList');
     }
 
     public function testGetRouterByRoute()
@@ -53,7 +53,7 @@ class RouterListTest extends \PHPUnit_Framework_TestCase
             $this->_model->getRouterByRoute('checkout')
         );
         $this->assertInstanceOf(
-            'Magento\Core\Controller\Varien\Router\DefaultRouter',
+            'Magento\App\Router\DefaultRouter',
             $this->_model->getRouterByRoute('test')
         );
     }
@@ -69,7 +69,7 @@ class RouterListTest extends \PHPUnit_Framework_TestCase
             $this->_model->getRouterByFrontName('checkout')
         );
         $this->assertInstanceOf(
-            'Magento\Core\Controller\Varien\Router\DefaultRouter',
+            'Magento\App\Router\DefaultRouter',
             $this->_model->getRouterByFrontName('test')
         );
     }

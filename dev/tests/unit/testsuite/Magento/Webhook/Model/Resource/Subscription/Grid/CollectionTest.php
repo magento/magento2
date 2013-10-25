@@ -31,7 +31,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructor()
     {
-        $eventManager = $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false);
+        $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
 
         $fetchStrategyMock = $this->_makeMock('Magento\Data\Collection\Db\FetchStrategyInterface');
         $endpointResMock = $this->_makeMock('Magento\Webhook\Model\Resource\Endpoint');

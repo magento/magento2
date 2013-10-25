@@ -29,14 +29,14 @@ class FileResolver implements \Magento\Config\FileResolverInterface
 {
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_applicationDirs;
 
     /**
-     * @param \Magento\Core\Model\Dir $applicationDirs
+     * @param \Magento\App\Dir $applicationDirs
      */
-    public function __construct(\Magento\Core\Model\Dir $applicationDirs)
+    public function __construct(\Magento\App\Dir $applicationDirs)
     {
         $this->_applicationDirs = $applicationDirs;
     }
@@ -46,7 +46,7 @@ class FileResolver implements \Magento\Config\FileResolverInterface
      */
     public function get($filename, $scope)
     {
-        $appLocaleDir = $this->_applicationDirs->getDir(\Magento\Core\Model\Dir::LOCALE);
+        $appLocaleDir = $this->_applicationDirs->getDir(\Magento\App\Dir::LOCALE);
         // Create pattern similar to app/locale/*/config.xml
         $filePattern = $appLocaleDir . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . $filename;
         $fileList = glob($filePattern, GLOB_BRACE);

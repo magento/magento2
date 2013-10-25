@@ -61,7 +61,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function constructorDataProvider()
     {
         return array(
-            'default area'  => array(array(), \Magento\Core\Model\View\DesignInterface::DEFAULT_AREA),
+            'default area'  => array(array(), \Magento\View\DesignInterface::DEFAULT_AREA),
             'frontend area' => array(array('area' => 'frontend'), 'frontend'),
             'backend area'  => array(array('area' => 'adminhtml'), 'adminhtml'),
         );
@@ -90,14 +90,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUpdate()
     {
-        $this->assertInstanceOf('Magento\Core\Model\Layout\Merge', $this->_layout->getUpdate());
-    }
-
-    public function testGetSetDirectOutput()
-    {
-        $this->assertFalse($this->_layout->isDirectOutput());
-        $this->_layout->setDirectOutput(true);
-        $this->assertTrue($this->_layout->isDirectOutput());
+        $this->assertInstanceOf('Magento\View\Layout\ProcessorInterface', $this->_layout->getUpdate());
     }
 
     public function testGenerateXml()
@@ -109,7 +102,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $merge = $this->getMock('StdClass', array('asSimplexml'));
         $merge->expects($this->once())->method('asSimplexml')->will($this->returnValue(simplexml_load_string(
             '<layout><container name="container1"></container></layout>',
-            'Magento\Core\Model\Layout\Element'
+            'Magento\View\Layout\Element'
         )));
         $layout->expects($this->once())->method('getUpdate')->will($this->returnValue($merge));
         $this->assertEmpty($layout->getXpath('/layout/container[@name="container1"]'));
@@ -134,7 +127,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                 <block class="Magento\Core\Block\Text" template="test"/>
                 <block class="Magento\Core\Block\Text"/>
             </layout>',
-            'Magento\Core\Model\Layout\Element'
+            'Magento\View\Layout\Element'
         ));
         $this->assertEquals(array(), $this->_layout->getAllBlocks());
         $this->_layout->generateElements();
@@ -492,7 +485,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testUpdateContainerAttributes()
     {
         $this->_layout->setXml(simplexml_load_file(__DIR__ . '/_files/layout/container_attributes.xml',
-            'Magento\Core\Model\Layout\Element'));
+            'Magento\View\Layout\Element'));
         $this->_layout->generateElements();
         $result = $this->_layout->renderElement('container1', false);
         $this->assertEquals('<div id="container1-2" class="class12">Test11Test12</div>', $result);

@@ -41,19 +41,19 @@ class Header extends \Magento\Core\Block\Template
     protected $_customerSession;
 
     /**
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     protected $_appState;
 
     /**
-     * @param \Magento\Core\Model\App\State $appState
+     * @param \Magento\App\State $appState
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Block\Template\Context $context
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\App\State $appState,
+        \Magento\App\State $appState,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Block\Template\Context $context,
@@ -131,7 +131,7 @@ class Header extends \Magento\Core\Block\Template
         $storeLogoPath = $this->_storeConfig->getConfig('design/header/logo_src');
         $logoUrl = $this->_urlBuilder->getBaseUrl(array('_type' => \Magento\Core\Model\Store::URL_TYPE_MEDIA))
             . $folderName . '/' . $storeLogoPath;
-        $absolutePath = $this->_dirs->getDir(\Magento\Core\Model\Dir::MEDIA) . DIRECTORY_SEPARATOR
+        $absolutePath = $this->_dirs->getDir(\Magento\App\Dir::MEDIA) . DIRECTORY_SEPARATOR
             . $folderName . DIRECTORY_SEPARATOR . $storeLogoPath;
 
         if (!is_null($storeLogoPath) && $this->_isFile($absolutePath)) {

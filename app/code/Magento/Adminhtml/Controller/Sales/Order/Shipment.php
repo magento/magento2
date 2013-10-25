@@ -704,8 +704,8 @@ class Shipment extends \Magento\Adminhtml\Controller\Sales\Shipment\AbstractShip
     {
         /** @var \Magento\Filesystem $filesystem */
         $filesystem = $this->_objectManager->get('Magento\Filesystem');
-        /** @var $tmpDir \Magento\Core\Model\Dir */
-        $tmpDir = $this->_objectManager->get('Magento\Core\Model\Dir', $filesystem->getWorkingDirectory());
+        /** @var $tmpDir \Magento\App\Dir */
+        $tmpDir = $this->_objectManager->get('Magento\App\Dir', $filesystem->getWorkingDirectory());
         $image = imagecreatefromstring($imageString);
         if (!$image) {
             return false;
@@ -716,7 +716,7 @@ class Shipment extends \Magento\Adminhtml\Controller\Sales\Shipment\AbstractShip
         $page = new \Zend_Pdf_Page($xSize, $ySize);
 
         imageinterlace($image, 0);
-        $tmpFileName = $tmpDir->getDir(\Magento\Core\Model\Dir::TMP) . 'shipping_labels_'
+        $tmpFileName = $tmpDir->getDir(\Magento\App\Dir::TMP) . 'shipping_labels_'
                      . uniqid(mt_rand()) . time() . '.png';
         imagepng($image, $tmpFileName);
         $pdfImage = \Zend_Pdf_Image::imageWithPath($tmpFileName);
@@ -728,7 +728,7 @@ class Shipment extends \Magento\Adminhtml\Controller\Sales\Shipment\AbstractShip
     /**
      * Return grid with shipping items for Ajax request
      *
-     * @return \Magento\Core\Controller\Response\Http
+     * @return \Magento\App\ResponseInterface
      */
     public function getShippingItemsGridAction()
     {

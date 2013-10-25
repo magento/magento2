@@ -52,7 +52,7 @@ class CopyService
     protected $_updateFactory;
 
     /**
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -66,7 +66,7 @@ class CopyService
      * @param \Magento\Core\Model\Theme\FileFactory $fileFactory
      * @param \Magento\Core\Model\Layout\Link $link
      * @param \Magento\Core\Model\Layout\UpdateFactory $updateFactory
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Theme\Customization\Path $customization
      */
     public function __construct(
@@ -74,7 +74,7 @@ class CopyService
         \Magento\Core\Model\Theme\FileFactory $fileFactory,
         \Magento\Core\Model\Layout\Link $link,
         \Magento\Core\Model\Layout\UpdateFactory $updateFactory,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Theme\Customization\Path $customization
     ) {
         $this->_filesystem = $filesystem;
@@ -88,10 +88,10 @@ class CopyService
     /**
      * Copy customizations from one theme to another
      *
-     * @param \Magento\Core\Model\Theme $source
-     * @param \Magento\Core\Model\Theme $target
+     * @param \Magento\View\Design\ThemeInterface $source
+     * @param \Magento\View\Design\ThemeInterface $target
      */
-    public function copy(\Magento\Core\Model\Theme $source, \Magento\Core\Model\Theme $target)
+    public function copy(\Magento\View\Design\ThemeInterface $source, \Magento\View\Design\ThemeInterface $target)
     {
         $this->_copyDatabaseCustomization($source, $target);
         $this->_copyLayoutCustomization($source, $target);
@@ -101,11 +101,13 @@ class CopyService
     /**
      * Copy customizations stored in a database from one theme to another, overriding existing data
      *
-     * @param \Magento\Core\Model\Theme $source
-     * @param \Magento\Core\Model\Theme $target
+     * @param \Magento\View\Design\ThemeInterface $source
+     * @param \Magento\View\Design\ThemeInterface $target
      */
-    protected function _copyDatabaseCustomization(\Magento\Core\Model\Theme $source, \Magento\Core\Model\Theme $target)
-    {
+    protected function _copyDatabaseCustomization(
+        \Magento\View\Design\ThemeInterface $source,
+        \Magento\View\Design\ThemeInterface $target
+    ) {
         /** @var $themeFile \Magento\Core\Model\Theme\File */
         foreach ($target->getCustomization()->getFiles() as $themeFile) {
             $themeFile->delete();
@@ -130,11 +132,13 @@ class CopyService
     /**
      * Add layout links to general layout updates for themes
      *
-     * @param \Magento\Core\Model\Theme $source
-     * @param \Magento\Core\Model\Theme $target
+     * @param \Magento\View\Design\ThemeInterface $source
+     * @param \Magento\View\Design\ThemeInterface $target
      */
-    protected function _copyLayoutCustomization(\Magento\Core\Model\Theme $source, \Magento\Core\Model\Theme $target)
-    {
+    protected function _copyLayoutCustomization(
+        \Magento\View\Design\ThemeInterface $source,
+        \Magento\View\Design\ThemeInterface $target
+    ) {
         $update = $this->_updateFactory->create();
         /** @var $targetUpdates \Magento\Core\Model\Resource\Layout\Update\Collection */
         $targetUpdates = $update->getCollection();
@@ -163,12 +167,12 @@ class CopyService
     /**
      * Copy customizations stored in a file system from one theme to another, overriding existing data
      *
-     * @param \Magento\Core\Model\Theme $source
-     * @param \Magento\Core\Model\Theme $target
+     * @param \Magento\View\Design\ThemeInterface $source
+     * @param \Magento\View\Design\ThemeInterface $target
      */
     protected function _copyFilesystemCustomization(
-        \Magento\Core\Model\Theme $source,
-        \Magento\Core\Model\Theme $target
+        \Magento\View\Design\ThemeInterface $source,
+        \Magento\View\Design\ThemeInterface $target
     ) {
         $sourcePath = $this->_customizationPath->getCustomizationPath($source);
         $targetPath = $this->_customizationPath->getCustomizationPath($target);

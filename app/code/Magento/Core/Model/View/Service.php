@@ -37,12 +37,12 @@ class Service
     const SCOPE_SEPARATOR = '::';
 
     /**
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     protected $_appState;
 
     /**
-     * @var \Magento\Core\Model\View\DesignInterface
+     * @var \Magento\View\DesignInterface
      */
     private $_design;
 
@@ -52,24 +52,21 @@ class Service
     protected $_themeFactory;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
     /**
-     * View files system model
-     *
-     *
-     * @param \Magento\Core\Model\App\State $appState
-     * @param \Magento\Core\Model\View\DesignInterface $design
+     * @param \Magento\App\State $appState
+     * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Model\Theme\FlyweightFactory $themeFactory
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      */
     public function __construct(
-        \Magento\Core\Model\App\State $appState,
-        \Magento\Core\Model\View\DesignInterface $design,
+        \Magento\App\State $appState,
+        \Magento\View\DesignInterface $design,
         \Magento\Core\Model\Theme\FlyweightFactory $themeFactory,
-        \Magento\Core\Model\Dir $dir
+        \Magento\App\Dir $dir
     ) {
         $this->_appState = $appState;
         $this->_design = $design;
@@ -113,7 +110,7 @@ class Service
      */
     public function isViewFileOperationAllowed()
     {
-        return $this->getAppMode() != \Magento\Core\Model\App\State::MODE_PRODUCTION;
+        return $this->getAppMode() != \Magento\App\State::MODE_PRODUCTION;
     }
 
     /**
@@ -133,7 +130,7 @@ class Service
      */
     public function getPublicDir()
     {
-        return $this->_dir->getDir(\Magento\Core\Model\Dir::STATIC_VIEW);
+        return $this->_dir->getDir(\Magento\App\Dir::STATIC_VIEW);
     }
 
     /**

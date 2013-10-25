@@ -41,7 +41,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Cms\Model\Block');
         $cmsBlock->load('fixture_block', 'identifier');
         /** @var $block \Magento\Cms\Block\Block */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Cms\Block\Block');
         $block->setBlockId($cmsBlock->getId());
         $result = $block->toHtml();

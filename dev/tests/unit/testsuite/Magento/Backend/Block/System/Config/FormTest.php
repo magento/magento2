@@ -80,7 +80,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             array(), array(), '', false, false
         );
 
-        $requestMock = $this->getMock('Magento\Core\Controller\Request\Http',
+        $requestMock = $this->getMock('Magento\App\RequestInterface',
             array(), array(), '', false, false
         );
         $requestParams = array(

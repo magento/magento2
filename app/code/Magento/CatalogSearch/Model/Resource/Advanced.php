@@ -39,7 +39,7 @@ class Advanced extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -55,12 +55,12 @@ class Advanced extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Core\Model\Resource $resource
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      */
     public function __construct(
         \Magento\Core\Model\Resource $resource,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Event\Manager $eventManager
+        \Magento\Event\ManagerInterface $eventManager
     ) {
         $this->_storeManager = $storeManager;
         $this->_eventManager = $eventManager;

@@ -125,12 +125,12 @@ class CachingProxy implements
      * Proxy to \Magento\Core\Model\Design\FileResolution\Strategy\Fallback::getFile()
      *
      * @param string $area
-     * @param \Magento\Core\Model\Theme $themeModel
+     * @param \Magento\View\Design\ThemeInterface $themeModel
      * @param string $file
      * @param string|null $module
      * @return string
      */
-    public function getFile($area, \Magento\Core\Model\Theme $themeModel, $file, $module = null)
+    public function getFile($area, \Magento\View\Design\ThemeInterface $themeModel, $file, $module = null)
     {
         $result = $this->_getFromMap('file', $area, $themeModel, null, $module, $file);
         if (!$result) {
@@ -144,12 +144,12 @@ class CachingProxy implements
      * Proxy to \Magento\Core\Model\Design\FileResolution\Strategy\Fallback::getLocaleFile()
      *
      * @param string $area
-     * @param \Magento\Core\Model\Theme $themeModel
+     * @param \Magento\View\Design\ThemeInterface $themeModel
      * @param string $locale
      * @param string $file
      * @return string
      */
-    public function getLocaleFile($area, \Magento\Core\Model\Theme $themeModel, $locale, $file)
+    public function getLocaleFile($area, \Magento\View\Design\ThemeInterface $themeModel, $locale, $file)
     {
         $result = $this->_getFromMap('locale', $area, $themeModel, $locale, null, $file);
         if (!$result) {
@@ -163,13 +163,13 @@ class CachingProxy implements
      * Proxy to \Magento\Core\Model\Design\FileResolution\Strategy\Fallback::getViewFile()
      *
      * @param string $area
-     * @param \Magento\Core\Model\Theme $themeModel
+     * @param \Magento\View\Design\ThemeInterface $themeModel
      * @param string $locale
      * @param string $file
      * @param string|null $module
      * @return string
      */
-    public function getViewFile($area, \Magento\Core\Model\Theme $themeModel, $locale, $file, $module = null)
+    public function getViewFile($area, \Magento\View\Design\ThemeInterface $themeModel, $locale, $file, $module = null)
     {
         $result = $this->_getFromMap('view', $area, $themeModel, $locale, $module, $file);
         if (!$result) {
@@ -184,14 +184,15 @@ class CachingProxy implements
      *
      * @param string $fileType
      * @param string $area
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @param string|null $locale
      * @param string|null $module
      * @param string $file
      * @return null|string
      */
-    protected function _getFromMap($fileType, $area, \Magento\Core\Model\Theme $theme, $locale, $module, $file)
-    {
+    protected function _getFromMap(
+        $fileType, $area, \Magento\View\Design\ThemeInterface $theme, $locale, $module, $file
+    ) {
         $sectionKey = $this->_loadSection($area, $theme, $locale);
         $fileKey = "$fileType|$file|$module";
         if (isset($this->_sections[$sectionKey]['data'][$fileKey])) {
@@ -209,15 +210,16 @@ class CachingProxy implements
      *
      * @param string $fileType
      * @param string $area
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @param string|null $locale
      * @param string|null $module
      * @param string $file
      * @param string $filePath
      * @throws \Magento\Exception
      */
-    protected function _setToMap($fileType, $area, \Magento\Core\Model\Theme $theme, $locale, $module, $file, $filePath)
-    {
+    protected function _setToMap(
+        $fileType, $area, \Magento\View\Design\ThemeInterface $theme, $locale, $module, $file, $filePath
+    ) {
         $pattern = $this->_baseDir . DIRECTORY_SEPARATOR;
         if (0 !== strpos($filePath, $pattern)) {
             throw new \Magento\Exception(
@@ -236,11 +238,11 @@ class CachingProxy implements
      * Compose section file name
      *
      * @param string $area
-     * @param \Magento\Core\Model\Theme $themeModel
+     * @param \Magento\View\Design\ThemeInterface $themeModel
      * @param string|null $locale
      * @return string
      */
-    protected function _getSectionFile($area, \Magento\Core\Model\Theme $themeModel, $locale)
+    protected function _getSectionFile($area, \Magento\View\Design\ThemeInterface $themeModel, $locale)
     {
         $theme = $themeModel->getId() ?: md5($themeModel->getThemePath());
         return "{$area}_{$theme}_{$locale}.ser";
@@ -250,11 +252,11 @@ class CachingProxy implements
      * Load section and return its key
      *
      * @param string $area
-     * @param \Magento\Core\Model\Theme $themeModel
+     * @param \Magento\View\Design\ThemeInterface $themeModel
      * @param string|null $locale
      * @return string
      */
-    protected function _loadSection($area, \Magento\Core\Model\Theme $themeModel, $locale)
+    protected function _loadSection($area, \Magento\View\Design\ThemeInterface $themeModel, $locale)
     {
         $sectionFile = $this->_getSectionFile($area, $themeModel, $locale);
         if (!isset($this->_sections[$sectionFile])) {
@@ -274,15 +276,15 @@ class CachingProxy implements
      * Set file path to map.
      *
      * @param string $area
-     * @param \Magento\Core\Model\Theme $themeModel
+     * @param \Magento\View\Design\ThemeInterface $themeModel
      * @param string $locale
      * @param string|null $module
      * @param string $file
      * @param string $newFilePath
      * @return \Magento\Core\Model\Design\FileResolution\Strategy\Fallback\CachingProxy
      */
-    public function setViewFilePathToMap($area, \Magento\Core\Model\Theme $themeModel, $locale, $module, $file,
-        $newFilePath
+    public function setViewFilePathToMap(
+        $area, \Magento\View\Design\ThemeInterface $themeModel, $locale, $module, $file, $newFilePath
     ) {
         $this->_setToMap('view', $area, $themeModel, $locale, $module, $file, $newFilePath);
         return $this;

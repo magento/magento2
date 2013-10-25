@@ -56,11 +56,11 @@ class Factory
     /**
      * Create new config object
      *
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @return \Magento\Core\Model\Theme\Domain\Virtual|\Magento\Core\Model\Theme\Domain\Staging
      * @throws \Magento\Core\Exception
      */
-    public function create(\Magento\Core\Model\Theme $theme)
+    public function create(\Magento\View\Design\ThemeInterface $theme)
     {
         if (!isset($this->_types[$theme->getType()])) {
             throw new \Magento\Core\Exception(sprintf('Invalid type of theme domain model "%s"', $theme->getType()));

@@ -144,7 +144,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
         $model = $this->_totalFactory->create($class);
         if (!$model instanceof \Magento\Sales\Model\Quote\Address\Total\AbstractTotal) {
             throw new \Magento\Core\Exception(
-                __('The address total model should be extended from \Magento\Sales\Model\Quote\Address\Total\Abstract.')
+                __('The address total model should be extended from \Magento\Sales\Model\Quote\Address\Total\AbstractTotal.')
             );
         }
 

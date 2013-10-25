@@ -44,7 +44,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     protected $_filesContent;
 
     /**
-     * @var \Magento\Core\Controller\Request\Http|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\RequestInterface|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_request;
 
@@ -52,7 +52,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     {
         $this->_helperStorage = $this->getMock('Magento\Theme\Helper\Storage', array(), array(), '', false);
         $this->_urlBuilder = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false);
-        $this->_request = $this->getMock('Magento\Core\Controller\Request\Http', array(), array(), '', false);
+        $this->_request = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $constructArguments =  $objectManagerHelper->getConstructArguments(

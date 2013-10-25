@@ -150,7 +150,7 @@ abstract class Form
     protected $_universalFactory;
 
     /**
-     * @var \Magento\Core\Controller\Request\Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_httpRequest;
 
@@ -165,7 +165,7 @@ abstract class Form
      * @param \Magento\Core\Model\Config\Modules\Reader $modulesReader
      * @param \Magento\Eav\Model\AttributeDataFactory $attrDataFactory
      * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Controller\Request\Http $httpRequest
+     * @param \Magento\App\RequestInterface $httpRequest
      * @param \Magento\Validator\ConfigFactory $validatorConfigFactory
      *
      * @throws \Magento\Core\Exception
@@ -176,7 +176,7 @@ abstract class Form
         \Magento\Core\Model\Config\Modules\Reader $modulesReader,
         \Magento\Eav\Model\AttributeDataFactory $attrDataFactory,
         \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Controller\Request\Http $httpRequest,
+        \Magento\App\RequestInterface $httpRequest,
         \Magento\Validator\ConfigFactory $validatorConfigFactory
     ) {
         if (empty($this->_moduleName)) {
@@ -427,7 +427,7 @@ abstract class Form
      * Prepare request with data and returns it
      *
      * @param array $data
-     * @return \Zend_Controller_Request_Http
+     * @return \Magento\App\RequestInterface
      */
     public function prepareRequest(array $data)
     {
@@ -442,12 +442,12 @@ abstract class Form
     /**
      * Extract data from request and return associative data array
      *
-     * @param \Zend_Controller_Request_Http $request
+     * @param \Magento\App\RequestInterface $request
      * @param string $scope the request scope
      * @param boolean $scopeOnly search value only in scope or search value in global too
      * @return array
      */
-    public function extractData(\Zend_Controller_Request_Http $request, $scope = null, $scopeOnly = true)
+    public function extractData(\Magento\App\RequestInterface $request, $scope = null, $scopeOnly = true)
     {
         $data = array();
         /** @var $attribute \Magento\Eav\Model\Attribute */

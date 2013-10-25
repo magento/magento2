@@ -52,13 +52,13 @@ class Theme implements \Magento\Core\Model\Design\Fallback\Rule\RuleInterface
      */
     public function getPatternDirs(array $params)
     {
-        if (!array_key_exists('theme', $params) || !($params['theme'] instanceof \Magento\Core\Model\ThemeInterface)) {
+        if (!array_key_exists('theme', $params) || !($params['theme'] instanceof \Magento\View\Design\ThemeInterface)) {
             throw new \InvalidArgumentException(
                 'Parameter "theme" should be specified and should implement the theme interface.'
             );
         }
         $result = array();
-        /** @var $theme \Magento\Core\Model\ThemeInterface */
+        /** @var $theme \Magento\View\Design\ThemeInterface */
         $theme = $params['theme'];
         unset($params['theme']);
         while ($theme) {

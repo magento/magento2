@@ -54,8 +54,8 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
      */
     protected $_fixtureInitParams = array(
         \Magento\Core\Model\App::PARAM_APP_DIRS => array(
-            \Magento\Core\Model\Dir::CONFIG     => __DIR__,
-            \Magento\Core\Model\Dir::VAR_DIR    => __DIR__,
+            \Magento\App\Dir::CONFIG     => __DIR__,
+            \Magento\App\Dir::VAR_DIR    => __DIR__,
         ),
     );
 
@@ -191,14 +191,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
 
     public function testRunApp()
     {
-        $requestMock = $this->getMock('Magento\TestFramework\Request', array(), array(), '', false);
-        $responseMock = $this->getMock('Magento\TestFramework\Response', array(), array(), '', false);
-
-        $this->_application
-            ->expects($this->once())
-            ->method('run')
-            ->with($requestMock, $responseMock)
-        ;
-        $this->_object->runApp($requestMock, $responseMock);
+        $this->_application->expects($this->once())->method('run');
+        $this->_object->runApp();
     }
 }

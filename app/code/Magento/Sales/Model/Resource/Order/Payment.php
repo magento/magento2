@@ -53,13 +53,13 @@ class Payment extends \Magento\Sales\Model\Resource\Order\AbstractOrder
     protected $_paymentConverter;
 
     /**
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Resource $resource
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory
      * @param \Magento\Sales\Model\Payment\Method\Converter $paymentConverter
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Resource $resource,
         \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory,
         \Magento\Sales\Model\Payment\Method\Converter $paymentConverter

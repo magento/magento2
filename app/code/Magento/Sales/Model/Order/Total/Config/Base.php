@@ -89,7 +89,7 @@ class Base extends \Magento\Sales\Model\Config\Ordered
         $model = $this->_orderTotalFactory->create($class);
         if (!$model instanceof \Magento\Sales\Model\Order\Total\AbstractTotal) {
             throw new \Magento\Core\Exception(
-                __('The total model should be extended from \Magento\Sales\Model\Order\Total\Abstract.')
+                __('The total model should be extended from \Magento\Sales\Model\Order\Total\AbstractTotal.')
             );
         }
 

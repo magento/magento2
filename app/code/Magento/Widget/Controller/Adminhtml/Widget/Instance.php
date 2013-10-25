@@ -94,12 +94,12 @@ class Instance extends \Magento\Adminhtml\Controller\Action
         /** @var $widgetInstance \Magento\Widget\Model\Widget\Instance */
         $widgetInstance = $this->_widgetFactory->create();
 
+        $code = $this->getRequest()->getParam('code', null);
         $instanceId = $this->getRequest()->getParam('instance_id', null);
-        $type = $this->getRequest()->getParam('type', null);
-        $themeId = $this->getRequest()->getParam('theme_id', null);
-
         if ($instanceId) {
-            $widgetInstance->load($instanceId);
+            $widgetInstance
+                ->load($instanceId)
+                ->setCode($code);
             if (!$widgetInstance->getId()) {
                 $this->_getSession()->addError(
                     __('Please specify a correct widget.')
@@ -107,7 +107,14 @@ class Instance extends \Magento\Adminhtml\Controller\Action
                 return false;
             }
         } else {
-            $widgetInstance->setType($type)->setThemeId($themeId);
+            // Widget id was not provided on the query-string.  Locate the widget instance
+            // type (namespace\classname) based upon the widget code (aka, widget id).
+            $themeId = $this->getRequest()->getParam('theme_id', null);
+            $type = $code != null ? $widgetInstance->getWidgetReference('code', $code, 'type') : null;
+            $widgetInstance
+                ->setType($type)
+                ->setCode($code)
+                ->setThemeId($themeId);
         }
         $this->_coreRegistry->register('current_widget_instance', $widgetInstance);
         return $widgetInstance;

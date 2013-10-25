@@ -47,7 +47,7 @@ class Factory
     private $_filesystem;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     private $_dirs;
 
@@ -97,7 +97,7 @@ class Factory
     /**
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Model\Dir $dirs
+     * @param \Magento\App\Dir $dirs
      * @param \Magento\Core\Model\Resource $resource
      * @param array $enforcedOptions
      * @param array $decorators
@@ -105,7 +105,7 @@ class Factory
     public function __construct(
         \Magento\ObjectManager $objectManager,
         \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\Dir $dirs,
+        \Magento\App\Dir $dirs,
         \Magento\Core\Model\Resource $resource,
         array $enforcedOptions = array(),
         array $decorators = array()
@@ -130,21 +130,21 @@ class Factory
 
         foreach (array('backend_options', 'slow_backend_options') as $section) {
             if (!empty($options[$section]['cache_dir'])) {
-                $dir = $this->_dirs->getDir(\Magento\Core\Model\Dir::VAR_DIR) . DS . $options[$section]['cache_dir'];
+                $dir = $this->_dirs->getDir(\Magento\App\Dir::VAR_DIR) . DS . $options[$section]['cache_dir'];
                 $this->_filesystem->setIsAllowCreateDirectories(true);
                 $this->_filesystem->ensureDirectoryExists($dir, 0777);
                 $options[$section]['cache_dir'] = $dir;
             }
         }
 
-        $this->_backendOptions['cache_dir'] = $this->_dirs->getDir(\Magento\Core\Model\Dir::CACHE);
+        $this->_backendOptions['cache_dir'] = $this->_dirs->getDir(\Magento\App\Dir::CACHE);
 
         $idPrefix = isset($options['id_prefix']) ? $options['id_prefix'] : '';
         if (!$idPrefix && isset($options['prefix'])) {
             $idPrefix = $options['prefix'];
         }
         if (empty($idPrefix)) {
-            $idPrefix = substr(md5($this->_dirs->getDir(\Magento\Core\Model\Dir::CONFIG)), 0, 3) . '_';
+            $idPrefix = substr(md5($this->_dirs->getDir(\Magento\App\Dir::CONFIG)), 0, 3) . '_';
         }
         $options['frontend_options']['cache_id_prefix'] = $idPrefix;
 

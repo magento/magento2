@@ -58,8 +58,8 @@ class SetupTest extends \PHPUnit_Framework_TestCase
         $this->_model->deleteTableRow('core_resource', 'code', 'adminnotification_setup');
         $this->_model->getConnection()->dropTable($this->_model->getTable('adminnotification_inbox'));
         $this->_model->getConnection()->dropTable($this->_model->getTable('admin_system_messages'));
-        /** @var $updater \Magento\Core\Model\Db\Updater */
-        $updater = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Db\Updater');
+        /** @var $updater \Magento\App\Updater */
+        $updater = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Updater');
         try {
             $updater->updateScheme();
             $updater->updateData();

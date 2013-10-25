@@ -51,8 +51,8 @@ class Upgrade extends \Magento\Core\Model\AbstractEntryPoint
             $cacheFrontend->clean();
         }
 
-        /** @var $updater \Magento\Core\Model\Db\Updater */
-        $updater = $this->_objectManager->get('Magento\Core\Model\Db\Updater');
+        /** @var $updater \Magento\App\Updater */
+        $updater = $this->_objectManager->get('Magento\App\Updater');
         $updater->updateScheme();
         $updater->updateData();
 

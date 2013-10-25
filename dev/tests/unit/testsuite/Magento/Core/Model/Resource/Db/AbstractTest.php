@@ -75,7 +75,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConnectionInMemoryCaching()
     {
-        $dir = $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false);
+        $dir = $this->getMock('Magento\App\Dir', array(), array(), '', false);
         $connection = new \Magento\DB\Adapter\Pdo\Mysql($dir, array(
             'dbname'   => 'test_dbname',
             'username' => 'test_username',

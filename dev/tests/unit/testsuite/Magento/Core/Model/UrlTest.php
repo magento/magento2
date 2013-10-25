@@ -37,19 +37,13 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_securityInfoMock;
-
     protected function setUp()
     {
-        $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
-        
-        $this->_securityInfoMock = $this->getMock('Magento\Core\Model\Url\SecurityInfoInterface');
         $this->_model = new \Magento\Core\Model\Url(
-            $this->_securityInfoMock,
-            $coreStoreConfig,
+            $this->getMock('Magento\App\RouterListInterface'),
+            $this->getMock('Magento\App\Request\Http', array(), array(), '', false),
+            $this->getMock('Magento\Core\Model\Url\SecurityInfoInterface'),
+            $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false),
             $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false, false),
             $this->getMock('Magento\Core\Model\App', array(), array(), '', false, false),
             $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false, false),
@@ -85,9 +79,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $controllerName = 'controllerName';
         $actionName = 'actionName';
 
-        $backendData = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false);
-        $requestMock = $this->getMockForAbstractClass('Magento\Core\Controller\Request\Http',
-            array($backendData), '', false, false, true,
+        $requestMock = $this->getMockForAbstractClass('Magento\App\Request\Http',
+            array(), '', false, false, true,
             array('getRequestedRouteName', 'getRequestedControllerName', 'getRequestedActionName'));
 
         $requestMock->expects($this->once())->method('getRequestedRouteName')

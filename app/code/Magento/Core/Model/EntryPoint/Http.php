@@ -39,8 +39,8 @@ class Http extends \Magento\Core\Model\AbstractEntryPoint
                 'Location: ' . $this->_objectManager->get('Magento\Core\Model\StoreManager')->getStore()->getBaseUrl()
             );
         } catch (\Magento\Core\Model\Store\Exception $e) {
-            require $this->_objectManager->get('Magento\Core\Model\Dir')
-                    ->getDir(\Magento\Core\Model\Dir::PUB) . DS . 'errors' . DS . '404.php';
+            require $this->_objectManager->get('Magento\App\Dir')
+                    ->getDir(\Magento\App\Dir::PUB) . DS . 'errors' . DS . '404.php';
         } catch (\Magento\BootstrapException $e) {
             header('Content-Type: text/plain', true, 503);
             echo $e->getMessage();
@@ -54,9 +54,14 @@ class Http extends \Magento\Core\Model\AbstractEntryPoint
      */
     protected function _processRequest()
     {
-        $request = $this->_objectManager->get('Magento\Core\Controller\Request\Http');
-        $response = $this->_objectManager->get('Magento\Core\Controller\Response\Http');
-        $handler = $this->_objectManager->get('Magento\HTTP\Handler\Composite');
-        $handler->handle($request, $response);
+        $request = $this->_objectManager->get('Magento\App\RequestInterface');
+        $areas = $this->_objectManager->get('Magento\App\AreaList');
+        $areaCode = $areas->getCodeByFrontName($request->getFrontName());
+        $this->_objectManager->get('Magento\Config\Scope')->setCurrentScope($areaCode);
+        $this->_objectManager->configure(
+            $this->_objectManager->get('Magento\Core\Model\ObjectManager\ConfigLoader')->load($areaCode)
+        );
+        $frontController = $this->_objectManager->get('Magento\App\FrontControllerInterface');
+        $frontController->dispatch($request);
     }
 }

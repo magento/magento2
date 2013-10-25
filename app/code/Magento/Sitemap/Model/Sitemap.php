@@ -150,7 +150,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
     protected $_dateModel;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dirModel;
 
@@ -160,7 +160,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Controller\Request\Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_request;
 
@@ -174,9 +174,9 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Sitemap\Model\Resource\Catalog\ProductFactory $productFactory
      * @param \Magento\Sitemap\Model\Resource\Cms\PageFactory $cmsFactory
      * @param \Magento\Core\Model\Date $modelDate
-     * @param \Magento\Core\Model\Dir $dirModel
+     * @param \Magento\App\Dir $dirModel
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -191,9 +191,9 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
         \Magento\Sitemap\Model\Resource\Catalog\ProductFactory $productFactory,
         \Magento\Sitemap\Model\Resource\Cms\PageFactory $cmsFactory,
         \Magento\Core\Model\Date $modelDate,
-        \Magento\Core\Model\Dir $dirModel,
+        \Magento\App\Dir $dirModel,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Controller\Request\Http $request,
+        \Magento\App\RequestInterface $request,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -574,7 +574,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
      */
     protected function _getBaseDir()
     {
-        return $this->_dirModel->getDir(\Magento\Core\Model\Dir::ROOT);
+        return $this->_dirModel->getDir(\Magento\App\Dir::ROOT);
     }
 
     /**

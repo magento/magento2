@@ -91,7 +91,7 @@ class Export
                 $this->addExportType($type['urlPath'], $type['label']);
             }
         }
-        $this->_exportPath = $this->_dirs->getDir(\Magento\Core\Model\Dir::VAR_DIR) . DS . 'export';
+        $this->_exportPath = $this->_dirs->getDir(\Magento\App\Dir::VAR_DIR) . DS . 'export';
     }
 
     /**

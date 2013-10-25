@@ -35,9 +35,9 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 class Layout extends \Magento\Core\Block\Html\Select
 {
     /**
-     * @var \Magento\Core\Model\Layout\MergeFactory
+     * @var \Magento\View\Layout\ProcessorFactory
      */
-    protected $_layoutMergeFactory;
+    protected $_layoutProcessorFactory;
 
     /**
      * @var \Magento\Core\Model\Resource\Theme\CollectionFactory
@@ -46,17 +46,17 @@ class Layout extends \Magento\Core\Block\Html\Select
 
     /**
      * @param \Magento\Core\Block\Context $context
-     * @param \Magento\Core\Model\Layout\MergeFactory $layoutMergeFactory
+     * @param \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory
      * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Block\Context $context,
-        \Magento\Core\Model\Layout\MergeFactory $layoutMergeFactory,
+        \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory,
         \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory,
         array $data = array()
     ) {
-        $this->_layoutMergeFactory = $layoutMergeFactory;
+        $this->_layoutProcessorFactory = $layoutProcessorFactory;
         $this->_themesFactory = $themesFactory;
         parent::__construct($context, $data);
     }
@@ -70,13 +70,13 @@ class Layout extends \Magento\Core\Block\Html\Select
     {
         if (!$this->getOptions()) {
             $this->addOption('', __('-- Please Select --'));
-            $layoutMergeParams = array(
+            $layoutUpdateParams = array(
                 'theme' => $this->_getThemeInstance($this->getTheme()),
             );
             $pageTypes = array();
-            $pageTypesAll = $this->_getLayoutMerge($layoutMergeParams)->getPageHandlesHierarchy();
+            $pageTypesAll = $this->_getLayoutProcessor($layoutUpdateParams)->getPageHandlesHierarchy();
             foreach ($pageTypesAll as $pageTypeName => $pageTypeInfo) {
-                $layoutMerge = $this->_getLayoutMerge($layoutMergeParams);
+                $layoutMerge = $this->_getLayoutProcessor($layoutUpdateParams);
                 $layoutMerge->addPageHandles(array($pageTypeName));
                 $layoutMerge->load();
                 if (!$layoutMerge->getContainers()) {
@@ -106,11 +106,11 @@ class Layout extends \Magento\Core\Block\Html\Select
      * Retrieve new layout merge model instance
      *
      * @param array $arguments
-     * @return \Magento\Core\Model\Layout\Merge
+     * @return \Magento\View\Layout\ProcessorInterface
      */
-    protected function _getLayoutMerge(array $arguments)
+    protected function _getLayoutProcessor(array $arguments)
     {
-        return $this->_layoutMergeFactory->create($arguments);
+        return $this->_layoutProcessorFactory->create($arguments);
     }
 
     /**

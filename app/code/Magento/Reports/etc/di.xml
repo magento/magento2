@@ -27,8 +27,8 @@
     <type name="Magento\Log\Model\Resource\Log">
         <plugin name="reportLog" type="Magento\Reports\Model\Plugin\Log" />
     </type>
-    <type name="Magento\Core\Model\Db\Updater">
-        <param name="resourceList">
+    <type name="Magento\App\Updater\SetupFactory">
+        <param name="resourceTypes">
             <value>
                 <reports_setup>Magento\Reports\Model\Resource\Setup</reports_setup>
             </value>

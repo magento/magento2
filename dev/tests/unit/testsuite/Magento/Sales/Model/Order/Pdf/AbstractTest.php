@@ -47,7 +47,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $coreString = $this->getMock('Magento\Core\Helper\String', array(), array(), '', false);
         $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
         $translate = $this->getMock('Magento\Core\Model\Translate', array(), array(), '', false);
-        $coreDir = $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false);
+        $coreDir = $this->getMock('Magento\App\Dir', array(), array(), '', false);
         $shippingConfig = $this->getMock('Magento\Shipping\Model\Config', array(), array(), '', false);
         $pdfItemsFactory = $this->getMock('Magento\Sales\Model\Order\Pdf\ItemsFactory', array(), array(), '', false);
 

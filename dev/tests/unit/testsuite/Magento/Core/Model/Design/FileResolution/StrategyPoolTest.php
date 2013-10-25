@@ -34,12 +34,12 @@ class StrategyPoolTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\Core\Model\App\State|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\State|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_appState;
 
     /**
-     * @var \Magento\Core\Model\Dir|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Dir|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_dirs;
 
@@ -56,9 +56,9 @@ class StrategyPoolTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = $this->getMock('Magento\Core\Model\ObjectManager', array(), array(), '', false);
-        $this->_appState = $this->getMock('Magento\Core\Model\App\State', array(), array(), '', false);
+        $this->_appState = $this->getMock('Magento\App\State', array(), array(), '', false);
 
-        $this->_dirs = new \Magento\Core\Model\Dir('base_dir');
+        $this->_dirs = new \Magento\App\Dir('base_dir');
 
         $this->_filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
 
@@ -113,13 +113,13 @@ class StrategyPoolTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'default mode' => array(
-                \Magento\Core\Model\App\State::MODE_DEFAULT
+                \Magento\App\State::MODE_DEFAULT
             ),
             'production mode' => array(
-                \Magento\Core\Model\App\State::MODE_PRODUCTION
+                \Magento\App\State::MODE_PRODUCTION
             ),
             'developer mode' => array(
-                \Magento\Core\Model\App\State::MODE_DEVELOPER
+                \Magento\App\State::MODE_DEVELOPER
             ),
         );
     }

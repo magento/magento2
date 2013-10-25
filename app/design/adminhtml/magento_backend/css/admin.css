@@ -1340,14 +1340,14 @@ fieldset.field [class^='fields-group-'] .field .control {
     box-sizing: border-box;
     float: left;
     width: 20%;
-    padding: 6px 0 0 15px;
-    font-size: 10px;
+    padding: 7px 0 0 15px;
+    color: #999;
+    font-size: 12px;
+    letter-spacing: 0.05em;
 }
 
 .form-inline .field-service[value-scope]:before {
     content: attr(value-scope) !important;
-    font-size: 10px;
-    color: #6F8992;
     white-space: nowrap;
     display: block;
     margin-bottom: 5px;
@@ -2407,7 +2407,8 @@ table tbody tr:nth-child(odd):hover th {
     z-index: 999;
 }
 
-.loading-old {
+.loading-old,
+.loading-mask {
     position: fixed;
     left: 0;
     top: 0;
@@ -3661,15 +3662,6 @@ table tbody tr:nth-child(odd):hover th {
     z-index: 2;
 }
 
-.adminhtml-dashboard-index .side-col {
-    width: 38%;
-    padding: 1%;
-}
-
-.adminhtml-dashboard-index .main-col {
-    width: 60%;
-}
-
 /* Sidebar and main column vertical separator */
 .main-col:after,
 .side-col:after {
@@ -4605,7 +4597,7 @@ table tbody tr:nth-child(odd):hover th {
     min-width: 121px;
 }
 
-.grid .filter .range input {
+.grid .filter .range .date input {
     margin-top: 0;
     vertical-align: middle;
     width: 80%;
@@ -4636,9 +4628,9 @@ table tbody tr:nth-child(odd):hover th {
 
 .grid .filter .date:before {
     position: absolute;
-    left: 85%;
+    left: 80%;
     top: 1px;
-    margin-top: 0;
+    margin-left: 5px;
     text-shadow: none;
     width: 16px;
     height: 16px;
@@ -4706,9 +4698,7 @@ table tbody tr:nth-child(odd):hover th {
 
 .massaction .entry-edit fieldset select {
     border-radius: 2px;
-    padding: 3px;
     margin: 0;
-    vertical-align: middle;
 }
 
 .massaction .entry-edit fieldset select.validation-failed {
@@ -4860,6 +4850,7 @@ tr.dynamic-grid input.input-text {
     white-space: normal;
 }
 
+/* will be deleted after checking entire back-end
 table .col-draggable {
     width: 1%;
 }
@@ -4897,34 +4888,34 @@ table .col-frontend_label {
     width: 25%;
 }
 
+.ui-dialog .selection-search table .col-select {
+    width: 25%;
+}
+*/
+
 table .col-draggable .draggable-handle {
     position: relative;
     top: 0;
     float: left;
 }
 
-.grid table .col-id,
-.grid table thead th.col-price,
-.grid table thead th.col-qty,
-.grid table thead th.col-number {
+.grid table .col-id {
     text-align: left;
-}
-
-.ui-dialog .selection-search table .col-select {
-    width: 25px;
 }
 
 /*
     Data table
 -------------------------------------- */
 .data-table {
-    border-collapse: inherit; /* do not remove this! without this rule in FF when table has only 1 row bottom and side borders disappear*/
+    border-collapse: separate; /* do not remove this! without this rule in FF when table has only 1 row bottom and side borders disappear*/
     width: 100%;
 }
 
 .data-table thead,
 .data-table tfoot,
-.data-table th {
+.data-table th,
+.accordion .config .data-table thead th,
+.accordion .config .data-table tfoot td {
     background: #fff;
     color: #666;
 }
@@ -4936,7 +4927,8 @@ table .col-draggable .draggable-handle {
 }
 
 .data-table td,
-.data-table tbody tr td {
+.data-table tbody tr td,
+.accordion .config .data-table td {
     background: #fff;
     padding: 5px 7px;
     font-size: 12px;
@@ -4962,7 +4954,8 @@ table .col-draggable .draggable-handle {
 }
 
 .data-table tbody tr:nth-child(odd) td,
-.data-table tbody tr:nth-child(odd):hover td {
+.data-table tbody tr:nth-child(odd):hover td,
+.accordion .config .data-table tbody tr:nth-child(odd) td {
     background: #fbfaf6;
 }
 
@@ -4971,7 +4964,8 @@ table .col-draggable .draggable-handle {
 }
 
 .data-table tfoot tr:last-child td,
-.data-table tfoot tr:last-child th {
+.data-table tfoot tr:last-child th,
+.accordion .config .data-table tfoot tr:last-child td {
     border: 0;
 }
 
@@ -5159,16 +5153,16 @@ table .col-draggable .draggable-handle {
 .col-color,
 .col-size,
 .col-product,
-.col-comment {
+.col-comment,
+.col-actions,
+.col-status {
     text-align: left;
 }
 
 /* center */
 .col-include,
-.col-price,
 .col-display,
 .col-image,
-.col-price,
 .col-no-records,
 .col-select,
 .col-default,
@@ -5179,7 +5173,6 @@ table .col-draggable .draggable-handle {
 /* right */
 .col-qty,
 .col-weight,
-.col-actions,
 .col-price,
 .col-price > input,
 .col-id,
@@ -5328,6 +5321,11 @@ table .col-draggable .draggable-handle {
     margin-right: 3px;
     position: relative;
     top: 2px;
+}
+
+.tree-store-scope .field .addafter {
+    display: inline-block;
+    padding-top: 6px;
 }
 
 .tree-store-scope .tooltip .help {
@@ -5541,6 +5539,14 @@ table .col-draggable .draggable-handle {
 -------------------------------------- */
 .action-wysiwyg {
     margin: 10px 0;
+}
+
+#catalog-wysiwyg-editor .buttons-set {
+    margin-bottom: 9px;
+}
+
+#catalog-wysiwyg-editor .buttons-set button {
+    margin-right: 4px;
 }
 
 /*

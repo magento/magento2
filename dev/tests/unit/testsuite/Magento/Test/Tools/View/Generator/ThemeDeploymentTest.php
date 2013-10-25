@@ -44,7 +44,7 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $filesystem =  new \Magento\Filesystem(new \Magento\Filesystem\Adapter\Local());
-        $dirs = new \Magento\Core\Model\Dir($filesystem->normalizePath(__DIR__ . '/../../../../../../'));
+        $dirs = new \Magento\App\Dir($filesystem->normalizePath(__DIR__ . '/../../../../../../'));
         $this->_cssHelper = new \Magento\Core\Helper\Css($filesystem, $dirs);
         $this->_tmpDir = TESTS_TEMP_DIR . DIRECTORY_SEPARATOR . 'tool_theme_deployment';
         mkdir($this->_tmpDir);

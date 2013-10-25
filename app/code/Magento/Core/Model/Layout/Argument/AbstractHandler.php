@@ -44,10 +44,10 @@ abstract class AbstractHandler
     /**
      * Retrieve value from argument
      *
-     * @param \Magento\Core\Model\Layout\Element $argument
+     * @param \Magento\View\Layout\Element $argument
      * @return mixed|null
      */
-    protected function _getArgumentValue(\Magento\Core\Model\Layout\Element $argument)
+    protected function _getArgumentValue(\Magento\View\Layout\Element $argument)
     {
         if ($this->_isUpdater($argument)) {
             return null;
@@ -63,10 +63,10 @@ abstract class AbstractHandler
     /**
      * Check whether updater used and value not overwriten
      *
-     * @param \Magento\Core\Model\Layout\Element $argument
+     * @param \Magento\View\Layout\Element $argument
      * @return string
      */
-    protected function _isUpdater(\Magento\Core\Model\Layout\Element $argument)
+    protected function _isUpdater(\Magento\View\Layout\Element $argument)
     {
         $updaters = $argument->xpath('./updater');
         if (!empty($updaters) && !isset($argument->value)) {
@@ -78,26 +78,26 @@ abstract class AbstractHandler
     /**
      * Retrieve xsi:type attribute value from argument
      *
-     * @param \Magento\Core\Model\Layout\Element $argument
+     * @param \Magento\View\Layout\Element $argument
      * @return string
      */
-    protected function _getArgumentType(\Magento\Core\Model\Layout\Element $argument)
+    protected function _getArgumentType(\Magento\View\Layout\Element $argument)
     {
         return (string)$argument->attributes('xsi', true)->type;
     }
 
     /**
      * Parse argument node
-     * @param \Magento\Core\Model\Layout\Element $argument
+     * @param \Magento\View\Layout\Element $argument
      * @return array
      */
-    public function parse(\Magento\Core\Model\Layout\Element $argument)
+    public function parse(\Magento\View\Layout\Element $argument)
     {
         $result = array();
         $updaters = array();
         $result['type'] = $this->_getArgumentType($argument);
         foreach ($argument->xpath('./updater') as $updaterNode) {
-            /** @var $updaterNode \Magento\Core\Model\Layout\Element */
+            /** @var $updaterNode \Magento\View\Layout\Element */
             $updaters[uniqid() . '_' . mt_rand()] = trim((string)$updaterNode);
         }
 

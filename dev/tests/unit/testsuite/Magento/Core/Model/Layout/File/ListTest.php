@@ -55,13 +55,13 @@ class ListTest extends \PHPUnit_Framework_TestCase
      * @param string $filename
      * @param string $module
      * @param string|null $themeFullPath
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\ThemeInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\View\Design\ThemeInterface
      */
     protected function _createLayoutFile($filename, $module, $themeFullPath = null)
     {
         $theme = null;
         if ($themeFullPath !== null) {
-            $theme = $this->getMockForAbstractClass('Magento\Core\Model\ThemeInterface');
+            $theme = $this->getMockForAbstractClass('Magento\View\Design\ThemeInterface');
             $theme->expects($this->any())->method('getFullPath')->will($this->returnValue($themeFullPath));
         }
         return new \Magento\Core\Model\Layout\File($filename, $module, $theme);

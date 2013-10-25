@@ -134,14 +134,14 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
 
         // Find files, declared in views
         $files = array();
-        /** @var $theme \Magento\Core\Model\Theme */
+        /** @var $theme \Magento\View\Design\ThemeInterface */
         foreach ($themes as $theme) {
             $this->_collectGetViewUrlInvokes($theme, $files);
         }
 
         // Populate data provider in correspondence of themes to view files
         $result = array();
-        /** @var $theme \Magento\Core\Model\Theme */
+        /** @var $theme \Magento\View\Design\ThemeInterface */
         foreach ($themes as $theme) {
             if (!isset($files[$theme->getId()])) {
                 continue;
@@ -156,7 +156,7 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
     /**
      * Collect getViewUrl() from theme templates
      *
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @param array &$files
      */
     protected function _collectGetViewUrlInvokes($theme, &$files)
@@ -177,9 +177,9 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
         }
 
         // Collect "addCss" and "addJs" from theme layout
-        /** @var \Magento\Core\Model\Layout\Merge $layoutUpdate */
+        /** @var \Magento\View\Layout\ProcessorInterface $layoutUpdate */
         $layoutUpdate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Layout\Merge', array('theme' => $theme));
+            ->create('Magento\View\Layout\ProcessorInterface', array('theme' => $theme));
         $fileLayoutUpdates = $layoutUpdate->getFileLayoutUpdatesXml();
         $elements = $fileLayoutUpdates->xpath(
             '//block[@class="Magento\Page\Block\Html\Head\Css" or @class="Magento\Page\Block\Html\Head\Script"]'
@@ -251,7 +251,7 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
     {
         $this->markTestIncomplete('Should be fixed when static when we have static folder jslib implemented');
         $this->assertFileExists(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Dir')->getDir('jslib')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')->getDir('jslib')
                 . DIRECTORY_SEPARATOR . $file
         );
     }

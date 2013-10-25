@@ -63,20 +63,20 @@ class DefaultPrice
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
     /**
      * @param \Magento\Core\Model\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      */
     public function __construct(
         \Magento\Core\Model\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData
     ) {
         $this->_eventManager = $eventManager;

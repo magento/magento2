@@ -140,15 +140,12 @@ class Bootstrap
     }
 
     /**
-     * Perform the full request processing by the application instance optionally passing parameters to be overridden.
+     * Perform the full request processing by the application instance.
      * Intended to be used by the controller tests.
-     *
-     * @param \Magento\TestFramework\Request $request
-     * @param \Magento\TestFramework\Response $response
      */
-    public function runApp(\Magento\TestFramework\Request $request, \Magento\TestFramework\Response $response)
+    public function runApp()
     {
-        $this->_bootstrap->getApplication()->run($request, $response);
+        $this->_bootstrap->getApplication()->run();
     }
 
     /**

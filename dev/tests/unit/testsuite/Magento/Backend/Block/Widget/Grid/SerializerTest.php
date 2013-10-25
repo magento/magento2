@@ -29,13 +29,13 @@ namespace Magento\Backend\Block\Widget\Grid;
 class SerializerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Layout
+     * @var \Magento\View\LayoutInterface
      */
     protected $_layoutMock;
 
     protected function setUp()
     {
-        $this->_layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
+        $this->_layoutMock = $this->getMockBuilder('Magento\View\LayoutInterface')->getMockForAbstractClass();
     }
 
     public function testPrepareLayout()

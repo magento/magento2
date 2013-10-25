@@ -37,8 +37,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = new \Magento\TestFramework\Request(
-            $this->getMock('Magento\Core\Model\StoreManager', ['__wakeup'], [], '', false),
-            $this->getMock('Magento\Backend\Helper\Data', [], [], '', false)
+            $this->getMock('Magento\App\RouterListInterface', array(), array(), '', false)
         );
     }
 

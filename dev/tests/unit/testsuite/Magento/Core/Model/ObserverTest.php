@@ -93,7 +93,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $themeMock->expects($this->any())->method('getCustomization')
             ->will($this->returnValue($this->_themeCustomization));
 
-        $designMock = $this->getMock('Magento\Core\Model\View\DesignInterface');
+        $designMock = $this->getMock('Magento\View\DesignInterface');
         $designMock
             ->expects($this->any())
             ->method('getDesignTheme')

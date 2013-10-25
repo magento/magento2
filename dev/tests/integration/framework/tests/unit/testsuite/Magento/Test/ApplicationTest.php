@@ -38,7 +38,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     {
         $dbInstance = $this->getMockForAbstractClass('Magento\TestFramework\Db\AbstractDb', array(), '', false);
         $installDir = '/install/dir';
-        $appMode = \Magento\Core\Model\App\State::MODE_DEVELOPER;
+        $appMode = \Magento\App\State::MODE_DEVELOPER;
 
         $object = new \Magento\TestFramework\Application(
             $dbInstance,
@@ -59,7 +59,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey(\Magento\Core\Model\App::PARAM_MODE, $initParams,
             'Application mode is not configured');
         $this->assertEquals(
-            \Magento\Core\Model\App\State::MODE_DEVELOPER,
+            \Magento\App\State::MODE_DEVELOPER,
             $initParams[\Magento\Core\Model\App::PARAM_MODE],
             'Wrong application mode configured'
         );

@@ -38,7 +38,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_theme = $this->getMockForAbstractClass('Magento\Core\Model\ThemeInterface');
+        $this->_theme = $this->getMockForAbstractClass('Magento\View\Design\ThemeInterface');
         $this->_model = new \Magento\Core\Model\Layout\File(__FILE__, 'Fixture_TestModule', $this->_theme);
     }
 

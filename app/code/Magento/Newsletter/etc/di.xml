@@ -24,8 +24,8 @@
  */
 -->
 <config>
-    <type name="Magento\Core\Model\Db\Updater">
-        <param name="resourceList">
+    <type name="Magento\App\Updater\SetupFactory">
+        <param name="resourceTypes">
             <value>
                 <newsletter_setup>Magento\Newsletter\Model\Resource\Setup</newsletter_setup>
             </value>

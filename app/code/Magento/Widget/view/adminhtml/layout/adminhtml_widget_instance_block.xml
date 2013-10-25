@@ -38,6 +38,7 @@
                         <item name="path" xsi:type="string">*/*/edit</item>
                         <item name="extraParamsTemplate" xsi:type="array">
                             <item name="instance_id" xsi:type="string">getId</item>
+                            <item name="code" xsi:type="string">getCode</item>
                         </item>
                     </argument>
                 </arguments>

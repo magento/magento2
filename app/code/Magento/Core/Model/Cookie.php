@@ -56,12 +56,12 @@ class Cookie
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Controller\Request\Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_httpRequest;
 
     /**
-     * @var \Magento\Core\Controller\Response\Http
+     * @var \Magento\App\ResponseInterface
      */
     protected $_httpResponse;
 
@@ -73,19 +73,19 @@ class Cookie
     protected $_coreStoreConfig;
 
     /**
-     * @param \Magento\Core\Controller\Request\Http $httpRequest
-     * @param \Magento\Core\Controller\Response\Http $httpResponse
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\App\ResponseInterface $response
+     * @param Store\Config $coreStoreConfig
+     * @param StoreManager $storeManager
      */
     public function __construct(
-        \Magento\Core\Controller\Request\Http $httpRequest,
-        \Magento\Core\Controller\Response\Http $httpResponse,
+        \Magento\App\RequestInterface $request,
+        \Magento\App\ResponseInterface $response,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManager $storeManager
     ) {
-        $this->_httpRequest = $httpRequest;
-        $this->_httpResponse = $httpResponse;
+        $this->_httpRequest = $request;
+        $this->_httpResponse = $response;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_storeManager = $storeManager;
     }
@@ -118,7 +118,7 @@ class Cookie
     /**
      * Retrieve Request object
      *
-     * @return \Magento\Core\Controller\Request\Http
+     * @return \Magento\App\RequestInterface
      */
     protected function _getRequest()
     {
@@ -128,7 +128,7 @@ class Cookie
     /**
      * Retrieve Response object
      *
-     * @return \Magento\Core\Controller\Response\Http
+     * @return \Magento\App\ResponseInterface
      */
     protected function _getResponse()
     {

@@ -31,7 +31,7 @@ class Tree extends \Magento\Data\Tree\Dbp
     const LEVEL_FIELD = 'level';
 
     /**
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     private $_eventManager;
     
@@ -113,7 +113,7 @@ class Tree extends \Magento\Data\Tree\Dbp
      * @param \Magento\Core\Model\CacheInterface $cache
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Resource $resource
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
      * @param \Magento\Catalog\Model\Resource\Category\Collection\Factory $collectionFactory
      */
@@ -122,7 +122,7 @@ class Tree extends \Magento\Data\Tree\Dbp
         \Magento\Core\Model\CacheInterface $cache,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Resource $resource,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
         \Magento\Catalog\Model\Resource\Category\Collection\Factory $collectionFactory
     ) {

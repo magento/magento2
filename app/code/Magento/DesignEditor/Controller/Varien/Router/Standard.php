@@ -42,36 +42,49 @@ class Standard extends \Magento\Core\Controller\Varien\Router\Base
     protected $_excludedRouters = array('admin', 'vde');
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Factory $controllerFactory
+     * Router list
+     *
+     * @var \Magento\App\RouterListInterface
+     */
+    protected $_routerList;
+
+    /**
+     * @var \Magento\Core\App\Request\RewriteService
+     */
+    protected $_urlRewriteService;
+
+    /**
+     * @param \Magento\App\RouterListInterface $routerList
+     * @param \Magento\App\ActionFactory $controllerFactory
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\App $app
-     * @param \Magento\Core\Model\Config\Scope $configScope
      * @param \Magento\Core\Model\Route\Config $routeConfig
      * @param \Magento\Core\Model\Url\SecurityInfoInterface $securityInfo
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Config $config
      * @param \Magento\Core\Model\Url $url
      * @param \Magento\Core\Model\StoreManager $storeManager
-     * @param \Magento\Core\Model\App\State $appState
-     * @param $areaCode
-     * @param $baseController
-     * @param $routerId
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @param \Magento\App\State $appState
+     * @param \Magento\Core\App\Request\RewriteService $urlRewriteService
+     * @param string $areaCode
+     * @param string $baseController
+     * @param string $routerId
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Factory $controllerFactory,
+        \Magento\App\RouterListInterface $routerList,
+        \Magento\App\ActionFactory $controllerFactory,
         \Magento\ObjectManager $objectManager,
         \Magento\Filesystem $filesystem,
         \Magento\Core\Model\App $app,
-        \Magento\Core\Model\Config\Scope $configScope,
         \Magento\Core\Model\Route\Config $routeConfig,
         \Magento\Core\Model\Url\SecurityInfoInterface $securityInfo,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Config $config,
         \Magento\Core\Model\Url $url,
         \Magento\Core\Model\StoreManager $storeManager,
-        \Magento\Core\Model\App\State $appState,
+        \Magento\App\State $appState,
+        \Magento\Core\App\Request\RewriteService $urlRewriteService,
         $areaCode,
         $baseController,
         $routerId
@@ -80,7 +93,6 @@ class Standard extends \Magento\Core\Controller\Varien\Router\Base
             $controllerFactory,
             $filesystem,
             $app,
-            $configScope,
             $coreStoreConfig,
             $routeConfig,
             $securityInfo,
@@ -92,16 +104,18 @@ class Standard extends \Magento\Core\Controller\Varien\Router\Base
             $baseController,
             $routerId
         );
+        $this->_urlRewriteService = $urlRewriteService;
         $this->_objectManager = $objectManager;
+        $this->_routerList = $routerList;
     }
 
     /**
      * Match provided request and if matched - return corresponding controller
      *
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @return \Magento\Core\Controller\Front\Action|null
      */
-    public function match(\Magento\Core\Controller\Request\Http $request)
+    public function match(\Magento\App\RequestInterface $request)
     {
         // if URL has VDE prefix
         if (!$this->_objectManager->get('Magento\DesignEditor\Helper\Data')->isVdeRequest($request)) {
@@ -120,14 +134,14 @@ class Standard extends \Magento\Core\Controller\Varien\Router\Base
         $this->_prepareVdeRequest($request);
 
         // apply rewrites
-        $this->getFront()->applyRewrites($request);
+        $this->_urlRewriteService->applyRewrites($request);
 
         // match routers
         $controller = null;
         $routers = $this->_getMatchedRouters();
-        /** @var $router \Magento\Core\Controller\Varien\Router\AbstractRouter */
+        /** @var $router \Magento\App\Router\AbstractRouter */
         foreach ($routers as $router) {
-            /** @var $controller \Magento\Core\Controller\Varien\AbstractAction */
+            /** @var $controller \Magento\App\Action\AbstractAction */
             $controller = $router->match($request);
             if ($controller) {
                 $this->_objectManager->get('Magento\DesignEditor\Model\State')
@@ -145,10 +159,10 @@ class Standard extends \Magento\Core\Controller\Varien\Router\Base
     /**
      * Modify request path to imitate basic request
      *
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @return \Magento\DesignEditor\Controller\Varien\Router\Standard
      */
-    protected function _prepareVdeRequest(\Magento\Core\Controller\Request\Http $request)
+    protected function _prepareVdeRequest(\Magento\App\RequestInterface $request)
     {
         list($vdeFrontName, $designMode, $themeId) = explode('/', trim($request->getPathInfo(), '/'));
         $request->setAlias('editorMode', $designMode);
@@ -166,7 +180,7 @@ class Standard extends \Magento\Core\Controller\Varien\Router\Base
      */
     protected function _getMatchedRouters()
     {
-        $routers = $this->getFront()->getRouters();
+        $routers = $this->_routerList->getRouters();
         foreach (array_keys($routers) as $name) {
             if (in_array($name, $this->_excludedRouters)) {
                 unset($routers[$name]);

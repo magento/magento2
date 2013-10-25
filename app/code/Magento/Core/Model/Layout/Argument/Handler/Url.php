@@ -36,15 +36,15 @@ namespace Magento\Core\Model\Layout\Argument\Handler;
 class Url extends \Magento\Core\Model\Layout\Argument\AbstractHandler
 {
     /**
-     * @var \Magento\Core\Model\UrlInterface
+     * @var \Magento\UrlInterface
      */
     protected $_urlModel;
 
     /**
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\UrlInterface $urlModel
+     * @param \Magento\UrlInterface $urlModel
      */
-    public function __construct(\Magento\Core\Model\UrlInterface  $urlModel)
+    public function __construct(\Magento\UrlInterface  $urlModel)
     {
         $this->_urlModel = $urlModel;
     }
@@ -84,7 +84,7 @@ class Url extends \Magento\Core\Model\Layout\Argument\AbstractHandler
      * @param $argument
      * @return array
      */
-    protected function _getArgumentValue(\Magento\Core\Model\Layout\Element $argument)
+    protected function _getArgumentValue(\Magento\View\Layout\Element $argument)
     {
         $result = array(
             'path' => (string)$argument['path'],

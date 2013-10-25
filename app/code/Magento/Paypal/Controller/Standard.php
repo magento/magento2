@@ -93,7 +93,7 @@ class Standard extends \Magento\Core\Controller\Front\Action
             $order = $this->_objectManager->create('Magento\Sales\Model\Order')
                 ->loadByIncrementId($session->getLastRealOrderId());
             if ($order->getId()) {
-                $this->_objectManager->get('Magento\Core\Model\Event\Manager')->dispatch(
+                $this->_objectManager->get('Magento\Event\ManagerInterface')->dispatch(
                     'paypal_payment_cancel',
                     array(
                         'order' => $order,

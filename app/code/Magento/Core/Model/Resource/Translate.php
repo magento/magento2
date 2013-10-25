@@ -37,7 +37,7 @@ namespace Magento\Core\Model\Resource;
 class Translate extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     protected $_appState;
 
@@ -48,12 +48,12 @@ class Translate extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Core\Model\Resource $resource
-     * @param \Magento\Core\Model\App\State $appState
+     * @param \Magento\App\State $appState
      * @param \Magento\Core\Model\StoreManager $storeManager
      */
     public function __construct(
         \Magento\Core\Model\Resource $resource,
-        \Magento\Core\Model\App\State $appState,
+        \Magento\App\State $appState,
         \Magento\Core\Model\StoreManager $storeManager
     ) {
         parent::__construct($resource);

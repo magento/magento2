@@ -55,7 +55,7 @@ class Wizard extends \Magento\Install\Controller\Action
     /**
      * DB Updater
      *
-     * @var \Magento\Core\Model\Db\UpdaterInterface
+     * @var \Magento\App\UpdaterInterface
      */
     protected $_dbUpdater;
 
@@ -68,28 +68,28 @@ class Wizard extends \Magento\Install\Controller\Action
 
     /**
      * @param \Magento\Core\Controller\Varien\Action\Context $context
-     * @param \Magento\Core\Model\Config\Scope $configScope
-     * @param \Magento\Core\Model\View\DesignInterface $viewDesign
+     * @param \Magento\Config\Scope $configScope
+     * @param \Magento\View\DesignInterface $viewDesign
      * @param \Magento\Core\Model\Theme\CollectionFactory $collectionFactory
      * @param \Magento\Core\Model\App $app
-     * @param \Magento\Core\Model\App\State $appState
+     * @param \Magento\App\State $appState
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Install\Model\Wizard $wizard
      * @param \Magento\Core\Model\Session\Generic $session
-     * @param \Magento\Core\Model\Db\UpdaterInterface $dbUpdater
+     * @param \Magento\App\UpdaterInterface $dbUpdater
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Core\Controller\Varien\Action\Context $context,
-        \Magento\Core\Model\Config\Scope $configScope,
-        \Magento\Core\Model\View\DesignInterface $viewDesign,
+        \Magento\Config\Scope $configScope,
+        \Magento\View\DesignInterface $viewDesign,
         \Magento\Core\Model\Theme\CollectionFactory $collectionFactory,
         \Magento\Core\Model\App $app,
-        \Magento\Core\Model\App\State $appState,
+        \Magento\App\State $appState,
         \Magento\Install\Model\Installer $installer,
         \Magento\Install\Model\Wizard $wizard,
         \Magento\Core\Model\Session\Generic $session,
-        \Magento\Core\Model\Db\UpdaterInterface $dbUpdater,
+        \Magento\App\UpdaterInterface $dbUpdater,
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         parent::__construct($context, $configScope, $viewDesign, $collectionFactory, $app, $appState);

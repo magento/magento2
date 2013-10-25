@@ -67,11 +67,11 @@ class Processor
     /**
      * Parse given argument
      *
-     * @param \Magento\Core\Model\Layout\Element $argument
+     * @param \Magento\View\Layout\Element $argument
      * @throws \InvalidArgumentException
      * @return array
      */
-    public function parse(\Magento\Core\Model\Layout\Element $argument)
+    public function parse(\Magento\View\Layout\Element $argument)
     {
         $type = $this->_getArgumentType($argument);
         $handler = $this->_handlerFactory->getArgumentHandlerByType($type);
@@ -98,10 +98,10 @@ class Processor
     /**
      * Get Argument's XSI type
      *
-     * @param \Magento\Core\Model\Layout\Element $argument
+     * @param \Magento\View\Layout\Element $argument
      * @return string
      */
-    protected function _getArgumentType(\Magento\Core\Model\Layout\Element $argument)
+    protected function _getArgumentType(\Magento\View\Layout\Element $argument)
     {
         return (string)$argument->attributes('xsi', true)->type;
     }

@@ -27,8 +27,15 @@ namespace Magento\Webapi\Model\Soap;
 
 class ServerTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Core\Model\Config */
-    protected $_configMock;
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_configScopeMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_areaListMock;
 
     /** @var \Magento\Webapi\Controller\Soap\Request */
     protected $_requestMock;
@@ -51,8 +58,9 @@ class ServerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->_storeMock = $this->getMockBuilder('Magento\Core\Model\Store')
             ->disableOriginalConstructor()->getMock();
-        $this->_configMock = $this->getMockBuilder('Magento\Core\Model\Config')
-            ->disableOriginalConstructor()->getMock();
+
+        $this->_areaListMock = $this->getMock('Magento\App\AreaList', array(), array(), '', false);
+        $this->_configScopeMock = $this->getMock('Magento\Config\ScopeInterface');
         $this->_storeManagerMock->expects($this->any())
             ->method('getStore')->will($this->returnValue($this->_storeMock));
         $this->_requestMock = $this->getMockBuilder('Magento\Webapi\Controller\Soap\Request')
@@ -75,7 +83,8 @@ class ServerTest extends \PHPUnit_Framework_TestCase
         $this->_storeMock->expects($this->once())->method('getConfig')->will($this->returnValue(true));
         /** Create SOAP server object. */
         $server = new \Magento\Webapi\Model\Soap\Server(
-            $this->_configMock,
+            $this->_areaListMock,
+            $this->_configScopeMock,
             $this->_requestMock,
             $this->_domDocumentFactory,
             $this->_storeManagerMock,
@@ -95,7 +104,8 @@ class ServerTest extends \PHPUnit_Framework_TestCase
         $this->_storeMock->expects($this->once())->method('getConfig')->will($this->returnValue(false));
         /** Create SOAP server object. */
         $server = new \Magento\Webapi\Model\Soap\Server(
-            $this->_configMock,
+            $this->_areaListMock,
+            $this->_configScopeMock,
             $this->_requestMock,
             $this->_domDocumentFactory,
             $this->_storeManagerMock,

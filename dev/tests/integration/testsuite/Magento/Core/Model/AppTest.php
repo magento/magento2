@@ -133,7 +133,8 @@ class AppTest extends \PHPUnit_Framework_TestCase
     public function testGetSafeNotExistingStore()
     {
         $this->_mageModel->getSafeStore(100);
-        $this->assertEquals('noRoute', $this->_mageModel->getRequest()->getActionName());
+        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Request\Http');
+        $this->assertEquals('noRoute', $request->getActionName());
     }
 
     public function testGetStores()
@@ -194,7 +195,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
     public function testGetFrontController()
     {
         $front = $this->_mageModel->getFrontController();
-        $this->assertInstanceOf('Magento\Core\Controller\Varien\Front', $front);
+        $this->assertInstanceOf('Magento\App\FrontController', $front);
         $this->assertSame($front, $this->_mageModel->getFrontController());
     }
 
@@ -230,7 +231,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
 
     public function testSetGetRequest()
     {
-        $this->assertInstanceOf('Magento\Core\Controller\Request\Http', $this->_model->getRequest());
+        $this->assertInstanceOf('Magento\App\RequestInterface', $this->_model->getRequest());
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $request \Magento\TestFramework\Request */
@@ -242,8 +243,8 @@ class AppTest extends \PHPUnit_Framework_TestCase
     public function testSetGetResponse()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Controller\Response\Http')->headersSentThrowsException = false;
-        $this->assertInstanceOf('Magento\Core\Controller\Response\Http', $this->_model->getResponse());
+            ->get('Magento\App\ResponseInterface')->headersSentThrowsException = false;
+        $this->assertInstanceOf('Magento\App\ResponseInterface', $this->_model->getResponse());
         $expectedHeader = array(
             'name' => 'Content-Type',
             'value' => 'text/html; charset=UTF-8',
@@ -251,7 +252,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertContains($expectedHeader, $this->_model->getResponse()->getHeaders());
         $response = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\TestFramework\Response');
+            ->create('Magento\App\ResponseInterface');
         $this->_model->setResponse($response);
         $this->assertSame($response, $this->_model->getResponse());
         $this->assertEmpty($this->_model->getResponse()->getHeaders());

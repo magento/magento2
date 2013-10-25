@@ -39,7 +39,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     /**
      * Url
      *
-     * @var \Magento\Core\Model\UrlInterface
+     * @var \Magento\UrlInterface
      */
     protected $_url;
 
@@ -47,11 +47,11 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * Constructor
      *
      * @param \Magento\Core\Helper\Context $context
-     * @param \Magento\Core\Model\UrlInterface $url
+     * @param \Magento\UrlInterface $url
      */
     public function __construct(
         \Magento\Core\Helper\Context $context,
-        \Magento\Core\Model\UrlInterface $url
+        \Magento\UrlInterface $url
     ) {
         parent::__construct($context);
         $this->_url = $url;

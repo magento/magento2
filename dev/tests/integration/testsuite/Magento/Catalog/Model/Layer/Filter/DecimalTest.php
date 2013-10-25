@@ -71,7 +71,7 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
         $request = $objectManager->get('Magento\TestFramework\Request');
         $this->_model->apply(
             $request,
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
                 ->createBlock('Magento\Core\Block\Text')
         );
 
@@ -88,7 +88,7 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
         $request->setParam('decimal', 'non-decimal');
         $this->_model->apply(
             $request,
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
                 ->createBlock('Magento\Core\Block\Text')
         );
 
@@ -104,7 +104,7 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
         $request->setParam('decimal', '1,100');
         $this->_model->apply(
             $request,
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
                 ->createBlock('Magento\Core\Block\Text')
         );
 

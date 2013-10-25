@@ -56,7 +56,7 @@ class ModuleOutput implements \Magento\Core\Model\Layout\File\SourceInterface
      *
      * {@inheritdoc}
      */
-    public function getFiles(\Magento\Core\Model\ThemeInterface $theme)
+    public function getFiles(\Magento\View\Design\ThemeInterface $theme)
     {
         $result = array();
         foreach ($this->_subject->getFiles($theme) as $file) {

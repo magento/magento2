@@ -1,0 +1,77 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php if (count($this->getGalleryImages()) > 0): ?>
+
+<?php
+    $thumbWidth =  $this->getVar("product_page_more_views:width");
+    $thumbHeight =  $this->getVar("product_page_more_views:height") ? : $thumbWidth;
+?>
+<div class="product photo thumbs">
+    <strong class="title"><?php echo __('More Views') ?></strong>
+    <ul class="items thumbs">
+    <?php foreach ($this->getGalleryImages() as $_image): ?>
+        <?php if ($_isOldDisplayMode) {
+                $attributes = ' href="#" data-mage-popwin="{windowURL:'
+                    . $this->getGalleryUrl($_image)
+                    . ',windowName:\'gallery\',width:300,height:300,status:1,scrollbars:1,resizable:1}"';
+            } else {
+                $attributes = ' href="'
+                    . $this->helper('Magento\Catalog\Helper\Image')->init($_product, 'image', $_image->getFile())
+                    . '" rel="';
+                if ($whiteBorders) {
+                    $attributes .= $this->helper('Magento\Catalog\Helper\Image')->init($_product, 'image', $_image->getFile())->resize($_resizedWidth,$_resizedHeight) . '"';
+                } else {
+                    $attributes .= $this->helper('Magento\Catalog\Helper\Image')->init($_product, 'image', $_image->getFile())->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize($_resizedWidth,$_resizedHeight) . '"';
+                }
+        };?>
+        <li class="item thumb">
+            <a<?php echo $attributes; ?> class="magento-zoom" title="<?php echo $this->escapeHtml($_image->getLabel()) ?>">
+            <?php if ($whiteBorders): ?>
+                <span class="img" style="position:relative; z-index:1; display:block; width:<?php echo $thumbHeight;?>px; height:<?php echo $thumbHeight;?>px;">
+                <img src="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($_product, 'thumbnail', $_image->getFile())->resize($thumbWidth,$thumbHeight); ?>" alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>" />
+                </span>
+            <?php else: ?>
+                <span class="img" style="position:relative; z-index:1; display:block; width:<?php echo $thumbHeight;?>px; height:<?php echo $thumbHeight;?>px;">
+                    <img src="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($_product, 'thumbnail', $_image->getFile())->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize($thumbWidth,$thumbHeight); ?>" alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>" />
+                </span>
+            <?php endif; ?>
+            </a>
+        </li>
+    <?php endforeach; ?>
+    </ul>
+</div>
+    <?php if ($_isOldDisplayMode): ?>
+    <script type="text/javascript">
+        (function($) {
+            head.js("<?php echo $this->getViewFileUrl('jquery/jquery.popupwindow.js')?>",
+                "<?php echo $this->getViewFileUrl('mage/popup-window.js')?>"
+            );
+        })(jQuery);
+    </script>
+    <?php endif; ?>
+<?php endif; ?>
+

@@ -35,14 +35,14 @@ class StoreManager implements \Magento\Core\Model\StoreManagerInterface
     /**
      * Event manager
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
     /**
      * Request model
      *
-     * @var \Magento\Core\Controller\Request\Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_request;
 
@@ -83,14 +83,14 @@ class StoreManager implements \Magento\Core\Model\StoreManagerInterface
 
     /**
      * @param \Magento\Core\Model\Store\StorageFactory $factory
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @param \Magento\Core\Model\Factory\Helper $helperFactory
      * @param string $scopeCode
      * @param string $scopeType
      */
     public function __construct(
         \Magento\Core\Model\Store\StorageFactory $factory,
-        \Magento\Core\Controller\Request\Http $request,
+        \Magento\App\RequestInterface $request,
         \Magento\Core\Model\Factory\Helper $helperFactory,
         $scopeCode = '',
         $scopeType = 'store'

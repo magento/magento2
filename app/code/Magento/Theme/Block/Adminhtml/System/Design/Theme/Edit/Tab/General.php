@@ -140,8 +140,8 @@ class General
             '"', '\'', $helper->jsonEncode($this->_getDefaultsInherited($themesCollections->addDefaultPattern()))
         ));
 
-        /** @var $parentTheme \Magento\Core\Model\Theme */
-        $parentTheme = $this->_objectManager->create('Magento\Core\Model\Theme');
+        /** @var $parentTheme \Magento\View\Design\ThemeInterface */
+        $parentTheme = $this->_objectManager->create('Magento\View\Design\ThemeInterface');
         if (!empty($formData['parent_id'])) {
             $parentTheme->load($formData['parent_id']);
         }
@@ -296,7 +296,7 @@ class General
     {
         $data = array('' => $this->_getDefaults());
 
-        /** @var $theme \Magento\Core\Model\Theme */
+        /** @var $theme \Magento\View\Design\ThemeInterface */
         foreach ($themesCollections as $theme) {
             $theme->load($theme->getThemePath(), 'theme_path');
             if (!$theme->getId()) {

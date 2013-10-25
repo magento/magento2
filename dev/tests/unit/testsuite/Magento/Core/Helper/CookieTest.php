@@ -114,13 +114,13 @@ class CookieTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getCookieStub($cookieString = array())
     {
-        $cookie = $this->getMock('Magento\Core\Model\Cookie', array('get'), array(), '', false);
+        $cookieMock = $this->getMock('Magento\Core\Model\Cookie', array(), array(), '', false);
 
-        $cookie->expects($this->any())
+        $cookieMock->expects($this->any())
             ->method('get')
             ->will($this->returnValue(json_encode($cookieString)));
 
-        return $cookie;
+        return $cookieMock;
     }
 
     /**
@@ -129,13 +129,13 @@ class CookieTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getWebsiteStub()
     {
-        $website = $this->getMock('Magento\Core\Model\Website', array('getId'), array(), '', false);
+        $websiteMock = $this->getMock('Magento\Core\Model\Website', array(), array(), '', false);
 
-        $website->expects($this->any())
+        $websiteMock->expects($this->any())
             ->method('getId')
             ->will($this->returnValue(1));
 
-        return $website;
+        return $websiteMock;
     }
 
     /**

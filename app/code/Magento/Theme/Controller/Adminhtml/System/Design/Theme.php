@@ -84,8 +84,8 @@ class Theme extends \Magento\Adminhtml\Controller\Action
     public function editAction()
     {
         $themeId = (int)$this->getRequest()->getParam('id');
-        /** @var $theme \Magento\Core\Model\Theme */
-        $theme = $this->_objectManager->create('Magento\Core\Model\Theme');
+        /** @var $theme \Magento\View\Design\ThemeInterface */
+        $theme = $this->_objectManager->create('Magento\View\Design\ThemeInterface');
         try {
             $theme->setType(\Magento\Core\Model\Theme::TYPE_VIRTUAL);
             if ($themeId && (!$theme->load($themeId)->getId() || !$theme->isVisible())) {
@@ -178,8 +178,8 @@ class Theme extends \Magento\Adminhtml\Controller\Action
         $themeId = $this->getRequest()->getParam('id');
         try {
             if ($themeId) {
-                /** @var $theme \Magento\Core\Model\Theme */
-                $theme = $this->_objectManager->create('Magento\Core\Model\Theme')->load($themeId);
+                /** @var $theme \Magento\View\Design\ThemeInterface */
+                $theme = $this->_objectManager->create('Magento\View\Design\ThemeInterface')->load($themeId);
                 if (!$theme->getId()) {
                     throw new \InvalidArgumentException(sprintf('We cannot find a theme with id "%1".', $themeId));
                 }
@@ -309,8 +309,8 @@ class Theme extends \Magento\Adminhtml\Controller\Action
         $helper = $this->_objectManager->get('Magento\Core\Helper\Theme');
         $fileName = $helper->urlDecode($file);
         try {
-            /** @var $theme \Magento\Core\Model\Theme */
-            $theme = $this->_objectManager->create('Magento\Core\Model\Theme')->load($themeId);
+            /** @var $theme \Magento\View\Design\ThemeInterface */
+            $theme = $this->_objectManager->create('Magento\View\Design\ThemeInterface')->load($themeId);
             if (!$theme->getId()) {
                 throw new \InvalidArgumentException(sprintf('We cannot find a theme with id "%1".', $themeId));
             }

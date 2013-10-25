@@ -26,6 +26,9 @@
 
 namespace Magento\Backend\Model;
 
+use Magento\Backend\Model\Auth;
+use Magento\Backend\Model\Menu;
+
 /**
  * Class \Magento\Backend\Model\Url
  *
@@ -89,21 +92,23 @@ class Url extends \Magento\Core\Model\Url
     protected $_cache;
 
     /**
+     * @param \Magento\App\RouterListInterface $routerList
+     * @param \Magento\App\RequestInterface $request
      * @param \Magento\Core\Model\Url\SecurityInfoInterface $securityInfo
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Core\Model\Session $session
-     * @param \Magento\Backend\Model\Menu\Config $menuConfig
+     * @param Menu\Config $menuConfig
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Core\Model\CacheInterface $cache
-     * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param Auth\Session $authSession
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
+        \Magento\App\RouterListInterface $routerList,
+        \Magento\App\RequestInterface $request,
         \Magento\Core\Model\Url\SecurityInfoInterface $securityInfo,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Backend\Helper\Data $backendHelper,
@@ -116,7 +121,8 @@ class Url extends \Magento\Core\Model\Url
         \Magento\Backend\Model\Auth\Session $authSession,
         array $data = array()
     ) {
-        parent::__construct($securityInfo, $coreStoreConfig, $coreData, $app, $storeManager, $session, $data);
+        parent::__construct(
+            $routerList, $request, $securityInfo, $coreStoreConfig, $coreData, $app, $storeManager, $session, $data);
         $this->_startupMenuItemId = $coreStoreConfig->getConfig(self::XML_PATH_STARTUP_MENU_ITEM);
         $this->_backendHelper = $backendHelper;
         $this->_coreSession = $session;

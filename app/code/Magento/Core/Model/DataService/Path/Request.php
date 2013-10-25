@@ -1,9 +1,9 @@
 <?php
 /**
- * Wrapper around \Magento\Core\Controller\Request\Http for the Navigator class.
+ * Wrapper around \Magento\App\Request\Http for the Navigator class.
  *
- * HTTP Requests need to be exposed as data services for the front end (twig) to be able to access the
- * request data. This class acts as a wrapper around the \Magento\Core\Controller\Request\Http object so
+ * HTTP Requests need to be exposed as data services for the front end to be able to access the
+ * request data. This class acts as a wrapper around the \Magento\App\Request\Http object so
  * that the data can be searched for and extracted via the Navigator class.
  *
  * Magento
@@ -32,14 +32,14 @@ namespace Magento\Core\Model\DataService\Path;
 class Request implements \Magento\Core\Model\DataService\Path\NodeInterface
 {
     /**
-     * @var \Magento\Core\Controller\Request\Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_request;
 
     /**
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      */
-    public function __construct(\Magento\Core\Controller\Request\Http $request)
+    public function __construct(\Magento\App\RequestInterface $request)
     {
         $this->_request = $request;
     }

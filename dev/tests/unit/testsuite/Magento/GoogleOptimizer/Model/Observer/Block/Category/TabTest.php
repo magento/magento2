@@ -78,7 +78,7 @@ class TabTest extends \PHPUnit_Framework_TestCase
     {
         $this->_helperMock->expects($this->once())->method('isGoogleExperimentActive')->will($this->returnValue(true));
 
-        $block = $this->getMock('Magento\Core\Block', array(), array(), '', false);
+        $block = $this->getMock('Magento\View\Element\BlockInterface', array(), array(), '', false);
         $block->expects($this->once())->method('toHtml')->will($this->returnValue('generated html'));
 
         $this->_layoutMock->expects($this->once())->method('createBlock')->with(

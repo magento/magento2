@@ -44,7 +44,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Core\Controller\Varien\Router\Base', $options);
         $this->_model->setFront(\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Controller\Varien\Front'));
+            ->create('Magento\App\FrontController'));
     }
 
     public function testFetchDefault()

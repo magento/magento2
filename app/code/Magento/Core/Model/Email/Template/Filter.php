@@ -92,12 +92,12 @@ class Filter extends \Magento\Filter\Template
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\Layout
+     * @var \Magento\View\LayoutInterface
      */
     protected $_layout;
 
     /**
-     * @var \Magento\Core\Model\LayoutFactory
+     * @var \Magento\View\LayoutFactory
      */
     protected $_layoutFactory;
 
@@ -115,8 +115,8 @@ class Filter extends \Magento\Filter\Template
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\VariableFactory $coreVariableFactory
      * @param \Magento\Core\Model\StoreManager $storeManager
-     * @param \Magento\Core\Model\Layout $layout
-     * @param \Magento\Core\Model\LayoutFactory $layoutFactory
+     * @param \Magento\View\LayoutInterface $layout
+     * @param \Magento\View\LayoutFactory $layoutFactory
      */
     public function __construct(
         \Magento\Core\Model\Logger $logger,
@@ -125,8 +125,8 @@ class Filter extends \Magento\Filter\Template
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\VariableFactory $coreVariableFactory,
         \Magento\Core\Model\StoreManager $storeManager,
-        \Magento\Core\Model\Layout $layout,
-        \Magento\Core\Model\LayoutFactory $layoutFactory
+        \Magento\View\LayoutInterface $layout,
+        \Magento\View\LayoutFactory $layoutFactory
     ) {
         $this->_coreData = $coreData;
         $this->_viewUrl = $viewUrl;
@@ -269,7 +269,7 @@ class Filter extends \Magento\Filter\Template
         if (isset($params['area'])) {
             $layoutParams['area'] = $params['area'];
         }
-        /** @var $layout \Magento\Core\Model\Layout */
+        /** @var $layout \Magento\View\LayoutInterface */
         $layout = $this->_layoutFactory->create($layoutParams);
         $layout->getUpdate()->addHandle($params['handle'])
             ->load();
@@ -298,7 +298,6 @@ class Filter extends \Magento\Filter\Template
             $layout->addOutputElement($rootBlock->getNameInLayout());
         }
 
-        $layout->setDirectOutput(false);
         $result = $layout->getOutput();
         $layout->__destruct(); // To overcome bug with SimpleXML memory leak (https://bugs.php.net/bug.php?id=62468)
         return $result;

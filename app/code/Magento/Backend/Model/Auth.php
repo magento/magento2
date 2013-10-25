@@ -51,7 +51,7 @@ class Auth
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -66,7 +66,7 @@ class Auth
     protected $_modelFactory;
 
     /**
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Backend\Model\Auth\StorageInterface $authStorage
      * @param \Magento\Backend\Model\Auth\Credential\StorageInterface $credentialStorage
@@ -74,7 +74,7 @@ class Auth
      * @param \Magento\Core\Model\Factory $modelFactory
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Backend\Helper\Data $backendData,
         \Magento\Backend\Model\Auth\StorageInterface $authStorage,
         \Magento\Backend\Model\Auth\Credential\StorageInterface $credentialStorage,
@@ -131,21 +131,11 @@ class Auth
      * Initialize credential storage from configuration
      *
      * @return void
-     * @throw \Magento\Backend\Model\Auth\Exception if credential storage absent or has not correct configuration
      */
     protected function _initCredentialStorage()
     {
-        $areaConfig = $this->_coreConfig->getAreaConfig($this->_backendData->getAreaCode());
-
-        if (isset($areaConfig['auth_credential_storage'])) {
-            $storage = $this->_modelFactory->create($areaConfig['auth_credential_storage']);
-            if ($storage instanceof \Magento\Backend\Model\Auth\Credential\StorageInterface) {
-                $this->_credentialStorage = $storage;
-                return;
-            }
-        }
-        self::throwException(
-            __('There are no authentication credential storage.')
+        $this->_credentialStorage = $this->_modelFactory->create(
+            'Magento\Backend\Model\Auth\Credential\StorageInterface'
         );
     }
 

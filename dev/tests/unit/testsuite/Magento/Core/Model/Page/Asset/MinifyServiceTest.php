@@ -42,16 +42,16 @@ class MinifyServiceTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Core\Model\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\State|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_appState;
 
     protected function setUp()
     {
         $this->_storeConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
-        $dirs = $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false);
+        $dirs = $this->getMock('Magento\App\Dir', array(), array(), '', false);
         $this->_objectManager = $this->getMock('Magento\ObjectManager');
-        $this->_appState = $this->getMock('Magento\Core\Model\App\State', array(), array(), '', false);
+        $this->_appState = $this->getMock('Magento\App\State', array(), array(), '', false);
 
         $this->_model = new \Magento\Core\Model\Page\Asset\MinifyService($this->_storeConfig, $this->_objectManager,
             $dirs, $this->_appState);
@@ -168,15 +168,15 @@ class MinifyServiceTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'production' => array(
-                \Magento\Core\Model\App\State::MODE_PRODUCTION,
+                \Magento\App\State::MODE_PRODUCTION,
                 'Magento\Code\Minifier\Strategy\Lite'
             ),
             'default'    => array(
-                \Magento\Core\Model\App\State::MODE_DEFAULT,
+                \Magento\App\State::MODE_DEFAULT,
                 'Magento\Code\Minifier\Strategy\Generate'
             ),
             'developer'  => array(
-                \Magento\Core\Model\App\State::MODE_DEVELOPER,
+                \Magento\App\State::MODE_DEVELOPER,
                 'Magento\Code\Minifier\Strategy\Generate'
             ),
         );

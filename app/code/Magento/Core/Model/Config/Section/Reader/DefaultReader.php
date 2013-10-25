@@ -43,7 +43,7 @@ class DefaultReader
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     protected $_appState;
 
@@ -51,13 +51,13 @@ class DefaultReader
      * @param \Magento\Core\Model\Config\Initial $initialConfig
      * @param \Magento\Core\Model\Config\Section\Converter $converter
      * @param \Magento\Core\Model\Resource\Config\Value\Collection\ScopedFactory $collectionFactory
-     * @param \Magento\Core\Model\App\State $appState
+     * @param \Magento\App\State $appState
      */
     public function __construct(
         \Magento\Core\Model\Config\Initial $initialConfig,
         \Magento\Core\Model\Config\Section\Converter $converter,
         \Magento\Core\Model\Resource\Config\Value\Collection\ScopedFactory $collectionFactory,
-        \Magento\Core\Model\App\State $appState
+        \Magento\App\State $appState
     ) {
         $this->_initialConfig = $initialConfig;
         $this->_converter = $converter;

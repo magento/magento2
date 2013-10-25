@@ -160,7 +160,7 @@ class CatalogTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     protected function _loginAdmin()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\View\DesignInterface')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
             ->setArea('adminhtml')
             ->setDefaultDesignTheme();
         $this->getRequest()->setServer(array(

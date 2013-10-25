@@ -64,33 +64,6 @@ TreeSuggestTest.prototype.testInit = function() {
     assertEquals(treeSuggestInstance.widgetEventPrefix, 'suggest');
 };
 
-TreeSuggestTest.prototype.testBind = function() {
-    return; // test is broken, see https://jira.corp.x.com/browse/MAGETWO-9269
-    var event = jQuery.Event('keydown'),
-        proxyEventsExecuted = false,
-        treeSuggestInstance = this.treeSuggestCreate();
-
-    treeSuggestInstance.dropdown.show();
-
-    event.keyCode = jQuery.ui.keyCode.LEFT;
-    this.stub(treeSuggestInstance, '_proxyEvents').done(function() {
-        proxyEventsExecuted = true
-    });
-
-    treeSuggestInstance.element.trigger(event);
-    assertTrue(proxyEventsExecuted);
-
-    event.keyCode = $.ui.keyCode.RIGHT;
-    proxyEventsExecuted = false;
-    this.stub(treeSuggestInstance, '_proxyEvents').done(function() {
-        proxyEventsExecuted = true
-    });
-
-    treeSuggestInstance.dropdown.show();
-    treeSuggestInstance.element.trigger(event);
-    assertTrue(proxyEventsExecuted);
-};
-
 TreeSuggestTest.prototype.testClose = function() {
     var treeSuggestInstance = this.treeSuggestCreate(),
         elementFocused = false;

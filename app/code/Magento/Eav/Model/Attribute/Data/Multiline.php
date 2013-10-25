@@ -39,10 +39,10 @@ class Multiline extends \Magento\Eav\Model\Attribute\Data\Text
     /**
      * Extract data from request and return value
      *
-     * @param \Zend_Controller_Request_Http $request
+     * @param \Magento\App\RequestInterface $request
      * @return array|string
      */
-    public function extractValue(\Zend_Controller_Request_Http $request)
+    public function extractValue(\Magento\App\RequestInterface $request)
     {
         $value = $this->_getRequestValue($request);
         if (!is_array($value)) {

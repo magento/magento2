@@ -55,7 +55,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         }
 
         /** @var $layout \Magento\Core\Model\Layout */
-        $layout = $objectManager->get('Magento\Core\Model\Layout');
+        $layout = $objectManager->get('Magento\View\LayoutInterface');
 
         $this->_block = $layout->createBlock('Magento\Adminhtml\Block\System\Store\Edit\Form\Store');
 

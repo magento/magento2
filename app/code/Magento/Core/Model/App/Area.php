@@ -64,7 +64,7 @@ class Area
     /**
      * Event Manager
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -121,7 +121,7 @@ class Area
 
     /**
      * @param \Magento\Core\Model\Logger $logger
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Translate $translator
      * @param \Magento\Core\Model\Config $config
      * @param \Magento\Core\Model\ObjectManager $objectManager
@@ -133,7 +133,7 @@ class Area
      */
     public function __construct(
         \Magento\Core\Model\Logger $logger,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Translate $translator,
         \Magento\Core\Model\Config $config,
         \Magento\Core\Model\ObjectManager $objectManager,
@@ -176,7 +176,7 @@ class Area
     /**
      * Detect and apply design for the area
      *
-     * @param \Zend_Controller_Request_Http $request
+     * @param \Magento\App\RequestInterface $request
      */
     public function detectDesign($request = null)
     {
@@ -193,7 +193,7 @@ class Area
     /**
      * Analyze user-agent information to override custom design settings
      *
-     * @param \Zend_Controller_Request_Http $request
+     * @param \Magento\App\RequestInterface $request
      * @return bool
      */
     protected function _applyUserAgentDesignException($request)
@@ -221,11 +221,11 @@ class Area
     }
 
     /**
-     * @return \Magento\Core\Model\View\DesignInterface
+     * @return \Magento\View\DesignInterface
      */
     protected function _getDesign()
     {
-        return $this->_objectManager->get('Magento\Core\Model\View\DesignInterface');
+        return $this->_objectManager->get('Magento\View\DesignInterface');
     }
 
     /**
@@ -276,7 +276,7 @@ class Area
             'inline_type' => null,
             'params' => array('area' => $this->_code)
         ));
-        $eventManager = $this->_objectManager->get('Magento\Core\Model\Event\Manager');
+        $eventManager = $this->_objectManager->get('Magento\Event\ManagerInterface');
         $eventManager->dispatch('translate_initialization_before', array(
             'translate_object' => $this->_translator,
             'result' => $dispatchResult

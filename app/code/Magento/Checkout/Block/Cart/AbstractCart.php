@@ -109,7 +109,7 @@ class AbstractCart extends \Magento\Core\Block\Template
     public function getItemRenderer($type)
     {
         $renderer = $this->getChildBlock($type) ?: $this->getChildBlock(self::DEFAULT_TYPE);
-        if (!$renderer instanceof \Magento\Core\Block) {
+        if (!$renderer instanceof \Magento\View\Element\BlockInterface) {
             throw new \RuntimeException('Renderer for type "' . $type . '" does not exist.');
         }
         $renderer->setRenderedBlock($this);

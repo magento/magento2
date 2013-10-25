@@ -80,7 +80,7 @@ abstract class AbstractExpress extends \Magento\Core\Controller\Front\Action
     protected $_customerSession;
 
     /**
-     * @var \Magento\Core\Model\UrlInterface
+     * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
 
@@ -112,7 +112,7 @@ abstract class AbstractExpress extends \Magento\Core\Controller\Front\Action
     /**
      * @param \Magento\Core\Controller\Varien\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\Model\UrlInterface $urlBuilder
+     * @param \Magento\UrlInterface $urlBuilder
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
@@ -122,7 +122,7 @@ abstract class AbstractExpress extends \Magento\Core\Controller\Front\Action
     public function __construct(
         \Magento\Core\Controller\Varien\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\Model\UrlInterface $urlBuilder,
+        \Magento\UrlInterface $urlBuilder,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Sales\Model\OrderFactory $orderFactory,

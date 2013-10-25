@@ -51,7 +51,7 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Magento version
      */
-    const VERSION = '2.0.0.0-dev48';
+    const VERSION = '2.0.0.0-dev49';
 
     /**
      * Custom application dirs
@@ -127,7 +127,7 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Application front controller
      *
-     * @var \Magento\Core\Controller\FrontInterface
+     * @var \Magento\App\FrontControllerInterface
      */
     protected $_frontController;
 
@@ -148,14 +148,14 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Request object
      *
-     * @var \Zend_Controller_Request_Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_request;
 
     /**
      * Response object
      *
-     * @var \Zend_Controller_Response_Http
+     * @var \Magento\App\ResponseInterface
      */
     protected $_response;
 
@@ -184,7 +184,7 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Data base updater object
      *
-     * @var \Magento\Core\Model\Db\UpdaterInterface
+     * @var \Magento\App\UpdaterInterface
      */
     protected $_dbUpdater;
 
@@ -196,72 +196,48 @@ class App implements \Magento\Core\Model\AppInterface
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     protected $_appState;
 
     /**
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
     /**
-     * @var \Magento\Core\Model\Config\Scope
+     * @var \Magento\Config\Scope
      */
     protected $_configScope;
 
     /**
-     * @param \Magento\Core\Model\Config $config
-     * @param \Magento\Core\Model\CacheInterface $cache
+     * @param Config $config
+     * @param CacheInterface $cache
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\Db\UpdaterInterface $dbUpdater
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Event\Manager $eventManager
-     * @param \Magento\Core\Model\App\State $appState
-     * @param \Magento\Core\Model\Config\Scope $configScope
+     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\App\State $appState
+     * @param \Magento\Config\Scope $configScope
+     * @param \Magento\App\FrontControllerInterface $frontController
      */
     public function __construct(
         \Magento\Core\Model\Config $config,
         \Magento\Core\Model\CacheInterface $cache,
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\Db\UpdaterInterface $dbUpdater,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Event\Manager $eventManager,
-        \Magento\Core\Model\App\State $appState,
-        \Magento\Core\Model\Config\Scope $configScope
+        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\App\State $appState,
+        \Magento\Config\Scope $configScope,
+        \Magento\App\FrontControllerInterface $frontController
     ) {
         $this->_config = $config;
         $this->_cache = $cache;
         $this->_objectManager = $objectManager;
         $this->_storeManager = $storeManager;
-        $this->_dbUpdater = $dbUpdater;
         $this->_appState = $appState;
         $this->_eventManager = $eventManager;
         $this->_configScope = $configScope;
-    }
-
-    /**
-     * Run application. Run process responsible for request processing and sending response.
-     *
-     * @return \Magento\Core\Model\App
-     */
-    public function run()
-    {
-        \Magento\Profiler::start('init');
-
-        if ($this->_appState->isInstalled() && !$this->_cache->load('data_upgrade')) {
-            $this->_dbUpdater->updateScheme();
-            $this->_dbUpdater->updateData();
-            $this->_cache->save(1, 'data_upgrade');
-        }
-        $this->_initRequest();
-
-        $controllerFront = $this->getFrontController();
-        \Magento\Profiler::stop('init');
-
-        $controllerFront->dispatch();
-
-        return $this;
+        $this->_frontController = $frontController;
     }
 
     /**
@@ -277,17 +253,6 @@ class App implements \Magento\Core\Model\AppInterface
     }
 
     /**
-     * Init request object
-     *
-     * @return \Magento\Core\Model\App
-     */
-    protected function _initRequest()
-    {
-        $this->getRequest()->setPathInfo();
-        return $this;
-    }
-
-    /**
      * Retrieve cookie object
      *
      * @return \Magento\Core\Model\Cookie
@@ -295,52 +260,6 @@ class App implements \Magento\Core\Model\AppInterface
     public function getCookie()
     {
         return $this->_objectManager->get('Magento\Core\Model\Cookie');
-    }
-
-    /**
-     * Initialize application front controller
-     *
-     * @return \Magento\Core\Model\App
-     */
-    protected function _initFrontController()
-    {
-        $this->_frontController = $this->_getFrontControllerByCurrentArea();
-        return $this;
-    }
-
-    /**
-     * Instantiate proper front controller instance depending on current area
-     *
-     * @return \Magento\Core\Controller\FrontInterface
-     */
-    protected function _getFrontControllerByCurrentArea()
-    {
-        /**
-         * TODO: Temporary implementation for API. Must be reconsidered during implementation
-         * TODO: of ability to set different front controllers in different area.
-         * TODO: See also related changes in \Magento\Core\Model\Config.
-         */
-        // TODO: Assure that everything work fine work in areas without routers (e.g. URL generation)
-        /** Default front controller class */
-        $frontControllerClass = 'Magento\Core\Controller\Varien\Front';
-        $pathParts = explode('/', trim($this->getRequest()->getPathInfo(), '/'));
-        if ($pathParts) {
-            /** If area front name is used it is expected to be set on the first place in path info */
-            $frontName = reset($pathParts);
-            foreach ($this->getConfig()->getAreas() as $areaCode => $areaInfo) {
-                if (isset($areaInfo['front_controller'])
-                    && isset($areaInfo['frontName']) && ($frontName == $areaInfo['frontName'])
-                ) {
-                    $this->_configScope->setCurrentScope($areaCode);
-                    $frontControllerClass = $areaInfo['front_controller'];
-                    /** Remove area from path info */
-                    array_shift($pathParts);
-                    $this->getRequest()->setPathInfo('/' . implode('/', $pathParts));
-                    break;
-                }
-            }
-        }
-        return $this->_objectManager->get($frontControllerClass);
     }
 
     /**
@@ -424,11 +343,11 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Retrieve layout object
      *
-     * @return \Magento\Core\Model\Layout
+     * @return \Magento\View\LayoutInterface
      */
     public function getLayout()
     {
-        return $this->_objectManager->get('Magento\Core\Model\Layout');
+        return $this->_objectManager->get('Magento\View\LayoutInterface');
     }
 
     /**
@@ -454,14 +373,10 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Retrieve front controller object
      *
-     * @return \Magento\Core\Controller\Varien\Front
+     * @return \Magento\App\FrontController
      */
     public function getFrontController()
     {
-        if (!$this->_isFrontControllerInitialized) {
-            $this->_initFrontController();
-            $this->_isFrontControllerInitialized = true;
-        }
         return $this->_frontController;
     }
 
@@ -553,12 +468,12 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Retrieve request object
      *
-     * @return \Magento\Core\Controller\Request\Http
+     * @return \Magento\App\RequestInterface
      */
     public function getRequest()
     {
         if (!$this->_request) {
-            $this->_request = $this->_objectManager->get('Magento\Core\Controller\Request\Http');
+            $this->_request = $this->_objectManager->get('Magento\App\RequestInterface');
         }
         return $this->_request;
     }
@@ -566,10 +481,10 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Request setter
      *
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @return \Magento\Core\Model\App
      */
-    public function setRequest(\Magento\Core\Controller\Request\Http $request)
+    public function setRequest(\Magento\App\RequestInterface $request)
     {
         $this->_request = $request;
         return $this;
@@ -578,12 +493,12 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Retrieve response object
      *
-     * @return \Zend_Controller_Response_Http
+     * @return \Magento\App\ResponseInterface
      */
     public function getResponse()
     {
         if (!$this->_response) {
-            $this->_response = $this->_objectManager->get('Magento\Core\Controller\Response\Http');
+            $this->_response = $this->_objectManager->get('Magento\App\ResponseInterface');
             $this->_response->setHeader('Content-Type', 'text/html; charset=UTF-8');
         }
         return $this->_response;
@@ -592,10 +507,10 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Response setter
      *
-     * @param \Magento\Core\Controller\Response\Http $response
+     * @param \Magento\App\ResponseInterface $response
      * @return \Magento\Core\Model\App
      */
-    public function setResponse(\Magento\Core\Controller\Response\Http $response)
+    public function setResponse(\Magento\App\ResponseInterface $response)
     {
         $this->_response = $response;
         return $this;
@@ -652,7 +567,7 @@ class App implements \Magento\Core\Model\AppInterface
      */
     public function isDeveloperMode()
     {
-        return $this->_appState->getMode() == \Magento\Core\Model\App\State::MODE_DEVELOPER;
+        return $this->_appState->getMode() == \Magento\App\State::MODE_DEVELOPER;
     }
 
     /**
@@ -921,7 +836,7 @@ class App implements \Magento\Core\Model\AppInterface
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '48',
+            'number'    => '49',
         );
     }
 }

@@ -303,6 +303,20 @@
 }
 
 /*
+    Configuration -> Design
+-------------------------------------- */
+#row_design_theme_ua_regexp .design_theme_ua_regexp {
+    float: left;
+    width: 100%;
+}
+#row_design_theme_ua_regexp .tooltip {
+    margin-top: 8px;
+}
+#row_design_theme_ua_regexp .note {
+    clear: both;
+}
+
+/*
     CMS -> Banners
 -------------------------------------- */
 
@@ -376,6 +390,10 @@
 .cms-hierarchy-node #node_properties_fieldset #node_preview {
     position: relative;
     top: 6px;
+}
+
+.cms-hierarchy-node .form-inline .label {
+    width: 30%;
 }
 
 /*
@@ -975,16 +993,8 @@
     width: 10%;
 }
 
-.adminhtml-report-product-lowstock .range {
-    white-space: nowrap;
-}
-
 .adminhtml-report-product-lowstock .range-line {
     display: inline-block;
-}
-
-.adminhtml-report-product-lowstock .range-line:first-child {
-    margin-right: 5px;
 }
 
 .adminhtml-report-product-lowstock .col-product {
@@ -998,6 +1008,14 @@
 /*
     Reports - PayPal Settlement Reports
 -------------------------------------- */
+
+.adminhtml-paypal-reports-index .grid tr.headings th > span {
+    white-space: normal;
+}
+
+.adminhtml-paypal-reports-index .col-transaction_event_code {
+    max-width: 150px;
+}
 
 .adminhtml-paypal-reports-index .col-amount,
 .adminhtml-paypal-reports-index .col-fee-amount {
@@ -1216,8 +1234,73 @@
     border: 1px solid #ccc;
 }
 
-.dashboard-container .dashboard-diagram {
-    margin: 20px;
+.adminhtml-dashboard-index .col-2-left-layout,
+.adminhtml-dashboard-index .col-1-layout {
+    min-width: 0;
+}
+
+.adminhtml-dashboard-index .side-col {
+    width: 38%;
+    padding: 1%;
+}
+
+.adminhtml-dashboard-index .col-2-left-layout .main-col {
+    min-width: 0;
+    width: 60%;
+}
+
+.dashboard-container {
+    border-radius: 0;
+}
+
+.dashboard-container.col-2-left-layout:before {
+    left: 40%;
+}
+
+.dashboard-container .dashboard-inner {
+    padding: 20px;
+}
+
+.dashboard-inner .tabs-horiz > li a {
+    padding-left: 14px;
+    padding-right: 14px;
+}
+
+.dashboard-container #diagram_tab_content {
+    background: #fff;
+    border: 1px solid #eae6e0;
+    border-radius: 5px;
+    border-top-left-radius: 0;
+    margin: 0 0 20px;
+    padding: 18px;
+    position: relative;
+}
+
+.dashboard-container .dashboard-diagram .store-switcher + div { /* loader under a diagram */
+    background: url(../mui/images/ajax-loader-small.gif) no-repeat 50% 50%;
+    min-height: 75px;
+    text-align: center;
+}
+
+.dashboard-container .dashboard-diagram .store-switcher + div img {
+    max-width: 100%;
+}
+
+.dashboard-container .dashboard-diagram .store-switcher + div.dashboard-diagram-nodata { /* when there is no data to display the diagram */
+    background-image: none;
+    min-height: 15px;
+}
+
+.dashboard-container #grid_tab_content {
+    background: #fff url(../mui/images/ajax-loader-small.gif) no-repeat 50% 50%;
+    border: 1px solid #eae6e0;
+    border-radius: 5px;
+    border-top-left-radius: 0;
+    min-height: 50px;
+}
+
+.dashboard-container #grid_tab_content .grid {
+    padding: 0;
 }
 
 .dashboard-container .store-switcher {
@@ -1784,7 +1867,6 @@
     width: 35px;
 }
 
-[class^=" adminhtml-sales-order-"] .col-status,
 [class^=" adminhtml-sales-order-"] .col-price-original,
 [class^=" adminhtml-sales-order-"] .col-tax-amount,
 [class^=" adminhtml-sales-order-"] .col-tax-percent,
@@ -2659,6 +2741,25 @@ table.items-to-invoice tbody tr:hover td {
 -------------------------------------- */
 .field-skeleton_set .select {
     width: 100%;
+}
+
+/*
+    Cache Management
+-------------------------------------- */
+.additional-cache-management .label {
+    margin-top: 5px;
+}
+
+/*
+    Currency Symbols
+-------------------------------------- */
+.adminhtml-system-currencysymbol-index th.col-symbol .required:after {
+    content: '*';
+    margin-left: 3px;
+}
+
+.adminhtml-system-currencysymbol-index td.col-currency .label {
+    margin-top: 5px;
 }
 
 /*

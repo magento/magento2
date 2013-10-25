@@ -189,7 +189,7 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_coreString = null;
 
     /**
-     * @var \Magento\Core\Model\UrlInterface
+     * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
 
@@ -206,24 +206,24 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Construct
      * 
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Core\Model\UrlInterface $urlBuilder
+     * @param \Magento\UrlInterface $urlBuilder
      * @param \Magento\Core\Helper\String $coreString
      * @param \Magento\Ogone\Model\Config $config
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Core\Model\UrlInterface $urlBuilder,
+        \Magento\UrlInterface $urlBuilder,
         \Magento\Core\Helper\String $coreString,
         \Magento\Ogone\Model\Config $config,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
@@ -433,9 +433,9 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
     protected function _getOgonePaymentOperation()
     {
         $value = $this->getPaymentAction();
-        if ($value==Magento_Payment_Model_Method_AbstractMethod::ACTION_AUTHORIZE) {
+        if ($value == \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE) {
             $value = \Magento\Ogone\Model\Api::OGONE_AUTHORIZE_ACTION;
-        } elseif ($value==Magento_Payment_Model_Method_AbstractMethod::ACTION_AUTHORIZE_CAPTURE) {
+        } elseif ($value == \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE) {
             $value = \Magento\Ogone\Model\Api::OGONE_AUTHORIZE_CAPTURE_ACTION;
         }
         return $value;

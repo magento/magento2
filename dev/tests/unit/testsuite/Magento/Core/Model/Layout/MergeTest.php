@@ -70,7 +70,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $fileSource = $this->getMockForAbstractClass('Magento\Core\Model\Layout\File\SourceInterface');
         $fileSource->expects($this->any())->method('getFiles')->will($this->returnValue($files));
 
-        $design = $this->getMockForAbstractClass('Magento\Core\Model\View\DesignInterface');
+        $design = $this->getMockForAbstractClass('Magento\View\DesignInterface');
 
         $this->_store = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
         $this->_store->expects($this->any())->method('getId')->will($this->returnValue(20));
@@ -79,7 +79,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
         $this->_resource = $this->getMock('Magento\Core\Model\Resource\Layout\Update', array(), array(), '', false);
 
-        $this->_appState = $this->getMock('Magento\Core\Model\App\State', array(), array(), '', false);
+        $this->_appState = $this->getMock('Magento\App\State', array(), array(), '', false);
 
         $this->_cache = $this->getMockForAbstractClass('Magento\Cache\FrontendInterface');
 

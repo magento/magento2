@@ -150,17 +150,17 @@ class Migration extends \Magento\Core\Model\Resource\Setup
     protected $_filesystem;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
     /**
-     * @param \Magento\Core\Model\Resource\Setup\Context $context
+     * @param Context $context
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Helper\Data $helper
-     * @param \Magento\Core\Model\Dir $dir
-     * @param string $resourceName
-     * @param string $confPathToMapFile
+     * @param \Magento\App\Dir $dir
+     * @param $resourceName
+     * @param $confPathToMapFile
      * @param string $moduleName
      * @param string $connectionName
      */
@@ -168,7 +168,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
         \Magento\Core\Model\Resource\Setup\Context $context,
         \Magento\Filesystem $filesystem,
         \Magento\Core\Helper\Data $helper,
-        \Magento\Core\Model\Dir $dir,
+        \Magento\App\Dir $dir,
         $resourceName,
         $confPathToMapFile,
         $moduleName = 'Magento_Core',

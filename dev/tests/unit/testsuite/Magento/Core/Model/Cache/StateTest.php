@@ -132,7 +132,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
             ->method('getAllOptions')
             ->will($this->returnValue($resourceTypeOptions));
 
-        $appState = $this->getMock('Magento\Core\Model\App\State', array(), array(), '', false);
+        $appState = $this->getMock('Magento\App\State', array(), array(), '', false);
         $appState->expects($this->any())
             ->method('isInstalled')
             ->will($this->returnValue($appInstalled));

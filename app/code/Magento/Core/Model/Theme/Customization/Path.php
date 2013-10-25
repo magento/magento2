@@ -37,16 +37,16 @@ class Path
     const DIR_NAME = 'theme_customization';
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      */
-    public function __construct(\Magento\Core\Model\Dir $dir)
+    public function __construct(\Magento\App\Dir $dir)
     {
         $this->_dir = $dir;
     }
@@ -54,14 +54,14 @@ class Path
     /**
      * Returns customization absolute path
      *
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @return string|null
      */
-    public function getCustomizationPath(\Magento\Core\Model\Theme $theme)
+    public function getCustomizationPath(\Magento\View\Design\ThemeInterface $theme)
     {
         $path = null;
         if ($theme->getId()) {
-            $path = $this->_dir->getDir(\Magento\Core\Model\Dir::MEDIA)
+            $path = $this->_dir->getDir(\Magento\App\Dir::MEDIA)
                 . DIRECTORY_SEPARATOR . self::DIR_NAME
                 . DIRECTORY_SEPARATOR . $theme->getId();
         }
@@ -71,14 +71,14 @@ class Path
     /**
      * Get directory where themes files are stored
      *
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @return string|null
      */
-    public function getThemeFilesPath(\Magento\Core\Model\Theme $theme)
+    public function getThemeFilesPath(\Magento\View\Design\ThemeInterface $theme)
     {
         $path = null;
         if ($theme->getFullPath()) {
-            $physicalThemesDir = $this->_dir->getDir(\Magento\Core\Model\Dir::THEMES);
+            $physicalThemesDir = $this->_dir->getDir(\Magento\App\Dir::THEMES);
             $path = \Magento\Filesystem::fixSeparator($physicalThemesDir . DIRECTORY_SEPARATOR . $theme->getFullPath());
         }
         return $path;
@@ -87,10 +87,10 @@ class Path
     /**
      * Get path to custom view configuration file
      *
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @return string|null
      */
-    public function getCustomViewConfigPath(\Magento\Core\Model\Theme $theme)
+    public function getCustomViewConfigPath(\Magento\View\Design\ThemeInterface $theme)
     {
         $path = null;
         if ($theme->getId()) {

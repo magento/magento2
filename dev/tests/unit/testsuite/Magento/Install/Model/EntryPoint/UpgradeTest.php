@@ -44,7 +44,7 @@ class UpgradeTest extends \PHPUnit_Framework_TestCase
     {
         $this->_config = $this->getMock('Magento\Core\Model\Config\Primary', array('getParam'), array(), '', false);
 
-        $dirVerification = $this->getMock('Magento\Core\Model\Dir\Verification', array(), array(), '', false);
+        $dirVerification = $this->getMock('Magento\App\Dir\Verification', array(), array(), '', false);
 
         $cacheFrontend = $this->getMockForAbstractClass('Magento\Cache\FrontendInterface');
         $cacheFrontend->expects($this->once())->method('clean')->with('all', array());
@@ -57,7 +57,7 @@ class UpgradeTest extends \PHPUnit_Framework_TestCase
         $cacheFrontendPool->expects($this->once())->method('current')->will($this->returnValue($cacheFrontend));
 
         $update = $this->getMock(
-            'Magento\Core\Model\Db\Updater', array('updateScheme', 'updateData'), array(), '', false);
+            'Magento\App\Updater', array('updateScheme', 'updateData'), array(), '', false);
         $update->expects($this->once())->method('updateScheme');
         $update->expects($this->once())->method('updateData');
 
@@ -68,10 +68,10 @@ class UpgradeTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = $this->getMock('Magento\ObjectManager');
         $this->_objectManager->expects($this->any())->method('get')->will($this->returnValueMap(array(
             array('Magento\Core\Model\Cache\Frontend\Pool', $cacheFrontendPool),
-            array('Magento\Core\Model\Db\Updater', $update),
+            array('Magento\App\Updater', $update),
             array('Magento\Core\Model\Config\Primary', $this->_config),
             array('Magento\Index\Model\Indexer', $this->_indexer),
-            array('Magento\Core\Model\Dir\Verification', $dirVerification),
+            array('Magento\App\Dir\Verification', $dirVerification),
         )));
     }
 

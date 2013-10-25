@@ -35,7 +35,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testGetChild()
     {
-        $requestMock = $this->getMockBuilder('Magento\Core\Controller\Request\Http')
+        $requestMock = $this->getMockBuilder('Magento\App\Request\Http')
             ->disableOriginalConstructor()
             ->getMock();
         $requestMock->expects($this->once())
@@ -47,7 +47,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testNotFound()
     {
-        $requestMock = $this->getMockBuilder('Magento\Core\Controller\Request\Http')->disableOriginalConstructor()
+        $requestMock = $this->getMockBuilder('Magento\App\Request\Http')
+            ->disableOriginalConstructor()
             ->getMock();
 
         $requestVisitor = new \Magento\Core\Model\DataService\Path\Request($requestMock);

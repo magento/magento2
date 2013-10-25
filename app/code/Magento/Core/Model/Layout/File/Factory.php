@@ -47,10 +47,10 @@ class Factory
      *
      * @param string $filename
      * @param string $module
-     * @param \Magento\Core\Model\ThemeInterface $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @return \Magento\Core\Model\Layout\File
      */
-    public function create($filename, $module, \Magento\Core\Model\ThemeInterface $theme = null)
+    public function create($filename, $module, \Magento\View\Design\ThemeInterface $theme = null)
     {
         return $this->_objectManager->create(
             'Magento\Core\Model\Layout\File',

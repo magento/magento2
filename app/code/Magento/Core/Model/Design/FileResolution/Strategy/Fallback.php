@@ -72,12 +72,12 @@ class Fallback
      * Get existing file name, using fallback mechanism
      *
      * @param string $area
-     * @param \Magento\Core\Model\Theme $themeModel
+     * @param \Magento\View\Design\ThemeInterface $themeModel
      * @param string $file
      * @param string|null $module
      * @return string
      */
-    public function getFile($area, \Magento\Core\Model\Theme $themeModel, $file, $module = null)
+    public function getFile($area, \Magento\View\Design\ThemeInterface $themeModel, $file, $module = null)
     {
         $params = array('area' => $area, 'theme' => $themeModel, 'namespace' => null, 'module' => null);
         if ($module) {
@@ -90,12 +90,12 @@ class Fallback
      * Get locale file name, using fallback mechanism
      *
      * @param string $area
-     * @param \Magento\Core\Model\Theme $themeModel
+     * @param \Magento\View\Design\ThemeInterface $themeModel
      * @param string $locale
      * @param string $file
      * @return string
      */
-    public function getLocaleFile($area, \Magento\Core\Model\Theme $themeModel, $locale, $file)
+    public function getLocaleFile($area, \Magento\View\Design\ThemeInterface $themeModel, $locale, $file)
     {
         $params = array('area' => $area, 'theme' => $themeModel, 'locale' => $locale);
         return $this->_resolveFile($this->_getLocaleFileRule(), $file, $params);
@@ -105,13 +105,13 @@ class Fallback
      * Get theme file name, using fallback mechanism
      *
      * @param string $area
-     * @param \Magento\Core\Model\Theme $themeModel
+     * @param \Magento\View\Design\ThemeInterface $themeModel
      * @param string $locale
      * @param string $file
      * @param string|null $module
      * @return string
      */
-    public function getViewFile($area, \Magento\Core\Model\Theme $themeModel, $locale, $file, $module = null)
+    public function getViewFile($area, \Magento\View\Design\ThemeInterface $themeModel, $locale, $file, $module = null)
     {
         $params = array(
             'area' => $area, 'theme' => $themeModel, 'locale' => $locale, 'namespace' => null, 'module' => null

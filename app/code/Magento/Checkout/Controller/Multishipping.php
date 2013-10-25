@@ -550,7 +550,7 @@ class Multishipping extends \Magento\Checkout\Controller\Action
     public function redirectLogin()
     {
         $this->setFlag('', 'no-dispatch', true);
-        $url = $this->_objectManager->create('Magento\Core\Model\UrlInterface')
+        $url = $this->_objectManager->create('Magento\UrlInterface')
             ->getUrl('*/*', array('_secure' => true));
         $this->_objectManager->get('Magento\Customer\Model\Session')->setBeforeAuthUrl($url);
 

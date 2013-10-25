@@ -51,8 +51,8 @@
             <value>Magento\Widget\Model\Template\Filter</value>
         </param>
     </type>
-    <type name="Magento\Core\Model\Db\Updater">
-        <param name="resourceList">
+    <type name="Magento\App\Updater\SetupFactory">
+        <param name="resourceTypes">
             <value>
                 <widget_setup>Magento\Core\Model\Resource\Setup\Generic</widget_setup>
             </value>

@@ -78,14 +78,14 @@ class Service extends \Magento\Object
     /**
      * Backend url
      *
-     * @var \Magento\Core\Model\UrlInterface
+     * @var \Magento\UrlInterface
      */
     protected $_backendUrl;
 
     /**
      * Frontend url
      *
-     * @var \Magento\Core\Model\UrlInterface
+     * @var \Magento\UrlInterface
      */
     protected $_frontendUrl;
 
@@ -127,8 +127,8 @@ class Service extends \Magento\Object
     /**
      * @param \Magento\Centinel\Model\Config $config
      * @param \Magento\Centinel\Model\Api $api
-     * @param \Magento\Core\Model\UrlInterface $backendUrl
-     * @param \Magento\Core\Model\UrlInterface $frontendUrl
+     * @param \Magento\UrlInterface $backendUrl
+     * @param \Magento\UrlInterface $frontendUrl
      * @param \Magento\Core\Model\Session\AbstractSession $centinelSession
      * @param \Magento\Core\Model\Session $session
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -138,8 +138,8 @@ class Service extends \Magento\Object
     public function __construct(
         \Magento\Centinel\Model\Config $config,
         \Magento\Centinel\Model\Api $api,
-        \Magento\Core\Model\UrlInterface $backendUrl,
-        \Magento\Core\Model\UrlInterface $frontendUrl,
+        \Magento\UrlInterface $backendUrl,
+        \Magento\UrlInterface $frontendUrl,
         \Magento\Core\Model\Session\AbstractSession $centinelSession,
         \Magento\Core\Model\Session $session,
         \Magento\Core\Model\StoreManagerInterface $storeManager,

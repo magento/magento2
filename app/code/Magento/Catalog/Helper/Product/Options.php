@@ -59,7 +59,7 @@ class Options extends \Magento\Core\Helper\AbstractHelper
      *  - 'size' - size of file
      *  - 'title' - user-friendly name of file (usually - original name as uploaded in Magento)
      *
-     * @param \Magento\Core\Controller\Response\Http $response
+     * @param \Magento\App\ResponseInterface $response
      * @param string $filePath
      * @param array $info
      * @return bool

@@ -70,7 +70,7 @@ class Observer
 
     /**
      * @param \Magento\Core\Model\Cache\Frontend\Pool $cacheFrontendPool
-     * @param \Magento\Core\Model\View\DesignInterface $design
+     * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Model\Page $page
      * @param \Magento\Core\Model\ConfigInterface $config
      * @param \Magento\Core\Model\Page\Asset\PublicFileFactory $assetFileFactory
@@ -79,7 +79,7 @@ class Observer
      */
     public function __construct(
         \Magento\Core\Model\Cache\Frontend\Pool $cacheFrontendPool,
-        \Magento\Core\Model\View\DesignInterface $design,
+        \Magento\View\DesignInterface $design,
         \Magento\Core\Model\Page $page,
         \Magento\Core\Model\ConfigInterface $config,
         \Magento\Core\Model\Page\Asset\PublicFileFactory $assetFileFactory,

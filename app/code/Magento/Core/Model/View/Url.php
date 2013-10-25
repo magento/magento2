@@ -42,7 +42,7 @@ class Url
     protected $_filesystem;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dirs;
 
@@ -71,7 +71,7 @@ class Url
      * View files URL model
      *
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Model\Dir $dirs
+     * @param \Magento\App\Dir $dirs
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Core\Model\View\Service $viewService
      * @param \Magento\Core\Model\View\Publisher $publisher
@@ -79,7 +79,7 @@ class Url
      */
     public function __construct(
         \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\Dir $dirs,
+        \Magento\App\Dir $dirs,
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Core\Model\View\Service $viewService,
         \Magento\Core\Model\View\Publisher $publisher,
@@ -140,10 +140,10 @@ class Url
     public function getPublicFileUrl($publicFilePath, $isSecure = null)
     {
         foreach (array(
-                \Magento\Core\Model\Store::URL_TYPE_LIB     => \Magento\Core\Model\Dir::PUB_LIB,
-                \Magento\Core\Model\Store::URL_TYPE_MEDIA   => \Magento\Core\Model\Dir::MEDIA,
-                \Magento\Core\Model\Store::URL_TYPE_STATIC  => \Magento\Core\Model\Dir::STATIC_VIEW,
-                \Magento\Core\Model\Store::URL_TYPE_CACHE   => \Magento\Core\Model\Dir::PUB_VIEW_CACHE,
+                \Magento\Core\Model\Store::URL_TYPE_LIB     => \Magento\App\Dir::PUB_LIB,
+                \Magento\Core\Model\Store::URL_TYPE_MEDIA   => \Magento\App\Dir::MEDIA,
+                \Magento\Core\Model\Store::URL_TYPE_STATIC  => \Magento\App\Dir::STATIC_VIEW,
+                \Magento\Core\Model\Store::URL_TYPE_CACHE   => \Magento\App\Dir::PUB_VIEW_CACHE,
             ) as $urlType => $dirType
         ) {
             $dir = $this->_dirs->getDir($dirType);

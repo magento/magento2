@@ -32,7 +32,7 @@ namespace Magento\Index\Model\Lock;
 class Storage
 {
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dirs;
 
@@ -49,11 +49,11 @@ class Storage
     protected $_fileHandlers = array();
 
     /**
-     * @param \Magento\Core\Model\Dir $dirs
+     * @param \Magento\App\Dir $dirs
      * @param \Magento\Index\Model\Process\FileFactory $fileFactory
      */
     public function __construct(
-        \Magento\Core\Model\Dir $dirs,
+        \Magento\App\Dir $dirs,
         \Magento\Index\Model\Process\FileFactory $fileFactory
     ) {
         $this->_dirs = $dirs;
@@ -70,7 +70,7 @@ class Storage
     {
         if (!isset($this->_fileHandlers[$processId])) {
             $file = $this->_fileFactory->create();
-            $varDirectory = $this->_dirs->getDir(\Magento\Core\Model\Dir::VAR_DIR) . DIRECTORY_SEPARATOR . 'locks';
+            $varDirectory = $this->_dirs->getDir(\Magento\App\Dir::VAR_DIR) . DIRECTORY_SEPARATOR . 'locks';
             $file->setAllowCreateFolders(true);
 
             $file->open(array('path' => $varDirectory));

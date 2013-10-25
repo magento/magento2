@@ -76,10 +76,10 @@ class Options extends \Magento\Core\Model\Layout\Argument\AbstractHandler
     }
 
     /**
-     * @param \Magento\Core\Model\Layout\Element $argument
+     * @param \Magento\View\Layout\Element $argument
      * @return array
      */
-    protected function _getArgumentValue(\Magento\Core\Model\Layout\Element $argument)
+    protected function _getArgumentValue(\Magento\View\Layout\Element $argument)
     {
         return array('model' => (string)$argument['model']);
     }
