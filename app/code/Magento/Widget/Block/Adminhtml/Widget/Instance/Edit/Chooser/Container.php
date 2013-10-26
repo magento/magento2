@@ -37,9 +37,9 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 class Container extends \Magento\Core\Block\Html\Select
 {
     /**
-     * @var \Magento\Core\Model\Layout\MergeFactory
+     * @var \Magento\View\Layout\ProcessorFactory
      */
-    protected $_layoutMergeFactory;
+    protected $_layoutProcessorFactory;
 
     /**
      * @var \Magento\Core\Model\Resource\Theme\CollectionFactory
@@ -48,17 +48,18 @@ class Container extends \Magento\Core\Block\Html\Select
 
     /**
      * @param \Magento\Core\Block\Context $context
-     * @param \Magento\Core\Model\Layout\MergeFactory $layoutMergeFactory
+     * @param \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory
      * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory
      * @param array $data
      */
+
     public function __construct(
         \Magento\Core\Block\Context $context,
-        \Magento\Core\Model\Layout\MergeFactory $layoutMergeFactory,
+        \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory,
         \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory,
         array $data = array()
     ) {
-        $this->_layoutMergeFactory = $layoutMergeFactory;
+        $this->_layoutProcessorFactory = $layoutProcessorFactory;
         $this->_themesFactory = $themesFactory;
         parent::__construct($context, $data);
     }
@@ -85,12 +86,12 @@ class Container extends \Magento\Core\Block\Html\Select
             $layoutMergeParams = array(
                 'theme' => $this->_getThemeInstance($this->getTheme()),
             );
-            /** @var $layoutMerge \Magento\Core\Model\Layout\Merge */
-            $layoutMerge = $this->_layoutMergeFactory->create($layoutMergeParams);
-            $layoutMerge->addPageHandles(array($this->getLayoutHandle()));
-            $layoutMerge->load();
+            /** @var $layoutProcessor \Magento\View\Layout\ProcessorInterface */
+            $layoutProcessor = $this->_layoutProcessorFactory->create($layoutMergeParams);
+            $layoutProcessor->addPageHandles(array($this->getLayoutHandle()));
+            $layoutProcessor->load();
 
-            $containers = $layoutMerge->getContainers();
+            $containers = $layoutProcessor->getContainers();
             if ($this->getAllowedContainers()) {
                 foreach (array_keys($containers) as $containerName) {
                     if (!in_array($containerName, $this->getAllowedContainers())) {

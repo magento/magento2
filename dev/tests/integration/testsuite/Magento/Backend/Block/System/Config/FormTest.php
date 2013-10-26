@@ -53,7 +53,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         /** @var $layout \Magento\Core\Model\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Core\Model\Layout', array('area' => 'adminhtml'));
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Config\Scope')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Config\ScopeInterface')
             ->setCurrentScope(\Magento\Core\Model\App\Area::AREA_ADMINHTML);
         /** @var $block \Magento\Backend\Block\System\Config\Form */
         $block = $layout->createBlock('Magento\Backend\Block\System\Config\Form', 'block');
@@ -80,14 +80,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testInitFieldsUseDefaultCheckbox($section, $group, $field, array $configData, $expectedUseDefault)
     {
         $this->markTestIncomplete('MAGETWO-9058');
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Config\Scope')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Config\ScopeInterface')
             ->setCurrentScope(\Magento\Core\Model\App\Area::AREA_ADMINHTML);
         $form = $this->_formFactory->create();
         $fieldset = $form->addFieldset($section->getId() . '_' . $group->getId(), array());
 
         /* @TODO Eliminate stub by proper mock / config fixture usage */
         /** @var $block \Magento\Backend\Block\System\Config\FormStub */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Backend\Block\System\Config\FormStub');
         $block->setScope(\Magento\Backend\Block\System\Config\Form::SCOPE_WEBSITES);
         $block->setStubConfigData($configData);
@@ -134,14 +134,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testInitFieldsUseConfigPath($section, $group, $field, array $configData, $expectedUseDefault)
     {
         $this->markTestIncomplete('MAGETWO-9058');
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Config\Scope')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Config\ScopeInterface')
             ->setCurrentScope(\Magento\Core\Model\App\Area::AREA_ADMINHTML);
         $form = $this->_formFactory->create();
         $fieldset = $form->addFieldset($section->getId() . '_' . $group->getId(), array());
 
         /* @TODO Eliminate stub by proper mock / config fixture usage */
         /** @var $block \Magento\Backend\Block\System\Config\FormStub */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Backend\Block\System\Config\FormStub');
         $block->setScope(\Magento\Backend\Block\System\Config\Form::SCOPE_DEFAULT);
         $block->setStubConfigData($configData);
@@ -165,7 +165,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             \Magento\Core\Model\App::PARAM_BAN_CACHE => true,
         ));
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\Config\Scope')
+            ->get('Magento\Config\ScopeInterface')
             ->setCurrentScope(\Magento\Core\Model\App\Area::AREA_ADMINHTML);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
             ->loadAreaPart(\Magento\Core\Model\App\Area::AREA_ADMINHTML, \Magento\Core\Model\App\Area::PART_CONFIG);
@@ -212,20 +212,20 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testInitFormAddsFieldsets()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Controller\Response\Http')->headersSentThrowsException = false;
+            ->get('Magento\App\ResponseInterface')->headersSentThrowsException = false;
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Core\Controller\Front\Action',
             array(
                 'request' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\Core\Controller\Request\Http'),
+                    ->get('Magento\App\Request\Http'),
                 'response' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                     ->get('Magento\Core\Model\App')->getResponse()
             )
         );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Controller\Request\Http')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\RequestInterface')
             ->setParam('section', 'general');
         /** @var $block \Magento\Backend\Block\System\Config\Form */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Backend\Block\System\Config\Form');
         $block->initForm();
         $expectedIds = array(

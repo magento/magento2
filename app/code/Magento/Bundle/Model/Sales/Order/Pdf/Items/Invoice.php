@@ -47,7 +47,7 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\Dir $coreDir
+     * @param \Magento\App\Dir $coreDir
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param array $data
@@ -57,7 +57,7 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\Dir $coreDir,
+        \Magento\App\Dir $coreDir,
         \Magento\Data\Collection\Db $resourceCollection = null,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         array $data = array()

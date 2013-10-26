@@ -46,7 +46,7 @@ class Config
     /**
      * Directory model
      *
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_coreDir;
 
@@ -54,9 +54,9 @@ class Config
 
     /**
      * @param \Magento\Install\Model\Config\Data $dataStorage
-     * @param \Magento\Core\Model\Dir $coreDir
+     * @param \Magento\App\Dir $coreDir
      */
-    public function __construct(\Magento\Install\Model\Config\Data $dataStorage, \Magento\Core\Model\Dir $coreDir)
+    public function __construct(\Magento\Install\Model\Config\Data $dataStorage, \Magento\App\Dir $coreDir)
     {
         $this->_dataStorage = $dataStorage;
         $this->_coreDir = $coreDir;

@@ -33,17 +33,12 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** Prepare mocks for SUT constructor. */
-        $applicationMock = $this->getMockBuilder('Magento\Core\Model\App')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $configMock = $this->getMockBuilder('Magento\Core\Model\Config')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $applicationMock->expects($this->once())->method('getConfig')->will($this->returnValue($configMock));
-        $configMock->expects($this->once())->method('getAreaFrontName')->will($this->returnValue('soap'));
+        $areaListMock = $this->getMock('Magento\App\AreaList', array(), array(), '', false);
+        $configScopeMock = $this->getMock('Magento\Config\ScopeInterface');
+        $areaListMock->expects($this->once())->method('getFrontName')->will($this->returnValue('soap'));
 
         /** Initialize SUT. */
-        $this->_soapRequest = new \Magento\Webapi\Controller\Soap\Request($applicationMock);
+        $this->_soapRequest = new \Magento\Webapi\Controller\Soap\Request($areaListMock, $configScopeMock);
         parent::setUp();
     }
 

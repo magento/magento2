@@ -258,7 +258,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
@@ -284,7 +284,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,

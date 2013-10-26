@@ -23,11 +23,11 @@
  */
 return array(
     'preferences' => array(
-        'Magento\Core\Model\Db\UpdaterInterface' => 'Magento\Core\Model\Db\Updater',
+        'Magento\App\UpdaterInterface' => 'Magento\App\Updater',
         'Magento\Core\Model\AppInterface' => 'Magento\Core\Model\App\Proxy',
     ),
 
-    'Magento\Core\Model\App\State' => array(
+    'Magento\App\State' => array(
         'parameters' => array(
             'mode' => array(
                 'argument' => 'MAGE_MODE',

@@ -65,7 +65,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
 
         $blockMock = $this->getMock('Magento\Backend\Block\Widget\Button', array(), array(), '', false, false);
 
-        $requestMock = $this->getMock('Magento\Core\Controller\Request\Http', array(), array(), '', false, false);
+        $requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false, false);
         $requestMock->expects($this->once())->method('getParam')->with('website')->will($this->returnValue(1));
 
         $helperMock = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false, false);

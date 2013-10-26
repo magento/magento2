@@ -29,7 +29,7 @@ namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\QuickStyles;
 /**
  * Block that renders Quick Styles > Buttons & Icons tab
  *
- * @method \Magento\Core\Model\Theme getTheme()
+ * @method \Magento\View\Design\ThemeInterface getTheme()
  * @method setTheme($theme)
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

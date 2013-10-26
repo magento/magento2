@@ -50,9 +50,9 @@ class MergedTest extends \PHPUnit_Framework_TestCase
         $service = $objectManager->get('Magento\Core\Model\View\Service');
         self::$_themePublicDir = $service->getPublicDir();
 
-        /** @var \Magento\Core\Model\Dir $dirs */
-        $dirs = $objectManager->get('Magento\Core\Model\Dir');
-        self::$_viewPublicMergedDir = $dirs->getDir(\Magento\Core\Model\Dir::PUB_VIEW_CACHE)
+        /** @var \Magento\App\Dir $dirs */
+        $dirs = $objectManager->get('Magento\App\Dir');
+        self::$_viewPublicMergedDir = $dirs->getDir(\Magento\App\Dir::PUB_VIEW_CACHE)
             . DIRECTORY_SEPARATOR . \Magento\Core\Model\Page\Asset\Merged::PUBLIC_MERGE_DIR;
     }
 
@@ -60,10 +60,10 @@ class MergedTest extends \PHPUnit_Framework_TestCase
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
             \Magento\Core\Model\App::PARAM_APP_DIRS => array(
-                \Magento\Core\Model\Dir::THEMES => realpath(__DIR__ . '/../../_files/design')
+                \Magento\App\Dir::THEMES => realpath(__DIR__ . '/../../_files/design')
             )
         ));
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\View\DesignInterface')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
             ->setDesignTheme('vendor_default');
     }
 

@@ -42,13 +42,13 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
             \Magento\Core\Model\App::PARAM_APP_DIRS => array(
-                \Magento\Core\Model\Dir::THEMES => dirname(__DIR__) . '/_files/design'
+                \Magento\App\Dir::THEMES => dirname(__DIR__) . '/_files/design'
             )
         ));
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Core\Model\View\FileSystem');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\View\DesignInterface')
+            ->get('Magento\View\DesignInterface')
             ->setDesignTheme('test_default');
     }
 

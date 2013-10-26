@@ -69,11 +69,15 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     protected $_cacheMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_responseMock;
+
     protected function setUp()
     {
-        $this->_requestMock = $this->getMock('Magento\Core\Controller\Request\Http', array(), array(), '', false,
-            false);
-        $responseMock = $this->getMock('Magento\Core\Controller\Response\Http', array(), array(), '', false, false);
+        $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false, false);
+        $this->_responseMock = $this->getMock('Magento\App\Response\Http', array(), array(), '', false, false);
 
         $configStructureMock = $this->getMock('Magento\Backend\Model\Config\Structure',
             array(), array(), '', false, false
@@ -81,7 +85,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->_configFactoryMock = $this->getMock('Magento\Backend\Model\Config\Factory',
             array(), array(), '', false, false
         );
-        $this->_eventManagerMock = $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false,
+        $this->_eventManagerMock = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false,
             false);
 
         $helperMock = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false, false);
@@ -104,12 +108,12 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->_sectionMock));
 
         $helperMock->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
-        $responseMock->expects($this->once())->method('setRedirect')->with('*/system_config/edit');
+        $this->_responseMock->expects($this->once())->method('setRedirect')->with('*/system_config/edit');
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $arguments = array(
             'request' => $this->_requestMock,
-            'response' => $responseMock,
+            'response' => $this->_responseMock,
             'session' => $this->_sessionMock,
             'helper' => $helperMock,
             'eventManager' => $this->_eventManagerMock,

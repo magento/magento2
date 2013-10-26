@@ -48,8 +48,8 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $instanceConfig = new \Magento\TestFramework\ObjectManager\Config();
         $primaryConfig = $this->getMock('Magento\Core\Model\Config\Primary', array(), array(), '', false);
         $primaryConfig->expects($this->any())->method('getParams')->will($this->returnValue(array()));
-        $dirs = $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false);
-        $verification = $this->getMock('Magento\Core\Model\Dir\Verification', array(), array(), '', false);
+        $dirs = $this->getMock('Magento\App\Dir', array(), array(), '', false);
+        $verification = $this->getMock('Magento\App\Dir\Verification', array(), array(), '', false);
         $cache = $this->getMock('Magento\Core\Model\CacheInterface');
         $configLoader = $this->getMock('Magento\Core\Model\ObjectManager\ConfigLoader', array(), array(), '', false);
         $configLoader->expects($this->once())->method('load')->will($this->returnValue(array()));
@@ -62,7 +62,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $model = new \Magento\TestFramework\ObjectManager(
             $primaryConfig, $instanceConfig,
             array(
-                'Magento\Core\Model\Dir\Verification' => $verification,
+                'Magento\App\Dir\Verification' => $verification,
                 'Magento\Core\Model\Cache\Type\Config' => $cache,
                 'Magento\Core\Model\ObjectManager\ConfigLoader' => $configLoader,
                 'Magento\Core\Model\ObjectManager\ConfigCache' => $configCache,

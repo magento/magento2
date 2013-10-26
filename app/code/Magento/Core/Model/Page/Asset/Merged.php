@@ -69,7 +69,7 @@ class Merged implements \Iterator
     /**
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Core\Model\Logger $logger,
-     * @param \Magento\Core\Model\Dir $dirs,
+     * @param \Magento\App\Dir $dirs,
      * @param \Magento\Core\Model\Page\Asset\MergeStrategyInterface $mergeStrategy
      * @param array $assets
      * @throws \InvalidArgumentException
@@ -77,7 +77,7 @@ class Merged implements \Iterator
     public function __construct(
         \Magento\ObjectManager $objectManager,
         \Magento\Core\Model\Logger $logger,
-        \Magento\Core\Model\Dir $dirs,
+        \Magento\App\Dir $dirs,
         \Magento\Core\Model\Page\Asset\MergeStrategyInterface $mergeStrategy,
         array $assets
     ) {
@@ -165,8 +165,8 @@ class Merged implements \Iterator
      */
     protected function _getMergedFilePath(array $publicFiles)
     {
-        $jsDir = \Magento\Filesystem::fixSeparator($this->_dirs->getDir(\Magento\Core\Model\Dir::PUB_LIB));
-        $publicDir = \Magento\Filesystem::fixSeparator($this->_dirs->getDir(\Magento\Core\Model\Dir::STATIC_VIEW));
+        $jsDir = \Magento\Filesystem::fixSeparator($this->_dirs->getDir(\Magento\App\Dir::PUB_LIB));
+        $publicDir = \Magento\Filesystem::fixSeparator($this->_dirs->getDir(\Magento\App\Dir::STATIC_VIEW));
         $prefixRemovals = array($jsDir, $publicDir);
 
         $relFileNames = array();
@@ -175,7 +175,7 @@ class Merged implements \Iterator
             $relFileNames[] = str_replace($prefixRemovals, '', $file);
         }
 
-        $mergedDir = $this->_dirs->getDir(\Magento\Core\Model\Dir::PUB_VIEW_CACHE) . '/'
+        $mergedDir = $this->_dirs->getDir(\Magento\App\Dir::PUB_VIEW_CACHE) . '/'
             . self::PUBLIC_MERGE_DIR;
         return $mergedDir . '/' . md5(implode('|', $relFileNames)) . '.' . $this->_contentType;
     }

@@ -61,8 +61,8 @@ class Config
         if (isset($cmdOptions['destination'])) {
             $destinationDir = $cmdOptions['destination'];
         } else {
-            $dirs = new \Magento\Core\Model\Dir($sourceDir);
-            $destinationDir = $dirs->getDir(\Magento\Core\Model\Dir::STATIC_VIEW);
+            $dirs = new \Magento\App\Dir($sourceDir);
+            $destinationDir = $dirs->getDir(\Magento\App\Dir::STATIC_VIEW);
         }
         if (!is_dir($destinationDir)) {
             throw new \Magento\Exception('Destination directory does not exist: ' . $destinationDir);

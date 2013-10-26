@@ -83,7 +83,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
 
-        $eventManagerMock = $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false);
+        $eventManagerMock = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         $objectFactoryMock = $this->getMock('Magento\Validator\Composite\VarienObjectFactory', array('create'),
             array(), '', false);
         $roleFactoryMock = $this->getMock('Magento\User\Model\RoleFactory', array('create'),

@@ -93,7 +93,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->_validatorMock = $this->getMock('Magento\Backend\Model\Menu\Item\Validator');
         $this->_validatorMock->expects($this->any())
             ->method('validate');
-        $this->_moduleListMock = $this->getMock('Magento\Core\Model\ModuleListInterface');
+        $this->_moduleListMock = $this->getMock('Magento\App\ModuleListInterface');
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $helper->getObject('Magento\Backend\Model\Menu\Item', array(

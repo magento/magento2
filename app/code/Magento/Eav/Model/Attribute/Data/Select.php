@@ -39,10 +39,10 @@ class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
     /**
      * Extract data from request and return value
      *
-     * @param \Zend_Controller_Request_Http $request
+     * @param \Magento\App\RequestInterface $request
      * @return array|string
      */
-    public function extractValue(\Zend_Controller_Request_Http $request)
+    public function extractValue(\Magento\App\RequestInterface $request)
     {
         return $this->_getRequestValue($request);
     }

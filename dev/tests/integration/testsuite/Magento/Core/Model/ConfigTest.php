@@ -109,38 +109,4 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Core\Model\Config', $arguments);
         return $model;
     }
-
-    /**
-     * @magentoAppIsolation enabled
-     * @expectedException \InvalidArgumentException
-     */
-    public function testGetAreaConfigThrowsExceptionIfNonexistentAreaIsRequested()
-    {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')->getConfig()
-            ->getAreaConfig('non_existent_area_code');
-    }
-
-    /**
-     * Check if areas loaded correctly from configuration
-     */
-    public function testGetAreas()
-    {
-        $this->markTestIncomplete('MAGETWO-6406');
-        $model = $this->_createModel(array('sourceData' => __DIR__ . '/../_files/etc/config.xml'));
-
-        $allowedAreas = $model->getAreas();
-        $this->assertNotEmpty($allowedAreas, 'Areas are not initialized');
-
-        $this->assertArrayHasKey('test_area1', $allowedAreas, 'Test area #1 is not loaded');
-
-        $testAreaExpected = array(
-            'areaNode' => 'value',
-        );
-        $this->assertEquals($testAreaExpected, $allowedAreas['test_area1'], 'Test area is not loaded correctly');
-
-        $this->assertArrayNotHasKey('test_area2', $allowedAreas, 'Test area #2 is loaded by mistake');
-        $this->assertArrayNotHasKey('test_area3', $allowedAreas, 'Test area #3 is loaded by mistake');
-        $this->assertArrayNotHasKey('test_area4', $allowedAreas, 'Test area #4 is loaded by mistake');
-        $this->assertArrayNotHasKey('test_area5', $allowedAreas, 'Test area #5 is loaded by mistake');
-    }
 }

@@ -70,7 +70,7 @@ class View extends \Magento\Core\Helper\AbstractHelper
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -93,7 +93,7 @@ class View extends \Magento\Core\Helper\AbstractHelper
      *
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Catalog\Model\Design $catalogDesign
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Page\Helper\Layout $pageLayout
      * @param \Magento\Core\Helper\Context $context
@@ -103,7 +103,7 @@ class View extends \Magento\Core\Helper\AbstractHelper
     public function __construct(
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Catalog\Model\Design $catalogDesign,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Page\Helper\Layout $pageLayout,
         \Magento\Core\Helper\Context $context,

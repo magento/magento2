@@ -44,8 +44,8 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         // Test protected method via reflection
         $storeManager = $this->getMock('Magento\Core\Model\StoreManagerInterface', array(), array(), '', false);
         $locale = $this->getMock('Magento\Core\Model\LocaleInterface', array(), array(), '', false);
-        $urlBuilder = $this->getMock('Magento\Core\Model\UrlInterface', array(), array(), '', false);
-        $eventManager = $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false);
+        $urlBuilder = $this->getMock('Magento\UrlInterface', array(), array(), '', false);
+        $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         $coreString = $this->getMock('Magento\Core\Helper\String', array(), array(), '', false);
         $config = $this->getMock('Magento\Ogone\Model\Config', array(), array(), '', false);
         $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', array(), array(), '', false);

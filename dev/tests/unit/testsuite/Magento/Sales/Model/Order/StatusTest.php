@@ -42,7 +42,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             $resource = $this->getMock('Magento\Sales\Model\Resource\Order\Status', array(), array(), '', false);
         }
         if (!$eventDispatcher) {
-            $eventDispatcher = $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false);
+            $eventDispatcher = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         }
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $model = $helper->getObject('Magento\Sales\Model\Order\Status', array(
@@ -64,7 +64,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $resource->expects($this->once())->method('commit');
 
         $params = array('status' => $status, 'state' => $state);
-        $eventDispatcher = $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false);
+        $eventDispatcher = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         $eventDispatcher->expects($this->once())->method('dispatch')
             ->with($this->equalTo('sales_order_status_unassign'), $this->equalTo($params));
 

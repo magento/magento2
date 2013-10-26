@@ -135,12 +135,12 @@ class Application
         $generationDir = "$installDir/generation";
         $this->_initParams = array(
             \Magento\Core\Model\App::PARAM_APP_DIRS => array(
-                \Magento\Core\Model\Dir::CONFIG      => $this->_installEtcDir,
-                \Magento\Core\Model\Dir::VAR_DIR     => $installDir,
-                \Magento\Core\Model\Dir::MEDIA       => "$installDir/media",
-                \Magento\Core\Model\Dir::STATIC_VIEW => "$installDir/pub_static",
-                \Magento\Core\Model\Dir::PUB_VIEW_CACHE => "$installDir/pub_cache",
-                \Magento\Core\Model\Dir::GENERATION => $generationDir,
+                \Magento\App\Dir::CONFIG      => $this->_installEtcDir,
+                \Magento\App\Dir::VAR_DIR     => $installDir,
+                \Magento\App\Dir::MEDIA       => "$installDir/media",
+                \Magento\App\Dir::STATIC_VIEW => "$installDir/pub_static",
+                \Magento\App\Dir::PUB_VIEW_CACHE => "$installDir/pub_cache",
+                \Magento\App\Dir::GENERATION => $generationDir,
             ),
             \Magento\Core\Model\App::PARAM_MODE => $appMode
         );
@@ -212,14 +212,14 @@ class Application
             ));
 
             $objectManager->addSharedInstance($config, 'Magento\Core\Model\Config\Primary');
-            $objectManager->addSharedInstance($config->getDirectories(), 'Magento\Core\Model\Dir');
+            $objectManager->addSharedInstance($config->getDirectories(), 'Magento\App\Dir');
             $objectManager->configure(array(
                 'preferences' => array(
                     'Magento\Core\Model\Cookie' => 'Magento\TestFramework\Cookie'
                 )
             ));
             $objectManager->loadPrimaryConfig($this->_primaryConfig);
-            $verification = $objectManager->get('Magento\Core\Model\Dir\Verification');
+            $verification = $objectManager->get('Magento\App\Dir\Verification');
             $verification->createAndVerifyDirectories();
             $objectManager->configure(
                 $objectManager->get('Magento\Core\Model\ObjectManager\ConfigLoader')->load('global')
@@ -232,7 +232,9 @@ class Application
                     'type' => 'Magento\TestFramework\Db\ConnectionAdapter'
                 ),
                 'preferences' => array(
-                    'Magento\Core\Model\Cookie' => 'Magento\TestFramework\Cookie'
+                    'Magento\Core\Model\Cookie' => 'Magento\TestFramework\Cookie',
+                    'Magento\App\RequestInterface' => 'Magento\TestFramework\Request',
+                    'Magento\App\ResponseInterface' => 'Magento\TestFramework\Response',
                 ),
             ));
         }
@@ -241,8 +243,8 @@ class Application
             ->setCache($objectManager->get('Magento\Core\Model\CacheInterface'));
 
         /** Register event observer of Integration Framework */
-        /** @var \Magento\Core\Model\Event\Config\Data $eventConfigData */
-        $eventConfigData = $objectManager->get('Magento\Core\Model\Event\Config\Data');
+        /** @var \Magento\Event\Config\Data $eventConfigData */
+        $eventConfigData = $objectManager->get('Magento\Event\Config\Data');
         $eventConfigData->merge(
             array('core_app_init_current_store_after' =>
                 array('integration_tests' =>
@@ -254,8 +256,8 @@ class Application
                 )
             )
         );
-        /** @var \Magento\Core\Model\Dir\Verification $verification */
-        $verification = $objectManager->get('Magento\Core\Model\Dir\Verification');
+        /** @var \Magento\App\Dir\Verification $verification */
+        $verification = $objectManager->get('Magento\App\Dir\Verification');
         $verification->createAndVerifyDirectories();
 
         $this->loadArea(\Magento\TestFramework\Application::DEFAULT_APP_AREA);
@@ -276,15 +278,13 @@ class Application
 
     /**
      * Run application normally, but with encapsulated initialization options
-     *
-     * @param \Magento\TestFramework\Request $request
-     * @param \Magento\TestFramework\Response $response
      */
-    public function run(\Magento\TestFramework\Request $request, \Magento\TestFramework\Response $response)
+    public function run()
     {
-        $composer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $handler = $composer->get('Magento\HTTP\Handler\Composite');
-        $handler->handle($request, $response);
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $config = new \Magento\Core\Model\Config\Primary(BP, array());
+        $entryPoint = new \Magento\Core\Model\EntryPoint\Http($config, $objectManager);
+        $entryPoint->processRequest();
     }
 
     /**
@@ -341,8 +341,8 @@ class Application
         $this->initialize();
 
         /* Run all install and data-install scripts */
-        /** @var $updater \Magento\Core\Model\Db\Updater */
-        $updater = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Db\Updater');
+        /** @var $updater \Magento\App\Updater */
+        $updater = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Updater');
         $updater->updateScheme();
         $updater->updateData();
 
@@ -370,8 +370,8 @@ class Application
         /* Switch an application to installed mode */
         $this->initialize();
         //hot fix for \Magento\Catalog\Model\Product\Attribute\Backend\SkuTest::testGenerateUniqueLongSku
-        /** @var $appState \Magento\Core\Model\App\State */
-        $appState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App\State');
+        /** @var $appState \Magento\App\State */
+        $appState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State');
         $appState->setInstallDate(date('r', strtotime('now')));
     }
 

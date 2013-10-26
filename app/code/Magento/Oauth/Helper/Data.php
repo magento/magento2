@@ -103,7 +103,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     /**
      * Process HTTP request object and prepare for token validation
      *
-     * @param \Zend_Controller_Request_Http $httpRequest
+     * @param \Magento\App\RequestInterface $httpRequest
      * @param array $bodyParams array of key value body parameters
      * @return array
      */
@@ -255,12 +255,12 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * Create response string for problem during request and set HTTP error code
      *
      * @param \Exception $exception
-     * @param \Zend_Controller_Response_Http $response OPTIONAL If NULL - will use internal getter
+     * @param \Magento\App\ResponseInterface $response OPTIONAL If NULL - will use internal getter
      * @return string
      */
     public function prepareErrorResponse(
         \Exception $exception,
-        \Zend_Controller_Response_Http $response = null
+        \Magento\App\ResponseInterface $response = null
     ) {
         $errorMap = $this->_errors;
         $errorsToHttpCode = $this->_errorsToHttpCode;

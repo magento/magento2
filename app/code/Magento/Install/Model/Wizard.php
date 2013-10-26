@@ -41,14 +41,14 @@ class Wizard
     /**
      * Url builder
      *
-     * @var \Magento\Core\Model\UrlInterface
+     * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
 
     /**
      * Init install wizard
      */
-    public function __construct(\Magento\Core\Model\UrlInterface $urlBuilder, \Magento\Install\Model\Config $installConfig)
+    public function __construct(\Magento\UrlInterface $urlBuilder, \Magento\Install\Model\Config $installConfig)
     {
         $this->_steps = $installConfig->getWizardSteps();
         $this->_urlBuilder = $urlBuilder;

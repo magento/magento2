@@ -48,10 +48,10 @@ class DefaultLocator
     /**
      * Retrieve default currency for selected store, website or website group
      *
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @return string
      */
-    public function getDefaultCurrency(\Magento\Core\Controller\Request\Http $request)
+    public function getDefaultCurrency(\Magento\App\RequestInterface $request)
     {
         if ($request->getParam('store')) {
             $store = $request->getParam('store');

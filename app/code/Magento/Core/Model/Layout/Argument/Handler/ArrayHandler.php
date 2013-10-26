@@ -93,17 +93,17 @@ class ArrayHandler extends \Magento\Core\Model\Layout\Argument\AbstractHandler
     /**
      * Retrive value from Array argument
      *
-     * @param \Magento\Core\Model\Layout\Element $argument
+     * @param \Magento\View\Layout\Element $argument
      * @return array|null
      */
-    protected function _getArgumentValue(\Magento\Core\Model\Layout\Element $argument)
+    protected function _getArgumentValue(\Magento\View\Layout\Element $argument)
     {
         $items = $argument->xpath('item');
         if ($this->_isUpdater($argument) && empty($items)) {
             return null;
         }
         $result = array();
-        /** @var $item \Magento\Core\Model\Layout\Element */
+        /** @var $item \Magento\View\Layout\Element */
         foreach ($items as $item) {
             $itemName = (string)$item['name'];
             $itemType = $this->_getArgumentType($item);

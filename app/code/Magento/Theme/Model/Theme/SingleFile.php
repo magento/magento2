@@ -47,11 +47,11 @@ class SingleFile
     /**
      * Creates or updates custom single file which belong to a selected theme
      *
-     * @param \Magento\Core\Model\Theme $themeModel
+     * @param \Magento\View\Design\ThemeInterface $themeModel
      * @param string $fileContent
      * @return \Magento\Core\Model\Theme\FileInterface
      */
-    public function update(\Magento\Core\Model\Theme $themeModel, $fileContent)
+    public function update(\Magento\View\Design\ThemeInterface $themeModel, $fileContent)
     {
         $customFiles = $themeModel->getCustomization()->getFilesByType($this->_fileService->getType());
         $customCss = reset($customFiles);

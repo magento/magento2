@@ -27,7 +27,7 @@ class Baseurl
     implements \Magento\AdminNotification\Model\System\MessageInterface
 {
     /**
-     * @var \Magento\Core\Model\UrlInterface
+     * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
 
@@ -49,13 +49,13 @@ class Baseurl
     /**
      * @param \Magento\Core\Model\Config $config
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\UrlInterface $urlBuilder
+     * @param \Magento\UrlInterface $urlBuilder
      * @param \Magento\Core\Model\Config\ValueFactory $configValueFactory
      */
     public function __construct(
         \Magento\Core\Model\Config $config,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\UrlInterface $urlBuilder,
+        \Magento\UrlInterface $urlBuilder,
         \Magento\Core\Model\Config\ValueFactory $configValueFactory
     ) {
         $this->_urlBuilder = $urlBuilder;

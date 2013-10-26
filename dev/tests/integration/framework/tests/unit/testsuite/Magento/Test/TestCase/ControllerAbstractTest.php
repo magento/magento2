@@ -46,12 +46,9 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
         ;
         $session = new \Magento\Object(array('messages' => $messagesCollection));
         $request = new \Magento\TestFramework\Request(
-            $this->getMock('Magento\Core\Model\StoreManager', [], [], '', false),
-            $this->getMock('Magento\Backend\Helper\Data', [], [], '', false)
+            $this->getMock('Magento\App\RouterListInterface', array(), array(), '', false)
         );
-        $response = new \Magento\TestFramework\Response(
-            $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false)
-        );
+        $response = new \Magento\TestFramework\Response();
 
         $this->_objectManager = $this->getMock(
             'Magento\TestFramework\ObjectManager', array('get', 'create'), array(), '', false
@@ -59,8 +56,8 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
         $this->_objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap(array(
-                array('Magento\TestFramework\Request', $request),
-                array('Magento\TestFramework\Response', $response),
+                array('Magento\App\RequestInterface', $request),
+                array('Magento\App\ResponseInterface', $response),
                 array('Magento\Core\Model\Session', $session),
             )));
     }
@@ -126,7 +123,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     public function testAssertRedirect()
     {
         /*
-         * Prevent calling \Magento\Core\Controller\Response\Http::setRedirect() because it dispatches event,
+         * Prevent calling \Magento\App\Response\Http::setRedirect() because it dispatches event,
          * which requires fully initialized application environment intentionally not available
          * for unit tests
          */

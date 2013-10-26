@@ -35,27 +35,27 @@ class Index extends \Magento\Install\Controller\Action
     /**
      * Core directory model
      *
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_coreDir;
 
     /**
      * @param \Magento\Core\Controller\Varien\Action\Context $context
-     * @param \Magento\Core\Model\Config\Scope $configScope
-     * @param \Magento\Core\Model\View\DesignInterface $viewDesign
+     * @param \Magento\Config\Scope $configScope
+     * @param \Magento\View\DesignInterface $viewDesign
      * @param \Magento\Core\Model\Theme\CollectionFactory $collectionFactory
      * @param \Magento\Core\Model\App $app
-     * @param \Magento\Core\Model\App\State $appState
-     * @param \Magento\Core\Model\Dir $coreDir
+     * @param \Magento\App\State $appState
+     * @param \Magento\App\Dir $coreDir
      */
     public function __construct(
         \Magento\Core\Controller\Varien\Action\Context $context,
-        \Magento\Core\Model\Config\Scope $configScope,
-        \Magento\Core\Model\View\DesignInterface $viewDesign,
+        \Magento\Config\Scope $configScope,
+        \Magento\View\DesignInterface $viewDesign,
         \Magento\Core\Model\Theme\CollectionFactory $collectionFactory,
         \Magento\Core\Model\App $app,
-        \Magento\Core\Model\App\State $appState,
-        \Magento\Core\Model\Dir $coreDir
+        \Magento\App\State $appState,
+        \Magento\App\Dir $coreDir
     ) {
         parent::__construct($context, $configScope, $viewDesign, $collectionFactory, $app, $appState);
         $this->_coreDir = $coreDir;
@@ -68,7 +68,7 @@ class Index extends \Magento\Install\Controller\Action
     {
         $this->setFlag('', self::FLAG_NO_CHECK_INSTALLATION, true);
         if (!$this->_appState->isInstalled()) {
-            foreach (glob($this->_coreDir->getDir(\Magento\Core\Model\Dir::VAR_DIR) . '/*', GLOB_ONLYDIR) as $dir) {
+            foreach (glob($this->_coreDir->getDir(\Magento\App\Dir::VAR_DIR) . '/*', GLOB_ONLYDIR) as $dir) {
                 \Magento\Io\File::rmdirRecursive($dir);
             }
         }

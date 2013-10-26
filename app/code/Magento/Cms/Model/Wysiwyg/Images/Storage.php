@@ -136,7 +136,7 @@ class Storage extends \Magento\Object
     /**
      * Dir
      *
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
@@ -157,7 +157,7 @@ class Storage extends \Magento\Object
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\Image\AdapterFactory $imageFactory
      * @param \Magento\Core\Model\View\Url $viewUrl
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      * @param \Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory $storageCollectionFactory
      * @param \Magento\Core\Model\File\Storage\FileFactory $storageFileFactory
      * @param \Magento\Core\Model\File\Storage\DatabaseFactory $storageDatabaseFactory
@@ -178,7 +178,7 @@ class Storage extends \Magento\Object
         \Magento\Filesystem $filesystem,
         \Magento\Core\Model\Image\AdapterFactory $imageFactory,
         \Magento\Core\Model\View\Url $viewUrl,
-        \Magento\Core\Model\Dir $dir,
+        \Magento\App\Dir $dir,
         \Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory $storageCollectionFactory,
         \Magento\Core\Model\File\Storage\FileFactory $storageFileFactory,
         \Magento\Core\Model\File\Storage\DatabaseFactory $storageDatabaseFactory,
@@ -582,7 +582,7 @@ class Storage extends \Magento\Object
      */
     public function getThumbsPath($filePath = false)
     {
-        $mediaRootDir = $this->_dir->getDir(\Magento\Core\Model\Dir::MEDIA);
+        $mediaRootDir = $this->_dir->getDir(\Magento\App\Dir::MEDIA);
         $thumbnailDir = $this->getThumbnailRoot();
 
         if ($filePath && strpos($filePath, $mediaRootDir) === 0) {

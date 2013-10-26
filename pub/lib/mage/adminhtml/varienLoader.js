@@ -197,10 +197,10 @@ varienLoaderHandler.handler = {
         request.options.loaderArea = $$('#html-body .wrapper')[0]; // Blocks all page
 
         if(request && request.options.loaderArea){
-            Element.clonePosition($('loading-mask'), $(request.options.loaderArea), {offsetLeft:-2})
+            //Element.clonePosition($('loading-mask'), $(request.options.loaderArea), {offsetLeft:-2});
             toggleSelectsUnderBlock($('loading-mask'), false);
             Element.show('loading-mask');
-            setLoaderPosition();
+            //setLoaderPosition();
             if(request.options.loaderArea=='html-body'){
                 //Element.show('loading-process');
             }

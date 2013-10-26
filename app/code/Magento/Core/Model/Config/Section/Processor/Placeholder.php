@@ -28,14 +28,14 @@ namespace Magento\Core\Model\Config\Section\Processor;
 class Placeholder
 {
     /**
-     * @var \Magento\Core\Controller\Request\Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_request;
 
     /**
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      */
-    public function __construct(\Magento\Core\Controller\Request\Http $request)
+    public function __construct(\Magento\App\RequestInterface $request)
     {
         $this->_request = $request;
     }

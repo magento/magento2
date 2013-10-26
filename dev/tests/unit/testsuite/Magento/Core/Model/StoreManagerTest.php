@@ -59,7 +59,7 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_factoryMock = $this->getMock('Magento\Core\Model\Store\StorageFactory', array(), array(), '', false);
-        $this->_requestMock = $this->getMock('Magento\Core\Controller\Request\Http', array(), array(), '', false);
+        $this->_requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false);
         $this->_helperFactoryMock = $this->getMock('Magento\Core\Model\Factory\Helper', array(), array(), '', false);
         $this->_storage = $this->getMock('Magento\Core\Model\Store\StorageInterface');
 

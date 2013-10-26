@@ -247,11 +247,11 @@ class Edit
     /**
      * Checks themes for changes by time
      *
-     * @param \Magento\Core\Model\Theme $sourceTheme
-     * @param \Magento\Core\Model\Theme $targetTheme
+     * @param \Magento\View\Design\ThemeInterface $sourceTheme
+     * @param \Magento\View\Design\ThemeInterface $targetTheme
      * @return bool
      */
-    protected function _hasThemeChanged(\Magento\Core\Model\Theme $sourceTheme, \Magento\Core\Model\Theme $targetTheme)
+    protected function _hasThemeChanged(\Magento\View\Design\ThemeInterface $sourceTheme, \Magento\View\Design\ThemeInterface $targetTheme)
     {
         $sourceChange = $this->_changeFactory->create();
         $sourceChange->loadByThemeId($sourceTheme->getId());

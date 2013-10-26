@@ -41,7 +41,7 @@ class Config
     {
         $result = array();
         $moduleList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\ModuleListInterface');
+            ->get('Magento\App\ModuleListInterface');
         foreach ($moduleList->getModules() as $module) {
             $result[] = $module['name'];
         }

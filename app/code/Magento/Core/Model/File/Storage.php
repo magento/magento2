@@ -97,7 +97,7 @@ class Storage extends \Magento\Core\Model\AbstractModel
     protected $_databaseFactory;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
@@ -110,7 +110,7 @@ class Storage extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\File\Storage\Flag $fileFlag
      * @param \Magento\Core\Model\File\Storage\FileFactory $fileFactory
      * @param \Magento\Core\Model\File\Storage\DatabaseFactory $databaseFactory
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -124,7 +124,7 @@ class Storage extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\File\Storage\Flag $fileFlag,
         \Magento\Core\Model\File\Storage\FileFactory $fileFactory,
         \Magento\Core\Model\File\Storage\DatabaseFactory $databaseFactory,
-        \Magento\Core\Model\Dir $dir,
+        \Magento\App\Dir $dir,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()

@@ -29,8 +29,8 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $objectManager->get('Magento\Core\Model\App')
     ->loadAreaPart(\Magento\Core\Model\App\Area::AREA_ADMINHTML, \Magento\Core\Model\App\Area::PART_CONFIG);
-/** @var $theme \Magento\Core\Model\Theme */
-$theme = $objectManager->create('Magento\Core\Model\Theme');
+/** @var $theme \Magento\View\Design\ThemeInterface */
+$theme = $objectManager->create('Magento\View\Design\ThemeInterface');
 $theme->setThemePath('test/test')
     ->setThemeVersion('2.0.0.0')
     ->setArea('frontend')

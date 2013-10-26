@@ -36,7 +36,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $configView = $this->getMock('Magento\Config\View', array('getVarValue'), array(), '', false);
         $configView->expects($this->any())->method('getVarValue')->will($this->returnValue(75));
 
-        $configManager = $this->getMock('Magento\Core\Model\View\Config', array(), array(), '', false);
+        $configManager = $this->getMock('Magento\View\ConfigInterface', array(), array(), '', false);
         $configManager->expects($this->any())->method('getViewConfig')->will($this->returnValue($configView));
 
         $product = $this->getMock('Magento\Catalog\Model\Product', array('isConfigurable'), array(), '', false);

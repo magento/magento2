@@ -24,6 +24,7 @@
  */
 -->
 <config>
+    <preference for="Magento\Backend\Model\Auth\Credential\StorageInterface" type="Magento\User\Model\User" />
     <type name="Magento\Acl\Builder">
         <param name="ruleLoader">
             <instance type="Magento\User\Model\Acl\Loader\Rule" />

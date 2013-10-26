@@ -108,7 +108,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($connection));
 
         $this->_model = new \Magento\Core\Model\Resource\Session(
-            $resource, $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false, false)
+            $resource, $this->getMock('Magento\App\Dir', array(), array(), '', false, false)
         );
     }
 

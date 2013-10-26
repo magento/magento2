@@ -96,7 +96,7 @@ class Wishlist extends \Magento\Core\Model\AbstractModel
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -126,7 +126,7 @@ class Wishlist extends \Magento\Core\Model\AbstractModel
     protected $_productFactory;
 
     /**
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Wishlist\Helper\Data $wishlistData
@@ -142,7 +142,7 @@ class Wishlist extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Wishlist\Helper\Data $wishlistData,

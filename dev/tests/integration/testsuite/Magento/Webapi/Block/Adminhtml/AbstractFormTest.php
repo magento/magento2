@@ -54,7 +54,7 @@ abstract class AbstractFormTest extends \PHPUnit_Framework_TestCase
     protected $_urlBuilder;
 
     /**
-     * @var \Magento\Core\Model\Layout
+     * @var \Magento\View\LayoutInterface
      */
     protected $_layout;
 
@@ -70,7 +70,7 @@ abstract class AbstractFormTest extends \PHPUnit_Framework_TestCase
         $this->_urlBuilder = $this->getMockBuilder('Magento\Backend\Model\Url')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_layout = $this->_objectManager->get('Magento\Core\Model\Layout');
+        $this->_layout = $this->_objectManager->get('Magento\View\LayoutInterface');
         $this->_blockFactory = $this->_objectManager->get('Magento\Core\Model\BlockFactory');
         $this->_block = $this->_blockFactory->createBlock($this->_formClass, array(
             'context' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

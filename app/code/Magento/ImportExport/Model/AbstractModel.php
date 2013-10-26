@@ -68,7 +68,7 @@ abstract class AbstractModel extends \Magento\Object
     protected $_logger;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
@@ -79,13 +79,13 @@ abstract class AbstractModel extends \Magento\Object
 
     /**
      * @param \Magento\Core\Model\Logger $logger
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      * @param \Magento\Core\Model\Log\AdapterFactory $adapterFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Model\Logger $logger,
-        \Magento\Core\Model\Dir $dir,
+        \Magento\App\Dir $dir,
         \Magento\Core\Model\Log\AdapterFactory $adapterFactory,
         array $data = array()
     ) {

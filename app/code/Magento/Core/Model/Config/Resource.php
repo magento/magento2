@@ -31,6 +31,13 @@ class Resource extends \Magento\Config\Data\Scoped
     const DEFAULT_SETUP_CONNECTION = 'default';
 
     /**
+     * List of connection names per resource
+     *
+     * @var array
+     */
+    protected $_connectionNames = array();
+
+    /**
      * @param \Magento\Core\Model\Resource\Config\Reader $reader
      * @param \Magento\Config\ScopeInterface $configScope
      * @param \Magento\Config\CacheInterface $cache

@@ -54,13 +54,13 @@ class Physical
     protected $_themeCollection;
 
     /**
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @param \Magento\Core\Model\ThemeFactory $themeFactory
      * @param \Magento\Core\Model\Theme\CopyService $themeCopyService
      * @param \Magento\Core\Model\Resource\Theme\Collection $themeCollection
      */
     public function __construct(
-        \Magento\Core\Model\Theme $theme,
+        \Magento\View\Design\ThemeInterface $theme,
         \Magento\Core\Model\ThemeFactory $themeFactory,
         \Magento\Core\Model\Theme\CopyService $themeCopyService,
         \Magento\Core\Model\Resource\Theme\Collection $themeCollection
@@ -74,7 +74,7 @@ class Physical
     /**
      * Create theme customization
      *
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @return \Magento\Core\Model\Theme
      */
     public function createVirtualTheme($theme)
@@ -86,7 +86,7 @@ class Physical
         $themeData['theme_title'] = $this->_getVirtualThemeTitle($theme);
         $themeData['type'] = \Magento\Core\Model\Theme::TYPE_VIRTUAL;
 
-        /** @var $themeCustomization \Magento\Core\Model\Theme */
+        /** @var $themeCustomization \Magento\View\Design\ThemeInterface */
         $themeCustomization = $this->_themeFactory->create()->setData($themeData);
         $themeCustomization->getThemeImage()->createPreviewImageCopy($theme->getPreviewImage());
         $themeCustomization->save();
@@ -99,7 +99,7 @@ class Physical
     /**
      * Get virtual theme title
      *
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @return string
      */
     protected function _getVirtualThemeTitle($theme)

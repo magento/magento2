@@ -25,9 +25,9 @@
 -->
 <config>
     <!-- Comment within root node -->
-    <preference for="Magento\Core\Model\Db\UpdaterInterface" type="Magento\Core\Model\Db\Updater" />
+    <preference for="Magento\App\UpdaterInterface" type="Magento\App\Updater" />
     <preference for="Magento\Core\Model\AppInterface" type="Magento\Core\Model\App\Proxy" />
-    <type name="Magento\Core\Model\App\State">
+    <type name="Magento\App\State">
         <param name="mode">
             <value type="argument">Magento\Core\Model\App::PARAM_MODE</value>
         </param>

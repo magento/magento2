@@ -34,7 +34,7 @@ class RoleUpdaterTest extends \PHPUnit_Framework_TestCase
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $request = $this->getMockBuilder('Magento\Core\Controller\Request\Http')
+        $request = $this->getMockBuilder('Magento\App\RequestInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $request->expects($this->any())->method('getParam')->will($this->returnValueMap(array(

@@ -52,7 +52,7 @@ class CacheOutdatedTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_authorizationMock = $this->getMock('Magento\AuthorizationInterface');
-        $this->_urlInterfaceMock = $this->getMock('Magento\Core\Model\UrlInterface');
+        $this->_urlInterfaceMock = $this->getMock('Magento\UrlInterface');
         $this->_cacheTypeListMock = $this->getMock('Magento\Core\Model\Cache\TypeListInterface');
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);

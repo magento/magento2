@@ -61,7 +61,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Construct
      *
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
@@ -69,7 +69,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,

@@ -64,7 +64,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Tax\Helper\Data $taxData
      */
     public function __construct(
@@ -72,7 +72,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Tax\Helper\Data $taxData
     ) {
         $this->_taxData = $taxData;

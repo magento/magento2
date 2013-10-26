@@ -31,7 +31,7 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -41,11 +41,11 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         $this->_eventManager = $eventManager;

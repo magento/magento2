@@ -25,91 +25,6 @@
 -->
 <config>
     <type name="Magento\Sales\Model\Resource\Report" shared="false" />
-    <type name="Magento\Sales\Model\Convert\Order">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Sales\Model\Convert\Quote">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Sales\Model\Observer">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Sales\Model\Order\Creditmemo">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Sales\Model\Order\Invoice">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Sales\Model\Order\Item">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Sales\Model\Order\Payment\Transaction">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Sales\Model\Order\Payment">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Sales\Model\Order">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Sales\Model\Quote\Address\Total\Discount">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Sales\Model\Quote\Config">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Sales\Model\Quote\Item">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Sales\Model\Quote\Payment">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Sales\Model\Quote">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Sales\Model\Resource\Order\AbstractOrder">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Sales\Model\Resource\Sale\Collection">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Sales\Model\Service\Quote">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
     <type name="Magento\Sales\Model\Order\Pdf\Config\Reader">
         <param name="fileName">
             <value>pdf.xml</value>
@@ -141,8 +56,8 @@
             </value>
         </param>
     </type>
-    <type name="Magento\Core\Model\Db\Updater">
-        <param name="resourceList">
+    <type name="Magento\App\Updater\SetupFactory">
+        <param name="resourceTypes">
             <value>
                 <sales_setup>Magento\Sales\Model\Resource\Setup</sales_setup>
             </value>

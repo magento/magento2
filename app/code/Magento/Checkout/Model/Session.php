@@ -85,7 +85,7 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
     protected $_quoteFactory;
 
     /**
-     * @var \Magento\Core\Controller\Request\Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_request;
 

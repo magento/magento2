@@ -47,10 +47,10 @@ class PrimaryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_dirMock = $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false);
+        $this->_dirMock = $this->getMock('Magento\App\Dir', array(), array(), '', false);
         $this->_dirMock->expects($this->any())->method('getDir')->will($this->returnValueMap(array(
-            array(\Magento\Core\Model\Dir::DI, '/path_to_root/var/di'),
-            array(\Magento\Core\Model\Dir::ROOT, '/path_to_root'),
+            array(\Magento\App\Dir::DI, '/path_to_root/var/di'),
+            array(\Magento\App\Dir::ROOT, '/path_to_root'),
         )));
         $this->_loaderMock = $this->getMock('Magento\Core\Model\Config\LoaderInterface');
         $that = $this;

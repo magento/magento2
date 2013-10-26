@@ -56,13 +56,13 @@ class State implements \Magento\Core\Model\Cache\StateInterface
     /**
      * @param \Magento\Core\Model\Resource\Cache $resource
      * @param \Magento\Core\Model\Cache\Frontend\Pool $cacheFrontendPool
-     * @param \Magento\Core\Model\App\State $appState
+     * @param \Magento\App\State $appState
      * @param bool $banAll Whether all cache types are forced to be disabled
      */
     public function __construct(
         \Magento\Core\Model\Resource\Cache $resource,
         \Magento\Core\Model\Cache\Frontend\Pool $cacheFrontendPool,
-        \Magento\Core\Model\App\State $appState,
+        \Magento\App\State $appState,
         $banAll = false
     ) {
         $this->_resource = $resource;

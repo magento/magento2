@@ -83,7 +83,7 @@ class DeployedFilesManager implements \Magento\Core\Model\View\PublicFilesManage
      */
     protected function _getDeployedFilePath($filePath, $params)
     {
-        /** @var $themeModel \Magento\Core\Model\Theme */
+        /** @var $themeModel \Magento\View\Design\ThemeInterface */
         $themeModel = $params['themeModel'];
         $themePath = $themeModel->getThemePath();
         while (empty($themePath) && $themeModel) {

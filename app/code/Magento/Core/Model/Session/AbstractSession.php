@@ -79,7 +79,7 @@ class AbstractSession extends \Magento\Object
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -120,12 +120,12 @@ class AbstractSession extends \Magento\Object
     protected $_messageFactory;
 
     /**
-     * @var \Magento\Core\Controller\Request\Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_request;
 
     /**
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     protected $_appState;
 
@@ -135,7 +135,7 @@ class AbstractSession extends \Magento\Object
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 

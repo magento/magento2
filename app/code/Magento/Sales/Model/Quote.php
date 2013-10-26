@@ -217,7 +217,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -294,7 +294,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
     protected $_recurringProfileFactory;
 
     /**
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Helper\Data $salesData
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Core\Helper\Data $coreData
@@ -321,7 +321,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Sales\Helper\Data $salesData,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Core\Helper\Data $coreData,

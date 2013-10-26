@@ -42,7 +42,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
         }
         $this->_validateConfigFile(
             $file,
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Dir')->getDir('lib')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')->getDir('lib')
                 . '/Magento/Config/etc/view.xsd'
         );
     }
@@ -54,7 +54,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     {
         $result = array();
         $files = glob(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Dir')->getDir('design')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')->getDir('design')
                 . '/*/*/view.xml'
         );
         foreach ($files as $file) {
@@ -79,7 +79,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     {
         $result = array();
         $files = glob(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Dir')->getDir('design')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')->getDir('design')
                 . '/*/*', GLOB_ONLYDIR
         );
         foreach ($files as $themeDir) {
@@ -96,7 +96,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     {
         $this->_validateConfigFile(
             $file,
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Dir')->getDir('lib')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')->getDir('lib')
                 . '/Magento/Config/etc/theme.xsd'
         );
     }
@@ -122,7 +122,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     {
         $result = array();
         $files = glob(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Dir')->getDir('design')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')->getDir('design')
                 . '/*/*/theme.xml'
         );
         foreach ($files as $file) {

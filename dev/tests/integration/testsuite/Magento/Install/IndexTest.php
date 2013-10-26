@@ -37,8 +37,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
          * because in integration testing environment the application is considered "installed"
          */
         $this->assertFileExists(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Dir')
-                ->getDir(\Magento\Core\Model\Dir::TMP)
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')
+                ->getDir(\Magento\App\Dir::TMP)
         );
     }
 }

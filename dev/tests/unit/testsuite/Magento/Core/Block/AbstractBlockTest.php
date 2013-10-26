@@ -83,7 +83,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('one'));
         $config->expects($this->at(1))->method('getVarValue')->with($module, 'v2')->will($this->returnValue('two'));
 
-        $configManager = $this->getMock('Magento\Core\Model\View\Config', array(), array(), '', false);
+        $configManager = $this->getMock('Magento\View\ConfigInterface', array(), array(), '', false);
         $configManager->expects($this->exactly(2))->method('getViewConfig')->will($this->returnValue($config));
 
         /** @var $block \Magento\Core\Block\AbstractBlock|PHPUnit_Framework_MockObject_MockObject */

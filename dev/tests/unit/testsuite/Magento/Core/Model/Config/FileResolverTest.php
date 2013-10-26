@@ -35,10 +35,10 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
         $appConfigDir = __DIR__ . DIRECTORY_SEPARATOR . 'FileResolver'
             . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'etc';
 
-        $applicationDirs = $this->getMock('Magento\Core\Model\Dir', array(), array('getDir'), '', false);
+        $applicationDirs = $this->getMock('Magento\App\Dir', array(), array('getDir'), '', false);
         $applicationDirs->expects($this->any())
             ->method('getDir')
-            ->with(\Magento\Core\Model\Dir::CONFIG)
+            ->with(\Magento\App\Dir::CONFIG)
             ->will($this->returnValue($appConfigDir));
 
         $moduleReader = $this->getMock('Magento\Core\Model\Config\Modules\Reader', array(),

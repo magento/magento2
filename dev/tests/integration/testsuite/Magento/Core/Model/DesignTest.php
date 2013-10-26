@@ -52,7 +52,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     public function testChangeDesign()
     {
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\View\DesignInterface');
+            ->create('Magento\View\DesignInterface');
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Core\Model\StoreManagerInterface')->getAnyStoreView()->getId(); // fixture design_change
         $designChange = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

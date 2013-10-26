@@ -42,7 +42,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $eventManager = $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false);
+        $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
 
         $fileStorageDb = $this->getMock('Magento\Core\Helper\File\Storage\Database', array(), array(), '', false);
         $coreData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
@@ -53,7 +53,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('table'));
 
         $mediaConfig = $this->getMock('Magento\Catalog\Model\Product\Media\Config', array(), array(), '', false);
-        $dirs = $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false);
+        $dirs = $this->getMock('Magento\App\Dir', array(), array(), '', false);
         $filesystem = $this->getMockBuilder('Magento\Filesystem')->disableOriginalConstructor()->getMock();
         $this->_model = $this->_objectHelper->getObject('Magento\Catalog\Model\Product\Attribute\Backend\Media', array(
             'eventManager' => $eventManager,

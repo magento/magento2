@@ -33,15 +33,15 @@ class Primary
     protected $_appMode;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dirs;
 
     /**
-     * @param \Magento\Core\Model\Dir $dirs
+     * @param \Magento\App\Dir $dirs
      * @param string $appMode
      */
-    public function __construct(\Magento\Core\Model\Dir $dirs, $appMode = \Magento\Core\Model\App\State::MODE_DEFAULT)
+    public function __construct(\Magento\App\Dir $dirs, $appMode = \Magento\App\State::MODE_DEFAULT)
     {
         $this->_dirs = $dirs;
         $this->_appMode = $appMode;

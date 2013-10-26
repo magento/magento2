@@ -132,9 +132,9 @@ class Payflowpro extends  \Magento\Payment\Model\Method\Cc
 
     /**
      * @param \Magento\Core\Model\Logger $logger
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\ModuleListInterface $moduleList
+     * @param \Magento\App\ModuleListInterface $moduleList
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
@@ -148,9 +148,9 @@ class Payflowpro extends  \Magento\Payment\Model\Method\Cc
      */
     public function __construct(
         \Magento\Core\Model\Logger $logger,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\ModuleListInterface $moduleList,
+        \Magento\App\ModuleListInterface $moduleList,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Core\Model\LocaleInterface $locale,
@@ -214,7 +214,7 @@ class Payflowpro extends  \Magento\Payment\Model\Method\Cc
     /**
      * Authorize payment
      *
-     * @param \\Magento\Object|\\Magento\Sales\Model\Order\Payment $payment
+     * @param \Magento\Object|\Magento\Sales\Model\Order\Payment $payment
      * @param float $amount
      * @return \Magento\Paypal\Model\Payflowpro
      */
@@ -244,7 +244,7 @@ class Payflowpro extends  \Magento\Payment\Model\Method\Cc
     /**
      * Capture payment
      *
-     * @param \\Magento\Object|\\Magento\Sales\Model\Order\Payment $payment
+     * @param \Magento\Object|\Magento\Sales\Model\Order\Payment $payment
      * @param float $amount
      * @return \Magento\Paypal\Model\Payflowpro
      */
@@ -284,7 +284,7 @@ class Payflowpro extends  \Magento\Payment\Model\Method\Cc
     /**
      * Void payment
      *
-     * @param \\Magento\Object|\\Magento\Sales\Model\Order\Payment $payment
+     * @param \Magento\Object|\Magento\Sales\Model\Order\Payment $payment
      * @return \Magento\Paypal\Model\Payflowpro
      */
     public function void(\Magento\Object $payment)
@@ -318,7 +318,7 @@ class Payflowpro extends  \Magento\Payment\Model\Method\Cc
     /**
      * Refund capture
      *
-     * @param \\Magento\Object|\\Magento\Sales\Model\Order\Payment $payment
+     * @param \Magento\Object|\Magento\Sales\Model\Order\Payment $payment
      * @param float $amount
      * @return \Magento\Paypal\Model\Payflowpro
      */
@@ -472,7 +472,7 @@ class Payflowpro extends  \Magento\Payment\Model\Method\Cc
     /**
      * Return request object with information for 'authorization' or 'sale' action
      *
-     * @param \\Magento\Object|\\Magento\Sales\Model\Order\Payment $payment
+     * @param \Magento\Object|\Magento\Sales\Model\Order\Payment $payment
      * @param float $amount
      * @return \Magento\Object
      */
@@ -527,7 +527,7 @@ class Payflowpro extends  \Magento\Payment\Model\Method\Cc
     /**
      * Return request object with basic information for gateway request
      *
-     * @param \\Magento\Object|\\Magento\Sales\Model\Order\Payment $payment
+     * @param \Magento\Object|\Magento\Sales\Model\Order\Payment $payment
      * @return \Magento\Object
      */
     protected function _buildBasicRequest(\Magento\Object $payment)

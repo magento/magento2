@@ -50,7 +50,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_theme = $this->getMock('Magento\Core\Model\Theme', null, array(), '', false);
-        $this->_dir = $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false);
+        $this->_dir = $this->getMock('Magento\App\Dir', array(), array(), '', false);
         $this->_model = new \Magento\Core\Model\Theme\Customization\Path($this->_dir);
     }
 
@@ -67,7 +67,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomizationPath()
     {
-        $this->_dir->expects($this->once())->method('getDir')->with(\Magento\Core\Model\Dir::MEDIA)
+        $this->_dir->expects($this->once())->method('getDir')->with(\Magento\App\Dir::MEDIA)
             ->will($this->returnValue('/media_dir'));
         $expectedPath = implode(
             DIRECTORY_SEPARATOR,
@@ -83,7 +83,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
     public function testGetThemeFilesPath()
     {
         $this->_theme->setArea('area51');
-        $this->_dir->expects($this->once())->method('getDir')->with(\Magento\Core\Model\Dir::THEMES)
+        $this->_dir->expects($this->once())->method('getDir')->with(\Magento\App\Dir::THEMES)
             ->will($this->returnValue('/themes_dir'));
         $expectedPath = implode(
             \Magento\Filesystem::DIRECTORY_SEPARATOR,
@@ -101,7 +101,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomViewConfigPath()
     {
-        $this->_dir->expects($this->once())->method('getDir')->with(\Magento\Core\Model\Dir::MEDIA)
+        $this->_dir->expects($this->once())->method('getDir')->with(\Magento\App\Dir::MEDIA)
             ->will($this->returnValue('/media_dir'));
         $expectedPath = implode(
             DIRECTORY_SEPARATOR,

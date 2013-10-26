@@ -141,6 +141,10 @@ return array(
     array('XML_PATH_CHECK_EXTENSIONS', 'Magento\Install\Model\Config'),
     array('XML_PATH_CONNECTION_TYPE', 'Magento\Core\Model\Config\Resource'),
     array('XML_PATH_COUNTRY_DEFAULT', 'Magento\Paypal\Model\System\Config\Backend\MerchantCountry'),
+    array('XML_PATH_DEBUG_TEMPLATE_HINTS', 'Magento\Core\Block\Template',
+        'Magento\Core\Model\TemplateEngine\Plugin::XML_PATH_DEBUG_TEMPLATE_HINTS'),
+    array('XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS', 'Magento\Core\Block\Template',
+        'Magento\Core\Model\TemplateEngine\Plugin::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS'),
     array('XML_PATH_DEFAULT_COUNTRY', 'Magento\Core\Model\Locale'),
     array('XML_PATH_DEFAULT_LOCALE', 'Magento\Core\Model\Locale',
         'Magento_Core_Model_LocaleInterface::XML_PATH_DEFAULT_LOCALE'
@@ -204,7 +208,7 @@ return array(
         'Magento_Core_Model_Session_Validator::XML_PATH_USE_USER_AGENT'
     ),
 
-    array('XML_NODE_DIRECT_FRONT_NAMES', 'Magento\Core\Controller\Request\Http'),
+    array('XML_NODE_DIRECT_FRONT_NAMES', 'Magento\App\Request\Http'),
 
     array('XML_NODE_USET_AGENT_SKIP', 'Magento\Core\Model\Session\AbstractSession'),
     array('XML_PAGE_TYPE_RENDER_INHERITED', 'Magento\Core\Controller\Varien\Action'),
@@ -234,12 +238,17 @@ return array(
     array('XML_PATH_DISABLED_CACHE_TYPES', 'Magento\DesignEditor\Helper\Data'),
     array('XML_PATH_ENCRYPTION_MODEL', 'Magento\Core\Helper\Data'),
     array('CONFIG_KEY_PATH_TO_MAP_FILE', 'Magento\Core\Model\Resource\Setup\Migration'),
-    array('XML_PATH_IGNORE_DEV_MODE', 'Magento\Core\Model\Db\UpdaterInterface'),
-    array('XML_PATH_SKIP_PROCESS_MODULES_UPDATES', 'Magento\Core\Model\Db\UpdaterInterface'),
+    array('XML_PATH_IGNORE_DEV_MODE', 'Magento\App\UpdaterInterface'),
+    array('XML_PATH_SKIP_PROCESS_MODULES_UPDATES', 'Magento\App\UpdaterInterface'),
     array('XML_NODE_SESSION_SAVE', 'Magento\Core\Model\Session\AbstractSession',
         'Magento_Core_Model_Session_AbstractSession::PARAM_SESSION_SAVE_METHOD'
     ),
     array('XML_NODE_SESSION_SAVE_PATH', 'Magento\Core\Model\Session\AbstractSession',
         'Magento_Core_Model_Session_AbstractSession::PARAM_SESSION_SAVE_PATH'
     ),
+    array('XML_PATH_USE_CUSTOM_ADMIN_PATH', 'Magento\Backend\Helper\Data'),
+    array('XML_PATH_CUSTOM_ADMIN_PATH', 'Magento\Backend\Helper\Data'),
+    array('XML_PATH_BACKEND_AREA_FRONTNAME', 'Magento\Backend\Helper\Data'),
+    array('PARAM_BACKEND_FRONT_NAME', 'Magento\Backend\Helper\Data'),
+
 );

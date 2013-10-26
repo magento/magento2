@@ -49,7 +49,7 @@ class Config
     /**
      * Application event manager
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -67,7 +67,7 @@ class Config
      * @param \Magento\Core\Model\Config\Value $configData
      * @param \Magento\Core\Model\Config\Storage\WriterInterface $configWriter
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Cache\FrontendInterface $configCache
      * @param \Magento\Cache\FrontendInterface $layoutCache
      */
@@ -75,7 +75,7 @@ class Config
         \Magento\Core\Model\Config\Value $configData,
         \Magento\Core\Model\Config\Storage\WriterInterface $configWriter,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Cache\FrontendInterface $configCache,
         \Magento\Cache\FrontendInterface $layoutCache
     ) {
@@ -90,7 +90,7 @@ class Config
     /**
      * Assign theme to the stores
      *
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @param array $stores
      * @param string $scope
      * @return $this

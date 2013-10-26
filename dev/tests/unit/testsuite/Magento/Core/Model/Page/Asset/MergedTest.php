@@ -75,7 +75,7 @@ class MergedTest extends \PHPUnit_Framework_TestCase
 
         $this->_logger = $this->getMock('Magento\Core\Model\Logger', array('logException'), array(), '', false);
 
-        $this->_dirs = $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false);
+        $this->_dirs = $this->getMock('Magento\App\Dir', array(), array(), '', false);
 
         $this->_mergeStrategy = $this->getMock('Magento\Core\Model\Page\Asset\MergeStrategyInterface');
 

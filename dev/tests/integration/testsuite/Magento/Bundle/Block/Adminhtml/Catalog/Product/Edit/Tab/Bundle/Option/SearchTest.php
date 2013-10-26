@@ -35,7 +35,7 @@ class SearchTest
      */
     public function testToHtmlHasIndex()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\View\DesignInterface')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
             ->setArea(\Magento\Core\Model\App\Area::AREA_ADMINHTML);
 
         /** @var $layout \Magento\Core\Model\Layout */

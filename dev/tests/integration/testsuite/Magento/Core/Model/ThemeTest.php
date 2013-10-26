@@ -36,8 +36,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      */
     public function testCrud()
     {
-        /** @var $themeModel \Magento\Core\Model\Theme */
-        $themeModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Theme');
+        /** @var $themeModel \Magento\View\Design\ThemeInterface */
+        $themeModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\View\Design\ThemeInterface');
         $themeModel->setData($this->_getThemeValidData());
 
         $crud = new \Magento\TestFramework\Entity($themeModel, array('theme_version' => '2.0.0.1'));
@@ -68,9 +69,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      */
     public function testChildRelation()
     {
-        /** @var $theme \Magento\Core\Model\Theme */
-        /** @var $currentTheme \Magento\Core\Model\Theme */
-        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Theme');
+        /** @var $theme \Magento\View\Design\ThemeInterface */
+        /** @var $currentTheme \Magento\View\Design\ThemeInterface */
+        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\Design\ThemeInterface');
         $collection = $theme->getCollection()->addTypeFilter(\Magento\Core\Model\Theme::TYPE_VIRTUAL);
         foreach ($collection as $currentTheme) {
             $parentTheme = $currentTheme->getParentTheme();

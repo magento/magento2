@@ -142,7 +142,7 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -158,7 +158,7 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
 
     /**
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Sales\Model\Config $salesConfig
@@ -168,7 +168,7 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Sales\Model\Config $salesConfig,

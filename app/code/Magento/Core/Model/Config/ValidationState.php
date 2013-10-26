@@ -47,6 +47,6 @@ class ValidationState implements \Magento\Config\ValidationStateInterface
      */
     public function isValidated()
     {
-        return $this->_appMode == \Magento\Core\Model\App\State::MODE_DEVELOPER;
+        return $this->_appMode == \Magento\App\State::MODE_DEVELOPER;
     }
 }

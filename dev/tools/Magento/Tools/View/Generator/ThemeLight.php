@@ -29,7 +29,7 @@
  */
 namespace Magento\Tools\View\Generator;
 
-class ThemeLight extends \Magento\Object implements \Magento\Core\Model\ThemeInterface
+class ThemeLight extends \Magento\Object implements \Magento\View\Design\ThemeInterface
 {
     /**
      * {@inheritdoc}
@@ -69,5 +69,13 @@ class ThemeLight extends \Magento\Object implements \Magento\Core\Model\ThemeInt
     public function getCode()
     {
         return (string)$this->getData('code');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isPhysical()
+    {
+        return false;
     }
 }

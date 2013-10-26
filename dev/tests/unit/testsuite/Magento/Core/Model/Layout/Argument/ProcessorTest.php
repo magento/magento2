@@ -131,7 +131,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     public function testParse()
     {
         // Because descendants of \SimpleXMLElement couldn't be mocked
-        $argument = new \Magento\Core\Model\Layout\Element('<argument xsi:type="string" name="argumentName" '
+        $argument = new \Magento\View\Layout\Element('<argument xsi:type="string" name="argumentName" '
             . 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Value</argument>'
         );
 

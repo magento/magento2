@@ -38,7 +38,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_logger;
 
     /**
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -96,12 +96,12 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_messageFactory;
 
     /**
-     * @var \Magento\Core\Controller\Request\Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_request;
 
     /**
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     protected $_appState;
 
@@ -111,7 +111,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
@@ -123,16 +123,16 @@ class Context implements \Magento\ObjectManager\ContextInterface
     /**
      * @param \Magento\Core\Model\Session\Validator $validator
      * @param \Magento\Core\Model\Logger $logger
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Http $coreHttp
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Message\CollectionFactory $messageFactory
      * @param \Magento\Core\Model\Message $message
      * @param \Magento\Core\Model\Cookie $cookie
-     * @param \Magento\Core\Controller\Request\Http $request
-     * @param \Magento\Core\Model\App\State $appState
+     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\App\State $appState
      * @param \Magento\Core\Model\StoreManager $storeManager
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      * @param \Magento\Core\Model\Url $url
      * @param $saveMethod
      * @param null $savePath
@@ -142,16 +142,16 @@ class Context implements \Magento\ObjectManager\ContextInterface
     public function __construct(
         \Magento\Core\Model\Session\Validator $validator,
         \Magento\Core\Model\Logger $logger,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Http $coreHttp,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Message\CollectionFactory $messageFactory,
         \Magento\Core\Model\Message $message,
         \Magento\Core\Model\Cookie $cookie,
-        \Magento\Core\Controller\Request\Http $request,
-        \Magento\Core\Model\App\State $appState,
+        \Magento\App\RequestInterface $request,
+        \Magento\App\State $appState,
         \Magento\Core\Model\StoreManager $storeManager,
-        \Magento\Core\Model\Dir $dir,
+        \Magento\App\Dir $dir,
         \Magento\Core\Model\Url $url,
         $saveMethod,
         $savePath = null,
@@ -178,7 +178,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \\Magento\Core\Model\Event\Manager
+     * @return \Magento\Event\ManagerInterface
      */
     public function getEventManager()
     {
@@ -186,7 +186,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \\Magento\Core\Helper\Http
+     * @return \Magento\Core\Helper\Http
      */
     public function getHttpHelper()
     {
@@ -194,7 +194,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \\Magento\Core\Model\Logger
+     * @return \Magento\Core\Model\Logger
      */
     public function getLogger()
     {
@@ -202,7 +202,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \\Magento\Core\Model\Store\Config
+     * @return \Magento\Core\Model\Store\Config
      */
     public function getStoreConfig()
     {
@@ -210,7 +210,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \\Magento\Core\Model\Session\Validator
+     * @return \Magento\Core\Model\Session\Validator
      */
     public function getValidator()
     {
@@ -250,7 +250,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \\Magento\Core\Model\App\State
+     * @return \Magento\App\State
      */
     public function getAppState()
     {
@@ -258,7 +258,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \\Magento\Core\Model\Cookie
+     * @return \Magento\Core\Model\Cookie
      */
     public function getCookie()
     {
@@ -266,7 +266,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \\Magento\Core\Model\Dir
+     * @return \Magento\App\Dir
      */
     public function getDir()
     {
@@ -274,7 +274,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \\Magento\Core\Model\Message
+     * @return \Magento\Core\Model\Message
      */
     public function getMessage()
     {
@@ -282,7 +282,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \\Magento\Core\Model\Message\CollectionFactory
+     * @return \Magento\Core\Model\Message\CollectionFactory
      */
     public function getMessageFactory()
     {
@@ -290,7 +290,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \\Magento\Core\Controller\Request\Http
+     * @return \Magento\App\RequestInterface
      */
     public function getRequest()
     {
@@ -298,7 +298,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \\Magento\Core\Model\StoreManager
+     * @return \Magento\Core\Model\StoreManager
      */
     public function getStoreManager()
     {
@@ -306,7 +306,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \\Magento\Core\Model\Url
+     * @return \Magento\Core\Model\Url
      */
     public function getUrl()
     {

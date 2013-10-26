@@ -1,6 +1,6 @@
 <?php
 /**
- * Factory class for Template Engine
+ * Factory that is able to create any template engine in the system
  *
  * Magento
  *
@@ -20,8 +20,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,34 +27,46 @@ namespace Magento\Core\Model\TemplateEngine;
 
 class Factory
 {
+    /**
+     * @var \Magento\ObjectManager
+     */
     protected $_objectManager;
 
     /**
-     * Template engine types
+     * @var array
      */
-    const ENGINE_TWIG = 'twig';
-    const ENGINE_PHTML = 'phtml';
+    protected $_engines;
 
-    public function __construct(\Magento\ObjectManager $objectManager)
-    {
+    /**
+     * @param \Magento\ObjectManager $objectManager
+     * @param array $engines Format: array('<name>' => 'TemplateEngine\Class', ...)
+     */
+    public function __construct(
+        \Magento\ObjectManager $objectManager,
+        array $engines
+    ) {
         $this->_objectManager = $objectManager;
+        $this->_engines = $engines;
     }
 
     /**
-     * Gets the singleton instance of the appropriate template engine
+     * Retrieve a template engine instance by its unique name
      *
      * @param string $name
      * @return \Magento\Core\Model\TemplateEngine\EngineInterface
-     * @throws \InvalidArgumentException if template engine doesn't exist
+     * @throws \InvalidArgumentException If template engine doesn't exist
+     * @throws \UnexpectedValueException If template engine doesn't implement the necessary interface
      */
-    public function get($name)
+    public function create($name)
     {
-        if (self::ENGINE_TWIG == $name) {
-            return $this->_objectManager->get('Magento\Core\Model\TemplateEngine\Twig');
-        } else if (self::ENGINE_PHTML == $name) {
-            return $this->_objectManager->get('Magento\Core\Model\TemplateEngine\Php');
+        if (!isset($this->_engines[$name])) {
+            throw new \InvalidArgumentException("Unknown template engine '$name'.");
         }
-        // unknown type, throw exception
-        throw new \InvalidArgumentException('Unknown template engine type: ' . $name);
+        $engineClass = $this->_engines[$name];
+        $engineInstance = $this->_objectManager->create($engineClass);
+        if (!($engineInstance instanceof \Magento\Core\Model\TemplateEngine\EngineInterface)) {
+            throw new \UnexpectedValueException("$engineClass has to implement the template engine interface.");
+        }
+        return $engineInstance;
     }
 }

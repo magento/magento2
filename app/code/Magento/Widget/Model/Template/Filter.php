@@ -52,11 +52,10 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\VariableFactory $coreVariableFactory
      * @param \Magento\Core\Model\StoreManager $storeManager
-     * @param \Magento\Core\Model\Layout $layout
+     * @param \Magento\View\LayoutInterface $layout
+     * @param \Magento\View\LayoutFactory $layoutFactory
      * @param \Magento\Widget\Model\Resource\Widget $widgetResource
      * @param \Magento\Widget\Model\Widget $widget
-     * @param \Magento\Core\Model\Layout $layout
-     * @param \Magento\Core\Model\LayoutFactory $layoutFactory
      */
     public function __construct(
         \Magento\Core\Model\Logger $logger,
@@ -65,8 +64,8 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\VariableFactory $coreVariableFactory,
         \Magento\Core\Model\StoreManager $storeManager,
-        \Magento\Core\Model\Layout $layout,
-        \Magento\Core\Model\LayoutFactory $layoutFactory,
+        \Magento\View\LayoutInterface $layout,
+        \Magento\View\LayoutFactory $layoutFactory,
         \Magento\Widget\Model\Resource\Widget $widgetResource,
         \Magento\Widget\Model\Widget $widget
     ) {

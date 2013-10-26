@@ -55,7 +55,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     private $_entityFactory;
 
     /**
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     private $_eventManager;
 
@@ -78,10 +78,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->_selectMock));
 
         $subscriptionMock = $this->_makeMock('Magento\Webhook\Model\Subscription');
-        $eventMgrMock = $this->_makeMock('Magento\Core\Model\Event\Manager');
+        $eventMgrMock = $this->_makeMock('Magento\Event\ManagerInterface');
 
         // Arguments to collection constructor
-        $this->_eventManager = $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false);
+        $this->_eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         $this->_fetchStrategyMock = $this->_makeMock('Magento\Data\Collection\Db\FetchStrategyInterface');
         $this->_endpointResMock = $this->_makeMock('Magento\Webhook\Model\Resource\Endpoint');
         $this->_resourceMock = $this-> _makeMock('Magento\Webhook\Model\Resource\Subscription');
@@ -95,7 +95,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             array('Magento\Webhook\Model\Subscription', array(), $subscriptionMock)
         );
         $getReturnMap = array(
-            array('Magento\Core\Model\Event\Manager', $eventMgrMock),
+            array('Magento\Event\ManagerInterface', $eventMgrMock),
         );
         $mockObjectManager = $this->_setMageObjectManager();
         $mockObjectManager->expects($this->any())

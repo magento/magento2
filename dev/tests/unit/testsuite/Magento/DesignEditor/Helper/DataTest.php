@@ -82,8 +82,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testIsVdeRequest($path, $expected)
     {
         $this->_model = new \Magento\DesignEditor\Helper\Data($this->_context, self::TEST_FRONT_NAME);
-        $requestMock = $this->getMock('Magento\Core\Controller\Request\Http', array('getOriginalPathInfo'),
-            array(), '', false);
+        $requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
         $requestMock->expects($this->once())
             ->method('getOriginalPathInfo')
             ->will($this->returnValue($path));

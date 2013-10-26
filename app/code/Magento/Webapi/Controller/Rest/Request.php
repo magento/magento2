@@ -47,22 +47,21 @@ class Request extends \Magento\Webapi\Controller\Request
     /** @var \Magento\Webapi\Controller\Rest\Request\Deserializer\Factory */
     protected $_deserializerFactory;
 
-    /** @var \Magento\Core\Model\App */
-    protected $_application;
-
     /**
-     * Initialize dependencies.
+     * Initialize dependencies
      *
-     * @param \Magento\Core\Model\App $application
+     * @param \Magento\App\AreaList $areaList
+     * @param \Magento\Config\ScopeInterface $configScope
      * @param \Magento\Webapi\Controller\Rest\Request\Deserializer\Factory $deserializerFactory
-     * @param string|null $uri
+     * @param null|string $uri
      */
     public function __construct(
-        \Magento\Core\Model\App $application,
+        \Magento\App\AreaList $areaList,
+        \Magento\Config\ScopeInterface $configScope,
         \Magento\Webapi\Controller\Rest\Request\Deserializer\Factory $deserializerFactory,
         $uri = null
     ) {
-        parent::__construct($application, $uri);
+        parent::__construct($areaList, $configScope, $uri);
         $this->_deserializerFactory = $deserializerFactory;
     }
 

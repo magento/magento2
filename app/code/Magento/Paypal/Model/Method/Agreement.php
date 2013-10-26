@@ -66,7 +66,7 @@ class Agreement extends \Magento\Sales\Model\Payment\Method\Billing\AbstractAgre
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\UrlInterface
+     * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
 
@@ -76,28 +76,28 @@ class Agreement extends \Magento\Sales\Model\Payment\Method\Billing\AbstractAgre
     protected $_cartFactory;
 
     /**
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Paypal\Model\Method\ProTypeFactory $proTypeFactory
      * @param \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory
-     * @param \Magento\Core\Model\UrlInterface $urlBuilder
+     * @param \Magento\UrlInterface $urlBuilder
      * @param \Magento\Paypal\Model\CartFactory $cartFactory
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Paypal\Model\Method\ProTypeFactory $proTypeFactory,
-        \Magento\Core\Model\UrlInterface $urlBuilder,
+        \Magento\UrlInterface $urlBuilder,
         \Magento\Paypal\Model\CartFactory $cartFactory,
         array $data = array()
     ) {

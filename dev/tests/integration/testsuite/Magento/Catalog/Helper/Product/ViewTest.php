@@ -26,7 +26,7 @@
  */
 namespace Magento\Catalog\Helper\Product;
 
-require \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Dir')->getDir()
+require \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')->getDir()
     . '/app/code/Magento/Catalog/Controller/Product.php';
 
 class ViewTest extends \PHPUnit_Framework_TestCase
@@ -44,7 +44,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\View\DesignInterface')
+        $objectManager->get('Magento\View\DesignInterface')
             ->setDefaultDesignTheme();
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Catalog\Helper\Product\View');

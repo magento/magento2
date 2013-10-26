@@ -57,26 +57,26 @@ class MinifyService
     protected $_minifiers = array();
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dirs;
 
     /**
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     protected $_appState;
 
     /**
      * @param \Magento\Core\Model\Store\Config $config
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\Dir $dirs
-     * @param \Magento\Core\Model\App\State $appState
+     * @param \Magento\App\Dir $dirs
+     * @param \Magento\App\State $appState
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $config,
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\Dir $dirs,
-        \Magento\Core\Model\App\State $appState
+        \Magento\App\Dir $dirs,
+        \Magento\App\State $appState
     ) {
         $this->_storeConfig = $config;
         $this->_objectManager = $objectManager;
@@ -123,7 +123,7 @@ class MinifyService
                 'adapter' => $adapter,
             );
             switch ($this->_appState->getMode()) {
-                case \Magento\Core\Model\App\State::MODE_PRODUCTION:
+                case \Magento\App\State::MODE_PRODUCTION:
                     $strategy = $this->_objectManager->create('Magento\Code\Minifier\Strategy\Lite', $strategyParams);
                     break;
                 default:
@@ -134,7 +134,7 @@ class MinifyService
             $this->_minifiers[$contentType] = $this->_objectManager->create('Magento\Code\Minifier',
                 array(
                     'strategy' => $strategy,
-                    'baseDir' => $this->_dirs->getDir(\Magento\Core\Model\Dir::PUB_VIEW_CACHE) . '/minify',
+                    'baseDir' => $this->_dirs->getDir(\Magento\App\Dir::PUB_VIEW_CACHE) . '/minify',
                 )
             );
         }

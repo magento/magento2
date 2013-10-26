@@ -113,13 +113,13 @@ class Files
     {
         $key = __METHOD__ . "/{$this->_path}/{$appCode}/{$otherCode}/{$templates}";
         if (!isset(self::$_cache[$key])) {
-            $namespace = $module = $area = $package = $theme = '*';
+            $namespace = $module = $area = $theme = '*';
 
             $files = array();
             if ($appCode) {
                 $files = array_merge(
                     glob($this->_path . '/app/*.php', GLOB_NOSORT),
-                    self::_getFiles(array("{$this->_path}/app/code/{$namespace}/{$module}"), '*.php')
+                    self::getFiles(array("{$this->_path}/app/code/{$namespace}/{$module}"), '*.php')
                 );
             }
             if ($otherCode) {
@@ -127,16 +127,16 @@ class Files
                     $files,
                     glob($this->_path . '/*.php', GLOB_NOSORT),
                     glob($this->_path . '/pub/*.php', GLOB_NOSORT),
-                    self::_getFiles(array("{$this->_path}/downloader"), '*.php'),
-                    self::_getFiles(array("{$this->_path}/lib/{Mage,Magento,Varien}"), '*.php')
+                    self::getFiles(array("{$this->_path}/downloader"), '*.php'),
+                    self::getFiles(array("{$this->_path}/lib/{Mage,Magento,Varien}"), '*.php')
                 );
             }
             if ($templates) {
                 $files = array_merge(
                     $files,
-                    self::_getFiles(array("{$this->_path}/app/code/{$namespace}/{$module}"), '*.phtml'),
-                    self::_getFiles(
-                        array("{$this->_path}/app/design/{$area}/{$package}/{$theme}/{$namespace}_{$module}"),
+                    self::getFiles(array("{$this->_path}/app/code/{$namespace}/{$module}"), '*.phtml'),
+                    self::getFiles(
+                        array("{$this->_path}/app/design/{$area}/{$theme}/{$namespace}_{$module}"),
                         '*.phtml'
                     )
                 );
@@ -173,37 +173,37 @@ class Files
             if ($appCode) {
                 $files = array_merge(
                     $files,
-                    self::_getFiles(array("{$this->_path}/app/code/Magento"), '*.php')
+                    self::getFiles(array("{$this->_path}/app/code/Magento"), '*.php')
                 );
             }
             if ($devTests) {
                 $files = array_merge(
                     $files,
-                    self::_getFiles(array("{$this->_path}/dev/tests"), '*.php')
+                    self::getFiles(array("{$this->_path}/dev/tests"), '*.php')
                 );
             }
             if ($devTools) {
                 $files = array_merge(
                     $files,
-                    self::_getFiles(array("{$this->_path}/dev/tools/Magento"), '*.php')
+                    self::getFiles(array("{$this->_path}/dev/tools/Magento"), '*.php')
                 );
             }
             if ($downloaderApp) {
                 $files = array_merge(
                     $files,
-                    self::_getFiles(array("{$this->_path}/downloader/app/Magento"), '*.php')
+                    self::getFiles(array("{$this->_path}/downloader/app/Magento"), '*.php')
                 );
             }
             if ($downloaderLib) {
                 $files = array_merge(
                     $files,
-                    self::_getFiles(array("{$this->_path}/downloader/lib/Magento"), '*.php')
+                    self::getFiles(array("{$this->_path}/downloader/lib/Magento"), '*.php')
                 );
             }
             if ($lib) {
                 $files = array_merge(
                     $files,
-                    self::_getFiles(array("{$this->_path}/lib/Magento"), '*.php')
+                    self::getFiles(array("{$this->_path}/lib/Magento"), '*.php')
                 );
             }
             self::$_cache[$key] = $files;
@@ -346,7 +346,7 @@ class Files
         if (!isset(self::$_cache[__METHOD__][$cacheKey])) {
             $files = array();
             if ($params['include_code']) {
-                $files = self::_getFiles(
+                $files = self::getFiles(
                     array(
                         "{$this->_path}/app/code/{$params['namespace']}/{$params['module']}"
                         . "/view/{$params['area']}/layout"
@@ -364,7 +364,7 @@ class Files
                 );
                 $files = array_merge(
                     $files,
-                    self::_getFiles(
+                    self::getFiles(
                         $dirPatterns,
                         '*.xml'
                     )
@@ -390,11 +390,11 @@ class Files
         if (isset(self::$_cache[$key])) {
             return self::$_cache[$key];
         }
-        $namespace = $module = $area = $package = $theme = $skin = '*';
-        $files = self::_getFiles(
+        $namespace = $module = $area = $theme = $skin = '*';
+        $files = self::getFiles(
             array(
                 "{$this->_path}/app/code/{$namespace}/{$module}/view/{$area}",
-                "{$this->_path}/app/design/{$area}/{$package}/{$theme}/skin/{$skin}",
+                "{$this->_path}/app/design/{$area}/{$theme}/skin/{$skin}",
                 "{$this->_path}/pub/lib/{mage,varien}"
             ),
             '*.js'
@@ -415,13 +415,13 @@ class Files
         if (isset(self::$_cache[$key])) {
             return self::$_cache[$key];
         }
-        $namespace = $module = $package = $theme = '*';
+        $namespace = $module = $theme = '*';
         $paths = array(
             "{$this->_path}/app/code/{$namespace}/{$module}/view/{$area}",
-            "{$this->_path}/app/design/{$area}/{$package}/{$theme}",
+            "{$this->_path}/app/design/{$area}/{$theme}",
             "{$this->_path}/pub/lib/varien",
         );
-        $files = self::_getFiles(
+        $files = self::getFiles(
             $paths,
             '*.js'
         );
@@ -430,27 +430,17 @@ class Files
             $adminhtmlPaths = array(
                 "{$this->_path}/pub/lib/mage/{adminhtml,backend}",
             );
-            $files = array_merge($files, self::_getFiles($adminhtmlPaths, '*.js'));
+            $files = array_merge($files, self::getFiles($adminhtmlPaths, '*.js'));
         } else {
             $frontendPaths = array("{$this->_path}/pub/lib/mage");
             /* current structure of /pub/lib/mage directory contains frontend javascript in the root,
                backend javascript in subdirectories. That's why script shouldn't go recursive throught subdirectories
                to get js files for frontend */
-            $files = array_merge($files, self::_getFiles($frontendPaths, '*.js', false));
+            $files = array_merge($files, self::getFiles($frontendPaths, '*.js', false));
         }
 
         self::$_cache[$key] = $files;
         return $files;
-    }
-
-    /**
-     * Returns list of Twig files in Magento app directory.
-     *
-     * @return array
-     */
-    public function getTwigFiles()
-    {
-        return self::_getFiles(array($this->_path . '/app'), '*.twig');
     }
 
     /**
@@ -474,7 +464,7 @@ class Files
         if (isset(self::$_cache[$key])) {
             return self::$_cache[$key];
         }
-        $files = self::_getFiles(array($this->_path . '/app/code/*/*/view/email'), '*.html');
+        $files = self::getFiles(array($this->_path . '/app/code/*/*/view/email'), '*.html');
         $result = self::composeDataSets($files);
         self::$_cache[$key] = $result;
         return $result;
@@ -493,7 +483,7 @@ class Files
             return self::$_cache[$key];
         }
 
-        $subFiles = self::_getFiles(
+        $subFiles = self::getFiles(
             array(
                 $this->_path . '/app',
                 $this->_path . '/dev',
@@ -526,7 +516,7 @@ class Files
      * @param string $fileNamePattern
      * @return array
      */
-    protected static function _getFiles(array $dirPatterns, $fileNamePattern, $recursive = true)
+    public static function getFiles(array $dirPatterns, $fileNamePattern, $recursive = true)
     {
         $result = array();
         foreach ($dirPatterns as $oneDirPattern) {
@@ -535,7 +525,7 @@ class Files
             $filesInDir = array_diff($entriesInDir, $subDirs);
 
             if ($recursive) {
-                $filesInSubDir = self::_getFiles($subDirs, $fileNamePattern);
+                $filesInSubDir = self::getFiles($subDirs, $fileNamePattern);
                 $result = array_merge($result, $filesInDir, $filesInSubDir);
             }
         }
@@ -548,7 +538,7 @@ class Files
      */
     public function getDiConfigs()
     {
-        $primaryConfigs = glob($this->_path . '/app/etc/di/*.xml');
+        $primaryConfigs = glob($this->_path . '/app/etc/{di.xml,*/di.xml}', GLOB_BRACE);
         $moduleConfigs = glob($this->_path . '/app/code/*/*/etc/{di,*/di}.xml', GLOB_BRACE);
         $configs = array_merge($primaryConfigs, $moduleConfigs);
         return $configs;
@@ -661,7 +651,7 @@ class Files
     {
         $key = __METHOD__ . "/{$module}";
         if (!isset(self::$_cache[$key])) {
-            $files = self::_getFiles(array("{$this->_path}/app/code/Magento/{$module}"), '*.php');
+            $files = self::getFiles(array("{$this->_path}/app/code/Magento/{$module}"), '*.php');
             self::$_cache[$key] = $files;
         }
 

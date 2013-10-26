@@ -38,10 +38,10 @@ interface HandlerInterface
     /**
      * Parse specified argument node
      *
-     * @param \Magento\Core\Model\Layout\Element $argument
+     * @param \Magento\View\Layout\Element $argument
      * @return array
      */
-    public function parse(\Magento\Core\Model\Layout\Element $argument);
+    public function parse(\Magento\View\Layout\Element $argument);
 
     /**
      * Process argument value

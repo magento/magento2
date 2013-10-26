@@ -28,7 +28,7 @@
 $filesystemCollection = $this->_themeFactory->create();
 $filesystemCollection->addDefaultPattern('*');
 
-/** @var $theme \Magento\Core\Model\Theme */
+/** @var $theme \Magento\View\Design\ThemeInterface */
 foreach ($this->_themeResourceFactory->create() as $theme) {
     $themeType = $filesystemCollection->hasTheme($theme)
         ? \Magento\Core\Model\Theme::TYPE_PHYSICAL

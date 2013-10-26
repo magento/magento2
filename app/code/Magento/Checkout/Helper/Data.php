@@ -41,7 +41,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -78,7 +78,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_emailTemplFactory;
 
     /**
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -88,7 +88,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * @param \Magento\Core\Model\Email\TemplateFactory $emailTemplFactory
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,

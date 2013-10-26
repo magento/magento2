@@ -39,6 +39,10 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 
     protected static $_keywordsBlacklist = array("String", "Array", "Boolean", "Element");
 
+    protected static $_namespaceBlacklist = null;
+
+    protected static $_referenceBlackList = null;
+
     public function testPhpFiles()
     {
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
@@ -210,10 +214,13 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
              * @param array $file
              */
             function ($file) {
-                $relativePath = str_replace(\Magento\TestFramework\Utility\Files::init()->getPathToSource(), "", $file);
+                $relativePath = str_replace(\Magento\TestFramework\Utility\Files::init()->getPathToSource() . "/",
+                    "",
+                    $file
+                );
                 // exceptions made for the files from the blacklist
-                $blacklist = require __DIR__ . '/NamespaceBlacklist.php';
-                if (in_array($relativePath, $blacklist)) {
+                self::_setNamespaceBlackList();
+                if (in_array($relativePath, self::$_namespaceBlacklist)) {
                     return;
                 }
 
@@ -237,7 +244,31 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    protected function _setNamespaceBlackList()
+    {
+        if (!isset(self::$_namespaceBlacklist)) {
+            $blackList = array();
+            foreach (glob(__DIR__ . '/_files/blacklist/namespace.txt') as $list) {
+                $fileList = file($list, FILE_IGNORE_NEW_LINES);
+                foreach ($fileList as $currentFile) {
+                    $absolutePath =
+                        \Magento\TestFramework\Utility\Files::init()->getPathToSource() .
+                        DIRECTORY_SEPARATOR .
+                        $currentFile;
+                    if (is_dir($absolutePath)) {
+                        $recursiveFiles =
+                            \Magento\TestFramework\Utility\Files::getFiles(array($absolutePath), '*.php', true);
+                        $blackList = array_merge($blackList, $recursiveFiles);
+                    } else {
+                        array_push($blackList, $currentFile);
+                    }
+                }
 
+            }
+            self::$_namespaceBlacklist = $blackList;
+        }
+    }
+    
     /**
      * Assert PHP classes have valid formal namespaces according to file locations
      *
@@ -358,20 +389,28 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * This function is to remove legacy code usages according to ReferenceBlacklist.php
+     * This function is to remove legacy code usages according to _files/blacklist/reference.txt
      * @param $classes
      * @return array
      */
     protected function referenceBlacklistFilter($classes)
     {
         // exceptions made for the files from the blacklist
-        $blacklist = require __DIR__ . '/ReferenceBlacklist.php';
+        self::_setReferenceBlacklist();
         foreach ($classes as $class) {
-            if (in_array($class, $blacklist)) {
+            if (in_array($class, self::$_referenceBlackList)) {
                 unset($classes[array_search($class, $classes)]);
             }
         }
         return $classes;
+    }
+
+    protected function _setReferenceBlacklist()
+    {
+        if (!isset(self::$_referenceBlackList)) {
+            $blackList = file(__DIR__ . DIRECTORY_SEPARATOR . '_files/blacklist/reference.txt', FILE_IGNORE_NEW_LINES);
+            self::$_referenceBlackList = $blackList;
+        }
     }
 
     /**

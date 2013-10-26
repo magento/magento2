@@ -24,8 +24,8 @@
  */
 -->
 <config>
-    <type name="Magento\Core\Model\Db\Updater">
-        <param name="resourceList">
+    <type name="Magento\App\Updater\SetupFactory">
+        <param name="resourceTypes">
             <value>
                 <giftmessage_setup>Magento\GiftMessage\Model\Resource\Setup</giftmessage_setup>
             </value>

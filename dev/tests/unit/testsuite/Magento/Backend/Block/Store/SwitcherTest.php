@@ -37,37 +37,50 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_applicationModel;
+    protected $_applicationMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_websiteFactory;
+    protected $_websiteFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_storeGroupFactory;
+    protected $_storeGroupMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_coreHelperMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_contextMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_storeFactoryMock;
 
     protected function setUp()
     {
-        $this->_applicationModel = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
-        $this->_websiteFactory = $this->getMock('Magento\Core\Model\Website\Factory', array(), array(), '', false);
-        $this->_storeGroupFactory = $this->getMock(
-            'Magento\Core\Model\Store\Group\Factory',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $this->_coreHelperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
+        $this->_contextMock = $this->getMock('Magento\Backend\Block\Template\Context', array(), array(), '', false);
+        $this->_applicationMock = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
+        $this->_websiteFactoryMock = $this->getMock('Magento\Core\Model\Website\Factory', array(), array(), '', false);
+        $this->_storeGroupMock = $this->getMock('Magento\Core\Model\Store\Group\Factory', array(), array(), '', false);
+        $this->_storeFactoryMock = $this->getMock('Magento\Core\Model\StoreFactory', array(), array(), '', false);
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_object = $helper->getObject('Magento\Backend\Block\Store\Switcher', array(
-            'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false),
-            'application' => $this->_applicationModel,
-            'websiteFactory' => $this->_websiteFactory,
-            'storeGroupFactory' => $this->_storeGroupFactory
-        ));
+        $this->_object = new \Magento\Backend\Block\Store\Switcher(
+            $this->_coreHelperMock,
+            $this->_contextMock,
+            $this->_applicationMock,
+            $this->_websiteFactoryMock,
+            $this->_storeGroupMock,
+            $this->_storeFactoryMock
+        );
     }
 
     /**
@@ -77,12 +90,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
     {
         $websiteModel = $this->getMock('Magento\Core\Model\Website', array(), array(), '', false, false);
         $collection = $this->getMock(
-            'Magento\Core\Model\Resource\Website\Collection',
-            array(),
-            array(),
-            '',
-            false,
-            false
+            'Magento\Core\Model\Resource\Website\Collection', array(), array(), '', false, false
         );
         $websiteModel->expects($this->once())->method('getResourceCollection')->will($this->returnValue($collection));
 
@@ -90,7 +98,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
         $collection->expects($this->once())->method('load')->will($this->returnValue($expected));
         $collection->expects($this->never())->method('addIdFilter');
 
-        $this->_websiteFactory->expects($this->once())
+        $this->_websiteFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($websiteModel));
 
@@ -124,7 +132,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
         $collection->expects($this->once())->method('load')->will($this->returnValue($expected));
         $collection->expects($this->once())->method('addIdFilter')->with($ids);
 
-        $this->_websiteFactory->expects($this->once())
+        $this->_websiteFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($websiteModel));
 
@@ -140,7 +148,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
         $this->_object->setWebsiteIds(null);
 
         $expected = array('test', 'data', 'some');
-        $this->_applicationModel->expects($this->once())->method('getWebsites')->will($this->returnValue($expected));
+        $this->_applicationMock->expects($this->once())->method('getWebsites')->will($this->returnValue($expected));
 
         $this->assertEquals($expected, $this->_object->getWebsites());
     }
@@ -166,7 +174,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
             3 => 'site 3',
             5 => 'site 5',
         );
-        $this->_applicationModel->expects($this->once())->method('getWebsites')->will($this->returnValue($webSites));
+        $this->_applicationMock->expects($this->once())->method('getWebsites')->will($this->returnValue($webSites));
 
         $this->assertEquals($expected, $this->_object->getWebsites());
     }
@@ -188,7 +196,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
         $this->_object->setWebsiteIds($ids);
 
         $expected = array();
-        $this->_applicationModel->expects($this->once())->method('getWebsites')->will($this->returnValue($webSites));
+        $this->_applicationMock->expects($this->once())->method('getWebsites')->will($this->returnValue($webSites));
 
         $this->assertEquals($expected, $this->_object->getWebsites());
     }

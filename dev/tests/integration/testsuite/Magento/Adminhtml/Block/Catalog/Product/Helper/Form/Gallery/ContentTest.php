@@ -35,7 +35,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     public function testGetUploader()
     {
         /** @var $layout \Magento\Core\Model\Layout */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout');
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         /** @var $block \Magento\Adminhtml\Block\Catalog\Product\Helper\Form\Gallery\Content */
         $block = $layout->createBlock('Magento\Adminhtml\Block\Catalog\Product\Helper\Form\Gallery\Content', 'block');
 

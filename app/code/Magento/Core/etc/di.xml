@@ -25,13 +25,14 @@
 -->
 <config>
     <preference for="Magento\Acl\CacheInterface" type="Magento\Core\Model\Acl\Cache" />
+    <preference for="Magento\App\Updater\SetupInterface" type="Magento\Core\Model\Resource\Setup" />
+    <preference for="Magento\App\Module\ResourceResolverInterface" type="Magento\App\Module\ResourceResolver" />
     <preference for="Magento\AuthorizationInterface" type="Magento\Authorization" />
     <preference for="Magento\Authorization\Policy" type="Magento\Authorization\Policy\DefaultPolicy" />
     <preference for="Magento\Authorization\RoleLocator" type="Magento\Authorization\RoleLocator\DefaultRoleLocator" />
     <preference for="Magento\Core\Model\Session\AbstractSession" type="Magento\Core\Model\Session" />
     <preference for="Magento\Core\Model\LocaleInterface" type="Magento\Core\Model\Locale" />
     <preference for="Magento\Core\Model\Page\Asset\MergeStrategyInterface" type="Magento\Core\Model\Page\Asset\MergeStrategy\Direct" />
-    <preference for="Twig_LoaderInterface" type="Magento\Core\Model\TemplateEngine\Twig\FullFileName" />
     <preference for="Magento\Core\Model\DataService\ConfigInterface" type="Magento\Core\Model\DataService\Config" />
     <preference for="Magento\Core\Model\ConfigInterface" type="Magento\Core\Model\Config" />
     <preference for="Magento\Core\Model\Config\DataInterface" type="Magento\Core\Model\Config\Data" />
@@ -42,7 +43,22 @@
     <preference for="Magento\Config\ConverterInterface" type="Magento\Config\Converter\Dom"/>
     <preference for="Magento\Phrase\RendererInterface" type="Magento\Phrase\Renderer\Composite" />
     <preference for="Magento\Core\Model\Url\SecurityInfoInterface" type="Magento\Core\Model\Url\SecurityInfo\Proxy" />
-    <preference for="Magento\Core\Model\Module\ResourceResolverInterface" type="Magento\Core\Model\Module\ResourceResolver" />
+    <type name="Magento\App\FrontController">
+        <plugin name="install" type="Magento\Core\App\FrontController\Plugin\Install" sortOrder="40"/>
+        <plugin name="requestPreprocessor" type="Magento\Core\App\FrontController\Plugin\RequestPreprocessor" sortOrder="50"/>
+    </type>
+    <type name="Magento\App\AreaList">
+        <param name="areas">
+            <value>
+                <frontend>
+                    <frontName />
+                </frontend>
+            </value>
+        </param>
+        <param name="default">
+            <value>frontend</value>
+        </param>
+    </type>
     <type name="Magento\Data\Structure" shared="false" />
     <type name="Magento\Data\Collection\Db\FetchStrategy\Cache">
         <param name="cache">
@@ -240,7 +256,7 @@
             <instance type="Magento\Core\Model\Config\SectionPool\Proxy" />
         </param>
     </type>
-    <type name="Magento\Core\Model\RouterList" shared="true">
+    <type name="Magento\App\RouterList" shared="true">
         <param name="routerList">
             <value>
                 <standard>
@@ -249,7 +265,7 @@
                     <sortOrder>20</sortOrder>
                 </standard>
                 <default>
-                    <instance>Magento\Core\Controller\Varien\Router\DefaultRouter</instance>
+                    <instance>Magento\App\Router\DefaultRouter</instance>
                     <disable type="bool">false</disable>
                     <sortOrder>100</sortOrder>
                 </default>
@@ -267,11 +283,11 @@
             <value>standard</value>
         </param>
     </type>
-    <type name="Magento\Core\Model\NoRouteHandlerList">
+    <type name="Magento\App\Router\NoRouteHandlerList">
         <param name="handlerClassesList">
             <value>
                 <default>
-                    <instance>Magento\Core\Model\Router\NoRouteHandler</instance>
+                    <instance>Magento\Core\App\Router\NoRouteHandler</instance>
                     <sortOrder>100</sortOrder>
                 </default>
             </value>
@@ -293,7 +309,7 @@
     <type name="Magento\Core\Model\View\Design">
         <param name="themes">
             <value>
-                <frontend>magento_demo</frontend>
+                <frontend>magento_plushe</frontend>
                 <adminhtml>magento_backend</adminhtml>
                 <install>magento_basic</install>
             </value>
@@ -367,17 +383,20 @@
     </type>
     <type name="Magento\Core\Model\StoreManager">
         <param name="request">
-            <instance type="Magento\Core\Controller\Request\Http\Proxy" />
+            <instance type="Magento\App\Request\Http\Proxy" />
         </param>
     </type>
     <type name="Magento\Core\Model\Config\Section\Processor\Placeholder">
         <param name="request">
-            <instance type="Magento\Core\Controller\Request\Http\Proxy" />
+            <instance type="Magento\App\Request\Http\Proxy" />
         </param>
     </type>
     <type name="Magento\Core\Helper\Context">
         <param name="urlBuilder">
             <instance type="Magento\Core\Model\Url\Proxy" />
+        </param>
+        <param name='httpRequest'>
+            <instance type="Magento\App\Request\Http\Proxy" />
         </param>
     </type>
     <type name="Magento\Core\Helper\String">
@@ -395,19 +414,17 @@
             <instance type="Magento\Core\Model\File\Storage\File\Proxy" />
         </param>
     </type>
-    <type name="Magento\Core\Model\Session\AbstractSession">
-        <param name="url">
-            <instance type="Magento\Core\Model\Url\Proxy" />
-        </param>
-    </type>
     <type name="Magento\Core\Model\View\Service">
         <param name="design">
             <instance type="Magento\Core\Model\View\Design\Proxy" />
         </param>
     </type>
-    <type name="Magento\Core\Controller\Varien\Front">
-        <param name="backendData">
-            <instance type="Magento\Backend\Helper\Data\Proxy" />
+    <type name="Magento\Core\Model\TemplateEngine\Factory">
+        <plugin name="debug_hints" type="Magento\Core\Model\TemplateEngine\Plugin\DebugHints" sortOrder="10"/>
+        <param name="engines">
+            <value>
+                <phtml>Magento\Core\Model\TemplateEngine\Php</phtml>
+            </value>
         </param>
     </type>
 </config>

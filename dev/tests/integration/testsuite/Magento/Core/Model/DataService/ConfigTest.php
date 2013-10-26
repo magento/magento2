@@ -35,26 +35,26 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Core\Model\Dir $dirs */
+        /** @var \Magento\App\Dir $dirs */
         $dirs = $objectManager->create(
-            'Magento\Core\Model\Dir',
+            'Magento\App\Dir',
             array(
                 'baseDir' => BP,
                 'dirs' => array(
-                    \Magento\Core\Model\Dir::MODULES => __DIR__ . '/LayoutTest',
-                    \Magento\Core\Model\Dir::CONFIG => __DIR__ . '/LayoutTest',
+                    \Magento\App\Dir::MODULES => __DIR__ . '/LayoutTest',
+                    \Magento\App\Dir::CONFIG => __DIR__ . '/LayoutTest',
                 )
             )
         );
 
         $moduleList = $objectManager->create(
-            'Magento\Core\Model\ModuleList',
+            'Magento\App\ModuleList',
             array(
                 'reader' => $objectManager->create(
-                    'Magento\Core\Model\Module\Declaration\Reader\Filesystem',
+                    'Magento\App\Module\Declaration\Reader\Filesystem',
                     array(
                         'fileResolver' => $objectManager->create(
-                            'Magento\Core\Model\Module\Declaration\FileResolver',
+                            'Magento\App\Module\Declaration\FileResolver',
                             array(
                                 'applicationDirs' => $dirs
                             )

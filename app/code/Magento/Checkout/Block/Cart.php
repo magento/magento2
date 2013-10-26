@@ -46,7 +46,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $_catalogUrlBuilder;
 
     /**
-     * @var \Magento\Core\Model\UrlInterface
+     * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
 
@@ -56,7 +56,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrlBuilder
-     * @param \Magento\Core\Model\UrlInterface $urlBuilder
+     * @param \Magento\UrlInterface $urlBuilder
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
@@ -69,7 +69,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Url $catalogUrlBuilder,
-        \Magento\Core\Model\UrlInterface $urlBuilder,
+        \Magento\UrlInterface $urlBuilder,
         array $data = array()
     ) {
         $this->_storeManager = $storeManager;

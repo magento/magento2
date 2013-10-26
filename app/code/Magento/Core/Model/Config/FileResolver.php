@@ -35,17 +35,17 @@ class FileResolver implements \Magento\Config\FileResolverInterface
     protected $_moduleReader;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_applicationDirs;
 
     /**
      * @param \Magento\Core\Model\Config\Modules\Reader $moduleReader
-     * @param \Magento\Core\Model\Dir $applicationDirs
+     * @param \Magento\App\Dir $applicationDirs
      */
     public function __construct(
         \Magento\Core\Model\Config\Modules\Reader $moduleReader,
-        \Magento\Core\Model\Dir $applicationDirs
+        \Magento\App\Dir $applicationDirs
     ) {
         $this->_moduleReader = $moduleReader;
         $this->_applicationDirs = $applicationDirs;
@@ -58,7 +58,7 @@ class FileResolver implements \Magento\Config\FileResolverInterface
     {
         switch ($scope) {
             case 'primary':
-                $appConfigDir = $this->_applicationDirs->getDir(\Magento\Core\Model\Dir::CONFIG);
+                $appConfigDir = $this->_applicationDirs->getDir(\Magento\App\Dir::CONFIG);
                 // Create pattern similar to app/etc/{*config.xml,*/*config.xml}
                 $filePattern = $appConfigDir . DIRECTORY_SEPARATOR
                     . '{*' . $filename . ',*' . DIRECTORY_SEPARATOR . '*' . $filename . '}';

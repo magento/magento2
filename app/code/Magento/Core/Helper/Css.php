@@ -40,17 +40,17 @@ class Css
     protected $_filesystem;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dirs;
 
     /**
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Model\Dir $dirs
+     * @param \Magento\App\Dir $dirs
      */
     public function __construct(
         \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\Dir $dirs
+        \Magento\App\Dir $dirs
     ) {
         $this->_filesystem = $filesystem;
         $this->_dirs = $dirs;
@@ -118,7 +118,7 @@ class Css
          * Thus, calculating relative path is not possible in general case. So we just assume,
          * that urls follow the structure of directory paths.
          */
-        $topDir = $this->_dirs->getDir(\Magento\Core\Model\Dir::ROOT);
+        $topDir = $this->_dirs->getDir(\Magento\App\Dir::ROOT);
         $topDir = $this->_filesystem->normalizePath($topDir);
         if (strpos($file, $topDir) !== 0 || strpos($referencedFile, $topDir) !== 0) {
             throw new \Magento\Core\Exception('Offset can be calculated for internal resources only.');

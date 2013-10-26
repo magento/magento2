@@ -120,7 +120,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -180,7 +180,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Resource $resource
      * @param \Magento\Core\Model\Logger $logger
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
@@ -198,7 +198,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Resource $resource,
         \Magento\Core\Model\Logger $logger,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,

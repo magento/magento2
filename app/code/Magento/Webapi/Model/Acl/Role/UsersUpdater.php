@@ -46,18 +46,18 @@ class UsersUpdater implements \Magento\Core\Model\Layout\Argument\UpdaterInterfa
     protected $_roleId;
 
     /**
-     * @var \Magento\Core\Controller\Request\Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_inRoleUsersFilter;
 
     /**
      * Constructor.
      *
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @param \Magento\Backend\Helper\Data $backendHelper
      */
     public function __construct(
-        \Magento\Core\Controller\Request\Http $request,
+        \Magento\App\RequestInterface $request,
         \Magento\Backend\Helper\Data $backendHelper
     ) {
         $this->_roleId = (int)$request->getParam('role_id');
@@ -67,12 +67,12 @@ class UsersUpdater implements \Magento\Core\Model\Layout\Argument\UpdaterInterfa
     /**
      * Parse $_inRoleUsersFilter value from request
      *
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @return int
      */
     protected function _parseInRoleUsersFilter(
-        \Magento\Core\Controller\Request\Http $request,
+        \Magento\App\RequestInterface $request,
         \Magento\Backend\Helper\Data $backendHelper
     ) {
         $result = self::IN_ROLE_USERS_ANY;

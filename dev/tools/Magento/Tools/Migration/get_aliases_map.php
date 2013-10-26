@@ -43,21 +43,24 @@ if (isset($options['h'])) {
     exit(0);
 }
 
-require_once realpath(dirname(dirname(dirname(__DIR__)))) . '/dev/tests/static/framework/bootstrap.php';
-require_once realpath(dirname(dirname(dirname(__DIR__)))) . '/lib/Zend/Json.php';
+require_once realpath(dirname(dirname(dirname(dirname(dirname(__DIR__)))))) .
+    '/dev/tests/static/framework/bootstrap.php';
+require_once realpath(dirname(dirname(dirname(dirname(dirname(__DIR__)))))) .
+    '/dev/tests/static/framework/Magento/TestFramework/Utility/Classes.php';
+require_once realpath(dirname(dirname(dirname(dirname(dirname(__DIR__)))))) . '/lib/Zend/Json.php';
 
-$magentoBaseDir = dirname(__DIR__) . '/../../';
+$magentoBaseDir = dirname(__DIR__) . '/../../../../';
 if (isset($options['p'])) {
     $magentoBaseDir = $options['p'];
 }
 
 $utilityFiles = new Magento\TestFramework\Utility\Files($magentoBaseDir);
 $map = array();
-$compositeModules = getFilesCombinedArray(__DIR__ . '/AliasesMap', '/^composite_modules_.*\.php$/');
+$compositeModules = getFilesCombinedArray(__DIR__ . '/aliases_map', '/^composite_modules_.*\.php$/');
 // PHP code
 foreach ($utilityFiles->getPhpFiles(true, true, true, false) as $file) {
     $content = file_get_contents($file);
-    $classes = \Magento\Test\Legacy\ClassesTest::collectPhpCodeClasses($content);
+    $classes = \Magento\TestFramework\Utility\Classes::collectPhpCodeClasses($content);
     if ($classes) {
         $factoryNames = array_filter($classes, 'isFactoryName');
         foreach ($factoryNames as $factoryName) {

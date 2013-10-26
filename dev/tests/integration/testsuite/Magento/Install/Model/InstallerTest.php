@@ -41,8 +41,8 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$_tmpDir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Dir')
-            ->getDir(\Magento\Core\Model\Dir::VAR_DIR) . DIRECTORY_SEPARATOR . 'InstallerTest';
+        self::$_tmpDir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')
+            ->getDir(\Magento\App\Dir::VAR_DIR) . DIRECTORY_SEPARATOR . 'InstallerTest';
         self::$_tmpConfigFile = self::$_tmpDir . DIRECTORY_SEPARATOR . 'local.xml';
         mkdir(self::$_tmpDir);
     }
@@ -64,9 +64,9 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         if ($emulateConfig) {
             $installerConfig = new \Magento\Install\Model\Installer\Config(
-                $objectManager->get('Magento\Install\Model\InstallerProxy'),
-                $objectManager->get('Magento\Core\Controller\Request\Http'),
-                new \Magento\Core\Model\Dir(__DIR__, array(), array(\Magento\Core\Model\Dir::CONFIG => self::$_tmpDir)),
+                $objectManager->get('Magento\Install\Model\Installer'),
+                $objectManager->get('Magento\App\RequestInterface'),
+                new \Magento\App\Dir(__DIR__, array(), array(\Magento\App\Dir::CONFIG => self::$_tmpDir)),
                 new \Magento\Filesystem(new \Magento\Filesystem\Adapter\Local()),
                 $objectManager->get('Magento\Core\Model\StoreManager')
             );

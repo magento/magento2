@@ -62,20 +62,6 @@ class Config implements \Magento\Core\Model\ConfigInterface
     protected $_secureUrlCache = array();
 
     /**
-     * Active modules array per namespace
-     *
-     * @var array
-     */
-    private $_moduleNamespaces = null;
-
-    /**
-     * Areas allowed to use
-     *
-     * @var array
-     */
-    protected $_allowedAreas = null;
-
-    /**
      * Object manager
      *
      * @var \Magento\ObjectManager
@@ -109,7 +95,7 @@ class Config implements \Magento\Core\Model\ConfigInterface
     protected $_configScope;
 
     /**
-     * @var \Magento\Core\Model\ModuleListInterface
+     * @var \Magento\App\ModuleListInterface
      */
     protected $_moduleList;
 
@@ -127,19 +113,17 @@ class Config implements \Magento\Core\Model\ConfigInterface
      * @param \Magento\Core\Model\ObjectManager           $objectManager
      * @param \Magento\Core\Model\Config\StorageInterface $storage
      * @param \Magento\Core\Model\Config\Modules\Reader   $moduleReader
-     * @param \Magento\Core\Model\ModuleListInterface     $moduleList
+     * @param \Magento\App\ModuleListInterface     $moduleList
      * @param \Magento\Config\ScopeInterface              $configScope
      * @param \Magento\Core\Model\Config\SectionPool      $sectionPool
-     * @param array                                      $areas
      */
     public function __construct(
         \Magento\Core\Model\ObjectManager $objectManager,
         \Magento\Core\Model\Config\StorageInterface $storage,
         \Magento\Core\Model\Config\Modules\Reader $moduleReader,
-        \Magento\Core\Model\ModuleListInterface $moduleList,
+        \Magento\App\ModuleListInterface $moduleList,
         \Magento\Config\ScopeInterface $configScope,
-        \Magento\Core\Model\Config\SectionPool $sectionPool,
-        array $areas = array()
+        \Magento\Core\Model\Config\SectionPool $sectionPool
     ) {
         \Magento\Profiler::start('config_load');
         $this->_objectManager = $objectManager;
@@ -149,7 +133,6 @@ class Config implements \Magento\Core\Model\ConfigInterface
         $this->_moduleList = $moduleList;
         $this->_configScope = $configScope;
         $this->_sectionPool = $sectionPool;
-        $this->_allowedAreas = $areas;
         \Magento\Profiler::stop('config_load');
     }
 
@@ -214,23 +197,6 @@ class Config implements \Magento\Core\Model\ConfigInterface
     }
 
     /**
-     * Retrieve area config by area code
-     *
-     * @param string|null $areaCode
-     * @throws \InvalidArgumentException
-     * @return array
-     */
-    public function getAreaConfig($areaCode = null)
-    {
-        $areaCode = empty($areaCode) ? $this->_configScope->getCurrentScope() : $areaCode;
-        $areas = $this->getAreas();
-        if (!isset($areas[$areaCode])) {
-            throw new \InvalidArgumentException('Requested area (' . $areaCode . ') does not exist');
-        }
-        return $areas[$areaCode];
-    }
-
-    /**
      * Identify front name of the requested area. Return current area front name if area code is not specified.
      *
      * @param string|null $areaCode
@@ -260,20 +226,6 @@ class Config implements \Magento\Core\Model\ConfigInterface
     public function getModuleDir($type, $moduleName)
     {
         return $this->_moduleReader->getModuleDir($type, $moduleName);
-    }
-
-    /**
-     * Set path to the corresponding module directory
-     *
-     * @param string $moduleName
-     * @param string $type directory type (etc, controllers, locale etc)
-     * @param string $path
-     * @return \Magento\Core\Model\Config
-     */
-    public function setModuleDir($moduleName, $type, $path)
-    {
-        $this->_moduleReader->setModuleDir($moduleName, $type, $path);
-        return $this;
     }
 
     /**

@@ -31,14 +31,14 @@ namespace Magento\Core\Model\Config\FileResolver;
 class Primary implements \Magento\Config\FileResolverInterface
 {
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_applicationDirs;
 
     /**
-     * @param \Magento\Core\Model\Dir $dirs
+     * @param \Magento\App\Dir $dirs
      */
-    public function __construct(\Magento\Core\Model\Dir $dirs)
+    public function __construct(\Magento\App\Dir $dirs)
     {
         $this->_applicationDirs = $dirs;
     }
@@ -53,7 +53,7 @@ class Primary implements \Magento\Config\FileResolverInterface
      */
     public function get($filename, $scope)
     {
-        $configDir = $this->_applicationDirs->getDir(\Magento\Core\Model\Dir::CONFIG);
+        $configDir = $this->_applicationDirs->getDir(\Magento\App\Dir::CONFIG);
         $fileList = glob($configDir . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . $filename);
 
         if (file_exists($configDir . DIRECTORY_SEPARATOR . $filename)) {

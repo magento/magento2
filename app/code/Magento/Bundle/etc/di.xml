@@ -24,11 +24,6 @@
  */
 -->
 <config>
-    <type name="Magento\Bundle\Model\Resource\Price\Index">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
     <type name="Magento\Bundle\Model\Source\Option\Type">
         <param name="options">
             <value>
@@ -39,8 +34,8 @@
             </value>
         </param>
     </type>
-    <type name="Magento\Core\Model\Db\Updater">
-        <param name="resourceList">
+    <type name="Magento\App\Updater\SetupFactory">
+        <param name="resourceTypes">
             <value>
                 <bundle_setup>Magento\Catalog\Model\Resource\Setup</bundle_setup>
             </value>

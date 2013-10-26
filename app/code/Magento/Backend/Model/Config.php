@@ -47,7 +47,7 @@ class Config extends \Magento\Object
     /**
      * Event dispatcher
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -108,7 +108,7 @@ class Config extends \Magento\Object
     /**
      * @param \Magento\Core\Model\App $application
      * @param \Magento\Core\Model\Config $config
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Backend\Model\Config\Structure $configStructure
      * @param \Magento\Core\Model\Resource\TransactionFactory $transactionFactory
      * @param \Magento\Backend\Model\Config\Loader $configLoader
@@ -119,7 +119,7 @@ class Config extends \Magento\Object
     public function __construct(
         \Magento\Core\Model\App $application,
         \Magento\Core\Model\Config $config,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Backend\Model\Config\Structure $configStructure,
         \Magento\Core\Model\Resource\TransactionFactory $transactionFactory,
         \Magento\Backend\Model\Config\Loader $configLoader,

@@ -46,7 +46,7 @@ class Indexer
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -63,13 +63,13 @@ class Indexer
     /**
      * @param \Magento\Index\Model\Resource\Process\CollectionFactory $collectionFactory
      * @param \Magento\Index\Model\Resource\Process $resourceProcess
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Index\Model\EventFactory $indexEventFactory
      */
     public function __construct(
         \Magento\Index\Model\Resource\Process\CollectionFactory $collectionFactory,
         \Magento\Index\Model\Resource\Process $resourceProcess,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Index\Model\EventFactory $indexEventFactory
     ) {
         $this->_collectionFactory = $collectionFactory;

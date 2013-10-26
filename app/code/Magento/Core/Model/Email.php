@@ -53,18 +53,18 @@ class Email extends \Magento\Object
     /**
      * Layout factory
      *
-     * @var \Magento\Core\Model\LayoutFactory
+     * @var \Magento\View\LayoutFactory
      */
     protected $_layoutFactory;
 
     /**
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\LayoutFactory $layoutFactory
+     * @param Store\Config $coreStoreConfig
+     * @param \Magento\View\LayoutFactory $layoutFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\LayoutFactory $layoutFactory,
+        \Magento\View\LayoutFactory $layoutFactory,
         array $data = array()
     ) {
         $this->_layoutFactory = $layoutFactory;

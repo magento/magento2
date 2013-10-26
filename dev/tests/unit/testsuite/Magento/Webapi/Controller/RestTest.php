@@ -48,7 +48,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
     /** @var \stdClass */
     protected $_serviceMock;
 
-    /** @var \Magento\Core\Model\App\State */
+    /** @var \Magento\App\State */
     protected $_appStateMock;
 
     /** @var \Magento\Oauth\Service\OauthV1 */
@@ -91,7 +91,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_appStateMock =  $this->getMockBuilder('Magento\Core\Model\App\State')
+        $this->_appStateMock =  $this->getMockBuilder('Magento\App\State')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -153,7 +153,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(false));
         $expectedMsg = 'Magento is not yet installed';
 
-        $this->_restController->dispatch();
+        $this->_restController->dispatch($this->_requestMock);
         $this->assertTrue($this->_responseMock->isException());
         $exceptionArray = $this->_responseMock->getException();
         $this->assertEquals($expectedMsg, $exceptionArray[0]->getMessage());
@@ -183,7 +183,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue(array()));
         $this->_routeMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRoute));
         $this->_requestMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRequest));
-        $this->_restController->dispatch();
+        $this->_restController->dispatch($this->_requestMock);
         $this->assertFalse($this->_responseMock->isException());
     }
 
@@ -225,7 +225,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
         // Override default prepareResponse. It should never be called in this case
         $this->_responseMock->expects($this->never())->method('prepareResponse');
 
-        $this->_restController->dispatch();
+        $this->_restController->dispatch($this->_requestMock);
         $this->assertTrue($this->_responseMock->isException());
         $exceptionArray = $this->_responseMock->getException();
         $this->assertEquals('Operation allowed only in HTTPS', $exceptionArray[0]->getMessage());
@@ -248,7 +248,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $expectedMsg = 'The method "' . self::SERVICE_METHOD . '" of service "'
             . self::SERVICE_ID . '" must return an array.';
 
-        $this->_restController->dispatch();
+        $this->_restController->dispatch($this->_requestMock);
         $this->assertTrue($this->_responseMock->isException());
         $exceptionArray = $this->_responseMock->getException();
         $this->assertEquals($expectedMsg, $exceptionArray[0]->getMessage());

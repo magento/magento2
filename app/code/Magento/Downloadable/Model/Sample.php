@@ -51,14 +51,14 @@ class Sample extends \Magento\Core\Model\AbstractModel
     const XML_PATH_SAMPLES_TITLE = 'catalog/downloadable/samples_title';
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dirModel;
 
     /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\Dir $dirModel
+     * @param \Magento\App\Dir $dirModel
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -66,7 +66,7 @@ class Sample extends \Magento\Core\Model\AbstractModel
     public function __construct(
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\Dir $dirModel,
+        \Magento\App\Dir $dirModel,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -128,7 +128,7 @@ class Sample extends \Magento\Core\Model\AbstractModel
      */
     public function getBaseTmpPath()
     {
-        return $this->_dirModel->getDir(\Magento\Core\Model\Dir::MEDIA)
+        return $this->_dirModel->getDir(\Magento\App\Dir::MEDIA)
             . DS . 'downloadable' . DS . 'tmp' . DS . 'samples';
     }
 
@@ -139,7 +139,7 @@ class Sample extends \Magento\Core\Model\AbstractModel
      */
     public function getBasePath()
     {
-        return $this->_dirModel->getDir(\Magento\Core\Model\Dir::MEDIA)
+        return $this->_dirModel->getDir(\Magento\App\Dir::MEDIA)
             . DS . 'downloadable' . DS . 'files' . DS . 'samples';
     }
 

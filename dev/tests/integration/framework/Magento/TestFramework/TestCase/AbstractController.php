@@ -77,13 +77,10 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_assertSessionErrors = false;
-        $this->_objectManager = \Magento\TestFramework\ObjectManager::getInstance();
-        $this->_objectManager->configure(array(
-            'preferences' => array(
-                'Magento\Core\Controller\Request\Http' => 'Magento\TestFramework\Request',
-                'Magento\Core\Controller\Response\Http' => 'Magento\TestFramework\Response'
-            )
-        ));
+        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();;
+        $this->_objectManager->removeSharedInstance('Magento\App\ResponseInterface');
+        $this->_objectManager->removeSharedInstance('Magento\App\RequestInterface');
+
     }
 
     protected function tearDown()
@@ -112,18 +109,18 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     public function dispatch($uri)
     {
         $this->getRequest()->setRequestUri($uri);
-        $this->_getBootstrap()->runApp($this->getRequest(), $this->getResponse());
+        $this->_getBootstrap()->runApp();
     }
 
     /**
      * Request getter
      *
-     * @return \Magento\TestFramework\Request
+     * @return \Magento\App\RequestInterface
      */
     public function getRequest()
     {
         if (!$this->_request) {
-            $this->_request = $this->_objectManager->get('Magento\TestFramework\Request');
+            $this->_request = $this->_objectManager->get('Magento\App\RequestInterface');
         }
         return $this->_request;
     }
@@ -131,12 +128,12 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     /**
      * Response getter
      *
-     * @return \Magento\TestFramework\Response
+     * @return \Magento\App\ResponseInterface
      */
     public function getResponse()
     {
         if (!$this->_response) {
-            $this->_response = $this->_objectManager->get('Magento\TestFramework\Response');
+            $this->_response = $this->_objectManager->get('Magento\App\ResponseInterface');
         }
         return $this->_response;
     }

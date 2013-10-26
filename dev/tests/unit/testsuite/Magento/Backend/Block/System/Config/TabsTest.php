@@ -56,7 +56,7 @@ class TabsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMock('Magento\Core\Controller\Request\Http', array(), array(), '', false);
+        $this->_requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false);
         $this->_requestMock->expects($this->any())->method('getParam')->with('section')
             ->will($this->returnValue('currentSectionId'));
         $this->_structureMock = $this->getMock('Magento\Backend\Model\Config\Structure', array(), array(), '', false);

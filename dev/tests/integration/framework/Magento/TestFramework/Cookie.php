@@ -35,19 +35,19 @@ class Cookie extends \Magento\Core\Model\Cookie
     /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManager $storeManager
-     * @param \Magento\Core\Controller\Request\Http $request
-     * @param \Magento\Core\Controller\Response\Http $response
+     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\App\ResponseInterface $response
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManager $storeManager,
-        \Magento\Core\Controller\Request\Http $request = null,
-        \Magento\Core\Controller\Response\Http $response = null
+        \Magento\App\RequestInterface $request = null,
+        \Magento\App\ResponseInterface $response = null
     ) {
         $this->_storeManager = $storeManager;
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $request = $request ?: $objectManager->get('Magento\Core\Controller\Request\Http');
-        $response = $response ?: $objectManager->get('Magento\Core\Controller\Response\Http');
+        $request = $request ?: $objectManager->get('Magento\App\RequestInterface');
+        $response = $response ?: $objectManager->get('Magento\App\ResponseInterface');
         parent::__construct($request, $response, $coreStoreConfig, $storeManager);
     }
 

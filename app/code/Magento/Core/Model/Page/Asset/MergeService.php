@@ -52,12 +52,12 @@ class MergeService
     private $_filesystem;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     private $_dirs;
 
     /**
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     private $_state;
 
@@ -65,15 +65,15 @@ class MergeService
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\Filesystem $filesystem,
-     * @param \Magento\Core\Model\Dir $dirs
-     * @param \Magento\Core\Model\App\State $state
+     * @param \Magento\App\Dir $dirs
+     * @param \Magento\App\State $state
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\Dir $dirs,
-        \Magento\Core\Model\App\State $state
+        \Magento\App\Dir $dirs,
+        \Magento\App\State $state
     ) {
         $this->_objectManager = $objectManager;
         $this->_storeConfig = $storeConfig;
@@ -101,7 +101,7 @@ class MergeService
         $isCssMergeEnabled = $this->_storeConfig->getConfigFlag(self::XML_PATH_MERGE_CSS_FILES);
         $isJsMergeEnabled = $this->_storeConfig->getConfigFlag(self::XML_PATH_MERGE_JS_FILES);
         if (($isCss && $isCssMergeEnabled) || ($isJs && $isJsMergeEnabled)) {
-            if ($this->_state->getMode() == \Magento\Core\Model\App\State::MODE_PRODUCTION) {
+            if ($this->_state->getMode() == \Magento\App\State::MODE_PRODUCTION) {
                 $mergeStrategyClass = 'Magento\Core\Model\Page\Asset\MergeStrategy\FileExists';
             } else {
                 $mergeStrategyClass = 'Magento\Core\Model\Page\Asset\MergeStrategy\Checksum';
@@ -121,7 +121,7 @@ class MergeService
      */
     public function cleanMergedJsCss()
     {
-        $mergedDir = $this->_dirs->getDir(\Magento\Core\Model\Dir::PUB_VIEW_CACHE) . '/'
+        $mergedDir = $this->_dirs->getDir(\Magento\App\Dir::PUB_VIEW_CACHE) . '/'
             . \Magento\Core\Model\Page\Asset\Merged::PUBLIC_MERGE_DIR;
         $this->_filesystem->delete($mergedDir);
 

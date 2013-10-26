@@ -34,7 +34,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetTemplate()
     {
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Wishlist\Block\Customer\Wishlist\Item\Options');
         $this->assertEmpty($block->getTemplate());
         $product = new \Magento\Object(array('type_id' => 'test'));

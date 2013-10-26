@@ -39,10 +39,10 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPatternDirs()
     {
-        $parentTheme = $this->getMockForAbstractClass('Magento\Core\Model\ThemeInterface');
+        $parentTheme = $this->getMockForAbstractClass('Magento\View\Design\ThemeInterface');
         $parentTheme->expects($this->any())->method('getThemePath')->will($this->returnValue('package/parent_theme'));
 
-        $theme = $this->getMockForAbstractClass('Magento\Core\Model\ThemeInterface');
+        $theme = $this->getMockForAbstractClass('Magento\View\Design\ThemeInterface');
         $theme->expects($this->any())->method('getThemePath')->will($this->returnValue('package/current_theme'));
         $theme->expects($this->any())->method('getParentTheme')->will($this->returnValue($parentTheme));
 

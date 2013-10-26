@@ -45,7 +45,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Controller\ErrorProcessor */
     protected $_errorProcessorMock;
 
-    /** @var \Magento\Core\Model\App\State */
+    /** @var \Magento\App\State */
     protected $_appStateMock;
 
     /** @var \Magento\Core\Model\App */
@@ -84,7 +84,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(array('maskException'))
             ->getMock();
-        $this->_appStateMock =  $this->getMockBuilder('Magento\Core\Model\App\State')
+        $this->_appStateMock =  $this->getMockBuilder('Magento\App\State')
             ->disableOriginalConstructor()
             ->getMock();
         $localeMock =  $this->getMockBuilder('Magento\Core\Model\Locale')
@@ -161,7 +161,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             ->method('getApiCharset')
             ->will($this->returnValue($encoding));
 
-        $this->_soapController->dispatch();
+        $this->_soapController->dispatch($this->_requestMock);
         $expectedMessage = <<<EXPECTED_MESSAGE
 <?xml version="1.0" encoding="{$encoding}"?>
 <env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope" >
@@ -195,7 +195,7 @@ EXPECTED_MESSAGE;
             ->method('generate')
             ->will($this->returnValue($wsdl));
 
-        $this->_soapController->dispatch();
+        $this->_soapController->dispatch($this->_requestMock);
         $this->assertEquals($wsdl, $this->_responseMock->getBody());
     }
 
@@ -216,7 +216,7 @@ EXPECTED_MESSAGE;
             ->method('validateAccessToken')
             ->will($this->returnValue(array('isValid' => true)));
 
-        $this->_soapController->dispatch();
+        $this->_soapController->dispatch($this->_requestMock);
         unset($_SERVER['HTTP_AUTHORIZATION']);
         $this->assertEquals($soapResponse, $this->_responseMock->getBody());
     }
@@ -242,7 +242,7 @@ EXPECTED_MESSAGE;
             ->method('getApiCharset')
             ->will($this->returnValue($encoding));
 
-        $this->_soapController->dispatch();
+        $this->_soapController->dispatch($this->_requestMock);
 
         $expectedMessage = <<<EXPECTED_MESSAGE
 <?xml version="1.0" encoding="{$encoding}"?>

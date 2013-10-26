@@ -169,7 +169,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
     public function testGetTooltipCreatesTooltipBlock()
     {
         $this->_model->setData(array('tooltip_block' => 'Magento\Core\Block\Tooltip'), 'scope');
-        $tooltipBlock = $this->getMock('Magento\Core\Block');
+        $tooltipBlock = $this->getMock('Magento\View\Element\BlockInterface');
         $tooltipBlock->expects($this->once())->method('toHtml')->will($this->returnValue('tooltip block'));
         $this->_blockFactoryMock->expects($this->once())
             ->method('createBlock')

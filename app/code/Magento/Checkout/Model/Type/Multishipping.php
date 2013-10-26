@@ -45,7 +45,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -80,7 +80,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Session $session
      * @param \Magento\Sales\Model\Quote\AddressFactory $addressFactory
@@ -92,7 +92,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Session $session,
         \Magento\Sales\Model\Quote\AddressFactory $addressFactory,

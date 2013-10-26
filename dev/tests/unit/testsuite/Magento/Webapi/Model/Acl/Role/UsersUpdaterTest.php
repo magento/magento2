@@ -38,7 +38,7 @@ class UsersUpdaterTest extends \PHPUnit_Framework_TestCase
     protected $_backendHelper;
 
     /**
-     * @var \Magento\Core\Controller\Request\Http|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\RequestInterface|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_request;
 
@@ -57,7 +57,7 @@ class UsersUpdaterTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->_backendHelper->expects($this->any())->method('prepareFilterString')->will($this->returnArgument(0));
 
-        $this->_request = $this->getMockBuilder('Magento\Core\Controller\Request\Http')
+        $this->_request = $this->getMockBuilder('Magento\App\Request\Http')
             ->disableOriginalConstructor()
             ->getMock();
         $this->_collection = $this->getMockBuilder('Magento\Webapi\Model\Resource\Acl\User\Collection')

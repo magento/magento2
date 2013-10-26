@@ -44,7 +44,7 @@ $numColumns = sizeof($this->getColumns());
                 <?php foreach ($this->getColumns() as $_column): ?>
                 <?php /* @var $_column \Magento\Backend\Block\Widget\Grid\Column */ ?>
                     <th data-column="<?php echo $_column->getId() ?>" <?php echo $_column->getHeaderHtmlProperty() ?>>
-                            <span class="nobr"><?php echo $_column->getHeaderHtml() ?></span>
+                            <span><?php echo $_column->getHeaderHtml() ?></span>
                     </th>
                 <?php endforeach; ?>
                 </tr>

@@ -239,7 +239,7 @@ class Proxy extends \Magento\Backend\Model\Url
     /**
      * {@inheritdoc}
      */
-    public function setRequest(\Zend_Controller_Request_Http $request)
+    public function setRequest(\Magento\App\RequestInterface $request)
     {
         return $this->_getObject()->setRequest($request);
     }

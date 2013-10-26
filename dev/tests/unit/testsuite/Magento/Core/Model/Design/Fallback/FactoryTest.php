@@ -38,17 +38,17 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $dirs = new \Magento\Core\Model\Dir(__DIR__, array(), array(
-            \Magento\Core\Model\Dir::THEMES => 'themes',
-            \Magento\Core\Model\Dir::MODULES => 'modules',
-            \Magento\Core\Model\Dir::PUB_LIB => 'pub_lib',
+        $dirs = new \Magento\App\Dir(__DIR__, array(), array(
+            \Magento\App\Dir::THEMES => 'themes',
+            \Magento\App\Dir::MODULES => 'modules',
+            \Magento\App\Dir::PUB_LIB => 'pub_lib',
         ));
         $this->_model = new \Magento\Core\Model\Design\Fallback\Factory($dirs);
 
-        $parentTheme = $this->getMockForAbstractClass('Magento\Core\Model\ThemeInterface');
+        $parentTheme = $this->getMockForAbstractClass('Magento\View\Design\ThemeInterface');
         $parentTheme->expects($this->any())->method('getThemePath')->will($this->returnValue('parent_theme_path'));
 
-        $theme = $this->getMockForAbstractClass('Magento\Core\Model\ThemeInterface');
+        $theme = $this->getMockForAbstractClass('Magento\View\Design\ThemeInterface');
         $theme->expects($this->any())->method('getThemePath')->will($this->returnValue('current_theme_path'));
         $theme->expects($this->any())->method('getParentTheme')->will($this->returnValue($parentTheme));
 

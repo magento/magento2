@@ -124,9 +124,9 @@ class State
      * Update system data for current VDE environment
      *
      * @param string $areaCode
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      */
-    public function update($areaCode, \Magento\Core\Controller\Request\Http $request)
+    public function update($areaCode, \Magento\App\RequestInterface $request)
     {
         $mode = $request->getAlias('editorMode') ?: self::MODE_NAVIGATION;
         $this->_themeContext->setEditableThemeById($request->getAlias('themeId'));

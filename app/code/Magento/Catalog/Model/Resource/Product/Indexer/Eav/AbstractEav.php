@@ -40,7 +40,7 @@ abstract class AbstractEav
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -49,12 +49,12 @@ abstract class AbstractEav
      *
      * @param \Magento\Core\Model\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      */
     public function __construct(
         \Magento\Core\Model\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Core\Model\Event\Manager $eventManager
+        \Magento\Event\ManagerInterface $eventManager
     ) {
         $this->_eventManager = $eventManager;
         parent::__construct($resource, $eavConfig);

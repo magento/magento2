@@ -37,17 +37,22 @@ class InstanceTest extends \Magento\Backend\Utility\Controller
         parent::setUp();
 
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\View\DesignInterface')
+            ->get('Magento\View\DesignInterface')
             ->setDefaultDesignTheme()
             ->getDesignTheme();
-        $this->getRequest()->setParam('type', 'Magento\Cms\Block\Widget\Page\Link');
+        $type = 'Magento\Cms\Block\Widget\Page\Link';
+        /** @var $model \Magento\Widget\Model\Widget\Instance */
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Widget\Model\Widget\Instance');
+        $code = $model->setType($type)->getWidgetReference('type', $type, 'code');
+        $this->getRequest()->setParam('code', $code);
         $this->getRequest()->setParam('theme_id', $theme->getId());
     }
 
     public function testEditAction()
     {
         $this->dispatch('backend/admin/widget_instance/edit');
-        $this->assertContains('<option value="Magento\Cms\Block\Widget\Page\Link" selected="selected">',
+        $this->assertContains('<option value="cms_page_link" selected="selected">',
             $this->getResponse()->getBody()
         );
     }

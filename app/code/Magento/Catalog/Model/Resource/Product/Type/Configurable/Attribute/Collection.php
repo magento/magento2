@@ -81,7 +81,7 @@ class Collection
      *
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Type\Configurable $catalogProductTypeConfigurable
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Logger $logger
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -91,7 +91,7 @@ class Collection
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Type\Configurable $catalogProductTypeConfigurable,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Logger $logger,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,

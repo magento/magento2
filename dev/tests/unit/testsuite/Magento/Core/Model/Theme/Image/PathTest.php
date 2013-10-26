@@ -54,11 +54,11 @@ class PathTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_dirMock = $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false);
+        $this->_dirMock = $this->getMock('Magento\App\Dir', array(), array(), '', false);
         $this->_viewUrlMock = $this->getMock('Magento\Core\Model\View\Url', array(), array(), '', false);
         $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
 
-        $this->_dirMock->expects($this->any())->method('getDir')->with(\Magento\Core\Model\Dir::MEDIA)
+        $this->_dirMock->expects($this->any())->method('getDir')->with(\Magento\App\Dir::MEDIA)
             ->will($this->returnValue('/media'));
 
         $this->_model = new \Magento\Core\Model\Theme\Image\Path(

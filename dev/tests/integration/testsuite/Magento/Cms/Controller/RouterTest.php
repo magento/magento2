@@ -40,14 +40,14 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->_model = new \Magento\Cms\Controller\Router(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                 ->get('Magento\Core\Controller\Varien\Action\Factory'),
-            new \Magento\Core\Model\Event\ManagerStub(
-                $this->getMockForAbstractClass('Magento\Core\Model\Event\InvokerInterface', array(), '', false),
-                $this->getMock('Magento\Core\Model\Event\Config', array(), array(), '', false),
+            new \Magento\Event\ManagerInterfaceStub(
+                $this->getMockForAbstractClass('Magento\Event\InvokerInterface'),
+                $this->getMock('Magento\Event\Config', array(), array(), '', false),
                 $this->getMock('Magento\EventFactory', array(), array(), '', false),
                 $this->getMock('Magento\Event\ObserverFactory', array(), array(), '', false)
             ),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Core\Model\UrlInterface'),
+                ->get('Magento\UrlInterface'),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                 ->get('Magento\Core\Model\Config\Primary'),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -66,7 +66,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete('MAGETWO-3393');
         $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Controller\Request\Http');
+            ->create('Magento\App\RequestInterface');
         //Open Node
         $request->setPathInfo('parent_node');
         $controller = $this->_model->match($request);
@@ -77,9 +77,9 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 /**
  * Event manager stub
  */
-namespace Magento\Core\Model\Event;
+namespace Magento\Event;
 
-class ManagerStub extends \Magento\Core\Model\Event\Manager
+class ManagerStub extends Manager
 {
     /**
      * Stub dispatch event

@@ -49,7 +49,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Catalog\Model\Product');
         $this->_product->load(1);
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Catalog\Block\Product\View\Type\Configurable');
         $this->_block->setProduct($this->_product);
     }

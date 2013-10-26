@@ -38,7 +38,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Core\Model\View\DesignInterface
+     * @var \Magento\View\DesignInterface
      */
     protected $_designModel;
 
@@ -79,10 +79,10 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->addSharedInstance($this->_viewFileSystem, 'Magento\Core\Model\View\FileSystem');
 
-        /** @var $configModel \Magento\Core\Model\Config */
-        $configModel = $objectManager->get('Magento\Core\Model\Config');
-        $configModel->setModuleDir('Magento_Core', 'i18n', __DIR__ . '/_files/Magento/Core/i18n');
-        $configModel->setModuleDir('Magento_Catalog', 'i18n',
+        /** @var $moduleReader \Magento\Core\Model\Config\Modules\Reader */
+        $moduleReader = $objectManager->get('Magento\Core\Model\Config\Modules\Reader');
+        $moduleReader->setModuleDir('Magento_Core', 'i18n', __DIR__ . '/_files/Magento/Core/i18n');
+        $moduleReader->setModuleDir('Magento_Catalog', 'i18n',
             __DIR__ . '/_files/Magento/Catalog/i18n');
 
         /** @var \Magento\Core\Model\View\Design _designModel */
@@ -143,7 +143,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('en_US', $this->_model->getConfig(\Magento\Core\Model\Translate::CONFIG_KEY_LOCALE));
         $this->assertEquals(1, $this->_model->getConfig(\Magento\Core\Model\Translate::CONFIG_KEY_STORE));
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\View\DesignInterface');
+            ->get('Magento\View\DesignInterface');
         $this->assertEquals($design->getDesignTheme()->getId(),
             $this->_model->getConfig(\Magento\Core\Model\Translate::CONFIG_KEY_DESIGN_THEME));
         $this->assertNull($this->_model->getConfig('non_existing_key'));

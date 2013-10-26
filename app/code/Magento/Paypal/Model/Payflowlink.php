@@ -141,9 +141,9 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
 
     /**
      * @param \Magento\Core\Model\Logger $logger
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\ModuleListInterface $moduleList
+     * @param \Magento\App\ModuleListInterface $moduleList
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
@@ -154,7 +154,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @param \Magento\Paypal\Model\Payflow\RequestFactory $requestFactory
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Core\Controller\Request\Http $requestHttp
+     * @param \Magento\App\RequestInterface $requestHttp
      * @param \Magento\Core\Model\WebsiteFactory $websiteFactory
      * @param array $data
      *
@@ -162,9 +162,9 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      */
     public function __construct(
         \Magento\Core\Model\Logger $logger,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\ModuleListInterface $moduleList,
+        \Magento\App\ModuleListInterface $moduleList,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Core\Model\LocaleInterface $locale,
@@ -175,7 +175,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         \Magento\Paypal\Model\Payflow\RequestFactory $requestFactory,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Core\Controller\Request\Http $requestHttp,
+        \Magento\App\RequestInterface $requestHttp,
         \Magento\Core\Model\WebsiteFactory $websiteFactory,
         array $data = array()
     ) {

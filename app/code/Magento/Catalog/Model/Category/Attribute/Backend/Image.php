@@ -44,7 +44,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Dir model
      *
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
@@ -59,12 +59,12 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Construct
      *
      * @param \Magento\Core\Model\Logger $logger
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      * @param \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
      */
     public function __construct(
         \Magento\Core\Model\Logger $logger,
-        \Magento\Core\Model\Dir $dir,
+        \Magento\App\Dir $dir,
         \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
     ) {
         $this->_dir = $dir;
@@ -94,7 +94,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             return $this;
         }
 
-        $path = $this->_dir->getDir(\Magento\Core\Model\Dir::MEDIA) . DS . 'catalog' . DS . 'category' . DS;
+        $path = $this->_dir->getDir(\Magento\App\Dir::MEDIA) . DS . 'catalog' . DS . 'category' . DS;
 
         try {
             /** @var $uploader \Magento\Core\Model\File\Uploader */

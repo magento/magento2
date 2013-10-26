@@ -73,7 +73,7 @@ class Config extends \Magento\Object
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -96,7 +96,7 @@ class Config extends \Magento\Object
 
     /**
      * @param \Magento\Backend\Model\Url $backendUrl
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Cms\Helper\Data $cmsData
      * @param \Magento\AuthorizationInterface $authorization
      * @param \Magento\Core\Model\View\Url $viewUrl
@@ -108,7 +108,7 @@ class Config extends \Magento\Object
      */
     public function __construct(
         \Magento\Backend\Model\Url $backendUrl,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Cms\Helper\Data $cmsData,
         \Magento\AuthorizationInterface $authorization,
         \Magento\Core\Model\View\Url $viewUrl,

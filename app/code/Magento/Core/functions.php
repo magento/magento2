@@ -163,11 +163,11 @@ function mageCoreErrorHandler($errorNo, $errorStr, $errorFile, $errorLine)
     $errorMessage .= ": {$errorStr} in {$errorFile} on line {$errorLine}";
     $exception = new \Exception($errorMessage);
     $errorMessage .= $exception->getTraceAsString();
-    $appState = \Magento\Core\Model\ObjectManager::getInstance()->get('Magento\Core\Model\App\State');
-    if ($appState == \Magento\Core\Model\App\State::MODE_DEVELOPER) {
+    $appState = \Magento\Core\Model\ObjectManager::getInstance()->get('Magento\App\State');
+    if ($appState == \Magento\App\State::MODE_DEVELOPER) {
         throw $exception;
     } else {
-        $dirs = new \Magento\Core\Model\Dir('.');
+        $dirs = new \Magento\App\Dir('.');
         $fileSystem = new \Magento\Io\File();
         $logger = new \Magento\Core\Model\Logger($dirs, $fileSystem);
         $logger->log($errorMessage, \Zend_Log::ERR);

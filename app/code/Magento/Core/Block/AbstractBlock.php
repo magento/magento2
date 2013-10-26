@@ -37,17 +37,18 @@
  */
 namespace Magento\Core\Block;
 
+use Magento\View\Element\BlockInterface;
+
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-abstract class AbstractBlock extends \Magento\Object
-    implements \Magento\Core\Block
+abstract class AbstractBlock extends \Magento\Object implements BlockInterface
 {
     /**
-     * @var \Magento\Core\Model\View\DesignInterface
+     * @var \Magento\View\DesignInterface
      */
     protected $_design;
 
@@ -75,12 +76,12 @@ abstract class AbstractBlock extends \Magento\Object
     /**
      * Parent layout of the block
      *
-     * @var \Magento\Core\Model\Layout
+     * @var \Magento\View\LayoutInterface
      */
     protected $_layout;
 
     /**
-     * @var \Magento\Core\Controller\Request\Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_request;
 
@@ -106,7 +107,7 @@ abstract class AbstractBlock extends \Magento\Object
     /**
      * Url Builder
      *
-     * @var \Magento\Core\Model\UrlInterface
+     * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
 
@@ -114,14 +115,14 @@ abstract class AbstractBlock extends \Magento\Object
      * System event manager
      *
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
     /**
      * Application front controller
      *
-     * @var \Magento\Core\Controller\Varien\Front
+     * @var \Magento\App\FrontController
      */
     protected $_frontController;
 
@@ -138,7 +139,7 @@ abstract class AbstractBlock extends \Magento\Object
     /**
      * View config model
      *
-     * @var \Magento\Core\Model\View\Config
+     * @var \Magento\View\ConfigInterface
      */
     protected $_viewConfig;
 
@@ -155,7 +156,7 @@ abstract class AbstractBlock extends \Magento\Object
     /**
      * @var \Magento\Core\Model\App
      */
-    protected $_app;
+    protected $_storeManager;
 
     /**
      * @param \Magento\Core\Block\Context $context
@@ -178,13 +179,13 @@ abstract class AbstractBlock extends \Magento\Object
         $this->_viewConfig      = $context->getViewConfig();
         $this->_cacheState      = $context->getCacheState();
         $this->_logger          = $context->getLogger();
-        $this->_app             = $context->getApp();
+        $this->_storeManager    = $context->getApp();
         parent::__construct($data);
         $this->_construct();
     }
 
     /**
-     * @return \Magento\Core\Controller\Request\Http
+     * @return \Magento\App\RequestInterface
      */
     public function getRequest()
     {
@@ -225,10 +226,10 @@ abstract class AbstractBlock extends \Magento\Object
     /**
      * Set layout object
      *
-     * @param   \Magento\Core\Model\Layout $layout
+     * @param   \Magento\View\LayoutInterface $layout
      * @return  \Magento\Core\Block\AbstractBlock
      */
-    public function setLayout(\Magento\Core\Model\Layout $layout)
+    public function setLayout(\Magento\View\LayoutInterface $layout)
     {
         $this->_layout = $layout;
         $this->_eventManager->dispatch('core_block_abstract_prepare_layout_before', array('block' => $this));
@@ -252,7 +253,7 @@ abstract class AbstractBlock extends \Magento\Object
     /**
      * Retrieve layout object
      *
-     * @return \Magento\Core\Model\Layout
+     * @return \Magento\View\LayoutInterface
      */
     public function getLayout()
     {
@@ -947,7 +948,7 @@ abstract class AbstractBlock extends \Magento\Object
     protected function _beforeCacheUrl()
     {
         if ($this->_cacheState->isEnabled(self::CACHE_GROUP)) {
-            $this->_app->setUseSessionVar(true);
+            $this->_storeManager->setUseSessionVar(true);
         }
         return $this;
     }
@@ -961,7 +962,7 @@ abstract class AbstractBlock extends \Magento\Object
     protected function _afterCacheUrl($html)
     {
         if ($this->_cacheState->isEnabled(self::CACHE_GROUP)) {
-            $this->_app->setUseSessionVar(false);
+            $this->_storeManager->setUseSessionVar(false);
             \Magento\Profiler::start('CACHE_URL');
             $html = $this->_urlBuilder->sessionUrlVar($html);
             \Magento\Profiler::stop('CACHE_URL');

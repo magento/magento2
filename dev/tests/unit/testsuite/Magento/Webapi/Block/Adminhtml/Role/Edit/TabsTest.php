@@ -43,7 +43,7 @@ class TabsTest extends \PHPUnit_Framework_TestCase
     protected $_helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Controller\Request\Http
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\RequestInterface
      */
     protected $_request;
 
@@ -60,7 +60,7 @@ class TabsTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $backendData = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false);
-        $this->_request = $this->getMockForAbstractClass('Magento\Core\Controller\Request\Http',
+        $this->_request = $this->getMockForAbstractClass('Magento\App\RequestInterface',
             array($backendData), '', false, false, true, array('getParam'));
 
         $this->_helper = new \Magento\TestFramework\Helper\ObjectManager($this);

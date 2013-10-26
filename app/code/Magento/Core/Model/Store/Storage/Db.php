@@ -135,7 +135,7 @@ class Db implements \Magento\Core\Model\Store\StorageInterface
     /**
      * Application state model
      *
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     protected $_appState;
 
@@ -150,7 +150,7 @@ class Db implements \Magento\Core\Model\Store\StorageInterface
      * @param \Magento\Core\Model\Store\Group\Factory $groupFactory
      * @param \Magento\Core\Model\Config $config
      * @param \Magento\Core\Model\Cookie $cookie
-     * @param \Magento\Core\Model\App\State $appState
+     * @param \Magento\App\State $appState
      * @param \Magento\Backend\Model\Url\Proxy $proxy
      * @param bool $isSingleStoreAllowed
      * @param string $scopeCode
@@ -163,7 +163,7 @@ class Db implements \Magento\Core\Model\Store\StorageInterface
         \Magento\Core\Model\Store\Group\Factory $groupFactory,
         \Magento\Core\Model\Config $config,
         \Magento\Core\Model\Cookie $cookie,
-        \Magento\Core\Model\App\State $appState,
+        \Magento\App\State $appState,
         \Magento\Backend\Model\Url\Proxy $proxy,
         $isSingleStoreAllowed,
         $scopeCode,

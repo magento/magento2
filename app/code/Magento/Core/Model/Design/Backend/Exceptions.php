@@ -31,12 +31,12 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
     /**
      * Design package instance
      *
-     * @var \Magento\Core\Model\View\DesignInterface
+     * @var \Magento\View\DesignInterface
      */
     protected $_design = null;
 
     /**
-     * @param \Magento\Core\Model\View\DesignInterface $design
+     * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\StoreManager $storeManager
@@ -46,7 +46,7 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\View\DesignInterface $design,
+        \Magento\View\DesignInterface $design,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\StoreManager $storeManager,

@@ -51,7 +51,7 @@ class Collection extends \Magento\Data\Collection\Filesystem
     /**
      * Directory model
      *
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
@@ -66,14 +66,14 @@ class Collection extends \Magento\Data\Collection\Filesystem
      * @param \Magento\Backup\Helper\Data $backupData
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      * @param \Magento\Backup\Model\Backup $backup
      */
     public function __construct(
         \Magento\Backup\Helper\Data $backupData,
         \Magento\Filesystem $filesystem,
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Core\Model\Dir $dir,
+        \Magento\App\Dir $dir,
         \Magento\Backup\Model\Backup $backup
     ) {
         $this->_backupData = $backupData;
@@ -83,7 +83,7 @@ class Collection extends \Magento\Data\Collection\Filesystem
         $this->_filesystem = $filesystem;
         $this->_dir = $dir;
         $this->_backup = $backup;
-        $this->_baseDir = $this->_dir->getDir(\Magento\Core\Model\Dir::VAR_DIR) . DS . 'backups';
+        $this->_baseDir = $this->_dir->getDir(\Magento\App\Dir::VAR_DIR) . DS . 'backups';
 
         $this->_filesystem->setIsAllowCreateDirectories(true);
         $this->_filesystem->ensureDirectoryExists($this->_baseDir);

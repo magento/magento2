@@ -43,7 +43,7 @@ class Content
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Data\Form\Factory $formFactory
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param array $data
      */
@@ -52,7 +52,7 @@ class Content
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Data\Form\Factory $formFactory,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Registry $coreRegistry,
         array $data = array()
     ) {

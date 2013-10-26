@@ -61,9 +61,9 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager   = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model           = $this->_objectManager->create('Magento\Index\Model\Process\File');
-        /** @var $dir \Magento\Core\Model\Dir */
-        $dir = $this->_objectManager->get('Magento\Core\Model\Dir');
-        $this->_fileDirectory   = $dir->getDir(\Magento\Core\Model\Dir::VAR_DIR) . DIRECTORY_SEPARATOR . 'locks';
+        /** @var $dir \Magento\App\Dir */
+        $dir = $this->_objectManager->get('Magento\App\Dir');
+        $this->_fileDirectory   = $dir->getDir(\Magento\App\Dir::VAR_DIR) . DIRECTORY_SEPARATOR . 'locks';
         $fullFileName           = $this->_fileDirectory . DIRECTORY_SEPARATOR . self::FILE_NAME;
         $this->_testFileHandler = fopen($fullFileName, 'w');
     }

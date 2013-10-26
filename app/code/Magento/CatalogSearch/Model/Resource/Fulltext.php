@@ -114,7 +114,7 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -153,7 +153,7 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\Catalog\Model\Product\Status $catalogProductStatus
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollFactory
      * @param \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\String $coreString
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
@@ -167,7 +167,7 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
         \Magento\Catalog\Model\Product\Status $catalogProductStatus,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollFactory,
         \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\String $coreString,
         \Magento\CatalogSearch\Helper\Data $catalogSearchData,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,

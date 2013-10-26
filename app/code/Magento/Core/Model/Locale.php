@@ -66,7 +66,7 @@ class Locale implements \Magento\Core\Model\LocaleInterface
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -83,7 +83,7 @@ class Locale implements \Magento\Core\Model\LocaleInterface
     protected $_coreStoreConfig;
 
     /**
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     protected $_appState;
 
@@ -103,20 +103,20 @@ class Locale implements \Magento\Core\Model\LocaleInterface
     protected $_app;
 
     /**
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Translate $translate
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\App\State $appState
+     * @param \Magento\App\State $appState
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Core\Model\Locale\Config $config
      * @param \Magento\Core\Model\App $app
      * @param string $locale
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Translate $translate,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\App\State $appState,
+        \Magento\App\State $appState,
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Core\Model\Locale\Config $config,
         \Magento\Core\Model\App $app,

@@ -34,12 +34,12 @@
  */
 namespace Magento\Cms\Controller;
 
-class Router extends \Magento\Core\Controller\Varien\Router\AbstractRouter
+class Router extends \Magento\App\Router\AbstractRouter
 {
     /**
      * Event manager
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -60,43 +60,43 @@ class Router extends \Magento\Core\Controller\Varien\Router\AbstractRouter
     /**
      * Config primary
      *
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     protected $_appState;
 
     /**
      * Url
      *
-     * @var \Magento\Core\Model\UrlInterface
+     * @var \Magento\UrlInterface
      */
     protected $_url;
 
     /**
      * Response
      *
-     * @var \Magento\Core\Controller\Response\Http
+     * @var \Magento\App\ResponseInterface
      */
     protected $_response;
 
     /**
      * Construct
      *
-     * @param \Magento\Core\Controller\Varien\Action\Factory $controllerFactory
-     * @param \Magento\Core\Model\Event\Manager $eventManager
-     * @param \Magento\Core\Model\UrlInterface $url
-     * @param \Magento\Core\Model\App\State $appState
+     * @param \Magento\App\ActionFactory $controllerFactory
+     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\UrlInterface $url
+     * @param \Magento\App\State $appState
      * @param \Magento\Cms\Model\PageFactory $pageFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Controller\Response\Http $response
+     * @param \Magento\App\ResponseInterface $response
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Factory $controllerFactory,
-        \Magento\Core\Model\Event\Manager $eventManager,
-        \Magento\Core\Model\UrlInterface $url,
-        \Magento\Core\Model\App\State $appState,
+        \Magento\App\ActionFactory $controllerFactory,
+        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\UrlInterface $url,
+        \Magento\App\State $appState,
         \Magento\Cms\Model\PageFactory $pageFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Controller\Response\Http $response
+        \Magento\App\ResponseInterface $response
     ) {
         parent::__construct($controllerFactory);
         $this->_eventManager = $eventManager;
@@ -110,12 +110,12 @@ class Router extends \Magento\Core\Controller\Varien\Router\AbstractRouter
     /**
      * Validate and Match Cms Page and modify request
      *
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @return bool
      *
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function match(\Magento\Core\Controller\Request\Http $request)
+    public function match(\Magento\App\RequestInterface $request)
     {
         if (!$this->_appState->isInstalled()) {
             $this->_response->setRedirect($this->_url->getUrl('install'))
@@ -139,7 +139,7 @@ class Router extends \Magento\Core\Controller\Varien\Router\AbstractRouter
             $this->_response->setRedirect($condition->getRedirectUrl())
                 ->sendResponse();
             $request->setDispatched(true);
-            return $this->_controllerFactory->createController('Magento\Core\Controller\Varien\Action\Redirect',
+            return $this->_controllerFactory->createController('Magento\App\Action\Redirect',
                 array('request' => $request)
             );
         }
@@ -164,7 +164,7 @@ class Router extends \Magento\Core\Controller\Varien\Router\AbstractRouter
             $identifier
         );
 
-        return $this->_controllerFactory->createController('Magento\Core\Controller\Varien\Action\Forward',
+        return $this->_controllerFactory->createController('Magento\App\Action\Forward',
             array('request' => $request)
         );
     }

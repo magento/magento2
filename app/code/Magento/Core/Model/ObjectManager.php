@@ -92,11 +92,11 @@ class ObjectManager extends \Magento\ObjectManager\ObjectManager
         );
 
         $localConfig = new \Magento\Core\Model\Config\Local(new \Magento\Core\Model\Config\Loader\Local(
-            $primaryConfig->getDirectories()->getDir(\Magento\Core\Model\Dir::CONFIG),
+            $primaryConfig->getDirectories()->getDir(\Magento\App\Dir::CONFIG),
             $primaryConfig->getParam(\Magento\Core\Model\App::PARAM_CUSTOM_LOCAL_CONFIG),
             $primaryConfig->getParam(\Magento\Core\Model\App::PARAM_CUSTOM_LOCAL_FILE)
         ));
-        $appMode = $primaryConfig->getParam(\Magento\Core\Model\App::PARAM_MODE, \Magento\Core\Model\App\State::MODE_DEFAULT);
+        $appMode = $primaryConfig->getParam(\Magento\Core\Model\App::PARAM_MODE, \Magento\App\State::MODE_DEFAULT);
         $factory = new \Magento\ObjectManager\Factory\Factory($config, $this, $definitions, array_replace(
             $localConfig->getParams(),
             $primaryConfig->getParams()
@@ -104,7 +104,7 @@ class ObjectManager extends \Magento\ObjectManager\ObjectManager
 
         $sharedInstances['Magento\Core\Model\Config\Local'] = $localConfig;
         $sharedInstances['Magento\Core\Model\Config\Primary'] = $primaryConfig;
-        $sharedInstances['Magento\Core\Model\Dir'] = $primaryConfig->getDirectories();
+        $sharedInstances['Magento\App\Dir'] = $primaryConfig->getDirectories();
         $sharedInstances['Magento\Core\Model\ObjectManager'] = $this;
 
         parent::__construct($factory, $config, $sharedInstances);
@@ -136,14 +136,17 @@ class ObjectManager extends \Magento\ObjectManager\ObjectManager
                 new \Magento\Code\Generator\Io(
                     new \Magento\Io\File(),
                     $autoloader,
-                    $primaryConfig->getDirectories()->getDir(\Magento\Core\Model\Dir::GENERATION)
+                    $primaryConfig->getDirectories()->getDir(\Magento\App\Dir::GENERATION)
                 )
             ));
         }
 
         \Magento\Profiler::stop('global_primary');
-        $verification = $this->get('Magento\Core\Model\Dir\Verification');
+        $verification = $this->get('Magento\App\Dir\Verification');
         $verification->createAndVerifyDirectories();
+
+        $this->_config->setCache($this->get('Magento\Core\Model\ObjectManager\ConfigCache'));
+        $this->configure($this->get('Magento\Core\Model\ObjectManager\ConfigLoader')->load('global'));
 
         $interceptionConfig = $this->create('Magento\Interception\Config\Config', array(
             'relations' => $definitionFactory->createRelations(),
@@ -171,8 +174,6 @@ class ObjectManager extends \Magento\ObjectManager\ObjectManager
             'config' => $interceptionConfig,
             'pluginList' => $pluginList
         ));
-        $this->_config->setCache($this->get('Magento\Core\Model\ObjectManager\ConfigCache'));
-        $this->configure($this->get('Magento\Core\Model\ObjectManager\ConfigLoader')->load('global'));
         $this->get('Magento\Core\Model\Resource')->setConfig($this->get('Magento\Core\Model\Config\Resource'));
 
         self::setInstance($this);

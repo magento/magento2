@@ -78,7 +78,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     protected $_reportOrderFactory;
 
     /**
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
@@ -91,7 +91,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Core\Model\Store\Config $coreStoreConfig,

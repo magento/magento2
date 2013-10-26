@@ -73,7 +73,7 @@ class Inline implements \Magento\Core\Model\Translate\InlineInterface
     protected $_url;
 
     /**
-     * @var \Magento\Core\Model\Layout
+     * @var \Magento\View\LayoutInterface
      */
     protected $_layout;
 
@@ -87,11 +87,11 @@ class Inline implements \Magento\Core\Model\Translate\InlineInterface
     /**
      * Initialize inline translation model
      *
-     * @param \Magento\Core\Model\Translate\InlineParser $parser
+     * @param InlineParser $parser
      * @param \Magento\Core\Model\Translate $translate
      * @param \Magento\Backend\Model\Url $backendUrl
      * @param \Magento\Core\Model\Url $url
-     * @param \Magento\Core\Model\Layout $layout
+     * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      */
     public function __construct(
@@ -99,7 +99,7 @@ class Inline implements \Magento\Core\Model\Translate\InlineInterface
         \Magento\Core\Model\Translate $translate,
         \Magento\Backend\Model\Url $backendUrl,
         \Magento\Core\Model\Url $url,
-        \Magento\Core\Model\Layout $layout,
+        \Magento\View\LayoutInterface $layout,
         \Magento\Core\Model\Store\Config $coreStoreConfig
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
