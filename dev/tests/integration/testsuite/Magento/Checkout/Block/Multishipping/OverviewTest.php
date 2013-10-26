@@ -38,7 +38,7 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
             ->getArea(\Magento\Core\Model\App\Area::AREA_FRONTEND)->load();
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Checkout\Block\Multishipping\Overview');
     }
 
@@ -57,6 +57,6 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Sales\Model\Quote');
         $item->setQuote($quote);
         // assure that default renderer was obtained
-        $this->assertSelectCount('h2.product-name a', 1, $this->_block->getRowItemHtml($item));
+        $this->assertSelectCount('strong.product.name a', 1, $this->_block->getRowItemHtml($item));
     }
 }

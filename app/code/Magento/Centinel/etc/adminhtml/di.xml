@@ -32,15 +32,7 @@
             <value>adminhtml</value>
         </param>
     </virtualType>
-    <type name="Magento\Centinel\Controller\Adminhtml\Centinel\Index">
-        <param name="checkoutCart">
-            <instance type="Magento\Adminhtml\Model\Sales\Order\Create" />
-        </param>
-    </type>
     <type name="Magento\Centinel\Model\Service">
-        <param name="checkoutCart">
-            <instance type="Magento\Adminhtml\Model\Sales\Order\Create" />
-        </param>
         <param name="backendUrl">
             <instance type="Magento\Backend\Model\Url" />
         </param>

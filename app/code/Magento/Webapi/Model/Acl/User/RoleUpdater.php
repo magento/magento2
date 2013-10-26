@@ -40,11 +40,11 @@ class RoleUpdater implements \Magento\Core\Model\Layout\Argument\UpdaterInterfac
     /**
      * Constructor.
      *
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @param \Magento\Webapi\Model\Acl\User\Factory $userFactory
      */
     public function __construct(
-        \Magento\Core\Controller\Request\Http $request,
+        \Magento\App\RequestInterface $request,
         \Magento\Webapi\Model\Acl\User\Factory $userFactory
     ) {
         $this->_userId = (int)$request->getParam('user_id');

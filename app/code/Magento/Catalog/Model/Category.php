@@ -128,7 +128,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -189,12 +189,12 @@ class Category extends \Magento\Catalog\Model\AbstractModel
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Core\Model\Url\RewriteFactory $urlRewriteFactory
      * @param \Magento\Core\Model\Resource\Store\CollectionFactory $storeCollectionFactory
-     * @param \Magento\Core\Model\UrlInterface $url
+     * @param \Magento\UrlInterface $url
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Index\Model\Indexer $indexIndexer
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Helper\Category\Flat $catalogCategoryFlat
      * @param \Magento\Core\Model\Context $context
@@ -211,12 +211,12 @@ class Category extends \Magento\Catalog\Model\AbstractModel
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Core\Model\Url\RewriteFactory $urlRewriteFactory,
         \Magento\Core\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
-        \Magento\Core\Model\UrlInterface $url,
+        \Magento\UrlInterface $url,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Index\Model\Indexer $indexIndexer,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Helper\Category\Flat $catalogCategoryFlat,
         \Magento\Core\Model\Context $context,

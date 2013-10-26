@@ -56,7 +56,7 @@ class File extends \Magento\Core\Model\Config\Value
     protected $_uploaderFactory;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
@@ -68,7 +68,7 @@ class File extends \Magento\Core\Model\Config\Value
      * @param \Magento\Core\Model\Config $config
      * @param \Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -83,7 +83,7 @@ class File extends \Magento\Core\Model\Config\Value
         \Magento\Core\Model\Config $config,
         \Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData,
         \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\Dir $dir,
+        \Magento\App\Dir $dir,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -216,7 +216,7 @@ class File extends \Magento\Core\Model\Config\Value
      */
     protected function _getUploadRoot($token)
     {
-        return $this->_dir->getDir(\Magento\Core\Model\Dir::MEDIA);
+        return $this->_dir->getDir(\Magento\App\Dir::MEDIA);
     }
 
     /**

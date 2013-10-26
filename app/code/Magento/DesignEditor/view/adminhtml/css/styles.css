@@ -306,6 +306,7 @@
 #theme_selector_tabs .tabs-horiz > .ui-state-active a {
     background: #fff;
     border: 0;
+    margin-top: 0;
     box-shadow: none;
 }
 

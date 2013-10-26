@@ -28,7 +28,7 @@ namespace Magento\Core\Model;
 class RouterListTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\RouterList
+     * @var \Magento\App\RouterList
      */
     protected $_model;
 
@@ -63,7 +63,7 @@ class RouterListTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_objectManagerMock = $this->getMock('Magento\ObjectManager');
-        $this->_model = new \Magento\Core\Model\RouterList($this->_objectManagerMock, $this->_routerList);
+        $this->_model = new \Magento\App\RouterList($this->_objectManagerMock, $this->_routerList);
     }
 
     public function testGetRoutes()

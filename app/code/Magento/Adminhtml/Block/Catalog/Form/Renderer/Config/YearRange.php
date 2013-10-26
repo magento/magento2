@@ -49,8 +49,7 @@ class YearRange extends \Magento\Backend\Block\System\Config\Form\Field
 
         $from = $element->setValue(isset($values[0]) ? $values[0] : null)->getElementHtml();
         $to = $element->setValue(isset($values[1]) ? $values[1] : null)->getElementHtml();
-        return __('from') . ' ' . $from
-            . ' '
-            . __('to') . ' ' . $to;
+        return __('<label class="label"><span>from</span></label>') . $from
+            . __('<label class="label"><span>to</span></label>') . $to;
     }
 }

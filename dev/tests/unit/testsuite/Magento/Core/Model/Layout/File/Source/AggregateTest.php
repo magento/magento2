@@ -74,8 +74,8 @@ class AggregateTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFiles()
     {
-        $parentTheme = $this->getMockForAbstractClass('Magento\Core\Model\ThemeInterface');
-        $theme = $this->getMockForAbstractClass('Magento\Core\Model\ThemeInterface');
+        $parentTheme = $this->getMockForAbstractClass('Magento\View\Design\ThemeInterface');
+        $theme = $this->getMockForAbstractClass('Magento\View\Design\ThemeInterface');
         $theme->expects($this->once())->method('getParentTheme')->will($this->returnValue($parentTheme));
 
         $files = array(

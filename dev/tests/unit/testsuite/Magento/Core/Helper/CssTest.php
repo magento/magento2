@@ -34,7 +34,7 @@ class CssTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $filesystem = new \Magento\Filesystem(new \Magento\Filesystem\Adapter\Local());
-        $dirs = new \Magento\Core\Model\Dir('/base_dir');
+        $dirs = new \Magento\App\Dir('/base_dir');
         $this->_object = new \Magento\Core\Helper\Css($filesystem, $dirs);
     }
 

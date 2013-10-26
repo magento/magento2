@@ -45,8 +45,5 @@
         <param name="app">
             <instance type="Magento\Core\Model\App" />
         </param>
-        <param name="coreConfig">
-            <instance type="Magento\Core\Model\Config" />
-        </param>
     </type>
 </config>

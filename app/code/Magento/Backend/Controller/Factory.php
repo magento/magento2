@@ -33,7 +33,7 @@
  */
 namespace Magento\Backend\Controller;
 
-class Factory extends \Magento\Core\Controller\Varien\Action\Factory
+class Factory extends \Magento\App\ActionFactory
 {
     /**
      * @param string $controllerName

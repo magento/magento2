@@ -50,7 +50,7 @@ class StorageFactory
     protected $_cache = array();
 
     /**
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -70,27 +70,27 @@ class StorageFactory
     protected $_app;
 
     /**
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     protected $_appState;
 
     /**
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Logger $log
      * @param \Magento\Core\Model\ConfigInterface $config
      * @param \Magento\Core\Model\App\Proxy $app
-     * @param \Magento\Core\Model\App\State $appState
+     * @param \Magento\App\State $appState
      * @param string $defaultStorageClassName
      * @param string $installedStoreClassName
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Logger $log,
         \Magento\Core\Model\ConfigInterface $config,
         \Magento\Core\Model\App\Proxy $app,
-        \Magento\Core\Model\App\State $appState,
+        \Magento\App\State $appState,
         $defaultStorageClassName = 'Magento\Core\Model\Store\Storage\DefaultStorage',
         $installedStoreClassName = 'Magento\Core\Model\Store\Storage\Db'
     ) {

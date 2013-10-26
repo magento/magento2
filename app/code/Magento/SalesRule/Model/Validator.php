@@ -87,7 +87,7 @@ class Validator extends \Magento\Core\Model\AbstractModel
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -113,7 +113,7 @@ class Validator extends \Magento\Core\Model\AbstractModel
     /**
      * @param \Magento\SalesRule\Model\Resource\Coupon\UsageFactory $usageFactory
      * @param \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
@@ -126,7 +126,7 @@ class Validator extends \Magento\Core\Model\AbstractModel
     public function __construct(
         \Magento\SalesRule\Model\Resource\Coupon\UsageFactory $usageFactory,
         \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,

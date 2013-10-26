@@ -29,13 +29,12 @@ namespace Magento\DesignEditor\Model\Url;
 
 class NavigationModeTest extends \PHPUnit_Framework_TestCase
 {
-    /**#@+
+    /**
      * Test route params
      */
     const FRONT_NAME = 'vde';
     const ROUTE_PATH = 'some-rout-url/page.html';
     const BASE_URL   = 'http://test.com';
-    /**#@-*/
 
     /**
      * @var \Magento\DesignEditor\Model\Url\NavigationMode
@@ -43,14 +42,49 @@ class NavigationModeTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\DesignEditor\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_helper;
+    protected $_designHelperMock;
 
     /**
-     * @var \Magento\Core\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_coreData;
+    protected $_coreHelperMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_requestMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_storeConfigMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_appMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_storeManagerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_sessionMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_routerListMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_securityInfoMock;
 
     /**
      * @var array
@@ -59,41 +93,46 @@ class NavigationModeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helper = $this->getMock('Magento\DesignEditor\Helper\Data', array('getFrontName'),
-            array(), '', false);
-        $this->_coreData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
-        $requestMock = $this->getMock('Magento\Core\Controller\Request\Http', array('getAlias'), array(), '', false);
-        $requestMock->expects($this->any())->method('getAlias')->will($this->returnValueMap(array(
-             array('editorMode', 'navigation'),
-             array('themeId', 1)
-        )));
-        $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
-        $app = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
-        $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
-        $session = $this->getMock('Magento\Core\Model\Session', array(), array(), '', false);
+        $this->_designHelperMock = $this->getMock('Magento\DesignEditor\Helper\Data', array(), array(), '', false);
+        $this->_coreHelperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
+        $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $this->_storeConfigMock = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
+        $this->_appMock = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
+        $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
+        $this->_sessionMock = $this->getMock('Magento\Core\Model\Session', array(), array(), '', false);
+        $this->_routerListMock = $this->getMock('\Magento\App\RouterListInterface');
+        $this->_securityInfoMock = $this->getMock('Magento\Core\Model\Url\SecurityInfoInterface');
+
+        $this->_requestMock->expects($this->any())
+            ->method('getAlias')
+            ->will($this->returnValueMap(array(
+                array('editorMode', 'navigation'),
+                array('themeId', 1))));
 
         $this->_model = new \Magento\DesignEditor\Model\Url\NavigationMode(
-            $this->getMock('Magento\Core\Model\Url\SecurityInfoInterface'),
-            $this->_helper,
-            $coreStoreConfig,
-            $this->_coreData,
-            $app,
-            $storeManager,
-            $session,
+            $this->_routerListMock,
+            $this->_requestMock,
+            $this->_securityInfoMock,
+            $this->_designHelperMock,
+            $this->_storeConfigMock,
+            $this->_coreHelperMock,
+            $this->_appMock,
+            $this->_storeManagerMock,
+            $this->_sessionMock,
             $this->_testData
         );
-        $this->_model->setRequest($requestMock);
+        $this->_model->setRequest($this->_requestMock);
     }
 
     public function testConstruct()
     {
-        $this->assertAttributeEquals($this->_helper, '_helper', $this->_model);
+        $this->assertAttributeEquals($this->_designHelperMock, '_helper', $this->_model);
         $this->assertAttributeEquals($this->_testData, '_data', $this->_model);
     }
 
     public function testGetRouteUrl()
     {
-        $this->_helper->expects($this->any())
+        $this->_designHelperMock->expects($this->any())
             ->method('getFrontName')
             ->will($this->returnValue(self::FRONT_NAME));
 

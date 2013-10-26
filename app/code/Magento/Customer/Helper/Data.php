@@ -112,7 +112,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -144,7 +144,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_formFactory;
 
     /**
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Customer\Helper\Address $customerAddress
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Helper\Context $context
@@ -155,7 +155,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * @param \Magento\Customer\Model\FormFactory $formFactory
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Customer\Helper\Address $customerAddress,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Helper\Context $context,
@@ -704,7 +704,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     /**
      * Perform customer data filtration based on form code and form object
      *
-     * @param \Zend_Controller_Request_Http $request
+     * @param \Magento\App\RequestInterface $request
      * @param string $formCode The code of EAV form to take the list of attributes from
      * @param \Magento\Core\Model\AbstractModel $entity entity model for the form
      * @param array $additionalAttributes The list of attribute codes to skip filtration for
@@ -712,7 +712,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * @param \Magento\Eav\Model\Form|null $eavForm EAV form model to use for extraction
      * @return array Filtered customer data
      */
-    public function extractCustomerData(\Zend_Controller_Request_Http $request, $formCode, $entity,
+    public function extractCustomerData(\Magento\App\RequestInterface $request, $formCode, $entity,
         $additionalAttributes = array(), $scope = null, $eavForm = null
     ) {
         if (is_null($eavForm)) {

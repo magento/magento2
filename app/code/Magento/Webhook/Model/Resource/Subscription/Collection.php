@@ -38,7 +38,7 @@ class Collection
 
     /**
      * @param \Magento\Webhook\Model\Resource\Endpoint $endpointResource
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Core\Model\EntityFactory $entityFactory
@@ -46,7 +46,7 @@ class Collection
      */
     public function __construct(
         \Magento\Webhook\Model\Resource\Endpoint $endpointResource,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Core\Model\EntityFactory $entityFactory,

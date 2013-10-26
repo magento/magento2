@@ -48,7 +48,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
                 $this->assertNotEmpty($module);
                 $this->assertTrue(class_exists($class), "Block class: {$class}");
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\Core\Model\Config\Scope')
+                    ->get('Magento\Config\ScopeInterface')
                     ->setCurrentScope($area);
 
                 /** @var \Magento\Core\Model\App $app */

@@ -104,7 +104,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $request = $objectManager->get('Magento\TestFramework\Request');
         $this->_model->apply(
             $request,
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
                 ->createBlock('Magento\Core\Block\Text')
         );
 
@@ -121,7 +121,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $request->setParam('price', 'non-numeric');
         $this->_model->apply(
             $request,
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
                 ->createBlock('Magento\Core\Block\Text')
         );
 
@@ -140,7 +140,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $request->setParam('price', '10-20');
         $this->_model->apply(
             $request,
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
                 ->createBlock('Magento\Core\Block\Text')
         );
 

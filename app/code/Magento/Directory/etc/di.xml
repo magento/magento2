@@ -35,13 +35,8 @@
             </value>
         </param>
     </type>
-    <type name="Magento\Directory\Model\Currency\Import\Factory">
-        <param name="coreConfig">
-            <instance type="Magento\Core\Model\Config\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Core\Model\Db\Updater">
-        <param name="resourceList">
+    <type name="Magento\App\Updater\SetupFactory">
+        <param name="resourceTypes">
             <value>
                 <directory_setup>Magento\Directory\Model\Resource\Setup</directory_setup>
             </value>

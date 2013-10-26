@@ -76,10 +76,10 @@ class Http extends \Magento\Core\Helper\AbstractHelper
      *
      * Returns plain array with 2 items: login and password respectively
      *
-     * @param \Zend_Controller_Request_Http $request
+     * @param \Magento\App\RequestInterface $request
      * @return array
      */
-    public function getHttpAuthCredentials(\Zend_Controller_Request_Http $request)
+    public function getHttpAuthCredentials(\Magento\App\RequestInterface $request)
     {
         $server = $request->getServer();
         $user = '';
@@ -117,10 +117,10 @@ class Http extends \Magento\Core\Helper\AbstractHelper
     /**
      * Set "auth failed" headers to the specified response object
      *
-     * @param \Zend_Controller_Response_Http $response
+     * @param \Magento\App\ResponseInterface $response
      * @param string $realm
      */
-    public function failHttpAuthentication(\Zend_Controller_Response_Http $response, $realm)
+    public function failHttpAuthentication(\Magento\App\ResponseInterface $response, $realm)
     {
         $response->setHeader('HTTP/1.1', '401 Unauthorized')
             ->setHeader('WWW-Authenticate', 'Basic realm="' . $realm . '"')

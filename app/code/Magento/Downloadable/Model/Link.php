@@ -68,14 +68,14 @@ class Link extends \Magento\Core\Model\AbstractModel
     const LINK_SHAREABLE_CONFIG = 2;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dirModel;
 
     /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\Dir $dirModel
+     * @param \Magento\App\Dir $dirModel
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -83,7 +83,7 @@ class Link extends \Magento\Core\Model\AbstractModel
     public function __construct(
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\Dir $dirModel,
+        \Magento\App\Dir $dirModel,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -130,7 +130,7 @@ class Link extends \Magento\Core\Model\AbstractModel
      */
     public function getBaseTmpPath()
     {
-        return $this->_dirModel->getDir(\Magento\Core\Model\Dir::MEDIA)
+        return $this->_dirModel->getDir(\Magento\App\Dir::MEDIA)
             . DS . 'downloadable' . DS . 'tmp' . DS . 'links';
     }
 
@@ -141,7 +141,7 @@ class Link extends \Magento\Core\Model\AbstractModel
      */
     public function getBasePath()
     {
-        return $this->_dirModel->getDir(\Magento\Core\Model\Dir::MEDIA) . DS . 'downloadable' . DS . 'files' . DS . 'links';
+        return $this->_dirModel->getDir(\Magento\App\Dir::MEDIA) . DS . 'downloadable' . DS . 'files' . DS . 'links';
     }
 
     /**
@@ -151,7 +151,7 @@ class Link extends \Magento\Core\Model\AbstractModel
      */
     public function getBaseSampleTmpPath()
     {
-        return $this->_dirModel->getDir(\Magento\Core\Model\Dir::MEDIA) . DS . 'downloadable' . DS . 'tmp' . DS . 'link_samples';
+        return $this->_dirModel->getDir(\Magento\App\Dir::MEDIA) . DS . 'downloadable' . DS . 'tmp' . DS . 'link_samples';
     }
 
     /**
@@ -161,7 +161,7 @@ class Link extends \Magento\Core\Model\AbstractModel
      */
     public function getBaseSamplePath()
     {
-        return $this->_dirModel->getDir(\Magento\Core\Model\Dir::MEDIA) . DS . 'downloadable' . DS . 'files' . DS . 'link_samples';
+        return $this->_dirModel->getDir(\Magento\App\Dir::MEDIA) . DS . 'downloadable' . DS . 'files' . DS . 'link_samples';
     }
 
     /**

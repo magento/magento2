@@ -74,7 +74,7 @@ class Factory
      * Get file path by type
      *
      * @param string $type
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @return string
      * @throws \Magento\Exception
      */
@@ -84,7 +84,7 @@ class Factory
             throw new \Magento\Exception("Unknown control configuration type: \"{$type}\"");
         }
         return $this->_viewFileSystem->getFilename($this->_fileNames[$type], array(
-            'area'       => \Magento\Core\Model\View\DesignInterface::DEFAULT_AREA,
+            'area'       => \Magento\View\DesignInterface::DEFAULT_AREA,
             'themeModel' => $theme
         ));
     }
@@ -93,16 +93,16 @@ class Factory
      * Create new instance
      *
      * @param string $type
-     * @param \Magento\Core\Model\Theme $theme
-     * @param \Magento\Core\Model\Theme $parentTheme
+     * @param \Magento\View\Design\ThemeInterface $theme
+     * @param \Magento\View\Design\ThemeInterface $parentTheme
      * @param array $files
      * @return \Magento\DesignEditor\Model\Editor\Tools\Controls\Configuration
      * @throws \Magento\Exception
      */
     public function create(
         $type,
-        \Magento\Core\Model\Theme $theme = null,
-        \Magento\Core\Model\Theme $parentTheme = null,
+        \Magento\View\Design\ThemeInterface $theme = null,
+        \Magento\View\Design\ThemeInterface $parentTheme = null,
         array $files = array()
     ) {
         $files[] = $this->_getFilePathByType($type, $theme);

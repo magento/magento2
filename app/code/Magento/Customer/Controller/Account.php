@@ -146,7 +146,7 @@ class Account extends \Magento\Core\Controller\Front\Action
 
         parent::preDispatch();
 
-        if (!$this->_objectManager->get('Magento\Core\Model\App\State')->isInstalled()) {
+        if (!$this->_objectManager->get('Magento\App\State')->isInstalled()) {
             return;
         }
 

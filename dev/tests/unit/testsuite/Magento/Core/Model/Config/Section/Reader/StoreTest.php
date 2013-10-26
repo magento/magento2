@@ -72,7 +72,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->_storeMock));
 
-        $this->_appStateMock = $this->getMock('Magento\Core\Model\App\State', array(), array(), '', false);
+        $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
         $this->_appStateMock->expects($this->any())
             ->method('isInstalled')
             ->will($this->returnValue(true));

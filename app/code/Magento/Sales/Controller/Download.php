@@ -48,12 +48,12 @@ class Download extends \Magento\Core\Controller\Front\Action
                 throw new \Exception();
             }
 
-            $filePath = $this->_objectManager->get('Magento\Core\Model\Dir')
-                ->getDir(\Magento\Core\Model\Dir::ROOT) . $info['order_path'];
+            $filePath = $this->_objectManager->get('Magento\App\Dir')
+                ->getDir(\Magento\App\Dir::ROOT) . $info['order_path'];
             if ((!is_file($filePath) || !is_readable($filePath)) && !$this->_processDatabaseFile($filePath)) {
                 //try get file from quote
-                $filePath = $this->_objectManager->get('Magento\Core\Model\Dir')
-                    ->getDir(\Magento\Core\Model\Dir::ROOT) . $info['quote_path'];
+                $filePath = $this->_objectManager->get('Magento\App\Dir')
+                    ->getDir(\Magento\App\Dir::ROOT) . $info['quote_path'];
                 if ((!is_file($filePath) || !is_readable($filePath)) && !$this->_processDatabaseFile($filePath)) {
                     throw new \Exception();
                 }

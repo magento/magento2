@@ -81,7 +81,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
@@ -101,7 +101,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         \Magento\Catalog\Model\Product\Option $catalogProductOption,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,

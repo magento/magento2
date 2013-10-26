@@ -49,13 +49,13 @@ class Source
      *
      * @param \Magento\Core\Model\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      */
     public function __construct(
         \Magento\Core\Model\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper
     ) {
         $this->_resourceHelper = $resourceHelper;

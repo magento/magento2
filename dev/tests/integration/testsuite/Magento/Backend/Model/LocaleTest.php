@@ -82,7 +82,7 @@ class LocaleTest extends \PHPUnit_Framework_TestCase
     public function testSetLocaleWithRequestLocale()
     {
         $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Controller\Request\Http');
+            ->get('Magento\App\RequestInterface');
         $request->setPost(array('locale' => 'de_DE'));
         $this->_checkSetLocale('de_DE');
     }

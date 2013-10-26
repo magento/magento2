@@ -31,7 +31,7 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetColumns()
     {
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout');
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         $block = $layout->addBlock('Magento\Wishlist\Block\Customer\Wishlist\Items', 'test');
         $child = $this->getMock('Magento\Core\Block\Text', array('isEnabled'),
             array(\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Block\Context')));

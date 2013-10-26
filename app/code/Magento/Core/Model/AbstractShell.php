@@ -62,7 +62,7 @@ abstract class AbstractShell
     protected $_filesystem;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
@@ -71,10 +71,10 @@ abstract class AbstractShell
      *
      * @param \Magento\Filesystem $filesystem
      * @param string $entryPoint
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      * @throws \Exception
      */
-    public function __construct(\Magento\Filesystem $filesystem, $entryPoint, \Magento\Core\Model\Dir $dir)
+    public function __construct(\Magento\Filesystem $filesystem, $entryPoint, \Magento\App\Dir $dir)
     {
         if (isset($_SERVER['REQUEST_METHOD'])) {
             throw new \Exception('This script cannot be run from Browser. This is the shell script.');
@@ -109,7 +109,7 @@ abstract class AbstractShell
      */
     protected function _getRootPath()
     {
-        return $this->_dir->getDir(\Magento\Core\Model\Dir::ROOT);
+        return $this->_dir->getDir(\Magento\App\Dir::ROOT);
     }
 
     /**

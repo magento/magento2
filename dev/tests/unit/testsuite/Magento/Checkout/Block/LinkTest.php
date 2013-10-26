@@ -40,7 +40,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $path = 'checkout';
         $url = 'http://example.com/';
 
-        $urlBuilder = $this->getMockForAbstractClass('Magento\Core\Model\UrlInterface');
+        $urlBuilder = $this->getMockForAbstractClass('Magento\UrlInterface');
         $urlBuilder->expects($this->once())->method('getUrl')->with($path)->will($this->returnValue($url . $path));
 
         $context = $this->_objectManagerHelper->getObject(

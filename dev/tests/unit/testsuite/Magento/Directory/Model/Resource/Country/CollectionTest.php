@@ -52,7 +52,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getTable')
             ->will($this->returnArgument(0));
 
-        $eventManager = $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false);
+        $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         $stringHelper = $this->getMock('Magento\Core\Helper\String', array(), array(), '', false);
         $localeMock = $this->getMock('Magento\Core\Model\LocaleInterface');
         $localeMock->expects($this->any())->method('getCountryTranslation')->will($this->returnArgument(0));

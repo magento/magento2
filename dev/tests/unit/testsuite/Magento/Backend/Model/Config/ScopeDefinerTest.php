@@ -41,7 +41,7 @@ class ScopeDefinerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMock('Magento\Core\Controller\Request\Http', array(), array(), '', false);
+        $this->_requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false);
         $this->_model = new \Magento\Backend\Model\Config\ScopeDefiner($this->_requestMock);
     }
 

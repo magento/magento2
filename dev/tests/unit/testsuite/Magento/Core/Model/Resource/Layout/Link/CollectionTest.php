@@ -47,7 +47,7 @@ class CollectionTest extends \Magento\Core\Model\Resource\Layout\AbstractTestCas
      */
     protected function _getCollection(\Zend_Db_Select $select)
     {
-        $eventManager = $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false);
+        $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
 
         return new \Magento\Core\Model\Resource\Layout\Link\Collection(
             $eventManager,

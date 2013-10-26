@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$robotsTxtPath = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Dir')->getDir()
+$robotsTxtPath = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')->getDir()
     . DS . 'robots.txt';
 if (is_file($robotsTxtPath)) {
     @unlink($robotsTxtPath);

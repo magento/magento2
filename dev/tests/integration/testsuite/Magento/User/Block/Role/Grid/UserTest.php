@@ -39,7 +39,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout');
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         $this->_block = $layout->createBlock('Magento\User\Block\Role\Grid\User');
     }
 

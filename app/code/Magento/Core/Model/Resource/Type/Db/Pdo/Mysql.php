@@ -29,7 +29,7 @@ class Mysql extends \Magento\Core\Model\Resource\Type\Db
     /**
      * Dirs instance
      *
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dirs;
 
@@ -49,7 +49,7 @@ class Mysql extends \Magento\Core\Model\Resource\Type\Db
     protected $_isActive;
 
     /**
-     * @param \Magento\Core\Model\Dir $dirs
+     * @param \Magento\App\Dir $dirs
      * @param string $host
      * @param string $username
      * @param string $password
@@ -60,7 +60,7 @@ class Mysql extends \Magento\Core\Model\Resource\Type\Db
      * @param bool $active
      */
     public function __construct(
-        \Magento\Core\Model\Dir $dirs,
+        \Magento\App\Dir $dirs,
         $host,
         $username,
         $password,

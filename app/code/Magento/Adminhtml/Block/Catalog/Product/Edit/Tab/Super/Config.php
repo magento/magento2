@@ -49,7 +49,7 @@ class Config
     /**
      * @var \Magento\Core\Model\App
      */
-    protected $_app;
+    protected $_storeManager;
 
     /**
      * @var \Magento\Core\Model\LocaleInterface
@@ -91,7 +91,7 @@ class Config
         $this->_configurableType = $configurableType;
         $this->_coreRegistry = $coreRegistry;
         $this->_catalogData = $catalogData;
-        $this->_app = $app;
+        $this->_storeManager = $app;
         $this->_locale = $locale;
         parent::__construct($coreData, $context, $data);
     }
@@ -489,7 +489,7 @@ class Config
      */
     public function getApp()
     {
-        return $this->_app;
+        return $this->_storeManager;
     }
 
     /**

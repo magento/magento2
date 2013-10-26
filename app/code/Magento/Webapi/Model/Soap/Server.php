@@ -39,8 +39,15 @@ class Server
     const REQUEST_PARAM_SERVICES = 'services';
     const REQUEST_PARAM_WSDL = 'wsdl';
 
-    /** @var \Magento\Core\Model\Config */
-    protected $_applicationConfig;
+    /**
+     * @var \Magento\App\AreaLIst
+     */
+    protected $_areaList;
+
+    /**
+     * @var \Magento\Config\ScopeInterface
+     */
+    protected $_configScope;
 
     /** @var \Magento\DomDocument\Factory */
     protected $_domDocumentFactory;
@@ -57,15 +64,17 @@ class Server
     /**
      * Initialize dependencies, initialize WSDL cache.
      *
-     * @param \Magento\Core\Model\Config $applicationConfig
+     * @param \Magento\App\AreaList $areaList
+     * @param \Magento\Config\ScopeInterface $configScope
      * @param \Magento\Webapi\Controller\Soap\Request $request
      * @param \Magento\DomDocument\Factory $domDocumentFactory
-     * @param \Magento\Core\Model\StoreManagerInterface
-     * @param \Magento\Webapi\Model\Soap\Server\Factory
-     * @throws \Magento\Webapi\Exception with invalid SOAP extension
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Webapi\Model\Soap\Server\Factory $soapServerFactory
+     * @throws \Magento\Webapi\Exception
      */
     public function __construct(
-        \Magento\Core\Model\Config $applicationConfig,
+        \Magento\App\AreaList $areaList,
+        \Magento\Config\ScopeInterface $configScope,
         \Magento\Webapi\Controller\Soap\Request $request,
         \Magento\DomDocument\Factory $domDocumentFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
@@ -75,7 +84,8 @@ class Server
             throw new \Magento\Webapi\Exception('SOAP extension is not loaded.', 0,
                 \Magento\Webapi\Exception::HTTP_INTERNAL_ERROR);
         }
-        $this->_applicationConfig = $applicationConfig;
+        $this->_areaList = $areaList;
+        $this->_configScope = $configScope;
         $this->_request = $request;
         $this->_domDocumentFactory = $domDocumentFactory;
         $this->_storeManager = $storeManager;
@@ -144,7 +154,8 @@ class Server
      */
     public function getEndpointUri()
     {
-        return $this->_storeManager->getStore()->getBaseUrl() . $this->_applicationConfig->getAreaFrontName();
+        return $this->_storeManager->getStore()->getBaseUrl()
+            . $this->_areaList->getFrontName($this->_configScope->getCurrentScope());
     }
 
     /**

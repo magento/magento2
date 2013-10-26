@@ -30,7 +30,7 @@ class Io
 {
     /**
      * Default code generation directory
-     * Should correspond the value from \Magento\Core\Model\Dir
+     * Should correspond the value from \Magento\App\Dir
      */
     const DEFAULT_DIRECTORY = 'var/generation';
 

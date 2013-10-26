@@ -42,10 +42,10 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFile()
     {
-        $this->_dirsMock = $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false, false);
+        $this->_dirsMock = $this->getMock('Magento\App\Dir', array(), array(), '', false, false);
         $this->_dirsMock->expects($this->any())
             ->method('getDir')
-            ->with(\Magento\Core\Model\Dir::VAR_DIR)
+            ->with(\Magento\App\Dir::VAR_DIR)
             ->will($this->returnValue(__DIR__ . DIRECTORY_SEPARATOR. 'var'));
 
         $fileModel = $this->getMock('Magento\Index\Model\Process\File',

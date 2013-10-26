@@ -27,20 +27,6 @@ namespace Magento\Webapi\Controller\Soap;
 
 class Request extends \Magento\Webapi\Controller\Request
 {
-    /** @var \Magento\Core\Model\App */
-    protected $_application;
-
-    /**
-     * Initialize dependencies.
-     *
-     * @param \Magento\Core\Model\App $application
-     * @param string|null $uri
-     */
-    public function __construct(\Magento\Core\Model\App $application, $uri = null)
-    {
-        parent::__construct($application, $uri);
-    }
-
     /**
      * Identify versions of resources that should be used for API configuration generation.
      * TODO : This is getting called twice within a single request. Need to cache.

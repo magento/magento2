@@ -56,10 +56,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'registry'                => $objectManager->get('Magento\Core\Model\Registry'),
             'configCacheType'         => $objectManager->get('Magento\Core\Model\Cache\Type\Config'),
             'url'                     => $objectManager->get('Magento\Core\Model\Url'),
-            'appState'                => $objectManager->get('Magento\Core\Model\App\State'),
-            'request'                 => $objectManager->get('Magento\Core\Controller\Request\Http'),
+            'appState'                => $objectManager->get('Magento\App\State'),
+            'request'                 => $objectManager->get('Magento\App\RequestInterface'),
             'configDataResource'      => $objectManager->get('Magento\Core\Model\Resource\Config\Data'),
-            'dir'                     => $objectManager->get('Magento\Core\Model\Dir'),
+            'dir'                     => $objectManager->get('Magento\App\Dir'),
             'coreStoreConfig'         => $objectManager->get('Magento\Core\Model\Store\Config'),
             'coreConfig'              => $objectManager->get('Magento\Core\Model\Config'),
             'resource'                => $objectManager->get('Magento\Core\Model\Resource\Store'),
@@ -198,7 +198,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseUrlInPub()
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\Core\Model\App::PARAM_APP_URIS => array(\Magento\Core\Model\Dir::PUB => '')
+            \Magento\Core\Model\App::PARAM_APP_URIS => array(\Magento\App\Dir::PUB => '')
         ));
         $this->_model = $this->_getStoreModel();
         $this->_model->load('default');
@@ -371,7 +371,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsUseStoreInUrl($isInstalled, $storeInUrl, $storeId, $expectedResult)
     {
-        $appStateMock = $this->getMock('Magento\Core\Model\App\State', array(), array(), '', false, false);
+        $appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false, false);
         $appStateMock->expects($this->any())
             ->method('isInstalled')
             ->will($this->returnValue($isInstalled));

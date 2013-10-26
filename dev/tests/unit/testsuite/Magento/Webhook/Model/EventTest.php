@@ -50,7 +50,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockEventManager = $this->getMockBuilder('Magento\Core\Model\Event\Manager')
+        $mockEventManager = $this->getMockBuilder('Magento\Event\ManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 

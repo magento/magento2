@@ -241,16 +241,16 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
      * Prepare a layout model with pre-loaded fixture of an update XML
      *
      * @param string $fixtureFile
-     * @return \Magento\Core\Model\Layout
+     * @return \Magento\View\LayoutInterface
      */
     protected function _getLayoutModel($fixtureFile)
     {
-        /** @var $layout \Magento\Core\Model\Layout */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout');
-        /** @var $xml \Magento\Core\Model\Layout\Element */
+        /** @var $layout \Magento\View\LayoutInterface */
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
+        /** @var $xml \Magento\View\Layout\Element */
         $xml = simplexml_load_file(
             __DIR__ . "/_files/layout_directives_test/{$fixtureFile}",
-            'Magento\Core\Model\Layout\Element'
+            'Magento\View\Layout\Element'
         );
         $layout->loadString($xml->asXml());
         $layout->generateElements();
@@ -264,8 +264,8 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     {
         $layout = $this->_getLayoutModel('ifconfig.xml');
         $this->assertFalse($layout->getBlock('block1'));
-        $this->assertInstanceOf('Magento\Core\Block', $layout->getBlock('block2'));
-        $this->assertInstanceOf('Magento\Core\Block', $layout->getBlock('block3'));
+        $this->assertInstanceOf('Magento\View\Element\BlockInterface', $layout->getBlock('block2'));
+        $this->assertInstanceOf('Magento\View\Element\BlockInterface', $layout->getBlock('block3'));
         $this->assertFalse($layout->getBlock('block4'));
     }
 }

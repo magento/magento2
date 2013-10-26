@@ -44,7 +44,7 @@ class Locale extends \Magento\Core\Model\Locale
     protected $_localeManager;
 
     /**
-     * @var \Magento\Core\Controller\Request\Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_request;
 
@@ -54,14 +54,14 @@ class Locale extends \Magento\Core\Model\Locale
     protected $_localeValidator;
 
     /**
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Backend\Model\Locale\Manager $localeManager
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @param \Magento\Core\Model\Locale\Validator $localeValidator
      * @param \Magento\Core\Helper\Translate $translate
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\App\State $appState
+     * @param \Magento\App\State $appState
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Core\Model\Locale\Config $config
      * @param \Magento\Core\Model\App $app
@@ -70,14 +70,14 @@ class Locale extends \Magento\Core\Model\Locale
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Backend\Model\Session $session,
         \Magento\Backend\Model\Locale\Manager $localeManager,
-        \Magento\Core\Controller\Request\Http $request,
+        \Magento\App\RequestInterface $request,
         \Magento\Core\Model\Locale\Validator $localeValidator,
         \Magento\Core\Helper\Translate $translate,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\App\State $appState,
+        \Magento\App\State $appState,
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Core\Model\Locale\Config $config,
         \Magento\Core\Model\App $app,

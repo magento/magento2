@@ -29,18 +29,8 @@
             <instance type="Magento\Tax\Model\ConfigProxy" />
         </param>
     </type>
-    <type name="Magento\Tax\Model\Calculation\Rate">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Tax\Model\Calculation\Rule">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Core\Model\Db\Updater">
-        <param name="resourceList">
+    <type name="Magento\App\Updater\SetupFactory">
+        <param name="resourceTypes">
             <value>
                 <tax_setup>Magento\Tax\Model\Resource\Setup</tax_setup>
             </value>

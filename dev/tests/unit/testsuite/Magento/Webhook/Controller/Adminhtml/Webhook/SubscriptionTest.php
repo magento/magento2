@@ -68,6 +68,9 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
     protected $_mockRequest;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $_mockResponse;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_mockConfigScope;
 
     /**
@@ -88,7 +91,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
         $this->_mockConfig = $this->getMockBuilder('Magento\Core\Model\Config')->disableOriginalConstructor()
             ->getMock();
         $this->_mockApp->expects($this->any())->method('getConfig')->will($this->returnValue($this->_mockConfig));
-        $this->_mockEventManager = $this->getMockBuilder('Magento\Core\Model\Event\Manager')
+        $this->_mockEventManager = $this->getMockBuilder('Magento\Event\ManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->_mockLayoutFilter = $this->getMockBuilder('Magento\Core\Model\Layout\Filter\Acl')
@@ -103,7 +106,10 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
         $this->_mockSubscriptionSvc = $this->getMockBuilder('Magento\Webhook\Service\SubscriptionV1')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_mockRequest = $this->getMockBuilder('Magento\Core\Controller\Request\Http')
+        $this->_mockRequest = $this->getMockBuilder('Magento\App\Request\Http')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_mockResponse = $this->getMockBuilder('Magento\App\Response\Http')
             ->disableOriginalConstructor()
             ->getMock();
         $this->_mockRegistry = $this->getMockBuilder('Magento\Core\Model\Registry')
@@ -568,6 +574,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             'session' => $this->_mockBackendModSess,
             'translator' => $this->_mockTranslateModel,
             'request' => $this->_mockRequest,
+            'response' => $this->_mockResponse,
         );
 
         $this->_mockBackendCntCtxt = $this->_objectManagerHelper

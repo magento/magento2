@@ -122,7 +122,7 @@ class EndpointTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSave($hasAuthType, $hasDataChanges)
     {
-        $mockEventManager = $this->getMockBuilder('Magento\Core\Model\Event\Manager')
+        $mockEventManager = $this->getMockBuilder('Magento\Event\ManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 

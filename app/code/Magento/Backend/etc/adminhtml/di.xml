@@ -27,7 +27,7 @@
     <preference for="Magento\Authorization\Policy" type="Magento\Authorization\Policy\Acl" />
     <preference for="Magento\Authorization\RoleLocator" type="Magento\Backend\Model\Authorization\RoleLocator" />
     <preference for="Magento\Core\Model\LocaleInterface" type="Magento\Backend\Model\Locale" />
-    <preference for="Magento\Core\Model\UrlInterface" type="Magento\Backend\Model\Url" />
+    <preference for="Magento\UrlInterface" type="Magento\Backend\Model\Url" />
     <preference for="Magento\Backend\Model\Auth\StorageInterface" type="Magento\Backend\Model\Auth\Session" />
     <preference for="Magento\Backend\Model\Config\Structure\SearchInterface" type="Magento\Backend\Model\Config\Structure" />
     <preference for="Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Backend\Model\Config\Backend\File\RequestData" />

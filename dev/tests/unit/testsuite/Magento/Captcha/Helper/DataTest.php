@@ -36,7 +36,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_dirMock = $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false, false);
+        $this->_dirMock = $this->getMock('Magento\App\Dir', array(), array(), '', false, false);
     }
 
     protected function _getHelper($store, $config, $factory)
@@ -121,7 +121,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->_dirMock->expects($this->once())
             ->method('getDir')
-            ->with(\Magento\Core\Model\Dir::LIB)
+            ->with(\Magento\App\Dir::LIB)
             ->will($this->returnValue(TESTS_TEMP_DIR . '/lib'));
 
         $factoryMock = $this->getMock('Magento\Captcha\Model\CaptchaFactory', array(), array(), '', false);
@@ -144,7 +144,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $factoryMock = $this->getMock('Magento\Captcha\Model\CaptchaFactory', array(), array(), '', false);
         $this->_dirMock->expects($this->once())
             ->method('getDir')
-            ->with(\Magento\Core\Model\Dir::MEDIA)
+            ->with(\Magento\App\Dir::MEDIA)
             ->will($this->returnValue(TESTS_TEMP_DIR . '/media'));
 
         $object = $this->_getHelper($this->_getStoreStub(), $this->_getConfigStub(), $factoryMock);

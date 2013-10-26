@@ -38,9 +38,6 @@
         <testsuite name="Code Integrity Tests">
             <directory>testsuite/Magento/Test/Integrity</directory>
         </testsuite>
-        <testsuite name="Twig Syntax Checker">
-            <directory>testsuite/Magento/Test/Twig/TwigExtensionTest.php</directory>
-        </testsuite>
     </testsuites>
     <php>
         <ini name="date.timezone" value="America/Los_Angeles"/>

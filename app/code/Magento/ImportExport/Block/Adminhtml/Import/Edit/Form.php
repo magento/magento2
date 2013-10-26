@@ -139,6 +139,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'label'    => __('Select File to Import'),
             'title'    => __('Select File to Import'),
             'required' => true,
+            'class' => 'input-file'
         ));
 
         $form->setUseContainer(true);

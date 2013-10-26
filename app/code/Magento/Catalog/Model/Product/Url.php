@@ -84,7 +84,7 @@ class Url extends \Magento\Object
      * Construct
      *
      * @param \Magento\Core\Model\Url\RewriteFactory $urlRewriteFactory
-     * @param \Magento\Core\Model\UrlInterface $url
+     * @param \Magento\UrlInterface $url
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Helper\Product\Url $catalogProductUrl
@@ -93,7 +93,7 @@ class Url extends \Magento\Object
      */
     public function __construct(
         \Magento\Core\Model\Url\RewriteFactory $urlRewriteFactory,
-        \Magento\Core\Model\UrlInterface $url,
+        \Magento\UrlInterface $url,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Category $catalogCategory,
         \Magento\Catalog\Helper\Product\Url $catalogProductUrl,

@@ -24,7 +24,7 @@
  */
 -->
 <config>
-    <preference for="Magento\Core\Model\Db\UpdaterInterface" type="Magento\Core\Model\Db\Updater" />
+    <preference for="Magento\App\UpdaterInterface" type="Magento\App\Updater" />
     <type name="Magento\Core\Model\Config\Loader\Local">
         <param name="customFile">
             <value type="argument">Magento\Core\Model\App::PARAM_CUSTOM_LOCAL_FILE</value>

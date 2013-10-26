@@ -109,21 +109,21 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $dirs = $objectManager->create(
-            'Magento\Core\Model\Dir',
+            'Magento\App\Dir',
             array(
                 'baseDir' => BP,
                 'dirs' => array(
-                    \Magento\Core\Model\Dir::MODULES => __DIR__ . '/_files',
-                    \Magento\Core\Model\Dir::CONFIG => __DIR__ . '/_files',
+                    \Magento\App\Dir::MODULES => __DIR__ . '/_files',
+                    \Magento\App\Dir::CONFIG => __DIR__ . '/_files',
                 ),
             )
         );
 
-        $moduleList = $objectManager->create('Magento\Core\Model\ModuleList', array(
-            'reader' => $objectManager->create('Magento\Core\Model\Module\Declaration\Reader\Filesystem',
+        $moduleList = $objectManager->create('Magento\App\ModuleList', array(
+            'reader' => $objectManager->create('Magento\App\Module\Declaration\Reader\Filesystem',
                 array(
                     'fileResolver' => $objectManager->create(
-                        'Magento\Core\Model\Module\Declaration\FileResolver',
+                        'Magento\App\Module\Declaration\FileResolver',
                         array(
                             'applicationDirs' => $dirs
                         )

@@ -41,7 +41,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveWithSingleStoreModeEnabled($groups)
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Config\Scope')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Config\ScopeInterface')
             ->setCurrentScope(\Magento\Core\Model\App\Area::AREA_ADMINHTML);
         /** @var $_configDataObject \Magento\Backend\Model\Config */
         $_configDataObject = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

@@ -45,10 +45,10 @@ class RelatedTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\Core\Model\Registry')->register('product', $product);
         /** @var $block \Magento\Catalog\Block\Product\ProductList\Related */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Catalog\Block\Product\ProductList\Related');
         $block->setLayout(\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Core\Model\Layout'));
+                ->get('Magento\View\LayoutInterface'));
         $block->setTemplate('product/list/related.phtml');
 
         $html = $block->toHtml();

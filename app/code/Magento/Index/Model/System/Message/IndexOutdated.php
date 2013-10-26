@@ -31,7 +31,7 @@ class IndexOutdated implements \Magento\AdminNotification\Model\System\MessageIn
     protected $_indexer;
 
     /**
-     * @var \Magento\Core\Model\UrlInterface
+     * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
 
@@ -47,12 +47,12 @@ class IndexOutdated implements \Magento\AdminNotification\Model\System\MessageIn
 
     /**
      * @param \Magento\Index\Model\Indexer $indexer
-     * @param \Magento\Core\Model\UrlInterface $urlBuilder
+     * @param \Magento\UrlInterface $urlBuilder
      * @param \Magento\AuthorizationInterface $authorization
      */
     public function __construct(
         \Magento\Index\Model\Indexer $indexer,
-        \Magento\Core\Model\UrlInterface $urlBuilder,
+        \Magento\UrlInterface $urlBuilder,
         \Magento\AuthorizationInterface $authorization
     ) {
         $this->_indexer = $indexer;

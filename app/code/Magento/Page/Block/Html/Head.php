@@ -90,7 +90,7 @@ class Head extends \Magento\Core\Block\Template
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
@@ -101,7 +101,7 @@ class Head extends \Magento\Core\Block\Template
 
     /**
      * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDatabase
      * @param \Magento\Core\Helper\Data $coreData
@@ -114,7 +114,7 @@ class Head extends \Magento\Core\Block\Template
      */
     public function __construct(
         \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Core\Model\Dir $dir,
+        \Magento\App\Dir $dir,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Helper\File\Storage\Database $fileStorageDatabase,
         \Magento\Core\Helper\Data $coreData,

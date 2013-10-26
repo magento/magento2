@@ -32,8 +32,8 @@ interface SourceInterface
     /**
      * Retrieve instances of layout files
      *
-     * @param \Magento\Core\Model\ThemeInterface $theme Theme that defines the design context
+     * @param \Magento\View\Design\ThemeInterface $theme Theme that defines the design context
      * @return \Magento\Core\Model\Layout\File[]
      */
-    public function getFiles(\Magento\Core\Model\ThemeInterface $theme);
+    public function getFiles(\Magento\View\Design\ThemeInterface $theme);
 }

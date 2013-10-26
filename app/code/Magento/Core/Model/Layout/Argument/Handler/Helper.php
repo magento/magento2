@@ -89,10 +89,10 @@ class Helper extends \Magento\Core\Model\Layout\Argument\AbstractHandler
     /**
      * Retrieve value from argument
      *
-     * @param \Magento\Core\Model\Layout\Element $argument
+     * @param \Magento\View\Layout\Element $argument
      * @return array
      */
-    protected function _getArgumentValue(\Magento\Core\Model\Layout\Element $argument)
+    protected function _getArgumentValue(\Magento\View\Layout\Element $argument)
     {
         $value = array(
             'helperClass' => '',

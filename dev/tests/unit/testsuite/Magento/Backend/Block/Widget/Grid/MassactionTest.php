@@ -96,9 +96,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
             ->with('test_grid')
             ->will($this->returnValue($this->_gridMock));
 
-        $this->_requestMock = $this->getMock('Magento\Core\Controller\Request\Http', array('getParam'), array(), '',
-            false
-        );
+        $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
 
         $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false);
 

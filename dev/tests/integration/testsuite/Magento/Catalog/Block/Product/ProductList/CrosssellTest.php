@@ -45,10 +45,10 @@ class CrosssellTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\Core\Model\Registry')->register('product', $product);
         /** @var $block \Magento\Catalog\Block\Product\ProductList\Crosssell */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Catalog\Block\Product\ProductList\Crosssell');
         $block->setLayout(\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Core\Model\Layout'));
+                ->get('Magento\View\LayoutInterface'));
         $block->setTemplate('Magento_Checkout::cart/crosssell.phtml');
         $block->setItemCount(1);
 

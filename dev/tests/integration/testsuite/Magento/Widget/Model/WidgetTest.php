@@ -62,10 +62,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPlaceholderImageUrl($type, $expectedFile)
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\View\DesignInterface')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
             ->setDesignTheme('magento_basic', 'adminhtml');
-        $expectedPubFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Dir')
-                ->getDir(\Magento\Core\Model\Dir::STATIC_VIEW) . "/adminhtml/magento_basic/en_US/{$expectedFile}";
+        $expectedPubFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')
+                ->getDir(\Magento\App\Dir::STATIC_VIEW) . "/adminhtml/magento_basic/en_US/{$expectedFile}";
         if (file_exists($expectedPubFile)) {
             unlink($expectedPubFile);
         }
@@ -102,13 +102,13 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     public function testGetPlaceholderImageUrlAtTheme()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Core\Model\Dir $dir */
-        $dir = $objectManager->get('Magento\Core\Model\Dir');
+        /** @var \Magento\App\Dir $dir */
+        $dir = $objectManager->get('Magento\App\Dir');
 
         $property = new \ReflectionProperty($dir, '_dirs');
         $property->setAccessible(true);
         $dirs = $property->getValue($dir);
-        $dirs[\Magento\Core\Model\Dir::THEMES] = dirname(__DIR__) . '/_files/design';
+        $dirs[\Magento\App\Dir::THEMES] = dirname(__DIR__) . '/_files/design';
         $property->setValue($dir, $dirs);
 
         $actualFile = $this->testGetPlaceholderImageUrl(

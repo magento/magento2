@@ -94,7 +94,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -136,7 +136,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_dateModel;
 
     /**
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     protected $_appState;
 
@@ -147,27 +147,27 @@ class Data extends \Magento\Core\Helper\AbstractHelper
 
     /**
      * @param \Magento\Core\Helper\Context $context
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Http $coreHttp
      * @param \Magento\Core\Model\Config $config
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Core\Model\Locale $locale
      * @param \Magento\Core\Model\Date $dateModel
-     * @param \Magento\Core\Model\App\State $appState
+     * @param \Magento\App\State $appState
      * @param \Magento\Core\Model\Encryption $encryptor
      * @param bool $dbCompatibleMode
      */
     public function __construct(
         \Magento\Core\Helper\Context $context,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Http $coreHttp,
         \Magento\Core\Model\Config $config,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Core\Model\Locale $locale,
         \Magento\Core\Model\Date $dateModel,
-        \Magento\Core\Model\App\State $appState,
+        \Magento\App\State $appState,
         \Magento\Core\Model\Encryption $encryptor,
         $dbCompatibleMode = true
     ) {

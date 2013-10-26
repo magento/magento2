@@ -56,7 +56,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider parseDataProvider()
-     * @param \Magento\Core\Model\Layout\Element $argument
+     * @param \Magento\View\Layout\Element $argument
      * @param array $expectedResult
      */
     public function testParse($argument, $expectedResult)
@@ -72,7 +72,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     {
         $layout = simplexml_load_file(
             __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'arguments.xml',
-            'Magento\Core\Model\Layout\Element'
+            'Magento\View\Layout\Element'
         );
         $optionsArguments = $layout->xpath('//argument[@name="testOptions"]');
         return array(

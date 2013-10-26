@@ -37,7 +37,7 @@ class PlaceholderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMock('Magento\Core\Controller\Request\Http', array(), array(), '', false);
+        $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
         $this->_requestMock->expects($this->any())
             ->method('getDistroBaseUrl')
             ->will($this->returnValue('http://localhost/'));

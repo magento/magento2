@@ -34,16 +34,16 @@ class Theme extends \Magento\Core\Helper\AbstractHelper
     /**
      * Directories
      *
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dirs;
 
     /**
      * Layout merge factory
      *
-     * @var \Magento\Core\Model\Layout\MergeFactory
+     * @var \Magento\View\Layout\ProcessorFactory
      */
-    protected $_layoutMergeFactory;
+    protected $_layoutProcessorFactory;
 
     /**
      * Theme collection model
@@ -58,21 +58,21 @@ class Theme extends \Magento\Core\Helper\AbstractHelper
     protected $_viewFileSystem;
 
     /**
-     * @param \Magento\Core\Helper\Context $context
-     * @param \Magento\Core\Model\Dir $dirs
-     * @param \Magento\Core\Model\Layout\MergeFactory $layoutMergeFactory
+     * @param Context $context
+     * @param \Magento\App\Dir $dirs
+     * @param \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory
      * @param \Magento\Core\Model\Resource\Theme\Collection $themeCollection
      * @param \Magento\Core\Model\View\FileSystem $viewFileSystem
      */
     public function __construct(
         \Magento\Core\Helper\Context $context,
-        \Magento\Core\Model\Dir $dirs,
-        \Magento\Core\Model\Layout\MergeFactory $layoutMergeFactory,
+        \Magento\App\Dir $dirs,
+        \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory,
         \Magento\Core\Model\Resource\Theme\Collection $themeCollection,
         \Magento\Core\Model\View\FileSystem $viewFileSystem
     ) {
         $this->_dirs = $dirs;
-        $this->_layoutMergeFactory = $layoutMergeFactory;
+        $this->_layoutProcessorFactory = $layoutProcessorFactory;
         $this->_themeCollection = $themeCollection;
         $this->_viewFileSystem = $viewFileSystem;
         parent::__construct($context);
@@ -86,14 +86,14 @@ class Theme extends \Magento\Core\Helper\AbstractHelper
      *   'Magento_Catalog::widgets.css' => 'http://mage2.com/pub/static/frontend/_theme15/en_US/Magento_Cms/widgets.css'
      * )
      *
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @return array
      */
     public function getCssFiles($theme)
     {
-        /** @var $layoutMerge \Magento\Core\Model\Layout\Merge */
-        $layoutMerge = $this->_layoutMergeFactory->create(array('theme' => $theme));
-        $layoutElement = $layoutMerge->getFileLayoutUpdatesXml();
+        /** @var $layoutProcessor \Magento\View\Layout\ProcessorInterface */
+        $layoutProcessor = $this->_layoutProcessorFactory->create(array('theme' => $theme));
+        $layoutElement = $layoutProcessor->getFileLayoutUpdatesXml();
 
         /**
          * XPath selector to get CSS files from layout added for HEAD block directly
@@ -118,7 +118,7 @@ class Theme extends \Magento\Core\Helper\AbstractHelper
             'skipProxy'  => true
         );
 
-        $basePath = $this->_dirs->getDir(\Magento\Core\Model\Dir::ROOT);
+        $basePath = $this->_dirs->getDir(\Magento\App\Dir::ROOT);
         $files = array();
         foreach ($elements as $fileId) {
             $fileId = (string)$fileId;
@@ -139,15 +139,15 @@ class Theme extends \Magento\Core\Helper\AbstractHelper
     /**
      * Get CSS files by group
      *
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @return array
      * @throws \LogicException
      */
     public function getGroupedCssFiles($theme)
     {
-        $jsDir = \Magento\Filesystem::fixSeparator($this->_dirs->getDir(\Magento\Core\Model\Dir::PUB_LIB));
-        $codeDir = \Magento\Filesystem::fixSeparator($this->_dirs->getDir(\Magento\Core\Model\Dir::MODULES));
-        $designDir = \Magento\Filesystem::fixSeparator($this->_dirs->getDir(\Magento\Core\Model\Dir::THEMES));
+        $jsDir = \Magento\Filesystem::fixSeparator($this->_dirs->getDir(\Magento\App\Dir::PUB_LIB));
+        $codeDir = \Magento\Filesystem::fixSeparator($this->_dirs->getDir(\Magento\App\Dir::MODULES));
+        $designDir = \Magento\Filesystem::fixSeparator($this->_dirs->getDir(\Magento\App\Dir::THEMES));
 
         $groups = array();
         $themes = array();
@@ -177,7 +177,7 @@ class Theme extends \Magento\Core\Helper\AbstractHelper
         }
 
         $order = array_merge(array($codeDir, $jsDir), array_map(function ($fileTheme) {
-            /** @var $fileTheme \Magento\Core\Model\Theme */
+            /** @var $fileTheme \Magento\View\Design\ThemeInterface */
             return $fileTheme->getThemeId();
         }, $themes));
         $groups = $this->_sortArrayByArray($groups, $order);
@@ -319,7 +319,7 @@ class Theme extends \Magento\Core\Helper\AbstractHelper
             $codeDir => (string)__('Framework files')
         );
         foreach ($themes as $theme) {
-            /** @var $theme \Magento\Core\Model\Theme */
+            /** @var $theme \Magento\View\Design\ThemeInterface */
             $labels[$theme->getThemeId()] = (string)__('"%1" Theme files', $theme->getThemeTitle());
         }
         return $labels;
@@ -356,8 +356,8 @@ class Theme extends \Magento\Core\Helper\AbstractHelper
     /**
      * Sort themes by hierarchy callback
      *
-     * @param \Magento\Core\Model\Theme $firstTheme
-     * @param \Magento\Core\Model\Theme $secondTheme
+     * @param \Magento\View\Design\ThemeInterface $firstTheme
+     * @param \Magento\View\Design\ThemeInterface $secondTheme
      * @return int
      */
     protected function _sortThemesByHierarchyCallback($firstTheme, $secondTheme)

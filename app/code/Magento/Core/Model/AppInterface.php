@@ -56,13 +56,6 @@ interface AppInterface extends \Magento\Core\Model\StoreManagerInterface
     const CONFIGURATION_DI_NODE = 'di';
 
     /**
-     * Run application. Run process responsible for request processing and sending response.
-     *
-     * @return \Magento\Core\Model\AppInterface
-     */
-    public function run();
-
-    /**
      * Throw an exception, if the application has not been installed yet
      *
      * @throws \Magento\Exception
@@ -126,7 +119,7 @@ interface AppInterface extends \Magento\Core\Model\StoreManagerInterface
     /**
      * Retrieve layout object
      *
-     * @return \Magento\Core\Model\Layout
+     * @return \Magento\View\LayoutInterface
      */
     public function getLayout();
 
@@ -147,7 +140,7 @@ interface AppInterface extends \Magento\Core\Model\StoreManagerInterface
     /**
      * Retrieve front controller object
      *
-     * @return \Magento\Core\Controller\Varien\Front
+     * @return \Magento\App\FrontController
      */
     public function getFrontController();
 
@@ -211,32 +204,32 @@ interface AppInterface extends \Magento\Core\Model\StoreManagerInterface
     /**
      * Retrieve request object
      *
-     * @return \Magento\Core\Controller\Request\Http
+     * @return \Magento\App\RequestInterface
      */
     public function getRequest();
 
     /**
      * Request setter
      *
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @return \Magento\Core\Model\AppInterface
      */
-    public function setRequest(\Magento\Core\Controller\Request\Http $request);
+    public function setRequest(\Magento\App\RequestInterface $request);
 
     /**
      * Retrieve response object
      *
-     * @return \Zend_Controller_Response_Http
+     * @return \Magento\App\ResponseInterface
      */
     public function getResponse();
 
     /**
      * Response setter
      *
-     * @param \Magento\Core\Controller\Response\Http $response
+     * @param \Magento\App\ResponseInterface $response
      * @return \Magento\Core\Model\AppInterface
      */
-    public function setResponse(\Magento\Core\Controller\Response\Http $response);
+    public function setResponse(\Magento\App\ResponseInterface $response);
 
     /**
      * Set use session var instead of SID for URL

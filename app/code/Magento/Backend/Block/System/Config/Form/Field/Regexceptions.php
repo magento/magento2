@@ -70,11 +70,9 @@ class Regexceptions
     {
         $this->addColumn('search', array(
             'label' => __('Search String'),
-            'style' => 'width:120px',
         ));
         $this->addColumn('value', array(
             'label' => __('Design Theme'),
-            'style' => 'width:120px',
         ));
         $this->_addAfter = false;
         $this->_addButtonLabel = __('Add \Exception');

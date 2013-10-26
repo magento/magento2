@@ -316,8 +316,8 @@ class Tools extends \Magento\Adminhtml\Controller\Action
         $storeId = (int)$this->getRequest()->getParam('store_id');
         $themeId = (int)$this->getRequest()->getParam('theme_id');
         try {
-            /** @var $theme \Magento\Core\Model\Theme */
-            $theme = $this->_objectManager->create('Magento\Core\Model\Theme');
+            /** @var $theme \Magento\View\Design\ThemeInterface */
+            $theme = $this->_objectManager->create('Magento\View\Design\ThemeInterface');
             if (!$theme->load($themeId)->getId() || !$theme->isEditable()) {
                 throw new \Magento\Core\Exception(
                     __('The file can\'t be found or edited.')
@@ -361,8 +361,8 @@ class Tools extends \Magento\Adminhtml\Controller\Action
         $storeId = (int)$this->getRequest()->getParam('store_id');
         $themeId = (int)$this->getRequest()->getParam('theme_id');
         try {
-            /** @var $theme \Magento\Core\Model\Theme */
-            $theme = $this->_objectManager->create('Magento\Core\Model\Theme');
+            /** @var $theme \Magento\View\Design\ThemeInterface */
+            $theme = $this->_objectManager->create('Magento\View\Design\ThemeInterface');
             if (!$theme->load($themeId)->getId() || !$theme->isEditable()) {
                 throw new \Magento\Core\Exception(
                     __('The file can\'t be found or edited.')

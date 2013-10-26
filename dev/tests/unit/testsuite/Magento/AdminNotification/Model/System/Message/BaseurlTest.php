@@ -64,7 +64,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_configMock = $this->getMock('Magento\Core\Model\Config', array(), array(), '', false);
-        $this->_urlBuilderMock = $this->getMock('Magento\Core\Model\UrlInterface');
+        $this->_urlBuilderMock = $this->getMock('Magento\UrlInterface');
 
         $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManagerInterface');
         $configFactoryMock = $this->getMock('Magento\Core\Model\Config\ValueFactory', array('create'),

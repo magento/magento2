@@ -32,10 +32,10 @@ namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
  */
 class GeneralTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Core\Model\Layout */
+    /** @var \Magento\View\LayoutInterface */
     protected $_layout;
 
-    /** @var \Magento\Core\Model\Theme */
+    /** @var \Magento\View\Design\ThemeInterface */
     protected $_theme;
 
     /** @var \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab_General */
@@ -44,9 +44,10 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout');
+        $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\View\LayoutInterface');
         $this->_theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Theme');
+            ->create('Magento\View\Design\ThemeInterface');
         $this->_theme->setType(\Magento\Core\Model\Theme::TYPE_VIRTUAL);
         $this->_block = $this->_layout
             ->createBlock('Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\General');

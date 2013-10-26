@@ -35,15 +35,15 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_blockDependencies = array(
-        'request'         => 'Magento\Core\Controller\Request\Http',
-        'layout'          => 'Magento\Core\Model\Layout',
-        'eventManager'    => 'Magento\Core\Model\Event\Manager',
+        'request'         => 'Magento\App\RequestInterface',
+        'layout'          => 'Magento\View\LayoutInterface',
+        'eventManager'    => 'Magento\Event\ManagerInterface',
         'translator'      => 'Magento\Core\Model\Translate',
         'cache'           => 'Magento\Core\Model\CacheInterface',
-        'design'          => 'Magento\Core\Model\View\DesignInterface',
+        'design'          => 'Magento\View\DesignInterface',
         'session'         => 'Magento\Core\Model\Session',
         'storeConfig'     => 'Magento\Core\Model\Store\Config',
-        'frontController' => 'Magento\Core\Controller\Varien\Front'
+        'frontController' => 'Magento\App\FrontController'
     );
 
     /**
@@ -52,7 +52,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_modelDependencies = array(
-        'eventDispatcher'    => 'Magento\Core\Model\Event\Manager',
+        'eventDispatcher'    => 'Magento\Event\ManagerInterface',
         'cacheManager'       => 'Magento\Core\Model\CacheInterface',
         'resource'           => 'Magento\Core\Model\Resource\AbstractResource',
         'resourceCollection' => 'Magento\Data\Collection\Db'
@@ -73,7 +73,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
 
         $area = 'frontend';
         /** @var $layoutMock \Magento\Core\Model\Layout */
-        $layoutMock = $this->getMock('Magento\Core\Model\Layout', array('getArea'), array(), '', false);
+        $layoutMock = $this->getMockBuilder('Magento\View\LayoutInterface')->getMockForAbstractClass();
         $layoutMock->expects($this->once())
             ->method('getArea')
             ->will($this->returnValue($area));

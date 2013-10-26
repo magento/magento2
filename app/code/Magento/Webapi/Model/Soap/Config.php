@@ -39,7 +39,7 @@ class Config
     /** @var \Magento\Filesystem */
     protected $_filesystem;
 
-    /** @var \Magento\Core\Model\Dir */
+    /** @var \Magento\App\Dir */
     protected $_dir;
 
     /** @var \Magento\Webapi\Model\Config */
@@ -66,13 +66,13 @@ class Config
     /**
      * @param \Magento\Core\Model\ObjectManager $objectManager
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      * @param \Magento\Webapi\Model\Config $config
      */
     public function __construct(
         \Magento\Core\Model\ObjectManager $objectManager,
         \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\Dir $dir,
+        \Magento\App\Dir $dir,
         \Magento\Webapi\Model\Config $config
     ) {
         $this->_filesystem = $filesystem;
@@ -209,7 +209,7 @@ class Config
     public function getServiceSchemaDOM($serviceClass)
     {
          // TODO: Check if Service specific XSD is already cached
-        $modulesDir = $this->_dir->getDir(\Magento\Core\Model\Dir::MODULES);
+        $modulesDir = $this->_dir->getDir(\Magento\App\Dir::MODULES);
 
         // TODO: Change pattern to match interface instead of class. Think about sub-services.
         if (!preg_match(\Magento\Webapi\Model\Config::SERVICE_CLASS_PATTERN, $serviceClass, $matches)) {

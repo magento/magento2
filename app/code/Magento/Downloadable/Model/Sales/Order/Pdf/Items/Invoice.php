@@ -49,7 +49,7 @@ class Invoice
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\Dir $coreDir
+     * @param \Magento\App\Dir $coreDir
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
@@ -62,7 +62,7 @@ class Invoice
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\Dir $coreDir,
+        \Magento\App\Dir $coreDir,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
         \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,

@@ -96,7 +96,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
     /**
      * DB updater
      *
-     * @var \Magento\Core\Model\Db\UpdaterInterface
+     * @var \Magento\App\UpdaterInterface
      */
     protected $_dbUpdater;
 
@@ -110,14 +110,14 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
     /**
      * Application State
      *
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     protected $_appState;
 
     /**
      * Core Dir model
      *
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_coreDir;
 
@@ -138,22 +138,22 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
     /**
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Core\Model\Config\Resource $resourceConfig
-     * @param \Magento\Core\Model\Db\UpdaterInterface $dbUpdater
+     * @param \Magento\App\UpdaterInterface $dbUpdater
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Install\Model\Installer\Data $installerData
-     * @param \Magento\Core\Model\App\State $appState
-     * @param \Magento\Core\Model\Dir $coreDir
+     * @param \Magento\App\State $appState
+     * @param \Magento\App\Dir $coreDir
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\ObjectManager $objectManager
      */
     public function __construct(
         \Magento\Install\Model\Installer $installer,
         \Magento\Core\Model\Config\Resource $resourceConfig,
-        \Magento\Core\Model\Db\UpdaterInterface $dbUpdater,
+        \Magento\App\UpdaterInterface $dbUpdater,
         \Magento\Filesystem $filesystem,
         \Magento\Install\Model\Installer\Data $installerData,
-        \Magento\Core\Model\App\State $appState,
-        \Magento\Core\Model\Dir $coreDir,
+        \Magento\App\State $appState,
+        \Magento\App\Dir $coreDir,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\ObjectManager $objectManager
     ) {
@@ -409,10 +409,10 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
         $this->_cleanUpDatabase();
 
         /* Remove temporary directories and local.xml */
-        foreach (glob($this->_coreDir->getDir(\Magento\Core\Model\Dir::VAR_DIR) . '/*', GLOB_ONLYDIR) as $dir) {
+        foreach (glob($this->_coreDir->getDir(\Magento\App\Dir::VAR_DIR) . '/*', GLOB_ONLYDIR) as $dir) {
             $this->_filesystem->delete($dir);
         }
-        $this->_filesystem->delete($this->_coreDir->getDir(\Magento\Core\Model\Dir::CONFIG)
+        $this->_filesystem->delete($this->_coreDir->getDir(\Magento\App\Dir::CONFIG)
             . DIRECTORY_SEPARATOR . '/local.xml');
         return true;
     }

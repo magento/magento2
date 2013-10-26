@@ -195,7 +195,7 @@ class Session
         /** @var $sessionModel \Magento\Persistent\Model\Session */
         $sessionModel = $this->_persistentSession->getSession();
 
-        /** @var $request \Magento\Core\Controller\Request\Http */
+        /** @var $request \Magento\App\RequestInterface */
         $request = $observer->getEvent()->getFront()->getRequest();
 
         // Quote Id could be changed only by logged in customer

@@ -122,7 +122,7 @@ abstract class AbstractMethod extends \Magento\Object
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -136,14 +136,14 @@ abstract class AbstractMethod extends \Magento\Object
     /**
      * Construct
      *
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,

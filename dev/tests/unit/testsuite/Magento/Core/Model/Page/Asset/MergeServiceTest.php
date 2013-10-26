@@ -63,8 +63,8 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
             'Magento\Core\Model\Store\Config', array('getConfigFlag'), array(), '', false
         );
         $this->_filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
-        $this->_dirs = $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false);
-        $this->_state = $this->getMock('Magento\Core\Model\App\State', array(), array(), '', false);
+        $this->_dirs = $this->getMock('Magento\App\Dir', array(), array(), '', false);
+        $this->_state = $this->getMock('Magento\App\State', array(), array(), '', false);
 
         $this->_object = new \Magento\Core\Model\Page\Asset\MergeService(
             $this->_objectManager,
@@ -143,42 +143,42 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
                 $jsAssets,
                 \Magento\Core\Model\View\Publisher::CONTENT_TYPE_JS,
                 \Magento\Core\Model\Page\Asset\MergeService::XML_PATH_MERGE_JS_FILES,
-                \Magento\Core\Model\App\State::MODE_PRODUCTION,
+                \Magento\App\State::MODE_PRODUCTION,
                 'Magento\Core\Model\Page\Asset\MergeStrategy\FileExists'
             ),
             'css production mode' => array(
                 $cssAssets,
                 \Magento\Core\Model\View\Publisher::CONTENT_TYPE_CSS,
                 \Magento\Core\Model\Page\Asset\MergeService::XML_PATH_MERGE_CSS_FILES,
-                \Magento\Core\Model\App\State::MODE_PRODUCTION,
+                \Magento\App\State::MODE_PRODUCTION,
                 'Magento\Core\Model\Page\Asset\MergeStrategy\FileExists'
             ),
             'js default mode' => array(
                 $jsAssets,
                 \Magento\Core\Model\View\Publisher::CONTENT_TYPE_JS,
                 \Magento\Core\Model\Page\Asset\MergeService::XML_PATH_MERGE_JS_FILES,
-                \Magento\Core\Model\App\State::MODE_DEFAULT,
+                \Magento\App\State::MODE_DEFAULT,
                 'Magento\Core\Model\Page\Asset\MergeStrategy\Checksum'
             ),
             'css default mode' => array(
                 $cssAssets,
                 \Magento\Core\Model\View\Publisher::CONTENT_TYPE_CSS,
                 \Magento\Core\Model\Page\Asset\MergeService::XML_PATH_MERGE_CSS_FILES,
-                \Magento\Core\Model\App\State::MODE_DEFAULT,
+                \Magento\App\State::MODE_DEFAULT,
                 'Magento\Core\Model\Page\Asset\MergeStrategy\Checksum'
             ),
             'js developer mode' => array(
                 $jsAssets,
                 \Magento\Core\Model\View\Publisher::CONTENT_TYPE_JS,
                 \Magento\Core\Model\Page\Asset\MergeService::XML_PATH_MERGE_JS_FILES,
-                \Magento\Core\Model\App\State::MODE_DEVELOPER,
+                \Magento\App\State::MODE_DEVELOPER,
                 'Magento\Core\Model\Page\Asset\MergeStrategy\Checksum'
             ),
             'css developer mode' => array(
                 $cssAssets,
                 \Magento\Core\Model\View\Publisher::CONTENT_TYPE_CSS,
                 \Magento\Core\Model\Page\Asset\MergeService::XML_PATH_MERGE_CSS_FILES,
-                \Magento\Core\Model\App\State::MODE_DEVELOPER,
+                \Magento\App\State::MODE_DEVELOPER,
                 'Magento\Core\Model\Page\Asset\MergeStrategy\Checksum'
             ),
         );
@@ -188,7 +188,7 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->_dirs->expects($this->once())
             ->method('getDir')
-            ->with(\Magento\Core\Model\Dir::PUB_VIEW_CACHE)
+            ->with(\Magento\App\Dir::PUB_VIEW_CACHE)
             ->will($this->returnValue('/pub/cache'));
 
         $mergedDir = '/pub/cache/' . \Magento\Core\Model\Page\Asset\Merged::PUBLIC_MERGE_DIR;

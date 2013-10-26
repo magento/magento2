@@ -98,13 +98,9 @@ function toggleCal(id) {
                 <?php if (is_array($this->getChildBlock('diagrams')->getTabsIds())) : ?>
                     <div id="diagram_tab_content"></div>
                 <?php endif; ?>
-                <div style="margin:20px;">
-                    <?php echo $this->getChildHtml('totals') ?>
-                </div>
-                <div style="margin:20px;">
-                    <?php echo $this->getChildHtml('grids') ?>
-                    <div id="grid_tab_content"></div>
-                </div>
+                <?php echo $this->getChildHtml('totals') ?>
+                <?php echo $this->getChildHtml('grids') ?>
+                <div id="grid_tab_content"></div>
             </div>
          </div>
          <div class="side-col">

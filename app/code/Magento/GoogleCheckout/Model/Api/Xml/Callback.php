@@ -54,12 +54,12 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
     /**
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\GoogleCheckout\Helper\Data $googleCheckoutData
      * @param \Magento\Tax\Helper\Data $taxData
@@ -69,7 +69,7 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData,
         \Magento\GoogleCheckout\Helper\Data $googleCheckoutData,
         \Magento\Tax\Helper\Data $taxData,

@@ -776,7 +776,7 @@ class Index
 
         try {
             $info      = unserialize($option->getValue());
-            $filePath  = $this->_objectManager->get('Magento\Core\Model\Dir')->getDir() . $info['quote_path'];
+            $filePath  = $this->_objectManager->get('Magento\App\Dir')->getDir() . $info['quote_path'];
             $secretKey = $this->getRequest()->getParam('key');
 
             if ($secretKey == $info['secret_key']) {

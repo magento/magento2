@@ -36,7 +36,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected $_converter;
 
     /**
-     * @var \Magento\Core\Model\Module\Dir\ReverseResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Module\Dir\ReverseResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_moduleDirResolver;
 
@@ -69,7 +69,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $validationState->expects($this->once())->method('isValidated')->will($this->returnValue(false));
 
         $this->_moduleDirResolver = $this->getMock(
-            'Magento\Core\Model\Module\Dir\ReverseResolver', array(), array(), '', false
+            'Magento\App\Module\Dir\ReverseResolver', array(), array(), '', false
         );
 
         $this->_model = new \Magento\Core\Model\Email\Template\Config\Reader(

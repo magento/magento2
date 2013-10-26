@@ -31,12 +31,12 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     protected $_controller;
 
     /**
-     * @var \Magento\Core\Controller\Response\Http|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\ResponseInterface|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_responseMock;
 
     /**
-     * @var \Magento\Core\Controller\Request\Http|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\RequestInterface|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_requestMock;
 
@@ -56,11 +56,9 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_responseMock = $this->getMock('Magento\Core\Controller\Response\Http',
-            array('setRedirect'), array(), '', false
-        );
+        $this->_responseMock = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
         $this->_responseMock->headersSentThrowsException = false;
-        $this->_requestMock = $this->getMock('Magento\Core\Controller\Request\Http', array(), array(), '', false);
+        $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
         $this->_sessionMock = $this->getMock('Magento\Backend\Model\Session',
             array('addError', 'setFormData'), array(), '', false);
         $this->_objectManager = $this->getMock('Magento\ObjectManager', array(), array(), '', false);

@@ -81,7 +81,7 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
     protected $_app;
 
     /**
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     protected $_appState;
 
@@ -95,7 +95,7 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\App $app
-     * @param \Magento\Core\Model\App\State $appState
+     * @param \Magento\App\State $appState
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -106,7 +106,7 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\App $app,
-        \Magento\Core\Model\App\State $appState,
+        \Magento\App\State $appState,
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -240,23 +240,20 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         return $this;
     }
 
+
     /**
-     * Implement logic of custom rewrites
+     * Perform custom url rewrites
      *
-     * @param   \Zend_Controller_Request_Http $request
-     * @param   \Zend_Controller_Response_Http $response
-     * @return  \Magento\Core\Model\Url
+     * @param \Magento\App\RequestInterface $request
+     * @return bool
      */
-    public function rewrite(\Zend_Controller_Request_Http $request=null, \Zend_Controller_Response_Http $response=null)
+    public function rewrite(\Magento\App\RequestInterface $request = null)
     {
         if (!$this->_appState->isInstalled()) {
             return false;
         }
         if (is_null($request)) {
             $request = $this->_app->getFrontController()->getRequest();
-        }
-        if (is_null($response)) {
-            $response = $this->_app->getFrontController()->getResponse();
         }
         if (is_null($this->getStoreId()) || false === $this->getStoreId()) {
             $this->setStoreId($this->_storeManager->getStore()->getId());

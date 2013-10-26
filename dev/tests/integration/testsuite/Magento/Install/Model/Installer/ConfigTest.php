@@ -32,8 +32,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$_tmpDir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Dir')
-            ->getDir(\Magento\Core\Model\Dir::VAR_DIR) . DIRECTORY_SEPARATOR . "ConfigTest";
+        self::$_tmpDir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')
+            ->getDir(\Magento\App\Dir::VAR_DIR) . DIRECTORY_SEPARATOR . "ConfigTest";
         mkdir(self::$_tmpDir);
     }
 
@@ -48,7 +48,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $expectedFile = self::$_tmpDir . '/local.xml';
 
         $request = $this->getMock(
-            'Magento\Core\Controller\Request\Http',
+            'Magento\App\Request\Http',
             array('getDistroBaseUrl'),
             array(),
             '',
@@ -57,10 +57,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $request->expects($this->once())->method('getDistroBaseUrl')->will($this->returnValue('http://example.com/'));
         $expectedContents = "test; <![CDATA[d-d-d-d-d]]>; <![CDATA[http://example.com/]]>; {{unknown}}";
-        $dirs = new \Magento\Core\Model\Dir(
+        $dirs = new \Magento\App\Dir(
             self::$_tmpDir,
             array(),
-            array(\Magento\Core\Model\Dir::CONFIG => self::$_tmpDir)
+            array(\Magento\App\Dir::CONFIG => self::$_tmpDir)
         );
 
         $this->assertFileNotExists($expectedFile);

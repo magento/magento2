@@ -51,33 +51,38 @@ class GridTest extends \PHPUnit_Framework_TestCase
     public function testAddGetClearRss($isUseStoreInUrl, $setStoreCount)
     {
         $helperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
+
         $urlMock = $this->getMock('Magento\Core\Model\Url', array(), array(), '', false);
-        $urlMock->expects($this->at($setStoreCount))->method('setStore');
-        $urlMock->expects($this->any())->method('getUrl')->will($this->returnValue('some_url'));
+        $urlMock->expects($this->at($setStoreCount))
+            ->method('setStore');
+        $urlMock->expects($this->any())
+            ->method('getUrl')
+            ->will($this->returnValue('some_url'));
 
         $storeMock = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
         $storeMock->expects($this->any())
             ->method('isUseStoreInUrl')
             ->will($this->returnValue($isUseStoreInUrl));
-        $storeManager = $this->getMock(
-            'Magento\Core\Model\StoreManager', array('getDefaultStoreView', 'getStore'), array(), '', false
-        );
-        $storeManager->expects($this->any())
+
+        $storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
+
+        $appMock = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
+        $appMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($storeMock));
-        $storeManager->expects($this->any())
+        $appMock->expects($this->any())
             ->method('getDefaultStoreView')
             ->will($this->returnValue($storeMock));
 
-        /** @var $block \Magento\Backend\Block\Widget\Grid */
-        $block = $this->_objectManager->getObject(
-            'Magento\Backend\Block\Widget\Grid',
-            array(
-                'storeManager' => $storeManager,
-                'urlModel' => $urlMock,
-                'coreData' => $helperMock,
-            )
-        );
+        $contextMock = $this->getMock('\Magento\Backend\Block\Template\Context', array(), array(), '', false);
+        $contextMock->expects($this->any())
+            ->method('getStoreManager')
+            ->will($this->returnValue($storeManagerMock));
+        $contextMock->expects($this->any())
+            ->method('getApp')
+            ->will($this->returnValue($appMock));
+
+        $block = new \Magento\Backend\Block\Widget\Grid($helperMock, $contextMock, $storeManagerMock, $urlMock);
 
         $this->assertFalse($block->getRssLists());
 
@@ -100,6 +105,6 @@ class GridTest extends \PHPUnit_Framework_TestCase
          return array(
             array(true, 1),
             array(false, 0),
-        );
+         );
     }
 }

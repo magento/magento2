@@ -1,2 +1,0 @@
-This file exists for unit testing purposes.  The code uses core php directory functions which cannot be mocked.
-Thereby the twig_templates directory exists for this reason.

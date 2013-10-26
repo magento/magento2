@@ -39,10 +39,10 @@ class Multiselect extends \Magento\Eav\Model\Attribute\Data\Select
     /**
      * Extract data from request and return value
      *
-     * @param \Zend_Controller_Request_Http $request
+     * @param \Magento\App\RequestInterface $request
      * @return array|string
      */
-    public function extractValue(\Zend_Controller_Request_Http $request)
+    public function extractValue(\Magento\App\RequestInterface $request)
     {
         $values = $this->_getRequestValue($request);
         if ($values !== false && !is_array($values)) {

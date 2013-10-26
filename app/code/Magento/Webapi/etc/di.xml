@@ -135,18 +135,14 @@
             </value>
         </param>
     </type>
-    <type name="Magento\Core\Model\Config">
+    <type name="Magento\App\AreaList">
         <param name="areas">
             <value>
                 <webapi_rest>
                     <frontName>rest</frontName>
-                    <front_controller>Magento\Webapi\Controller\Rest</front_controller>
-                    <request_object>Magento\Webapi\Controller\Rest\Request</request_object>
                 </webapi_rest>
                 <webapi_soap>
                     <frontName>soap</frontName>
-                    <front_controller>Magento\Webapi\Controller\Soap</front_controller>
-                    <request_object>Magento\Webapi\Controller\Soap\Request</request_object>
                 </webapi_soap>
             </value>
         </param>

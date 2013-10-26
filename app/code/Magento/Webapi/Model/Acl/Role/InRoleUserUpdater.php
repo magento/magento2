@@ -40,11 +40,11 @@ class InRoleUserUpdater implements \Magento\Core\Model\Layout\Argument\UpdaterIn
     /**
      * Constructor.
      *
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @param \Magento\Webapi\Model\Resource\Acl\User $userResource
      */
     public function __construct(
-        \Magento\Core\Controller\Request\Http $request,
+        \Magento\App\RequestInterface $request,
         \Magento\Webapi\Model\Resource\Acl\User $userResource
     ) {
         $this->_roleId = (int)$request->getParam('role_id');

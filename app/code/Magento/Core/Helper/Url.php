@@ -64,8 +64,8 @@ class Url extends \Magento\Core\Helper\AbstractHelper
         $port = $this->_getRequest()->getServer('SERVER_PORT');
         if ($port) {
             $defaultPorts = array(
-                \Magento\Core\Controller\Request\Http::DEFAULT_HTTP_PORT,
-                \Magento\Core\Controller\Request\Http::DEFAULT_HTTPS_PORT
+                \Magento\App\Request\Http::DEFAULT_HTTP_PORT,
+                \Magento\App\Request\Http::DEFAULT_HTTPS_PORT
             );
             $port = (in_array($port, $defaultPorts)) ? '' : ':' . $port;
         }

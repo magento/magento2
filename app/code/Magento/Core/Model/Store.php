@@ -246,7 +246,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     protected $_url;
 
     /**
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     protected $_appState;
 
@@ -256,7 +256,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     protected $_isCustomEntryPoint = false;
 
     /**
-     * @var \Magento\Core\Controller\Request\Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_request;
 
@@ -273,7 +273,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     protected $_coreFileStorageDatabase = null;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
@@ -295,10 +295,10 @@ class Store extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\Cache\Type\Config $configCacheType
      * @param \Magento\Core\Model\Url $url
-     * @param \Magento\Core\Model\App\State $appState
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\State $appState
+     * @param \Magento\App\RequestInterface $request
      * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Config $coreConfig
      * @param \Magento\Core\Model\Resource\Store $resource
@@ -313,10 +313,10 @@ class Store extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\Cache\Type\Config $configCacheType,
         \Magento\Core\Model\Url $url,
-        \Magento\Core\Model\App\State $appState,
-        \Magento\Core\Controller\Request\Http $request,
+        \Magento\App\State $appState,
+        \Magento\App\RequestInterface $request,
         \Magento\Core\Model\Resource\Config\Data $configDataResource,
-        \Magento\Core\Model\Dir $dir,
+        \Magento\App\Dir $dir,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Config $coreConfig,
         \Magento\Core\Model\Resource\Store $resource,
@@ -359,7 +359,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     {
         parent::__wakeup();
         $this->_eventDispatcher = \Magento\Core\Model\ObjectManager::getInstance()
-            ->get('Magento\Core\Model\Event\Manager');
+            ->get('Magento\Event\ManagerInterface');
         $this->_cacheManager    = \Magento\Core\Model\ObjectManager::getInstance()
             ->get('Magento\Core\Model\CacheInterface');
         $this->_coreStoreConfig = \Magento\Core\Model\ObjectManager::getInstance()
@@ -557,7 +557,7 @@ class Store extends \Magento\Core\Model\AbstractModel
                     $url = $this->getConfig($path);
                     if (!$url) {
                         $url = $this->getBaseUrl(self::URL_TYPE_WEB, $secure)
-                            . $this->_dir->getUri(\Magento\Core\Model\Dir::PUB_LIB);
+                            . $this->_dir->getUri(\Magento\App\Dir::PUB_LIB);
                     }
                     break;
 
@@ -566,7 +566,7 @@ class Store extends \Magento\Core\Model\AbstractModel
                     $url = $this->getConfig($path);
                     if (!$url) {
                         $url = $this->getBaseUrl(self::URL_TYPE_WEB, $secure)
-                            . $this->_dir->getUri(\Magento\Core\Model\Dir::STATIC_VIEW);
+                            . $this->_dir->getUri(\Magento\App\Dir::STATIC_VIEW);
                     }
                     break;
 
@@ -575,7 +575,7 @@ class Store extends \Magento\Core\Model\AbstractModel
                     $url = $this->getConfig($path);
                     if (!$url) {
                         $url = $this->getBaseUrl(self::URL_TYPE_WEB, $secure)
-                            . $this->_dir->getUri(\Magento\Core\Model\Dir::PUB_VIEW_CACHE);
+                            . $this->_dir->getUri(\Magento\App\Dir::PUB_VIEW_CACHE);
                     }
                     break;
 
@@ -586,7 +586,7 @@ class Store extends \Magento\Core\Model\AbstractModel
                         $url = $this->getConfig($path);
                         if (!$url) {
                             $url = $this->getBaseUrl(self::URL_TYPE_WEB, $secure)
-                                . $this->_dir->getUri(\Magento\Core\Model\Dir::MEDIA);
+                                . $this->_dir->getUri(\Magento\App\Dir::MEDIA);
                         }
                     }
                     break;
@@ -644,16 +644,16 @@ class Store extends \Magento\Core\Model\AbstractModel
      * If we use Database file storage and server doesn't support rewrites (.htaccess in media folder)
      * we have to put name of fetching media script exactly into URL
      *
-     * @param \Magento\Core\Model\Dir $dirs
+     * @param \Magento\App\Dir $dirs
      * @param bool $secure
      * @return string|bool
      */
-    protected function _getMediaScriptUrl(\Magento\Core\Model\Dir $dirs, $secure)
+    protected function _getMediaScriptUrl(\Magento\App\Dir $dirs, $secure)
     {
         if (!$this->getConfig(self::XML_PATH_USE_REWRITES)
             && $this->_coreFileStorageDatabase->checkDbUsage()
         ) {
-            return $this->getBaseUrl(self::URL_TYPE_WEB, $secure) . $dirs->getUri(\Magento\Core\Model\Dir::PUB)
+            return $this->getBaseUrl(self::URL_TYPE_WEB, $secure) . $dirs->getUri(\Magento\App\Dir::PUB)
             . '/' . self::MEDIA_REWRITE_SCRIPT;
         }
         return false;

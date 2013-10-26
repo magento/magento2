@@ -32,7 +32,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProcessedTemplate($isSingleStore)
     {
-        $design = $this->getMock('Magento\Core\Model\View\DesignInterface');
+        $design = $this->getMock('Magento\View\DesignInterface');
         $context = $this->getMock('Magento\Core\Model\Context', array(), array(), '', false);
         $registry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
 
@@ -41,7 +41,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->method('hasSingleStore')
             ->will($this->returnValue($isSingleStore));
 
-        $request = $this->getMock('Magento\Core\Controller\Request\Http', array(), array(), '', false);
+        $request = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false);
 
         if ($isSingleStore) {
             $store = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);

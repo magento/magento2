@@ -71,7 +71,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMock('Magento\Core\Controller\Request\Http', array(), array(), '', false,
+        $this->_requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false,
             false);
         $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false, false);
         $this->_layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false, false);

@@ -47,7 +47,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     protected $_themeFactory;
 
     /**
-     * @var \Zend_Controller_Request_Http|PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_request;
 
@@ -66,7 +66,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->_customizationPath = \Magento\Filesystem::DIRECTORY_SEPARATOR
             . implode(\Magento\Filesystem::DIRECTORY_SEPARATOR, array('var', 'theme'));
 
-        $this->_request = $this->getMock('Zend_Controller_Request_Http', array('getParam'), array(), '', false);
+        $this->_request = $this->getMock('\Magento\App\Request\Http', array(), array(), '', false);
         $this->_filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
         $this->_session = $this->getMock('Magento\Backend\Model\Session', array(), array(), '', false);
         $this->_themeFactory = $this->getMock('Magento\Core\Model\Theme\FlyweightFactory', array('create'), array(),

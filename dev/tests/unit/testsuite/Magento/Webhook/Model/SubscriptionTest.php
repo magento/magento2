@@ -61,7 +61,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             ->method('getUser')
             ->will($this->returnValue($this->_mockUser));
 
-        $mockEventDispatcher = $this->getMockBuilder('Magento\Core\Model\Event\Manager')
+        $mockEventDispatcher = $this->getMockBuilder('Magento\Event\ManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 

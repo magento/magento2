@@ -70,8 +70,8 @@ abstract class AbstractEntryPoint
     public function processException(\Exception $exception)
     {
         $this->_init();
-        $appMode = $this->_objectManager->get('Magento\Core\Model\App\State')->getMode();
-        if ($appMode == \Magento\Core\Model\App\State::MODE_DEVELOPER) {
+        $appMode = $this->_objectManager->get('Magento\App\State')->getMode();
+        if ($appMode == \Magento\App\State::MODE_DEVELOPER) {
             print '<pre>';
             print $exception->getMessage() . "\n\n";
             print $exception->getTraceAsString();
@@ -92,12 +92,12 @@ abstract class AbstractEntryPoint
             // attempt to specify store as a skin
             try {
                 $storeManager = $this->_objectManager->get('Magento\Core\Model\StoreManager');
-                $reportData['skin'] = $storeManager->getStore()->getCode;
+                $reportData['skin'] = $storeManager->getStore()->getCode();
             } catch (\Exception $exception) {
             }
 
-            $modelDir = $this->_objectManager->get('Magento\Core\Model\Dir');
-            require_once($modelDir->getDir(\Magento\Core\Model\Dir::PUB) . DS . 'errors' . DS . 'report.php');
+            $modelDir = $this->_objectManager->get('Magento\App\Dir');
+            require_once($modelDir->getDir(\Magento\App\Dir::PUB) . DS . 'errors' . DS . 'report.php');
         }
     }
 

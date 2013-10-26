@@ -41,7 +41,7 @@ class Order extends \Magento\Object
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -91,7 +91,7 @@ class Order extends \Magento\Object
     protected $_creditmemoItemFactory;
 
     /**
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory
@@ -108,7 +108,7 @@ class Order extends \Magento\Object
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory,

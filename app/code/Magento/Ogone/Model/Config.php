@@ -41,18 +41,29 @@ class Config extends \Magento\Payment\Model\Config
     protected $_coreData = null;
 
     /**
-     * @var \Magento\Core\Model\UrlInterface
+     * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
 
     /**
-     * @param \Magento\Core\Model\UrlInterface $urlBuilder
+     * @param \Magento\UrlInterface $urlBuilder
      * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\Payment\Model\Method\Factory $paymentMethodFactory
+     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Config\DataInterface $dataStorage
      */
     public function __construct(
-        \Magento\Core\Model\UrlInterface $urlBuilder,
-        \Magento\Core\Helper\Data $coreData
+        \Magento\UrlInterface $urlBuilder,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Core\Model\Config $coreConfig,
+        \Magento\Payment\Model\Method\Factory $paymentMethodFactory,
+        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Config\DataInterface $dataStorage
     ) {
+        parent::__construct($coreStoreConfig, $coreConfig, $paymentMethodFactory, $locale, $dataStorage);
         $this->_urlBuilder = $urlBuilder;
         $this->_coreData = $coreData;
     }

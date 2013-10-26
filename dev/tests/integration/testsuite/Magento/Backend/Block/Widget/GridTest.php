@@ -38,7 +38,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     protected $_block;
 
     /**
-     * @var \Magento\Core\Model\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_layoutMock;
 
@@ -65,7 +65,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $this->_layoutMock->expects($this->any())->method('createBlock')
             ->with('Magento\Backend\Block\Widget\Button')
             ->will($this->returnValue(\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Core\Model\Layout')->createBlock('Magento\Backend\Block\Widget\Button')));
+                ->get('Magento\View\LayoutInterface')->createBlock('Magento\Backend\Block\Widget\Button')));
         $this->_layoutMock->expects($this->any())->method('helper')
             ->with('Magento\Core\Helper\Data')
             ->will($this->returnValue(
@@ -73,7 +73,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ));
 
 
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Backend\Block\Widget\Grid');
         $this->_block->setLayout($this->_layoutMock);
         $this->_block->setNameInLayout('grid');
@@ -90,7 +90,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Core\Block\Template\Context', array(
-                'dirs' => new \Magento\Core\Model\Dir(__DIR__),
+                'dirs' => new \Magento\App\Dir(__DIR__),
                 'filesystem' => new \Magento\Filesystem(new \Magento\Filesystem\Adapter\Local),
             )),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

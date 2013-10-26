@@ -31,10 +31,12 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 {
     public function testNewProductsWidget()
     {
+        $type = 'Magento\Catalog\Block\Product\Widget\NewWidget';
+
         /** @var $model \Magento\Widget\Model\Widget\Instance */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Widget\Model\Widget\Instance');
-        $config = $model->setType('Magento\Catalog\Block\Product\Widget\NewWidget')->getWidgetConfigAsArray();
+        $config = $model->setType($type)->getWidgetConfigAsArray();
         $templates = $config['parameters']['template']['values'];
         $this->assertArrayHasKey('default', $templates);
         $this->assertArrayHasKey('list', $templates);
@@ -52,5 +54,9 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('left', $containers);
         $this->assertContains('content', $containers);
         $this->assertContains('right', $containers);
+
+        // Verify that the correct id (code) is found for this widget instance type.
+        $code = $model->setType($type)->getWidgetReference('type', $type, 'code');
+        $this->assertEquals('new_products', $code);
     }
 }

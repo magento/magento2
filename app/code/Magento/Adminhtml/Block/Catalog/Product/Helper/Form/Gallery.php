@@ -42,12 +42,12 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\Layout
+     * @var \Magento\View\LayoutInterface
      */
     protected $_layout;
 
     /**
-     * @param \Magento\Core\Model\Layout $layout
+     * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Data\Form\Element\Factory $factoryElement
@@ -55,7 +55,7 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
      * @param array $attributes
      */
     public function __construct(
-        \Magento\Core\Model\Layout $layout,
+        \Magento\View\LayoutInterface $layout,
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Data\Form\Element\Factory $factoryElement,

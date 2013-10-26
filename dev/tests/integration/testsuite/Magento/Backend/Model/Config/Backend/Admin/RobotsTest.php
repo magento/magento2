@@ -78,7 +78,7 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
     public function testAfterSaveFileNotExists()
     {
         $robotsTxtPath = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Core\Model\Dir')->getDir() . DS . 'robots.txt';
+                ->get('Magento\App\Dir')->getDir() . DS . 'robots.txt';
         $this->assertFileNotExists($robotsTxtPath, 'robots.txt exists');
 
         $this->_modifyConfig();
@@ -92,7 +92,7 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterSaveFileExists()
     {
-        $robotsTxtPath = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Dir')
+        $robotsTxtPath = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')
                 ->getDir() . DS . 'robots.txt';
         $this->assertFileExists($robotsTxtPath, 'robots.txt exists');
 
@@ -108,7 +108,7 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
         $this->_model->setValue($robotsTxt)->save();
         $this->assertStringEqualsFile(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Core\Model\Dir')->getDir() . DS . 'robots.txt',
+                ->get('Magento\App\Dir')->getDir() . DS . 'robots.txt',
             $robotsTxt
         );
     }

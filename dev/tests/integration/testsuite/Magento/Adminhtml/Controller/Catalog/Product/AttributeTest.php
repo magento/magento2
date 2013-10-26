@@ -113,7 +113,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         // emulate admin store and design
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
             ->setCurrentStore(\Magento\Core\Model\AppInterface::ADMIN_STORE_ID);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\View\DesignInterface')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
             ->setDesignTheme(1);
         /** @var \Magento\Core\Model\Translate $translate */
         $translate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

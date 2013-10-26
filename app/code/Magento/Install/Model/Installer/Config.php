@@ -45,12 +45,12 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_localConfigFile;
 
     /**
-     * @var \Magento\Core\Controller\Request\Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_request;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dirs;
 
@@ -70,20 +70,20 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
 
     /**
      * @param \Magento\Install\Model\Installer $installer
-     * @param \Magento\Core\Controller\Request\Http $request
-     * @param \Magento\Core\Model\Dir $dirs
+     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\App\Dir $dirs
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Install\Model\Installer $installer,
-        \Magento\Core\Controller\Request\Http $request,
-        \Magento\Core\Model\Dir $dirs,
+        \Magento\App\RequestInterface $request,
+        \Magento\App\Dir $dirs,
         \Magento\Filesystem $filesystem,
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         parent::__construct($installer);
-        $this->_localConfigFile = $dirs->getDir(\Magento\Core\Model\Dir::CONFIG) . DIRECTORY_SEPARATOR . 'local.xml';
+        $this->_localConfigFile = $dirs->getDir(\Magento\App\Dir::CONFIG) . DIRECTORY_SEPARATOR . 'local.xml';
         $this->_dirs = $dirs;
         $this->_request = $request;
         $this->_filesystem = $filesystem;
@@ -111,9 +111,9 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         $data = $this->getConfigData();
 
         $defaults = array(
-            'root_dir' => $this->_dirs->getDir(\Magento\Core\Model\Dir::ROOT),
-            'app_dir'  => $this->_dirs->getDir(\Magento\Core\Model\Dir::APP),
-            'var_dir'  => $this->_dirs->getDir(\Magento\Core\Model\Dir::VAR_DIR),
+            'root_dir' => $this->_dirs->getDir(\Magento\App\Dir::ROOT),
+            'app_dir'  => $this->_dirs->getDir(\Magento\App\Dir::APP),
+            'var_dir'  => $this->_dirs->getDir(\Magento\App\Dir::VAR_DIR),
             'base_url' => $this->_request->getDistroBaseUrl(),
         );
         foreach ($defaults as $index => $value) {
@@ -151,7 +151,7 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
 
         $this->_getInstaller()->getDataModel()->setConfigData($data);
 
-        $path = $this->_dirs->getDir(\Magento\Core\Model\Dir::CONFIG) . DIRECTORY_SEPARATOR . 'local.xml.template';
+        $path = $this->_dirs->getDir(\Magento\App\Dir::CONFIG) . DIRECTORY_SEPARATOR . 'local.xml.template';
         $contents = $this->_filesystem->read($path);
         foreach ($data as $index => $value) {
             $contents = str_replace('{{' . $index . '}}', '<![CDATA[' . $value . ']]>', $contents);
@@ -197,9 +197,9 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
     protected function _checkUrl($baseUrl)
     {
         try {
-            $pubLibDir = $this->_dirs->getDir(\Magento\Core\Model\Dir::PUB_LIB);
+            $pubLibDir = $this->_dirs->getDir(\Magento\App\Dir::PUB_LIB);
             $staticFile = $this->_findFirstFileRelativePath($pubLibDir, '/.+\.(html?|js|css|gif|jpe?g|png)$/');
-            $staticUrl = $baseUrl . $this->_dirs->getUri(\Magento\Core\Model\Dir::PUB_LIB) . '/' . $staticFile;
+            $staticUrl = $baseUrl . $this->_dirs->getUri(\Magento\App\Dir::PUB_LIB) . '/' . $staticFile;
             $client = new \Magento\HTTP\ZendClient($staticUrl);
             $response = $client->request('GET');
         } catch (\Exception $e){

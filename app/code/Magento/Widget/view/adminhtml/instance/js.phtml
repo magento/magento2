@@ -26,15 +26,15 @@
 ?>
 <script type="text/javascript">
 //<![CDATA[
-function setSettings(urlTemplate, typeElement, themeElement) {
+function setSettings(urlTemplate, codeElement, themeElement) {
     if (!jQuery('#edit_form').valid()) {
         return false;
     }
-    typeElement = $F(typeElement);
+    codeElement = $F(codeElement);
     themeElement = $F(themeElement);
 
     setLocation(new Template(urlTemplate, /(^|.|\r|\n)({{(\w+)}})/).evaluate({
-        'type': typeElement,
+        'code': codeElement,
         'theme_id': themeElement
     }));
 }

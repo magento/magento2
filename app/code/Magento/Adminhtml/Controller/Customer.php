@@ -846,7 +846,7 @@ class Customer extends \Magento\Adminhtml\Controller\Action
             return $this->norouteAction();
         }
 
-        $path = $this->_objectManager->get('Magento\Core\Model\Dir')->getDir('media') . DS . 'customer';
+        $path = $this->_objectManager->get('Magento\App\Dir')->getDir('media') . DS . 'customer';
 
         /** @var \Magento\Filesystem $filesystem */
         $filesystem = $this->_objectManager->get('Magento\Filesystem');

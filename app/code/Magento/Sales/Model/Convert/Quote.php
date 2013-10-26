@@ -41,7 +41,7 @@ class Quote extends \Magento\Object
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -66,7 +66,7 @@ class Quote extends \Magento\Object
     protected $_orderItemFactory;
 
     /**
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Order\AddressFactory $orderAddressFactory
@@ -75,7 +75,7 @@ class Quote extends \Magento\Object
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Order\AddressFactory $orderAddressFactory,

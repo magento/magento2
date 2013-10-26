@@ -42,35 +42,35 @@ class Primary extends \Magento\Core\Model\Config\Base
     /**
      * Directory list
      *
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
     /**
      * @param string $baseDir
      * @param array $params
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      * @param \Magento\Core\Model\Config\LoaderInterface $loader
      */
     public function __construct(
         $baseDir,
         array $params,
-        \Magento\Core\Model\Dir $dir = null,
+        \Magento\App\Dir $dir = null,
         \Magento\Core\Model\Config\LoaderInterface $loader = null
     ) {
         parent::__construct('<config/>');
         $this->_params = $params;
-        $this->_dir = $dir ?: new \Magento\Core\Model\Dir(
+        $this->_dir = $dir ?: new \Magento\App\Dir(
             $baseDir,
             $this->getParam(\Magento\Core\Model\App::PARAM_APP_URIS, array()),
             $this->getParam(\Magento\Core\Model\App::PARAM_APP_DIRS, array())
         );
         \Magento\Autoload\IncludePath::addIncludePath(array(
-            $this->_dir->getDir(\Magento\Core\Model\Dir::GENERATION)
+            $this->_dir->getDir(\Magento\App\Dir::GENERATION)
         ));
 
         $this->_loader = $loader ?: new \Magento\Core\Model\Config\Loader\Primary(
-            $this->_dir->getDir(\Magento\Core\Model\Dir::CONFIG)
+            $this->_dir->getDir(\Magento\App\Dir::CONFIG)
         );
         $this->_loader->load($this);
     }
@@ -100,7 +100,7 @@ class Primary extends \Magento\Core\Model\Config\Base
     /**
      * Retrieve directories
      *
-     * @return \Magento\Core\Model\Dir
+     * @return \Magento\App\Dir
      */
     public function getDirectories()
     {
@@ -127,9 +127,9 @@ class Primary extends \Magento\Core\Model\Config\Base
         if (isset($pathInfo['path'])) {
             return $pathInfo['path'];
         } else if (isset($pathInfo['relativePath'])) {
-            return $this->_dir->getDir(\Magento\Core\Model\Dir::ROOT) . DIRECTORY_SEPARATOR . $pathInfo['relativePath'];
+            return $this->_dir->getDir(\Magento\App\Dir::ROOT) . DIRECTORY_SEPARATOR . $pathInfo['relativePath'];
         } else {
-            return $this->_dir->getDir(\Magento\Core\Model\Dir::DI);
+            return $this->_dir->getDir(\Magento\App\Dir::DI);
         }
     }
 
@@ -155,7 +155,7 @@ class Primary extends \Magento\Core\Model\Config\Base
         $objectManager->configure(array(
             'Magento\Core\Model\Config\Loader\Local' => array(
                 'parameters' => array(
-                    'configDirectory' => $this->_dir->getDir(\Magento\Core\Model\Dir::CONFIG),
+                    'configDirectory' => $this->_dir->getDir(\Magento\App\Dir::CONFIG),
                 )
             ),
             'Magento\Core\Model\Cache\Frontend\Factory' => array(

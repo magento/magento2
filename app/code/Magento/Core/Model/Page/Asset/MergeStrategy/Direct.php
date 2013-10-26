@@ -35,7 +35,7 @@ class Direct implements \Magento\Core\Model\Page\Asset\MergeStrategyInterface
     private $_filesystem;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     private $_dirs;
 
@@ -46,12 +46,12 @@ class Direct implements \Magento\Core\Model\Page\Asset\MergeStrategyInterface
 
     /**
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Model\Dir $dirs
+     * @param \Magento\App\Dir $dirs
      * @param \Magento\Core\Helper\Css $cssHelper
      */
     public function __construct(
         \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\Dir $dirs,
+        \Magento\App\Dir $dirs,
         \Magento\Core\Helper\Css $cssHelper
     ) {
         $this->_filesystem = $filesystem;

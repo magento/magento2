@@ -35,10 +35,10 @@ class Cron extends \Magento\Core\Model\AbstractEntryPoint
         $app->setUseSessionInUrl(false);
         $app->requireInstalledInstance();
 
-        /** @var $eventManager \Magento\Core\Model\Event\Manager */
-        $eventManager = $this->_objectManager->get('Magento\Core\Model\Event\Manager');
-        /** @var \Magento\Core\Model\Config\Scope $configScope */
-        $configScope = $this->_objectManager->get('Magento\Core\Model\Config\Scope');
+        /** @var $eventManager \Magento\Event\ManagerInterface */
+        $eventManager = $this->_objectManager->get('Magento\Event\ManagerInterface');
+        /** @var \Magento\Config\Scope $configScope */
+        $configScope = $this->_objectManager->get('Magento\Config\ScopeInterface');
         $configScope->setCurrentScope('crontab');
         $eventManager->dispatch('default');
     }

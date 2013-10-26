@@ -451,7 +451,7 @@
                 <field id="use_custom_path" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Use Custom Admin Path</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Admin\Usecustompath</backend_model>
+                    <backend_model>Magento\Backend\Model\Config\Backend\Admin\Custompath</backend_model>
                 </field>
                 <field id="custom_path" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Custom Admin Path</label>

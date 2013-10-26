@@ -75,11 +75,23 @@ class Merchant
     {
         $this->setElement($element);
 
-        $html = '<div id="merchant_allowed_methods_template" style="display:none">';
+        $html = '<table style="display: none;"><tbody id="merchant_allowed_methods_template">';
         $html .= $this->_getRowTemplateHtml();
-        $html .= '</div>';
+        $html .= '</tbody></table>';
 
-        $html .= '<ul id="merchant_allowed_methods_container">';
+        $html .= '<table cellspacing="0" class="data-table">';
+        $html .= '<thead><tr>';
+        $html .= '<th class="col-shipping-method">' . __('Shipping Method') . '</th>';
+        $html .= '<th class="col-default-price">' . __('Default Price') . '</th>';
+        $html .= '<th class="col-actions">' . __('Action') . '</th>';
+        $html .= '</tr></thead>';
+        $html .= '<tfoot><tr><td colspan="3">';
+
+        $html .= $this->_getAddRowButtonHtml('merchant_allowed_methods_container', 'merchant_allowed_methods_template', __('Add Shipping Method'));
+
+        $html .= '</td></tr></tfoot>';
+        $html .= '<tbody id="merchant_allowed_methods_container">';
+
         if ($this->_getValue('method')) {
             foreach ($this->_getValue('method') as $i => $f) {
                 if ($i) {
@@ -87,9 +99,9 @@ class Merchant
                 }
             }
         }
-        $html .= '</ul>';
-        $html .= $this->_getAddRowButtonHtml('merchant_allowed_methods_container',
-            'merchant_allowed_methods_template', __('Add Shipping Method'));
+
+        $html .= '</tbody>';
+        $html .= '</table>';
 
         return $html;
     }
@@ -102,33 +114,34 @@ class Merchant
      */
     protected function _getRowTemplateHtml($rowIndex = 0)
     {
-        $html = '<li>';
+        $html = '<tr>';
+        $html .= '<td class="col-shipping-method">';
         $html .= '<select name="' . $this->getElement()->getName() . '[method][]" ' . $this->_getDisabled() . '>';
         $html .= '<option value="">' . __('* Select shipping method') . '</option>';
 
         foreach ($this->getShippingMethods() as $carrierCode => $carrier) {
-            $html .= '<optgroup label="' . $this->escapeHtml($carrier['title'])
-                . '" style="border-top:solid 1px black; margin-top:3px;">';
+            $html .= '<optgroup label="' . $this->escapeHtml($carrier['title']) . '">';
 
             foreach ($carrier['methods'] as $methodCode => $method) {
                 $code = $carrierCode . '/' . $methodCode;
                 $html .= '<option value="' . $this->escapeHtml($code) . '" '
                     . $this->_getSelected('method/' . $rowIndex, $code)
-                    . ' style="background:white;">' . $this->escapeHtml($method['title']) . '</option>';
+                    . '>' . $this->escapeHtml($method['title']) . '</option>';
             }
             $html .= '</optgroup>';
         }
-        $html .= '</select>';
 
-        $html .= '<div style="margin:5px 0 10px;">';
-        $html .= '<label>' . __('Default price:') . '</label> ';
-        $html .= '<input class="input-text" style="width:70px;" name="'
+        $html .= '</select>';
+        $html .= '</td>';
+        $html .= '<td class="col-default-price">';
+        $html .= '<input type="text" class="input-text" name="'
             . $this->getElement()->getName() . '[price][]" value="'
             . $this->_getValue('price/' . $rowIndex) . '" ' . $this->_getDisabled() . '/> ';
-
+        $html .= '</td>';
+        $html .= '<td class="col-actions">';
         $html .= $this->_getRemoveRowButtonHtml();
-        $html .= '</div>';
-        $html .= '</li>';
+        $html .= '</td>';
+        $html .= '</tr>';
 
         return $html;
     }
@@ -206,12 +219,12 @@ class Merchant
         return $this->_addRowButtonHtml[$container];
     }
 
-    protected function _getRemoveRowButtonHtml($selector = 'li', $title = 'Remove')
+    protected function _getRemoveRowButtonHtml($selector = 'tr', $title = 'Remove')
     {
         if (!$this->_removeRowButtonHtml) {
             $this->_removeRowButtonHtml = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
                     ->setType('button')
-                    ->setClass('delete v-middle ' . $this->_getDisabled())
+                    ->setClass('delete ' . $this->_getDisabled())
                     ->setLabel(__($title))
                     ->setOnClick("Element.remove($(this).up('" . $selector . "'))")
                     ->setDisabled($this->_getDisabled())

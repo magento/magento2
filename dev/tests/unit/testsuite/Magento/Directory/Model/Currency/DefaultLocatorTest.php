@@ -47,7 +47,7 @@ class DefaultLocatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $backendData = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false);
-        $this->_requestMock = $this->getMockForAbstractClass('Magento\Core\Controller\Request\Http',
+        $this->_requestMock = $this->getMockForAbstractClass('Magento\App\RequestInterface',
             array($backendData), '', false, false, true, array('getParam'));
         $this->_appMock = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
         $this->_model = new \Magento\Directory\Model\Currency\DefaultLocator($this->_appMock);

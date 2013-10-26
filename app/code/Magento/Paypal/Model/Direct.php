@@ -84,12 +84,12 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\UrlInterface
+     * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
 
     /**
-     * @var \Magento\Core\Controller\Request\Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_requestHttp;
 
@@ -100,17 +100,17 @@ class Direct extends \Magento\Payment\Model\Method\Cc
 
     /**
      * @param \Magento\Core\Model\Logger $logger
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\ModuleListInterface $moduleList
+     * @param \Magento\App\ModuleListInterface $moduleList
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Centinel\Model\Service $centinelService
      * @param \Magento\Paypal\Model\Method\ProTypeFactory $proTypeFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\UrlInterface $urlBuilder
-     * @param \Magento\Core\Controller\Request\Http $requestHttp
+     * @param \Magento\UrlInterface $urlBuilder
+     * @param \Magento\App\RequestInterface $requestHttp
      * @param \Magento\Paypal\Model\CartFactory $cartFactory
      * @param array $data
      *
@@ -118,17 +118,17 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      */
     public function __construct(
         \Magento\Core\Model\Logger $logger,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\ModuleListInterface $moduleList,
+        \Magento\App\ModuleListInterface $moduleList,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Centinel\Model\Service $centinelService,
         \Magento\Paypal\Model\Method\ProTypeFactory $proTypeFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\UrlInterface $urlBuilder,
-        \Magento\Core\Controller\Request\Http $requestHttp,
+        \Magento\UrlInterface $urlBuilder,
+        \Magento\App\RequestInterface $requestHttp,
         \Magento\Paypal\Model\CartFactory $cartFactory,
         array $data = array()
     ) {

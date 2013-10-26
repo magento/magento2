@@ -28,7 +28,7 @@ namespace Magento\Core\Model;
 class Context implements \Magento\ObjectManager\ContextInterface
 {
     /**
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventDispatcher;
 
@@ -44,21 +44,21 @@ class Context implements \Magento\ObjectManager\ContextInterface
 
     /**
      * @param \Magento\Core\Model\Logger $logger
-     * @var \Magento\Core\Model\App\State
+     * @var \Magento\App\State
      */
     protected $_appState;
 
     /**
      * @param \Magento\Core\Model\Logger $logger
-     * @param \Magento\Core\Model\Event\Manager $eventDispatcher
+     * @param \Magento\Event\ManagerInterface $eventDispatcher
      * @param \Magento\Core\Model\CacheInterface $cacheManager
-     * @param \Magento\Core\Model\App\State $appState
+     * @param \Magento\App\State $appState
      */
     public function __construct(
         \Magento\Core\Model\Logger $logger,
-        \Magento\Core\Model\Event\Manager $eventDispatcher,
+        \Magento\Event\ManagerInterface $eventDispatcher,
         \Magento\Core\Model\CacheInterface $cacheManager,
-        \Magento\Core\Model\App\State $appState
+        \Magento\App\State $appState
     ) {
         $this->_eventDispatcher = $eventDispatcher;
         $this->_cacheManager = $cacheManager;
@@ -75,7 +75,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Core\Model\Event\Manager
+     * @return \Magento\Event\ManagerInterface
      */
     public function getEventDispatcher()
     {
@@ -91,7 +91,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Core\Model\App\State
+     * @return \Magento\App\State
      */
     public function getAppState()
     {

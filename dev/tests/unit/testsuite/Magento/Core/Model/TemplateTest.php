@@ -47,7 +47,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             $helper->getConstructArguments(
                 'Magento\Core\Model\Template',
                 array(
-                    'design' => $this->getMock('Magento\Core\Model\View\DesignInterface'),
+                    'design' => $this->getMock('Magento\View\DesignInterface'),
                     'data' => array(
                         'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
                         'store' => 1

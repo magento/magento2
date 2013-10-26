@@ -102,7 +102,7 @@ class Image extends \Magento\Core\Model\AbstractModel
     /**
      * Dir
      *
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dir;
 
@@ -117,7 +117,7 @@ class Image extends \Magento\Core\Model\AbstractModel
      * Construct
      *
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Dir $dir
+     * @param \Magento\App\Dir $dir
      * @param \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Core\Model\Context $context
@@ -135,7 +135,7 @@ class Image extends \Magento\Core\Model\AbstractModel
      */
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Dir $dir,
+        \Magento\App\Dir $dir,
         \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Core\Model\Context $context,
@@ -599,7 +599,7 @@ class Image extends \Magento\Core\Model\AbstractModel
                 "Magento_Catalog::images/product/placeholder/{$this->getDestinationSubdir()}.jpg"
             );
         } else {
-            $baseDir = $this->_dir->getDir(\Magento\Core\Model\Dir::MEDIA);
+            $baseDir = $this->_dir->getDir(\Magento\App\Dir::MEDIA);
             $path = str_replace($baseDir . DS, "", $this->_newFile);
             $url = $this->_storeManager->getStore()->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_MEDIA) . str_replace(DS, '/', $path);;
         }
@@ -792,7 +792,7 @@ class Image extends \Magento\Core\Model\AbstractModel
 
     public function clearCache()
     {
-        $directory = $this->_dir->getDir(\Magento\Core\Model\Dir::MEDIA) . DS . 'catalog' . DS . 'product'
+        $directory = $this->_dir->getDir(\Magento\App\Dir::MEDIA) . DS . 'catalog' . DS . 'product'
             . DS . 'cache' . DS;
         $this->_filesystem->delete($directory);
 

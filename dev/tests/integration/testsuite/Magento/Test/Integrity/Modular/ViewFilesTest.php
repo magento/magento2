@@ -39,7 +39,7 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
              */
             function ($application, $file) {
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\Core\Model\View\DesignInterface')
+                    ->get('Magento\View\DesignInterface')
                     ->setArea($application)
                     ->setDefaultDesignTheme();
                 $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -142,7 +142,7 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
              */
             function ($application, $file) {
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\Core\Model\View\DesignInterface')
+                    ->get('Magento\View\DesignInterface')
                     ->setArea($application)
                     ->setDefaultDesignTheme();
                 $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

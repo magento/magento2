@@ -24,18 +24,13 @@
  */
 -->
 <config>
-    <type name="Magento\Eav\Model\Entity\Collection\AbstractCollection">
-        <param name="eventManager">
-            <instance type="Magento\Core\Model\Event\Manager\Proxy"/>
-        </param>
-    </type>
     <type name="Magento\Eav\Model\Resource\Helper">
         <param name="modulePrefix">
             <value>eav</value>
         </param>
     </type>
-    <type name="Magento\Core\Model\Db\Updater">
-        <param name="resourceList">
+    <type name="Magento\App\Updater\SetupFactory">
+        <param name="resourceTypes">
             <value>
                 <eav_setup>Magento\Eav\Model\Entity\Setup</eav_setup>
             </value>

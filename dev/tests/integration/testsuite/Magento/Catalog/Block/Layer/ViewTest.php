@@ -45,7 +45,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $layer->setCurrentCategory($currentCategory);
 
         /** @var $layout \Magento\Core\Model\Layout */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout');
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         /** @var $block \Magento\Catalog\Block\Layer\View */
         $block = $layout->createBlock('Magento\Catalog\Block\Layer\View', 'block');
 

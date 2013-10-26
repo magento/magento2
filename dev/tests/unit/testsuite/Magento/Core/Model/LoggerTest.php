@@ -43,8 +43,8 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_filesystemMock = $this->getMock('Magento\Io\File', array(), array(), '', false, false);
-        $dirs = new \Magento\Core\Model\Dir(TESTS_TEMP_DIR);
-        $logDir = $dirs->getDir(\Magento\Core\Model\Dir::LOG);
+        $dirs = new \Magento\App\Dir(TESTS_TEMP_DIR);
+        $logDir = $dirs->getDir(\Magento\App\Dir::LOG);
         if (!is_dir($logDir)) {
             mkdir($logDir, 0777, true);
         }

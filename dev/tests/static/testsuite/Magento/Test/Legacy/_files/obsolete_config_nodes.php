@@ -46,7 +46,7 @@ return array(
     '/config/*[self::global|self::adminhtml|self::frontend]/events' => 'This configuration moved to events.xml file',
     '/config/*[self::global|self::adminhtml|self::frontend]/routers' =>
         'Routes configuration moved to routes.xml file,'
-        . 'routers list can be set through Di configuration of \Magento\Core\Model\RouterList model',
+        . 'routers list can be set through Di configuration of \Magento\App\RouterList model',
     '/config/global/importexport' => 'This configuration moved to import.xml and export.xml files',
     '/config/global/catalog/product/type' => 'This configuration moved to product_types.xml file',
     '/config/global/catalog/product/options' => 'This configuration moved to product_options.xml file',
@@ -56,7 +56,7 @@ return array(
     '/config/global/salesrule' => 'This configuration moved to Di configuration of \Magento\SalesRule\Helper\Coupon',
     '/config/global/session' => 'This configuration moved to Di configuration of \Magento\Core\Model\Session\Validator',
     '/config/global/ignore_user_agents' => 'This configuration moved to Di configuration of \Magento\Log\Model\Visitor',
-    '/config/global/request' => 'This configuration moved to Di configuration of \Magento\Core\Controller\Request\Http',
+    '/config/global/request' => 'This configuration moved to Di configuration of \Magento\App\RequestInterface',
     '/config/global/secure_url' =>
         'This configuration moved to Di configuration of \Magento\Core\Model\Url\SecurityInfo',
     '/config/global/dev' =>

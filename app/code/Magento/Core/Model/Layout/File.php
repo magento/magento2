@@ -40,16 +40,16 @@ class File
     private $_module;
 
     /**
-     * @var \Magento\Core\Model\ThemeInterface
+     * @var \Magento\View\Design\ThemeInterface
      */
     private $_theme;
 
     /**
      * @param string $filename
      * @param string $module
-     * @param \Magento\Core\Model\ThemeInterface $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      */
-    public function __construct($filename, $module, \Magento\Core\Model\ThemeInterface $theme = null)
+    public function __construct($filename, $module, \Magento\View\Design\ThemeInterface $theme = null)
     {
         $this->_filename = $filename;
         $this->_module = $module;
@@ -89,7 +89,7 @@ class File
     /**
      * Retrieve instance of a theme a file belongs to
      *
-     * @return \Magento\Core\Model\ThemeInterface|null
+     * @return \Magento\View\Design\ThemeInterface|null
      */
     public function getTheme()
     {

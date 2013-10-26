@@ -87,7 +87,7 @@ class Onepage
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -97,7 +97,7 @@ class Onepage
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Controller\Request\Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_request;
 
@@ -127,7 +127,7 @@ class Onepage
     protected $_orderFactory;
 
     /**
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Checkout\Helper\Data $helper
      * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Core\Helper\Data $coreData
@@ -135,7 +135,7 @@ class Onepage
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @param \Magento\Customer\Model\AddressFactory $customrAddrFactory
      * @param \Magento\Customer\Model\FormFactory $customerFormFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
@@ -143,7 +143,7 @@ class Onepage
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Checkout\Helper\Data $helper,
         \Magento\Customer\Helper\Data $customerData,
         \Magento\Core\Helper\Data $coreData,
@@ -151,7 +151,7 @@ class Onepage
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Controller\Request\Http $request,
+        \Magento\App\RequestInterface $request,
         \Magento\Customer\Model\AddressFactory $customrAddrFactory,
         \Magento\Customer\Model\FormFactory $customerFormFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,

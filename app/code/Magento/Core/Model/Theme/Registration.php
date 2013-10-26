@@ -109,7 +109,7 @@ class Registration
      * Register theme and recursively all its ascendants
      * Second param is optional and is used to prevent circular references in inheritance chain
      *
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @param array $inheritanceChain
      * @return \Magento\Core\Model\Theme\Collection
      * @throws \Magento\Core\Exception
@@ -146,10 +146,10 @@ class Registration
     /**
      * Save preview image for theme
      *
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @return $this
      */
-    protected function _savePreviewImage(\Magento\Core\Model\Theme $theme)
+    protected function _savePreviewImage(\Magento\View\Design\ThemeInterface $theme)
     {
         $themeDirectory = $theme->getCustomization()->getThemeFilesPath();
         if (!$theme->getPreviewImage() || !$themeDirectory) {
@@ -181,7 +181,7 @@ class Registration
     public function checkPhysicalThemes()
     {
         $themes = $this->_collectionFactory->create()->addTypeFilter(\Magento\Core\Model\Theme::TYPE_PHYSICAL);
-        /** @var $theme \Magento\Core\Model\Theme */
+        /** @var $theme \Magento\View\Design\ThemeInterface */
         foreach ($themes as $theme) {
             if (!$this->_themeCollection->hasTheme($theme)) {
                 $theme->setType(\Magento\Core\Model\Theme::TYPE_VIRTUAL)->save();
@@ -201,7 +201,7 @@ class Registration
             list($parentType, $childType) = $typesSequence;
             $collection = $this->_collectionFactory->create();
             $collection->addTypeRelationFilter($parentType, $childType);
-            /** @var $theme \Magento\Core\Model\Theme */
+            /** @var $theme \Magento\View\Design\ThemeInterface */
             foreach ($collection as $theme) {
                 $parentId = $this->_getResetParentId($theme);
                 if ($theme->getParentId() != $parentId) {
@@ -215,10 +215,10 @@ class Registration
     /**
      * Reset parent themes by type
      *
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @return int|null
      */
-    protected function _getResetParentId(\Magento\Core\Model\Theme $theme)
+    protected function _getResetParentId(\Magento\View\Design\ThemeInterface $theme)
     {
         $parentTheme = $theme->getParentTheme();
         while ($parentTheme) {

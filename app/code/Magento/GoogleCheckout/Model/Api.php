@@ -38,7 +38,7 @@ class Api extends \Magento\Object
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -56,13 +56,13 @@ class Api extends \Magento\Object
 
     /**
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param array $data
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         array $data = array()
     ) {

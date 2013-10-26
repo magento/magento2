@@ -105,8 +105,7 @@
          */
         _render: function() {
             if (this.spinner.length === 0) {
-                this.spinner = $.tmpl(this.options.template, this.options)
-                    .css(this._getCssObj());
+                this.spinner = $.tmpl(this.options.template, this.options)/*.css(this._getCssObj())*/;
             }
             this.element.prepend(this.spinner);
         },

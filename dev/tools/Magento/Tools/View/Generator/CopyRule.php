@@ -82,7 +82,7 @@ class CopyRule
     public function getCopyRules()
     {
         $result = array();
-        /** @var $theme \Magento\Core\Model\ThemeInterface */
+        /** @var $theme \Magento\View\Design\ThemeInterface */
         foreach ($this->_themes as $theme) {
             $area = $theme->getArea();
             $nonModularLocations = $this->_fallbackRule->getPatternDirs(array(

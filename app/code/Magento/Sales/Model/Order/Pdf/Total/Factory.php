@@ -59,7 +59,8 @@ class Factory
         $class = $class ?: $this->_defaultTotalModel;
         if (!is_a($class, 'Magento\Sales\Model\Order\Pdf\Total\DefaultTotal', true)) {
             throw new \Magento\Core\Exception(
-                __("The PDF total model {$class} must be or extend \Magento\Sales\Model\Order\Pdf\Total\Default.")
+                __("The PDF total model {$class} must be or extend "
+                    . "\\Magento\\Sales\\Model\\Order\\Pdf\\Total\\DefaultTotal.")
             );
         }
         return $this->_objectManager->create($class, $arguments);

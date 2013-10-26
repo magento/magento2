@@ -31,12 +31,12 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         // Wire object with mocks
         $context = $this->getMock('Magento\Backend\Controller\Context', array(), array(), '', false);
 
-        $request = $this->getMock('Magento\Core\Controller\Request\Http', array(), array(), '', false);
+        $request = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false);
         $context->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue($request));
 
-        $response = $this->getMock('Magento\Core\Controller\Response\Http', array(), array(), '', false);
+        $response = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
         $context->expects($this->any())
             ->method('getResponse')
             ->will($this->returnValue($response));
@@ -46,12 +46,12 @@ class CacheTest extends \PHPUnit_Framework_TestCase
             ->method('getObjectManager')
             ->will($this->returnValue($objectManager));
 
-        $frontController = $this->getMock('Magento\Core\Controller\Varien\Front', array(), array(), '', false);
+        $frontController = $this->getMock('Magento\App\FrontController', array(), array(), '', false);
         $context->expects($this->any())
             ->method('getFrontController')
             ->will($this->returnValue($frontController));
 
-        $eventManager = $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false);
+        $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         $eventManager->expects($this->once())
             ->method('dispatch')
             ->with('clean_media_cache_after');
@@ -97,9 +97,15 @@ class CacheTest extends \PHPUnit_Framework_TestCase
             ->method('getUrl')
             ->with('*/*')
             ->will($this->returnValue('redirect_url'));
+
         $response->expects($this->once())
             ->method('setRedirect')
             ->with('redirect_url');
+
+        $response->expects($this->once())
+            ->method('getHeader')
+            ->with('X-Frame-Options')
+            ->will($this->returnValue(false));
 
         // Run
         $controller->cleanMediaAction();

@@ -151,7 +151,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
      */
     public function testAppendClassAliasReplace()
     {
-        $moduleListMock = $this->getMock('Magento\Core\Model\ModuleListInterface');
+        $moduleListMock = $this->getMock('Magento\App\ModuleListInterface');
         $moduleListMock->expects($this->once())
             ->method('getModule')
             ->will($this->returnValue(array()));
@@ -160,7 +160,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
 
         $contextMock->expects($this->once())
             ->method('getEventManager')
-            ->will($this->returnValue($this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false)));
+            ->will($this->returnValue($this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false)));
         $contextMock->expects($this->once())
             ->method('getResourceModel')
             ->will($this->returnValue($this->getMock('Magento\Core\Model\Resource', array(), array(), '', false)));
@@ -180,7 +180,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             $contextMock,
             $this->getMock('Magento\Filesystem', array(), array(), '', false),
             $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false),
+            $this->getMock('Magento\App\Dir', array(), array(), '', false),
             'core_setup',
             ''
         );
@@ -236,11 +236,11 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Core\Model\Resource', array(), array(), '', false, false),
             $this->getMock('Magento\Filesystem', array(), array(), '', false),
             $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Dir', array(), array(), '', false),
+            $this->getMock('Magento\App\Dir', array(), array(), '', false),
             $this->getMock('Magento\Core\Model\Logger', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Event\Manager', array(), array(), '', false),
+            $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false),
             $this->getMock('Magento\Core\Model\Config', array(), array(), '', false, false),
-            $this->getMock('Magento\Core\Model\ModuleListInterface'),
+            $this->getMock('Magento\App\ModuleListInterface'),
             $this->getMock('Magento\Core\Model\Config\Modules\Reader', array(), array(), '', false, false),
             $this->getMock('Magento\Core\Model\Resource\Resource', array(), array(), '', false),
             $this->getMock('Magento\Core\Model\Resource\Theme\CollectionFactory', array(), array(), '', false),

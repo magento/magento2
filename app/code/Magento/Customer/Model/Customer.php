@@ -150,12 +150,12 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
     /**
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Core\Helper\Data $coreData
      * Core store config
@@ -200,7 +200,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     protected $_attributeFactory;
 
     /**
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Context $context
@@ -221,7 +221,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Event\Manager $eventManager,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Customer\Helper\Data $customerData,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Context $context,

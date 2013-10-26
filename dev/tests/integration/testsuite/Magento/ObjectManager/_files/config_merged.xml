@@ -24,8 +24,8 @@
  */
 -->
 <config>
-    <preference for="Magento\Core\Model\Db\UpdaterInterface" type="Magento\Core\Model\Db\UpdaterOne" />
-    <preference for="Magento\Core\Model\Db\UpdaterInterfaceTwo" type="Magento\Core\Model\Db\UpdaterTwo"/>
+    <preference for="Magento\App\UpdaterInterface" type="Magento\App\UpdaterOne" />
+    <preference for="Magento\App\UpdaterInterfaceTwo" type="Magento\App\UpdaterTwo"/>
     <type name="Magento\Core\Model\Config\Loader\Local" shared="false">
         <param name="customFile">
             <value type="argument">Magento\Core\Model\App::PARAM_CUSTOM_LOCAL_CONFIG</value>

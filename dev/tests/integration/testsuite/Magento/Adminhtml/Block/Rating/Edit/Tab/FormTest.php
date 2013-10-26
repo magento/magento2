@@ -33,7 +33,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             'Magento\Adminhtml\Block\Rating\Edit\Tab\Form',
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
                 ->createBlock('Magento\Adminhtml\Block\Rating\Edit\Tab\Form')
         );
     }

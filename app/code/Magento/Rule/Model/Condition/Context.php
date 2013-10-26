@@ -41,7 +41,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_locale;
 
     /**
-     * @var \Magento\Core\Model\Layout
+     * @var \Magento\View\LayoutInterface
      */
     protected $_layout;
 
@@ -58,14 +58,14 @@ class Context implements \Magento\ObjectManager\ContextInterface
     /**
      * @param \Magento\Core\Model\View\Url $viewUrl
      * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Core\Model\Layout $layout
+     * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Rule\Model\ConditionFactory $conditionFactory
      * @param \Magento\Core\Model\Logger $logger
      */
     public function __construct(
         \Magento\Core\Model\View\Url $viewUrl,
         \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Core\Model\Layout $layout,
+        \Magento\View\LayoutInterface $layout,
         \Magento\Rule\Model\ConditionFactory $conditionFactory,
         \Magento\Core\Model\Logger $logger
     ) {
@@ -93,7 +93,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Core\Model\Layout
+     * @return \Magento\View\LayoutInterface
      */
     public function getLayout()
     {
@@ -101,7 +101,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Core\Model\Layout
+     * @return \Magento\Rule\Model\ConditionFactory
      */
     public function getConditionFactory()
     {

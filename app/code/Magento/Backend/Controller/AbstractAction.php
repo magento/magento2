@@ -349,9 +349,9 @@ abstract class AbstractAction extends \Magento\Core\Controller\Varien\Action
     /**
      * Process not logged in user data
      *
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      */
-    protected function _processNotLoggedInUser(\Magento\Core\Controller\Request\Http $request)
+    protected function _processNotLoggedInUser(\Magento\App\RequestInterface $request)
     {
         $isRedirectNeeded = false;
         if ($request->getPost('login') && $this->_performLogin()) {

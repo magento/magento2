@@ -32,16 +32,16 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
      */
     private $_object;
 
-    /** @var \Magento\Core\Model\Dir/PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\App\Dir/PHPUnit_Framework_MockObject_MockObject  */
     private $_applicationDirsMock;
 
     public function setUp()
     {
-        $this->_applicationDirsMock = $this->getMockBuilder('Magento\Core\Model\Dir')
+        $this->_applicationDirsMock = $this->getMockBuilder('Magento\App\Dir')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $moduleListMock = $this->getMockBuilder('Magento\Core\Model\ModuleListInterface')
+        $moduleListMock = $this->getMockBuilder('Magento\App\ModuleListInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $moduleListMock->expects($this->any())

@@ -51,8 +51,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_model = new \Magento\Install\Model\Installer\Config(
             $this->getMock('Magento\Install\Model\Installer', array(), array(),
                 '', false),
-            $this->getMock('Magento\Core\Controller\Request\Http', array(), array(), '', false),
-            new \Magento\Core\Model\Dir(__DIR__, array(), array(\Magento\Core\Model\Dir::CONFIG => TESTS_TEMP_DIR)),
+            $this->getMock('Magento\App\RequestInterface', array(), array(), '', false),
+            new \Magento\App\Dir(__DIR__, array(), array(\Magento\App\Dir::CONFIG => TESTS_TEMP_DIR)),
             $this->_filesystemMock,
             $this->getMock('Magento\Core\Model\StoreManagerInterface', array(), array(), '', false)
         );

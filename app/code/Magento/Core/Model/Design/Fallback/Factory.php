@@ -30,16 +30,16 @@ namespace Magento\Core\Model\Design\Fallback;
 class Factory
 {
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     private $_dirs;
 
     /**
      * Constructor
      *
-     * @param \Magento\Core\Model\Dir $dirs
+     * @param \Magento\App\Dir $dirs
      */
-    public function __construct(\Magento\Core\Model\Dir $dirs)
+    public function __construct(\Magento\App\Dir $dirs)
     {
         $this->_dirs = $dirs;
     }
@@ -51,7 +51,7 @@ class Factory
      */
     public function createLocaleFileRule()
     {
-        $themesDir = $this->_dirs->getDir(\Magento\Core\Model\Dir::THEMES);
+        $themesDir = $this->_dirs->getDir(\Magento\App\Dir::THEMES);
         return new \Magento\Core\Model\Design\Fallback\Rule\Theme(
             new \Magento\Core\Model\Design\Fallback\Rule\Simple("$themesDir/<area>/<theme_path>/i18n/<locale>")
         );
@@ -64,8 +64,8 @@ class Factory
      */
     public function createFileRule()
     {
-        $themesDir = $this->_dirs->getDir(\Magento\Core\Model\Dir::THEMES);
-        $modulesDir = $this->_dirs->getDir(\Magento\Core\Model\Dir::MODULES);
+        $themesDir = $this->_dirs->getDir(\Magento\App\Dir::THEMES);
+        $modulesDir = $this->_dirs->getDir(\Magento\App\Dir::MODULES);
         return new \Magento\Core\Model\Design\Fallback\Rule\ModularSwitch(
             new \Magento\Core\Model\Design\Fallback\Rule\Theme(
                 new \Magento\Core\Model\Design\Fallback\Rule\Simple(
@@ -92,9 +92,9 @@ class Factory
      */
     public function createViewFileRule()
     {
-        $themesDir = $this->_dirs->getDir(\Magento\Core\Model\Dir::THEMES);
-        $modulesDir = $this->_dirs->getDir(\Magento\Core\Model\Dir::MODULES);
-        $pubLibDir = $this->_dirs->getDir(\Magento\Core\Model\Dir::PUB_LIB);
+        $themesDir = $this->_dirs->getDir(\Magento\App\Dir::THEMES);
+        $modulesDir = $this->_dirs->getDir(\Magento\App\Dir::MODULES);
+        $pubLibDir = $this->_dirs->getDir(\Magento\App\Dir::PUB_LIB);
         return new \Magento\Core\Model\Design\Fallback\Rule\ModularSwitch(
             new \Magento\Core\Model\Design\Fallback\Rule\Composite(array(
                 new \Magento\Core\Model\Design\Fallback\Rule\Theme(

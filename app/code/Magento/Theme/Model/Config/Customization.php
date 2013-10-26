@@ -37,7 +37,7 @@ class Customization
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\View\DesignInterface
+     * @var \Magento\View\DesignInterface
      */
     protected $_design;
 
@@ -64,12 +64,12 @@ class Customization
 
     /**
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager,
-     * @param \Magento\Core\Model\View\DesignInterface $design
+     * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $collectionFactory
      */
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\View\DesignInterface $design,
+        \Magento\View\DesignInterface $design,
         \Magento\Core\Model\Resource\Theme\CollectionFactory $collectionFactory
     ) {
         $this->_storeManager    = $storeManager;
@@ -128,7 +128,7 @@ class Customization
     /**
      * Check if current theme has assigned to any store
      *
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @param null|\Magento\Core\Model\Store $store
      * @return bool
      */
@@ -154,7 +154,7 @@ class Customization
     /**
      * Is theme assigned to specific store
      *
-     * @param \Magento\Core\Model\Theme $theme
+     * @param \Magento\View\Design\ThemeInterface $theme
      * @param \Magento\Core\Model\Store $store
      * @return bool
      */
@@ -197,7 +197,7 @@ class Customization
         $this->_assignedTheme = array();
         $this->_unassignedTheme = array();
 
-        /** @var $theme \Magento\Core\Model\Theme */
+        /** @var $theme \Magento\View\Design\ThemeInterface */
         foreach ($themeCollection as $theme) {
             if (isset($assignedThemes[$theme->getId()])) {
                 $theme->setAssignedStores($assignedThemes[$theme->getId()]);

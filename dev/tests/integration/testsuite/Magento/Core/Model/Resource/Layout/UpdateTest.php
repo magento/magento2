@@ -45,9 +45,9 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
      */
     public function testFetchUpdatesByHandle()
     {
-        /** @var $theme \Magento\Core\Model\Theme */
+        /** @var $theme \Magento\View\Design\ThemeInterface */
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Theme');
+            ->create('Magento\View\Design\ThemeInterface');
         $theme->load('Test Theme', 'theme_title');
         $result = $this->_resourceModel->fetchUpdatesByHandle(
             'test_handle',

@@ -47,7 +47,7 @@ class ColumnSetTest
         $objectManager->get('Magento\Core\Model\Registry')->register('current_product', $product);
 
         /** @var $layout \Magento\Core\Model\Layout */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout');
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         /** @var $block  \Magento\Catalog\Block\Product\Configurable\AssociatedSelector\Backend\Grid\ColumnSet */
         $block = $layout->createBlock(
             'Magento\Catalog\Block\Product\Configurable\AssociatedSelector\Backend\Grid\ColumnSet',

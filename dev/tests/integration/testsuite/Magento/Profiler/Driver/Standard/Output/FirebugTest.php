@@ -38,19 +38,19 @@ class FirebugTest extends \PHPUnit_Framework_TestCase
     protected $_response;
 
     /**
-     * @var \Zend_Controller_Request_Http|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\RequestInterface|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_request;
 
     protected function setUp()
     {
-        $this->_response = $this->getMock('Zend_Controller_Response_Http', array('canSendHeaders', 'sendHeaders'));
+        $this->_response = $this->getMock('\Magento\App\Response\Http', array('canSendHeaders', 'sendHeaders'));
         $this->_response
             ->expects($this->any())
             ->method('canSendHeaders')
             ->will($this->returnValue(true));
 
-        $this->_request = $this->getMock('Zend_Controller_Request_Http', array('getHeader'));
+        $this->_request = $this->getMock('\Magento\App\Request\Http', array('getHeader'));
         $this->_request
             ->expects($this->any())
             ->method('getHeader')

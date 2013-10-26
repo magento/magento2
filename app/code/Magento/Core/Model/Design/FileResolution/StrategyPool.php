@@ -52,7 +52,7 @@ class StrategyPool
     protected $_filesystem;
 
     /**
-     * @var \Magento\Core\Model\Dir
+     * @var \Magento\App\Dir
      */
     protected $_dirs;
 
@@ -88,14 +88,14 @@ class StrategyPool
 
     /**
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\App\State $appState
-     * @param \Magento\Core\Model\Dir $dirs
+     * @param \Magento\App\State $appState
+     * @param \Magento\App\Dir $dirs
      * @param \Magento\Filesystem $filesystem
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\App\State $appState,
-        \Magento\Core\Model\Dir $dirs,
+        \Magento\App\State $appState,
+        \Magento\App\Dir $dirs,
         \Magento\Filesystem $filesystem
     ) {
         $this->_objectManager = $objectManager;
@@ -164,11 +164,11 @@ class StrategyPool
     protected function _getStrategyClass($fileType, $skipProxy = false)
     {
         $mode = $this->_appState->getMode();
-        if ($mode == \Magento\Core\Model\App\State::MODE_PRODUCTION) {
+        if ($mode == \Magento\App\State::MODE_PRODUCTION) {
             $strategyClasses = $this->_strategies['production_mode'];
-        } else if (($mode == \Magento\Core\Model\App\State::MODE_DEVELOPER) || $skipProxy) {
+        } else if (($mode == \Magento\App\State::MODE_DEVELOPER) || $skipProxy) {
             $strategyClasses = $this->_strategies['full_check'];
-        } else if ($mode == \Magento\Core\Model\App\State::MODE_DEFAULT) {
+        } else if ($mode == \Magento\App\State::MODE_DEFAULT) {
             $strategyClasses = $this->_strategies['caching_map'];
         } else {
             throw new \Magento\Core\Exception("Unknown mode to choose strategy: {$mode}");
@@ -186,11 +186,11 @@ class StrategyPool
     {
         switch ($className) {
             case 'Magento\Core\Model\Design\FileResolution\Strategy\Fallback\CachingProxy':
-                $mapDir = $this->_dirs->getDir(\Magento\Core\Model\Dir::VAR_DIR) . DIRECTORY_SEPARATOR
+                $mapDir = $this->_dirs->getDir(\Magento\App\Dir::VAR_DIR) . DIRECTORY_SEPARATOR
                     . self::FALLBACK_MAP_DIR;
                 $arguments = array(
                     'mapDir' => str_replace('/', DIRECTORY_SEPARATOR, $mapDir),
-                    'baseDir' => $this->_dirs->getDir(\Magento\Core\Model\Dir::ROOT),
+                    'baseDir' => $this->_dirs->getDir(\Magento\App\Dir::ROOT),
                 );
                 break;
             default:

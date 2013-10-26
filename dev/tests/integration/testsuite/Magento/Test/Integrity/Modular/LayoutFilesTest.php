@@ -53,7 +53,7 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
     {
         $layout = simplexml_load_file(
             $layout,
-            'Magento\Core\Model\Layout\Element'
+            'Magento\View\Layout\Element'
         );
         foreach ($layout->xpath('//*[@xsi:type]') as $argument) {
             $type = (string)$argument->attributes('xsi', true)->type;

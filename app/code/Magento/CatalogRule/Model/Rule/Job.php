@@ -47,16 +47,16 @@ class Job extends \Magento\Object
     /**
      * Instance of event manager model
      *
-     * @var \Magento\Core\Model\Event\Manager
+     * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
     /**
      * Basic object initialization
      *
-     * @param \Magento\Core\Model\Event\Manager $eventManager
+     * @param \Magento\Event\ManagerInterface $eventManager
      */
-    public function __construct(\Magento\Core\Model\Event\Manager $eventManager)
+    public function __construct(\Magento\Event\ManagerInterface $eventManager)
     {
         $this->_eventManager = $eventManager;
     }

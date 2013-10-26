@@ -25,6 +25,16 @@
 -->
 <config>
     <preference for="Magento\Core\Model\Config\Storage\WriterInterface" type="Magento\Core\Model\Config\Storage\Writer\Db" />
+    <preference for="Magento\App\Request\PathInfoProcessorInterface" type="Magento\Backend\App\Request\PathInfoProcessor" />
+    <type name="Magento\App\AreaList">
+        <param name="areas">
+            <value>
+                <adminhtml>
+                    <frontNameResolver>Magento\Backend\App\Area\FrontNameResolver</frontNameResolver>
+                </adminhtml>
+            </value>
+        </param>
+    </type>
     <type name="Magento\Backend\Controller\Context">
         <param name="translator">
             <instance type="Magento\Core\Model\Translate\Proxy" />
@@ -55,7 +65,7 @@
     <type name="Magento\Backend\Model\Menu\Config">
         <param name="menuDirector"><instance type="Magento\Backend\Model\Menu\Director\Director"/></param>
     </type>
-    <type name="Magento\Core\Model\RouterList">
+    <type name="Magento\App\RouterList">
         <param name="routerList">
             <value>
                 <admin>
@@ -66,13 +76,12 @@
             </value>
         </param>
     </type>
+    <type name="Magento\Backend\App\Area\FrontNameResolver">
+        <param name="defaultFrontName">
+            <value type="argument">Magento\Backend\App\Area\FrontNameResolver::PARAM_BACKEND_FRONT_NAME</value>
+        </param>
+    </type>
     <type name="Magento\Backend\Helper\Data">
-        <param name="defaultAreaFrontName">
-            <value>backend</value>
-        </param>
-        <param name="backendFrontName">
-            <value type="argument">Magento\Backend\Helper\Data::PARAM_BACKEND_FRONT_NAME</value>
-        </param>
         <param name="app">
             <instance type="Magento\Core\Model\App\Proxy" />
         </param>
@@ -83,11 +92,11 @@
             <instance type="Magento\Backend\Model\Auth\Proxy" />
         </param>
     </type>
-    <type name="Magento\Core\Model\NoRouteHandlerList">
+    <type name="Magento\App\Router\NoRouteHandlerList">
         <param name="handlerClassesList">
             <value>
                 <backend>
-                    <instance>Magento\Backend\Model\Router\NoRouteHandler</instance>
+                    <instance>Magento\Backend\App\Router\NoRouteHandler</instance>
                     <sortOrder>10</sortOrder>
                 </backend>
             </value>

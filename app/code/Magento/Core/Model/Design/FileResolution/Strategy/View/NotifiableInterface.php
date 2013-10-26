@@ -36,14 +36,14 @@ interface NotifiableInterface
      * new location.
      *
      * @param string $area
-     * @param \Magento\Core\Model\Theme $themeModel
+     * @param \Magento\View\Design\ThemeInterface $themeModel
      * @param string $locale
      * @param string|null $module
      * @param string $file
      * @param string $newFilePath
      * @return \Magento\Core\Model\Design\FileResolution\Strategy\Fallback\CachingProxy
      */
-    public function setViewFilePathToMap($area, \Magento\Core\Model\Theme $themeModel, $locale, $module, $file,
-        $newFilePath
+    public function setViewFilePathToMap(
+        $area, \Magento\View\Design\ThemeInterface $themeModel, $locale, $module, $file, $newFilePath
     );
 }

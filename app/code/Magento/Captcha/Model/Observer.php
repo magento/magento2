@@ -69,7 +69,7 @@ class Observer
     protected $_coreData;
 
     /**
-     * @var \Magento\Core\Controller\Request\Http
+     * @var \Magento\App\RequestInterface
      */
     protected $_request;
 
@@ -102,7 +102,7 @@ class Observer
      * @param \Magento\Captcha\Helper\Data $helper
      * @param \Magento\Core\Model\Url $urlManager
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @param \Magento\Core\Model\StoreManager $storeManager
      */
     public function __construct(
@@ -114,7 +114,7 @@ class Observer
         \Magento\Captcha\Helper\Data $helper,
         \Magento\Core\Model\Url $urlManager,
         \Magento\Filesystem $filesystem,
-        \Magento\Core\Controller\Request\Http $request,
+        \Magento\App\RequestInterface $request,
         \Magento\Core\Model\StoreManager $storeManager
     ) {
         $this->_resLogFactory = $resLogFactory;
@@ -380,11 +380,11 @@ class Observer
     /**
      * Get Captcha String
      *
-     * @param \Magento\Core\Controller\Request\Http $request
+     * @param \Magento\App\RequestInterface $request
      * @param string $formId
      * @return string
      */
-    protected function _getCaptchaString(\Magento\Core\Controller\Request\Http $request, $formId)
+    protected function _getCaptchaString(\Magento\App\RequestInterface $request, $formId)
     {
         $captchaParams = $request->getPost(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE);
         return isset($captchaParams[$formId]) ? $captchaParams[$formId] : '';

@@ -45,7 +45,7 @@ class Image extends \Magento\Data\Form\Element\Image
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Core\Model\UrlInterface $urlBuilder
+     * @param \Magento\UrlInterface $urlBuilder
      * @param array $attributes
      */
     public function __construct(
@@ -53,7 +53,7 @@ class Image extends \Magento\Data\Form\Element\Image
         \Magento\Core\Helper\Data $coreData,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Core\Model\UrlInterface $urlBuilder,
+        \Magento\UrlInterface $urlBuilder,
         $attributes = array()
     ) {
         $this->_storeManager = $storeManager;

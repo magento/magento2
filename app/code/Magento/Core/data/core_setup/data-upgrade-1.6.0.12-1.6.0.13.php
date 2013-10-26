@@ -27,7 +27,7 @@
 /** @var $themeDbCollection \Magento\Core\Model\Resource\Theme\Collection */
 $themeDbCollection = $this->_themeResourceFactory->create();
 
-/** @var $theme \Magento\Core\Model\Theme */
+/** @var $theme \Magento\View\Design\ThemeInterface */
 foreach ($this->_themeFactory->create()->addDefaultPattern('*') as $theme) {
     $dbTheme = $themeDbCollection->getThemeByFullPath($theme->getFullPath());
     $dbTheme->setCode($theme->getCode());
