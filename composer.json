@@ -4,7 +4,7 @@
     "license": ["OSL-3.0", "AFL-3.0"],
     "require": {
         "php": ">=5.4.0",
-        "zendframework/zendframework1": "1.12.3"
+        "zendframework/zendframework1": "1.*@stable"
     },
     "autoload": {
         "psr-0": {
