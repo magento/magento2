@@ -3,7 +3,8 @@
     "description": "eCommerce Platform for Growth (Community Edition)",
     "license": ["OSL-3.0", "AFL-3.0"],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "zendframework/zendframework1": "1.12.3"
     },
     "autoload": {
         "psr-0": {
