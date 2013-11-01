@@ -299,7 +299,7 @@ class DefaultType extends \Magento\Object
 
     /**
      * Return formatted option value ready to edit, ready to parse
-     * (ex: Admin re-order, see \Magento\Adminhtml\Model\Sales\Order\Create)
+     * (ex: Admin re-order, see \Magento\Sales\Model\AdminOrder\Create)
      *
      * @param string $optionValue Prepared for cart option value
      * @return string

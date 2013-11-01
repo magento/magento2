@@ -65,9 +65,9 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     {
         $files = array();
         foreach (glob(__DIR__ . '/_files/layout/*.xml') as $filename) {
-            $files[] = new \Magento\Core\Model\Layout\File($filename, 'Magento_Core');
+            $files[] = new \Magento\View\Layout\File($filename, 'Magento_Core');
         }
-        $fileSource = $this->getMockForAbstractClass('Magento\Core\Model\Layout\File\SourceInterface');
+        $fileSource = $this->getMockForAbstractClass('Magento\View\Layout\File\SourceInterface');
         $fileSource->expects($this->any())->method('getFiles')->will($this->returnValue($files));
 
         $design = $this->getMockForAbstractClass('Magento\View\DesignInterface');
@@ -134,7 +134,8 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($nonPageHandles, $this->_model->getHandles());
 
         /* test that only the first existing handle is taken into account */
-        $handlesToTry = array('catalog_product_view_type_simple', 'checkout_onepage_index');
+        $handlesToTry = array(
+            'default', 'catalog_category_default', 'catalog_product_view', 'catalog_product_view_type_simple');
         $expectedPageHandles = array(
             'default', 'catalog_category_default', 'catalog_product_view', 'catalog_product_view_type_simple'
         );
@@ -144,49 +145,12 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
         /* test that new handles override the previous ones */
         $expectedPageHandles = array('default', 'checkout_onepage_index');
-        $this->assertTrue($this->_model->addPageHandles(array('checkout_onepage_index')));
+        $this->_model->removeHandle('catalog_category_default');
+        $this->_model->removeHandle('catalog_product_view');
+        $this->_model->removeHandle('catalog_product_view_type_simple');
+        $this->assertTrue($this->_model->addPageHandles(array('default', 'checkout_onepage_index')));
         $this->assertEquals($expectedPageHandles, $this->_model->getPageHandles());
         $this->assertEquals(array_merge($nonPageHandles, $expectedPageHandles), $this->_model->getHandles());
-    }
-
-    /**
-     * @param string $inputPageHandle
-     * @param bool $isPageTypeOnly
-     * @param array $expectedResult
-     * @dataProvider getPageHandleParentsDataProvider
-     */
-    public function testGetPageHandleParents($inputPageHandle, $isPageTypeOnly, $expectedResult)
-    {
-        $this->assertSame($expectedResult, $this->_model->getPageHandleParents($inputPageHandle, $isPageTypeOnly));
-    }
-
-    public function getPageHandleParentsDataProvider()
-    {
-        return array(
-            'non-existing handle'      => array('non_existing_handle', false, array()),
-            'non page type handle'     => array('not_a_page_type', false, array()),
-            'page type with no parent' => array('default', false, array()),
-            'page type with parent'    => array(
-                'catalog_category_default', false, array('default')
-            ),
-            'deeply nested page type'  => array(
-                'catalog_category_layered', false, array('default', 'catalog_category_default')
-            ),
-            'page fragment is not processed' => array(
-                'checkout_onepage_progress', true, array()
-            ),
-            'page fragment is processed' => array(
-                'checkout_onepage_progress', false, array('default', 'checkout_onepage_index')
-            )
-        );
-    }
-
-    public function testGetPageHandlesHierarchy()
-    {
-        $expected = require(__DIR__ . '/_files/pages_hierarchy.php');
-        $actual = $this->_model->getPageHandlesHierarchy();
-        $this->assertEquals($expected, $actual);
-        $this->assertInternalType('string', $actual['default']['label']);
     }
 
     /**
@@ -276,6 +240,8 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetContainers()
     {
+        $this->_model->addPageHandles(array('default'));
+        $this->_model->addPageHandles(array('catalog_product_view'));
         $this->_model->addPageHandles(array('catalog_product_view_type_configurable'));
         $this->_model->load();
         $expected = array(

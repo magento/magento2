@@ -41,9 +41,6 @@
     }
 ?>
 <div class="page-title category-title">
-    <?php if($this->isRssCatalogEnable() && $this->isTopCategory()): ?>
-        <a href="<?php echo $this->getRssLink() ?>" class="link-rss"><?php echo __('Subscribe to RSS Feed') ?></a>
-    <?php endif; ?>
     <h1><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h1>
 </div>
 

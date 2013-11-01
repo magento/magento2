@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Catalog Product View (Grouped)" type="page" parent="catalog_product_view">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Catalog Product View (Grouped)" type="page">
     <referenceBlock name="product.info">
         <block class="Magento\Catalog\Block\Product\View\Type\Grouped" name="product.info.grouped" as="product_type_data" template="product/view/type/grouped.phtml">
             <container name="product.info.grouped.extra" as="product_type_data_extra" label="Product Extra Info"/>

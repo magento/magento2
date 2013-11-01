@@ -34,14 +34,14 @@ class ProcessorFactory
      *
      * @var \Magento\ObjectManager
      */
-    protected $_objectManager = null;
+    protected $objectManager;
 
     /**
      * Instance name to create
      *
      * @var string
      */
-    protected $_instanceName = null;
+    protected $instanceName;
 
     /**
      * Factory constructor
@@ -53,8 +53,8 @@ class ProcessorFactory
         \Magento\ObjectManager $objectManager,
         $instanceName = 'Magento\View\Layout\ProcessorInterface'
     ) {
-        $this->_objectManager = $objectManager;
-        $this->_instanceName = $instanceName;
+        $this->objectManager = $objectManager;
+        $this->instanceName = $instanceName;
     }
 
     /**
@@ -65,6 +65,6 @@ class ProcessorFactory
      */
     public function create(array $data = array())
     {
-        return $this->_objectManager->create($this->_instanceName, $data);
+        return $this->objectManager->create($this->instanceName, $data);
     }
 }

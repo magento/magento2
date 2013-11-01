@@ -44,7 +44,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         /** @var \Magento\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setId('edit_form');
-        $form->setAction($this->getUrl('*/*/save'));
+        $form->setAction($this->getUrl('adminhtml/*/save'));
         $form->setMethod('post');
         $form->setUseContainer(true);
         $this->setForm($form);

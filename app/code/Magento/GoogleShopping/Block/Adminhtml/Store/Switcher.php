@@ -48,6 +48,6 @@ class Switcher extends \Magento\Backend\Block\Store\Switcher
     protected function _construct()
     {
         parent::_construct();
-        $this->setUseConfirm(false)->setSwitchUrl($this->getUrl('*/*/*', array('store' => null)));
+        $this->setUseConfirm(false)->setSwitchUrl($this->getUrl('adminhtml/*/*', array('store' => null)));
     }
 }

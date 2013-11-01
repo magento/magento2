@@ -19,81 +19,74 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php /* @var $this \Magento\Sales\Block\Billing\Agreements */ ?>
-<div class="page-title">
-    <h1><?php echo __('Billing Agreements') ?></h1>
-</div>
-
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-
-<div class="billing-agreements">
+<div class="block billing agreements">
     <?php $billingAgreements = $this->getBillingAgreements(); ?>
     <?php if (count($billingAgreements) > 0): ?>
         <?php echo $this->getChildHtml('pager'); ?>
-        <table id="billing-agreements" class="data-table">
-            <col />
-            <col width="1" />
-            <col />
-            <col />
-            <col />
-            <col width="1" />
+        <table id="billing-agreements" class="data table billing agreements">
             <thead>
-                <tr>
-                    <th><span class="nobr"><?php echo __('Reference ID'); ?></span></th>
-                    <th><?php echo __('Status'); ?></th>
-                    <th><span class="nobr"><?php echo __('Created At'); ?></span></th>
-                    <th><span class="nobr"><?php echo __('Updated At'); ?></span></th>
-                    <th><span class="nobr"><?php echo __('Payment Method'); ?></span></th>
-                    <th>&nbsp;</th>
-                </tr>
+            <tr>
+                <th class="col id"><?php echo __('Reference ID'); ?></th>
+                <th class="col status"><?php echo __('Status'); ?></th>
+                <th class="col created"><?php echo __('Created At'); ?></th>
+                <th class="col updated"><?php echo __('Updated At'); ?></th>
+                <th class="col payment"><?php echo __('Payment Method'); ?></th>
+                <th class="col actions">&nbsp;</th>
+            </tr>
             </thead>
             <tbody>
-                <?php foreach($billingAgreements as $item): ?>
+            <?php foreach ($billingAgreements as $item): ?>
                 <tr>
-                    <td><span class="nobr"><?php echo $this->getItemValue($item, 'reference_id') ?></span></td>
-                    <td><?php echo $this->getItemValue($item, 'status') ?></td>
-                    <td><span class="nobr"><?php echo $this->getItemValue($item, 'created_at') ?></span></td>
-                    <td><span class="nobr"><?php echo $this->getItemValue($item, 'updated_at') ?></span></td>
-                    <td><?php echo $this->getItemValue($item, 'payment_method_label') ?></td>
-                    <td><a href="<?php echo $this->getItemValue($item, 'edit_url') ?>"><?php echo __('View') ?></a></td>
+                    <td class="col id"><?php echo $this->getItemValue($item, 'reference_id') ?></td>
+                    <td class="col status"><?php echo $this->getItemValue($item, 'status') ?></td>
+                    <td class="col created"><?php echo $this->getItemValue($item, 'created_at') ?></td>
+                    <td class="col updated"><?php echo $this->getItemValue($item, 'updated_at') ?></td>
+                    <td class="col payment"><?php echo $this->getItemValue($item, 'payment_method_label') ?></td>
+                    <td class="col actions">
+                        <a href="<?php echo $this->getItemValue($item, 'edit_url') ?>"><?php echo __('View') ?></a>
+                    </td>
                 </tr>
-                <?php endforeach; ?>
+            <?php endforeach; ?>
             </tbody>
         </table>
-        <script type="text/javascript">(function($) {$('#billing-agreements').decorate('table')})(jQuery)</script>
     <?php else: ?>
-        <p><?php echo __('There are no billing agreements yet.')?></p>
+        <p class="no agreements"><?php echo __('There are no billing agreements yet.') ?></p>
     <?php endif; ?>
 
     <?php $paymentMethods = $this->getWizardPaymentMethodOptions() ?>
     <?php if ($paymentMethods): ?>
-        <div class="info-box">
-            <h2 class="box-title"><?php echo __('New Billing Agreement') ?></h2>
-            <form action="<?php echo $this->getCreateUrl() ?>" method="post">
-                <div class="box-content">
-                    <p><?php echo __('You will be redirected to the payment system website.') ?></p>
-                    <ul class="form-list">
-                        <li>
-                            <select id="payment_method" name="payment_method">
-                                <option value=""><?php echo __('-- Please Select --') ?></option>
-                                <?php foreach ($paymentMethods as $code => $title): ?>
-                                    <option value="<?php echo $code ?>"><?php echo $title ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            <button type="submit" class="button"><span><span><?php echo __('Create...') ?></span></span></button>
-                        </li>
-                    </ul>
+        <h2 class="subtitle caption"><?php echo __('New Billing Agreement') ?></h2>
+
+        <form action="<?php echo $this->getCreateUrl() ?>" method="post" class="form new agreement">
+            <fieldset class="fieldset">
+                <p class="note"><?php echo __('You will be redirected to the payment system website.') ?></p>
+
+                <div class="field payment method">
+                    <div class="control">
+                        <select id="payment_method" name="payment_method">
+                            <option value=""><?php echo __('-- Please Select --') ?></option>
+                            <?php foreach ($paymentMethods as $code => $title): ?>
+                                <option value="<?php echo $code ?>"><?php echo $title ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 </div>
-            </form>
-        </div>
+                <button type="submit" class="primary action create">
+                    <span><?php echo __('Create...') ?></span>
+                </button>
+            </fieldset>
+        </form>
     <?php endif; ?>
 
-    <div class="buttons-set">
-        <p class="back-link"><a href="<?php echo $this->escapeHtml($this->getBackUrl()) ?>"><small>&laquo; </small><?php echo __('Back') ?></a></p>
+    <div class="actions">
+        <div class="secondary">
+            <a href="<?php echo $this->escapeHtml($this->getBackUrl()) ?>"
+               class="action back"><span><?php echo __('Back') ?></span></a>
+        </div>
     </div>
 </div>

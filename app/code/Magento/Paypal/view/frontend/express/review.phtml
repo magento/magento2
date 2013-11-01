@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -28,73 +27,78 @@
 $billingBlock = $this->getChildBlock('billing')->setFieldNamePrefix('billing')->setHideEmailAddress(true);
 $shippingAddress = $this->getShippingAddress();
 ?>
-<div class="page-title">
-    <h1><?php echo __('Review Order') ?></h1>
-</div>
-<?php echo $this->getLayout()->renderElement('messages') ?>
-<h2 class="sub-title">
-    Please confirm your addresses
-</h2>
-<div class="paypal-review-order">
-    <form method="post" id="order-review-form" action="<?php echo $this->getPlaceOrderUrl() ?>">
-    <?php if(!$billingBlock->isCustomerLoggedIn()): ?>
-        <div class="info-set col2-set">
-            <h2 class="legend"><?php echo __('Customer Information') ?></h2>
-            <ul class="form-list form-list-narrow">
-                <li id="customer-info-form" class="address-form">
-                    <div class="field">
-                        <label for="customer:email" class="required"><em>*</em><?php echo __('Email Address') ?></label>
-                        <div class="input-box">
-                            <input type="text" name="customer-email" id="customer:email" value="<?php echo $this->escapeHtml($billingBlock->getAddress()->getEmail()) ?>" title="<?php echo __('Email Address') ?>" class="input-text validate-email required-entry" />
-                        </div>
+<hgroup class="page title">
+    <h1 class="title"><span class="base"><?php echo __('Review Order') ?></span></h1>
+</hgroup>
+<?php echo $this->getMessagesBlock()->toHtml() ?>
+<div class="paypal review view">
+    <div class="paypal subtitle caption"><strong>Please confirm your addresses</strong></div>
+
+    <form method="post" id="order-review-form" action="<?php echo $this->getPlaceOrderUrl() ?>"
+          class="form paypal review">
+        <?php if (!$billingBlock->isCustomerLoggedIn()): ?>
+            <fieldset class="fieldset customer email">
+                <legend class="legend"><span><?php echo __('Customer Information') ?></span></legend>
+                <br>
+
+                <div id="customer-info-form" class="field email required">
+                    <label for="customer:email" class="label"><?php echo __('Email Address') ?></label>
+
+                    <div class="control">
+                        <input type="text" name="customer-email" id="customer:email"
+                               value="<?php echo $this->escapeHtml($billingBlock->getAddress()->getEmail()) ?>"
+                               title="<?php echo __('Email Address') ?>" class="input-text"/>
                     </div>
-                </li>
-            </ul>
-        </div>
-    <?php endif ?>
-    <div class="info-set col2-set">
-        <div class="col-1" id="billing-address">
-            <h2 class="legend"><?php echo __('Billing Address') ?></h2>
+                </div>
+            </fieldset>
+        <?php endif ?>
+
+        <fieldset class="fieldset billing address" id="billing-address">
+            <legend class="legend"><span><?php echo __('Billing Address') ?></span></legend>
+            <br>
             <?php if ($shippingAddress): ?>
                 <?php echo $billingBlock->setShowAsShippingCheckbox(true)->toHtml(); ?>
             <?php else: ?>
                 <?php echo $billingBlock->toHtml(); ?>
             <?php endif; ?>
-        </div>
-    <?php if ($shippingAddress): ?>
-        <div class="col-2" id="shipping-address">
-            <h2 class="legend"><?php echo __('Shipping Address') ?></h2>
-            <?php echo $this->getChildBlock('shipping')->setFieldNamePrefix('shipping')->setHideEmailAddress(true)->toHtml(); ?>
-        </div>
-    </div>
+        </fieldset>
 
-    <div class="info-set col2-set">
-        <div class="col-2">
-            <div class="box paypal-shipping-method">
-                <div class="box-title">
-                    <h3><?php echo __('Shipping Method') ?></h3>
-                </div>
-                <div class="box-content">
-                    <?php echo $this->getChildBlock('shipping_method')->toHtml(); ?>
-                </div>
+        <?php if ($shippingAddress): ?>
+            <fieldset class="fieldset shipping address" id="shipping-address">
+                <legend class="legend"><span><?php echo __('Shipping Address') ?></span></legend>
+                <br>
+                <?php echo $this->getChildBlock('shipping')->setFieldNamePrefix('shipping')->setHideEmailAddress(true)->toHtml(); ?>
+            </fieldset>
+
+            <fieldset class="fieldset shipping method">
+                <legend class="legend"><span><?php echo __('Shipping Method') ?></span></legend>
+                <br>
+                <?php echo $this->getChildBlock('shipping_method')->toHtml(); ?>
+            </fieldset>
+        <?php endif; ?>
+
+        <div class="paypal review items">
+            <div class="paypal subtitle caption">
+                <strong><?php echo __('Items in Your Shopping Cart') ?></strong>
+                <a href="<?php echo $this->getUrl('checkout/cart') ?>"
+                   class="action edit"><?php echo __('Edit Shopping Cart') ?></a>
+            </div>
+
+            <div id="details-reload">
+                <?php echo $this->getChildHtml('details') ?>
             </div>
         </div>
-    <?php endif; ?>
-    </div>
 
-    <div class="info-set">
-        <h2 class="legend"><?php echo __('Items in Your Shopping Cart') ?><span class="separator"> | </span><a href="<?php echo $this->getUrl('checkout/cart') ?>"><?php echo __('Edit Shopping Cart') ?></a></h2>
-        <div id="details-reload">
-            <?php echo $this->getChildHtml('details') ?>
-        </div>
-    </div>
         <?php echo $this->getChildHtml('agreements'); ?>
-        <div class="buttons-set buttons-set-order" id="review-buttons-container">
-            <button type="button" id="review-button" value="<?php echo __('Place Order') ?>" class="button btn-checkout"><span><span><?php echo __('Place Order') ?></span></span></button>
-            <button type="button" id="review-submit" value="<?php echo __('Place Order') ?>" class="button btn-checkout"><span><span><?php echo __('Place Order') ?></span></span></button>
-            <button type="button" id="update-order" class="button btn-checkout"><span><span><?php echo __('Update Order Data') ?></span></span></button>
-            <span class="please-wait" id="review-please-wait" style="display:none;">
-                <img src="<?php echo $this->getViewFileUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo __('Submitting order information') ?>" title="<?php echo __('Submitting order information') ?>" class="v-middle" /> <?php echo __('Submitting order information') ?>
+        <div class="actions" id="review-buttons-container">
+            <button type="button" id="review-button" value="<?php echo __('Place Order') ?>" class="action checkout">
+                <span><?php echo __('Place Order') ?></span></button>
+            <button type="button" id="review-submit" value="<?php echo __('Place Order') ?>" class="action checkout">
+                <span><?php echo __('Place Order') ?></span></button>
+            <button type="button" id="update-order" class="action update">
+                <span><?php echo __('Update Order Data') ?></span></button>
+            <span class="please-wait load indicator" id="review-please-wait" style="display:none;">
+               <span><?php echo __('Submitting order information...') ?></span>
             </span>
         </div>
     </form>
@@ -105,7 +109,7 @@ $shippingAddress = $this->getShippingAddress();
         "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
         "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
         "<?php echo $this->getViewFileUrl('Magento_Paypal::order-review.js') ?>",
-        function() {
+        function () {
             jQuery('#order-review-form').validation().orderReview({
                 shippingMethodUpdateUrl: '<?php echo $this->escapeHtml($this->getUpdateShippingMethodsUrl()) ?>',
                 updateOrderSubmitUrl: '<?php echo $this->escapeHtml($this->getUpdateOrderSubmitUrl()) ?>',

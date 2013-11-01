@@ -867,10 +867,16 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
             throw new \Magento\Exception("Unexpected element type specified for generating block: {$type}.");
         }
 
+
         $configPath = (string)$node->getAttribute('ifconfig');
         if (!empty($configPath) && !$this->_coreStoreConfig->getConfigFlag($configPath)) {
             $this->_scheduledStructure->unsetElement($elementName);
             return;
+        }
+
+        $group = (string)$node->getAttribute('group');
+        if (!empty($group)) {
+            $this->_structure->addToParentGroup($elementName, $group);
         }
 
         // create block

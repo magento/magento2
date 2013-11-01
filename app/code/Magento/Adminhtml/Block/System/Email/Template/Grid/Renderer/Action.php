@@ -41,7 +41,7 @@ class Action extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Action
         $actions = array();
 
         $actions[] = array(
-            'url'		=>  $this->getUrl('*/*/preview', array('id'=>$row->getId())),
+            'url'		=>  $this->getUrl('adminhtml/*/preview', array('id'=>$row->getId())),
             'popup'     =>  true,
             'caption'	=>	__('Preview')
         );

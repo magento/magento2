@@ -26,7 +26,7 @@
 
 namespace Magento\Adminhtml\Controller\System;
 
-class Design extends \Magento\Adminhtml\Controller\Action
+class Design extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * Core registry
@@ -114,12 +114,12 @@ class Design extends \Magento\Adminhtml\Controller\Action
                 $this->_objectManager->get('Magento\Adminhtml\Model\Session')
                     ->addError($e->getMessage())
                     ->setDesignData($data);
-                $this->_redirect('*/*/edit', array('id'=>$design->getId()));
+                $this->_redirect('adminhtml/*/edit', array('id'=>$design->getId()));
                 return;
             }
         }
 
-        $this->_redirect('*/*/');
+        $this->_redirect('adminhtml/*/');
     }
 
     public function deleteAction()
@@ -141,7 +141,7 @@ class Design extends \Magento\Adminhtml\Controller\Action
                     ->addException($e, __("Cannot delete the design change."));
             }
         }
-        $this->getResponse()->setRedirect($this->getUrl('*/*/'));
+        $this->getResponse()->setRedirect($this->getUrl('adminhtml/*/'));
     }
 
     protected function _isAllowed()

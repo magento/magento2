@@ -172,7 +172,7 @@ class Items extends \Magento\Adminhtml\Block\Template
      */
     public function getSaveUrl()
     {
-        return $this->getUrl('*/sales_order_view_giftmessage/save', array(
+        return $this->getUrl('sales/order_view_giftmessage/save', array(
             'entity'    => $this->getItem()->getId(),
             'type'      => 'order_item',
             'reload'    => true

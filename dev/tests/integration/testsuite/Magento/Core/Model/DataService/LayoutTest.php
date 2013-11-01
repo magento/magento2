@@ -103,7 +103,7 @@ class LayoutTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     protected function _getLayoutModel($fixtureFile)
     {
-        /** @var $layout \Magento\Core\Model\Layout */
+        /** @var $layout \Magento\View\LayoutInterface */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\View\LayoutInterface',
             array('dataServiceGraph' => $this->_dataServiceGraph)

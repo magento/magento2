@@ -48,7 +48,7 @@ class UrlrewriteTest extends \PHPUnit_Framework_TestCase
         $testedBlock->setSelectorBlock($selectorBlock);
         $testedBlock->expects($this->once())
             ->method('getUrl')
-            ->with('*/*/edit')
+            ->with('adminhtml/*/edit')
             ->will($this->returnValue('http://localhost/admin/urlrewrite/edit/'));
 
         $this->assertEquals($expectedUrl, $testedBlock->getCreateUrl());

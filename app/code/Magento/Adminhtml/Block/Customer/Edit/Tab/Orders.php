@@ -153,7 +153,7 @@ class Orders extends \Magento\Adminhtml\Block\Widget\Grid
                 'filter'    => false,
                 'sortable'  => false,
                 'width'     => '100px',
-                'renderer'  => 'Magento\Adminhtml\Block\Sales\Reorder\Renderer\Action'
+                'renderer'  => 'Magento\Sales\Block\Adminhtml\Reorder\Renderer\Action'
             ));
         }
 
@@ -162,11 +162,11 @@ class Orders extends \Magento\Adminhtml\Block\Widget\Grid
 
     public function getRowUrl($row)
     {
-        return $this->getUrl('*/sales_order/view', array('order_id' => $row->getId()));
+        return $this->getUrl('sales/order/view', array('order_id' => $row->getId()));
     }
 
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/orders', array('_current' => true));
+        return $this->getUrl('adminhtml/*/orders', array('_current' => true));
     }
 }

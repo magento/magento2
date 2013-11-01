@@ -118,7 +118,9 @@ class Js
      */
     public function getJsUploadUrl()
     {
-        return $this->getUrl('*/system_design_theme/uploadjs', array('id' => $this->_getCurrentTheme()->getId()));
+        return $this->getUrl(
+            'adminhtml/system_design_theme/uploadjs', array('id' => $this->_getCurrentTheme()->getId())
+        );
     }
 
     /**

@@ -33,7 +33,7 @@ class Detailed extends \Magento\Adminhtml\Block\Template
 {
     protected $_voteCollection = false;
 
-    protected $_template = 'rating/detailed.phtml';
+    protected $_template = 'Magento_Rating::rating/detailed.phtml';
 
     /**
      * Core registry

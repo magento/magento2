@@ -25,8 +25,10 @@
  */
 ?>
 <?php $_order = $this->getOrder() ?>
-<h1><?php echo __('Order #%1', $_order->getRealOrderId()) ?></h1>
-<p class="order-date"><?php echo __('Order Date: %1', $this->formatDate($_order->getCreatedAtStoreDate(), 'long')) ?></p>
+<div class="page title">
+    <h1 class="title"><?php echo __('Order #%1', $_order->getRealOrderId()) ?></h1>
+</div>
+<p class="order date"><?php echo __('Order Date: %1', $this->formatDate($_order->getCreatedAtStoreDate(), 'long')) ?></p>
 <?php $_creditmemo = $this->getCreditmemo() ?>
 <?php if($_creditmemo): ?>
     <?php $_creditmemos = array($_creditmemo); ?>
@@ -34,65 +36,81 @@
     <?php $_creditmemos = $_order->getCreditmemosCollection() ?>
 <?php endif; ?>
 <?php foreach ($_creditmemos as $_creditmemo): ?>
-    <h2 class="h2"><?php echo __('Refund #%1', $_creditmemo->getIncrementId()) ?></h2>
-    <div class="col2-set">
-        <div class="col-1">
+    <div class="order details view">
+        <div class="title">
+            <strong><?php echo __('Refund #%1', $_creditmemo->getIncrementId()) ?></strong>
+        </div>
+
+        <div class="block order shipping address">
         <?php if (!$_order->getIsVirtual()): ?>
-            <h3><?php echo __('Shipping Address') ?></h3>
-            <?php $_shipping = $_creditmemo->getShippingAddress() ?>
-            <address><?php echo $_shipping->format('html') ?></address>
+            <div class="title">
+                <strong><?php echo __('Shipping Address') ?></strong>
+            </div>
+            <div class="content">
+                <?php $_shipping = $_creditmemo->getShippingAddress() ?>
+                <address><?php echo $_shipping->format('html') ?></address>
+            </div>
         </div>
-        <div class="col-2">
+
+        <div class="block order billing address">
         <?php endif; ?>
-            <h3><?php echo __('Billing Address') ?></h3>
-            <?php $_billing = $_creditmemo->getbillingAddress() ?>
-            <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
+            <div class="title">
+                <strong><?php echo __('Billing Address') ?></strong>
+            </div>
+            <div class="content">
+                <?php $_billing = $_creditmemo->getbillingAddress() ?>
+                <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
+            </div>
         </div>
-    <?php if (!$_order->getIsVirtual()): ?>
-    </div>
-    <div class="col2-set">
-        <div class="col-1">
-            <h3><?php echo __('Shipping Method') ?></h3>
-             <?php echo $this->escapeHtml($_order->getShippingDescription()) ?>
+
+        <?php if (!$_order->getIsVirtual()): ?>
+        <div class="block order shipping method">
+            <div class="title">
+                <strong><?php echo __('Shipping Method') ?></strong>
+            </div>
+            <div class="content">
+                <?php echo $this->escapeHtml($_order->getShippingDescription()) ?>
+            </div>
         </div>
         <?php endif; ?>
-        <div class="col-2">
-            <h3><?php echo __('Payment Method') ?></h3>
-            <?php echo $this->getPaymentInfoHtml() ?>
+        <div class="block order payment method">
+            <div class="title">
+                <strong><?php echo __('Payment Method') ?></strong>
+            </div>
+            <div class="content">
+                <?php echo $this->getPaymentInfoHtml() ?>
+            </div>
         </div>
+
     </div>
-    <h3><?php echo __('Items Refunded') ?></h3>
-    <table class="data-table" id="my-refund-table-<?php echo $_creditmemo->getId(); ?>">
-      <col />
-      <col width="1" />
-      <col width="1" />
-      <col width="1" />
-      <col width="1" />
-      <col width="1" />
-      <col width="1" />
-      <thead>
-          <tr>
-            <th><?php echo __('Product Name') ?></th>
-            <th><?php echo __('SKU') ?></th>
-            <th class="a-right"><?php echo __('Price') ?></th>
-            <th class="a-center"><?php echo __('Qty') ?></th>
-            <th class="a-right"><?php echo __('Subtotal') ?></th>
-            <th class="a-center wrap"><?php echo __('Discount Amount') ?></th>
-            <th class="a-center wrap"><?php echo __('Row Total') ?></th>
-          </tr>
-      </thead>
-      <tfoot>
-        <?php echo $this->getTotalsHtml($_creditmemo);?>
-      </tfoot>
-    <?php $_items = $_creditmemo->getAllItems(); ?>
-    <?php $_count = count($_items); ?>
-    <?php foreach ($_items as $_item): ?>
-    <?php if ($_item->getOrderItem()->getParentItem()) continue; ?>
-    <tbody>
-        <?php echo $this->getItemHtml($_item) ?>
-    </tbody>
-    <?php endforeach; ?>
-</table>
-<script type="text/javascript">(function($) {$('#my-refund-table-<?php echo $_creditmemo->getId(); ?>').decorate('table', {'tbody': ['odd','even'], 'tbody tr': ['first','last']})})(jQuery)</script>
+    <div class="order details items">
+        <div class="order subtitle caption">
+            <strong><?php echo __('Items Refunded') ?></strong>
+        </div>
+        <table class="data table order items" id="my-refund-table-<?php echo $_creditmemo->getId(); ?>">
+            <thead>
+                <tr>
+                    <th class="col name"><?php echo __('Product Name') ?></th>
+                    <th class="col sku"><?php echo __('SKU') ?></th>
+                    <th class="col price"><?php echo __('Price') ?></th>
+                    <th class="col qty"><?php echo __('Qty') ?></th>
+                    <th class="col subtotal"><?php echo __('Subtotal') ?></th>
+                    <th class="col discount"><?php echo __('Discount Amount') ?></th>
+                    <th class="col rowtotal"><?php echo __('Row Total') ?></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <?php echo $this->getTotalsHtml($_creditmemo);?>
+            </tfoot>
+            <?php $_items = $_creditmemo->getAllItems(); ?>
+            <?php $_count = count($_items); ?>
+            <?php foreach ($_items as $_item): ?>
+            <?php if ($_item->getOrderItem()->getParentItem()) continue; ?>
+            <tbody>
+                <?php echo $this->getItemHtml($_item) ?>
+            </tbody>
+            <?php endforeach; ?>
+        </table>
+    </div>
 <?php endforeach; ?>
 <script type="text/javascript">window.print();</script>

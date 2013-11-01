@@ -18,11 +18,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
- * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @category Magento
+ * @package Magento_Checkout
+ * @subpackage integration_tests
+ * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Checkout\Controller;
@@ -77,7 +77,7 @@ class OnepageTest extends \Magento\TestFramework\TestCase\AbstractController
             ->getPayment()
             ->getMethodInstance()
             ->getTitle();
-        $this->assertContains('<p>' . $methodTitle . '</p>', $html);
+        $this->assertContains('<dt class="title">' . $methodTitle . '</dt>', $html);
     }
 
     public function testShippingMethodAction()
@@ -93,3 +93,5 @@ class OnepageTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains('checkout-review', $this->getResponse()->getBody());
     }
 }
+
+

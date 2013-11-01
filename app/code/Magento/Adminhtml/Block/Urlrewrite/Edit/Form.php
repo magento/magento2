@@ -300,7 +300,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _formPostInit($form)
     {
-        $form->setAction($this->_adminhtmlData->getUrl('*/*/save', array(
+        $form->setAction($this->_adminhtmlData->getUrl('adminhtml/*/save', array(
             'id' => $this->_getModel()->getId()
         )));
         return $this;

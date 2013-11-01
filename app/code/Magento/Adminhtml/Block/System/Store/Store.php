@@ -52,19 +52,19 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Container
     {
         /* Update default add button to add website button */
         $this->_updateButton('add', 'label', __('Create Website'));
-        $this->_updateButton('add', 'onclick', "setLocation('" . $this->getUrl('*/*/newWebsite') . "')");
+        $this->_updateButton('add', 'onclick', "setLocation('" . $this->getUrl('adminhtml/*/newWebsite') . "')");
 
         /* Add Store Group button */
         $this->_addButton('add_group', array(
             'label'     => __('Create Store'),
-            'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/newGroup') .'\')',
+            'onclick'   => 'setLocation(\'' . $this->getUrl('adminhtml/*/newGroup') .'\')',
             'class'     => 'add',
         ));
 
         /* Add Store button */
         $this->_addButton('add_store', array(
             'label'   => __('Create Store View'),
-            'onclick' => 'setLocation(\'' . $this->getUrl('*/*/newStore') . '\')',
+            'onclick' => 'setLocation(\'' . $this->getUrl('adminhtml/*/newStore') . '\')',
             'class'   => 'add',
         ));
 

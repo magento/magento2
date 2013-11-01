@@ -43,7 +43,7 @@ class Store
             return null;
         }
         return '<a title="' . __('Edit Store View') . '"
-            href="' . $this->getUrl('*/*/editStore', array('store_id' => $row->getStoreId())) . '">'
+            href="' . $this->getUrl('adminhtml/*/editStore', array('store_id' => $row->getStoreId())) . '">'
             . $this->escapeHtml($row->getData($this->getColumn()->getIndex())) . '</a>';
     }
 }

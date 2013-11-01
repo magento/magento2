@@ -1025,7 +1025,8 @@ final class Controller
         try {
             $type = $this->_getBackupTypeByCode($archiveType);
 
-            $backupManager = \Magento\Backup::getBackupInstance($type)
+            $backupManager = \Magento\Core\Model\ObjectManager::getInstance()->get('Magento\Backup\Factory')
+                ->create($type)
                 ->setBackupExtension($this->_getExtensionType($type))
                 ->setTime(time())
                 ->setName($archiveName)

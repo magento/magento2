@@ -92,7 +92,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $form = $this->_formFactory->create(array(
             'attributes' => array(
                 'id'        => 'edit_form',
-                'action'    => $this->getUrl('*/*/save', array(
+                'action'    => $this->getUrl('catalog/*/save', array(
                     'id' => $this->getRequest()->getParam('id'),
                     'ret' => $this->_coreRegistry->registry('ret')
                 )),
@@ -107,13 +107,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $fieldset->addField('product_name', 'note', array(
             'label'     => __('Product'),
-            'text'      => '<a href="' . $this->getUrl('*/catalog_product/edit', array('id' => $product->getId()))
+            'text'      => '<a href="' . $this->getUrl('catalog/product/edit', array('id' => $product->getId()))
                 . '" onclick="this.target=\'blank\'">' . $this->_reviewData->escapeHtml($product->getName()) . '</a>'
         ));
 
         if ($customer->getId()) {
             $customerText = __('<a href="%1" onclick="this.target=\'blank\'">%2 %3</a> <a href="mailto:%4">(%4)</a>',
-                $this->getUrl('*/customer/edit', array('id' => $customer->getId(), 'active_tab'=>'review')),
+                $this->getUrl('adminhtml/customer/edit', array('id' => $customer->getId(), 'active_tab'=>'review')),
                 $this->escapeHtml($customer->getFirstname()),
                 $this->escapeHtml($customer->getLastname()),
                 $this->escapeHtml($customer->getEmail()));

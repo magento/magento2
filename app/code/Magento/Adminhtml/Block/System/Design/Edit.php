@@ -65,7 +65,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget
     {
         $this->addChild('back_button', 'Magento\Adminhtml\Block\Widget\Button', array(
             'label'     => __('Back'),
-            'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/') . '\')',
+            'onclick'   => 'setLocation(\'' . $this->getUrl('adminhtml/*/') . '\')',
             'class' => 'back'
         ));
 
@@ -94,17 +94,17 @@ class Edit extends \Magento\Adminhtml\Block\Widget
 
     public function getDeleteUrl()
     {
-        return $this->getUrl('*/*/delete', array('_current'=>true));
+        return $this->getUrl('adminhtml/*/delete', array('_current'=>true));
     }
 
     public function getSaveUrl()
     {
-        return $this->getUrl('*/*/save', array('_current'=>true));
+        return $this->getUrl('adminhtml/*/save', array('_current'=>true));
     }
 
     public function getValidationUrl()
     {
-        return $this->getUrl('*/*/validate', array('_current'=>true));
+        return $this->getUrl('adminhtml/*/validate', array('_current'=>true));
     }
 
     public function getHeader()

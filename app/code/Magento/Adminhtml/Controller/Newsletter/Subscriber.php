@@ -33,7 +33,7 @@
  */
 namespace Magento\Adminhtml\Controller\Newsletter;
 
-class Subscriber extends \Magento\Adminhtml\Controller\Action
+class Subscriber extends \Magento\Backend\Controller\Adminhtml\Action
 {
 
     public function indexAction()
@@ -104,7 +104,7 @@ class Subscriber extends \Magento\Adminhtml\Controller\Action
             }
         }
 
-        $this->_redirect('*/*/index');
+        $this->_redirect('adminhtml/*/index');
     }
 
     public function massDeleteAction()
@@ -127,7 +127,7 @@ class Subscriber extends \Magento\Adminhtml\Controller\Action
             }
         }
 
-        $this->_redirect('*/*/index');
+        $this->_redirect('adminhtml/*/index');
     }
 
     protected function _isAllowed()

@@ -24,9 +24,6 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceContainer name="checkout.cart.top_methods">
-        <block class="Magento\GoogleCheckout\Block\Link" name="checkout.cart.methods.googlecheckout.top" template="link.phtml" before="-"/>
-    </referenceContainer>
     <referenceContainer name="checkout.cart.methods">
         <block class="Magento\GoogleCheckout\Block\Link" name="checkout.cart.methods.googlecheckout.bottom" template="link.phtml"/>
     </referenceContainer>

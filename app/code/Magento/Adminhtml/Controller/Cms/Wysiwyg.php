@@ -33,7 +33,7 @@
  */
 namespace Magento\Adminhtml\Controller\Cms;
 
-class Wysiwyg extends \Magento\Adminhtml\Controller\Action
+class Wysiwyg extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * Template directives callback

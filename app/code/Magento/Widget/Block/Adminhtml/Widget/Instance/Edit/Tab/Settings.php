@@ -188,7 +188,7 @@ class Settings
      */
     public function getContinueUrl()
     {
-        return $this->getUrl('*/*/*', array(
+        return $this->getUrl('adminhtml/*/*', array(
             '_current' => true,
             'code'     => '{{code}}',
             'theme_id' => '{{theme_id}}'

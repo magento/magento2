@@ -64,7 +64,7 @@ class Helper
 
         if (false === ($helper instanceof \Magento\Core\Helper\AbstractHelper)) {
             throw new \LogicException(
-                $className . ' doesn\'t extends Magento\Core\Helper\AbstractHelper'
+                $className . ' doesn\'t extends Magento\App\Helper'
             );
         }
 

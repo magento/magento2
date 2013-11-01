@@ -26,11 +26,11 @@
  */
 ?>
 <?php if ($this->isCurrent()):?>
-<li class="current">
+<li class="nav item current">
     <strong><?php echo $this->escapeHtml(__($this->getLabel()))?></strong>
 </li>
 <?php else:?>
-<li>
+<li class="nav item">
     <a href="<?php echo $this->escapeHtml($this->getHref())?>"
         <?php if ($title = $this->getTitle()):?> title="<?php echo $this->escapeHtml(__($title))?>"<?php endif;?>
     >

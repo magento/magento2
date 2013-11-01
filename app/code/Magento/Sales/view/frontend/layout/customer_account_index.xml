@@ -24,7 +24,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="customer_account_dashboard">
-        <block class="Magento\Sales\Block\Order\Recent" name="customer_account_dashboard_top" as="top" template="order/recent.phtml"/>
+    <referenceBlock name="my.account.wrapper">
+        <block class="Magento\Sales\Block\Order\Recent" name="customer_account_dashboard_top" after="customer_account_dashboard_hello" template="order/recent.phtml"/>
     </referenceBlock>
 </layout>

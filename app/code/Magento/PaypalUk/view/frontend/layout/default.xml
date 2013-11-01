@@ -25,6 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceContainer name="cart_sidebar.extra_actions">
-        <block class="Magento\PaypalUk\Block\Express\Shortcut" name="paypaluk.partner.cart_sidebar.shortcut" template="Magento_Paypal::express/shortcut.phtml"/>
+        <block class="Magento\PaypalUk\Block\Express\Shortcut" name="paypaluk.partner.cart_sidebar.shortcut"
+               template="Magento_Paypal::express/shortcut.phtml"/>
     </referenceContainer>
 </layout>

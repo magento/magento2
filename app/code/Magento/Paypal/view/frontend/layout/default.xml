@@ -24,7 +24,12 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <referenceContainer name="topCart.extra_actions">
+        <block class="Magento\Paypal\Block\Express\Shortcut" name="paypal.partner.top_cart.shortcut"
+               template="express/shortcut.phtml"/>
+    </referenceContainer>
     <referenceContainer name="cart_sidebar.extra_actions">
-        <block class="Magento\Paypal\Block\Express\Shortcut" name="paypal.partner.cart_sidebar.shortcut" template="express/shortcut.phtml"/>
+        <block class="Magento\Paypal\Block\Express\Shortcut" name="paypal.partner.cart_sidebar.shortcut"
+               template="express/shortcut.phtml"/>
     </referenceContainer>
 </layout>

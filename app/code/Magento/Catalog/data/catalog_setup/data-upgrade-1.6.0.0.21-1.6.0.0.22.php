@@ -54,5 +54,5 @@ $this->updateAttribute(
     \Magento\Catalog\Model\Product::ENTITY,
     'weight',
     'frontend_input_renderer',
-    'Magento\Adminhtml\Block\Catalog\Product\Helper\Form\Weight'
+    'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight'
 );

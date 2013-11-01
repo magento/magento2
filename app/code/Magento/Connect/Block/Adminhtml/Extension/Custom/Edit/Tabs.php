@@ -82,7 +82,7 @@ class Tabs extends \Magento\Adminhtml\Block\Widget\Tabs
 //        $this->addTab('load', array(
 //            'label'     => __('Load local Package'),
 //            'class'     => 'ajax',
-//            'url'       => $this->getUrl('*/*/loadtab', array('_current' => true)),
+//            'url'       => $this->getUrl('adminhtml/*/loadtab', array('_current' => true)),
 //        ));
 
         return parent::_beforeToHtml();

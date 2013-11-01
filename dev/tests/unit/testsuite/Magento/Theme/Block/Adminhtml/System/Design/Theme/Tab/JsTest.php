@@ -110,7 +110,7 @@ class JsTest extends \PHPUnit_Framework_TestCase
         $this->_urlBuilder
             ->expects($this->once())
             ->method('getUrl')
-            ->with('*/system_design_theme/uploadjs', array('id' => $themeId))
+            ->with('adminhtml/system_design_theme/uploadjs', array('id' => $themeId))
             ->will($this->returnValue($uploadUrl));
 
         $this->assertEquals($uploadUrl, $this->_model->getJsUploadUrl());

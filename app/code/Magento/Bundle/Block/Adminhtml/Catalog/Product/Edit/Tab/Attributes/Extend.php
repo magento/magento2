@@ -34,7 +34,7 @@
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes;
 
 class Extend
-    extends \Magento\Adminhtml\Block\Catalog\Form\Renderer\Fieldset\Element
+    extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
 {
     const DYNAMIC = 0;
     const FIXED = 1;

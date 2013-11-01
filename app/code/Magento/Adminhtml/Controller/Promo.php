@@ -33,7 +33,7 @@
  */
 namespace Magento\Adminhtml\Controller;
 
-class Promo extends \Magento\Adminhtml\Controller\Action
+class Promo extends \Magento\Backend\Controller\Adminhtml\Action
 {
 
     public function indexAction()

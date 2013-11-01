@@ -19,36 +19,32 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php if( $this->getCollection() && $this->count()): ?>
-<div class="box-account box-reviews">
-    <div class="box-head">
-        <h2><?php echo __('My Recent Reviews') ?></h2>
-        <a href="<?php echo $this->getAllReviewsUrl() ?>"><?php echo __('View All Reviews') ?></a>
+<div class="block reviews dashboard">
+    <div class="title">
+        <strong><?php echo __('My Recent Reviews') ?></strong>
+        <a class="action view" href="<?php echo $this->getAllReviewsUrl() ?>"><span><?php echo __('View All Reviews') ?></span></a>
     </div>
-    <ol id="my_recent_reviews">
-    <?php $iterator = 0 ?>
-    <?php foreach ($this->getCollection() as $_review): ?>
-        <li class="item">
-            <span class="number"><?php echo ++$iterator ?></span>
-            <div class="details">
-                <h3 class="product-name"><a href="<?php echo $this->getReviewUrl($_review->getReviewId()) ?>"><?php echo $this->escapeHtml($_review->getName()) ?></a></h3>
+    <div class="content">
+        <ol class="items">
+        <?php foreach ($this->getCollection() as $_review): ?>
+            <li class="item">
+                <strong class="product name"><a href="<?php echo $this->getReviewUrl($_review->getReviewId()) ?>"><?php echo $this->escapeHtml($_review->getName()) ?></a></strong>
                 <?php if($_review->getSum()): ?>
-                    <div class="ratings">
-                        <strong><?php echo __('Rating:') ?></strong>
-                        <div class="rating-box">
-                            <div class="rating" style="width:<?php echo ( $_review->getSum() / $_review->getCount() ) ?>%;"></div>
-                        </div>
+                <?php $rating = $_review->getSum() / $_review->getCount() ?>
+                    <div class="rating" title="<?php echo $rating; ?>%">
+                        <span style="width:<?php echo $rating; ?>%">
+                            <?php echo $rating; ?>
+                        </span>
                     </div>
                 <?php endif; ?>
-            </div>
-        </li>
-    <?php endforeach; ?>
-    </ol>
-    <script type="text/javascript">(function($) {$('#my_recent_reviews').decorate('list')})(jQuery)</script>
+            </li>
+        <?php endforeach; ?>
+        </ol>
+    </div>
 </div>
 <?php endif; ?>

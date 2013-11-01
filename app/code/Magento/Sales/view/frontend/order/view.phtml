@@ -19,45 +19,55 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="order-items order-details">
+<div class="order details items">
     <?php $_order = $this->getOrder() ?>
-    <h2 class="table-caption"><?php echo __('Items Ordered') ?>
+
+    <div class="order subtitle caption">
+        <strong><?php echo __('Items Ordered') ?></strong>
         <?php if ($_order->getTracksCollection()->count()) : ?>
-            <span class="separator">|</span> <a href="#" data-mage-init="{popupWindow: {windowURL:'<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($_order) ?>',windowName:'trackorder',top:0,left:0,width:800,height:600,resizable:1,scrollbars:1}}" title="<?php echo __('Track your order') ?>"><?php echo __('Track your order') ?></a>
+            <a href="#"
+               data-mage-init="{popupWindow: {windowURL:'<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($_order) ?>',windowName:'trackorder',top:0,left:0,width:800,height:600,resizable:1,scrollbars:1}}"
+               title="<?php echo __('Track your order') ?>"
+               class="action track">
+                <span><?php echo __('Track your order') ?></span>
+            </a>
         <?php endif; ?>
-    </h2>
+    </div>
 
     <?php echo $this->getChildHtml('order_items') ?>
 
     <?php if($this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order', $_order) && $_order->getGiftMessageId()): ?>
-    <div class="order-additional order-gift-message">
-        <h2 class="sub-title"><?php echo __('Gift Message for This Order') ?></h2>
+    <div class="order additional details gift">
+        <div class="order subtitle caption"><strong><?php echo __('Gift Message for This Order') ?></strong></div>
         <?php $_giftMessage=$this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessageForEntity($_order); ?>
-        <dl class="gift-message">
-            <dt><strong><?php echo __('From:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getSender()) ?></dt>
-            <dt><strong><?php echo __('To:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getRecipient()) ?></dt>
-            <dd><?php echo $this->helper('Magento\GiftMessage\Helper\Message')->getEscapedGiftMessage($_order) ?></dd>
+        <dl class="gift message">
+            <dt class="gift sender"><strong class="label"><?php echo __('From:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getSender()) ?></dt>
+            <dt class="gift recipient"><strong class="label"><?php echo __('To:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getRecipient()) ?></dt>
+            <dd class="message text"><?php echo $this->helper('Magento\GiftMessage\Helper\Message')->getEscapedGiftMessage($_order) ?></dd>
         </dl>
     </div>
     <?php endif; ?>
     <?php $_history = $this->getOrder()->getVisibleStatusHistory() ?>
     <?php if (count($_history)): ?>
-    <div class="order-additional order-comments">
-        <h2 class="sub-title"><?php echo __('About Your Order') ?></h2>
-        <dl class="order-about">
+    <div class="order additional details comments">
+        <div class="order subtitle caption"><strong><?php echo __('About Your Order') ?></strong></div>
+        <dl class="order comments">
             <?php foreach ($_history as $_historyItem): ?>
-                <dt><?php echo $this->formatDate($_historyItem->getCreatedAtStoreDate(), 'medium', true) ?></dt>
-                <dd><?php echo $this->escapeHtml($_historyItem->getComment()) ?></dd>
+                <dt class="comment date"><?php echo $this->formatDate($_historyItem->getCreatedAtStoreDate(), 'medium', true) ?></dt>
+                <dd class="comment text"><?php echo $this->escapeHtml($_historyItem->getComment()) ?></dd>
             <?php endforeach; ?>
         </dl>
     </div>
     <?php endif; ?>
-    <div class="buttons-set">
-        <p class="back-link"><a href="<?php echo $this->getBackUrl() ?>"><small>&laquo; </small><?php echo $this->getBackTitle() ?></a></p>
+    <div class="actions">
+        <div class="secondary">
+            <a class="action back" href="<?php echo $this->getBackUrl() ?>">
+                <span><?php echo $this->getBackTitle() ?></span>
+            </a>
+        </div>
     </div>
 </div>

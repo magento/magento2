@@ -34,7 +34,7 @@
 
 namespace Magento\Centinel\Block\Adminhtml\Validation;
 
-class Form extends \Magento\Adminhtml\Block\Sales\Order\Create\AbstractCreate
+class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
      * Prepare validation and template parameters

@@ -83,7 +83,7 @@
     </type>
     <type name="Magento\Backend\Helper\Data">
         <param name="app">
-            <instance type="Magento\Core\Model\App\Proxy" />
+            <instance type="Magento\Core\Model\AppInterface" />
         </param>
         <param name="backendUrl">
             <instance type="Magento\Backend\Model\Url\Proxy" />
@@ -110,6 +110,11 @@
     <type name="Magento\Backend\Model\Url">
         <param name="authSession">
             <instance type="Magento\Backend\Model\Auth\Session\Proxy" />
+        </param>
+    </type>
+    <type name="Magento\Backend\Helper\Dashboard\Data">
+        <param name="installDate">
+            <value type="argument">Magento\App\State::PARAM_INSTALL_DATE</value>
         </param>
     </type>
 </config>

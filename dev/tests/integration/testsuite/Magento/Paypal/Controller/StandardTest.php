@@ -58,7 +58,7 @@ class StandardTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('paypal/standard/redirect');
         $this->assertContains(
             '<form action="https://www.paypal.com/cgi-bin/webscr" id="paypal_standard_checkout"'
-                . ' name="paypal_standard_checkout" method="POST">',
+            . ' name="paypal_standard_checkout" method="POST">',
             $this->getResponse()->getBody()
         );
     }

@@ -49,7 +49,7 @@ strong {
     Forms
 -------------------------------------- */
 .field.required > .label > span:first-child:after {
-    content: ' *';
+    content: '*';
     color: @requiredField;
 }
 
@@ -367,6 +367,13 @@ body {
 }
 
 /*
+    Sidebar Paypal logo
+-------------------------------------- */
+.sidebar .paypal.acceptance {
+    margin-bottom: 45px;
+}
+
+/*
     Breadcrumbs
 -------------------------------------- */
 .breadcrumbs {
@@ -420,14 +427,15 @@ body {
     }
     .bugs {
         margin-top: 25px;
-        font-size: 11px;
-        a {
-            font-weight: bold;
-            &:before {
-                content: ' - ';
+        font-size: 12px;
+        span {
+            &:after {
+                content: '\00a0\2014\00a0';
                 display: inline-block;
             }
-
+        }
+        a {
+            font-weight: bold;
         }
     }
 }
@@ -791,7 +799,7 @@ body {
 .block.progress.onepage {
     float: left;
     width: 200px;
-    dt {
+    .content > dt {
         font-size: @baseFontSizeBigger;
         font-weight: @baseFontWeight;
         margin: 0 0 10px 0;
@@ -807,6 +815,39 @@ body {
         font-style: normal;
     }
 }
+
+// Payment methods - for OPC and Order pages
+.payment.method {
+    .block.progress.onepage &,
+    .order.details .block.order & {
+        margin: 0;
+        .content {
+            margin: 5px 0;
+            padding: 0;
+        }
+        &.purchase.order,
+        &.checkmemo {
+            .content strong:after {
+                content: ": ";
+            }
+            .content .number {
+                white-space: nowrap;
+            }
+        }
+        .data.table {
+            th {
+                font-size: 14px;
+                padding: 5px 0;
+                text-align: left;
+                width: 50%;
+            }
+            td {
+                padding: 5px;
+            }
+        }
+    }
+}
+
 
 .opc.wrapper {
     float: right;
@@ -864,6 +905,7 @@ body {
             padding: 0;
             margin: 20px 0;
             border: 0;
+            position: relative;
         }
         .field {
             .fieldStyle();
@@ -915,6 +957,66 @@ body {
             letter-spacing: normal;
             word-spacing: normal;
             color: @secondary1;
+        }
+        .field.date {
+            .nested {
+                display: inline-block;
+                margin-right: 5px;
+            }
+            select {
+                width: auto;
+            }
+        }
+    }
+    .tooltip {
+        background: @primary7;
+        border: 1px solid @primary3;
+        display: block;
+        cursor: default;
+        padding: 30px;
+        position: absolute;
+        left: 20px;
+        top: 10px;
+        &.hidden {
+            display: none;
+        }
+        .action.close {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            span {
+                .iconAfter(@content: @icon-close-thick, @size: 11px, @font: 'icons');
+                .iconHideText(11px);
+            }
+        }
+    }
+    .check.payable {
+        margin: 0 0 0 20px;
+        .title {
+            display: inline-block;
+            padding: 5px 0;
+            width: 30%;
+        }
+        .content {
+            display: inline-block;
+            margin: 0;
+            padding: 5px 0;
+            width: 68%;
+        }
+    }
+    .sp-methods {
+        .items,
+        .fieldset.items {
+            margin: 0 0 0 6px;
+        }
+        .paypal.field.items {
+            padding: 0;
+            width: 100%;
+        }
+        .paypal.icon {
+            display: inline-block;
+            margin-right: 5px;
+            vertical-align: middle;
         }
     }
 }
@@ -1229,6 +1331,17 @@ body {
                 }
             }
         }
+        .box.method {
+            .payment.method {
+                margin: 0;
+            }
+            .title {
+                margin: 0 0 5px;
+            }
+            .content {
+                margin: 0 0 0 10px;
+            }
+        }
     }
 
 // Oher goods (can't be shipped: virtual, downloadable)
@@ -1306,13 +1419,6 @@ body {
         margin-bottom: 0;
     }
     .items.data {
-        td.col.address {
-            padding-top: 10px;
-        }
-        td.col.delete,
-        td.col.product {
-            padding-top: 18px;
-        }
         .col {
             &.item {
                 padding-left: 0;
@@ -1387,9 +1493,13 @@ body {
             }
         }
     }
+
     &.form.address {
-        .col.address select {
-            max-width: 450px;
+        .control.address {
+            margin-top: -6px;
+            select {
+                max-width: 450px;
+            }
         }
     }
 }
@@ -1590,7 +1700,7 @@ body {
     z-index: 1;
 }
 
-.cart.main.actions {
+.cart.actions {
     padding: 20px 0;
     .action.continue {
         position: absolute;
@@ -1609,15 +1719,17 @@ body {
     thead tr:last-child th {
         padding-bottom: 10px;
     }
+    th > span {
+        white-space: nowrap
+    }
     th.col.item > span {
         display: none;
     }
     td.col.qty {
         width: 40px;
-        padding-top: 20px;
         text-align: center;
-        .review & {
-            padding-top: @baseFontSizeBigger;
+        .control {
+            margin-top: -6px;
         }
     }
     th.col.qty {
@@ -1631,11 +1743,19 @@ body {
     td.col.subtotal {
         text-align: right;
     }
+    .img.photo.container,
     .product.photo {
         padding-right: 20px;
         display: table-cell;
         width: 1%;
         vertical-align: top;
+    }
+    .product.photo {
+        .img.photo.container {
+            display: block;
+            padding:0;
+            width:auto;
+        }
     }
     .product.details {
         display: table-cell;
@@ -2512,6 +2632,9 @@ body {
         vertical-align: middle;
         margin: 0 5px;
     }
+    .box.tocart & {
+        margin-top: 10px;
+    }
 }
 
 .box.tocart .checkout.paypal {
@@ -2556,9 +2679,10 @@ body {
     }
     .actions {
         margin: 15px 0 0;
+        text-align: left;
         .primary,
         .secondary {
-            margin-right: 5px;
+            margin: 0 10px 10px 0;
             display: inline-block;
             vertical-align: middle;
         }
@@ -3644,6 +3768,12 @@ body {
         .datetime-picker + .ui-datepicker-trigger {
             margin: 0 15px 0 7px;
         }
+        .payment.product.options,
+        .payment.product.schedule {
+            .content {
+                margin: 5px 0 0;
+            }
+        }
     }
 }
 
@@ -4067,6 +4197,10 @@ img[align="right"] {
     position: relative;
     z-index: 1;
     cursor: pointer;
+    .menu {
+        padding:0;
+        margin: 0;
+    }
     .menu > ul {
         font-weight: 600;
         font-size: @baseFontSizeMiddle;
@@ -4470,10 +4604,12 @@ img[align="right"] {
     .actions {
         margin-top: 35px;
         .action.update {
-            &:extend(.secondary.action all)
-        ;
+            &:extend(.secondary.action all);
             margin-left: 10px;
         }
+    }
+    .paypal.review.items {
+        clear: left;
     }
     .data.table.paypal.review.items {
         width: 100%;
@@ -4497,6 +4633,50 @@ img[align="right"] {
             padding-top: 15px;
         }
     }
+
+    .block.shipping.information,
+    .block.billing.information {
+        margin-bottom: 45px;
+        > .content {
+            .clearfix();
+        }
+        .box {
+            float: left;
+            padding-right: 2%;
+            width: 48%;
+            > .content {
+                background: @primary1;
+                padding: 30px;
+                .select {
+                    width: 100%;
+                }
+                .actions {
+                    margin: 25px 0 0;
+                }
+            }
+        }
+        address {
+            font-style: normal;
+        }
+        .subtitle {
+            display: block;
+            font-size: 18px;
+            font-weight: 200;
+            margin-bottom: 20px;
+            .action {
+                display: inline-block;
+                font-size: 14px;
+                font-weight: 400;
+                margin-left: 20px;
+                text-decoration: underline;
+                text-transform: lowercase;
+            }
+        }
+    }
+}
+
+.paypal.iframe {
+    display: none;
 }
 
 /*
@@ -4942,6 +5122,12 @@ img[align="right"] {
             background: @primary1;
             padding: 30px;
         }
+        p {
+            margin-top: 0;
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
     }
 
     .order.info {
@@ -4954,12 +5140,12 @@ img[align="right"] {
         }
 
         > dd {
-            margin: 10px 0 0 0;
-            background: @primary1;
-            padding: 30px;
-
+            margin: 0;
             .items {
                 .clearfix();
+                background: @primary1;
+                margin: 10px 0 0 0;
+                padding: 30px;
                 .item {
                     float: left;
                     margin-right: 15px;
@@ -5007,10 +5193,27 @@ img[align="right"] {
     }
     .action.show {
         text-decoration: none;
-        .iconAfter(@content: @icon-arrow-up-filled, @size: 12px, @font: "icons");
+        .iconAfter(@content: @icon-arrow-bottom-filled, @size: 12px, @font: "icons");
         &.expanded:after {
-            content: @icon-arrow-bottom-filled;
+            content: @icon-arrow-up-filled;
         }
+    }
+    .gift.message.details {
+        position: relative;
+    }
+    .gift.message {
+        margin: 0;
+    }
+    .action.close {
+        position: absolute;
+        right: 0;
+        top: 0;
+        span {
+            .iconAfter(@content: @icon-close-thick, @size: 12px, @font: "icons");
+        }
+    }
+    + .order.details.view {
+        margin-top: 45px;
     }
 }
 
@@ -5114,6 +5317,14 @@ img[align="right"] {
             width: 40%;
         }
     }
+    .qty.summary {
+        .resetList();
+        .label {
+            &:after {
+                content: ": ";
+            }
+        }
+    }
 }
 
 /*
@@ -5136,6 +5347,46 @@ img[align="right"] {
         .action.create {
             padding-top: 7px;
             padding-bottom: 6px;
+        }
+    }
+}
+
+/*
+    My Account -> Recurring profiles
+-------------------------------------- */
+.recurring.order.details {
+    .block.view.info {
+        .clearfix();
+        .box {
+            float: left;
+            padding-right: 2%;
+            width: 48%;
+            .subtitle {
+                font-size: 20px;
+                font-weight: 200;
+                line-height: 1.2;
+                display: inline-block;
+                margin-bottom: 15px;
+            }
+            .content {
+                background: @primary1;
+                padding: 30px;
+                .clearfix();
+            }
+            .data.table {
+                th,
+                td {
+                    padding: 4px 7px;
+                }
+            }
+        }
+    }
+    > .actions {
+        .primary {
+            text-align: right;
+            .action {
+                &:extend(.primary.action all);
+            }
         }
     }
 }

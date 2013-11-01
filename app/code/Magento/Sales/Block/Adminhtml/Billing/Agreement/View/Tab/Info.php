@@ -130,7 +130,7 @@ class Info extends \Magento\Backend\Block\Template
         $this->setReferenceId($agreement->getReferenceId());
         $customer = $this->_customerFactory->create()->load($agreement->getCustomerId());
         $this->setCustomerUrl(
-            $this->getUrl('*/customer/edit', array('id' => $customer->getId()))
+            $this->getUrl('adminhtml/customer/edit', array('id' => $customer->getId()))
         );
         $this->setCustomerEmail($customer->getEmail());
         $this->setStatus($agreement->getStatusLabel());

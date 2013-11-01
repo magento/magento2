@@ -77,7 +77,7 @@ abstract class AbstractForm extends \Magento\Backend\Block\Widget\Form\Generic
             'value'     => $this->_coreRegistry->registry('store_action')
         ));
 
-        $form->setAction($this->getUrl('*/*/save'));
+        $form->setAction($this->getUrl('adminhtml/*/save'));
         $form->setUseContainer(true);
         $this->setForm($form);
 

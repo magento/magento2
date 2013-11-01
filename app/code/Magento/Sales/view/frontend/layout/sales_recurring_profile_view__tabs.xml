@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Recurring Profile View Tabs" type="page" parent="sales_recurring_profile_index">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Recurring Profile View Tabs" type="page">
     <referenceBlock name="root">
         <action method="setTemplate">
             <argument name="template" xsi:type="string">2columns-left.phtml</argument>
@@ -34,10 +34,7 @@
             <action method="setShouldPrepareInfoTabs">
                 <argument name="value" xsi:type="string">1</argument>
             </action>
-            <block class="Magento\Core\Block\Text" as="profile_info" name="sales.recurring.profile.view.tab.profile">
-                <action method="addToParentGroup">
-                    <argument name="value" xsi:type="string">info_tabs</argument>
-                </action>
+            <block class="Magento\Core\Block\Text" as="profile_info" name="sales.recurring.profile.view.tab.profile" group="info_tabs">
                 <action method="setViewLabel">
                     <argument translate="true" name="value" xsi:type="string">Profile Information</argument>
                 </action>
@@ -58,10 +55,7 @@
                 </action>
             </block>
             -->
-            <block class="Magento\Core\Block\Text" as="related_orders" name="sales.recurring.profile.view.tab.orders">
-                <action method="addToParentGroup">
-                    <argument name="value" xsi:type="string">info_tabs</argument>
-                </action>
+            <block class="Magento\Core\Block\Text" as="related_orders" name="sales.recurring.profile.view.tab.orders" group="info_tabs">
                 <action method="setViewLabel">
                     <argument translate="true" name="value" xsi:type="string">Related Orders</argument>
                 </action>

@@ -36,7 +36,7 @@
             <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="promo.catalog.grid.columnSet" as="grid.columnSet">
                 <arguments>
                     <argument name="rowUrl" xsi:type="array">
-                        <item name="path" xsi:type="string">*/*/edit</item>
+                        <item name="path" xsi:type="string">adminhtml/*/edit</item>
                         <item name="extraParamsTemplate" xsi:type="array">
                             <item name="id" xsi:type="string">getRuleId</item>
                         </item>

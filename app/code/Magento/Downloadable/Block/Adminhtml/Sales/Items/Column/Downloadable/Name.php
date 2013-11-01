@@ -34,7 +34,7 @@
  */
 namespace Magento\Downloadable\Block\Adminhtml\Sales\Items\Column\Downloadable;
 
-class Name extends \Magento\Adminhtml\Block\Sales\Items\Column\Name
+class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
 {
     protected $_purchased = null;
 

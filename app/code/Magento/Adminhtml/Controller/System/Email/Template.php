@@ -33,7 +33,7 @@
  */
 namespace Magento\Adminhtml\Controller\System\Email;
 
-class Template extends \Magento\Adminhtml\Controller\Action
+class Template extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * Core registry
@@ -93,7 +93,7 @@ class Template extends \Magento\Adminhtml\Controller\Action
         $this->loadLayout();
         $template = $this->_initTemplate('id');
         $this->_setActiveMenu('Magento_Adminhtml::system_email_template');
-        $this->_addBreadcrumb(__('Transactional Emails'), __('Transactional Emails'), $this->getUrl('*/*'));
+        $this->_addBreadcrumb(__('Transactional Emails'), __('Transactional Emails'), $this->getUrl('adminhtml/*'));
 
         if ($this->getRequest()->getParam('id')) {
             $this->_addBreadcrumb(__('Edit Template'), __('Edit System Template'));
@@ -119,7 +119,7 @@ class Template extends \Magento\Adminhtml\Controller\Action
         if (!$template->getId() && $id) {
             $this->_objectManager->get('Magento\Adminhtml\Model\Session')
                 ->addError(__('This email template no longer exists.'));
-            $this->_redirect('*/*/');
+            $this->_redirect('adminhtml/*/');
             return;
         }
 
@@ -145,7 +145,7 @@ class Template extends \Magento\Adminhtml\Controller\Action
             $this->_objectManager->get('Magento\Adminhtml\Model\Session')->setFormData(false);
             $this->_objectManager->get('Magento\Adminhtml\Model\Session')
                 ->addSuccess(__('The email template has been saved.'));
-            $this->_redirect('*/*');
+            $this->_redirect('adminhtml/*');
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Adminhtml\Model\Session')
                 ->setData('email_template_form_data', $request->getParams());
@@ -165,7 +165,7 @@ class Template extends \Magento\Adminhtml\Controller\Action
                 $this->_objectManager->get('Magento\Adminhtml\Model\Session')
                     ->addSuccess(__('The email template has been deleted.'));
                 // go to grid
-                $this->_redirect('*/*/');
+                $this->_redirect('adminhtml/*/');
                 return;
             } catch (\Magento\Core\Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
@@ -176,7 +176,7 @@ class Template extends \Magento\Adminhtml\Controller\Action
                 $this->_objectManager->get('Magento\Adminhtml\Model\Session')
                     ->setFormData($this->getRequest()->getParams());
                 // redirect to edit form
-                $this->_redirect('*/*/edit', array('id' => $template->getId()));
+                $this->_redirect('adminhtml/*/edit', array('id' => $template->getId()));
                 return;
             }
         }
@@ -184,7 +184,7 @@ class Template extends \Magento\Adminhtml\Controller\Action
         $this->_objectManager->get('Magento\Adminhtml\Model\Session')
             ->addError(__('We can\'t find an email template to delete.'));
         // go to grid
-        $this->_redirect('*/*/');
+        $this->_redirect('adminhtml/*/');
     }
 
     public function previewAction()

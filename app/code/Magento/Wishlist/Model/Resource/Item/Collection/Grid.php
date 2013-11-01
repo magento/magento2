@@ -38,7 +38,7 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
 
     /**
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
-     * @param \Magento\Adminhtml\Helper\Sales $adminhtmlSales
+     * @param \Magento\Sales\Helper\Admin $adminhtmlSales
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -57,7 +57,7 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
      */
     public function __construct(
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
-        \Magento\Adminhtml\Helper\Sales $adminhtmlSales,
+        \Magento\Sales\Helper\Admin $adminhtmlSales,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,

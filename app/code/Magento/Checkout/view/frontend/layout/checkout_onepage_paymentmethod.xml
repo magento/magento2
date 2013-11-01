@@ -22,8 +22,8 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
--->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="One Page Checkout Choose Payment Method" type="fragment" owner="checkout_onepage_index">
+ -->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="One Page Checkout Choose Payment Method" type="page">
     <block class="Magento\Page\Block\Html" name="root" output="1" template="page_fragment.phtml">
         <block class="Magento\Checkout\Block\Onepage\Payment\Methods" name="payment_method" template="onepage/payment/methods.phtml">
             <action method="setMethodFormTemplate">

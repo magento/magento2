@@ -717,7 +717,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\ImportExport\Model\Import\Entity\CustomerComposite::setErrorMessages
+     * @covers \Magento\ImportExport\Model\Import\Entity\CustomerComposite::getErrorMessages
      */
     public function testGetErrorMessages()
     {

@@ -35,6 +35,12 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Grid;
 
 abstract class AbstractGrid extends \Magento\Adminhtml\Block\Widget\Grid
 {
+    /**
+     * Block Module
+     *
+     * @var string
+     */
+    protected $_module = 'adminhtml';
 
     protected function _construct()
     {
@@ -101,11 +107,12 @@ abstract class AbstractGrid extends \Magento\Adminhtml\Block\Widget\Grid
     /**
      * Return url of given row
      *
+     * @param \Magento\Object $row
      * @return string
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('*/*/edit', array('attribute_id' => $row->getAttributeId()));
+        return $this->getUrl($this->_module . '/*/edit', array('attribute_id' => $row->getAttributeId()));
     }
 
 }

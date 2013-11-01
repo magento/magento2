@@ -53,7 +53,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Magento\Data\Form', $form);
         $this->assertEquals('post', $form->getData('method'));
-        $this->assertEquals($block->getUrl('*/system_account/save'), $form->getData('action'));
+        $this->assertEquals($block->getUrl('adminhtml/system_account/save'), $form->getData('action'));
         $this->assertEquals('edit_form', $form->getId());
         $this->assertTrue($form->getUseContainer());
 

@@ -28,10 +28,10 @@
 <?php if ($this->getIsDisabled()): ?>
 <img src="<?php echo $this->escapeHtml($this->getImageUrl())?>" alt="<?php echo __('Fast checkout through Google');?>" title="<?php echo __('Fast Checkout through Google');?>" />
 <?php else: ?>
-<form method="post" action="<?php echo $this->getCheckoutUrl();?>"<?php if ($this->getOnsubmitJs()):?> onsubmit="<?php echo $this->getOnsubmitJs() ?>"<?php endif;?>>
-    <fieldset>
-        <input type="hidden" name="analyticsdata" value="" />
-        <input type="image" src="<?php echo $this->escapeHtml($this->getImageUrl())?>" title="<?php echo __('Fast checkout through Google');?>" alt="<?php echo __('Fast Checkout through Google');?>" />
-    </fieldset>
-</form>
+<div class="google checkout">
+	<form method="post" action="<?php echo $this->getCheckoutUrl();?>"<?php if ($this->getOnsubmitJs()):?> onsubmit="<?php echo $this->getOnsubmitJs() ?>"<?php endif;?>>
+	    <input type="hidden" name="analyticsdata" value="" />
+	    <input type="image" src="<?php echo $this->escapeHtml($this->getImageUrl())?>" title="<?php echo __('Fast checkout through Google');?>" alt="<?php echo __('Fast Checkout through Google');?>" />
+	</form>
+</div>
 <?php endif; ?>

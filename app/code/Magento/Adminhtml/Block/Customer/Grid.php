@@ -217,18 +217,18 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
 
         $this->getMassactionBlock()->addItem('delete', array(
              'label'    => __('Delete'),
-             'url'      => $this->getUrl('*/*/massDelete'),
+             'url'      => $this->getUrl('adminhtml/*/massDelete'),
              'confirm'  => __('Are you sure?')
         ));
 
         $this->getMassactionBlock()->addItem('newsletter_subscribe', array(
              'label'    => __('Subscribe to Newsletter'),
-             'url'      => $this->getUrl('*/*/massSubscribe')
+             'url'      => $this->getUrl('adminhtml/*/massSubscribe')
         ));
 
         $this->getMassactionBlock()->addItem('newsletter_unsubscribe', array(
              'label'    => __('Unsubscribe from Newsletter'),
-             'url'      => $this->getUrl('*/*/massUnsubscribe')
+             'url'      => $this->getUrl('adminhtml/*/massUnsubscribe')
         ));
 
         $groups = $this->helper('Magento\Customer\Helper\Data')->getGroups()->toOptionArray();
@@ -236,7 +236,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
         array_unshift($groups, array('label'=> '', 'value'=> ''));
         $this->getMassactionBlock()->addItem('assign_group', array(
              'label'        => __('Assign a Customer Group'),
-             'url'          => $this->getUrl('*/*/massAssignGroup'),
+             'url'          => $this->getUrl('adminhtml/*/massAssignGroup'),
              'additional'   => array(
                 'visibility'    => array(
                      'name'     => 'group',
@@ -253,11 +253,11 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
 
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/grid', array('_current'=> true));
+        return $this->getUrl('adminhtml/*/grid', array('_current'=> true));
     }
 
     public function getRowUrl($row)
     {
-        return $this->getUrl('*/*/edit', array('id'=>$row->getId()));
+        return $this->getUrl('adminhtml/*/edit', array('id'=>$row->getId()));
     }
 }

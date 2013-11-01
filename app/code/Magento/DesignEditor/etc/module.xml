@@ -26,12 +26,10 @@
 <config>
     <module name="Magento_DesignEditor" version="1.0.0.3" active="true">
         <sequence>
-            <module name="Magento_Adminhtml"/>
             <module name="Magento_Page"/>
             <module name="Magento_Theme"/>
         </sequence>
         <depends>
-            <module name="Magento_Adminhtml"/>
             <module name="Magento_Theme"/>
             <module name="Magento_Backend"/>
             <module name="Magento_Core"/>

@@ -175,7 +175,8 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
 
     public function getLinkSamlpeUrl($link)
     {
-        return $this->getUrl('downloadable/download/linkSample', array('link_id' => $link->getId()));
+        $store = $this->getProduct()->getStore();
+        return $store->getUrl('downloadable/download/linkSample', array('link_id' => $link->getId()));
     }
 
     /**

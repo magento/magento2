@@ -33,7 +33,7 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml;
 
-class Export extends \Magento\Adminhtml\Controller\Action
+class Export extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * Initialize layout.
@@ -86,7 +86,7 @@ class Export extends \Magento\Adminhtml\Controller\Action
         } else {
             $this->_getSession()->addError(__('Please correct the data sent.'));
         }
-        return $this->_redirect('*/*/index');
+        return $this->_redirect('adminhtml/*/index');
     }
 
     /**
@@ -134,6 +134,6 @@ class Export extends \Magento\Adminhtml\Controller\Action
         } else {
             $this->_getSession()->addError(__('Please correct the data sent.'));
         }
-        $this->_redirect('*/*/index');
+        $this->_redirect('adminhtml/*/index');
     }
 }

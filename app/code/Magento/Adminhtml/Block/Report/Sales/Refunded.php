@@ -55,6 +55,6 @@ class Refunded extends \Magento\Adminhtml\Block\Widget\Grid\Container
     public function getFilterUrl()
     {
         $this->getRequest()->setParam('filter', null);
-        return $this->getUrl('*/*/refunded', array('_current' => true));
+        return $this->getUrl('adminhtml/*/refunded', array('_current' => true));
     }
 }

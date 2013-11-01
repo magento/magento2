@@ -101,7 +101,7 @@ class Order extends \Magento\Object
                 'form_panel_title'  => __('Order #%1 (%2)',
                     $order->getIncrementId(),
                     $order->getBillingFirstname() . ' ' . $order->getBillingLastname()),
-                'url' => $this->_adminhtmlData->getUrl('*/sales_order/view', array('order_id' => $order->getId())),
+                'url' => $this->_adminhtmlData->getUrl('sales/order/view', array('order_id' => $order->getId())),
             );
         }
 

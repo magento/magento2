@@ -31,7 +31,7 @@ namespace Magento\DesignEditor\Controller\Adminhtml\System\Design;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Editor extends \Magento\Adminhtml\Controller\Action
+class Editor extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * @var \Magento\Theme\Model\Config
@@ -116,7 +116,7 @@ class Editor extends \Magento\Adminhtml\Controller\Action
             if ($launchedTheme->isPhysical()) {
                 $launchedTheme = $launchedTheme->getDomainModel(\Magento\Core\Model\Theme::TYPE_PHYSICAL)
                     ->createVirtualTheme($launchedTheme);
-                $this->_redirect($this->getUrl('*/*/*', array('theme_id' => $launchedTheme->getId())));
+                $this->_redirect($this->getUrl('adminhtml/*/*', array('theme_id' => $launchedTheme->getId())));
                 return;
             }
             $editableTheme = $themeContext->getStagingTheme();
@@ -141,12 +141,12 @@ class Editor extends \Magento\Adminhtml\Controller\Action
         } catch (\Magento\Core\Exception $e) {
             $this->_getSession()->addException($e, $e->getMessage());
             $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
-            $this->_redirect('*/*/');
+            $this->_redirect('adminhtml/*/');
             return;
         } catch (\Exception $e) {
             $this->_getSession()->addException($e, __('Sorry, there was an unknown error.'));
             $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
-            $this->_redirect('*/*/');
+            $this->_redirect('adminhtml/*/');
             return;
         }
     }

@@ -51,7 +51,7 @@ class Denied extends \Magento\Adminhtml\Block\Template
 
     public function hasAvailableResources()
     {
-        $user = $this->authSession->getUser();
+        $user = $this->_authSession->getUser();
         if ($user && $user->getHasAvailableResources()) {
             return true;
         }

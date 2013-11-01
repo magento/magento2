@@ -63,7 +63,7 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Webhook\Block\Adminhtml\Registration\Activate', array($context, $registry));
 
         $urlBuilder = $context->getUrlBuilder();
-        $expectedUrl = $urlBuilder->getUrl('*/*/accept', array('id' => $subscriptionId));
+        $expectedUrl = $urlBuilder->getUrl('adminhtml/*/accept', array('id' => $subscriptionId));
 
         $this->assertEquals($expectedUrl, $block->getAcceptUrl());
         $this->assertEquals('name', $block->getSubscriptionName());

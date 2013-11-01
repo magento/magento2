@@ -106,7 +106,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->_urlBuilder
             ->expects($this->once())
             ->method('getUrl')
-            ->with('*/*/save', array('_current' => true, 'continue' => true))
+            ->with('adminhtml/*/save', array('_current' => true, 'continue' => true))
             ->will($this->returnValue($expectedUrl));
 
         $this->assertEquals($expectedUrl, $this->_block->getSaveAndContinueUrl());

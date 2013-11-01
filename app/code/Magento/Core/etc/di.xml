@@ -156,7 +156,7 @@
     </type>
     <type name="Magento\Core\Model\Layout\Merge">
         <param name="fileSource">
-            <instance type="Magento\Core\Model\Layout\File\Source\Aggregated" />
+            <instance type="Magento\View\Layout\File\Source\Aggregated" />
         </param>
         <param name="cache">
             <instance type="Magento\Core\Model\Cache\Type\Layout" />
@@ -167,57 +167,57 @@
             <instance type="Magento\Core\Model\Cache\Type\Layout" />
         </param>
     </type>
-    <virtualType name="layoutFileSourceBaseFiltered" type="Magento\Core\Model\Layout\File\Source\Decorator\ModuleOutput">
+    <virtualType name="layoutFileSourceBaseFiltered" type="Magento\View\Layout\File\Source\Decorator\ModuleOutput">
         <param name="subject">
-            <instance type="Magento\Core\Model\Layout\File\Source\Base" />
+            <instance type="Magento\View\Layout\File\Source\Base" />
         </param>
     </virtualType>
-    <virtualType name="layoutFileSourceBaseSorted" type="Magento\Core\Model\Layout\File\Source\Decorator\ModuleDependency">
+    <virtualType name="layoutFileSourceBaseSorted" type="Magento\View\Layout\File\Source\Decorator\ModuleDependency">
         <param name="subject">
             <instance type="layoutFileSourceBaseFiltered" />
         </param>
     </virtualType>
-    <virtualType name="layoutFileSourceThemeFiltered" type="Magento\Core\Model\Layout\File\Source\Decorator\ModuleOutput">
+    <virtualType name="layoutFileSourceThemeFiltered" type="Magento\View\Layout\File\Source\Decorator\ModuleOutput">
         <param name="subject">
-            <instance type="Magento\Core\Model\Layout\File\Source\Theme" />
+            <instance type="Magento\View\Layout\File\Source\Theme" />
         </param>
     </virtualType>
-    <virtualType name="layoutFileSourceThemeSorted" type="Magento\Core\Model\Layout\File\Source\Decorator\ModuleDependency">
+    <virtualType name="layoutFileSourceThemeSorted" type="Magento\View\Layout\File\Source\Decorator\ModuleDependency">
         <param name="subject">
             <instance type="layoutFileSourceThemeFiltered" />
         </param>
     </virtualType>
-    <virtualType name="layoutFileSourceOverrideBaseFiltered" type="Magento\Core\Model\Layout\File\Source\Decorator\ModuleOutput">
+    <virtualType name="layoutFileSourceOverrideBaseFiltered" type="Magento\View\Layout\File\Source\Decorator\ModuleOutput">
         <param name="subject">
-            <instance type="Magento\Core\Model\Layout\File\Source\Override\Base" />
+            <instance type="Magento\View\Layout\File\Source\Override\Base" />
         </param>
     </virtualType>
-    <virtualType name="layoutFileSourceOverrideBaseSorted" type="Magento\Core\Model\Layout\File\Source\Decorator\ModuleDependency">
+    <virtualType name="layoutFileSourceOverrideBaseSorted" type="Magento\View\Layout\File\Source\Decorator\ModuleDependency">
         <param name="subject">
             <instance type="layoutFileSourceOverrideBaseFiltered" />
         </param>
     </virtualType>
-    <virtualType name="layoutFileSourceOverrideThemeFiltered" type="Magento\Core\Model\Layout\File\Source\Decorator\ModuleOutput">
+    <virtualType name="layoutFileSourceOverrideThemeFiltered" type="Magento\View\Layout\File\Source\Decorator\ModuleOutput">
         <param name="subject">
-            <instance type="Magento\Core\Model\Layout\File\Source\Override\Theme" />
+            <instance type="Magento\View\Layout\File\Source\Override\Theme" />
         </param>
     </virtualType>
-    <virtualType name="layoutFileSourceOverrideThemeSorted" type="Magento\Core\Model\Layout\File\Source\Decorator\ModuleDependency">
+    <virtualType name="layoutFileSourceOverrideThemeSorted" type="Magento\View\Layout\File\Source\Decorator\ModuleDependency">
         <param name="subject">
             <instance type="layoutFileSourceOverrideThemeFiltered" />
         </param>
     </virtualType>
-    <type name="Magento\Core\Model\Layout\File\Source\Aggregated">
+    <type name="Magento\View\Layout\File\Source\Aggregated">
         <param name="baseFiles">
             <instance type="layoutFileSourceBaseSorted" />
         </param>
         <param name="themeFiles">
             <instance type="layoutFileSourceThemeSorted" />
         </param>
-        <param name="overridingBaseFiles">
+        <param name="overrideBaseFiles">
             <instance type="layoutFileSourceOverrideBaseSorted" />
         </param>
-        <param name="overridingThemeFiles">
+        <param name="overrideThemeFiles">
             <instance type="layoutFileSourceOverrideThemeSorted" />
         </param>
     </type>
@@ -419,12 +419,7 @@
             <instance type="Magento\Core\Model\View\Design\Proxy" />
         </param>
     </type>
-    <type name="Magento\Core\Model\TemplateEngine\Factory">
+    <type name="Magento\View\TemplateEngineFactory">
         <plugin name="debug_hints" type="Magento\Core\Model\TemplateEngine\Plugin\DebugHints" sortOrder="10"/>
-        <param name="engines">
-            <value>
-                <phtml>Magento\Core\Model\TemplateEngine\Php</phtml>
-            </value>
-        </param>
     </type>
 </config>

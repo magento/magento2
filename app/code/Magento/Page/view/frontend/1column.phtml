@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -28,31 +27,34 @@
 /**
  * Template for \Magento\Page\Block\Html
  */
+$bodyCss = $this->getBodyClass() ? $this->getBodyClass() : '';
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->getLang() ?>" lang="<?php echo $this->getLang() ?>">
+<!doctype html>
+<html lang="<?php echo $this->getLang() ?>" class="no-js">
 <head>
-<?php echo $this->getChildHtml('head') ?>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <?php echo $this->getChildHtml('head') ?>
 </head>
-<body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?> data-container="body" data-mage-init="{loaderAjax: {}, loader: {}}">
-<?php echo $this->getChildHtml('after_body_start') ?>
-<div class="wrapper">
-    <?php echo $this->getChildHtml('global_notices') ?>
-    <div class="page">
-        <?php echo $this->getChildHtml('header') ?>
-        <div class="main-container col1-layout">
-            <div class="main">
-                <?php echo $this->getChildHtml('breadcrumbs') ?>
-                <div class="col-main">
-                    <?php echo $this->getChildHtml('global_messages') ?>
-                    <?php echo $this->getChildHtml('content') ?>
-                </div>
+<body class="col1-layout<?php echo $bodyCss ?>" data-container="body" data-mage-init="{loaderAjax: {}, loader: {}}">
+    <?php echo $this->getChildHtml('after_body_start') ?>
+    <div class="page wrapper">
+        <?php echo $this->getChildHtml('global_notices') ?>
+        <?php echo $this->getChildHtml('header-container') ?>
+        <?php echo $this->getChildHtml('page_top') ?>
+        <section class="page main">
+            <?php echo $this->getChildHtml('columns_top') ?>
+            <div class="columns">
+                <?php echo $this->getChildHtml('main') ?>
             </div>
-        </div>
+        </section>
+        <?php echo $this->getChildHtml('page_bottom') ?>
+
         <?php echo $this->getChildHtml('footer') ?>
+
         <?php echo $this->getChildHtml('before_body_end') ?>
     </div>
-</div>
-<?php echo $this->getAbsoluteFooter() ?>
+    <?php echo $this->getAbsoluteFooter() ?>
 </body>
 </html>

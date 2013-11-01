@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     \Magento\Backup
+ * @package     Magento_Backup
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,7 +28,7 @@
  * Interface for work with archives
  *
  * @category    Magento
- * @package     \Magento\Backup
+ * @package     Magento_Backup
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backup;
@@ -49,7 +49,7 @@ interface BackupInterface
      */
     public function rollback();
 
-     /**
+    /**
      * Set Backup Extension
      *
      * @param string $backupExtension
@@ -74,10 +74,10 @@ interface BackupInterface
     public function setTime($time);
 
     /**
-    * Get Backup Type
-    *
-    * @return string
-    */
+     * Get Backup Type
+     *
+     * @return string
+     */
     public function getType();
 
     /**

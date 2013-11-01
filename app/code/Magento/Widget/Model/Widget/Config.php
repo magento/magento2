@@ -116,7 +116,7 @@ class Config
         if (count($skipped) > 0) {
             $params['skip_widgets'] = $this->encodeWidgetsToQuery($skipped);
         }
-        return $this->_backendUrl->getUrl('*/widget/index', $params);
+        return $this->_backendUrl->getUrl('adminhtml/widget/index', $params);
     }
 
     /**

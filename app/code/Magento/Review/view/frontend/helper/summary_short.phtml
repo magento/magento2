@@ -19,20 +19,46 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php $url = $this->getReviewsUrl(); ?>
+<?php $urlForm = $this->getReviewsUrl() . '#review-form'; ?>
+<?php //$url = $this->getProduct()->getProductUrl() . '#info-product_reviews' ?>
+<?php //$urlForm = $this->getProduct()->getProductUrl() . '#info-product_reviews' ?>
 <?php if ($this->getReviewsCount()): ?>
-    <div class="ratings">
-        <?php if ($this->getRatingSummary()):?>
-            <div class="rating-box">
-                <div class="rating" style="width:<?php echo $this->getRatingSummary() ?>%"></div>
-            </div>
-        <?php endif;?>
-        <span class="amount"><a href="#" onclick="var t = opener ? opener.window : window; t.location.href='<?php echo $this->getReviewsUrl() ?>'; return false;"><?php echo __('%1 Review(s)', $this->getReviewsCount()) ?></a></span>
+<?php $rating = $this->getRatingSummary(); ?>
+<div class="product reviews summary short<?php echo !$rating ? ' no-rating' :''?>">
+    <?php if ($rating):?>
+    <div class="rating" title="<?php echo $rating; ?>%">
+        <span style="width:<?php echo $rating; ?>%">
+            <?php echo $rating; ?>
+        </span>
     </div>
+    <?php endif;?>
+    <div class="reviews actions">
+        <a class="action view" href="<?php echo $urlForm ?>"><?php echo $this->getReviewsCount() ?><span><?php echo __('Review(s)') ?></span></a>
+    </div>
+</div>
 <?php elseif ($this->getDisplayIfEmpty()): ?>
-    <p class="no-rating"><a href="<?php echo $this->getReviewsUrl() ?>#review-form"><?php echo __('Be the first to review this product') ?></a></p>
+<div class="product reviews summary short empty">
+    <a class="action add" href="<?php echo $urlForm; ?>">
+        <?php echo __('Be the first to review this product') ?>
+    </a>
+</div>
 <?php endif; ?>
+<script type="text/javascript">
+    (function($) {
+        $(document).ready(function() {
+            $('.reviews.summary .action').click(function(evt){
+                if($('#product_reviews').length > 0) {
+                    evt.preventDefault();
+                    $('[data-sections]').terms({start:'product_reviews'});
+                } else {
+                    return
+                }
+            })
+        });
+    })(jQuery);
+</script>

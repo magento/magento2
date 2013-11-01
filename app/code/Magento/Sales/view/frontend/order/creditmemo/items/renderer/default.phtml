@@ -26,10 +26,11 @@
 ?>
 <?php $_item = $this->getItem() ?>
 <?php $_order = $this->getItem()->getOrderItem()->getOrder() ?>
-<tr class="border" id="order-item-row-<?php echo $_item->getId() ?>">
-    <td><h4 class="product-name"><?php echo $this->escapeHtml($_item->getName()) ?></h4>
+<tr id="order-item-row-<?php echo $_item->getId() ?>">
+    <td class="col name">
+        <strong class="product name"><?php echo $this->escapeHtml($_item->getName()) ?></strong>
         <?php if($_options = $this->getItemOptions()): ?>
-        <dl class="item-options">
+        <dl class="item options">
         <?php foreach ($_options as $_option) : ?>
             <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
             <?php if (!$this->getPrintStatus()): ?>
@@ -37,7 +38,7 @@
                 <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated" data-mage-init="{truncateOptions:[]}"<?php endif; ?>><?php echo $_formatedOptionValue['value'] ?>
                     <?php if (isset($_formatedOptionValue['full_view'])): ?>
                     <div class="truncated_full_value">
-                        <dl class="item-options">
+                        <dl class="item options">
                             <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
                             <dd><?php echo $_formatedOptionValue['full_view'] ?></dd>
                         </dl>
@@ -50,17 +51,31 @@
         <?php endforeach; ?>
         </dl>
         <?php endif; ?>
+
+        <?php /* downloadable */ ?>
+        <?php if ($links = $this->getLinks()): ?>
+            <dl class="item options">
+                <dt><?php echo $this->getLinksTitle() ?></dt>
+                <?php foreach ($links->getPurchasedItems() as $link): ?>
+                    <dd><?php echo $this->escapeHtml($link->getLinkTitle()); ?></dd>
+                <?php endforeach; ?>
+            </dl>
+        <?php endif; ?>
+        <?php /* EOF downloadable */ ?>
+
         <?php $addInfoBlock = $this->getProductAdditionalInformationBlock(); ?>
         <?php if ($addInfoBlock) :?>
             <?php echo $addInfoBlock->setItem($_item->getOrderItem())->toHtml(); ?>
         <?php endif; ?>
         <?php echo $this->escapeHtml($_item->getDescription()) ?>
         <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order_item', $_item->getOrderItem()) && $_item->getGiftMessageId()): ?>
-            <a href="#" id="order-item-gift-message-link-<?php echo $_item->getId() ?>" class="gift-message-link" aria-controls="order-item-gift-message-<?php echo $_item->getId()?>" data-item-id="<?php echo $_item->getId()?>"><?php echo __('Gift Message') ?></a>
+            <a href="#" id="order-item-gift-message-link-<?php echo $_item->getId() ?>" class="action show"
+               aria-controls="order-item-gift-message-<?php echo $_item->getId() ?>"
+               data-item-id="<?php echo $_item->getId() ?>"><?php echo __('Gift Message') ?></a>
         <?php endif; ?>
     </td>
-    <td><?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\String')->splitInjection($this->getSku())) ?></td>
-    <td class="a-right">
+    <td class="col sku"><?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\String')->splitInjection($this->getSku())) ?></td>
+    <td class="col price">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceExclTax()): ?>
             <span class="price-excl-tax">
                 <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices()): ?>
@@ -83,9 +98,7 @@
                     <?php else: ?>
                         <?php echo $this->getOrder()->formatPrice($this->getItem()->getPrice()) ?>
                     <?php endif; ?>
-
                 </span>
-
 
                 <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem())): ?>
 
@@ -141,9 +154,7 @@
                     <?php else: ?>
                         <?php echo $this->getOrder()->formatPrice($_incl-$this->getItem()->getWeeeTaxDisposition()) ?>
                     <?php endif; ?>
-
                 </span>
-
 
                 <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem())): ?>
 
@@ -176,8 +187,8 @@
             </span>
         <?php endif; ?>
     </td>
-    <td class="a-center"><?php echo $_item->getQty()*1 ?></td>
-    <td class="a-right">
+    <td class="col qty"><?php echo $_item->getQty()*1 ?></td>
+    <td class="col subtotal">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceExclTax()): ?>
             <span class="price-excl-tax">
                 <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices()): ?>
@@ -200,9 +211,7 @@
                     <?php else: ?>
                         <?php echo $this->getOrder()->formatPrice($this->getItem()->getRowTotal()) ?>
                     <?php endif; ?>
-
                 </span>
-
 
                 <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem())): ?>
 
@@ -257,9 +266,7 @@
                     <?php else: ?>
                         <?php echo $this->getOrder()->formatPrice($_incl-$this->getItem()->getWeeeTaxRowDisposition()) ?>
                     <?php endif; ?>
-
                 </span>
-
 
                 <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem())): ?>
 
@@ -289,14 +296,11 @@
                         </span>
                     <?php endif; ?>
                 <?php endif; ?>
-
-
-
             </span>
         <?php endif; ?>
     </td>
-    <td class="a-right"><?php echo $_order->formatPrice(-$_item->getDiscountAmount()) ?></td>
-    <td class="last a-right">
+    <td class="col discount"><?php echo $_order->formatPrice(-$_item->getDiscountAmount()) ?></td>
+    <td class="cot total">
         <?php echo $_order->formatPrice($_item->getRowTotal()-$_item->getDiscountAmount()+$_item->getTaxAmount()+$_item->getWeeeTaxAppliedRowAmount()) ?>
     </td>
 </tr>

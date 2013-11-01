@@ -99,7 +99,7 @@ class Currency extends \Magento\Backend\Block\Template
 
     public function getImportFormAction()
     {
-        return $this->getUrl('*/*/fetchRates');
+        return $this->getUrl('adminhtml/*/fetchRates');
     }
 
 }

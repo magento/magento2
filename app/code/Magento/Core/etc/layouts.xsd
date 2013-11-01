@@ -135,7 +135,6 @@
     <xs:simpleType name="handlePageType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="page"/>
-            <xs:enumeration value="fragment"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -229,6 +228,7 @@
         <xs:attribute type="elementOutputType" name="output" use="optional"/>
         <xs:attribute type="xs:string" name="acl" use="optional"/>
         <xs:attribute type="xs:string" name="ifconfig" use="optional"/>
+        <xs:attribute type="xs:string" name="group" use="optional" />
     </xs:complexType>
 
     <xs:complexType name="dataType">

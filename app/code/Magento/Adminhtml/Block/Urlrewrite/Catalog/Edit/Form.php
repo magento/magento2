@@ -113,7 +113,7 @@ class Form extends \Magento\Adminhtml\Block\Urlrewrite\Edit\Form
     {
         // Set form action
         $form->setAction(
-            $this->_adminhtmlData->getUrl('*/*/save', array(
+            $this->_adminhtmlData->getUrl('adminhtml/*/save', array(
                 'id'       => $this->_getModel()->getId(),
                 'product'  => $this->_getProduct()->getId(),
                 'category' => $this->_getCategory()->getId()

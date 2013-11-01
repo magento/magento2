@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -29,21 +28,19 @@
  * @see \Magento\Payment\Block\Info
  */
 ?>
-<p><strong><?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?></strong></p>
-
+<dl class="payment method">
+    <dt class="title"><?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?></dt>
 <?php if ($_specificInfo = $this->getSpecificInformation()):?>
-<table>
-    <tbody>
-    <?php foreach ($_specificInfo as $_label => $_value):?>
-        <tr>
-            <th><strong><?php echo $this->escapeHtml($_label)?>:</strong></th>
-        </tr>
-        <tr>
-            <td><?php echo nl2br(implode($this->getValueAsArray($_value, true), "\n"))?></td>
-        </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
+    <dd class="content">
+        <table class="data table">
+            <?php foreach ($_specificInfo as $_label => $_value):?>
+                <tr>
+                    <th><?php echo $this->escapeHtml($_label)?></th>
+                    <td><?php echo nl2br(implode($this->getValueAsArray($_value, true), "\n"))?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </dd>
 <?php endif;?>
-
+</dl>
 <?php echo $this->getChildHtml()?>

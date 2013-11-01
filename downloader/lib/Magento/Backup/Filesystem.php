@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     \Magento\Backup
+ * @package     Magento_Backup
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,7 +28,7 @@
  * Class to work with filesystem backups
  *
  * @category    Magento
- * @package     \Magento\Backup
+ * @package     Magento_Backup
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backup;
@@ -196,8 +196,7 @@ class Filesystem extends \Magento\Backup\AbstractBackup
             if (!in_array($paths, $this->_ignorePaths)) {
                 $this->_ignorePaths[] = $paths;
             }
-        }
-        else if (is_array($paths)) {
+        } else if (is_array($paths)) {
             foreach ($paths as $path) {
                 $this->addIgnorePaths($path);
             }
@@ -219,7 +218,7 @@ class Filesystem extends \Magento\Backup\AbstractBackup
     /**
      * Set directory where backups saved and add it to ignore paths
      *
-     * @see \Magento\Backup\AbstractBackupBackup::setBackupsDir()
+     * @see \Magento\Backup\AbstractBackup::setBackupsDir()
      * @param string $backupsDir
      * @return \Magento\Backup\Filesystem
      */

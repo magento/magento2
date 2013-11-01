@@ -36,7 +36,6 @@ namespace Magento\Bundle\Block\Catalog\Product\View\Type;
 
 class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 {
-    protected $_optionRenderers = array();
     protected $_options         = null;
 
     /**
@@ -260,17 +259,18 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         return $coreHelper->jsonEncode($config);
     }
 
-    public function addRenderer($type, $block)
-    {
-        $this->_optionRenderers[$type] = $block;
-    }
-
+    /**
+     * Get html for option
+     *
+     * @param \Magento\Bundle\Model\Option $option
+     * @return string
+     */
     public function getOptionHtml($option)
     {
-        if (!isset($this->_optionRenderers[$option->getType()])) {
+        $optionBlock = $this->getChildBlock($option->getType());
+        if (!$optionBlock) {
             return __('There is no defined renderer for "%1" option type.', $option->getType());
         }
-        return $this->getLayout()->createBlock($this->_optionRenderers[$option->getType()])
-            ->setOption($option)->toHtml();
+        return $optionBlock->setOption($option)->toHtml();
     }
 }

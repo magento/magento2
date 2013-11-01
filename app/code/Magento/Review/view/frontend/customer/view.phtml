@@ -19,57 +19,60 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php if($this->getProductData()->getId()): ?>
-<div class="product-review">
-    <div class="page-title">
-        <h1><?php echo __('Review Details') ?></h1>
-    </div>
-    <div class="product-img-box">
-        <a href="<?php echo $this->getProductData()->getProductUrl() ?>" title="<?php echo $this->escapeHtml($this->getProductData()->getName()) ?>" class="product-image"><img src="<?php echo $this->getSmallImageUrl($this->getProductData()); ?>" width="125" height="125" alt="<?php echo $this->escapeHtml($this->getProductData()->getName()) ?>" /></a>
+<?php $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image'); ?>
+<div class="customer review view">
+    <h2 class="product name"><?php echo $this->escapeHtml($this->getProductData()->getName()) ?></h2>
+    <div class="product details">
+        <a class="product photo" href="<?php echo $this->getProductData()->getProductUrl() ?>">
+            <?php /* customer_account_product_review_page */ ?>
+            <?php echo $imageBlock->init($this->getProductData(), 'customer_account_product_review_page')->toHtml() ?>
+        </a>
         <?php if( $this->getRating() && $this->getRating()->getSize()): ?>
-            <p class="label"><?php echo __('Average Customer Rating:') ?></p>
-            <?php echo $this->getReviewsSummaryHtml($this->getProductData()) ?>
+        <p><?php echo __('Average Customer Rating:') ?></p>
+        <?php echo $this->getReviewsSummaryHtml($this->getProductData()) ?>
         <?php endif; ?>
     </div>
-    <div class="product-details">
-        <h2 class="product-name"><?php echo $this->escapeHtml($this->getProductData()->getName()) ?></h2>
+    <div class="review details">
+
         <?php if( $this->getRating() && $this->getRating()->getSize()): ?>
-        <h3><?php echo ($this->isReviewOwner()) ? __('Your Rating:') : __('Rating:'); ?></h3>
-        <table class="ratings-table">
-        <?php foreach ($this->getRating() as $_rating): ?>
-        <?php if($_rating->getPercent()): ?>
-            <tr>
-                <th><?php echo $this->escapeHtml($_rating->getRatingCode()) ?></th>
-                <td>
-                    <div class="rating-box">
-                        <div class="rating" style="width:<?php echo ceil($_rating->getPercent()) ?>%;"></div>
+        <div class="ratings summary">
+            <strong><?php echo ($this->isReviewOwner()) ? __('Your Rating:') : __('Rating:'); ?></strong>
+
+            <?php foreach ($this->getRating() as $_rating): ?>
+            <?php if($_rating->getPercent()): ?>
+                <?php $rating = ceil($_rating->getPercent()) ?>
+                <div class="reviews summary item">
+                    <div class="label"><?php echo $this->escapeHtml($_rating->getRatingCode()) ?></div>
+                    <div class="rating" title="<?php echo $rating; ?>%">
+                        <span style="width:<?php echo $rating; ?>%">
+                            <?php echo $rating; ?>
+                        </span>
                     </div>
-                </td>
-            </tr>
+                </div>
+            <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
         <?php endif; ?>
-        <?php endforeach; ?>
-        </table>
-        <?php endif; ?>
-        <dl>
-            <dt>
-                <?php if ($this->isReviewOwner()): ?>
-                    <?php echo __('Your Review (submitted on %1):', $this->dateFormat($this->getReviewData()->getCreatedAt())) ?>
-                <?php else :?>
-                    <?php echo __('Review (submitted on %1):', $this->dateFormat($this->getReviewData()->getCreatedAt())) ?>
-                <?php endif;?>
-            </dt>
-            <dd>
-                <?php echo nl2br($this->escapeHtml($this->getReviewData()->getDetail())) ?>
-            </dd>
-        </dl>
+
+        <div class="review title"><?php echo $this->escapeHtml($this->getReviewData()->getTitle()) ?></div>
+        <p class="review date">
+            <?php if ($this->isReviewOwner()): ?>
+                <?php echo __('Your Review (submitted on %1):', '<time class="date">' . $this->dateFormat($this->getReviewData()->getCreatedAt()) . '</time>') ?>
+            <?php else :?>
+                <?php echo __('Review (submitted on %1):', '<time class="date">' . $this->dateFormat($this->getReviewData()->getCreatedAt()) . '</time>') ?>
+            <?php endif;?>
+        </p>
+        <div class="review content"><?php echo nl2br($this->escapeHtml($this->getReviewData()->getDetail())) ?></div>
     </div>
-    <div class="buttons-set">
-        <p class="back-link"><a href="<?php echo $this->getBackUrl() ?>"><small>&laquo; </small><?php echo __('Back to My Reviews') ?></a></p>
+</div>
+<div class="actions">
+    <div class="secondary">
+        <a class="action back" href="<?php echo $this->getBackUrl() ?>"><span><?php echo __('Back to My Reviews') ?></span></a>
     </div>
 </div>
 <?php endif; ?>

@@ -33,7 +33,7 @@
  */
 namespace Magento\Bundle\Controller\Adminhtml\Bundle;
 
-class Selection extends \Magento\Adminhtml\Controller\Action
+class Selection extends \Magento\Backend\Controller\Adminhtml\Action
 {
     public function searchAction()
     {

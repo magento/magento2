@@ -184,6 +184,7 @@ class Page extends \Magento\Core\Helper\AbstractHelper
                 $this->_design->setDesignTheme($this->_page->getCustomTheme());
             }
         }
+        $action->getLayout()->getUpdate()->addHandle('default')->addHandle('cms_page_view');
         $action->addPageLayoutHandles(array('id' => $this->_page->getIdentifier()));
 
         $action->addActionLayoutHandles();

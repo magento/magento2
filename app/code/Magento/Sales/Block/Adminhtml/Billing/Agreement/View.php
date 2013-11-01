@@ -112,7 +112,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     protected function _getCancelUrl()
     {
-        return $this->getUrl('*/*/cancel', array('agreement' => $this->_getBillingAgreement()->getAgreementId()));
+        return $this->getUrl('adminhtml/*/cancel', array('agreement' => $this->_getBillingAgreement()->getAgreementId()));
     }
 
     /**

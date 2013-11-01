@@ -64,7 +64,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
             (function ($) {
                 $('.themes-customizations .theme').themeControl({url: '%s'});
             })(jQuery);",
-            $this->getUrl('*/*/quickEdit')
+            $this->getUrl('adminhtml/*/quickEdit')
         );
         return sprintf('<script type="text/javascript">%s</script>', $script);
     }

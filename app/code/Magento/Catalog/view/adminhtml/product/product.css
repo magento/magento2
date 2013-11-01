@@ -24,9 +24,9 @@
  */
 
 /* Action "Back" as cross  */
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back,
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back:hover,
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back:active,
+[class^=" catalog-product-"] .page-actions .action-back,
+[class^=" catalog-product-"] .page-actions .action-back:hover,
+[class^=" catalog-product-"] .page-actions .action-back:active,
 [class^=" adminhtml-newsletter-"] .page-actions .action-back,
 [class^=" adminhtml-newsletter-"] .page-actions .action-back:hover,
 [class^=" adminhtml-newsletter-"] .page-actions .action-back:active {
@@ -36,17 +36,17 @@
     color: #7a7976;;
 }
 
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back:hover,
+[class^=" catalog-product-"] .page-actions .action-back:hover,
 [class^=" adminhtml-newsletter-"] .page-actions .action-back:hover {
     color: #000;
 }
 
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back.mage-error,
+[class^=" catalog-product-"] .page-actions .action-back.mage-error,
 [class^=" adminhtml-newsletter-"] .page-actions .action-back.mage-error {
     color: #b57c72;
 }
 
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back:before,
+[class^=" catalog-product-"] .page-actions .action-back:before,
 [class^=" adminhtml-newsletter-"] .page-actions .action-back:before {
     display: inline-block;
     font-family: 'MUI-Icons';
@@ -58,7 +58,7 @@
     font-size: 16px;
 }
 
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back span,
+[class^=" catalog-product-"] .page-actions .action-back span,
 [class^=" adminhtml-newsletter-"] .page-actions .action-back span {
     display: inline-block;
     overflow: hidden;

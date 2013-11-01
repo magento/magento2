@@ -69,7 +69,7 @@ try {
     $themes->setItemObjectClass(' \Magento\Tools\View\Generator\ThemeLight');
     $themes->addDefaultPattern('*');
 
-    $fallbackFactory = new \Magento\Core\Model\Design\Fallback\Factory($dirs);
+    $fallbackFactory = new \Magento\View\Design\Fallback\Factory($dirs);
     $generator = new \Magento\Tools\View\Generator\CopyRule($filesystem, $themes,
         $fallbackFactory->createViewFileRule());
     $copyRules = $generator->getCopyRules();

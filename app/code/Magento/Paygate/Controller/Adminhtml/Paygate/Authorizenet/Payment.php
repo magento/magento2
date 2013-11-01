@@ -33,7 +33,7 @@
  */
 namespace Magento\Paygate\Controller\Adminhtml\Paygate\Authorizenet;
 
-class Payment extends \Magento\Adminhtml\Controller\Action
+class Payment extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * Session quote

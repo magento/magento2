@@ -19,20 +19,27 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-
-<?php  $_order = $this->getOrder() ?>
-<?php if($this->helper('Magento\Rss\Helper\Order')->isStatusNotificationAllow()): ?>
-    <a href="<?php echo $this->helper('Magento\Rss\Helper\Order')->getStatusHistoryRssUrl($_order) ?>" class="link-rss f-none"><?php echo __('Subscribe to Order Status') ?></a>
-    <span class="separator">|</span>
-<?php endif; ?>
-<?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($_order)) : ?>
-    <a href="<?php echo $this->getReorderUrl($_order) ?>" class="link-reorder"><?php echo __('Reorder') ?></a>
-    <span class="separator">|</span>
-<?php endif ?>
-<a href="<?php echo $this->getPrintUrl($_order) ?>" class="link-print" onclick="this.target='_blank';"><?php echo __('Print Order') ?></a>
-<?php echo $this->getChildHtml(); ?>
+<div class="actions">
+    <?php  $_order = $this->getOrder() ?>
+    <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($_order)) : ?>
+        <a class="action reorder" href="<?php echo $this->getReorderUrl($_order) ?>">
+            <span><?php echo __('Reorder') ?></span>
+        </a>
+    <?php endif ?>
+    <a class="action print"
+       href="<?php echo $this->getPrintUrl($_order) ?>"
+       onclick="this.target='_blank';">
+        <span><?php echo __('Print Order') ?></span>
+    </a>
+    <?php if($this->helper('Magento\Rss\Helper\Order')->isStatusNotificationAllow()): ?>
+        <a href="<?php echo $this->helper('Magento\Rss\Helper\Order')->getStatusHistoryRssUrl($_order) ?>"
+           class="action rss">
+            <span><?php echo __('Subscribe to Order Status') ?></span>
+        </a>
+    <?php endif; ?>
+    <?php echo $this->getChildHtml(); ?>
+</div>

@@ -72,8 +72,8 @@
             var element = $(e.target),
                 parentsDl = element.closest('dl');
             parentsDl.find('dt input:radio').prop('checked', false);
-            parentsDl.find('dd ul').hide().find('[name^="payment["]').prop('disabled', true);
-            element.prop('checked', true).parent().nextUntil('dt').find('ul').show().find('[name^="payment["]').prop('disabled', false);
+            parentsDl.find('.items').hide().find('[name^="payment["]').prop('disabled', true);
+            element.prop('checked', true).parent().nextUntil('dt').find('.items').show().find('[name^="payment["]').prop('disabled', false);
         },
 
         /**

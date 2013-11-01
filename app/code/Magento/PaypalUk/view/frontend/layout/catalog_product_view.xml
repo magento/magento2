@@ -25,8 +25,11 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="product.info.addtocart">
-        <container name="product.info.addtocart.paypaluk.wrapper" label="PayPal Express Checkout (Payflow Edition) Shortcut Wrapper" htmlTag="p" htmlClass="paypal-logo">
-            <block class="Magento\PaypalUk\Block\Express\Shortcut" name="product.info.addtocart.paypaluk" template="Magento_Paypal::express/shortcut.phtml">
+        <container name="product.info.addtocart.paypaluk.wrapper"
+                   label="PayPal Express Checkout (Payflow Edition) Shortcut Wrapper" htmlTag="p"
+                   htmlClass="paypal-logo">
+            <block class="Magento\PaypalUk\Block\Express\Shortcut" name="product.info.addtocart.paypaluk"
+                   template="Magento_Paypal::express/shortcut.phtml">
                 <action method="setIsInCatalogProduct">
                     <argument name="value" xsi:type="string">1</argument>
                 </action>

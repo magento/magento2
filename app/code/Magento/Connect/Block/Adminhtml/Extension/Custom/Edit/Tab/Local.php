@@ -44,7 +44,7 @@ class Local
      */
     public function getTabUrl()
     {
-        return $this->getUrl('*/*/loadtab', array('_current' => true));
+        return $this->getUrl('adminhtml/*/loadtab', array('_current' => true));
     }
 
     /**

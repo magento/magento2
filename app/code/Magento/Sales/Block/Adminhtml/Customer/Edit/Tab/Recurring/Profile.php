@@ -161,6 +161,6 @@ class Profile
      */
     public function getGridUrl()
     {
-        return $this->getUrl('*/sales_recurring_profile/customerGrid', array('_current' => true));
+        return $this->getUrl('sales/recurring_profile/customerGrid', array('_current' => true));
     }
 }

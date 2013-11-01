@@ -127,7 +127,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/grid', array('_current' => true));
+        return $this->getUrl('adminhtml/*/grid', array('_current' => true));
     }
 
     /**
@@ -139,7 +139,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     public function getRowUrl($row)
     {
         if ($this->_editAllow) {
-            return $this->getUrl('*/*/edit', array('id' => $row->getId()));
+            return $this->getUrl('adminhtml/*/edit', array('id' => $row->getId()));
         }
         return null;
     }

@@ -23,10 +23,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Catalog Product Review View" type="page" parent="review_product_list">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Catalog Product Review View" type="page">
     <referenceBlock name="root">
         <action method="setTemplate">
-            <argument name="template" xsi:type="string">2columns-right.phtml</argument>
+            <argument name="template" xsi:type="string">1column.phtml</argument>
         </action>
     </referenceBlock>
     <referenceContainer name="content">

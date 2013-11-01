@@ -181,7 +181,7 @@
             </block>
             <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-catalog-product-js">
                 <arguments>
-                    <argument name="file" xsi:type="string">Magento_Adminhtml::catalog/product.js</argument>
+                    <argument name="file" xsi:type="string">Magento_Catalog::catalog/product.js</argument>
                 </arguments>
             </block>
             <block class="Magento\Page\Block\Html\Head\Script" name="lib-ds-sleight-js">
@@ -291,6 +291,7 @@
         <block class="Magento\Core\Block\Messages" name="messages" as="messages"/>
         <container name="js" as="js" label="JavaScript"/>
         <block class="Magento\Adminhtml\Block\Page\Footer" name="footer" as="footer">
+            <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright"/>
             <action method="setBugreportUrl">
                 <argument name="url" xsi:type="string">http://www.magentocommerce.com/bug-tracking</argument>
             </action>

@@ -34,7 +34,7 @@
 namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost;
 
 class Payment
-    extends \Magento\Adminhtml\Controller\Sales\Order\Create
+    extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**
      * Core registry
@@ -78,11 +78,11 @@ class Payment
     /**
      * Retrieve order create model
      *
-     * @return \Magento\Adminhtml\Model\Sales\Order\Create
+     * @return \Magento\Sales\Model\AdminOrder\Create
      */
     protected function _getOrderCreateModel()
     {
-        return $this->_objectManager->get('Magento\Adminhtml\Model\Sales\Order\Create');
+        return $this->_objectManager->get('Magento\Sales\Model\AdminOrder\Create');
     }
 
     /**
@@ -166,7 +166,9 @@ class Payment
             if ($isError) {
                 $result['success'] = 0;
                 $result['error'] = 1;
-                $result['redirect'] = $this->_objectManager->get('Magento\Backend\Model\Url')->getUrl('*/sales_order_create/');
+                $result['redirect'] = $this->_objectManager
+                    ->get('Magento\Backend\Model\Url')
+                    ->getUrl('sales/order_create/');
             }
 
             $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));

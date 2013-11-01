@@ -28,7 +28,7 @@
  * Recurring profile info block
  *
  * @category   Magento
- * @package    Magento_Adminhtml
+ * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Sales\Block\Adminhtml\Recurring\Profile\View;

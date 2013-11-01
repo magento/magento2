@@ -118,7 +118,7 @@ class View extends \Magento\Core\Block\Template
              * want to show rss feed in the url
              */
             if ($this->IsRssCatalogEnable() && $this->IsTopCategory()) {
-                $title = __('%1 RSS Feed',$this->getCurrentCategory()->getName());
+                $title = __('%1 RSS Feed', $this->getCurrentCategory()->getName());
                 $headBlock->addRss($title, $this->getRssLink());
             }
             $pageMainTitle = $this->getLayout()->getBlock('page.main.title');

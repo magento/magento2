@@ -23,4 +23,4 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout label="Catalog Category (Non-Anchor)" type="page" parent="default"/>
+<layout label="Catalog Category (Non-Anchor)" type="page"/>

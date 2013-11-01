@@ -102,7 +102,6 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Backend\Controller\Router\DefaultRouter::fetchDefault
-     * @covers \Magento\Backend\Controller\Router\DefaultRouter::getDefaultModuleFrontName
      */
     public function testFetchDefault()
     {

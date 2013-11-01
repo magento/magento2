@@ -77,7 +77,7 @@ class Edit extends \Magento\Adminhtml\Block\Urlrewrite\Edit
         if ($this->_getCmsPage()->getId()) {
             $this->_addCmsPageLinkBlock();
             $this->_addEditFormBlock();
-            $this->_updateBackButtonLink($this->_adminhtmlData->getUrl('*/*/edit') . 'cms_page');
+            $this->_updateBackButtonLink($this->_adminhtmlData->getUrl('adminhtml/*/edit') . 'cms_page');
         } else {
             $this->_addUrlRewriteSelectorBlock();
             $this->_addCmsPageGridBlock();
@@ -103,7 +103,7 @@ class Edit extends \Magento\Adminhtml\Block\Urlrewrite\Edit
     private function _addCmsPageLinkBlock()
     {
         $this->addChild('cms_page_link', 'Magento\Adminhtml\Block\Urlrewrite\Link', array(
-            'item_url'  => $this->_adminhtmlData->getUrl('*/*/*') . 'cms_page',
+            'item_url'  => $this->_adminhtmlData->getUrl('adminhtml/*/*') . 'cms_page',
             'item_name' => $this->getCmsPage()->getTitle(),
             'label'     => __('CMS page:')
         ));

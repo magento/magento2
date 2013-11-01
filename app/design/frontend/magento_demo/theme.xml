@@ -27,6 +27,7 @@
 <theme>
     <title>Magento Demo</title>
     <version>2.0.0.0</version>
+    <parent>magento_backup</parent>
     <media>
         <preview_image>media/preview_image.jpg</preview_image>
     </media>

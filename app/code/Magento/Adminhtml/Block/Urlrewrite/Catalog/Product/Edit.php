@@ -99,13 +99,13 @@ class Edit extends \Magento\Adminhtml\Block\Urlrewrite\Edit
                 $this->_addEditFormBlock();
                 $this->_updateBackButtonLink(
                     $this->_adminhtmlData
-                        ->getUrl('*/*/edit', array('product' => $this->_getProduct()->getId())) . 'category'
+                        ->getUrl('adminhtml/*/edit', array('product' => $this->_getProduct()->getId())) . 'category'
                 );
             } else {
                 // categories selector & skip categories button
                 $this->_addCategoriesTreeBlock();
                 $this->_addSkipCategoriesBlock();
-                $this->_updateBackButtonLink($this->_adminhtmlData->getUrl('*/*/edit') . 'product');
+                $this->_updateBackButtonLink($this->_adminhtmlData->getUrl('adminhtml/*/edit') . 'product');
             }
         } else {
             $this->_addUrlRewriteSelectorBlock();
@@ -145,7 +145,7 @@ class Edit extends \Magento\Adminhtml\Block\Urlrewrite\Edit
     private function _addProductLinkBlock()
     {
         $this->addChild('product_link', 'Magento\Adminhtml\Block\Urlrewrite\Link', array(
-            'item_url'  => $this->_adminhtmlData->getUrl('*/*/*') . 'product',
+            'item_url'  => $this->_adminhtmlData->getUrl('adminhtml/*/*') . 'product',
             'item_name' => $this->_getProduct()->getName(),
             'label'     => __('Product:')
         ));
@@ -158,7 +158,7 @@ class Edit extends \Magento\Adminhtml\Block\Urlrewrite\Edit
     {
         $this->addChild('category_link', 'Magento\Adminhtml\Block\Urlrewrite\Link', array(
             'item_url'  => $this->_adminhtmlData
-                ->getUrl('*/*/*', array('product' => $this->_getProduct()->getId())) . 'category',
+                ->getUrl('adminhtml/*/*', array('product' => $this->_getProduct()->getId())) . 'category',
             'item_name' => $this->_getCategory()->getName(),
             'label'     => __('Category:')
         ));
@@ -188,7 +188,8 @@ class Edit extends \Magento\Adminhtml\Block\Urlrewrite\Edit
         $this->addChild('skip_categories', 'Magento\Adminhtml\Block\Widget\Button', array(
             'label' => __('Skip Category Selection'),
             'onclick' => 'window.location = \''
-                . $this->_adminhtmlData->getUrl('*/*/*', array('product' => $this->_getProduct()->getId())) . '\'',
+                . $this->_adminhtmlData->getUrl('adminhtml/*/*', array('product' => $this->_getProduct()->getId()))
+                . '\'',
             'class' => 'save',
             'level' => -1
         ));

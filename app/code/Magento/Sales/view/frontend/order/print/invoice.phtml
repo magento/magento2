@@ -25,57 +25,75 @@
  */
 ?>
 <?php $_order = $this->getOrder() ?>
-<h1><?php echo __('Order #%1', $_order->getRealOrderId()) ?></h1>
-<p class="order-date"><?php echo __('Order Date: %1', $this->formatDate($_order->getCreatedAtStoreDate(), 'long')) ?></p>
+<div class="page title">
+    <h1 class="title"><?php echo __('Order #%1', $_order->getRealOrderId()) ?></h1>
+</div>
+<p class="order date"><?php echo __('Order Date: %1', $this->formatDate($_order->getCreatedAtStoreDate(), 'long')) ?></p>
 <?php $_invoice = $this->getInvoice() ?>
-<?php if($_invoice): ?>
-    <?php $_invoices = array($_invoice); ?>
+<?php if ($_invoice): ?>
+<?php $_invoices = array($_invoice); ?>
 <?php else: ?>
-    <?php $_invoices = $_order->getInvoiceCollection() ?>
+<?php $_invoices = $_order->getInvoiceCollection() ?>
 <?php endif; ?>
 <?php foreach ($_invoices as $_invoice): ?>
-    <h2 class="h2"><?php echo __('Invoice #%1', $_invoice->getIncrementId()) ?></h2>
-    <div class="col2-set">
-        <div class="col-1">
-        <?php if (!$_order->getIsVirtual()): ?>
-            <h3><?php echo __('Shipping Address') ?></h3>
+<div class="order details view">
+    <div class="title">
+        <strong><?php echo __('Invoice #%1', $_invoice->getIncrementId()) ?></strong>
+    </div>
+
+    <div class="block order shipping address">
+    <?php if (!$_order->getIsVirtual()): ?>
+        <div class="title">
+            <strong><?php echo __('Shipping Address') ?></strong>
+        </div>
+        <div class="content">
             <?php $_shipping = $_invoice->getShippingAddress() ?>
             <address><?php echo $_shipping->format('html') ?></address>
         </div>
-        <div class="col-2">
+    </div>
+    <div class="block order billing address">
         <?php endif; ?>
-            <h3><?php echo __('Billing Address') ?></h3>
+        <div class="title">
+            <strong><?php echo __('Billing Address') ?></strong>
+        </div>
+        <div class="content">
             <?php $_billing = $_invoice->getbillingAddress() ?>
             <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
         </div>
-        <?php if (!$_order->getIsVirtual()): ?>
     </div>
-    <div class="col2-set">
-        <div class="col-1">
-            <h3><?php echo __('Shipping Method') ?></h3>
-             <?php echo $this->escapeHtml($_order->getShippingDescription()) ?>
+    <?php if (!$_order->getIsVirtual()): ?>
+
+    <div class="block order shipping method">
+        <div class="title">
+            <strong><?php echo __('Shipping Method') ?></strong>
         </div>
-        <?php endif; ?>
-        <div class="col-2">
-            <h3><?php echo __('Payment Method') ?></h3>
+        <div class="content">
+            <?php echo $this->escapeHtml($_order->getShippingDescription()) ?>
+        </div>
+    </div>
+    <?php endif; ?>
+    <div class="block order payment method">
+        <div class="title">
+            <strong><?php echo __('Payment Method') ?></strong>
+        </div>
+        <div class="content">
             <?php echo $this->getPaymentInfoHtml() ?>
         </div>
     </div>
-    <h3><?php echo __('Items Invoiced') ?></h3>
-    <table class="data-table" id="my-invoice-table-<?php echo $_invoice->getId(); ?>">
-        <col />
-        <col width="1" />
-        <col width="1" />
-        <col width="1" />
-        <col width="1" />
+</div>
+<div class="order details items">
+    <div class="order subtitle caption">
+        <strong><?php echo __('Items Invoiced') ?></strong>
+    </div>
+    <table class="data table order items" id="my-invoice-table-<?php echo $_invoice->getId(); ?>">
         <thead>
-            <tr>
-                <th><?php echo __('Product Name') ?></th>
-                <th><?php echo __('SKU') ?></th>
-                <th class="a-right"><?php echo __('Price') ?></th>
-                <th class="a-center"><span class="nobr"><?php echo __('Qty Invoiced') ?></span></th>
-                <th class="a-right"><?php echo __('Subtotal') ?></th>
-            </tr>
+        <tr>
+            <th class="col name"><?php echo __('Product Name') ?></th>
+            <th class="col sku"><?php echo __('SKU') ?></th>
+            <th class="col price"><?php echo __('Price') ?></th>
+            <th class="col qty"><span class="nobr"><?php echo __('Qty Invoiced') ?></span></th>
+            <th class="col subtotal"><?php echo __('Subtotal') ?></th>
+        </tr>
         </thead>
         <tfoot>
             <?php echo $this->getInvoiceTotalsHtml($_invoice)?>
@@ -89,6 +107,6 @@
         </tbody>
         <?php endforeach; ?>
     </table>
-    <script type="text/javascript">(function($) {$('#my-invoice-table-<?php echo $_invoice->getId(); ?>').decorate('table', {'tbody': ['odd','even'], 'tbody tr': ['first','last']})})(jQuery)</script>
+</div>
 <?php endforeach; ?>
 <script type="text/javascript">window.print();</script>

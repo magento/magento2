@@ -23,17 +23,15 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Email Order Items List" type="page" parent="sales_order_view">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Email Order Items List" type="page">
     <block class="Magento\Sales\Block\Order\Email\Items" name="items" template="email/items.phtml">
         <block class="Magento\Sales\Block\Order\Email\Items\Order\DefaultOrder" as="default" template="email/items/order/default.phtml"/>
         <block class="Magento\Sales\Block\Order\Email\Items\Order\Grouped" as="grouped" template="email/items/order/default.phtml"/>
         <block class="Magento\Sales\Block\Order\Totals" name="order_totals" template="order/totals.phtml">
-            <action method="setLabelProperties">
-                <argument name="value" xsi:type="string">colspan="3" align="right" style="padding:3px 9px"</argument>
-            </action>
-            <action method="setValueProperties">
-                <argument name="value" xsi:type="string">align="right" style="padding:3px 9px"</argument>
-            </action>
+            <arguments>
+                <argument name="label_properties" xsi:type="string">colspan="3" align="right" style="padding:3px 9px"</argument>
+                <argument name="value_properties" xsi:type="string">align="right" style="padding:3px 9px"</argument>
+            </arguments>
             <block class="Magento\Tax\Block\Sales\Order\Tax" name="tax" template="order/tax.phtml">
                 <action method="setIsPlaneMode">
                     <argument name="value" xsi:type="string">1</argument>

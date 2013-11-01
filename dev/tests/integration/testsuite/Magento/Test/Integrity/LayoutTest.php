@@ -43,46 +43,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         self::$_cachedFiles = array(); // Free memory
     }
 
-    public function testHandlesHierarchy()
-    {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
-        $invoker(
-            /**
-             * @param \Magento\View\Design\ThemeInterface $theme
-             */
-            function (\Magento\View\Design\ThemeInterface $theme) {
-                $xml = $this->_composeXml($theme);
-
-                /**
-                 * There could be used an xpath "/layouts/*[@type or @owner or @parent]", but it randomly produced bugs,
-                 * by selecting all nodes in depth. Thus it was refactored into manual nodes extraction.
-                 */
-                $handles = array();
-                foreach ($xml->children() as $handleNode) {
-                    if ($handleNode->getAttribute('type')
-                        || $handleNode->getAttribute('owner')
-                        || $handleNode->getAttribute('parent')
-                    ) {
-                        $handles[] = $handleNode;
-                    }
-                }
-
-                /** @var \Magento\View\Layout\Element $node */
-                $errors = array();
-                foreach ($handles as $node) {
-                    $this->_collectHierarchyErrors($node, $xml, $errors);
-                }
-
-                if ($errors) {
-                    $this->fail("There are errors while checking the page type and fragment types hierarchy at:\n"
-                        . var_export($errors, 1)
-                    );
-                }
-            },
-            $this->areasAndThemesDataProvider()
-        );
-    }
-
     /**
      * Composes full layout xml for designated parameters
      *
@@ -107,8 +67,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     protected function _collectHierarchyErrors($node, $xml, &$errors)
     {
         $name = $node->getName();
-        $refName = $node->getAttribute('type') == \Magento\Core\Model\Layout\Merge::TYPE_FRAGMENT
-            ? $node->getAttribute('owner') : $node->getAttribute('parent');
+        $refName = $node->getAttribute('type') == $node->getAttribute('parent');
         if ($refName) {
             $refNode = $xml->xpath("/layouts/{$refName}");
             if (!$refNode) {
@@ -116,8 +75,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                     $this->markTestIncomplete('MAGETWO-9182');
                 }
                 $errors[$name][] = "Node '{$refName}', referenced in hierarchy, does not exist";
-            } elseif ($refNode[0]->getAttribute('type') == \Magento\Core\Model\Layout\Merge::TYPE_FRAGMENT) {
-                $errors[$name][] = "Page fragment type '{$refName}', cannot be an ancestor in a hierarchy";
             }
         }
     }
@@ -160,8 +117,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                 $xml = $this->_composeXml($theme);
 
                 $xpath = '/layouts/*['
-                    . '@type="' . \Magento\Core\Model\Layout\Merge::TYPE_PAGE . '"'
-                    . ' or @type="' . \Magento\Core\Model\Layout\Merge::TYPE_FRAGMENT . '"]';
+                    . '@type="' . \Magento\Core\Model\Layout\Merge::TYPE_PAGE  . '"]';
                 $handles = $xml->xpath($xpath) ?: array();
 
                 /** @var \Magento\View\Layout\Element $node */
@@ -190,7 +146,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             /**
              * Check whether page types are declared only in layout update files allowed for it - base ones
              */
-            function (\Magento\Core\Model\Layout\File $layout) {
+            function (\Magento\View\Layout\File $layout) {
                 $content = simplexml_load_file($layout->getFilename());
                 $this->assertEmpty(
                     $content->xpath(\Magento\Core\Model\Layout\Merge::XPATH_HANDLE_DECLARATION),
@@ -204,21 +160,21 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     /**
      * Get theme layout updates
      *
-     * @return \Magento\Core\Model\Layout\File[]
+     * @return \Magento\View\Layout\File[]
      */
     public function pageTypesDeclarationDataProvider()
     {
-        /** @var $themeUpdates \Magento\Core\Model\Layout\File\Source\Theme */
+        /** @var $themeUpdates \Magento\View\Layout\File\Source\Theme */
         $themeUpdates = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Layout\File\Source\Theme');
-        /** @var $themeUpdatesOverride \Magento\Core\Model\Layout\File\Source\Override\Theme */
+            ->create('Magento\View\Layout\File\Source\Theme');
+        /** @var $themeUpdatesOverride \Magento\View\Layout\File\Source\Override\Theme */
         $themeUpdatesOverride = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Layout\File\Source\Override\Theme');
+            ->create('Magento\View\Layout\File\Source\Override\Theme');
         /** @var $themeCollection \Magento\Core\Model\Theme\Collection */
         $themeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Core\Model\Theme\Collection');
         $themeCollection->addDefaultPattern('*');
-        /** @var $themeLayouts \Magento\Core\Model\Layout\File[] */
+        /** @var $themeLayouts \Magento\View\Layout\File[] */
         $themeLayouts = array();
         /** @var $theme \Magento\View\Design\ThemeInterface */
         foreach ($themeCollection as $theme) {
@@ -239,13 +195,13 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             /**
              * Check, that for an overriding file ($themeFile) in a theme ($theme), there is a corresponding base file
              *
-             * @param \Magento\Core\Model\Layout\File $themeFile
+             * @param \Magento\View\Layout\File $themeFile
              * @param \Magento\View\Design\ThemeInterface $theme
              */
             function ($themeFile, $theme) {
                 $baseFiles = self::_getCachedFiles(
                     $theme->getArea(),
-                    'Magento\Core\Model\Layout\File\Source\Base',
+                    'Magento\View\Layout\File\Source\Base',
                     $theme
                 );
                 $fileKey = $themeFile->getModule() . '/' . $themeFile->getName();
@@ -265,7 +221,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
              * Check, that for an ancestor-overriding file ($themeFile) in a theme ($theme),
              * there is a corresponding file in that ancestor theme
              *
-             * @param \Magento\Core\Model\Layout\File $themeFile
+             * @param \Magento\View\Layout\File $themeFile
              * @param \Magento\View\Design\ThemeInterface $theme
              */
             function ($themeFile, $theme) {
@@ -288,7 +244,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
                 // Search for the overridden file in the ancestor theme
                 $ancestorFiles = self::_getCachedFiles($ancestorTheme->getFullPath(),
-                    'Magento\Core\Model\Layout\File\Source\Theme', $ancestorTheme);
+                    'Magento\View\Layout\File\Source\Theme', $ancestorTheme);
                 $fileKey = $themeFile->getModule() . '/' . $themeFile->getName();
                 $this->assertArrayHasKey($fileKey, $ancestorFiles,
                     sprintf("Could not find original file in '%s' theme, overridden by file '%s'.",
@@ -305,12 +261,12 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      * @param string $cacheKey
      * @param string $sourceClass
      * @param \Magento\View\Design\ThemeInterface $theme
-     * @return \Magento\Core\Model\Layout\File[]
+     * @return \Magento\View\Layout\File[]
      */
     protected static function _getCachedFiles($cacheKey, $sourceClass, \Magento\View\Design\ThemeInterface $theme)
     {
         if (!isset(self::$_cachedFiles[$cacheKey])) {
-            /* @var $fileList \Magento\Core\Model\Layout\File[] */
+            /* @var $fileList \Magento\View\Layout\File[] */
             $fileList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                 ->create($sourceClass)->getFiles($theme);
             $files = array();
@@ -329,7 +285,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     {
         return $this->_retrieveFilesForEveryTheme(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->create('Magento\Core\Model\Layout\File\Source\Override\Base')
+                ->create('Magento\View\Layout\File\Source\Override\Base')
         );
     }
 
@@ -340,7 +296,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     {
         return $this->_retrieveFilesForEveryTheme(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->create('Magento\Core\Model\Layout\File\Source\Override\Theme')
+                ->create('Magento\View\Layout\File\Source\Override\Theme')
         );
     }
 
@@ -348,10 +304,10 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      * Scan all the themes in the system, for each theme retrieve list of files via $filesRetriever,
      * and return them as array of pairs [file, theme].
      *
-     * @param \Magento\Core\Model\Layout\File\SourceInterface $filesRetriever
+     * @param \Magento\View\Layout\File\SourceInterface $filesRetriever
      * @return array
      */
-    protected function _retrieveFilesForEveryTheme(\Magento\Core\Model\Layout\File\SourceInterface $filesRetriever)
+    protected function _retrieveFilesForEveryTheme(\Magento\View\Layout\File\SourceInterface $filesRetriever)
     {
         $result = array();
         /** @var $themeCollection \Magento\Core\Model\Theme\Collection */

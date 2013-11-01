@@ -69,7 +69,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $url = 'example.url.com/id/333';
         $this->_urlBuilder->expects($this->once())
             ->method('getUrl')
-            ->with('*/*/register', array('id' => 333))
+            ->with('adminhtml/*/register', array('id' => 333))
             ->will($this->returnValue($url));
 
         $this->assertEquals($url, $this->_block->getSubmitUrl());

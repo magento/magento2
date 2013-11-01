@@ -205,7 +205,11 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     {
         foreach (self::$_classes as $row) {
             list($class, , $replacement) = $row;
-            $this->_assertNotRegExp('/[^a-z\d_;\\\\]' . preg_quote($class, '/') . '[^a-z\d_;\\\\]/iS', $content,
+            /* avoid collision between obsolete class name and valid namespace */
+            $content = preg_replace('/namespace[^;]+;/', '', $content);
+            $this->_assertNotRegExp(
+                '/[^a-z\d_]' . preg_quote($class, '/') . '[^a-z\d_\\\\]/iS',
+                $content,
                 $this->_suggestReplacement(sprintf("Class '%s' is obsolete.", $class), $replacement)
             );
         }
@@ -504,13 +508,13 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
         $invoker(
             /**
-             * Check elimination of "Mage" class usages
+             * Check absence of obsolete Mage class usages
              *
              * @param string $file
              */
             function ($file) {
                 $this->_assertNotRegExp(
-                    '/[^a-z\d_]Mage::[^\s]+?\(/i',
+                    '/[^a-z\d_]Mage\s*::/i',
                     file_get_contents($file),
                     '"Mage" class methods are obsolete'
                 );
@@ -524,11 +528,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      */
     public function mageObsoleteDataProvider()
     {
-        $blackList = include(
-            __DIR__ . DIRECTORY_SEPARATOR .'_files'
-            . DIRECTORY_SEPARATOR . 'blacklist'
-            . DIRECTORY_SEPARATOR . 'obsolete_mage.php'
-        );
+        $blackList = include(__DIR__ . '/_files/blacklist/obsolete_mage.php');
         $ignored = array();
         $appPath = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
         foreach ($blackList as $file) {

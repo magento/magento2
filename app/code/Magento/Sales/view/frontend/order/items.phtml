@@ -19,26 +19,20 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php $_order = $this->getOrder() ?>
-<?php $_giftMessage = ''; ?>
-<table class="data-table" id="my-orders-table" summary="<?php echo __('Items Ordered') ?>">
-    <col />
-    <col width="1" />
-    <col width="1" />
-    <col width="1" />
-    <col width="1" />
+<?php $_giftMessage; ?>
+<table class="data table order items" id="my-orders-table" summary="<?php echo __('Items Ordered') ?>">
     <thead>
         <tr>
-            <th><?php echo __('Product Name') ?></th>
-            <th><?php echo __('SKU') ?></th>
-            <th class="a-right"><?php echo __('Price') ?></th>
-            <th class="a-center"><?php echo __('Qty') ?></th>
-            <th class="a-right"><?php echo __('Subtotal') ?></th>
+            <th class="col name"><?php echo __('Product Name') ?></th>
+            <th class="col sku"><?php echo __('SKU') ?></th>
+            <th class="col price"><?php echo __('Price') ?></th>
+            <th class="col qty"><?php echo __('Qty') ?></th>
+            <th class="col subtotal"><?php echo __('Subtotal') ?></th>
         </tr>
     </thead>
     <tfoot>
@@ -47,31 +41,39 @@
         <?php $_items = $_order->getItemsCollection(); ?>
         <?php $_index = 0; ?>
         <?php $_count = $_items->count(); ?>
+        <?php $_giftMessage = ''?>
         <?php foreach ($_items as $_item): ?>
         <?php if ($_item->getParentItem()) continue; ?>
         <tbody>
             <?php echo $this->getItemHtml($_item) ?>
             <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order_item', $_item) && $_item->getGiftMessageId()): ?>
-            <tr class="border<?php echo ($_index++ > $_count ?' last':'') ?>" id="order-item-gift-message-<?php echo $_item->getId() ?>" role="region" aria-expanded="false" tabindex="-1" style="display:none;">
+            <tr id="order-item-gift-message-<?php echo $_item->getId() ?>" role="region" aria-expanded="false" tabindex="-1" style="display:none;">
                 <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessageForEntity($_item); ?>
-                <td class="gift-message-row" colspan="7">
-                    <a href="#" title="<?php echo __('Close') ?>" aria-controls="order-item-gift-message-<?php echo $_item->getId()?>" data-item-id="<?php echo $_item->getId()?>" class="btn-close"><?php echo __('Close') ?></a>
-                    <dl class="gift-message">
-                        <dt><strong><?php echo __('From:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getSender()) ?></dt>
-                        <dt><strong><?php echo __('To:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getRecipient()) ?></dt>
-                        <dd><?php echo $this->helper('Magento\GiftMessage\Helper\Message')->getEscapedGiftMessage($_item) ?></dd>
-                    </dl>
+                <td class="col message" colspan="7">
+                    <div class="gift message details">
+                        <a href="#"
+                           title="<?php echo __('Close') ?>"
+                           aria-controls="order-item-gift-message-<?php echo $_item->getId()?>"
+                           data-item-id="<?php echo $_item->getId()?>"
+                           class="action close">
+                            <?php echo __('Close') ?>
+                        </a>
+                        <dl class="gift message">
+                            <dt class="gift sender"><strong class="label"><?php echo __('From:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getSender()) ?></dt>
+                            <dt class="gift recipient"><strong class="label"><?php echo __('To:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getRecipient()) ?></dt>
+                            <dd class="message text"><?php echo $this->helper('Magento\GiftMessage\Helper\Message')->getEscapedGiftMessage($_item) ?></dd>
+                        </dl>
+                    </div>
                 </td>
             </tr>
             <?php endif ?>
         </tbody>
         <?php endforeach; ?>
 </table>
-<script type="text/javascript">jQuery('#my-orders-table').decorate('table', {'tbody': ['odd','even'], 'tbody tr': ['first','last']})</script>
 <?php if ($_giftMessage): ?>
     <script type="text/javascript">
         head.js("<?php echo $this->getViewFileUrl('Magento_Sales::gift-message.js')?>", function() {
-            jQuery('a.gift-message-link').add('a.btn-close').giftMessage();
+            jQuery('a.action.show').add('a.action.close').giftMessage();
         });
     </script>
-<?php endif ?>
+<?php endif; ?>

@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     \Magento\Archive
+ * @package     Magento_Archive
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,7 +28,7 @@
 * Helper class that simplifies bz2 files stream reading and writing
 *
 * @category    Magento
-* @package     \Magento\Archive
+* @package     Magento_Archive
 * @author      Magento Core Team <core@magentocommerce.com>
 */
 namespace Magento\Archive\Helper\File;

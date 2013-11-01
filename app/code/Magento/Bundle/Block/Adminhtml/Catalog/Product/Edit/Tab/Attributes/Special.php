@@ -33,7 +33,7 @@
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes;
 
-class Special extends \Magento\Adminhtml\Block\Catalog\Form\Renderer\Fieldset\Element
+class Special extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
 {
     public function getElementHtml()
     {

@@ -69,7 +69,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
         $this->_urlBuilder
             ->expects($this->once())
             ->method('getUrl')
-            ->with('*/*/edit', array())
+            ->with('adminhtml/*/edit', array())
             ->will($this->returnValue($expectedUrl));
 
         $this->assertEquals($expectedUrl, $this->_block->getCreateUrl());

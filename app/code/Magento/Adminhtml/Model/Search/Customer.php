@@ -89,7 +89,7 @@ class Customer extends \Magento\Object
                 'type'          => __('Customer'),
                 'name'          => $customer->getName(),
                 'description'   => $customer->getCompany(),
-                'url' => $this->_adminhtmlData->getUrl('*/customer/edit', array('id' => $customer->getId())),
+                'url' => $this->_adminhtmlData->getUrl('adminhtml/customer/edit', array('id' => $customer->getId())),
             );
         }
 

@@ -160,7 +160,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         if ($this->getPackageShippingBlock()) {
             $packaging = $this->getPackageShippingBlock();
         } else {
-            $packaging = $this->_layout->getBlockSingleton('Magento\Adminhtml\Block\Sales\Order\Shipment\Packaging');
+            $packaging = $this->_layout->getBlockSingleton('Magento\Sales\Block\Adminhtml\Order\Shipment\Packaging');
         }
         $packages = $packaging->getPackages();
 

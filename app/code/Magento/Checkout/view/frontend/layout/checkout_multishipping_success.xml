@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Multishipping Checkout Success" type="page" parent="checkout_multishipping">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Multishipping Checkout Success" type="page">
     <update handle="checkout_multishipping"/>
     <referenceContainer name="content">
         <block class="Magento\Checkout\Block\Multishipping\Success" name="checkout_success" template="multishipping/success.phtml"/>

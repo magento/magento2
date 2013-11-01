@@ -199,7 +199,7 @@ class Service extends \Magento\Object
             'isIframe' => true
         );
         if ($this->_storeManager->getStore()->isAdmin()) {
-            return $this->_backendUrl->getUrl('*/centinel_index/' . $suffix, $params);
+            return $this->_backendUrl->getUrl('adminhtml/centinel_index/' . $suffix, $params);
         } else {
             return $this->_frontendUrl->getUrl('centinel/index/' . $suffix, $params);
         }

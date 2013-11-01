@@ -146,7 +146,7 @@ class Review extends \Magento\Core\Block\AbstractBlock
         $store = $this->_storeManager->getStore($row['store_id']);
         $productUrl = $store->getUrl('catalog/product/view', array('id' => $row['entity_id']));
         $reviewUrl = $this->_adminhtmlData->getUrl(
-            'adminhtml/catalog_product_review/edit/',
+            'catalog/product_review/edit/',
             array('id' => $row['review_id'], '_secure' => true, '_nosecret' => true)
         );
         $storeName = $store->getName();

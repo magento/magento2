@@ -157,7 +157,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         );
         $this->_helper->expects($this->once())
             ->method('getUrl')
-            ->with($this->equalTo('*/customer'), $this->equalTo(array()))
+            ->with($this->equalTo('adminhtml/customer'), $this->equalTo(array()))
             ->will($this->returnValue($redirectLink));
 
         $this->_response->expects($this->once())->method('setRedirect')->with($this->equalTo($redirectLink));
@@ -187,7 +187,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
         $this->_helper->expects($this->any())
             ->method('getUrl')
-            ->with($this->equalTo('*/customer'), $this->equalTo(array()))
+            ->with($this->equalTo('adminhtml/customer'), $this->equalTo(array()))
             ->will($this->returnValue($redirectLink));
 
         $this->_response->expects($this->once())->method('setRedirect')->with($this->equalTo($redirectLink));

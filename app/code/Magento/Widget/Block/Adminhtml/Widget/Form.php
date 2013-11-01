@@ -85,7 +85,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $form->setUseContainer(true);
         $form->setId('widget_options_form');
         $form->setMethod('post');
-        $form->setAction($this->getUrl('*/*/buildWidget'));
+        $form->setAction($this->getUrl('adminhtml/*/buildWidget'));
         $this->setForm($form);
     }
 

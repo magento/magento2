@@ -293,7 +293,8 @@ class Action extends \Magento\App\Action\AbstractAction
         foreach ($parameters as $key => $value) {
             $pageHandles[] = $handle . '_' . $key . '_' . $value;
         }
-        return $this->getLayout()->getUpdate()->addPageHandles(array_reverse($pageHandles));
+        // Do not sort array going into add page handles. Ensure default layout handle is added first.
+        return $this->getLayout()->getUpdate()->addPageHandles($pageHandles);
     }
 
     /**

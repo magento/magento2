@@ -25,10 +25,10 @@
  */
 namespace Magento\Core\Model\TemplateEngine\Decorator;
 
-class DebugHints implements \Magento\Core\Model\TemplateEngine\EngineInterface
+class DebugHints implements \Magento\View\TemplateEngineInterface
 {
     /**
-     * @var \Magento\Core\Model\TemplateEngine\EngineInterface
+     * @var \Magento\View\TemplateEngineInterface
      */
     private $_subject;
 
@@ -38,11 +38,11 @@ class DebugHints implements \Magento\Core\Model\TemplateEngine\EngineInterface
     private $_showBlockHints;
 
     /**
-     * @param \Magento\Core\Model\TemplateEngine\EngineInterface $subject
+     * @param \Magento\View\TemplateEngineInterface $subject
      * @param bool $showBlockHints Whether to include block into the debugging information or not
      */
     public function __construct(
-        \Magento\Core\Model\TemplateEngine\EngineInterface $subject,
+        \Magento\View\TemplateEngineInterface $subject,
         $showBlockHints
     ) {
         $this->_subject = $subject;

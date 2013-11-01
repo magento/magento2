@@ -26,9 +26,9 @@
 -------------------------------------- */
 
 /* Action "Back" as cross  */
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back,
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back:hover,
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back:active,
+[class^=" catalog-product-"] .page-actions .action-back,
+[class^=" catalog-product-"] .page-actions .action-back:hover,
+[class^=" catalog-product-"] .page-actions .action-back:active,
 [class^=" adminhtml-newsletter-"] .page-actions .action-back,
 [class^=" adminhtml-newsletter-"] .page-actions .action-back:hover,
 [class^=" adminhtml-newsletter-"] .page-actions .action-back:active {
@@ -38,33 +38,33 @@
     color: #7a7976;
 }
 
-.eq-ie8 [class^=" adminhtml-catalog-product-"] .page-actions .action-back,
-.eq-ie8 [class^=" adminhtml-catalog-product-"] .page-actions .action-back:hover,
-.eq-ie8 [class^=" adminhtml-catalog-product-"] .page-actions .action-back:active,
+.eq-ie8 [class^=" catalog-product-"] .page-actions .action-back,
+.eq-ie8 [class^=" catalog-product-"] .page-actions .action-back:hover,
+.eq-ie8 [class^=" catalog-product-"] .page-actions .action-back:active,
 .eq-ie8 [class^=" adminhtml-newsletter-"] .page-actions .action-back,
 .eq-ie8 [class^=" adminhtml-newsletter-"] .page-actions .action-back:hover,
 .eq-ie8 [class^=" adminhtml-newsletter-"] .page-actions .action-back:active,
-.adminhtml-sales-order-create-index .page-actions-inner .cancel,
-.adminhtml-sales-order-create-index .page-actions-inner .cancel:hover,
-.adminhtml-sales-order-create-index .page-actions-inner .cancel:active {
+.sales-order-create-index .page-actions-inner .cancel,
+.sales-order-create-index .page-actions-inner .cancel:hover,
+.sales-order-create-index .page-actions-inner .cancel:active {
     filter: none;
     border: 0;
 }
 
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back:hover,
+[class^=" catalog-product-"] .page-actions .action-back:hover,
 [class^=" adminhtml-newsletter-"] .page-actions .action-back:hover,
-.adminhtml-sales-order-create-index .page-actions-inner .cancel:hover {
+.sales-order-create-index .page-actions-inner .cancel:hover {
     color: #000;
 }
 
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back.mage-error,
+[class^=" catalog-product-"] .page-actions .action-back.mage-error,
 [class^=" adminhtml-newsletter-"] .page-actions .action-back.mage-error {
     color: #b57c72;
 }
 
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back:before,
+[class^=" catalog-product-"] .page-actions .action-back:before,
 [class^=" adminhtml-newsletter-"] .page-actions .action-back:before,
-.adminhtml-sales-order-create-index .page-actions-inner .cancel:before {
+.sales-order-create-index .page-actions-inner .cancel:before {
     display: inline-block;
     font-family: 'MUI-Icons';
     font-style: normal;
@@ -75,9 +75,9 @@
     font-size: 16px;
 }
 
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back span,
+[class^=" catalog-product-"] .page-actions .action-back span,
 [class^=" adminhtml-newsletter-"] .page-actions .action-back span,
-.adminhtml-sales-order-create-index .page-actions-inner .cancel span {
+.sales-order-create-index .page-actions-inner .cancel span {
     display: inline-block;
     overflow: hidden;
     text-indent: -999em;
@@ -1376,11 +1376,11 @@
 
 .order-billing-address,
 .order-billing-method,
-[class^=" adminhtml-sales-order-"] .order-history,
-[class^=" adminhtml-sales-order-"] .order-comments-history,
-[class^=" adminhtml-sales-order-"] .order-information,
-[class^=" adminhtml-sales-order-"] .order-billing-address,
-[class^=" adminhtml-sales-order-"] .order-payment-method,
+[class^=" sales-order-"] .order-history,
+[class^=" sales-order-"] .order-comments-history,
+[class^=" sales-order-"] .order-information,
+[class^=" sales-order-"] .order-billing-address,
+[class^=" sales-order-"] .order-payment-method,
 [class^=" adminhtml-rma-"] .order-comments-history,
 [class^=" adminhtml-rma-"] .order-shipping-address,
 [class^=" adminhtml-rma-"] .rma-request-details {
@@ -1390,11 +1390,11 @@
 
 .order-shipping-address,
 .order-shipping-method,
-[class^=" adminhtml-sales-order-"] .order-totals,
-[class^=" adminhtml-sales-order-"] .order-account-information,
-[class^=" adminhtml-sales-order-"] .order-shipping-address,
-[class^=" adminhtml-sales-order-"] .order-payment-method-virtual,
-[class^=" adminhtml-sales-order-"] .order-shipping-method,
+[class^=" sales-order-"] .order-totals,
+[class^=" sales-order-"] .order-account-information,
+[class^=" sales-order-"] .order-shipping-address,
+[class^=" sales-order-"] .order-payment-method-virtual,
+[class^=" sales-order-"] .order-shipping-method,
 [class^=" adminhtml-rma-"] .rma-confirmation,
 [class^=" adminhtml-rma-"] .order-shipping-method,
 [class^=" adminhtml-rma-"] .order-return-address {
@@ -1407,7 +1407,7 @@
     width: auto;
 }
 
-[class^=" adminhtml-sales-"] .order-information .fieldset-wrapper > .fieldset-wrapper-title .title {
+[class^=" sales-"] .order-information .fieldset-wrapper > .fieldset-wrapper-title .title {
     width: 100%;
 }
 
@@ -1506,78 +1506,78 @@
     width: 100%;
 }
 
-[class^=" adminhtml-sales-order-"] .order-billing-address .actions,
-[class^=" adminhtml-sales-order-"] .order-shipping-address .actions {
+[class^=" sales-order-"] .order-billing-address .actions,
+[class^=" sales-order-"] .order-shipping-address .actions {
     margin: 17px 0;
 }
 
-[class^=" adminhtml-sales-order-"] .order-billing-address .control + label,
-[class^=" adminhtml-sales-order-"] .order-shipping-address .control + label {
+[class^=" sales-order-"] .order-billing-address .control + label,
+[class^=" sales-order-"] .order-shipping-address .control + label {
     margin: 17px 0 0;
 }
 
-.adminhtml-sales-order-create-index .page-actions-inner .cancel,
-.adminhtml-sales-order-create-index .page-actions-inner .cancel:hover,
-.adminhtml-sales-order-create-index .page-actions-inner .cancel:active {
+.sales-order-create-index .page-actions-inner .cancel,
+.sales-order-create-index .page-actions-inner .cancel:hover,
+.sales-order-create-index .page-actions-inner .cancel:active {
     float: right;
     margin: 0 0 0 12px;
     padding: 3px 0 3px 6px;
 }
 
-.adminhtml-sales-order-create-index #order-message ul.messages > li,
-.adminhtml-sales-order-edit-index #order-message  ul.messages > li {
+.sales-order-create-index #order-message ul.messages > li,
+.sales-order-edit-index #order-message  ul.messages > li {
     margin: 0 0 60px;
 }
 
-.adminhtml-sales-order-create-index thead .col-entity_id,
-.adminhtml-sales-order-create-index .col-entity_id,
-.adminhtml-sales-order-create-index .col-qty {
+.sales-order-create-index thead .col-entity_id,
+.sales-order-create-index .col-entity_id,
+.sales-order-create-index .col-qty {
     width: 50px;
 }
 
-.adminhtml-sales-order-create-index .col-in_products {
+.sales-order-create-index .col-in_products {
     text-align: center;
 }
 
-.adminhtml-sales-order-create-index .col-sku,
-.adminhtml-sales-order-create-index .col-remove {
+.sales-order-create-index .col-sku,
+.sales-order-create-index .col-remove {
     width: 120px;
 }
 
-.adminhtml-sales-order-create-index .col-price {
+.sales-order-create-index .col-price {
     width: 70px;
 }
 
-.adminhtml-sales-order-create-index .order-search-items .col-name {
+.sales-order-create-index .order-search-items .col-name {
     width: 50%;
 }
 
-.adminhtml-sales-order-create-index .order-items.fieldset-wrapper .fieldset-wrapper-title,
-.adminhtml-sales-order-create-index .order-search-items.fieldset-wrapper .fieldset-wrapper-title,
-.adminhtml-sales-order-create-index .order-additional-area.fieldset-wrapper .fieldset-wrapper-title,
-.adminhtml-sales-order-create-index .order-errors .fieldset-wrapper-title {
+.sales-order-create-index .order-items.fieldset-wrapper .fieldset-wrapper-title,
+.sales-order-create-index .order-search-items.fieldset-wrapper .fieldset-wrapper-title,
+.sales-order-create-index .order-additional-area.fieldset-wrapper .fieldset-wrapper-title,
+.sales-order-create-index .order-errors .fieldset-wrapper-title {
     border-bottom: 0;
     margin: 0;
 }
 
-.adminhtml-sales-order-create-index #order-data .fieldset-wrapper-title .actions .action-add {
+.sales-order-create-index #order-data .fieldset-wrapper-title .actions .action-add {
     margin-left: 0;
     margin-right: 20px;
 }
 
-.adminhtml-sales-order-create-index .order-items.fieldset-wrapper .title,
-.adminhtml-sales-order-create-index .order-additional-area.fieldset-wrapper .title,
-.adminhtml-sales-order-create-index .order-search-items.fieldset-wrapper .title,
-.adminhtml-sales-order-create-index .order-errors .title {
+.sales-order-create-index .order-items.fieldset-wrapper .title,
+.sales-order-create-index .order-additional-area.fieldset-wrapper .title,
+.sales-order-create-index .order-search-items.fieldset-wrapper .title,
+.sales-order-create-index .order-errors .title {
     border-bottom: 1px solid #ededed;
     float: none;
     margin: 0 0 18px;
     width: 100%;
 }
 
-.adminhtml-sales-order-create-index .order-items.fieldset-wrapper .actions,
-.adminhtml-sales-order-create-index .order-search-items.fieldset-wrapper .actions,
-.adminhtml-sales-order-create-index #order-errors .actions {
+.sales-order-create-index .order-items.fieldset-wrapper .actions,
+.sales-order-create-index .order-search-items.fieldset-wrapper .actions,
+.sales-order-create-index #order-errors .actions {
     float: none;
     border: 1px solid #c0bbaf;
     border-bottom: 0;
@@ -1595,7 +1595,7 @@
     position: relative;
 }
 
-.adminhtml-sales-order-create-index #order-data .fieldset-wrapper .actions .action-add {
+.sales-order-create-index #order-data .fieldset-wrapper .actions .action-add {
     background: #f58227;
     background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y1ODIyNyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmMDcyMWMiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
     background: -moz-linear-gradient(top, #f58227 0%, #f0721c 100%);
@@ -1616,13 +1616,13 @@
     text-decoration: none;
 }
 
-.adminhtml-sales-order-create-index .order-additional-area.fieldset-wrapper .actions {
+.sales-order-create-index .order-additional-area.fieldset-wrapper .actions {
     float: none;
     margin: 0 0 8px;
     padding: 0;
 }
 
-.adminhtml-sales-order-create-index #order-data .fieldset-wrapper .actions .action-add:hover {
+.sales-order-create-index #order-data .fieldset-wrapper .actions .action-add:hover {
     color: #fff;
     background: #e47821;
     background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2U0NzgyMSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkZTY4MTciIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
@@ -1634,15 +1634,15 @@
     background: linear-gradient(to bottom, #e47821 0%, #de6817 100%);
 }
 
-.eq-ie8 .adminhtml-sales-order-create-index #order-data .fieldset-wrapper .actions .action-add {
+.eq-ie8 .sales-order-create-index #order-data .fieldset-wrapper .actions .action-add {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f58227', endColorstr='#f0721c', GradientType=0);
 }
 
-.eq-ie8 .adminhtml-sales-order-create-index #order-data .fieldset-wrapper .action-add:hover {
+.eq-ie8 .sales-order-create-index #order-data .fieldset-wrapper .action-add:hover {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e47821', endColorstr='#de6817', GradientType=0);
 }
 
-.adminhtml-sales-order-create-index #order-data .fieldset-wrapper .actions .action-delete {
+.sales-order-create-index #order-data .fieldset-wrapper .actions .action-delete {
     margin: 11px 0 0;
 }
 
@@ -1751,16 +1751,16 @@
 /*
     Order view
 -------------------------------------- */
-[class^=" adminhtml-sales-order-"] .fieldset-wrapper-title .actions {
+[class^=" sales-order-"] .fieldset-wrapper-title .actions {
     float: right;
     font-size: 12px;
     margin: 8px 20px 0 0;
 }
 
-[class^=" adminhtml-sales-order-"] .fieldset-wrapper-title .actions a:link,
-[class^=" adminhtml-sales-order-"] .fieldset-wrapper-title .actions a:visited,
-[class^=" adminhtml-sales-order-"] .fieldset-wrapper-title .actions a:hover,
-[class^=" adminhtml-sales-order-"] .fieldset-wrapper-title .actions a:active {
+[class^=" sales-order-"] .fieldset-wrapper-title .actions a:link,
+[class^=" sales-order-"] .fieldset-wrapper-title .actions a:visited,
+[class^=" sales-order-"] .fieldset-wrapper-title .actions a:hover,
+[class^=" sales-order-"] .fieldset-wrapper-title .actions a:active {
     color: #a29c94;
 }
 
@@ -1790,7 +1790,7 @@
     float: right;
 }
 
-[class^=" adminhtml-sales-order-"] .fieldset-wrapper address {
+[class^=" sales-order-"] .fieldset-wrapper address {
     overflow: auto;
 }
 
@@ -1855,26 +1855,26 @@
 
 .adminhtml-giftwrapping-index .col-id,
 .adminhtml-checkout-agreement-index .col-id,
-[class^=" adminhtml-sales-billing-"] .col-id,
-[class^=" adminhtml-sales-transactions-"] .col-id {
+[class^=" sales-billing-"] .col-id,
+[class^=" sales-transactions-"] .col-id {
     width: 35px;
 }
 
-[class^=" adminhtml-sales-order-shipment-"] .col-ship,
-[class^=" adminhtml-sales-"] .col-return-to-stock,
+[class^=" sales-order-shipment-"] .col-ship,
+[class^=" sales-"] .col-return-to-stock,
 .adminhtml-rma-new .col-select {
     text-align: center;
     width: 35px;
 }
 
-[class^=" adminhtml-sales-order-"] .col-price-original,
-[class^=" adminhtml-sales-order-"] .col-tax-amount,
-[class^=" adminhtml-sales-order-"] .col-tax-percent,
-[class^=" adminhtml-sales-order-"] .col-discont,
-[class^=" adminhtml-sales-order-"] .col-total,
-[class^=" adminhtml-sales-order-"] .col-discount,
-[class^=" adminhtml-sales-order-"] .col-tax,
-[class^=" adminhtml-sales-"] .col-refunded,
+[class^=" sales-order-"] .col-price-original,
+[class^=" sales-order-"] .col-tax-amount,
+[class^=" sales-order-"] .col-tax-percent,
+[class^=" sales-order-"] .col-discont,
+[class^=" sales-order-"] .col-total,
+[class^=" sales-order-"] .col-discount,
+[class^=" sales-order-"] .col-tax,
+[class^=" sales-"] .col-refunded,
 [class^=" adminhtml-rma-"] .col-order,
 [class^=" adminhtml-rma-"] .col-required,
 [class^=" adminhtml-rma-"] .col-system,
@@ -1886,71 +1886,71 @@
     width: 50px;
 }
 
-[class^=" adminhtml-sales-order-"] .col-subtotal,
-[class^=" adminhtml-sales-order-"] .col-price,
+[class^=" sales-order-"] .col-subtotal,
+[class^=" sales-order-"] .col-price,
 [class^=" adminhtml-rma-"] .col-price,
 .adminhtml-giftwrapping-index .col-price {
     text-align: right;
     width: 50px;
 }
 
-.adminhtml-sales-order-invoice-view .col-subtotal,
-.adminhtml-sales-order-invoice-view .col-price {
+.sales-order-invoice-view .col-subtotal,
+.sales-order-invoice-view .col-price {
     width: 10%;
 }
 
-[class^=" adminhtml-sales-"] .col-actions,
+[class^=" sales-"] .col-actions,
 [class^=" adminhtml-rma-"] .col-actions,
 [class^=" adminhtml-rma-"] .col-default,
 .adminhtml-giftwrapping-index .col-actions {
     width: 50px;
 }
 
-[class^=" adminhtml-sales-"] .col-select,
+[class^=" sales-"] .col-select,
 [class^=" adminhtml-rma-"] .col-select,
 .adminhtml-giftwrapping-index .col-select {
     width: 60px;
 }
 
-[class^=" adminhtml-sales-"] .col-qty,
-[class^=" adminhtml-sales-order-"] .col-qty-invoice,
-[class^=" adminhtml-sales-order-"] .col-ordered-qty,
+[class^=" sales-"] .col-qty,
+[class^=" sales-order-"] .col-qty-invoice,
+[class^=" sales-order-"] .col-ordered-qty,
 [class^=" adminhtml-rma-"] .col-qty,
 [class^=" adminhtml-rma-"] .col-condition {
     width: 70px;
 }
 
-[class^=" adminhtml-sales-"] .col-refund,
-[class^=" adminhtml-sales-transactions-"] .col-closed,
-.adminhtml-sales-order-view .col-closed {
+[class^=" sales-"] .col-refund,
+[class^=" sales-transactions-"] .col-closed,
+.sales-order-view .col-closed {
     text-align: center;
     width: 70px;
 }
 
-[class^=" adminhtml-sales-"] .col-order-number,
-[class^=" adminhtml-sales-"] .col-invoice-number,
-[class^=" adminhtml-sales-"] .col-memo-number,
-[class^=" adminhtml-sales-"] .col-shipment-number,
-[class^=" adminhtml-sales-"] .col-rma-number,
-[class^=" adminhtml-sales-"] .col-status,
+[class^=" sales-"] .col-order-number,
+[class^=" sales-"] .col-invoice-number,
+[class^=" sales-"] .col-memo-number,
+[class^=" sales-"] .col-shipment-number,
+[class^=" sales-"] .col-rma-number,
+[class^=" sales-"] .col-status,
 [class^=" adminhtml-rma-"] .col-order-number,
 [class^=" adminhtml-rma-"] .col-rma-number,
-[class^=" adminhtml-sales-transactions-"] .col-order-id,
+[class^=" sales-transactions-"] .col-order-id,
 .adminhtml-giftwrapping-index .col-status,
-.adminhtml-sales-order-view .col-refunded {
+.sales-order-view .col-refunded {
     white-space: normal;
     width: 75px;
 }
 
-[class^=" adminhtml-sales-"] .col-gtbase,
-[class^=" adminhtml-sales-"] .col-gtpurchased {
+[class^=" sales-"] .col-gtbase,
+[class^=" sales-"] .col-gtpurchased {
     text-align: right;
     white-space: normal;
     width: 75px;
 }
 
-[class^=" adminhtml-sales-"] .col-order-number,
-[class^=" adminhtml-sales-"] .col-rma-number,
+[class^=" sales-"] .col-order-number,
+[class^=" sales-"] .col-rma-number,
 [class^=" adminhtml-rma-"] .col-order-number,
 [class^=" adminhtml-rma-"] .col-rma-number {
     text-align: left;
@@ -1959,27 +1959,27 @@
 [class^=" adminhtml-rma-"] .col-status,
 [class^=" adminhtml-rma-"] .col-reason,
 [class^=" adminhtml-rma-"] .col-resolution,
-[class^=" adminhtml-sales-transactions-"] .col-transaction-type,
-.adminhtml-sales-order-view .col-memo {
+[class^=" sales-transactions-"] .col-transaction-type,
+.sales-order-view .col-memo {
     width: 100px;
 }
 
-[class^=" adminhtml-sales-"] tr.headings .col-parent-transaction-id > span,
-[class^=" adminhtml-sales-"] tr.headings .col-method > span,
-[class^=" adminhtml-sales-"] tr.headings .col-transaction-id > span,
-[class^=" adminhtml-sales-"] tr.headings .col-transaction-type > span,
-[class^=" adminhtml-sales-"] tr.headings .col-gtbase > span,
-[class^=" adminhtml-sales-"] tr.headings .col-gtpurchased > span,
-[class^=" adminhtml-sales-order-"] tr.headings .col-discont > span {
+[class^=" sales-"] tr.headings .col-parent-transaction-id > span,
+[class^=" sales-"] tr.headings .col-method > span,
+[class^=" sales-"] tr.headings .col-transaction-id > span,
+[class^=" sales-"] tr.headings .col-transaction-type > span,
+[class^=" sales-"] tr.headings .col-gtbase > span,
+[class^=" sales-"] tr.headings .col-gtpurchased > span,
+[class^=" sales-order-"] tr.headings .col-discont > span {
     white-space: normal;
 }
 
-[class^=" adminhtml-sales-"] .col-period,
+[class^=" sales-"] .col-period,
 [class^=" adminhtml-rma-"] .col-period {
     width: 150px;
 }
 
-[class^=" adminhtml-sales-order-shipment-"] .col-carrier {
+[class^=" sales-order-shipment-"] .col-carrier {
     width: 190px;
 }
 
@@ -1989,42 +1989,42 @@
     width: 200px;
 }
 
-[class^=" adminhtml-sales-transactions-"] .log-details .data-table tbody tr th,
-[class^=" adminhtml-sales-transactions-"] .col-key {
+[class^=" sales-transactions-"] .log-details .data-table tbody tr th,
+[class^=" sales-transactions-"] .col-key {
     width: 22%;
 }
 
-.adminhtml-sales-order-index .col-1-layout table.data {
+.sales-order-index .col-1-layout table.data {
     table-layout: fixed;
     word-wrap: break-word;
 }
 
-.eq-ie8 .adminhtml-sales-order-index .col-1-layout table.data {
+.eq-ie8 .sales-order-index .col-1-layout table.data {
     table-layout: auto;
     word-wrap: normal;
 }
 
-[class^=" adminhtml-sales-"] .col-from-store {
+[class^=" sales-"] .col-from-store {
     width: 15%;
 }
 
-[class^=" adminhtml-sales-"] .col-2-left-layout .hor-scroll {
+[class^=" sales-"] .col-2-left-layout .hor-scroll {
     margin-bottom: -4px;
     overflow: auto;
     padding-bottom: 4px;
     width: 100%;
 }
 
-[class^=" adminhtml-sales-order-"] .order-totals .actions,
+[class^=" sales-order-"] .order-totals .actions,
 [class^=" adminhtml-rma-"] .col-qty,
 [class^=" adminhtml-rma-"] .col-qty_ordered,
-.adminhtml-sales-order-view .col-refunded {
+.sales-order-view .col-refunded {
     text-align: right;
 }
 
 .adminhtml-giftwrapping-index .col-price .label,
-[class^=" adminhtml-sales-order-"] .col-price .label,
-[class^=" adminhtml-sales-order-"] .col-subtotal .label {
+[class^=" sales-order-"] .col-price .label,
+[class^=" sales-order-"] .col-subtotal .label {
     display: inline-block;
     min-width: 60px;
     white-space: nowrap;
@@ -2032,42 +2032,42 @@
 
 .adminhtml-giftwrapping-index .col-price .price-excl-tax .price,
 .adminhtml-giftwrapping-index .col-price .price-incl-tax .price,
-[class^=" adminhtml-sales-order-"] .col-price .price-excl-tax .price,
-[class^=" adminhtml-sales-order-"] .col-price .price-incl-tax .price,
-[class^=" adminhtml-sales-order-"] .col-subtotal .price-excl-tax .price,
-[class^=" adminhtml-sales-order-"] .col-subtotal .price-incl-tax .price {
+[class^=" sales-order-"] .col-price .price-excl-tax .price,
+[class^=" sales-order-"] .col-price .price-incl-tax .price,
+[class^=" sales-order-"] .col-subtotal .price-excl-tax .price,
+[class^=" sales-order-"] .col-subtotal .price-incl-tax .price {
     font-weight: bold;
 }
 
-[class^=" adminhtml-sales-order-"] .grid .col-qty table,
-[class^=" adminhtml-sales-order-"] .grid .col-qty tbody,
-[class^=" adminhtml-sales-order-"] .grid .col-qty tr,
-[class^=" adminhtml-sales-order-"] .grid .col-qty td,
-[class^=" adminhtml-sales-order-"] .grid .col-ordered-qty table,
-[class^=" adminhtml-sales-order-"] .grid .col-ordered-qty tbody,
-[class^=" adminhtml-sales-order-"] .grid .col-ordered-qty tr,
-[class^=" adminhtml-sales-order-"] .grid .col-ordered-qty td {
+[class^=" sales-order-"] .grid .col-qty table,
+[class^=" sales-order-"] .grid .col-qty tbody,
+[class^=" sales-order-"] .grid .col-qty tr,
+[class^=" sales-order-"] .grid .col-qty td,
+[class^=" sales-order-"] .grid .col-ordered-qty table,
+[class^=" sales-order-"] .grid .col-ordered-qty tbody,
+[class^=" sales-order-"] .grid .col-ordered-qty tr,
+[class^=" sales-order-"] .grid .col-ordered-qty td {
     background: none;
     border: 0;
 }
 
-[class^=" adminhtml-sales-order-"] .col-ordered-qty td {
+[class^=" sales-order-"] .col-ordered-qty td {
     padding: 0 5px 3px;
 }
 
-[class^=" adminhtml-sales-order-"] .grid .product-title {
+[class^=" sales-order-"] .grid .product-title {
     font-weight: bold;
 }
 
-[class^=" adminhtml-sales-order-"] .item-options {
+[class^=" sales-order-"] .item-options {
     margin: 5px 0 5px 10px;
 }
 
-[class^=" adminhtml-sales-order-"] .item-options dt {
+[class^=" sales-order-"] .item-options dt {
     font-weight: bold;
 }
 
-[class^=" adminhtml-sales-order-"] .item-options dd {
+[class^=" sales-order-"] .item-options dd {
     margin: 0 0 0 10px;
 }
 
@@ -2092,7 +2092,7 @@ table.items-to-invoice tbody tr:hover td {
     text-align: center;
 }
 
-[class^=" adminhtml-sales-order-creditmemo-"] .no-items {
+[class^=" sales-order-creditmemo-"] .no-items {
     padding-top: 13px;
     text-align: center;
 }
@@ -2102,11 +2102,11 @@ table.items-to-invoice tbody tr:hover td {
     font-weight: bold;
 }
 
-.adminhtml-sales-order-shipment-new .order-totals .fieldset-wrapper {
+.sales-order-shipment-new .order-totals .fieldset-wrapper {
     padding-top: 18px;
 }
 
-.adminhtml-sales-order-shipment-new .actions {
+.sales-order-shipment-new .actions {
     float: right;
 }
 
@@ -2115,7 +2115,7 @@ table.items-to-invoice tbody tr:hover td {
     width: 60px;
 }
 
-[class^=" adminhtml-sales-order-"] .order-subtotal .label {
+[class^=" sales-order-"] .order-subtotal .label {
     width: 80%;
 }
 
@@ -2131,7 +2131,7 @@ table.items-to-invoice tbody tr:hover td {
 }
 
 .adminhtml-rma-edit .data-table .col-carrier,
-[class^=" adminhtml-sales-billing-agreement-"] .log-details .data-table th {
+[class^=" sales-billing-agreement-"] .log-details .data-table th {
     width: 20%;
 }
 
@@ -2143,7 +2143,7 @@ table.items-to-invoice tbody tr:hover td {
     width: 25%;
 }
 
-[class^=" adminhtml-sales-order-"] .order-shipping-address .price,
+[class^=" sales-order-"] .order-shipping-address .price,
 .order-shipping-address .shipping-description-title {
     font-weight: bold;
 }
@@ -2162,36 +2162,36 @@ table.items-to-invoice tbody tr:hover td {
     margin: 0 3px;
 }
 
-[class^=" adminhtml-sales-"] .order-payment-method .data-table {
+[class^=" sales-"] .order-payment-method .data-table {
     margin-top: 15px;
 }
 
-[class^=" adminhtml-sales-"] .order-payment-currency {
+[class^=" sales-"] .order-payment-currency {
     margin-top: 15px;
 }
 
-[class^=" adminhtml-sales-"] .grid tbody td {
+[class^=" sales-"] .grid tbody td {
     vertical-align: top;
 }
 
-[class^=" adminhtml-sales-"] .grid tbody.even tr td {
+[class^=" sales-"] .grid tbody.even tr td {
     background: #e6e3de;
 }
 
-[class^=" adminhtml-sales-"] .grid tbody.odd tr td {
+[class^=" sales-"] .grid tbody.odd tr td {
     border-bottom: 0;
     background: #f5f2ed;
 }
 
-[class^=" adminhtml-sales-"] .grid .data {
+[class^=" sales-"] .grid .data {
     border-bottom: 1px solid #c0bbaf;
 }
 
-[class^=" adminhtml-sales-"] .grid td .option-label {
+[class^=" sales-"] .grid td .option-label {
     font-weight: bold;
 }
 
-[class^=" adminhtml-sales-"] .grid td .option-value {
+[class^=" sales-"] .grid td .option-value {
     margin: 0 0 0 10px;
 }
 
@@ -2542,8 +2542,8 @@ table.items-to-invoice tbody tr:hover td {
     padding: 0;
 }
 
-[class^=" adminhtml-sales-order-"] .order-billing-address .packaging-window .actions,
-[class^=" adminhtml-sales-order-"] .order-shipping-address .packaging-window .actions {
+[class^=" sales-order-"] .order-billing-address .packaging-window .actions,
+[class^=" sales-order-"] .order-shipping-address .packaging-window .actions {
     margin: 0;
 }
 

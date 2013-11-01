@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -29,32 +28,34 @@
  * @var $this \Magento\Paypal\Block\Express\Shortcut
  */
 ?>
-<p class="paypal-logo">
+<?php
+$labelPosition = '';
+if ($this->isOrPositionBefore()) {
+    $labelPosition = ' before';
+} elseif ($this->isOrPositionAfter()) {
+    $labelPosition = ' after';
+}
+?>
+<div data-label="or" class="paypal checkout <?php echo $labelPosition ?> paypal-logo">
     <?php $shortcutHtmlId = $this->getShortcutHtmlId() ?>
-    <?php if ($this->isOrPositionBefore()): ?>
-    <span class="paypal-or"><?php echo __('-OR-');?></span>
-    <?php endif; ?>
-    <input type="image" data-action="checkout-form-submit" data-checkout-url="<?php echo $this->getCheckoutUrl()?>"
-           src="<?php echo $this->getImageUrl()?>"
-           alt="<?php echo __('Checkout with PayPal');?>"
-           title="<?php echo __('Checkout with PayPal');?>"/>
-    <?php if ($this->isOrPositionAfter()): ?>
-    <span class="paypal-or"><?php echo __('-OR-');?></span>
-    <?php endif; ?>
+    <input type="image" data-action="checkout-form-submit" data-checkout-url="<?php echo $this->getCheckoutUrl() ?>"
+           src="<?php echo $this->getImageUrl() ?>"
+           alt="<?php echo __('Checkout with PayPal'); ?>"
+           title="<?php echo __('Checkout with PayPal'); ?>"/>
     <?php if ($this->getConfirmationUrl() || $this->getIsInCatalogProduct()): ?>
-    <?php if ($this->getIsInCatalogProduct()): ?>
-        <input type="hidden" id="pp-checkout-url" name="return_url" value=""/>
+        <?php if ($this->getIsInCatalogProduct()): ?>
+            <input type="hidden" id="pp-checkout-url" name="return_url" value=""/>
         <?php endif; ?>
 
-    <?php
-    $confirmationUrl = $this->getConfirmationUrl();
-    $isInCatalogProduct = $this->getIsInCatalogProduct();
-endif; ?>
+        <?php
+        $confirmationUrl = $this->getConfirmationUrl();
+        $isInCatalogProduct = $this->getIsInCatalogProduct();
+    endif; ?>
     <script type="text/javascript">
-        (function($) {
+        (function ($) {
             head.js(
                 "<?php echo $this->getViewFileUrl('Magento_Paypal::js/paypal-checkout.js') ?>",
-                function() {
+                function () {
                     $('.paypal-logo').paypalCheckout({
                         confirmMessage: "<?php echo $this->helper('Magento\Core\Helper\Data')->jsQuoteEscape($this->getConfirmationMessage())?>",
                         confirmUrl: "<?php echo !empty($confirmationUrl) ? $confirmationUrl : false ?>",
@@ -65,4 +66,4 @@ endif; ?>
                 });
         })(jQuery);
     </script>
-</p>
+</div>

@@ -130,7 +130,7 @@ class Consumer extends \Magento\Backend\Controller\AbstractAction
 
         if (!$consumerId) {
             $this->_getSession()->addError(__('Invalid ID parameter.'));
-            $this->_redirect('*/*/index');
+            $this->_redirect('adminhtml/*/index');
             return $consumer;
         }
 
@@ -139,7 +139,7 @@ class Consumer extends \Magento\Backend\Controller\AbstractAction
         if (!$consumer->getId()) {
             $this->_getSession()
                 ->addError(__('An add-on with ID %1 was not found.', $consumerId));
-            $this->_redirect('*/*/index');
+            $this->_redirect('adminhtml/*/index');
         }
 
         return $consumer;
@@ -221,9 +221,9 @@ class Consumer extends \Magento\Backend\Controller\AbstractAction
     private function _redirectToEditOrNew($consumerId)
     {
         if ($consumerId) {
-            $this->_redirect('*/*/edit', array(self::PARAM_CONSUMER_ID => $consumerId));
+            $this->_redirect('adminhtml/*/edit', array(self::PARAM_CONSUMER_ID => $consumerId));
         } else {
-            $this->_redirect('*/*/new');
+            $this->_redirect('adminhtml/*/new');
         }
     }
 
@@ -279,11 +279,11 @@ class Consumer extends \Magento\Backend\Controller\AbstractAction
             //$this->_redirect('<Add-On Website URL>', array(
                     //'oauth_consumer_key' => $consumerData[self::DATA_KEY],
                     //'oauth_verifier' => $verifier[self::DATA_VERIFIER],
-                    //'callback_url' => $this->getUrl('*/*/index')
+                    //'callback_url' => $this->getUrl('adminhtml/*/index')
                 //));
-            $this->_redirect('*/*/index');
+            $this->_redirect('adminhtml/*/index');
         } else {
-            $this->_redirect('*/*/index');
+            $this->_redirect('adminhtml/*/index');
         }
     }
 
@@ -352,6 +352,6 @@ class Consumer extends \Magento\Backend\Controller\AbstractAction
                     ->addException($e, __('An error occurred while deleting the add-on.'));
             }
         }
-        $this->_redirect('*/*/index');
+        $this->_redirect('adminhtml/*/index');
     }
 }

@@ -48,7 +48,7 @@ $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'msrp_enabled',
     'user_defined'  => false,
     'default'       => '',
     'apply_to'      => $productTypes,
-    'input_renderer'   => 'Magento\Adminhtml\Block\Catalog\Product\Helper\Form\Msrp\Enabled',
+    'input_renderer'   => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Msrp\Enabled',
     'visible_on_front' => false,
     'used_in_product_listing' => true
 ));
@@ -66,7 +66,7 @@ $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'msrp_display_a
     'user_defined'  => false,
     'default'       => '',
     'apply_to'      => $productTypes,
-    'input_renderer'   => 'Magento\Adminhtml\Block\Catalog\Product\Helper\Form\Msrp\Price',
+    'input_renderer'   => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Msrp\Price',
     'visible_on_front' => false,
     'used_in_product_listing' => true
 ));

@@ -33,7 +33,7 @@
  */
 namespace Magento\Adminhtml\Controller\Checkout;
 
-class Agreement extends \Magento\Adminhtml\Controller\Action
+class Agreement extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * Core registry
@@ -82,7 +82,7 @@ class Agreement extends \Magento\Adminhtml\Controller\Action
                 $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(
                     __('This condition no longer exists.')
                 );
-                $this->_redirect('*/*/');
+                $this->_redirect('adminhtml/*/');
                 return;
             }
         }
@@ -104,7 +104,7 @@ class Agreement extends \Magento\Adminhtml\Controller\Action
             ->_addContent(
                 $this->getLayout()
                     ->createBlock('Magento\Adminhtml\Block\Checkout\Agreement\Edit')
-                    ->setData('action', $this->getUrl('*/*/save'))
+                    ->setData('action', $this->getUrl('adminhtml/*/save'))
             )
             ->renderLayout();
     }
@@ -120,7 +120,7 @@ class Agreement extends \Magento\Adminhtml\Controller\Action
                 $model->save();
 
                 $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(__('The condition has been saved.'));
-                $this->_redirect('*/*/');
+                $this->_redirect('adminhtml/*/');
 
                 return;
             } catch (\Magento\Core\Exception $e) {
@@ -141,14 +141,14 @@ class Agreement extends \Magento\Adminhtml\Controller\Action
             ->load($id);
         if (!$model->getId()) {
             $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(__('This condition no longer exists.'));
-            $this->_redirect('*/*/');
+            $this->_redirect('adminhtml/*/');
             return;
         }
 
         try {
             $model->delete();
             $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(__('The condition has been deleted.'));
-            $this->_redirect('*/*/');
+            $this->_redirect('adminhtml/*/');
             return;
         } catch (\Magento\Core\Exception $e) {
             $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError($e->getMessage());
@@ -162,7 +162,7 @@ class Agreement extends \Magento\Adminhtml\Controller\Action
     /**
      * Initialize action
      *
-     * @return \Magento\Adminhtml\Controller\Action
+     * @return \Magento\Backend\Controller\Adminhtml\Action
      */
     protected function _initAction()
     {

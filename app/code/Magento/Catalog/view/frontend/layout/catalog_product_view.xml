@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Catalog Product View (Any)" type="page" parent="default">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Catalog Product View (Any)" type="page">
     <referenceBlock name="root">
         <action method="setTemplate">
             <argument name="template" xsi:type="string">2columns-right.phtml</argument>
@@ -52,18 +52,12 @@
                 </action>
             </block>
             <block class="Magento\Catalog\Block\Product\View\Additional" name="product.info.additional" as="product_additional_data"/>
-            <block class="Magento\Catalog\Block\Product\View\Description" name="product.description" as="description" template="product/view/description.phtml">
-                <action method="addToParentGroup">
-                    <argument name="group" xsi:type="string">detailed_info</argument>
-                </action>
+            <block class="Magento\Catalog\Block\Product\View\Description" name="product.description" as="description" template="product/view/description.phtml" group="detailed_info">
                 <action method="setTitle">
                     <argument translate="true" name="value" xsi:type="string">Details</argument>
                 </action>
             </block>
-            <block class="Magento\Catalog\Block\Product\View\Attributes" name="product.attributes" as="additional" template="product/view/attributes.phtml">
-                <action method="addToParentGroup">
-                    <argument name="group" xsi:type="string">detailed_info</argument>
-                </action>
+            <block class="Magento\Catalog\Block\Product\View\Attributes" name="product.attributes" as="additional" template="product/view/attributes.phtml" group="detailed_info">
                 <action method="setTitle">
                     <argument translate="true" name="value" xsi:type="string">Additional Information</argument>
                 </action>

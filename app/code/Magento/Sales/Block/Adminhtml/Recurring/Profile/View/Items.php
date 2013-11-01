@@ -28,12 +28,12 @@
  * Adminhtml recurring profile items grid
  *
  * @category   Magento
- * @package    Magento_Adminhtml
+ * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Sales\Block\Adminhtml\Recurring\Profile\View;
 
-class Items extends \Magento\Adminhtml\Block\Sales\Items\AbstractItems
+class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
     /**
      * @var \Magento\Core\Model\StoreManagerInterface

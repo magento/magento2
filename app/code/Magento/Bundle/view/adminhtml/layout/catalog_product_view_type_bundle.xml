@@ -26,22 +26,10 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="product.composite.fieldset">
         <block class="Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Bundle" before="product.composite.fieldset.options" name="product.composite.fieldset.bundle" template="product/composite/fieldset/options/bundle.phtml">
-            <action method="addRenderer">
-                <argument name="type" xsi:type="string">select</argument>
-                <argument name="block" xsi:type="string">Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Select</argument>
-            </action>
-            <action method="addRenderer">
-                <argument name="type" xsi:type="string">multi</argument>
-                <argument name="block" xsi:type="string">Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Multi</argument>
-            </action>
-            <action method="addRenderer">
-                <argument name="type" xsi:type="string">radio</argument>
-                <argument name="block" xsi:type="string">Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Radio</argument>
-            </action>
-            <action method="addRenderer">
-                <argument name="type" xsi:type="string">checkbox</argument>
-                <argument name="block" xsi:type="string">Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Checkbox</argument>
-            </action>
+            <block class="Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Select" name="product.info.bundle.options.select" as="select"/>
+            <block class="Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Multi" name="product.info.bundle.options.multi" as="multi"/>
+            <block class="Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Radio" name="product.info.bundle.options.radio" as="radio"/>
+            <block class="Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Checkbox" name="product.info.bundle.options.checkbox" as="checkbox"/>
         </block>
     </referenceBlock>
 </layout>

@@ -97,7 +97,7 @@ abstract class AbstractFormTest extends \PHPUnit_Framework_TestCase
 
         $this->_urlBuilder->expects($this->once())
             ->method('getUrl')
-            ->with('*/*/save', array())
+            ->with('adminhtml/*/save', array())
             ->will($this->returnValue('action_url'));
         $this->_block->toHtml();
 

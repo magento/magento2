@@ -72,7 +72,7 @@ class Uploader extends \Magento\Adminhtml\Block\Media\Uploader
             $files[] = '*.' . $ext;
         }
         $this->getConfig()
-            ->setUrl($this->_urlBuilder->addSessionParam()->getUrl('*/*/upload', array('type' => $type)))
+            ->setUrl($this->_urlBuilder->addSessionParam()->getUrl('adminhtml/*/upload', array('type' => $type)))
             ->setFileField('image')
             ->setFilters(array(
                 'images' => array(

@@ -31,9 +31,12 @@ $canApplyMsrp = $this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($_ite
 <tbody class="cart item">
 <tr class="item info">
     <td class="col item">
-        <?php if ($this->hasProductUrl()):?><a href="<?php echo $this->getProductUrl() ?>" title="<?php echo $this->escapeHtml($this->getProductName()) ?>" class="product photo"><?php endif;?>
+        <?php if ($this->hasProductUrl()):?><a href="<?php echo $this->getProductUrl() ?>" title="<?php echo $this->escapeHtml($this->getProductName()) ?>" class="product photo">
+        <?php else:?>
+            <span class="product photo">
+        <?php endif;?>
         <?php echo $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image')->init($_item->getProduct(), 'cart_page_product_thumbnail')->toHtml(); ?>
-        <?php if ($this->hasProductUrl()):?></a><?php endif;?>
+        <?php if ($this->hasProductUrl()):?></a><?php else: ?></span><?php endif; ?>
         <div class="product details">
             <strong class="product name">
             <?php if ($this->hasProductUrl()):?>

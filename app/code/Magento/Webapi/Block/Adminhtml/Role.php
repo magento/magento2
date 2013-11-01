@@ -55,6 +55,6 @@ class Role extends \Magento\Backend\Block\Widget\Grid\Container
      */
     public function getCreateUrl()
     {
-        return $this->getUrl('*/*/edit');
+        return $this->getUrl('adminhtml/*/edit');
     }
 }

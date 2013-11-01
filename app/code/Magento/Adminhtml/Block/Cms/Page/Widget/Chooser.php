@@ -104,7 +104,7 @@ class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
     public function prepareElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
     {
         $uniqId = $this->_coreData->uniqHash($element->getId());
-        $sourceUrl = $this->getUrl('*/cms_page_widget/chooser', array('uniq_id' => $uniqId));
+        $sourceUrl = $this->getUrl('adminhtml/cms_page_widget/chooser', array('uniq_id' => $uniqId));
 
         $chooser = $this->getLayout()->createBlock('Magento\Widget\Block\Adminhtml\Widget\Chooser')
             ->setElement($element)
@@ -212,6 +212,6 @@ class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
 
     public function getGridUrl()
     {
-        return $this->getUrl('*/cms_page_widget/chooser', array('_current' => true));
+        return $this->getUrl('adminhtml/cms_page_widget/chooser', array('_current' => true));
     }
 }

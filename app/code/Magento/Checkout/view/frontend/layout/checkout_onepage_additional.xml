@@ -23,12 +23,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="One Page Checkout Additional Address Form" type="fragment" owner="checkout_onepage_index">
-    <block class="Magento\Page\Block\Html" name="root" output="1" template="page_fragment.phtml">
-        <block class="Magento\Checkout\Block\Onepage\Shipping\Method\Additional" name="shipping_method_additional" template="onepage/shipping_method/additional.phtml">
-            <action method="setDontDisplayContainer">
-                <argument name="param" xsi:type="string">1</argument>
-            </action>
-        </block>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <block class="Magento\Checkout\Block\Onepage\Shipping\Method\Additional" name="shipping_method_additional" output="1" template="onepage/shipping_method/additional.phtml">
+        <action method="setDontDisplayContainer">
+            <argument name="param" xsi:type="string">1</argument>
+        </action>
     </block>
 </layout>

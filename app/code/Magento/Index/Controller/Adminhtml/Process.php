@@ -25,7 +25,7 @@
  */
 namespace Magento\Index\Controller\Adminhtml;
 
-class Process extends \Magento\Adminhtml\Controller\Action
+class Process extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * Core registry
@@ -114,7 +114,7 @@ class Process extends \Magento\Adminhtml\Controller\Action
             $this->_getSession()->addError(
                 __('Cannot initialize the indexer process.')
             );
-            $this->_redirect('*/*/list');
+            $this->_redirect('adminhtml/*/list');
         }
     }
 
@@ -142,12 +142,12 @@ class Process extends \Magento\Adminhtml\Controller\Action
                      __('There was a problem with saving process.')
                 );
             }
-            $this->_redirect('*/*/list');
+            $this->_redirect('adminhtml/*/list');
         } else {
             $this->_getSession()->addError(
                 __('Cannot initialize the indexer process.')
             );
-            $this->_redirect('*/*/list');
+            $this->_redirect('adminhtml/*/list');
         }
     }
 
@@ -180,7 +180,7 @@ class Process extends \Magento\Adminhtml\Controller\Action
             );
         }
 
-        $this->_redirect('*/*/list');
+        $this->_redirect('adminhtml/*/list');
     }
 
     /**
@@ -229,7 +229,7 @@ class Process extends \Magento\Adminhtml\Controller\Action
             }
         }
 
-        $this->_redirect('*/*/list');
+        $this->_redirect('adminhtml/*/list');
     }
 
     /**
@@ -263,7 +263,7 @@ class Process extends \Magento\Adminhtml\Controller\Action
             }
         }
 
-        $this->_redirect('*/*/list');
+        $this->_redirect('adminhtml/*/list');
     }
 
     /**

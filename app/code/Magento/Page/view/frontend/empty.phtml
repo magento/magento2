@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -28,19 +27,29 @@
 /**
  * Template for \Magento\Page\Block\Html
  */
+$bodyCss = $this->getBodyClass() ? $this->getBodyClass() : '';
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->getLang() ?>" lang="<?php echo $this->getLang() ?>">
+<!doctype html>
+<html lang="<?php echo $this->getLang() ?>" class="no-js">
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
     <?php echo $this->getChildHtml('head') ?>
 </head>
-<body class="page-empty <?php echo $this->getBodyClass()?$this->getBodyClass():'' ?>">
-    <div>
-        <?php echo $this->getChildHtml('after_body_start') ?>
-        <?php echo $this->getChildHtml('global_messages') ?>
-        <?php echo $this->getChildHtml('content') ?>
+<body class="page-empty<?php echo $bodyCss ?>" data-container="body" data-mage-init="{loaderAjax: {}, loader: {}}">
+    <?php echo $this->getChildHtml('after_body_start') ?>
+    <div class="page wrapper">
+        <?php echo $this->getChildHtml('global_notices') ?>
+        <section class="page main">
+            <?php echo $this->getChildHtml('columns_top') ?>
+            <div class="columns">
+                <?php echo $this->getChildHtml('main') ?>
+            </div>
+        </section>
+        <?php echo $this->getChildHtml('page_bottom') ?>
         <?php echo $this->getChildHtml('before_body_end') ?>
-        <?php echo $this->getAbsoluteFooter() ?>
     </div>
+    <?php echo $this->getAbsoluteFooter() ?>
 </body>
 </html>

@@ -34,7 +34,7 @@
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
 class Attributes
-    extends \Magento\Adminhtml\Block\Catalog\Product\Edit\Tab\Attributes
+    extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes
 {
     /**
      * Prepare attributes form of bundle product
@@ -118,7 +118,7 @@ class Attributes
         $tier_price = $this->getForm()->getElement('tier_price');
         if ($tier_price) {
             $tier_price->setRenderer(
-                $this->getLayout()->createBlock('Magento\Adminhtml\Block\Catalog\Product\Edit\Tab\Price\Tier')
+                $this->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier')
                     ->setPriceColumnHeader(__('Percent Discount'))
                     ->setPriceValidation('validate-greater-than-zero validate-number-range number-range-0.00-100.00')
             );
@@ -127,7 +127,7 @@ class Attributes
         $groupPrice = $this->getForm()->getElement('group_price');
         if ($groupPrice) {
             $groupPrice->setRenderer(
-                $this->getLayout()->createBlock('Magento\Adminhtml\Block\Catalog\Product\Edit\Tab\Price\Group')
+                $this->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group')
                     ->setPriceColumnHeader(__('Percent Discount'))
                     ->setPriceValidation('validate-greater-than-zero validate-number-range number-range-0.00-100.00')
             );

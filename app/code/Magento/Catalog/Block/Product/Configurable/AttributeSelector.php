@@ -112,7 +112,7 @@ class AttributeSelector extends \Magento\Backend\Block\Template
      */
     public function getAttributeSetCreationUrl()
     {
-        return $this->getUrl('*/catalog_product_set/save');
+        return $this->getUrl('*/product_set/save');
     }
 
     /**
@@ -123,7 +123,7 @@ class AttributeSelector extends \Magento\Backend\Block\Template
     public function getSuggestWidgetOptions()
     {
         return array(
-            'source' => $this->getUrl('*/catalog_product_attribute/suggestConfigurableAttributes'),
+            'source' => $this->getUrl('*/product_attribute/suggestConfigurableAttributes'),
             'minLength' => 0,
             'className' => 'category-select',
             'showAll' => true,

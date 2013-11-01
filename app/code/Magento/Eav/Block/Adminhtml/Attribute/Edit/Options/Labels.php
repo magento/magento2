@@ -44,7 +44,7 @@ class Labels extends \Magento\Backend\Block\Template
     /**
      * @inheritdoc
      */
-    protected $_template = 'Magento_Adminhtml::catalog/product/attribute/labels.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/attribute/labels.phtml';
 
     /**
      * @param \Magento\Core\Helper\Data $coreData

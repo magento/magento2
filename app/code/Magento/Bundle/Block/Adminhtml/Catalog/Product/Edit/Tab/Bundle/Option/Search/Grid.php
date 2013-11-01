@@ -187,7 +187,7 @@ class Grid
      */
     public function getGridUrl()
     {
-        return $this->getUrl('*/bundle_selection/grid', array('index' => $this->getIndex(), 'productss' => implode(',', $this->_getProducts())));
+        return $this->getUrl('adminhtml/bundle_selection/grid', array('index' => $this->getIndex(), 'productss' => implode(',', $this->_getProducts())));
     }
 
     protected function _getSelectedProducts()

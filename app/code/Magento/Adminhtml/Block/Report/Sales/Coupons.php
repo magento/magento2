@@ -55,6 +55,6 @@ class Coupons extends \Magento\Adminhtml\Block\Widget\Grid\Container
     public function getFilterUrl()
     {
         $this->getRequest()->setParam('filter', null);
-        return $this->getUrl('*/*/coupons', array('_current' => true));
+        return $this->getUrl('adminhtml/*/coupons', array('_current' => true));
     }
 }

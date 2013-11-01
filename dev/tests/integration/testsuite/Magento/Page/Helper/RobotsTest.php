@@ -43,7 +43,7 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Page\Helper\RobotsTest::getRobotsDefaultCustomInstructions
+     * @covers \Magento\Page\Helper\Robots::getRobotsDefaultCustomInstructions
      */
     public function testGetRobotsDefaultCustomInstructions()
     {

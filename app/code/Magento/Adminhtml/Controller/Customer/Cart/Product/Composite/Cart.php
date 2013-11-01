@@ -33,7 +33,7 @@
  */
 namespace Magento\Adminhtml\Controller\Customer\Cart\Product\Composite;
 
-class Cart extends \Magento\Adminhtml\Controller\Action
+class Cart extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * Customer we're working with
@@ -114,7 +114,7 @@ class Cart extends \Magento\Adminhtml\Controller\Action
             $configureResult->setMessage($e->getMessage());
         }
 
-        $this->_objectManager->get('Magento\Adminhtml\Helper\Catalog\Product\Composite')
+        $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite')
             ->renderConfigureResult($this, $configureResult);
 
         return $this;
@@ -144,7 +144,7 @@ class Cart extends \Magento\Adminhtml\Controller\Action
 
         $updateResult->setJsVarName($this->getRequest()->getParam('as_js_varname'));
         $this->_objectManager->get('Magento\Adminhtml\Model\Session')->setCompositeProductResult($updateResult);
-        $this->_redirect('*/catalog_product/showUpdateResult');
+        $this->_redirect('adminhtml/product/showUpdateResult');
 
         return $this;
     }

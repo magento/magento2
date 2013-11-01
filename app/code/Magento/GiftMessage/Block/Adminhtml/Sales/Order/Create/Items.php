@@ -68,7 +68,7 @@ class Items extends \Magento\Adminhtml\Block\Template
      */
     public function getFormHtml()
     {
-        return $this->getLayout()->createBlock('Magento\Adminhtml\Block\Sales\Order\Create\Giftmessage\Form')
+        return $this->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage\Form')
             ->setEntity($this->getItem())
             ->setEntityType('item')
             ->toHtml();

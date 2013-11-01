@@ -19,29 +19,38 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php  $_order = $this->getOrder() ?>
-<p class="order-links"><a href="<?php echo $this->getPrintAllInvoicesUrl($_order) ?>" onclick="this.target='_blank'" class="link-print"><?php echo __('Print All Invoices') ?></a></p>
+<?php $_order = $this->getOrder() ?>
+<div class="order toolbar">
+    <div class="actions">
+        <a href="<?php echo $this->getPrintAllInvoicesUrl($_order) ?>"
+           target="_blank"
+           class="action print">
+            <span><?php echo __('Print All Invoices') ?></span>
+        </a>
+    </div>
+</div>
 <?php foreach ($_order->getInvoiceCollection() as $_invoice): ?>
-<h2 class="sub-title"><?php echo __('Invoice #') ?><?php echo $_invoice->getIncrementId(); ?> <span class="separator">|</span> <a href="<?php echo $this->getPrintInvoiceUrl($_invoice) ?>" onclick="this.target='_blank'" class="link-print"><?php echo __('Print Invoice') ?></a></h2>
-<h3 class="table-caption"><?php echo __('Items Invoiced') ?></h3>
-<table class="data-table" id="my-invoice-table-<?php echo $_invoice->getId(); ?>">
-    <col />
-    <col width="1" />
-    <col width="1" />
-    <col width="1" />
-    <col width="1" />
+<div class="order title">
+    <strong><?php echo __('Invoice #') ?><?php echo $_invoice->getIncrementId(); ?></strong>
+    <a href="<?php echo $this->getPrintInvoiceUrl($_invoice) ?>"
+       onclick="this.target='_blank'"
+       class="action print">
+        <span><?php echo __('Print Invoice') ?></span>
+    </a>
+</div>
+<div class="order subtitle caption"><strong><?php echo __('Items Invoiced') ?></strong></div>
+<table class="data table order items invoice" id="my-invoice-table-<?php echo $_invoice->getId(); ?>">
     <thead>
         <tr>
-            <th><?php echo __('Product Name') ?></th>
-            <th><?php echo __('SKU') ?></th>
-            <th class="a-right"><?php echo __('Price') ?></th>
-            <th class="a-center"><span class="nobr"><?php echo __('Qty Invoiced') ?></span></th>
-            <th class="a-right"><?php echo __('Subtotal') ?></th>
+            <th class="col name"><?php echo __('Product Name') ?></th>
+            <th class="col sku"><?php echo __('SKU') ?></th>
+            <th class="col price"><?php echo __('Price') ?></th>
+            <th class="col qty"><?php echo __('Qty Invoiced') ?></th>
+            <th class="col subtotal"><?php echo __('Subtotal') ?></th>
         </tr>
     </thead>
     <tfoot>
@@ -56,6 +65,5 @@
     </tbody>
     <?php endforeach; ?>
 </table>
-<script type="text/javascript">(function($) {$('#my-invoice-table-<?php echo $_invoice->getId(); ?>').decorate('table', {'tbody': ['odd','even'], 'tbody tr': ['first','last']})})(jQuery)</script>
 <?php echo $this->getInvoiceCommentsHtml($_invoice)?>
 <?php endforeach; ?>

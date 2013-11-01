@@ -178,7 +178,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('*/sales_recurring_profile/view', array('profile' => $row->getId()));
+        return $this->getUrl('sales/recurring_profile/view', array('profile' => $row->getId()));
     }
 
     /**
@@ -188,6 +188,6 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
      */
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/grid', array('_current'=>true));
+        return $this->getUrl('adminhtml/*/grid', array('_current'=>true));
     }
 }

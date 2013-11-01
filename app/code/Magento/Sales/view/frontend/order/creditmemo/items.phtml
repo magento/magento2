@@ -19,33 +19,41 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php $_order = $this->getOrder() ?>
-<p class="order-links"><a href="<?php echo $this->getPrintAllCreditmemosUrl($_order) ?>" onclick="this.target='_blank'" class="link-print"><?php echo __('Print All Refunds') ?></a></p>
+<div class="order toolbar">
+    <div class="actions">
+        <a href="<?php echo $this->getPrintAllCreditmemosUrl($_order) ?>"
+           onclick="this.target='_blank'"
+           class="action print">
+            <span><?php echo __('Print All Refunds') ?></span>
+        </a>
+    </div>
+</div>
 <?php foreach ($_order->getCreditmemosCollection() as $_creditmemo): ?>
-<h2 class="sub-title"><?php echo __('Refund #') ?><?php echo $_creditmemo->getIncrementId(); ?> <span class="separator">|</span> <a href="<?php echo $this->getPrintCreditmemoUrl($_creditmemo) ?>" onclick="this.target='_blank'" class="link-print"><?php echo __('Print Refund') ?></a></h2>
-<h3 class="table-caption"><?php echo __('Items Refunded') ?></h3>
-<table class="data-table" id="my-refund-table-<?php echo $_creditmemo->getId(); ?>">
-    <col />
-    <col width="1" />
-    <col width="1" />
-    <col width="1" />
-    <col width="1" />
-    <col width="1" />
-    <col width="1" />
+<div class="order title">
+    <strong><?php echo __('Refund #') ?><?php echo $_creditmemo->getIncrementId(); ?> </strong>
+    <a href="<?php echo $this->getPrintCreditmemoUrl($_creditmemo) ?>"
+       onclick="this.target='_blank'"
+       class="action print">
+        <span><?php echo __('Print Refund') ?></span>
+    </a>
+</div>
+
+<div class="order subtitle caption"><strong><?php echo __('Items Refunded') ?></strong></div>
+<table class="data table order items creditmemo" id="my-refund-table-<?php echo $_creditmemo->getId(); ?>">
     <thead>
         <tr>
-            <th><?php echo __('Product Name') ?></th>
-            <th><?php echo __('SKU') ?></th>
-            <th class="a-right"><?php echo __('Price') ?></th>
-            <th class="a-center"><?php echo __('Qty') ?></th>
-            <th class="a-right"><?php echo __('Subtotal') ?></th>
-            <th class="a-center wrap"><?php echo __('Discount Amount') ?></th>
-            <th class="a-right wrap"><?php echo __('Row Total') ?></th>
+            <th class="col name"><?php echo __('Product Name') ?></th>
+            <th class="col sku"><?php echo __('SKU') ?></th>
+            <th class="col price"><?php echo __('Price') ?></th>
+            <th class="col qty"><?php echo __('Qty') ?></th>
+            <th class="col subtotal"><?php echo __('Subtotal') ?></th>
+            <th class="col discount"><?php echo __('Discount Amount') ?></th>
+            <th class="col total"><?php echo __('Row Total') ?></th>
         </tr>
     </thead>
     <tfoot>
@@ -60,6 +68,5 @@
     </tbody>
     <?php endforeach; ?>
 </table>
-<script type="text/javascript">(function($) {$('#my-refund-table-<?php echo $_creditmemo->getId(); ?>').decorate('table', {'tbody': ['odd','even'], 'tbody tr': ['first','last']})})(jQuery)</script>
 <?php echo $this->getCommentsHtml($_creditmemo)?>
 <?php endforeach; ?>

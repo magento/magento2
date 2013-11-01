@@ -131,7 +131,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
         if (!isset($params['_current'])) {
             $params['_current'] = true;
         }
-        return $this->getUrl('*/*/grid', $params);
+        return $this->getUrl('adminhtml/*/grid', $params);
     }
 
     /**
@@ -141,6 +141,6 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('*/*/load', array('id' => strtr(base64_encode($row->getFilenameId()), '+/=', '-_,')));
+        return $this->getUrl('adminhtml/*/load', array('id' => strtr(base64_encode($row->getFilenameId()), '+/=', '-_,')));
     }
 }

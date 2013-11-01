@@ -29,7 +29,7 @@
  */
 namespace Magento\Paypal\Controller\Adminhtml\Paypal;
 
-class Reports extends \Magento\Adminhtml\Controller\Action
+class Reports extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * Core registry
@@ -97,7 +97,7 @@ class Reports extends \Magento\Adminhtml\Controller\Action
         $rowId = $this->getRequest()->getParam('id');
         $row = $this->_rowFactory->create()->load($rowId);
         if (!$row->getId()) {
-            $this->_redirect('*/*/');
+            $this->_redirect('adminhtml/*/');
             return;
         }
         $this->_coreRegistry->register('current_transaction', $row);
@@ -143,7 +143,7 @@ class Reports extends \Magento\Adminhtml\Controller\Action
         } catch (\Exception $e) {
             $this->_logger->logException($e);
         }
-        $this->_redirect('*/*/index');
+        $this->_redirect('adminhtml/*/index');
     }
 
     /**

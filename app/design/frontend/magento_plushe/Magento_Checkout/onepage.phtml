@@ -86,7 +86,8 @@ $_registerParam = $this->getRequest()->getParam('register');
                             review: {
                                 saveUrl: '<?php echo $this->getUrl('checkout/onepage/saveOrder') ?>',
                                 successUrl: '<?php echo $this->getUrl('checkout/onepage/success') ?>'
-                            }
+                            },
+                            methodDescription : '.items'
                         });
                 });
         })(jQuery);

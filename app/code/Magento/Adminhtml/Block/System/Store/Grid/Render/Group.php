@@ -43,7 +43,7 @@ class Group
             return null;
         }
         return '<a title="' . __('Edit Store') . '"
-            href="' . $this->getUrl('*/*/editGroup', array('group_id' => $row->getGroupId())) . '">'
+            href="' . $this->getUrl('adminhtml/*/editGroup', array('group_id' => $row->getGroupId())) . '">'
             . $this->escapeHtml($row->getData($this->getColumn()->getIndex())) . '</a>';
     }
 }

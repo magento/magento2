@@ -482,6 +482,7 @@ input[type="button"],
 .form.contact .action,
 .data.table.wishlist + .actions .primary .action.share,
 .data.table.wishlist + .actions .primary .action.update,
+.recurring.order.details > .actions .primary .action,
 .action.myPrimary,
 input[type="submit"],
 input[type="button"],
@@ -542,7 +543,8 @@ input[type="button"],
 .form.orders.search .action,
 .form.contact .action,
 .data.table.wishlist + .actions .primary .action.share,
-.data.table.wishlist + .actions .primary .action.update {
+.data.table.wishlist + .actions .primary .action.update,
+.recurring.order.details > .actions .primary .action {
   background-color: #da370a;
   color: #ffffff;
 }
@@ -731,7 +733,10 @@ input[type="button"]:hover,
 .data.table.wishlist + .actions .primary .action.share:hover,
 .data.table.wishlist + .actions .primary .action.update:focus,
 .data.table.wishlist + .actions .primary .action.update:active,
-.data.table.wishlist + .actions .primary .action.update:hover {
+.data.table.wishlist + .actions .primary .action.update:hover,
+.recurring.order.details > .actions .primary .action:focus,
+.recurring.order.details > .actions .primary .action:active,
+.recurring.order.details > .actions .primary .action:hover {
   background-color: #a92b08;
 }
 .secondary.action,
@@ -740,8 +745,8 @@ input[type="reset"],
 .action.mySecondaryButton,
 .popup .actions .action.cancel,
 .multicheckout .action.update,
-.cart.main.actions .action.update,
-.cart.main.actions .action.clear,
+.cart.actions .action.update,
+.cart.actions .action.clear,
 .block.compare .action.compare,
 .data.comparison .cell.remove .action.delete,
 .form.send.friend .actions > .primary .action.add,
@@ -752,8 +757,8 @@ input[type="reset"],
 .action.mySecondaryButton,
 .popup .actions .action.cancel,
 .multicheckout .action.update,
-.cart.main.actions .action.update,
-.cart.main.actions .action.clear,
+.cart.actions .action.update,
+.cart.actions .action.clear,
 .block.compare .action.compare,
 .data.comparison .cell.remove .action.delete,
 .form.send.friend .actions > .primary .action.add,
@@ -780,12 +785,12 @@ input[type="reset"]:hover,
 .multicheckout .action.update:focus,
 .multicheckout .action.update:active,
 .multicheckout .action.update:hover,
-.cart.main.actions .action.update:focus,
-.cart.main.actions .action.update:active,
-.cart.main.actions .action.update:hover,
-.cart.main.actions .action.clear:focus,
-.cart.main.actions .action.clear:active,
-.cart.main.actions .action.clear:hover,
+.cart.actions .action.update:focus,
+.cart.actions .action.update:active,
+.cart.actions .action.update:hover,
+.cart.actions .action.clear:focus,
+.cart.actions .action.clear:active,
+.cart.actions .action.clear:hover,
 .block.compare .action.compare:focus,
 .block.compare .action.compare:active,
 .block.compare .action.compare:hover,
@@ -853,8 +858,8 @@ input[type="reset"],
 .multicheckout .action.continue,
 .multicheckout .action.submit,
 .multicheckout .action.add,
-.cart.main.actions .action.update,
-.cart.main.actions .action.clear,
+.cart.actions .action.update,
+.cart.actions .action.clear,
 .cart.summary .block .action,
 .action.checkout,
 .form.newsletter.manage .action.save,
@@ -905,7 +910,8 @@ input[type="reset"],
 .paypal.review.view .actions .action.update,
 .data.table.wishlist + .actions .primary .action.share,
 .data.table.wishlist + .actions .primary .action.update,
-.shipping-tracking-popup .action.close {
+.shipping-tracking-popup .action.close,
+.recurring.order.details > .actions .primary .action {
   border: none;
   border-radius: 0;
   font: 600 14px/16px;
@@ -3923,7 +3929,7 @@ strong {
     Forms
 -------------------------------------- */
 .field.required > .label > span:first-child:after {
-  content: ' *';
+  content: '*';
   color: #da370a;
 }
 /*
@@ -4299,6 +4305,12 @@ body {
   font-size: 18px;
 }
 /*
+    Sidebar Paypal logo
+-------------------------------------- */
+.sidebar .paypal.acceptance {
+  margin-bottom: 45px;
+}
+/*
     Breadcrumbs
 -------------------------------------- */
 .breadcrumbs {
@@ -4370,14 +4382,14 @@ body {
 }
 .footer .bugs {
   margin-top: 25px;
-  font-size: 11px;
+  font-size: 12px;
+}
+.footer .bugs span:after {
+  content: '\00a0\2014\00a0';
+  display: inline-block;
 }
 .footer .bugs a {
   font-weight: bold;
-}
-.footer .bugs a:before {
-  content: ' - ';
-  display: inline-block;
 }
 /*
     Switchers
@@ -4924,12 +4936,12 @@ body {
   float: left;
   width: 200px;
 }
-.block.progress.onepage dt {
+.block.progress.onepage .content > dt {
   font-size: 16px;
   font-weight: 400;
   margin: 0 0 10px 0;
 }
-.block.progress.onepage dt a {
+.block.progress.onepage .content > dt a {
   font-size: 14px;
 }
 .block.progress.onepage dd.complete {
@@ -4938,6 +4950,38 @@ body {
 }
 .block.progress.onepage address {
   font-style: normal;
+}
+.block.progress.onepage .payment.method,
+.order.details .block.order .payment.method {
+  margin: 0;
+}
+.block.progress.onepage .payment.method .content,
+.order.details .block.order .payment.method .content {
+  margin: 5px 0;
+  padding: 0;
+}
+.block.progress.onepage .payment.method.purchase.order .content strong:after,
+.order.details .block.order .payment.method.purchase.order .content strong:after,
+.block.progress.onepage .payment.method.checkmemo .content strong:after,
+.order.details .block.order .payment.method.checkmemo .content strong:after {
+  content: ": ";
+}
+.block.progress.onepage .payment.method.purchase.order .content .number,
+.order.details .block.order .payment.method.purchase.order .content .number,
+.block.progress.onepage .payment.method.checkmemo .content .number,
+.order.details .block.order .payment.method.checkmemo .content .number {
+  white-space: nowrap;
+}
+.block.progress.onepage .payment.method .data.table th,
+.order.details .block.order .payment.method .data.table th {
+  font-size: 14px;
+  padding: 5px 0;
+  text-align: left;
+  width: 50%;
+}
+.block.progress.onepage .payment.method .data.table td,
+.order.details .block.order .payment.method .data.table td {
+  padding: 5px;
 }
 .opc.wrapper {
   float: right;
@@ -4995,6 +5039,7 @@ body {
   padding: 0;
   margin: 20px 0;
   border: 0;
+  position: relative;
 }
 .opc.wrapper .form:not(.login) .fieldset .field {
   display: inline-block;
@@ -5072,6 +5117,91 @@ body {
   letter-spacing: normal;
   word-spacing: normal;
   color: #da370a;
+}
+.opc.wrapper .form:not(.login) .field.date .nested {
+  display: inline-block;
+  margin-right: 5px;
+}
+.opc.wrapper .form:not(.login) .field.date select {
+  width: auto;
+}
+.opc.wrapper .tooltip {
+  background: #ffffff;
+  border: 1px solid #c2c2c2;
+  display: block;
+  cursor: default;
+  padding: 30px;
+  position: absolute;
+  left: 20px;
+  top: 10px;
+}
+.opc.wrapper .tooltip.hidden {
+  display: none;
+}
+.opc.wrapper .tooltip .action.close {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+.opc.wrapper .tooltip .action.close span {
+  width: 11px;
+  display: block;
+  line-height: 0;
+  white-space: nowrap;
+  vertical-align: middle;
+  text-align: center;
+  text-indent: -999em;
+}
+.opc.wrapper .tooltip .action.close span:after {
+  font-family: "icons";
+  font-size: 11px;
+  line-height: 11px;
+  height: 11px;
+  margin: 0;
+  overflow: hidden;
+  content: "\e012";
+  font-style: normal;
+  speak: none;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+}
+.opc.wrapper .tooltip .action.close span:active {
+  outline: 0;
+}
+.opc.wrapper .tooltip .action.close span:after {
+  text-indent: 0;
+  display: block;
+  margin: 0;
+}
+.opc.wrapper .check.payable {
+  margin: 0 0 0 20px;
+}
+.opc.wrapper .check.payable .title {
+  display: inline-block;
+  padding: 5px 0;
+  width: 30%;
+}
+.opc.wrapper .check.payable .content {
+  display: inline-block;
+  margin: 0;
+  padding: 5px 0;
+  width: 68%;
+}
+.opc.wrapper .sp-methods .items,
+.opc.wrapper .sp-methods .fieldset.items {
+  margin: 0 0 0 6px;
+}
+.opc.wrapper .sp-methods .paypal.field.items {
+  padding: 0;
+  width: 100%;
+}
+.opc.wrapper .sp-methods .paypal.icon {
+  display: inline-block;
+  margin-right: 5px;
+  vertical-align: middle;
 }
 .opc.loading .active {
   position: relative;
@@ -5420,6 +5550,15 @@ body {
   font-size: 24px;
   font-weight: 700;
 }
+.multicheckout.overview .box.method .payment.method {
+  margin: 0;
+}
+.multicheckout.overview .box.method .title {
+  margin: 0 0 5px;
+}
+.multicheckout.overview .box.method .content {
+  margin: 0 0 0 10px;
+}
 .multicheckout.change.billing .box {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -5484,13 +5623,6 @@ body {
 .multicheckout .product.name {
   margin-bottom: 0;
 }
-.multicheckout .items.data td.col.address {
-  padding-top: 10px;
-}
-.multicheckout .items.data td.col.delete,
-.multicheckout .items.data td.col.product {
-  padding-top: 18px;
-}
 .multicheckout .items.data .col.item {
   padding-left: 0;
   text-align: left;
@@ -5552,7 +5684,10 @@ body {
   margin: 0 0 15px;
   padding: 10px;
 }
-.multicheckout.form.address .col.address select {
+.multicheckout.form.address .control.address {
+  margin-top: -6px;
+}
+.multicheckout.form.address .control.address select {
   max-width: 450px;
 }
 .checkout-multishipping-address-newshipping .form.address.edit,
@@ -5764,10 +5899,10 @@ body {
 .cart.container:after {
   clear: both;
 }
-.cart.main.actions {
+.cart.actions {
   padding: 20px 0;
 }
-.cart.main.actions .action.continue {
+.cart.actions .action.continue {
   position: absolute;
   text-decoration: underline;
   right: 0;
@@ -5779,16 +5914,18 @@ body {
 .items.data thead tr:last-child th {
   padding-bottom: 10px;
 }
+.items.data th > span {
+  white-space: nowrap;
+}
 .items.data th.col.item > span {
   display: none;
 }
 .items.data td.col.qty {
   width: 40px;
-  padding-top: 20px;
   text-align: center;
 }
-.review .items.data td.col.qty {
-  padding-top: 16px;
+.items.data td.col.qty .control {
+  margin-top: -6px;
 }
 .items.data th.col.qty {
   text-transform: uppercase;
@@ -5801,11 +5938,17 @@ body {
 .items.data td.col.subtotal {
   text-align: right;
 }
+.items.data .img.photo.container,
 .items.data .product.photo {
   padding-right: 20px;
   display: table-cell;
   width: 1%;
   vertical-align: top;
+}
+.items.data .product.photo .img.photo.container {
+  display: block;
+  padding: 0;
+  width: auto;
 }
 .items.data .product.details {
   display: table-cell;
@@ -6808,6 +6951,9 @@ body {
   vertical-align: middle;
   margin: 0 5px;
 }
+.box.tocart .checkout.paypal {
+  margin-top: 10px;
+}
 .box.tocart .checkout.paypal.after:after {
   display: none;
 }
@@ -6845,10 +6991,11 @@ body {
 }
 .block.reorder .actions {
   margin: 15px 0 0;
+  text-align: left;
 }
 .block.reorder .actions .primary,
 .block.reorder .actions .secondary {
-  margin-right: 5px;
+  margin: 0 10px 10px 0;
   display: inline-block;
   vertical-align: middle;
 }
@@ -8322,6 +8469,10 @@ body {
 .product.main.info .product.options.wrapper .fieldset .datetime-picker + .ui-datepicker-trigger {
   margin: 0 15px 0 7px;
 }
+.product.main.info .product.options.wrapper .fieldset .payment.product.options .content,
+.product.main.info .product.options.wrapper .fieldset .payment.product.schedule .content {
+  margin: 5px 0 0;
+}
 .action.primary.customize,
 .action.primary.tocart {
   line-height: 16px;
@@ -8920,6 +9071,10 @@ img[align="right"] {
   position: relative;
   z-index: 1;
   cursor: pointer;
+}
+.customer.welcome .menu {
+  padding: 0;
+  margin: 0;
 }
 .customer.welcome .menu > ul {
   font-weight: 600;
@@ -10159,6 +10314,9 @@ img[align="right"] {
 .paypal.review.view .actions .action.update {
   margin-left: 10px;
 }
+.paypal.review.view .paypal.review.items {
+  clear: left;
+}
 .paypal.review.view .data.table.paypal.review.items {
   width: 100%;
 }
@@ -10181,6 +10339,67 @@ img[align="right"] {
 .paypal.review.view .data.table.paypal.review.items tfoot tr:first-child td {
   border-top: 3px solid #e5e5e5;
   padding-top: 15px;
+}
+.paypal.review.view .block.shipping.information,
+.paypal.review.view .block.billing.information {
+  margin-bottom: 45px;
+}
+.paypal.review.view .block.shipping.information > .content,
+.paypal.review.view .block.billing.information > .content {
+  *zoom: 1;
+}
+.paypal.review.view .block.shipping.information > .content:before,
+.paypal.review.view .block.billing.information > .content:before,
+.paypal.review.view .block.shipping.information > .content:after,
+.paypal.review.view .block.billing.information > .content:after {
+  content: "";
+  display: table;
+}
+.paypal.review.view .block.shipping.information > .content:after,
+.paypal.review.view .block.billing.information > .content:after {
+  clear: both;
+}
+.paypal.review.view .block.shipping.information .box,
+.paypal.review.view .block.billing.information .box {
+  float: left;
+  padding-right: 2%;
+  width: 48%;
+}
+.paypal.review.view .block.shipping.information .box > .content,
+.paypal.review.view .block.billing.information .box > .content {
+  background: #f8f8f8;
+  padding: 30px;
+}
+.paypal.review.view .block.shipping.information .box > .content .select,
+.paypal.review.view .block.billing.information .box > .content .select {
+  width: 100%;
+}
+.paypal.review.view .block.shipping.information .box > .content .actions,
+.paypal.review.view .block.billing.information .box > .content .actions {
+  margin: 25px 0 0;
+}
+.paypal.review.view .block.shipping.information address,
+.paypal.review.view .block.billing.information address {
+  font-style: normal;
+}
+.paypal.review.view .block.shipping.information .subtitle,
+.paypal.review.view .block.billing.information .subtitle {
+  display: block;
+  font-size: 18px;
+  font-weight: 200;
+  margin-bottom: 20px;
+}
+.paypal.review.view .block.shipping.information .subtitle .action,
+.paypal.review.view .block.billing.information .subtitle .action {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 400;
+  margin-left: 20px;
+  text-decoration: underline;
+  text-transform: lowercase;
+}
+.paypal.iframe {
+  display: none;
 }
 /*
     MISC
@@ -10610,6 +10829,12 @@ img[align="right"] {
   background: #f8f8f8;
   padding: 30px;
 }
+.order.details .block.order p {
+  margin-top: 0;
+}
+.order.details .block.order p:last-child {
+  margin-bottom: 0;
+}
 .order.details .order.info {
   clear: both;
 }
@@ -10619,12 +10844,13 @@ img[align="right"] {
   font-size: 20px;
 }
 .order.details .order.info > dd {
-  margin: 10px 0 0 0;
-  background: #f8f8f8;
-  padding: 30px;
+  margin: 0;
 }
 .order.details .order.info > dd .items {
   *zoom: 1;
+  background: #f8f8f8;
+  margin: 10px 0 0 0;
+  padding: 30px;
 }
 .order.details .order.info > dd .items:before,
 .order.details .order.info > dd .items:after {
@@ -10680,7 +10906,7 @@ img[align="right"] {
   height: 12px;
   margin: 0;
   overflow: hidden;
-  content: "\e029";
+  content: "\e02c";
   font-style: normal;
   speak: none;
   font-weight: normal;
@@ -10690,7 +10916,37 @@ img[align="right"] {
   text-align: center;
 }
 .order.details.items .action.show.expanded:after {
-  content: "\e02c";
+  content: "\e029";
+}
+.order.details.items .gift.message.details {
+  position: relative;
+}
+.order.details.items .gift.message {
+  margin: 0;
+}
+.order.details.items .action.close {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.order.details.items .action.close span:after {
+  font-family: "icons";
+  font-size: 12px;
+  line-height: 12px;
+  height: 12px;
+  margin: 0;
+  overflow: hidden;
+  content: "\e012";
+  font-style: normal;
+  speak: none;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+}
+.order.details.items + .order.details.view {
+  margin-top: 45px;
 }
 .shipping-tracking-popup .action.close {
   text-indent: 0;
@@ -10778,6 +11034,15 @@ img[align="right"] {
 .data.table.order.tracking .label {
   width: 40%;
 }
+.data.table.order .qty.summary {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  list-style-image: none;
+}
+.data.table.order .qty.summary .label:after {
+  content: ": ";
+}
 /*
     My Account -> Billing agreements
 -------------------------------------- */
@@ -10805,6 +11070,52 @@ img[align="right"] {
 .billing.agreements .form.new.agreement .action.create {
   padding-top: 7px;
   padding-bottom: 6px;
+}
+/*
+    My Account -> Recurring profiles
+-------------------------------------- */
+.recurring.order.details .block.view.info {
+  *zoom: 1;
+}
+.recurring.order.details .block.view.info:before,
+.recurring.order.details .block.view.info:after {
+  content: "";
+  display: table;
+}
+.recurring.order.details .block.view.info:after {
+  clear: both;
+}
+.recurring.order.details .block.view.info .box {
+  float: left;
+  padding-right: 2%;
+  width: 48%;
+}
+.recurring.order.details .block.view.info .box .subtitle {
+  font-size: 20px;
+  font-weight: 200;
+  line-height: 1.2;
+  display: inline-block;
+  margin-bottom: 15px;
+}
+.recurring.order.details .block.view.info .box .content {
+  background: #f8f8f8;
+  padding: 30px;
+  *zoom: 1;
+}
+.recurring.order.details .block.view.info .box .content:before,
+.recurring.order.details .block.view.info .box .content:after {
+  content: "";
+  display: table;
+}
+.recurring.order.details .block.view.info .box .content:after {
+  clear: both;
+}
+.recurring.order.details .block.view.info .box .data.table th,
+.recurring.order.details .block.view.info .box .data.table td {
+  padding: 4px 7px;
+}
+.recurring.order.details > .actions .primary {
+  text-align: right;
 }
 /*
     Overlay popup

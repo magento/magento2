@@ -75,7 +75,7 @@ class Content extends \Magento\Adminhtml\Block\Widget\Container
      */
     public function getContentsUrl()
     {
-        return $this->getUrl('*/*/contents', array('type' => $this->getRequest()->getParam('type')));
+        return $this->getUrl('adminhtml/*/contents', array('type' => $this->getRequest()->getParam('type')));
     }
 
     /**
@@ -111,7 +111,7 @@ class Content extends \Magento\Adminhtml\Block\Widget\Container
      */
     public function getNewfolderUrl()
     {
-        return $this->getUrl('*/*/newFolder');
+        return $this->getUrl('adminhtml/*/newFolder');
     }
 
     /**
@@ -121,7 +121,7 @@ class Content extends \Magento\Adminhtml\Block\Widget\Container
      */
     protected function getDeletefolderUrl()
     {
-        return $this->getUrl('*/*/deleteFolder');
+        return $this->getUrl('adminhtml/*/deleteFolder');
     }
 
     /**
@@ -132,7 +132,7 @@ class Content extends \Magento\Adminhtml\Block\Widget\Container
      */
     public function getDeleteFilesUrl()
     {
-        return $this->getUrl('*/*/deleteFiles');
+        return $this->getUrl('adminhtml/*/deleteFiles');
     }
 
     /**
@@ -142,7 +142,7 @@ class Content extends \Magento\Adminhtml\Block\Widget\Container
      */
     public function getOnInsertUrl()
     {
-        return $this->getUrl('*/*/onInsert');
+        return $this->getUrl('adminhtml/*/onInsert');
     }
 
     /**

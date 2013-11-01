@@ -684,29 +684,29 @@ th.required:after {
     1 column grid pages with actions
 -------------------------------------- */
 /* slaes */
-.adminhtml-sales-order-index .col-1-layout,
-.adminhtml-sales-shipment-index .col-1-layout,
+.sales-order-index .col-1-layout,
+.sales-shipment-index .col-1-layout,
 .adminhtml-rma-index .col-1-layout,
-.adminhtml-sales-invoice-index .col-1-layout,
+.sales-invoice-index .col-1-layout,
 .adminhtml-rma-item-attribute-index .col-1-layout,
-.adminhtml-sales-transactions-index .col-1-layout,
-.adminhtml-sales-creditmemo-index .col-1-layout,
-.adminhtml-sales-recurring-profile-index .col-1-layout,
+.sales-transactions-index .col-1-layout,
+.sales-creditmemo-index .col-1-layout,
+.sales-recurring-profile-index .col-1-layout,
 .adminhtml-giftwrapping-index .col-1-layout,
-.adminhtml-sales-billing-agreement-index .col-1-layout,
+.sales-billing-agreement-index .col-1-layout,
 .adminhtml-checkout-agreement-index .col-1-layout,
 /* catalog */
-.adminhtml-catalog-product-index .col-1-layout,
+.catalog-product-index .col-1-layout,
 .adminhtml-catalog-event-index .col-1-layout,
 .adminhtml-googleshopping-items-index .col-1-layout,
-.adminhtml-catalog-product-attribute-index .col-1-layout,
-.adminhtml-catalog-product-set-index .col-1-layout,
+.catalog-product-attribute-index .col-1-layout,
+.catalog-product-set-index .col-1-layout,
 .adminhtml-urlrewrite-index .col-1-layout,
 .adminhtml-targetrule-index .col-1-layout,
-.adminhtml-catalog-search-index .col-1-layout,
-.adminhtml-catalog-product-review-pending .col-1-layout,
-.adminhtml-catalog-product-review-index .col-1-layout,
-.adminhtml-rating-index .col-1-layout,
+.catalog-search-index .col-1-layout,
+.catalog-product-review-pending .col-1-layout,
+.catalog-product-review-index .col-1-layout,
+.rating-index-index .col-1-layout,
 .adminhtml-tag-index .col-1-layout,
 .adminhtml-tag-pending .col-1-layout,
 .adminhtml-googleshopping-types-index .col-1-layout,
@@ -775,11 +775,11 @@ th.required:after {
 .adminhtml-system-variable-index .col-1-layout,
 .adminhtml-user-index .col-1-layout,
 .adminhtml-user-role-index .col-1-layout,
-.adminhtml-tax-rule-index .col-1-layout,
-.adminhtml-tax-rate-index .col-1-layout,
+.tax-rule-index .col-1-layout,
+.tax-rate-index .col-1-layout,
 .adminhtml-system-currency-index .col-1-layout,
 .adminhtml-cache-index .col-1-layout,
-.adminhtml-sales-order-status-index .col-1-layout {
+.sales-order-status-index .col-1-layout {
     padding: 0;
     background: transparent;
     border: 0;
@@ -791,21 +791,21 @@ th.required:after {
 /*
     Round "+" button for grid tables
 -------------------------------------- */
-.adminhtml-sales-order-index .page-actions,
+.sales-order-index .page-actions,
 .adminhtml-rma-index .page-actions,
 .adminhtml-giftwrapping-index .page-actions,
 .adminhtml-rma-item-attribute-index .page-actions,
 .adminhtml-checkout-agreement-index .page-actions,
 /* catalog */
-.adminhtml-catalog-product-index .page-actions,
+.catalog-product-index .page-actions,
 .adminhtml-catalog-event-index .page-actions,
-.adminhtml-catalog-product-attribute-index .page-actions,
-.adminhtml-catalog-product-set-index .page-actions,
+.catalog-product-attribute-index .page-actions,
+.catalog-product-set-index .page-actions,
 .adminhtml-urlrewrite-index .page-actions,
 .adminhtml-targetrule-index .page-actions,
-.adminhtml-catalog-search-index .page-actions,
-.adminhtml-catalog-product-review-index .page-actions,
-.adminhtml-rating-index .page-actions,
+.catalog-search-index .page-actions,
+.catalog-product-review-index .page-actions,
+.rating-index-index .page-actions,
 .adminhtml-tag-index .page-actions,
 .adminhtml-googleshopping-types-index .page-actions,
 .adminhtml-sitemap-index .page-actions,
@@ -840,8 +840,8 @@ th.required:after {
 .adminhtml-system-variable-index .page-actions,
 .adminhtml-user-index .page-actions,
 .adminhtml-user-role-index .page-actions,
-.adminhtml-tax-rule-index .page-actions,
-.adminhtml-tax-rate-index .page-actions {
+.tax-rule-index .page-actions,
+.tax-rate-index .page-actions {
     position: absolute;
     z-index: 2;
     margin-top: 8px;
@@ -849,21 +849,21 @@ th.required:after {
     padding: 0;
 }
 
-.adminhtml-sales-order-index .page-actions.fixed,
+.sales-order-index .page-actions.fixed,
 .adminhtml-rma-index .page-actions.fixed,
 .adminhtml-giftwrapping-index .page-actions.fixed,
 .adminhtml-rma-item-attribute-index .page-actions.fixed,
 .adminhtml-checkout-agreement-index .page-actions.fixed,
 /* catalog */
-.adminhtml-catalog-product-index .page-actions.fixed,
+.catalog-product-index .page-actions.fixed,
 .adminhtml-catalog-event-index .page-actions.fixed,
-.adminhtml-catalog-product-attribute-index .page-actions.fixed,
-.adminhtml-catalog-product-set-index .page-actions.fixed,
+.catalog-product-attribute-index .page-actions.fixed,
+.catalog-product-set-index .page-actions.fixed,
 .adminhtml-urlrewrite-index .page-actions.fixed,
 .adminhtml-targetrule-index .page-actions.fixed,
-.adminhtml-catalog-search-index .page-actions.fixed,
-.adminhtml-catalog-product-review-index .page-actions.fixed,
-.adminhtml-rating-index .page-actions.fixed,
+.catalog-search-index .page-actions.fixed,
+.catalog-product-review-index .page-actions.fixed,
+.rating-index-index .page-actions.fixed,
 .adminhtml-tag-index .page-actions.fixed,
 .adminhtml-googleshopping-types-index .page-actions.fixed,
 .adminhtml-sitemap-index .page-actions.fixed,
@@ -898,29 +898,29 @@ th.required:after {
 .adminhtml-system-variable-index .page-actions.fixed,
 .adminhtml-user-index .page-actions.fixed,
 .adminhtml-user-role-index .page-actions.fixed,
-.adminhtml-tax-rule-index .page-actions.fixed,
-.adminhtml-tax-rate-index .page-actions.fixed {
+.tax-rule-index .page-actions.fixed,
+.tax-rate-index .page-actions.fixed {
     left: 0;
     margin: 0;
     padding: 0 21px;
     position: fixed;
 }
 
-.adminhtml-sales-order-index .page-actions .add,
+.sales-order-index .page-actions .add,
 .adminhtml-rma-index .page-actions .add,
 .adminhtml-giftwrapping-index .page-actions .add,
 .adminhtml-rma-item-attribute-index .page-actions .add,
 .adminhtml-checkout-agreement-index .page-actions .add,
 /* catalog */
-.adminhtml-catalog-product-index .page-actions .btn-round > .action-default,
+.catalog-product-index .page-actions .btn-round > .action-default,
 .adminhtml-catalog-event-index .page-actions .add,
-.adminhtml-catalog-product-attribute-index .page-actions .add,
-.adminhtml-catalog-product-set-index .page-actions .add,
+.catalog-product-attribute-index .page-actions .add,
+.catalog-product-set-index .page-actions .add,
 .adminhtml-urlrewrite-index .page-actions .add,
 .adminhtml-targetrule-index .page-actions .add,
-.adminhtml-catalog-search-index .page-actions .add,
-.adminhtml-catalog-product-review-index .page-actions .add,
-.adminhtml-rating-index .page-actions .add,
+.catalog-search-index .page-actions .add,
+.catalog-product-review-index .page-actions .add,
+.rating-index-index .page-actions .add,
 .adminhtml-tag-index .page-actions .add,
 .adminhtml-googleshopping-types-index .page-actions .add,
 .adminhtml-sitemap-index .page-actions .add,
@@ -955,8 +955,8 @@ th.required:after {
 .adminhtml-system-variable-index .page-actions .add,
 .adminhtml-user-index .page-actions .add,
 .adminhtml-user-role-index .page-actions .add,
-.adminhtml-tax-rule-index .page-actions .add,
-.adminhtml-tax-rate-index .page-actions .add {
+.tax-rule-index .page-actions .add,
+.tax-rate-index .page-actions .add {
     width: 32px;
     height: 32px;
     overflow: hidden;
@@ -976,21 +976,21 @@ th.required:after {
     background: linear-gradient(to bottom, #f58228 0%,#f3731c 100%);
 }
 
-.eq-ie8 .adminhtml-sales-order-index .page-actions .add,
+.eq-ie8 .sales-order-index .page-actions .add,
 .eq-ie8 .adminhtml-rma-index .page-actions .add,
 .eq-ie8 .adminhtml-giftwrapping-index .page-actions .add,
 .eq-ie8 .adminhtml-rma-item-attribute-index .page-actions .add,
 .eq-ie8 .adminhtml-checkout-agreement-index .page-actions .add,
 /* catalog */
-.eq-ie8 .adminhtml-catalog-product-index .page-actions .btn-round > .action-default,
+.eq-ie8 .catalog-product-index .page-actions .btn-round > .action-default,
 .eq-ie8 .adminhtml-catalog-event-index .page-actions .add,
-.eq-ie8 .adminhtml-catalog-product-attribute-index .page-actions .add,
-.eq-ie8 .adminhtml-catalog-product-set-index .page-actions .add,
+.eq-ie8 .catalog-product-attribute-index .page-actions .add,
+.eq-ie8 .catalog-product-set-index .page-actions .add,
 .eq-ie8 .adminhtml-urlrewrite-index .page-actions .add,
 .eq-ie8 .adminhtml-targetrule-index .page-actions .add,
-.eq-ie8 .adminhtml-catalog-search-index .page-actions .add,
-.eq-ie8 .adminhtml-catalog-product-review-index .page-actions .add,
-.eq-ie8 .adminhtml-rating-index .page-actions .add,
+.eq-ie8 .catalog-search-index .page-actions .add,
+.eq-ie8 .catalog-product-review-index .page-actions .add,
+.eq-ie8 .rating-index-index .page-actions .add,
 .eq-ie8 .adminhtml-tag-index .page-actions .add,
 .eq-ie8 .adminhtml-googleshopping-types-index .page-actions .add,
 .eq-ie8 .adminhtml-sitemap-index .page-actions .add,
@@ -1025,26 +1025,26 @@ th.required:after {
 .eq-ie8 .adminhtml-system-variable-index .page-actions .add,
 .eq-ie8 .adminhtml-user-index .page-actions .add,
 .eq-ie8 .adminhtml-user-role-index .page-actions .add,
-.eq-ie8 .adminhtml-tax-rule-index .page-actions .add,
-.eq-ie8 .adminhtml-tax-rate-index .page-actions .add {
+.eq-ie8 .tax-rule-index .page-actions .add,
+.eq-ie8 .tax-rate-index .page-actions .add {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f58228', endColorstr='#f3731c',GradientType=0 );
 }
 
-.adminhtml-sales-order-index .page-actions .add:hover,
+.sales-order-index .page-actions .add:hover,
 .adminhtml-rma-index .page-actions .add:hover,
 .adminhtml-giftwrapping-index .page-actions .add:hover,
 .adminhtml-rma-item-attribute-index .page-actions .add:hover,
 .adminhtml-checkout-agreement-index .page-actions .add:hover,
 /* catalog */
-.adminhtml-catalog-product-index .page-actions .btn-round > .action-default:hover,
+.catalog-product-index .page-actions .btn-round > .action-default:hover,
 .adminhtml-catalog-event-index .page-actions .add:hover,
-.adminhtml-catalog-product-attribute-index .page-actions .add:hover,
-.adminhtml-catalog-product-set-index .page-actions .add:hover,
+.catalog-product-attribute-index .page-actions .add:hover,
+.catalog-product-set-index .page-actions .add:hover,
 .adminhtml-urlrewrite-index .page-actions .add:hover,
 .adminhtml-targetrule-index .page-actions .add:hover,
-.adminhtml-catalog-search-index .page-actions .add:hover,
-.adminhtml-catalog-product-review-index .page-actions .add:hover,
-.adminhtml-rating-index .page-actions .add:hover,
+.catalog-search-index .page-actions .add:hover,
+.catalog-product-review-index .page-actions .add:hover,
+.rating-index-index .page-actions .add:hover,
 .adminhtml-tag-index .page-actions .add:hover,
 .adminhtml-googleshopping-types-index .page-actions .add:hover,
 .adminhtml-sitemap-index .page-actions .add:hover,
@@ -1079,8 +1079,8 @@ th.required:after {
 .adminhtml-system-variable-index .page-actions .add:hover,
 .adminhtml-user-index .page-actions .add:hover,
 .adminhtml-user-role-index .page-actions .add:hover,
-.adminhtml-tax-rule-index .page-actions .add:hover,
-.adminhtml-tax-rate-index .page-actions .add:hover {
+.tax-rule-index .page-actions .add:hover,
+.tax-rate-index .page-actions .add:hover {
     border: 1px solid #e4731c;
     background: #e47821;
     background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2U0NzgyMSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkZjY4MTciIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
@@ -1092,21 +1092,21 @@ th.required:after {
     background: linear-gradient(to bottom, #e47821 0%,#df6817 100%);
 }
 
-.eq-ie8 .adminhtml-sales-order-index .page-actions .add:hover,
+.eq-ie8 .sales-order-index .page-actions .add:hover,
 .eq-ie8 .adminhtml-rma-index .page-actions .add:hover,
 .eq-ie8 .adminhtml-giftwrapping-index .page-actions .add:hover,
 .eq-ie8 .adminhtml-rma-item-attribute-index .page-actions .add:hover,
 .eq-ie8 .adminhtml-checkout-agreement-index .page-actions .add:hover,
 /* catalog */
-.eq-ie8 .adminhtml-catalog-product-index .page-actions .btn-round > .action-default:hover,
+.eq-ie8 .catalog-product-index .page-actions .btn-round > .action-default:hover,
 .eq-ie8 .adminhtml-catalog-event-index .page-actions .add:hover,
-.eq-ie8 .adminhtml-catalog-product-attribute-index .page-actions .add:hover,
-.eq-ie8 .adminhtml-catalog-product-set-index .page-actions .add:hover,
+.eq-ie8 .catalog-product-attribute-index .page-actions .add:hover,
+.eq-ie8 .catalog-product-set-index .page-actions .add:hover,
 .eq-ie8 .adminhtml-urlrewrite-index .page-actions .add:hover,
 .eq-ie8 .adminhtml-targetrule-index .page-actions .add:hover,
-.eq-ie8 .adminhtml-catalog-search-index .page-actions .add:hover,
-.eq-ie8 .adminhtml-catalog-product-review-index .page-actions .add:hover,
-.eq-ie8 .adminhtml-rating-index .page-actions .add:hover,
+.eq-ie8 .catalog-search-index .page-actions .add:hover,
+.eq-ie8 .catalog-product-review-index .page-actions .add:hover,
+.eq-ie8 .rating-index-index .page-actions .add:hover,
 .eq-ie8 .adminhtml-tag-index .page-actions .add:hover,
 .eq-ie8 .adminhtml-googleshopping-types-index .page-actions .add:hover,
 .eq-ie8 .adminhtml-sitemap-index .page-actions .add:hover,
@@ -1141,26 +1141,26 @@ th.required:after {
 .eq-ie8 .adminhtml-system-variable-index .page-actions .add:hover,
 .eq-ie8 .adminhtml-user-index .page-actions .add:hover,
 .eq-ie8 .adminhtml-user-role-index .page-actions .add:hover,
-.eq-ie8 .adminhtml-tax-rule-index .page-actions .add:hover,
-.eq-ie8 .adminhtml-tax-rate-index .page-actions .add:hover {
+.eq-ie8 .tax-rule-index .page-actions .add:hover,
+.eq-ie8 .tax-rate-index .page-actions .add:hover {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e47821', endColorstr='#df6817',GradientType=0 );
 }
 
-.adminhtml-sales-order-index .page-actions .add:active,
+.sales-order-index .page-actions .add:active,
 .adminhtml-rma-index .page-actions .add:active,
 .adminhtml-giftwrapping-index .page-actions .add:active,
 .adminhtml-rma-item-attribute-index .page-actions .add:active,
 .adminhtml-checkout-agreement-index .page-actions .add:active,
 /* catalog */
-.adminhtml-catalog-product-index .page-actions .btn-round > .action-default:active,
+.catalog-product-index .page-actions .btn-round > .action-default:active,
 .adminhtml-catalog-event-index .page-actions .add:active,
-.adminhtml-catalog-product-attribute-index .page-actions .add:active,
-.adminhtml-catalog-product-set-index .page-actions .add:active,
+.catalog-product-attribute-index .page-actions .add:active,
+.catalog-product-set-index .page-actions .add:active,
 .adminhtml-urlrewrite-index .page-actions .add:active,
 .adminhtml-targetrule-index .page-actions .add:active,
-.adminhtml-catalog-search-index .page-actions .add:active,
-.adminhtml-catalog-product-review-index .page-actions .add:active,
-.adminhtml-rating-index .page-actions .add:active,
+.catalog-search-index .page-actions .add:active,
+.catalog-product-review-index .page-actions .add:active,
+.rating-index-index .page-actions .add:active,
 .adminhtml-tag-index .page-actions .add:active,
 .adminhtml-googleshopping-types-index .page-actions .add:active,
 .adminhtml-sitemap-index .page-actions .add:active,
@@ -1195,8 +1195,8 @@ th.required:after {
 .adminhtml-system-variable-index .page-actions .add:active,
 .adminhtml-user-index .page-actions .add:active,
 .adminhtml-user-role-index .page-actions .add:active,
-.adminhtml-tax-rule-index .page-actions .add:active,
-.adminhtml-tax-rate-index .page-actions .add:active {
+.tax-rule-index .page-actions .add:active,
+.tax-rate-index .page-actions .add:active {
     background: #e2701av;
     -webkit-box-shadow: inset 0px 1px 1px 1px rgba(185, 90, 19, 1);
     box-shadow: inset 0px 1px 1px 1px rgba(185, 90, 19, 1);
@@ -1204,21 +1204,21 @@ th.required:after {
     filter: none;
 }
 
-.adminhtml-sales-order-index .page-actions .add > span,
+.sales-order-index .page-actions .add > span,
 .adminhtml-rma-index .page-actions .add > span,
 .adminhtml-rma-item-attribute-index .page-actions .add > span,
 .adminhtml-giftwrapping-index .page-actions .add > span,
 .adminhtml-checkout-agreement-index .page-actions .add > span,
 /* catalog */
-.adminhtml-catalog-product-index .page-actions .btn-round > .action-default > span,
+.catalog-product-index .page-actions .btn-round > .action-default > span,
 .adminhtml-catalog-event-index .page-actions .add > span,
-.adminhtml-catalog-product-attribute-index .page-actions .add > span,
-.adminhtml-catalog-product-set-index .page-actions .add > span,
+.catalog-product-attribute-index .page-actions .add > span,
+.catalog-product-set-index .page-actions .add > span,
 .adminhtml-urlrewrite-index .page-actions .add > span,
 .adminhtml-targetrule-index .page-actions .add > span,
-.adminhtml-catalog-search-index .page-actions .add > span,
-.adminhtml-catalog-product-review-index .page-actions .add > span,
-.adminhtml-rating-index .page-actions .add > span,
+.catalog-search-index .page-actions .add > span,
+.catalog-product-review-index .page-actions .add > span,
+.rating-index-index .page-actions .add > span,
 .adminhtml-tag-index .page-actions .add > span,
 .adminhtml-googleshopping-types-index .page-actions .add > span,
 .adminhtml-sitemap-index .page-actions .add > span,
@@ -1253,29 +1253,29 @@ th.required:after {
 .adminhtml-system-variable-index .page-actions .add > span,
 .adminhtml-user-index .page-actions .add > span,
 .adminhtml-user-role-index .page-actions .add > span,
-.adminhtml-tax-rule-index .page-actions .add > span,
-.adminhtml-tax-rate-index .page-actions .add > span {
+.tax-rule-index .page-actions .add > span,
+.tax-rate-index .page-actions .add > span {
     text-indent: -999em;
     display: block;
     width: 32px;
     height: 32px;
 }
 
-.adminhtml-sales-order-index .page-actions .add > span:before,
+.sales-order-index .page-actions .add > span:before,
 .adminhtml-rma-index .page-actions .add > span:before,
 .adminhtml-giftwrapping-index .page-actions .add > span:before,
 .adminhtml-rma-item-attribute-index .page-actions .add > span:before,
 .adminhtml-checkout-agreement-index .page-actions .add > span:before,
 /* catalog */
-.adminhtml-catalog-product-index .page-actions .btn-round > .action-default > span:before,
+.catalog-product-index .page-actions .btn-round > .action-default > span:before,
 .adminhtml-catalog-event-index .page-actions .add > span:before,
-.adminhtml-catalog-product-attribute-index .page-actions .add > span:before,
-.adminhtml-catalog-product-set-index .page-actions .add > span:before,
+.catalog-product-attribute-index .page-actions .add > span:before,
+.catalog-product-set-index .page-actions .add > span:before,
 .adminhtml-urlrewrite-index .page-actions .add > span:before,
 .adminhtml-targetrule-index .page-actions .add > span:before,
-.adminhtml-catalog-search-index .page-actions .add > span:before,
-.adminhtml-catalog-product-review-index .page-actions .add > span:before,
-.adminhtml-rating-index .page-actions .add > span:before,
+.catalog-search-index .page-actions .add > span:before,
+.catalog-product-review-index .page-actions .add > span:before,
+.rating-index-index .page-actions .add > span:before,
 .adminhtml-tag-index .page-actions .add > span:before,
 .adminhtml-googleshopping-types-index .page-actions .add > span:before,
 .adminhtml-sitemap-index .page-actions .add > span:before,
@@ -1310,8 +1310,8 @@ th.required:after {
 .adminhtml-system-variable-index .page-actions .add > span:before,
 .adminhtml-user-index .page-actions .add > span:before,
 .adminhtml-user-role-index .page-actions .add > span:before,
-.adminhtml-tax-rule-index .page-actions .add > span:before,
-.adminhtml-tax-rate-index .page-actions .add > span:before {
+.tax-rule-index .page-actions .add > span:before,
+.tax-rate-index .page-actions .add > span:before {
     text-indent: 0;
     font-family: 'MUI-Icons';
     font-weight: normal;
@@ -1329,8 +1329,8 @@ th.required:after {
     overflow: hidden;
 }
 
-.adminhtml-catalog-product-index .btn-round > .action-toggle,
-.adminhtml-catalog-product-index .btn-round > .action-toggle:focus {
+.catalog-product-index .btn-round > .action-toggle,
+.catalog-product-index .btn-round > .action-toggle:focus {
     border: 1px solid #c5c0b9;
     border-radius: 0 20px 20px 0;
     box-shadow: 0 1px 0 0 #f3f2f1, inset 0 1px 0 0 #f4f1ec;
@@ -1349,12 +1349,12 @@ th.required:after {
     background: linear-gradient(to bottom, #f1eee7 0%,#ebe7dc 100%);
 }
 
-.eq-ie8 .adminhtml-catalog-product-index .btn-round > .action-toggle,
-.eq-ie8 .adminhtml-catalog-product-index .btn-round > .action-toggle:focus {
+.eq-ie8 .catalog-product-index .btn-round > .action-toggle,
+.eq-ie8 .catalog-product-index .btn-round > .action-toggle:focus {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f1eee7', endColorstr='#ebe7dc',GradientType=0 );
 }
 
-.adminhtml-catalog-product-index .btn-round > .action-toggle:hover {
+.catalog-product-index .btn-round > .action-toggle:hover {
     margin-left: -6px;
     text-shadow: none;
     background: #dfdbd4;
@@ -1367,11 +1367,11 @@ th.required:after {
     background: linear-gradient(to bottom, #dfdbd4 0%,#d3cdc3 100%);
 }
 
-.eq-ie8 .adminhtml-catalog-product-index .btn-round > .action-toggle:hover {
+.eq-ie8 .catalog-product-index .btn-round > .action-toggle:hover {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dfdbd4', endColorstr='#d3cdc3',GradientType=0 );
 }
 
-.adminhtml-catalog-product-index .btn-round.active {
+.catalog-product-index .btn-round.active {
     background: #fff;
     padding: 5px 4px 6px 7px;
     margin: -6px -4px -6px -8px;
@@ -1382,8 +1382,8 @@ th.required:after {
     filter: none
 }
 
-.adminhtml-catalog-product-index .btn-round.active > .action-toggle,
-.adminhtml-catalog-product-index .btn-round.active > .action-toggle:hover {
+.catalog-product-index .btn-round.active > .action-toggle,
+.catalog-product-index .btn-round.active > .action-toggle:hover {
     background: transparent;
     border: 0;
     border-radius: 0;
@@ -1392,12 +1392,12 @@ th.required:after {
     padding: 1px 5px 1px 11px;
 }
 
-.eq-ie8 .adminhtml-catalog-product-index .btn-round.active > .action-toggle,
-.eq-ie8 .adminhtml-catalog-product-index .btn-round.active > .action-toggle:hover {
+.eq-ie8 .catalog-product-index .btn-round.active > .action-toggle,
+.eq-ie8 .catalog-product-index .btn-round.active > .action-toggle:hover {
     filter: none;
 }
 
-.adminhtml-catalog-product-index .btn-round.active:before {
+.catalog-product-index .btn-round.active:before {
     position: absolute;
     display: block;
     bottom: -2px;
@@ -1409,7 +1409,7 @@ th.required:after {
     z-index: 5;
 }
 
-.adminhtml-catalog-product-index .btn-round .dropdown-menu {
+.catalog-product-index .btn-round .dropdown-menu {
     margin-top: -4px;
     left: -1px;
     right: auto;
@@ -1419,29 +1419,29 @@ th.required:after {
     z-index: 1;
 }
 
-.adminhtml-catalog-product-index .dropdown-menu {
+.catalog-product-index .dropdown-menu {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
-.adminhtml-catalog-product-index .btn-round.active .dropdown-menu > li > .item {
+.catalog-product-index .btn-round.active .dropdown-menu > li > .item {
     padding: 9px 10px 10px;
 }
 
-.adminhtml-sales-order-index .grid-actions,
+.sales-order-index .grid-actions,
 .adminhtml-rma-index .grid-actions,
 .adminhtml-giftwrapping-index .grid-actions,
 .adminhtml-rma-item-attribute-index .grid-actions,
 .adminhtml-checkout-agreement-index .grid-actions,
 /* catalog */
-.adminhtml-catalog-product-index .grid-actions,
+.catalog-product-index .grid-actions,
 .adminhtml-catalog-event-index .grid-actions,
-.adminhtml-catalog-product-attribute-index .grid-actions,
-.adminhtml-catalog-product-set-index .grid-actions,
+.catalog-product-attribute-index .grid-actions,
+.catalog-product-set-index .grid-actions,
 .adminhtml-urlrewrite-index .grid-actions,
 .adminhtml-targetrule-index .grid-actions,
-.adminhtml-catalog-search-index .grid-actions,
-.adminhtml-catalog-product-review-index .grid-actions,
-.adminhtml-rating-index .grid-actions,
+.catalog-search-index .grid-actions,
+.catalog-product-review-index .grid-actions,
+.rating-index-index .grid-actions,
 .adminhtml-tag-index .grid-actions,
 .adminhtml-googleshopping-types-index .grid-actions,
 .adminhtml-sitemap-index .grid-actions,
@@ -1476,8 +1476,8 @@ th.required:after {
 .adminhtml-system-variable-index .grid-actions,
 .adminhtml-user-index .grid-actions,
 .adminhtml-user-role-index .grid-actions,
-.adminhtml-tax-rule-index .grid-actions,
-.adminhtml-tax-rate-index .grid-actions {
+.tax-rule-index .grid-actions,
+.tax-rate-index .grid-actions {
     border-radius: 5px 5px 0 0;
     margin-top: 20px;
     padding-left: 100px;
@@ -1491,7 +1491,7 @@ th.required:after {
 .adminhtml-system-currencysymbol-index .page-actions,
 .adminhtml-cache-index .page-actions,
 .adminhtml-system-store-index .page-actions,
-.adminhtml-sales-order-status-index .page-actions {
+.sales-order-status-index .page-actions {
     border: 1px solid #c0bbaf;
     border-bottom: 0;
     background: rgb(246, 243, 236);
@@ -1527,13 +1527,13 @@ th.required:after {
 .adminhtml-system-currencysymbol-index .page-actions.fixed,
 .adminhtml-cache-index .page-actions.fixed,
 .adminhtml-system-store-index .page-actions.fixed,
-.adminhtml-sales-order-status-index .page-actions.fixed {
+.sales-order-status-index .page-actions.fixed {
     background-image: none;
     padding: 0 21px;
     position: fixed;
 }
 
-.adminhtml-catalog-product-index .grid-actions {
+.catalog-product-index .grid-actions {
     padding-left: 80px;
 }
 
@@ -1546,7 +1546,7 @@ th.required:after {
     margin: 3px 0 0 10px;
 }
 
-.adminhtml-catalog-product-index .field-store-switcher {
+.catalog-product-index .field-store-switcher {
     padding: 0;
 }
 
@@ -1558,7 +1558,7 @@ th.required:after {
     margin: 0 0 5px;
 }
 
-.adminhtml-sales-order-create-index .grid table .action-configure {
+.sales-order-create-index .grid table .action-configure {
     float: right;
 }
 
@@ -1616,7 +1616,7 @@ th.required:after {
 /*
     Manage Categories
 -------------------------------------- */
-.adminhtml-catalog-category-edit .category-edit-title {
+.catalog-category-edit .category-edit-title {
     float: left;
 }
 

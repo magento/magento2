@@ -49,7 +49,7 @@ class Report extends \Magento\Backend\Block\Widget\Grid\Container
         if (true == $this->_authorization->isAllowed('Magento_Paypal::fetch')) {
             $this->_addButton('fetch', array(
                 'label'   => __('Fetch Updates'),
-                'onclick' => "confirmSetLocation('{$message}', '{$this->getUrl('*/*/fetch')}')",
+                'onclick' => "confirmSetLocation('{$message}', '{$this->getUrl('adminhtml/*/fetch')}')",
                 'class'   => 'task'
             ));
         }

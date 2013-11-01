@@ -43,18 +43,18 @@ class Action extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Action
         if($row->getQueueStatus()==\Magento\Newsletter\Model\Queue::STATUS_NEVER) {
                if(!$row->getQueueStartAt() && $row->getSubscribersTotal()) {
                 $actions[] = array(
-                    'url' => $this->getUrl('*/*/start', array('id'=>$row->getId())),
+                    'url' => $this->getUrl('adminhtml/*/start', array('id'=>$row->getId())),
                     'caption'	=> __('Start')
                 );
             }
         } else if ($row->getQueueStatus()==\Magento\Newsletter\Model\Queue::STATUS_SENDING) {
             $actions[] = array(
-                    'url' => $this->getUrl('*/*/pause', array('id'=>$row->getId())),
+                    'url' => $this->getUrl('adminhtml/*/pause', array('id'=>$row->getId())),
                     'caption'	=>	__('Pause')
             );
 
             $actions[] = array(
-                'url'		=>	$this->getUrl('*/*/cancel', array('id'=>$row->getId())),
+                'url'		=>	$this->getUrl('adminhtml/*/cancel', array('id'=>$row->getId())),
                 'confirm'	=>	__('Do you really want to cancel the queue?'),
                 'caption'	=>	__('Cancel')
             );
@@ -63,14 +63,14 @@ class Action extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Action
         } else if ($row->getQueueStatus()==\Magento\Newsletter\Model\Queue::STATUS_PAUSE) {
 
             $actions[] = array(
-                'url' => $this->getUrl('*/*/resume', array('id'=>$row->getId())),
+                'url' => $this->getUrl('adminhtml/*/resume', array('id'=>$row->getId())),
                 'caption'	=>	__('Resume')
             );
 
         }
 
         $actions[] = array(
-            'url'       =>  $this->getUrl('*/newsletter_queue/preview',array('id'=>$row->getId())),
+            'url'       =>  $this->getUrl('adminhtml/newsletter_queue/preview',array('id'=>$row->getId())),
             'caption'   =>  __('Preview'),
             'popup'     =>  true
         );

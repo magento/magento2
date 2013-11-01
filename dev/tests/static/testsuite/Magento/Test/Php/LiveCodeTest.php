@@ -46,7 +46,7 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
      */
     protected static $_blackList = array();
 
-    public static function setUpBeforeClass() 
+    public static function setUpBeforeClass()
     {
         self::$_reportDir = \Magento\TestFramework\Utility\Files::init()->getPathToSource()
             . '/dev/tests/static/report';
@@ -61,8 +61,8 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
         if ($type != '' && !preg_match('/\/$/', $type)) {
             $type = $type . '/';
         }
-        self::$_whiteList = self::_readLists(__DIR__ . '/_files/'.$type.'whitelist/*.txt');
-        self::$_blackList = self::_readLists(__DIR__ . '/_files/'.$type.'blacklist/*.txt');
+        self::$_whiteList = self::_readLists(__DIR__ . '/_files/' . $type . 'whitelist/*.txt');
+        self::$_blackList = self::_readLists(__DIR__ . '/_files/' . $type . 'blacklist/*.txt');
     }
 
     /**
@@ -111,7 +111,7 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('PHP Code Sniffer is not installed.');
         }
         self::setupFileLists();
-        $result = $codeSniffer->run(self::$_whiteList, self::$_blackList, array('php','phtml'));
+        $result = $codeSniffer->run(self::$_whiteList, self::$_blackList, array('php', 'phtml'));
         $this->assertEquals(
             0,
             $result,

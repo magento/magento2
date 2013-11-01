@@ -24,6 +24,9 @@
 
 namespace Magento\View\Layout;
 
+/**
+ * @package Magento\View
+ */
 interface ProcessorInterface
 {
     /**
@@ -81,31 +84,21 @@ interface ProcessorInterface
     public function addPageHandles(array $handlesToTry);
 
     /**
-     * Retrieve full hierarchy of types and fragment types in the system
+     * Retrieve all page and fragment types that exist in the system.
      *
      * Result format:
      * array(
      *     'handle_name_1' => array(
      *         'name'     => 'handle_name_1',
      *         'label'    => 'Handle Name 1',
-     *         'children' => array(
-     *             'handle_name_2' => array(
-     *                 'name'     => 'handle_name_2',
-     *                 'label'    => 'Handle Name 2',
-     *                 'type'     => self::TYPE_PAGE or self::TYPE_FRAGMENT,
-     *                 'children' => array(
-     *                     // ...
-     *                 )
-     *             ),
-     *             // ...
-     *         )
+     *         'type'     => self::TYPE_PAGE,
      *     ),
      *     // ...
      * )
      *
      * @return array
      */
-    public function getPageHandlesHierarchy();
+    public function getAllPageHandles();
 
     /**
      * Load layout updates by handles

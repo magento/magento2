@@ -108,7 +108,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->_sectionMock));
 
         $helperMock->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
-        $this->_responseMock->expects($this->once())->method('setRedirect')->with('*/system_config/edit');
+        $this->_responseMock->expects($this->once())->method('setRedirect')->with('adminhtml/system_config/edit');
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $arguments = array(

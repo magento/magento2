@@ -19,74 +19,59 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php /** @var $this \Magento\Sales\Block\Order\Info */ ?>
 <?php $_order = $this->getOrder() ?>
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<div class="page-title title-buttons">
-    <h1><?php echo __('Order #%1 - %2', $_order->getRealOrderId(), $_order->getStatusLabel()) ?></h1>
-    <?php echo $this->getChildHtml('buttons') ?>
-</div>
-<?php echo $this->getStatusHistoryRssUrl($_order) ?>
-<dl class="order-info">
-    <dt><?php echo __('About This Order:') ?></dt>
-    <dd>
-        <?php echo $this->getChildHtml('links') ?>
-        <script type="text/javascript">(function($) {$('#order-info-tabs').find('li').decorate('generic', ['first','last'])})(jQuery)</script>
-    </dd>
-</dl>
-<p class="order-date"><?php echo __('Order Date: %1', $this->formatDate($_order->getCreatedAtStoreDate(), 'long')) ?></p>
+<div class="order details view">
+    <strong class="order status"><?php echo $_order->getStatusLabel() ?></strong>
+    <div class="order toolbar">
+        <?php echo $this->getChildHtml('buttons') ?>
+        <?php echo $this->getStatusHistoryRssUrl($_order) ?>
+    </div>
+    <dl class="order info">
+        <dt><?php echo __('About This Order:') ?></dt>
+        <dd>
+            <?php echo $this->getChildHtml('links') ?>
+        </dd>
+    </dl>
+    <p class="order date"><?php echo __('<span class="label">Order Date:</span> %1', '<date>' . $this->formatDate($_order->getCreatedAtStoreDate(), 'long') . '</date>' ) ?></p>
 <?php if (!$_order->getIsVirtual()): ?>
-<div class="col2-set order-info-box">
-    <div class="col-1">
-        <div class="box">
-            <div class="box-title">
-                <h2><?php echo __('Shipping Address') ?></h2>
-            </div>
-            <div class="box-content">
-                <address><?php echo $_order->getShippingAddress()->format('html') ?></address>
-            </div>
+    <div class="block order shipping address">
+        <div class="title"><strong><?php echo __('Shipping Address') ?></strong></div>
+        <div class="content">
+            <address><?php echo $_order->getShippingAddress()->format('html') ?></address>
         </div>
     </div>
-    <div class="col-2">
-        <div class="box">
-            <div class="box-title">
-                <h2><?php echo __('Shipping Method') ?></h2>
-            </div>
-            <div class="box-content">
-                <?php if ($_order->getShippingDescription()): ?>
-                    <?php echo $this->escapeHtml($_order->getShippingDescription()) ?>
-                <?php else: ?>
-                    <p><?php echo __('No shipping information available'); ?></p>
-                <?php endif; ?>
-            </div>
+
+    <div class="block order shipping method">
+        <div class="title"><strong><?php echo __('Shipping Method') ?></strong></div>
+        <div class="content">
+        <?php if ($_order->getShippingDescription()): ?>
+            <?php echo $this->escapeHtml($_order->getShippingDescription()) ?>
+        <?php else: ?>
+            <?php echo __('No shipping information available'); ?>
+        <?php endif; ?>
         </div>
     </div>
-</div>
+
 <?php endif; ?>
-<div class="col2-set order-info-box">
-    <div class="col-1">
-        <div class="box">
-            <div class="box-title">
-                <h2><?php echo __('Billing Address') ?></h2>
-            </div>
-            <div class="box-content">
-                <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
-            </div>
+    <div class="block order billing address">
+        <div class="title">
+            <strong><?php echo __('Billing Address') ?></strong>
+        </div>
+        <div class="content">
+            <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
         </div>
     </div>
-    <div class="col-2">
-        <div class="box box-payment">
-            <div class="box-title">
-                <h2><?php echo __('Payment Method') ?></h2>
-            </div>
-            <div class="box-content">
-                <?php echo $this->getPaymentInfoHtml() ?>
-            </div>
+    <div class="block order billing method">
+        <div class="title">
+            <strong><?php echo __('Payment Method') ?></strong>
+        </div>
+        <div class="content">
+            <?php echo $this->getPaymentInfoHtml() ?>
         </div>
     </div>
 </div>

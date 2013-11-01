@@ -36,7 +36,7 @@ return array(
     // Fails because of bug in \Magento\Webapi\Model\Acl\Loader\Resource\ConfigReader constructor
     'Magento\Adminhtml\Block\Cms\Page',
     'Magento\Adminhtml\Block\Cms\Page\Edit',
-    'Magento\Adminhtml\Block\Sales\Order',
+    'Magento\Sales\Block\Adminhtml\Order',
     'Magento\Oauth\Block\Adminhtml\Oauth\Consumer',
     'Magento\Oauth\Block\Adminhtml\Oauth\Consumer\Grid',
     'Magento\Paypal\Block\Adminhtml\Settlement\Report',

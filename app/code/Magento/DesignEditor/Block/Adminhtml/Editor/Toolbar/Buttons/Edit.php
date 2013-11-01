@@ -138,7 +138,7 @@ class Edit
      */
     public function getRevertUrl($revertType)
     {
-        return $this->getUrl('*/system_design_editor/revert', array(
+        return $this->getUrl('adminhtml/system_design_editor/revert', array(
             'theme_id'  => $this->_themeContext->getEditableTheme()->getId(),
             'revert_to' => $revertType
         ));

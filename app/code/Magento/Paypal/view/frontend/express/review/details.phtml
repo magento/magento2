@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -28,37 +27,28 @@
  * @see \Magento\Paypal\Block\Express\Review\Details
  */
 ?>
-<table id="details-table" class="data-table">
+<table id="details-table" class="data table paypal review items">
     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): $colspan = $rowspan = 2; else: $colspan = $rowspan = 1; endif; ?>
-    <col />
-    <col width="1" />
-    <col width="1" />
-    <col width="1" />
-    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-    <col width="1" />
-    <col width="1" />
-    <?php endif; ?>
     <thead>
+    <tr>
+        <th rowspan="<?php echo $rowspan ?>" class="col name"><?php echo __('Product Name') ?></th>
+        <th colspan="<?php echo $colspan ?>" class="col price"><?php echo __('Price') ?></th>
+        <th rowspan="<?php echo $rowspan ?>" class="col qty"><?php echo __('Qty') ?></th>
+        <th colspan="<?php echo $colspan ?>" class="col subtotal"><?php echo __('Subtotal') ?></th>
+    </tr>
+    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
         <tr>
-            <th rowspan="<?php echo $rowspan ?>"><?php echo __('Product Name') ?></th>
-            <th colspan="<?php echo $colspan ?>" class="a-center"><?php echo __('Price') ?></th>
-            <th rowspan="<?php echo $rowspan ?>" class="a-center"><?php echo __('Qty') ?></th>
-            <th colspan="<?php echo $colspan ?>" class="a-center"><?php echo __('Subtotal') ?></th>
+            <th class="col price excl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
+            <th class="col price incl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
+            <th class="col subtotal excl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
+            <th class="col subtotal incl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
         </tr>
-        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-            <tr>
-                <th class="a-right"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
-                <th><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
-                <th class="a-right"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
-                <th><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
-            </tr>
-        <?php endif; ?>
+    <?php endif; ?>
     </thead>
-<?php echo $this->getChildHtml('totals'); ?>
+    <?php echo $this->getChildHtml('totals'); ?>
     <tbody>
-        <?php foreach($this->getItems() as $_item): ?>
-            <?php echo $this->getItemHtml($_item) ?>
-        <?php endforeach ?>
+    <?php foreach ($this->getItems() as $_item): ?>
+        <?php echo $this->getItemHtml($_item) ?>
+    <?php endforeach ?>
     </tbody>
 </table>
-<script type="text/javascript">(function($) {$('#details-table').decorate('table')})(jQuery)</script>

@@ -101,7 +101,7 @@ abstract class AbstractSelectorList
             'title' => __('Duplicate'),
             'label' => __('Duplicate'),
             'class'   => 'action-duplicate',
-            'href'   => $this->getUrl('*/*/duplicate', array('theme_id' => $themeId))
+            'href'   => $this->getUrl('adminhtml/*/duplicate', array('theme_id' => $themeId))
         ));
 
         $themeBlock->addButton($assignButton);
@@ -185,7 +185,7 @@ abstract class AbstractSelectorList
      */
     protected function _getPreviewUrl($themeId)
     {
-        return $this->getUrl('*/*/launch', array(
+        return $this->getUrl('adminhtml/*/launch', array(
             'theme_id' => $themeId,
             'mode'     => \Magento\DesignEditor\Model\State::MODE_NAVIGATION
         ));
@@ -199,7 +199,7 @@ abstract class AbstractSelectorList
      */
     protected function _getEditUrl($themeId)
     {
-        return $this->getUrl('*/*/launch', array(
+        return $this->getUrl('adminhtml/*/launch', array(
             'theme_id' => $themeId,
             'mode'     => \Magento\DesignEditor\Model\State::MODE_NAVIGATION
         ));

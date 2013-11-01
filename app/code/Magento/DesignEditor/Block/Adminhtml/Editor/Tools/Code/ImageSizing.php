@@ -81,7 +81,7 @@ class ImageSizing extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getImageSizingUrl()
     {
-        return $this->getUrl('*/system_design_editor_tools/saveImageSizing',
+        return $this->getUrl('adminhtml/system_design_editor_tools/saveImageSizing',
             array('theme_id' => $this->_themeContext->getEditableTheme()->getId()));
     }
 

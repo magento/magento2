@@ -122,7 +122,7 @@ class NewOrder extends \Magento\Core\Block\AbstractBlock
         if ($order && $order->getId()) {
             $title = __('Order #%1 created at %2', $order->getIncrementId(), $this->formatDate($order->getCreatedAt()));
             $url = $this->_adminhtmlData->getUrl(
-                'adminhtml/sales_order/view',
+                'sales/order/view',
                 array(
                     '_secure' => true,
                     'order_id' => $order->getId(),

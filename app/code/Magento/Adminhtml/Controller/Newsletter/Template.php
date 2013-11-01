@@ -32,7 +32,7 @@
  */
 namespace Magento\Adminhtml\Controller\Newsletter;
 
-class Template extends \Magento\Adminhtml\Controller\Action
+class Template extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * Core registry
@@ -177,7 +177,7 @@ class Template extends \Magento\Adminhtml\Controller\Action
     {
         $request = $this->getRequest();
         if (!$request->isPost()) {
-            $this->getResponse()->setRedirect($this->getUrl('*/newsletter_template'));
+            $this->getResponse()->setRedirect($this->getUrl('adminhtml/newsletter_template'));
         }
         $template = $this->_objectManager->create('Magento\Newsletter\Model\Template');
 
@@ -212,7 +212,7 @@ class Template extends \Magento\Adminhtml\Controller\Action
             $this->_getSession()->addSuccess(__('The newsletter template has been saved.'));
             $this->_getSession()->setFormData(false);
 
-            $this->_redirect('*/*');
+            $this->_redirect('adminhtml/*');
             return;
         } catch (\Magento\Core\Exception $e) {
             $this->_getSession()->addError(nl2br($e->getMessage()));
@@ -249,7 +249,7 @@ class Template extends \Magento\Adminhtml\Controller\Action
                 );
             }
         }
-        $this->_redirect('*/*');
+        $this->_redirect('adminhtml/*');
     }
 
     /**

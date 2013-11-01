@@ -47,7 +47,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
     {
         $this->addButton('back_button', array(
             'label'   => __('Back'),
-            'onclick' => 'setLocation(\'' . $this->getUrl('*/*') . '\')',
+            'onclick' => 'setLocation(\'' . $this->getUrl('adminhtml/*') . '\')',
             'class'   => 'back'
         ));
 

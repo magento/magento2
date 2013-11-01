@@ -36,11 +36,11 @@
                 <arguments>
                     <argument name="exportTypes" xsi:type="array">
                         <item name="csv" xsi:type="array">
-                            <item name="urlPath" xsi:type="string">*/*/exportSearchCsv</item>
+                            <item name="urlPath" xsi:type="string">adminhtml/*/exportSearchCsv</item>
                             <item name="label" xsi:type="string" translate="true">CSV</item>
                         </item>
                         <item name="excel" xsi:type="array">
-                            <item name="urlPath" xsi:type="string">*/*/exportSearchExcel</item>
+                            <item name="urlPath" xsi:type="string">adminhtml/*/exportSearchExcel</item>
                             <item name="label" xsi:type="string" translate="true">Excel XML</item>
                         </item>
                     </argument>
@@ -49,7 +49,7 @@
             <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="adminhtml.report.search.grid.columnSet">
                 <arguments>
                     <argument name="rowUrl" xsi:type="array">
-                        <item name="path" xsi:type="string">*/catalog_search/edit</item>
+                        <item name="path" xsi:type="string">adminhtml/catalog_search/edit</item>
                         <item name="extraParamsTemplate" xsi:type="array">
                             <item name="id" xsi:type="string">getId</item>
                         </item>

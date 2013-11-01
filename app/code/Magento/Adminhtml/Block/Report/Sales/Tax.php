@@ -56,7 +56,7 @@ class Tax extends \Magento\Adminhtml\Block\Widget\Grid\Container
     public function getFilterUrl()
     {
         $this->getRequest()->setParam('filter', null);
-        return $this->getUrl('*/*/tax', array('_current' => true));
+        return $this->getUrl('adminhtml/*/tax', array('_current' => true));
     }
 
 }

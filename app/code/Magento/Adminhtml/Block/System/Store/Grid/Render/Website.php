@@ -41,7 +41,7 @@ class Website
     public function render(\Magento\Object $row)
     {
         return '<a title="' . __('Edit Web Site') . '"
-            href="' . $this->getUrl('*/*/editWebsite', array('website_id' => $row->getWebsiteId())) . '">'
+            href="' . $this->getUrl('adminhtml/*/editWebsite', array('website_id' => $row->getWebsiteId())) . '">'
             . $this->escapeHtml($row->getData($this->getColumn()->getIndex())) . '</a>';
     }
 

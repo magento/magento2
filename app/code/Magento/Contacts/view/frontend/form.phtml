@@ -19,52 +19,44 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
-<div class="page-title">
-    <h1><?php echo __('Contact Us') ?></h1>
-</div>
-<form action="<?php echo $this->getFormAction(); ?>" id="contact-form" method="post">
-    <div class="fieldset">
-        <h2 class="legend"><?php echo __('Contact Information') ?></h2>
-        <ul class="form-list">
-            <li class="fields">
-                <div class="field">
-                    <label for="name" class="required"><em>*</em><?php echo __('Name') ?></label>
-                    <div class="input-box">
-                        <input name="name" id="name" title="<?php echo __('Name') ?>" value="<?php echo $this->escapeHtml($this->helper('Magento\Contacts\Helper\Data')->getUserName()) ?>" class="input-text" type="text" data-validate="{required:true}"/>
-                    </div>
-                </div>
-                <div class="field">
-                    <label for="email" class="required"><em>*</em><?php echo __('Email') ?></label>
-                    <div class="input-box">
-                        <input name="email" id="email" title="<?php echo __('Email') ?>" value="<?php echo $this->escapeHtml($this->helper('Magento\Contacts\Helper\Data')->getUserEmail()) ?>" class="input-text" type="text" data-validate="{required:true, 'validate-email':true}"/>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <label for="telephone"><?php echo __('Telephone') ?></label>
-                <div class="input-box">
-                    <input name="telephone" id="telephone" title="<?php echo __('Telephone') ?>" value="" class="input-text" type="text" />
-                </div>
-            </li>
-            <li class="wide">
-                <label for="comment" class="required"><em>*</em><?php echo __('Comment') ?></label>
-                <div class="input-box">
-                    <textarea name="comment" id="comment" title="<?php echo __('Comment') ?>" class="input-text" cols="5" rows="3" data-validate="{required:true}"></textarea>
-                </div>
-            </li>
+<form class="form contact" action="<?php echo $this->getFormAction(); ?>" id="contact-form" method="post" data-hasrequired="<?php echo __('* Required Fields') ?>">
+    <fieldset class="fieldset">
+        <legend class="legend"><span><?php echo __('Contact Information') ?></span></legend><br />
+        <div class="field name required">
+            <label class="label" for="name"><span><?php echo __('Name') ?></span></label>
+            <div class="control">
+                <input name="name" id="name" title="<?php echo __('Name') ?>" value="<?php echo $this->escapeHtml($this->helper('Magento\Contacts\Helper\Data')->getUserName()) ?>" class="input-text" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+        <div class="field email required">
+            <label class="label" for="email"><span><?php echo __('Email') ?></span></label>
+            <div class="control">
+                <input name="email" id="email" title="<?php echo __('Email') ?>" value="<?php echo $this->escapeHtml($this->helper('Magento\Contacts\Helper\Data')->getUserEmail()) ?>" class="input-text" type="text" data-validate="{required:true, 'validate-email':true}"/>
+            </div>
+        </div>
+        <div class="field telephone">
+            <label class="label" for="telephone"><span><?php echo __('Telephone') ?></span></label>
+            <div class="control">
+                <input name="telephone" id="telephone" title="<?php echo __('Telephone') ?>" value="" class="input-text" type="text" />
+            </div>
+        </div>
+        <div class="field comment required">
+            <label class="label" for="comment"><span><?php echo __('Comment') ?></span></label>
+            <div class="control">
+                <textarea name="comment" id="comment" title="<?php echo __('Comment') ?>" class="input-text" cols="5" rows="3" data-validate="{required:true}"></textarea>
+            </div>
             <?php echo $this->getChildHtml('form.additional.info'); ?>
-        </ul>
-    </div>
-    <div class="buttons-set">
-        <p class="required"><?php echo __('* Required Fields') ?></p>
-        <input type="text" name="hideit" id="hideit" value="" style="display:none !important;" />
-        <button type="submit" title="<?php echo __('Submit') ?>" class="button"><span><span><?php echo __('Submit') ?></span></span></button>
+        </div>
+    </fieldset>
+    <div class="actions">
+        <input type="hidden" name="hideit" id="hideit" value="" />
+        <button type="submit" title="<?php echo __('Submit') ?>" class="action submit">
+            <span><?php echo __('Submit') ?></span>
+        </button>
     </div>
 </form>
 <script type="text/javascript">

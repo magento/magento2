@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -41,81 +40,77 @@
     <p class="amount">
         <?php if($this->getLastPageNum()>1): ?>
             <?php echo __('Items %1 to %2 of %3 total', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+        <?php elseif ($this->getLastPageNum() == 1): ?>
+            <?php echo __('%1 Item', $this->getTotalNum()) ?>
         <?php else: ?>
-            <strong><?php echo __('%1 Item(s)', $this->getTotalNum()) ?></strong>
+            <?php echo __('%1 Item(s)', $this->getTotalNum()) ?>
         <?php endif; ?>
     </p>
     <?php endif ?>
 
-    <?php if($this->getShowPerPage()): ?>
-    <div class="limiter">
-        <label><?php echo __('Show') ?></label>
-        <select onchange="setLocation(this.value)">
-        <?php foreach ($this->getAvailableLimit() as  $_key=>$_limit): ?>
-            <option value="<?php echo $this->getLimitUrl($_key) ?>"<?php if($this->isLimitCurrent($_key)): ?> selected="selected"<?php endif ?>>
-                <?php echo $_limit ?>
-            </option>
-        <?php endforeach; ?>
-        </select> <?php echo __('per page') ?>
-    </div>
-    <?php endif ?>
+        <?php if($this->getShowPerPage()): ?>
+            <div class="limiter">
+                <strong class="label"><?php echo __('Show') ?></strong>
+                <select id="limiter" data-mage-redirect="{'event':'change'}">
+                    <?php foreach ($this->getAvailableLimit() as $_key => $_limit): ?>
+                    <option value="<?php echo $this->getLimitUrl($_key) ?>"<?php if ($this->isLimitCurrent($_key)): ?>
+                            selected="selected"<?php endif ?>>
+                        <?php echo $_limit ?>
+                    </option>
+                    <?php endforeach; ?>
+                </select>
+                <span class="text"><?php echo __('per page') ?></span>
+            </div>
+        <?php endif ?>
 
-    <?php if($this->getLastPageNum()>1): ?>
-    <div class="pages">
-        <strong><?php echo __('Page:') ?></strong>
-        <ol>
-        <?php if (!$this->isFirstPage()): ?>
-            <li>
-                <a class="previous<?php if(!$this->getAnchorTextForPrevious()): ?> i-previous<?php endif;?>" href="<?php echo $this->getPreviousPageUrl() ?>" title="<?php echo __('Previous') ?>">
-                    <?php if(!$this->getAnchorTextForPrevious()): ?>
-                        <img src="<?php echo $this->getViewFileUrl('images/pager_arrow_left.gif') ?>" alt="<?php echo __('Previous') ?>" class="v-middle" />
-                    <?php else: ?>
-                        <?php echo $this->getAnchorTextForPrevious() ?>
-                    <?php endif;?>
-                </a>
-            </li>
-        <?php endif;?>
-
-        <?php if ($this->canShowFirst()): ?>
-            <li><a class="first" href="<?php echo $this->getFirstPageUrl() ?>">1</a></li>
-        <?php endif;?>
-
-        <?php if ($this->canShowPreviousJump()): ?>
-            <li><a class="previous_jump" title="" href="<?php echo $this->getPreviousJumpUrl() ?>">...</a></li>
-        <?php endif;?>
-
-        <?php foreach ($this->getFramePages() as $_page): ?>
-            <?php if ($this->isPageCurrent($_page)): ?>
-                <li class="current"><?php echo $_page ?></li>
-            <?php else: ?>
-                <li><a href="<?php echo $this->getPageUrl($_page) ?>"><?php echo $_page ?></a></li>
+        <?php if($this->getLastPageNum()>1): ?>
+        <div class="pages">
+            <strong class="label"><?php echo __('Page') ?></strong>
+            <ol class="items">
+            <?php if (!$this->isFirstPage()): ?>
+                <li class="item">
+                    <?php $text = $this->getAnchorTextForPrevious() ? $this->getAnchorTextForPrevious() : '';?>
+                    <a class="<?php echo $text ? 'link ' : 'action '?> previous" href="<?php echo $this->getPreviousPageUrl() ?>" title="<?php echo $text ? $text : __('Previous') ?>">
+                        <span><?php echo $text ? $text : __('Previous') ?></span>
+                    </a>
+                </li>
             <?php endif;?>
-        <?php endforeach;?>
 
+            <?php if ($this->canShowFirst()): ?>
+                <li class="item"><a class="first" href="<?php echo $this->getFirstPageUrl() ?>"><span>1</span></a></li>
+            <?php endif;?>
 
-        <?php if ($this->canShowNextJump()): ?>
-            <li><a class="next_jump" title="" href="<?php echo $this->getNextJumpUrl() ?>">...</a></li>
-        <?php endif;?>
+            <?php if ($this->canShowPreviousJump()): ?>
+                <li class="item"><a class="previous jump" title="" href="<?php echo $this->getPreviousJumpUrl() ?>"><span>...</span></a></li>
+            <?php endif;?>
 
-        <?php if ($this->canShowLast()): ?>
-          <li><a class="last" href="<?php echo $this->getLastPageUrl() ?>"><?php echo $this->getLastPageNum() ?></a></li>
-        <?php endif;?>
+            <?php foreach ($this->getFramePages() as $_page): ?>
+                <?php if ($this->isPageCurrent($_page)): ?>
+                    <li class="item current"><strong><span><?php echo $_page ?></span></strong></li>
+                <?php else: ?>
+                    <li class="item"><a href="<?php echo $this->getPageUrl($_page) ?>"><span><?php echo $_page ?></span></a></li>
+                <?php endif;?>
+            <?php endforeach;?>
 
-        <?php if (!$this->isLastPage()): ?>
-            <li>
-                <a class="next<?php if(!$this->getAnchorTextForNext()): ?> i-next<?php endif; ?>" href="<?php echo $this->getNextPageUrl() ?>" title="<?php echo __('Next') ?>">
-                    <?php if(!$this->getAnchorTextForNext()): ?>
-                        <img src="<?php echo $this->getViewFileUrl('images/pager_arrow_right.gif') ?>" alt="<?php echo __('Next') ?>" class="v-middle" />
-                    <?php else: ?>
-                        <?php echo $this->getAnchorTextForNext() ?>
-                    <?php endif;?>
-                </a>
-            </li>
-        <?php endif;?>
-        </ol>
+            <?php if ($this->canShowNextJump()): ?>
+                <li class="item"><a class="next jump" title="" href="<?php echo $this->getNextJumpUrl() ?>"><span>...</span></a></li>
+            <?php endif;?>
 
-    </div>
-    <?php endif; ?>
+            <?php if ($this->canShowLast()): ?>
+              <li class="item"><a class="last" href="<?php echo $this->getLastPageUrl() ?>"><span><?php echo $this->getLastPageNum() ?></span></a></li>
+            <?php endif;?>
+
+            <?php if (!$this->isLastPage()): ?>
+                <li class="item">
+                    <?php $text = $this->getAnchorTextForNext() ? $this->getAnchorTextForNext() : '';?>
+                    <a class="<?php echo $text ? 'link ' : 'action '?> next" href="<?php echo $this->getNextPageUrl() ?>" title="<?php echo $text ? $text : __('Next') ?>">
+                        <span><?php echo $text ? $text : __('Next') ?></span>
+                    </a>
+                </li>
+            <?php endif;?>
+            </ol>
+        </div>
+        <?php endif; ?>
 
     <?php if($this->getUseContainer()): ?>
     </div>
