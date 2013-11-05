@@ -58,8 +58,8 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
         $httpClient = $this->getMock('Magento\HTTP\ZendClient',
             array('setUri', 'setParameterGet', 'setConfig', 'request', 'getHeaders')
         );
-        /** @var $helper \Magento\Adminhtml\Helper\Dashboard\Data|PHPUnit_Framework_MockObject_MockObject */
-        $helper = $this->getMock('Magento\Adminhtml\Helper\Dashboard\Data',
+        /** @var $helper \Magento\Backend\Helper\Dashboard\Data|PHPUnit_Framework_MockObject_MockObject */
+        $helper = $this->getMock('Magento\Backend\Helper\Dashboard\Data',
             array('getChartDataHash'), array(), '', false, false
         );
         $helper->expects($this->any())->method('getChartDataHash')->will($this->returnValue($fixture));
@@ -67,7 +67,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
         $objectManager = $this->getMock('Magento\ObjectManager');
         $objectManager->expects($this->at(0))
             ->method('get')
-            ->with('Magento\Adminhtml\Helper\Dashboard\Data')
+            ->with('Magento\Backend\Helper\Dashboard\Data')
             ->will($this->returnValue($helper));
         $objectManager->expects($this->at(1))
             ->method('create')
@@ -112,8 +112,8 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')->with('ga')
             ->will($this->returnValue(urlencode(base64_encode(json_encode(array(1))))));
         $this->_request->expects($this->at(1))->method('getParam')->with('h')->will($this->returnValue($fixture));
-        /** @var $helper \Magento\Adminhtml\Helper\Dashboard\Data|PHPUnit_Framework_MockObject_MockObject */
-        $helper = $this->getMock('Magento\Adminhtml\Helper\Dashboard\Data',
+        /** @var $helper \Magento\Backend\Helper\Dashboard\Data|PHPUnit_Framework_MockObject_MockObject */
+        $helper = $this->getMock('Magento\Backend\Helper\Dashboard\Data',
             array('getChartDataHash'), array(), '', false, false
         );
         $helper->expects($this->any())->method('getChartDataHash')->will($this->returnValue($fixture));
@@ -121,7 +121,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
         $objectManager = $this->getMock('Magento\ObjectManager');
         $objectManager->expects($this->at(0))
             ->method('get')
-            ->with('Magento\Adminhtml\Helper\Dashboard\Data')
+            ->with('Magento\Backend\Helper\Dashboard\Data')
             ->will($this->returnValue($helper));
         $exceptionMock = new \Exception();
         $objectManager->expects($this->at(1))
@@ -156,7 +156,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
      * @param Magento\App\Request\Http $request
      * @param \Magento\App\Response\Http|null $response
      * @param \Magento\ObjectManager|null $objectManager
-     * @return \Magento\Adminhtml\Controller\Dashboard|PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Backend\Controller\Adminhtml\Dashboard|PHPUnit_Framework_MockObject_MockObject
      */
     protected function _factory($request, $response = null, $objectManager = null)
     {
@@ -181,7 +181,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
             'frontController' => $varienFront,
         );
         $context = $helper->getObject('Magento\Backend\Controller\Context', $arguments);
-        return new \Magento\Adminhtml\Controller\Dashboard($context);
+        return new \Magento\Backend\Controller\Adminhtml\Dashboard($context);
     }
 }
 

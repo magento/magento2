@@ -19,100 +19,92 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="form-add">
-    <h2><?php echo __('Write Your Own Review') ?></h2>
-    <?php if ($this->getAllowWriteReviewFlag()): ?>
-    <form action="<?php echo $this->getAction() ?>" method="post" id="review-form">
-        <fieldset>
-            <?php echo $this->getChildHtml('form_fields_before')?>
-            <h3><?php echo __("You're reviewing:"); ?> <span><?php echo $this->escapeHtml($this->getProductInfo()->getName()) ?></span></h3>
-            <?php if( $this->getRatings() && $this->getRatings()->getSize()): ?>
-                <h4><?php echo __('How do you rate this product?') ?> <em class="required">*</em></h4>
-                <span id="input-message-box"></span>
-                <table class="data-table" id="product-review-table">
-                    <col />
-                    <col width="1" />
-                    <col width="1" />
-                    <col width="1" />
-                    <col width="1" />
-                    <col width="1" />
-                    <thead>
-                        <tr>
-                            <th>&nbsp;</th>
-                            <th><span class="nobr"><?php echo __('1 star') ?></span></th>
-                            <th><span class="nobr"><?php echo __('2 stars') ?></span></th>
-                            <th><span class="nobr"><?php echo __('3 stars') ?></span></th>
-                            <th><span class="nobr"><?php echo __('4 stars') ?></span></th>
-                            <th><span class="nobr"><?php echo __('5 stars') ?></span></th>
-                        </tr>
-                    </thead>
-                    <tbody>
+<div class="block add review">
+    <div class="title"><strong><?php echo __('Write Your Own Review') ?></strong></div>
+<div class="content">
+<?php if ($this->getAllowWriteReviewFlag()): ?>
+<form action="<?php echo $this->getAction() ?>" method="post" id="review-form">
+    <?php echo $this->getChildHtml('form_fields_before')?>
+    <fieldset class="fieldset" data-hasrequired="<?php __('* Required Fields'); ?>">
+        <legend class="legend"><span><?php echo __("You're reviewing:"); ?></span><strong><?php echo $this->escapeHtml($this->getProductInfo()->getName()) ?></strong></legend><br />
+        <?php if ($this->getRatings() && $this->getRatings()->getSize()): ?>
+        <span id="input-message-box"></span>
+        <div class="field ratings required">
+            <label class="label"><span><?php echo __('How do you rate this product?') ?></span></label>
+            <div class="control">
+                <div class="nested" id="product-review-table">
                     <?php foreach ($this->getRatings() as $_rating): ?>
-                        <tr>
-                            <th><?php echo $this->escapeHtml($_rating->getRatingCode()) ?></th>
-                        <?php foreach ($_rating->getOptions() as $_option): ?>
-                            <td class="value"><input type="radio" name="ratings[<?php echo $_rating->getId() ?>]" id="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" value="<?php echo $_option->getId() ?>" class="radio" data-validate="{required:true, messages:{required:'Please select one of each of the ratings above.'}}" /></td>
-                        <?php endforeach; ?>
-                        </tr>
+                        <div class="field rating">
+                            <label class="label"><span><?php echo $this->escapeHtml($_rating->getRatingCode()) ?></span></label>
+                            <div class="control">
+                            <?php $options = $_rating->getOptions();?>
+                            <?php $iterator = 1; foreach ($options as $_option): ?>
+                                <input type="radio" name="ratings[<?php echo $_rating->getId() ?>]" id="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" value="<?php echo $_option->getId() ?>" class="radio" data-validate="{required:true, messages:{required:'Please select one of each of the ratings above.'}}" />
+                                <label class="rating-<?php echo $iterator; ?>" for="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" title="<?php echo __('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star') ?>">
+                                    <span><?php echo __('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star') ?></span>
+                                </label>
+                            <?php $iterator++; ?>
+                            <?php endforeach; ?>
+                            </div>
+                        </div>
                     <?php endforeach; ?>
-                    </tbody>
-                </table>
+                </div>
                 <input type="hidden" name="validate_rating" class="validate-rating" value="" />
-                <script type="text/javascript">(function($) {$('#product-review-table').decorate('table')})(jQuery)</script>
-            <?php endif; ?>
-                <ul class="form-list">
-                    <li>
-                        <label for="nickname_field" class="required"><em>*</em><?php echo __('Nickname') ?></label>
-                        <div class="input-box">
-                            <input type="text" name="nickname" id="nickname_field" class="input-text" data-validate="{required:true}" value="<?php echo $this->escapeHtml($data->getNickname()) ?>" />
-                        </div>
-                    </li>
-                    <li>
-                        <label for="summary_field" class="required"><em>*</em><?php echo __('Summary of Your Review') ?></label>
-                        <div class="input-box">
-                            <input type="text" name="title" id="summary_field" class="input-text" data-validate="{required:true}" value="<?php echo $this->escapeHtml($data->getTitle()) ?>" />
-                        </div>
-                    </li>
-                    <li>
-                        <label for="review_field" class="required"><em>*</em><?php echo __('Review') ?></label>
-                        <div class="input-box">
-                            <textarea name="detail" id="review_field" cols="5" rows="3"  data-validate="{required:true}"><?php echo $this->escapeHtml($data->getDetail()) ?></textarea>
-                        </div>
-                    </li>
-                </ul>
-            </fieldset>
-            <div class="buttons-set">
-                <button type="submit" title="<?php echo __('Submit Review') ?>" class="button"><span><span><?php echo __('Submit Review') ?></span></span></button>
             </div>
-    </form>
-    <script>
-        (function($) {
-            head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-                "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-                "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-                "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
-                function() {
-                    $('#review-form').validation({
-                        errorPlacement: function (error, element) {
-                            if (element.parents('#product-review-table').length) {
-                                $('#product-review-table').siblings(this.errorElement + '.' + this.errorClass).remove();
-                                $('#product-review-table').after(error);
-                            } else {
-                                element.after(error);
-                            }
-                        }
-                    });
-                });
-        })(jQuery);
-    </script>
-    <?php else: ?>
-    <p class="review-nologged" id="review-form">
-        <?php echo __('Only registered users can write reviews. Please, <a href="%1">log in</a> or <a href="%2">sign up</a>.', $this->getLoginLink(), $this->helper('Magento\Customer\Helper\Data')->getRegisterUrl()) ?>
-    </p>
+        </div>
     <?php endif ?>
+        <div class="field nickname required">
+            <label for="nickname_field" class="label"><span><?php echo __('Nickname') ?></span></label>
+            <div class="control">
+                <input type="text" name="nickname" id="nickname_field" class="input-text" data-validate="{required:true}" value="<?php echo $this->escapeHtml($data->getNickname()) ?>" />
+            </div>
+        </div>
+        <div class="field summary required">
+            <label for="summary_field" class="label"><span><?php echo __('Summary of Your Review') ?></span></label>
+            <div class="control">
+                <input type="text" name="title" id="summary_field" class="input-text" data-validate="{required:true}" value="<?php echo $this->escapeHtml($data->getTitle()) ?>" />
+            </div>
+        </div>
+        <div class="field text required">
+            <label for="review_field" class="label"><span><?php echo __('Review') ?></span></label>
+            <div class="control">
+                <textarea name="detail" id="review_field" cols="5" rows="3" data-validate="{required:true}"><?php echo $this->escapeHtml($data->getDetail()) ?></textarea>
+            </div>
+        </div>
+    </fieldset>
+    <div class="actions form">
+        <button type="submit" class="action submit"><span><?php echo __('Submit Review') ?></span></button>
+        <!-- <button type="button" class="action cancel"><span><?php echo __('Cancel') ?></span></button> -->
+    </div>
+</form>
+<script>
+    (function($) {
+        head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
+            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
+            function() {
+                $('#review-form').validation({
+                    errorPlacement: function (error, element) {
+                        if (element.parents('#product-review-table').length) {
+                            $('#product-review-table').siblings(this.errorElement + '.' + this.errorClass).remove();
+                            $('#product-review-table').after(error);
+                        } else {
+                            element.after(error);
+                        }
+                    }
+                });
+            });
+    })(jQuery);
+</script>
+<?php else: ?>
+    <p class="review notlogged" id="review-form">
+        <?php echo __('Only registered users can write reviews. Please, <a href="%1">log in</a> or <a href="%2">register</a>', $this->getLoginLink(), $this->helper('Magento\Customer\Helper\Data')->getRegisterUrl()) ?>
+    </p>
+<?php endif ?>
+</div>
 </div>

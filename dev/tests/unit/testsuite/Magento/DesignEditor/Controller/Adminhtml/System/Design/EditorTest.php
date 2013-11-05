@@ -64,7 +64,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
                 'getMessagesBlock'
             ),
             array(), '', false);
-        /** @var $layoutMock \Magento\Core\Model\Layout */
+        /** @var $layoutMock \Magento\View\LayoutInterface */
         $layoutMock->expects($this->any())->method('generateXml')->will($this->returnSelf());
         $layoutMock->expects($this->any())->method('getNode')
             ->will($this->returnValue(new \Magento\Simplexml\Element('<root />')));

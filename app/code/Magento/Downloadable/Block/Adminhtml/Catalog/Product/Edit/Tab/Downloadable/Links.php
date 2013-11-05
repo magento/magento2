@@ -280,7 +280,7 @@ class Links
 
             if ($item->getLinkFile() && is_file($file)) {
                 $name = '<a href="'
-                    . $this->getUrl('*/downloadable_product_edit/link', array(
+                    . $this->getUrl('adminhtml/downloadable_product_edit/link', array(
                         'id' => $item->getId(),
                         '_secure' => true
                     )) . '">' . $fileHelper->getFileFromPathFile($item->getLinkFile()) . '</a>';
@@ -384,7 +384,7 @@ class Links
     public function getUploadUrl($type)
     {
         return $this->_urlFactory->create()->addSessionParam()
-            ->getUrl('*/downloadable_file/upload', array('type' => $type, '_secure' => true));
+            ->getUrl('adminhtml/downloadable_file/upload', array('type' => $type, '_secure' => true));
     }
 
     /**

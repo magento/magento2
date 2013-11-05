@@ -71,7 +71,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     {
         $structure = new \Magento\Data\Structure;
         $structure->createElement('test.container', array());
-        /** @var $layout \Magento\Core\Model\Layout */
+        /** @var $layout \Magento\View\LayoutInterface */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Core\Model\Layout', array('structure' => $structure));
         $this->assertTrue($layout->hasElement('test.container'));
@@ -96,7 +96,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testGenerateXml()
     {
         $layoutUtility = new \Magento\Core\Utility\Layout($this);
-        /** @var $layout \Magento\Core\Model\Layout */
+        /** @var $layout \Magento\View\LayoutInterface */
         $layout = $this->getMock('Magento\Core\Model\Layout', array('getUpdate'),
             $layoutUtility->getLayoutDependencies());
         $merge = $this->getMock('StdClass', array('asSimplexml'));
@@ -321,10 +321,10 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \Magento\Core\Model\Layout $layout
+     * @param \Magento\View\LayoutInterface $layout
      * @depends testSetChild
      */
-    public function testReorderChild(\Magento\Core\Model\Layout $layout)
+    public function testReorderChild(\Magento\View\LayoutInterface $layout)
     {
         $layout->addContainer('four', 'Four', array(), 'one');
 

@@ -41,6 +41,6 @@
         <block class="Magento\Backend\Block\System\Config\Switcher" name="adminhtml.system.config.switcher" before="-"/>
     </referenceContainer>
     <referenceContainer name="content">
-        <block class="Magento\Backend\Block\System\Config\Edit"/>
+        <block name="system.config.edit" class="Magento\Backend\Block\System\Config\Edit"/>
     </referenceContainer>
 </layout>

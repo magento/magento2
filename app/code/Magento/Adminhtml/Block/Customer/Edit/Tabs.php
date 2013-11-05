@@ -90,20 +90,20 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
                 $this->addTab('orders', array(
                     'label'     => __('Orders'),
                     'class'     => 'ajax',
-                    'url'       => $this->getUrl('*/*/orders', array('_current' => true)),
+                    'url'       => $this->getUrl('adminhtml/*/orders', array('_current' => true)),
                  ));
             }
 
             $this->addTab('cart', array(
                 'label'     => __('Shopping Cart'),
                 'class'     => 'ajax',
-                'url'       => $this->getUrl('*/*/carts', array('_current' => true)),
+                'url'       => $this->getUrl('adminhtml/*/carts', array('_current' => true)),
             ));
 
             $this->addTab('wishlist', array(
                 'label'     => __('Wishlist'),
                 'class'     => 'ajax',
-                'url'       => $this->getUrl('*/*/wishlist', array('_current' => true)),
+                'url'       => $this->getUrl('adminhtml/*/wishlist', array('_current' => true)),
             ));
 
             if ($this->_authorization->isAllowed('Magento_Newsletter::subscriber')) {
@@ -118,7 +118,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
                 $this->addTab('reviews', array(
                     'label'     => __('Product Reviews'),
                     'class'     => 'ajax',
-                    'url'       => $this->getUrl('*/*/productReviews', array('_current' => true)),
+                    'url'       => $this->getUrl('adminhtml/*/productReviews', array('_current' => true)),
                 ));
             }
         }

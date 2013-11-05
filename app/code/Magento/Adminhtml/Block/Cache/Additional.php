@@ -30,11 +30,11 @@ class Additional extends \Magento\Adminhtml\Block\Template
 {
     public function getCleanImagesUrl()
     {
-        return $this->getUrl('*/*/cleanImages');
+        return $this->getUrl('adminhtml/*/cleanImages');
     }
 
     public function getCleanMediaUrl()
     {
-        return $this->getUrl('*/*/cleanMedia');
+        return $this->getUrl('adminhtml/*/cleanMedia');
     }
 }

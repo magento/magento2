@@ -303,7 +303,7 @@ class Storage extends \Magento\Object
                 $thumbUrl = $this->getThumbnailUrl($item->getFilename(), true);
                 // generate thumbnail "on the fly" if it does not exists
                 if (!$thumbUrl) {
-                    $thumbUrl = $this->_backendUrl->getUrl('*/*/thumbnail', array('file' => $item->getId()));
+                    $thumbUrl = $this->_backendUrl->getUrl('adminhtml/*/thumbnail', array('file' => $item->getId()));
                 }
 
                 $size = @getimagesize($item->getFilename());

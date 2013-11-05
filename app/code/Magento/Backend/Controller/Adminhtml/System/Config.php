@@ -74,7 +74,7 @@ class Config extends \Magento\Backend\Controller\System\AbstractConfig
         /** @var $section \Magento\Backend\Model\Config\Structure\Element\Section */
         $section = $this->_configStructure->getElement($current);
         if ($current && !$section->isVisible($website, $store)) {
-            return $this->_redirect('*/*/', array('website' => $website, 'store' => $store));
+            return $this->_redirect('adminhtml/*/', array('website' => $website, 'store' => $store));
         }
 
         $this->loadLayout();

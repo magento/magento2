@@ -23,8 +23,6 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Centinel Authentication Finish" type="fragment" owner="checkout_onepage_index">
-    <block class="Magento\Page\Block\Html" name="root" output="1" template="page_fragment.phtml">
-        <block class="Magento\Centinel\Block\Authentication\Complete" template="authentication/complete.phtml"/>
-    </block>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <block class="Magento\Centinel\Block\Authentication\Complete" output="1" template="authentication/complete.phtml"/>
 </layout>

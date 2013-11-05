@@ -259,6 +259,7 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoConfigFixture current_store true_options 1
+     * @magentoAppIsolation enabled
      */
     public function testIfConfigForBlock()
     {
@@ -267,6 +268,17 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\View\Element\BlockInterface', $layout->getBlock('block2'));
         $this->assertInstanceOf('Magento\View\Element\BlockInterface', $layout->getBlock('block3'));
         $this->assertFalse($layout->getBlock('block4'));
+    }
+
+    /**
+     * @magentoConfigFixture current_store true_options 1
+     * @magentoAppIsolation enabled
+     */
+    public function testBlockGroups()
+    {
+        $layout = $this->_getLayoutModel('group.xml');
+        $childNames = $layout->getBlock('block1')->getGroupChildNames('group1');
+        $this->assertEquals(array('block2', 'block3'), $childNames);
     }
 }
 

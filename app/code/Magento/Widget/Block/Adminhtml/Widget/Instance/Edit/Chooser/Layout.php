@@ -73,18 +73,8 @@ class Layout extends \Magento\Core\Block\Html\Select
             $layoutUpdateParams = array(
                 'theme' => $this->_getThemeInstance($this->getTheme()),
             );
-            $pageTypes = array();
-            $pageTypesAll = $this->_getLayoutProcessor($layoutUpdateParams)->getPageHandlesHierarchy();
-            foreach ($pageTypesAll as $pageTypeName => $pageTypeInfo) {
-                $layoutMerge = $this->_getLayoutProcessor($layoutUpdateParams);
-                $layoutMerge->addPageHandles(array($pageTypeName));
-                $layoutMerge->load();
-                if (!$layoutMerge->getContainers()) {
-                    continue;
-                }
-                $pageTypes[$pageTypeName] = $pageTypeInfo;
-            }
-            $this->_addPageTypeOptions($pageTypes);
+            $pageTypesAll = $this->_getLayoutProcessor($layoutUpdateParams)->getAllPageHandles();
+            $this->_addPageTypeOptions($pageTypesAll);
         }
         return parent::_beforeToHtml();
     }
@@ -93,6 +83,10 @@ class Layout extends \Magento\Core\Block\Html\Select
      * Retrieve theme instance by its identifier
      *
      * @param int $themeId
+     *
+     *
+     *
+     *
      * @return \Magento\Core\Model\Theme|null
      */
     protected function _getThemeInstance($themeId)
@@ -117,17 +111,19 @@ class Layout extends \Magento\Core\Block\Html\Select
      * Add page types information to the options
      *
      * @param array $pageTypes
-     * @param int $level
      */
-    protected function _addPageTypeOptions(array $pageTypes, $level = 0)
+    protected function _addPageTypeOptions(array $pageTypes)
     {
+        // Sort list of page types by label
+        foreach ($pageTypes as $key => $row) {
+            $label[$key]  = $row['label'];
+        }
+        array_multisort($label, SORT_STRING, $pageTypes);
+
         foreach ($pageTypes as $pageTypeName => $pageTypeInfo) {
             $params = array();
-            if ($pageTypeInfo['type'] == \Magento\Core\Model\Layout\Merge::TYPE_FRAGMENT) {
-                $params['class'] = 'fragment';
-            }
-            $this->addOption($pageTypeName, str_repeat('. ', $level) . $pageTypeInfo['label'], $params);
-            $this->_addPageTypeOptions($pageTypeInfo['children'], $level + 1);
+
+            $this->addOption($pageTypeName, $pageTypeInfo['label'], $params);
         }
     }
 }

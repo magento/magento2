@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -27,20 +26,27 @@
  * @var \Magento\Page\Block\Html\Header $this
  */
 ?>
-<div class="header-container">
-    <div class="header">
+
+<?php switch($this->getShowPart()):
+    case 'logo': ?>
+        <?php $storeName = $this->getThemeName() ? $this->getThemeName() : $this->getLogoAlt();?>
         <?php if ($this->getIsHomePage()):?>
-        <h1 class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a></h1>
+        <strong class="logo">
+            <img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" />
+        </strong>
         <?php else:?>
-        <a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a>
+        <a class="logo" href="<?php echo $this->getUrl(''); ?>" title="<?php echo $storeName ?>">
+            <img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $storeName ?>" />
+        </a>
         <?php endif?>
-        <div class="quick-access">
-            <?php echo $this->getChildHtml('topSearch') ?>
-            <p class="welcome-msg"><?php echo $this->getWelcome() ?> <?php echo $this->getAdditionalHtml() ?></p>
-            <?php echo $this->getChildHtml('topLinks') ?>
-            <?php echo $this->getChildHtml('store_language') ?>
-        </div>
-        <?php echo $this->getChildHtml('topContainer'); ?>
-    </div>
-</div>
-<?php echo $this->getChildHtml('topMenu') ?>
+    <?php break; ?>
+
+    <?php case 'welcome': ?>
+        <p class="welcome"><?php echo $this->getWelcome() ?></p>
+    <?php break; ?>
+
+    <?php case 'other': ?>
+        <?php echo $this->getChildHtml(); ?>
+    <?php break; ?>
+
+<?php endswitch; ?>

@@ -391,6 +391,7 @@ class Product extends \Magento\Core\Controller\Front\Action
     protected function _initProductLayout($product)
     {
         $update = $this->getLayout()->getUpdate();
+        $update->addHandle('default');
         $this->addPageLayoutHandles(
             array('id' => $product->getId(), 'sku' => $product->getSku(), 'type' => $product->getTypeId())
         );

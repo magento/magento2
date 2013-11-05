@@ -44,7 +44,7 @@ class GlobalSearch extends \Magento\Backend\Block\Template
                 'dropdownWrapper' => '<div class="autocomplete-results" ></div >',
                 'template' => '[data-template=search-suggest]',
                 'termAjaxArgument' => 'query',
-                'source' => $this->getUrl('*/index/globalSearch'),
+                'source' => $this->getUrl('adminhtml/index/globalSearch'),
                 'filterProperty' => 'name',
                 'preventClickPropagation' => false,
                 'minLength' => 2

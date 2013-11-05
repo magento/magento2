@@ -204,6 +204,6 @@ class Grid extends \Magento\Adminhtml\Block\Report\Grid\Shopcart
 
     public function getRowUrl($row)
     {
-        return $this->getUrl('*/customer/edit', array('id'=>$row->getCustomerId(), 'active_tab'=>'cart'));
+        return $this->getUrl('adminhtml/customer/edit', array('id'=>$row->getCustomerId(), 'active_tab'=>'cart'));
     }
 }

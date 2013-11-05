@@ -35,7 +35,7 @@ class Design extends \Magento\Adminhtml\Block\Template
 
         $this->addChild('add_new_button', 'Magento\Adminhtml\Block\Widget\Button', array(
             'label'     => __('Add Design Change'),
-            'onclick'   => "setLocation('".$this->getUrl('*/*/new')."')",
+            'onclick'   => "setLocation('".$this->getUrl('adminhtml/*/new')."')",
             'class'   => 'add'
         ));
 

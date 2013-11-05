@@ -136,7 +136,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
      */
     public function getValidationUrl()
     {
-        return $this->getUrl('*/*/validate', array('_current'=>true));
+        return $this->getUrl('adminhtml/*/validate', array('_current'=>true));
     }
 
     /**
@@ -146,7 +146,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
      */
     public function getSaveUrl()
     {
-        return $this->getUrl('*/*/save', array('_current' => true, 'back' => null));
+        return $this->getUrl('adminhtml/*/save', array('_current' => true, 'back' => null));
     }
 
     /**
@@ -156,6 +156,6 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
      */
     public function getSaveAndContinueUrl()
     {
-        return $this->getUrl('*/*/save', array('_current' => true, 'back' => 'edit'));
+        return $this->getUrl('adminhtml/*/save', array('_current' => true, 'back' => 'edit'));
     }
 }

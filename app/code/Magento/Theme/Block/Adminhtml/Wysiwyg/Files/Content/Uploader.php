@@ -48,7 +48,7 @@ class Uploader extends \Magento\Adminhtml\Block\Media\Uploader
     protected function _prepareLayout()
     {
         $this->getConfig()->setUrl(
-            $this->getUrl('*/*/upload', $this->helper('Magento\Theme\Helper\Storage')->getRequestParams())
+            $this->getUrl('adminhtml/*/upload', $this->helper('Magento\Theme\Helper\Storage')->getRequestParams())
         );
         return parent::_prepareLayout();
     }

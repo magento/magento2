@@ -29,9 +29,6 @@
             <argument name="at_label" xsi:type="string">none</argument>
             <argument name="title" translate="true" xsi:type="string">Overview</argument>
         </arguments>
-        <action method="addToParentGroup">
-            <argument name="group" xsi:type="string">detailed_info</argument>
-        </action>
     </referenceBlock>
     <move element="product.info" destination="product.info.main" after="product.tierprices"/>
     <move element="page.main.title" destination="product.info.main" before="-"/>

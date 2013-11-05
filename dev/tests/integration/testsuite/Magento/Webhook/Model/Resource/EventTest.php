@@ -33,7 +33,7 @@ namespace Magento\Webhook\Model\Resource;
 class EventTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \Magento\Webhook\Model\Resource\Event::init
+     * @covers \Magento\Webhook\Model\Resource\Event::_init
      */
     public function testInit()
     {

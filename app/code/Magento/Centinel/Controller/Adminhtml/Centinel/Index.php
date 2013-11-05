@@ -33,7 +33,7 @@
  */
 namespace Magento\Centinel\Controller\Adminhtml\Centinel;
 
-class Index extends \Magento\Adminhtml\Controller\Action
+class Index extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * Core registry
@@ -123,7 +123,7 @@ class Index extends \Magento\Adminhtml\Controller\Action
      */
     private function _getPayment()
     {
-        return $this->_objectManager->get('Magento\Adminhtml\Model\Sales\Order\Create')->getQuote()->getPayment();
+        return $this->_objectManager->get('Magento\Sales\Model\AdminOrder\Create')->getQuote()->getPayment();
     }
 
     /**

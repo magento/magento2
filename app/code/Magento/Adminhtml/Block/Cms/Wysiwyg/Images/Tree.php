@@ -97,7 +97,7 @@ class Tree extends \Magento\Adminhtml\Block\Template
      */
     public function getTreeLoaderUrl()
     {
-        return $this->getUrl('*/*/treeJson');
+        return $this->getUrl('adminhtml/*/treeJson');
     }
 
     /**

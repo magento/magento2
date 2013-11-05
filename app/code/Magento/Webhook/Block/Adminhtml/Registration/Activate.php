@@ -63,7 +63,7 @@ class Activate extends \Magento\Backend\Block\Template
      */
     public function getAcceptUrl()
     {
-        return $this->getUrl('*/*/accept', array('id' => $this->_subscriptionData[self::DATA_SUBSCRIPTION_ID]));
+        return $this->getUrl('adminhtml/*/accept', array('id' => $this->_subscriptionData[self::DATA_SUBSCRIPTION_ID]));
     }
 
     /**

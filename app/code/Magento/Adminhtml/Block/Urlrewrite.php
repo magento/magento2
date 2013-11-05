@@ -85,7 +85,7 @@ class Urlrewrite extends \Magento\Adminhtml\Block\Widget\Grid\Container
      */
     public function getCreateUrl()
     {
-        $url = $this->getUrl('*/*/edit');
+        $url = $this->getUrl('adminhtml/*/edit');
 
         $selectorBlock = $this->getSelectorBlock();
         if ($selectorBlock === null) {

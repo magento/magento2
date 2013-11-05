@@ -66,7 +66,7 @@ class Detail extends \Magento\Adminhtml\Block\Widget\Grid\Container
 
         parent::_construct();
         $this->_removeButton('add');
-        $this->setBackUrl($this->getUrl('*/report_review/product/'));
+        $this->setBackUrl($this->getUrl('adminhtml/report_review/product/'));
         $this->_addBackButton();
     }
 }

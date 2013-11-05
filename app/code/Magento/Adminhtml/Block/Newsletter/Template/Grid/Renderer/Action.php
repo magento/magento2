@@ -46,13 +46,13 @@ class Action extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Action
     {
         if($row->isValidForSend()) {
             $actions[] = array(
-                'url' => $this->getUrl('*/newsletter_queue/edit', array('template_id' => $row->getId())),
+                'url' => $this->getUrl('adminhtml/newsletter_queue/edit', array('template_id' => $row->getId())),
                 'caption' => __('Queue Newsletter...')
             );
         }
 
         $actions[] = array(
-            'url'     => $this->getUrl('*/*/preview', array('id'=>$row->getId())),
+            'url'     => $this->getUrl('adminhtml/*/preview', array('id'=>$row->getId())),
             'popup'   => true,
             'caption' => __('Preview')
         );

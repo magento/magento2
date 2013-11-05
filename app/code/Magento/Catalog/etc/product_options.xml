@@ -24,20 +24,20 @@
  */
 -->
 <config>
-    <option name="text" label="Text" renderer="Magento\Adminhtml\Block\Catalog\Product\Edit\Tab\Options\Type\Text">
+    <option name="text" label="Text" renderer="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Text">
         <inputType name="field" label="Field" />
         <inputType name="area"  label="Area" />
     </option>
-    <option name="file" label="File" renderer="Magento\Adminhtml\Block\Catalog\Product\Edit\Tab\Options\Type\File">
+    <option name="file" label="File" renderer="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\File">
         <inputType name="file" label="File" />
     </option>
-    <option name="select" label="Select" renderer="Magento\Adminhtml\Block\Catalog\Product\Edit\Tab\Options\Type\Select">
+    <option name="select" label="Select" renderer="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Select">
         <inputType name="drop_down" label="Drop-down" />
         <inputType name="radio"     label="Radio Buttons" />
         <inputType name="checkbox"  label="Checkbox" />
         <inputType name="multiple"  label="Multiple Select" />
     </option>
-    <option name="date" label="Date" renderer="Magento\Adminhtml\Block\Catalog\Product\Edit\Tab\Options\Type\Date">
+    <option name="date" label="Date" renderer="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Date">
         <inputType name="date"      label="Date" />
         <inputType name="date_time" label="Date &amp; Time" />
         <inputType name="time"      label="Time" />

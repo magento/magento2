@@ -175,7 +175,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @dataProvider getBehaviorDataProvider
-     * @covers \Magento\ImportExport\Model\Import\Entity\Product::_saveCustomOptions
      */
     public function testSaveCustomOptionsDuplicate($behavior)
     {

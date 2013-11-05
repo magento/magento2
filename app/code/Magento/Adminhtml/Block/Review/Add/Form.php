@@ -149,7 +149,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $form->setMethod('post');
         $form->setUseContainer(true);
         $form->setId('edit_form');
-        $form->setAction($this->getUrl('*/*/post'));
+        $form->setAction($this->getUrl('catalog/*/post'));
 
         $this->setForm($form);
     }

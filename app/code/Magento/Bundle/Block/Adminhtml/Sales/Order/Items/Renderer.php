@@ -34,7 +34,7 @@
  */
 namespace Magento\Bundle\Block\Adminhtml\Sales\Order\Items;
 
-class Renderer extends \Magento\Adminhtml\Block\Sales\Items\Renderer\DefaultRenderer
+class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer
 {
     /**
      * Getting all available childs for Invoice, Shipmen or Creditmemo item

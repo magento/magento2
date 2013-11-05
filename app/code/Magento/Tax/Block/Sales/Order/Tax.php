@@ -83,7 +83,7 @@ class Tax extends \Magento\Core\Block\Template
      */
     public function initTotals()
     {
-        /** @var $parent \Magento\Adminhtml\Block\Sales\Order\Invoice\Totals */
+        /** @var $parent \Magento\Sales\Block\Adminhtml\Order\Invoice\Totals */
         $parent = $this->getParentBlock();
         $this->_order   = $parent->getOrder();
         $this->_source  = $parent->getSource();

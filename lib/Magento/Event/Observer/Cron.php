@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category   Magento
- * @package    \Magento\Event
+ * @package    Magento_Event
  * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,7 +29,7 @@
  * Event cron observer object
  * 
  * @category   Magento
- * @package    \Magento\Event
+ * @package    Magento_Event
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Event\Observer;

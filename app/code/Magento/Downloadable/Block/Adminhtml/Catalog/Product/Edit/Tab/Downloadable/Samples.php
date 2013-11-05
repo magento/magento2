@@ -250,7 +250,7 @@ class Samples
     {
         $url = $this->_urlFactory->create()
             ->addSessionParam()
-            ->getUrl('*/downloadable_file/upload', array('type' => 'samples', '_secure' => true));
+            ->getUrl('adminhtml/downloadable_file/upload', array('type' => 'samples', '_secure' => true));
         $this->getConfig()->setUrl($url);
         $this->getConfig()->setParams(array('form_key' => $this->getFormKey()));
         $this->getConfig()->setFileField('samples');

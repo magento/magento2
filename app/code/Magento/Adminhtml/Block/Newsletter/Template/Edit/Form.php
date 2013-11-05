@@ -169,7 +169,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ));
         }
 
-        $form->setAction($this->getUrl('*/*/save'));
+        $form->setAction($this->getUrl('adminhtml/*/save'));
         $form->setUseContainer(true);
         $this->setForm($form);
 

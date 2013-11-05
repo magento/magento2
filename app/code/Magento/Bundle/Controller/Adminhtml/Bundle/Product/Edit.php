@@ -33,7 +33,7 @@
  */
 namespace Magento\Bundle\Controller\Adminhtml\Bundle\Product;
 
-class Edit extends \Magento\Adminhtml\Controller\Catalog\Product
+class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     public function formAction()
     {

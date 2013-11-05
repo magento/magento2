@@ -115,7 +115,7 @@ class Conditions
 
         $renderer = $this->_rendererFieldset
             ->setTemplate('Magento_Adminhtml::promo/fieldset.phtml')
-            ->setNewChildUrl($this->getUrl('*/promo_quote/newConditionHtml/form/rule_conditions_fieldset'));
+            ->setNewChildUrl($this->getUrl('adminhtml/promo_quote/newConditionHtml/form/rule_conditions_fieldset'));
 
         $fieldset = $form->addFieldset('conditions_fieldset', array(
             'legend'=>__('Apply the rule only if the following conditions are met (leave blank for all products).')

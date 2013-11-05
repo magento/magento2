@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -29,6 +28,10 @@
  * @see \Magento\Paypal\Block\Logo
  */
 ?>
-<div class="paypal-logo">
-    <a href="#" title="<?php echo __('Additional Options') ?>" onclick="javascript:window.open('<?php echo $this->getAboutPaypalPageUrl() ?>','paypal','width=600,height=350,left=0,top=0,location=no,status=yes,scrollbars=yes,resizable=yes'); return false;"><img src="<?php echo $this->escapeHtml($this->getLogoImageUrl()) ?>" alt="<?php echo __('Additional Options') ?>" title="<?php echo __('Additional Options') ?>" /></a>
+<div class="paypal acceptance">
+    <a href="#" title="<?php echo __('Additional Options') ?>"
+       onclick="javascript:window.open('<?php echo $this->getAboutPaypalPageUrl() ?>','paypal','width=600,height=350,left=0,top=0,location=no,status=yes,scrollbars=yes,resizable=yes'); return false;"
+       class="action paypal additional"><img src="<?php echo $this->escapeHtml($this->getLogoImageUrl()) ?>"
+                                             alt="<?php echo __('Additional Options') ?>"
+                                             title="<?php echo __('Additional Options') ?>"/></a>
 </div>

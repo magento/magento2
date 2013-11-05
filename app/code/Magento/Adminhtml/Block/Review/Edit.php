@@ -89,7 +89,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
         if ($prevId !== false) {
             $this->addButton('previous', array(
                 'label' => __('Previous'),
-                'onclick' => 'setLocation(\'' . $this->getUrl('*/*/*', array('id' => $prevId)) . '\')'
+                'onclick' => 'setLocation(\'' . $this->getUrl('adminhtml/*/*', array('id' => $prevId)) . '\')'
             ), 3, 10);
 
             $this->addButton('save_and_previous', array(
@@ -131,7 +131,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
 
             $this->addButton('next', array(
                 'label' => __('Next'),
-                'onclick' => 'setLocation(\'' . $this->getUrl('*/*/*', array('id' => $nextId)) . '\')'
+                'onclick' => 'setLocation(\'' . $this->getUrl('adminhtml/*/*', array('id' => $nextId)) . '\')'
             ), 3, 105);
         }
         $this->_updateButton('save', 'label', __('Save Review'));
@@ -144,7 +144,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
                 'onclick',
                 'setLocation(\''
                     . $this->getUrl(
-                        '*/catalog_product/edit',
+                        'catalog/product/edit',
                         array('id' => $this->getRequest()->getParam('productId', false))
                     )
                     .'\')'
@@ -157,7 +157,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
                 'onclick',
                 'setLocation(\''
                     . $this->getUrl(
-                        '*/customer/edit',
+                        'adminhtml/customer/edit',
                         array('id' => $this->getRequest()->getParam('customerId', false))
                     )
                     .'\')'
@@ -165,7 +165,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
         }
 
         if ($this->getRequest()->getParam('ret', false) == 'pending') {
-            $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('*/*/pending') .'\')' );
+            $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('adminhtml/*/pending') .'\')' );
             $this->_updateButton(
                 'delete',
                 'onclick',
@@ -199,7 +199,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
                         $(\'save_button\').disabled = true;
                         new Ajax.Updater(
                             "rating_detail",
-                            "' . $this->getUrl('*/*/ratingItems', array('_current'=>true)).'",
+                            "' . $this->getUrl('catalog/*/ratingItems', array('_current'=>true)).'",
                             {
                                 parameters:Form.serializeElements(elements),
                                 evalScripts:true,

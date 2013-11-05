@@ -32,13 +32,11 @@ namespace Magento\Core\Controller\Response;
 
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * Test for getHeader method
      *
      * @dataProvider headersDataProvider
-     * @covers \Magento\App\ResponseInterface::getHeader
-     *
+     * @covers \Magento\App\Response\Http::getHeader
      * @param string $header
      */
     public function testGetHeaderExists($header)
@@ -75,8 +73,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for getHeader method. Validation for attempt to get not existing header
      *
-     * @covers \Magento\App\ResponseInterface::getHeader
-     *
+     * @covers \Magento\App\Response\Http::getHeader
      */
     public function testGetHeaderNotExists()
     {

@@ -40,7 +40,7 @@ class Group extends \Magento\Backend\Block\Widget\Form
      */
     public function getDownloadUrl($fileId, $themeId)
     {
-        return $this->getUrl('*/system_design_theme/downloadCss', array(
+        return $this->getUrl('adminhtml/system_design_theme/downloadCss', array(
             'theme_id' => $themeId,
             'file'     => $this->_helperFactory->get('Magento\DesignEditor\Helper\Data')->urlEncode($fileId)
         ));

@@ -41,12 +41,12 @@ namespace Magento\Test\Integrity;
 class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Design\Fallback\Rule\RuleInterface
+     * @var \Magento\View\Design\Fallback\Rule\RuleInterface
      */
     static protected $_fallbackRule;
 
     /**
-     * @var \Magento\Core\Model\Design\FileResolution\Strategy\Fallback
+     * @var \Magento\View\Design\FileResolution\Strategy\Fallback
      */
     static protected $_fallback;
 
@@ -64,11 +64,11 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var $fallbackFactory \Magento\Core\Model\Design\Fallback\Factory */
-        $fallbackFactory = $objectManager->get('Magento\Core\Model\Design\Fallback\Factory');
+        /** @var $fallbackFactory \Magento\View\Design\Fallback\Factory */
+        $fallbackFactory = $objectManager->get('Magento\View\Design\Fallback\Factory');
         self::$_fallbackRule = $fallbackFactory->createViewFileRule();
 
-        self::$_fallback = $objectManager->get('Magento\Core\Model\Design\FileResolution\Strategy\Fallback');
+        self::$_fallback = $objectManager->get('Magento\View\Design\FileResolution\Strategy\Fallback');
 
         // Themes to be checked
         self::$_themeCollection = $objectManager->get('Magento\Core\Model\Theme\Collection');

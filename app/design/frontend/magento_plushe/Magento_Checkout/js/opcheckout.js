@@ -43,7 +43,11 @@
             updateSelectorPrefix: '#checkout-',
             updateSelectorSuffix: '-load',
             backSelector: '.action.back',
-            minBalance: 0.0001
+            minBalance: 0.0001,
+            methodsListContainer: 'dl',
+            methodContainer: 'dt',
+            methodDescription : 'dd ul',
+            methodOn: 'dt input:radio'
         },
 
         _create: function() {
@@ -417,11 +421,11 @@
          */
         _paymentMethodHandler: function(e) {
             var _this = $(e.target),
-                parentsDl = _this.closest('dl');
-            parentsDl.find('dt input:radio').prop('checked', false);
+                parentsDl = _this.closest(this.options.methodsListContainer);
+            parentsDl.find(this.options.methodOn).prop('checked', false);
             _this.prop('checked', true);
-            parentsDl.find('dd ul').hide().find('[name^="payment["]').prop('disabled', true);
-            _this.parent().nextUntil('dt').find('ul').show().find('[name^="payment["]').prop('disabled', false);
+            parentsDl.find(this.options.methodDescription).hide().find('[name^="payment["]').prop('disabled', true);
+            _this.parent().nextUntil(this.options.methodContainer).find(this.options.methodDescription).show().find('[name^="payment["]').prop('disabled', false);
         },
 
         /**

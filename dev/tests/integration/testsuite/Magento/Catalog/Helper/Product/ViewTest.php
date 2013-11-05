@@ -147,7 +147,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoAppIsolation enabled
-     * @covers \Magento\Catalog\Helper\Product\View::_getSessionMessageModels
      * @magentoAppArea frontend
      */
     public function testGetSessionMessageModels()

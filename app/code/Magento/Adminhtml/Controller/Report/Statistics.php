@@ -33,7 +33,7 @@
  */
 namespace Magento\Adminhtml\Controller\Report;
 
-class Statistics extends \Magento\Adminhtml\Controller\Action
+class Statistics extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * Admin session model
@@ -139,7 +139,7 @@ class Statistics extends \Magento\Adminhtml\Controller\Action
         }
 
         if($this->_getSession()->isFirstPageAfterLogin()) {
-            $this->_redirect('*/*');
+            $this->_redirect('adminhtml/*');
         } else {
             $this->_redirectReferer('*/*');
         }
@@ -170,7 +170,7 @@ class Statistics extends \Magento\Adminhtml\Controller\Action
         }
 
         if($this->_getSession()->isFirstPageAfterLogin()) {
-            $this->_redirect('*/*');
+            $this->_redirect('adminhtml/*');
         } else {
             $this->_redirectReferer('*/*');
         }

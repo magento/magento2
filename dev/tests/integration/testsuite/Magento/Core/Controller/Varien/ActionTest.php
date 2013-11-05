@@ -189,65 +189,28 @@ class ActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $route
-     * @param string $controller
-     * @param string $action
-     * @param array $expected
-     *
-     * @magentoAppIsolation enabled
-     * @dataProvider addActionLayoutHandlesInheritedDataProvider
-     */
-    public function testAddActionLayoutHandlesInherited($route, $controller, $action, $expected)
-    {
-        $arguments = array(
-            'request'  => $this->_objectManager->get('Magento\TestFramework\Request'),
-            'response' => $this->_objectManager->get('Magento\TestFramework\Response'),
-            'isRenderInherited' => true,
-        );
-        $context = $this->_objectManager->create('Magento\Core\Controller\Varien\Action\Context', $arguments);
-        $this->_object = $this->getMockForAbstractClass('Magento\Core\Controller\Varien\Action',
-            array('context' => $context));
-
-        $this->_object->getRequest()
-            ->setRouteName($route)
-            ->setControllerName($controller)
-            ->setActionName($action);
-        $this->_object->addActionLayoutHandles();
-        $handles = $this->_object->getLayout()->getUpdate()->getHandles();
-        foreach ($expected as $expectedHandle) {
-            $this->assertContains($expectedHandle, $handles);
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function addActionLayoutHandlesInheritedDataProvider()
-    {
-        return array(
-            array('test', 'controller', 'action', array('test_controller_action')),
-            array('catalog', 'product', 'gallery', array('default', 'catalog_product_view', 'catalog_product_gallery'))
-        );
-    }
-
-    /**
      * @magentoAppIsolation enabled
      */
     public function testAddPageLayoutHandles()
     {
+        /* @var $update \Magento\Core\Model\Layout\Merge */
+        $update = $this->_object->getLayout()->getUpdate();
+
         $this->_object->getRequest()->setRouteName('test')
             ->setControllerName('controller')
             ->setActionName('action');
         $result = $this->_object->addPageLayoutHandles();
         $this->assertFalse($result);
-        $this->assertEmpty($this->_object->getLayout()->getUpdate()->getHandles());
+        $this->assertEmpty($update->getHandles());
 
         $this->_object->getRequest()->setRouteName('catalog')
             ->setControllerName('product')
             ->setActionName('view');
+        $update->addHandle('default');
         $result = $this->_object->addPageLayoutHandles(array('type' => 'simple'));
+
         $this->assertTrue($result);
-        $handles = $this->_object->getLayout()->getUpdate()->getHandles();
+        $handles = $update->getHandles();
         $this->assertContains('default', $handles);
         $this->assertContains('catalog_product_view', $handles);
         $this->assertContains('catalog_product_view_type_simple', $handles);
@@ -376,7 +339,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
                 'Magento\Core\Controller\Varien\Action\Context'
             ),
             'backend' => array(
-                'Magento\Adminhtml\Controller\Action',
+                'Magento\Backend\Controller\Adminhtml\Action',
                 'adminhtml',
                 'admin',
                 'magento_backend',

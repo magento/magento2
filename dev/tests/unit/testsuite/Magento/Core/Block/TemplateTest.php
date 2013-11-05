@@ -40,7 +40,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     protected $_filesystem;
 
     /**
-     * @var \Magento\Core\Model\TemplateEngine\EngineInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\View\TemplateEngineInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_templateEngine;
 
@@ -62,16 +62,16 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $this->_filesystem = $this->getMock('\Magento\Filesystem', array(), array(), '', false);
 
-        $this->_templateEngine = $this->getMock('\Magento\Core\Model\TemplateEngine\EngineInterface');
+        $this->_templateEngine = $this->getMock('\Magento\View\TemplateEngineInterface');
 
-        $enginePool = $this->getMock('Magento\Core\Model\TemplateEngine\Pool', array(), array(), '', false);
+        $enginePool = $this->getMock('Magento\View\TemplateEngineFactory', array(), array(), '', false);
         $enginePool->expects($this->any())
             ->method('get')
             ->with('phtml')
             ->will($this->returnValue($this->_templateEngine));
 
         $context = $this->getMock('\Magento\Core\Block\Template\Context', array(), array(), '', false);
-        $context->expects($this->any())->method('getEnginePool')->will($this->returnValue($enginePool));
+        $context->expects($this->any())->method('getEngineFactory')->will($this->returnValue($enginePool));
         $context->expects($this->any())->method('getDirs')->will($this->returnValue($dirs));
         $context->expects($this->any())->method('getFilesystem')->will($this->returnValue($this->_filesystem));
         $context->expects($this->any())->method('getViewFileSystem')->will($this->returnValue($this->_viewFileSystem));

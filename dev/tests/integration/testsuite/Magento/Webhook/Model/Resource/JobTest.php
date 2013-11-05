@@ -30,7 +30,7 @@ namespace Magento\Webhook\Model\Resource;
 class JobTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \Magento\Webhook\Model\Resource\Job::init
+     * @covers \Magento\Webhook\Model\Resource\Job::_init
      */
     public function testInit()
     {

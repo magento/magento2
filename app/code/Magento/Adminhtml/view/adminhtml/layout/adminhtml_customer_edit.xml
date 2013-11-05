@@ -31,7 +31,7 @@
         <block class="Magento\Adminhtml\Block\Template" name="optional_zip_countries" as="optional_zip_countries" template="Magento_Directory::js/optional_zip_countries.phtml"/>
         <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-catalog-product-composite-configure-js">
             <arguments>
-                <argument name="file" xsi:type="string">Magento_Adminhtml::catalog/product/composite/configure.js</argument>
+                <argument name="file" xsi:type="string">Magento_Catalog::catalog/product/composite/configure.js</argument>
             </arguments>
         </block>
         <block class="Magento\Page\Block\Html\Head\Script" name="varien-configurable-js">

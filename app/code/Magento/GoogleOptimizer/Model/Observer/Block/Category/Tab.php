@@ -62,7 +62,7 @@ class Tab
                 'google-experiment-form'
             );
 
-            /** @var $tabs \Magento\Adminhtml\Block\Catalog\Category\Tabs */
+            /** @var $tabs \Magento\Catalog\Block\Adminhtml\Category\Tabs */
             $tabs = $observer->getEvent()->getTabs();
             $tabs->addTab('google-experiment-tab', array(
                 'label' => __('Category View Optimization'),

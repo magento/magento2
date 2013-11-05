@@ -33,7 +33,7 @@
  */
 namespace Magento\Widget\Controller\Adminhtml;
 
-class Widget extends \Magento\Adminhtml\Controller\Action
+class Widget extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * Core registry

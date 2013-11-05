@@ -134,7 +134,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         ));
 
         $form->setValues($user->getData());
-        $form->setAction($this->getUrl('*/system_account/save'));
+        $form->setAction($this->getUrl('adminhtml/system_account/save'));
         $form->setMethod('post');
         $form->setUseContainer(true);
         $form->setId('edit_form');

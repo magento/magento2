@@ -18,8 +18,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     \Magento\Backup
+ * @category     Magento
+ * @package      Magento_Backup
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,7 +28,7 @@
  * Rollback worker for rolling back via ftp
  *
  * @category    Magento
- * @package     \Magento\Backup
+ * @package     Magento_Backup
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backup\Filesystem\Rollback;
@@ -181,6 +181,10 @@ class Ftp extends \Magento\Backup\Filesystem\Rollback\AbstractRollback
         foreach ($filesystemIterator as $item) {
             $ftpPath = $this->_snapshot->getFtpPath() . DS . str_replace($tmpDir, '', $item->__toString());
             $ftpPath = str_replace(DS, '/', $ftpPath);
+
+            if ($item->isLink()) {
+                continue;
+            }
 
             if ($item->isDir()) {
                 $this->_ftpClient->mkdirRecursive($ftpPath);

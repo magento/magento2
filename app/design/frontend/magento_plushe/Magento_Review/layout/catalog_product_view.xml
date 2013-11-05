@@ -25,18 +25,13 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="product.info.details">
-        <block class="Magento\Catalog\Block\Product\View\Additional" name="product.info.reviews.tab" as="product_reviews">
+        <block class="Magento\Catalog\Block\Product\View\Additional" name="product.info.reviews.tab" as="product_reviews" group="detailed_info">
             <arguments>
                 <argument name="title" translate="true" xsi:type="string">Reviews</argument>
             </arguments>
-            <action method="addToParentGroup">
-                <argument name="group" xsi:type="string">detailed_info</argument>
-            </action>
             <block class="Magento\Review\Block\Form" name="product.review.form" as="review_form">
                 <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before" htmlTag="div" htmlClass="rewards"/>
             </block>
-            <!-- <block class="Magento\Page\Block\Html\Pager" name="product_review_list.toolbar"/> -->
-            <!-- <block class="Magento\Core\Block\Template" name="product_review_list.count" template="Magento_Review::product/view/count.phtml"/> -->
             <block class="Magento\Review\Block\Product\View\ListView" name="product.info.product_additional_data" as="product_additional_data" template="product/view/list.phtml"/>
         </block>
     </referenceBlock>

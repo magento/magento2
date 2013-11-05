@@ -98,7 +98,7 @@ class Edit extends \Magento\Adminhtml\Block\Template
         } else {
             $params = array('id' => $this->getRequest()->getParam('id'));
         }
-        return $this->getUrl('*/*/save', $params);
+        return $this->getUrl('adminhtml/*/save', $params);
     }
 
     protected function _prepareLayout()
@@ -164,7 +164,7 @@ class Edit extends \Magento\Adminhtml\Block\Template
      */
     public function getPreviewUrl()
     {
-        return $this->getUrl('*/*/preview');
+        return $this->getUrl('adminhtml/*/preview');
     }
 
     /**

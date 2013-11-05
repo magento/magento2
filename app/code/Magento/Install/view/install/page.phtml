@@ -114,7 +114,7 @@
             href="http://www.magentocommerce.com/bug-tracking"
             target="varien_external"><strong><?php echo __('Report All Bugs') ?></strong></a> <?php echo __('(ver. %1)', \Magento\Core\Model\App::VERSION) ?>
             <br/>
-            <?php echo __('Magento&reg is a trademark of X.commerce, Inc. Copyright &copy; %1 X.commerce, Inc.', date('Y')) ?>
+            <?php echo $this->getChildHtml('copyright');?>
         </p>
     </div>
 </div>

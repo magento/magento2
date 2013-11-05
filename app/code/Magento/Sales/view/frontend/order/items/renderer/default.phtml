@@ -19,16 +19,16 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php $_item = $this->getItem() ?>
-<tr class="border" id="order-item-row-<?php echo $_item->getId() ?>">
-    <td><h3 class="product-name"><?php echo $this->escapeHtml($_item->getName()) ?></h3>
+<tr id="order-item-row-<?php echo $_item->getId() ?>">
+    <td class="col name">
+        <strong class="product name"><?php echo $this->escapeHtml($_item->getName()) ?></strong>
         <?php if($_options = $this->getItemOptions()): ?>
-        <dl class="item-options">
+        <dl class="item options">
         <?php foreach ($_options as $_option) : ?>
             <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
             <?php if (!$this->getPrintStatus()): ?>
@@ -37,7 +37,7 @@
                     <?php echo $_formatedOptionValue['value'] ?>
                     <?php if (isset($_formatedOptionValue['full_view'])): ?>
                     <div class="truncated_full_value">
-                        <dl class="item-options">
+                        <dl class="item options">
                             <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
                             <dd><?php echo $_formatedOptionValue['full_view'] ?></dd>
                         </dl>
@@ -58,11 +58,17 @@
         <?php endif; ?>
         <?php echo $this->escapeHtml($_item->getDescription()) ?>
         <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order_item', $_item) && $_item->getGiftMessageId()): ?>
-            <a href="#" id="order-item-gift-message-link-<?php echo $_item->getId() ?>" class="gift-message-link" aria-controls="order-item-gift-message-<?php echo $_item->getId()?>" data-item-id="<?php echo $_item->getId()?>"><?php echo __('Gift Message') ?></a>
+            <a href="#"
+               id="order-item-gift-message-link-<?php echo $_item->getId() ?>"
+               class="action show"
+               aria-controls="order-item-gift-message-<?php echo $_item->getId()?>"
+               data-item-id="<?php echo $_item->getId()?>">
+                <?php echo __('Gift Message') ?>
+            </a>
         <?php endif; ?>
     </td>
-    <td><?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\String')->splitInjection($this->getSku())) ?></td>
-    <td class="a-right">
+    <td class="col sku"><?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\String')->splitInjection($this->getSku())) ?></td>
+    <td class="col price">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceExclTax()): ?>
             <span class="price-excl-tax">
                 <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices()): ?>
@@ -85,9 +91,7 @@
                     <?php else: ?>
                         <?php echo $this->getOrder()->formatPrice($this->getItem()->getPrice()) ?>
                     <?php endif; ?>
-
                 </span>
-
 
                 <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem())): ?>
 
@@ -118,7 +122,6 @@
                     <?php endif; ?>
                 <?php endif; ?>
             </span>
-            <br />
         <?php endif; ?>
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceInclTax()): ?>
             <span class="price-incl-tax">
@@ -137,15 +140,12 @@
                 <?php else: ?>
                     <span class="cart-price">
                 <?php endif; ?>
-
                     <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($this->getItem(), array(0, 1, 4), 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
                         <?php echo $this->getOrder()->formatPrice($_incl+$this->getItem()->getWeeeTaxAppliedAmount()); ?>
                     <?php else: ?>
                         <?php echo $this->getOrder()->formatPrice($_incl-$this->getItem()->getWeeeTaxDisposition()) ?>
                     <?php endif; ?>
-
                 </span>
-
 
                 <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem())): ?>
 
@@ -178,23 +178,23 @@
             </span>
         <?php endif; ?>
     </td>
-    <td class="a-right">
-        <span class="nobr">
-                <?php if ($this->getItem()->getQtyOrdered() > 0): ?>
-            <?php echo __('Ordered'); ?>: <strong><?php echo $this->getItem()->getQtyOrdered()*1 ?></strong><br />
+    <td class="col qty">
+        <ul class="qty summary items">
+        <?php if ($this->getItem()->getQtyOrdered() > 0): ?>
+            <li class="item"><span class="label"><?php echo __('Ordered'); ?></span><strong><?php echo $this->getItem()->getQtyOrdered()*1 ?></strong></li>
         <?php endif; ?>
         <?php if ($this->getItem()->getQtyShipped() > 0): ?>
-            <?php echo __('Shipped'); ?>: <strong><?php echo $this->getItem()->getQtyShipped()*1 ?></strong><br />
+            <li class="item"><span class="label"><?php echo __('Shipped'); ?></span><strong><?php echo $this->getItem()->getQtyShipped()*1 ?></strong></li>
         <?php endif; ?>
         <?php if ($this->getItem()->getQtyCanceled() > 0): ?>
-            <?php echo __('Canceled'); ?>: <strong><?php echo $this->getItem()->getQtyCanceled()*1 ?></strong><br />
+            <li class="item"><span class="label"><?php echo __('Canceled'); ?></span><strong><?php echo $this->getItem()->getQtyCanceled()*1 ?></strong></li>
         <?php endif; ?>
         <?php if ($this->getItem()->getQtyRefunded() > 0): ?>
-            <?php echo __('Refunded'); ?>: <strong><?php echo $this->getItem()->getQtyRefunded()*1 ?></strong><br />
+            <li class="item"><span class="label"><?php echo __('Refunded'); ?></span><strong><?php echo $this->getItem()->getQtyRefunded()*1 ?></strong></li>
         <?php endif; ?>
-        </span>
+        </ul>
     </td>
-    <td class="a-right">
+    <td class="col subtotal">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceExclTax()): ?>
             <span class="price-excl-tax">
                 <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices()): ?>
@@ -211,15 +211,12 @@
                 <?php else: ?>
                     <span class="cart-price">
                 <?php endif; ?>
-
                     <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($this->getItem(), array(0, 1, 4), 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
                         <?php echo $this->getOrder()->formatPrice($this->getItem()->getRowTotal()+$this->getItem()->getWeeeTaxAppliedRowAmount()+$this->getItem()->getWeeeTaxRowDisposition()); ?>
                     <?php else: ?>
                         <?php echo $this->getOrder()->formatPrice($this->getItem()->getRowTotal()) ?>
                     <?php endif; ?>
-
                 </span>
-
 
                 <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem())): ?>
 
@@ -274,9 +271,7 @@
                     <?php else: ?>
                         <?php echo $this->getOrder()->formatPrice($_incl-$this->getItem()->getWeeeTaxRowDisposition()) ?>
                     <?php endif; ?>
-
                 </span>
-
 
                 <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem())): ?>
 
@@ -306,18 +301,15 @@
                         </span>
                     <?php endif; ?>
                 <?php endif; ?>
-
-
-
             </span>
         <?php endif; ?>
     </td>
-    <!--
-    <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceExclTax()): ?>
+
+    <?php /* if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceExclTax()): ?>
     <th class="a-right"><?php echo $this->getOrder()->formatPrice($this->getItem()->getRowTotal()) ?></th>
     <?php endif; ?>
     <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceInclTax()): ?>
     <th class="a-right"><?php echo $this->getOrder()->formatPrice($this->helper('Magento\Checkout\Helper\Data')->getSubtotalInclTax($this->getItem())); ?></th>
-    <?php endif; ?>
-    -->
+    <?php endif; */ ?>
+
 </tr>

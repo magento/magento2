@@ -25,7 +25,7 @@
  */
 ?>
 <?php if($this->getType()!== 'main' && !$this->getScriptIncluded() && $this->getCanDisplayContainer()): ?>
-<?php echo $this->helper('Magento\Core\Helper\Js')->includeScript('Magento_Adminhtml::sales/order/create/giftmessage.js') ?>
+<?php echo $this->helper('Magento\Core\Helper\Js')->includeScript('Magento_Sales::order/create/giftmessage.js') ?>
 <?php $this->setScriptIncluded(true); ?>
 <?php endif; ?>
 <?php if($this->getCanDisplayContainer()): ?>

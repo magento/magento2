@@ -99,7 +99,7 @@ class Catalog extends \Magento\Object
                 'type'          => __('Product'),
                 'name'          => $product->getName(),
                 'description'   => $this->_coreString->substr($description, 0, 30),
-                'url' => $this->_adminhtmlData->getUrl('*/catalog_product/edit', array('id' => $product->getId())),
+                'url' => $this->_adminhtmlData->getUrl('catalog/product/edit', array('id' => $product->getId())),
             );
         }
 

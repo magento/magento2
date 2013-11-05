@@ -148,7 +148,7 @@ class Tools extends \Magento\Backend\Block\Template
      */
     public function getSaveUrl()
     {
-        return $this->getUrl('*/system_design_editor_tools/saveQuickStyles',
+        return $this->getUrl('adminhtml/system_design_editor_tools/saveQuickStyles',
             array('theme_id' => $this->_themeContext->getEditableTheme()->getId())
         );
     }

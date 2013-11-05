@@ -83,7 +83,7 @@ class Accordion extends \Magento\Adminhtml\Block\Widget\Accordion
         $this->addItem('lastOrders', array(
             'title'       => __('Recent Orders'),
             'ajax'        => true,
-            'content_url' => $this->getUrl('*/*/lastOrders', array('_current' => true)),
+            'content_url' => $this->getUrl('adminhtml/*/lastOrders', array('_current' => true)),
         ));
 
         // add shopping cart block of each website
@@ -106,7 +106,7 @@ class Accordion extends \Magento\Adminhtml\Block\Widget\Accordion
             $this->addItem('shopingCart' . $websiteId, array(
                 'title'   => $title,
                 'ajax'    => true,
-                'content_url' => $this->getUrl('*/*/viewCart', array('_current' => true, 'website_id' => $websiteId)),
+                'content_url' => $this->getUrl('adminhtml/*/viewCart', array('_current' => true, 'website_id' => $websiteId)),
             ));
         }
 
@@ -119,7 +119,7 @@ class Accordion extends \Magento\Adminhtml\Block\Widget\Accordion
         $this->addItem('wishlist', array(
             'title' => __('Wishlist - %1 item(s)', $wishlistCount),
             'ajax'  => true,
-            'content_url' => $this->getUrl('*/*/viewWishlist', array('_current' => true)),
+            'content_url' => $this->getUrl('adminhtml/*/viewWishlist', array('_current' => true)),
         ));
     }
 }

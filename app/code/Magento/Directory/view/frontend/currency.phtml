@@ -31,19 +31,25 @@
  * @see \Magento\Directory\Block\Currency
  */
 ?>
-<?php if($this->getCurrencyCount()>1): ?>
-<div class="block block-currency">
-    <div class="block-title">
-        <strong><span><?php echo __('Select Your Currency') ?></span></strong>
-    </div>
-    <div class="block-content">
-        <select name="currency" title="<?php echo __('Select Your Currency') ?>" onchange="setLocation(this.value)">
-        <?php foreach ($this->getCurrencies() as $_code => $_name): ?>
-            <option value="<?php echo $this->getSwitchCurrencyUrl($_code) ?>"<?php if($_code==$this->getCurrentCurrencyCode()): ?> selected="selected"<?php endif; ?>>
-                <?php echo $_name ?> - <?php echo $_code ?>
-            </option>
-        <?php endforeach; ?>
-        </select>
+<?php if ($this->getCurrencyCount() > 1): ?>
+<?php $currencies = $this->getCurrencies(); ?>
+<?php $currentCurrencyCode = $this->getCurrentCurrencyCode(); ?>
+<div class="switcher currency">
+    <strong class="label"><span><?php echo __('Currency') ?></span></strong>
+    <div class="options">
+        <strong class="language-<?php echo $this->escapeHtml($this->getCurrentCurrencyCode()) ?>">
+            <span><?php echo $this->escapeHtml($currentCurrencyCode) ?> - <?php echo @$this->escapeHtml($currencies[$currentCurrencyCode]) ?></span>
+        </strong>
+        <button type="button" data-toggle="dropdown" class="action switch"><span><?php echo __('Change')?></span></button>
+        <ul data-target="dropdown">
+            <?php foreach ($currencies as $_code => $_name): ?>
+                <?php if($_code != $currentCurrencyCode): ?>
+                    <li class="currency-<?php echo $_code ?>">
+                        <a href="<?php echo $this->getSwitchCurrencyUrl($_code) ?>"><?php echo $_code ?> - <?php echo $_name ?></a>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ul>
     </div>
 </div>
 <?php endif; ?>

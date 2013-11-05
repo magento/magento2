@@ -34,7 +34,7 @@ class FileSystem
     /**
      * Model, used to resolve the file paths
      *
-     * @var \Magento\Core\Model\Design\FileResolution\StrategyPool
+     * @var \Magento\View\Design\FileResolution\StrategyPool
      */
     protected $_resolutionPool = null;
 
@@ -46,11 +46,11 @@ class FileSystem
     /**
      * View files system model
      *
-     * @param \Magento\Core\Model\Design\FileResolution\StrategyPool $resolutionPool
+     * @param \Magento\View\Design\FileResolution\StrategyPool $resolutionPool
      * @param \Magento\Core\Model\View\Service $viewService
      */
     public function __construct(
-        \Magento\Core\Model\Design\FileResolution\StrategyPool $resolutionPool,
+        \Magento\View\Design\FileResolution\StrategyPool $resolutionPool,
         \Magento\Core\Model\View\Service $viewService
     ) {
         $this->_resolutionPool = $resolutionPool;
@@ -115,8 +115,8 @@ class FileSystem
     {
         $skipProxy = isset($params['skipProxy']) && $params['skipProxy'];
         $strategy = $this->_resolutionPool->getViewStrategy($skipProxy);
-        if ($strategy instanceof \Magento\Core\Model\Design\FileResolution\Strategy\View\NotifiableInterface) {
-            /** @var $strategy \Magento\Core\Model\Design\FileResolution\Strategy\View\NotifiableInterface  */
+        if ($strategy instanceof \Magento\View\Design\FileResolution\Strategy\View\NotifiableInterface) {
+            /** @var $strategy \Magento\View\Design\FileResolution\Strategy\View\NotifiableInterface  */
             $filePath = $this->_viewService->extractScope($fileId, $params);
             $this->_viewService->updateDesignParams($params);
             $strategy->setViewFilePathToMap(

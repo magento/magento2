@@ -19,22 +19,19 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php if(!empty($collection) && $collection->getSize()): ?>
-    <table class="ratings-table">
-        <col width="1" />
-        <col />
+    <table class="data table ratings review summary">
         <tbody>
             <?php foreach ($collection as $_rating): ?>
                 <?php if($_rating->getSummary()): ?>
                     <tr>
-                        <th><?php echo __($this->escapeHtml($_rating->getRatingCode())) ?></th>
-                        <td>
-                            <div class="rating-box">
+                        <th class="label"><?php echo __($this->escapeHtml($_rating->getRatingCode())) ?></th>
+                        <td class="value">
+                            <div class="rating box">
                                 <div class="rating" style="width:<?php echo ceil($_rating->getSummary()) ?>%;"></div>
                             </div>
                         </td>

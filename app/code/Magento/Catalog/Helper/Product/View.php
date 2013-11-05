@@ -137,6 +137,7 @@ class View extends \Magento\Core\Helper\AbstractHelper
         }
 
         $update = $controller->getLayout()->getUpdate();
+        $update->addHandle('default');
         $controller->addPageLayoutHandles(
             array('id' => $product->getId(), 'sku' => $product->getSku(), 'type' => $product->getTypeId())
         );

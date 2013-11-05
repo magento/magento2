@@ -52,13 +52,17 @@
                 <tr>
                     <td class="col product"><?php echo $this->getItemHtml($_item->getQuoteItem()) ?></td>
                     <td class="col qty">
-                        <input type="text" name="ship[<?php echo $_index ?>][<?php echo $_item->getQuoteItemId() ?>][qty]" value="<?php echo $this->escapeHtml($_item->getQty()) ?>" size="2" class="input-text qty" data-validate="{number: true}"/>
+                        <div class="control qty">
+                            <input type="text" name="ship[<?php echo $_index ?>][<?php echo $_item->getQuoteItemId() ?>][qty]" value="<?php echo $this->escapeHtml($_item->getQty()) ?>" size="2" class="input-text qty" data-validate="{number: true}"/>
+                        </div>
                     </td>
                     <td class="col address">
                         <?php if ($_item->getProduct()->getIsVirtual()): ?>
                             <div class="applicable"><?php echo __('Shipping selection is not applicable.'); ?></div>
                         <?php else: ?>
-                            <?php echo $this->getAddressesHtmlSelect($_item, $_index); ?>
+                            <div class="control address">
+                                <?php echo $this->getAddressesHtmlSelect($_item, $_index); ?>
+                            </div>
                         <?php endif; ?>
                     </td>
                     <td class="col delete">

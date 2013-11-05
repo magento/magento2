@@ -160,7 +160,7 @@ class Config extends \Magento\Object
             'no_display'                    => false,
             'translator'                    => $this->_cmsData,
             'encode_directives'             => true,
-            'directives_url'                => $this->_backendUrl->getUrl('*/cms_wysiwyg/directive'),
+            'directives_url'                => $this->_backendUrl->getUrl('adminhtml/cms_wysiwyg/directive'),
             'popup_css'                     =>
                 $viewUrl->getViewFileUrl('mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/dialog.css'),
             'content_css'                   =>
@@ -174,7 +174,7 @@ class Config extends \Magento\Object
         if ($this->_authorization->isAllowed('Magento_Cms::media_gallery')) {
             $config->addData(array(
                 'add_images' => true,
-                'files_browser_window_url' => $this->_backendUrl->getUrl('*/cms_wysiwyg_images/index'),
+                'files_browser_window_url' => $this->_backendUrl->getUrl('adminhtml/cms_wysiwyg_images/index'),
                 'files_browser_window_width' => $this->_windowSize['width'],
                 'files_browser_window_height'=> $this->_windowSize['height'],
             ));

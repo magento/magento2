@@ -205,10 +205,10 @@ class StoreView extends \Magento\Backend\Block\Template
     {
         $options = array();
         $options['storesByThemes']    = $this->_getStoresByThemes();
-        $options['assignUrl']         = $this->getUrl('*/*/assignThemeToStore', array(
+        $options['assignUrl']         = $this->getUrl('adminhtml/*/assignThemeToStore', array(
             'theme_id' => $this->getThemeId()
         ));
-        $options['afterAssignUrl']    = $this->getUrl('*/*/index');
+        $options['afterAssignUrl']    = $this->getUrl('adminhtml/*/index');
         $options['hasMultipleStores'] = $this->_hasMultipleStores();
 
         $options['actionOnAssign']   = $this->getData('actionOnAssign');

@@ -198,7 +198,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
 
             case 'sales_order_create':
             case 'sales_order_edit':
-                $route = 'adminhtml/sales_order/view';
+                $route = 'sales/order/view';
                 $order = $this->_orderFactory->create()->loadByIncrementId($params['x_invoice_num']);
                 $param['order_id'] = $order->getId();
                 return $this->getAdminUrl($route, $param);

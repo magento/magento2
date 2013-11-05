@@ -225,7 +225,7 @@ class Application
                 $objectManager->get('Magento\Core\Model\ObjectManager\ConfigLoader')->load('global')
             );
             $objectManager->configure(array(
-                'Magento\Core\Model\Design\FileResolution\Strategy\Fallback\CachingProxy' => array(
+                'Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy' => array(
                     'parameters' => array('canSaveMap' => false)
                 ),
                 'default_setup' => array(

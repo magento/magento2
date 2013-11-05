@@ -90,6 +90,6 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
      */
     public function getFormActionUrl()
     {
-        return $this->getUrl('*/*/save');
+        return $this->getUrl('adminhtml/*/save');
     }
 }

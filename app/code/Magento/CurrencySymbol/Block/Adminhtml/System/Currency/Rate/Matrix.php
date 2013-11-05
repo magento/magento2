@@ -100,7 +100,7 @@ class Matrix extends \Magento\Backend\Block\Template
 
     public function getRatesFormAction()
     {
-        return $this->getUrl('*/*/saveRates');
+        return $this->getUrl('adminhtml/*/saveRates');
     }
 
     protected function _prepareRates($array)

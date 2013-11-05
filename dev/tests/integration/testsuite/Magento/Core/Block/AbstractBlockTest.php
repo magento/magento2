@@ -445,8 +445,8 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $block1 = $this->_createBlockWithLayout('block1', 'block1');
         $block2 = $this->_createBlockWithLayout('block2', 'block2');
         $parent->setChild('block1', $block1)->setChild('block2', $block2);
-        $block1->addToParentGroup('group');
-        $block2->addToParentGroup('group');
+        $this->_layout->addToParentGroup('block1', 'group');
+        $this->_layout->addToParentGroup('block2', 'group');
         $group = $parent->getGroupChildNames('group');
         $this->assertContains('block1', $group);
         $this->assertContains('block2', $group);

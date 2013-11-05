@@ -35,7 +35,7 @@
 namespace Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items;
 
 class Renderer
-    extends \Magento\Adminhtml\Block\Sales\Order\View\Items\Renderer\DefaultRenderer
+    extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer
 {
     public function isShipmentSeparately($item = null)
     {

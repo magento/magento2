@@ -527,11 +527,11 @@ button.primary.disabled:hover,
 .image .action-delete[disabled],
 .fieldset-wrapper-title .actions .action-delete[disabled],
 .address-list-item-actions .action-delete[disabled],
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back,
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back:hover,
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back:active,
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back.active,
-[class^=" adminhtml-catalog-product-"] .page-actions .action-back[disabled],
+[class^=" catalog-product-"] .page-actions .action-back,
+[class^=" catalog-product-"] .page-actions .action-back:hover,
+[class^=" catalog-product-"] .page-actions .action-back:active,
+[class^=" catalog-product-"] .page-actions .action-back.active,
+[class^=" catalog-product-"] .page-actions .action-back[disabled],
 [class^=" adminhtml-newsletter-"] .page-actions .action-back,
 [class^=" adminhtml-newsletter-"] .page-actions .action-back:hover,
 [class^=" adminhtml-newsletter-"] .page-actions .action-back:active,
@@ -547,11 +547,11 @@ button.primary.disabled:hover,
 .notification .action-close:active,
 .notification .action-close.active,
 .notification .action-close[disabled],
-.adminhtml-sales-order-create-index .page-actions-inner .cancel,
-.adminhtml-sales-order-create-index .page-actions-inner .cancel:hover,
-.adminhtml-sales-order-create-index .page-actions-inner .cancel:active,
-.adminhtml-sales-order-create-index .page-actions-inner .cancel.active,
-.adminhtml-sales-order-create-index .page-actions-inner .cancel[disabled] {
+.sales-order-create-index .page-actions-inner .cancel,
+.sales-order-create-index .page-actions-inner .cancel:hover,
+.sales-order-create-index .page-actions-inner .cancel:active,
+.sales-order-create-index .page-actions-inner .cancel.active,
+.sales-order-create-index .page-actions-inner .cancel[disabled] {
     border: 0;
     border-radius: 0;
     background: none;
@@ -4122,7 +4122,7 @@ table tbody tr:nth-child(odd):hover th {
     float: left;
 }
 
-.adminhtml-catalog-product-index .page-actions {
+.catalog-product-index .page-actions {
     padding-top: 0;
 }
 
@@ -5063,9 +5063,9 @@ table .col-draggable .draggable-handle {
 .order-information .data-table tbody tr th,
 .order-account-information .data-table tbody tr th,
 .adminhtml-rma-new .data-table tbody tr th,
-[class^=" adminhtml-sales-transactions-"] .data-table tbody tr th,
-[class^=" adminhtml-sales-"] .order-payment-method .data-table tbody tr th,
-[class^=" adminhtml-sales-billing-agreement-"] .log-details .data-table tbody tr th {
+[class^=" sales-transactions-"] .data-table tbody tr th,
+[class^=" sales-"] .order-payment-method .data-table tbody tr th,
+[class^=" sales-billing-agreement-"] .log-details .data-table tbody tr th {
     font-weight: bold;
 }
 
@@ -5083,12 +5083,12 @@ table .col-draggable .draggable-handle {
 .order-account-information .data-table tbody tr th,
 [class^=" adminhtml-rma-"] .data-table tbody tr td,
 [class^=" adminhtml-rma-"] .data-table tbody tr th,
-[class^=" adminhtml-sales-transactions-"] .data-table tbody tr th,
-[class^=" adminhtml-sales-transactions-"] .data-table tbody tr td,
-[class^=" adminhtml-sales-"] .order-payment-method .data-table tbody tr th,
-[class^=" adminhtml-sales-"] .order-payment-method .data-table tbody tr td,
-[class^=" adminhtml-sales-billing-agreement-"] .log-details .data-table tbody tr th,
-[class^=" adminhtml-sales-billing-agreement-"] .log-details .data-table tbody tr td {
+[class^=" sales-transactions-"] .data-table tbody tr th,
+[class^=" sales-transactions-"] .data-table tbody tr td,
+[class^=" sales-"] .order-payment-method .data-table tbody tr th,
+[class^=" sales-"] .order-payment-method .data-table tbody tr td,
+[class^=" sales-billing-agreement-"] .log-details .data-table tbody tr th,
+[class^=" sales-billing-agreement-"] .log-details .data-table tbody tr td {
     background-color: #fff;
     border: 0;
     padding: 9px 10px 10px;
@@ -5110,12 +5110,12 @@ table .col-draggable .draggable-handle {
 .order-account-information .data-table tbody tr:nth-child(2n+1) th,
 [class^=" adminhtml-rma-"] .data-table tbody tr:nth-child(2n+1) td,
 [class^=" adminhtml-rma-"] .data-table tbody tr:nth-child(2n+1) th,
-[class^=" adminhtml-sales-transactions-"] .data-table tbody tr:nth-child(2n+1) th,
-[class^=" adminhtml-sales-transactions-"] .data-table tbody tr:nth-child(2n+1) td,
-[class^=" adminhtml-sales-"] .order-payment-method .data-table tbody tr:nth-child(2n+1) th,
-[class^=" adminhtml-sales-"] .order-payment-method .data-table tbody tr:nth-child(2n+1) td,
-[class^=" adminhtml-sales-billing-agreement-"] .log-details .data-table tbody tr:nth-child(2n+1) th,
-[class^=" adminhtml-sales-billing-agreement-"] .log-details .data-table tbody tr:nth-child(2n+1) td {
+[class^=" sales-transactions-"] .data-table tbody tr:nth-child(2n+1) th,
+[class^=" sales-transactions-"] .data-table tbody tr:nth-child(2n+1) td,
+[class^=" sales-"] .order-payment-method .data-table tbody tr:nth-child(2n+1) th,
+[class^=" sales-"] .order-payment-method .data-table tbody tr:nth-child(2n+1) td,
+[class^=" sales-billing-agreement-"] .log-details .data-table tbody tr:nth-child(2n+1) th,
+[class^=" sales-billing-agreement-"] .log-details .data-table tbody tr:nth-child(2n+1) td {
     background-color: #fbfaf6;
 }
 
@@ -5133,12 +5133,12 @@ table .col-draggable .draggable-handle {
 .eq-ie8 .order-account-information .data-table tbody tr th,
 .eq-ie8 [class^=" adminhtml-rma-"] .data-table tbody tr td,
 .eq-ie8 [class^=" adminhtml-rma-"] .data-table tbody tr th,
-.eq-ie8 [class^=" adminhtml-sales-transactions-"] .data-table tbody tr th,
-.eq-ie8 [class^=" adminhtml-sales-transactions-"] .data-table tbody tr td,
-.eq-ie8 [class^=" adminhtml-sales-"] .order-payment-method .data-table tbody tr th,
-.eq-ie8 [class^=" adminhtml-sales-"] .order-payment-method .data-table tbody tr td,
-.eq-ie8 [class^=" adminhtml-sales-billing-agreement-"] .log-details .data-table tbody tr th,
-.eq-ie8 [class^=" adminhtml-sales-billing-agreement-"] .log-details .data-table tbody tr td {
+.eq-ie8 [class^=" sales-transactions-"] .data-table tbody tr th,
+.eq-ie8 [class^=" sales-transactions-"] .data-table tbody tr td,
+.eq-ie8 [class^=" sales-"] .order-payment-method .data-table tbody tr th,
+.eq-ie8 [class^=" sales-"] .order-payment-method .data-table tbody tr td,
+.eq-ie8 [class^=" sales-billing-agreement-"] .log-details .data-table tbody tr th,
+.eq-ie8 [class^=" sales-billing-agreement-"] .log-details .data-table tbody tr td {
     border-bottom: 1px solid #ededed;
 }
 

@@ -167,7 +167,7 @@ class NotifyStock extends \Magento\Core\Block\AbstractBlock
         /* @var $product \Magento\Catalog\Model\Product */
         $product = $args['product'];
         $product->setData($args['row']);
-        $url = $this->_adminhtmlData->getUrl('adminhtml/catalog_product/edit/',
+        $url = $this->_adminhtmlData->getUrl('catalog/product/edit/',
             array('id' => $product->getId(), '_secure' => true, '_nosecret' => true));
         $qty = 1 * $product->getQty();
         $description = __('%1 has reached a quantity of %2.', $product->getName(), $qty);

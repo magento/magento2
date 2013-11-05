@@ -192,7 +192,7 @@ class Role extends \Magento\Backend\Controller\AbstractAction
             $this->_session->addError(
                 __('You cannot delete self-assigned roles.')
             );
-            $this->_redirect('*/*/editrole', array('rid' => $rid));
+            $this->_redirect('adminhtml/*/editrole', array('rid' => $rid));
             return;
         }
 
@@ -235,7 +235,7 @@ class Role extends \Magento\Backend\Controller\AbstractAction
         $role = $this->_initRole('role_id');
         if (!$role->getId() && $rid) {
             $this->_session->addError(__('This role no longer exists.'));
-            $this->_redirect('*/*/');
+            $this->_redirect('adminhtml/*/');
             return;
         }
 
@@ -274,7 +274,7 @@ class Role extends \Magento\Backend\Controller\AbstractAction
                 __('An error occurred while saving this role.')
             );
         }
-        $this->_redirect('*/*/');
+        $this->_redirect('adminhtml/*/');
         return;
     }
 

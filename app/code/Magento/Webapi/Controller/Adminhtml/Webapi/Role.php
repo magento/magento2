@@ -25,7 +25,7 @@
  */
 namespace Magento\Webapi\Controller\Adminhtml\Webapi;
 
-class Role extends \Magento\Adminhtml\Controller\Action
+class Role extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * @var \Magento\Core\Model\Validator\Factory
@@ -112,7 +112,7 @@ class Role extends \Magento\Adminhtml\Controller\Action
                 $this->_getSession()->addError(
                     __('This API role no longer exists.')
                 );
-                $this->_redirect('*/*/');
+                $this->_redirect('adminhtml/*/');
                 return;
             }
             $this->_addBreadcrumb(
@@ -184,7 +184,7 @@ class Role extends \Magento\Adminhtml\Controller\Action
                 $this->_getSession()->addError(
                     __('This role no longer exists.')
                 );
-                $this->_redirect('*/*/');
+                $this->_redirect('adminhtml/*/');
                 return;
             }
             $role->setData($data);
@@ -203,14 +203,14 @@ class Role extends \Magento\Adminhtml\Controller\Action
                 $this->_getSession()->setWebapiRoleData(false);
 
                 if ($roleId && !$this->getRequest()->has('continue')) {
-                    $this->_redirect('*/*/');
+                    $this->_redirect('adminhtml/*/');
                 } else {
-                    $this->_redirect('*/*/edit', array('role_id' => $role->getId()));
+                    $this->_redirect('adminhtml/*/edit', array('role_id' => $role->getId()));
                 }
             } catch (\Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
                 $this->_getSession()->setWebapiRoleData($data);
-                $this->_redirect('*/*/edit', array('role_id' => $role->getId()));
+                $this->_redirect('adminhtml/*/edit', array('role_id' => $role->getId()));
             }
         }
     }

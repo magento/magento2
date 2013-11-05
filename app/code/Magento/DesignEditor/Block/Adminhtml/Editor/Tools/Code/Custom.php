@@ -100,7 +100,7 @@ class Custom extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getDownloadCustomCssUrl()
     {
-        return $this->getUrl('*/system_design_theme/downloadCustomCss',
+        return $this->getUrl('adminhtml/system_design_theme/downloadCustomCss',
             array('theme_id' => $this->_themeContext->getEditableTheme()->getId()));
     }
 
@@ -111,7 +111,7 @@ class Custom extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getUploadUrl()
     {
-        return $this->getUrl('*/system_design_editor_tools/upload',
+        return $this->getUrl('adminhtml/system_design_editor_tools/upload',
             array('theme_id' => $this->_themeContext->getEditableTheme()->getId()));
     }
 
@@ -122,7 +122,7 @@ class Custom extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getSaveCustomCssUrl()
     {
-        return $this->getUrl('*/system_design_editor_tools/saveCssContent',
+        return $this->getUrl('adminhtml/system_design_editor_tools/saveCssContent',
             array('theme_id' => $this->_themeContext->getEditableTheme()->getId()));
     }
 
@@ -135,7 +135,7 @@ class Custom extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getMediaBrowserUrl($targetElementId, $contentType)
     {
-        return $this->getUrl('*/system_design_editor_files/index', array(
+        return $this->getUrl('adminhtml/system_design_editor_files/index', array(
             'target_element_id'                           => $targetElementId,
             \Magento\Theme\Helper\Storage::PARAM_THEME_ID     => $this->_themeContext->getEditableTheme()->getId(),
             \Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE => $contentType

@@ -225,7 +225,7 @@ class Registration extends \Magento\Backend\Controller\AbstractAction
         $this->_getSession()->addSuccess(
             __('The subscription \'%1\' has been activated.', $subscriptionData[self::DATA_NAME])
         );
-        $this->_redirect('*/webhook_registration/succeeded',
+        $this->_redirect('adminhtml/webhook_registration/succeeded',
             array(self::PARAM_SUBSCRIPTION_ID => $subscriptionData[self::DATA_SUBSCRIPTION_ID]));
     }
 
@@ -237,6 +237,6 @@ class Registration extends \Magento\Backend\Controller\AbstractAction
     protected function _redirectFailed($errorMessage)
     {
         $this->_getSession()->addError($errorMessage);
-        $this->_redirect('*/webhook_registration/failed');
+        $this->_redirect('adminhtml/webhook_registration/failed');
     }
 }

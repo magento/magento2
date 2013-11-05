@@ -44,7 +44,7 @@ class LinksTest
      */
     public static function performUploadButtonTest(\Magento\Core\Block\AbstractBlock $block)
     {
-        /** @var $layout \Magento\Core\Model\Layout */
+        /** @var $layout \Magento\View\LayoutInterface */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Core\Model\Layout');
         $layout->addBlock($block, 'links');

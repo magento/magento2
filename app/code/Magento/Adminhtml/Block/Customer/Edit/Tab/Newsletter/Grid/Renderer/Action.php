@@ -62,7 +62,7 @@ class Action extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Abstra
 
         $actions[] = array(
             '@'	=>  array(
-                'href'  => $this->getUrl('*/newsletter_template/preview',
+                'href'  => $this->getUrl('adminhtml/newsletter_template/preview',
                     array(
                         'id'        => $row->getTemplateId(),
                         'subscriber'=> $this->_coreRegistry->registry('subscriber')->getId()

@@ -174,6 +174,6 @@ class Form
      */
     public function getGenerateUrl()
     {
-        return $this->getUrl('*/*/generate');
+        return $this->getUrl('adminhtml/*/generate');
     }
 }

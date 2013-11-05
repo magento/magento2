@@ -68,7 +68,7 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
         $url = 'example.url.com/id/333';
         $this->_urlBuilder->expects($this->once())
             ->method('getUrl')
-            ->with('*/*/accept', array('id' => 333))
+            ->with('adminhtml/*/accept', array('id' => 333))
             ->will($this->returnValue($url));
 
         $this->assertEquals($url, $this->_block->getAcceptUrl());

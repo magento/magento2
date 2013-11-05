@@ -37,7 +37,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         /** @var \Magento\Data\Form $form */
         $form = $this->_formFactory->create(array(
             'attributes' => array(
-                'action' => $this->getUrl('*/*/save'),
+                'action' => $this->getUrl('adminhtml/*/save'),
                 'id' => 'edit_form',
                 'method' => 'post',
             ))

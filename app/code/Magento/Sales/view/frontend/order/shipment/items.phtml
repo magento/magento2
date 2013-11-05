@@ -19,32 +19,49 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php  $_order = $this->getOrder() ?>
-<p class="order-links">
-    <?php  if ($_order->getTracksCollection()->count()) : ?>
-        <a href="#" data-mage-init="{popupWindow: {windowURL:'<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($_order) ?>',windowName:'trackorder',width:800,height:600,top:0,left:0,resizable:1,scrollbars:1}}" title="<?php echo __('Track all shipment(s)') ?>"><?php echo __('Track all shipments') ?></a> <span class="separator">|</span>
-    <?php endif; ?>
-    <a href="<?php echo $this->getPrintAllShipmentsUrl($_order) ?>" onclick="this.target='_blank'" class="link-print"><?php echo __('Print All Shipments') ?></a>
-</p>
+<div class="order toolbar">
+    <div class="actions">
+        <?php  if ($_order->getTracksCollection()->count()) : ?>
+            <a href="#"
+               data-mage-init="{popupWindow: {windowURL:'<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($_order) ?>',windowName:'trackorder',width:800,height:600,top:0,left:0,resizable:1,scrollbars:1}}" title="<?php echo __('Track all shipment(s)') ?>"
+               class="action track">
+                <span><?php echo __('Track all shipments') ?></span>
+            </a>
+        <?php endif; ?>
+        <a href="<?php echo $this->getPrintAllShipmentsUrl($_order) ?>"
+           onclick="this.target='_blank'"
+           class="action print">
+            <span><?php echo __('Print All Shipments') ?></span>
+        </a>
+    </div>
+</div>
 <?php foreach ($_order->getShipmentsCollection() as $_shipment): ?>
-<h2 class="sub-title"><?php echo __('Shipment #') ?><?php echo $_shipment->getIncrementId(); ?> <span class="separator">|</span> <a href="<?php echo $this->getPrintShipmentUrl($_shipment) ?>" onclick="this.target='_blank'" class="link-print"><?php echo __('Print Shipment') ?></a></h2>
+<div class="order title">
+    <strong><?php echo __('Shipment #') ?><?php echo $_shipment->getIncrementId(); ?></strong>
+    <a href="<?php echo $this->getPrintShipmentUrl($_shipment) ?>"
+       onclick="this.target='_blank'"
+       class="action print">
+        <span><?php echo __('Print Shipment') ?></span
+    </a>
+    <a href="#"
+       data-mage-init="{popupWindow: {windowURL:'<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($_shipment) ?>',windowName:'trackshipment',width:800,height:600,top:0,left:0,resizable:1,scrollbars:1}}"
+       title="<?php echo __('Track this shipment') ?>"
+       class="action track">
+        <span><?php echo __('Track this shipment') ?></span>
+    </a>
+</div>
 <?php $tracks = $_shipment->getTracksCollection(); ?>
 <?php  if ($tracks->count()): ?>
-    <table class="data-table tracking-table" id="my-tracking-table-<?php echo $_shipment->getId(); ?>">
+    <table class="data table order tracking" id="my-tracking-table-<?php echo $_shipment->getId(); ?>">
         <tbody>
             <tr>
-                <td colspan="2">
-                    <a href="#" data-mage-init="{popupWindow: {windowURL:'<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($_shipment) ?>',windowName:'trackshipment',width:800,height:600,top:0,left:0,resizable:1,scrollbars:1}}" title="<?php echo __('Track this shipment') ?>"><?php echo __('Track this shipment') ?></a>
-                </td>
-            </tr>
-            <tr>
-                <th class="label"><?php echo __('Tracking Number(s):') ?></th>
-                <td>&nbsp;
+                <th class="col label"><?php echo __('Tracking Number(s):') ?></th>
+                <td class="col number">
                 <?php
                 $i = 1;
                 $_size = $tracks->count();
@@ -52,7 +69,11 @@
                 <?php if($track->isCustom()): ?>
                     <?php echo $this->escapeHtml($track->getNumber()) ?>
                 <?php else: ?>
-                    <a href="#" data-mage-init="{popupWindow: {windowURL:'<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($track) ?>',windowName:'trackorder',width:800,height:600,left:0,top:0,resizable:1,scrollbars:1}}"><?php echo $this->escapeHtml($track->getNumber()) ?></a>
+                    <a href="#"
+                       data-mage-init="{popupWindow: {windowURL:'<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($track) ?>',windowName:'trackorder',width:800,height:600,left:0,top:0,resizable:1,scrollbars:1}}"
+                       class="action track">
+                        <span><?php echo $this->escapeHtml($track->getNumber()) ?></span>
+                    </a>
                 <?php endif; ?>
                 <?php if($i!=$_size): ?>, <?php endif; ?>
                 <?php $i++;
@@ -61,18 +82,14 @@
             </tr>
         </tbody>
     </table>
-    <script type="text/javascript">jQuery('#my-tracking-table-<?php echo $_shipment->getId(); ?>').decorate('table')</script>
 <?php  endif; ?>
-<h3 class="table-caption"><?php echo __('Items Shipped') ?></h3>
-<table class="data-table" id="my-shipment-table-<?php echo $_shipment->getId(); ?>">
-    <col />
-    <col width="1" />
-    <col width="1" />
+<div class="order subtitle caption"><strong><?php echo __('Items Shipped') ?></strong></div>
+<table class="data table order items shipment" id="my-shipment-table-<?php echo $_shipment->getId(); ?>">
     <thead>
         <tr>
-            <th><?php echo __('Product Name') ?></th>
-            <th><?php echo __('SKU') ?></th>
-            <th class="a-center"><span class="nobr"><?php echo __('Qty Shipped') ?></span></th>
+            <th class="col name"><?php echo __('Product Name') ?></th>
+            <th class="col sku"><?php echo __('SKU') ?></th>
+            <th class="col qty"><?php echo __('Qty Shipped') ?></th>
         </tr>
     </thead>
     <?php $_items = $_shipment->getAllItems(); ?>
@@ -84,6 +101,5 @@
     </tbody>
     <?php endforeach; ?>
 </table>
-<script type="text/javascript">jQuery('#my-shipment-table-<?php echo $_shipment->getId(); ?>').decorate('table', {'tbody': ['odd','even'], 'tbody tr': ['first','last']})</script>
 <?php echo $this->getCommentsHtml($_shipment)?>
 <?php endforeach; ?>

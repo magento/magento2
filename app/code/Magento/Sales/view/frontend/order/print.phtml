@@ -19,67 +19,76 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php $_order = $this->getOrder() ?>
-<h1><?php echo __('Order #%1', $_order->getRealOrderId()) ?></h1>
+<div class="page title">
+    <h1 class="title"><?php echo __('Order #%1', $_order->getRealOrderId()) ?></h1>
+</div>
 <p class="order-date"><?php echo __('Order Date: %1', $this->formatDate($_order->getCreatedAtStoreDate(), 'long')) ?></p>
-<div class="col2-set">
+
+<div class="order details view">
+    <div class="block order shipping address">
+        <div class="title">
+            <strong><?php echo __('Shipping Address') ?></strong>
+        </div>
+        <div class="content">
+            <address><?php echo $_order->getShippingAddress()->format('html') ?></address>
+        </div>
+    </div>
+    <div class="block order billing address">
+        <div class="title">
+            <strong><?php echo __('Billing Address') ?></strong>
+        </div>
+        <div class="content">
+            <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
+        </div>
+    </div>
     <?php if (!$_order->getIsVirtual()): ?>
-    <div class="col-1">
-        <h2><?php echo __('Shipping Address') ?></h2>
-        <address><?php echo $_order->getShippingAddress()->format('html') ?></address>
+    <div class="block order shipping method">
+        <div class="title">
+            <strong><?php echo __('Shipping Method') ?></strong>
+        </div>
+        <?php echo $this->escapeHtml($_order->getShippingDescription()) ?>
     </div>
-    <div class="col-2">
-    <?php else: ?>
-    <div class="col-1">
     <?php endif; ?>
-        <h2><?php echo __('Billing Address') ?></h2>
-        <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
-    </div>
-<?php if (!$_order->getIsVirtual()): ?>
-</div>
-<div class="col2-set">
-    <div class="col-1">
-        <h2><?php echo __('Shipping Method') ?></h2>
-         <?php echo $this->escapeHtml($_order->getShippingDescription()) ?>
-    </div>
-<?php endif; ?>
-    <div class="col-2">
-        <h2><?php echo __('Payment Method') ?></h2>
-        <?php echo $this->getPaymentInfoHtml() ?>
+    <div class="block order shipping">
+        <div class="title">
+            <strong><?php echo __('Payment Method') ?></strong>
+        </div>
+        <div class="content">
+            <?php echo $this->getPaymentInfoHtml() ?>
+        </div>
     </div>
 </div>
-<h2><?php echo __('Items Ordered') ?></h2>
-<table class="data-table" id="my-orders-table">
-    <col />
-    <col width="1" />
-    <col width="1" />
-    <col width="1" />
-    <col width="1" />
-    <thead>
+
+<div class="order details items">
+    <div class="order subtitle caption">
+        <strong><?php echo __('Items Ordered') ?></strong>
+    </div>
+    <table class="data table order items" id="my-orders-table">
+        <thead>
         <tr>
-            <th><?php echo __('Product Name') ?></th>
-            <th><?php echo __('SKU') ?></th>
-            <th class="a-right"><?php echo __('Price') ?></th>
-            <th class="a-center"><?php echo __('Qty') ?></th>
-            <th class="a-right"><?php echo __('Subtotal') ?></th>
+            <th class="col name"><?php echo __('Product Name') ?></th>
+            <th class="col sku"><?php echo __('SKU') ?></th>
+            <th class="col price"><?php echo __('Price') ?></th>
+            <th class="col qty"><?php echo __('Qty') ?></th>
+            <th class="col subtotal"><?php echo __('Subtotal') ?></th>
         </tr>
-    </thead>
-    <tfoot>
+        </thead>
+        <tfoot>
         <?php echo $this->getChildHtml('order_totals') ?>
-    </tfoot>
-    <?php $_items = $_order->getItemsCollection(); ?>
-    <?php $_count = $_items->count(); ?>
-    <?php foreach ($_items as $_item): ?>
-    <?php if ($_item->getParentItem()) continue; ?>
-    <tbody>
-        <?php echo $this->getItemHtml($_item) ?>
-    </tbody>
+        </tfoot>
+        <?php $_items = $_order->getItemsCollection(); ?>
+        <?php $_count = $_items->count(); ?>
+        <?php foreach ($_items as $_item): ?>
+        <?php if ($_item->getParentItem()) continue; ?>
+        <tbody>
+            <?php echo $this->getItemHtml($_item) ?>
+        </tbody>
         <?php endforeach; ?>
-</table>
-<script type="text/javascript">(function($) {$('#my-orders-table').decorate('table', {'tbody': ['odd','even'], 'tbody tr': ['first','last']})})(jQuery)</script>
+    </table>
+</div>
 <script type="text/javascript">window.print();</script>

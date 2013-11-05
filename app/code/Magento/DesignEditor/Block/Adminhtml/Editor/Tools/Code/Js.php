@@ -120,7 +120,7 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getJsUploadUrl()
     {
-        return $this->getUrl('*/system_design_editor_tools/uploadjs',
+        return $this->getUrl('adminhtml/system_design_editor_tools/uploadjs',
             array('theme_id' => $this->_themeContext->getEditableTheme()->getId()));
     }
 
@@ -131,7 +131,7 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getJsReorderUrl()
     {
-        return $this->getUrl('*/system_design_editor_tools/reorderjs',
+        return $this->getUrl('adminhtml/system_design_editor_tools/reorderjs',
             array('theme_id' => $this->_themeContext->getEditableTheme()->getId()));
     }
 
@@ -142,7 +142,7 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getJsDeleteUrl()
     {
-        return $this->getUrl('*/system_design_editor_tools/deleteCustomFiles', array(
+        return $this->getUrl('adminhtml/system_design_editor_tools/deleteCustomFiles', array(
             'theme_id' => $this->_themeContext->getEditableTheme()->getId()
         ));
     }

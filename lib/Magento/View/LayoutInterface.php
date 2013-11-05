@@ -208,7 +208,7 @@ interface LayoutInterface
     /**
      * Add a block to registry, create new object if needed
      *
-     * @param string|Element\BlockInterface $block
+     * @param string|\Magento\Core\Block\AbstractBlock $block
      * @param string $name
      * @param string $parent
      * @param string $alias

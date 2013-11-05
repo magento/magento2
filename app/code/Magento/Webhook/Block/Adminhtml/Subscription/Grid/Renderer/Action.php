@@ -44,13 +44,15 @@ class Action
 
         switch ($row->getStatus()) {
             case \Magento\Webhook\Model\Subscription::STATUS_ACTIVE :
-                return '<a href="' . $this->getUrl('*/webhook_subscription/revoke', array('id' => $row->getId()))
+                return '<a href="'
+                    . $this->getUrl('adminhtml/webhook_subscription/revoke', array('id' => $row->getId()))
                     . '">' . __('Revoke') . '</a>';
             case \Magento\Webhook\Model\Subscription::STATUS_REVOKED :
-                return '<a href="' . $this->getUrl('*/webhook_subscription/activate', array('id' => $row->getId()))
+                return '<a href="'
+                    . $this->getUrl('adminhtml/webhook_subscription/activate', array('id' => $row->getId()))
                     . '">' . __('Activate') . '</a>';
             case  \Magento\Webhook\Model\Subscription::STATUS_INACTIVE :
-                $url = $this->getUrl('*/webhook_registration/activate', array('id' => $row->getId()));
+                $url = $this->getUrl('adminhtml/webhook_registration/activate', array('id' => $row->getId()));
                 return '<a href="#" onclick="activateSubscription(\''. $url .'\'); return false;">'
                     . __('Activate') . '</a>';
             default :

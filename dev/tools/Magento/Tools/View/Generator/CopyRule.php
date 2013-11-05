@@ -42,7 +42,7 @@ class CopyRule
     private $_themes;
 
     /**
-     * @var \Magento\Core\Model\Design\Fallback\Rule\RuleInterface
+     * @var \Magento\View\Design\Fallback\Rule\RuleInterface
      */
     private $_fallbackRule;
 
@@ -58,12 +58,12 @@ class CopyRule
      *
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\Theme\Collection $themes
-     * @param \Magento\Core\Model\Design\Fallback\Rule\RuleInterface $fallbackRule
+     * @param \Magento\View\Design\Fallback\Rule\RuleInterface $fallbackRule
      */
     public function __construct(
         \Magento\Filesystem $filesystem,
         \Magento\Core\Model\Theme\Collection $themes,
-        \Magento\Core\Model\Design\Fallback\Rule\RuleInterface $fallbackRule
+        \Magento\View\Design\Fallback\Rule\RuleInterface $fallbackRule
     ) {
         $this->_filesystem = $filesystem;
         $this->_themes = $themes;

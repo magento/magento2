@@ -87,7 +87,7 @@ class LogoUploader
      */
     public function getLogoUploadUrl($store)
     {
-        return $this->getUrl('*/system_design_editor_tools/uploadStoreLogo',
+        return $this->getUrl('adminhtml/system_design_editor_tools/uploadStoreLogo',
             array('theme_id' => $this->_themeContext->getEditableTheme()->getId(), 'store_id' => $store->getId())
         );
     }
@@ -100,7 +100,7 @@ class LogoUploader
      */
     public function getLogoRemoveUrl($store)
     {
-        return $this->getUrl('*/system_design_editor_tools/removeStoreLogo',
+        return $this->getUrl('adminhtml/system_design_editor_tools/removeStoreLogo',
             array('theme_id' => $this->_themeContext->getEditableTheme()->getId(), 'store_id' => $store->getId())
         );
     }

@@ -19,79 +19,101 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php /* @var $this \Magento\Sales\Block\Order\Print\Shipment */?>
+<?php /* @var $this \Magento\Sales\Block\Order\PrintOrder\Shipment */ ?>
 <?php $order = $this->getOrder(); ?>
-<h1><?php echo __('Order #%1', $this->getObjectData($order, 'real_order_id')); ?></h1>
+<div class="page title">
+    <h1 class="title">
+        <?php echo __('Order #%1', $this->getObjectData($order, 'real_order_id')); ?>
+    </h1>
+</div>
 <p class="order-date"><?php echo __('Order Date: %1', $this->formatDate($this->getObjectData($order, 'created_at_store_date'), 'long')) ?></p>
 <?php if (!$this->getObjectData($order, 'is_virtual')): ?>
 <?php foreach ($this->getShipmentsCollection() as $shipment): ?>
-    <h2 class="h2"><?php echo __('Shipment #%1', $this->getObjectData($shipment, 'increment_id')); ?></h2>
-    <div class="col2-set">
-        <div class="col-1">
-            <h3><?php echo __('Shipping Address') ?></h3>
-            <address><?php echo $this->getShipmentAddressFormattedHtml($shipment); ?></address>
+    <div class="order details view">
+        <div class="title">
+            <strong><?php echo __('Shipment #%1', $this->getObjectData($shipment, 'increment_id')); ?></strong>
         </div>
-        <div class="col-2">
-            <h3><?php echo __('Billing Address') ?></h3>
-            <address><?php echo $this->getBillingAddressFormattedHtml($order); ?></address>
+
+        <div class="block order shipping address">
+            <div class="title">
+                <strong><?php echo __('Shipping Address') ?></strong>
+            </div>
+            <div class="content">
+                <address><?php echo $this->getShipmentAddressFormattedHtml($shipment); ?></address>
+            </div>
         </div>
-    </div>
-    <div class="col2-set">
-        <div class="col-1">
-            <h3><?php echo __('Shipping Method') ?></h3>
-             <?php echo $this->escapeHtml($this->getObjectData($order, 'shipping_description')); ?>
-             <?php $tracks = $this->getShipmentTracks($shipment); 
-                if ($tracks): ?>
-                <table class="data-table" id="my-shipment-tracking">
-                    <col />
-                    <col />
+
+        <div class="block order billing address">
+            <div class="title">
+                <strong><?php echo __('Billing Address') ?></strong>
+            </div>
+            <div class="content">
+                <address><?php echo $this->getBillingAddressFormattedHtml($order); ?></address>
+            </div>
+        </div>
+
+        <div class="block order shipping method">
+            <div class="title">
+                <strong><?php echo __('Shipping Method') ?></strong>
+            </div>
+            <?php echo $this->escapeHtml($this->getObjectData($order, 'shipping_description')); ?>
+            <?php $tracks = $this->getShipmentTracks($shipment);
+            if ($tracks): ?>
+                <table class="data table order tracking" id="my-shipment-tracking">
                     <thead>
-                        <tr>
-                            <th><?php echo __('Title')?></th>
-                            <th><?php echo __('Number')?></th>
-                        </tr>
+                    <tr>
+                        <th class="col label"><?php echo __('Title')?></th>
+                        <th class="col number"><?php echo __('Number')?></th>
+                    </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($tracks as $track): ?>
-                            <tr>
-                                <td><?php echo $this->escapeHtml($this->getObjectData($track, 'title')); ?></td>
-                                <td><?php echo $this->escapeHtml($this->getObjectData($track, 'number')); ?></td>
-                            </tr>
+                    <tr>
+                        <td class="col label"><?php echo $this->escapeHtml($this->getObjectData($track, 'title')); ?></td>
+                        <td class="col number"><?php echo $this->escapeHtml($this->getObjectData($track, 'number')); ?></td>
+                    </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-                <script type="text/javascript">(function($) {$('#my-shipment-tracking').decorate('table')})(jQuery)</script>
             <?php endif; ?>
         </div>
-        <div class="col-2">
-            <h3><?php echo __('Payment Method') ?></h3>
-            <?php echo $this->getPaymentInfoHtml() ?>
+
+        <div class="block order payment method">
+            <div class="title">
+                <strong><?php echo __('Payment Method') ?></strong>
+            </div>
+            <div class="content">
+                <?php echo $this->getPaymentInfoHtml() ?>
+            </div>
         </div>
+
     </div>
-    <h3><?php echo __('Items Shipped') ?></h3>
-    <table class="data-table" id="my-shipment-table-<?php echo $this->getObjectData($shipment, 'id') ?>">
-        <col />
-        <col width="1" />
-        <col width="1" />
-        <thead>
+    <div class="order details items">
+        <div class="order subtitle caption">
+            <strong><?php echo __('Items Shipped') ?></strong>
+        </div>
+        <table class="data table order items" id="my-shipment-table-<?php echo $this->getObjectData($shipment, 'id') ?>">
+            <thead>
             <tr>
-                <th><?php echo __('Product Name') ?></th>
-                <th><?php echo __('SKU') ?></th>
-                <th class="a-center"><span class="nobr"><?php echo __('Qty Shipped') ?></span></th>
+                <th class="col name"><?php echo __('Product Name') ?></th>
+                <th class="col sku"><?php echo __('SKU') ?></th>
+                <th class="col price"><span class="nobr"><?php echo __('Qty Shipped') ?></span></th>
             </tr>
-        </thead>
-        <?php foreach ($this->getShipmentItems($shipment) as $item): ?>
-        <tbody>
-            <?php echo $this->getItemHtml($item) ?>
-        </tbody>
-        <?php endforeach; ?>
-    </table>
-    <script type="text/javascript">(function($) {$('#my-shipment-table-<?php echo $this->getObjectData($shipment, 'id')?>').decorate('table', {'tbody': ['odd','even'], 'tbody tr': ['first','last']})})(jQuery)</script>
-<?php endforeach; ?>
+            </thead>
+            <?php foreach ($this->getShipmentItems($shipment) as $item): ?>
+            <tbody>
+                <?php echo $this->getItemHtml($item) ?>
+            </tbody>
+            <?php endforeach; ?>
+        </table>
+    </div>
+    <script type="text/javascript">(function ($) {
+        $('#my-shipment-table-<?php echo $this->getObjectData($shipment, 'id')?>').decorate('table', {'tbody':['odd', 'even'], 'tbody tr':['first', 'last']})
+    })(jQuery)</script>
+    <?php endforeach; ?>
 <?php endif; ?>
 <script type="text/javascript">window.print();</script>

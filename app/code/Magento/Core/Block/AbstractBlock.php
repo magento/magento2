@@ -327,6 +327,7 @@ abstract class AbstractBlock extends \Magento\Object implements BlockInterface
         if ($block instanceof self) {
             $block = $block->getNameInLayout();
         }
+
         $layout->setChild($thisName, $block, $alias);
 
         return $this;
@@ -552,23 +553,6 @@ abstract class AbstractBlock extends \Magento\Object implements BlockInterface
     public function append($element, $alias = '')
     {
         return $this->insert($element, null, true, $alias);
-    }
-
-    /**
-     * Add self to the specified group of parent block
-     *
-     * @param string $groupName
-     * @return \Magento\Core\Block\AbstractBlock|bool
-     */
-    public function addToParentGroup($groupName)
-    {
-        $layout = $this->getLayout();
-        if (!$layout) {
-            return false;
-        }
-        $layout->addToParentGroup($this->getNameInLayout(), $groupName);
-
-        return $this;
     }
 
     /**

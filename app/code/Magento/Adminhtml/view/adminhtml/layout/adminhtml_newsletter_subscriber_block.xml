@@ -41,11 +41,11 @@
                     <argument name="options" xsi:type="array">
                         <item name="unsubscribe" xsi:type="array">
                             <item name="label" xsi:type="string" translate="true">Unsubscribe</item>
-                            <item name="url" xsi:type="string">*/*/massUnsubscribe</item>
+                            <item name="url" xsi:type="string">adminhtml/*/massUnsubscribe</item>
                         </item>
                         <item name="delete" xsi:type="array">
                             <item name="label" xsi:type="string" translate="true">Delete</item>
-                            <item name="url" xsi:type="string">*/*/massDelete</item>
+                            <item name="url" xsi:type="string">adminhtml/*/massDelete</item>
                         </item>
                     </argument>
                 </arguments>
@@ -54,11 +54,11 @@
                 <arguments>
                     <argument name="exportTypes" xsi:type="array">
                         <item name="csv" xsi:type="array">
-                            <item name="urlPath" xsi:type="string">*/*/exportCsv</item>
+                            <item name="urlPath" xsi:type="string">adminhtml/*/exportCsv</item>
                             <item name="label" xsi:type="string" translate="true">CSV</item>
                         </item>
                         <item name="excel" xsi:type="array">
-                            <item name="urlPath" xsi:type="string">*/*/exportXml</item>
+                            <item name="urlPath" xsi:type="string">adminhtml/*/exportXml</item>
                             <item name="label" xsi:type="string" translate="true">Excel XML</item>
                         </item>
                     </argument>

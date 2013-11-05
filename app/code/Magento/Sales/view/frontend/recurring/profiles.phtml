@@ -19,23 +19,16 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php /* @var $this \Magento\Sales\Block\Recurring\Profiles */ ?>
-<div class="page-title">
-    <h1><?php echo __('Recurring Billing Profiles') ?></h1>
-</div>
-
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-
-<div class="recurring-profiles">
-
+<div class="block recurring profiles">
     <?php echo $this->getChildHtml('grid')?>
-
-    <div class="buttons-set">
-        <p class="back-link"><a href="<?php echo $this->escapeHtml($this->getBackUrl()) ?>"><small>&laquo; </small><?php echo __('Back') ?></a></p>
+    <div class="actions">
+        <div class="secondary">
+            <a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>" class="action back"><span><?php echo __('Back') ?></span></a>
+        </div>
     </div>
 </div>

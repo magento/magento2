@@ -23,15 +23,15 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true*/
-(function($, window) {
+(function ($, window) {
     "use strict";
     $.widget('mage.paypalCheckout', {
         /**
          * Initialize store credit events
          * @private
          */
-        _create: function() {
-            this.element.on('click', '[data-action="checkout-form-submit"]', $.proxy(function(e) {
+        _create: function () {
+            this.element.on('click', '[data-action="checkout-form-submit"]', $.proxy(function (e) {
                 var returnUrl = $(e.target).data('checkout-url');
                 if (this.options.confirmUrl && this.options.confirmMessage) {
                     if (window.confirm(this.options.confirmMessage)) {

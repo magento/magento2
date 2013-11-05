@@ -62,8 +62,8 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
     {
         $this->_coreData->expects($this->once())->method('isDevAllowed')->will($this->returnValue(true));
         $this->_setupConfigFixture(true, $showBlockHints);
-        $engine = $this->getMock('Magento\Core\Model\TemplateEngine\EngineInterface');
-        $engineDecorated = $this->getMock('Magento\Core\Model\TemplateEngine\EngineInterface');
+        $engine = $this->getMock('Magento\View\TemplateEngineInterface');
+        $engineDecorated = $this->getMock('Magento\View\TemplateEngineInterface');
         $this->_objectManager
             ->expects($this->once())
             ->method('create')
@@ -94,7 +94,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
         $this->_coreData->expects($this->any())->method('isDevAllowed')->will($this->returnValue($isDevAllowed));
         $this->_setupConfigFixture($showTemplateHints, true);
         $this->_objectManager->expects($this->never())->method('create');
-        $engine = $this->getMock('Magento\Core\Model\TemplateEngine\EngineInterface');
+        $engine = $this->getMock('Magento\View\TemplateEngineInterface');
         $this->assertSame($engine, $this->_model->afterCreate($engine));
     }
 

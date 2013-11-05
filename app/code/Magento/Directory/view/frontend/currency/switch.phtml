@@ -19,13 +19,10 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
+ * @package     magento_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="page-title">
-    <h1><?php echo __('Currency') ?></h1>
-</div>
 <p><?php echo __('Your current currency is: %1.', $currency->getCode()) ?></p>
-<p><a href="<?php echo $this->getBaseUrl(); ?>"><?php echo __('Continue &raquo;') ?></a></p>
+<p><a href="<?php echo $this->getBaseUrl(); ?>" class="action continue"><span><?php echo __('Continue') ?></span></a></p>

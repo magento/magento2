@@ -25,14 +25,16 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceContainer name="checkout.cart.top_methods">
-        <block class="Magento\PaypalUk\Block\Express\Shortcut" name="checkout.cart.methods.paypaluk_express.top" before="-" template="Magento_Paypal::express/shortcut.phtml">
+        <block class="Magento\PaypalUk\Block\Express\Shortcut" name="checkout.cart.methods.paypaluk_express.top"
+               before="-" template="Magento_Paypal::express/shortcut.phtml">
             <action method="setIsQuoteAllowed">
                 <argument name="value" xsi:type="string">1</argument>
             </action>
         </block>
     </referenceContainer>
     <referenceContainer name="checkout.cart.methods">
-        <block class="Magento\PaypalUk\Block\Express\Shortcut" name="checkout.cart.methods.paypaluk_express.bottom" before="-" template="Magento_Paypal::express/shortcut.phtml">
+        <block class="Magento\PaypalUk\Block\Express\Shortcut" name="checkout.cart.methods.paypaluk_express.bottom"
+               before="-" template="Magento_Paypal::express/shortcut.phtml">
             <action method="setIsQuoteAllowed">
                 <argument name="value" xsi:type="string">1</argument>
             </action>

@@ -33,7 +33,7 @@
  */
 namespace Magento\PageCache\Controller\Adminhtml;
 
-class PageCache extends \Magento\Adminhtml\Controller\Action
+class PageCache extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * Clean external cache action
@@ -60,7 +60,7 @@ class PageCache extends \Magento\Adminhtml\Controller\Action
                 __('Something went wrong while clearing the external full page cache.')
             );
         }
-        $this->_redirect('*/cache/index');
+        $this->_redirect('adminhtml/cache/index');
     }
 
     /**

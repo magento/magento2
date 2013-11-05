@@ -289,7 +289,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('*/*/edit', array('process' => $row->getId()));
+        return $this->getUrl('adminhtml/*/edit', array('process' => $row->getId()));
     }
 
     /**
@@ -306,7 +306,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
 
         $this->getMassactionBlock()->addItem('change_mode', array(
             'label'         => __('Change Index Mode'),
-            'url'           => $this->getUrl('*/*/massChangeMode'),
+            'url'           => $this->getUrl('adminhtml/*/massChangeMode'),
             'additional'    => array(
                 'mode'      => array(
                     'name'      => 'index_mode',
@@ -320,7 +320,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
 
         $this->getMassactionBlock()->addItem('reindex', array(
             'label'    => __('Reindex Data'),
-            'url'      => $this->getUrl('*/*/massReindex'),
+            'url'      => $this->getUrl('adminhtml/*/massReindex'),
             'selected' => true,
         ));
 

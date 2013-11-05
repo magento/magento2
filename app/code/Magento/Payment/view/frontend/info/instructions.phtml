@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     Magento_Payment
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -29,13 +28,9 @@
  * @see \Magento\Payment\Block\Info
  */
 ?>
-<p><?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?></p>
+<dl class="payment method">
+    <dt class="title"><?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?></dt>
 <?php if ($this->getInstructions()): ?>
-<table>
-    <tbody>
-        <tr>
-            <td><?php echo nl2br($this->getInstructions()) ?></td>
-        </tr>
-    </tbody>
-</table>
+    <dd class="content"><?php echo nl2br($this->getInstructions()) ?></dd>
 <?php endif; ?>
+</dl>

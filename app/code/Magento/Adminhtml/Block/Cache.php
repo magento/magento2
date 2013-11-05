@@ -56,7 +56,7 @@ class Cache extends \Magento\Adminhtml\Block\Widget\Grid\Container
      */
     public function getFlushStorageUrl()
     {
-        return $this->getUrl('*/*/flushAll');
+        return $this->getUrl('adminhtml/*/flushAll');
     }
 
     /**
@@ -64,6 +64,6 @@ class Cache extends \Magento\Adminhtml\Block\Widget\Grid\Container
      */
     public function getFlushSystemUrl()
     {
-        return $this->getUrl('*/*/flushSystem');
+        return $this->getUrl('adminhtml/*/flushSystem');
     }
 }

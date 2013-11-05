@@ -24,7 +24,7 @@
  */
 -->
 <config>
-    <module name="Magento_Catalog" version="1.6.0.0.23" active="true">
+    <module name="Magento_Catalog" version="1.6.0.0.24" active="true">
         <sequence>
             <module name="Magento_Eav"/>
             <module name="Magento_Cms"/>
@@ -51,7 +51,6 @@
             <module name="Magento_Adminhtml"/>
             <module name="Magento_Directory"/>
             <module name="Magento_CatalogRule"/>
-            <module name="Magento_Media"/>
             <module name="Magento_Sales"/>
             <module name="Magento_CatalogSearch"/>
             <module name="Magento_Weee"/>

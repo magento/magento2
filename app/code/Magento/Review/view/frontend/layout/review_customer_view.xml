@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Customer My Account Review Details" type="page" parent="review_customer_index">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Customer My Account Review Details" type="page">
     <update handle="customer_account"/>
     <referenceContainer name="my.account.wrapper">
         <block class="Magento\Review\Block\Customer\View" name="customers_review"/>

@@ -70,7 +70,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
             'optionValueFactory' => $optValFactoryMock,
         ));
         $dateBlock = $this->getMock('Magento\Adminhtml\Block\Catalog\Product\Composite\Fieldset\Options',
-            array('setProduct'), array('context' => $context, 'option' => $option), '', false);
+            array('setProduct', 'setOption'), array('context' => $context, 'option' => $option), '', false);
         $dateBlock->expects($this->any())
             ->method('setProduct')->will($this->returnValue($dateBlock));
 
@@ -120,6 +120,8 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
             array('resource' => $this->_optionResource)
         );
         $option->setType('date');
+        $dateBlock->expects($this->any())
+            ->method('setOption')->with($this->equalTo($option))->will($this->returnValue($dateBlock));
         $this->assertEquals('html', $this->_optionsBlock->getOptionHtml($option));
     }
 }

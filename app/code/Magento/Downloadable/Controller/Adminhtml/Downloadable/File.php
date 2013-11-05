@@ -33,7 +33,7 @@
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable;
 
-class File extends \Magento\Adminhtml\Controller\Action
+class File extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * @var \Magento\Downloadable\Model\Link

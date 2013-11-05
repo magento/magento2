@@ -5,15 +5,15 @@
 # Formatter intorduces long line
 app/bootstrap.php
 # Formatter intorduces long line
-app/code/Magento/Adminhtml/Block/Catalog/Product/Edit/NewCategory.php
+app/code/Magento/Catalog/Block/Adminhtml/Product/Edit/NewCategory.php
 # Formatter intorduces long line
-app/code/Magento/Adminhtml/Block/Catalog/Product/Edit/Tab/Attributes/Search.php
+app/code/Magento/Catalog/Block/Adminhtml/Product/Edit/Tab/Attributes/Search.php
 # Formatter intorduces long line
-app/code/Magento/Adminhtml/Block/Catalog/Product/Helper/Form/Category.php
+app/code/Magento/Catalog/Block/Adminhtml/Product/Helper/Form/Category.php
 # Formatter intorduces long line
-app/code/Magento/Adminhtml/Block/Catalog/Product/Helper/Form/Weight.php
+app/code/Magento/Catalog/Block/Adminhtml/Product/Helper/Form/Weight.php
 # Formatter intorduces long line
-app/code/Magento/Adminhtml/Block/Catalog/Product/Options/Ajax.php
+app/code/Magento/Catalog/Block/Adminhtml/Product/Options/Ajax.php
 # Formatter intorduces long line
 app/code/Magento/Adminhtml/Block/Cms/Page/Edit/Tab/Design.php
 # Formatter intorduces long line

@@ -33,7 +33,7 @@
  */
 namespace Magento\Adminhtml\Controller;
 
-class Report extends \Magento\Adminhtml\Controller\Action
+class Report extends \Magento\Backend\Controller\Adminhtml\Action
 {
     public function _initAction()
     {

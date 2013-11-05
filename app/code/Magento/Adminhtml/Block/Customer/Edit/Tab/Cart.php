@@ -205,7 +205,7 @@ class Cart extends \Magento\Adminhtml\Block\Widget\Grid
      */
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/cart', array('_current'=>true, 'website_id' => $this->getWebsiteId()));
+        return $this->getUrl('adminhtml/*/cart', array('_current'=>true, 'website_id' => $this->getWebsiteId()));
     }
 
     /**
@@ -219,6 +219,6 @@ class Cart extends \Magento\Adminhtml\Block\Widget\Grid
 
     public function getRowUrl($row)
     {
-        return $this->getUrl('*/catalog_product/edit', array('id' => $row->getProductId()));
+        return $this->getUrl('catalog/product/edit', array('id' => $row->getProductId()));
     }
 }

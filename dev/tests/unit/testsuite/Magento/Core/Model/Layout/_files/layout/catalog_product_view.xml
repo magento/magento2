@@ -23,6 +23,6 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout label="Catalog Product View (Any)" type="page" parent="catalog_category_default">
+<layout label="Catalog Product View (Any)" type="page">
     <container name="product.info.extrahint" as="extrahint" label="Product View Extra Hint"/>
 </layout>

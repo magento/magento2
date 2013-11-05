@@ -112,7 +112,7 @@ class Conditions
         $form->setHtmlIdPrefix('rule_');
 
         $renderer = $this->_rendererFieldset->setTemplate('Magento_Adminhtml::promo/fieldset.phtml')
-            ->setNewChildUrl($this->getUrl('*/promo_catalog/newConditionHtml/form/rule_conditions_fieldset'));
+            ->setNewChildUrl($this->getUrl('adminhtml/promo_catalog/newConditionHtml/form/rule_conditions_fieldset'));
 
         $fieldset = $form->addFieldset('conditions_fieldset', array(
             'legend'=>__('Conditions (leave blank for all products)'))

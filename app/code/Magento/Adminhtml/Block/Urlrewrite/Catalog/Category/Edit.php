@@ -79,7 +79,7 @@ class Edit
         if ($this->_getCategory()->getId()) {
             $this->_addCategoryLinkBlock();
             $this->_addEditFormBlock();
-            $this->_updateBackButtonLink($this->_adminhtmlData->getUrl('*/*/edit') . 'category');
+            $this->_updateBackButtonLink($this->_adminhtmlData->getUrl('adminhtml/*/edit') . 'category');
         } else {
             $this->_addUrlRewriteSelectorBlock();
             $this->_addCategoryTreeBlock();
@@ -105,7 +105,7 @@ class Edit
     private function _addCategoryLinkBlock()
     {
         $this->addChild('category_link', 'Magento\Adminhtml\Block\Urlrewrite\Link', array(
-            'item_url'  => $this->_adminhtmlData->getUrl('*/*/*') . 'category',
+            'item_url'  => $this->_adminhtmlData->getUrl('adminhtml/*/*') . 'category',
             'item_name' => $this->_getCategory()->getName(),
             'label'     => __('Category:')
         ));

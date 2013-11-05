@@ -38,8 +38,8 @@ class CreateOrderTest extends \Magento\Backend\Utility\Controller
      */
     public function testIndexAction()
     {
-        /** @var $order \Magento\Adminhtml\Model\Sales\Order\Create */
-        $order = $this->_objectManager->get('Magento\Adminhtml\Model\Sales\Order\Create');
+        /** @var $order \Magento\Sales\Model\AdminOrder\Create */
+        $order = $this->_objectManager->get('Magento\Sales\Model\AdminOrder\Create');
         $paymentData = array(
             'cc_owner' => 'Test User',
             'cc_type' => 'visa',
@@ -50,7 +50,7 @@ class CreateOrderTest extends \Magento\Backend\Utility\Controller
             'method' => 'ccsave',
         );
         $order->addProducts(array(1 => array('qty' => 1)))->getQuote()->getPayment()->addData($paymentData);
-        $this->dispatch('backend/admin/sales_order_create/index');
+        $this->dispatch('backend/sales/order_create/index');
         $this->assertContains('<div class="centinel">', $this->getResponse()->getBody());
     }
 }

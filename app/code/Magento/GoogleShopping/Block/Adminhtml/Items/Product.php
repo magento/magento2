@@ -213,7 +213,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $this->getMassactionBlock()->addItem('add', array(
              'label'    => __('Add to Google Content'),
-             'url'      => $this->getUrl('*/*/massAdd', array('_current'=>true)),
+             'url'      => $this->getUrl('adminhtml/*/massAdd', array('_current'=>true)),
         ));
         return $this;
     }
@@ -225,7 +225,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getGridUrl()
     {
-        return $this->getUrl('*/googleshopping_selection/grid', array('index' => $this->getIndex(),'_current'=>true));
+        return $this->getUrl('adminhtml/googleshopping_selection/grid', array('index' => $this->getIndex(),'_current'=>true));
     }
 
     /**

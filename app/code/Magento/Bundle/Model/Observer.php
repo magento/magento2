@@ -43,11 +43,11 @@ class Observer
     protected $_bundleData = null;
 
     /**
-     * Adminhtml catalog
+     * Catalog helper
      *
-     * @var \Magento\Adminhtml\Helper\Catalog
+     * @var \Magento\Catalog\Helper\Catalog
      */
-    protected $_adminhtmlCatalog = null;
+    protected $_helperCatalog = null;
 
     /**
      * @var \Magento\Bundle\Model\Resource\Selection
@@ -68,17 +68,17 @@ class Observer
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Catalog\Model\Config $config
      * @param \Magento\Bundle\Model\Resource\Selection $bundleSelection
-     * @param \Magento\Adminhtml\Helper\Catalog $adminhtmlCatalog
+     * @param \Magento\Catalog\Helper\Catalog $helperCatalog
      * @param \Magento\Bundle\Helper\Data $bundleData
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Catalog\Model\Config $config,
         \Magento\Bundle\Model\Resource\Selection $bundleSelection,
-        \Magento\Adminhtml\Helper\Catalog $adminhtmlCatalog,
+        \Magento\Catalog\Helper\Catalog $helperCatalog,
         \Magento\Bundle\Helper\Data $bundleData
     ) {
-        $this->_adminhtmlCatalog = $adminhtmlCatalog;
+        $this->_helperCatalog = $helperCatalog;
         $this->_bundleData = $bundleData;
         $this->_bundleSelection = $bundleSelection;
         $this->_config = $config;
@@ -280,7 +280,7 @@ class Observer
     {
         $product = $observer->getEvent()->getProduct();
         if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            $this->_adminhtmlCatalog
+            $this->_helperCatalog
                 ->setAttributeTabBlock('Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes');
         }
         return $this;

@@ -126,7 +126,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
      */
     protected function _getSaveAndContinueUrl()
     {
-        return $this->getUrl('*/*/save', array(
+        return $this->getUrl('adminhtml/*/save', array(
             '_current'   => true,
             'back'       => 'edit',
             'active_tab' => '{{tab_id}}'

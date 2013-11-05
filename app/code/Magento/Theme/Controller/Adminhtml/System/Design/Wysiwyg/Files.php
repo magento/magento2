@@ -29,7 +29,7 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg;
 
-class Files extends \Magento\Adminhtml\Controller\Action
+class Files extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * Index action

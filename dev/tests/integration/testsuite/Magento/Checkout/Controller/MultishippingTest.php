@@ -58,7 +58,9 @@ class MultishippingTest extends \Magento\TestFramework\TestCase\AbstractControll
         $this->getRequest()->setPost('payment', array('method' => 'checkmo'));
         $this->dispatch('checkout/multishipping/overview');
         $html = $this->getResponse()->getBody();
-        $this->assertContains('<p>' . $quote->getPayment()->getMethodInstance()->getTitle() . '</p>', $html);
+        $this->assertContains('<div class="box method">', $html);
+        $this->assertContains('<dt class="title">'
+            . $quote->getPayment()->getMethodInstance()->getTitle() . '</dt>', $html);
         $this->assertContains('<span class="price">$10.00</span>', $html);
     }
 }

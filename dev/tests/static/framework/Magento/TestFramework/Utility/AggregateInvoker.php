@@ -31,7 +31,7 @@ namespace Magento\TestFramework\Utility;
 class AggregateInvoker
 {
     /**
-     * @var PHPUnit_Framework_TestCase
+     * @var \PHPUnit_Framework_TestCase
      */
     protected $_testCase;
 
@@ -91,7 +91,7 @@ class AggregateInvoker
             } catch (\PHPUnit_Framework_SkippedTestError $exception) {
                 $results[get_class($exception)][] = $exceptionDumper($exception, $dataSet);
             } catch (\PHPUnit_Framework_AssertionFailedError $exception) {
-                $results[get_class($exception)][] = $exceptionDumper($exception, $dataSet);
+                $results['PHPUnit_Framework_AssertionFailedError'][] = $exceptionDumper($exception, $dataSet);
             }
         }
         $this->processResults($results, $passed);

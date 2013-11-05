@@ -79,7 +79,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $form = $this->_formFactory->create(array(
             'attributes' => array(
                 'id'     => 'edit_form',
-                'action' => $this->getUrl('*/*/getFilter'),
+                'action' => $this->getUrl('adminhtml/*/getFilter'),
                 'method' => 'post',
             ))
         );

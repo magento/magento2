@@ -25,7 +25,8 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="footer_links">
-        <block class="Magento\Page\Block\Link\Current" ifconfig="contacts/contacts/enabled" name="catalog-search-term-popular-link">
+        <block class="Magento\Page\Block\Link" ifconfig="contacts/contacts/enabled"
+               name="contact-us-link">
             <arguments>
                 <argument name="label" xsi:type="string">Contact Us</argument>
                 <argument name="path" xsi:type="string">contacts</argument>

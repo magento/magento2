@@ -47,7 +47,7 @@ class Options extends \Magento\Backend\Block\Template
     /**
      * @inheritdoc
      */
-    protected $_template = 'Magento_Adminhtml::catalog/product/attribute/options.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/attribute/options.phtml';
 
     /**
      * @var \Magento\Validator\UniversalFactory $universalFactory

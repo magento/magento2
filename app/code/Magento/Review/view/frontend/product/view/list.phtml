@@ -19,48 +19,53 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 
-<?php $_items = $this->getReviewsCollection()->getItems();?>
-<div class="box-collateral box-reviews" id="customer-reviews">
-    <?php if (count($_items)):?>
-        <h2><?php echo __('Customer Reviews') ?></h2>
-        <?php echo $this->getChildHtml('toolbar') ?>
-        <dl>
-        <?php foreach ($_items as $_review):?>
-            <dt>
-                <a href="<?php echo $this->getReviewUrl($_review->getId()) ?>"><?php echo $this->escapeHtml($_review->getTitle()) ?></a> <?php echo __('Review by <span>%1</span>', $this->escapeHtml($_review->getNickname())) ?>
-            </dt>
-            <dd>
-                <?php $_votes = $_review->getRatingVotes(); ?>
-                <?php if (count($_votes)): ?>
-                <table class="ratings-table">
-                    <col width="1" />
-                    <col />
-                    <tbody>
-                        <?php foreach ($_votes as $_vote): ?>
-                        <tr>
-                            <th><?php echo $this->escapeHtml($_vote->getRatingCode()) ?></th>
-                            <td>
-                                <div class="rating-box">
-                                    <div class="rating" style="width:<?php echo $_vote->getPercent() ?>%;"></div>
-                                </div>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <?php endif; ?>
+<?php 
+    $_items = $this->getReviewsCollection()->getItems();
+    $format = $this->getDateFormat() ?: 'short';
+?>
+<?php if (count($_items)):?>
+<div class="block reviews list" id="customer-reviews">
+    <div class="title">
+        <strong><?php echo __('Customer Reviews') ?></strong>
+    </div>
+    <div class="content">
+    <?php echo $this->getChildHtml('toolbar') ?>
+    <ol class="reviews items">
+    <?php foreach ($_items as $_review):?>
+        <li class="item review">
+            <div class="reviews summary">
+            <?php foreach ($_review->getRatingVotes() as $_vote): ?>
+                <span class="label"><?php echo $this->escapeHtml($_vote->getRatingCode()) ?></span>
+                <div class="rating" title="<?php echo $_vote->getPercent() ?>%">
+                    <span style="width:<?php echo $_vote->getPercent() ?>%">
+                        <?php echo $_vote->getPercent() ?>
+                    </span>
+                </div>
+            <?php endforeach; ?>
+            </div>
+            <div class="review details">
+                <p class="author">
+                    <span><?php echo __('Review by')?></span>
+                    <strong class="nickname"><?php echo $this->escapeHtml($_review->getNickname()) ?></strong>
+                </p>
+                <p class="review date">
+                    <span><?php echo __('Posted on') ?></span>
+                    <time class="date"><?php echo $this->formatDate($_review->getCreatedAt(), $format) ?></time>
+                </p>
+            </div>
+            <div class="review title"><?php echo $this->escapeHtml($_review->getTitle()) ?></div>
+            <div class="review content">
                 <?php echo nl2br($this->escapeHtml($_review->getDetail())) ?>
-                <small class="date"><?php echo __('(Posted on %1)', $this->formatDate($_review->getCreatedAt())) ?></small>
-            </dd>
-        <?php endforeach; ?>
-        </dl>
-        <?php echo $this->getChildHtml('toolbar') ?>
-    <?php endif;?>
-    <?php echo $this->getChildHtml('review_form') ?>
+            </div>
+        </li>
+    <?php endforeach; ?>
+    </ol>
+    <?php echo $this->getChildHtml('toolbar') ?>
+    </div>
 </div>
+<?php endif;?>

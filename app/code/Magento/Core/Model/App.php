@@ -51,7 +51,7 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Magento version
      */
-    const VERSION = '2.0.0.0-dev49';
+    const VERSION = '2.0.0.0-dev50';
 
     /**
      * Custom application dirs
@@ -836,7 +836,7 @@ class App implements \Magento\Core\Model\AppInterface
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '49',
+            'number'    => '50',
         );
     }
 }

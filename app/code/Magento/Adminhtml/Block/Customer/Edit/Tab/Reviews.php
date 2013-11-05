@@ -52,6 +52,6 @@ class Reviews extends \Magento\Adminhtml\Block\Review\Grid
      */
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/productReviews', array('_current' => true));
+        return $this->getUrl('adminhtml/*/productReviews', array('_current' => true));
     }
 }

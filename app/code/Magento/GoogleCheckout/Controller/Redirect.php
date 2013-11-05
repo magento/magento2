@@ -53,7 +53,7 @@ class Redirect extends \Magento\Core\Controller\Front\Action
         }
 
         $storeQuote = $this->_objectManager->create('Magento\Sales\Model\Quote')->setStoreId(
-            $this->_objectManager->get('Magento\Core\Model\StoreManger')->getStore()->getId()
+            $this->_objectManager->get('Magento\Core\Model\StoreManager')->getStore()->getId()
         );
         $storeQuote->merge($quote);
         $storeQuote

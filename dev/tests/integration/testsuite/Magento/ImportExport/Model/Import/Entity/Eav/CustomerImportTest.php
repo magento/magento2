@@ -52,7 +52,6 @@ class CustomerImportTest extends \PHPUnit_Framework_TestCase
      *
      * @covers \Magento\ImportExport\Model\Import\Entity\Eav\Customer::_importData
      * @covers \Magento\ImportExport\Model\Import\Entity\Eav\Customer::_prepareDataForUpdate
-     * @covers \Magento\ImportExport\Model\Import\Entity\Eav\Customer::_saveCustomerEntity
      * @covers \Magento\ImportExport\Model\Import\Entity\Eav\Customer::_saveCustomerAttributes
      *
      * @magentoDataFixture Magento/ImportExport/_files/customer.php
@@ -120,9 +119,6 @@ class CustomerImportTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test importData() method (delete behavior)
-     *
-     * @covers \Magento\ImportExport\Model\Import\Entity\Eav\Customer::_importData
-     * @covers \Magento\ImportExport\Model\Import\Entity\Eav\Customer::_deleteCustomers
      *
      * @magentoDataFixture Magento/ImportExport/_files/customers.php
      */

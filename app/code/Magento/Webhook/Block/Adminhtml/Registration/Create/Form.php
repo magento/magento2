@@ -59,7 +59,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $form = $this->_formFactory->create(array(
             'attributes' => array(
                 'id' => 'api_user',
-                'action' => $this->getUrl('*/*/register', array('id' => $subscription[self::DATA_SUBSCRIPTION_ID])),
+                'action' => $this->getUrl(
+                    'adminhtml/*/register', array('id' => $subscription[self::DATA_SUBSCRIPTION_ID])
+                ),
                 'method' => 'post',
             ))
         );

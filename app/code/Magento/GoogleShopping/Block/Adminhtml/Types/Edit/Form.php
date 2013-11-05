@@ -279,6 +279,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getSaveUrl()
     {
-        return $this->getUrl('*/*/save', array('type_id' => $this->getItemType()->getId()));
+        return $this->getUrl('adminhtml/*/save', array('type_id' => $this->getItemType()->getId()));
     }
 }

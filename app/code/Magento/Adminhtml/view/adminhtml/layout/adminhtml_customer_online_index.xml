@@ -38,7 +38,7 @@
                     <arguments>
                         <argument name="rowUrl" xsi:type="array">
                             <item name="generatorClass" xsi:type="string">Magento\Log\Model\Resource\Visitor\Online\Grid\Row\UrlGenerator</item>
-                            <item name="path" xsi:type="string">*/customer/edit</item>
+                            <item name="path" xsi:type="string">adminhtml/customer/edit</item>
                             <item name="extraParamsTemplate" xsi:type="array">
                                 <item name="id" xsi:type="string">getCustomerId</item>
                             </item>

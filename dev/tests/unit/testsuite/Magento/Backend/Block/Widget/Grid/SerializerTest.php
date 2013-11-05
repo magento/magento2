@@ -42,8 +42,8 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $grid = $this->getMock('Magento\Adminhtml\Block\Catalog\Product\Widget\Chooser', array('getSelectedProducts'),
-            array(), '', false);
+        $grid = $this->getMock('Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser',
+            array('getSelectedProducts'), array(), '', false);
         $grid->expects($this->once())->method('getSelectedProducts')->will($this->returnValue(array('product1')));
         $arguments = array(
             'data' => array(

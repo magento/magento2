@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="One Page Checkout Overview" type="fragment" owner="checkout_onepage_index">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="One Page Checkout Overview" type="page">
     <block class="Magento\Page\Block\Html" name="root" output="1" template="page_fragment.phtml">
         <block class="Magento\Checkout\Block\Onepage\Review\Info" name="order_review" template="onepage/review/info.phtml">
             <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="onepage/review/item.phtml"/>

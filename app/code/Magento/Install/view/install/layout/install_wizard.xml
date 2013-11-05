@@ -28,6 +28,7 @@
         <action method="setTemplate">
             <argument name="template" xsi:type="string">Magento_Install::page.phtml</argument>
         </action>
+        <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright"/>
         <container name="left" as="left" label="Left Column"/>
         <container name="content" as="content" label="Content"/>
     </block>

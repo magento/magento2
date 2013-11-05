@@ -1,3 +1,22 @@
+2.0.0.0-dev50
+=============
+* Modularity improvements:
+  * Cleavage of Adminhtml module
+    * Moved Sales, Catalog, Tax-related logic to respective modules
+    * Moved Action, Cache, Ajax, Dashboard, Index, Json, Rating, Sitemap, Survey, UrlRewrite from root of Adminhtml Controller folder
+  * View abstraction was moved into library
+  * Eliminated dependency in Magento\Data\Form from Magento\Core module
+  * Eliminated Magento\Media module
+* Themes update:
+  * Templates and layout updates are updated in Cms, Contacts, Core, Directory, GoogleCheckout, Page, Payment, PaypalUk, Paypal, Rating, Review, Rss,Sales, Widget modules, old files moved to magento_backup theme
+* Layout improvements:
+  * Removed page type hierarchy and page fragment types
+  * No direct code execution: methods addColumnRender, addRenderer, addToParentGroup usages as action nodes were eliminated
+* Fixed bugs:
+  * Impossible to add image using WYSIWYG
+  * Legacy static test ObsoleteCodeTest::testPhpFiles produced false-positive results
+  * Incorrect copyright information
+
 2.0.0.0-dev49
 =============
 * Various improvements:

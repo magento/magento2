@@ -216,7 +216,7 @@
                 </field>
                 <field id="date_fields_order" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Date Fields Order</label>
-                    <frontend_model>Magento\Adminhtml\Block\Catalog\Form\Renderer\Config\DateFieldsOrder</frontend_model>
+                    <frontend_model>Magento\Catalog\Block\Adminhtml\Form\Renderer\Config\DateFieldsOrder</frontend_model>
                 </field>
                 <field id="time_format" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Time Format</label>
@@ -225,7 +225,7 @@
                 <field id="year_range" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Year Range</label>
                     <comment>Please use a four-digit year format.</comment>
-                    <frontend_model>Magento\Adminhtml\Block\Catalog\Form\Renderer\Config\YearRange</frontend_model>
+                    <frontend_model>Magento\Catalog\Block\Adminhtml\Form\Renderer\Config\YearRange</frontend_model>
                 </field>
             </group>
         </section>

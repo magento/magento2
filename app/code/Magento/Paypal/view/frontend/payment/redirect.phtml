@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -30,12 +29,12 @@
  * @see \Magento\PayPal\Block\Standard\Form
  */
 ?>
-<ul class="form-list" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none;">
-    <li class="form-alt"><?php echo $this->getRedirectMessage() ?></li>
+<div class="paypal choice field items" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none;">
+    <p><?php echo $this->getRedirectMessage() ?></p>
     <?php if ($code = $this->getCreateBACode()): ?>
-        <li class="form-alt">
-            <label for="<?php echo $code ?>"><input type="checkbox" id="<?php echo $code ?>" value="1" name="payment[<?php echo $code ?>]" class="checkbox" />
-            <?php echo __('Sign a billing agreement to streamline further purchases with PayPal.') ?></label>
-        </li>
+        <input type="checkbox" id="<?php echo $code ?>" value="1" name="payment[<?php echo $code ?>]" class="checkbox">
+        <label for="<?php echo $code ?>" class="label">
+            <span><?php echo __('Sign a billing agreement to streamline further purchases with PayPal.') ?></span>
+        </label>
     <?php endif; ?>
-</ul>
+</div>

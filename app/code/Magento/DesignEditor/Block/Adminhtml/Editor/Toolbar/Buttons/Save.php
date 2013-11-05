@@ -125,7 +125,7 @@ class Save
      */
     public function getSaveUrl()
     {
-        return $this->getUrl('*/system_design_editor/save', array('theme_id' => $this->getTheme()->getId()));
+        return $this->getUrl('adminhtml/system_design_editor/save', array('theme_id' => $this->getTheme()->getId()));
     }
 
     /**

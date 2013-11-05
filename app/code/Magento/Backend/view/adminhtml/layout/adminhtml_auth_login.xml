@@ -26,6 +26,7 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <container name="root" label="Root" output="1">
         <block class="Magento\Backend\Block\Template" name="content" template="admin/login.phtml">
+            <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright"/>
             <container name="form.additional.info" label="Form Additional Info"/>
             <container name="form.buttons" label="Form Buttons">
                 <block class="Magento\Backend\Block\Template" name="adminhtml_auth_login_buttons" template="admin/login_buttons.phtml"/>

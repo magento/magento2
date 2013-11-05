@@ -73,7 +73,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getSaveAndContinueUrl()
     {
-        return $this->getUrl('*/*/save', array('_current' => true, 'continue' => true));
+        return $this->getUrl('adminhtml/*/save', array('_current' => true, 'continue' => true));
     }
 
     /**

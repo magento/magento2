@@ -67,10 +67,10 @@ class DebugHints
     /**
      * Wrap template engine instance with the debugging hints decorator, depending of the store configuration
      *
-     * @param \Magento\Core\Model\TemplateEngine\EngineInterface $invocationResult
-     * @return \Magento\Core\Model\TemplateEngine\EngineInterface
+     * @param \Magento\View\TemplateEngineInterface $invocationResult
+     * @return \Magento\View\TemplateEngineInterface
      */
-    public function afterCreate(\Magento\Core\Model\TemplateEngine\EngineInterface $invocationResult)
+    public function afterCreate(\Magento\View\TemplateEngineInterface $invocationResult)
     {
         if ($this->_storeConfig->getConfig(self::XML_PATH_DEBUG_TEMPLATE_HINTS) && $this->_coreData->isDevAllowed()) {
             $showBlockHints = $this->_storeConfig->getConfig(self::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS);

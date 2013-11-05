@@ -19,20 +19,26 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<p><?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?></p>
-<?php if($this->getInfo()->getAdditionalData()): ?>
-    <?php if($this->getPayableTo()): ?>
-        <p><strong><?php echo __('Make Check payable to:') ?></strong> <?php echo $this->escapeHtml($this->getPayableTo()) ?></p>
+<dl class="payment method checkmemo">
+    <dt class="title"><?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?></dt>
+    <?php if($this->getInfo()->getAdditionalData()): ?>
+        <?php if($this->getPayableTo()): ?>
+            <dd class="content">
+                <strong><?php echo __('Make Check payable to') ?></strong>
+                <?php echo $this->escapeHtml($this->getPayableTo()) ?>
+            </dd>
+        <?php endif; ?>
+        <?php if($this->getMailingAddress()): ?>
+            <dd class="content">
+                <strong><?php echo __('Send Check to') ?></strong>
+                <address class="checkmo mailing address">
+                    <?php echo nl2br($this->escapeHtml($this->getMailingAddress())) ?>
+                </address>
+            </dd>
+        <?php endif; ?>
     <?php endif; ?>
-    <?php if($this->getMailingAddress()): ?>
-        <p><strong><?php echo __('Send Check to:') ?></strong></p>
-        <address class="checkmo-mailing-address">
-            <?php echo nl2br($this->escapeHtml($this->getMailingAddress())) ?>
-        </address>
-    <?php endif; ?>
-<?php endif; ?>
+</dl>

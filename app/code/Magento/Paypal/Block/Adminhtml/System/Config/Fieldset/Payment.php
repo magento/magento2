@@ -112,7 +112,7 @@ class Payment
             . (empty($groupConfig['paypal_ec_separate']) ? '' : ' paypal-ec-separate')
             . $disabledClassString . '" id="' . $htmlId
             . '-head" onclick="paypalToggleSolution.call(this, \'' . $htmlId . "', '"
-            . $this->getUrl('*/*/state') . '\'); return false;"><span class="state-closed">'
+            . $this->getUrl('adminhtml/*/state') . '\'); return false;"><span class="state-closed">'
             . __('Configure') . '</span><span class="state-opened">'
             . __('Close') . '</span></button>';
 

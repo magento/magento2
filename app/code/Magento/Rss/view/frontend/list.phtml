@@ -24,18 +24,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="page-title rss-title">
-    <h1><?php echo __('RSS Feeds') ?></h1>
-</div>
 <?php
     $_categories = $this->getRssCatalogFeeds();
     $_misc = $this->getRssMiscFeeds();
 ?>
 <?php if ($_categories || $_misc): ?>
 <?php if($_misc): ?>
-<table class="data-table rss-table" id="rss-table-misc">
-    <col />
-    <col width="1" />
+<table class="data table rss">
     <thead>
         <tr>
             <th colspan="2"><?php echo __('Miscellaneous Feeds') ?></th>
@@ -44,20 +39,15 @@
     <tbody>
         <?php foreach ($_misc as $_feed): ?>
         <tr>
-            <td><?php echo $_feed->getLabel() ?></td>
-            <td><a href="<?php echo $_feed->getUrl() ?>" class="link-rss"><?php echo __('Get Feed'); ?></a></td>
+            <td class="col feed"><?php echo $_feed->getLabel() ?></td>
+            <td class="col action"><a href="<?php echo $_feed->getUrl() ?>" class="action get"><span><?php echo __('Get Feed'); ?></span></a></td>
         </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
 <?php endif; ?>
-<?php if ($_categories && $_misc): ?>
-<br />
-<?php endif ?>
 <?php if($_categories): ?>
-<table class="data-table rss-table" id="rss-table-category">
-    <col />
-    <col width="1" />
+<table class="data table category rss">
     <thead>
         <tr>
             <th colspan="2"><?php echo __('Category Feeds') ?></th>
@@ -66,19 +56,13 @@
     <tbody>
         <?php foreach ($_categories as $_category): ?>
         <tr>
-            <td><?php echo $_category->getLabel() ?></td>
-            <td><a href="<?php echo $_category->getUrl() ?>" class="link-rss"><?php echo __('Get Feed'); ?></a></td>
+            <td class="col feed"><?php echo $_category->getLabel() ?></td>
+            <td class="col action"><a href="<?php echo $_category->getUrl() ?>" class="action get"><span><?php echo __('Get Feed'); ?></span></a></td>
         </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
 <?php endif; ?>
-<script type="text/javascript">
-    (function($) {
-        $('#rss-table-misc').decorate('table');
-        $('#rss-table-category').decorate('table');
-    })(jQuery);
-</script>
 <?php else: ?>
     <p><?php echo __('There are no Rss Feeds.'); ?></p>
 <?php endif; ?>

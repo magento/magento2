@@ -87,7 +87,7 @@ class AbstractTest
         $themeBlockMock = $this->getMock(
             'Magento\DesignEditor\Block\Adminhtml\Theme', array('getTheme'), array(), '', false
         );
-        /** @var $layoutMock \Magento\Core\Model\Layout */
+        /** @var $layoutMock \Magento\View\LayoutInterface */
         $layoutMock  = $this->getMock('Magento\Core\Model\Layout', array('createBlock'), array(), '', false);
         /** @var $buttonMock \Magento\Backend\Block\Widget\Button */
         $buttonMock = $this->getMock('Magento\Backend\Block\Widget\Button', array(), array(), '', false);

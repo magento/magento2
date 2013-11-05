@@ -34,7 +34,7 @@
  */
 namespace Magento\Adminhtml\Controller\Report;
 
-abstract class AbstractReport extends \Magento\Adminhtml\Controller\Action
+abstract class AbstractReport extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
      * Admin session model
@@ -118,8 +118,8 @@ abstract class AbstractReport extends \Magento\Adminhtml\Controller\Action
             )
             : 'undefined';
 
-        $refreshStatsLink = $this->getUrl('*/report_statistics');
-        $directRefreshLink = $this->getUrl('*/report_statistics/refreshRecent', array('code' => $refreshCode));
+        $refreshStatsLink = $this->getUrl('adminhtml/report_statistics');
+        $directRefreshLink = $this->getUrl('adminhtml/report_statistics/refreshRecent', array('code' => $refreshCode));
 
         $this->_objectManager->get('Magento\Adminhtml\Model\Session')
             ->addNotice(__('Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, '

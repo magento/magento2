@@ -163,7 +163,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
 
         $this->getMassactionBlock()->addItem('delete', array(
              'label'=> __('Delete'),
-             'url'  => $this->getUrl('*/*/couponsMassDelete', array('_current' => true)),
+             'url'  => $this->getUrl('adminhtml/*/couponsMassDelete', array('_current' => true)),
              'confirm' => __('Are you sure you want to delete the selected coupon(s)?'),
              'complete' => 'refreshCouponCodesGrid'
         ));
@@ -178,6 +178,6 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
      */
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/couponsGrid', array('_current'=> true));
+        return $this->getUrl('adminhtml/*/couponsGrid', array('_current'=> true));
     }
 }

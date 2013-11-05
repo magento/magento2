@@ -31,7 +31,7 @@ namespace Magento\Adminhtml\Block\Review\Rating;
 
 class Summary extends \Magento\Adminhtml\Block\Template
 {
-    protected $_template = 'rating/stars/summary.phtml';
+    protected $_template = 'Magento_Rating::rating/stars/summary.phtml';
 
     /**
      * Core registry

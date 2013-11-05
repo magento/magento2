@@ -175,7 +175,7 @@ class Orders
                     'actions'   => array(
                         array(
                             'caption' => __('View'),
-                            'url'     => array('base'=>'*/sales_order/view'),
+                            'url'     => array('base'=>'sales/order/view'),
                             'field'   => 'order_id'
                         )
                     ),
@@ -197,7 +197,7 @@ class Orders
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('*/sales_order/view', array('order_id' => $row->getId()));
+        return $this->getUrl('sales/order/view', array('order_id' => $row->getId()));
     }
 
     /**
@@ -218,7 +218,7 @@ class Orders
     public function getTabUrl()
     {
         $recurringProfile = $this->_coreRegistry->registry('current_recurring_profile');
-        return $this->getUrl('*/*/orders', array('profile' => $recurringProfile->getId()));
+        return $this->getUrl('adminhtml/*/orders', array('profile' => $recurringProfile->getId()));
     }
 
     /**

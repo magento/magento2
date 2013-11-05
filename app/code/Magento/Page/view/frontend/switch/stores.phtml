@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -32,16 +31,16 @@
  */
 ?>
 <?php if(count($this->getGroups())>1): ?>
-<div class="store-switcher">
-    <label for="select-store"><?php echo __('Select Store:') ?></label>
-    <select id="select-store" title="<?php echo __('Select Store') ?>" onchange="location.href=this.value">
-    <?php /*foreach ($this->getStores() as $_store): ?>
-        <option value="<?php echo $_store->getUrl('') ?>"<?php if($_store->getId()==$this->getCurrentStoreId()): ?> selected="selected"<?php endif; ?>><?php echo $_store->getName() ?></option>
-    <?php endforeach;*/ ?>
+<div class="switcher-store">
+    <label><?php echo __('Select Store') ?>:</label>
+    <ul id="select-store">
     <?php foreach ($this->getGroups() as $_group): ?>
-        <?php $_selected = ($_group->getId()==$this->getCurrentGroupId()) ? ' selected="selected"' : '' ?>
-        <option value="<?php echo $_group->getHomeUrl() ?>"<?php echo $_selected ?>><?php echo $this->escapeHtml($_group->getName()) ?></option>
+        <?php if ($_group->getId()==$this->getCurrentGroupId()): ?>
+        <li class="current"><strong><?php echo $this->escapeHtml($_group->getName()) ?></strong></li>
+        <?php else: ?>
+        <li><a href="<?php echo $_group->getHomeUrl() ?>"><?php echo $this->escapeHtml($_group->getName()) ?></a></li>
+        <?php endif; ?>
     <?php endforeach; ?>
-    </select>
+    </ul>
 </div>
 <?php endif; ?>

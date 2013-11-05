@@ -63,7 +63,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         ));
 
         $urlBuilder = $context->getUrlBuilder();
-        $expectedUrl = $urlBuilder->getUrl('*/*/register', array('id' => $subscriptionId));
+        $expectedUrl = $urlBuilder->getUrl('adminhtml/*/register', array('id' => $subscriptionId));
 
         $this->assertEquals($expectedUrl, $block->getSubmitUrl());
         $this->assertEquals('name', $block->getSubscriptionName());

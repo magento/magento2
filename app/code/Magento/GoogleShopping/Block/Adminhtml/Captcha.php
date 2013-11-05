@@ -51,7 +51,7 @@ class Captcha extends \Magento\Adminhtml\Block\Template
                 'label'     => __('Confirm'),
                 'onclick'   => "if($('user_confirm').value != '')
                                 {
-                                    setLocation('".$this->getUrl('*/*/confirmCaptcha', array('_current'=>true))."' + 'user_confirm/' + $('user_confirm').value + '/');
+                                    setLocation('".$this->getUrl('adminhtml/*/confirmCaptcha', array('_current'=>true))."' + 'user_confirm/' + $('user_confirm').value + '/');
                                 }",
                 'class'     => 'task'
             ));

@@ -24,17 +24,17 @@
  */
 -->
 <config>
-    <type name="Magento\Adminhtml\Controller\Catalog\Product\Attribute">
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Attribute">
         <param name="attributeLabelCache">
             <instance type="Magento\Core\Model\Cache\Type\Translate" />
         </param>
     </type>
-    <type name="Magento\Adminhtml\Helper\Dashboard\Data">
+    <type name="Magento\Backend\Helper\Dashboard\Data">
         <param name="installDate">
             <value type="argument">Magento\App\State::PARAM_INSTALL_DATE</value>
         </param>
     </type>
-    <type name="Magento\Adminhtml\Block\Rating\Edit\Tab\Form">
+    <type name="Magento\Rating\Block\Adminhtml\Edit\Tab\Form">
         <param name="session">
             <instance type="Magento\Adminhtml\Model\Session" />
         </param>

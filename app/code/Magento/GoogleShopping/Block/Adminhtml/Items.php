@@ -127,6 +127,6 @@ class Items extends \Magento\Adminhtml\Block\Widget\Grid\Container
      */
     public function getStatusUrl()
     {
-        return $this->getUrl('*/*/status');
+        return $this->getUrl('adminhtml/*/status');
     }
 }
