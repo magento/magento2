@@ -2,6 +2,15 @@
 /**
  * Public alias for the application entry point
  *
+ * Example - run a particular store or website:
+ * --------------------------------------------
+ * $params = $_SERVER;
+ * $params['MAGE_RUN_CODE'] = 'website2';
+ * $params['MAGE_RUN_TYPE'] = 'website';
+ * ...
+ * $entryPoint = new \Magento\Core\Model\EntryPoint\Http(new \Magento\Core\Model\Config\Primary(BP, $params));
+ * --------------------------------------------
+ *
  * Magento
  *
  * NOTICE OF LICENSE
