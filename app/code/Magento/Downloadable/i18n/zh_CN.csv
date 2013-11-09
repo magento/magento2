@@ -89,3 +89,12 @@
 "download","下载"
 "inline","内联"
 "sample","示例"
+"You have not purchased any downloadable products.","你还没有购买任何可下载产品."
+SKU,SKU
+U,U
+"Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with '_'.","推荐使用字符数字、中划线和下划线命名文件.不正确的字符将被'_'自动替换"
+"Something went wrong while saving the file(s).","当存储文件时发生错误."
+"Please correct the download URL scheme.","请纠正下载URL."
+"Please correct the download URL host.","请纠正下载URL主机名."
+"Something went wrong while getting the requested content.","当获取请求内容时发生错误."
+"Sorry, there was an error getting requested content. Please contact the store owner.","很抱歉, 获取请求内容时发生错误. 请联系店主."

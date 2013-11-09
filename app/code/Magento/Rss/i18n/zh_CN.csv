@@ -54,3 +54,7 @@
 "Total: %s<br/>","总数：%s <br/>"
 "Wishlist","愿望清单"
 "click <a href=""%s"">here</a> to view the review","点击 <a href=""%s"">这里</a> 查看评测"
+"Discount (%1)","折扣 (%1)"
+"There are no Rss Feeds.","没有Rss种子."
+"There was no RSS feed enabled.","没有允许Rss种子."
+"We cannot retrieve the wish list.","检索不到收藏清单."

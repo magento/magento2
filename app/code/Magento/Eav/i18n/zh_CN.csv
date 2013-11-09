@@ -123,3 +123,9 @@
 "Wrong type definition for %s","错误的类定义：%s"
 "Yes","是"
 "Yes/No","是/否"
+"Invalid EAV attribute","无效的EAV属性"
+"A joined field with this alias is already declared.","使用该别名的连接字段已经被声明."
+"No options found.","找不到选项."
+"Attribute set name is empty.","属性集名称为空."
+"Invalid entity supplied","无效的实体"
+URL,URL

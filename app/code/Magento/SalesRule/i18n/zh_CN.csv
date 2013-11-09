@@ -130,3 +130,6 @@
 "Yes","是"
 "total amount","总数"
 "total quantity","总量"
+"Item totals are not set for the rule.","条目总数没有设置该规则."
+"Can't acquire coupon.","不能获取优惠券."
+"We cannot create the requested Coupon Qty. Please check your settings and try again.","不能创建请求的优惠券数量.请检查设置再试一次."

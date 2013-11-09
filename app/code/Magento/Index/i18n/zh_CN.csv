@@ -43,3 +43,5 @@
 "Update on Save","保存时更新"
 "Updated At","更新于"
 "Yes","是"
+"Indexer name is not defined.","索引器名字未定义."
+"Indexer model should extend MagentoIndexModelIndexerAbstract.","索引器模型应该扩展MagentoIndexModelIndexerAbstract."

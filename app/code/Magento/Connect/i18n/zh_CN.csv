@@ -56,3 +56,8 @@
 "There was a problem saving package data","保存包数据时遇到问题"
 "Type","类型"
 "User","用户"
+"Something went wrong loading the package data.","装载包数据时发生错误."
+"Something went wrong saving the package data.","存储包数据时发生错误."
+"Something went wrong saving the package.","存储包时发生错误."
+"Something went wrong creating the package.","创建包时发生错误."
+Pre-1.5.0.0,Pre-1.5.0.0

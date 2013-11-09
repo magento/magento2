@@ -1,2 +1,5 @@
 "PayPal Express Checkout (Payflow Edition) Shortcut Wrapper","PayPal快速结账（Payflow版）快捷方式包装"
 "PayPal Express Order Review Form","PayPal快速订单审查表单"
+"Update Shipping Method","更新货运方法"
+"Change Payment Method","变更支付方法"
+"Fetch transaction details method does not exists in PaypalUK","PaypalUK没有找到交易详细方法"

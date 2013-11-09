@@ -44,3 +44,8 @@
 "WARNING:","警告："
 "Webservicex","Web服务"
 "Your current currency is: %s","您的当前币种为：%s"
+"--Please select--","--请选择--"
+"Please correct the rates received","请纠正所得比率"
+"Please specify the correct Import Service.","请指定正确导入服务."
+"We can't initialize the import model.","不能初始化导入模型."
+"Please correct the target currency.","请纠正目标货币."

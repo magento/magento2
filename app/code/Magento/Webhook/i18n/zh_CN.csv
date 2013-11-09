@@ -1,0 +1,23 @@
+"Subscription registration succeeded.","成功注册订阅."
+"Subscription registration failed!","订阅注册失败!"
+"Creating API User for ","创建API用户给"
+Events,事件
+Deny,否决
+"Unexpected error.  Please contact the administrator.","不期望的错误，请与管理员联系."
+Revoked,已撤销
+"WebHook Subscriptions","WebHook订阅"
+"Add Subscription","添加订阅"
+"Edit Subscription","编辑订阅"
+"No Subscription ID was provided with the request.","没有提供订阅ID."
+"API Key, API Secret and Contact Email are required fields.","必须提供API密钥、API安全码和联络邮箱地址."
+"Invalid Email address provided","提供的邮箱地址无效"
+Subscriptions,订阅
+Revoke,撤销
+Subscription,订阅
+"Endpoint URL","端点URL"
+Format,"格式"
+"Authentication Types","认证类型"
+Topics,话题
+"Contact Email","联络邮件"
+"API Key","API密钥"
+"API Secret","API安全码"

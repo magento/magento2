@@ -64,3 +64,17 @@
 "Waiting Authorization","等待身份验证"
 "You can arrange the layout/list of the payment methods on Ogone payment page.","您可以在Ogone支付页面上安排支付方法的布局/列表。"
 "You will be redirected to Ogone website when you place an order.","在下单时，您会被重定向到Ogone的网站。"
+"Please stand by. In a moment, this page will transfer your data to the Ogone payment gateway.","请稍等, 此刻页面将要传输数据到Ogone支付网关."
+Ogone,Ogone
+Magento,Magento
+"The hash is not valid.","无效的哈希."
+"The order is not valid.","无效的订单."
+"Can't detect Ogone payment action","检测不到Ogone网关动作"
+"Order can't save","订单不能存储"
+"Something went wrong during the payment process, and so the result is unpredictable.","支付过程中发生错误,所以结果是不可预期的."
+"Something went wrong during the authorization process, and so the result is unpredictable.","授权过程中发生错误,所以结果是不可预期的."
+"Something went wrong while saving this order.","存储订单时发生错误."
+"Declined Order on Ogone side","Ogone拒绝订单"
+"The payment transaction has been declined.","支付交易被拒绝."
+"The order was canceled on the Ogone side.","Ogone端取消了该订单."
+"Something went wrong while canceling this order.","取消订单时发生错误."

@@ -294,3 +294,18 @@
 "Zero shipping charge for '%s'","'%s' 免运费"
 "cm","厘米"
 "inch","英寸"
+"Sorry, something went wrong. Please try again or contact us and we'll try to help.","很抱歉, 发生某种错误. 请重试或者联系我们我们将尽最大努力帮助您."
+"UPS Worldwide Saver","UPS全球存储器"
+PAK,PAK
+"2 Day AM","2 Day AM"
+"We don't have a way to ship to the selected shipping address. Please choose another address or edit the current address.","无法发送到选择的运送地址，请选择另一个地址或者编辑当前地址."
+"Please format your response correctly.","请正确格式化返回应答."
+"Reference code is missing","缺少参考代码"
+"Package content is missing","缺少包括内容"
+"Wrong Content Type","错误的内容类型"
+Sprintline,Sprintline
+Jetline,Jetline
+"Please, specify origin country","请指定发起国家"
+"Wrong Region","地区错误"
+"This shipping method is not available. Please specify the zip code.","无效的货运方法，请指定邮政编码."
+"This allows breaking total order weight into smaller pieces if it exceeds %1 %2 to ensure accurate calculation of shipping charges.","如果重量超过%1%2可以拆分整个订单重量到多个小包以确保货运费用计算更精确"

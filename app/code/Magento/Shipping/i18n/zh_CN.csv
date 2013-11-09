@@ -91,3 +91,11 @@
 "ZIP/Postal Code","邮政编码"
 "contact us","联系我们"
 "email us at ","发送电子邮件给我们："
+"Tracking information is not available. Please ","无效的追踪信息"
+N/A,N/A
+"Tracking information is unavailable.","无效的追踪信息."
+"We don't have enough information to create shipping labels. Please make sure your store information and settings are complete.","没有足够的信息创建货运标签,请确保设置了完整的店铺信息."
+"Please correct Table Rates File Format.","请纠正货运费率表文件格式."
+"Something went wrong while importing table rates.","导入费率表发生错误."
+"This shipping method is not available. To use this shipping method, please contact us.","无效的货运方法.为了使用该货运方法,请联系我们."
+"Sorry, but we can't deliver to the destination country with this shipping module.","很抱歉,该货运模块不支持运送到目的地国家."
