@@ -43,5 +43,5 @@ Theme,主题
 "Upload Fonts","上传字体"
 "Edit custom.css","编辑custom.css"
 "Allowed file types *.css.","允许的文件类型*.css."
-"This file will replace the current custom.css file and can't be more than 2 MB.","该文件被替换当前custom.css并且大小不能超过2MB."
+"This file will replace the current custom.css file and can't be more than 2 MB.","该文件将替换当前custom.css文件并且大小不能超过2MB."
 "CSS Editor","CSS编辑器"
