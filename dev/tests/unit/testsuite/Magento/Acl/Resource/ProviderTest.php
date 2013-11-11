@@ -38,23 +38,23 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_configScopeMock;
+    protected $_treeBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\State|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_treeBuilderMock;
+    protected $_appState;
 
     protected function setUp()
     {
         $this->_configReaderMock = $this->getMock('Magento\Config\ReaderInterface');
-        $this->_configScopeMock = $this->getMock('Magento\Config\ScopeInterface');
+        $this->_appState = $this->getMock('Magento\App\State', array('getAreaCode'), array(), '', false);
         $this->_treeBuilderMock =
             $this->getMock('Magento\Acl\Resource\TreeBuilder', array(), array(), '', false);
         $this->_model = new \Magento\Acl\Resource\Provider(
             $this->_configReaderMock,
-            $this->_configScopeMock,
-            $this->_treeBuilderMock
+            $this->_treeBuilderMock,
+            $this->_appState
         );
     }
 
@@ -62,7 +62,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
     {
         $aclResourceConfig['config']['acl']['resources'] = array('ExpectedValue');
         $scope = 'scopeName';
-        $this->_configScopeMock->expects($this->once())->method('getCurrentScope')->will($this->returnValue($scope));
+        $this->_appState->expects($this->once())->method('getAreaCode')->will($this->returnValue($scope));
         $this->_configReaderMock->expects($this->once())
             ->method('read')->with($scope)->will($this->returnValue($aclResourceConfig));
         $this->_treeBuilderMock->expects($this->once())
@@ -73,7 +73,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetIfAclResourcesEmpty()
     {
         $scope = 'scopeName';
-        $this->_configScopeMock->expects($this->once())->method('getCurrentScope')->will($this->returnValue($scope));
+        $this->_appState->expects($this->once())->method('getAreaCode')->will($this->returnValue($scope));
         $this->_configReaderMock->expects($this->once())
             ->method('read')->with($scope)->will($this->returnValue(array()));
         $this->_treeBuilderMock->expects($this->never())->method('build');

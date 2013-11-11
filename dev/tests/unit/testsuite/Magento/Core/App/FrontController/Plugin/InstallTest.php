@@ -25,7 +25,7 @@ namespace Magento\Core\App\FrontController\Plugin;
 class InstallTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\App\FrontController\Plugin\Install
+     * @var \Magento\Module\FrontController\Plugin\Install
      */
     protected $_model;
 
@@ -53,10 +53,10 @@ class InstallTest extends \PHPUnit_Framework_TestCase
     {
         $this->_appStateMock = $this->getMock('\Magento\App\State', array(), array(), '', false);
         $this->_cacheMock = $this->getMock('\Magento\Cache\FrontendInterface');
-        $this->_dbUpdaterMock = $this->getMock('\Magento\App\UpdaterInterface');
+        $this->_dbUpdaterMock = $this->getMock('\Magento\Module\UpdaterInterface');
         $this->_invocationChainMock =
             $this->getMock('\Magento\Code\Plugin\InvocationChain', array(), array(), '', false);
-        $this->_model = new \Magento\Core\App\FrontController\Plugin\Install(
+        $this->_model = new \Magento\Module\FrontController\Plugin\Install(
             $this->_appStateMock,
             $this->_cacheMock,
             $this->_dbUpdaterMock

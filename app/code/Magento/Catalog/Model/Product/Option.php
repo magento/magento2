@@ -92,12 +92,18 @@ class Option extends \Magento\Core\Model\AbstractModel
     protected $_optionFactory;
 
     /**
+     * @var \Magento\Stdlib\String
+     */
+    protected $string;
+
+    /**
      * Construct
      *
      * @param \Magento\Catalog\Model\Product\Option\Value $productOptionValue
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Catalog\Model\Product\Option\Type\Factory $optionFactory
+     * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -107,12 +113,14 @@ class Option extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Catalog\Model\Product\Option\Type\Factory $optionFactory,
+        \Magento\Stdlib\String $string,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_productOptionValue = $productOptionValue;
         $this->_optionFactory = $optionFactory;
+        $this->string = $string;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -279,7 +287,9 @@ class Option extends \Magento\Core\Model\AbstractModel
     {
         $group = $this->getGroupByType($type);
         if (!empty($group)) {
-            return $this->_optionFactory->create('Magento\Catalog\Model\Product\Option\Type\\' . uc_words($group));
+            return $this->_optionFactory->create(
+                'Magento\Catalog\Model\Product\Option\Type\\' . $this->string->upperCaseWords($group)
+            );
         }
         throw new \Magento\Core\Exception(__('The option type to get group instance is incorrect.'));
     }

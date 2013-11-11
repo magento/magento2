@@ -53,7 +53,7 @@ class Advanced
      * @param \Magento\Backend\Model\Config\Source\Yesno $yesNo
      * @param \Magento\Eav\Helper\Data $eavData
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\Form\Factory $formFactory
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
@@ -62,7 +62,7 @@ class Advanced
         \Magento\Backend\Model\Config\Source\Yesno $yesNo,
         \Magento\Eav\Helper\Data $eavData,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Data\Form\Factory $formFactory,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
         array $data = array()

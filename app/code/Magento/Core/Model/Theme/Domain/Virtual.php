@@ -142,7 +142,6 @@ class Virtual
             'theme_title'          => sprintf('%s - Staging', $this->_theme->getThemeTitle()),
             'preview_image'        => $this->_theme->getPreviewImage(),
             'is_featured'          => $this->_theme->getIsFeatured(),
-            'area'                 => $this->_theme->getArea(),
             'type'                 => \Magento\Core\Model\Theme::TYPE_STAGING
         ));
         $stagingTheme->save();

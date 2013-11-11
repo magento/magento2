@@ -55,14 +55,9 @@ class StorageFactory
     protected $_eventManager;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_log;
-
-    /**
-     * @var \Magento\Core\Model\ConfigInterface
-     */
-    protected $_config;
 
     /**
      * @var \Magento\Core\Model\AppInterface
@@ -75,33 +70,38 @@ class StorageFactory
     protected $_appState;
 
     /**
+     * @var string
+     */
+    protected $_writerModel;
+
+    /**
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\Logger $log
-     * @param \Magento\Core\Model\ConfigInterface $config
+     * @param \Magento\Logger $logger
      * @param \Magento\Core\Model\AppInterface $app
      * @param \Magento\App\State $appState
      * @param string $defaultStorageClassName
      * @param string $installedStoreClassName
+     * @param string $writerModel
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Logger $log,
-        \Magento\Core\Model\ConfigInterface $config,
+        \Magento\Logger $logger,
         \Magento\Core\Model\AppInterface $app,
         \Magento\App\State $appState,
         $defaultStorageClassName = 'Magento\Core\Model\Store\Storage\DefaultStorage',
-        $installedStoreClassName = 'Magento\Core\Model\Store\Storage\Db'
+        $installedStoreClassName = 'Magento\Core\Model\Store\Storage\Db',
+        $writerModel = ''
     ) {
         $this->_objectManager = $objectManager;
         $this->_defaultStorageClassName = $defaultStorageClassName;
         $this->_installedStoreClassName = $installedStoreClassName;
         $this->_eventManager = $eventManager;
-        $this->_log = $log;
+        $this->_log = $logger;
         $this->_appState = $appState;
-        $this->_config = $config;
         $this->_app = $app;
+        $this->_writerModel = $writerModel;
     }
 
     /**
@@ -123,7 +123,7 @@ class StorageFactory
 
             if (false === ($instance instanceof \Magento\Core\Model\Store\StorageInterface)) {
                 throw new \InvalidArgumentException($className
-                        . ' doesn\'t implement \Magento\Core\Model\Store\StorageInterface'
+                    . ' doesn\'t implement \Magento\Core\Model\Store\StorageInterface'
                 );
             }
             $this->_cache[$className] = $instance;
@@ -135,7 +135,18 @@ class StorageFactory
 
                 $this->_eventManager->dispatch('core_app_init_current_store_after');
 
-                $this->_log->initForStore($instance->getStore(true), $this->_config);
+                $store = $instance->getStore(true);
+                if ($store->getConfig('dev/log/active')) {
+
+                    $this->_log->unsetLoggers();
+                    $this->_log->addStreamLog(
+                        \Magento\Logger::LOGGER_SYSTEM, $store->getConfig('dev/log/file'), $this->_writerModel);
+                    $this->_log->addStreamLog(
+                        \Magento\Logger::LOGGER_EXCEPTION,
+                        $store->getConfig('dev/log/exception_file'),
+                        $this->_writerModel
+                    );
+                }
             }
         }
         return $this->_cache[$className];

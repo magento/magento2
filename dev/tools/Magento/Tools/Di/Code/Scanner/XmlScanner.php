@@ -24,35 +24,47 @@
 
 namespace Magento\Tools\Di\Code\Scanner;
 
-class XmlScanner extends FileScanner
+class XmlScanner implements ScannerInterface
 {
     /**
-     * Regular expression pattern
-     *
-     * @var string
+     * @var \Magento\Tools\Di\Compiler\Log\Log $log
      */
-    protected $_pattern =
-        '/[\n\'"<>]{1}([A-Z]{1}[a-zA-Z0-9]*[_\\\\][A-Z]{1}[a-zA-Z0-9_\\\\]*(Proxy|Factory))[\n\'"<>]{1}/';
+    protected $_log;
 
     /**
-     * Prepare xml file content
-     *
-     * @param string $content
-     * @return string
+     * @param \Magento\Tools\Di\Compiler\Log\Log $log
      */
-    protected function _prepareContent($content)
+    public function __construct(\Magento\Tools\Di\Compiler\Log\Log $log)
     {
-        $dom = new \DOMDocument();
-        $dom->loadXML($content);
+        $this->_log = $log;
+    }
 
-        $xpath = new \DOMXPath($dom);
-        /** @var $comment \DOMComment */
-        foreach ($xpath->query('//comment()') as $comment) {
-            $comment->parentNode->removeChild($comment);
+    /**
+     * Get array of class names
+     *
+     * @param array $files
+     * @return array
+     */
+    public function collectEntities(array $files)
+    {
+        $output = array();
+        foreach ($files as $file) {
+            $dom = new \DOMDocument();
+            $dom->load($file);
+            $xpath = new \DOMXPath($dom);
+            $xpath->registerNamespace("php", "http://php.net/xpath");
+            $xpath->registerPhpFunctions('preg_match');
+            $regex = '/(.*)Proxy/';
+            $query = "/config/preference[ php:functionString('preg_match', '$regex', @type) > 0] | "
+                . "/config/type/param/instance[ php:functionString('preg_match', '$regex', @type) > 0] | "
+                . "/config/virtualType[ php:functionString('preg_match', '$regex', @type) > 0]";
+            /** @var \DOMNode $node */
+            foreach ($xpath->query($query) as $node) {
+                $output[] = $node->attributes->getNamedItem('type')->nodeValue;
+            }
         }
-        $output = $dom->saveXML();
-
-        return $output;
+        $output = array_unique($output);
+        return $this->_filterEntities($output);
     }
 
     /**
@@ -65,10 +77,17 @@ class XmlScanner extends FileScanner
     {
         $filteredEntities = array();
         foreach ($output as $className) {
-            $entityName = rtrim(preg_replace('/(Proxy|Factory)$/', '', $className), '\\');
-            // Skip aliases that are declared in Di configuration
-            if (class_exists($entityName)) {
-                array_push($filteredEntities, $className);
+            $entityName = substr($className, -6) === '\Proxy' ? substr($className, 0, -6) : $className;
+            if (false === class_exists($className)) {
+                if (class_exists($entityName)) {
+                    array_push($filteredEntities, $className);
+                } else {
+                    $this->_log->add(
+                        \Magento\Tools\Di\Compiler\Log\Log::CONFIGURATION_ERROR,
+                        $className,
+                        'Invalid proxy class for ' . substr($className, 0, -5)
+                    );
+                }
             }
         }
         return $filteredEntities;

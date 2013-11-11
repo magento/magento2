@@ -24,16 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
-/**
- * File storage model class
- *
- * @category    Magento
- * @package     Magento_Core
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Core\Model\File;
 
+/**
+ * Class Storage
+ */
 class Storage extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -142,13 +137,11 @@ class Storage extends \Magento\Core\Model\AbstractModel
     /**
      * Show if there were errors while synchronize process
      *
-     * @param  \Magento\Core\Model\AbstractModel $sourceModel
-     * @param  \Magento\Core\Model\AbstractModel $destinationModel
+     * @param $sourceModel
+     * @param $destinationModel
      * @return bool
      */
-    protected function _synchronizeHasErrors(\Magento\Core\Model\AbstractModel $sourceModel,
-        \Magento\Core\Model\AbstractModel $destinationModel
-    ) {
+    protected function _synchronizeHasErrors($sourceModel, $destinationModel) {
         if (!$sourceModel || !$destinationModel) {
             return true;
         }
@@ -191,8 +184,7 @@ class Storage extends \Magento\Core\Model\AbstractModel
                 break;
             case self::STORAGE_MEDIA_DATABASE:
                 $connection = (isset($params['connection'])) ? $params['connection'] : null;
-                $arguments = array('connection' => $connection);
-                $model = $this->_databaseFactory->create(array('connectionName' => $arguments));
+                $model = $this->_databaseFactory->create(array('connectionName' => $connection));
                 break;
             default:
                 return false;

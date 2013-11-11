@@ -48,13 +48,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
 
         $moduleList = $objectManager->create(
-            'Magento\App\ModuleList',
+            'Magento\Module\ModuleList',
             array(
                 'reader' => $objectManager->create(
-                    'Magento\App\Module\Declaration\Reader\Filesystem',
+                    'Magento\Module\Declaration\Reader\Filesystem',
                     array(
                         'fileResolver' => $objectManager->create(
-                            'Magento\App\Module\Declaration\FileResolver',
+                            'Magento\Module\Declaration\FileResolver',
                             array(
                                 'applicationDirs' => $dirs
                             )
@@ -65,9 +65,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        /** @var \Magento\Core\Model\Config\Modules\Reader $moduleReader */
+        /** @var \Magento\Module\Dir\Reader $moduleReader */
         $moduleReader = $objectManager->create(
-            'Magento\Core\Model\Config\Modules\Reader',
+            'Magento\Module\Dir\Reader',
             array(
                 'moduleList' => $moduleList
             )

@@ -45,7 +45,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Config\ScopeInterface')
-            ->setCurrentScope(\Magento\Core\Model\App\Area::AREA_ADMINHTML);
+            ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Backend\Helper\Data');
     }

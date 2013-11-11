@@ -254,7 +254,7 @@ class Index
 
             /** @var $helper \Magento\Wishlist\Helper\Data */
             $helper = $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
-            $message = __('%1 has been added to your wishlist. Click <a href="%2">here</a> to continue shopping.', $helper->escapeHtml($product->getName()), $this->_objectManager->get('Magento\Core\Helper\Data')->escapeUrl($referer));
+            $message = __('%1 has been added to your wishlist. Click <a href="%2">here</a> to continue shopping.', $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getName()), $this->_objectManager->get('Magento\Escaper')->escapeUrl($referer));
             $session->addSuccess($message);
         }
         catch (\Magento\Core\Exception $e) {
@@ -262,7 +262,7 @@ class Index
         }
         catch (\Exception $e) {
             $session->addError(__('An error occurred while adding item to wish list.'));
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
         }
 
         $this->_redirect('*', array('wishlist_id' => $wishlist->getId()));
@@ -309,7 +309,7 @@ class Index
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Customer\Model\Session')
                 ->addError(__('We can\'t configure the product.'));
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
             $this->_redirect('*');
             return;
         }
@@ -363,7 +363,7 @@ class Index
             $session->addError($e->getMessage());
         } catch (\Exception $e) {
             $session->addError(__('An error occurred while updating wish list.'));
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         $this->_redirect('*/*', array('wishlist_id' => $wishlist->getId()));
     }
@@ -413,7 +413,7 @@ class Index
                     try {
                         $item->delete();
                     } catch (\Exception $e) {
-                        $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+                        $this->_objectManager->get('Magento\Logger')->logException($e);
                         $this->_objectManager->get('Magento\Customer\Model\Session')->addError(
                             __('Can\'t delete item from wishlist')
                         );
@@ -431,7 +431,7 @@ class Index
                     $updatedItems++;
                 } catch (\Exception $e) {
                     $this->_objectManager->get('Magento\Customer\Model\Session')->addError(
-                        __('Can\'t save description %1', $this->_objectManager->get('Magento\Core\Helper\Data')->escapeHtml($description))
+                        __('Can\'t save description %1', $this->_objectManager->get('Magento\Escaper')->escapeHtml($description))
                     );
                 }
             }
@@ -601,8 +601,8 @@ class Index
             $cart->getQuote()->removeItem($itemId);
             $cart->save();
             $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
-            $productName = $this->_objectManager->get('Magento\Core\Helper\Data')->escapeHtml($item->getProduct()->getName());
-            $wishlistName = $this->_objectManager->get('Magento\Core\Helper\Data')->escapeHtml($wishlist->getName());
+            $productName = $this->_objectManager->get('Magento\Escaper')->escapeHtml($item->getProduct()->getName());
+            $wishlistName = $this->_objectManager->get('Magento\Escaper')->escapeHtml($wishlist->getName());
             $session->addSuccess(
                 __("%1 has been moved to wish list %2", $productName, $wishlistName)
             );

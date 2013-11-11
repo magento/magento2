@@ -45,19 +45,17 @@ class File extends \Magento\Core\Helper\AbstractHelper
     /**
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Core\Helper\Context $context
-     * @param \Magento\Core\Model\Config $config
+     * @param array $mimeTypes
      */
     public function __construct(
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Core\Helper\Context $context,
-        \Magento\Core\Model\Config $config
+        array $mimeTypes = array()
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         parent::__construct($context);
-        $nodes = $config->getNode('global/mime/types');
-        if ($nodes) {
-            $nodes = (array)$nodes;
-            foreach ($nodes as $key => $value) {
+        if (!empty($mimeTypes)) {
+            foreach ($mimeTypes as $key => $value) {
                 self::$_mimeTypes[$key] = $value;
             }
         }
@@ -65,11 +63,11 @@ class File extends \Magento\Core\Helper\AbstractHelper
 
     /**
      * Checking file for moving and move it
-     *
-     * @param string $baseTmpPath
+     * @param  string $baseTmpPath
      * @param string $basePath
-     * @param array $file
+     * @param string $file
      * @return string
+     * @throws \Magento\Core\Exception
      */
     public function moveFileFromTmp($baseTmpPath, $basePath, $file)
     {

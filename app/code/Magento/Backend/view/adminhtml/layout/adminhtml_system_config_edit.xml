@@ -32,9 +32,9 @@
         </block>
     </referenceBlock>
     <referenceContainer name="js">
-        <block class="Magento\Adminhtml\Block\System\Shipping\Ups" template="Magento_Adminhtml::system/shipping/ups.phtml"/>
-        <block class="Magento\Backend\Block\Template" template="system/config/js.phtml"/>
-        <block class="Magento\Backend\Block\Template" template="Magento_Adminhtml::system/shipping/applicable_country.phtml"/>
+        <block class="Magento\Backend\Block\System\Shipping\Ups" template="Magento_Backend::system/shipping/ups.phtml"/>
+        <block class="Magento\Backend\Block\Template" template="Magento_Backend::system/config/js.phtml"/>
+        <block class="Magento\Backend\Block\Template" template="Magento_Backend::system/shipping/applicable_country.phtml"/>
     </referenceContainer>
     <referenceContainer name="left">
         <block class="Magento\Backend\Block\System\Config\Tabs" name="adminhtml.system.config.tabs" before="-"/>

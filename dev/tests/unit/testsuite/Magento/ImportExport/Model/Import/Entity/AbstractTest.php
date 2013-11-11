@@ -77,7 +77,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             ->with('Magento\Core\Model\Registry')
             ->will($this->returnValue($coreRegisterMock));
 
-        \Magento\Core\Model\ObjectManager::setInstance($objectManagerMock);
+        \Magento\App\ObjectManager::setInstance($objectManagerMock);
 
         return $helper;
     }

@@ -24,16 +24,25 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 namespace Magento\Filter;
 
 class ArrayFilter extends \Zend_Filter
 {
+    /**
+     * @var array
+     */
     protected $_columnFilters = array();
-    
-    function addFilter(\Zend_Filter_Interface $filter, $column='')
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Zend_Filter_Interface $filter
+     * @param string $column
+     * @return null|\Zend_Filter
+     */
+    public function addFilter(\Zend_Filter_Interface $filter, $column = '')
     {
-        if (''===$column) {
+        if ('' === $column) {
             parent::addFilter($filter);
         } else {
             if (!isset($this->_columnFilters[$column])) {
@@ -42,11 +51,17 @@ class ArrayFilter extends \Zend_Filter
             $this->_columnFilters[$column]->addFilter($filter);
         }
     }
-    
-    function filter($array)
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param array $array
+     * @return array
+     */
+    public function filter($array)
     {
         $out = array();
-        foreach ($array as $column=>$value) {
+        foreach ($array as $column => $value) {
             $value = parent::filter($value);
             if (isset($this->_columnFilters[$column])) {
                 $value = $this->_columnFilters[$column]->filter($value);

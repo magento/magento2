@@ -45,11 +45,9 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             array(), array(), '', false, false
         );
 
-        $coreHelper = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
-        $factory = $this->getMock('Magento\Data\Form\Element\Factory', array(), array(), '', false);
-        $factoryColl = $this->getMock('Magento\Data\Form\Element\CollectionFactory', array(), array(), '', false);
-        $this->_object = new \Magento\Backend\Block\System\Config\Form\Field\Export(
-            $coreHelper, $factory, $factoryColl, $this->_helperFactoryMock
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_object = $objectManager->getObject('Magento\Backend\Block\System\Config\Form\Field\Export', array(
+            'helperFactory' => $this->_helperFactoryMock)
         );
     }
 

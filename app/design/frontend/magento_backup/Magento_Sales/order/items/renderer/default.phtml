@@ -61,7 +61,7 @@
             <a href="#" id="order-item-gift-message-link-<?php echo $_item->getId() ?>" class="gift-message-link" aria-controls="order-item-gift-message-<?php echo $_item->getId()?>" data-item-id="<?php echo $_item->getId()?>"><?php echo __('Gift Message') ?></a>
         <?php endif; ?>
     </td>
-    <td><?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\String')->splitInjection($this->getSku())) ?></td>
+    <td><?php echo $this->prepareSku($this->getSku()) ?></td>
     <td class="a-right">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceExclTax()): ?>
             <span class="price-excl-tax">

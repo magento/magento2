@@ -69,7 +69,7 @@ class EndpointTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(1));
 
         // Resources mock
-        $this->_resourceMock = $this->_makeMock('Magento\Core\Model\Resource');
+        $this->_resourceMock = $this->_makeMock('Magento\App\Resource');
         // Resources stubs
         $stubReturnMap = array(
             array('core_read', $this->_adapterMock),

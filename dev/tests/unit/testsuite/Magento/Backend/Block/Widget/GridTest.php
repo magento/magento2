@@ -48,16 +48,11 @@ class GridTest extends \PHPUnit_Framework_TestCase
      * @covers \Magento\Backend\Block\Widget\Grid::getRssLists
      * @dataProvider addGetClearRssDataProvider
      */
-    public function testAddGetClearRss($isUseStoreInUrl, $setStoreCount)
+    public function testAddGetClearRss($isUseStoreInUrl)
     {
         $helperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
 
         $urlMock = $this->getMock('Magento\Core\Model\Url', array(), array(), '', false);
-        $urlMock->expects($this->at($setStoreCount))
-            ->method('setStore');
-        $urlMock->expects($this->any())
-            ->method('getUrl')
-            ->will($this->returnValue('some_url'));
 
         $storeMock = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
         $storeMock->expects($this->any())
@@ -73,14 +68,23 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $appMock->expects($this->any())
             ->method('getDefaultStoreView')
             ->will($this->returnValue($storeMock));
+        $urlBuilderMock = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false);
 
-        $contextMock = $this->getMock('\Magento\Backend\Block\Template\Context', array(), array(), '', false);
+        $contextMock = $this->getMock('Magento\Backend\Block\Template\Context', array(), array(), '', false);
         $contextMock->expects($this->any())
             ->method('getStoreManager')
             ->will($this->returnValue($storeManagerMock));
         $contextMock->expects($this->any())
             ->method('getApp')
             ->will($this->returnValue($appMock));
+        $contextMock->expects($this->any())
+            ->method('getUrlBuilder')
+            ->will($this->returnValue($urlBuilderMock));
+
+        $urlBuilderMock->expects($this->any())
+            ->method('getUrl')
+            ->will($this->returnValue('some_url'));
+
 
         $block = new \Magento\Backend\Block\Widget\Grid($helperMock, $contextMock, $storeManagerMock, $urlMock);
 
@@ -103,8 +107,8 @@ class GridTest extends \PHPUnit_Framework_TestCase
     public function addGetClearRssDataProvider()
     {
          return array(
-            array(true, 1),
-            array(false, 0),
+            array(true),
+            array(false)
          );
     }
 }

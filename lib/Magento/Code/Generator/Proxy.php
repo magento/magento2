@@ -110,7 +110,7 @@ class Proxy extends \Magento\Code\Generator\EntityAbstract
         );
         $methods[] = array(
             'name'     => '__wakeup',
-            'body'     => '$this->_objectManager = \Magento\Core\Model\ObjectManager::getInstance();',
+            'body'     => '$this->_objectManager = \Magento\App\ObjectManager::getInstance();',
             'docblock' => array(
                 'shortDescription' => 'Retrieve ObjectManager from global scope',
             ),
@@ -249,5 +249,25 @@ class Proxy extends \Magento\Code\Generator\EntityAbstract
             $methodCall = sprintf('%s(%s)', $name, implode(', ', $parameters));
         }
         return 'return $this->_getSubject()->' . $methodCall . ';';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _validateData()
+    {
+        $result = parent::_validateData();
+        if ($result) {
+            $sourceClassName = $this->_getSourceClassName();
+            $resultClassName = $this->_getResultClassName();
+
+            if ($resultClassName !== $sourceClassName . '\\Proxy') {
+                $this->_addError('Invalid Proxy class name ['
+                    . $resultClassName . ']. Use ' . $sourceClassName . '\\Proxy'
+                );
+                $result = false;
+            }
+        }
+        return $result;
     }
 }

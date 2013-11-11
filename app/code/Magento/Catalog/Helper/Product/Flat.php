@@ -96,10 +96,6 @@ class Flat extends \Magento\Catalog\Helper\Flat\AbstractFlat
      * Construct
      *
      * @param \Magento\Index\Model\ProcessFactory $processFactory
-
-     * 
-     * Constructor
-     * @param \Magento\Index\Model\ProcessFactory $processFactory
      * @param \Magento\Core\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Catalog\Model\Product\Flat\Flag $flatFlag
@@ -116,7 +112,7 @@ class Flat extends \Magento\Catalog\Helper\Flat\AbstractFlat
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
         parent::__construct($processFactory, $context);
-        $this->_flagObject = $flatFlag;
+        $this->_flagObject = $flatFlag->loadSelf();
         $this->_addFilterableAttrs = intval($addFilterableAttrs);
         $this->_addChildData = intval($addChildData);
     }
@@ -128,9 +124,6 @@ class Flat extends \Magento\Catalog\Helper\Flat\AbstractFlat
      */
     public function getFlag()
     {
-        if (is_null($this->_flagObject)) {
-            $this->_flagObject->loadSelf();
-        }
         return $this->_flagObject;
     }
 

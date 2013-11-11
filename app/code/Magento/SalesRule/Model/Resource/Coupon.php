@@ -59,7 +59,7 @@ class Coupon extends \Magento\Core\Model\Resource\Db\AbstractDb
         if (!$object->getExpirationDate()) {
             $object->setExpirationDate(null);
         } else if ($object->getExpirationDate() instanceof \Zend_Date) {
-            $object->setExpirationDate($object->getExpirationDate()->toString(\Magento\Date::DATETIME_INTERNAL_FORMAT));
+            $object->setExpirationDate($object->getExpirationDate()->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT));
         }
 
         // maintain single primary coupon per rule

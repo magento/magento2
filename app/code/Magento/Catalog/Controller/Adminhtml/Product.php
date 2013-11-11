@@ -91,7 +91,7 @@ class Product extends \Magento\Backend\Controller\Adminhtml\Action
                 $product->load($productId);
             } catch (\Exception $e) {
                 $product->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE);
-                $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Logger')->logException($e);
             }
         }
 
@@ -885,8 +885,8 @@ class Product extends \Magento\Backend\Controller\Adminhtml\Action
                 $this->_getSession()->addSuccess(__('You saved the product.'));
                 if ($product->getSku() != $originalSku) {
                     $this->_getSession()->addNotice(__('SKU for product %1 has been changed to %2.',
-                            $this->_objectManager->get('Magento\Core\Helper\Data')->escapeHtml($product->getName()),
-                            $this->_objectManager->get('Magento\Core\Helper\Data')->escapeHtml($product->getSku()))
+                            $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getName()),
+                            $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getSku()))
                     );
                 }
 
@@ -905,7 +905,7 @@ class Product extends \Magento\Backend\Controller\Adminhtml\Action
                     ->setProductData($data);
                 $redirectBack = true;
             } catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Logger')->logException($e);
                 $this->_getSession()->addError($e->getMessage());
                 $redirectBack = true;
             }
@@ -952,7 +952,7 @@ class Product extends \Magento\Backend\Controller\Adminhtml\Action
             $this->_getSession()->addSuccess(__('You duplicated the product.'));
             $this->_redirect('catalog/*/edit', array('_current'=>true, 'id'=>$newProduct->getId()));
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
             $this->_getSession()->addError($e->getMessage());
             $this->_redirect('catalog/*/edit', array('_current'=>true));
         }

@@ -53,8 +53,10 @@ class Factory
     /** @var \Magento\Acl\CacheInterface  */
     protected $_cache;
 
-    /** @var \Magento\Core\Helper\Data  */
-    private $_coreHelper;
+    /**
+     * @var \Magento\Math\Random
+     */
+    protected $_mathRandom;
 
     /**
      * @param \Magento\Webapi\Model\Acl\Rule\Factory $ruleFactory
@@ -62,7 +64,7 @@ class Factory
      * @param \Magento\Webapi\Model\Acl\Role\Factory $roleFactory
      * @param \Magento\Webapi\Model\Acl\Resource\Provider $resourceProvider
      * @param \Magento\Webapi\Model\Acl\Cache $cache
-     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Math\Random $mathRandom
      */
     public function __construct(
         \Magento\Webapi\Model\Acl\Rule\Factory $ruleFactory,
@@ -70,13 +72,13 @@ class Factory
         \Magento\Webapi\Model\Acl\Role\Factory $roleFactory,
         \Magento\Webapi\Model\Acl\Resource\Provider $resourceProvider,
         \Magento\Webapi\Model\Acl\Cache $cache,
-        \Magento\Core\Helper\Data $coreHelper
+        \Magento\Math\Random $mathRandom
     ) {
         $this->_ruleFactory = $ruleFactory;
         $this->_userFactory = $userFactory;
         $this->_roleFactory = $roleFactory;
-        $this->_coreHelper = $coreHelper;
         $this->_cache = $cache;
+        $this->_mathRandom = $mathRandom;
         $this->_initVirtualResourceMapping($resourceProvider);
     }
 
@@ -122,7 +124,7 @@ class Factory
 
         // Check if a role with this name already exists, we need a new role with a unique name
         if ($role->getId()) {
-            $uniqString = $this->_coreHelper->uniqHash();
+            $uniqString = $this->_mathRandom->getUniqueHash();
             $roleName   = $this->_createRoleName($email, $company, $uniqString);
         }
 

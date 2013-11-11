@@ -23,7 +23,7 @@
  */
 return array(
     'preferences' => array(
-        'Magento\App\UpdaterInterface' => 'Magento\App\Updater',
+        'Magento\Module\UpdaterInterface' => 'Magento\Module\Updaterter',
         'Magento\Core\Model\AppInterface' => 'Magento\Core\Model\App\Proxy',
     ),
 

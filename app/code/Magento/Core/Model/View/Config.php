@@ -41,7 +41,7 @@ class Config implements \Magento\View\ConfigInterface
     /**
      * Module configuration reader
      *
-     * @var \Magento\Core\Model\Config\Modules\Reader
+     * @var \Magento\Module\Dir\Reader
      */
     protected $_moduleReader;
 
@@ -65,13 +65,13 @@ class Config implements \Magento\View\ConfigInterface
     /**
      * View config model
      *
-     * @param \Magento\Core\Model\Config\Modules\Reader $moduleReader
+     * @param \Magento\Module\Dir\Reader $moduleReader
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\View\Service $viewService
      * @param \Magento\Core\Model\View\FileSystem $viewFileSystem
      */
     public function __construct(
-        \Magento\Core\Model\Config\Modules\Reader $moduleReader,
+        \Magento\Module\Dir\Reader $moduleReader,
         \Magento\Filesystem $filesystem,
         \Magento\Core\Model\View\Service $viewService,
         \Magento\Core\Model\View\FileSystem $viewFileSystem

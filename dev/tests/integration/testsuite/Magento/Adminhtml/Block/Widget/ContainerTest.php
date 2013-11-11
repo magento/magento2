@@ -76,7 +76,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         /** @var $layout \Magento\View\LayoutInterface */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Core\Model\Layout',
-            array('area' => \Magento\Core\Model\App\Area::AREA_ADMINHTML)
+            array('area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
         );
         /** @var $block \Magento\Adminhtml\Block\Widget\Container */
         $block = $layout->createBlock('Magento\Adminhtml\Block\Widget\Container', 'block');

@@ -35,7 +35,7 @@
             <instance type="Magento\Customer\Model\Resource\Customer\Proxy" />
         </param>
     </type>
-    <type name="Magento\App\Updater\SetupFactory">
+    <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
             <value>
                 <customer_setup>Magento\Customer\Model\Resource\Setup</customer_setup>

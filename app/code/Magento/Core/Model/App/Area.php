@@ -36,7 +36,6 @@ class Area
     const AREA_GLOBAL   = 'global';
     const AREA_FRONTEND = 'frontend';
     const AREA_ADMIN    = 'admin';
-    const AREA_ADMINHTML = 'adminhtml';
 
     const PART_CONFIG   = 'config';
     const PART_TRANSLATE= 'translate';
@@ -90,7 +89,7 @@ class Area
     protected $_objectManager;
 
     /**
-     * @var \Magento\Core\Model\ObjectManager\ConfigLoader
+     * @var \Magento\App\ObjectManager\ConfigLoader
      */
     protected $_diConfigLoader;
 
@@ -102,12 +101,12 @@ class Area
     protected $_coreStoreConfig;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
     /**
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * Core design
      *
      * @var \Magento\Core\Model\Design
@@ -120,24 +119,24 @@ class Area
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Translate $translator
      * @param \Magento\Core\Model\Config $config
-     * @param \Magento\Core\Model\ObjectManager $objectManager
-     * @param \Magento\Core\Model\ObjectManager\ConfigLoader $diConfigLoader
+     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\App\ObjectManager\ConfigLoader $diConfigLoader
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Design $design
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param string $areaCode
      */
     public function __construct(
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Translate $translator,
         \Magento\Core\Model\Config $config,
-        \Magento\Core\Model\ObjectManager $objectManager,
-        \Magento\Core\Model\ObjectManager\ConfigLoader $diConfigLoader,
+        \Magento\ObjectManager $objectManager,
+        \Magento\App\ObjectManager\ConfigLoader $diConfigLoader,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Design $design,
         \Magento\Core\Model\StoreManager $storeManager,
@@ -281,7 +280,7 @@ class Area
             'translate_object' => $this->_translator,
             'result' => $dispatchResult
         ));
-        $this->_translator->init($this->_code, $dispatchResult, false);
+        $this->_translator->init(null, $dispatchResult, false);
 
         \Magento\Phrase::setRenderer($this->_objectManager->get('Magento\Phrase\RendererInterface'));
         return $this;

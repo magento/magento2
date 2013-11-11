@@ -81,7 +81,7 @@ class Tree extends \Magento\Data\Tree\Dbp
     protected $_storeId                          = null;
 
     /**
-     * @var \Magento\Core\Model\Resource
+     * @var \Magento\App\Resource
      */
     protected $_coreResource;
 
@@ -95,7 +95,7 @@ class Tree extends \Magento\Data\Tree\Dbp
     /**
      * Cache
      *
-     * @var \Magento\Core\Model\CacheInterface
+     * @var \Magento\App\CacheInterface
      */
     protected $_cache;
 
@@ -110,18 +110,18 @@ class Tree extends \Magento\Data\Tree\Dbp
      * Construct
      *
      * @param \Magento\Catalog\Model\Resource\Category $catalogCategory
-     * @param \Magento\Core\Model\CacheInterface $cache
+     * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
      * @param \Magento\Catalog\Model\Resource\Category\Collection\Factory $collectionFactory
      */
     public function __construct(
         \Magento\Catalog\Model\Resource\Category $catalogCategory,
-        \Magento\Core\Model\CacheInterface $cache,
+        \Magento\App\CacheInterface $cache,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
         \Magento\Catalog\Model\Resource\Category\Collection\Factory $collectionFactory
@@ -399,6 +399,21 @@ class Tree extends \Magento\Data\Tree\Dbp
     }
 
     /**
+     * Clean unneeded collection
+     *
+     * @param \Magento\Catalog\Model\Resource\Category\Collection|array $object
+     */
+    protected function _clean($object)
+    {
+        if (is_array($object)) {
+            foreach ($object as $obj) {
+                $this->_clean($obj);
+            }
+        }
+        unset($object);
+    }
+
+    /**
      * Enter description here...
      *
      * @param \Magento\Catalog\Model\Resource\Category\Collection $collection
@@ -407,7 +422,7 @@ class Tree extends \Magento\Data\Tree\Dbp
     public function setCollection($collection)
     {
         if (!is_null($this->_collection)) {
-            destruct($this->_collection);
+            $this->_clean($this->_collection);
         }
         $this->_collection = $collection;
         return $this;

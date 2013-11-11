@@ -90,9 +90,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_configFactory;
 
     /**
-     * \Magento\Data\Form\Factory
+     * \Magento\Data\FormFactory
      *
-     * @var \Magento\Data\Form\Factory
+     * @var \Magento\Data\FormFactory
      */
     protected $_formFactory;
 
@@ -137,7 +137,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Core\Model\Config $coreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\Form\Factory $formFactory
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
@@ -152,7 +152,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Core\Model\Config $coreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Data\Form\Factory $formFactory,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
         array $data = array()
@@ -466,10 +466,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     public function getConfigValue($path)
     {
         return $this->_config->getValue($path, $this->getScope(), $this->getScopeCode());
-        if (empty($this->_configRoot)) {
-            $this->_configRoot = $this->_coreConfig->getNode(null, $this->getScope(), $this->getScopeCode());
-        }
-        return $this->_configRoot;
     }
 
     /**

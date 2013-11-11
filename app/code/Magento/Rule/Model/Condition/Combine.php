@@ -42,7 +42,7 @@ class Combine extends \Magento\Rule\Model\Condition\AbstractCondition
     protected $_conditionFactory;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 

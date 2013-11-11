@@ -37,7 +37,7 @@ class MenuConfigFilesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $moduleReader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Config\Modules\Reader');
+            ->create('Magento\Module\Dir\Reader');
         $schemaFile = $moduleReader->getModuleDir('etc', 'Magento_Backend') . DIRECTORY_SEPARATOR . 'menu.xsd';
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Backend\Model\Menu\Config\Reader',

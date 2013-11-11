@@ -49,8 +49,32 @@ namespace Magento\Log\Model;
 class Customer extends \Magento\Core\Model\AbstractModel
 {
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @param \Magento\Core\Model\Context $context
+     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Core\Model\Context $context,
+        \Magento\Core\Model\Registry $registry,
+        \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Data\Collection\Db $resourceCollection = null,
+        array $data = array()
+    ) {
+        $this->dateTime = $dateTime;
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+    }
+
+    /**
      * Define resource model
-     *
      */
     protected function _construct()
     {
@@ -82,7 +106,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     {
         $loginAt = $this->getLoginAt();
         if ($loginAt) {
-            return \Magento\Date::toTimestamp($loginAt);
+            return $this->dateTime->toTimestamp($loginAt);
         }
 
         return null;

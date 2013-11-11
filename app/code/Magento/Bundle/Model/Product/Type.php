@@ -152,7 +152,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\Registry $coreRegistry
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Bundle\Model\SelectionFactory $bundleModelSelection
@@ -176,7 +176,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Filesystem $filesystem,
         \Magento\Core\Model\Registry $coreRegistry,
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Bundle\Model\SelectionFactory $bundleModelSelection,

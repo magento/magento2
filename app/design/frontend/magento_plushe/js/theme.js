@@ -29,9 +29,9 @@
         var list = $('[data-action="scroll"]').addClass('carousel');
         var listInner = $('> .minilist.items', list);
         var items = $('.item', list);
-        var itemWidth = $(items[0]).outerWidth();
-        var perpage = Math.floor(list.outerWidth()/itemWidth);
-        var pages = Math.floor(items.length/perpage);
+        var itemWidth = $(items).length ? $(items[0]).outerWidth() : null;
+        var perpage = (itemWidth !== null) ? Math.floor(list.outerWidth()/itemWidth) : null;
+        var pages = (perpage !== null) ? Math.floor(items.length/perpage) : null;
         var page=0;
         for (var i=0 ; i < perpage; i++) {
             $(items[i + page*perpage]).addClass('shown');

@@ -43,37 +43,27 @@ class Page extends \Zend_Pdf_Page
     const ALIGN_CENTER = 'center';
 
     /**
-     * Dhl International Label Creation Class Pdf Page constructor
-     * Create/Make a copy of pdf page
-     *
-     * @param \Magento\Usa\Model\Shipping\Carrier\Dhl\Label\Pdf\Page|string $param1
-     * @param null $param2
-     * @param null $param3
+     * @var \Magento\Stdlib\String
      */
-    /**
-     * Dhl International Label Creation Class Pdf Page constructor
-     *
-     * Create/Make a copy of pdf page
-     *
-     * @param \Magento\Core\Helper\String $coreString
-     * @param \Magento\Usa\Model\Shipping\Carrier\Dhl\Label\Pdf\Page|string $param1
-     * @param null $param2
-     * @param null $param3
-     */
-    /**
-     * Core string
-     *
-     * @var \Magento\Core\Helper\String
-     */
-    protected $_coreString = null;
+    protected $string;
 
+    /**
+     * Dhl International Label Creation Class Pdf Page constructor
+     *
+     * Create/Make a copy of pdf page
+     *
+     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Usa\Model\Shipping\Carrier\Dhl\Label\Pdf\Page|string $param1
+     * @param null $param2
+     * @param null $param3
+     */
     public function __construct(
-        \Magento\Core\Helper\String $coreString,
+        \Magento\Stdlib\String $string,
         $param1,
         $param2 = null,
         $param3 = null
     ) {
-        $this->_coreString = $coreString;
+        $this->string = $string;
         if ($param1 instanceof \Magento\Usa\Model\Shipping\Carrier\Dhl\Label\Pdf\Page
             && $param2 === null && $param3 === null
         ) {
@@ -162,7 +152,7 @@ class Page extends \Zend_Pdf_Page
     {
         foreach ($lines as $line) {
             if (strlen($line) > $maxWidth) {
-                $subLines = $this->_coreString->strSplit($line, $maxWidth, true, true);
+                $subLines = $this->string->split($line, $maxWidth, true, true);
                 $y = $this->drawLines(array_filter($subLines), $x, $y, $maxWidth, $align);
                 continue;
             }

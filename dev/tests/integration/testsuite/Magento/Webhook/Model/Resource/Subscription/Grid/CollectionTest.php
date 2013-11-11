@@ -108,78 +108,28 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function _createSubscriptionConfig()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $dirs = $objectManager->create(
-            'Magento\App\Dir',
-            array(
-                'baseDir' => BP,
-                'dirs' => array(
-                    \Magento\App\Dir::MODULES => __DIR__ . '/_files',
-                    \Magento\App\Dir::CONFIG => __DIR__ . '/_files',
+
+        $configMock = $this->getMock('Magento\Webhook\Model\Config', array(), array(), '', false, false);
+        $subscriptions = array(
+            'subscription_alias' => array(
+                'name' => 'Test subscriber',
+                'endpoint_url' => 'http://mage.loc/mage-twitter-integration/web/index.php/endpoint',
+                'topics' => array(
+                    'customer' => array(
+                        'created' => '',
+                        'updated' => '',
+                        'deleted' => '',
+                    ),
+                    'order' => array(
+                        'created'
+                    ),
                 ),
-            )
-        );
-
-        $moduleList = $objectManager->create('Magento\App\ModuleList', array(
-            'reader' => $objectManager->create('Magento\App\Module\Declaration\Reader\Filesystem',
-                array(
-                    'fileResolver' => $objectManager->create(
-                        'Magento\App\Module\Declaration\FileResolver',
-                        array(
-                            'applicationDirs' => $dirs
-                        )
-                    )
-                )
             ),
-            'cache' => $this->getMock('Magento\Config\CacheInterface')
-        ));
-
-        /** @var \Magento\Core\Model\Config\Modules\Reader $moduleReader */
-        $moduleReader = $objectManager->create('Magento\Core\Model\Config\Modules\Reader', array(
-            'moduleList' => $moduleList
-        ));
-        $moduleReader->setModuleDir('Acme_Subscriber', 'etc', __DIR__ . '/_files/Acme/Subscriber/etc');
-
-        /** @var \Magento\Core\Model\Config\Loader $modulesLoader */
-        $modulesLoader = $objectManager->create(
-            'Magento\Core\Model\Config\Loader', array(
-                'fileReader' => $moduleReader
-        ));
-
-        $config = new \Magento\Core\Model\Config\Base('<config />');
-        $modulesLoader->load($config);
-
-        /**
-         * Mock is used to disable caching, as far as Integration Tests Framework loads main
-         * modules configuration first and it gets cached
-         *
-         * @var \PHPUnit_Framework_MockObject_MockObject $cache
-         */
-        $cache = $this->getMock('Magento\Core\Model\Config\Cache',
-            array('load', 'save', 'clean', 'getSection'),
-            array(), '', false);
-
-        $cache->expects($this->any())
-            ->method('load')
-            ->will($this->returnValue(false));
-
-        /** @var \Magento\Core\Model\Config\Storage $storage */
-        $storage = $objectManager->create(
-            'Magento\Core\Model\Config\Storage', array(
-                'loader' => $modulesLoader,
-                'cache' => $cache
-            )
         );
+        $configMock->expects($this->any())->method('getSubscriptions')->will($this->returnValue($subscriptions));
 
-        /** @var \Magento\Core\Model\Config $mageConfig */
-        $mageConfig = $objectManager->create('Magento\Core\Model\Config', array(
-            'storage' => $storage,
-            'moduleReader' => $moduleReader,
-            'moduleList' => $moduleList
-        ));
-
-        /** @var \Magento\Webhook\Model\Subscription\Config $config */
         return $objectManager->create('Magento\Webhook\Model\Subscription\Config', array(
-            'mageConfig' => $mageConfig
+            'config' => $configMock
         ));
     }
 
@@ -188,11 +138,16 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_subscriptions = array();
 
-        /** @var $configModel \Magento\Core\Model\Config */
-        $configModel = $objectManager->get('Magento\Core\Model\Config');
-        $configModel->setNode('global/webhook/webhooks/listeners/one/label', 'One Listener');
-        $configModel->setNode('global/webhook/webhooks/listeners/two/label', 'Two Listeners');
-        $configModel->setNode('global/webhook/webhooks/listeners/three/label', 'Three Listeners');
+        $configMock = $this->getMock('Magento\Webhook\Model\Config', array(), array(), '', false, false);
+        $webHooks = array(
+            'listeners' => array(
+                'one' => array('label' => 'One Listener'),
+                'two' => array('label' => 'Two Listeners'),
+                'three' => array('label' => 'Three Listeners'),
+            )
+        );
+        $configMock->expects($this->any())->method('getWebhooks')->will($this->returnValue($webHooks));
+        $objectManager->addSharedInstance($configMock, 'Magento\Webhook\Model\Config');
 
         /** @var \Magento\Webhook\Model\Subscription $subscription */
         $subscription = $objectManager->create('Magento\Webhook\Model\Subscription');

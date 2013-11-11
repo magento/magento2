@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Helper;
 
 /**
  * Sales module base helper
  */
-namespace Magento\Sales\Helper;
-
 class Guest extends \Magento\Core\Helper\Data
 {
     /**
@@ -81,14 +80,11 @@ class Guest extends \Magento\Core\Helper\Data
     /**
      * @param \Magento\Core\Helper\Context $context
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Helper\Http $coreHttp
-     * @param \Magento\Core\Model\Config $config
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Core\Model\Locale $locale
      * @param \Magento\Core\Model\Date $dateModel
      * @param \Magento\App\State $appState
-     * @param \Magento\Core\Model\Encryption $encryptor
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Core\Model\Cookie $coreCookie
@@ -100,14 +96,11 @@ class Guest extends \Magento\Core\Helper\Data
     public function __construct(
         \Magento\Core\Helper\Context $context,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Helper\Http $coreHttp,
-        \Magento\Core\Model\Config $config,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Core\Model\Locale $locale,
         \Magento\Core\Model\Date $dateModel,
         \Magento\App\State $appState,
-        \Magento\Core\Model\Encryption $encryptor,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Core\Model\Cookie $coreCookie,
@@ -115,16 +108,22 @@ class Guest extends \Magento\Core\Helper\Data
         \Magento\Core\Model\Session $coreSession,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         $dbCompatibleMode = true
-    )
-    {
+    ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_customerSession = $customerSession;
         $this->_coreCookie = $coreCookie;
         $this->_coreApp = $coreApp;
         $this->_coreSession = $coreSession;
         $this->_orderFactory = $orderFactory;
-        parent::__construct($context, $eventManager, $coreHttp, $config, $coreStoreConfig, $storeManager,
-            $locale, $dateModel, $appState, $encryptor, $dbCompatibleMode
+        parent::__construct(
+            $context,
+            $eventManager,
+            $coreStoreConfig,
+            $storeManager,
+            $locale,
+            $dateModel,
+            $appState,
+            $dbCompatibleMode
         );
     }
 
@@ -149,7 +148,7 @@ class Guest extends \Magento\Core\Helper\Data
         if (empty($post) && !$this->_coreCookie->get($this->_cookieName)) {
             $this->_coreApp->getResponse()->setRedirect($this->_urlBuilder->getUrl('sales/guest/form'));
             return false;
-        } elseif (!empty($post) && isset($post['oar_order_id']) && isset($post['oar_type']))  {
+        } elseif (!empty($post) && isset($post['oar_order_id']) && isset($post['oar_type'])) {
             $type           = $post['oar_type'];
             $incrementId    = $post['oar_order_id'];
             $lastName       = $post['oar_billing_lastname'];

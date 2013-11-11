@@ -24,11 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Ogone\Model;
+
 /**
  * Ogone payment method model
  */
-namespace Magento\Ogone\Model;
-
 class Api extends \Magento\Payment\Model\Method\AbstractMethod
 {
     /**
@@ -168,25 +168,23 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
 
     /**
      * Parameters hashing context
-     * @var string
      */
     const HASH_DIR_OUT = 'out';
     const HASH_DIR_IN = 'in';
 
     /**
      * Supported hashing algorithms
-     * @var string
      */
     const HASH_SHA1 = 'sha1';
     const HASH_SHA256 = 'sha256';
     const HASH_SHA512 = 'sha512';
 
     /**
-     * Core string
+     * Magento string lib
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
-    protected $_coreString = null;
+    protected $string;
 
     /**
      * @var \Magento\UrlInterface
@@ -212,7 +210,7 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\UrlInterface $urlBuilder
-     * @param \Magento\Core\Helper\String $coreString
+     * @param \Magento\Stdlib\String $string
      * @param \Magento\Ogone\Model\Config $config
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param array $data
@@ -224,7 +222,7 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\UrlInterface $urlBuilder,
-        \Magento\Core\Helper\String $coreString,
+        \Magento\Stdlib\String $string,
         \Magento\Ogone\Model\Config $config,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         array $data = array()
@@ -232,7 +230,7 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
         $this->_storeManager = $storeManager;
         $this->_locale = $locale;
         $this->_urlBuilder = $urlBuilder;
-        $this->_coreString = $coreString;
+        $this->string = $string;
         $this->_config = $config;
         parent::__construct($eventManager, $paymentData, $coreStoreConfig, $logAdapterFactory, $data);
     }
@@ -455,12 +453,12 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
                 continue;
             }
             //COM filed can only handle max 100
-            if ($this->_coreString->strlen($invoiceDesc.$item->getName()) > 100) {
+            if ($this->string->strlen($invoiceDesc.$item->getName()) > 100) {
                 break;
             }
             $invoiceDesc .= $item->getName() . ', ';
         }
-        return $this->_coreString->substr($invoiceDesc, 0, -2);
+        return $this->string->substr($invoiceDesc, 0, -2);
     }
 
     /**

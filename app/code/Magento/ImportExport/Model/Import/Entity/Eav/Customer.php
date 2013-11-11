@@ -133,11 +133,11 @@ class Customer
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Helper\String $coreString
+     * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\App $app
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -148,11 +148,11 @@ class Customer
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Helper\String $coreString,
+        \Magento\Stdlib\String $string,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Core\Model\App $app,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
@@ -172,7 +172,7 @@ class Customer
             $data['attribute_collection'] = $this->_attributeCollection;
         }
 
-        parent::__construct($coreData, $coreString, $coreStoreConfig, $importFactory, $resourceHelper, $resource,
+        parent::__construct($coreData, $string, $coreStoreConfig, $importFactory, $resourceHelper, $resource,
             $app, $collectionFactory, $eavConfig, $storageFactory, $data);
 
         $this->_specialAttributes[] = self::COLUMN_WEBSITE;
@@ -197,8 +197,7 @@ class Customer
             __('Invalid password length')
         );
 
-        $this->_initStores(true)
-            ->_initAttributes();
+        $this->_initStores(true)->_initAttributes();
 
         $this->_customerModel = $customerFactory->create();
         /** @var $customerResource \Magento\Customer\Model\Resource\Customer */
@@ -314,8 +313,8 @@ class Customer
             'store_id'   => empty($rowData[self::COLUMN_STORE])
                 ? 0 : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]],
 
-            'created_at' => $createdAt->format(\Magento\Date::DATETIME_PHP_FORMAT),
-            'updated_at' => $now->format(\Magento\Date::DATETIME_PHP_FORMAT),
+            'created_at' => $createdAt->format(\Magento\Stdlib\DateTime::DATETIME_PHP_FORMAT),
+            'updated_at' => $now->format(\Magento\Stdlib\DateTime::DATETIME_PHP_FORMAT),
         );
 
         $emailInLowercase = strtolower($rowData[self::COLUMN_EMAIL]);
@@ -347,7 +346,7 @@ class Customer
                     $value = $attributeParameters['options'][strtolower($value)];
                 } elseif ('datetime' == $attributeParameters['type']) {
                     $value = new \DateTime('@' . strtotime($value));
-                    $value = $value->format(\Magento\Date::DATETIME_PHP_FORMAT);
+                    $value = $value->format(\Magento\Stdlib\DateTime::DATETIME_PHP_FORMAT);
                 } elseif ($backendModel) {
                     $attribute->getBackend()->beforeSave($this->_customerModel->setData($attributeCode, $value));
                     $value = $this->_customerModel->getData($attributeCode);
@@ -459,7 +458,7 @@ class Customer
             }
             // check password
             if (isset($rowData['password']) && strlen($rowData['password'])
-                && $this->_stringHelper->strlen($rowData['password']) < self::MIN_PASSWORD_LENGTH
+                && $this->string->strlen($rowData['password']) < self::MIN_PASSWORD_LENGTH
             ) {
                 $this->addRowError(self::ERROR_PASSWORD_LENGTH, $rowNumber);
             }

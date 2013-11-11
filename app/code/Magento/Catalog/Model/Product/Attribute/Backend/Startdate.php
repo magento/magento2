@@ -49,12 +49,12 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
      *
      * @param \Magento\Core\Model\Date $date
      * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      */
     public function __construct(
         \Magento\Core\Model\Date $date,
         \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Core\Model\Logger $logger
+        \Magento\Logger $logger
     ) {
         $this->_date = $date;
         parent::__construct($logger, $locale);

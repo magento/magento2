@@ -44,23 +44,21 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     const SKU_MAX_LENGTH = 64;
 
     /**
-     * Core string
+     * Magento string lib
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
-    protected $_coreString = null;
+    protected $string;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Core\Model\Logger $logger
-     * @param \Magento\Core\Helper\String $coreString
+     * @param \Magento\Logger $logger
+     * @param \Magento\Stdlib\String $string
      */
     public function __construct(
-        \Magento\Core\Model\Logger $logger,
-        \Magento\Core\Helper\String $coreString
+        \Magento\Logger $logger,
+        \Magento\Stdlib\String $string
     ) {
-        $this->_coreString = $coreString;
+        $this->string = $string;
         parent::__construct($logger);
     }
 
@@ -73,14 +71,13 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function validate($object)
     {
-        $helper = $this->_coreString;
         $attrCode = $this->getAttribute()->getAttributeCode();
         $value = $object->getData($attrCode);
         if ($this->getAttribute()->getIsRequired() && $this->getAttribute()->isValueEmpty($value)) {
             return false;
         }
 
-        if ($helper->strlen($object->getSku()) > self::SKU_MAX_LENGTH) {
+        if ($this->string->strlen($object->getSku()) > self::SKU_MAX_LENGTH) {
             throw new \Magento\Core\Exception(
                 __('SKU length should be %1 characters maximum.', self::SKU_MAX_LENGTH)
             );

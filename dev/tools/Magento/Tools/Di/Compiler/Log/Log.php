@@ -29,38 +29,50 @@ class Log
     const GENERATION_ERROR = 1;
     const GENERATION_SUCCESS = 2;
     const COMPILATION_ERROR = 3;
+    const CONFIGURATION_ERROR = 4;
 
     /**
-     * Log writer
+     * Success log writer
      *
      * @var Writer\WriterInterface
      */
-    protected $_writer;
+    protected $_successWriter;
 
     /**
-     * List of log entries
+     * Error log writer
+     *
+     * @var Writer\WriterInterface
+     */
+    protected $_errorWriter;
+
+    /**
+     * List of success log entries
      *
      * @var array
      */
-    protected $_entries = array();
+    protected $_successEntries = array();
 
     /**
-     * Allowed log types
+     * List of error entries
      *
      * @var array
      */
-    protected $_allowedTypes;
+    protected $_errorEntries = array();
 
     /**
-     * @param Writer\WriterInterface $writer
-     * @param array $allowedTypes
+     * @param Writer\WriterInterface $successWriter
+     * @param Writer\WriterInterface $errorWriter
      */
-    public function __construct(Writer\WriterInterface $writer, $allowedTypes = array())
+    public function __construct(Writer\WriterInterface $successWriter, Writer\WriterInterface $errorWriter)
     {
-        $this->_writer = $writer;
-        $this->_allowedTypes = empty($allowedTypes)
-            ? array(self::GENERATION_ERROR, self::COMPILATION_ERROR, self::GENERATION_SUCCESS)
-            : $allowedTypes;
+        $this->_successWriter = $successWriter;
+        $this->_errorWriter = $errorWriter;
+        $this->_successEntries[self::GENERATION_SUCCESS] = array();
+        $this->_errorEntries = array(
+            self::CONFIGURATION_ERROR => array(),
+            self::GENERATION_ERROR    => array(),
+            self::COMPILATION_ERROR   => array(),
+        );
     }
 
     /**
@@ -72,8 +84,10 @@ class Log
      */
     public function add($type, $key, $message = '')
     {
-        if (in_array($type, $this->_allowedTypes)) {
-            $this->_entries[$type][$key][] = $message;
+        if (array_key_exists($type, $this->_successEntries)) {
+            $this->_successEntries[$type][$key][] = $message;
+        } else {
+            $this->_errorEntries[$type][$key][] = $message;
         }
     }
 
@@ -82,6 +96,22 @@ class Log
      */
     public function report()
     {
-        $this->_writer->write($this->_entries);
+        $this->_successWriter->write($this->_successEntries);
+        $this->_errorWriter->write($this->_errorEntries);
+    }
+
+    /**
+     * Check whether error exists
+     *
+     * @return bool
+     */
+    public function hasError()
+    {
+        foreach ($this->_errorEntries as $data) {
+            if (count($data)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

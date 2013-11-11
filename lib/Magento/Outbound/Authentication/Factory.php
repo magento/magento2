@@ -30,7 +30,7 @@ namespace Magento\Outbound\Authentication;
 
 class Factory
 {
-    /** @var \Magento\Core\Model\ObjectManager  */
+    /** @var \Magento\App\ObjectManager  */
     private $_objectManager;
 
     /**

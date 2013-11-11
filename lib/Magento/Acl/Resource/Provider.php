@@ -31,28 +31,28 @@ class Provider implements \Magento\Acl\Resource\ProviderInterface
     protected $_configReader;
 
     /**
-     * @var \Magento\Config\ScopeInterface
-     */
-    protected $_scope;
-
-    /**
      * @var \Magento\Acl\Resource\TreeBuilder
      */
     protected $_resourceTreeBuilder;
 
     /**
+     * @var \Magento\App\State
+     */
+    protected $_appState;
+
+    /**
      * @param \Magento\Config\ReaderInterface $configReader
-     * @param \Magento\Config\ScopeInterface $scope
      * @param \Magento\Acl\Resource\TreeBuilder $resourceTreeBuilder
+     * @param \Magento\App\State $appState
      */
     public function __construct(
         \Magento\Config\ReaderInterface $configReader,
-        \Magento\Config\ScopeInterface $scope,
-        \Magento\Acl\Resource\TreeBuilder $resourceTreeBuilder
+        \Magento\Acl\Resource\TreeBuilder $resourceTreeBuilder,
+        \Magento\App\State $appState
     ) {
         $this->_configReader = $configReader;
-        $this->_scope = $scope;
         $this->_resourceTreeBuilder = $resourceTreeBuilder;
+        $this->_appState = $appState;
     }
 
     /**
@@ -60,7 +60,7 @@ class Provider implements \Magento\Acl\Resource\ProviderInterface
      */
     public function getAclResources()
     {
-        $aclResourceConfig = $this->_configReader->read($this->_scope->getCurrentScope());
+        $aclResourceConfig = $this->_configReader->read($this->_appState->getAreaCode());
         if (!empty($aclResourceConfig['config']['acl']['resources'])) {
             return $this->_resourceTreeBuilder->build($aclResourceConfig['config']['acl']['resources']);
         }

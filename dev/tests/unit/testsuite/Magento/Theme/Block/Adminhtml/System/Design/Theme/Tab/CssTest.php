@@ -61,7 +61,7 @@ class CssTest extends \PHPUnit_Framework_TestCase
         $constructArguments = $objectManagerHelper->getConstructArguments(
             'Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css',
             array(
-                'formFactory'      => $this->getMock('Magento\Data\Form\Factory', array(), array(), '', false),
+                'formFactory'      => $this->getMock('Magento\Data\FormFactory', array(), array(), '', false),
                 'objectManager'   => $this->_objectManager,
                 'dirs'            => new \Magento\App\Dir(__DIR__),
                 'uploaderService' => $this->getMock(

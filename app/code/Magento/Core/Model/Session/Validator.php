@@ -42,9 +42,9 @@ class Validator
     protected $_storeConfig;
 
     /**
-     * @var \Magento\Core\Helper\Http
+     * @var \Magento\HTTP\PhpEnvironment\RemoteAddress
      */
-    protected $_helper;
+    protected $_remoteAddress;
 
     /**
      * @var array
@@ -53,16 +53,16 @@ class Validator
 
     /**
      * @param \Magento\Core\Model\Store\Config $storeConfig
-     * @param \Magento\Core\Helper\Http $helper
+     * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param array $skippedUserAgentList
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $storeConfig,
-        \Magento\Core\Helper\Http $helper,
+        \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         array $skippedUserAgentList = array()
     ) {
         $this->_storeConfig = $storeConfig;
-        $this->_helper = $helper;
+        $this->_remoteAddress = $remoteAddress;
         $this->_skippedAgentList = $skippedUserAgentList;
     }
 
@@ -143,8 +143,8 @@ class Validator
         );
 
         // collect ip data
-        if ($this->_helper->getRemoteAddr()) {
-            $parts[self::VALIDATOR_REMOTE_ADDR_KEY] = $this->_helper->getRemoteAddr();
+        if ($this->_remoteAddress->getRemoteAddress()) {
+            $parts[self::VALIDATOR_REMOTE_ADDR_KEY] = $this->_remoteAddress->getRemoteAddress();
         }
         if (isset($_ENV['HTTP_VIA'])) {
             $parts[self::VALIDATOR_HTTP_VIA_KEY] = (string)$_ENV['HTTP_VIA'];

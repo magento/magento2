@@ -24,36 +24,16 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Core data helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Core\Helper;
 
+/**
+ * Core data helper
+ */
 class Data extends \Magento\Core\Helper\AbstractHelper
 {
     const XML_PATH_DEFAULT_COUNTRY              = 'general/country/default';
-    const XML_PATH_PROTECTED_FILE_EXTENSIONS    = 'general/file/protected_extensions';
-    const XML_PATH_PUBLIC_FILES_VALID_PATHS     = 'general/file/public_files_valid_paths';
     const XML_PATH_DEV_ALLOW_IPS                = 'dev/restrict/allow_ips';
     const XML_PATH_CONNECTION_TYPE              = 'global/resources/default_setup/connection/type';
-
-    const CHARS_LOWERS                          = 'abcdefghijklmnopqrstuvwxyz';
-    const CHARS_UPPERS                          = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const CHARS_DIGITS                          = '0123456789';
-    const CHARS_SPECIALS                        = '!$*+-.=?@^_|~';
-    const CHARS_PASSWORD_LOWERS                 = 'abcdefghjkmnpqrstuvwxyz';
-    const CHARS_PASSWORD_UPPERS                 = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-    const CHARS_PASSWORD_DIGITS                 = '23456789';
-    const CHARS_PASSWORD_SPECIALS               = '!$*-.=?@_';
-
-    /**
-     * Config pathes to merchant country code and merchant VAT number
-     */
-    const XML_PATH_MERCHANT_COUNTRY_CODE = 'general/store_information/country_id';
-    const XML_PATH_MERCHANT_VAT_NUMBER = 'general/store_information/merchant_vat_number';
-    const XML_PATH_EU_COUNTRIES_LIST = 'general/country/eu_countries';
 
     const XML_PATH_SINGLE_STORE_MODE_ENABLED = 'general/single_store_mode/enabled';
 
@@ -67,29 +47,12 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      */
     const XML_PATH_SYSTEM_SMTP_DISABLE = 'system/smtp/disable';
 
-    /**
-     * @var \Magento\Core\Model\Encryption
-     */
-    protected $_encryptor;
-
     protected $_allowedFormats = array(
         \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_FULL,
         \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_LONG,
         \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM,
         \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT
     );
-
-    /**
-     * @var \Magento\Core\Model\Config
-     */
-    protected $_config;
-
-    /**
-     * Core http
-     *
-     * @var \Magento\Core\Helper\Http
-     */
-    protected $_coreHttp = null;
 
     /**
      * Core event manager proxy
@@ -102,11 +65,6 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * @var \Magento\Core\Model\Cache\Config
      */
     protected $_cacheConfig;
-
-    /**
-     * @var \Magento\Core\Model\EncryptionFactory
-     */
-    protected $_encryptorFactory;
 
     /**
      * @var \Magento\Core\Model\Fieldset\Config
@@ -146,54 +104,41 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_dbCompatibleMode;
 
     /**
-     * @param \Magento\Core\Helper\Context $context
+     * @var \Magento\HTTP\PhpEnvironment\RemoteAddress
+     */
+    protected $_remoteAddress;
+
+    /**
+     * @param Context $context
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Helper\Http $coreHttp
-     * @param \Magento\Core\Model\Config $config
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Core\Model\Locale $locale
      * @param \Magento\Core\Model\Date $dateModel
      * @param \Magento\App\State $appState
-     * @param \Magento\Core\Model\Encryption $encryptor
      * @param bool $dbCompatibleMode
      */
     public function __construct(
         \Magento\Core\Helper\Context $context,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Helper\Http $coreHttp,
-        \Magento\Core\Model\Config $config,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Core\Model\Locale $locale,
         \Magento\Core\Model\Date $dateModel,
         \Magento\App\State $appState,
-        \Magento\Core\Model\Encryption $encryptor,
         $dbCompatibleMode = true
     ) {
         $this->_eventManager = $eventManager;
-        $this->_coreHttp = $coreHttp;
         $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_remoteAddress = $context->getRemoteAddress();
         parent::__construct($context);
-        $this->_config = $config;
         $this->_cacheConfig = $context->getCacheConfig();
-        $this->_encryptorFactory = $context->getEncryptorFactory();
         $this->_fieldsetConfig = $context->getFieldsetConfig();
         $this->_storeManager = $storeManager;
         $this->_locale = $locale;
         $this->_dateModel = $dateModel;
         $this->_appState = $appState;
-        $this->_encryptor = $encryptor;
-        $this->_encryptor->setHelper($this);
         $this->_dbCompatibleMode = $dbCompatibleMode;
-    }
-
-    /**
-     * @return \Magento\Core\Model\Encryption
-     */
-    public function getEncryptor()
-    {
-        return $this->_encryptor;
     }
 
     /**
@@ -266,8 +211,11 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * @param   bool                $showTime Whether to include time
      * @return  string
      */
-    public function formatDate($date = null, $format = \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT, $showTime = false)
-    {
+    public function formatDate(
+        $date = null,
+        $format = \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT,
+        $showTime = false
+    ) {
         if (!in_array($format, $this->_allowedFormats, true)) {
             return $date;
         }
@@ -301,8 +249,11 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * @param   bool                $showDate
      * @return  string
      */
-    public function formatTime($time = null, $format = \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT, $showDate = false)
-    {
+    public function formatTime(
+        $time = null,
+        $format = \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT,
+        $showDate = false
+    ) {
         if (!in_array($format, $this->_allowedFormats, true)) {
             return $time;
         }
@@ -325,148 +276,19 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     }
 
     /**
-     * Encrypt data using application key
-     *
-     * @param   string $data
-     * @return  string
+     * @param null $storeId
+     * @return bool
      */
-    public function encrypt($data)
-    {
-        if (!$this->_appState->isInstalled()) {
-            return $data;
-        }
-        return $this->getEncryptor()->encrypt($data);
-    }
-
-    /**
-     * Decrypt data using application key
-     *
-     * @param   string $data
-     * @return  string
-     */
-    public function decrypt($data)
-    {
-        if (!$this->_appState->isInstalled()) {
-            return $data;
-        }
-        return $this->getEncryptor()->decrypt($data);
-    }
-
-    public function validateKey($key)
-    {
-        return $this->getEncryptor()->validateKey($key);
-    }
-
-    public function getRandomString($len, $chars = null)
-    {
-        if (is_null($chars)) {
-            $chars = self::CHARS_LOWERS . self::CHARS_UPPERS . self::CHARS_DIGITS;
-        }
-        mt_srand(10000000*(double)microtime());
-        for ($i = 0, $str = '', $lc = strlen($chars)-1; $i < $len; $i++) {
-            $str .= $chars[mt_rand(0, $lc)];
-        }
-        return $str;
-    }
-
-    /**
-     * Generate salted hash from password
-     *
-     * @param string $password
-     * @param string|integer|boolean $salt
-     * @return string
-     */
-    public function getHash($password, $salt = false)
-    {
-        return $this->getEncryptor()->getHash($password, $salt);
-    }
-
-    public function validateHash($password, $hash)
-    {
-        return $this->getEncryptor()->validateHash($password, $hash);
-    }
-
-    /**
-     * Retrieve store identifier
-     *
-     * @param   mixed $store
-     * @return  int
-     */
-    public function getStoreId($store=null)
-    {
-        return $this->_storeManager->getStore($store)->getId();
-    }
-
-    /**
-     * Remove accents
-     *
-     * @param string $string
-     * @param bool $german
-     * @return string
-     */
-    public function removeAccents($string, $german = false)
-    {
-        static $replacements;
-
-        if (empty($replacements[$german])) {
-            $substitutions = array(
-                // single ISO-8859-1 letters
-                192 => 'A', 193 => 'A', 194 => 'A', 195 => 'A', 196 => 'A', 197 => 'A', 199 => 'C',
-                208 => 'D', 200 => 'E', 201 => 'E', 202 => 'E', 203 => 'E', 204 => 'I', 205 => 'I',
-                206 => 'I', 207 => 'I', 209 => 'N', 210 => 'O', 211 => 'O', 212 => 'O', 213 => 'O',
-                214 => 'O', 216 => 'O', 138 => 'S', 217 => 'U', 218 => 'U', 219 => 'U', 220 => 'U',
-                221 => 'Y', 142 => 'Z', 224 => 'a', 225 => 'a', 226 => 'a', 227 => 'a', 228 => 'a',
-                229 => 'a', 231 => 'c', 232 => 'e', 233 => 'e', 234 => 'e', 235 => 'e', 236 => 'i',
-                237 => 'i', 238 => 'i', 239 => 'i', 241 => 'n', 240 => 'o', 242 => 'o', 243 => 'o',
-                244 => 'o', 245 => 'o', 246 => 'o', 248 => 'o', 154 => 's', 249 => 'u', 250 => 'u',
-                251 => 'u', 252 => 'u', 253 => 'y', 255 => 'y', 158 => 'z',
-                // HTML entities
-                258 => 'A', 260 => 'A', 262 => 'C', 268 => 'C', 270 => 'D', 272 => 'D', 280 => 'E',
-                282 => 'E', 286 => 'G', 304 => 'I', 313 => 'L', 317 => 'L', 321 => 'L', 323 => 'N',
-                327 => 'N', 336 => 'O', 340 => 'R', 344 => 'R', 346 => 'S', 350 => 'S', 354 => 'T',
-                356 => 'T', 366 => 'U', 368 => 'U', 377 => 'Z', 379 => 'Z', 259 => 'a', 261 => 'a',
-                263 => 'c', 269 => 'c', 271 => 'd', 273 => 'd', 281 => 'e', 283 => 'e', 287 => 'g',
-                305 => 'i', 322 => 'l', 314 => 'l', 318 => 'l', 324 => 'n', 328 => 'n', 337 => 'o',
-                341 => 'r', 345 => 'r', 347 => 's', 351 => 's', 357 => 't', 355 => 't', 367 => 'u',
-                369 => 'u', 378 => 'z', 380 => 'z',
-                // ligatures
-                198 => 'Ae', 230 => 'ae', 140 => 'Oe', 156 => 'oe', 223 => 'ss',
-            );
-
-            if ($german) {
-                // umlauts
-                $germanReplacements = array(
-                    196 => 'Ae', 228 => 'ae', 214 => 'Oe', 246 => 'oe', 220 => 'Ue', 252 => 'ue'
-                );
-                $substitutions = $germanReplacements + $substitutions;
-            }
-
-            $replacements[$german] = array();
-            foreach ($substitutions as $code => $value) {
-                $replacements[$german][$code < 256 ? chr($code) : '&#' . $code . ';'] = $value;
-            }
-        }
-
-        // convert string from default database format (UTF-8)
-        // to encoding which replacement arrays made with (ISO-8859-1)
-        if ($convertedString = @iconv('UTF-8', 'ISO-8859-1', $string)) {
-            $string = $convertedString;
-        }
-        // Replace
-        $string = strtr($string, $replacements[$german]);
-        return $string;
-    }
-
     public function isDevAllowed($storeId = null)
     {
         $allow = true;
 
         $allowedIps = $this->_coreStoreConfig->getConfig(self::XML_PATH_DEV_ALLOW_IPS, $storeId);
-        $remoteAddr = $this->_coreHttp->getRemoteAddr();
+        $remoteAddr = $this->_remoteAddress->getRemoteAddress();
         if (!empty($allowedIps) && !empty($remoteAddr)) {
             $allowedIps = preg_split('#\s*,\s*#', $allowedIps, null, PREG_SPLIT_NO_EMPTY);
             if (array_search($remoteAddr, $allowedIps) === false
-                && array_search($this->_coreHttp->getHttpHost(), $allowedIps) === false) {
+                && array_search($this->_httpHeader->getHttpHost(), $allowedIps) === false) {
                 $allow = false;
             }
         }
@@ -650,101 +472,6 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     }
 
     /**
-     * Transform an assoc array to \SimpleXMLElement object
-     * Array has some limitations. Appropriate exceptions will be thrown
-     *
-     * @param array $array
-     * @param string $rootName
-     * @return \SimpleXMLElement
-     * @throws \Magento\Exception
-     */
-    public function assocToXml(array $array, $rootName = '_')
-    {
-        if (empty($rootName) || is_numeric($rootName)) {
-            throw new \Magento\Exception('Root element must not be empty or numeric');
-        }
-
-        $xmlstr = <<<XML
-<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<$rootName></$rootName>
-XML;
-        $xml = new \SimpleXMLElement($xmlstr);
-        foreach ($array as $key => $value) {
-            if (is_numeric($key)) {
-                throw new \Magento\Exception('Array root keys must not be numeric.');
-            }
-        }
-        return self::_assocToXml($array, $rootName, $xml);
-    }
-
-    /**
-     * Function, that actually recursively transforms array to xml
-     *
-     * @param array $array
-     * @param string $rootName
-     * @param \SimpleXMLElement $xml
-     * @return \SimpleXMLElement
-     * @throws \Magento\Exception
-     */
-    private function _assocToXml(array $array, $rootName, \SimpleXMLElement &$xml)
-    {
-        $hasNumericKey = false;
-        $hasStringKey  = false;
-        foreach ($array as $key => $value) {
-            if (!is_array($value)) {
-                if (is_string($key)) {
-                    if ($key === $rootName) {
-                        throw new \Magento\Exception(
-                            'Associative key must not be the same as its parent associative key.'
-                        );
-                    }
-                    $hasStringKey = true;
-                    $xml->$key = $value;
-                } elseif (is_int($key)) {
-                    $hasNumericKey = true;
-                    $xml->{$rootName}[$key] = $value;
-                }
-            } else {
-                self::_assocToXml($value, $key, $xml->$key);
-            }
-        }
-        if ($hasNumericKey && $hasStringKey) {
-            throw new \Magento\Exception('Associative and numeric keys must not be mixed at one level.');
-        }
-        return $xml;
-    }
-
-    /**
-     * Transform \SimpleXMLElement to associative array
-     * \SimpleXMLElement must be conform structure, generated by assocToXml()
-     *
-     * @param \SimpleXMLElement $xml
-     * @return array
-     */
-    public function xmlToAssoc(\SimpleXMLElement $xml)
-    {
-        $array = array();
-        foreach ($xml as $key => $value) {
-            if (isset($value->$key)) {
-                $i = 0;
-                foreach ($value->$key as $v) {
-                    $array[$key][$i++] = (string)$v;
-                }
-            } else {
-                // try to transform it into string value, trimming spaces between elements
-                $array[$key] = trim((string)$value);
-                if (empty($array[$key]) && !empty($value)) {
-                    $array[$key] = self::xmlToAssoc($value);
-                } else {
-                    // untrim strings values
-                    $array[$key] = (string)$value;
-                }
-            }
-        }
-        return $array;
-    }
-
-    /**
      * Encode the mixed $valueToEncode into the JSON format
      *
      * @param mixed $valueToEncode
@@ -776,17 +503,6 @@ XML;
     }
 
     /**
-     * Generate a hash from unique ID
-     *
-     * @param string $prefix
-     * @return string
-     */
-    public function uniqHash($prefix = '')
-    {
-        return $prefix . md5(uniqid(microtime() . mt_rand(), true));
-    }
-
-    /**
      * Return default country code
      *
      * @param \Magento\Core\Model\Store|string|int $store
@@ -798,42 +514,6 @@ XML;
     }
 
     /**
-     * Return list with protected file extensions
-     *
-     * @param \Magento\Core\Model\Store|string|int $store
-     * @return array
-     */
-    public function getProtectedFileExtensions($store = null)
-    {
-        return $this->_coreStoreConfig->getConfig(self::XML_PATH_PROTECTED_FILE_EXTENSIONS, $store);
-    }
-
-    /**
-     * Return list with public files valid paths
-     *
-     * @return array
-     */
-    public function getPublicFilesValidPath()
-    {
-        return $this->_coreStoreConfig->getConfig(self::XML_PATH_PUBLIC_FILES_VALID_PATHS);
-    }
-
-    /**
-     * Check LFI protection
-     *
-     * @throws \Magento\Core\Exception
-     * @param string $name
-     * @return bool
-     */
-    public function checkLfiProtection($name)
-    {
-        if (preg_match('#\.\.[\\\/]#', $name)) {
-            throw new \Magento\Core\Exception(__('Requested file may not include parent directory traversal ("../", "..\\" notation)'));
-        }
-        return true;
-    }
-
-    /**
      * Check whether database compatible mode is used (configs enable it for MySQL by default).
      *
      * @return bool
@@ -841,60 +521,6 @@ XML;
     public function useDbCompatibleMode()
     {
         return $this->_dbCompatibleMode;
-    }
-
-    /**
-     * Retrieve merchant country code
-     *
-     * @param \Magento\Core\Model\Store|string|int|null $store
-     * @return string
-     */
-    public function getMerchantCountryCode($store = null)
-    {
-        return (string) $this->_coreStoreConfig->getConfig(self::XML_PATH_MERCHANT_COUNTRY_CODE, $store);
-    }
-
-    /**
-     * Retrieve merchant VAT number
-     *
-     * @param \Magento\Core\Model\Store|string|int|null $store
-     * @return string
-     */
-    public function getMerchantVatNumber($store = null)
-    {
-        return (string) $this->_coreStoreConfig->getConfig(self::XML_PATH_MERCHANT_VAT_NUMBER, $store);
-    }
-
-    /**
-     * Check whether specified country is in EU countries list
-     *
-     * @param string $countryCode
-     * @param null|int $storeId
-     * @return bool
-     */
-    public function isCountryInEU($countryCode, $storeId = null)
-    {
-        $euCountries = explode(',', $this->_coreStoreConfig->getConfig(self::XML_PATH_EU_COUNTRIES_LIST, $storeId));
-        return in_array($countryCode, $euCountries);
-    }
-
-    /**
-     * Returns the floating point remainder (modulo) of the division of the arguments
-     *
-     * @param float|int $dividend
-     * @param float|int $divisor
-     * @return float|int
-     */
-    public function getExactDivision($dividend, $divisor)
-    {
-        $epsilon = $divisor / self::DIVIDE_EPSILON;
-
-        $remainder = fmod($dividend, $divisor);
-        if (abs($remainder - $divisor) < $epsilon || abs($remainder) < $epsilon) {
-            $remainder = 0;
-        }
-
-        return $remainder;
     }
 
     /**

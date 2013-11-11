@@ -24,20 +24,9 @@
  */
 -->
 <config>
-    <virtualType name="Magento\Reports\Model\Session" type="Magento\Core\Model\Session\Generic">
-        <param name="sessionNamespace">
-            <value>reports</value>
-        </param>
+    <virtualType name="Magento\Reports\Model\Session">
         <param name="sessionName">
             <value>frontend</value>
         </param>
     </virtualType>
-    <type name="Magento\Core\Model\Session\Generic">
-        <param name="sessionNamespace">
-            <value>reports</value>
-        </param>
-        <param name="sessionName">
-            <value>frontend</value>
-        </param>
-    </type>
 </config>

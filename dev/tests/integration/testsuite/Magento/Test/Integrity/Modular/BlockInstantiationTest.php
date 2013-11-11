@@ -129,7 +129,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
             $area = 'adminhtml';
         }
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')->loadAreaPart(
-            \Magento\Core\Model\App\Area::AREA_ADMINHTML,
+            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
             \Magento\Core\Model\App\Area::PART_CONFIG
         );
         $templateBlocks[$module . ', ' . $blockClass . ', ' . $area]

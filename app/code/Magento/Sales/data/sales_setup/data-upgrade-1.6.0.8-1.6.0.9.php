@@ -50,9 +50,9 @@ do {
             ->update(
                 $installer->getTable('sales_flat_order_payment'),
                 array(
-                    'cc_exp_month' => $installer->getCoreData()->encrypt($order['cc_exp_month']),
-                    'cc_exp_year' => $installer->getCoreData()->encrypt($order['cc_exp_year']),
-                    'cc_owner' => $installer->getCoreData()->encrypt($order['cc_owner']),
+                    'cc_exp_month' => $installer->getEncryptor()->encrypt($order['cc_exp_month']),
+                    'cc_exp_year' => $installer->getEncryptor()->encrypt($order['cc_exp_year']),
+                    'cc_owner' => $installer->getEncryptor()->encrypt($order['cc_owner']),
                 ),
                 array('entity_id = ?' => $order['entity_id'])
         );
@@ -80,9 +80,9 @@ do {
             ->update(
                 $installer->getTable('sales_flat_quote_payment'),
                 array(
-                    'cc_exp_month' => $installer->getCoreData()->encrypt($quote['cc_exp_month']),
-                    'cc_exp_year' => $installer->getCoreData()->encrypt($quote['cc_exp_year']),
-                    'cc_owner' => $installer->getCoreData()->encrypt($quote['cc_owner']),
+                    'cc_exp_month' => $installer->getEncryptor()->encrypt($quote['cc_exp_month']),
+                    'cc_exp_year' => $installer->getEncryptor()->encrypt($quote['cc_exp_year']),
+                    'cc_owner' => $installer->getEncryptor()->encrypt($quote['cc_owner']),
                 ),
                 array('payment_id = ?' => $quote['payment_id'])
         );

@@ -27,7 +27,7 @@
     <remove name="footer"/>
     <remove name="head"/>
     <referenceContainer name="left">
-        <block class="Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree" name="wysiwyg_files.tree" template="Magento_Adminhtml::cms/browser/tree.phtml"/>
+        <block class="Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree" name="wysiwyg_files.tree" template="Magento_Cms::browser/tree.phtml"/>
     </referenceContainer>
     <referenceContainer name="content">
         <block class="Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content" name="wysiwyg_files.content" template="browser/content.phtml">

@@ -64,7 +64,7 @@ class Observer
     protected  $_registration;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
@@ -75,7 +75,7 @@ class Observer
      * @param \Magento\Core\Model\ConfigInterface $config
      * @param \Magento\Core\Model\Page\Asset\PublicFileFactory $assetFileFactory
      * @param \Magento\Core\Model\Theme\Registration $registration
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      */
     public function __construct(
         \Magento\Core\Model\Cache\Frontend\Pool $cacheFrontendPool,
@@ -84,7 +84,7 @@ class Observer
         \Magento\Core\Model\ConfigInterface $config,
         \Magento\Core\Model\Page\Asset\PublicFileFactory $assetFileFactory,
         \Magento\Core\Model\Theme\Registration $registration,
-        \Magento\Core\Model\Logger $logger
+        \Magento\Logger $logger
     ) {
         $this->_cacheFrontendPool = $cacheFrontendPool;
         $this->_currentTheme = $design->getDesignTheme();

@@ -84,11 +84,9 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Model\Order\Pdf\AbstractPdf', array('drawLineBlocks', 'getPdf'), array(), '', false, false
         );
 
-        $context = $this->getMock('Magento\Core\Helper\Context', array(), array(), '', false, false);
-        $locale = $this->getMock('Magento\Core\Model\Locale', array(), array(), '', false, false);
         $modelConstructorArgs = $objectManager
             ->getConstructArguments('Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo', array(
-                'helper' => new \Magento\Core\Helper\String($context, $locale)
+                'string' => new \Magento\Stdlib\String()
         ));
 
         $this->_model = $this->getMock(
@@ -97,8 +95,6 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
             $modelConstructorArgs
         );
 
-        $context = $this->getMock('Magento\Core\Helper\Context', array(), array(), '', false, false);
-        $this->_model->setStringHelper(new \Magento\Core\Helper\String($context, $locale));
         $this->_model->setOrder($this->_order);
         $this->_model->setPdf($this->_pdf);
         $this->_model->setPage(new \Zend_Pdf_Page('a4'));
@@ -191,7 +187,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
         ;
 
         $this->assertNotSame($expectedPdfPage, $this->_model->getPage());
-        $this->_model->draw();
+        $this->assertNull($this->_model->draw());
         $this->assertSame($expectedPdfPage, $this->_model->getPage());
     }
 }

@@ -675,22 +675,6 @@ class Grid extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Returns url for RSS
-     * Can be overloaded in descendant classes to perform custom changes to url passed to addRssList()
-     *
-     * @param string $url
-     * @return string
-     */
-    protected function _getRssUrl($url)
-    {
-        if ($this->_storeManager->getStore()->isUseStoreInUrl()) {
-            // Url in 'admin' store view won't be accessible, so form it in default store view frontend
-            $this->_urlModel->setStore($this->_storeManager->getDefaultStoreView());
-        }
-        return $this->_urlModel->getUrl($url);
-    }
-
-    /**
      * Add new rss list to grid
      *
      * @param   string $url
@@ -701,7 +685,7 @@ class Grid extends \Magento\Backend\Block\Widget
     {
         $this->_rssLists[] = new \Magento\Object(
             array(
-                'url'   => $this->_getRssUrl($url),
+                'url'   => $this->getUrl($url, array('_nosecret' => true)),
                 'label' => $label
             )
         );

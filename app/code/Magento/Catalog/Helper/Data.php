@@ -75,12 +75,13 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      */
     protected $_storeId = null;
 
-    /** Core registry
+    /**
+     * Core registry
      *
      * @var \Magento\Core\Model\Registry
      */
     protected $_coreRegistry = null;
-    
+
     /**
      * Catalog product
      *
@@ -96,17 +97,15 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_catalogCategory = null;
 
     /**
-     * Core string
-     *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
-    protected $_coreString = null;
+    protected $string;
 
     /**
      * @var string
      */
     protected $_templateFilterModel;
-    
+
     /**
      * Catalog session
      *
@@ -150,6 +149,11 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_templateFilterFactory;
 
     /**
+     * @var \Magento\Escaper
+     */
+    protected $_escaper;
+
+    /**
      * Construct
      *
      * @param \Magento\Catalog\Model\Resource\Eav\AttributeFactory $eavAttributeFactory
@@ -157,13 +161,14 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Session $catalogSession
-     * @param \Magento\Core\Helper\String $coreString
+     * @param \Magento\Stdlib\String $string
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Core\Helper\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Catalog\Model\Template\Filter\Factory $templateFilterFactory
+     * @param \Magento\Escaper $escaper
      * @param $templateFilterModel
      */
     public function __construct(
@@ -172,13 +177,14 @@ class Data extends \Magento\Core\Helper\AbstractHelper
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Session $catalogSession,
-        \Magento\Core\Helper\String $coreString,
+        \Magento\Stdlib\String $string,
         \Magento\Catalog\Helper\Category $catalogCategory,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Core\Helper\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Catalog\Model\Template\Filter\Factory $templateFilterFactory,
+        \Magento\Escaper $escaper,
         $templateFilterModel
     ) {
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -187,12 +193,13 @@ class Data extends \Magento\Core\Helper\AbstractHelper
         $this->_storeManager = $storeManager;
         $this->_catalogSession = $catalogSession;
         $this->_templateFilterFactory = $templateFilterFactory;
-        $this->_coreString = $coreString;
+        $this->string = $string;
         $this->_catalogCategory = $catalogCategory;
         $this->_catalogProduct = $catalogProduct;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_coreRegistry = $coreRegistry;
         $this->_templateFilterModel = $templateFilterModel;
+        $this->_escaper = $escaper;
         parent::__construct($context);
     }
 
@@ -320,7 +327,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      */
     public function splitSku($sku, $length = 30)
     {
-        return $this->_coreString->strSplit($sku, $length, true, false, '[\-\s]');
+        return $this->string->split($sku, $length, true, false, '[\-\s]');
     }
 
     /**
@@ -449,7 +456,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      */
     public function getMsrpExplanationMessage()
     {
-        return $this->escapeHtml(
+        return $this->_escaper->escapeHtml(
             $this->_coreStoreConfig->getConfig(self::XML_PATH_MSRP_EXPLANATION_MESSAGE, $this->_storeId),
             array('b','br','strong','i','u', 'p', 'span')
         );
@@ -462,7 +469,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      */
     public function getMsrpExplanationMessageWhatsThis()
     {
-        return $this->escapeHtml(
+        return $this->_escaper->escapeHtml(
             $this->_coreStoreConfig->getConfig(self::XML_PATH_MSRP_EXPLANATION_MESSAGE_WHATS_THIS, $this->_storeId),
             array('b','br','strong','i','u', 'p', 'span')
         );

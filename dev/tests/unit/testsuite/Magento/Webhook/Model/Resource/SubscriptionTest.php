@@ -33,18 +33,6 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
     const HOOK_TABLE_NAME = 'webhook_subscription_hook_table';
     const SUBSCRIPTION_ID = '1';
 
-    /**
-     * Contents of dummy config element
-     */
-    const TOPICS_XML =
-                '<test>
-                    <a>
-                        <label>label</label>
-                    </a>
-                    <c>
-                        <label>label</label>
-                    </c>
-                </test>';
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $_selectMock;
 
@@ -67,7 +55,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_selectMock = $this->_makeMock('Magento\DB\Select');
-        $this->_resourceMock = $this->_makeMock('Magento\Core\Model\Resource');
+        $this->_resourceMock = $this->_makeMock('Magento\App\Resource');
         $this->_adapterMock = $this->_makeMock('Magento\DB\Adapter\Pdo\Mysql');
         $this->_adapterMock->expects($this->any())
             ->method('select')
@@ -75,8 +63,18 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->_selectMock));
 
         // Config mock
-        $configMethods = array('getNode', 'setNode', 'getXpath', 'reinit');
-        $this->_configMock = $this->getMock('Magento\Core\Model\ConfigInterface', $configMethods, array(), '', false);
+        $this->_configMock = $this->getMock('Magento\Webhook\Model\Config', array(), array(), '', false);
+        $configArray = array(
+            'a' => array(
+                'label' => 'label'
+            ),
+            'c' => array(
+                'label' => 'label'
+            )
+        );
+        $this->_configMock->expects($this->once())
+            ->method('getWebhooks')
+            ->will($this->returnValue($configArray));
     }
 
     /**
@@ -137,11 +135,6 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->with('topics')
             ->will($this->returnValue($newTopics));
-        $configElement = new \Magento\Core\Model\Config\Element(self::TOPICS_XML);
-        $this->_configMock->expects($this->once())
-            ->method('getNode')
-            ->will($this->returnValue($configElement));
-
         // Adapter stubs
         $this->_adapterMock->expects($this->once())
             ->method('delete')

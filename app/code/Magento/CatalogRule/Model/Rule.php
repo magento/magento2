@@ -24,6 +24,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\CatalogRule\Model;
 
 /**
  * Catalog Rule data model
@@ -55,13 +56,7 @@
  * @method \Magento\CatalogRule\Model\Rule setDiscountAmount(float $value)
  * @method string getWebsiteIds()
  * @method \Magento\CatalogRule\Model\Rule setWebsiteIds(string $value)
- *
- * @category    Magento
- * @package     Magento_CatalogRule
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogRule\Model;
-
 class Rule extends \Magento\Rule\Model\AbstractModel
 {
     /**
@@ -166,18 +161,23 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected $_productCollFactory;
 
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\CatalogRule\Model\Rule\Condition\CombineFactory $combineFactory
-     * @param \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollFactory
+     * @param Rule\Condition\CombineFactory $combineFactory
+     * @param Rule\Action\CollectionFactory $actionCollFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Core\Model\Resource\Iterator $resourceIterator
      * @param \Magento\Index\Model\Indexer $indexer
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\CatalogRule\Helper\Data $catalogRuleData
      * @param \Magento\Core\Model\Cache\TypeListInterface $cacheTypesList
-     * @param \Magento\Data\Form\Factory $formFactory
+     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\LocaleInterface $locale
@@ -185,7 +185,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $relatedCacheTypes
      * @param array $data
-     *
+     * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -199,7 +199,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\Customer\Model\Session $customerSession,
         \Magento\CatalogRule\Helper\Data $catalogRuleData,
         \Magento\Core\Model\Cache\TypeListInterface $cacheTypesList,
-        \Magento\Data\Form\Factory $formFactory,
+        \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\LocaleInterface $locale,
@@ -219,6 +220,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         $this->_catalogRuleData = $catalogRuleData;
         $this->_cacheTypesList = $cacheTypesList;
         $this->_relatedCacheTypes = $relatedCacheTypes;
+        $this->dateTime = $dateTime;
         parent::__construct($formFactory, $context, $registry, $locale, $resource, $resourceCollection, $data);
     }
 
@@ -274,7 +276,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function getNow()
     {
         if (!$this->_now) {
-            return now();
+            return $this->dateTime->now();
         }
         return $this->_now;
     }

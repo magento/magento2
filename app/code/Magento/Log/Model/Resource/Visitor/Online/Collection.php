@@ -51,7 +51,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
@@ -59,7 +59,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     public function __construct(
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Core\Model\Resource\Db\AbstractDb $resource = null

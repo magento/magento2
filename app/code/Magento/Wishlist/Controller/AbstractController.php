@@ -120,7 +120,7 @@ abstract class AbstractController extends \Magento\Core\Controller\Front\Action
                     $messages[] = __('%1 for "%2".', trim($e->getMessage(), '.'), $item->getProduct()->getName());
                 }
             } catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Logger')->logException($e);
                 $messages[] = __('We cannot add this item to your shopping cart.');
             }
         }

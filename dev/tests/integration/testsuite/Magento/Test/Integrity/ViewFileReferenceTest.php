@@ -63,6 +63,11 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager->configure(array(
+            'preferences' => array(
+                'Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data'
+            )
+        ));
 
         /** @var $fallbackFactory \Magento\View\Design\Fallback\Factory */
         $fallbackFactory = $objectManager->get('Magento\View\Design\Fallback\Factory');

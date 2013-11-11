@@ -78,8 +78,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('query')
             ->will($this->returnValue($statementMock));
 
-        /** @var $resourceModelMock \Magento\Core\Model\Resource */
-        $resourceModelMock = $this->getMock('Magento\Core\Model\Resource',
+        /** @var $resourceModelMock \Magento\App\Resource */
+        $resourceModelMock = $this->getMock('Magento\App\Resource',
             array('getConnection', '_newConnection', 'getTableName'),
             array(), '', false
         );

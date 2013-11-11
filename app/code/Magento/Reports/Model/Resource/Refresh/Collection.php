@@ -76,7 +76,7 @@ class Collection extends \Magento\Data\Collection
             ->loadSelf();
         return ($flag->hasData())
             ? $this->_locale
-                ->storeDate(0, new \Zend_Date($flag->getLastUpdate(), \Magento\Date::DATETIME_INTERNAL_FORMAT), true)
+                ->storeDate(0, new \Zend_Date($flag->getLastUpdate(), \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT), true)
             : '';
     }
 

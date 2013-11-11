@@ -63,7 +63,7 @@ class Handler
      * @param string $operation
      * @param array $arguments
      * @return \stdClass|null
-     * @throws \Magento\Webapi\Exception|LogicException
+     * @throws \Magento\Webapi\Exception|\LogicException
      */
     public function __call($operation, $arguments)
     {

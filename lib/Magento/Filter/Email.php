@@ -24,13 +24,16 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 namespace Magento\Filter;
 
 class Email implements \Zend_Filter_Interface
-{  
+{
+    /**
+     * @param mixed $value
+     * @return mixed
+     */
     public function filter($value)
     {
-        $atIndex = 0;
+        return $value;
     }
 }

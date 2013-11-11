@@ -24,17 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Catalog\Block\Product;
 
 /**
  * Product View block
- *
- * @category Magento
- * @package  Magento_Catalog
- * @module   Catalog
- * @author   Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Block\Product;
-
 class View extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**
@@ -45,11 +39,11 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_mapRenderer = 'msrp_item';
 
     /**
-     * Core string
+     * Magento string lib
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
-    protected $_coreString = null;
+    protected $string;
 
     /**
      * Tax calculation
@@ -81,7 +75,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Tax\Model\Calculation $taxCalculation
      * @param \Magento\Core\Model\Registry $coreRegistry
-     * @param \Magento\Core\Helper\String $coreString
+     * @param \Magento\Stdlib\String $string
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Core\Helper\Data $coreData
@@ -95,7 +89,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Tax\Model\Calculation $taxCalculation,
         \Magento\Core\Model\Registry $coreRegistry,
-        \Magento\Core\Helper\String $coreString,
+        \Magento\Stdlib\String $string,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Core\Helper\Data $coreData,
@@ -105,7 +99,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
         $this->_productFactory = $productFactory;
         $this->_locale = $locale;
         $this->_taxCalculation = $taxCalculation;
-        $this->_coreString = $coreString;
+        $this->string = $string;
         parent::__construct($storeManager, $catalogConfig, $coreRegistry, $taxData, $catalogData, $coreData,
             $context, $data);
     }
@@ -136,7 +130,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
             if ($description) {
                 $headBlock->setDescription( ($description) );
             } else {
-                $headBlock->setDescription($this->_coreString->substr($product->getDescription(), 0, 255));
+                $headBlock->setDescription($this->string->substr($product->getDescription(), 0, 255));
             }
             //@todo: move canonical link to separate block
             if ($this->helper('Magento\Catalog\Helper\Product')->canUseCanonicalTag()

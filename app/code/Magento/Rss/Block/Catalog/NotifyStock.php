@@ -25,26 +25,12 @@
  */
 
 /**
- * Review form block
+ * Catalog low stock RSS block
  */
 namespace Magento\Rss\Block\Catalog;
 
-class NotifyStock extends \Magento\Core\Block\AbstractBlock
+class NotifyStock extends \Magento\Backend\Block\AbstractBlock
 {
-    /**
-     * Rss data
-     *
-     * @var \Magento\Rss\Helper\Data
-     */
-    protected $_rssData;
-
-    /**
-     * Adminhtml data
-     *
-     * @var \Magento\Backend\Helper\Data
-     */
-    protected $_adminhtmlData;
-
     /**
      * @var \Magento\Rss\Model\RssFactory
      */
@@ -71,9 +57,7 @@ class NotifyStock extends \Magento\Core\Block\AbstractBlock
     protected $_resourceIterator;
 
     /**
-     * @param \Magento\Backend\Helper\Data $adminhtmlData
-     * @param \Magento\Rss\Helper\Data $rssData
-     * @param \Magento\Core\Block\Context $context
+     * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Rss\Model\RssFactory $rssFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\CatalogInventory\Model\Resource\StockFactory $stockFactory
@@ -82,9 +66,7 @@ class NotifyStock extends \Magento\Core\Block\AbstractBlock
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Helper\Data $adminhtmlData,
-        \Magento\Rss\Helper\Data $rssData,
-        \Magento\Core\Block\Context $context,
+        \Magento\Backend\Block\Context $context,
         \Magento\Rss\Model\RssFactory $rssFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\CatalogInventory\Model\Resource\StockFactory $stockFactory,
@@ -92,8 +74,6 @@ class NotifyStock extends \Magento\Core\Block\AbstractBlock
         \Magento\Core\Model\Resource\Iterator $resourceIterator,
         array $data = array()
     ) {
-        $this->_adminhtmlData = $adminhtmlData;
-        $this->_rssData = $rssData;
         $this->_rssFactory = $rssFactory;
         $this->_productFactory = $productFactory;
         $this->_stockFactory = $stockFactory;
@@ -109,7 +89,7 @@ class NotifyStock extends \Magento\Core\Block\AbstractBlock
      */
     protected function _toHtml()
     {
-        $newUrl = $this->_urlBuilder->getUrl('rss/catalog/notifystock');
+        $newUrl = $this->getUrl('rss/catalog/notifystock', array('_secure' => true, '_nosecret' => true));
         $title = __('Low Stock Products');
         /** @var $rssObj \Magento\Rss\Model\Rss */
         $rssObj = $this->_rssFactory->create();
@@ -123,7 +103,6 @@ class NotifyStock extends \Magento\Core\Block\AbstractBlock
         $globalNotifyStockQty = (float)$this->_storeConfig->getConfig(
             \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_NOTIFY_STOCK_QTY
         );
-        $this->_rssData->disableFlat();
         /* @var $product \Magento\Catalog\Model\Product */
         $product = $this->_productFactory->create();
         /* @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
@@ -167,7 +146,7 @@ class NotifyStock extends \Magento\Core\Block\AbstractBlock
         /* @var $product \Magento\Catalog\Model\Product */
         $product = $args['product'];
         $product->setData($args['row']);
-        $url = $this->_adminhtmlData->getUrl('catalog/product/edit/',
+        $url = $this->getUrl('catalog/product/edit',
             array('id' => $product->getId(), '_secure' => true, '_nosecret' => true));
         $qty = 1 * $product->getQty();
         $description = __('%1 has reached a quantity of %2.', $product->getName(), $qty);

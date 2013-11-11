@@ -51,7 +51,7 @@ class Payflowadvanced extends \Magento\Paypal\Controller\Express\AbstractExpress
     protected $_checkoutType = 'Magento\Paypal\Model\Payflowadvanced';
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 

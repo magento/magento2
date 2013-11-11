@@ -59,7 +59,6 @@ class StandardTest extends \PHPUnit_Framework_TestCase
      * @param \Magento\App\RequestInterface $request
      * @param bool $isVde
      * @param bool $isLoggedIn
-     * @param bool $isConfiguration
      * @param array $routers
      * @param string|null $matchedValue
      *
@@ -69,11 +68,10 @@ class StandardTest extends \PHPUnit_Framework_TestCase
         \Magento\App\RequestInterface $request,
         $isVde,
         $isLoggedIn,
-        $isConfiguration,
         array $routers = array(),
         $matchedValue = null
     ) {
-        $this->_model = $this->_prepareMocksForTestMatch($request, $isVde, $isLoggedIn, $isConfiguration, $routers);
+        $this->_model = $this->_prepareMocksForTestMatch($request, $isVde, $isLoggedIn, $routers);
 
         $this->assertEquals($matchedValue, $this->_model->match($request));
         if ($isVde && $isLoggedIn) {
@@ -96,7 +94,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
             'vde'   => 'vde router',
         );
 
-        $routerListMock = $this->getMock('Magento\App\RouterListInterface');
+        $routerListMock = $this->getMock('\Magento\App\Route\ConfigInterface');
 
         // test data to verify routers match logic
         $matchedRequest = $this->getMock('Magento\App\Request\Http',
@@ -109,7 +107,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
 
         // method "match" will be invoked for this router because it's first in the list
         $matchedRouter = $this->getMock(
-            'Magento\Core\Controller\Varien\Router\Base', array(), array(), '', false
+            'Magento\Core\App\Router\Base', array(), array(), '', false
         );
         $matchedRouter->expects($this->once())
             ->method('match')
@@ -118,7 +116,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
 
         // method "match" will not be invoked for this router because controller will be found by first router
         $notMatchedRouter = $this->getMock(
-            'Magento\Core\Controller\Varien\Router\Base', array(), array(), '', false
+            'Magento\Core\App\Router\Base', array(), array(), '', false
         );
         $notMatchedRouter->expects($this->never())
             ->method('match');
@@ -136,7 +134,6 @@ class StandardTest extends \PHPUnit_Framework_TestCase
                 ),
                 '$isVde'           => false,
                 '$isLoggedIn'      => true,
-                '$isConfiguration' => false,
             ),
             'not logged as admin' => array(
                 '$request' => $this->getMock(
@@ -144,7 +141,6 @@ class StandardTest extends \PHPUnit_Framework_TestCase
                 ),
                 '$isVde'           => true,
                 '$isLoggedIn'      => false,
-                '$isConfiguration' => false,
             ),
             'no matched routers' => array(
                 '$request' => $this->getMock(
@@ -152,14 +148,12 @@ class StandardTest extends \PHPUnit_Framework_TestCase
                 ),
                 '$isVde'           => true,
                 '$isLoggedIn'      => true,
-                '$isConfiguration' => false,
                 '$routers'         => $excludedRouters
             ),
             'matched routers' => array(
                 '$request'         => $matchedRequest,
                 '$isVde'           => true,
                 '$isLoggedIn'      => true,
-                '$isConfiguration' => true,
                 '$routers'         => $matchedRouters,
                 '$matchedValue'    => $matchedController,
             ),
@@ -170,7 +164,6 @@ class StandardTest extends \PHPUnit_Framework_TestCase
      * @param \Magento\App\RequestInterface $request
      * @param bool $isVde
      * @param bool $isLoggedIn
-     * @param bool $isConfiguration
      * @param array $routers
      * @return \Magento\DesignEditor\Controller\Varien\Router\Standard
      */
@@ -178,7 +171,6 @@ class StandardTest extends \PHPUnit_Framework_TestCase
         \Magento\App\RequestInterface $request,
         $isVde,
         $isLoggedIn,
-        $isConfiguration,
         array $routers
     ) {
         // default mocks - not affected on method functionality
@@ -186,9 +178,8 @@ class StandardTest extends \PHPUnit_Framework_TestCase
         $helperMock         = $this->_getHelperMock($isVde);
         $backendSessionMock = $this->_getBackendSessionMock($isVde, $isLoggedIn);
         $stateMock          = $this->_getStateModelMock($routers);
-        $configurationMock  = $this->_getConfigurationMock($isVde, $isLoggedIn, $isConfiguration);
 
-        $callback = function ($name) use ($helperMock, $backendSessionMock, $stateMock, $configurationMock) {
+        $callback = function ($name) use ($helperMock, $backendSessionMock, $stateMock) {
             switch ($name) {
                 case 'Magento\DesignEditor\Helper\Data':
                     return $helperMock;
@@ -196,8 +187,6 @@ class StandardTest extends \PHPUnit_Framework_TestCase
                     return $backendSessionMock;
                 case 'Magento\DesignEditor\Model\State':
                     return $stateMock;
-                case 'Magento\Core\Model\Config':
-                    return $configurationMock;
                 default:
                     return null;
             }
@@ -207,9 +196,17 @@ class StandardTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnCallback($callback));
 
-        $frontControllerMock = $this->getMock('Magento\App\FrontController', array(), array(), '', false);
         $rewriteServiceMock = $this->getMock('Magento\Core\App\Request\RewriteService', array(), array(), '', false);
-        $routerListMock = $this->getMock('Magento\App\RouterListInterface');
+        $routerListMock = $this->getMock('Magento\App\RouterListInterface',
+            array(
+                'getRouters',
+                'current',
+                'next',
+                'key',
+                'valid',
+                'rewind'
+            )
+        );
 
         if ($isVde && $isLoggedIn) {
             $rewriteServiceMock->expects($this->once())
@@ -221,24 +218,20 @@ class StandardTest extends \PHPUnit_Framework_TestCase
         }
 
         $router = new \Magento\DesignEditor\Controller\Varien\Router\Standard(
-            $routerListMock,
             $this->getMock('Magento\App\ActionFactory', array(), array(), '', false),
-            $objectManager,
-            $this->getMock('Magento\Filesystem', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\App', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Route\Config', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Url\SecurityInfoInterface'),
-            $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Config', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Url', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false),
+            $this->getMock('Magento\App\DefaultPathInterface'),
+            $this->getMock('Magento\App\ResponseFactory', array(), array(), '', false),
+            $this->getMock('Magento\App\Route\Config', array(), array(), '', false),
             $this->getMock('Magento\App\State', array(), array(), '', false),
+            $this->getMock('Magento\UrlInterface'),
+            $this->getMock('Magento\Core\Model\StoreManagerInterface'),
+            $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false),
+            $this->getMock('Magento\Core\Model\Url\SecurityInfoInterface'),
+            $routerListMock,
+            $objectManager,
             $rewriteServiceMock,
-            'frontend',
-            'Magento\Core\Controller\Varien\Action',
-            'vde'
+            'frontend'
         );
-        $router->setFront($frontControllerMock);
         return $router;
     }
 
@@ -285,40 +278,5 @@ class StandardTest extends \PHPUnit_Framework_TestCase
         }
 
         return $stateModel;
-    }
-
-    /**
-     * @param bool $isVde
-     * @param bool $isLoggedIn
-     * @param bool $isConfiguration
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function _getConfigurationMock($isVde, $isLoggedIn, $isConfiguration)
-    {
-        $configuration = $this->getMock('Magento\Core\Model\Config', array(), array(), '', false);
-
-        if ($isVde && $isLoggedIn) {
-            $configurationData = null;
-            if ($isConfiguration) {
-                $configurationData = self::VDE_CONFIGURATION_DATA;
-            }
-            $configuration->expects($this->at(0))
-                ->method('getNode')
-                ->with(\Magento\DesignEditor\Model\Area::AREA_VDE)
-                ->will($this->returnValue($configurationData));
-
-            if ($isConfiguration) {
-                $elementMock = $this->getMock('stdClass', array('extend'), array(), '', false);
-                $elementMock->expects($this->once())
-                    ->method('extend')
-                    ->with(self::VDE_CONFIGURATION_DATA, true);
-
-                $configuration->expects($this->at(1))
-                    ->method('getNode')
-                    ->with(\Magento\Core\Model\App\Area::AREA_FRONTEND)
-                    ->will($this->returnValue($elementMock));
-            }
-        }
-        return $configuration;
     }
 }

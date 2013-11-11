@@ -58,6 +58,7 @@ class Comment extends \Magento\Sales\Model\AbstractModel
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\LocaleInterface $coreLocale
+     * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -67,13 +68,14 @@ class Comment extends \Magento\Sales\Model\AbstractModel
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\LocaleInterface $coreLocale,
+        \Magento\Stdlib\DateTime $dateTime,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct(
-            $context, $registry, $coreLocale, $resource, $resourceCollection, $data
+            $context, $registry, $coreLocale, $dateTime, $resource, $resourceCollection, $data
         );
         $this->_storeManager = $storeManager;
     }

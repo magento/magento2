@@ -34,6 +34,7 @@ class ResourceNotFoundException extends \Magento\Service\Exception
      * @param int $code
      * @param \Exception $previous
      * @param array $parameters
+     * @param string $name
      * @param string|int|null $resourceId
      */
     public function __construct(
@@ -41,7 +42,8 @@ class ResourceNotFoundException extends \Magento\Service\Exception
         // TODO Specify default exception code when Service \Exception Handling policy is defined
         $code = 0,
         \Exception $previous = null,
-        $parameters = array(),
+        array $parameters = array(),
+        $name = 'resourceNotFound',
         $resourceId = null
     ) {
         if ($resourceId) {
@@ -50,6 +52,6 @@ class ResourceNotFoundException extends \Magento\Service\Exception
                 $message = "Resource with ID '{$resourceId}' not found.";
             }
         }
-        parent::__construct($message, $code, $previous, $parameters);
+        parent::__construct($message, $code, $previous, $parameters, $name);
     }
 }

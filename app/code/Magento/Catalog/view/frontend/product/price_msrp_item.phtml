@@ -54,7 +54,7 @@ $priceElementIdPrefix = $this->getPriceElementIdPrefix() ? $this->getPriceElemen
     <?php if ($_catalogHelper->isShowPriceOnGesture($_product)): ?>
     <?php $priceElementId = $priceElementIdPrefix . $_id . $this->getIdSuffix(); ?>
     <span id="<?php echo $priceElementId ?>" style="display:none"></span>
-    <?php $popupId = 'msrp-popup-' . $_id . $_coreHelper->getRandomString(20); ?>
+    <?php $popupId = 'msrp-popup-' . $_id . $this->getRandomString(20); ?>
     <a href="#" id="<?php echo($popupId);?>"><?php echo __('Click for price'); ?></a>
 
     <?php else: ?>
@@ -63,7 +63,7 @@ $priceElementIdPrefix = $this->getPriceElementIdPrefix() ? $this->getPriceElemen
     </span>
     <?php endif; ?>
 
-    <?php $helpLinkId = 'msrp-help-' . $_id . $_coreHelper->getRandomString(20); ?>
+    <?php $helpLinkId = 'msrp-help-' . $_id . $this->getRandomString(20); ?>
     <a href="#" id="<?php echo($helpLinkId);?>"><?php echo __("What's this?"); ?></a>
 </div>
 

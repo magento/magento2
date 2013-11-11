@@ -40,9 +40,9 @@ class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
     protected $_perFileSchema = null;
 
     /**
-     * @param \Magento\Core\Model\Config\Modules\Reader $moduleReader
+     * @param \Magento\Module\Dir\Reader $moduleReader
      */
-    public function __construct(\Magento\Core\Model\Config\Modules\Reader $moduleReader)
+    public function __construct(\Magento\Module\Dir\Reader $moduleReader)
     {
         $etcDir = $moduleReader->getModuleDir('etc', 'Magento_Catalog');
         $this->_schema = $etcDir . DIRECTORY_SEPARATOR . 'product_options_merged.xsd';

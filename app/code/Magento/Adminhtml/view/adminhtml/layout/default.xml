@@ -253,7 +253,7 @@
             </block>
             <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-promo-rules-js">
                 <arguments>
-                    <argument name="file" xsi:type="string">Magento_Adminhtml::promo/rules.js</argument>
+                    <argument name="file" xsi:type="string">Magento_Rule::rules.js</argument>
                     <argument name="properties" xsi:type="array">
                         <item name="attributes" xsi:type="string"/>
                         <item name="ie_condition" xsi:type="string"/>

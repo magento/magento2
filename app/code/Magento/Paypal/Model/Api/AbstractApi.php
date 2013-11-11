@@ -103,7 +103,7 @@ abstract class AbstractApi extends \Magento\Object
     protected $_customerAddress;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
@@ -129,7 +129,7 @@ abstract class AbstractApi extends \Magento\Object
      * attributes This behavior may change in child classes
      *
      * @param \Magento\Customer\Helper\Address $customerAddress
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
@@ -137,7 +137,7 @@ abstract class AbstractApi extends \Magento\Object
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddress,
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,

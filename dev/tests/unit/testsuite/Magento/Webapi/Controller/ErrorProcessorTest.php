@@ -36,7 +36,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Core\Model\App */
     protected $_appMock;
 
-    /** @var \Magento\Core\Model\Logger */
+    /** @var \Magento\Logger */
     protected $_loggerMock;
 
     protected function setUp()
@@ -50,7 +50,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_loggerMock = $this->getMockBuilder('Magento\Core\Model\Logger')
+        $this->_loggerMock = $this->getMockBuilder('Magento\Logger')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -218,7 +218,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
         return array(
             'Magento\Service\ResourceNotFoundException' => array(
                 new \Magento\Service\ResourceNotFoundException('Resource not found', 2345, null,
-                    array('datail1' => 'value1'), 'resource10'),
+                    array('datail1' => 'value1'), 'resourceNotFound', 'resource10'),
                 \Magento\Webapi\Exception::HTTP_NOT_FOUND,
                 'Resource not found',
                 2345,
@@ -226,7 +226,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
             ),
             'Magento_Service_ResourceNotFoundException (Empty message)' => array(
                 new \Magento\Service\ResourceNotFoundException('', 2345, null,
-                    array('datail1' => 'value1'), 'resource10'),
+                    array('datail1' => 'value1'), 'resourceNotFound', 'resource10'),
                 \Magento\Webapi\Exception::HTTP_NOT_FOUND,
                 "Resource with ID 'resource10' not found.",
                 2345,
@@ -238,6 +238,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
                     345,
                     null,
                     array(),
+                    'authorization',
                     3,
                     4
                 ),
@@ -247,7 +248,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
                 array('user_id' => 3, 'resource_id' => 4)
             ),
             'Magento\Service\AuthorizationException (Empty message)' => array(
-                new \Magento\Service\AuthorizationException('', 345, null, array(), 3, 4),
+                new \Magento\Service\AuthorizationException('', 345, null, array(), 'authorization', 3, 4),
                 \Magento\Webapi\Exception::HTTP_UNAUTHORIZED,
                 "User with ID '3' is not authorized to access resource with ID '4'.",
                 345,

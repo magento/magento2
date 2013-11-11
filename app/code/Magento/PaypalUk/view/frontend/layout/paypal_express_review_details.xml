@@ -24,16 +24,14 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\Page\Block\Html" name="root" output="1" template="page_fragment.phtml">
-        <block class="Magento\Paypal\Block\Express\Review\Details" name="paypal.express.review.details"
-               template="express/review/details.phtml">
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="onepage/review/item.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped"
-                   template="onepage/review/item.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable"
-                   template="onepage/review/item.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Totals" name="paypal.express.review.details.totals" as="totals"
-                   template="onepage/review/totals.phtml"/>
-        </block>
+    <block class="Magento\Paypal\Block\Express\Review\Details" name="root" output="1"
+           template="express/review/details.phtml">
+        <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="onepage/review/item.phtml"/>
+        <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped"
+               template="onepage/review/item.phtml"/>
+        <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable"
+               template="onepage/review/item.phtml"/>
+        <block class="Magento\Checkout\Block\Cart\Totals" name="paypal.express.review.details.totals" as="totals"
+               template="onepage/review/totals.phtml"/>
     </block>
 </layout>

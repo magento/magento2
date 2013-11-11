@@ -94,7 +94,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
         $blockName = $code . '_total_renderer';
         $block = $this->getLayout()->getBlock($blockName);
         if (!$block) {
-            $renderer = $this->_salesConfig->getTotalsRenderer('quote', 'totals', $code, 'frontend');
+            $renderer = $this->_salesConfig->getTotalsRenderer('quote', 'totals', $code);
             if (!empty($renderer)) {
                 $block = $renderer;
             } else {

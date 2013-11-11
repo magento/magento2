@@ -135,7 +135,7 @@ abstract class Form
     protected $_eavConfig;
 
     /**
-     * @var \Magento\Core\Model\Config\Modules\Reader
+     * @var \Magento\Module\Dir\Reader
      */
     protected $_modulesReader;
 
@@ -162,7 +162,7 @@ abstract class Form
     /**
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Core\Model\Config\Modules\Reader $modulesReader
+     * @param \Magento\Module\Dir\Reader $modulesReader
      * @param \Magento\Eav\Model\AttributeDataFactory $attrDataFactory
      * @param \Magento\Validator\UniversalFactory $universalFactory
      * @param \Magento\App\RequestInterface $httpRequest
@@ -173,7 +173,7 @@ abstract class Form
     public function __construct(
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Core\Model\Config\Modules\Reader $modulesReader,
+        \Magento\Module\Dir\Reader $modulesReader,
         \Magento\Eav\Model\AttributeDataFactory $attrDataFactory,
         \Magento\Validator\UniversalFactory $universalFactory,
         \Magento\App\RequestInterface $httpRequest,

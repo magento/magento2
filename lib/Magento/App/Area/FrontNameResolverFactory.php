@@ -1,5 +1,7 @@
 <?php
 /**
+ * Application area front name resolver factory
+ *
  * Magento
  *
  * NOTICE OF LICENSE

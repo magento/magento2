@@ -56,20 +56,28 @@ class Page extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_storeManager;
 
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
      * Construct
      *
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\Date $date
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Stdlib\DateTime $dateTime
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Core\Model\Date $date,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Stdlib\DateTime $dateTime
     ) {
         parent::__construct($resource);
         $this->_date = $date;
         $this->_storeManager = $storeManager;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -115,7 +123,7 @@ class Page extends \Magento\Core\Model\Resource\Db\AbstractDb
          */
         foreach (array('custom_theme_from', 'custom_theme_to') as $field) {
             $value = !$object->getData($field) ? null : $object->getData($field);
-            $object->setData($field, $this->formatDate($value));
+            $object->setData($field, $this->dateTime->formatDate($value));
         }
 
         if (!$this->getIsUniquePageToStores($object)) {

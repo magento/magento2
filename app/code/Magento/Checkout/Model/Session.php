@@ -90,12 +90,18 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
     protected $_request;
 
     /**
+     * @var \Magento\HTTP\PhpEnvironment\RemoteAddress
+     */
+    protected $_remoteAddress;
+
+    /**
      * @param \Magento\Core\Model\Session\Context $context
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Core\Model\Message\CollectionFactory $messageCollFactory
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
+     * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param null $sessionName
      * @param array $data
      */
@@ -106,6 +112,7 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Core\Model\Message\CollectionFactory $messageCollFactory,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
+        \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         $sessionName = null,
         array $data = array()
     ) {
@@ -114,6 +121,7 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
         $this->_customerSession = $customerSession;
         $this->_messageCollFactory = $messageCollFactory;
         $this->_quoteFactory = $quoteFactory;
+        $this->_remoteAddress = $remoteAddress;
         parent::__construct($context, $data);
         $this->init('checkout', $sessionName);
     }
@@ -222,7 +230,7 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
             $this->_quote = $quote;
         }
 
-        if ($remoteAddr = $this->_coreHttp->getRemoteAddr()) {
+        if ($remoteAddr = $this->_remoteAddress->getRemoteAddress()) {
             $this->_quote->setRemoteIp($remoteAddr);
             $xForwardIp = $this->_request->getServer('HTTP_X_FORWARDED_FOR');
             $this->_quote->setXForwardedFor($xForwardIp);

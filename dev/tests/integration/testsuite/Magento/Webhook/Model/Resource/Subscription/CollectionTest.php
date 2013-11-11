@@ -76,11 +76,19 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_subscriptions = array();
-        $configModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Config');
-        $configModel->setNode('global/webhook/webhooks/listeners/one/label', 'One Listener');
-        $configModel->setNode('global/webhook/webhooks/listeners/two/label', 'Two Listeners');
-        $configModel->setNode('global/webhook/webhooks/listeners/three/label', 'Three Listeners');
+
+        $configMock = $this->getMock('Magento\Webhook\Model\Config', array(), array(), '', false, false);
+        $webHooks = array(
+            'listeners' => array(
+                'one' => array('label' => 'One Listener'),
+                'two' => array('label' => 'Two Listeners'),
+                'three' => array('label' => 'Three Listeners'),
+            )
+        );
+        $configMock->expects($this->any())->method('getWebhooks')->will($this->returnValue($webHooks));
+        $objectManager->addSharedInstance($configMock, 'Magento\Webhook\Model\Config');
 
         /** @var \Magento\Webhook\Model\Subscription $subscription */
         $subscription = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

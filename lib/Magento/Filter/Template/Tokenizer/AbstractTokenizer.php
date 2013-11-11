@@ -24,65 +24,61 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Template constructions tokenizer
- *
- * @category   Magento
- * @package    Magento_Filter
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-
 namespace Magento\Filter\Template\Tokenizer;
 
+/**
+ * Template constructions tokenizer
+ */
 abstract class AbstractTokenizer
 {
     /**
      * Current index in string
+     *
      * @var int
      */
     protected $_currentIndex;
-    
+
     /**
      * String for tokenize
      */
     protected $_string;
-    
+
     /**
-     * Move current index to next char. 
+     * Move current index to next char.
      *
      * If index out of bounds returns false
      *
      * @return boolean
      */
-    public function next() 
+    public function next()
     {
         if($this->_currentIndex + 1 >= strlen($this->_string)) {
             return false;
         }
-        
+
         $this->_currentIndex++;
-        return true; 
+        return true;
     }
-    
+
     /**
-     * Move current index to previus char. 
+     * Move current index to previus char.
      *
      * If index out of bounds returns false
      *
      * @return boolean
      */
-    public function prev() 
+    public function prev()
     {
         if($this->_currentIndex - 1 < 0) {
             return false;
         }
-        
+
         $this->_currentIndex--;
-        return true; 
+        return true;
     }
-    
+
     /**
-     * Return current char 
+     * Return current char
      *
      * @return string
      */
@@ -90,8 +86,8 @@ abstract class AbstractTokenizer
     {
         return $this->_string{$this->_currentIndex};
     }
-    
-    
+
+
     /**
      * Set string for tokenize
      */
@@ -100,15 +96,15 @@ abstract class AbstractTokenizer
         $this->_string = $value;
         $this->reset();
     }
-    
+
     /**
      * Move char index to begin of string
      */
-    public function reset() 
+    public function reset()
     {
         $this->_currentIndex = 0;
     }
-    
+
     /**
      * Return true if current char is white-space
      *
@@ -117,7 +113,7 @@ abstract class AbstractTokenizer
     public function isWhiteSpace() {
         return trim($this->char()) != $this->char();
     }
-    
+
     abstract public function tokenize();
-    
+
 }

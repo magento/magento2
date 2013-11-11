@@ -126,7 +126,7 @@ class Profile extends \Magento\Core\Model\AbstractModel
         // start date, order ref ID, schedule description
         if (!$this->getStartDatetime()) {
             $this->_errors['start_datetime'][] = __('The start date is undefined.');
-        } elseif (!\Zend_Date::isDate($this->getStartDatetime(), \Magento\Date::DATETIME_INTERNAL_FORMAT)) {
+        } elseif (!\Zend_Date::isDate($this->getStartDatetime(), \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)) {
             $this->_errors['start_datetime'][] = __('The start date has an invalid format.');
         }
         if (!$this->getScheduleDescription()) {
@@ -248,7 +248,7 @@ class Profile extends \Magento\Core\Model\AbstractModel
                 throw new \Magento\Core\Exception(__('The recurring profile start date has invalid format.'));
             }
             $utcTime = $this->_locale->utcDate($this->_store, $startDate, true, $dateFormat)
-                ->toString(\Magento\Date::DATETIME_INTERNAL_FORMAT);
+                ->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
             $this->setStartDatetime($utcTime)->setImportedStartDatetime($startDate);
         }
         return $this->_filterValues();
@@ -279,7 +279,7 @@ class Profile extends \Magento\Core\Model\AbstractModel
                 if (is_array($options)) {
                     if (isset($options['start_datetime'])) {
                         $startDatetime = new \Zend_Date($options['start_datetime'],
-                            \Magento\Date::DATETIME_INTERNAL_FORMAT);
+                            \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
                         $this->setNearestStartDatetime($startDatetime);
                     }
                 }
@@ -326,7 +326,7 @@ class Profile extends \Magento\Core\Model\AbstractModel
         if (!$date || $date->getTimestamp() < time()) {
             $date = new \Zend_Date(time());
         }
-        $this->setStartDatetime($date->toString(\Magento\Date::DATETIME_INTERNAL_FORMAT));
+        $this->setStartDatetime($date->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT));
         return $this;
     }
 
@@ -578,7 +578,7 @@ class Profile extends \Magento\Core\Model\AbstractModel
 
         // automatically determine start date, if not set
         if ($this->getStartDatetime()) {
-            $date = new \Zend_Date($this->getStartDatetime(), \Magento\Date::DATETIME_INTERNAL_FORMAT);
+            $date = new \Zend_Date($this->getStartDatetime(), \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
             $this->setNearestStartDatetime($date);
         } else {
             $this->setNearestStartDatetime();

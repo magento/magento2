@@ -75,7 +75,7 @@ class Product extends \Magento\Core\Controller\Front\Action
     protected $_categoryFactory;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
@@ -111,7 +111,7 @@ class Product extends \Magento\Core\Controller\Front\Action
      * @param \Magento\UrlInterface $urlModel
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param \Magento\Rating\Model\RatingFactory $ratingFactory
@@ -126,7 +126,7 @@ class Product extends \Magento\Core\Controller\Front\Action
         \Magento\UrlInterface $urlModel,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
         \Magento\Rating\Model\RatingFactory $ratingFactory,

@@ -62,7 +62,7 @@ class Switcher extends \Magento\Backend\Block\Template
      */
     protected function _prepareLayout()
     {
-        $this->setTemplate('system/config/switcher.phtml');
+        $this->setTemplate('Magento_Backend::system/config/switcher.phtml');
         return parent::_prepareLayout();
     }
 

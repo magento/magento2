@@ -47,21 +47,21 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @var \Magento\Catalog\Model\Category
      */
-    protected $_appliedCategory = null;
+    protected $_appliedCategory;
 
     /**
      * Core data
      *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Escaper
      */
-    protected $_coreData = null;
+    protected $_escaper;
 
     /**
      * Core registry
      *
      * @var \Magento\Core\Model\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Category factory
@@ -77,7 +77,7 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $catalogLayer
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Escaper $escaper
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param array $data
      */
@@ -86,12 +86,12 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer $catalogLayer,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Escaper $escaper,
         \Magento\Core\Model\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_categoryFactory = $categoryFactory;
-        $this->_coreData = $coreData;
+        $this->_escaper = $escaper;
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($filterItemFactory, $storeManager, $catalogLayer, $data);
         $this->_requestVar = 'cat';
@@ -206,7 +206,7 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         foreach ($categories as $category) {
             if ($category->getIsActive() && $category->getProductCount()) {
                 $data[] = array(
-                    'label' => $this->_coreData->escapeHtml($category->getName()),
+                    'label' => $this->_escaper->escapeHtml($category->getName()),
                     'value' => $category->getId(),
                     'count' => $category->getProductCount(),
                 );

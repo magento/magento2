@@ -80,7 +80,7 @@ class Export extends \Magento\Backend\Controller\Adminhtml\Action
             } catch (\Magento\Core\Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Logger')->logException($e);
                 $this->_getSession()->addError(__('Please correct the data sent.'));
             }
         } else {

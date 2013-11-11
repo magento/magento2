@@ -101,12 +101,12 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
         return 'persistent.xml';
     }
 
-    public function testFileSchemaUsingInvalidXml()
+    public function testFileSchemaUsingInvalidXml($expectedErrors = null)
     {
         $this->markTestSkipped('persistent.xml does not have a partial schema');
     }
 
-    public function testSchemaUsingPartialXml()
+    public function testSchemaUsingPartialXml($expectedErrors = null)
     {
         $this->markTestSkipped('persistent.xml does not have a partial schema');
     }
@@ -116,7 +116,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
         $this->markTestSkipped('persistent.xml does not have a partial schema');
     }
 
-    public function testSchemaUsingInvalidXml()
+    public function testSchemaUsingInvalidXml($expectedErrors = null)
     {
         $expectedErrors = array(
             "Element 'welcome': This element is not expected.",

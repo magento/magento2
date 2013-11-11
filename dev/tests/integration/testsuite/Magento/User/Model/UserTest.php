@@ -38,6 +38,11 @@ class UserTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $_dateTime;
+
+    /**
      * @var \Magento\User\Model\Role
      */
     protected static $_newRole;
@@ -46,6 +51,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\User\Model\User');
+        $this->_dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Stdlib\DateTime');
     }
 
     /**
@@ -408,10 +415,10 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->_model->save();
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $this->assertFalse($this->_model->isResetPasswordLinkTokenExpired());
-        $this->_model->setRpTokenCreatedAt(\Magento\Date::formatDate(time() - 60 * 60 * 24 * 10 + 10));
+        $this->_model->setRpTokenCreatedAt($this->_dateTime->formatDate(time() - 60 * 60 * 24 * 10 + 10));
         $this->assertFalse($this->_model->isResetPasswordLinkTokenExpired());
 
-        $this->_model->setRpTokenCreatedAt(\Magento\Date::formatDate(time() - 60 * 60 * 24 * 10 - 10));
+        $this->_model->setRpTokenCreatedAt($this->_dateTime->formatDate(time() - 60 * 60 * 24 * 10 - 10));
         $this->assertTrue($this->_model->isResetPasswordLinkTokenExpired());
     }
 

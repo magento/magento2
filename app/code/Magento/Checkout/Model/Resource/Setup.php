@@ -43,7 +43,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
 
     /**
      * @param \Magento\Core\Model\Resource\Setup\Context $context
-     * @param \Magento\Core\Model\CacheInterface $cache
+     * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory
      * @param \Magento\Customer\Helper\Address $customerAddress
      * @param string $resourceName
@@ -52,7 +52,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      */
     public function __construct(
         \Magento\Core\Model\Resource\Setup\Context $context,
-        \Magento\Core\Model\CacheInterface $cache,
+        \Magento\App\CacheInterface $cache,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory,
         \Magento\Customer\Helper\Address $customerAddress,
         $resourceName,

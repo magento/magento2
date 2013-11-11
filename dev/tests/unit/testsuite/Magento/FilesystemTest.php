@@ -934,6 +934,9 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($searchResult, $filesystem->searchKeys($baseDirectory, $pattern));
     }
 
+    /**
+     * @return array
+     */
     public function testSearchFilesDataProvider()
     {
         return array(
@@ -966,6 +969,9 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $filesystem->searchKeys($baseDirectory, $pattern);
     }
 
+    /**
+     * @return array
+     */
     public function searchFilesIsolationDataProvider()
     {
         return array(
@@ -981,6 +987,41 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
                 '*',
                 "Path '/tmp/log/some/folder/../../../' is out of working directory '/tmp/log'"
             ),
+        );
+    }
+
+    public function testCheckLfiProtection()
+    {
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')->getMock();
+        $filesystem = new \Magento\Filesystem($adapterMock);
+        $this->assertTrue($filesystem->checkLfiProtection('/some/path/to/a/file.txt'));
+        $this->assertTrue($filesystem->checkLfiProtection('/some/path/to/a/file.with.dot.txt'));
+        $this->assertTrue($filesystem->checkLfiProtection('/some/path/to/a/dir'));
+    }
+
+    /**
+     * @dataProvider checkLfiProtectionDataProvider
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Requested file may not include parent directory traversal ("../", "..\" notation)
+     */
+    public function testCheckLfiProtectionException($path)
+    {
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')->getMock();
+        $filesystem = new \Magento\Filesystem($adapterMock);
+        $filesystem->checkLfiProtection($path);
+    }
+
+    /**
+     * @return array
+     */
+    public function checkLfiProtectionDataProvider()
+    {
+        return array(
+            array('../asd/'),
+            array('../../'),
+            array('asd/../asda'),
+            array('/asd/../asda'),
+            array('asd/../../asda'),
         );
     }
 }

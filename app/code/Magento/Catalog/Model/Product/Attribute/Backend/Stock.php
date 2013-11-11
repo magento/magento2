@@ -46,11 +46,11 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Construct
      *
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
      */
     public function __construct(
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
     ) {
         $this->_stockItemFactory = $stockItemFactory;

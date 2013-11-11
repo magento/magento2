@@ -49,20 +49,20 @@ class DisableOutput
     protected $_values;
 
     /**
-     * @var \Magento\App\ModuleListInterface
+     * @var \Magento\Module\ModuleListInterface
      */
     protected $_moduleList;
 
     /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\App\ModuleListInterface $moduleList
+     * @param \Magento\Module\ModuleListInterface $moduleList
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\App\ModuleListInterface $moduleList,
+        \Magento\Module\ModuleListInterface $moduleList,
         array $data = array()
     ) {
         parent::__construct($context, $authSession, $data);

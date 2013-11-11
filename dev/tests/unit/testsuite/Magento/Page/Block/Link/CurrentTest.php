@@ -43,30 +43,26 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_frontControllerMock;
+    protected $_coreHelperMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_coreHelperMock;
+    protected $_defaultPathMock;
 
     protected function setUp()
     {
         $this->_urlBuilderMock = $this->getMock('\Magento\UrlInterface');
         $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
-        $this->_frontControllerMock = $this->getMock('Magento\App\FrontController', array(), array(), '', false);
         $this->_coreHelperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $this->_contextMock = $this->getMock('Magento\Core\Block\Template\Context', array(), array(), '', false);
-
+        $this->_defaultPathMock = $this->getMock('\Magento\App\DefaultPathInterface');
         $this->_contextMock->expects($this->any())
             ->method('getUrlBuilder')
             ->will($this->returnValue($this->_urlBuilderMock));
         $this->_contextMock->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue($this->_requestMock));
-        $this->_contextMock->expects($this->any())
-            ->method('getFrontController')
-            ->will($this->returnValue($this->_frontControllerMock));
     }
 
     public function testGetUrl()
@@ -79,7 +75,11 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
             ->with($path)
             ->will($this->returnValue($url));
 
-        $link = new \Magento\Page\Block\Link\Current($this->_coreHelperMock, $this->_contextMock);
+        $link = new \Magento\Page\Block\Link\Current(
+            $this->_coreHelperMock,
+            $this->_contextMock,
+            $this->_defaultPathMock
+        );
 
         $link->setPath($path);
         $this->assertEquals($url, $link->getHref());
@@ -88,7 +88,11 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
 
     public function testIsCurrentIfIsset()
     {
-        $link = new \Magento\Page\Block\Link\Current($this->_coreHelperMock, $this->_contextMock);
+        $link = new \Magento\Page\Block\Link\Current(
+            $this->_coreHelperMock,
+            $this->_contextMock,
+            $this->_defaultPathMock
+        );
         $link->setCurrent(true);
         $this->assertTrue($link->IsCurrent());
     }
@@ -101,10 +105,9 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
         $this->_requestMock->expects($this->once())->method('getModuleName')->will($this->returnValue('a'));
         $this->_requestMock->expects($this->once())->method('getControllerName')->will($this->returnValue('b'));
         $this->_requestMock->expects($this->once())->method('getActionName')->will($this->returnValue('d'));
-
-        $this->_frontControllerMock->expects($this->once())
-            ->method('getDefault')
-            ->will($this->returnValue(array('action' => 'd')));
+        $this->_defaultPathMock->expects($this->atLeastOnce())
+            ->method('getPart')
+            ->will($this->returnValue('d'));
 
         $this->_urlBuilderMock->expects($this->at(0))->method('getUrl')->with($path)->will($this->returnValue($url));
         $this->_urlBuilderMock->expects($this->at(1))
@@ -112,7 +115,11 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
             ->with('a/b')
             ->will($this->returnValue($url));
 
-        $link = new \Magento\Page\Block\Link\Current($this->_coreHelperMock, $this->_contextMock);
+        $link = new \Magento\Page\Block\Link\Current(
+            $this->_coreHelperMock,
+            $this->_contextMock,
+            $this->_defaultPathMock
+        );
         $link->setPath($path);
         $this->assertTrue($link->isCurrent());
     }
@@ -122,7 +129,11 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
         $this->_urlBuilderMock->expects($this->at(0))->method('getUrl')->will($this->returnValue('1'));
         $this->_urlBuilderMock->expects($this->at(1))->method('getUrl')->will($this->returnValue('2'));
 
-        $link = new \Magento\Page\Block\Link\Current($this->_coreHelperMock, $this->_contextMock);
+        $link = new \Magento\Page\Block\Link\Current(
+            $this->_coreHelperMock,
+            $this->_contextMock,
+            $this->_defaultPathMock
+        );
         $this->assertFalse($link->isCurrent());
     }
 }

@@ -101,9 +101,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             $this->_subscriptionFactory->create()->load($this->_subscription->getId())->getStatus());
     }
 
-    /**
-     * @magentoConfigFixture global/webhook/webhooks/test/hook/label 'Test Hook'
-     */
     public function testAfterWebapiUserChange()
     {
         //setup
@@ -121,9 +118,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             $this->_subscriptionFactory->create()->load($this->_subscription->getId())->getStatus());
     }
 
-    /**
-     * @magentoConfigFixture global/webhook/webhooks/test/hook/label 'Test Hook'
-     */
     public function testAfterWebapiRoleChange()
     {
         //setup

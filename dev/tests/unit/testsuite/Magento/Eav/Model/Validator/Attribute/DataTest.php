@@ -50,7 +50,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $attrDataFactory = $this->getMock(
             'Magento\Eav\Model\AttributeDataFactory',
             array('create'),
-            array('objectManager' => $this->getMock('Magento\ObjectManager'))
+            array(
+                'objectManager' => $this->getMock('Magento\ObjectManager'),
+                'string'        => $this->getMock('Magento\Stdlib\String')
+            )
         );
 
         $validator = new \Magento\Eav\Model\Validator\Attribute\Data($attrDataFactory);
@@ -166,7 +169,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $attrDataFactory = $this->getMock(
             'Magento\Eav\Model\AttributeDataFactory',
             array('create'),
-            array('objectManager' => $this->getMock('Magento\ObjectManager'))
+            array(
+                'objectManager' => $this->getMock('Magento\ObjectManager'),
+                'string'        => $this->getMock('Magento\Stdlib\String')
+            )
         );
         $attrDataFactory->expects($this->once())
             ->method('create')
@@ -203,7 +209,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $attrDataFactory = $this->getMock(
             'Magento\Eav\Model\AttributeDataFactory',
             array('create'),
-            array('objectManager' => $this->getMock('Magento\ObjectManager'))
+            array(
+                'objectManager' => $this->getMock('Magento\ObjectManager'),
+                'string'        => $this->getMock('Magento\Stdlib\String')
+            )
         );
         $attrDataFactory->expects($this->once())
             ->method('create')
@@ -240,7 +249,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $attrDataFactory = $this->getMock(
             'Magento\Eav\Model\AttributeDataFactory',
             array(),
-            array('objectManager' => $this->getMock('Magento\ObjectManager'))
+            array(
+                'objectManager' => $this->getMock('Magento\ObjectManager'),
+                'string'        => $this->getMock('Magento\Stdlib\String')
+            )
         );
         $validator = new \Magento\Eav\Model\Validator\Attribute\Data($attrDataFactory);
         $result = $validator->setAttributesWhiteList($attributes);
@@ -254,7 +266,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $attrDataFactory = $this->getMock(
             'Magento\Eav\Model\AttributeDataFactory',
             array(),
-            array('objectManager' => $this->getMock('Magento\ObjectManager'))
+            array(
+                'objectManager' => $this->getMock('Magento\ObjectManager'),
+                'string'        => $this->getMock('Magento\Stdlib\String')
+            )
         );
         $validator = new \Magento\Eav\Model\Validator\Attribute\Data($attrDataFactory);
         $result = $validator->setAttributesBlackList($attributes);
@@ -290,8 +305,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $factory = $this->getMock(
             'Magento\Eav\Model\AttributeDataFactory',
             array('create'),
-            array('objectManager' => $this->getMock('Magento\ObjectManager'))
-        );;
+            array(
+                'objectManager' => $this->getMock('Magento\ObjectManager'),
+                'string'        => $this->getMock('Magento\Stdlib\String')
+            )
+        );
         $validator = new \Magento\Eav\Model\Validator\Attribute\Data($factory);
         $validator->setAttributes(array($firstAttribute, $secondAttribute))
             ->setData($data);

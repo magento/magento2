@@ -164,12 +164,12 @@ class Translate
     protected $_placeholderRender;
 
     /**
-     * @var \Magento\App\ModuleList
+     * @var \Magento\Module\ModuleList
      */
     protected $_moduleList;
 
     /**
-     * @var \Magento\Core\Model\Config\Modules\Reader
+     * @var \Magento\Module\Dir\Reader
      */
     protected $_modulesReader;
 
@@ -189,18 +189,24 @@ class Translate
     protected $_app;
 
     /**
+     * @var \Magento\App\State
+     */
+    protected $_appState;
+
+    /**
      * @param \Magento\View\DesignInterface $viewDesign
      * @param \Magento\Core\Model\Locale\Hierarchy\Config $config
      * @param \Magento\Core\Model\Translate\Factory $translateFactory
      * @param \Magento\Cache\FrontendInterface $cache
      * @param \Magento\Core\Model\View\FileSystem $viewFileSystem
      * @param \Magento\Phrase\Renderer\Placeholder $placeholderRender
-     * @param \Magento\App\ModuleList $moduleList
-     * @param \Magento\Core\Model\Config\Modules\Reader $modulesReader
+     * @param \Magento\Module\ModuleList $moduleList
+     * @param \Magento\Module\Dir\Reader $modulesReader
      * @param \Magento\Core\Model\Config $coreConfig
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Core\Model\Resource\Translate $translate
      * @param \Magento\Core\Model\App $app
+     * @param \Magento\App\State $appState
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -211,12 +217,13 @@ class Translate
         \Magento\Cache\FrontendInterface $cache,
         \Magento\Core\Model\View\FileSystem $viewFileSystem,
         \Magento\Phrase\Renderer\Placeholder $placeholderRender,
-        \Magento\App\ModuleList $moduleList,
-        \Magento\Core\Model\Config\Modules\Reader $modulesReader,
+        \Magento\Module\ModuleList $moduleList,
+        \Magento\Module\Dir\Reader $modulesReader,
         \Magento\Core\Model\Config $coreConfig,
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Core\Model\Resource\Translate $translate,
-        \Magento\Core\Model\App $app
+        \Magento\Core\Model\App $app,
+        \Magento\App\State $appState
     ) {
         $this->_viewDesign = $viewDesign;
         $this->_localeHierarchy = $config->getHierarchy();
@@ -230,6 +237,7 @@ class Translate
         $this->_storeManager = $storeManager;
         $this->_translateResource = $translate;
         $this->_app = $app;
+        $this->_appState = $appState;
     }
 
     /**
@@ -240,12 +248,13 @@ class Translate
      * @param bool $forceReload
      * @return \Magento\Core\Model\Translate
      */
-    public function init($area, $initParams = null, $forceReload = false)
+    public function init($area = null, $initParams = null, $forceReload = false)
     {
+        $area = isset($area) ? $area : $this->_appState->getAreaCode();
         $this->setConfig(array(self::CONFIG_KEY_AREA => $area));
 
         $this->_translateInline = $this->getInlineObject($initParams)->isAllowed(
-            $area == \Magento\Backend\Helper\Data::BACKEND_AREA_CODE ? 'admin' : null);
+            $area == \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE ? 'admin' : null);
 
         if (!$forceReload) {
             $this->_data = $this->_loadCache();

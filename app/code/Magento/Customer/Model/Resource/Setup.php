@@ -43,16 +43,16 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
 
     /**
      * @param \Magento\Core\Model\Resource\Setup\Context $context
-     * @param \Magento\Core\Model\CacheInterface $cache
+     * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Core\Model\CacheInterface $resourceName
+     * @param \Magento\App\CacheInterface $resourceName
      * @param string $moduleName
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Core\Model\Resource\Setup\Context $context,
-        \Magento\Core\Model\CacheInterface $cache,
+        \Magento\App\CacheInterface $cache,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory,
         \Magento\Eav\Model\Config $eavConfig,
         $resourceName,

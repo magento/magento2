@@ -42,6 +42,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
         /** @var $_model \Magento\Core\Model\App\Area */
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Core\Model\App\Area', array('areaCode' => 'frontend'));

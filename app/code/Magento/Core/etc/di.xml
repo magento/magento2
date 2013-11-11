@@ -25,8 +25,8 @@
 -->
 <config>
     <preference for="Magento\Acl\CacheInterface" type="Magento\Core\Model\Acl\Cache" />
-    <preference for="Magento\App\Updater\SetupInterface" type="Magento\Core\Model\Resource\Setup" />
-    <preference for="Magento\App\Module\ResourceResolverInterface" type="Magento\App\Module\ResourceResolver" />
+    <preference for="Magento\Module\Updater\SetupInterface" type="Magento\Core\Model\Resource\Setup" />
+    <preference for="Magento\Module\ResourceResolverInterface" type="Magento\Module\ResourceResolver" />
     <preference for="Magento\AuthorizationInterface" type="Magento\Authorization" />
     <preference for="Magento\Authorization\Policy" type="Magento\Authorization\Policy\DefaultPolicy" />
     <preference for="Magento\Authorization\RoleLocator" type="Magento\Authorization\RoleLocator\DefaultRoleLocator" />
@@ -43,15 +43,24 @@
     <preference for="Magento\Config\ConverterInterface" type="Magento\Config\Converter\Dom"/>
     <preference for="Magento\Phrase\RendererInterface" type="Magento\Phrase\Renderer\Composite" />
     <preference for="Magento\Core\Model\Url\SecurityInfoInterface" type="Magento\Core\Model\Url\SecurityInfo\Proxy" />
-    <type name="Magento\App\FrontController">
-        <plugin name="install" type="Magento\Core\App\FrontController\Plugin\Install" sortOrder="40"/>
-        <plugin name="requestPreprocessor" type="Magento\Core\App\FrontController\Plugin\RequestPreprocessor" sortOrder="50"/>
+    <preference for="Magento\App\DefaultPathInterface" type="Magento\App\DefaultPath\DefaultPath" />
+    <preference for="Magento\Encryption\EncryptorInterface" type="Magento\Encryption\Encryptor" />
+    <preference for="Magento\Filter\Encrypt\AdapterInterface" type=" Magento\Filter\Encrypt\Basic" />
+    <type name="Magento\App\DefaultPath\DefaultPath">
+        <param name="parts">
+            <value>
+                <module>core</module>
+                <controller>index</controller>
+                <action>index</action>
+            </value>
+        </param>
     </type>
     <type name="Magento\App\AreaList">
         <param name="areas">
             <value>
                 <frontend>
                     <frontName />
+                    <router>standard</router>
                 </frontend>
             </value>
         </param>
@@ -223,7 +232,7 @@
     </type>
     <type name="Magento\Core\Model\Theme\Image">
         <param name="uploader">
-            <instance type="Magento\Core\Model\Theme\Image\UploaderProxy" />
+            <instance type="Magento\Core\Model\Theme\Image\Uploader\Proxy" />
         </param>
     </type>
     <type name="Magento\Phrase\Renderer\Composite">
@@ -256,29 +265,7 @@
             <instance type="Magento\Core\Model\Config\SectionPool\Proxy" />
         </param>
     </type>
-    <type name="Magento\App\RouterList" shared="true">
-        <param name="routerList">
-            <value>
-                <standard>
-                    <instance>Magento\Core\Controller\Varien\Router\Base</instance>
-                    <disable type="bool">false</disable>
-                    <sortOrder>20</sortOrder>
-                </standard>
-                <default>
-                    <instance>Magento\App\Router\DefaultRouter</instance>
-                    <disable type="bool">false</disable>
-                    <sortOrder>100</sortOrder>
-                </default>
-            </value>
-        </param>
-    </type>
-    <type name="Magento\Core\Controller\Varien\Router\Base">
-        <param name="areaCode">
-            <value>frontend</value>
-        </param>
-        <param name="baseController">
-            <value>Magento\Core\Controller\Varien\Action</value>
-        </param>
+    <type name="Magento\Core\App\Router\Base">
         <param name="routerId">
             <value>standard</value>
         </param>
@@ -347,9 +334,6 @@
         </param>
     </type>
     <type name="Magento\Core\Helper\Data">
-        <param name="encryptor">
-            <instance type="Magento\Core\Model\Encryption" />
-        </param>
         <param name="locale">
             <instance type="Magento\Core\Model\Locale\Proxy" />
         </param>
@@ -362,9 +346,9 @@
             <value>app/etc/aliases_to_classes_map.json</value>
         </param>
     </type>
-    <type name="Magento\Core\Model\Encryption">
+    <type name="Magento\Encryption\Encryptor">
         <param name="cryptKey">
-            <value type="argument">Magento\Core\Model\Encryption::PARAM_CRYPT_KEY</value>
+            <value type="argument">Magento\Encryption\Encryptor::PARAM_CRYPT_KEY</value>
         </param>
     </type>
     <type name="Magento\Core\Model\Session\Context">
@@ -399,11 +383,6 @@
             <instance type="Magento\App\Request\Http\Proxy" />
         </param>
     </type>
-    <type name="Magento\Core\Helper\String">
-        <param name="locale">
-            <instance type="Magento\Core\Model\Locale\Proxy" />
-        </param>
-    </type>
     <type name="Magento\Core\Helper\File\Storage">
         <param name="storage">
             <instance type="Magento\Core\Model\File\Storage\Proxy" />
@@ -421,5 +400,18 @@
     </type>
     <type name="Magento\View\TemplateEngineFactory">
         <plugin name="debug_hints" type="Magento\Core\Model\TemplateEngine\Plugin\DebugHints" sortOrder="10"/>
+    </type>
+    <type name="Magento\Core\Model\Store\Storage\Db">
+        <param name="url">
+            <instance type="Magento\Backend\Model\Url\Proxy" />
+        </param>
+    </type>
+    <type name="Magento\Core\Model\App">
+        <param name="frontController">
+            <instance type="Magento\App\FrontController\Proxy" />
+        </param>
+    </type>
+    <type name="Magento\App\FrontController">
+        <plugin name="dispatchExceptionHandler" type="Magento\Core\App\FrontController\Plugin\DispatchExceptionHandler" sortOrder="30"/>
     </type>
 </config>

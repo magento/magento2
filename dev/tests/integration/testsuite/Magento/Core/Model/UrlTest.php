@@ -255,10 +255,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->_model->setRoutePath('catalog/product/view');
         $this->_model->setRouteParams(array('id' => 50));
         $this->assertEquals('catalog/product/view/id/50/', $this->_model->getRoutePath());
-
-        $this->_model->setRoutePath('adminhtml/system_config/edit');
-        $this->_model->setRouteParams(array('section' => 'design', 'key' => '123'));
-        $this->assertEquals('admin/system_config/edit/section/design/key/123/', $this->_model->getRoutePath());
     }
 
     public function testSetGetRouteName()

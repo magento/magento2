@@ -30,6 +30,9 @@
 require __DIR__ . '/../../../../../app/bootstrap.php';
 \Magento\Autoload\IncludePath::addIncludePath(__DIR__.'/../../../');
 
+/**
+ * Command line usage help
+ */
 define('SYNOPSIS', <<<USAGE
 Usage: php -f generator.php -- [--source <dir>] [--destination <dir>] [--dry-run]
        php -f generator.php -- --help
@@ -64,9 +67,9 @@ try {
     $filesystem = new \Magento\Filesystem(new \Magento\Filesystem\Adapter\Local);
     $dirs = new \Magento\App\Dir($config->getSourceDir());
     $objectManager = new \Magento\ObjectManager\ObjectManager();
-
-    $themes = new \Magento\Core\Model\Theme\Collection($filesystem, $objectManager, $dirs);
-    $themes->setItemObjectClass(' \Magento\Tools\View\Generator\ThemeLight');
+    $entityFactory = new Magento\Core\Model\EntityFactory($objectManager);
+    $themes = new \Magento\Core\Model\Theme\Collection($filesystem, $dirs, $entityFactory);
+    $themes->setItemObjectClass('\Magento\Tools\View\Generator\ThemeLight');
     $themes->addDefaultPattern('*');
 
     $fallbackFactory = new \Magento\View\Design\Fallback\Factory($dirs);

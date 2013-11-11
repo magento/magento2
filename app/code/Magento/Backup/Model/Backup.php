@@ -64,13 +64,6 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     protected $_helper;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
-
-    /**
      * Locale model
      *
      * @var \Magento\Core\Model\LocaleInterface
@@ -85,24 +78,27 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     protected $_backendAuthSession;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Core\Helper\Data $coreData
+     * @var \Magento\Encryption\EncryptorInterface
+     */
+    protected $_encryptor;
+
+    /**
      * @param \Magento\Backup\Helper\Data $helper
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param \Magento\Encryption\EncryptorInterface $encryptor
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backup\Helper\Data $helper,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Backend\Model\Auth\Session $authSession,
+        \Magento\Encryption\EncryptorInterface $encryptor,
         $data = array()
     ) {
+        $this->_encryptor = $encryptor;
         parent::__construct($data);
 
-        $this->_coreData = $coreData;
         $adapter = new \Magento\Filesystem\Adapter\Zlib(self::COMPRESS_RATE);
         $this->_filesystem = new \Magento\Filesystem($adapter);
         $this->_filesystem->setIsAllowCreateDirectories(true);
@@ -427,7 +423,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     public function validateUserPassword($password)
     {
         $userPasswordHash = $this->_backendAuthSession->getUser()->getPassword();
-        return $this->_coreData->validateHash($password, $userPasswordHash);
+        return $this->_encryptor->validateHash($password, $userPasswordHash);
     }
 
     /**

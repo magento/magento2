@@ -42,29 +42,27 @@ class Data extends \Magento\Core\Helper\AbstractHelper
         = 'admin/emails/password_reset_link_expiration_period';
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
-
-    /**
      * @var \Magento\Core\Model\Config
      */
     protected $_coreConfig;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
+     * @var \Magento\Math\Random
+     */
+    protected $mathRandom;
+
+    /**
      * @param \Magento\Core\Helper\Context $context
      * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\Math\Random $mathRandom
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Helper\Context $context,
-        \Magento\Core\Model\Config $coreConfig
+        \Magento\Core\Model\Config $coreConfig,
+        \Magento\Math\Random $mathRandom
     ) {
-        $this->_coreData = $coreData;
         $this->_coreConfig = $coreConfig;
+        $this->mathRandom = $mathRandom;
         parent::__construct($context);
     }
 
@@ -75,7 +73,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      */
     public function generateResetPasswordLinkToken()
     {
-        return $this->_coreData->uniqHash();
+        return $this->mathRandom->getUniqueHash();
     }
 
     /**

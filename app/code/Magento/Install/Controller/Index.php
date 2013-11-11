@@ -80,6 +80,6 @@ class Index extends \Magento\Install\Controller\Action
      */
     public function indexAction()
     {
-        $this->_forward('begin', 'wizard', 'install');
+        $this->_redirect('install/wizard/begin');
     }
 }

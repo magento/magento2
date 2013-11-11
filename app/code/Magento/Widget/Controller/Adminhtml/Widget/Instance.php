@@ -44,25 +44,33 @@ class Instance extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_widgetFactory;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
+
+    /**
+     * @var \Magento\Math\Random
+     */
+    protected $mathRandom;
 
     /**
      * @param \Magento\Backend\Controller\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Widget\Model\Widget\InstanceFactory $widgetFactory
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
+     * @param \Magento\Math\Random $mathRandom
      */
     public function __construct(
         \Magento\Backend\Controller\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Widget\Model\Widget\InstanceFactory $widgetFactory,
-        \Magento\Core\Model\Logger $logger
+        \Magento\Logger $logger,
+        \Magento\Math\Random $mathRandom
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_widgetFactory = $widgetFactory;
         $this->_logger = $logger;
+        $this->mathRandom = $mathRandom;
         parent::__construct($context);
     }
 
@@ -262,7 +270,7 @@ class Instance extends \Magento\Backend\Controller\Adminhtml\Action
         $chooser = $this->getLayout()
             ->createBlock('Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser')
             ->setUseMassaction(true)
-            ->setId($this->_objectManager->get('Magento\Core\Helper\Data')->uniqHash('categories'))
+            ->setId($this->mathRandom->getUniqueHash('categories'))
             ->setIsAnchorOnly($isAnchorOnly)
             ->setSelectedCategories(explode(',', $selected));
         $this->setBody($chooser->toHtml());
@@ -278,7 +286,7 @@ class Instance extends \Magento\Backend\Controller\Adminhtml\Action
         $productTypeId = $this->getRequest()->getParam('product_type_id', '');
         $chooser = $this->getLayout()
             ->createBlock('Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser')
-            ->setName($this->_objectManager->get('Magento\Core\Helper\Data')->uniqHash('products_grid_'))
+            ->setName($this->mathRandom->getUniqueHash('products_grid_'))
             ->setUseMassaction(true)
             ->setProductTypeId($productTypeId)
             ->setSelectedProducts(explode(',', $selected));
@@ -303,6 +311,15 @@ class Instance extends \Magento\Backend\Controller\Adminhtml\Action
      *
      */
     public function blocksAction()
+    {
+        $this->_objectManager->get('Magento\App\State')
+            ->emulateAreaCode('frontend', array($this, 'renderPageContainers'));
+    }
+
+    /**
+     * Render page containers
+     */
+    public function renderPageContainers()
     {
         /* @var $widgetInstance \Magento\Widget\Model\Widget\Instance */
         $widgetInstance = $this->_initWidgetInstance();

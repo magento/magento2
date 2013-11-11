@@ -39,7 +39,7 @@ class Db extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_dbResource;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
@@ -59,13 +59,13 @@ class Db extends \Magento\Install\Model\Installer\AbstractInstaller
 
     /**
      * @param \Magento\Install\Model\Installer $installer
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Install\Model\Installer\Db\Factory $dbFactory
      * @param array $dbConfig
      */
     public function __construct(
         \Magento\Install\Model\Installer $installer,
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Install\Model\Installer\Db\Factory $dbFactory,
         array $dbConfig
     ) {

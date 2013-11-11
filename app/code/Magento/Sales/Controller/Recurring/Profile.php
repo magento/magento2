@@ -118,7 +118,7 @@ class Profile extends \Magento\Core\Controller\Front\Action
             $this->_session->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->_session->addError(__('We couldn\'t update the profile.'));
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         if ($profile) {
             $this->_redirect('*/*/view', array('profile' => $profile->getId()));
@@ -146,7 +146,7 @@ class Profile extends \Magento\Core\Controller\Front\Action
             $this->_session->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->_session->addError(__('We couldn\'t update the profile.'));
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         if ($profile) {
             $this->_redirect('*/*/view', array('profile' => $profile->getId()));
@@ -174,7 +174,7 @@ class Profile extends \Magento\Core\Controller\Front\Action
         } catch (\Magento\Core\Exception $e) {
             $this->_session->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         $this->_redirect('*/*/');
     }

@@ -24,6 +24,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Tax\Model\Sales\Order;
+
 /**
  * @method \Magento\Tax\Model\Resource\Sales\Order\Tax _getResource()
  * @method \Magento\Tax\Model\Resource\Sales\Order\Tax getResource()
@@ -49,13 +51,7 @@
  * @method \Magento\Tax\Model\Sales\Order\Tax setBaseRealAmount(float $value)
  * @method int getHidden()
  * @method \Magento\Tax\Model\Sales\Order\Tax setHidden(int $value)
- *
- * @category    Magento
- * @package     Magento_Tax
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Tax\Model\Sales\Order;
-
 class Tax extends \Magento\Core\Model\AbstractModel
 {
     protected function _construct()

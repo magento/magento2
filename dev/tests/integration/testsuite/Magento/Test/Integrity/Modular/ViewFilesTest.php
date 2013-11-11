@@ -38,9 +38,10 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
              * @param string $file
              */
             function ($application, $file) {
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
+                    ->loadArea($application);
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                     ->get('Magento\View\DesignInterface')
-                    ->setArea($application)
                     ->setDefaultDesignTheme();
                 $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                     ->get('Magento\Core\Model\View\FileSystem')
@@ -59,10 +60,11 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
     public function viewFilesFromModulesViewDataProvider()
     {
         $files = array();
-        /** @var $configModel \Magento\Core\Model\Config */
-        $configModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Config');
+        /** @var $configModelReader \Magento\Module\Dir\Reader */
+        $configModelReader =
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Module\Dir\Reader');
         foreach ($this->_getEnabledModules() as $moduleName) {
-            $moduleViewDir = $configModel->getModuleDir('view', $moduleName);
+            $moduleViewDir = $configModelReader->getModuleDir('view', $moduleName);
             if (!is_dir($moduleViewDir)) {
                 continue;
             }
@@ -141,9 +143,10 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
              * @param string $file
              */
             function ($application, $file) {
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
+                    ->setAreaCode($application);
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                     ->get('Magento\View\DesignInterface')
-                    ->setArea($application)
                     ->setDefaultDesignTheme();
                 $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                     ->get('Magento\Core\Model\View\FileSystem');

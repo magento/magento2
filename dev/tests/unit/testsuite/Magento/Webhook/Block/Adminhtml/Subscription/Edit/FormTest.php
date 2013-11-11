@@ -61,7 +61,7 @@ class FormTest extends \Magento\Test\Block\Adminhtml
 
     public function testPrepareColumns()
     {
-        $this->_formFactoryMock = $this->getMock('Magento\Data\Form\Factory', array('create'),
+        $this->_formFactoryMock = $this->getMock('Magento\Data\FormFactory', array('create'),
             array(), '', false, false);
         $this->_registry = new \Magento\Core\Model\Registry();
         $this->_coreData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);

@@ -43,20 +43,18 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     protected $_resource;
 
     /**
-     * Core string
+     * Magento string lib
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
-    protected $_coreString = null;
+    protected $string;
 
     /**
-     * Construct
-     *
      * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $catalogLayer
      * @param \Magento\Catalog\Model\Resource\Layer\Filter\AttributeFactory $filterAttributeFactory
-     * @param \Magento\Core\Helper\String $coreString
+     * @param \Magento\Stdlib\String $string
      * @param array $data
      */
     public function __construct(
@@ -64,11 +62,11 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer $catalogLayer,
         \Magento\Catalog\Model\Resource\Layer\Filter\AttributeFactory $filterAttributeFactory,
-        \Magento\Core\Helper\String $coreString,
+        \Magento\Stdlib\String $string,
         array $data = array()
     ) {
         $this->_resource = $filterAttributeFactory->create();
-        $this->_coreString = $coreString;
+        $this->string = $string;
         parent::__construct($filterItemFactory, $storeManager, $catalogLayer, $data);
         $this->_requestVar = 'attribute';
     }
@@ -144,7 +142,7 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
             if (is_array($option['value'])) {
                 continue;
             }
-            if ($this->_coreString->strlen($option['value'])) {
+            if ($this->string->strlen($option['value'])) {
                 // Check filter type
                 if ($this->_getIsFilterableAttribute($attribute) == self::OPTIONS_ONLY_WITH_RESULTS) {
                     if (!empty($optionsCount[$option['value']])) {

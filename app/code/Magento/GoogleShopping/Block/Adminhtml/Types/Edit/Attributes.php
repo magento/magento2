@@ -202,7 +202,7 @@ class Attributes
         foreach ($attributes as $attribute) {
             /* @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
             $result[$attribute->getAttributeId()] = $escapeJsQuotes
-                ? $this->jsQuoteEscape($attribute->getFrontendLabel())
+                ? $this->escapeJsQuote($attribute->getFrontendLabel())
                 : $attribute->getFrontendLabel();
         }
         return $result;

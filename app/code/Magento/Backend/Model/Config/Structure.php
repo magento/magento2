@@ -96,12 +96,14 @@ class Structure implements \Magento\Backend\Model\Config\Structure\SearchInterfa
      */
     public function getTabs()
     {
-        foreach ($this->_data['sections'] as $sectionId => $section) {
-            if (isset($section['tab']) && $section['tab']) {
-                $this->_data['tabs'][$section['tab']]['children'][$sectionId] = $section;
+        if (isset($this->_data['sections'])) {
+            foreach ($this->_data['sections'] as $sectionId => $section) {
+                if (isset($section['tab']) && $section['tab']) {
+                    $this->_data['tabs'][$section['tab']]['children'][$sectionId] = $section;
+                }
             }
+            $this->_tabIterator->setElements($this->_data['tabs'], $this->_scopeDefiner->getScope());
         }
-        $this->_tabIterator->setElements($this->_data['tabs'], $this->_scopeDefiner->getScope());
         return $this->_tabIterator;
     }
 

@@ -30,7 +30,7 @@
         </action>
         <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-variables-js">
             <arguments>
-                <argument name="file" xsi:type="string">Magento_Adminhtml::variables.js</argument>
+                <argument name="file" xsi:type="string">Magento_Backend::variables.js</argument>
             </arguments>
         </block>
         <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-wysiwyg-widget-js">

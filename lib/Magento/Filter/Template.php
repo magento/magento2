@@ -58,6 +58,21 @@ class Template implements \Zend_Filter_Interface
     protected $_includeProcessor = null;
 
     /**
+     * @var \Magento\Stdlib\String
+     */
+    protected $string;
+
+    /**
+     * @param \Magento\Stdlib\String $string
+     * @param array $variables
+     */
+    public function __construct(\Magento\Stdlib\String $string, $variables = array())
+    {
+        $this->string = $string;
+        $this->setVariables($variables);
+    }
+
+    /**
      * Sets template variables that's can be called through {var ...} statement
      *
      * @param array $variables
@@ -257,7 +272,7 @@ class Template implements \Zend_Filter_Interface
             ) {
                 // If object calling methods or getting properties
                 if ($stackVars[$i]['type'] == 'property') {
-                    $caller = 'get' . uc_words($stackVars[$i]['name'], '');
+                    $caller = 'get' . $this->string->upperCaseWords($stackVars[$i]['name'], '_', '');
                     $stackVars[$i]['variable'] = method_exists($stackVars[$i - 1]['variable'], $caller)
                         ? $stackVars[$i - 1]['variable']->$caller()
                         : $stackVars[$i - 1]['variable']->getData($stackVars[$i]['name']);

@@ -15,23 +15,21 @@ app/code/Magento/Catalog/Block/Adminhtml/Product/Helper/Form/Weight.php
 # Formatter intorduces long line
 app/code/Magento/Catalog/Block/Adminhtml/Product/Options/Ajax.php
 # Formatter intorduces long line
-app/code/Magento/Adminhtml/Block/Cms/Page/Edit/Tab/Design.php
+app/code/Magento/Cms/Block/Adminhtml/Page/Edit/Tab/Design.php
 # Formatter intorduces long line
 app/code/Magento/Adminhtml/Block/Page/System/Config/Robots/Reset.php
 # Formatter intorduces long line
-app/code/Magento/Adminhtml/Block/System/Store/Edit.php
+app/code/Magento/Backend/Block/System/Store/Edit.php
 # Not magento code
 app/code/Zend
 # Not magento code
 dev/tools/Magento/Tools/I18n/Zend
-# Not required to scan build director
-dev/build
 # Not magento code
 dev/tools/layout
 # Not magento code
 dev/tools/xml
 # PSR-1 not applied to
-dev/tests/functional
+dev/tests/functional-old
 # PSR-1 not applied to
 dev/tests/js
 # Example files that are expected to fail code sniffer

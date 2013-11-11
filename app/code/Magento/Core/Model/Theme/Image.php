@@ -52,7 +52,7 @@ class Image
     protected $_imageFactory;
 
     /**
-     * @var \Magento\Core\Model\Theme\Image\UploaderProxy
+     * @var \Magento\Core\Model\Theme\Image\Uploader
      */
     protected $_uploader;
 
@@ -62,7 +62,7 @@ class Image
     protected $_themeImagePath;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
@@ -78,7 +78,7 @@ class Image
      * @param \Magento\Core\Model\Image\Factory $imageFactory
      * @param \Magento\Core\Model\Theme\Image\Uploader $uploader
      * @param \Magento\Core\Model\Theme\Image\Path $themeImagePath
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\View\Design\ThemeInterface $theme
      */
     public function __construct(
@@ -86,7 +86,7 @@ class Image
         \Magento\Core\Model\Image\Factory $imageFactory,
         \Magento\Core\Model\Theme\Image\Uploader $uploader,
         \Magento\Core\Model\Theme\Image\Path $themeImagePath,
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\View\Design\ThemeInterface $theme = null
     ) {
         $this->_filesystem = $filesystem;

@@ -37,8 +37,22 @@ namespace Magento\Index\Model\Resource;
 class Process extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\App\Resource $resource
+     */
+    public function __construct(\Magento\Stdlib\DateTime $dateTime, \Magento\App\Resource $resource)
+    {
+        $this->dateTime = $dateTime;
+        parent::__construct($resource);
+    }
+
+    /**
      * Initialize  table and table pk
-     *
      */
     protected function _construct()
     {
@@ -74,7 +88,7 @@ class Process extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $data = array(
             'status'    => \Magento\Index\Model\Process::STATUS_PENDING,
-            'ended_at'  => $this->formatDate(time()),
+            'ended_at'  => $this->dateTime->formatDate(time()),
         );
         $this->_updateProcessData($process->getId(), $data);
         return $this;
@@ -90,7 +104,7 @@ class Process extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $data = array(
             'status'        => \Magento\Index\Model\Process::STATUS_RUNNING,
-            'started_at'    => $this->formatDate(time()),
+            'started_at'    => $this->dateTime->formatDate(time()),
         );
         $this->_updateProcessData($process->getId(), $data);
         return $this;
@@ -106,7 +120,7 @@ class Process extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $data = array(
             'status'   => \Magento\Index\Model\Process::STATUS_REQUIRE_REINDEX,
-            'ended_at' => $this->formatDate(time()),
+            'ended_at' => $this->dateTime->formatDate(time()),
         );
         $this->_updateProcessData($process->getId(), $data);
         return $this;
@@ -149,7 +163,7 @@ class Process extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function updateProcessStartDate(\Magento\Index\Model\Process $process)
     {
-        $this->_updateProcessData($process->getId(), array('started_at' => $this->formatDate(time())));
+        $this->_updateProcessData($process->getId(), array('started_at' => $this->dateTime->formatDate(time())));
         return $this;
     }
 
@@ -161,7 +175,7 @@ class Process extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function updateProcessEndDate(\Magento\Index\Model\Process $process)
     {
-        $this->_updateProcessData($process->getId(), array('ended_at' => $this->formatDate(time())));
+        $this->_updateProcessData($process->getId(), array('ended_at' => $this->dateTime->formatDate(time())));
         return $this;
     }
 

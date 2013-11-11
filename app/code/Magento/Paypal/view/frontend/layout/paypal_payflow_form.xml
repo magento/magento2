@@ -24,8 +24,6 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Paypal Payflow Form" type="page">
-    <block class="Magento\Page\Block\Html" name="root" output="1" template="page_fragment.phtml">
-        <block class="Magento\Paypal\Block\Payflow\Link\Iframe" name="payflow.link.iframe"
-               template="payflowlink/form.phtml"/>
-    </block>
+    <block class="Magento\Paypal\Block\Payflow\Link\Iframe" name="payflow.link.iframe" output="1"
+           template="payflowlink/form.phtml"/>
 </layout>

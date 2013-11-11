@@ -75,14 +75,14 @@ class QueueHandlerTest extends \PHPUnit_Framework_TestCase
             ->save();
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(array(
-            'Magento\Core\Model\Config\Base' => array(
+            'Magento\Webhook\Model\Config' => array(
                 'parameters' => array(
                     'sourceData' => __DIR__ . '/../_files/config.xml',
                 ),
             ),
             'Magento\Webhook\Model\Resource\Subscription' => array(
                 'parameters' => array(
-                    'config' => array('instance' => 'Magento\Core\Model\Config\Base'),
+                    'config' => array('instance' => 'Magento\Webhook\Model\Config'),
                 ),
             )
         ));

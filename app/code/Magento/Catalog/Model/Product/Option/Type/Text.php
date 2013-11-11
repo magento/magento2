@@ -24,49 +24,41 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Catalog product option text type
- *
- * @category   Magento
- * @package    Magento_Catalog
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Model\Product\Option\Type;
 
+/**
+ * Catalog product option text type
+ */
 class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
     /**
-     * Core string
+     * Magento string lib
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
-    protected $_coreString = null;
+    protected $string;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Escaper
      */
-    protected $_coreData = null;
+    protected $_escaper = null;
 
     /**
-     * Constructor
-     *
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Helper\String $coreString
+     * @param \Magento\Escaper $escaper
+     * @param \Magento\Stdlib\String $string
      * @param array $data
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Helper\String $coreString,
+        \Magento\Escaper $escaper,
+        \Magento\Stdlib\String $string,
         array $data = array()
     ) {
-        $this->_coreData = $coreData;
-        $this->_coreString = $coreString;
+        $this->_escaper = $escaper;
+        $this->string = $string;
         parent::__construct($checkoutSession, $coreStoreConfig, $data);
     }
 
@@ -92,7 +84,7 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
         // Check maximal length limit
         $maxCharacters = $option->getMaxCharacters();
-        if ($maxCharacters > 0 && $this->_coreString->strlen($value) > $maxCharacters) {
+        if ($maxCharacters > 0 && $this->string->strlen($value) > $maxCharacters) {
             $this->setIsValid(false);
             throw new \Magento\Core\Exception(__('The text is too long.'));
         }
@@ -123,6 +115,6 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function getFormattedOptionValue($value)
     {
-        return $this->_coreData->escapeHtml($value);
+        return $this->_escaper->escapeHtml($value);
     }
 }

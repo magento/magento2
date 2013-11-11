@@ -32,13 +32,6 @@ namespace Magento\Directory\Model\Resource\Country;
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
-     * String helper
-     *
-     * @var \Magento\Core\Helper\String
-     */
-    protected $_stringHelper;
-
-    /**
      * Locale model
      *
      * @var \Magento\Core\Model\LocaleInterface
@@ -58,32 +51,39 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     protected $_countryFactory;
 
     /**
-     * @param \Magento\Core\Model\Logger $logger
+     * Array utils object
+     *
+     * @var \Magento\Stdlib\ArrayUtils
+     */
+    protected $_arrayUtils;
+
+    /**
+     * @param \Magento\Logger $logger
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Helper\String $stringHelper
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Directory\Model\Resource\CountryFactory $countryFactory
+     * @param \Magento\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Helper\String $stringHelper,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Directory\Model\Resource\CountryFactory $countryFactory,
+        \Magento\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $resource);
         $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_stringHelper = $stringHelper;
         $this->_locale = $locale;
         $this->_countryFactory = $countryFactory;
+        $this->_arrayUtils = $arrayUtils;
     }
     /**
      * Foreground countries
@@ -205,7 +205,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
                 $sort[$name] = $data['value'];
             }
         }
-        $this->_stringHelper->ksortMultibyte($sort);
+        $this->_arrayUtils->ksortMultibyte($sort, $this->_locale->getLocaleCode());
         foreach (array_reverse($this->_foregroundCountries) as $foregroundCountry) {
             $name = array_search($foregroundCountry, $sort);
             unset($sort[$name]);

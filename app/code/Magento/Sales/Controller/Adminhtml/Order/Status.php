@@ -128,14 +128,14 @@ class Status extends \Magento\Backend\Controller\Adminhtml\Action
             $statusCode = $this->getRequest()->getParam('status');
 
             //filter tags in labels/status
-            /** @var $helper \Magento\Adminhtml\Helper\Data */
-            $helper = $this->_objectManager->get('Magento\Adminhtml\Helper\Data');
+            /** @var $filterManager \Magento\Filter\FilterManager */
+            $filterManager = $this->_objectManager->get('Magento\Filter\FilterManager');
             if ($isNew) {
-                $statusCode = $data['status'] = $helper->stripTags($data['status']);
+                $statusCode = $data['status'] = $filterManager->stripTags($data['status']);
             }
-            $data['label'] = $helper->stripTags($data['label']);
+            $data['label'] = $filterManager->stripTags($data['label']);
             foreach ($data['store_labels'] as &$label) {
-                $label = $helper->stripTags($label);
+                $label = $filterManager->stripTags($label);
             }
 
             $status = $this->_objectManager->create('Magento\Sales\Model\Order\Status')

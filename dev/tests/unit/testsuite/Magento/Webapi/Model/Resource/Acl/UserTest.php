@@ -35,7 +35,7 @@ class UserTest extends \Magento\Webapi\Model\Resource\Acl\AbstractTest
      */
     protected function _createModel($selectMock = null)
     {
-        $this->_resource = $this->getMockBuilder('Magento\Core\Model\Resource')
+        $this->_resource = $this->getMockBuilder('Magento\App\Resource')
             ->disableOriginalConstructor()
             ->setMethods(array('getConnection', 'getTableName'))
             ->getMock();

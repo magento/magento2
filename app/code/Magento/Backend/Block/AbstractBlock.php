@@ -24,17 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Backend abstract block
- *
- * @category   Magento
- * @package    Magento_Backend
- * @author     Magento Core Team <core@magentocommerce.com>
- *
- */
 namespace Magento\Backend\Block;
 
 /**
+ * Backend abstract block
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractBlock extends \Magento\Core\Block\AbstractBlock
@@ -43,11 +37,6 @@ class AbstractBlock extends \Magento\Core\Block\AbstractBlock
      * @var \Magento\AuthorizationInterface
      */
     protected $_authorization;
-
-    /**
-     * @var \Magento\Core\Model\Logger
-     */
-    protected $_logger;
 
     /**
      * @param \Magento\Backend\Block\Context $context
@@ -59,6 +48,5 @@ class AbstractBlock extends \Magento\Core\Block\AbstractBlock
     ) {
         parent::__construct($context, $data);
         $this->_authorization = $context->getAuthorization();
-        $this->_logger = $context->getLogger();
     }
 }

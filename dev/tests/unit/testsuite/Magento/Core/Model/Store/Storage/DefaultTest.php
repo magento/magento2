@@ -22,16 +22,15 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model\Store\Storage;
 
 /**
  * Test class for \Magento\Core\Model\Store\Storage\DefaultStorage
  */
-namespace Magento\Core\Model\Store\Storage;
-
 class DefaultTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Store\Storage\DefaultStorage
+     * @var DefaultStorage
      */
     protected $_model;
 
@@ -91,7 +90,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         $this->_storeFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->_storeMock));
-        $this->_model = new \Magento\Core\Model\Store\Storage\DefaultStorage(
+        $this->_model = new DefaultStorage(
             $this->_storeFactoryMock,
             $this->_websiteFactoryMock,
             $this->_groupFactoryMock
@@ -128,6 +127,12 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     public function testGetWebsite()
     {
         $websiteId = 'testWebsite';
+        $this->assertInstanceOf('Magento\Core\Model\Website', $this->_model->getWebsite($websiteId));
+    }
+
+    public function testGetWebsiteEmptyString()
+    {
+        $websiteId = '';
         $this->assertInstanceOf('Magento\Core\Model\Website', $this->_model->getWebsite($websiteId));
     }
 

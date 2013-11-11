@@ -54,21 +54,23 @@ class CompositeScannerTest extends \PHPUnit_Framework_TestCase
         $scannerPhp = $this->getMock('Magento\Tools\Di\Code\Scanner\ScannerInterface');
         $scannerXml = $this->getMock('Magento\Tools\Di\Code\Scanner\ScannerInterface');
 
+        $scannerPhpExpected = array('Model_OneProxy', 'Model_TwoFactory');
+        $scannerXmlExpected = array('Model_OneProxy', 'Model_ThreeFactory');
         $scannerPhp->expects($this->once())
             ->method('collectEntities')
             ->with($phpFiles)
-            ->will($this->returnValue(array('Model_OneProxy', 'Model_TwoFactory')));
+            ->will($this->returnValue($scannerPhpExpected));
 
         $scannerXml->expects($this->once())
             ->method('collectEntities')
             ->with($configFiles)
-            ->will($this->returnValue(array('Model_OneProxy', 'Model_ThreeFactory')));
+            ->will($this->returnValue($scannerXmlExpected));
 
         $this->_model->addChild($scannerPhp, 'php');
         $this->_model->addChild($scannerXml, 'config');
 
         $actual = $this->_model->collectEntities($files);
-        $expected = array('Model_OneProxy', 'Model_TwoFactory', 'Model_ThreeFactory');
+        $expected = array($scannerPhpExpected, $scannerXmlExpected);
 
         $this->assertEquals($expected, array_values($actual));
     }

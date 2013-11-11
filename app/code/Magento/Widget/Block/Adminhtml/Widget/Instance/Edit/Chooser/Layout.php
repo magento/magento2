@@ -24,14 +24,14 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
+
 /**
  * Widget Instance layouts chooser
  *
  * @method getArea()
  * @method getTheme()
  */
-namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
-
 class Layout extends \Magento\Core\Block\Html\Select
 {
     /**
@@ -45,19 +45,27 @@ class Layout extends \Magento\Core\Block\Html\Select
     protected $_themesFactory;
 
     /**
+     * @var \Magento\App\State
+     */
+    protected $_appState;
+
+    /**
      * @param \Magento\Core\Block\Context $context
      * @param \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory
      * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory
+     * @param \Magento\App\State $appState
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Block\Context $context,
         \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory,
         \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory,
+        \Magento\App\State $appState,
         array $data = array()
     ) {
         $this->_layoutProcessorFactory = $layoutProcessorFactory;
         $this->_themesFactory = $themesFactory;
+        $this->_appState = $appState;
         parent::__construct($context, $data);
     }
 
@@ -73,8 +81,11 @@ class Layout extends \Magento\Core\Block\Html\Select
             $layoutUpdateParams = array(
                 'theme' => $this->_getThemeInstance($this->getTheme()),
             );
-            $pageTypesAll = $this->_getLayoutProcessor($layoutUpdateParams)->getAllPageHandles();
-            $this->_addPageTypeOptions($pageTypesAll);
+            $pageTypes = $this->_appState->emulateAreaCode(
+                'frontend',
+                array($this->_getLayoutProcessor($layoutUpdateParams), 'getAllPageHandles')
+            );
+            $this->_addPageTypeOptions($pageTypes);
         }
         return parent::_beforeToHtml();
     }
@@ -83,10 +94,6 @@ class Layout extends \Magento\Core\Block\Html\Select
      * Retrieve theme instance by its identifier
      *
      * @param int $themeId
-     *
-     *
-     *
-     *
      * @return \Magento\Core\Model\Theme|null
      */
     protected function _getThemeInstance($themeId)
@@ -114,6 +121,7 @@ class Layout extends \Magento\Core\Block\Html\Select
      */
     protected function _addPageTypeOptions(array $pageTypes)
     {
+        $label = array();
         // Sort list of page types by label
         foreach ($pageTypes as $key => $row) {
             $label[$key]  = $row['label'];

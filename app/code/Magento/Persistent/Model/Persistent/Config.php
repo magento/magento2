@@ -42,7 +42,7 @@ class Config
     /** @var \Magento\Config\DomFactory  */
     protected $_domFactory;
 
-    /** @var \Magento\Core\Model\Config\Modules\Reader  */
+    /** @var \Magento\Module\Dir\Reader  */
     protected $_moduleReader;
 
     /** @var \DOMXPath  */
@@ -71,14 +71,14 @@ class Config
 
     /**
      * @param \Magento\Config\DomFactory $domFactory
-     * @param \Magento\Core\Model\Config\Modules\Reader $moduleReader
+     * @param \Magento\Module\Dir\Reader $moduleReader
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\App\State $appState
      * @param \Magento\Persistent\Model\Factory $persistentFactory
      */
     public function __construct(
         \Magento\Config\DomFactory $domFactory,
-        \Magento\Core\Model\Config\Modules\Reader $moduleReader,
+        \Magento\Module\Dir\Reader $moduleReader,
         \Magento\View\LayoutInterface $layout,
         \Magento\App\State $appState,
         \Magento\Persistent\Model\Factory $persistentFactory

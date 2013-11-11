@@ -43,7 +43,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_elementFactory;
 
     /**
-     * @var \Magento\Data\Form\Factory
+     * @var \Magento\Data\FormFactory
      */
     protected $_formFactory;
 
@@ -87,7 +87,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavCollectionFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\GoogleShopping\Model\Config $config
-     * @param \Magento\Data\Form\Factory $formFactory
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Data\Form\Element\Factory $elementFactory
      * @param \Magento\GoogleShopping\Helper\Category $googleShoppingCategory
      * @param \Magento\Core\Helper\Data $coreData
@@ -100,7 +100,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavCollectionFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\GoogleShopping\Model\Config $config,
-        \Magento\Data\Form\Factory $formFactory,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Data\Form\Element\Factory $elementFactory,
         \Magento\GoogleShopping\Helper\Category $googleShoppingCategory,
         \Magento\Core\Helper\Data $coreData,

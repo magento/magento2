@@ -24,15 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Import entity abstract model
- *
- * @category    Magento
- * @package     Magento_ImportExport
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\ImportExport\Model\Import;
 
+/**
+ * Import entity abstract model
+ */
 abstract class AbstractEntity
 {
     /**
@@ -137,11 +133,11 @@ abstract class AbstractEntity
     protected $_jsonHelper;
 
     /**
-     * Helper to manipulate with string
+     * Magento string lib
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
-    protected $_stringHelper;
+    protected $string;
 
     /**
      * Entity model parameters
@@ -251,20 +247,20 @@ abstract class AbstractEntity
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Helper\String $coreString
+     * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Helper\String $coreString,
+        \Magento\Stdlib\String $string,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         array $data = array()
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
@@ -273,7 +269,7 @@ abstract class AbstractEntity
         $this->_connection          = isset($data['connection']) ? $data['connection']
             : $resource->getConnection('write');
         $this->_jsonHelper          =  $coreData;
-        $this->_stringHelper        =  $coreString;
+        $this->string        =  $string;
         $this->_pageSize            = isset($data['page_size']) ? $data['page_size']
             : (static::XML_PATH_PAGE_SIZE ? (int)$this->_coreStoreConfig->getConfig(static::XML_PATH_PAGE_SIZE) : 0);
         $this->_maxDataSize         = isset($data['max_data_size']) ? $data['max_data_size']
@@ -581,8 +577,8 @@ abstract class AbstractEntity
     {
         switch ($attributeParams['type']) {
             case 'varchar':
-                $value = $this->_stringHelper->cleanString($rowData[$attributeCode]);
-                $valid = $this->_stringHelper->strlen($value) < self::DB_MAX_VARCHAR_LENGTH;
+                $value = $this->string->cleanString($rowData[$attributeCode]);
+                $valid = $this->string->strlen($value) < self::DB_MAX_VARCHAR_LENGTH;
                 break;
             case 'decimal':
                 $value = trim($rowData[$attributeCode]);
@@ -601,8 +597,8 @@ abstract class AbstractEntity
                 $valid = strtotime($value) !== false;
                 break;
             case 'text':
-                $value = $this->_stringHelper->cleanString($rowData[$attributeCode]);
-                $valid = $this->_stringHelper->strlen($value) < self::DB_MAX_TEXT_LENGTH;
+                $value = $this->string->cleanString($rowData[$attributeCode]);
+                $valid = $this->string->strlen($value) < self::DB_MAX_TEXT_LENGTH;
                 break;
             default:
                 $valid = true;
@@ -701,11 +697,10 @@ abstract class AbstractEntity
     {
         if (!$this->_dataValidated) {
             // do all permanent columns exist?
-            if ($absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames())) {
+            $absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames());
+            if ($absentColumns) {
                 throw new \Magento\Core\Exception(
-                    __('Cannot find required columns: %1',
-                        implode(', ', $absentColumns)
-                    )
+                    __('Cannot find required columns: %1', implode(', ', $absentColumns))
                 );
             }
 
@@ -726,16 +721,12 @@ abstract class AbstractEntity
 
             if ($emptyHeaderColumns) {
                 throw new \Magento\Core\Exception(
-                    __('Columns number: "%1" have empty headers',
-                        implode('", "', $emptyHeaderColumns)
-                    )
+                    __('Columns number: "%1" have empty headers', implode('", "', $emptyHeaderColumns))
                 );
             }
             if ($invalidColumns) {
                 throw new \Magento\Core\Exception(
-                    __('Column names: "%1" are invalid',
-                        implode('", "', $invalidColumns)
-                    )
+                    __('Column names: "%1" are invalid', implode('", "', $invalidColumns))
                 );
             }
 

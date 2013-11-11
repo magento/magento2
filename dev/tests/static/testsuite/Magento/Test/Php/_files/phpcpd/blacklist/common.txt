@@ -7,6 +7,7 @@ Magento/Catalog/Block/Product/ProductList
 Magento/Catalog/Model/Category/Attribute/Source
 Magento/Catalog/Model/Category/Indexer
 Magento/Catalog/Model/Product
+Magento/Core/Model/Resource/Design
 Zend
 downloader
 dev
@@ -39,12 +40,15 @@ Magento/Sales/Controller/Adminhtml/Order
 Magento/Sales/Model/Resource/Helper
 Magento/Sales/Model/Resource/Order
 Magento/Catalog/Model/Resource/Product
+Magento/CatalogRule/Block/Adminhtml/Promo/Catalog/Edit/Tab
 Magento/Checkout/Block/Onepage
+Magento/Cms/Block/Adminhtml/Page/Edit
 Magento/Core/Model/Design/Backend
 Magento/Core/Model/Layout/File/Source/Override
 Magento/Core/Model/Store
 Magento/Cron/Model/Config/Backend/Product
 Magento/Customer/Block/Account/Dashboard
+Magento/Customer/Block/Adminhtml/Edit/Tab
 Magento/Customer/Model/Config/Backend/Show
 Magento/DesignEditor/Block/Adminhtml/Editor/Tools/Code
 Magento/DesignEditor/Block/Adminhtml/Theme/Selector/Tab
@@ -68,6 +72,7 @@ Magento/Sales/Block/Adminhtml
 Magento/Sales/Model/Resource
 Magento/Sales/Model/Quote/Address/Total
 Magento/Sales/Model/Resource/Report/Order
+Magento/SalesRule/Block/Adminhtml/Promo/Quote/Edit/Tab
 Magento/Shipping/Model/Carrier
 Magento/CatalogRule/Model
 Magento/Tax/Block/Checkout
@@ -95,3 +100,4 @@ Magento/Theme/Block/Adminhtml/System/Design/Theme/Edit
 Magento/User/Block/User/Edit
 var/generation
 Magento/Newsletter/Model/Template/Filter
+

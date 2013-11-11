@@ -82,7 +82,7 @@ class Auth extends \Magento\Backend\Controller\AbstractAction
                 }
                 // @codingStandardsIgnoreStart
                 $this->_getSession()
-                    ->addSuccess(__('If there is an account associated with %1 you will receive an email with a link to reset your password.', $this->_objectManager->get('Magento\User\Helper\Data')->escapeHtml($email)));
+                    ->addSuccess(__('If there is an account associated with %1 you will receive an email with a link to reset your password.', $this->_objectManager->get('Magento\Escaper')->escapeHtml($email)));
                 // @codingStandardsIgnoreEnd
                 $this->getResponse()->setRedirect(
                     $this->_objectManager->get('Magento\Backend\Helper\Data')->getHomePageUrl()

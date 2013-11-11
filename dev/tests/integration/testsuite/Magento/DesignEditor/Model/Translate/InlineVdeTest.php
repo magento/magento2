@@ -46,6 +46,7 @@ class InlineVdeTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
             ->setDesignTheme('magento_demo');
     }

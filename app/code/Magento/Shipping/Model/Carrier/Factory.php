@@ -36,7 +36,7 @@ class Factory
     protected $_coreStoreConfig;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
@@ -47,12 +47,12 @@ class Factory
 
     /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\ObjectManager $objectManager
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\ObjectManager $objectManager
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;

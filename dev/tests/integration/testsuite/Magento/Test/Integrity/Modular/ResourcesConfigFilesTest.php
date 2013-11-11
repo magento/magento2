@@ -26,7 +26,7 @@ namespace Magento\Test\Integrity\Modular;
 class ResourcesConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Resource\Config\Reader
+     * @var \Magento\App\Resource\Config\Reader
      */
     protected $_model;
 
@@ -44,10 +44,10 @@ class ResourcesConfigFilesTest extends \PHPUnit_Framework_TestCase
         $validationStateMock->expects($this->any())
             ->method('isValidated')
             ->will($this->returnValue(true));
-        $localConfigMock = $this->getMock('Magento\Core\Model\Config\Local', array(), array(), '', false);
+        $localConfigMock = $this->getMock('Magento\App\Config', array(), array(), '', false);
         $localConfigMock->expects($this->any())->method('getConfiguration')->will($this->returnValue(array()));
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model = $objectManager->create('Magento\Core\Model\Resource\Config\Reader', array(
+        $this->_model = $objectManager->create('Magento\App\Resource\Config\Reader', array(
             'fileResolver' => $fileResolverMock,
             'validationState' => $validationStateMock,
             'localConfig' => $localConfigMock,

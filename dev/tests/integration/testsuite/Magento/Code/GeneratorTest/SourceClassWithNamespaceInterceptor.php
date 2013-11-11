@@ -159,7 +159,7 @@ class SourceClassWithNamespaceInterceptor extends \Magento\Code\GeneratorTest\So
      */
     public function __wakeup()
     {
-        $this->_objectManager = \Magento\Core\Model\ObjectManager::getInstance();
+        $this->_objectManager = \Magento\App\ObjectManager::getInstance();
         $this->_pluginList = $this->_objectManager->get('Magento\Interception\PluginList');
     }
 

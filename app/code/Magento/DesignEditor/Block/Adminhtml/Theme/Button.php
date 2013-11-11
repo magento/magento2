@@ -91,11 +91,10 @@ class Button extends \Magento\Core\Block\Template
      */
     protected function _attributesToHtml($attributes)
     {
-        $helper = $this->helper('Magento\Backend\Helper\Data');
         $html = '';
         foreach ($attributes as $attributeKey => $attributeValue) {
             if ($attributeValue !== null && $attributeValue !== '') {
-                $html .= $attributeKey . '="' . $helper->escapeHtml($attributeValue) . '" ';
+                $html .= $attributeKey . '="' . $this->escapeHtml($attributeValue) . '" ';
             }
         }
         return $html;

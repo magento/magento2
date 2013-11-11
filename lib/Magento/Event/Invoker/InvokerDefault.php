@@ -25,6 +25,8 @@
  */
 namespace Magento\Event\Invoker;
 
+use Zend\Stdlib\Exception\LogicException;
+
 class InvokerDefault implements \Magento\Event\InvokerInterface
 {
     /**
@@ -79,14 +81,14 @@ class InvokerDefault implements \Magento\Event\InvokerInterface
      * @param string $method
      * @param \Magento\Event\Observer $observer
      * @return \Magento\Event\InvokerInterface
-     * @throws \Magento\Core\Exception
+     * @throws \LogicException
      */
     protected function _callObserverMethod($object, $method, $observer)
     {
         if (method_exists($object, $method)) {
             $object->$method($observer);
         } elseif ($this->_appState->getMode() == \Magento\App\State::MODE_DEVELOPER) {
-            throw new \Magento\Core\Exception('Method "' . $method . '" is not defined in "' . get_class($object) . '"');
+            throw new \LogicException('Method "' . $method . '" is not defined in "' . get_class($object) . '"');
         }
         return $this;
     }

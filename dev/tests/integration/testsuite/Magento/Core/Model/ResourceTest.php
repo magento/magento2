@@ -28,14 +28,14 @@ namespace Magento\Core\Model;
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Resource
+     * @var \Magento\App\Resource
      */
     protected $_model;
 
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Resource');
+            ->create('Magento\App\Resource');
     }
 
     public function testGetTableName()
@@ -45,7 +45,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $tableNameOrig = 'core_website';
 
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Resource', array('tablePrefix' => 'prefix_'));
+            ->create('Magento\App\Resource', array('tablePrefix' => 'prefix_'));
 
         $tableName = $this->_model->getTableName(array($tableNameOrig, $tableSuffix));
         $this->assertContains($tablePrefix, $tableName);

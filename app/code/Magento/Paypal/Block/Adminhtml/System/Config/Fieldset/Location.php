@@ -213,7 +213,7 @@ class Location
 
                             if (conflict && !confirmationShowed && anotherEnabler.value == 1) {
                                 if (isEvent) {
-                                    confirmationApproved = confirm(\'' .  $this->helper('Magento\Core\Helper\Data')->jsQuoteEscape(__('There is already another PayPal solution enabled. Enable this solution instead?')) . '\');
+                                    confirmationApproved = confirm(\'' .  $this->escapeJsQuote(__('There is already another PayPal solution enabled. Enable this solution instead?')) . '\');
                                 } else {
                                     paypalConflictsObject.isConflict = true;
                                 }
@@ -312,14 +312,14 @@ class Location
                     paypalConflictsObject.checkPaymentConflicts(enablerElement, "initial");
                 });
                 if (paypalConflictsObject.isConflict || paypalConflictsObject.ecMissed) {
-                    var notification = \'' .  $this->helper('Magento\Core\Helper\Data')->jsQuoteEscape(__('The following error(s) occured:')) . '\';
+                    var notification = \'' .  $this->escapeJsQuote(__('The following error(s) occured:')) . '\';
                     if (paypalConflictsObject.isConflict) {
-                        notification += "\\n  " + \'' .  $this->helper('Magento\Core\Helper\Data')->jsQuoteEscape(__('Some PayPal solutions conflict.')) . '\';
+                        notification += "\\n  " + \'' .  $this->escapeJsQuote(__('Some PayPal solutions conflict.')) . '\';
                     }
                     if (paypalConflictsObject.ecMissed) {
-                        notification += "\\n  " + \'' .  $this->helper('Magento\Core\Helper\Data')->jsQuoteEscape(__('PayPal Express Checkout is not enabled.')) . '\';
+                        notification += "\\n  " + \'' .  $this->escapeJsQuote(__('PayPal Express Checkout is not enabled.')) . '\';
                     }
-                    notification += "\\n" + \'' .  $this->helper('Magento\Core\Helper\Data')->jsQuoteEscape(__('Please re-enable the previously enabled payment solutions.')) . '\';
+                    notification += "\\n" + \'' .  $this->escapeJsQuote(__('Please re-enable the previously enabled payment solutions.')) . '\';
                     setTimeout(function() {
                         alert(notification);
                     }, 1);

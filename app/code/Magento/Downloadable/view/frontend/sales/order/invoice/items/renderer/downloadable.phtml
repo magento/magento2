@@ -23,6 +23,8 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
+/** @var $this \Magento\Downloadable\Block\Sales\Order\Item\Renderer\Downloadable */
 ?>
 <?php $_item = $this->getItem() ?>
 <?php $_order = $this->getItem()->getOrderItem()->getOrder() ?>
@@ -68,7 +70,7 @@
             <br/><a href="#" id="order-item-gift-message-link-<?php echo $_item->getId() ?>" class="gift-message-link" aria-controls="order-item-gift-message-<?php echo $_item->getId()?>" data-item-id="<?php echo $_item->getId() ?>"><?php echo __('Gift Message') ?></a>
         <?php endif; ?>
     </td>
-    <td><?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\String')->splitInjection($this->getSku())) ?></td>
+    <td><?php echo $this->prepareSku($this->getSku()) ?></td>
     <td class="a-right nowrap">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displayCartPriceExclTax()): ?>
             <span class="price-excl-tax">

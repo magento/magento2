@@ -158,7 +158,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
      */
     public function isShownToLoggedInUser()
     {
-        $forms = (array)$this->_captchaData->getConfigNode('shown_to_logged_in_user');
+        $forms = (array)$this->_captchaData->getConfig('shown_to_logged_in_user');
         foreach ($forms as $formId => $isShownToLoggedIn) {
             if ($isShownToLoggedIn && $this->_formId == $formId) {
                 return true;
@@ -185,7 +185,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
      */
     protected function _getAllowedAttemptsForSameLogin()
     {
-        return (int)$this->_captchaData->getConfigNode('failed_attempts_login');
+        return (int)$this->_captchaData->getConfig('failed_attempts_login');
     }
 
     /**
@@ -195,7 +195,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
      */
     protected function _getAllowedAttemptsFromSameIp()
     {
-        return (int)$this->_captchaData->getConfigNode('failed_attempts_ip');
+        return (int)$this->_captchaData->getConfig('failed_attempts_ip');
     }
 
     /**
@@ -241,7 +241,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
      */
     public function isCaseSensitive()
     {
-        return (string)$this->_captchaData->getConfigNode('case_sensitive');
+        return (string)$this->_captchaData->getConfig('case_sensitive');
     }
 
     /**
@@ -251,7 +251,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
      */
     public function getFont()
     {
-        $font = (string)$this->_captchaData->getConfigNode('font');
+        $font = (string)$this->_captchaData->getConfig('font');
         $fonts = $this->_captchaData->getFonts();
 
         if (isset($fonts[$font])) {
@@ -276,7 +276,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
              * as "timeout" configuration parameter specifies timeout in minutes - we multiply it on 60 to set
              * expiration in seconds
              */
-            $this->_expiration = (int)$this->_captchaData->getConfigNode('timeout') * 60;
+            $this->_expiration = (int)$this->_captchaData->getConfig('timeout') * 60;
         }
         return $this->_expiration;
     }
@@ -383,7 +383,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
      */
     protected function _getSymbols()
     {
-        return str_split((string)$this->_captchaData->getConfigNode('symbols'));
+        return str_split((string)$this->_captchaData->getConfig('symbols'));
     }
 
     /**
@@ -395,7 +395,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
     {
         $from = 0;
         $to = 0;
-        $length = (string)$this->_captchaData->getConfigNode('length');
+        $length = (string)$this->_captchaData->getConfig('length');
         if (!is_numeric($length)) {
             if (preg_match('/(\d+)-(\d+)/', $length, $matches)) {
                 $from = (int)$matches[1];
@@ -421,17 +421,17 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
      */
     protected function _isShowAlways()
     {
-        if ((string)$this->_captchaData->getConfigNode('mode') == \Magento\Captcha\Helper\Data::MODE_ALWAYS) {
+        if ((string)$this->_captchaData->getConfig('mode') == \Magento\Captcha\Helper\Data::MODE_ALWAYS) {
             return true;
         }
 
-        if ((string)$this->_captchaData->getConfigNode('mode') == \Magento\Captcha\Helper\Data::MODE_AFTER_FAIL
+        if ((string)$this->_captchaData->getConfig('mode') == \Magento\Captcha\Helper\Data::MODE_AFTER_FAIL
             && $this->_getAllowedAttemptsForSameLogin() == 0
         ) {
             return true;
         }
 
-        $alwaysFor = $this->_captchaData->getConfigNode('always_for');
+        $alwaysFor = $this->_captchaData->getConfig('always_for');
         foreach ($alwaysFor as $nodeFormId => $isAlwaysFor) {
             if ($isAlwaysFor && $this->_formId == $nodeFormId) {
                 return true;
@@ -448,7 +448,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
      */
     protected function _isEnabled()
     {
-        return (string)$this->_captchaData->getConfigNode('enable');
+        return (string)$this->_captchaData->getConfig('enable');
     }
 
     /**
@@ -460,7 +460,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
      */
     protected function _getTargetForms()
     {
-        $formsString = (string)$this->_captchaData->getConfigNode('forms');
+        $formsString = (string)$this->_captchaData->getConfig('forms');
         return explode(',', $formsString);
     }
 

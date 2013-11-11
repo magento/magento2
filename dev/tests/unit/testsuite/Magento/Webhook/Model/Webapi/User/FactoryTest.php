@@ -148,13 +148,18 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $mockMathRandom = $this->getMockBuilder('Magento\Math\Random')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->_userFactory = new \Magento\Webhook\Model\Webapi\User\Factory(
             $mockRuleFactory,
             $mockUserFactory,
+
             $mockRoleFactory,
             $this->_mockAuthConfig,
             $mockAclCache,
-            $this->_mockCoreHelper
+            $mockMathRandom
         );
     }
 
@@ -173,15 +178,6 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             'secret'    => $secret,
             'company'   => $company,
         );
-
-        $uniq = 'unique string';
-
-        $this->_mockCoreHelper = $this->getMockBuilder('Magento\Core\Helper\Data')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_mockCoreHelper->expects($this->once())
-            ->method('uniqHash')
-            ->will($this->returnValue($uniq));
 
         // Mock Role
         $this->_mockRole = $this->getMockBuilder('Magento\Webapi\Model\Acl\Role')

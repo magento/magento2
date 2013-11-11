@@ -32,11 +32,29 @@ namespace Magento\Backend\Controller\Adminhtml;
 class Index extends \Magento\Backend\Controller\AbstractAction
 {
     /**
+     * Search modules list
+     *
+     * @var array
+     */
+    protected $_searchModules;
+
+    /**
+     * @param \Magento\Backend\Controller\Context $context
+     * @param array $searchModules
+     */
+    public function __construct(
+        \Magento\Backend\Controller\Context $context,
+        array $searchModules = array()
+    ) {
+        $this->_searchModules = $searchModules;
+        parent::__construct($context);
+    }
+
+    /**
      * Global Search Action
      */
     public function globalSearchAction()
     {
-        $searchModules = $this->_objectManager->get('Magento\Core\Model\Config')->getNode("adminhtml/global_search");
         $items = array();
 
         if (!$this->_authorization->isAllowed('Magento_Adminhtml::global_search')) {
@@ -47,7 +65,7 @@ class Index extends \Magento\Backend\Controller\AbstractAction
                 'description' => __('You need more permissions to do this.')
             );
         } else {
-            if (empty($searchModules)) {
+            if (empty($this->_searchModules)) {
                 $items[] = array(
                     'id' => 'error',
                     'type' => __('Error'),
@@ -58,14 +76,13 @@ class Index extends \Magento\Backend\Controller\AbstractAction
                 $start = $this->getRequest()->getParam('start', 1);
                 $limit = $this->getRequest()->getParam('limit', 10);
                 $query = $this->getRequest()->getParam('query', '');
-                foreach ($searchModules->children() as $searchConfig) {
+                foreach ($this->_searchModules as $searchConfig) {
 
-                    if ($searchConfig->acl && !$this->_authorization->isAllowed($searchConfig->acl)){
+                    if ($searchConfig['acl'] && !$this->_authorization->isAllowed($searchConfig['acl'])){
                         continue;
                     }
 
-                    $className = $searchConfig->getClassName();
-
+                    $className = $searchConfig['class'];
                     if (empty($className)) {
                         continue;
                     }

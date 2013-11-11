@@ -42,15 +42,16 @@ class Config implements \Magento\Core\Model\DataService\ConfigInterface
     /** @var array $_serviceCallNodes */
     protected $_serviceCallNodes;
 
-    /** @var \Magento\Core\Model\Config\Modules\Reader  */
+    /** @var \Magento\Module\Dir\Reader  */
     protected $_moduleReader;
 
     /**
-     * @param \Magento\Core\Model\DataService\Config\Reader\Factory $readerFactory
-     * @param \Magento\Core\Model\Config\Modules\Reader
+     * @param Config\Reader\Factory $readerFactory
+     * @param \Magento\Module\Dir\Reader $moduleReader
      */
-    public function __construct(\Magento\Core\Model\DataService\Config\Reader\Factory $readerFactory,
-        \Magento\Core\Model\Config\Modules\Reader $moduleReader
+    public function __construct(
+        \Magento\Core\Model\DataService\Config\Reader\Factory $readerFactory,
+        \Magento\Module\Dir\Reader $moduleReader
     ) {
         $this->_readerFactory = $readerFactory;
         $this->_moduleReader = $moduleReader;

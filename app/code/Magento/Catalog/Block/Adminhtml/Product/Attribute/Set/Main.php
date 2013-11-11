@@ -146,7 +146,7 @@ class Main extends \Magento\Backend\Block\Template
 
         $this->addChild('delete_button', 'Magento\Adminhtml\Block\Widget\Button', array(
             'label'     => __('Delete Attribute Set'),
-            'onclick'   => 'deleteConfirm(\''. $this->jsQuoteEscape(__('You are about to delete all products in this set. Are you sure you want to delete this attribute set?')) . '\', \'' . $this->getUrl('catalog/*/delete', array('id' => $setId)) . '\')',
+            'onclick'   => 'deleteConfirm(\''. $this->escapeJsQuote(__('You are about to delete all products in this set. Are you sure you want to delete this attribute set?')) . '\', \'' . $this->getUrl('catalog/*/delete', array('id' => $setId)) . '\')',
             'class'     => 'delete'
         ));
 

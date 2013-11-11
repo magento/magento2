@@ -33,7 +33,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_validator;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
@@ -41,11 +41,6 @@ class Context implements \Magento\ObjectManager\ContextInterface
      * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
-
-    /**
-     * @var \Magento\Core\Helper\Http
-     */
-    protected $_httpHelper;
 
     /**
      * @var \Magento\Core\Model\Store\Config
@@ -122,9 +117,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
 
     /**
      * @param \Magento\Core\Model\Session\Validator $validator
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Helper\Http $coreHttp
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Message\CollectionFactory $messageFactory
      * @param \Magento\Core\Model\Message $message
@@ -141,9 +135,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
      */
     public function __construct(
         \Magento\Core\Model\Session\Validator $validator,
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Helper\Http $coreHttp,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Message\CollectionFactory $messageFactory,
         \Magento\Core\Model\Message $message,
@@ -161,7 +154,6 @@ class Context implements \Magento\ObjectManager\ContextInterface
         $this->_validator = $validator;
         $this->_logger = $logger;
         $this->_eventManager = $eventManager;
-        $this->_httpHelper = $coreHttp;
         $this->_storeConfig = $coreStoreConfig;
         $this->_saveMethod = $saveMethod;
         $this->_savePath = $savePath;
@@ -186,15 +178,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Core\Helper\Http
-     */
-    public function getHttpHelper()
-    {
-        return $this->_httpHelper;
-    }
-
-    /**
-     * @return \Magento\Core\Model\Logger
+     * @return \\Magento\Logger
      */
     public function getLogger()
     {

@@ -44,7 +44,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
     protected $_directoryHelper;
 
     /**
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Core\Model\Config $config
@@ -53,7 +53,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
      * @param \Magento\Weee\Model\Resource\Attribute\Backend\Weee\Tax $attributeTax
      */
     public function __construct(
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Core\Model\Config $config,

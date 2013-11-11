@@ -36,7 +36,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_observer;
 
     /**
-     * @var \Magento\Core\Model\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManager;
 
@@ -63,7 +63,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->_objectManager = $this->getMockBuilder('Magento\Core\Model\ObjectManager')
+        $this->_objectManager = $this->getMockBuilder('Magento\App\ObjectManager')
             ->disableOriginalConstructor()
             ->getMock();
         $this->_app = $this->getMockBuilder('Magento\Core\Model\App')

@@ -67,6 +67,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $model->getFilter();
     }
 
+    /**
+     * @magentoAppArea frontend
+     */
     public function testGetUrl()
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */

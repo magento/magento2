@@ -38,9 +38,8 @@ class Setup extends \Magento\Sales\Model\Resource\Setup
 
     /**
      * @param \Magento\Core\Model\Resource\Setup\Context $context
-     * @param \Magento\Core\Model\CacheInterface $cache
+     * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory
-     * @param \Magento\Core\Helper\Data $coreHelper
      * @param \Magento\Core\Model\Config $config
      * @param \Magento\Catalog\Model\Resource\SetupFactory $setupFactory
      * @param string $resourceName
@@ -49,9 +48,8 @@ class Setup extends \Magento\Sales\Model\Resource\Setup
      */
     public function __construct(
         \Magento\Core\Model\Resource\Setup\Context $context,
-        \Magento\Core\Model\CacheInterface $cache,
+        \Magento\App\CacheInterface $cache,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory,
-        \Magento\Core\Helper\Data $coreHelper,
         \Magento\Core\Model\Config $config,
         \Magento\Catalog\Model\Resource\SetupFactory $setupFactory,
         $resourceName,
@@ -60,7 +58,7 @@ class Setup extends \Magento\Sales\Model\Resource\Setup
     ) {
         $this->_setupFactory = $setupFactory;
         parent::__construct(
-            $context, $cache, $attrGrCollFactory, $coreHelper, $config, $resourceName, $moduleName, $connectionName
+            $context, $cache, $attrGrCollFactory, $config, $resourceName, $moduleName, $connectionName
         );
     }
 

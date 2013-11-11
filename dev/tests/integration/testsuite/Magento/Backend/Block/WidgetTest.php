@@ -41,7 +41,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     {
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Core\Model\Layout',
-            array('area' => \Magento\Core\Model\App\Area::AREA_ADMINHTML)
+            array('area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
         );
         $layout->getUpdate()->load();
         $layout->generateXml()->generateElements();
@@ -63,7 +63,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     {
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Core\Model\Layout',
-            array('area' => \Magento\Core\Model\App\Area::AREA_ADMINHTML)
+            array('area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
         );
         $layout->getUpdate()->load();
         $layout->generateXml()->generateElements();

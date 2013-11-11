@@ -38,12 +38,12 @@ class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractIte
     /**
      * Core string
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
-    protected $_coreString = null;
+    protected $string;
 
     /**
-     * @param \Magento\Core\Helper\String $coreString
+     * @param \Magento\Stdlib\String $string
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
@@ -53,7 +53,7 @@ class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractIte
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\String $coreString,
+        \Magento\Stdlib\String $string,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
@@ -62,7 +62,7 @@ class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractIte
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_coreString = $coreString;
+        $this->string = $string;
         parent::__construct($taxData, $context, $registry, $coreDir, $resource, $resourceCollection, $data);
     }
 
@@ -79,13 +79,13 @@ class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractIte
 
         // draw Product name
         $lines[0] = array(array(
-            'text' => $this->_coreString->strSplit($item->getName(), 35, true, true),
+            'text' => $this->string->split($item->getName(), 35, true, true),
             'feed' => 35,
         ));
 
         // draw SKU
         $lines[0][] = array(
-            'text'  => $this->_coreString->strSplit($this->getSku($item), 17),
+            'text'  => $this->string->split($this->getSku($item), 17),
             'feed'  => 255,
             'align' => 'right'
         );
@@ -138,7 +138,7 @@ class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractIte
             foreach ($options as $option) {
                 // draw options label
                 $lines[][] = array(
-                    'text' => $this->_coreString->strSplit(strip_tags($option['label']), 40, true, true),
+                    'text' => $this->string->split(strip_tags($option['label']), 40, true, true),
                     'font' => 'italic',
                     'feed' => 35
                 );
@@ -146,7 +146,7 @@ class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractIte
                 // draw options value
                 $_printValue = isset($option['print_value']) ? $option['print_value'] : strip_tags($option['value']);
                 $lines[][] = array(
-                    'text' => $this->_coreString->strSplit($_printValue, 30, true, true),
+                    'text' => $this->string->split($_printValue, 30, true, true),
                     'feed' => 40
                 );
             }

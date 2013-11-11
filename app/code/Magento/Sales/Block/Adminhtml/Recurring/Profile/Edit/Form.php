@@ -59,7 +59,7 @@ class Form extends \Magento\Backend\Block\AbstractBlock
     protected $_product = null;
 
     /**
-     * @var \Magento\Data\Form\Factory
+     * @var \Magento\Data\FormFactory
      */
     protected $_formFactory;
 
@@ -69,13 +69,13 @@ class Form extends \Magento\Backend\Block\AbstractBlock
     protected $_recurringProfile;
 
     /**
-     * @param \Magento\Data\Form\Factory $formFactory
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Sales\Model\Recurring\Profile $recurringProfile
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Factory $formFactory,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Backend\Block\Context $context,
         \Magento\Sales\Model\Recurring\Profile $recurringProfile,
         array $data = array()

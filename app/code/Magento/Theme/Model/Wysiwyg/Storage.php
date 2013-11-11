@@ -163,7 +163,7 @@ class Storage
             $image->resize(self::THUMBNAIL_WIDTH, self::THUMBNAIL_HEIGHT);
             $image->save($thumbnailPath);
         } catch (\Magento\Filesystem\FilesystemException $e) {
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
             return false;
         }
 

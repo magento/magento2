@@ -109,7 +109,7 @@
             <instance type="Magento\Catalog\Model\Layer\Proxy" />
         </param>
     </type>
-    <type name="Magento\App\Updater\SetupFactory">
+    <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
             <value>
                 <catalog_setup>Magento\Catalog\Model\Resource\Setup</catalog_setup>

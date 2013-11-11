@@ -45,7 +45,7 @@ class ErrorProcessor
     /** @var \Magento\Core\Model\App */
     protected $_app;
 
-    /** @var \Magento\Core\Model\Logger */
+    /** @var \Magento\Logger */
     protected $_logger;
 
     /**
@@ -53,12 +53,12 @@ class ErrorProcessor
      *
      * @param \Magento\Core\Helper\Data $helper
      * @param \Magento\Core\Model\App $app
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      */
     public function __construct(
         \Magento\Core\Helper\Data $helper,
         \Magento\Core\Model\App $app,
-        \Magento\Core\Model\Logger $logger
+        \Magento\Logger $logger
     ) {
         $this->_coreHelper = $helper;
         $this->_app = $app;
@@ -90,7 +90,8 @@ class ErrorProcessor
                 $exception->getMessage(),
                 $exception->getCode(),
                 $httpCode,
-                $exception->getParameters()
+                $exception->getParameters(),
+                $exception->getName()
             );
         } else if ($exception instanceof \Magento\Webapi\Exception) {
             $maskedException = $exception;

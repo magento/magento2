@@ -130,7 +130,7 @@ class Types extends \Magento\Backend\Controller\Adminhtml\Action
                 ->_addContent($this->getLayout()->createBlock('Magento\GoogleShopping\Block\Adminhtml\Types\Edit'))
                 ->renderLayout();
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
             $this->_getSession()->addError(__("We can't create Attribute Set Mapping."));
             $this->_redirect('adminhtml/*/index', array('store' => $this->_getStore()->getId()));
         }
@@ -165,7 +165,7 @@ class Types extends \Magento\Backend\Controller\Adminhtml\Action
                 ->_addContent($this->getLayout()->createBlock('Magento\GoogleShopping\Block\Adminhtml\Types\Edit'))
                 ->renderLayout();
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
             $this->_getSession()->addError(__("We can't edit Attribute Set Mapping."));
             $this->_redirect('adminhtml/*/index');
         }
@@ -224,7 +224,7 @@ class Types extends \Magento\Backend\Controller\Adminhtml\Action
                     ->addSuccess($this->_objectManager->get('Magento\GoogleShopping\Helper\Category')->getMessage());
             }
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
             $this->_objectManager->get('Magento\Adminhtml\Model\Session')
                 ->addError(__("We can't save Attribute Set Mapping."));
         }
@@ -245,7 +245,7 @@ class Types extends \Magento\Backend\Controller\Adminhtml\Action
             }
             $this->_getSession()->addSuccess(__('Attribute set mapping was deleted'));
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
             $this->_getSession()->addError(__("We can't delete Attribute Set Mapping."));
         }
         $this->_redirect('adminhtml/*/index', array('store' => $this->_getStore()->getId()));
@@ -265,7 +265,7 @@ class Types extends \Magento\Backend\Controller\Adminhtml\Action
                 ->toHtml()
             );
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
             // just need to output text with error
             $this->_getSession()->addError(__("We can't load attributes."));
         }
@@ -283,7 +283,7 @@ class Types extends \Magento\Backend\Controller\Adminhtml\Action
                     ->toHtml()
             );
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
             // just need to output text with error
             $this->_getSession()->addError(__("We can't load attribute sets."));
         }

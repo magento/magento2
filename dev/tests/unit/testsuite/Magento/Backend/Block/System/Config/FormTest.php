@@ -98,7 +98,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
         $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false, false);
         $configFactoryMock = $this->getMock('Magento\Backend\Model\Config\Factory', array(), array(), '', false, false);
-        $this->_formFactoryMock = $this->getMock('Magento\Data\Form\Factory', array('create'),
+        $this->_formFactoryMock = $this->getMock('Magento\Data\FormFactory', array('create'),
             array(), '', false, false);
         $this->_fieldsetFactoryMock = $this->getMock('Magento\Backend\Block\System\Config\Form\Fieldset\Factory',
             array(), array(), '', false, false

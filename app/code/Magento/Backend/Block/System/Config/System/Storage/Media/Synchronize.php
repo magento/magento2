@@ -32,7 +32,7 @@ namespace Magento\Backend\Block\System\Config\System\Storage\Media;
 class Synchronize
     extends \Magento\Backend\Block\System\Config\Form\Field
 {
-    protected $_template = 'system/config/system/storage/media/synchronize.phtml';
+    protected $_template = 'Magento_Backend::system/config/system/storage/media/synchronize.phtml';
 
     /**
      * @var \Magento\Core\Model\File\Storage

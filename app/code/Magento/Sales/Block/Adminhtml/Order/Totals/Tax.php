@@ -46,7 +46,7 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
     protected $_taxCalculation;
 
     /**
-     * @var \Magento\Tax\Model\Sales\Order\Tax\Factory
+     * @var \Magento\Tax\Model\Sales\Order\TaxFactory
      */
     protected $_taxOrderFactory;
 
@@ -61,7 +61,7 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Tax\Model\Calculation $taxCalculation
-     * @param \Magento\Tax\Model\Sales\Order\Tax\Factory $taxOrderFactory
+     * @param \Magento\Tax\Model\Sales\Order\TaxFactory $taxOrderFactory
      * @param array $data
      */
     public function __construct(
@@ -70,7 +70,7 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
         \Magento\Tax\Model\Config $taxConfig,
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Tax\Model\Calculation $taxCalculation,
-        \Magento\Tax\Model\Sales\Order\Tax\Factory $taxOrderFactory,
+        \Magento\Tax\Model\Sales\Order\TaxFactory $taxOrderFactory,
         array $data = array()
     ) {
         $this->_taxHelper = $taxHelper;

@@ -26,23 +26,6 @@
  */
 -->
 <config>
-    <frontend>
-        <cache>
-            <allowed_requests>
-                <cms />
-                <catalog>
-                    <category>
-                        <view />
-                    </category>
-                </catalog>
-                <catalog>
-                    <product>
-                        <view />
-                    </product>
-                </catalog>
-            </allowed_requests>
-        </cache>
-    </frontend>
     <default>
         <system>
             <external_page_cache>

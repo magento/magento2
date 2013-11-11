@@ -106,17 +106,17 @@ class Filter implements \Zend_Filter_Interface
     protected $_helperFactory;
 
     /**
-     * @var \Magento\Core\Model\ObjectManager
+     * @var \Magento\ObjectManager
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Core\Model\Factory\Helper $helperFactory
-     * @param \Magento\Core\Model\ObjectManager $objectManager
+     * @param \Magento\ObjectManager $objectManager
      */
     function __construct(
         \Magento\Core\Model\Factory\Helper $helperFactory,
-        \Magento\Core\Model\ObjectManager $objectManager
+        \Magento\ObjectManager $objectManager
     ) {
         $this->_helperFactory = $helperFactory;
         $this->_objectManager = $objectManager;

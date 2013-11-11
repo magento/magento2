@@ -75,7 +75,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             ->method('getFileExtension')
             ->will($this->returnValue($this->_exportFileExtension));
 
-        $logger = $this->getMock('Magento\Core\Model\Logger', array(), array(), '', false);
+        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         $dir = $this->getMock('Magento\App\Dir', array(), array(), '', false);
         $adapterFactory = $this->getMock('Magento\Core\Model\Log\AdapterFactory', array(), array(), '', false);
         $entityFactory = $this->getMock(

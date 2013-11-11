@@ -36,7 +36,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
     protected $_fileList;
 
     /**
-     * @var \Magento\Core\Model\Config\FileResolver\Primary
+     * @var \Magento\App\Config\FileResolver\Primary
      */
     protected $_fileResolverMock;
 
@@ -46,7 +46,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
     protected $_mergedConfig;
 
     /**
-     * @var \Magento\Core\Model\Config\ValidationState
+     * @var \Magento\App\Config\ValidationState
      */
     protected $_validationState;
 
@@ -69,12 +69,12 @@ class DomTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_fileResolverMock = $this->getMock(
-            'Magento\Core\Model\Config\FileResolver\Primary', array(), array(), '', false
+            'Magento\App\Config\FileResolver\Primary', array(), array(), '', false
         );
         $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue($this->_fileList));
         $this->_mapper = new \Magento\ObjectManager\Config\Mapper\Dom();
         $this->_validationState =
-            new \Magento\Core\Model\Config\ValidationState(\Magento\App\State::MODE_DEFAULT);
+            new \Magento\App\Config\ValidationState(\Magento\App\State::MODE_DEFAULT);
         $this->_schemaLocator = new \Magento\ObjectManager\Config\SchemaLocator();
 
         $this->_mergedConfig = new \DOMDocument();

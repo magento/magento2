@@ -52,12 +52,12 @@ class Group extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Class constructor
      *
      * @param \Magento\Customer\Helper\Data $customerData
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory
      */
     public function __construct(
         \Magento\Customer\Helper\Data $customerData,
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory
     ) {
         $this->_customerData = $customerData;

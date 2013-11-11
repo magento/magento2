@@ -137,7 +137,7 @@ class Button extends \Magento\Backend\Block\Widget
                 continue;
             }
             $html .= $attributeKey . '="'
-                . $this->helper('Magento\Backend\Helper\Data')->escapeHtml($attributeValue) . '" ';
+                . $this->escapeHtml($attributeValue) . '" ';
         }
 
         return $html;

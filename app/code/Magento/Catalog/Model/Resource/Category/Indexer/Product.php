@@ -89,11 +89,11 @@ class Product extends \Magento\Index\Model\Resource\AbstractResource
      * Class constructor
      *
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      */
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Core\Model\Resource $resource
+        \Magento\App\Resource $resource
     ) {
         $this->_eavConfig = $eavConfig;
         parent::__construct($resource);

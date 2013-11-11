@@ -153,6 +153,7 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Core\Model\LocaleInterface $coreLocale
+     * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Resource\Order\Shipment\Item\CollectionFactory $shipmentItemCollFactory
      * @param \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory $trackCollFactory
@@ -173,6 +174,7 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Core\Model\LocaleInterface $coreLocale,
+        \Magento\Stdlib\DateTime $dateTime,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Resource\Order\Shipment\Item\CollectionFactory $shipmentItemCollFactory,
         \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory $trackCollFactory,
@@ -194,7 +196,7 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
         $this->_commentCollFactory = $commentCollFactory;
         $this->_templateMailerFactory = $templateMailerFactory;
         $this->_emailInfoFactory = $emailInfoFactory;
-        parent::__construct($context, $registry, $coreLocale, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $coreLocale, $dateTime, $resource, $resourceCollection, $data);
     }
 
     /**

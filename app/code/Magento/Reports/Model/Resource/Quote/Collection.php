@@ -67,7 +67,7 @@ class Collection extends \Magento\Sales\Model\Resource\Quote\Collection
 
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Catalog\Model\Resource\Product\Collection $productResource,

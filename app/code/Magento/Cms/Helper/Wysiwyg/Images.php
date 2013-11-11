@@ -258,7 +258,7 @@ class Images extends \Magento\Core\Helper\AbstractHelper
             } else {
                 $directive = $this->_coreData->urlEncode($directive);
                 $html = $this->_backendData->getUrl(
-                    '*/cms_wysiwyg/directive',
+                    'cms/wysiwyg/directive',
                     array('___directive' => $directive)
                 );
             }

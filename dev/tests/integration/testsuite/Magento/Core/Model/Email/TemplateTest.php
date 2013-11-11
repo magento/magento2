@@ -63,6 +63,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Core\Model\Email\Template\Config'),
             ))
             ->getMock();
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
         $this->_model->expects($this->any())->method('_getMail')->will($this->returnCallback(array($this, 'getMail')));
         $this->_model->setSenderName('sender')->setSenderEmail('sender@example.com')->setTemplateSubject('Subject');
     }

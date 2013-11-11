@@ -27,11 +27,18 @@
     <preference for="Magento\Authorization\Policy" type="Magento\Authorization\Policy\Acl" />
     <preference for="Magento\Authorization\RoleLocator" type="Magento\Backend\Model\Authorization\RoleLocator" />
     <preference for="Magento\Core\Model\LocaleInterface" type="Magento\Backend\Model\Locale" />
+    <preference for="Magento\Core\Controller\Varien\Action\Context" type="Magento\Backend\Controller\Context" />
     <preference for="Magento\UrlInterface" type="Magento\Backend\Model\Url" />
     <preference for="Magento\Backend\Model\Auth\StorageInterface" type="Magento\Backend\Model\Auth\Session" />
     <preference for="Magento\Backend\Model\Config\Structure\SearchInterface" type="Magento\Backend\Model\Config\Structure" />
     <preference for="Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Backend\Model\Config\Backend\File\RequestData" />
-    <preference for="Magento\Acl\Resource\ProviderInterface" type="Magento\Acl\Resource\Provider"/>
+    <preference for="Magento\Acl\Resource\ProviderInterface" type="Magento\Acl\Resource\Provider" />
+    <preference for="Magento\App\DefaultPathInterface" type="Magento\Backend\App\DefaultPath" />
+    <type name="Magento\Backend\Model\Auth\Session">
+        <param name="backendUrl">
+            <instance type="Magento\Backend\Model\Url\Proxy" />
+        </param>
+    </type>
     <type name="Magento\Acl\Resource\Config\Reader\Filesystem">
         <param name="converter">
             <instance type="Magento\Acl\Resource\Config\Converter\Dom"/>
@@ -99,6 +106,22 @@
     <type name="Magento\Core\Model\Layout">
         <param name="area">
             <value>adminhtml</value>
+        </param>
+    </type>
+    <type name="Magento\App\RouterList">
+        <param name="routerList">
+            <value>
+                <admin>
+                    <instance>Magento\Backend\App\Router\DefaultRouter</instance>
+                    <disable type="bool">false</disable>
+                    <sortOrder>10</sortOrder>
+                </admin>
+                <default>
+                    <instance>Magento\App\Router\DefaultRouter</instance>
+                    <disable type="bool">false</disable>
+                    <sortOrder>100</sortOrder>
+                </default>
+            </value>
         </param>
     </type>
 </config>

@@ -33,7 +33,8 @@ class Console implements WriterInterface
     protected $_messages = array(
         Log::GENERATION_SUCCESS => 'Generated classes:',
         Log::GENERATION_ERROR => 'Errors during class generation:',
-        Log::COMPILATION_ERROR => 'Errors during compilation:'
+        Log::COMPILATION_ERROR => 'Errors during compilation:',
+        Log::CONFIGURATION_ERROR => 'Errors during configuration scanning:'
     );
 
     /**
@@ -44,10 +45,13 @@ class Console implements WriterInterface
     public function write(array $data)
     {
         foreach ($data as $type => $classes) {
+            if (!count($classes)) {
+                continue;
+            }
             echo $this->_messages[$type] . "\n";
             foreach ($classes as $className => $messages) {
-                echo "\t" . $className . "\n";
                 if (count($messages)) {
+                    echo "\t" . $className . "\n";
                     foreach ($messages as $message) {
                         if ($message) {
                             echo "\t\t - " . $message . "\n";

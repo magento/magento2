@@ -34,4 +34,24 @@
             <value>frontend</value>
         </param>
     </type>
+    <type name="Magento\App\FrontController">
+        <plugin name="requestPreprocessor" type="Magento\Core\App\FrontController\Plugin\RequestPreprocessor" sortOrder="50"/>
+        <plugin name="urlRewrite" type="Magento\Core\App\FrontController\Plugin\UrlRewrite" sortOrder="60"/>
+    </type>
+    <type name="Magento\App\RouterList" shared="true">
+        <param name="routerList">
+            <value>
+                <standard>
+                    <instance>Magento\Core\App\Router\Base</instance>
+                    <disable type="bool">false</disable>
+                    <sortOrder>20</sortOrder>
+                </standard>
+                <default>
+                    <instance>Magento\App\Router\DefaultRouter</instance>
+                    <disable type="bool">false</disable>
+                    <sortOrder>100</sortOrder>
+                </default>
+            </value>
+        </param>
+    </type>
 </config>

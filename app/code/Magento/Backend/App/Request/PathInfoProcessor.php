@@ -1,5 +1,7 @@
 <?php
 /**
+ * Prevents path info processing for admin store
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -29,6 +31,7 @@ class PathInfoProcessor implements \Magento\App\Request\PathInfoProcessorInterfa
      * @var \Magento\Backend\Helper\Data
      */
     private $_helper;
+
     /**
      * @var \Magento\Core\App\Request\PathInfoProcessor
      */

@@ -52,7 +52,8 @@ class InstanceTest extends \Magento\Backend\Utility\Controller
     public function testEditAction()
     {
         $this->dispatch('backend/admin/widget_instance/edit');
-        $this->assertContains('<option value="cms_page_link" selected="selected">',
+        $this->assertContains(
+            '<option value="cms_page_link" selected="selected">',
             $this->getResponse()->getBody()
         );
     }

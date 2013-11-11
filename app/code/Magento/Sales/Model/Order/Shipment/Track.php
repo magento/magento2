@@ -83,6 +83,7 @@ class Track extends \Magento\Sales\Model\AbstractModel
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\LocaleInterface $coreLocale
+     * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Shipping\Model\Config $shippingConfig
      * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
@@ -94,6 +95,7 @@ class Track extends \Magento\Sales\Model\AbstractModel
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\LocaleInterface $coreLocale,
+        \Magento\Stdlib\DateTime $dateTime,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Shipping\Model\Config $shippingConfig,
         \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
@@ -105,6 +107,7 @@ class Track extends \Magento\Sales\Model\AbstractModel
             $context,
             $registry,
             $coreLocale,
+            $dateTime,
             $resource,
             $resourceCollection,
             $data

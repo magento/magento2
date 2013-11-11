@@ -38,22 +38,27 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
     {
         $resourceModel = $this->getMock(
             'Magento\Core\Model\Resource\Layout\Update',
-            array('formatDate', 'getIdFieldName', 'beginTransaction', 'save', 'addCommitCallback', 'commit'),
+            array('__wakeup', 'formatDate', 'getIdFieldName', 'beginTransaction', 'save', 'addCommitCallback',
+                'commit'),
             array(),
             '',
             false
         );
         $resourceModel->expects($this->once())
+            ->method('addCommitCallback')
+            ->will($this->returnSelf());
+        $dateTime = $this->getMock('\Magento\Stdlib\DateTime', array(), array());
+        $dateTime->expects($this->once())
             ->method('formatDate')
             ->with($this->isType('int'))
             ->will($this->returnValue(self::TEST_FORMATTED_TIME));
-        $resourceModel->expects($this->once())
-            ->method('addCommitCallback')
-            ->will($this->returnSelf());
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         /** @var $model \Magento\Core\Model\Layout\Update */
-        $model = $helper->getObject('Magento\Core\Model\Layout\Update', array('resource' => $resourceModel));
+        $model = $helper->getObject('Magento\Core\Model\Layout\Update', array(
+            'resource' => $resourceModel,
+            'dateTime' => $dateTime
+        ));
         $model->setId(0); // set any data to set _hasDataChanges flag
         $model->save();
 

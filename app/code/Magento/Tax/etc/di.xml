@@ -26,10 +26,10 @@
 <config>
     <type name="Magento\Tax\Helper\Data">
         <param name="taxConfig">
-            <instance type="Magento\Tax\Model\ConfigProxy" />
+            <instance type="Magento\Tax\Model\Config\Proxy" />
         </param>
     </type>
-    <type name="Magento\App\Updater\SetupFactory">
+    <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
             <value>
                 <tax_setup>Magento\Tax\Model\Resource\Setup</tax_setup>

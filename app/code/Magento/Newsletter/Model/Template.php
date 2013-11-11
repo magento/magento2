@@ -108,6 +108,11 @@ class Template extends \Magento\Core\Model\Template
     protected $_templateFactory;
 
     /**
+     * @var \Magento\Filter\FilterManager
+     */
+    protected $_filterManager;
+
+    /**
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
@@ -117,6 +122,7 @@ class Template extends \Magento\Core\Model\Template
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
      * @param \Magento\Core\Model\App\Emulation $appEmulation
+     * @param \Magento\Filter\FilterManager $filterManager
      * @param array $data
      */
     public function __construct(
@@ -129,6 +135,7 @@ class Template extends \Magento\Core\Model\Template
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Newsletter\Model\TemplateFactory $templateFactory,
         \Magento\Core\Model\App\Emulation $appEmulation,
+        \Magento\Filter\FilterManager $filterManager,
         array $data = array()
     ) {
         parent::__construct($design, $context, $registry, $appEmulation, $storeManager, $data);
@@ -137,6 +144,7 @@ class Template extends \Magento\Core\Model\Template
         $this->_filter = $filter;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_templateFactory = $templateFactory;
+        $this->_filterManager = $filterManager;
     }
 
     /**
@@ -313,14 +321,10 @@ class Template extends \Magento\Core\Model\Template
      */
     public function getProcessedTemplateSubject(array $variables)
     {
-        $processor = new \Magento\Filter\Template();
-
         if (!$this->_preprocessFlag) {
             $variables['this'] = $this;
         }
-
-        $processor->setVariables($variables);
-        return $processor->filter($this->getTemplateSubject());
+        return $this->_filterManager->template($this->getTemplateSubject(), array('variables' => $variables));
     }
 
     /**

@@ -60,7 +60,7 @@ class JsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
 
         $registeredPhrases = $this->_getRegisteredPhrases();
 
-        foreach ($this->_getJavascriptPhrases('adminhtml') as $phrase) {
+        foreach ($this->_getJavascriptPhrases(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE) as $phrase) {
             if (!in_array($phrase['phrase'], $registeredPhrases)) {
                 $unregisteredMessages[]
                     = sprintf("'%s' \n in file %s, line# %s", $phrase['phrase'], $phrase['file'], $phrase['line']);

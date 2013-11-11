@@ -108,7 +108,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\Registry $coreRegistry
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param array $data
      */
     public function __construct(
@@ -124,7 +124,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Filesystem $filesystem,
         \Magento\Core\Model\Registry $coreRegistry,
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         array $data = array()
     ) {
         $this->_catalogProductLink = $catalogProductLink;

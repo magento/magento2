@@ -34,7 +34,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
         $tableName = 'webhook_event_table';
         $idFieldName = 'event_id';
 
-        $resourceMock = $this->getMockBuilder('Magento\Core\Model\Resource')
+        $resourceMock = $this->getMockBuilder('Magento\App\Resource')
             ->disableOriginalConstructor()
             ->getMock();
         $resourceMock->expects($this->once())

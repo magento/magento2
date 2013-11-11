@@ -53,18 +53,18 @@ abstract class AbstractHelper
     protected $_modulePrefix;
 
     /**
-     * @var \Magento\Core\Model\Resource
+     * @var \Magento\App\Resource
      */
     protected $_resource;
 
     /**
      * Initialize resource helper instance
      *
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param string $modulePrefix
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         $modulePrefix
     ) {
         $this->_resource = $resource;

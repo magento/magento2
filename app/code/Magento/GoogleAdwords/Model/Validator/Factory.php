@@ -1,7 +1,4 @@
 <?php
-
-namespace Magento\GoogleAdwords\Model\Validator;
-
 /**
  * Google AdWords Validator Factory
  *
@@ -27,17 +24,23 @@ namespace Magento\GoogleAdwords\Model\Validator;
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @SuppressWarnings(PHPMD.LongVariable)
  */
+namespace Magento\GoogleAdwords\Model\Validator;
+
+use Magento\Validator\Int;
+use Magento\Validator\Regex;
+use Magento\Validator\UniversalFactory;
+
 class Factory
 {
     /**
-     * @var \Magento\Validator\UniversalFactory
+     * @var UniversalFactory
      */
     protected $_validatorBuilderFactory;
 
     /**
-     * @param \Magento\Validator\UniversalFactory $validatorBuilderFactory
+     * @param UniversalFactory $validatorBuilderFactory
      */
-    public function __construct(\Magento\Validator\UniversalFactory $validatorBuilderFactory)
+    public function __construct(UniversalFactory $validatorBuilderFactory)
     {
         $this->_validatorBuilderFactory = $validatorBuilderFactory;
     }
@@ -53,21 +56,23 @@ class Factory
         $message = __('Conversion Color value is not valid "%1". Please set hexadecimal 6-digit value.',
             $currentColor);
         /** @var \Magento\Validator\Builder $builder */
-        $builder = $this->_validatorBuilderFactory->create(array(
+        $builder = $this->_validatorBuilderFactory->create('Magento\Validator\Builder', array(
             'constraints' => array(
                 array(
                     'alias' => 'Regex',
                     'type' => '',
                     'class' => 'Magento\Validator\Regex',
                     'options' => array(
-                        'arguments' => array('/^[0-9a-f]{6}$/i'),
+                        'arguments' => array(
+                            'pattern' => ('/^[0-9a-f]{6}$/i')
+                        ),
                         'methods' => array(
                             array(
                                 'method' => 'setMessages',
                                 'arguments' => array(
                                     array(
-                                        \Magento\Validator\Regex::NOT_MATCH => $message,
-                                        \Magento\Validator\Regex::INVALID => $message,
+                                        Regex::NOT_MATCH => $message,
+                                        Regex::INVALID => $message,
                                     ),
                                 ),
                             ),
@@ -90,7 +95,7 @@ class Factory
         $message = __('Conversion Id value is not valid "%1". Conversion Id should be an integer.',
             $currentId);
         /** @var \Magento\Validator\Builder $builder */
-        $builder = $this->_validatorBuilderFactory->create(array(
+        $builder = $this->_validatorBuilderFactory->create('Magento\Validator\Builder', array(
             'constraints' => array(
                 array(
                     'alias' => 'Int',
@@ -102,8 +107,8 @@ class Factory
                                 'method' => 'setMessages',
                                 'arguments' => array(
                                     array(
-                                        \Magento\Validator\Int::NOT_INT => $message,
-                                        \Magento\Validator\Int::INVALID => $message,
+                                        Int::NOT_INT => $message,
+                                        Int::INVALID => $message,
                                     ),
                                 ),
                             ),

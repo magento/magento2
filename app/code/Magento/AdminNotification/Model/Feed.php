@@ -59,7 +59,7 @@ class Feed extends \Magento\Core\Model\AbstractModel
     protected $_inboxFactory;
 
     /**
-     * @var \Magento\Core\Model\CacheInterface
+     * @var \Magento\App\CacheInterface
      */
     protected $_cache;
 
@@ -68,7 +68,7 @@ class Feed extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\AdminNotification\Model\InboxFactory $inboxFactory
-     * @param \Magento\Core\Model\CacheInterface $cache
+     * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -78,7 +78,7 @@ class Feed extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
-        \Magento\Core\Model\CacheInterface $cache,
+        \Magento\App\CacheInterface $cache,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()

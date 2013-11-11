@@ -33,7 +33,7 @@ class FrontController implements FrontControllerInterface
     protected $_defaults = array();
 
     /**
-     * @var \Magento\App\RouterList
+     * @var \Magento\App\RouterInterface[]
      */
     protected $_routerList;
 
@@ -48,64 +48,23 @@ class FrontController implements FrontControllerInterface
     protected $_response;
 
     /**
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager;
-
-    /**
      * @var ActionInterface
      */
     protected $_action;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\App\ResponseInterface $response
      * @param RouterList $routerList
      * @param array $data
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\App\ResponseInterface $response,
         RouterList $routerList,
         array $data = array()
     ) {
-        $this->_eventManager = $eventManager;
         $this->_routerList = $routerList;
         $this->_response = $response;
-    }
-
-    /**
-     * Set Default Value
-     *
-     * @param string $key
-     * @param mixed $value
-     * @return $this
-     */
-    public function setDefault($key, $value = null)
-    {
-        if (is_array($key)) {
-            $this->_defaults = $key;
-        } else {
-            $this->_defaults[$key] = $value;
-        }
-        return $this;
-    }
-
-    /**
-     * Retrieve default value
-     *
-     * @param string $key
-     * @return mixed
-     */
-    public function getDefault($key=null)
-    {
-        if (is_null($key)) {
-            return $this->_defaults;
-        } elseif (isset($this->_defaults[$key])) {
-            return $this->_defaults[$key];
-        }
-        return false;
     }
 
     /**
@@ -148,6 +107,7 @@ class FrontController implements FrontControllerInterface
 
     /**
      * @param RequestInterface $request
+     * @return ResponseInterface
      * @throws \LogicException
      */
     public function dispatch(RequestInterface $request)
@@ -156,11 +116,7 @@ class FrontController implements FrontControllerInterface
         \Magento\Profiler::start('routers_match');
         $routingCycleCounter = 0;
         while (!$request->isDispatched() && $routingCycleCounter++ < 100) {
-            /** @var $router \Magento\App\Router\AbstractRouter */
-            foreach ($this->_routerList->getRouters() as $router) {
-                $router->setFront($this);
-
-                /** @var $controllerInstance \Magento\App\ActionInterface */
+            foreach ($this->_routerList as $router) {
                 $controllerInstance = $router->match($this->getRequest());
                 if ($controllerInstance) {
                     $controllerInstance->dispatch($request->getActionName());
@@ -172,12 +128,6 @@ class FrontController implements FrontControllerInterface
         if ($routingCycleCounter > 100) {
             throw new \LogicException('Front controller reached 100 router match iterations');
         }
-        // This event gives possibility to launch something before sending output (allow cookie setting)
-        $this->_eventManager->dispatch('controller_front_send_response_before', array('front' => $this));
-        \Magento\Profiler::start('send_response');
-        $this->_eventManager->dispatch('http_response_send_before', array('response' => $this));
-        $this->getResponse()->sendResponse();
-        \Magento\Profiler::stop('send_response');
-        $this->_eventManager->dispatch('controller_front_send_response_after', array('front' => $this));
+        return $this->getResponse();
     }
 }

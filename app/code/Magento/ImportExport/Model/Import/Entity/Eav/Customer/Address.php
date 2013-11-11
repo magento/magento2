@@ -24,18 +24,14 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\ImportExport\Model\Import\Entity\Eav\Customer;
+
 /**
  * Import entity customer address model
- *
- * @category    Magento
- * @package     Magento_ImportExport
- * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @todo finish moving dependencies to constructor in the scope of
  * @todo https://wiki.magento.com/display/MAGE2/Technical+Debt+%28Team-Donetsk-B%29
  */
-namespace Magento\ImportExport\Model\Import\Entity\Eav\Customer;
-
 class Address
     extends \Magento\ImportExport\Model\Import\Entity\Eav\AbstractCustomer
 {
@@ -225,12 +221,17 @@ class Address
     protected $_addressFactory;
 
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Helper\String $coreString
+     * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\App $app
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -240,15 +241,16 @@ class Address
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Customer\Model\Resource\Address\CollectionFactory $addressColFactory
      * @param \Magento\Customer\Model\Resource\Address\Attribute\CollectionFactory $attributesFactory
+     * @param \Magento\Stdlib\DateTime $dateTime
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Helper\String $coreString,
+        \Magento\Stdlib\String $string,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Core\Model\App $app,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
@@ -258,12 +260,14 @@ class Address
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Customer\Model\Resource\Address\CollectionFactory $addressColFactory,
         \Magento\Customer\Model\Resource\Address\Attribute\CollectionFactory $attributesFactory,
+        \Magento\Stdlib\DateTime $dateTime,
         array $data = array()
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_addressFactory = $addressFactory;
         $this->_eavConfig = $eavConfig;
         $this->_resourceHelper = $resourceHelper;
+        $this->dateTime = $dateTime;
 
         if (!isset($data['attribute_collection'])) {
             /** @var $attributeCollection \Magento\Customer\Model\Resource\Address\Attribute\Collection */
@@ -273,7 +277,7 @@ class Address
             $data['attribute_collection'] = $attributeCollection;
         }
         parent::__construct(
-            $coreData, $coreString, $coreStoreConfig, $importFactory, $resourceHelper, $resource, $app,
+            $coreData, $string, $coreStoreConfig, $importFactory, $resourceHelper, $resource, $app,
             $collectionFactory, $eavConfig, $storageFactory, $data
         );
 
@@ -469,7 +473,7 @@ class Address
                     $value = $attributeParams['options'][strtolower($rowData[$attributeAlias])];
                 } elseif ('datetime' == $attributeParams['type']) {
                     $value = new \DateTime('@' . strtotime($rowData[$attributeAlias]));
-                    $value = $value->format(\Magento\Date::DATETIME_PHP_FORMAT);
+                    $value = $value->format(\Magento\Stdlib\DateTime::DATETIME_PHP_FORMAT);
                 } else {
                     $value = $rowData[$attributeAlias];
                 }
@@ -491,8 +495,8 @@ class Address
             'entity_id'      => $addressId,
             'entity_type_id' => $this->getEntityTypeId(),
             'parent_id'      => $customerId,
-            'created_at'     => now(),
-            'updated_at'     => now()
+            'created_at'     => $this->dateTime->now(),
+            'updated_at'     => $this->dateTime->now()
         );
 
         // attribute values

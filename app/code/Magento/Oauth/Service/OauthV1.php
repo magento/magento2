@@ -90,8 +90,8 @@ class OauthV1 implements \Magento\Oauth\Service\OauthV1Interface
      * @param \Magento\Oauth\Model\Consumer\Factory $consumerFactory
      * @param \Magento\Oauth\Model\Nonce\Factory $nonceFactory
      * @param \Magento\Oauth\Model\Token\Factory $tokenFactory
-     * @param \Magento\Core\Model\StoreManagerInterface
-     * @param \Magento\HTTP\ZendClient
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\HTTP\ZendClient $httpClient
      * @param \Zend_Oauth_Http_Utility $httpUtility
      * @param \Magento\Core\Model\Date $date
      */

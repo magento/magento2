@@ -32,7 +32,7 @@
         <parameters>
             <parameter name="page_id" xsi:type="block" visible="true" required="true" sort_order="10">
                 <label translate="true">CMS Page</label>
-                <block class="Magento\Adminhtml\Block\Cms\Page\Widget\Chooser">
+                <block class="Magento\Cms\Block\Adminhtml\Page\Widget\Chooser">
                     <data>
                         <item name="button" xsi:type="array">
                             <item name="open" xsi:type="string">Select Page...</item>
@@ -67,7 +67,7 @@
         <parameters>
             <parameter name="block_id" xsi:type="block" visible="true" required="true" sort_order="20">
                 <label translate="true">Block</label>
-                <block class="Magento\Adminhtml\Block\Cms\Block\Widget\Chooser">
+                <block class="Magento\Cms\Block\Adminhtml\Block\Widget\Chooser">
                     <data>
                         <item name="button" xsi:type="array">
                             <item name="open" xsi:type="string">Select Block...</item>

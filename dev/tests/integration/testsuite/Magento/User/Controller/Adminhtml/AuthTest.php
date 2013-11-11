@@ -112,13 +112,17 @@ class AuthTest extends \Magento\Backend\Utility\Controller
      */
     public function testResetPasswordPostAction()
     {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
         /** @var $user \Magento\User\Model\User */
-        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\User\Model\User')->loadByUsername('dummy_username');
+        $user = $objectManager->create('Magento\User\Model\User');
+        $user->loadByUsername('dummy_username');
         $this->assertNotEmpty($user->getId(), 'Broken fixture');
-        $resetPasswordToken = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\User\Helper\Data')
-            ->generateResetPasswordLinkToken();
+
+        /** @var \Magento\User\Helper\Data $helper */
+        $helper = $objectManager->get('Magento\User\Helper\Data');
+
+        $resetPasswordToken = $helper->generateResetPasswordLinkToken();
         $user->changeResetPasswordLinkToken($resetPasswordToken);
         $user->save();
 
@@ -132,18 +136,17 @@ class AuthTest extends \Magento\Backend\Utility\Controller
 
         $this->dispatch('backend/admin/auth/resetpasswordpost');
 
-        $this->assertRedirect($this->equalTo(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Helper\Data')
-                ->getHomePageUrl()
-        ));
+        /** @var \Magento\Backend\Helper\Data $backendHelper */
+        $backendHelper = $objectManager->get('Magento\Backend\Helper\Data');
+        $this->assertRedirect($this->equalTo($backendHelper->getHomePageUrl()));
 
         /** @var $user \Magento\User\Model\User */
-        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\User\Model\User')->loadByUsername('dummy_username');
-        $this->assertTrue(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Helper\Data')
-                ->validateHash($newDummyPassword, $user->getPassword())
-        );
+        $user = $objectManager->create('Magento\User\Model\User');
+        $user->loadByUsername('dummy_username');
+
+        /** @var \Magento\Encryption\EncryptorInterface $encryptor */
+        $encryptor = $objectManager->get('Magento\Encryption\EncryptorInterface');
+        $this->assertTrue($encryptor->validateHash($newDummyPassword, $user->getPassword()));
     }
 
     /**
@@ -158,10 +161,13 @@ class AuthTest extends \Magento\Backend\Utility\Controller
         $this->assertSessionMessages(
             $this->equalTo(array('Your password reset link has expired.')), \Magento\Core\Model\Message::ERROR
         );
-        $this->assertRedirect($this->equalTo(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Helper\Data')
-                ->getHomePageUrl()
-        ));
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var \Magento\Backend\Helper\Data $backendHelper */
+        $backendHelper = $objectManager->get('Magento\Backend\Helper\Data');
+
+        $this->assertRedirect($this->equalTo($backendHelper->getHomePageUrl()));
     }
 
     /**
@@ -171,13 +177,16 @@ class AuthTest extends \Magento\Backend\Utility\Controller
      */
     public function testResetPasswordPostActionWithInvalidPassword()
     {
-        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\User\Model\User')->loadByUsername('dummy_username');
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $user = $objectManager->create('Magento\User\Model\User');
+        $user->loadByUsername('dummy_username');
         $resetPasswordToken = null;
         if ($user->getId()) {
-            $resetPasswordToken = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\User\Helper\Data')
-                ->generateResetPasswordLinkToken();
+            /** @var \Magento\User\Helper\Data $userHelper */
+            $userHelper = $objectManager->get('Magento\User\Helper\Data');
+
+            $resetPasswordToken = $userHelper->generateResetPasswordLinkToken();
             $user->changeResetPasswordLinkToken($resetPasswordToken);
             $user->save();
         }

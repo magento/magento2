@@ -161,7 +161,7 @@ class Item
     /**
      * Module list
      *
-     * @var \Magento\App\ModuleListInterface
+     * @var \Magento\Module\ModuleListInterface
      */
     protected $_moduleList;
 
@@ -172,7 +172,7 @@ class Item
      * @param \Magento\Backend\Model\MenuFactory $menuFactory
      * @param \Magento\Backend\Model\Url $urlModel
      * @param \Magento\Core\Helper\AbstractHelper $helper
-     * @param \Magento\App\ModuleListInterface $moduleList
+     * @param \Magento\Module\ModuleListInterface $moduleList
      * @param array $data
      */
     public function __construct(
@@ -182,7 +182,7 @@ class Item
         \Magento\Backend\Model\MenuFactory $menuFactory,
         \Magento\Backend\Model\Url $urlModel,
         \Magento\Core\Helper\AbstractHelper $helper,
-        \Magento\App\ModuleListInterface $moduleList,
+        \Magento\Module\ModuleListInterface $moduleList,
         array $data = array()
     ) {
         $this->_validator = $validator;
@@ -492,14 +492,14 @@ class Item
 
     public function __wakeup()
     {
-        $objectManager = \Magento\Core\Model\ObjectManager::getInstance();
+        $objectManager = \Magento\App\ObjectManager::getInstance();
         $this->_moduleHelper = $objectManager->get($this->_moduleHelperName);
         $this->_validator = $objectManager->get('Magento\Backend\Model\Menu\Item\Validator');
         $this->_acl = $objectManager->get('Magento\AuthorizationInterface');
         $this->_storeConfig = $objectManager->get('Magento\Core\Model\Store\Config');
         $this->_menuFactory = $objectManager->get('Magento\Backend\Model\MenuFactory');
         $this->_urlModel = $objectManager->get('Magento\Backend\Model\Url');
-        $this->_moduleList = $objectManager->get('Magento\App\ModuleListInterface');
+        $this->_moduleList = $objectManager->get('Magento\Module\ModuleListInterface');
         if ($this->_serializedSubmenu) {
             $this->_submenu = $this->_menuFactory->create();
             $this->_submenu->unserialize($this->_serializedSubmenu);

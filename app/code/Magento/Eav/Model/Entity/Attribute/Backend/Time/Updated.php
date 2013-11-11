@@ -24,17 +24,31 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Entity/Attribute/Model - attribute backend default
- *
- * @category   Magento
- * @package    Magento_Eav
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Eav\Model\Entity\Attribute\Backend\Time;
 
+/**
+ * Entity/Attribute/Model - attribute backend default
+ */
 class Updated extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
+    /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @param \Magento\Logger $logger
+     * @param \Magento\Stdlib\DateTime $dateTime
+     */
+    public function __construct(
+        \Magento\Logger $logger,
+        \Magento\Stdlib\DateTime $dateTime
+    ) {
+        $this->dateTime = $dateTime;
+        parent::__construct($logger);
+    }
+
+
     /**
      * Set modified date
      *
@@ -43,7 +57,7 @@ class Updated extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
      */
     public function beforeSave($object)
     {
-        $object->setData($this->getAttribute()->getAttributeCode(), \Magento\Date::now());
+        $object->setData($this->getAttribute()->getAttributeCode(), $this->dateTime->now());
         return $this;
     }
 }

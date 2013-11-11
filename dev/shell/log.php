@@ -29,8 +29,7 @@ $params = array(
     \Magento\Core\Model\App::PARAM_RUN_CODE => 'admin',
     \Magento\Core\Model\App::PARAM_RUN_TYPE => 'store',
 );
-$entryPoint = new \Magento\Log\Model\EntryPoint\Shell(
-    new \Magento\Core\Model\Config\Primary(BP, $params),
-    basename(__FILE__)
-);
-$entryPoint->processRequest();
+$entryPoint = new \Magento\App\EntryPoint\EntryPoint(BP, $params);
+$entryPoint->run('Magento\Log\App\Shell', array(
+    'entryFileName' => basename(__FILE__),
+));

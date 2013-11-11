@@ -34,7 +34,7 @@
             <instance type="Magento\GoogleShopping\Model\Resource\Helper" />
         </param>
     </type>
-    <type name="Magento\App\Updater\SetupFactory">
+    <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
             <value>
                 <googleshopping_setup>Magento\GoogleShopping\Model\Resource\Setup</googleshopping_setup>

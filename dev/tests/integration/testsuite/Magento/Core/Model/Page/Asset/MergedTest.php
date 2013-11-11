@@ -59,10 +59,11 @@ class MergedTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\Core\Model\App::PARAM_APP_DIRS => array(
+            \Magento\App\Dir::PARAM_APP_DIRS => array(
                 \Magento\App\Dir::THEMES => realpath(__DIR__ . '/../../_files/design')
             )
         ));
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
             ->setDesignTheme('vendor_default');
     }

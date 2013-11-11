@@ -50,7 +50,7 @@ class ImageSizing extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\Form\Factory $formFactory
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -60,7 +60,7 @@ class ImageSizing extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function __construct(
         \Magento\Core\Model\Registry $registry,
-        \Magento\Data\Form\Factory $formFactory,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
@@ -170,7 +170,7 @@ class ImageSizing extends \Magento\Backend\Block\Widget\Form\Generic
                 'name'  => 'save_image_sizing',
                 'title' => __('Update'),
                 'value' => __('Update'),
-                'data-mage-init' => $this->helper('Magento\Backend\Helper\Data')->escapeHtml(json_encode(array(
+                'data-mage-init' => $this->escapeHtml(json_encode(array(
                     'button' => array(
                         'event'  => 'saveForm',
                         'target' => 'body'
@@ -364,7 +364,7 @@ class ImageSizing extends \Magento\Backend\Block\Widget\Form\Generic
             'title' => __('Reset to Original'),
             'value' => __('Reset to Original'),
             'class' => 'action-reset',
-            'data-mage-init' => $this->helper('Magento\Backend\Helper\Data')->escapeHtml(json_encode(array(
+            'data-mage-init' => $this->escapeHtml(json_encode(array(
                 'button' => array(
                     'event'     => 'restoreDefaultData',
                     'target'    => 'body',

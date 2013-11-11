@@ -93,7 +93,7 @@ class Collection extends \Magento\Data\Collection
     protected $_reportCollection = null;
 
     /**
-     * @var  \Zend_DateFactory
+     * @var  \Magento\Reports\Model\DateFactory
      */
     protected $_dateFactory;
 
@@ -109,13 +109,13 @@ class Collection extends \Magento\Data\Collection
 
     /**
      * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Zend_DateFactory $dateFactory
-     * @param \Magento\Reports\Model\Resource\Report\Collection\Factory $collectionFactory
+     * @param \Magento\Reports\Model\DateFactory $dateFactory
+     * @param Collection\Factory $collectionFactory
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      */
     public function __construct(
         \Magento\Core\Model\LocaleInterface $locale,
-        \Zend_DateFactory $dateFactory,
+        \Magento\Reports\Model\DateFactory $dateFactory,
         \Magento\Reports\Model\Resource\Report\Collection\Factory $collectionFactory,
         \Magento\Core\Model\EntityFactory $entityFactory
     ) {
@@ -164,8 +164,8 @@ class Collection extends \Magento\Data\Collection
             if (!$this->_from && !$this->_to) {
                 return $this->_intervals;
             }
-            $dateStart  =  $this->_dateFactory->create(array('date' => $this->_from));
-            $dateEnd    =  $this->_dateFactory->create(array('date' => $this->_to));
+            $dateStart  =  $this->_dateFactory->create($this->_from);
+            $dateEnd    =  $this->_dateFactory->create($this->_to);
 
             $interval = array();
             $firstInterval = true;
@@ -392,8 +392,8 @@ class Collection extends \Magento\Data\Collection
     public function timeShift($datetime)
     {
         return $this->_locale
-            ->utcDate(null, $datetime, true, \Magento\Date::DATETIME_INTERNAL_FORMAT)
-            ->toString(\Magento\Date::DATETIME_INTERNAL_FORMAT);
+            ->utcDate(null, $datetime, true, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
+            ->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
     }
 
     /**

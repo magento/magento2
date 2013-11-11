@@ -24,16 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Sales\Model\Resource\Quote;
 
 /**
  * Quote payment resource model
- *
- * @category    Magento
- * @package     Magento_Sales
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Quote;
-
 class Payment extends \Magento\Sales\Model\Resource\AbstractResource
 {
     /**
@@ -51,15 +46,17 @@ class Payment extends \Magento\Sales\Model\Resource\AbstractResource
     protected $_paymentConverter;
 
     /**
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
+     * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Sales\Model\Payment\Method\Converter $paymentConverter
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
+        \Magento\Stdlib\DateTime $dateTime,
         \Magento\Sales\Model\Payment\Method\Converter $paymentConverter
     ) {
         $this->_paymentConverter = $paymentConverter;
-        parent::__construct($resource);
+        parent::__construct($resource, $dateTime);
     }
 
     /**

@@ -126,4 +126,25 @@ class Factory extends \Magento\Code\Generator\EntityAbstract
 
         return array($construct, $create);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _validateData()
+    {
+        $result = parent::_validateData();
+
+        if ($result) {
+            $sourceClassName = $this->_getSourceClassName();
+            $resultClassName = $this->_getResultClassName();
+
+            if ($resultClassName !== $sourceClassName . 'Factory') {
+                $this->_addError('Invalid Factory class name ['
+                    . $resultClassName . ']. Use ' . $sourceClassName . 'Factory'
+                );
+                $result = false;
+            }
+        }
+        return $result;
+    }
 }

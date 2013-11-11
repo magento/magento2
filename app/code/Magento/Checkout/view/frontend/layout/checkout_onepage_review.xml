@@ -24,16 +24,14 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="One Page Checkout Overview" type="page">
-    <block class="Magento\Page\Block\Html" name="root" output="1" template="page_fragment.phtml">
-        <block class="Magento\Checkout\Block\Onepage\Review\Info" name="order_review" template="onepage/review/info.phtml">
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="onepage/review/item.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped" template="onepage/review/item.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable" template="onepage/review/item.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Totals" name="checkout.onepage.review.info.totals" as="totals" template="onepage/review/totals.phtml"/>
-            <container name="checkout.onepage.review.info.items.before" as="items_before" label="Items Before"/>
-            <container name="checkout.onepage.review.info.items.after" as="items_after" label="Items After"/>
-            <block class="Magento\Checkout\Block\Agreements" name="checkout.onepage.agreements" as="agreements" template="onepage/agreements.phtml"/>
-            <block class="Magento\Core\Block\Template" name="checkout.onepage.review.button" as="button" template="Magento_Checkout::onepage/review/button.phtml"/>
-        </block>
+    <block class="Magento\Checkout\Block\Onepage\Review\Info" name="order_review" output="1" template="onepage/review/info.phtml">
+        <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="onepage/review/item.phtml"/>
+        <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped" template="onepage/review/item.phtml"/>
+        <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable" template="onepage/review/item.phtml"/>
+        <block class="Magento\Checkout\Block\Cart\Totals" name="checkout.onepage.review.info.totals" as="totals" template="onepage/review/totals.phtml"/>
+        <container name="checkout.onepage.review.info.items.before" as="items_before" label="Items Before"/>
+        <container name="checkout.onepage.review.info.items.after" as="items_after" label="Items After"/>
+        <block class="Magento\Checkout\Block\Agreements" name="checkout.onepage.agreements" as="agreements" template="onepage/agreements.phtml"/>
+        <block class="Magento\Core\Block\Template" name="checkout.onepage.review.button" as="button" template="Magento_Checkout::onepage/review/button.phtml"/>
     </block>
 </layout>

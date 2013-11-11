@@ -24,16 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\CatalogSearch\Model\Resource;
 
 /**
  * CatalogSearch Fulltext Index resource model
- *
- * @category    Magento
- * @package     Magento_CatalogSearch
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogSearch\Model\Resource;
-
 class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -107,9 +102,9 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Core string
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Filter\FilterManager
      */
-    protected $_coreString;
+    protected $filter;
 
     /**
      * Core event manager proxy
@@ -145,46 +140,52 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_engineProvider;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Core\Model\Resource $resource
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Status $catalogProductStatus
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollFactory
-     * @param \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider
+     * @param EngineProvider $engineProvider
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Helper\String $coreString
+     * @param \Magento\Filter\FilterManager $filter
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\CatalogSearch\Model\Resource\Helper $resourceHelper
+     * @param Helper $resourceHelper
+     * @param \Magento\Stdlib\DateTime $dateTime
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Product\Status $catalogProductStatus,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollFactory,
         \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Helper\String $coreString,
+        \Magento\Filter\FilterManager $filter,
         \Magento\CatalogSearch\Helper\Data $catalogSearchData,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\CatalogSearch\Model\Resource\Helper $resourceHelper
+        \Magento\CatalogSearch\Model\Resource\Helper $resourceHelper,
+        \Magento\Stdlib\DateTime $dateTime
     ) {
         $this->_catalogProductType = $catalogProductType;
         $this->_eavConfig = $eavConfig;
         $this->_catalogProductStatus = $catalogProductStatus;
         $this->_productAttributeCollFactory = $productAttributeCollFactory;
         $this->_eventManager = $eventManager;
-        $this->_coreString = $coreString;
+        $this->filter = $filter;
         $this->_catalogSearchData = $catalogSearchData;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_storeManager = $storeManager;
         $this->_resourceHelper = $resourceHelper;
         $this->_engineProvider = $engineProvider;
+        $this->dateTime = $dateTime;
         parent::__construct($resource);
     }
 
@@ -467,8 +468,10 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
             if ($searchType == \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_LIKE
                 || $searchType == \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_COMBINE
             ) {
-                $words = $this->_coreString
-                    ->splitWords($queryText, true, $query->getMaxQueryWords());
+                $words = $this->filter->splitWords($queryText, array(
+                    'uniqueOnly' => true,
+                    'wordsQty' => $query->getMaxQueryWords()
+                ));
                 foreach ($words as $word) {
                     $like[] = $this->_resourceHelper->getCILike('s.data_index', $word, array('position' => 'any'));
                 }
@@ -911,9 +914,9 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
             $this->_dates[$storeId] = array($dateObj, $locale->getTranslation(null, 'date', $locale));
         }
 
-        if (!is_empty_date($date)) {
+        if (!$this->dateTime->isEmptyDate($date)) {
             list($dateObj, $format) = $this->_dates[$storeId];
-            $dateObj->setDate($date, \Magento\Date::DATETIME_INTERNAL_FORMAT);
+            $dateObj->setDate($date, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
 
             return $dateObj->toString($format);
         }

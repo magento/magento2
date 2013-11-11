@@ -110,12 +110,13 @@ class Scoped extends \Magento\Config\Data
             }
             foreach ($this->_scopePriorityScheme as $scopeCode) {
                 if (false == isset($this->_loadedScopes[$scopeCode])) {
-                    $data = $this->_cache->load($scopeCode . '::' . $this->_cacheId);
-                    if (false === $data) {
-                        $data = $this->_reader->read($scopeCode);
-                        $this->_cache->save(serialize($data), $scopeCode . '::' . $this->_cacheId);
-                    } else {
+                    if ($scopeCode !== 'primary' && $data = $this->_cache->load($scopeCode . '::' . $this->_cacheId)) {
                         $data = unserialize($data);
+                    } else {
+                        $data = $this->_reader->read($scopeCode);
+                        if ($scopeCode !== 'primary') {
+                            $this->_cache->save(serialize($data), $scopeCode . '::' . $this->_cacheId);
+                        }
                     }
                     $this->merge($data);
                     $this->_loadedScopes[$scopeCode] = true;

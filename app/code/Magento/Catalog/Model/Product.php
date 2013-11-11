@@ -2068,7 +2068,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel
         $this->setData(array());
         $this->setOrigData();
         $this->_customOptions       = array();
-        $this->_optionInstance      = null;
         $this->_options             = array();
         $this->_canAffectOptions    = false;
         $this->_errors              = array();

@@ -33,8 +33,7 @@
  */
 namespace Magento\ImportExport\Model\Resource\Import\CustomerComposite;
 
-class Data
-    extends \Magento\ImportExport\Model\Resource\Import\Data
+class Data extends \Magento\ImportExport\Model\Resource\Import\Data
 {
     /**
      * Entity type
@@ -53,12 +52,12 @@ class Data
     /**
      * Class constructor
      *
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Helper\Data $coreHelper
      * @param array $arguments
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Core\Helper\Data $coreHelper,
         array $arguments = array()
     ) {

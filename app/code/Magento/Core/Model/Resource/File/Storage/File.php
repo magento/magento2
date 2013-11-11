@@ -24,17 +24,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
-/**
- * Model for synchronization from DB to filesystem
- *
- * @category    Magento
- * @package     Magento_Core
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Core\Model\Resource\File\Storage;
 
-class File extends \Magento\Core\Model\Resource\AbstractResource
+/**
+ * Class File
+ */
+class File
 {
     /**
      * Prefix of model events names
@@ -54,19 +49,19 @@ class File extends \Magento\Core\Model\Resource\AbstractResource
     protected $_dbHelper;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
     /**
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Helper\File\Storage\Database $dbHelper
-     * @param \Magento\Core\Model\Logger $log
+     * @param \Magento\Logger $log
      */
     public function __construct(
         \Magento\Filesystem $filesystem,
         \Magento\Core\Helper\File\Storage\Database $dbHelper,
-        \Magento\Core\Model\Logger $log
+        \Magento\Logger $log
     ) {
         $this->_dbHelper = $dbHelper;
         $this->_logger = $log;
@@ -199,30 +194,6 @@ class File extends \Magento\Core\Model\Resource\AbstractResource
             throw new \Magento\Core\Exception(__('Unable to save file: %1', $filePath));
         }
 
-        return false;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function _construct()
-    {
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function _getReadAdapter()
-    {
-        return false;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function _getWriteAdapter()
-    {
         return false;
     }
 

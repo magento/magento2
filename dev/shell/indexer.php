@@ -30,9 +30,7 @@ $params = array(
     \Magento\Core\Model\App::PARAM_RUN_TYPE => 'store',
 );
 
-$entryPoint = new \Magento\Index\Model\EntryPoint\Shell(
-    basename(__FILE__),
-    new \Magento\Index\Model\EntryPoint\Shell\ErrorHandler(),
-    new \Magento\Core\Model\Config\Primary(BP, $params)
-);
-$entryPoint->processRequest();
+$entryPoint = new \Magento\App\EntryPoint\EntryPoint(BP, $params);
+$entryPoint->run('Magento\Index\App\Shell', array(
+    'entryFileName' => basename(__FILE__),
+));

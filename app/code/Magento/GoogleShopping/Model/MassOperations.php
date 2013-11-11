@@ -86,7 +86,7 @@ class MassOperations
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\AdminNotification\Model\InboxFactory $inboxFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\GoogleShopping\Helper\Data $gleShoppingData
      * @param \Magento\GoogleShopping\Helper\Category $gleShoppingCategory
      * @param array $data
@@ -97,7 +97,7 @@ class MassOperations
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\GoogleShopping\Helper\Data $gleShoppingData,
         \Magento\GoogleShopping\Helper\Category $gleShoppingCategory,
         array $data = array()
@@ -134,7 +134,7 @@ class MassOperations
     protected $_flag;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 

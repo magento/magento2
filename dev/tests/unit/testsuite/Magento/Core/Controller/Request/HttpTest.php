@@ -36,7 +36,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_routerListMock = $this->getMock('\Magento\App\RouterList', array(), array(), '', false);
+        $this->_routerListMock = $this->getMock('\Magento\App\Route\ConfigInterface');
         $this->_model = new \Magento\App\Request\Http($this->_routerListMock);
     }
 

@@ -216,7 +216,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 
     /**
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Data\Form\Factory $formFactory
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
@@ -232,7 +232,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      */
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Data\Form\Factory $formFactory,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\SalesRule\Model\CouponFactory $couponFactory,

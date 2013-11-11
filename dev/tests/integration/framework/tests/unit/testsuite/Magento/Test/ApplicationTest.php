@@ -27,6 +27,8 @@
 
 namespace Magento\Test;
 
+use Magento\App\State;
+
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -54,13 +56,13 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         $initParams = $object->getInitParams();
         $this->assertInternalType('array', $initParams, 'Wrong initialization parameters type');
-        $this->assertArrayHasKey(\Magento\Core\Model\App::PARAM_APP_DIRS, $initParams,
+        $this->assertArrayHasKey(\Magento\App\Dir::PARAM_APP_DIRS, $initParams,
             'Directories are not configured');
-        $this->assertArrayHasKey(\Magento\Core\Model\App::PARAM_MODE, $initParams,
+        $this->assertArrayHasKey(State::PARAM_MODE, $initParams,
             'Application mode is not configured');
         $this->assertEquals(
             \Magento\App\State::MODE_DEVELOPER,
-            $initParams[\Magento\Core\Model\App::PARAM_MODE],
+            $initParams[State::PARAM_MODE],
             'Wrong application mode configured'
         );
     }

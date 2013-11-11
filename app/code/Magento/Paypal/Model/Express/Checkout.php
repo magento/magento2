@@ -172,7 +172,7 @@ class Checkout
     protected $_customerData;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
@@ -229,7 +229,7 @@ class Checkout
     /**
      * Set config, session and quote instances
      *
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Tax\Helper\Data $taxData
@@ -252,7 +252,7 @@ class Checkout
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Customer\Helper\Data $customerData,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Tax\Helper\Data $taxData,

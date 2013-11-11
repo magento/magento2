@@ -24,41 +24,56 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Sales\Block\Adminhtml\Items\Column;
 
 /**
  * Sales Order items name column renderer
- *
- * @category   Magento
- * @package    Magento_Sales
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Items\Column;
-
 class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn
 {
     /**
      * Core string
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Filter\FilterManager
      */
-    protected $_coreString = null;
+    protected $filter;
 
     /**
-     * @param \Magento\Core\Helper\String $coreString
      * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Filter\FilterManager $filter
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\String $coreString,
         \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Filter\FilterManager $filter,
         array $data = array()
     ) {
-        $this->_coreString = $coreString;
+        $this->filter = $filter;
         parent::__construct($optionFactory, $coreData, $context, $data);
+    }
+
+    /**
+     * Truncate string
+     *
+     * @param string $value
+     * @param int $length
+     * @param string $etc
+     * @param string &$remainder
+     * @param bool $breakWords
+     * @return string
+     */
+    public function truncateString($value, $length = 80, $etc = '...', &$remainder = '', $breakWords = true)
+    {
+        return $this->filter->truncate($value, array(
+            'length' => $length,
+            'etc' => $etc,
+            'remainder' => $remainder,
+            'breakWords' => $breakWords
+        ));
     }
 
     /**
@@ -69,11 +84,11 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn
      */
     public function getFormattedOption($value)
     {
-        $_remainder = '';
-        $value = $this->_coreString->truncate($value, 55, '', $_remainder);
+        $remainder = '';
+        $value = $this->truncateString($value, 55, '', $remainder);
         $result = array(
             'value' => nl2br($value),
-            'remainder' => nl2br($_remainder)
+            'remainder' => nl2br($remainder)
         );
 
         return $result;

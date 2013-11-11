@@ -12,7 +12,7 @@ app/code/Magento/Captcha/view/frontend/onepage.js
 app/code/Magento/Catalog/view/adminhtml/catalog/category/edit.js
 app/code/Magento/Catalog/view/adminhtml/catalog/product/composite/configure.js
 app/code/Magento/Catalog/view/adminhtml/catalog/product.js
-app/code/Magento/Adminhtml/view/adminhtml/promo/rules.js
+app/code/Magento/Adminhtml/view/adminhtml/rules.js
 app/code/Magento/Sales/view/adminhtml/order/create/giftmessage.js
 app/code/Magento/Sales/view/adminhtml/order/create/scripts.js
 app/code/Magento/Sales/view/adminhtml/order/giftoptions_tooltip.js

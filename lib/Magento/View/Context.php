@@ -34,12 +34,12 @@ use Magento\Core\Model\Store\Config as StoreConfig;
 use Magento\Core\Model\Factory\Helper as FactoryHelper;
 use Magento\Core\Model\View\Url as ViewUrl;
 use Magento\View\ConfigInterface as ViewConfig;
-use Magento\Core\Model\Logger;
+use Magento\Logger;
 use Magento\Core\Model\App;
 use Magento\App\State as AppState;
 
 use Magento\Core\Model\Session\AbstractSession;
-use Magento\Core\Model\CacheInterface as Cache;
+use Magento\App\CacheInterface as Cache;
 use Magento\Core\Model\Cache\StateInterface as CacheState;
 use Magento\UrlInterface;
 use Magento\Event\ManagerInterface;
@@ -74,7 +74,7 @@ class Context
     protected $translator;
 
     /**
-     * @var \Magento\Core\Model\CacheInterface
+     * @var \Magento\App\CacheInterface
      */
     protected $cache;
 
@@ -109,6 +109,11 @@ class Context
     protected $viewUrl;
 
     /**
+     * @var \Magento\View\LayoutInterface
+     */
+    protected $layout;
+
+    /**
      * View config model
      *
      * @var \Magento\Core\Model\View\Config
@@ -121,7 +126,7 @@ class Context
     protected $cacheState;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $logger;
 
@@ -193,7 +198,7 @@ class Context
     }
 
     /**
-     * @return \Magento\Core\Model\CacheInterface
+     * @return \Magento\App\CacheInterface
      */
     public function getCache()
     {
@@ -305,7 +310,7 @@ class Context
     }
 
     /**
-     * @return \Magento\Core\Model\Logger
+     * @return \Magento\Logger
      */
     public function getLogger()
     {

@@ -37,12 +37,22 @@ class Cert extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_coreDate;
 
     /**
-     * @param \Magento\Core\Model\Resource $resource
-     * @param \Magento\Core\Model\Date $coreDate
+     * @var \Magento\Stdlib\DateTime
      */
-    public function __construct(\Magento\Core\Model\Resource $resource, \Magento\Core\Model\Date $coreDate)
-    {
+    protected $dateTime;
+
+    /**
+     * @param \Magento\App\Resource $resource
+     * @param \Magento\Core\Model\Date $coreDate
+     * @param \Magento\Stdlib\DateTime $dateTime
+     */
+    public function __construct(
+        \Magento\App\Resource $resource,
+        \Magento\Core\Model\Date $coreDate,
+        \Magento\Stdlib\DateTime $dateTime
+    ) {
         $this->_coreDate = $coreDate;
+        $this->dateTime = $dateTime;
         parent::__construct($resource);
     }
 
@@ -62,7 +72,7 @@ class Cert extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected function _beforeSave(\Magento\Core\Model\AbstractModel $object)
     {
-        $object->setUpdatedAt($this->formatDate($this->_coreDate->gmtDate()));
+        $object->setUpdatedAt($this->dateTime->formatDate($this->_coreDate->gmtDate()));
         return parent::_beforeSave($object);
     }
 

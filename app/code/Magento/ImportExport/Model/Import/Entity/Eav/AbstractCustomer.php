@@ -24,17 +24,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Import entity abstract customer model
- *
- * @category    Magento
- * @package     Magento_ImportExport
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\ImportExport\Model\Import\Entity\Eav;
 
-abstract class AbstractCustomer
-    extends \Magento\ImportExport\Model\Import\Entity\AbstractEav
+/**
+ * Import entity abstract customer model
+ */
+abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entity\AbstractEav
 {
     /**#@+
      * Permanent column names
@@ -80,11 +75,11 @@ abstract class AbstractCustomer
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Helper\String $coreString
+     * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\App $app
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -93,11 +88,11 @@ abstract class AbstractCustomer
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Helper\String $coreString,
+        \Magento\Stdlib\String $string,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Core\Model\App $app,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
@@ -106,7 +101,7 @@ abstract class AbstractCustomer
     ) {
         $this->_storageFactory = $storageFactory;
         parent::__construct(
-            $coreData, $coreString, $coreStoreConfig, $importFactory, $resourceHelper, $resource, $app,
+            $coreData, $string, $coreStoreConfig, $importFactory, $resourceHelper, $resource, $app,
             $collectionFactory, $eavConfig, $data
         );
 

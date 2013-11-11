@@ -23,6 +23,8 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
+/** @var $this \Magento\Bundle\Block\Sales\Order\Items\Renderer */
 ?>
 <?php $parentItem = $this->getItem() ?>
 <?php $items = array_merge(array($parentItem), $parentItem->getChildrenItems()); ?>
@@ -56,7 +58,7 @@
     <?php else: ?>
         <td class="col value"><div class="option value"><?php echo $this->getValueHtml($_item)?></div></td>
     <?php endif; ?>
-    <td class="col sku"><?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\String')->splitInjection($_item->getSku())) ?></td>
+    <td class="col sku"><?php echo $this->prepareSku($_item->getSku()) ?></td>
     <td class="col price">
         <?php if (!$_item->getParentItem()): ?>
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceExclTax()): ?>

@@ -26,8 +26,6 @@
  */
 -->
 <config>
-    <global>
-    </global>
     <default>
         <oauth>
             <cleanup>

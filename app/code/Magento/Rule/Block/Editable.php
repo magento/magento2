@@ -24,7 +24,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 namespace Magento\Rule\Block;
 
 class Editable
@@ -36,29 +35,29 @@ class Editable
      *
      * @var \Magento\Core\Helper\Data
      */
-    protected $_coreData = null;
+    protected $_coreData;
 
     /**
-     * Core string
+     * Filter manager
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Filter\FilterManager
      */
-    protected $_coreString = null;
+    protected $filter;
 
     /**
-     * @param \Magento\Core\Helper\String $coreString
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Block\Context $context
+     * @param \Magento\Filter\FilterManager $filter
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\String $coreString,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Block\Context $context,
+        \Magento\Filter\FilterManager $filter,
         array $data = array()
     ) {
-        $this->_coreString = $coreString;
         $this->_coreData = $coreData;
+        $this->filter = $filter;
         parent::__construct($context, $data);
     }
 
@@ -88,9 +87,9 @@ class Editable
                 . '<a href="javascript:void(0)" class="label">';
 
             if ($this->_translator->isAllowed()) {
-                $html .= $this->_coreData->escapeHtml($valueName);
+                $html .= $this->escapeHtml($valueName);
             } else {
-                $html .= $this->_coreData->escapeHtml($this->_coreString->truncate($valueName, 33, '...'));
+                $html .= $this->escapeHtml($this->filter->truncate($valueName, array('length' => 33, 'etc' => '...')));
             }
 
             $html .= '</a><span class="element"> ' . $element->getElementHtml();

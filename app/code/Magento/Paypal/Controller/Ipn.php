@@ -30,7 +30,7 @@ namespace Magento\Paypal\Controller;
 class Ipn extends \Magento\Core\Controller\Front\Action
 {
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 

@@ -23,10 +23,9 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\App\Router;
 
-class NoRouteHandler implements \Magento\Appl\Router\NoRouteHandlerInterface
+class NoRouteHandler implements \Magento\App\Router\NoRouteHandlerInterface
 {
     /**
      * @var \Magento\Backend\Helper\Data
@@ -54,7 +53,7 @@ class NoRouteHandler implements \Magento\Appl\Router\NoRouteHandlerInterface
 
         if ($areaFrontName == $this->_helper->getAreaFrontName()) {
 
-            $moduleName     = 'core';
+            $moduleName     = 'admin';
             $controllerName = 'index';
             $actionName     = 'noRoute';
 

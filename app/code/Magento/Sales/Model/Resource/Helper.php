@@ -38,12 +38,12 @@ class Helper extends \Magento\Core\Model\Resource\Helper
     protected $_reportsResourceHelper;
 
     /**
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Reports\Model\Resource\Helper $reportsResourceHelper
      * @param string $modulePrefix
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Reports\Model\Resource\Helper $reportsResourceHelper,
         $modulePrefix = 'sales'
     ) {

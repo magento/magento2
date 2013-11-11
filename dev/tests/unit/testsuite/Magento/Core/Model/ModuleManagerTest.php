@@ -48,7 +48,7 @@ class ModuleManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_moduleList = $this->getMockForAbstractClass('Magento\App\ModuleListInterface');
+        $this->_moduleList = $this->getMockForAbstractClass('Magento\Module\ModuleListInterface');
         $this->_storeConfig = $this->getMockForAbstractClass('Magento\Core\Model\Store\ConfigInterface');
         $this->_model = new \Magento\Core\Model\ModuleManager($this->_storeConfig, $this->_moduleList, array(
             'Module_DisabledOutputOne' => self::XML_PATH_OUTPUT_ENABLED,

@@ -33,8 +33,7 @@
  */
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons;
 
-class Save
-    extends \Magento\Backend\Block\Widget\Button\SplitButton
+class Save extends \Magento\Backend\Block\Widget\Button\SplitButton
 {
     /**
      * Current theme used for preview
@@ -301,6 +300,6 @@ class Save
      */
     protected function _encode($data)
     {
-        return $this->helper('Magento\Backend\Helper\Data')->escapeHtml(json_encode($data));
+        return $this->escapeHtml(json_encode($data));
     }
 }

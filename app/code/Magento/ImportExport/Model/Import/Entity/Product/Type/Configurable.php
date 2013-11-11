@@ -141,7 +141,7 @@ class Configurable
     protected $_resourceHelper;
 
     /**
-     * @var \Magento\Core\Model\Resource
+     * @var \Magento\App\Resource
      */
     protected $_resource;
 
@@ -155,7 +155,7 @@ class Configurable
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $_productColFac
      * @param array $params
      */
@@ -164,7 +164,7 @@ class Configurable
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $_productColFac,
         array $params
     ) {

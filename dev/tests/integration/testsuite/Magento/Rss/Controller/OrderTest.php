@@ -35,7 +35,7 @@ class OrderTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * Reuse URI for "new" action
      */
-    const NEW_ORDER_URI = 'rss/order/new';
+    const NEW_ORDER_URI = 'backend/rss/order/new';
 
     public function testNewActionAuthorizationFailed()
     {

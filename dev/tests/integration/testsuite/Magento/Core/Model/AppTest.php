@@ -202,7 +202,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
     public function testGetCacheInstance()
     {
         $cache = $this->_mageModel->getCacheInstance();
-        $this->assertInstanceOf('Magento\Core\Model\CacheInterface', $cache);
+        $this->assertInstanceOf('Magento\App\CacheInterface', $cache);
         $this->assertSame($cache, $this->_mageModel->getCacheInstance());
     }
 

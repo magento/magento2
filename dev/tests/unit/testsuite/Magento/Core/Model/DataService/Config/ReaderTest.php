@@ -40,7 +40,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     {
         $path = array(__DIR__, '..', '_files', 'service_calls.xml');
         $path = realpath(implode('/', $path));
-        $this->_modulesReaderMock = $this->getMockBuilder('Magento\Core\Model\Config\Modules\Reader')
+        $this->_modulesReaderMock = $this->getMockBuilder('Magento\Module\Dir\Reader')
             ->disableOriginalConstructor()
             ->getMock();
 

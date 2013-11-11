@@ -144,8 +144,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $data = $collection->getData();
         $this->assertEquals(2, count($data));
 
-        /** @var \Magento\Core\Model\Resource $resource */
-        $resource = $this->_objectManager->create('Magento\Core\Model\Resource');
+        /** @var \Magento\App\Resource $resource */
+        $resource = $this->_objectManager->create('Magento\App\Resource');
         $connection = $resource->getConnection('core_write');
 
         /** @var \Magento\Webhook\Model\Resource\Job\Collection $collection2 */

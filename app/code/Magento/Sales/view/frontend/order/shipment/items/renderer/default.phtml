@@ -66,6 +66,6 @@
             </a>
         <?php endif; ?>
     </td>
-    <td class="col sku"><?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\String')->splitInjection($this->getSku())) ?></td>
+    <td class="col sku"><?php echo $this->prepareSku($this->getSku()) ?></td>
     <td class="col qty"><?php echo $_item->getQty()*1 ?></td>
 </tr>

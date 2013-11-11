@@ -26,22 +26,6 @@
  */
 -->
 <config>
-    <adminhtml>
-        <global_search>
-            <products>
-                <class>Magento\Adminhtml\Model\Search\Catalog</class>
-                <acl>Magento_Catalog::catalog</acl>
-            </products>
-            <customers>
-                <class>Magento\Adminhtml\Model\Search\Customer</class>
-                <acl>Magento_Customer::customer</acl>
-            </customers>
-            <sales>
-                <class>Magento\Adminhtml\Model\Search\Order</class>
-                <acl>Magento_Sales::sales</acl>
-            </sales>
-        </global_search>
-    </adminhtml>
     <default>
         <system>
             <media_storage_configuration>
@@ -73,14 +57,6 @@
                 </input_types>
             </validator_data>
         </general>
-        <hints>
-            <store_switcher>
-                <url>
-                    <![CDATA[http://www.magentocommerce.com/knowledge-base/entry/understanding-store-scopes]]>
-</url>
-                <enabled>1</enabled>
-            </store_switcher>
-        </hints>
     </default>
     <stores>
         <admin>

@@ -32,7 +32,7 @@ namespace Magento\Reports\Model;
 class Config extends \Magento\Object
 {
     /**
-     * @var \Magento\Core\Model\Config\Modules\Reader
+     * @var \Magento\Module\Dir\Reader
      */
     protected $_moduleReader;
 
@@ -42,12 +42,12 @@ class Config extends \Magento\Object
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\Config\Modules\Reader $moduleReader
+     * @param \Magento\Module\Dir\Reader $moduleReader
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Config\Modules\Reader $moduleReader,
+        \Magento\Module\Dir\Reader $moduleReader,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         array $data = array()
     ) {

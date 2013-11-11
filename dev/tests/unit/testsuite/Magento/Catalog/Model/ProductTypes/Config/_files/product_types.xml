@@ -38,4 +38,13 @@
             <type name="type_two" />
         </allowedSelectionTypes>
     </type>
+    <type name="type_three" label="Label Three" modelInstance="Instance_Type" composite="false" indexPriority="20" canUseQtyDecimals="false" isQty="false">
+        <priceModel instance="Instance_Type_Three" />
+        <indexerModel instance="Instance_Type_Three" />
+        <false/>
+        <stockIndexerModel instance="Instance_Type_Three" />
+        <allowProductTypes>
+            <type name="type_three" />
+        </allowProductTypes>
+    </type>
 </config>

@@ -51,7 +51,7 @@ class Mysql4Test extends \PHPUnit_Framework_TestCase
         $adapterMock->expects($this->once())->method('getConnection')->will($this->returnValue($connectionMock));
         $adapterFactory->expects($this->once())->method('create')->will($this->returnValue($adapterMock));
 
-        $localConfig = $this->getMockBuilder('\Magento\Core\Model\Config\Local')
+        $localConfig = $this->getMockBuilder('\Magento\App\Config')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -85,7 +85,7 @@ class Mysql4Test extends \PHPUnit_Framework_TestCase
             'Magento\Core\Model\Resource\Type\Db\Pdo\MysqlFactory', array('create'), array(), '', false
         );
         $localConfig =
-            $this->getMockBuilder('\Magento\Core\Model\Config\Local')->disableOriginalConstructor()->getMock();
+            $this->getMockBuilder('\Magento\App\Config')->disableOriginalConstructor()->getMock();
         $installer = new \Magento\Install\Model\Installer\Db\Mysql4(
             $adapterFactory, $localConfig, $dbExtensions
         );

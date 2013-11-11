@@ -533,4 +533,21 @@ class Filesystem
     {
         return 0 === strpos(self::normalizePath($path), self::normalizePath($directory));
     }
+
+    /**
+     * Check LFI protection
+     *
+     * @throws \InvalidArgumentException
+     * @param string $name
+     * @return bool
+     */
+    public function checkLfiProtection($name)
+    {
+        if (preg_match('#\.\.[\\\/]#', $name)) {
+            throw new \InvalidArgumentException(
+                'Requested file may not include parent directory traversal ("../", "..\\" notation)'
+            );
+        }
+        return true;
+    }
 }

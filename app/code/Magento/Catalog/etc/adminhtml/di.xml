@@ -34,4 +34,26 @@
             <value>adminhtml</value>
         </param>
     </type>
+    <type name="Magento\Catalog\Block\Adminhtml\Product\Frontend\Product\Watermark">
+        <param name="imageTypes">
+            <value>
+                <small>
+                    <title>Small</title>
+                    <attribute>small_image</attribute>
+                </small>
+                <main>
+                    <title>Main</title>
+                    <attribute>image</attribute>
+                </main>
+                <cart>
+                    <title>Thumbnail</title>
+                    <attribute>thumbnail</attribute>
+                </cart>
+                <custom>
+                    <title>Custom image</title>
+                    <attribute>custom_image</attribute>
+                </custom>
+            </value>
+        </param>
+    </type>
 </config>

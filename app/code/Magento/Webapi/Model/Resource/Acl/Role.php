@@ -30,9 +30,9 @@ class Role extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Class constructor.
      *
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      */
-    public function __construct(\Magento\Core\Model\Resource $resource)
+    public function __construct(\Magento\App\Resource $resource)
     {
         parent::__construct($resource);
     }

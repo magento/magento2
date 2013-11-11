@@ -48,7 +48,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $schema = $this->getMockBuilder('Magento\Sales\Model\Config\SchemaLocator')
             ->disableOriginalConstructor()
             ->getMock();
-        $validator = $this->getMockBuilder('Magento\Core\Model\Config\ValidationState')
+        $validator = $this->getMockBuilder('\Magento\Config\ValidationStateInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->_reader = new \Magento\Sales\Model\Config\Reader($fileResolver, $converter, $schema, $validator);

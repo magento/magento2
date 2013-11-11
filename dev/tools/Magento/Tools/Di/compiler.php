@@ -34,17 +34,13 @@ use Magento\Tools\Di\Compiler\Log\Log,
 
 $filePatterns = array(
     'php' => '/.*\.php$/',
-    'etc' => '/\/app\/etc\/[a-z0-9\.]*\.xml$/',
     'di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/',
-    'view' => '/\/view\/[a-z0-9A-Z\/\.]*\.xml$/',
-    'design' => '/\/app\/design\/[a-z0-9A-Z\/\._]*\.xml$/',
 );
 $codeScanDir = realpath($rootDir . '/app');
 try {
     $opt = new Zend_Console_Getopt(array(
         'serializer=w' => 'serializer function that should be used (serialize|binary) default = serialize',
         'verbose|v' => 'output report after tool run',
-        'log|l=s' => 'log level (all|error) default = all',
         'extra-classes-file=s' => 'path to file with extra proxies and factories to generate',
         'generation=s' => 'absolute path to generated classes, <magento_root>/var/generation by default',
         'di=s' => 'absolute path to DI definitions directory, <magento_root>/var/di by default'
@@ -65,11 +61,13 @@ try {
         $generationDir,
     );
 
-    $writer = $opt->getOption('v') ? new Writer\Console() : new Writer\Quiet();
-    $allowedLogTypes = $opt->getOption('log') == 'error' ?
-        array(Log::COMPILATION_ERROR, Log::GENERATION_ERROR)
-        : array();
-    $log = new Log($writer, $allowedLogTypes);
+    /** @var Writer\WriterInterface $logWriter Writer model for success messages */
+    $logWriter   = $opt->getOption('v') ? new Writer\Console() : new Writer\Quiet();
+
+    /** @var Writer\WriterInterface $logWriter Writer model for error messages */
+    $errorWriter = new Writer\Console();
+
+    $log = new Log($logWriter, $errorWriter);
     $serializer = ($opt->getOption('serializer') == 'binary') ? new Serializer\Igbinary() : new Serializer\Standard();
 
     // 1 Code generation
@@ -80,21 +78,47 @@ try {
     $entities = array();
 
     $scanner = new Scanner\CompositeScanner();
-    $scanner->addChild(new Scanner\PhpScanner(), 'php');
-    $scanner->addChild(new Scanner\XmlScanner(), 'etc');
-    $scanner->addChild(new Scanner\XmlScanner(), 'di');
-    $scanner->addChild(new Scanner\XmlScanner(), 'view');
-    $scanner->addChild(new Scanner\XmlScanner(), 'design');
+    $scanner->addChild(new Scanner\PhpScanner($log), 'php');
+    $scanner->addChild(new Scanner\XmlScanner($log), 'di');
     $scanner->addChild(new Scanner\ArrayScanner(), 'additional');
     $entities = $scanner->collectEntities($files);
 
     $interceptorScanner = new Scanner\XmlInterceptorScanner();
-    $entities = array_merge($entities, $interceptorScanner->collectEntities($files['di']));
+    $entities['di'] = array_merge($entities['di'], $interceptorScanner->collectEntities($files['di']));
 
-    // 1.2 Generation
+    // 1.2 Generation of Factory and Additional Classes
     $generatorIo = new \Magento\Code\Generator\Io(null, null, $generationDir);
     $generator = new \Magento\Code\Generator(null, null, $generatorIo);
-    foreach ($entities as $entityName) {
+    foreach (array('php', 'additional') as $type) {
+        foreach ($entities[$type] as $entityName) {
+            switch ($generator->generateClass($entityName)) {
+                case \Magento\Code\Generator::GENERATION_SUCCESS:
+                    $log->add(Log::GENERATION_SUCCESS, $entityName);
+                    break;
+
+                case \Magento\Code\Generator::GENERATION_ERROR:
+                    $log->add(Log::GENERATION_ERROR, $entityName);
+                    break;
+
+                case \Magento\Code\Generator::GENERATION_SKIP:
+                default:
+                    //no log
+                    break;
+            }
+        }
+    }
+
+    // 2. Compilation
+    // 2.1 Code scan
+    $directoryCompiler = new Directory($log);
+    foreach ($compilationDirs as $path) {
+        if (is_readable($path)) {
+            $directoryCompiler->compile($path);
+        }
+    }
+
+    // 2.1.1 Generation of Proxy and Interceptor Classes
+    foreach ($entities['di'] as $entityName) {
         switch ($generator->generateClass($entityName)) {
             case \Magento\Code\Generator::GENERATION_SUCCESS:
                 $log->add(Log::GENERATION_SUCCESS, $entityName);
@@ -111,14 +135,9 @@ try {
         }
     }
 
-    // 2. Compilation
-    // 2.1 Code scan
-    $directoryCompiler = new Directory($log);
-    foreach ($compilationDirs as $path) {
-        if (is_readable($path)) {
-            $directoryCompiler->compile($path);
-        }
-    }
+    //2.1.2 Compile definitions for Proxy/Interceptor classes
+    $directoryCompiler->compile($generationDir);
+
     list($definitions, $relations) = $directoryCompiler->getResult();
 
     // 2.2 Compression
@@ -132,14 +151,17 @@ try {
     file_put_contents($compiledFile, $output);
     file_put_contents($relationsFile, $serializer->serialize($relations));
 
-
     // 3. Plugin Definition Compilation
     $pluginScanner = new Scanner\CompositeScanner();
     $pluginScanner->addChild(new Scanner\PluginScanner(), 'di');
     $pluginDefinitions = array();
-    foreach ($pluginScanner->collectEntities($files) as $entity) {
-        $pluginDefinitions[$entity] = get_class_methods($entity);
+    $pluginList = $pluginScanner->collectEntities($files);
+    foreach ($pluginList as $type => $entityList) {
+        foreach ($entityList as $entity) {
+            $pluginDefinitions[$entity] = get_class_methods($entity);
+        }
     }
+
     $output = $serializer->serialize($pluginDefinitions);
 
     if (!file_exists(dirname($pluginDefFile))) {
@@ -147,8 +169,14 @@ try {
     }
 
     file_put_contents($pluginDefFile, $output);
+
     //Reporter
     $log->report();
+
+    if ($log->hasError()) {
+        exit(1);
+    }
+
 } catch (Zend_Console_Getopt_Exception $e) {
     echo $e->getUsageMessage();
     echo 'Please, use quotes(") for wrapping strings.' . "\n";

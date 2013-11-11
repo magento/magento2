@@ -38,19 +38,16 @@ class Layout
     extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
-     * @var \Magento\Core\Model\Config
+     * @var array
      */
-    protected $_coreConfig;
+    protected $_cmsLayouts;
 
     /**
-     * Constructor
-     *
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param array $cmsLayouts
      */
-    public function __construct(
-        \Magento\Core\Model\Config $coreConfig
-    ) {
-        $this->_coreConfig = $coreConfig;
+    public function __construct(array $cmsLayouts = array())
+    {
+        $this->_cmsLayouts = $cmsLayouts;
     }
 
     /**
@@ -61,11 +58,10 @@ class Layout
     public function getAllOptions()
     {
         if (!$this->_options) {
-            $layouts = array();
-            foreach ($this->_coreConfig->getNode('global/cms/layouts')->children() as $layoutName=>$layoutConfig) {
+            foreach ($this->_cmsLayouts as $layoutName => $layoutConfig) {
                 $this->_options[] = array(
-                   'value'=>$layoutName,
-                   'label'=>(string)$layoutConfig->label
+                   'value' => $layoutName,
+                   'label' => $layoutConfig
                 );
             }
             array_unshift($this->_options, array('value'=>'', 'label' => __('No layout updates')));

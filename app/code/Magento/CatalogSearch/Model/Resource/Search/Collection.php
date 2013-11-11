@@ -51,11 +51,6 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     protected $_searchQuery;
 
     /**
-     * @var \Magento\Core\Model\Resource
-     */
-    protected $_resource;
-
-    /**
      * Attribute collection factory
      *
      * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
@@ -64,11 +59,11 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 
     /**
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Core\Model\Resource $coreResource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Validator\UniversalFactory $universalFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -80,16 +75,16 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
-     * @param \Magento\Core\Model\Resource $resource
      */
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Core\Model\Resource $coreResource,
+        \Magento\App\Resource $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Validator\UniversalFactory $universalFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
@@ -101,16 +96,15 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
+        \Magento\Stdlib\DateTime $dateTime,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
-        \Magento\Core\Model\Resource $resource
-    )
-    {
+        \Magento\App\Resource $resource
+    ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
-        $this->_resource = $resource;
         parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $eavConfig,
-            $coreResource, $eavEntityFactory, $universalFactory, $storeManager, $catalogData,
+            $resource, $eavEntityFactory, $universalFactory, $storeManager, $catalogData,
             $catalogProductFlat, $coreStoreConfig, $productOptionFactory, $catalogUrl, $locale,
-            $customerSession, $resourceHelper
+            $customerSession, $resourceHelper, $dateTime
         );
     }
 

@@ -24,6 +24,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Core\Model;
 
 /**
  * Design settings change model
@@ -38,13 +39,7 @@
  * @method \Magento\Core\Model\Design setDateFrom(string $value)
  * @method string getDateTo()
  * @method \Magento\Core\Model\Design setDateTo(string $value)
- *
- * @category    Magento
- * @package     Magento_Core
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model;
-
 class Design extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -74,9 +69,15 @@ class Design extends \Magento\Core\Model\AbstractModel
     protected $_locale;
 
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $_dateTime;
+
+    /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -85,12 +86,14 @@ class Design extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime $dateTime,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_locale = $locale;
+        $this->_dateTime = $dateTime;
     }
 
     /**
@@ -111,7 +114,7 @@ class Design extends \Magento\Core\Model\AbstractModel
     public function loadChange($storeId, $date = null)
     {
         if (is_null($date)) {
-            $date = \Magento\Date::formatDate($this->_locale->storeTimeStamp($storeId), false);
+            $date = $this->_dateTime->formatDate($this->_locale->storeTimeStamp($storeId), false);
         }
 
         $changeCacheId = 'design_change_' . md5($storeId . $date);

@@ -44,11 +44,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $block->expects($this->any())
             ->method('escapeHtml')
             ->will($this->returnArgument(0));
-        $coreHelper = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
-        $factory = $this->getMock('Magento\Data\Form\Element\Factory', array(), array(), '', false);
-        $collectionFactory = $this->getMock('Magento\Data\Form\Element\CollectionFactory', array('create'),
-            array(), '', false);
-        $element = new \Magento\Data\Form\Element\Multiselect($coreHelper, $factory, $collectionFactory);
+
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $element = $objectManager->getObject('Magento\Data\Form\Element\Multiselect');
         $element->setValue(array(
             array(
                 'test' => 'test',

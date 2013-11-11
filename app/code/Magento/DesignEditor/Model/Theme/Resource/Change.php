@@ -32,6 +32,21 @@ namespace Magento\DesignEditor\Model\Theme\Resource;
 class Change extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\App\Resource $resource
+     */
+    public function __construct(\Magento\Stdlib\DateTime $dateTime, \Magento\App\Resource $resource)
+    {
+        $this->dateTime = $dateTime;
+        parent::__construct($resource);
+    }
+
+    /**
      * Resource initialization
      */
     protected function _construct()
@@ -48,7 +63,7 @@ class Change extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected function _beforeSave(\Magento\Core\Model\AbstractModel $change)
     {
         if (!$change->getChangeTime()) {
-            $change->setChangeTime($this->formatDate(true));
+            $change->setChangeTime($this->dateTime->formatDate(true));
         }
         return $this;
     }

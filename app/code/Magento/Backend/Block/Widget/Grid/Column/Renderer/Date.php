@@ -93,7 +93,7 @@ class Date
             $format = $this->_getFormat();
             try {
                 if ($this->getColumn()->getGmtoffset()) {
-                    $data = $this->_locale->date($data, \Magento\Date::DATETIME_INTERNAL_FORMAT)->toString($format);
+                    $data = $this->_locale->date($data, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)->toString($format);
                 } else {
                     $data = $this->_locale->date($data, \Zend_Date::ISO_8601, null, false)->toString($format);
                 }
@@ -101,7 +101,7 @@ class Date
             catch (\Exception $e)
             {
                 if ($this->getColumn()->getTimezone()) {
-                    $data = $this->_locale->date($data, \Magento\Date::DATETIME_INTERNAL_FORMAT)->toString($format);
+                    $data = $this->_locale->date($data, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)->toString($format);
                 } else {
                     $data = $this->_locale->date($data, null, null, false)->toString($format);
                 }

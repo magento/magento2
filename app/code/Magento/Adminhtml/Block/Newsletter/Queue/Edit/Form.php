@@ -56,7 +56,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Core\Model\System\Store $systemStore
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\Form\Factory $formFactory
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
@@ -66,7 +66,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Core\Model\System\Store $systemStore,
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Data\Form\Factory $formFactory,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
         array $data = array()
@@ -154,7 +154,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         if ($queue->getQueueStartAt()) {
             $form->getElement('date')->setValue(
-                $this->_locale->date($queue->getQueueStartAt(), \Magento\Date::DATETIME_INTERNAL_FORMAT)
+                $this->_locale->date($queue->getQueueStartAt(), \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
             );
         }
 

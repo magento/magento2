@@ -29,46 +29,6 @@ namespace Magento\Webhook\Model\Subscription;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
-
-    /**
-     * String constants representing XML strings to be used in stub config element.
-     *
-     * Single-quotes are used because phpcs does not handle heredocs well.
-     */
-    const SETTING_NAME_XML =
-                    '<xml>
-                        <setting_name>
-                            <name>Extension Name</name>
-                        </setting_name>
-                    </xml>';
-
-    const NAME_MISSING_XML =
-                '<xml>
-                    <name_missing>
-                        <!-- Missing name on purpose -->
-                    </name_missing>
-                </xml>';
-
-    const EXISTING_SUBSCRIPTION =
-                '<xml>
-                    <setting_name_on_existing_subscription>
-                        <name>Extension Name</name>
-                        <topics>
-                            <topic_one>
-                                <subcall/>
-                            </topic_one>
-                        </topics>
-                    </setting_name_on_existing_subscription>
-                </xml>';
-
-    const AUTHENTICATION_TYPE =
-        '<xml>
-            <setting_authentication_type>
-                <name>Extension Name</name>
-                <authentication_type>HMAC</authentication_type>
-            </setting_authentication_type>
-        </xml>';
-
     /** @var \Magento\Webhook\Model\Subscription\Config that is also our unit under test */
     protected $_config;
 
@@ -92,11 +52,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_mockSubscription = $this->_createMockSubscription();
     }
 
-
-
     public function testSettingNameNewSubscription()
     {
-        $configNode = $this->_createStubConfigElement(self::SETTING_NAME_XML);
 
         // Set expectations
         $this->_mockSubscription->expects($this->atLeastOnce())
@@ -105,7 +62,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('setName')
             ->with($this->equalTo('Extension Name'));
 
-        $this->_stubMock($configNode);
+        $settingNameXml =
+            array(
+                'setting_name' =>
+                array('name' => 'Extension Name')
+            );
+        $this->_stubMock($settingNameXml);
 
         // Run test
         $this->_config->updateSubscriptionCollection();
@@ -113,8 +75,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testNameMissing()
     {
-        $configNode = $this->_createStubConfigElement(self::NAME_MISSING_XML);
-
         // Set expectations
         $this->_mockSubscription->expects($this->never())
             ->method('save');
@@ -125,7 +85,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             __("Invalid config data for subscription '%1'.", 'name_missing'),
         );
 
-        $this->_stubMock($configNode, null, $expectedErrors);
+        $nameMissingXml = array('name_missing' => array());
+        $this->_stubMock($nameMissingXml, null, $expectedErrors);
 
         // Run test
         $this->_config->updateSubscriptionCollection();
@@ -140,7 +101,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $existingSubscription->expects($this->once())
             ->method('setName');
 
-        $configNode = $this->_createStubConfigElement(self::EXISTING_SUBSCRIPTION);
 
         // Set expectations
         $this->_mockSubscription->expects($this->never())
@@ -154,7 +114,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->_stubMock($configNode, $subxCollection);
+        $existingArray = array(
+            'setting_name_on_existing_subscription' =>
+            array(
+                'name' => 'Extension Name',
+                'topics' => array(
+                    'topic_one' => array('subcall')
+                )
+            )
+        );
+        $this->_stubMock($existingArray, $subxCollection);
 
         // Run test
         $this->_config->updateSubscriptionCollection();
@@ -162,7 +131,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSettingAuthenticationType()
     {
-        $configNode = $this->_createStubConfigElement(self::AUTHENTICATION_TYPE);
 
         // Set expectations
         $this->_mockSubscription->expects($this->atLeastOnce())
@@ -174,7 +142,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('setAuthenticationType')
             ->with($this->equalTo('HMAC'));
 
-        $this->_stubMock($configNode);
+        $authentificationType = array(
+            'setting_authentication_type' =>
+                array('name' => 'Extension Name',
+                    'authentication_type' => 'HMAC')
+            );
+        $this->_stubMock($authentificationType);
 
         // Run test
         $this->_config->updateSubscriptionCollection();
@@ -206,17 +179,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Creates stub config element given a fragment of valid xml string
-     *
-     * @param string $xmlString
-     * @return \Magento\Core\Model\Config\Element
-     */
-    protected function _createStubConfigElement($xmlString)
-    {
-        return new \Magento\Core\Model\Config\Element($xmlString);
-    }
-
-    /**
      * Initializes a set of mocks and stubs
      *
      * @param \Magento\Core\Model\Config\Element          $configNode
@@ -231,7 +193,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_mockMageConfig = $this->getMockBuilder('Magento\Core\Model\Config')
+        $this->_mockMageConfig = $this->getMockBuilder('\Magento\Webhook\Model\Config')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -239,7 +201,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_mockLogger = $this->getMockBuilder('Magento\Core\Model\Logger')
+        $this->_mockLogger = $this->getMockBuilder('Magento\Logger')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -255,10 +217,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 ->with($this->equalTo(new \Magento\Webhook\Exception(implode("\n", $expectedErrors))));
         }
 
-        // Stub getNode
         $this->_mockMageConfig->expects($this->any())
-            ->method('getNode')
-            ->with($this->equalTo(\Magento\Webhook\Model\Subscription\Config::XML_PATH_SUBSCRIPTIONS))
+            ->method('getSubscriptions')
             ->will($this->returnValue($configNode));
 
         // Get or set subscription collection mock

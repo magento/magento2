@@ -69,6 +69,7 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Core\Model\Session\Generic $reportSession
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
+     * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -82,13 +83,14 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Core\Model\Session\Generic $reportSession,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
+        \Magento\Stdlib\DateTime $dateTime,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct(
             $context, $registry, $storeManager, $logVisitor, $customerSession,
-            $reportSession, $productVisibility, $resource, $resourceCollection, $data
+            $reportSession, $productVisibility, $dateTime, $resource, $resourceCollection, $data
         );
         $this->_productCompare = $productCompare;
     }

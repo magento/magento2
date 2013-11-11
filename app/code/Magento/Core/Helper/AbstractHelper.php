@@ -60,7 +60,7 @@ abstract class AbstractHelper
     private $_moduleManager;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
@@ -75,6 +75,11 @@ abstract class AbstractHelper
     protected $_urlBuilder;
 
     /**
+     * @var \Magento\HTTP\Header
+     */
+    protected $_httpHeader;
+
+    /**
      * @param \Magento\Core\Helper\Context $context
      */
     public function __construct(\Magento\Core\Helper\Context $context)
@@ -85,6 +90,7 @@ abstract class AbstractHelper
         $this->_request = $context->getRequest();
         $this->_app = $context->getApp();
         $this->_urlBuilder = $context->getUrlBuilder();
+        $this->_httpHeader = $context->getHttpHeader();
     }
 
     /**
@@ -189,114 +195,6 @@ abstract class AbstractHelper
             $moduleName = $this->_getModuleName();
         }
         return $this->_moduleManager->isEnabled($moduleName);
-    }
-
-    /**
-     * Escape html entities
-     *
-     * @param   string|array $data
-     * @param   array $allowedTags
-     * @return  mixed
-     */
-    public function escapeHtml($data, $allowedTags = null)
-    {
-        if (is_array($data)) {
-            $result = array();
-            foreach ($data as $item) {
-                $result[] = $this->escapeHtml($item);
-            }
-        } else {
-            // process single item
-            if (strlen($data)) {
-                if (is_array($allowedTags) and !empty($allowedTags)) {
-                    $allowed = implode('|', $allowedTags);
-                    $result = preg_replace('/<([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)>/si', '##$1$2$3##', $data);
-                    $result = htmlspecialchars($result, ENT_COMPAT, 'UTF-8', false);
-                    $result = preg_replace('/##([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)##/si', '<$1$2$3>', $result);
-                } else {
-                    $result = htmlspecialchars($data, ENT_COMPAT, 'UTF-8', false);
-                }
-            } else {
-                $result = $data;
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Remove html tags, but leave "<" and ">" signs
-     *
-     * @param string $html
-     * @return string
-     */
-    public function removeTags($html)
-    {
-        $callback = function ($matches) {
-            return htmlentities($matches[0]);
-        };
-        $html = preg_replace_callback("# <(?![/a-z]) | (?<=\s)>(?![a-z]) #xi", $callback, $html);
-        $html =  strip_tags($html);
-        return htmlspecialchars_decode($html);
-    }
-
-    /**
-     * Wrapper for standard strip_tags() function with extra functionality for html entities
-     *
-     * @param string $data
-     * @param string $allowableTags
-     * @param bool $escape
-     * @return string
-     */
-    public function stripTags($data, $allowableTags = null, $escape = false)
-    {
-        $result = strip_tags($data, $allowableTags);
-        return $escape ? $this->escapeHtml($result, $allowableTags) : $result;
-    }
-
-    /**
-     * Escape html entities in url
-     *
-     * @param string $data
-     * @return string
-     */
-    public function escapeUrl($data)
-    {
-        return htmlspecialchars($data);
-    }
-
-    /**
-     * Escape quotes in java script
-     *
-     * @param mixed $data
-     * @param string $quote
-     * @return mixed
-     */
-    public function jsQuoteEscape($data, $quote = '\'')
-    {
-        if (is_array($data)) {
-            $result = array();
-            foreach ($data as $item) {
-                $result[] = str_replace($quote, '\\' . $quote, $item);
-            }
-            return $result;
-        }
-        return str_replace($quote, '\\' . $quote, $data);
-    }
-
-    /**
-     * Escape quotes inside html attributes
-     * Use $addSlashes = false for escaping js that inside html attribute (onClick, onSubmit etc)
-     *
-     * @param string $data
-     * @param bool $addSlashes
-     * @return string
-     */
-    public function quoteEscape($data, $addSlashes = false)
-    {
-        if ($addSlashes === true) {
-            $data = addslashes($data);
-        }
-        return htmlspecialchars($data, ENT_QUOTES, null, false);
     }
 
     /**

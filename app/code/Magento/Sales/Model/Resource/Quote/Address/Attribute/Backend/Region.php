@@ -38,11 +38,11 @@ class Region
     protected $_regionFactory;
 
     /**
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      */
     public function __construct(
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Directory\Model\RegionFactory $regionFactory
     ) {
         $this->_regionFactory = $regionFactory;

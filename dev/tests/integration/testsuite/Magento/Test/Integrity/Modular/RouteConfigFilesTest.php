@@ -28,7 +28,7 @@ class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * attributes represent merging rules
-     * copied from original class \Magento\Core\Model\Route\Config\Reader
+     * copied from original class \Magento\App\Route\Config\Reader
      * @var array
      */
     protected $_idAttributes = array(
@@ -55,8 +55,8 @@ class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
     {
         global $magentoBaseDir;
 
-        $this->_schemaFile = $magentoBaseDir . '/app/code/Magento/Core/etc/routes.xsd';
-        $this->_mergedSchemaFile = $magentoBaseDir . '/app/code/Magento/Core/etc/routes_merged.xsd';
+        $this->_schemaFile = $magentoBaseDir . '/lib/Magento/App/etc/routes.xsd';
+        $this->_mergedSchemaFile = $magentoBaseDir . '/lib/Magento/App/etc/routes_merged.xsd';
     }
 
     public function testRouteConfigsValidation()

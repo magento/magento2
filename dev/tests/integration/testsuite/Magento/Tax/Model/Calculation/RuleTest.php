@@ -182,7 +182,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             array(
                 $this->_objectManager->create('Magento\Core\Model\Context'),
                 $this->_objectManager->get('Magento\Core\Model\Registry'),
-                $this->_objectManager->create('Magento\Tax\Model\ClassModel\Factory'),
+                $this->_objectManager->get('Magento\Tax\Model\TaxClass\Factory'),                
             ),
             '',
             true

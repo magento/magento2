@@ -61,14 +61,14 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
 
     /**
      * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\File\Validator\NotProtectedExtension $fileValidator
      * @param \Magento\App\Dir $coreDir
      */
     public function __construct(
         \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\File\Validator\NotProtectedExtension $fileValidator,
         \Magento\App\Dir $coreDir

@@ -97,6 +97,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoAppIsolation enabled
      * @covers \Magento\Core\Model\Theme\Collection::hasTheme
+     * @magentoAppArea install
      */
     public function testHasThemeInCollection()
     {

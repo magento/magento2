@@ -146,9 +146,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected $_coreDataMock;
 
     /**
-     * @var \Magento\Core\Helper\String|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Stdlib\String
      */
-    protected $_coreStringMock;
+    protected $_stringLib;
 
     /**
      * @var \Magento\TestFramework\Helper\ObjectManager
@@ -162,9 +162,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManagerMock = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_coreDataMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
-        $this->_coreStringMock = $this->getMock(
-            'Magento\Core\Helper\String', array('__construct'), array(), '', false
-        );
+        $this->_stringLib = new \Magento\Stdlib\String;
         $this->_model = $this->_getModelMock();
     }
 
@@ -425,7 +423,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         // mock to imitate data source model
         $dataSourceMock = $this->getMock(
             'Magento\ImportExport\Model\Resource\Import\Data',
-            array('getNextBunch'),
+            array('getNextBunch', '__wakeup'),
             array(),
             '',
             false
@@ -487,11 +485,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         $modelMock = new \Magento\ImportExport\Model\Import\Entity\Eav\Customer\Address(
             $this->_coreDataMock,
-            $this->_coreStringMock,
+            $this->_stringLib,
             $coreStoreConfig,
             $this->getMock('Magento\ImportExport\Model\ImportFactory', array(), array(), '', false),
             $this->getMock('Magento\ImportExport\Model\Resource\Helper', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Resource', array(), array(), '', false),
+            $this->getMock('Magento\App\Resource', array(), array(), '', false),
             $this->getMock('Magento\Core\Model\App', array(), array(), '', false),
             $this->getMock('Magento\ImportExport\Model\Export\Factory', array(), array(), '', false),
             $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false),
@@ -503,6 +501,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Customer\Model\Resource\Address\Attribute\CollectionFactory',
                 array(), array(), '', false
             ),
+            new \Magento\Stdlib\DateTime,
             $this->_getModelDependencies()
         );
 

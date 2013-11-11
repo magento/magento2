@@ -77,9 +77,15 @@ class Event extends \Magento\Core\Model\AbstractModel
     protected $_indexer;
 
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
      * @param \Magento\Index\Model\Indexer $indexer
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -88,11 +94,13 @@ class Event extends \Magento\Core\Model\AbstractModel
         \Magento\Index\Model\Indexer $indexer,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Stdlib\DateTime $dateTime,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_indexer = $indexer;
+        $this->dateTime = $dateTime;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -360,7 +368,7 @@ class Event extends \Magento\Core\Model\AbstractModel
         $newData = $this->getNewData(false);
         $this->setNewData(serialize($newData));
         if (!$this->hasCreatedAt()) {
-            $this->setCreatedAt($this->_getResource()->formatDate(time(), true));
+            $this->setCreatedAt($this->dateTime->formatDate(time(), true));
         }
         return parent::_beforeSave();
     }

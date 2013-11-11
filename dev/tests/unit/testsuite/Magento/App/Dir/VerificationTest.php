@@ -69,7 +69,11 @@ class VerificationTest extends \PHPUnit_Framework_TestCase
     protected function _createModelForVerification($mode, $isExist, &$actualCreatedDirs, &$actualVerifiedDirs)
     {
         $dirs = new \Magento\App\Dir('base_dir');
-        $appState = new \Magento\App\State(time(), $mode);
+        $appState = new \Magento\App\State(
+            $this->getMockForAbstractClass('Magento\Config\ScopeInterface', array(), '', false),
+            time(),
+            $mode
+        );
 
         $filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
         $filesystem->expects($this->any())
@@ -151,7 +155,10 @@ class VerificationTest extends \PHPUnit_Framework_TestCase
             'Cannot create or verify write access: base_dir/var/log, base_dir/var/session');
 
         $dirs = new \Magento\App\Dir('base_dir');
-        $appState = new \Magento\App\State(time());
+        $appState = new \Magento\App\State(
+            $this->getMockForAbstractClass('Magento\Config\ScopeInterface', array(), '', false),
+            time()
+        );
 
         $callback = function ($dir) {
             if (($dir == 'base_dir/var/log') || ($dir == 'base_dir/var/session')) {
@@ -179,7 +186,10 @@ class VerificationTest extends \PHPUnit_Framework_TestCase
             'Cannot create or verify write access: base_dir/var/log, base_dir/var/session');
 
         $dirs = new \Magento\App\Dir('base_dir');
-        $appState = new \Magento\App\State(time());
+        $appState = new \Magento\App\State(
+            $this->getMockForAbstractClass('Magento\Config\ScopeInterface', array(), '', false),
+            time()
+        );
 
         $filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
         $filesystem->expects($this->any())

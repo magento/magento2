@@ -218,11 +218,11 @@ class Payment extends \Magento\Payment\Model\Info
 
     /**
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Sales\Model\Service\Order $serviceOrderFactory
+     * @param \Magento\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory
      * @param \Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory
      * @param \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollFactory
      * @param \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory
@@ -233,11 +233,11 @@ class Payment extends \Magento\Payment\Model\Info
      */
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Sales\Model\Service\Order $serviceOrderFactory,
+        \Magento\Encryption\EncryptorInterface $encryptor,
+        \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory,
         \Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory,
         \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollFactory,
         \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory,
@@ -252,7 +252,7 @@ class Payment extends \Magento\Payment\Model\Info
         $this->_transactionCollFactory = $transactionCollFactory;
         $this->_agreementFactory = $agreementFactory;
         $this->_storeManager = $storeManager;
-        parent::__construct($coreData, $paymentData, $context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct($paymentData, $context, $registry, $encryptor, $resource, $resourceCollection, $data);
     }
 
     /**

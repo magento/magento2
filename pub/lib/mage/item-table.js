@@ -125,7 +125,7 @@
             e.stopPropagation();
 
             // remove the deletable item
-            e.target.remove();
+            $(e.target).remove();
 
             if (this.options.keepLastRow) {
                 // determine if there is only one element remaining, in which case, disable the delete mechanism on it

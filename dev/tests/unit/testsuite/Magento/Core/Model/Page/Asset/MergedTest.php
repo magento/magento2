@@ -73,7 +73,7 @@ class MergedTest extends \PHPUnit_Framework_TestCase
         $this->_assetJsTwo->expects($this->any())->method('getSourceFile')
             ->will($this->returnValue('/pub/script_two.js'));
 
-        $this->_logger = $this->getMock('Magento\Core\Model\Logger', array('logException'), array(), '', false);
+        $this->_logger = $this->getMock('Magento\Logger', array('logException'), array(), '', false);
 
         $this->_dirs = $this->getMock('Magento\App\Dir', array(), array(), '', false);
 

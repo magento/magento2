@@ -34,7 +34,7 @@
             </value>
         </param>
     </type>
-    <type name="Magento\App\Updater\SetupFactory">
+    <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
             <value>
                 <bundle_setup>Magento\Catalog\Model\Resource\Setup</bundle_setup>

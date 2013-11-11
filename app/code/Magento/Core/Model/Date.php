@@ -23,8 +23,6 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 /**
  * Date conversion model
  *
@@ -93,20 +91,16 @@ class Date
     {
         $result = true;
         $offset = 0;
-
-        if (!is_null($timezone)){
+        if (!is_null($timezone)) {
             $oldzone = @date_default_timezone_get();
             $result = date_default_timezone_set($timezone);
         }
-
         if ($result === true) {
             $offset = gmmktime(0, 0, 0, 1, 2, 1970) - mktime(0, 0, 0, 1, 2, 1970);
         }
-
-        if (!is_null($timezone)){
+        if (!is_null($timezone)) {
             date_default_timezone_set($oldzone);
         }
-
         return $offset;
     }
 
@@ -122,13 +116,10 @@ class Date
         if (is_null($format)) {
             $format = 'Y-m-d H:i:s';
         }
-
         $date = $this->gmtTimestamp($input);
-
         if ($date === false) {
             return false;
         }
-
         $result = date($format, $date);
         return $result;
     }
@@ -146,7 +137,6 @@ class Date
         if (is_null($format)) {
             $format = 'Y-m-d H:i:s';
         }
-
         $result = date($format, $this->timestamp($input));
         return $result;
     }
@@ -161,23 +151,21 @@ class Date
     {
         if (is_null($input)) {
             return gmdate('U');
-        } else if (is_numeric($input)) {
-            $result = $input;
         } else {
-            $result = strtotime($input);
+            if (is_numeric($input)) {
+                $result = $input;
+            } else {
+                $result = strtotime($input);
+            }
         }
-
         if ($result === false) {
             // strtotime() unable to parse string (it's not a date or has incorrect format)
             return false;
         }
-
-        $date      = $this->_locale->date($result);
+        $date = $this->_locale->date($result);
         $timestamp = $date->get(\Zend_Date::TIMESTAMP) - $date->get(\Zend_Date::TIMEZONE_SECS);
-
         unset($date);
         return $timestamp;
-
     }
 
     /**
@@ -191,15 +179,15 @@ class Date
     {
         if (is_null($input)) {
             $result = $this->gmtTimestamp();
-        } else if (is_numeric($input)) {
-            $result = $input;
         } else {
-            $result = strtotime($input);
+            if (is_numeric($input)) {
+                $result = $input;
+            } else {
+                $result = strtotime($input);
+            }
         }
-
-        $date      = $this->_locale->date($result);
+        $date = $this->_locale->date($result);
         $timestamp = $date->get(\Zend_Date::TIMESTAMP) + $date->get(\Zend_Date::TIMEZONE_SECS);
-
         unset($date);
         return $timestamp;
     }
@@ -217,11 +205,9 @@ class Date
             case 'seconds':
             default:
                 break;
-
             case 'minutes':
                 $result = $result / 60;
                 break;
-
             case 'hours':
                 $result = $result / 60 / 60;
                 break;

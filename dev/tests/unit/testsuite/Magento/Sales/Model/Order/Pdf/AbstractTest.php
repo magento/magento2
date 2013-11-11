@@ -44,7 +44,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         // Setup most constructor dependencies
         $paymentData = $this->getMock('Magento\Payment\Helper\Data', array(), array(), '', false);
         $coreData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
-        $coreString = $this->getMock('Magento\Core\Helper\String', array(), array(), '', false);
+        $string = $this->getMock('Magento\Stdlib\String', array(), array(), '', false);
         $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
         $translate = $this->getMock('Magento\Core\Model\Translate', array(), array(), '', false);
         $coreDir = $this->getMock('Magento\App\Dir', array(), array(), '', false);
@@ -108,7 +108,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         // Test model
         /** @var \Magento\Sales\Model\Order\Pdf\AbstractPdf|\PHPUnit_Framework_MockObject_MockObject $model */
         $model = $this->getMockForAbstractClass('Magento\Sales\Model\Order\Pdf\AbstractPdf',
-            array($paymentData, $coreData, $coreString, $coreStoreConfig, $translate, $coreDir, $shippingConfig,
+            array($paymentData, $coreData, $string, $coreStoreConfig, $translate, $coreDir, $shippingConfig,
                 $pdfConfig, $pdfTotalFactory, $pdfItemsFactory),
             '', true, false, true, array('drawLineBlocks')
         );

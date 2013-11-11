@@ -423,7 +423,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         switch ($this->getAttribute()) {
             case 'sku':
             case 'category_ids':
-                $url = 'adminhtml/promo_widget/chooser/attribute/' . $this->getAttribute();
+                $url = '*/promo_widget/chooser/attribute/' . $this->getAttribute();
                 if ($this->getJsFormObject()) {
                     $url .= '/form/' . $this->getJsFormObject();
                 }

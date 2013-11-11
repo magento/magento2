@@ -24,11 +24,11 @@
  */
 -->
 <config>
-    <preference for="Magento\App\UpdaterInterfaceTwo" type="Magento\App\UpdaterTwo" />
-    <preference for="Magento\App\UpdaterInterface" type="Magento\App\UpdaterOne" />
-    <type name="Magento\Core\Model\Config\Loader\Local" shared="false">
+    <preference for="Magento\Module\UpdaterInterfaceTwo" type="Magento\Module\UpdaterTwo" />
+    <preference for="Magento\Module\UpdaterInterface" type="Magento\Module\UpdaterOne" />
+    <type name="Magento\App\Config\Loader" shared="false">
         <param name="customFile">
-            <value type="argument">Magento\Core\Model\App::PARAM_CUSTOM_LOCAL_CONFIG</value>
+            <value type="argument">Magento\App\Config\Loader::PARAM_CUSTOM_FILE</value>
         </param>
         <param name="newParam">
             <value>paramValue</value>
@@ -48,7 +48,7 @@
         <plugin name="two" type="somePluginTwo" sortOrder="20" disabled="true"/>
         <plugin name="one" sortOrder="800"/>
     </type>
-    <virtualType name="Magento\Core\Model\Config\Loader\LocalVirtual" shared="true">
+    <virtualType name="Magento\App\Config\LoaderVirtual" shared="true">
         <plugin name="three" type="somePluginThree"/>
         <plugin name="two" type="somePluginTwo" sortOrder="20" disabled="true"/>
         <plugin name="one" sortOrder="800"/>

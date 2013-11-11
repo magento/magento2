@@ -44,20 +44,23 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 
     /**
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Core\Model\Resource\Db\Abstract $resource
+     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      * @param null $timeoutIdling
      */
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Stdlib\DateTime $dateTime,
         \Magento\Core\Model\Resource\Db\AbstractDb $resource = null,
         $timeoutIdling = null
     ) {
+        $this->dateTime = $dateTime;
         parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $resource);
         $this->_timeoutIdling = is_null($timeoutIdling) ?
             self::DEFAULT_TIMEOUT_IDLING_JOBS : $timeoutIdling;
@@ -87,7 +90,10 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
                     \Magento\PubSub\JobInterface::STATUS_READY_TO_SEND,
                     \Magento\PubSub\JobInterface::STATUS_RETRY
                 )))
-            ->addFieldToFilter('retry_at', array('to' => \Magento\Date::formatDate(true), 'datetime' => true))
+            ->addFieldToFilter(
+                'retry_at',
+                array('to' => $this->dateTime->formatDate(true), 'datetime' => true)
+            )
             ->setOrder('updated_at', \Magento\Data\Collection::SORT_ORDER_ASC)
             ->setPageSize(self::PAGE_SIZE);
         return $this;
@@ -161,7 +167,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
             /* if event is in progress state for less than defined delay we do nothing with it */
             $okUpdatedTime = time() - $this->_timeoutIdling;
             $this->addFieldToFilter('status', \Magento\PubSub\JobInterface::STATUS_IN_PROGRESS)
-                ->addFieldToFilter('updated_at', array('to' => \Magento\Date::formatDate($okUpdatedTime),
+                ->addFieldToFilter('updated_at', array('to' => $this->dateTime->formatDate($okUpdatedTime),
                     'datetime' => true));
 
             if (!count($this->getItems())) {

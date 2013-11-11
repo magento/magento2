@@ -79,10 +79,16 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
         $aclCache->clean();
         // add new hooks for the tests
 
-        /** @var $configModel \Magento\Core\Model\Config */
-        $configModel = $this->_objectManager->get('Magento\Core\Model\Config');
-        $configModel->setNode('global/webhook/webhooks/test/hook/label', 'Test Hook');
-        $configModel->setNode('global/webhook/webhooks/test/two/label', 'Test Hook Two');
+
+        $configMock = $this->getMock('Magento\Webhook\Model\Config', array(), array(), '', false, false);
+        $webHooks = array(
+            'test' => array(
+                'hook' => array('label' => 'Test Hook'),
+                'two' => array('label' => 'Test Hook Two'),
+            )
+        );
+        $configMock->expects($this->any())->method('getWebhooks')->will($this->returnValue($webHooks));
+        $this->_objectManager->addSharedInstance($configMock, 'Magento\Webhook\Model\Config');
     }
 
     protected function tearDown()

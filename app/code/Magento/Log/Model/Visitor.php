@@ -24,6 +24,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Log\Model;
 
 /**
  * @method \Magento\Log\Model\Resource\Visitor _getResource()
@@ -36,13 +37,7 @@
  * @method \Magento\Log\Model\Visitor setLastUrlId(int $value)
  * @method int getStoreId()
  * @method \Magento\Log\Model\Visitor setStoreId(int $value)
- *
- * @category    Magento
- * @package     Magento_Log
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Log\Model;
-
 class Visitor extends \Magento\Core\Model\AbstractModel
 {
     const DEFAULT_ONLINE_MINUTES_INTERVAL = 15;
@@ -53,13 +48,6 @@ class Visitor extends \Magento\Core\Model\AbstractModel
      * @var bool
      */
     protected $_skipRequestLogging = false;
-
-    /**
-     * Core http
-     *
-     * @var \Magento\Core\Helper\Http
-     */
-    protected $_coreHttp = null;
 
     /**
      * @var array
@@ -113,21 +101,44 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     protected $_customerFactory;
 
     /**
-     * @param \Magento\Core\Model\Context               $context
-     * @param \Magento\Core\Model\Registry              $registry
-     * @param \Magento\Core\Model\Store\Config          $coreStoreConfig
-     * @param \Magento\Event\ManagerInterface         $eventManager
-     * @param \Magento\Customer\Model\CustomerFactory   $customerFactory
-     * @param \Magento\Sales\Model\QuoteFactory         $quoteFactory
-     * @param \Magento\Core\Model\Session               $session
+     * @var \Magento\HTTP\Header
+     */
+    protected $_httpHeader;
+
+    /**
+     * @var \Magento\HTTP\PhpEnvironment\RemoteAddress
+     */
+    protected $_remoteAddress;
+
+    /**
+     * @var \Magento\HTTP\PhpEnvironment\ServerAddress
+     */
+    protected $_serverAddress;
+
+    /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @param \Magento\Core\Model\Context $context
+     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
+     * @param \Magento\Core\Model\Session $session
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Helper\Http                 $coreHttp
-     * @param \Magento\Core\Model\Config                $coreConfig
-     * @param array                                    $data
-     * @param array                                    $ignoredUserAgents
-     * @param array                                    $ignores
-     * @param \Magento\Core\Model\Resource\AbstractResource     $resource
-     * @param \Magento\Data\Collection\Db               $resourceCollection
+     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\HTTP\Header $httpHeader
+     * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
+     * @param \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress
+     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param array $data
+     * @param array $ignoredUserAgents
+     * @param array $ignores
+     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Data\Collection\Db $resourceCollection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -140,8 +151,11 @@ class Visitor extends \Magento\Core\Model\AbstractModel
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Core\Model\Session $session,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Helper\Http $coreHttp,
         \Magento\Core\Model\Config $coreConfig,
+        \Magento\HTTP\Header $httpHeader,
+        \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
+        \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress,
+        \Magento\Stdlib\DateTime $dateTime,
         array $data = array(),
         array $ignoredUserAgents = array(),
         array $ignores = array(),
@@ -154,9 +168,12 @@ class Visitor extends \Magento\Core\Model\AbstractModel
         $this->_quoteFactory = $quoteFactory;
         $this->_session = $session;
         $this->_storeManager = $storeManager;
-        $this->_coreHttp = $coreHttp;
         $this->_coreConfig = $coreConfig;
         $this->_ignoredUserAgents = $ignoredUserAgents;
+        $this->_httpHeader = $httpHeader;
+        $this->_remoteAddress = $remoteAddress;
+        $this->_serverAddress = $serverAddress;
+        $this->dateTime = $dateTime;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_ignores = $ignores;
@@ -168,7 +185,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     protected function _construct()
     {
         $this->_init('Magento\Log\Model\Resource\Visitor');
-        $userAgent = $this->_coreHttp->getHttpUserAgent();
+        $userAgent = $this->_httpHeader->getHttpUserAgent();
         if ($this->_ignoredUserAgents) {
             if (in_array($userAgent, $this->_ignoredUserAgents)) {
                 $this->_skipRequestLogging = true;
@@ -193,17 +210,18 @@ class Visitor extends \Magento\Core\Model\AbstractModel
      */
     public function initServerData()
     {
+        $clean = true;
         $this->addData(array(
-            'server_addr'           => $this->_coreHttp->getServerAddr(true),
-            'remote_addr'           => $this->_coreHttp->getRemoteAddr(true),
+            'server_addr'           => $this->_serverAddress->getServerAddress(true),
+            'remote_addr'           => $this->_remoteAddress->getRemoteAddress(true),
             'http_secure'           => $this->_storeManager->getStore()->isCurrentlySecure(),
-            'http_host'             => $this->_coreHttp->getHttpHost(true),
-            'http_user_agent'       => $this->_coreHttp->getHttpUserAgent(true),
-            'http_accept_language'  => $this->_coreHttp->getHttpAcceptLanguage(true),
-            'http_accept_charset'   => $this->_coreHttp->getHttpAcceptCharset(true),
-            'request_uri'           => $this->_coreHttp->getRequestUri(true),
+            'http_host'             => $this->_httpHeader->getHttpHost($clean),
+            'http_user_agent'       => $this->_httpHeader->getHttpUserAgent($clean),
+            'http_accept_language'  => $this->_httpHeader->getHttpAcceptLanguage($clean),
+            'http_accept_charset'   => $this->_httpHeader->getHttpAcceptCharset($clean),
+            'request_uri'           => $this->_httpHeader->getRequestUri($clean),
             'session_id'            => $this->_getSession()->getSessionId(),
-            'http_referer'          => $this->_coreHttp->getHttpReferer(true),
+            'http_referer'          => $this->_httpHeader->getHttpReferer($clean),
         ));
 
         return $this;
@@ -237,7 +255,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     public function getFirstVisitAt()
     {
         if (!$this->hasData('first_visit_at')) {
-            $this->setData('first_visit_at', now());
+            $this->setData('first_visit_at', $this->dateTime->now());
         }
         return $this->getData('first_visit_at');
     }
@@ -245,7 +263,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     public function getLastVisitAt()
     {
         if (!$this->hasData('last_visit_at')) {
-            $this->setData('last_visit_at', now());
+            $this->setData('last_visit_at', $this->dateTime->now());
         }
         return $this->getData('last_visit_at');
     }
@@ -268,7 +286,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
         $this->initServerData();
 
         if (!$this->getId()) {
-            $this->setFirstVisitAt(now());
+            $this->setFirstVisitAt($this->dateTime->now());
             $this->setIsNewVisitor(true);
             $this->save();
             $this->_eventManager->dispatch('visitor_init', array('visitor' => $this));
@@ -291,7 +309,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
         }
 
         try {
-            $this->setLastVisitAt(now());
+            $this->setLastVisitAt($this->dateTime->now());
             $this->save();
             $this->_getSession()->setVisitorData($this->getData());
         } catch (\Exception $e) {

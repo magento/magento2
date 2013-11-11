@@ -118,7 +118,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         /** @var \Magento\Core\Model\Translate $translate */
         $translate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Core\Model\Translate');
-        $translate->init(\Magento\Backend\Helper\Data::BACKEND_AREA_CODE, null);
+        $translate->init(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE, null);
         return $translate->translate(array($string));
     }
 

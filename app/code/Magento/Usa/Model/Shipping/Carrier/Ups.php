@@ -130,12 +130,12 @@ class Ups
     protected $_locale;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
     /**
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Usa\Model\Simplexml\ElementFactory $simpleXmlElementFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Usa\Model\Simplexml\ElementFactory $xmlElFactory
@@ -156,7 +156,7 @@ class Ups
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Usa\Model\Simplexml\ElementFactory $simpleXmlElementFactory,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Usa\Model\Simplexml\ElementFactory $xmlElFactory,

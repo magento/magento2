@@ -24,10 +24,10 @@
  */
 -->
 <config>
-    <preference for="Magento\App\UpdaterInterface" type="Magento\App\Updater" />
-    <type name="Magento\Core\Model\Config\Loader\Local">
+    <preference for="Magento\Module\UpdaterInterface" type="Magento\Module\Updater" />
+    <type name="Magento\App\Config\Loader">
         <param name="customFile">
-            <value type="argument">Magento\Core\Model\App::PARAM_CUSTOM_LOCAL_FILE</value>
+            <value type="argument">Magento\App\Config\Loader::PARAM_CUSTOM_FILE</value>
         </param>
         <param name="customConfig">
             <instance shared="true" type="Magento\Core\Model\Config\Storage_Modules" />
@@ -44,9 +44,9 @@
         <plugin name="one" type="somePluginOne"/>
         <plugin name="two" type="somePluginTwo" sortOrder="15"/>
     </type>
-    <virtualType name="Magento\Core\Model\Config\Loader\LocalVirtual" type="Magento\Core\Model\Config\Loader\Local" shared="false">
+    <virtualType name="Magento\App\Config\LoaderVirtual" type="Magento\App\Config\Loader\Local" shared="false">
         <param name="customFile">
-            <value type="argument">Magento\Core\Model\App::PARAM_CUSTOM_LOCAL_FILE</value>
+            <value type="argument">Magento\App\Config\Loader::PARAM_CUSTOM_FILE</value>
         </param>
         <param name="customConfig">
             <instance type="Magento\Core\Model\Config\Storage_Modules" />

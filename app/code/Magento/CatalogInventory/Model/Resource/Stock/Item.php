@@ -44,11 +44,11 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_coreStoreConfig;
 
     /**
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Core\Model\Store\Config $coreStoreConfig
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;

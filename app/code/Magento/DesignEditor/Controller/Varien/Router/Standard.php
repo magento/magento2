@@ -27,7 +27,7 @@ namespace Magento\DesignEditor\Controller\Varien\Router;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Standard extends \Magento\Core\Controller\Varien\Router\Base
+class Standard extends \Magento\Core\App\Router\Base
 {
     /**
      * @var \Magento\ObjectManager
@@ -54,55 +54,38 @@ class Standard extends \Magento\Core\Controller\Varien\Router\Base
     protected $_urlRewriteService;
 
     /**
-     * @param \Magento\App\RouterListInterface $routerList
-     * @param \Magento\App\ActionFactory $controllerFactory
-     * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Model\App $app
-     * @param \Magento\Core\Model\Route\Config $routeConfig
-     * @param \Magento\Core\Model\Url\SecurityInfoInterface $securityInfo
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Config $config
-     * @param \Magento\Core\Model\Url $url
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\App\ActionFactory $actionFactory
+     * @param \Magento\App\DefaultPathInterface $defaultPath
+     * @param \Magento\App\ResponseFactory $responseFactory
+     * @param \Magento\App\Route\Config $routeConfig
      * @param \Magento\App\State $appState
+     * @param \Magento\UrlInterface $url
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Model\Store\Config $storeConfig
+     * @param \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo
+     * @param \Magento\App\RouterListInterface $routerList
+     * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Core\App\Request\RewriteService $urlRewriteService
-     * @param string $areaCode
-     * @param string $baseController
-     * @param string $routerId
+     * @param $routerId
      */
     public function __construct(
-        \Magento\App\RouterListInterface $routerList,
-        \Magento\App\ActionFactory $controllerFactory,
-        \Magento\ObjectManager $objectManager,
-        \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\App $app,
-        \Magento\Core\Model\Route\Config $routeConfig,
-        \Magento\Core\Model\Url\SecurityInfoInterface $securityInfo,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Config $config,
-        \Magento\Core\Model\Url $url,
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\App\ActionFactory $actionFactory,
+        \Magento\App\DefaultPathInterface $defaultPath,
+        \Magento\App\ResponseFactory $responseFactory,
+        \Magento\App\Route\Config $routeConfig,
         \Magento\App\State $appState,
+        \Magento\UrlInterface $url,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\Model\Store\Config $storeConfig,
+        \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo,
+        \Magento\App\RouterListInterface $routerList,
+        \Magento\ObjectManager $objectManager,
         \Magento\Core\App\Request\RewriteService $urlRewriteService,
-        $areaCode,
-        $baseController,
         $routerId
     ) {
         parent::__construct(
-            $controllerFactory,
-            $filesystem,
-            $app,
-            $coreStoreConfig,
-            $routeConfig,
-            $securityInfo,
-            $config,
-            $url,
-            $storeManager,
-            $appState,
-            $areaCode,
-            $baseController,
-            $routerId
+            $actionFactory, $defaultPath, $responseFactory, $routeConfig, $appState, $url, $storeManager, $storeConfig,
+            $urlSecurityInfo, $routerId
         );
         $this->_urlRewriteService = $urlRewriteService;
         $this->_objectManager = $objectManager;
@@ -127,9 +110,6 @@ class Standard extends \Magento\Core\Controller\Varien\Router\Base
             return null;
         }
 
-        // override VDE configuration
-        $this->_overrideConfiguration();
-
         // prepare request to imitate
         $this->_prepareVdeRequest($request);
 
@@ -145,7 +125,7 @@ class Standard extends \Magento\Core\Controller\Varien\Router\Base
             $controller = $router->match($request);
             if ($controller) {
                 $this->_objectManager->get('Magento\DesignEditor\Model\State')
-                    ->update($this->_areaCode, $request, $controller);
+                    ->update(\Magento\Core\Model\App\Area::AREA_FRONTEND, $request);
                 break;
             }
         }
@@ -187,18 +167,5 @@ class Standard extends \Magento\Core\Controller\Varien\Router\Base
             }
         }
         return $routers;
-    }
-
-    /**
-     * Override frontend configuration with VDE area data
-     */
-    protected function _overrideConfiguration()
-    {
-        $vdeNode = $this->_objectManager->get('Magento\Core\Model\Config')
-            ->getNode(\Magento\DesignEditor\Model\Area::AREA_VDE);
-        if ($vdeNode) {
-            $this->_objectManager->get('Magento\Core\Model\Config')->getNode(\Magento\Core\Model\App\Area::AREA_FRONTEND)
-                ->extend($vdeNode, true);
-        }
     }
 }

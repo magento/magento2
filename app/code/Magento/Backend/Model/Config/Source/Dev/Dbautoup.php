@@ -31,15 +31,15 @@ class Dbautoup implements \Magento\Core\Model\Option\ArrayInterface
     {
         return array(
             array(
-                'value'=>\Magento\Core\Model\Resource::AUTO_UPDATE_ALWAYS,
+                'value'=> \Magento\App\Resource::AUTO_UPDATE_ALWAYS,
                 'label' => __('Always (during development)')
             ),
             array(
-                'value'=>\Magento\Core\Model\Resource::AUTO_UPDATE_ONCE,
+                'value'=> \Magento\App\Resource::AUTO_UPDATE_ONCE,
                 'label' => __('Only Once (version upgrade)')
             ),
             array(
-                'value'=>\Magento\Core\Model\Resource::AUTO_UPDATE_NEVER,
+                'value'=> \Magento\App\Resource::AUTO_UPDATE_NEVER,
                 'label' => __('Never (production)')
             ),
         );

@@ -46,13 +46,6 @@ class Config
     protected $_serviceConfigPath = 'payment_services/centinel';
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
-
-    /**
      * Core store config
      *
      * @var \Magento\Core\Model\Store\Config
@@ -65,18 +58,23 @@ class Config
     protected $_coreConfig;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
+     * @var \Magento\Encryption\EncryptorInterface
+     */
+    protected $_encryptor;
+
+    /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\Encryption\EncryptorInterface $encryptor
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Config $coreConfig
+        \Magento\Core\Model\Config $coreConfig,
+        \Magento\Encryption\EncryptorInterface $encryptor
     ) {
-        $this->_coreData = $coreData;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_coreConfig = $coreConfig;
+        $this->_encryptor = $encryptor;
     }
 
     /**
@@ -128,7 +126,7 @@ class Config
      */
     public function getTransactionPwd()
     {
-        return $this->_coreData->decrypt($this->_getServiceConfigValue('password'));
+        return $this->_encryptor->decrypt($this->_getServiceConfigValue('password'));
     }
 
     /**

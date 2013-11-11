@@ -57,11 +57,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_dateTime->setTimezone(new \DateTimeZone(self::DATE_TIMEZONE));
     }
 
-    public function testGetEncryptor()
-    {
-        $this->assertInstanceOf('Magento\Core\Model\Encryption', $this->_helper->getEncryptor());
-    }
-
     public function testCurrency()
     {
         $price = 10.00;
@@ -107,40 +102,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testEncryptDecrypt()
-    {
-        $initial = md5(uniqid());
-        $encrypted = $this->_helper->encrypt($initial);
-        $this->assertNotEquals($initial, $encrypted);
-        $this->assertEquals($initial, $this->_helper->decrypt($encrypted));
-    }
-
-    public function testValidateKey()
-    {
-        $validKey = md5(uniqid());
-        $this->assertInstanceOf('Magento\Crypt', $this->_helper->validateKey($validKey));
-    }
-
-    public function testGetRandomString()
-    {
-        $string = $this->_helper->getRandomString(10);
-        $this->assertEquals(10, strlen($string));
-    }
-
-    public function testGetValidateHash()
-    {
-        $password = uniqid();
-        $hash = $this->_helper->getHash($password);
-
-        $this->assertTrue(is_string($hash));
-        $this->assertTrue($this->_helper->validateHash($password, $hash));
-    }
-
-    public function testGetStoreId()
-    {
-        $this->assertTrue(is_numeric($this->_helper->getStoreId()));
-    }
-
     /**
      * @magentoAppIsolation enabled
      */
@@ -155,7 +116,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsDevAllowedTrue()
     {
-        $_SERVER['REMOTE_ADDR'] = '192.168.0.1';
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var \Magento\TestFramework\Request $request */
+        $request = $objectManager->get('Magento\TestFramework\Request');
+        $request->setServer(array('REMOTE_ADDR' => '192.168.0.1'));
+
         $this->assertTrue($this->_helper->isDevAllowed());
     }
 
@@ -165,7 +131,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsDevAllowedFalse()
     {
-        $_SERVER['REMOTE_ADDR'] = '192.168.0.3';
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var \Magento\TestFramework\Request $request */
+        $request = $objectManager->get('Magento\TestFramework\Request');
+        $request->setServer(array('REMOTE_ADDR' => '192.168.0.3'));
+
         $this->assertFalse($this->_helper->isDevAllowed());
     }
 
@@ -246,71 +217,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($decoratedVo, $this->_helper->decorateArray($sample, ''));
     }
 
-    public function testAssocToXml()
-    {
-        $data = array(
-            'one' => 1,
-            'two' => array(
-                'three' => 3,
-                'four' => '4',
-            ),
-        );
-        $result = $this->_helper->assocToXml($data);
-        $expectedResult = <<<XML
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<_><one>1</one><two><three>3</three><four>4</four></two></_>
-
-XML;
-        $this->assertInstanceOf('SimpleXMLElement', $result);
-        $this->assertEquals($expectedResult, $result->asXML());
-    }
-
-    /**
-     * @param array $array
-     * @param string $rootName
-     * @expectedException \Magento\Exception
-     * @dataProvider assocToXmlExceptionDataProvider
-     */
-    public function testAssocToXmlException($array, $rootName = '_')
-    {
-        $this->_helper->assocToXml($array, $rootName);
-    }
-
-    public function assocToXmlExceptionDataProvider()
-    {
-        return array(
-            array(array(), ''),
-            array(array(), 0),
-            array(array(1, 2, 3)),
-            array(array('root' => 1), 'root'),
-        );
-    }
-
-    public function testXmlToAssoc()
-    {
-        $xmlstr = <<<XML
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<_><one>1</one><two><three>3</three><four>4</four></two></_>
-XML;
-        $result = $this->_helper->xmlToAssoc(new \SimpleXMLElement($xmlstr));
-        $this->assertEquals(array('one' => '1', 'two' => array('three' => '3', 'four'  => '4')), $result);
-    }
-
     public function testJsonEncodeDecode()
     {
         $data = array('one' => 1, 'two' => 'two');
         $jsonData = '{"one":1,"two":"two"}';
         $this->assertEquals($jsonData, $this->_helper->jsonEncode($data));
         $this->assertEquals($data, $this->_helper->jsonDecode($jsonData));
-    }
-
-    public function testUniqHash()
-    {
-        $hashOne = $this->_helper->uniqHash();
-        $hashTwo = $this->_helper->uniqHash();
-        $this->assertTrue(is_string($hashOne));
-        $this->assertTrue(is_string($hashTwo));
-        $this->assertNotEquals($hashOne, $hashTwo);
     }
 
     public function testGetDefaultCountry()

@@ -95,11 +95,11 @@ class Payment extends \Magento\Core\Controller\Front\Action
             $paymentMethod->process($data);
             $result['success'] = 1;
         } catch (\Magento\Core\Exception $e) {
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
             $result['success'] = 0;
             $result['error_msg'] = $e->getMessage();
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
             $result['success'] = 0;
             $result['error_msg'] = __('We couldn\'t process your order right now. Please try again later.');
         }

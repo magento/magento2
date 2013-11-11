@@ -59,7 +59,7 @@ class Date implements \Magento\Data\Form\Filter\FilterInterface
     public function __construct($format = null, $locale = null)
     {
         if (is_null($format)) {
-            $format = \Magento\Date::DATE_INTERNAL_FORMAT;
+            $format = \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
         }
         $this->_dateFormat  = $format;
         $this->_locale      = $locale;
@@ -78,7 +78,7 @@ class Date implements \Magento\Data\Form\Filter\FilterInterface
             'locale'        => $this->_locale
         ));
         $filterInternal = new \Zend_Filter_NormalizedToLocalized(array(
-            'date_format'   => \Magento\Date::DATE_INTERNAL_FORMAT,
+            'date_format'   => \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
             'locale'        => $this->_locale
         ));
 
@@ -96,7 +96,7 @@ class Date implements \Magento\Data\Form\Filter\FilterInterface
     public function outputFilter($value)
     {
         $filterInput = new \Zend_Filter_LocalizedToNormalized(array(
-            'date_format'   => \Magento\Date::DATE_INTERNAL_FORMAT,
+            'date_format'   => \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
             'locale'        => $this->_locale
         ));
         $filterInternal = new \Zend_Filter_NormalizedToLocalized(array(

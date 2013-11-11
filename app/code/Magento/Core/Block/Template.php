@@ -24,16 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Core\Block;
 
 /**
  * Base html block
- *
- * @category   Magento
- * @package    Magento_Core
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Block;
-
 class Template extends \Magento\Core\Block\AbstractBlock
 {
     const XML_PATH_TEMPLATE_ALLOW_SYMLINK       = 'dev/template/allow_symlink';
@@ -68,11 +63,6 @@ class Template extends \Magento\Core\Block\AbstractBlock
     protected $_dirs;
 
     /**
-     * @var \Magento\Core\Model\Logger
-     */
-    protected $_logger;
-
-    /**
      * @var \Magento\Filesystem
      */
     protected $_filesystem;
@@ -99,12 +89,17 @@ class Template extends \Magento\Core\Block\AbstractBlock
      *
      * @var \Magento\Core\Helper\Data
      */
-    protected $_coreData = null;
+    protected $_coreData;
 
     /**
      * @var \Magento\Core\Model\App
      */
     protected $_storeManager;
+
+    /**
+     * @var \Magento\App\State
+     */
+    protected $_appState;
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
@@ -119,11 +114,11 @@ class Template extends \Magento\Core\Block\AbstractBlock
     ) {
         $this->_coreData = $coreData;
         $this->_dirs = $context->getDirs();
-        $this->_logger = $context->getLogger();
         $this->_filesystem = $context->getFilesystem();
         $this->_viewFileSystem = $context->getViewFileSystem();
         $this->_templateEngineFactory = $context->getEngineFactory();
         $this->_storeManager = $context->getApp();
+        $this->_appState = $context->getAppState();
         parent::__construct($context, $data);
     }
 
@@ -185,15 +180,13 @@ class Template extends \Magento\Core\Block\AbstractBlock
 
     /**
      * Get design area
+     *
+     * @deprecated
      * @return string
      */
     public function getArea()
     {
-        $result = $this->_getData('area');
-        if (!$result && $this->getLayout()) {
-            $result = $this->getLayout()->getArea();
-        }
-        return $result;
+        return $this->_appState->getAreaCode();
     }
 
     /**

@@ -78,10 +78,10 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
     protected $_hostedproRequestFactory;
 
     /**
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\App\ModuleListInterface $moduleList
+     * @param \Magento\Module\ModuleListInterface $moduleList
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
@@ -97,10 +97,10 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\App\ModuleListInterface $moduleList,
+        \Magento\Module\ModuleListInterface $moduleList,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Core\Model\LocaleInterface $locale,

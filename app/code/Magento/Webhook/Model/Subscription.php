@@ -1,7 +1,5 @@
 <?php
 /**
- * Represents a subscription to one or more topics
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -24,6 +22,12 @@
  * @package     Magento_Webhook
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+namespace Magento\Webhook\Model;
+
+/**
+ * Represents a subscription to one or more topics
  *
  * @method string getName()
  * @method \Magento\Webhook\Model\Subscription setName(string $value)
@@ -41,8 +45,6 @@
  * @method bool hasStatus()
  * @method int getSubscriptionId()
  */
-namespace Magento\Webhook\Model;
-
 class Subscription
     extends \Magento\Core\Model\AbstractModel
     implements \Magento\PubSub\SubscriptionInterface
@@ -65,6 +67,11 @@ class Subscription
     private $_endpoint = null;
 
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $_dateTime;
+
+    /**
      * Tracks whether or not we've already loaded endpoint data from the DB.
      *
      * @var bool
@@ -75,6 +82,7 @@ class Subscription
      * @param \Magento\Webhook\Model\Endpoint $endpoint
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -83,6 +91,7 @@ class Subscription
         \Magento\Webhook\Model\Endpoint $endpoint,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Stdlib\DateTime $dateTime,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -92,7 +101,7 @@ class Subscription
             $data['status'] = \Magento\PubSub\SubscriptionInterface::STATUS_INACTIVE;
         }
         parent::__construct($context, $coreRegistry, $resource, $resourceCollection, $data);
-
+        $this->_dateTime = $dateTime;
         $this->_endpoint = $endpoint;
     }
 
@@ -125,7 +134,7 @@ class Subscription
         }
 
         if ($this->hasDataChanges()) {
-            $this->setUpdatedAt($this->_getResource()->formatDate(time()));
+            $this->setUpdatedAt($this->_dateTime->formatDate(time()));
         }
 
         return parent::_beforeSave();

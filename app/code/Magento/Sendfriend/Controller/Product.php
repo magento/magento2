@@ -118,15 +118,20 @@ class Product extends \Magento\Core\Controller\Front\Action
      */
     protected function _initSendToFriendModel()
     {
+        /** @var \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress */
+        $remoteAddress = $this->_objectManager->get('Magento\HTTP\PhpEnvironment\RemoteAddress');
+
+        /** @var \Magento\Core\Model\Cookie $cookie */
+        $cookie = $this->_objectManager->get('Magento\Core\Model\Cookie');
+
+        /** @var \Magento\Core\Model\StoreManagerInterface $store */
+        $store = $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface');
+
+        /** @var \Magento\Sendfriend\Model\Sendfriend $model */
         $model  = $this->_objectManager->create('Magento\Sendfriend\Model\Sendfriend');
-        $model->setRemoteAddr($this->_objectManager->get('Magento\Core\Helper\Http')->getRemoteAddr(true));
-        $model->setCookie($this->_objectManager->get('Magento\Core\Model\Cookie'));
-        $model->setWebsiteId(
-            $this->_objectManager
-                ->get('Magento\Core\Model\StoreManagerInterface')
-                ->getStore()
-                ->getWebsiteId()
-        );
+        $model->setRemoteAddr($remoteAddress->getRemoteAddress(true));
+        $model->setCookie($cookie);
+        $model->setWebsiteId($store->getStore()->getWebsiteId());
 
         $this->_coreRegistry->register('send_to_friend_model', $model);
 

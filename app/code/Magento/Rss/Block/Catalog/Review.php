@@ -29,22 +29,8 @@
  */
 namespace Magento\Rss\Block\Catalog;
 
-class Review extends \Magento\Core\Block\AbstractBlock
+class Review extends \Magento\Backend\Block\AbstractBlock
 {
-    /**
-     * Rss data
-     *
-     * @var \Magento\Rss\Helper\Data
-     */
-    protected $_rssData = null;
-
-    /**
-     * Adminhtml data
-     *
-     * @var \Magento\Backend\Helper\Data
-     */
-    protected $_adminhtmlData = null;
-
     /**
      * @var \Magento\Rss\Model\RssFactory
      */
@@ -66,31 +52,33 @@ class Review extends \Magento\Core\Block\AbstractBlock
     protected $_storeManager;
 
     /**
-     * @param \Magento\Backend\Helper\Data $adminhtmlData
-     * @param \Magento\Rss\Helper\Data $rssData
-     * @param \Magento\Core\Block\Context $context
+     * @var \Magento\Core\Model\Url
+     */
+    protected $_urlModel;
+
+    /**
+     * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Rss\Model\RssFactory $rssFactory
      * @param \Magento\Core\Model\Resource\Iterator $resourceIterator
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Model\Url $urlModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Helper\Data $adminhtmlData,
-        \Magento\Rss\Helper\Data $rssData,
-        \Magento\Core\Block\Context $context,
+        \Magento\Backend\Block\Context $context,
         \Magento\Rss\Model\RssFactory $rssFactory,
         \Magento\Core\Model\Resource\Iterator $resourceIterator,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\Model\Url $urlModel,
         array $data = array()
     ) {
-        $this->_adminhtmlData = $adminhtmlData;
-        $this->_rssData = $rssData;
         $this->_rssFactory = $rssFactory;
         $this->_resourceIterator = $resourceIterator;
         $this->_reviewFactory = $reviewFactory;
         $this->_storeManager = $storeManager;
+        $this->_urlModel = $urlModel;
         parent::__construct($context, $data);
     }
 
@@ -101,9 +89,8 @@ class Review extends \Magento\Core\Block\AbstractBlock
      */
     protected function _toHtml()
     {
-        $newUrl = $this->_urlBuilder->getUrl('rss/catalog/review');
+        $newUrl = $this->getUrl('rss/catalog/review', array('_secure' => true, '_nosecret' => true));
         $title = __('Pending product review(s)');
-        $this->_rssData->disableFlat();
 
         /** @var $rssObj \Magento\Rss\Model\Rss */
         $rssObj = $this->_rssFactory->create();
@@ -143,13 +130,14 @@ class Review extends \Magento\Core\Block\AbstractBlock
         $rssObj = $args['rssObj'];
         $row = $args['row'];
 
-        $store = $this->_storeManager->getStore($row['store_id']);
-        $productUrl = $store->getUrl('catalog/product/view', array('id' => $row['entity_id']));
-        $reviewUrl = $this->_adminhtmlData->getUrl(
+        $productUrl = $this->_urlModel
+            ->setStore($row['store_id'])
+            ->getUrl('catalog/product/view', array('id' => $row['entity_id']));
+        $reviewUrl = $this->getUrl(
             'catalog/product_review/edit/',
             array('id' => $row['review_id'], '_secure' => true, '_nosecret' => true)
         );
-        $storeName = $store->getName();
+        $storeName = $this->_storeManager->getStore($row['store_id'])->getName();
         $description = '<p>'
              . __('Product: <a href="%1">%2</a> <br/>', $productUrl, $row['name'])
              . __('Summary of review: %1 <br/>', $row['title'])

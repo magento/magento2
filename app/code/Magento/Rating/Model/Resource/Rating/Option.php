@@ -92,13 +92,6 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_optionId;
 
     /**
-     * Core http
-     *
-     * @var \Magento\Core\Helper\Http
-     */
-    protected $_coreHttp = null;
-
-    /**
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
@@ -109,20 +102,20 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_ratingOptionVoteF;
 
     /**
-     * @param \Magento\Core\Helper\Http $coreHttp
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Rating\Model\Rating\Option\VoteFactory $ratingOptionVoteF
+     * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      */
     public function __construct(
-        \Magento\Core\Helper\Http $coreHttp,
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Rating\Model\Rating\Option\VoteFactory $ratingOptionVoteF
+        \Magento\Rating\Model\Rating\Option\VoteFactory $ratingOptionVoteF,
+        \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
     ) {
-        $this->_coreHttp = $coreHttp;
         $this->_customerSession = $customerSession;
         $this->_ratingOptionVoteF = $ratingOptionVoteF;
+        $this->_remoteAddress = $remoteAddress;
         parent::__construct($resource);
     }
 
@@ -160,8 +153,8 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
         );
 
         if (!$option->getDoUpdate()) {
-            $data['remote_ip']       = $this->_coreHttp->getRemoteAddr();
-            $data['remote_ip_long']  = $this->_coreHttp->getRemoteAddr(true);
+            $data['remote_ip']       = $this->_remoteAddress->getRemoteAddress();
+            $data['remote_ip_long']  = $this->_remoteAddress->getRemoteAddress(true);
             $data['customer_id']     = $this->_customerSession->getCustomerId();
             $data['entity_pk_value'] = $option->getEntityPkValue();
             $data['rating_id']       = $option->getRatingId();

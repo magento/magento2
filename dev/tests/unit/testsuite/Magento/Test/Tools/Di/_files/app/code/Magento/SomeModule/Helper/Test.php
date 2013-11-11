@@ -34,22 +34,31 @@ class Test
     protected $_factory;
 
     /**
-     * @var \Magento\SomeModule\Element\Proxy\Factory
+     * @var \Magento\SomeModule\Element\Factory
      */
-    protected $_proxy;
+    protected $_elementFactory;
 
-    public function __construct(\Magento\SomeModule\ElementFactory $factory, \Magento\SomeModule\Element\Proxy $proxy)
-    {
+    /**
+     * @var \Magento\SomeModule\ElementFactory
+     */
+    protected $_newElementFactory;
+
+    public function __construct(
+        \Magento\SomeModule\Module\Factory $factory,
+        \Magento\SomeModule\Element\Factory $elementFactory,
+        \Magento\SomeModule\ElementFactory $rightElementFactory
+    ) {
         $this->_factory = $factory;
-        $this->_proxy = $proxy;
+        $this->_elementFactory = $elementFactory;
+        $this->_newElementFactory = $rightElementFactory;
     }
 
     /**
-     * @param ModelFactory $factory
+     * @param \Magento\SomeModule\ElementFactory $factory
      * @param array $data
      */
-    public function testHelper(ModelFactory $factory, array $data = array())
+    public function testHelper(\Magento\SomeModule\ElementFactory $factory, array $data = array())
     {
-        $factory->create('Magento\SomeModule\BlockFactory', array('data' => $data));
+        $factory->create('\Magento\SomeModule\ElementFactory', array('data' => $data));
     }
 }

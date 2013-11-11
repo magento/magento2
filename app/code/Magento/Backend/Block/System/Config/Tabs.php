@@ -53,7 +53,7 @@ class Tabs extends \Magento\Backend\Block\Widget
      *
      * @var string
      */
-    protected $_template = 'system/config/tabs.phtml';
+    protected $_template = 'Magento_Backend::system/config/tabs.phtml';
 
     /**
      * Currently selected section id

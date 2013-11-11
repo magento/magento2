@@ -31,7 +31,7 @@ class GlobalSearch extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'Magento_Adminhtml::system/search.phtml';
+    protected $_template = 'Magento_Backend::system/search.phtml';
 
     /**
      * Get components configuration

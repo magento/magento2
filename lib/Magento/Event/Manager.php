@@ -38,47 +38,27 @@ class Manager implements ManagerInterface
     /**
      * Event invoker
      *
-     * @var \Magento\Event\InvokerInterface
+     * @var InvokerInterface
      */
     protected $_invoker;
 
     /**
      * Event config
      *
-     * @var \Magento\Event\ConfigInterface
+     * @var ConfigInterface
      */
     protected $_eventConfig;
 
     /**
-     * Magento event factory
-     *
-     * @var \Magento\EventFactory
-     */
-    protected $_eventFactory;
-
-    /**
-     * Magento event observer factory
-     *
-     * @var \Magento\Event\WrapperFactory
-     */
-    protected $wrapperFactory;
-
-    /**
      * @param InvokerInterface $invoker
      * @param ConfigInterface $eventConfig
-     * @param \Magento\EventFactory $eventFactory
-     * @param WrapperFactory $wrapperFactory
      */
     public function __construct(
-        \Magento\Event\InvokerInterface $invoker,
-        \Magento\Event\ConfigInterface $eventConfig,
-        \Magento\EventFactory $eventFactory,
-        \Magento\Event\WrapperFactory $wrapperFactory
+        InvokerInterface $invoker,
+        ConfigInterface $eventConfig
     ) {
         $this->_invoker = $invoker;
         $this->_eventConfig = $eventConfig;
-        $this->_eventFactory = $eventFactory;
-        $this->wrapperFactory = $wrapperFactory;
     }
 
     /**
@@ -94,12 +74,10 @@ class Manager implements ManagerInterface
     {
         \Magento\Profiler::start('EVENT:' . $eventName, array('group' => 'EVENT', 'name' => $eventName));
         foreach ($this->_eventConfig->getObservers($eventName) as $observerConfig) {
-            /** @var $event \Magento\Event */
-            $event = $this->_eventFactory->create(array('data' => $data));
+            $event = new \Magento\Event($data);
             $event->setName($eventName);
 
-            /** @var $wrapper \Magento\Event\Observer */
-            $wrapper = $this->wrapperFactory->create();
+            $wrapper = new Observer();
             $wrapper->setData(array_merge(array('event' => $event), $data));
 
             \Magento\Profiler::start('OBSERVER:' . $observerConfig['name']);

@@ -24,16 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\SalesRule\Model\Resource;
 
 /**
  * Sales Rule resource model
- *
- * @category Magento
- * @package Magento_SalesRule
- * @author Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\SalesRule\Model\Resource;
-
 class Rule extends \Magento\Rule\Model\Resource\AbstractResource
 {
     /**
@@ -55,11 +50,11 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     );
 
     /**
-     * Core string
+     * Magento string lib
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
-    protected $_coreString = null;
+    protected $string;
 
     /**
      * @var \Magento\SalesRule\Model\Resource\Coupon
@@ -67,16 +62,16 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     protected $_resourceCoupon;
 
     /**
-     * @param \Magento\Core\Helper\String $coreString
-     * @param \Magento\Core\Model\Resource $resource
-     * @param \Magento\SalesRule\Model\Resource\Coupon $resourceCoupon
+     * @param \Magento\App\Resource $resource
+     * @param \Magento\Stdlib\String $string
+     * @param Coupon $resourceCoupon
      */
     public function __construct(
-        \Magento\Core\Helper\String $coreString,
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
+        \Magento\Stdlib\String $string,
         \Magento\SalesRule\Model\Resource\Coupon $resourceCoupon
     ) {
-        $this->_coreString = $coreString;
+        $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;
         parent::__construct($resource);
     }
@@ -202,7 +197,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
 
         $data    = array();
         foreach ($labels as $storeId => $label) {
-            if ($this->_coreString->strlen($label)) {
+            if ($this->string->strlen($label)) {
                 $data[] = array('rule_id' => $ruleId, 'store_id' => $storeId, 'label' => $label);
             } else {
                 $deleteByStoreIds[] = $storeId;
@@ -336,7 +331,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
         $result = array();
         if (preg_match_all('~s:32:"salesrule/rule_condition_product";s:9:"attribute";s:\d+:"(.*?)"~s',
             $serializedString, $matches)){
-            foreach ($matches[1] as $offset => $attributeCode) {
+            foreach ($matches[1] as $attributeCode) {
                 $result[] = $attributeCode;
             }
         }

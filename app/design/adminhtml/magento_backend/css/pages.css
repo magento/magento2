@@ -1854,7 +1854,7 @@
 }
 
 .adminhtml-giftwrapping-index .col-id,
-.adminhtml-checkout-agreement-index .col-id,
+.checkout-agreement-index .col-id,
 [class^=" sales-billing-"] .col-id,
 [class^=" sales-transactions-"] .col-id {
     width: 35px;
@@ -1879,7 +1879,7 @@
 [class^=" adminhtml-rma-"] .col-required,
 [class^=" adminhtml-rma-"] .col-system,
 [class^=" adminhtml-rma-"] .col-visible-on-front,
-.adminhtml-checkout-agreement-index .col-status,
+.checkout-agreement-index .col-status,
 .adminhtml-rma-item-attribute-edit .col-position {
     text-align: right;
     white-space: nowrap;
@@ -1984,7 +1984,7 @@
 }
 
 .adminhtml-giftwrapping-index .col-websites,
-.adminhtml-checkout-agreement-index .col-store-view {
+.checkout-agreement-index .col-store-view {
     white-space: nowrap;
     width: 200px;
 }

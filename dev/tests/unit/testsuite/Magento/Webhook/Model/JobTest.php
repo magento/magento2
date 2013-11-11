@@ -63,13 +63,15 @@ class JobTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
+        $dateTime = $this->getMock('Magento\Stdlib\DateTime', null, array(), '', true);
 
         $this->_job = $this->getMockBuilder('Magento\Webhook\Model\Job')
             ->setConstructorArgs(array(
                 $this->_mockEventFactory,
                 $this->_mockSubscrFactory,
                 $this->_mockContext,
-                $coreRegistry
+                $coreRegistry,
+                $dateTime
             ))
             ->setMethods(array('_init', 'save'))
             ->getMock();
@@ -101,12 +103,15 @@ class JobTest extends \PHPUnit_Framework_TestCase
 
         $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
 
+        $dateTime = $this->getMock('Magento\Stdlib\DateTime', null, array(), '', true);
+
         $this->_job = $this->getMockBuilder('Magento\Webhook\Model\Job')
             ->setConstructorArgs(array(
                 $this->_mockEventFactory,
                 $this->_mockSubscrFactory,
                 $this->_mockContext,
                 $coreRegistry,
+                $dateTime,
                 null,
                 null,
                 $data
@@ -136,12 +141,15 @@ class JobTest extends \PHPUnit_Framework_TestCase
 
         $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
 
+        $dateTime = $this->getMock('Magento\Stdlib\DateTime', null, array(), '', true);
+
         $this->_job = $this->getMockBuilder('Magento\Webhook\Model\Job')
             ->setConstructorArgs(array(
                 $this->_mockEventFactory,
                 $this->_mockSubscrFactory,
                 $this->_mockContext,
                 $coreRegistry,
+                $dateTime,
                 null,
                 null,
                 $data
@@ -173,12 +181,15 @@ class JobTest extends \PHPUnit_Framework_TestCase
 
         $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
 
+        $dateTime = $this->getMock('Magento\Stdlib\DateTime', null, array(), '', true);
+
         $this->_job = $this->getMockBuilder('Magento\Webhook\Model\Job')
             ->setConstructorArgs(array(
                 $this->_mockEventFactory,
                 $this->_mockSubscrFactory,
                 $this->_mockContext,
                 $coreRegistry,
+                $dateTime,
                 null,
                 null,
                 $data
@@ -209,12 +220,15 @@ class JobTest extends \PHPUnit_Framework_TestCase
 
         $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
 
+        $dateTime = $this->getMock('Magento\Stdlib\DateTime', null, array(), '', true);
+
         $this->_job = $this->getMockBuilder('Magento\Webhook\Model\Job')
             ->setConstructorArgs(array(
                 $this->_mockEventFactory,
                 $this->_mockSubscrFactory,
                 $this->_mockContext,
                 $coreRegistry,
+                $dateTime,
                 null,
                 null,
                 $data
@@ -245,12 +259,15 @@ class JobTest extends \PHPUnit_Framework_TestCase
 
         $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
 
+        $dateTime = $this->getMock('Magento\Stdlib\DateTime', null, array(), '', true);
+
         $this->_job = $this->getMockBuilder('Magento\Webhook\Model\Job')
             ->setConstructorArgs(array(
                 $this->_mockEventFactory,
                 $this->_mockSubscrFactory,
                 $this->_mockContext,
                 $coreRegistry,
+                $dateTime,
                 null,
                 null,
                 $data
@@ -308,12 +325,15 @@ class JobTest extends \PHPUnit_Framework_TestCase
     {
         $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
 
+        $dateTime = $this->getMock('Magento\Stdlib\DateTime', null, array(), '', true);
+
         $this->_job = $this->getMockBuilder('Magento\Webhook\Model\Job')
             ->setConstructorArgs(array(
                 $this->_mockEventFactory,
                 $this->_mockSubscrFactory,
                 $this->_mockContext,
-                $coreRegistry
+                $coreRegistry,
+                $dateTime
             ))
             ->setMethods(array('_init', 'save', 'getRetryCount', 'setUpdatedAt', 'setStatus'))
             ->getMock();
@@ -342,12 +362,15 @@ class JobTest extends \PHPUnit_Framework_TestCase
     {
         $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
 
+        $dateTime = $this->getMock('Magento\Stdlib\DateTime', null, array(), '', true);
+
         $this->_job = $this->getMockBuilder('Magento\Webhook\Model\Job')
             ->setConstructorArgs(array(
                 $this->_mockEventFactory,
                 $this->_mockSubscrFactory,
                 $this->_mockContext,
-                $coreRegistry
+                $coreRegistry,
+                $dateTime,
             ))
             ->setMethods(array('_init', 'save', 'getRetryCount', 'setStatus'))
             ->getMock();

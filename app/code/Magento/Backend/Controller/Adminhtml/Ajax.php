@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     Magento_Adminhtml
+ * @package     Magento_Backend
  */
 namespace Magento\Backend\Controller\Adminhtml;
 

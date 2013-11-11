@@ -191,7 +191,7 @@ class Compare extends \Magento\Core\Controller\Front\Action
 
             if ($product->getId()/* && !$product->isSuper()*/) {
                 $this->_catalogProductCompareList->addProduct($product);
-                $productName = $this->_objectManager->get('Magento\Core\Helper\Data')->escapeHtml($product->getName());
+                $productName = $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getName());
                 $this->_catalogSession->addSuccess(
                     __('You added product %1 to the comparison list.', $productName)
                 );
@@ -234,7 +234,7 @@ class Compare extends \Magento\Core\Controller\Front\Action
                 $helper = $this->_objectManager->get('Magento\Catalog\Helper\Product\Compare');
                 if ($item->getId()) {
                     $item->delete();
-                    $productName = $helper->escapeHtml($product->getName());
+                    $productName = $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getName());
                     $this->_catalogSession->addSuccess(
                         __('You removed product %1 from the comparison list.', $productName)
                     );

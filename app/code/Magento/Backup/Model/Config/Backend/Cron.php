@@ -44,8 +44,11 @@ class Cron extends \Magento\Core\Model\Config\Value
     protected $_configValueFactory;
 
     /**
-     * Construct
-     *
+     * @var string
+     */
+    protected $_runModelPath = '';
+
+    /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\StoreManager $storeManager
@@ -53,6 +56,7 @@ class Cron extends \Magento\Core\Model\Config\Value
      * @param \Magento\Core\Model\Config\ValueFactory $configValueFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param string $runModelPath
      * @param array $data
      */
     public function __construct(
@@ -63,11 +67,12 @@ class Cron extends \Magento\Core\Model\Config\Value
         \Magento\Core\Model\Config\ValueFactory $configValueFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
+        $runModelPath = '',
         array $data = array()
     ) {
-        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
-
+        $this->_runModelPath = $runModelPath;
         $this->_configValueFactory = $configValueFactory;
+        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
     }
 
     /**
@@ -107,7 +112,7 @@ class Cron extends \Magento\Core\Model\Config\Value
 
             $this->_configValueFactory->create()
                 ->load(self::CRON_MODEL_PATH, 'path')
-                ->setValue((string) $this->_config->getNode(self::CRON_MODEL_PATH))
+                ->setValue($this->_runModelPath)
                 ->setPath(self::CRON_MODEL_PATH)
                 ->save();
         } catch (\Exception $e) {

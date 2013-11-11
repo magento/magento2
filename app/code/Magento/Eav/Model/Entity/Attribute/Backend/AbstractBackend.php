@@ -80,16 +80,15 @@ abstract class AbstractBackend
     protected $_defaultValue = null;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
     /**
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      */
-    public function __construct(
-        \Magento\Core\Model\Logger $logger
-    ) {
+    public function __construct(\Magento\Logger $logger)
+    {
         $this->_logger = $logger;
     }
 

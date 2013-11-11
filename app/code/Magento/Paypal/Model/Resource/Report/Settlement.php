@@ -44,10 +44,10 @@ class Settlement extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_coreDate;
 
     /**
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\Date $coreDate
      */
-    public function __construct(\Magento\Core\Model\Resource $resource, \Magento\Core\Model\Date $coreDate)
+    public function __construct(\Magento\App\Resource $resource, \Magento\Core\Model\Date $coreDate)
     {
         $this->_coreDate = $coreDate;
         parent::__construct($resource);

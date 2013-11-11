@@ -24,15 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * DHL International (API v1.4)
- *
- * @category Magento
- * @package  Magento_Usa
- * @author   Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Usa\Model\Shipping\Carrier\Dhl;
 
+/**
+ * DHL International (API v1.4)
+ */
 class International
     extends \Magento\Usa\Model\Shipping\Carrier\AbstractCarrier
     implements \Magento\Shipping\Model\Carrier\CarrierInterface
@@ -158,23 +154,16 @@ class International
     /**
      * Core string
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
-    protected $_coreString = null;
+    protected $string;
 
     /**
      * Usa data
      *
      * @var \Magento\Usa\Helper\Data
      */
-    protected $_usaData = null;
-
-    /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
+    protected $_usaData;
 
     /**
      * @var \Magento\Core\Model\Date
@@ -192,21 +181,29 @@ class International
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\Config\Modules\Reader
+     * @var \Magento\Module\Dir\Reader
      */
     protected $_configReader;
+
+    /**
+     * @var \Magento\Math\Division
+     */
+    protected $mathDivision;
+
+    /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
 
     /**
      * Dhl International Class constructor
      *
      * Sets necessary data
      *
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Usa\Helper\Data $usaData
-     * @param \Magento\Core\Helper\String $coreString
      * @param \Magento\Core\Model\Date $coreDate
      * @param \Magento\Usa\Model\Shipping\Carrier\Dhl\Label\PdfFactory $pdfFactory
-     * @param \Magento\Core\Model\Config\Modules\Reader $configReader
+     * @param \Magento\Module\Dir\Reader $configReader
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Usa\Model\Simplexml\ElementFactory $xmlElFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
@@ -221,16 +218,17 @@ class International
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
+     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Math\Division $mathDivision
+     * @param \Magento\Stdlib\DateTime $dateTime
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Usa\Helper\Data $usaData,
-        \Magento\Core\Helper\String $coreString,
         \Magento\Core\Model\Date $coreDate,
         \Magento\Usa\Model\Shipping\Carrier\Dhl\Label\PdfFactory $pdfFactory,
-        \Magento\Core\Model\Config\Modules\Reader $configReader,
+        \Magento\Module\Dir\Reader $configReader,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Usa\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
@@ -245,15 +243,19 @@ class International
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
+        \Magento\Stdlib\String $string,
+        \Magento\Math\Division $mathDivision,
+        \Magento\Stdlib\DateTime $dateTime,
         array $data = array()
     ) {
-        $this->_coreData = $coreData;
         $this->_usaData = $usaData;
-        $this->_coreString = $coreString;
         $this->_coreDate = $coreDate;
         $this->_pdfFactory = $pdfFactory;
         $this->_storeManager = $storeManager;
         $this->_configReader = $configReader;
+        $this->string = $string;
+        $this->mathDivision = $mathDivision;
+        $this->dateTime = $dateTime;
         parent::__construct(
             $xmlElFactory, $rateFactory, $rateMethodFactory, $trackFactory, $trackErrorFactory, $trackStatusFactory,
             $regionFactory, $countryFactory, $currencyFactory, $directoryData, $coreStoreConfig, $rateErrorFactory,
@@ -414,8 +416,7 @@ class International
         $requestObject->setValue(round($request->getPackageValue(), 2))
             ->setValueWithDiscount($request->getPackageValueWithDiscount())
             ->setCustomsValue($request->getPackageCustomsValue())
-            ->setDestStreet(
-                $this->_coreString->substr(str_replace("\n", '', $request->getDestStreet()), 0, 35))
+            ->setDestStreet($this->string->substr(str_replace("\n", '', $request->getDestStreet()), 0, 35))
             ->setDestStreetLine2($request->getDestStreetLine2())
             ->setDestCity($request->getDestCity())
             ->setOrigCompanyName($request->getOrigCompanyName())
@@ -713,7 +714,7 @@ class International
                        if ($itemWeight > $maxWeight) {
                            $qtyItem = floor($itemWeight / $maxWeight);
                            $decimalItems[] = array('weight' => $maxWeight, 'qty' => $qtyItem);
-                           $weightItem = $this->_coreData->getExactDivision($itemWeight, $maxWeight);
+                           $weightItem = $this->mathDivision->getExactDivision($itemWeight, $maxWeight);
                            if ($weightItem) {
                                $decimalItems[] = array('weight' => $weightItem, 'qty' => 1);
                            }
@@ -904,7 +905,7 @@ class International
 
         $nodeBkgDetails = $nodeGetQuote->addChild('BkgDetails');
         $nodeBkgDetails->addChild('PaymentCountryCode', $rawRequest->getOrigCountryId());
-        $nodeBkgDetails->addChild('Date', \Magento\Date::now(true));
+        $nodeBkgDetails->addChild('Date', $this->dateTime->now(true));
         $nodeBkgDetails->addChild('ReadyTime', 'PT' . (int)(string)$this->getConfigData('ready_time') . 'H00M');
 
         $nodeBkgDetails->addChild('DimensionUnit', $this->_getDimensionUnit());
@@ -1374,7 +1375,7 @@ class International
         $nodeConsignee->addChild('CompanyName', substr($companyName, 0, 35));
 
         $address = $rawRequest->getRecipientAddressStreet1(). ' ' . $rawRequest->getRecipientAddressStreet2();
-        $address = $this->_coreString->strSplit($address, 35, false, true);
+        $address = $this->string->split($address, 35, false, true);
         if (is_array($address)) {
             foreach ($address as $addressLine) {
                 $nodeConsignee->addChild('AddressLine', $addressLine);
@@ -1433,7 +1434,7 @@ class International
         $nodeShipper->addChild('RegisteredAccount', (string)$this->getConfigData('account'));
 
         $address = $rawRequest->getShipperAddressStreet1(). ' ' . $rawRequest->getShipperAddressStreet2();
-        $address = $this->_coreString->strSplit($address, 35, false, true);
+        $address = $this->string->split($address, 35, false, true);
         if (is_array($address)) {
             foreach ($address as $addressLine) {
                 $nodeShipper->addChild('AddressLine', $addressLine);

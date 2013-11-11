@@ -22,14 +22,27 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 namespace Magento\Filter\Template;
 
 class Simple extends \Magento\Object implements \Zend_Filter_Interface
 {
+    /**
+     * @var string
+     */
     protected $_startTag = '{{';
+
+    /**
+     * @var string
+     */
     protected $_endTag = '}}';
 
+    /**
+     * Set tags
+     *
+     * @param string $start
+     * @param string $end
+     * @return $this
+     */
     public function setTags($start, $end)
     {
         $this->_startTag = $start;
@@ -37,6 +50,12 @@ class Simple extends \Magento\Object implements \Zend_Filter_Interface
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @param string $value
+     * @return string
+     */
     public function filter($value)
     {
         $callback = function ($matches) {

@@ -24,19 +24,22 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Core\Model\File\Validator;
 
 /**
  * Validator for check not protected file extensions
- *
- * @category   Magento
- * @package    Magento_Core
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\File\Validator;
-
 class NotProtectedExtension extends \Zend_Validate_Abstract
 {
+    /**
+     * Protected extension message key
+     */
     const PROTECTED_EXTENSION = 'protectedExtension';
+
+    /**
+     * Protected files config path
+     */
+    const XML_PATH_PROTECTED_FILE_EXTENSIONS    = 'general/file/protected_extensions';
 
     /**
      * The file extension
@@ -53,23 +56,20 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
     protected $_protectedFileExtensions = array();
 
     /**
-     * Core data
+     * Core store config
      *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Core\Model\Store\Config
      */
-    protected $_coreData = null;
+    protected $_coreStoreConfig;
 
     /**
-     * Construct
+     * Init validator
      *
-     *
-     *
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      */
-    public function __construct(
-        \Magento\Core\Helper\Data $coreData
-    ) {
-        $this->_coreData = $coreData;
+    public function __construct(\Magento\Core\Model\Store\Config $coreStoreConfig)
+    {
+        $this->_coreStoreConfig = $coreStoreConfig;
         $this->_initMessageTemplates();
         $this->_initProtectedFileExtensions();
     }
@@ -97,9 +97,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
     protected function _initProtectedFileExtensions()
     {
         if (!$this->_protectedFileExtensions) {
-            /** @var $helper \Magento\Core\Helper\Data */
-            $helper = $this->_coreData;
-            $extensions = $helper->getProtectedFileExtensions();
+            $extensions = $this->getProtectedFileExtensions();
             if (is_string($extensions)) {
                 $extensions = explode(',', $extensions);
             }
@@ -111,6 +109,16 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
         return $this;
     }
 
+    /**
+     * Return list with protected file extensions
+     *
+     * @param \Magento\Core\Model\Store|string|int $store
+     * @return array
+     */
+    public function getProtectedFileExtensions($store = null)
+    {
+        return $this->_coreStoreConfig->getConfig(self::XML_PATH_PROTECTED_FILE_EXTENSIONS, $store);
+    }
 
     /**
      * Returns true if and only if $value meets the validation requirements

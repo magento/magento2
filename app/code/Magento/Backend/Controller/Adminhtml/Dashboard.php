@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     Magento_Adminhtml
+ * @package     Magento_Backend
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,7 +28,7 @@
  * Dashboard admin controller
  *
  * @category   Magento
- * @package    Magento_Adminhtml
+ * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backend\Controller\Adminhtml;
@@ -79,11 +79,13 @@ class Dashboard extends \Magento\Backend\Controller\Adminhtml\Action
     {
         $output   = '';
         $blockTab = $this->getRequest()->getParam('block');
-        $blockClassSuffix = str_replace(' ', \Magento\Autoload\IncludePath::NS_SEPARATOR,
-            ucwords(str_replace(\Magento\Autoload\IncludePath::NS_SEPARATOR, ' ', $blockTab)));
-
+        $blockClassSuffix = str_replace(
+            ' ',
+            \Magento\Autoload\IncludePath::NS_SEPARATOR,
+            ucwords(str_replace('_', ' ', $blockTab))
+        );
         if (in_array($blockTab, array('tab_orders', 'tab_amounts', 'totals'))) {
-            $output = $this->getLayout()->createBlock('Magento\\Adminhtml\\Block\\Dashboard\\' . $blockClassSuffix)
+            $output = $this->getLayout()->createBlock('Magento\\Backend\\Block\\Dashboard\\' . $blockClassSuffix)
                 ->toHtml();
         }
         $this->getResponse()->setBody($output);
@@ -122,7 +124,7 @@ class Dashboard extends \Magento\Backend\Controller\Adminhtml\Action
                             ->setBody($response->getBody());
                         return;
                     } catch (\Exception $e) {
-                        $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+                        $this->_objectManager->get('Magento\Logger')->logException($e);
                         $error = __('see error log for details');
                         $httpCode = 503;
                     }

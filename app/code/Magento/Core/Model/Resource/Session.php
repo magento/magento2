@@ -65,10 +65,10 @@ class Session implements \Zend_Session_SaveHandler_Interface
     /**
      * Constructor
      *
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\App\Dir $dir
      */
-    public function __construct(\Magento\Core\Model\Resource $resource, \Magento\App\Dir $dir)
+    public function __construct(\Magento\App\Resource $resource, \Magento\App\Dir $dir)
     {
         $this->_sessionTable = $resource->getTableName('core_session');
         $this->_write        = $resource->getConnection('core_write');

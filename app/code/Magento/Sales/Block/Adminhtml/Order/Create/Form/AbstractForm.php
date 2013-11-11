@@ -38,7 +38,7 @@ abstract class AbstractForm
     extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
-     * @var \Magento\Data\Form\Factory
+     * @var \Magento\Data\FormFactory
      */
     protected $_formFactory;
 
@@ -50,7 +50,7 @@ abstract class AbstractForm
     protected $_form;
 
     /**
-     * @param \Magento\Data\Form\Factory $formFactory
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Adminhtml\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
      * @param \Magento\Core\Helper\Data $coreData
@@ -58,7 +58,7 @@ abstract class AbstractForm
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Factory $formFactory,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Adminhtml\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
         \Magento\Core\Helper\Data $coreData,
@@ -130,9 +130,9 @@ abstract class AbstractForm
     protected function _getAdditionalFormElementTypes()
     {
         return array(
-            'file'      => 'Magento\Adminhtml\Block\Customer\Form\Element\File',
-            'image'     => 'Magento\Adminhtml\Block\Customer\Form\Element\Image',
-            'boolean'   => 'Magento\Adminhtml\Block\Customer\Form\Element\Boolean',
+            'file'      => 'Magento\Customer\Block\Adminhtml\Form\Element\File',
+            'image'     => 'Magento\Customer\Block\Adminhtml\Form\Element\Image',
+            'boolean'   => 'Magento\Customer\Block\Adminhtml\Form\Element\Boolean',
         );
     }
 
@@ -144,7 +144,7 @@ abstract class AbstractForm
     protected function _getAdditionalFormElementRenderers()
     {
         return array(
-            'region'    => $this->getLayout()->createBlock('Magento\Adminhtml\Block\Customer\Edit\Renderer\Region'),
+            'region'    => $this->getLayout()->createBlock('Magento\Customer\Block\Adminhtml\Edit\Renderer\Region'),
         );
     }
 

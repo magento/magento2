@@ -63,17 +63,29 @@ class Reader
     protected $_scopePriorityScheme = array('primary', 'global');
 
     /**
+     * Path to corresponding XSD file with validation rules for config
+     *
+     * @var string
+     */
+    protected $_schemaFile;
+
+    /**
      * @param \Magento\Config\FileResolverInterface $fileResolver
-     * @param \Magento\Core\Model\Config\Initial\Converter $converter
+     * @param Converter $converter
+     * @param SchemaLocator $schemaLocator
+     * @param \Magento\Config\ValidationStateInterface $validationState
      * @param string $fileName
      * @param string $domDocumentClass
      */
     public function __construct(
         \Magento\Config\FileResolverInterface $fileResolver,
-        \Magento\Core\Model\Config\Initial\Converter $converter,
+        Converter $converter,
+        SchemaLocator $schemaLocator,
+        \Magento\Config\ValidationStateInterface $validationState,
         $fileName = 'config.xml',
         $domDocumentClass = 'Magento\Config\Dom'
     ) {
+        $this->_schemaFile = $validationState->isValidated() ? $schemaLocator->getSchema() : null;
         $this->_fileResolver = $fileResolver;
         $this->_converter = $converter;
         $this->_domDocumentClass = $domDocumentClass;
@@ -104,7 +116,11 @@ class Reader
             try {
                 if (is_null($domDocument)) {
                     $class = $this->_domDocumentClass;
-                    $domDocument = new $class(file_get_contents($file));
+                    $domDocument = new $class(
+                        file_get_contents($file),
+                        array(),
+                        $this->_schemaFile
+                    );
                 } else {
                     $domDocument->merge(file_get_contents($file));
                 }

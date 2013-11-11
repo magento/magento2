@@ -35,6 +35,14 @@ namespace Magento\Catalog\Helper;
 
 class Catalog extends \Magento\Core\Helper\AbstractHelper
 {
+    /**
+     * Config path to valid file paths
+     */
+    const XML_PATH_PUBLIC_FILES_VALID_PATHS     = 'general/file/public_files_valid_paths';
+
+    /**
+     * Config path to sitemap valid paths
+     */
     const XML_PATH_SITEMAP_VALID_PATHS = 'general/file/sitemap_generate_valid_paths';
 
     /**
@@ -57,13 +65,6 @@ class Catalog extends \Magento\Core\Helper\AbstractHelper
      * @var \Magento\Core\Model\Store\Config
      */
     protected $_coreStoreConfig;
-    
-    /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
@@ -75,7 +76,6 @@ class Catalog extends \Magento\Core\Helper\AbstractHelper
         \Magento\Core\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig
     ) {
-        $this->_coreData = $coreData;
         $this->_coreStoreConfig = $coreStoreConfig;
         parent::__construct($context);
     }
@@ -133,7 +133,7 @@ class Catalog extends \Magento\Core\Helper\AbstractHelper
     {
         return array_merge(
             $this->_coreStoreConfig->getConfig(self::XML_PATH_SITEMAP_VALID_PATHS),
-            $this->_coreData->getPublicFilesValidPath()
+            $this->_coreStoreConfig->getConfig(self::XML_PATH_PUBLIC_FILES_VALID_PATHS)
         );
     }
 }

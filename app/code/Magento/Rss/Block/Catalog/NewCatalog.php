@@ -111,11 +111,11 @@ class NewCatalog extends \Magento\Rss\Block\Catalog\AbstractCatalog
         $product = $this->_productFactory->create();
         $todayStartOfDayDate  = $this->_locale->date()
             ->setTime('00:00:00')
-            ->toString(\Magento\Date::DATETIME_INTERNAL_FORMAT);
+            ->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
 
         $todayEndOfDayDate  = $this->_locale->date()
             ->setTime('23:59:59')
-            ->toString(\Magento\Date::DATETIME_INTERNAL_FORMAT);
+            ->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
 
         /** @var $products \Magento\Catalog\Model\Resource\Product\Collection */
         $products = $product->getCollection();

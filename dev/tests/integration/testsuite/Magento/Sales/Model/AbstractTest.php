@@ -44,7 +44,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterCommitCallbackOrderGridNotInvoked()
     {
-        $adapter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Resource')
+        $adapter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Resource')
             ->getConnection('core_write');
         $this->assertEquals(0, $adapter->getTransactionLevel(), 'This test must be outside a transaction.');
 

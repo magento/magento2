@@ -126,9 +126,6 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->_responseMock->expects($this->any())->method('prepareResponse')->will($this->returnValue(array()));
         $this->_requestMock->expects($this->any())->method('getRequestData')->will($this->returnValue(array()));
 
-        /** Assert that response sendResponse method will be executed once. */
-        $this->_responseMock->expects($this->once())->method('sendResponse');
-
         parent::setUp();
     }
 

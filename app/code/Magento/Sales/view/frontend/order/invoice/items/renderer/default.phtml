@@ -65,7 +65,7 @@
             </a>
         <?php endif; ?>
     </td>
-    <td class="col sku"><?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\String')->splitInjection($this->getSku())) ?></td>
+    <td class="col sku"><?php echo $this->prepareSku($this->getSku()) ?></td>
     <td class="col price">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceExclTax()): ?>
             <span class="price-excl-tax">

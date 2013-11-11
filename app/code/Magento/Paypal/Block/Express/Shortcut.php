@@ -112,6 +112,11 @@ class Shortcut extends \Magento\Core\Block\Template
     protected $_checkoutFactory;
 
     /**
+     * @var \Magento\Math\Random
+     */
+    protected $mathRandom;
+
+    /**
      * @param \Magento\Paypal\Helper\Data $paypalData
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Helper\Data $coreData
@@ -122,6 +127,7 @@ class Shortcut extends \Magento\Core\Block\Template
      * @param \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory
+     * @param \Magento\Math\Random $mathRandom
      * @param array $data
      */
     public function __construct(
@@ -135,6 +141,7 @@ class Shortcut extends \Magento\Core\Block\Template
         \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,
+        \Magento\Math\Random $mathRandom,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
@@ -145,6 +152,7 @@ class Shortcut extends \Magento\Core\Block\Template
         $this->_paypalConfigFactory = $paypalConfigFactory;
         $this->_checkoutSession = $checkoutSession;
         $this->_checkoutFactory = $checkoutFactory;
+        $this->mathRandom = $mathRandom;
         parent::__construct($coreData, $context, $data);
     }
 
@@ -193,7 +201,7 @@ class Shortcut extends \Magento\Core\Block\Template
         }
 
         // set misc data
-        $this->setShortcutHtmlId($this->helper('Magento\Core\Helper\Data')->uniqHash('ec_shortcut_'))
+        $this->setShortcutHtmlId($this->mathRandom->getUniqueHash('ec_shortcut_'))
             ->setCheckoutUrl($this->getUrl($this->_startAction))
         ;
 

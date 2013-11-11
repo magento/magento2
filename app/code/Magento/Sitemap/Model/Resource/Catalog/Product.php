@@ -105,7 +105,7 @@ class Product extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     public function __construct(
         \Magento\Sitemap\Helper\Data $sitemapData,
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Catalog\Model\Resource\Product $productResource,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,

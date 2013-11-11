@@ -24,36 +24,31 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Backend Grid Renderer
- *
- * @category   Magento
- * @package    Magento_Backend
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
-class Longtext
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+/**
+ * Backend Grid Renderer
+ */
+class Longtext extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * Core string
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Filter\FilterManager
      */
-    protected $_coreString = null;
+    protected $filter;
 
     /**
-     * @param \Magento\Core\Helper\String $coreString
      * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Filter\FilterManager $filter
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\String $coreString,
         \Magento\Backend\Block\Context $context,
+        \Magento\Filter\FilterManager $filter,
         array $data = array()
     ) {
-        $this->_coreString = $coreString;
+        $this->filter = $filter;
         parent::__construct($context, $data);
     }
 
@@ -76,7 +71,7 @@ class Longtext
         if ($this->getColumn()->getTruncate()) {
             $truncateLength = $this->getColumn()->getTruncate();
         }
-        $text = $this->_coreString->truncate(parent::_getValue($row), $truncateLength);
+        $text = $this->filter->truncate(parent::_getValue($row), array('length' => $truncateLength));
         if ($this->getColumn()->getEscape()) {
             $text = $this->escapeHtml($text);
         }

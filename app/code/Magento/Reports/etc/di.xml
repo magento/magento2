@@ -27,11 +27,21 @@
     <type name="Magento\Log\Model\Resource\Log">
         <plugin name="reportLog" type="Magento\Reports\Model\Plugin\Log" />
     </type>
-    <type name="Magento\App\Updater\SetupFactory">
+    <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
             <value>
                 <reports_setup>Magento\Reports\Model\Resource\Setup</reports_setup>
             </value>
+        </param>
+    </type>
+    <virtualType name="Magento\Reports\Model\Session" type="Magento\Core\Model\Session\Generic">
+        <param name="sessionNamespace">
+            <value>reports</value>
+        </param>
+    </virtualType>
+    <type name="Magento\Reports\Model\Product\Index\AbstractIndex">
+        <param name="reportSession">
+            <instance type="Magento\Reports\Model\Session" />
         </param>
     </type>
 </config>

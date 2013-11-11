@@ -128,11 +128,11 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with('Magento\HTTP\ZendClient')
             ->will($this->throwException($exceptionMock));
-        $loggerMock = $this->getMock('Magento\Core\Model\Logger', array('logException'), array(), '', false);
+        $loggerMock = $this->getMock('Magento\Logger', array('logException'), array(), '', false);
         $loggerMock->expects($this->once())->method('logException')->with($exceptionMock);
         $objectManager->expects($this->at(2))
             ->method('get')
-            ->with('Magento\Core\Model\Logger')
+            ->with('Magento\Logger')
             ->will($this->returnValue($loggerMock));
 
         $this->_response->expects($this->once())

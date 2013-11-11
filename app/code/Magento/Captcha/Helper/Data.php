@@ -124,7 +124,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     public function getCaptcha($formId)
     {
         if (!array_key_exists($formId, $this->_captcha)) {
-            $captchaType = ucfirst($this->getConfigNode('type'));
+            $captchaType = ucfirst($this->getConfig('type'));
             if (!$captchaType) {
                 $captchaType = self::DEFAULT_CAPTCHA_TYPE;
             }
@@ -138,13 +138,13 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     }
 
     /**
-     * Returns value of the node with respect to current area (frontend or backend)
+     * Returns config value
      *
      * @param string $key The last part of XML_PATH_$area_CAPTCHA_ constant (case insensitive)
      * @param \Magento\Core\Model\Store $store
      * @return \Magento\Core\Model\Config\Element
      */
-    public function getConfigNode($key, $store = null)
+    public function getConfig($key, $store = null)
     {
         $store = $this->_storeManager->getStore($store);
         $areaCode = $store->isAdmin() ? 'admin' : 'customer';

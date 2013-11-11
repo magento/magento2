@@ -115,7 +115,7 @@ class ServiceLocator
     private static function _getFactory()
     {
         if (null === self::$_factory) {
-            self::$_factory = new Factory();
+            self::$_factory = new \Magento\Tools\I18n\Code\Factory();
         }
         return self::$_factory;
     }

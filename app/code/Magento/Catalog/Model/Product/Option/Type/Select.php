@@ -24,54 +24,46 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Catalog product option select type
- *
- * @category   Magento
- * @package    Magento_Catalog
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Model\Product\Option\Type;
 
+/**
+ * Catalog product option select type
+ */
 class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
     /**
      * @var mixed
      */
-    protected $_formattedOptionValue = null;
+    protected $_formattedOptionValue;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Escaper
      */
-    protected $_coreData = null;
+    protected $_escaper;
 
     /**
-     * Core string
+     * Magento string lib
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
-    protected $_coreString = null;
+    protected $string;
 
     /**
-     * Construct
-     *
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Core\Helper\String $coreString
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Escaper $escaper
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Core\Helper\String $coreString,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Stdlib\String $string,
+        \Magento\Escaper $escaper,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         array $data = array()
     ) {
-        $this->_coreString = $coreString;
-        $this->_coreData = $coreData;
+        $this->string = $string;
+        $this->_escaper = $escaper;
         parent::__construct($checkoutSession, $coreStoreConfig, $data);
     }
 
@@ -128,7 +120,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function getFormattedOptionValue($optionValue)
     {
         if ($this->_formattedOptionValue === null) {
-            $this->_formattedOptionValue = $this->_coreData->escapeHtml(
+            $this->_formattedOptionValue = $this->_escaper->escapeHtml(
                 $this->getEditableOptionValue($optionValue)
             );
         }
@@ -168,31 +160,29 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $result = '';
         if (!$this->_isSingleSelection()) {
             foreach (explode(',', $optionValue) as $_value) {
-                if ($_result = $option->getValueById($_value)) {
+                $_result = $option->getValueById($_value);
+                if ($_result) {
                     $result .= $_result->getTitle() . ', ';
                 } else {
                     if ($this->getListener()) {
-                        $this->getListener()
-                                ->setHasError(true)
-                                ->setMessage(
-                                    $this->_getWrongConfigurationMessage()
-                                );
+                        $this->getListener()->setHasError(true)->setMessage(
+                            $this->_getWrongConfigurationMessage()
+                        );
                         $result = '';
                         break;
                     }
                 }
             }
-            $result = $this->_coreString->substr($result, 0, -2);
+            $result = $this->string->substr($result, 0, -2);
         } elseif ($this->_isSingleSelection()) {
-            if ($_result = $option->getValueById($optionValue)) {
+            $_result = $option->getValueById($optionValue);
+            if ($_result) {
                 $result = $_result->getTitle();
             } else {
                 if ($this->getListener()) {
-                    $this->getListener()
-                            ->setHasError(true)
-                            ->setMessage(
-                                $this->_getWrongConfigurationMessage()
-                            );
+                    $this->getListener()->setHasError(true)->setMessage(
+                        $this->_getWrongConfigurationMessage()
+                    );
                 }
                 $result = '';
             }
@@ -211,19 +201,19 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {
-        $_values = array();
+        $values = array();
         if (!$this->_isSingleSelection()) {
-            foreach (explode(',', $optionValue) as $_value) {
-                $_value = trim($_value);
-                if (array_key_exists($_value, $productOptionValues)) {
-                    $_values[] = $productOptionValues[$_value];
+            foreach (explode(',', $optionValue) as $value) {
+                $value = trim($value);
+                if (array_key_exists($value, $productOptionValues)) {
+                    $values[] = $productOptionValues[$value];
                 }
             }
         } elseif ($this->_isSingleSelection() && array_key_exists($optionValue, $productOptionValues)) {
-            $_values[] = $productOptionValues[$optionValue];
+            $values[] = $productOptionValues[$optionValue];
         }
-        if (count($_values)) {
-            return implode(',', $_values);
+        if (count($values)) {
+            return implode(',', $values);
         } else {
             return null;
         }
@@ -257,7 +247,8 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
         if (!$this->_isSingleSelection()) {
             foreach(explode(',', $optionValue) as $value) {
-                if ($_result = $option->getValueById($value)) {
+                $_result = $option->getValueById($value);
+                if ($_result) {
                     $result += $this->_getChargableOptionPrice(
                         $_result->getPrice(),
                         $_result->getPriceType() == 'percent',
@@ -275,7 +266,8 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 }
             }
         } elseif ($this->_isSingleSelection()) {
-            if ($_result = $option->getValueById($optionValue)) {
+            $_result = $option->getValueById($optionValue);
+            if ($_result) {
                 $result = $this->_getChargableOptionPrice(
                     $_result->getPrice(),
                     $_result->getPriceType() == 'percent',
@@ -283,11 +275,9 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 );
             } else {
                 if ($this->getListener()) {
-                    $this->getListener()
-                            ->setHasError(true)
-                            ->setMessage(
-                                $this->_getWrongConfigurationMessage()
-                            );
+                    $this->getListener()->setHasError(true)->setMessage(
+                        $this->_getWrongConfigurationMessage()
+                    );
                 }
             }
         }
@@ -309,30 +299,28 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         if (!$this->_isSingleSelection()) {
             $skus = array();
             foreach(explode(',', $optionValue) as $value) {
-                if ($optionSku = $option->getValueById($value)) {
+                $optionSku = $option->getValueById($value);
+                if ($optionSku) {
                     $skus[] = $optionSku->getSku();
                 } else {
                     if ($this->getListener()) {
-                        $this->getListener()
-                                ->setHasError(true)
-                                ->setMessage(
-                                    $this->_getWrongConfigurationMessage()
-                                );
+                        $this->getListener()->setHasError(true)->setMessage(
+                            $this->_getWrongConfigurationMessage()
+                        );
                         break;
                     }
                 }
             }
             $result = implode($skuDelimiter, $skus);
         } elseif ($this->_isSingleSelection()) {
-            if ($result = $option->getValueById($optionValue)) {
+            $result = $option->getValueById($optionValue);
+            if ($result) {
                 return $result->getSku();
             } else {
                 if ($this->getListener()) {
-                    $this->getListener()
-                            ->setHasError(true)
-                            ->setMessage(
-                                $this->_getWrongConfigurationMessage()
-                            );
+                    $this->getListener()->setHasError(true)->setMessage(
+                        $this->_getWrongConfigurationMessage()
+                    );
                 }
                 return '';
             }
@@ -350,10 +338,10 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     protected function _isSingleSelection()
     {
-        $_single = array(
+        $single = array(
             \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DROP_DOWN,
             \Magento\Catalog\Model\Product\Option::OPTION_TYPE_RADIO
         );
-        return in_array($this->getOption()->getType(), $_single);
+        return in_array($this->getOption()->getType(), $single);
     }
 }

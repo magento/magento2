@@ -31,6 +31,11 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
 {
     public function testViewFilesFromThemes()
     {
+        \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()->configure(array(
+            'preferences' => array(
+                'Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data'
+            )
+        ));
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
         $invoker(
             /**

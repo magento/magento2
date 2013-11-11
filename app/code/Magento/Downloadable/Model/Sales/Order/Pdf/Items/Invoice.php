@@ -38,14 +38,12 @@ class Invoice
     extends \Magento\Downloadable\Model\Sales\Order\Pdf\Items\AbstractItems
 {
     /**
-     * Core string
-     *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
-    protected $_coreString = null;
+    protected $string;
 
     /**
-     * @param \Magento\Core\Helper\String $coreString
+     * @param \Magento\Stdlib\String $string
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
@@ -58,7 +56,7 @@ class Invoice
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\String $coreString,
+        \Magento\Stdlib\String $string,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
@@ -70,7 +68,7 @@ class Invoice
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_coreString = $coreString;
+        $this->string = $string;
         parent::__construct(
             $taxData,
             $context,
@@ -98,15 +96,14 @@ class Invoice
         $lines  = array();
 
         // draw Product name
-        $stringHelper = $this->_coreString;
         $lines[0] = array(array(
-            'text' => $stringHelper->strSplit($item->getName(), 35, true, true),
+            'text' => $this->string->split($item->getName(), 35, true, true),
             'feed' => 35,
         ));
 
         // draw SKU
         $lines[0][] = array(
-            'text'  => $stringHelper->strSplit($this->getSku($item), 17),
+            'text'  => $this->string->split($this->getSku($item), 17),
             'feed'  => 290,
             'align' => 'right'
         );
@@ -170,7 +167,7 @@ class Invoice
             foreach ($options as $option) {
                 // draw options label
                 $lines[][] = array(
-                    'text' => $stringHelper->strSplit(strip_tags($option['label']), 40, true, true),
+                    'text' => $this->string->split(strip_tags($option['label']), 40, true, true),
                     'font' => 'italic',
                     'feed' => 35
                 );
@@ -184,7 +181,7 @@ class Invoice
                     $values = explode(', ', $_printValue);
                     foreach ($values as $value) {
                         $lines[][] = array(
-                            'text' => $stringHelper->strSplit($value, 30, true, true),
+                            'text' => $this->string->split($value, 30, true, true),
                             'feed' => 40
                         );
                     }
@@ -197,7 +194,7 @@ class Invoice
 
         // draw Links title
         $lines[][] = array(
-            'text' => $stringHelper->strSplit($this->getLinksTitle(), 70, true, true),
+            'text' => $this->string->split($this->getLinksTitle(), 70, true, true),
             'font' => 'italic',
             'feed' => 35
         );
@@ -205,7 +202,7 @@ class Invoice
         // draw Links
         foreach ($_purchasedItems as $_link) {
             $lines[][] = array(
-                'text' => $stringHelper->strSplit($_link->getLinkTitle(), 50, true, true),
+                'text' => $this->string->split($_link->getLinkTitle(), 50, true, true),
                 'feed' => 40
             );
         }

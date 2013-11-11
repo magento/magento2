@@ -72,10 +72,10 @@ class Payment extends \Magento\Core\Controller\Front\Action
             $result['success']  = true;
             $result['update_html'] = $this->_getPaymentMethodsHtml();
         } catch (\Magento\Core\Exception $e) {
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
             $result['error_message'] = $e->getMessage();
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
             $result['error_message'] = __('There was an error canceling transactions. Please contact us or try again later.');
         }
 

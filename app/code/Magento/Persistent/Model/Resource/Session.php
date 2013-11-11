@@ -49,11 +49,11 @@ class Session extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Class constructor
      *
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Persistent\Model\SessionFactory $sessionFactory
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Persistent\Model\SessionFactory $sessionFactory
     ) {
         $this->_sessionFactory = $sessionFactory;

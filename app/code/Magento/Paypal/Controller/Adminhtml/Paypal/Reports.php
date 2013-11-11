@@ -49,7 +49,7 @@ class Reports extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_settlementFactory;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 

@@ -24,24 +24,71 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items;
 
 /**
  * Adminhtml sales order item renderer
- *
- * @category    Magento
- * @package     Magento_Bundle
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items;
-
-class Renderer
-    extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer
+class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer
 {
+    /**
+     * Core string
+     *
+     * @var \Magento\Filter\FilterManager
+     */
+    protected $filter;
+
+    /**
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Filter\FilterManager $filter
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Model\Registry $registry,
+        \Magento\Filter\FilterManager $filter,
+        array $data = array()
+    ) {
+        $this->filter = $filter;
+        parent::__construct($productFactory, $coreData, $context, $registry, $data);
+    }
+
+    /**
+     * Truncate string
+     *
+     * @param string $value
+     * @param int $length
+     * @param string $etc
+     * @param string &$remainder
+     * @param bool $breakWords
+     * @return string
+     */
+    public function truncateString($value, $length = 80, $etc = '...', &$remainder = '', $breakWords = true)
+    {
+        return $this->filter->truncate($value, array(
+            'length' => $length,
+            'etc' => $etc,
+            'remainder' => $remainder,
+            'breakWords' => $breakWords
+        ));
+    }
+
+    /**
+     * @param null|object $item
+     * @return bool
+     */
     public function isShipmentSeparately($item = null)
     {
         if ($item) {
-            if ($parentItem = $item->getParentItem()) {
-                if ($options = $parentItem->getProductOptions()) {
+            $parentItem = $item->getParentItem();
+            if ($parentItem) {
+                $options = $parentItem->getProductOptions();
+                if ($options) {
                     if (isset($options['shipment_type'])
                         && $options['shipment_type'] == \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY
                     ) {
@@ -51,7 +98,8 @@ class Renderer
                     }
                 }
             } else {
-                if ($options = $item->getProductOptions()) {
+                $options = $item->getProductOptions();
+                if ($options) {
                     if (isset($options['shipment_type'])
                         && $options['shipment_type'] == \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY
                     ) {
@@ -63,7 +111,8 @@ class Renderer
             }
         }
 
-        if ($options = $this->getOrderItem()->getProductOptions()) {
+        $options = $this->getOrderItem()->getProductOptions();
+        if ($options) {
             if (isset($options['shipment_type'])
                 && $options['shipment_type'] == \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY
             ) {
@@ -73,11 +122,17 @@ class Renderer
         return false;
     }
 
+    /**
+     * @param null|object $item
+     * @return bool
+     */
     public function isChildCalculated($item = null)
     {
         if ($item) {
-            if ($parentItem = $item->getParentItem()) {
-                if ($options = $parentItem->getProductOptions()) {
+            $parentItem = $item->getParentItem();
+            if ($parentItem) {
+                $options = $parentItem->getProductOptions();
+                if ($options) {
                     if (isset($options['product_calculations'])
                         && $options['product_calculations'] == \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
                     ) {
@@ -87,7 +142,8 @@ class Renderer
                     }
                 }
             } else {
-                if ($options = $item->getProductOptions()) {
+                $options = $item->getProductOptions();
+                if ($options) {
                     if (isset($options['product_calculations'])
                         && $options['product_calculations'] == \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
                     ) {
@@ -99,7 +155,8 @@ class Renderer
             }
         }
 
-        if ($options = $this->getItem()->getProductOptions()) {
+        $options = $this->getItem()->getProductOptions();
+        if ($options) {
             if (isset($options['product_calculations'])
                 && $options['product_calculations'] == \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
             ) {
@@ -109,7 +166,8 @@ class Renderer
         return false;
     }
 
-    public function getSelectionAttributes($item) {
+    public function getSelectionAttributes($item)
+    {
         if ($item instanceof \Magento\Sales\Model\Order\Item) {
             $options = $item->getProductOptions();
         } else {
@@ -121,10 +179,14 @@ class Renderer
         return null;
     }
 
+    /**
+     * @return array
+     */
     public function getOrderOptions()
     {
         $result = array();
-        if ($options = $this->getItem()->getProductOptions()) {
+        $options = $this->getItem()->getProductOptions();
+        if ($options) {
             if (isset($options['options'])) {
                 $result = array_merge($result, $options['options']);
             }
@@ -138,26 +200,37 @@ class Renderer
         return $result;
     }
 
+    /**
+     * @param object $item
+     * @return string
+     */
     public function getValueHtml($item)
     {
         $result = $this->escapeHtml($item->getName());
         if (!$this->isShipmentSeparately($item)) {
-            if ($attributes = $this->getSelectionAttributes($item)) {
+            $attributes = $this->getSelectionAttributes($item);
+            if ($attributes) {
                 $result =  sprintf('%d', $attributes['qty']) . ' x ' . $result;
             }
         }
         if (!$this->isChildCalculated($item)) {
-            if ($attributes = $this->getSelectionAttributes($item)) {
+            $attributes = $this->getSelectionAttributes($item);
+            if ($attributes) {
                 $result .= " " . $this->getItem()->getOrder()->formatPrice($attributes['price']);
             }
         }
         return $result;
     }
 
+    /**
+     * @param object $item
+     * @return bool
+     */
     public function canShowPriceInfo($item)
     {
         if (($item->getParentItem() && $this->isChildCalculated())
-                || (!$item->getParentItem() && !$this->isChildCalculated())) {
+            || (!$item->getParentItem() && !$this->isChildCalculated())
+        ) {
             return true;
         }
         return false;

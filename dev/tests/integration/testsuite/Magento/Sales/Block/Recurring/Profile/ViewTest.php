@@ -69,6 +69,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     public function testToHtmlPropagatesUrl()
     {
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
+            ->setAreaCode('frontend');
         $this->_block->setShouldPrepareInfoTabs(true);
         $childOne = $this->_layout->addBlock('Magento\Core\Block\Text', 'child1', 'block');
         $this->_layout->addToParentGroup('child1', 'info_tabs');

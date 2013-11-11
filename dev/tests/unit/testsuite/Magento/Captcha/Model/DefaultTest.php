@@ -279,11 +279,11 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     {
         $helper = $this->getMockBuilder('Magento\Captcha\Helper\Data')
             ->disableOriginalConstructor()
-            ->setMethods(array('getConfigNode', 'getFonts', '_getWebsiteCode', 'getImgUrl'))
+            ->setMethods(array('getConfig', 'getFonts', '_getWebsiteCode', 'getImgUrl'))
             ->getMock();
 
         $helper->expects($this->any())
-            ->method('getConfigNode')
+            ->method('getConfig')
             ->will($this->returnCallback('Magento\Captcha\Model\DefaultTest::getConfigNodeStub'));
 
         $helper->expects($this->any())

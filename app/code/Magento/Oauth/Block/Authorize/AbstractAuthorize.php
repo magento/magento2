@@ -105,7 +105,7 @@ abstract class AbstractAuthorize extends \Magento\Core\Block\Template
         //load base template from admin area
         $params = array(
             '_relative' => true,
-            'area'     => 'adminhtml',
+            'area'     => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
             'package'  => 'default'
         );
         return $this->_viewFileSystem->getFilename($this->getTemplate(), $params);

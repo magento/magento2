@@ -59,15 +59,13 @@ class Subscription extends \Magento\Backend\Controller\AbstractAction
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Webhook\Service\SubscriptionV1Interface $subscriptionService
      * @param \Magento\Backend\Controller\Context $context
-     * @param string $areaCode
      */
     public function __construct(
         \Magento\Core\Model\Registry $registry,
         \Magento\Webhook\Service\SubscriptionV1Interface $subscriptionService,
-        \Magento\Backend\Controller\Context $context,
-        $areaCode = null
+        \Magento\Backend\Controller\Context $context
     ) {
-        parent::__construct($context, $areaCode);
+        parent::__construct($context);
 
         $this->_registry = $registry;
         $this->_subscriptionService = $subscriptionService;

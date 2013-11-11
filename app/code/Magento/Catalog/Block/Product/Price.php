@@ -67,6 +67,16 @@ class Price extends \Magento\Core\Block\Template
     protected $_storeManager;
 
     /**
+     * @var \Magento\Stdlib\String
+     */
+    protected $string;
+
+    /**
+     * @var \Magento\Math\Random
+     */
+    protected $mathRandom;
+
+    /**
      * Construct
      *
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -75,6 +85,8 @@ class Price extends \Magento\Core\Block\Template
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Math\Random $mathRandom
      * @param array $data
      */
     public function __construct(
@@ -84,12 +96,16 @@ class Price extends \Magento\Core\Block\Template
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Stdlib\String $string,
+        \Magento\Math\Random $mathRandom,
         array $data = array()
     ) {
         $this->_storeManager = $storeManager;
         $this->_coreRegistry = $registry;
         $this->_catalogData = $catalogData;
         $this->_taxData = $taxData;
+        $this->string = $string;
+        $this->mathRandom = $mathRandom;
         parent::__construct($coreData, $context, $data);
     }
 
@@ -221,5 +237,28 @@ class Price extends \Magento\Core\Block\Template
     {
         $html = $this->hasRealPriceHtml() ? $this->getRealPriceHtml() : $product->getRealPriceHtml();
         return $this->_coreData->jsonEncode($html);
+    }
+
+    /**
+     * Prepare SKU
+     *
+     * @param string $sku
+     * @return string
+     */
+    public function prepareSku($sku)
+    {
+        return $this->escapeHtml($this->string->splitInjection($sku));
+    }
+
+    /**
+     * Get random string
+     *
+     * @param int $length
+     * @param string|null $chars
+     * @return string
+     */
+    public function getRandomString($length, $chars = null)
+    {
+        return $this->mathRandom->getRandomString($length, $chars);
     }
 }

@@ -51,17 +51,25 @@ class Configuration extends \Magento\Core\Helper\AbstractHelper
     protected $_ctlgProdConfigur = null;
 
     /**
+     * @var \Magento\Escaper
+     */
+    protected $_escaper;
+
+    /**
      * @param \Magento\Catalog\Helper\Product\Configuration $ctlgProdConfigur
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\Escaper $escaper
      */
     public function __construct(
         \Magento\Catalog\Helper\Product\Configuration $ctlgProdConfigur,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Helper\Context $context
+        \Magento\Core\Helper\Context $context,
+        \Magento\Escaper $escaper
     ) {
         $this->_ctlgProdConfigur = $ctlgProdConfigur;
         $this->_coreData = $coreData;
+        $this->_escaper = $escaper;
         parent::__construct($context);
     }
 
@@ -155,7 +163,7 @@ class Configuration extends \Magento\Core\Helper\AbstractHelper
                         foreach ($bundleSelections as $bundleSelection) {
                             $qty = $this->getSelectionQty($product, $bundleSelection->getSelectionId()) * 1;
                             if ($qty) {
-                                $option['value'][] = $qty . ' x ' . $this->escapeHtml($bundleSelection->getName())
+                                $option['value'][] = $qty . ' x ' . $this->_escaper->escapeHtml($bundleSelection->getName())
                                     . ' ' . $this->_coreData->currency(
                                         $this->getSelectionFinalPrice($item, $bundleSelection)
                                     );
