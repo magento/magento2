@@ -20,6 +20,6 @@ Forms,表单
 "Please specify 8 symbols at the most. Range allowed (e.g. 3-5)",请最多指定8个符号。可用范围指定（例如3-5）
 "Please type the letters below",请输入下列字母
 "Please type the letters from the image:",请输入图像中的字母：
-"Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.<br />Similar looking characters (e.g. ""i"", ""l"", ""1"") decrease chance of correct recognition by customer.","该字段中请只使用字母 (a-z 或 A-Z) 或数字 (0-9)。不能使用空格或其他字符。<br />看起来类似的字符 (例如 ""i"", ""l"", ""1"")会降低顾客准确辨识的成功率。"
+"Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.<br />Similar looking characters (e.g. ""i"", ""l"", ""1"") decrease chance of correct recognition by customer.","该字段中请只使用字母 （a-z 或 A-Z） 或数字 （0-9）。不能使用空格或其他字符。<br />看起来类似的字符 （例如 ""i""， ""l""， ""1""）会降低顾客准确辨识的成功率。"
 "Reload captcha",刷新验证码
 "Symbols Used in CAPTCHA",验证码中使用的符号

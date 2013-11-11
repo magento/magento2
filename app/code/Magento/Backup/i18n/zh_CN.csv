@@ -29,33 +29,33 @@ Name,姓名
 "Not enough free space to create backup.",没有创建备份所需的足够空间。
 "Not enough permissions to create backup.",没有创建备份所需的权限。
 "Not enough permissions to perform rollback",没有执行回滚所需的权限
-"Please correct the order of creation for a new backup.",请纠正新建备份的创建顺序.
+"Please correct the order of creation for a new backup.",请纠正新建备份的创建顺序。
 "Please deselect the sufficient check-box, if you want to continue backup's creation",如果你想继续创建备份，请反选一定的复选框
 "Please deselect the sufficient check-box, if you want to continue rollback processing",如果你想继续回滚操作，请反选一定的复选框
 "Put store on the maintenance mode while backup's creation",在创建备份时将店铺置于维护模式
 Rollback,回滚
 "Scheduled Backup Settings",计划备份设置
 "Size (bytes)",大小，字节
-"Something went wrong writing to the backup file ""%1"".","当写备份文件""%1""时发生错误."
-"Sorry, but we cannot read from or write to backup file ""%1"".","很抱歉, 不能读取备份文件""%1""."
+"Something went wrong writing to the backup file ""%1"".","当写备份文件""%1""时发生错误。"
+"Sorry, but we cannot read from or write to backup file ""%1"".","很抱歉， 不能读取备份文件""%1""。"
 "Start Time",开始时间
-"System (excluding Media)",系统(不包括媒体)
+"System (excluding Media)",系统（不包括媒体）
 "System Backup",系统备份
 "System couldn't put store on the maintenance mode",系统没有将店铺置于维护模式
-"The archive can be uncompressed with <a href=""%1"">%2</a> on Windows systems.","该包在Windows系统下不能用<a href=""%1"">%2</a>解压."
-"The backup file ""%1"" does not exist.","备份文件""%1""不存在."
-"The backup file handler was unspecified.",备份文件句柄未指定.
-"The backup file path was not specified.",备份文件未指定.
+"The archive can be uncompressed with <a href=""%1"">%2</a> on Windows systems.","该包在Windows系统下不能用<a href=""%1"">%2</a>解压。"
+"The backup file ""%1"" does not exist.","备份文件""%1""不存在。"
+"The backup file handler was unspecified.",备份文件句柄未指定。
+"The backup file path was not specified.",备份文件未指定。
 "The database and media backup has been created.",数据库与媒体备份已创建。
 "The database backup has been created.",数据库备份已创建。
 "The file was compressed with Zlib, but this extension is not installed on server.",该文件已使用Zlib压缩，但服务器上没有安装该扩展。
 "The selected backup(s) has been deleted.",所选备份已删除。
-"The system backup (excluding media) has been created.",系统备份(不包括媒体)已经被创建.
+"The system backup (excluding media) has been created.",系统备份（不包括媒体）已经被创建。
 "The system backup has been created.",系统备份已创建。
 Time,时间
 Type,类型
 "Unable to create backup. Please, try again later.",无法创建备份。请稍候重试。
 "Unable to save the cron expression.",无法保存Cron表达式。
 "Warning! System couldn't put store on the maintenance mode.",警告！系统无法将店铺置于维护模式。
-"We can't save the Cron expression.",不能存储Cron表达式.
+"We can't save the Cron expression.",不能存储Cron表达式。
 "Wrong order of creation for new backup.",创建新备份的顺序有误。

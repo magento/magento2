@@ -21,12 +21,11 @@ Enabled,已启用
 Message:,信息：
 Name,姓名
 Name:,姓名：
-"No more than %1 emails can be sent at a time.",仅仅%1封邮件能被一次性送出.
 "No more than %1 emails can be sent at a time.","一次能发送不超过 %1 封电子邮件。"
 "Please define a correct Cookie instance.","请定义正确的 Cookie 实例。"
 "Please define a correct Product instance.",请定义正确的产品实例。
 "Please define the correct Sender information.",请定义正确的发送者信息。
-"Please enter a correct recipient email address.",请输入正确的收件人邮件地址.
+"Please enter a correct recipient email address.",请输入正确的收件人邮件地址。
 Recipient:,收件人：
 "Remove Email",删除邮件
 "Select Email Template",选择邮件模板
@@ -39,7 +38,7 @@ Sender:,发送人：
 "The messages cannot be sent more than %1 times in an hour",一小时内消息不能发送超过%1次。
 "The sender name cannot be empty.",发送人姓名不能为空。
 "There were some problems with the data.",数据有些问题。
-"We found some problems with the data.",发现数据有问题.
-"You can't send messages more than %1 times an hour.",您不能一小时内发送消息超过%1次.
+"We found some problems with the data.",发现数据有问题。
+"You can't send messages more than %1 times an hour.",您不能一小时内发送消息超过%1次。
 "You have exceeded limit of %1 sends in an hour",您已超过一小时内的%1次发送限制。
-"You've met your limit of %1 sends in an hour.",您已经达到了每小时发送的限制数%1.
+"You've met your limit of %1 sends in an hour.",您已经达到了每小时发送的限制数%1。

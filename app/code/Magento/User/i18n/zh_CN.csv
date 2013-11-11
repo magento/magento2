@@ -1,27 +1,27 @@
 ,
-"A user with the same user name or email already exists.",相同用户名和邮件地址的用户已经存在.
-"First Name is a required field.",名字是必输项.
+"A user with the same user name or email already exists.",相同用户名和邮件地址的用户已经存在。
+"First Name is a required field.",名字是必输项。
 "If there is an account associated with %1 you will receive an email with a link to reset your password.",如果账户和%1关联你将收到重置密码的邮件
 "Interface Locale",接口本地化
-"Last Name is a required field.",姓是必输项.
+"Last Name is a required field.",姓是必输项。
 "Magento Admin Panel",Magento管理面板
-"Password is required field.",密码是必输项.
-"Please correct the password reset token.",请纠正密码重置口令.
+"Password is required field.",密码是必输项。
+"Please correct the password reset token.",请纠正密码重置口令。
 "Please correct this email address:",请纠正邮件地址:
-"Please specify the correct account and try again.",请指定正确的账户名重试.
+"Please specify the correct account and try again.",请指定正确的账户名重试。
 Role,角色
-"This role no longer exists.",该角色不存在.
-"User Name is a required field.",用户名是必输项.
+"This role no longer exists.",该角色不存在。
+"User Name is a required field.",用户名是必输项。
 "Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?","警告!\r\n该操作将从已经分配角色中移除这个用户\r\n您确定?"
 "Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","警告!\r\n该操作将从已经分配角色中移除那些用户\r\n您确定?"
 "Warning\r\nThis action will remove this user from already assigned role\r\nAre you sure?","警告\r\n该操作将移除这个已经分配角色的用户\r\n你确定吗??"
 "Warning\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","警告\r\n该操作将移除那些已经分配角色的用户\r\n你确定吗??"
-"We can't find a user to delete.",找不到要删除的用户.
-"You cannot delete self-assigned roles.",不能删除自分配的角色.
-"You deleted the role.",成功删除了角色.
-"You deleted the user.",成功删除用户.
-"You saved the role.",成功存储了角色.
-"You saved the user.",成功存储用户.
-"Your password confirmation must match your password.",密码确认与密码不匹配.
-"Your password must be at least %1 characters.",您的密码至少需要%1个字符.
-"Your password must include both numeric and alphabetic characters.",密码必须同时包含数字和字符.
+"We can't find a user to delete.",找不到要删除的用户。
+"You cannot delete self-assigned roles.",不能删除自分配的角色。
+"You deleted the role.",成功删除了角色。
+"You deleted the user.",成功删除用户。
+"You saved the role.",成功存储了角色。
+"You saved the user.",成功存储用户。
+"Your password confirmation must match your password.",密码确认与密码不匹配。
+"Your password must be at least %1 characters.",您的密码至少需要%1个字符。
+"Your password must include both numeric and alphabetic characters.",密码必须同时包含数字和字符。

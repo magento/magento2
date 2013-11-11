@@ -1,5 +1,5 @@
 """Remember Me"" Default Value",“记住我”的默认值
-"(Not %1?)",(非%1?)
+"(Not %1?)",（非%1?）
 "* Required Fields",*必要字段
 Address,地址
 "Address Information",地址信息
@@ -26,10 +26,10 @@ Fax,传真
 "Forgot Your Password?",忘记您的密码？
 "Forgot your password?",忘记您的密码？
 "General Options",常规选项
-"Get easy access to your order history and status.",更容易存取订单历史和状态.
+"Get easy access to your order history and status.",更容易存取订单历史和状态。
 "If you have an account with us, please log in.",如果您拥有账户，请登录。
-"Loading next step...",正在载入下一步...
-"Log in or create an account.",登录或者创建一个新账号.
+"Loading next step...",正在载入下一步。。。
+"Log in or create an account.",登录或者创建一个新账号。
 Login,登录
 "Login Information",登录信息
 "Login or Create an Account",登录或创建帐户
@@ -41,7 +41,7 @@ Password,密码
 "Personal Information",个人信息
 Phone,电话
 "Please log in below:",请在下面登录：
-"Please select a region, state or province.",请选择地区、州或省.
+"Please select a region, state or province.",请选择地区、州或省。
 "Please select region, state or province",请选择地区、州，或省
 Register,注册
 "Register and save time!",注册并节约时间！
@@ -50,7 +50,7 @@ Register,注册
 "Registered Customers",已注册的客户
 "Remember Me",记住我
 "Save in address book",保存到地址簿
-"Select State/Province...",选择州/省...
+"Select State/Province...",选择州/省。。。
 "Select a billing address from your address book or enter a new address.",从您的地址簿选择账单地址，或输入新地址。
 "Ship to different address",送货到不同地址
 "Ship to this address",送货到这个地址
@@ -61,12 +61,12 @@ State/Province,州/省
 "Street Address",街道地址
 "Street Address %1","街道地址 %1"
 Submit,提交
-"To check out, please log in using your email address.","为了结账,请使用您的邮件地址登录."
+"To check out, please log in using your email address.",为了结账，请使用您的邮件地址登录。
 "To proceed to Checkout, please log in using your email address.",要继续结账，请使用你的电子邮件地址登录。
 "VAT Number","VAT 编号"
-"We cannot load the configuration from file %1.",无法从文件%1加载配置.
+"We cannot load the configuration from file %1.",无法从文件%1加载配置。
 "Welcome, %1!",欢迎，%1！
 "What's this?",这是什么？
-"With your own account, you can check out faster, store multiple shipping addesses, see your shopping activity and more.",用自己的账号便于更快结账、使用店铺多货运地址、查看购买活动等更多.
-"Your shopping cart has been updated with new prices.",您的购物车已经更新了价格.
+"With your own account, you can check out faster, store multiple shipping addesses, see your shopping activity and more.",用自己的账号便于更快结账、使用店铺多货运地址、查看购买活动等更多。
+"Your shopping cart has been updated with new prices.",您的购物车已经更新了价格。
 "Zip/Postal Code",邮政编码

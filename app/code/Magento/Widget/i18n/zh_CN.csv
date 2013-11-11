@@ -11,9 +11,9 @@ Apply,应用
 "Assign to Store Views",分配到店铺视图
 "Big Image",大图片
 "Block Reference",块引用
-CMS,内容管理系统(CMS)
+CMS,内容管理系统（CMS）
 Categories,分类
-Choose...,选择...
+Choose...,选择。。。
 Close,关闭
 Continue,继续
 "Default Template",默认模板
@@ -26,7 +26,7 @@ Delete,删除
 "Generic Pages",通用页面
 Images,图像
 "Insert Widget",插入小工具
-"Insert Widget...",插入小工具...
+"Insert Widget...",插入小工具。。。
 "Layout Updates",布局更新
 "Manage Widget Instances",管理小工具实例
 "New Frontend App Instance",新的前端应用实例
@@ -39,8 +39,8 @@ Images,图像
 Page,页面
 "Please Select Block Reference First",请首先选择块引用
 "Please Select Container First",请首先选择容器
-"Please specify a Widget Type.",请指定小部件类型.
-"Please specify a correct widget.",请指定一个正确的小部件.
+"Please specify a Widget Type.",请指定小部件类型。
+"Please specify a correct widget.",请指定一个正确的小部件。
 "Previous page",上一页
 Products,产品
 "Remove Layout Update",删除布局更新
@@ -65,7 +65,7 @@ Type,类型
 "Unselect All",全部反选
 "Unselect Visible",反选可见性
 View,查看
-"We cannot create the widget instance because it is missing required information.",由于缺少必要的信息不能创建小部件实例.
+"We cannot create the widget instance because it is missing required information.",由于缺少必要的信息不能创建小部件实例。
 Widget,小工具
 "Widget ""%1""","小工具 ""%1"""
 "Widget ID",小工具ID

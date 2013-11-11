@@ -1,6 +1,6 @@
-"""%1"" contains non-alphabetic characters.","""%1""包含了非字母字符."
-"""%1"" contains non-alphabetic or non-numeric characters.","""%1""包含字母和数字以外的字符."
-"""%1"" contains non-numeric characters.","""%1""包含数字以外的字符."
+"""%1"" contains non-alphabetic characters.","""%1""包含了非字母字符。"
+"""%1"" contains non-alphabetic or non-numeric characters.","""%1""包含字母和数字以外的字符。"
+"""%1"" contains non-numeric characters.","""%1""包含数字以外的字符。"
 """%1"" contains not only digit characters.","""%1"" 包含不止数字代码。"
 """%1"" does not fit the entered date format.","""%1""与输入的日期格式不符合。"
 """%1"" exceeds the allowed file size.","""%1""超过了允许的文件尺寸。"
@@ -32,11 +32,11 @@
 "'%value%' does not appear to be a valid URI hostname","'%value%' 似乎不是有效的 URI 主机名"
 "'%value%' does not appear to be a valid local network name","'%value%' 似乎不是有效的本地网络名"
 "'%value%' does not match the expected structure for a DNS hostname","'%value%' 无法与预期的 DNS 主机名相匹配"
-"A joined field with this alias is already declared.",使用该别名的连接字段已经被声明.
-"A joint field with this alias (%1) is already declared","使用该别名 (%1) 的联合字段已声明"
-"A joint field with this alias (%1) is already declared.",一个该别名(%1)的连接的字段已经被定义.
+"A joined field with this alias is already declared.",使用该别名的连接字段已经被声明。
+"A joint field with this alias (%1) is already declared","使用该别名 （%1） 的联合字段已声明"
+"A joint field with this alias (%1) is already declared.",一个该别名（%1）的连接的字段已经被定义。
 "Add Option",添加选项
-"An attribute set with the ""%1"" name already exists.","一个名字为""%1""的属性集已经存在."
+"An attribute set with the ""%1"" name already exists.","一个名字为""%1""的属性集已经存在。"
 "An error occurred while loading a record, aborting. Error: %1",加载记录时出错，正在忽略。错误：%1
 "An error occurred while loading the collection, aborting. Error: %1",加载集合时出错，正在忽略。错误：%1
 "An error occurred while saving a record, aborting. Error: ",保存记录时出错，正在忽略。错误：
@@ -46,10 +46,9 @@
 "Attribute Label",属性标签
 "Attribute Properties",属性的属性
 "Attribute object is undefined",属性对象未定义
-"Attribute set name is empty.",属性集名称为空.
+"Attribute set name is empty.",属性集名称为空。
 "Attribute set with the ""%1"" name already exists.",使用“%1”为名的属性已存在。
 "Attribute with the same code",使用相同代码的属性
-"Can't create table: %1","不能创建表: %1"
 "Can't create table: %1",无法创建表格：%1
 "Catalog Input Type for Store Owner",店铺所有者的分类输出类型
 "Current module EAV entity is undefined",当前模块EAV实体未定义
@@ -102,19 +101,19 @@ Email,电子邮件
 "Joined field with this alias is already declared",使用此别名的合并字段已被声明
 "Joint field or attribute expression with this alias is already declared",使用此别名的合并字段或属性表达式已被声明
 Letters,字母
-"Letters (a-z, A-Z) or Numbers (0-9)","字母 (a-z, A-Z) 或数字 (0-9)"
+"Letters (a-z, A-Z) or Numbers (0-9)","字母 （a-z， A-Z） 或数字 （0-9）"
 "Loaded %1 records","已载入 %1 条记录"
 "Maximum length of attribute code must be less than %1 symbols",属性代码最大长度必须小于%1个符号
 "Maximum length of attribute code must be less then %1 symbols","属性代码的最大长度必须小于 %1 个符号"
 "Multiple Select",多选
 No,否
 "No options found in config node %1","配置节点 %1 中没有找到选项"
-"No options found.",找不到选项.
+"No options found.",找不到选项。
 None,无
 "Not shared with other products",未与其它产品共享
-"Please enter a valid date between %1 and %2 at %3.",请在%3输入一个处于%1和%2期间的有效日期.
-"Please enter a valid date equal to or greater than %1 at %2.",请在%2输入一个大于等于%1的有效日期.
-"Please enter a valid date less than or equal to %1 at %2.",请在%2输入一个小于等于%1的有效日期.
+"Please enter a valid date between %1 and %2 at %3.",请在%3输入一个处于%1和%2期间的有效日期。
+"Please enter a valid date equal to or greater than %1 at %2.",请在%2输入一个大于等于%1的有效日期。
+"Please enter a valid date less than or equal to %1 at %2.",请在%2输入一个小于等于%1的有效日期。
 "Problem loading the collection, aborting. Error: %1",载入收藏时遇到问题，正在中止。错误：%1
 "Problem saving the collection, aborting. Error: %1",保存收藏时遇到问题，正在中止。错误：%1
 Required,必须
@@ -124,7 +123,6 @@ Required,必须
 System,系统
 "Text Area",文本区
 "Text Field",文本字段
-"The attribute code '%1' is reserved by system. Please try another attribute code","属性代码'%1'是系统保留字. 请换一个再试"
 "The attribute code '%1' is reserved by system. Please try another attribute code",属性代码‘%1’已被系统预留。请尝试另一个属性代码
 "The value of attribute ""%1"" is invalid","属性""%1""的值无效"
 "The value of attribute ""%1"" must be unique",属性“%1”的值必须为唯一

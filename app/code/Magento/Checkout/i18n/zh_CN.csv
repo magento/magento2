@@ -1,7 +1,7 @@
 "%1 was added to your shopping cart.","%1 已添加到您的购物车。"
 "%1 was updated in your shopping cart.",购物车里的%1被更新
 "* Required Fields",*必要字段
-"Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href=""%1"">click here</a>.","Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href=""%1"">click here</a>."
+"Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href=""%1"">click here</a>.","Account confirmation is required。 Please， check your e-mail for confirmation link。 To resend confirmation email please <a href=""%1"">click here</a>。"
 "Add New Address",添加新地址
 "Add New Condition",添加新条件
 "Add coupon code for shopping cart",为购物车添加优惠代码
@@ -62,9 +62,8 @@ Checkout,结账
 "Checkout with Multiple Addresses",按多个地址支付
 City,城市
 "Clear Shopping Cart",清空购物车
-"Click <a href=""%1"" onclick=""this.target='_blank'"">here to print</a> a copy of your order confirmation.","单击<a href=""%1"" onclick=""this.target='_blank'"">这里打印</a>您的订单信息."
 "Click <a href=""%1"" onclick=""this.target='_blank'"">here to print</a> a copy of your order confirmation.","单击<a href=""%1"">这里来打印</a>您订单确认信息的拷贝。"
-"Click <a href=""%1"">here</a> to continue shopping.","单击<a href=""%1"">这里</a>继续购物."
+"Click <a href=""%1"">here</a> to continue shopping.","单击<a href=""%1"">这里</a>继续购物。"
 Close,关闭
 Company,公司
 "Condition Name",条件名称
@@ -73,7 +72,7 @@ Company,公司
 "Confirm Password",确认密码
 Content,内容
 "Content Height",内容高度
-"Content Height (css)","内容高度 (css)"
+"Content Height (css)","内容高度 （css）"
 Continue,继续
 "Continue Shopping",继续购物
 "Continue to Billing Information",继续以查看账单信息
@@ -127,7 +126,7 @@ Fax,传真
 "Forgot an Item?",忘记某个条目？
 "Forgot your password?",忘记您的密码？
 "Get a Quote",获得报价
-"Get easy access to your order history and status.",很容易存储订单历史和状态.
+"Get easy access to your order history and status.",很容易存储订单历史和状态。
 "Get list of available payment methods",获得可用支付方法的列表
 "Get list of available shipping methods",获得可用运送方式的列表
 "Get list of products in shopping cart",获得购物车中的产品列表
@@ -152,7 +151,7 @@ Items,条目
 "Items After",条目晚于
 "Items Before",之前的条目
 "Load customer quote error",载入客户报价错误
-"Loading next step...",正在载入下一步...
+"Loading next step...",正在载入下一步。。。
 Login,登录
 "Login/Registration Before",登录/注册早于
 "Manage Terms and Conditions",管理条款与协议
@@ -219,14 +218,14 @@ Password,密码
 "Please check shipping addresses information.",请检查运送地址信息。
 "Please choose to register or to checkout as a guest",请选择地区或以来宾身份结账
 "Please log in below:",请在下面登录：
-"Please select a region, state or province.",请选择地区、州或省.
-"Please select a shipping address for applicable items.",请为合适的条目选择运送地址.
+"Please select a region, state or province.",请选择地区、州或省。
+"Please select a shipping address for applicable items.",请为合适的条目选择运送地址。
 "Please select region, state or province",请选择地区、州，或省
 "Please select shipping address for applicable items",请为适用条目选择运送地址
 "Please select shipping methods for all addresses",请为所有地址选择运送方式
-"Please select shipping methods for all addresses.",请为所有的地址选择货运方法.
+"Please select shipping methods for all addresses.",请为所有的地址选择货运方法。
 "Please select valid payment method.",请选择有效的支付方法。
-"Please specify a payment method.",请指定一个支付方法.
+"Please specify a payment method.",请指定一个支付方法。
 "Please specify payment method.",请指定支付方式。
 "Please specify shipping method.",请指定发货方式。
 "Please specify shipping methods for all addresses.",请为所有地址制定运送方式。
@@ -237,7 +236,6 @@ Product,产品
 Products,产品
 Qty,数量
 Qty:,数量：
-"Quantity was recalculated from %1 to %2",数量由%1重新计算为%2
 "Quantity was recalculated from %1 to %2","数量已重新计算，从 %1 到 %2"
 "Quote Lifetime (days)",报价生命期（天）
 "Quote item does not exist.",报价条目不存在。
@@ -264,13 +262,13 @@ Sales,销售
 "Select Address",选择地址
 "Select Addresses",选择地址
 "Select Shipping Method",选择运送方式
-"Select State/Province...",选择州/省...
+"Select State/Province...",选择州/省。。。
 "Select a billing address from your address book or enter a new address.",从您的地址簿选择账单地址，或输入新地址。
 "Select a shipping address from your address book or enter a new address.",从您的地址簿选择发货地址，或输入新地址。
 "Send Payment Failed Email Copy Method",发送支付失败电子邮件复制方法
 "Send Payment Failed Email Copy To",发送支付失败电子邮件拷贝至
 "Send To",发送至
-"Separate by "","".","以“,”分隔。"
+"Separate by "","".",以“，”分隔。
 "Set customer for shopping cart",设置客户的购物车
 "Set customer's addresses in shopping cart",设置购物车中客户的地址
 "Set payment method",设置支付方法
@@ -298,20 +296,20 @@ Sales,销售
 "Some of the requested products are not available in the desired quantity.",部分已请求的产品不符合需求的数量。
 "Some of the requested products are unavailable.",部分已请求的产品暂无供应。
 "Some products quantities were recalculated because of quantity increment mismatch",由于数量增量不匹配，部分产品数量已被重新计算
-"Some products quantities were recalculated because of quantity increment mismatch.","由于数量增加不匹配,一些产品书数量被重新计算了."
-"Something went wrong processing your order. Please try again later.","处理订单时发生错误,请稍后再试."
-"Something went wrong while processing your payment.",当处理支付时发生错误.
-"Sorry, guest checkout is not enabled.","很抱歉,访客结账是不允许的."
+"Some products quantities were recalculated because of quantity increment mismatch.",由于数量增加不匹配，一些产品书数量被重新计算了。
+"Something went wrong processing your order. Please try again later.",处理订单时发生错误，请稍后再试。
+"Something went wrong while processing your payment.",当处理支付时发生错误。
+"Sorry, guest checkout is not enabled.",很抱歉，来宾结账是不允许的。
 "Sorry, guest checkout is not enabled. Please try again or contact store owner.",很抱歉，来宾结账尚未启用。请重试或联系商店店主。
 "Sorry, guest checkout is not enabled. Please try again or contact the store owner.",对不起，不允许来宾结账。请重试或联系店主。
 "Sorry, no quotes are available for this order at this time.",抱歉，当前该订单中没有报价可用。
-"Sorry, no quotes are available for this order.","很抱歉, 没有有效的订单报价."
+"Sorry, no quotes are available for this order.","很抱歉， 没有有效的订单报价。"
 State/Province,州/省
 Status,状态
 "Store View",店铺视图
 "Street Address",街道地址
 "Street Address %1","街道地址 %1"
-"Submitting order information...",正在提交订单信息...
+"Submitting order information...",正在提交订单信息。。。
 Subtotal,小计
 "Subtotal must exceed minimum order amount",总数必须超出允许订购的最小数量
 Telephone,电话
@@ -320,23 +318,23 @@ Telephone,电话
 "Terms and conditions",条款和条件
 Text,文字
 "Thank you for your purchase!",感谢您的购买！
-"Thanks for your order. We'll send you emails with order details and tracking information.",感谢选购.我们将发送一封带有订单详细跟踪信息的邮件给您
+"Thanks for your order. We'll send you emails with order details and tracking information.",感谢选购。我们将发送一封带有订单详细跟踪信息的邮件给您
 "The condition has been deleted",条件已被删除
 "The condition has been saved.",条件已保存。
 "The coupon code ""%1"" is not valid.","无效的优惠券代码""%1"""
 "The coupon code ""%1"" was applied.","优惠券代码""%1""被应用"
-"The coupon code was canceled.",优惠券代码被取消.
-"The customer address is not valid.",无效的客户地址.
+"The coupon code was canceled.",优惠券代码被取消。
+"The customer address is not valid.",无效的客户地址。
 "The onepage checkout is disabled.",单页面结账已被禁用。
 "The product could not be found.",无法找到产品。
 "The product does not exist.",产品不存在。
 "There are <a href=""%1"">%2 items</a> in your cart.","您的购物车里有<a href=""%1"">%2个条目"
 "There is <a href=""%1"">1 item</a> in your cart.","您的购物车里有<a href=""%1"">1个条目"
 "There is already a customer registered using this email address. Please login using this email address or enter a different email address to register your account.",已存在使用此电子邮件地址注册的客户。请使用此电子邮件登录或输入不同的电子邮件地址来注册您的账户。
-"There is already a registered customer using this email address. Please log in using this email address or enter a different email address to register your account.",该邮件地址已经被注册.请直接登录或者输入其他的邮件地址注册.
+"There is already a registered customer using this email address. Please log in using this email address or enter a different email address to register your account.",该邮件地址已经被注册。请直接登录或者输入其他的邮件地址注册。
 "There was an error processing your order. Please contact us or try again later.",处理您的订单时遇到了错误。请联系我们，或稍后再试。
 "This condition no longer exists.",该条件已不存在。
-"This quote item does not exist.",报价条目不存在.
+"This quote item does not exist.",报价条目不存在。
 Total,总数
 "Total for this address",该地址的总额
 "Unable to set Payment Method",不能设置支付方法
@@ -351,21 +349,21 @@ Total,总数
 "Use Billing Address",使用账单地址
 "VAT Number","VAT 编号"
 "We are processing your order and you will soon receive an email with details of the order. Once the order has shipped you will receive another email with a link to track its progress.",我们正在处理您的订单，您将很快收到包含订单详情的电子邮件。当订单运送后，您会收到另一封邮件，并可使用邮件中的链接来追踪运送进度。
-"We can't find the product.",找不到该产品.
+"We can't find the product.",找不到该产品。
 "We cannot add this item to your shopping cart",不能添加该条目到您的购物车
-"We cannot apply the coupon code.",不能应用该优惠券代码.
-"We cannot configure the product.",不能配置该产品.
-"We cannot open the overview page.",不能打开概览页.
-"We cannot remove the item.",不能移除该条目.
-"We cannot update the item.",不能更新该条目.
-"We cannot update the shopping cart.",不能更新购物车.
-"We received your order.",已接收您的订单.
-"We'll send you a confirmation email with order details and tracking information.",我们将发送一封带有订单详细跟踪信息的确认邮件给您.
+"We cannot apply the coupon code.",不能应用该优惠券代码。
+"We cannot configure the product.",不能配置该产品。
+"We cannot open the overview page.",不能打开概览页。
+"We cannot remove the item.",不能移除该条目。
+"We cannot update the item.",不能更新该条目。
+"We cannot update the shopping cart.",不能更新购物车。
+"We received your order.",已接收您的订单。
+"We'll send you a confirmation email with order details and tracking information.",我们将发送一封带有订单详细跟踪信息的确认邮件给您。
 "What's this?",这是什么？
 "You added %1 to your shopping cart.",%1被加入到了您的购物车
 "You have no items in your shopping cart.",您的购物车内没有物品。
 "You will receive an order confirmation email with details of your order and a link to track its progress.",您将会收到一份内含订单详细信息和可查询进展情况链接的确认邮件
-"You will see the order total before you submit the order.",在提交该订单前您将会看到订单总额.
+"You will see the order total before you submit the order.",在提交该订单前您将会看到订单总额。
 "Your Checkout Progress",您的结帐流程
 "Your billing agreement # is: %1.","您的账单编号为： %1"
 "Your order # is: %1.","您的订单编号为： %1"

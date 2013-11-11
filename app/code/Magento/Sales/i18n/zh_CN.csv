@@ -3,24 +3,24 @@
 "%1 / %2 rate:","%1 / %2 比率："
 "%1 for %2","%1 对 %2"
 "%1 order(s) cannot be canceled","%1 个订单无法被取消"
-"%1 order(s) cannot be canceled.",%1个订单不能取消.
+"%1 order(s) cannot be canceled.",%1个订单不能取消。
 "%1 order(s) have been canceled.",%1个订单已取消。
 "%1 order(s) have been put on hold.",%1个订单已挂起。
 "%1 order(s) have been released from holding status.",%1个订单已从挂起状态恢复。
-"%1 order(s) have been released from on hold status.",%1个订单已经解除挂起状态.
+"%1 order(s) have been released from on hold status.",%1个订单已经解除挂起状态。
 "%1 order(s) were not put on hold.","%1 个订单没有被保持。"
 "%1 order(s) were not released from holding status.","%1 个订单没有从保持状态恢复。"
-"%1 order(s) were not released from on hold status.",%1个订单没有解除挂起状态.
+"%1 order(s) were not released from on hold status.",%1个订单没有解除挂起状态。
 "%1 with %2 discount each","满%1 每个折扣 %2"
 "* - Enter custom price excluding tax","* - 输入不含税的自定义价格"
 "* - Enter custom price including tax","* - 输入含税的自定义价格"
 "-- Please Select --","-- 请选择 --"
 "-- Please Select Billing Agreement--","-- 请选择记账协议 --"
 "<span class=""label"">Order Date:</span> %1","<span class=""label"">订单日期:</span> %1"
-"A PDF object is not specified.",未指定一个PDF对象.
-"A PDF page object is not specified.",未指定一个PDF页对象.
-"A hold action is not available.",挂起动作不可用.
-"A payment method must be specified.",必须指定一个支付方法.
+"A PDF object is not specified.",未指定一个PDF对象。
+"A PDF page object is not specified.",未指定一个PDF页对象。
+"A hold action is not available.",挂起动作不可用。
+"A payment method must be specified.",必须指定一个支付方法。
 "About This Order:",关于此订单：
 "About This Profile:",关于此资料：
 "About Your Invoice",关于您的发票
@@ -58,15 +58,15 @@ Address,地址
 "Allow Reorder",允许记录
 Amount,数量
 "Amount: %1.",数量：%1。
-"An amount of %1 will be captured after being approved at the payment gateway.",在支付网关批准之后%1的额度被捕获.
+"An amount of %1 will be captured after being approved at the payment gateway.",在支付网关批准之后%1的额度被捕获。
 "An error occurred while assigning order status. Status has not been assigned.",分配订单状态时发生错误。状态未被分配。
 "An error occurred while creating shipping label.",创建运送标签时发生错误。
 "An error occurred while saving order status. The status has not been added.",保存订单状态时发生错误。状态未被添加。
 "An error occurred while unassigning order status.",取消分配订单状态时发生错误。
 "An error occurred while updating the order address. The address has not been changed.",更新订单地址时发生错误。地址未更改。
-"An item object is not specified.",未指定一个条目对象.
+"An item object is not specified.",未指定一个条目对象。
 "An item option with code %1 already exists.","代码为 %1 的项已经存在。"
-"An order with subscription items was registered.",一个带有订阅条目的订单被登记.
+"An order with subscription items was registered.",一个带有订阅条目的订单被登记。
 "Anchor Custom Title",自定义标题锚点
 "Append Comments",附加评论
 Apply,应用
@@ -88,12 +88,12 @@ Apply,应用
 "Are you sure you want to void the payment?",您确认要使支付无效吗？
 "Are you sure?",您是否确认？
 "Are you sure? This order will be canceled and a new one will be created instead",您确认吗？该订单会被取消，并创建一个全新订单
-"Are you sure? This order will be canceled and a new one will be created instead.","你确定吗? 该订单将要被取消并重现创建一个."
+"Are you sure? This order will be canceled and a new one will be created instead.","你确定吗? 该订单将要被取消并重现创建一个。"
 "Assign Order Status to State",按国家分配订单状态
 "Assign Status to State",按国家分配状态
 "Assignment Information",分配信息
 "At least a payment ID must be set.",必须至少设置一个付款ID。
-"At minimum, you need to set a payment ID.",您至少需要设置一个支付ID.
+"At minimum, you need to set a payment ID.",您至少需要设置一个支付ID。
 Authorization,授权
 "Authorized amount of %1",%1的授权额度
 "Authorized amount of %1.","授权额度 %1"
@@ -128,7 +128,7 @@ Canceled,已取消
 "Canceled order online.",取消的订单在线。
 "Cannot add order history.",无法添加订单历史。
 "Cannot create an empty shipment.",无法创建空运单。
-"Cannot create online refund for Refund to Store Credit.",不能为退款到退料单创建在线退款.
+"Cannot create online refund for Refund to Store Credit.",不能为退款到退料单创建在线退款。
 "Cannot determine the field name.",无法确定字段名称。
 "Cannot do invoice for order.",无法为订单创建发票。
 "Cannot do shipment for order.",无法为该订单发货。
@@ -137,7 +137,7 @@ Canceled,已取消
 "Cannot register an existing credit memo.",无法注册现有信用记录。
 "Cannot register existing invoice",无法注册现有发票
 "Cannot register existing shipment",无法注册现有运单
-"Cannot update the item's quantity.",不能更新条目数量.
+"Cannot update the item's quantity.",不能更新条目数量。
 Capture,获取
 "Capture Amount",获取额度
 "Capture Offline",离线获取
@@ -159,7 +159,7 @@ Closed,已关闭
 Comma-separated.,逗号分隔。
 Comment,评论
 "Comment Text",评论文字
-"Comment text cannot be empty.",评论文本不可为空.
+"Comment text cannot be empty.",评论文本不可为空。
 Comments,评论
 "Comments History",评论历史
 Company,公司
@@ -184,19 +184,19 @@ Create,创建
 "Create Packages",创建包
 "Create Shipment",创建运单
 "Create Shipping Label",创建运送标签
-"Create Shipping Label...",创建运送标签...
+"Create Shipping Label...",创建运送标签。。。
 "Create new credit memo for order",为订单新建信用记录
 "Create new invoice for order",为订单创建新发票
 "Create new shipment for order",为订单创建新运单
-Create...,创建...
+Create...,创建。。。
 Created,创建于
 "Created billing agreement #%1.","创建记账协议 #%1。"
 Created:,创建：
 "Credit Memo",信用记录
 "Credit Memo #","信用记录 #"
 "Credit Memo # ","付款通知 # "
-"Credit Memo #%1 | %3 | %2 (%4)","付款通知#%1 | %3 | %2 (%4)"
-"Credit Memo #%1$s | %3$s | %2$s (%4$s)","信用记录 #%1$s | %3$s | %2$s (%4$s)"
+"Credit Memo #%1 | %3 | %2 (%4)","付款通知#%1 | %3 | %2 （%4）"
+"Credit Memo #%1$s | %3$s | %2$s (%4$s)","信用记录 #%1$s | %3$s | %2$s （%4$s）"
 "Credit Memo Comment Email Sender",信用记录评论电子邮件发送程序
 "Credit Memo Comment Email Template",信用记录评论电子邮件模板
 "Credit Memo Comment Email Template for Guest",针对来宾的信用记录评论电子邮件模板
@@ -210,7 +210,7 @@ Created:,创建：
 "Credit memo canceling problem.",信用记录取消出错。
 "Credit memo cannot be canceled.",信用记录无法取消。
 "Credit memo has been created automatically",信用备忘录已自动创建
-"Credit memo's total must be positive.",付款通知的总数必须是正数.
+"Credit memo's total must be positive.",付款通知的总数必须是正数。
 "Custom Price",自定义价格
 "Custom Value",自定义值
 Customer,客户
@@ -223,12 +223,11 @@ Customer,客户
 "Customer My Account Order View",客户我的帐户订单视图
 "Customer Name",客户名字
 "Customer's Current Activities",客户的当前活动
-"Customer's Current Activities",客户的当前活动
 "Customs Value",自定义值
 Date,日期
 "Default Status",默认状态
 "Default Template",默认模板
-"Default logo, will be used in PDF and HTML documents.<br />(jpeg, tiff, png)","默认徽标，将用在PDF与HTML文档中。<br />(jpeg, tiff, png)"
+"Default logo, will be used in PDF and HTML documents.<br />(jpeg, tiff, png)","默认徽标，将用在PDF与HTML文档中。<br />（jpeg， tiff， png）"
 Delete,删除
 "Delete Package",删除包
 "Delivery Date",运送日期
@@ -289,8 +288,8 @@ General,常规
 "Gift Wrapping for the Entire Order",整个订单的礼品包装
 Girth,周长
 "Grand Total",总计
-"Grand Total (Base)",G.T.（基本）
-"Grand Total (Purchased)",G.T.（已购买）
+"Grand Total (Base)",G。T。（基本）
+"Grand Total (Purchased)",G。T。（已购买）
 "Grand Total to be Charged",需要收取的总费用
 Guest,来宾
 Height,高度
@@ -302,9 +301,9 @@ ID,ID#
 "IPN ""Refunded"". Refund issued by merchant. Registered notification about refunded amount of %1. Transaction ID: ""%2""","IPN ""已退款""。 商家发起的退款。%1 退款数量已注册通知。交易ID： ""%2"""
 "If empty, the default description above will be used.",如果为空，将使用上述默认描述。
 "If empty, the default error above will be used.",如果为空，将使用上述默认错误。
-"If the invoice was created offline, try creating an offline credit memo.","如果发票被离线创建,请创建一个离线付款通知."
+"If the invoice was created offline, try creating an offline credit memo.",如果发票被离线创建，请创建一个离线付款通知。
 "If the invoice was created offline, try creating an offline creditmemo.",如果离线创建发票，请尝试离线创建信用记录。
-"If you don't want to leave a gift message for the entire order, leave this box blank.",如果你不想为整个订单写下礼物留言请留空.
+"If you don't want to leave a gift message for the entire order, leave this box blank.",如果你不想为整个订单写下礼物留言请留空。
 "Incl. Tax",含税
 Information,信息
 "Initial Fee",初始费用
@@ -325,8 +324,8 @@ Invoice,发票
 "Invoice #","发票 #"
 "Invoice # ","发票 # "
 "Invoice #%1","发票 #%1"
-"Invoice #%1 | %2 | %4 (%3)","发票#%1 | %2 | %4 (%3)"
-"Invoice #%1$s | %2$s | %4$s (%3$s)","发票 #%1$s | %2$s | %4$s (%3$s)"
+"Invoice #%1 | %2 | %4 (%3)","发票#%1 | %2 | %4 （%3）"
+"Invoice #%1$s | %2$s | %4$s (%3$s)","发票 #%1$s | %2$s | %4$s （%3$s）"
 "Invoice Comment Email Sender",发票评论电子邮件发送程序
 "Invoice Comment Email Template",发票评论电子邮件模板
 "Invoice Comment Email Template for Guest",针对来宾的发票评论电子邮件模板
@@ -339,7 +338,7 @@ Invoice,发票
 "Invoice Update for Guest",针对来宾的发票更新
 "Invoice and Packing Slip Design",发票与包装标签设计
 "Invoice and Ship",发票与发货
-"Invoice and shipment types do not match for some items on this order. You can create a shipment only after creating the invoice.",订单中有些条目的发票和运单类型不匹配.只有在创建发票后才能创建货运
+"Invoice and shipment types do not match for some items on this order. You can create a shipment only after creating the invoice.",订单中有些条目的发票和运单类型不匹配。只有在创建发票后才能创建货运
 "Invoice canceling error",发票取消错误
 "Invoice canceling problem.",发票取消问题。
 "Invoice cannot be canceled.",发票无法被取消。
@@ -377,8 +376,8 @@ Length,长度
 "Link to the New Order",链接到新订单
 "Link to the Previous Order",连接到前一订单
 "Logo for HTML Print View","HTML 打印视图标志"
-"Logo for HTML documents only. If empty, default will be used.<br />(jpeg, gif, png)","仅供 HTML 文档使用的标志。如果为空，则使用默认标志。<br />(jpeg, gif, png)"
-"Logo for PDF Print-outs (200x50)","适用于 PDF 打印的标志 (200x50)"
+"Logo for HTML documents only. If empty, default will be used.<br />(jpeg, gif, png)","仅供 HTML 文档使用的标志。如果为空，则使用默认标志。<br />（jpeg， gif， png）"
+"Logo for PDF Print-outs (200x50)","适用于 PDF 打印的标志 （200x50）"
 "Make Check payable to:",通过支票付款给：
 Manage,管理
 "Maximum amount available to refund is %1","可退款的最高金额为 %s"
@@ -428,7 +427,7 @@ No,否
 "No items",无条目
 "No order(s) were put on hold.",没有被暂挂的订单。
 "No order(s) were released from holding status.",没有脱离暂挂状态的订单。
-"No order(s) were released from on hold status.",没有订单取消挂起状态.
+"No order(s) were released from on hold status.",没有订单取消挂起状态。
 "No ordered items",无订单项
 "No shipping information available",无可用发货信息
 "Nominal Items",名义上的产品
@@ -545,23 +544,23 @@ Period,周期
 "Please Select a Store",请选择商店
 "Please check billing address information. %1","请检查帐单地址信息。 %1"
 "Please check shipping address information. %1",请检查配送地址信息。%1
-"Please check the billing address information. %1","请检查账单地址信息. %1"
-"Please check the shipping address information. %1","请检查运送地址信息. %1"
-"Please correct the parent block for this block.",请纠正该区块的父区块.
-"Please correct the transaction ID and try again.",请纠正交易ID再试.
+"Please check the billing address information. %1","请检查账单地址信息。 %1"
+"Please check the shipping address information. %1","请检查运送地址信息。 %1"
+"Please correct the parent block for this block.",请纠正该区块的父区块。
+"Please correct the transaction ID and try again.",请纠正交易ID再试。
 "Please define PDF object before using.","请在使用前定义 PDF 对象。"
-"Please define the PDF object before using.",在使用前请定义PDF对象.
-"Please enter a positive number in this field.",请输入正数.
-"Please enter a tracking number.",请输入追踪号.
+"Please define the PDF object before using.",在使用前请定义PDF对象。
+"Please enter a positive number in this field.",请输入正数。
+"Please enter a tracking number.",请输入追踪号。
 "Please enter positive number in this field.",请在该字段输入正数。
 "Please select a valid payment method.",请选择有效的支付方式。
-"Please select products.",请选择产品.
-"Please set a proper payment object.",请设置一个正确的支付对象.
-"Please specify a carrier.",请指定一个承运商.
+"Please select products.",请选择产品。
+"Please set a proper payment object.",请设置一个正确的支付对象。
+"Please specify a carrier.",请指定一个承运商。
 "Please specify a shipping method.",请指定一个配送方法。
 "Please specify a valid grid column alias name that exists in grid table.",请从现有网格表中指定有效的网格栏别名名称。
-"Please specify a valid grid column alias name that exists in the grid table.",请在网格表中指定一个有效的网格列别名.
-"Please specify the correct billing agreement ID and try again.",请指定正确的账单协议ID再试.
+"Please specify a valid grid column alias name that exists in the grid table.",请在网格表中指定一个有效的网格列别名。
+"Please specify the correct billing agreement ID and try again.",请指定正确的账单协议ID再试。
 "Please, visit for more info",请访问看更多信息
 Price,价格
 Print,打印
@@ -615,7 +614,7 @@ Rate,费率
 "Recently Viewed",最近查看过的
 "Recently Viewed Products",最近查看过的产品
 "Recurring Billing Profiles",周期账单配置
-"Recurring Billing Profiles (beta)",周期账单配置(beta)
+"Recurring Billing Profiles (beta)",周期账单配置（beta）
 "Recurring Profile # %1","循环配置文件 # %1"
 "Recurring Profile Initial Fee",循环配置文件初始化费用
 "Recurring Profiles",递归配置文件
@@ -692,8 +691,8 @@ Schedule,计划
 Select,选择
 "Select All",全选
 "Select from existing customer addresses:",从现有客户地址选择：
-"Select whether buyer can define the date when billing for the profile begins.",当为配置开始的账单时选择买家是否能定义日期.
-"Selected option(s) or their combination is not currently available.",选择的选项或他们的组合当前不可用.
+"Select whether buyer can define the date when billing for the profile begins.",当为配置开始的账单时选择买家是否能定义日期。
+"Selected option(s) or their combination is not currently available.",选择的选项或他们的组合当前不可用。
 "Send Credit Memo Comment Email Copy To",发送信用记录评论邮件副本到
 "Send Credit Memo Comments Email Copy Method",发送信用记录评论邮件副本的方法
 "Send Credit Memo Email Copy Method",发送信用记录邮件副本的方法
@@ -722,17 +721,17 @@ Ship,送货
 "Ship-to Name",收货人
 Shipment,送货单号
 "Shipment #%1","运单 #%1"
-"Shipment #%1 | %3 (%2)","运单 #%1 | %3 (%2)"
+"Shipment #%1 | %3 (%2)","运单 #%1 | %3 （%2）"
 "Shipment #%1',运单 #%1'",
 "Shipment %1",送货单号#%1
-"Shipment %1$s | %3$s (%2$s)","送货单号#%1$s | %3$s (%2$s)"
+"Shipment %1$s | %3$s (%2$s)","送货单号#%1$s | %3$s （%2$s）"
 "Shipment Comment Email Sender",送货评论邮件发送者
 "Shipment Comment Email Template",送货评论邮件模板
 "Shipment Comment Email Template for Guest",针对来宾的运单评论邮件模板
 "Shipment Comments",运单评论
 "Shipment Email Sender",运单邮件发送程序
 "Shipment Email Template",送货邮件模板
-"Shipment Email Template for Guest",访客送货邮件模板
+"Shipment Email Template for Guest",来宾送货邮件模板
 "Shipment Update",送货信息更新
 "Shipment Update for Guest",针对来宾的运单更新
 Shipments,发货
@@ -744,8 +743,8 @@ Shipping,运送
 "Shipping &amp; Handling Information","运单 &amp; 处理信息"
 "Shipping Address",送货地址
 "Shipping Amount",运送量
-"Shipping Excl. Tax (%1)",不含税运费(%1)
-"Shipping Incl. Tax (%1)",含税运费(%1)
+"Shipping Excl. Tax (%1)",不含税运费（%1）
+"Shipping Incl. Tax (%1)",含税运费（%1）
 "Shipping Information",运送信息
 "Shipping Method",运送方式
 "Shipping Method:",送货方法：
@@ -760,18 +759,18 @@ Shipping,运送
 Size,尺寸
 Sku,Sku
 "Sold to:",卖到:
-"Some item options or their combination are not currently available.",一些条目选项或他们的组合当前无效.
-"Some items in this order are no longer in our catalog.",该订单的一些条目不在产品目录中.
-"Some of the products below do not have all the required options.",下面一些产品没有所有必须的选项.
+"Some item options or their combination are not currently available.",一些条目选项或他们的组合当前无效。
+"Some items in this order are no longer in our catalog.",该订单的一些条目不在产品目录中。
+"Some of the products below do not have all the required options.",下面一些产品没有所有必须的选项。
 "Some of the products below do not have all the required options. Please edit them and configure all the required options.",下列某些产品必须的选项不完整。请修改并配置所有必须的选项。
-"Some of the selected options are not currently available.",一些选项当前不可用.
-"Something went wrong during the item options declaration.",条目选项声明期间发生错误.
-"Something went wrong updating the order address.",更新订单订单地址时发生错误.
-"Something went wrong while saving the gift message.",存储礼物留言时.
-"Something went wrong while we were unassigning the order.",当接触订单分配时发生错误.
-"Sorry, but items with payment agreements must be ordered one at a time To continue, please remove or buy the other items in your cart, then order this item by itself.","很抱歉, 有支付协议的条目必须被一次订购.为了继续,请移除或购买其他条目, 然后单独订购该条目."
+"Some of the selected options are not currently available.",一些选项当前不可用。
+"Something went wrong during the item options declaration.",条目选项声明期间发生错误。
+"Something went wrong updating the order address.",更新订单订单地址时发生错误。
+"Something went wrong while saving the gift message.",存储礼物留言时。
+"Something went wrong while we were unassigning the order.",当接触订单分配时发生错误。
+"Sorry, but items with payment agreements must be ordered one at a time To continue, please remove or buy the other items in your cart, then order this item by itself.","很抱歉， 有支付协议的条目必须被一次订购。为了继续，请移除或购买其他条目， 然后单独订购该条目。"
 "Sorry, no quotes are available for this order at this time.",抱歉，当前该订单中没有报价可用。
-"Sorry, no quotes are available for this order.","很抱歉, 该订单没有有效报价."
+"Sorry, no quotes are available for this order.","很抱歉， 该订单没有有效报价。"
 "Source object is not specified.",源对象未指定。
 "Specified profile does not exist.",指定的配置文件不存在。
 "State Code [State Title]",州代码[州名称]
@@ -802,81 +801,81 @@ Tax,传真
 "Tax Amount",税额
 "Tax Percent",税率
 Telephone,电话
-"The Billing Agreement status is not set.",账单协议状态为设置.
+"The Billing Agreement status is not set.",账单协议状态为设置。
 "The Order State ""%1"" must not be set manually.","订单状态 ""%1"" 必须手工设置。"
-"The Transaction ID field cannot be empty.",交易ID不能为空.
-"The address model is not defined.",未定义的地址模型.
-"The address total model should be extended from MagentoSalesModelQuoteAddressTotalAbstractTotal.",该地址总额模型应该集成MagentoSalesModelQuoteAddressTotalAbstractTotal类.
+"The Transaction ID field cannot be empty.",交易ID不能为空。
+"The address model is not defined.",未定义的地址模型。
+"The address total model should be extended from MagentoSalesModelQuoteAddressTotalAbstractTotal.",该地址总额模型应该集成MagentoSalesModelQuoteAddressTotalAbstractTotal类。
 "The address total model should be extended from \Magento\Sales\Model\Quote\Address\Total\AbstractTotal.","地址总模块应扩展自\Magento\Sales\Model\Quote\Address\Total\AbstractTotal。"
 "The billing agreement ""%1"" has been canceled.","该记账协议 ""%1"" 已被取消。"
 "The billing agreement ""%1"" has been created.","该记账协议 ""%1"" 已被创建。"
 "The coupon code has been accepted.",该代金券代码已被使用。
 "The credit memo email was sent",该付款通知邮件已经被发出
-"The credit memo has been created automatically.",该付款通知已经被自动生成.
-"The customer ID is not set.",客户ID未设置.
-"The invoice will be created offline without the payment gateway.",该发票将不通过支付网关而直接离线创建.
-"The last status can't be unassigned from its current state.",最后的状态不能从当前阶段解除.
+"The credit memo has been created automatically.",该付款通知已经被自动生成。
+"The customer ID is not set.",客户ID未设置。
+"The invoice will be created offline without the payment gateway.",该发票将不通过支付网关而直接离线创建。
+"The last status can't be unassigned from its current state.",最后的状态不能从当前阶段解除。
 "The message has been sent.",该信息已发送。
 "The message was sent.",消息已发送。
-"The most money available to refund is %1.",最多能退款%1.
+"The most money available to refund is %1.",最多能退款%1。
 "The order address has been updated.",订单地址已更新。
-"The order amount of %1 is pending approval on the payment gateway.",%1的订单额正等待支付网关批准.
-"The order does not allow an invoice to be created.",该订单不允许一个要被创建的的发票.
+"The order amount of %1 is pending approval on the payment gateway.",%1的订单额正等待支付网关批准。
+"The order does not allow an invoice to be created.",该订单不允许一个要被创建的的发票。
 "The order email has been sent.",订单电子邮件已发送。
 "The order has been cancelled.",订单已被取消。
 "The order has been created.",订单已创建。
 "The order has been put on hold.",订单已被暂挂。
 "The order has been released from holding status.",订单已脱离暂挂状态。
 "The order has not been cancelled.",订单尚未被取消。
-"The order object is not specified.",未指定订单对象.
+"The order object is not specified.",未指定订单对象。
 "The order status has been assigned.",订单状态已被分配。
 "The order status has been saved.",订单状态已被保存。
 "The order status has been unassigned.",订单状态已被撤销分配。
-"The order was not on hold.",该订单没有被挂起.
+"The order was not on hold.",该订单没有被挂起。
 "The order was not put on hold.",订单没有被保持。
 "The order was not unheld.",订单没有被保持。
 "The order was placed using %1","订单被使用 %1 下达。"
-"The order was placed using %1.",用%1来下单.
+"The order was placed using %1.",用%1来下单。
 "The order(s) cannot be canceled",订单无法被取消
-"The parent transaction ID must have a transaction ID.",父交易ID必须有一个交易ID.
+"The parent transaction ID must have a transaction ID.",父交易ID必须有一个交易ID。
 "The payment has been accepted.",支付已被接受。
 "The payment has been denied.",支付已被拒绝。
 "The payment has been voided.",支付已被撤销。
-"The payment update has been made.",该支付已经被更新.
+"The payment update has been made.",该支付已经被更新。
 "The profile has been updated.",个人资料已更新。
 "The profile has no changes.",个人资料无变化。
 "The profile state has been updated.",配置文件状态已更新。
-"The profile you specified does not exist.",您指定的配置不存在.
+"The profile you specified does not exist.",您指定的配置不存在。
 "The quantity you want to add exceeds the total shipped quantity for some of selected Product(s)",你想要添加的数量超出了某些所选商品的总可发货数量
 "The requested Payment Method is not available.",请求的支付方式不可用。
 "The shipping label has been created.",运送标签已创建。
-"The source object is not specified.",未指定源对象.
-"The total model should be extended from MagentoSalesModelOrderTotalAbstractTotal.",该总额模型应该继承MagentoSalesModelOrderTotalAbstractTotal类.
-"The transaction ""%1"" (%1) is already closed.","交易 ""%1"" (%1) 已被关闭。"
-"The transaction ""%1"" (%2) is already closed.","交易""%1"" (%2)已经被关闭."
+"The source object is not specified.",未指定源对象。
+"The total model should be extended from MagentoSalesModelOrderTotalAbstractTotal.",该总额模型应该继承MagentoSalesModelOrderTotalAbstractTotal类。
+"The transaction ""%1"" (%1) is already closed.","交易 ""%1"" （%1） 已被关闭。"
+"The transaction ""%1"" (%2) is already closed.","交易""%1"" （%2）已经被关闭。"
 "The transaction ""%1"" cannot be captured yet.","交易 ""%1"" 尚无法获取。"
 "The value that you entered is not valid.",你输入的数值无效。
 "There are no billing agreements yet.",尚无记账协议。
 "There are no printable documents related to selected orders.",没有与所选订单有关的可打印文档。
 "There are no shipping labels related to selected %1.","没有与所选 %1 有关的发货标签。"
-"There are no shipping labels related to selected orders.",没有与选择订单关联的运送标签.
-"There are no shipping labels related to selected shipments.",没有与选择运单关联的运送标签.
+"There are no shipping labels related to selected orders.",没有与选择订单关联的运送标签。
+"There are no shipping labels related to selected shipments.",没有与选择运单关联的运送标签。
 "There is no need to approve this payment.",无需审核该支付。
 "There is no need to deny this payment.",无需拒绝该支付。
 "There is no update for the payment.",该支付无更新。
-"This is the wrong quote item id to update configuration.",更新配置的报价条目编号无效.
-"This item price or quantity is not valid for checkout.",结账的该条目价格和数量无效.
+"This is the wrong quote item id to update configuration.",更新配置的报价条目编号无效。
+"This item price or quantity is not valid for checkout.",结账的该条目价格和数量无效。
 "This message will be shown in shopping cart when subtotal after discount less than minimum amount.",如果折扣后的总价格低于最小值，该信息会显示在购物车里。
 "This operation requires an existing transaction object.",该操作需要一个现有的交易目标。
-"This order contains (%1) items and therefore cannot be edited through the admin interface at this time, if you wish to continue editing the (%1) items will be removed, the order will be canceled and a new order will be placed.","该订单包含 (%1) 个条目，因此当前无法通过管理员界面编辑，如果您希望继续编辑，(%1) 个条目将被删除，该订单将被取消并生成新订单。"
-"This order contains (%1) items and therefore cannot be edited through the admin interface. If you wish to continue editing, the (%2) items will be removed, the order will be canceled and a new order will be placed.","该订单包括(%1)个条目因而不能通过后台接口被编辑. 如果你希望继续编辑,(%2)个条目将会被移除,该订单将被取消,一个新的订单被创建并下单."
+"This order contains (%1) items and therefore cannot be edited through the admin interface at this time, if you wish to continue editing the (%1) items will be removed, the order will be canceled and a new order will be placed.","该订单包含 （%1） 个条目，因此当前无法通过管理员界面编辑，如果您希望继续编辑，（%1） 个条目将被删除，该订单将被取消并生成新订单。"
+"This order contains (%1) items and therefore cannot be edited through the admin interface. If you wish to continue editing, the (%2) items will be removed, the order will be canceled and a new order will be placed.","该订单包括（%1）个条目因而不能通过后台接口被编辑。 如果你希望继续编辑，（%2）个条目将会被移除，该订单将被取消，一个新的订单被创建并下单。"
 "This order no longer exists.",该订单已不存在。
-"This payment method instance is not available.",该支付方法实例不可用.
-"This payment method is not available.",该支付方法不可用.
+"This payment method instance is not available.",该支付方法实例不可用。
+"This payment method is not available.",该支付方法不可用。
 "This product does not have any configurable options",该产品不包含任何可配置选项
-"This product is disabled.",该产品被禁止.
+"This product is disabled.",该产品被禁止。
 "This profile state cannot be changed to ""%1"".",该资料状态无法更改为“%1”。
-"This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?","这将创建一个离线退款.为了创建在线退款,打开一个发票然后为其创建付款通知.你确定要继续吗?"
+"This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?",这将创建一个离线退款。为了创建在线退款，打开一个发票然后为其创建付款通知。你确定要继续吗?
 "This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you wish to proceed?",这将会创建离线退款。要创建在线退款，打开一张发票并为其创建信用备忘录。您希望继续吗？
 "Tier Pricing",层级价格
 Title,标题
@@ -884,9 +883,8 @@ To,发送至
 "To Name",到名称
 To:,至：
 Total,总数
-"Total %1 product(s)",共%1个产品
 "Total %1 product(s)",总共%1个产品
-"Total (ex)","总计 (ex)"
+"Total (ex)","总计 （ex）"
 "Total (inc)",总数（含）
 "Total Due",总额
 "Total Invoiced",发票总量
@@ -928,7 +926,7 @@ Transactions,交易
 "Trial Period",尝试周期
 "Trial period payment",试用期支付
 Type,类型
-"USPS domestic shipments don't use package types.",USPS内部运单不使用包裹类型.
+"USPS domestic shipments don't use package types.",USPS内部运单不使用包裹类型。
 Unassign,撤销分配
 Unhold,适当
 "Unhold action is not available.",恢复操作不可用。
@@ -937,9 +935,7 @@ Unhold,适当
 "Unknown Status",位置状态
 "Unsupported transaction type ""%1"".","不支持的交易类型""%1""。"
 "Update Changes",更新更改
-"Update Items and Qty's",更新条目和数量
 "Update Items and Qty's",更新条目与数量
-"Update Qty's",更新数量
 "Update Qty's",更新数量
 Updated,更新于
 Updated:,更新时间：
@@ -955,54 +951,54 @@ View,查看
 Void,无效
 "Void invoice",查看发票
 "Voided authorization.",无效的认证。
-"We can't find the profile you specified.",找不到指定的配置.
-"We can't find this order status.",找不到该订单状态.
-"We can't save the invoice.",不能存储发票.
-"We can't send the invoice email.",不能发送发票邮件.
-"We can't send the shipment.",不能发送运单.
-"We can't update the transaction details.",不能更新交易细节.
-"We can't void the credit memo.",不能作废该付款通知.
-"We canceled %1 order(s).",我们取消了%1个订单.
-"We cannot add order history.",不能添加订单历史.
-"We cannot add this item to your shopping cart.",不能添加该条目到购物车.
-"We cannot cancel this order.",不能取消该订单.
-"We cannot create an empty shipment.",不能创建一个空的运单.
-"We cannot determine the field name.",我们不能决定该字段名字.
-"We cannot get the order instance.",不能获得订单实例.
-"We cannot register an existing credit memo.",不能登记一个存在的付款通知.
+"We can't find the profile you specified.",找不到指定的配置。
+"We can't find this order status.",找不到该订单状态。
+"We can't save the invoice.",不能存储发票。
+"We can't send the invoice email.",不能发送发票邮件。
+"We can't send the shipment.",不能发送运单。
+"We can't update the transaction details.",不能更新交易细节。
+"We can't void the credit memo.",不能作废该付款通知。
+"We canceled %1 order(s).",我们取消了%1个订单。
+"We cannot add order history.",不能添加订单历史。
+"We cannot add this item to your shopping cart.",不能添加该条目到购物车。
+"We cannot cancel this order.",不能取消该订单。
+"We cannot create an empty shipment.",不能创建一个空的运单。
+"We cannot determine the field name.",我们不能决定该字段名字。
+"We cannot get the order instance.",不能获得订单实例。
+"We cannot register an existing credit memo.",不能登记一个存在的付款通知。
 "We cannot register an existing invoice",不能登记一个存在的发票
 "We cannot register an existing shipment",不能注册一个存在的运单
-"We could not add a product to cart by the ID ""%1"".","我们不能添加ID为""%1""的产品到购物车."
-"We could not cancel the billing agreement.",不能取消该账单协议.
-"We could not delete the billing agreement.",不能删除该账单协议.
-"We could not update the profile.",不能更新该配置.
-"We couldn't add your order status because something went wrong saving.",因为存储错误不能添加您的订单状态.
-"We couldn't cancel the billing agreement.",不能取消账单协议向导.
-"We couldn't create a billing agreement for this order.",不能为该订单创建账单协议.
-"We couldn't find this wish list.",不能发现该收藏.
-"We couldn't finish the billing agreement wizard.",不能完成账单协议向导.
-"We couldn't send the email order.",不能发送该订单邮件.
-"We couldn't start the billing agreement wizard.",不能开始账单协议向导.
-"We couldn't update the payment.",不能更新该支付.
-"We couldn't update the profile.",不能更新该配置.
-"We couldn't void the payment.",不能作废该支付.
-"We don't have enough information to save the parent transaction ID.",没有足够的信息来存储父交易ID.
-"We don't recognize or support the file extension in this shipment: %1.",我们不能识别或支持在运单%1的文件扩展名.
-"We don't recognize the draw line data. Please define the ""lines"" array.","无法识别画线数据.请定义""线""数组."
-"We found an invalid entity model.",发现无效实体模型.
-"We found an invalid item option format.",条目选项格式无效.
-"We found an invalid qty to ship for item ""%1"".","发现运送条目""%1""的无效数量."
-"We found an invalid quantity to invoice item ""%1"".","发现发票条目""%1""的无效数量."
-"We found an invalid quantity to refund item ""%1"".","发现退款条目""%1""的无效数量.."
-"We found an invalid renderer model.",发现无效的渲染模型.
-"We found an invalid request for adding product to quote.",添加产品到报价的请求无效.
-"We found an item options declaration error.",条目选项声明错误.
-"We found an unsupported transaction type ""%1"".","发现不支持的交易类型""%1""."
-"We found another order status with the same order status code.",发现另一个订单状态有同样的状态码.
-"We refunded %1 offline.",离线退款%1.
-"We refunded %1 online.",在线退款%1.
-"We sent the message.",消息已发出.
-"We will authorize %1 after the payment is approved at the payment gateway.",在支付网关批准支付金额后我们将授权%1.
+"We could not add a product to cart by the ID ""%1"".","我们不能添加ID为""%1""的产品到购物车。"
+"We could not cancel the billing agreement.",不能取消该账单协议。
+"We could not delete the billing agreement.",不能删除该账单协议。
+"We could not update the profile.",不能更新该配置。
+"We couldn't add your order status because something went wrong saving.",因为存储错误不能添加您的订单状态。
+"We couldn't cancel the billing agreement.",不能取消账单协议向导。
+"We couldn't create a billing agreement for this order.",不能为该订单创建账单协议。
+"We couldn't find this wish list.",不能发现该收藏。
+"We couldn't finish the billing agreement wizard.",不能完成账单协议向导。
+"We couldn't send the email order.",不能发送该订单邮件。
+"We couldn't start the billing agreement wizard.",不能开始账单协议向导。
+"We couldn't update the payment.",不能更新该支付。
+"We couldn't update the profile.",不能更新该配置。
+"We couldn't void the payment.",不能作废该支付。
+"We don't have enough information to save the parent transaction ID.",没有足够的信息来存储父交易ID。
+"We don't recognize or support the file extension in this shipment: %1.",我们不能识别或支持在运单%1的文件扩展名。
+"We don't recognize the draw line data. Please define the ""lines"" array.","无法识别画线数据。请定义""线""数组。"
+"We found an invalid entity model.",发现无效实体模型。
+"We found an invalid item option format.",条目选项格式无效。
+"We found an invalid qty to ship for item ""%1"".","发现运送条目""%1""的无效数量。"
+"We found an invalid quantity to invoice item ""%1"".","发现发票条目""%1""的无效数量。"
+"We found an invalid quantity to refund item ""%1"".","发现退款条目""%1""的无效数量。。"
+"We found an invalid renderer model.",发现无效的渲染模型。
+"We found an invalid request for adding product to quote.",添加产品到报价的请求无效。
+"We found an item options declaration error.",条目选项声明错误。
+"We found an unsupported transaction type ""%1"".","发现不支持的交易类型""%1""。"
+"We found another order status with the same order status code.",发现另一个订单状态有同样的状态码。
+"We refunded %1 offline.",离线退款%1。
+"We refunded %1 online.",在线退款%1。
+"We sent the message.",消息已发出。
+"We will authorize %1 after the payment is approved at the payment gateway.",在支付网关批准支付金额后我们将授权%1。
 Website,网站
 Weight,高度
 "Whether buyer can define the date when billing for the profile begins.",卖家是否可以在简介开始时定义日期。
@@ -1014,38 +1010,38 @@ Wishlist,收藏清单
 "Wrong state: ""%1""","错误状态: ""%1"""
 "Wrong state: ""%1"".","州错误：""%1"""
 Yes,是
-"You are trying to add a quantity for some products that doesn't match the quantity that was shipped.",您正在尝试为一些不匹配运送数量的产品添加数量.
+"You are trying to add a quantity for some products that doesn't match the quantity that was shipped.",您正在尝试为一些不匹配运送数量的产品添加数量。
 "You can leave a box blank if you don't wish to add a gift message for whole order",如果不希望为整个订单添加礼品信息，即可在这里留空
-"You can't do this without a transaction object.",没有交易对象不能进行该操作.
-"You canceled the billing agreement.",您已经取消了账单协议.
-"You canceled the credit memo.",您已经取消了该付款通知.
-"You canceled the invoice.",您取消了该发票.
-"You canceled the order.",您取消了该订单.
-"You cannot cancel the order(s).",您不能取消订单.
-"You cannot remove the hold.",不能移除该挂起.
-"You created the credit memo.",您已经创建了该付款通知.
-"You created the invoice and shipment.",您已经创建了发票和运单.
-"You created the order.",您已经创建了订单.
-"You created the shipping label.",您创建了运送标签.
-"You deleted the billing agreement.",您已经删除了该账单协议.
-"You don't need to select a shipping address.",您不需要选择一个运送地址.
-"You don't need to select a shipping method.",不必选择货运方法.
-"You entered incorrect data. Please try again.",输入数据错误.请重试.
-"You have assigned the order status.",您已经分配了该订单状态.
-"You have not canceled the item.",您还没有取消该条目.
-"You have not put the order on hold.",您还没有挂起该订单.
+"You can't do this without a transaction object.",没有交易对象不能进行该操作。
+"You canceled the billing agreement.",您已经取消了账单协议。
+"You canceled the credit memo.",您已经取消了该付款通知。
+"You canceled the invoice.",您取消了该发票。
+"You canceled the order.",您取消了该订单。
+"You cannot cancel the order(s).",您不能取消订单。
+"You cannot remove the hold.",不能移除该挂起。
+"You created the credit memo.",您已经创建了该付款通知。
+"You created the invoice and shipment.",您已经创建了发票和运单。
+"You created the order.",您已经创建了订单。
+"You created the shipping label.",您创建了运送标签。
+"You deleted the billing agreement.",您已经删除了该账单协议。
+"You don't need to select a shipping address.",您不需要选择一个运送地址。
+"You don't need to select a shipping method.",不必选择货运方法。
+"You entered incorrect data. Please try again.",输入数据错误。请重试。
+"You have assigned the order status.",您已经分配了该订单状态。
+"You have not canceled the item.",您还没有取消该条目。
+"You have not put the order on hold.",您还没有挂起该订单。
 "You have placed no orders.",您没有下订单。
-"You have put %1 order(s) on hold.",您已经挂起%1个订单.
-"You have saved the order status.",您已经存储了订单状态.
-"You have unassigned the order status.",您已经解除了该订单状态分配.
-"You need to specify a shipping method.",你需要指定一个货运方法.
-"You put the order on hold.",您挂起了该订单.
-"You released the order from holding status.",您取消了该订单挂起状态.
-"You sent the order email.",您已经发送了订单邮件.
-"You sent the shipment.",您已经发出该运单.
-"You updated the order address.",您更新了订单地址.
-"You updated the profile.",您更新了该配置.
-"You voided the credit memo.",您已经作废了该付款通知.
+"You have put %1 order(s) on hold.",您已经挂起%1个订单。
+"You have saved the order status.",您已经存储了订单状态。
+"You have unassigned the order status.",您已经解除了该订单状态分配。
+"You need to specify a shipping method.",你需要指定一个货运方法。
+"You put the order on hold.",您挂起了该订单。
+"You released the order from holding status.",您取消了该订单挂起状态。
+"You sent the order email.",您已经发送了订单邮件。
+"You sent the shipment.",您已经发出该运单。
+"You updated the order address.",您更新了订单地址。
+"You updated the profile.",您更新了该配置。
+"You voided the credit memo.",您已经作废了该付款通知。
 "You will be redirected to the payment system website.",您将被重定向到支付系统网站。
 "Your credit card will be charged for",您的信用卡将被收取
 "ZIP Code",邮编

@@ -1,7 +1,7 @@
 "--Please Select--","-- 请选择 --"
 "API Login ID","API 登录 ID"
 "Accepted Currency",接受的汇率
-"Authorize.net Direct Post","Authorize.net 直接发表"
+"Authorize.net Direct Post","Authorize。net 直接发表"
 "Card Verification Number",卡片验证号码
 "Card Verification Number Visual Reference","信用卡验证号码 视觉参考"
 Close,关闭
@@ -15,7 +15,7 @@ Debug,调试
 Enabled,已启用
 "Expiration Date",过期日期
 "Gateway URL","网关 URL"
-"Invalid transaction ID.",无效的交易ID.
+"Invalid transaction ID.",无效的交易ID。
 "Maximum Order Total",最大订单总数
 "Merchant MD5","商家 MD5"
 "Merchant's Email",商家电子邮件
@@ -29,22 +29,22 @@ Enabled,已启用
 "Payment error. Paid amount doesn't match the order amount.",支付错误。付款金额与订单金额不匹配。
 "Payment from Applicable Countries",从可接受的国家支付
 "Payment from Specific Countries",从指定的国家支付
-"Please choose a payment method.",请选择支付方法.
+"Please choose a payment method.",请选择支付方法。
 "Please, choose payment method",请选择支付方式
 "Response hash validation failed. Transaction declined.",响应哈希验证失败。交易被拒绝。
-"Something went wrong: the paid amount doesn't match the order amount. Please correct this and try again.","发生错误: 付款额订单额不匹配,请纠正后再试."
+"Something went wrong: the paid amount doesn't match the order amount. Please correct this and try again.","发生错误: 付款额订单额不匹配，请纠正后再试。"
 "Sort Order",排序顺序
 "Test Mode",测试模式
 "The order has been created.",订单已创建。
-"The transaction was declined because the response hash validation failed.",因为响应哈希校验失败交易被拒绝.
-"There was a payment authorization error.",支付授权发生错误.
+"The transaction was declined because the response hash validation failed.",因为响应哈希校验失败交易被拒绝。
+"There was a payment authorization error.",支付授权发生错误。
 "There was an error processing your order. Please contact us or try again later.",处理您的订单时遇到了错误。请联系我们，或稍后再试。
-"This payment didn't work out because we can't find this order.","由于找不到订单,支付无法进行."
-"This payment was not authorized because the transaction ID field is empty.",由于交易ID为空所以支付没有通过授权.
+"This payment didn't work out because we can't find this order.",由于找不到订单，支付无法进行。
+"This payment was not authorized because the transaction ID field is empty.",由于交易ID为空所以支付没有通过授权。
 Title,标题
 "Transaction Key",交易密钥
-"We couldn't process your order right now. Please try again later.","现在不能处理您的订单,请稍后再试."
+"We couldn't process your order right now. Please try again later.",现在不能处理您的订单，请稍后再试。
 "What is this?",这是什么？
-"You created the order.",您创建了订单.
+"You created the order.",您创建了订单。
 "You will be required to enter your payment details before you place an order.",您将需要输入您的支付详情，随后才能下单。
-"You'll be asked for your payment details before placing an order.",在下单之前您将被要求提供支付的详细信息.
+"You'll be asked for your payment details before placing an order.",在下单之前您将被要求提供支付的详细信息。

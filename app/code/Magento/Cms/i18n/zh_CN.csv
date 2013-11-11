@@ -35,7 +35,7 @@ Content,内容
 "Content Heading",内容标题
 "Content Management",内容管理
 "Contents of a Static Block",静态区块的内容
-"Create Folder...",创建文件夹...
+"Create Folder...",创建文件夹。。。
 "Custom Design",自定义设计
 "Custom Design From",自定义设计，来自：
 "Custom Design To",自定义设计到
@@ -67,7 +67,7 @@ Home,主页
 ID,ID
 Identifier,标识
 "If empty, the Page Title will be used",如果为空，将使用页面标题
-"Images (%1)","图片 (%1)"
+"Images (%1)","图片 （%1）"
 "Insert File",插入文件
 "Invalid folder name. Please, use alphanumeric characters, underscores and dashes.",无效的文件夹名称。请使用字母数字字符、下划线和短划线。
 Keywords,关键词
@@ -75,7 +75,7 @@ Keywords,关键词
 Layout,布局
 "Layout Update XML","布局更新 XML"
 "Link to a CMS Page","链接到 CMS 页面"
-"Make sure that static block content does not reference the block itself.",确保静态块内容没有引用本身.
+"Make sure that static block content does not reference the block itself.",确保静态块内容没有引用本身。
 "Manage Pages",管理页面
 "Media Gallery",媒体库
 "Media Storage",媒体存储
@@ -91,15 +91,15 @@ Layout,布局
 "Page Status",页面状态
 "Page Title",页面标题
 Pages,页面
-"Please correct the folder name. Use only letters, numbers, underscores and dashes.","请纠正目录名,要求仅仅输入字母、数字、下划线和中划线"
+"Please correct the folder name. Use only letters, numbers, underscores and dashes.",请纠正目录名，要求仅仅输入字母、数字、下划线和中划线
 "Product Tax Class Information",产品税费类别信息
 "Redirect to CMS-page if Cookies are Disabled","如果 Cookie 被禁用，则重定向到 CMS 页面"
 "Relative to Website Base URL","关于网站基本 URL"
 "Save Block",保存区块
 "Save Page",保存页面
 "Save Process",保存过程
-"Select Block...",选择区块...
-"Select Page...",选择页面...
+"Select Block...",选择区块。。。
+"Select Page...",选择页面。。。
 "Show Breadcrumbs for CMS Pages","显示 CMS 页面的面包屑"
 "Show Notice if JavaScript is Disabled","如果 JavaScript 被禁用，则显示通知"
 "Static Blocks",静态块
@@ -110,7 +110,7 @@ Template,模板
 "The block has been deleted.",该区块已被删除。
 "The block has been saved.",区块已保存。
 "The directory %1 is not writable by server.","目录 %1 对服务器端不可写。"
-"The page URL key cannot be made of only numbers.",页面URL不能仅仅填写数字.
+"The page URL key cannot be made of only numbers.",页面URL不能仅仅填写数字。
 "The page URL key cannot consist only of numbers.","页面 URL 密钥不能仅由数字组成。"
 "The page URL key contains capital letters or disallowed symbols.","页面 URL 密钥包含大写字母或不允许的符号。"
 "The page has been deleted.",页面已被删除。
@@ -123,9 +123,9 @@ Title,标题
 "Unable to find a block to delete.",无法找到可删除的区块。
 "Unable to find a page to delete.",无法找到要删除的页面。
 "WYSIWYG Options","WYSIWYG 选项"
-"We cannot create a new directory.",不能创建新目录.
-"We cannot delete directory %1.",不能删除目录%1.
-"We cannot delete root directory %1.",不能删除根目录%1.
-"We cannot upload the file.",不能更新该文件.
-"We found a directory with the same name. Please try another folder name.","发现目录同名,请换一个再试"
+"We cannot create a new directory.",不能创建新目录。
+"We cannot delete directory %1.",不能删除目录%1。
+"We cannot delete root directory %1.",不能删除根目录%1。
+"We cannot upload the file.",不能更新该文件。
+"We found a directory with the same name. Please try another folder name.",发现目录同名，请换一个再试
 px.,像素

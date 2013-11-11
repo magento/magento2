@@ -70,11 +70,11 @@ Dropoff,自取
 "Enabled for Checkout",为付款启用
 "Enables/Disables SSL verification of Magento server by UPS.",启用/禁用UPS对Magento服务器的SSL验证。
 "Error #%1 : %2","错误 #%1 : %2"
-"Error #%1 : %2 (%3)","错误 #%1 : %2 (%3)"
+"Error #%1 : %2 (%3)","错误 #%1 : %2 （%3）"
 "Error #%1: %2","错误 #%1: %2"
 Europack,欧洲
 "Europe First Priority",欧洲优先
-"Exchange rate %1 (Base Currency) -> %2 not found. DHL method %2 skipped","费率 %1 (基本货币) -> %2 未找到。DHL 方法 %3 被跳过"
+"Exchange rate %1 (Base Currency) -> %2 not found. DHL method %2 skipped","费率 %1 （基本货币） -> %2 未找到。DHL 方法 %3 被跳过"
 Express,快速
 "Express 10:30","快速 10:30"
 "Express 10:30 AM",快速早10:30
@@ -180,7 +180,7 @@ Password,密码
 "Pickup Method",取货方法
 "Piece Id barcode is missing","价格 ID 条码丢失"
 "Piece number information is missing",价格数字信息丢失
-"Please format your response correctly.",请正确格式化返回应答.
+"Please format your response correctly.",请正确格式化返回应答。
 "Please make sure to use only digits here. No dashes are allowed.",请在这里只使用数字，不能使用横线。
 "Please, specify origin country",请指定发起国家
 Pounds,磅
@@ -229,7 +229,7 @@ Sender,发送方
 Size,尺寸
 "Small Express Box",快递小箱
 "Smart Post",智能发布
-"Sorry, something went wrong. Please try again or contact us and we'll try to help.","很抱歉, 发生某种错误. 请重试或者联系我们我们将尽最大努力帮助您."
+"Sorry, something went wrong. Please try again or contact us and we'll try to help.","很抱歉， 发生某种错误。 请重试或者联系我们我们将尽最大努力帮助您。"
 "Sort Order",排序顺序
 Specific,指定
 Sprintline,Sprintline
@@ -242,7 +242,7 @@ Subtotal,小计
 "There is no items in this order",该订单不包含商品
 "Third Party",第三方
 "This allows breaking total order weight into smaller pieces if it exceeds %1 %2 to ensure accurate calculation of shipping charges.",如果重量超过%1%2可以拆分整个订单重量到多个小包以确保货运费用计算更精确
-"This shipping method is not available. Please specify the zip code.",无效的货运方法，请指定邮政编码.
+"This shipping method is not available. Please specify the zip code.",无效的货运方法，请指定邮政编码。
 Title,标题
 "To Lower",要降低
 "To Upper",要升高
@@ -286,8 +286,8 @@ USPS,USPS
 "User ID",用户ID
 Variable,变量
 "Waybill barcode information is missing","Waybill 条码信息丢失"
-"We don't have a way to ship to the selected shipping address. Please choose another address or edit the current address.",无法发送到选择的运送地址，请选择另一个地址或者编辑当前地址.
-"We had to skip DHL method %1 because we couldn't find exchange rate %2 (Base Currency).",由于无法找到汇率%(基础货币)我们不得不跳过DHL方法%1.
+"We don't have a way to ship to the selected shipping address. Please choose another address or edit the current address.",无法发送到选择的运送地址，请选择另一个地址或者编辑当前地址。
+"We had to skip DHL method %1 because we couldn't find exchange rate %2 (Base Currency).",由于无法找到汇率%（基础货币）我们不得不跳过DHL方法%1。
 "Weight Unit",重量单位
 "Weight unit is invalid",重量单位无效
 Width,宽

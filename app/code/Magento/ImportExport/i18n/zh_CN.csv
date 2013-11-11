@@ -1,12 +1,12 @@
 " in rows: ",行：
 "-- Please Select --","-- 请选择 --"
-"Adapter must be an instance of MagentoImportExportModelImportAbstractSource","适配器(Adapter)必须 MagentoImportExportModelImportAbstractSource的实例"
+"Adapter must be an instance of MagentoImportExportModelImportAbstractSource","适配器（Adapter）必须 MagentoImportExportModelImportAbstractSource的实例"
 "Adapter must be an instance of \Magento\ImportExport\Model\Import\Adapter\Abstract","适配器必须为\Magento\ImportExport\Model\Import\Adapter\Abstract的实例"
 "Adapter object must be an instance of %1",适配器对象必须是%1的实例
 "Adapter type must be a non empty string",适配器类型必须为非空字符串
 "Add/Update Complex Data",添加/更新复杂数据
 "Append Complex Data",追加复杂数据
-"Attribute does not has options, so filtering is impossible","属性没有选项,所以过滤是不可能的"
+"Attribute does not has options, so filtering is impossible",属性没有选项，所以过滤是不可能的
 "Begin data validation",开始数据校验
 "Begin export of %1",开始%1的导入
 "Begin import of ""%1"" with ""%2"" behavior","开始导入用""%2""行为导入""%1"""
@@ -17,15 +17,15 @@
 "Cannot find required columns: %1","找不到必须的列: %1"
 "Cannot get autoincrement value",不能得到子增量值
 "Check Data",检查数据
-"Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4","核对的行: %1, 核对的实体: %2, 无效的行: %3, 总错误数: %4"
+"Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4","核对的行: %1， 核对的实体: %2， 无效的行: %3， 总错误数: %4"
 "Column names have duplicates",栏名称有重复
 "Column names is empty or is not an array",栏名称为空或非阵列
 "Column names: ""%1"" are invalid","列名""%1""是无效的"
 "Columns number: ""%1"" have empty headers","列号""%1""标题为空"
 Continue,继续
 "Custom Action",定制动作
-"Custom option with such title already declared in source file.",有如此标题的定制选项已经在源文件中声明.
-"Custom options have different types.",定制选项有不同的类别.
+"Custom option with such title already declared in source file.",有如此标题的定制选项已经在源文件中声明。
+"Custom options have different types.",定制选项有不同的类别。
 "Customer address id column is not specified",客户地址ID列未指定
 "Data is invalid or file is not uploaded",数据无效，或文件未被上传
 "Delete Entities",删除实体
@@ -34,10 +34,10 @@ Continue,继续
 "Destination file path must be a string",目标文件路径必须为字符串
 "Done import data validation",完成导入数据校验
 "E-mail and website combination is not found",邮件地址和站点组合未找到
-"E-mail is duplicated in import file",导入文件中的邮件地址重复.
+"E-mail is duplicated in import file",导入文件中的邮件地址重复。
 "E-mail is invalid",无效的邮件地址
 "E-mail is not specified",未指定邮件地址
-"Empty custom option title.",空的定制选标题.
+"Empty custom option title.",空的定制选标题。
 "Entity Attributes",编辑属性
 "Entity adapter object must be an instance of %1 or %2",尸体适配器对象必须是%1或%2的实例
 "Entity adapter object must be an instance of \Magento\ImportExport\Model\Import\Entity\Abstract","实体适配器对象必须为\Magento\ImportExport\Model\Import\Entity\Abstract的实例"
@@ -48,74 +48,74 @@ Continue,继续
 "Error in data structure: %1 values are mixed","数据结构错误: %1的值是混合的"
 "Error in data structure: behaviors are mixed",数据结构有误：行为是混合的
 "Error in data structure: entity codes are mixed",数据结构有误：实体代码是混合的
-"Errors limit (%1) reached. Please fix errors and re-upload file.",达到错误极限(%1).请修正错误然后重新上传文件.
+"Errors limit (%1) reached. Please fix errors and re-upload file.",达到错误极限（%1）。请修正错误然后重新上传文件。
 Export,导出
 "Export FAQ","导出 FAQ"
 "Export File Format",导出文件格式
 "Export Settings",导出文件
-"Export has been done.",导出完成.
-"Exported %1 rows.",导出%1行.
+"Export has been done.",导出完成。
+"Exported %1 rows.",导出%1行。
 FAQ,常见问题与解答
-"File does not contain data.",文件不包含任何数据.
+"File does not contain data.",文件不包含任何数据。
 "File does not contain data. Please upload another one",文件不包含数据。请上传另一个文件
 "File format is unknown",未知的文件格式
 "File is partially valid, but import is not possible",文件部分有效，但无法导入
 "File is totally invalid. Please fix errors and re-upload file",文件无效。请修复错误并重新上传文件
-"File is totally invalid. Please fix errors and re-upload file.",文件完全无效.请修正错误重新上传.
+"File is totally invalid. Please fix errors and re-upload file.",文件完全无效。请修正错误重新上传。
 "File is valid! To start import process press ""Import"" button",文件有效！要开始导入，请单击“导入”按钮
 "File is valid, but import is not possible",文件有效，但无法导入
 "File to Import",要导入的文件
 "File was not uploaded",文件没有被上传
-"File was not uploaded.",文件未被上传.
+"File was not uploaded.",文件未被上传。
 "Header column names already set",标题列名称已设置
 Import,导入
 "Import / Export FAQ (Frequently Asked Questions)","导入 / 导出 FAQ（常见问题）"
 "Import Behavior",导入行为
 "Import FAQ","导入 FAQ"
 "Import Settings",导入设置
-"Import has been done successfuly.",已成功导入.
+"Import has been done successfuly.",已成功导入。
 "Import successfully done",成功导入
 "Import successfully done.",导入成功完成。
 Import/Export,导入/导出
 In/Out,入/出
 "Input entity code is not equal to entity adapter code",输入的实体代码与实体适配器代码不相同
 "Invalid behavior token for %1",%1的无效行为令牌
-"Invalid custom option maximum characters value.",无效的定制选项最字符值.
-"Invalid custom option price.",无效的定制选项价格.
-"Invalid custom option sort order.",无效的定制选项排序.
-"Invalid custom option store.",无效的定制选项店铺.
-"Invalid custom option type.",无效的定制选项类型.
-"Invalid custom option value price.",无效的定制选项值价格.
-"Invalid custom option value sort order.",无效的定制选项值排序.
+"Invalid custom option maximum characters value.",无效的定制选项最字符值。
+"Invalid custom option price.",无效的定制选项价格。
+"Invalid custom option sort order.",无效的定制选项排序。
+"Invalid custom option store.",无效的定制选项店铺。
+"Invalid custom option type.",无效的定制选项类型。
+"Invalid custom option value price.",无效的定制选项值价格。
+"Invalid custom option value sort order.",无效的定制选项值排序。
 "Invalid entity",无效的实体
 "Invalid file format",无效的文件格式
 "Invalid parameters",无效的参数
 "Invalid password length",无效的密码长度
 "Invalid seek position",无效的位置寻找
 "Invalid value for '%1'",“%1”的数值无效
-"Invalid value in Store column (store does not exists?)",店铺列的值无效(店铺不存在?)
+"Invalid value in Store column (store does not exists?)",店铺列的值无效（店铺不存在?）
 "No filter data provided",没有提供过滤器数据
 "No source specified",没有指定源
 "No valid data sent",没有发送有效的数据
 "No writer specified",没有指定作者
 "Node does not has model token tag",节点不具有模型令牌标签
 "Not implemented yet",尚未实现
-"Option entity must have a parent product entity.",选项实体必须有一个父产品实体.
-"Orphan rows that will be skipped due default row errors","由于默认行错误,孤儿行将被跳过"
-"Please correct the data sent.",请纠正送出的数据.
-"Please correct the file format.",请纠正文件格式.
-"Please correct the parameters.",请纠正这些参数.
+"Option entity must have a parent product entity.",选项实体必须有一个父产品实体。
+"Orphan rows that will be skipped due default row errors",由于默认行错误，孤儿行将被跳过
+"Please correct the data sent.",请纠正送出的数据。
+"Please correct the file format.",请纠正文件格式。
+"Please correct the parameters.",请纠正这些参数。
 "Please enter a correct entity model",请输入一个正确的实体模型
-"Please enter a correct entity.",请输入正确的实体.
+"Please enter a correct entity.",请输入正确的实体。
 "Please fix errors and re-upload file",请修复错误并重新上传文件
 "Please fix errors and re-upload file or simply press ""Import"" button to skip rows with errors",请修复错误并重新上传文件，或单击“导入”按钮来跳过错误行
-"Please fix errors and re-upload file.",请修正错误重新上传文件.
-"Please provide filter data.",请提供过滤器数据.
-"Please specify a source.",请指定一个源.
-"Please specify writer.",请指定写入器.
+"Please fix errors and re-upload file.",请修正错误重新上传文件。
+"Please provide filter data.",请提供过滤器数据。
+"Please specify a source.",请指定一个源。
+"Please specify writer.",请指定写入器。
 "Region is invalid",无效地区
 "Replace Existing Complex Data",替换存在的复杂数据
-"Row with such email, website and address id combination was already found.",找到包含如此邮件地址、站点和地址ID的组合行.
+"Row with such email, website and address id combination was already found.",找到包含如此邮件地址、站点和地址ID的组合行。
 "Select File to Import",选择要导入的文件
 "Some other FAQ","一些其他 FAQ"
 "Source file moving failed",源文件移动失败
@@ -124,17 +124,17 @@ In/Out,入/出
 Status,状态
 "System busy",系统忙碌
 "System doesn't allow to get file upload settings",系统不允许获得上传设置
-"The adapter type must be a non empty string.",适配器类型必须是一个非空字符串.
-"The input entity code is not equal to entity adapter code.",该输入实体代码与实体适配器代码不相等.
+"The adapter type must be a non empty string.",适配器类型必须是一个非空字符串。
+"The input entity code is not equal to entity adapter code.",该输入实体代码与实体适配器代码不相等。
 "The total size of the uploadable files can't be more that %1M",可上传的文件尺寸不能超过%1M
 "There are no product types available for export",没有可用的产品类型可供导出
-"There are several existing custom options with such name.",有几个存在定制选项包含如此名字.
+"There are several existing custom options with such name.",有几个存在定制选项包含如此名字。
 "There is no data for export",没有要导出的数据
 "Total size of uploadable files must not exceed %1","可上传文件的总大小不可超过 %1"
 "Unknown attribute filter type",未知的属性过滤器类型
 "Uploaded file has no extension",已上传的文件没有扩展名
 "Validation Results",验证结果
-"Validation finished successfully",成功完成校验.
+"Validation finished successfully",成功完成校验。
 "Website is not specified",未指定站点
 "in rows",在行
 "in rows:",在行:

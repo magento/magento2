@@ -1,4 +1,4 @@
-"%1 Index process is not working now. Please try running this process later.","%1索引过程现在不工作. 请稍后再尝试运行."
+"%1 Index process is not working now. Please try running this process later.","%1索引过程现在不工作。 请稍后再尝试运行。"
 "%1 Index process is working now. Please try run this process later.","%1 索引进程正在工作。请稍后尝试运行该进程。"
 "%1 index was rebuilt.","%1 索引已重建。"
 "'%1' Index Process Information",“%1”索引进程信息
@@ -19,16 +19,16 @@ Index,索引
 "Index mode",索引模式
 "Indexer code is not defined.",索引器代码未定义。
 "Indexer model is not defined.",索引器模型未定义。
-"Indexer model should extend MagentoIndexModelIndexerAbstract.",索引器模型应该扩展MagentoIndexModelIndexerAbstract.
+"Indexer model should extend MagentoIndexModelIndexerAbstract.",索引器模型应该扩展MagentoIndexModelIndexerAbstract。
 "Indexer model should extend \Magento\Index\Model\Indexer\AbstractIndexer.","索引器模型必须延伸 \Magento\Index\Model\Indexer\AbstractIndexer。"
-"Indexer name is not defined.",索引器名字未定义.
+"Indexer name is not defined.",索引器名字未定义。
 "Manual Update",手动更新
 Mode,模式
 Never,永不
 No,否
 "One or more of the Indexes are not up to date:",一个或多个索引不是最新：
 "One or more of the Indexes are not up to date: %1","一个或更多索引过期: %1"
-"Please go to <a href=""%1"">Index Management</a> and rebuild required indexes.","请去<a href=""%1"">索引管理</a>重建必需的索引."
+"Please go to <a href=""%1"">Index Management</a> and rebuild required indexes.","请去<a href=""%1"">索引管理</a>重建必需的索引。"
 "Please select Index(es)",请选择索引
 "Please select Indexes",请选择索引
 "Process Information",处理信息
@@ -42,8 +42,6 @@ System,系统
 "The index has been saved.",索引已保存。
 "There was a problem with reindexing process.",重新索引进程遇到问题。
 "There was a problem with saving process.",保存进程遇到问题。
-"Total of %1 index(es) have changed index mode.",共%1个索引已经改变了索引模式.
-"Total of %1 index(es) have reindexed data.",共%1个索引已经重新索引了数据.
 "Total of %1 index(es) have changed index mode.","总计 %1 个索引已变更索引模式。"
 "Total of %1 index(es) have reindexed data.","总计 %1 个索引包含重新索引数据。"
 "Update Required",需要更新

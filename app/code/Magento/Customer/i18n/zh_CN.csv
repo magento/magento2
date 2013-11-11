@@ -35,7 +35,7 @@ Amount,数量
 "An error occurred while deleting the address.",删除该地址时遇到了错误。
 "An error occurred while retrieving the option value: %1.","获取选项值 %1 时遇到了错误。"
 "An error occurred while saving the collection, aborting. Error: %1",保存集合时遇到了错误，正在忽略，错误号：%1
-"An invalid option ID is specified for %1 (%2), skipping the record.","%1 (%2)为无效的选项ID，跳过此记录。"
+"An invalid option ID is specified for %1 (%2), skipping the record.","%1 （%2）为无效的选项ID，跳过此记录。"
 Approved,已批准
 "Are you sure that you want to remove this item?",您是否确认要删除该内容？
 "Are you sure you want to cancel adding of this address?",您是否确认要取消添加该地址？
@@ -157,7 +157,7 @@ Fax,传真
 "Forgot and Remind Email Sender",忘记并提醒邮件发送者
 "Form Fields Before",表单字段，先于
 "From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information.",在您的我的帐户仪表板中，您可以查看最近帐户活动的快照，并更新帐户信息。选择下面的链接以查看或修改信息。
-"From your dashboard you can review recent account activity and edit your account information.",从仪表盘能查看您的近期账户活动和编辑账户信息.
+"From your dashboard you can review recent account activity and edit your account information.",从仪表盘能查看您的近期账户活动和编辑账户信息。
 Gender,性别
 "Gender is required.",需提供性别信息。
 "General Subscription",常规订阅
@@ -180,16 +180,16 @@ ID,ID
 "If you are a registered VAT customer, please click <a href=""%1"">here</a> to enter you shipping address for proper VAT calculation","如果你是已注册的 VAT 顾客，请点击<a href=""%1"">这里</a>输入发货地址，以准确计算 VAT"
 "If you believe this is an error, please contact us at %1","如果你觉得有错误，请联系我们 %1"
 "If you have an account with us, please log in.",如果您拥有账户，请登录。
-"Invalid attribute option specified for attribute %1 (%2), skipping the record.","为属性 %1 (%2) 指定的属性选项无效，正在跳过该记录。"
+"Invalid attribute option specified for attribute %1 (%2), skipping the record.","为属性 %1 （%2） 指定的属性选项无效，正在跳过该记录。"
 "Invalid attribute set specified, skipping the record.",指定的属性集无效，正在跳过该记录。
-"Invalid billing address for (%1)","(%1) 的帐单地址无效"
+"Invalid billing address for (%1)","（%1） 的帐单地址无效"
 "Invalid current password",当前密码无效
 "Invalid customer data",客户数据无效
 "Invalid email address ""%1"".","电子邮件地址 ""%1"" 无效。"
 "Invalid email address.",邮件地址无效。
 "Invalid login or password.",无效的登录名或密码。
 "Invalid password reset token.",无效的密码重设令牌。
-"Invalid shipping address for (%1)","(%1) 的发货地址无效"
+"Invalid shipping address for (%1)","（%1） 的发货地址无效"
 "Invalid store specified, skipping the record.",指定的店铺无效，正在跳过该记录。
 "Invalid website, skipping the record, line: %1",网站无效，跳过该记录，行：%1
 "Last Activity",上次活动
@@ -198,7 +198,7 @@ ID,ID
 "Last Name",姓氏
 "Last URL",最后一个URL
 "Leave empty for default (15 minutes).",留空可使用默认值（15分钟）。
-"Leave empty for default (2). Valid range: 1-4",留空可使用默认值（2）.有效范围：1-4
+"Leave empty for default (2). Valid range: 1-4",留空可使用默认值（2）。有效范围：1-4
 "Lifetime Sales",终生销售
 "Log In",登录
 "Log Out",注销
@@ -272,8 +272,8 @@ Paused,已暂停
 Pending,挂起
 "Per Website",每网站
 "Personal Information",个人信息
-"Please correct the email address.",请纠正邮件地址.
-"Please correct this email address: ""%1"".","请纠正该邮件地址: ""%1""."
+"Please correct the email address.",请纠正邮件地址。
+"Please correct this email address: ""%1"".","请纠正该邮件地址: ""%1""。"
 "Please enter a number 1 or greater in this field.",请在该字段输入数字1或更大值。
 "Please enter a valid date between %1 and %2 at %3.","请在%1输入介于%2 与 %3 之间的有效日期。"
 "Please enter a valid date equal to or greater than %1 at %2.","请在 %1 输入等于或大于 %2 的有效日期。"
@@ -288,12 +288,11 @@ Pending,挂起
 "Please enter the zip/postal code.",请输入邮编。
 "Please enter your email address below. You will receive a link to reset your password.",请在下面输入你的电子邮件地址。你将收到一个重置密码的链接。
 "Please enter your email address. We'll send a link to reset your password.",请在下面输入你的电子邮件地址。你将收到一个重置密码的链接。
-"Please enter your email below and we'll send you confirmation link for it.",请输入您的邮件地址然后我们将发送一个确认链接给您.
 "Please enter your email below and we'll send you confirmation link for it.",请在下面输入您的邮件地址，我们将发送确认链接。
 "Please enter your email.",请输入您的电子邮件。
 "Please make sure your passwords match.",请确保密码匹配。
 "Please select",请选择
-"Please select a region, state or province.",请选择地区、州或省.
+"Please select a region, state or province.",请选择地区、州或省。
 "Please select a website which contains store view",请选择包含该店铺视图的网站
 "Please select region, state or province",请选择地区、州，或省
 "Please, check your email for confirmation key.",请检查您的电子邮件以获取确认密钥。
@@ -384,14 +383,14 @@ Text,文字
 "Thank you for registering with %1.","感谢您注册 %1。"
 "The Date of Birth is required.",需提供生日。
 "The TAX/VAT number is required.","需提供 TAX/VAT 号码。"
-"The VAT ID entered (%1) is not a valid VAT ID.","输入的 VAT ID (%1)  不是有效的 VAT ID。"
-"The VAT ID entered (%1) is not a valid VAT ID. The customer would belong to Customer Group %2.","输入的 VAT ID (%1) 不是有效的 VAT ID。该顾客应属于顾客群体 %2。"
+"The VAT ID entered (%1) is not a valid VAT ID.","输入的 VAT ID （%1）  不是有效的 VAT ID。"
+"The VAT ID entered (%1) is not a valid VAT ID. The customer would belong to Customer Group %2.","输入的 VAT ID （%1） 不是有效的 VAT ID。该顾客应属于顾客群体 %2。"
 "The VAT ID is valid. The current Customer Group will be used.","VAT ID 有效。将使用当前的顾客群体。"
 "The account information has been saved.",帐户信息已保存。
 "The address does not belong to this customer.",该地址不输入此用户。
 "The address has been deleted.",地址已删除。
 "The address has been saved.",地址已保存。
-"The address with the specified ID not found.",找不到指定ID的地址.
+"The address with the specified ID not found.",找不到指定ID的地址。
 "The customer ID and email did not match, skipping the record, line: %1","顾客 ID 与电子邮件不匹配，跳过该记录，行：%1"
 "The customer does not have default billing address.",客户未设置默认账单地址。
 "The customer email (%1) already exists, skipping the record, line: %2",顾客邮件（%1）已经存在，跳过该记录，行：%2
@@ -402,15 +401,15 @@ Text,文字
 "The group ""%1"" cannot be deleted","组 ""%1"" 无法删除"
 "The last name cannot be empty.",姓氏不能为空。
 "The minimum password length is %1","密码长度最小值为 %1"
-"The password can not begin or end with a space.",密码不能以空格开头或者结束.
+"The password can not begin or end with a space.",密码不能以空格开头或者结束。
 "The password cannot be empty.",密码不能为空。
-"The password must have at least %1 characters.",密码必须有至少%1个字符.
+"The password must have at least %1 characters.",密码必须有至少%1个字符。
 "The password must have at least 6 characters. Leading or trailing spaces will be ignored.","密码必须包含至少 6 个字符。前导或尾随空格将被忽略。"
-"The suffix that goes after name (Jr., Sr., etc.)",名字后面的后缀（Jr.、Sr.等）
+"The suffix that goes after name (Jr., Sr., etc.)",名字后面的后缀（Jr。、Sr。等）
 "The title that goes before name (Mr., Mrs., etc.)",姓名前称谓（先生、女士等）
-"There are no items in customer's wishlist at the moment",客户的收藏清单中目前没内容
 "There are no items in customer's shopping cart at the moment",客户的购物车中目前没内容
-"There is already an account with this email address. If you are sure that it is your email address, <a href=""%1"">click here</a> to get your password and access your account.","已经存在一个同名邮件地址的账号.如果您确定这就是您的邮件地址,<a href=""%1"">点击这里</a>得到密码来访问您的账户信息."
+"There are no items in customer's wishlist at the moment",客户的收藏清单中目前没内容
+"There is already an account with this email address. If you are sure that it is your email address, <a href=""%1"">click here</a> to get your password and access your account.","已经存在一个同名邮件地址的账号。如果您确定这就是您的邮件地址，<a href=""%1"">点击这里</a>得到密码来访问您的账户信息。"
 "There was an error validating the VAT ID.","验证 VAT ID 时出错。"
 "There was an error validating the VAT ID. The customer would belong to Customer Group %1.","验证 VAT ID 时出错。该顾客可属于顾客群体 %1。"
 "This account is not confirmed.",该帐户尚未确认。
@@ -434,8 +433,8 @@ Update,更新
 "Use as My Default Shipping Address",用作我的默认运送地址
 "Use as my default billing address",使用并作为我的默认账单地址
 "Use as my default shipping address",使用并作为我的默认运送地址
-"Use this as my default billing address.",设置为默认账单地址.
-"Use this as my default shipping address.",设置为默认货运地址.
+"Use this as my default billing address.",设置为默认账单地址。
+"Use this as my default shipping address.",设置为默认货运地址。
 "VAT Number","VAT 编号"
 "VAT Request Date","VAT 请求日期"
 "VAT Request Identifier","VAT 申请标识符"
@@ -450,7 +449,7 @@ Website,网站
 "Welcome Email",欢迎邮件
 Wishlist,收藏清单
 "Wishlist - %1 item(s)","收藏清单 - %1 个条目"
-"With your own account, you can check out faster, store multiple shipping addesses, see your shopping activity and more.",用自己的账号方便更快结账、存储多运送地址、查看购物历史以及更多.
+"With your own account, you can check out faster, store multiple shipping addesses, see your shopping activity and more.",用自己的账号方便更快结账、存储多运送地址、查看购物历史以及更多。
 "Would you like to change the Customer Group for this order?",你是否想更改该订单的顾客群体？
 "Wrong confirmation key.",错误的确认密钥。
 "Wrong customer account specified.",指定的客户帐户有误。
@@ -463,19 +462,19 @@ Year,年
 "You are currently subscribed to 'General Subscription'.",您当前已订阅“常规订阅”。
 "You are currently subscribed to our newsletter.",您当前已订阅我们的新闻通讯。
 "You are now logged out",您已注销
-"You do not subscribe to a newsletter.",不订阅新闻邮件.
+"You do not subscribe to a newsletter.",不订阅新闻邮件。
 "You have logged out and will be redirected to our homepage in 5 seconds.",您已退出，5秒钟内会回到首页。
 "You have no additional address entries in your address book.",您的地址薄中没有额外的地址条目。
 "You have no additional entries in your address book.",您的地址簿里有没有额外的条目。
 "You have no default billing address in your address book.",您的地址薄中没有默认账单地址。
 "You have no default entries in your address book.",您的地址薄里没有默认的条目。
 "You have no default shipping address in your address book.",您的地址薄中没有默认运送地址。
-"You have no more address entries in your address book.",您的地址簿中没有更多地址.
+"You have no more address entries in your address book.",您的地址簿中没有更多地址。
 "You have not set a default billing address.",您还没有设置默认的账单地址。
 "You have not set a default shipping address.",您尚未设置默认的运送地址。
 "You have placed no orders yet.",您还没下过订单。
 "You have placed no products yet.",您尚未放置产品。
-"You subscribe to our newsletter.",订阅新闻邮件.
+"You subscribe to our newsletter.",订阅新闻邮件。
 "You will be charged tax.",你将被收税。
 "You will not be charged tax.",你不需要交税。
 "Your Tax ID cannot be validated.","你的纳税 ID 无法验证。"

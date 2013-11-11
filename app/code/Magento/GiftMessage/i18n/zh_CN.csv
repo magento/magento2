@@ -24,14 +24,13 @@ From,来自
 "Gift Options for the Entire Order.",适用于整个订单的礼品选项。
 "Gift Options for this address",为该地址的礼物设置
 "Gift Options for this address.",适用于该地址的礼品选项。
-"Item %1 of %2",%2中的条目%1
 "Item %1 of %2","第 %1 个条目，共 %2 个"
 Message,信息
 No,否
 OK,确定
 "Save Gift Message",保存礼品信息
 "The gift message has been removed",礼品信息已删除
-"The gift message has been removed.",该礼物留言已经被移除.
+"The gift message has been removed.",该礼物留言已经被移除。
 "The gift message has been saved",礼品信息已保存
 "The gift message has been saved.",礼品信息已保存。
 To,发送至
@@ -41,6 +40,6 @@ Yes,是
 "You can leave this box blank if you do not wish to add a gift message for the item.",如果您不想为该商品添加礼品信息，则可以在这里留空。
 "You can leave this box blank if you do not wish to add a gift message for this address.",如果您不想为该地址添加礼品信息，则可以在这里留空。
 "You can leave this box blank if you do not wish to add a gift message for whole order.",如果您不想为整个订单添加礼品信息，则可以在这里留空。
-"You can leave this box empty if you don't want to add a gift message for the whole order.",如果你不想为整个订单添加礼物留言请留空.
-"You can leave this box empty if you don't want to add a gift message for this address.",如果你不想为该地址添加礼物留言请留空.
-"You can leave this box empty if you don't want to add a gift message to this item.",如果你不想为该条目添加礼物留言请留空.
+"You can leave this box empty if you don't want to add a gift message for the whole order.",如果你不想为整个订单添加礼物留言请留空。
+"You can leave this box empty if you don't want to add a gift message for this address.",如果你不想为该地址添加礼物留言请留空。
+"You can leave this box empty if you don't want to add a gift message to this item.",如果你不想为该条目添加礼物留言请留空。

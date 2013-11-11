@@ -6,7 +6,7 @@
 "3 stars","3 星"
 "4 stars","4 星"
 "5 stars","5 星"
-"<a href=""%1$s"" onclick=""this.target='blank'"">%2$s %3$s</a> <a href=""mailto:%4$s"">(%4$s)</a>","<a href=""%1$s"" onclick=""this.target='blank'"">%2$s %3$s</a> <a href=""mailto:%4$s"">(%4$s)</a>"
+"<a href=""%1$s"" onclick=""this.target='blank'"">%2$s %3$s</a> <a href=""mailto:%4$s"">(%4$s)</a>","<a href=""%1$s"" onclick=""this。target='blank'"">%2$s %3$s</a> <a href=""mailto:%4$s"">（%4$s）</a>"
 "Add New Review",添加新评论
 "Add Your Review",添加您的评论
 Administrator,管理员
@@ -47,7 +47,7 @@ Nickname,昵称
 "Nickname can't be empty",昵称不能为空
 "Not Approved",未批准
 "Only registered users can write reviews. Please, <a href=""%1"">log in</a> or <a href=""%1"">register</a>","仅注册用户可撰写评论。请<a href=""%1"">登录</a>或<a href=""%1"">注册</a>"
-"Only registered users can write reviews. Please, <a href=""%1"">log in</a> or <a href=""%2"">register</a>","只有注册用户能发表评论,<a href=""%1"">登录</a>或者<a href=""%2"">注册</a>"
+"Only registered users can write reviews. Please, <a href=""%1"">log in</a> or <a href=""%2"">register</a>","只有注册用户能发表评论，<a href=""%1"">登录</a>或者<a href=""%2"">注册</a>"
 "Pending Reviews",挂起的评论
 "Pending Reviews of Customer `%1`",来自客户“%1”未决的评论
 "Please select a product",请选择产品
@@ -65,14 +65,14 @@ Product,产品名
 Quantity,数量
 Rating:,评分：
 Review,评论
-"Review (submitted on %1):",评论(提交于%1)
+"Review (submitted on %1):",评论（提交于%1）
 "Review Details",评论详情
 "Review Form Fields Before",评论表单字段之前
 "Review by",被评论
 "Review by <span>%1</span>","评论者 <span>%1</span>"
 "Review can't be empty",评论不能为空
 "Review summary can't be empty",评论摘要不能为空
-Review(s),评论(s)
+Review(s),评论（s）
 "Reviews and Ratings",评论与评级
 SKU,SKU
 "Save Review",保存评论
@@ -82,9 +82,9 @@ Status,状态
 "Summary Rating",评分汇总
 "Summary of Review",评论汇总
 "Summary of Your Review",您的评论汇总
-"The nickname field can't be empty.",昵称不能为空.
-"The review field can't be empty.",评论不能为空.
-"The review summary field can't be empty.",评论内容不能为空.
+"The nickname field can't be empty.",昵称不能为空。
+"The review field can't be empty.",评论不能为空。
+"The review summary field can't be empty.",评论内容不能为空。
 Title,标题
 Type,类型
 "Unable to post the review.",无法发布该评论。
@@ -92,11 +92,11 @@ Type,类型
 "View All Reviews",查看所有评论
 "View Details",查看详情
 Visibility,可见性
-"We cannot post the review.",不能发表评论.
+"We cannot post the review.",不能发表评论。
 Websites,网站
 "Write Your Own Review",撰写您自己的评论
 "You have submitted no reviews.",您尚未提交评论。
 "You're reviewing:",您正在评论：
 "Your Rating:",您的评分：
-"Your Review (submitted on %1):",你的评论(提交于%1)
+"Your Review (submitted on %1):",你的评论（提交于%1）
 "Your review has been accepted for moderation.",您的评论已被管理员批准。

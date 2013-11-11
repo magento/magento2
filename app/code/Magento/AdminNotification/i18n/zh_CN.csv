@@ -1,4 +1,4 @@
-"A total of %1 record(s) have been marked as Read.",共%1条记录已经被标记为已读.
+"A total of %1 record(s) have been marked as Read.",共%1条记录已经被标记为已读。
 Acknowledge,告知
 Actions,操作
 "An error occurred while marking notification as read.",标记通知为已读时遇到了错误。
@@ -17,19 +17,19 @@ Message,信息
 "Messages Inbox",收件箱
 Notification,通知
 Notifications,通知
-"One or more media files failed to be synchronized during the media storages synchronization process. Refer to the log file for details.","媒体存储同步过程中一个或更多文件未能同步,打开日志文件查看详细."
-"One or more of the Cache Types are invalidated: %1. ","一个或多个缓存类型是无效的: %1. "
-"Please go to <a href=""%1"">Cache Management</a> and refresh cache types.","请去<a href=""%1"">缓存管理</a>刷新缓存类型."
+"One or more media files failed to be synchronized during the media storages synchronization process. Refer to the log file for details.",媒体存储同步过程中一个或更多文件未能同步，打开日志文件查看详细。
+"One or more of the Cache Types are invalidated: %1. ","一个或多个缓存类型是无效的: %1。 "
+"Please go to <a href=""%1"">Cache Management</a> and refresh cache types.","请去<a href=""%1"">缓存管理</a>刷新缓存类型。"
 "Please select messages.",请选择一条信息。
 "Read Details",阅读详情
 Remove,删除
-"See All (%1 unread)",查看所有(%1未读)
+"See All (%1 unread)",查看所有（%1未读）
 Severity,严重程度
 "Show List",显示列表
 "Show Toolbar",显示工具栏
-"Synchronization of media storages has been completed.",媒体存储同步已经完成.
+"Synchronization of media storages has been completed.",媒体存储同步已经完成。
 "System messages",系统消息
-"The message has been marked as Read.",消息已经标记为已读.
+"The message has been marked as Read.",消息已经标记为已读。
 "The message has been marked as read.",该信息已标记为已读。
 "The message has been removed.",该信息已被删除。
 "Total of %1 record(s) have been marked as read.",共%1条信息标记为已读。
@@ -37,7 +37,7 @@ Severity,严重程度
 "Unable to proceed. Please, try again.",无法处理。请重试。
 "Update Frequency",更新频率
 "Use HTTPS to Get Feed",使用HTTPS获取源
-"We appreciate our merchants' feedback. Please <a href=""#"" data-mage-init=%1>take our survey</a> and tell us about features you'd like to see in Magento.","感谢商家反馈,请<a href=""#"" data-mage-init=%1>参与调查</a>告诉我们关于你期望Magento实现的特性."
+"We appreciate our merchants' feedback. Please <a href=""#"" data-mage-init=%1>take our survey</a> and tell us about features you'd like to see in Magento.","感谢商家反馈，请<a href=""#"" data-mage-init=%1>参与调查</a>告诉我们关于你期望Magento实现的特性。"
 "Wrong message type",错误的消息类型
 "You have %1 new system message",您有%1条新系统消息
 "You have %1 new system messages",您有%1条新系统消息
@@ -45,4 +45,4 @@ critical,重要
 major,主要
 minor,次要
 notice,注意
-"{{base_url}} is not recommended to use in a production environment to declare the Base Unsecure URL / Base Secure URL. It is highly recommended to change this value in your Magento <a href=""%1"">configuration</a>.","不推荐在产品环境中使用{{base_url}}来声明基础非URL(安全/非安全).强烈推荐改变Magento<a href=""%1"">配置</a>中的值."
+"{{base_url}} is not recommended to use in a production environment to declare the Base Unsecure URL / Base Secure URL. It is highly recommended to change this value in your Magento <a href=""%1"">configuration</a>.","不推荐在产品环境中使用{{base_url}}来声明基础非URL（安全/非安全）。强烈推荐改变Magento<a href=""%1"">配置</a>中的值。"

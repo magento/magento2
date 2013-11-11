@@ -111,36 +111,36 @@ Password,密码
 "Switch/Solo/Maestro Start Date",Switch/Solo/Maestro开始日期
 "Tax Amount",税额
 "Test Mode",测试模式
-"The authorize action is not available.",认证操作无效.
-"The billing period unit is not defined or wrong.",账期单位未定义或定义错误.
-"The capture action is not available.",捕获操作无效.
-"The currency code is undefined.",货币码未定义.
+"The authorize action is not available.",认证操作无效。
+"The billing period unit is not defined or wrong.",账期单位未定义或定义错误。
+"The capture action is not available.",捕获操作无效。
+"The currency code is undefined.",货币码未定义。
 "The date when billing for the profile begins.",该配置文件记账的开始日期。
-"The initial, non-recurring payment amount is due immediately when the profile is created.","当配置文件创建后,初始的、非周期性的支付额立即到期."
+"The initial, non-recurring payment amount is due immediately when the profile is created.",当配置文件创建后，初始的、非周期性的支付额立即到期。
 "The number of billing cycles for payment period.",支付周期内记账循环的数量。
 "The number of scheduled payments that can fail before the profile is automatically suspended.",配置文件被自动挂起之前，支付计划的失败数量。
-"The order action is not available.",订购操作无效.
-"The payment disallows storing objects.",该支付不允许存储对象.
-"The payment method code is not set.",支付方法未设定.
-"The payment method code is undefined.",支付方法未定义.
-"The payment method you requested is not available.",请求的支付方法无效.
+"The order action is not available.",订购操作无效。
+"The payment disallows storing objects.",该支付不允许存储对象。
+"The payment method code is not set.",支付方法未设定。
+"The payment method code is undefined.",支付方法未定义。
+"The payment method you requested is not available.",请求的支付方法无效。
 "The payment review action is unavailable.",支付审查操作不可用。
-"The period frequency is wrong.",周期频率错误.
-"The recurring profile start date has invalid format.",周期性配置文件开始日期格式无效.
-"The reference ID is not set.",参考ID未设定.
-"The refund action is not available.",退款操作无效.
-"The schedule description must be provided.",必须提供日程描述.
-"The start date has an invalid format.",开始日期格式无效.
-"The start date is undefined.",开始日期未定义.
-"The trial billing amount is wrong.",试用账单额错误.
-"The trial billing period unit is wrong.",试用账期单位错误.
-"The trial period frequency is wrong.",试用期频率错误.
-"The trial period max cycles is wrong.",试用期最大周期错误.
-"The wrong %1 is specified.",指定了错误的%1.
-"This is the date when billing for the profile begins.",这是账单配置文件开始的日期.
-"This is the number of billing cycles for the payment period.",这是支付期间的账单周期数.
-"This is the number of billing periods that make up one billing cycle.",这是用来完成一个账单周期的账期数.
-"This is the unit for billing during the subscription period.",这是账单订阅期间的单位.
+"The period frequency is wrong.",周期频率错误。
+"The recurring profile start date has invalid format.",周期性配置文件开始日期格式无效。
+"The reference ID is not set.",参考ID未设定。
+"The refund action is not available.",退款操作无效。
+"The schedule description must be provided.",必须提供日程描述。
+"The start date has an invalid format.",开始日期格式无效。
+"The start date is undefined.",开始日期未定义。
+"The trial billing amount is wrong.",试用账单额错误。
+"The trial billing period unit is wrong.",试用账期单位错误。
+"The trial period frequency is wrong.",试用期频率错误。
+"The trial period max cycles is wrong.",试用期最大周期错误。
+"The wrong %1 is specified.",指定了错误的%1。
+"This is the date when billing for the profile begins.",这是账单配置文件开始的日期。
+"This is the number of billing cycles for the payment period.",这是支付期间的账单周期数。
+"This is the number of billing periods that make up one billing cycle.",这是用来完成一个账单周期的账期数。
+"This is the unit for billing during the subscription period.",这是账单订阅期间的单位。
 Title,标题
 "Trial Billing Amount",尝试记账帐户。
 "Trial Billing Frequency",尝试记账频率
@@ -156,17 +156,17 @@ Title,标题
 "Unit for billing during the subscription period.",订阅期限内的记账单位。
 "Unsupported currency code: %1.",不支持的货币代码：%1
 "Void action is not available.",空操作不可用。
-"We cannot retrieve the payment info model object.",检索不到支付信息模型对象.
-"We cannot retrieve the payment information object instance.",检索不到支付信息对象实例.
-"We cannot retrieve the payment method code.",检索不到支付方法代码.
-"We cannot retrieve the payment method model object.",检索不到支付方法模型对象.
-"We found a wrong or empty billing amount specified.",未指定或指定错误的账单额.
-"We found an incorrect credit card expiration date.",不正确的信用卡过期日期.
+"We cannot retrieve the payment info model object.",检索不到支付信息模型对象。
+"We cannot retrieve the payment information object instance.",检索不到支付信息对象实例。
+"We cannot retrieve the payment method code.",检索不到支付方法代码。
+"We cannot retrieve the payment method model object.",检索不到支付方法模型对象。
+"We found a wrong or empty billing amount specified.",未指定或指定错误的账单额。
+"We found an incorrect credit card expiration date.",不正确的信用卡过期日期。
 Week,周
 "What is this?",这是什么？
 "Whether to suspend the payment profile if the initial fee fails or add it to the outstanding balance.",如果初始费用失败，或添加到余款余额中，是否挂起支付配置文件。
 "Wrong %1 specified.","指定的 %1 有误。"
 "Wrong or empty billing amount specified.",指定的记账额度有误或为空。
 Year,年
-"You can't use the payment type you selected to make payments to the billing country.",不能选择该支付类型来支付到账单目的地国家.
+"You can't use the payment type you selected to make payments to the billing country.",不能选择该支付类型来支付到账单目的地国家。
 "Zero Subtotal Checkout",无小计结账

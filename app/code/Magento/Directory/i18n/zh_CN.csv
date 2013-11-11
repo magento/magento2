@@ -2,7 +2,7 @@
 "--Please select--",--请选择--
 "Allowed Currencies",允许的货币
 "Base Currency",基准货币
-"Base currency is used for all online payment transactions. Scope is defined by the catalog price scope (""Catalog"" > ""Price"" > ""Catalog Price Scope"").","基准货币将被所有在线支付交易所使用。范围则是由分类价格范围 (""分类"" > ""价格"" > ""分类价格范围"")决定的。"
+"Base currency is used for all online payment transactions. Scope is defined by the catalog price scope (""Catalog"" > ""Price"" > ""Catalog Price Scope"").","基准货币将被所有在线支付交易所使用。范围则是由分类价格范围 （""分类"" > ""价格"" > ""分类价格范围""）决定的。"
 "Can't convert rate from ""%1-%2"".","无法执行 ""%1-%2"" 费率转换。"
 "Cannot retrieve rate from %1.","无法从 %1 获取费率。"
 "Connection Timeout in Seconds",连接超时的秒数
@@ -30,10 +30,10 @@ Frequency,频率
 "Invalid target currency.",目标币种无效。
 "List of countries",国家列表
 "List of regions in specified country",所指定国家中的地区列表
-"Please correct the country code: %1.","请纠正货币代码: %1."
+"Please correct the country code: %1.","请纠正货币代码: %1。"
 "Please correct the rates received",请纠正所得比率
-"Please correct the target currency.",请纠正目标货币.
-"Please specify the correct Import Service.",请指定正确导入服务.
+"Please correct the target currency.",请纠正目标货币。
+"Please specify the correct Import Service.",请指定正确导入服务。
 "Postal Code is Optional for the following countries",下列国家的邮编是可选的
 Region,地区
 "Region API",地区API
@@ -47,8 +47,8 @@ State/Province,州/省
 "Unable to initialize the import model.",无法初始化导入模块。
 "Undefined rate from ""%1-%2"".","未定义的费率 ""%1-%2""。"
 WARNING:,警告：
-"We can't initialize the import model.",不能初始化导入模型.
-"We can't retrieve a rate from %1.",不能从%1检索一个比率.
+"We can't initialize the import model.",不能初始化导入模型。
+"We can't retrieve a rate from %1.",不能从%1检索一个比率。
 Webservicex,Web服务
 "Your current currency is: %1",您的当前币种为：%1
-"Your current currency is: %1.","您当前货币是: %1."
+"Your current currency is: %1.","您当前货币是: %1。"

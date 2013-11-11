@@ -1,7 +1,7 @@
 """%1"" is not available in the requested quantity. %2 of the items will be backordered.","所请求数量的""%1""不可用。该条目有 %2 个处于缺货状态。"
 "%1 is available for purchase in increments of %2",可以以%2的增量的购买%1
 "%1 is available for purchase in increments of %2 only.",%1仅在增量购买%2时可用。
-"%1 is not a correct comparison method.",%1不是一个正确的比较方法.
+"%1 is not a correct comparison method.",%1不是一个正确的比较方法。
 "%1 is not a correct comparsion method.",%1不是正确的比较方法。
 "<strong>Note</strong> that these settings are applicable to cart line items, not the whole cart.",<strong>请注意</strong>这些设置适用于购物车单个条目，而非整个购物车。
 "Add Minimum Qty",添加最小的数量
@@ -30,13 +30,13 @@ Inventory,盘点
 "Minimum Quantity",最小数量
 "Minimum Quantity Allowed in Shopping Cart",购物车里允许的最少数量
 "No Backorders",无延期交货
-"Not all of your products are available in the requested quantity.",不是所有的产品请求数量都是有效的.
+"Not all of your products are available in the requested quantity.",不是所有的产品请求数量都是有效的。
 "Not all products are available in the requested quantity",在已请求的数量中并非所有产品均有库存
 "Notify for Quantity Below",存量过低通知
 "Only %1 left",仅剩下%1
 "Only X left Threshold","仅 X左侧阈值"
 "Out of Stock",无货
-"Please correct the quantity for some products.",请纠正部分产品的数量.
+"Please correct the quantity for some products.",请纠正部分产品的数量。
 "Product Stock Options",产品库存选项
 "Quantity Increments",数量增量
 "Quantity for Item's Status to Become Out of Stock",产品状态变为缺货时的数量
@@ -45,33 +45,33 @@ Inventory,盘点
 "Rule price",规则价格
 "Set Items' Status to be In Stock When Order is Cancelled",如果订单被取消，设置商品的状态为有货
 "Some of the products are currently out of stock",某些产品目前缺货
-"Some of the products are currently out of stock.",部分产品当前缺货.
+"Some of the products are currently out of stock.",部分产品当前缺货。
 "Some of the products cannot be ordered in requested quantity.",某些产品的订购数量存货不足。
 "Some of the products cannot be ordered in the requested quantity.",某些产品无法按照所需数量下单。
 "Stock Options",库存选项
 "Stock Status",库存状态
-"The fewest you may purchase is %1.",您购买最少的是%1.
+"The fewest you may purchase is %1.",您购买最少的是%1。
 "The maximum quantity allowed for purchase is %1.","允许购买的最大数量为 %1。"
 "The minimum quantity allowed for purchase is %1.","允许购买的最小数量为 %1。"
-"The most you may purchase is %1.",您购买最多的是%1.
+"The most you may purchase is %1.",您购买最多的是%1。
 "The requested quantity for ""%1"" is not available.","""%1"" 所要购买的数量不可用。"
 "The stock item for Product in option is not valid.",产品的库存选项无效。
 "The stock item for Product is not valid.",产品的库存项无效。
 "This product is available for purchase in increments of %1 only.","该产品只能以 %1 的增量采购。"
 "This product is currently out of stock.",该产品目前缺货。
 "This product is not available in the requested quantity. %1 of the items will be backordered.","该产品所要购买的数量不足。 %1 个产品处于缺货状态。"
-"This product is out of stock.",该产品缺货.
+"This product is out of stock.",该产品缺货。
 "To Fixed Value",为固定值
 "To Percentage",为百分率
 "Undefined product type",未定义的产品类型
 "Undefined product type.",未定义的产品类型。
-"Unsupported product type ""%1"".","不支持的产品类型""%1""."
+"Unsupported product type ""%1"".","不支持的产品类型""%1""。"
 Update,更新
 "Update product stock data",更新产品库存数据
 "Update the Product",更新产品
-"We cannot specify a product identifier for the order item.",无法为该订单条目指定产品标识.
-"We don't have ""%1"" in the requested quantity, so we'll back order the remaining %2.","我们没有""%1""个备货量, 所以我们将延迟交货剩下的%2."
-"We don't have as many ""%1"" as you requested, but we'll back order the remaining %2.","我们没有你要的(""%1"")那么多数量, 但是我们将延迟交货剩下的%2."
-"We don't have as many ""%1"" as you requested.","我们没有你要的(""%1"")那么多数量."
-"You can buy %1 only in increments of %2.",您能以%2的增量购买%1.
-"You can buy this product only in increments of %1.",您能以%1的增量购买该产品.
+"We cannot specify a product identifier for the order item.",无法为该订单条目指定产品标识。
+"We don't have ""%1"" in the requested quantity, so we'll back order the remaining %2.","我们没有""%1""个备货量， 所以我们将延迟交货剩下的%2。"
+"We don't have as many ""%1"" as you requested, but we'll back order the remaining %2.","我们没有你要的（""%1""）那么多数量， 但是我们将延迟交货剩下的%2。"
+"We don't have as many ""%1"" as you requested.","我们没有你要的（""%1""）那么多数量。"
+"You can buy %1 only in increments of %2.",您能以%2的增量购买%1。
+"You can buy this product only in increments of %1.",您能以%1的增量购买该产品。

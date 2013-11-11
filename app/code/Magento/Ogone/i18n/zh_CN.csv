@@ -4,7 +4,6 @@ Authorization,授权
 "Background Color of Ogone Template","Ogone 模板的背景颜色"
 "Button Background Color of the Ogone Template","Ogone 模板的按钮背景颜色"
 "Button Text Color of the Ogone Template","Ogone 模板的的按钮文本颜色"
-"Can't detect Ogone payment action",检测不到Ogone网关动作
 "Can't detect Ogone payment action","无法检测 Ogone 支付操作"
 "Cancelled Ogone","已取消 Ogone"
 Debug,调试
@@ -19,7 +18,7 @@ Enabled,已启用
 "Enabling this feature needs adjusting ""Technical information > Global security parameters"" on merchant administration.","要启用此功能，需要在商家管理页面调节“技术信息 > 全局安全参数”设置。"
 "Exception not defined",异常未定义
 "Font Family of the Ogone Template","Ogone 模板的字体库"
-"For production, replace ""test"" with ""prod"". Example: https://secure.ogone.com/ncol/prod/orderstandard.asp","对于产品，将 ""test"" 替换为 ""prod""。例如：https://secure.ogone.com/ncol/prod/orderstandard.asp"
+"For production, replace ""test"" with ""prod"". Example: https://secure.ogone.com/ncol/prod/orderstandard.asp","对于产品，将 ""test"" 替换为 ""prod""。例如：https://secure。ogone。com/ncol/prod/orderstandard。asp"
 "Gateway URL","网关 URL"
 "Hash All Parameters",哈希所有参数
 "Hashing Algorithm",哈希算法
@@ -32,7 +31,6 @@ Enabled,已启用
 Magento,Magento
 Ogone,Ogone
 "Ogone Default Operation",Ogone默认操作
-"Order can't save",订单不能存储
 "Order can't save",订单无法保存
 PSPID,PSPID
 "Payment Action",支付操作
@@ -41,31 +39,31 @@ PSPID,PSPID
 "Payment transaction has been declined.",支付交易被拒绝。
 "Payment uncertain: A technical problem arose during payment process, giving unpredictable result",支付不确定：支付过程中遇到了技术问题，因此获得了非预期结果
 "Pending Ogone",挂起的Ogone
-"Please stand by. In a moment, this page will transfer your data to the Ogone payment gateway.","请稍等, 此刻页面将要传输数据到Ogone支付网关."
+"Please stand by. In a moment, this page will transfer your data to the Ogone payment gateway.","请稍等， 此刻页面将要传输数据到Ogone支付网关。"
 "Please, wait a moment. This page will transfer your data to Ogone payment gateway in a few seconds.",请稍等。该页面会在几秒后将您的数据传输到Ogone支付网站。
 "Processed Ogone Payment",已处理的Ogone支付
 "Processed by Ogone",由Ogone处理
 "Processing Ogone Payment",正在处理Ogone支付
 "SHA-IN Pass Phrase",SHA-IN通路
 "SHA-OUT Pass Phrase","SHA-OUT 通路"
-"Something went wrong during the authorization process, and so the result is unpredictable.","授权过程中发生错误,所以结果是不可预期的."
-"Something went wrong during the payment process, and so the result is unpredictable.","支付过程中发生错误,所以结果是不可预期的."
-"Something went wrong while canceling this order.",取消订单时发生错误.
-"Something went wrong while saving this order.",存储订单时发生错误.
+"Something went wrong during the authorization process, and so the result is unpredictable.",授权过程中发生错误，所以结果是不可预期的。
+"Something went wrong during the payment process, and so the result is unpredictable.",支付过程中发生错误，所以结果是不可预期的。
+"Something went wrong while canceling this order.",取消订单时发生错误。
+"Something went wrong while saving this order.",存储订单时发生错误。
 "Start Ogone Processing",开始Ogone处理
 "Table Background Color of the Ogone Template",Ogone模板的表格背景色
 "Table Text Color of the Ogone Template",Ogone表格的文字颜色
 "Text Color of the Ogone Template",Ogone模板的文字颜色
 "The hash is not valid",哈希无效
-"The hash is not valid.",无效的哈希.
+"The hash is not valid.",无效的哈希。
 "The order cannot be canceled for a system reason.",由于系统原因，订单无法取消。
 "The order cannot be saved for a system reason.",由于系统原因，订单无法保存。
 "The order cannot be saved.",订单无法保存。
 "The order is not valid",订单无效。
-"The order is not valid.",无效的订单.
+"The order is not valid.",无效的订单。
 "The order was canceled on ogone side.",订单在Ogone端被取消。
-"The order was canceled on the Ogone side.",Ogone端取消了该订单.
-"The payment transaction has been declined.",支付交易被拒绝.
+"The order was canceled on the Ogone side.",Ogone端取消了该订单。
+"The payment transaction has been declined.",支付交易被拒绝。
 Title,标题
 "Title of the Ogone Template",Ogone模板的名称
 "To hash <strong>all parameters</strong>, select the following options in the ""Global security parameters"" fieldset: <ul><li>Each parameter followed by the pass phrase.</li><li>""Hash algorithm"" same as ""Hashing Algorithm"" below</li><li>UTF-8</li></ul>","要对 <strong>所有参数</strong>创建哈希，请在“全局安全参数”类别下选择下列选项：<ul><li>通路后的每个参数。</li><li>""哈希算法""与 下面的""哈希算法""相同</li><li>UTF-8</li></ul>"

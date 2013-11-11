@@ -1,8 +1,8 @@
-"%1 Item",%1个条目(s)
+"%1 Item",%1个条目（s）
 "%1 Item(s)","%1 个条目"
-"&copy; 2008 Magento Demo Store. All Rights Reserved.","&copy; 2008 Magento Demo Store. 保留所有权利。"
+"&copy; 2008 Magento Demo Store. All Rights Reserved.","&copy; 2008 Magento Demo Store。 保留所有权利。"
 "(Shift-)Click or drag to change value",（Shift-）点击或拖拽即可更改值
-"(ver. %1)","（版本. %1）"
+"(ver. %1)","（版本。 %1）"
 "- Click on any of the time parts to increase it","- 点击时间的任何部分即可更改"
 "- Hold mouse button on any of the above buttons for faster selection.","- 在任何按钮上按下鼠标按键即可选中。"
 "- Use the %1 buttons to select month","- 使用%1 按钮选择月份"
@@ -59,7 +59,7 @@ Page:,页面：
 "Prev. month (hold for menu)",上个月（按下菜单）
 "Prev. year (hold for menu)",去年（按下可打开菜单）
 Previous,上一个
-Redirecting...,正在重定向...
+Redirecting...,正在重定向。。。
 "Report All Bugs",报告所有Bug
 "Right Column",右栏
 "Select Store",选择店铺
@@ -67,8 +67,8 @@ Redirecting...,正在重定向...
 "Select date",选择日期
 Show,显示
 "This is a demo store. Any orders placed through this store will not be honored or fulfilled.",这是一个演示商店。任何在此商店下的订单将无法被兑现或履行。
-"This is just a demo store. You can browse and place orders, but nothing will be processed.","这仅是演示店铺.您可以浏览商品和下订单,除此之外什么都不能做."
-"This store uses cookies to make shopping more enjoyable. Learn how cookies work in our <a href=""%1"">privacy policy</a>.","该店铺用cookie使购物更方便.在我们的<a href=""%1"">隐私策略</a>中学习怎样使用cookie."
+"This is just a demo store. You can browse and place orders, but nothing will be processed.",这仅是演示店铺。您可以浏览商品和下订单，除此之外什么都不能做。
+"This store uses cookies to make shopping more enjoyable. Learn how cookies work in our <a href=""%1"">privacy policy</a>.","该店铺用cookie使购物更方便。在我们的<a href=""%1"">隐私策略</a>中学习怎样使用cookie。"
 "This website requires cookies provide all of its features.  For more information on what data is contained in the cookies, please see our <a href=""%1"">privacy policy page</a> To accept cookies from this site, please click accept below.","该网站需要 Cookie 才能提供完整功能。要了解 Cookie 中保存了哪些数据，请参考我们的<a href=""%1"">隐私策略页面</a>。要接受该站点的 Cookie，请点击下方的接受。"
 "Time selection:",时间选择：
 Time:,时间：

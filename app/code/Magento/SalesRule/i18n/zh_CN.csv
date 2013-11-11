@@ -18,7 +18,6 @@ Auto,自动
 "Buy X get Y free (discount amount is Y)","购买 X 即可免费获得 Y（折扣额是Y）"
 "By Fixed value",由固定值
 "By Percentage",按百分比
-"Can't acquire coupon.",不能获取优惠券.
 "Can't acquire coupon.",无法获取代金券。
 "Cart Attribute",购物车属性
 Catalog,分类
@@ -62,7 +61,7 @@ ID,ID
 Inactive,未激活
 Interval,周期
 "Item totals are not set for rule.",商品总数并不由规则设置
-"Item totals are not set for the rule.",条目总数没有设置该规则.
+"Item totals are not set for the rule.",条目总数没有设置该规则。
 Labels,标签
 "Manage Coupon Codes",管理折扣券代码
 "Maximum Quantity Discount is Applied To",最大数量折扣被应用给
@@ -124,7 +123,7 @@ Used,已使用
 Uses,用户数
 "Uses per Coupon",每代金券使用
 "Uses per Customer",每客户使用
-"We cannot create the requested Coupon Qty. Please check your settings and try again.",不能创建请求的优惠券数量.请检查设置再试一次.
+"We cannot create the requested Coupon Qty. Please check your settings and try again.",不能创建请求的优惠券数量。请检查设置再试一次。
 Website,网站
 Websites,网站
 "Wrong rule specified.",所指定规则有误。

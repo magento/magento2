@@ -23,9 +23,9 @@ Commercial,商业
 "Continue Shopping URL","继续购物 URL"
 "Credit memo has been created automatically",信用备忘录已自动创建
 Debug,调试
-"Default Package Height (in)","默认包裹高度 (in)"
-"Default Package Length (in)","默认包裹长度 (in)"
-"Default Package Width (in)","默认包裹宽度 (in)"
+"Default Package Height (in)","默认包裹高度 （in）"
+"Default Package Length (in)","默认包裹长度 （in）"
+"Default Package Width (in)","默认包裹宽度 （in）"
 "Default Price for Methods",默认价格
 "Default price:",默认价格：
 "Delivery Address Category",送货地址分类
@@ -77,14 +77,14 @@ Inches,英寸
 "Is Buyer Willing to Receive Marketing Emails: %1",买家是否愿意接收市场营销电子邮件：%1
 "Key/URL delivery","Key/URL 交付"
 "Large - %1","大 - %1"
-"Large - %1', '180x46","大 - %1', '180x46"
+"Large - %1', '180x46","大 - %1'， '180x46"
 "Latest Charge: %1",最近付款：%1
 "Latest Chargeback: %1",最近退款：%1
 "Latest Refund: %1",最近退款：%1
 Location,位置
 "Media Mail",媒体邮件
 "Medium - %1","中 - %1"
-"Medium - %1', '168x44","中 - %1', '168x44"
+"Medium - %1', '168x44","中 - %1'， '168x44"
 "Merchant ID",分行ID
 "Merchant Key",分行密钥
 Method,方式
@@ -120,8 +120,8 @@ Residential,住宅
 Sandbox,沙箱
 "Secure Callback URL",安全回拨URL
 "Small - %1","小- %1"
-"Small - %1', '160x43","小 - %1', '160x43"
-"Something went wrong creating the order.",当创建订单时发生错误.
+"Small - %1', '160x43","小 - %1'， '160x43"
+"Something went wrong creating the order.",当创建订单时发生错误。
 "Standard Overnight",标准次日
 "The tax amount has been applied based on the information received from Google Checkout, because tax amount received from Google Checkout is different from the calculated tax amount","所产生的税金额度取决于从Google Checkout收到的信息，因为从Google Checkout收到的信息与计算而来的税金额度可能有所不同"
 Title,标题
@@ -137,4 +137,4 @@ USPS,USPS
 "White Background",白色背景
 Yes,是
 "You will be redirected to GoogleCheckout in a few seconds.","几秒后您将被重定向到Google Checkout。"
-"You will be redirected to the Google Checkout website when you place an order.","当您下单时页面将被转到Google Checkout网站."
+"You will be redirected to the Google Checkout website when you place an order.","当您下单时页面将被转到Google Checkout网站。"

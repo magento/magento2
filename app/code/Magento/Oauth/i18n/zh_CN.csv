@@ -1,25 +1,25 @@
 "Add-On Information",扩展信息
 "Add-On Name",扩展名字
 Add-Ons,扩展集
-"An add-on with ID %1 was not found.",找不到ID为%1的扩展.
-"An error occurred on saving consumer data.",存储消费者数据时发生错误.
-"An error occurred validating the nonce.",校验特定场合时发生错误.
-"An error occurred while deleting the add-on.",删除扩展时发生错误.
+"An add-on with ID %1 was not found.",找不到ID为%1的扩展。
+"An error occurred on saving consumer data.",存储消费者数据时发生错误。
+"An error occurred validating the nonce.",校验特定场合时发生错误。
+"An error occurred while deleting the add-on.",删除扩展时发生错误。
 "Are you sure you want to disable this application?",你确定要禁止该应用嘛?
 "Are you sure you want to enable this application?",你确定要允许该应用嘛?
 "Callback URL",回调URL
 "Edit Add-On",编辑扩展
 "Http Post URL",Http提交URL
-"Incorrect timestamp value in the oauth_timestamp parameter.",oauth_timestampe参数传入错误的时间戳.
+"Incorrect timestamp value in the oauth_timestamp parameter.",oauth_timestampe参数传入错误的时间戳。
 "Invalid Callback URL",无效的回调URL
-"Invalid ID parameter.",无效的ID参数.
+"Invalid ID parameter.",无效的ID参数。
 "Invalid Rejected Callback URL",拒绝的回调URL无效
 "New Add-On",新建扩展
 "Rejected Callback URL",拒绝的回调URL
 Secret,密钥
-"The add-on has been deleted.",扩展已被删除.
-"The add-on has been saved.",扩展已被存储.
-"The nonce is already being used by the consumer with id %1.",该特定场合已经被ID为%1的消费者使用.
-"The nonce/timestamp combination has already been used.",该特定场合/时间戳组合已经被使用.
-"Unexpected error. Unable to create OAuth Consumer account.",不期望的错误.不能创建OAuth消费者账户.
-"Unexpected error. Unable to post data to consumer.",不期望的错误.不能提交数据到消费者.
+"The add-on has been deleted.",扩展已被删除。
+"The add-on has been saved.",扩展已被存储。
+"The nonce is already being used by the consumer with id %1.",该特定场合已经被ID为%1的消费者使用。
+"The nonce/timestamp combination has already been used.",该特定场合/时间戳组合已经被使用。
+"Unexpected error. Unable to create OAuth Consumer account.",不期望的错误。不能创建OAuth消费者账户。
+"Unexpected error. Unable to post data to consumer.",不期望的错误。不能提交数据到消费者。

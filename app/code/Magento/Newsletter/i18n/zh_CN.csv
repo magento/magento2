@@ -35,7 +35,7 @@ Email,电子邮件
 "Enter your email address",输入邮件地址
 "Error Code",错误代码
 "Error Text",错误文本
-"Follow this link to unsubscribe <!-- This tag is for unsubscribe link  --><a href=""{{var subscriber.getUnsubscriptionLink()}}"">{{var subscriber.getUnsubscriptionLink()}}</a>","使用此链接来退订&lt;!-- 该标记用于退订链接 --&gt;<a href=""{{var subscriber.getUnsubscriptionLink()}}"">{{var subscriber.getUnsubscriptionLink()}}</a>"
+"Follow this link to unsubscribe <!-- This tag is for unsubscribe link  --><a href=""{{var subscriber.getUnsubscriptionLink()}}"">{{var subscriber.getUnsubscriptionLink()}}</a>","使用此链接来退订&lt;!-- 该标记用于退订链接 --&gt;<a href=""{{var subscriber。getUnsubscriptionLink（）}}"">{{var subscriber。getUnsubscriptionLink（）}}</a>"
 Guest,来宾
 ID,ID
 "Invalid queue selected.",已选择无效的队列。
@@ -68,14 +68,14 @@ Pause,暂停
 Paused,已暂停
 "Please enter a valid email address.",请输入有效的电子邮件地址。
 "Please enter new template name",请输入新的模板名称
-"Please refer to exeption.log","请参考 exeption.log"
+"Please refer to exeption.log","请参考 exeption。log"
 "Please select subscriber(s)",请选择订阅者
 Preview,预览
 "Preview Template",预览模板
 Processed,已处理
 "Queue End",队列完成
 "Queue Information",队列信息
-"Queue Newsletter...",队列新闻邮件...
+"Queue Newsletter...",队列新闻邮件。。。
 "Queue Start",队列开始
 "Queue Start Date",队列数据开始
 "Queue Subject",队列主题
@@ -96,9 +96,9 @@ Sending,正在发送
 Sent,已发送
 "Sign Up for Our Newsletter:",订阅我们的新闻邮件：
 "Sign up for our newsletter",订阅我们的新闻邮件
-"Something went wrong while saving your subscription.",当存储订阅时发生错误.
-"Something went wrong with the subscription.",发生订阅错误.
-"Something went wrong with the un-subscription.",发生退订错误.
+"Something went wrong while saving your subscription.",当存储订阅时发生错误。
+"Something went wrong with the subscription.",发生订阅错误。
+"Something went wrong with the un-subscription.",发生退订错误。
 "Sorry, but administrator denied subscription for guests. Please <a href=""%1"">register</a>.","对不起，但管理员拒绝了来宾的订阅。请 <a href=""%1"">注册</a>。"
 Start,开始
 Status,状态
@@ -120,16 +120,16 @@ Subscribers,订阅者
 "Template Subject",模板主题
 "Template Type",模板类型
 "Thank you for your subscription.",感谢您的订阅。
-"The confirmation request has been sent.",确认请求已经被发出.
+"The confirmation request has been sent.",确认请求已经被发出。
 "The subscription has been removed.",订阅已删除。
 "The subscription has been saved.",订阅已保存。
-"There are no subscribers selected.",没有选择任何订阅者.
+"There are no subscribers selected.",没有选择任何订阅者。
 "There was a problem with the subscription.",订阅遇到问题。
 "There was a problem with the subscription: %1","订阅 %1 遇到问题"
 "There was a problem with the un-subscription.",取消订阅遇到问题。
 "This email address is already assigned to another user.",该电子邮件地址已分配给另一用户。
-"This is an invalid subscription ID.",这是一个无效的订阅ID.
-"This is an invalid subscription confirmation code.",这事一个无效的订阅确认码.
+"This is an invalid subscription ID.",这是一个无效的订阅ID。
+"This is an invalid subscription confirmation code.",这事一个无效的订阅确认码。
 Type,类型
 Unconfirmed,未确认
 Unsubscribe,退订
@@ -138,10 +138,10 @@ Unsubscribed,已退订
 "Unsubscription Email Sender",退订邮件发送程序
 "Unsubscription Email Template",退订邮件模板
 "View Newsletter",查看新闻邮件
-"We cannot mark as received subscriber.",无法标记为可接收的订阅者.
-"We removed the subscription.",已成功移除该订阅.
-"We saved the subscription.",已成功存储该订阅.
+"We cannot mark as received subscriber.",无法标记为可接收的订阅者。
+"We removed the subscription.",已成功移除该订阅。
+"We saved the subscription.",已成功存储该订阅。
 Website,网站
 "You have been unsubscribed.",您已经退订。
-"You selected an invalid queue.",您选择了一个无效的队列.
+"You selected an invalid queue.",您选择了一个无效的队列。
 "Your subscription has been confirmed.",您的订阅已确认。
