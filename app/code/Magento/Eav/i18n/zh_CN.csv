@@ -1,12 +1,9 @@
 """%1"" contains non-alphabetic characters.","""%1""包含了非字母字符。"
 """%1"" contains non-alphabetic or non-numeric characters.","""%1""包含字母和数字以外的字符。"
 """%1"" contains non-numeric characters.","""%1""包含数字以外的字符。"
-"""%1"" contains not only digit characters.","""%1"" 包含不止数字代码。"
 """%1"" does not fit the entered date format.","""%1""与输入的日期格式不符合。"
 """%1"" exceeds the allowed file size.","""%1""超过了允许的文件尺寸。"
 """%1"" exceeds the allowed length.","""%1""超过了允许的尺寸。"
-"""%1"" has not only alphabetic and digit characters.","""%1""包含不止字母和数字代码。"
-"""%1"" has not only alphabetic characters.","""%1""有不止字母。"
 """%1"" height exceeds allowed value of %2 px.","""%1""高度超过%2 px的允许值"
 """%1"" invalid type entered.","""%1""无效输入。"
 """%1"" is a required value.","""%1""是必填值。"
@@ -22,32 +19,16 @@
 """%1"" length must be equal or greater than %2 characters.","""%1""长度必须大于等于%2。"
 """%1"" length must be equal or less than %2 characters.","""%1""长度必须小于等于%2。"
 """%1"" width exceeds allowed value of %2 px.","""%1""宽度超过%2 px允许值。"
-"'%value%' appears to be a DNS hostname but cannot extract TLD part","“%value%” 似乎是一个 DNS 主机名，但无法提取 TLD 部分"
-"'%value%' appears to be a DNS hostname but cannot match TLD against known list","“%value%” 似乎是一个 DNS 主机名，但无法与已知列表匹配 TLD"
-"'%value%' appears to be a DNS hostname but cannot match against hostname schema for TLD '%tld%'","“%value%” 似乎是一个 DNS 主机名，但无法与 TLD “%tld%” 的主机名模式相匹配。"
-"'%value%' appears to be a DNS hostname but contains a dash in an invalid position","“%value%” 似乎是一个 DNS 主机名，但在无效位置包含破折号"
-"'%value%' appears to be a DNS hostname but the given punycode notation cannot be decoded","'%value%' 似乎是 DNS 主机名，但无法对指定的 Punycode符号解码"
-"'%value%' appears to be a local network name but local network names are not allowed","'%value%' 似乎是本地网络名称，此处不能使用本地网络名称"
-"'%value%' appears to be an IP address, but IP addresses are not allowed","'%value%' 似乎是 IP 地址，此处不能使用 IP 地址"
-"'%value%' does not appear to be a valid URI hostname","'%value%' 似乎不是有效的 URI 主机名"
-"'%value%' does not appear to be a valid local network name","'%value%' 似乎不是有效的本地网络名"
-"'%value%' does not match the expected structure for a DNS hostname","'%value%' 无法与预期的 DNS 主机名相匹配"
 "A joined field with this alias is already declared.",使用该别名的连接字段已经被声明。
-"A joint field with this alias (%1) is already declared","使用该别名 （%1） 的联合字段已声明"
 "A joint field with this alias (%1) is already declared.",一个该别名（%1）的连接的字段已经被定义。
 "Add Option",添加选项
 "An attribute set with the ""%1"" name already exists.","一个名字为""%1""的属性集已经存在。"
-"An error occurred while loading a record, aborting. Error: %1",加载记录时出错，正在忽略。错误：%1
-"An error occurred while loading the collection, aborting. Error: %1",加载集合时出错，正在忽略。错误：%1
-"An error occurred while saving a record, aborting. Error: ",保存记录时出错，正在忽略。错误：
 "Attempt to add an invalid object",尝试添加的对象无效
-"Attribute '%1' used in configurable products","配置产品中使用的属性 '%1'"
 "Attribute Code",属性代码
 "Attribute Label",属性标签
 "Attribute Properties",属性的属性
 "Attribute object is undefined",属性对象未定义
 "Attribute set name is empty.",属性集名称为空。
-"Attribute set with the ""%1"" name already exists.",使用“%1”为名的属性已存在。
 "Attribute with the same code",使用相同代码的属性
 "Can't create table: %1",无法创建表格：%1
 "Catalog Input Type for Store Owner",店铺所有者的分类输出类型
@@ -56,18 +37,14 @@
 "Data integrity: No header row found for attribute",数据完整性：属性的表头行没找到
 Date,日期
 "Decimal Number",十进制数
-"Default Product Listing Sort by not exists on Available Product Listing Sort By",可用产品列表使用的默认产品列表顺序不存在
 "Default Value",默认值
 "Default option value is not defined",默认选项值未定义
 Delete,删除
 Dropdown,下拉菜单
 Email,电子邮件
-"Entity collection expected.",预计为实体集合。
-"Entity collections expected.",预计为实体集合。
 "Entity instance is not defined",实体实例未定义
 "Entity is not initialized",实体未初始化
 "Entity object is undefined",实体对象未定义
-"Failed to load node %1 from config","从配置中加载节点 %1 出错"
 "For internal use. Must be unique with no spaces. Maximum length of attribute code must be less than %1 symbols","仅限内部使用。必须具备唯一性且不包含空格。属性代码的长度最大值不能超过 %1 个符号。"
 "Form Element with the same attribute",使用相同属性的表单元素
 "Form Fieldset with the same code",使用相同代码的表单字段集
@@ -77,7 +54,6 @@ Email,电子邮件
 "Input Validation for Store Owner",店铺所有者的输入验证
 "Integer Number",整数
 "Invalid EAV attribute",无效的EAV属性
-"Invalid EAV attribute.",无效的EAV属性。
 "Invalid alias, already exists in joint attributes",无效的别名、已经存在于联合属性中。
 "Invalid attribute name: %1",无效的属性名：%1
 "Invalid attribute requested: %1",无效的属性请求：%1
@@ -86,39 +62,26 @@ Email,电子邮件
 "Invalid date",无效的日期
 "Invalid default date",无效的默认日期
 "Invalid default decimal value",无效的默认十进制数值
-"Invalid entity specified",无效的已指定实体
 "Invalid entity supplied",无效的实体
-"Invalid entity supplied.",无效的已提供实体。
 "Invalid entity supplied: %1",无效的已提供实体：%1
 "Invalid entity type",无效的实体类型
-"Invalid entity_id, skipping the record.","无效的 entity_id，跳过该记录。"
 "Invalid entity_type specified: %1","无效的已指定 entity_type：%1"
 "Invalid foreign key",无效的外键
 "Invalid form type.",无效的表单类型。
 "Invalid joint fields",无效的合并字段
-"Invalid store specified",指定的店铺无效
-"Invalid type given. String expected",指定的类无效。需使用字符串
-"Joined field with this alias is already declared",使用此别名的合并字段已被声明
 "Joint field or attribute expression with this alias is already declared",使用此别名的合并字段或属性表达式已被声明
 Letters,字母
 "Letters (a-z, A-Z) or Numbers (0-9)","字母 （a-z， A-Z） 或数字 （0-9）"
-"Loaded %1 records","已载入 %1 条记录"
 "Maximum length of attribute code must be less than %1 symbols",属性代码最大长度必须小于%1个符号
-"Maximum length of attribute code must be less then %1 symbols","属性代码的最大长度必须小于 %1 个符号"
 "Multiple Select",多选
 No,否
-"No options found in config node %1","配置节点 %1 中没有找到选项"
 "No options found.",找不到选项。
 None,无
 "Not shared with other products",未与其它产品共享
 "Please enter a valid date between %1 and %2 at %3.",请在%3输入一个处于%1和%2期间的有效日期。
 "Please enter a valid date equal to or greater than %1 at %2.",请在%2输入一个大于等于%1的有效日期。
 "Please enter a valid date less than or equal to %1 at %2.",请在%2输入一个小于等于%1的有效日期。
-"Problem loading the collection, aborting. Error: %1",载入收藏时遇到问题，正在中止。错误：%1
-"Problem saving the collection, aborting. Error: %1",保存收藏时遇到问题，正在中止。错误：%1
 Required,必须
-"Saved %1 record(s).","已保存 %1 条记录。"
-"Source model ""%1"" not found for attribute ""%1""",源模型“%1”在属性“%2”中未找到
 "Source model ""%1"" not found for attribute ""%2""","找不到属性""%2""的源模型""%1"""
 System,系统
 "Text Area",文本区
@@ -139,4 +102,3 @@ URL,URL
 "Wrong type definition for %1",错误的类定义：%1
 Yes,是
 Yes/No,是/否
-"必须是唯一的没有空格.属性代码最大长度必须小于%1个符号""",

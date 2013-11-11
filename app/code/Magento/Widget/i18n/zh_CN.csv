@@ -10,13 +10,11 @@ All,全部
 Apply,应用
 "Assign to Store Views",分配到店铺视图
 "Big Image",大图片
-"Block Reference",块引用
 CMS,内容管理系统（CMS）
 Categories,分类
 Choose...,选择。。。
 Close,关闭
 Continue,继续
-"Default Template",默认模板
 Delete,删除
 "Design Package/Theme","设计 包裹/主题"
 "Design Theme",设计主题
@@ -30,14 +28,12 @@ Images,图像
 "Layout Updates",布局更新
 "Manage Widget Instances",管理小工具实例
 "New Frontend App Instance",新的前端应用实例
-"New Instance",新实例
 "New Widget Instance",新小工具实例
 "Next page",下一页
 "Non-Anchor Categories",非锚点分类
 "Not Selected",非所选
 "Open Chooser",打开选择器
 Page,页面
-"Please Select Block Reference First",请首先选择块引用
 "Please Select Container First",请首先选择容器
 "Please specify a Widget Type.",请指定小部件类型。
 "Please specify a correct widget.",请指定一个正确的小部件。
@@ -49,7 +45,6 @@ Products,产品
 "Select Visible",选择可见性
 Settings,设置
 "Sort Order",排序顺序
-"Sort Order of widget instances in the same block reference",用相同的块应用对订单的小工具实例进行排序
 "Sort Order of widget instances in the same container",同一容器里小部件实例的排序
 "Specific %1","指定的 %1"
 "Specified Page",指定的页面
@@ -61,23 +56,17 @@ Template,模板
 Thumbnail,缩略图
 "Total %1 records found","共找到 %1条记录"
 Type,类型
-"Undefined Design Package or Theme.",未定义的设计包或主题。
 "Unselect All",全部反选
 "Unselect Visible",反选可见性
 View,查看
 "We cannot create the widget instance because it is missing required information.",由于缺少必要的信息不能创建小部件实例。
 Widget,小工具
 "Widget ""%1""","小工具 ""%1"""
-"Widget ID",小工具ID
 "Widget Insertion",小工具插入
 "Widget Instance",小工具实例
 "Widget Instance Title",小工具实例标题
 "Widget Options",小工具选项
 "Widget Type",小工具类型
-"Widget Type is not specified",小工具类型未指定
-"Widget instance is not full complete to create.",小工具实例并未完全创建。
-Widgets,小工具
-"Wrong widget instance specified.",指定的小工具实例有误。
 "items selected",以选项
 "of %1 pages","共 %1 页"
 "per page",每页

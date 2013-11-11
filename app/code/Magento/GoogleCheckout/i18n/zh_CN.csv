@@ -4,43 +4,24 @@
 "2nd Day Air AM",第二天航空朝至
 "3 Day Select",3天选择
 "<br />Warning: <strong>%1</strong><br />","<br />警告：<strong>%1</strong><br />"
-"<strong style=""color:red"">Warning!</strong> This option disables the merchant calculated shipping. With this option, Google API ignores any attempt to affect shipping prices.","<strong style=""color:red"">警告！</strong> 该选项将禁用商家计算的运送费用。使用该选项，Google API 将忽略任何影响运送费用的情况。"
 "A virtual item to reflect the discount total",一件虚拟条目反应总折扣
 "A virtual item to reflect the tax total",一件虚拟条目反映总税费
 "AVS Status: %1","AVS 状态：%1"
 Add,添加
 "Add Shipping Method",添加运送方式
-"Allowed Methods",允许的方式
 "Amount: %1",数量：%1
 "Auto-generated from GoogleCheckout Charge","从 GoogleCheckout 支付自动生成"
 "Buyer Account Age: %1 days","买家账户年龄：%1 天"
 "CC Partial: xxxx-%1","CC 部分：xxxx-%1"
 "CID Status: %1","CID 状态：%1"
-"Carrier Calculated Methods",承运商计算的方式
 "Cart Discount",购物车折扣
-"Checkout Image Style",结账图片风格
 Commercial,商业
-"Continue Shopping URL","继续购物 URL"
 "Credit memo has been created automatically",信用备忘录已自动创建
-Debug,调试
-"Default Package Height (in)","默认包裹高度 （in）"
-"Default Package Length (in)","默认包裹长度 （in）"
-"Default Package Width (in)","默认包裹宽度 （in）"
-"Default Price for Methods",默认价格
-"Default price:",默认价格：
-"Delivery Address Category",送货地址分类
-"Delivery Schedule",发货计划
 "Description-based delivery",基于描述的交付
-"Disable Default Tax Tables",禁止默认税率表
 "Discount Tax",折扣率
 "Eligible for Protection: %1",符合资格的保护：%1
 "Email delivery",邮件交付
 Enable,启用
-"Enable Carrier Calculated",启用承运人计算
-"Enable Digital Delivery",启用数字交付
-"Enable Flat Rate",启用平坦费率
-"Enable Merchant Calculated",启用分行计算
-"Enable this if your checkout request is too big and being cut off.",如果您的结账请求太大被截断，请启用这个。
 "Expiration: %1",到期：%1
 "Express Mail",快速邮件
 "Express Saver",快速经济
@@ -51,16 +32,10 @@ FedEx,FedEx
 "First Overnight",次日达
 "Free Shipping",免运费
 "Fulfillment: %1 -> %2","满足： %1 -> %2"
-"Google API","Google API"
 "Google Authorization:",Google身份验证：
 "Google Buyer ID: %1","Google买家ID： %1"
 "Google Charge:","Google Charger："
 "Google Chargeback:","Google Chargeback："
-"Google Checkout","Google Checkout"
-"Google Checkout Shipping - Carrier Calculated","Google Checkout 送货 - 承运人计算"
-"Google Checkout Shipping - Digital Delivery","Google Checkout 送货 - 数字交付"
-"Google Checkout Shipping - Flat Rate","Google Checkout 送货 - 平坦费率"
-"Google Checkout Shipping - Merchant Calculated","Google Checkout 送货 - 分行计算"
 "Google Checkout: %1","Google Checkout：%1"
 "Google Order Number: %1","Google 订单号码：%1"
 "Google Order Status Change:","Google 订单状态更改："
@@ -68,26 +43,19 @@ FedEx,FedEx
 "Google Risk Information:","Google 风险信息："
 "GoogleCheckout is not configured",GoogleCheckout没有配置
 Ground,地面
-"Hide Cart Contents",隐藏购物车内容
 "Home Delivery",家庭运送
 "IP Address: %1","IP 地址：%1"
-"If enabled, cart contents will be hidden after clicking on the Google Checkout button in the shopping cart, and restored if ""Edit Cart"" link was activated.","如果启用，购物车内容会在单击购物车中的 Google Checkout 按钮后被隐藏，并在“编辑购物车”链接激活后恢复显示。"
 Inches,英寸
 "Invoice Auto-Created: %1",发票已自动创建：%1
 "Is Buyer Willing to Receive Marketing Emails: %1",买家是否愿意接收市场营销电子邮件：%1
 "Key/URL delivery","Key/URL 交付"
 "Large - %1","大 - %1"
-"Large - %1', '180x46","大 - %1'， '180x46"
 "Latest Charge: %1",最近付款：%1
 "Latest Chargeback: %1",最近退款：%1
 "Latest Refund: %1",最近退款：%1
 Location,位置
 "Media Mail",媒体邮件
 "Medium - %1","中 - %1"
-"Medium - %1', '168x44","中 - %1'， '168x44"
-"Merchant ID",分行ID
-"Merchant Key",分行密钥
-Method,方式
 "New Order Status",新订单状态
 "Next Day Air",下一日空运
 "Next Day Air Early AM",下一日空运朝至
@@ -96,34 +64,15 @@ No,否
 "No Comment",无评论
 "No Reason",无原因
 Optimistic,乐观的
-"Optional, leave empty for home page.",可选，主页留空。
-"Order creation error",订单创建出错
 "Parcel Post",邮政包裹
 Pessimistic,悲观的
 "Priority Mail",优先邮件
 "Priority Overnight",第二天优先
-"Rate 1 Amount","评级 1 数量"
-"Rate 1 Ship To Applicable Countries","评级 1 运送到适用的国家"
-"Rate 1 Ship to Specific Countries","评级 1 运送到特定国家"
-"Rate 1 Title","比率 1 标题"
-"Rate 2 Amount","比率 2 数量"
-"Rate 2 Ship To Applicable Countries","比率2 发货到可接受国家"
-"Rate 2 Ship to Specific Countries","比率 2 发货到指定国家"
-"Rate 2 Title","比率 2 标题"
-"Rate 3 Amount","比率 3 数量"
-"Rate 3 Ship To Applicable Countries","比率 3 发货到可接受国家"
-"Rate 3 Ship to Specific Countries","比率 3 发货到指定国家"
-"Rate 3 Title","比率 3 标题"
 Remove,删除
-"Required for live Google Checkout transactions.","要求活动的Google Checkout 交易。"
 Residential,住宅
-Sandbox,沙箱
-"Secure Callback URL",安全回拨URL
 "Small - %1","小- %1"
-"Small - %1', '160x43","小 - %1'， '160x43"
 "Something went wrong creating the order.",当创建订单时发生错误。
 "Standard Overnight",标准次日
-"The tax amount has been applied based on the information received from Google Checkout, because tax amount received from Google Checkout is different from the calculated tax amount","所产生的税金额度取决于从Google Checkout收到的信息，因为从Google Checkout收到的信息与计算而来的税金额度可能有所不同"
 Title,标题
 "Total Chargeback: %1",总退款：%1
 "Total Charged: %1",总收费：%1

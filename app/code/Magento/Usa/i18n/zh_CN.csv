@@ -1,5 +1,4 @@
 " was not delivered nor scanned",尚未发布或扫描
-"""Per Order"" allows single handling fee for entire order. ""Per Package"" allows individual  handling fee for each package.",“预定”可以让整个订单只收取一笔处理费用。“每包裹”需要为每个包裹收取处理费用。
 "1 Day Freight",1天送达
 "2 Day",2天
 "2 Day AM","2 Day AM"
@@ -11,70 +10,39 @@
 "2nd Day Air Letter",第二天航空信件
 "3 Day Freight",3天送达
 "3 Day Select",3天选择
-"Access ID",访问ID
-"Access License Number",访问许可编号
-"Account ID",帐户ID
-"Account Number",帐户号码
-"Additional Protection Configuration Value",额外的保护已启用
-"Additional Protection Enabled",额外的保护已启用
-"Additional Protection Min Subtotal",额外的保护减去小计
-"Additional Protection Value",额外保护的价值
-"Additional Protection Value Rounding Method",额外保护价值凑整方法
 Adult,成人
 "Adult Signature Required",需要核对签名
-"Allowed Methods",允许的方式
-"Allows breaking total order weight into smaller pieces if it exeeds %1 %2 to ensure accurate calculation of shipping charges.","为确保准确估算运费，可将重量超过 %1 %2 的包裹拆分为多个小件。"
-"Allows breaking total order weight into smaller pieces if it exeeds 70 kg to ensure accurate calculation of shipping charges.","为确保准确估算运费，总重量超过 70kg 的包裹将拆分为多个小件。"
 "Bound Printed Matter",有封面的印刷品
 "Break bulk economy",经济式拆分
 "Break bulk express",快速式拆分
 "Business Service Center",商业服务中心
-"Calculate Handling Fee",计算的手续费
 "Canada Standard",加拿大标准
-"Cannot identify measure unit for %1","无法确认 %1 的度量单位"
-"Cannot identify weight unit for %1","无法确认 %1 的重量单位"
 "Cannot retrieve shipping rates",无法获取运费
 Centimeters,厘米
 Commercial,商业
 Configuration,配置
 Container,容器
-"Content Type",内容类型
 "Customer Packaging",客户自取
 "Customer Supplied Package",客户提供包裹
 "Customer services",客户服务
-DHL,DHL
-"DHL (Deprecated)",DHL（不赞成）
-Debug,调试
-"Default Package Height",默认包裹高度
-"Default Package Length",默认包裹长度
-"Default Package Width",默认包裹宽度
 Delivered,已交付
 "Delivery Confirmation",交付确认
 Depth,深度
-"Destination Type",目的地类型
 "Destination facility code is empty",目的地代码为空
 Development,开发
 Direct,直接
-"Displayed Error Message",显示的错误信息
-"Divide Order Weight",拆分订单重量
 Documents,文档
-"Domestic Shipment Days",国内运送天数
 "Domestic economy select",选择经济型
 "Domestic express",选择快速型
 "Drop Box",取件箱
-Dropoff,自取
 "Easy shop",轻松购物
 "Economy select",选择经济的
 "Empty response",无需应答
-"Enable Negotiated Rates",启用协商费率
-"Enabled for Checkout",为付款启用
-"Enables/Disables SSL verification of Magento server by UPS.",启用/禁用UPS对Magento服务器的SSL验证。
 "Error #%1 : %2","错误 #%1 : %2"
 "Error #%1 : %2 (%3)","错误 #%1 : %2 （%3）"
 "Error #%1: %2","错误 #%1: %2"
 Europack,欧洲
 "Europe First Priority",欧洲优先
-"Exchange rate %1 (Base Currency) -> %2 not found. DHL method %2 skipped","费率 %1 （基本货币） -> %2 未找到。DHL 方法 %3 被跳过"
 Express,快速
 "Express 10:30","快速 10:30"
 "Express 10:30 AM",快速早10:30
@@ -99,20 +67,14 @@ First-Class,一类
 Flat,平坦
 "Flat-Rate Box",平纸箱
 "Flat-Rate Envelope",平信封
-"Free Method",免费方法
-"Free Shipping with Minimum Order Amount",有最小订单数量要求的免费送货
 Freight,送达
 "Freight worldwide",直飞全球
-"Gateway URL","网关 URL"
-"Gateway XML URL","网关 XML URL"
 Gift,礼品
 Girth,周长
 "Globalmail business",全球邮寄业务
 Ground,地面
 "Ground Commercial",地面运送
 "Ground Residential",地面住宅
-"Handling Applied",需要的处理
-"Handling Fee",处理费
 Height,高度
 "Height, width and length should be equal or greater than %1","高度、宽度，及长度必须等于或大于 %1"
 "Home Delivery",家庭运送
@@ -123,7 +85,6 @@ Indirect,非直接
 "International First",国际优先
 "International Ground",国际陆云
 "International Priority",国际优先
-"International Shipment Days",国际送货日
 "Intl Economy Freight",国际经济达
 "Intl Priority Freight",国际优先达
 Jetline,Jetline
@@ -136,15 +97,10 @@ Length,长度
 Letter,信件
 Library,图书馆
 Live,动态
-Machinable,可加工
-"Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)",最大包裹重量（可支持的最大包裹重量请咨询您的物流公司）
 "Media Mail",媒体邮件
 "Medical express",医疗快速
 "Medium Express Box",中等快递箱
 Merchandise,商品
-"Meter Number",仪表编号
-"Minimum Order Amount for Free Shipping",免费货运的最小订单量
-"Minimum Package Weight (Please consult your shipping carrier for minimum supported shipping weight)",最小包裹重量（可支持的最小包裹重量请咨询您的物流公司）
 Mode,模式
 "National Freight",全国达
 "Next Afternoon",第二天下午
@@ -163,25 +119,19 @@ Non-rectangular,非矩形
 None,无
 "Not Required",非必须
 Order,订单
-"Origin of the Shipment",始发运送
 "Origin serviceAreaCode is missing",来源服务区域代码丢失
 Other,其它
 Others,其他
 PAK,PAK
 Package,包裹
-"Package Description",包裹描述
 "Package content is missing",缺少包括内容
-"Packages Request Type",包裹请求类型
-Packaging,打包
 Pallet,托盘
 Parcel,小包
 "Parcel Post",邮政包裹
 Password,密码
-"Pickup Method",取货方法
 "Piece Id barcode is missing","价格 ID 条码丢失"
 "Piece number information is missing",价格数字信息丢失
 "Please format your response correctly.",请正确格式化返回应答。
-"Please make sure to use only digits here. No dashes are allowed.",请在这里只使用数字，不能使用横线。
 "Please, specify origin country",请指定发起国家
 Pounds,磅
 "Priority Mail",优先邮件
@@ -195,36 +145,22 @@ Regular,常规
 "Regular Pickup",常规取件
 "Request Courier",需要快递员
 Required,必须
-"Required for negotiated rates; 6-character UPS.","费率需协商，6字符 UPS。"
 Residential,住宅
-"Residential Delivery",住宅送货
 "Response is in the wrong format",响应的格式有误
 Return,退货
 Round,周围
 "Routing barcode is missing",流转条码丢失
 "Same day",当天
 Sample,范例
-"Sandbox Mode",沙箱模式
 "Second Day Service",第二日服务
-"Secure Gateway URL",安全网关URL
 Secureline,安全线
 Sender,发送方
 "Sender city info is missing",发送方城市信息丢失
 "Sender contact name is missing",发送方联系人姓名丢失
 "Sender country info is missing",发送方国家信息丢失
 "Service type does not match",服务类型不匹配
-"Ship to Applicable Countries",发送到适用的国家
-"Ship to Specific Countries",发送到指定国家
-"Shipment Contains Hazardous Materials",运单包含危险物品
-"Shipment Dutiable",运单应纳税
-"Shipment Duty Payment Type",运单税务支付类型
-"Shipment Type",运送类型
 "Shipment is not available.",运送不可用。
 "Shipment picked up",运单取件
-"Shipper Number",运单号
-"Shipping Key",运单密钥
-"Shipping Key (International)",运单密钥（国际）
-"Show Method if Not Applicable",如果不可用，显示其他方法
 "Signature Required",需要签名
 Size,尺寸
 "Small Express Box",快递小箱
@@ -238,7 +174,6 @@ Station,站台
 Subtotal,小计
 "Subtotal With Discount",不含折扣小计
 "The response is in wrong format.",响应格式有误。
-"There is no available method for selected shipping address.",所选运送地址没有可用运送方法。
 "There is no items in this order",该订单不包含商品
 "Third Party",第三方
 "This allows breaking total order weight into smaller pieces if it exceeds %1 %2 to ensure accurate calculation of shipping charges.",如果重量超过%1%2可以拆分整个订单重量到多个小包以确保货运费用计算更精确
@@ -246,7 +181,6 @@ Subtotal,小计
 Title,标题
 "To Lower",要降低
 "To Upper",要升高
-"Tracking XML URL","追踪XML URL"
 UPS,UPS
 "UPS Expedited",UPS加快
 "UPS Express",UPS快速
@@ -269,7 +203,6 @@ UPS,UPS
 "UPS Today Intercity",UPS当天城际
 "UPS Today Standard",UPS当天标准型
 "UPS Tube",UPS包装管
-"UPS Type",UPS类型
 "UPS Worldwide 10 kilo",UPS全球10公斤
 "UPS Worldwide 25 kilo",UPS全球25公斤
 "UPS Worldwide Expedited",UPS全球专运
@@ -282,13 +215,11 @@ USPS,USPS
 "United Parcel Service",美国联合包裹服务
 "United Parcel Service XML",美国联合包裹服务XML
 "Unknown error",未知错误
-"Used only when ""Additional Protection Value"" is set to ""Configuration"". Can contain only numeric amount.",只有在“额外保护价值”被设置为“配置”时使用。只能包含数额。
 "User ID",用户ID
 Variable,变量
 "Waybill barcode information is missing","Waybill 条码信息丢失"
 "We don't have a way to ship to the selected shipping address. Please choose another address or edit the current address.",无法发送到选择的运送地址，请选择另一个地址或者编辑当前地址。
 "We had to skip DHL method %1 because we couldn't find exchange rate %2 (Base Currency).",由于无法找到汇率%（基础货币）我们不得不跳过DHL方法%1。
-"Weight Unit",重量单位
 "Weight unit is invalid",重量单位无效
 Width,宽
 "Worldwide Expedited",全球专递
@@ -298,11 +229,8 @@ Width,宽
 "Worldwide Express Plus Letter",全球快速加急信件
 "Worldwide Express Saver",全球快速节约型
 "Wrong Content Type",错误的内容类型
-"Wrong Content Type.",内容类型有误。
 "Wrong Region",地区错误
-"Wrong Region.",地区有误。
 Yes,是
 "Your Packaging",您的包裹
-"Zero shipping charge for '%1'","'%1' 免运费"
 cm,厘米
 inch,英寸

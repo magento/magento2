@@ -1,4 +1,3 @@
-,
 "A user with the same user name or email already exists.",相同用户名和邮件地址的用户已经存在。
 "First Name is a required field.",名字是必输项。
 "If there is an account associated with %1 you will receive an email with a link to reset your password.",如果账户和%1关联你将收到重置密码的邮件
@@ -14,8 +13,6 @@ Role,角色
 "User Name is a required field.",用户名是必输项。
 "Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?","警告!\r\n该操作将从已经分配角色中移除这个用户\r\n您确定?"
 "Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","警告!\r\n该操作将从已经分配角色中移除那些用户\r\n您确定?"
-"Warning\r\nThis action will remove this user from already assigned role\r\nAre you sure?","警告\r\n该操作将移除这个已经分配角色的用户\r\n你确定吗??"
-"Warning\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","警告\r\n该操作将移除那些已经分配角色的用户\r\n你确定吗??"
 "We can't find a user to delete.",找不到要删除的用户。
 "You cannot delete self-assigned roles.",不能删除自分配的角色。
 "You deleted the role.",成功删除了角色。
