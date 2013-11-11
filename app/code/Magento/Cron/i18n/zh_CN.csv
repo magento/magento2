@@ -10,7 +10,7 @@
 "Generate Schedules Every","生成计划，每"
 "History Cleanup Every","清除历史记录，每"
 "Hourly","每小时"
-"Invalid callback: %s::%s does not exist","无效的回调：%s::%s 不存在"
+"Invalid callback: %1::%2 does not exist","无效的回调：%1::%2 不存在"
 "Invalid model/method definition, expecting ""model/class::method"".","无效的模型/方法定义，期望值“模型/类::方法”。"
 "Minute Intervals","分钟间隔"
 "Missed if Not Run Within","丢失，如果未运行在"

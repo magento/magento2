@@ -20,7 +20,7 @@
 "Merchant's Email","商家电子邮件"
 "Minimum Order Total","最小订单总数"
 "New Order Status","新订单状态"
-"Order saving error: %s","订单保存错误：%s"
+"Order saving error: %1","订单保存错误：%1"
 "Payment Action","支付操作"
 "Payment authorization error.","支付授权错误。"
 "Payment authorization error. Transacion id is empty.","支付授权出错。交易编号为空。"

@@ -47,7 +47,7 @@
 "Ship Bundle Items","运送捆绑的项目"
 "Shipment","发货"
 "Store View Title","店铺视图标题"
-"There is no defined renderer for ""%s"" option type.","针对 ""%s"" 选项类型没有预定义的渲染器。"
+"There is no defined renderer for ""%1"" option type.","针对 ""%1"" 选项类型没有预定义的渲染器。"
 "This product is also part of bundle(s)","该产品也属于捆绑销售的一部分"
 "To","发送至"
 "To:","至："

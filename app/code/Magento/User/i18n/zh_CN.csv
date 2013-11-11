@@ -21,3 +21,7 @@
 "Please specify the correct account and try again.","请指定正确的账户名重试."
 "Role","角色"
 "Interface Locale","接口本地化"
+
+"Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?","警告!\r\n该操作将从已经分配角色中移除这个用户\r\n您确定?"
+"Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","警告!\r\n该操作将从已经分配角色中移除那些用户\r\n您确定?"
+"Your password must be at least %1 characters.","您的密码至少需要%1个字符."

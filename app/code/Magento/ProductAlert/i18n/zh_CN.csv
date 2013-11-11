@@ -38,3 +38,4 @@
 "You deleted the alert subscription.","已删除了报警订阅."
 "There are not enough parameters.","参数不够."
 "You saved the alert subscription.","已存储报警订阅."
+"Invalid block type: %1","无效的快类型: %1"

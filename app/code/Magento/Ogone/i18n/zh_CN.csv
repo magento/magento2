@@ -78,3 +78,4 @@ Magento,Magento
 "The payment transaction has been declined.","支付交易被拒绝."
 "The order was canceled on the Ogone side.","Ogone端取消了该订单."
 "Something went wrong while canceling this order.","取消订单时发生错误."
+"Payment ID: %1","支付ID: %1"

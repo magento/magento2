@@ -6,7 +6,7 @@
 "Customer Groups must be specified.","必须指定顾客群体。"
 "End Date must be greater than Start Date.","结束日期必须大于开始日期。"
 "FALSE","否"
-"If %s of these conditions are %s:","如果 %s 个这些条件为%s："
+"If %1 of these conditions are %2:","如果 %1 个这些条件为%2："
 "Invalid discount amount.","无效的折扣额。"
 "Open Chooser","打开选择器"
 "Perform following actions","执行下列操作"
@@ -40,3 +40,4 @@
 "Please choose a condition to add.","请增加一个条件."
 "Please choose an action to add.","请增加一个操作."
 "End Date must follow Start Date.","结束日期不能早于开始日期."
+"There is no information about associated entity type ""%1"".","没有与实体类型""%1""关联的信息."

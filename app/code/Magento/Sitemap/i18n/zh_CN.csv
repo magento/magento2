@@ -53,3 +53,7 @@
 "We can't find a sitemap to delete.","找不到要删除的站点地图"
 "Something went wrong generating the sitemap.","产生站点地图发生错误."
 "We can't find a sitemap to generate.","找不到要产生的站点地图."
+"File ""%1"" cannot be saved. Please, make sure the directory ""%2"" is writable by web server.","文件""%1""不能被存储. 请确保服务器上的目录""%2""可写."
+"Please create the specified folder ""%1"" before saving the sitemap.","请在存储站点地图之前创建指定的目录""%1""."
+"Please make sure that ""%1"" is writable by the web-server.","请确保服务器上""%1""可写."
+"The sitemap ""%1"" has been generated.","站点地图""%1""已经被生成."

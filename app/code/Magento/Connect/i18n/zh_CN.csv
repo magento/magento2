@@ -51,7 +51,7 @@
 "Supported releases","支持的版本"
 "System","系统"
 "Target","目标"
-"The package %s data has been loaded.","包中 %s 数据已载入。"
+"The package %1 data has been loaded.","包%1的数据已载入。"
 "The package data has been saved.","包中数据已保存。"
 "There was a problem saving package data","保存包数据时遇到问题"
 "Type","类型"

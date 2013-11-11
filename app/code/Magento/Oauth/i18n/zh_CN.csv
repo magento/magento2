@@ -21,3 +21,5 @@
 "Secret","密钥"
 "Callback URL","回调URL"
 "Rejected Callback URL","拒绝的回调URL"
+"An add-on with ID %1 was not found.","找不到ID为%1的扩展."
+"The nonce is already being used by the consumer with id %1.","该特定场合已经被ID为%1的消费者使用."

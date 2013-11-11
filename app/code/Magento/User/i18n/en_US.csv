@@ -21,3 +21,6 @@ Role,Role
 "You saved the user.","You saved the user."
 "Your password confirmation must match your password.","Your password confirmation must match your password."
 "Your password must include both numeric and alphabetic characters.","Your password must include both numeric and alphabetic characters."
+"Warning!rnThis action will remove this user from already assigned rolernAre you sure?","Warning!rnThis action will remove this user from already assigned rolernAre you sure?"
+"Warning!rnThis action will remove those users from already assigned rolesrnAre you sure?","Warning!rnThis action will remove those users from already assigned rolesrnAre you sure?"
+"Your password must be at least %1 characters.","Your password must be at least %1 characters."
