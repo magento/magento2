@@ -56,7 +56,7 @@ Back,返回
 "Cache storage may contain additional data. Are you sure that you want flush it?",缓存存储可能包含额外数据。您确认要清空它吗？
 "Can not create invoice. Order was not found.",无法创建发票。未找到订单。
 "Can't retrieve request object",无法获取请求对象
-"Can\'t retrieve entity config: %1",无法获取实体配置：%1
+"Can't retrieve entity config: %1",无法获取实体配置：%1
 Cancel,取消
 "Cannot complete this operation from non-admin area.",无法从非管理员区域完成该操作。
 "Card type does not match credit card number.",信用卡类型与信用卡号不匹配。
@@ -186,7 +186,7 @@ Host,主机
 "Invalid transactional email code: ",无效的交易电子邮件代码：
 "Invalid transactional email code: %1","无效的交易邮件代码: %1"
 "Invalid view file directory ""%1""","无效的视图文件目录""%1"""
-"Invalid website\'s configuration path: %1",无效的网站配置路径：%1
+"Invalid website's configuration path: %1",无效的网站配置路径：%1
 "JavaScript Settings","JavaScript 设置"
 Layout,布局
 "Leave empty for access from any location.",从任何位置访问留空。

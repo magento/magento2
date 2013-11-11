@@ -19,7 +19,7 @@ Auto,自动
 "By Fixed value",由固定值
 "By Percentage",按百分比
 "Can't acquire coupon.",不能获取优惠券.
-"Can\'t acquire coupon.",无法获取代金券。
+"Can't acquire coupon.",无法获取代金券。
 "Cart Attribute",购物车属性
 Catalog,分类
 "Code Format",代码格式
@@ -55,8 +55,8 @@ FOUND,找到
 "General Information",常规信息
 Generate,生成
 ID,ID
-"If %1 %2 %3 for a subselection of items in cart matching %4 of these conditions:","如果购物车中的 %1 %2 %3 附属项目符合下列 %3 个条件："
-"If an item is %1 in the cart with %2 of these conditions true:","如果购物车中的项目 %1 满足下列 %2 个条件："
+"If %1 %2 %3 for a subselection of items in cart matching %4 of these conditions:","如果购物车中的 %1 %2 %3 附属条目符合下列 %3 个条件："
+"If an item is %1 in the cart with %2 of these conditions true:","如果购物车中的条目 %1 满足下列 %2 个条件："
 "If empty no separation.",如果为空则不分隔。
 "If you select and save the rule you will be able to generate multiple coupon codes.",如果选择并保存该规则，你就可以生成多个折扣券代码。
 Inactive,未激活

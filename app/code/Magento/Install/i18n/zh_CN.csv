@@ -100,7 +100,7 @@ Password,密码
 "Provide a complete base URL for SSL connection. For example: %1.', '<strong>https://www.mydomain.com/magento/</strong>","提供一个完整的SSL连接的基础URL.如: %1', '<strong>https://www.mydomain.com/magento/</strong>"
 "Report All Bugs",报告所有Bug
 "Required Fields",必须的字段
-"Response from server isn\'t valid.",来自服务器的响应无效。
+"Response from server isn't valid.",来自服务器的响应无效。
 "Response from the server is invalid.",来自服务器的响应无效.
 "Run admin interface with SSL",使用SSL运行管理界面。
 "Run this in your shell from Magento root folder:",在您的外壳中从Magento根文件夹运行这个：
@@ -117,7 +117,7 @@ Password,密码
 "The URL ""%1"" is invalid.","URL ""%1"" 无效。"
 "The URL ""%1"" is not accessible.","URL “%1” 无法访问。"
 "The database server version doesn't match system requirements (required: %1, actual: %2).","数据库版本与系统要求的不匹配(要求: %1,实际: %2)."
-"The database server version doesn\'t match system requirements (required: %1, actual: %2).",数据库服务器版本不满足要求（需要：%1，实际：%2）。
+"The database server version doesn't match system requirements (required: %1, actual: %2).",数据库服务器版本不满足要求（需要：%1，实际：%2）。
 "The table prefix should contain only letters (a-z), numbers (0-9) or underscores (_), the first character should be a letter.","表前缀只能包含字母 (a-z)、数字 (0-9)，或下划线 (_)，第一个字符必须是字母。"
 "The table prefix should contain only letters (a-z), numbers (0-9) or underscores (_); the first character should be a letter.",表前缀应该仅仅包含字母(a-z)、数字(0-9)或者下划线(_);首字母必须是字母.
 "There was a problem installing Magento packages. Please read the log, correct errors and try again.",安装Magento包时遇到了错误。请阅读日志，解决问题，并重试。

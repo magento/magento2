@@ -210,7 +210,7 @@ Cancel,取消
 "Cannot save the credit memo.",无法保存信用记录。
 "Cannot send shipment information.",无法发送运行信息。
 "Cannot update item quantity.",无法更新商品数量。
-"Cannot update the item\'s quantity.",无法更新商品的数量。
+"Cannot update the item's quantity.",无法更新商品的数量。
 "Cart Price Rules",购物车价格规则
 Catalog,分类
 "Catalog Price Rules",分类价格规则
@@ -256,7 +256,7 @@ Create,创建
 "Credit Memos",信用记录
 "Credit memo #%1 comment added","信用记录 #%1 评论已添加"
 "Credit memo #%1 created","信用记录 #%1 已创建"
-"Credit memo\'s total must be positive.",信用记录的总数必须为正数。
+"Credit memo's total must be positive.",信用记录的总数必须为正数。
 Currency,币种
 "Currency ""%1"" is used as %2 in %3.","货币 ""%1"" 被用作 %3 中的 %2。"
 "Currency Information",币种信息
@@ -501,7 +501,7 @@ Invalidated,撤销
 Invoices,发票
 "Is Closed",已关闭
 "Issue Number",问题编号
-Items,项目
+Items,条目
 "JavaScript may be disabled in your browser.",您的浏览器可能禁止了Javascript
 "JavaScript seems to be disabled in your browser.","你的浏览器似乎禁用了 JavaScript。"
 JavaScript/CSS,JavaScript/CSS
@@ -518,7 +518,7 @@ Kb,Kb
 "Last Name",姓氏
 "Last Name is required field.",姓氏是必要字段。
 "Last Name:",姓氏：
-"Last updated: %1. To refresh last day\'s <a href=""%2"">statistics</a>, click <a href=""%3"">here</a>.","上次更新： %1。要刷新最新一天的 <a href=""%2"">状态</a>，请点击<a href=""%3"">这里</a>。"
+"Last updated: %1. To refresh last day's <a href=""%2"">statistics</a>, click <a href=""%3"">here</a>.","上次更新： %1。要刷新最新一天的 <a href=""%2"">状态</a>，请点击<a href=""%3"">这里</a>。"
 "Latest Message:",最新信息：
 "Layered Navigation Indices",层次式导航目录
 "Layered Navigation Indices were refreshed.",层次式导航目录已恢复。
@@ -605,7 +605,7 @@ Name:,姓名：
 "New Email Template",新组
 "New Group",新组
 "New Invoice",新发票
-"New Item Type",新项目类型
+"New Item Type",新条目类型
 "New Memo",新纪录
 "New Memo for #%1",#%1的新纪录
 "New Page",新页面
@@ -656,7 +656,7 @@ No,否
 "No search keywords.",无搜索关键字。
 "No search modules were registered",未注册搜索模块
 "No wishlist item ID is defined.",已定义的收藏条目ID.
-"No wishlist item id defined.","未定义收藏清单项目 ID。"
+"No wishlist item id defined.","未定义收藏清单条目 ID。"
 None,无
 Note:,注意：
 Notes,注意
@@ -724,7 +724,7 @@ Permissions,权限
 "Personal Information",个人信息
 Phone:,电话：
 "Please Select",请选择
-"Please confirm site switching. All data that hasn\'t been saved will be lost.",请确认网站参数。所有未保存数据都将丢失。
+"Please confirm site switching. All data that hasn't been saved will be lost.",请确认网站参数。所有未保存数据都将丢失。
 "Please correct the XML data and try again. %value%","请纠正XML然后再试一次. %value%"
 "Please correct the newsletter template and try again.",请纠正新闻邮件模板然后重试.
 "Please correct the password.",请纠正密码.
@@ -984,7 +984,7 @@ Shipping,运送
 "Sitemap Information",站点结构图信息
 "Size for %1",%1的大小
 "Skip Category Selection",跳过分类的选择
-"Some items in this order have different invoice and shipment types. You can create shipment only after the invoice is created.",该订单中的某些项目具有不同的发票和送货类型。您只能在创建发票后创建运单。
+"Some items in this order have different invoice and shipment types. You can create shipment only after the invoice is created.",该订单中的某些条目具有不同的发票和送货类型。您只能在创建发票后创建运单。
 "Some of the ordered items do not exist in the catalog anymore and will be removed if you try to edit the order.",订购的某些商品已经不再包含在分类中，如果尝试修改订单，将会被删除。
 "Something went wrong  while deleting this condition.",当删除条件时发生错误.
 "Something went wrong creating the backup.",当创建备份时发生错误.
@@ -1260,7 +1260,7 @@ Warning,警告
 "Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","警告！\r\n该操作将从已分配的角色中将这些用户删除\r\n您是否真要这样做？"
 "Warning: Please do not close the window during importing/exporting data",警告：请不要在导入/导出数据过程中关闭该窗口
 "Watermark File for %1",%1的水印文件
-"We appreciate our merchants\' feedback, please <a href=""#"" onclick=""surveyAction(\'yes\'); return false;"">take our survey</a> to provide insight on the features you would like included in Magento. <a href=""#"" onclick=""surveyAction(\'no\'); return false;"">Remove this notification</a>","我们要感谢所用的银行\' 若有反馈，请 <a href=""#"">参与我们的调查</a> 以便告诉我们您希望在以后的Magento中看到哪些新功能。 <a href=""#"">删除该通知</a>"
+"We appreciate our merchants' feedback, please <a href=""#"" onclick=""surveyAction('yes'); return false;"">take our survey</a> to provide insight on the features you would like included in Magento. <a href=""#"" onclick=""surveyAction('no'); return false;"">Remove this notification</a>","我们要感谢所用的银行' 若有反馈，请 <a href=""#"">参与我们的调查</a> 以便告诉我们您希望在以后的Magento中看到哪些新功能。 <a href=""#"">删除该通知</a>"
 "We can't find a block to delete.",找不到要删除的块.
 "We can't find a page to delete.",找不到要删除的页.
 "We can't find a rule to delete.",找不到要删除的规则.
@@ -1275,7 +1275,7 @@ Warning,警告
 "We couldn't find records for this period.",找不到该时期的记录.
 "We unsubscribed the people you identified.",已经退订了新闻邮件模板已经被成功存储.标识的人.
 "We updated lifetime statistics.",更新了生命周期统计.
-"We\'re in our typing table, coding away more features for Magento. Thank you for your patience.",我们正在辛苦工作中，为Magento添加更多功能。感谢您的耐心。
+"We're in our typing table, coding away more features for Magento. Thank you for your patience.",我们正在辛苦工作中，为Magento添加更多功能。感谢您的耐心。
 "Web Section",Web区域
 "Web Services",Web服务
 "Web Site",站点

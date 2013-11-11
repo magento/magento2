@@ -223,7 +223,7 @@ Customer,客户
 "Customer My Account Order View",客户我的帐户订单视图
 "Customer Name",客户名字
 "Customer's Current Activities",客户的当前活动
-"Customer\'s Current Activities",客户的当前活动
+"Customer's Current Activities",客户的当前活动
 "Customs Value",自定义值
 Date,日期
 "Default Status",默认状态
@@ -315,7 +315,7 @@ Information,信息
 "Invalid carrier specified.",指定的运营商无效。
 "Invalid draw line data. Please define ""lines"" array.",行数据无效。请定义“行”阵列。
 "Invalid entity model",无效的实体模型。
-"Invalid item option format.",项目选项格式无效。
+"Invalid item option format.",条目选项格式无效。
 "Invalid qty to invoice item ""%1""","商品 ""%1""的发票数量无效"
 "Invalid qty to refund item ""%1""","商品""%1""的退款数量无效"
 "Invalid qty to ship for item ""%1""","商品""%1""的发货数量无效"
@@ -359,7 +359,7 @@ Item,商品
 "Item ordered qty",下单商品的数量
 "Item qty declaration error",条目数量声明错误
 "Item qty declaration error.",商品数量声明有误
-Items,项目
+Items,条目
 "Items Invoiced",商品移开发票
 "Items Ordered",商品已下单
 "Items Refunded",商品已退款
@@ -372,7 +372,7 @@ Items,项目
 Key,密钥
 "Last Name",姓氏
 "Last Ordered Items",上次订购的商品
-"Last status can\'t be unassigned from state.",上次状态无法被取消分配。
+"Last status can't be unassigned from state.",上次状态无法被取消分配。
 Length,长度
 "Link to the New Order",链接到新订单
 "Link to the Previous Order",连接到前一订单
@@ -420,12 +420,12 @@ New,新建
 "New Shipment for Order #%1","订单 #%1 的新运单"
 "Newsletter Subscription",新闻邮件订阅
 No,否
-"No Items",无项目
-"No Items To Refund",无可退款项目
+"No Items",无条目
+"No Items To Refund",无可退款条目
 "No Payment Methods",无支付方法
 "No detail for number ""%1""","编号 ""%1"" 无详情"
 "No information available.",无可用信息。
-"No items",无项目
+"No items",无条目
 "No order(s) were put on hold.",没有被暂挂的订单。
 "No order(s) were released from holding status.",没有脱离暂挂状态的订单。
 "No order(s) were released from on hold status.",没有订单取消挂起状态.
@@ -868,7 +868,7 @@ Telephone,电话
 "This item price or quantity is not valid for checkout.",结账的该条目价格和数量无效.
 "This message will be shown in shopping cart when subtotal after discount less than minimum amount.",如果折扣后的总价格低于最小值，该信息会显示在购物车里。
 "This operation requires an existing transaction object.",该操作需要一个现有的交易目标。
-"This order contains (%1) items and therefore cannot be edited through the admin interface at this time, if you wish to continue editing the (%1) items will be removed, the order will be canceled and a new order will be placed.","该订单包含 (%1) 个项目，因此当前无法通过管理员界面编辑，如果您希望继续编辑，(%1) 个项目将被删除，该订单将被取消并生成新订单。"
+"This order contains (%1) items and therefore cannot be edited through the admin interface at this time, if you wish to continue editing the (%1) items will be removed, the order will be canceled and a new order will be placed.","该订单包含 (%1) 个条目，因此当前无法通过管理员界面编辑，如果您希望继续编辑，(%1) 个条目将被删除，该订单将被取消并生成新订单。"
 "This order contains (%1) items and therefore cannot be edited through the admin interface. If you wish to continue editing, the (%2) items will be removed, the order will be canceled and a new order will be placed.","该订单包括(%1)个条目因而不能通过后台接口被编辑. 如果你希望继续编辑,(%2)个条目将会被移除,该订单将被取消,一个新的订单被创建并下单."
 "This order no longer exists.",该订单已不存在。
 "This payment method instance is not available.",该支付方法实例不可用.
@@ -938,9 +938,9 @@ Unhold,适当
 "Unsupported transaction type ""%1"".","不支持的交易类型""%1""。"
 "Update Changes",更新更改
 "Update Items and Qty's",更新条目和数量
-"Update Items and Qty\'s",更新项目与数量
+"Update Items and Qty's",更新条目与数量
 "Update Qty's",更新数量
-"Update Qty\'s",更新数量
+"Update Qty's",更新数量
 Updated,更新于
 Updated:,更新时间：
 "Use Aggregated Data (beta)",使用聚合数据（测试版）
@@ -1010,12 +1010,12 @@ Width,宽
 "Wish List",收藏清单
 Wishlist,收藏清单
 "Wrong billing agreement ID specified.",指定的记账协议ID有误。
-"Wrong quote item id to update configuration.",更新配置的报价项目ID错误。
+"Wrong quote item id to update configuration.",更新配置的报价条目ID错误。
 "Wrong state: ""%1""","错误状态: ""%1"""
 "Wrong state: ""%1"".","州错误：""%1"""
 Yes,是
 "You are trying to add a quantity for some products that doesn't match the quantity that was shipped.",您正在尝试为一些不匹配运送数量的产品添加数量.
-"You can leave a box blank if you don\'t wish to add a gift message for whole order",如果不希望为整个订单添加礼品信息，即可在这里留空
+"You can leave a box blank if you don't wish to add a gift message for whole order",如果不希望为整个订单添加礼品信息，即可在这里留空
 "You can't do this without a transaction object.",没有交易对象不能进行该操作.
 "You canceled the billing agreement.",您已经取消了账单协议.
 "You canceled the credit memo.",您已经取消了该付款通知.

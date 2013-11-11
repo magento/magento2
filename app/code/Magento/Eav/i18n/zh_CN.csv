@@ -50,7 +50,7 @@
 "Attribute set with the ""%1"" name already exists.",使用“%1”为名的属性已存在。
 "Attribute with the same code",使用相同代码的属性
 "Can't create table: %1","不能创建表: %1"
-"Can\'t create table: %1",无法创建表格：%1
+"Can't create table: %1",无法创建表格：%1
 "Catalog Input Type for Store Owner",店铺所有者的分类输出类型
 "Current module EAV entity is undefined",当前模块EAV实体未定义
 "Current module pathname is undefined",当前模块路径名未定义
@@ -125,7 +125,7 @@ System,系统
 "Text Area",文本区
 "Text Field",文本字段
 "The attribute code '%1' is reserved by system. Please try another attribute code","属性代码'%1'是系统保留字. 请换一个再试"
-"The attribute code \'%1\' is reserved by system. Please try another attribute code",属性代码‘%1’已被系统预留。请尝试另一个属性代码
+"The attribute code '%1' is reserved by system. Please try another attribute code",属性代码‘%1’已被系统预留。请尝试另一个属性代码
 "The value of attribute ""%1"" is invalid","属性""%1""的值无效"
 "The value of attribute ""%1"" must be unique",属性“%1”的值必须为唯一
 "The value of attribute ""%1"" must be unique.",属性“%1”的值必须为唯一。

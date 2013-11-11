@@ -1,5 +1,5 @@
 "%1 - %2","%1 - %2"
-"%1 Item(s)","%1 个项目"
+"%1 Item(s)","%1 个条目"
 "%1 RSS Feed",%1RSS种子
 "%1 and above","%1 及以上"
 "%1 incl tax",%1含税
@@ -98,7 +98,7 @@ Approved,已批准
 "Are you sure you want to remove all products from your comparison?",您确定要从您的比较里移除所有的产品吗?
 "Are you sure you want to remove this item from the compared products?",您确定要从比较产品里移除该条目吗?
 "Are you sure you would like to remove all products from your comparison?",你确定要是删除所有对比的产品？
-"Are you sure you would like to remove this item from the compare products?",你确定要从对比产品中删除这个项目？
+"Are you sure you would like to remove this item from the compare products?",你确定要从对比产品中删除这个条目？
 "Are you sure?",您是否确认？
 "As low as:",低至：
 Assign,、分配
@@ -156,11 +156,11 @@ Bottom/Right,底部/右侧
 "Can be Divided into Multiple Boxes for Shipping",可拆分为多个箱发货
 "Can be used only with catalog input type Dropdown","仅可用于类别输入类型 下拉"
 "Can be used only with catalog input type Dropdown, Multiple Select and Price",仅可用于类别输入类型　下拉、多选和价格
-"Can\'t create image.",无法创建图片。
+"Can't create image.",无法创建图片。
 Cancel,取消
 "Cannot create image.",无法创建图片。
 "Cannot create writeable directory '%1'.",无法创建可写的目录'%1'。
-"Cart Item Attribute",购物车项目属性
+"Cart Item Attribute",购物车条目属性
 Catalog,分类
 "Catalog Category (Anchor)",分类类别（固定）
 "Catalog Category (Non-Anchor)",分类类别（不固定）
@@ -414,7 +414,7 @@ Inventory,盘点
 "Items %1 to %2 of %3 total","条目%1到%2 共%3个"
 "Items that you do not want to show in the catalog or search results should have status 'Disabled' in the desired store.",您不希望显示在分类或搜索结果中的内容应在目标店铺中设置'Disabled'状态。
 "Items that you don't want to show in the catalog or search results should have status 'Disabled' in the desired store.",您不希望在分类或搜索结果中显示的内容应在目标店铺中设置'Disabled'状态。
-"Keep your eyes open for our special Back to School items and save A LOT!","睁大眼睛找到特殊的“返校” 项目，获得大实惠！"
+"Keep your eyes open for our special Back to School items and save A LOT!","睁大眼睛找到特殊的“返校” 条目，获得大实惠！"
 Label,标签
 "Last Name",姓氏
 "Last Notified",最新通知
@@ -460,7 +460,7 @@ List,列表
 "Minimum Qty Allowed in Shopping Cart",购物车允许的最小数量
 "Minimum Qty for Item's Status to be Out of Stock",状态转变为缺货的条目的最小数量
 "Minimum Quantity Allowed in Shopping Cart",购物车里允许的最少数量
-"Minimum Quantity for Item\'s Status to be Out of Stock",商品状态的最小数量为缺货
+"Minimum Quantity for Item's Status to be Out of Stock",商品状态的最小数量为缺货
 "Missing SKU, skipping the record.",丢失SKU，正在跳过该记录。
 "More Views",更多视图
 Move,移动
@@ -527,7 +527,7 @@ Percentage,百分率
 "Please refresh ""Catalog URL Rewrites"" and ""Product Attributes"" in System -> <a href=""%1"">Index Management</a>","请在 系统 -> <a href=""%1"">索引管理</a>中刷新 ""类别 URL 重写"" 与 ""产品属性"""
 "Please select a static block ...",请选择一个静态块...
 "Please select a static block.",请选择一个静态块.
-"Please select items.",请选择项目。
+"Please select items.",请选择条目。
 "Please select one or more attributes.",请选择一个或多个属性。
 "Please select product(s).",请选择产品。
 "Please select products for attributes update",请选择要更新属性的产品
@@ -540,8 +540,8 @@ Percentage,百分率
 "Please specify the product required option(s).",请指定产品需要的选项。
 "Please specify the product's option(s).",请指定产品的选项(s).
 "Please specify the product's required option(s).",请指定该产品要求的选项(s).
-"Please specify the product\'s option(s).",请指定产品的选项。
-"Please specify the product\'s required option(s).",请指定产品的必要选项。
+"Please specify the product's option(s).",请指定产品的选项。
+"Please specify the product's required option(s).",请指定产品的必要选项。
 "Please specify the quantity of product(s).",请指定产品数量。
 "Please specify time required option(s).",请指定时间需要的选项。
 "Please wait...",请稍候...
@@ -613,7 +613,7 @@ Properties,属性
 Quantity,数量
 "Quantity Increments",数量增量
 "Quantity Uses Decimals",数量使用小数
-"Quantity for Item\'s Status to Become Out of Stock",项目的状态变为无货时的数量
+"Quantity for Item's Status to Become Out of Stock",条目的状态变为无货时的数量
 Quantity:,数量：
 "Quick Create",快速创建
 "Quick Overview",快速概述
@@ -854,10 +854,10 @@ Tile,平铺
 Title,标题
 "To reindex the enabled product(s), please specify the store or product.","为了重新所以你允许的产品,请指定店铺或产品."
 "To reindex the enabled product(s), the store or product must be specified",要对已启用的产品重新索引，必须指定商店或产品
-"To see product price, add this item to your cart. You can always remove it later.",要查看产品价格，请添加该项目到您的购物车。您总是可以稍后删除它。
+"To see product price, add this item to your cart. You can always remove it later.",要查看产品价格，请添加该条目到您的购物车。您总是可以稍后删除它。
 Top/Left,顶部/左侧
 Top/Right,顶部/右侧
-"Total Quantity Base Items","总数量 基础项目"
+"Total Quantity Base Items","总数量 基础条目"
 "Total incl. Tax: %1","含税总价: %1"
 "Total incl. Tax: %1$s",含税总额：%1$s
 "Total of %1 record(s) have been deleted.",总共%1记录已被删除。
@@ -951,7 +951,7 @@ Watermark,水印
 "We're unable to complete this request.",不能完成该请求.
 "Web Site",站点
 Website,网站
-"Website Item Must be checked",网站项目必须检查
+"Website Item Must be checked",网站条目必须检查
 "Website Store Must be checked",网站店铺必须被选中
 Websites,网站
 "What's this?",这是什么？
@@ -959,8 +959,8 @@ Websites,网站
 "Will make search for the query above return results for this search",将要执行上面查询条件的搜索返回搜索结果
 "Will make search for the query above return results for this search.",执行上述查询的搜索是否返回该搜索的结果。
 "Wrong BuyRequest instance in options group.",选项组中错误的购买请求实例。
-"Wrong configuration item instance in options group.",选项组中错误的配置项目实例。
-"Wrong configuration item option instance in options group.",选项组中存在错误配置项目选项的实例。
+"Wrong configuration item instance in options group.",选项组中错误的配置条目实例。
+"Wrong configuration item option instance in options group.",选项组中存在错误配置条目选项的实例。
 "Wrong option instance type in options group.",选项组中错误的选项实例类型。
 "Wrong option type to get group instance.",错误的选项类型来获得群组实例。
 "Wrong product instance type in options group.",选项组中错误的产品实例类型。
@@ -978,7 +978,7 @@ Yes,是
 "You deleted the category.",您已经删除分类.
 "You deleted the search.",您已经删除了该搜索.
 "You duplicated the product.",您已复制了该产品.
-"You have no items to compare.",您没有可比较的项目。
+"You have no items to compare.",您没有可比较的条目。
 "You may also be interested in the following product(s)",您还可能对下列产品感兴趣
 "You may also be interested in the following product(s):",您也可以感兴趣下面的产品:
 "You removed product %1 from the comparison list.",您已经从比较列表中移除了%1.

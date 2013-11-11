@@ -69,8 +69,8 @@ AutoSweep,自动清理
 "Buyer claims that the received merchandise is unsatisfactory, defective, or damaged.",买家声称收到的商品不满意、有缺陷或者破损.
 "Buyer's Tax ID",买家的税ID
 "Buyer's Tax ID Type",买家的ID类型
-"Buyer\'s Tax ID","买家的纳税人 ID"
-"Buyer\'s Tax ID Type","买家的纳税人 ID 类型"
+"Buyer's Tax ID","买家的纳税人 ID"
+"Buyer's Tax ID Type","买家的纳税人 ID 类型"
 "By default it is ""reports.paypal.com"".",默认为“reports.paypal.com”。
 CNPJ,CNPJ
 CPF,CPF
@@ -227,7 +227,7 @@ Login,登录
 "Merchant Liability",商家责任
 "Merchant Protection Eligibility",银行保护的资格
 "Merchant Referral Bonus",银行推荐奖励
-"Merchant account doesn\'t have a withdrawal mechanism. Merchant must manually accept or deny this payment from your Account Overview.",银行帐户没有撤销机制。银行必须从您的帐户概述中手工接受或拒绝本支付。
+"Merchant account doesn't have a withdrawal mechanism. Merchant must manually accept or deny this payment from your Account Overview.",银行帐户没有撤销机制。银行必须从您的帐户概述中手工接受或拒绝本支付。
 "Merchant account is not verified.",银行帐户未验证。
 "Merchant denied this pending payment.",银行拒绝了这一挂起的支付。
 "Merchant holds a non-U.S. account and does not have a withdrawal mechanism.",银行提供了非美国帐户，并且没有撤销机制。
@@ -433,7 +433,7 @@ Switch/Maestro,Switch/Maestro
 "The merchant holds a non-U.S. account and does not have a withdrawal mechanism.",该商家持有一个非美国账户并且没有取款功能.
 "The merchant's reference ID format is not supported.",商家的引用ID格式不支持.
 "The ordering amount of %1 is pending approval on the payment gateway.",%1的订购数量等待支付网关批准中.
-"The payment curency does not match any of the merchant\'s balances currency.",支付的币种与银行支持的币种不一致。
+"The payment curency does not match any of the merchant's balances currency.",支付的币种与银行支持的币种不一致。
 "The payment currency does not match any of the merchant's balances currency.",该支付货币与商家余额货币不匹配.
 "The payment eCheck is not yet cleared.",支付的电子支票尚未兑现。
 "The payment is authorized but not settled.",支付已获授权但尚未确定。
@@ -489,7 +489,7 @@ View,查看
 "Virtual PayPal Debit Card Transaction",虚拟PayPal借记卡交易
 "Virtual Terminal Payment",虚拟终端支付
 Void,无效
-"Waiting until Customer\'s eCheck will be cleared.",等待直到客户的电子支票兑现。
+"Waiting until Customer's eCheck will be cleared.",等待直到客户的电子支票兑现。
 "We are connecting to the PayPal SFTP server to retrieve new reports. Are you sure you want to continue?","我们正在连接到PayPal SFTP服务器来检索新的报表.你确定要继续吗?"
 "We can't change the status because the current status doesn't match the real status.",因为当前状态与真实状态不匹配不能改变该状态.
 "We can't contact the PayPal gateway.",无法联系PayPal网关.

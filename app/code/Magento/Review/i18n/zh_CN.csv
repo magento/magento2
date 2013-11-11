@@ -6,7 +6,7 @@
 "3 stars","3 星"
 "4 stars","4 星"
 "5 stars","5 星"
-"<a href=""%1$s"" onclick=""this.target=\'blank\'"">%2$s %3$s</a> <a href=""mailto:%4$s"">(%4$s)</a>","<a href=""%1$s"" onclick=""this.target=\'blank\'"">%2$s %3$s</a> <a href=""mailto:%4$s"">(%4$s)</a>"
+"<a href=""%1$s"" onclick=""this.target='blank'"">%2$s %3$s</a> <a href=""mailto:%4$s"">(%4$s)</a>","<a href=""%1$s"" onclick=""this.target='blank'"">%2$s %3$s</a> <a href=""mailto:%4$s"">(%4$s)</a>"
 "Add New Review",添加新评论
 "Add Your Review",添加您的评论
 Administrator,管理员
@@ -44,7 +44,7 @@ Name,姓名
 "Name in Store",商店名称
 "New Review",新评论
 Nickname,昵称
-"Nickname can\'t be empty",昵称不能为空
+"Nickname can't be empty",昵称不能为空
 "Not Approved",未批准
 "Only registered users can write reviews. Please, <a href=""%1"">log in</a> or <a href=""%1"">register</a>","仅注册用户可撰写评论。请<a href=""%1"">登录</a>或<a href=""%1"">注册</a>"
 "Only registered users can write reviews. Please, <a href=""%1"">log in</a> or <a href=""%2"">register</a>","只有注册用户能发表评论,<a href=""%1"">登录</a>或者<a href=""%2"">注册</a>"
@@ -70,8 +70,8 @@ Review,评论
 "Review Form Fields Before",评论表单字段之前
 "Review by",被评论
 "Review by <span>%1</span>","评论者 <span>%1</span>"
-"Review can\'t be empty",评论不能为空
-"Review summary can\'t be empty",评论摘要不能为空
+"Review can't be empty",评论不能为空
+"Review summary can't be empty",评论摘要不能为空
 Review(s),评论(s)
 "Reviews and Ratings",评论与评级
 SKU,SKU

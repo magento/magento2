@@ -246,10 +246,10 @@ Newsletter,新闻邮件
 "Newsletter Start",新闻邮件开始
 "Newsletter Subscription",新闻邮件订阅
 Newsletters,新闻邮件
-"No Items Found",未找到项目
+"No Items Found",未找到条目
 "No Newsletter Found",未找到新闻邮件
 "No customer collections found",未找到客户集合
-"No item specified.",未指定项目
+"No item specified.",未指定条目
 "Not Sent",未发送
 "Not confirmed, can login",未确认，可登录
 "Not confirmed, cannot login",未确认，无法登陆
@@ -289,7 +289,7 @@ Pending,挂起
 "Please enter your email address below. You will receive a link to reset your password.",请在下面输入你的电子邮件地址。你将收到一个重置密码的链接。
 "Please enter your email address. We'll send a link to reset your password.",请在下面输入你的电子邮件地址。你将收到一个重置密码的链接。
 "Please enter your email below and we'll send you confirmation link for it.",请输入您的邮件地址然后我们将发送一个确认链接给您.
-"Please enter your email below and we\'ll send you confirmation link for it.",请在下面输入您的邮件地址，我们将发送确认链接。
+"Please enter your email below and we'll send you confirmation link for it.",请在下面输入您的邮件地址，我们将发送确认链接。
 "Please enter your email.",请输入您的电子邮件。
 "Please make sure your passwords match.",请确保密码匹配。
 "Please select",请选择
@@ -352,7 +352,7 @@ Sent,已发送
 "Shipped to Last Name",发送给姓氏
 "Shipped to Name",运送至姓名
 "Shopping Cart",购物车
-"Shopping Cart - %1 item(s)","购物车 - %1 个项目"
+"Shopping Cart - %1 item(s)","购物车 - %1 个条目"
 "Shopping Cart of %1$s - %2$d item(s)","购物车包含 %1$s - %2$d 件商品"
 "Show Date of Birth",显示出生日期
 "Show Gender",显示性别
@@ -409,7 +409,7 @@ Text,文字
 "The suffix that goes after name (Jr., Sr., etc.)",名字后面的后缀（Jr.、Sr.等）
 "The title that goes before name (Mr., Mrs., etc.)",姓名前称谓（先生、女士等）
 "There are no items in customer's wishlist at the moment",客户的收藏清单中目前没内容
-"There are no items in customer\'s shopping cart at the moment",客户的购物车中目前没内容
+"There are no items in customer's shopping cart at the moment",客户的购物车中目前没内容
 "There is already an account with this email address. If you are sure that it is your email address, <a href=""%1"">click here</a> to get your password and access your account.","已经存在一个同名邮件地址的账号.如果您确定这就是您的邮件地址,<a href=""%1"">点击这里</a>得到密码来访问您的账户信息."
 "There was an error validating the VAT ID.","验证 VAT ID 时出错。"
 "There was an error validating the VAT ID. The customer would belong to Customer Group %1.","验证 VAT ID 时出错。该顾客可属于顾客群体 %1。"
@@ -449,7 +449,7 @@ Visitor,访客
 Website,网站
 "Welcome Email",欢迎邮件
 Wishlist,收藏清单
-"Wishlist - %1 item(s)","收藏清单 - %1 个项目"
+"Wishlist - %1 item(s)","收藏清单 - %1 个条目"
 "With your own account, you can check out faster, store multiple shipping addesses, see your shopping activity and more.",用自己的账号方便更快结账、存储多运送地址、查看购物历史以及更多.
 "Would you like to change the Customer Group for this order?",你是否想更改该订单的顾客群体？
 "Wrong confirmation key.",错误的确认密钥。

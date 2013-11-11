@@ -56,7 +56,7 @@ Interval,周期
 "Invalid date specified",无效的日期
 "Invalid date specified.",已指定的日期无效。
 Invoiced,已出发票
-"Items in Cart",购物车中的项目
+"Items in Cart",购物车中的条目
 "Last Name",姓氏
 "Last Review",上次评论
 Link,链接
@@ -75,7 +75,7 @@ No,否
 "Number Purchased",已购买数目
 "Number of Products to display",显示产品的数量
 "Number of Reviews",评论数量
-"Number of items bought from a wishlist: %1",从收藏清单中购买项目的数量：%1
+"Number of items bought from a wishlist: %1",从收藏清单中购买条目的数量：%1
 "Number of times wishlists have been shared (emailed): %1",收藏清单被分享（通过发送电子邮件）的次数：%1
 "Number of wishlist conversions: %1",收藏清单转换的数量：%1
 "Number of wishlist referrals: %1",收藏清单推荐次数：%1

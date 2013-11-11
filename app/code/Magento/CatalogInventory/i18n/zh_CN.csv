@@ -1,20 +1,20 @@
-"""%1"" is not available in the requested quantity. %2 of the items will be backordered.","所请求数量的""%1""不可用。该项目有 %2 个处于缺货状态。"
+"""%1"" is not available in the requested quantity. %2 of the items will be backordered.","所请求数量的""%1""不可用。该条目有 %2 个处于缺货状态。"
 "%1 is available for purchase in increments of %2",可以以%2的增量的购买%1
 "%1 is available for purchase in increments of %2 only.",%1仅在增量购买%2时可用。
 "%1 is not a correct comparison method.",%1不是一个正确的比较方法.
 "%1 is not a correct comparsion method.",%1不是正确的比较方法。
-"<strong>Note</strong> that these settings are applicable to cart line items, not the whole cart.",<strong>请注意</strong>这些设置适用于购物车单个项目，而非整个购物车。
+"<strong>Note</strong> that these settings are applicable to cart line items, not the whole cart.",<strong>请注意</strong>这些设置适用于购物车单个条目，而非整个购物车。
 "Add Minimum Qty",添加最小的数量
 "Add Minimum Quantity",添加最小数量
 "Allow Qty Below 0",允许数量小于零
 "Allow Qty Below 0 and Notify Customer",允许数量小于零并通知客户
 "Allow Quantity Below 0","允许数量小于 0"
 "Allow Quantity Below 0 and Notify Customer","允许数量小于 0 并通知客户"
-"Automatically Return Credit Memo Item to Stock",自动返回信用备忘项目到库存
+"Automatically Return Credit Memo Item to Stock",自动返回信用备忘条目到库存
 Backorders,缺货
 "By Fixed value",由固定值
 "By Percentage",按百分比
-"Cannot specify product identifier for the order item.",无法为订单项目指定产品标识符。
+"Cannot specify product identifier for the order item.",无法为订单条目指定产品标识符。
 "Catalog Inventory",分类清单
 "Decrease Stock When Order is Placed",当下订单时，减少库存
 "Display Out of Stock Products",显示缺货产品

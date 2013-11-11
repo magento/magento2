@@ -83,7 +83,7 @@ Status:,状态：
 "Table Rates",表费率
 "The shipping module is not available for selected delivery country.",针对所选目标国家，发货模块不可用。
 "The shipping module is not available.",运送模块不可用。
-"There is no tracking available for this shipment.",此运送项目无可用的状态追踪。
+"There is no tracking available for this shipment.",此运送条目无可用的状态追踪。
 "There is no tracking available.",没有可用的追踪。
 "This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.",该运送方式当前不可用。如果您要使用该运送方式进行运送，请联系我们。
 "This shipping method is not available, please specify ZIP-code",该运送方式不可用，请指定邮政编码

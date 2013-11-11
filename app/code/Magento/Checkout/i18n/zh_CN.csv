@@ -23,7 +23,7 @@ Address,地址
 "An error occurred while saving this condition.",当保存该条件时发生错误。
 "Apply Coupon",应用优惠券
 "Are you sure you want to remove this item from the shopping cart?",您确定要从购物车中移除该条目吗?
-"Are you sure you would like to remove this item from the shopping cart?",您确认要从购物车中删除该项目吗？
+"Are you sure you would like to remove this item from the shopping cart?",您确认要从购物车中删除该条目吗？
 Back,返回
 "Back to Billing Information",返回到账单信息
 "Back to Select Addresses",返回到选择地址
@@ -34,16 +34,16 @@ Back,返回
 "Billing Information",账单信息
 "Billing Information - %1","账单信息 - %1"
 "Cancel Coupon",取消优惠券
-"Cannot add item to the shopping cart.",无法添加项目到购物车。
-"Cannot add the item to shopping cart",无法添加该项目到购物车
-"Cannot add the item to shopping cart.",无法添加该项目到购物车。
+"Cannot add item to the shopping cart.",无法添加条目到购物车。
+"Cannot add the item to shopping cart",无法添加该条目到购物车
+"Cannot add the item to shopping cart.",无法添加该条目到购物车。
 "Cannot apply the coupon code.",无法应用优惠代码。
 "Cannot configure product.",无法配置产品。
 "Cannot open the overview page",无法打开概览页面
-"Cannot process the item.",无法处理该项目。
-"Cannot remove the item.",无法移除项目。
+"Cannot process the item.",无法处理该条目。
+"Cannot remove the item.",无法移除条目。
 "Cannot update shopping cart.",无法更新购物车。
-"Cannot update the item.",无法更新该项目。
+"Cannot update the item.",无法更新该条目。
 "Card Verification Number Visual Reference","信用卡验证号码 视觉参考"
 "Cart Product API","购物车产品 API"
 "Cart Subtotal:",购物车小计：
@@ -63,13 +63,13 @@ Checkout,结账
 City,城市
 "Clear Shopping Cart",清空购物车
 "Click <a href=""%1"" onclick=""this.target='_blank'"">here to print</a> a copy of your order confirmation.","单击<a href=""%1"" onclick=""this.target='_blank'"">这里打印</a>您的订单信息."
-"Click <a href=""%1"" onclick=""this.target=\'_blank\'"">here to print</a> a copy of your order confirmation.","单击<a href=""%1"">这里来打印</a>您订单确认信息的拷贝。"
+"Click <a href=""%1"" onclick=""this.target='_blank'"">here to print</a> a copy of your order confirmation.","单击<a href=""%1"">这里来打印</a>您订单确认信息的拷贝。"
 "Click <a href=""%1"">here</a> to continue shopping.","单击<a href=""%1"">这里</a>继续购物."
 Close,关闭
 Company,公司
 "Condition Name",条件名称
 "Configurable Product Image",可配置产品图片
-"Configure Cart Item",配置购物车项目
+"Configure Cart Item",配置购物车条目
 "Confirm Password",确认密码
 Content,内容
 "Content Height",内容高度
@@ -99,20 +99,20 @@ Disabled,已禁用
 "Discount Codes",折扣代码
 "Display Cart Summary",显示购物车概要
 "Display Shopping Cart Sidebar",显示购物车侧边栏
-"Display item quantities",显示项目数量
-"Display number of items in cart",显示购物车中项目的数量
-"Display number of items in wishlist",显示收藏列表中项目的数量
+"Display item quantities",显示条目数量
+"Display number of items in cart",显示购物车中条目的数量
+"Display number of items in wishlist",显示收藏列表中条目的数量
 "Easy access to your order history and status",轻松访问您的订单历史记录和状态
 Edit,编辑
 "Edit Address",编辑地址
 "Edit Billing Address",编辑账单地址
 "Edit Condition",编辑条件
-"Edit Items",编辑项目
+"Edit Items",编辑条目
 "Edit Shipping Address",编辑运送地址
 "Edit Terms and Conditions",编辑条款和条件
 "Edit Your Cart",编辑您的购物车
-"Edit item",编辑项目
-"Edit item parameters",编辑项目参数
+"Edit item",编辑条目
+"Edit item parameters",编辑条目参数
 "Email Address",编辑电子邮件地址
 "Enable Onepage Checkout",启用单页面结账
 "Enable Terms and Conditions",启用条款和条件
@@ -124,7 +124,7 @@ Enabled,已启用
 "Excl. Tax",不含税
 "Fast and easy check out",方便快捷的结账
 Fax,传真
-"Forgot an Item?",忘记某个项目？
+"Forgot an Item?",忘记某个条目？
 "Forgot your password?",忘记您的密码？
 "Get a Quote",获得报价
 "Get easy access to your order history and status.",很容易存储订单历史和状态.
@@ -147,16 +147,16 @@ ID,ID
 "Invalid method: %1","无效的方法: %1"
 "Invalid shipping method",无效的货运方法
 "Invalid shipping method.",运送方法无效。
-"Item not found or already ordered",无法找到项目，或项目已被订购
-Items,项目
-"Items After",项目晚于
-"Items Before",之前的项目
+"Item not found or already ordered",无法找到条目，或条目已被订购
+Items,条目
+"Items After",条目晚于
+"Items Before",之前的条目
 "Load customer quote error",载入客户报价错误
 "Loading next step...",正在载入下一步...
 Login,登录
 "Login/Registration Before",登录/注册早于
 "Manage Terms and Conditions",管理条款与协议
-"Maximum Display Recently Added Item(s)",最大显示近期添加的项目
+"Maximum Display Recently Added Item(s)",最大显示近期添加的条目
 "Maximum qty allowed for Shipping to multiple addresses is %1",最多允许多地址运送的数量为%1
 "Minimum order amount is %1",最小的订单额为%1
 Move,移动
@@ -176,8 +176,8 @@ Move,移动
 "Multishipping Checkout Shipping Information Step",多重运送结账运送信息步骤
 "Multishipping Checkout Success",多重运送结账成功
 "My Cart",我的购物车
-"My Cart (%1 item)","我的购物车（%1 个项目）"
-"My Cart (%1 items)","我的购物车（%1 个项目）"
+"My Cart (%1 item)","我的购物车（%1 个条目）"
+"My Cart (%1 items)","我的购物车（%1 个条目）"
 "My Cart Link",我的购物车链接
 "New Address",新地址
 "New Condition",新条件
@@ -187,15 +187,15 @@ Move,移动
 "One Page Checkout Failure",单页面结账失败
 "One Page Checkout Overview",单页面结账概览
 "One Page Checkout Success",单页面结账成功
-"One item of products do not have identifier or sku","产品中的一个项目不包含标识或 SKU"
-"One item of products is not belong any of quote item",产品中的一个项目不属于任何报价项目
+"One item of products do not have identifier or sku","产品中的一个条目不包含标识或 SKU"
+"One item of products is not belong any of quote item",产品中的一个条目不属于任何报价条目
 "Order #","订单 #"
 "Order Review",订单总览
 "Order Success",订购成功
 "Order place error",下订单错误
 "Order place error.",提交订单错误。
-"Other Items in Your Order",您订单中的其它项目
-"Overview Items After",项目概览
+"Other Items in Your Order",您订单中的其它条目
+"Overview Items After",条目概览
 Password,密码
 "Payment Failed Email Reciever",支付失败电子邮件接收者
 "Payment Failed Email Sender",支付失败电子邮件发送者
@@ -222,7 +222,7 @@ Password,密码
 "Please select a region, state or province.",请选择地区、州或省.
 "Please select a shipping address for applicable items.",请为合适的条目选择运送地址.
 "Please select region, state or province",请选择地区、州，或省
-"Please select shipping address for applicable items",请为适用项目选择运送地址
+"Please select shipping address for applicable items",请为适用条目选择运送地址
 "Please select shipping methods for all addresses",请为所有地址选择运送方式
 "Please select shipping methods for all addresses.",请为所有的地址选择货运方法.
 "Please select valid payment method.",请选择有效的支付方法。
@@ -240,17 +240,17 @@ Qty:,数量：
 "Quantity was recalculated from %1 to %2",数量由%1重新计算为%2
 "Quantity was recalculated from %1 to %2","数量已重新计算，从 %1 到 %2"
 "Quote Lifetime (days)",报价生命期（天）
-"Quote item does not exist.",报价项目不存在。
-"Quote item is not found.",报价项目未找到。
-"Recently added item(s)",最近添加的项目
+"Quote item does not exist.",报价条目不存在。
+"Quote item is not found.",报价条目未找到。
+"Recently added item(s)",最近添加的条目
 Register,注册
 "Register and save time!",注册并节约时间！
 "Register to Create an Account",注册以创建帐户
 "Register with us for future convenience:",在这里注册以后可以更方便：
-"Remove Item",删除项目
+"Remove Item",删除条目
 "Remove This Item",删除该内容
 "Remove coupon code from shopping cart",从购物车中删除优惠代码
-"Remove item",删除项目
+"Remove item",删除条目
 "Remove product from shopping cart",从购物车中删除产品
 "Remove product(s) from shopping cart",从购物车中删除产品
 "Require Customer To Be Logged In To Checkout",需要顾客登录才能结账
