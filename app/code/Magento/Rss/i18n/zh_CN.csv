@@ -2,68 +2,67 @@
 "%1 - Special Products","%1 - 特价产品"
 "%1 RSS Feed","%1 RSS源"
 "%1 has reached a quantity of %1.","%1 已经达到了一些 %1"
+"%1 has reached a quantity of %2.",%1已经达到%2的数量.
+"%1's Wishlist",%1'的收藏
 "%1\'s Wishlist","%1 的收藏清单"
-"Cannot retrieve the wishlist","无法获取收藏清单"
-"Catalog","分类"
-"Category Feeds","分类源"
-"Click for price","单击获取价格"
+"Cannot retrieve the wishlist",无法获取收藏清单
+Catalog,分类
+"Category Feeds",分类源
+"Click <a href=""%1"">here</a> to view the review.","点击<a href=""%1"">这里</a>查看评论."
+"Click for price",单击获取价格
 "Comment: %1<br/>","评论：%1 <br/>"
-"Coupons/Discounts","代金券/折扣"
+Coupons/Discounts,代金券/折扣
 "Current Status: %1<br/>","当前状态：%1 <br/>"
-"Customer: %1","客户姓名：%1"
-"Customer Order Status Notification","客户订单状态通知"
+"Customer Name: %1","客户名: %1"
+"Customer Order Status Notification",客户订单状态通知
+"Customer: %1",客户姓名：%1
 "Details for %1 #%2","%1 #%2的详情"
-"Discount","折扣"
-"Discount (%1)","折扣（%1）"
-"Enable RSS","启用RSS"
-"Error in processing xml. %1","处理xml时出错。%1"
-"From:","来自："
-"Get Feed","获取源"
-"Gift Message","礼品消息"
-"Grand Total","总计"
-"Low Stock Products","产品库存低"
-"Message:","信息："
-"Miscellaneous Feeds","杂项源订阅"
-"New Orders","新订单"
-"New Products","新产品"
+Discount,折扣
+"Discount (%1)","折扣 (%1)"
+"Enable RSS",启用RSS
+"Error in processing xml. %1",处理xml时出错。%1
+From:,来自：
+"Get Feed",获取源
+"Gift Message",礼品消息
+"Grand Total",总计
+"Low Stock Products",产品库存低
+Message:,信息：
+"Miscellaneous Feeds",杂项源订阅
+"New Orders",新订单
+"New Products",新产品
 "New Products from %1","新产品来自 %1"
-"Notified Date: %1<br/>","通知日期：%1<br/>"
+"Notified Date: %1<br/>",通知日期：%1<br/>
+"Order # %1 Notification(s)","订单# %1 通知(s)"
+"Order #%1 created at %2",订单#%1创建于%2
 "Order %1 Notification(s)","订单 # %1 通知"
 "Order %1 created at %1","订单 # %1 已于 %2 创建"
-"Pending product review(s)","未决的产品评论"
+"Pending product review(s)",未决的产品评论
+"Price: %1","价格: %1"
 "Product: ""%1"" review By: %2","产品：“%1” 由 %2 评论"
 "Product: <a href=""%1"">%2</a> <br/>","产品：<a href=""%1"">%2</a> <br/>"
 "Products tagged with %1","已标记 %1 的产品"
-"Purchased From: %1","购买自：%1"
-"RSS","RSS"
+"Purchased From: %1",购买自：%1
+RSS,RSS
 "RSS Feeds","RSS 订阅源"
 "RSS Feeds List","RSS 订阅源列表"
 "RSS Feeds Section","RSS 源选区"
 "Review: %1 <br/>","评论：%1 <br/>"
 "Rss Config","RSS 配置"
-"Shipping &amp; Handling","运送与手续费"
-"Special Products","特殊商品"
-"Store: %1 <br/>","商店：%1 <br/>"
-"Subtotal","小计"
-"Summary of review: %1 <br/>","评论摘要：%1 <br/>"
-"Tags Products","标记产品"
-"Tax","传真"
-"There are no Rss Feeds","没有RSS源"
-"To:","至："
-"Top Level Category","顶级分类"
-"Total: %1<br/>","总数：%1 <br/>"
-"Wishlist","收藏清单"
-"click <a href=""%1"">here</a> to view the review","点击 <a href=""%1"">这里</a> 查看评论"
-"Discount (%1)","折扣 (%1)"
-"There are no Rss Feeds.","没有Rss种子."
-"There was no RSS feed enabled.","没有允许Rss种子."
-"We cannot retrieve the wish list.","检索不到收藏清单."
-"%1 has reached a quantity of %2.","%1已经达到%2的数量."
-"%1's Wishlist","%1'的收藏"
-"Click <a href=""%1"">here</a> to view the review.","点击<a href=""%1"">这里</a>查看评论."
-"Customer Name: %1","客户名: %1"
-"Order # %1 Notification(s)","订单# %1 通知(s)"
-"Order #%1 created at %2","订单#%1创建于%2"
-"Price: %1","价格: %1"
-"Special Expires On: %1","特价于%1过期"
+"Shipping &amp; Handling",运送与手续费
+"Special Expires On: %1",特价于%1过期
 "Special Price: %1","特价: %1"
+"Special Products",特殊商品
+"Store: %1 <br/>","商店：%1 <br/>"
+Subtotal,小计
+"Summary of review: %1 <br/>","评论摘要：%1 <br/>"
+"Tags Products",标记产品
+Tax,传真
+"There are no Rss Feeds",没有RSS源
+"There are no Rss Feeds.",没有Rss种子.
+"There was no RSS feed enabled.",没有允许Rss种子.
+To:,至：
+"Top Level Category",顶级分类
+"Total: %1<br/>","总数：%1 <br/>"
+"We cannot retrieve the wish list.",检索不到收藏清单.
+Wishlist,收藏清单
+"click <a href=""%1"">here</a> to view the review","点击 <a href=""%1"">这里</a> 查看评论"

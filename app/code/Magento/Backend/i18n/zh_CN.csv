@@ -1,53 +1,52 @@
-"Magento is an eBay Inc. company. Copyright&copy; %1 Magento, Inc. All rights reserved.","Magento属于eBay公司. 版权&copy; %1 Magento, Inc. 版权所有."
-"Additional Settings","额外的设置"
-"Please confirm site switching. All data that hasn't been saved will be lost.","请确认站点转换.所有没有被存储的数据将会丢失."
-"There are no search keywords.","没有搜索关键字."
-"Log in","登录"
-"Magento Admin Panel","Magento管理面板"
-ImageMagick,ImageMagick
-"PHP GD2","PHP GD2"
-Bcc,Bcc
-"We can't save the Cron expression.","不能存储Cron表达式."
-"Please correct the timezone.","请纠正您的时区."
-"Maximum sender name length is 255. Please correct your settings.","最大发送者名字长度是255.请修正您的设置."
-"Sorry, we haven't installed the default display currency you selected.","很抱歉, 还没有安装你选择默认显示货币."
-"Sorry, the default display currency you selected in not available in allowed currencies.","很抱歉, 您选择的默认显示货币在允许的货币里无效."
-"Sorry, we haven't installed the base currency you selected.","很抱歉,还没有安装你选择的基础货币."
-"Specify a fully qualified URL.","指定完整的URL."
-"Please correct the user name or password.","请纠正用户名或密码."
-"Authentication error occurred.","认证错误."
-YTD,YTD
-2YTD,2YTD
-"You saved the configuration.","成功存储该配置."
-"You need more permissions to do this.","您需要更高的权限进行该操作."
-"invalid request","无效的请求"
-"see error log for details","打开错误日志看详细信息"
-"An error occurred while enabling cache.","当允许缓存时发生错误."
-"An error occurred while disabling cache.","当禁止缓存时发生错误."
-"An error occurred while refreshing cache.","当刷新缓存时发生错误."
-"You entered an invalid Secret Key. Please refresh the page.","您输入了一个无效的密钥,请刷新页面."
-"This attribute shares the same value in all stores.","该属性在所有的店铺分享了同一个值."
-"Please correct the tab configuration and try again.","请纠正tab配置再试一次."
-"We couldn't find any records.","找不到任何记录."
-"Please correct the column format and try again.","请纠正列格式再试一次."
-"Search String","搜索字符串"
-"Design Theme","设计主题"
-"-- No Theme --","-- 没有主题 --"
 "%1 (Default)","%1 (Default)"
 "%1 An empty value is allowed as well.","%1 空值也是允许的."
+"-- No Theme --","-- 没有主题 --"
+2YTD,2YTD
+"Additional Settings",额外的设置
+"An error occurred while disabling cache.",当禁止缓存时发生错误.
+"An error occurred while enabling cache.",当允许缓存时发生错误.
+"An error occurred while refreshing cache.",当刷新缓存时发生错误.
+"Authentication error occurred.",认证错误.
+Bcc,Bcc
 "Chart is disabled. To enable the chart, click <a href=""%1"">here</a>.","图表被禁止.为了允许图表显示,单击<a href=""%1"">这里</a>."
 "Currency ""%1"" is used as %2 in %3.","货币""%1""作为%2使用在%3."
 "Default display currency ""%1"" is not available in allowed currencies.","默认显示货币""%1""在允许的货币里不可用."
+"Design Theme",设计主题
+ImageMagick,ImageMagick
 "Invalid %1. %2","无效的%1. %2"
+"Log in",登录
+"Magento Admin Panel",Magento管理面板
+"Magento is an eBay Inc. company. Copyright&copy; %1 Magento, Inc. All rights reserved.","Magento属于eBay公司. 版权&copy; %1 Magento, Inc. 版权所有."
+"Maximum sender name length is 255. Please correct your settings.",最大发送者名字长度是255.请修正您的设置.
+"PHP GD2","PHP GD2"
+"Please confirm site switching. All data that hasn't been saved will be lost.",请确认站点转换.所有没有被存储的数据将会丢失.
+"Please correct the column format and try again.",请纠正列格式再试一次.
 "Please correct the email address: ""%1"".","请纠正邮件地址: ""%1""."
+"Please correct the tab configuration and try again.",请纠正tab配置再试一次.
+"Please correct the timezone.",请纠正您的时区.
+"Please correct the user name or password.",请纠正用户名或密码.
+"Search String",搜索字符串
 "Selected allowed currency ""%1"" is not available in installed currencies.","安装的货币中找不到您允许的货币""%1""."
 "Service unavailable: %1","无效的服务: %1"
-"Specify a URL or path that starts with placeholder(s): %1.","指定一个以占位符%1开头的URL或路径:."
+"Sorry, the default display currency you selected in not available in allowed currencies.","很抱歉, 您选择的默认显示货币在允许的货币里无效."
+"Sorry, we haven't installed the base currency you selected.","很抱歉,还没有安装你选择的基础货币."
+"Sorry, we haven't installed the default display currency you selected.","很抱歉, 还没有安装你选择默认显示货币."
+"Specify a URL or path that starts with placeholder(s): %1.",指定一个以占位符%1开头的URL或路径:.
+"Specify a fully qualified URL.",指定完整的URL.
 "The file you're uploading exceeds the server size limit of %1 kilobytes.","您正在上传的文件超过了服务器文件尺寸限制%1 kb."
 "The sender name ""%1"" is not valid. Please use only visible characters and spaces.","无效的发送者名字""%1"". 请仅仅使用可见的字符和空."
-"Total %1 records found","共发现%1条记录"
-"Value must be a URL or one of placeholders: %1","值必须是URL或者占位符%1中的一个"
-"of %1 pages","总页数%1中"
-"store(%1) scope","店铺(%1)范围"
-"website(%1) scope","站点(%1)范围"
-"%1 (Default)","%1 (Default)"
+"There are no search keywords.",没有搜索关键字.
+"This attribute shares the same value in all stores.",该属性在所有的店铺分享了同一个值.
+"Total %1 records found",共发现%1条记录
+"Value must be a URL or one of placeholders: %1",值必须是URL或者占位符%1中的一个
+"We can't save the Cron expression.",不能存储Cron表达式.
+"We couldn't find any records.",找不到任何记录.
+YTD,YTD
+"You entered an invalid Secret Key. Please refresh the page.","您输入了一个无效的密钥,请刷新页面."
+"You need more permissions to do this.",您需要更高的权限进行该操作.
+"You saved the configuration.",成功存储该配置.
+"invalid request",无效的请求
+"of %1 pages",总页数%1中
+"see error log for details",打开错误日志看详细信息
+"store(%1) scope",店铺(%1)范围
+"website(%1) scope",站点(%1)范围
