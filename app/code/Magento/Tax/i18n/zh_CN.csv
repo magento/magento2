@@ -1,4 +1,4 @@
-"'*' - matches any; 'xyz*' - matches any that begins on 'xyz' and not longer than %d.","'*' - 匹配任意； 'xyz*' - 匹配以 'xyz' 开头且不长于 %d。"
+"'*' - matches any; 'xyz*' - matches any that begins on 'xyz' and not longer than %1.","'*' - 匹配任意； 'xyz*' - 匹配以 'xyz' 开头且不长于 %1。"
 "-- Please Select --","-- 请选择 --"
 "Add New Class",添加新类
 "Add New Tax Class",添加新的税类
@@ -167,8 +167,8 @@ Total,总数
 "Whether catalog prices entered by admin include tax.",任何目录价格包括税，都由管理员输入。
 "Whether shipping amounts entered by admin or obtained from gateways include tax.",任何销售金额包含税，都由管理员输入或从网关获取。
 Yes,是
-"You cannot delete this tax class as it is used for %d customer groups.",无法删除此税务类型，它使用于％d个客户组中。
-"You cannot delete this tax class as it is used for %d products.",无法删除此税务类型，它使用于%d个产品中。
+"You cannot delete this tax class as it is used for %1 customer groups.",无法删除此税务类型，它使用于%1个客户组中。
+"You cannot delete this tax class as it is used for %1 products.",无法删除此税务类型，它使用于%1个产品中。
 "You cannot delete this tax class as it is used in Tax Rules. You have to delete the rules it is used in first.",无法删除此税务类型，它在税务规则中被使用。若要删除请先删除对应的规则。
 "You cannot delete this tax class because it is used for %1 %2(s).","您不能删除税类，因为它正在被%1 %2(s)使用."
 "You cannot delete this tax class because it is used in Tax Rules. You have to delete the rules it is used in first.",由于该税类被用于税规则所以你不能删除它.必须首先删除这个规则.

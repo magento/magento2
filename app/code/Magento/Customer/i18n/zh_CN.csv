@@ -352,7 +352,7 @@ Sent,已发送
 "Shipped to Last Name",发送给姓氏
 "Shipped to Name",运送至姓名
 "Shopping Cart",购物车
-"Shopping Cart - %d item(s)","购物车 - %d 个项目"
+"Shopping Cart - %1 item(s)","购物车 - %1 个项目"
 "Shopping Cart of %1$s - %2$d item(s)","购物车包含 %1$s - %2$d 件商品"
 "Show Date of Birth",显示出生日期
 "Show Gender",显示性别
@@ -449,7 +449,7 @@ Visitor,访客
 Website,网站
 "Welcome Email",欢迎邮件
 Wishlist,收藏清单
-"Wishlist - %d item(s)","收藏清单 - %d 个项目"
+"Wishlist - %1 item(s)","收藏清单 - %1 个项目"
 "With your own account, you can check out faster, store multiple shipping addesses, see your shopping activity and more.",用自己的账号方便更快结账、存储多运送地址、查看购物历史以及更多.
 "Would you like to change the Customer Group for this order?",你是否想更改该订单的顾客群体？
 "Wrong confirmation key.",错误的确认密钥。

@@ -103,7 +103,7 @@ Email,电子邮件
 "Joint field or attribute expression with this alias is already declared",使用此别名的合并字段或属性表达式已被声明
 Letters,字母
 "Letters (a-z, A-Z) or Numbers (0-9)","字母 (a-z, A-Z) 或数字 (0-9)"
-"Loaded %d records","已载入 %d 条记录"
+"Loaded %1 records","已载入 %1 条记录"
 "Maximum length of attribute code must be less than %1 symbols",属性代码最大长度必须小于%1个符号
 "Maximum length of attribute code must be less then %1 symbols","属性代码的最大长度必须小于 %1 个符号"
 "Multiple Select",多选
@@ -118,7 +118,7 @@ None,无
 "Problem loading the collection, aborting. Error: %1",载入收藏时遇到问题，正在中止。错误：%1
 "Problem saving the collection, aborting. Error: %1",保存收藏时遇到问题，正在中止。错误：%1
 Required,必须
-"Saved %d record(s).","已保存 %d 条记录。"
+"Saved %1 record(s).","已保存 %1 条记录。"
 "Source model ""%1"" not found for attribute ""%1""",源模型“%1”在属性“%2”中未找到
 "Source model ""%1"" not found for attribute ""%2""","找不到属性""%2""的源模型""%1"""
 System,系统

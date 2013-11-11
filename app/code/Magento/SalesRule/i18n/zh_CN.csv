@@ -1,5 +1,5 @@
 "%1 Coupon(s) have been generated","已生成 %1 个组"
-"%d Shopping Cart Price Rules based on ""%1"" attribute have been disabled.","%d 购物车价格规则基于 ""%1"" 属性，已被禁用。"
+"%1 Shopping Cart Price Rules based on ""%2"" attribute have been disabled.","%1 购物车价格规则基于 ""%2"" 属性，已被禁用。"
 Actions,操作
 Active,活动
 "Add New Rule",添加新规则

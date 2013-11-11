@@ -1,6 +1,6 @@
 "%1 and greater",%1或更多
 "<strong>%1 item(s)</strong> were found using the following search criteria.",<strong>%1个条目</strong>被发现使用下面的搜索条件.
-"<strong>%d item(s)</strong> were found using the following search criteria","使用下列搜索条件找到了<strong>%d 个商品</strong>"
+"<strong>%1 item(s)</strong> were found using the following search criteria","使用下列搜索条件找到了<strong>%1 个商品</strong>"
 "Advanced Search",高级搜索
 "Advanced Search Form",高级搜索表单
 "Advanced Search Result",高级搜索结果

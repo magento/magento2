@@ -25,7 +25,7 @@ From,来自
 "Gift Options for this address",为该地址的礼物设置
 "Gift Options for this address.",适用于该地址的礼品选项。
 "Item %1 of %2",%2中的条目%1
-"Item %d of %d","第 %d 个项目，共 %d 个"
+"Item %1 of %2","第 %1 个项目，共 %2 个"
 Message,信息
 No,否
 OK,确定

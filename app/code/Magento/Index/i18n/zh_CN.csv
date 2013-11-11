@@ -44,8 +44,8 @@ System,系统
 "There was a problem with saving process.",保存进程遇到问题。
 "Total of %1 index(es) have changed index mode.",共%1个索引已经改变了索引模式.
 "Total of %1 index(es) have reindexed data.",共%1个索引已经重新索引了数据.
-"Total of %d index(es) have changed index mode.","总计 %d 个索引已变更索引模式。"
-"Total of %d index(es) have reindexed data.","总计 %d 个索引包含重新索引数据。"
+"Total of %1 index(es) have changed index mode.","总计 %1 个索引已变更索引模式。"
+"Total of %1 index(es) have reindexed data.","总计 %1 个索引包含重新索引数据。"
 "Update Required",需要更新
 "Update on Save",保存时更新
 "Updated At",更新于

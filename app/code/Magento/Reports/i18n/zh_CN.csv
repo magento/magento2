@@ -32,7 +32,7 @@ Customers,客户
 "Customers by Orders Total",按订单数量排列顾客
 "Customers by number of orders",按订单数排列顾客
 "Customers by orders total",按订单总数排列顾客
-"Customers that have wishlist: %s%",有收藏清单的顾客：%s%
+"Customers that have wishlist: %1%",有收藏清单的顾客：%1%
 Dashboard,仪表板
 Day,天
 "Default Recently Compared Products Count",默认最近比较的产品数量
@@ -75,11 +75,11 @@ No,否
 "Number Purchased",已购买数目
 "Number of Products to display",显示产品的数量
 "Number of Reviews",评论数量
-"Number of items bought from a wishlist: %s",从收藏清单中购买项目的数量：%s
-"Number of times wishlists have been shared (emailed): %s",收藏清单被分享（通过发送电子邮件）的次数：%s
-"Number of wishlist conversions: %s",收藏清单转换的数量：%s
-"Number of wishlist referrals: %s",收藏清单推荐次数：%s
-"Number of wishlists: %s",收藏清单数量：%s
+"Number of items bought from a wishlist: %1",从收藏清单中购买项目的数量：%1
+"Number of times wishlists have been shared (emailed): %1",收藏清单被分享（通过发送电子邮件）的次数：%1
+"Number of wishlist conversions: %1",收藏清单转换的数量：%1
+"Number of wishlist referrals: %1",收藏清单推荐次数：%1
+"Number of wishlists: %1",收藏清单数量：%1
 "Order Quantity",下单的数量
 "Order Status",订单状态
 "Order Taxes Report Grouped by Tax Rate",按税率分组的订购税费报告
@@ -117,7 +117,7 @@ Results,结果
 Revenue,收入
 Review,评论
 Reviews,评论
-"Reviews for %s",%s的评论
+"Reviews for %1",%1的评论
 Sales,销售
 "Sales Report",销售报告
 "Search Query",搜索查询
@@ -135,11 +135,11 @@ Statistics,状态
 "Submit Locale",提交于
 Subtotal,小计
 Tag,标签名称
-"Tag ""%s"" details","标签 ""%s"" 详情"
+"Tag ""%1"" details","标签 ""%1"" 详情"
 "Tag Detail",标签详情
 "Tag Use",标签的使用
-"Tags Submitted by %s","由%s 提交的标签"
-"Tags submitted to %s","由%s 提交的标签"
+"Tags Submitted by %1","由%1 提交的标签"
+"Tags submitted to %1","由%1 提交的标签"
 Tax,传真
 "The product type filter specified is incorrect.",产品类型过滤器不正确.
 "Times Deleted",已删除时间数量

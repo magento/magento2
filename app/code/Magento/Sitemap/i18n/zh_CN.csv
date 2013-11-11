@@ -11,7 +11,7 @@ Enabled,已启用
 "Error Email Sender",邮件发送有误
 "Error Email Template",邮件模板有误
 "File ""%1"" cannot be saved. Please, make sure the directory ""%2"" is writable by web server.","文件""%1""不能被存储. 请确保服务器上的目录""%2""可写."
-"File ""%s"" cannot be saved. Please, make sure the directory ""%s"" is writeable by web server.","文件 ""%s"" 无法保存。请确保目录 ""%s"" 可被Web服务器写入。"
+"File ""%1"" cannot be saved. Please, make sure the directory ""%2"" is writeable by web server.","文件 ""%1"" 无法保存。请确保目录 ""%2"" 可被Web服务器写入。"
 "File handler unreachable",文件句柄不可达
 Filename,文件名
 Frequency,频率
@@ -28,11 +28,11 @@ Never,永不
 "New Sitemap",新站点结构图
 Path,路径
 "Please create the specified folder ""%1"" before saving the sitemap.","请在存储站点地图之前创建指定的目录""%1""."
-"Please create the specified folder ""%s"" before saving the sitemap.","保存站点结构图之前，请创建指定的文件夹 ""%s""。"
+"Please create the specified folder ""%1"" before saving the sitemap.","保存站点结构图之前，请创建指定的文件夹 ""%1""。"
 "Please define a correct path.",请定义一个正确路径.
 "Please define correct path",请定义正确的路径
 "Please make sure that ""%1"" is writable by the web-server.","请确保服务器上""%1""可写."
-"Please make sure that ""%s"" is writable by web-server.","请确保Web服务器可写入 ""%s""。"
+"Please make sure that ""%1"" is writable by web-server.","请确保Web服务器可写入 ""%1""。"
 "Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) in the filename. No spaces or other characters are allowed.",在文件名中请只使用字母（a-z或A-Z）、数字（0-9），或下划线（_）。不允许使用空格或其他字符。
 "Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename. No spaces or other characters are allowed.",文件中请仅仅使用字符(a-z或A-Z)、数字(0-9)或者下划线(_).空格和其他支付都是不允许的.
 Priority,优先级
@@ -44,7 +44,7 @@ Sitemap,站点结构图
 "Store View",店铺视图
 "The priority must be between 0 and 1.",优先级必须介于0和1之间。
 "The sitemap ""%1"" has been generated.","站点地图""%1""已经被生成."
-"The sitemap ""%s"" has been generated.","站点结构图 “%s”已生成。"
+"The sitemap ""%1"" has been generated.","站点结构图 “%1”已生成。"
 "The sitemap has been deleted.",站点结构图已被删除。
 "The sitemap has been saved.",站点结构图已保存。
 "This sitemap no longer exists.",站点结构图不存在。

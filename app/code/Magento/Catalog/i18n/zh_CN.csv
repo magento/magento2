@@ -5,7 +5,6 @@
 "%1 incl tax",%1含税
 "%1 x %2 px.","%1 x %2 px."
 "%1$s incl tax.","%1$s 含税。"
-(%d),(%d)
 "(Copy data from: %1)",(从%1复制数据)
 "* Required Fields",*必要字段
 "-- Please Select --","-- 请选择 --"
@@ -725,12 +724,12 @@ Show,显示
 Sitemap,站点结构图
 "Size for %1",%1的尺寸
 "Skip import row, is not valid value ""%1"" for field ""%2""","跳过导入行，该行不是""%1""字段的有效值""%2"""
-"Skip import row, required field ""%s"" for the new customer is not defined.","立刻跳过导入，新顾客所需的 ""%s"" 字段未定义。"
-"Skip import row, the value ""%s"" is invalid for field ""%s""","跳过导入行，值 ""%s"" 对于 ""%s"" 字段无效"
-"Skipping import row, required field ""%s"" for new products is not defined.","正在跳过导入的行，新产品所需的字段 ""%s"" 未定义。"
-"Skipping import row, required field ""%s"" is not defined.","跳过导入的行，必须的 ""%s"" 字段未定义。"
-"Skipping import row, store ""%s"" field does not exist.","正在跳过导入行，存储 ""%s"" 字段不存在。"
-"Skipping import row, the value ""%s"" is not valid for the ""%s"" field.","跳过导入的行， ""%s"" 字段的值 ""%s"" 无效。"
+"Skip import row, required field ""%1"" for the new customer is not defined.","立刻跳过导入，新顾客所需的 ""%1"" 字段未定义。"
+"Skip import row, the value ""%1"" is invalid for field ""%2""","跳过导入行，值 ""%1"" 对于 ""%2"" 字段无效"
+"Skipping import row, required field ""%1"" for new products is not defined.","正在跳过导入的行，新产品所需的字段 ""%1"" 未定义。"
+"Skipping import row, required field ""%1"" is not defined.","跳过导入的行，必须的 ""%1"" 字段未定义。"
+"Skipping import row, store ""%1"" field does not exist.","正在跳过导入行，存储 ""%1"" 字段不存在。"
+"Skipping import row, the value ""%1"" is not valid for the ""%2"" field.","跳过导入的行， ""%1"" 字段的值 ""%2"" 无效。"
 "Some of the processed products have no SKU value defined. Please fill it prior to performing operations on these products.",某些已经处理的产品无有效SKU值。请在针对这些产品执行操作前首先填写。
 "Some of the products below do not have all the required options. Please edit them and configure all the required options.",下列某些产品必须的选项不完整。请修改并配置所有必须的选项。
 "Some of the selected item options are not currently available.",选定的条目选项中的一些当前不可用.
@@ -757,9 +756,9 @@ Sitemap,站点结构图
 "Sort Order",排序顺序
 "Sort Variations",排序变量
 "Source Model",源型号
-"Special Expires On: %s","特殊过期于： %s"
+"Special Expires On: %1","特殊过期于： %1"
 "Special Price:",特殊价格：
-"Special Price: %s","特殊价格： %s"
+"Special Price: %1","特殊价格： %1"
 "Starting at:",开始于：
 Static,静态
 "Static block and products",静态区块和产品
@@ -791,9 +790,9 @@ Text,文字
 "The comparison list was cleared.",比较列表被清空。
 "The configuration item instance in options group is incorrect.",选项组中配置条目实例是不正确的.
 "The configuration item option instance in options group is incorrect.",选项组中配置条目选项实例是不正确的.
-"The file '%s' for '%s' has an invalid extension","'%s' 的文件 '%s' 扩展有误"
-"The file '%s' you uploaded is larger than %s Megabytes allowed by server","您上传的文件 '％s' 大于服务器允许的 ％s 兆"
-"The file you uploaded is larger than %s Megabytes allowed by server","您上传的文件大于服务器所允许的 %s 兆字节"
+"The file '%1' for '%2' has an invalid extension","'%1' 的文件 '%2' 扩展有误"
+"The file '%1' you uploaded is larger than %2 Megabytes allowed by server","您上传的文件 '%1' 大于服务器允许的 %2 兆"
+"The file you uploaded is larger than %1 Megabytes allowed by server","您上传的文件大于服务器所允许的 %1 兆字节"
 "The filter model name must be declared.",过滤器模型必须被声明.
 "The filter must be an object. Please set correct filter.",过滤器必须是一个对象.请设置正确的过滤器.
 "The filters must be an array.",过滤器必须为数组。
@@ -803,8 +802,8 @@ Text,文字
 "The model collection resource name is not defined.",型号集合资源名称未定义。
 "The option instance type in options group is incorrect.",选项组中选项实例类型是不正确的.
 "The option type to get group instance is incorrect.",用来获得组实例的该选项类别是不正确的.
-"The product %s has been added to comparison list.","产品 %s 已被添加至比较列表。"
-"The product %s has been removed from comparison list.","产品 %s 已从比较列表中删除。"
+"The product %1 has been added to comparison list.","产品 %1 已被添加至比较列表。"
+"The product %1 has been removed from comparison list.","产品 %1 已从比较列表中删除。"
 "The product attribute has been deleted.",产品属性已被删除。
 "The product attribute has been saved.",产品属性已保存。
 "The product has been created.",产品已创建。
@@ -824,7 +823,7 @@ Text,文字
 "The text is too long",文本过长
 "The text is too long.",文本太长.
 "The value of attribute ""%1"" must be unique.","属性""%1""的值得必须是唯一的."
-"There are no %s available.","没有可用的 %s。"
+"There are no %1 available.","没有可用的 %1。"
 "There are no customers for this alert",没有客户适用于此提醒
 "There are no customers for this alert.",没有客户适用于此提醒。
 "There are no grouped products.",没有分组的产品.
@@ -861,9 +860,9 @@ Top/Right,顶部/右侧
 "Total Quantity Base Items","总数量 基础项目"
 "Total incl. Tax: %1","含税总价: %1"
 "Total incl. Tax: %1$s",含税总额：%1$s
-"Total of %d record(s) have been deleted.",总共%d记录已被删除。
-"Total of %d record(s) have been updated.",总共%d记录已被更新。
-"Total of %d record(s) were updated","共更新 %d 条记录"
+"Total of %1 record(s) have been deleted.",总共%1记录已被删除。
+"Total of %1 record(s) have been updated.",总共%1记录已被更新。
+"Total of %1 record(s) were updated","共更新 %1 条记录"
 Type,类型
 "URL Rewrite Management",URL重写管理
 "Unable to complete this request.",无法完成该请求。
@@ -873,9 +872,9 @@ Type,类型
 "Unable to save product",不能存储产品
 "Unable to save the category",不能存储分类
 "Unassigned Attributes",未分配的属性
-"Unknown EAV indexer type ""%s"".","未知 EAV 索引类型 ""%s"" 。"
-"Unknown attribute: %s.",未知属性：%s。
-"Unsupported product type ""%s"".","不支持的产品类型 ""%s""。"
+"Unknown EAV indexer type ""%1"".","未知 EAV 索引类型 ""%1"" 。"
+"Unknown attribute: %1.",未知属性：%1。
+"Unsupported product type ""%1"".","不支持的产品类型 ""%1""。"
 Up-sells,超售
 Update,更新
 "Update Attributes",更新属性
@@ -916,8 +915,8 @@ Update,更新
 "Used for Sorting in Product Listing",在产品列表中使用排序
 "Used in Product Listing",用于产品清单
 Uses,用户数
-"Value for ""%s"" is invalid.","""%s"" 的值无效。"
-"Value for ""%s"" is invalid: %s","""%s"" 的值是无效的： %s"
+"Value for ""%1"" is invalid.","""%1"" 的值无效。"
+"Value for ""%1"" is invalid: %2","""%1"" 的值是无效的： %2"
 Varchar,可变长字符串
 "Variation Label",变量标签
 Variations,变量

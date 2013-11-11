@@ -6,7 +6,7 @@
 "%1$s has been added to your wishlist. Click <a href=""%2$s"">here</a> to continue shopping.","%1$s 已添加到您的收藏清单。单击<a href=""%2$s"">这里</a>来继续购物。"
 "%1$s has been updated in your wishlist.","%1$s 已在您的收藏清单中更新。"
 "%1's Wishlist","%1 的收藏清单"
-"%d product(s) have been added to shopping cart: %1.","%d 个产品已添加到购物车：%1。"
+"%1 product(s) have been added to shopping cart: %1.","%1 个产品已添加到购物车：%1。"
 "* Required Fields",*必要字段
 "Add All to Cart",全部添加到购物车
 "Add Date",添加日期
@@ -79,9 +79,9 @@ Message,信息
 "My Wish List (%1 items)",我的收藏(%1个条目)
 "My Wish List <small>(%1)</small>",我的收藏<small>(%1)</small>
 "My Wishlist",我的收藏
-"My Wishlist (%d item)","我的收藏清单（%d 件商品）"
-"My Wishlist (%d items)","我的收藏清单 （%d 件商品）"
-"My Wishlist <small>(%d)</small>",我的收藏清单<small>(%d)</small>
+"My Wishlist (%1 item)","我的收藏清单（%1 件商品）"
+"My Wishlist (%1 items)","我的收藏清单 （%1 件商品）"
+"My Wishlist <small>(%1)</small>",我的收藏清单<small>(%1)</small>
 "My Wishlist Link",我的收藏清单链接
 "Options Details",选项详情
 "Out of stock",缺货

@@ -258,7 +258,7 @@ Pagination,轮换
 "Please enter a valid date equal to or greater than %1","请输入等于或大于 %1 的有效日期"
 "Please enter a valid date less than or equal to %1","请输入小于或等于 %1 的有效日期"
 "Please enter a valid date.",请输入有效日期
-"Please enter a valid day (1-%d).",请输入有效天数（1-%d）。
+"Please enter a valid day (1-%1).",请输入有效天数（1-%1）。
 "Please enter a valid email address. For example johndoe@domain.com.",请输入有效邮件地址。例如johndoe@domain.com。
 "Please enter a valid fax number. For example (123) 456-7890 or 123-456-7890.","请输入有效传真号码，例如 (123) 456-7890 或 123-456-7890。"
 "Please enter a valid full date",请输入有效完整日期
@@ -266,7 +266,7 @@ Pagination,轮换
 "Please enter a valid number in this field.",请在此区域输入有效的数字。
 "Please enter a valid phone number. For example (123) 456-7890 or 123-456-7890.","请输入有效的电话号码。例如 (123) 456-7890 或 123-456-7890。"
 "Please enter a valid social security number. For example 123-45-6789.",请输入有效社会安全号码，例如123-45-6789。
-"Please enter a valid year (1900-%d).",请输入有效年份（1900-%d）。
+"Please enter a valid year (1900-%1).",请输入有效年份（1900-%1）。
 "Please enter a valid zip code.",请输入有效的邮政编码。
 "Please enter a valid zip code. For example 90602 or 90602-1234.",请输入有效邮编，例如90602或90602-1234。
 "Please enter a value greater than or equal to %1.",请输入一个大于等于%1的值.

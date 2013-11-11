@@ -381,7 +381,7 @@ Length,长度
 "Logo for PDF Print-outs (200x50)","适用于 PDF 打印的标志 (200x50)"
 "Make Check payable to:",通过支票付款给：
 Manage,管理
-"Maximum amount available to refund is %1","可退款的最高金额为 ％s"
+"Maximum amount available to refund is %1","可退款的最高金额为 %s"
 "Maximum shipping amount allowed to refund is: %1",允许退款的最大运送数量为：%1
 Message,信息
 Message:,信息：
@@ -543,8 +543,8 @@ Period,周期
 "Please Select Products to Add",请选择要添加的产品
 "Please Select a Customer",请选择一个客户
 "Please Select a Store",请选择商店
-"Please check billing address information. %1","请检查帐单地址信息。 ％s"
-"Please check shipping address information. %1",请检查配送地址信息。％s
+"Please check billing address information. %1","请检查帐单地址信息。 %1"
+"Please check shipping address information. %1",请检查配送地址信息。%1
 "Please check the billing address information. %1","请检查账单地址信息. %1"
 "Please check the shipping address information. %1","请检查运送地址信息. %1"
 "Please correct the parent block for this block.",请纠正该区块的父区块.
@@ -885,7 +885,7 @@ To,发送至
 To:,至：
 Total,总数
 "Total %1 product(s)",共%1个产品
-"Total %d product(s)",总共%d个产品
+"Total %1 product(s)",总共%1个产品
 "Total (ex)","总计 (ex)"
 "Total (inc)",总数（含）
 "Total Due",总额

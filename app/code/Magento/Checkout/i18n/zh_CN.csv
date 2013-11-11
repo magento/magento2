@@ -238,7 +238,7 @@ Products,产品
 Qty,数量
 Qty:,数量：
 "Quantity was recalculated from %1 to %2",数量由%1重新计算为%2
-"Quantity was recalculated from %d to %d","数量已重新计算，从 %d 到 %d"
+"Quantity was recalculated from %1 to %2","数量已重新计算，从 %1 到 %2"
 "Quote Lifetime (days)",报价生命期（天）
 "Quote item does not exist.",报价项目不存在。
 "Quote item is not found.",报价项目未找到。

@@ -17,12 +17,12 @@ Enabled,已启用
 "Max Products Sent in 1 Hour","1 小时内最多产品发送"
 "Max Recipients",最大收件人数量
 "Maximum %1 email addresses allowed",最多允许%1个邮件地址
-"Maximum %d email addresses allowed.","最多允许发送 %d封邮件。"
+"Maximum %1 email addresses allowed.","最多允许发送 %1封邮件。"
 Message:,信息：
 Name,姓名
 Name:,姓名：
 "No more than %1 emails can be sent at a time.",仅仅%1封邮件能被一次性送出.
-"No more than %d emails can be sent at a time.","一次能发送不超过 %d 封电子邮件。"
+"No more than %1 emails can be sent at a time.","一次能发送不超过 %1 封电子邮件。"
 "Please define a correct Cookie instance.","请定义正确的 Cookie 实例。"
 "Please define a correct Product instance.",请定义正确的产品实例。
 "Please define the correct Sender information.",请定义正确的发送者信息。
@@ -36,10 +36,10 @@ Sender:,发送人：
 "Some emails were not sent.",某些邮件未发送
 "The link to a friend was sent.",链接已发送给朋友。
 "The message cannot be empty.",消息不能为空。
-"The messages cannot be sent more than %d times in an hour",一小时内消息不能发送超过%d次。
+"The messages cannot be sent more than %1 times in an hour",一小时内消息不能发送超过%1次。
 "The sender name cannot be empty.",发送人姓名不能为空。
 "There were some problems with the data.",数据有些问题。
 "We found some problems with the data.",发现数据有问题.
 "You can't send messages more than %1 times an hour.",您不能一小时内发送消息超过%1次.
-"You have exceeded limit of %d sends in an hour",您已超过一小时内的%d次发送限制。
+"You have exceeded limit of %1 sends in an hour",您已超过一小时内的%1次发送限制。
 "You've met your limit of %1 sends in an hour.",您已经达到了每小时发送的限制数%1.
