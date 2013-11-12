@@ -264,5 +264,10 @@ Yes,是
 "You must select items to move",你必须选择要移动的条目（s）
 "Your design change for the specified store intersects with another one, please specify another date range.",您对指定商店设计的更改和另一个有交叉，请重新指定日期范围。
 "database ""%1""","数据库 ""%1"""
-kB,kB
 "start typing to search category",开始输入来搜索分类
+"Add Products to Option ""%1""","添加产品到选项""%1"""
+"Maximum length of this field must be equal or less than %1 symbols.","该字段的最大长度必须小于等于%1个符号。"
+"Please enter a valid day (1-%1).","请输入有效的天(1-%1)。"
+"Please enter a valid year (1900-%1).","请输入有效的年(1900-%1)。"
+"Please enter a value greater than or equal to %s.","请输入一个大于等于%1的值。"
+"Please enter a value less than or equal to %s.","请输入一个小于等于%s的值。"

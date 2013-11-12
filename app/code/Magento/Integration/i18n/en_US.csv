@@ -1,0 +1,14 @@
+"Add New Integration","Add New Integration"
+Authentication,Authentication
+"Edit ""%1"" Integration","Edit ""%1"" Integration"
+Integration,Integration
+"Integration ID is not specified or is invalid.","Integration ID is not specified or is invalid."
+"Integration Info","Integration Info"
+"Integration Information","Integration Information"
+"Integration Name","Integration Name"
+Integrations,Integrations
+"New Integration","New Integration"
+OAuth,OAuth
+"Please enter endpoint for oAuth.","Please enter endpoint for oAuth."
+"The integration '%1' has been saved.","The integration '%1' has been saved."
+"This integration no longer exists.","This integration no longer exists."
