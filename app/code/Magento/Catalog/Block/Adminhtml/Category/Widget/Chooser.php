@@ -80,7 +80,7 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      */
     public function prepareElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
     {
-        $uniqId = $this->_coreData->uniqHash($element->getId());
+        $uniqId = $this->mathRandom->getUniqueHash($element->getId());
         $sourceUrl = $this->getUrl('catalog/category_widget/chooser', array('uniq_id' => $uniqId, 'use_massaction' => false));
 
         $chooser = $this->getLayout()->createBlock('Magento\Widget\Block\Adminhtml\Widget\Chooser')

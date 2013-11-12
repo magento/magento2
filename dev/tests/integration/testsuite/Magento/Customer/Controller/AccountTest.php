@@ -34,7 +34,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testIndexAction()
     {
-        $logger = $this->getMock('Magento\Core\Model\Logger', array(), array(), '', false);
+        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Customer\Model\Session', array($logger));
         $session->login('customer@example.com', 'password');

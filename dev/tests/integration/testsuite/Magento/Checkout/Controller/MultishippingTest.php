@@ -50,7 +50,7 @@ class MultishippingTest extends \Magento\TestFramework\TestCase\AbstractControll
         $quote->load('test01', 'reserved_order_id');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Checkout\Model\Session')
             ->setQuoteId($quote->getId());
-        $logger = $this->getMock('Magento\Core\Model\Logger', array(), array(), '', false);
+        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         /** @var $session \Magento\Customer\Model\Session */
         $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Customer\Model\Session', array($logger));

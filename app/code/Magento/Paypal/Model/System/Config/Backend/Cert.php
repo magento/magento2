@@ -32,41 +32,39 @@ namespace Magento\Paypal\Model\System\Config\Backend;
 class Cert extends \Magento\Core\Model\Config\Value
 {
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData;
-
-    /**
      * @var \Magento\Paypal\Model\CertFactory
      */
     protected $_certFactory;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
+     * @var \Magento\Encryption\EncryptorInterface
+     */
+    protected $_encryptor;
+
+    /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Core\Model\Config $config
      * @param \Magento\Paypal\Model\CertFactory $certFactory
+     * @param \Magento\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Core\Model\Config $config,
         \Magento\Paypal\Model\CertFactory $certFactory,
+        \Magento\Encryption\EncryptorInterface $encryptor,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_coreData = $coreData;
         $this->_certFactory = $certFactory;
+        $this->_encryptor = $encryptor;
         parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
     }
 
@@ -93,7 +91,7 @@ class Cert extends \Magento\Core\Model\Config\Value
                 throw new \Magento\Core\Exception(__('The PayPal certificate file is empty.'));
             }
             $this->setValue($_FILES['groups']['name'][$this->getGroupId()]['fields'][$this->getField()]['value']);
-            $content = $this->_coreData->encrypt(file_get_contents($tmpPath));
+            $content = $this->_encryptor->encrypt(file_get_contents($tmpPath));
             $this->_certFactory->create()->loadByWebsite($this->getScopeId())
                 ->setContent($content)
                 ->save();

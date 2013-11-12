@@ -24,18 +24,27 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 namespace Magento\Filter;
 
 class Money implements \Zend_Filter_Interface
 {
-    protected $_format = null;
-    
+    /**
+     * @var string
+     */
+    protected $_format;
+
+    /**
+     * @param string $format
+     */
     public function __construct($format)
     {
         $this->_format = $format;
     }
-    
+
+    /**
+     * @param float $value
+     * @return string
+     */
     public function filter($value)
     {
         return money_format($this->_format, $value);

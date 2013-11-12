@@ -364,7 +364,7 @@ class Observer
     public function deleteExpiredImages()
     {
         foreach ($this->_storeManager->getWebsites(true) as $website) {
-            $expire = time() - $this->_helper->getConfigNode('timeout', $website->getDefaultStore()) * 60;
+            $expire = time() - $this->_helper->getConfig('timeout', $website->getDefaultStore()) * 60;
             $imageDirectory = $this->_helper->getImgDir($website);
             foreach ($this->_filesystem->getNestedKeys($imageDirectory) as $filePath) {
                 if ($this->_filesystem->isFile($filePath)

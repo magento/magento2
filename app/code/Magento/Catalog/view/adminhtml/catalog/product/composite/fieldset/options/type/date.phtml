@@ -63,10 +63,10 @@
         jQuery.validator.addMethod('validate-datetime-<?php echo $_optionId ?>', function(v) {
             var dateTimeParts = jQuery('.datetime-picker[id^="options_<?php echo $_optionId ?>"]');
             for (var i=0; i < dateTimeParts.length; i++) {
-                if (dateTimeParts[i].val() == "") return false;
+                if (dateTimeParts[i].value == "") return false;
             }
             return true;
-        }, '<?php echo $this->jsQuoteEscape( __('This is a required option.') )?>');
+        }, '<?php echo $this->escapeJsQuote( __('This is a required option.') )?>');
 <?php else: ?>
         jQuery.validator.addMethod('validate-datetime-<?php echo $_optionId ?>', function(v) {
             var dateTimeParts = jQuery('.datetime-picker[id^="options_<?php echo $_optionId ?>"]');
@@ -82,8 +82,9 @@
                 }
             }
             return hasWithValue ^ hasWithNoValue;
-        }, '<?php echo $this->jsQuoteEscape( __('Field is not complete') )?>');
+        }, '<?php echo $this->escapeJsQuote( __('Field is not complete') )?>');
 <?php endif; ?>
     //]]>
     </script>
-</dd>
+  </div>
+</div>

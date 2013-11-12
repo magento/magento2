@@ -49,7 +49,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     public function testGetTable()
     {
         $this->_resourceMock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Resource', array('tablePrefix' => 'prefix_')
+            'Magento\App\Resource', array('tablePrefix' => 'prefix_')
         );
 
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

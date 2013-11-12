@@ -89,14 +89,14 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
     /**
      * Resource config
      *
-     * @var \Magento\Core\Model\Config\Resource
+     * @var \Magento\App\Resource\Config
      */
     protected $_resourceConfig;
 
     /**
      * DB updater
      *
-     * @var \Magento\App\UpdaterInterface
+     * @var \Magento\Module\UpdaterInterface
      */
     protected $_dbUpdater;
 
@@ -137,8 +137,8 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
 
     /**
      * @param \Magento\Install\Model\Installer $installer
-     * @param \Magento\Core\Model\Config\Resource $resourceConfig
-     * @param \Magento\App\UpdaterInterface $dbUpdater
+     * @param \Magento\App\Resource\Config $resourceConfig
+     * @param \Magento\Module\UpdaterInterface $dbUpdater
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Install\Model\Installer\Data $installerData
      * @param \Magento\App\State $appState
@@ -148,8 +148,8 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      */
     public function __construct(
         \Magento\Install\Model\Installer $installer,
-        \Magento\Core\Model\Config\Resource $resourceConfig,
-        \Magento\App\UpdaterInterface $dbUpdater,
+        \Magento\App\Resource\Config $resourceConfig,
+        \Magento\Module\UpdaterInterface $dbUpdater,
         \Magento\Filesystem $filesystem,
         \Magento\Install\Model\Installer\Data $installerData,
         \Magento\App\State $appState,

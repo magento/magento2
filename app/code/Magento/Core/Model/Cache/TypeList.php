@@ -43,7 +43,7 @@ class TypeList implements \Magento\Core\Model\Cache\TypeListInterface
     protected $_cacheState;
 
     /**
-     * @var \Magento\Core\Model\CacheInterface
+     * @var \Magento\App\CacheInterface
      */
     protected $_cache;
 
@@ -51,13 +51,13 @@ class TypeList implements \Magento\Core\Model\Cache\TypeListInterface
      * @param \Magento\Core\Model\Cache\Config $config
      * @param \Magento\Core\Model\Cache\StateInterface $cacheState
      * @param \Magento\Core\Model\Cache\InstanceFactory $factory
-     * @param \Magento\Core\Model\CacheInterface $cache
+     * @param \Magento\App\CacheInterface $cache
      */
     public function __construct(
         \Magento\Core\Model\Cache\Config $config,
         \Magento\Core\Model\Cache\StateInterface $cacheState,
         \Magento\Core\Model\Cache\InstanceFactory $factory,
-        \Magento\Core\Model\CacheInterface $cache
+        \Magento\App\CacheInterface $cache
     ) {
         $this->_config = $config;
         $this->_factory = $factory;

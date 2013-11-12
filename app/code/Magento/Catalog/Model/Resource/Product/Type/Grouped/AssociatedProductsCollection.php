@@ -54,11 +54,11 @@ class AssociatedProductsCollection
      * Construct
      *
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Core\Model\Resource $coreResource
+     * @param \Magento\App\Resource $coreResource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Validator\UniversalFactory $universalFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -70,6 +70,7 @@ class AssociatedProductsCollection
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
      *
@@ -77,11 +78,11 @@ class AssociatedProductsCollection
      */
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Core\Model\Resource $coreResource,
+        \Magento\App\Resource $coreResource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Validator\UniversalFactory $universalFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
@@ -93,6 +94,7 @@ class AssociatedProductsCollection
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
+        \Magento\Stdlib\DateTime $dateTime,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
     ) {
@@ -100,7 +102,7 @@ class AssociatedProductsCollection
         $this->_config = $config;
         parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $eavConfig, $coreResource,
             $eavEntityFactory, $universalFactory, $storeManager, $catalogData, $catalogProductFlat, $coreStoreConfig,
-            $productOptionFactory, $catalogUrl, $locale, $customerSession, $resourceHelper
+            $productOptionFactory, $catalogUrl, $locale, $customerSession, $resourceHelper, $dateTime
         );
     }
 

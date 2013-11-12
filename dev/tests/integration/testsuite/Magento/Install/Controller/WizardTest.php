@@ -66,7 +66,7 @@ class WizardTest extends \Magento\TestFramework\TestCase\AbstractController
         $appState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State');
         $appState->setInstallDate(false);
         $this->dispatch('install/wizard');
-        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+        $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $appState->setInstallDate(date('r', strtotime('now')));
     }
 
@@ -78,7 +78,7 @@ class WizardTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testPreDispatchImpossibleToRenderPage($action)
     {
         $params = self::$_params;
-        $params[\Magento\Core\Model\App::PARAM_APP_DIRS][\Magento\App\Dir::STATIC_VIEW] = self::$_tmpDir;
+        $params[\Magento\App\Dir::PARAM_APP_DIRS][\Magento\App\Dir::STATIC_VIEW] = self::$_tmpDir;
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize($params);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(array(
             'preferences' => array(

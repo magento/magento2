@@ -37,6 +37,23 @@ namespace Magento\Core\Model\Resource;
 class Design extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\App\Resource $resource
+     */
+    public function __construct(
+        \Magento\Stdlib\DateTime $dateTime,
+        \Magento\App\Resource $resource
+    ) {
+        $this->dateTime = $dateTime;
+        parent::__construct($resource);
+    }
+
+    /**
      * Define main table and primary key
      *
      */
@@ -55,20 +72,20 @@ class Design extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function _beforeSave(\Magento\Core\Model\AbstractModel $object)
     {
         if ($date = $object->getDateFrom()) {
-            $object->setDateFrom($this->formatDate($date));
+            $object->setDateFrom($this->dateTime->formatDate($date));
         } else {
             $object->setDateFrom(null);
         }
 
         if ($date = $object->getDateTo()) {
-            $object->setDateTo($this->formatDate($date));
+            $object->setDateTo($this->dateTime->formatDate($date));
         } else {
             $object->setDateTo(null);
         }
 
         if (!is_null($object->getDateFrom())
             && !is_null($object->getDateTo())
-            && \Magento\Date::toTimestamp($object->getDateFrom()) > \Magento\Date::toTimestamp($object->getDateTo())) {
+            && $this->dateTime->toTimestamp($object->getDateFrom()) > $this->dateTime->toTimestamp($object->getDateTo())) {
             throw new \Magento\Core\Exception(__('Start date cannot be greater than end date.'));
         }
 

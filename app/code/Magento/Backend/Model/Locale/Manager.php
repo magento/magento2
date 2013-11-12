@@ -81,7 +81,7 @@ class Manager
             ->setInterfaceLocale($localeCode);
 
         $this->_translator->setLocale($localeCode)
-            ->init(\Magento\Backend\Helper\Data::BACKEND_AREA_CODE, true);
+            ->init(null, true);
 
         return $this;
     }

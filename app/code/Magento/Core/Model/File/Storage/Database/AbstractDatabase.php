@@ -24,24 +24,42 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
-/**
- * Abstract database storage model class
- *
- * @category    Magento
- * @package     Magento_Core
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Core\Model\File\Storage\Database;
 
-abstract class AbstractDatabase extends \Magento\Core\Model\File\Storage\AbstractStorage
+/**
+ * Class AbstractDatabase
+ */
+abstract class AbstractDatabase extends \Magento\Core\Model\AbstractModel
 {
+    /**
+     * Store media base directory path
+     *
+     * @var string
+     */
+    protected $_mediaBaseDirectory = null;
+
+    /**
+     * Core file storage database
+     *
+     * @var \Magento\Core\Helper\File\Storage\Database
+     */
+    protected $_coreFileStorageDb = null;
+
+    /**
+     * Date model
+     *
+     * @var \Magento\Core\Model\Date
+     */
+    protected $_date;
+
     /**
      * @var \Magento\Core\Model\App
      */
     protected $_app;
 
     /**
+     * Class constructor
+     *
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
@@ -49,6 +67,7 @@ abstract class AbstractDatabase extends \Magento\Core\Model\File\Storage\Abstrac
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param string|null $connectionName
      * @param array $data
      */
     public function __construct(
@@ -59,15 +78,16 @@ abstract class AbstractDatabase extends \Magento\Core\Model\File\Storage\Abstrac
         \Magento\Core\Model\App $app,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
+        $connectionName = null,
         array $data = array()
     ) {
-        parent::__construct($coreFileStorageDb, $context, $registry, $dateModel, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry,  $resource, $resourceCollection, $data);
         $this->_app = $app;
-        $connectionName = (isset($data['connection'])) ? $data['connection'] : null;
-        if (empty($connectionName)) {
+        $this->_coreFileStorageDb = $coreFileStorageDb;
+        $this->_date = $dateModel;
+        if (!$connectionName) {
             $connectionName = $this->getConfigConnectionName();
         }
-
         $this->setConnectionName($connectionName);
     }
 
@@ -83,7 +103,6 @@ abstract class AbstractDatabase extends \Magento\Core\Model\File\Storage\Abstrac
         if (empty($connectionName)) {
             $connectionName = 'default_setup';
         }
-
         return $connectionName;
     }
 

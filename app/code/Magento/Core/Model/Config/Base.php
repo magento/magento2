@@ -28,7 +28,7 @@
  */
 namespace Magento\Core\Model\Config;
 
-class Base extends \Magento\Simplexml\Config implements \Magento\Core\Model\ConfigInterface
+class Base extends \Magento\Simplexml\Config
 {
     /**
      * List of instances
@@ -45,14 +45,6 @@ class Base extends \Magento\Simplexml\Config implements \Magento\Core\Model\Conf
         $this->_elementClass = 'Magento\Core\Model\Config\Element';
         parent::__construct($sourceData);
         self::$instances[] = $this;
-    }
-
-    /**
-     * Reinitialize config object
-     */
-    public function reinit()
-    {
-
     }
 
     /**

@@ -41,7 +41,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     {
         $this->_ruleResource = $this->getMockBuilder('Magento\Webapi\Model\Resource\Acl\Rule')
             ->disableOriginalConstructor()
-            ->setMethods(array('getResourceIdsByRole'))
+            ->setMethods(array('getResourceIdsByRole', '__wakeup'))
             ->getMock();
 
         $rootResource = new \Magento\Core\Model\Acl\RootResource('Magento_Webapi');

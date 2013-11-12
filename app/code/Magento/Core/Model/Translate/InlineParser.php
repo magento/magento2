@@ -150,6 +150,11 @@ class InlineParser
     protected $_inputFilter;
 
     /**
+     * @var \Magento\App\State
+     */
+    protected $_appState;
+
+    /**
      * Initialize base inline translation model
      *
      * @param \Magento\Core\Model\Resource\Translate\String $resource
@@ -157,19 +162,22 @@ class InlineParser
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Helper\Data $helper
      * @param \Zend_Filter_Interface $inputFilter
+     * @param \Magento\App\State $appState
      */
     public function __construct(
         \Magento\Core\Model\Resource\Translate\String $resource,
         \Magento\View\DesignInterface $design,
         \Magento\Core\Helper\Data $helper,
         \Magento\Core\Model\StoreManager $storeManager,
-        \Zend_Filter_Interface $inputFilter
+        \Zend_Filter_Interface $inputFilter,
+        \Magento\App\State $appState
     ) {
         $this->_resource = $resource;
         $this->_design = $design;
         $this->_helper = $helper;
         $this->_storeManager = $storeManager;
         $this->_inputFilter = $inputFilter;
+        $this->_appState = $appState;
     }
 
     /**
@@ -216,7 +224,7 @@ class InlineParser
         $validStoreId = $this->_storeManager->getStore()->getId();
 
         foreach ($translateParams as $param) {
-            if ($this->_design->getArea() == \Magento\Backend\Helper\Data::BACKEND_AREA_CODE) {
+            if ($this->_appState->getAreaCode() == \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE) {
                 $storeId = 0;
             } else if (empty($param['perstore'])) {
                 $this->_resource->deleteTranslate($param['original'], null, false);

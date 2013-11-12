@@ -57,19 +57,27 @@ class Output extends \Magento\Core\Helper\AbstractHelper
     protected $_eavConfig;
 
     /**
+     * @var \Magento\Escaper
+     */
+    protected $_escaper;
+
+    /**
      * Construct
      *
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\Escaper $escaper
      */
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Helper\Context $context
+        \Magento\Core\Helper\Context $context,
+        \Magento\Escaper $escaper
     ) {
         $this->_eavConfig = $eavConfig;
         $this->_catalogData = $catalogData;
+        $this->_escaper = $escaper;
         parent::__construct($context);
     }
 
@@ -148,7 +156,7 @@ class Output extends \Magento\Core\Helper\AbstractHelper
         if ($attribute && $attribute->getId() && ($attribute->getFrontendInput() != 'media_image')
             && (!$attribute->getIsHtmlAllowedOnFront() && !$attribute->getIsWysiwygEnabled())) {
                 if ($attribute->getFrontendInput() != 'price') {
-                    $attributeHtml = $this->escapeHtml($attributeHtml);
+                    $attributeHtml = $this->_escaper->escapeHtml($attributeHtml);
                 }
                 if ($attribute->getFrontendInput() == 'textarea') {
                     $attributeHtml = nl2br($attributeHtml);
@@ -182,7 +190,7 @@ class Output extends \Magento\Core\Helper\AbstractHelper
 
         if ($attribute && ($attribute->getFrontendInput() != 'image')
             && (!$attribute->getIsHtmlAllowedOnFront() && !$attribute->getIsWysiwygEnabled())) {
-            $attributeHtml = $this->escapeHtml($attributeHtml);
+            $attributeHtml = $this->_escaper->escapeHtml($attributeHtml);
         }
         if ($attribute->getIsHtmlAllowedOnFront() && $attribute->getIsWysiwygEnabled()) {
             if ($this->_catalogData->isUrlDirectivesParsingAllowed()) {

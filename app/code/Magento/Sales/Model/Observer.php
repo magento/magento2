@@ -50,33 +50,26 @@ class Observer
      *
      * @var \Magento\Customer\Helper\Address
      */
-    protected $_customerAddress = null;
+    protected $_customerAddress;
 
     /**
      * Customer data
      *
      * @var \Magento\Customer\Helper\Data
      */
-    protected $_customerData = null;
-
-    /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
+    protected $_customerData;
 
     /**
      * Core event manager proxy
      *
      * @var \Magento\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\Core\Model\Store\Config
      */
-    protected $_coreConfig;
+    protected $_storeConfig;
 
     /**
      * @var \Magento\Sales\Model\Resource\Quote\CollectionFactory
@@ -95,32 +88,29 @@ class Observer
 
     /**
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Customer\Helper\Address $customerAddress
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\Sales\Model\Resource\Quote\CollectionFactory $quoteFactory
      * @param \Magento\Core\Model\LocaleInterface $coreLocale
      * @param \Magento\Sales\Model\ResourceFactory $resourceFactory
      */
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Customer\Helper\Data $customerData,
         \Magento\Customer\Helper\Address $customerAddress,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\Sales\Model\Resource\Quote\CollectionFactory $quoteFactory,
         \Magento\Core\Model\LocaleInterface $coreLocale,
         \Magento\Sales\Model\ResourceFactory $resourceFactory
     ) {
         $this->_eventManager = $eventManager;
-        $this->_coreData = $coreData;
         $this->_customerData = $customerData;
         $this->_customerAddress = $customerAddress;
         $this->_catalogData = $catalogData;
-        $this->_coreConfig = $coreConfig;
+        $this->_storeConfig = $storeConfig;
         $this->_quoteCollectionFactory = $quoteFactory;
         $this->_coreLocale = $coreLocale;
         $this->_resourceFactory = $resourceFactory;
@@ -136,7 +126,7 @@ class Observer
     {
         $this->_eventManager->dispatch('clear_expired_quotes_before', array('sales_observer' => $this));
 
-        $lifetimes = $this->_coreConfig->getStoresConfigByPath('checkout/cart/delete_quote_after');
+        $lifetimes = $this->_storeConfig->getStoresConfigByPath('checkout/cart/delete_quote_after');
         foreach ($lifetimes as $storeId=>$lifetime) {
             $lifetime *= 86400;
 
@@ -379,14 +369,11 @@ class Observer
             return;
         }
 
-        /** @var $customerHelper \Magento\Customer\Helper\Data */
-        $customerHelper = $this->_customerData;
-
         $customerCountryCode = $quoteAddress->getCountryId();
         $customerVatNumber = $quoteAddress->getVatId();
 
-        if (empty($customerVatNumber) || !$this->_coreData->isCountryInEU($customerCountryCode)) {
-            $groupId = ($customerInstance->getId()) ? $customerHelper->getDefaultCustomerGroupId($storeId)
+        if (empty($customerVatNumber) || !$this->_customerData->isCountryInEU($customerCountryCode)) {
+            $groupId = ($customerInstance->getId()) ? $this->_customerData->getDefaultCustomerGroupId($storeId)
                 : \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID;
 
             $quoteAddress->setPrevQuoteCustomerGroupId($quoteInstance->getCustomerGroupId());
@@ -396,10 +383,8 @@ class Observer
             return;
         }
 
-        /** @var $coreHelper \Magento\Core\Helper\Data */
-        $coreHelper = $this->_coreData;
-        $merchantCountryCode = $coreHelper->getMerchantCountryCode();
-        $merchantVatNumber = $coreHelper->getMerchantVatNumber();
+        $merchantCountryCode = $this->_customerData->getMerchantCountryCode();
+        $merchantVatNumber = $this->_customerData->getMerchantVatNumber();
 
         $gatewayResponse = null;
         if ($addressHelper->getValidateOnEachTransaction($storeId)
@@ -407,7 +392,7 @@ class Observer
             || $customerVatNumber != $quoteAddress->getValidatedVatNumber()
         ) {
             // Send request to gateway
-            $gatewayResponse = $customerHelper->checkVatNumber(
+            $gatewayResponse = $this->_customerData->checkVatNumber(
                 $customerCountryCode,
                 $customerVatNumber,
                 ($merchantVatNumber !== '') ? $merchantCountryCode : '',
@@ -433,7 +418,7 @@ class Observer
         }
 
         // Magento always has to emulate group even if customer uses default billing/shipping address
-        $groupId = $customerHelper->getCustomerGroupIdBasedOnVatNumber(
+        $groupId = $this->_customerData->getCustomerGroupIdBasedOnVatNumber(
             $customerCountryCode, $gatewayResponse, $customerInstance->getStore()
         );
 

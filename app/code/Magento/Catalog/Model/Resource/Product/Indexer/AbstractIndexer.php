@@ -46,11 +46,11 @@ abstract class AbstractIndexer extends \Magento\Index\Model\Resource\AbstractRes
     /**
      * Class constructor
      *
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig
     ) {
         $this->_eavConfig = $eavConfig;

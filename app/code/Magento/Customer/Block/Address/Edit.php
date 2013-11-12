@@ -224,15 +224,6 @@ class Edit extends \Magento\Directory\Block\Data
     }
 
     /**
-     * @param string $path
-     * @return \Magento\Core\Model\Config\Element
-     */
-    public function getConfigNode($path)
-    {
-        return $this->_config->getNode($path);
-    }
-
-    /**
      * Get config
      *
      * @param string $path

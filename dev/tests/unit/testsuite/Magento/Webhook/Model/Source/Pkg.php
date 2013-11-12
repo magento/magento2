@@ -37,20 +37,22 @@ class Pkg extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_mockConfig;
     
-    /** @var \Magento\Core\Model\Config\Element */
+    /** @var array() */
     protected $_modelConfigElement;
     
     protected function setUp()
     {
         $label = self::CONFIG_LABEL;
         $status = self::CONFIG_STATUS;
-        $this->_modelConfigElement = new \Magento\Core\Model\Config\Element(
-            "<types><type><status>{$status}</status><label>{$label}</label></type></types>"
+        $this->_modelConfigElement = array(
+            'type' => array(
+                'status' => $status,
+                'label' => $label
+            )
         );
-        $this->_mockConfig = $this->getMockBuilder('Magento\Core\Model\Config')
-            ->disableOriginalConstructor()->getMock();
+        $this->_mockConfig = $this->getMock('Magento\Webhook\Model\Config', array(), array(), '', false);
         $this->_mockConfig->expects($this->any())
-            ->method('getNode')
+            ->method('getWebhooks')
             ->will($this->returnValue($this->_modelConfigElement));
     }
 

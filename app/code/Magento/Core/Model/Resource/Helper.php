@@ -32,11 +32,11 @@ namespace Magento\Core\Model\Resource;
 class Helper extends \Magento\Core\Model\Resource\Helper\AbstractHelper
 {
     /**
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param string $modulePrefix
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         $modulePrefix = 'core'
     ) {
         parent::__construct($resource, $modulePrefix);

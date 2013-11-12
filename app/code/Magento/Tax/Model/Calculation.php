@@ -352,8 +352,8 @@ class Calculation extends \Magento\Core\Model\AbstractModel
         $shippingAddress = null,
         $billingAddress = null,
         $customerTaxClass = null,
-        $store = null)
-    {
+        $store = null
+    ) {
         if ($shippingAddress === false && $billingAddress === false && $customerTaxClass === false) {
             return $this->getRateOriginRequest($store);
         }
@@ -406,6 +406,8 @@ class Calculation extends \Magento\Core\Model\AbstractModel
                     ->setPostcode($this->_coreStoreConfig->getConfig(
                         \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_POSTCODE,
                         $store));
+                break;
+            default:
                 break;
         }
 
@@ -492,9 +494,6 @@ class Calculation extends \Magento\Core\Model\AbstractModel
         /** @var $classes \Magento\Tax\Model\Resource\TaxClass\Collection */
         $classes = $this->_classesFactory->create();
         $classes->addFieldToFilter('class_type', $type)->load();
-        /** @var $namespace Magento\Tax\Model;
-
-class ClassModel */
         foreach ($classes as $class) {
             $request->setData($fieldName, $class->getId());
             $result[$class->getId()] = $this->getRate($request);
@@ -556,9 +555,9 @@ class ClassModel */
         $taxRate = $taxRate/100;
 
         if ($priceIncludeTax) {
-            $amount = $price*(1-1/(1+$taxRate));
+            $amount = $price * (1 - 1 / (1 + $taxRate));
         } else {
-            $amount = $price*$taxRate;
+            $amount = $price * $taxRate;
         }
 
         if ($round) {
@@ -575,10 +574,10 @@ class ClassModel */
      * @param   int $precision
      * @return  float
      */
-    public function truncate($price, $precision=4)
+    public function truncate($price, $precision = 4)
     {
-        $exp = pow(10,$precision);
-        $price = floor($price*$exp)/$exp;
+        $exp = pow(10, $precision);
+        $price = floor($price * $exp) / $exp;
         return $price;
     }
 
@@ -601,6 +600,6 @@ class ClassModel */
      */
     public function roundUp($price)
     {
-        return ceil($price*100)/100;
+        return ceil($price * 100) / 100;
     }
 }

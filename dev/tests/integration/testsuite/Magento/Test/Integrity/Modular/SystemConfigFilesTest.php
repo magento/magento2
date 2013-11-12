@@ -45,7 +45,7 @@ class SystemConfigFilesTest extends \PHPUnit_Framework_TestCase
         $fileList = glob($modulesDir . '/*/*/etc/adminhtml/system.xml');
 
         $configMock = $this->getMock(
-            'Magento\Core\Model\Config\Modules\Reader', array('getConfigurationFiles', 'getModuleDir'),
+            'Magento\Module\Dir\Reader', array('getConfigurationFiles', 'getModuleDir'),
             array(), '', false
         );
         $configMock->expects($this->any())

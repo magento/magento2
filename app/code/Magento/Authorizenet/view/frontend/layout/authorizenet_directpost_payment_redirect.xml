@@ -24,7 +24,5 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="AuthorizeNet Directpost Redirect" type="page">
-    <block class="Magento\Page\Block\Html" name="root" output="1" template="page_fragment.phtml">
-        <block class="Magento\Authorizenet\Block\Directpost\Iframe" name="iframe" template="directpost/iframe.phtml"/>
-    </block>
+    <block class="Magento\Authorizenet\Block\Directpost\Iframe" name="iframe" output="1" template="directpost/iframe.phtml"/>
 </layout>

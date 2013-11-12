@@ -37,16 +37,16 @@ class VoidTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $eventManager = $objectManager->get('Magento\Event\ManagerInterface');
-        $moduleList = $objectManager->get('Magento\App\ModuleListInterface');
+        $moduleList = $objectManager->get('Magento\Module\ModuleListInterface');
         $paymentData = $objectManager->get('Magento\Payment\Helper\Data');
         $coreStoreConfig = $objectManager->get('Magento\Core\Model\Store\Config');
-        $logger = $objectManager->get('Magento\Core\Model\Logger');
+        $logger = $objectManager->get('Magento\Logger');
         $logAdapterFactory = $objectManager->get('Magento\Core\Model\Log\AdapterFactory');
         $locale = $objectManager->get('Magento\Core\Model\LocaleInterface');
         $centinelService = $objectManager->get('Magento\Centinel\Model\Service');
         $storeManager = $objectManager->get('Magento\Core\Model\StoreManagerInterface');
         $configFactory = $objectManager->get('Magento\Paypal\Model\ConfigFactory');
-        $coreData = $objectManager->get('Magento\Core\Helper\Data');
+        $mathRandom = $objectManager->get('Magento\Math\Random');
 
         /** @var $order \Magento\Sales\Model\Order */
         $order = $objectManager->create('Magento\Sales\Model\Order');
@@ -63,9 +63,9 @@ class VoidTest extends \PHPUnit_Framework_TestCase
             $logAdapterFactory,
             $locale,
             $centinelService,
-            $coreData,
             $storeManager,
-            $configFactory
+            $configFactory,
+            $mathRandom
         ));
 
         $response = new \Magento\Object(array(

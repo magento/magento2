@@ -536,11 +536,20 @@ class Files
      * Look for DI config through the system
      * @return array
      */
-    public function getDiConfigs()
+    public function getDiConfigs($asDataSet = false)
     {
         $primaryConfigs = glob($this->_path . '/app/etc/{di.xml,*/di.xml}', GLOB_BRACE);
         $moduleConfigs = glob($this->_path . '/app/code/*/*/etc/{di,*/di}.xml', GLOB_BRACE);
         $configs = array_merge($primaryConfigs, $moduleConfigs);
+
+        if ($asDataSet) {
+            $output = array();
+            foreach ($configs as $file) {
+                $output[$file] = array($file);
+            }
+
+            return $output;
+        }
         return $configs;
     }
 
@@ -565,7 +574,7 @@ class Files
             '/dev/tests/api-functional/framework/', '/dev/tests/integration/framework/',
             '/dev/tests/integration/framework/tests/unit/testsuite/', '/dev/tests/integration/testsuite/',
             '/dev/tests/integration/testsuite/Magento/Test/Integrity/', '/dev/tests/performance/framework/',
-            '/dev/tests/static/framework/', '/dev/tests/static/testsuite/',
+            '/dev/tests/static/framework/', '/dev/tests/static/testsuite/', '/dev/tests/functional/tests/app/',
             '/dev/tests/unit/framework/', '/dev/tests/unit/testsuite/',
         );
 

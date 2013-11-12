@@ -26,7 +26,7 @@
 
 namespace Magento\Core\App\Router;
 
-class NoRouteHandler implements \Magento\Appl\Router\NoRouteHandlerInterface
+class NoRouteHandler implements \Magento\App\Router\NoRouteHandlerInterface
 {
     /**
      * @var \Magento\Core\Model\Config

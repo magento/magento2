@@ -59,6 +59,11 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
     protected $_eventManager = null;
 
     /**
+     * @var \Magento\Stdlib\String
+     */
+    protected $string;
+
+    /**
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\GoogleCheckout\Helper\Data $googleCheckoutData
@@ -66,6 +71,7 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Core\Model\Translate $translator
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Stdlib\String $string
      * @param array $data
      */
     public function __construct(
@@ -76,12 +82,14 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
         \Magento\ObjectManager $objectManager,
         \Magento\Core\Model\Translate $translator,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Stdlib\String $string,
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;
         $this->_coreData = $coreData;
         $this->_googleCheckoutData = $googleCheckoutData;
         $this->_taxData = $taxData;
+        $this->string = $string;
         parent::__construct($objectManager, $translator, $coreStoreConfig, $data);
     }
 
@@ -137,7 +145,7 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
             $notification->startProcess();
         }
 
-        $method = '_response' . uc_words($root, '', '-');
+        $method = '_response' . $this->string->upperCaseWords($root, '-', '');
         if (method_exists($this, $method)) {
             ob_start();
 
@@ -1046,12 +1054,14 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
             ->addStatusToHistory($this->getOrder()->getStatus(), $msg)
             ->save();
 
-        $method = '_orderStateChangeFinancial' . uc_words(strtolower($newFinancial), '', '_');
+        $method = '_orderStateChangeFinancial'
+            . $this->string->upperCaseWords(strtolower($newFinancial), '_', '');
         if (method_exists($this, $method)) {
             $this->$method();
         }
 
-        $method = '_orderStateChangeFulfillment' . uc_words(strtolower($newFulfillment), '', '_');
+        $method = '_orderStateChangeFulfillment'
+            . $this->string->upperCaseWords(strtolower($newFulfillment), '_', '');
         if (method_exists($this, $method)) {
             $this->$method();
         }

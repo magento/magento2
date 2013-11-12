@@ -42,7 +42,7 @@ class RoleUpdaterTest extends \PHPUnit_Framework_TestCase
         )));
 
         $userModel = $this->getMockBuilder('Magento\Webapi\Model\Acl\User')
-            ->setMethods(array('getRoleId', 'load'))
+            ->setMethods(array('getRoleId', 'load', '__wakeup'))
             ->disableOriginalConstructor()
             ->getMock();
         $userModel->expects($this->once())->method('load')

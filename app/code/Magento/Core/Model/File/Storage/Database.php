@@ -24,16 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
-/**
- * File storage database model class
- *
- * @category    Magento
- * @package     Magento_Core
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Core\Model\File\Storage;
 
+/**
+ * Class Database
+ */
 class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabase
 {
     /**
@@ -58,32 +53,40 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
     protected $_errors = array();
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
     /**
-     * @param \Magento\Core\Model\Logger $logger
      * @var \Magento\Core\Model\File\Storage\Directory\DatabaseFactory
      */
     protected $_directoryFactory;
 
     /**
-     * @param \Magento\Core\Model\Logger $logger
+     * @var \Magento\Core\Helper\File\Media
+     */
+    protected $_mediaHelper;
+
+    /**
+     * Class constructor
+     *
+     * @param \Magento\Logger $logger
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
+     * @param \Magento\Core\Helper\File\Media $mediaHelper
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\Date $dateModel
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Core\Model\Resource\File\Storage\Database $resource
-     * @param \Magento\Core\Model\File\Storage\Directory\DatabaseFactory $directoryFactory
+     * @param Directory\DatabaseFactory $directoryFactory
      * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param string|null $connectionName
      * @param array $data
-     * @param string $connectionName
      */
     public function __construct(
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
+        \Magento\Core\Helper\File\Media $mediaHelper,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\Date $dateModel,
@@ -91,12 +94,12 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
         \Magento\Core\Model\Resource\File\Storage\Database $resource,
         \Magento\Core\Model\File\Storage\Directory\DatabaseFactory $directoryFactory,
         \Magento\Data\Collection\Db $resourceCollection = null,
-        array $data = array(),
-        $connectionName = null
+        $connectionName = null,
+        array $data = array()
     ) {
-        $this->_init('Magento\Core\Model\Resource\File\Storage\Database');
         $this->_directoryFactory = $directoryFactory;
         $this->_logger = $logger;
+        $this->_mediaHelper = $mediaHelper;
         parent::__construct(
             $coreFileStorageDb,
             $context,
@@ -105,7 +108,10 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
             $app,
             $resource,
             $resourceCollection,
-            $data);
+            $connectionName,
+            $data
+        );
+        $this->_init(get_class($this->_resource));
     }
 
     /**
@@ -116,8 +122,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
     public function getDirectoryModel()
     {
         if (is_null($this->_directoryModel)) {
-            $arguments = array('connection' => $this->getConnectionName());
-            $this->_directoryModel = $this->_directoryFactory->create(array('connectionName' => $arguments));
+            $this->_directoryModel = $this->_directoryFactory->create(array('connectionName' => $this->getConnectionName()));
         }
 
         return $this->_directoryModel;
@@ -243,9 +248,8 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
 
             try {
                 $file['update_time'] = $dateSingleton->date();
-                $arguments = array('connection' => $this->getConnectionName());
                 $file['directory_id'] = (isset($file['directory']) && strlen($file['directory']))
-                    ? $this->_directoryFactory->create(array('connectionName' => $arguments))
+                    ? $this->_directoryFactory->create(array('connectionName' => $this->getConnectionName()))
                         ->loadByPath($file['directory'])->getId()
                     : null;
 
@@ -267,7 +271,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      */
     public function saveFile($filename)
     {
-        $fileInfo = $this->collectFileInfo($filename);
+        $fileInfo = $this->_mediaHelper->collectFileInfo($this->getMediaBaseDirectory(), $filename);
         $filePath = $fileInfo['directory'];
 
         $directory = $this->_directoryFactory->create()->loadByPath($filePath);

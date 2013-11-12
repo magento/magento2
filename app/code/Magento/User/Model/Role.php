@@ -91,7 +91,7 @@ class Role extends \Magento\Core\Model\AbstractModel
     public function __wakeup()
     {
         parent::__wakeup();
-        $objectManager = \Magento\Core\Model\ObjectManager::getInstance();
+        $objectManager = \Magento\App\ObjectManager::getInstance();
         $this->_userRolesFactory = $objectManager->get('Magento\User\Model\Resource\Role\User\CollectionFactory');
         $this->_resource = $objectManager->get('Magento\User\Model\Resource\Role');
         $this->_resourceCollection = $objectManager->get('Magento\User\Model\Resource\Role\Collection');

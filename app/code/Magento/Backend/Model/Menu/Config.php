@@ -52,7 +52,7 @@ class Config
     protected $_menu;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
@@ -72,14 +72,20 @@ class Config
     protected $_director;
 
     /**
+     * @var \Magento\App\State
+     */
+    protected $_appState;
+
+    /**
      * @param \Magento\Backend\Model\Menu\Builder $menuBuilder
      * @param \Magento\Backend\Model\Menu\AbstractDirector $menuDirector
      * @param \Magento\Backend\Model\MenuFactory $menuFactory
      * @param \Magento\Backend\Model\Menu\Config\Reader $configReader
      * @param \Magento\Core\Model\Cache\Type\Config $configCacheType
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\State $appState
      */
     public function __construct(
         \Magento\Backend\Model\Menu\Builder $menuBuilder,
@@ -88,8 +94,9 @@ class Config
         \Magento\Backend\Model\Menu\Config\Reader $configReader,
         \Magento\Core\Model\Cache\Type\Config $configCacheType,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Logger $logger,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Logger $logger,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\State $appState
     ) {
         $this->_menuBuilder = $menuBuilder;
         $this->_director = $menuDirector;
@@ -99,18 +106,24 @@ class Config
         $this->_menuFactory = $menuFactory;
         $this->_configReader = $configReader;
         $this->_storeManager = $storeManager;
+        $this->_appState = $appState;
     }
 
     /**
      * Build menu model from config
      *
      * @return \Magento\Backend\Model\Menu
-     * @throws \InvalidArgumentException|BadMethodCallException|OutOfRangeException|Exception
+     * @throws \Exception|\InvalidArgumentException
+     * @throws \Exception
+     * @throws \BadMethodCallException|\Exception
+     * @throws \Exception|\OutOfRangeException
      */
     public function getMenu()
     {
-        $store = $this->_storeManager->getStore();
-        $this->_logger->addStoreLog(\Magento\Backend\Model\Menu::LOGGER_KEY, $store);
+        if ($this->_storeManager->getStore()->getConfig('dev/log/active')) {
+            $this->_logger->addStreamLog(\Magento\Backend\Model\Menu::LOGGER_KEY);
+        }
+
         try {
             $this->_initMenu();
             return $this->_menu;
@@ -145,7 +158,7 @@ class Config
             }
 
             $this->_director->direct(
-                $this->_configReader->read(\Magento\Core\Model\App\Area::AREA_ADMINHTML),
+                $this->_configReader->read($this->_appState->getAreaCode()),
                 $this->_menuBuilder,
                 $this->_logger
             );

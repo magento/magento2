@@ -57,8 +57,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     {
         parent::_construct();
 
-        $this->setErrorText($this->helper('Magento\Backend\Helper\Data')
-            ->jsQuoteEscape(__('Please select items.')));
+        $this->escapeJsQuote(__('Please select items.'));
 
         if (null !== $this->getOptions()) {
             foreach ($this->getOptions() as $optionId => $option) {

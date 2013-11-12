@@ -30,7 +30,7 @@
  */
 ?>
 <script id="add-recipient-tmpl" type="text/x-jQuery-tmpl">
-    <a href="delete_email"  id="btn-remove${_index_}" class="action delete" title="<?php echo $this->jsQuoteEscape(__('Remove Email')) ?>"><span><?php echo $this->jsQuoteEscape(__('Remove Email')) ?></span></a>
+    <a href="delete_email"  id="btn-remove${_index_}" class="action delete" title="<?php echo $this->escapeJsQuote(__('Remove Email')) ?>"><span><?php echo $this->escapeJsQuote(__('Remove Email')) ?></span></a>
 
     <div class="field name required">
         <label for="recipients-name${_index_}" class="label"><span><?php echo __('Name:')?></span></label>

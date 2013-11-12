@@ -24,15 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Downloadable order item render block
- *
- * @category    Magento
- * @package     Magento_Downloadable
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Downloadable\Block\Sales\Order\Item\Renderer;
 
+/**
+ * Downloadable order item render block
+ */
 class Downloadable extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
 {
     /**
@@ -51,33 +47,30 @@ class Downloadable extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRende
     protected $_itemsFactory;
 
     /**
-     * @param \Magento\Core\Helper\String $coreString
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Stdlib\String $string
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
+     * @param \Magento\Filter\FilterManager $filter
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\String $coreString,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Block\Template\Context $context,
+        \Magento\Stdlib\String $string,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
+        \Magento\Filter\FilterManager $filter,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
         \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,
         array $data = array()
     ) {
         $this->_purchasedFactory = $purchasedFactory;
         $this->_itemsFactory = $itemsFactory;
-        parent::__construct($coreString, $coreData, $context, $productOptionFactory, $data);
+        parent::__construct($coreData, $context, $string, $productOptionFactory, $filter, $data);
     }
 
-    /**
-     * Enter description here...
-     *
-     * @return unknown
-     */
     public function getLinks()
     {
         $this->_purchasedLinks = $this->_purchasedFactory->create()
@@ -89,6 +82,9 @@ class Downloadable extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRende
         return $this->_purchasedLinks;
     }
 
+    /**
+     * @return string
+     */
     public function getLinksTitle()
     {
         if ($this->_purchasedLinks->getLinkSectionTitle()) {
@@ -96,5 +92,4 @@ class Downloadable extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRende
         }
         return $this->_storeConfig->getConfig(\Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE);
     }
-
 }

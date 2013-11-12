@@ -97,44 +97,49 @@ class Observer
     protected $_resourceRule;
 
     /**
-     * @param \Magento\CatalogRule\Model\Resource\RuleFactory $resourceRuleFactory
-     * @param \Magento\CatalogRule\Model\Resource\Rule $resourceRule
+     * @param Resource\RuleFactory $resourceRuleFactory
+     * @param Resource\Rule $resourceRule
+     * @param Resource\Rule\CollectionFactory $ruleCollFactory
+     * @param Rule\Product\Price $productPrice
+     * @param RuleFactory $ruleFactory
+     * @param FlagFactory $flagFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\CatalogRule\Model\RuleFactory $ruleFactory
-     * @param \Magento\CatalogRule\Model\Resource\Rule\CollectionFactory $ruleCollFactory
-     * @param \Magento\CatalogRule\Model\FlagFactory $flagFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Backend\Model\Session $backendSession
-     * @param \Magento\CatalogRule\Model\Rule\Product\Price $productPrice
+     * @param Rule\Product\Price $productPrice
      * @param \Magento\Core\Model\Registry $coreRegistry
-     *
+     * @param \Magento\Stdlib\DateTime $dateTime
+     * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\CatalogRule\Model\Resource\RuleFactory $resourceRuleFactory,
-        \Magento\CatalogRule\Model\Resource\Rule $resourceRule,
+        Resource\RuleFactory $resourceRuleFactory,
+        Resource\Rule $resourceRule,
+        Resource\Rule\CollectionFactory $ruleCollFactory,
+        Rule\Product\Price $productPrice,
+        RuleFactory $ruleFactory,
+        FlagFactory $flagFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\CatalogRule\Model\RuleFactory $ruleFactory,
-        \Magento\CatalogRule\Model\Resource\Rule\CollectionFactory $ruleCollFactory,
-        \Magento\CatalogRule\Model\FlagFactory $flagFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Backend\Model\Session $backendSession,
         \Magento\CatalogRule\Model\Rule\Product\Price $productPrice,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Stdlib\DateTime $dateTime
     ) {
-        $this->_resourceRule = $resourceRule;
         $this->_resourceRuleFactory = $resourceRuleFactory;
-        $this->_storeManager = $storeManager;
-        $this->_locale = $locale;
+        $this->_resourceRule = $resourceRule;
+        $this->_ruleCollFactory = $ruleCollFactory;
+        $this->_productPrice = $productPrice;
         $this->_ruleFactory = $ruleFactory;
         $this->_flagFactory = $flagFactory;
-        $this->_ruleCollFactory = $ruleCollFactory;
+        $this->_storeManager = $storeManager;
+        $this->_locale = $locale;
         $this->_customerSession = $customerSession;
         $this->_backendSession = $backendSession;
-        $this->_productPrice = $productPrice;
         $this->_coreRegistry = $coreRegistry;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -173,7 +178,7 @@ class Observer
      */
     public function applyAllRules($observer)
     {
-        $this->_resourceRule->applyAllRulesForDateRange($this->_resourceRule->formatDate(mktime(0,0,0)));
+        $this->_resourceRule->applyAllRulesForDateRange($this->dateTime->formatDate(mktime(0,0,0)));
         $this->_flagFactory->create()
             ->loadSelf()
             ->setState(0)

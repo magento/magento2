@@ -44,6 +44,23 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
     protected $_converter = null;
 
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @param \Magento\App\Resource $resource
+     * @param \Magento\Stdlib\DateTime $dateTime
+     */
+    public function __construct(
+        \Magento\App\Resource $resource,
+        \Magento\Stdlib\DateTime $dateTime
+    ) {
+        $this->dateTime = $dateTime;
+        parent::__construct($resource);
+    }
+
+    /**
      * Prepare data for save
      *
      * @param \Magento\Core\Model\AbstractModel $object
@@ -51,7 +68,7 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
      */
     protected function _prepareDataForSave(\Magento\Core\Model\AbstractModel $object)
     {
-        $currentTime = \Magento\Date::now();
+        $currentTime = $this->dateTime->now();
         if ((!$object->getId() || $object->isObjectNew()) && !$object->getCreatedAt()) {
             $object->setCreatedAt($currentTime);
         }

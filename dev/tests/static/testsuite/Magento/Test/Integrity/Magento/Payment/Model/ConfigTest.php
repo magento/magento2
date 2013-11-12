@@ -28,7 +28,7 @@ namespace Magento\Test\Integrity\Magento\Payment\Model;
 class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
 {
 
-    public function testSchemaUsingInvalidXml()
+    public function testSchemaUsingInvalidXml($expectedErrors = null)
     {
         $expectedErrors = array(
             "Element 'type': The attribute 'id' is required but missing.",
@@ -39,7 +39,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
         parent::testSchemaUsingInvalidXml($expectedErrors);
     }
 
-    public function testFileSchemaUsingInvalidXml()
+    public function testFileSchemaUsingInvalidXml($expectedErrors = null)
     {
         $expectedErrors = array(
             "Element 'type': The attribute 'id' is required but missing.",
@@ -49,7 +49,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
         parent::testFileSchemaUsingInvalidXml($expectedErrors);
     }
 
-    public function testSchemaUsingPartialXml()
+    public function testSchemaUsingPartialXml($expectedErrors = null)
     {
         $expectedErrors = array(
             "Element 'type': The attribute 'order' is required but missing.",

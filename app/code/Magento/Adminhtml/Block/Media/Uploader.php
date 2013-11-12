@@ -39,7 +39,7 @@ class Uploader extends \Magento\Adminhtml\Block\Widget
     /**
      * @var string
      */
-    protected $_template = 'media/uploader.phtml';
+    protected $_template = 'Magento_Adminhtml::media/uploader.phtml';
 
     /**
      * @var \Magento\Core\Model\View\Url

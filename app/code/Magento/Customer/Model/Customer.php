@@ -24,20 +24,16 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Customer\Model;
+
 /**
  * Customer model
- *
- * @category    Magento
- * @package     Magento_Customer
- * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @method int getWebsiteId() getWebsiteId()
  * @method int getStoreId() getStoreId()
  * @method string getEmail() getEmail()
  * @method \Magento\Customer\Model\Resource\Customer _getResource()
  */
-namespace Magento\Customer\Model;
-
 class Customer extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -134,13 +130,6 @@ class Customer extends \Magento\Core\Model\AbstractModel
     protected $_config;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
-
-    /**
      * Customer data
      *
      * @var \Magento\Customer\Helper\Data
@@ -155,11 +144,6 @@ class Customer extends \Magento\Core\Model\AbstractModel
     protected $_eventManager = null;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Customer\Helper\Data $customerData
-     * @param \Magento\Core\Helper\Data $coreData
-     * Core store config
-     *
      * @var \Magento\Core\Model\Store\Config
      */
     protected $_coreStoreConfig;
@@ -200,9 +184,23 @@ class Customer extends \Magento\Core\Model\AbstractModel
     protected $_attributeFactory;
 
     /**
+     * @var \Magento\Encryption\EncryptorInterface
+     */
+    protected $_encryptor;
+
+    /**
+     * @var \Magento\Math\Random
+     */
+    protected $mathRandom;
+
+    /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Customer\Helper\Data $customerData
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\Sender $sender
@@ -217,13 +215,15 @@ class Customer extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Email\InfoFactory $emailInfoFactory
      * @param \Magento\Customer\Model\GroupFactory $groupFactory
      * @param \Magento\Customer\Model\AttributeFactory $attributeFactory
+     * @param \Magento\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Data\Collection\Db|null $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Customer\Helper\Data $customerData,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\Sender $sender,
@@ -238,12 +238,14 @@ class Customer extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Email\InfoFactory $emailInfoFactory,
         \Magento\Customer\Model\GroupFactory $groupFactory,
         \Magento\Customer\Model\AttributeFactory $attributeFactory,
+        \Magento\Encryption\EncryptorInterface $encryptor,
+        \Magento\Math\Random $mathRandom,
+        \Magento\Stdlib\DateTime $dateTime,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;
         $this->_customerData = $customerData;
-        $this->_coreData = $coreData;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_sender = $sender;
         $this->_storeManager = $storeManager;
@@ -255,6 +257,9 @@ class Customer extends \Magento\Core\Model\AbstractModel
         $this->_emailInfoFactory = $emailInfoFactory;
         $this->_groupFactory = $groupFactory;
         $this->_attributeFactory = $attributeFactory;
+        $this->_encryptor = $encryptor;
+        $this->mathRandom = $mathRandom;
+        $this->dateTime = $dateTime;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -496,7 +501,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
      */
     public function hashPassword($password, $salt = null)
     {
-        return $this->_coreData->getHash($password, !is_null($salt) ? $salt : 2);
+        return $this->_encryptor->getHash($password, !is_null($salt) ? $salt : 2);
     }
 
     /**
@@ -507,7 +512,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
      */
     public function generatePassword($length = 6)
     {
-        return $this->_coreData->getRandomString($length);
+        return $this->mathRandom->getRandomString($length);
     }
 
     /**
@@ -522,7 +527,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
         if (!$hash) {
             return false;
         }
-        return $this->_coreData->validateHash($password, $hash);
+        return $this->_encryptor->validateHash($password, $hash);
     }
 
 
@@ -534,7 +539,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
      */
     public function encryptPassword($password)
     {
-        return $this->_coreData->encrypt($password);
+        return $this->_encryptor->encrypt($password);
     }
 
     /**
@@ -545,7 +550,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
      */
     public function decryptPassword($password)
     {
-        return $this->_coreData->decrypt($password);
+        return $this->_encryptor->decrypt($password);
     }
 
     /**
@@ -1050,7 +1055,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     {
         $date = $this->getCreatedAt();
         if ($date) {
-            return \Magento\Date::toTimestamp($date);
+            return $this->dateTime->toTimestamp($date);
         }
         return null;
     }
@@ -1217,9 +1222,8 @@ class Customer extends \Magento\Core\Model\AbstractModel
 
         $expirationPeriod = $this->_customerData->getResetPasswordLinkExpirationPeriod();
 
-        $currentDate = \Magento\Date::now();
-        $currentTimestamp = \Magento\Date::toTimestamp($currentDate);
-        $tokenTimestamp = \Magento\Date::toTimestamp($linkTokenCreatedAt);
+        $currentTimestamp = $this->dateTime->toTimestamp($this->dateTime->now());
+        $tokenTimestamp = $this->dateTime->toTimestamp($linkTokenCreatedAt);
         if ($tokenTimestamp > $currentTimestamp) {
             return true;
         }

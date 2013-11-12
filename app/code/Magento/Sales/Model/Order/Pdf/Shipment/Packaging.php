@@ -56,7 +56,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
     /**
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Helper\String $coreString
+     * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Core\Model\Translate $translate
      * @param \Magento\App\Dir $coreDir
@@ -75,7 +75,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Helper\String $coreString,
+        \Magento\Stdlib\String $string,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Core\Model\Translate $translate,
         \Magento\App\Dir $coreDir,
@@ -93,7 +93,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         $this->_locale = $locale;
         $this->_storeManager = $storeManager;
         $this->_layout = $layout;
-        parent::__construct($paymentData, $coreData, $coreString, $coreStoreConfig, $translate, $coreDir,
+        parent::__construct($paymentData, $coreData, $string, $coreStoreConfig, $translate, $coreDir,
             $shippingConfig, $pdfConfig, $pdfTotalFactory, $pdfItemsFactory, $data);
     }
 

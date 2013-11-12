@@ -97,7 +97,9 @@ class Nonce extends \Magento\Core\Model\AbstractModel
      */
     public function loadByCompositeKey($nonce, $consumerId)
     {
-        $this->setData($this->getResource()->selectByCompositeKey($nonce, $consumerId));
+        /** @var \Magento\Oauth\Model\Resource\Nonce $resource */
+        $resource = $this->getResource();
+        $this->setData($resource->selectByCompositeKey($nonce, $consumerId));
         return $this;
     }
 }

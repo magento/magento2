@@ -89,7 +89,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 
         $resource = $this->getMockForAbstractClass('Magento\Core\Model\Resource\Db\AbstractDb',
             array(), '', false, true,
-            true, array('getReadConnection', 'getMainTable', 'getTable'));
+            true, array('getReadConnection', 'getMainTable', 'getTable', '__wakeup'));
         $resource->expects($this->any())
             ->method('getReadConnection')
             ->will($this->returnValue($connection));
@@ -126,7 +126,8 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
         $datetime = new \DateTime();
         $storeInterval = new \DateInterval('P' . self::TEST_DAYS_BEFORE . 'D');
         $datetime->sub($storeInterval);
-        $expectedDate = \Magento\Date::formatDate($datetime->getTimestamp());
+        $dateTimeLib = new \Magento\Stdlib\DateTime;
+        $expectedDate = $dateTimeLib->formatDate($datetime->getTimestamp());
         $this->_expectedConditions['data'][1][1]['lt'] = $expectedDate;
 
         $collection->addUpdatedDaysBeforeFilter(self::TEST_DAYS_BEFORE);

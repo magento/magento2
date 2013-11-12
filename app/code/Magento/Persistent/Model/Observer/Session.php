@@ -196,7 +196,7 @@ class Session
         $sessionModel = $this->_persistentSession->getSession();
 
         /** @var $request \Magento\App\RequestInterface */
-        $request = $observer->getEvent()->getFront()->getRequest();
+        $request = $observer->getEvent()->getRequest();
 
         // Quote Id could be changed only by logged in customer
         if ($this->_customerSession->isLoggedIn()

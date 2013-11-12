@@ -83,23 +83,21 @@ class Translate extends \Magento\Core\Helper\AbstractHelper
     /**
      * This method initializes the Translate object for this instance.
      * @param $localeCode string
-     * @param $area string
      * @param $forceReload bool
      * @return \Magento\Core\Model\Translate
      */
-    public function initTranslate($localeCode, $area, $forceReload)
+    public function initTranslate($localeCode, $forceReload)
     {
         $this->_translator->setLocale($localeCode);
 
         $dispatchResult = new \Magento\Object(array(
-            'inline_type' => null,
-            'params' => array('area' => $area)
+            'inline_type' => null
         ));
         $this->_eventManager->dispatch('translate_initialization_before', array(
             'translate_object' => $this->_translator,
             'result' => $dispatchResult
         ));
-        $this->_translator->init($area, $dispatchResult, $forceReload);
+        $this->_translator->init(null, $dispatchResult, $forceReload);
         return $this;
     }
 }

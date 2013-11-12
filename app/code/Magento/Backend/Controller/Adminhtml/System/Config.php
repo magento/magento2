@@ -29,7 +29,7 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System;
 
-class Config extends \Magento\Backend\Controller\System\AbstractConfig
+class Config extends \Magento\Backend\Controller\Adminhtml\System\AbstractConfig
 {
     /**
      * @var \Magento\Core\Model\StoreManagerInterface

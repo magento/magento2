@@ -52,20 +52,20 @@ class Session
     protected $_aclBuilder;
 
     /**
-     * @var \Magento\Backend\Model\Url\Proxy
+     * @var \Magento\Backend\Model\Url
      */
     protected $_backendUrl;
 
     /**
      * @param \Magento\Core\Model\Session\Context $context
      * @param \Magento\Acl\Builder $aclBuilder
-     * @param \Magento\Backend\Model\Url\Proxy $backendUrl
+     * @param \Magento\Backend\Model\Url $backendUrl
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Model\Session\Context $context,
         \Magento\Acl\Builder $aclBuilder,
-        \Magento\Backend\Model\Url\Proxy $backendUrl,
+        \Magento\Backend\Model\Url $backendUrl,
         array $data = array()
     ) {
         $this->_aclBuilder = $aclBuilder;

@@ -24,7 +24,7 @@
  */
 -->
 <config>
-    <type name="Magento\App\Updater\SetupFactory">
+    <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
             <value>
                 <newsletter_setup>Magento\Newsletter\Model\Resource\Setup</newsletter_setup>

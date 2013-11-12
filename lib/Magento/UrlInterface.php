@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -135,21 +133,6 @@ interface UrlInterface
      * @return bool
      */
     public function isSecure();
-
-    /**
-     * Set store entity
-     *
-     * @param mixed $params
-     * @return \Magento\UrlInterface
-     */
-    public function setStore($params);
-
-    /**
-     * Get current store for the url instance
-     *
-     * @return \Magento\Core\Model\Store
-     */
-    public function getStore();
 
     /**
      * Retrieve Base URL

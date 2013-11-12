@@ -70,7 +70,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             'taxItemFactory' => $taxItemFactory
         ));
 
-        $taxOrderFactory = $this->getMock('Magento\Tax\Model\Sales\Order\Tax\Factory',
+        $taxOrderFactory = $this->getMock('Magento\Tax\Model\Sales\Order\TaxFactory',
             array('create'), array(), '', false);
 
         return $objectManagerHelper->getConstructArguments(

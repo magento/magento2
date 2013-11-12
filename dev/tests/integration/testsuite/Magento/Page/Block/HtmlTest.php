@@ -30,8 +30,8 @@ namespace Magento\Page\Block;
 class HtmlTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     *
      * @dataProvider getConfigValuesDataProvider
+     * @magentoAppArea frontend
      */
     public function testGetPrintLogoUrl($configData, $returnValue)
     {
@@ -43,17 +43,19 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap($configData));
 
         $securityInfoMock = $this->getMock('Magento\Core\Model\Url\SecurityInfoInterface');
-        $urlHelperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
+        $codeData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $urlBuilder = $this->getMock(
             'Magento\Core\Model\Url',
             array('getBaseUrl'),
             array(
+                $this->getMock('Magento\App\Route\ConfigInterface'),
+                $this->getMock('Magento\App\Request\Http', array(), array(), '', false),
                 $securityInfoMock,
                 $storeConfig,
-                $urlHelperMock,
                 $this->getMock('Magento\Core\Model\App', array(), array(), '', false),
                 $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false),
                 $this->getMock('Magento\Core\Model\Session', array(), array(), '', false),
+                null,
                 array()
             )
         );
@@ -73,7 +75,7 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Page\Block\Html', array(
                 'storeManager'  => $storeManager,
                 'locale'        => $locale,
-                'urlHelperMock' => $urlHelperMock,
+                'urlHelperMock' => $codeData,
                 'context'       => $context
             ));
 

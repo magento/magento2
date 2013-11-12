@@ -68,14 +68,14 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
     {
         $fromDate = $object->getFromDate();
         if ($fromDate instanceof \Zend_Date) {
-            $object->setFromDate($fromDate->toString(\Magento\Date::DATETIME_INTERNAL_FORMAT));
+            $object->setFromDate($fromDate->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT));
         } elseif (!is_string($fromDate) || empty($fromDate)) {
             $object->setFromDate(null);
         }
 
         $toDate = $object->getToDate();
         if ($toDate instanceof \Zend_Date) {
-            $object->setToDate($toDate->toString(\Magento\Date::DATETIME_INTERNAL_FORMAT));
+            $object->setToDate($toDate->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT));
         } elseif (!is_string($toDate) || empty($toDate)) {
             $object->setToDate(null);
         }

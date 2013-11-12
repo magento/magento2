@@ -134,7 +134,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
         if ($this->getOrder()->getCustomerIsGuest() || !$this->getOrder()->getCustomerId()) {
             return false;
         }
-        return $this->getUrl('adminhtml/customer/edit', array('id' => $this->getOrder()->getCustomerId()));
+        return $this->getUrl('customer/index/edit', array('id' => $this->getOrder()->getCustomerId()));
     }
 
     public function getViewUrl($orderId)

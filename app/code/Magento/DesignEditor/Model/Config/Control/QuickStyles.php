@@ -39,15 +39,15 @@ class QuickStyles extends \Magento\DesignEditor\Model\Config\Control\AbstractCon
     protected $_controlAttributes = array('title', 'tab', 'column');
 
     /**
-     * @var \Magento\Core\Model\Config\Modules\Reader
+     * @var \Magento\Module\Dir\Reader
      */
     protected $_moduleReader;
 
     /**
-     * @param \Magento\Core\Model\Config\Modules\Reader $moduleReader
+     * @param \Magento\Module\Dir\Reader $moduleReader
      * @param array $configFiles
      */
-    public function __construct(\Magento\Core\Model\Config\Modules\Reader $moduleReader, array $configFiles)
+    public function __construct(\Magento\Module\Dir\Reader $moduleReader, array $configFiles)
     {
         $this->_moduleReader = $moduleReader;
         parent::__construct($configFiles);

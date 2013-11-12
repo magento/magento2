@@ -36,14 +36,14 @@ class DefaultRouter extends AbstractRouter
     protected $_noRouteHandlerList;
 
     /**
-     * @param ActionFactory $controllerFactory
+     * @param ActionFactory $actionFactory
      * @param \Magento\App\Router\NoRouteHandlerList $noRouteHandlerList
      */
     public function __construct(
-        ActionFactory $controllerFactory,
+        ActionFactory $actionFactory,
         \Magento\App\Router\NoRouteHandlerList $noRouteHandlerList
     ) {
-        parent::__construct($controllerFactory);
+        parent::__construct($actionFactory);
         $this->_noRouteHandlerList = $noRouteHandlerList;
     }
 
@@ -61,7 +61,7 @@ class DefaultRouter extends AbstractRouter
             }
         }
 
-        return $this->_controllerFactory->createController('Magento\App\Action\Forward',
+        return $this->_actionFactory->createController('Magento\App\Action\Forward',
             array('request' => $request)
         );
     }

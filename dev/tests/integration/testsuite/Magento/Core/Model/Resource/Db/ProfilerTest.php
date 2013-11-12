@@ -28,7 +28,7 @@ namespace Magento\Core\Model\Resource\Db;
 class ProfilerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Resource
+     * @var \Magento\App\Resource
      */
     protected $_model;
 
@@ -52,7 +52,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Resource');
+            ->create('Magento\App\Resource');
     }
 
     /**
@@ -61,7 +61,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     protected function _getConnectionRead()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $localConfig = $objectManager->get('Magento\Core\Model\Config\Local');
+        $localConfig = $objectManager->get('Magento\App\Config');
         $connectionConfig = $localConfig->getConnection('default');
         $connectionConfig['profiler'] = array(
             'class' => 'Magento\Core\Model\Resource\Db\Profiler',
@@ -85,8 +85,8 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     {
         $connection = $this->_getConnectionRead();
 
-        /** @var \Magento\Core\Model\Resource $resource */
-        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Resource');
+        /** @var \Magento\App\Resource $resource */
+        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Resource');
         $testTableName = $resource->getTableName('core_resource');
         $selectQuery = sprintf($selectQuery, $testTableName);
 
@@ -142,8 +142,8 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
             $this->fail("Expected exception didn't thrown!");
         }
 
-        /** @var \Magento\Core\Model\Resource $resource */
-        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Resource');
+        /** @var \Magento\App\Resource $resource */
+        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Resource');
         $testTableName = $resource->getTableName('core_resource');
         $connection->query('SELECT * FROM ' . $testTableName);
 

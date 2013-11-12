@@ -43,11 +43,11 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
-            ->loadArea(\Magento\Core\Model\App\Area::AREA_ADMINHTML);
+            ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Backend\Model\Auth');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Config\ScopeInterface')
-            ->setCurrentScope(\Magento\Core\Model\App\Area::AREA_ADMINHTML);
+            ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
     }
 
     public function testMenuItemManipulation()

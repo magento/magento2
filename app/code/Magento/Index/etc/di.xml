@@ -25,7 +25,7 @@
 -->
 <config>
     <preference for="Magento\Index\Model\Indexer\ConfigInterface" type="Magento\Index\Model\Indexer\Config" />
-    <type name="Magento\App\Updater\SetupFactory">
+    <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
             <value>
                 <index_setup>Magento\Index\Model\Resource\Setup</index_setup>

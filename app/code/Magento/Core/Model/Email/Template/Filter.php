@@ -67,16 +67,14 @@ class Filter extends \Magento\Filter\Template
     protected $_viewUrl;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Escaper
      */
-    protected $_coreData = null;
+    protected $_escaper = null;
 
     /**
      * Core store config
@@ -109,26 +107,44 @@ class Filter extends \Magento\Filter\Template
     protected $_coreStoreConfig;
 
     /**
-     * @param \Magento\Core\Model\Logger $logger
-     * @param \Magento\Core\Helper\Data $coreData
+     * Layout directive params
+     *
+     * @var array
+     */
+    protected $_directiveParams;
+
+    /**
+     * App state
+     *
+     * @var \Magento\App\State
+     */
+    protected $_appState;
+
+    /**
+     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Logger $logger
+     * @param \Magento\Escaper $escaper
      * @param \Magento\Core\Model\View\Url $viewUrl
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\VariableFactory $coreVariableFactory
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\View\LayoutFactory $layoutFactory
+     * @param \Magento\App\State $appState
      */
     public function __construct(
-        \Magento\Core\Model\Logger $logger,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Stdlib\String $string,
+        \Magento\Logger $logger,
+        \Magento\Escaper $escaper,
         \Magento\Core\Model\View\Url $viewUrl,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\VariableFactory $coreVariableFactory,
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\View\LayoutInterface $layout,
-        \Magento\View\LayoutFactory $layoutFactory
+        \Magento\View\LayoutFactory $layoutFactory,
+        \Magento\App\State $appState
     ) {
-        $this->_coreData = $coreData;
+        $this->_escaper = $escaper;
         $this->_viewUrl = $viewUrl;
         $this->_logger = $logger;
         $this->_coreStoreConfig = $coreStoreConfig;
@@ -137,6 +153,8 @@ class Filter extends \Magento\Filter\Template
         $this->_storeManager = $storeManager;
         $this->_layout = $layout;
         $this->_layoutFactory = $layoutFactory;
+        $this->_appState = $appState;
+        parent::__construct($string);
     }
 
     /**
@@ -263,15 +281,32 @@ class Filter extends \Magento\Filter\Template
      */
     public function layoutDirective($construction)
     {
-        $skipParams = array('handle', 'area');
-        $params = $this->_getIncludeParameters($construction[2]);
-        $layoutParams = array();
-        if (isset($params['area'])) {
-            $layoutParams['area'] = $params['area'];
+        $this->_directiveParams = $this->_getIncludeParameters($construction[2]);
+        if (!isset($this->_directiveParams['area'])) {
+            $this->_directiveParams['area'] = 'frontend';
         }
+        if ($this->_directiveParams['area'] != $this->_appState->getAreaCode()) {
+            return $this->_appState->emulateAreaCode(
+                $this->_directiveParams['area'],
+                array($this, 'emulateAreaCallback')
+            );
+        } else {
+            return $this->emulateAreaCallback();
+        }
+    }
+
+    /**
+     * Retrieve layout html directive callback
+     *
+     * @return string
+     */
+    public function emulateAreaCallback()
+    {
+        $skipParams = array('handle', 'area');
+
         /** @var $layout \Magento\View\LayoutInterface */
-        $layout = $this->_layoutFactory->create($layoutParams);
-        $layout->getUpdate()->addHandle($params['handle'])
+        $layout = $this->_layoutFactory->create();
+        $layout->getUpdate()->addHandle($this->_directiveParams['handle'])
             ->load();
 
         $layout->generateXml();
@@ -283,7 +318,7 @@ class Filter extends \Magento\Filter\Template
             if (!$block->getParentBlock() && !$rootBlock) {
                 $rootBlock = $block;
             }
-            foreach ($params as $k => $v) {
+            foreach ($this->_directiveParams as $k => $v) {
                 if (in_array($k, $skipParams)) {
                     continue;
                 }
@@ -399,7 +434,7 @@ class Filter extends \Magento\Filter\Template
             $allowedTags = preg_split('/\s*\,\s*/', $params['allowed_tags'], 0, PREG_SPLIT_NO_EMPTY);
         }
 
-        return $this->_coreData->escapeHtml($params['var'], $allowedTags);
+        return $this->_escaper->escapeHtml($params['var'], $allowedTags);
     }
 
     /**

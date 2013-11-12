@@ -172,7 +172,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             }
 
             $date = new \Zend_Date($timestamp);
-            $result = $date->toString(\Magento\Date::DATETIME_INTERNAL_FORMAT);
+            $result = $date->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
 
             // Save date in internal format to avoid locale date bugs
             $this->_setInternalInRequest($result);
@@ -201,7 +201,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME) {
                 $format = $this->_locale->getDateTimeFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT);
                 $result = $this->_locale
-                    ->date($optionValue, \Magento\Date::DATETIME_INTERNAL_FORMAT, null, false)->toString($format);
+                    ->date($optionValue, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT, null, false)->toString($format);
             } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME) {
                 $date = new \Zend_Date($optionValue);
                 $result = date($this->is24hTimeFormat() ? 'H:i' : 'h:i a', $date->getTimestamp());
@@ -250,7 +250,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         }
 
         $date = new \Zend_Date($timestamp);
-        return $date->toString(\Magento\Date::DATETIME_INTERNAL_FORMAT);
+        return $date->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
     }
 
     /**

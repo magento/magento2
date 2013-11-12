@@ -43,11 +43,11 @@ class Helper extends \Magento\Core\Model\Resource\Helper
     const DB_MAX_PACKET_COEFFICIENT = 0.85; // The coefficient of useful data from maximum packet length
 
     /**
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param string $modulePrefix
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         $modulePrefix = 'importexport'
     ) {
         parent::__construct($resource, $modulePrefix);

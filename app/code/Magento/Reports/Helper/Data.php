@@ -67,21 +67,21 @@ class Data extends \Magento\Core\Helper\AbstractHelper
             return $intervals;
         }
 
-        $start = new \Zend_Date($from, \Magento\Date::DATE_INTERNAL_FORMAT);
+        $start = new \Zend_Date($from, \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
 
         if ($period == self::REPORT_PERIOD_TYPE_DAY) {
             $dateStart = $start;
         }
 
         if ($period == self::REPORT_PERIOD_TYPE_MONTH) {
-            $dateStart = new \Zend_Date(date("Y-m", $start->getTimestamp()), \Magento\Date::DATE_INTERNAL_FORMAT);
+            $dateStart = new \Zend_Date(date("Y-m", $start->getTimestamp()), \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
         }
 
         if ($period == self::REPORT_PERIOD_TYPE_YEAR) {
-            $dateStart = new \Zend_Date(date("Y", $start->getTimestamp()), \Magento\Date::DATE_INTERNAL_FORMAT);
+            $dateStart = new \Zend_Date(date("Y", $start->getTimestamp()), \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
         }
 
-        $dateEnd = new \Zend_Date($to, \Magento\Date::DATE_INTERNAL_FORMAT);
+        $dateEnd = new \Zend_Date($to, \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
 
         while ($dateStart->compare($dateEnd) <= 0) {
             switch ($period) {

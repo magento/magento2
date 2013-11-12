@@ -37,6 +37,21 @@ namespace Magento\Core\Model\Resource\Email;
 class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\App\Resource $resource
+     */
+    public function __construct(\Magento\Stdlib\DateTime $dateTime, \Magento\App\Resource $resource)
+    {
+        $this->dateTime = $dateTime;
+        parent::__construct($resource);
+    }
+
+    /**
      * Initialize email template resource model
      *
      */
@@ -97,15 +112,15 @@ class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Set template type, added at and modified at time
      *
-     * @param \Magento\Core\Model\Email\Template $object
+     * @param \Magento\Core\Model\AbstractModel $object
      * @return \Magento\Core\Model\Resource\Email\Template
      */
     protected function _beforeSave(\Magento\Core\Model\AbstractModel $object)
     {
         if ($object->isObjectNew()) {
-            $object->setCreatedAt($this->formatDate(true));
+            $object->setCreatedAt($this->dateTime->formatDate(true));
         }
-        $object->setModifiedAt($this->formatDate(true));
+        $object->setModifiedAt($this->dateTime->formatDate(true));
         $object->setTemplateType((int)$object->getTemplateType());
 
         return parent::_beforeSave($object);

@@ -24,20 +24,15 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Import entity abstract model
- *
- * @category    Magento
- * @package     Magento_ImportExport
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\ImportExport\Model\Import\Entity;
 
+/**
+ * Import entity abstract model
+ */
 abstract class AbstractEntity
 {
     /**
      * Database constants
-     *
      */
     const DB_MAX_PACKET_COEFFICIENT = 900000;
     const DB_MAX_PACKET_DATA        = 1048576;
@@ -200,48 +195,49 @@ abstract class AbstractEntity
      *
      * @var \Magento\ImportExport\Helper\Data
      */
-    protected $_importExportData = null;
+    protected $_importExportData;
 
     /**
      * Core data
      *
      * @var \Magento\Core\Helper\Data
      */
-    protected $_coreData = null;
+    protected $_coreData;
 
     /**
-     * Core string
+     * Magento string lib
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
-    protected $_coreString = null;
+    protected $string;
+
     /**
      * @var \Magento\ImportExport\Model\Resource\Helper
      */
     protected $_resourceHelper;
 
     /**
-     * @param \Magento\Core\Helper\String $coreString
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Stdlib\String $string
      */
     public function __construct(
-        \Magento\Core\Helper\String $coreString,
         \Magento\Core\Helper\Data $coreData,
         \Magento\ImportExport\Helper\Data $importExportData,
         \Magento\ImportExport\Model\Resource\Import\Data $importData,
         \Magento\Eav\Model\Config $config,
-        \Magento\Core\Model\Resource $resource,
-        \Magento\ImportExport\Model\Resource\Helper $resourceHelper
+        \Magento\App\Resource $resource,
+        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
+        \Magento\Stdlib\String $string
     ) {
-        $this->_coreString = $coreString;
         $this->_coreData = $coreData;
         $this->_importExportData = $importExportData;
         $this->_resourceHelper = $resourceHelper;
+        $this->string = $string;
 
         $entityType = $config->getEntityType($this->getEntityTypeCode());
 
@@ -254,6 +250,7 @@ abstract class AbstractEntity
      * Inner source object getter.
      *
      * @return \Magento\ImportExport\Model\Import\AbstractSource
+     * @throws \Magento\Core\Exception
      */
     protected function _getSource()
     {
@@ -591,8 +588,8 @@ abstract class AbstractEntity
     {
         switch ($attrParams['type']) {
             case 'varchar':
-                $val   = $this->_coreString->cleanString($rowData[$attrCode]);
-                $valid = $this->_coreString->strlen($val) < self::DB_MAX_VARCHAR_LENGTH;
+                $val   = $this->string->cleanString($rowData[$attrCode]);
+                $valid = $this->string->strlen($val) < self::DB_MAX_VARCHAR_LENGTH;
                 break;
             case 'decimal':
                 $val   = trim($rowData[$attrCode]);
@@ -611,8 +608,8 @@ abstract class AbstractEntity
                 $valid = strtotime($val) !== false;
                 break;
             case 'text':
-                $val   = $this->_coreString->cleanString($rowData[$attrCode]);
-                $valid = $this->_coreString->strlen($val) < self::DB_MAX_TEXT_LENGTH;
+                $val   = $this->string->cleanString($rowData[$attrCode]);
+                $valid = $this->string->strlen($val) < self::DB_MAX_TEXT_LENGTH;
                 break;
             default:
                 $valid = true;

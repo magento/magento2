@@ -30,14 +30,14 @@ interface Config
      *
      * @param \Magento\ObjectManager\Relations $relations
      */
-    public function setRelations(\Magento\ObjectManager\Relations $relations);
+    public function setRelations(Relations $relations);
 
     /**
      * Set configuration cache instance
      *
      * @param \Magento\ObjectManager\ConfigCache $cache
      */
-    public function setCache(\Magento\ObjectManager\ConfigCache $cache);
+    public function setCache(ConfigCache $cache);
 
     /**
      * Retrieve list of arguments per type

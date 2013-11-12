@@ -1,7 +1,5 @@
 <?php
 /**
- * Customer entity resource model
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -23,8 +21,12 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Customer\Model\Resource;
 
+/**
+ * Customer entity resource model
+ */
 class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
 {
     /**
@@ -40,7 +42,12 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     protected $_coreStoreConfig;
 
     /**
-     * @param \Magento\Core\Model\Resource $resource
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity
      * @param \Magento\Core\Model\LocaleInterface $locale
@@ -48,10 +55,11 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Validator\UniversalFactory $universalFactory
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Validator\Factory $validatorFactory
+     * @param \Magento\Stdlib\DateTime $dateTime
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity,
         \Magento\Core\Model\LocaleInterface $locale,
@@ -59,6 +67,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         \Magento\Validator\UniversalFactory $universalFactory,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Validator\Factory $validatorFactory,
+        \Magento\Stdlib\DateTime $dateTime,
         $data = array()
     ) {
         parent::__construct(
@@ -72,6 +81,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         );
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_validatorFactory = $validatorFactory;
+        $this->dateTime = $dateTime;
         $this->setType('customer');
         $this->setConnection('customer_read', 'customer_write');
     }
@@ -381,8 +391,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     {
         if (is_string($passwordLinkToken) && !empty($passwordLinkToken)) {
             $customer->setRpToken($passwordLinkToken);
-            $currentDate = \Magento\Date::now();
-            $customer->setRpTokenCreatedAt($currentDate);
+            $customer->setRpTokenCreatedAt($this->dateTime->now());
             $this->saveAttribute($customer, 'rp_token');
             $this->saveAttribute($customer, 'rp_token_created_at');
         }

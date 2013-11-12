@@ -70,7 +70,7 @@ class Factory implements \Magento\ObjectManager\Factory
     ) {
         $this->_objectManager = $objectManager;
         $this->_config = $config;
-        $this->_definitions = $definitions ?: new \Magento\ObjectManager\Definition\Runtime();
+        $this->_definitions = $definitions ? : new \Magento\ObjectManager\Definition\Runtime();
         $this->_globalArguments = $globalArguments;
     }
 
@@ -96,7 +96,10 @@ class Factory implements \Magento\ObjectManager\Factory
             $argument = null;
             if (array_key_exists($paramName, $arguments)) {
                 $argument = $arguments[$paramName];
-            } else if ($paramRequired) {
+            } elseif (array_key_exists('options', $arguments) && array_key_exists($paramName, $arguments['options'])) {
+                // The parameter name doesn't exist in the arguments, but it is contained in the 'options' argument.
+                $argument = $arguments['options'][$paramName];
+            } elseif ($paramRequired) {
                 if ($paramType) {
                     $argument = array('instance' => $paramType);
                 } else {
@@ -123,14 +126,13 @@ class Factory implements \Magento\ObjectManager\Factory
                     );
                 }
                 $this->_creationStack[$requestedType] = 1;
-
                 $isShared = (!isset($argument['shared']) && $this->_config->isShared($argumentType))
                     || (isset($argument['shared']) && $argument['shared']);
                 $argument = $isShared
                     ? $this->_objectManager->get($argumentType)
                     : $this->_objectManager->create($argumentType);
                 unset($this->_creationStack[$requestedType]);
-            } else if (is_array($argument) && isset($argument['argument'])) {
+            } elseif (is_array($argument) && isset($argument['argument'])) {
                 $argKey = $argument['argument'];
                 $argument = isset($this->_globalArguments[$argKey]) ? $this->_globalArguments[$argKey] : $paramDefault;
             }
@@ -164,36 +166,31 @@ class Factory implements \Magento\ObjectManager\Factory
     {
         $type = $this->_config->getInstanceType($requestedType);
         $parameters = $this->_definitions->getParameters($type);
+        if (!isset($this->_instances[$type])) {
+            $this->_instances[$type] = 0;
+        }
+        $this->_instances[$type]++;
         if ($parameters == null) {
             return new $type();
         }
         $args = $this->_resolveArguments($requestedType, $parameters, $arguments);
-
-        switch(count($args)) {
+        switch (count($args)) {
             case 1:
                 return new $type($args[0]);
-
             case 2:
                 return new $type($args[0], $args[1]);
-
             case 3:
                 return new $type($args[0], $args[1], $args[2]);
-
             case 4:
                 return new $type($args[0], $args[1], $args[2], $args[3]);
-
             case 5:
                 return new $type($args[0], $args[1], $args[2], $args[3], $args[4]);
-
             case 6:
                 return new $type($args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
-
             case 7:
                 return new $type($args[0], $args[1], $args[2], $args[3], $args[4], $args[5], $args[6]);
-
             case 8:
                 return new $type($args[0], $args[1], $args[2], $args[3], $args[4], $args[5], $args[6], $args[7]);
-
             default:
                 $reflection = new \ReflectionClass($type);
                 return $reflection->newInstanceArgs($args);

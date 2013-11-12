@@ -46,8 +46,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPluginSettings()
     {
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
+            ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
-            ->setDesignTheme('magento_basic', 'adminhtml');
+            ->setDesignTheme('magento_basic');
 
         $config = new \Magento\Object();
         $settings = $this->_model->getPluginSettings($config);

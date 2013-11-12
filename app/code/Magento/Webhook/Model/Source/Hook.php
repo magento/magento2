@@ -30,26 +30,18 @@ namespace Magento\Webhook\Model\Source;
 class Hook implements \Magento\Core\Model\Option\ArrayInterface
 {
     /**
-     * Path to environments section in the config
-     */
-    const XML_PATH_WEBHOOK = 'global/webhook/webhooks';
-
-    /**
      * Cache of options
      *
      * @var null|array
      */
     protected $_options = null;
 
-    /** @var  \Magento\Core\Model\Config */
-    private $_config;
-
     /**
-     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\Webhook\Model\Config $config
      */
-    public function __construct(\Magento\Core\Model\Config $config )
+    public function __construct(\Magento\Webhook\Model\Config $config )
     {
-        $this->_config = $config;
+        $this->_options = $config->getWebhooks();
     }
 
     /**
@@ -59,15 +51,6 @@ class Hook implements \Magento\Core\Model\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        if (!$this->_options) {
-            $this->_options = array();
-
-            $configElement = $this->_config->getNode(self::XML_PATH_WEBHOOK);
-            if ($configElement) {
-                $this->_options = $configElement->asArray();
-            }
-        }
-
         return $this->_options;
     }
 

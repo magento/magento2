@@ -37,7 +37,7 @@ namespace Magento\Backend\Controller\Adminhtml\System\Config;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Backend\Controller\System\AbstractConfig
+class Save extends \Magento\Backend\Controller\Adminhtml\System\AbstractConfig
 {
     /**
      * Backend Config Model Factory
@@ -52,20 +52,28 @@ class Save extends \Magento\Backend\Controller\System\AbstractConfig
     protected $_cache;
 
     /**
+     * @var \Magento\Stdlib\String
+     */
+    protected $string;
+
+    /**
      * @param \Magento\Backend\Controller\Context $context
      * @param \Magento\Backend\Model\Config\Structure $configStructure
      * @param \Magento\Backend\Model\Config\Factory $configFactory
      * @param \Magento\Cache\FrontendInterface $cache
+     * @param \Magento\Stdlib\String $string
      */
     public function __construct(
         \Magento\Backend\Controller\Context $context,
         \Magento\Backend\Model\Config\Structure $configStructure,
         \Magento\Backend\Model\Config\Factory $configFactory,
-        \Magento\Cache\FrontendInterface $cache
+        \Magento\Cache\FrontendInterface $cache,
+        \Magento\Stdlib\String $string
     ) {
         parent::__construct($context, $configStructure);
         $this->_configFactory = $configFactory;
         $this->_cache = $cache;
+        $this->string = $string;
     }
 
     /**
@@ -177,7 +185,9 @@ class Save extends \Magento\Backend\Controller\System\AbstractConfig
      */
     protected function _saveSection()
     {
-        $method = '_save' . uc_words($this->getRequest()->getParam('section'), '');
+        $method = '_save' . $this->string->upperCaseWords(
+            $this->getRequest()->getParam('section'), '_', ''
+        );
         if (method_exists($this, $method)) {
             $this->$method();
         }

@@ -61,7 +61,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Rating\Model\Rating\OptionFactory $optionFactory
      * @param \Magento\Core\Model\Session\AbstractSession $session
      * @param \Magento\Core\Model\System\Store $systemStore
-     * @param \Magento\Data\Form\Factory $formFactory
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -72,7 +72,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Rating\Model\Rating\OptionFactory $optionFactory,
         \Magento\Core\Model\Session\AbstractSession $session,
         \Magento\Core\Model\System\Store $systemStore,
-        \Magento\Data\Form\Factory $formFactory,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\StoreManagerInterface $storeManager,

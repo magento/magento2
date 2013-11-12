@@ -34,6 +34,8 @@ class ShipmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testSendEmail()
     {
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
+            ->setAreaCode('frontend');
         $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Sales\Model\Order');
         $order->loadByIncrementId('100000001');
@@ -47,7 +49,6 @@ class ShipmentTest extends \PHPUnit_Framework_TestCase
         $paymentInfoBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Payment\Helper\Data')
             ->getInfoBlock($payment);
-        $paymentInfoBlock->setArea('invalid-area');
         $payment->setBlockMock($paymentInfoBlock);
 
         $this->assertEmpty($shipment->getEmailSent());

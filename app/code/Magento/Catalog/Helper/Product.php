@@ -101,7 +101,7 @@ class Product extends \Magento\Core\Helper\Url
     protected $_coreConfig;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 

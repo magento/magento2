@@ -55,7 +55,7 @@ class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
     {
         $result = array();
         $files = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\Config\Modules\Reader')
+            ->get('Magento\Module\Dir\Reader')
             ->getConfigurationFiles('view.xml');
         foreach ($files as $file) {
             $result[] = array($file);

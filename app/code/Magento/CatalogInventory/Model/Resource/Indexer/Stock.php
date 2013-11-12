@@ -55,13 +55,13 @@ class Stock extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractInde
     protected $_productType;
 
     /**
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\CatalogInventory\Model\Resource\Indexer\StockFactory $indexerFactory
      * @param \Magento\Catalog\Model\Product\Type $productType
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\CatalogInventory\Model\Resource\Indexer\StockFactory $indexerFactory,
         \Magento\Catalog\Model\Product\Type $productType

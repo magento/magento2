@@ -56,11 +56,18 @@ class AttributeDataFactory
     protected $_objectManager;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @var \Magento\Stdlib\String
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    protected $string;
+
+    /**
+     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Stdlib\String $string
+     */
+    public function __construct(\Magento\ObjectManager $objectManager, \Magento\Stdlib\String $string)
     {
         $this->_objectManager = $objectManager;
+        $this->string = $string;
     }
 
     /**
@@ -86,7 +93,7 @@ class AttributeDataFactory
             if (empty($this->_dataModels[$attribute->getFrontendInput()])) {
                 $dataModelClass = sprintf(
                     'Magento\Eav\Model\Attribute\Data\%s',
-                    uc_words($attribute->getFrontendInput())
+                    $this->string->upperCaseWords($attribute->getFrontendInput())
                 );
                 $dataModel = $this->_objectManager->create($dataModelClass);
                 $this->_dataModels[$attribute->getFrontendInput()] = $dataModel;

@@ -37,7 +37,7 @@ class LocalTest extends \PHPUnit_Framework_TestCase
         $this->_adapter = new \Magento\Filesystem\Adapter\Local();
 
         \Magento\Io\File::rmdirRecursive(self::_getTmpDir());
-        mkdir(self::_getTmpDir());
+        mkdir(self::_getTmpDir(), 0777, true);
     }
 
     protected function tearDown()

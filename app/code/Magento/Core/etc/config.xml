@@ -59,6 +59,9 @@
             </js>
         </dev>
         <system>
+            <filesystem>
+                <media>{{media_dir}}</media>
+            </filesystem>
             <smtp>
                 <disable>0</disable>
                 <host>localhost</host>
@@ -156,6 +159,8 @@
             <locale>
                 <firstday>0</firstday>
                 <weekend>0,6</weekend>
+                <code>en_US</code>
+                <timezone>America/Los_Angeles</timezone>
             </locale>
             <file>
                 <protected_extensions>

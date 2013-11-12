@@ -41,20 +41,20 @@ class Fieldset extends \Magento\Data\Form\Element\Fieldset
 
     /**
      * @param \Magento\Tax\Block\Adminhtml\Rate\Title $title
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
      * @param array $attributes
      */
     public function __construct(
         \Magento\Tax\Block\Adminhtml\Rate\Title $title,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
         $attributes = array()
     ) {
         $this->_title = $title;
-        parent::__construct($coreData, $factoryElement, $factoryCollection, $attributes);
+        parent::__construct($escaper, $factoryElement, $factoryCollection, $attributes);
     }
 
     public function getBasicChildrenHtml()

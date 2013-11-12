@@ -103,10 +103,13 @@ class Container extends \Magento\Backend\Block\Widget\Container
      */
     protected function _buildFormClassName()
     {
-        return ucwords(str_replace('_', '\\', $this->_blockGroup))
-        . '\\Block\\'
-        . str_replace('_', '\\', uc_words(str_replace('_', ' ', $this->_controller) . '\\' . uc_words($this->_mode)))
-        . '\\Form';
+        return \Magento\Core\Helper\String::buildClassName(array(
+            $this->_blockGroup,
+            'Block',
+            $this->_controller,
+            $this->_mode,
+            'Form'
+        ));
     }
 
     /**
@@ -145,7 +148,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
         if ($this->hasFormActionUrl()) {
             return $this->getData('form_action_url');
         }
-        return $this->getUrl('*/' . $this->_controller . '/save');
+        return $this->getUrl('*/*/save');
     }
 
     public function getFormHtml()

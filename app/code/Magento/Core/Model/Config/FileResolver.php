@@ -30,7 +30,7 @@ class FileResolver implements \Magento\Config\FileResolverInterface
     /**
      * Module configuration file reader
      *
-     * @var \Magento\Core\Model\Config\Modules\Reader
+     * @var \Magento\Module\Dir\Reader
      */
     protected $_moduleReader;
 
@@ -40,11 +40,11 @@ class FileResolver implements \Magento\Config\FileResolverInterface
     protected $_applicationDirs;
 
     /**
-     * @param \Magento\Core\Model\Config\Modules\Reader $moduleReader
+     * @param \Magento\Module\Dir\Reader $moduleReader
      * @param \Magento\App\Dir $applicationDirs
      */
     public function __construct(
-        \Magento\Core\Model\Config\Modules\Reader $moduleReader,
+        \Magento\Module\Dir\Reader $moduleReader,
         \Magento\App\Dir $applicationDirs
     ) {
         $this->_moduleReader = $moduleReader;

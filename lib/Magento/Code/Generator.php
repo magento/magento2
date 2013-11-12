@@ -154,6 +154,8 @@ class Generator
                     throw new \InvalidArgumentException('Unknown generation entity.');
                     break;
             }
+        } else {
+            $this->_generator->init($sourceClassName, $resultClassName);
         }
 
         return $this->_generator;

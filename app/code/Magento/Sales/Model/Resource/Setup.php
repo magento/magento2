@@ -32,20 +32,19 @@ namespace Magento\Sales\Model\Resource;
 class Setup extends \Magento\Eav\Model\Entity\Setup
 {
     /**
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData;
-
-    /**
      * @var \Magento\Core\Model\Config
      */
     protected $_config;
 
     /**
+     * @var \Magento\Encryption\EncryptorInterface
+     */
+    protected $_encryptor;
+
+    /**
      * @param \Magento\Core\Model\Resource\Setup\Context $context
-     * @param \Magento\Core\Model\CacheInterface $cache
+     * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory
-     * @param \Magento\Core\Helper\Data $coreHelper
      * @param \Magento\Core\Model\Config $config
      * @param string $resourceName
      * @param string $moduleName
@@ -53,16 +52,15 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      */
     public function __construct(
         \Magento\Core\Model\Resource\Setup\Context $context,
-        \Magento\Core\Model\CacheInterface $cache,
+        \Magento\App\CacheInterface $cache,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory,
-        \Magento\Core\Helper\Data $coreHelper,
         \Magento\Core\Model\Config $config,
         $resourceName,
         $moduleName = 'Magento_Sales',
         $connectionName = ''
     ) {
         $this->_config = $config;
-        $this->_coreData = $coreHelper;
+        $this->_encryptor = $context->getEncryptor();
         parent::__construct($context, $cache, $attrGrCollFactory, $resourceName, $moduleName, $connectionName);
     }
 
@@ -260,16 +258,6 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     }
 
     /**
-     * Get Core Helper
-     *
-     * @return \Magento\Core\Helper\Data
-     */
-    public function getCoreData()
-    {
-        return $this->_coreData;
-    }
-
-    /**
      * Get config model
      *
      * @return \Magento\Core\Model\Config
@@ -277,5 +265,13 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     public function getConfigModel()
     {
         return $this->_config;
+    }
+
+    /**
+     * @return \Magento\Encryption\EncryptorInterface
+     */
+    public function getEncryptor()
+    {
+        return $this->_encryptor;
     }
 }

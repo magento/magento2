@@ -35,18 +35,18 @@ class Observer
     /** @var  \Magento\Webhook\Model\Resource\Subscription\Collection $_subscriptionSet */
     private $_subscriptionSet;
 
-    /** @var \Magento\Core\Model\Logger */
+    /** @var \Magento\Logger */
     private $_logger;
 
     /**
      * @param \Magento\Webhook\Model\Webapi\EventHandler                        $webapiEventHandler
      * @param \Magento\Webhook\Model\Resource\Subscription\Collection           $subscriptionSet
-     * @param \Magento\Core\Model\Logger                                        $logger
+     * @param \Magento\Logger                                        $logger
      */
     public function __construct(
         \Magento\Webhook\Model\Webapi\EventHandler $webapiEventHandler,
         \Magento\Webhook\Model\Resource\Subscription\Collection $subscriptionSet,
-        \Magento\Core\Model\Logger $logger
+        \Magento\Logger $logger
     ) {
         $this->_webapiEventHandler = $webapiEventHandler;
         $this->_subscriptionSet = $subscriptionSet;

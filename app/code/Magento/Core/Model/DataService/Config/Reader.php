@@ -28,16 +28,16 @@ namespace Magento\Core\Model\DataService\Config;
 class Reader extends \Magento\Config\AbstractXml
 {
     /**
-     * @var \Magento\Core\Model\Config\Modules\Reader
+     * @var \Magento\Module\Dir\Reader
      */
     private $_modulesReader;
 
     /**
-     * @param \Magento\Core\Model\Config\Modules\Reader $moduleReader
+     * @param \Magento\Module\Dir\Reader $moduleReader
      * @param array $configFiles
      */
     public function __construct(
-        \Magento\Core\Model\Config\Modules\Reader $moduleReader,
+        \Magento\Module\Dir\Reader $moduleReader,
         array $configFiles
     ) {
         if (count($configFiles)) {

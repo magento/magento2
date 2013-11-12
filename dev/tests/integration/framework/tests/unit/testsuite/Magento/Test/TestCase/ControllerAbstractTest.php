@@ -46,7 +46,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
         ;
         $session = new \Magento\Object(array('messages' => $messagesCollection));
         $request = new \Magento\TestFramework\Request(
-            $this->getMock('Magento\App\RouterListInterface', array(), array(), '', false)
+            $this->getMock('\Magento\App\Route\ConfigInterface', array(), array(), '', false)
         );
         $response = new \Magento\TestFramework\Response();
 

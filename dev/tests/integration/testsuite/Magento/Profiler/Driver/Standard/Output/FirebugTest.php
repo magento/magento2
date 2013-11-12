@@ -50,7 +50,7 @@ class FirebugTest extends \PHPUnit_Framework_TestCase
             ->method('canSendHeaders')
             ->will($this->returnValue(true));
 
-        $this->_request = $this->getMock('\Magento\App\Request\Http', array('getHeader'));
+        $this->_request = $this->getMock('\Magento\App\Request\Http', array('getHeader'), array(), '', false);
         $this->_request
             ->expects($this->any())
             ->method('getHeader')

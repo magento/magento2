@@ -250,15 +250,12 @@ class SplitButton extends \Magento\Backend\Block\Widget
      */
     protected function _getAttributesString($attributes)
     {
-        /** @var $helper \Magento\Backend\Helper\Data */
-        $helper = $this->helper('Magento\Backend\Helper\Data');
-
         $html = array();
         foreach ($attributes as $attributeKey => $attributeValue) {
             if ($attributeValue === null || $attributeValue == '') {
                 continue;
             }
-            $html[] = $attributeKey . '="' . $helper->escapeHtml($attributeValue) . '"';
+            $html[] = $attributeKey . '="' . $this->escapeHtml($attributeValue) . '"';
         }
         return join(' ', $html);
     }

@@ -39,6 +39,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         /** @var \Magento\Core\Model\EntityFactory $entityFactory */
         $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
+        $dateTime = $this->getMock('Magento\Stdlib\DateTime', null, array(), '', true);
 
         $mockDBAdapter = $this->getMockBuilder('Magento\DB\Adapter\Pdo\Mysql')
             ->disableOriginalConstructor()
@@ -50,10 +51,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $mockResourceEvent->expects($this->any())
             ->method('getReadConnection')
             ->will($this->returnValue($mockDBAdapter));
-        $logger = $this->getMock('Magento\Core\Model\Logger', array(), array(), '', false);
+        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
 
         $collection = new \Magento\Webhook\Model\Resource\Event\Collection(
-            $eventManager, $logger, $mockFetchStrategy, $entityFactory, $mockResourceEvent
+            $eventManager, $logger, $mockFetchStrategy, $entityFactory, $dateTime, $mockResourceEvent
         );
         $this->assertInstanceOf('Magento\Webhook\Model\Resource\Event\Collection', $collection);
         $this->assertEquals('Magento\Webhook\Model\Resource\Event', $collection->getResourceModelName());

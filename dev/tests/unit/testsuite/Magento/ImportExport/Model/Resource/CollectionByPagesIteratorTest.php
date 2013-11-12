@@ -63,7 +63,7 @@ class CollectionByPagesIteratorTest extends \PHPUnit_Framework_TestCase
         $select = $this->getMock('Zend_Db_Select', array(), array(), '', false);
 
         $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
-        $logger = $this->getMock('Magento\Core\Model\Logger', array(), array(), '', false);
+        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
 
         /** @var $collectionMock \Magento\Data\Collection\Db|PHPUnit_Framework_MockObject_MockObject */
         $collectionMock = $this->getMock('Magento\Data\Collection\Db',

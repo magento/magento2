@@ -49,7 +49,7 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
     /**
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Core\Model\StoreManager $storeManager
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
      * @param array $attributes
@@ -57,14 +57,14 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
     public function __construct(
         \Magento\View\LayoutInterface $layout,
         \Magento\Core\Model\StoreManager $storeManager,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
         $attributes = array()
     ) {
         $this->_layout = $layout;
         $this->_storeManager = $storeManager;
-        parent::__construct($coreData, $factoryElement, $factoryCollection, $attributes);
+        parent::__construct($escaper, $factoryElement, $factoryCollection, $attributes);
     }
 
     public function getElementHtml()

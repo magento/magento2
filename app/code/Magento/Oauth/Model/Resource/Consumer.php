@@ -32,6 +32,21 @@ namespace Magento\Oauth\Model\Resource;
 class Consumer extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\App\Resource $resource
+     */
+    public function __construct(\Magento\Stdlib\DateTime $dateTime, \Magento\App\Resource $resource)
+    {
+        $this->dateTime = $dateTime;
+        parent::__construct($resource);
+    }
+
+    /**
      * Initialize resource model
      *
      * @return void
@@ -49,7 +64,7 @@ class Consumer extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function _beforeSave(\Magento\Core\Model\AbstractModel $object)
     {
-        $object->setUpdatedAt($this->formatDate(time()));
+        $object->setUpdatedAt($this->dateTime->formatDate(time()));
         return parent::_beforeSave($object);
     }
 

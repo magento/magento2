@@ -36,9 +36,22 @@ namespace Magento\Oauth\Model\Resource;
 class Token extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\App\Resource $resource
+     */
+    public function __construct(\Magento\Stdlib\DateTime $dateTime, \Magento\App\Resource $resource)
+    {
+        $this->dateTime = $dateTime;
+        parent::__construct($resource);
+    }
+
+    /**
      * Initialize resource model
-     *
-     * @return void
      */
     protected function _construct()
     {
@@ -88,7 +101,7 @@ class Token extends \Magento\Core\Model\Resource\Db\AbstractDb
                 $this->getMainTable(),
                 $adapter->quoteInto(
                     'type = "' . \Magento\Oauth\Model\Token::TYPE_REQUEST . '" AND created_at <= ?',
-                    \Magento\Date::formatDate(time() - $minutes * 60)
+                    $this->dateTime->formatDate(time() - $minutes * 60)
                 )
             );
         } else {

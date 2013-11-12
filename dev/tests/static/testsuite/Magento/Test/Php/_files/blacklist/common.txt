@@ -38,14 +38,10 @@ lib/Magento/Cache/Backend/Database.php
 lib/Magento/Cache/Backend/Eaccelerator.php
 lib/Magento/Cache/Backend/Memcached.php
 lib/Magento/Cache/Core.php
-lib/Magento/Code/Generator.php
-lib/Magento/Code/Generator/EntityAbstract.php
-lib/Magento/Code/Generator/Io.php
 lib/Magento/Connect
 lib/Magento/Convert/ConvertException.php
 lib/Magento/Convert/Mapper/Column.php
 lib/Magento/Convert/Mapper/MapperInterface.php
-lib/Magento/DB
 lib/Magento/Data/Collection.php
 lib/Magento/Data/Collection/Db.php
 lib/Magento/Data/Collection/Db/FetchStrategy/Cache.php
@@ -94,8 +90,8 @@ lib/Magento/Data/Tree/Db.php
 lib/Magento/Data/Tree/Dbp.php
 lib/Magento/Data/Tree/Node.php
 lib/Magento/Data/Tree/Node/Collection.php
-lib/Magento/Date.php
 lib/Magento/DB
+lib/Magento/Stdlib/DateTime.php
 lib/Magento/Debug.php
 lib/Magento/Event.php
 lib/Magento/Event
@@ -103,7 +99,6 @@ lib/Magento/File/Csv.php
 lib/Magento/File/CsvMulty.php
 lib/Magento/File/Transfer/Adapter/Http.php
 lib/Magento/File/Uploader.php
-lib/Magento/Filter
 lib/Magento/Gdata
 lib/Magento/HTTP/Adapter/Curl.php
 lib/Magento/HTTP/Client.php
@@ -121,6 +116,3 @@ lib/Magento/Simplexml
 lib/Magento/System
 lib/Magento/Util.php
 lib/Magento/Xml
-lib/Magento/Validator
-dev/tests/unit/testsuite/Magento/Code/Plugin/GeneratorTest/SimpleObjectManager.php
-dev/tools/Magento/Tools/I18n/Zend

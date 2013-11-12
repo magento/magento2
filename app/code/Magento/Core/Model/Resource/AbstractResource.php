@@ -133,29 +133,6 @@ abstract class AbstractResource
     }
 
     /**
-     * Format date to internal format
-     *
-     * @param string|Zend_Date $date
-     * @param bool $includeTime
-     * @return string
-     */
-    public function formatDate($date, $includeTime=true)
-    {
-         return \Magento\Date::formatDate($date, $includeTime);
-    }
-
-    /**
-     * Convert internal date to UNIX timestamp
-     *
-     * @param string $str
-     * @return int
-     */
-    public function mktime($str)
-    {
-        return \Magento\Date::toTimestamp($str);
-    }
-
-    /**
      * Serialize specified field in an object
      *
      * @param \Magento\Object $object
@@ -240,7 +217,7 @@ abstract class AbstractResource
     {
         $type = strtolower($type);
         if ($type == 'decimal' || $type == 'numeric' || $type == 'float') {
-            $value = \Magento\Core\Model\ObjectManager::getInstance()->get('Magento\Core\Model\LocaleInterface')
+            $value = \Magento\App\ObjectManager::getInstance()->get('Magento\Core\Model\LocaleInterface')
                 ->getNumber($value);
         }
         return $value;

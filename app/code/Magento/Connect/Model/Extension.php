@@ -24,15 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Extension model
- *
- * @category    Magento
- * @package     Magento_Connect
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Connect\Model;
 
+/**
+ * Extension model
+ */
 class Extension extends \Magento\Object
 {
     /**
@@ -59,14 +55,12 @@ class Extension extends \Magento\Object
      *
      * @var \Magento\Connect\Helper\Data
      */
-    protected $_connectData = null;
+    protected $_connectData;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Convert\ConvertArray
      */
-    protected $_coreData = null;
+    protected $_convertArray;
 
     /**
      * Session
@@ -76,20 +70,20 @@ class Extension extends \Magento\Object
     protected $_session;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Convert\ConvertArray $convertArray
      * @param \Magento\Connect\Helper\Data $connectData
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Connect\Model\Session $session
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Convert\ConvertArray $convertArray,
         \Magento\Connect\Helper\Data $connectData,
         \Magento\Filesystem $filesystem,
         \Magento\Connect\Model\Session $session,
         array $data = array()
     ) {
-        $this->_coreData = $coreData;
+        $this->_convertArray = $convertArray;
         $this->_connectData = $connectData;
         $this->_session = $session;
         parent::__construct($data);
@@ -110,14 +104,14 @@ class Extension extends \Magento\Object
     }
 
     /**
-     * Set package object.
+     * Set package object
      *
      * @return \Magento\Connect\Model\Extension
+     * @throws \Magento\Core\Exception
      */
     public function generatePackageXml()
     {
-        $this->_session
-            ->setLocalExtensionPackageFormData($this->getData());
+        $this->_session->setLocalExtensionPackageFormData($this->getData());
 
         $this->_setPackage()
             ->_setRelease()
@@ -180,6 +174,10 @@ class Extension extends \Magento\Object
         return $this;
     }
 
+    /**
+     * @param string $filesString
+     * @return array
+     */
     protected function packageFilesToArray($filesString)
     {
         $packageFiles = array();
@@ -190,7 +188,7 @@ class Extension extends \Magento\Object
                 $res = explode(DIRECTORY_SEPARATOR, $file, 2);
                 array_map('trim', $res);
                 if (2 == count($res)) {
-                    $packageFiles[] = array('target'=>$res[0], 'path'=>$res[1]);
+                    $packageFiles[] = array('target' => $res[0], 'path' => $res[1]);
                 }
             }
         }
@@ -208,30 +206,31 @@ class Extension extends \Magento\Object
             ->clearDependencies()
             ->setDependencyPhpVersion($this->getData('depends_php_min'), $this->getData('depends_php_max'));
 
-        foreach ($this->getData('depends') as $deptype=>$deps) {
-            foreach ($deps['name'] as $i=>$type) {
-                if (0===$i) {
+        foreach ($this->getData('depends') as $depType => $deps) {
+            foreach (array_keys($deps['name']) as $key) {
+                if (0 === $key) {
                     continue;
                 }
-                $name = $deps['name'][$i];
-                $min = !empty($deps['min'][$i]) ? $deps['min'][$i] : false;
-                $max = !empty($deps['max'][$i]) ? $deps['max'][$i] : false;
+                $name = $deps['name'][$key];
+                $min = !empty($deps['min'][$key]) ? $deps['min'][$key] : false;
+                $max = !empty($deps['max'][$key]) ? $deps['max'][$key] : false;
 
-                $files = !empty($deps['files'][$i]) ? $deps['files'][$i] : false;
+                $files = !empty($deps['files'][$key]) ? $deps['files'][$key] : false;
                 $packageFiles = $this->packageFilesToArray($files);
 
-                if ($deptype !== 'extension') {
-                    $channel = !empty($deps['channel'][$i])
-                        ? $deps['channel'][$i]
+                if ($depType !== 'extension') {
+                    $channel = !empty($deps['channel'][$key])
+                        ? $deps['channel'][$key]
                         : 'connect.magentocommerce.com/core';
                 }
-                switch ($deptype) {
+                switch ($depType) {
                     case 'package':
                         $this->getPackage()->addDependencyPackage($name, $channel, $min, $max, $packageFiles);
                         break;
-
                     case 'extension':
                         $this->getPackage()->addDependencyExtension($name, $min, $max);
+                        break;
+                    default:
                         break;
                 }
             }
@@ -248,21 +247,22 @@ class Extension extends \Magento\Object
     {
         $this->getPackage()->clearContents();
         $contents = $this->getData('contents');
-        foreach ($contents['target'] as $i=>$target) {
-            if (0===$i) {
+        foreach ($contents['target'] as $i => $target) {
+            if (0 === $i) {
                 continue;
             }
             switch ($contents['type'][$i]) {
                 case 'file':
                     $this->getPackage()->addContent($contents['path'][$i], $contents['target'][$i]);
                     break;
-
                 case 'dir':
                     $target = $contents['target'][$i];
                     $path = $contents['path'][$i];
                     $include = $contents['include'][$i];
                     $ignore = $contents['ignore'][$i];
                     $this->getPackage()->addContentDir($target, $path, $ignore, $include);
+                    break;
+                default:
                     break;
             }
         }
@@ -301,7 +301,7 @@ class Extension extends \Magento\Object
 
             $this->unsPackageXml();
             $this->unsTargets();
-            $xml = $this->_coreData->assocToXml($this->getData());
+            $xml = $this->_convertArray->assocToXml($this->getData());
             $xml = new \Magento\Simplexml\Element($xml->asXML());
 
             // prepare dir to save

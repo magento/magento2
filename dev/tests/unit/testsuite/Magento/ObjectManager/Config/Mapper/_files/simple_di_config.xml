@@ -25,11 +25,11 @@
 -->
 <config>
     <!-- Comment within root node -->
-    <preference for="Magento\App\UpdaterInterface" type="Magento\App\Updater" />
+    <preference for="Magento\Module\UpdaterInterface" type="Magento\Module\Updaterter" />
     <preference for="Magento\Core\Model\AppInterface" type="Magento\Core\Model\App\Proxy" />
     <type name="Magento\App\State">
         <param name="mode">
-            <value type="argument">Magento\Core\Model\App::PARAM_MODE</value>
+            <value type="argument">Magento\App\State::PARAM_MODE</value>
         </param>
     </type>
     <type name="Magento\Core\Model\Config_Modules">

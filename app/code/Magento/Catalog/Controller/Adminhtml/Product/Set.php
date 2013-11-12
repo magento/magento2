@@ -41,7 +41,7 @@ class Set extends \Magento\Backend\Controller\Adminhtml\Action
      *
      * @var \Magento\Core\Model\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param \Magento\Backend\Controller\Context $context
@@ -130,13 +130,13 @@ class Set extends \Magento\Backend\Controller\Adminhtml\Action
         $model  = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Set')
             ->setEntityTypeId($entityTypeId);
 
-        /** @var $helper \Magento\Adminhtml\Helper\Data */
-        $helper = $this->_objectManager->get('Magento\Adminhtml\Helper\Data');
+        /** @var $filterManager \Magento\Filter\FilterManager */
+        $filterManager = $this->_objectManager->get('Magento\Filter\FilterManager');
 
         try {
             if ($isNewSet) {
                 //filter html tags
-                $name = $helper->stripTags($this->getRequest()->getParam('attribute_set_name'));
+                $name = $filterManager->stripTags($this->getRequest()->getParam('attribute_set_name'));
                 $model->setAttributeSetName(trim($name));
             } else {
                 if ($attributeSetId) {
@@ -149,7 +149,7 @@ class Set extends \Magento\Backend\Controller\Adminhtml\Action
                     ->jsonDecode($this->getRequest()->getPost('data'));
 
                 //filter html tags
-                $data['attribute_set_name'] = $helper->stripTags($data['attribute_set_name']);
+                $data['attribute_set_name'] = $filterManager->stripTags($data['attribute_set_name']);
 
                 $model->organizeData($data);
             }

@@ -24,15 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Product form category field helper
- *
- * @category   Magento
- * @package    Magento_Catalog
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
+/**
+ * Product form category field helper
+ */
 class Category extends \Magento\Data\Form\Element\Multiselect
 {
     /**
@@ -45,7 +41,7 @@ class Category extends \Magento\Data\Form\Element\Multiselect
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_backendData = null;
+    protected $_backendData;
 
     /**
      * @var \Magento\Catalog\Model\Resource\Category\CollectionFactory
@@ -53,26 +49,34 @@ class Category extends \Magento\Data\Form\Element\Multiselect
     protected $_collectionFactory;
 
     /**
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreData;
+
+    /**
      * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $collectionFactory
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\View\LayoutInterface $layout
+     * @param \Magento\Core\Helper\Data $coreData
      * @param array $attributes
      */
     public function __construct(
         \Magento\Catalog\Model\Resource\Category\CollectionFactory $collectionFactory,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Backend\Helper\Data $backendData,
         \Magento\View\LayoutInterface $layout,
+        \Magento\Core\Helper\Data $coreData,
         array $attributes = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_backendData = $backendData;
-        parent::__construct($coreData, $factoryElement, $factoryCollection, $attributes);
+        $this->_coreData = $coreData;
+        parent::__construct($escaper, $factoryElement, $factoryCollection, $attributes);
         $this->_layout = $layout;
     }
 

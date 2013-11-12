@@ -54,9 +54,9 @@ class DiConfigFilesTest extends \PHPUnit_Framework_TestCase
         array_unshift(self::$_primaryFiles, $dir->getDir(\Magento\App\Dir::APP) . DS . 'etc' . DS . 'di.xml');
 
         //init module global configs
-        /** @var $modulesReader \Magento\Core\Model\Config\Modules\Reader */
+        /** @var $modulesReader \Magento\Module\Dir\Reader */
         $modulesReader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\Config\Modules\Reader');
+            ->get('Magento\Module\Dir\Reader');
         self::$_moduleGlobalFiles = $modulesReader->getConfigurationFiles('di.xml');
 
         //init module area configs

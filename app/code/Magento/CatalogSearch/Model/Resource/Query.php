@@ -44,16 +44,22 @@ class Query extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_date;
 
     /**
-     * Class constructor
-     *
-     * @param \Magento\Core\Model\Resource $resource
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\Date $date
+     * @param \Magento\Stdlib\DateTime $dateTime
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
-        \Magento\Core\Model\Date $date
+        \Magento\App\Resource $resource,
+        \Magento\Core\Model\Date $date,
+        \Magento\Stdlib\DateTime $dateTime
     ) {
         $this->_date = $date;
+        $this->dateTime = $dateTime;
         parent::__construct($resource);
     }
 
@@ -135,7 +141,7 @@ class Query extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function _beforeSave(\Magento\Core\Model\AbstractModel $object)
     {
-        $object->setUpdatedAt($this->formatDate($this->_date->gmtTimestamp()));
+        $object->setUpdatedAt($this->dateTime->formatDate($this->_date->gmtTimestamp()));
         return $this;
     }
 }

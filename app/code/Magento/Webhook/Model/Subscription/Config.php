@@ -29,35 +29,38 @@ namespace Magento\Webhook\Model\Subscription;
 
 class Config
 {
-    /** Webhook subscription configuration path */
-    const XML_PATH_SUBSCRIPTIONS = 'global/webhook/subscriptions';
-
-    /** @var \Magento\Webhook\Model\Resource\Subscription\Collection  */
+    /**
+     * @var \Magento\Webhook\Model\Resource\Subscription\Collection
+     */
     protected $_subscriptionSet;
 
-    /** @var  \Magento\Core\Model\Config */
-    protected $_mageConfig;
+    /**
+     * @var \Magento\Webhook\Model\Config
+     */
+    protected $_config;
 
-    /** @var  \Magento\Webhook\Model\Subscription\Factory */
+    /**
+     * @var Factory
+     */
     protected $_subscriptionFactory;
 
-    /** @var \Magento\Core\Model\Logger */
+    /** @var \Magento\Logger */
     private $_logger;
 
     /**
      * @param \Magento\Webhook\Model\Resource\Subscription\Collection $subscriptionSet
-     * @param \Magento\Core\Model\Config $mageConfig
+     * @param \Magento\Webhook\Model\Config $config
      * @param \Magento\Webhook\Model\Subscription\Factory $subscriptionFactory
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      */
     public function __construct(
         \Magento\Webhook\Model\Resource\Subscription\Collection $subscriptionSet,
-        \Magento\Core\Model\Config $mageConfig,
+        \Magento\Webhook\Model\Config $config,
         \Magento\Webhook\Model\Subscription\Factory $subscriptionFactory,
-        \Magento\Core\Model\Logger $logger
+        \Magento\Logger $logger
     ) {
         $this->_subscriptionSet = $subscriptionSet;
-        $this->_mageConfig = $mageConfig;
+        $this->_config = $config;
         $this->_subscriptionFactory = $subscriptionFactory;
         $this->_logger = $logger;
     }
@@ -69,17 +72,7 @@ class Config
      */
     public function updateSubscriptionCollection()
     {
-        $subscriptionConfig = $this->_mageConfig->getNode(self::XML_PATH_SUBSCRIPTIONS);
-
-        if (!empty($subscriptionConfig)) {
-            $subscriptionConfig = $subscriptionConfig->asArray();
-        }
-        // It could be no subscriptions have been defined
-        if (!$subscriptionConfig) {
-            return $this;
-        }
-
-        foreach ($subscriptionConfig as $alias => $subscriptionData) {
+        foreach ($this->_config->getSubscriptions() as $alias => $subscriptionData) {
             try {
                 $this->_validateConfigData($subscriptionData, $alias);
                 $subscriptions = $this->_subscriptionSet->getSubscriptionsByAlias($alias);

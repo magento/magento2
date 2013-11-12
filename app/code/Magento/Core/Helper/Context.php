@@ -43,7 +43,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_eventManager;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
@@ -56,11 +56,6 @@ class Context implements \Magento\ObjectManager\ContextInterface
      * @var \Magento\Core\Model\Cache\Config
      */
     protected $_cacheConfig;
-
-    /**
-     * @var \Magento\Core\Model\EncryptionFactory
-     */
-    protected $_encryptorFactory;
 
     /**
      * @var \Magento\Core\Model\Fieldset\Config
@@ -78,39 +73,52 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_urlBuilder;
 
     /**
-     * @param \Magento\Core\Model\Logger $logger
+     * @var \Magento\HTTP\Header
+     */
+    protected $_httpHeader;
+
+    /**
+     * @var \Magento\HTTP\PhpEnvironment\RemoteAddress
+     */
+    protected $_remoteAddress;
+
+    /**
+     * @param \Magento\Logger $logger
      * @param \Magento\Core\Model\Translate $translator
      * @param \Magento\Core\Model\ModuleManager $moduleManager
      * @param \Magento\App\RequestInterface $httpRequest
      * @param \Magento\Core\Model\Cache\Config $cacheConfig
-     * @param \Magento\Core\Model\EncryptionFactory $encryptorFactory
      * @param \Magento\Core\Model\Fieldset\Config $fieldsetConfig
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\App $app
      * @param \Magento\UrlInterface $urlBuilder
+     * @param \Magento\HTTP\Header $httpHeader
+     * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      */
     public function __construct(
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Core\Model\Translate $translator,
         \Magento\Core\Model\ModuleManager $moduleManager,
         \Magento\App\RequestInterface $httpRequest,
         \Magento\Core\Model\Cache\Config $cacheConfig,
-        \Magento\Core\Model\EncryptionFactory $encryptorFactory,
         \Magento\Core\Model\Fieldset\Config $fieldsetConfig,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\App $app,
-        \Magento\UrlInterface $urlBuilder
+        \Magento\UrlInterface $urlBuilder,
+        \Magento\HTTP\Header $httpHeader,
+        \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
     ) {
         $this->_translator = $translator;
         $this->_moduleManager = $moduleManager;
         $this->_httpRequest = $httpRequest;
         $this->_cacheConfig = $cacheConfig;
-        $this->_encryptorFactory = $encryptorFactory;
         $this->_fieldsetConfig = $fieldsetConfig;
         $this->_eventManager = $eventManager;
         $this->_logger = $logger;
         $this->_app = $app;
         $this->_urlBuilder = $urlBuilder;
+        $this->_httpHeader = $httpHeader;
+        $this->_remoteAddress = $remoteAddress;
     }
 
     /**
@@ -162,14 +170,6 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Core\Model\EncryptionFactory
-     */
-    public function getEncryptorFactory()
-    {
-        return $this->_encryptorFactory;
-    }
-
-    /**
      * @return \Magento\Event\ManagerInterface
      */
     public function getEventManager()
@@ -186,10 +186,26 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
     
     /**
-     * @return \Magento\Core\Model\Logger
+     * @return \Magento\Logger
      */
     public function getLogger()
     {
         return $this->_logger;
+    }
+
+    /**
+     * @return \Magento\HTTP\Header
+     */
+    public function getHttpHeader()
+    {
+        return $this->_httpHeader;
+    }
+
+    /**
+     * @return \Magento\HTTP\PhpEnvironment\RemoteAddress
+     */
+    public function getRemoteAddress()
+    {
+        return $this->_remoteAddress;
     }
 }

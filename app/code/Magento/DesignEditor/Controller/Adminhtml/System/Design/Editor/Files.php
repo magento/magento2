@@ -44,7 +44,7 @@ class Files
                     ->getTreeJson($this->_getStorage()->getTreeArray())
             );
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
             $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array()));
         }
     }

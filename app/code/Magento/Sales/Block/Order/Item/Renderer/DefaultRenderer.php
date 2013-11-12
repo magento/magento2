@@ -24,23 +24,26 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Order item render block
- *
- * @category    Magento
- * @package     Magento_Sales
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Sales\Block\Order\Item\Renderer;
 
+/**
+ * Order item render block
+ */
 class DefaultRenderer extends \Magento\Core\Block\Template
 {
     /**
-     * Core string
+     * Filter manager
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Filter\FilterManager
      */
-    protected $_coreString = null;
+    protected $filter;
+
+    /**
+     * Magento string lib
+     *
+     * @var \Magento\Stdlib\String
+     */
+    protected $string;
 
     /**
      * @var \Magento\Catalog\Model\Product\OptionFactory
@@ -48,21 +51,25 @@ class DefaultRenderer extends \Magento\Core\Block\Template
     protected $_productOptionFactory;
 
     /**
-     * @param \Magento\Core\Helper\String $coreString
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Stdlib\String $string
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
+     * @param \Magento\Filter\FilterManager $filter
+     * @param \Magento\Stdlib\String $string
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\String $coreString,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Block\Template\Context $context,
+        \Magento\Stdlib\String $string,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
+        \Magento\Filter\FilterManager $filter,
         array $data = array()
     ) {
-        $this->_coreString = $coreString;
+        $this->string = $string;
         $this->_productOptionFactory = $productOptionFactory;
+        $this->filter = $filter;
         parent::__construct($coreData, $context, $data);
     }
 
@@ -168,17 +175,17 @@ class DefaultRenderer extends \Magento\Core\Block\Template
         // truncate standard view
         $result = array();
         if (is_array($optionValue)) {
-            $_truncatedValue = implode("\n", $optionValue);
-            $_truncatedValue = nl2br($_truncatedValue);
-            return array('value' => $_truncatedValue);
+            $truncatedValue = implode("\n", $optionValue);
+            $truncatedValue = nl2br($truncatedValue);
+            return array('value' => $truncatedValue);
         } else {
-            $_truncatedValue = $this->_coreString->truncate($optionValue, 55, '');
-            $_truncatedValue = nl2br($_truncatedValue);
+            $truncatedValue = $this->filter->truncate($optionValue, array('length' => 55, 'etc' => ''));
+            $truncatedValue = nl2br($truncatedValue);
         }
 
-        $result = array('value' => $_truncatedValue);
+        $result = array('value' => $truncatedValue);
 
-        if ($this->_coreString->strlen($optionValue) > 55) {
+        if ($this->string->strlen($optionValue) > 55) {
             $result['value'] = $result['value'] . ' <a href="#" class="dots" onclick="return false">...</a>';
             $optionValue = nl2br($optionValue);
             $result = array_merge($result, array('full_view' => $optionValue));
@@ -205,5 +212,16 @@ class DefaultRenderer extends \Magento\Core\Block\Template
     public function getProductAdditionalInformationBlock()
     {
         return $this->getLayout()->getBlock('additional.product.info');
+    }
+
+    /**
+     * Prepare SKU
+     *
+     * @param string $sku
+     * @return string
+     */
+    public function prepareSku($sku)
+    {
+        return $this->escapeHtml($this->string->splitInjection($sku));
     }
 }

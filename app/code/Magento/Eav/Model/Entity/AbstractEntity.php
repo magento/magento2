@@ -179,7 +179,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
     protected static $_attributeBackendTables   = array();
 
     /**
-     * @var \Magento\Core\Model\Resource
+     * @var \Magento\App\Resource
      */
     protected $_resource;
 
@@ -209,7 +209,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
     protected $_universalFactory;
 
     /**
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity
      * @param \Magento\Core\Model\LocaleInterface $locale
@@ -218,7 +218,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity,
         \Magento\Core\Model\LocaleInterface $locale,
@@ -973,8 +973,8 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
         } else {
             $value = $object->getData($attribute->getAttributeCode());
             if ($attribute->getBackend()->getType() == 'datetime') {
-                $date  = new \Zend_Date($value, \Magento\Date::DATE_INTERNAL_FORMAT);
-                $value = $date->toString(\Magento\Date::DATETIME_INTERNAL_FORMAT);
+                $date  = new \Zend_Date($value, \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
+                $value = $date->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
             }
             $bind = array(
                 'entity_type_id' => $this->getTypeId(),

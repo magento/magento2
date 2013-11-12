@@ -39,7 +39,7 @@ class Director extends \Magento\Backend\Model\Menu\AbstractDirector
      * Get command object
      *
      * @param array $data command params
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @return \Magento\Backend\Model\Menu\Builder\AbstractCommand
      */
     protected function _getCommand($data, $logger)
@@ -58,12 +58,12 @@ class Director extends \Magento\Backend\Model\Menu\AbstractDirector
      *
      * @param array $config
      * @param \Magento\Backend\Model\Menu\Builder $builder
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      */
     public function direct(
         array $config,
         \Magento\Backend\Model\Menu\Builder $builder,
-        \Magento\Core\Model\Logger $logger
+        \Magento\Logger $logger
     ) {
         foreach ($config as $data) {
             $builder->processCommand($this->_getCommand($data, $logger));

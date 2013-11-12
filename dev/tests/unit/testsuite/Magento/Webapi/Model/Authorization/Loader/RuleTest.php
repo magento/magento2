@@ -50,7 +50,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->_ruleResource = $this->getMock('Magento\Webapi\Model\Resource\Acl\Rule',
-            array('getRuleList'), array(), '', false);
+            array('getRuleList', '__wakeup'), array(), '', false);
 
         $this->_acl = $this->getMock('Magento\Acl', array('has', 'hasRole', 'allow'), array(), '', false);
 

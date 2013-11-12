@@ -1,7 +1,5 @@
 <?php
 /**
- * Service config data reader.
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,80 +23,35 @@
  */
 namespace Magento\Webapi\Model\Config;
 
-class Reader extends \Magento\Config\AbstractXml
+/**
+ * Service config data reader.
+ */
+class Reader extends \Magento\Config\Reader\Filesystem
 {
     /**
-     * Get absolute path to the XML-schema file
+     * List of id attributes for merge
      *
-     * @return string
+     * @var array
      */
-    public function getSchemaFile()
-    {
-        return __DIR__ . '/../etc/webapi.xsd';
-    }
+    protected $_idAttributes = array(
+        '/config/service' => 'class',
+        '/config/service/rest-route' => 'method',
+    );
 
     /**
-     * Extract configuration data from the DOM structure
-     *
-     * @param \DOMDocument $dom
-     * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param \Magento\Config\FileResolverInterface $fileResolver
+     * @param \Magento\Webapi\Model\Config\Converter $converter
+     * @param \Magento\Webapi\Model\Config\SchemaLocator $schemeLocator
+     * @param \Magento\Config\ValidationStateInterface $validationState
+     * @param string $fileName
      */
-    protected function _extractData(\DOMDocument $dom)
-    {
-        return array();
-    }
-
-    /**
-     * Get XML-contents, initial for merging
-     *
-     * @return string
-     */
-    protected function _getInitialXml()
-    {
-        return '<?xml version="1.0" encoding="utf-8"?><config></config>';
-    }
-
-    /**
-     * Get list of paths to identifiable nodes
-     *
-     * @return array
-     */
-    protected function _getIdAttributes()
-    {
-        return array();
-    }
-
-    /**
-     * Get Dom configuration model
-     * @return \Magento\Config\Dom
-     */
-    protected function _getDomConfigModel()
-    {
-        if (is_null($this->_domConfig)) {
-            $this->_domConfig = new \Magento\Webapi\Model\Config\Dom(
-                $this->_getInitialXml(),
-                $this->_getIdAttributes()
-            );
-        }
-        return $this->_domConfig;
-    }
-
-    /**
-     * Get if xml files must be runtime validated
-     * @return boolean
-     */
-    protected function _isRuntimeValidated()
-    {
-        return false;
-    }
-
-    /**
-     * Retrieve services
-     * @return \DOMDocument
-     */
-    public function getServices()
-    {
-        return $this->_getDomConfigModel()->getDom();
+    public function __construct(
+        \Magento\Config\FileResolverInterface $fileResolver,
+        \Magento\Webapi\Model\Config\Converter $converter,
+        \Magento\Webapi\Model\Config\SchemaLocator $schemeLocator,
+        \Magento\Config\ValidationStateInterface $validationState,
+        $fileName = 'webapi.xml'
+    ) {
+        parent::__construct($fileResolver, $converter, $schemeLocator, $validationState, $fileName);
     }
 }

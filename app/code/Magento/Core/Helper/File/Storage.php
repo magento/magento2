@@ -64,15 +64,25 @@ class Storage extends \Magento\Core\Helper\AbstractHelper
     protected $_storage;
 
     /**
-     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
+     * File system storage model
+     *
+     * @var \Magento\Core\Model\File\Storage\File
+     */
+    protected $_filesystemStorage;
+
+    /**
+     * @param Storage\Database $coreFileStorageDb
      * @param \Magento\Core\Helper\Context $context
      * @param \Magento\Core\Model\File\Storage $storage
+     * @param \Magento\Core\Model\File\Storage\File $filesystemStorage
      */
     public function __construct(
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Core\Helper\Context $context,
-        \Magento\Core\Model\File\Storage $storage
+        \Magento\Core\Model\File\Storage $storage,
+        \Magento\Core\Model\File\Storage\File $filesystemStorage
     ) {
+        $this->_filesystemStorage = $filesystemStorage;
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_storage = $storage;
         parent::__construct($context);
@@ -100,8 +110,7 @@ class Storage extends \Magento\Core\Helper\AbstractHelper
      */
     public function getStorageFileModel()
     {
-        return $objectManager = \Magento\Core\Model\ObjectManager::getInstance()
-            ->getSingleton('Magento\Core\Model\File\Storage\File');
+        return $this->_filesystemStorage;
     }
 
     /**

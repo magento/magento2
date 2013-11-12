@@ -110,7 +110,7 @@ class Datetime
      */
     public function getHtml()
     {
-        $htmlId = $this->_coreData->uniqHash($this->_getHtmlId());
+        $htmlId = $this->mathRandom->getUniqueHash($this->_getHtmlId());
         $format = $this->getLocale()->getDateFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT);
         $timeFormat = '';
 

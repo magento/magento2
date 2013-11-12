@@ -29,6 +29,18 @@ return array(
     '/config/global/fieldsets'                 => '',
     '/config/global/cache/betatypes'           => '',
     '/config/admin/fieldsets'                  => '',
+    '/config/global/webhook'                   =>
+        'This configuration moved to Di configuration of \Magento\Webhook module models',
+    '/config/general/locale'                   =>
+        'This configuration moved to Di configuration of \Magento\Core\Model\Locale\Config model',
+    '/config/global/can_use_base_url'          =>
+        'This configuration moved to Di configuration of \Magento\Backend\Controller\Context class',
+    '/config/global/locale/allow/codes'        =>
+        'This configuration moved to Di configuration of \Magento\Core\Model\Locale\Config model',
+    '/config/global/locale/allow/currencies'   =>
+        'This configuration moved to Di configuration of \Magento\Core\Model\Locale\Config model',
+    '/config/global/mime/types'                =>
+        'This configuration moved to Di configuration for \Magento\Downloadable\Helper\File class',
     '/config/global/models/*/deprecatedNode'   => '',
     '/config/global/models/*/entities/*/table' => '',
     '/config/global/models/*/class'            => '',
@@ -42,6 +54,8 @@ return array(
     '/config/global/payment'                   => 'Move them to payment.xml.',
     '/config/adminhtml/menu'                   => 'Move them to adminhtml.xml.',
     '/config/adminhtml/acl'                    => 'Move them to adminhtml.xml.',
+    '/config/adminhtml/global_search'          =>
+        'This configuration moved to Di configuration of \Magento\Adminhtml\Controller\Index',
     '/config/*[self::global|self::adminhtml|self::frontend]/di' => 'This configuration moved to di.xml file',
     '/config/*[self::global|self::adminhtml|self::frontend]/events' => 'This configuration moved to events.xml file',
     '/config/*[self::global|self::adminhtml|self::frontend]/routers' =>
@@ -50,6 +64,9 @@ return array(
     '/config/global/importexport' => 'This configuration moved to import.xml and export.xml files',
     '/config/global/catalog/product/type' => 'This configuration moved to product_types.xml file',
     '/config/global/catalog/product/options' => 'This configuration moved to product_options.xml file',
+    '/config/global/catalog/product/media/image_types' =>
+        'This configuration moved to Di configuration of '
+        . '\Magento\Adminhtml\Block\Catalog\Product\Frontend\Product\Watermark',
     '/config/global/eav_attributes' => 'This configuration moved to eav_attributes.xml file',
     '/config/global/index' => 'This configuration moved to indexers.xml file',
     '/config/global/catalogrule' => 'This configuration moved to Di configuration of \Magento\CatalogRule\Model\Rule',
@@ -90,8 +107,8 @@ return array(
     '/config/global/eav_frontendclasses' =>
         'This configuration was removed. '
         . 'Please pluginize \Magento\Eav\Helper\Data::getFrontendClasses to extend frontend classes list',
-    '/config/global/resources' => 'This configuration moved to Di configuration of \Magento\Core\Model\Resource',
-    '/config/global/resource' => 'This configuration moved to Di configuration of \Magento\Core\Model\Resource',
+    '/config/global/resources' => 'This configuration moved to Di configuration of \Magento\App\Resource',
+    '/config/global/resource' => 'This configuration moved to Di configuration of \Magento\App\Resource',
     '/config/*/events/core_block_abstract_to_html_after' =>
     'Event has been replaced with "core_layout_render_element"',
     '/config/*/events/catalog_controller_product_delete' => '',

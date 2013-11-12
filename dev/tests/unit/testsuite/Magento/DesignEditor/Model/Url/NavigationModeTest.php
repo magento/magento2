@@ -79,7 +79,7 @@ class NavigationModeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_routerListMock;
+    protected $_configInterfaceMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -94,13 +94,12 @@ class NavigationModeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_designHelperMock = $this->getMock('Magento\DesignEditor\Helper\Data', array(), array(), '', false);
-        $this->_coreHelperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
         $this->_storeConfigMock = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
         $this->_appMock = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
         $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
         $this->_sessionMock = $this->getMock('Magento\Core\Model\Session', array(), array(), '', false);
-        $this->_routerListMock = $this->getMock('\Magento\App\RouterListInterface');
+        $this->_configInterfaceMock = $this->getMock('\Magento\App\Route\ConfigInterface');
         $this->_securityInfoMock = $this->getMock('Magento\Core\Model\Url\SecurityInfoInterface');
 
         $this->_requestMock->expects($this->any())
@@ -110,15 +109,15 @@ class NavigationModeTest extends \PHPUnit_Framework_TestCase
                 array('themeId', 1))));
 
         $this->_model = new \Magento\DesignEditor\Model\Url\NavigationMode(
-            $this->_routerListMock,
+            $this->_configInterfaceMock,
             $this->_requestMock,
             $this->_securityInfoMock,
             $this->_designHelperMock,
             $this->_storeConfigMock,
-            $this->_coreHelperMock,
             $this->_appMock,
             $this->_storeManagerMock,
             $this->_sessionMock,
+            'string',
             $this->_testData
         );
         $this->_model->setRequest($this->_requestMock);

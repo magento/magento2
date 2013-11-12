@@ -28,7 +28,7 @@ namespace Magento\User\Model\Acl\Loader;
 class Role implements \Magento\Acl\LoaderInterface
 {
     /**
-     * @var \Magento\Core\Model\Resource
+     * @var \Magento\App\Resource
      */
     protected $_resource;
 
@@ -45,12 +45,12 @@ class Role implements \Magento\Acl\LoaderInterface
     /**
      * @param \Magento\User\Model\Acl\Role\GroupFactory $groupFactory
      * @param \Magento\User\Model\Acl\Role\UserFactory $roleFactory
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      */
     public function __construct(
         \Magento\User\Model\Acl\Role\GroupFactory $groupFactory,
         \Magento\User\Model\Acl\Role\UserFactory $roleFactory,
-        \Magento\Core\Model\Resource $resource
+        \Magento\App\Resource $resource
     ) {
         $this->_resource = $resource;
         $this->_groupFactory = $groupFactory;

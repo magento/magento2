@@ -30,7 +30,7 @@ namespace Magento\Outbound\Formatter;
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject \Magento\Core\Model\ObjectManager
+     * @var \PHPUnit_Framework_MockObject_MockObject \Magento\App\ObjectManager
      */
     private $_mockObjectManager;
 

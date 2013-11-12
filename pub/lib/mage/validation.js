@@ -936,7 +936,7 @@
              */
                 function(value, element, params) {
                 if (value && params && creditCartTypes[value]) {
-                    return creditCartTypes[value][0].test($(params).val());
+                    return creditCartTypes[value][0].test($(params).val().replace(/\s+/g, ''));
                 }
                 return false;
             }, 'Card type does not match credit card number.'

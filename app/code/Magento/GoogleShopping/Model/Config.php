@@ -43,11 +43,6 @@ class Config extends \Magento\Object
     protected $_config = array();
 
     /**
-     * @var \Magento\Core\Helper\Data|null
-     */
-    protected $_coreData = null;
-
-    /**
      * Core store config
      *
      * @var \Magento\Core\Model\Store\Config
@@ -62,21 +57,25 @@ class Config extends \Magento\Object
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
-     *
+     * @var \Magento\Encryption\EncryptorInterface
+     */
+    protected $_encryptor;
+
+    /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Encryption\EncryptorInterface $encryptor
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Encryption\EncryptorInterface $encryptor,
         array $data = array()
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_coreData = $coreData;
         $this->_storeManager = $storeManager;
+        $this->_encryptor = $encryptor;
         parent::__construct($data);
     }
 
@@ -126,7 +125,7 @@ class Config extends \Magento\Object
      */
     public function getAccountPassword($storeId = null)
     {
-        return $this->_coreData->decrypt($this->getConfigData('password', $storeId));
+        return $this->_encryptor->decrypt($this->getConfigData('password', $storeId));
     }
 
     /**

@@ -62,22 +62,24 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
     protected $_helperFactory;
 
     /**
-     * @param \Magento\Core\Model\Logger $logger
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\Logger $logger
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
+     * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Catalog\Model\Resource\Product $productResource
      * @param \Magento\Reports\Model\Resource\HelperFactory $helperFactory
      */
     public function __construct(
-        \Magento\Core\Model\Logger $logger,
-        \Magento\Core\Model\Resource $resource,
+        \Magento\Logger $logger,
+        \Magento\App\Resource $resource,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
+        \Magento\Stdlib\DateTime $dateTime,
         \Magento\Catalog\Model\Resource\Product $productResource,
         \Magento\Reports\Model\Resource\HelperFactory $helperFactory
     ) {
-        parent::__construct($logger, $resource, $locale, $reportsFlagFactory);
+        parent::__construct($logger, $resource, $locale, $reportsFlagFactory, $dateTime);
         $this->_productResource = $productResource;
         $this->_helperFactory = $helperFactory;
     }

@@ -31,13 +31,26 @@ class Exception extends \Magento\Core\Exception
     protected $_parameters;
 
     /**
+     * Exception name.
+     *
+     * @var string
+     */
+    protected $_name;
+
+    /**
      * {@inheritdoc}
      * @param array $parameters - Array of optional exception parameters.
      */
-    public function __construct($message = "", $code = 0, Exception $previous = null, $parameters = array())
-    {
+    public function __construct(
+        $message = "",
+        $code = 0,
+        \Exception $previous = null,
+        array $parameters = array(),
+        $name = ''
+    ) {
         parent::__construct($message, $code, $previous);
         $this->_parameters = $parameters;
+        $this->_name = $name;
     }
 
     /**
@@ -48,5 +61,13 @@ class Exception extends \Magento\Core\Exception
     public function getParameters()
     {
         return $this->_parameters;
+    }
+
+    /**
+     * Retrieve exception name.
+     */
+    public function getName()
+    {
+        return $this->_name;
     }
 }

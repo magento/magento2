@@ -1,7 +1,5 @@
 <?php
 /**
- * Represents an endpoint to which messages can be sent
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -24,6 +22,12 @@
  * @package     Magento_Webhook
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+namespace Magento\Webhook\Model;
+
+/**
+ * Represents an endpoint to which messages can be sent
  *
  * @method string getName()
  * @method \Magento\Webhook\Model\Endpoint setName(string $value)
@@ -36,8 +40,6 @@
  * @method \Magento\Webhook\Model\Endpoint setAuthenticationType(string $value)
  * @method \Magento\Webhook\Model\Endpoint setTimeoutInSecs(string $value)
  */
-namespace Magento\Webhook\Model;
-
 class Endpoint extends \Magento\Core\Model\AbstractModel implements \Magento\Outbound\EndpointInterface
 {
     /**
@@ -47,9 +49,15 @@ class Endpoint extends \Magento\Core\Model\AbstractModel implements \Magento\Out
     private $_userFactory;
 
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $_dateTime;
+
+    /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Webhook\Model\User\Factory $userFactory
+     * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -58,13 +66,14 @@ class Endpoint extends \Magento\Core\Model\AbstractModel implements \Magento\Out
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Webhook\Model\User\Factory $userFactory,
+        \Magento\Stdlib\DateTime $dateTime,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-
         $this->_userFactory = $userFactory;
+        $this->_dateTime = $dateTime;
     }
 
     /**
@@ -111,7 +120,7 @@ class Endpoint extends \Magento\Core\Model\AbstractModel implements \Magento\Out
         }
 
         if ($this->hasDataChanges()) {
-            $this->setUpdatedAt($this->_getResource()->formatDate(time()));
+            $this->setUpdatedAt($this->_dateTime->formatDate(time()));
         }
 
         return $this;

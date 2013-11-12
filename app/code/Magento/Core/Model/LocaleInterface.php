@@ -45,8 +45,6 @@ interface LocaleInterface
      */
     const XML_PATH_DEFAULT_LOCALE   = 'general/locale/code';
     const XML_PATH_DEFAULT_TIMEZONE = 'general/locale/timezone';
-    const XML_PATH_ALLOW_CODES      = 'global/locale/allow/codes';
-    const XML_PATH_ALLOW_CURRENCIES = 'global/locale/allow/currencies';
     const XML_PATH_ALLOW_CURRENCIES_INSTALLED = 'system/currency/installed';
 
     /**

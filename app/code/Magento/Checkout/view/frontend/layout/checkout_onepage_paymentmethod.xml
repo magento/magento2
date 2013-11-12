@@ -24,12 +24,10 @@
  */
  -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="One Page Checkout Choose Payment Method" type="page">
-    <block class="Magento\Page\Block\Html" name="root" output="1" template="page_fragment.phtml">
-        <block class="Magento\Checkout\Block\Onepage\Payment\Methods" name="payment_method" template="onepage/payment/methods.phtml">
-            <action method="setMethodFormTemplate">
-                <argument name="method" xsi:type="string">purchaseorder</argument>
-                <argument name="template" xsi:type="string">Magento_Payment::form/purchaseorder.phtml</argument>
-            </action>
-        </block>
+    <block class="Magento\Checkout\Block\Onepage\Payment\Methods" name="payment_method" output="1" template="onepage/payment/methods.phtml">
+        <action method="setMethodFormTemplate">
+            <argument name="method" xsi:type="string">purchaseorder</argument>
+            <argument name="template" xsi:type="string">Magento_Payment::form/purchaseorder.phtml</argument>
+        </action>
     </block>
 </layout>

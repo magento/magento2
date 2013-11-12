@@ -67,7 +67,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->_themeMock = $this->getMock('Magento\Core\Model\Theme', null, array(), '', false, false);
         $this->_uploaderMock = $this->getMock('Magento\Core\Model\Theme\Image\Uploader',
             array(), array(), 'UploaderProxy', false, false);
-        $logger = $this->getMock('Magento\Core\Model\Logger', array(), array(), '', false, false);
+        $logger = $this->getMock('Magento\Logger', array(), array(), '', false, false);
 
         $this->_model = new \Magento\Core\Model\Theme\Image(
             $this->_filesystemMock,
@@ -134,7 +134,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Core\Model\Image\Factory', array(), array(), '', false, false),
             $this->_uploaderMock,
             $this->_getImagePathMock(),
-            $this->getMock('Magento\Core\Model\Logger', array(), array(), '', false, false),
+            $this->getMock('Magento\Logger', array(), array(), '', false, false),
             $this->_themeMock
         );
         $this->assertNotEmpty($themeImage);

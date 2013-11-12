@@ -258,8 +258,16 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                     "Function or method '{$method}()' is obsolete in file '{$file}'.",
                     $replacement
                 );
-                $this->_assertNotRegExp('/function\s*' . $quotedMethod . '\s*\(/iS', $content, $message);
-                $this->_assertNotRegExp('/[^a-z\d_]' . $quotedMethod . '\s*\(/iS', $content, $message);
+                $this->_assertNotRegExp(
+                    '/(?<!public|protected|private|static)\s+function\s*' . $quotedMethod . '\s*\(/iS',
+                    $content,
+                    $message
+                );
+                $this->_assertNotRegExp(
+                    '/(?<![a-z\d_:]|->|function\s)' . $quotedMethod . '\s*\(/iS',
+                    $content,
+                    $message
+                );
             }
         }
     }

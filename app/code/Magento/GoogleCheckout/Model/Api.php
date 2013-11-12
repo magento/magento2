@@ -55,27 +55,36 @@ class Api extends \Magento\Object
     protected $objectManager;
 
     /**
+     * @var \Magento\Stdlib\String
+     */
+    protected $string;
+
+    /**
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Stdlib\String $string
      * @param array $data
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Stdlib\String $string,
         array $data = array()
     ) {
         $this->objectManager = $objectManager;
         $this->_eventManager = $eventManager;
         $this->_coreStoreConfig = $coreStoreConfig;
+        $this->string = $string;
         parent::__construct($data);
     }
 
     protected function _getApi($area)
     {
-        $api = $this->objectManager->create('Magento\GoogleCheckout\Model\Api\Xml\\' . uc_words($area))
-            ->setStoreId($this->getStoreId());
+        $api = $this->objectManager->create(
+            'Magento\GoogleCheckout\Model\Api\Xml\\' . $this->string->upperCaseWords($area)
+        )->setStoreId($this->getStoreId());
         $api->setApi($this);
         return $api;
     }

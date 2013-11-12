@@ -24,15 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Adminhtml quote session
- *
- * @category   Magento
- * @package    Magento_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Adminhtml\Model\Session;
 
+/**
+ * Adminhtml quote session
+ */
 class Quote extends \Magento\Core\Model\Session\AbstractSession
 {
     const XML_PATH_DEFAULT_CREATEACCOUNT_GROUP = 'customer/create_account/default_group';
@@ -163,7 +159,8 @@ class Quote extends \Magento\Core\Model\Session\AbstractSession
             if ($useSetStore && $this->getStore()->getId()) {
                 $this->_customer->setStore($this->getStore());
             }
-            if ($customerId = $this->getCustomerId()) {
+            $customerId = $this->getCustomerId();
+            if ($customerId) {
                 $this->_customer->load($customerId);
             }
         }
@@ -179,7 +176,8 @@ class Quote extends \Magento\Core\Model\Session\AbstractSession
     {
         if (is_null($this->_store)) {
             $this->_store = $this->_storeManager->getStore($this->getStoreId());
-            if ($currencyId = $this->getCurrencyId()) {
+            $currencyId = $this->getCurrencyId();
+            if ($currencyId) {
                 $this->_store->setCurrentCurrencyCode($currencyId);
             }
         }

@@ -132,13 +132,6 @@ class Profile extends \Magento\Payment\Model\Recurring\Profile
     protected $_workflow = null;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
-
-    /**
      * @var \Magento\Sales\Model\OrderFactory
      */
     protected $_orderFactory;
@@ -159,7 +152,11 @@ class Profile extends \Magento\Payment\Model\Recurring\Profile
     protected $_orderItemFactory;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
+     * @var \Magento\Math\Random
+     */
+    protected $mathRandom;
+
+    /**
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
@@ -167,6 +164,7 @@ class Profile extends \Magento\Payment\Model\Recurring\Profile
      * @param \Magento\Sales\Model\Order\AddressFactory $addressFactory
      * @param \Magento\Sales\Model\Order\PaymentFactory $paymentFactory
      * @param \Magento\Sales\Model\Order\ItemFactory $orderItemFactory
+     * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -174,7 +172,6 @@ class Profile extends \Magento\Payment\Model\Recurring\Profile
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
@@ -182,15 +179,16 @@ class Profile extends \Magento\Payment\Model\Recurring\Profile
         \Magento\Sales\Model\Order\AddressFactory $addressFactory,
         \Magento\Sales\Model\Order\PaymentFactory $paymentFactory,
         \Magento\Sales\Model\Order\ItemFactory $orderItemFactory,
+        \Magento\Math\Random $mathRandom,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_coreData = $coreData;
         $this->_orderFactory = $orderFactory;
         $this->_addressFactory = $addressFactory;
         $this->_paymentFactory = $paymentFactory;
         $this->_orderItemFactory = $orderItemFactory;
+        $this->mathRandom = $mathRandom;
         parent::__construct($paymentData, $context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -213,9 +211,9 @@ class Profile extends \Magento\Payment\Model\Recurring\Profile
     {
         $this->_getResource()->beginTransaction();
         try {
-            $this->setInternalReferenceId($this->_coreData->uniqHash('temporary-'));
+            $this->setInternalReferenceId($this->mathRandom->getUniqueHash('temporary-'));
             $this->save();
-            $this->setInternalReferenceId($this->_coreData->uniqHash($this->getId() . '-'));
+            $this->setInternalReferenceId($this->mathRandom->getUniqueHash($this->getId() . '-'));
             $this->getMethodInstance()->submitRecurringProfile($this, $this->getQuote()->getPayment());
             $this->save();
             $this->_getResource()->commit();

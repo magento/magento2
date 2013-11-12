@@ -46,6 +46,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
             ->setDefaultDesignTheme();
         $this->_block = $this->getMockForAbstractClass('Magento\Core\Block\AbstractBlock', array(
@@ -628,10 +629,10 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($url, $this->_block->escapeUrl($url));
     }
 
-    public function testJsQuoteEscape()
+    public function testEscapeJsQuote()
     {
         $script = "var s = 'text';";
-        $this->assertEquals('var s = \\\'text\\\';', $this->_block->jsQuoteEscape($script));
+        $this->assertEquals('var s = \\\'text\\\';', $this->_block->escapeJsQuote($script));
     }
 
     public function testGetCacheKeyInfo()

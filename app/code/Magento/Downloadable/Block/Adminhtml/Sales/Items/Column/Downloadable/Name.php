@@ -24,16 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Downloadable\Block\Adminhtml\Sales\Items\Column\Downloadable;
 
 /**
  * Sales Order downloadable items name column renderer
- *
- * @category   Magento
- * @package    Magento_Downloadable
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Block\Adminhtml\Sales\Items\Column\Downloadable;
-
 class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
 {
     protected $_purchased = null;
@@ -49,26 +44,27 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
     protected $_itemsFactory;
 
     /**
-     * @param \Magento\Core\Helper\String $coreString
      * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Filter\FilterManager $filter
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param array $data
+     * @internal param \Magento\Core\Helper\String $coreString
      */
     public function __construct(
-        \Magento\Core\Helper\String $coreString,
         \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Filter\FilterManager $filter,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
         \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,
         array $data = array()
     ) {
         $this->_purchasedFactory = $purchasedFactory;
         $this->_itemsFactory = $itemsFactory;
-        parent::__construct($coreString, $optionFactory, $coreData, $context, $data);
+        parent::__construct($optionFactory, $coreData, $context, $filter, $data);
     }
 
     public function getLinks()

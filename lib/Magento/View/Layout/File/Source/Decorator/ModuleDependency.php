@@ -28,7 +28,7 @@ namespace Magento\View\Layout\File\Source\Decorator;
 
 use Magento\View\Layout\File\SourceInterface;
 use Magento\View\Layout\File;
-use Magento\App\ModuleListInterface;
+use Magento\Module\ModuleListInterface;
 use Magento\View\Design\ThemeInterface;
 
 class ModuleDependency implements SourceInterface

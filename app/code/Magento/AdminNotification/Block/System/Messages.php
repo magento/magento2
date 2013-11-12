@@ -33,7 +33,7 @@ class Messages extends \Magento\Backend\Block\Template
     protected $_messages;
 
     /**
-     * @param Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\AdminNotification\Model\Resource\System\Message\Collection\Synchronized $messages
      * @param array $data

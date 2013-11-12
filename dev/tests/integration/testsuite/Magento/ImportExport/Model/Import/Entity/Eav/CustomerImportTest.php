@@ -125,7 +125,7 @@ class CustomerImportTest extends \PHPUnit_Framework_TestCase
     public function testDeleteData()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
-            ->getArea(\Magento\Core\Model\App\Area::AREA_FRONTEND)->load();
+            ->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
         $source = new \Magento\ImportExport\Model\Import\Source\Csv(__DIR__ . '/_files/customers_to_import.csv');
 
         /** @var $customerCollection \Magento\Customer\Model\Resource\Customer\Collection */

@@ -73,7 +73,7 @@ class Soap implements \Magento\App\FrontControllerInterface
      * @param \Magento\Webapi\Model\Soap\Server $soapServer
      * @param \Magento\Webapi\Controller\ErrorProcessor $errorProcessor
      * @param \Magento\App\State $appState
-     * @param \Magento\Core\Model\App $application
+     * @param \Magento\Core\Model\AppInterface $application
      * @param \Magento\Oauth\Service\OauthV1Interface $oauthService
      * @param \Magento\Oauth\Helper\Service $oauthHelper
      */
@@ -84,7 +84,7 @@ class Soap implements \Magento\App\FrontControllerInterface
         \Magento\Webapi\Model\Soap\Server $soapServer,
         \Magento\Webapi\Controller\ErrorProcessor $errorProcessor,
         \Magento\App\State $appState,
-        \Magento\Core\Model\App $application,
+        \Magento\Core\Model\AppInterface $application,
         \Magento\Oauth\Service\OauthV1Interface $oauthService,
         \Magento\Oauth\Helper\Service $oauthHelper
     ) {
@@ -111,7 +111,7 @@ class Soap implements \Magento\App\FrontControllerInterface
 
     /**
      * @param \Magento\App\RequestInterface $request
-     * @return $this
+     * @return \Magento\App\ResponseInterface
      */
     public function dispatch(\Magento\App\RequestInterface $request)
     {
@@ -137,8 +137,7 @@ class Soap implements \Magento\App\FrontControllerInterface
         } catch (\Exception $e) {
             $this->_prepareErrorResponse($e);
         }
-        $this->_response->sendResponse();
-        return $this;
+        return $this->_response;
     }
 
     /**
@@ -171,7 +170,6 @@ class Soap implements \Magento\App\FrontControllerInterface
     protected function _prepareErrorResponse($exception)
     {
         $maskedException = $this->_errorProcessor->maskException($exception);
-        $soapFault = new \Magento\Webapi\Model\Soap\Fault($this->_application, $maskedException);
         if ($this->_isWsdlRequest()) {
             $httpCode = $maskedException->getHttpCode();
             $contentType = self::CONTENT_TYPE_WSDL_REQUEST;
@@ -181,6 +179,7 @@ class Soap implements \Magento\App\FrontControllerInterface
         }
         $this->_setResponseContentType($contentType);
         $this->_response->setHttpResponseCode($httpCode);
+        $soapFault = new \Magento\Webapi\Model\Soap\Fault($this->_application, $this->_soapServer, $maskedException);
         // TODO: Generate list of available URLs when invalid WSDL URL specified
         $this->_setResponseBody($soapFault->toXml());
     }

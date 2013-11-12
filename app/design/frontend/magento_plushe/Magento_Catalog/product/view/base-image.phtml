@@ -75,8 +75,8 @@
                     swapNotices: false,
                     isOldMode: <?php print $_isOldDisplayMode; ?>,
                     messages: {
-                        noticeDefault: '<?php echo $this->jsQuoteEscape(__("Click on image to zoom")) ?>',
-                        loadingMessage: '<?php echo $this->jsQuoteEscape(__("Loading...")) ?>'
+                        noticeDefault: '<?php echo $this->escapeJsQuote(__("Click on image to zoom")) ?>',
+                        loadingMessage: '<?php echo $this->escapeJsQuote(__("Loading...")) ?>'
                     }
                 });
             <?php else: ?>
@@ -91,8 +91,8 @@
                     swapNotices: true,
                     isOldMode: <?php print $_isOldDisplayMode; ?>,
                     messages: {
-                        noticeDefault: '<?php echo $this->jsQuoteEscape(__("Click on image to zoom")) ?>',
-                        noticeLightBox: '<?php echo $this->jsQuoteEscape(__("Click on image to view it full sized")) ?>', loadingMessage: '<?php echo $this->jsQuoteEscape(__("Loading...")) ?>'
+                        noticeDefault: '<?php echo $this->escapeJsQuote(__("Click on image to zoom")) ?>',
+                        noticeLightBox: '<?php echo $this->escapeJsQuote(__("Click on image to view it full sized")) ?>', loadingMessage: '<?php echo $this->escapeJsQuote(__("Loading...")) ?>'
                     }
                 });
             <?php endif; ?>

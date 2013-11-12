@@ -24,5 +24,5 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\Centinel\Block\Authentication\Complete" output="1" template="authentication/complete.phtml"/>
+    <block class="Magento\Centinel\Block\Authentication\Complete" name="root" output="1" template="authentication/complete.phtml"/>
 </layout>

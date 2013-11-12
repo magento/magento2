@@ -40,7 +40,7 @@ class Payflow extends \Magento\Core\Controller\Front\Action
     protected $_orderFactory;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 

@@ -55,8 +55,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('createReader')
             ->will($this->returnValue($reader));
 
-        /** @var \Magento\Core\Model\Config\Modules\Reader $modulesReaderMock */
-        $modulesReaderMock = $this->getMockBuilder('Magento\Core\Model\Config\Modules\Reader')
+        /** @var \Magento\Module\Dir\Reader $modulesReaderMock */
+        $modulesReaderMock = $this->getMockBuilder('Magento\Module\Dir\Reader')
             ->disableOriginalConstructor()
             ->getMock();
         $modulesReaderMock->expects($this->any())

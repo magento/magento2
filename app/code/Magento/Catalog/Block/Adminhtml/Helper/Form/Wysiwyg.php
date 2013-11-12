@@ -62,7 +62,7 @@ class Wysiwyg extends \Magento\Data\Form\Element\Textarea
     /**
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\View\LayoutInterface $layout
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Core\Model\ModuleManager $moduleManager
@@ -72,7 +72,7 @@ class Wysiwyg extends \Magento\Data\Form\Element\Textarea
     public function __construct(
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\View\LayoutInterface $layout,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Core\Model\ModuleManager $moduleManager,
@@ -83,7 +83,7 @@ class Wysiwyg extends \Magento\Data\Form\Element\Textarea
         $this->_layout = $layout;
         $this->_moduleManager = $moduleManager;
         $this->_backendData = $backendData;
-        parent::__construct($coreData, $factoryElement, $factoryCollection, $attributes);
+        parent::__construct($escaper, $factoryElement, $factoryCollection, $attributes);
     }
 
     /**

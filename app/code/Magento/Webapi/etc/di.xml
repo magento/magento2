@@ -147,4 +147,29 @@
             </value>
         </param>
     </type>
+    <type name="Magento\Webapi\Controller\Rest">
+        <param name="request">
+            <instance type="Magento\Webapi\Controller\Rest\Request\Proxy"/>
+        </param>
+        <param name="response">
+            <instance type="Magento\Webapi\Controller\Rest\Response\Proxy"/>
+        </param>
+        <param name="router">
+            <instance type="Magento\Webapi\Controller\Rest\Router\Proxy"/>
+        </param>
+        <param name="oauthHelper">
+            <instance type="Magento\Oauth\Helper\Data\Proxy"/>
+        </param>
+    </type>
+    <type name="Magento\Webapi\Controller\Soap">
+        <param name="soapServer">
+            <instance type="Magento\Webapi\Model\Soap\Server\Proxy"/>
+        </param>
+        <param name="errorProcessor">
+            <instance type="Magento\Webapi\Controller\ErrorProcessor\Proxy"/>
+        </param>
+        <param name="oauthHelper">
+            <instance type="Magento\Oauth\Helper\Service\Proxy"/>
+        </param>
+    </type>
 </config>

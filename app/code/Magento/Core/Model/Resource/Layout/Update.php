@@ -37,11 +37,11 @@ class Update extends \Magento\Core\Model\Resource\Db\AbstractDb
     private $_cache;
 
     /**
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Cache\FrontendInterface $cache
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Cache\FrontendInterface $cache
     ) {
         parent::__construct($resource);

@@ -60,16 +60,14 @@ class Registration extends \Magento\Backend\Controller\AbstractAction
      * @param \Magento\Webhook\Service\SubscriptionV1Interface $subscriptionService
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Backend\Controller\Context $context
-     * @param string $areaCode
      */
     public function __construct(
         \Magento\Webhook\Model\Webapi\User\Factory $userFactory,
         \Magento\Webhook\Service\SubscriptionV1Interface $subscriptionService,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Backend\Controller\Context $context,
-        $areaCode = null
+        \Magento\Backend\Controller\Context $context
     ) {
-        parent::__construct($context, $areaCode);
+        parent::__construct($context);
         $this->_userFactory = $userFactory;
         $this->_subscriptionService = $subscriptionService;
         $this->_registry = $registry;

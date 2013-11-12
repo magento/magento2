@@ -26,12 +26,7 @@
 <config>
     <type name="Magento\Downloadable\Helper\Download">
         <param name="coreFileStorageDb">
-            <instance type="Magento\Core\Helper\File\Storage\DatabaseProxy" />
-        </param>
-    </type>
-    <type name="Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo">
-        <param name="helper">
-            <instance type="Magento\Core\Helper\StringProxy" />
+            <instance type="Magento\Core\Helper\File\Storage\Database\Proxy" />
         </param>
     </type>
     <type name="Magento\Catalog\Helper\Product">
@@ -39,7 +34,7 @@
             <value>Virtual / Downloadable</value>
         </param>
     </type>
-    <type name="Magento\App\Updater\SetupFactory">
+    <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
             <value>
                 <downloadable_setup>Magento\Catalog\Model\Resource\Setup</downloadable_setup>

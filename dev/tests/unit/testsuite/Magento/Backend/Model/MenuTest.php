@@ -35,7 +35,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
@@ -55,7 +55,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->_items['item3'] = $this->getMock('Magento\Backend\Model\Menu\Item', array(), array(), '', false);
         $this->_items['item3']->expects($this->any())->method('getId')->will($this->returnValue('item3'));
 
-        $this->_logger = $this->getMock('Magento\Core\Model\Logger', array('log'), array(), '', false);
+        $this->_logger = $this->getMock('Magento\Logger', array('log'), array(), '', false);
 
         $this->_model = new \Magento\Backend\Model\Menu($this->_logger);
     }

@@ -31,12 +31,6 @@ namespace Magento\Catalog\Model\Category\CategoryImageTest;
     ->setConfig('dev/log/active', 1);
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')->getStore()
     ->setConfig('dev/log/exception_file', 'save_category_without_image.log');
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Core\Model\Config')
-    ->setNode(
-        'global/log/core/writer_model',
-        'Magento\Catalog\Model\Category\CategoryImageTest\StubZendLogWriterStreamTest'
-);
 
 class StubZendLogWriterStreamTest extends \Zend_Log_Writer_Stream
 {

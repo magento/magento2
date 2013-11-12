@@ -334,11 +334,9 @@ class Nvp extends \Magento\Paypal\Model\Api\Nvp
     );
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Math\Random
      */
-    protected $_coreData;
+    protected $mathRandom;
 
     /**
      * Constructor
@@ -347,23 +345,23 @@ class Nvp extends \Magento\Paypal\Model\Api\Nvp
      * attributes This behavior may change in child classes
      *
      * @param \Magento\Customer\Helper\Address $customerAddress
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Math\Random $mathRandom
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddress,
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
-        \Magento\Core\Helper\Data $coreData
+        \Magento\Math\Random $mathRandom
     ) {
-        $this->_coreData = $coreData;
+        $this->mathRandom = $mathRandom;
         parent::__construct($customerAddress, $logger, $locale, $regionFactory, $logAdapterFactory, $countryFactory);
     }
 
@@ -507,7 +505,7 @@ class Nvp extends \Magento\Paypal\Model\Api\Nvp
      * Catch success calls and collect warnings
      *
      * @param array
-     * @return bool| success flag
+     * @return bool success flag
      */
     protected function _isCallSuccessful($response)
     {
@@ -560,7 +558,7 @@ class Nvp extends \Magento\Paypal\Model\Api\Nvp
      */
     protected function getRequestId()
     {
-        return $this->_coreData->uniqHash();
+        return $this->mathRandom->getUniqueHash();
     }
 
     /**

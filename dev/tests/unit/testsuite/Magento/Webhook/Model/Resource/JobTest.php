@@ -33,7 +33,7 @@ class JobTest extends \PHPUnit_Framework_TestCase
     {
         $tableName = 'webhook_dispatch_job_table';
         $idFieldName = 'dispatch_job_id';
-        $resourceMock = $this->getMockBuilder('Magento\Core\Model\Resource')
+        $resourceMock = $this->getMockBuilder('Magento\App\Resource')
             ->disableOriginalConstructor()
             ->getMock();
         $resourceMock->expects($this->once())

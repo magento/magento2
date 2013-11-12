@@ -24,24 +24,7 @@
  */
 -->
 <config>
-    <type name="Magento\App\RouterList">
-        <param name="routerList">
-            <value>
-                <vde>
-                    <instance>Magento\DesignEditor\Controller\Varien\Router\Standard</instance>
-                    <disable type="bool">false</disable>
-                    <sortOrder>40</sortOrder>
-                </vde>
-            </value>
-        </param>
-    </type>
     <type name="Magento\DesignEditor\Controller\Varien\Router\Standard">
-        <param name="areaCode">
-            <value>frontend</value>
-        </param>
-        <param name="baseController">
-            <value>Magento\Core\Controller\Varien\Action</value>
-        </param>
         <param name="routerId">
             <value>vde</value>
         </param>

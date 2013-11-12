@@ -64,7 +64,7 @@ class Address
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
      * @param \Magento\Customer\Model\FormFactory $customerFormFactory
      * @param \Magento\Adminhtml\Helper\Addresses $adminhtmlAddresses
-     * @param \Magento\Data\Form\Factory $formFactory
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Adminhtml\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
      * @param \Magento\Core\Helper\Data $coreData
@@ -75,7 +75,7 @@ class Address
         \Magento\Customer\Model\AddressFactory $addressFactory,
         \Magento\Customer\Model\FormFactory $customerFormFactory,
         \Magento\Adminhtml\Helper\Addresses $adminhtmlAddresses,
-        \Magento\Data\Form\Factory $formFactory,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Adminhtml\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
         \Magento\Core\Helper\Data $coreData,
@@ -234,7 +234,7 @@ class Address
         if ($vatIdElement && $this->getDisplayVatValidationButton() !== false) {
             $vatIdElement->setRenderer(
                 $this->getLayout()
-                    ->createBlock('Magento\Adminhtml\Block\Customer\Sales\Order\Address\Form\Renderer\Vat')
+                    ->createBlock('Magento\Customer\Block\Adminhtml\Sales\Order\Address\Form\Renderer\Vat')
                     ->setJsVariablePrefix($this->getJsVariablePrefix())
             );
         }

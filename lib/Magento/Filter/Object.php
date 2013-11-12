@@ -29,10 +29,13 @@ namespace Magento\Filter;
 
 class Object extends \Zend_Filter
 {
+    /**
+     * @var array
+     */
     protected $_columnFilters = array();
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Core\Model\EntityFactory
      */
     protected $_entityFactory;
 
@@ -43,10 +46,15 @@ class Object extends \Zend_Filter
     {
         $this->_entityFactory = $entityFactory;
     }
-    
-    function addFilter(\Zend_Filter_Interface $filter, $column='')
+
+    /**
+     * @param \Zend_Filter_Interface $filter
+     * @param string $column
+     * @return null|\Zend_Filter
+     */
+    public function addFilter(\Zend_Filter_Interface $filter, $column='')
     {
-        if (''===$column) {
+        if ('' === $column) {
             parent::addFilter($filter);
         } else {
             if (!isset($this->_columnFilters[$column])) {
@@ -55,15 +63,20 @@ class Object extends \Zend_Filter
             $this->_columnFilters[$column]->addFilter($filter);
         }
     }
-    
-    function filter($object)
+
+    /**
+     * @param mixed $object
+     * @return mixed
+     * @throws \Exception
+     */
+    public function filter($object)
     {
         if (!$object instanceof \Magento\Object) {
-            throw new \Exception('Expecting an instance of \Magento\Object');
+            throw new \InvalidArgumentException('Expecting an instance of \Magento\Object');
         }
         $class = get_class($object);
         $out = $this->_entityFactory->create($class);
-        foreach ($object->getData() as $column=>$value) {
+        foreach ($object->getData() as $column => $value) {
             $value = parent::filter($value);
             if (isset($this->_columnFilters[$column])) {
                 $value = $this->_columnFilters[$column]->filter($value);

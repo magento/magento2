@@ -24,24 +24,19 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Log\Model\Resource;
 
 /**
  * Visitor log resource
- *
- * @category    Magento
- * @package     Magento_Log
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Log\Model\Resource;
-
 class Visitor extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
-     * Core string
+     * Magento string lib
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
-    protected $_coreString = null;
+    protected $string;
 
     /**
      * @var \Magento\Core\Model\Date
@@ -56,18 +51,18 @@ class Visitor extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Core\Model\Date $date
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Helper\String $coreString
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\Stdlib\String $string
+     * @param \Magento\App\Resource $resource
      */
     public function __construct(
         \Magento\Core\Model\Date $date,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Helper\String $coreString,
-        \Magento\Core\Model\Resource $resource
+        \Magento\Stdlib\String $string,
+        \Magento\App\Resource $resource
     ) {
         $this->_date = $date;
         $this->_storeManager = $storeManager;
-        $this->_coreString = $coreString;
+        $this->string = $string;
         parent::__construct($resource);
     }
 
@@ -106,8 +101,8 @@ class Visitor extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $adapter    = $this->_getWriteAdapter();
         $data       = new \Magento\Object(array(
-            'url'    => $this->_coreString->substr($visitor->getUrl(), 0, 250),
-            'referer'=> $this->_coreString->substr($visitor->getHttpReferer(), 0, 250)
+            'url'    => $this->string->substr($visitor->getUrl(), 0, 250),
+            'referer'=> $this->string->substr($visitor->getHttpReferer(), 0, 250)
         ));
         $bind = $this->_prepareDataForTable($data, $this->getTable('log_url_info'));
 
@@ -183,17 +178,17 @@ class Visitor extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected function _saveVisitorInfo($visitor)
     {
-        $referer    = $this->_coreString->cleanString($visitor->getHttpReferer());
-        $referer    = $this->_coreString->substr($referer, 0, 255);
+        $referer    = $this->string->cleanString($visitor->getHttpReferer());
+        $referer    = $this->string->substr($referer, 0, 255);
 
-        $userAgent  = $this->_coreString->cleanString($visitor->getHttpUserAgent());
-        $userAgent  = $this->_coreString->substr($userAgent, 0, 255);
+        $userAgent  = $this->string->cleanString($visitor->getHttpUserAgent());
+        $userAgent  = $this->string->substr($userAgent, 0, 255);
 
-        $charset    = $this->_coreString->cleanString($visitor->getHttpAcceptCharset());
-        $charset    = $this->_coreString->substr($charset, 0, 255);
+        $charset    = $this->string->cleanString($visitor->getHttpAcceptCharset());
+        $charset    = $this->string->substr($charset, 0, 255);
 
-        $language   = $this->_coreString->cleanString($visitor->getHttpAcceptLanguage());
-        $language   = $this->_coreString->substr($language, 0, 255);
+        $language   = $this->string->cleanString($visitor->getHttpAcceptLanguage());
+        $language   = $this->string->substr($language, 0, 255);
 
         $data = new \Magento\Object(array(
             'visitor_id'            => $visitor->getId(),

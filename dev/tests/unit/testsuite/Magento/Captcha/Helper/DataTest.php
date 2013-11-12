@@ -98,7 +98,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Captcha\Helper\Data::getConfigNode
+     * @covers \Magento\Captcha\Helper\Data::getConfig
      */
     public function testGetConfigNode()
     {
@@ -114,7 +114,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $factoryMock = $this->getMock('Magento\Captcha\Model\CaptchaFactory', array(), array(), '', false);
         $object = $this->_getHelper($store, $this->_getConfigStub(), $factoryMock);
-        $object->getConfigNode('enable');
+        $object->getConfig('enable');
     }
 
     public function testGetFonts()

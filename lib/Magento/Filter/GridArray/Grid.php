@@ -24,15 +24,18 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 namespace Magento\Filter\GridArray;
 
 class Grid extends \Magento\Filter\ArrayFilter
 {
-    function filter($grid)
+    /**
+     * @param array $grid
+     * @return array
+     */
+    public function filter($grid)
     {
         $out = array();
-        foreach ($grid as $i=>$array) {
+        foreach ($grid as $i => $array) {
             $out[$i] = parent::filter($array);
         }
         return $out;

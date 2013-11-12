@@ -53,7 +53,7 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
     /**
      * Class constructor
      *
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Eav\Model\Resource\Entity\Type $eavEntityType
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -61,7 +61,7 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
      * @param array $arguments
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Core\Model\App $app,
         \Magento\Eav\Model\Resource\Entity\Type $eavEntityType,
         \Magento\Core\Model\StoreManagerInterface $storeManager,

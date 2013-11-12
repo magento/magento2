@@ -49,7 +49,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
     {
         $this->_mockEndpoint = $this->getMockBuilder('Magento\Webhook\Model\Endpoint')
             ->setMethods(array('_init', 'save', 'setEndpointId', 'getId', 'getUser', '_getResource', 'delete',
-                'load', 'hasDataChanges'))
+                'load', 'hasDataChanges', '__wakeup'))
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -75,10 +75,11 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($mockEventDispatcher));
 
         $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
+        $dateTime = new \Magento\Stdlib\DateTime;
 
         $this->_subscription = $this->getMockBuilder('Magento\Webhook\Model\Subscription')
             ->setMethods(array('_init', '_hasModelChanged', '_getResource'))
-            ->setConstructorArgs(array($this->_mockEndpoint, $this->_mockContext, $coreRegistry))
+            ->setConstructorArgs(array($this->_mockEndpoint, $this->_mockContext, $coreRegistry, $dateTime))
             ->getMock();
 
         $subscriptionResource = $this->getMockBuilder('Magento\Webhook\Model\Resource\Subscription')
@@ -111,9 +112,12 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
 
     public function testFindRestrictedTopicsWithNoUser()
     {
+        $dateTime = new \Magento\Stdlib\DateTime;
         // The only way to override a pre-existing implementation is to create a new object
         $this->_mockEndpoint = $this->getMockBuilder('Magento\Webhook\Model\Endpoint')
-            ->setMethods(array('_init', 'save', 'setEndpointId', 'getId', 'getUser', '_getResource', 'delete'))
+            ->setMethods(array(
+                '__wakeup', '_init', 'save', 'setEndpointId', 'getId', 'getUser', '_getResource', 'delete'
+            ))
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -125,7 +129,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
 
         $this->_subscription = $this->getMockBuilder('Magento\Webhook\Model\Subscription')
             ->setMethods(array('_init', '_hasModelChanged', '_getResource'))
-            ->setConstructorArgs(array($this->_mockEndpoint, $this->_mockContext, $coreRegistry))
+            ->setConstructorArgs(array($this->_mockEndpoint, $this->_mockContext, $coreRegistry, $dateTime))
             ->getMock();
 
         $this->_subscription->setTopics(array('restricted', 'allowed'));
@@ -138,6 +142,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
     public function testAfterDelete()
     {
         $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
+        $dateTime = new \Magento\Stdlib\DateTime;
 
         // it's useful to mock out more methods for the purposes of testing this one method
         $this->_subscription = $this->getMockBuilder('Magento\Webhook\Model\Subscription')
@@ -146,7 +151,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
                     'setRegistrationMechanism', 'getEndpointId', 'setEndpointId', 'setUpdatedAt',
                     'hasDataChanges', '_init', '_hasModelChanged', '_getResource')
             )
-            ->setConstructorArgs(array($this->_mockEndpoint, $this->_mockContext, $coreRegistry))
+            ->setConstructorArgs(array($this->_mockEndpoint, $this->_mockContext, $coreRegistry, $dateTime))
             ->getMock();
 
         $mockResource = $this->getMockBuilder('Magento\Webhook\Model\Resource\Subscription')
@@ -176,6 +181,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
     public function testBeforeSave($hasRegiMechanism, $hasEndpointChanges, $hasEndpointId, $hasDataChanges)
     {
         $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
+        $dateTime = $this->getMock('\Magento\Stdlib\DateTime', array('formatDate'));
 
         // it's useful to mock out more methods for the purposes of testing this one method
         $this->_subscription = $this->getMockBuilder('Magento\Webhook\Model\Subscription')
@@ -183,7 +189,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
                 array('hasStatus', 'setStatus', 'hasRegistrationMechanism', 'setRegistrationMechanism', 'getEndpointId',
                       'setEndpointId', 'setUpdatedAt', 'hasDataChanges', '_init', '_hasModelChanged', '_getResource')
             )
-            ->setConstructorArgs(array($this->_mockEndpoint, $this->_mockContext, $coreRegistry))
+            ->setConstructorArgs(array($this->_mockEndpoint, $this->_mockContext, $coreRegistry, $dateTime))
             ->getMock();
 
         $mockResource = $this->getMockBuilder('Magento\Webhook\Model\Resource\Subscription')
@@ -209,7 +215,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
 
         $this->_expectEndpointOrId($hasEndpointChanges, $hasEndpointId);
 
-        $this->_expectSubscriptionHasDataChanges($hasDataChanges, $mockResource);
+        $this->_expectSubscriptionHasDataChanges($hasDataChanges, $dateTime);
 
         $this->assertEquals($this->_subscription, $this->_subscription->save());
     }
@@ -293,16 +299,16 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
      * Mock out the subscription depending on whether or not it will have data changes
      *
      * @param $hasDataChanges
-     * @param $mockResource
+     * @param $dateTime
      */
-    protected function _expectSubscriptionHasDataChanges($hasDataChanges, $mockResource)
+    protected function _expectSubscriptionHasDataChanges($hasDataChanges, $dateTime)
     {
         $this->_subscription->expects($this->once())
             ->method('hasDataChanges')
             ->will($this->returnValue($hasDataChanges));
         if ($hasDataChanges) {
             $someFormattedTime = '2013-07-10 12:35:28';
-            $mockResource->expects($this->once())
+            $dateTime->expects($this->once())
                 ->method('formatDate')
                 ->withAnyParameters()
                 ->will($this->returnValue($someFormattedTime));
@@ -310,7 +316,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
                 ->method('setUpdatedAt')
                 ->with($this->equalTo($someFormattedTime));
         } else {
-            $mockResource->expects($this->never())
+            $dateTime->expects($this->never())
                 ->method('formatDate');
             $this->_subscription->expects($this->never())
                 ->method('setUpdatedAt');

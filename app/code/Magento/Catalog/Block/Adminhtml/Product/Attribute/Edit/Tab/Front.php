@@ -45,7 +45,7 @@ class Front
     /**
      * @param \Magento\Backend\Model\Config\Source\Yesno $yesNo
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\Form\Factory $formFactory
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
@@ -53,7 +53,7 @@ class Front
     public function __construct(
         \Magento\Backend\Model\Config\Source\Yesno $yesNo,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Data\Form\Factory $formFactory,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
         array $data = array()

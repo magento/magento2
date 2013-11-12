@@ -65,13 +65,6 @@ class Subscriber extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_messagesScope          = 'newsletter/session';
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
-
-    /**
      * Date
      *
      * @var \Magento\Core\Model\Date
@@ -79,20 +72,25 @@ class Subscriber extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_date;
 
     /**
+     * @var \Magento\Math\Random
+     */
+    protected $mathRandom;
+
+    /**
      * Construct
      *
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\Date $date
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Math\Random $mathRandom
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Core\Model\Date $date,
-        \Magento\Core\Helper\Data $coreData
+        \Magento\Math\Random $mathRandom
     ) {
-        parent::__construct($resource);
         $this->_date = $date;
-        $this->_coreData = $coreData;
+        $this->mathRandom = $mathRandom;
+        parent::__construct($resource);
     }
 
     /**
@@ -177,7 +175,7 @@ class Subscriber extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected function _generateRandomCode()
     {
-        return $this->_coreData->uniqHash();
+        return $this->mathRandom->getUniqueHash();
     }
 
     /**

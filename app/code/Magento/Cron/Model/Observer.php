@@ -60,7 +60,9 @@ class Observer
     /** @var \Magento\Cron\Model\ConfigInterface */
     protected $_config;
 
-    /** @var \Magento\Core\Model\ObjectManager */
+    /**
+     * @var \Magento\App\ObjectManager
+     */
     protected $_objectManager;
 
     /** @var \Magento\Core\Model\App */

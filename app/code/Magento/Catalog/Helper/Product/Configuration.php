@@ -40,11 +40,12 @@ class Configuration extends \Magento\Core\Helper\AbstractHelper
     protected $_config;
 
     /**
-     * Core string
+     * Filter manager
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Filter\FilterManager
      */
-    protected $_coreString = null;
+    protected $filter;
+
 
     /**
      * Product option factory
@@ -54,22 +55,30 @@ class Configuration extends \Magento\Core\Helper\AbstractHelper
     protected $_productOptionFactory;
 
     /**
-     * Construct
+     * Magento string lib
      *
+     * @var \Magento\Stdlib\String
+     */
+    protected $string;
+
+    /**
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
-     * @param \Magento\Core\Helper\String $coreString
+     * @param \Magento\Filter\FilterManager $filter
      * @param \Magento\Core\Helper\Context $context
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
+     * @param \Magento\Stdlib\String $string
      */
     public function __construct(
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
-        \Magento\Core\Helper\String $coreString,
+        \Magento\Filter\FilterManager $filter,
         \Magento\Core\Helper\Context $context,
-        \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
+        \Magento\Catalog\Model\ProductTypes\ConfigInterface $config,
+        \Magento\Stdlib\String $string
     ) {
         $this->_productOptionFactory = $productOptionFactory;
-        $this->_coreString = $coreString;
+        $this->filter = $filter;
         $this->_config = $config;
+        $this->string = $string;
         parent::__construct($context);
     }
 
@@ -205,9 +214,9 @@ class Configuration extends \Magento\Core\Helper\AbstractHelper
         switch ($typeId) {
             case \Magento\Catalog\Model\Product\Type\Configurable::TYPE_CODE:
                 return $this->getConfigurableOptions($item);
-                break;
             case \Magento\Catalog\Model\Product\Type\Grouped::TYPE_CODE:
                 return $this->getGroupedOptions($item);
+            default:
                 break;
         }
         return $this->getCustomOptions($item);
@@ -276,23 +285,22 @@ class Configuration extends \Magento\Core\Helper\AbstractHelper
         }
 
         // Truncate standard view
-        $result = array();
         if (is_array($optionValue)) {
-            $_truncatedValue = implode("\n", $optionValue);
-            $_truncatedValue = nl2br($_truncatedValue);
-            return array('value' => $_truncatedValue);
+            $truncatedValue = implode("\n", $optionValue);
+            $truncatedValue = nl2br($truncatedValue);
+            return array('value' => $truncatedValue);
         } else {
             if ($maxLength) {
-                $_truncatedValue = $this->_coreString->truncate($optionValue, $maxLength, '');
+                $truncatedValue = $this->filter->truncate($optionValue, array('length' => $maxLength, 'etc' => ''));
             } else {
-                $_truncatedValue = $optionValue;
+                $truncatedValue = $optionValue;
             }
-            $_truncatedValue = nl2br($_truncatedValue);
+            $truncatedValue = nl2br($truncatedValue);
         }
 
-        $result = array('value' => $_truncatedValue);
+        $result = array('value' => $truncatedValue);
 
-        if ($maxLength && ($this->_coreString->strlen($optionValue) > $maxLength)) {
+        if ($maxLength && ($this->string->strlen($optionValue) > $maxLength)) {
             $result['value'] = $result['value'] . $cutReplacer;
             $optionValue = nl2br($optionValue);
             $result['full_view'] = $optionValue;

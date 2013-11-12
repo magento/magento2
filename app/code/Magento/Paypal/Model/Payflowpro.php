@@ -112,14 +112,6 @@ class Payflowpro extends  \Magento\Payment\Model\Method\Cc
         'centinel_eci'          => 'ECI',
         'centinel_xid'          => 'XID',
     );
-
-    /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData;
-
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
      */
@@ -131,38 +123,43 @@ class Payflowpro extends  \Magento\Payment\Model\Method\Cc
     protected $_configFactory;
 
     /**
-     * @param \Magento\Core\Model\Logger $logger
+     * @var \Magento\Math\Random
+     */
+    protected $mathRandom;
+
+    /**
+     * @param \Magento\Logger $logger
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\App\ModuleListInterface $moduleList
+     * @param \Magento\Module\ModuleListInterface $moduleList
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Centinel\Model\Service $centinelService
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Paypal\Model\ConfigFactory $configFactory
+     * @param ConfigFactory $configFactory
+     * @param \Magento\Math\Random $mathRandom
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Logger $logger,
+        \Magento\Logger $logger,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\App\ModuleListInterface $moduleList,
+        \Magento\Module\ModuleListInterface $moduleList,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Centinel\Model\Service $centinelService,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Paypal\Model\ConfigFactory $configFactory,
+        \Magento\Math\Random $mathRandom,
         array $data = array()
     ) {
-        $this->_coreData = $coreData;
         $this->_storeManager = $storeManager;
         $this->_configFactory = $configFactory;
+        $this->mathRandom = $mathRandom;
         parent::__construct(
             $logger,
             $eventManager,
@@ -551,7 +548,7 @@ class Payflowpro extends  \Magento\Payment\Model\Method\Cc
      */
     protected function _generateRequestId()
     {
-        return $this->_coreData->uniqHash();
+        return $this->mathRandom->getUniqueHash();
     }
 
     /**

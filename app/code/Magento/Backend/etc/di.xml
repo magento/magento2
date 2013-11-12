@@ -31,6 +31,7 @@
             <value>
                 <adminhtml>
                     <frontNameResolver>Magento\Backend\App\Area\FrontNameResolver</frontNameResolver>
+                    <router>admin</router>
                 </adminhtml>
             </value>
         </param>
@@ -40,21 +41,9 @@
             <instance type="Magento\Core\Model\Translate\Proxy" />
         </param>
     </type>
-    <type name="Magento\Backend\Controller\Router\DefaultRouter">
-        <param name="controllerFactory">
-            <instance type="Magento\Backend\Controller\Factory" />
-        </param>
-        <param name="areaCode">
-            <value>adminhtml</value>
-        </param>
-        <param name="baseController">
-            <value>Magento\Backend\Controller\AbstractAction</value>
-        </param>
+    <type name="Magento\Backend\App\Router\DefaultRouter">
         <param name="routerId">
             <value>admin</value>
-        </param>
-        <param name="defaultRouteId">
-            <value>adminhtml</value>
         </param>
     </type>
     <type name="Magento\Backend\Controller\Adminhtml\System\Config\Save">
@@ -65,26 +54,12 @@
     <type name="Magento\Backend\Model\Menu\Config">
         <param name="menuDirector"><instance type="Magento\Backend\Model\Menu\Director\Director"/></param>
     </type>
-    <type name="Magento\App\RouterList">
-        <param name="routerList">
-            <value>
-                <admin>
-                    <instance>Magento\Backend\Controller\Router\DefaultRouter</instance>
-                    <disable type="bool">false</disable>
-                    <sortOrder>10</sortOrder>
-                </admin>
-            </value>
-        </param>
-    </type>
     <type name="Magento\Backend\App\Area\FrontNameResolver">
         <param name="defaultFrontName">
             <value type="argument">Magento\Backend\App\Area\FrontNameResolver::PARAM_BACKEND_FRONT_NAME</value>
         </param>
     </type>
     <type name="Magento\Backend\Helper\Data">
-        <param name="app">
-            <instance type="Magento\Core\Model\AppInterface" />
-        </param>
         <param name="backendUrl">
             <instance type="Magento\Backend\Model\Url\Proxy" />
         </param>
@@ -111,10 +86,36 @@
         <param name="authSession">
             <instance type="Magento\Backend\Model\Auth\Session\Proxy" />
         </param>
+        <param name="areaCode">
+            <value>adminhtml</value>
+        </param>
+    </type>
+    <type name="Magento\Core\Model\Url">
+        <param name="areaCode">
+            <value>frontend</value>
+        </param>
     </type>
     <type name="Magento\Backend\Helper\Dashboard\Data">
         <param name="installDate">
             <value type="argument">Magento\App\State::PARAM_INSTALL_DATE</value>
+        </param>
+    </type>
+    <type name="Magento\Backend\Controller\Adminhtml\Index">
+        <param name="searchModules">
+            <value>
+                <products>
+                    <class>Magento\Adminhtml\Model\Search\Catalog</class>
+                    <acl>Magento_Catalog::catalog</acl>
+                </products>
+                <customers>
+                    <class>Magento\Adminhtml\Model\Search\Customer</class>
+                    <acl>Magento_Customer::customer</acl>
+                </customers>
+                <sales>
+                    <class>Magento\Adminhtml\Model\Search\Order</class>
+                    <acl>Magento_Sales::sales</acl>
+                </sales>
+            </value>
         </param>
     </type>
 </config>

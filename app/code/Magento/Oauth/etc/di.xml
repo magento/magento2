@@ -23,5 +23,10 @@
  */
 -->
 <config>
-    <preference for="Magento\Oauth\Service\OauthV1Interface" type="Magento\Oauth\Service\OauthV1" />
+    <preference for="Magento\Oauth\Service\OauthV1Interface" type="Magento\Oauth\Service\OauthV1"/>
+    <type name="Magento\Oauth\Service\OauthV1">
+        <param name="date">
+            <instance type="Magento\Core\Model\Date\Proxy"/>
+        </param>
+    </type>
 </config>

@@ -91,11 +91,11 @@ class Datetime
         if ($data = $this->_getValue($row)) {
             $format = $this->_getFormat();
             try {
-                $data = $this->_locale->date($data, \Magento\Date::DATETIME_INTERNAL_FORMAT)->toString($format);
+                $data = $this->_locale->date($data, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)->toString($format);
             }
             catch (\Exception $e)
             {
-                $data = $this->_locale->date($data, \Magento\Date::DATETIME_INTERNAL_FORMAT)->toString($format);
+                $data = $this->_locale->date($data, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)->toString($format);
             }
             return $data;
         }

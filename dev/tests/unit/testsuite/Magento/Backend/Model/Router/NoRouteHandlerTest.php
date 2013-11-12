@@ -61,7 +61,7 @@ class NoRouteHandlerTest extends \PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->once())
             ->method('setModuleName')
-            ->with('core')
+            ->with('admin')
             ->will($this->returnValue($this->_requestMock));
 
         $this->_requestMock

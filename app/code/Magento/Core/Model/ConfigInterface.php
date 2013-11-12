@@ -29,21 +29,24 @@ namespace Magento\Core\Model;
 interface ConfigInterface
 {
     /**
-     * Get configuration node
+     * Retrieve config value by path and scope
      *
      * @param string $path
-     * @return \Magento\Simplexml\Element
+     * @param string $scope
+     * @param string $scopeCode
+     * @return mixed
      */
-    public function getNode($path = null);
+    public function getValue($path = null, $scope = 'default', $scopeCode = null);
 
     /**
-     * Create node by $path and set its value
+     * Set config value in the corresponding config scope
      *
-     * @param string $path separated by slashes
-     * @param string $value
-     * @param boolean $overwrite
+     * @param string $path
+     * @param mixed $value
+     * @param string $scope
+     * @param null|string $scopeCode
      */
-    public function setNode($path, $value, $overwrite = true);
+    public function setValue($path, $value, $scope = 'default', $scopeCode = null);
 
     /**
      * Reinitialize config object

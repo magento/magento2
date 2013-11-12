@@ -103,7 +103,7 @@ class InvokerDefaultTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $shared
      * @dataProvider dataProviderForMethodIsNotDefined
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \LogicException
      */
     public function testMethodIsNotDefinedExceptionWithEnabledDeveloperMode($shared)
     {

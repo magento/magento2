@@ -53,14 +53,14 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\Text
 
     /**
      * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Core\Model\Logger $logger
-     * @param \Magento\Core\Helper\String $stringHelper
+     * @param \Magento\Logger $logger
+     * @param \Magento\Stdlib\String $stringHelper
      * @param \Magento\Directory\Helper\Data $directoryData
      */
     public function __construct(
         \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Core\Model\Logger $logger,
-        \Magento\Core\Helper\String $stringHelper,
+        \Magento\Logger $logger,
+        \Magento\Stdlib\String $stringHelper,
         \Magento\Directory\Helper\Data $directoryData
     ) {
         $this->_directoryData = $directoryData;

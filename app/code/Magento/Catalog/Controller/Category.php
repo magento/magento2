@@ -127,7 +127,7 @@ class Category extends \Magento\Core\Controller\Front\Action
                 )
             );
         } catch (\Magento\Core\Exception $e) {
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
             return false;
         }
 

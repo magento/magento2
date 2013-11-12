@@ -211,12 +211,12 @@
                         }
 
                         if( editSet.SystemNodesExists(editSet.currentNode) ) {
-                            alert('<?php echo $this->helper('Magento\Core\Helper\Data')->jsQuoteEscape(__('This group contains system attributes. Please move system attributes to another group and try again.')) ?>');
+                            alert('<?php echo $this->escapeJsQuote(__('This group contains system attributes. Please move system attributes to another group and try again.')) ?>');
                             return;
                         }
 
                         if (editSet.ConfigurableNodeExists(editSet.currentNode)) {
-                            alert('<?php echo $this->helper('Magento\Core\Helper\Data')->jsQuoteEscape(__('This group contains attributes used in configurable products. Please move these attributes to another group and try again.')) ?>');
+                            alert('<?php echo $this->escapeJsQuote(__('This group contains attributes used in configurable products. Please move these attributes to another group and try again.')) ?>');
                             return;
                         }
 
@@ -346,7 +346,7 @@
                     },
 
                     failure : function(o) {
-                        alert('<?php echo $this->helper('Magento\Core\Helper\Data')->jsQuoteEscape(__('We\'re unable to complete this request.')) ?>');
+                        alert('<?php echo $this->escapeJsQuote(__('We\'re unable to complete this request.')) ?>');
                     },
 
                     groupBeforeMove : function(tree, nodeThis, oldParent, newParent) {
@@ -361,11 +361,11 @@
 
                     rightBeforeAppend : function(tree, nodeThis, node, newParent) {
                         if (node.attributes.is_user_defined == 0) {
-                            alert('<?php echo $this->helper('Magento\Core\Helper\Data')->jsQuoteEscape(__('You cannot remove system attributes from this set.')) ?>');
+                            alert('<?php echo $this->escapeJsQuote(__('You cannot remove system attributes from this set.')) ?>');
                             return false;
                         }
                         else if (node.attributes.is_configurable == 1) {
-                            alert('<?php echo $this->helper('Magento\Core\Helper\Data')->jsQuoteEscape(__('This attribute is used in configurable products. You cannot remove it from the attribute set.')) ?>');
+                            alert('<?php echo $this->escapeJsQuote(__('This attribute is used in configurable products. You cannot remove it from the attribute set.')) ?>');
                             return false;
                         }
                         else {
@@ -380,10 +380,10 @@
                         }
 
                         if (node.attributes.is_unassignable == 0) {
-                            alert('<?php echo $this->helper('Magento\Core\Helper\Data')->jsQuoteEscape(__('You cannot remove system attributes from this set.')) ?>');
+                            alert('<?php echo $this->escapeJsQuote(__('You cannot remove system attributes from this set.')) ?>');
                             return false;
                         } else if (node.attributes.is_configurable == 1) {
-                            alert('<?php echo $this->helper('Magento\Core\Helper\Data')->jsQuoteEscape(__('This attribute is used in configurable products. You cannot remove it from the attribute set.')) ?>');
+                            alert('<?php echo $this->escapeJsQuote(__('This attribute is used in configurable products. You cannot remove it from the attribute set.')) ?>');
                             return false;
                         } else {
                             return true;

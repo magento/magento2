@@ -47,7 +47,7 @@
             <instance type="Magento\CatalogInventory\Helper\Data\Proxy" />
         </param>
     </type>
-    <type name="Magento\App\Updater\SetupFactory">
+    <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
             <value>
                 <cataloginventory_setup>Magento\Eav\Model\Entity\Setup</cataloginventory_setup>

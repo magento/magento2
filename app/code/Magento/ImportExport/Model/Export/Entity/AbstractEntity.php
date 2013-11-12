@@ -168,13 +168,13 @@ abstract class AbstractEntity
     /**
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Eav\Model\Config $config,
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         $this->_locale = $locale;

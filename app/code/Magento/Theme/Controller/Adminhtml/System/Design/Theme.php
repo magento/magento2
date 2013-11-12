@@ -55,7 +55,6 @@ class Theme extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function indexAction()
     {
-        $this->_eventManager->dispatch('theme_registration_from_filesystem');
         $this->loadLayout();
         $this->_setActiveMenu('Magento_Theme::system_design_theme');
         $this->renderLayout();
@@ -109,7 +108,7 @@ class Theme extends \Magento\Backend\Controller\Adminhtml\Action
             $this->_redirect('adminhtml/*/');
         } catch (\Exception $e) {
             $this->_getSession()->addError(__('We cannot find the theme.'));
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
             $this->_redirect('adminhtml/*/');
         }
     }
@@ -164,7 +163,7 @@ class Theme extends \Magento\Backend\Controller\Adminhtml\Action
             $redirectBack = true;
         } catch (\Exception $e) {
             $this->_getSession()->addError('The theme was not saved');
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         $redirectBack
             ? $this->_redirect('adminhtml/*/edit', array('id' => $theme->getId()))
@@ -197,7 +196,7 @@ class Theme extends \Magento\Backend\Controller\Adminhtml\Action
             $this->_getSession()->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->_getSession()->addException($e, __('We cannot delete the theme.'));
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         /**
          * @todo Temporary solution. Theme module should not know about the existence of editor module.
@@ -219,7 +218,7 @@ class Theme extends \Magento\Backend\Controller\Adminhtml\Action
             $result = array('error' => true, 'message' => $e->getMessage());
         } catch (\Exception $e) {
             $result = array('error' => true, 'message' => __('We cannot upload the CSS file.'));
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
     }
@@ -259,7 +258,7 @@ class Theme extends \Magento\Backend\Controller\Adminhtml\Action
             $result = array('error' => true, 'message' => $e->getMessage());
         } catch (\Exception $e) {
             $result = array('error' => true, 'message' => __('We cannot upload the JS file.'));
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
     }
@@ -295,7 +294,7 @@ class Theme extends \Magento\Backend\Controller\Adminhtml\Action
         } catch (\Exception $e) {
             $this->_getSession()->addException($e, __('We cannot find file'));
             $this->_redirectUrl($this->_getRefererUrl());
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
         }
     }
 
@@ -331,7 +330,7 @@ class Theme extends \Magento\Backend\Controller\Adminhtml\Action
         } catch (\Exception $e) {
             $this->_getSession()->addException($e, __('We cannot find file "%1".', $fileName));
             $this->_redirectUrl($this->_getRefererUrl());
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
         }
     }
 

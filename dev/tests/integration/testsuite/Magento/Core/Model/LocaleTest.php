@@ -31,7 +31,7 @@ class LocaleTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetLocale()
     {
-        $objectManager = \Magento\Core\Model\ObjectManager::getInstance();
+        $objectManager = \Magento\App\ObjectManager::getInstance();
         \Zend_Locale_Data::removeCache();
         $this->assertNull(\Zend_Locale_Data::getCache());
         $model = $objectManager->create('Magento\Core\Model\Locale', array('locale' => 'some_locale'));

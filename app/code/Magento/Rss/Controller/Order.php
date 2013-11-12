@@ -25,17 +25,12 @@
  */
 
 /**
- * Customer reviews controller
+ * RSS Controller for Order feed
  */
 namespace Magento\Rss\Controller;
 
 class Order extends \Magento\Core\Controller\Front\Action
 {
-    /**
-     * @var \Magento\Config\Scope
-     */
-    protected $_configScope;
-
     /**
      * Core registry
      *
@@ -44,42 +39,15 @@ class Order extends \Magento\Core\Controller\Front\Action
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Core\Model\Logger
-     */
-    protected $_logger;
-
-    /**
      * @param \Magento\Core\Controller\Varien\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
-     * @param \Magento\Config\Scope $configScope
      */
     public function __construct(
         \Magento\Core\Controller\Varien\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry,
-        \Magento\Config\Scope $configScope
+        \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
-        $this->_configScope = $configScope;
-        $this->_logger = $context->getLogger();
         parent::__construct($context);
-    }
-
-    public function preDispatch()
-    {
-        if ('new' === $this->getRequest()->getActionName()) {
-            $this->_configScope->setCurrentScope(\Magento\Core\Model\App\Area::AREA_ADMINHTML);
-            if (!$this->authenticateAndAuthorizeAdmin('Magento_Sales::sales_order', $this->_logger)) {
-                return;
-            }
-        }
-        parent::preDispatch();
-    }
-
-    public function newAction()
-    {
-        $this->getResponse()->setHeader('Content-type', 'text/xml; charset=UTF-8');
-        $this->loadLayout(false);
-        $this->renderLayout();
     }
 
     /**

@@ -52,7 +52,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         $select->expects($this->once())->method('from')->with('catalog_category_entity');
         $connection = $this->getMock('Magento\DB\Adapter\AdapterInterface');
         $connection->expects($this->once())->method('select')->will($this->returnValue($select));
-        $this->_resource = $this->getMock('Magento\Core\Model\Resource', array(), array(), '', false);
+        $this->_resource = $this->getMock('Magento\App\Resource', array(), array(), '', false);
         $this->_resource
             ->expects($this->once())
             ->method('getConnection')
@@ -87,9 +87,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
             ->with('catalog_category')
             ->will($this->returnValue($attributes))
         ;
-        $collection = $this->getMock(
-            'Magento\Catalog\Model\Resource\Category\Collection', array(), array(), '', false
-        );
+        $collection = $this->getCollectionMock();
         $collection->expects($this->once())->method('addAttributeToSelect')->with($attributes);
         $this->_collectionFactory
             ->expects($this->once())
@@ -99,5 +97,31 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($collection, $this->_model->getCollection());
         // Makes sure the value is calculated only once
         $this->assertSame($collection, $this->_model->getCollection());
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getCollectionMock()
+    {
+        return $this->getMock('Magento\Catalog\Model\Resource\Category\Collection', array(), array(), '', false);
+    }
+
+    public function testSetCollection()
+    {
+        $collection = $this->getCollectionMock();
+        $this->_model->setCollection($collection);
+
+        $this->assertSame($collection, $this->_model->getCollection());
+    }
+
+    public function testCallCleaningDuringSetCollection()
+    {
+        /** @var \Magento\Catalog\Model\Resource\Category\Tree $model */
+        $model = $this->getMock('Magento\Catalog\Model\Resource\Category\Tree', array('_clean'), array(), '', false);
+        $model->expects($this->once())->method('_clean')->will($this->returnSelf());
+
+        $this->assertEquals($model, $model->setCollection($this->getCollectionMock()));
+        $this->assertEquals($model, $model->setCollection($this->getCollectionMock()));
     }
 }

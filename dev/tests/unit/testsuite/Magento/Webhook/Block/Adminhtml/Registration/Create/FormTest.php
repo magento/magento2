@@ -52,7 +52,7 @@ class FormTest extends \Magento\Test\Block\Adminhtml
         parent::setUp();
         $this->_registry = new \Magento\Core\Model\Registry();
         $this->_coreData = $this->_makeMock('Magento\Core\Helper\Data');
-        $this->_formFactoryMock = $this->getMock('Magento\Data\Form\Factory', array('create'),
+        $this->_formFactoryMock = $this->getMock('Magento\Data\FormFactory', array('create'),
             array(), '', false, false);
 
         $this->_dataFormMock = $this->_makeMock('Magento\Data\Form');

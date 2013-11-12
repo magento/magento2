@@ -73,7 +73,7 @@ class Index extends \Magento\Backend\Controller\Adminhtml\Action
         } catch (\Magento\Core\Exception $e) {
             $result['message'] = $e->getMessage();
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
             $result['message'] = __('Validation failed.');
         }
         $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));

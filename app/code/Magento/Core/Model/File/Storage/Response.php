@@ -28,7 +28,7 @@ class Response
     /**
      * Application object manager
      *
-     * @var \Magento\Core\Model\ObjectManager
+     * @var \Magento\ObjectManager
      */
     protected $_objectManager;
 

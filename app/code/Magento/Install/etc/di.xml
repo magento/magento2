@@ -39,7 +39,7 @@
     </type>
     <type name="Magento\Install\Block\End">
         <param name="cryptKey">
-            <value type="argument">Magento\Core\Model\Encryption::PARAM_CRYPT_KEY</value>
+            <value type="argument">Magento\Encryption\Encryptor::PARAM_CRYPT_KEY</value>
         </param>
         <param name='session'>
             <instance type="Magento\Install\Model\Session" />
@@ -132,6 +132,21 @@
     <type name="Magento\Install\Model\Installer\AbstractInstaller">
         <param name="installer">
             <instance type="Magento\Install\Model\Installer\Proxy" />
+        </param>
+    </type>
+    <type name="Magento\App\AreaList">
+        <param name="areas">
+            <value>
+                <install>
+                    <frontName>install</frontName>
+                    <router>install</router>
+                </install>
+            </value>
+        </param>
+    </type>
+    <type name="Magento\Backend\Model\Url">
+        <param name="areaCode">
+            <value>adminhtml</value>
         </param>
     </type>
 </config>

@@ -27,7 +27,7 @@
 
 <?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Theme */?>
 <?php
-    $themeTitle = $this->quoteEscape($this->getTheme()->getThemeTitle());
+    $themeTitle = $this->escapeQuote($this->getTheme()->getThemeTitle());
 ?>
 
 <li class="theme" id="theme-id-<?php echo $this->getTheme()->getId() ?>" data-widget-options="<?php echo $this->escapeHtml($this->getOptionsJson()); ?>">

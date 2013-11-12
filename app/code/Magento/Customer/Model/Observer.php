@@ -53,21 +53,14 @@ class Observer
      *
      * @var \Magento\Core\Model\Registry
      */
-    protected $_coreRegistry = null;
-    
+    protected $_coreRegistry;
+
     /**
      * Customer data
      *
      * @var \Magento\Customer\Helper\Data
      */
-    protected $_customerData = null;
-
-    /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
+    protected $_customerData;
 
     /**
      * @var \Magento\Core\Model\StoreManager
@@ -80,7 +73,6 @@ class Observer
     protected $_customerSession;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Customer\Helper\Address $customerAddress
      * @param \Magento\Core\Model\Registry $coreRegistry
@@ -88,14 +80,12 @@ class Observer
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Customer\Helper\Data $customerData,
         \Magento\Customer\Helper\Address $customerAddress,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Customer\Model\Session $customerSession
     ) {
-        $this->_coreData = $coreData;
         $this->_customerData = $customerData;
         $this->_customerAddress = $customerAddress;
         $this->_coreRegistry = $coreRegistry;
@@ -204,7 +194,7 @@ class Observer
             $customerHelper = $this->_customerData;
 
             if ($customerAddress->getVatId() == ''
-                || !$this->_coreData->isCountryInEU($customerAddress->getCountry()))
+                || !$this->_customerData->isCountryInEU($customerAddress->getCountry()))
             {
                 $defaultGroupId = $customerHelper->getDefaultCustomerGroupId($customer->getStore());
 

@@ -43,10 +43,25 @@ return array(
         'model' => 'Instance_Type',
         'composite' => false,
         'index_priority' => 0,
-        'can_use_qty_decimals' => false,
+        'can_use_qty_decimals' => true,
         'is_qty' => false,
         'allowed_selection_types' => array(
             'type_two' => 'type_two'
+        )
+    ),
+    'type_three' => array(
+        'name' => 'type_three',
+        'label' => 'Label Three',
+        'model' => 'Instance_Type',
+        'composite' => false,
+        'index_priority' => 20,
+        'can_use_qty_decimals' => false,
+        'is_qty' => false,
+        'price_model' => 'Instance_Type_Three',
+        'price_indexer' => 'Instance_Type_Three',
+        'stock_indexer' => 'Instance_Type_Three',
+        'allow_product_types' => array(
+            'type_three' => 'type_three'
         )
     )
 );

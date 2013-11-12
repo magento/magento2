@@ -33,7 +33,7 @@
             <instance type="Magento\Backend\Model\Session\Proxy" />
         </param>
     </type>
-    <type name="Magento\App\Updater\SetupFactory">
+    <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
             <value>
                 <salesrule_setup>Magento\SalesRule\Model\Resource\Setup</salesrule_setup>

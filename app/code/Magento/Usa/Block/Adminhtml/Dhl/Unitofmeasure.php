@@ -80,17 +80,17 @@ class Unitofmeasure extends \Magento\Backend\Block\System\Config\Form\Field
 
         $carrierModel = $this->_shippingDhl;
 
-        $this->setInch($this->jsQuoteEscape($carrierModel->getCode('unit_of_dimension_cut', 'I')));
-        $this->setCm($this->jsQuoteEscape($carrierModel->getCode('unit_of_dimension_cut', 'C')));
+        $this->setInch($this->escapeJsQuote($carrierModel->getCode('unit_of_dimension_cut', 'I')));
+        $this->setCm($this->escapeJsQuote($carrierModel->getCode('unit_of_dimension_cut', 'C')));
 
-        $this->setHeight($this->jsQuoteEscape($carrierModel->getCode('dimensions', 'height')));
-        $this->setDepth($this->jsQuoteEscape($carrierModel->getCode('dimensions', 'depth')));
-        $this->setWidth($this->jsQuoteEscape($carrierModel->getCode('dimensions', 'width')));
+        $this->setHeight($this->escapeJsQuote($carrierModel->getCode('dimensions', 'height')));
+        $this->setDepth($this->escapeJsQuote($carrierModel->getCode('dimensions', 'depth')));
+        $this->setWidth($this->escapeJsQuote($carrierModel->getCode('dimensions', 'width')));
 
         $kgWeight = 70;
 
         $this->setDivideOrderWeightNoteKg(
-            $this->jsQuoteEscape(__('This allows breaking total order weight into smaller pieces if it exceeds %1 %2 to ensure accurate calculation of shipping charges.', $kgWeight, 'kg'))
+            $this->escapeJsQuote(__('This allows breaking total order weight into smaller pieces if it exceeds %1 %2 to ensure accurate calculation of shipping charges.', $kgWeight, 'kg'))
         );
 
         $weight = round(
@@ -98,7 +98,7 @@ class Unitofmeasure extends \Magento\Backend\Block\System\Config\Form\Field
                 $kgWeight, \Zend_Measure_Weight::KILOGRAM, \Zend_Measure_Weight::POUND), 3);
 
         $this->setDivideOrderWeightNoteLbp(
-            $this->jsQuoteEscape(__('This allows breaking total order weight into smaller pieces if it exceeds %1 %2 to ensure accurate calculation of shipping charges.', $weight, 'pounds'))
+            $this->escapeJsQuote(__('This allows breaking total order weight into smaller pieces if it exceeds %1 %2 to ensure accurate calculation of shipping charges.', $weight, 'pounds'))
         );
 
         $this->setTemplate('dhl/unitofmeasure.phtml');

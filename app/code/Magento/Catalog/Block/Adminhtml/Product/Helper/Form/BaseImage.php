@@ -63,7 +63,7 @@ class BaseImage extends \Magento\Data\Form\Element\AbstractElement
     protected $_viewUrl;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Core\Model\View\UrlFactory $coreViewUrlFactory
@@ -73,7 +73,7 @@ class BaseImage extends \Magento\Data\Form\Element\AbstractElement
      * @param array $attributes
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Core\Model\View\UrlFactory $coreViewUrlFactory,
@@ -82,7 +82,7 @@ class BaseImage extends \Magento\Data\Form\Element\AbstractElement
         \Magento\File\Size $fileConfig,
         array $attributes = array()
     ) {
-        parent::__construct($coreData, $factoryElement, $factoryCollection, $attributes);
+        parent::__construct($escaper, $factoryElement, $factoryCollection, $attributes);
 
         $this->_viewUrl = $coreViewUrlFactory->create();
         $this->_url = $backendUrlFactory->create();
@@ -108,8 +108,8 @@ class BaseImage extends \Magento\Data\Form\Element\AbstractElement
      */
     public function getElementHtml()
     {
-        $htmlId = $this->_coreData->escapeHtml($this->getHtmlId());
-        $uploadUrl = $this->_coreData->escapeHtml($this->_getUploadUrl());
+        $htmlId = $this->_escaper->escapeHtml($this->getHtmlId());
+        $uploadUrl = $this->_escaper->escapeHtml($this->_getUploadUrl());
         $spacerImage = $this->_viewUrl->getViewFileUrl('images/spacer.gif');
         $imagePlaceholderText = __('Click here or drag and drop to add images');
         $deleteImageText = __('Delete image');

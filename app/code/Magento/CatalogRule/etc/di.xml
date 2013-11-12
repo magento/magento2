@@ -41,7 +41,7 @@
             <instance type="Magento\Backend\Model\Session\Proxy" />
         </param>
     </type>
-    <type name="Magento\App\Updater\SetupFactory">
+    <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
             <value>
                 <catalogrule_setup>Magento\Core\Model\Resource\Setup\Generic</catalogrule_setup>

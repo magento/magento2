@@ -39,9 +39,9 @@ namespace Magento\Backend\Block\Store;
 class Switcher extends \Magento\Backend\Block\Template
 {
     /**
-     * Key in config for store switcher hint
+     * URL for store switcher hint
      */
-    const XPATH_HINT_KEY = 'store_switcher';
+    const HINT_URL = 'http://www.magentocommerce.com/knowledge-base/entry/understanding-store-scopes';
 
     /**
      * @var array
@@ -126,7 +126,6 @@ class Switcher extends \Magento\Backend\Block\Template
         $this->_storeGroupFactory = $storeGroupFactory;
         $this->_storeFactory = $storeFactory;
     }
-
 
     protected function _construct()
     {
@@ -338,10 +337,7 @@ class Switcher extends \Magento\Backend\Block\Template
      */
     public function getHintUrl()
     {
-        if (null === $this->_hintUrl) {
-            $this->_hintUrl = $this->helper('Magento\Core\Helper\Hint')->getHintByCode(self::XPATH_HINT_KEY);
-        }
-        return $this->_hintUrl;
+        return self::HINT_URL;
     }
 
     /**

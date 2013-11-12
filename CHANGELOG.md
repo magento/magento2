@@ -1,9 +1,69 @@
+2.0.0.0-dev51
+=============
+* Application areas rework:
+    * Single point of access to the current area code
+    * Declare Application Areas
+* Various improvements:
+  * Breakdown of the Adminhtml module:
+     * Moved the Customer-related logic to the Customer module
+     * Moved the System-related logic to the Backend module
+     * Moved the Checkout-related logic to the Checkout module
+     * Moved the Cms-related logic to the Cms module
+     * Moved the Promotions-related logic to the CatalogRule and SalesRule modules
+  * Eliminated the setNode/getNode methods from Magento\Core\Model\Config and adopted all client code
+  * Moved all application bootstrapping behavior to library
+  * Moved application-specific behavior from the entry points to the Magento\AppInterface implementations
+  * Removed the obsolete behavior from routing and front-controller
+  * Refactored the route configuration loading
+  * Extracted the modularity support behavior to the Magento\Module component
+  * Refactored the Resource configuration loading
+  * Removed the obsolete configuration loaders
+  * Removed the obsolete configuration from config.xml
+  * Refactored the code-generation mechanism
+  * Added constructor integrity verification to the Compiler tool
+  * Added strict naming rules for the auto-generated Factory and Proxy classes
+  * Global functions are now called from app\functions.php
+  * Removed functions.php from the Magento\Core module
+  * Methods related to mageCoreErrorHandler, string and date were moved from functions.php to the Library components
+  * Moved the following methods from Core Helpers to the appropriate libraries:
+     * Moved the Abstract Helper to the Magento\Escaper and Magento\Filter libraries
+     * Moved the String Helper to the Magento\Filter, Magento\Stdlib\String, Magento\Stdlib\ArrayUtils libraries
+     * Moved the Data Helper to the Magento\Math, Magento\Filter, Magento\Convert, Magento\Encryption, Magento\Filesystem libraries and to Magento\Customer\Helper\Data libraries
+     * Moved the Http Magento Helper to the Magento\HTTP library
+  * The Hint Magento Helper, Http Magento Helper helpers were removed from the Magento\Core module
+  * Implemented SOAP faults declaration in WSDL
+  * Web API config reader was refactored to use Magento\Config\Reader\Filesystem
+  * Created integrations module. Added 'Integrations Grid' and 'New/Edit' Integration pages in the admin
+  * Removed obsolete page fragment code
+* Fixed bugs:
+  * Fixed inability to create an Invoice/Shipment/Credit Memo if the Sales Archive functionality is enabled
+  * Fixed the Minimum Advertised Price link on the Product view
+  * Fixed the View Files Population Tool
+  * Fixed the error on saving the Google AdWords configuration
+  * Fixed the error with the 'Invalid website code requested:' message appearing when enabling payment methods
+  * Fixed inability to insert spaces in credit card numbers
+  * Fixed inability to print orders from the frontend
+  * Fixed the fatal error on removal of reviews that have ratings
+  * Fixed JS error with the browser not responding when Virtual/Downloadable product are added to cart
+  * Fixed inability to delete a row from the 'Order By SKU' form in Internet Explorer
+  * Fixed inability to enable the Use Flat Catalog Product option
+  * Fixed inability to configure Grouped and Configurable products during order creation in the backend
+  * Fixed inability to insert a widget and/or a banner in CMS pages
+  * Fixed inability to set the Quantity value for Gift Cards
+  * Fixed the fatal error on the Customer Account > Gift Registry tab in the backend
+  * Fixed inability to import with the "Customers Main File" entity type selected
+  * Fixed the "Recently Viewed/Compared products" option missing on the New Frontend App Instance page
+  * Fixed the fatal error on managing Shopping Cart for a customer with a placed order in the backend
+  * Fixed the fatal error on an attempt to create an RMA request for Configurable products
+  * Fixed error on the backend dashboard if any value except "Last 24 Hours" is chosen in the "Select Range" dropdown
+  * Fixed duplicate values of options in the drop-downs on the RMA pages in the backend
+
 2.0.0.0-dev50
 =============
 * Modularity improvements:
-  * Cleavage of Adminhtml module
-    * Moved Sales, Catalog, Tax-related logic to respective modules
-    * Moved Action, Cache, Ajax, Dashboard, Index, Json, Rating, Sitemap, Survey, UrlRewrite from root of Adminhtml Controller folder
+  * Breakdown of the Adminhtml module:
+     * Moved Sales, Catalog, Tax-related logic to respective modules
+     * Moved Action, Cache, Ajax, Dashboard, Index, Json, Rating, Sitemap, Survey, UrlRewrite from root of Adminhtml Controller folder
   * View abstraction was moved into library
   * Eliminated dependency in Magento\Data\Form from Magento\Core module
   * Eliminated Magento\Media module

@@ -30,7 +30,9 @@ return array(
     array('BACKORDERS_YES'),
     array('CACHE_TAG', 'Magento\Api\Model\Config', 'Magento_Api_Model_Cache_Type::CACHE_TAG'),
     array('CACHE_TAG', 'Magento\Core\Model\AppInterface'),
-    array('CACHE_TAG', 'Magento\Core\Model\Resource\Db\Collection\AbstractCollection',
+    array(
+        'CACHE_TAG',
+        'Magento\Core\Model\Resource\Db\Collection\AbstractCollection',
         'Magento_Core_Model_Cache_Type_Collection::CACHE_TAG'
     ),
     array('CACHE_TAG', 'Magento\Core\Model\Translate', 'Magento_Core_Model_Cache_Type_Translate::CACHE_TAG'),
@@ -50,19 +52,25 @@ return array(
     array('CONFIG_XML_PATH_DISPLAY_TAX_COLUMN'),
     array('CONFIG_XML_PATH_DISPLAY_ZERO_TAX'),
     array('CONFIG_XML_PATH_SHOW_IN_CATALOG'),
-    array('DEFAULT_SETUP_RESOURCE', 'Mage_Core_Model_Resource',
+    array(
+        'DEFAULT_SETUP_RESOURCE',
+        'Mage_Core_Model_Resource',
         'Magento_Core_Model_Config_Resource::DEFAULT_SETUP_CONNECTION'
     ),
-    array('DEFAULT_READ_RESOURCE', 'Mage_Core_Model_Resource',
+    array(
+        'DEFAULT_READ_RESOURCE',
+        'Mage_Core_Model_Resource',
         'Magento_Core_Model_Config_Resource::DEFAULT_READ_CONNECTION'
     ),
-    array('DEFAULT_WRITE_RESOURCE', 'Mage_Core_Model_Resource',
+    array(
+        'DEFAULT_WRITE_RESOURCE',
+        'Mage_Core_Model_Resource',
         'Magento_Core_Model_Config_Resource::DEFAULT_WRITE_CONNECTION'
     ),
     array('DEFAULT_CURRENCY', 'Magento\Core\Model\Locale', 'Magento_Core_Model_LocaleInterface::DEFAULT_CURRENCY'),
     array('DEFAULT_ERROR_HANDLER', 'Magento\Core\Model\App'),
-    array('DEFAULT_READ_CONNECTION', 'Magento\Core\Model\Config\Resource'),
-    array('DEFAULT_WRITE_CONNECTION', 'Magento\Core\Model\Config\Resource'),
+    array('DEFAULT_READ_CONNECTION', 'Magento\App\Resource\Config'),
+    array('DEFAULT_WRITE_CONNECTION', 'Magento\App\Resource\Config'),
     array('DEFAULT_ERROR_HANDLER', 'Mage'),
     array('DEFAULT_LOCALE', 'Magento\Core\Model\Locale', 'Magento_Core_Model_LocaleInterface::DEFAULT_LOCALE'),
     array('DEFAULT_THEME_NAME', 'Magento\Core\Model\Design\PackageInterface'),
@@ -85,7 +93,11 @@ return array(
     array('INIT_OPTION_SCOPE_TYPE', 'Magento\Core\Model\App', 'Magento_Core_Model_App::PARAM_RUN_TYPE'),
     array('INIT_OPTION_URIS', 'Magento\Core\Model\App', 'Magento_Core_Model_App::PARAM_APP_URIS'),
     array('INSTALLER_HOST_RESPONSE', 'Magento\Install\Model\Installer'),
-    array('LAYOUT_GENERAL_CACHE_TAG', 'Magento\Core\Model\Layout\Merge', 'Magento_Core_Model_Cache_Type_Layout::CACHE_TAG'),
+    array(
+        'LAYOUT_GENERAL_CACHE_TAG',
+        'Magento\Core\Model\Layout\Merge',
+        'Magento_Core_Model_Cache_Type_Layout::CACHE_TAG'
+    ),
     array('LOCALE_CACHE_KEY', 'Magento\Adminhtml\Block\Page\Footer'),
     array('LOCALE_CACHE_LIFETIME', 'Magento\Adminhtml\Block\Page\Footer'),
     array('LOCALE_CACHE_TAG', 'Magento\Adminhtml\Block\Page\Footer'),
@@ -93,19 +105,29 @@ return array(
     array('PATH_PREFIX_CUSTOMIZED', 'Magento\Core\Model\Theme\Files'),
     array('PUBLIC_BASE_THEME_DIR', 'Magento\Core\Model\Design\PackageInterface'),
     array('PUBLIC_CACHE_TAG', 'Magento\Core\Model\Design\PackageInterface'),
-    array('PUBLIC_MODULE_DIR', 'Magento\Core\Model\Design\PackageInterface',
+    array(
+        'PUBLIC_MODULE_DIR',
+        'Magento\Core\Model\Design\PackageInterface',
         'Magento_Core_Model_Design_Package::PUBLIC_MODULE_DIR'
     ),
-    array('PUBLIC_THEME_DIR', 'Magento\Core\Model\Design\PackageInterface',
+    array(
+        'PUBLIC_THEME_DIR',
+        'Magento\Core\Model\Design\PackageInterface',
         'Magento_Core_Model_Design_Package::PUBLIC_THEME_DIR'
     ),
-    array('PUBLIC_VIEW_DIR', 'Magento\Core\Model\Design\PackageInterface',
+    array(
+        'PUBLIC_VIEW_DIR',
+        'Magento\Core\Model\Design\PackageInterface',
         'Magento_Core_Model_Design_Package::PUBLIC_VIEW_DIR'
     ),
     array('REGISTRY_FORM_PARAMS_KEY', null, 'direct value'),
     array('SCOPE_TYPE_GROUP', 'Magento\Core\Model\App', 'Magento_Core_Model_StoreManagerInterface::SCOPE_TYPE_GROUP'),
     array('SCOPE_TYPE_STORE', 'Magento\Core\Model\App', 'Magento_Core_Model_StoreManagerInterface::SCOPE_TYPE_STORE'),
-    array('SCOPE_TYPE_WEBSITE', 'Magento\Core\Model\App', 'Magento_Core_Model_StoreManagerInterface::SCOPE_TYPE_WEBSITE'),
+    array(
+        'SCOPE_TYPE_WEBSITE',
+        'Magento\Core\Model\App',
+        'Magento_Core_Model_StoreManagerInterface::SCOPE_TYPE_WEBSITE'
+    ),
     array('SEESION_MAX_COOKIE_LIFETIME'),
     array('TYPE_BINARY', null, 'Magento_DB_Ddl_Table::TYPE_BLOB'),
     array('TYPE_CHAR', null, 'Magento_DB_Ddl_Table::TYPE_TEXT'),
@@ -124,14 +146,17 @@ return array(
     array('XML_CHARSET_NODE', 'Magento\SalesRule\Helper\Coupon'),
     array('XML_CHARSET_SEPARATOR', 'Magento\SalesRule\Helper\Coupon'),
     array('XML_NODE_RELATED_CACHE', 'Magento\CatalogRule\Model\Rule'),
-    array('XML_NODE_ATTRIBUTE_NODES', 'Magento\Catalog\Model\Resource\Product\Flat\Indexer',
-        'XML_NODE_ATTRIBUTE_GROUPS'),
-    array('XML_PATH_ALLOW_CODES', 'Magento\Core\Model\Locale', 'Magento_Core_Model_LocaleInterface::XML_PATH_ALLOW_CODES'),
-    array('XML_PATH_ALLOW_CURRENCIES', 'Magento\Core\Model\Locale',
+    array(
+        'XML_NODE_ATTRIBUTE_NODES',
+        'Magento\Catalog\Model\Resource\Product\Flat\Indexer',
+        'XML_NODE_ATTRIBUTE_GROUPS'
+    ),
+    array(
+        'XML_PATH_ALLOW_CURRENCIES',
+        'Magento\Core\Model\Locale',
         'Magento_Core_Model_LocaleInterface::XML_PATH_ALLOW_CURRENCIES'
     ),
-    array('XML_PATH_ALLOW_CURRENCIES_INSTALLED', 'Magento\Core\Model\Locale',
-        'Magento_Core_Model_LocaleInterface::XML_PATH_ALLOW_CURRENCIES_INSTALLED'),
+    array('XML_PATH_ALLOW_CODES', 'Magento\Core\Model\LocaleInterface'),
     array('XML_PATH_ALLOW_DUPLICATION', 'Magento\Core\Model\Design\PackageInterface',
         'Magento_Core_Model_Design_Package::XML_PATH_ALLOW_DUPLICATION'
     ),
@@ -139,81 +164,116 @@ return array(
     array('XML_PATH_BACKEND_FRONTNAME', 'Mage_Backend_Helper_Data'),
     array('XML_PATH_CACHE_BETA_TYPES'),
     array('XML_PATH_CHECK_EXTENSIONS', 'Magento\Install\Model\Config'),
-    array('XML_PATH_CONNECTION_TYPE', 'Magento\Core\Model\Config\Resource'),
+    array('XML_PATH_CONNECTION_TYPE', 'Magento\App\Resource\Config'),
     array('XML_PATH_COUNTRY_DEFAULT', 'Magento\Paypal\Model\System\Config\Backend\MerchantCountry'),
-    array('XML_PATH_DEBUG_TEMPLATE_HINTS', 'Magento\Core\Block\Template',
-        'Magento\Core\Model\TemplateEngine\Plugin::XML_PATH_DEBUG_TEMPLATE_HINTS'),
-    array('XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS', 'Magento\Core\Block\Template',
-        'Magento\Core\Model\TemplateEngine\Plugin::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS'),
+    array(
+        'XML_PATH_DEBUG_TEMPLATE_HINTS',
+        'Magento\Core\Block\Template',
+        'Magento\Core\Model\TemplateEngine\Plugin::XML_PATH_DEBUG_TEMPLATE_HINTS'
+    ),
+    array(
+        'XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS',
+        'Magento\Core\Block\Template',
+        'Magento\Core\Model\TemplateEngine\Plugin::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS'
+    ),
     array('XML_PATH_DEFAULT_COUNTRY', 'Magento\Core\Model\Locale'),
-    array('XML_PATH_DEFAULT_LOCALE', 'Magento\Core\Model\Locale',
+    array(
+        'XML_PATH_DEFAULT_LOCALE',
+        'Magento\Core\Model\Locale',
         'Magento_Core_Model_LocaleInterface::XML_PATH_DEFAULT_LOCALE'
     ),
-    array('XML_PATH_DEFAULT_TIMEZONE', 'Magento\Core\Model\Locale',
+    array(
+        'XML_PATH_DEFAULT_TIMEZONE',
+        'Magento\Core\Model\Locale',
         'Magento_Core_Model_LocaleInterface::XML_PATH_DEFAULT_TIMEZONE'
     ),
     array('XML_PATH_INDEXER_DATA', 'Magento\Index\Model\Process'),
     array('XML_PATH_INSTALL_DATE', 'Mage_Core_Model_App', 'Mage_Core_Model_Config_Primary::XML_PATH_INSTALL_DATE'),
     array('XML_PATH_EXTERNAL_CACHE_CONTROLS', 'Magento\PageCache\Helper\Data'),
+    array('XML_PATH_EXTERNAL_CACHE_CONTROLS', 'Magento\PageCache\Model\CacheControlFactory'),
     array('XML_PATH_EXTERNAL_CACHE_CONTROL', 'Magento\PageCache\Helper\Data'),
     array('XML_PATH_LOCALE_INHERITANCE', 'Mage_Core_Model_Translate'),
     array('XML_PATH_PRODUCT_ATTRIBUTES', 'Magento\Wishlist\Model\Config'),
     array('XML_PATH_PRODUCT_COLLECTION_ATTRIBUTES', 'Magento\Catalog\Model\Config'),
     array('XML_PATH_QUOTE_PRODUCT_ATTRIBUTES', 'Magento\Sales\Model\Quote\Config'),
     array('XML_PATH_SENDING_SET_RETURN_PATH', 'Mage_Newsletter_Model_Subscriber'),
-    array('XML_PATH_SKIP_PROCESS_MODULES_UPDATES', 'Mage_Core_Model_App',
+    array(
+        'XML_PATH_SKIP_PROCESS_MODULES_UPDATES',
+        'Mage_Core_Model_App',
         'Mage_Core_Model_Db_UpdaterInterface::XML_PATH_SKIP_PROCESS_MODULES_UPDATES'
     ),
-    array('XML_PATH_STATIC_FILE_SIGNATURE', 'Magento\Core\Helper\Data',
+    array(
+        'XML_PATH_STATIC_FILE_SIGNATURE',
+        'Magento\Core\Helper\Data',
         'Magento_Core_Model_Design_Package::XML_PATH_STATIC_FILE_SIGNATURE'
     ),
     array('XML_PATH_TEMPLATE_EMAIL', 'Magento\Core\Model\Email\Template'),
-    array('XML_PATH_TEMPLATE_FILTER', 'Magento\Newsletter\Helper\Data',
+    array(
+        'XML_PATH_TEMPLATE_FILTER',
+        'Magento\Newsletter\Helper\Data',
         'Use directly model \Magento\Newsletter\Model\Template\Filter'
     ),
-    array('XML_PATH_THEME', 'Magento\Core\Model\Design\PackageInterface',
+    array(
+        'XML_PATH_THEME',
+        'Magento\Core\Model\Design\PackageInterface',
         'Magento_Core_Model_Design_Package::XML_PATH_THEME'
     ),
-    array('XML_PATH_THEME_ID', 'Magento\Core\Model\Design\PackageInterface',
+    array(
+        'XML_PATH_THEME_ID',
+        'Magento\Core\Model\Design\PackageInterface',
         'Magento_Core_Model_Design_Package::XML_PATH_THEME_ID'
     ),
     array('XML_STORE_ROUTERS_PATH', 'Mage_Core_Controller_Varien_Front'),
     array('XML_PATH_SESSION_MESSAGE_MODELS', 'Magento\Catalog\Helper\Product\View'),
-
-    array('VALIDATOR_KEY', 'Magento\Core\Model\Session\AbstractSession',
+    array(
+        'VALIDATOR_KEY',
+        'Magento\Core\Model\Session\AbstractSession',
         'Magento_Core_Model_Session_Validator::VALIDATOR_KEY'
     ),
-    array('VALIDATOR_HTTP_USER_AGENT_KEY', 'Magento\Core\Model\Session\AbstractSession',
+    array(
+        'VALIDATOR_HTTP_USER_AGENT_KEY',
+        'Magento\Core\Model\Session\AbstractSession',
         'Magento_Core_Model_Session_Validator::VALIDATOR_HTTP_USER_AGENT_KEY'
     ),
-    array('VALIDATOR_HTTP_X_FORVARDED_FOR_KEY', 'Magento\Core\Model\Session\AbstractSession',
+    array(
+        'VALIDATOR_HTTP_X_FORVARDED_FOR_KEY',
+        'Magento\Core\Model\Session\AbstractSession',
         'Magento_Core_Model_Session_Validator::VALIDATOR_HTTP_X_FORWARDED_FOR_KEY'
     ),
-    array('VALIDATOR_HTTP_VIA_KEY', 'Magento\Core\Model\Session\AbstractSession',
+    array(
+        'VALIDATOR_HTTP_VIA_KEY',
+        'Magento\Core\Model\Session\AbstractSession',
         'Magento_Core_Model_Session_Validator::VALIDATOR_HTTP_VIA_KEY'
     ),
-    array('VALIDATOR_REMOTE_ADDR_KEY', 'Magento\Core\Model\Session\AbstractSession',
+    array(
+        'VALIDATOR_REMOTE_ADDR_KEY',
+        'Magento\Core\Model\Session\AbstractSession',
         'Magento_Core_Model_Session_Validator::VALIDATOR_REMOTE_ADDR_KEY'
     ),
-    array('XML_PATH_USE_REMOTE_ADDR', 'Magento\Core\Model\Session\AbstractSession',
+    array(
+        'XML_PATH_USE_REMOTE_ADDR',
+        'Magento\Core\Model\Session\AbstractSession',
         'Magento_Core_Model_Session_Validator::XML_PATH_USE_REMOTE_ADDR'
     ),
-    array('XML_PATH_USE_HTTP_VIA', 'Magento\Core\Model\Session\AbstractSession',
+    array(
+        'XML_PATH_USE_HTTP_VIA',
+        'Magento\Core\Model\Session\AbstractSession',
         'Magento_Core_Model_Session_Validator::XML_PATH_USE_HTTP_VIA'
     ),
-    array('XML_PATH_USE_X_FORWARDED', 'Magento\Core\Model\Session\AbstractSession',
+    array(
+        'XML_PATH_USE_X_FORWARDED',
+        'Magento\Core\Model\Session\AbstractSession',
         'Magento_Core_Model_Session_Validator::XML_PATH_USE_X_FORWARDED'
     ),
-    array('XML_PATH_USE_USER_AGENT', 'Magento\Core\Model\Session\AbstractSession',
+    array(
+        'XML_PATH_USE_USER_AGENT',
+        'Magento\Core\Model\Session\AbstractSession',
         'Magento_Core_Model_Session_Validator::XML_PATH_USE_USER_AGENT'
     ),
-
     array('XML_NODE_DIRECT_FRONT_NAMES', 'Magento\App\Request\Http'),
-
     array('XML_NODE_USET_AGENT_SKIP', 'Magento\Core\Model\Session\AbstractSession'),
     array('XML_PAGE_TYPE_RENDER_INHERITED', 'Magento\Core\Controller\Varien\Action'),
     array('XML_PATH_ALLOW_MAP_UPDATE', 'Magento\Core\Model\Design\FileResolution\StrategyPool'),
-
     array('XML_PATH_WEBAPI_REQUEST_INTERPRETERS', 'Magento\Webapi\Controller\Request\Rest\Interpreter\Factory'),
     array('XML_PATH_WEBAPI_RESPONSE_RENDERS', 'Magento\Webapi\Controller\Response\Rest\Renderer\Factor'),
     array('XML_PATH_THEME'),
@@ -238,17 +298,58 @@ return array(
     array('XML_PATH_DISABLED_CACHE_TYPES', 'Magento\DesignEditor\Helper\Data'),
     array('XML_PATH_ENCRYPTION_MODEL', 'Magento\Core\Helper\Data'),
     array('CONFIG_KEY_PATH_TO_MAP_FILE', 'Magento\Core\Model\Resource\Setup\Migration'),
-    array('XML_PATH_IGNORE_DEV_MODE', 'Magento\App\UpdaterInterface'),
     array('XML_PATH_SKIP_PROCESS_MODULES_UPDATES', 'Magento\App\UpdaterInterface'),
-    array('XML_NODE_SESSION_SAVE', 'Magento\Core\Model\Session\AbstractSession',
-        'Magento_Core_Model_Session_AbstractSession::PARAM_SESSION_SAVE_METHOD'
+    array(
+        'XML_NODE_SESSION_SAVE',
+        'Magento\Core\Model\Session\AbstractSession',
+        'Magento\Core\Model\Session\AbstractSession::PARAM_SESSION_SAVE_METHOD'
     ),
-    array('XML_NODE_SESSION_SAVE_PATH', 'Magento\Core\Model\Session\AbstractSession',
-        'Magento_Core_Model_Session_AbstractSession::PARAM_SESSION_SAVE_PATH'
+    array('XML_PATH_IGNORE_DEV_MODE', 'Magento\Module\UpdaterInterface'),
+    array('XML_PATH_SKIP_PROCESS_MODULES_UPDATES', 'Magento\Module\UpdaterInterface'),
+    array(
+        'XML_NODE_SESSION_SAVE_PATH',
+        'Magento\Core\Model\Session\AbstractSession',
+        'Magento\Core\Model\Session\AbstractSession::PARAM_SESSION_SAVE_PATH'
     ),
     array('XML_PATH_USE_CUSTOM_ADMIN_PATH', 'Magento\Backend\Helper\Data'),
     array('XML_PATH_CUSTOM_ADMIN_PATH', 'Magento\Backend\Helper\Data'),
     array('XML_PATH_BACKEND_AREA_FRONTNAME', 'Magento\Backend\Helper\Data'),
     array('PARAM_BACKEND_FRONT_NAME', 'Magento\Backend\Helper\Data'),
-
+    array('CHARS_LOWERS', '\Magento\Core\Helper\Data', '\Magento\Math\Random::CHARS_LOWERS'),
+    array('CHARS_UPPERS', '\Magento\Core\Helper\Data', '\Magento\Math\Random::CHARS_UPPERS'),
+    array('CHARS_DIGITS', '\Magento\Core\Helper\Data', '\Magento\Math\Random::CHARS_DIGITS'),
+    array('CHARS_SPECIALS', '\Magento\Core\Helper\Data', '\Magento\Math\Random::CHARS_SPECIALS'),
+    array('CHARS_PASSWORD_LOWERS', '\Magento\Core\Helper\Data', '\Magento\Math\Random::CHARS_PASSWORD_LOWERS'),
+    array('CHARS_PASSWORD_UPPERS', '\Magento\Core\Helper\Data', '\Magento\Math\Random::CHARS_PASSWORD_UPPERS'),
+    array('CHARS_PASSWORD_DIGITS', '\Magento\Core\Helper\Data', '\Magento\Math\Random::CHARS_PASSWORD_DIGITS'),
+    array('CHARS_PASSWORD_SPECIALS', '\Magento\Core\Helper\Data', '\Magento\Math\Random::CHARS_PASSWORD_SPECIALS'),
+    array('XML_NODE_REMOTE_ADDR_HEADERS', '\Magento\Core\Helper\Http'),
+    array(
+        'XML_PATH_EU_COUNTRIES_LIST',
+        '\Magento\Core\Helper\Data',
+        'Magento\Customer\Helper\Data::XML_PATH_EU_COUNTRIES_LIST'
+    ),
+    array(
+        'XML_PATH_MERCHANT_COUNTRY_CODE',
+        '\Magento\Core\Helper\Data',
+        'Magento\Customer\Helper\Data::XML_PATH_MERCHANT_COUNTRY_CODE'
+    ),
+    array(
+        'XML_PATH_MERCHANT_VAT_NUMBER',
+        '\Magento\Core\Helper\Data',
+        'Magento\Customer\Helper\Data::XML_PATH_MERCHANT_VAT_NUMBER'
+    ),
+    array(
+        'XML_PATH_PROTECTED_FILE_EXTENSIONS',
+        '\Magento\Core\Helper\Data',
+        '\Magento\Core\Model\File\Validator\NotProtectedExtension::XML_PATH_PROTECTED_FILE_EXTENSIONS'
+    ),
+    array(
+        'XML_PATH_PUBLIC_FILES_VALID_PATHS',
+        '\Magento\Core\Helper\Data',
+        '\Magento\Adminhtml\Helper\Catalog::XML_PATH_PUBLIC_FILES_VALID_PATHS'
+    ),
+    array('XML_PATH_IMAGE_TYPES', 'Magento\Adminhtml\Block\Catalog\Product\Frontend\Product\Watermark'),
+    array('XML_PATH_WEBHOOK', 'Magento\Webhook\Model\Source\Hook'),
+    array('XML_PATH_SUBSCRIPTIONS', 'Magento\Webhook\Model\Subscription\Config'),
 );

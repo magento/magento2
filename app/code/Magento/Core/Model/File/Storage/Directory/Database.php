@@ -24,16 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
-/**
- * Directory database storage model class
- *
- * @category    Magento
- * @package     Magento_Core
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Core\Model\File\Storage\Directory;
 
+/**
+ * Class Database
+ */
 class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabase
 {
     /**
@@ -56,7 +51,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
     protected $_directoryFactory;
 
     /**
-     * Class construct
+     * Class constructor
      *
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Core\Model\Context $context
@@ -66,8 +61,8 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      * @param \Magento\Core\Model\File\Storage\Directory\DatabaseFactory $directoryFactory
      * @param \Magento\Core\Model\Resource\File\Storage\Directory\Database $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param string|null $connectionName
      * @param array $data
-     * @param null $connectionName
      */
     public function __construct(
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
@@ -76,18 +71,24 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
         \Magento\Core\Model\Date $dateModel,
         \Magento\Core\Model\App $app,
         \Magento\Core\Model\File\Storage\Directory\DatabaseFactory $directoryFactory,
-        \Magento\Core\Model\Resource\File\Storage\Directory\Database $resource = null,
+        \Magento\Core\Model\Resource\File\Storage\Directory\Database $resource,
         \Magento\Data\Collection\Db $resourceCollection = null,
-        array $data = array(),
-        $connectionName = null
+        $connectionName = null,
+        array $data = array()
     ) {
+        $this->_directoryFactory = $directoryFactory;
         parent::__construct(
-            $coreFileStorageDb, $context, $registry, $dateModel, $app, $resource, $resourceCollection,
+            $coreFileStorageDb,
+            $context,
+            $registry,
+            $dateModel,
+            $app,
+            $resource,
+            $resourceCollection,
+            $connectionName,
             $data
         );
-
-        $this->_directoryFactory = $directoryFactory;
-        $this->_init('Magento\Core\Model\Resource\File\Storage\Directory\Database');
+        $this->_init(get_class($this->_resource));
     }
 
     /**
@@ -185,8 +186,8 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      */
     public function exportDirectories($offset = 0, $count = 100)
     {
-        $offset = ((int) $offset >= 0) ? (int) $offset : 0;
-        $count  = ((int) $count >= 1) ? (int) $count : 1;
+        $offset = ((int)$offset >= 0) ? (int)$offset : 0;
+        $count  = ((int)$count >= 1) ? (int)$count : 1;
 
         $result = $this->_getResource()->exportDirectories($offset, $count);
 
@@ -217,8 +218,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
             }
 
             try {
-                $arguments = array('connection' => $this->getConnectionName());
-                $directory = $this->_directoryFactory->create(array('connectionName' => $arguments));
+                $directory = $this->_directoryFactory->create(array('connectionName' => $this->getConnectionName()));
                 $directory->setPath($dir['path']);
 
                 $parentId = $directory->getParentId();
@@ -264,7 +264,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
     /**
      * Delete directory from database
      *
-     * @param string $path
+     * @param string $dirPath
      * @return \Magento\Core\Model\File\Storage\Directory\Database
      */
     public function deleteDirectory($dirPath)

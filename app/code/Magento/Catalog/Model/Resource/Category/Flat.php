@@ -157,7 +157,7 @@ class Flat extends \Magento\Index\Model\Resource\AbstractResource
     /**
      * Class constructor
      *
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -167,7 +167,7 @@ class Flat extends \Magento\Index\Model\Resource\AbstractResource
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,

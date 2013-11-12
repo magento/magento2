@@ -55,7 +55,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->_resourceModelMock = $this->getMock('Magento\Webapi\Model\Resource\Acl\Role',
-            array('getRolesIds'), array(), '', false);
+            array('getRolesIds', '__wakeup'), array(), '', false);
 
         $this->_roleFactory = $this->getMock('Magento\Webapi\Model\Authorization\Role\Factory',
             array('createRole'), array(), '', false);

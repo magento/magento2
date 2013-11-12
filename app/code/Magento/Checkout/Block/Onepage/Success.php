@@ -72,7 +72,7 @@ class Success extends \Magento\Core\Block\Template
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory
-     * @param \Magento\Sales\Model\Resource\Recurring\Profile\Collection $profileCollFactory
+     * @param \Magento\Sales\Model\Resource\Recurring\Profile\CollectionFactory $profileCollFactory
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param array $data
      */
@@ -83,7 +83,7 @@ class Success extends \Magento\Core\Block\Template
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory,
-        \Magento\Sales\Model\Resource\Recurring\Profile\Collection $profileCollFactory,
+        \Magento\Sales\Model\Resource\Recurring\Profile\CollectionFactory $profileCollFactory,
         \Magento\Sales\Model\Order\Config $orderConfig,
         array $data = array()
     ) {

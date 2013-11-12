@@ -45,7 +45,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $this->_webapiEventHandler = $this->_getBasicMock('Magento\Webhook\Model\Webapi\EventHandler');
         $this->_subscriptionSet = $this->_getBasicMock('Magento\Webhook\Model\Resource\Subscription\Collection');
-        $this->_logger = $this->_getBasicMock('Magento\Core\Model\Logger');
+        $this->_logger = $this->_getBasicMock('Magento\Logger');
 
         $this->_observer = new \Magento\Webhook\Model\Observer(
             $this->_webapiEventHandler,

@@ -37,7 +37,7 @@ class RelatedTest extends \PHPUnit_Framework_TestCase
     public function testAll()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
-            ->getArea(\Magento\Core\Model\App\Area::AREA_FRONTEND)->load();
+            ->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Catalog\Model\Product');
         $product->load(2);

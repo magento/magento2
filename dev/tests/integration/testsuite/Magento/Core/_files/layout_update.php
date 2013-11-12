@@ -28,7 +28,7 @@
 /** @var $objectManager \Magento\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $objectManager->get('Magento\Core\Model\App')
-    ->loadAreaPart(\Magento\Core\Model\App\Area::AREA_ADMINHTML, \Magento\Core\Model\App\Area::PART_CONFIG);
+    ->loadAreaPart(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE, \Magento\Core\Model\App\Area::PART_CONFIG);
 /** @var $theme \Magento\View\Design\ThemeInterface */
 $theme = $objectManager->create('Magento\View\Design\ThemeInterface');
 $theme->setThemePath('test/test')

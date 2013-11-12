@@ -48,12 +48,12 @@ class Factory
      * Initialize dependencies
      *
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\Config\Modules\Reader $moduleReader
+     * @param \Magento\Module\Dir\Reader $moduleReader
      * @param \Magento\Core\Model\Translate $translator
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\Config\Modules\Reader $moduleReader,
+        \Magento\Module\Dir\Reader $moduleReader,
         \Magento\Core\Model\Translate $translator
     ) {
         $this->_objectManager = $objectManager;

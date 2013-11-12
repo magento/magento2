@@ -44,11 +44,14 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $layoutUtility = new \Magento\Core\Utility\Layout($this);
+        $appState = $objectManager->get('Magento\App\State');
+        $appState->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $args = array(
             'context' => $objectManager->get('Magento\Core\Block\Template\Context'),
             'layoutProcessorFactory' => $this->getMock('Magento\View\Layout\ProcessorFactory',
                 array(), array(), '', false),
             'themesFactory' => $objectManager->get('Magento\Core\Model\Resource\Theme\CollectionFactory'),
+            'appState' => $appState,
             'data' => array(
                 'name'  => 'page_type',
                 'id'    => 'page_types_select',

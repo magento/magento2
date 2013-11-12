@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Structure description for webapi.xml services file.
+ * Structure description for webapi.xml configuration files.
  *
  * Magento
  *
@@ -25,38 +26,35 @@
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="config">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="service">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="rest-route">
-                <xs:complexType>
-                  <xs:simpleContent>
-                    <xs:extension base="xs:string">
-                      <xs:attribute name="httpMethod">
-                        <xs:simpleType>
-                          <xs:restriction base="xs:string">
+    <xs:element name="config" type="configType"/>
+    <xs:complexType name="configType">
+        <xs:sequence>
+            <xs:element type="serviceType" name="service" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="serviceType">
+        <xs:sequence>
+            <xs:element type="restRouteType" name="rest-route" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="class"/>
+        <xs:attribute type="xs:string" name="baseUrl"/>
+    </xs:complexType>
+    <xs:complexType name="restRouteType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="httpMethod">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
                             <xs:enumeration value="GET"/>
                             <xs:enumeration value="PUT"/>
                             <xs:enumeration value="POST"/>
                             <xs:enumeration value="DELETE"/>
-                          </xs:restriction>
-                        </xs:simpleType>
-                      </xs:attribute>
-                      <xs:attribute type="xs:string" name="method"/>
-                      <xs:attribute type="xs:boolean" name="secure" default="false"/>
-                    </xs:extension>
-                  </xs:simpleContent>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-            <xs:attribute type="xs:string" name="class"/>
-            <xs:attribute type="xs:string" name="baseUrl"/>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute type="xs:string" name="method"/>
+                <xs:attribute type="xs:boolean" name="secure" default="false"/>
+            </xs:extension>
+        </xs:simpleContent>
     </xs:complexType>
-  </xs:element>
 </xs:schema>

@@ -53,8 +53,8 @@ class LayoutTest extends \Magento\TestFramework\TestCase\AbstractController
     protected function _loadServiceCallsConfig()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Core\Model\Config\Modules\Reader $moduleReader */
-        $moduleReader = $objectManager->create('Magento\Core\Model\Config\Modules\Reader');
+        /** @var \Magento\Module\Dir\Reader $moduleReader */
+        $moduleReader = $objectManager->create('Magento\Module\Dir\Reader');
         $moduleReader->setModuleDir('Magento_Catalog', 'etc', __DIR__ . '/LayoutTest/Magento/Catalog/etc');
 
         /** @var \Magento\Core\Model\DataService\Config\Reader\Factory $dsCfgReaderFactory */

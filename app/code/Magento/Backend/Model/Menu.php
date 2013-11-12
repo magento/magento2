@@ -44,15 +44,15 @@ class Menu extends \ArrayObject
     protected $_path = '';
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
     /**
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param string $pathInMenuStructure
      */
-    public function __construct(\Magento\Core\Model\Logger $logger, $pathInMenuStructure = '')
+    public function __construct(\Magento\Logger $logger, $pathInMenuStructure = '')
     {
         if ($pathInMenuStructure) {
             $this->_path = $pathInMenuStructure . '/';

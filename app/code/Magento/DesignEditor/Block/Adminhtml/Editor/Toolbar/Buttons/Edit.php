@@ -181,7 +181,7 @@ class Edit
         $sourceChange = $this->_changeFactory->create();
         $sourceChange->loadByThemeId($this->_themeContext->getEditableTheme()->getId());
         $dateMessage = $this->_localeModel
-            ->date($sourceChange->getChangeTime(), \Magento\Date::DATETIME_INTERNAL_FORMAT)->toString();
+            ->date($sourceChange->getChangeTime(), \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)->toString();
         $message = __('Do you want to restore the version saved at %1?', $dateMessage);
 
         $data = array(
@@ -194,7 +194,7 @@ class Edit
                 )
             )
         );
-        return $this->helper('Magento\Backend\Helper\Data')->escapeHtml(json_encode($data));
+        return $this->escapeHtml(json_encode($data));
     }
 
     /**
@@ -215,7 +215,7 @@ class Edit
                 )
             )
         );
-        return $this->helper('Magento\Backend\Helper\Data')->escapeHtml(json_encode($data));
+        return $this->escapeHtml(json_encode($data));
     }
 
     /**

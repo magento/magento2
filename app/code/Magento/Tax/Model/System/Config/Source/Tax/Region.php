@@ -31,14 +31,14 @@ class Region implements \Magento\Core\Model\Option\ArrayInterface
     protected $_options;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Region\Collection\Factory
+     * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
      */
     protected $_regionsFactory;
 
     /**
-     * @param \Magento\Directory\Model\Resource\Region\Collection\Factory $regionsFactory
+     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionsFactory
      */
-    public function __construct(\Magento\Directory\Model\Resource\Region\Collection\Factory $regionsFactory)
+    public function __construct(\Magento\Directory\Model\Resource\Region\CollectionFactory $regionsFactory)
     {
         $this->_regionsFactory = $regionsFactory;
     }

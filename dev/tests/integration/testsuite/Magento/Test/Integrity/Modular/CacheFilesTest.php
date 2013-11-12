@@ -34,9 +34,9 @@ class CacheFilesTest extends \PHPUnit_Framework_TestCase
         $validationStateMock = $this->getMock('Magento\Config\ValidationStateInterface');
         $validationStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
 
-        /** @var \Magento\Core\Model\Config\Modules\Reader $moduleReader */
+        /** @var \Magento\Module\Dir\Reader $moduleReader */
         $moduleReader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\Config\Modules\Reader');
+            ->get('Magento\Module\Dir\Reader');
         $schema = $moduleReader->getModuleDir('etc', 'Magento_Core') . DIRECTORY_SEPARATOR . 'cache.xsd';
 
         /** @var \Magento\Core\Model\Cache\Config\Reader $reader */

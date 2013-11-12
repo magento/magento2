@@ -78,7 +78,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_configMock = $this->getMock('Magento\Core\Model\Config', array(), array(), '', false, false);
-        $this->_cacheMock = $this->getMock('Magento\Core\Model\CacheInterface');
+        $this->_cacheMock = $this->getMock('Magento\App\CacheInterface');
         $this->_objectManagerMock = $this->getMock('Magento\ObjectManager', array(), array(), '', false, false);
         $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManagerInterface');
         $this->_eventManagerMock = $this->getMock('Magento\Event\ManagerInterface');

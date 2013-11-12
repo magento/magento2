@@ -55,7 +55,7 @@ class Price extends \Magento\Data\Form\Element\Text
     /**
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Tax\Helper\Data $taxData
@@ -64,7 +64,7 @@ class Price extends \Magento\Data\Form\Element\Text
     public function __construct(
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Tax\Helper\Data $taxData,
@@ -73,7 +73,7 @@ class Price extends \Magento\Data\Form\Element\Text
         $this->_locale = $locale;
         $this->_storeManager = $storeManager;
         $this->_taxData = $taxData;
-        parent::__construct($coreData, $factoryElement, $factoryCollection, $attributes);
+        parent::__construct($escaper, $factoryElement, $factoryCollection, $attributes);
     }
 
     protected function _construct()

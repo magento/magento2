@@ -66,23 +66,23 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\TestFramework\ObjectManager  $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $mock \Magento\CatalogSearch\Helper\Data */
-        $mock = $this->getMock(
-            'Magento\CatalogSearch\Helper\Data',
-            array('getQueryText'),
-            array(
-                $objectManager->get('Magento\Core\Helper\Context'),
-                $objectManager->get('Magento\Core\Helper\String'),
-                $objectManager->get('Magento\Core\Model\Store\ConfigInterface'),
-                $objectManager->get('Magento\CatalogSearch\Model\QueryFactory'),
+
+        /** @var \Magento\CatalogSearch\Helper\Data $catalogSearchHelper */
+        $catalogSearchHelper = $this->getMock('Magento\CatalogSearch\Helper\Data', array('getQueryText'), array(
+            $objectManager->get('Magento\Core\Helper\Context'),
+            $objectManager->get('Magento\Stdlib\String'),
+            $objectManager->get('Magento\Core\Model\Store\ConfigInterface'),
+            $objectManager->get('Magento\CatalogSearch\Model\QueryFactory'),
+            $objectManager->get('Magento\Escaper'),
+            $objectManager->get('Magento\Filter\FilterManager'),
         ));
-        $mock->expects($this->any())
+        $catalogSearchHelper->expects($this->any())
             ->method('getQueryText')
             ->will($this->returnValue('five <words> here <being> tested'));
 
-        $mock->checkNotes();
+        $catalogSearchHelper->checkNotes();
 
-        $notes = implode($mock->getNoteMessages());
+        $notes = implode($catalogSearchHelper->getNoteMessages());
         $this->assertContains('&lt;being&gt;', $notes);
         $this->assertNotContains('<being>', $notes);
     }

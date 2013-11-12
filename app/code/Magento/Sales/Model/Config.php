@@ -39,11 +39,20 @@ class Config implements \Magento\Sales\Model\ConfigInterface
     protected $_dataContainer;
 
     /**
-     * @param \Magento\Sales\Model\Config\Data $dataContainer
+     * @var \Magento\App\State
      */
-    public function __construct(\Magento\Sales\Model\Config\Data $dataContainer)
-    {
+    protected $_appState;
+
+    /**
+     * @param \Magento\Sales\Model\Config\Data $dataContainer
+     * @param \Magento\App\State $appState
+     */
+    public function __construct(
+        \Magento\Sales\Model\Config\Data $dataContainer,
+        \Magento\App\State $appState
+    ) {
         $this->_dataContainer = $dataContainer;
+        $this->_appState = $appState;
     }
 
     /**
@@ -52,12 +61,11 @@ class Config implements \Magento\Sales\Model\ConfigInterface
      * @param string $section
      * @param string $group
      * @param string $code
-     * @param string $area
      * @return array
      */
-    public function getTotalsRenderer($section, $group, $code, $area)
+    public function getTotalsRenderer($section, $group, $code)
     {
-        $path = implode('/', array($section, $group, $code, 'renderers', $area));
+        $path = implode('/', array($section, $group, $code, 'renderers', $this->_appState->getAreaCode()));
         return $this->_dataContainer->get($path);
     }
 

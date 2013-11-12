@@ -35,6 +35,8 @@ class InfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetChildPdfAsArray()
     {
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
+            ->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         /** @var $layout \Magento\Core\Model\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         $block = $layout->createBlock('Magento\Payment\Block\Info', 'block');
@@ -46,8 +48,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Payment\Model\Method\Banktransfer'));
         /** @var $childBank \Magento\Payment\Block\Info\Instructions */
         $childBank = $layout->addBlock('Magento\Payment\Block\Info\Instructions', 'child.one', 'block');
-        $childBank->setInfo($paymentInfoBank)
-            ->setArea('adminhtml');
+        $childBank->setInfo($paymentInfoBank);
 
         $nonExpectedHtml = 'non-expected html';
         $childHtml = $layout->addBlock('Magento\Core\Block\Text', 'child.html', 'block');
@@ -60,8 +61,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Payment\Model\Method\Checkmo'));
         /** @var $childCheckmo \Magento\Payment\Block\Info\Checkmo */
         $childCheckmo = $layout->addBlock('Magento\Payment\Block\Info\Checkmo', 'child.just.another', 'block');
-        $childCheckmo->setInfo($paymentInfoCheckmo)
-            ->setArea('adminhtml');
+        $childCheckmo->setInfo($paymentInfoCheckmo);
 
         $pdfArray = $block->getChildPdfAsArray();
 

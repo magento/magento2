@@ -43,19 +43,19 @@ class Matrix extends \Magento\Backend\Block\Template
     protected $_adminSession;
 
     /**
-     * @var \Magento\Directory\Model\Currency\Factory
+     * @var \Magento\Directory\Model\CurrencyFactory
      */
     protected $_dirCurrencyFactory;
 
     /**
-     * @param \Magento\Directory\Model\Currency\Factory $dirCurrencyFactory
+     * @param \Magento\Directory\Model\CurrencyFactory $dirCurrencyFactory
      * @param \Magento\Backend\Model\Session $adminSession
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
      */
     public function __construct(
-        \Magento\Directory\Model\Currency\Factory $dirCurrencyFactory,
+        \Magento\Directory\Model\CurrencyFactory $dirCurrencyFactory,
         \Magento\Backend\Model\Session $adminSession,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,

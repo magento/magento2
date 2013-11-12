@@ -53,7 +53,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $this->_userService = $this->getMockBuilder('Magento\Webapi\Model\Resource\Acl\User')
             ->disableOriginalConstructor()
-            ->setMethods(array('getIdFieldName', 'getRoleUsers', 'load', 'getReadConnection'))
+            ->setMethods(array('getIdFieldName', 'getRoleUsers', 'load', 'getReadConnection', '__wakeup'))
             ->getMock();
 
         $this->_userService->expects($this->any())
@@ -78,7 +78,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         return $this->_helper->getObject('Magento\Webapi\Model\Acl\User', array(
             'eventDispatcher' => $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false),
-            'cacheManager' => $this->getMock('Magento\Core\Model\CacheInterface', array(), array(), '', false),
+            'cacheManager' => $this->getMock('Magento\App\CacheInterface', array(), array(), '', false),
             'resource' => $userService,
             'resourceCollection' => $serviceCollection
         ));
@@ -149,7 +149,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         $fetchStrategy = $this->getMockForAbstractClass('Magento\Data\Collection\Db\FetchStrategyInterface');
         $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
-        $logger = $this->getMock('Magento\Core\Model\Logger', array(), array(), '', false);
+        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $collection */
         $collection = $this->getMock(

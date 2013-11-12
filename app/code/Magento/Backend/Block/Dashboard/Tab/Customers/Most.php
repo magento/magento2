@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     Magento_Adminhtml
+ * @package     Magento_Backend
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,7 +28,7 @@
  * Adminhtml dashboard most active buyers
  *
  * @category   Magento
- * @package    Magento_Adminhtml
+ * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 
@@ -140,6 +140,6 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
 
     public function getRowUrl($row)
     {
-        return $this->getUrl('adminhtml/customer/edit', array('id'=>$row->getCustomerId()));
+        return $this->getUrl('customer/index/edit', array('id'=>$row->getCustomerId()));
     }
 }

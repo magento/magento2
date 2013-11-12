@@ -56,70 +56,30 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $dirs = $this->_objectManager->create(
-            'Magento\App\Dir',
-            array(
-                'baseDir' => BP,
-                'dirs'    => array(
-                    \Magento\App\Dir::MODULES => __DIR__ . '/_files',
-                    \Magento\App\Dir::CONFIG => __DIR__ . '/_files'
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $configMock = $this->getMock('Magento\Webhook\Model\Config', array(), array(), '', false, false);
+        $subscriptions = array(
+            'subscription_alias' => array(
+                'name' => 'Test subscriber',
+                'endpoint_url' => 'http://mage.loc/mage-twitter-integration/web/index.php/endpoint',
+                'topics' => array(
+                    'customer' => array(
+                        'created' => '',
+                        'updated' => '',
+                        'deleted' => '',
+                    ),
+                    'order' => array(
+                        'created'
+                    ),
                 ),
-            )
+            ),
         );
+        $configMock->expects($this->any())->method('getSubscriptions')->will($this->returnValue($subscriptions));
 
-        $fileResolver = $this->_objectManager->create(
-            'Magento\App\Module\Declaration\FileResolver', array('applicationDirs' => $dirs)
-        );
-        $filesystemReader = $this->_objectManager->create('Magento\App\Module\Declaration\Reader\Filesystem',
-            array('fileResolver' => $fileResolver)
-        );
-        $moduleList = $this->_objectManager->create(
-            'Magento\App\ModuleList',
-            array('reader' => $filesystemReader, 'cache' => $this->getMock('Magento\Config\CacheInterface'))
-        );
-
-        /**
-         * Mock is used to disable caching, as far as Integration Tests Framework loads main
-         * modules configuration first and it gets cached
-         *
-         * @var \PHPUnit_Framework_MockObject_MockObject $cache
-         */
-        $cache = $this->getMock('Magento\Core\Model\Config\Cache', array('load', 'save', 'clean', 'getSection'),
-            array(), '', false);
-
-        $cache->expects($this->any())
-            ->method('load')
-            ->will($this->returnValue(false));
-
-        /** @var \Magento\Core\Model\Config\Modules\Reader $moduleReader */
-        $moduleReader = $this->_objectManager->create(
-            'Magento\Core\Model\Config\Modules\Reader', array(
-                'moduleList' => $moduleList
-            )
-        );
-        $moduleReader->setModuleDir('Acme_Subscriber', 'etc', __DIR__ . '/_files/Acme/Subscriber/etc');
-
-        $loader = $this->_objectManager->create(
-            'Magento\Core\Model\Config\Loader',
-            array('fileReader' => $moduleReader)
-        );
-        /** @var \Magento\Core\Model\Config\Storage $storage */
-        $storage = $this->_objectManager->create(
-            'Magento\Core\Model\Config\Storage', array(
-                'loader' => $loader,
-                'cache' => $cache
-            )
-        );
-
-        $mageConfig = $this->_objectManager->create(
-            'Magento\Core\Model\Config',
-            array('storage' => $storage, 'moduleReader' => $moduleReader)
-        );
-
-        /** @var \Magento\Webhook\Model\Subscription\Config $config */
-        $this->_config = $this->_objectManager->create('Magento\Webhook\Model\Subscription\Config',
-            array('mageConfig' => $mageConfig)
-        );
+        $this->_config = $objectManager->create('Magento\Webhook\Model\Subscription\Config', array(
+            'config' => $configMock
+        ));
     }
 
     public function testReadingConfig()

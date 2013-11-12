@@ -24,16 +24,11 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Convert;
 
 /**
  * Convert exception
- *
- * @category   Magento
- * @package    Magento_Convert
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Convert;
-
 class ConvertException extends \Magento\Exception
 {
     const NOTICE = 'NOTICE';

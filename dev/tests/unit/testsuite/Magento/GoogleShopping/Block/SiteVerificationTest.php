@@ -34,24 +34,25 @@ class SiteVerificationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $layout = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
-        $coreHelper = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
-        $coreHelper->expects($this->any())
-            ->method('escapeHtml')->with('Valor & Honor')->will($this->returnValue('Valor &amp; Honor'));
-        $helperFactory = $this->getMockBuilder('Magento\Core\Model\Factory\Helper')
+
+        $escaper = $this->getMockBuilder('Magento\Escaper')
             ->disableOriginalConstructor()
-            ->setMethods(array('get'))
+            ->setMethods(array('escapeHtml'))
             ->getMock();
-        $helperFactory->expects($this->any())->method('get')->will($this->returnValue($coreHelper));
-        $layout->expects($this->any())
-            ->method('helper')->with('Magento\Core\Helper\Data')->will($this->returnValue($coreHelper));
+        $escaper->expects($this->any())
+            ->method('escapeHtml')
+            ->with('Valor & Honor')->will($this->returnValue('Valor &amp; Honor'));
+
         $context = $objectHelper->getObject('Magento\Core\Block\Context', array(
-            'eventManager' => $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false),
-            'layout' => $layout,
-            'helperFactory' => $helperFactory
+            'escaper' => $escaper
         ));
+
         $this->_config = $this->getMock('Magento\GoogleShopping\Model\Config', array(), array(), '', false);
-        $this->_block = new \Magento\GoogleShopping\Block\SiteVerification($context, $this->_config);
+
+        $this->_block = $objectHelper->getObject('Magento\GoogleShopping\Block\SiteVerification', array(
+            'context' => $context,
+            'config' => $this->_config
+        ));
     }
 
     public function testToHtmlWithContent()

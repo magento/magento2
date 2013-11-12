@@ -1,7 +1,5 @@
 <?php
 /**
- * Webapi Config Model for Rest.
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,6 +23,11 @@
  */
 namespace Magento\Webapi\Model\Rest;
 
+use \Magento\Webapi\Model\Config\Converter;
+
+/**
+ * Webapi Config Model for Rest.
+ */
 class Config
 {
     /**#@+
@@ -117,27 +120,19 @@ class Config
         $routes = array();
         foreach ($this->_config->getServices() as $serviceName => $serviceData) {
             // skip if baseurl is not null and does not match
-            if (
-                !isset($serviceData[\Magento\Webapi\Model\Config::ATTR_SERVICE_PATH])
-                || !$serviceBaseUrl
-                || strcasecmp(
-                    trim($serviceBaseUrl, '/'),
-                    trim($serviceData[\Magento\Webapi\Model\Config::ATTR_SERVICE_PATH], '/')
-                ) !== 0
+            if (!isset($serviceData[Converter::KEY_BASE_URL]) || !$serviceBaseUrl
+                || strcasecmp(trim($serviceBaseUrl, '/'), trim($serviceData[Converter::KEY_BASE_URL], '/')) !== 0
             ) {
                 // baseurl does not match, just skip this service
                 continue;
             }
-            foreach ($serviceData['methods'] as $methodName => $methodInfo) {
-                if (strtoupper($methodInfo[\Magento\Webapi\Model\Config::ATTR_HTTP_METHOD])
-                    == strtoupper($httpMethod)) {
-                    $secure = isset($methodInfo[\Magento\Webapi\Model\Config::ATTR_IS_SECURE])
-                        ? $methodInfo[\Magento\Webapi\Model\Config::ATTR_IS_SECURE] : false;
-                    $methodRoute = isset($methodInfo['route']) ? $methodInfo['route'] : '';
+            foreach ($serviceData[Converter::KEY_SERVICE_METHODS] as $methodName => $methodInfo) {
+                if (strtoupper($methodInfo[Converter::KEY_HTTP_METHOD]) == strtoupper($httpMethod)) {
+                    $secure = $methodInfo[Converter::KEY_IS_SECURE];
+                    $methodRoute = $methodInfo[Converter::KEY_METHOD_ROUTE];
                     $routes[] = $this->_createRoute(
                         array(
-                            self::KEY_ROUTE_PATH =>
-                                $serviceData[\Magento\Webapi\Model\Config::ATTR_SERVICE_PATH] . $methodRoute,
+                            self::KEY_ROUTE_PATH => $serviceData[Converter::KEY_BASE_URL] . $methodRoute,
                             self::KEY_CLASS => $serviceName,
                             self::KEY_METHOD => $methodName,
                             self::KEY_IS_SECURE => $secure

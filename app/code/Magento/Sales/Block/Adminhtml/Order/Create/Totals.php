@@ -100,7 +100,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         $blockName = $code.'_total_renderer';
         $block = $this->getLayout()->getBlock($blockName);
         if (!$block) {
-            $configRenderer = $this->_salesConfig->getTotalsRenderer('quote', 'totals', $code, 'adminhtml');
+            $configRenderer = $this->_salesConfig->getTotalsRenderer('quote', 'totals', $code);
             if (empty($configRenderer)) {
                 $block = $this->_defaultRenderer;
             } else {

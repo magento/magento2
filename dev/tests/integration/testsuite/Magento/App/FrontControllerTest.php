@@ -28,6 +28,7 @@ namespace Magento\App;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @magentoAppArea frontend
  */
 class FrontControllerTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,16 +46,6 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $this->_objectManager->create('Magento\App\FrontController');
-    }
-
-    public function testSetGetDefault()
-    {
-        $this->_model->setDefault('test', 'value');
-        $this->assertEquals('value', $this->_model->getDefault('test'));
-
-        $default = array('some_key' => 'some_value');
-        $this->_model->setDefault($default);
-        $this->assertEquals($default, $this->_model->getDefault());
     }
 
     public function testGetRequest()
@@ -80,7 +71,7 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Cant\'t test dispatch process without sending headers');
         }
         $_SERVER['HTTP_HOST'] = 'localhost';
-        $this->_objectManager->get('Magento\Config\Scope')->setCurrentScope('frontend');
+        $this->_objectManager->get('Magento\App\State')->setAreaCode('frontend');
         $request = $this->_objectManager->create('Magento\App\Request\Http');
         /* empty action */
         $request->setRequestUri('core/index/index');

@@ -63,7 +63,6 @@ class StockTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_coreHelperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);        
         $this->_factoryElementMock = $this->getMock('Magento\Data\Form\Element\Factory', array(), array(), '', false);
         $this->_collectionFactoryMock = $this->getMock('Magento\Data\Form\Element\CollectionFactory', array(),
             array(), '', false);
@@ -74,7 +73,6 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_block = $objectManagerHelper->getObject('Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock',
             array(
-                'coreData' => $this->_coreHelperMock,
                 'factoryElement' => $this->_factoryElementMock,
                 'factoryCollection' => $this->_collectionFactoryMock,
                 'factoryText' => $this->_factoryTextMock,
@@ -91,11 +89,11 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $this->_qtyMock->expects($this->once())->method('setForm')
             ->with($this->isInstanceOf('Magento\Data\Form\Element\AbstractElement'));
 
-        $this->_block->setForm(new \Magento\Data\Form\Element\Text(
-            $this->_coreHelperMock, 
-            $this->_factoryElementMock, 
-            $this->_collectionFactoryMock
-        ));
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_block->setForm($objectManager->getObject('Magento\Data\Form\Element\Text', array(
+            'factoryElement' => $this->_factoryElementMock,
+            'factoryCollection' => $this->_collectionFactoryMock
+        )));
     }
 
     public function testSetValue()

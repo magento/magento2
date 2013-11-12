@@ -92,7 +92,7 @@ class CodeMessDetector
 
         $command = new \PHP_PMD_TextUI_Command();
 
-        return $command->run($options);
+        return $command->run($options, new \PHP_PMD_RuleSetFactory());
     }
 
 }

@@ -30,8 +30,8 @@ class SecureTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         $appState = $this->getMock('Magento\App\State', array(), array(), '', false);
         $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
-        $cacheManager = $this->getMock('Magento\Core\Model\CacheInterface');
-        $logger = $this->getMock('Magento\Core\Model\Logger', array(), array(), '', false);
+        $cacheManager = $this->getMock('Magento\App\CacheInterface');
+        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         $context = new \Magento\Core\Model\Context(
             $logger,
             $eventDispatcher,

@@ -37,14 +37,14 @@ namespace Magento\Rss\Model\Resource;
 class Order
 {
     /**
-     * @var \Magento\Core\Model\Resource
+     * @var \Magento\App\Resource
      */
     protected $_resource;
 
     /**
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      */
-    public function __construct(\Magento\Core\Model\Resource $resource)
+    public function __construct(\Magento\App\Resource $resource)
     {
         $this->_resource = $resource;
     }
@@ -57,7 +57,7 @@ class Order
      */
     public function getAllCommentCollection($orderId)
     {
-        /** @var $res \Magento\Core\Model\Resource */
+        /** @var $res \Magento\App\Resource */
         $res = $this->_resource;
         $read = $res->getConnection('core_read');
 

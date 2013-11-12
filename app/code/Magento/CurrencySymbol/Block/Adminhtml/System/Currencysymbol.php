@@ -36,18 +36,18 @@ namespace Magento\CurrencySymbol\Block\Adminhtml\System;
 class Currencysymbol extends \Magento\Backend\Block\Widget\Form
 {
     /**
-     * @var \Magento\CurrencySymbol\Model\System\Currencysymbol\Factory
+     * @var \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory
      */
     protected $_symbolSystemFactory;
 
     /**
-     * @param \Magento\CurrencySymbol\Model\System\Currencysymbol\Factory $symbolSystemFactory
+     * @param \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolSystemFactory
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
      */
     public function __construct(
-        \Magento\CurrencySymbol\Model\System\Currencysymbol\Factory $symbolSystemFactory,
+        \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolSystemFactory,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
         array $data = array()

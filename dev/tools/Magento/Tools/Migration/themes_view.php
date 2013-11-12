@@ -26,13 +26,11 @@
 require_once __DIR__ . '/../../../../../app/bootstrap.php';
 $rootDir = realpath(__DIR__ . '/../../../../..');
 try {
-    $config = new \Magento\Core\Model\Config\Primary($rootDir, array());
-    $entryPoint = new \Magento\Core\Model\EntryPoint\Cron($config);
+    $entryPoint = new \Magento\App\EntryPoint\EntryPoint($rootDir, array());
 
-    $objectManager = new \Magento\Core\Model\ObjectManager($config);
+    $objectManager = new \Magento\App\ObjectManager($config);
     /** @var $configModel \Magento\Core\Model\Config */
     $configModel = $objectManager->get('Magento\Core\Model\Config');
-    $configModel->removeCache();
     $configModel->reinit();
     $config = array();
 
@@ -51,7 +49,7 @@ try {
 /**
  * Replace {{skin url=""}} with {{view url=""}} for given table field
  *
- * @param \Magento\Core\Model\Config\Primary $objectManager
+ * @param \Magento\ObjectManager $objectManager
  * @param string $table
  * @param string $col
  */

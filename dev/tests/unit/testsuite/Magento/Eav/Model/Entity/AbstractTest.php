@@ -40,7 +40,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Eav\Model\Entity\AbstractEntity',
             array(
-                $this->getMock('Magento\Core\Model\Resource', array(), array(), '', false),
+                $this->getMock('Magento\App\Resource', array(), array(), '', false),
                 $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false),
                 $this->getMock('Magento\Eav\Model\Entity\Attribute\Set', array(), array(), '', false),
                 $this->getMock('Magento\Core\Model\LocaleInterface'),
@@ -129,7 +129,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             );
             $mock->setAttributeId($code);
 
-            $logger = $this->getMock('Magento\Core\Model\Logger', array(), array(), '', false);
+            $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
             /** @var $backendModel \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend */
             $backendModel = $this->getMock(
                 'Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend',
@@ -256,7 +256,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $attribute = $this->_getAttributeMock($attributeCode, $attributeSetId);
 
-        $logger = $this->getMock('Magento\Core\Model\Logger', array(), array(), '', false);
+        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         /** @var $backendModel \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend */
         $backendModel = $this->getMock(
             'Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend',
@@ -302,7 +302,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $attributes[$attributeCode] = $attribute;
 
         $data = array(
-            $this->getMock('Magento\Core\Model\Resource', array(), array(), '', false),
+            $this->getMock('Magento\App\Resource', array(), array(), '', false),
             $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false),
             $this->getMock('Magento\Eav\Model\Entity\Attribute\Set', array(), array(), '', false),
             $this->getMock('Magento\Core\Model\LocaleInterface'),

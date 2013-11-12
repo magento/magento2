@@ -41,7 +41,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\View\DesignInterface')
-            ->setArea(\Magento\Core\Model\App\Area::AREA_ADMINHTML)
+            ->setArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
             ->setDefaultDesignTheme();
         $layout = $objectManager->create('Magento\Core\Model\Layout');
         $formBlock = $layout->addBlock('Magento\Backend\Block\Widget\Form');

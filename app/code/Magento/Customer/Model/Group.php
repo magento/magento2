@@ -72,9 +72,9 @@ class Group extends \Magento\Core\Model\AbstractModel
     protected static $_taxClassIds = array();
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\Core\Model\Store\Config
      */
-    protected $_coreConfig;
+    protected $_storeConfig;
 
     /**
      * @var \Magento\Index\Model\Indexer
@@ -86,7 +86,7 @@ class Group extends \Magento\Core\Model\AbstractModel
      *
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\Index\Model\Indexer $indexer
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -95,13 +95,13 @@ class Group extends \Magento\Core\Model\AbstractModel
     public function __construct(
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\Index\Model\Indexer $indexer,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_coreConfig = $coreConfig;
+        $this->_storeConfig = $storeConfig;
         $this->_indexer = $indexer;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -146,7 +146,7 @@ class Group extends \Magento\Core\Model\AbstractModel
 
     public function usesAsDefault()
     {
-        $data = $this->_coreConfig->getStoresConfigByPath(self::XML_PATH_DEFAULT_ID);
+        $data = $this->_storeConfig->getStoresConfigByPath(self::XML_PATH_DEFAULT_ID);
         if (in_array($this->getId(), $data)) {
             return true;
         }

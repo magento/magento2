@@ -52,14 +52,14 @@
         <?php if ($_catalogHelper->isShowPriceOnGesture($_product)): ?>
             <?php $priceElementId = 'product-price-' . $_id . $this->getIdSuffix(); ?>
             <span id="<?php echo $priceElementId ?>" style="display:none"></span>
-            <?php $popupId = 'msrp-popup-' . $_id . $_coreHelper->getRandomString(20); ?>
+            <?php $popupId = 'msrp-popup-' . $_id . $this->getRandomString(20); ?>
             <a href="#" id="<?php echo($popupId);?>"><?php echo __('Click for price'); ?></a>
         <?php else: ?>
             <span class="msrp-price-hide-message">
                 <?php echo $_catalogHelper->getMsrpPriceMessage($_product) ?>
             </span>
         <?php endif; ?>
-        <?php $helpLinkId = 'msrp-help-' . $_id . $_coreHelper->getRandomString(20); ?>
+        <?php $helpLinkId = 'msrp-help-' . $_id . $this->getRandomString(20); ?>
         <a href="#" id="<?php echo($helpLinkId);?>"><?php echo __("What's this?"); ?></a>
     </div>
     <script type="text/javascript">

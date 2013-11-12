@@ -49,11 +49,9 @@ class Rest implements \Magento\App\FrontControllerInterface
     protected $_oauthHelper;
 
     /**
-     * Initialize dependencies.
-     *
-     * @param \Magento\Webapi\Controller\Rest\Request $request
-     * @param \Magento\Webapi\Controller\Rest\Response $response
-     * @param \Magento\Webapi\Controller\Rest\Router $router
+     * @param Rest\Request $request
+     * @param Rest\Response $response
+     * @param Rest\Router $router
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\App\State $appState
      * @param \Magento\Oauth\Service\OauthV1Interface $oauthService
@@ -91,7 +89,7 @@ class Rest implements \Magento\App\FrontControllerInterface
      * Handle REST request
      *
      * @param \Magento\App\RequestInterface $request
-     * @return $this
+     * @return \Magento\App\ResponseInterface
      */
     public function dispatch(\Magento\App\RequestInterface $request)
     {
@@ -124,7 +122,6 @@ class Rest implements \Magento\App\FrontControllerInterface
         } catch (\Exception $e) {
             $this->_response->setException($e);
         }
-        $this->_response->sendResponse();
-        return $this;
+        return $this->_response;
     }
 }

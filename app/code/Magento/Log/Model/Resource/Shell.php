@@ -36,7 +36,7 @@ namespace Magento\Log\Model\Resource;
 class Shell
 {
     /**
-     * @var \Magento\Core\Model\Resource
+     * @var \Magento\App\Resource
      */
     protected $_resource;
 
@@ -47,11 +47,11 @@ class Shell
 
     /**
      * @param \Magento\Core\Model\Resource\HelperPool $helperPool
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      */
     public function __construct(
         \Magento\Core\Model\Resource\HelperPool $helperPool,
-        \Magento\Core\Model\Resource $resource
+        \Magento\App\Resource $resource
     ) {
         $this->_helperPool = $helperPool;
         $this->_resource = $resource;

@@ -54,16 +54,29 @@ class Exception extends \RuntimeException
     protected $_httpCode;
 
     /**
+     * Exception name is used for SOAP faults generation.
+     *
+     * @var string
+     */
+    protected $_name;
+
+    /**
      * Initialize exception with HTTP code.
      *
      * @param string $message
      * @param int $httpCode
      * @param int $code Error code
      * @param array $details Additional exception details
+     * @param string $name Exception name
      * @throws \InvalidArgumentException
      */
-    public function __construct($message, $code = 0, $httpCode = self::HTTP_BAD_REQUEST, array $details = array())
-    {
+    public function __construct(
+        $message,
+        $code = 0,
+        $httpCode = self::HTTP_BAD_REQUEST,
+        array $details = array(),
+        $name = ''
+    ) {
         /** Only HTTP error codes are allowed. No success or redirect codes must be used. */
         if ($httpCode < 400 || $httpCode > 599) {
             throw new \InvalidArgumentException(sprintf('The specified HTTP code "%d" is invalid.', $httpCode));
@@ -71,6 +84,7 @@ class Exception extends \RuntimeException
         parent::__construct($message, $code);
         $this->_httpCode = $httpCode;
         $this->_details = $details;
+        $this->_name = $name;
     }
 
     /**
@@ -103,5 +117,15 @@ class Exception extends \RuntimeException
     public function getDetails()
     {
         return $this->_details;
+    }
+
+    /**
+     * Retrieve exception name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->_name;
     }
 }

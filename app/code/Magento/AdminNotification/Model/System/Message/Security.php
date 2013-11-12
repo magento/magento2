@@ -45,7 +45,7 @@ class Security
     private $_verificationTimeOut  = 2;
 
     /**
-     * @var \Magento\Core\Model\CacheInterface
+     * @var \Magento\App\CacheInterface
      */
     protected $_cache;
 
@@ -65,13 +65,13 @@ class Security
     protected $_curlFactory;
 
     /**
-     * @param \Magento\Core\Model\CacheInterface $cache
+     * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\Core\Model\Config $config
      * @param \Magento\HTTP\Adapter\CurlFactory $curlFactory
      */
     public function __construct(
-        \Magento\Core\Model\CacheInterface $cache,
+        \Magento\App\CacheInterface $cache,
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\Core\Model\Config $config,
         \Magento\HTTP\Adapter\CurlFactory $curlFactory

@@ -212,7 +212,7 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
             && $row['allowed_price_in_rss']
         ) {
             $compareDate = self::$_currentDate->compareDate($row['special_to_date'],
-                \Magento\Date::DATE_INTERNAL_FORMAT);
+                \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
             if (-1 === $compareDate || 0 === $compareDate) {
                 $row['use_special'] = true;
             }

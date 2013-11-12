@@ -69,12 +69,12 @@ var tierPriceRowTemplate = '<tr>'
     + '<td class="col-websites"<?php if (!$_showWebsite): ?> style="display:none"<?php endif; ?>>'
     + '<select class="<?php echo $_htmlClass ?> required-entry" name="<?php echo $_htmlName ?>[{{index}}][website_id]" id="tier_price_row_{{index}}_website">'
     <?php foreach ($this->getWebsites() as $_websiteId => $_info): ?>
-    + '<option value="<?php echo $_websiteId ?>"><?php echo $this->jsQuoteEscape($this->escapeHtml($_info['name'])) ?><?php if (!empty($_info['currency'])): ?> [<?php echo $this->escapeHtml($_info['currency']) ?>]<?php endif; ?></option>'
+    + '<option value="<?php echo $_websiteId ?>"><?php echo $this->escapeJsQuote($this->escapeHtml($_info['name'])) ?><?php if (!empty($_info['currency'])): ?> [<?php echo $this->escapeHtml($_info['currency']) ?>]<?php endif; ?></option>'
     <?php endforeach ?>
     + '</select></td>'
     + '<td class="col-customer-group"><select class="<?php echo $_htmlClass ?> custgroup required-entry" name="<?php echo $_htmlName ?>[{{index}}][cust_group]" id="tier_price_row_{{index}}_cust_group">'
     <?php foreach ($this->getCustomerGroups() as $_groupId=>$_groupName): ?>
-    + '<option value="<?php echo $_groupId ?>"><?php echo $this->jsQuoteEscape($this->escapeHtml($_groupName)) ?></option>'
+    + '<option value="<?php echo $_groupId ?>"><?php echo $this->escapeJsQuote($this->escapeHtml($_groupName)) ?></option>'
     <?php endforeach ?>
     + '</select></td>'
     + '<td class="col-qty"><small class="nobr" title="<?php echo __("and above")?>"><?php echo __("and above")?></small><input class="<?php echo $_htmlClass ?> qty required-entry validate-greater-than-zero" type="text" name="<?php echo $_htmlName ?>[{{index}}][price_qty]" value="{{qty}}" id="tier_price_row_{{index}}_qty" />'

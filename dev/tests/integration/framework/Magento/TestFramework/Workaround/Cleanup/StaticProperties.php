@@ -50,7 +50,7 @@ class StaticProperties
      */
     protected static $_classesToSkip = array(
         'Mage',
-        'Magento\Core\Model\ObjectManager',
+        'Magento\App\ObjectManager',
         'Magento\TestFramework\Helper\Bootstrap',
         'Magento\TestFramework\Event\Magento',
         'Magento\TestFramework\Event\PhpUnit',

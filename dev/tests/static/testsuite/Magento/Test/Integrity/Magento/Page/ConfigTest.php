@@ -30,13 +30,13 @@ namespace Magento\Test\Integrity\Magento\Page;
 
 class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
 {
-    public function testFileSchemaUsingInvalidXml()
+    public function testFileSchemaUsingInvalidXml($expectedErrors = null)
     {
         $expectedErrors = array("Element 'layout': The attribute 'id' is required but missing.");
         parent::testFileSchemaUsingInvalidXml($expectedErrors);
     }
 
-    public function testSchemaUsingInvalidXml()
+    public function testSchemaUsingInvalidXml($expectedErrors = null)
     {
         $expectedErrors = array(
             "Element 'layouts': No match found for key-sequence ['bad_ref'] of keyref 'layout-ref'.",
@@ -45,7 +45,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
         parent::testSchemaUsingInvalidXml($expectedErrors);
     }
 
-    public function testSchemaUsingPartialXml()
+    public function testSchemaUsingPartialXml($expectedErrors = null)
     {
         $expectedErrors = array(
             "Element 'layout': Missing child element(s). Expected is ( label ).",

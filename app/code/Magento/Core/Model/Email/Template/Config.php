@@ -33,17 +33,17 @@ class Config
     protected $_dataStorage;
 
     /**
-     * @var \Magento\Core\Model\Config\Modules\Reader
+     * @var \Magento\Module\Dir\Reader
      */
     protected $_moduleReader;
 
     /**
      * @param \Magento\Core\Model\Email\Template\Config\Data $dataStorage
-     * @param \Magento\Core\Model\Config\Modules\Reader $moduleReader
+     * @param \Magento\Module\Dir\Reader $moduleReader
      */
     public function __construct(
         \Magento\Core\Model\Email\Template\Config\Data $dataStorage,
-        \Magento\Core\Model\Config\Modules\Reader $moduleReader
+        \Magento\Module\Dir\Reader $moduleReader
     ) {
         $this->_dataStorage = $dataStorage;
         $this->_moduleReader = $moduleReader;

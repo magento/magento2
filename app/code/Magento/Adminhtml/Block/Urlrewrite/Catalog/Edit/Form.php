@@ -71,7 +71,7 @@ class Form extends \Magento\Adminhtml\Block\Urlrewrite\Edit\Form
      * @param \Magento\Backend\Model\Session $backendSession
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\Form\Factory $formFactory
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
@@ -89,7 +89,7 @@ class Form extends \Magento\Adminhtml\Block\Urlrewrite\Edit\Form
         \Magento\Backend\Model\Session $backendSession,
         \Magento\Backend\Helper\Data $adminhtmlData,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Data\Form\Factory $formFactory,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
         array $data = array()

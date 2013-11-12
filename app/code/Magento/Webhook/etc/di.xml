@@ -24,11 +24,6 @@
  */
 -->
 <config>
-    <type name="Magento\Webhook\Model\Resource\Subscription">
-        <param name="config">
-            <instance type="Magento\Core\Model\Config" />
-        </param>
-    </type>
     <type name="Magento\Outbound\Formatter\Factory">
         <param name="formatterMap">
             <value>

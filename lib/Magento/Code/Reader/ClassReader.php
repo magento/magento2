@@ -51,8 +51,7 @@ class ClassReader
                             null
                     );
                 } catch (\ReflectionException $e) {
-                    $message = $e->getMessage() . "\n";
-                    $message .= 'Are you sure that you didn\'t use virtual type in constructor signature?';
+                    $message = $e->getMessage();
                     throw new \ReflectionException($message, 0, $e);
                 }
             }

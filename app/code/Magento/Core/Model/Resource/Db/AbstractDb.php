@@ -39,7 +39,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
     /**
      * Cached resources singleton
      *
-     * @var \Magento\Core\Model\Resource
+     * @var \Magento\App\Resource
      */
     protected $_resources;
 
@@ -140,9 +140,9 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
     /**
      * Class constructor
      *
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      */
-    public function __construct(\Magento\Core\Model\Resource $resource)
+    public function __construct(\Magento\App\Resource $resource)
     {
         $this->_resources = $resource;
         parent::__construct();
@@ -165,7 +165,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
      */
     public function __wakeup()
     {
-        $this->_resources = \Magento\Core\Model\ObjectManager::getInstance()->get('Magento\Core\Model\Resource');
+        $this->_resources = \Magento\App\ObjectManager::getInstance()->get('Magento\App\Resource');
     }
 
     /**

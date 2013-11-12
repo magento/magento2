@@ -46,6 +46,31 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     protected $_eventObject = 'layout_update_collection';
 
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Logger $logger
+     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
+     */
+    public function __construct(
+        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Logger $logger,
+        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
+    ) {
+        $this->dateTime = $dateTime;
+        parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $resource);
+    }
+
+    /**
      * Define resource model
      */
     protected function _construct()
@@ -139,7 +164,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         $datetime = new \DateTime();
         $storeInterval = new \DateInterval('P' . $days . 'D');
         $datetime->sub($storeInterval);
-        $formattedDate = $this->formatDate($datetime->getTimestamp());
+        $formattedDate = $this->dateTime->formatDate($datetime->getTimestamp());
 
         $this->addFieldToFilter('main_table.updated_at', array('notnull' => true))
             ->addFieldToFilter('main_table.updated_at', array('lt' => $formattedDate));

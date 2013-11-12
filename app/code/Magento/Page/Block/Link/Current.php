@@ -42,6 +42,30 @@ class Current extends \Magento\Core\Block\Template
     protected $_template = 'Magento_Page::link/current.phtml';
 
     /**
+     * Default path
+     *
+     * @var \Magento\App\DefaultPathInterface
+     */
+    protected $_defaultPath;
+
+    /**
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\App\DefaultPathInterface $defaultPath
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Block\Template\Context $context,
+        \Magento\App\DefaultPathInterface $defaultPath,
+        array $data = array()
+    ) {
+        parent::__construct($coreData, $context, $data);
+        $this->_defaultPath = $defaultPath;
+    }
+
+
+    /**
      * @return string
      */
     public function getHref()
@@ -61,11 +85,10 @@ class Current extends \Magento\Core\Block\Template
             'controller' => $this->_request->getControllerName(),
             'action' => $this->_request->getActionName(),
         );
-        $dafaultsParams = $this->_frontController->getDefault();
 
         $parts = array();
         foreach ($routeParts as $key => $value) {
-            if (!empty($value) && (!isset($dafaultsParams[$key]) || $value != $dafaultsParams[$key])) {
+            if (!empty($value) && ($value != $this->_defaultPath->getPart($key))) {
                 $parts[] = $value;
             }
         }

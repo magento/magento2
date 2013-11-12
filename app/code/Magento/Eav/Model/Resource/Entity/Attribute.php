@@ -63,13 +63,13 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Class constructor
      *
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Eav\Model\Resource\Entity\Type $eavEntityType
      * @param array $arguments
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Core\Model\App $app,
         \Magento\Eav\Model\Resource\Entity\Type $eavEntityType,
         array $arguments = array()

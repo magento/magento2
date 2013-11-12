@@ -54,8 +54,10 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFilesCollection()
     {
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
+            ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
-            ->setDesignTheme('magento_basic', 'adminhtml');
+            ->setDesignTheme('magento_basic');
         /** @var $model \Magento\Cms\Model\Wysiwyg\Images\Storage */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Cms\Model\Wysiwyg\Images\Storage');

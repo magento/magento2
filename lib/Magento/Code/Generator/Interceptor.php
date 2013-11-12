@@ -223,7 +223,7 @@ class Interceptor extends \Magento\Code\Generator\EntityAbstract
             'docblock' => array(
                 'shortDescription' => 'Retrieve ObjectManager from the global scope',
             ),
-            'body' => '$this->_objectManager = \Magento\Core\Model\ObjectManager::getInstance();'
+            'body' => '$this->_objectManager = \Magento\App\ObjectManager::getInstance();'
                 . "\n\$this->_pluginList = \$this->_objectManager->get('Magento\Interception\PluginList');",
         );
 
@@ -311,5 +311,26 @@ class Interceptor extends \Magento\Code\Generator\EntityAbstract
             $this->_classGenerator->setExtendedClass($typeName);
         }
         return parent::_generateCode();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _validateData()
+    {
+        $result = parent::_validateData();
+
+        if ($result) {
+            $sourceClassName = $this->_getSourceClassName();
+            $resultClassName = $this->_getResultClassName();
+
+            if ($resultClassName !== $sourceClassName . '\\Interceptor') {
+                $this->_addError('Invalid Interceptor class name ['
+                    . $resultClassName . ']. Use ' . $sourceClassName . '\\Interceptor'
+                );
+                $result = false;
+            }
+        }
+        return $result;
     }
 }

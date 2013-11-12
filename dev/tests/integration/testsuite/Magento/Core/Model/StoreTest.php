@@ -198,7 +198,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseUrlInPub()
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\Core\Model\App::PARAM_APP_URIS => array(\Magento\App\Dir::PUB => '')
+            \Magento\App\Dir::PARAM_APP_URIS => array(\Magento\App\Dir::PUB => '')
         ));
         $this->_model = $this->_getStoreModel();
         $this->_model->load('default');

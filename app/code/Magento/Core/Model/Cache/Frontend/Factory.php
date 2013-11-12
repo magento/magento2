@@ -90,7 +90,7 @@ class Factory
     /**
      * Resource
      *
-     * @var \Magento\Core\Model\Resource
+     * @var \Magento\App\Resource
      */
     protected $_resource;
 
@@ -98,7 +98,7 @@ class Factory
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\App\Dir $dirs
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param array $enforcedOptions
      * @param array $decorators
      */
@@ -106,7 +106,7 @@ class Factory
         \Magento\ObjectManager $objectManager,
         \Magento\Filesystem $filesystem,
         \Magento\App\Dir $dirs,
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         array $enforcedOptions = array(),
         array $decorators = array()
     ) {

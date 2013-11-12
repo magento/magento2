@@ -24,18 +24,16 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Recent Customer Reviews Block
- *
- * @category   Magento
- * @package    Magento_Review
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-
 namespace Magento\Review\Block\Customer;
 
+/**
+ * Recent Customer Reviews Block
+ */
 class Recent extends \Magento\Core\Block\Template
 {
+    /**
+     * @var string
+     */
     protected $_template = 'customer/list.phtml';
 
     /**
@@ -56,11 +54,19 @@ class Recent extends \Magento\Core\Block\Template
     protected $_storeManager;
 
     /**
+     * Filter manager
+     *
+     * @var \Magento\Filter\FilterManager
+     */
+    protected $filter;
+
+    /**
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Filter\FilterManager $filter
      * @param array $data
      */
     public function __construct(
@@ -69,12 +75,34 @@ class Recent extends \Magento\Core\Block\Template
         \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Filter\FilterManager $filter,
         array $data = array()
     ) {
         $this->_collection = $collectionFactory->create();
         $this->_customerSession = $customerSession;
         $this->_storeManager = $storeManager;
+        $this->filter = $filter;
         parent::__construct($coreData, $context, $data);
+    }
+
+    /**
+     * Truncate string
+     *
+     * @param string $value
+     * @param int $length
+     * @param string $etc
+     * @param string &$remainder
+     * @param bool $breakWords
+     * @return string
+     */
+    public function truncateString($value, $length = 80, $etc = '...', &$remainder = '', $breakWords = true)
+    {
+        return $this->filter->truncate($value, array(
+            'length' => $length,
+            'etc' => $etc,
+            'remainder' => $remainder,
+            'breakWords' => $breakWords
+        ));
     }
 
     protected function _initCollection()

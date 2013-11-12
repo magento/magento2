@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -35,13 +32,12 @@ class AbstractActionTest extends \Magento\Backend\Utility\Controller
 {
     /**
      * Check redirection to startup page for logged user
-     * @magentoConfigFixture global/areas/adminhtml/frontName backend
      * @magentoConfigFixture current_store admin/security/use_form_key 1
      */
     public function testPreDispatchWithEmptyUrlRedirectsToStartupPage()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Config\ScopeInterface')
-            ->setCurrentScope(\Magento\Core\Model\App\Area::AREA_ADMINHTML);
+            ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $this->dispatch('backend');
         /** @var $backendUrlModel \Magento\Backend\Model\Url */
         $backendUrlModel =

@@ -29,9 +29,9 @@
     <preference for="Magento\App\ResponseInterface" type="Magento\App\Response\Http" />
     <preference for="Magento\App\RouterListInterface" type="Magento\App\RouterList" />
     <preference for="Magento\App\FrontControllerInterface" type="Magento\App\FrontController" />
-    <preference for="Magento\App\UpdaterInterface" type="Magento\App\Updater" />
+    <preference for="Magento\Module\UpdaterInterface" type="Magento\Module\Updater" />
     <preference for="Magento\Core\Model\AppInterface" type="Magento\Core\Model\App\Proxy" />
-    <preference for="Magento\Core\Model\CacheInterface" type="Magento\Core\Model\Cache\Proxy" />
+    <preference for="Magento\App\CacheInterface" type="Magento\Core\Model\Cache\Proxy" />
     <preference for="Magento\Core\Model\Cache\StateInterface" type="Magento\Core\Model\Cache\State" />
     <preference for="Magento\Core\Model\Cache\TypeListInterface" type="Magento\Core\Model\Cache\TypeList" />
     <preference for="Magento\Core\Model\Store\ConfigInterface" type="Magento\Core\Model\Store\Config" />
@@ -45,48 +45,43 @@
     <preference for="Magento\Config\ScopeInterface" type="Magento\Config\Scope" />
     <preference for="Magento\Config\FileResolverInterface" type="Magento\Core\Model\Config\FileResolver" />
     <preference for="Magento\Config\CacheInterface" type="Magento\Core\Model\Cache\Type\Config" />
-    <preference for="Magento\Config\ValidationStateInterface" type="Magento\Core\Model\Config\ValidationState" />
-    <preference for="Magento\App\ModuleListInterface" type="Magento\App\ModuleList" />
+    <preference for="Magento\Config\ValidationStateInterface" type="Magento\App\Config\ValidationState" />
+    <preference for="Magento\Module\ModuleListInterface" type="Magento\Module\ModuleList" />
     <preference for="Magento\Event\ConfigInterface" type="Magento\Event\Config" />
     <preference for="Magento\Event\InvokerInterface" type="Magento\Event\Invoker\InvokerDefault" />
     <preference for="Magento\Interception\PluginList" type="Magento\Interception\PluginList\PluginList" />
     <preference for="Magento\Event\ManagerInterface" type="Magento\Event\Manager\Proxy" />
     <preference for="Magento\View\LayoutInterface" type="Magento\Core\Model\Layout" />
     <preference for="Magento\View\Layout\ProcessorInterface" type="Magento\Core\Model\Layout\Merge" />
+    <preference for="Magento\App\Route\ConfigInterface" type="Magento\App\Route\Config" />
+    <preference for="Magento\App\Resource\ConfigInterface" type="Magento\App\Resource\Config\Proxy" />
     <type name="Magento\View\Layout\Structure" shared="false" />
     <type name="Magento\View\BlockPool" shared="false" />
-    <type name="Magento\Data\Form\Factory">
-        <param name="session">
-            <instance type="Magento\Core\Model\Session" />
-        </param>
-    </type>
+    <preference for="Magento\Error\HandlerInterface" type="Magento\App\Error\Handler" />
     <type name="Magento\App\State">
         <param name="installDate">
             <value type="argument">Magento\App\State::PARAM_INSTALL_DATE</value>
         </param>
         <param name="mode">
-            <value type="argument">Magento\Core\Model\App::PARAM_MODE</value>
+            <value type="argument">Magento\App\State::PARAM_MODE</value>
         </param>
     </type>
-    <type name="Magento\Core\App\FrontController\Plugin\Install">
+    <type name="Magento\Module\FrontController\Plugin\Install">
         <param name="cache">
             <instance type="Magento\Core\Model\Cache\Type\Config" />
         </param>
     </type>
-    <type name="Magento\Core\Model\Config\ValidationState">
+    <type name="Magento\App\Config\ValidationState">
         <param name="appMode">
-            <value type="argument">Magento\Core\Model\App::PARAM_MODE</value>
+            <value type="argument">Magento\App\State::PARAM_MODE</value>
         </param>
     </type>
-    <type name="Magento\Core\Model\Config\Loader\Local">
+    <type name="Magento\App\Config\Loader">
         <param name="customFile">
-            <value type="argument">Magento\Core\Model\App::PARAM_CUSTOM_LOCAL_FILE</value>
-        </param>
-        <param name="customConfig">
-            <value type="argument">Magento\Core\Model\App::PARAM_CUSTOM_LOCAL_CONFIG</value>
+            <value type="argument">Magento\App\Config\Loader::PARAM_CUSTOM_FILE</value>
         </param>
     </type>
-    <type name="Magento\App\Module\Declaration\Reader\Filesystem">
+    <type name="Magento\Module\Declaration\Reader\Filesystem">
         <param name="allowedModules">
             <value type="argument">Magento\Core\Model\App::PARAM_ALLOWED_MODULES</value>
         </param>
@@ -94,6 +89,19 @@
     <type name="Magento\Core\Model\Cache\Frontend\Factory">
         <param name="enforcedOptions">
             <value type="argument">Magento\Core\Model\App::PARAM_CACHE_OPTIONS</value>
+        </param>
+        <param name="decorators">
+            <value>
+                <tag>
+                    <class>Magento\Cache\Frontend\Decorator\TagScope</class>
+                    <parameters>
+                        <tag>MAGE</tag>
+                    </parameters>
+                </tag>
+            </value>
+        </param>
+        <param name="resource">
+            <instance type="Magento\App\Resource\Proxy" />
         </param>
     </type>
     <type name="Magento\Core\Model\Cache\State">
@@ -109,27 +117,12 @@
             <value type="argument">Magento\Core\Model\App::PARAM_RUN_TYPE</value>
         </param>
     </type>
-    <type name="Magento\Core\Model\Config">
-        <param name="storage">
-            <instance type="Magento\Core\Model\Config\Storage" />
-        </param>
-    </type>
-    <type name="Magento\Core\Model\Config\Storage">
-        <param name="loader">
-            <instance type="Magento\Core\Model\Config\Loader\Proxy" />
-        </param>
-    </type>
     <type name="Magento\Core\Model\Translate">
         <param name="cache">
             <instance type="Magento\Core\Model\Cache\Type\Translate" />
         </param>
     </type>
     <type name="Magento\Install\Model\Installer">
-        <param name="config">
-            <instance type="Magento\Core\Model\Config\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Core\Model\Store\StorageFactory">
         <param name="config">
             <instance type="Magento\Core\Model\Config\Proxy" />
         </param>
@@ -154,12 +147,12 @@
         </param>
     </type>
     <type name="Magento\Acl" shared="false" />
-    <type name="Magento\Core\Model\ObjectManager\ConfigLoader">
+    <type name="Magento\App\ObjectManager\ConfigLoader">
         <param name="cache">
             <instance type="Magento\Core\Model\Cache\Type\Config"/>
         </param>
     </type>
-    <type name="Magento\Core\Model\ObjectManager\ConfigCache">
+    <type name="Magento\App\ObjectManager\ConfigCache">
         <param name="cacheFrontend">
             <instance type="Magento\Core\Model\Cache\Type\Config"/>
         </param>
@@ -201,25 +194,43 @@
             </value>
         </param>
     </type>
-    <type name="Magento\Core\Model\Resource">
-        <param name="resourceConfig">
-            <instance type="Magento\Core\Model\Config\Resource\Primary" />
-        </param>
+    <type name="Magento\App\Resource">
         <param name="tablePrefix">
-            <value type="argument">Magento\Core\Model\Resource::PARAM_TABLE_PREFIX</value>
+            <value type="argument">Magento\App\Resource::PARAM_TABLE_PREFIX</value>
+        </param>
+    </type>
+    <type name="Magento\App\Resource\Config">
+        <param name="cache">
+            <instance type="Magento\Core\Model\Cache\Type\Config\Proxy" />
+        </param>
+        <param name="initialResources">
+            <value type="argument">Magento\App\Resource\Config::PARAM_INITIAL_RESOURCES</value>
+        </param>
+    </type>
+    <type name="Magento\App\Resource\Config\Reader">
+        <param name="fileResolver">
+            <instance type="Magento\Core\Model\Config\FileResolver\Proxy" />
         </param>
     </type>
     <type name="Magento\Config\Scope">
         <param name="defaultScope">
-            <value>global</value>
+            <value>primary</value>
         </param>
         <param name="areaList">
-            <instance type="Magento\App\AreaListProxy" />
+            <instance type="Magento\App\AreaList\Proxy" />
         </param>
     </type>
     <type name="Magento\Core\Model\Url">
         <param name="session">
             <instance type="Magento\Core\Model\Session\Proxy" />
         </param>
+    </type>
+    <type name="Magento\HTTP\PhpEnvironment\RemoteAddress">
+        <param name="alternativeHeaders">
+            <value/>
+        </param>
+    </type>
+    <type name="Magento\App\FrontController">
+        <plugin name="install" type="Magento\Module\FrontController\Plugin\Install" sortOrder="40"/>
     </type>
 </config>

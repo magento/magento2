@@ -37,9 +37,6 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Customer\Helper\Data */
     protected $_customerData;
 
-    /** @var  \Magento\Core\Helper\Data */
-    protected $_coreData;
-
     /** @var \Magento\Core\Model\Website|\PHPUnit_Framework_MockObject_MockObject */
     protected $_website;
 
@@ -73,10 +70,6 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(array('getResetPasswordLinkExpirationPeriod'))
             ->getMock();
-        $this->_coreData = $this->getMockBuilder('Magento\Core\Helper\Data')
-            ->disableOriginalConstructor()
-            ->setMethods(array())
-            ->getMock();
         $this->_website = $this->getMockBuilder('Magento\Core\Model\Website')
             ->disableOriginalConstructor()
             ->setMethods(array('getStoreIds', '__wakeup'))
@@ -103,6 +96,10 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
         $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
+        $encryptor = $this->getMockBuilder('\Magento\Encryption\EncryptorInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(array())
+            ->getMock();
 
         $this->_storeManager = $this->getMockBuilder('Magento\Core\Model\StoreManager')
             ->disableOriginalConstructor()
@@ -118,7 +115,6 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $this->_model = new \Magento\Customer\Model\Customer(
             $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false),
             $this->_customerData,
-            $this->_coreData,
             $this->_contextMock,
             $coreRegistry,
             $this->_senderMock,
@@ -133,6 +129,9 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Core\Model\Email\InfoFactory', array(), array(), '', false),
             $this->getMock('Magento\Customer\Model\GroupFactory', array(), array(), '', false),
             $this->getMock('Magento\Customer\Model\AttributeFactory', array(), array(), '', false),
+            $encryptor,
+            new \Magento\Math\Random,
+            new \Magento\Stdlib\DateTime,
             $this->_collectionMock,
             array()
         );

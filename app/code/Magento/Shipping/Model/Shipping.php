@@ -61,13 +61,6 @@ class Shipping
     protected $_availabilityConfigField = 'active';
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
-
-    /**
      * Core store config
      *
      * @var \Magento\Core\Model\Store\Config
@@ -110,7 +103,11 @@ class Shipping
     protected $_regionFactory;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
+     * @var \Magento\Math\Division
+     */
+    protected $mathDivision;
+
+    /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Shipping\Model\Config $shippingConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -119,9 +116,9 @@ class Shipping
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
      * @param \Magento\Shipping\Model\Rate\RequestFactory $rateRequestFactory
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
+     * @param \Magento\Math\Division $mathDivision
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Shipping\Model\Config $shippingConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
@@ -129,9 +126,9 @@ class Shipping
         \Magento\Shipping\Model\Carrier\Factory $carrierFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
         \Magento\Shipping\Model\Rate\RequestFactory $rateRequestFactory,
-        \Magento\Directory\Model\RegionFactory $regionFactory
+        \Magento\Directory\Model\RegionFactory $regionFactory,
+        \Magento\Math\Division $mathDivision
     ) {
-        $this->_coreData = $coreData;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_shippingConfig = $shippingConfig;
         $this->_storeManager = $storeManager;
@@ -140,6 +137,7 @@ class Shipping
         $this->_rateResultFactory = $rateResultFactory;
         $this->_rateRequestFactory = $rateRequestFactory;
         $this->_regionFactory = $regionFactory;
+        $this->mathDivision = $mathDivision;
     }
 
     /**
@@ -355,7 +353,7 @@ class Shipping
                        if ($itemWeight > $maxWeight) {
                            $qtyItem = floor($itemWeight / $maxWeight);
                            $decimalItems[] = array('weight' => $maxWeight, 'qty' => $qtyItem);
-                           $weightItem = $this->_coreData->getExactDivision($itemWeight, $maxWeight);
+                           $weightItem = $this->mathDivision->getExactDivision($itemWeight, $maxWeight);
                            if ($weightItem) {
                                $decimalItems[] = array('weight' => $weightItem, 'qty' => 1);
                            }

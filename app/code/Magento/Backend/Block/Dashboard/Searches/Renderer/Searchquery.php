@@ -27,9 +27,6 @@
 
 /**
  * Dashboard search query column renderer
- *
- * @category   Magento
- * @package    Magento_Adminhtml
  */
 namespace Magento\Backend\Block\Dashboard\Searches\Renderer;
 

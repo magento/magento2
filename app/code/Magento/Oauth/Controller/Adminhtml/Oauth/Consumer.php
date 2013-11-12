@@ -59,30 +59,26 @@ class Consumer extends \Magento\Backend\Controller\AbstractAction
     /** @var \Magento\Oauth\Helper\Service */
     protected $_oauthHelper;
 
-    /** @var \Magento\Core\Model\Logger */
+    /** @var \Magento\Logger */
     protected $_logger;
 
     /**
-     * Class constructor
-     *
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Oauth\Helper\Service $oauthHelper
      * @param \Magento\Oauth\Model\Consumer\Factory $consumerFactory
      * @param \Magento\Oauth\Service\OauthV1Interface $oauthService
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param \Magento\Backend\Controller\Context $context
-     * @param string $areaCode
      */
     public function __construct(
         \Magento\Core\Model\Registry $registry,
         \Magento\Oauth\Helper\Service $oauthHelper,
         \Magento\Oauth\Model\Consumer\Factory $consumerFactory,
         \Magento\Oauth\Service\OauthV1Interface $oauthService,
-        \Magento\Core\Model\Logger $logger,
-        \Magento\Backend\Controller\Context $context,
-        $areaCode = null
+        \Magento\Logger $logger,
+        \Magento\Backend\Controller\Context $context
     ) {
-        parent::__construct($context, $areaCode);
+        parent::__construct($context);
         $this->_registry = $registry;
         $this->_oauthHelper = $oauthHelper;
         $this->_consumerFactory = $consumerFactory;
@@ -264,7 +260,7 @@ class Consumer extends \Magento\Backend\Controller\AbstractAction
             $this->_setFormData(null);
         } catch (\Magento\Core\Exception $e) {
             $this->_setFormData($data);
-            $this->_getSession()->addError($this->_oauthHelper->escapeHtml($e->getMessage()));
+            $this->_getSession()->addError($this->_objectManager->get('Magento\Escaper')->escapeHtml($e->getMessage()));
             $this->getRequest()->setParam('back', 'edit');
         } catch (\Exception $e) {
             $this->_setFormData(null);

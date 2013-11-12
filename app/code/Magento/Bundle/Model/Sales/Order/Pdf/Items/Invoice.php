@@ -36,14 +36,12 @@ namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
 class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
 {
     /**
-     * Core string
-     *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
-    protected $_coreString = null;
+    protected $string;
 
     /**
-     * @param \Magento\Core\Helper\String $coreString
+     * @param \Magento\Stdlib\String $coreString
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
@@ -53,7 +51,7 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\String $coreString,
+        \Magento\Stdlib\String $coreString,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
@@ -62,7 +60,7 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         array $data = array()
     ) {
-        $this->_coreString = $coreString;
+        $this->string = $coreString;
         parent::__construct($taxData, $context, $registry, $coreDir, $resource, $resourceCollection, $data);
     }
 
@@ -83,7 +81,6 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
         $_prevOptionId = '';
         $drawItems = array();
 
-        $stringHelper = $this->_coreString;
         foreach ($items as $_item) {
             $line   = array();
 
@@ -106,7 +103,7 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
                 if ($_prevOptionId != $attributes['option_id']) {
                     $line[0] = array(
                         'font'  => 'italic',
-                        'text'  => $this->_coreString->strSplit($attributes['option_label'], 45, true, true),
+                        'text'  => $this->string->split($attributes['option_label'], 45, true, true),
                         'feed'  => 35
                     );
 
@@ -130,14 +127,14 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
                 $name = $_item->getName();
             }
             $line[] = array(
-                'text'  => $this->_coreString->strSplit($name, 35, true, true),
+                'text'  => $this->string->split($name, 35, true, true),
                 'feed'  => $feed
             );
 
             // draw SKUs
             if (!$_item->getOrderItem()->getParentItem()) {
                 $text = array();
-                foreach ($this->_coreString->strSplit($item->getSku(), 17) as $part) {
+                foreach ($this->string->split($item->getSku(), 17) as $part) {
                     $text[] = $part;
                 }
                 $line[] = array(
@@ -188,7 +185,7 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
                 foreach ($options['options'] as $option) {
                     $lines = array();
                     $lines[][] = array(
-                        'text'  => $this->_coreString->strSplit(strip_tags($option['label']), 40, true, true),
+                        'text'  => $this->string->split(strip_tags($option['label']), 40, true, true),
                         'font'  => 'italic',
                         'feed'  => 35
                     );
@@ -200,7 +197,7 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
                             : strip_tags($option['value']);
                         $values = explode(', ', $_printValue);
                         foreach ($values as $value) {
-                            foreach ($this->_coreString->strSplit($value, 30, true, true) as $_value) {
+                            foreach ($this->string->split($value, 30, true, true) as $_value) {
                                 $text[] = $_value;
                             }
                         }

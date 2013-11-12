@@ -114,57 +114,38 @@ class Config
         'TRL' /*Old Turkish Lira*/,'XPF' /*CFP Franc*/
     );
 
-    /**
-     * @var \Magento\Core\Model\Config
-     */
-    protected $_coreConfig;
 
     /**
-     * Constructor
-     *
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param array $data
      */
-    public function __construct(
-        \Magento\Core\Model\Config $coreConfig
-    ) {
-        $this->_coreConfig = $coreConfig;
+    public function __construct(array $data = array())
+    {
+        if (isset($data['allowedLocales']) && is_array($data['allowedLocales'])) {
+            $this->_allowedLocales = array_merge($this->_allowedLocales, $data['allowedLocales']);
+        }
+
+        if (isset($data['allowedCurrencies']) && is_array($data['allowedCurrencies'])) {
+            $this->_allowedCurrencies = array_merge($this->_allowedCurrencies, $data['allowedCurrencies']);
+        }
     }
 
     /**
-     * Get list preconfigured allowed locales
+     * Get list pre-configured allowed locales
      *
      * @return array
      */
     public function getAllowedLocales()
     {
-        $configData = $this->_coreConfig->getNode(\Magento\Core\Model\LocaleInterface::XML_PATH_ALLOW_CODES);
-        if ($configData) {
-            $configData = $configData->asArray();
-        }
-        if ($configData) {
-            $configData = array_keys($configData);
-        } else {
-            $configData = array();
-        }
-        return array_merge($this->_allowedLocales, $configData);
+       return $this->_allowedLocales;
     }
 
     /**
-     * Get list preconfigured allowed currencies
+     * Get list pre-configured allowed currencies
      *
      * @return array
      */
     public function getAllowedCurrencies()
     {
-        $configData = $this->_coreConfig->getNode(\Magento\Core\Model\LocaleInterface::XML_PATH_ALLOW_CURRENCIES);
-        if ($configData) {
-            $configData = $configData->asArray();
-        }
-        if ($configData) {
-            $configData = array_keys($configData);
-        } else {
-            $configData = array();
-        }
-        return array_merge($this->_allowedCurrencies, $configData);
+      return $this->_allowedCurrencies;
     }
 }

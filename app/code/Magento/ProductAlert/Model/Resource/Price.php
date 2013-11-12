@@ -37,11 +37,11 @@ class Price extends \Magento\ProductAlert\Model\Resource\AbstractResource
     protected $_dateFactory;
 
     /**
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\DateFactory $dateFactory
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Core\Model\DateFactory $dateFactory
     ) {
         $this->_dateFactory = $dateFactory;

@@ -193,7 +193,7 @@ class Attribute extends \Magento\Backend\Controller\Adminhtml\Action
             $attributeSet = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Set');
             $attributeSet->setEntityTypeId($this->_entityTypeId)->load($setName, 'attribute_set_name');
             if ($attributeSet->getId()) {
-                $setName = $this->_objectManager->get('Magento\Core\Helper\Data')->escapeHtml($setName);
+                $setName = $this->_objectManager->get('Magento\Escaper')->escapeHtml($setName);
                 $this->_getSession()->addError(
                     __('Attribute Set with name \'%1\' already exists.', $setName)
                 );

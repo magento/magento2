@@ -143,13 +143,6 @@ class Item extends \Magento\Core\Model\AbstractModel
     protected $_catalogInventoryMinsaleqty;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData;
-
-    /**
      * Catalog inventory data
      *
      * @var \Magento\CatalogInventory\Helper\Data
@@ -193,6 +186,11 @@ class Item extends \Magento\Core\Model\AbstractModel
     protected $_customerSession;
 
     /**
+     * @var \Magento\Math\Division
+     */
+    protected $mathDivision;
+
+    /**
      * Construct
      *
      * @param \Magento\Customer\Model\Session $customerSession
@@ -201,11 +199,11 @@ class Item extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\CatalogInventory\Helper\Minsaleqty $catalogInventoryMinsaleqty
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Math\Division $mathDivision
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -217,11 +215,11 @@ class Item extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\CatalogInventory\Helper\Minsaleqty $catalogInventoryMinsaleqty,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Math\Division $mathDivision,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -232,11 +230,11 @@ class Item extends \Magento\Core\Model\AbstractModel
         $this->_indexer = $indexer;
         $this->_stockStatus = $stockStatus;
         $this->_catalogInventoryData = $catalogInventoryData;
-        $this->_coreData = $coreData;
         $this->_catalogInventoryMinsaleqty = $catalogInventoryMinsaleqty;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_storeManager = $storeManager;
         $this->_locale = $locale;
+        $this->mathDivision = $mathDivision;
     }
 
     /**
@@ -750,7 +748,7 @@ class Item extends \Magento\Core\Model\AbstractModel
             $qtyIncrements = $this->getDefaultQtyIncrements();
         }
 
-        if ($qtyIncrements && ($this->_coreData->getExactDivision($qty, $qtyIncrements) != 0)) {
+        if ($qtyIncrements && ($this->mathDivision->getExactDivision($qty, $qtyIncrements) != 0)) {
             $result->setHasError(true)
                 ->setQuoteMessage(
                     __('Please correct the quantity for some products.')
@@ -827,7 +825,7 @@ class Item extends \Magento\Core\Model\AbstractModel
             $this->setLowStockDate(null);
             if ($this->verifyNotification()) {
                 $this->setLowStockDate($this->_locale->date(null, null, null, false)
-                    ->toString(\Magento\Date::DATETIME_INTERNAL_FORMAT)
+                    ->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
                 );
             }
 

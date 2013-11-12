@@ -104,7 +104,7 @@ class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
      */
     public function prepareElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
     {
-        $uniqId = $this->_coreData->uniqHash($element->getId());
+        $uniqId = $this->mathRandom->getUniqueHash($element->getId());
         $sourceUrl = $this->getUrl('catalog/product_widget/chooser', array(
             'uniq_id' => $uniqId,
             'use_massaction' => false,

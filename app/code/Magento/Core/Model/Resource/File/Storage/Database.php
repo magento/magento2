@@ -24,30 +24,25 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
-/**
- * File storage database resource resource model class
- *
- * @category    Magento
- * @package     Magento_Core
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Core\Model\Resource\File\Storage;
 
+/**
+ * Class Database
+ */
 class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
 {
     /**
-     * @var \Magento\Core\Model\Resource\Helper\AbstractHelper
+     * @var \Magento\Core\Model\Resource\Helper
      */
     protected $_resourceHelper;
 
     /**
-     * @param \Magento\Core\Model\Resource $resource
-     * @param \Magento\Core\Model\Resource\Helper\AbstractHelper $resourceHelper
+     * @param \Magento\App\Resource $resource
+     * @param \Magento\Core\Model\Resource\Helper $resourceHelper
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
-        \Magento\Core\Model\Resource\Helper\AbstractHelper $resourceHelper
+        \Magento\App\Resource $resource,
+        \Magento\Core\Model\Resource\Helper $resourceHelper
     ) {
         parent::__construct($resource);
         $this->_resourceHelper = $resourceHelper;

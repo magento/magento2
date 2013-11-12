@@ -38,7 +38,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_factoryMock = $this->getMock('Zend_DateFactory', array('create'), array(), '', false);
+        $this->_factoryMock = $this->getMock('\Magento\Reports\Model\DateFactory', array('create'), array(), '', false);
         $arguments = array(
             'dateFactory' => $this->_factoryMock,
         );
@@ -54,11 +54,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $startDateMock = $this->getMock('Zend_Date', array(), array(), '', false);
         $endDateMock = $this->getMock('Zend_Date', array(), array(), '', false);
         $map = array(
-            array(array('date' => $startDate), $startDateMock),
-            array(array('date' => $endDate), $endDateMock),
+            array($startDate, null, null, $startDateMock),
+            array($endDate, null, null, $endDateMock),
         );
         $this->_factoryMock->expects($this->exactly(2))->method('create')->will($this->returnValueMap($map));
-
         $startDateMock->expects($this->once())->method('compare')->with($endDateMock)->will($this->returnValue(true));
 
         $this->assertEquals(0, $this->_model->getSize());

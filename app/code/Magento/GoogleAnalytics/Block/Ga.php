@@ -110,10 +110,10 @@ class Ga extends \Magento\Core\Block\Template
         $pageName   = trim($this->getPageName());
         $optPageURL = '';
         if ($pageName && preg_match('/^\/.*/i', $pageName)) {
-            $optPageURL = ", '{$this->jsQuoteEscape($pageName)}'";
+            $optPageURL = ", '{$this->escapeJsQuote($pageName)}'";
         }
         return "
-_gaq.push(['_setAccount', '{$this->jsQuoteEscape($accountId)}']);
+_gaq.push(['_setAccount', '{$this->escapeJsQuote($accountId)}']);
 _gaq.push(['_trackPageview'{$optPageURL}]);
 ";
     }
@@ -142,18 +142,18 @@ _gaq.push(['_trackPageview'{$optPageURL}]);
             }
             $result[] = sprintf("_gaq.push(['_addTrans', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s']);",
                 $order->getIncrementId(),
-                $this->jsQuoteEscape($this->_storeManager->getStore()->getFrontendName()),
+                $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
                 $order->getBaseGrandTotal(),
                 $order->getBaseTaxAmount(),
                 $order->getBaseShippingAmount(),
-                $this->jsQuoteEscape($this->_coreData->escapeHtml($address->getCity())),
-                $this->jsQuoteEscape($this->_coreData->escapeHtml($address->getRegion())),
-                $this->jsQuoteEscape($this->_coreData->escapeHtml($address->getCountry()))
+                $this->escapeJsQuote($this->escapeHtml($address->getCity())),
+                $this->escapeJsQuote($this->escapeHtml($address->getRegion())),
+                $this->escapeJsQuote($this->escapeHtml($address->getCountry()))
             );
             foreach ($order->getAllVisibleItems() as $item) {
                 $result[] = sprintf("_gaq.push(['_addItem', '%s', '%s', '%s', '%s', '%s', '%s']);",
                     $order->getIncrementId(),
-                    $this->jsQuoteEscape($item->getSku()), $this->jsQuoteEscape($item->getName()),
+                    $this->escapeJsQuote($item->getSku()), $this->escapeJsQuote($item->getName()),
                     null, // there is no "category" defined for the order item
                     $item->getBasePrice(), $item->getQtyOrdered()
                 );

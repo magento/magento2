@@ -423,7 +423,7 @@ class Category extends \Magento\Backend\Controller\Adminhtml\Action
             $this->getResponse()->setBody($e->getMessage());
         } catch (\Exception $e){
             $this->getResponse()->setBody(__('There was a category move error %1', $e));
-            $this->_objectManager->get('Magento\Core\Model\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Logger')->logException($e);
         }
 
     }

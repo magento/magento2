@@ -23,13 +23,15 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\App;
-
-use Zend\Soap\Exception\InvalidArgumentException;
 
 class State
 {
+    /**
+     * Application run code
+     */
+    const PARAM_MODE = 'MAGE_MODE';
+
     /**
      * Application mode
      *
@@ -58,6 +60,20 @@ class State
      */
     protected $_installDate;
 
+    /**
+     * Config scope model
+     *
+     * @var \Magento\Config\ScopeInterface
+     */
+    protected $_configScope;
+
+    /**
+     * Area code
+     *
+     * @var string
+     */
+    protected $_areaCode;
+
     /**#@+
      * Application modes
      */
@@ -69,13 +85,15 @@ class State
     const PARAM_INSTALL_DATE   = 'install.date';
 
     /**
+     * @param \Magento\Config\ScopeInterface $configScope
      * @param string $installDate
      * @param string $mode
      * @throws \LogicException
      */
-    public function __construct($installDate, $mode = self::MODE_DEFAULT)
+    public function __construct(\Magento\Config\ScopeInterface $configScope, $installDate, $mode = self::MODE_DEFAULT)
     {
         $this->_installDate = strtotime((string)$installDate);
+        $this->_configScope = $configScope;
         switch ($mode) {
             case self::MODE_DEVELOPER:
             case self::MODE_PRODUCTION:
@@ -146,5 +164,56 @@ class State
     public function setInstallDate($date)
     {
         $this->_installDate = $date;
+    }
+
+    /**
+     * Set area code
+     *
+     * @param string $code
+     * @throws \Magento\Exception
+     */
+    public function setAreaCode($code)
+    {
+        if (isset($this->_areaCode)) {
+            throw new \Magento\Exception('Area code is already set');
+        }
+        $this->_configScope->setCurrentScope($code);
+        $this->_areaCode = $code;
+    }
+
+    /**
+     * Get area code
+     *
+     * @return string
+     * @throws \Magento\Exception
+     */
+    public function getAreaCode()
+    {
+        if (!isset($this->_areaCode)) {
+            throw new \Magento\Exception('Area code is not set');
+        }
+        return $this->_areaCode;
+    }
+
+    /**
+     * Emulate callback inside some area code
+     *
+     * @param string $areaCode
+     * @param callable $callback
+     * @return mixed
+     * @throws \Exception
+     */
+    public function emulateAreaCode($areaCode, $callback)
+    {
+        $currentArea = $this->_areaCode;
+        $this->_areaCode = $areaCode;
+        try {
+            $result = call_user_func($callback);
+        } catch (\Exception $e) {
+            $this->_areaCode = $currentArea;
+            throw $e;
+        }
+        $this->_areaCode = $currentArea;
+        return $result;
     }
 }

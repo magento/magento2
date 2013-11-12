@@ -28,14 +28,7 @@ namespace Magento\Paypal\Block\Standard;
 class Redirect extends \Magento\Core\Block\AbstractBlock
 {
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData;
-
-    /**
-     * @var \Magento\Data\Form\Factory
+     * @var \Magento\Data\FormFactory
      */
     protected $_formFactory;
 
@@ -50,25 +43,30 @@ class Redirect extends \Magento\Core\Block\AbstractBlock
     protected $_paypalStandardFactory;
 
     /**
-     * @param \Magento\Data\Form\Factory $formFactory
+     * @var \Magento\Math\Random
+     */
+    protected $mathRandom;
+
+    /**
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Data\Form\Element\Factory $elementFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Block\Context $context
      * @param \Magento\Paypal\Model\StandardFactory $paypalStandardFactory
+     * @param \Magento\Math\Random $mathRandom
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Factory $formFactory,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Data\Form\Element\Factory $elementFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Block\Context $context,
         \Magento\Paypal\Model\StandardFactory $paypalStandardFactory,
+        \Magento\Math\Random $mathRandom,
         array $data = array()
     ) {
-        $this->_coreData = $coreData;
         $this->_formFactory = $formFactory;
         $this->_elementFactory = $elementFactory;
         $this->_paypalStandardFactory = $paypalStandardFactory;
+        $this->mathRandom = $mathRandom;
         parent::__construct($context, $data);
     }
 
@@ -88,7 +86,7 @@ class Redirect extends \Magento\Core\Block\AbstractBlock
         foreach ($standard->getStandardCheckoutFormFields() as $field => $value) {
             $form->addField($field, 'hidden', array('name' => $field, 'value' => $value));
         }
-        $idSuffix = $this->_coreData->uniqHash();
+        $idSuffix = $this->mathRandom->getUniqueHash();
         $submitButton = $this->_elementFactory->create('submit', array('attributes' => array(
             'value' => __('Click here if you are not redirected within 10 seconds.'),
         )));

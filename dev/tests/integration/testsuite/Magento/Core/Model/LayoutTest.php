@@ -53,15 +53,19 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructor(array $inputArguments, $expectedArea)
     {
+        if (isset($inputArguments['area'])) {
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
+                ->setAreaCode($inputArguments['area']);
+        }
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Layout', $inputArguments);
+            ->create('Magento\Core\Model\Layout');
         $this->assertEquals($expectedArea, $layout->getArea());
     }
 
     public function constructorDataProvider()
     {
         return array(
-            'default area'  => array(array(), \Magento\View\DesignInterface::DEFAULT_AREA),
+            'default area'  => array(array(), null),
             'frontend area' => array(array('area' => 'frontend'), 'frontend'),
             'backend area'  => array(array('area' => 'adminhtml'), 'adminhtml'),
         );

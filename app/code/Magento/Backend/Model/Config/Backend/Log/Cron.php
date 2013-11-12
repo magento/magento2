@@ -40,6 +40,11 @@ class Cron extends \Magento\Core\Model\Config\Value
     protected $_configValueFactory;
 
     /**
+     * @var string
+     */
+    protected $_runModelPath = '';
+
+    /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\StoreManager $storeManager
@@ -47,6 +52,7 @@ class Cron extends \Magento\Core\Model\Config\Value
      * @param \Magento\Core\Model\Config\ValueFactory $configValueFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param string $runModelPath
      * @param array $data
      */
     public function __construct(
@@ -57,9 +63,11 @@ class Cron extends \Magento\Core\Model\Config\Value
         \Magento\Core\Model\Config\ValueFactory $configValueFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
+        $runModelPath = '',
         array $data = array()
     ) {
         $this->_configValueFactory = $configValueFactory;
+        $this->_runModelPath = $runModelPath;
         parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
     }
 
@@ -73,7 +81,7 @@ class Cron extends \Magento\Core\Model\Config\Value
     {
         $enabled    = $this->getData('groups/log/fields/enabled/value');
         $time       = $this->getData('groups/log/fields/time/value');
-        $frequncy   = $this->getData('groups/log/fields/frequency/value');
+        $frequency   = $this->getData('groups/log/fields/frequency/value');
 
         $frequencyWeekly    = \Magento\Cron\Model\Config\Source\Frequency::CRON_WEEKLY;
         $frequencyMonthly   = \Magento\Cron\Model\Config\Source\Frequency::CRON_MONTHLY;
@@ -82,9 +90,9 @@ class Cron extends \Magento\Core\Model\Config\Value
             $cronExprArray = array(
                 intval($time[1]),                                   # Minute
                 intval($time[0]),                                   # Hour
-                ($frequncy == $frequencyMonthly) ? '1' : '*',       # Day of the Month
+                ($frequency == $frequencyMonthly) ? '1' : '*',       # Day of the Month
                 '*',                                                # Month of the Year
-                ($frequncy == $frequencyWeekly) ? '1' : '*',        # Day of the Week
+                ($frequency == $frequencyWeekly) ? '1' : '*',        # Day of the Week
             );
             $cronExprString = join(' ', $cronExprArray);
         } else {
@@ -102,7 +110,7 @@ class Cron extends \Magento\Core\Model\Config\Value
             /** @var $configValue \Magento\Core\Model\Config\Value */
             $configValue = $this->_configValueFactory->create();
             $configValue->load(self::CRON_MODEL_PATH, 'path');
-            $configValue->setValue((string) $this->_config->getNode(self::CRON_MODEL_PATH))
+            $configValue->setValue($this->_runModelPath)
                 ->setPath(self::CRON_MODEL_PATH)
                 ->save();
         } catch (\Exception $e) {

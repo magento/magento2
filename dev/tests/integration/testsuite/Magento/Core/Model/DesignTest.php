@@ -51,6 +51,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
      */
     public function testChangeDesign()
     {
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\View\DesignInterface');
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -119,7 +120,9 @@ class DesignTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadChangeCache()
     {
-        $date = \Magento\Date::now(true);
+        /** @var \Magento\Stdlib\DateTime $dateTime */
+        $dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('\Magento\Stdlib\DateTime');
+        $date = $dateTime->now(true);
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Core\Model\StoreManagerInterface')->getAnyStoreView()->getId(); // fixture design_change
 

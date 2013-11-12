@@ -56,7 +56,7 @@
                 "<?php echo $this->getViewFileUrl('Magento_Paypal::js/paypal-checkout.js') ?>",
                 function() {
                     $('.paypal-logo').paypalCheckout({
-                        confirmMessage: "<?php echo $this->helper('Magento\Core\Helper\Data')->jsQuoteEscape($this->getConfirmationMessage())?>",
+                        confirmMessage: "<?php echo $this->escapeJsQuote($this->getConfirmationMessage())?>",
                         confirmUrl: "<?php echo !empty($confirmationUrl) ? $confirmationUrl : false ?>",
                         isCatalogProduct: "<?php echo !empty($isInCatalogProduct) ? $isInCatalogProduct : false ?>",
                         paypalCheckoutSelector: '#pp-checkout-url',

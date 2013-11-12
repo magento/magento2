@@ -25,7 +25,7 @@
  */
 namespace Magento\TestFramework;
 
-class ObjectManager extends \Magento\Core\Model\ObjectManager
+class ObjectManager extends \Magento\App\ObjectManager
 {
     /**
      * Classes with xml properties to explicitly call __destruct() due to https://bugs.php.net/bug.php?id=62468
@@ -51,9 +51,9 @@ class ObjectManager extends \Magento\Core\Model\ObjectManager
         }
 
         \Magento\Core\Model\Config\Base::destroy();
-        $sharedInstances = array('Magento\ObjectManager' => $this, 'Magento\Core\Model\ObjectManager' => $this);
-        if (isset($this->_sharedInstances['Magento\Core\Model\Resource'])) {
-            $sharedInstances['Magento\Core\Model\Resource'] = $this->_sharedInstances['Magento\Core\Model\Resource'];
+        $sharedInstances = array('Magento\ObjectManager' => $this, 'Magento\App\ObjectManager' => $this);
+        if (isset($this->_sharedInstances['Magento\App\Resource'])) {
+            $sharedInstances['Magento\App\Resource'] = $this->_sharedInstances['Magento\App\Resource'];
         }
         $this->_sharedInstances = $sharedInstances;
         $this->_config->clean();
@@ -80,18 +80,6 @@ class ObjectManager extends \Magento\Core\Model\ObjectManager
     public function removeSharedInstance($className)
     {
         unset($this->_sharedInstances[$className]);
-    }
-
-    /**
-     * Load primary DI configuration
-     *
-     * @param array $configData
-     */
-    public function loadPrimaryConfig($configData)
-    {
-        if ($configData) {
-            $this->configure($configData);
-        }
     }
 
     /**

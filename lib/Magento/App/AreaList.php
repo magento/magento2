@@ -1,5 +1,7 @@
 <?php
 /**
+ * Application area list
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -47,7 +49,7 @@ class AreaList
      * @param array $areas
      * @param string $default
      */
-    public function __construct(\Magento\App\Area\FrontNameResolverFactory $resolverFactory, array $areas, $default)
+    public function __construct(Area\FrontNameResolverFactory $resolverFactory, array $areas, $default)
     {
         $this->_resolverFactory = $resolverFactory;
         $this->_areas = $areas;
@@ -93,5 +95,16 @@ class AreaList
     public function getCodes()
     {
         return array_keys($this->_areas);
+    }
+
+    /**
+     * Retrieve default area router id
+     *
+     * @param string $areaCode
+     * @return string
+     */
+    public function getDefaultRouter($areaCode)
+    {
+        return isset($this->_areas[$areaCode]['router']) ? $this->_areas[$areaCode]['router'] : null;
     }
 }

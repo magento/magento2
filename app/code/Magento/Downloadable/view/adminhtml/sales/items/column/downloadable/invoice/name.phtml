@@ -36,7 +36,7 @@
             <?php if (isset($_option['custom_view']) && $_option['custom_view']): ?>
                 <?php echo $_option['value'];?>
             <?php else: ?>
-                <?php echo $this->helper('Magento\Core\Helper\String')->truncate($_option['value'], 55, '', $_remainder);?>
+                <?php echo $this->truncateString($_option['value'], 55, '', $_remainder);?>
                 <?php if ($_remainder):?>
                     ... <span id="<?php echo $_id = 'id' . uniqid()?>"><?php echo $_remainder ?></span>
                     <script type="text/javascript">

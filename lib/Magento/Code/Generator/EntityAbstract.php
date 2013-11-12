@@ -370,4 +370,16 @@ abstract class EntityAbstract
 
         return $parameterInfo;
     }
+
+    /**
+     * Reinit generator
+     *
+     * @param string $sourceClassName
+     * @param string $resultClassName
+     */
+    public function init($sourceClassName, $resultClassName)
+    {
+        $this->_sourceClassName = $sourceClassName;
+        $this->_resultClassName = $resultClassName;
+    }
 }

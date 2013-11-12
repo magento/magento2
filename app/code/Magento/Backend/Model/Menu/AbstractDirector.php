@@ -46,9 +46,9 @@ abstract class AbstractDirector
      *
      * @param array $config
      * @param \Magento\Backend\Model\Menu\Builder $builder
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      */
     abstract public function direct(
-        array $config, \Magento\Backend\Model\Menu\Builder $builder, \Magento\Core\Model\Logger $logger
+        array $config, \Magento\Backend\Model\Menu\Builder $builder, \Magento\Logger $logger
     );
 }

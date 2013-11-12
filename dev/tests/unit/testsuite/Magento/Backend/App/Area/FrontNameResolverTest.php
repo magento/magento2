@@ -43,7 +43,7 @@ class FrontNameResolverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_configMock
-            = $this->getMock('\Magento\Core\Model\ConfigInterface', array('getValue', 'getNode', 'setNode', 'reinit'));
+            = $this->getMock('\Magento\Core\Model\ConfigInterface');
         $this->_model = new \Magento\Backend\App\Area\FrontNameResolver($this->_configMock, $this->_defaultFrontName);
     }
 

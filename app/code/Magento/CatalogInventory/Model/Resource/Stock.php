@@ -99,25 +99,33 @@ class Stock extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @var \Magento\CatalogInventory\Model\StockFactory
      */
     protected $_stockFactory;
-    
+
+    /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $dateTime;
+
     /**
      * Construct
      * 
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\CatalogInventory\Model\StockFactory $stockFactory
+     * @param \Magento\Stdlib\DateTime $dateTime
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\CatalogInventory\Model\StockFactory $stockFactory
+        \Magento\CatalogInventory\Model\StockFactory $stockFactory,
+        \Magento\Stdlib\DateTime $dateTime
     ) {
         parent::__construct($resource);
         $this->_catalogInventoryData = $catalogInventoryData;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_stockFactory = $stockFactory;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -342,7 +350,7 @@ class Stock extends \Magento\Core\Model\Resource\Db\AbstractDb
         $adapter = $this->_getWriteAdapter();
         $condition = $adapter->quoteInto('(use_config_notify_stock_qty = 1 AND qty < ?)',
             $this->_configNotifyStockQty) . ' OR (use_config_notify_stock_qty = 0 AND qty < notify_stock_qty)';
-        $currentDbTime = $adapter->quoteInto('?', $this->formatDate(true));
+        $currentDbTime = $adapter->quoteInto('?', $this->dateTime->formatDate(true));
         $conditionalDate = $adapter->getCheckSql($condition, $currentDbTime, 'NULL');
 
         $value  = array(

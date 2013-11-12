@@ -52,6 +52,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_customerFactory = $this->_objectManager->get('Magento\Customer\Model\CustomerFactory');
         $this->_model = $this->_objectManager->create('Magento\Customer\Service\Customer');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
     }
 
     protected function tearDown()
@@ -77,6 +78,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $customerData
      * @dataProvider createDataProvider
+     * @magentoAppArea adminhtml
      */
     public function testCreate($customerData)
     {
@@ -316,6 +318,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      * @param array $customerData
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @dataProvider updateDataProvider
+     * @magentoAppArea frontend
      */
     public function testUpdate($customerData)
     {
@@ -410,6 +413,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @appAreaCode adminhtml
      */
     public function testAutoGeneratePassword()
     {

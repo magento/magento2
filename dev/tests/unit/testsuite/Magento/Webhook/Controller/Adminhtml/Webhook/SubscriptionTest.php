@@ -534,7 +534,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
         $this->_mockObjectManager = $this->getMockBuilder('Magento\ObjectManager')
             ->disableOriginalConstructor()
             ->getMock();
-        \Magento\Core\Model\ObjectManager::setInstance($this->_mockObjectManager);
+        \Magento\App\ObjectManager::setInstance($this->_mockObjectManager);
     }
 
     /**

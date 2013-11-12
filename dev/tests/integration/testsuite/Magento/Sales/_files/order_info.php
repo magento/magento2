@@ -26,7 +26,7 @@
  */
 
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
-    ->loadArea(\Magento\Core\Model\App\Area::AREA_ADMINHTML);
+    ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');

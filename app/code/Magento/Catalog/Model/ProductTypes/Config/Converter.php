@@ -42,14 +42,17 @@ class Converter implements \Magento\Config\ConverterInterface
         /** @var $typeNode DOMNode */
         foreach ($types as $typeNode) {
             $typeName = $this->_getAttributeValue($typeNode, 'name');
+            $isComposite = $this->_getAttributeValue($typeNode, 'composite', 'false');
+            $isDecimal = $this->_getAttributeValue($typeNode, 'canUseQtyDecimals', 'true');
+            $isQty = $this->_getAttributeValue($typeNode, 'isQty', 'false');
             $data = array();
             $data['name'] = $typeName;
             $data['label'] = $this->_getAttributeValue($typeNode, 'label', '');
             $data['model'] = $this->_getAttributeValue($typeNode, 'modelInstance');
-            $data['composite'] = (bool) $this->_getAttributeValue($typeNode, 'composite', false);
+            $data['composite'] = !empty($isComposite) && 'false' !== $isComposite;
             $data['index_priority'] = (int) $this->_getAttributeValue($typeNode, 'indexPriority', 0);
-            $data['can_use_qty_decimals'] = (bool) $this->_getAttributeValue($typeNode, 'canUseQtyDecimals', false);
-            $data['is_qty'] = (bool) $this->_getAttributeValue($typeNode, 'isQty', false);
+            $data['can_use_qty_decimals'] = !empty($isDecimal) && 'false' !== $isDecimal;
+            $data['is_qty'] = !empty($isQty) && 'false' !== $isQty;
 
             /** @var $childNode DOMNode */
             foreach ($typeNode->childNodes as $childNode) {

@@ -39,6 +39,7 @@ interface DesignInterface
     /**
      * Set package area
      *
+     * @deprecated
      * @param string $area
      * @return DesignInterface
      */
@@ -47,6 +48,7 @@ interface DesignInterface
     /**
      * Retrieve package area
      *
+     * @deprecated
      * @return string
      */
     public function getArea();

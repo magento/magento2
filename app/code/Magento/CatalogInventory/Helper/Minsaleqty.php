@@ -32,13 +32,6 @@ namespace Magento\CatalogInventory\Helper;
 class Minsaleqty
 {
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
-
-    /**
      * Core store config
      *
      * @var \Magento\Core\Model\Store\Config
@@ -46,15 +39,20 @@ class Minsaleqty
     protected $_coreStoreConfig;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
+     * @var \Magento\Math\Random
+     */
+    protected $mathRandom;
+
+    /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Math\Random $mathRandom
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Model\Store\Config $coreStoreConfig
+        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Math\Random $mathRandom
     ) {
-        $this->_coreData = $coreData;
         $this->_coreStoreConfig = $coreStoreConfig;
+        $this->mathRandom = $mathRandom;
     }
 
     /**
@@ -144,7 +142,7 @@ class Minsaleqty
     {
         $result = array();
         foreach ($value as $groupId => $qty) {
-            $_id = $this->_coreData->uniqHash('_');
+            $_id = $this->mathRandom->getUniqueHash('_');
             $result[$_id] = array(
                 'customer_group_id' => $groupId,
                 'min_sale_qty' => $this->_fixQty($qty),

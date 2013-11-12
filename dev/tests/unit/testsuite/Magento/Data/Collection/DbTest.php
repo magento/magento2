@@ -38,7 +38,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     {
         $fetchStrategy = $this->getMockForAbstractClass('Magento\Data\Collection\Db\FetchStrategyInterface');
         $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
-        $logger = $this->getMock('Magento\Core\Model\Logger', array(), array(), '', false);
+        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         $this->_collection = new \Magento\Data\Collection\Db($logger, $fetchStrategy, $entityFactory);
     }
 
@@ -252,7 +252,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     {
         $fetchStrategy = $this->getMock('Magento\Data\Collection\Db\FetchStrategyInterface');
         $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
-        $logger = $this->getMock('Magento\Core\Model\Logger', array(), array(), '', false);
+        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         $collection = $this->getMock(
             'Magento\Data\Collection\Db',
             array('_logQuery'),

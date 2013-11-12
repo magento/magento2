@@ -70,16 +70,20 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->with('phtml')
             ->will($this->returnValue($this->_templateEngine));
 
-        $context = $this->getMock('\Magento\Core\Block\Template\Context', array(), array(), '', false);
+        $appState = $this->getMock('Magento\App\State', array('getAreaCode'), array(), '', false);
+        $appState->expects($this->any())->method('getAreaCode')->will($this->returnValue('frontend'));
+
+        $context = $this->getMock('Magento\Core\Block\Template\Context', array(), array(), '', false);
         $context->expects($this->any())->method('getEngineFactory')->will($this->returnValue($enginePool));
         $context->expects($this->any())->method('getDirs')->will($this->returnValue($dirs));
         $context->expects($this->any())->method('getFilesystem')->will($this->returnValue($this->_filesystem));
         $context->expects($this->any())->method('getViewFileSystem')->will($this->returnValue($this->_viewFileSystem));
+        $context->expects($this->any())->method('getAppState')->will($this->returnValue($appState));
 
         $this->_block = new \Magento\Core\Block\Template(
             $this->getMock('\Magento\Core\Helper\Data', array(), array(), '', false),
             $context,
-            array('template' => 'template.phtml', 'area' => 'frontend', 'module_name' => 'Fixture_Module')
+            array('template' => 'template.phtml', 'module_name' => 'Fixture_Module')
         );
     }
 

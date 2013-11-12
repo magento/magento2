@@ -34,10 +34,9 @@ interface ConfigInterface
      * @param string $section
      * @param string $group
      * @param string $code
-     * @param string $area
      * @return array
      */
-    public function getTotalsRenderer($section, $group, $code, $area);
+    public function getTotalsRenderer($section, $group, $code);
 
     /**
      * Retrieve totals for group

@@ -98,7 +98,7 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\Customer\Model\GroupFactory $customerGroup
      * @param \Magento\Catalog\Model\Config $config
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      */
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
@@ -107,7 +107,7 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
         \Magento\Customer\Model\GroupFactory $customerGroup,
         \Magento\Catalog\Model\Config $config,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Resource $resource
+        \Magento\App\Resource $resource
     ) {
         $this->_eventManager = $eventManager;
         parent::__construct($resource);

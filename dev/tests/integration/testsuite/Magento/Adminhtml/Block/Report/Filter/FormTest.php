@@ -39,7 +39,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testPrepareForm()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
-            ->setArea(\Magento\Core\Model\App\Area::AREA_ADMINHTML)
+            ->setArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
             ->setDefaultDesignTheme();
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Layout');
         $block = $layout->addBlock('Magento\Adminhtml\Block\Report\Filter\Form');

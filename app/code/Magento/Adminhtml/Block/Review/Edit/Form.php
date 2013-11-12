@@ -59,7 +59,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Review\Helper\Data $reviewData
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\Form\Factory $formFactory
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
@@ -70,7 +70,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Review\Helper\Data $reviewData,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Data\Form\Factory $formFactory,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
         array $data = array()
@@ -108,12 +108,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField('product_name', 'note', array(
             'label'     => __('Product'),
             'text'      => '<a href="' . $this->getUrl('catalog/product/edit', array('id' => $product->getId()))
-                . '" onclick="this.target=\'blank\'">' . $this->_reviewData->escapeHtml($product->getName()) . '</a>'
+                . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($product->getName()) . '</a>'
         ));
 
         if ($customer->getId()) {
             $customerText = __('<a href="%1" onclick="this.target=\'blank\'">%2 %3</a> <a href="mailto:%4">(%4)</a>',
-                $this->getUrl('adminhtml/customer/edit', array('id' => $customer->getId(), 'active_tab'=>'review')),
+                $this->getUrl('customer/index/edit', array('id' => $customer->getId(), 'active_tab'=>'review')),
                 $this->escapeHtml($customer->getFirstname()),
                 $this->escapeHtml($customer->getLastname()),
                 $this->escapeHtml($customer->getEmail()));

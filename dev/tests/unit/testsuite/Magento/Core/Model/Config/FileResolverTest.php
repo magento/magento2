@@ -41,7 +41,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\App\Dir::CONFIG)
             ->will($this->returnValue($appConfigDir));
 
-        $moduleReader = $this->getMock('Magento\Core\Model\Config\Modules\Reader', array(),
+        $moduleReader = $this->getMock('Magento\Module\Dir\Reader', array(),
             array('getConfigurationFiles'), '', false);
         $moduleReader->expects($this->any())
             ->method('getConfigurationFiles')

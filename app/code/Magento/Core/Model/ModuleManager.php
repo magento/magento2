@@ -40,7 +40,7 @@ class ModuleManager
     private $_storeConfig;
 
     /**
-     * @var \Magento\App\ModuleListInterface
+     * @var \Magento\Module\ModuleListInterface
      */
     private $_moduleList;
 
@@ -51,12 +51,12 @@ class ModuleManager
 
     /**
      * @param \Magento\Core\Model\Store\ConfigInterface $storeConfig
-     * @param \Magento\App\ModuleListInterface $moduleList
+     * @param \Magento\Module\ModuleListInterface $moduleList
      * @param array $outputConfigPaths
      */
     public function __construct(
         \Magento\Core\Model\Store\ConfigInterface $storeConfig,
-        \Magento\App\ModuleListInterface $moduleList,
+        \Magento\Module\ModuleListInterface $moduleList,
         array $outputConfigPaths = array()
     ) {
         $this->_storeConfig = $storeConfig;

@@ -22,6 +22,8 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
+/** @var $this \Magento\Downloadable\Block\Sales\Order\Item\Renderer\Downloadable */
 ?>
 <?php $_item = $this->getItem() ?>
 <tr id="order-item-row-<?php echo $_item->getId() ?>">
@@ -77,7 +79,7 @@
             </a>
         <?php endif; ?>
     </td>
-    <td class="col sku"><?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\String')->splitInjection($this->getSku())) ?></td>
+    <td class="col sku"><?php echo $this->prepareSku($this->getSku()) ?></td>
     <td class="col price">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceExclTax()): ?>
             <span class="price-excl-tax">

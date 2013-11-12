@@ -214,8 +214,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 new \Magento\Object(array('id' => 1)),
             )));
 
-        /** @var $resource \Magento\Core\Model\Resource */
-        $resource = $this->getMock('Magento\Core\Model\Resource',
+        /** @var $resource \Magento\App\Resource */
+        $resource = $this->getMock('Magento\App\Resource',
             array('getTableName', 'getConnection'), array(), '', false, false
         );
         $resource->expects($this->any())

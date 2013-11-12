@@ -38,7 +38,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\Core\Model\Resource|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Resource|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_resource;
 

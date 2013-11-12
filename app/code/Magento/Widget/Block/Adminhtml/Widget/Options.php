@@ -57,7 +57,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Core\Model\Option\ArrayPool $sourceModelPool
      * @param \Magento\Widget\Model\Widget $widget
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\Form\Factory $formFactory
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
@@ -66,7 +66,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Core\Model\Option\ArrayPool $sourceModelPool,
         \Magento\Widget\Model\Widget $widget,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Data\Form\Factory $formFactory,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
         array $data = array()

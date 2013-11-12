@@ -43,7 +43,7 @@ class Formgroup
     /**
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\Form\Factory $formFactory
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
@@ -51,7 +51,7 @@ class Formgroup
     public function __construct(
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Data\Form\Factory $formFactory,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
         array $data = array()

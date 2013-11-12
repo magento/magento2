@@ -58,17 +58,17 @@ class Adapter
     protected $_debugReplacePrivateDataKeys = array();
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 
     /**
      * Set log file name
      *
-     * @param \Magento\Core\Model\Logger $logger
+     * @param \Magento\Logger $logger
      * @param string $fileName
      */
-    public function __construct(\Magento\Core\Model\Logger $logger, $fileName)
+    public function __construct(\Magento\Logger $logger, $fileName)
     {
         $this->_logFileName = $fileName;
         $this->_logger = $logger;

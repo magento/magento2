@@ -45,20 +45,18 @@ class Observer
     protected $_pageCacheData = null;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var array
      */
-    protected $_coreConfig;
+    protected $_allowedCache;
 
     /**
      * @param \Magento\PageCache\Helper\Data $pageCacheData
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param array $allowedCache
      */
-    public function __construct(
-        \Magento\PageCache\Helper\Data $pageCacheData,
-        \Magento\Core\Model\Config $coreConfig
-    ) {
+    public function __construct(\Magento\PageCache\Helper\Data $pageCacheData, array $allowedCache = array())
+    {
         $this->_pageCacheData = $pageCacheData;
-        $this->_coreConfig = $coreConfig;
+        $this->_allowedCache = $allowedCache;
     }
 
     /**
@@ -90,26 +88,26 @@ class Observer
             $needCaching = false;
         }
 
-        $configuration = $this->_coreConfig->getNode(self::XML_NODE_ALLOWED_CACHE);
-
-        if (!$configuration) {
+        if (empty($this->_allowedCache)) {
             $needCaching = false;
         }
 
-        $configuration = $configuration->asArray();
         $module = $request->getModuleName();
         $controller = $request->getControllerName();
         $action = $request->getActionName();
 
-        if (!isset($configuration[$module])) {
+
+        if (!isset($this->_allowedCache[$module])) {
             $needCaching = false;
         }
 
-        if (isset($configuration[$module]['controller']) && $configuration[$module]['controller'] != $controller) {
+        if (isset($this->_allowedCache[$module]['controller'])
+            && $this->_allowedCache[$module]['controller'] != $controller
+        ) {
             $needCaching = false;
         }
 
-        if (isset($configuration[$module]['action']) && $configuration[$module]['action'] != $action) {
+        if (isset($this->_allowedCache[$module]['action']) && $this->_allowedCache[$module]['action'] != $action) {
             $needCaching = false;
         }
 

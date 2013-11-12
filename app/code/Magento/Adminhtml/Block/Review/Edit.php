@@ -157,7 +157,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
                 'onclick',
                 'setLocation(\''
                     . $this->getUrl(
-                        'adminhtml/customer/edit',
+                        'customer/index/edit',
                         array('id' => $this->getRequest()->getParam('customerId', false))
                     )
                     .'\')'

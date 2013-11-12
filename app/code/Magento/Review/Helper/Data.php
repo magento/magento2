@@ -24,23 +24,21 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Default review helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Review\Helper;
 
+/**
+ * Default review helper
+ */
 class Data extends \Magento\Core\Helper\AbstractHelper
 {
     const XML_REVIEW_GUETS_ALLOW = 'catalog/review/allow_guest';
 
     /**
-     * Core string
+     * Filter manager
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Filter\FilterManager
      */
-    protected $_coreString = null;
+    protected $filter;
 
     /**
      * Core store config
@@ -50,23 +48,35 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_coreStoreConfig;
 
     /**
-     * @param \Magento\Core\Helper\String $coreString
+     * @var \Magento\Escaper
+     */
+    protected $_escaper;
+
+    /**
      * @param \Magento\Core\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Escaper $escaper
+     * @param \Magento\Filter\FilterManager $filter
      */
     public function __construct(
-        \Magento\Core\Helper\String $coreString,
         \Magento\Core\Helper\Context $context,
-        \Magento\Core\Model\Store\Config $coreStoreConfig
+        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Escaper $escaper,
+        \Magento\Filter\FilterManager $filter
     ) {
-        $this->_coreString = $coreString;
         $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_escaper = $escaper;
+        $this->filter = $filter;
         parent::__construct($context);
     }
 
+    /**
+     * @param string $origDetail
+     * @return string
+     */
     public function getDetail($origDetail)
     {
-        return nl2br($this->_coreString->truncate($origDetail, 50));
+        return nl2br($this->filter->truncate($origDetail, array('length' => 50)));
     }
 
     /**
@@ -76,7 +86,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      */
     public function getDetailHtml($origDetail)
     {
-        return nl2br($this->_coreString->truncate($this->escapeHtml($origDetail), 50));
+        return nl2br($this->filter->truncate($this->_escaper->escapeHtml($origDetail), array('length' => 50)));
     }
 
     /**
@@ -109,8 +119,8 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     public function getReviewStatusesOptionArray()
     {
         $result = array();
-        foreach ($this->getReviewStatuses() as $k => $v) {
-            $result[] = array('value' => $k, 'label' => $v);
+        foreach ($this->getReviewStatuses() as $value => $label) {
+            $result[] = array('value' => $value, 'label' => $label);
         }
 
         return $result;

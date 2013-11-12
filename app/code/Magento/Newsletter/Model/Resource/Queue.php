@@ -46,11 +46,11 @@ class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Construct
      *
-     * @param \Magento\Core\Model\Resource $resource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Newsletter\Model\Resource\Subscriber\Collection $subscriberCollection
      */
     public function __construct(
-        \Magento\Core\Model\Resource $resource,
+        \Magento\App\Resource $resource,
         \Magento\Newsletter\Model\Resource\Subscriber\Collection $subscriberCollection
     ) {
         parent::__construct($resource);

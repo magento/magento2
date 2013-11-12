@@ -75,7 +75,7 @@
                 '<?php echo $this->getMediaBrowserUrl('custom_code', \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT) ?>',
                 null,
                 null,
-                '<?php echo $this->quoteEscape(__('Font Assets'), true); ?>'
+                '<?php echo $this->escapeQuote(__('Font Assets'), true); ?>'
             );
         });
         $('[data-manage="images"]').on('click', function() {
@@ -83,7 +83,7 @@
                 '<?php echo $this->getMediaBrowserUrl('custom_code', \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE) ?>',
                 null,
                 null,
-                '<?php echo $this->quoteEscape(__('Image Assets'), true); ?>'
+                '<?php echo $this->escapeQuote(__('Image Assets'), true); ?>'
             );
         });
         $('#vde-tab-custom').customCssPanel({
