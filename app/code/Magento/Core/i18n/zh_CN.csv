@@ -169,7 +169,7 @@ Package,包裹
 "Please use only letters (a-z), numbers (0-9) or underscore(_) in this field, first character should be a letter.",该字段中请只使用字母（a-z）、数字（0-9）以及下划线（_），第一个字符应为字母。
 "Please use only visible characters and spaces.",请只使用可见字符和空格。
 "Please use this date format: dd/mm/yyyy. For example 17/03/2006 for the 17th of March, 2006.",请使用这样的日期格式：dd/mm/yyyy。例如17/03/2006代表2006年3月17日。
-"Please wait, loading...",请稍候，正在加载。。。
+"Please wait, loading...",请稍候，正在加载...
 "Recent items",最近的条目
 "Request Path for Specified Store",特殊店铺的请求路径
 "Requested file may not include parent directory traversal (""../"", ""..\\ notation)""","所请求的文件可能没有包含在父目录遍历中 （""。。/""， ""。。\\ notation）"""
@@ -188,7 +188,7 @@ Save,保存
 "Sender Email",发送人邮件
 "Sender Name",发送人姓名
 "Set as Default",设置为默认值
-"Show all...",显示所有。。。
+"Show all...",显示所有...
 "Some problem with revert action",恢复动作的有问题
 "Some problem with save action",存储动作有问题
 "Something went wrong while loading the theme.",当加载主题时发生错误。
@@ -271,3 +271,7 @@ Yes,是
 "Please enter a valid year (1900-%1).","请输入有效的年(1900-%1)。"
 "Please enter a value greater than or equal to %s.","请输入一个大于等于%1的值。"
 "Please enter a value less than or equal to %s.","请输入一个小于等于%s的值。"
+"About Us","关于我们"
+"Customer Service","客户服务"
+"Advanced Search","高级搜索"
+"Contact Us","联系我们"

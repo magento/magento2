@@ -134,8 +134,8 @@ Create,创建
 "Create Packages",创建包
 "Create Shipment",创建运单
 "Create Shipping Label",创建运送标签
-"Create Shipping Label...",创建运送标签。。。
-Create...,创建。。。
+"Create Shipping Label...",创建运送标签...
+Create...,创建...
 Created,创建于
 "Created billing agreement #%1.","创建记账协议 #%1。"
 Created:,创建：
@@ -433,7 +433,7 @@ Refunded,已存储
 "Related Orders",相关订单
 Remove,删除
 "Remove Coupon Code",删除折价券
-Reorder,记录
+Reorder,再次下单
 "Return to Stock",返回库存
 Returned,已退款
 Revenue,收入
