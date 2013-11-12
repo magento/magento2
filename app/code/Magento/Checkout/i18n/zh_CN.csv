@@ -243,3 +243,16 @@ Total,总数
 "Your order number is ",您的订单号是
 "Your recurring payment profiles:",您的付款档案：
 "Zip/Postal Code",邮政编码
+"Are you sure you would like to remove this item from the shopping cart?","您确定要从购物车移除该条目吗？"
+"Cart Subtotal","购物车小计"
+"Checkout as a Guest","作为访客结账"
+"Click <a href=""%1"" onclick=""this.target=\'_blank\'"">here to print</a> a copy of your order confirmation.","点击<a href=""%1"" onclick=""this.target=\'_blank\'"">这里打印</a>您的订单确认信息。"
+"Easy access to your order history and status","更方便存取您的订单历史和状态"
+"ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER","在你提交订单之前订单总数将显示"
+"Other items in your order","您订单里的其他条目"
+"Payment profile # %1: ""%2"".","支付配置 # %1: ""%2""."
+"Register with us for future convenience:","为便于使用注册:"
+"Thanks for your order. We'll send you emails with order details and tracking information.","感谢您订购. 我们将发送一封带有订单详细和跟踪信息的邮件给您."
+"Total:","总计："
+"View cart","查看购物车"
+"You will receive an order confirmation email with details of your order and a link to track its progress.","您将收到一封含有订单详细和订单链接的确认邮件以便跟踪订单过程。"

@@ -566,4 +566,10 @@ save,保存
 "start typing to search category",开始输入来搜索分类
 "unselect all",撤销全选
 "Search results for: '%1'",搜索结果：“%1”
- 
+ "%1 incl tax.","%1含税."
+"Are you sure you would like to remove all products from your comparison?","您确定要从比较列表中移除所有的产品？"
+"Are you sure you would like to remove this item from the compare products?","您确定要从比较产品中移除该条目？"
+"Items %1-%2 of %3","第%1-%2个，共%3个条目"
+"More Choices:","更多选择:"
+"Remove Product","移除产品"
+"You may also be interested in the following product(s)","你可能页感兴趣下列产品"
