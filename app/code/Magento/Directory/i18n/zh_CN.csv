@@ -5,7 +5,7 @@ Country,国家
 Currency,币种
 Enabled,已启用
 "FATAL ERROR:",致命错误：
-"Please correct the country code: %1.","请纠正货币代码: %1。"
+"Please correct the country code: %1.","请纠正货币代码： %1。"
 "Please correct the rates received",请纠正所得比率
 "Please correct the target currency.",请纠正目标货币。
 "Please specify the correct Import Service.",请指定正确导入服务。
@@ -14,4 +14,4 @@ State/Province,州/省
 WARNING:,警告：
 "We can't initialize the import model.",不能初始化导入模型。
 "We can't retrieve a rate from %1.",不能从%1检索一个比率。
-"Your current currency is: %1.","您当前货币是: %1。"
+"Your current currency is: %1.","您当前货币是： %1。"

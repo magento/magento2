@@ -1,14 +1,14 @@
-"Add New Integration","添加新集成"
-"Authentication","认证"
+"Add New Integration",添加新集成
+Authentication,认证
 "Edit ""%1"" Integration","编辑""%1""集成"
-"Integration","集成"
-"Integration ID is not specified or is invalid.","未指定或指定了无效的集成ID。"
-"Integration Info","集成信息"
-"Integration Information","集成信息"
-"Integration Name","集成名"
-Integrations,"集成"
-"New Integration","新集成"
+Integration,集成
+"Integration ID is not specified or is invalid.",未指定或指定了无效的集成ID。
+"Integration Info",集成信息
+"Integration Information",集成信息
+"Integration Name",集成名
+Integrations,集成
+"New Integration",新集成
 OAuth,OAuth
-"Please enter endpoint for oAuth.","请输入oAuth的端点。"
-"The integration '%1' has been saved.","集成'%1'已经被存储。"
-"This integration no longer exists.","集成不存在。"
+"Please enter endpoint for oAuth.",请输入oAuth的端点。
+"The integration '%1' has been saved.",集成'%1'已经被存储。
+"This integration no longer exists.",集成不存在。

@@ -22,17 +22,17 @@ ImageMagick,ImageMagick
 "PHP GD2","PHP GD2"
 "Please confirm site switching. All data that hasn't been saved will be lost.",请确认站点转换。所有没有被存储的数据将会丢失。
 "Please correct the column format and try again.",请纠正列格式再试一次。
-"Please correct the email address: ""%1"".","请纠正邮件地址: ""%1""。"
+"Please correct the email address: ""%1"".","请纠正邮件地址： ""%1""。"
 "Please correct the tab configuration and try again.",请纠正tab配置再试一次。
 "Please correct the timezone.",请纠正您的时区。
 "Please correct the user name or password.",请纠正用户名或密码。
 "Search String",搜索字符串
 "Selected allowed currency ""%1"" is not available in installed currencies.","安装的货币中找不到您允许的货币""%1""。"
-"Service unavailable: %1","无效的服务: %1"
+"Service unavailable: %1","无效的服务： %1"
 "Sorry, the default display currency you selected in not available in allowed currencies.","很抱歉， 您选择的默认显示货币在允许的货币里无效。"
 "Sorry, we haven't installed the base currency you selected.",很抱歉，还没有安装你选择的基础货币。
 "Sorry, we haven't installed the default display currency you selected.","很抱歉， 还没有安装你选择默认显示货币。"
-"Specify a URL or path that starts with placeholder(s): %1.",指定一个以占位符%1开头的URL或路径:。
+"Specify a URL or path that starts with placeholder(s): %1.",指定一个以占位符%1开头的URL或路径：。
 "Specify a fully qualified URL.",指定完整的URL。
 "The file you're uploading exceeds the server size limit of %1 kilobytes.","您正在上传的文件超过了服务器文件尺寸限制%1 kb。"
 "The sender name ""%1"" is not valid. Please use only visible characters and spaces.","无效的发送者名字""%1""。 请仅仅使用可见的字符和空。"

@@ -64,7 +64,7 @@ Password,密码
 "Please make sure that <code>mod_rewrite</code> is enabled in Apache configuration.",请确保在Apache配置中启用了<code>mod_rewrite</code>。
 "Please set all required settings before clicking ""Continue"".","在单击""继续""之前请设置所有必须的设置选项。"
 "Proceed With Automatic Download (%1)",正在处理自动下载（%1）
-"Provide a complete base URL for SSL connection. For example: %1.",请为SSL连接提供一个完整的基础URL。例:%1。
+"Provide a complete base URL for SSL connection. For example: %1.",请为SSL连接提供一个完整的基础URL。例：%1。
 "Report All Bugs",报告所有Bug
 "Required Fields",必须的字段
 "Response from the server is invalid.",来自服务器的响应无效。
@@ -82,7 +82,7 @@ Password,密码
 "The URL ""%1"" is not accessible.","URL “%1” 无法访问。"
 "The database server version doesn't match system requirements (required: %1, actual: %2).",数据库服务器版本不满足要求（需要：%1，实际：%2）。
 "The table prefix should contain only letters (a-z), numbers (0-9) or underscores (_); the first character should be a letter.",表前缀应该仅仅包含字母（a-z）、数字（0-9）或者下划线（_）;首字母必须是字母。
-"This is the additional path used after your base URL to access your store Admin (e.g, Admin).",这是另外的路径附加到你的基础URL用来存取店铺管理（如:Admin）。
+"This is the additional path used after your base URL to access your store Admin (e.g, Admin).",这是另外的路径附加到你的基础URL用来存取店铺管理（如：Admin）。
 "Time Zone",时区
 "Use Secure URLs (SSL)",使用安全URL（SSL）
 "Use Web Server (Apache) Rewrites",使用Web服务器（Apache）重写
@@ -92,5 +92,5 @@ Username,用户名
 Validation,验证
 "Web access options",Web访问选项
 Welcome,欢迎
-"You can specify server port, ex.: localhost:3307<br />If you are not using default UNIX socket, you can specify it here instead of host, ex.: /var/run/mysqld/mysqld.sock","您可以指定服务器端口，例如： localhost:3307<br />如果没有使用默认的UNIX socket，则可以在此指定，而不用在主机中指定，例如： /var/run/mysqld/mysqld。sock"
+"You can specify server port, ex.: localhost:3307<br />If you are not using default UNIX socket, you can specify it here instead of host, ex.: /var/run/mysqld/mysqld.sock","您可以指定服务器端口，例如： localhost：3307<br />如果没有使用默认的UNIX socket，则可以在此指定，而不用在主机中指定，例如： /var/run/mysqld/mysqld。sock"
 "You could enable this option to use web server rewrites functionality for improved search engines optimization.",您可以启用该选项，以便通过Web服务器的重写功能改善搜索引擎优化效果。

@@ -10,6 +10,7 @@ Enabled,已启用
 "Invalid Sender Email",无效的发送者邮件
 "Invalid Sender Information",无效的发送者信息
 "Maximum %1 email addresses allowed",最多允许%1个邮件地址
+"Maximum %1 email addresses allowed.",最多允许%1个邮件地址。
 Message:,信息：
 Name,姓名
 Name:,姓名：
@@ -29,4 +30,3 @@ Sender:,发送人：
 "We found some problems with the data.",发现数据有问题。
 "You can't send messages more than %1 times an hour.",您不能一小时内发送消息超过%1次。
 "You've met your limit of %1 sends in an hour.",您已经达到了每小时发送的限制数%1。
-"Maximum %1 email addresses allowed.","最多允许%1个邮件地址。"

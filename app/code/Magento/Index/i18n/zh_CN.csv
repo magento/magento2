@@ -20,7 +20,7 @@ Index,索引
 Mode,模式
 Never,永不
 No,否
-"One or more of the Indexes are not up to date: %1","一个或更多索引过期: %1"
+"One or more of the Indexes are not up to date: %1","一个或更多索引过期： %1"
 "Please go to <a href=""%1"">Index Management</a> and rebuild required indexes.","请去<a href=""%1"">索引管理</a>重建必需的索引。"
 "Please select Index(es)",请选择索引
 "Please select Indexes",请选择索引

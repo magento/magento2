@@ -1,5 +1,6 @@
 "* Required Fields",*必要字段
 "ALL GROUPS",所有群组
+"Account Dashboard",账户面板
 "Account Information",帐户信息
 "Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href=""%1"">click here</a>.","帐户信息是必须的。请使用您电子邮件中的确认链接。要重新发送确认电子邮件，请 <a href=""%1"">点击这里</a>。"
 "Account confirmation is required. Please, check your email for the confirmation link. To resend the confirmation email please <a href=""%1"">click here</a>.","帐户信息是必须的。请使用您电子邮件中的确认链接。要重新发送确认电子邮件，请 <a href=""%1"">点击这里</a>。"
@@ -28,6 +29,7 @@ Approved,已批准
 Back,返回
 "Back to Login",返回到登录界面
 "Bad request.",请求有误。
+"By creating an account with our store, you will be able to move through the checkout process faster, store multiple shipping addresses, view and track your orders in your account and more.",在我们店铺创建一个账号，将便于您更快结账，存储多个运送地址、查看和跟踪订单还有更多。
 CSV,CSV
 Cancel,取消
 "Cannot save a new password.",无法保存新密码。
@@ -95,11 +97,13 @@ Email:,电子邮件：
 Fax,传真
 "First Name",名字
 "Forgot Your Password?",忘记您的密码？
+"From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information.",从账户面板能查看您最近的账户活动情况和更新账户信息。选择下面的链接查看或编辑信息。
 "From your dashboard you can review recent account activity and edit your account information.",从仪表盘能查看您的近期账户活动和编辑账户信息。
 Gender,性别
 "Gender is required.",需提供性别信息。
 "General Subscription",常规订阅
 Global,全球
+"Go back",回退
 "Grand Total",总计
 Group,分组
 "Group Information",群组信息
@@ -112,6 +116,7 @@ ID,ID
 "If there is an account associated with %1 you will receive an email with a link to reset your password.","如果有关联给 %1 的账户，你将收到一封包含重设密码链接的电子邮件。"
 "If you are a registered VAT customer, please click <a href=""%1"">here</a> to enter you billing address for proper VAT calculation","如果你是已注册的 VAT 顾客，请点击 <a href=""%1"">这里</a> 输入帐单地址，以准确计算 VAT"
 "If you are a registered VAT customer, please click <a href=""%1"">here</a> to enter you shipping address for proper VAT calculation","如果你是已注册的 VAT 顾客，请点击<a href=""%1"">这里</a>输入发货地址，以准确计算 VAT"
+"If you have an account with us, log in using your email address.",如果您已经有了一个账户，请使用您的邮件地址登录。
 "If you have an account with us, please log in.",如果您拥有账户，请登录。
 "Invalid current password",当前密码无效
 "Invalid login or password.",无效的登录名或密码。
@@ -149,6 +154,7 @@ Never,永不
 Newsletter,新闻邮件
 "Newsletter Information",新闻邮件信息
 "Newsletter Subscription",新闻邮件订阅
+"Newsletter Subscriptions",邮件订阅
 Newsletters,新闻邮件
 "No Newsletter Found",未找到新闻邮件
 "No item specified.",未指定条目
@@ -169,7 +175,7 @@ Pending,挂起
 "Per Website",每网站
 "Personal Information",个人信息
 "Please correct the email address.",请纠正邮件地址。
-"Please correct this email address: ""%1"".","请纠正该邮件地址: ""%1""。"
+"Please correct this email address: ""%1"".","请纠正该邮件地址： ""%1""。"
 "Please enter a valid date between %1 and %2 at %3.","请在%1输入介于%2 与 %3 之间的有效日期。"
 "Please enter a valid date equal to or greater than %1 at %2.","请在 %1 输入等于或大于 %2 的有效日期。"
 "Please enter a valid date less than or equal to %1 at %2.","请在 %2 输入小于或等于 %1 的有效日期。"
@@ -181,6 +187,8 @@ Pending,挂起
 "Please enter the street.",请输入街道。
 "Please enter the telephone number.",请输入电话号码。
 "Please enter the zip/postal code.",请输入邮编。
+"Please enter your email address below. You will receive a link to reset your password.",在下面输入邮件地址，您将接收到一封带有密码重置链接的邮件。
+"Please enter your email below and we will send you the confirmation link for it.",在下面输入邮件地址我们将发送一封带有确认链接的邮件给您。
 "Please enter your email below and we'll send you confirmation link for it.",请在下面输入您的邮件地址，我们将发送确认链接。
 "Please enter your email.",请输入您的电子邮件。
 "Please make sure your passwords match.",请确保密码匹配。
@@ -195,6 +203,7 @@ Product,产品
 "Product Reviews",产品评论
 Qty,数量
 "Recent Orders",近期订单
+"Recurring Profiles",周期配置
 Refunded,已存储
 "Registered Customers",已注册的客户
 Remove,删除
@@ -229,6 +238,7 @@ Store,商店
 Subject,主题
 Submit,提交
 "Subscribe to Newsletter",订阅到新闻通讯
+"Subscription option",订阅选项
 "Tax Class",税率
 "Tax/VAT number",税/增值税号码
 Telephone,电话
@@ -251,6 +261,7 @@ Text,文字
 "The password can not begin or end with a space.",密码不能以空格开头或者结束。
 "The password must have at least %1 characters.",密码必须有至少%1个字符。
 "There are no items in customer's shopping cart at the moment",客户的购物车中目前没内容
+"There are no recurring profiles yet.",还没有周期配置。
 "There is already an account with this email address. If you are sure that it is your email address, <a href=""%1"">click here</a> to get your password and access your account.","已经存在一个同名邮件地址的账号。如果您确定这就是您的邮件地址，<a href=""%1"">点击这里</a>得到密码来访问您的账户信息。"
 "There was an error validating the VAT ID.","验证 VAT ID 时出错。"
 "This account is not confirmed.",该帐户尚未确认。
@@ -283,15 +294,18 @@ Wishlist,收藏清单
 "Wrong transactional account email type",错误的交易账户电子邮件类型
 Year,年
 "Year (YYYY)",YYYY
+"You are currently not subscribed to any newsletter.",您暂未订阅新闻邮件。
 "You are currently not subscribed to our newsletter.",您目前没有订阅我们的时事通讯。
 "You are now logged out",您已注销
 "You do not subscribe to a newsletter.",不订阅新闻邮件。
 "You have logged out and will be redirected to our homepage in 5 seconds.",您已退出，5秒钟内会回到首页。
+"You have no additional address entries in your address book.",地址簿中没有其他的地址。
 "You have no additional entries in your address book.",您的地址簿里有没有额外的条目。
 "You have no default billing address in your address book.",您的地址薄中没有默认账单地址。
 "You have no default entries in your address book.",您的地址薄里没有默认的条目。
 "You have no default shipping address in your address book.",您的地址薄中没有默认运送地址。
 "You have no more address entries in your address book.",您的地址簿中没有更多地址。
+"You have not purchased any downloadable products yet.",您尚未购买任何可下载的产品。
 "You have not set a default billing address.",您还没有设置默认的账单地址。
 "You have not set a default shipping address.",您尚未设置默认的运送地址。
 "You subscribe to our newsletter.",订阅新闻邮件。
@@ -304,17 +318,3 @@ Year,年
 "Your password reset link has expired.",你的密码重设链接已过期。
 ZIP,邮编
 "Zip/Postal Code",邮政编码
-"Account Dashboard","账户面板"
-"Recurring Profiles","周期配置"
-"Newsletter Subscriptions","邮件订阅"
-"From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information.","从账户面板能查看您最近的账户活动情况和更新账户信息。选择下面的链接查看或编辑信息。"
-"You are currently not subscribed to any newsletter.","您暂未订阅新闻邮件。"
-"You have no additional address entries in your address book.","地址簿中没有其他的地址。"
-"Go back","回退"
-"You have not purchased any downloadable products yet.",您尚未购买任何可下载的产品。
-"Subscription option",订阅选项
-"There are no recurring profiles yet.","还没有周期配置。"
-"By creating an account with our store, you will be able to move through the checkout process faster, store multiple shipping addresses, view and track your orders in your account and more.","在我们店铺创建一个账号，将便于您更快结账，存储多个运送地址、查看和跟踪订单还有更多。"
-"If you have an account with us, log in using your email address.","如果您已经有了一个账户，请使用您的邮件地址登录。"
-"Please enter your email address below. You will receive a link to reset your password.","在下面输入邮件地址，您将接收到一封带有密码重置链接的邮件。"
-"Please enter your email below and we will send you the confirmation link for it.","在下面输入邮件地址我们将发送一封带有确认链接的邮件给您。"

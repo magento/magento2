@@ -5,7 +5,8 @@ Add,添加
 "Add gift options.",添加礼品选项。
 "Are you sure?",您是否确认？
 Cancel,取消
-"Does your order include gift items?",你的订单包含礼物条目吗?
+"Do you have any gift items in your order?",您的订单里有礼物条目吗？
+"Does your order include gift items?",你的订单包含礼物条目吗？
 Edit,编辑
 From,来自
 "Gift Message",礼品消息
@@ -13,6 +14,7 @@ From,来自
 "Gift Options for Individual Items",适用于单个条目的礼品选项
 "Gift Options for the Entire Order",为整个订单的礼物选项
 "Gift Options for this address",为该地址的礼物设置
+"Gift Options for this address.",该地址的礼物选项。
 "Item %1 of %2","第 %1 个条目，共 %2 个"
 Message,信息
 No,否
@@ -24,11 +26,9 @@ To,发送至
 "Unknown entity type",未知实体类型
 "Use config",用户配置
 Yes,是
+"You can leave a box blank if you don't wish to add a gift message for the item.",如果您不想为该条目添加一条礼物留言请留空。
+"You can leave this box blank if you do not wish to add a gift message for the item.",如果您不想为该条目添加一条礼物留言请留空。
+"You can leave this box blank if you do not wish to add a gift message for this address.",如果您不想为该地址添加一条礼物留言请留空。
 "You can leave this box empty if you don't want to add a gift message for the whole order.",如果你不想为整个订单添加礼物留言请留空。
 "You can leave this box empty if you don't want to add a gift message for this address.",如果你不想为该地址添加礼物留言请留空。
 "You can leave this box empty if you don't want to add a gift message to this item.",如果你不想为该条目添加礼物留言请留空。
-"Do you have any gift items in your order?","您的订单里有礼物条目吗？"
-"Gift Options for this address.","该地址的礼物选项。"
-"You can leave a box blank if you don't wish to add a gift message for the item.","如果您不想为该条目添加一条礼物留言请留空."
-"You can leave this box blank if you do not wish to add a gift message for the item.","如果您不想为该条目添加一条礼物留言请留空."
-"You can leave this box blank if you do not wish to add a gift message for this address.","如果您不想为该地址添加一条礼物留言请留空."

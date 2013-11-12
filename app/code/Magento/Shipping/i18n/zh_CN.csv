@@ -32,8 +32,8 @@ Percent,百分之
 "Please correct Country ""%1"" in the Row #%2.","请在行#%2纠正国家""%1""。"
 "Please correct Region/State ""%1"" in the Row #%2.","请在行#%2纠正地区/州""%1""。"
 "Please correct Shipping Price ""%1"" in the Row #%2.","请在行#%2纠正运送价格""%1""。"
-"Please correct Table Rate code for type %1: %2.","请纠正类型%1: %2的表费率代码。"
-"Please correct Table Rate code type: %1.","请纠正表费率代码类型: %1。"
+"Please correct Table Rate code for type %1: %2.","请纠正类型%1： %2的表费率代码。"
+"Please correct Table Rate code type: %1.","请纠正表费率代码类型： %1。"
 "Please correct Table Rates File Format.",请纠正货运费率表文件格式。
 "Please correct Table Rates format in the Row #%1.",请在行#%1纠正表费率格式。
 Price,价格
@@ -58,6 +58,7 @@ Title,标题
 Track:,追踪：
 "Tracking Information",追踪信息
 "Tracking Number:",追踪号码：
+"Tracking information is currently not available. Please ",追踪信息当前不可用。请
 "Tracking information is not available. Please ",无效的追踪信息
 "Tracking information is unavailable.",无效的追踪信息。
 Type,类型
@@ -69,4 +70,3 @@ Type,类型
 Weight:,重量：
 "contact us",联系我们
 "email us at ",发送电子邮件给我们：
-"Tracking information is currently not available. Please ","追踪信息当前不可用。请"

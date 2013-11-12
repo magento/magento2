@@ -11,7 +11,7 @@ Enabled,已启用
 "New Order Status",新订单状态
 "Order saving error: %1",订单保存错误：%1
 "Please choose a payment method.",请选择支付方法。
-"Something went wrong: the paid amount doesn't match the order amount. Please correct this and try again.","发生错误: 付款额订单额不匹配，请纠正后再试。"
+"Something went wrong: the paid amount doesn't match the order amount. Please correct this and try again.","发生错误： 付款额订单额不匹配，请纠正后再试。"
 "Sort Order",排序顺序
 "The transaction was declined because the response hash validation failed.",因为响应哈希校验失败交易被拒绝。
 "There was a payment authorization error.",支付授权发生错误。

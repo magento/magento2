@@ -1,9 +1,9 @@
 "Add New Theme",添加新的主题
 "Allowed file types *.css.",允许的文件类型*。css。
 "Allowed file types *.js.",允许的文件类型*。js。
-"Are you sure you want to delete this file?",你确定要删除该文件吗?
-"Are you sure you want to delete this folder?",你确定要删除该目录吗?
-"Are you sure you want to delete this theme?",你确定要删除该主题吗?
+"Are you sure you want to delete this file?",你确定要删除该文件吗？
+"Are you sure you want to delete this folder?",你确定要删除该目录吗？
+"Are you sure you want to delete this theme?",你确定要删除该主题吗？
 "Browse Files",浏览文件
 "CSS Editor",CSS编辑器
 "Copy of %1",%1副本
@@ -11,7 +11,7 @@
 "Custom CSS",定制CSS
 "Download CSS File",下载CSS文件
 "Edit custom.css",编辑custom。css
-"Example: 0.0.0.1 or 123.1.0.25-alpha1","例: 0。0。0。1或123。1。0。25-alpha1"
+"Example: 0.0.0.1 or 123.1.0.25-alpha1","例： 0。0。0。1或123。1。0。25-alpha1"
 "JS Editor",JS编辑器
 "Max file size to upload %1M",上传文件的最大尺寸%1M
 "Max image size %1M",最大图片尺寸%1M
@@ -30,7 +30,7 @@ Theme,主题
 "Theme Title",主题标题
 "Theme Version",主题版本
 "Theme isn't editable.",主题不可编辑。
-"Theme: %1","主题: %1"
+"Theme: %1","主题： %1"
 "This file will replace the current custom.css file and can't be more than 2 MB.",该文件将替换当前custom。css文件并且大小不能超过2MB。
 "Upload CSS File",上传CSS文件
 "Upload Fonts",上传字体

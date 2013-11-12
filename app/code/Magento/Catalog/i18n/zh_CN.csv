@@ -3,6 +3,7 @@
 "%1 RSS Feed",%1RSS种子
 "%1 and above","%1 及以上"
 "%1 incl tax",%1含税
+"%1 incl tax.",%1含税。
 "%1 x %2 px.","%1 x %2 px。"
 "(Copy data from: %1)",（从%1复制数据）
 "* Required Fields",*必要字段
@@ -61,8 +62,10 @@ Amount,数量
 "Apply To",应用给
 Approved,已批准
 "Are you sure you want to delete this category?",你确定要删除此类别？
-"Are you sure you want to remove all products from your comparison?",您确定要从您的比较里移除所有的产品吗?
-"Are you sure you want to remove this item from the compared products?",您确定要从比较产品里移除该条目吗?
+"Are you sure you want to remove all products from your comparison?",您确定要从您的比较里移除所有的产品吗？
+"Are you sure you want to remove this item from the compared products?",您确定要从比较产品里移除该条目吗？
+"Are you sure you would like to remove all products from your comparison?",您确定要从比较列表中移除所有的产品？
+"Are you sure you would like to remove this item from the compare products?",您确定要从比较产品中移除该条目？
 "Are you sure?",您是否确认？
 "As low as:",低至：
 Assign,、分配
@@ -112,7 +115,7 @@ Change,更改
 "Check items to add to the cart or",检查要加入购物车的内容
 Choose,选择
 "Choose Affected Attribute Set",选择受影响的属性集
-"Choose an Option...",选择选项...
+"Choose an Option...",选择选项。。。
 "Clear All",清除全部
 "Clear Price",清除价格
 "Click for price",单击获取价格
@@ -231,6 +234,7 @@ Integer,整数
 "Invalid image file type.",无效的图像文件类型。
 "Is Default",为默认值
 "Items %1 to %2 of %3 total","条目%1到%2 共%3个"
+"Items %1-%2 of %3",第%1-%2个，共%3个条目
 Label,标签
 "Last Name",姓氏
 "Last Notified",最新通知
@@ -255,6 +259,7 @@ List,列表
 "Media Image",媒体图片
 "Minimum Qty Allowed in Shopping Cart",购物车允许的最小数量
 "Minimum Qty for Item's Status to be Out of Stock",状态转变为缺货的条目的最小数量
+"More Choices:",更多选择：
 "More Views",更多视图
 Move,移动
 N/A,N/A
@@ -307,7 +312,7 @@ Pending,挂起
 "Please specify the product's required option(s).",请指定产品的必要选项。
 "Please specify the quantity of product(s).",请指定产品数量。
 "Please specify time required option(s).",请指定时间需要的选项。
-"Please wait...",请稍候...
+"Please wait...",请稍候。。。
 Position,位置
 "Position in Layered Navigation",在层次式导航中定位
 "Position of Watermark for %1",%1的水印位置
@@ -351,6 +356,7 @@ Redirect,重定向
 "Related Products",相关产品
 Remove,删除
 "Remove Image",移除图片
+"Remove Product",移除产品
 "Remove Product From Websites",从网站删除产品
 "Remove This Item",删除该内容
 "Reorganize EAV category structure to flat structure",重新识别EAV分类结构为平坦结构
@@ -378,6 +384,7 @@ Scope,范围
 Search,搜索
 "Search Information",搜索信息
 "Search Query",搜索查询
+"Search results for: '%1'",搜索结果：“%1”
 Searchable,可搜索
 "See price before order confirmation.",确认订单前显示价格。
 "Select Configurable Attributes",选择可配置的属性
@@ -441,7 +448,7 @@ Text,文字
 "The From Date value should be less than or equal to the To Date value.",开始日期应该小于等于结束如期。
 "The attribute model is not defined.",属性模型未定义。
 "The base directory to upload file is not specified.",文件上传的基本目录尚未指定。
-"The category must be an instance of \Magento\Catalog\Model\Category.","分类必须是\Magento\Catalog\Model\Category的实例."
+"The category must be an instance of \Magento\Catalog\Model\Category.","分类必须是\Magento\Catalog\Model\Category的实例。"
 "The configuration item instance in options group is incorrect.",选项组中配置条目实例是不正确的。
 "The configuration item option instance in options group is incorrect.",选项组中配置条目选项实例是不正确的。
 "The filter model name must be declared.",过滤器模型必须被声明。
@@ -482,7 +489,7 @@ Title,标题
 "To see product price, add this item to your cart. You can always remove it later.",要查看产品价格，请添加该条目到您的购物车。您总是可以稍后删除它。
 Top/Left,顶部/左侧
 Top/Right,顶部/右侧
-"Total incl. Tax: %1","含税总价: %1"
+"Total incl. Tax: %1","含税总价： %1"
 Type,类型
 "URL Rewrite Management",URL重写管理
 "Unable to save product",不能存储产品
@@ -537,7 +544,7 @@ Websites,网站
 Yes,是
 "You added product %1 to the comparison list.",您已经添加了产品%1比较列表。
 "You already have an identical search term query.",您已经有了一个同样的搜索名词查询。
-"You are about to delete all products in this set. Are you sure you want to delete this attribute set?",此操作将要删除该集合里的所有产品。你确定要删除该属性集吗?
+"You are about to delete all products in this set. Are you sure you want to delete this attribute set?",此操作将要删除该集合里的所有产品。你确定要删除该属性集吗？
 "You can't update your attribute.",不能更新您的属性。
 "You cannot remove system attributes from this set.",不能从该属性集移除系统属性。
 "You cleared the comparison list.",您清除了比较列表。
@@ -545,7 +552,8 @@ Yes,是
 "You deleted the search.",您已经删除了该搜索。
 "You duplicated the product.",您已复制了该产品。
 "You have no items to compare.",您没有可比较的条目。
-"You may also be interested in the following product(s):",您也可以感兴趣下面的产品:
+"You may also be interested in the following product(s)",你可能页感兴趣下列产品
+"You may also be interested in the following product(s):",您也可以感兴趣下面的产品：
 "You removed product %1 from the comparison list.",您已经从比较列表中移除了%1。
 "You saved the attribute set.",您已经存储了属性集。
 "You saved the category.",您已经存储该分类。
@@ -557,7 +565,7 @@ Yes,是
 and,和
 "begin typing to add value",开始输入来添加值
 each,每个
-"ex. http://domain.com","例如 http://domain。com"
+"ex. http://domain.com","例如 http：//domain。com"
 lbs,磅
 "per page",每页
 px.,像素
@@ -565,11 +573,3 @@ save,保存
 "select all",全选
 "start typing to search category",开始输入来搜索分类
 "unselect all",撤销全选
-"Search results for: '%1'",搜索结果：“%1”
- "%1 incl tax.","%1含税."
-"Are you sure you would like to remove all products from your comparison?","您确定要从比较列表中移除所有的产品？"
-"Are you sure you would like to remove this item from the compare products?","您确定要从比较产品中移除该条目？"
-"Items %1-%2 of %3","第%1-%2个，共%3个条目"
-"More Choices:","更多选择:"
-"Remove Product","移除产品"
-"You may also be interested in the following product(s)","你可能页感兴趣下列产品"

@@ -8,10 +8,10 @@
 "Begin export of %1",开始%1的导入
 "Begin import of ""%1"" with ""%2"" behavior","开始导入用""%2""行为导入""%1"""
 "Cannot determine attribute filter type",不能检测属性过滤器类型
-"Cannot find required columns: %1","找不到必须的列: %1"
+"Cannot find required columns: %1","找不到必须的列： %1"
 "Cannot get autoincrement value",不能得到子增量值
 "Check Data",检查数据
-"Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4","核对的行: %1， 核对的实体: %2， 无效的行: %3， 总错误数: %4"
+"Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4","核对的行： %1， 核对的实体： %2， 无效的行： %3， 总错误数： %4"
 "Column names: ""%1"" are invalid","列名""%1""是无效的"
 "Columns number: ""%1"" have empty headers","列号""%1""标题为空"
 Continue,继续
@@ -34,7 +34,7 @@ Continue,继续
 "Entity adapter object must be an instance of %1 or %2",尸体适配器对象必须是%1或%2的实例
 "Entity is unknown",未知实体
 "Entity type model must be an instance of \Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType","实体类型模块必须为\Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType的实例"
-"Error in data structure: %1 values are mixed","数据结构错误: %1的值是混合的"
+"Error in data structure: %1 values are mixed","数据结构错误： %1的值是混合的"
 "Errors limit (%1) reached. Please fix errors and re-upload file.",达到错误极限（%1）。请修正错误然后重新上传文件。
 Export,导出
 "Export File Format",导出文件格式
@@ -67,7 +67,7 @@ Import/Export,导入/导出
 "Invalid custom option value price.",无效的定制选项值价格。
 "Invalid custom option value sort order.",无效的定制选项值排序。
 "Invalid password length",无效的密码长度
-"Invalid value in Store column (store does not exists?)",店铺列的值无效（店铺不存在?）
+"Invalid value in Store column (store does not exists?)",店铺列的值无效（店铺不存在？）
 "Option entity must have a parent product entity.",选项实体必须有一个父产品实体。
 "Orphan rows that will be skipped due default row errors",由于默认行错误，孤儿行将被跳过
 "Please correct the data sent.",请纠正送出的数据。
@@ -99,4 +99,4 @@ Status,状态
 "Validation finished successfully",成功完成校验。
 "Website is not specified",未指定站点
 "in rows",在行
-"in rows:",在行:
+"in rows:",在行：

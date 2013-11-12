@@ -5,18 +5,21 @@
 "-- No Theme --","-- 没有主题 --"
 "-- Please Select --","-- 请选择 --"
 "A category object is required for determining the product request path.",为确定产品申请路径，必须提供分类对象。
+"About Us",关于我们
 "Add Products By SKU",通过SKU添加产品
 "Add Products to Group",添加产品到组
 "Add Products to New Option",添加产品到新选项
+"Add Products to Option ""%1""","添加产品到选项""%1"""
 "Add Selected Products",添加选择的产品
 Admin,管理员
 Advanced,高级
+"Advanced Search",高级搜索
 "An error occurred while saving. Please review the error log.",在保存时出现了错误。请查看错误日志。
 "Anchor symbol (#) is not supported in request path",锚点符号（#）不能用于请求路径中
 "Anchor symbol (#) is not supported in url rewrite suffix","URL 重写后缀不支持固定标志 （#）"
 "Are you sure you want to delete the folder named",你确定要删除该目录
 "Are you sure?",您是否确认？
-"Assign theme to your live store-view:",分配主题到你的活动店铺视图:
+"Assign theme to your live store-view:",分配主题到你的活动店铺视图：
 B,B
 Back,返回
 "Backup Options",备份选项
@@ -34,6 +37,7 @@ Cancel,取消
 "Choose existing category.",选择存在的分类。
 "Circular-reference in theme inheritance detected for ""%1""","为""%1""检测主题继承中的循环引用"
 Code,代码
+"Contact Us",联系我们
 "Controller file was loaded but class does not exist",控制器文件已载入，但类不存在
 Copy,副本
 Country,国家
@@ -48,6 +52,7 @@ Country,国家
 "Custom1 Contact Name","自定义 1 联系姓名"
 "Custom2 Contact Email","自定义 2 联系邮件"
 "Custom2 Contact Name","自定义 2 联系姓名"
+"Customer Service",客户服务
 Dashboard,仪表板
 "Date From",日期自
 "Date To",日期至
@@ -102,15 +107,16 @@ Host,主机
 "Invalid connection",无效的连接
 "Invalid messages storage ""%1"" for layout messages initialization",对布局消息初始化中无效的消息存储“%1”
 "Invalid query",无效的查询
-"Invalid regular expression: ""%1"".","无效的正则表达式: ""%1""。"
+"Invalid regular expression: ""%1"".","无效的正则表达式： ""%1""。"
 "Invalid theme loaded by theme path ""%1/%2""","主题路径""%1/%2""加载无效主题"
-"Invalid transactional email code: %1","无效的交易邮件代码: %1"
+"Invalid transactional email code: %1","无效的交易邮件代码： %1"
 "Invalid view file directory ""%1""","无效的视图文件目录""%1"""
 Layout,布局
 "Library files",库文件
 Locale,区域
 MB,MB
 "Manage Stores",管理店铺
+"Maximum length of this field must be equal or less than %1 symbols.",该字段的最大长度必须小于等于%1个符号。
 "Media Storage",媒体存储
 "Method ",方法
 "Model collection resource name is not defined.",模块集合资源名未定义。
@@ -138,19 +144,23 @@ Package,包裹
 "Please enter a number greater than 0 in this field.",请在该字段中输入大于0的数字。
 "Please enter a number lower than 100.",请输入不超过100个数字。
 "Please enter a valid URL Key. For example ""example-page"", ""example-page.html"" or ""anotherlevel/example-page"".","请输入有效的 URL 密钥。例如， ""example-page""、""example-page。html""，或 ""anotherlevel/example-page""。"
-"Please enter a valid URL. Protocol is required (http://, https:// or ftp://)",请输入有效URL。协议名是必须的（http://、https://，或ftp://）
+"Please enter a valid URL. Protocol is required (http://, https:// or ftp://)",请输入有效URL。协议名是必须的（http：//、https：//，或ftp：//）
 "Please enter a valid XML-identifier. For example something_1, block5, id-4.",请输入有效的XML标识符。例如，类似something_1、block5、id-4。
 "Please enter a valid credit card number.",请输入有效的信用卡卡号。
 "Please enter a valid credit card verification number.",请输入有效的信用卡验证码。
 "Please enter a valid date.",请输入有效日期
+"Please enter a valid day (1-%1).",请输入有效的天（1-%1）。
 "Please enter a valid email address. For example johndoe@domain.com.",请输入有效邮件地址。例如johndoe@domain。com。
 "Please enter a valid fax number. For example (123) 456-7890 or 123-456-7890.","请输入有效传真号码，例如 （123） 456-7890 或 123-456-7890。"
 "Please enter a valid full date",请输入有效完整日期
 "Please enter a valid month (1-12).",请输入有效月份（1-12）。
 "Please enter a valid number in this field.",请在此区域输入有效的数字。
 "Please enter a valid social security number. For example 123-45-6789.",请输入有效社会安全号码，例如123-45-6789。
+"Please enter a valid year (1900-%1).",请输入有效的年（1900-%1）。
 "Please enter a valid zip code.",请输入有效的邮政编码。
 "Please enter a valid zip code. For example 90602 or 90602-1234.",请输入有效邮编，例如90602或90602-1234。
+"Please enter a value greater than or equal to %s.",请输入一个大于等于%1的值。
+"Please enter a value less than or equal to %s.",请输入一个小于等于%s的值。
 "Please enter issue number or start date for switch/solo card type.",请输入Switch/Solo类卡的颁发号或开始日期。
 "Please input a valid CSS-length. For example 100px or 77pt or 20em or .5ex or 50%.","请输入有效 CSS长度。例如， 100px 或 77pt 或 20em 或 。5ex 或 50%。"
 "Please make sure your passwords match.",请确保密码匹配。
@@ -169,7 +179,7 @@ Package,包裹
 "Please use only letters (a-z), numbers (0-9) or underscore(_) in this field, first character should be a letter.",该字段中请只使用字母（a-z）、数字（0-9）以及下划线（_），第一个字符应为字母。
 "Please use only visible characters and spaces.",请只使用可见字符和空格。
 "Please use this date format: dd/mm/yyyy. For example 17/03/2006 for the 17th of March, 2006.",请使用这样的日期格式：dd/mm/yyyy。例如17/03/2006代表2006年3月17日。
-"Please wait, loading...",请稍候，正在加载...
+"Please wait, loading...",请稍候，正在加载。。。
 "Recent items",最近的条目
 "Request Path for Specified Store",特殊店铺的请求路径
 "Requested file may not include parent directory traversal (""../"", ""..\\ notation)""","所请求的文件可能没有包含在父目录遍历中 （""。。/""， ""。。\\ notation）"""
@@ -188,7 +198,7 @@ Save,保存
 "Sender Email",发送人邮件
 "Sender Name",发送人姓名
 "Set as Default",设置为默认值
-"Show all...",显示所有...
+"Show all...",显示所有。。。
 "Some problem with revert action",恢复动作的有问题
 "Some problem with save action",存储动作有问题
 "Something went wrong while loading the theme.",当加载主题时发生错误。
@@ -258,20 +268,10 @@ Website,网站名称
 "Website with the same code",使用相同代码的网站
 "Wrong file info format",错误的文件信息格式
 Yes,是
-"You are about to delete your wish list. This action cannot be undone. Are you sure you want to continue?",将删除您的收藏清单。该操作不可恢复。你确定要继续嘛?
+"You are about to delete your wish list. This action cannot be undone. Are you sure you want to continue?",将删除您的收藏清单。该操作不可恢复。你确定要继续嘛？
 "You can change the number of gift registry items on the Gift Registry Info page or directly in your cart, but not while in checkout.",您可以在礼物登记信息页或者在购物车修改礼物登记条目的数量，但是一定要在结账前操作。
 "You must select items to copy",你必须选择要复制的条目（s）
 "You must select items to move",你必须选择要移动的条目（s）
 "Your design change for the specified store intersects with another one, please specify another date range.",您对指定商店设计的更改和另一个有交叉，请重新指定日期范围。
 "database ""%1""","数据库 ""%1"""
 "start typing to search category",开始输入来搜索分类
-"Add Products to Option ""%1""","添加产品到选项""%1"""
-"Maximum length of this field must be equal or less than %1 symbols.","该字段的最大长度必须小于等于%1个符号。"
-"Please enter a valid day (1-%1).","请输入有效的天(1-%1)。"
-"Please enter a valid year (1900-%1).","请输入有效的年(1900-%1)。"
-"Please enter a value greater than or equal to %s.","请输入一个大于等于%1的值。"
-"Please enter a value less than or equal to %s.","请输入一个小于等于%s的值。"
-"About Us","关于我们"
-"Customer Service","客户服务"
-"Advanced Search","高级搜索"
-"Contact Us","联系我们"

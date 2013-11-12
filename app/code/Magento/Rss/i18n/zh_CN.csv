@@ -10,7 +10,7 @@ Catalog,分类
 "Comment: %1<br/>","评论：%1 <br/>"
 Coupons/Discounts,代金券/折扣
 "Current Status: %1<br/>","当前状态：%1 <br/>"
-"Customer Name: %1","客户名: %1"
+"Customer Name: %1","客户名： %1"
 "Details for %1 #%2","%1 #%2的详情"
 Discount,折扣
 "Discount (%1)","折扣 （%1）"
@@ -29,14 +29,14 @@ Message:,信息：
 "Order # %1 Notification(s)","订单# %1 通知（s）"
 "Order #%1 created at %2",订单#%1创建于%2
 "Pending product review(s)",未决的产品评论
-"Price: %1","价格: %1"
+"Price: %1","价格： %1"
 "Product: ""%1"" review By: %2","产品：“%1” 由 %2 评论"
 "Product: <a href=""%1"">%2</a> <br/>","产品：<a href=""%1"">%2</a> <br/>"
 "Purchased From: %1",购买自：%1
 "Review: %1 <br/>","评论：%1 <br/>"
 "Shipping &amp; Handling",运送与手续费
 "Special Expires On: %1",特价于%1过期
-"Special Price: %1","特价: %1"
+"Special Price: %1","特价： %1"
 "Special Products",特殊商品
 "Store: %1 <br/>","商店：%1 <br/>"
 Subtotal,小计

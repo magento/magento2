@@ -11,7 +11,7 @@
 "* - Enter custom price including tax","* - 输入含税的自定义价格"
 "-- Please Select --","-- 请选择 --"
 "-- Please Select Billing Agreement--","-- 请选择记账协议 --"
-"<span class=""label"">Order Date:</span> %1","<span class=""label"">订单日期:</span> %1"
+"<span class=""label"">Order Date:</span> %1","<span class=""label"">订单日期：</span> %1"
 "A PDF object is not specified.",未指定一个PDF对象。
 "A PDF page object is not specified.",未指定一个PDF页对象。
 "A hold action is not available.",挂起动作不可用。
@@ -59,13 +59,13 @@ Apply,应用
 "Are you sure you want to delete all items from shopping cart?",你是否确定要删除购物车中的所有内容？
 "Are you sure you want to deny this payment?",您确认要拒绝该支付吗？
 "Are you sure you want to do this?",您是否确认要这样做？
-"Are you sure you want to send a Credit memo email to customer?",您确定要发送一封付款通知邮件给客户吗?
-"Are you sure you want to send a Shipment email to customer?",您确定要发送一封运单邮件给客户吗?
-"Are you sure you want to send an Invoice email to customer?",您确定要发送一封发票邮件给客户吗?
-"Are you sure you want to send an order email to customer?",你确定要发送一封订单邮件给客户吗?
+"Are you sure you want to send a Credit memo email to customer?",您确定要发送一封付款通知邮件给客户吗？
+"Are you sure you want to send a Shipment email to customer?",您确定要发送一封运单邮件给客户吗？
+"Are you sure you want to send an Invoice email to customer?",您确定要发送一封发票邮件给客户吗？
+"Are you sure you want to send an order email to customer?",你确定要发送一封订单邮件给客户吗？
 "Are you sure you want to void the payment?",您确认要使支付无效吗？
 "Are you sure?",您是否确认？
-"Are you sure? This order will be canceled and a new one will be created instead.","你确定吗? 该订单将要被取消并重现创建一个。"
+"Are you sure? This order will be canceled and a new one will be created instead.","你确定吗？ 该订单将要被取消并重现创建一个。"
 "Assign Order Status to State",按国家分配订单状态
 "Assign Status to State",按国家分配状态
 "Assignment Information",分配信息
@@ -134,8 +134,8 @@ Create,创建
 "Create Packages",创建包
 "Create Shipment",创建运单
 "Create Shipping Label",创建运送标签
-"Create Shipping Label...",创建运送标签...
-Create...,创建...
+"Create Shipping Label...",创建运送标签。。。
+Create...,创建。。。
 Created,创建于
 "Created billing agreement #%1.","创建记账协议 #%1。"
 Created:,创建：
@@ -305,7 +305,7 @@ Order,订单
 "Order Date",订单日期
 "Order Date (%1)",订单日期（%1）
 "Order Date: ",订单日期：
-"Order Date: %1","订单日期: %1"
+"Order Date: %1","订单日期： %1"
 "Order Grand Total",订单总数
 "Order History",订单历史
 "Order ID","订单 ID"
@@ -340,7 +340,7 @@ Paid,已付费
 Partial,部分
 "Payment Information",支付信息
 "Payment Method",支付方式
-"Payment Method:",支付方法:
+"Payment Method:",支付方法：
 "Payment Review",支付预览
 "Payment transactions disallow storing objects.",支付交易不允许的店铺对象。
 "Payment type",支付类型
@@ -463,7 +463,7 @@ Select,选择
 Ship,送货
 "Ship Date",发货日期
 "Ship To",送货至
-"Ship to:",运送到:
+"Ship to:",运送到：
 "Ship-to Name",收货人
 Shipment,送货单号
 "Shipment #%1","运单 #%1"
@@ -492,7 +492,7 @@ Shipping,运送
 "Signed by",被签署
 Size,尺寸
 Sku,Sku
-"Sold to:",卖到:
+"Sold to:",卖到：
 "Some item options or their combination are not currently available.",一些条目选项或他们的组合当前无效。
 "Some items in this order are no longer in our catalog.",该订单的一些条目不在产品目录中。
 "Some of the products below do not have all the required options.",下面一些产品没有所有必须的选项。
@@ -580,7 +580,7 @@ Telephone,电话
 "This product does not have any configurable options",该产品不包含任何可配置选项
 "This product is disabled.",该产品被禁止。
 "This profile state cannot be changed to ""%1"".",该资料状态无法更改为“%1”。
-"This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?",这将创建一个离线退款。为了创建在线退款，打开一个发票然后为其创建付款通知。你确定要继续吗?
+"This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?",这将创建一个离线退款。为了创建在线退款，打开一个发票然后为其创建付款通知。你确定要继续吗？
 "Tier Pricing",层级价格
 Title,标题
 To,发送至
@@ -614,7 +614,7 @@ Total,总数
 "Tracking Number(s):",追踪编号：
 "Tracking summary",追踪摘要
 "Transaction ID",交易ID
-"Transaction ID: ""%1""","交易ID: ""%1"""
+"Transaction ID: ""%1""","交易ID： ""%1"""
 "Transaction Type",交易类型
 Transactions,交易
 "Trial ",试用
@@ -694,7 +694,7 @@ Weight,高度
 Width,宽
 "Wish List",收藏清单
 Wishlist,收藏清单
-"Wrong state: ""%1""","错误状态: ""%1"""
+"Wrong state: ""%1""","错误状态： ""%1"""
 Yes,是
 "You are trying to add a quantity for some products that doesn't match the quantity that was shipped.",您正在尝试为一些不匹配运送数量的产品添加数量。
 "You can't do this without a transaction object.",没有交易对象不能进行该操作。

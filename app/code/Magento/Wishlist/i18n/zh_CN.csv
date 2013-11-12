@@ -1,7 +1,7 @@
 "%1 for ""%2"".","%1 为 ""%2""。"
 "%1 has been added to your wishlist. Click <a href=""%2"">here</a> to continue shopping.","%1已经被加入到你的收藏夹。单击<a href=""%2"">这里</a>继续购物。"
 "%1 has been updated in your wish list.",收藏清单里%1已经被更新。
-"%1 product(s) have been added to shopping cart: %2.","%1个产品已经被添加到购物车: %2。"
+"%1 product(s) have been added to shopping cart: %2.","%1个产品已经被添加到购物车： %2。"
 "%1's Wishlist","%1 的收藏清单"
 "* Required Fields",*必要字段
 "Add All to Cart",全部添加到购物车
@@ -15,7 +15,8 @@
 "An error occurred while deleting the item from wish list.",当从收藏清单删除该条目是出错。
 "An error occurred while deleting the item from wish list: %1",当从收藏清单中删除条目%1时发生错误
 "An error occurred while updating wish list.",当更新收藏清单时发生错误。
-"Are you sure you want to remove this product from your wish list?",您确定要从收藏清单里移除该产品吗?
+"Are you sure you want to remove this product from your wish list?",您确定要从收藏清单里移除该产品吗？
+"Are you sure you want to remove this product from your wishlist?",您确定要从收藏清单里移除该产品吗？
 "Are you sure you would like to remove this item from the wishlist?",您确认要从收藏清单中删除该条目？
 Back,返回
 "Can't delete item from wishlist",无法从收藏清单中删除条目
@@ -31,6 +32,7 @@ Comment:,评论：
 "Display number of items in wish list",显示收藏清单里的条目数量
 Edit,编辑
 "Email address can't be empty.",邮件地址不能为空。
+"Email addresses, separated by commas",用逗号分隔邮件地址
 "Email addresses, separated by commas (max %1 addresses)",用逗号分隔的邮件地址（最多%1个地址）
 Enabled,已启用
 "Go to Wish List",去我的收藏
@@ -53,12 +55,14 @@ Product,产品
 "Remove This Item",删除该内容
 "Remove item",删除条目
 "Share Wish List",分享收藏
+"Share Wishlist",分享清单
 "Share Your Wish List",分享你的收藏
 "Sharing Information",分享信息
 "This Wish List has no Items",收藏清单没有任何条目
 "This product(s) is out of stock.",该产品缺货。
 "This wishlist can be shared %1 more times.",该收藏清单能被分享%1甚至更多次。
 "Update Wish List",更新收藏清单
+"Update Wishlist",更新收藏
 "View Details",查看详情
 "View Product",查看产品
 "We can't configure the product.",不能配置该产品。
@@ -69,7 +73,7 @@ Product,产品
 "We can't specify a wish list.",没有指定收藏清单。
 "We can't update wish list.",不能更新收藏清单。
 "We cannot add this item to your shopping cart.",不能添加该条目到购物车。
-"We couldn't add the following product(s) to the shopping cart: %1.","无法添加下面的产品到购物车: %1。"
+"We couldn't add the following product(s) to the shopping cart: %1.","无法添加下面的产品到购物车： %1。"
 "What's this?",这是什么？
 "Wish List",收藏清单
 "Wish List Sharing",收藏分享
@@ -79,7 +83,3 @@ Wishlist,收藏清单
 "You have no items in your wish list.",你的收藏没有任何条目
 "You have no items in your wishlist.",您的收藏清单是空的。
 "Your wish list has been shared.",您的收藏清单已经被分享。
-"Are you sure you want to remove this product from your wishlist?","您确定要从收藏清单里移除该产品吗？"
-"Email addresses, separated by commas","用逗号分隔邮件地址"
-"Share Wishlist","分享清单"
-"Update Wishlist","更新收藏"

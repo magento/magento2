@@ -116,7 +116,7 @@ Funding,退款
 Help,帮助
 "Hidden Virtual PayPal Debit Card Transaction",隐藏虚拟PayPal借记卡交易
 "Hold for Dispute Investigation",保留做争议调查
-"IPN ""%1"". %2 Transaction amount %3. Transaction ID: ""%4""","IPN ""%1""。 %2 交易额 %3。 交易ID: ""%4"""
+"IPN ""%1"". %2 Transaction amount %3. Transaction ID: ""%4""","IPN ""%1""。 %2 交易额 %3。 交易ID： ""%4"""
 "IPN ""%1"". A dispute has been resolved and closed. %2 Transaction amount %3.","IPN ""%1""。 一个争议已经被解决并关闭。 %2 交易额 %3。"
 "IPN ""%1"". Case type ""%2"". Case ID ""%3"" %4","IPN ""%1""。 案例类型""%2""。 案例ID ""%3"" %4"
 Incentive,奖励
@@ -164,7 +164,7 @@ No,否
 "No Logo",没有标示
 "No match",无匹配结果
 "None of the address information matched",无匹配地址信息
-"Not sure what PayPal payment method to use? Click <a href=""%1"" target=""_blank"">here</a> to learn more.","不确定什么PayPal支付方法被使用?点击<a href=""%1"" target=""_blank"">这里</a>学习更多。"
+"Not sure what PayPal payment method to use? Click <a href=""%1"" target=""_blank"">here</a> to learn more.","不确定什么PayPal支付方法被使用？点击<a href=""%1"" target=""_blank"">这里</a>学习更多。"
 "Note: %1",注意：%1
 "Now accepting PayPal (150 X 40)",现在接受PayPal（150X40）
 "Now accepting PayPal (150 X 60)",现在接受PayPal（150X60）
@@ -204,7 +204,7 @@ Phone,电话
 "Please agree to all the terms and conditions before placing the order.",请在下订单前同意所有的条款和条件。
 "Please do not refresh the page until you complete payment.",请不要刷新该页面，直到付款完成。
 "Please re-enable the previously enabled payment solutions.",请重新允许以前允许的支付方案。
-"Please select a shipping method...",请选择送货方法...
+"Please select a shipping method...",请选择送货方法。。。
 "Please select region, state or province",请选择地区、州，或省
 "Please update order data to get shipping methods and rates",请更新订单数据，获取配送方式和价格
 "Points Incentive Redemption",兑换奖励点
@@ -249,7 +249,7 @@ State/Province,州/省
 Static,静态
 "Street Address",街道地址
 "Street Address %1","街道地址 %1"
-"Submitting order information...",正在提交订单信息...
+"Submitting order information...",正在提交订单信息。。。
 "Subscription ID",订阅ID
 "Subscription Payment, either payment sent or payment received",订阅支付，可通过发出或收到的付款进行
 Subtotal,小计
@@ -257,7 +257,7 @@ Subtotal,小计
 "The PayPal certificate file is empty.",PayPal证书文件为空。
 "The PayPal gateway has rejected this request. %1","PayPal网关已经拒绝了该请求。 %1"
 "The authorized amount is %1.",授权金额为%1。
-"The following error(s) occured:",下列错误发生:
+"The following error(s) occured:",下列错误发生：
 "The maximum number of child authorizations is reached.",授权子帐户的最大数量已达到。
 "The merchant account is not yet verified.",银行帐户尚未验证。
 "The merchant holds a non-U.S. account and does not have a withdrawal mechanism.",该商家持有一个非美国账户并且没有取款功能。
@@ -271,7 +271,7 @@ Subtotal,小计
 "The payment was made via credit card. In order to receive funds merchant must upgrade account to Business or Premier status.",支付是通过信用卡进行的。为了收到资金，银行必须将帐户升级为商业或白金状态。
 "The schedule description is too long.",时间表描述太长。
 "The subscriber name is too long.",订阅者名字太长。
-"There is already another PayPal solution enabled. Enable this solution instead?",已经允许了另一个PayPal方案，要替代允许该方案吗?
+"There is already another PayPal solution enabled. Enable this solution instead?",已经允许了另一个PayPal方案，要替代允许该方案吗？
 "This customer did not include a confirmed address.",客户没有包含确认地址。
 "This operation requires an existing transaction object.",该操作需要一个现有的交易目标。
 Title,标题
@@ -293,7 +293,7 @@ View,查看
 "Virtual PayPal Debit Card Transaction",虚拟PayPal借记卡交易
 "Virtual Terminal Payment",虚拟终端支付
 Void,无效
-"We are connecting to the PayPal SFTP server to retrieve new reports. Are you sure you want to continue?","我们正在连接到PayPal SFTP服务器来检索新的报表。你确定要继续吗?"
+"We are connecting to the PayPal SFTP server to retrieve new reports. Are you sure you want to continue?","我们正在连接到PayPal SFTP服务器来检索新的报表。你确定要继续吗？"
 "We can't change the status because the current status doesn't match the real status.",因为当前状态与真实状态不匹配不能改变该状态。
 "We can't contact the PayPal gateway.",无法联系PayPal网关。
 "We can't initialize Express Checkout review.","无法初始化Express Checkout评审。"

@@ -16,7 +16,7 @@
 24h,24h
 2YTD,2YTD
 "6 Hours",6小时
-"<a href=""%1"" onclick=""this.target='blank'"">%2 %3</a> <a href=""mailto:%4"">(%4)</a>","<a href=""%1"" onclick=""this。target='blank'"">%2 %3</a> <a href=""mailto:%4"">（%4）</a>"
+"<a href=""%1"" onclick=""this.target='blank'"">%2 %3</a> <a href=""mailto:%4"">(%4)</a>","<a href=""%1"" onclick=""this。target='blank'"">%2 %3</a> <a href=""mailto：%4"">（%4）</a>"
 "<strong>Attention</strong>: Captcha is case sensitive.",<strong>注意</strong>：验证码为大小写敏感的。
 "A total of %1 record(s) were deleted.",共%1条记录被删除。
 "A total of %1 record(s) were updated.",共%1条记录被更新。
@@ -89,9 +89,9 @@ Any,任意
 "Apply the rule only if the following conditions are met (leave blank for all products).",仅仅符合下面的条件才应用该规则（对于所有产品留空）。
 "Are you sure that you want to delete this template?",您是否确认要删除该模板？
 "Are you sure that you want to strip tags?",您是否确认要取消标签？
-"Are you sure you want to continue?",您确定要继续吗?
-"Are you sure you want to delete this file?",您确定要删除该文件吗?
-"Are you sure you want to delete this folder?",您确定要删除该目录吗?
+"Are you sure you want to continue?",您确定要继续吗？
+"Are you sure you want to delete this file?",您确定要删除该文件吗？
+"Are you sure you want to delete this folder?",您确定要删除该目录吗？
 "Are you sure you want to do this?",您是否确认要这样做？
 "Are you sure you want to proceed?",你是否确定要继续？
 "As low as:",低至：
@@ -116,10 +116,10 @@ Bestsellers,最佳销量
 "Block Information",块信息
 Blocks,块
 "Both IPN and PDT",IPN和PDT
-"Browse Files...",浏览文件...
+"Browse Files...",浏览文件。。。
 "Bundle with dynamic pricing cannot include custom defined options. Options will not be saved.",与动态价格的捆绑不能包含自定义的选项。选项将无法保存。
 CMS,CMS
-"CMS page:",CMS页:
+"CMS page:",CMS页：
 CSV,CSV
 "Cache Control",缓存控制
 "Cache Management",缓存管理
@@ -194,7 +194,7 @@ Customers,客户
 "Customers Now Online",当前在线客户
 "Customers by Number of Orders",按订单数统计的客户
 "Customers by Orders Total",按订单数量排列顾客
-"Customers that have wish list: %1%","有收藏清单的客户: %1%"
+"Customers that have wish list: %1%","有收藏清单的客户： %1%"
 Dashboard,仪表板
 Database,数据库
 Date,日期
@@ -228,7 +228,7 @@ Download,下载
 Downloads,下载
 "Downloads Report",下载报表
 Edit,编辑
-"Edit Customer Group ""%1""","编辑客户组:""%1"""
+"Edit Customer Group ""%1""","编辑客户组：""%1"""
 "Edit Design Change",编辑设计变动
 "Edit Email Template",编辑邮件模板
 "Edit Order",编辑订单
@@ -303,7 +303,7 @@ ID,ID
 "IPN (Instant Payment Notification) Only",仅IPN（即时支付通知）
 "If there is an account associated with %1 you will receive an email with a link to reset your password.","如果有关联给 %1 的账户，你将收到一封包含重设密码链接的电子邮件。"
 "If you continue to receive this message, please contact the store owner.",如果您一直收到该消息，请联系店主。
-"Images (%1)",图片:（%1）
+"Images (%1)",图片：（%1）
 "Images (.gif, .jpg, .png)",图像（。gif、。jpg、。png）
 "Images Cache",图像缓存
 Import,导入
@@ -314,7 +314,7 @@ Import/Export,导入/导出
 Inactive,未激活
 "Incl. Tax",含税
 "Incoming Message",收到的信息
-"Insert Variable...",插入变量...
+"Insert Variable...",插入变量。。。
 "Interface Locale",接口本地化
 Interval,周期
 "Invalid Form Key. Please refresh the page.",来源密钥无效，请刷新本页面。
@@ -351,7 +351,7 @@ Links,链接
 "List Only",仅列表
 "Load Template",加载模板
 "Load default template",加载默认模板
-Loading...,正在加载...
+Loading...,正在加载。。。
 Locale,区域
 "Log Out",注销
 "Log into Magento Admin Page",登录到Magento管理页面
@@ -438,11 +438,11 @@ None,无
 Note:,注意：
 Notes,注意
 Notifications,通知
-"Number of items bought from a wish list: %1","从收藏清单里购买的数量: %1"
-"Number of times wish lists have been shared (emailed): %1","收藏清单里分享的次数（发邮件的）: %1"
-"Number of wish list conversions: %1","收藏清单转化数量: %1"
-"Number of wish list referrals: %1","收藏清单导入的数量: %1"
-"Number of wish lists: %1","收藏的数量: %1"
+"Number of items bought from a wish list: %1","从收藏清单里购买的数量： %1"
+"Number of times wish lists have been shared (emailed): %1","收藏清单里分享的次数（发邮件的）： %1"
+"Number of wish list conversions: %1","收藏清单转化数量： %1"
+"Number of wish list referrals: %1","收藏清单导入的数量： %1"
+"Number of wish lists: %1","收藏的数量： %1"
 OK,确定
 "Offline Refunds",离线的退款
 "Old rate:",原本的比例：
@@ -485,20 +485,20 @@ Permissions,权限
 "Please enter 6 or more characters.","请输入 6 个或更多个字符。"
 "Please enter a number greater than 0 in this field.",请在该字段中输入大于0的数字。
 "Please enter a password.",请输入密码。
-"Please enter a valid URL (for example, the URL must begin with ""http://"").","请输入有效的URL（例如:URL必须以""http://""开头）。"
-"Please enter a valid URL (for examples, http://www.example.com or www.example.com).","请输入有效的URL（例如:http://www。example。com or www。example。com）。"
+"Please enter a valid URL (for example, the URL must begin with ""http://"").","请输入有效的URL（例如：URL必须以""http：//""开头）。"
+"Please enter a valid URL (for examples, http://www.example.com or www.example.com).","请输入有效的URL（例如：http：//www。example。com or www。example。com）。"
 "Please enter a valid credit card number.",请输入有效的信用卡卡号。
 "Please enter a valid date.",请输入有效日期
-"Please enter a valid dollar amount (for example, $100.00).",请输入有效的美元数量（如:$100。00）。
-"Please enter a valid email address(for example johndoe@domain.com.).",请输入有效的邮件地址（例如:jondoe@domain。com）。
+"Please enter a valid dollar amount (for example, $100.00).",请输入有效的美元数量（如：$100。00）。
+"Please enter a valid email address(for example johndoe@domain.com.).",请输入有效的邮件地址（例如：jondoe@domain。com）。
 "Please enter a valid email address. For example johndoe@domain.com.",请输入有效邮件地址。例如johndoe@domain。com。
 "Please enter a valid email.",请输入有效邮件。
 "Please enter a valid number in this field.",请在此区域输入有效的数字。
 "Please enter a valid password.",请输入有效的密码。
-"Please enter a valid phone number (for example, (123) 456-7890 or 123-456-7890).","请输入有效的电话号码（例如:（123） 456-7890 或者 123-456-7890）。"
-"Please enter a valid social security number (for example, 123-45-6789).",请输入有效的社会保险号（例如:123-45-6789）。
+"Please enter a valid phone number (for example, (123) 456-7890 or 123-456-7890).","请输入有效的电话号码（例如：（123） 456-7890 或者 123-456-7890）。"
+"Please enter a valid social security number (for example, 123-45-6789).",请输入有效的社会保险号（例如：123-45-6789）。
 "Please enter a valid social security number. For example 123-45-6789.",请输入有效社会安全号码，例如123-45-6789。
-"Please enter a valid zip code (for example, 90602 or 90602-1234).","请输入有效的邮编 （例如:90602或90602-1234）。"
+"Please enter a valid zip code (for example, 90602 or 90602-1234).","请输入有效的邮编 （例如：90602或90602-1234）。"
 "Please enter a valid zip code.",请输入有效的邮政编码。
 "Please enter a valid zip code. For example 90602 or 90602-1234.",请输入有效邮编，例如90602或90602-1234。
 "Please enter new template name.",请输入新的模板名字。
@@ -530,10 +530,10 @@ Permissions,权限
 "Please use numbers only in this field. Please avoid spaces or other characters such as dots or commas.",请在该字段中只使用数字。请不要使用空格或其它字符，例如句点或逗号。
 "Please use only letters (a-z or A-Z), numbers (0-9) or spaces in this field.",在此字段内请仅使用字母（az或AZ）、数字（0-9）或空格。
 "Please use this date format: dd/mm/yyyy. For example 17/03/2006 for the 17th of March, 2006.",请使用这样的日期格式：dd/mm/yyyy。例如17/03/2006代表2006年3月17日。
-"Please use this date format: dd/mm/yyyy. For example, enter ""17/03/2006"" to represent March 17, 2006.","请使用如下日期格式: dd/mm/yyyy。 例如: 输入""17/03/2006""表示March 17， 2006。"
+"Please use this date format: dd/mm/yyyy. For example, enter ""17/03/2006"" to represent March 17, 2006.","请使用如下日期格式： dd/mm/yyyy。 例如： 输入""17/03/2006""表示March 17， 2006。"
 "Please wait until the action ends.",请等待操作结束。
-"Please wait, loading...",请稍候，正在加载...
-"Please wait...",请稍候...
+"Please wait, loading...",请稍候，正在加载。。。
+"Please wait...",请稍候。。。
 "Position of Watermark for %1",%1的水印位置
 "Pregenerated product images files",预产生图片文件
 Preview,预览
@@ -685,7 +685,7 @@ Subtotal,小计
 "Switch/Solo/Maestro Only","仅限 Switch/Solo/Maestro"
 Synchronize,同步
 "Synchronizing %1 to %2",同步%1到%2
-Synchronizing...,正在同步...
+Synchronizing...,正在同步。。。
 System,系统
 "Target Path",目标路径
 Tax,传真

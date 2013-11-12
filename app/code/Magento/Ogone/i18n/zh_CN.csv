@@ -13,7 +13,7 @@ Magento,Magento
 Ogone,Ogone
 "Ogone Default Operation",Ogone默认操作
 "Order can't save",订单无法保存
-"Payment ID: %1","支付ID: %1"
+"Payment ID: %1","支付ID： %1"
 "Pending Ogone",挂起的Ogone
 "Please stand by. In a moment, this page will transfer your data to the Ogone payment gateway.","请稍等， 此刻页面将要传输数据到Ogone支付网关。"
 "Processed Ogone Payment",已处理的Ogone支付

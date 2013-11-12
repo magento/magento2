@@ -11,7 +11,7 @@ Message,信息
 Notification,通知
 Notifications,通知
 "One or more media files failed to be synchronized during the media storages synchronization process. Refer to the log file for details.",媒体存储同步过程中一个或更多文件未能同步，打开日志文件查看详细。
-"One or more of the Cache Types are invalidated: %1. ","一个或多个缓存类型是无效的: %1。 "
+"One or more of the Cache Types are invalidated: %1. ","一个或多个缓存类型是无效的： %1。 "
 "Please go to <a href=""%1"">Cache Management</a> and refresh cache types.","请去<a href=""%1"">缓存管理</a>刷新缓存类型。"
 "Please select messages.",请选择一条信息。
 "Read Details",阅读详情

@@ -6,13 +6,13 @@
 "Magento Admin Panel",Magento管理面板
 "Password is required field.",密码是必输项。
 "Please correct the password reset token.",请纠正密码重置口令。
-"Please correct this email address:",请纠正邮件地址:
+"Please correct this email address:",请纠正邮件地址：
 "Please specify the correct account and try again.",请指定正确的账户名重试。
 Role,角色
 "This role no longer exists.",该角色不存在。
 "User Name is a required field.",用户名是必输项。
-"Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?","警告!\r\n该操作将从已经分配角色中移除这个用户\r\n您确定?"
-"Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","警告!\r\n该操作将从已经分配角色中移除那些用户\r\n您确定?"
+"Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?","警告!\r\n该操作将从已经分配角色中移除这个用户\r\n您确定？"
+"Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","警告!\r\n该操作将从已经分配角色中移除那些用户\r\n您确定？"
 "We can't find a user to delete.",找不到要删除的用户。
 "You cannot delete self-assigned roles.",不能删除自分配的角色。
 "You deleted the role.",成功删除了角色。

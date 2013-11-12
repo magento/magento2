@@ -11,7 +11,7 @@ CMS,CMS
 "Collapse All",折叠全部
 Content,内容
 "Content Heading",内容标题
-"Create Folder...",创建文件夹...
+"Create Folder...",创建文件夹。。。
 "Custom Design",自定义设计
 "Custom Design From",自定义设计，来自：
 "Custom Design To",自定义设计到
@@ -61,7 +61,7 @@ Pages,页面
 "Save Block",保存区块
 "Save Page",保存页面
 "Save Process",保存过程
-"Something went wrong connecting to the host. Error#%1 - %2.","连接主机时发生错误. 错误#%1 - %2.""Static Blocks",静态块
+"Something went wrong connecting to the host. Error#%1 - %2.","连接主机时发生错误。 错误#%1 - %2。""Static Blocks"
 Status,状态
 "Storage Root",存储根目录
 "Store View",店铺视图

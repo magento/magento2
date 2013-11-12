@@ -1,4 +1,5 @@
 "%1 and greater",%1或更多
+"<strong>%1 item(s)</strong> were found using the following search criteria",发现<strong>%1个条目</strong>使用下面的搜索条件
 "<strong>%1 item(s)</strong> were found using the following search criteria.",<strong>%1个条目</strong>被发现使用下面的搜索条件。
 All,全部
 "Attribute setting change related with Search Index. Please run <a href=""%1"">Rebuild Search Index</a> process.","属性设置改变与搜索索引相关。请运行<a href=""%1"">重建搜索索引</a>过程。"
@@ -11,6 +12,7 @@ List,列表
 "Minimum Search query length is %1","最小搜索查询长度为 %1"
 "Modify your search",修改您的搜索
 No,否
+"No items were found using the following search criteria.",找不到使用下列搜索条件的条目。
 "Please specify at least one search term.",请至少指定一个搜索词。
 "Please specify correct data.",请指定正确的日期。
 "Popular Search Terms",热门搜索词
@@ -20,7 +22,7 @@ Results,结果
 Search,搜索
 "Search Settings",搜索设置
 "Search Terms",搜索条件
-"Search entire store here...",在这里搜索整个商店...
+"Search entire store here...",在这里搜索整个商店。。。
 Search:,搜索：
 "Sorry, but the maximum word count is %1. We left out this part of your search: %2.","很抱歉，最大单词数为%1。 我们忽略掉了您搜索的""%2""部分。"
 "There are no search terms available.",没有可用的搜索词
@@ -29,5 +31,3 @@ Yes,是
 "Your search query can't be longer than %1, so we had to shorten your query.",您的搜索关键字不能长于%1。所以我们不得不截断它。
 "Your search returns no results.",您的搜索未找到结果。
 "up to %1","至多 %1"
-"<strong>%1 item(s)</strong> were found using the following search criteria","发现<strong>%1个条目</strong>使用下面的搜索条件"
-"No items were found using the following search criteria.","找不到使用下列搜索条件的条目。"

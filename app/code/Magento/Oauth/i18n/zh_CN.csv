@@ -5,8 +5,8 @@ Add-Ons,扩展集
 "An error occurred on saving consumer data.",存储消费者数据时发生错误。
 "An error occurred validating the nonce.",校验特定场合时发生错误。
 "An error occurred while deleting the add-on.",删除扩展时发生错误。
-"Are you sure you want to disable this application?",你确定要禁止该应用嘛?
-"Are you sure you want to enable this application?",你确定要允许该应用嘛?
+"Are you sure you want to disable this application?",你确定要禁止该应用嘛？
+"Are you sure you want to enable this application?",你确定要允许该应用嘛？
 "Callback URL",回调URL
 "Edit Add-On",编辑扩展
 "Http Post URL",Http提交URL
