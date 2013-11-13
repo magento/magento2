@@ -104,7 +104,7 @@ ID,ID
 "Item not found or already ordered",无法找到条目，或条目已被订购
 Items,条目
 "Load customer quote error",载入客户报价错误
-"Loading next step...",正在载入下一步。。。
+"Loading next step...",正在载入下一步...
 Login,登录
 "Maximum qty allowed for Shipping to multiple addresses is %1",最多允许多地址运送的数量为%1
 "Minimum order amount is %1",最小的订单额为%1
@@ -199,7 +199,7 @@ Status,状态
 "Store View",店铺视图
 "Street Address",街道地址
 "Street Address %1","街道地址 %1"
-"Submitting order information...",正在提交订单信息。。。
+"Submitting order information...",正在提交订单信息...
 Subtotal,小计
 "Subtotal must exceed minimum order amount",总数必须超出允许订购的最小数量
 Telephone,电话

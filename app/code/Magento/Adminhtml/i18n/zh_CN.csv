@@ -116,7 +116,7 @@ Bestsellers,最佳销量
 "Block Information",块信息
 Blocks,块
 "Both IPN and PDT",IPN和PDT
-"Browse Files...",浏览文件。。。
+"Browse Files...",浏览文件...
 "Bundle with dynamic pricing cannot include custom defined options. Options will not be saved.",与动态价格的捆绑不能包含自定义的选项。选项将无法保存。
 CMS,CMS
 "CMS page:",CMS页：
@@ -314,7 +314,7 @@ Import/Export,导入/导出
 Inactive,未激活
 "Incl. Tax",含税
 "Incoming Message",收到的信息
-"Insert Variable...",插入变量。。。
+"Insert Variable...",插入变量...
 "Interface Locale",接口本地化
 Interval,周期
 "Invalid Form Key. Please refresh the page.",来源密钥无效，请刷新本页面。
@@ -351,7 +351,7 @@ Links,链接
 "List Only",仅列表
 "Load Template",加载模板
 "Load default template",加载默认模板
-Loading...,正在加载。。。
+Loading...,正在加载...
 Locale,区域
 "Log Out",注销
 "Log into Magento Admin Page",登录到Magento管理页面
@@ -532,8 +532,8 @@ Permissions,权限
 "Please use this date format: dd/mm/yyyy. For example 17/03/2006 for the 17th of March, 2006.",请使用这样的日期格式：dd/mm/yyyy。例如17/03/2006代表2006年3月17日。
 "Please use this date format: dd/mm/yyyy. For example, enter ""17/03/2006"" to represent March 17, 2006.","请使用如下日期格式： dd/mm/yyyy。 例如： 输入""17/03/2006""表示March 17， 2006。"
 "Please wait until the action ends.",请等待操作结束。
-"Please wait, loading...",请稍候，正在加载。。。
-"Please wait...",请稍候。。。
+"Please wait, loading...",请稍候，正在加载...
+"Please wait...",请稍候...
 "Position of Watermark for %1",%1的水印位置
 "Pregenerated product images files",预产生图片文件
 Preview,预览
@@ -685,7 +685,7 @@ Subtotal,小计
 "Switch/Solo/Maestro Only","仅限 Switch/Solo/Maestro"
 Synchronize,同步
 "Synchronizing %1 to %2",同步%1到%2
-Synchronizing...,正在同步。。。
+Synchronizing...,正在同步...
 System,系统
 "Target Path",目标路径
 Tax,传真
