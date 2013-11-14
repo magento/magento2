@@ -2,6 +2,7 @@
 "ALL GROUPS",所有群组
 "Account Dashboard",账户面板
 "Account Information",帐户信息
+"Account Sharing Options",账户分享选项
 "Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href=""%1"">click here</a>.","帐户信息是必须的。请使用您电子邮件中的确认链接。要重新发送确认电子邮件，请 <a href=""%1"">点击这里</a>。"
 "Account confirmation is required. Please, check your email for the confirmation link. To resend the confirmation email please <a href=""%1"">click here</a>.","帐户信息是必须的。请使用您电子邮件中的确认链接。要重新发送确认电子邮件，请 <a href=""%1"">点击这里</a>。"
 Action,操作
@@ -13,6 +14,7 @@ Address,地址
 "Address Book",地址薄
 "Address Books",地址簿
 "Address Information",地址信息
+"Address Templates",地址模板
 Addresses,地址
 Admin,管理员
 All,全部
@@ -45,11 +47,13 @@ Company,公司
 Configure,配置
 "Confirm New Password",确认新密码
 "Confirm Password",确认密码
+"Confirmation Link Email",确认链接邮件
 Confirmed,已确认
 "Contact Information",联系信息
 "Continue Shopping",继续购物
 Country,国家
 Create,创建
+"Create New Account Options",创建新帐户选项
 "Create New Customer Account",创建新客户帐户
 "Create Order",创建订单
 "Create a new password",创建新密码
@@ -57,6 +61,7 @@ Create,创建
 "Current Password",当前密码
 Customer,客户
 "Customer Addresses",客户地址
+"Customer Configuration",客户配置
 "Customer Group",客户组
 "Customer Groups",客户组
 "Customer Information",客户信息
@@ -73,7 +78,11 @@ Day,天
 "Day (DD)",DD
 "Default Addresses",默认地址
 "Default Billing Address",默认账单地址
+"Default Email Domain",默认邮件域
+"Default Group",默认组
 "Default Shipping Address",默认送货地址
+"Default Value for Disable Automatic Group Changes Based on VAT ID","禁用根据 VAT ID 自动分配顾客组变动的默认值"
+"Default Welcome Email",默认欢迎邮件
 Delete,删除
 "Delete Address",删除地址
 "Delete Customer",删除客户
@@ -82,6 +91,7 @@ Delete,删除
 Details,详情
 Disabled,已禁用
 Edit,编辑
+"Edit Account Info",编辑帐户信息
 "Edit Account Information",修改帐户信息
 "Edit Address",编辑地址
 "Edit Address Entry",编辑地址项
@@ -91,23 +101,31 @@ Edit,编辑
 "Edit Newsletters",编辑新闻邮件
 Email,电子邮件
 "Email Address",编辑电子邮件地址
+"Email Sender",电子邮件发送人
 Email:,电子邮件：
+"Enable Automatic Assignment to Customer Group",启用顾客群体的自动分配
 "Excel XML","Excel XML"
 "Failed to confirm customer account.",确认客户帐户失败。
 Fax,传真
 "First Name",名字
+"Forgot Email Template",忘记邮件模板
+"Forgot Your Password",忘记您的密码
 "Forgot Your Password?",忘记您的密码？
 "From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information.",从账户面板能查看您最近的账户活动情况和更新账户信息。选择下面的链接查看或编辑信息。
 "From your dashboard you can review recent account activity and edit your account information.",从仪表盘能查看您的近期账户活动和编辑账户信息。
 Gender,性别
 "Gender is required.",需提供性别信息。
 "General Subscription",常规订阅
+"Generate Human-Friendly Customer ID","生成人性化客户 ID"
 Global,全球
 "Go back",回退
 "Grand Total",总计
 Group,分组
 "Group Information",群组信息
 "Group Name",群组名称
+"Group for Invalid VAT ID","无效 VAT ID 组"
+"Group for Valid VAT ID - Domestic","无效 VAT ID 组 - 国内"
+"Group for Valid VAT ID - Intra-Union","有效 VAT ID 组 - 联邦内"
 Guest,来宾
 HTML,HTML
 "Hello, %1!","您好， %1！"
@@ -121,14 +139,17 @@ ID,ID
 "Invalid current password",当前密码无效
 "Invalid login or password.",无效的登录名或密码。
 "Invalid password reset token.",无效的密码重设令牌。
+"Last Activity",上次活动
 "Last Date Subscribed",上次订阅的日期
 "Last Date Unsubscribed",上次退订的日期
 "Last Name",姓氏
+"Last URL",最后一个URL
 "Lifetime Sales",终生销售
 "Log In",登录
 "Log Out",注销
 Login,登录
 "Login Information",登录信息
+"Login Options",登录选项
 "Login and password are required.",需要登录和密码。
 "Login or Create an Account",登录或创建帐户
 "Manage Addresses",管理地址
@@ -140,6 +161,7 @@ Month,月
 "My Dashboard",我的仪表板
 "My Orders",我的订单
 Name,姓名
+"Name and Address Options",名字和地址选项
 Never,永不
 "New Address",新地址
 "New Address Entry",新地址项
@@ -161,14 +183,20 @@ Newsletters,新闻邮件
 "Not Sent",未发送
 "Not confirmed, can login",未确认，可登录
 "Not confirmed, cannot login",未确认，无法登陆
+"Number of Lines in a Street Address",街道地址行数
 Offline,离线
 Online,在线
 "Online Customers",在线客户
+"Online Customers Options",在线客户选项
+"Online Minutes Interval",在线分钟数间隔
 "Order #","订单 #"
 "Order Total",订单总数
 Orders,订单
 Password,密码
 "Password Management",密码管理
+"Password Options",密码选项
+"Password Template Email Sender",密码模板邮件地址发送者
+"Password forgotten",密码忘记
 Password:,密码：
 Paused,已暂停
 Pending,挂起
@@ -197,16 +225,22 @@ Pending,挂起
 "Please select a website which contains store view",请选择包含该店铺视图的网站
 "Please select region, state or province",请选择地区、州，或省
 "Please, check your email for confirmation key.",请检查您的电子邮件以获取确认密钥。
+"Prefix Dropdown Options",前缀下拉菜单选项
 Price,价格
 Product,产品
 "Product Name",产品名
 "Product Reviews",产品评论
 Qty,数量
 "Recent Orders",近期订单
+"Recovery Link Expiration Period (days)",恢复链接过期周期（天）
 "Recurring Profiles",周期配置
+"Redirect Customer to Account Dashboard after Logging in",登录后，重定向客户到账户显示板
 Refunded,已存储
 "Registered Customers",已注册的客户
+"Remind Email Template",提醒邮件模板
 Remove,删除
+"Require Emails Confirmation",需要确认电子邮件
+"Reset Password Template","Reset Password Template"
 "Reset a Password",重置密码
 "Retrieve your confirmation link here",在这里获取您的确认链接
 "Retrieve your password here",在这里获取您的密码
@@ -224,10 +258,19 @@ Save,保存
 "Send confirmation link",发送确认链接
 Sending,正在发送
 Sent,已发送
+"Session Start Time",会话开始时间
 "Set as Default Billing Address",设置为默认账单地址
 "Set as Default Shipping Address",设置为默认运送地址
+"Share Customer Accounts",分享客户账户
 "Shopping Cart",购物车
 "Shopping Cart - %1 item(s)","购物车 - %1 个条目"
+"Show Date of Birth",显示出生日期
+"Show Gender",显示性别
+"Show Middle Name (initial)",显示中间名（初始）
+"Show Prefix",显示前缀
+"Show Suffix",显示后缀
+"Show Tax/VAT Number",显示税/增值税号码
+"Show VAT Number on Frontend",在前端显示VAT号
 "Sign Up for Newsletter",订阅新闻邮件
 State/Province,州/省
 Status,状态
@@ -239,10 +282,13 @@ Subject,主题
 Submit,提交
 "Subscribe to Newsletter",订阅到新闻通讯
 "Subscription option",订阅选项
+"Suffix Dropdown Options",后缀下拉菜单选项
+"Tax Calculation Based On",税金的计算基于
 "Tax Class",税率
 "Tax/VAT number",税/增值税号码
 Telephone,电话
 Text,文字
+"Text One Line",一行文字
 "Thank you for registering with %1.","感谢您注册 %1。"
 "The Date of Birth is required.",需提供生日。
 "The TAX/VAT number is required.","需提供 TAX/VAT 号码。"
@@ -279,11 +325,14 @@ Update,更新
 "VAT Request Date","VAT 请求日期"
 "VAT Request Identifier","VAT 申请标识符"
 "Validate VAT Number","验证 VAT 号码"
+"Validate on Each Transaction",每次交易都验证
+"Validation Error Group",验证错误组
 View,查看
 "View Order",查看订单
 Visitor,访客
 "Visitors Only",仅限访客
 Website,网站
+"Welcome Email",欢迎邮件
 Wishlist,收藏清单
 "Wishlist - %1 item(s)","收藏清单 - %1 个条目"
 "With your own account, you can check out faster, store multiple shipping addesses, see your shopping activity and more.",用自己的账号方便更快结账、存储多运送地址、查看购物历史以及更多。
@@ -318,53 +367,4 @@ Year,年
 "Your password reset link has expired.",你的密码重设链接已过期。
 ZIP,邮编
 "Zip/Postal Code",邮政编码
-"Account Sharing Options",账户分享选项
-"Address Templates",地址模板
-"Confirmation Link Email",确认链接邮件
-"Create New Account Options",创建新帐户选项
-"Customer Configuration",客户配置
-"Default Email Domain",默认邮件域
-"Default Group",默认组
-"Default Value for Disable Automatic Group Changes Based on VAT ID","禁用根据 VAT ID 自动分配顾客组变动的默认值"
-"Default Welcome Email",默认欢迎邮件
-"Edit Account Info",编辑帐户信息
-"Email Sender",电子邮件发送人
-"Enable Automatic Assignment to Customer Group",启用顾客群体的自动分配
-"Forgot Email Template",忘记邮件模板
-"Forgot Your Password",忘记您的密码
-"Generate Human-Friendly Customer ID","生成人性化客户 ID"
-"Group for Invalid VAT ID","无效 VAT ID 组"
-"Group for Valid VAT ID - Domestic","无效 VAT ID 组 - 国内"
-"Group for Valid VAT ID - Intra-Union","有效 VAT ID 组 - 联邦内"
-"Last Activity",上次活动
-"Last URL",最后一个URL
-"Login Options",登录选项
-"Name and Address Options",名字和地址选项
-"Number of Lines in a Street Address","街道地址行数"
-"Online Customers Options",在线客户选项
-"Online Minutes Interval",在线分钟数间隔
-"Password Options",密码选项
-"Password Template Email Sender","密码模板邮件地址发送者"
-"Password forgotten",密码忘记
-"Prefix Dropdown Options",前缀下拉菜单选项
-"Recovery Link Expiration Period (days)",恢复链接过期周期（天）
-"Redirect Customer to Account Dashboard after Logging in",登录后，重定向客户到账户显示板
-"Remind Email Template",提醒邮件模板
-"Require Emails Confirmation",需要确认电子邮件
-"Reset Password Template","Reset Password Template"
-"Session Start Time",会话开始时间
-"Share Customer Accounts",分享客户账户
-"Show Date of Birth",显示出生日期
-"Show Gender",显示性别
-"Show Middle Name (initial)",显示中间名（初始）
-"Show Prefix",显示前缀
-"Show Suffix",显示后缀
-"Show Tax/VAT Number",显示税/增值税号码
-"Show VAT Number on Frontend","在前端显示VAT号"
-"Suffix Dropdown Options",后缀下拉菜单选项
-"Tax Calculation Based On",税金的计算基于
-"Text One Line",一行文字
-"Validate on Each Transaction",每次交易都验证
-"Validation Error Group",验证错误组
-"Welcome Email",欢迎邮件
 n/a,不可用

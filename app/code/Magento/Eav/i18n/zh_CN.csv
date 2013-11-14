@@ -41,6 +41,7 @@ Date,日期
 "Default option value is not defined",默认选项值未定义
 Delete,删除
 Dropdown,下拉菜单
+"EAV types and attributes",EAV类型和属性
 Email,电子邮件
 "Entity instance is not defined",实体实例未定义
 "Entity is not initialized",实体未初始化
@@ -102,4 +103,3 @@ URL,URL
 "Wrong type definition for %1",错误的类定义：%1
 Yes,是
 Yes/No,是/否
-"EAV types and attributes","EAV类型和属性"

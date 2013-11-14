@@ -29,31 +29,41 @@ Back,返回
 Comment,评论
 Comment:,评论：
 "Configured Price:",配置价格：
+"Display Wish List Summary",显示收藏清单摘要
 "Display number of items in wish list",显示收藏清单里的条目数量
 Edit,编辑
+"Email Sender",电子邮件发送人
+"Email Template",电子邮件模板
+"Email Text Length Limit",邮件文本长度限制
 "Email address can't be empty.",邮件地址不能为空。
 "Email addresses, separated by commas",用逗号分隔邮件地址
 "Email addresses, separated by commas (max %1 addresses)",用逗号分隔的邮件地址（最多%1个地址）
 Enabled,已启用
+"General Options",常规选项
 "Go to Wish List",去我的收藏
 "In stock",现货
 "Last Added Items",最后添加的内容
+"Max Emails Allowed to be Sent",最大允许送出的邮件
 Message,信息
 "Message length must not exceed %1 symbols",消息长度不要超过%1个符号
 "My Wish List",我的收藏
 "My Wish List (%1 item)",我的收藏（%1个条目）
 "My Wish List (%1 items)",我的收藏（%1个条目）
 "My Wish List <small>(%1)</small>",我的收藏<small>（%1）</small>
+"My Wish List Link",我的收藏链接
+"No Items Found",未找到条目
 "Options Details",选项详情
 "Out of stock",缺货
 "Please enter your comments.",请输入您的评论。
 "Please input a valid email address.",请输入有效电子邮件地址。
 Product,产品
+"Product Details and Comment",产品详情与评论
 "Product(s) %1 have required options. Each product can only be added individually.","产品 %1 有必填选项。每个产品必须分别添加。"
 "RSS Feed",RSS源
 "Remove Item",删除条目
 "Remove This Item",删除该内容
 "Remove item",删除条目
+"Share Options",共享选项
 "Share Wish List",分享收藏
 "Share Wishlist",分享清单
 "Share Your Wish List",分享你的收藏
@@ -63,6 +73,7 @@ Product,产品
 "This wishlist can be shared %1 more times.",该收藏清单能被分享%1甚至更多次。
 "Update Wish List",更新收藏清单
 "Update Wishlist",更新收藏
+"User description",用户描述
 "View Details",查看详情
 "View Product",查看产品
 "We can't configure the product.",不能配置该产品。
@@ -83,14 +94,3 @@ Wishlist,收藏清单
 "You have no items in your wish list.",你的收藏没有任何条目
 "You have no items in your wishlist.",您的收藏清单是空的。
 "Your wish list has been shared.",您的收藏清单已经被分享。
-"Display Wish List Summary","显示收藏清单摘要"
-"Email Sender",电子邮件发送人
-"Email Template",电子邮件模板
-"Email Text Length Limit","邮件文本长度限制"
-"General Options",常规选项
-"Max Emails Allowed to be Sent","最大允许送出的邮件"
-"My Wish List Link","我的收藏链接"
-"No Items Found",未找到条目
-"Product Details and Comment",产品详情与评论
-"Share Options",共享选项
-"User description",用户描述

@@ -28,6 +28,7 @@ Back,返回
 "Base Unsecure URL","基本不安全 URL"
 "Before modifying the store view code please make sure that it is not used in index.php.","请在修改商店视图代码前，确认它没有在 index。php 中使用。"
 "Before modifying the website code please make sure that it is not used in index.php.","请在修改网站代码前，确认它没有在 index。php 中使用。"
+"Blocks HTML output",块HTML输出
 "Cache Storage Management",缓存存储管理
 "Cache storage may contain additional data. Are you sure that you want flush it?",缓存存储可能包含额外数据。您确认要清空它吗？
 "Can not create invoice. Order was not found.",无法创建发票。未找到订单。
@@ -37,6 +38,7 @@ Cancel,取消
 "Choose existing category.",选择存在的分类。
 "Circular-reference in theme inheritance detected for ""%1""","为""%1""检测主题继承中的循环引用"
 Code,代码
+"Collections Data",集合数据
 "Contact Us",联系我们
 "Controller file was loaded but class does not exist",控制器文件已载入，但类不存在
 Copy,副本
@@ -112,6 +114,7 @@ Host,主机
 "Invalid transactional email code: %1","无效的交易邮件代码： %1"
 "Invalid view file directory ""%1""","无效的视图文件目录""%1"""
 Layout,布局
+Layouts,布局
 "Library files",库文件
 Locale,区域
 MB,MB
@@ -245,6 +248,7 @@ Themes,主题
 "This website cannot be deleted.",该网站无法被删除。
 "Transactional Emails",交易邮件
 Translate,翻译
+Translations,翻译
 "Two and more slashes together are not permitted in request path",两个或更多斜杠在请求的路径中不被允许
 "Two and more slashes together are not permitted in url rewrite suffix","两个或更多斜杠在 URL 重写后缀中不被允许"
 "Unable to create directory: %1",无法创建目录：%1
@@ -275,7 +279,3 @@ Yes,是
 "Your design change for the specified store intersects with another one, please specify another date range.",您对指定商店设计的更改和另一个有交叉，请重新指定日期范围。
 "database ""%1""","数据库 ""%1"""
 "start typing to search category",开始输入来搜索分类
-"Blocks HTML output","块HTML输出"
-"Collections Data","集合数据"
-Layouts,布局
-Translations,翻译

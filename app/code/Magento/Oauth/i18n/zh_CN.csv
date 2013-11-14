@@ -8,13 +8,20 @@ Add-Ons,扩展集
 "Are you sure you want to disable this application?",你确定要禁止该应用嘛？
 "Are you sure you want to enable this application?",你确定要允许该应用嘛？
 "Callback URL",回调URL
+"Cleanup Probability",清除可能性
+"Cleanup Settings",清除设置
+"Consumer Settings",消费者设置
 "Edit Add-On",编辑扩展
+"Expiration Period",过期时长
 "Http Post URL",Http提交URL
 "Incorrect timestamp value in the oauth_timestamp parameter.",oauth_timestampe参数传入错误的时间戳。
 "Invalid Callback URL",无效的回调URL
 "Invalid ID parameter.",无效的ID参数。
 "Invalid Rejected Callback URL",拒绝的回调URL无效
 "New Add-On",新建扩展
+OAuth,OAuth
+"OAuth consumer credentials HTTP Post maxredirects","OAuth消费者证书HTTP Post最大重定向"
+"OAuth consumer credentials HTTP Post timeout","OAuth消费者证书HTTP Post超时"
 "Rejected Callback URL",拒绝的回调URL
 Secret,密钥
 "The add-on has been deleted.",扩展已被删除。
@@ -23,10 +30,3 @@ Secret,密钥
 "The nonce/timestamp combination has already been used.",该特定场合/时间戳组合已经被使用。
 "Unexpected error. Unable to create OAuth Consumer account.",不期望的错误。不能创建OAuth消费者账户。
 "Unexpected error. Unable to post data to consumer.",不期望的错误。不能提交数据到消费者。
-"Cleanup Probability","清除可能性"
-"Cleanup Settings","清除设置"
-"Consumer Settings","消费者设置"
-"Expiration Period","过期时长"
-OAuth,OAuth
-"OAuth consumer credentials HTTP Post maxredirects","OAuth消费者证书HTTP Post最大重定向"
-"OAuth consumer credentials HTTP Post timeout","OAuth消费者证书HTTP Post超时"

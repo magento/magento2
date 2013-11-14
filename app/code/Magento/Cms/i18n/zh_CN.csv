@@ -4,13 +4,27 @@ Action,操作
 "Add New Block",添加新区块
 "Add New Page",添加新页面
 "All Countries",全部国家
+"Anchor Custom Text",自定义文本锚点
+"Anchor Custom Title",自定义标题锚点
 Block,区块
 "Block Information",块信息
 "Block Title",区块标题
+"Browser Capabilities Detection",浏览器功能检测
 CMS,CMS
+"CMS Home Page",CMS首页
+"CMS No Cookies Page","CMS 无 Cookie 页面"
+"CMS No Route Page","CMS 无路由页面"
+"CMS Page","CMS 页面"
+"CMS Page Link","CMS 页面链接"
+"CMS Page Link Block Template",CMS页面链接块模板
+"CMS Page Link Inline Template",CMS页面链接内联摸板
+"CMS Static Block","CMS 静态区块"
+"CMS Static Block Default Template","CMS 静态区块默认模板"
 "Collapse All",折叠全部
 Content,内容
 "Content Heading",内容标题
+"Content Management",内容管理
+"Contents of a Static Block",静态区块的内容
 "Create Folder...",创建文件夹...
 "Custom Design",自定义设计
 "Custom Design From",自定义设计，来自：
@@ -29,6 +43,7 @@ Disabled,已禁用
 "Disabled by Default",默认被禁用
 "Edit Block",编辑区块
 "Edit Page",编辑页面
+"Enable WYSIWYG Editor","启用 WYSIWYG 编辑器"
 Enabled,已启用
 "Enabled by Default",默认启用
 "Expand All",全部展开
@@ -37,11 +52,13 @@ Enabled,已启用
 Home,主页
 ID,ID
 Identifier,标识
+"If empty, the Page Title will be used",如果为空，将使用页面标题
 "Images (%1)","图片 （%1）"
 "Insert File",插入文件
 Keywords,关键词
 Layout,布局
 "Layout Update XML","布局更新 XML"
+"Link to a CMS Page","链接到 CMS 页面"
 "Make sure that static block content does not reference the block itself.",确保静态块内容没有引用本身。
 "Manage Pages",管理页面
 "Media Storage",媒体存储
@@ -58,9 +75,12 @@ Layout,布局
 "Page Title",页面标题
 Pages,页面
 "Please correct the folder name. Use only letters, numbers, underscores and dashes.",请纠正目录名，要求仅仅输入字母、数字、下划线和中划线
+"Redirect to CMS-page if Cookies are Disabled","如果 Cookie 被禁用，则重定向到 CMS 页面"
 "Save Block",保存区块
 "Save Page",保存页面
 "Save Process",保存过程
+"Show Breadcrumbs for CMS Pages","显示 CMS 页面的面包屑"
+"Show Notice if JavaScript is Disabled","如果 JavaScript 被禁用，则显示通知"
 "Something went wrong connecting to the host. Error#%1 - %2.","连接主机时发生错误。 错误#%1 - %2。""Static Blocks"
 Status,状态
 "Storage Root",存储根目录
@@ -77,30 +97,10 @@ Template,模板
 "This page no longer exists.",该页面已不存在。
 Title,标题
 "URL Key","URL Key"
+"WYSIWYG Options","WYSIWYG 选项"
 "We cannot create a new directory.",不能创建新目录。
 "We cannot delete directory %1.",不能删除目录%1。
 "We cannot delete root directory %1.",不能删除根目录%1。
 "We cannot upload the file.",不能更新该文件。
 "We found a directory with the same name. Please try another folder name.",发现目录同名，请换一个再试
 px.,像素
-"Anchor Custom Text",自定义文本锚点
-"Anchor Custom Title",自定义标题锚点
-"Browser Capabilities Detection",浏览器功能检测
-"CMS Home Page",CMS首页
-"CMS No Cookies Page","CMS 无 Cookie 页面"
-"CMS No Route Page","CMS 无路由页面"
-"CMS Page","CMS 页面"
-"CMS Page Link","CMS 页面链接"
-"CMS Page Link Block Template",CMS页面链接块模板
-"CMS Page Link Inline Template",CMS页面链接内联摸板
-"CMS Static Block","CMS 静态区块"
-"CMS Static Block Default Template","CMS 静态区块默认模板"
-"Content Management",内容管理
-"Contents of a Static Block",静态区块的内容
-"Enable WYSIWYG Editor","启用 WYSIWYG 编辑器"
-"If empty, the Page Title will be used",如果为空，将使用页面标题
-"Link to a CMS Page","链接到 CMS 页面"
-"Redirect to CMS-page if Cookies are Disabled","如果 Cookie 被禁用，则重定向到 CMS 页面"
-"Show Breadcrumbs for CMS Pages","显示 CMS 页面的面包屑"
-"Show Notice if JavaScript is Disabled","如果 JavaScript 被禁用，则显示通知"
-"WYSIWYG Options","WYSIWYG 选项"

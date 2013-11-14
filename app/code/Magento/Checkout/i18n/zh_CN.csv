@@ -9,6 +9,8 @@
 "Add to Wishlist",添加到收藏
 Address,地址
 "Address %1 of %2","地址 %1 of %2"
+"After Adding a Product Redirect to Shopping Cart",添加产品后重定向至购物车
+"Allow Guest Checkout",允许来宾结账
 "Already registered?",已注册？
 "Apply Coupon",应用优惠券
 "Are you sure you want to remove this item from the shopping cart?",您确定要从购物车中移除该条目吗？
@@ -33,6 +35,7 @@ Change,更改
 Checkout,结账
 "Checkout Conditions",支付条件
 "Checkout Method",支付方法
+"Checkout Options",支付选项
 "Checkout Terms and Conditions",结账条款和情况
 "Checkout as Guest",作为来宾结账
 "Checkout as a Guest",作为访客结账
@@ -46,6 +49,7 @@ City,城市
 Close,关闭
 Company,公司
 "Condition Name",条件名称
+"Configurable Product Image",可配置产品图片
 "Confirm Password",确认密码
 Content,内容
 "Content Height",内容高度
@@ -66,6 +70,8 @@ Country,国家
 Details,详情
 Disabled,已禁用
 "Discount Codes",折扣代码
+"Display Cart Summary",显示购物车概要
+"Display Shopping Cart Sidebar",显示购物车侧边栏
 "Display item quantities",显示条目数量
 "Display number of items in cart",显示购物车中条目的数量
 "Easy access to your order history and status",更方便存取您的订单历史和状态
@@ -80,6 +86,8 @@ Edit,编辑
 "Edit item",编辑条目
 "Edit item parameters",编辑条目参数
 "Email Address",编辑电子邮件地址
+"Enable Onepage Checkout",启用单页面结账
+"Enable Terms and Conditions",启用条款和条件
 Enabled,已启用
 "Enter a New Address",输入新地址
 "Enter your coupon code if you have one.",如果您有优惠代码，请输入。
@@ -94,6 +102,7 @@ Fax,传真
 "Get easy access to your order history and status.",很容易存储订单历史和状态。
 "Gift Message",礼品消息
 "Grand Total:",总计：
+"Grouped Product Image",已分组的产品图片
 HTML,HTML
 ID,ID
 "Incl. Tax",含税
@@ -106,6 +115,7 @@ Items,条目
 "Load customer quote error",载入客户报价错误
 "Loading next step...",正在载入下一步...
 Login,登录
+"Maximum Display Recently Added Item(s)",最大显示近期添加的条目
 "Maximum qty allowed for Shipping to multiple addresses is %1",最多允许多地址运送的数量为%1
 "Minimum order amount is %1",最小的订单额为%1
 Move,移动
@@ -114,6 +124,7 @@ Move,移动
 "My Cart",我的购物车
 "My Cart (%1 item)","我的购物车（%1 个条目）"
 "My Cart (%1 items)","我的购物车（%1 个条目）"
+"My Cart Link",我的购物车链接
 "New Address",新地址
 "New Condition",新条件
 "New Terms and Conditions",新建条款与协议
@@ -125,6 +136,10 @@ Move,移动
 "Other Items in Your Order",您订单中的其它条目
 "Other items in your order",您订单里的其他条目
 Password,密码
+"Payment Failed Email Receiver",支付失败邮件接收者
+"Payment Failed Email Sender",支付失败电子邮件发送者
+"Payment Failed Emails",支付失败电子邮件
+"Payment Failed Template",支付失败模板
 "Payment Information",支付信息
 "Payment Method",支付方式
 "Payment method is not defined",支付方式未定义
@@ -154,6 +169,7 @@ Products,产品
 Qty,数量
 Qty:,数量：
 "Quantity was recalculated from %1 to %2","数量已重新计算，从 %1 到 %2"
+"Quote Lifetime (days)",报价生命期（天）
 "Recently added item(s)",最近添加的条目
 Register,注册
 "Register and save time!",注册并节约时间！
@@ -162,6 +178,7 @@ Register,注册
 "Remove Item",删除条目
 "Remove This Item",删除该内容
 "Remove item",删除条目
+"Require Customer To Be Logged In To Checkout",需要顾客登录才能结账
 "Review Order",查看订单
 "Review Order - %1","查看订单 - %1"
 Sales,销售
@@ -173,6 +190,8 @@ Sales,销售
 "Select Shipping Method",选择运送方式
 "Select a billing address from your address book or enter a new address.",从您的地址簿选择账单地址，或输入新地址。
 "Select a shipping address from your address book or enter a new address.",从您的地址簿选择发货地址，或输入新地址。
+"Send Payment Failed Email Copy Method",发送支付失败电子邮件复制方法
+"Send Payment Failed Email Copy To",发送支付失败电子邮件拷贝至
 "Send To",发送至
 "Ship to Multiple Addresses",运送到多个地址
 "Ship to different address",送货到不同地址
@@ -185,6 +204,7 @@ Sales,销售
 "Shipping method has not been selected yet",运送方式尚未被选择
 "Shipping selection is not applicable.",运送选择不适用。
 "Shopping Cart",购物车
+"Shopping Cart Sidebar",购物车侧边栏
 "Shopping Cart is Empty",购物车为空
 "Show Content as",显示内容为
 "Sign up with us to save time on your next checkout:",注册账号以便下次结账节省时间：
@@ -252,27 +272,7 @@ Total:,总计：
 "Your order # is: %1.","您的订单编号为： %1"
 "Your order cannot be completed at this time as there is no payment methods available for it.",由于付款方法不可用，现在无法完成您的订单。
 "Your order cannot be completed at this time as there is no shipping methods available for it. Please make necessary changes in your shipping address.",由于送货方法不可用，现在无法完成您的订单。请更改您的收货地址。
-"Your order has been received.","您的订单已经被收到"
+"Your order has been received.",您的订单已经被收到
 "Your order number is ",您的订单号是
 "Your recurring payment profiles:",您的付款档案：
 "Zip/Postal Code",邮政编码
-"After Adding a Product Redirect to Shopping Cart",添加产品后重定向至购物车
-"Allow Guest Checkout",允许来宾结账
-"Checkout Options",支付选项
-"Configurable Product Image",可配置产品图片
-"Display Cart Summary",显示购物车概要
-"Display Shopping Cart Sidebar",显示购物车侧边栏
-"Enable Onepage Checkout",启用单页面结账
-"Enable Terms and Conditions",启用条款和条件
-"Grouped Product Image",已分组的产品图片
-"Maximum Display Recently Added Item(s)",最大显示近期添加的条目
-"My Cart Link",我的购物车链接
-"Payment Failed Email Receiver","支付失败邮件接收者"
-"Payment Failed Email Sender",支付失败电子邮件发送者
-"Payment Failed Emails",支付失败电子邮件
-"Payment Failed Template",支付失败模板
-"Quote Lifetime (days)",报价生命期（天）
-"Require Customer To Be Logged In To Checkout",需要顾客登录才能结账
-"Send Payment Failed Email Copy Method",发送支付失败电子邮件复制方法
-"Send Payment Failed Email Copy To",发送支付失败电子邮件拷贝至
-"Shopping Cart Sidebar",购物车侧边栏

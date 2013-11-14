@@ -62,6 +62,7 @@ View,查看
 "We cannot create the widget instance because it is missing required information.",由于缺少必要的信息不能创建小部件实例。
 Widget,小工具
 "Widget ""%1""","小工具 ""%1"""
+"Widget ID",小工具ID
 "Widget Insertion",小工具插入
 "Widget Instance",小工具实例
 "Widget Instance Title",小工具实例标题
@@ -70,4 +71,3 @@ Widget,小工具
 "items selected",以选项
 "of %1 pages","共 %1 页"
 "per page",每页
-"Widget ID",小工具ID

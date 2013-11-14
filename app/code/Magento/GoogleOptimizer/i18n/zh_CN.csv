@@ -2,6 +2,7 @@
 Attributes,属性
 "Category View Optimization",分类视图优化
 Enable,启用
+"Enable Content Experiments",允许内容实验
 "Experiment Code",实验代码
 "Google Analytics Content Experiments Code","Google Analytics内容实验代码"
 "Note: Experiment code should be added to the original page only.","注： 实验代码应该被仅仅加入到发起页。"
@@ -10,4 +11,3 @@ Other,其它
 "Product View Optimization",产品视图优化
 "Shopping Cart",购物车
 "Use Default",使用默认值
-"Enable Content Experiments","允许内容实验"

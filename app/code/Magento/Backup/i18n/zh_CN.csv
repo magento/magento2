@@ -1,14 +1,18 @@
 Action,操作
+"Backup Type",备份类型
 Backups,备份
 "Create Backup",创建备份
 "Database Backup",数据库备份
 "Database and Media",数据库和媒体
 "Database and Media Backup",数据库与媒体备份
 Download,下载
+"Enable Scheduled Backup",启用计划备份
 "Failed to rollback",回滚失败
 "Failed to validate FTP","验证 FTP 失败"
+"Maintenance Mode",维护模式
 Name,姓名
 "Please correct the order of creation for a new backup.",请纠正新建备份的创建顺序。
+"Scheduled Backup Settings",计划备份设置
 "Something went wrong writing to the backup file ""%1"".","当写备份文件""%1""时发生错误。"
 "Sorry, but we cannot read from or write to backup file ""%1"".","很抱歉， 不能读取备份文件""%1""。"
 "System (excluding Media)",系统（不包括媒体）
@@ -25,7 +29,3 @@ Name,姓名
 Time,时间
 Type,类型
 "We can't save the Cron expression.",不能存储Cron表达式。
-"Backup Type",备份类型
-"Enable Scheduled Backup",启用计划备份
-"Maintenance Mode",维护模式
-"Scheduled Backup Settings",计划备份设置

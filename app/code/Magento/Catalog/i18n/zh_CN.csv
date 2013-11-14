@@ -9,6 +9,7 @@
 "* Required Fields",*必要字段
 "-- Please Select --","-- 请选择 --"
 24h,24小时
+"86400 by default, if not set. To refresh instantly, clear the Blocks HTML Output cache.",如果未设置默认86400秒。为了立即刷新，清除块HTML输出缓存。
 "<label class=""label""><span>from</span></label>","<label class=""label""><span>从</span></label>"
 "<label class=""label""><span>to</span></label>","<label class=""label""><span>到</span></label>"
 "A group with the same name already exists.",以同样名称命名的群组已存在。
@@ -45,12 +46,17 @@ Add,添加
 "Add to Cart",添加到购物车
 "Add to Compare",添加并比较
 "Add to Wishlist",添加到收藏
+"Additional Information",额外信息
 "Advanced Attribute Properties",高级属性设置
 "Advanced Inventory",高级库存
 "Advanced Settings",高级设置
 All,全部
 "All Product Types",所有产品类型
 "All Websites",所有网站
+"All products",所有产品
+"All products - recently added products, New products - products marked as new","所有产品-最新添加的产品，新产品-标记为""新""的产品"
+"Allow All Products per Page",每页面允许显示的所有产品
+"Allow Dynamic Media URLs in Products and Categories",在产品和分类中允许使用动态媒体URL
 "Allow HTML Tags on Frontend",允许在前端使用HTML标签
 "Allowed File Extensions",允许的文件扩展
 "Allowed file extensions to upload",允许上传的文件扩展
@@ -59,6 +65,9 @@ Amount,数量
 "An attribute group named ""/name/"" already exists"".","一个命名为""/name/""属性组名已经存在""。"
 "An attribute with this code already exists.",同样代码的属性已经存在。
 "An error occurred while saving the attribute set.",保存属性集时发生错误。
+"Anchor Custom Text",自定义文本锚点
+"Anchor Custom Title",自定义标题锚点
+"Apply MAP (Default Value)",MAP应用（预设值）
 "Apply To",应用给
 Approved,已批准
 "Are you sure you want to delete this category?",你确定要删除此类别？
@@ -86,6 +95,7 @@ Backorders,缺货
 "Based On",基于
 "Basic Settings",基础设置
 "Before Order Confirmation",在订单确认之前
+"Block after Info Column",信息栏之后阻止
 Bottom/Left,底部/左侧
 Bottom/Right,底部/右侧
 "Browse By",浏览者：
@@ -95,19 +105,28 @@ Bottom/Right,底部/右侧
 "Buy %1 for %2",以%2买%1
 "Buy %1 for %2 (%3 incl. tax) each",每以%2%1（%3含税）
 "Buy %1 for %2 each",每以%2买%1
+"Cache Lifetime (Seconds)",缓存生存时间（秒）
 "Can be Divided into Multiple Boxes for Shipping",可拆分为多个箱发货
 "Can be used only with catalog input type Dropdown, Multiple Select and Price",仅可用于类别输入类型　下拉、多选和价格
 Cancel,取消
 "Cart Item Attribute",购物车条目属性
 Catalog,分类
+"Catalog Category Link",分类类别链接
+"Catalog New Products List",分类新产品列表
+"Catalog Price Scope",分类价格范围
+"Catalog Product Link",分类产品链接
 "Catalog URL Rewrites",分类URL重写
 "Catalog, Search",分类，搜索
 Categories,分类
 Category,分类
 "Category Data",分类数据
 "Category Flat Data",分类平坦数据
+"Category Link Block Template",分类链接块模板
+"Category Link Inline Template",分类链接内联摸板
 "Category Name",分类名
 "Category Products",分类产品
+"Category Top Navigation",分类顶部导航
+"Category URL Suffix","分类 URL 后缀"
 Center,中心
 Change,更改
 "Change Price",改变价格
@@ -137,6 +156,7 @@ Country/State,国家/州
 Create,创建
 "Create Empty",创建空的
 "Create New Variation Set",创建新的变量组
+"Create Permanent Redirect for URLs if URL Key Changed","如果 URL 键有变动，为该 URL 创建永久重定向"
 "Create Permanent Redirect for old URL",为老URL创建永久重定向
 Cross-sells,交叉销售
 "Current Variations",当前变量
@@ -146,10 +166,15 @@ Cross-sells,交叉销售
 "Customer Group",客户组
 "Customers Reviews",客户评论
 "Data Type for Saving in Database",要保存在数据库中的数据类型
+"Date & Time Custom Options",日期和时间定制设置
+"Date Fields Order",日期字段顺序
 Datetime,日期时间
 Decimal,十进制
 "Declare attribute value saving scope",声明属性值保存范围
+"Default ""What's This"" Text Message","默认“这是什么” 文字信息"
+"Default Popup Text Message",默认弹出窗口文字信息
 "Default Price",默认价格
+"Default Price Navigation Step",默认价格导航步骤
 "Default Product Listing Sort by does not exist in Available Product Listing Sort By.",默认产品列表排序不存在与可用的产品列表排序中。
 "Default Qty",默认数量
 "Default Quantity",默认数量
@@ -171,6 +196,11 @@ Design,设计
 Details,详情
 Disabled,已禁用
 Display,显示
+"Display Actual Price",显示实际价格
+"Display Page Control",显示页码控制
+"Display Price Interval as One Price",将价格间隔显示为一个价格
+"Display Product Count",显示产品数量
+"Display Type",显示类型
 "Display in Suggested Terms",显示建议的搜索条件
 "Do not change the scope. This attribute is used in configurable products.",不要改变范围，该属性被用在可配置产品中。
 "Double click on a group to rename it",双击组即可更名
@@ -185,6 +215,7 @@ Edit,编辑
 Email,电子邮件
 "Email to a Friend",给朋友发邮件
 Empty,空
+"Enable MAP",启用映射
 "Enable Qty Increments",允许数量
 "Enable WYSIWYG",启用所见即所得
 Enabled,已启用
@@ -201,6 +232,7 @@ Failed,已失败
 Fixed,固定
 "For internal use",为内部使用
 "For the last time placed.",上次的置入
+Frontend,前端
 "Frontend Properties",前端属性
 Gallery,画廊
 "General Information",常规信息
@@ -216,6 +248,8 @@ Hidden,隐藏
 Home,主页
 ID,"产品 ID"
 "ID: %1",ID：%1
+"If empty, the Category Name will be used",如果为空，则使用分类名称
+"If empty, the Product Name will be used",如果为空，产品名字将被使用
 "If there are no custom parent categories, please use the default parent category. You can reassign the category at any time in <a href=""%1"" target=""_blank"">Products > Categories</a>.","如果没有定制的父分类，请使用默认的父分类。你能任何时候在<a href=""%1"" target=""_blank"">产品 > 分类重新对其分配。"
 Image,图案
 "Image Management",图片管理
@@ -230,6 +264,7 @@ Image,图案
 "Indexed category/products association",已索引的分类/产品关联
 "Input Type",输入类型
 Integer,整数
+"Interval Division Limit",区间划分限制
 "Invalid attribute %1","无效的属性 %1"
 "Invalid image file type.",无效的图像文件类型。
 "Is Default",为默认值
@@ -238,8 +273,14 @@ Integer,整数
 Label,标签
 "Last Name",姓氏
 "Last Notified",最新通知
+"Layered Navigation",分层导航
 "Learn More",了解更多
+"Link to a Specified Category",链接到指定的分类
+"Link to a Specified Product",链接到指定产品
 List,列表
+"List Mode",列表模式
+"List of Products that are set as New",名单被定为新产品
+"Look for our special back-to-school items and save bunches!",查找特价的back-to-school条目并存储一批！
 "Make Base",设置为基本
 "Manage Attribute Sets",管理属性集
 "Manage Catalog Categories",管理分类类别
@@ -250,13 +291,20 @@ List,列表
 "Manage Product Sets",管理产品设置
 "Manage Stock",库存管理
 "Manage Titles (Size, Color, etc.)",管理名称（尺寸，颜色等）
+"Mask for Meta Description",为元数据描述的伪装
+"Mask for Meta Keywords",为元数据关键字的伪装
+"Mask for Meta Title",为元数据标题的伪装
+"Mask for SKU",
 "Max Characters",字符数上限
+"Maximal Depth",最大深度
 "Maximum Image Size",最大图像大小
+"Maximum Number of Price Intervals",价格间隔最大数量
 "Maximum Qty Allowed in Shopping Cart",购物车允许的最大数量
 "Maximum image height",图片最大高度
 "Maximum image width",图片最大宽度
 "Maximum number of characters:",最大字符数：
 "Media Image",媒体图片
+"Minimum Advertised Price",最低广告价格
 "Minimum Qty Allowed in Shopping Cart",购物车允许的最小数量
 "Minimum Qty for Item's Status to be Out of Stock",状态转变为缺货的条目的最小数量
 "More Choices:",更多选择：
@@ -269,11 +317,17 @@ Name,姓名
 "New Product Attribute",新产品属性
 "New Product Template",新的产品模板
 "New Products",新产品
+"New Products Grid Template",新产品网格模板
+"New Products Images Only Template",新的产品图片仅模板
+"New Products Images and Names Template",新的图片和名字模板
+"New Products List Template",新产品列表模板
+"New Products Names Only Template",新产品名字仅仅模板
 "New Root Category",新建根类别
 "New Search",新搜索
 "New Set Name",新集名称
 "New Subcategory",新建子类别
 "New attribute set name",新属性集名称
+"New products",新产品
 Next,下一个
 No,否
 "No Image",没有图片
@@ -283,15 +337,19 @@ None,无
 "Not Visible Individually",无独立可见性
 "Notify Low Stock RSS",存货不足RSS通知
 "Notify for Quantity Below",存量过低通知
+"Number of Products per Page",每页产品数量
+"Number of Products to Display",显示的产品数量
 "Number of Uses",使用数量
 "Number of results",结果的数量
 "Number of results (For the last time placed)",结果的数量（上次的置入）
 OK,确定
 OR,或
 "On Gesture",手势
+"Our customer service is available 24/7.",我们的客户服务24小时/7天有效。
 "Out of Stock",无货
 "Out of stock",缺货
 PM,PM
+"Page Title Separator",页面标题分隔器
 "Parent Category",父分类
 Pending,挂起
 "Pending Reviews RSS",挂起评论RSS
@@ -320,6 +378,7 @@ Position,位置
 Prev,上一个
 Previous,上一个
 Price,价格
+"Price Navigation Step Calculation",价格导航步骤计算
 "Price Type",价格类型
 "Price is not available",价格不可用
 Price:,价格：
@@ -329,11 +388,19 @@ Product,产品名
 "Product Alerts",产品警报
 "Product Attribute",产品属性
 "Product Attributes",产品属性
+"Product Fields Auto-Generation",产品字段自动产生
 "Product Flat Data",产品平坦数据
+"Product Image Placeholders",产品图像占位符
+"Product Image Watermarks",产品图像水印
 "Product In Websites",网站中的产品
+"Product Info Column",产品信息栏
+"Product Link Block Template",产品链接区块模板
+"Product Link Inline Template",产品链接内联模板
+"Product Listing Sort by",产品列表排列顺序
 "Product Prices",产品价格
 "Product Reviews",产品评论
 "Product Templates",产品模板
+"Product URL Suffix",产品URL前缀
 "Product is not loaded",产品尚未加载
 "Product offline",产品下线
 "Product online",产品上线
@@ -343,6 +410,10 @@ Products,产品
 "Products Information",产品信息
 "Products Reviews",产品评论
 "Products only",仅产品
+"Products per Page on Grid Allowed Values",网格允许的数值中的每页产品数量
+"Products per Page on Grid Default Value",网格默认值每页产品
+"Products per Page on List Allowed Values",列表允许值每页产品
+"Products per Page on List Default Value",列表默认数值中的每页产品数量
 Properties,属性
 "Qty Increments",Qty增量
 "Qty Uses Decimals",数量使用小数
@@ -382,6 +453,7 @@ Save,保存
 "Save in New Attribute Set",存储在新的属性集
 Scope,范围
 Search,搜索
+"Search Engine Optimizations",搜索引擎优化
 "Search Information",搜索信息
 "Search Query",搜索查询
 "Search results for: '%1'",搜索结果：“%1”
@@ -391,6 +463,7 @@ Searchable,可搜索
 "Select Product Actions",选择产品操作
 "Select type options required values rows.",选择需要值的选项类型。
 "Send Count",发送数量
+Set,设置名称
 "Set Ascending Direction",设置降序顺序
 "Set Descending Direction",设置升序顺序
 "Set Root Category for Store",为店铺选择根分类
@@ -484,6 +557,7 @@ Text,文字
 "This search no longer exists.",该搜索已不存在。
 "Tier Pricing",层级价格
 Tile,平铺
+"Time Format",时间格式
 Title,标题
 "To reindex the enabled product(s), please specify the store or product.",为了重新所以你允许的产品，请指定店铺或产品。
 "To see product price, add this item to your cart. You can always remove it later.",要查看产品价格，请添加该条目到您的购物车。您总是可以稍后删除它。
@@ -500,8 +574,15 @@ Up-sells,超售
 Update,更新
 "Update Attributes",更新属性
 "Upload Image",上传图片
+"Use Canonical Link Meta Tag For Categories","类别使用规范链接 Meta 标签"
+"Use Canonical Link Meta Tag For Products",为产品使用标准的链接元数据标签
+"Use Categories Path for Product URLs","产品 URL 使用分类路径"
 "Use Config Settings",使用配置设置
 "Use Default Value",使用默认值
+"Use Flat Catalog Category",使用平面目录产品分类
+"Use Flat Catalog Product",使用平面目录产品
+"Use JavaScript Calendar","使用 JavaScript 日历"
+"Use Static URLs for Media Content in WYSIWYG for Catalog",为分类的所见即所得编辑中的媒体内容使用静态URL
 "Use To Create Configurable Product",用于创建可配置的产品
 "Use config",用户配置
 "Use for Promo Rule Conditions",使用促销规则条件
@@ -519,7 +600,11 @@ Visibility,可见性
 Visible,可见
 "Visible on Catalog Pages on Frontend",在前端目录也可见
 "WYSIWYG Editor",所见即所得编辑器
+Watermark,水印
+"Watermark Default Size",水印默认大小
 "Watermark File for %1",%1的水印文件
+"Watermark Opacity, Percent",水印不透明度，百分比
+"Watermark Position",水印位置
 "We can't find a search term to delete.",找不到要删除的搜索名词。
 "We can't find an attribute to delete.",找不到要删除的属性。
 "We can't find the image file.",找不到图片文件。
@@ -541,6 +626,7 @@ Website,网站
 Websites,网站
 "What's this?",这是什么？
 "Will make search for the query above return results for this search",将要执行上面查询条件的搜索返回搜索结果
+"Year Range",年份范围
 Yes,是
 "You added product %1 to the comparison list.",您已经添加了产品%1比较列表。
 "You already have an identical search term query.",您已经有了一个同样的搜索名词查询。
@@ -573,91 +659,3 @@ save,保存
 "select all",全选
 "start typing to search category",开始输入来搜索分类
 "unselect all",撤销全选
-"86400 by default, if not set. To refresh instantly, clear the Blocks HTML Output cache.","如果未设置默认86400秒。为了立即刷新，清除块HTML输出缓存。"
-"Date & Time Custom Options","日期和时间定制设置"
-"Additional Information",额外信息
-"All products","所有产品"
-"All products - recently added products, New products - products marked as new","所有产品-最新添加的产品，新产品-标记为""新""的产品"
-"Allow All Products per Page",每页面允许显示的所有产品
-"Allow Dynamic Media URLs in Products and Categories",在产品和分类中允许使用动态媒体URL
-"Anchor Custom Text",自定义文本锚点
-"Anchor Custom Title",自定义标题锚点
-"Apply MAP (Default Value)",MAP应用（预设值）
-"Block after Info Column",信息栏之后阻止
-"Cache Lifetime (Seconds)",缓存生存时间（秒）
-"Catalog Category Link",分类类别链接
-"Catalog New Products List",分类新产品列表
-"Catalog Price Scope",分类价格范围
-"Catalog Product Link",分类产品链接
-"Category Link Block Template",分类链接块模板
-"Category Link Inline Template",分类链接内联摸板
-"Category Top Navigation",分类顶部导航
-"Category URL Suffix","分类 URL 后缀"
-"Create Permanent Redirect for URLs if URL Key Changed","如果 URL 键有变动，为该 URL 创建永久重定向"
-"Date Fields Order",日期字段顺序
-"Default ""What's This"" Text Message","默认“这是什么” 文字信息"
-"Default Popup Text Message",默认弹出窗口文字信息
-"Default Price Navigation Step",默认价格导航步骤
-"Display Actual Price",显示实际价格
-"Display Page Control","显示页码控制"
-"Display Price Interval as One Price",将价格间隔显示为一个价格
-"Display Product Count",显示产品数量
-"Display Type","Display Type"
-"Enable MAP",启用映射
-Frontend,前端
-"If empty, the Category Name will be used",如果为空，则使用分类名称
-"Interval Division Limit",区间划分限制
-"Layered Navigation",分层导航
-"Link to a Specified Category",链接到指定的分类
-"Link to a Specified Product",链接到指定产品
-"List Mode",列表模式
-"List of Products that are set as New",名单被定为新产品
-"Look for our special back-to-school items and save bunches!","查找特价的back-to-school条目并存储一批！"
-"Mask for Meta Description","为元数据描述的伪装"
-"Mask for Meta Keywords","为元数据关键字的伪装"
-"Mask for Meta Title","为元数据标题的伪装"
-"Mask for SKU",,"为SKU的伪装"
-"Maximal Depth",最大深度
-"Maximum Number of Price Intervals",价格间隔最大数量
-"Minimum Advertised Price",最低广告价格
-"New Products Grid Template",新产品网格模板
-"New Products List Template",新产品列表模板
-"New Products Names Only Template","新产品名字仅仅模板"
-"New products","新产品"
-"Number of Products per Page","每页产品数量"
-"Number of Products to Display",显示的产品数量
-"Our customer service is available 24/7.","我们的客户服务24小时/7天有效."
-"Page Title Separator",页面标题分隔器
-"Price Navigation Step Calculation",价格导航步骤计算
-"Product Image Placeholders",产品图像占位符
-"Product Image Watermarks",产品图像水印
-"Product Info Column",产品信息栏
-"Product Link Block Template",产品链接区块模板
-"Product Link Inline Template",产品链接内联模板
-"Product Listing Sort by",产品列表排列顺序
-"Product URL Suffix",产品URL前缀
-"Products per Page on Grid Allowed Values",网格允许的数值中的每页产品数量
-"Products per Page on Grid Default Value",网格默认值每页产品
-"Products per Page on List Allowed Values",列表允许值每页产品
-"Products per Page on List Default Value",列表默认数值中的每页产品数量
-SKU,SKU
-"Search Engine Optimizations",搜索引擎优化
-Set,设置名称
-"Time Format",时间格式
-"Use Canonical Link Meta Tag For Categories","类别使用规范链接 Meta 标签"
-"Use Canonical Link Meta Tag For Products",为产品使用标准的链接元数据标签
-"Use Categories Path for Product URLs","产品 URL 使用分类路径"
-"Use Flat Catalog Category",使用平面目录产品分类
-"Use Flat Catalog Product",使用平面目录产品
-"Use JavaScript Calendar","使用 JavaScript 日历"
-"Use Static URLs for Media Content in WYSIWYG for Catalog",为分类的所见即所得编辑中的媒体内容使用静态URL
-Watermark,水印
-"Watermark Default Size",水印默认大小
-"Watermark Opacity, Percent",水印不透明度，百分比
-"Watermark Position",水印位置
-"Year Range",年份范围
-"Display Type","显示类型"
-"If empty, the Product Name will be used","如果为空，产品名字将被使用"
-"New Products Images Only Template","新的产品图片仅模板"
-"New Products Images and Names Template","新的图片和名字模板"
-"Product Fields Auto-Generation","产品字段自动产生"

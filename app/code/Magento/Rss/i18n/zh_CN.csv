@@ -11,9 +11,11 @@ Catalog,分类
 Coupons/Discounts,代金券/折扣
 "Current Status: %1<br/>","当前状态：%1 <br/>"
 "Customer Name: %1","客户名： %1"
+"Customer Order Status Notification",客户订单状态通知
 "Details for %1 #%2","%1 #%2的详情"
 Discount,折扣
 "Discount (%1)","折扣 （%1）"
+"Enable RSS",启用RSS
 "Error in processing xml. %1",处理xml时出错。%1
 From:,来自：
 "Get Feed",获取源
@@ -33,7 +35,9 @@ Message:,信息：
 "Product: ""%1"" review By: %2","产品：“%1” 由 %2 评论"
 "Product: <a href=""%1"">%2</a> <br/>","产品：<a href=""%1"">%2</a> <br/>"
 "Purchased From: %1",购买自：%1
+"RSS Feeds","RSS 订阅源"
 "Review: %1 <br/>","评论：%1 <br/>"
+"Rss Config","RSS 配置"
 "Shipping &amp; Handling",运送与手续费
 "Special Expires On: %1",特价于%1过期
 "Special Price: %1","特价： %1"
@@ -45,11 +49,7 @@ Tax,传真
 "There are no Rss Feeds.",没有Rss种子。
 "There was no RSS feed enabled.",没有允许Rss种子。
 To:,至：
+"Top Level Category",顶级分类
 "Total: %1<br/>","总数：%1 <br/>"
 "We cannot retrieve the wish list.",检索不到收藏清单。
 Wishlist,收藏清单
-"Customer Order Status Notification",客户订单状态通知
-"Enable RSS",启用RSS
-"RSS Feeds","RSS 订阅源"
-"Rss Config","RSS 配置"
-"Top Level Category",顶级分类

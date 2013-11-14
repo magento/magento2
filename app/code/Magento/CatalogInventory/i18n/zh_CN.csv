@@ -3,21 +3,30 @@
 "Add Minimum Qty",添加最小的数量
 "Allow Qty Below 0",允许数量小于零
 "Allow Qty Below 0 and Notify Customer",允许数量小于零并通知客户
+"Automatically Return Credit Memo Item to Stock",自动返回信用备忘条目到库存
 Backorders,缺货
 "By Fixed value",由固定值
 "By Percentage",按百分比
+"Decrease Stock When Order is Placed",当下订单时，减少库存
+"Display Out of Stock Products",显示缺货产品
+"Display products availability in stock in the frontend",在前端的库存显示产品有效性
 "In Stock",有货
 "Index Product Stock Status",索引产品库存状态
+Inventory,盘点
 "Manage Stock",库存管理
 "Minimum Qty",最小的数量
 "No Backorders",无延期交货
 "Not all of your products are available in the requested quantity.",不是所有的产品请求数量都是有效的。
 "Notify for Quantity Below",存量过低通知
 "Only %1 left",仅剩下%1
+"Only X left Threshold","仅 X左侧阈值"
 "Out of Stock",无货
 "Please correct the quantity for some products.",请纠正部分产品的数量。
+"Product Stock Options",产品库存选项
 "Rule price",规则价格
+"Set Items' Status to be In Stock When Order is Cancelled",如果订单被取消，设置商品的状态为有货
 "Some of the products are currently out of stock.",部分产品当前缺货。
+"Stock Options",库存选项
 "Stock Status",库存状态
 "The fewest you may purchase is %1.",您购买最少的是%1。
 "The most you may purchase is %1.",您购买最多的是%1。
@@ -36,12 +45,3 @@ Update,更新
 "We don't have as many ""%1"" as you requested.","我们没有你要的（""%1""）那么多数量。"
 "You can buy %1 only in increments of %2.",您能以%2的增量购买%1。
 "You can buy this product only in increments of %1.",您能以%1的增量购买该产品。
-"Automatically Return Credit Memo Item to Stock",自动返回信用备忘条目到库存
-"Decrease Stock When Order is Placed",当下订单时，减少库存
-"Display Out of Stock Products",显示缺货产品
-"Display products availability in stock in the frontend","在前端的库存显示产品有效性"
-Inventory,盘点
-"Only X left Threshold","仅 X左侧阈值"
-"Product Stock Options",产品库存选项
-"Set Items' Status to be In Stock When Order is Cancelled",如果订单被取消，设置商品的状态为有货
-"Stock Options",库存选项

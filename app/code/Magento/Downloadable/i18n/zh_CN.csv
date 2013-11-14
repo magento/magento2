@@ -5,8 +5,13 @@ Availability:,可用性：
 Back,返回
 Canceled,已取消
 Date,日期
+"Default Link Title",默认链接标题
+"Default Maximum Number of Downloads",下载数量默认最大值
+"Default Sample Title",默认范例标题
 Delete,删除
+"Disable Guest Checkout if Cart Contains Downloadable Items",如果购物车包含可下载内容，则禁止来宾结账
 "Downloadable Information",可下载的信息
+"Downloadable Product Options",可下载产品选项
 Edit,编辑
 "Edit item parameters",编辑条目参数
 "Excl. Tax",不含税
@@ -24,7 +29,9 @@ List,列表
 Message:,信息：
 Move,移动
 "My Downloadable Products",我的可下载产品
+"Open Links in New Window",在新窗口打开链接
 Order,"订单 #"
+"Order Item Status to Enable Downloads",订单条目状态为允许下载
 "Order id cannot be null",订单编号不能为空
 "Order item id cannot be null","订购物品 id 不能为空"
 Ordered,已下单
@@ -60,6 +67,7 @@ Title,标题
 To:,至：
 U,U
 Unlimited,无限
+"Use Content-Disposition",用户内容描述
 "Use Default Value",使用默认值
 "View Order",查看订单
 "What's this?",这是什么？
@@ -68,11 +76,3 @@ attachment,附件
 download,下载
 inline,内联
 sample,示例
-"Default Link Title",默认链接标题
-"Default Maximum Number of Downloads",下载数量默认最大值
-"Default Sample Title",默认范例标题
-"Disable Guest Checkout if Cart Contains Downloadable Items",如果购物车包含可下载内容，则禁止来宾结账
-"Downloadable Product Options",可下载产品选项
-"Open Links in New Window",在新窗口打开链接
-"Order Item Status to Enable Downloads",订单条目状态为允许下载
-"Use Content-Disposition",用户内容描述

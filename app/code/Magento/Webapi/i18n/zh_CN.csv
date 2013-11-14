@@ -9,21 +9,28 @@
 "Content-Type header is invalid.",无效的Content-Type头。
 "Decoding error.",解码错误。
 "Decoding error: %1%2%3%4","解码错误： %1%2%3%4"
+"Default Response Charset",默认响应字符集
 "Delete API Role",删除API角色
 "Delete API User",删除API用户
 "Edit API Role",编辑API角色
+"Enable WSDL Cache",允许WSDL缓存
 "Incorrect format of WSDL request URI or Requested services are missing.",WSDL请求不正确或者请求的服务不存在。
 "Internal Error. Details are available in Magento log file. Report ID: %1","内不错误。详细信息请查看Magento日志文件。 报告ID： %1"
 "Invalid XML",无效的XML
 "Invalid XML: Detected use of illegal DOCTYPE","无效的XML： 检测到不合法的DOCTYPE"
+"Magento Web API","Magento Web API"
 "Magento is not yet installed",还没有安装Magento
 "New API Role",新的API角色
 "New API User",新的API用户
+"No Roles Found",找不到角色
+"No Users Found",找不到用户
 "Not allowed parameters: %1. Please use only %2 and %3.","不允许的参数： %1。 请仅使用%2和%3。"
 "Operation ""%1"" not found.","操作""%1""没发现。"
 "Operation allowed only in HTTPS",仅允许HTTPS
 "Request does not match any route.",请求不匹配任何路由。
 "Request method is invalid.",请求方法无效。
+"Role Users Information",角色用户信息
+"SOAP Settings",SOAP设置
 "Save API Role",存储API角色
 "Save API User",出处API用户
 "Server cannot understand Accept HTTP header media type.","服务器不能解释Accept HTTP头媒体类型。"
@@ -40,11 +47,4 @@
 "Unable to find a user to be deleted.",找不到要删除的用户。
 "Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","警告！\r\n该操作将移那些除已经分配角色的用户\r\n你确定吗？"
 "Web Api","Web Api"
-"Default Response Charset","默认响应字符集"
-"Enable WSDL Cache","允许WSDL缓存"
-"Magento Web API","Magento Web API"
-"No Roles Found","找不到角色"
-"No Users Found","找不到用户"
-"Role Users Information","角色用户信息"
-"SOAP Settings","SOAP设置"
-"Web Services Configuration","Web服务配置"
+"Web Services Configuration",Web服务配置

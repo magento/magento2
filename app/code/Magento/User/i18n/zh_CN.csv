@@ -8,6 +8,7 @@
 "Please correct the password reset token.",请纠正密码重置口令。
 "Please correct this email address:",请纠正邮件地址：
 "Please specify the correct account and try again.",请指定正确的账户名重试。
+"Reset Password Template",重置密码模板
 Role,角色
 "This role no longer exists.",该角色不存在。
 "User Name is a required field.",用户名是必输项。
@@ -22,4 +23,3 @@ Role,角色
 "Your password confirmation must match your password.",密码确认与密码不匹配。
 "Your password must be at least %1 characters.",您的密码至少需要%1个字符。
 "Your password must include both numeric and alphabetic characters.",密码必须同时包含数字和字符。
-"Reset Password Template","重置密码模板"

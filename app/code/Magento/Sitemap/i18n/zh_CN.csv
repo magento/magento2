@@ -1,16 +1,25 @@
 Action,操作
+"Add Images into Sitemap",添加图片到站点地图
 "Add Sitemap",添加站点结构图
 Always,总是
 "Base Only",仅基础
+"CMS Pages Options",CMS包选项
+"Categories Options",分类选项
 Daily,每天
 "Edit Sitemap",编辑站点结构图
+"Enable Submission to Robots.txt",允许提交到Robots。txt
 Enabled,已启用
 "File ""%1"" cannot be saved. Please, make sure the directory ""%2"" is writable by web server.","文件""%1""不能被存储。 请确保服务器上的目录""%2""可写。"
 "File handler unreachable",文件句柄不可达
 Filename,文件名
 Generate,生成
+"Generation Settings",常规设置
 Hourly,每小时
 ID,ID
+"Last Generated",上一次生成时间
+"Link for Google",Google的链接
+"Maximum File Size",最大文件尺寸
+"Maximum No of URLs Per File",每个文件最大的URL数量
 Monthly,每月
 Never,永不
 "New Site Map",新的站点地图
@@ -21,7 +30,10 @@ Path,路径
 "Please make sure that ""%1"" is writable by the web-server.","请确保服务器上""%1""可写。"
 "Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename. No spaces or other characters are allowed.",文件中请仅仅使用字符（a-z或A-Z）、数字（0-9）或者下划线（_）。空格和其他支付都是不允许的。
 Priority,优先级
+"Products Options",产品选项
+"Search Engine Submission Settings",搜索引擎提交设置
 Sitemap,站点结构图
+"Sitemap File Limits",站点地图文件限制
 "Something went wrong generating the sitemap.",产生站点地图发生错误。
 "Store View",店铺视图
 "The priority must be between 0 and 1.",优先级必须介于0和1之间。
@@ -34,15 +46,3 @@ Sitemap,站点结构图
 Weekly,每周
 "XML Sitemap",XML站点地图
 Yearly,每年
-"Add Images into Sitemap","添加图片到站点地图"
-"CMS Pages Options",CMS包选项
-"Categories Options",分类选项
-"Enable Submission to Robots.txt","允许提交到Robots.txt"
-"Generation Settings",常规设置
-"Last Generated",上一次生成时间
-"Link for Google",Google的链接
-"Maximum File Size","最大文件尺寸"
-"Maximum No of URLs Per File","每个文件最大的URL数量"
-"Products Options",产品选项
-"Search Engine Submission Settings","搜索引擎提交设置"
-"Sitemap File Limits","站点地图文件限制"

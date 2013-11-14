@@ -8,13 +8,22 @@ Action,操作
 Any,任意
 "Applied Coupon",已应用的优惠券
 "Applies to Any of the Specified Order Statuses",适用于任何指定的顺序状态
+"Are you sure you want to refresh lifetime statistics? There can be performance impact during this operation.",您确认要刷新生命期数据吗？此操作过程可能会影响性能。
+"Are you sure you want to refresh statistics for last day?",您确定要刷新最后一天的统计吗？
 "Are you sure?",您是否确认？
+"Average (Approved)",平均（已批准）
 Bestsellers,最佳销量
 CSV,CSV
 Carts,购物车
+"Compared Product Images Only Template",比较的产品图片仅模板
+"Compared Product Names Only Template",比较产品名仅模板
+"Compared Products Grid Template",比对的产品网格模板
+"Compared Products Images and Names Template",比较产品图片和名字模板
+"Compared Products List Template",比对的产品列表模板
 Coupons,折价券
 "Coupons Usage Report",优惠券使用报告
 "Created At",创建于
+"Current Month Starts",当前月起始
 Customer,顾客姓名
 Customers,客户
 "Customers Report",顾客报告
@@ -23,6 +32,8 @@ Customers,客户
 "Customers by number of orders",按订单数排列顾客
 Dashboard,仪表板
 Day,天
+"Default Recently Compared Products Count",默认最近比较的产品数量
+"Default Recently Viewed Products Count",默认最近查看的产品数量
 Description,描述
 Detail,详情
 Downloads,下载
@@ -41,7 +52,10 @@ Interval,周期
 Invoiced,已出发票
 "Items in Cart",购物车中的条目
 "Last Name",姓氏
+"Last Review",上次评论
 Link,链接
+"List of Products Recently Compared and Removed from the Compare List by Visitor",最近由访客从比较列表中比较和删除的产品列表
+"List of Products Recently Viewed by Visitor",最近由访客浏览过的产品列表
 "Low Stock",库存量低
 "Low stock",低库存
 Month,月
@@ -49,9 +63,11 @@ Month,月
 Name,姓名
 "New Accounts",新账户数量
 No,否
+"Number of Products to display",显示产品的数量
 "Order Quantity",下单的数量
 "Order Status",订单状态
 "Order Taxes Report Grouped by Tax Rate",按税率分组的订购税费报告
+"Ordered Quantity",订购数量
 Orders,订单
 "Out of stock",缺货
 Price,价格
@@ -69,7 +85,11 @@ Quantity,商品的数量
 "Recently Compared Products",最近比较过的产品
 "Recently Viewed",最近查看过的
 "Recently Viewed Products",最近查看过的产品
+"Recently Viewed/Compared Products",最近查看/比较过的产品
+"Refresh Lifetime Statistics",刷新寿命状态
 "Refresh Statistics",刷新状态
+"Refresh Statistics for the Last Day",刷新昨天的状态
+Report,报告
 Reports,报告
 Results,结果
 Revenue,收入
@@ -84,8 +104,10 @@ Shipping,运送
 "Shopping Cart",购物车
 "Show Actual Values",显示实际值
 "Show Report",显示报告
+"Show for Current",显示最新值
 Specified,已指定
 Statistics,状态
+"Stock Quantity",库存数量
 Subtotal,小计
 Tax,传真
 "The product type filter specified is incorrect.",产品类型过滤器不正确。
@@ -99,39 +121,17 @@ Total,总数
 "Total Shipped Report",发货总数报告
 "Updated At",更新于
 Viewed,浏览数目
+"Viewed Products Grid Template",查看过的产品网格模板
+"Viewed Products Images Only Template",查看产品图片仅模板
+"Viewed Products Images and Names Template",查看产品图片和名字模板
+"Viewed Products List Template",查看的产品列表模板
+"Viewed Products Names Only Template",查看图片名字仅模板
 Views,浏览数量
 Visibility,可见性
 "Wishlist Purchase",购买自收藏清单
 Year,年
+"Year-To-Date Starts",开始的年月日
 Yes,是
 "Your Recently Compared",您最近的比较
 "Your Recently Viewed",您最近看过的
-"Are you sure you want to refresh lifetime statistics? There can be performance impact during this operation.",您确认要刷新生命期数据吗？此操作过程可能会影响性能。
-"Are you sure you want to refresh statistics for last day?","您确定要刷新最后一天的统计吗？"
-"Average (Approved)","平均(已批准)"
-"Compared Product Images Only Template","比较的产品图片仅模板"
-"Compared Product Names Only Template","比较产品名仅模板"
-"Compared Products Grid Template",比对的产品网格模板
-"Compared Products Images and Names Template","比较产品图片和名字模板"
-"Compared Products List Template",比对的产品列表模板
-"Current Month Starts",当前月起始
-"Default Recently Compared Products Count",默认最近比较的产品数量
-"Default Recently Viewed Products Count",默认最近查看的产品数量
-"Last Review",上次评论
-"List of Products Recently Compared and Removed from the Compare List by Visitor",最近由访客从比较列表中比较和删除的产品列表
-"List of Products Recently Viewed by Visitor",最近由访客浏览过的产品列表
-"Number of Products to display",显示产品的数量
-"Recently Viewed/Compared Products",最近查看/比较过的产品
-"Refresh Lifetime Statistics",刷新寿命状态
-"Refresh Statistics for the Last Day",刷新昨天的状态
-Report,报告
-"Show for Current",显示最新值
-"Stock Quantity",库存数量
-"Viewed Products Grid Template",查看过的产品网格模板
-"Viewed Products Images Only Template","查看产品图片仅模板"
-"Viewed Products Images and Names Template","查看产品图片和名字模板"
-"Viewed Products List Template",查看的产品列表模板
-"Viewed Products Names Only Template","查看图片名字仅模板"
-"Year-To-Date Starts",开始的年月日
 undefined,未定义
-"Ordered Quantity","订购数量"

@@ -1,3 +1,4 @@
+"3D Secure","3D 安全"
 "3D Secure Card Validation","3D 安全信用卡验证"
 "A case that has been resolved and close requires a reimbursement.",一种情况已经被解决并且关闭要求赔偿。
 "A reversal has occurred on this transaction because of a customer dispute suspecting unauthorized spoof.",由于客户争议未授权的欺骗本次交易被撤销。
@@ -10,8 +11,12 @@
 "ACH Deposit (Reversal)",ACH保证金（撤销）
 "ACH Funding for Funds Recovery from Account Balance",来自帐户余额的返款恢复ACH返款
 "ACH Withdrawal",ACH撤销
+"API Authentication Methods",API身份验证方法
 "API Certificate",API证书
+"API Password",API密码
 "API Signature",API签名
+"API Username",API用户名
+"API Uses Proxy",API使用代理
 "Acceptance Mark",接受标志
 "Acceptance Mark Image",接受标志图片
 "Account-to-Account Payment, initiated by PayPal",帐户到帐户支付，由PayPal开创
@@ -19,6 +24,8 @@
 Address,地址
 "Address Verification System Response",地址验证系统响应
 "All the address information matched",所有地址信息都匹配
+"Allow in Billing Agreement Wizard",允许使用记账协议向导
+"Allowed Credit Card Types",允许的信用卡类型
 "Ask Customer",询问顾客
 "Attempted Authentication, Bad Result",尝试身份验证，结果有误
 "Attempted Authentication, Good Result",尝试身份验证，结果正常
@@ -26,11 +33,21 @@ Address,地址
 "Authenticated, Bad Result",已身份验证，结果有误
 "Authenticated, Good Result",已身份验证，结果正常
 Authorization,授权
+"Authorization Honor Period (days)",授权信用期（天）
 Auto,自动
 AutoSweep,自动清理
 "Available Balance",可用余额
 "Balance Manager Account Bonus",余额管理器帐户点数
+"Basic Settings - PayPal Express Checkout","基础设置 - PayPal Express Checkout"
+"Basic Settings - PayPal Payflow Link","基础设置 - PayPal Payflow Link"
+"Basic Settings - PayPal Payflow Pro","基础设置 - PayPal Payflow Pro"
+"Basic Settings - PayPal Payments Advanced","基础设置 - PayPal Payments Advanced"
+"Basic Settings - PayPal Payments Pro","基础设置 - PayPal Payments Pro"
+"Basic Settings - PayPal Payments Standard","基础设置 - PayPal Payments Standard"
+"Basic Settings - PayPal Website Payments Pro","基础设置 - PayPal Website Payments Pro"
+"Basic Settings - PayPal Website Payments Standard","基础设置 - PayPal Website Payments Standard"
 "Billing Address",账单地址
+"Billing Agreement Signup",账单协议注册
 "Bonus for first ACH Use",首次使用ACH奖励
 "Buyer Credit Payment",买家信用支付
 "Buyer claims that a possible duplicate payment was made to the merchant.",买家声称商家可能发生重复支付。
@@ -42,7 +59,10 @@ AutoSweep,自动清理
 "Buyer's Tax ID Type","买家的纳税人 ID 类型"
 CNPJ,CNPJ
 CPF,CPF
+"CVV Entry is Editable",CVV入口是可以编辑的
 "CVV2 Check Result by PayPal",PayPal的CVV2检查结果
+"Centinel API URL","Centinel API URL"
+"Centinel Custom API URL","Centinel 自定义 API URL"
 Charge-off,收取
 Chargeback,退款
 "Checkout with PayPal",使用PayPal结账
@@ -50,17 +70,22 @@ City,城市
 "Click here if you are not redirected within 10 seconds.",如果10秒中之内页面没有被转向请单击这里。
 Company,公司
 Complaint,投诉
+"Countries Payment Applicable From",各国支付可用情况表单
 Country,国家
 "Coupon Redemption",代金券兑换
 Credit,信用
+"Credit Card Settings",信用卡设置
 "Currency Conversion required to cover negative balance",货币转换需要考虑余额负值
 Custom,自定义
+"Custom Endpoint Hostname or IP-Address",自定义端点主机名或IP地址
+"Custom Path",自定义路径
 "Customer Information",客户信息
 Daily,每天
 Debit,借记
 "Debit Card Cash Back",借记卡返现
 "Debit Card Transaction",借记卡交易
 "Debit or Credit",借记卡或信用卡
+"Debug Mode",调试模式
 "Direct Payment API",直接支付API
 Discount,折扣
 Dispute,争议
@@ -68,12 +93,21 @@ Dynamic,动态
 "EFT Funding (German banking)",EFT返款（德国银行）
 "Edit Shopping Cart",编辑购物车
 "Email Address",编辑电子邮件地址
+"Email Associated with PayPal Merchant Account",关联给PayPal银行帐户的电子邮件地址
+"Email Associated with PayPal Merchant Account (Optional)",与PayPal商业账户关联的邮件（可选）
+"Enable Automatic Fetching",启用自动获取
+"Enable Express Checkout","允许Express Checkout"
+"Enable PayPal Guest Checkout",启用PayPal来宾结账
+"Enable Payflow Link","允许Payflow Link"
+"Enable SSL verification",允许SSL校验
+"Enable this Solution",允许该方案
 Enabled,已启用
 Event,事件
 "Event Code",事件代码
 "Exact Match. Address and Postal Code. International",完全匹配。地址和邮编。国际
 "Exact Match. Address and Postal Code. UK-specific",完全匹配。地址和邮编。仅限英国
 "Exact Match. Address and nine-digit ZIP code",完全匹配，地址和九位邮编
+"Express Checkout",快速结账
 "Express Checkout APIs",快速结账API
 "Express Checkout and Order have been canceled.",快速结账且订单已取消。
 "Express Checkout has been canceled.",快速结账已被取消。
@@ -89,6 +123,7 @@ Fetch,获取
 "Fetch Updates",获取更新
 "Finish Date",完成日期
 "For Virtual Quotes Only",仅用于虚拟产品
+"Frontend Experience Settings",前端体验设置
 Funding,退款
 "General (Authorization)",常规（身份验证）
 "General (Dividend)",常规（利息）
@@ -113,6 +148,9 @@ Funding,退款
 "Gift Certificate Payment: purchase of Gift Certificate",礼品券支付：购买礼品券
 "Gift Certificate Redemption",礼品券兑换
 "Gross Amount",总额
+"Header Background Color",头部背景色
+"Header Border Color",头部边框颜色
+"Header Image URL",头部图像URL
 Help,帮助
 "Hidden Virtual PayPal Debit Card Transaction",隐藏虚拟PayPal借记卡交易
 "Hold for Dispute Investigation",保留做争议调查
@@ -168,20 +206,30 @@ No,否
 "Note: %1",注意：%1
 "Now accepting PayPal (150 X 40)",现在接受PayPal（150X40）
 "Now accepting PayPal (150 X 60)",现在接受PayPal（150X60）
+"Number of Child Authorizations",授权子帐户的数量
 "Once you log into your PayPal Advanced account, navigate to the Service Settings - Hosted Checkout Pages - Set Up menu and set the options described below","一旦你登录了PayPal Advanced账户，导航到Service Settings - Hosted Checkout Pages - Set Up菜单设置下面这些选项"
 "Once you log into your PayPal Payflow Link account, navigate to the Service Settings - Hosted Checkout Pages - Set Up menu and set the options described below","一旦有登录了PayPal Payflow Link账户，导航到Service Setting - Hosted Checkout Pages - Set Up菜单然后设置下面这些选项"
 "Open Authorization",开放授权
 Order,订单
 "Order ID","订单 ID"
+"Order Valid Period (days)",订单有效期（天）
+"Page Background Color",页面背景色
+"Page Style",页面样式
 "Part of the address information matched",地址信息中部分匹配
+Partner,合作伙伴
 Password,密码
 "PayPal Balance Manager function of PayPal account",PayPal帐户的PayPal余额管理器功能
+"PayPal Billing Agreement Settings",PayPal账单协议设置
 "PayPal Buyer Warranty Bonus",PayPal买家担保津贴
 "PayPal Debit Card Cash Advance",PayPal借记卡预付现金
 "PayPal Debit Card Withdrawal from ATM",从ATM进行PayPal借记卡撤销
+"PayPal Express Checkout","PayPal Express结账"
 "PayPal Express Checkout Token does not exist.",PayPal快速结账令牌不存在。
 "PayPal Express Checkout is not enabled.","PayPal Express Checkout是不允许的。"
 "PayPal Fee Information",PayPal费用信息
+"PayPal Merchant Pages Style",PayPal商业页面样式
+"PayPal Payment Gateways","PayPal Payment网关"
+"PayPal Product Logo",PayPal产品徽标
 "PayPal Protection Bonus",PayPal保护津贴
 "PayPal Reference ID",PayPal推荐ID
 "PayPal Reference ID Type",PayPal推荐ID类型
@@ -194,8 +242,20 @@ Password,密码
 "Payer ID",付款者ID
 "Payer Status",付款者状态
 "Payer is not identified.",付款者未经检定。
+"Payflow Link (Includes Express Checkout)","Payflow Link（包括Express Checkout）"
+"Payflow Link and Express Checkout","Payflow Link和Express Checkout"
+"Payflow Pro","Payflow Pro"
+"Payflow Pro (Includes Express Checkout)","Payflow Pro（包括Express Checkout）"
+"Payflow Pro and Express Checkout","Payflow Pro和Express Checkout"
+"Payment Action",支付操作
+"Payment Applicable From",支付适用性表单
 "Payment Refund initiated by merchant",由商户发起的支付退款
 "Payment transactions disallow storing objects.",支付交易不允许的店铺对象。
+"Payments Advanced (Includes Express Checkout)","Payments Advanced（包括Express Checkout）"
+"Payments Advanced and Express Checkout","Payments Advanced和Express Checkout"
+"Payments Pro (Includes Express Checkout)","Payments Pro （包括Express Checkout）"
+"Payments Pro and Express Checkout","Payments Pro和Express Checkout"
+"Payments Standard",支付标准
 "Payments by PayPal (150 X 40)",用PayPal付款（150X40）
 "Payments by PayPal (150 X 60)",用PayPal付款（150X60）
 "Pending PayPal",挂起的PayPal
@@ -213,6 +273,8 @@ Phone,电话
 "Preapproved Payment ID",预审核的支付ID
 Price,价格
 Product,产品名
+"Proxy Host",代理主机
+"Proxy Port",代理端口
 Quantity,数量
 Reauthorization,撤销授权
 "Reference Information",参考信息
@@ -220,6 +282,9 @@ Reauthorization,撤销授权
 "Reimbursement of Chargeback",退款的偿还
 "Report Date",报告日期
 Reports,报告
+"Require CVV Entry",需要CVV项
+"Require Customer's Billing Address",要求客户帐单地址
+"Required PayPal Settings",必要的PayPal设置
 Reversal,撤销
 "Reversal of General Account Hold",常规帐户保持的撤销
 "Reversal of Points Usage",点数使用情况撤销
@@ -227,18 +292,27 @@ Reversal,撤销
 "Reversal of hold for Dispute Investigation",撤销保留的争议调查
 "Review Order",查看订单
 "Reward Voucher Redemption",奖励兑换
+"SFTP Credentials",SFTP凭据
 Sale,销售
 Sales,销售
 "Same as shipping",与配送地址相同
+"Sandbox Mode",沙箱模式
 Schedule,计划
+"Scheduled Fetching",计划的获取
+"Send Email Confirmation",发送邮件确认
 "Settlement Consolidation",合并处理
+"Settlement Report Settings",处理报告设置
 "Settlement of a chargeback.",处理返款。
+"Severe 3D Secure Card Validation","提供 3D 安全信用卡验证"
 Shipping,运送
 "Shipping Address",送货地址
 "Shipping Method",运送方式
 "Shop now using (150 X 40)",立刻购物并使用（150X40）
 "Shop now using (150 X 60)",立刻购物并使用（150X60）
 Shortcut,快捷方式
+"Shortcut Buttons Flavor",快捷方式按钮风格
+"Shortcut on Product View",产品视图上的快捷方式
+"Shortcut on Shopping Cart",购物车上的快捷方式
 "Sign a billing agreement to streamline further purchases with PayPal.",与PayPal签署记账协议简化后续购买。
 "Some PayPal solutions conflict.",一些PayPal方案冲突。
 "Something went wrong while processing your order.",当处理您的订单时发生错误。
@@ -253,6 +327,8 @@ Static,静态
 "Subscription ID",订阅ID
 "Subscription Payment, either payment sent or payment received",订阅支付，可通过发出或收到的付款进行
 Subtotal,小计
+"Summary Text for Aggregated Cart",聚合购物车的摘要文字
+"Test Mode",测试模式
 "The PayPal certificate does not exist.",PayPal证书不存在。
 "The PayPal certificate file is empty.",PayPal证书文件为空。
 "The PayPal gateway has rejected this request. %1","PayPal网关已经拒绝了该请求。 %1"
@@ -274,6 +350,7 @@ Subtotal,小计
 "There is already another PayPal solution enabled. Enable this solution instead?",已经允许了另一个PayPal方案，要替代允许该方案吗？
 "This customer did not include a confirmed address.",客户没有包含确认地址。
 "This operation requires an existing transaction object.",该操作需要一个现有的交易目标。
+"Time of Day",每天的时间段
 Title,标题
 "To use PayPal Payflow Link, you must configure your PayPal Payflow Link account on the PayPal website.","为了使用PayPal Payflow Link，你必须在PayPal网站配置你的PayPal Payflow Link。"
 "To use PayPal Payments Advanced, you must configure  your PayPal Payments Advanced account on the PayPal website.","为了使用PayPal Payments Advanced，你必须到PayPal网站配置你的PayPal Payments Advanced账户。"
@@ -281,11 +358,17 @@ Title,标题
 "Transaction Information",交易信息
 "Transaction reversal by PayPal administrators.",PayPal管理员撤销本次交易。
 "Transaction reversal due to fraud detected by PayPal administrators.",PayPal管理员检测到欺诈行为，本次交易撤销。
+"Transfer Cart Line Items",传输购物车内容
+"Transfer Shipping Options",传输送货选项
 "Triggered Fraud Filters",触发的欺诈筛选器
+"URL method for Cancel URL and Return URL",取消和返回链接的URL方法
 "Unable to cancel Express Checkout","不能取消Express Checkout"
 "Update Order Data",更新订单数据
+"Use Proxy",使用代理
+User,用户
 "User-initiated Currency Conversion",用户发起的货币转换
 "VAT Number","VAT 编号"
+Vendor,供应商
 View,查看
 "View Demo",查看演示
 "View Transaction",查看交易
@@ -309,6 +392,9 @@ Void,无效
 "We found nothing to fetch because of an empty configuration.",由于空的配置导致没什么可以抓取。
 "We prefer PayPal (150 X 40)",我们喜欢PayPal（150X40）
 "We prefer PayPal (150 X 60)",我们喜欢PayPal（150X60）
+"Website Payments Pro (Includes Express Checkout)","Website Payments Pro（包括Express Checkout）"
+"Website Payments Pro and Express Checkout","Website Payments Pro和Express Checkout"
+"Website Payments Standard",网站支付标准版
 "Website Payments Standard Payment",网站支付标准版付款
 "What is PayPal?",什么是PayPal？
 "WorldLink Withdrawal",WorldLink撤销
@@ -326,89 +412,3 @@ Yes,是
 "Your payment has been declined. Please try again.",您的支付已经被拒绝。请重试。
 "Zip/Postal Code",邮政编码
 "eBay Auction Payment",eBay拍卖付款
-"3D Secure","3D 安全"
-"API Authentication Methods",API身份验证方法
-"API Password",API密码
-"API Username",API用户名
-"API Uses Proxy",API使用代理
-"Allow in Billing Agreement Wizard",允许使用记账协议向导
-"Allowed Credit Card Types",允许的信用卡类型
-"Authorization Honor Period (days)","授权信用期(天)"
-"Basic Settings - PayPal Express Checkout","基础设置 - PayPal Express Checkout"
-"Basic Settings - PayPal Payflow Link","基础设置 - PayPal Payflow Link"
-"Basic Settings - PayPal Payflow Pro","基础设置 - PayPal Payflow Pro"
-"Basic Settings - PayPal Payments Advanced","基础设置 - PayPal Payments Advanced"
-"Basic Settings - PayPal Payments Pro","基础设置 - PayPal Payments Pro"
-"Basic Settings - PayPal Payments Standard","基础设置 - PayPal Payments Standard"
-"Basic Settings - PayPal Website Payments Pro","基础设置 - PayPal Website Payments Pro"
-"Basic Settings - PayPal Website Payments Standard","基础设置 - PayPal Website Payments Standard"
-"Billing Agreement Signup","账单协议注册"
-"CVV Entry is Editable","CVV入口是可以编辑的"
-"Centinel API URL","Centinel API URL"
-"Centinel Custom API URL","Centinel 自定义 API URL"
-"Countries Payment Applicable From",各国支付可用情况表单
-"Credit Card Settings",信用卡设置
-"Custom Endpoint Hostname or IP-Address",自定义端点主机名或IP地址
-"Custom Path",自定义路径
-"Debug Mode",调试模式
-"Email Associated with PayPal Merchant Account",关联给PayPal银行帐户的电子邮件地址
-"Email Associated with PayPal Merchant Account (Optional)","与PayPal商业账户关联的邮件(可选)"
-"Enable Automatic Fetching",启用自动获取
-"Enable Express Checkout","允许Express Checkout"
-"Enable PayPal Guest Checkout",启用PayPal来宾结账
-"Express Checkout",快速结账
-"Frontend Experience Settings",前端体验设置
-"Header Background Color",头部背景色
-"Header Border Color",头部边框颜色
-"Header Image URL",头部图像URL
-"Number of Child Authorizations",授权子帐户的数量
-"Order Valid Period (days)","订单有效期(天)"
-"Page Background Color",页面背景色
-"Page Style",页面样式
-Partner,合作伙伴
-"PayPal Billing Agreement Settings","PayPal账单协议设置"
-"PayPal Express Checkout","PayPal Express结账"
-"PayPal Merchant Pages Style",PayPal商业页面样式
-"PayPal Payment Gateways","PayPal Payment网关"
-"PayPal Product Logo",PayPal产品徽标
-"Payflow Link (Includes Express Checkout)","Payflow Link(包括Express Checkout)"
-"Payflow Link and Express Checkout","Payflow Link和Express Checkout"
-"Payflow Pro","Payflow Pro"
-"Payflow Pro (Includes Express Checkout)","Payflow Pro(包括Express Checkout)"
-"Payflow Pro and Express Checkout","Payflow Pro和Express Checkout"
-"Payment Action",支付操作
-"Payment Applicable From",支付适用性表单
-"Payments Advanced (Includes Express Checkout)","Payments Advanced(包括Express Checkout)"
-"Payments Advanced and Express Checkout","Payments Advanced和Express Checkout"
-"Payments Pro (Includes Express Checkout)","Payments Pro (包括Express Checkout)"
-"Payments Pro and Express Checkout","Payments Pro和Express Checkout"
-"Payments Standard","支付标准"
-"Proxy Host",代理主机
-"Proxy Port",代理端口
-"Require CVV Entry",需要CVV项
-"Require Customer's Billing Address",要求客户帐单地址
-"SFTP Credentials",SFTP凭据
-"Sandbox Mode",沙箱模式
-"Scheduled Fetching",计划的获取
-"Send Email Confirmation","发送邮件确认"
-"Settlement Report Settings",处理报告设置
-"Severe 3D Secure Card Validation","提供 3D 安全信用卡验证"
-"Shortcut Buttons Flavor",快捷方式按钮风格
-"Shortcut on Product View",产品视图上的快捷方式
-"Shortcut on Shopping Cart",购物车上的快捷方式
-"Summary Text for Aggregated Cart",聚合购物车的摘要文字
-"Test Mode",测试模式
-"Time of Day",每天的时间段
-"Transfer Cart Line Items",传输购物车内容
-"Transfer Shipping Options",传输送货选项
-"URL method for Cancel URL and Return URL","取消和返回链接的URL方法"
-"Use Proxy",使用代理
-User,用户
-Vendor,供应商
-"Website Payments Pro (Includes Express Checkout)","Website Payments Pro(包括Express Checkout)"
-"Website Payments Pro and Express Checkout","Website Payments Pro和Express Checkout"
-"Website Payments Standard",网站支付标准版
-"Enable Payflow Link","允许Payflow Link"
-"Enable SSL verification","允许SSL校验"
-"Enable this Solution","允许该方案"
-"Required PayPal Settings","必要的PayPal设置"

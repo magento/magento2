@@ -8,6 +8,7 @@ Apply,应用
 "Apply to Shipping Amount",应用给运单额度
 "Are you sure you want to delete the selected coupon(s)?",你是否确定要删除所选折扣券？
 Auto,自动
+"Auto Generated Specific Coupon Codes",自动生成指定的折扣券代码
 "Buy X get Y free (discount amount is Y)","购买 X 即可免费获得 Y（折扣额是Y）"
 "By Fixed value",由固定值
 "By Percentage",按百分比
@@ -112,4 +113,3 @@ Websites,网站
 Yes,是
 "total amount",总数
 "total quantity",总量
-"Auto Generated Specific Coupon Codes",自动生成指定的折扣券代码

@@ -11,6 +11,7 @@ ID,ID
 "Option Title",选项标题
 "Option Title:",选项标题：
 "Please specify a rating title for a store, or we'll just use the default value.",请为店铺指定评级标题或者就使用默认值
+Rating,评级名称
 "Rating Information",评级信息
 "Rating Options",评级选项
 "Rating Title",评级标题
@@ -23,4 +24,3 @@ Visibility,可见性
 "Visible In",可见在
 "You deleted the rating.",已删除评级。
 "You saved the rating.",已存储评级。
-Rating,评级名称

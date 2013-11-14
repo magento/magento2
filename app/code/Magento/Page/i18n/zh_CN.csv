@@ -2,6 +2,10 @@
 "%1 Item(s)","%1 个条目"
 "(ver. %1)","（版本。 %1）"
 "-- Please Select --","-- 请选择 --"
+"1 column",1栏
+"2 columns with left bar",2栏带左边栏
+"2 columns with right bar",2栏带右边栏
+"3 columns",3栏
 "About the calendar",关于日历
 "All Pages",所有页面
 Allow,允许
@@ -9,48 +13,44 @@ Allow,允许
 "Click <a href=""%1"">here</a> if nothing has happened","如果什么都没有发生，请点击 <a href=""%1"">这里</a>"
 Close,关闭
 "Close Window",关闭窗口
-Empty,空
-"Enable JavaScript in your browser to get the best experience on our website!",允许浏览器的JavaScript以便获得网站最好的体验!
-"Go Today",转到今天
-"Help Us to Keep Magento Healthy",帮助我们保证Magento的健康
-Hour,时
-"Items %1 to %2 of %3 total","条目%1到%2 共%3个"
-"JavaScript seems to be disabled in your browser.","你的浏览器似乎禁用了 JavaScript。"
-Language,语言
-Minute,分
-Next,下一个
-Previous,上一个
-Redirecting...,正在重定向...
-"Report All Bugs",报告所有Bug
-"Select Store",选择店铺
-Show,显示
-"This is just a demo store. You can browse and place orders, but nothing will be processed.",这仅是演示店铺。您可以浏览商品和下订单，除此之外什么都不能做。
-"This store uses cookies to make shopping more enjoyable. Learn how cookies work in our <a href=""%1"">privacy policy</a>.","该店铺用cookie使购物更方便。在我们的<a href=""%1"">隐私策略</a>中学习怎样使用cookie。"
-WK,WK
-"Welcome, %1!",欢迎，%1！
-"Your Language",您的语言
-"Your Language:",您的语言：
-"per page",每页
-"1 column",1栏
-"2 columns with left bar",2栏带左边栏
-"2 columns with right bar",2栏带右边栏
-"3 columns",3栏
 Copyright,版权所有
 "Default Description",默认描述
 "Default Keywords",默认关键字
 "Default Robots",默认机器人
 "Default Title",默认标题
 "Display Demo Store Notice",显示预览店铺通知
-"Edit custom instruction of robots.txt File","编辑robots.txt文件的定制指令集"
+"Edit custom instruction of robots.txt File",编辑robots。txt文件的定制指令集
+Empty,空
+"Enable JavaScript in your browser to get the best experience on our website!",允许浏览器的JavaScript以便获得网站最好的体验!
 "Favicon Icon",Favicon图标
 Footer,脚注
+"Go Today",转到今天
 "HTML Head",HTML头
+"Help Us to Keep Magento Healthy",帮助我们保证Magento的健康
+Hour,时
+"Items %1 to %2 of %3 total","条目%1到%2 共%3个"
+"JavaScript seems to be disabled in your browser.","你的浏览器似乎禁用了 JavaScript。"
+Language,语言
 "Logo Image",徽标图像
 "Logo Image Alt",备选徽标图像
+Minute,分
 "Miscellaneous HTML",HTML杂项
 "Miscellaneous Scripts",杂项脚本
+Next,下一个
+Previous,上一个
+Redirecting...,正在重定向...
+"Report All Bugs",报告所有Bug
+"Reset to Defaults",重置回默认
+"Search Engine Robots",搜索引擎机器人
+"Select Store",选择店铺
+Show,显示
+"This is just a demo store. You can browse and place orders, but nothing will be processed.",这仅是演示店铺。您可以浏览商品和下订单，除此之外什么都不能做。
+"This store uses cookies to make shopping more enjoyable. Learn how cookies work in our <a href=""%1"">privacy policy</a>.","该店铺用cookie使购物更方便。在我们的<a href=""%1"">隐私策略</a>中学习怎样使用cookie。"
 "Title Prefix",标题前缀
 "Title Suffix",标题后缀
+WK,WK
 "Welcome Text",欢迎信息
-"Reset to Defaults","重置回默认"
-"Search Engine Robots","搜索引擎机器人"
+"Welcome, %1!",欢迎，%1！
+"Your Language",您的语言
+"Your Language:",您的语言：
+"per page",每页

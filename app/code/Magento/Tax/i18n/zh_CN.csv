@@ -5,16 +5,34 @@
 "Add New Tax Rule",添加新税率规则
 "After Discount",折扣后
 "An error occurred while deleting this tax rate.",当删除税率时发生错误。
+"Apply Customer Tax",应用客户税
+"Apply Discount On Prices",在价格上应用折扣
+"Apply Tax On",将税应用于
 "Are you sure you want to do this?",您是否确认要这样做？
 Back,返回
 "Before Discount",折前
 CSV,CSV
+"Calculation Settings",计算设置
+"Catalog Prices",分类价格
 Code,代码
 Country,国家
 "Custom price if available",可用时的自定义价格
 "Customer Tax Class",客户税务类型
+"Default Country",默认国家
+"Default Post Code",默认发布代码
+"Default State",默认州
+"Default Tax Class for Customer",客户的默认税类
+"Default Tax Class for Product",产品的默认税类
+"Default Tax Destination Calculation",默认税额计算
 "Delete Rate",删除费率
 "Delete Rule",删除规则
+"Display Full Tax Summary",显示完整文字摘要
+"Display Prices",显示价格
+"Display Product Prices In Catalog",在分类中显示产品价格
+"Display Shipping Amount",显示运送量
+"Display Shipping Prices",显示运费
+"Display Subtotal",显示小计
+"Display Zero Tax Subtotal",显示零税额小计
 "Do you really want to delete this tax class?",你确定要删除该税类吗？
 "Do you really want to delete this tax rate?",你真的要删除该税率吗？
 "Edit Rule",修改规则
@@ -34,6 +52,7 @@ Country,国家
 "Inc. Tax",含税
 "Incl. Tax",含税
 "Incl. Tax:",含税：
+"Include Tax In Grand Total",在合计中含税
 "Including Tax",含税
 "Including and Excluding Tax",包含和不包含税
 "Invalid file upload attempt",文件无效的上传企图
@@ -49,8 +68,10 @@ Name,姓名
 "New Tax Rule",新的税规则
 No,否
 None,无
+"Orders, Invoices, Credit Memos Display Settings",订单、收据、信用记录显示设置
 "Original price only",仅原价
 "Please fill all required fields with valid information.",请正确填写所有必填字段。
+"Price Display Settings",价格显示设置
 Priority,优先级
 "Product Tax Class",产品税务类型
 "Range From",范围从
@@ -72,6 +93,8 @@ Sales,销售
 "Shipping (Incl. Tax)",运费（含税）
 "Shipping Excl. Tax (%1)",运费不含税（%1）
 "Shipping Incl. Tax (%1)",运费含税（%1）
+"Shipping Prices",运费
+"Shopping Cart Display Settings",购物车显示设置
 "Something went wrong deleting this rate because of an incorrect rate ID.",由于税率ID不正确，当删除它时发生错误。
 "Something went wrong deleting this rate.",当删除税率时发生错误。
 "Something went wrong deleting this tax class.",当删除税类时发生错误。
@@ -82,11 +105,16 @@ Sales,销售
 "Something went wrong saving this tax rule.",当存储税规则时发生错误。
 "Sort Order",排序顺序
 State,州
+State/Region,州/地区
 "Subtotal (Excl. Tax)",小计（不含税）
 "Subtotal (Excl.Tax)",小计（不含税）
 "Subtotal (Incl. Tax)",小计（含税）
 "Subtotal (Incl.Tax)",小计（含税）
 Tax,传真
+"Tax Calculation Based On",税金的计算基于
+"Tax Calculation Method Based On",税金的计算方法基于
+"Tax Class for Shipping",运费的税类
+"Tax Classes",税类
 "Tax Identifier",税务识别符
 "Tax Rate",税率
 "Tax Rate Information",税率信息
@@ -114,32 +142,3 @@ Yes,是
 "Zip/Post is Range",邮编范围
 "customer group",客户组
 product,产品
-"Apply Customer Tax",应用客户税
-"Apply Discount On Prices",在价格上应用折扣
-"Apply Tax On",将税应用于
-"Calculation Settings",计算设置
-"Catalog Prices",分类价格
-"Default Country",默认国家
-"Default Post Code",默认发布代码
-"Default State",默认州
-"Default Tax Class for Customer","客户的默认税类"
-"Default Tax Class for Product","产品的默认税类"
-"Default Tax Destination Calculation",默认税额计算
-"Display Full Tax Summary",显示完整文字摘要
-"Display Prices",显示价格
-"Display Product Prices In Catalog",在分类中显示产品价格
-"Display Shipping Amount",显示运送量
-"Display Shipping Prices",显示运费
-"Display Subtotal",显示小计
-"Display Zero Tax Subtotal",显示零税额小计
-"Excel XML","Excel XML"
-"Include Tax In Grand Total",在合计中含税
-"Orders, Invoices, Credit Memos Display Settings",订单、收据、信用记录显示设置
-"Price Display Settings",价格显示设置
-"Shipping Prices",运费
-"Shopping Cart Display Settings",购物车显示设置
-State/Region,州/地区
-"Tax Calculation Based On",税金的计算基于
-"Tax Calculation Method Based On",税金的计算方法基于
-"Tax Class for Shipping",运费的税类
-"Tax Classes",税类

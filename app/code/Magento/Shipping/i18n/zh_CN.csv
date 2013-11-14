@@ -1,6 +1,8 @@
 " for more information or ",欲知详情或
 "# of Items (and above)","# 商品（上述）"
 "# of Items vs. Destination","# 商品 vs。 目标"
+"Allow Shipping to Multiple Addresses",允许发送到多个地址
+"Calculate Handling Fee",计算的手续费
 Carrier:,运营商：
 City,城市
 "Close Window",关闭窗口
@@ -11,20 +13,29 @@ Date,日期
 "Delivered on:",发布于：
 "Delivered to:",发布至：
 Description,描述
+"Displayed Error Message",显示的错误信息
 "Divide to equal weight (one request)",拆分为相等重量（申请一次）
 "Duplicate Row #%1 (Country ""%2"", Region/State ""%3"", Zip ""%4"" and Value ""%5"")","重复行 #%1 （国家 ""%2""， 地区/州 ""%3""， 邮编 ""%4"" ，以及值 ""%5""）。"
 Enabled,已启用
 Error:,错误：
 Export,导出
 Fixed,固定
+"Flat Rate",平坦费率
 "Free Shipping",免运费
+"Handling Fee",处理费
 Import,导入
+"Include Virtual Products in Price Calculation",计算的价格中包含虚拟产品
 Info:,信息：
 "Local Time",本地时间
 Location,位置
+"Maximum Qty Allowed for Shipping to Multiple Addresses",为多地址运送的最大数量
+"Method Name",方法的名称
+"Minimum Order Amount",最小订单数量
 N/A,N/A
 None,无
+Options,选项
 "Order Subtotal (and above)",订单小计（以上）
+Origin,原始
 "Per Order",每订单
 "Per Package",每个包裹
 Percent,百分之
@@ -40,9 +51,13 @@ Price,价格
 "Price vs. Destination","价格 vs。 目标"
 Region/State,地区/州
 "Service Type:",服务类型：
+"Ship to Applicable Countries",发送到适用的国家
+"Ship to Specific Countries",发送到指定国家
 "Shipment #",送货单号
 "Shipped or billed on:",发送或扣款于：
 "Shipping Methods",运送方式
+"Shipping Settings",发送设置
+"Show Method if Not Applicable",如果不可用，显示其他方法
 "Signed by:",签名者：
 "Something went wrong while importing table rates.",导入费率表发生错误。
 "Sorry, but we can't deliver to the destination country with this shipping module.",很抱歉，该货运模块不支持运送到目的地国家。
@@ -50,6 +65,8 @@ Region/State,地区/州
 Status:,状态：
 "Store Pickup",店铺取货
 "Street Address",街道地址
+"Street Address Line 2",街道地址第二行
+"Table Rates",表费率
 "The shipping module is not available.",运送模块不可用。
 "There is no tracking available for this shipment.",此运送条目无可用的状态追踪。
 "There is no tracking available.",没有可用的追踪。
@@ -68,23 +85,6 @@ Type,类型
 "Weight (and above)",重量（和以上）
 "Weight vs. Destination","重量 vs。 目的地"
 Weight:,重量：
+"ZIP/Postal Code",邮政编码
 "contact us",联系我们
 "email us at ",发送电子邮件给我们：
-"Allow Shipping to Multiple Addresses",允许发送到多个地址
-"Calculate Handling Fee",计算的手续费
-"Displayed Error Message",显示的错误信息
-"Flat Rate",平坦费率
-"Handling Fee",处理费
-"Include Virtual Products in Price Calculation",计算的价格中包含虚拟产品
-"Maximum Qty Allowed for Shipping to Multiple Addresses","为多地址运送的最大数量"
-"Method Name",方法的名称
-"Minimum Order Amount",最小订单数量
-Options,选项
-Origin,原始
-"Ship to Applicable Countries",发送到适用的国家
-"Ship to Specific Countries",发送到指定国家
-"Shipping Settings",发送设置
-"Show Method if Not Applicable",如果不可用，显示其他方法
-"Street Address Line 2",街道地址第二行
-"Table Rates",表费率
-"ZIP/Postal Code",邮政编码

@@ -183,8 +183,10 @@ Custom,自定义
 "Custom Variable ""%1""","自定义变量 ""%1"""
 "Custom Variables",自定义变量
 Customer,顾客姓名
+"Customer First Name",客户名字
 "Customer Group:",顾客组：
 "Customer Groups",客户组
+"Customer Last Name",客户姓氏
 "Customer Reviews",顾客评论
 "Customer Reviews Report",客户评论报表
 "Customer Shopping Carts",顾客购物车
@@ -256,6 +258,8 @@ Enabled,已启用
 "Entity Attributes",编辑属性
 "Entity Type",实体类型
 Error,错误
+"Error Code",错误代码
+"Error Text",错误文本
 "Excel XML","Excel XML"
 "Excl. Tax",不含税
 "Exclude media folder from backup",从备份中排除媒体文件夹
@@ -270,6 +274,7 @@ Export,导出
 File,文件
 "File System",文件系统
 "File extension not known or unsupported type.",未知的文件扩展名或者不支持的文件类型。
+"First Invoice Created Date",第一张发票的创建日期
 "First Name",名字
 Fixed,固定
 "Flush Catalog Images Cache",清理分类图像缓存
@@ -295,6 +300,7 @@ HTML,HTML
 "HTTP (unsecure)",HTTP（不安全）
 "HTTPS (SSL)",HTTPS（SSL）
 "Helper arguments should not be used in custom layout updates.",Helper参数不应该被使用在定制的布局更新里。
+Hits,提示
 Home,主页
 Hour,时
 ID,ID
@@ -342,6 +348,8 @@ Kb,Kb
 "Last 5 Orders",上五个订单
 "Last 5 Search Terms",上五个搜索条件
 "Last 7 Days",上七天
+"Last Credit Memo Created Date",上次信用记录创建日期
+"Last Invoice Created Date",上一个发票创建日期
 "Last Logged In (%1):",上次登录于（%1）：
 "Last Logged In:",上次登录：
 "Last Name",姓氏
@@ -358,6 +366,7 @@ Locale,区域
 Login,登录
 "Low Stock",库存量低
 "Low Stock Report",地库存报表
+"Magento Admin",Magento管理
 "Magento Admin Panel",Magento管理面板
 "Magento root directory","Magento 根目录"
 "Magento ver. %1",Magento版本%1
@@ -435,6 +444,7 @@ No,否
 "No search modules were registered",未注册搜索模块
 "No wishlist item ID is defined.",已定义的收藏条目ID。
 None,无
+"Not Activated",未激活
 Note:,注意：
 Notes,注意
 Notifications,通知
@@ -450,12 +460,15 @@ OK,确定
 "Online Refunds",在线的退款
 "Only Once (version upgrade)",仅一次（版本升级）
 Optional,可选
+Options,选项
 Order,订单
 "Order #%1 (%2)","订单 #%1 （%2）"
 "Order Count Report",订单数报告
+"Order Created Date",订单创建日期
 "Order ID","订单 ID"
 "Order Total Report",订单总额报表
 "Order Totals",订单总数
+"Order Updated Date",订单更新日期
 "Ordered Products Report",订购的产品报表
 Orders,订单
 "Out of stock",缺货
@@ -560,6 +573,8 @@ Purchased,购买的
 "Purchased Item",已购买内容
 Quantity,数量
 "Queue Date Start",排队开始日期
+"Queue Start Date",队列数据开始
+"Queue Subject",队列主题
 "Read details",阅读详情
 Rebuild,重建
 "Rebuild Catalog Index",重建分类索引
@@ -680,7 +695,9 @@ Store,商店
 Stores,店铺
 Subject,主题
 Submit,提交
+Subscribed,已订阅
 "Subscribed to Newsletter",订阅新闻邮件
+Subscriber,订阅者
 Subtotal,小计
 "Switch/Solo/Maestro Only","仅限 Switch/Solo/Maestro"
 Synchronize,同步
@@ -702,6 +719,7 @@ Template,模板名称
 Text,文字
 "The Comment Text field cannot be empty.",该评论文本框不能为空。
 "The JavaScript/CSS cache has been cleaned.",JavaScript/CSS缓存已清空。
+"The Order Updated Date report is displayed in real-time, and does not need to be refreshed.",该订单更新的日期报告被实时显示，不需要刷新。
 "The URL Rewrite has been deleted.","URL 重写已被删除。"
 "The URL Rewrite has been saved.","URL 重写已保存。"
 "The account has been saved.",帐户已保存。
@@ -741,6 +759,7 @@ Text,文字
 "This email template no longer exists.",邮件模板不再存在。
 "This is a required field.",这是必填区域。
 "This is only a demo store. You can browse and place orders, but nothing will be processed.",这仅是演示店铺。您可以浏览商品和下订单，除此之外什么都不能做。
+"This report uses timezone configuration data. Be sure to refresh lifetime statistics any time you change store timezone.",该报告使用时区配置数据。确保任何时间改变店铺时区时刷新生命周期统计。
 "This section is not allowed.",该单元不被允许。
 "This user no longer exists.",该用户已不存在。
 Time,时间
@@ -768,9 +787,12 @@ Type,类型
 "URL Redirects",URL转向
 "URL Rewrite Information",URL重写信息
 "URL Rewrite Management",URL重写管理
+Unconfirmed,未确认
 Unknown,未知
 Unlimited,无限
 "Unpaid Invoices",位支付的发票
+Unsubscribe,退订
+Unsubscribed,已退订
 Update,更新
 Updated,更新日期
 "Updated At",更新于
@@ -830,6 +852,7 @@ Warning,警告
 "We couldn't create a backup right now. Please try again later.",不能立即创建备份，请稍后再试。
 "We couldn't delete one or more backups.",不能删除一个或多个备份。
 "We couldn't find records for this period.",找不到该时期的记录。
+"We found no problems.",我们未发现问题。
 "We unsubscribed the people you identified.",已经退订了新闻邮件模板已经被成功存储。标识的人。
 "We updated lifetime statistics.",更新了生命周期统计。
 "Web Services",Web服务
@@ -882,26 +905,3 @@ successful,成功
 to,至
 "website(%1) scope",站点（%1）范围
 "{{base_url}} is not recommended to use in a production environment to declare the Base Unsecure URL / Base Secure URL. It is highly recommended to change this value in your Magento <a href=""%1"">configuration</a>.","不建议在生产环境中使用 {{base_url}} 检测 Base Unsecure URL / Base Secure URL。强烈建议在您的Magento<a href=""%1"">配置</a>中更改该值。"
-"Customer First Name",客户名字
-"Customer Last Name",客户姓氏
-"Error Code",错误代码
-"Error Text",错误文本
-"First Invoice Created Date",第一张发票的创建日期
-Hits,提示
-"Last Credit Memo Created Date",上次信用记录创建日期
-"Last Invoice Created Date",上一个发票创建日期
-"Magento Admin",Magento管理
-"Not Activated",未激活
-Options,选项
-"Order Created Date",订单创建日期
-"Order Updated Date",订单更新日期
-"Queue Start Date",队列数据开始
-"Queue Subject",队列主题
-Subscribed,已订阅
-Subscriber,订阅者
-"The Order Updated Date report is displayed in real-time, and does not need to be refreshed.","该订单更新的日期报告被实时显示,不需要刷新。"
-"This report uses timezone configuration data. Be sure to refresh lifetime statistics any time you change store timezone.","该报告使用时区配置数据。确保任何时间改变店铺时区时刷新生命周期统计。"
-Unconfirmed,未确认
-Unsubscribe,退订
-Unsubscribed,已退订
-"We found no problems.","我们未发现问题。"

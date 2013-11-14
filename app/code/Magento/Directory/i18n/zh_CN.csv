@@ -1,31 +1,31 @@
 "-- Please select --",--请选择--
 "--Please select--",--请选择--
+"Allow to Choose State if It is Optional for Country",如果国家的州是可选的那么允许选择州
+"Allowed Currencies",允许的货币
+"Base Currency",基准货币
+"Connection Timeout in Seconds",连接超时的秒数
 Country,国家
 "Country and Format Type combination should be unique",国家和格式类型的组合必须是唯一的
 Currency,币种
+"Currency Options",货币选项
+"Currency Setup",币种设置
+"Default Display Currency",默认显示的币种
 Enabled,已启用
 "FATAL ERROR:",致命错误：
+"Installed Currencies",已安装的币种
 "Please correct the country code: %1.","请纠正货币代码： %1。"
 "Please correct the rates received",请纠正所得比率
 "Please correct the target currency.",请纠正目标货币。
 "Please specify the correct Import Service.",请指定正确导入服务。
+"Scheduled Import Settings",计划的导入设置
+Service,服务
+"State Options",州选项
+"State is Required for",州是必要的
 State/Province,州/省
 "Undefined rate from ""%1-%2"".","未定义的费率 ""%1-%2""。"
 WARNING:,警告：
 "We can't initialize the import model.",不能初始化导入模型。
 "We can't retrieve a rate from %1.",不能从%1检索一个比率。
-"Your current currency is: %1.","您当前货币是： %1。"
-"Allow to Choose State if It is Optional for Country","如果国家的州是可选的那么允许选择州"
-"Allowed Currencies",允许的货币
-"Base Currency",基准货币
-"Connection Timeout in Seconds",连接超时的秒数
-"Currency Options",货币选项
-"Currency Setup",币种设置
-"Default Display Currency",默认显示的币种
-"Installed Currencies",已安装的币种
-"Scheduled Import Settings",计划的导入设置
-Service,服务
-"State Options","州选项"
-"State is Required for","州是必要的"
 Webservicex,Web服务
-"Zip/Postal Code is Optional for","邮编代码是可选的"
+"Your current currency is: %1.","您当前货币是： %1。"
+"Zip/Postal Code is Optional for",邮编代码是可选的

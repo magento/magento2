@@ -1,41 +1,41 @@
 "--Please Select--","-- 请选择 --"
+"API Login ID","API 登录 ID"
+"Accepted Currency",接受的汇率
+"Authorize.net Direct Post","Authorize。net 直接发表"
 "Card Verification Number",卡片验证号码
 "Card Verification Number Visual Reference","信用卡验证号码 视觉参考"
 Close,关闭
 "Credit Card Information",信用卡信息
 "Credit Card Number",信用卡号码
 "Credit Card Type",信用卡类型
+"Credit Card Types",信用卡类型
+"Credit Card Verification",信用卡验证
+Debug,调试
+"Email Customer",发送电子邮件给客户
 Enabled,已启用
 "Expiration Date",过期日期
+"Gateway URL","网关 URL"
 "Invalid transaction ID.",无效的交易ID。
+"Maximum Order Total",最大订单总数
+"Merchant MD5","商家 MD5"
+"Merchant's Email",商家电子邮件
+"Minimum Order Total",最小订单总数
 "New Order Status",新订单状态
 "Order saving error: %1",订单保存错误：%1
+"Payment Action",支付操作
+"Payment from Applicable Countries",从可接受的国家支付
+"Payment from Specific Countries",从指定的国家支付
 "Please choose a payment method.",请选择支付方法。
 "Something went wrong: the paid amount doesn't match the order amount. Please correct this and try again.","发生错误： 付款额订单额不匹配，请纠正后再试。"
 "Sort Order",排序顺序
+"Test Mode",测试模式
 "The transaction was declined because the response hash validation failed.",因为响应哈希校验失败交易被拒绝。
 "There was a payment authorization error.",支付授权发生错误。
 "This payment didn't work out because we can't find this order.",由于找不到订单，支付无法进行。
 "This payment was not authorized because the transaction ID field is empty.",由于交易ID为空所以支付没有通过授权。
 Title,标题
+"Transaction Key",交易密钥
 "We couldn't process your order right now. Please try again later.",现在不能处理您的订单，请稍后再试。
 "What is this?",这是什么？
 "You created the order.",您创建了订单。
 "You'll be asked for your payment details before placing an order.",在下单之前您将被要求提供支付的详细信息。
-"API Login ID","API 登录 ID"
-"Accepted Currency",接受的汇率
-"Authorize.net Direct Post","Authorize。net 直接发表"
-"Credit Card Types",信用卡类型
-"Credit Card Verification",信用卡验证
-Debug,调试
-"Email Customer",发送电子邮件给客户
-"Gateway URL","网关 URL"
-"Maximum Order Total",最大订单总数
-"Merchant MD5","商家 MD5"
-"Merchant's Email",商家电子邮件
-"Minimum Order Total",最小订单总数
-"Payment Action",支付操作
-"Payment from Applicable Countries",从可接受的国家支付
-"Payment from Specific Countries",从指定的国家支付
-"Test Mode",测试模式
-"Transaction Key",交易密钥

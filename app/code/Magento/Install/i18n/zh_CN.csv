@@ -46,6 +46,7 @@ Host,主机
 Installation,安装
 "Installation Guide",安装指南
 "Last Name",姓氏
+"License Agreement",许可协议
 Locale,区域
 "Locale settings",区域设置
 Localization,本地化
@@ -94,5 +95,4 @@ Validation,验证
 Welcome,欢迎
 "You can specify server port, ex.: localhost:3307<br />If you are not using default UNIX socket, you can specify it here instead of host, ex.: /var/run/mysqld/mysqld.sock","您可以指定服务器端口，例如： localhost：3307<br />如果没有使用默认的UNIX socket，则可以在此指定，而不用在主机中指定，例如： /var/run/mysqld/mysqld。sock"
 "You could enable this option to use web server rewrites functionality for improved search engines optimization.",您可以启用该选项，以便通过Web服务器的重写功能改善搜索引擎优化效果。
-"License Agreement",许可协议
 "You're All Set!",您已经设置完毕！

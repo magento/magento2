@@ -1,26 +1,26 @@
 "<strong>Attention</strong>: Captcha is case sensitive.",<strong>注意</strong>：验证码为大小写敏感的。
+"Admin Forgot Password",忘记管理员密码
+"Admin Login",管理员登录
 "After number of attempts to login",登录失败的次数
 Always,总是
-"Incorrect CAPTCHA",不正确的CAPTCHA
-"Incorrect CAPTCHA.",验证码有误。
-"Please enter the letters below",请输入下面的字母
-"Please enter the letters from the image:",请输入图片里的字母：
-"Please type the letters below",请输入下面的字符
-"Reload captcha",刷新验证码
-"Admin Forgot Password","忘记管理员密码"
-"Admin Login","管理员登录"
 CAPTCHA,验证码
 "CAPTCHA Timeout (minutes)",验证码超时（分钟）
 "Case Sensitive",大小写敏感
-"Create user","创建用户"
+"Create user",创建用户
 "Displaying Mode",显示模式
 "Enable CAPTCHA in Admin",在管理界面中启用验证码
 "Enable CAPTCHA on Frontend",在前端启用验证码
 Font,字体
-"Forgot password","忘记密码"
+"Forgot password",忘记密码
 Forms,表单
+"Incorrect CAPTCHA",不正确的CAPTCHA
+"Incorrect CAPTCHA.",验证码有误。
 LinLibertine,LinLibertine
 "Number of Symbols",符号数量
 "Number of Unsuccessful Attempts to Login",不成功的登录企图数量
-"Register during Checkout","在结账时注册"
+"Please enter the letters below",请输入下面的字母
+"Please enter the letters from the image:",请输入图片里的字母：
+"Please type the letters below",请输入下面的字符
+"Register during Checkout",在结账时注册
+"Reload captcha",刷新验证码
 "Symbols Used in CAPTCHA",验证码中使用的符号

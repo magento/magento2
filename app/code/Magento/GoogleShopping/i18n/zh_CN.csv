@@ -1,5 +1,9 @@
 "A total of %1 items(s) have been deleted; a total of %2 items(s) have been updated.",共%1条记录已经被删除;%2条记录已经被更新。
 "A total of %1 product(s) have been added to Google Content.","共%1个产品被添加到Google Content。"
+"Account ID",帐户ID
+"Account Login",账户登录
+"Account Password",账户密码
+"Account Type",账户类型
 "Add Attribute Mapping",添加属性映射
 "Add to Google Content","添加到Google Content"
 "An error has occurred while adding products to google shopping account.","当向Google Shopping账号中添加产品时发生错误。"
@@ -9,14 +13,17 @@ Attribute,属性
 "Attribute set mapping",属性集映射
 "Attribute set mapping was deleted",属性集映射被删除
 "Attributes Mapping",属性映射
+"Attributes Set",属性集
 AuthSub,AuthSub
 "Available Products",可用的产品
 "Captcha has been confirmed.",Captcha已经被确认。
 ClientLogin,客户登录
+"Commerce Search",商业搜索
 Confirm,确认
 "Current Mapping will be reloaded. Continue?","当前映射将被重载。 要继续吗？"
 "Custom attribute, no mapping",定制属性，不映射
 "Delete Mapping",删除映射
+Destinations,目的地
 "Edit attribute set mapping",编辑属性集映射
 "Error: %1","错误： %1"
 "Errors happened during synchronization with Google Shopping","在同步Google Shopping期间发生错误"
@@ -31,6 +38,7 @@ Google,谷歌
 "Google Content Attributes","Google Content属性"
 "Google Content Items","Google Content条目"
 "Google Product Category",谷歌产品分类
+"Google Product Search",谷歌产品搜索
 "Google Shopping Error","Google Shopping错误"
 "Google Shopping item removal process succeded","Google Shopping条目移除过程完成"
 "Google Shopping operation has expired.","Google Shopping操作已经过期。"
@@ -45,6 +53,7 @@ Hosted,托管
 "Operation of adding products to Google Shopping expired.","添加产品到Google Shopping的操作过期。"
 "Please correct the attribute ""%1"" type for Google Shopping. The product with this attribute hasn't been updated in Google Content.","请纠正Google Shopping的属性""%1""类型。 有该属性的产品没有在Google Content里更新。"
 "Please, select Attribute Set and Google Item Type to load attributes",请选择属性集和谷歌条目类型来加载属性
+"Product Ads",产品广告
 "Product synchronization with Google Shopping completed","和Google Shopping的产品同步完成"
 "Products were added to Google Shopping account.","产品已被添加到Google Shopping账号。"
 SKU,SKU
@@ -61,18 +70,9 @@ SKU,SKU
 "The product ""%1"" hasn't been added to Google Content.","产品""%1""还没有被添加Google Content。"
 "There was a Captcha confirmation error: %1","发生Captcha确认错误： %1"
 "This action will update items' attributes and remove items that are not available in Google Content. If an attribute was deleted from the mapping, it will also be deleted from Google. Do you want to continue?","该操作将要更新条目的属性并且移除Google Content中无效的条目。如果一个属性从映射中删除，它也将从Google中删除。你确定要继续吗？"
+"Total Qty Content Items",总共的内容条目数
 "Total of %1 items(s) have been removed from Google Shopping.","共%1个条目已经从Google Shopping移除。"
 "Unable to select a Store View",不能选择店铺视图
-"View Item in Google Content","查看Google Content里的条目"
-"Account ID",帐户ID
-"Account Login","账户登录"
-"Account Password","账户密码"
-"Account Type","账户类型"
-"Attributes Set","属性集"
-"Commerce Search","商业搜索"
-Destinations,"目的地"
-"Google Product Search","谷歌产品搜索"
-"Product Ads","产品广告"
-"Total Qty Content Items","总共的内容条目数"
 "Update Google Shopping Item when Product is Updated","当产品更新时，更新Google Shopping条目"
-"Verifying Meta Tag","检验元数据标签"
+"Verifying Meta Tag",检验元数据标签
+"View Item in Google Content","查看Google Content里的条目"

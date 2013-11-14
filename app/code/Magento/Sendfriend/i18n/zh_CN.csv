@@ -1,4 +1,5 @@
 "Add Recipient",添加收件人
+"Allow for Guests",对来宾允许
 "At least one recipient must be specified.",必须至少指定一个收件人。
 Back,返回
 "Email Address",编辑电子邮件地址
@@ -9,6 +10,9 @@ Email:,电子邮件：
 Enabled,已启用
 "Invalid Sender Email",无效的发送者邮件
 "Invalid Sender Information",无效的发送者信息
+"Limit Sending By",限制发送，通过
+"Max Products Sent in 1 Hour","1 小时内最多产品发送"
+"Max Recipients",最大收件人数量
 "Maximum %1 email addresses allowed",最多允许%1个邮件地址
 "Maximum %1 email addresses allowed.",最多允许%1个邮件地址。
 Message:,信息：
@@ -21,6 +25,7 @@ Name:,姓名：
 "Please enter a correct recipient email address.",请输入正确的收件人邮件地址。
 Recipient:,收件人：
 "Remove Email",删除邮件
+"Select Email Template",选择邮件模板
 "Send Email",发送邮件
 Sender:,发送人：
 "Some emails were not sent.",某些邮件未发送
@@ -30,8 +35,3 @@ Sender:,发送人：
 "We found some problems with the data.",发现数据有问题。
 "You can't send messages more than %1 times an hour.",您不能一小时内发送消息超过%1次。
 "You've met your limit of %1 sends in an hour.",您已经达到了每小时发送的限制数%1。
-"Allow for Guests",对来宾允许
-"Limit Sending By",限制发送，通过
-"Max Products Sent in 1 Hour","1 小时内最多产品发送"
-"Max Recipients",最大收件人数量
-"Select Email Template",选择邮件模板
