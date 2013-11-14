@@ -18,3 +18,11 @@ Price:,价格：
 "You will no longer receive price alerts for this product.",您不再接收此产品的价格提醒。
 "You will no longer receive stock alerts for this product.",您不再接收此产品的库存提醒。
 "You will no longer receive stock alerts.",您不再接收库存提醒。
+"Alert Email Sender",提醒电子邮件发送者
+"Allow Alert When Product Comes Back in Stock",当产品重新有库存时允许提醒
+"Allow Alert When Product Price Changes",当产品价格变更时允许提醒
+"Price Alert Email Template",价格提醒电子邮件模板
+"Product Alerts Run Settings",产品提醒运行设置
+"Sign up for price alert",注册价格提醒
+"Sign up to be notified when this product is back in stock.","当产品回到库存注册被通知。"
+"Stock Alert Email Template",库存提醒电子邮件模版

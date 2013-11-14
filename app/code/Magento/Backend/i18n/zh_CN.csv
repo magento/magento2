@@ -51,3 +51,117 @@ YTD,YTD
 "see error log for details",打开错误日志看详细信息
 "store(%1) scope",店铺（%1）范围
 "website(%1) scope",站点（%1）范围
+"Add Block Names to Hints",添加块名称到提示中
+"Add Secret Key to URLs",添加密钥Key到URL中
+"Add Store Code to Urls",添加店铺代码到URL中
+"Admin Base URL",管理基本URL
+"Admin Session Lifetime (seconds)","管理会话生命周期(秒)"
+"Admin User Emails",管理用户邮件
+"Allow Countries",允许的国家
+"Allow Symlinks",允许的符号链接
+"Allowed IPs (comma separated)",允许的IP（逗号分割）
+"Anchor Text for Next",下一个的锚点文字
+"Anchor Text for Previous",上一个的锚点文字
+"Are you sure you want to delete the selected backup(s)?",你是否确定要删除所选备份？
+"Auto-redirect to Base URL","自定重定向到基本 URL"
+"Base Link URL","基本链接 URL"
+"Base URL for Static Library Files","静态库文件的基础URL"
+"Base URL for Static View Files","静态视图文件的基础URL"
+"Base URL for User Media Files","媒介文件缓存的基础URL"
+"Base URL for View Files Cache","视图文件缓存的基础URL"
+"Base URLs","基础URL"
+"Base URLs (Secure)","基础URL(安全)"
+"CSS Settings","CSS 设置"
+"Cache Type",缓存类型
+"Cookie Domain",Cookie域
+"Cookie Lifetime",Cookie寿命
+"Cookie Path",Cookie路径
+"Cookie Restriction Mode","Cookie 限制模式"
+"Country Options","国家设置"
+"Custom Admin Path",自定义管理路径
+"Custom Admin URL","自定义管理 URL"
+"Custom Email 1",自定义邮件1
+"Custom Email 2",自定义邮件2
+"Customer Support",客户支持
+Debug,调试
+"Default Cookie Settings","默认Cookie设置"
+"Default Country",默认国家
+"Default No-route URL",默认非路由URL
+"Default Pages",默认页面
+"Default Web URL","默认Web URL"
+Developer,开发人员
+"Developer Client Restrictions",开发人员客户端闲置
+"Disable Email Communications",禁用电子邮件通讯
+"Disable Modules Output",禁用模块输出
+"Enabled for Admin",启用管理
+"Enabled for Frontend",为前端启用
+"Environment Update Time",环境更新时间
+"European Union Countries",欧盟成员国
+"Exceptions Log File Name",例外日志文件名
+"First Day of Week",每周第一天
+"Forgot Password Email Template",忘记密码邮件模板
+"Forgot and Reset Email Sender","忘记和重置邮件发送者"
+"General Contact",常规联系人
+"Image Adapter","图片适配器"
+"Image Processing Settings","图片处理设置"
+"JavaScript Settings","JavaScript 设置"
+"Locale Options",区域选项
+"Log Settings",日志设置
+"Login is Case Sensitive",登录信息大小写敏感
+"Logo Image",徽标图像
+"Logo Image Alt",备选徽标图像
+"Mail Sending Settings",邮件发送设置
+"Merge CSS Files",合并CSS文件
+"Merge JavaScript Files",合并JavaScript文件
+"Minify JavaScript Files","缩小JavaScript文件"
+"Offloader header",Offloader头部
+Pagination,轮换
+"Pagination Frame",轮换框架
+"Pagination Frame Skip",跳过轮换框架
+"Port (25)",端口（25）
+"Recovery Link Expiration Period (days)",恢复链接过期周期（天）
+"Return-Path Email",返回路径邮件
+Rollback,回滚
+"Sales Representative",销售代表
+"Search Engines Optimization",搜索引擎优化
+"Secure Base URL for Static Library Files","静态库文件的安全基础URL"
+"Secure Base URL for Static View Files","静态视图文件的安全基础URL"
+"Secure Base URL for User Media Files","用户媒体文件安全基础URL"
+"Secure Base URL for View Files Cache","试图文件缓存的安全基础URL"
+Security,安全
+"Select Media Database",选择媒体数据库
+Services,服务
+"Session Validation Settings",会话验证设置
+"Set Return-Path",设置返回路径
+"Sign Static Files","签署静态文件"
+"Single-Store Mode","单店模式"
+Size(bytes),"尺寸(字节)"
+"Startup Page",启动页面
+"Static Files Settings","静态文件设置"
+"Storage Configuration for Media",媒体的存储配置
+"Store Email Addresses",店铺电子邮件地址
+"Street Address Line 2",街道地址第二行
+"System Log File Name",系统日志文件名
+Tags,标签
+"Template Path Hints",模版路径提示
+"Template Settings",模板设置
+Timezone,时区
+"Translate Inline",翻译内嵌
+"Url Options","URL 选项"
+"Use Custom Admin Path",使用自定义管理员路径
+"Use Custom Admin URL","使用自定义管理 URL"
+"Use HTTP Only",仅使用HTTP
+"Use SID on Frontend","在前端使用 SID"
+"Use Secure URLs in Admin",在管理界面使用安全URL
+"Use Secure URLs in Frontend","在前端使用安全 URL"
+"Use Web Server Rewrites",使用网络服务器重写
+"User-Agent Exceptions","用户代理人异常"
+"Validate HTTP_USER_AGENT","验证 HTTP_USER_AGENT"
+"Validate HTTP_VIA","验证 HTTP_VIA"
+"Validate HTTP_X_FORWARDED_FOR","验证 HTTP_X_FORWARDED_FOR"
+"Validate REMOTE_ADDR","验证 REMOTE_ADDR"
+"Variable ID",变量ID
+"Weekend Days",周末
+"ZIP/Postal Code",邮政编码
+"Enable Single-Store Mode","允许单店模式"
+"Secure Base Link URL","安全基础链接URL"

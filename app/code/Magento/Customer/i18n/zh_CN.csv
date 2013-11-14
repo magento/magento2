@@ -318,3 +318,53 @@ Year,年
 "Your password reset link has expired.",你的密码重设链接已过期。
 ZIP,邮编
 "Zip/Postal Code",邮政编码
+"Account Sharing Options",账户分享选项
+"Address Templates",地址模板
+"Confirmation Link Email",确认链接邮件
+"Create New Account Options",创建新帐户选项
+"Customer Configuration",客户配置
+"Default Email Domain",默认邮件域
+"Default Group",默认组
+"Default Value for Disable Automatic Group Changes Based on VAT ID","禁用根据 VAT ID 自动分配顾客组变动的默认值"
+"Default Welcome Email",默认欢迎邮件
+"Edit Account Info",编辑帐户信息
+"Email Sender",电子邮件发送人
+"Enable Automatic Assignment to Customer Group",启用顾客群体的自动分配
+"Forgot Email Template",忘记邮件模板
+"Forgot Your Password",忘记您的密码
+"Generate Human-Friendly Customer ID","生成人性化客户 ID"
+"Group for Invalid VAT ID","无效 VAT ID 组"
+"Group for Valid VAT ID - Domestic","无效 VAT ID 组 - 国内"
+"Group for Valid VAT ID - Intra-Union","有效 VAT ID 组 - 联邦内"
+"Last Activity",上次活动
+"Last URL",最后一个URL
+"Login Options",登录选项
+"Name and Address Options",名字和地址选项
+"Number of Lines in a Street Address","街道地址行数"
+"Online Customers Options",在线客户选项
+"Online Minutes Interval",在线分钟数间隔
+"Password Options",密码选项
+"Password Template Email Sender","密码模板邮件地址发送者"
+"Password forgotten",密码忘记
+"Prefix Dropdown Options",前缀下拉菜单选项
+"Recovery Link Expiration Period (days)",恢复链接过期周期（天）
+"Redirect Customer to Account Dashboard after Logging in",登录后，重定向客户到账户显示板
+"Remind Email Template",提醒邮件模板
+"Require Emails Confirmation",需要确认电子邮件
+"Reset Password Template","Reset Password Template"
+"Session Start Time",会话开始时间
+"Share Customer Accounts",分享客户账户
+"Show Date of Birth",显示出生日期
+"Show Gender",显示性别
+"Show Middle Name (initial)",显示中间名（初始）
+"Show Prefix",显示前缀
+"Show Suffix",显示后缀
+"Show Tax/VAT Number",显示税/增值税号码
+"Show VAT Number on Frontend","在前端显示VAT号"
+"Suffix Dropdown Options",后缀下拉菜单选项
+"Tax Calculation Based On",税金的计算基于
+"Text One Line",一行文字
+"Validate on Each Transaction",每次交易都验证
+"Validation Error Group",验证错误组
+"Welcome Email",欢迎邮件
+n/a,不可用

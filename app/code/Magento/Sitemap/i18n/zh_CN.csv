@@ -34,3 +34,15 @@ Sitemap,站点结构图
 Weekly,每周
 "XML Sitemap",XML站点地图
 Yearly,每年
+"Add Images into Sitemap","添加图片到站点地图"
+"CMS Pages Options",CMS包选项
+"Categories Options",分类选项
+"Enable Submission to Robots.txt","允许提交到Robots.txt"
+"Generation Settings",常规设置
+"Last Generated",上一次生成时间
+"Link for Google",Google的链接
+"Maximum File Size","最大文件尺寸"
+"Maximum No of URLs Per File","每个文件最大的URL数量"
+"Products Options",产品选项
+"Search Engine Submission Settings","搜索引擎提交设置"
+"Sitemap File Limits","站点地图文件限制"

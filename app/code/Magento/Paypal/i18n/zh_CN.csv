@@ -326,3 +326,89 @@ Yes,是
 "Your payment has been declined. Please try again.",您的支付已经被拒绝。请重试。
 "Zip/Postal Code",邮政编码
 "eBay Auction Payment",eBay拍卖付款
+"3D Secure","3D 安全"
+"API Authentication Methods",API身份验证方法
+"API Password",API密码
+"API Username",API用户名
+"API Uses Proxy",API使用代理
+"Allow in Billing Agreement Wizard",允许使用记账协议向导
+"Allowed Credit Card Types",允许的信用卡类型
+"Authorization Honor Period (days)","授权信用期(天)"
+"Basic Settings - PayPal Express Checkout","基础设置 - PayPal Express Checkout"
+"Basic Settings - PayPal Payflow Link","基础设置 - PayPal Payflow Link"
+"Basic Settings - PayPal Payflow Pro","基础设置 - PayPal Payflow Pro"
+"Basic Settings - PayPal Payments Advanced","基础设置 - PayPal Payments Advanced"
+"Basic Settings - PayPal Payments Pro","基础设置 - PayPal Payments Pro"
+"Basic Settings - PayPal Payments Standard","基础设置 - PayPal Payments Standard"
+"Basic Settings - PayPal Website Payments Pro","基础设置 - PayPal Website Payments Pro"
+"Basic Settings - PayPal Website Payments Standard","基础设置 - PayPal Website Payments Standard"
+"Billing Agreement Signup","账单协议注册"
+"CVV Entry is Editable","CVV入口是可以编辑的"
+"Centinel API URL","Centinel API URL"
+"Centinel Custom API URL","Centinel 自定义 API URL"
+"Countries Payment Applicable From",各国支付可用情况表单
+"Credit Card Settings",信用卡设置
+"Custom Endpoint Hostname or IP-Address",自定义端点主机名或IP地址
+"Custom Path",自定义路径
+"Debug Mode",调试模式
+"Email Associated with PayPal Merchant Account",关联给PayPal银行帐户的电子邮件地址
+"Email Associated with PayPal Merchant Account (Optional)","与PayPal商业账户关联的邮件(可选)"
+"Enable Automatic Fetching",启用自动获取
+"Enable Express Checkout","允许Express Checkout"
+"Enable PayPal Guest Checkout",启用PayPal来宾结账
+"Express Checkout",快速结账
+"Frontend Experience Settings",前端体验设置
+"Header Background Color",头部背景色
+"Header Border Color",头部边框颜色
+"Header Image URL",头部图像URL
+"Number of Child Authorizations",授权子帐户的数量
+"Order Valid Period (days)","订单有效期(天)"
+"Page Background Color",页面背景色
+"Page Style",页面样式
+Partner,合作伙伴
+"PayPal Billing Agreement Settings","PayPal账单协议设置"
+"PayPal Express Checkout","PayPal Express结账"
+"PayPal Merchant Pages Style",PayPal商业页面样式
+"PayPal Payment Gateways","PayPal Payment网关"
+"PayPal Product Logo",PayPal产品徽标
+"Payflow Link (Includes Express Checkout)","Payflow Link(包括Express Checkout)"
+"Payflow Link and Express Checkout","Payflow Link和Express Checkout"
+"Payflow Pro","Payflow Pro"
+"Payflow Pro (Includes Express Checkout)","Payflow Pro(包括Express Checkout)"
+"Payflow Pro and Express Checkout","Payflow Pro和Express Checkout"
+"Payment Action",支付操作
+"Payment Applicable From",支付适用性表单
+"Payments Advanced (Includes Express Checkout)","Payments Advanced(包括Express Checkout)"
+"Payments Advanced and Express Checkout","Payments Advanced和Express Checkout"
+"Payments Pro (Includes Express Checkout)","Payments Pro (包括Express Checkout)"
+"Payments Pro and Express Checkout","Payments Pro和Express Checkout"
+"Payments Standard","支付标准"
+"Proxy Host",代理主机
+"Proxy Port",代理端口
+"Require CVV Entry",需要CVV项
+"Require Customer's Billing Address",要求客户帐单地址
+"SFTP Credentials",SFTP凭据
+"Sandbox Mode",沙箱模式
+"Scheduled Fetching",计划的获取
+"Send Email Confirmation","发送邮件确认"
+"Settlement Report Settings",处理报告设置
+"Severe 3D Secure Card Validation","提供 3D 安全信用卡验证"
+"Shortcut Buttons Flavor",快捷方式按钮风格
+"Shortcut on Product View",产品视图上的快捷方式
+"Shortcut on Shopping Cart",购物车上的快捷方式
+"Summary Text for Aggregated Cart",聚合购物车的摘要文字
+"Test Mode",测试模式
+"Time of Day",每天的时间段
+"Transfer Cart Line Items",传输购物车内容
+"Transfer Shipping Options",传输送货选项
+"URL method for Cancel URL and Return URL","取消和返回链接的URL方法"
+"Use Proxy",使用代理
+User,用户
+Vendor,供应商
+"Website Payments Pro (Includes Express Checkout)","Website Payments Pro(包括Express Checkout)"
+"Website Payments Pro and Express Checkout","Website Payments Pro和Express Checkout"
+"Website Payments Standard",网站支付标准版
+"Enable Payflow Link","允许Payflow Link"
+"Enable SSL verification","允许SSL校验"
+"Enable this Solution","允许该方案"
+"Required PayPal Settings","必要的PayPal设置"

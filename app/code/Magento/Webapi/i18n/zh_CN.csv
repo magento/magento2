@@ -40,3 +40,11 @@
 "Unable to find a user to be deleted.",找不到要删除的用户。
 "Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","警告！\r\n该操作将移那些除已经分配角色的用户\r\n你确定吗？"
 "Web Api","Web Api"
+"Default Response Charset","默认响应字符集"
+"Enable WSDL Cache","允许WSDL缓存"
+"Magento Web API","Magento Web API"
+"No Roles Found","找不到角色"
+"No Users Found","找不到用户"
+"Role Users Information","角色用户信息"
+"SOAP Settings","SOAP设置"
+"Web Services Configuration","Web服务配置"

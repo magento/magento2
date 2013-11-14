@@ -22,3 +22,4 @@ Role,角色
 "Your password confirmation must match your password.",密码确认与密码不匹配。
 "Your password must be at least %1 characters.",您的密码至少需要%1个字符。
 "Your password must include both numeric and alphabetic characters.",密码必须同时包含数字和字符。
+"Reset Password Template","重置密码模板"

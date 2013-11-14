@@ -22,3 +22,20 @@ Title,标题
 "What is this?",这是什么？
 "You created the order.",您创建了订单。
 "You'll be asked for your payment details before placing an order.",在下单之前您将被要求提供支付的详细信息。
+"API Login ID","API 登录 ID"
+"Accepted Currency",接受的汇率
+"Authorize.net Direct Post","Authorize。net 直接发表"
+"Credit Card Types",信用卡类型
+"Credit Card Verification",信用卡验证
+Debug,调试
+"Email Customer",发送电子邮件给客户
+"Gateway URL","网关 URL"
+"Maximum Order Total",最大订单总数
+"Merchant MD5","商家 MD5"
+"Merchant's Email",商家电子邮件
+"Minimum Order Total",最小订单总数
+"Payment Action",支付操作
+"Payment from Applicable Countries",从可接受的国家支付
+"Payment from Specific Countries",从指定的国家支付
+"Test Mode",测试模式
+"Transaction Key",交易密钥

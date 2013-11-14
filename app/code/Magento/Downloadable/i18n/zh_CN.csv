@@ -68,3 +68,11 @@ attachment,附件
 download,下载
 inline,内联
 sample,示例
+"Default Link Title",默认链接标题
+"Default Maximum Number of Downloads",下载数量默认最大值
+"Default Sample Title",默认范例标题
+"Disable Guest Checkout if Cart Contains Downloadable Items",如果购物车包含可下载内容，则禁止来宾结账
+"Downloadable Product Options",可下载产品选项
+"Open Links in New Window",在新窗口打开链接
+"Order Item Status to Enable Downloads",订单条目状态为允许下载
+"Use Content-Disposition",用户内容描述

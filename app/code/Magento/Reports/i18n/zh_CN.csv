@@ -106,3 +106,32 @@ Year,年
 Yes,是
 "Your Recently Compared",您最近的比较
 "Your Recently Viewed",您最近看过的
+"Are you sure you want to refresh lifetime statistics? There can be performance impact during this operation.",您确认要刷新生命期数据吗？此操作过程可能会影响性能。
+"Are you sure you want to refresh statistics for last day?","您确定要刷新最后一天的统计吗？"
+"Average (Approved)","平均(已批准)"
+"Compared Product Images Only Template","比较的产品图片仅模板"
+"Compared Product Names Only Template","比较产品名仅模板"
+"Compared Products Grid Template",比对的产品网格模板
+"Compared Products Images and Names Template","比较产品图片和名字模板"
+"Compared Products List Template",比对的产品列表模板
+"Current Month Starts",当前月起始
+"Default Recently Compared Products Count",默认最近比较的产品数量
+"Default Recently Viewed Products Count",默认最近查看的产品数量
+"Last Review",上次评论
+"List of Products Recently Compared and Removed from the Compare List by Visitor",最近由访客从比较列表中比较和删除的产品列表
+"List of Products Recently Viewed by Visitor",最近由访客浏览过的产品列表
+"Number of Products to display",显示产品的数量
+"Recently Viewed/Compared Products",最近查看/比较过的产品
+"Refresh Lifetime Statistics",刷新寿命状态
+"Refresh Statistics for the Last Day",刷新昨天的状态
+Report,报告
+"Show for Current",显示最新值
+"Stock Quantity",库存数量
+"Viewed Products Grid Template",查看过的产品网格模板
+"Viewed Products Images Only Template","查看产品图片仅模板"
+"Viewed Products Images and Names Template","查看产品图片和名字模板"
+"Viewed Products List Template",查看的产品列表模板
+"Viewed Products Names Only Template","查看图片名字仅模板"
+"Year-To-Date Starts",开始的年月日
+undefined,未定义
+"Ordered Quantity","订购数量"

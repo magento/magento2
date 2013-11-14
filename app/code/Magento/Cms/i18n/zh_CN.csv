@@ -83,3 +83,24 @@ Title,标题
 "We cannot upload the file.",不能更新该文件。
 "We found a directory with the same name. Please try another folder name.",发现目录同名，请换一个再试
 px.,像素
+"Anchor Custom Text",自定义文本锚点
+"Anchor Custom Title",自定义标题锚点
+"Browser Capabilities Detection",浏览器功能检测
+"CMS Home Page",CMS首页
+"CMS No Cookies Page","CMS 无 Cookie 页面"
+"CMS No Route Page","CMS 无路由页面"
+"CMS Page","CMS 页面"
+"CMS Page Link","CMS 页面链接"
+"CMS Page Link Block Template",CMS页面链接块模板
+"CMS Page Link Inline Template",CMS页面链接内联摸板
+"CMS Static Block","CMS 静态区块"
+"CMS Static Block Default Template","CMS 静态区块默认模板"
+"Content Management",内容管理
+"Contents of a Static Block",静态区块的内容
+"Enable WYSIWYG Editor","启用 WYSIWYG 编辑器"
+"If empty, the Page Title will be used",如果为空，将使用页面标题
+"Link to a CMS Page","链接到 CMS 页面"
+"Redirect to CMS-page if Cookies are Disabled","如果 Cookie 被禁用，则重定向到 CMS 页面"
+"Show Breadcrumbs for CMS Pages","显示 CMS 页面的面包屑"
+"Show Notice if JavaScript is Disabled","如果 JavaScript 被禁用，则显示通知"
+"WYSIWYG Options","WYSIWYG 选项"

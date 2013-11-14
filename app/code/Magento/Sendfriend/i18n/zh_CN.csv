@@ -30,3 +30,8 @@ Sender:,发送人：
 "We found some problems with the data.",发现数据有问题。
 "You can't send messages more than %1 times an hour.",您不能一小时内发送消息超过%1次。
 "You've met your limit of %1 sends in an hour.",您已经达到了每小时发送的限制数%1。
+"Allow for Guests",对来宾允许
+"Limit Sending By",限制发送，通过
+"Max Products Sent in 1 Hour","1 小时内最多产品发送"
+"Max Recipients",最大收件人数量
+"Select Email Template",选择邮件模板

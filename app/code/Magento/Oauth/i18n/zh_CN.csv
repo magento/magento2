@@ -23,3 +23,10 @@ Secret,密钥
 "The nonce/timestamp combination has already been used.",该特定场合/时间戳组合已经被使用。
 "Unexpected error. Unable to create OAuth Consumer account.",不期望的错误。不能创建OAuth消费者账户。
 "Unexpected error. Unable to post data to consumer.",不期望的错误。不能提交数据到消费者。
+"Cleanup Probability","清除可能性"
+"Cleanup Settings","清除设置"
+"Consumer Settings","消费者设置"
+"Expiration Period","过期时长"
+OAuth,OAuth
+"OAuth consumer credentials HTTP Post maxredirects","OAuth消费者证书HTTP Post最大重定向"
+"OAuth consumer credentials HTTP Post timeout","OAuth消费者证书HTTP Post超时"

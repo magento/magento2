@@ -742,3 +742,78 @@ lb,lb
 "the order confirmation email was sent",订单确认电子邮件已发送
 "the shipment email is not sent",运送电子邮件未发送
 "the shipment email was sent",运送电子邮件已发送
+"Allow Reorder",允许记录
+"Anchor Custom Title",自定义标题锚点
+"Checkout Totals Sort Order",按结账总数对订单排序
+"Credit Memo Comment Email Sender",信用记录评论电子邮件发送程序
+"Credit Memo Comment Email Template",信用记录评论电子邮件模板
+"Credit Memo Comment Email Template for Guest",针对来宾的信用记录评论电子邮件模板
+"Credit Memo Email Sender",信用记录电子邮件发送程序
+"Credit Memo Email Template",信用记录电子邮件模板
+"Credit Memo Email Template for Guest",针对来宾的信用记录电子邮件模板
+"Default Status",默认状态
+"Default Template",默认模板
+"Description Message",描述信息
+"Display Order ID in Header",在头部显示订单ID
+"Error to Show in Shopping Cart",在购物车中显示时出错
+"Hide Customer IP","隐藏顾客 IP 地址"
+"Invoice Comment Email Sender",发票评论电子邮件发送程序
+"Invoice Comment Email Template",发票评论电子邮件模板
+"Invoice Comment Email Template for Guest",针对来宾的发票评论电子邮件模板
+"Invoice Email Sender",发票邮件发送程序
+"Invoice Email Template",发票邮件模板
+"Invoice Email Template for Guest",针对来宾的发票邮件模板
+"Invoice and Packing Slip Design",发票与包装标签设计
+"Logo for HTML Print View","HTML 打印视图标志"
+"Logo for PDF Print-outs (200x50)","适用于 PDF 打印的标志 （200x50）"
+"Minimum Amount",最小数量
+"Minimum Order Amount",最小订单数量
+"Multi-address Description Message",多个地址描述消息
+"Multi-address Error to Show in Shopping Cart",购物车中多个地址显示错误
+"New Order Confirmation Email Sender",新订单确认邮件发送程序
+"New Order Confirmation Template",新订单确认模板
+"New Order Confirmation Template for Guest",针对来宾的新订单确认模板
+"New Order RSS",新订单RSS
+"Order Comment Email Sender",订单评论邮件发送程序
+"Order Comment Email Template",订单评论邮件模板
+"Order Comment Email Template for Guest",针对来宾的订单评论邮件模板
+"Orders and Returns Search Form",订单与退货搜索表单
+"PDF Print-outs",PDF版打印输出
+"Print All",打印全部
+"Print Credit Memos",打印信用记录
+"Print Invoices",打印发票
+"Print Packing Slips",打印包裹清单
+"Profile Payments",配置文件支付
+"Profile Schedule",配置文件计划
+"Recurring Profile View",循环配置文件视图
+Reference,参考
+"Sales Emails",销售邮件
+"Send Credit Memo Comment Email Copy To",发送信用记录评论邮件副本到
+"Send Credit Memo Comments Email Copy Method",发送信用记录评论邮件副本的方法
+"Send Credit Memo Email Copy Method",发送信用记录邮件副本的方法
+"Send Credit Memo Email Copy To",发送信用记录邮件副本至
+"Send Invoice Comment Email Copy To",发送发票评论邮件副本至
+"Send Invoice Comments Email Copy Method",发送发票评论邮件副本的方法
+"Send Invoice Email Copy Method",发送发票邮件副本的方法
+"Send Invoice Email Copy To",发送发票邮件副本到
+"Send Order Comment Email Copy To",发送订单评论邮件副本至
+"Send Order Comments Email Copy Method",发送订单评论邮件副本的方法
+"Send Order Email Copy Method",发送订单邮件副本的方法
+"Send Order Email Copy To",发送订单邮件副本至
+"Send Shipment Comment Email Copy To",发送送货评论邮件副本至
+"Send Shipment Comments Email Copy Method",发送运单评论邮件副本的方法
+"Send Shipment Email Copy Method",发送运单邮件副本的方法
+"Send Shipment Email Copy To",发送送货邮件副本至
+"Shipment Comment Email Sender",送货评论邮件发送者
+"Shipment Comment Email Template",送货评论邮件模板
+"Shipment Comment Email Template for Guest",针对来宾的运单评论邮件模板
+"Shipment Email Sender",运单邮件发送程序
+"Shipment Email Template",送货邮件模板
+"Shipment Email Template for Guest",来宾送货邮件模板
+"Signed-up Point","注册的点数"
+"State Code and Title","状态码和标题"
+"There are no orders yet.","还没有订单。"
+"Use Aggregated Data (beta)",使用聚合数据（测试版）
+"Validate Each Address Separately in Multi-address Checkout",分别验证多地址复选框内的每一个地址
+"ZIP/Post Code",邮政编码
+"Orders Based on This Profile","基于该配置的订单"

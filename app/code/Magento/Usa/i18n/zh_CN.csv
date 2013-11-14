@@ -234,3 +234,61 @@ Yes,是
 "Your Packaging",您的包裹
 cm,厘米
 inch,英寸
+"Access ID",访问ID
+"Access License Number",访问许可编号
+"Account ID",帐户ID
+"Account Number",帐户号码
+"Additional Protection Configuration Value",额外的保护已启用
+"Additional Protection Enabled",额外的保护已启用
+"Additional Protection Min Subtotal",额外的保护减去小计
+"Additional Protection Value",额外保护的价值
+"Additional Protection Value Rounding Method",额外保护价值凑整方法
+"Allowed Methods",允许的方式
+"Calculate Handling Fee",计算的手续费
+"Content Type",内容类型
+"DHL (Deprecated)",DHL（不赞成）
+"Default Package Height",默认包裹高度
+"Default Package Length",默认包裹长度
+"Default Package Width",默认包裹宽度
+"Destination Type",目的地类型
+"Displayed Error Message",显示的错误信息
+"Divide Order Weight",拆分订单重量
+"Domestic Shipment Days",国内运送天数
+Dropoff,自取
+"Enable Negotiated Rates",启用协商费率
+"Enabled for Checkout",为付款启用
+"Free Method",免费方法
+"Free Shipping Amount Threshold","免费运送数量限制"
+"Gateway URL","网关 URL"
+"Gateway XML URL","网关 XML URL"
+"Handling Applied",需要的处理
+"Handling Fee",处理费
+"Hub ID","Hub ID"
+"International Shipment Days",国际送货日
+"Live account","活动账号"
+Machinable,可加工
+"Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)",最大包裹重量（可支持的最大包裹重量请咨询您的物流公司）
+"Meter Number",仪表编号
+"Minimum Package Weight (Please consult your shipping carrier for minimum supported shipping weight)",最小包裹重量（可支持的最小包裹重量请咨询您的物流公司）
+"Origin of the Shipment",始发运送
+"Package Description",包裹描述
+"Packages Request Type",包裹请求类型
+Packaging,打包
+"Pickup Method",取货方法
+"Ready time","准备时间"
+"Residential Delivery",住宅送货
+"Sandbox Mode",沙箱模式
+"Secure Gateway URL",安全网关URL
+"Ship to Applicable Countries",发送到适用的国家
+"Ship to Specific Countries",发送到指定国家
+"Shipment Contains Hazardous Materials",运单包含危险物品
+"Shipment Dutiable",运单应纳税
+"Shipment Duty Payment Type",运单税务支付类型
+"Shipment Type",运送类型
+"Shipper Number",运单号
+"Shipping Key",运单密钥
+"Shipping Key (International)",运单密钥（国际）
+"Show Method if Not Applicable",如果不可用，显示其他方法
+"Tracking XML URL","追踪XML URL"
+"UPS Type",UPS类型
+"Weight Unit",重量单位

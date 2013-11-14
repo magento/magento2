@@ -25,3 +25,7 @@ Name,姓名
 Time,时间
 Type,类型
 "We can't save the Cron expression.",不能存储Cron表达式。
+"Backup Type",备份类型
+"Enable Scheduled Backup",启用计划备份
+"Maintenance Mode",维护模式
+"Scheduled Backup Settings",计划备份设置

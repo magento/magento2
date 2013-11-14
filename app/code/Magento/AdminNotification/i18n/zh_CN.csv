@@ -32,3 +32,8 @@ major,主要
 minor,次要
 notice,注意
 "{{base_url}} is not recommended to use in a production environment to declare the Base Unsecure URL / Base Secure URL. It is highly recommended to change this value in your Magento <a href=""%1"">configuration</a>.","不推荐在产品环境中使用{{base_url}}来声明基础非URL（安全/非安全）。强烈推荐改变Magento<a href=""%1"">配置</a>中的值。"
+"Date Added",添加日期
+"Last Update",最后更新
+Severity,严重程度
+"Update Frequency",更新频率
+"Use HTTPS to Get Feed",使用HTTPS获取源

@@ -12,3 +12,4 @@ OAuth,OAuth
 "Please enter endpoint for oAuth.","Please enter endpoint for oAuth."
 "The integration '%1' has been saved.","The integration '%1' has been saved."
 "This integration no longer exists.","This integration no longer exists."
+"No Integrations Found","No Integrations Found"

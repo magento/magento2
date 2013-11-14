@@ -252,6 +252,27 @@ Total:,总计：
 "Your order # is: %1.","您的订单编号为： %1"
 "Your order cannot be completed at this time as there is no payment methods available for it.",由于付款方法不可用，现在无法完成您的订单。
 "Your order cannot be completed at this time as there is no shipping methods available for it. Please make necessary changes in your shipping address.",由于送货方法不可用，现在无法完成您的订单。请更改您的收货地址。
+"Your order has been received.","您的订单已经被收到"
 "Your order number is ",您的订单号是
 "Your recurring payment profiles:",您的付款档案：
 "Zip/Postal Code",邮政编码
+"After Adding a Product Redirect to Shopping Cart",添加产品后重定向至购物车
+"Allow Guest Checkout",允许来宾结账
+"Checkout Options",支付选项
+"Configurable Product Image",可配置产品图片
+"Display Cart Summary",显示购物车概要
+"Display Shopping Cart Sidebar",显示购物车侧边栏
+"Enable Onepage Checkout",启用单页面结账
+"Enable Terms and Conditions",启用条款和条件
+"Grouped Product Image",已分组的产品图片
+"Maximum Display Recently Added Item(s)",最大显示近期添加的条目
+"My Cart Link",我的购物车链接
+"Payment Failed Email Receiver","支付失败邮件接收者"
+"Payment Failed Email Sender",支付失败电子邮件发送者
+"Payment Failed Emails",支付失败电子邮件
+"Payment Failed Template",支付失败模板
+"Quote Lifetime (days)",报价生命期（天）
+"Require Customer To Be Logged In To Checkout",需要顾客登录才能结账
+"Send Payment Failed Email Copy Method",发送支付失败电子邮件复制方法
+"Send Payment Failed Email Copy To",发送支付失败电子邮件拷贝至
+"Shopping Cart Sidebar",购物车侧边栏

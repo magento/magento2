@@ -36,3 +36,12 @@ Update,更新
 "We don't have as many ""%1"" as you requested.","我们没有你要的（""%1""）那么多数量。"
 "You can buy %1 only in increments of %2.",您能以%2的增量购买%1。
 "You can buy this product only in increments of %1.",您能以%1的增量购买该产品。
+"Automatically Return Credit Memo Item to Stock",自动返回信用备忘条目到库存
+"Decrease Stock When Order is Placed",当下订单时，减少库存
+"Display Out of Stock Products",显示缺货产品
+"Display products availability in stock in the frontend","在前端的库存显示产品有效性"
+Inventory,盘点
+"Only X left Threshold","仅 X左侧阈值"
+"Product Stock Options",产品库存选项
+"Set Items' Status to be In Stock When Order is Cancelled",如果订单被取消，设置商品的状态为有货
+"Stock Options",库存选项

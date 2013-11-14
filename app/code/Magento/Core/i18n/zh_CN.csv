@@ -275,3 +275,7 @@ Yes,是
 "Your design change for the specified store intersects with another one, please specify another date range.",您对指定商店设计的更改和另一个有交叉，请重新指定日期范围。
 "database ""%1""","数据库 ""%1"""
 "start typing to search category",开始输入来搜索分类
+"Blocks HTML output","块HTML输出"
+"Collections Data","集合数据"
+Layouts,布局
+Translations,翻译

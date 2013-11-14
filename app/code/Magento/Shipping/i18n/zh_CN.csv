@@ -70,3 +70,21 @@ Type,类型
 Weight:,重量：
 "contact us",联系我们
 "email us at ",发送电子邮件给我们：
+"Allow Shipping to Multiple Addresses",允许发送到多个地址
+"Calculate Handling Fee",计算的手续费
+"Displayed Error Message",显示的错误信息
+"Flat Rate",平坦费率
+"Handling Fee",处理费
+"Include Virtual Products in Price Calculation",计算的价格中包含虚拟产品
+"Maximum Qty Allowed for Shipping to Multiple Addresses","为多地址运送的最大数量"
+"Method Name",方法的名称
+"Minimum Order Amount",最小订单数量
+Options,选项
+Origin,原始
+"Ship to Applicable Countries",发送到适用的国家
+"Ship to Specific Countries",发送到指定国家
+"Shipping Settings",发送设置
+"Show Method if Not Applicable",如果不可用，显示其他方法
+"Street Address Line 2",街道地址第二行
+"Table Rates",表费率
+"ZIP/Postal Code",邮政编码

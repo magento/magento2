@@ -15,3 +15,17 @@ WARNING:,警告：
 "We can't initialize the import model.",不能初始化导入模型。
 "We can't retrieve a rate from %1.",不能从%1检索一个比率。
 "Your current currency is: %1.","您当前货币是： %1。"
+"Allow to Choose State if It is Optional for Country","如果国家的州是可选的那么允许选择州"
+"Allowed Currencies",允许的货币
+"Base Currency",基准货币
+"Connection Timeout in Seconds",连接超时的秒数
+"Currency Options",货币选项
+"Currency Setup",币种设置
+"Default Display Currency",默认显示的币种
+"Installed Currencies",已安装的币种
+"Scheduled Import Settings",计划的导入设置
+Service,服务
+"State Options","州选项"
+"State is Required for","州是必要的"
+Webservicex,Web服务
+"Zip/Postal Code is Optional for","邮编代码是可选的"

@@ -87,3 +87,43 @@ USPS,USPS
 Yes,是
 "You will be redirected to GoogleCheckout in a few seconds.","几秒后您将被重定向到Google Checkout。"
 "You will be redirected to the Google Checkout website when you place an order.","当您下单时页面将被转到Google Checkout网站。"
+"Allowed Methods",允许的方式
+"Carrier Calculated Methods",承运商计算的方式
+"Checkout Image Style",结账图片风格
+"Continue Shopping URL","继续购物 URL"
+Debug,调试
+"Default Package Height (in)","默认包裹高度 （in）"
+"Default Package Length (in)","默认包裹长度 （in）"
+"Default Package Width (in)","默认包裹宽度 （in）"
+"Default Price for Methods",默认价格
+"Delivery Address Category",送货地址分类
+"Delivery Schedule",发货计划
+"Disable Default Tax Tables",禁止默认税率表
+"Enable Carrier Calculated",启用承运人计算
+"Enable Digital Delivery",启用数字交付
+"Enable Flat Rate",启用平坦费率
+"Enable Merchant Calculated",启用分行计算
+"Google API","Google API"
+"Google Checkout","Google Checkout"
+"Google Checkout Shipping - Carrier Calculated","Google Checkout 送货 - 承运人计算"
+"Google Checkout Shipping - Digital Delivery","Google Checkout 送货 - 数字交付"
+"Google Checkout Shipping - Flat Rate","Google Checkout 送货 - 平坦费率"
+"Google Checkout Shipping - Merchant Calculated","Google Checkout 送货 - 分行计算"
+"Hide Cart Contents",隐藏购物车内容
+"Merchant ID",分行ID
+"Merchant Key",分行密钥
+Method,方式
+"Rate 1 Amount","评级 1 数量"
+"Rate 1 Ship To Applicable Countries","评级 1 运送到适用的国家"
+"Rate 1 Ship to Specific Countries","评级 1 运送到特定国家"
+"Rate 1 Title","比率 1 标题"
+"Rate 2 Amount","比率 2 数量"
+"Rate 2 Ship To Applicable Countries","比率2 发货到可接受国家"
+"Rate 2 Ship to Specific Countries","比率 2 发货到指定国家"
+"Rate 2 Title","比率 2 标题"
+"Rate 3 Amount","比率 3 数量"
+"Rate 3 Ship To Applicable Countries","比率 3 发货到可接受国家"
+"Rate 3 Ship to Specific Countries","比率 3 发货到指定国家"
+"Rate 3 Title","比率 3 标题"
+Sandbox,沙箱
+"Secure Callback URL",安全回拨URL

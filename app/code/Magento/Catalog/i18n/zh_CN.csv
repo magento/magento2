@@ -573,3 +573,91 @@ save,保存
 "select all",全选
 "start typing to search category",开始输入来搜索分类
 "unselect all",撤销全选
+"86400 by default, if not set. To refresh instantly, clear the Blocks HTML Output cache.","如果未设置默认86400秒。为了立即刷新，清除块HTML输出缓存。"
+"Date & Time Custom Options","日期和时间定制设置"
+"Additional Information",额外信息
+"All products","所有产品"
+"All products - recently added products, New products - products marked as new","所有产品-最新添加的产品，新产品-标记为""新""的产品"
+"Allow All Products per Page",每页面允许显示的所有产品
+"Allow Dynamic Media URLs in Products and Categories",在产品和分类中允许使用动态媒体URL
+"Anchor Custom Text",自定义文本锚点
+"Anchor Custom Title",自定义标题锚点
+"Apply MAP (Default Value)",MAP应用（预设值）
+"Block after Info Column",信息栏之后阻止
+"Cache Lifetime (Seconds)",缓存生存时间（秒）
+"Catalog Category Link",分类类别链接
+"Catalog New Products List",分类新产品列表
+"Catalog Price Scope",分类价格范围
+"Catalog Product Link",分类产品链接
+"Category Link Block Template",分类链接块模板
+"Category Link Inline Template",分类链接内联摸板
+"Category Top Navigation",分类顶部导航
+"Category URL Suffix","分类 URL 后缀"
+"Create Permanent Redirect for URLs if URL Key Changed","如果 URL 键有变动，为该 URL 创建永久重定向"
+"Date Fields Order",日期字段顺序
+"Default ""What's This"" Text Message","默认“这是什么” 文字信息"
+"Default Popup Text Message",默认弹出窗口文字信息
+"Default Price Navigation Step",默认价格导航步骤
+"Display Actual Price",显示实际价格
+"Display Page Control","显示页码控制"
+"Display Price Interval as One Price",将价格间隔显示为一个价格
+"Display Product Count",显示产品数量
+"Display Type","Display Type"
+"Enable MAP",启用映射
+Frontend,前端
+"If empty, the Category Name will be used",如果为空，则使用分类名称
+"Interval Division Limit",区间划分限制
+"Layered Navigation",分层导航
+"Link to a Specified Category",链接到指定的分类
+"Link to a Specified Product",链接到指定产品
+"List Mode",列表模式
+"List of Products that are set as New",名单被定为新产品
+"Look for our special back-to-school items and save bunches!","查找特价的back-to-school条目并存储一批！"
+"Mask for Meta Description","为元数据描述的伪装"
+"Mask for Meta Keywords","为元数据关键字的伪装"
+"Mask for Meta Title","为元数据标题的伪装"
+"Mask for SKU",,"为SKU的伪装"
+"Maximal Depth",最大深度
+"Maximum Number of Price Intervals",价格间隔最大数量
+"Minimum Advertised Price",最低广告价格
+"New Products Grid Template",新产品网格模板
+"New Products List Template",新产品列表模板
+"New Products Names Only Template","新产品名字仅仅模板"
+"New products","新产品"
+"Number of Products per Page","每页产品数量"
+"Number of Products to Display",显示的产品数量
+"Our customer service is available 24/7.","我们的客户服务24小时/7天有效."
+"Page Title Separator",页面标题分隔器
+"Price Navigation Step Calculation",价格导航步骤计算
+"Product Image Placeholders",产品图像占位符
+"Product Image Watermarks",产品图像水印
+"Product Info Column",产品信息栏
+"Product Link Block Template",产品链接区块模板
+"Product Link Inline Template",产品链接内联模板
+"Product Listing Sort by",产品列表排列顺序
+"Product URL Suffix",产品URL前缀
+"Products per Page on Grid Allowed Values",网格允许的数值中的每页产品数量
+"Products per Page on Grid Default Value",网格默认值每页产品
+"Products per Page on List Allowed Values",列表允许值每页产品
+"Products per Page on List Default Value",列表默认数值中的每页产品数量
+SKU,SKU
+"Search Engine Optimizations",搜索引擎优化
+Set,设置名称
+"Time Format",时间格式
+"Use Canonical Link Meta Tag For Categories","类别使用规范链接 Meta 标签"
+"Use Canonical Link Meta Tag For Products",为产品使用标准的链接元数据标签
+"Use Categories Path for Product URLs","产品 URL 使用分类路径"
+"Use Flat Catalog Category",使用平面目录产品分类
+"Use Flat Catalog Product",使用平面目录产品
+"Use JavaScript Calendar","使用 JavaScript 日历"
+"Use Static URLs for Media Content in WYSIWYG for Catalog",为分类的所见即所得编辑中的媒体内容使用静态URL
+Watermark,水印
+"Watermark Default Size",水印默认大小
+"Watermark Opacity, Percent",水印不透明度，百分比
+"Watermark Position",水印位置
+"Year Range",年份范围
+"Display Type","显示类型"
+"If empty, the Product Name will be used","如果为空，产品名字将被使用"
+"New Products Images Only Template","新的产品图片仅模板"
+"New Products Images and Names Template","新的图片和名字模板"
+"Product Fields Auto-Generation","产品字段自动产生"

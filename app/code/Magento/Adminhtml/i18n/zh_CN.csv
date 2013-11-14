@@ -882,3 +882,26 @@ successful,成功
 to,至
 "website(%1) scope",站点（%1）范围
 "{{base_url}} is not recommended to use in a production environment to declare the Base Unsecure URL / Base Secure URL. It is highly recommended to change this value in your Magento <a href=""%1"">configuration</a>.","不建议在生产环境中使用 {{base_url}} 检测 Base Unsecure URL / Base Secure URL。强烈建议在您的Magento<a href=""%1"">配置</a>中更改该值。"
+"Customer First Name",客户名字
+"Customer Last Name",客户姓氏
+"Error Code",错误代码
+"Error Text",错误文本
+"First Invoice Created Date",第一张发票的创建日期
+Hits,提示
+"Last Credit Memo Created Date",上次信用记录创建日期
+"Last Invoice Created Date",上一个发票创建日期
+"Magento Admin",Magento管理
+"Not Activated",未激活
+Options,选项
+"Order Created Date",订单创建日期
+"Order Updated Date",订单更新日期
+"Queue Start Date",队列数据开始
+"Queue Subject",队列主题
+Subscribed,已订阅
+Subscriber,订阅者
+"The Order Updated Date report is displayed in real-time, and does not need to be refreshed.","该订单更新的日期报告被实时显示,不需要刷新。"
+"This report uses timezone configuration data. Be sure to refresh lifetime statistics any time you change store timezone.","该报告使用时区配置数据。确保任何时间改变店铺时区时刷新生命周期统计。"
+Unconfirmed,未确认
+Unsubscribe,退订
+Unsubscribed,已退订
+"We found no problems.","我们未发现问题。"

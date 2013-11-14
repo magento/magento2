@@ -91,3 +91,16 @@ Website,网站
 "You have been unsubscribed.",您已经退订。
 "You selected an invalid queue.",您选择了一个无效的队列。
 "Your subscription has been confirmed.",您的订阅已确认。
+"Allow Guest Subscription",允许游客订阅
+"Confirmation Email Sender",确认电子邮件发送者
+"Confirmation Email Template",确认电子邮件模版
+"Need to Confirm",需要确认
+Processed,已处理
+"Queue End",队列完成
+"Queue Start",队列开始
+Recipients,收件人
+"Subscription Options",订阅选项
+"Success Email Sender",成功电子邮件发送者
+"Success Email Template",成功电子邮件模板
+"Unsubscription Email Sender",退订邮件发送程序
+"Unsubscription Email Template",退订邮件模板

@@ -34,3 +34,20 @@ Title,标题
 "Verical list",垂直列表
 "Waiting Authorization",等待身份验证
 "You will be redirected to Ogone website when you place an order.",在下单时，您会被重定向到Ogone的网站。
+"Background Color of Ogone Template","Ogone 模板的背景颜色"
+"Button Background Color of the Ogone Template","Ogone 模板的按钮背景颜色"
+"Button Text Color of the Ogone Template","Ogone 模板的的按钮文本颜色"
+"Font Family of the Ogone Template","Ogone 模板的字体库"
+"Gateway URL","网关 URL"
+"Hash All Parameters",哈希所有参数
+"Hashing Algorithm",哈希算法
+"Layout of Payment Methods",支付方法布局
+"Logo of the Ogone Template",Ogone模板的徽标
+"Payment Action",支付操作
+"Payment Template",支付模板
+"SHA-IN Pass Phrase",SHA-IN通路
+"SHA-OUT Pass Phrase","SHA-OUT 通路"
+"Table Background Color of the Ogone Template",Ogone模板的表格背景色
+"Table Text Color of the Ogone Template",Ogone表格的文字颜色
+"Text Color of the Ogone Template",Ogone模板的文字颜色
+"Title of the Ogone Template",Ogone模板的名称

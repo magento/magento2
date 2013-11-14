@@ -32,3 +32,5 @@ Yes,是
 "You can leave this box empty if you don't want to add a gift message for the whole order.",如果你不想为整个订单添加礼物留言请留空。
 "You can leave this box empty if you don't want to add a gift message for this address.",如果你不想为该地址添加礼物留言请留空。
 "You can leave this box empty if you don't want to add a gift message to this item.",如果你不想为该条目添加礼物留言请留空。
+"Allow Gift Messages for Order Items",允许为订单条目添加礼品消息
+"Allow Gift Messages on Order Level",允许按订单级别添加礼品消息

@@ -24,3 +24,4 @@ Role,Role
 "Warning!rnThis action will remove this user from already assigned rolernAre you sure?","Warning!rnThis action will remove this user from already assigned rolernAre you sure?"
 "Warning!rnThis action will remove those users from already assigned rolesrnAre you sure?","Warning!rnThis action will remove those users from already assigned rolesrnAre you sure?"
 "Your password must be at least %1 characters.","Your password must be at least %1 characters."
+"Reset Password Template","Reset Password Template"
