@@ -62,7 +62,7 @@ abstract class AbstractCondition
     protected $_arrayInputTypes = array();
 
     /**
-     * @var \Magento\Core\Model\View\Url
+     * @var \Magento\View\Url
      */
     protected $_viewUrl;
 

@@ -23,16 +23,17 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Configure Wish list Item" type="page">
-    <referenceBlock name="product.info">
-        <block class="Magento\Wishlist\Block\Item\Configure" name="product.info.addto" as="addto" template="item/configure/addto.phtml"/>
-    </referenceBlock>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <update handle="catalog_product_view"/>
+    <referenceContainer name="product.info.main">
+        <block class="Magento\Wishlist\Block\Item\Configure" name="product.info.addto" as="addto" template="Magento_Wishlist::item/configure/addto.phtml"/>
+    </referenceContainer>
     <referenceBlock name="product.info.options.wrapper.bottom">
         <action method="unsetChild">
-            <argument name="name" xsi:type="string">product.info.addto.additional</argument>
+            <argument name="name" xsi:type="string">product.info.addtocart.additional</argument>
         </action>
         <action method="append">
-            <argument name="element" xsi:type="string">product.info.addto.additional</argument>
+            <argument name="element" xsi:type="string">product.info.addtocart.additional</argument>
         </action>
     </referenceBlock>
 </layout>

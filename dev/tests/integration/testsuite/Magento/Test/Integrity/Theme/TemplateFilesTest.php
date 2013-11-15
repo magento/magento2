@@ -53,7 +53,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
             );
             try {
                 $templateFilename = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()
-                    ->get('Magento\Core\Model\View\FileSystem')
+                    ->get('Magento\View\FileSystem')
                     ->getFilename($file, $params);
                 $this->assertFileExists($templateFilename);
             } catch (\PHPUnit_Framework_ExpectationFailedException $e) {

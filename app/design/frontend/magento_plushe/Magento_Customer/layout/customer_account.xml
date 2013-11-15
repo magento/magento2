@@ -30,6 +30,4 @@
             <argument name="class" xsi:type="string">account</argument>
         </action>
     </referenceBlock>
-    <remove name="catalog.compare.sidebar"/>
-    <remove name="tags_popular"/>
 </layout>

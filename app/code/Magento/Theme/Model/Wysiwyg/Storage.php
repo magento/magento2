@@ -79,7 +79,7 @@ class Storage
     protected $_objectManager;
 
     /**
-     * @var \Magento\Core\Model\Image\AdapterFactory
+     * @var \Magento\Image\AdapterFactory
      */
     protected $_imageFactory;
 
@@ -89,13 +89,13 @@ class Storage
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Theme\Helper\Storage $helper
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\Image\AdapterFactory $imageFactory
+     * @param \Magento\Image\AdapterFactory $imageFactory
      */
     public function __construct(
         \Magento\Filesystem $filesystem,
         \Magento\Theme\Helper\Storage $helper,
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\Image\AdapterFactory $imageFactory
+        \Magento\Image\AdapterFactory $imageFactory
     ) {
         $this->_filesystem = $filesystem;
         $this->_filesystem->setIsAllowCreateDirectories(true);

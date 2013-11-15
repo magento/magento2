@@ -82,7 +82,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_optZipCountries = null;
 
     /**
-     * @var \Magento\Core\Model\Cache\Type\Config
+     * @var \Magento\App\Cache\Type\Config
      */
     protected $_configCacheType;
 
@@ -113,7 +113,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
 
     /**
      * @param \Magento\Core\Helper\Context $context
-     * @param \Magento\Core\Model\Cache\Type\Config $configCacheType
+     * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Directory\Model\Resource\Country\Collection $countryCollection
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regCollFactory,
      * @param \Magento\Core\Helper\Data $coreHelper
@@ -123,7 +123,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      */
     public function __construct(
         \Magento\Core\Helper\Context $context,
-        \Magento\Core\Model\Cache\Type\Config $configCacheType,
+        \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\Directory\Model\Resource\Country\Collection $countryCollection,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regCollFactory,
         \Magento\Core\Helper\Data $coreHelper,

@@ -82,11 +82,9 @@ abstract class AbstractPdf extends \Magento\Object
     protected $string;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Core\Model\LocaleInterface
      */
-    protected $_coreData;
+    protected $locale;
 
     /**
      * Core store config
@@ -127,7 +125,6 @@ abstract class AbstractPdf extends \Magento\Object
 
     /**
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Core\Model\Translate $translate
@@ -136,13 +133,13 @@ abstract class AbstractPdf extends \Magento\Object
      * @param \Magento\Sales\Model\Order\Pdf\Config $pdfConfig
      * @param \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory
      * @param \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory
+     * @param \Magento\Core\Model\LocaleInterface $locale
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Stdlib\String $string,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Core\Model\Translate $translate,
@@ -151,10 +148,11 @@ abstract class AbstractPdf extends \Magento\Object
         \Magento\Sales\Model\Order\Pdf\Config $pdfConfig,
         \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory,
         \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory,
+        \Magento\Core\Model\LocaleInterface $locale,
         array $data = array()
     ) {
         $this->_paymentData = $paymentData;
-        $this->_coreData = $coreData;
+        $this->locale = $locale;
         $this->string = $string;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_translate = $translate;
@@ -380,7 +378,7 @@ abstract class AbstractPdf extends \Magento\Object
             );
         }
         $page->drawText(
-            __('Order Date: ') . $this->_coreData->formatDate(
+            __('Order Date: ') . $this->locale->formatDate(
                 $order->getCreatedAtStoreDate(), 'medium', false
             ),
             35,

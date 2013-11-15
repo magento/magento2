@@ -77,9 +77,9 @@ try {
         $fallbackFactory->createViewFileRule());
     $copyRules = $generator->getCopyRules();
 
-    $cssHelper = new \Magento\Core\Helper\Css($filesystem, $dirs);
+    $cssUrlResolver = new \Magento\View\Url\CssResolver($filesystem, $dirs);
     $deployment = new \Magento\Tools\View\Generator\ThemeDeployment(
-        $cssHelper,
+        $cssUrlResolver,
         $config->getDestinationDir(),
         __DIR__ . '/config/permitted.php',
         __DIR__ . '/config/forbidden.php',

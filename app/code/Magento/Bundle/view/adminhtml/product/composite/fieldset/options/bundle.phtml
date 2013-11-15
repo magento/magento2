@@ -26,7 +26,7 @@
 ?>
 
 <?php /* @var $this \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Bundle */ ?>
-<?php $options = $this->helper('Magento\Core\Helper\Data')->decorateArray($this->getOptions()); ?>
+<?php $options = $this->decorateArray($this->getOptions()); ?>
 <?php if (count($options)): ?>
 <div id="catalog_product_composite_configure_fields_bundle" class="<?php echo $this->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
     <h4><?php echo __('Bundle Items') ?></h4>

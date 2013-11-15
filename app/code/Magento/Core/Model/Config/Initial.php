@@ -43,12 +43,12 @@ class Initial
 
     /**
      * @param \Magento\Core\Model\Config\Initial\Reader $reader
-     * @param \Magento\Core\Model\Cache\Type\Config $cache
+     * @param \Magento\App\Cache\Type\Config $cache
      * @param string $cacheId
      */
     public function __construct(
         \Magento\Core\Model\Config\Initial\Reader $reader,
-        \Magento\Core\Model\Cache\Type\Config $cache,
+        \Magento\App\Cache\Type\Config $cache,
         $cacheId = 'initial_config'
     ) {
         $data = $cache->load($cacheId);

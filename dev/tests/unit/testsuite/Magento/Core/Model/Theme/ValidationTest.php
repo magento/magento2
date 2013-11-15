@@ -35,7 +35,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     /**
      * Test validator with valid data
      *
-     * @covers \Magento\Core\Model\Theme\Validator::validate
+     * @covers \Magento\View\Design\Theme\Validator::validate
      */
     public function testValidateWithValidData()
     {
@@ -43,9 +43,9 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
         $themeMock = new \Magento\Object();
         $themeMock->setData($this->_getThemeValidData());
 
-        /** @var $validatorMock \Magento\Core\Model\Theme\Validator */
+        /** @var $validatorMock \Magento\View\Design\Theme\Validator */
         $validatorMock = $this->getMock(
-            'Magento\Core\Model\Theme\Validator', array('_setThemeValidators'), array(), '', false
+            'Magento\View\Design\Theme\Validator', array('_setThemeValidators'), array(), '', false
         );
 
         $versionValidators = array(
@@ -63,7 +63,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     /**
      * Test validator with invalid data
      *
-     * @covers \Magento\Core\Model\Theme\Validator::validate
+     * @covers \Magento\View\Design\Theme\Validator::validate
      */
     public function testValidateWithInvalidData()
     {
@@ -74,9 +74,9 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
         /** @var $helper \Magento\Core\Helper\Data */
         $helper = $this->getMockBuilder('Magento\Core\Helper\Data')->disableOriginalConstructor()->getMock();
 
-        /** @var $validatorMock \Magento\Core\Model\Theme\Validator */
+        /** @var $validatorMock \Magento\View\Design\Theme\Validator */
         $validatorMock = $this->getMock(
-            'Magento\Core\Model\Theme\Validator', array('_setThemeValidators'), array($helper), '', true
+            'Magento\View\Design\Theme\Validator', array('_setThemeValidators'), array($helper), '', true
         );
 
         $codeValidators = array(

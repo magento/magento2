@@ -39,7 +39,7 @@ class Js extends \Magento\Core\Helper\AbstractHelper
     protected $_translateData = null;
 
     /**
-     * @var \Magento\Core\Model\View\Url
+     * @var \Magento\View\Url
      */
     protected $_viewUrl;
 
@@ -53,12 +53,12 @@ class Js extends \Magento\Core\Helper\AbstractHelper
     /**
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Helper\Context $context
-     * @param \Magento\Core\Model\View\Url $viewUrl
+     * @param \Magento\View\Url $viewUrl
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Helper\Context $context,
-        \Magento\Core\Model\View\Url $viewUrl
+        \Magento\View\Url $viewUrl
     ) {
         $this->_coreData = $coreData;
         parent::__construct($context);

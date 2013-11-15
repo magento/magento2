@@ -107,7 +107,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     public function filterVisibleThemes()
     {
-        $this->addTypeFilter(array(\Magento\Core\Model\Theme::TYPE_PHYSICAL, \Magento\Core\Model\Theme::TYPE_VIRTUAL));
+        $this->addTypeFilter(
+            array(
+                \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL,
+                \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL
+            )
+        );
         return $this;
     }
 
@@ -190,7 +195,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     ) {
 
         $this->addAreaFilter(\Magento\Core\Model\App\Area::AREA_FRONTEND)
-            ->addTypeFilter(\Magento\Core\Model\Theme::TYPE_PHYSICAL);
+            ->addTypeFilter(\Magento\View\Design\ThemeInterface::TYPE_PHYSICAL);
         if ($page) {
             $this->setPageSize($pageSize)->setCurPage($page);
         }
@@ -202,11 +207,11 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param string $area
      * @param int $type
-     * @return $this
+     * @return \Magento\Core\Model\Resource\Theme\Collection
      */
     public function filterThemeCustomizations(
         $area = \Magento\Core\Model\App\Area::AREA_FRONTEND,
-        $type = \Magento\Core\Model\Theme::TYPE_VIRTUAL
+        $type = \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL
     ) {
         $this->addAreaFilter($area)->addTypeFilter($type);
         return $this;

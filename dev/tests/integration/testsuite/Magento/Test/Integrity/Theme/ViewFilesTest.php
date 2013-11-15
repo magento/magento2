@@ -49,22 +49,22 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
                 try {
                     $params = array('area' => $area, 'themeId' => $themeId);
                     $viewFile = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()
-                        ->get('Magento\Core\Model\View\FileSystem')
+                        ->get('Magento\View\FileSystem')
                         ->getViewFile($file, $params);
                     $this->assertFileExists($viewFile);
 
-                    $fileParts = explode(\Magento\Core\Model\View\Service::SCOPE_SEPARATOR, $file);
+                    $fileParts = explode(\Magento\View\Service::SCOPE_SEPARATOR, $file);
                     if (count($fileParts) > 1) {
                         $params['module'] = $fileParts[0];
                     }
                     if (pathinfo($file, PATHINFO_EXTENSION) == 'css') {
                         $errors = array();
                         $content = file_get_contents($viewFile);
-                        preg_match_all(\Magento\Core\Helper\Css::REGEX_CSS_RELATIVE_URLS, $content, $matches);
+                        preg_match_all(\Magento\View\Url\CssResolver::REGEX_CSS_RELATIVE_URLS, $content, $matches);
                         foreach ($matches[1] as $relativePath) {
                             $path = $this->_addCssDirectory($relativePath, $file);
                             $pathFile = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()
-                                ->get('Magento\Core\Model\View\FileSystem')
+                                ->get('Magento\View\FileSystem')
                                 ->getViewFile($path, $params);
                             if (!is_file($pathFile)) {
                                 $errors[] = $relativePath;

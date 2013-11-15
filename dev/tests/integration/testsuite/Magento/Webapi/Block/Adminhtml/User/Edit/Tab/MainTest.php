@@ -42,7 +42,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
     protected $_layout;
 
     /**
-     * @var \Magento\Core\Model\BlockFactory
+     * @var \Magento\View\Element\BlockFactory
      */
     protected $_blockFactory;
 
@@ -57,7 +57,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_layout = $this->_objectManager->get('Magento\View\LayoutInterface');
-        $this->_blockFactory = $this->_objectManager->get('Magento\Core\Model\BlockFactory');
+        $this->_blockFactory = $this->_objectManager->get('Magento\View\Element\BlockFactory');
         $this->_block = $this->_blockFactory->createBlock('Magento\Webapi\Block\Adminhtml\User\Edit\Tab\Main');
         $this->_layout->addBlock($this->_block);
     }

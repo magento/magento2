@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,13 +27,8 @@
  */
 namespace Magento\Core\Model\Theme\Image;
 
-class Path
+class Path implements \Magento\View\Design\Theme\Image\PathInterface
 {
-    /**
-     * Image preview path
-     */
-    const PREVIEW_DIRECTORY_PATH = 'theme/preview';
-
     /**
      * Default theme preview image
      */
@@ -44,33 +37,33 @@ class Path
     /**
      * @var \Magento\App\Dir
      */
-    protected $_dir;
+    protected $dir;
 
     /**
-     * @var \Magento\Core\Model\View\Url
+     * @var \Magento\View\Url
      */
-    protected $_viewUrl;
+    protected $viewUrl;
 
     /**
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\UrlInterface
      */
-    protected $_storeManager;
+    protected $storeManager;
 
     /**
      * Initialize dependencies
      *
      * @param \Magento\App\Dir $dir
-     * @param \Magento\Core\Model\View\Url $viewUrl
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\View\Url $viewUrl
+     * @param \Magento\UrlInterface $storeManager
      */
     public function __construct(
         \Magento\App\Dir $dir,
-        \Magento\Core\Model\View\Url $viewUrl,
-        \Magento\Core\Model\StoreManager $storeManager
+        \Magento\View\Url $viewUrl,
+        \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
-        $this->_dir = $dir;
-        $this->_viewUrl = $viewUrl;
-        $this->_storeManager = $storeManager;
+        $this->dir = $dir;
+        $this->viewUrl = $viewUrl;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -80,7 +73,7 @@ class Path
      */
     public function getPreviewImageDirectoryUrl()
     {
-        return $this->_storeManager->getStore()->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_MEDIA)
+        return $this->storeManager->getStore()->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_MEDIA)
             . self::PREVIEW_DIRECTORY_PATH . '/';
     }
 
@@ -91,7 +84,7 @@ class Path
      */
     public function getPreviewImageDefaultUrl()
     {
-        return $this->_viewUrl->getViewFileUrl(self::DEFAULT_PREVIEW_IMAGE);
+        return $this->viewUrl->getViewFileUrl(self::DEFAULT_PREVIEW_IMAGE);
     }
 
     /**
@@ -101,7 +94,7 @@ class Path
      */
     public function getImagePreviewDirectory()
     {
-        return $this->_dir->getDir(\Magento\App\Dir::MEDIA) . DIRECTORY_SEPARATOR
+        return $this->dir->getDir(\Magento\App\Dir::MEDIA) . DIRECTORY_SEPARATOR
             . str_replace('/', DIRECTORY_SEPARATOR, self::PREVIEW_DIRECTORY_PATH);
     }
 
@@ -113,7 +106,7 @@ class Path
     public function getTemporaryDirectory()
     {
         return implode(DIRECTORY_SEPARATOR, array(
-            $this->_dir->getDir(\Magento\App\Dir::MEDIA), 'theme', 'origin'
+            $this->dir->getDir(\Magento\App\Dir::MEDIA), 'theme', 'origin'
         ));
     }
 }

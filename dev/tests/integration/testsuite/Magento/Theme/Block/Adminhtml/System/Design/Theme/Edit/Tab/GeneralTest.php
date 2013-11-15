@@ -48,7 +48,7 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
             ->get('Magento\View\LayoutInterface');
         $this->_theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\View\Design\ThemeInterface');
-        $this->_theme->setType(\Magento\Core\Model\Theme::TYPE_VIRTUAL);
+        $this->_theme->setType(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL);
         $this->_block = $this->_layout
             ->createBlock('Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\General');
     }

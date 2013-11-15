@@ -19,12 +19,13 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="welcome-msg">
-    <p class="hello"><strong><?php echo __('Hello, %1!', $this->escapeHtml($this->getCustomerName())) ?></strong></p>
-    <p><?php echo __('From your dashboard you can review recent account activity and edit your account information.') ?></p>
+<div class="block dashboard welcome">
+    <div class="title"><strong><?php echo __('Hello, %1!', $this->escapeHtml($this->getCustomerName())) ?></strong></div>
+    <div class="content">
+        <p><?php echo __('From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information.') ?></p>
+    </div>
 </div>

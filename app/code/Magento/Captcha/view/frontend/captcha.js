@@ -50,7 +50,7 @@
             $.ajax({
                 url: this.options.url,
                 type: 'post',
-                async:false,
+                async: false,
                 dataType: 'json',
                 context: this,
                 data: {

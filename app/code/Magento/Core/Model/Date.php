@@ -40,18 +40,6 @@ class Date
     private $_offset = 0;
 
     /**
-     * Current system offset in seconds
-     *
-     * @var int
-     */
-    private $_systemOffset = 0;
-
-    /**
-     * @var \Magento\Core\Model\StoreManager
-     */
-    protected $_storeManager;
-
-    /**
      * @var \Magento\Core\Model\LocaleInterface
      */
     protected $_locale;
@@ -64,21 +52,8 @@ class Date
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Core\Model\LocaleInterface $locale
     ) {
-        $this->_systemOffset = $this->calculateOffset();
-        $this->_storeManager = $storeManager;
         $this->_locale = $locale;
-        $this->_offset = $this->calculateOffset($this->_getConfigTimezone());
-    }
-
-    /**
-     * Gets the store config timezone
-     *
-     * @return string
-     */
-    protected function _getConfigTimezone()
-    {
-        return $this->_storeManager->getStore()
-            ->getConfig('general/locale/timezone');
+        $this->_offset = $this->calculateOffset($locale->getConfigTimezone());
     }
 
     /**

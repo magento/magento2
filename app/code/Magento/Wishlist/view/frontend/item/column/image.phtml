@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -27,7 +26,8 @@
 /* @var \Magento\Wishlist\Model\Item $item */
 $item = $this->getItem();
 $product = $item->getProduct();
+$imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
 ?>
-<a class="product-image" href="<?php echo $this->getProductUrl($item) ?>" title="<?php echo $this->escapeHtml($product->getName()) ?>">
-    <img src="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($product, 'small_image')->resize(113, 113); ?>" width="113" height="113" alt="<?php echo $this->escapeHtml($product->getName()) ?>" />
+<a class="product photo" href="<?php echo $this->getProductUrl($item) ?>" title="<?php echo $this->escapeHtml($product->getName()) ?>">
+    <?php echo $imageBlock->init($product, 'wishlist_thumbnail')->toHtml() ?>
 </a>

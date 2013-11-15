@@ -53,13 +53,13 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $pageAssets = $page->getAssets();
 
         $fixtureAssets = array(
-            array('name'   => 'test_css', 'type' => \Magento\Core\Model\View\Publisher::CONTENT_TYPE_CSS,
+            array('name'   => 'test_css', 'type' => \Magento\View\Publisher::CONTENT_TYPE_CSS,
                   'params' => array()),
-            array('name'   => 'test_css_vde', 'type' => \Magento\Core\Model\View\Publisher::CONTENT_TYPE_CSS,
+            array('name'   => 'test_css_vde', 'type' => \Magento\View\Publisher::CONTENT_TYPE_CSS,
                   'params' => array('flag_name' => 'vde_design_mode')),
-            array('name'   => 'test_js', 'type' => \Magento\Core\Model\View\Publisher::CONTENT_TYPE_JS,
+            array('name'   => 'test_js', 'type' => \Magento\View\Publisher::CONTENT_TYPE_JS,
                   'params' => array()),
-            array('name'   => 'test_js_vde', 'type' => \Magento\Core\Model\View\Publisher::CONTENT_TYPE_JS,
+            array('name'   => 'test_js_vde', 'type' => \Magento\View\Publisher::CONTENT_TYPE_JS,
                   'params' => array('flag_name' => 'vde_design_mode')),
         );
 

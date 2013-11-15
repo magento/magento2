@@ -19,48 +19,48 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
 /** @var $this \Magento\Wishlist\Block\Customer\Sharing */
 ?>
-<div class="page-title">
-    <h1><?php echo __('Share Your Wish List') ?></h1>
-</div>
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<form action="<?php echo $this->getSendUrl() ?>" id="form-validate" method="post">
-    <div class="fieldset">
+<form class="form wishlist share" action="<?php echo $this->getSendUrl() ?>" id="form-validate" method="post" data-hasrequired="<?php echo __('* Required Fields') ?>">
+    <fieldset class="fieldset">
         <?php echo $this->getBlockHtml('formkey')?>
-        <h2 class="legend"><?php echo __('Sharing Information') ?></h2>
-        <ul class="form-list">
-            <li class="wide">
-                <label for="email_address" class="required"><em>*</em><?php echo __('Email addresses, separated by commas (max %1 addresses)', $this->getEmailSharingLimit()); ?></label>
-                <div class="input-box">
-                    <textarea name="emails" cols="60" rows="5" id="email_address" data-validate="{required:true,'validate-emails':true}"><?php echo $this->getEnteredData('emails') ?></textarea>
-                </div>
-            </li>
-            <li class="wide">
-                <label for="message"><?php echo __('Message') ?></label>
-                <div class="input-box">
-                    <textarea id="message" name="message" cols="60" rows="5" class="validate-length maximum-length-<?php echo $this->getTextSharingLimit();?>"><?php echo $this->getEnteredData('message') ?></textarea>
-                </div>
-            </li>
-            <?php if($this->helper('Magento\Wishlist\Helper\Data')->isRssAllow()): ?>
-            <li class="control">
-                <div class="input-box">
-                    <input type="checkbox" name="rss_url" id="rss_url" value="1" title="<?php echo __('Check this checkbox if you want to add a link to an rss feed to your wishlist.') ?>" class="checkbox" />
-                </div>
-                <label for="rss_url"><?php echo __('Check this checkbox if you want to add a link to an rss feed to your wishlist.') ?></label>
-            </li>
-            <?php endif; ?>
-        </ul>
-    </div>
-    <div class="buttons-set form-buttons">
-        <p class="required"><?php echo __('* Required Fields') ?></p>
-        <p class="back-link"><a href="<?php echo $this->getBackUrl(); ?>"><small>&laquo; </small><?php echo __('Back')?></a></p>
-        <button type="submit" title="<?php echo __('Share Wish List') ?>" class="button"><span><span><?php echo __('Share Wish List') ?></span></span></button>
+        <legend class="legend"><span><?php echo __('Sharing Information') ?></span></legend><br />
+        <div class="field emails required">
+            <label class="label" for="email_address"><span><?php echo __('Email addresses, separated by commas') ?></span></label>
+            <div class="control">
+                <textarea name="emails" cols="60" rows="5" id="email_address" data-validate="{required:true,'validate-emails':true}"><?php echo $this->getEnteredData('emails') ?></textarea>
+            </div>
+        </div>
+        <div class="field text">
+            <label class="label" for="message"><span><?php echo __('Message') ?></span></label>
+            <div class="control">
+                <textarea id="message" name="message" cols="60" rows="5"><?php echo $this->getEnteredData('message') ?></textarea>
+            </div>
+        </div>
+        <?php if($this->helper('Magento\Wishlist\Helper\Data')->isRssAllow()): ?>
+            <div class="field choice rss">
+                <input type="checkbox" name="rss_url" id="rss_url" value="1" title="<?php echo __('Check this checkbox if you want to add a link to an rss feed to your wishlist.') ?>" class="checkbox">
+                <label class="label" for="rss_url">
+                    <span>
+                        <?php echo __('Check this checkbox if you want to add a link to an rss feed to your wishlist.') ?>
+                    </span>
+                </label>
+            </div>
+        <?php endif; ?>
+    </fieldset>
+    <div class="actions">
+        <div class="primary">
+            <button type="submit" title="<?php echo __('Share Wishlist') ?>" class="action submit">
+                <span><?php echo __('Share Wishlist') ?></span>
+            </button>
+        </div>
+        <div class="secondary">
+            <a class="action back" href="<?php echo $this->getBackUrl(); ?>"><span><?php echo __('Back')?></span></a>
+        </div>
     </div>
 </form>
 <script type="text/javascript">

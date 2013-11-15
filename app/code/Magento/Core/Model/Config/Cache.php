@@ -41,7 +41,7 @@ class Cache
     protected $_containerFactory;
 
     /**
-     * @var \Magento\Core\Model\Cache\Type\Config
+     * @var \Magento\App\Cache\Type\Config
      */
     protected $_configCacheType;
 
@@ -60,11 +60,11 @@ class Cache
     protected $_loadedConfig = null;
 
     /**
-     * @param \Magento\Core\Model\Cache\Type\Config $configCacheType
+     * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Core\Model\Config\BaseFactory $containerFactory
      */
     public function __construct(
-        \Magento\Core\Model\Cache\Type\Config $configCacheType,
+        \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\Core\Model\Config\BaseFactory $containerFactory
     ) {
         $this->_containerFactory = $containerFactory;

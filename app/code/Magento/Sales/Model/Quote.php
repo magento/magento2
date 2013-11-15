@@ -194,13 +194,6 @@ class Quote extends \Magento\Core\Model\AbstractModel
     protected $_preventSaving = false;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData;
-
-    /**
      * Catalog product
      *
      * @var \Magento\Catalog\Helper\Product
@@ -294,10 +287,14 @@ class Quote extends \Magento\Core\Model\AbstractModel
     protected $_recurringProfileFactory;
 
     /**
+     * @var \Magento\Object\Copy
+     */
+    protected $_objectCopyService;
+
+    /**
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Helper\Data $salesData
      * @param \Magento\Catalog\Helper\Product $catalogProduct
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
@@ -314,6 +311,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Sales\Model\Quote\PaymentFactory $quotePaymentFactory
      * @param \Magento\Sales\Model\Resource\Quote\Payment\CollectionFactory $quotePaymentCollFactory
      * @param \Magento\Sales\Model\Recurring\ProfileFactory $recurringProfileFactory
+     * @param \Magento\Object\Copy $objectCopyService
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -324,7 +322,6 @@ class Quote extends \Magento\Core\Model\AbstractModel
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Sales\Helper\Data $salesData,
         \Magento\Catalog\Helper\Product $catalogProduct,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
@@ -341,6 +338,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
         \Magento\Sales\Model\Quote\PaymentFactory $quotePaymentFactory,
         \Magento\Sales\Model\Resource\Quote\Payment\CollectionFactory $quotePaymentCollFactory,
         \Magento\Sales\Model\Recurring\ProfileFactory $recurringProfileFactory,
+        \Magento\Object\Copy $objectCopyService,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -348,7 +346,6 @@ class Quote extends \Magento\Core\Model\AbstractModel
         $this->_eventManager = $eventManager;
         $this->_salesData = $salesData;
         $this->_catalogProduct = $catalogProduct;
-        $this->_coreData = $coreData;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_storeManager = $storeManager;
         $this->_config = $config;
@@ -363,6 +360,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
         $this->_quotePaymentFactory = $quotePaymentFactory;
         $this->_quotePaymentCollFactory = $quotePaymentCollFactory;
         $this->_recurringProfileFactory = $recurringProfileFactory;
+        $this->_objectCopyService = $objectCopyService;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -610,7 +608,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
     {
         $this->_customer = $customer;
         $this->setCustomerId($customer->getId());
-        $this->_coreData->copyFieldsetToTarget('customer_account', 'to_quote', $customer, $this);
+        $this->_objectCopyService->copyFieldsetToTarget('customer_account', 'to_quote', $customer, $this);
         return $this;
     }
 

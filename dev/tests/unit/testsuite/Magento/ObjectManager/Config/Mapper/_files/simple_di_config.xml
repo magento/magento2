@@ -101,6 +101,6 @@
             <value type='string' pattern="[a-z\-]*">az-value</value>
         </param>
     </type>
-    <virtualType name="customCacheInstance" type="Magento\Core\Model\Cache" shared="true" />
+    <virtualType name="customCacheInstance" type="Magento\App\Cache" shared="true" />
     <virtualType name="customOverriddenInstance" shared="false" />
 </config>

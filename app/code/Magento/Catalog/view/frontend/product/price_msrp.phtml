@@ -43,8 +43,8 @@
             <?php $_msrpPrice = $this->helper('Magento\Core\Helper\Data')->currency($_product->getMsrp(),true,true) ?>
             <span class="old-price" id="product-price-<?php echo $_product->getId() ?><?php echo $this->getIdSuffix() ?>"><?php echo $_msrpPrice ?></span>
         <?php endif; ?>
-        <?php $helpLinkId = 'msrp-click-' . $_product->getId() . $this->helper('Magento\Core\Helper\Data')->getRandomString(20); ?>
-        <a href="#" id="<?php echo($helpLinkId);?>"><?php echo __('Click for price') ?></a>
+        <?php $popupId = 'msrp-click-' . $_product->getId() . $this->getRandomString(20); ?>
+        <a href="#" id="<?php echo($popupId);?>"><?php echo __('Click for price') ?></a>
     </div>
 
     <script type="text/javascript">
@@ -52,8 +52,8 @@
         (function ($) {
             head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/msrp.js') ?>", function () {
                 <?php if ($this->helper('Magento\Catalog\Helper\Data')->isShowPriceOnGesture($_product)): ?>
-                    $('#<?php echo($helpLinkId);?>').addToCart({
-                        popupId: "#<?php echo($helpLinkId);?>",
+                    $('#<?php echo($popupId);?>').addToCart({
+                        popupId: "#<?php echo($popupId);?>",
                         productName: '<?php echo $_product->getName() ?>',
                         realPrice: '<?php echo $this->getRealPriceJs($_product) ?>',
                         msrpPrice: '<?php echo $_msrpPrice ?>',
@@ -64,7 +64,7 @@
                     });
                 <?php else: ?>
                     $('#<?php echo($popupId);?>').addToCart({
-                        popupId: "#<?php echo($helpLinkId);?>",
+                        popupId: "#<?php echo($popupId);?>",
                         submitUrl: "<?php echo $_product->getProductUrl() ?>"
                     });
                 <?php endif; ?>

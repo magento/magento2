@@ -24,11 +24,23 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 namespace Magento\Backend\Model\Config\Source\Image;
 
 class Adapter implements \Magento\Core\Model\Option\ArrayInterface
 {
+    /**
+     * @var \Magento\Image\Adapter\ConfigInterface
+     */
+    protected $config;
+
+    /**
+     * @param \Magento\Image\Adapter\ConfigInterface $config
+     */
+    public function __construct(\Magento\Image\Adapter\ConfigInterface $config)
+    {
+        $this->config = $config;
+    }
+
     /**
      * Return hash of image adapter codes and labels
      *
@@ -36,11 +48,11 @@ class Adapter implements \Magento\Core\Model\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return array(
-            \Magento\Core\Model\Image\AdapterFactory::ADAPTER_IM  =>
-                __('ImageMagick'),
-            \Magento\Core\Model\Image\AdapterFactory::ADAPTER_GD2 =>
-                __('PHP GD2'),
-        );
+        $result = array();
+        foreach ($this->config->getAdapters() as $alias => $adapter) {
+            $result[$alias] = __($adapter['title']);
+        }
+
+        return $result;
     }
 }

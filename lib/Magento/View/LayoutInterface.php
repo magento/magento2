@@ -270,7 +270,7 @@ interface LayoutInterface
     /**
      * Retrieve block factory
      *
-     * @return \Magento\Core\Model\BlockFactory
+     * @return \Magento\View\Element\BlockFactory
      */
     public function getBlockFactory();
 

@@ -144,7 +144,7 @@ class View
      */
     public function getCreateDate()
     {
-        return $this->_coreData->formatDate(
+        return $this->formatDate(
             $this->getCustomer()->getCreatedAtTimestamp(),
             \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM,
             true
@@ -184,7 +184,7 @@ class View
     {
         $date = $this->getCustomerLog()->getLoginAtTimestamp();
         if ($date) {
-            return $this->_coreData->formatDate(
+            return $this->formatDate(
                 $date,
                 \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM,
                 true

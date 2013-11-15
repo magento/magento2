@@ -146,6 +146,10 @@
         },
 
         _checkToCollapseOrExpand: function() {
+            if ($("html").hasClass("lt-640") || $("html").hasClass("w-640")) {
+                return;
+            }
+
             var navWidth = this.itemsContainer.width(),
                 totalWidth = 0,
                 startCollapseIndex = 0;
@@ -248,6 +252,7 @@
                             .addClass(this.options.topLevelHoverClass);
                     }, this));
                 }
+
                 $(menuItem)
                     .data('opened', true);
             } else {
@@ -357,19 +362,27 @@
                             this._showMenu();
                         }
                         e.stopPropagation();
+                        this.mobileNav.scrollTop(0);
+                        this._fixedBackLink();
                     }, this))
                     .on('click.hideMenu', this.options.pageWrapper, $.proxy(function() {
                         if ($(this.element).data('opened')) {
                             this._hideMenu();
+                            this.mobileNav.scrollTop(0);
+                            this._fixedBackLink();
                         }
                     }, this))
                     .on('click.showSubmenu', this.options.titleWithSubmenu, $.proxy(function(e) {
                         this._showSubmenu(e);
 
                         e.preventDefault();
+                        this.mobileNav.scrollTop(0);
+                        this._fixedBackLink();
                     }, this))
                     .on('click.hideSubmenu', '.action.back', $.proxy(function(e) {
                         this._hideSubmenu(e);
+                        this.mobileNav.scrollTop(0);
+                        this._fixedBackLink();
                     }, this));
 
                 this.eventsBound = true;
@@ -378,12 +391,12 @@
 
         _showMenu: function() {
             $(this.element).data('opened', true);
-            this.mainContainer.addClass(this.options.openedMenuClass);
+            this.mainContainer.add( "html" ).addClass(this.options.openedMenuClass);
         },
 
         _hideMenu: function() {
             $(this.element).data('opened', false);
-            this.mainContainer.removeClass(this.options.openedMenuClass);
+            this.mainContainer.add( "html" ).removeClass(this.options.openedMenuClass);
         },
 
         _showSubmenu: function(e) {
@@ -407,6 +420,12 @@
                 submenu
                     .closest('.navigation > ul')
                         .removeAttr('style');
+            } else {
+                submenu
+                    .closest('.navigation > ul')
+                    .css({
+                        height: submenu.closest('.submenu.opened').outerHeight(true)
+                    });
             }
         },
 
@@ -421,10 +440,10 @@
 
                 items.prepend(actions);
 
-                submenu
-                    .css({
-                        height: $(window).outerHeight(true) - 1
-                    });
+//                submenu
+//                    .css({
+//                        height: $(window).outerHeight(true) - 1
+//                    });
             }, this));
         },
 
@@ -437,6 +456,13 @@
             this.toggleAction.insertBefore(this.options.toggleActionPlaceholder);
             this.mobileNav = $(this.element).detach().clone();
             this.mainContainer.prepend(this.mobileNav);
+            this.mobileNav.find('> ul').addClass('nav');
+            this._insertExtraItems();
+            this.mobileNav.scroll($.proxy(
+                function() {
+                    this._fixedBackLink();
+                }, this
+            ));
 
             this._renderSubmenuActions();
             this._bindDocumentEvents();
@@ -454,6 +480,78 @@
                 .off('click.hideSubmenu', '.action.back');
 
             this.eventsBound = false;
+
+            this._applySubmenuStyles();
+        },
+
+        _insertExtraItems: function() {
+            if ($('.header > .panel .switcher').length) {
+                var settings = $('.header > .panel')
+                    .clone()
+                    .addClass('settings');
+
+                this.mobileNav.prepend(settings);
+
+                settings.wrapInner('<div class="content"></div>');
+                settings.prepend('<div class="title">Settings</div>');
+
+                settings.find('> .title')
+                    .dropdown({
+                        autoclose: false,
+                        menu: '> .content'
+                    });
+
+                settings.find('.switcher.language .options > strong')
+                    .dropdown({
+                        autoclose: false,
+                        menu: '.switcher.language .options > ul'
+                    });
+
+                settings.find('.switcher.currency .options > strong')
+                    .dropdown({
+                        autoclose: false,
+                        menu: '.switcher.currency .options > ul'
+                    });
+            }
+
+            if ($('.header > .content > .links li').length) {
+                var account = $('.header > .content > .links')
+                    .clone()
+                    .addClass('account');
+
+                this.mobileNav.prepend(account);
+
+                account.find('.customer.welcome > .customer')
+                    .dropdown({
+                        autoclose: false,
+                        menu: '.customer.welcome > .menu'
+                    });
+            }
+        },
+
+        _fixedBackLink: function() {
+            var linksBack = this.mobileNav.find('.submenu .action.back');
+            var linkBack = this.mobileNav.find('.submenu.opened > ul > .action.back').last();
+
+            linksBack.removeClass('fixed');
+
+            if(linkBack.length) {
+                var subMenu = linkBack.parent(),
+                    navOffset = this.mobileNav.find('.nav').position().top,
+                    linkBackHeight = linkBack.height();
+
+                if (navOffset <= 0) {
+                    linkBack.addClass('fixed');
+                    subMenu.css({
+                        paddingTop: linkBackHeight
+                    })
+                } else {
+                    linkBack.removeClass('fixed');
+                    subMenu.css({
+                        paddingTop: 0
+                    })
+                }
+            }
         }
     });
 })(window.jQuery);

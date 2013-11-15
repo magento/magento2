@@ -128,13 +128,6 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
     protected $_coreRegistry = null;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
-
-    /**
      * @var \Magento\Logger
      */
     protected $_logger;
@@ -157,31 +150,36 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
     protected $_objectManager;
 
     /**
+     * @var \Magento\Object\Copy
+     */
+    protected $_objectCopyService;
+
+    /**
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Adminhtml\Model\Session\Quote $sessionQuote
      * @param \Magento\Logger $logger
+     * @param \Magento\Object\Copy $objectCopyService
      * @param array $data
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Adminhtml\Model\Session\Quote $sessionQuote,
         \Magento\Logger $logger,
+        \Magento\Object\Copy $objectCopyService,
         array $data = array()
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
-        $this->_coreData = $coreData;
         $this->_coreRegistry = $coreRegistry;
         $this->_salesConfig = $salesConfig;
         $this->_logger = $logger;
+        $this->_objectCopyService = $objectCopyService;
         parent::__construct($data);
         $this->_session = $sessionQuote;
     }
@@ -390,7 +388,7 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
             $quote->collectTotals();
         }
 
-        $this->_coreData->copyFieldsetToTarget('sales_copy_order', 'to_edit', $order, $quote);
+        $this->_objectCopyService->copyFieldsetToTarget('sales_copy_order', 'to_edit', $order, $quote);
 
         $this->_eventManager->dispatch('sales_convert_order_to_quote', array('order' => $order, 'quote' => $quote));
 
@@ -421,7 +419,7 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
     protected function _initBillingAddressFromOrder(\Magento\Sales\Model\Order $order)
     {
         $this->getQuote()->getBillingAddress()->setCustomerAddressId('');
-        $this->_coreData->copyFieldsetToTarget(
+        $this->_objectCopyService->copyFieldsetToTarget(
             'sales_copy_order_billing_address',
             'to_order',
             $order->getBillingAddress(),
@@ -435,7 +433,7 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
         $quoteShippingAddress = $this->getQuote()->getShippingAddress()
             ->setCustomerAddressId('')
             ->setSameAsBilling($orderShippingAddress && $orderShippingAddress->getSameAsBilling());
-        $this->_coreData->copyFieldsetToTarget(
+        $this->_objectCopyService->copyFieldsetToTarget(
             'sales_copy_order_shipping_address',
             'to_order',
             $orderShippingAddress,

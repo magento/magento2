@@ -129,7 +129,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     {
         $filePath = 'design/area/theme_path/Module_One/layout/override/theme/parent_theme/1.xml';
         $this->setExpectedException(
-            'Magento\Core\Exception',
+            'Magento\Exception',
             "Trying to override layout file '$filePath' for theme 'parent_theme'"
                 . ", which is not ancestor of theme 'theme_path'"
         );

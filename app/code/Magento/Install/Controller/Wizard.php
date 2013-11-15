@@ -92,14 +92,13 @@ class Wizard extends \Magento\Install\Controller\Action
         \Magento\Module\UpdaterInterface $dbUpdater,
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
-        parent::__construct($context, $configScope, $viewDesign, $collectionFactory, $app, $appState);
         $this->_installer = $installer;
         $this->_wizard = $wizard;
         $this->_session = $session;
         $this->_dbUpdater = $dbUpdater;
         $this->_storeManager = $storeManager;
+        parent::__construct($context, $configScope, $viewDesign, $collectionFactory, $app, $appState);
     }
-
 
     /**
      * Perform necessary checks for all actions

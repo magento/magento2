@@ -64,9 +64,9 @@ class CacheTest extends \PHPUnit_Framework_TestCase
             ->method('getHelper')
             ->will($this->returnValue($backendHelper));
 
-        $cacheTypeListMock = $this->getMock('Magento\Core\Model\Cache\TypeListInterface');
-        $cacheStateMock = $this->getMock('Magento\Core\Model\Cache\StateInterface');
-        $cacheFrontendPool = $this->getMock('Magento\Core\Model\Cache\Frontend\Pool', array(), array(), '', false);
+        $cacheTypeListMock = $this->getMock('Magento\App\Cache\TypeListInterface');
+        $cacheStateMock = $this->getMock('Magento\App\Cache\StateInterface');
+        $cacheFrontendPool = $this->getMock('Magento\App\Cache\Frontend\Pool', array(), array(), '', false);
 
         $controller = new \Magento\Backend\Controller\Adminhtml\Cache(
             $context,

@@ -89,6 +89,7 @@ class Container extends \Magento\Core\Block\Html\Select
             /** @var $layoutProcessor \Magento\View\Layout\ProcessorInterface */
             $layoutProcessor = $this->_layoutProcessorFactory->create($layoutMergeParams);
             $layoutProcessor->addPageHandles(array($this->getLayoutHandle()));
+            $layoutProcessor->addPageHandles(array('default'));
             $layoutProcessor->load();
 
             $containers = $layoutProcessor->getContainers();

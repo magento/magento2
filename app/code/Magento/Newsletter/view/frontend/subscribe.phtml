@@ -19,46 +19,44 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="block block-subscribe">
-    <div class="block-title">
-        <strong><span><?php echo __('Newsletter') ?></span></strong>
+<div class="block newsletter">
+    <div class="title"><strong>Newsletter</strong></div>
+    <div class="content">
+        <form action="<?php echo $this->getFormActionUrl() ?>" method="post" id="newsletter-validate-detail">
+            <div class="field newsletter">
+                <label class="label" for="newsletter"><?php echo __('Sign Up for Our Newsletter:') ?></label>
+                <div class="control">
+                    <input name="email" type="text" id="newsletter"
+                                  placeholder="<?php echo __('Enter your email address') ?>"
+                                  data-validate="{required:true, 'validate-email':true}"/>
+                </div>
+                <div class="actions">
+                    <button class="action subscribe" title="<?php echo __('Subscribe') ?>" type="submit">
+                        <span><?php echo __('Subscribe') ?></span>
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
-    <form action="<?php echo $this->getFormActionUrl() ?>" method="post" id="newsletter-validate-detail">
-        <div class="block-content">
-            <div class="form-subscribe-header">
-                <label for="newsletter"><?php echo __('Sign Up for Our Newsletter:') ?></label>
-            </div>
-            <div class="input-box">
-                <input type="text" name="email" id="newsletter"
-                       title="<?php echo __('Sign up for our newsletter') ?>"
-                       value="<?php echo __('Enter your email address') ?>"
-                       class="input-text" data-validate="{required:true, 'validate-email':true}"/>
-            </div>
-            <div class="actions">
-                <button type="submit" title="<?php echo __('Subscribe') ?>" class="button">
-                    <span><span><?php echo __('Subscribe') ?></span></span></button>
-            </div>
-        </div>
-    </form>
-    <script type="text/javascript">
-        //<![CDATA[
-        (function($) {
-            head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-                "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-                "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-                "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
-                "<?php echo $this->getViewFileUrl('Magento_Newsletter::newsletter.js')?>", function() {
-                    $('#newsletter').newsletter({
-                        formSelector: '#newsletter-validate-detail',
-                        placeholder: '<?php echo __('Enter your email address') ?>'
-                    });
-            });
-        })(jQuery);
-        //]]>
-    </script>
 </div>
+
+<script type="text/javascript">
+    //<![CDATA[
+    (function($) {
+        head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
+            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('Magento_Newsletter::newsletter.js')?>", function() {
+                $('#newsletter').newsletter({
+                    formSelector: '#newsletter-validate-detail',
+                    placeholder: '<?php echo __('Enter your email address') ?>'
+                });
+            });
+    })(jQuery);
+    //]]>
+</script>

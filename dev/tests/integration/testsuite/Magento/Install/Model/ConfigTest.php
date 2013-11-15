@@ -40,14 +40,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $cacheTypeList \Magento\Core\Model\Cache\TypeListInterface */
+        /** @var $cacheTypeList \Magento\App\Cache\TypeListInterface */
         $cacheTypeList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Cache\TypeListInterface');
+            ->create('Magento\App\Cache\TypeListInterface');
         $types = array_keys($cacheTypeList->getTypes());
 
-        /** @var $cacheState \Magento\Core\Model\Cache\StateInterface */
+        /** @var $cacheState \Magento\App\Cache\StateInterface */
         $cacheState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\Cache\StateInterface');
+            ->get('Magento\App\Cache\StateInterface');
         foreach ($types as $type) {
             $cacheState->setEnabled($type, false);
         }

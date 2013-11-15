@@ -46,7 +46,7 @@ class Uploader extends \Magento\Core\Model\File\Uploader
     const DEFAULT_FILE_TYPE = 'application/octet-stream';
 
     /**
-     * @var \Magento\Core\Model\Image\AdapterFactory
+     * @var \Magento\Image\AdapterFactory
      */
     protected $_imageFactory;
 
@@ -58,14 +58,14 @@ class Uploader extends \Magento\Core\Model\File\Uploader
     /**
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Core\Helper\File\Storage $coreFileStorage
-     * @param \Magento\Core\Model\Image\AdapterFactory $imageFactory
+     * @param \Magento\Image\AdapterFactory $imageFactory
      * @param \Magento\Core\Model\File\Validator\NotProtectedExtension $validator
      * @param string $filePath
      */
     public function __construct(
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Core\Helper\File\Storage $coreFileStorage,
-        \Magento\Core\Model\Image\AdapterFactory $imageFactory,
+        \Magento\Image\AdapterFactory $imageFactory,
         \Magento\Core\Model\File\Validator\NotProtectedExtension $validator,
         $filePath = null
     ) {

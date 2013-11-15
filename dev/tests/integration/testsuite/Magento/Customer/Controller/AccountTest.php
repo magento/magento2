@@ -39,7 +39,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->create('Magento\Customer\Model\Session', array($logger));
         $session->login('customer@example.com', 'password');
         $this->dispatch('customer/account/index');
-        $this->assertContains('<div class="my-account">', $this->getResponse()->getBody());
+        $this->assertContains('<div class="block dashboard welcome">', $this->getResponse()->getBody());
     }
 
     /**

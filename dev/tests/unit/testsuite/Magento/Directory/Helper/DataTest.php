@@ -56,7 +56,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $context = $this->getMock('Magento\Core\Helper\Context', array(), array(), '', false);
 
-        $configCacheType = $this->getMock('Magento\Core\Model\Cache\Type\Config', array(), array(), '', false);
+        $configCacheType = $this->getMock('Magento\App\Cache\Type\Config', array(), array(), '', false);
 
         $this->_countryCollection = $this->getMock('Magento\Directory\Model\Resource\Country\Collection', array(),
             array(), '', false);

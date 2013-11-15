@@ -94,14 +94,14 @@ class Layout
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         return array(
-            'processorFactory'       => $objectManager->get('Magento\View\Layout\ProcessorFactory'),
+            'processorFactory'   => $objectManager->get('Magento\View\Layout\ProcessorFactory'),
             'themeFactory'       => $objectManager->get('Magento\Core\Model\Resource\Theme\CollectionFactory'),
             'logger'             => $objectManager->get('Magento\Logger'),
             'eventManager'       => $objectManager->get('Magento\Event\ManagerInterface'),
             'factoryHelper'      => $objectManager->get('Magento\Core\Model\Factory\Helper'),
             'coreData'           => $objectManager->get('Magento\Core\Helper\Data'),
             'design'             => $objectManager->get('Magento\View\DesignInterface'),
-            'blockFactory'       => $objectManager->create('Magento\Core\Model\BlockFactory', array()),
+            'blockFactory'       => $objectManager->create('Magento\View\Element\BlockFactory', array()),
             'structure'          => $objectManager->create('Magento\Data\Structure', array()),
             'argumentProcessor'  => $objectManager->create('Magento\Core\Model\Layout\Argument\Processor', array()),
             'scheduledStructure' => $objectManager->create('Magento\Core\Model\Layout\ScheduledStructure', array()),

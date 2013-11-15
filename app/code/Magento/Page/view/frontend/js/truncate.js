@@ -29,7 +29,7 @@
         options: {
             detailsLink: 'a.details',
             mouseEvents: 'mouseover mouseout',
-            truncatedFullValue: 'div.truncated_full_value'
+            truncatedFullValue: 'div.truncated.full.value'
         },
 
         /**

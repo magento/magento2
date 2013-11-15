@@ -204,10 +204,10 @@ class Head extends \Magento\Core\Block\Template
                 }
             }
 
-            if ($contentType == \Magento\Core\Model\View\Publisher::CONTENT_TYPE_JS ) {
+            if ($contentType == \Magento\View\Publisher::CONTENT_TYPE_JS ) {
                 $groupTemplate = '<script' . $attributes . ' type="text/javascript" src="%s"></script>' . "\n";
             } else {
-                if ($contentType == \Magento\Core\Model\View\Publisher::CONTENT_TYPE_CSS) {
+                if ($contentType == \Magento\View\Publisher::CONTENT_TYPE_CSS) {
                     $attributes = ' rel="stylesheet" type="text/css"' . ($attributes ?: ' media="all"');
                 }
                 $groupTemplate = '<link' . $attributes . ' href="%s" />' . "\n";

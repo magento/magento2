@@ -61,12 +61,12 @@ class Installer extends \Magento\Object
     protected $_config;
 
     /**
-     * @var \Magento\Core\Model\Cache\StateInterface
+     * @var \Magento\App\Cache\StateInterface
      */
     protected $_cacheState;
 
     /**
-     * @var \Magento\Core\Model\Cache\TypeListInterface
+     * @var \Magento\App\Cache\TypeListInterface
      */
     protected $_cacheTypeList;
 
@@ -162,8 +162,8 @@ class Installer extends \Magento\Object
      * @param \Magento\Core\Model\ConfigInterface $config
      * @param \Magento\Module\UpdaterInterface $dbUpdater
      * @param \Magento\App\CacheInterface $cache
-     * @param \Magento\Core\Model\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\Core\Model\Cache\StateInterface $cacheState
+     * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\App\Cache\StateInterface $cacheState
      * @param \Magento\Module\Updater\SetupFactory $setupFactory
      * @param \Magento\App\Config $localConfig
      * @param \Magento\Core\Model\App $app
@@ -184,8 +184,8 @@ class Installer extends \Magento\Object
         \Magento\Core\Model\ConfigInterface $config,
         \Magento\Module\UpdaterInterface $dbUpdater,
         \Magento\App\CacheInterface $cache,
-        \Magento\Core\Model\Cache\TypeListInterface $cacheTypeList,
-        \Magento\Core\Model\Cache\StateInterface $cacheState,
+        \Magento\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\App\Cache\StateInterface $cacheState,
         \Magento\Module\Updater\SetupFactory $setupFactory,
         \Magento\App\Config $localConfig,
         \Magento\Core\Model\App $app,

@@ -64,17 +64,17 @@ class Image extends \Magento\Core\Model\AbstractModel
     protected $_filesystem;
 
     /**
-     * @var \Magento\Core\Model\Image\Factory
+     * @var \Magento\Image\Factory
      */
     protected $_imageFactory;
 
     /**
-     * @var \Magento\Core\Model\View\Url
+     * @var \Magento\View\Url
      */
     protected $_viewUrl;
 
     /**
-     * @var \Magento\Core\Model\View\FileSystem
+     * @var \Magento\View\FileSystem
      */
     protected $_viewFileSystem;
 
@@ -123,9 +123,9 @@ class Image extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Model\Image\Factory $imageFactory
-     * @param \Magento\Core\Model\View\Url $viewUrl
-     * @param \Magento\Core\Model\View\FileSystem $viewFileSystem
+     * @param \Magento\Image\Factory $imageFactory
+     * @param \Magento\View\Url $viewUrl
+     * @param \Magento\View\FileSystem $viewFileSystem
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -141,9 +141,9 @@ class Image extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\Image\Factory $imageFactory,
-        \Magento\Core\Model\View\Url $viewUrl,
-        \Magento\Core\Model\View\FileSystem $viewFileSystem,
+        \Magento\Image\Factory $imageFactory,
+        \Magento\View\Url $viewUrl,
+        \Magento\View\FileSystem $viewFileSystem,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,

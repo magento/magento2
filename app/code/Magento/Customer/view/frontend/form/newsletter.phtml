@@ -19,30 +19,26 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="page-title">
-    <h1><?php echo __('Newsletter Subscription') ?></h1>
-</div>
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <?php echo $this->getChildHtml('form_before')?>
-<form action="<?php echo $this->getAction() ?>" method="post" id="form-validate">
-    <div class="fieldset">
-        <?php echo $this->getBlockHtml('formkey')?>
-        <h2 class="legend"><?php echo __('Newsletter Subscription') ?></h2>
-        <ul class="form-list">
-            <li class="control"><input type="checkbox" name="is_subscribed" id="subscription" value="1" title="<?php echo __('General Subscription') ?>"<?php if($this->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox" /><label for="subscription"><?php echo __('General Subscription') ?></label></li>
+    <form class="form newsletter manage" action="<?php echo $this->getAction() ?>" method="post" id="form-validate">
+        <fieldset class="fieldset">
+            <?php echo $this->getBlockHtml('formkey')?>
+            <legend class="legend"><span><?php echo __('Subscription option') ?></span></legend><br>
+            <div class="field choice">
+                <input type="checkbox" name="is_subscribed" id="subscription" value="1" title="<?php echo __('General Subscription') ?>"<?php if($this->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox">
+                <label for="subscription" class="label"><span><?php echo __('General Subscription') ?></span></label>
+            </div>
             <?php /* Extensions placeholder */ ?>
             <?php echo $this->getChildHtml('customer.form.newsletter.extra')?>
-        </ul>
-    </div>
-    <div class="buttons-set">
-        <p class="back-link"><a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><small>&laquo; </small><?php echo __('Back') ?></a></p>
-        <button type="submit" title="<?php echo __('Save') ?>" class="button"><span><span><?php echo __('Save') ?></span></span></button>
-    </div>
-</form>
+        </fieldset>
+        <div class="actions">
+            <div class="primary"><button type="submit" title="<?php echo __('Save') ?>" class="action save"><span><?php echo __('Save') ?></span></button></div>
+            <div class="secondary"><a class="action back" href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><span><?php echo __('Back') ?></span></a></div>
+        </div>
+    </form>
 <?php /* Extensions placeholder */ ?>
 <?php echo $this->getChildHtml('customer.form.newsletter.extra2')?>

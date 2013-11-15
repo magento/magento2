@@ -52,10 +52,10 @@ class Save extends \Magento\Backend\Block\Widget\Button\SplitButton
     {
         $theme = $this->getTheme();
         $themeType = $theme->getType();
-        if ($themeType == \Magento\Core\Model\Theme::TYPE_PHYSICAL) {
+        if ($themeType == \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL) {
             $this->_initPhysical();
-        } else if ($themeType == \Magento\Core\Model\Theme::TYPE_VIRTUAL) {
-            if ($theme->getDomainModel(\Magento\Core\Model\Theme::TYPE_VIRTUAL)->isAssigned()) {
+        } else if ($themeType == \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL) {
+            if ($theme->getDomainModel(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL)->isAssigned()) {
                 $this->_initAssigned();
             } else {
                 $this->_initUnAssigned();

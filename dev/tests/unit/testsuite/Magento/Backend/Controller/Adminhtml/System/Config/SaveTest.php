@@ -101,7 +101,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             array(), array(), '', false);
 
         $this->_cacheMock = $this->getMock(
-            'Magento\Core\Model\Cache\Type\Layout', array(), array(), '', false
+            'Magento\App\Cache\Type\Layout', array(), array(), '', false
         );
 
         $configStructureMock->expects($this->any())->method('getElement')

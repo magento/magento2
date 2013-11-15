@@ -141,42 +141,42 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
         return array(
             'js production mode' => array(
                 $jsAssets,
-                \Magento\Core\Model\View\Publisher::CONTENT_TYPE_JS,
+                \Magento\View\Publisher::CONTENT_TYPE_JS,
                 \Magento\Core\Model\Page\Asset\MergeService::XML_PATH_MERGE_JS_FILES,
                 \Magento\App\State::MODE_PRODUCTION,
                 'Magento\Core\Model\Page\Asset\MergeStrategy\FileExists'
             ),
             'css production mode' => array(
                 $cssAssets,
-                \Magento\Core\Model\View\Publisher::CONTENT_TYPE_CSS,
+                \Magento\View\Publisher::CONTENT_TYPE_CSS,
                 \Magento\Core\Model\Page\Asset\MergeService::XML_PATH_MERGE_CSS_FILES,
                 \Magento\App\State::MODE_PRODUCTION,
                 'Magento\Core\Model\Page\Asset\MergeStrategy\FileExists'
             ),
             'js default mode' => array(
                 $jsAssets,
-                \Magento\Core\Model\View\Publisher::CONTENT_TYPE_JS,
+                \Magento\View\Publisher::CONTENT_TYPE_JS,
                 \Magento\Core\Model\Page\Asset\MergeService::XML_PATH_MERGE_JS_FILES,
                 \Magento\App\State::MODE_DEFAULT,
                 'Magento\Core\Model\Page\Asset\MergeStrategy\Checksum'
             ),
             'css default mode' => array(
                 $cssAssets,
-                \Magento\Core\Model\View\Publisher::CONTENT_TYPE_CSS,
+                \Magento\View\Publisher::CONTENT_TYPE_CSS,
                 \Magento\Core\Model\Page\Asset\MergeService::XML_PATH_MERGE_CSS_FILES,
                 \Magento\App\State::MODE_DEFAULT,
                 'Magento\Core\Model\Page\Asset\MergeStrategy\Checksum'
             ),
             'js developer mode' => array(
                 $jsAssets,
-                \Magento\Core\Model\View\Publisher::CONTENT_TYPE_JS,
+                \Magento\View\Publisher::CONTENT_TYPE_JS,
                 \Magento\Core\Model\Page\Asset\MergeService::XML_PATH_MERGE_JS_FILES,
                 \Magento\App\State::MODE_DEVELOPER,
                 'Magento\Core\Model\Page\Asset\MergeStrategy\Checksum'
             ),
             'css developer mode' => array(
                 $cssAssets,
-                \Magento\Core\Model\View\Publisher::CONTENT_TYPE_CSS,
+                \Magento\View\Publisher::CONTENT_TYPE_CSS,
                 \Magento\Core\Model\Page\Asset\MergeService::XML_PATH_MERGE_CSS_FILES,
                 \Magento\App\State::MODE_DEVELOPER,
                 'Magento\Core\Model\Page\Asset\MergeStrategy\Checksum'

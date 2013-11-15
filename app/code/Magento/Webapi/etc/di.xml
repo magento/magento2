@@ -158,7 +158,7 @@
             <instance type="Magento\Webapi\Controller\Rest\Router\Proxy"/>
         </param>
         <param name="oauthHelper">
-            <instance type="Magento\Oauth\Helper\Data\Proxy"/>
+            <instance type="Magento\Oauth\Helper\Request\Proxy"/>
         </param>
     </type>
     <type name="Magento\Webapi\Controller\Soap">
@@ -167,9 +167,6 @@
         </param>
         <param name="errorProcessor">
             <instance type="Magento\Webapi\Controller\ErrorProcessor\Proxy"/>
-        </param>
-        <param name="oauthHelper">
-            <instance type="Magento\Oauth\Helper\Service\Proxy"/>
         </param>
     </type>
 </config>

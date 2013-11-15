@@ -41,17 +41,17 @@ class Widget
     protected $_dataStorage;
 
     /**
-     * @var \Magento\Core\Model\Cache\Type\Config
+     * @var \Magento\App\Cache\Type\Config
      */
     protected $_configCacheType;
 
     /**
-     * @var \Magento\Core\Model\View\Url
+     * @var \Magento\View\Url
      */
     protected $_viewUrl;
 
     /**
-     * @var \Magento\Core\Model\View\FileSystem
+     * @var \Magento\View\FileSystem
      */
     protected $_viewFileSystem;
 
@@ -68,15 +68,15 @@ class Widget
     /**
      * @param \Magento\Escaper $escaper
      * @param \Magento\Widget\Model\Config\Data $dataStorage
-     * @param \Magento\Core\Model\View\Url $viewUrl
-     * @param \Magento\Core\Model\View\Url $viewUrl
-     * @param \Magento\Core\Model\View\FileSystem $viewFileSystem
+     * @param \Magento\View\Url $viewUrl
+     * @param \Magento\View\Url $viewUrl
+     * @param \Magento\View\FileSystem $viewFileSystem
      */
     public function __construct(
         \Magento\Escaper $escaper,
         \Magento\Widget\Model\Config\Data $dataStorage,
-        \Magento\Core\Model\View\Url $viewUrl,
-        \Magento\Core\Model\View\FileSystem $viewFileSystem
+        \Magento\View\Url $viewUrl,
+        \Magento\View\FileSystem $viewFileSystem
     ) {
         $this->_escaper = $escaper;
         $this->_dataStorage = $dataStorage;

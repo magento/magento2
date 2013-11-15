@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -27,5 +26,7 @@
 /** @var $this \Magento\Wishlist\Block\Customer\Wishlist\Button */
 ?>
 <?php if($this->getWishlist()->getItemsCount() && $this->getWishlist()->getShared() < $this->getConfig()->getSharingEmailLimit()): ?>
-    <button type="submit" name="save_and_share" title="<?php echo __('Share Wish List') ?>" class="button btn-share"><span><span><?php echo __('Share Wish List') ?></span></span></button>
+    <button type="submit" name="save_and_share" title="<?php echo __('Share Wish List') ?>" class="action share">
+        <span><?php echo __('Share Wish List') ?></span>
+    </button>
 <?php endif;?>

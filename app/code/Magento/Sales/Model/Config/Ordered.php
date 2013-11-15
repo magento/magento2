@@ -78,7 +78,7 @@ abstract class Ordered extends \Magento\Core\Model\Config\Base
     protected $_collectors = array();
 
     /**
-     * @var \Magento\Core\Model\Cache\Type\Config
+     * @var \Magento\App\Cache\Type\Config
      */
     protected $_configCacheType;
 
@@ -93,13 +93,13 @@ abstract class Ordered extends \Magento\Core\Model\Config\Base
     protected $_salesConfig;
 
     /**
-     * @param \Magento\Core\Model\Cache\Type\Config $configCacheType
+     * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Logger $logger
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Simplexml\Element $sourceData
      */
     public function __construct(
-        \Magento\Core\Model\Cache\Type\Config $configCacheType,
+        \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\Logger $logger,
         \Magento\Sales\Model\Config $salesConfig,
         $sourceData = null

@@ -41,9 +41,7 @@ app/code/Magento/Cms/Block/Adminhtml/Page/Edit/Tab/Design.php
 app/code/Magento/Cms/Controller/Router.php
 app/code/Magento/Cms/Model/Template/FilterProvider.php
 app/code/Magento/Core/data
-app/code/Magento/Core/Helper/Css.php
 app/code/Magento/Core/Model/Config
-app/code/Magento/Core/Model/Cache
 app/code/Magento/Core/Model/DataService
 app/code/Magento/Core/Model/Design.php
 app/code/Magento/Core/Model/Email/Template/Config
@@ -101,6 +99,7 @@ app/code/Magento/Index/Model/Indexer/ConfigInterface.php
 app/code/Magento/Index/Model/Indexer/Factory.php
 app/code/Magento/Index/Model/Indexer/AbstractIndexer.php
 app/code/Magento/Index/Model/Shell.php
+app/code/Magento/Integration
 app/code/Magento/Log/Model/Resource/Helper.php
 app/code/Magento/Log/Model/Resource/Shell.php
 app/code/Magento/Log/Model/Shell.php

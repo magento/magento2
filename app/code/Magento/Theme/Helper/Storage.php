@@ -93,20 +93,20 @@ class Storage extends \Magento\Core\Helper\AbstractHelper
     protected $_session;
 
     /**
-     * @var \Magento\Core\Model\Theme\FlyweightFactory
+     * @var \Magento\View\Design\Theme\FlyweightFactory
      */
     protected $_themeFactory;
 
     /**
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Backend\Model\Session $session
-     * @param \Magento\Core\Model\Theme\FlyweightFactory $themeFactory
+     * @param \Magento\View\Design\Theme\FlyweightFactory $themeFactory
      * @param \Magento\Core\Helper\Context $context
      */
     public function __construct(
         \Magento\Filesystem $filesystem,
         \Magento\Backend\Model\Session $session,
-        \Magento\Core\Model\Theme\FlyweightFactory $themeFactory,
+        \Magento\View\Design\Theme\FlyweightFactory $themeFactory,
         \Magento\Core\Helper\Context $context
     ) {
         parent::__construct($context);

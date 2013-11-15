@@ -128,10 +128,11 @@
                     this._ajaxContinue(this.options.checkout.saveUrl, {method:'register'}, this.options.billingSection);
                     this.element.find(this.options.checkout.registerCustomerPasswordSelector).show();
                 } else {
-                    alert($.mage.__('Please choose to register or to checkout as a guest'));
+                    alert($.mage.__('Please choose to register or to checkout as a guest.'));
+                    return false;
                 }
             }
-            return false;
+            this.element.trigger('login');
         },
 
         /**

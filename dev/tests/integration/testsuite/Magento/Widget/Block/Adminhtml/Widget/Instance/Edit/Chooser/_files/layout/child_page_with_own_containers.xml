@@ -23,6 +23,6 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="page" label="Child Page with Own Containers">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <container name="container_three" label="Container Three"/>
 </layout>

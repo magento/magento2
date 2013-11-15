@@ -115,4 +115,8 @@ return array(
     array('_backendFrontName', 'Magento\Backend\Helper\Data'),
     array('_app', 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency'),
     array('_enginePool', '\Magento\Core\Block\Template\Context', '_engineFactory'),
+    array('_allowedFormats', '\Magento\Core\Helper\Data', '\Magento\Core\Model\Locale'),
+    array('types', '\Magento\Core\Model\Theme'),
+    array('_collectionFactory', '\Magento\Install\Controller\Action', 'themeProvider'),
+    array('_collectionFactory', '\Magento\Theme\Model\Config\Customization', 'themeProvider'),
 );

@@ -34,7 +34,7 @@ class PhysicalTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateVirtualTheme()
     {
-        $physicalTheme = $this->getMock('Magento\Core\Model\Theme', null, array(), '', false, false);
+        $physicalTheme = $this->getMock('Magento\Core\Model\Theme', array('__wakeup'), array(), '', false, false);
         $physicalTheme->setData(array(
             'parent_id' => 10,
             'theme_title' => 'Test Theme'
@@ -46,8 +46,12 @@ class PhysicalTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($copyService));
 
         $virtualTheme = $this->getMock(
-            'Magento\Core\Model\Theme', array('getThemeImage', 'createPreviewImageCopy', 'save'),
-            array(), '', false, false
+            'Magento\Core\Model\Theme',
+            array('__wakeup', 'getThemeImage', 'createPreviewImageCopy', 'save'),
+            array(),
+            '',
+            false,
+            false
         );
         $virtualTheme->expects($this->once())
             ->method('getThemeImage')

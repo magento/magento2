@@ -58,14 +58,14 @@ class Base extends \Magento\Sales\Model\Config\Ordered
     protected $_orderTotalFactory;
 
     /**
-     * @param \Magento\Core\Model\Cache\Type\Config $configCacheType
+     * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Logger $logger
      * @param \Magento\Sales\Model\Order\TotalFactory $orderTotalFactory
      * @param \Magento\Sales\Model\Config $salesConfig,
      * @param null $sourceData
      */
     public function __construct(
-        \Magento\Core\Model\Cache\Type\Config $configCacheType,
+        \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\Logger $logger,
         \Magento\Sales\Model\Order\TotalFactory $orderTotalFactory,
         \Magento\Sales\Model\Config $salesConfig,

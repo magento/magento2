@@ -19,46 +19,40 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="col2-set">
-    <div class="col-1">
-        <div class="box">
-            <div class="box-title">
-                <h3><?php echo __('Contact Information') ?></h3>
-                <a href="<?php echo $this->getUrl('customer/account/edit') ?>"><?php echo __('Edit') ?></a>
-            </div>
-            <div class="box-content">
-                <p>
-                    <?php echo $this->escapeHtml($this->getCustomer()->getName()) ?><br />
-                    <?php echo $this->escapeHtml($this->getCustomer()->getEmail()) ?><br />
-                    <a href="<?php echo $this->getChangePasswordUrl() ?>"><?php echo __('Change Password') ?></a>
-                </p>
-            </div>
+<div class="block dashboard info">
+    <div class="title"><strong><?php echo __('Account Information') ?></strong></div>
+    <div class="content">
+        <div class="box information">
+            <strong class="subtitle">
+                <?php echo __('Contact Information') ?>
+                <a class="action edit" href="<?php echo $this->getUrl('customer/account/edit') ?>"><span><?php echo __('Edit') ?></span></a>
+            </strong>
+            <p>
+                <?php echo $this->escapeHtml($this->getCustomer()->getName()) ?><br>
+                <?php echo $this->escapeHtml($this->getCustomer()->getEmail()) ?><br>
+                <a href="<?php echo $this->getChangePasswordUrl() ?>"><?php echo __('Change Password') ?></a>
+            </p>
         </div>
-    </div>
-    <?php if( $this->isNewsletterEnabled() ): ?>
-    <div class="col-2">
-        <div class="box">
-            <div class="box-title">
-                <h3><?php echo __('Newsletters') ?></h3>
-                <a href="<?php echo $this->getUrl('newsletter/manage') ?>"><?php echo __('Edit') ?></a>
-            </div>
-            <div class="box-content">
+        <?php if( $this->isNewsletterEnabled() ): ?>
+            <div class="box newsletter">
+                <strong class="subtitle">
+                    <?php echo __('Newsletters') ?>
+                    <a class="action edit" href="<?php echo $this->getUrl('newsletter/manage') ?>"><span><?php echo __('Edit') ?></span></a>
+                </strong>
                 <p>
                     <?php if( $this->getIsSubscribed() ): ?>
-                        <?php echo __("You subscribe to 'General Subscription'.") ?>
+                        <?php echo __("You are currently subscribed to 'General Subscription'.") ?>
                     <?php else: ?>
-                        <?php echo __('You do not subscribe to a newsletter.') ?>
+                        <?php echo __('You are currently not subscribed to any newsletter.') ?>
                     <?php endif; ?>
                 </p>
+                <?php /* Extensions placeholder */ ?>
+                <?php echo $this->getChildHtml('customer.account.dashboard.info.extra')?>
             </div>
-        </div>
-        <?php /* Extensions placeholder */ ?>
-        <?php echo $this->getChildHtml('customer.account.dashboard.info.extra')?>
+        <?php endif; ?>
     </div>
-    <?php endif; ?>
 </div>

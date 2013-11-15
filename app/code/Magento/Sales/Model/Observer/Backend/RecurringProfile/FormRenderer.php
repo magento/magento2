@@ -26,14 +26,14 @@ namespace Magento\Sales\Model\Observer\Backend\RecurringProfile;
 class FormRenderer
 {
     /**
-     * @var \Magento\Core\Model\BlockFactory
+     * @var \Magento\View\Element\BlockFactory
      */
     protected $_blockFactory;
 
     /**
-     * @param \Magento\Core\Model\BlockFactory $blockFactory
+     * @param \Magento\View\Element\BlockFactory $blockFactory
      */
-    public function __construct(\Magento\Core\Model\BlockFactory $blockFactory)
+    public function __construct(\Magento\View\Element\BlockFactory $blockFactory)
     {
         $this->_blockFactory = $blockFactory;
     }

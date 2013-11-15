@@ -44,8 +44,8 @@
     <ul class="note-list">
     <?php foreach ($_entity->getCommentsCollection(true) as $_comment): ?>
         <li>
-            <span class="note-list-date"><?php echo $this->helper('Magento\Core\Helper\Data')->formatDate($_comment->getCreatedAtDate(), 'medium') ?></span>
-            <span class="note-list-time"><?php echo $this->helper('Magento\Core\Helper\Data')->formatTime($_comment->getCreatedAtDate(), 'medium') ?></span>
+            <span class="note-list-date"><?php echo $this->formatDate($_comment->getCreatedAtDate(), 'medium') ?></span>
+            <span class="note-list-time"><?php echo $this->formatTime($_comment->getCreatedAtDate(), 'medium') ?></span>
             <span class="note-list-customer">
                 <?php echo __('Customer') ?>
                 <?php if ($_comment->getIsCustomerNotified()): ?>

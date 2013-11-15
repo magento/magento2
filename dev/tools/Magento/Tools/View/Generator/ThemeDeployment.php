@@ -34,9 +34,9 @@ class ThemeDeployment
     /**
      * Helper to process CSS content and fix urls
      *
-     * @var \Magento\Core\Helper\Css
+     * @var \Magento\View\Url\CssResolver
      */
-    private $_cssHelper;
+    private $_cssUrlResolver;
 
     /**
      * Destination dir, where files will be copied to
@@ -71,7 +71,7 @@ class ThemeDeployment
     /**
      * Constructor
      *
-     * @param \Magento\Core\Helper\Css $cssHelper
+     * @param \Magento\View\Url\CssResolver $cssUrlResolver
      * @param string $destinationHomeDir
      * @param string $configPermitted
      * @param string|null $configForbidden
@@ -79,13 +79,13 @@ class ThemeDeployment
      * @throws \Magento\Exception
      */
     public function __construct(
-        \Magento\Core\Helper\Css $cssHelper,
+        \Magento\View\Url\CssResolver $cssUrlResolver,
         $destinationHomeDir,
         $configPermitted,
         $configForbidden = null,
         $isDryRun = false
     ) {
-        $this->_cssHelper = $cssHelper;
+        $this->_cssUrlResolver = $cssUrlResolver;
         $this->_destinationHomeDir = $destinationHomeDir;
         $this->_isDryRun = $isDryRun;
         $this->_permitted = $this->_loadConfig($configPermitted);
@@ -133,10 +133,9 @@ class ThemeDeployment
                 'destinationContext' => $destinationContext,
             );
 
-            $destDir = \Magento\Core\Model\View\DeployedFilesManager::buildDeployedFilePath(
+            $destDir = \Magento\View\DeployedFilesManager::buildDeployedFilePath(
                 $destinationContext['area'],
                 $destinationContext['themePath'],
-                $destinationContext['locale'],
                 '',
                 $destinationContext['module']
             );
@@ -209,15 +208,14 @@ class ThemeDeployment
             $destContext = $context['destinationContext'];
             $destHomeDir = $this->_destinationHomeDir;
             $callback = function ($relativeUrl) use ($destContext, $destFileDir, $destHomeDir) {
-                $parts = explode(\Magento\Core\Model\View\Service::SCOPE_SEPARATOR, $relativeUrl);
+                $parts = explode(\Magento\View\Service::SCOPE_SEPARATOR, $relativeUrl);
                 if (count($parts) == 2) {
                     list($module, $file) = $parts;
                     if (!strlen($module) || !strlen($file)) {
                         throw new \Magento\Exception("Wrong module url: {$relativeUrl}");
                     }
-                    $relPath = \Magento\Core\Model\View\DeployedFilesManager::buildDeployedFilePath(
-                        $destContext['area'], $destContext['themePath'], $destContext['locale'],
-                        $file, $module
+                    $relPath = \Magento\View\DeployedFilesManager::buildDeployedFilePath(
+                        $destContext['area'], $destContext['themePath'], $file, $module
                     );
 
                     $result = $destHomeDir . '/' . $relPath;
@@ -229,7 +227,13 @@ class ThemeDeployment
 
             // Replace relative urls and write the modified content (if not dry run)
             $content = file_get_contents($fileSource);
-            $content = $this->_cssHelper->replaceCssRelativeUrls($content, $fileSource, $fileDestination, $callback);
+            $content = $this->_cssUrlResolver->replaceCssRelativeUrls(
+                $content,
+                $fileSource,
+                $fileDestination,
+                $callback
+            );
+
             if (!$this->_isDryRun) {
                 file_put_contents($fileDestination, $content);
             }

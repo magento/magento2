@@ -96,12 +96,12 @@ class Template extends \Magento\Core\Model\Template
     protected $_filesystem;
 
     /**
-     * @var \Magento\Core\Model\View\Url
+     * @var \Magento\View\Url
      */
     protected $_viewUrl;
 
     /**
-     * @var \Magento\Core\Model\View\FileSystem
+     * @var \Magento\View\FileSystem
      */
     protected $_viewFileSystem;
 
@@ -141,8 +141,8 @@ class Template extends \Magento\Core\Model\Template
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\App\Emulation $appEmulation
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Model\View\Url $viewUrl
-     * @param \Magento\Core\Model\View\FileSystem $viewFileSystem
+     * @param \Magento\View\Url $viewUrl
+     * @param \Magento\View\FileSystem $viewFileSystem
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Core\Model\ConfigInterface $coreConfig
@@ -159,8 +159,8 @@ class Template extends \Magento\Core\Model\Template
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\App\Emulation $appEmulation,
         \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\View\Url $viewUrl,
-        \Magento\Core\Model\View\FileSystem $viewFileSystem,
+        \Magento\View\Url $viewUrl,
+        \Magento\View\FileSystem $viewFileSystem,
         \Magento\View\DesignInterface $design,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Core\Model\ConfigInterface $coreConfig,

@@ -100,14 +100,14 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $themeImage = $this->getMock('Magento\Core\Model\Theme\Image', array(), array(), '', false);
         $themeMock->expects($this->any())->method('getThemeImage')->will($this->returnValue($themeImage));
 
-        $themeFactory = $this->getMock('Magento\Core\Model\Theme\FlyweightFactory', array('create'), array(), '',
+        $themeFactory = $this->getMock('Magento\View\Design\Theme\FlyweightFactory', array('create'), array(), '',
             false);
         $themeFactory->expects($this->once())->method('create')->will($this->returnValue($themeMock));
 
         $this->_objectManagerMock
             ->expects($this->at(0))
             ->method('get')
-            ->with('Magento\Core\Model\Theme\FlyweightFactory')
+            ->with('Magento\View\Design\Theme\FlyweightFactory')
             ->will($this->returnValue($themeFactory));
 
         $this->_objectManagerMock

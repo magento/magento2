@@ -67,7 +67,7 @@ class Address extends \Magento\Core\Helper\AbstractHelper
     /**
      * Block factory
      *
-     * @var \Magento\Core\Model\BlockFactory
+     * @var \Magento\View\Element\BlockFactory
      */
     protected $_blockFactory;
 
@@ -94,7 +94,7 @@ class Address extends \Magento\Core\Helper\AbstractHelper
 
     /**
      * @param \Magento\Core\Helper\Context $context
-     * @param \Magento\Core\Model\BlockFactory $blockFactory
+     * @param \Magento\View\Element\BlockFactory $blockFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -102,7 +102,7 @@ class Address extends \Magento\Core\Helper\AbstractHelper
      */
     public function __construct(
         \Magento\Core\Helper\Context $context,
-        \Magento\Core\Model\BlockFactory $blockFactory,
+        \Magento\View\Element\BlockFactory $blockFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Eav\Model\Config $eavConfig,

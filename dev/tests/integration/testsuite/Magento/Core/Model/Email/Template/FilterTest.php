@@ -124,7 +124,10 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Core\Model\Resource\Theme\Collection');
         $themeId = $collection->getThemeByFullPath('frontend/test_default')->getId();
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->setConfig(\Magento\Core\Model\View\Design::XML_PATH_THEME_ID, $themeId);
+            ->getStore()->setConfig(
+                \Magento\Core\Model\View\Design::XML_PATH_THEME_ID,
+                $themeId
+            );
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

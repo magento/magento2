@@ -34,11 +34,11 @@ Magento/Catalog/Model/Template
 Magento/Cms/Model
 Magento/GiftMessage/Model
 Magento/GoogleShopping/Model/Attribute
-Magento/Oauth/Controller
 Magento/Sales/Block/Order
 Magento/Sales/Controller/Adminhtml/Order
 Magento/Sales/Model/Resource/Helper
 Magento/Sales/Model/Resource/Order
+Magento/Catalog/Block/Product
 Magento/Catalog/Model/Resource/Product
 Magento/CatalogRule/Block/Adminhtml/Promo/Catalog/Edit/Tab
 Magento/Checkout/Block/Onepage

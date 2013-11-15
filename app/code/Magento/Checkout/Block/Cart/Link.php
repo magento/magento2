@@ -30,20 +30,20 @@ namespace Magento\Checkout\Block\Cart;
 class Link extends \Magento\Page\Block\Link
 {
     /**
-     * @var \Magento\Core\Model\ModuleManager
+     * @var \Magento\Module\Manager
      */
     protected $_moduleManager;
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Core\Model\ModuleManager $moduleManager
+     * @param \Magento\Module\Manager $moduleManager
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Block\Template\Context $context,
-        \Magento\Core\Model\ModuleManager $moduleManager,
+        \Magento\Module\Manager $moduleManager,
         array $data = array()
     ) {
         parent::__construct($coreData, $context, $data);

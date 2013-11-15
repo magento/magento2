@@ -24,7 +24,7 @@
  */
 -->
 <config>
-    <module name="Magento_User" version="1.6.1.4" active="true">
+    <module name="Magento_User" version="1.6.1.5" active="true">
         <sequence>
             <module name="Magento_Backend"/>
         </sequence>
@@ -51,7 +51,6 @@
             <module name="Magento_GoogleShopping"/>
             <module name="Magento_ImportExport"/>
             <module name="Magento_Index"/>
-            <module name="Magento_Oauth"/>
             <module name="Magento_PageCache"/>
             <module name="Magento_Payment"/>
             <module name="Magento_Paypal"/>

@@ -56,6 +56,14 @@
         </xs:sequence>
         <xs:attribute type="xs:string" name="type"/>
         <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute name="design_abstraction">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="custom"/>
+                    <xs:enumeration value="page_layout"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
     </xs:complexType>
 
     <xs:complexType name="argumentsType">

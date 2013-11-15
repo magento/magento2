@@ -33,7 +33,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
     public function testRender($showBlockHints)
     {
         $subject = $this->getMock('Magento\View\TemplateEngineInterface');
-        $block = $this->getMock('Magento\Core\Block\Template', array(), array(), 'TestBlock', false);
+        $block = $this->getMock('Magento\View\Element\BlockInterface', array(), array(), 'TestBlock', false);
         $subject
             ->expects($this->once())
             ->method('render')

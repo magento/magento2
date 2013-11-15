@@ -30,6 +30,7 @@
 namespace Magento\Core\Model\Resource\Theme\File;
 
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+    implements \Magento\View\Design\Theme\File\CollectionInterface
 {
     /**
      * Collection initialization

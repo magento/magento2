@@ -44,7 +44,7 @@ class Login extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     protected $_checkoutData = null;
 
     /**
-     * @param \Magento\Core\Model\Cache\Type\Config $configCacheType
+     * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
@@ -56,7 +56,7 @@ class Login extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Cache\Type\Config $configCacheType,
+        \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Block\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,

@@ -60,7 +60,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false),
             $this->getMock('Magento\Downloadable\Model\Link\Purchased\ItemFactory', array(), array(), '', false),
             $this->getMock('Magento\Checkout\Model\Session', array(), array(), '', false),
-            $itemsFactory
+            $itemsFactory,
+            $this->getMock('\Magento\Object\Copy', array(), array(), '', false)
         );
     }
 

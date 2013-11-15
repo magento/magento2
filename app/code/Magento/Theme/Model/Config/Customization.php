@@ -42,9 +42,9 @@ class Customization
     protected $_design;
 
     /**
-     * @var \Magento\Core\Model\Resource\Theme\CollectionFactory
+     * @var \Magento\View\Design\Theme\ThemeProviderInterface
      */
-    protected $_collectionFactory;
+    protected $themeProvider;
 
     /**
      * Theme customizations which are assigned to store views or as default
@@ -63,18 +63,18 @@ class Customization
     protected $_unassignedTheme;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager,
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\View\DesignInterface $design
-     * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $collectionFactory
+     * @param \Magento\View\Design\Theme\ThemeProviderInterface $themeProvider
      */
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\View\DesignInterface $design,
-        \Magento\Core\Model\Resource\Theme\CollectionFactory $collectionFactory
+        \Magento\View\Design\Theme\ThemeProviderInterface $themeProvider
     ) {
-        $this->_storeManager    = $storeManager;
-        $this->_design          = $design;
-        $this->_collectionFactory = $collectionFactory;
+        $this->_storeManager = $storeManager;
+        $this->_design       = $design;
+        $this->themeProvider = $themeProvider;
     }
 
     /**
@@ -184,13 +184,12 @@ class Customization
      * NOTE: To get into "assigned" list theme customization not necessary should be assigned to store-view directly.
      * It can be set to website or as default theme and be used by store-view via config fallback mechanism.
      *
-     * @return $this
+     * @return Customization
      */
     protected function _prepareThemeCustomizations()
     {
         /** @var \Magento\Core\Model\Resource\Theme\Collection $themeCollection */
-        $themeCollection = $this->_collectionFactory->create();
-        $themeCollection->filterThemeCustomizations();
+        $themeCollection = $this->themeProvider->getThemeCustomizations(\Magento\Core\Model\App\Area::AREA_FRONTEND);
 
         $assignedThemes = $this->getStoresByThemes();
 
@@ -209,6 +208,4 @@ class Customization
 
         return $this;
     }
-
-
 }

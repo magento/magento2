@@ -71,7 +71,7 @@ class Config extends \Magento\Eav\Model\Config
     /**
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory
-     * @param \Magento\Core\Model\Cache\StateInterface $cacheState
+     * @param \Magento\App\Cache\StateInterface $cacheState
      * @param \Magento\Validator\UniversalFactory $universalFactory
      * Eav config
      *
@@ -119,7 +119,7 @@ class Config extends \Magento\Eav\Model\Config
      *
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory
-     * @param \Magento\Core\Model\Cache\StateInterface $cacheState
+     * @param \Magento\App\Cache\StateInterface $cacheState
      * @param \Magento\Validator\UniversalFactory $universalFactory
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Catalog\Model\Resource\ConfigFactory $configFactory
@@ -134,7 +134,7 @@ class Config extends \Magento\Eav\Model\Config
     public function __construct(
         \Magento\Core\Model\App $app,
         \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory,
-        \Magento\Core\Model\Cache\StateInterface $cacheState,
+        \Magento\App\Cache\StateInterface $cacheState,
         \Magento\Validator\UniversalFactory $universalFactory,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Catalog\Model\Resource\ConfigFactory $configFactory,

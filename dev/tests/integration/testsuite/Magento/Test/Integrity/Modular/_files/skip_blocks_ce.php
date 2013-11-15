@@ -37,8 +37,6 @@ return array(
     'Magento\Cms\Block\Adminhtml\Page',
     'Magento\Cms\Block\Adminhtml\Page\Edit',
     'Magento\Sales\Block\Adminhtml\Order',
-    'Magento\Oauth\Block\Adminhtml\Oauth\Consumer',
-    'Magento\Oauth\Block\Adminhtml\Oauth\Consumer\Grid',
     'Magento\Paypal\Block\Adminhtml\Settlement\Report',
     'Magento\Sales\Block\Adminhtml\Billing\Agreement\View',
     'Magento\User\Block\Role\Tab\Edit',

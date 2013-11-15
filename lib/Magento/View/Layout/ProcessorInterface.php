@@ -84,21 +84,21 @@ interface ProcessorInterface
     public function addPageHandles(array $handlesToTry);
 
     /**
-     * Retrieve all page and fragment types that exist in the system.
+     * Retrieve all design abstractions that exist in the system.
      *
      * Result format:
      * array(
      *     'handle_name_1' => array(
      *         'name'     => 'handle_name_1',
      *         'label'    => 'Handle Name 1',
-     *         'type'     => self::TYPE_PAGE,
+     *         'design_abstraction' => self::DESIGN_ABSTRACTION_PAGE_LAYOUT or self::DESIGN_ABSTRACTION_CUSTOM
      *     ),
      *     // ...
      * )
      *
      * @return array
      */
-    public function getAllPageHandles();
+    public function getAllDesignAbstractions();
 
     /**
      * Load layout updates by handles

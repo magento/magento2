@@ -23,13 +23,19 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Customer Account Login Form" type="page">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="root">
         <action method="setTemplate">
             <argument name="template" xsi:type="string">1column.phtml</argument>
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\Customer\Block\Form\Login" name="customer_form_login" template="form/login.phtml"/>
+        <!-- customer.form.login.extra -->
+        <container name="customer.login.container" label="Customer Login Container" htmlTag="div" htmlClass="login container">
+            <block class="Magento\Customer\Block\Form\Login" name="customer_form_login" template="form/login.phtml">
+                <container name="form.additional.info" label="invisible" as="form_additional_info"/>
+            </block>
+            <block class="Magento\Customer\Block\Form\Login" name="customer.new" template="newcustomer.phtml"/>
+        </container>
     </referenceContainer>
 </layout>

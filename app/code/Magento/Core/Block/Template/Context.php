@@ -33,7 +33,7 @@ class Context extends \Magento\Core\Block\Context
     protected $_filesystem;
 
     /**
-     * @var \Magento\Core\Model\View\FileSystem
+     * @var \Magento\View\FileSystem
      */
     protected $_viewFileSystem;
 
@@ -59,18 +59,20 @@ class Context extends \Magento\Core\Block\Context
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\App\FrontController $frontController
      * @param \Magento\Core\Model\Factory\Helper $helperFactory
-     * @param \Magento\Core\Model\View\Url $viewUrl
+     * @param \Magento\View\Url $viewUrl
      * @param \Magento\View\ConfigInterface $viewConfig
-     * @param \Magento\Core\Model\Cache\StateInterface $cacheState
+     * @param \Magento\App\Cache\StateInterface $cacheState
      * @param \Magento\App\Dir $dirs
      * @param \Magento\Logger $logger
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Model\View\FileSystem $viewFileSystem
+     * @param \Magento\View\FileSystem $viewFileSystem
      * @param \Magento\View\TemplateEngineFactory $engineFactory
      * @param \Magento\Core\Model\App $app
      * @param \Magento\App\State $appState
      * @param \Magento\Escaper $escaper
      * @param \Magento\Filter\FilterManager $filterManager
+     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param array $data
      */
     public function __construct(
         \Magento\App\RequestInterface $request,
@@ -84,18 +86,20 @@ class Context extends \Magento\Core\Block\Context
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\App\FrontController $frontController,
         \Magento\Core\Model\Factory\Helper $helperFactory,
-        \Magento\Core\Model\View\Url $viewUrl,
+        \Magento\View\Url $viewUrl,
         \Magento\View\ConfigInterface $viewConfig,
-        \Magento\Core\Model\Cache\StateInterface $cacheState,
+        \Magento\App\Cache\StateInterface $cacheState,
         \Magento\App\Dir $dirs,
         \Magento\Logger $logger,
         \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\View\FileSystem $viewFileSystem,
+        \Magento\View\FileSystem $viewFileSystem,
         \Magento\View\TemplateEngineFactory $engineFactory,
         \Magento\Core\Model\App $app,
         \Magento\App\State $appState,
         \Magento\Escaper $escaper,
-        \Magento\Filter\FilterManager $filterManager
+        \Magento\Filter\FilterManager $filterManager,
+        \Magento\Core\Model\LocaleInterface $locale,
+        array $data = array()
     ) {
         parent::__construct(
             $request,
@@ -115,7 +119,9 @@ class Context extends \Magento\Core\Block\Context
             $logger,
             $app,
             $escaper,
-            $filterManager
+            $filterManager,
+            $locale,
+            $data
         );
 
         $this->_appState = $appState;
@@ -158,7 +164,7 @@ class Context extends \Magento\Core\Block\Context
     /**
      * Get view file system model
      *
-     * @return \Magento\Core\Model\View\FileSystem
+     * @return \Magento\View\FileSystem
      */
     public function getViewFileSystem()
     {

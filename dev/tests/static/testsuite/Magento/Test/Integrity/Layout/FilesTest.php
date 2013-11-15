@@ -48,34 +48,10 @@ class FilesTest extends \PHPUnit_Framework_TestCase
             function ($layout) {
                 $dom = new \DOMDocument();
                 $dom->loadXML(file_get_contents($layout));
-                $errors = $this->_validateDomDocument($dom, $this->_schemaFile);
+                $errors = \Magento\TestFramework\Utility\Validator::validateXml($dom, $this->_schemaFile);
                 $this->assertTrue(empty($errors), print_r($errors, true));
             },
             \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()
         );
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     * @param $schemaFileName
-     * @return array
-     */
-    protected function _validateDomDocument(\DOMDocument $dom, $schemaFileName)
-    {
-        libxml_use_internal_errors(true);
-        $result = $dom->schemaValidate($schemaFileName);
-        $errors = array();
-        if (!$result) {
-            $validationErrors = libxml_get_errors();
-            if (count($validationErrors)) {
-                foreach ($validationErrors as $error) {
-                    $errors[] = "{$error->message} Line: {$error->line}\n";
-                }
-            } else {
-                $errors[] = 'Unknown validation error';
-            }
-        }
-        libxml_use_internal_errors(false);
-        return $errors;
     }
 }

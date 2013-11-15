@@ -175,13 +175,13 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
         $this->_getModel(true)->finish();
 
-        /** @var $cacheState \Magento\Core\Model\Cache\StateInterface */
+        /** @var $cacheState \Magento\App\Cache\StateInterface */
         $cacheState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Cache\StateInterface');
+            ->create('Magento\App\Cache\StateInterface');
 
-        /** @var \Magento\Core\Model\Cache\TypeListInterface $cacheTypeList */
+        /** @var \Magento\App\Cache\TypeListInterface $cacheTypeList */
         $cacheTypeList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Cache\TypeListInterface');
+            ->create('Magento\App\Cache\TypeListInterface');
         $types = array_keys($cacheTypeList->getTypes());
         foreach ($types as $type) {
             $this->assertTrue(

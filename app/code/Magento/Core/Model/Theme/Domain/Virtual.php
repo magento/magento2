@@ -34,7 +34,7 @@ class Virtual
     /**
      * Virtual theme model instance
      *
-     * @var \Magento\Core\Model\Theme
+     * @var \Magento\View\Design\ThemeInterface
      */
     protected $_theme;
 
@@ -46,7 +46,7 @@ class Virtual
     /**
      * Staging theme model instance
      *
-     * @var \Magento\Core\Model\Theme
+     * @var \Magento\View\Design\ThemeInterface
      */
     protected $_stagingTheme;
 
@@ -83,7 +83,7 @@ class Virtual
     /**
      * Get 'staging' theme
      *
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\View\Design\ThemeInterface
      */
     public function getStagingTheme()
     {
@@ -100,7 +100,7 @@ class Virtual
     /**
      * Get 'physical' theme
      *
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\View\Design\ThemeInterface
      */
     public function getPhysicalTheme()
     {
@@ -130,7 +130,7 @@ class Virtual
     /**
      * Create 'staging' theme associated with current 'virtual' theme
      *
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\View\Design\ThemeInterface
      */
     protected function _createStagingTheme()
     {
@@ -142,7 +142,7 @@ class Virtual
             'theme_title'          => sprintf('%s - Staging', $this->_theme->getThemeTitle()),
             'preview_image'        => $this->_theme->getPreviewImage(),
             'is_featured'          => $this->_theme->getIsFeatured(),
-            'type'                 => \Magento\Core\Model\Theme::TYPE_STAGING
+            'type'                 => \Magento\View\Design\ThemeInterface::TYPE_STAGING
         ));
         $stagingTheme->save();
         return $stagingTheme;

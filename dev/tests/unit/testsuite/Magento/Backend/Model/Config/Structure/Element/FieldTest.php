@@ -94,7 +94,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             'Magento\Backend\Model\Config\CommentFactory', array(), array(), '', false
         );
         $this->_blockFactoryMock = $this->getMock(
-            'Magento\Core\Model\BlockFactory', array(), array(), '', false
+            'Magento\View\Element\BlockFactory', array(), array(), '', false
         );
         $this->_dsGraphMock = $this->getMock(
             'Magento\Core\Model\DataService\Graph', array(), array(), '', false

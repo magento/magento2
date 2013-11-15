@@ -65,7 +65,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_cacheFrontendMock = $this->getMockForAbstractClass('Magento\Cache\FrontendInterface');
 
         $this->_frontendPoolMock = $this->getMock(
-            'Magento\Core\Model\Cache\Frontend\Pool',
+            'Magento\App\Cache\Frontend\Pool',
             array(),
             array(),
             '',
@@ -83,13 +83,19 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         ;
 
         $this->_themeCustomization = $this->getMock(
-            'Magento\Core\Model\Theme\Customization',
+            'Magento\View\Design\Theme\Customization',
             array(),
             array(),
             '',
             false
         );
-        $themeMock = $this->getMock('Magento\Core\Model\Theme', array('getCustomization'), array(), '', false);
+        $themeMock = $this->getMock(
+            'Magento\Core\Model\Theme',
+            array('__wakeup', 'getCustomization'),
+            array(),
+            '',
+            false
+        );
         $themeMock->expects($this->any())->method('getCustomization')
             ->will($this->returnValue($this->_themeCustomization));
 
@@ -151,7 +157,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $asset = new \Magento\Core\Model\Page\Asset\Remote('http://127.0.0.1/test.css');
         $file = $this->getMock('Magento\Core\Model\Theme\File', array(), array(), '', false);
-        $fileService = $this->getMock('Magento\Core\Model\Theme\Customization\File\Css', array(), array(), '', false);
+        $fileService = $this->getMock('Magento\View\Design\Theme\Customization\File\Css', array(), array(), '', false);
 
         $fileService->expects($this->atLeastOnce())->method('getContentType')->will($this->returnValue('css'));
 

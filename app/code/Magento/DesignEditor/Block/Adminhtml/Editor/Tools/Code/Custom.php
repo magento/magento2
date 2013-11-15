@@ -146,7 +146,7 @@ class Custom extends \Magento\Backend\Block\Widget\Form\Generic
      * Get theme file (with custom CSS)
      *
      * @param \Magento\View\Design\ThemeInterface $theme
-     * @return \Magento\Core\Model\Theme\FileInterface|null
+     * @return \Magento\View\Design\Theme\FileInterface|null
      */
     protected function _getCustomCss($theme)
     {

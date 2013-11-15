@@ -89,7 +89,7 @@ class Context
         if (!$this->_theme->load($themeId)->getId()) {
             throw new \Magento\Core\Exception(__('We can\'t find theme "%1".', $themeId));
         }
-        if ($this->_theme->getType() === \Magento\Core\Model\Theme::TYPE_STAGING) {
+        if ($this->_theme->getType() === \Magento\View\Design\ThemeInterface::TYPE_STAGING) {
             throw new \Magento\Core\Exception(__('Wrong theme type set as editable'));
         }
         return $this;
@@ -124,7 +124,7 @@ class Context
                     __('Theme "%1" is not editable.', $editableTheme->getThemeTitle())
                 );
             }
-            $this->_stagingTheme = $editableTheme->getDomainModel(\Magento\Core\Model\Theme::TYPE_VIRTUAL)
+            $this->_stagingTheme = $editableTheme->getDomainModel(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL)
                 ->getStagingTheme();
         }
         return $this->_stagingTheme;

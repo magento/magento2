@@ -29,6 +29,11 @@
             <value>frontend</value>
         </param>
     </type>
+    <type name="Magento\Catalog\Model\Resource\Category\Collection">
+        <param name="fetchStrategy">
+            <instance type="Magento\Data\Collection\Db\FetchStrategy\Cache" />
+        </param>
+    </type>
     <type name="Magento\Sales\Model\Convert\Quote">
         <plugin name="copy_quote_files_to_order" type="Magento\Catalog\Model\Plugin\QuoteItemProductOption"/>
     </type>

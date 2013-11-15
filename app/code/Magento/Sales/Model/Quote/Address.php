@@ -208,13 +208,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected $_nominalOnly = null;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData;
-
-    /**
      * Core store config
      *
      * @var \Magento\Core\Model\Store\ConfigInterface
@@ -257,7 +250,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected $_addressTotalFactory;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
+     * @var \Magento\Object\Copy
+     */
+    protected $_objectCopyService;
+
+    /**
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Core\Model\Context $context
@@ -276,6 +273,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @param \Magento\Shipping\Model\Rate\RequestFactory $rateRequestFactory
      * @param \Magento\Sales\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory
      * @param \Magento\Sales\Model\Quote\Address\TotalFactory $addressTotalFactory
+     * @param \Magento\Object\Copy $objectCopyService
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -283,7 +281,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Core\Model\Context $context,
@@ -302,11 +299,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         \Magento\Shipping\Model\Rate\RequestFactory $rateRequestFactory,
         \Magento\Sales\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory,
         \Magento\Sales\Model\Quote\Address\TotalFactory $addressTotalFactory,
+        \Magento\Object\Copy $objectCopyService,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_coreData = $coreData;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_addressFactory = $addressFactory;
         $this->_addressItemFactory = $addressItemFactory;
@@ -317,6 +314,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         $this->_rateRequestFactory = $rateRequestFactory;
         $this->_totalCollectorFactory = $totalCollectorFactory;
         $this->_addressTotalFactory = $addressTotalFactory;
+        $this->_objectCopyService = $objectCopyService;
         parent::__construct(
             $eventManager,
             $directoryData,
@@ -419,7 +417,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     public function importCustomerAddress(\Magento\Customer\Model\Address $address)
     {
-        $this->_coreData->copyFieldsetToTarget('customer_address', 'to_quote_address', $address, $this);
+        $this->_objectCopyService->copyFieldsetToTarget('customer_address', 'to_quote_address', $address, $this);
         $email = null;
         if ($address->hasEmail()) {
             $email =  $address->getEmail();
@@ -440,8 +438,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function exportCustomerAddress()
     {
         $address = $this->_addressFactory->create();
-        $this->_coreData
-            ->copyFieldsetToTarget('sales_convert_quote_address', 'to_customer_address', $this, $address);
+        $this->_objectCopyService->copyFieldsetToTarget(
+            'sales_convert_quote_address', 'to_customer_address', $this, $address
+        );
         return $address;
     }
 
@@ -458,8 +457,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
             ->setCustomerAddressId($address->getCustomerAddressId())
             ->setEmail($address->getEmail());
 
-        $this->_coreData
-            ->copyFieldsetToTarget('sales_convert_order_address', 'to_quote_address', $address, $this);
+        $this->_objectCopyService->copyFieldsetToTarget(
+            'sales_convert_order_address', 'to_quote_address', $address, $this
+        );
 
         return $this;
     }

@@ -82,7 +82,6 @@ class Context extends \Magento\Core\Controller\Varien\Action\Context
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\HTTP\Authentication $authentication
-     * @param bool $isRenderInherited
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Backend\Helper\Data $helper
      * @param \Magento\AuthorizationInterface $authorization
@@ -103,7 +102,6 @@ class Context extends \Magento\Core\Controller\Varien\Action\Context
         \Magento\View\LayoutInterface $layout,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\HTTP\Authentication $authentication,
-        $isRenderInherited,
         \Magento\Backend\Model\Session $session,
         \Magento\Backend\Helper\Data $helper,
         \Magento\AuthorizationInterface $authorization,
@@ -114,7 +112,7 @@ class Context extends \Magento\Core\Controller\Varien\Action\Context
         $canUseBaseUrl = false
     ) {
         parent::__construct($logger, $request, $response, $objectManager, $frontController, $layout, $eventManager, 
-            $authentication, $isRenderInherited
+            $authentication
         );
         $this->_canUseBaseUrl = $canUseBaseUrl;
         $this->_session = $session;

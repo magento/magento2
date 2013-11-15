@@ -26,6 +26,7 @@
 <config>
     <module name="Magento_Integration" version="1.0.0.0" active="true">
         <sequence>
+            <module name="Magento_Core"/>
             <module name="Magento_Adminhtml"/>
         </sequence>
         <depends>

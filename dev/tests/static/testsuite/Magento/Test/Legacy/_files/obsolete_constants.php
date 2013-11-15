@@ -349,6 +349,46 @@ return array(
         '\Magento\Core\Helper\Data',
         '\Magento\Adminhtml\Helper\Catalog::XML_PATH_PUBLIC_FILES_VALID_PATHS'
     ),
+    array(
+        'TYPE_PHYSICAL',
+        '\Magento\Core\Model\Theme',
+        '\Magento\View\Design\ThemeInterface::TYPE_PHYSICAL'
+    ),
+    array(
+        'TYPE_VIRTUAL',
+        '\Magento\Core\Model\Theme',
+        '\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL'
+    ),
+    array(
+        'TYPE_STAGING',
+        '\Magento\Core\Model\Theme',
+        '\Magento\View\Design\ThemeInterface::TYPE_STAGING'
+    ),
+    array(
+        'PATH_SEPARATOR',
+        '\Magento\Core\Model\Theme',
+        '\Magento\View\Design\ThemeInterface::PATH_SEPARATOR'
+    ),
+    array(
+        'CODE_SEPARATOR',
+        '\Magento\Core\Model\Theme',
+        '\Magento\View\Design\ThemeInterface::CODE_SEPARATOR'
+    ),
+    array(
+        'XML_PATH_IMAGE_ADAPTER',
+        '\Magento\Core\Model\Image\AdapterFactory',
+        '\Magento\Core\Model\Image\Adapter\Config::XML_PATH_IMAGE_ADAPTER'
+    ),
+    array(
+        'ADAPTER_IM',
+        '\Magento\Core\Model\Image\AdapterFactory',
+        '\Magento\Image\Adapter\AdapterInterface::ADAPTER_IM'
+    ),
+    array(
+        'ADAPTER_GD2',
+        '\Magento\Core\Model\Image\AdapterFactory',
+        '\Magento\Image\Adapter\AdapterInterface::ADAPTER_GD2'
+    ),
     array('XML_PATH_IMAGE_TYPES', 'Magento\Adminhtml\Block\Catalog\Product\Frontend\Product\Watermark'),
     array('XML_PATH_WEBHOOK', 'Magento\Webhook\Model\Source\Hook'),
     array('XML_PATH_SUBSCRIPTIONS', 'Magento\Webhook\Model\Subscription\Config'),

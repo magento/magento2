@@ -26,9 +26,9 @@
 <config>
     <preference for="Magento\Core\Model\AppInterface" type="Magento\Core\Model\App\Proxy" />
     <preference for="Magento\Core\Model\Config\InvalidatorInterface" type="Magento\Core\Model\Config\Invalidator\Proxy" />
-    <preference for="Magento\App\CacheInterface" type="Magento\Core\Model\Cache\Proxy" />
-    <virtualType name="custom_cache_instance" type="Magento\Core\Model\Cache">
-        <plugin name="tag" type="Magento\Core\Model\Cache\TagPlugin" />
+    <preference for="Magento\App\CacheInterface" type="Magento\App\Cache\Proxy" />
+    <virtualType name="custom_cache_instance" type="Magento\App\Cache">
+        <plugin name="tag" type="Magento\App\Cache\TagPlugin" />
     </virtualType>
     <type name="Magento\SomeModule\Model\Test">
         <param name="proxy">

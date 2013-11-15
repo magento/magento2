@@ -53,7 +53,7 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Magento version
      */
-    const VERSION = '2.0.0.0-dev51';
+    const VERSION = '2.0.0.0-dev52';
 
 
     /**
@@ -801,7 +801,7 @@ class App implements \Magento\Core\Model\AppInterface
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '51',
+            'number'    => '52',
         );
     }
 }

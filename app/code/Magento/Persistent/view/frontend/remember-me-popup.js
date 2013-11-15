@@ -26,22 +26,15 @@
 (function ($) {
     $.widget('mage.rememberMePopup', {
         options: {
-            closeBtn: '.btn-close',
-            windowOverlayTemplate: '<div class="window-overlay"></div>',
-            popupBlockTemplate: '<div class="popup-block block popup-remember-tip active">' +
-                                '<div class="block-title">' +
+            closeBtn: '.action.close',
+            windowOverlayTemplate: '<div class="window overlay"></div>',
+            popupBlockTemplate: '<div class="popup block remember tip active">' +
+                                '<div class="title">' +
                                     '<strong>${title}</strong>' +
-                                    '<div class="btn-close"></div>' +
+                                    '<div class="action close"></div>' +
                                 '</div>' +
-                                '<div class="block-content">' +
+                                '<div class="content">' +
                                     '<p>${content}</p>' +
-                                    '<div class="buttons-set">' +
-                                        '<button class="button btn-close" type="button">' +
-                                            '<span>' +
-                                                '<span>Close</span>' +
-                                            '</span>' +
-                                        '</button>' +
-                                    '</div>' +
                                 '</div>' +
                             '</div>'
         },

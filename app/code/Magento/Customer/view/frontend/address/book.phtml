@@ -18,8 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    customer address book
- * @package     mage
+ * @category    design
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -30,75 +29,81 @@
  * @var $this \Magento\Customer\Block\Address\Book
  */
 ?>
-<div class="page-title title-buttons">
-    <h1><?php echo __('Address Book') ?></h1>
-    <button type="button" role="add-address" title="<?php echo __('Add New Address') ?>" class="button"><span><span><?php echo __('Add New Address') ?></span></span></button>
-</div>
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<div class="col2-set addresses-list">
-    <div class="col-1 addresses-primary">
-        <h2><?php echo __('Default Addresses') ?></h2>
-        <ol>
+<div class="block addresses default">
+    <div class="title"><strong><?php echo __('Default Addresses') ?></strong></div>
+    <div class="content">
         <?php if($_pAddsses = $this->getDefaultBilling()): ?>
-            <li class="item">
-                <h3><?php echo __('Default Billing Address') ?></h3>
+            <div class="box address billing">
+                <strong class="subtitle">
+                    <span><?php echo __('Default Billing Address') ?></span>
+                    <a class="action edit" href="<?php echo $this->getAddressEditUrl($this->getAddressById($_pAddsses)) ?>">
+                        <span><?php echo __('Change Billing Address') ?></span>
+                    </a>
+                </strong>
                 <address>
                     <?php echo $this->getAddressHtml($this->getAddressById($_pAddsses)) ?>
                 </address>
-                <p><a href="<?php echo $this->getAddressEditUrl($this->getAddressById($_pAddsses)) ?>"><?php echo __('Change Billing Address') ?></a></p>
-           </li>
+            </div>
         <?php else: ?>
-            <li class="item">
-                <h3><?php echo __('Default Billing Address') ?></h3>
-                <?php echo __('You have no default billing address in your address book.') ?>
-            </li>
+            <div class="box address billing">
+                <strong class="subtitle"><span><?php echo __('Default Billing Address') ?></span></strong>
+                <p><?php echo __('You have no default billing address in your address book.') ?></p>
+            </div>
         <?php endif ?>
 
         <?php if($_pAddsses = $this->getDefaultShipping()): ?>
-            <li class="item">
-                <h3><?php echo __('Default Shipping Address') ?></h3>
+            <div class="box address shipping">
+                <strong class="subtitle">
+                    <span><?php echo __('Default Shipping Address') ?></span>
+                    <a class="action edit" href="<?php echo $this->getAddressEditUrl($this->getAddressById($_pAddsses)) ?>">
+                        <span><?php echo __('Change Shipping Address') ?></span>
+                    </a>
+                </strong>
                 <address>
                     <?php echo $this->getAddressHtml($this->getAddressById($_pAddsses)) ?>
                 </address>
-                <p><a href="<?php echo $this->getAddressEditUrl($this->getAddressById($_pAddsses)) ?>"><?php echo __('Change Shipping Address') ?></a></p>
-            </li>
+            </div>
         <?php else: ?>
-            <li class="item empty">
-                <h3><?php echo __('Default Shipping Address') ?></h3>
+            <div class="box address shipping">
+                <strong class="subtitle"><span><?php echo __('Default Shipping Address') ?></span></strong>
                 <p><?php echo __('You have no default shipping address in your address book.') ?></p>
-            </li>
+            </div>
         <?php endif ?>
-        </ol>
-    </div>
-    <div class="col-2 addresses-additional">
-        <h2><?php echo __('Additional Address Entries') ?></h2>
-        <ol>
-        <?php if($_pAddsses = $this->getAdditionalAddresses()): ?>
-            <?php foreach($_pAddsses as $_address): ?>
-            <li class="item">
-                <address>
-                    <?php echo $this->getAddressHtml($_address) ?>
-                </address>
-                <p><a href="<?php echo $this->getUrl('customer/address/edit', array('id'=>$_address->getId())) ?>"><?php echo __('Edit Address') ?></a> <span class="separator">|</span> <a href="#" class="link-remove" role="delete-address" data-address="<?php echo $_address->getId() ?>"><?php echo __('Delete Address') ?></a></p>
-            </li>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <li class="item empty">
-                <p><?php echo __('You have no more address entries in your address book.') ?></p>
-            </li>
-        <?php endif ?>
-        </ol>
     </div>
 </div>
-<div class="buttons-set">
-    <p class="back-link"><a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><small>&laquo; </small><?php echo __('Back') ?></a></p>
+
+<div class="block addresses list">
+    <div class="title"><strong><?php echo __('Additional Address Entries') ?></strong></div>
+    <div class="content">
+        <?php if($_pAddsses = $this->getAdditionalAddresses()): ?>
+            <ol class="items addresses">
+                <?php foreach($_pAddsses as $_address): ?>
+                    <li class="item">
+                        <address>
+                            <?php echo $this->getAddressHtml($_address) ?><br />
+                        </address>
+                        <div class="item actions">
+                            <a class="action edit" href="<?php echo $this->getUrl('customer/address/edit', array('id'=>$_address->getId())) ?>"><span><?php echo __('Edit Address') ?></span></a>
+                            <a class="action delete" href="#" role="delete-address" data-address="<?php echo $_address->getId() ?>"><span><?php echo __('Delete Address') ?></span></a>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            </ol>
+        <?php else: ?>
+            <p class="empty"><?php echo __('You have no additional address entries in your address book.') ?></p>
+        <?php endif ?>
+    </div>
+</div>
+
+<div class="actions">
+    <div class="secondary"><a class="action back" href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><span><?php echo __('Back') ?></span></a></div>
 </div>
 <script type="text/javascript">
-    head.js("<?php echo $this->getViewFileUrl('Magento_Customer::address.js');?>", function() {
-        jQuery('div.page-title').address({
+    head.js("<?php echo $this->getViewFileUrl('Magento_Customer::address.js'); ?>", function() {
+        jQuery('.page.main').address({
             deleteAddress: "li.item a[role='delete-address']",
             deleteUrlPrefix: '<?php echo $this->getDeleteUrl() ?>id/',
-            addAddress: "div.title-buttons button[role='add-address']",
+            addAddress: "button[role='add-address']",
             addAddressLocation: '<?php echo $this->getAddAddressUrl() ?>'
         });
     });

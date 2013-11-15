@@ -26,7 +26,7 @@
 <config>
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Attribute">
         <param name="attributeLabelCache">
-            <instance type="Magento\Core\Model\Cache\Type\Translate" />
+            <instance type="Magento\App\Cache\Type\Translate" />
         </param>
     </type>
     <type name="Magento\Backend\Helper\Dashboard\Data">

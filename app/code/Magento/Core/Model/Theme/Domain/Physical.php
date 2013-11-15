@@ -34,7 +34,7 @@ class Physical
     /**
      * Physical theme model instance
      *
-     * @var \Magento\Core\Model\Theme
+     * @var \Magento\View\Design\ThemeInterface
      */
     protected $_theme;
 
@@ -75,7 +75,7 @@ class Physical
      * Create theme customization
      *
      * @param \Magento\View\Design\ThemeInterface $theme
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\View\Design\ThemeInterface
      */
     public function createVirtualTheme($theme)
     {
@@ -84,7 +84,7 @@ class Physical
         $themeData['theme_id'] = null;
         $themeData['theme_path'] = null;
         $themeData['theme_title'] = $this->_getVirtualThemeTitle($theme);
-        $themeData['type'] = \Magento\Core\Model\Theme::TYPE_VIRTUAL;
+        $themeData['type'] = \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL;
 
         /** @var $themeCustomization \Magento\View\Design\ThemeInterface */
         $themeCustomization = $this->_themeFactory->create()->setData($themeData);
@@ -105,7 +105,7 @@ class Physical
     protected function _getVirtualThemeTitle($theme)
     {
         $themeCopyCount = $this->_themeCollection->addAreaFilter(\Magento\Core\Model\App\Area::AREA_FRONTEND)
-            ->addTypeFilter(\Magento\Core\Model\Theme::TYPE_VIRTUAL)
+            ->addTypeFilter(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL)
             ->addFilter('parent_id', $theme->getId())
             ->count();
 

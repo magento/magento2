@@ -28,7 +28,7 @@
 $_product = $this->getProduct();
 $_helper = $this->helper('Magento\Catalog\Helper\Output');
 ?>
-<?php $_options = $this->helper('Magento\Core\Helper\Data')->decorateArray($this->getOptions()); ?>
+<?php $_options = $this->decorateArray($this->getOptions()); ?>
 <?php if ($_product->isSaleable()):?>
     <?php if (count($_options)): ?>
     <script type="text/javascript">

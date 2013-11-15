@@ -37,10 +37,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $themeMock = $this->getMock('Magento\Core\Model\Theme', array('getType'), array(), '', false);
+        $themeMock = $this->getMock('Magento\Core\Model\Theme', array('__wakeup', 'getType'), array(), '', false);
         $themeMock->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue(\Magento\Core\Model\Theme::TYPE_VIRTUAL));
+            ->will($this->returnValue(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL));
 
         $newThemeMock = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false);
 
@@ -50,7 +50,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->with('Magento\Core\Model\Theme\Domain\Virtual', array('theme' => $themeMock))
             ->will($this->returnValue($newThemeMock));
 
-        $themeDomainFactory = new \Magento\Core\Model\Theme\Domain\Factory($objectManager);
+        $themeDomainFactory = new \Magento\View\Design\Theme\Domain\Factory($objectManager);
         $this->assertEquals($newThemeMock, $themeDomainFactory->create($themeMock));
     }
 
@@ -60,17 +60,17 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateWithWrongThemeType()
     {
         $wrongThemeType = 'wrong_theme_type';
-        $themeMock = $this->getMock('Magento\Core\Model\Theme', array('getType'), array(), '', false);
+        $themeMock = $this->getMock('Magento\Core\Model\Theme', array('__wakeup', 'getType'), array(), '', false);
         $themeMock->expects($this->any())
             ->method('getType')
             ->will($this->returnValue($wrongThemeType));
 
         $objectManager = $this->getMock('Magento\ObjectManager', array(), array('create'), '', false);
 
-        $themeDomainFactory = new \Magento\Core\Model\Theme\Domain\Factory($objectManager);
+        $themeDomainFactory = new \Magento\View\Design\Theme\Domain\Factory($objectManager);
 
         $this->setExpectedException(
-            'Magento\Core\Exception',
+            'Magento\Exception',
             sprintf('Invalid type of theme domain model "%s"', $wrongThemeType)
         );
         $themeDomainFactory->create($themeMock);

@@ -29,7 +29,7 @@
  */
 namespace Magento\View\Design\FileResolution;
 
-use Magento\Core\Exception;
+use Magento\Exception;
 use Magento\App\State;
 use Magento\App\Dir;
 use Magento\Filesystem;

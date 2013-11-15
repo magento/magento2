@@ -30,19 +30,19 @@ namespace Magento\Checkout\Block;
 class Link extends \Magento\Page\Block\Link
 {
     /**
-     * @var \Magento\Core\Model\ModuleManager
+     * @var \Magento\Module\Manager
      */
     protected $_moduleManager;
 
     /**
      * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Core\Model\ModuleManager $moduleManager
+     * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Block\Template\Context $context,
-        \Magento\Core\Model\ModuleManager $moduleManager,
+        \Magento\Module\Manager $moduleManager,
         \Magento\Core\Helper\Data $coreData,
         array $data = array()
     ) {

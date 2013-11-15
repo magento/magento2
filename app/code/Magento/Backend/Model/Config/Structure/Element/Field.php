@@ -76,7 +76,7 @@ class Field
     /**
      * Block factory
      *
-     * @var \Magento\Core\Model\BlockFactory
+     * @var \Magento\View\Element\BlockFactory
      */
     protected $_blockFactory;
 
@@ -92,7 +92,7 @@ class Field
      * @param \Magento\Backend\Model\Config\BackendFactory $backendFactory
      * @param \Magento\Backend\Model\Config\SourceFactory $sourceFactory
      * @param \Magento\Backend\Model\Config\CommentFactory $commentFactory
-     * @param \Magento\Core\Model\BlockFactory $blockFactory
+     * @param \Magento\View\Element\BlockFactory $blockFactory
      * @param \Magento\Core\Model\DataService\Graph $dataServiceGraph,
      * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
      */
@@ -101,7 +101,7 @@ class Field
         \Magento\Backend\Model\Config\BackendFactory $backendFactory,
         \Magento\Backend\Model\Config\SourceFactory $sourceFactory,
         \Magento\Backend\Model\Config\CommentFactory $commentFactory,
-        \Magento\Core\Model\BlockFactory $blockFactory,
+        \Magento\View\Element\BlockFactory $blockFactory,
         \Magento\Core\Model\DataService\Graph $dataServiceGraph,
         \Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
     ) {

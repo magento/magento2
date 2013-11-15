@@ -111,7 +111,7 @@ class Image extends \Magento\Core\Helper\AbstractHelper
     protected $_placeholder;
 
     /**
-     * @var \Magento\Core\Model\View\Url
+     * @var \Magento\View\Url
      */
     protected $_viewUrl;
 
@@ -134,13 +134,13 @@ class Image extends \Magento\Core\Helper\AbstractHelper
      *
      * @param \Magento\Catalog\Model\Product\ImageFactory $productImageFactory
      * @param \Magento\Core\Helper\Context $context
-     * @param \Magento\Core\Model\View\Url $viewUrl
+     * @param \Magento\View\Url $viewUrl
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      */
     public function __construct(
         \Magento\Catalog\Model\Product\ImageFactory $productImageFactory,
         \Magento\Core\Helper\Context $context,
-        \Magento\Core\Model\View\Url $viewUrl,
+        \Magento\View\Url $viewUrl,
         \Magento\Core\Model\Store\Config $coreStoreConfig
     ) {
         $this->_productImageFactory = $productImageFactory;

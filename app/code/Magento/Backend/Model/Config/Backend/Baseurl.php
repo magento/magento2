@@ -167,7 +167,7 @@ class Baseurl extends \Magento\Core\Model\Config\Value
         $quoted = array_map('preg_quote', $values, array_fill(0, count($values), '/'));
         if (!preg_match('/^(' . implode('|', $quoted) . ')(.+\/)?$/', $value) && !$this->_isFullyQualifiedUrl($value)) {
             throw new \Magento\Core\Exception(
-                __('Specify a URL or path that starts with placeholder(s): %1.', implode(', ', $values)));
+                __('Specify a URL or path that starts with placeholder(s): %1, and ends with "/".', implode(', ', $values)));
         }
     }
 

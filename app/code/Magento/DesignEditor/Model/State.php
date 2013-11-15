@@ -71,7 +71,7 @@ class State
     /**
      * Application Cache Manager
      *
-     * @var \Magento\Core\Model\Cache\StateInterface
+     * @var \Magento\App\Cache\StateInterface
      */
     protected $_cacheState;
 
@@ -94,7 +94,7 @@ class State
      * @param \Magento\Backend\Model\Session $backendSession
      * @param \Magento\Core\Model\Layout\Factory $layoutFactory
      * @param \Magento\DesignEditor\Model\Url\Factory $urlModelFactory
-     * @param \Magento\Core\Model\Cache\StateInterface $cacheState
+     * @param \Magento\App\Cache\StateInterface $cacheState
      * @param \Magento\DesignEditor\Helper\Data $dataHelper
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Core\Model\App $application
@@ -104,7 +104,7 @@ class State
         \Magento\Backend\Model\Session $backendSession,
         \Magento\Core\Model\Layout\Factory $layoutFactory,
         \Magento\DesignEditor\Model\Url\Factory $urlModelFactory,
-        \Magento\Core\Model\Cache\StateInterface $cacheState,
+        \Magento\App\Cache\StateInterface $cacheState,
         \Magento\DesignEditor\Helper\Data $dataHelper,
         \Magento\ObjectManager $objectManager,
         \Magento\Core\Model\App $application,

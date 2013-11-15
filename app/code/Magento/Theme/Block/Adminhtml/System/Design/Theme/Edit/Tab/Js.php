@@ -61,7 +61,7 @@ class Js
             'legend' => __('Theme Java Script'),
         ));
         $customization = $this->_getCurrentTheme()->getCustomization();
-        $customJsFiles = $customization->getFilesByType(\Magento\Core\Model\Theme\Customization\File\Js::TYPE);
+        $customJsFiles = $customization->getFilesByType(\Magento\View\Design\Theme\Customization\File\Js::TYPE);
 
         /** @var $jsFieldsetRenderer \Magento\Backend\Block\Widget\Form\Renderer\Fieldset */
         $jsFieldsetRenderer = $this->getChildBlock('theme_edit_tabs_tab_js_tab_content');

@@ -60,7 +60,7 @@ class Product extends \Magento\Core\Helper\Url
     protected $_priceBlock;
 
     /**
-     * @var \Magento\Core\Model\View\Url
+     * @var \Magento\View\Url
      */
     protected $_viewUrl;
 
@@ -135,7 +135,7 @@ class Product extends \Magento\Core\Helper\Url
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Context $context
-     * @param \Magento\Core\Model\View\Url $viewUrl
+     * @param \Magento\View\Url $viewUrl
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
@@ -151,7 +151,7 @@ class Product extends \Magento\Core\Helper\Url
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Context $context,
-        \Magento\Core\Model\View\Url $viewUrl,
+        \Magento\View\Url $viewUrl,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
         \Magento\Core\Model\Store\Config $coreStoreConfig,

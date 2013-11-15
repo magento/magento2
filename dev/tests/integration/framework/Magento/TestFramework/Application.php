@@ -322,12 +322,12 @@ class Application
         $updater->updateData();
 
         /* Enable configuration cache by default in order to improve tests performance */
-        /** @var $cacheState \Magento\Core\Model\Cache\StateInterface */
+        /** @var $cacheState \Magento\App\Cache\StateInterface */
         $cacheState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\Cache\StateInterface');
-        $cacheState->setEnabled(\Magento\Core\Model\Cache\Type\Config::TYPE_IDENTIFIER, true);
-        $cacheState->setEnabled(\Magento\Core\Model\Cache\Type\Layout::TYPE_IDENTIFIER, true);
-        $cacheState->setEnabled(\Magento\Core\Model\Cache\Type\Translate::TYPE_IDENTIFIER, true);
+            ->get('Magento\App\Cache\StateInterface');
+        $cacheState->setEnabled(\Magento\App\Cache\Type\Config::TYPE_IDENTIFIER, true);
+        $cacheState->setEnabled(\Magento\App\Cache\Type\Layout::TYPE_IDENTIFIER, true);
+        $cacheState->setEnabled(\Magento\App\Cache\Type\Translate::TYPE_IDENTIFIER, true);
         $cacheState->setEnabled(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER, true);
         $cacheState->persist();
 

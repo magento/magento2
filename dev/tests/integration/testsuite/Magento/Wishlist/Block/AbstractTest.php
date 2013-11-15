@@ -45,6 +45,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             $objectManager->get('Magento\Catalog\Helper\Data'),
             $objectManager->get('Magento\Core\Helper\Data'),
             $objectManager->get('Magento\Core\Block\Template\Context'),
+            $objectManager->get('Magento\Math\Random'),
             $objectManager->get('Magento\Wishlist\Helper\Data'),
             $objectManager->get('Magento\Customer\Model\Session'),
             $objectManager->get('Magento\Catalog\Model\ProductFactory'),

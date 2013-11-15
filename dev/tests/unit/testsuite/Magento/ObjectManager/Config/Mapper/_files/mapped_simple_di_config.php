@@ -105,7 +105,7 @@ return array(
 
     'customCacheInstance' => array(
         'shared' => true,
-        'type' => 'Magento\Core\Model\Cache',
+        'type' => 'Magento\App\Cache',
         'parameters' => array(),
     ),
 

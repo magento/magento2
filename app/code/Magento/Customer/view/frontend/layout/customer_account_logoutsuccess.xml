@@ -23,10 +23,15 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Customer Account Logout Success" type="page">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="root">
         <action method="setTemplate">
             <argument name="template" xsi:type="string">1column.phtml</argument>
+        </action>
+    </referenceBlock>
+    <referenceBlock name="page.main.title">
+        <action method="setPageTitle">
+            <argument name="title" translate="true" xsi:type="string">You are now logged out</argument>
         </action>
     </referenceBlock>
     <referenceContainer name="content">

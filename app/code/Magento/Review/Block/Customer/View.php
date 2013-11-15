@@ -44,11 +44,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_productFactory;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * @var \Magento\Review\Model\ReviewFactory
      */
     protected $_reviewFactory;
@@ -69,8 +64,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_customerSession;
 
     /**
-     * Construct
-     *
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Core\Model\Registry $coreRegistry
@@ -78,14 +71,13 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param \Magento\Rating\Model\Rating\Option\VoteFactory $voteFactory
      * @param \Magento\Rating\Model\RatingFactory $ratingFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
@@ -95,6 +87,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Block\Template\Context $context,
+        \Magento\Math\Random $mathRandom,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
         \Magento\Rating\Model\Rating\Option\VoteFactory $voteFactory,
@@ -103,14 +96,21 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
         array $data = array()
     ) {
         $this->_productFactory = $productFactory;
-        $this->_storeManager = $storeManager;
         $this->_reviewFactory = $reviewFactory;
         $this->_voteFactory = $voteFactory;
         $this->_ratingFactory = $ratingFactory;
         $this->_customerSession = $customerSession;
-
-        parent::__construct($storeManager, $catalogConfig, $coreRegistry, $taxData, $catalogData, $coreData, $context,
-            $data);
+        parent::__construct(
+            $storeManager,
+            $catalogConfig,
+            $coreRegistry,
+            $taxData,
+            $catalogData,
+            $coreData,
+            $context,
+            $mathRandom,
+            $data
+        );
     }
 
 

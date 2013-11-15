@@ -72,7 +72,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $helperFactory->expects($this->any())->method('get')->will($this->returnValue($helper));
 
-        $moduleManager = $this->getMockBuilder('Magento\Core\Model\ModuleManager')
+        $moduleManager = $this->getMockBuilder('Magento\Module\Manager')
             ->disableOriginalConstructor()
             ->setMethods(array('isOutputEnabled'))
             ->getMock();

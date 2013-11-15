@@ -48,16 +48,6 @@ class Topmenu extends \Magento\Core\Block\Template
     public function _construct()
     {
         $this->_menu = new \Magento\Data\Tree\Node(array(), 'root', new \Magento\Data\Tree());
-
-        // enabling the cache for this topmenu to not expire until changes made in admin area
-        // this is to prevent the menu from being rebuild every request and to prevent new categories from showing up
-        // immediately
-        $this->addData(array(
-            'cache_lifetime'    => false,
-            'cache_tags'        => array(
-                \Magento\Core\Model\Store\Group::CACHE_TAG
-            ),
-        ));
     }
 
     /**

@@ -86,7 +86,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                     'theme_path'           => 'magento_default',
                     'code'                 => 'magento_default',
                     'preview_image'        => null,
-                    'type'                 => \Magento\Core\Model\Theme::TYPE_PHYSICAL
+                    'type'                 => \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL
                 )
             )
         );
@@ -112,7 +112,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             'is_featured'          => false,
             'theme_path'           => 'default_space',
             'preview_image'        => 'images/preview.png',
-            'type'                 => \Magento\Core\Model\Theme::TYPE_PHYSICAL
+            'type'                 => \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL
         ));
 
         $this->_model->addDefaultPattern('*');

@@ -27,13 +27,13 @@
     <module name="Magento_Webapi" version="1.0.0.3" active="true">
         <sequence>
             <module name="Magento_Core"/>
-            <module name="Magento_Oauth"/>
+            <module name="Magento_Integration"/>
             <module name="Magento_Service"/>
             <module name="Magento_Backend"/>
         </sequence>
         <depends>
             <module name="Magento_Core"/>
-            <module name="Magento_Oauth"/>
+            <module name="Magento_Integration"/>
             <module name="Magento_Service"/>
             <module name="Magento_Backend"/>
         </depends>

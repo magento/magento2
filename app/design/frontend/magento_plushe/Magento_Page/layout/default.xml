@@ -40,6 +40,11 @@
                 <argument name="file" xsi:type="string">js/matchMedia.js</argument>
             </arguments>
         </block>
+        <block class="Magento\Page\Block\Html\Head\Script" name="js-responsive-js">
+            <arguments>
+                <argument name="file" xsi:type="string">js/responsive.js</argument>
+            </arguments>
+        </block>
         <block class="Magento\Page\Block\Html\Head\Script" name="js-head-js">
             <arguments>
                 <argument name="file" xsi:type="string">js/head.js</argument>

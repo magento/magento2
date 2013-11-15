@@ -60,7 +60,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             'is_featured'          => false,
             'theme_path'           => 'default/space',
             'preview_image'        => 'images/preview.png',
-            'type'                 => \Magento\Core\Model\Theme::TYPE_VIRTUAL
+            'type'                 => \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL
         );
     }
 
@@ -72,7 +72,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         /** @var $theme \Magento\View\Design\ThemeInterface */
         /** @var $currentTheme \Magento\View\Design\ThemeInterface */
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\Design\ThemeInterface');
-        $collection = $theme->getCollection()->addTypeFilter(\Magento\Core\Model\Theme::TYPE_VIRTUAL);
+        $collection = $theme->getCollection()->addTypeFilter(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL);
         foreach ($collection as $currentTheme) {
             $parentTheme = $currentTheme->getParentTheme();
             if (!empty($parentTheme)) {

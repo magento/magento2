@@ -45,7 +45,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_cacheMock = $this->getMock('Magento\Core\Model\Cache\Type\Config', array(), array(), '', false, false);
+        $this->_cacheMock = $this->getMock('Magento\App\Cache\Type\Config', array(), array(), '', false, false);
         $this->_baseFactoryMock = $this->getMock('Magento\Core\Model\Config\BaseFactory',
             array(), array(), '', false, false);
         $this->_model = new \Magento\Core\Model\Config\Cache($this->_cacheMock, $this->_baseFactoryMock);

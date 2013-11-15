@@ -45,7 +45,8 @@ class Wysiwyg extends \Magento\Backend\Controller\Adminhtml\Action
         $directive = $this->getRequest()->getParam('___directive');
         $directive = $this->_objectManager->get('Magento\Core\Helper\Data')->urlDecode($directive);
         $url = $this->_objectManager->create('Magento\Core\Model\Email\Template\Filter')->filter($directive);
-        $image = $this->_objectManager->get('Magento\Core\Model\Image\AdapterFactory')->create();
+        /** @var \Magento\Image\Adapter\AdapterInterface $image */
+        $image = $this->_objectManager->get('Magento\Image\AdapterFactory')->create();
         $response = $this->getResponse();
         try {
             $image->open($url);

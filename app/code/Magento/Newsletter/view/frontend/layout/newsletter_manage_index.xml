@@ -23,11 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Customer My Account Newsletter Subscriptions" type="page">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="customer_account"/>
-    <referenceContainer name="my.account.wrapper">
+    <referenceContainer name="content">
         <block class="Magento\Customer\Block\Newsletter" name="customer_newsletter">
-            <container name="customer.newsletter.form.before" as="form_before" label="Newsletter Subscription Form Before"/>
+            <container name="customer.newsletter.form.before" as="form_before" label="Newsletter Subscription Form Before" htmlTag="div" htmlClass="rewards"/>
         </block>
     </referenceContainer>
 </layout>

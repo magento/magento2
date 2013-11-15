@@ -29,6 +29,8 @@
  */
 namespace Magento\Core\Model\Theme;
 
+use \Magento\View\Design\ThemeInterface;
+
 class Registration
 {
     /**
@@ -49,8 +51,8 @@ class Registration
      * @var array
      */
     protected $_allowedRelations = array(
-        array(\Magento\Core\Model\Theme::TYPE_PHYSICAL, \Magento\Core\Model\Theme::TYPE_VIRTUAL),
-        array(\Magento\Core\Model\Theme::TYPE_VIRTUAL, \Magento\Core\Model\Theme::TYPE_STAGING)
+        array(ThemeInterface::TYPE_PHYSICAL, ThemeInterface::TYPE_VIRTUAL),
+        array(ThemeInterface::TYPE_VIRTUAL, ThemeInterface::TYPE_STAGING)
     );
 
     /**
@@ -59,8 +61,8 @@ class Registration
      * @var array
      */
     protected $_forbiddenRelations = array(
-        array(\Magento\Core\Model\Theme::TYPE_VIRTUAL, \Magento\Core\Model\Theme::TYPE_VIRTUAL),
-        array(\Magento\Core\Model\Theme::TYPE_PHYSICAL, \Magento\Core\Model\Theme::TYPE_STAGING)
+        array(ThemeInterface::TYPE_VIRTUAL, ThemeInterface::TYPE_VIRTUAL),
+        array(ThemeInterface::TYPE_PHYSICAL, ThemeInterface::TYPE_STAGING)
     );
 
     /**
@@ -82,7 +84,7 @@ class Registration
      *
      * @param string $baseDir
      * @param string $pathPattern
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\View\Design\ThemeInterface
      */
     public function register($baseDir = '', $pathPattern = '')
     {
@@ -137,7 +139,7 @@ class Registration
         }
 
         $this->_savePreviewImage($theme);
-        $theme->setType(\Magento\Core\Model\Theme::TYPE_PHYSICAL);
+        $theme->setType(\Magento\View\Design\ThemeInterface::TYPE_PHYSICAL);
         $theme->save();
 
         return $this;
@@ -149,7 +151,7 @@ class Registration
      * @param \Magento\View\Design\ThemeInterface $theme
      * @return $this
      */
-    protected function _savePreviewImage(\Magento\View\Design\ThemeInterface $theme)
+    protected function _savePreviewImage(ThemeInterface $theme)
     {
         $themeDirectory = $theme->getCustomization()->getThemeFilesPath();
         if (!$theme->getPreviewImage() || !$themeDirectory) {
@@ -166,7 +168,7 @@ class Registration
      * Get theme from DB by full path
      *
      * @param string $fullPath
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\View\Design\ThemeInterface
      */
     public function getThemeFromDb($fullPath)
     {
@@ -180,11 +182,11 @@ class Registration
      */
     public function checkPhysicalThemes()
     {
-        $themes = $this->_collectionFactory->create()->addTypeFilter(\Magento\Core\Model\Theme::TYPE_PHYSICAL);
+        $themes = $this->_collectionFactory->create()->addTypeFilter(ThemeInterface::TYPE_PHYSICAL);
         /** @var $theme \Magento\View\Design\ThemeInterface */
         foreach ($themes as $theme) {
             if (!$this->_themeCollection->hasTheme($theme)) {
-                $theme->setType(\Magento\Core\Model\Theme::TYPE_VIRTUAL)->save();
+                $theme->setType(ThemeInterface::TYPE_VIRTUAL)->save();
             }
         }
         return $this;

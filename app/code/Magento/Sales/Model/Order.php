@@ -417,13 +417,6 @@ class Order extends \Magento\Sales\Model\AbstractModel
     protected $_paymentData;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData;
-
-    /**
      * Core event manager proxy
      *
      * @var \Magento\Event\ManagerInterface
@@ -545,7 +538,6 @@ class Order extends \Magento\Sales\Model\AbstractModel
      */
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Sales\Helper\Data $salesData,
         \Magento\Core\Model\Context $context,
@@ -573,7 +565,6 @@ class Order extends \Magento\Sales\Model\AbstractModel
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;
-        $this->_coreData = $coreData;
         $this->_paymentData = $paymentData;
         $this->_salesData = $salesData;
         $this->_coreStoreConfig = $coreStoreConfig;
@@ -2221,7 +2212,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
      */
     public function getCreatedAtFormated($format)
     {
-        return $this->_coreData->formatDate($this->getCreatedAtStoreDate(), $format, true);
+        return $this->_coreLocale->formatDate($this->getCreatedAtStoreDate(), $format, true);
     }
 
     /**

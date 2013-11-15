@@ -42,6 +42,26 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     protected $_formFactory;
 
+    /**
+     * @var \Magento\Backend\Model\Config\Structure\Element\Section
+     */
+    protected $_section;
+
+    /**
+     * @var \Magento\Backend\Model\Config\Structure\Element\Group
+     */
+    protected $_group;
+
+    /**
+     * @var \Magento\Backend\Model\Config\Structure\Element\Field
+     */
+    protected $_field;
+
+    /**
+     * @var array
+     */
+    protected $_configData;
+
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -70,34 +90,35 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Backend\Block\System\Config\Form::initFields
-     * @param $section \Magento\Backend\Model\Config\Structure\Element\Section
-     * @param $group \Magento\Backend\Model\Config\Structure\Element\Group
-     * @param $field \Magento\Backend\Model\Config\Structure\Element\Field
-     * @param array $configData
+     * @param bool $useConfigField uses the test_field_use_config field if true
+     * @param bool $isConfigDataEmpty if the config data array should be empty or not
+     * @param $configDataValue the value that the field path should be set to in the config data
      * @param bool $expectedUseDefault
-     * @dataProvider initFieldsInheritCheckboxDataProvider
+     * @dataProvider initFieldsUseDefaultCheckboxDataProvider
      */
-    public function testInitFieldsUseDefaultCheckbox($section, $group, $field, array $configData, $expectedUseDefault)
-    {
-        $this->markTestIncomplete('MAGETWO-9058');
+    public function testInitFieldsUseDefaultCheckbox($useConfigField, $isConfigDataEmpty, $configDataValue,
+        $expectedUseDefault
+    ) {
+        $this->_setupFieldsInheritCheckbox($useConfigField, $isConfigDataEmpty, $configDataValue);
+
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Config\ScopeInterface')
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $form = $this->_formFactory->create();
-        $fieldset = $form->addFieldset($section->getId() . '_' . $group->getId(), array());
+        $fieldset = $form->addFieldset($this->_section->getId() . '_' . $this->_group->getId(), array());
 
         /* @TODO Eliminate stub by proper mock / config fixture usage */
         /** @var $block \Magento\Backend\Block\System\Config\FormStub */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Backend\Block\System\Config\FormStub');
         $block->setScope(\Magento\Backend\Block\System\Config\Form::SCOPE_WEBSITES);
-        $block->setStubConfigData($configData);
-        $block->initFields($fieldset, $group, $section);
+        $block->setStubConfigData($this->_configData);
+        $block->initFields($fieldset, $this->_group, $this->_section);
 
         $fieldsetSel = 'fieldset';
-        $valueSel = sprintf('input#%s_%s_%s', $section->getId(), $group->getId(), $field->getId());
+        $valueSel = sprintf('input#%s_%s_%s', $this->_section->getId(), $this->_group->getId(), $this->_field->getId());
         $valueDisabledSel = sprintf('%s[disabled="disabled"]', $valueSel);
-        $useDefaultSel = sprintf('input#%s_%s_%s_inherit.checkbox', $section->getId(), $group->getId(),
-            $field->getId());
+        $useDefaultSel = sprintf('input#%s_%s_%s_inherit.checkbox', $this->_section->getId(), $this->_group->getId(),
+            $this->_field->getId());
         $useDefaultCheckedSel = sprintf('%s[checked="checked"]', $useDefaultSel);
         $fieldsetHtml = $fieldset->getElementHtml();
 
@@ -119,36 +140,47 @@ class FormTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
+    public static function initFieldsUseDefaultCheckboxDataProvider()
+    {
+        return array(
+            array(false, true, null, true),
+            array(false, false, null, false),
+            array(false, false, '', false),
+            array(false, false, 'value', false),
+            array(true, false, 'config value', false)
+        );
+    }
 
     /**
      * @covers \Magento\Backend\Block\System\Config\Form::initFields
-     * @param $section \Magento\Backend\Model\Config\Structure\Element\Section
-     * @param $group \Magento\Backend\Model\Config\Structure\Element\Group
-     * @param $field \Magento\Backend\Model\Config\Structure\Element\Field
-     * @param array $configData
-     * @param bool $expectedUseDefault
-     * @dataProvider initFieldsInheritCheckboxDataProvider
+     * @param bool $useConfigField uses the test_field_use_config field if true
+     * @param bool $isConfigDataEmpty if the config data array should be empty or not
+     * @param $configDataValue the value that the field path should be set to in the config data
+     * @dataProvider initFieldsUseConfigPathDataProvider
      * @magentoConfigFixture default/test_config_section/test_group_config_node/test_field_value config value
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testInitFieldsUseConfigPath($section, $group, $field, array $configData, $expectedUseDefault)
+    public function testInitFieldsUseConfigPath($useConfigField, $isConfigDataEmpty, $configDataValue)
     {
-        $this->markTestIncomplete('MAGETWO-9058');
+        $this->_setupFieldsInheritCheckbox($useConfigField, $isConfigDataEmpty, $configDataValue);
+
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Config\ScopeInterface')
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $form = $this->_formFactory->create();
-        $fieldset = $form->addFieldset($section->getId() . '_' . $group->getId(), array());
+        $fieldset = $form->addFieldset($this->_section->getId() . '_' . $this->_group->getId(), array());
 
         /* @TODO Eliminate stub by proper mock / config fixture usage */
         /** @var $block \Magento\Backend\Block\System\Config\FormStub */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Backend\Block\System\Config\FormStub');
         $block->setScope(\Magento\Backend\Block\System\Config\Form::SCOPE_DEFAULT);
-        $block->setStubConfigData($configData);
-        $block->initFields($fieldset, $group, $section);
+        $block->setStubConfigData($this->_configData);
+        $block->initFields($fieldset, $this->_group, $this->_section);
 
         $fieldsetSel = 'fieldset';
-        $valueSel = sprintf('input#%s_%s_%s', $section->getId(), $group->getId(), $field->getId());
+        $valueSel = sprintf('input#%s_%s_%s', $this->_section->getId(), $this->_group->getId(), $this->_field->getId());
         $fieldsetHtml = $fieldset->getElementHtml();
 
         $this->assertSelectCount($fieldsetSel, true, $fieldsetHtml, 'Fieldset HTML is invalid');
@@ -156,10 +188,25 @@ class FormTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @TODO data provider should be static
      * @return array
      */
-    public function initFieldsInheritCheckboxDataProvider()
+    public static function initFieldsUseConfigPathDataProvider()
+    {
+        return array(
+            array(false, true, null),
+            array(false, false, null),
+            array(false, false, ''),
+            array(false, false, 'value'),
+            array(true, false, 'config value')
+        );
+    }
+
+    /**
+     * @param bool $useConfigField uses the test_field_use_config field if true
+     * @param bool $isConfigDataEmpty if the config data array should be empty or not
+     * @param $configDataValue the value that the field path should be set to in the config data
+     */
+    protected function _setupFieldsInheritCheckbox($useConfigField, $isConfigDataEmpty, $configDataValue)
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
             \Magento\Core\Model\App::PARAM_BAN_CACHE => true,
@@ -173,43 +220,38 @@ class FormTest extends \PHPUnit_Framework_TestCase
                 \Magento\Core\Model\App\Area::PART_CONFIG
             );
 
-        $configMock = $this->getMock('Magento\Module\Dir\Reader', array(), array(), '', false, false);
-        $configMock->expects($this->any())->method('getConfigurationFiles')
+        $fileResolverMock = $this->getMockBuilder('Magento\Core\Model\Config\FileResolver')
+                                ->disableOriginalConstructor()
+                                ->getMock();
+        $fileResolverMock->expects($this->any())
+            ->method('get')
             ->will($this->returnValue(array(__DIR__ . '/_files/test_section_config.xml')));
-        $configMock->expects($this->any())->method('getModuleDir')
-            ->will($this->returnValue(BP . '/app/code/Magento/Backend/etc'));
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(array(
             'Magento\Backend\Model\Config\Structure\Reader' => array(
-                'parameters' => array('moduleReader' => $configMock)
+                'parameters' => array('fileResolver' => $fileResolverMock)
             )
         ));
         /** @var \Magento\Backend\Model\Config\Structure $structure  */
         $structure = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Backend\Model\Config\Structure');
 
-        /** @var \Magento\Backend\Model\Config\Structure\Element\Section $section  */
-        $section = $structure->getElement('test_section');
+        $this->_section = $structure->getElement('test_section');
 
-        /** @var \Magento\Backend\Model\Config\Structure\Element\Group $group  */
-        $group = $structure->getElement('test_section/test_group');
+        $this->_group = $structure->getElement('test_section/test_group');
 
-        /** @var \Magento\Backend\Model\Config\Structure\Element\Field $field  */
-        $field = $structure->getElement('test_section/test_group/test_field');
+        if ($useConfigField) {
+            $this->_field = $structure->getElement('test_section/test_group/test_field_use_config');
+        } else {
+            $this->_field = $structure->getElement('test_section/test_group/test_field');
+        }
+        $fieldPath = $this->_field->getConfigPath();
 
-        $fieldPath = $field->getConfigPath();
-
-        /** @var \Magento\Backend\Model\Config\Structure\Element\Field $field  */
-        $field2 = $structure->getElement('test_section/test_group/test_field_use_config');
-
-        $fieldPath2 = $field2->getConfigPath();
-        return array(
-            array($section, $group, $field, array(), true),
-            array($section, $group, $field, array($fieldPath => null), false),
-            array($section, $group, $field, array($fieldPath => ''), false),
-            array($section, $group, $field, array($fieldPath => 'value'), false),
-            array($section, $group, $field2, array($fieldPath2 => 'config value'), true),
-        );
+        if ($isConfigDataEmpty) {
+            $this->_configData = array();
+        } else {
+            $this->_configData = array($fieldPath => $configDataValue);
+        }
     }
 
     public function testInitFormAddsFieldsets()

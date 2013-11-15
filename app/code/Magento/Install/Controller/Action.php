@@ -42,7 +42,7 @@ class Action extends \Magento\Core\Controller\Varien\Action
     /**
      * @var \Magento\Core\Model\Theme\CollectionFactory
      */
-    protected $_collectionFactory;
+    protected $collectionFactory;
 
     /**
      * Application
@@ -76,10 +76,10 @@ class Action extends \Magento\Core\Controller\Varien\Action
     ) {
         $this->_configScope = $configScope;
         $this->_viewDesign = $viewDesign;
-        $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context);
+        $this->collectionFactory = $collectionFactory;
         $this->_app = $app;
         $this->_appState = $appState;
+        parent::__construct($context);
     }
 
     protected function _construct()
@@ -115,7 +115,7 @@ class Action extends \Magento\Core\Controller\Varien\Action
     protected function _initDefaultTheme($areaCode)
     {
         /** @var $themesCollection \Magento\Core\Model\Theme\Collection */
-        $themesCollection = $this->_collectionFactory->create();
+        $themesCollection = $this->collectionFactory->create();
         $themeModel = $themesCollection->addDefaultPattern($areaCode)
             ->addFilter('theme_path', $this->_viewDesign->getConfigurationDesignTheme($areaCode))
             ->getFirstItem();

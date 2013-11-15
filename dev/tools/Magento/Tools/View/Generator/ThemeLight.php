@@ -52,7 +52,7 @@ class ThemeLight extends \Magento\Object implements \Magento\View\Design\ThemeIn
      */
     public function getFullPath()
     {
-        return $this->getArea() . \Magento\Core\Model\Theme::PATH_SEPARATOR . $this->getThemePath();
+        return $this->getArea() . \Magento\View\Design\ThemeInterface::PATH_SEPARATOR . $this->getThemePath();
     }
 
     /**
