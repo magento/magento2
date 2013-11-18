@@ -32,6 +32,11 @@ namespace Magento\View;
 interface ConfigInterface
 {
     /**
+     * Filename of view configuration
+     */
+    const CONFIG_FILE_NAME = 'view.xml';
+
+    /**
      * Render view config object for current package and theme
      *
      * @param array $params

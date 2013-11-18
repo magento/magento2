@@ -72,6 +72,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\CatalogInventory\Model\Stock $stock
@@ -88,6 +89,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Block\Template\Context $context,
+        \Magento\Math\Random $mathRandom,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\CatalogInventory\Model\Stock $stock,
@@ -98,8 +100,17 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
         $this->_productVisibility = $productVisibility;
         $this->_stock = $stock;
         $this->_productLinkFactory = $productLinkFactory;
-        parent::__construct($storeManager, $catalogConfig, $coreRegistry, $taxData, $catalogData, $coreData, $context,
-            $data);
+        parent::__construct(
+            $storeManager,
+            $catalogConfig,
+            $coreRegistry,
+            $taxData,
+            $catalogData,
+            $coreData,
+            $context,
+            $mathRandom,
+            $data
+        );
     }
 
     /**

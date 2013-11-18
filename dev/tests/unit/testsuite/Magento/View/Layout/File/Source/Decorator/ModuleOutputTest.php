@@ -44,7 +44,7 @@ class ModuleOutputTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_fileSource = $this->getMockForAbstractClass('Magento\View\Layout\File\SourceInterface');
-        $this->_moduleManager = $this->getMock('Magento\Core\Model\ModuleManager', array(), array(), '', false);
+        $this->_moduleManager = $this->getMock('Magento\Module\Manager', array(), array(), '', false);
         $this->_moduleManager
             ->expects($this->any())
             ->method('isOutputEnabled')

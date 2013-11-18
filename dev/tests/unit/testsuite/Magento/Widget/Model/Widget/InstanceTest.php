@@ -33,7 +33,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     protected $_widgetModelMock;
 
     /**
-     * @var \Magento\Core\Model\View\FileSystem|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\View\FileSystem|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_viewFileSystemMock;
 
@@ -58,13 +58,13 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
         $this->_widgetModelMock = $this->getMockBuilder('Magento\Widget\Model\Widget')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_viewFileSystemMock = $this->getMockBuilder('Magento\Core\Model\View\FileSystem')
+        $this->_viewFileSystemMock = $this->getMockBuilder('Magento\View\FileSystem')
             ->disableOriginalConstructor()
             ->getMock();
         $this->_namespaceResolver = $this->getMockBuilder('\Magento\Widget\Model\NamespaceResolver')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_cacheTypesListMock = $this->getMock('Magento\Core\Model\Cache\TypeListInterface');
+        $this->_cacheTypesListMock = $this->getMock('Magento\App\Cache\TypeListInterface');
         $this->_readerMock = $this->getMockBuilder('Magento\Widget\Model\Config\Reader')
             ->disableOriginalConstructor()
             ->getMock();

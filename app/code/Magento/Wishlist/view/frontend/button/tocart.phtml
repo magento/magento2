@@ -19,12 +19,13 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 
 <?php if($this->getWishlist()->getItemsCount() && $this->getWishlist()->isSalable()): ?>
-    <button type="button" title="<?php echo __('Add All to Cart') ?>" class="button btn-add"><span><span><?php echo __('Add All to Cart') ?></span></span></button>
+    <button type="button" title="<?php echo __('Add All to Cart') ?>" class="action tocart">
+        <span><?php echo __('Add All to Cart') ?></span>
+    </button>
 <?php endif;?>

@@ -1,3 +1,26 @@
+2.0.0.0-dev52
+=============
+* Better Navigation menu rendering due to improved Caching of Categories
+* Added Magento\Filesystem\Directory and Magento\Filesystem\File to the library
+* Various improvements:
+  * Added a static test to check for incorrect dependencies in the library
+  * Moved Magento\Core\Model\Theme to the Magento\View component
+  * Moved Magento\Core\Model\Design to the Magento\View component
+  * Consistent declaration of page-types
+  * The Framework part of the Cache functionality moved out from modules
+* Themes update:
+  * Updated templates and layout updates in the Captcha, Customer, Newsletter, Persistent, ProductAlert, Wishlist modules; old files moved to the "magento-backup" theme
+  * Refactored and removed duplicate Persistent module templates
+  * Plushe theme made responsive
+* Fixed bugs:
+  * Fixed inability to print order, invoice, or creditmemo in the frontend
+  * Fixed fatal error caused by the Mage_Backend_Block_System_Config_FormTest integration test
+  * Fixed the broken link when the MAP feature is enabled and actual product price is set to be displayed in the shopping cart
+* Moved the following methods from Core Helpers to the appropriate libraries:
+  * Moved the Data Helper date format related functions to \Magento\Core\Model\Locale
+  * Moved the Data Helper array decoration related functions to Magento\Stdlib\ArrayUtils
+  * Moved the Data Helper functions that copy data from one object to another to \Magento\Object\Copy
+
 2.0.0.0-dev51
 =============
 * Application areas rework:

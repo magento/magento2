@@ -68,17 +68,17 @@ class StateTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Backend\Model\Session|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_backendSession;
 
     /**
-     * @var \Magento\Core\Model\Layout\Factory|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Core\Model\Layout\Factory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_layoutFactory;
 
     /**
-     * @var \Magento\DesignEditor\Model\Url\Factory|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\DesignEditor\Model\Url\Factory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_urlModelFactory;
 
@@ -88,7 +88,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     protected $_cacheStateMock;
 
     /**
-     * @var \Magento\DesignEditor\Helper\Data|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\DesignEditor\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_dataHelper;
 
@@ -98,7 +98,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\Core\Model\App|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Core\Model\App|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_application;
 
@@ -129,7 +129,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $this->_urlModelFactory = $this->getMock('Magento\DesignEditor\Model\Url\Factory', array('replaceClassName'),
             array(), '', false
         );
-        $this->_cacheStateMock = $this->getMockBuilder('Magento\Core\Model\Cache\StateInterface')
+        $this->_cacheStateMock = $this->getMockBuilder('Magento\App\Cache\StateInterface')
             ->disableOriginalConstructor()->getMock();
 
         $this->_dataHelper = $this->getMock('Magento\DesignEditor\Helper\Data', array('getDisabledCacheTypes'),
@@ -142,7 +142,10 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array('setConfig'), array(), '', false);
         $storeManager->expects($this->any())
             ->method('setConfig')
-            ->with($this->equalTo(\Magento\Core\Model\View\Design::XML_PATH_THEME_ID), $this->equalTo(self::THEME_ID))
+            ->with(
+                $this->equalTo(\Magento\Core\Model\View\Design::XML_PATH_THEME_ID),
+                $this->equalTo(self::THEME_ID)
+            )
             ->will($this->returnSelf());
 
         $this->_application->expects($this->any())

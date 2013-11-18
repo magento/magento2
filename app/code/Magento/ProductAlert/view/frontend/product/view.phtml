@@ -19,12 +19,13 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php /* @var $this \Magento\ProductAlert\Block\Product\View */?>
-<p class="<?php echo $this->getHtmlClass() ?>">
-    <a href="<?php echo $this->escapeHtml($this->getSignupUrl()) ?>" title="<?php echo $this->escapeHtml(__($this->getSignupLabel())); ?>"><?php echo $this->escapeHtml(__($this->getSignupLabel())); ?></a>
-</p>
+<div class="product alert <?php echo $this->getHtmlClass() ?>">
+    <a href="<?php echo $this->escapeHtml($this->getSignupUrl()) ?>" title="<?php echo $this->escapeHtml(__($this->getSignupLabel())); ?>" class="action alert">
+        <?php echo $this->escapeHtml(__($this->getSignupLabel())); ?>
+    </a>
+</div>

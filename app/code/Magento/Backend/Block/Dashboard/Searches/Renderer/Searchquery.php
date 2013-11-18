@@ -34,32 +34,32 @@ class Searchquery
     extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * Core string
+     * String helper
      *
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
-    protected $_coreString = null;
+    protected $_stringHelper = null;
 
     /**
-     * @param \Magento\Core\Helper\String $coreString
+     * @param \Magento\Stdlib\String $stringHelper
      * @param \Magento\Backend\Block\Context $context
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\String $coreString,
+        \Magento\Stdlib\String $stringHelper,
         \Magento\Backend\Block\Context $context,
         array $data = array()
     ) {
-        $this->_coreString = $coreString;
+        $this->_stringHelper = $stringHelper;
         parent::__construct($context, $data);
     }
 
     public function render(\Magento\Object $row)
     {
         $value = $row->getData($this->getColumn()->getIndex());
-        if ($this->_coreString->strlen($value) > 30) {
+        if ($this->_stringHelper->strlen($value) > 30) {
             $value = '<span title="'. $this->escapeHtml($value) .'">'
-                . $this->escapeHtml($this->_coreString->truncate($value, 30)) . '</span>';
+                . $this->escapeHtml($this->_stringHelper->truncate($value, 30)) . '</span>';
         } else {
             $value = $this->escapeHtml($value);
         }

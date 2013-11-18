@@ -25,4 +25,17 @@
 -->
 <config>
     <preference for="Magento\Integration\Service\IntegrationV1Interface" type="Magento\Integration\Service\IntegrationV1" />
+    <preference for="Magento\Oauth\ConsumerInterface" type="Magento\Integration\Model\Oauth\Consumer"/>
+    <preference for="Magento\Oauth\NonceGeneratorInterface" type="Magento\Integration\Model\Oauth\Nonce\Generator"/>
+    <preference for="Magento\Oauth\TokenProviderInterface" type="Magento\Integration\Model\Oauth\Token\Provider"/>
+    <type name="Magento\Integration\Model\Oauth\Nonce\Generator">
+        <param name="date">
+            <instance type="Magento\Core\Model\Date\Proxy"/>
+        </param>
+    </type>
+    <type name="Magento\Integration\Model\Oauth\Token\Provider">
+        <param name="date">
+            <instance type="Magento\Core\Model\Date\Proxy"/>
+        </param>
+    </type>
 </config>

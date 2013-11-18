@@ -53,14 +53,14 @@ class PageBuilder
     protected $_page;
 
     /**
-     * @var \Magento\Core\Model\View\FileSystem
+     * @var \Magento\View\FileSystem
      */
     protected $_viewFileSystem;
 
     /**
      * Create font instances
      */
-    public function __construct(\Magento\Core\Model\View\FileSystem $viewFileSystem)
+    public function __construct(\Magento\View\FileSystem $viewFileSystem)
     {
         $this->_viewFileSystem = $viewFileSystem;
         $this->_fontNormal = \Zend_Pdf_Font::fontWithName(\Zend_Pdf_Font::FONT_HELVETICA);

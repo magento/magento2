@@ -65,4 +65,40 @@ class ArrayUtilsTest extends \PHPUnit_Framework_TestCase
             array(array('б' => 2, 'в' => 3, 'а' => 1), 'ru_RU'),
         );
     }
+
+    /**
+     * @covers \Magento\Stdlib\ArrayUtils::decorateArray
+     */
+    public function testDecorateArray()
+    {
+        $original = array(
+            array('value' => 1),
+            array('value' => 2),
+            array('value' => 3),
+        );
+        $decorated = array(
+            array('value' => 1, 'is_first' => true, 'is_odd' => true),
+            array('value' => 2, 'is_even' => true),
+            array('value' => 3, 'is_last' => true, 'is_odd' => true),
+        );
+
+        // arrays
+        $this->assertEquals($decorated, $this->_arrayUtils->decorateArray($original, ''));
+
+        // \Magento\Object
+        $sample = array(
+            new \Magento\Object($original[0]),
+            new \Magento\Object($original[1]),
+            new \Magento\Object($original[2]),
+        );
+        $decoratedVo = array(
+            new \Magento\Object($decorated[0]),
+            new \Magento\Object($decorated[1]),
+            new \Magento\Object($decorated[2]),
+        );
+        foreach ($decoratedVo as $obj) {
+            $obj->setDataChanges(true); // hack for assertion
+        }
+        $this->assertEquals($decoratedVo, $this->_arrayUtils->decorateArray($sample, ''));
+    }
 }

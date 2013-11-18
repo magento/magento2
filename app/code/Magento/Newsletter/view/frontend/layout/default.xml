@@ -24,7 +24,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceContainer name="left">
-        <block class="Magento\Newsletter\Block\Subscribe" name="newsletter_subscription" template="subscribe.phtml"/>
+    <referenceContainer name="footer">
+        <block class="Magento\Newsletter\Block\Subscribe" name="form.subscribe" as="subscribe" before="-" template="subscribe.phtml"/>
     </referenceContainer>
 </layout>

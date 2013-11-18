@@ -32,13 +32,6 @@ namespace Magento\Sales\Model\Convert;
 class Order extends \Magento\Object
 {
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
-
-    /**
      * Core event manager proxy
      *
      * @var \Magento\Event\ManagerInterface
@@ -91,8 +84,12 @@ class Order extends \Magento\Object
     protected $_creditmemoItemFactory;
 
     /**
+     * @var \Magento\Object\Copy
+     */
+    protected $_objectCopyService;
+
+    /**
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory
      * @param \Magento\Sales\Model\Quote\PaymentFactory $quotePaymentFactory
@@ -103,13 +100,13 @@ class Order extends \Magento\Object
      * @param \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory
      * @param \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory
      * @param \Magento\Sales\Model\Order\Creditmemo\ItemFactory $creditmemoItemFactory
+     * @param \Magento\Object\Copy $objectCopyService
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory,
         \Magento\Sales\Model\Quote\PaymentFactory $quotePaymentFactory,
@@ -120,10 +117,10 @@ class Order extends \Magento\Object
         \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory,
         \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory,
         \Magento\Sales\Model\Order\Creditmemo\ItemFactory $creditmemoItemFactory,
+        \Magento\Object\Copy $objectCopyService,
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;
-        $this->_coreData = $coreData;
         $this->_quoteFactory = $quoteFactory;
         $this->_quoteAddressFactory = $quoteAddressFactory;
         $this->_quotePaymentFactory = $quotePaymentFactory;
@@ -134,6 +131,7 @@ class Order extends \Magento\Object
         $this->_shipmentItemFactory = $shipmentItemFactory;
         $this->_creditmemoFactory = $creditmemoFactory;
         $this->_creditmemoItemFactory = $creditmemoItemFactory;
+        $this->_objectCopyService = $objectCopyService;
         parent::__construct($data);
     }
 
@@ -153,7 +151,7 @@ class Order extends \Magento\Object
         $quote->setStoreId($order->getStoreId())
             ->setOrderId($order->getId());
 
-        $this->_coreData->copyFieldsetToTarget('sales_convert_order', 'to_quote', $order, $quote);
+        $this->_objectCopyService->copyFieldsetToTarget('sales_convert_order', 'to_quote', $order, $quote);
 
         $this->_eventManager->dispatch('sales_convert_order_to_quote', array('order' => $order, 'quote' => $quote));
         return $quote;
@@ -169,7 +167,7 @@ class Order extends \Magento\Object
     {
         $address = $this->addressToQuoteAddress($order->getShippingAddress());
 
-        $this->_coreData->copyFieldsetToTarget('sales_convert_order', 'to_quote_address', $order, $address);
+        $this->_objectCopyService->copyFieldsetToTarget('sales_convert_order', 'to_quote_address', $order, $address);
         return $address;
     }
 
@@ -187,7 +185,7 @@ class Order extends \Magento\Object
             ->setCustomerId($address->getCustomerId())
             ->setCustomerAddressId($address->getCustomerAddressId());
 
-        $this->_coreData->copyFieldsetToTarget(
+        $this->_objectCopyService->copyFieldsetToTarget(
             'sales_convert_order_address',
             'to_quote_address',
             $address,
@@ -212,7 +210,7 @@ class Order extends \Magento\Object
         $quotePayment->setStoreId($payment->getStoreId())
             ->setCustomerPaymentId($payment->getCustomerPaymentId());
 
-        $this->_coreData->copyFieldsetToTarget(
+        $this->_objectCopyService->copyFieldsetToTarget(
             'sales_convert_order_payment',
             'to_quote_payment',
             $payment,
@@ -235,7 +233,7 @@ class Order extends \Magento\Object
             ->setProductId($item->getProductId())
             ->setParentProductId($item->getParentProductId());
 
-        $this->_coreData->copyFieldsetToTarget('sales_convert_order_item', 'to_quote_item', $item, $quoteItem);
+        $this->_objectCopyService->copyFieldsetToTarget('sales_convert_order_item', 'to_quote_item', $item, $quoteItem);
         return $quoteItem;
     }
 
@@ -254,7 +252,7 @@ class Order extends \Magento\Object
             ->setBillingAddressId($order->getBillingAddressId())
             ->setShippingAddressId($order->getShippingAddressId());
 
-        $this->_coreData->copyFieldsetToTarget('sales_convert_order', 'to_invoice', $order, $invoice);
+        $this->_objectCopyService->copyFieldsetToTarget('sales_convert_order', 'to_invoice', $order, $invoice);
         return $invoice;
     }
 
@@ -270,7 +268,7 @@ class Order extends \Magento\Object
         $invoiceItem->setOrderItem($item)
             ->setProductId($item->getProductId());
 
-        $this->_coreData->copyFieldsetToTarget('sales_convert_order_item', 'to_invoice_item', $item, $invoiceItem);
+        $this->_objectCopyService->copyFieldsetToTarget('sales_convert_order_item', 'to_invoice_item', $item, $invoiceItem);
         return $invoiceItem;
     }
 
@@ -289,7 +287,7 @@ class Order extends \Magento\Object
             ->setBillingAddressId($order->getBillingAddressId())
             ->setShippingAddressId($order->getShippingAddressId());
 
-        $this->_coreData->copyFieldsetToTarget('sales_convert_order', 'to_shipment', $order, $shipment);
+        $this->_objectCopyService->copyFieldsetToTarget('sales_convert_order', 'to_shipment', $order, $shipment);
         return $shipment;
     }
 
@@ -305,7 +303,7 @@ class Order extends \Magento\Object
         $shipmentItem->setOrderItem($item)
             ->setProductId($item->getProductId());
 
-        $this->_coreData->copyFieldsetToTarget('sales_convert_order_item', 'to_shipment_item', $item, $shipmentItem);
+        $this->_objectCopyService->copyFieldsetToTarget('sales_convert_order_item', 'to_shipment_item', $item, $shipmentItem);
         return $shipmentItem;
     }
 
@@ -324,7 +322,7 @@ class Order extends \Magento\Object
             ->setBillingAddressId($order->getBillingAddressId())
             ->setShippingAddressId($order->getShippingAddressId());
 
-        $this->_coreData->copyFieldsetToTarget('sales_convert_order', 'to_cm', $order, $creditmemo);
+        $this->_objectCopyService->copyFieldsetToTarget('sales_convert_order', 'to_cm', $order, $creditmemo);
         return $creditmemo;
     }
 
@@ -340,7 +338,7 @@ class Order extends \Magento\Object
         $creditmemoItem->setOrderItem($item)
             ->setProductId($item->getProductId());
 
-        $this->_coreData->copyFieldsetToTarget('sales_convert_order_item', 'to_cm_item', $item, $creditmemoItem);
+        $this->_objectCopyService->copyFieldsetToTarget('sales_convert_order_item', 'to_cm_item', $item, $creditmemoItem);
         return $creditmemoItem;
     }
 }

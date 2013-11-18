@@ -26,10 +26,10 @@
 <config>
     <type name="Magento\Theme\Model\Config">
         <param name="configCache">
-            <instance type="Magento\Core\Model\Cache\Type\Config" />
+            <instance type="Magento\App\Cache\Type\Config" />
         </param>
         <param name="layoutCache">
-            <instance type="Magento\Core\Model\Cache\Type\Layout" />
+            <instance type="Magento\App\Cache\Type\Layout" />
         </param>
     </type>
     <type name="Magento\Theme\Model\Uploader\Service">

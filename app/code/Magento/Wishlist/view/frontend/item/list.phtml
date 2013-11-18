@@ -19,39 +19,37 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php
-    $columns = $this->getColumns();
+$columns = $this->getColumns();
 ?>
-<table class="data-table" id="wishlist-table">
+<table class="table data wishlist" id="wishlist-table">
     <thead>
-        <tr>
-            <?php foreach ($columns as $column): ?>
-                <th><?php echo $column->getTitle();?></th>
-            <?php endforeach; ?>
-        </tr>
+    <tr>
+        <?php foreach ($columns as $column): ?>
+            <th class="col <?php echo $column->getColClass(); ?>"><?php echo $column->getTitle();?></th>
+        <?php endforeach; ?>
+    </tr>
     </thead>
     <tbody>
-        <?php if (count($this->getItems())): ?>
-            <?php foreach ($this->getItems() as $item): ?>
-                <tr id="item_<?php echo $item->getId();?>">
-                    <?php foreach ($columns as $column): ?>
-                        <td><?php $column->setItem($item); echo $column->toHtml($item);?></td>
-                    <?php endforeach; ?>
-                </tr>
-            <?php endforeach ?>
-        <?php else: ?>
-            <td colspan="<?php echo count($columns);?>" class="wishlist-empty"><?php echo __('This Wish List has no Items');?></td>
-        <?php endif; ?>
+    <?php if (count($this->getItems())): ?>
+        <?php foreach ($this->getItems() as $item): ?>
+            <tr id="item_<?php echo $item->getId();?>">
+                <?php foreach ($columns as $column): ?>
+                    <td class="col <?php echo $column->getColClass(); ?>">
+                        <?php $column->setItem($item); echo $column->toHtml($item);?>
+                    </td>
+                <?php endforeach; ?>
+            </tr>
+        <?php endforeach ?>
+    <?php else: ?>
+        <td colspan="<?php echo count($columns);?>" class="col empty"><?php echo __('This Wish List has no Items');?></td>
+    <?php endif; ?>
     </tbody>
 </table>
 <?php foreach ($columns as $column): ?>
     <?php echo $column->getAdditionalHtml();?>
 <?php endforeach; ?>
-<script type="text/javascript">
-    jQuery('#wishlist-table').decorate('table');
-</script>

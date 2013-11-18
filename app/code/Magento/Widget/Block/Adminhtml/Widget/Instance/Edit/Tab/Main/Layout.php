@@ -203,6 +203,10 @@ class Layout
                 array(
                     'value' => 'pages',
                     'label' => $this->escapeJsQuote(__('Specified Page'))
+                ),
+                array(
+                    'value' => 'page_layouts',
+                    'label' => $this->escapeJsQuote(__('Page Layouts'))
                 )
             )
         );
@@ -269,6 +273,26 @@ class Layout
             ->setClass('required-entry select')
             ->setExtraParams("onchange=\"WidgetInstance.loadSelectBoxByType(\'block_reference\', "
                 . "this.up(\'div.pages\'), this.value)\"")
+            ->setArea($this->getWidgetInstance()->getArea())
+            ->setTheme($this->getWidgetInstance()->getThemeId())
+        ;
+        return $chooserBlock->toHtml();
+    }
+
+    /**
+     * Retrieve layout select chooser html
+     *
+     * @return string
+     */
+    public function getPageLayoutsPageChooser()
+    {
+        $chooserBlock = $this->getLayout()
+            ->createBlock('Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\DesignAbstraction')
+            ->setName('widget_instance[{{id}}][page_layouts][layout_handle]')
+            ->setId('layout_handle')
+            ->setClass('required-entry select')
+            ->setExtraParams("onchange=\"WidgetInstance.loadSelectBoxByType(\'block_reference\', "
+                    . "this.up(\'div.pages\'), this.value)\"")
             ->setArea($this->getWidgetInstance()->getArea())
             ->setTheme($this->getWidgetInstance()->getThemeId())
         ;

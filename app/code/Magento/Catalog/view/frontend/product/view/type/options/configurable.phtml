@@ -26,8 +26,9 @@
 ?>
 
 <?php
+/** @var $this Magento\Catalog\Block\Product\View\Type\Configurable*/
 $_product    = $this->getProduct();
-$_attributes = $this->helper('Magento\Core\Helper\Data')->decorateArray($this->getAllowAttributes());
+$_attributes = $this->decorateArray($this->getAllowAttributes());
 ?>
 <?php if ($_product->isSaleable() && count($_attributes)):?>
     <dl>

@@ -56,6 +56,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Wishlist\Helper\Data $wishlistData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -70,16 +71,28 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Block\Template\Context $context,
+        \Magento\Math\Random $mathRandom,
         \Magento\Wishlist\Helper\Data $wishlistData,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         array $data = array()
-    )
-    {
+    ) {
         $this->_customerFactory = $customerFactory;
-        parent::__construct($storeManager, $catalogConfig, $coreRegistry, $taxData, $catalogData, $coreData,
-            $context, $wishlistData, $customerSession, $productFactory, $data);
+        parent::__construct(
+            $storeManager,
+            $catalogConfig,
+            $coreRegistry,
+            $taxData,
+            $catalogData,
+            $coreData,
+            $context,
+            $mathRandom,
+            $wishlistData,
+            $customerSession,
+            $productFactory,
+            $data
+        );
     }
 
     /**

@@ -54,17 +54,17 @@ class Factory
     protected $_objectManager;
 
     /**
-     * @var \Magento\Core\Model\View\FileSystem
+     * @var \Magento\View\FileSystem
      */
     protected $_viewFileSystem;
 
     /**
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\View\FileSystem $viewFileSystem
+     * @param \Magento\View\FileSystem $viewFileSystem
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\View\FileSystem $viewFileSystem
+        \Magento\View\FileSystem $viewFileSystem
     ) {
         $this->_objectManager = $objectManager;
         $this->_viewFileSystem = $viewFileSystem;

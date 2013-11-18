@@ -56,8 +56,8 @@
     <ul class="note-list">
     <?php foreach ($this->getOrder()->getStatusHistoryCollection(true) as $_item): ?>
         <li>
-            <span class="note-list-date"><?php echo $this->helper('Magento\Core\Helper\Data')->formatDate($_item->getCreatedAtDate(), 'medium') ?></span>
-            <span class="note-list-time"><?php echo $this->helper('Magento\Core\Helper\Data')->formatTime($_item->getCreatedAtDate(), 'medium') ?></span>
+            <span class="note-list-date"><?php echo $this->formatDate($_item->getCreatedAtDate(), 'medium') ?></span>
+            <span class="note-list-time"><?php echo $this->formatTime($_item->getCreatedAtDate(), 'medium') ?></span>
             <span class="note-list-status"><?php echo $_item->getStatusLabel() ?></span>
             <span class="note-list-customer">
                 <?php echo __('Customer') ?>

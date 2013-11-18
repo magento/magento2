@@ -129,7 +129,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     const BASE_URL_PLACEHOLDER            = '{{base_url}}';
 
     /**
-     * @var \Magento\Core\Model\Cache\Type\Config
+     * @var \Magento\App\Cache\Type\Config
      */
     protected $_configCacheType;
 
@@ -293,7 +293,7 @@ class Store extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\Cache\Type\Config $configCacheType
+     * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Core\Model\Url $url
      * @param \Magento\App\State $appState
      * @param \Magento\App\RequestInterface $request
@@ -311,7 +311,7 @@ class Store extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\Cache\Type\Config $configCacheType,
+        \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\Core\Model\Url $url,
         \Magento\App\State $appState,
         \Magento\App\RequestInterface $request,

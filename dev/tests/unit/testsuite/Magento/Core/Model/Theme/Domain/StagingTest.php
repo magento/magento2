@@ -39,7 +39,14 @@ class StagingTest extends \PHPUnit_Framework_TestCase
     {
         $parentTheme = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false, false);
 
-        $theme = $this->getMock('Magento\Core\Model\Theme', array('getParentTheme'), array(), '', false, false);
+        $theme = $this->getMock(
+            'Magento\Core\Model\Theme',
+            array('__wakeup', 'getParentTheme'),
+            array(),
+            '',
+            false,
+            false
+        );
         $theme->expects($this->once())->method('getParentTheme')->will($this->returnValue($parentTheme));
 
         $themeCopyService = $this->getMock('Magento\Core\Model\Theme\CopyService', array('copy'), array(), '', false);

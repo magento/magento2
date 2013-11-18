@@ -23,13 +23,15 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Customer Account Confirmation" type="page">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <referenceBlock name="head">
+        <action method="setTitle">
+            <argument translate="true" name="title" xsi:type="string">Send confirmation link</argument>
+        </action>
+    </referenceBlock>
     <referenceBlock name="root">
         <action method="setTemplate">
             <argument name="template" xsi:type="string">1column.phtml</argument>
-        </action>
-        <action method="setHeaderTitle">
-            <argument translate="true" name="title" xsi:type="string">Send confirmation link</argument>
         </action>
     </referenceBlock>
     <referenceContainer name="content">

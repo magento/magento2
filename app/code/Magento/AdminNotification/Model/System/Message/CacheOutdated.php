@@ -37,19 +37,19 @@ class CacheOutdated
     protected $_authorization;
 
     /**
-     * @var \Magento\Core\Model\Cache\TypeListInterface
+     * @var \Magento\App\Cache\TypeListInterface
      */
     protected $_cacheTypeList;
 
     /**
      * @param \Magento\AuthorizationInterface $authorization
      * @param \Magento\UrlInterface $urlBuilder
-     * @param \Magento\Core\Model\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
      */
     public function __construct(
         \Magento\AuthorizationInterface $authorization,
         \Magento\UrlInterface $urlBuilder,
-        \Magento\Core\Model\Cache\TypeListInterface $cacheTypeList
+        \Magento\App\Cache\TypeListInterface $cacheTypeList
     ) {
         $this->_authorization = $authorization;
         $this->_urlBuilder = $urlBuilder;

@@ -43,35 +43,38 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $layoutUtility = new \Magento\Core\Utility\Layout($this);
-        $appState = $objectManager->get('Magento\App\State');
-        $appState->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $args = array(
-            'context' => $objectManager->get('Magento\Core\Block\Template\Context'),
-            'layoutProcessorFactory' => $this->getMock('Magento\View\Layout\ProcessorFactory',
-                array(), array(), '', false),
-            'themesFactory' => $objectManager->get('Magento\Core\Model\Resource\Theme\CollectionFactory'),
-            'appState' => $appState,
-            'data' => array(
+        $config = $this->getMockBuilder('Magento\Core\Model\Layout\PageType\Config')
+                            ->setMethods(array('getPageTypes'))
+                            ->disableOriginalConstructor()
+                            ->getMock();
+        $pageTypeValues = array(
+            'wishlist_index_index' => array(
+                'label' => 'Customer My Account My Wish List',
+                'id' => 'wishlist_index_index'
+            ),
+            'cms_index_nocookies' => array(
+                'label' => 'CMS No-Cookies Page',
+                'id' => 'cms_index_nocookies'
+            ),
+            'cms_index_defaultindex' => array(
+                'label' => 'CMS Home Default Page',
+                'id' => 'cms_index_defaultindex'
+            ),
+        );
+        $config->expects($this->any())
+              ->method('getPageTypes')
+              ->will($this->returnValue($pageTypeValues));
+
+        $this->_block = new \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout(
+            $objectManager->get('Magento\Core\Block\Template\Context'),
+            $config,
+            array(
                 'name'  => 'page_type',
                 'id'    => 'page_types_select',
                 'class' => 'page-types-select',
                 'title' => 'Page Types Select',
             )
         );
-        $this->_block = $this->getMock(
-            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout',
-            array('_getLayoutProcessor'), $args
-        );
-        $this->_block
-            ->expects($this->any())
-            ->method('_getLayoutProcessor')
-            ->will($this->returnCallback(
-                function () use ($layoutUtility) {
-                    return $layoutUtility->getLayoutUpdateFromFixture(glob(__DIR__ . '/_files/layout/*.xml'));
-                }
-            ))
-        ;
     }
 
     public function testToHtml()

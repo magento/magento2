@@ -19,17 +19,13 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="page-title">
-    <h1><?php echo __('You are now logged out') ?></h1>
-</div>
 <p><?php echo __('You have logged out and will be redirected to our homepage in 5 seconds.') ?></p>
 <script type="text/javascript">
     (function($){
-        $($.mage.redirect("<?php echo $this->getUrl() ?>","assign",5000));
+        $($.mage.redirect("<?php echo $this->getUrl() ?>", "assign", 5000));
     })(jQuery);
 </script>

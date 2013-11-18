@@ -111,7 +111,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
 
         $themeCollectionMock->expects($this->once())
             ->method('addTypeFilter')
-            ->with(\Magento\Core\Model\Theme::TYPE_VIRTUAL)
+            ->with(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL)
             ->will($this->returnValue($themeCollectionMock));
 
         $themeCollectionMock->expects($this->once())

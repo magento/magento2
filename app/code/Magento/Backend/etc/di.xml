@@ -48,7 +48,7 @@
     </type>
     <type name="Magento\Backend\Controller\Adminhtml\System\Config\Save">
         <param name="cache">
-            <instance type="Magento\Core\Model\Cache\Type\Layout" />
+            <instance type="Magento\App\Cache\Type\Layout" />
         </param>
     </type>
     <type name="Magento\Backend\Model\Menu\Config">

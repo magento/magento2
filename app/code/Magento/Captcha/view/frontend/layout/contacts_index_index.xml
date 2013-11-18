@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceContainer name="form.additional.info">
-        <block class="Magento\Captcha\Block\Captcha" name="captcha">
+        <block class="Magento\Captcha\Block\Captcha" name="captcha" after="-">
             <action method="setFormId">
                 <argument name="formId" xsi:type="string">contact_us</argument>
             </action>

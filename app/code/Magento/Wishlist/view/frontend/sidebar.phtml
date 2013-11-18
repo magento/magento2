@@ -19,43 +19,54 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /* @var $this \Magento\Wishlist\Block\Customer\Sidebar */
 ?>
+
 <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
-<div class="block block-wishlist">
-    <div class="block-title">
-        <strong><span><?php echo $this->getTitle(); ?></span></strong>
+    <?php $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');?>
+    <div class="block wishlist">
+        <div class="title">
+            <strong><?php echo $this->getTitle(); ?></strong>
+        </div>
+        <div class="content">
+            <strong class="subtitle"><?php echo __('Last Added Items') ?></strong>
+            <?php if ($this->hasWishlistItems()): ?>
+                <ol class="items minilist products" id="wishlist-sidebar">
+                    <?php $iterator = 1; ?>
+                    <?php foreach ($this->getWishlistItems() as $_item): ?>
+                        <?php $product = $_item->getProduct(); ?>
+                        <?php echo ($iterator++==1) ? '<li class="item product">' : '</li><li class="item product">' ?>
+                        <div class="product">
+                            <a class="product photo" href="<?php echo $this->getProductUrl($_item) ?>" title="<?php echo $this->escapeHtml($product->getName()) ?>">
+                                <?php echo $imageBlock->init($product, 'wishlist_sidebar_block')->toHtml() ?>
+                            </a>
+                            <div class="product details">
+                                <strong class="product name"><a href="<?php echo $this->getProductUrl($_item) ?>"><?php echo $this->escapeHtml($product->getName()) ?></a></strong>
+                                <?php echo $this->getPriceHtml($product, false, '-wishlist') ?>
+                                <div class="product actions">
+                                    <?php if ($product->isSaleable() && $product->isVisibleInSiteVisibility()): ?>
+                                        <div class="primary"><a href="<?php echo $this->getItemAddToCartUrl($_item) ?>" class="action tocart"><span><?php echo __('Add to Cart') ?></span></a></div>
+                                    <?php endif; ?>
+                                    <div class="secondary">
+                                        <a href="<?php echo $this->getItemRemoveUrl($_item) ?>" title="<?php echo __('Remove This Item') ?>" onclick="return confirm('<?php echo __('Are you sure you would like to remove this item from the wishlist?') ?>');" class="action delete">
+                                            <span><?php echo __('Remove This Item') ?></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php echo ($iterator==count($this->getWishlistItems())+1) ? '</li>' : '' ?>
+                    <?php endforeach; ?>
+                </ol>
+                <div class="actions">
+                    <a class="action details" href="<?php echo $this->helper('Magento\Wishlist\Helper\Data')->getListUrl() ?>"><span><?php echo __('Go to Wish List') ?></span></a>
+                </div>
+            <?php else: ?>
+                <p class="empty"><?php echo __('You have no items in your wish list.') ?></p>
+            <?php endif ?>
+        </div>
     </div>
-    <div class="block-content">
-    <p class="block-subtitle"><?php echo __('Last Added Items') ?></p>
-    <?php if ($this->hasWishlistItems()): ?>
-    <ol class="mini-products-list" id="wishlist-sidebar">
-     <?php foreach ($this->getWishlistItems() as $_item): ?>
-        <?php $product = $_item->getProduct(); ?>
-        <li class="item">
-            <a href="<?php echo $this->getProductUrl($_item) ?>" title="<?php echo $this->escapeHtml($product->getName()) ?>" class="product-image"><img src="<?php echo $this->getThumbnailSidebarUrl($product); ?>" width="<?php echo $this->getThumbnailSidebarSize()?>" height="<?php echo $this->getThumbnailSidebarSize()?>" alt="<?php echo $this->escapeHtml($_item->getName()) ?>" /></a>
-            <div class="product-details">
-                <a href="<?php echo $this->getItemRemoveUrl($_item) ?>" title="<?php echo __('Remove This Item') ?>" onclick="return confirm('<?php echo __('Are you sure you would like to remove this item from the wishlist?') ?>');" class="btn-remove"><?php echo __('Remove This Item') ?></a>
-                <p class="product-name"><a href="<?php echo $this->getProductUrl($_item) ?>"><?php echo $this->escapeHtml($product->getName()) ?></a></p>
-                <?php echo $this->getPriceHtml($product, false, '-wishlist') ?>
-                <?php if ($product->isSaleable() && $product->isVisibleInSiteVisibility()): ?>
-                    <a href="<?php echo $this->getItemAddToCartUrl($_item) ?>" class="link-cart"><?php echo __('Add to Cart') ?></a>
-                <?php endif; ?>
-            </div>
-        </li>
-    <?php endforeach; ?>
-    </ol>
-    <script type="text/javascript">(function($) {$('#wishlist-sidebar').decorate('list', false)})(jQuery)</script>
-    <div class="actions">
-        <a href="<?php echo $this->helper('Magento\Wishlist\Helper\Data')->getListUrl() ?>"><?php echo __('Go to Wish List') ?></a>
-    </div>
-    <?php else: ?>
-        <p class="empty"><?php echo __('You have no items in your wishlist.') ?></p>
-    <?php endif ?>
-    </div>
-</div>
 <?php endif ?>

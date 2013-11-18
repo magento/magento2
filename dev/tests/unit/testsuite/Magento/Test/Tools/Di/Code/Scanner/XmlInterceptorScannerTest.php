@@ -55,7 +55,7 @@ class XmlInterceptorScannerTest extends \PHPUnit_Framework_TestCase
     {
         $actual = $this->_model->collectEntities($this->_testFiles);
         $expected = array(
-            'Magento\Core\Model\Cache\Interceptor',
+            'Magento\App\Cache\Interceptor',
             'Magento\Core\Controller\Varien\Action\Context\Interceptor',
         );
         $this->assertEquals($expected, $actual);

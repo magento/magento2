@@ -42,6 +42,21 @@ interface ThemeInterface
     const CODE_SEPARATOR = '/';
 
     /**
+     * Physical theme type
+     */
+    const TYPE_PHYSICAL = 0;
+
+    /**
+     * Virtual theme type
+     */
+    const TYPE_VIRTUAL  = 1;
+
+    /**
+     * Staging theme type
+     */
+    const TYPE_STAGING  = 2;
+
+    /**
      * Retrieve code of an area a theme belongs to
      *
      * @return string

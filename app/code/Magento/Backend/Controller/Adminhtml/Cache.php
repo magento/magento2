@@ -29,31 +29,31 @@ namespace Magento\Backend\Controller\Adminhtml;
 class Cache extends \Magento\Backend\Controller\Adminhtml\Action
 {
     /**
-     * @var \Magento\Core\Model\Cache\TypeListInterface
+     * @var \Magento\App\Cache\TypeListInterface
      */
     private $_cacheTypeList;
 
     /**
-     * @var \Magento\Core\Model\Cache\StateInterface
+     * @var \Magento\App\Cache\StateInterface
      */
     private $_cacheState;
 
     /**
-     * @var \Magento\Core\Model\Cache\Frontend\Pool
+     * @var \Magento\App\Cache\Frontend\Pool
      */
     private $_cacheFrontendPool;
 
     /**
      * @param \Magento\Backend\Controller\Context $context
-     * @param \Magento\Core\Model\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\Core\Model\Cache\StateInterface $cacheState
-     * @param \Magento\Core\Model\Cache\Frontend\Pool $cacheFrontendPool
+     * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\App\Cache\StateInterface $cacheState
+     * @param \Magento\App\Cache\Frontend\Pool $cacheFrontendPool
      */
     public function __construct(
         \Magento\Backend\Controller\Context $context,
-        \Magento\Core\Model\Cache\TypeListInterface $cacheTypeList,
-        \Magento\Core\Model\Cache\StateInterface $cacheState,
-        \Magento\Core\Model\Cache\Frontend\Pool $cacheFrontendPool
+        \Magento\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\App\Cache\StateInterface $cacheState,
+        \Magento\App\Cache\Frontend\Pool $cacheFrontendPool
     ) {
         parent::__construct($context);
         $this->_cacheTypeList = $cacheTypeList;

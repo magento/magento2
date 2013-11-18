@@ -36,7 +36,7 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
     protected $_readerMock;
 
     /**
-     * @var \Magento\Core\Model\Cache\Type\Config
+     * @var \Magento\App\Cache\Type\Config
      */
     protected $_cacheMock;
 
@@ -46,7 +46,7 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
             array(), array(), '', false
         );
 
-        $this->_cacheMock = $this->getMock('Magento\Core\Model\Cache\Type\Config', array(), array(), '', false);
+        $this->_cacheMock = $this->getMock('Magento\App\Cache\Type\Config', array(), array(), '', false);
         $this->_model = new \Magento\App\ObjectManager\ConfigLoader($this->_cacheMock, $this->_readerMock);
     }
 

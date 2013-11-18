@@ -29,7 +29,7 @@
             <referenceContainer name="alert.urls">
                 <block class="Magento\ProductAlert\Block\Product\View\Price" name="productalert.price" as="productalert_price" template="product/view.phtml">
                     <action method="setHtmlClass">
-                        <argument name="value" xsi:type="string">alert-price link-price-alert</argument>
+                        <argument name="value" xsi:type="string">price</argument>
                     </action>
                     <action method="setSignupLabel">
                         <argument translate="true" name="value" xsi:type="string">Sign up for price alert</argument>
@@ -37,7 +37,7 @@
                 </block>
                 <block class="Magento\ProductAlert\Block\Product\View\Stock" name="productalert.stock" as="productalert_stock" template="product/view.phtml">
                     <action method="setHtmlClass">
-                        <argument name="value" xsi:type="string">alert-stock link-stock-alert</argument>
+                        <argument name="value" xsi:type="string">stock</argument>
                     </action>
                     <action method="setSignupLabel">
                         <argument translate="true" name="value" xsi:type="string">Sign up to be notified when this product is back in stock.</argument>

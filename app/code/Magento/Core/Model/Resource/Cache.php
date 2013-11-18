@@ -34,7 +34,7 @@
  */
 namespace Magento\Core\Model\Resource;
 
-class Cache extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Cache extends \Magento\Core\Model\Resource\Db\AbstractDb implements \Magento\App\Cache\State\OptionsInterface
 {
     /**
      * Define main table

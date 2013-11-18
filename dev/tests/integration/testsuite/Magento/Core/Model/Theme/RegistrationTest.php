@@ -72,7 +72,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
     protected function _getTestTheme()
     {
         $theme = $this->_theme->getCollection()->getThemeByFullPath(
-            implode(\Magento\Core\Model\Theme::PATH_SEPARATOR, array('frontend', 'test_test_theme'))
+            implode(\Magento\View\Design\ThemeInterface::PATH_SEPARATOR, array('frontend', 'test_test_theme'))
         );
         $this->assertNotEmpty($theme->getId());
         return $theme;
@@ -88,11 +88,12 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
 
         $virtualTheme = clone $this->_theme;
         $virtualTheme->setData($theme->getData())->setId(null);
-        $virtualTheme->setType(\Magento\Core\Model\Theme::TYPE_VIRTUAL)->save();
+        $virtualTheme->setType(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL)->save();
 
         $subVirtualTheme = clone $this->_theme;
         $subVirtualTheme->setData($theme->getData())->setId(null);
-        $subVirtualTheme->setParentId($virtualTheme->getId())->setType(\Magento\Core\Model\Theme::TYPE_VIRTUAL)->save();
+        $subVirtualTheme->setParentId($virtualTheme->getId())
+            ->setType(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL)->save();
 
         $this->registerThemes();
         $parentId = $subVirtualTheme->getParentId();
@@ -110,10 +111,10 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
 
         $testTheme = clone $this->_theme;
         $testTheme->setData($theme->getData())->setThemePath('empty')->setId(null);
-        $testTheme->setType(\Magento\Core\Model\Theme::TYPE_PHYSICAL)->save();
+        $testTheme->setType(\Magento\View\Design\ThemeInterface::TYPE_PHYSICAL)->save();
 
         $this->registerThemes();
         $testTheme->load($testTheme->getId());
-        $this->assertNotEquals((int)$testTheme->getType(), \Magento\Core\Model\Theme::TYPE_PHYSICAL);
+        $this->assertNotEquals((int)$testTheme->getType(), \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL);
     }
 }

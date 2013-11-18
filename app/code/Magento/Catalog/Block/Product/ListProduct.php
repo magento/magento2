@@ -65,35 +65,44 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_categoryFactory;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Catalog\Model\Layer $catalogLayer
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
+     * @param \Magento\Catalog\Model\Layer $catalogLayer
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Catalog\Model\Layer $catalogLayer,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Block\Template\Context $context,
+        \Magento\Math\Random $mathRandom,
+        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        \Magento\Catalog\Model\Layer $catalogLayer,
         array $data = array()
     ) {
         $this->_categoryFactory = $categoryFactory;
         $this->_catalogLayer = $catalogLayer;
-        parent::__construct($storeManager, $catalogConfig, $coreRegistry, $taxData, $catalogData, $coreData,
-            $context, $data);
+        parent::__construct(
+            $storeManager,
+            $catalogConfig,
+            $coreRegistry,
+            $taxData,
+            $catalogData,
+            $coreData,
+            $context,
+            $mathRandom,
+            $data
+        );
     }
 
     /**

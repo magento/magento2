@@ -31,7 +31,7 @@
  * @var $this \Magento\Catalog\Block\Product\Price
  */
 ?>
-<div class="price-box map-info">
+<div class="price-box msrp">
     <?php if ($this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($this->getProduct())): ?>
         <a href="<?php echo $this->getProduct()->getProductUrl() ?>"><?php echo __('Click for price'); ?></a>
     <?php endif; ?>

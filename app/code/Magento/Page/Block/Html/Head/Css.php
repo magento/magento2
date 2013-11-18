@@ -49,7 +49,7 @@ class Css extends \Magento\Core\Block\AbstractBlock
         $this->setAsset(
             $viewFileFactory->create(array(
                 'file' => (string)$this->getFile(),
-                'contentType' => \Magento\Core\Model\View\Publisher::CONTENT_TYPE_CSS
+                'contentType' => \Magento\View\Publisher::CONTENT_TYPE_CSS
             ))
         );
     }

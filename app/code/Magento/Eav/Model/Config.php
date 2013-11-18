@@ -120,13 +120,13 @@ class Config
     /**
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory
-     * @param \Magento\Core\Model\Cache\StateInterface $cacheState
+     * @param \Magento\App\Cache\StateInterface $cacheState
      * @param \Magento\Validator\UniversalFactory $universalFactory
      */
     public function __construct(
         \Magento\Core\Model\App $app,
         \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory,
-        \Magento\Core\Model\Cache\StateInterface $cacheState,
+        \Magento\App\Cache\StateInterface $cacheState,
         \Magento\Validator\UniversalFactory $universalFactory
     ) {
         $this->_app = $app;

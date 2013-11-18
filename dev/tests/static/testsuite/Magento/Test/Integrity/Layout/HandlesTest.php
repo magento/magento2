@@ -34,21 +34,22 @@ class HandlesTest extends \PHPUnit_Framework_TestCase
     {
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
         $invoker(
-            /**
-             * Test dependencies between handle attributes that is out of coverage by XSD
-             *
-             * @param string $layoutFile
-             */
+        /**
+         * Test dependencies between handle attributes that is out of coverage by XSD
+         *
+         * @param string $layoutFile
+         */
             function ($layoutFile) {
                 $issues = array();
                 $node = simplexml_load_file($layoutFile);
-                $type = $node['type'];
                 $label = $node['label'];
-                if (!$type) {
-                    if ($label) {
-                        $issues[] = 'Attribute "label" is defined, but "type" is not';
+                $design_abstraction = $node['design_abstraction'];
+                if (!$label) {
+                    if ($design_abstraction) {
+                        $issues[] = 'Attribute "design_abstraction" is defined, but "label" is not';
                     }
                 }
+
                 if ($issues) {
                     $this->fail("Issues found in handle declaration:\n" . implode("\n", $issues) . "\n");
                 }
@@ -70,7 +71,7 @@ class HandlesTest extends \PHPUnit_Framework_TestCase
                 $issues = array();
                 $xml = simplexml_load_file($layoutFile);
                 $containers = $xml->xpath('/layout//container') ?: array();
-                /** @var SimpleXMLElement $node */
+                /** @var \SimpleXMLElement $node */
                 foreach ($containers as $node) {
                     if (!isset($node['htmlTag']) && (isset($node['htmlId']) || isset($node['htmlClass']))) {
                         $issues[] = $node->asXML();

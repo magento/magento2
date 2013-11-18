@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Catalog Product Compare List" type="page">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceContainer name="content">
         <block class="Magento\Catalog\Block\Product\Compare\ListCompare" name="catalog.compare.list" template="product/compare/list.phtml"/>
     </referenceContainer>

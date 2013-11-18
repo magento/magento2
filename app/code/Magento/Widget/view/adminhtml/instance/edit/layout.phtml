@@ -157,6 +157,37 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
         '</tbody>'+
     '</table>'+
 '</div>'+
+'<div class="no-display ignore-validate pages group_container" id="page_layouts_{{id}}">'+
+    '<input type="hidden" class="container_name" name="__[container_name]" value="widget_instance[{{id}}][page_layouts]" />'+
+    '<input type="hidden" name="widget_instance[{{id}}][page_layouts][page_id]" value="{{page_id}}" />'+
+    '<input type="hidden" class="for_all" name="widget_instance[{{id}}][page_layouts][for]" value="all" />'+
+    '<table cellspacing="0" class="data-table">'+
+        '<col width="200" />'+
+        '<thead>'+
+            '<tr>'+
+                '<th><label><?php echo $this->escapeJsQuote(__('Page')) ?> <span class="required">*</span></label></th>'+
+                '<th><label><?php echo $this->escapeJsQuote(__('Container')) ?> <span class="required">*</span></label></th>'+
+                '<th><label><?php echo $this->escapeJsQuote(__('Template')) ?></label></th>'+
+            '</tr>'+
+        '</thead>'+
+        '<tbody>'+
+            '<tr>'+
+                '<td><?php echo $this->getPageLayoutsPageChooser() ?></td>'+
+                '<td>'+
+                    '<div class="block_reference_container">'+
+                        '<div class="block_reference"></div>'+
+                    '</div>'+
+                '</td>'+
+                '<td>'+
+                    '<div class="block_template_container">'+
+                        '<div class="block_template"></div>'+
+                    '</div>'+
+                '</td>'+
+                '<td>&nbsp;</td>'+
+            '</tr>'+
+        '</tbody>'+
+    '</table>'+
+'</div>'+
 '</div>'+
 '</div>';
 

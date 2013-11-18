@@ -36,32 +36,6 @@ namespace Magento\Downloadable\Block\Catalog\Product;
 class Samples extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**
-     * Construct
-     *
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        array $data = array()
-    ) {
-        parent::__construct($storeManager, $catalogConfig, $registry, $taxData, $catalogData, $coreData,
-            $context, $data);
-    }
-
-    /**
      * Enter description here...
      *
      * @return boolean

@@ -41,9 +41,9 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
      */
     public function testPaymentMethod($code, $methodClass)
     {
-        /** @var $blockFactory \Magento\Core\Model\BlockFactory */
+        /** @var $blockFactory \Magento\View\Element\BlockFactory */
         $blockFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\BlockFactory');
+            ->get('Magento\View\Element\BlockFactory');
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getId();
         /** @var $model \Magento\Payment\Model\Method\AbstractMethod */

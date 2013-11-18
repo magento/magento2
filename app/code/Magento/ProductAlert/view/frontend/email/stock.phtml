@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -29,9 +28,17 @@
 <table>
 <?php foreach ($_products as $_product): ?>
     <tr>
-        <td><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->escapeHtml($_product->getName()) ?>"><img src="<?php echo $this->getThumbnailUrl($_product) ?>" width="<?php echo $this->getThumbnailSize()?>" height="<?php echo $this->getThumbnailSize()?>" border="0" align="left" alt="<?php echo $this->escapeHtml($_product->getName()) ?>" /></a></td>
-        <td>
-            <p><a href="<?php echo $_product->getProductUrl() ?>"><strong><?php echo $this->escapeHtml($_product->getName()) ?></strong></a></p>
+        <td class="col photo">
+            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->escapeHtml($_product->getName()) ?>" class="product photo">
+                <img src="<?php echo $this->getThumbnailUrl($_product) ?>" width="<?php echo $this->getThumbnailSize()?>" height="<?php echo $this->getThumbnailSize()?>" alt="<?php echo $this->escapeHtml($_product->getName()) ?>" class="photo image" />
+            </a>
+        </td>
+        <td class="col item">
+            <p>
+                <strong class="product name">
+                    <a href="<?php echo $_product->getProductUrl() ?>"><?php echo $this->escapeHtml($_product->getName()) ?></a>
+                </strong>
+            </p>
             <?php if ($shortDescription = $this->escapeHtml($_product->getShortDescription())): ?>
             <p><small><?php echo $shortDescription ?></small></p>
             <?php endif; ?>

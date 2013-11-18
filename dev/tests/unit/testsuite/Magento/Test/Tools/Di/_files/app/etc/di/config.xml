@@ -24,7 +24,7 @@
  */
 -->
 <config>
-    <type name="Magento\Core\Model\Cache">
+    <type name="Magento\App\Cache">
         <param name="storeManager"><instance type="customStoreManagerProxy" /></param>
     </type>
     <type name="Magento\Core\Controller\Varien\Action\Context">

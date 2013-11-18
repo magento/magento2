@@ -19,18 +19,19 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<label for="<?php echo $this->getFieldId('gender')?>"<?php if ($this->isRequired()) echo ' class="required"' ?>><?php if ($this->isRequired()) echo '<em>*</em>' ?><?php echo __('Gender') ?></label>
-<div class="input-box">
-    <select id="<?php echo $this->getFieldId('gender')?>" name="<?php echo $this->getFieldName('gender')?>" title="<?php echo __('Gender') ?>"<?php if ($this->isRequired()):?> class="validate-select" data-validate="{required:true}"<?php endif; ?> <?php echo $this->getFieldParams() ?>>
-        <?php $options = $this->getGenderOptions(); ?>
-        <?php $value = $this->getGender();?>
-        <?php foreach ($options as $option):?>
-            <option value="<?php echo $option['value'] ?>"<?php if ($option['value'] == $value) echo ' selected="selected"' ?>><?php echo $option['label'] ?></option>
-        <?php endforeach;?>
-    </select>
+<div class="field gender<?php if ($this->isRequired()) echo ' required' ?>">
+    <label class="label" for="<?php echo $this->getFieldId('gender')?>"><span><?php echo __('Gender') ?></span></label>
+    <div class="control">
+        <select id="<?php echo $this->getFieldId('gender')?>" name="<?php echo $this->getFieldName('gender')?>" title="<?php echo __('Gender') ?>"<?php if ($this->isRequired()):?> class="validate-select" data-validate="{required:true}"<?php endif; ?> <?php echo $this->getFieldParams() ?>>
+            <?php $options = $this->getGenderOptions(); ?>
+            <?php $value = $this->getGender();?>
+            <?php foreach ($options as $option):?>
+                <option value="<?php echo $option['value'] ?>"<?php if ($option['value'] == $value) echo ' selected="selected"' ?>><?php echo $option['label'] ?></option>
+            <?php endforeach;?>
+        </select>
+    </div>
 </div>

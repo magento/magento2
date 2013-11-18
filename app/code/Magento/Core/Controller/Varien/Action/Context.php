@@ -58,13 +58,6 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_eventManager;
 
     /**
-     * Should inherited page be rendered
-     *
-     * @var bool
-     */
-    protected $_isRenderInherited;
-
-    /**
      * @var \Magento\Logger
      */
     protected $_logger;
@@ -83,7 +76,6 @@ class Context implements \Magento\ObjectManager\ContextInterface
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\HTTP\Authentication $authentication
-     * @param bool $isRenderInherited
      */
     public function __construct(
         \Magento\Logger $logger,
@@ -93,8 +85,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
         \Magento\App\FrontController $frontController,
         \Magento\View\LayoutInterface $layout,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\HTTP\Authentication $authentication,
-        $isRenderInherited
+        \Magento\HTTP\Authentication $authentication
     ) {
         $this->_request           = $request;
         $this->_response          = $response;
@@ -102,19 +93,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
         $this->_frontController   = $frontController;
         $this->_layout            = $layout;
         $this->_eventManager      = $eventManager;
-        $this->_isRenderInherited = $isRenderInherited;
         $this->_logger            = $logger;
         $this->authentication     = $authentication;
-    }
-
-    /**
-     * Should inherited page be rendered
-     *
-     * @return bool
-     */
-    public function isRenderInherited()
-    {
-        return $this->_isRenderInherited;
     }
 
     /**

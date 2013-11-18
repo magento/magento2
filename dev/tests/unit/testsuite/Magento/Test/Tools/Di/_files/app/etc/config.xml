@@ -26,7 +26,7 @@
 <config>
     <global>
         <di>
-            <Node1 type="Magento\Core\Model\Cache">
+            <Node1 type="Magento\App\Cache">
                 <parameters>
                     <storeManager>
                         <instance>customStoreManagerProxy</instance>

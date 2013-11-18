@@ -31,28 +31,14 @@
  */
 /** @var $this \Magento\Core\Block\Template */
 ?>
-<div id="window-overlay" class="window-overlay" style="display:none;"></div>
-<div id="remember-me-popup" class="remember-me-popup" style="display:none;">
-    <div class="remember-me-popup-head">
-        <h3>What's this?</h3>
-        <a href="#" class="remember-me-popup-close" title="<?php echo __('Close') ?>"><?php echo __('Close') ?></a>
-    </div>
-    <div class="remember-me-popup-body">
-        <p>Checking &quot;Remember Me&quot; will let you access your shopping cart on this computer when you are logged out</p>
-        <div class="remember-me-popup-close-button a-right">
-            <a href="#" class="remember-me-popup-close button" title="<?php echo __('Close') ?>"><span><?php echo __('Close') ?></span></a>
-        </div>
-    </div>
-</div>
 <script type="text/javascript">
     (function($) {
         head.js(
             "<?php echo $this->getViewFileUrl('Magento_Persistent::remember-me-popup.js') ?>",
             function() {
                 $('#remember-me-box').rememberMePopup({
-                    windowOverlay: '#window-overlay',
-                    popupBlock: '#remember-me-popup',
-                    closeBtn: '.remember-me-popup-close'
+                    title: '<?php echo __('What is this?');?>',
+                    content: '<?php echo __('Check &quot;Remember Me&quot; to access your shopping cart on this computer when you are logged out')?>'
                 });
             });
     })(jQuery);

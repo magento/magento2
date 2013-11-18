@@ -24,12 +24,12 @@
 
 namespace Magento\View;
 
-use Magento\Core\Model\BlockFactory;
+use Magento\View\Element\BlockFactory;
 
 class DataSourcePool
 {
     /**
-     * @var \Magento\Core\Model\BlockFactory
+     * @var \Magento\View\Element\BlockFactory
      */
     protected $blockFactory;
 
@@ -44,7 +44,7 @@ class DataSourcePool
     protected $assignments = array();
 
     /**
-     * @param BlockFactory $blockFactory
+     * @param \Magento\View\Element\BlockFactory $blockFactory
      */
     public function __construct(BlockFactory $blockFactory)
     {

@@ -28,16 +28,16 @@ namespace Magento\Backend\Model\Cache\Resource\Grid;
 class Collection extends \Magento\Data\Collection
 {
     /**
-     * @var \Magento\Core\Model\Cache\TypeListInterface
+     * @var \Magento\App\Cache\TypeListInterface
      */
     protected $_cacheTypeList;
 
     /**
-     * @param \Magento\Core\Model\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      */
     public function __construct(
-        \Magento\Core\Model\Cache\TypeListInterface $cacheTypeList,
+        \Magento\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Core\Model\EntityFactory $entityFactory
     ) {
         $this->_cacheTypeList = $cacheTypeList;

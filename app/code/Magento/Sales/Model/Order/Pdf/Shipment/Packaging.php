@@ -39,11 +39,6 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
     protected $_usaData = null;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
      * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -55,7 +50,6 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
 
     /**
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Core\Model\Translate $translate
@@ -64,8 +58,8 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
      * @param \Magento\Sales\Model\Order\Pdf\Config $pdfConfig
      * @param \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory
      * @param \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory
-     * @param \Magento\Usa\Helper\Data $usaData
      * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Usa\Helper\Data $usaData
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\View\LayoutInterface $layout
      * @param array $data
@@ -74,7 +68,6 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
      */
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Stdlib\String $string,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Core\Model\Translate $translate,
@@ -83,18 +76,29 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         \Magento\Sales\Model\Order\Pdf\Config $pdfConfig,
         \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory,
         \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory,
-        \Magento\Usa\Helper\Data $usaData,
         \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Usa\Helper\Data $usaData,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\View\LayoutInterface $layout,
         array $data = array()
     ) {
         $this->_usaData = $usaData;
-        $this->_locale = $locale;
         $this->_storeManager = $storeManager;
         $this->_layout = $layout;
-        parent::__construct($paymentData, $coreData, $string, $coreStoreConfig, $translate, $coreDir,
-            $shippingConfig, $pdfConfig, $pdfTotalFactory, $pdfItemsFactory, $data);
+
+        parent::__construct(
+            $paymentData,
+            $string,
+            $coreStoreConfig,
+            $translate,
+            $coreDir,
+            $shippingConfig,
+            $pdfConfig,
+            $pdfTotalFactory,
+            $pdfItemsFactory,
+            $locale,
+            $data
+        );
     }
 
     /**
@@ -113,7 +117,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         $page = $this->newPage();
 
         if ($shipment->getStoreId()) {
-            $this->_locale->emulate($shipment->getStoreId());
+            $this->locale->emulate($shipment->getStoreId());
             $this->_storeManager->setCurrentStore($shipment->getStoreId());
         }
 
@@ -126,7 +130,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         $this->_afterGetPdf();
 
         if ($shipment->getStoreId()) {
-            $this->_locale->revert();
+            $this->locale->revert();
         }
         return $pdf;
     }

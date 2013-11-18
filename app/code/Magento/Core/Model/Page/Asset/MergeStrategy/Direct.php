@@ -40,23 +40,23 @@ class Direct implements \Magento\Core\Model\Page\Asset\MergeStrategyInterface
     private $_dirs;
 
     /**
-     * @var \Magento\Core\Helper\Css
+     * @var \Magento\View\Url\CssResolver
      */
-    private $_cssHelper;
+    private $_cssUrlResolver;
 
     /**
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\App\Dir $dirs
-     * @param \Magento\Core\Helper\Css $cssHelper
+     * @param \Magento\View\Url\CssResolver $cssUrlResolver
      */
     public function __construct(
         \Magento\Filesystem $filesystem,
         \Magento\App\Dir $dirs,
-        \Magento\Core\Helper\Css $cssHelper
+        \Magento\View\Url\CssResolver $cssUrlResolver
     ) {
         $this->_filesystem = $filesystem;
         $this->_dirs = $dirs;
-        $this->_cssHelper = $cssHelper;
+        $this->_cssUrlResolver = $cssUrlResolver;
     }
 
     /**
@@ -82,7 +82,7 @@ class Direct implements \Magento\Core\Model\Page\Asset\MergeStrategyInterface
     protected function _composeMergedContent(array $publicFiles, $targetFile, $contentType)
     {
         $result = array();
-        $isCss = $contentType == \Magento\Core\Model\View\Publisher::CONTENT_TYPE_CSS;
+        $isCss = $contentType == \Magento\View\Publisher::CONTENT_TYPE_CSS;
 
         foreach ($publicFiles as $file) {
             if (!$this->_filesystem->has($file)) {
@@ -90,7 +90,7 @@ class Direct implements \Magento\Core\Model\Page\Asset\MergeStrategyInterface
             }
             $content = $this->_filesystem->read($file);
             if ($isCss) {
-                $content = $this->_cssHelper->replaceCssRelativeUrls($content, $file, $targetFile);
+                $content = $this->_cssUrlResolver->replaceCssRelativeUrls($content, $file, $targetFile);
             }
             $result[] = $content;
         }

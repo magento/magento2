@@ -40,7 +40,8 @@ class Gallery extends \Magento\Backend\Controller\Adminhtml\Action
         try {
             $uploader = $this->_objectManager->create('Magento\Core\Model\File\Uploader', array('fileId' => 'image'));
             $uploader->setAllowedExtensions(array('jpg','jpeg','gif','png'));
-            $imageAdapter = $this->_objectManager->get('Magento\Core\Model\Image\AdapterFactory')->create();
+            /** @var \Magento\Image\Adapter\AdapterInterface $imageAdapter */
+            $imageAdapter = $this->_objectManager->get('Magento\Image\AdapterFactory')->create();
             $uploader->addValidateCallback('catalog_product_image', $imageAdapter, 'validateUploadFile');
             $uploader->setAllowRenameFiles(true);
             $uploader->setFilesDispersion(true);

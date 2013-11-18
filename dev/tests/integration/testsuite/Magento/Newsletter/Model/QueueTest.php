@@ -50,12 +50,13 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $app = $objectManager->get('Magento\Core\Model\App');
         $app->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
 
-        /** @var $collection \Magento\Core\Model\Resource\Theme\Collection */
         $collection = $objectManager->create('Magento\Core\Model\Resource\Theme\Collection');
         $themeId = $collection->getThemeByFullPath('frontend/magento_demo')->getId();
         /** @var $storeManager \Magento\Core\Model\StoreManagerInterface */
         $storeManager = $objectManager->get('Magento\Core\Model\StoreManagerInterface');
-        $storeManager->getStore('fixturestore')->setConfig('design/theme/theme_id', $themeId);
+        $storeManager->getStore('fixturestore')->setConfig(
+            \Magento\Core\Model\View\Design::XML_PATH_THEME_ID, $themeId
+        );
 
         $subscriberOne = $this->getMock('Zend_Mail', array('send', 'setBodyHTML'), array('utf-8'));
         $subscriberOne->expects($this->any())->method('send');
@@ -76,8 +77,8 @@ class QueueTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Core\Model\Registry'),
                 $appEmulation,
                 $objectManager->get('Magento\Filesystem'),
-                $objectManager->get('Magento\Core\Model\View\Url'),
-                $objectManager->get('Magento\Core\Model\View\FileSystem'),
+                $objectManager->get('Magento\View\Url'),
+                $objectManager->get('Magento\View\FileSystem'),
                 $design,
                 $objectManager->get('Magento\Core\Model\Store\ConfigInterface'),
                 $objectManager->get('Magento\Core\Model\ConfigInterface'),
@@ -123,8 +124,8 @@ class QueueTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Core\Model\Registry'),
                 $objectManager->get('Magento\Core\Model\App\Emulation'),
                 $objectManager->get('Magento\Filesystem'),
-                $objectManager->get('Magento\Core\Model\View\Url'),
-                $objectManager->get('Magento\Core\Model\View\FileSystem'),
+                $objectManager->get('Magento\View\Url'),
+                $objectManager->get('Magento\View\FileSystem'),
                 $objectManager->get('Magento\Core\Model\View\Design'),
                 $objectManager->get('Magento\Core\Model\Store\ConfigInterface'),
                 $objectManager->get('Magento\Core\Model\ConfigInterface'),

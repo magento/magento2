@@ -44,16 +44,16 @@ class DirectTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_cssHelper;
+    protected $_cssUrlResolver;
 
     protected function setUp()
     {
-        $this->_cssHelper = $this->getMock('Magento\Core\Helper\Css', array(), array(), '', false);
+        $this->_cssUrlResolver = $this->getMock('Magento\View\Url\CssResolver', array(), array(), '', false);
         $this->_filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
         $this->_dirs = $this->getMock('Magento\App\Dir', array(), array(), '', false);
 
         $this->_object = new \Magento\Core\Model\Page\Asset\MergeStrategy\Direct(
-            $this->_filesystem, $this->_dirs, $this->_cssHelper
+            $this->_filesystem, $this->_dirs, $this->_cssUrlResolver
         );
     }
 
@@ -71,7 +71,7 @@ class DirectTest extends \PHPUnit_Framework_TestCase
      */
     public function testMergeFilesCss()
     {
-        $this->_cssHelper
+        $this->_cssUrlResolver
             ->expects($this->exactly(2))
             ->method('replaceCssRelativeUrls')
             ->will($this->returnArgument(0));
@@ -83,7 +83,7 @@ class DirectTest extends \PHPUnit_Framework_TestCase
      */
     public function testMergeFilesJs()
     {
-        $this->_cssHelper
+        $this->_cssUrlResolver
             ->expects($this->never())
             ->method('replaceCssRelativeUrls');
         $this->_testMergeFiles('js');

@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Sales Shipment Print View" type="page">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceContainer name="content">
         <block class="Magento\Sales\Block\Order\PrintOrder\Shipment" name="sales.order.print.shipment" template="order/print/shipment.phtml">
             <block class="Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer" as="default" template="order/shipment/items/renderer/default.phtml"/>

@@ -23,14 +23,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Customer Account Edit Form" type="page">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="customer_account"/>
-    <referenceBlock name="root">
-        <action method="setHeaderTitle">
-            <argument translate="true" name="title" xsi:type="string">Edit Account Info</argument>
+    <referenceBlock name="page.main.title">
+        <action method="setPageTitle">
+            <argument translate="true" name="title" xsi:type="string">Edit Account Information</argument>
         </action>
     </referenceBlock>
-    <referenceContainer name="my.account.wrapper">
+    <referenceContainer name="content">
         <block class="Magento\Customer\Block\Form\Edit" name="customer_edit" template="form/edit.phtml"/>
     </referenceContainer>
 </layout>

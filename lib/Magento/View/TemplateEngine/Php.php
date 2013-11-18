@@ -27,12 +27,12 @@
 namespace Magento\View\TemplateEngine;
 
 use Magento\View\TemplateEngineInterface;
-use Magento\Core\Block\Template;
+use Magento\View\Element\BlockInterface;
 
 class Php implements TemplateEngineInterface
 {
     /**
-     * @var \Magento\Core\Block\Template
+     * @var BlockInterface
      */
     protected $_currentBlock;
 
@@ -40,14 +40,14 @@ class Php implements TemplateEngineInterface
      * Include the named PHTML template using the given block as the $this
      * reference, though only public methods will be accessible.
      *
-     * @param \Magento\Core\Block\Template $block
+     * @param BlockInterface           $block
      * @param string                   $fileName
      * @param array                    $dictionary
      *
      * @return string
      * @throws \Exception any exception that the template may throw
      */
-    public function render(Template $block, $fileName, array $dictionary = array())
+    public function render(BlockInterface $block, $fileName, array $dictionary = array())
     {
         ob_start();
         try {

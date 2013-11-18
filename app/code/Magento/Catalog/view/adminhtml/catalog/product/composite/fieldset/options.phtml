@@ -26,7 +26,7 @@
 ?>
 
 <?php /* @var $this \Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options */ ?>
-<?php $options = $this->helper('Magento\Core\Helper\Data')->decorateArray($this->getOptions()); ?>
+<?php $options = $this->decorateArray($this->getOptions()); ?>
 <?php if (count($options)): ?>
 
 <?php echo $this->getChildHtml('options_js') ?>

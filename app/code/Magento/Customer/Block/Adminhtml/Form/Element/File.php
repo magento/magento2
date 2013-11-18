@@ -37,7 +37,7 @@ namespace Magento\Customer\Block\Adminhtml\Form\Element;
 class File extends \Magento\Data\Form\Element\AbstractElement
 {
     /**
-     * @var \Magento\Core\Model\View\Url
+     * @var \Magento\View\Url
      */
     protected $_viewUrl;
 
@@ -53,7 +53,7 @@ class File extends \Magento\Data\Form\Element\AbstractElement
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Backend\Helper\Data $adminhtmlData
-     * @param \Magento\Core\Model\View\Url $viewUrl
+     * @param \Magento\View\Url $viewUrl
      * @param array $attributes
      */
     public  function __construct(
@@ -61,7 +61,7 @@ class File extends \Magento\Data\Form\Element\AbstractElement
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Backend\Helper\Data $adminhtmlData,
-        \Magento\Core\Model\View\Url $viewUrl,
+        \Magento\View\Url $viewUrl,
         $attributes = array()
     ) {
         $this->_adminhtmlData = $adminhtmlData;

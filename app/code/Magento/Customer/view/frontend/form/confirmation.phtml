@@ -19,32 +19,27 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="page-title">
-    <h1><?php echo __('Send confirmation link') ?></h1>
-</div>
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<form action="" method="post" id="form-validate">
-    <div class="fieldset">
-        <h2 class="legend"><?php echo __('Retrieve your confirmation link here') ?></h2>
-        <p><?php echo __('Please enter your email below and we\'ll send you confirmation link for it.') ?></p>
-        <ul class="form-list">
-            <li>
-                <label for="email_address" class="required"><em>*</em><?php echo __('Email Address') ?></label>
-                <div class="input-box">
-                    <input type="text" name="email" id="email_address" title="<?php echo __('Email Address') ?>" class="input-text" value="<?php echo $this->escapeHtml($this->getEmail()) ?>" data-validate="{required:true, 'validate-email':true}"/>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <div class="buttons-set">
-        <p class="required"><?php echo __('* Required Fields') ?></p>
-        <p class="back-link"><a href="<?php echo $this->helper('Magento\Customer\Helper\Data')->getLoginUrl() ?>"><small>&laquo; </small><?php echo __('Back to Login') ?></a></p>
-        <button type="submit" title="<?php echo __('Submit') ?>" class="button"><span><span><?php echo __('Submit') ?></span></span></button>
+<form action="" method="post" id="form-validate" class="form send confirmation">
+    <fieldset class="fieldset" data-hasrequired="<?php echo __('* Required Fields') ?>">
+        <p class="field note"><?php echo __('Please enter your email below and we will send you the confirmation link for it.') ?></p>
+        <div class="field email required">
+            <label for="email_address" class="label"><span><?php echo __('Email Address') ?></span></label>
+            <div class="control">
+                <input type="text" name="email" id="email_address" class="input-text" value="<?php echo $this->escapeHtml($this->getEmail()) ?>" data-validate="{required:true, 'validate-email':true}">
+            </div>
+        </div>
+    </fieldset>
+    <div class="actions">
+        <div class="primary">
+            <button type="submit" class="action send"><span><?php echo __('Send confirmation link') ?></span></button>
+        </div>
+        <div class="secondary">
+            <a href="<?php echo $this->helper('Magento\Customer\Helper\Data')->getLoginUrl() ?>" class="action back"><span><?php echo __('Back to Login') ?></span></a>
+        </div>
     </div>
 </form>
 <script type="text/javascript">

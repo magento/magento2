@@ -32,9 +32,15 @@ namespace Magento\Core\Model\Layout;
 class Merge implements \Magento\View\Layout\ProcessorInterface
 {
     /**#@+
-     * Available item type names
+     * Layout abstraction based on designer prerogative.
      */
-    const TYPE_PAGE = 'page';
+    const DESIGN_ABSTRACTION_CUSTOM = 'custom';
+    /**#@-*/
+
+    /**#@+
+     * Layout generalization guaranteed to load into View
+     */
+    const DESIGN_ABSTRACTION_PAGE_LAYOUT = 'page_layout';
     /**#@-*/
 
     /**
@@ -272,8 +278,7 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
         if (empty($handles)) {
             return null;
         }
-        $condition = '@type="' . self::TYPE_PAGE . '"';
-        $nodes = $this->getFileLayoutUpdatesXml()->xpath("/layouts/handle[@id=\"{$handleName}\" and ($condition)]");
+        $nodes = $this->getFileLayoutUpdatesXml()->xpath("/layouts/handle[@id=\"{$handleName}\"]");
         return $nodes ? reset($nodes) : null;
     }
 
@@ -288,26 +293,26 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
     }
 
     /**
-     * Retrieve all page and fragment types that exist in the system.
+     * Retrieve all design abstractions that exist in the system.
      *
      * Result format:
      * array(
      *     'handle_name_1' => array(
      *         'name'     => 'handle_name_1',
      *         'label'    => 'Handle Name 1',
-     *         'type'     => self::TYPE_PAGE,
+     *         'design_abstraction' => self::DESIGN_ABSTRACTION_PAGE_LAYOUT or self::DESIGN_ABSTRACTION_CUSTOM
      *     ),
      *     // ...
      * )
      *
      * @return array
      */
-    public function getAllPageHandles()
+    public function getAllDesignAbstractions()
     {
         $result = array();
 
         $conditions = array(
-            '(@type="' . self::TYPE_PAGE . '")'
+            '(@design_abstraction="' . self::DESIGN_ABSTRACTION_PAGE_LAYOUT . '" or @design_abstraction="' . self::DESIGN_ABSTRACTION_CUSTOM . '")'
         );
         $xpath = '/layouts/*[' . implode(' or ', $conditions) . ']';
         $nodes = $this->getFileLayoutUpdatesXml()->xpath($xpath) ?: array();
@@ -317,7 +322,7 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
             $info = array(
                 'name'     => $name,
                 'label'    => __((string)$node->getAttribute('label')),
-                'type'     => $node->getAttribute('type'),
+                'design_abstraction'     => $node->getAttribute('design_abstraction'),
             );
             $result[$name] = $info;
         }

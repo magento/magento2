@@ -243,6 +243,10 @@
     z-index: 2;
     .clearfix();
 
+    &:empty {
+        display: none;
+    }
+
     > ul > .level-top {
         display: inline-block;
         line-height: 1.2;
@@ -437,21 +441,22 @@
 }
 
 @media only screen and (max-width: 640px) {
-    html {
-        height: 100%;
-        min-width: 0;
+    html.opened {
         overflow: hidden;
     }
 
     body {
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-        position: relative;
-        height: 100%;
-        width: 100%;
-        overflow: hidden;
         &.opened {
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            position: relative;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+
             .navigation {
                 left: 0;
+                -webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+                box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
             }
             .page.wrapper {
                 margin-right: -86%;
@@ -529,10 +534,11 @@
         left: -86%;
         height: 100%;
         background: @primary7;
-        overflow-x: hidden;
+        overflow: auto;
         border-right: #b6b8af 1px solid;
         .box-sizing();
         .transition(left .3s ease-out 0);
+
         ul {
             margin: 0;
             padding: 0;
@@ -540,7 +546,8 @@
                 display: none;
             }
         }
-        & > ul {
+
+        .nav {
             .transition(left .3s linear 0);
             position: relative;
             overflow: hidden;
@@ -549,18 +556,21 @@
                 padding: 0;
                 background: @primary7;
                 .navigationLink();
+                > a span {
+                    color: @primary6;
+                }
                 &.parent {
                     &:after {
                         display: none;
                     }
                     > a {
                         position: relative;
-                        .iconAfter(@content: @icon-arrow-right-thick, @size: 18px, @font: 'icons');
+                        .iconAfter(@content: @icon-arrow-right-thick, @size: 14px, @font: 'icons');
                         text-transform: none !important;
                         &:after {
                             position: absolute;
                             width: 18px;
-                            top: 12px;
+                            top: 15px;
                             right: 17px;
                             left: auto;
                             opacity: 1;
@@ -573,86 +583,232 @@
                 }
 
             }
-        }
-        .action.back {
-            a {
-                background: @primary6;
-                position: relative;
-                color: @primary7 !important;
-                border-bottom-color: transparent;
-                cursor: pointer;
-                .iconBefore(@content: @icon-arrow-left-thick, @size: 18px, @font: 'icons');
-                &:hover,
-                &:active,
-                &:visited {
+
+            .action.back {
+                a {
+                    background: @primary6;
+                    position: relative;
                     color: @primary7 !important;
-                    background: @primary6 !important;
+                    border-bottom-color: transparent !important;
+                    cursor: pointer;
+                    .iconBefore(@icon-arrow-left-thick, 14px, 0, "icons");
+                    &:hover,
+                    &:active,
+                    &:visited {
+                        color: @primary7 !important;
+                        background: @primary6 !important;
+                    }
+                    &:before {
+                        position: absolute;
+                        top: 15px;
+                        left: 3px;
+                    }
+                    span:before {
+                        content: "";
+                    }
                 }
-                &:before {
-                    position: absolute;
-                    top: 12px;
-                    left: 3px;
+                &.fixed {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 86%;
+                    z-index: 1;
+                    -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.6);
+                    box-shadow: 0 1px 5px rgba(0,0,0,0.6);
                 }
-                span:before {
-                    content: "";
+            }
+
+            .parent {
+                &:after {
+                    display: none;
+                }
+                > a {
+                    position: relative;
+                    .iconAfter(@icon-arrow-right-thick, 14px, 0, "icons");
+                    &:after {
+                        position: absolute;
+                        top: 15px;
+                        right: 17px;
+                    }
+                }
+                .submenu {
+                    .navigationSubmenu();
                 }
             }
         }
-        .parent {
-            &:after {
+
+        .account.links {
+            .resetList();
+            > li > a {
+                background: @primary1;
+                padding: 10px 20px;
+                font-weight: 600;
+            }
+            a {
+                text-transform: capitalize;
+                position: relative;
+                display: block;
+                padding: 10px;
+                cursor: pointer;
+                font-size: 18px;
+                border-bottom: 1px solid @primary2;
+                font-weight: 400;
+                color: @primary6;
+                &:hover,
+                &:visited {
+                    color: @primary6 !important;
+                }
+                &:active {
+                    background: #dbdcd7 ;
+                }
+            }
+            .link.compare {
                 display: none;
             }
-            > a {
-                position: relative;
-                .iconAfter(@content: @icon-arrow-right-thick, @size: 18px, @font: 'icons');
-                &:after {
-                    position: absolute;
-                    width: 18px;
-                    top: 16px;
-                    right: 17px;
-                    left: auto;
-                    opacity: 1;
-                    z-index: auto;
+            .customer.welcome {
+                display: block  !important;
+                background: @primary1;
+                padding: 0 10px;
+                border-bottom: 1px solid @primary2;
+                .customer.name {
+                    position: relative;
+                    display: block;
+                    padding: 10px;
+                    cursor: pointer;
+                    font-size: 18px;
+                    font-weight: 600;
+                    .iconAfter(@icon-expand, 16px, 0, "icons");
+                    &:after {
+                        position: absolute;
+                        top: 10px;
+                        right: 7px;
+                    }
+                    &.active:after {
+                        content: "\e011";
+                    }
+                }
+                .menu {
+                    margin: 0;
+                    padding: 0;
+                    display: none;
+                    > ul {
+                        margin: 0;
+                        padding: 0;
+                        position: relative;
+                        float: none;
+                        border: none;
+                        background: @primary7;
+                        li {
+                            margin: 0;
+                        }
+                    }
+                }
+                &.active {
+                    border-bottom-color: transparent;
+                    .menu {
+                        display: block;
+                    }
                 }
             }
-            .submenu {
-                .navigationSubmenu();
+        }
+
+        .settings.panel {
+            border-bottom: 1px solid @primary2;
+            background: @primary1;
+            > .title {
+                font-weight: 600;
+                position: relative;
+                padding: 10px 20px;
+                cursor: pointer;
+                font-size: 18px;
+                .iconAfter(@icon-expand, 16px, 0, "icons");
+                &:after {
+                    position: absolute;
+                    top: 10px;
+                    right: 17px;
+                }
+            }
+            > .content {
+                display: none;
+                margin: 0 10px 10px;
+                background: @primary7;
+                border-bottom: 1px solid @primary2;
+
+                .switcher {
+                    padding: 10px 10px 15px;
+                    display: block;
+
+                    &:first-child {
+                        padding-bottom: 0;
+                    }
+                    .label {
+                        font-weight: 400;
+                        color: @primary6;
+                        font-size: 16px;
+                        display: block;
+                        padding-bottom: 5px;
+                    }
+                    .options {
+                        display: block;
+
+                        strong {
+                            color: @primary6;
+                            display: block;
+                            position: relative;
+                            padding: 10px 40px 10px 20px;
+                            cursor: pointer;
+                            font-size: 16px;
+                            .iconAfter(@icon-expand, 16px, 0, "icons");
+                            &:after {
+                                position: absolute;
+                                top: 10px;
+                                right: 17px;
+                            }
+                        }
+                        button {
+                            display: none;
+                        }
+                        ul {
+                            display: none;
+                            position: static;
+                            margin: 0 10px 10px;
+                            padding: 0;
+                            border: 0;
+                            min-width: 0;
+                            float: none;
+                            background: none;
+                            color: @primary6;
+                            font-size: 16px;
+
+                            li {
+                                margin: 0;
+                                padding: 10px 20px;
+                                border-bottom: 1px solid @primary2;
+
+                                a {
+                                    color: @primary6;
+                                }
+                            }
+                        }
+                        &.active {
+                            ul {
+                                display: block;
+                            }
+                            strong:after {
+                                content: "\e011";
+                            }
+                        }
+                    }
+                }
+            }
+            &.active {
+                > .content {
+                    display: block;
+                }
+                > .title:after {
+                    content: "\e011";
+                }
             }
         }
-    }
-
-    .action.toggle.nav {
-        display: block;
-        margin-top: 19px;
-        position: absolute;
-        top: 0;
-        left: 20px;
-        font-size: 0;
-        .iconAfter(@content: @icon-menu, @size: 32px, @font: 'icons');
-        .iconHideText(32px);
-        cursor: pointer;
-        &:before {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            left: -100%;
-            top: -20px;
-            padding: 20px 0;
-            content: "";
-        }
-        .active-nav &:before {
-            position: fixed;
-            padding: 0;
-            left: 86%;
-            right: 0;
-            top: 0;
-            bottom: 0;
-        }
-    }
-
-    .header {
-        padding: 0;
-        position: relative;
-        margin-bottom: 35px;
     }
 }

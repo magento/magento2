@@ -45,7 +45,7 @@ class PluginScannerTest extends \PHPUnit_Framework_TestCase
     {
         $actual = $this->_model->collectEntities($this->_testFiles);
         $expected = array(
-            'Magento\Core\Model\Cache\TagPlugin',
+            'Magento\App\Cache\TagPlugin',
             'Magento\Core\Model\Action\Plugin',
             'Custom_PageCache_Model_Action_Plugin',
         );

@@ -26,13 +26,13 @@ namespace Magento\View;
 
 use Magento\View\Layout;
 use Magento\View\Element\BlockInterface;
-use Magento\Core\Model\BlockFactory;
+use Magento\View\Element\BlockFactory;
 use Magento\ObjectManager;
 
 class BlockPool
 {
     /**
-     * @var \Magento\Core\Model\BlockFactory
+     * @var \Magento\View\Element\BlockFactory
      */
     protected $blockFactory;
 

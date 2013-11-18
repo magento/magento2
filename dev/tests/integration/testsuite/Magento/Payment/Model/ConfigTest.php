@@ -38,8 +38,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $cache \Magento\Core\Model\Cache */
-        $cache = $objectManager->create('Magento\Core\Model\Cache');
+        /** @var $cache \Magento\App\Cache */
+        $cache = $objectManager->create('Magento\App\Cache');
         $cache->clean();
         $fileResolverMock = $this->getMockBuilder('Magento\Config\FileResolverInterface')
             ->disableOriginalConstructor()

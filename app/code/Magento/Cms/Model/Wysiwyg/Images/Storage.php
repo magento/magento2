@@ -57,12 +57,12 @@ class Storage extends \Magento\Object
     protected $_filesystem;
 
     /**
-     * @var \Magento\Core\Model\Image\AdapterFactory
+     * @var \Magento\Image\AdapterFactory
      */
     protected $_imageFactory;
 
     /**
-     * @var \Magento\Core\Model\View\Url
+     * @var \Magento\View\Url
      */
     protected $_viewUrl;
 
@@ -155,8 +155,8 @@ class Storage extends \Magento\Object
      * @param \Magento\Cms\Helper\Wysiwyg\Images $cmsWysiwygImages
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Model\Image\AdapterFactory $imageFactory
-     * @param \Magento\Core\Model\View\Url $viewUrl
+     * @param \Magento\Image\AdapterFactory $imageFactory
+     * @param \Magento\View\Url $viewUrl
      * @param \Magento\App\Dir $dir
      * @param \Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory $storageCollectionFactory
      * @param \Magento\Core\Model\File\Storage\FileFactory $storageFileFactory
@@ -176,8 +176,8 @@ class Storage extends \Magento\Object
         \Magento\Cms\Helper\Wysiwyg\Images $cmsWysiwygImages,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\Image\AdapterFactory $imageFactory,
-        \Magento\Core\Model\View\Url $viewUrl,
+        \Magento\Image\AdapterFactory $imageFactory,
+        \Magento\View\Url $viewUrl,
         \Magento\App\Dir $dir,
         \Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory $storageCollectionFactory,
         \Magento\Core\Model\File\Storage\FileFactory $storageFileFactory,

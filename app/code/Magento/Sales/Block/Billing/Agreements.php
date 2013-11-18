@@ -120,7 +120,7 @@ class Agreements extends \Magento\Core\Block\Template
             case 'created_at':
             case 'updated_at':
                 $value = ($item->getData($key))
-                    ? $this->helper('Magento\Core\Helper\Data')->formatDate($item->getData($key), 'short', true)
+                    ? $this->formatDate($item->getData($key), 'short', true)
                     : __('N/A');
                 break;
             case 'edit_url':

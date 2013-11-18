@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -32,28 +31,35 @@ $options = $this->getChildBlock('customer.wishlist.item.options')
     ->setItem($item)
     ->getConfiguredOptions();
 ?>
-<div class="cart-cell">
-    <?php echo $this->getPriceHtml($product, empty($options));?>
-    <div class="add-to-cart-alt">
-        <?php if ($item->canHaveQty() && $item->getProduct()->isVisibleInSiteVisibility()): ?>
-            <input type="text" class="input-text qty" data-validate="{required:true,'validate-greater-than-zero':true}" name="qty[<?php echo $item->getId() ?>]"
-                   value="<?php echo $this->getAddToCartQty($item) * 1 ?>"/>
-        <?php endif; ?>
-        <?php if ($product->isSaleable()): ?>
-            <button type="button" title="<?php echo __('Add to Cart') ?>" data-item-id="<?php echo $item->getId()?>" class="button btn-cart"><span><span><?php echo __('Add to Cart') ?></span></span></button>
+<?php echo $this->getPriceHtml($product, empty($options));?>
+<div class="box tocart">
+    <?php if ($item->canHaveQty() && $item->getProduct()->isVisibleInSiteVisibility()): ?>
+        <input type="text" class="input-text qty" data-validate="{required:true,'validate-greater-than-zero':true}"
+               name="qty[<?php echo $item->getId() ?>]" value="<?php echo $this->getAddToCartQty($item) * 1 ?>">
+    <?php endif; ?>
+    <?php if ($product->isSaleable()): ?>
+        <button type="button" title="<?php echo __('Add to Cart') ?>" data-item-id="<?php echo $item->getId()?>" class="action tocart">
+            <span><?php echo __('Add to Cart') ?></span>
+        </button>
+    <?php else: ?>
+        <?php if ($product->getIsSalable()): ?>
+            <p class="available stock" title="<?php echo __('Availability') ?>">
+                <span><?php echo __('In stock') ?></span>
+            </p>
         <?php else: ?>
-            <?php if ($product->getIsSalable()): ?>
-                <p class="availability in-stock"><span><?php echo __('In stock') ?></span></p>
-            <?php else: ?>
-                <p class="availability out-of-stock"><span><?php echo __('Out of stock') ?></span></p>
-            <?php endif; ?>
+            <p class="unavailable stock" title="<?php echo __('Availability') ?>">
+                <span><?php echo __('Out of stock') ?></span>
+            </p>
         <?php endif; ?>
-    </div>
-    <?php foreach ($this->getChildNames() as $childName): ?>
-        <?php echo $this->getLayout()->renderElement($childName, false); ?>
-    <?php endforeach;?>
-    <?php if ($product->isVisibleInSiteVisibility()): ?>
-        <p><a class="link-edit" href="<?php echo $this->getItemConfigureUrl($item) ?>"><?php echo __('Edit') ?></a>
-    </p>
-    <?php endif ?>
+    <?php endif; ?>
 </div>
+<?php foreach ($this->getChildNames() as $childName): ?>
+    <?php echo $this->getLayout()->renderElement($childName, false); ?>
+<?php endforeach;?>
+<?php if ($product->isVisibleInSiteVisibility()): ?>
+    <p>
+        <a class="action edit" href="<?php echo $this->getItemConfigureUrl($item) ?>">
+            <span><?php echo __('Edit') ?></span>
+        </a>
+    </p>
+<?php endif ?>

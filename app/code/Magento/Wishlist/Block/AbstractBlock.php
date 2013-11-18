@@ -82,8 +82,6 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     protected $_productFactory;
 
     /**
-     * Construct
-     *
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Core\Model\Registry $coreRegistry
@@ -91,6 +89,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Wishlist\Helper\Data $wishlistData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -106,6 +105,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Block\Template\Context $context,
+        \Magento\Math\Random $mathRandom,
         \Magento\Wishlist\Helper\Data $wishlistData,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Model\ProductFactory $productFactory,
@@ -114,8 +114,16 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
         $this->_wishlistData = $wishlistData;
         $this->_customerSession = $customerSession;
         $this->_productFactory = $productFactory;
-        parent::__construct($storeManager, $catalogConfig, $coreRegistry,
-            $taxData, $catalogData, $coreData, $context, $data
+        parent::__construct(
+            $storeManager,
+            $catalogConfig,
+            $coreRegistry,
+            $taxData,
+            $catalogData,
+            $coreData,
+            $context,
+            $mathRandom,
+            $data
         );
     }
 

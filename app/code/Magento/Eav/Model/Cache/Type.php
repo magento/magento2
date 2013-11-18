@@ -44,9 +44,9 @@ class Type extends \Magento\Cache\Frontend\Decorator\TagScope
     const CACHE_TAG = 'EAV';
 
     /**
-     * @param \Magento\Core\Model\Cache\Type\FrontendPool $cacheFrontendPool
+     * @param \Magento\App\Cache\Type\FrontendPool $cacheFrontendPool
      */
-    public function __construct(\Magento\Core\Model\Cache\Type\FrontendPool $cacheFrontendPool)
+    public function __construct(\Magento\App\Cache\Type\FrontendPool $cacheFrontendPool)
     {
         parent::__construct($cacheFrontendPool->get(self::TYPE_IDENTIFIER), self::CACHE_TAG);
     }

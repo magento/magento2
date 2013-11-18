@@ -23,14 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Customer My Account (All Pages)" type="page">
-    <referenceBlock name="root">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">2columns-left.phtml</argument>
-        </action>
-    </referenceBlock>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Customer My Account (All Pages)" design_abstraction="custom">
     <referenceContainer name="content">
-        <container name="my.account.wrapper" label="My Account Wrapper" htmlTag="div" htmlClass="my-account"/>
+        <container name="my.account.wrapper" label="My Account Wrapper" htmlTag="div" htmlClass="my-account" after="-"/>
     </referenceContainer>
     <referenceContainer name="left">
         <block class="Magento\Page\Block\Links" name="customer_account_navigation" before="-" template="Magento_Customer::account/navigation.phtml">
@@ -55,6 +50,4 @@
         </block>
         <block class="Magento\Catalog\Block\Product\Compare\Sidebar" name="catalog.compare.sidebar" template="product/compare/sidebar.phtml"/>
     </referenceContainer>
-    <move element="cart_sidebar" destination="left" before="catalog.compare.sidebar"/>
-    <remove name="tags_popular"/>
 </layout>

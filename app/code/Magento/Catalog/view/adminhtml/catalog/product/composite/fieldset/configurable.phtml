@@ -27,7 +27,7 @@
 
 <?php /* @var $this \Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Configurable */ ?>
 <?php $_product = $this->getProduct(); ?>
-<?php $_attributes = $this->helper('Magento\Core\Helper\Data')->decorateArray($this->getAllowAttributes()); ?>
+<?php $_attributes = $this->decorateArray($this->getAllowAttributes()); ?>
 <?php $_skipSaleableCheck = $this->helper('Magento\Catalog\Helper\Product')->getSkipSaleableCheck(); ?>
 <?php if (($_product->isSaleable() || $_skipSaleableCheck) && count($_attributes)):?>
 <fieldset id="catalog_product_composite_configure_fields_configurable" class="fieldset">

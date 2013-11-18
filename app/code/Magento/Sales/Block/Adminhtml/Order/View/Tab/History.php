@@ -170,9 +170,9 @@ class History
             return '';
         }
         if ('date' === $dateType) {
-            return $this->helper('Magento\Core\Helper\Data')->formatDate($item['created_at'], $format);
+            return $this->formatDate($item['created_at'], $format);
         }
-        return $this->helper('Magento\Core\Helper\Data')->formatTime($item['created_at'], $format);
+        return $this->formatTime($item['created_at'], $format);
     }
 
     /**

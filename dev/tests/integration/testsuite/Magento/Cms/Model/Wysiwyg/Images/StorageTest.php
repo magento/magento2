@@ -80,8 +80,8 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $session = $objectManager->get('Magento\Backend\Model\Session');
         $backendUrl = $objectManager->get('Magento\Backend\Model\Url');
-        $imageFactory = $objectManager->get('Magento\Core\Model\Image\AdapterFactory');
-        $viewUrl = $objectManager->get('Magento\Core\Model\View\Url');
+        $imageFactory = $objectManager->get('Magento\Image\AdapterFactory');
+        $viewUrl = $objectManager->get('Magento\View\Url');
         $imageHelper = $objectManager->get('Magento\Cms\Helper\Wysiwyg\Images');
         $coreFileStorageDb = $objectManager->get('Magento\Core\Helper\File\Storage\Database');
         $dir = $objectManager->get('Magento\App\Dir');

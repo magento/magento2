@@ -36,6 +36,8 @@
  */
 namespace Magento\ImportExport\Model;
 
+use Magento\HTTP\Adapter\FileTransferFactory;
+
 class Import extends \Magento\ImportExport\Model\AbstractModel
 {
     /**#@+
@@ -111,7 +113,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected $_csvFactory;
 
     /**
-     * @var \Magento\ImportExport\Model\HttpAdapterFactory
+     * @var \Magento\HTTP\Adapter\FileTransferFactory
      */
     protected $_httpFactory;
 
@@ -140,7 +142,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param Import\Entity\Factory $entityFactory
      * @param Resource\Import\Data $importData
      * @param Export\Adapter\CsvFactory $csvFactory
-     * @param HttpAdapterFactory $httpFactory
+     * @param FileTransferFactory $httpFactory
      * @param \Magento\Core\Model\File\UploaderFactory $uploaderFactory
      * @param Source\Import\Behavior\Factory $behaviorFactory
      * @param \Magento\Index\Model\Indexer $indexer
@@ -156,7 +158,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         \Magento\ImportExport\Model\Import\Entity\Factory $entityFactory,
         \Magento\ImportExport\Model\Resource\Import\Data $importData,
         \Magento\ImportExport\Model\Export\Adapter\CsvFactory $csvFactory,
-        \Magento\ImportExport\Model\HttpAdapterFactory $httpFactory,
+        \Magento\HTTP\Adapter\FileTransferFactory $httpFactory,
         \Magento\Core\Model\File\UploaderFactory $uploaderFactory,
         \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory,
         \Magento\Index\Model\Indexer $indexer,

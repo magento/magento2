@@ -44,7 +44,7 @@ class FormRendererTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_blockFactoryMock = $this->getMock(
-            'Magento\Core\Model\BlockFactory', array('createBlock'), array(), '', false
+            'Magento\View\Element\BlockFactory', array('createBlock'), array(), '', false
         );
         $this->_observerMock = $this->getMock('Magento\Event\Observer', array(), array(), '', false);
         $this->_model = new \Magento\Sales\Model\Observer\Backend\RecurringProfile\FormRenderer(

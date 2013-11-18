@@ -125,8 +125,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             function (\Magento\View\Design\ThemeInterface $theme) {
                 $xml = $this->_composeXml($theme);
 
-                $xpath = '/layouts/*['
-                    . '@type="' . \Magento\Core\Model\Layout\Merge::TYPE_PAGE  . '"]';
+                $xpath = '/layouts/*[@design_abstraction]';
                 $handles = $xml->xpath($xpath) ?: array();
 
                 /** @var \Magento\View\Layout\Element $node */

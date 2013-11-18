@@ -68,7 +68,7 @@ class Template extends \Magento\Core\Block\AbstractBlock
     protected $_filesystem;
 
     /**
-     * @var \Magento\Core\Model\View\FileSystem
+     * @var \Magento\View\FileSystem
      */
     protected $_viewFileSystem;
 

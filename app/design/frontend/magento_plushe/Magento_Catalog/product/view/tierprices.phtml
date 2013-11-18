@@ -26,7 +26,7 @@
 
 <?php
 /**
- * @see \Magento\Catalog\Block\Product\View
+ * @var $this \Magento\Catalog\Block\Product\View
  */
 $_product = $this->getProduct();
 $_tierPrices = $this->getTierPrices();
@@ -190,7 +190,7 @@ if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(1,
         <?php endif; ?>
 
         <?php if ($_catalogHelper->isShowPriceOnGesture($_product)):?>
-            <?php $popupId = 'msrp-popup-' . $_product->getId() . $this->helper('Magento\Core\Helper\Data')->getRandomString(20); ?>
+            <?php $popupId = 'msrp-popup-' . $_product->getId() . $this->getRandomString(20); ?>
             <?php
             $addToCartUrl = $this->getProduct()->isSalable()
                 ? $this->getAddToCartUrl($_product, array('qty' => $_price['price_qty']))

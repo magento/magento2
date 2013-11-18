@@ -24,9 +24,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-
+<?php /** @var $this Magento\Bundle\Block\Catalog\Product\View\Type\Bundle */ ?>
 <?php $_product = $this->getProduct(); ?>
-<?php $_options = $this->helper('Magento\Core\Helper\Data')->decorateArray($this->getOptions()); ?>
+<?php $_options = $this->decorateArray($this->getOptions()); ?>
 <?php if ($_product->isSaleable()):?>
     <?php if (count($_options)): ?>
     <script type="text/javascript">

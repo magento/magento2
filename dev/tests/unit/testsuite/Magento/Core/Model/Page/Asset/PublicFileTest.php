@@ -35,13 +35,13 @@ class PublicFileTest extends \PHPUnit_Framework_TestCase
     protected $_object;
 
     /**
-     * @var \Magento\Core\Model\View\Url|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\View\Url|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_viewUrl;
 
     protected function setUp()
     {
-        $this->_viewUrl = $this->getMock('Magento\Core\Model\View\Url', array(), array(), '', false);
+        $this->_viewUrl = $this->getMock('Magento\View\Url', array(), array(), '', false);
         $this->_object = new \Magento\Core\Model\Page\Asset\PublicFile($this->_viewUrl, 'test/style.css', 'css');
     }
 

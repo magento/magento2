@@ -24,17 +24,12 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="checkout.onepage.login">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">Magento_Persistent::checkout/onepage/login.phtml</argument>
-        </action>
-        block class="Magento\Persistent\Block\Form\Remember" name="checkout.onepage.login.persistent.remember.me" as="persistent.remember.me" template="remember_me.phtml"/>
-    </referenceBlock>
-    <referenceBlock name="checkout.onepage.billing">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">Magento_Persistent::checkout/onepage/billing.phtml</argument>
-        </action>
-        <block class="Magento\Persistent\Block\Form\Remember" name="checkout.onepage.billing.persistent.remember.me" as="persistent.remember.me" template="remember_me.phtml"/>
-        <block class="Magento\Core\Block\Template" name="checkout.onepage.billing.persistent.remember.me.tooltip" as="persistent.remember.me.tooltip" template="Magento_Persistent::remember_me_tooltip.phtml"/>
-    </referenceBlock>
+    <referenceContainer name="form.login.additional.info">
+        <block class="Magento\Persistent\Block\Form\Remember" name="persistent.remember.me" template="remember_me.phtml" before="-"/>
+        <block class="Magento\Core\Block\Template" name="persistent.remember.me.tooltip" template="Magento_Persistent::remember_me_tooltip.phtml"/>
+    </referenceContainer>
+    <referenceContainer name="form.billing.additional.info">
+        <block class="Magento\Persistent\Block\Form\Remember" name="persistent.remember.me.billing" template="remember_me.phtml" before="-"/>
+        <block class="Magento\Core\Block\Template" name="persistent.remember.me.tooltip.billing" template="Magento_Persistent::remember_me_tooltip.phtml"/>
+    </referenceContainer>
 </layout>

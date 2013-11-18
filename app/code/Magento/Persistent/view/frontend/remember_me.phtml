@@ -31,11 +31,12 @@
  * @var $this \Magento\Persistent\Block\Form\Remember
  */
 ?>
-<li id="remember-me-box" class="control">
-    <?php $rememberMeId = 'remember_me' . $this->helper('Magento\Core\Helper\Data')->getRandomString(10); ?>
-    <div class="input-box">
-        <input type="checkbox" name="persistent_remember_me" class="checkbox" id="<?php echo $rememberMeId; ?>"<?php if ($this->isRememberMeChecked()): ?> checked="checked"<?php endif; ?> title="<?php echo __('Remember Me') ?>" />
-    </div>
-    <label for="<?php echo $rememberMeId; ?>"><?php echo __('Remember Me') ?></label>
-    <a class="link-tip" href="#"><?php echo __('What\'s this?') ?></a>
-</li>
+<div id="remember-me-box" class="field choice persistent">
+    <?php $rememberMeId = 'remember_me' . $this->getRandomString(10); ?>
+    <input type="checkbox" name="persistent_remember_me" class="checkbox" id="<?php echo $rememberMeId; ?>"<?php if ($this->isRememberMeChecked()): ?> checked="checked"<?php endif; ?> title="<?php echo __('Remember Me') ?>" />
+    <label for="<?php echo $rememberMeId; ?>" class="label"><span><?php echo __('Remember Me') ?></span></label>
+    <a class="link tip" href="#"><?php echo __('What\'s this?') ?></a>
+</div>
+<?php if ($this->helper('Magento\Checkout\Helper\Data')->isContextCheckout()): ?>
+    <input name="context" type="hidden" value="checkout" />
+<?php endif; ?>

@@ -22,7 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $cache \Magento\Core\Model\Cache */
+/** @var $cache \Magento\App\Cache */
 $cache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Core\Model\Cache');
+    ->create('Magento\App\Cache');
 $cache->clean(array(\Magento\Core\Model\Design::CACHE_TAG));

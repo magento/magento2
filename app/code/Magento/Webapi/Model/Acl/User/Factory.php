@@ -25,7 +25,7 @@
  */
 namespace Magento\Webapi\Model\Acl\User;
 
-class Factory extends \Magento\Oauth\Model\Consumer\Factory
+class Factory extends \Magento\Integration\Model\Oauth\Consumer\Factory
 {
     const CLASS_NAME = 'Magento\Webapi\Model\Acl\User';
 

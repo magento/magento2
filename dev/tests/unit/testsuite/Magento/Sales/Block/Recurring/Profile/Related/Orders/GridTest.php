@@ -160,14 +160,19 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getContext()
     {
+        $locale = $this->getMockBuilder('\Magento\Core\Model\LocaleInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(array('formatDate'))
+            ->getMockForAbstractClass();
+        $locale->expects($this->once())->method('formatDate')
+            ->will($this->returnValue('11-11-1999'));
+
         $helper = $this->getMockBuilder('Magento\Customer\Helper\Data')
             ->disableOriginalConstructor()
-            ->setMethods(array('formatCurrency', 'formatDate'))
+            ->setMethods(array('formatCurrency'))
             ->getMock();
         $helper->expects($this->once())->method('formatCurrency')
             ->will($this->returnValue('10 USD'));
-        $helper->expects($this->once())->method('formatDate')
-            ->will($this->returnValue('11-11-1999'));
 
         $helperFactory = $this->getMockBuilder('Magento\Core\Model\Factory\Helper')
             ->disableOriginalConstructor()
@@ -178,7 +183,10 @@ class GridTest extends \PHPUnit_Framework_TestCase
         /** @var  \Magento\Core\Block\Template\Context $context */
         $context = $this->_objectManagerHelper->getObject(
             'Magento\Core\Block\Template\Context',
-            array('helperFactory' => $helperFactory)
+            array(
+                'helperFactory' => $helperFactory,
+                'locale'        => $locale
+            )
         );
         return $context;
     }
