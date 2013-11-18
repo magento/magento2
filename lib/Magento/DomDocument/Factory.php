@@ -4,17 +4,19 @@
  *
  * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-class Magento_DomDocument_Factory
+namespace Magento\DomDocument;
+
+class Factory
 {
     /**
-     * @var Magento_ObjectManager
+     * @var \Magento\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @param Magento_ObjectManager $objectManager
+     * @param \Magento\ObjectManager $objectManager
      */
-    public function __construct(Magento_ObjectManager $objectManager)
+    public function __construct(\Magento\ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -22,7 +24,7 @@ class Magento_DomDocument_Factory
     /**
      * Create empty DOM document instance.
      *
-     * @return DOMDocument
+     * @return \DOMDocument
      */
     public function createDomDocument()
     {

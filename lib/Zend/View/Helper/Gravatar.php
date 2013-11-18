@@ -92,7 +92,7 @@ class Zend_View_Helper_Gravatar extends Zend_View_Helper_HtmlElement
      *
      * $options may include the following:
      * - 'img_size' int height of img to return
-     * - 'default_img' string img to return if email adress has not found
+     * - 'default_img' string img to return if email address has not found
      * - 'rating' string rating parameter for avatar
      * - 'secure' bool load from the SSL or Non-SSL location
      *

@@ -22,32 +22,34 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Autoload_ClassMapTest extends PHPUnit_Framework_TestCase
+namespace Magento\Autoload;
+
+class ClassMapTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Autoload_ClassMap
+     * @var \Magento\Autoload\ClassMap
      */
     protected $_loader = null;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->_loader = new Magento_Autoload_ClassMap(__DIR__ . '/_files');
+        $this->_loader = new \Magento\Autoload\ClassMap(__DIR__ . '/ClassMapTest');
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testConstructNonExistent()
     {
-        new Magento_Autoload_ClassMap('non_existent');
+        new \Magento\Autoload\ClassMap('non_existent');
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testConstructNotDir()
     {
-        new Magento_Autoload_ClassMap(__FILE__);
+        new \Magento\Autoload\ClassMap(__FILE__);
     }
 
     public function testGetFileAddMap()
@@ -67,7 +69,7 @@ class Magento_Autoload_ClassMapTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(class_exists('Unknown_Class', false));
         $this->_loader->load('TestMap');
         $this->_loader->load('Unknown_Class');
-        $this->assertTrue(class_exists('TestMap', false));
+        $this->assertTrue(class_exists('Magento\Autoload\ClassMapTest\TestMap', false));
         $this->assertFalse(class_exists('Unknown_Class', false));
     }
 }

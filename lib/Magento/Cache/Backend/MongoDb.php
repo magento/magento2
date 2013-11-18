@@ -25,7 +25,9 @@
 /**
  * MongoDb cache backend
  */
-class Magento_Cache_Backend_MongoDb extends Zend_Cache_Backend implements Zend_Cache_Backend_ExtendedInterface
+namespace Magento\Cache\Backend;
+
+class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**
      * Infinite expiration time
@@ -35,13 +37,13 @@ class Magento_Cache_Backend_MongoDb extends Zend_Cache_Backend implements Zend_C
     /**#@+
      * Available comparison modes. Used for composing queries to search by tags
      */
-    const COMPARISON_MODE_MATCHING_TAG     = Zend_Cache::CLEANING_MODE_MATCHING_TAG;
-    const COMPARISON_MODE_NOT_MATCHING_TAG = Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG;
-    const COMPARISON_MODE_MATCHING_ANY_TAG = Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG;
+    const COMPARISON_MODE_MATCHING_TAG     = \Zend_Cache::CLEANING_MODE_MATCHING_TAG;
+    const COMPARISON_MODE_NOT_MATCHING_TAG = \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG;
+    const COMPARISON_MODE_MATCHING_ANY_TAG = \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG;
     /**#@-*/
 
     /**
-     * @var MongoCollection|null
+     * @var \MongoCollection|null
      */
     protected $_collection = null;
 
@@ -66,13 +68,13 @@ class Magento_Cache_Backend_MongoDb extends Zend_Cache_Backend implements Zend_C
      */
     public function __construct(array $options = array())
     {
-        if (!extension_loaded('mongo') || !version_compare(Mongo::VERSION, '1.2.11', '>=')) {
-            Zend_Cache::throwException(
+        if (!extension_loaded('mongo') || !version_compare(\Mongo::VERSION, '1.2.11', '>=')) {
+            \Zend_Cache::throwException(
                 "At least 1.2.11 version of 'mongo' extension is required for using MongoDb cache backend"
             );
         }
         if (empty($options['db'])) {
-            Zend_Cache::throwException("'db' option is not specified");
+            \Zend_Cache::throwException("'db' option is not specified");
         }
         parent::__construct($options);
     }
@@ -80,12 +82,12 @@ class Magento_Cache_Backend_MongoDb extends Zend_Cache_Backend implements Zend_C
     /**
      * Get collection
      *
-     * @return MongoCollection
+     * @return \MongoCollection
      */
     protected function _getCollection()
     {
         if (null === $this->_collection) {
-            $connection = new Mongo($this->_options['connection_string'], $this->_options['mongo_options']);
+            $connection = new \Mongo($this->_options['connection_string'], $this->_options['mongo_options']);
             $database = $connection->selectDB($this->_options['db']);
             $this->_collection = $database->selectCollection($this->_options['collection']);
         }
@@ -182,7 +184,7 @@ class Magento_Cache_Backend_MongoDb extends Zend_Cache_Backend implements Zend_C
             self::COMPARISON_MODE_MATCHING_ANY_TAG => '$or'
         );
         if (!isset($operators[$comparisonMode])) {
-            Zend_Cache::throwException("Incorrect comparison mode specified: $comparisonMode");
+            \Zend_Cache::throwException("Incorrect comparison mode specified: $comparisonMode");
         }
         $operator = $operators[$comparisonMode];
         $query = array();
@@ -336,7 +338,7 @@ class Magento_Cache_Backend_MongoDb extends Zend_Cache_Backend implements Zend_C
         $tags = array_map(array($this, '_quoteString'), $tags);
         $document = array(
             '_id'      => $this->_quoteString($cacheId),
-            'data'     => new MongoBinData($this->_quoteString($data), MongoBinData::BYTE_ARRAY),
+            'data'     => new \MongoBinData($this->_quoteString($data), \MongoBinData::BYTE_ARRAY),
             'tags'     => $tags,
             'mtime'    => $time,
             'expire'   => $expire,
@@ -359,36 +361,36 @@ class Magento_Cache_Backend_MongoDb extends Zend_Cache_Backend implements Zend_C
      * Clean some cache records
      *
      * Available modes are :
-     * Zend_Cache::CLEANING_MODE_ALL (default)    => remove all cache entries ($tags is not used)
-     * Zend_Cache::CLEANING_MODE_OLD              => remove too old cache entries ($tags is not used)
-     * Zend_Cache::CLEANING_MODE_MATCHING_TAG     => remove cache entries matching all given tags
+     * \Zend_Cache::CLEANING_MODE_ALL (default)    => remove all cache entries ($tags is not used)
+     * \Zend_Cache::CLEANING_MODE_OLD              => remove too old cache entries ($tags is not used)
+     * \Zend_Cache::CLEANING_MODE_MATCHING_TAG     => remove cache entries matching all given tags
      *                                               ($tags can be an array of strings or a single string)
-     * Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG => remove cache entries not {matching one of the given tags}
+     * \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG => remove cache entries not {matching one of the given tags}
      *                                               ($tags can be an array of strings or a single string)
-     * Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG => remove cache entries matching any given tags
+     * \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG => remove cache entries matching any given tags
      *                                               ($tags can be an array of strings or a single string)
      *
      * @param  string $mode Clean mode
      * @param  array  $tags Array of tags
      * @return boolean true if no problem
      */
-    public function clean($mode = Zend_Cache::CLEANING_MODE_ALL, $tags = array())
+    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = array())
     {
         $result = false;
         switch ($mode) {
-            case Zend_Cache::CLEANING_MODE_ALL:
+            case \Zend_Cache::CLEANING_MODE_ALL:
                 $result = $this->_getCollection()->drop();
                 $result = (bool)$result['ok'];
                 break;
-            case Zend_Cache::CLEANING_MODE_OLD:
+            case \Zend_Cache::CLEANING_MODE_OLD:
                 $query = array('expire' => array('$ne' => self::EXPIRATION_TIME_INFINITE, '$lte' => time()));
                 break;
-            case Zend_Cache::CLEANING_MODE_MATCHING_TAG:
-            case Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG:
-            case Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG:
+            case \Zend_Cache::CLEANING_MODE_MATCHING_TAG:
+            case \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG:
+            case \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG:
                 $query = $this->_getQueryMatchingTags((array)$tags, $mode);
                 break;
-            default: Zend_Cache::throwException('Unsupported cleaning mode: ' . $mode);
+            default: \Zend_Cache::throwException('Unsupported cleaning mode: ' . $mode);
         }
         if (!empty($query)) {
             $result = $this->_getCollection()->remove($query);

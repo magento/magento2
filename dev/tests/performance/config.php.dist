@@ -27,7 +27,7 @@
 return array(
     'application' => array(
         'url_host' => '127.0.0.1',
-        'url_path' => '/magento/',
+        'url_path' => '/',
         'admin' => array(
             'frontname' => 'backend',
             'username' => 'admin',
@@ -37,7 +37,7 @@ return array(
         'installation' => array(
             /**
              * Console installer options
-             * @see Mage_Install_Model_Installer_Console::_installOptions
+             * @see \Magento\Install\Model\Installer\Console::_installOptions
              */
             'options' => array(
                 'license_agreement_accepted' => 'yes',
@@ -90,6 +90,7 @@ return array(
             'Checkout' => array(
                 'file' => 'testsuite/checkout.jmx',
                 'fixtures' => array(
+                    'testsuite/fixtures/shipping_flatrate_enabled.php',
                     'testsuite/fixtures/catalog_product.php',
                 ),
             ),

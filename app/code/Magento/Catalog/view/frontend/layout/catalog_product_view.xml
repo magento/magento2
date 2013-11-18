@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <referenceBlock name="root">
+        <action method="setTemplate">
+            <argument name="template" xsi:type="string">2columns-right.phtml</argument>
+        </action>
+    </referenceBlock>
+    <referenceBlock name="head">
+        <block class="Magento\Page\Block\Html\Head\Css" name="magento-catalog-zoom-css">
+            <arguments>
+                <argument name="file" xsi:type="string">Magento_Catalog::zoom.css</argument>
+            </arguments>
+        </block>
+    </referenceBlock>
+    <update handle="page_calendar"/>
+    <referenceContainer name="content">
+        <block class="Magento\Catalog\Block\Product\View" name="product.info" template="product/view.phtml">
+            <block class="Magento\Catalog\Block\Product\View\BaseImage" name="product-info-base-image" as="base-image" template="product/view/base-image.phtml"/>
+            <block class="Magento\Catalog\Block\Product\View\Gallery" name="product-info-gallery" as="gallery" template="product/view/gallery.phtml"/>
+            <container name="alert.urls" as="alert_urls" label="Alert Urls"/>
+            <block class="Magento\Catalog\Block\Product\ProductList\Upsell" name="product.info.upsell" as="upsell_products" template="product/list/upsell.phtml">
+                <action method="setColumnCount">
+                    <argument name="columns" xsi:type="string">4</argument>
+                </action>
+                <action method="setItemLimit">
+                    <argument name="type" xsi:type="string">upsell</argument>
+                    <argument name="limit" xsi:type="string">4</argument>
+                </action>
+            </block>
+            <block class="Magento\Catalog\Block\Product\View\Additional" name="product.info.additional" as="product_additional_data"/>
+            <block class="Magento\Catalog\Block\Product\View\Description" name="product.description" as="description" template="product/view/description.phtml" group="detailed_info">
+                <action method="setTitle">
+                    <argument translate="true" name="value" xsi:type="string">Details</argument>
+                </action>
+            </block>
+            <block class="Magento\Catalog\Block\Product\View\Attributes" name="product.attributes" as="additional" template="product/view/attributes.phtml" group="detailed_info">
+                <action method="setTitle">
+                    <argument translate="true" name="value" xsi:type="string">Additional Information</argument>
+                </action>
+            </block>
+            <block class="Magento\Catalog\Block\Product\View" name="product.info.addto" as="addto" template="product/view/addto.phtml"/>
+            <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart" as="addtocart" template="product/view/addtocart.phtml"/>
+            <container name="product.info.extrahint" as="extrahint" label="Product View Extra Hint"/>
+            <block class="Magento\Core\Block\Template" name="product.info.container" as="options_container">
+                <block class="Magento\Catalog\Block\Product\View" name="product.info.options.wrapper" as="product_options_wrapper" template="product/view/options/wrapper.phtml">
+                    <block class="Magento\Catalog\Block\Product\View\Options" name="product.info.options" as="product_options" template="product/view/options.phtml">
+                        <block class="Magento\Catalog\Block\Product\View\Options\Type\DefaultType" as="default" template="product/view/options/type/default.phtml"/>
+                        <block class="Magento\Catalog\Block\Product\View\Options\Type\Text" as="text" template="product/view/options/type/text.phtml"/>
+                        <block class="Magento\Catalog\Block\Product\View\Options\Type\File" as="file" template="product/view/options/type/file.phtml"/>
+                        <block class="Magento\Catalog\Block\Product\View\Options\Type\Select" as="select" template="product/view/options/type/select.phtml"/>
+                        <block class="Magento\Catalog\Block\Product\View\Options\Type\Date" as="date" template="product/view/options/type/date.phtml"/>
+                    </block>
+                    <block class="Magento\Core\Block\Html\Calendar" name="html_calendar" as="html_calendar" template="Magento_Page::js/calendar.phtml"/>
+                </block>
+                <block class="Magento\Catalog\Block\Product\View" name="product.info.options.wrapper.bottom" as="product_options_wrapper_bottom" template="product/view/options/wrapper/bottom.phtml">
+                    <block class="Magento\Catalog\Block\Product\View" name="product.tierprices.additional" as="product.tierprices" template="product/view/tierprices.phtml"/>
+                    <block class="Magento\Catalog\Block\Product\View" name="product.clone_prices" as="prices" template="product/view/price_clone.phtml"/>
+                    <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart.additional" as="addtocart" template="product/view/addtocart.phtml"/>
+                    <block class="Magento\Catalog\Block\Product\View" name="product.info.addto.additional" as="addto" template="product/view/addto.phtml"/>
+                </block>
+            </block>
+        </block>
+    </referenceContainer>
+    <referenceContainer name="right">
+        <block class="Magento\Catalog\Block\Product\ProductList\Related" name="catalog.product.related" before="-" template="product/list/related.phtml"/>
+    </referenceContainer>
+    <update handle="MAP_popup"/>
+    <update handle="MAP_price_msrp_item"/>
+</layout>

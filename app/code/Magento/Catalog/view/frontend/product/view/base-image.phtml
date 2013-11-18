@@ -1,0 +1,67 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Product media data template
+ *
+ * @see \Magento\Catalog\Block\Product\View\BaseImage
+ */
+?>
+<?php
+    $_product = $this->getProduct();
+    $_helper = $this->helper('Magento\Catalog\Helper\Output');
+?>
+<?php if ($_product->getImage() != 'no_selection' && $_product->getImage()): ?>
+<p class="product-image product-image-zoom">
+    <?php
+        $_img = '<img data-role="base-image" id="image" src="'.$this->helper('Magento\Catalog\Helper\Image')->init($_product, 'image').'" alt="'.$this->escapeHtml($this->getImageLabel()).'" title="'.$this->escapeHtml($this->getImageLabel()).'" />';
+        echo $_helper->productAttribute($_product, $_img, 'image');
+    ?>
+</p>
+<p class="zoom-notice" id="track-hint"><?php echo __('Double click on above image to view full picture') ?></p>
+<div class="zoom">
+    <img id="zoom-out" src="<?php echo $this->getViewFileUrl('Magento_Catalog::images/slider_btn_zoom_out.gif') ?>" alt="<?php echo __('Zoom Out') ?>" title="<?php echo __('Zoom Out') ?>" class="btn-zoom-out" />
+    <div id="slider"></div>
+    <img id="zoom-in" src="<?php echo $this->getViewFileUrl('Magento_Catalog::images/slider_btn_zoom_in.gif') ?>" alt="<?php echo __('Zoom In') ?>" title="<?php echo __('Zoom In') ?>" class="btn-zoom-in" />
+</div>
+<script type="text/javascript">
+    head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/zoom.js')?>", function() {
+        jQuery('#image').zoom({
+            sliderSelector: '#slider',
+            zoomNoticeSelector: '#track-hint',
+            zoomInSelector: '#zoom-in',
+            zoomOutSelector: '#zoom-out'
+        });
+    });
+</script>
+<?php else: ?>
+<p class="product-image">
+    <?php
+        $_img = '<img data-role="base-image" src="'.$this->getBaseImageUrl($_product).'" alt="'.$this->escapeHtml($this->getImageLabel()).'" title="'.$this->escapeHtml($this->getImageLabel()).'" />';
+        echo $_helper->productAttribute($_product, $_img, 'image');
+    ?>
+</p>
+<?php endif; ?>

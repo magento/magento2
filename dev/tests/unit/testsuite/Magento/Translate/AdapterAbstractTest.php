@@ -24,16 +24,18 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Translate_AdapterAbstractTest extends PHPUnit_Framework_TestCase
+namespace Magento\Translate;
+
+class AdapterAbstractTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Translate_AdapterAbstract
+     * @var \Magento\Translate\AbstractAdapter
      */
     protected $_model = null;
 
     protected function setUp()
     {
-        $this->_model = $this->getMockBuilder('Magento_Translate_AdapterAbstract')
+        $this->_model = $this->getMockBuilder('Magento\Translate\AbstractAdapter')
             ->getMockForAbstractClass();
     }
 
@@ -50,7 +52,7 @@ class Magento_Translate_AdapterAbstractTest extends PHPUnit_Framework_TestCase
      */
     public function testSetLocale()
     {
-        $this->assertInstanceOf('Magento_Translate_AdapterAbstract', $this->_model->setLocale('en_US'));
+        $this->assertInstanceOf('Magento\Translate\AbstractAdapter', $this->_model->setLocale('en_US'));
     }
 
     /**
@@ -58,6 +60,6 @@ class Magento_Translate_AdapterAbstractTest extends PHPUnit_Framework_TestCase
      */
     public function testToString()
     {
-        $this->assertEquals('Magento_Translate_Adapter', $this->_model->toString());
+        $this->assertEquals('Magento\Translate\Adapter', $this->_model->toString());
     }
 }

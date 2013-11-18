@@ -32,20 +32,20 @@
             <rule name="check_alnum_and_int_not_empty_and_have_valid_value">
                 <property_constraints >
                     <property name="alnum">
-                        <constraint class="Magento_Validator_Test_NotEmpty"/>
-                        <constraint class="Magento_Validator_Test_Alnum"/>
+                        <constraint class="Magento\Validator\Test\NotEmpty"/>
+                        <constraint class="Magento\Validator\Test\Alnum"/>
                     </property>
                     <property name="int">
-                        <constraint class="Magento_Validator_Test_Int"/>
+                        <constraint class="Magento\Validator\Test\Int"/>
                     </property>
                 </property_constraints>
                 <entity_constraints>
-                    <constraint class="Magento_Validator_Test_True"/>
+                    <constraint class="Magento\Validator\Test\True"/>
                 </entity_constraints>
             </rule>
             <rule name="always_true">
                 <entity_constraints>
-                    <constraint alias="alias" class="Magento_Validator_Test_True"/>
+                    <constraint alias="alias" class="Magento\Validator\Test\True"/>
                 </entity_constraints>
             </rule>
         </rules>

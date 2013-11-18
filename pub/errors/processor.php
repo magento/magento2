@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
+ * @category    Magento
  * @package     Errors
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
@@ -141,7 +141,7 @@ class Error_Processor
 
     public function __construct()
     {
-        $this->_errorDir  = dirname(__FILE__) . '/';
+        $this->_errorDir  = __DIR__ . '/';
         $this->_reportDir = dirname(dirname($this->_errorDir)) . '/var/report/';
 
         if (!empty($_SERVER['SCRIPT_NAME'])) {
@@ -165,6 +165,15 @@ class Error_Processor
         if (isset($_GET['skin'])) {
             $this->_setSkin($_GET['skin']);
         }
+    }
+
+    /**
+     * Process no cache error
+     */
+    public function processNoCache()
+    {
+        $this->pageTitle = 'Error : cached config data is unavailable';
+        $this->_renderPage('nocache.phtml');
     }
 
     /**

@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     {license_link
  */
-abstract class Magento_ObjectManager_Definition_Compiled implements Magento_ObjectManager_Definition
+namespace Magento\ObjectManager\Definition;
+
+abstract class Compiled implements \Magento\ObjectManager\Definition
 {
     /**
      * Class definitions
@@ -74,5 +76,15 @@ abstract class Magento_ObjectManager_Definition_Compiled implements Magento_Obje
             return $this->_signatures[$definition];
         }
         return null;
+    }
+
+    /**
+     * Retrieve list of all classes covered with definitions
+     *
+     * @return array
+     */
+    public function getClasses()
+    {
+        return array_keys($this->_definitions);
     }
 }

@@ -21,7 +21,9 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Cache_Frontend_Decorator_BareTest extends PHPUnit_Framework_TestCase
+namespace Magento\Cache\Frontend\Decorator;
+
+class BareTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param string $method
@@ -31,10 +33,10 @@ class Magento_Cache_Frontend_Decorator_BareTest extends PHPUnit_Framework_TestCa
      */
     public function testProxyMethod($method, $params, $expectedResult)
     {
-        $frontendMock = $this->getMock('Magento_Cache_FrontendInterface');
+        $frontendMock = $this->getMock('Magento\Cache\FrontendInterface');
 
-        $object = new Magento_Cache_Frontend_Decorator_Bare($frontendMock);
-        $helper = new Magento_Test_Helper_ProxyTesting();
+        $object = new \Magento\Cache\Frontend\Decorator\Bare($frontendMock);
+        $helper = new \Magento\TestFramework\Helper\ProxyTesting();
         $result = $helper->invokeWithExpectations($object, $frontendMock, $method, $params, $expectedResult);
         $this->assertSame($expectedResult, $result);
     }
@@ -49,10 +51,10 @@ class Magento_Cache_Frontend_Decorator_BareTest extends PHPUnit_Framework_TestCa
             array('load', array('record_id'), '111'),
             array('save', array('record_value', 'record_id', array('tag'), 555), true),
             array('remove', array('record_id'), true),
-            array('clean', array(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('tag')), true),
-            array('getBackend', array(), PHPUnit_Framework_MockObject_Generator::getMock('Zend_Cache_Backend')),
+            array('clean', array(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('tag')), true),
+            array('getBackend', array(), \PHPUnit_Framework_MockObject_Generator::getMock('Zend_Cache_Backend')),
             array('getLowLevelFrontend', array(),
-                PHPUnit_Framework_MockObject_Generator::getMock('Zend_Cache_Core')
+                \PHPUnit_Framework_MockObject_Generator::getMock('Zend_Cache_Core')
             ),
         );
     }

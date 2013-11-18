@@ -1,5 +1,8 @@
 <?php
 /**
+ * Uses ACL to control access. If ACL doesn't contain provided resource,
+ * permission for all resources is checked
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -18,30 +21,24 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Framework
- * @subpackage  Authorization
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Authorization\Policy;
 
-/**
- * Uses ACL to control access. If ACL doesn't contain provided resource,
- * permission for all resources is checked
- */
-class Magento_Authorization_Policy_Acl implements Magento_Authorization_Policy
+class Acl implements \Magento\Authorization\Policy
 {
     /**
-     * @var Magento_Acl
+     * @var \Magento\Acl\Builder
      */
-    protected $_acl;
+    protected $_aclBuilder;
 
     /**
-     * @param Magento_Acl $acl
+     * @param \Magento\Acl\Builder $aclBuilder
      */
-    public function __construct(Magento_Acl $acl)
+    public function __construct(\Magento\Acl\Builder $aclBuilder)
     {
-        $this->_acl = $acl;
+        $this->_aclBuilder = $aclBuilder;
     }
 
     /**
@@ -55,13 +52,13 @@ class Magento_Authorization_Policy_Acl implements Magento_Authorization_Policy
     public function isAllowed($roleId, $resourceId, $privilege = null)
     {
         try {
-            return $this->_acl->isAllowed($roleId, $resourceId, $privilege);
-        } catch (Exception $e) {
+            return $this->_aclBuilder->getAcl()->isAllowed($roleId, $resourceId, $privilege);
+        } catch (\Exception $e) {
             try {
-                if (!$this->_acl->has($resourceId)) {
-                    return $this->_acl->isAllowed($roleId, null, $privilege);
+                if (!$this->_aclBuilder->getAcl()->has($resourceId)) {
+                    return $this->_aclBuilder->getAcl()->isAllowed($roleId, null, $privilege);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
             }
         }
         return false;

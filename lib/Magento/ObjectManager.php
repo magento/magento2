@@ -24,24 +24,33 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-interface Magento_ObjectManager
+namespace Magento;
+
+interface ObjectManager
 {
+    /**
+     * Set factory
+     *
+     * @param ObjectManager\Factory $factory
+     */
+    public function setFactory(ObjectManager\Factory $factory);
+
     /**
      * Create new object instance
      *
-     * @param string $className
+     * @param string $type
      * @param array $arguments
      * @return mixed
      */
-    public function create($className, array $arguments = array());
+    public function create($type, array $arguments = array());
 
     /**
      * Retrieve cached object instance
      *
-     * @param string $className
+     * @param string $type
      * @return mixed
      */
-    public function get($className);
+    public function get($type);
 
     /**
      * Configure object manager

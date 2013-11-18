@@ -190,7 +190,7 @@ class Zend_Filter_File_Rename implements Zend_Filter_Interface
         }
 
         #require_once 'Zend/Filter/Exception.php';
-        throw new Zend_Filter_Exception(sprintf("File '%s' could not be renamed. An error occured while processing the file.", $value));
+        throw new Zend_Filter_Exception(sprintf("File '%s' could not be renamed. An error occurred while processing the file.", $value));
     }
 
     /**

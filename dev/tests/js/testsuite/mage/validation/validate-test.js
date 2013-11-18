@@ -451,7 +451,7 @@ MageValidationTest.prototype.testValidateCCType = function () {
     assertTrue($.validator.methods['validate-cc-type'].call(this, '371293266574617', null, '#cc-type'));
     assertFalse($.validator.methods['validate-cc-type'].call(this, '5265071363284878', null, '#cc-type'));
     ccType.val('DI');
-    assertTrue($.validator.methods['validate-cc-type'].call(this, '6011120623356953', null, '#cc-type'));
+    assertTrue($.validator.methods['validate-cc-type'].call(this, '6011000990139424', null, '#cc-type'));
     assertFalse($.validator.methods['validate-cc-type'].call(this, '4916835098995909', null, '#cc-type'));
 };
 

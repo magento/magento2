@@ -28,6 +28,8 @@
 /**
  * Not empty test validator
  */
-class Magento_Validator_Test_NotEmpty extends Zend_Validate_NotEmpty implements Magento_Validator_ValidatorInterface
+namespace Magento\Validator\Test;
+
+class NotEmpty extends \Zend_Validate_NotEmpty implements \Magento\Validator\ValidatorInterface
 {
 }

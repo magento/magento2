@@ -1,6 +1,6 @@
 <?php
 /**
- * Test case for Magento_Profiler_Driver_Standard_Output_Csvfile
+ * Test case for \Magento\Profiler\Driver\Standard\Output\Csvfile
  *
  * Magento
  *
@@ -23,10 +23,12 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Profiler_Driver_Standard_Output_CsvfileTest extends PHPUnit_Framework_TestCase
+namespace Magento\Profiler\Driver\Standard\Output;
+
+class CsvfileTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Profiler_Driver_Standard_Output_Csvfile
+     * @var \Magento\Profiler\Driver\Standard\Output\Csvfile
      */
     protected $_output;
 
@@ -51,7 +53,7 @@ class Magento_Profiler_Driver_Standard_Output_CsvfileTest extends PHPUnit_Framew
      */
     public function testDisplay($statFile, $expectedFile, $delimiter = ',', $enclosure = '"')
     {
-        $this->_output = new Magento_Profiler_Driver_Standard_Output_Csvfile(array(
+        $this->_output = new \Magento\Profiler\Driver\Standard\Output\Csvfile(array(
             'filePath' => $this->_outputFile,
             'delimiter' => $delimiter,
             'enclosure' => $enclosure

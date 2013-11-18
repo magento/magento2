@@ -25,25 +25,27 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_ObjectManager_TestAsset_ConstructorThreeArguments
-    extends Magento_ObjectManager_TestAsset_ConstructorTwoArguments
+namespace Magento\ObjectManager\TestAsset;
+
+class ConstructorThreeArguments
+    extends \Magento\ObjectManager\TestAsset\ConstructorTwoArguments
 {
     /**
-     * @var Magento_ObjectManager_TestAsset_Basic
+     * @var \Magento\ObjectManager\TestAsset\Basic
      */
     protected $_three;
 
     /**
      * Three arguments
      *
-     * @param Magento_ObjectManager_TestAsset_Basic $one
-     * @param Magento_ObjectManager_TestAsset_Basic $two
-     * @param Magento_ObjectManager_TestAsset_Basic $three
+     * @param \Magento\ObjectManager\TestAsset\Basic $one
+     * @param \Magento\ObjectManager\TestAsset\Basic $two
+     * @param \Magento\ObjectManager\TestAsset\Basic $three
      */
     public function __construct(
-        Magento_ObjectManager_TestAsset_Basic $one,
-        Magento_ObjectManager_TestAsset_Basic $two,
-        Magento_ObjectManager_TestAsset_Basic $three
+        \Magento\ObjectManager\TestAsset\Basic $one,
+        \Magento\ObjectManager\TestAsset\Basic $two,
+        \Magento\ObjectManager\TestAsset\Basic $three
     ) {
         parent::__construct($one, $two);
         $this->_three = $three;

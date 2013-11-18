@@ -22,7 +22,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Autoload_IncludePathTest extends PHPUnit_Framework_TestCase
+namespace Magento\Autoload;
+
+class IncludePathTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var string
@@ -46,9 +48,9 @@ class Magento_Autoload_IncludePathTest extends PHPUnit_Framework_TestCase
      */
     public function testGetFile($class, $expectedValue)
     {
-        $this->assertFalse(Magento_Autoload_IncludePath::getFile($class));
-        Magento_Autoload_IncludePath::addIncludePath(__DIR__ . '/_files');
-        $this->assertEquals($expectedValue, Magento_Autoload_IncludePath::getFile($class));
+        $this->assertFalse(\Magento\Autoload\IncludePath::getFile($class));
+        \Magento\Autoload\IncludePath::addIncludePath(__DIR__ . '/_files');
+        $this->assertEquals($expectedValue, \Magento\Autoload\IncludePath::getFile($class));
     }
 
     /**
@@ -74,7 +76,7 @@ class Magento_Autoload_IncludePathTest extends PHPUnit_Framework_TestCase
     {
         $expectedIncludePath = str_replace('%include_path%', get_include_path(), $expectedIncludePath);
         $this->assertNotEquals($expectedIncludePath, get_include_path());
-        Magento_Autoload_IncludePath::addIncludePath($fixturePath, $prepend);
+        \Magento\Autoload\IncludePath::addIncludePath($fixturePath, $prepend);
         $this->assertEquals($expectedIncludePath, get_include_path());
     }
 
@@ -106,9 +108,9 @@ class Magento_Autoload_IncludePathTest extends PHPUnit_Framework_TestCase
      */
     public function testLoad($class, $expectedValue)
     {
-        Magento_Autoload_IncludePath::addIncludePath(__DIR__ . '/_files');
+        \Magento\Autoload\IncludePath::addIncludePath(__DIR__ . '/_files');
         $this->assertFalse(class_exists($class, false));
-        Magento_Autoload_IncludePath::load($class);
+        \Magento\Autoload\IncludePath::load($class);
         if ($expectedValue) {
             $this->assertTrue(class_exists($class, false));
         } else {

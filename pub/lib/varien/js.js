@@ -372,7 +372,7 @@ Varien.searchForm.prototype = {
 }
 /* Varien.Tabs is depricated.
    IK: 12/17/12
-   Only one usage left in /app/code/Mage/Install/view/install/download.phtml - Questionable becuase that page does not have the markup using CSS class "tabs"
+   Only one usage left in /app/code/Magento/Install/view/install/download.phtml - Questionable becuase that page does not have the markup using CSS class "tabs"
    Need further investigation
  */
 Varien.Tabs = Class.create();

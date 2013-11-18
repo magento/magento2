@@ -19,11 +19,13 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     Mage_Sales
+ * @package     Magento_Sales
  * @subpackage  integration_tests
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+/** @var \Magento\TestFramework\Application $this */
 
 $addressData = array(
     'region'     => 'CA',
@@ -33,28 +35,28 @@ $addressData = array(
     'telephone'  => '11111111',
     'country_id' => 'US',
 );
-$billingAddress = Mage::getModel('Mage_Sales_Model_Order_Address', array('data' => $addressData));
+$billingAddress = $this->getObjectManager()->create('Magento\Sales\Model\Order\Address', array('data' => $addressData));
 $shippingAddress = clone $billingAddress;
 
-$item = Mage::getModel('Mage_Sales_Model_Order_Item');
+$item = $this->getObjectManager()->create('Magento\Sales\Model\Order\Item');
 $item->setOriginalPrice(100)
     ->setPrice(100)
     ->setQtyOrdered(1)
     ->setRowTotal(100)
     ->setSubtotal(100);
 
-$payment = Mage::getModel('Mage_Sales_Model_Order_Payment');
+$payment = $this->getObjectManager()->create('Magento\Sales\Model\Order\Payment');
 $payment->setMethod('checkmo');
 
-$order = Mage::getModel('Mage_Sales_Model_Order');
+$order = $this->getObjectManager()->create('Magento\Sales\Model\Order');
 $order->setBaseSubtotal(100)
     ->setSubtotal(100)
     ->setBaseGrandTotal(100)
     ->setGrandTotal(100)
     ->setTotalPaid(100)
     ->setCustomerIsGuest(true)
-    ->setState(Mage_Sales_Model_Order::STATE_NEW, true)
-    ->setStoreId(Mage::app()->getStore()->getId());
+    ->setState(\Magento\Sales\Model\Order::STATE_NEW, true)
+    ->setStoreId($this->getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getId());
 
 for ($i = 1; $i <= 100000; $i++) {
     $billingAddress

@@ -25,31 +25,33 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_ObjectManager_TestAsset_ConstructorSixArguments
-    extends Magento_ObjectManager_TestAsset_ConstructorFiveArguments
+namespace Magento\ObjectManager\TestAsset;
+
+class ConstructorSixArguments
+    extends \Magento\ObjectManager\TestAsset\ConstructorFiveArguments
 {
     /**
-     * @var Magento_ObjectManager_TestAsset_Basic
+     * @var \Magento\ObjectManager\TestAsset\Basic
      */
     protected $_six;
 
     /**
      * Six arguments
      *
-     * @param Magento_ObjectManager_TestAsset_Basic $one
-     * @param Magento_ObjectManager_TestAsset_Basic $two
-     * @param Magento_ObjectManager_TestAsset_Basic $three
-     * @param Magento_ObjectManager_TestAsset_Basic $four
-     * @param Magento_ObjectManager_TestAsset_Basic $five
-     * @param Magento_ObjectManager_TestAsset_Basic $six
+     * @param \Magento\ObjectManager\TestAsset\Basic $one
+     * @param \Magento\ObjectManager\TestAsset\Basic $two
+     * @param \Magento\ObjectManager\TestAsset\Basic $three
+     * @param \Magento\ObjectManager\TestAsset\Basic $four
+     * @param \Magento\ObjectManager\TestAsset\Basic $five
+     * @param \Magento\ObjectManager\TestAsset\Basic $six
      */
     public function __construct(
-        Magento_ObjectManager_TestAsset_Basic $one,
-        Magento_ObjectManager_TestAsset_Basic $two,
-        Magento_ObjectManager_TestAsset_Basic $three,
-        Magento_ObjectManager_TestAsset_Basic $four,
-        Magento_ObjectManager_TestAsset_Basic $five,
-        Magento_ObjectManager_TestAsset_Basic $six
+        \Magento\ObjectManager\TestAsset\Basic $one,
+        \Magento\ObjectManager\TestAsset\Basic $two,
+        \Magento\ObjectManager\TestAsset\Basic $three,
+        \Magento\ObjectManager\TestAsset\Basic $four,
+        \Magento\ObjectManager\TestAsset\Basic $five,
+        \Magento\ObjectManager\TestAsset\Basic $six
     ) {
         parent::__construct($one, $two, $three, $four, $five);
         $this->_six = $six;

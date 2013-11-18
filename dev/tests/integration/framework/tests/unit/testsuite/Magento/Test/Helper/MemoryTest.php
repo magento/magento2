@@ -21,74 +21,98 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Test_Helper_MemoryTest extends PHPUnit_Framework_TestCase
+namespace Magento\Test\Helper;
+
+class MemoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $_shell;
 
     protected function setUp()
     {
-        $this->_shell = $this->getMock('Magento_Shell', array('execute'), array(), '', false);
+        $this->_shell = $this->getMock('Magento\Shell', array('execute'), array(), '', false);
     }
 
-    public function testGetRealMemoryUsage()
+    public function testGetRealMemoryUsageUnix()
     {
-        /** @var $mock PHPUnit_Framework_MockObject_MockObject|Magento_Test_Helper_Memory */
-        $mock = $this->getMock(
-            'Magento_Test_Helper_Memory',
-            array('getUnixProcessMemoryUsage', 'getWinProcessMemoryUsage'),
-            array($this->_shell)
-        );
-        $mock->expects($this->any())->method('getUnixProcessMemoryUsage')->will($this->returnValue('gizmo'));
-        $mock->expects($this->any())->method('getWinProcessMemoryUsage')->will($this->returnValue('gizmo'));
-        $this->assertEquals('gizmo', $mock->getRealMemoryUsage());
+        $object = new \Magento\TestFramework\Helper\Memory($this->_shell);
+        $this->_shell
+            ->expects($this->at(0))
+            ->method('execute')
+            ->with($this->stringStartsWith('tasklist.exe '))
+            ->will($this->throwException(new \Magento\Exception('command not found')))
+        ;
+        $this->_shell
+            ->expects($this->at(1))
+            ->method('execute')
+            ->with($this->stringStartsWith('ps '))
+            ->will($this->returnValue('26321'))
+        ;
+        $this->assertEquals(26952704, $object->getRealMemoryUsage());
     }
 
-    public function testGetUnixProcessMemoryUsage()
+    public function testGetRealMemoryUsageWin()
     {
-        $unixFixture = '  PID USER    PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND'
-            . "\n" . '12345 root    20   0  215m  36m  10m S   98  0.5   0:32.96 php';
-        $this->_shell->expects($this->once())->method('execute')->will($this->returnValue($unixFixture));
-        $object = new Magento_Test_Helper_Memory($this->_shell);
-        $this->assertEquals('37748736', $object->getUnixProcessMemoryUsage(0));
-    }
-
-    public function testGetWinProcessMemoryUsage()
-    {
-        $winFixture = '"Image Name","PID","Session Name","Session#","Mem Usage"'
-            . "\r\n" . '"php.exe","12345","N/A","0","26,321 K"';
-        $this->_shell->expects($this->once())->method('execute')->will($this->returnValue($winFixture));
-        $object = new Magento_Test_Helper_Memory($this->_shell);
-        $this->assertEquals('26952704', $object->getWinProcessMemoryUsage(0));
-    }
-
-    public function testIsWindowsOs()
-    {
-        $this->assertInternalType('boolean', Magento_Test_Helper_Memory::isWindowsOs());
+        $this->_shell
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->stringStartsWith('tasklist.exe '))
+            ->will($this->returnValue('"php.exe","12345","N/A","0","26,321 K"'))
+        ;
+        $object = new \Magento\TestFramework\Helper\Memory($this->_shell);
+        $this->assertEquals(26952704, $object->getRealMemoryUsage());
     }
 
     /**
      * @param string $number
      * @param string $expected
-     * @dataProvider convertToBytes32DataProvider
+     * @dataProvider convertToBytesDataProvider
      */
-    public function testConvertToBytes32($number, $expected)
+    public function testConvertToBytes($number, $expected)
     {
-        $this->assertEquals($expected, Magento_Test_Helper_Memory::convertToBytes($number));
+        $this->assertEquals($expected, \Magento\TestFramework\Helper\Memory::convertToBytes($number));
     }
 
     /**
      * @return array
      */
-    public function convertToBytes32DataProvider()
+    public function convertToBytesDataProvider()
     {
         return array(
-            array('1B', '1'),
-            array('3K', '3072'),
-            array('2M', '2097152'),
-            array('1G', '1073741824'),
+            'B'               => array('1B', '1'),
+            'KB'              => array('3K', '3072'),
+            'MB'              => array('2M', '2097152'),
+            'GB'              => array('1G', '1073741824'),
+            'regular spaces'  => array('1 234 K', '1263616'),
+            'no-break spaces' => array("1\xA0234\xA0K", '1263616'),
+            'tab'             => array("1\x09234\x09K", '1263616'),
+            'coma'            => array('1,234K', '1263616'),
+            // following is also correct, accepting that "." is thousands separator
+            'dot'             => array('1.234 K', '1263616'),
+        );
+    }
+
+    /**
+     * @param string $number
+     * @dataProvider convertToBytesBadFormatDataProvider
+     * @expectedException \InvalidArgumentException
+     */
+    public function testConvertToBytesBadFormat($number)
+    {
+        \Magento\TestFramework\Helper\Memory::convertToBytes($number);
+    }
+
+    /**
+     * @return array
+     */
+    public function convertToBytesBadFormatDataProvider()
+    {
+        return array(
+            'more than one unit of measure' => array('1234KB'),
+            'unknown unit of measure' => array('1234Z'),
+            'non-integer value' => array('1,234.56 K'),
         );
     }
 
@@ -100,9 +124,9 @@ class Magento_Test_Helper_MemoryTest extends PHPUnit_Framework_TestCase
     public function testConvertToBytes64($number, $expected)
     {
         if (PHP_INT_SIZE <= 4) {
-            $this->markTestSkipped("A 64-bit system is required to perform this test.");
+            $this->markTestSkipped('A 64-bit system is required to perform this test.');
         }
-        $this->assertEquals($expected, Magento_Test_Helper_Memory::convertToBytes($number));
+        $this->assertEquals($expected, \Magento\TestFramework\Helper\Memory::convertToBytes($number));
     }
 
     /**
@@ -118,21 +142,21 @@ class Magento_Test_Helper_MemoryTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testConvertToBytesInvalidArgument()
     {
-        Magento_Test_Helper_Memory::convertToBytes('3Z');
+        \Magento\TestFramework\Helper\Memory::convertToBytes('3Z');
     }
 
     /**
-     * @expectedException OutOfBoundsException
+     * @expectedException \OutOfBoundsException
      */
     public function testConvertToBytesOutOfBounds()
     {
         if (PHP_INT_SIZE > 4) {
-            $this->markTestSkipped("A 32-bit system is required to perform this test.");
+            $this->markTestSkipped('A 32-bit system is required to perform this test.');
         }
-        Magento_Test_Helper_Memory::convertToBytes('2P');
+        \Magento\TestFramework\Helper\Memory::convertToBytes('2P');
     }
 }

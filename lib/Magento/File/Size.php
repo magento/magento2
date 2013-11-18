@@ -28,7 +28,9 @@
 /**
  * Magento file size lib
  */
-class Magento_File_Size
+namespace Magento\File;
+
+class Size
 {
     /**
      * Maximum file size for MAX_FILE_SIZE attribute of a form

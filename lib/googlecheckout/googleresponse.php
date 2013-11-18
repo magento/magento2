@@ -187,7 +187,7 @@
     }
 
     /**
-     * Set the response header indicating that an internal error ocurred and
+     * Set the response header indicating that an internal error occurred and
      * the notification sent by Google Checkout can't be processed right now
      *
      * @param string $msg the message to log

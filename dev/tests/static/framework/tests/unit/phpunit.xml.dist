@@ -28,7 +28,7 @@
 <phpunit bootstrap="../../bootstrap.php">
     <testsuites>
         <testsuite name="Magento Unit Tests for Static Code Analysis Framework">
-            <directory suffix="Test.php">testsuite</directory>
+            <directory suffix="Test.php">testsuite/Magento/TestFramework</directory>
         </testsuite>
     </testsuites>
     <php>

@@ -22,17 +22,19 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Cache_Backend_MongoDbTest extends PHPUnit_Framework_TestCase
+namespace Magento\Cache\Backend;
+
+class MongoDbTest extends \PHPUnit_Framework_TestCase
 {
     protected $_connectionString;
     protected $_dbName = 'magento_integration_test';
 
     /**
-     * @var Magento_Cache_Backend_MongoDb|null
+     * @var \Magento\Cache\Backend\MongoDb|null
      */
     protected $_model = null;
 
-    public function setUp()
+    protected function setUp()
     {
         if (defined('MONGODB_CONNECTION_STRING')) {
             $this->_connectionString = MONGODB_CONNECTION_STRING;
@@ -45,27 +47,27 @@ class Magento_Cache_Backend_MongoDbTest extends PHPUnit_Framework_TestCase
         if (defined('MONGODB_DATABASE_NAME')) {
             $this->_dbName = MONGODB_DATABASE_NAME;
         }
-        $this->_model = new Magento_Cache_Backend_MongoDb(
+        $this->_model = new \Magento\Cache\Backend\MongoDb(
             array('connection_string' => $this->_connectionString, 'db' => $this->_dbName)
         );
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         if (!empty($this->_connectionString) && extension_loaded('mongo')) {
             $this->_model = null;
-            $connection = new Mongo($this->_connectionString);
+            $connection = new \Mongo($this->_connectionString);
             $connection->dropDB($this->_dbName);
         }
     }
 
     /**
-     * @expectedException Zend_Cache_Exception
+     * @expectedException \Zend_Cache_Exception
      * @expectedExceptionMessage 'db' option is not specified
      */
     public function testConstructorException()
     {
-        new Magento_Cache_Backend_MongoDb();
+        new \Magento\Cache\Backend\MongoDb();
     }
 
     public function testGetIds()
@@ -155,10 +157,10 @@ class Magento_Cache_Backend_MongoDbTest extends PHPUnit_Framework_TestCase
 
     /**
      * @param int $extraLifeTime
-     * @param PHPUnit_Framework_Constraint $constraint
+     * @param \PHPUnit_Framework_Constraint $constraint
      * @dataProvider touchDataProvider
      */
-    public function testTouch($extraLifeTime, PHPUnit_Framework_Constraint $constraint)
+    public function testTouch($extraLifeTime, \PHPUnit_Framework_Constraint $constraint)
     {
         $cacheId = 'test';
         $this->_model->save('test data', $cacheId, array(), 2);
@@ -246,19 +248,19 @@ class Magento_Cache_Backend_MongoDbTest extends PHPUnit_Framework_TestCase
     public function cleanDataProvider()
     {
         return array(
-            'clean all cache' => array(Zend_Cache::CLEANING_MODE_ALL, array(), array()),
+            'clean all cache' => array(\Zend_Cache::CLEANING_MODE_ALL, array(), array()),
             'clean cache matching all tags' => array(
-                Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
                 array('tag1', 'tag2'),
                 array('test2', 'test4', 'test5')
             ),
             'clean cache not matching tags' => array(
-                Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
+                \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
                 array('tag1', 'tag2'),
                 array('test1', 'test2', 'test3')
             ),
             'clean cache matching any tags' => array(
-                Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
                 array('tag1', 'tag2'),
                 array('test4', 'test5')
             ),
@@ -270,7 +272,7 @@ class Magento_Cache_Backend_MongoDbTest extends PHPUnit_Framework_TestCase
         $this->_model->save('long-living entity', 'long', array(), 1000);
         $this->_model->save('infinite-living entity', 'infinite', array(), null);
         $this->_model->save('short-living entity', 'short', array(), 0);
-        $this->_model->clean(Zend_Cache::CLEANING_MODE_OLD);
+        $this->_model->clean(\Zend_Cache::CLEANING_MODE_OLD);
         $expectedIds = array('long', 'infinite');
         $actualIds = $this->_model->getIds();
         $this->assertSame($expectedIds, $actualIds);

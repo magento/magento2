@@ -1,6 +1,6 @@
 <?php
 /**
- * Test case for Magento_Profiler_Driver_Standard_Output_Firebug
+ * Test case for \Magento\Profiler\Driver\Standard\Output\Firebug
  *
  * Magento
  *
@@ -23,39 +23,41 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Profiler_Driver_Standard_Output_FirebugTest extends PHPUnit_Framework_TestCase
+namespace Magento\Profiler\Driver\Standard\Output;
+
+class FirebugTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Profiler_Driver_Standard_Output_Firebug
+     * @var \Magento\Profiler\Driver\Standard\Output\Firebug
      */
     protected $_output;
 
     /**
-     * @var Zend_Controller_Response_Http|PHPUnit_Framework_MockObject_MockObject
+     * @var \Zend_Controller_Response_Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_response;
 
     /**
-     * @var Zend_Controller_Request_Http|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\RequestInterface|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_request;
 
     protected function setUp()
     {
-        $this->_response = $this->getMock('Zend_Controller_Response_Http', array('canSendHeaders', 'sendHeaders'));
+        $this->_response = $this->getMock('\Magento\App\Response\Http', array('canSendHeaders', 'sendHeaders'));
         $this->_response
             ->expects($this->any())
             ->method('canSendHeaders')
             ->will($this->returnValue(true));
 
-        $this->_request = $this->getMock('Zend_Controller_Request_Http', array('getHeader'));
+        $this->_request = $this->getMock('\Magento\App\Request\Http', array('getHeader'), array(), '', false);
         $this->_request
             ->expects($this->any())
             ->method('getHeader')
             ->with('User-Agent')
             ->will($this->returnValue('Mozilla/5.0 with FirePHP/1.6'));
 
-        $this->_output = new Magento_Profiler_Driver_Standard_Output_Firebug();
+        $this->_output = new \Magento\Profiler\Driver\Standard\Output\Firebug();
         $this->_output->setResponse($this->_response);
         $this->_output->setRequest($this->_request);
     }

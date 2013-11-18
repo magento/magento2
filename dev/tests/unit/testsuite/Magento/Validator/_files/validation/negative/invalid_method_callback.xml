@@ -32,7 +32,7 @@
             <rule name="name_sku_and_price">
                 <property_constraints>
                     <property name="name">
-                        <constraint alias="some_validator" class="Magento_Validator_StringLenght">
+                        <constraint alias="some_validator" class="Magento\Validator_StringLenght">
                             <method name="setOptions">
                                 <argument>
                                     <!-- attribute class is required for callback element -->

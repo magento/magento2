@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Profiler_Driver_Factory
+namespace Magento\Profiler\Driver;
+
+class Factory
 {
     /**
      * Default driver type
@@ -45,7 +47,7 @@ class Magento_Profiler_Driver_Factory
      * @param string $defaultDriverPrefix
      * @param string $defaultDriverType
      */
-    public function __construct($defaultDriverPrefix = 'Magento_Profiler_Driver_', $defaultDriverType = 'standard')
+    public function __construct($defaultDriverPrefix = 'Magento\Profiler\Driver\\', $defaultDriverType = 'standard')
     {
         $this->_defaultDriverPrefix = $defaultDriverPrefix;
         $this->_defaultDriverType = $defaultDriverType;
@@ -55,8 +57,8 @@ class Magento_Profiler_Driver_Factory
      * Create instance of profiler driver
      *
      * @param array $config|null
-     * @return Magento_Profiler_DriverInterface
-     * @throws InvalidArgumentException
+     * @return \Magento\Profiler\DriverInterface
+     * @throws \InvalidArgumentException
      */
     public function create(array $config = null)
     {
@@ -66,15 +68,15 @@ class Magento_Profiler_Driver_Factory
         } else {
             $class = $this->_defaultDriverPrefix . ucfirst($type);
             if (!class_exists($class)) {
-                throw new InvalidArgumentException(
+                throw new \InvalidArgumentException(
                     sprintf("Cannot create profiler driver, class \"%s\" doesn't exist.", $class
                 ));
             }
         }
         $driver = new $class($config);
-        if (!$driver instanceof Magento_Profiler_DriverInterface) {
-            throw new InvalidArgumentException(sprintf(
-                "Driver class \"%s\" must implement Magento_Profiler_DriverInterface.", get_class($driver)
+        if (!$driver instanceof \Magento\Profiler\DriverInterface) {
+            throw new \InvalidArgumentException(sprintf(
+                "Driver class \"%s\" must implement \Magento\Profiler\DriverInterface.", get_class($driver)
             ));
         }
         return $driver;

@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Validator_NotEmpty extends Zend_Validate_NotEmpty implements Magento_Validator_ValidatorInterface
+namespace Magento\Validator;
+
+class NotEmpty extends \Zend_Validate_NotEmpty implements \Magento\Validator\ValidatorInterface
 {
 
 }

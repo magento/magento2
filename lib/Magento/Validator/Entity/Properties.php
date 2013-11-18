@@ -1,6 +1,6 @@
 <?php
 /**
- * Validates properties of entity (Varien_Object).
+ * Validates properties of entity (\Magento\Object).
  *
  * Magento
  *
@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Validator_Entity_Properties extends Magento_Validator_ValidatorAbstract
+namespace Magento\Validator\Entity;
+
+class Properties extends \Magento\Validator\AbstractValidator
 {
     /**
      * @var array
@@ -41,19 +43,19 @@ class Magento_Validator_Entity_Properties extends Magento_Validator_ValidatorAbs
     }
 
     /**
-     * Successful if $value is Varien_Object an all condition are fulfilled.
+     * Successful if $value is \Magento\Object an all condition are fulfilled.
      *
      * If read-only properties are set than $value mustn't have changes in them.
      *
-     * @param Varien_Object|mixed $value
+     * @param \Magento\Object|mixed $value
      * @return bool
-     * @throws InvalidArgumentException when $value is not instanceof Varien_Object
+     * @throws \InvalidArgumentException when $value is not instanceof \Magento\Object
      */
     public function isValid($value)
     {
         $this->_clearMessages();
-        if (!($value instanceof Varien_Object)) {
-            throw new InvalidArgumentException('Instance of Varien_Object is expected.');
+        if (!($value instanceof \Magento\Object)) {
+            throw new \InvalidArgumentException('Instance of \Magento\Object is expected.');
         }
         if ($this->_readOnlyProperties) {
             if (!$value->hasDataChanges()) {
@@ -62,7 +64,7 @@ class Magento_Validator_Entity_Properties extends Magento_Validator_ValidatorAbs
             foreach ($this->_readOnlyProperties as $property) {
                 if ($this->_hasChanges($value->getData($property), $value->getOrigData($property))) {
                     $this->_messages[__CLASS__] = array(
-                        $this->getTranslator()->__("Read-only property cannot be changed.")
+                        __("Read-only property cannot be changed.")
                     );
                     break;
                 }

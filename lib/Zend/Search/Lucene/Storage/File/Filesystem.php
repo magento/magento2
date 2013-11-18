@@ -163,7 +163,7 @@ class Zend_Search_Lucene_Storage_File_Filesystem extends Zend_Search_Lucene_Stor
             $nextBlock = fread($this->_fileHandle, $length);
             if ($nextBlock === false) {
                 #require_once 'Zend/Search/Lucene/Exception.php';
-                throw new Zend_Search_Lucene_Exception( "Error occured while file reading." );
+                throw new Zend_Search_Lucene_Exception( "Error occurred while file reading." );
             }
 
             $data .= $nextBlock;
@@ -171,7 +171,7 @@ class Zend_Search_Lucene_Storage_File_Filesystem extends Zend_Search_Lucene_Stor
         }
         if ($length != 0) {
             #require_once 'Zend/Search/Lucene/Exception.php';
-            throw new Zend_Search_Lucene_Exception( "Error occured while file reading." );
+            throw new Zend_Search_Lucene_Exception( "Error occurred while file reading." );
         }
 
         return $data;

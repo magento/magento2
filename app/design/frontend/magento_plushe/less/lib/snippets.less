@@ -1,0 +1,142 @@
+// /**
+//  * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @package     magento2_reference
+//  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.resetList(@margin: 0, @padding: 0) {
+    padding: @padding;
+    margin: @margin;
+    list-style-type: none;
+    list-style-image: none;
+}
+
+.borderColor (@color) when (lightness(@color) > 50%) {
+    border-color: darken(@color, 13%);
+}
+
+.borderColor (@color) when (lightness(@color) =< 50%) {
+    border-color: lighten(@color, 13%);
+}
+
+.borderColorI (@color) when (lightness(@color) > 50%) {
+    border-color: lighten(@color, 13%);
+}
+
+.borderColorI (@color) when (lightness(@color) =< 50%) {
+    border-color: darken(@color, 13%);
+}
+
+.pageWidth(@maxWidth: @LayoutMaxWidth, @minWidth: @LayoutMinWidth, @padding: 10px) {
+    padding-left: @padding;
+    padding-right: @padding;
+    margin: 0 auto;
+    min-width: (@minWidth - (2 * @padding));
+    max-width: (@maxWidth - (2 * @padding));
+}
+
+.transitionDelay(@delay) {
+    -webkit-transition-delay: @delay;
+    -moz-transition-delay: @delay;
+    -ms-transition-delay: @delay;
+    -o-transition-delay: @delay;
+    transition-delay: @delay;
+}
+
+.resetAction() {
+    border: none;
+    border-radius: 0;
+    background: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    text-shadow: none;
+    outline: none;
+}
+
+.actionLink() {
+    display: inline;
+    color: @link;
+    text-decoration: none;
+    &:focus,
+    &:active,
+    &:hover {
+        color: @linkHover;
+    }
+}
+
+.colorA(@c1, @c2) {
+    color: @c1;
+    > span {
+        color: @c1;
+    }
+    &:hover,
+    &:hover > span {
+        color: @c2;
+    }
+}
+
+.fieldStyle() {
+    margin: 0 0 10px;
+    &:last-child {
+        margin-bottom: 0;
+    }
+    .nested {
+        .field {
+            margin: 5px 0;
+        }
+        padding: 0 0 0;
+    }
+}
+
+.labelStyle() {
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 0 0 5px;
+}
+
+.formInline(@labelWidth: 50%) {
+    > .field {
+        .clearfix();
+    }
+    > .field > .control,
+    > .field > .label {
+        margin: 0;
+        float: left;
+        width: @labelWidth;
+        .box-sizing();
+    }
+    > .field > .control {
+        width: 100% - @labelWidth;
+    }
+    > .field.no-label {
+        .control {
+            margin-left: @labelWidth;
+        }
+    }
+}
+
+.profileBlockWithBg {
+    .box-sizing();
+    background: @primary1;
+    padding: 30px;
+}

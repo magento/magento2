@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <referenceBlock name="root">
+        <action method="setTemplate">
+            <argument name="template" xsi:type="string">2columns-right.phtml</argument>
+        </action>
+    </referenceBlock>
+    <referenceBlock name="head">
+        <block class="Magento\Page\Block\Html\Head\Css" name="magento-catalog-zoom-css">
+            <arguments>
+                <argument name="file" xsi:type="string">Magento_Catalog::zoom.css</argument>
+            </arguments>
+        </block>
+    </referenceBlock>
+    <referenceContainer name="content">
+        <block class="Magento\Review\Block\Product\View" name="product.info" template="Magento_Catalog::product/view.phtml">
+            <block class="Magento\Catalog\Block\Product\View\BaseImage" name="product-info-base-image" as="base-image" template="product/view/base-image.phtml"/>
+            <block class="Magento\Catalog\Block\Product\View" name="product.info.addto" as="addto" template="product/view/addto.phtml"/>
+            <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart" as="addtocart" template="product/view/addtocart.phtml">
+                <!-- workaround: a better place for this code is in paypal.xml -->
+                <container name="review.product.info.addtocart.paypal.wrapper" label="PayPal Express Checkout Shortcut Wrapper" htmlTag="div">
+                    <block class="Magento\Paypal\Block\Express\Shortcut" name="review.product.info.addtocart.paypal" template="express/shortcut.phtml">
+                        <action method="setIsInCatalogProduct">
+                            <argument name="value" xsi:type="string">1</argument>
+                        </action>
+                    </block>
+                </container>
+            </block>
+            <block class="Magento\Catalog\Block\Product\View" name="product.tierprices" as="tierprices" template="product/view/tierprices.phtml"/>
+            <block class="Magento\Review\Block\Product\View\Other" name="product.info.other" as="other" template="Magento_Review::product/view/other.phtml"/>
+            <block class="Magento\Page\Block\Html\Pager" name="product_review_list.toolbar"/>
+            <block class="Magento\Core\Block\Template" name="product_review_list.count" template="Magento_Review::product/view/count.phtml"/>
+            <block class="Magento\Review\Block\Product\View\ListView" name="product.info.product_additional_data" as="product_additional_data" template="product/view/list.phtml">
+                <block class="Magento\Review\Block\Form" name="product.review.form" as="review_form">
+                    <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before"/>
+                </block>
+            </block>
+        </block>
+    </referenceContainer>
+</layout>

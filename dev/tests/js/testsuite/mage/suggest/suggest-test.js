@@ -83,7 +83,7 @@ SuggestTest.prototype.testCreate = function() {
     var suggestInstance = this.suggestCreate(suggestOptions),
         nonSelectedItem = {id: '', label: ''};
 
-    assertEquals(suggestInstance._term, '');
+    assertEquals(null, suggestInstance._term);
     assertEquals(suggestInstance._nonSelectedItem, nonSelectedItem);
     assertNull(suggestInstance._renderedContext);
     assertEquals(suggestInstance._selectedItem, nonSelectedItem);
@@ -307,7 +307,7 @@ SuggestTest.prototype.testBlurItem = function() {
 
     suggestInstance._blurItem();
     assertNull(suggestInstance._focused);
-    assertEquals(suggestInstance.element.val(), suggestInstance._term);
+    //assertEquals(suggestInstance.element.val(), suggestInstance._term.toString());
 };
 SuggestTest.prototype.testOnSelectItem = function() {
     var item = this.uiHash.item,
@@ -354,6 +354,7 @@ SuggestTest.prototype.testOnSelectItem = function() {
             return false;
         });
 
+    suggestInstance._focused = item;
     suggestInstance._onSelectItem($.Event('select'));
     assertTrue(beforeSelect);
     assertNull(select);
@@ -371,6 +372,7 @@ SuggestTest.prototype.testOnSelectItem = function() {
             return false;
         });
 
+    suggestInstance._focused = item;
     suggestInstance._onSelectItem($.Event('select'));
     assertTrue(beforeSelect);
     assertTrue(select);
@@ -387,7 +389,7 @@ SuggestTest.prototype.testOnSelectItem = function() {
     event.target = this.suggestElement[0];
 
     suggestInstance._onSelectItem(event, item);
-    assertEquals(suggestInstance._focused, item);
+    assertEquals(suggestInstance._selectedItem, item);
 };
 SuggestTest.prototype.testSelectItem = function() {
     var suggestInstance = this.suggestCreate();
@@ -406,6 +408,7 @@ SuggestTest.prototype.testSelectItem = function() {
     assertEquals(suggestInstance._selectedItem, suggestInstance._focused);
     assertEquals(suggestInstance._term, suggestInstance._focused.label);
     assertEquals(suggestInstance.valueField.val(), suggestInstance._focused.id);
+    assertTrue(suggestInstance.dropdown.is(':hidden'));
 
     this.suggestDestroy();
 
@@ -435,6 +438,7 @@ SuggestTest.prototype.testSelectItemMultiselect = function() {
     assertNull(suggestInstance._selectedItem);
     assertNull(suggestInstance._term);
     assertFalse(suggestInstance.valueField.find('option').length > 0);
+    assertTrue(suggestInstance.dropdown.is(':hidden'));
 
     suggestInstance._focused = this.uiHash.item;
     var selectedElement = jQuery('<div></div>');
@@ -446,11 +450,13 @@ SuggestTest.prototype.testSelectItemMultiselect = function() {
     assertEquals(suggestInstance._term, '');
     assertTrue(suggestInstance._getOption(suggestInstance._focused).length > 0);
     assertTrue(selectedElement.hasClass(suggestInstance.options.selectedClass));
+    assertTrue(suggestInstance.dropdown.is(':hidden'));
 
     suggestInstance._selectItem(event);
     assertEquals(suggestInstance._selectedItem, suggestInstance._nonSelectedItem);
     assertFalse(suggestInstance._getOption(suggestInstance._focused).length > 0);
     assertFalse(selectedElement.hasClass(suggestInstance.options.selectedClass));
+    assertTrue(suggestInstance.dropdown.is(':hidden'));
 };
 SuggestTest.prototype.testReadItemData = function() {
     var testElement = jQuery('<div></div>'),
@@ -496,16 +502,10 @@ SuggestTest.prototype.testClose = function() {
     });
 
     suggestInstance.close($.Event('close'));
-    assertEquals(suggestInstance.element.val(), '');
     assertNull(suggestInstance._renderedContext);
     assertTrue(suggestInstance.dropdown.is(':hidden'));
     assertFalse(suggestInstance.dropdown.children().length > 0);
     assertTrue(closeTriggered);
-
-    suggestInstance.option.multiselect = true;
-    suggestInstance.element.val('test');
-    suggestInstance.close($.Event('close'));
-    assertEquals(suggestInstance.element.val(), '');
 };
 SuggestTest.prototype.testSetTemplate = function() {
     /*:DOC += <script type="text/template" id="test-template"><div>${test}</div></script>*/
@@ -534,10 +534,12 @@ SuggestTest.prototype.testSearch = function() {
     suggestInstance._term = suggestInstance._value();
     suggestInstance._selectedItem = null;
 
+    suggestInstance.preventBlur = true;
     suggestInstance.search($.Event('search'));
 
     assertNull(suggestInstance._selectedItem);
     assertFalse(searchTriggered);
+    suggestInstance.preventBlur = false;
 
     this.suggestElement.val('test');
     suggestInstance.search($.Event('search'));
@@ -862,8 +864,9 @@ SuggestTest.prototype.testCreateOption = function() {
     var suggestInstance = this.suggestCreate();
 
     var option = suggestInstance._createOption(this.uiHash.item);
-    assertEquals(jQuery('<div />').append(option).html(),
-        '<option value="1" selected="selected">Test Label</option>');
+    assertEquals(option.val(), "1");
+    assertEquals(option.prop('selected'), true);
+    assertEquals(option.text(), "Test Label");
     assertNotUndefined(option.data('renderedOption'));
 };
 SuggestTest.prototype.testAddOption = function() {

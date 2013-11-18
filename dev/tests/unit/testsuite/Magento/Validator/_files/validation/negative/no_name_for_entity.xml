@@ -32,7 +32,7 @@
             <rule name="test_rule_b">
                 <!-- constraints element is not allowed here, expected entity_constraints or property_constraints -->
                 <constraints>
-                    <constraint class="Magento_Validator_Test_True"/>
+                    <constraint class="Magento\Validator\Test\True"/>
                 </constraints>
             </rule>
         </rules>
