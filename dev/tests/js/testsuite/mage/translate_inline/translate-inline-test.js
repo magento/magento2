@@ -24,59 +24,51 @@
  */
 TranslateInlineTest = TestCase('TranslateInlineTest');
 TranslateInlineTest.prototype.testInit = function() {
-    var translateInline = jQuery(document).translateInline();
-    assertEquals(true, translateInline.is(':mage-translateInline'));
-    translateInline.translateInline('destroy');
-};
-TranslateInlineTest.prototype.testCreate = function() {
-    var options = {
-            translateForm: {
-                data:{
-                    id: 'translate-form-id'
-                }
-            },
-            dialog:{
-                id: 'dialog-id'
-            },
-            editTrigger: {
-                template: '<img id="edit-trigger-id" alt="${alt}" src="${img}">'
-            }
-        },
-        translateInline = jQuery(document).translateInline(options);
-    assertEquals(true, jQuery('#' + options.dialog.id).size() > 0);
-    assertEquals(true, jQuery('#edit-trigger-id').size() > 0);
+    /*:DOC += <script id="translate-form-template" type="text/x-jquery-tmpl">
+      </script>
+      <div data-role="translate-dialog"></div>
+     */
+    var translateInline = jQuery('[data-role="translate-dialog"]').translateInline();
+    assertTrue(translateInline.is(':mage-translateInline'));
     translateInline.translateInline('destroy');
 };
 TranslateInlineTest.prototype.testDialogOpenOnEdit = function() {
+    /*:DOC += <script id="translate-form-template" type="text/x-jquery-tmpl">
+      </script>
+      <div data-role="translate-dialog"></div>
+     */
     var options= {
             dialog: {
                 id: 'dialog-id'
             }
         };
-    var translateInline = jQuery(document).translateInline(options),
-        dialog = jQuery('#' + options.dialog.id),
-        dialogHiddenOnTranslateInlineCreate = dialog.is(':hidden');
+    var translateInline = jQuery('[data-role="translate-dialog"]').translateInline(options),
+        isDialogHiddenOnInit = translateInline.is(':hidden');
     translateInline.trigger('edit.editTrigger');
-    var dialogVisibleAfterTriggerEdit = dialog.is(':visible');
-    assertEquals(true, dialogHiddenOnTranslateInlineCreate);
-    assertEquals(true, dialogVisibleAfterTriggerEdit);
+    var dialogVisibleAfterTriggerEdit = translateInline.is(':visible');
+    assertTrue(isDialogHiddenOnInit);
+    assertTrue(dialogVisibleAfterTriggerEdit);
     translateInline.translateInline('destroy');
 };
 TranslateInlineTest.prototype.testTranslationFormTemplate = function() {
+    /*:DOC += <script id="translate-form-template" type="text/x-jquery-tmpl">
+      <form id="${id}">${newTemplateVariable}</form>
+      </script>
+      <div data-role="translate-dialog"></div>
+     */
     var options = {
             translateForm: {
-                template:'<div id="${data.id}">${data.newTemplateVariable}</div>',
                 data:{
                     id: 'translate-form-id',
                     newTemplateVariable: 'New Template Variable'
                 }
             }
         },
-        translateInline = jQuery(document).translateInline(options);
+        translateInline = jQuery('[data-role="translate-dialog"]').translateInline(options);
     translateInline.trigger('edit.editTrigger');
     var translateForm = jQuery('#' + options.translateForm.data.id);
-    assertEquals(true, translateForm.size() > 0);
-    assertEquals(true, translateForm.text() === options.translateForm.data.newTemplateVariable);
+    assertTrue(translateForm.size() > 0);
+    assertEquals(translateForm.text(), options.translateForm.data.newTemplateVariable);
     translateInline.translateInline('destroy');
 };
 // @TODO Need to be fixed to avoid errors on the bamboo server in context of MAGETWO-5085 ticket
@@ -122,32 +114,29 @@ TranslateInlineTest.prototype.testTranslationFormTemplate = function() {
     translateInline.translateInline('destroy');
 };*/
 TranslateInlineTest.prototype.testDestroy = function() {
+    /*:DOC += <script id="translate-form-template" type="text/x-jquery-tmpl">
+      <form id="${id}">${newTemplateVariable}</form>
+      </script>
+      <div data-role="translate-dialog"></div>
+      <img id="edit-trigger-id">
+     */
     var options = {
             translateForm: {
                 data:{
                     id: 'translate-form-id'
                 }
             },
-            dialog:{
-                id: 'dialog-id'
-            },
-            editTrigger: {
-                template: '<img id="edit-trigger-id" alt="${alt}" src="${img}">'
-            }
         },
-        translateInline = jQuery(document).translateInline(options),
-        dialog = jQuery('#' + options.dialog.id),
-        editTrigger = jQuery('#edit-trigger-id'),
-        dialogCreated = dialog.size() && dialog.is(':ui-dialog'),
-        editTriggerCreated = editTrigger.size() && jQuery(document).is(':mage-editTrigger'),
+        translateInline = jQuery('[data-role="translate-dialog"]').translateInline(options),
+        editTrigger = jQuery('#edit-trigger-id').editTrigger(),
+        editTriggerCreated = editTrigger.size() && jQuery('#edit-trigger-id').is(':mage-editTrigger'),
         editTriggerEventIsBound = false;
 
-    assertEquals(true, dialogCreated);
-    assertEquals(true, editTriggerCreated);
+    assertTrue(translateInline.is(':mage-translateInline'));
+    assertTrue(editTriggerCreated);
     translateInline.on('edit.editTrigger', function(){editTriggerEventIsBound = true;});
     translateInline.translateInline('destroy');
     translateInline.trigger('edit.editTrigger');
-    assertEquals(false, dialog.size() && dialog.is(':ui-dialog'));
-    assertEquals(false, editTrigger.size() && jQuery(document).is(':mage-editTrigger'));
-    assertEquals(false, editTriggerEventIsBound);
+    assertFalse(translateInline.is(':mage-translateInline'));
+    assertFalse(editTriggerEventIsBound);
 };

@@ -27,10 +27,9 @@
 
 $rootDir = realpath(__DIR__ . '/../../../../../../..');
 require __DIR__ . '/../../../../../../../app/autoload.php';
-Magento_Autoload_IncludePath::addIncludePath(array(
+\Magento\Autoload\IncludePath::addIncludePath(array(
     $rootDir . '/lib/',
     $rootDir . '/dev/tests/unit/framework/',
     $rootDir . '/app/code/',
     $rootDir . '/app'
 ));
-Mage::setIsSerializable(false);

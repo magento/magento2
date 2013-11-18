@@ -23,7 +23,9 @@
  * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_ObjectManager_Definition_Compiled_Binary extends Magento_ObjectManager_Definition_Compiled
+namespace Magento\ObjectManager\Definition\Compiled;
+
+class Binary extends \Magento\ObjectManager\Definition\Compiled
 {
     /**
      * Unpack signature

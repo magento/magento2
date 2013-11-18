@@ -26,24 +26,26 @@
  */
 
 /**
- * Test class for Magento_Test_Bootstrap_DocBlock.
+ * Test class for \Magento\TestFramework\Bootstrap\DocBlock.
  */
-class Magento_Test_Bootstrap_DocBlockTest extends PHPUnit_Framework_TestCase
+namespace Magento\Test\Bootstrap;
+
+class DocBlockTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Test_Bootstrap_DocBlock
+     * @var \Magento\TestFramework\Bootstrap\DocBlock
      */
     protected $_object;
 
     /**
-     * @var Magento_Test_Application|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Application|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_application;
 
     protected function setUp()
     {
-        $this->_object = new Magento_Test_Bootstrap_DocBlock(__DIR__);
-        $this->_application = $this->getMock('Magento_Test_Application', array(), array(), '', false);
+        $this->_object = new \Magento\TestFramework\Bootstrap\DocBlock(__DIR__);
+        $this->_application = $this->getMock('Magento\TestFramework\Application', array(), array(), '', false);
     }
 
     protected function tearDown()
@@ -63,19 +65,20 @@ class Magento_Test_Bootstrap_DocBlockTest extends PHPUnit_Framework_TestCase
         try {
             new $listenerClass();
             $this->fail("Inability to instantiate the event listener '$listenerClass' is expected.");
-        } catch (Magento_Exception $e) {
+        } catch (\Magento\Exception $e) {
             $this->assertEquals($expectedExceptionMsg, $e->getMessage());
         }
     }
 
     public function testRegisterAnnotations()
     {
-        $this->_expectNoListenerCreation('Magento_Test_Event_PhpUnit', 'Instance of the event manager is required.');
         $this->_expectNoListenerCreation(
-            'Magento_Test_Event_Magento', 'Instance of the "Magento_Test_EventManager" is expected.'
+            'Magento\TestFramework\Event\PhpUnit', 'Instance of the event manager is required.');
+        $this->_expectNoListenerCreation(
+            'Magento\TestFramework\Event\Magento', 'Instance of the "Magento\TestFramework\EventManager" is expected.'
         );
         $this->_object->registerAnnotations($this->_application);
-        new Magento_Test_Event_PhpUnit();
-        new Magento_Test_Event_Magento();
+        new \Magento\TestFramework\Event\PhpUnit();
+        new \Magento\TestFramework\Event\Magento();
     }
 }

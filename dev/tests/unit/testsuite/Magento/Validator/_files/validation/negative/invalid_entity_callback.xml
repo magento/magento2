@@ -31,7 +31,7 @@
         <rules>
             <rule name="name_sku_and_price">
                 <entity_constraints>
-                    <constraint alias="eav_validator" class="Mage_Catalog_Model_Validator_Eav" >
+                    <constraint alias="eav_validator" class="Magento\Catalog\Model\Validator\Eav" >
                         <!-- attribute class is required for callback element -->
                         <callback method="someMethod" />
                     </constraint>

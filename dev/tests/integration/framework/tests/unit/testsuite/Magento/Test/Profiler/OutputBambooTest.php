@@ -25,70 +25,22 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Stream filter that collect the data that is going through the stream
- *
- * @link http://php.net/manual/en/function.stream-filter-register.php
- */
-class Magento_Test_Profiler_OutputBambooTestFilter extends php_user_filter
-{
-    private static $_collectedData = '';
-
-    /**
-     * Collect intercepted data
-     *
-     * @param resource $in
-     * @param resource $out
-     * @param int $consumed
-     * @param bool $closing
-     * @return int
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.ShortVariable)
-     */
-    public function filter($in, $out, &$consumed, $closing)
-    {
-        while ($bucket = stream_bucket_make_writeable($in)) {
-            self::$_collectedData .= $bucket->data;
-            $consumed += $bucket->datalen;
-            stream_bucket_append($out, $bucket);
-        }
-        return PSFS_PASS_ON;
-    }
-
-    public static function resetCollectedData()
-    {
-        self::$_collectedData = '';
-    }
-
-    /**
-     * Assert that collected data matches expected format
-     *
-     * @param string $expectedData
-     */
-    public static function assertCollectedData($expectedData)
-    {
-        PHPUnit_Framework_Assert::assertStringMatchesFormat(
-            $expectedData,
-            self::$_collectedData,
-            'Expected data went through the stream.'
-        );
-    }
-}
+namespace Magento\Test\Profiler;
 
 /**
- * Test class for Magento_Test_Profiler_OutputBamboo.
+ * Test class for \Magento\TestFramework\Profiler\OutputBamboo.
  */
-class Magento_Test_Profiler_OutputBambooTest extends PHPUnit_Framework_TestCase
+require_once __DIR__ . '/OutputBambooTestFilter.php';
+class OutputBambooTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Test_Profiler_OutputBamboo
+     * @var \Magento\TestFramework\Profiler\OutputBamboo
      */
     protected $_output;
 
     public static function setUpBeforeClass()
     {
-        stream_filter_register('dataCollectorFilter', 'Magento_Test_Profiler_OutputBambooTestFilter');
+        stream_filter_register('dataCollectorFilter', 'Magento\Test\Profiler\OutputBambooTestFilter');
     }
 
     /**
@@ -96,12 +48,12 @@ class Magento_Test_Profiler_OutputBambooTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Magento_Test_Profiler_OutputBambooTestFilter::resetCollectedData();
+        \Magento\Test\Profiler\OutputBambooTestFilter::resetCollectedData();
 
         /**
          * @link http://php.net/manual/en/wrappers.php.php
          */
-        $this->_output = new Magento_Test_Profiler_OutputBamboo(array(
+        $this->_output = new \Magento\TestFramework\Profiler\OutputBamboo(array(
             'filePath' => 'php://filter/write=dataCollectorFilter/resource=php://memory',
             'metrics' => array('sample metric (ms)' => array('profiler_key_for_sample_metric'))
         ));
@@ -109,7 +61,7 @@ class Magento_Test_Profiler_OutputBambooTest extends PHPUnit_Framework_TestCase
 
     public function testDisplay()
     {
-        $this->_output->display(new Magento_Profiler_Driver_Standard_Stat());
-        Magento_Test_Profiler_OutputBambooTestFilter::assertCollectedData("Timestamp,\"sample metric (ms)\"\n%d,%d");
+        $this->_output->display(new \Magento\Profiler\Driver\Standard\Stat());
+        \Magento\Test\Profiler\OutputBambooTestFilter::assertCollectedData("Timestamp,\"sample metric (ms)\"\n%d,%d");
     }
 }

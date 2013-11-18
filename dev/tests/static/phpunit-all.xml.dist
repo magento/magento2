@@ -30,7 +30,7 @@
 <phpunit bootstrap="./framework/bootstrap.php">
     <testsuites>
         <testsuite name="All Static Code Analysis Tests">
-            <directory>testsuite</directory>
+            <directory>testsuite/Magento/Test/</directory>
         </testsuite>
     </testsuites>
     <php>

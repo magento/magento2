@@ -14,7 +14,7 @@
   class XMLParser{
 
 		var $xml_parser;
-		var $deseralizedResponse;
+		var $deserializedResponse;
 		var $elementName;
 		var $elementValue;
 
@@ -66,7 +66,7 @@
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		// Function deserialize(xmlString)
 		//
-		// Deserilize the XML reponse message and add each element to the deseralizedResponse collection.
+		// Deserilize the XML reponse message and add each element to the deserializedResponse collection.
 		// Once complete, then each element reference will be available using the getValue function.
 		/////////////////////////////////////////////////////////////////////////////////////////////
 

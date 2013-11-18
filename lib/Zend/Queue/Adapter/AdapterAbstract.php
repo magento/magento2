@@ -48,7 +48,7 @@ abstract class Zend_Queue_Adapter_AdapterAbstract
     const CREATE_TIMEOUT_DEFAULT = 30;
 
     /**
-     * Default timeout for recieve() function
+     * Default timeout for receive() function
      */
     const RECEIVE_TIMEOUT_DEFAULT = 30;
 

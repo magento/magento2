@@ -32,13 +32,13 @@
             <rule name="name_sku_and_price">
                 <property_constraints>
                     <property name="name">
-                        <constraint alias="some_validator" class="Magento_Validator_StringLenght"/>
+                        <constraint alias="some_validator" class="Magento\Validator_StringLenght"/>
                     </property>
                 </property_constraints>
             </rule>
         </rules>
         <groups>
-            <!-- builder class must implement Magento_Validator_Builder -->
+            <!-- builder class must implement \Magento\Validator\Builder -->
             <group name="create" builder="stdClass">
                 <uses>
                     <use rule="name_sku_and_price"/>

@@ -33,14 +33,14 @@
             <rule>
                 <property_constraints>
                     <property name="sku">
-                        <constraint class="Magento_Validator_Test_Alnum"/>
+                        <constraint class="Magento\Validator\Test\Alnum"/>
                     </property>
                 </property_constraints>
             </rule>
             <rule name="test_rule_sku">
                 <property_constraints>
                     <property name="sku">
-                        <constraint class="Magento_Validator_Test_NotEmpty"/>
+                        <constraint class="Magento\Validator\Test\NotEmpty"/>
                     </property>
                 </property_constraints>
             </rule>

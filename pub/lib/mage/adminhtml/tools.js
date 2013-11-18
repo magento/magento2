@@ -18,7 +18,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Mage
- * @package     Mage_Adminhtml
+ * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -150,19 +150,6 @@ function toggleValueElements(checkbox, container, excludedElements, checked){
                 }
             }
         });
-        if (navigator && navigator.userAgent.indexOf('Chrome') != -1) {
-            if (!checkbox.checked) {
-                $(checkbox).writeAttribute('checked', false);
-            } else {
-                $(checkbox).writeAttribute('checked', 'checked');
-            }
-            // fix chrome bug: rerender page updating parent content
-            var p = elems[0].nodeName.toLowerCase() == 'img'
-                ? elems[1].parentNode
-                : elems[0].parentNode;
-
-            p.innerHTML += '';
-        }
     }
 }
 
@@ -318,9 +305,15 @@ var Fieldset = {
         }
         if (collapsed==1 || collapsed===undefined) {
            $(containerId + '-head').removeClassName('open');
+           if($(containerId + '-head').up('.section-config')) {
+                $(containerId + '-head').up('.section-config').removeClassName('active');
+           }
            $(containerId).hide();
         } else {
            $(containerId + '-head').addClassName('open');
+           if($(containerId + '-head').up('.section-config')) {
+                $(containerId + '-head').up('.section-config').addClassName('active');
+           }
            $(containerId).show();
         }
     },

@@ -24,7 +24,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Translate_AdapterTest extends PHPUnit_Framework_TestCase
+namespace Magento\Translate;
+
+class AdapterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Check that translate calls are passed to given translator
@@ -43,7 +45,7 @@ class Magento_Translate_AdapterTest extends PHPUnit_Framework_TestCase
             ->method('translate')
             ->with($strToTranslate)
             ->will($this->returnValue($translatedStr));
-        $translator = new Magento_Translate_Adapter(array(
+        $translator = new \Magento\Translate\Adapter(array(
             'translator' => array($translatorMock, 'translate')
         ));
 
@@ -57,7 +59,6 @@ class Magento_Translate_AdapterTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array('translate', 'Translate me!', 'Translated string'),
-            array('__', 'Translate me!', 'Translated string')
         );
     }
 
@@ -66,7 +67,7 @@ class Magento_Translate_AdapterTest extends PHPUnit_Framework_TestCase
      */
     public function testTranslateNoProxy()
     {
-        $translator = new Magento_Translate_Adapter();
+        $translator = new \Magento\Translate\Adapter();
         $this->assertEquals('test string', $translator->translate('test string'));
     }
 
@@ -75,17 +76,6 @@ class Magento_Translate_AdapterTest extends PHPUnit_Framework_TestCase
      */
     public function testUnderscoresTranslation()
     {
-        $translatorMock = $this->getMockBuilder('stdClass')
-            ->setMethods(array('translate'))
-            ->getMock();
-        $translatorMock->expects($this->once())
-            ->method('translate')
-            ->will($this->returnArgument(0));
-        $translator = new Magento_Translate_Adapter(array(
-            'translator' => array($translatorMock, 'translate')
-        ));
-
-        $translatedString = $translator->__('Translated %s with %d placeholders', 'string', 2);
-        $this->assertEquals('Translated string with 2 placeholders', $translatedString);
+        $this->markTestIncomplete('MAGETWO-1012: i18n Improvements - Localization/Translations');
     }
 }

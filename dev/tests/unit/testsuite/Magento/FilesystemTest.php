@@ -1,6 +1,6 @@
 <?php
 /**
- * Unit Test for Magento_Filesystem
+ * Unit Test for \Magento\Filesystem
  *
  * Magento
  *
@@ -23,31 +23,35 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *
+ */
+namespace Magento;
+
+/**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
+class FilesystemTest extends \PHPUnit_Framework_TestCase
 {
     public function testSetWorkingDirectory()
     {
-        $filesystem = new Magento_Filesystem($this->_getDefaultAdapterMock());
+        $filesystem = new \Magento\Filesystem($this->_getDefaultAdapterMock());
         $filesystem->setWorkingDirectory('/tmp');
         $this->assertEquals('/tmp', $filesystem->getWorkingDirectory());
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @exceptedExceptionMessage Working directory "/tmp" does not exists
      */
     public function testSetWorkingDirectoryException()
     {
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_AdapterInterface')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')
             ->getMock();
         $adapterMock->expects($this->once())
             ->method('isDirectory')
             ->with('/tmp')
             ->will($this->returnValue(false));
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
     }
 
@@ -58,9 +62,9 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
      */
     public function testSetIsAllowCreateDirectories($allow, $mode)
     {
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_AdapterInterface')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')
             ->getMock();
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $this->assertSame($filesystem, $filesystem->setIsAllowCreateDirectories($allow, $mode));
         $this->assertAttributeEquals($allow, '_isAllowCreateDirs', $filesystem);
         if (!$mode) {
@@ -93,7 +97,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
     public function testTwoFilesOperation($method, $checkMethod, $source, $target, $workingDirectory = null,
         $targetDir = null
     ) {
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_AdapterInterface')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')
             ->getMock();
         $adapterMock->expects($this->exactly(2))
             ->method('isDirectory')
@@ -105,7 +109,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
             ->method($method)
             ->with($source, $target);
 
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
         $filesystem->$method($source, $target, $workingDirectory, $targetDir);
     }
@@ -147,7 +151,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
         $adapterMock->expects($this->never())
             ->method($method);
 
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
 
 
@@ -249,7 +253,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
     public function testEnsureDirectoryExists()
     {
         $dir = '/tmp/path';
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_AdapterInterface')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')
             ->getMock();
         $adapterMock->expects($this->at(0))
             ->method('isDirectory')
@@ -263,19 +267,19 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
             ->method('isDirectory');
         $adapterMock->expects($this->never())
             ->method('createDirectory');
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
         $filesystem->ensureDirectoryExists($dir, 0644);
     }
 
     /**
-     * @expectedException Magento_Filesystem_Exception
+     * @expectedException \Magento\Filesystem\FilesystemException
      * @expectedExceptionMessage Directory '/tmp/path' doesn't exist.
      */
     public function testEnsureDirectoryExistsException()
     {
         $dir = '/tmp/path';
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_AdapterInterface')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')
             ->getMock();
         $adapterMock->expects($this->at(0))
             ->method('isDirectory')
@@ -289,7 +293,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
             ->method('isDirectory');
         $adapterMock->expects($this->never())
             ->method('createDirectory');
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
         $filesystem->ensureDirectoryExists($dir, 0644);
     }
@@ -297,7 +301,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
     public function testEnsureDirectoryExistsNoDir()
     {
         $dir = '/tmp/path1/path2';
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_AdapterInterface')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')
             ->getMock();
         $adapterMock->expects($this->at(0))
             ->method('isDirectory')
@@ -325,7 +329,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
             ->with('/tmp/path1/path2');
         $adapterMock->expects($this->exactly(2))
             ->method('createDirectory');
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
         $filesystem->setIsAllowCreateDirectories(true);
         $filesystem->ensureDirectoryExists($dir, 0644);
@@ -338,25 +342,25 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
     public function testTouch($allowCreateDirs)
     {
         $validPath = '/tmp/path/file.txt';
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_AdapterInterface')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')
             ->getMock();
         $adapterMock->expects($this->exactly(2))
             ->method('isDirectory')
             ->will($this->returnValue(true));
 
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setIsAllowCreateDirectories($allowCreateDirs);
         $filesystem->setWorkingDirectory('/tmp');
         $filesystem->touch($validPath);
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Path '/etc/passwd' is out of working directory '/tmp'
      */
     public function testTouchIsolation()
     {
-        $filesystem = new Magento_Filesystem($this->_getDefaultAdapterMock());
+        $filesystem = new \Magento\Filesystem($this->_getDefaultAdapterMock());
         $filesystem->setWorkingDirectory('/tmp');
         $filesystem->touch('/etc/passwd');
     }
@@ -372,10 +376,10 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
     public function testCreateStreamCustom()
     {
         $path = '/tmp/test.txt';
-        $streamMock = $this->getMockBuilder('Magento_Filesystem_Stream_Local')
+        $streamMock = $this->getMockBuilder('Magento\Filesystem\Stream\Local')
             ->disableOriginalConstructor()
             ->getMock();
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_Adapter_Local')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\Adapter\Local')
             ->getMock();
         $adapterMock->expects($this->once())
             ->method('isDirectory')
@@ -385,52 +389,52 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
             ->method('createStream')
             ->with($path)
             ->will($this->returnValue($streamMock));
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
-        $this->assertInstanceOf('Magento_Filesystem_Stream_Local', $filesystem->createStream($path));
+        $this->assertInstanceOf('Magento\Filesystem\Stream\Local', $filesystem->createStream($path));
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Path '/tmp/../etc/test.txt' is out of working directory '/tmp'
      */
     public function testCreateStreamIsolation()
     {
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_Adapter_Local')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\Adapter\Local')
             ->getMock();
         $adapterMock->expects($this->once())
             ->method('isDirectory')
             ->with('/tmp')
             ->will($this->returnValue(true));
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
         $filesystem->createStream('/tmp/../etc/test.txt');
     }
 
     /**
-     * @expectedException Magento_Filesystem_Exception
+     * @expectedException \Magento\Filesystem\FilesystemException
      * @expectedExceptionMessage Filesystem doesn't support streams.
      */
     public function testCreateStreamException()
     {
-        $filesystem = new Magento_Filesystem($this->_getDefaultAdapterMock());
+        $filesystem = new \Magento\Filesystem($this->_getDefaultAdapterMock());
         $filesystem->setWorkingDirectory('/tmp');
         $filesystem->createStream('/tmp/test.txt');
     }
 
     /**
      * @dataProvider modeDataProvider
-     * @param string|Magento_Filesystem_Stream_Mode $mode
+     * @param string|\Magento\Filesystem\Stream\Mode $mode
      */
     public function testCreateAndOpenStream($mode)
     {
         $path = '/tmp/test.txt';
-        $streamMock = $this->getMockBuilder('Magento_Filesystem_Stream_Local')
+        $streamMock = $this->getMockBuilder('Magento\Filesystem\Stream\Local')
             ->disableOriginalConstructor()
             ->getMock();
         $streamMock->expects($this->once())
             ->method('open');
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_Adapter_Local')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\Adapter\Local')
             ->getMock();
         $adapterMock->expects($this->once())
             ->method('isDirectory')
@@ -440,24 +444,24 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
             ->method('createStream')
             ->with($path)
             ->will($this->returnValue($streamMock));
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
-        $this->assertInstanceOf('Magento_Filesystem_Stream_Local', $filesystem->createAndOpenStream($path, $mode));
+        $this->assertInstanceOf('Magento\Filesystem\Stream\Local', $filesystem->createAndOpenStream($path, $mode));
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Wrong mode parameter
      */
     public function testCreateAndOpenStreamException()
     {
         $path = '/tmp/test.txt';
-        $streamMock = $this->getMockBuilder('Magento_Filesystem_Stream_Local')
+        $streamMock = $this->getMockBuilder('Magento\Filesystem\Stream\Local')
             ->disableOriginalConstructor()
             ->getMock();
         $streamMock->expects($this->never())
             ->method('open');
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_Adapter_Local')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\Adapter\Local')
             ->getMock();
         $adapterMock->expects($this->once())
             ->method('isDirectory')
@@ -467,10 +471,10 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
             ->method('createStream')
             ->with($path)
             ->will($this->returnValue($streamMock));
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
-        $this->assertInstanceOf('Magento_Filesystem_Stream_Local',
-            $filesystem->createAndOpenStream($path, new stdClass()));
+        $this->assertInstanceOf('Magento\Filesystem\Stream\Local',
+            $filesystem->createAndOpenStream($path, new \stdClass()));
     }
 
     /**
@@ -480,7 +484,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array('r'),
-            array(new Magento_Filesystem_Stream_Mode('w'))
+            array(new \Magento\Filesystem\Stream\Mode('w'))
         );
     }
 
@@ -498,7 +502,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
             ->method($adapterMethod)
             ->with($validPath);
 
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
         $params = (array)$params;
         array_unshift($params, $validPath);
@@ -529,7 +533,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Path '/tmp/../etc/passwd' is out of working directory '/tmp'
      * @dataProvider adapterIsolationMethods
      * @param string $method
@@ -543,7 +547,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
         $adapterMock->expects($this->never())
             ->method($adapterMethod);
 
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
         $params = (array)$params;
         array_unshift($params, $invalidPath);
@@ -585,7 +589,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
             ->with($validPath)
             ->will($this->returnValue(1));
 
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
         $this->assertEquals(1, $filesystem->$method($validPath));
     }
@@ -609,7 +613,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
     public function testCreateDirectory($workingDirectory)
     {
         $validPath = '/tmp/path';
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_AdapterInterface')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')
             ->getMock();
         $adapterMock->expects($this->exactly(2))
             ->method('isDirectory')
@@ -619,7 +623,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
             ->method('createDirectory')
             ->with($validPath);
 
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
         $filesystem->createDirectory($validPath, 0777, $workingDirectory);
     }
@@ -631,7 +635,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
     public function testWrite($workingDirectory)
     {
         $validPath = '/tmp/path/file.txt';
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_AdapterInterface')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')
             ->getMock();
         $adapterMock->expects($this->at(0))
             ->method('isDirectory')
@@ -647,13 +651,13 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
             ->method('write')
             ->with($validPath, 'TEST TEST');
 
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
         $filesystem->write($validPath, 'TEST TEST', $workingDirectory);
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Path '/tmp/../path/file.txt' is out of working directory '/tmp'
      * @dataProvider workingDirDataProvider
      * @param string|null $workingDirectory
@@ -661,7 +665,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
     public function testWriteIsolation($workingDirectory)
     {
         $invalidPath = '/tmp/../path/file.txt';
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_AdapterInterface')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')
             ->getMock();
         $adapterMock->expects($this->once())
             ->method('isDirectory')
@@ -670,7 +674,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
         $adapterMock->expects($this->never())
             ->method('write');
 
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
         $filesystem->write($invalidPath, 'TEST TEST', $workingDirectory);
     }
@@ -686,7 +690,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage "/tmp/test/file.txt" does not exists
      * @dataProvider methodsWithFileChecksDataProvider
      * @param string $method
@@ -695,7 +699,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
     public function testFileChecks($method, array $params = null)
     {
         $path = '/tmp/test/file.txt';
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_AdapterInterface')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')
             ->getMock();
         $adapterMock->expects($this->once())
             ->method('isDirectory')
@@ -705,7 +709,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
             ->method('exists')
             ->with($path)
             ->will($this->returnValue(false));
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
         $params = (array)$params;
         array_unshift($params, $path);
@@ -723,7 +727,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage "/tmp/test/file.txt" does not exists
      * @dataProvider methodsWithPathChecksDataProvider
      * @param string $method
@@ -732,7 +736,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
     public function testPathChecks($method, array $params = null)
     {
         $path = '/tmp/test/file.txt';
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_AdapterInterface')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')
             ->getMock();
         $adapterMock->expects($this->once())
             ->method('isDirectory')
@@ -742,7 +746,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
             ->method('isFile')
             ->with($path)
             ->will($this->returnValue(false));
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
         $params = (array)$params;
         array_unshift($params, $path);
@@ -769,7 +773,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
     public function testIsDirectory($workingDirectory)
     {
         $validPath = '/tmp/path';
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_AdapterInterface')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')
             ->getMock();
         $adapterMock->expects($this->at(0))
             ->method('isDirectory')
@@ -782,14 +786,14 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
         $adapterMock->expects($this->exactly(2))
             ->method('isDirectory');
 
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory('/tmp');
         $this->assertTrue($filesystem->isDirectory($validPath, $workingDirectory));
     }
 
     /**
      * Test isDirectory isolation
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Path '/tmp/../etc/passwd' is out of working directory '/tmp'
      * @dataProvider workingDirDataProvider
      * @param string|null $workingDirectory
@@ -797,119 +801,72 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
     public function testIsDirectoryIsolation($workingDirectory)
     {
         $validPath = '/tmp/../etc/passwd';
-        $filesystem = new Magento_Filesystem($this->_getDefaultAdapterMock());
+        $filesystem = new \Magento\Filesystem($this->_getDefaultAdapterMock());
         $filesystem->setWorkingDirectory('/tmp');
         $this->assertTrue($filesystem->isDirectory($validPath, $workingDirectory));
     }
 
     /**
-     * @dataProvider absolutePathDataProvider
+     * @dataProvider normalizePathDataProvider
      * @param string $path
+     * @param bool $isRelative
      * @param string $expected
      */
-    public function testGetAbsolutePath($path, $expected)
+    public function testNormalizePath($path, $isRelative, $expected)
     {
-        $this->assertEquals($expected, Magento_Filesystem::getAbsolutePath($path));
+        $this->assertEquals($expected, \Magento\Filesystem::normalizePath($path, $isRelative));
     }
 
     /**
      * @return array
      */
-    public function absolutePathDataProvider()
+    public static function normalizePathDataProvider()
     {
         return array(
-            array('/tmp/../file.txt', '/file.txt'),
-            array('/tmp/../etc/mysql/file.txt', '/etc/mysql/file.txt'),
-            array('/tmp/../file.txt', '/file.txt'),
-            array('/tmp/./file.txt', '/tmp/file.txt'),
-            array('/tmp/./../file.txt', '/file.txt'),
-            array('/tmp/../../../file.txt', '/file.txt'),
-            array('../file.txt', '/file.txt'),
-            array('/../file.txt', '/file.txt'),
-            array('/tmp/path/file.txt', '/tmp/path/file.txt'),
-            array('/tmp/path', '/tmp/path'),
-            array('C:\\Windows', 'C:/Windows'),
-            array('C:\\Windows\\system32\\..', 'C:/Windows'),
+            array('/tmp/../file.txt', false, '/file.txt'),
+            array('/tmp/../etc/mysql/file.txt', false, '/etc/mysql/file.txt'),
+            array('/tmp/./file.txt', false, '/tmp/file.txt'),
+            array('/tmp/./../file.txt', false, '/file.txt'),
+            array('/tmp/path/file.txt', false, '/tmp/path/file.txt'),
+            array('/tmp/path\file.txt', false, '/tmp/path/file.txt'),
+            array('/tmp/path', false, '/tmp/path'),
+            array('../tmp/path', true, '../tmp/path'),
+            array('../tmp/../../path', true, '../../path'),
+            array('C:\\Windows', false, 'C:/Windows'),
+            array('C:\\Windows\\system32\\..', false, 'C:/Windows'),
         );
     }
 
-    /**
-     * @dataProvider pathDataProvider
-     * @param array $parts
-     * @param string $expected
-     * @param bool $isAbsolute
-     */
-    public function testGetPathFromArray(array $parts, $expected, $isAbsolute)
-    {
-        $expected = Magento_Filesystem::fixSeparator($expected);
-        $this->assertEquals($expected, Magento_Filesystem::getPathFromArray($parts, $isAbsolute));
-    }
 
     /**
-     * @return array
-     */
-    public function pathDataProvider()
-    {
-        return array(
-            array(array('etc', 'mysql', 'my.cnf'), '/etc/mysql/my.cnf',true),
-            array(array('etc', 'mysql', 'my.cnf'), 'etc/mysql/my.cnf', false),
-            array(array('C:', 'Windows', 'my.cnf'), 'C:/Windows/my.cnf', false),
-            array(array('C:', 'Windows', 'my.cnf'), 'C:/Windows/my.cnf', true),
-            array(array('C:', 'Windows', 'my.cnf'), 'C:\\Windows/my.cnf', true),
-        );
-    }
-
-    /**
-     * @dataProvider pathDataProvider
-     * @param array $expected
      * @param string $path
+     * @param bool $isRelative
+     * @dataProvider normalizePathExceptionDataProvider
      */
-    public function testGetPathAsArray(array $expected, $path)
+    public function testNormalizePathException($path, $isRelative)
     {
-        $this->assertEquals($expected, Magento_Filesystem::getPathAsArray($path));
-    }
-
-    /**
-     * @dataProvider isAbsolutePathDataProvider
-     * @param bool $isReal
-     * @param string $path
-     */
-    public function testIsAbsolutePath($isReal, $path)
-    {
-        $this->assertEquals($isReal, Magento_Filesystem::isAbsolutePath($path));
+        $this->setExpectedException('Magento\Filesystem\FilesystemException', "Invalid path '{$path}'.");
+        \Magento\Filesystem::normalizePath($path, $isRelative);
     }
 
     /**
      * @return array
      */
-    public function isAbsolutePathDataProvider()
+    public static function normalizePathExceptionDataProvider()
     {
         return array(
-            array(true, '/tmp/file.txt'),
-            array(false, '/tmp/../etc/mysql/my.cnf'),
-            array(false, '/tmp/../tmp/file.txt'),
-            array(false, 'C:\Temp\..\tmpfile.txt'),
-            array(true, 'C:\Temp\tmpfile.txt'),
-            array(true, '/tmp/'),
-            array(true, '/tmp'),
+            array('./../file.txt', false),
+            array('/../file.txt', false),
+            array('/tmp/../../file.txt', false),
         );
     }
 
     /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Path must contain at least one node
-     */
-    public function testGetPathFromArrayException()
-    {
-        Magento_Filesystem::getPathFromArray(array());
-    }
-
-    /**
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function _getDefaultAdapterMock()
     {
-        $adapterMock = $this->getMockBuilder('Magento_Filesystem_AdapterInterface')
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')
             ->getMock();
         $adapterMock->expects($this->once())
             ->method('isDirectory')
@@ -929,7 +886,11 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
      */
     public function testIsPathInDirectory($path, $directory, $expectedValue)
     {
-        $this->assertEquals($expectedValue, Magento_Filesystem::isPathInDirectory($path, $directory));
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')
+            ->getMock();
+
+        $filesystem = new \Magento\Filesystem($adapterMock);
+        $this->assertEquals($expectedValue, $filesystem->isPathInDirectory($path, $directory));
     }
 
     /**
@@ -955,7 +916,7 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchFiles($workingDirectory, $baseDirectory, $pattern, $expectedValue)
     {
-        $adapterMock = $this->getMock('Magento_Filesystem_AdapterInterface');
+        $adapterMock = $this->getMock('Magento\Filesystem\AdapterInterface');
 
         $adapterMock->expects($this->once())
             ->method('isDirectory')
@@ -968,11 +929,14 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
             ->with($expectedValue)
             ->will($this->returnValue($searchResult));
 
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory($workingDirectory);
         $this->assertEquals($searchResult, $filesystem->searchKeys($baseDirectory, $pattern));
     }
 
+    /**
+     * @return array
+     */
     public function testSearchFilesDataProvider()
     {
         return array(
@@ -991,20 +955,23 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchFilesIsolation($workingDirectory, $baseDirectory, $pattern, $expectedMessage)
     {
-        $adapterMock = $this->getMock('Magento_Filesystem_AdapterInterface');
+        $adapterMock = $this->getMock('Magento\Filesystem\AdapterInterface');
 
         $adapterMock->expects($this->once())
             ->method('isDirectory')
             ->with($workingDirectory)
             ->will($this->returnValue(true));
 
-        $filesystem = new Magento_Filesystem($adapterMock);
+        $filesystem = new \Magento\Filesystem($adapterMock);
         $filesystem->setWorkingDirectory($workingDirectory);
 
         $this->setExpectedException('InvalidArgumentException', $expectedMessage);
         $filesystem->searchKeys($baseDirectory, $pattern);
     }
 
+    /**
+     * @return array
+     */
     public function searchFilesIsolationDataProvider()
     {
         return array(
@@ -1020,6 +987,41 @@ class Magento_FilesystemTest extends PHPUnit_Framework_TestCase
                 '*',
                 "Path '/tmp/log/some/folder/../../../' is out of working directory '/tmp/log'"
             ),
+        );
+    }
+
+    public function testCheckLfiProtection()
+    {
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')->getMock();
+        $filesystem = new \Magento\Filesystem($adapterMock);
+        $this->assertTrue($filesystem->checkLfiProtection('/some/path/to/a/file.txt'));
+        $this->assertTrue($filesystem->checkLfiProtection('/some/path/to/a/file.with.dot.txt'));
+        $this->assertTrue($filesystem->checkLfiProtection('/some/path/to/a/dir'));
+    }
+
+    /**
+     * @dataProvider checkLfiProtectionDataProvider
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Requested file may not include parent directory traversal ("../", "..\" notation)
+     */
+    public function testCheckLfiProtectionException($path)
+    {
+        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')->getMock();
+        $filesystem = new \Magento\Filesystem($adapterMock);
+        $filesystem->checkLfiProtection($path);
+    }
+
+    /**
+     * @return array
+     */
+    public function checkLfiProtectionDataProvider()
+    {
+        return array(
+            array('../asd/'),
+            array('../../'),
+            array('asd/../asda'),
+            array('/asd/../asda'),
+            array('asd/../../asda'),
         );
     }
 }

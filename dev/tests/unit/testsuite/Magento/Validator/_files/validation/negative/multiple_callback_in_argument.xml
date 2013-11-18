@@ -32,12 +32,12 @@
             <rule name="name_sku_and_price">
                 <property_constraints>
                     <property name="name">
-                        <constraint alias="some_validator" class="Magento_Validator_StringLenght">
+                        <constraint alias="some_validator" class="Magento\Validator_StringLenght">
                             <method name="setOptions">
                                 <argument>
                                     <!-- argument element can contain only one callback element -->
-                                    <callback method="getSomeValue" class="Magento_Validator_StringLenght"/>
-                                    <callback method="getMethod" class="Magento_Validator_StringLenght"/>
+                                    <callback method="getSomeValue" class="Magento\Validator_StringLenght"/>
+                                    <callback method="getMethod" class="Magento\Validator_StringLenght"/>
                                 </argument>
                             </method>
                         </constraint>

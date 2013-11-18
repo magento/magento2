@@ -372,7 +372,7 @@ abstract class Zend_Db_Table_Rowset_Abstract implements SeekableIterator, Counta
      * Returns a Zend_Db_Table_Row from a known position into the Iterator
      *
      * @param int $position the position of the row expected
-     * @param bool $seek wether or not seek the iterator to that position after
+     * @param bool $seek whether or not seek the iterator to that position after
      * @return Zend_Db_Table_Row
      * @throws Zend_Db_Table_Rowset_Exception
      */

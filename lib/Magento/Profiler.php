@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Profiler
+namespace Magento;
+
+class Profiler
 {
     /**
      * Separator literal to assemble timer identifier from timer names
@@ -138,9 +140,9 @@ class Magento_Profiler
     /**
      * Add profiler driver.
      *
-     * @param Magento_Profiler_DriverInterface $driver
+     * @param \Magento\Profiler\DriverInterface $driver
      */
-    public static function add(Magento_Profiler_DriverInterface $driver)
+    public static function add(\Magento\Profiler\DriverInterface $driver)
     {
         self::$_drivers[] = $driver;
         self::enable();
@@ -212,15 +214,15 @@ class Magento_Profiler
      * Clear collected statistics for specified timer or for whole profiler if timer id is omitted
      *
      * @param string|null $timerName
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function clear($timerName = null)
     {
         if (strpos($timerName, self::NESTING_SEPARATOR) !== false) {
-            throw new InvalidArgumentException('Timer name must not contain a nesting separator.');
+            throw new \InvalidArgumentException('Timer name must not contain a nesting separator.');
         }
         $timerId = self::_getTimerId($timerName);
-        /** @var Magento_Profiler_DriverInterface $driver */
+        /** @var \Magento\Profiler\DriverInterface $driver */
         foreach (self::$_drivers as $driver) {
             $driver->clear($timerId);
         }
@@ -247,7 +249,7 @@ class Magento_Profiler
      *
      * @param string $timerName
      * @param array|null $tags
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function start($timerName, array $tags = null)
     {
@@ -261,11 +263,11 @@ class Magento_Profiler
         }
 
         if (strpos($timerName, self::NESTING_SEPARATOR) !== false) {
-            throw new InvalidArgumentException('Timer name must not contain a nesting separator.');
+            throw new \InvalidArgumentException('Timer name must not contain a nesting separator.');
         }
 
         $timerId = self::_getTimerId($timerName);
-        /** @var Magento_Profiler_DriverInterface $driver */
+        /** @var \Magento\Profiler\DriverInterface $driver */
         foreach (self::$_drivers as $driver) {
             $driver->start($timerId, $tags);
         }
@@ -282,7 +284,7 @@ class Magento_Profiler
      * Only the latest started timer can be stopped.
      *
      * @param string|null $timerName
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function stop($timerName = null)
     {
@@ -298,7 +300,7 @@ class Magento_Profiler
                 $timerPosition = array_pop(self::$_pathIndex[$timerName]);
             }
             if ($timerPosition === false) {
-                throw new InvalidArgumentException(sprintf('Timer "%s" has not been started.', $timerName));
+                throw new \InvalidArgumentException(sprintf('Timer "%s" has not been started.', $timerName));
             } elseif ($timerPosition === 1) {
                 $timersToStop = 1;
             } else {
@@ -308,7 +310,7 @@ class Magento_Profiler
 
         for ($i = 0; $i < $timersToStop; $i++) {
             $timerId = self::_getTimerId();
-            /** @var Magento_Profiler_DriverInterface $driver */
+            /** @var \Magento\Profiler\DriverInterface $driver */
             foreach (self::$_drivers as $driver) {
                 $driver->stop($timerId);
             }
@@ -321,11 +323,13 @@ class Magento_Profiler
     /**
      * Init profiler
      *
-     * @param array $config
+     * @param array|string $config
+     * @param string $baseDir
+     * @param boolean $isAjax
      */
-    public static function applyConfig(array $config)
+    public static function applyConfig($config, $baseDir, $isAjax = false)
     {
-        $config = self::_parseConfig($config);
+        $config = self::_parseConfig($config, $baseDir, $isAjax);
         if ($config['driverConfigs']) {
             foreach ($config['driverConfigs'] as $driverConfig) {
                 self::add($config['driverFactory']->create($driverConfig));
@@ -339,42 +343,40 @@ class Magento_Profiler
     /**
      * Parses config
      *
-     * @param array $config
+     * @param array|string $profilerConfig
+     * @param string $baseDir
+     * @param boolean $isAjax
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected static function _parseConfig(array $config)
+    protected static function _parseConfig($profilerConfig, $baseDir, $isAjax)
     {
-        if (isset($config['drivers']) && is_array($config['drivers'])) {
-            $driverConfigs = $config['drivers'];
-        } elseif (isset($config['driver'])) {
-            $driverConfigs = array($config['driver']);
+        $config = array(
+            'baseDir' => $baseDir,
+            'tagFilters' => array()
+        );
+
+        if (is_scalar($profilerConfig)) {
+            $config['drivers'] = array(
+                array(
+                    'output' => $isAjax ? 'firebug' : (is_numeric($profilerConfig) ? 'html' : $profilerConfig)
+                )
+            );
         } else {
-            $driverConfigs = array();
+            $config = array_merge($config, $profilerConfig);
         }
 
-        if (isset($config['driverFactory'])) {
-            $driverFactory = $config['driverFactory'];
-        } else {
-            $driverFactory = new Magento_Profiler_Driver_Factory();
-        }
-
-        if (isset($config['tagFilters']) && is_array($config['tagFilters'])) {
-            $tagFilters = $config['tagFilters'];
-        } else {
-            $tagFilters = array();
-        }
-
-        if (isset($config['baseDir'])) {
-            $baseDir = $config['baseDir'];
-        } else {
-            $baseDir = null;
-        }
+        $driverConfigs = (array) (isset($config['drivers']) ? $config['drivers'] : array());
+        $driverFactory = isset($config['driverFactory'])
+            ? $config['driverFactory']
+            : new \Magento\Profiler\Driver\Factory();
+        $tagFilters = (array) (isset($config['tagFilters']) ? $config['tagFilters'] : array());
 
         $result = array(
-            'driverConfigs' => self::_parseDriverConfigs($driverConfigs, $baseDir),
+            'driverConfigs' => self::_parseDriverConfigs($driverConfigs, $config['baseDir']),
             'driverFactory' => $driverFactory,
             'tagFilters' => $tagFilters,
-            'baseDir' => $baseDir
+            'baseDir' => $config['baseDir']
         );
         return $result;
     }

@@ -31,7 +31,7 @@
         <rules>
             <rule name="test_rule_sku">
                 <entity_constraints>
-                    <constraint class="Magento_Validator_Test_NotEmpty"/>
+                    <constraint class="Magento\Validator\Test\NotEmpty"/>
                 </entity_constraints>
             </rule>
         </rules>

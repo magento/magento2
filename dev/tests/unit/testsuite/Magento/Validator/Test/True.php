@@ -28,7 +28,9 @@
 /**
  * Test validator that always returns TRUE
  */
-class Magento_Validator_Test_True extends Magento_Validator_ValidatorAbstract
+namespace Magento\Validator\Test;
+
+class True extends \Magento\Validator\AbstractValidator
 {
     /**
      * Validate value

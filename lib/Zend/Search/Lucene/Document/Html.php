@@ -326,7 +326,7 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
                                        . '</body></html>');
             if (!$success) {
                 #require_once 'Zend/Search/Lucene/Exception.php';
-                throw new Zend_Search_Lucene_Exception("Error occured while loading highlighted text fragment: '$highlightedWordNodeSetHtml'.");
+                throw new Zend_Search_Lucene_Exception("Error occurred while loading highlighted text fragment: '$highlightedWordNodeSetHtml'.");
             }
             $highlightedWordNodeSetXpath = new DOMXPath($highlightedWordNodeSetDomDocument);
             $highlightedWordNodeSet      = $highlightedWordNodeSetXpath->query('/html/body')->item(0)->childNodes;

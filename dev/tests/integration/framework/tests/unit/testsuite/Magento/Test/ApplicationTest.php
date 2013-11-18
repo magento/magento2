@@ -25,24 +25,28 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Test_ApplicationTest extends PHPUnit_Framework_TestCase
+namespace Magento\Test;
+
+use Magento\App\State;
+
+class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers Magento_Test_Application::getInstallDir()
-     * @covers Magento_Test_Application::getDbInstance()
-     * @covers Magento_Test_Application::getInitParams()
+     * @covers \Magento\TestFramework\Application::getInstallDir()
+     * @covers \Magento\TestFramework\Application::getDbInstance()
+     * @covers \Magento\TestFramework\Application::getInitParams()
      */
     public function testConstructor()
     {
-        $dbInstance = $this->getMockForAbstractClass('Magento_Test_Db_DbAbstract', array(), '', false);
+        $dbInstance = $this->getMockForAbstractClass('Magento\TestFramework\Db\AbstractDb', array(), '', false);
         $installDir = '/install/dir';
-        $appMode = Mage_Core_Model_App_State::MODE_DEVELOPER;
+        $appMode = \Magento\App\State::MODE_DEVELOPER;
 
-        $object = new Magento_Test_Application(
+        $object = new \Magento\TestFramework\Application(
             $dbInstance,
             $installDir,
-            new Varien_Simplexml_Element('<data/>'),
-            array(),
+            new \Magento\Simplexml\Element('<data/>'),
+            '',
             array(),
             $appMode
         );
@@ -52,11 +56,13 @@ class Magento_Test_ApplicationTest extends PHPUnit_Framework_TestCase
 
         $initParams = $object->getInitParams();
         $this->assertInternalType('array', $initParams, 'Wrong initialization parameters type');
-        $this->assertArrayHasKey(Mage::PARAM_APP_DIRS, $initParams, 'Directories are not configured');
-        $this->assertArrayHasKey(Mage::PARAM_MODE, $initParams, 'Application mode is not configured');
+        $this->assertArrayHasKey(\Magento\App\Dir::PARAM_APP_DIRS, $initParams,
+            'Directories are not configured');
+        $this->assertArrayHasKey(State::PARAM_MODE, $initParams,
+            'Application mode is not configured');
         $this->assertEquals(
-            Mage_Core_Model_App_State::MODE_DEVELOPER,
-            $initParams[Mage::PARAM_MODE],
+            \Magento\App\State::MODE_DEVELOPER,
+            $initParams[State::PARAM_MODE],
             'Wrong application mode configured'
         );
     }

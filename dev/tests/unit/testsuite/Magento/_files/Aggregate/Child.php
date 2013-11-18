@@ -21,16 +21,18 @@
  * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Test_Di_Aggregate_Child extends Magento_Test_Di_Aggregate_Parent
+namespace Magento\Test\Di\Aggregate;
+
+class Child extends \Magento\Test\Di\Aggregate\AggregateParent
 {
     public $secondScalar;
 
     public $secondOptionalScalar;
 
     public function __construct(
-        Magento_Test_Di_Interface $interface,
-        Magento_Test_Di_Parent $parent,
-        Magento_Test_Di_Child $child,
+        \Magento\Test\Di\DiInterface $interface,
+        \Magento\Test\Di\DiParent $parent,
+        \Magento\Test\Di\Child $child,
         $scalar,
         $secondScalar,
         $optionalScalar = 1,

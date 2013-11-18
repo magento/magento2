@@ -1,8 +1,0 @@
-#!/bin/sh
-#
-# A script to run the unit tests.  
-# Your environment must be setup with both php and phpUnit before this will pass
-
-echo Starting unit tests.  Any failures will cause your commit to be rejected.
-
-phpunit -c $(git rev-parse --show-toplevel)/dev/tests/unit/phpunit.xml.dist

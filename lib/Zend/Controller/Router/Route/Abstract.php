@@ -83,7 +83,7 @@ abstract class Zend_Controller_Router_Route_Abstract implements Zend_Controller_
     }
 
     /**
-     * Check or set wether this is an abstract route or not
+     * Check or set whether this is an abstract route or not
      *
      * @param  boolean $flag
      * @return boolean

@@ -28,7 +28,9 @@
 /**
  * View configuration files handler
  */
-class Magento_Config_View extends Magento_Config_XmlAbstract
+namespace Magento\Config;
+
+class View extends \Magento\Config\AbstractXml
 {
     /**
      * Path to view.xsd
@@ -43,16 +45,16 @@ class Magento_Config_View extends Magento_Config_XmlAbstract
     /**
      * Extract configuration data from the DOM structure
      *
-     * @param DOMDocument $dom
+     * @param \DOMDocument $dom
      * @return array
      */
-    protected function _extractData(DOMDocument $dom)
+    protected function _extractData(\DOMDocument $dom)
     {
         $result = array();
-        /** @var $varsNode DOMElement */
+        /** @var $varsNode \DOMElement */
         foreach ($dom->childNodes->item(0)/*root*/->childNodes as $varsNode) {
             $moduleName = $varsNode->getAttribute('module');
-            /** @var $varNode DOMElement */
+            /** @var $varNode \DOMElement */
             foreach ($varsNode->getElementsByTagName('var') as $varNode) {
                 $varName = $varNode->getAttribute('name');
                 $varValue = $varNode->nodeValue;
@@ -90,7 +92,7 @@ class Magento_Config_View extends Magento_Config_XmlAbstract
     /**
      * Return copy of DOM
      *
-     * @return Magento_Config_Dom
+     * @return \Magento\Config\Dom
      */
     public function getDomConfigCopy()
     {

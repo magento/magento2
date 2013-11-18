@@ -74,6 +74,14 @@
         });
     };
 
+    window.onerror = function (message) {
+        if ($.mage.isDevMode()) {
+            $('[data-container-for=messages]').append(
+                '<ul class="messages"><li class="error-msg" data-role="js-error"><ul><li>' + message + '</li></ul></li></ul>'
+            );
+        }
+    };
+
     /**
      * Storage of declared resources
      * @type {Object}
@@ -99,7 +107,7 @@
 
         if (args.length) {
             head.js.apply(head, args);
-        } else {
+        } else if (typeof handler === 'function') {
             handler();
         }
     }

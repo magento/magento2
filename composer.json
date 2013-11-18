@@ -3,7 +3,7 @@
     "description": "eCommerce Platform for Growth (Community Edition)",
     "license": ["OSL-3.0", "AFL-3.0"],
     "require": {
-        "php": ">=5.3.3"
+        "php": ">=5.4.0"
     },
     "autoload": {
         "psr-0": {

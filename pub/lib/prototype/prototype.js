@@ -5827,21 +5827,20 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
     }
   }
 
-  function pollDoScroll() {
-    try { document.documentElement.doScroll('left'); }
-    catch(e) {
-      timer = pollDoScroll.defer();
-      return;
-    }
-    fireContentLoadedEvent();
-  }
-
   if (document.addEventListener) {
     document.addEventListener('DOMContentLoaded', fireContentLoadedEvent, false);
   } else {
     document.observe('readystatechange', checkReadyState);
     if (window == top)
-      timer = pollDoScroll.defer();
+      var timer = window.setInterval(function () {
+        try {
+          document.documentElement.doScroll('left');
+        } catch (e) {
+          return;
+        }
+        window.clearInterval(timer);
+        fireContentLoadedEvent();
+      }, 5);
   }
 
   Event.observe(window, 'load', fireContentLoadedEvent);

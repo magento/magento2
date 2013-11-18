@@ -60,29 +60,7 @@ abstract class Zend_Pdf_FileParserDataSource
   /**** Public Interface ****/
 
 
-  /* Abstract Methods */
-
-    /**
-     * Object constructor. Opens the data source for parsing.
-     *
-     * Must set $this->_size to the total size in bytes of the data source.
-     *
-     * Upon return the data source can be interrogated using the primitive
-     * methods described here.
-     *
-     * If the data source cannot be opened for any reason (such as insufficient
-     * permissions, missing file, etc.), will throw an appropriate exception.
-     *
-     * @throws Zend_Pdf_Exception
-     */
-    abstract public function __construct();
-
-    /**
-     * Object destructor. Closes the data source.
-     *
-     * May also perform cleanup tasks such as deleting temporary files.
-     */
-    abstract public function __destruct();
+    /* Abstract Methods */
 
     /**
      * Returns the specified number of raw bytes from the data source at the

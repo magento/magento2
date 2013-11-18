@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <type name="Magento\Log\Model\Resource\Log">
+        <plugin name="reportLog" type="Magento\Reports\Model\Plugin\Log" />
+    </type>
+    <type name="Magento\Module\Updater\SetupFactory">
+        <param name="resourceTypes">
+            <value>
+                <reports_setup>Magento\Reports\Model\Resource\Setup</reports_setup>
+            </value>
+        </param>
+    </type>
+    <virtualType name="Magento\Reports\Model\Session" type="Magento\Core\Model\Session\Generic">
+        <param name="sessionNamespace">
+            <value>reports</value>
+        </param>
+    </virtualType>
+    <type name="Magento\Reports\Model\Product\Index\AbstractIndex">
+        <param name="reportSession">
+            <instance type="Magento\Reports\Model\Session" />
+        </param>
+    </type>
+</config>

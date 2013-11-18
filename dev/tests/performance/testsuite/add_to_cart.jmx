@@ -193,7 +193,7 @@
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="1554014413">&lt;a href=&quot;${base_uri}${product_url_key}&quot;&gt;${product_name}&lt;/a&gt;</stringProp>
-              <stringProp name="1472794794">${product_name} was added to your shopping cart.</stringProp>
+              <stringProp name="1472794794">You added ${product_name} to your shopping cart.</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>

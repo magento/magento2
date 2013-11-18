@@ -21,13 +21,15 @@
  * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Test_Di_Aggregate_WithOptional
+namespace Magento\Test\Di\Aggregate;
+
+class WithOptional
 {
     public $parent;
 
     public $child;
 
-    public function __construct(Magento_Test_Di_Parent $parent = null, Magento_Test_Di_Child $child = null)
+    public function __construct(\Magento\Test\Di\DiParent $parent = null, \Magento\Test\Di\Child $child = null)
     {
         $this->parent = $parent;
         $this->child  = $child;

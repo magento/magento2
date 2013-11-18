@@ -132,7 +132,7 @@ class Zend_Gdata_ClientLogin
 
         // Send the authentication request
         // For some reason Google's server causes an SSL error. We use the
-        // output buffer to supress an error from being shown. Ugly - but works!
+        // output buffer to suppress an error from being shown. Ugly - but works!
         ob_start();
         try {
             $response = $client->request('POST');

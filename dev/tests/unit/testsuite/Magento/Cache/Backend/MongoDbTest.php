@@ -22,19 +22,21 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Cache_Backend_MongoDbTest extends PHPUnit_Framework_TestCase
+namespace Magento\Cache\Backend;
+
+class MongoDbTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Cache_Backend_MongoDb|null
+     * @var \Magento\Cache\Backend\MongoDb|null
      */
     protected $_model = null;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_collection = null;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_collection = $this->getMock(
             'MongoCollection',
@@ -43,13 +45,13 @@ class Magento_Cache_Backend_MongoDbTest extends PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_model = $this->getMock('Magento_Cache_Backend_MongoDb', array('_getCollection'), array(), '', false);
+        $this->_model = $this->getMock('Magento\Cache\Backend\MongoDb', array('_getCollection'), array(), '', false);
         $this->_model->expects($this->any())
             ->method('_getCollection')
             ->will($this->returnValue($this->_collection));
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->_model = null;
         $this->_collection = null;
@@ -62,7 +64,7 @@ class Magento_Cache_Backend_MongoDbTest extends PHPUnit_Framework_TestCase
      */
     public function testGetIds(array $ids, array $expected)
     {
-        $result = new ArrayIterator($ids);
+        $result = new \ArrayIterator($ids);
         $this->_collection->expects($this->once())
             ->method('find')
             ->will($this->returnValue($result));
@@ -101,14 +103,14 @@ class Magento_Cache_Backend_MongoDbTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento_Cache_Backend_MongoDb::getIdsMatchingTags
-     * @covers Magento_Cache_Backend_MongoDb::getIdsNotMatchingTags
-     * @covers Magento_Cache_Backend_MongoDb::getIdsMatchingAnyTags
+     * @covers \Magento\Cache\Backend\MongoDb::getIdsMatchingTags
+     * @covers \Magento\Cache\Backend\MongoDb::getIdsNotMatchingTags
+     * @covers \Magento\Cache\Backend\MongoDb::getIdsMatchingAnyTags
      * @dataProvider getIdsMatchingTagsDataProvider
      */
     public function testGetIdsMatchingTags($method, $tags, $expectedInput)
     {
-        $expectedOutput = new ArrayIterator(array('test1' => 'test1', 'test2' => 'test2'));
+        $expectedOutput = new \ArrayIterator(array('test1' => 'test1', 'test2' => 'test2'));
         $expectedIds = array('test1', 'test2');
         $this->_collection->expects($this->once())
             ->method('find')
@@ -155,9 +157,9 @@ class Magento_Cache_Backend_MongoDbTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento_Cache_Backend_MongoDb::getIdsMatchingTags
-     * @covers Magento_Cache_Backend_MongoDb::getIdsNotMatchingTags
-     * @covers Magento_Cache_Backend_MongoDb::getIdsMatchingAnyTags
+     * @covers \Magento\Cache\Backend\MongoDb::getIdsMatchingTags
+     * @covers \Magento\Cache\Backend\MongoDb::getIdsNotMatchingTags
+     * @covers \Magento\Cache\Backend\MongoDb::getIdsMatchingAnyTags
      */
     public function testGetIdsMatchingTagsNoInputTags()
     {
@@ -243,7 +245,7 @@ class Magento_Cache_Backend_MongoDbTest extends PHPUnit_Framework_TestCase
      */
     public function testLoad($doNotTestValidity)
     {
-        include_once(__DIR__ . '/_files/MongoBinData.php');
+        include_once(__DIR__ . '/_files/MongoBinData.txt');
 
         $cacheId = 'test_id';
         $expected = 'test_data';
@@ -251,7 +253,7 @@ class Magento_Cache_Backend_MongoDbTest extends PHPUnit_Framework_TestCase
         if ($doNotTestValidity) {
             $validityCondition = $this->logicalNot($validityCondition);
         }
-        $binData = new MongoBinData($expected, MongoBinData::BYTE_ARRAY);
+        $binData = new \MongoBinData($expected, \MongoBinData::BYTE_ARRAY);
         $binData->bin = $expected;
         $this->_collection->expects($this->once())
             ->method('findOne')
@@ -298,7 +300,7 @@ class Magento_Cache_Backend_MongoDbTest extends PHPUnit_Framework_TestCase
 
     public function testSave()
     {
-        include_once(__DIR__ . '/_files/MongoBinData.php');
+        include_once(__DIR__ . '/_files/MongoBinData.txt');
 
         $inputAssertion = $this->logicalAnd(
             $this->arrayHasKey('_id'),
@@ -344,53 +346,53 @@ class Magento_Cache_Backend_MongoDbTest extends PHPUnit_Framework_TestCase
     {
         return array(
             'clean expired' => array(
-                Zend_Cache::CLEANING_MODE_OLD,
+                \Zend_Cache::CLEANING_MODE_OLD,
                 array(),
                 $this->arrayHasKey('expire'),
             ),
             'clean cache matching all tags (string)' => array(
-                Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
                 'tag1',
                 array('$and' => array(array('tags' => 'tag1'))),
             ),
 
             'clean cache matching all tags (one tag)' => array(
-                Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
                 array('tag1'),
                 array('$and' => array(array('tags' => 'tag1'))),
             ),
             'clean cache matching all tags (multiple tags)' => array(
-                Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
                 array('tag1', 'tag2'),
                 array('$and' => array(array('tags' => 'tag1'), array('tags' => 'tag2'))),
             ),
             'clean cache not matching tags (string)' => array(
-                Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
+                \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
                 'tag1',
                 array('$nor' => array(array('tags' => 'tag1'))),
             ),
             'clean cache not matching tags (one tag)' => array(
-                Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
+                \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
                 array('tag1'),
                 array('$nor' => array(array('tags' => 'tag1'))),
             ),
             'clean cache not matching tags (multiple tags)' => array(
-                Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
+                \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
                 array('tag1', 'tag2'),
                 array('$nor' => array(array('tags' => 'tag1'), array('tags' => 'tag2'))),
             ),
             'clean cache matching any tags (string)' => array(
-                Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
                 'tag1',
                 array('$or' => array(array('tags' => 'tag1'))),
             ),
             'clean cache matching any tags (one tag)' => array(
-                Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
                 array('tag1'),
                 array('$or' => array(array('tags' => 'tag1'))),
             ),
             'clean cache matching any tags (multiple tags)' => array(
-                Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
                 array('tag1', 'tag2'),
                 array('$or' => array(array('tags' => 'tag1'), array('tags' => 'tag2'))),
             ),
@@ -402,16 +404,16 @@ class Magento_Cache_Backend_MongoDbTest extends PHPUnit_Framework_TestCase
         $this->_collection->expects($this->once())
             ->method('drop')
             ->will($this->returnValue(array('ok' => true)));
-        $this->assertTrue($this->_model->clean(Zend_Cache::CLEANING_MODE_ALL));
+        $this->assertTrue($this->_model->clean(\Zend_Cache::CLEANING_MODE_ALL));
     }
 
     public function cleanNoTags()
     {
         $this->_collection->expects($this->never())->method('remove');
         $modes = array(
-            Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-            Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
-            Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG
+            \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+            \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
+            \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG
         );
         foreach ($modes as $mode) {
             $this->assertFalse(
@@ -420,7 +422,7 @@ class Magento_Cache_Backend_MongoDbTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Zend_Cache_Exception
+     * @expectedException \Zend_Cache_Exception
      * @expectedExceptionMessage Unsupported cleaning mode: invalid_mode
      */
     public function testCleanInvalidMode()

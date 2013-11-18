@@ -26,8 +26,10 @@
  */
 
 /**
- * Exception that should be thrown by DOM model when incoming xml is not valid.
+ * \Exception that should be thrown by DOM model when incoming xml is not valid.
  */
-class Magento_Config_Dom_ValidationException extends InvalidArgumentException
+namespace Magento\Config\Dom;
+
+class ValidationException extends \InvalidArgumentException
 {
 }

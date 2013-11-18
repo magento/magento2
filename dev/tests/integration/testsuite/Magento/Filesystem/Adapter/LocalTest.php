@@ -1,6 +1,6 @@
 <?php
 /**
- * Test for Magento_Filesystem_Adapter_Local
+ * Test for \Magento\Filesystem\Adapter\Local
  *
  * Magento
  *
@@ -23,45 +23,40 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
+namespace Magento\Filesystem\Adapter;
+
+class LocalTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Filesystem_Adapter_Local
+     * @var \Magento\Filesystem\Adapter\Local
      */
     protected $_adapter;
 
-    /**
-     * @var string
-     */
-    protected $_filePath;
-
-    /**
-     * @var array
-     */
-    protected $_deleteFiles = array();
-
     protected function setUp()
     {
-        $this->_adapter = new Magento_Filesystem_Adapter_Local();
+        $this->_adapter = new \Magento\Filesystem\Adapter\Local();
+
+        \Magento\Io\File::rmdirRecursive(self::_getTmpDir());
+        mkdir(self::_getTmpDir(), 0777, true);
     }
 
     protected function tearDown()
     {
-        foreach ($this->_deleteFiles as $fileName) {
-            if (is_dir($fileName)) {
-                rmdir($fileName);
-            } elseif (is_file($fileName)) {
-                unlink($fileName);
-            }
-        }
+        \Magento\Io\File::rmdirRecursive(self::_getTmpDir());
+    }
+
+    protected static function _getTmpDir()
+    {
+        return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')
+            ->getDir(\Magento\App\Dir::VAR_DIR) . DIRECTORY_SEPARATOR . 'Magento\Filesystem\Adapter\LocalTest';
     }
 
     /**
      * @return string
      */
-    protected function _getFixturesPath()
+    protected static function _getFixturesPath()
     {
-        return __DIR__ . DS . '..' . DS . '_files' . DS;
+        return __DIR__ . '/../_files/';
     }
 
     /**
@@ -77,11 +72,11 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function existsDataProvider()
+    public static function existsDataProvider()
     {
         return array(
-            'existed file' => array($this->_getFixturesPath() . 'popup.csv', true),
-            'not existed file' => array($this->_getFixturesPath() . 'popup2.css', false),
+            'existed file' => array(self::_getFixturesPath() . 'popup.csv', true),
+            'not existed file' => array(self::_getFixturesPath() . 'popup2.css', false),
         );
     }
 
@@ -98,11 +93,20 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function readDataProvider()
+    public static function readDataProvider()
     {
         return array(
-            'read' => array($this->_getFixturesPath() . 'popup.csv', 'var myData = 5;'),
+            'read' => array(self::_getFixturesPath() . 'popup.csv', 'var myData = 5;'),
         );
+    }
+
+    /**
+     * @expectedException \Magento\Filesystem\FilesystemException
+     * @expectedExceptionMessage Failed to read contents of 'non-existing-file.txt'
+     */
+    public function testReadException()
+    {
+        $this->_adapter->read('non-existing-file.txt');
     }
 
     /**
@@ -112,7 +116,6 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
      */
     public function testWrite($fileName, $fileData)
     {
-        $this->_deleteFiles = array($fileName);
         $this->_adapter->write($fileName, $fileData);
         $this->assertFileExists($fileName);
         $this->assertEquals(file_get_contents($fileName), $fileData);
@@ -121,27 +124,35 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function writeDataProvider()
+    public static function writeDataProvider()
     {
         return array(
-            'correct file' => array($this->_getFixturesPath() . 'tempFile.css', 'temporary data'),
-            'empty file' => array($this->_getFixturesPath() . 'tempFile2.css', '')
+            'correct file' => array(self::_getTmpDir() . '/tempFile.css', 'temporary data'),
+            'empty file' => array(self::_getTmpDir() . '/tempFile2.css', '')
         );
     }
 
+    public function testWriteException()
+    {
+        $filename = __DIR__;
+        $this->setExpectedException('Magento\Filesystem\FilesystemException',
+            "Failed to write contents to '{$filename}'");
+        $this->_adapter->write($filename, 'any contents');
+    }
+
+    /**
+     * Test, that deleting non-existing file doesn't produce exceptions
+     */
     public function testDeleteNotExists()
     {
-        $fileName = $this->_getFixturesPath() . 'tempFile3.css';
+        $fileName = self::_getTmpDir() . '/tempFile3.css';
         $this->_adapter->delete($fileName);
-        $this->assertFileNotExists($fileName);
     }
 
     public function testDeleteDir()
     {
-        $fileName = $this->_getFixturesPath() . 'new_directory' . DS . 'tempFile3.css';
-        $dirName = $this->_getFixturesPath() . 'new_directory';
-        $this->_deleteFiles[] = $fileName;
-        $this->_deleteFiles[] = $dirName;
+        $dirName = self::_getTmpDir() . '/new_directory';
+        $fileName = $dirName . '/tempFile3.css';
         mkdir($dirName, 0755);
         file_put_contents($fileName, 'test data');
         $this->_adapter->delete($dirName);
@@ -151,8 +162,7 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $fileName = $this->_getFixturesPath() . 'tempFile3.css';
-        $this->_deleteFiles = array($fileName);
+        $fileName = self::_getTmpDir() . '/tempFile3.css';
         file_put_contents($fileName, 'test data');
         $this->_adapter->delete($fileName);
         $this->assertFileNotExists($fileName);
@@ -160,8 +170,7 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
 
     public function testChangePermissionsFile()
     {
-        $fileName = $this->_getFixturesPath() . 'tempFile3.css';
-        $this->_deleteFiles[] = $fileName;
+        $fileName = self::_getTmpDir() . '/tempFile3.css';
         file_put_contents($fileName, 'test data');
         $this->_adapter->changePermissions($fileName, 0666, false);
         $this->assertEquals(0666, fileperms($fileName) & 0777);
@@ -172,10 +181,8 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
         if (substr(PHP_OS, 0, 3) == 'WIN') {
             $this->markTestSkipped("chmod may not work for Windows");
         }
-        $fileName = $this->_getFixturesPath() . 'new_directory2' . DS . 'tempFile3.css';
-        $dirName = $this->_getFixturesPath() . 'new_directory2';
-        $this->_deleteFiles[] = $fileName;
-        $this->_deleteFiles[] = $dirName;
+        $dirName = self::_getTmpDir() . '/new_directory2';
+        $fileName = $dirName . '/tempFile3.css';
         mkdir($dirName, 0777);
         file_put_contents($fileName, 'test data');
         $this->_adapter->changePermissions($dirName, 0755, true);
@@ -183,52 +190,59 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0755, fileperms($fileName) & 0777);
     }
 
+    /**
+     * @expectedException \Magento\Filesystem\FilesystemException
+     * @expectedExceptionMessage Failed to change mode of 'non-existing-file.txt'
+     */
+    public function testChangePermissionsException()
+    {
+        $this->_adapter->changePermissions('non-existing-file.txt', 0666, false);
+    }
+
     public function testGetFileMd5()
     {
         $this->assertEquals('e5f30e10b8965645d5f8ed5999d88600',
-            $this->_adapter->getFileMd5($this->_getFixturesPath() . 'popup.csv'));
+            $this->_adapter->getFileMd5(self::_getFixturesPath() . 'popup.csv'));
     }
 
     /**
-     * @expectedException Magento_Filesystem_Exception
-     * @expectedExceptionMessage Unable to get file hash
+     * @expectedException \Magento\Filesystem\FilesystemException
+     * @expectedExceptionMessage Failed to get hash of 'non-existing-file.txt'
      */
     public function testGetFileMd5Exception()
     {
-        $this->_adapter->getFileMd5($this->_getFixturesPath() . 'invalid.csv');
+        $this->_adapter->getFileMd5('non-existing-file.txt');
     }
 
     public function testIsFile()
     {
-        $this->assertTrue($this->_adapter->isFile($this->_getFixturesPath() . 'popup.csv'));
+        $this->assertTrue($this->_adapter->isFile(self::_getFixturesPath() . 'popup.csv'));
     }
 
     public function testIsWritable()
     {
-        $this->assertTrue($this->_adapter->isWritable($this->_getFixturesPath() . 'popup.csv'));
+        $this->assertTrue($this->_adapter->isWritable(self::_getFixturesPath() . 'popup.csv'));
     }
 
     public function testIsReadable()
     {
-        $this->assertTrue($this->_adapter->isReadable($this->_getFixturesPath() . 'popup.csv'));
+        $this->assertTrue($this->_adapter->isReadable(self::_getFixturesPath() . 'popup.csv'));
     }
 
     public function testCreateStream()
     {
-        $stream = $this->_adapter->createStream($this->_getFixturesPath() . 'popup.csv');
-        $this->assertInstanceOf('Magento_Filesystem_Stream_Local', $stream);
+        $stream = $this->_adapter->createStream(self::_getFixturesPath() . 'popup.csv');
+        $this->assertInstanceOf('Magento\Filesystem\Stream\Local', $stream);
     }
 
     /**
      * @param string $sourceName
      * @param string $targetName
-     * @throws Exception
+     * @throws \Exception
      * @dataProvider renameDataProvider
      */
     public function testRename($sourceName, $targetName)
     {
-        $this->_deleteFiles[] = $sourceName;
-        $this->_deleteFiles[] = $targetName;
         file_put_contents($sourceName, 'test data');
         $this->_adapter->rename($sourceName, $targetName);
         $this->assertFileExists($targetName);
@@ -239,35 +253,42 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function renameDataProvider()
+    public static function renameDataProvider()
     {
         return array(
-            'test 1' => array($this->_getFixturesPath() . 'file1.js', $this->_getFixturesPath() . 'file2.js'),
+            'test 1' => array(self::_getTmpDir() . '/file1.js', self::_getTmpDir() . '/file2.js'),
         );
     }
 
+    /**
+     * @expectedException \Magento\Filesystem\FilesystemException
+     * @expectedExceptionMessage Failed to rename 'non-existing-file.txt' to 'any-new-file.txt'
+     */
+    public function testRenameException()
+    {
+        $this->_adapter->rename('non-existing-file.txt', 'any-new-file.txt');
+    }
+
+
     public function testIsDirectory()
     {
-        $this->assertTrue($this->_adapter->isDirectory($this->_getFixturesPath()));
-        $this->assertFalse($this->_adapter->isDirectory($this->_getFixturesPath() . 'popup.csv'));
+        $this->assertTrue($this->_adapter->isDirectory(self::_getFixturesPath()));
+        $this->assertFalse($this->_adapter->isDirectory(self::_getFixturesPath() . 'popup.csv'));
     }
 
     public function testCreateDirectory()
     {
-        $directoryName = $this->_getFixturesPath() . 'new_directory';
-        $this->_deleteFiles[] = $directoryName;
+        $directoryName = self::_getTmpDir() . '/new_directory';
         $this->_adapter->createDirectory($directoryName, 0755);
         $this->assertFileExists($directoryName);
         $this->assertTrue(is_dir($directoryName));
     }
 
-    /**
-     *
-     * @expectedException Magento_Filesystem_Exception
-     */
-    public function testCreateDirectoryError()
+    public function testCreateDirectoryException()
     {
-        $this->_adapter->createDirectory('', 0755);
+        $filename = __FILE__;
+        $this->setExpectedException('Magento\Filesystem\FilesystemException', "Failed to create '{$filename}'");
+        $this->_adapter->createDirectory($filename, 0755);
     }
 
     /**
@@ -277,9 +298,6 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
      */
     public function testTouch($fileName, $newFile = false)
     {
-        if ($newFile) {
-            $this->_deleteFiles = array($fileName);
-        }
         if ($newFile) {
             $this->assertFileNotExists($fileName);
         } else {
@@ -292,12 +310,19 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function touchDataProvider()
+    public static function touchDataProvider()
     {
         return array(
-            'update file' => array($this->_getFixturesPath() . 'popup.csv', false),
-            'create file' => array($this->_getFixturesPath() . 'popup2.css', true)
+            'update file' => array(self::_getFixturesPath() . 'popup.csv', false),
+            'create file' => array(self::_getTmpDir() . '/popup.css', true)
         );
+    }
+
+    public function testTouchException()
+    {
+        $filename = __FILE__ . '/invalid';
+        $this->setExpectedException('Magento\Filesystem\FilesystemException', "Failed to touch '{$filename}'");
+        $this->_adapter->touch($filename);
     }
 
     /**
@@ -307,7 +332,6 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
      */
     public function testCopy($sourceName, $targetName)
     {
-        $this->_deleteFiles = array($sourceName, $targetName);
         $testData = 'test data';
         file_put_contents($sourceName, $testData);
         $this->_adapter->copy($sourceName, $targetName);
@@ -317,22 +341,63 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($testData, file_get_contents($targetName));
     }
 
+    /**
+     * @expectedException \Magento\Filesystem\FilesystemException
+     * @expectedExceptionMessage Failed to copy 'non-existing-file.txt' to 'any-new-file.txt'
+     */
+    public function testCopyException()
+    {
+        $this->_adapter->copy('non-existing-file.txt', 'any-new-file.txt');
+    }
+
     public function testGetMTime()
     {
-        $filePath = $this->_getFixturesPath() . 'mtime.txt';
-        $this->_deleteFiles[] = $filePath;
+        $filePath = self::_getTmpDir() . '/mtime.txt';
         $this->_adapter->write($filePath, 'Test');
         $this->assertFileExists($filePath);
         $this->assertGreaterThan(0, $this->_adapter->getMTime($filePath));
     }
 
-    public function testGetFileSize()
+    /**
+     * @expectedException \Magento\Filesystem\FilesystemException
+     * @expectedExceptionMessage Failed to get modification time of 'non-existing-file.txt'
+     */
+    public function testGetMTimeException()
     {
-        $filePath = $this->_getFixturesPath() . 'filesize.txt';
-        $this->_deleteFiles[] = $filePath;
-        $this->_adapter->write($filePath, '1234');
+        $this->_adapter->getMTime('non-existing-file.txt');
+    }
+
+    /**
+     * @param string $content
+     * @param int $expectedSize
+     * @dataProvider getFileSizeDataProvider
+     */
+    public function testGetFileSize($content, $expectedSize)
+    {
+        $filePath = self::_getTmpDir() . '/filesize.txt';
+        $this->_adapter->write($filePath, $content);
         $this->assertFileExists($filePath);
-        $this->assertEquals(4, $this->_adapter->getFileSize($filePath));
+        $this->assertEquals($expectedSize, $this->_adapter->getFileSize($filePath));
+    }
+
+    /**
+     * @return array
+     */
+    public static function getFileSizeDataProvider()
+    {
+        return array(
+            'usual file' => array('1234', 4),
+            'empty file' => array('', 0),
+        );
+    }
+
+    /**
+     * @expectedException \Magento\Filesystem\FilesystemException
+     * @expectedExceptionMessage Failed to get file size of 'non-existing-file.txt'
+     */
+    public function testGetFileSizeException()
+    {
+        $this->_adapter->getFileSize('non-existing-file.txt');
     }
 
     /**
@@ -349,33 +414,30 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
 
     /**
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.ShortVariable)
      */
-    public function getNestedKeysDataProvider()
+    public static function getNestedKeysDataProvider()
     {
-        $ds = Magento_Filesystem::DIRECTORY_SEPARATOR;
         return array(
             array(
-                $this->_getFixturesPath() . 'foo',
+                self::_getFixturesPath() . 'foo',
                 array(
-                    $this->_getFixturesPath() . 'foo' . $ds . 'bar',
-                    $this->_getFixturesPath() . 'foo' . $ds . 'bar' . $ds . 'baz',
-                    $this->_getFixturesPath() . 'foo' . $ds . 'bar' . $ds . 'baz' . $ds . 'file_one.txt',
-                    $this->_getFixturesPath() . 'foo' . $ds . 'bar' . $ds . 'file_two.txt',
-                    $this->_getFixturesPath() . 'foo' . $ds . 'file_three.txt',
+                    self::_getFixturesPath() . 'foo/bar',
+                    self::_getFixturesPath() . 'foo/bar/baz',
+                    self::_getFixturesPath() . 'foo/bar/baz/file_one.txt',
+                    self::_getFixturesPath() . 'foo/bar/file_two.txt',
+                    self::_getFixturesPath() . 'foo/file_three.txt',
                 )
             ),
             array(
-                $this->_getFixturesPath() . 'foo' . $ds . 'bar' . $ds . 'baz',
-                array($this->_getFixturesPath() . 'foo' . $ds . 'bar' . $ds . 'baz' . $ds . 'file_one.txt')
+                self::_getFixturesPath() . 'foo/bar/baz',
+                array(self::_getFixturesPath() . 'foo/bar/baz/file_one.txt')
             )
         );
     }
 
     /**
-     * @expectedException Magento_Filesystem_Exception
-     * @expectedExceptionMessage The directory "/unknown_directory" does not exist.
+     * @expectedException \Magento\Filesystem\FilesystemException
+     * @expectedExceptionMessage The directory '/unknown_directory' does not exist.
      */
     public function testGetNestedKeysInUnknownDirectory()
     {
@@ -394,26 +456,31 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
 
     /**
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.ShortVariable)
      */
-    public function getNestedFilesDataProvider()
+    public static function getNestedFilesDataProvider()
     {
-        $ds = Magento_Filesystem::DIRECTORY_SEPARATOR;
         return array(
             array(
-                $this->_getFixturesPath() . 'foo/*',
+                self::_getFixturesPath() . 'foo/*',
                 array(
-                    $this->_getFixturesPath() . 'foo' . $ds . 'bar',
-                    $this->_getFixturesPath() . 'foo' . $ds . 'file_three.txt',
+                    self::_getFixturesPath() . 'foo/bar',
+                    self::_getFixturesPath() . 'foo/file_three.txt',
                 )
             ),
             array(
-                $this->_getFixturesPath() . 'foo/*/file_*',
+                self::_getFixturesPath() . 'foo/*/file_*',
                 array(
-                    $this->_getFixturesPath() . 'foo' . $ds . 'bar' . $ds . 'file_two.txt',
+                    self::_getFixturesPath() . 'foo/bar/file_two.txt',
                 )
             )
         );
+    }
+
+    public function testSearchKeysException()
+    {
+        $pattern = str_repeat('1', 20000); // Overflow the glob() length limit (Win - 260b, Linux - 1k-8k)
+        $this->setExpectedException('Magento\Filesystem\FilesystemException',
+            "Failed to resolve the file pattern '{$pattern}'");
+        $this->_adapter->searchKeys($pattern);
     }
 }

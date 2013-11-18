@@ -63,30 +63,27 @@ TreeSuggestTest.prototype.testInit = function() {
     assertTrue(this.suggestElement.is(':mage-treeSuggest'));
     assertEquals(treeSuggestInstance.widgetEventPrefix, 'suggest');
 };
-TreeSuggestTest.prototype.testBind = function() {
-    var event = jQuery.Event('keydown'),
-        proxyEventsExecuted = false,
-        treeSuggestInstance = this.treeSuggestCreate();
 
-    treeSuggestInstance.dropdown.show();
-
-    event.keyCode = jQuery.ui.keyCode.LEFT;
-    this.stub(treeSuggestInstance, '_proxyEvents').done(function() {
-        proxyEventsExecuted = true
+TreeSuggestTest.prototype.testClose = function() {
+    var treeSuggestInstance = this.treeSuggestCreate(),
+        elementFocused = false;
+    treeSuggestInstance.element.on('focus', function() {
+        elementFocused = true;
     });
+    treeSuggestInstance.dropdown.text('test').show();
+    treeSuggestInstance.close();
+    assertEquals(treeSuggestInstance.dropdown.text(), '');
+    assertTrue(treeSuggestInstance.dropdown.is(':hidden'));
 
-    treeSuggestInstance.element.trigger(event);
-    assertTrue(proxyEventsExecuted);
+    treeSuggestInstance.dropdown.text('test').show();
+    treeSuggestInstance.close(jQuery.Event('select'));
+    assertEquals(treeSuggestInstance.dropdown.text(), '');
+    assertTrue(treeSuggestInstance.dropdown.is(':hidden'));
 
-    event.keyCode = $.ui.keyCode.RIGHT;
-    proxyEventsExecuted = false;
-    this.stub(treeSuggestInstance, '_proxyEvents').done(function() {
-        proxyEventsExecuted = true
-    });
-
-    treeSuggestInstance.dropdown.show();
-    treeSuggestInstance.element.trigger(event);
-    assertTrue(proxyEventsExecuted);
+    treeSuggestInstance.dropdown.text('test').show();
+    treeSuggestInstance.close(jQuery.Event('select_tree_node'));
+    assertEquals(treeSuggestInstance.dropdown.text(), 'test');
+    assertTrue(treeSuggestInstance.dropdown.is(':visible'));
 };
 TreeSuggestTest.prototype.testFilterSelected = function() {
     var treeSuggestInstance = this.treeSuggestCreate();

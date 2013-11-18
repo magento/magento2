@@ -207,7 +207,7 @@ class Zend_Cloud_QueueService_Adapter_ZendQueue
     
     /**
      * Recieve at most $max messages from the specified queue and return the
-     * message IDs for messages recieved.
+     * message IDs for messages received.
      * 
      * @param  string $queueId
      * @param  int    $max

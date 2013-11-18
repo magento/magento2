@@ -27,21 +27,23 @@
 /**
  * Shell command line wrapper encapsulates command execution and arguments escaping
  */
-class Magento_Shell
+namespace Magento;
+
+class Shell
 {
     /**
      * Logger instance
      *
-     * @var Zend_Log
+     * @var \Zend_Log
      */
     protected $_logger;
 
     /**
      * Constructor
      *
-     * @param Zend_Log $logger Logger instance to be used to log commands and their output
+     * @param \Zend_Log $logger Logger instance to be used to log commands and their output
      */
-    public function __construct(Zend_Log $logger = null)
+    public function __construct(\Zend_Log $logger = null)
     {
         $this->_logger = $logger;
     }
@@ -52,7 +54,7 @@ class Magento_Shell
      * @param string $command Command with optional argument markers '%s'
      * @param array $arguments Argument values to substitute markers with
      * @return string Output of an executed command
-     * @throws Magento_Exception if a command returns non-zero exit code
+     * @throws \Magento\Exception if a command returns non-zero exit code
      */
     public function execute($command, array $arguments = array())
     {
@@ -64,8 +66,8 @@ class Magento_Shell
         $output = implode(PHP_EOL, $output);
         $this->_log($output);
         if ($exitCode) {
-            $commandError = new Exception($output, $exitCode);
-            throw new Magento_Exception("Command `$command` returned non-zero exit code.", 0, $commandError);
+            $commandError = new \Exception($output, $exitCode);
+            throw new \Magento\Exception("Command `$command` returned non-zero exit code.", 0, $commandError);
         }
         return $output;
     }
@@ -78,7 +80,7 @@ class Magento_Shell
     protected function _log($message)
     {
         if ($this->_logger) {
-            $this->_logger->log($message, Zend_Log::INFO);
+            $this->_logger->log($message, \Zend_Log::INFO);
         }
     }
 }

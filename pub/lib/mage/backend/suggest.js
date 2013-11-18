@@ -55,7 +55,7 @@
             events: {},
             appendMethod: 'after',
             controls: {
-                selector: ':ui-menu',
+                selector: ':ui-menu, :mage-menu',
                 eventsMap: {
                     focus: ['menufocus'],
                     blur: ['menublur'],
@@ -63,9 +63,11 @@
                 }
             },
             termAjaxArgument: 'label_part',
+            filterProperty: 'label',
             className: null,
             inputWrapper:'<div class="mage-suggest"><div class="mage-suggest-inner"></div></div>',
             dropdownWrapper: '<div class="mage-suggest-dropdown"></div>',
+            preventClickPropagation: true,
             currentlySelected: null
         },
 
@@ -74,7 +76,7 @@
          * @private
          */
         _create: function() {
-            this._term = '';
+            this._term = null;
             this._nonSelectedItem = {id: '', label: ''};
             this._renderedContext = null;
             this._selectedItem = this._nonSelectedItem;
@@ -215,6 +217,7 @@
                         case keyCode.DOWN:
                         case keyCode.LEFT:
                         case keyCode.RIGHT:
+                        case keyCode.TAB:
                             break;
                         case keyCode.ENTER:
                         case keyCode.NUMPAD_ENTER:
@@ -227,13 +230,19 @@
                     }
                 },
                 blur: function(event) {
-                    this.close(event);
-                    this._change(event);
+                    if (!this.preventBlur) {
+                        this._abortSearch();
+                        this.close(event);
+                        this._change(event);
+                    } else {
+                        this.element.trigger('focus');
+                    }
                 },
                 cut: this.search,
                 paste: this.search,
                 input: this.search,
-                select: this._onSelectItem
+                selectItem: this._onSelectItem,
+                click: this.search
             }, this.options.events));
 
             this._bindDropdown();
@@ -278,13 +287,25 @@
                     }
                 }, this));
             }, this));
-            this._on(this.dropdown, events);
+
+            if (this.options.preventClickPropagation) {
+                this._on(this.dropdown, events);
+            }
+            // Fix for IE 8
+            this._on(this.dropdown, {
+                mousedown: function() {
+                    this.preventBlur = true;
+                },
+                mouseup: function() {
+                    this.preventBlur = false;
+                }
+            });
         },
 
         /**
          * @override
          */
-        _trigger: function(type, event, data) {
+        _trigger: function(type, event) {
             var result = this._superApply(arguments);
             if(result === false && event) {
                 event.stopImmediatePropagation();
@@ -333,7 +354,8 @@
                 return;
             }
             this._selectItem(e);
-            this._trigger('select', e || null, {item: this._focused});
+            this._blurItem();
+            this._trigger('select', e || null, {item: this._selectedItem});
         },
 
         /**
@@ -388,9 +410,10 @@
          * @param {Object} e - event object
          */
         close: function(e) {
-            this.element.val('');
             this._renderedContext = null;
-            this.dropdown.hide().empty();
+            if (this.dropdown.length) {
+                this.dropdown.hide().empty();
+            }
             this._trigger('close', e);
         },
 
@@ -415,9 +438,9 @@
          */
         search: function(e) {
             var term = this._value();
-            if (this._term !== term) {
+            if ((this._term !== term || term.length === 0) && !this.preventBlur) {
                 this._term = term;
-                if (term && term.length >= this.options.minLength) {
+                if ($.type(term) == 'string' && term.length >= this.options.minLength) {
                     if (this._trigger("search", e) === false) {
                         return;
                     }
@@ -442,6 +465,9 @@
             }, this);
             this.element.addClass(this.options.loadingClass);
             if (this.options.delay) {
+                if ($.type(this.options.data) != 'undefined') {
+                    response(this.filter(this.options.data, term));
+                }
                 clearTimeout(this._searchTimeout);
                 this._searchTimeout = this._delay(function() {
                     this._source(term, response);
@@ -534,12 +560,15 @@
                 var ajaxData = {};
                 ajaxData[this.options.termAjaxArgument] = term;
 
-                this._xhr = $.ajax($.extend({
+                this._xhr = $.ajax($.extend(true, {
                     url: o.source,
                     type: 'POST',
                     dataType: 'json',
                     data: ajaxData,
-                    success: response
+                    success: $.proxy(function(items) {
+                        this.options.data = items;
+                        response.apply(response, arguments);
+                    }, this)
                 }, o.ajaxOptions || {}));
             } else if ($.type(o.source) === 'function') {
                 o.source.apply(o.source, arguments);
@@ -566,9 +595,16 @@
          */
         filter: function(items, term) {
             var matcher = new RegExp(term.replace(/[\-\/\\\^$*+?.()|\[\]{}]/g, '\\$&'), 'i');
-            return $.grep(items, function(value) {
-                return matcher.test(value.label || value.id || value);
+            var itemsArray = $.isArray(items) ? items : $.map(items, function(element) {
+                return element;
             });
+            var property = this.options.filterProperty;
+            return $.grep(
+                itemsArray,
+                function(value) {
+                    return matcher.test(value[property] || value.id || value);
+                }
+            );
         }
     });
 
@@ -649,7 +685,11 @@
             });
             if (this.options.showRecent || this.options.showAll) {
                 this._on({
-                    focus: this.search,
+                    focus: function(e) {
+                        if (!this.isDropdownShown()) {
+                            this.search(e);
+                        }
+                    },
                     showAll: this._showAll
                 });
             }
@@ -777,7 +817,7 @@
         _getOptions: function() {
             return this.valueField.find('option');
         },
-        
+
         /**
          * @override
          */
@@ -803,7 +843,7 @@
          * @return {Array}
          * @private
          */
-        _filterSelected: function(items, context) {
+        _filterSelected: function(items) {
             var options = this._getOptions();
             return $.grep(items, function(value) {
                 var itemSelected = false;
@@ -873,6 +913,7 @@
                         }
                     }
                 }
+                this.close(e);
             } else {
                 this._superApply(arguments);
             }
@@ -964,16 +1005,6 @@
                 .on('removeOption', $.proxy(function(e) {
                     this.removeOption(e, item);
                 }, this));
-        },
-
-        /**
-         * @override
-         */
-        close: function() {
-            this._superApply(arguments);
-            if (this.options.multiselect) {
-                this.element.val('');
-            }
         }
     });
 })(jQuery);

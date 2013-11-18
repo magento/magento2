@@ -18,7 +18,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Mage
- * @package     Mage_Adminhtml
+ * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -107,6 +107,7 @@ tinyMceWysiwygSetup.prototype =
             theme_advanced_toolbar_align : 'left',
             theme_advanced_statusbar_location : 'bottom',
             theme_advanced_resizing : true,
+            theme_advanced_resize_horizontal : false,
             convert_urls : false,
             relative_urls : false,
             content_css: this.config.content_css,
@@ -269,6 +270,9 @@ tinyMceWysiwygSetup.prototype =
 
     onChangeContent: function() {
         // Add "changed" to tab class if it exists
+        if (tinyMCE.get(this.id)) {
+            jQuery('#' + this.id).val(tinyMCE.get(this.id).getContent()).trigger('change');
+        }
         if(this.config.tab_id) {
             var tab = $$('a[id$=' + this.config.tab_id + ']')[0];
             if ($(tab) != undefined && $(tab).hasClassName('tab-item-link')) {

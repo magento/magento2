@@ -4,17 +4,19 @@
  *
  * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-class Magento_Controller_Router_Route_Factory
+namespace Magento\Controller\Router\Route;
+
+class Factory
 {
     /**
-     * @var Magento_ObjectManager
+     * @var \Magento\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @param Magento_ObjectManager $objectManager
+     * @param \Magento\ObjectManager $objectManager
      */
-    public function __construct(Magento_ObjectManager $objectManager)
+    public function __construct(\Magento\ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -27,8 +29,8 @@ class Magento_Controller_Router_Route_Factory
      * @param array $defaults Defaults for map variables with keys as variable names
      * @param array $reqs Regular expression requirements for variables (keys as variable names)
      * @param mixed $locale
-     * @return Zend_Controller_Router_Route_Interface
-     * @throws LogicException If specified route class does not implement proper interface.
+     * @return \Zend_Controller_Router_Route_Interface
+     * @throws \LogicException If specified route class does not implement proper interface.
      */
     public function createRoute(
         $routeClass,
@@ -46,8 +48,8 @@ class Magento_Controller_Router_Route_Factory
                 'locale' => $locale
             )
         );
-        if (!$route instanceof Zend_Controller_Router_Route_Interface) {
-            throw new LogicException('Route must implement "Zend_Controller_Router_Route_Interface".');
+        if (!$route instanceof \Zend_Controller_Router_Route_Interface) {
+            throw new \LogicException('Route must implement "Zend_Controller_Router_Route_Interface".');
         }
         return $route;
     }

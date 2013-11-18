@@ -8,7 +8,7 @@
  * $params['MAGE_RUN_CODE'] = 'website2';
  * $params['MAGE_RUN_TYPE'] = 'website';
  * ...
- * $entryPoint = new Mage_Core_Model_EntryPoint_Http(new Mage_Core_Model_Config_Primary(BP, $params));
+ * $entryPoint = new \Magento\App\EntryPoint\EntryPoint(BP, $params);
  * --------------------------------------------
  *
  * Magento
@@ -34,7 +34,8 @@
  */
 require __DIR__ . '/app/bootstrap.php';
 
-Magento_Profiler::start('mage');
-$entryPoint = new Mage_Core_Model_EntryPoint_Http(new Mage_Core_Model_Config_Primary(BP, $_SERVER));
-$entryPoint->processRequest();
-Magento_Profiler::stop('mage');
+\Magento\Profiler::start('magento');
+$entryPoint = new \Magento\App\EntryPoint\EntryPoint(BP, $_SERVER);
+$result = $entryPoint->run('Magento\App\Http');
+\Magento\Profiler::stop('magento');
+return $result;

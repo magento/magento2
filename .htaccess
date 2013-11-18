@@ -36,11 +36,6 @@
     php_value max_execution_time 18000
 
 ############################################
-## disable magic quotes for php request vars
-
-    php_flag magic_quotes_gpc off
-
-############################################
 ## disable automatic session start
 ## before autoload was initialized
 
@@ -55,11 +50,6 @@
 # disable user agent verification to not break multiple image upload
 
     php_flag suhosin.session.cryptua off
-
-###########################################
-# turn off compatibility with PHP4 when dealing with objects
-
-    php_flag zend.ze1_compatibility_mode Off
 
 </IfModule>
 

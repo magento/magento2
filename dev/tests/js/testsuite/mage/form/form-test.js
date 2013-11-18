@@ -23,13 +23,20 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 FormTest = TestCase('FormTest');
+FormTest.prototype.setUp = function() {
+    /*:DOC += <form id="form" action="action/url" method="GET", target="_self" ></form>*/
+};
+FormTest.prototype.tearDown = function() {
+    var formInstance = jQuery('#form').data('form');
+    if(formInstance && formInstance.destroy) {
+        formInstance.destroy();
+    }
+};
 FormTest.prototype.testInit = function() {
-    /*:DOC += <form id="form" action="action/url/" ></form>*/
     var form = jQuery('#form').form();
     assertTrue(form.is(':mage-form'));
 };
 FormTest.prototype.testRollback = function() {
-    /*:DOC += <form id="form" action="action/url" method="GET", target="_self" ></form>*/
     var form = jQuery('#form').form(),
         initialFormAttrs = {
             action: form.prop('action'),
@@ -53,7 +60,6 @@ FormTest.prototype.testRollback = function() {
     assertEquals(form.prop('method'), initialFormAttrs.method);
 };
 FormTest.prototype.testGetHandlers = function() {
-    /*:DOC += <form id="form" action="action/url"></form>*/
     var form = jQuery('#form').form(),
         handlersData = form.form('option', 'handlersData'),
         handlers = [];
@@ -63,7 +69,6 @@ FormTest.prototype.testGetHandlers = function() {
     assertEquals(handlers.join(' '), form.data("form")._getHandlers().join(' '));
 };
 FormTest.prototype.testStoreAttribute = function() {
-    /*:DOC += <form id="form" action="action/url" method="GET", target="_self" ></form>*/
     var form = jQuery('#form').form(),
         initialFormAttrs = {
             action: form.prop('action'),
@@ -79,7 +84,6 @@ FormTest.prototype.testStoreAttribute = function() {
     assertEquals(form.data("form").oldAttributes.method, initialFormAttrs.method);
 };
 FormTest.prototype.testBind = function() {
-    /*:DOC += <form id="form" action="action/url"></form>*/
     var form = jQuery('#form').form(),
         submitted = false,
         handlersData = form.form('option', 'handlersData');
@@ -97,7 +101,6 @@ FormTest.prototype.testBind = function() {
     form.off('submit');
 };
 FormTest.prototype.testGetActionUrl = function() {
-    /*:DOC += <form id="form" action="action/url/"></form>*/
     var form = jQuery('#form').form(),
         action = form.prop('action'),
         testUrl = 'new/action/url',
@@ -106,12 +109,11 @@ FormTest.prototype.testGetActionUrl = function() {
         };
 
     form.data("form")._storeAttribute('action');
-    assertEquals(form.data("form")._getActionUrl(testArgs), action + 'arg/value/');
+    assertEquals(form.data("form")._getActionUrl(testArgs), action + '/arg/value/');
     assertEquals(form.data("form")._getActionUrl(testUrl), testUrl);
     assertEquals(form.data("form")._getActionUrl(), action);
 };
 FormTest.prototype.testProcessData = function() {
-    /*:DOC += <form id="form" action="action/url/"></form>*/
     var form = jQuery('#form').form(),
         initialFormAttrs = {
             action: form.prop('action'),
@@ -149,9 +151,7 @@ FormTest.prototype.testProcessData = function() {
     assertEquals(processedData.action, newActionUrl);
 };
 FormTest.prototype.testBeforeSubmit = function() {
-    /*:DOC += <form id="form" action="action/url/"></form>
-        <form id="test-form"></form>
-     */
+    /*:DOC += <form id="test-form"></form> */
     var testHandler = {
             action: {
                 args: {
@@ -201,7 +201,6 @@ FormTest.prototype.testBeforeSubmit = function() {
     assertEquals(testForm.prop('method'), form.prop('method'));
 };
 FormTest.prototype.testSubmit = function() {
-    /*:DOC += <form id="form" action="action/url/"></form>*/
     var form = jQuery('#form').form({
             handlersData: {
                 save: {}

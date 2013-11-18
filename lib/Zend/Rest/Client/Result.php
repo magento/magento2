@@ -52,7 +52,7 @@ class Zend_Rest_Client_Result implements IteratorAggregate {
         restore_error_handler();
         if($this->_sxml === false) {
             if ($this->_errstr === null) {
-                $message = "An error occured while parsing the REST response with simplexml.";
+                $message = "An error occurred while parsing the REST response with simplexml.";
             } else {
                 $message = "REST Response Error: " . $this->_errstr;
                 $this->_errstr = null;
@@ -227,7 +227,7 @@ class Zend_Rest_Client_Result implements IteratorAggregate {
         } else {
             $result = $this->_sxml->xpath('//response');
             if (sizeof($result) > 1) {
-                return (string) "An error occured.";
+                return (string) "An error occurred.";
             } else {
                 return (string) $result[0];
             }

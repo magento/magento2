@@ -22,6 +22,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/** @var \Magento\TestFramework\Application $this */
+
 if (!isset($customersNumber)) {
     $customersNumber = 100000;
 }
@@ -44,8 +46,6 @@ $pattern = array(
     'middlename'                  => '',
     'password_hash'               => '',
     'prefix'                      => NULL,
-    'reward_update_notification'  => '1',
-    'reward_warning_notification' => '1',
     'rp_token'                    => NULL,
     'rp_token_created_at'         => NULL,
     'store_id'                    => '0',
@@ -70,8 +70,12 @@ $pattern = array(
     '_address_default_billing_'   => '1',
     '_address_default_shipping_'  => '1'
 );
-$generator = new Magento_ImportExport_Fixture_Generator($pattern, $customersNumber);
-$import = new Mage_ImportExport_Model_Import(array('entity' => 'customer_composite', 'behavior' => 'append'));
+$generator = new \Magento\TestFramework\ImportExport\Fixture\Generator($pattern, $customersNumber);
+/** @var \Magento\ImportExport\Model\Import $import */
+$import = $this->getObjectManager()->create(
+    'Magento\ImportExport\Model\Import',
+    array('data' => array('entity' => 'customer_composite', 'behavior' => 'append'))
+);
 // it is not obvious, but the validateSource() will actually save import queue data to DB
 $import->validateSource($generator);
 // this converts import queue into actual entities

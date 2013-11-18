@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     Mage_Core
+ * @package     Magento_Core
  * @subpackage  integration_tests
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
@@ -28,20 +28,21 @@
 /**
  * Magento file size test
  */
-class Magento_File_SizeTest extends PHPUnit_Framework_TestCase
+namespace Magento\File;
+
+class SizeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_File_Size
+     * @var \Magento\File\Size
      */
     protected $_fileSize;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->_fileSize = Mage::getObjectManager()->get('Magento_File_Size');
+        $this->_fileSize = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\File\Size');
     }
 
     /**
-     * @covers Mage_Core_Helper_File_Storage::getMaxFileSize
      * @backupStaticAttributes
      */
     public function testGetMaxFileSize()
@@ -51,7 +52,6 @@ class Magento_File_SizeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Mage_Core_Helper_File_Storage::convertSizeToInteger
      * @dataProvider getConvertSizeToIntegerDataProvider
      * @backupStaticAttributes
      * @param string $value

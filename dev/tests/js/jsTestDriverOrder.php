@@ -29,7 +29,7 @@
  * @return array
  */
 return array(
-    '/pub/lib/jquery/jquery.min.js',
+    '/pub/lib/jquery/jquery.js',
     '/pub/lib/jquery/jquery-ui.js',
     '/pub/lib/jquery/jquery.cookie.js',
     '/pub/lib/head.load.min.js',
