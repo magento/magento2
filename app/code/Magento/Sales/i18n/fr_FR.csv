@@ -285,7 +285,7 @@
 "Invalid entity model","Modèle d'entité invalide"
 "Invalid item option format.","Format d'option d'objet invalide."
 "Invalid qty to invoice item ""%s""","Qté invalide pour facturer l'article ""%s"""
-"Invalid qty to refund item ""%s""","Qté invalide pourrembourser l'article ""%s"""
+"Invalid qty to refund item ""%s""","Qté invalide pour rembourser l'article ""%s"""
 "Invalid qty to ship for item ""%s""","Qté invalide pour expédier l'article ""%s"""
 "Invalid renderer model","Modèle de rendu invalide"
 "Invalid request for adding product to quote.","Requête non valide pour l'ajout du produit au devis."

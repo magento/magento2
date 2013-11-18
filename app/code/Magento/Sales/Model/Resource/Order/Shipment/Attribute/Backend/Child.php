@@ -40,7 +40,7 @@ class Child
     /**
      * Performed before data is saved
      *
-     * @param Varieb_Object $object
+     * @param Varien_Object $object
      * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function beforeSave($object)

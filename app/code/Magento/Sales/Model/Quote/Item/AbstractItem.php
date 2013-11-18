@@ -32,7 +32,7 @@
  *  - original_price - product price before any calculations
  *  - calculation_price - prices for item totals calculation
  *  - custom_price - new price that can be declared by user and recalculated during calculation process
- *  - original_custom_price - original defined value of custom price without any convertion
+ *  - original_custom_price - original defined value of custom price without any conversion
  *
  * @category   Magento
  * @package    Magento_Sales
@@ -177,7 +177,7 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * Get chil items
+     * Get children items
      *
      * @return array
      */
@@ -620,7 +620,7 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * Checking can we ship product separatelly (each child separately)
+     * Checking can we ship product separately (each child separately)
      * or each parent product item can be shipped only like one item
      *
      * @return bool

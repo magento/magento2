@@ -26,7 +26,7 @@
 
 /**
  * Sales implementation of recurring payment profiles
- * Implements saving and manageing profiles
+ * Implements saving and managing profiles
  *
  * @method \Magento\Sales\Model\Resource\Recurring\Profile _getResource()
  * @method \Magento\Sales\Model\Resource\Recurring\Profile getResource()
@@ -422,7 +422,7 @@ class Profile extends \Magento\Payment\Model\Recurring\Profile
     /**
      * Import quote information to the profile
      *
-     * @param \Magento\Sales\Model\Quote\ $quote
+     * @param \Magento\Sales\Model\Quote $quote
      * @return \Magento\Sales\Model\Recurring\Profile
      */
     public function importQuote(\Magento\Sales\Model\Quote $quote)
@@ -812,7 +812,7 @@ class Profile extends \Magento\Payment\Model\Recurring\Profile
     }
 
     /**
-     * Add additional options suboption into itev
+     * Add additional options suboption into item
      *
      * @param \Magento\Sales\Model\Order\Item $item
      * @param array $option

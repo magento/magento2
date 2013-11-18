@@ -98,7 +98,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
     /**
      * Child transactions, assoc array of txn_id => instance
      * Filled only in case when all child transactions have txn_id
-     * Used for quicker search of child transactions using isset() as oposite to foreaching $_children
+     * Used for quicker search of child transactions using isset() as opposite to foreaching $_children
      * @var array
      */
     protected $_identifiedChildren = null;

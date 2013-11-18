@@ -420,7 +420,7 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
     }
 
     /**
-     * Check invice capture action availability
+     * Check invoice capture action availability
      *
      * @return bool
      */
@@ -880,7 +880,7 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
         // Get the destination email addresses to send copies to
         $copyTo = $this->_getEmails(self::XML_PATH_EMAIL_COPY_TO);
         $copyMethod = $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_COPY_METHOD, $storeId);
-        // Check if at least one recepient is found
+        // Check if at least one recipient is found
         if (!$notifyCustomer && !$copyTo) {
             return $this;
         }
@@ -955,7 +955,7 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
         // Get the destination email addresses to send copies to
         $copyTo = $this->_getEmails(self::XML_PATH_UPDATE_EMAIL_COPY_TO);
         $copyMethod = $this->_coreStoreConfig->getConfig(self::XML_PATH_UPDATE_EMAIL_COPY_METHOD, $storeId);
-        // Check if at least one recepient is found
+        // Check if at least one recipient is found
         if (!$notifyCustomer && !$copyTo) {
             return $this;
         }
