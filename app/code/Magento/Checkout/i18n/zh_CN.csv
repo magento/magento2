@@ -36,6 +36,7 @@ Checkout,结账
 "Checkout Conditions",支付条件
 "Checkout Method",支付方法
 "Checkout Options",支付选项
+"Checkout Section",支付区域
 "Checkout Terms and Conditions",结账条款和情况
 "Checkout as Guest",作为来宾结账
 "Checkout as a Guest",作为访客结账
@@ -223,6 +224,7 @@ Status,状态
 Subtotal,小计
 "Subtotal must exceed minimum order amount",总数必须超出允许订购的最小数量
 Telephone,电话
+"Terms &amp; Conditions",条款和协议
 "Terms and Conditions",条款和条件
 "Terms and Conditions Information",条款和条件信息
 Text,文字

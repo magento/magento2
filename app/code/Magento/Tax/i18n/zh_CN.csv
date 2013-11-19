@@ -49,6 +49,7 @@ Country,国家
 "Grand Total Excl. Tax",合计不含税
 "Grand Total Incl. Tax",合计含税
 "Import Tax Rates",导入税率
+"Import/Export Tax Rates",导入/导出税率
 "Inc. Tax",含税
 "Incl. Tax",含税
 "Incl. Tax:",含税：
@@ -120,9 +121,11 @@ Tax,传真
 "Tax Rate Information",税率信息
 "Tax Rule Information",税务规则信息
 "Tax Rules",税务规则
+"Tax Section",纳税项
 "Tax Titles",税务标题
 "Tax Zones and Rates",税区域和比率
 "Tax rates at the same priority are added, others are compounded.",同一优先级的税率已被添加，其它的是集合的。
+Taxes,税
 "The tax rate cannot be removed. It exists in a tax rule.",税率不能被移除，因为它正在被税规则使用。
 "The tax rate has been deleted.",该税率已被删除。
 "The tax rate has been imported.",该税率已被导入。

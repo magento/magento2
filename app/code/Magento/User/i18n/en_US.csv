@@ -1,4 +1,5 @@
 "A user with the same user name or email already exists.","A user with the same user name or email already exists."
+"All Users","All Users"
 "First Name is a required field.","First Name is a required field."
 "If there is an account associated with %1 you will receive an email with a link to reset your password.","If there is an account associated with %1 you will receive an email with a link to reset your password."
 "Interface Locale","Interface Locale"
@@ -25,3 +26,4 @@ Role,Role
 "Warning!rnThis action will remove those users from already assigned rolesrnAre you sure?","Warning!rnThis action will remove those users from already assigned rolesrnAre you sure?"
 "Your password must be at least %1 characters.","Your password must be at least %1 characters."
 "Reset Password Template","Reset Password Template"
+"User Roles","User Roles"

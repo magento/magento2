@@ -1,3 +1,4 @@
+"Abandoned Cart",废弃的购物车
 "Abandoned Carts",放弃购物车
 "Abandoned carts",废弃的购物车
 Action,操作
@@ -13,6 +14,8 @@ Any,任意
 "Are you sure?",您是否确认？
 "Average (Approved)",平均（已批准）
 Bestsellers,最佳销量
+"By Customers",按客户
+"By Products",按产品
 CSV,CSV
 Carts,购物车
 "Compared Product Images Only Template",比较的产品图片仅模板
@@ -64,6 +67,7 @@ Name,姓名
 "New Accounts",新账户数量
 No,否
 "Number of Products to display",显示产品的数量
+"Order Count",订单数
 "Order Quantity",下单的数量
 "Order Status",订单状态
 "Order Taxes Report Grouped by Tax Rate",按税率分组的订购税费报告
@@ -78,6 +82,7 @@ Products,产品
 "Products Ordered",产品已下单
 "Products Report",产品报告
 "Products Reviews",产品评论
+"Products in Cart",购物车中的产品
 "Products in carts",购物车中的产品
 Purchases,购买
 Quantity,商品的数量
@@ -89,6 +94,8 @@ Quantity,商品的数量
 "Refresh Lifetime Statistics",刷新寿命状态
 "Refresh Statistics",刷新状态
 "Refresh Statistics for the Last Day",刷新昨天的状态
+"Refresh statistics",刷新统计
+Refunds,退款
 Report,报告
 Reports,报告
 Results,结果

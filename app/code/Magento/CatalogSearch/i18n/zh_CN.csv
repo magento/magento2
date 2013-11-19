@@ -31,6 +31,7 @@ Search,搜索
 Search:,搜索：
 "Sorry, but the maximum word count is %1. We left out this part of your search: %2.","很抱歉，最大单词数为%1。 我们忽略掉了您搜索的""%2""部分。"
 "Suggested Terms",建议关键词
+Synonym,近义词
 "There are no search terms available.",没有可用的搜索词
 "We didn't find any items using this search criteria.",没有找到指定搜索条件的条目。
 Yes,是

@@ -7,6 +7,7 @@ Action,操作
 "Add files",添加文件
 Authors,作者
 Channel,渠道
+"Connect Manager",连接管理器
 Contents,内容
 "Create Extension Package",创建扩展包
 Dependencies,依存性
@@ -19,6 +20,7 @@ License,许可
 "License URI",许可URI
 "Load Local Package",加载本地包
 "Load local Package",载入本地包
+"Magento Connect",Magento内容
 Maximum,最大
 Minimum,最小
 Name,姓名

@@ -18,6 +18,7 @@ Address,地址
 Addresses,地址
 Admin,管理员
 All,全部
+"All Customers",所有客户
 "All Store Views",所有店铺视图
 "All countries",所有国家
 Amount,数量
@@ -72,6 +73,7 @@ Customer,客户
 "Customer website ID must be specified when using the website scope",使用网站范围时必须指定客户网站ID
 Customers,客户
 "Customers Only",仅限客户
+"Customers Section",客户区域
 Date,日期
 "Date of Birth",出生日期
 Day,天
@@ -183,6 +185,7 @@ Newsletters,新闻邮件
 "Not Sent",未发送
 "Not confirmed, can login",未确认，可登录
 "Not confirmed, cannot login",未确认，无法登陆
+"Now Online",当前在线
 "Number of Lines in a Street Address",街道地址行数
 Offline,离线
 Online,在线

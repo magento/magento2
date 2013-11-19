@@ -36,6 +36,7 @@ Message:,信息：
 "Product: <a href=""%1"">%2</a> <br/>","产品：<a href=""%1"">%2</a> <br/>"
 "Purchased From: %1",购买自：%1
 "RSS Feeds","RSS 订阅源"
+"RSS Feeds Section","RSS 源选区"
 "Review: %1 <br/>","评论：%1 <br/>"
 "Rss Config","RSS 配置"
 "Shipping &amp; Handling",运送与手续费
@@ -46,8 +47,8 @@ Message:,信息：
 Subtotal,小计
 "Summary of review: %1 <br/>","评论摘要：%1 <br/>"
 Tax,传真
-"There are no Rss Feeds.",没有Rss种子。
-"There was no RSS feed enabled.",没有允许Rss种子。
+"There are no Rss Feeds.",没有RSS源。
+"There was no RSS feed enabled.",没有允许的RSS源。
 To:,至：
 "Top Level Category",顶级分类
 "Total: %1<br/>","总数：%1 <br/>"

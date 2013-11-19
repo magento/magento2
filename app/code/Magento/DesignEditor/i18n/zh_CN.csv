@@ -59,6 +59,7 @@ JS,JS
 "Sorry, but you cannot resize images for this theme.",很抱歉，无法改变该主题的图片尺寸。
 "Sorry, there was an unknown error.","很抱歉， 发生未知错误。"
 "Store Designer",店铺设计器
+"The Designer",设计器
 "The file can't be found or edited.",找不到该文件或者该文件无法编辑。
 "Theme ""%1"" is not editable.","主题""%1""不可编辑。"
 "Theme ""%1"" reverted to last default state","主题""%1""回滚到上次默认状态"""

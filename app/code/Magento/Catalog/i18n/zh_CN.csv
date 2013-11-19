@@ -1,6 +1,6 @@
 "%1 - %2","%1 - %2"
 "%1 Item(s)","%1 个条目"
-"%1 RSS Feed",%1RSS种子
+"%1 RSS Feed",%1RSS源
 "%1 and above","%1 及以上"
 "%1 incl tax",%1含税
 "%1 incl tax.",%1含税。
@@ -399,6 +399,7 @@ Product,产品名
 "Product Listing Sort by",产品列表排列顺序
 "Product Prices",产品价格
 "Product Reviews",产品评论
+"Product Template",产品模板
 "Product Templates",产品模板
 "Product URL Suffix",产品URL前缀
 "Product is not loaded",产品尚未加载

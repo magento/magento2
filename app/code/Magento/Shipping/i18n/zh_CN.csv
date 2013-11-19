@@ -56,7 +56,9 @@ Region/State,地区/州
 "Shipment #",送货单号
 "Shipped or billed on:",发送或扣款于：
 "Shipping Methods",运送方式
+"Shipping Methods Section",发送方法选择
 "Shipping Settings",发送设置
+"Shipping Settings Section",发送设置区域
 "Show Method if Not Applicable",如果不可用，显示其他方法
 "Signed by:",签名者：
 "Something went wrong while importing table rates.",导入费率表发生错误。

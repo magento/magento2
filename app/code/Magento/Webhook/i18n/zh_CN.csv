@@ -11,8 +11,10 @@ Deny,否决
 Events,事件
 Format,格式
 "Invalid Email address provided",提供的邮箱地址无效
+"Manage WebHooks",管理WebHooks
 "No Items Found",未找到条目
 "No Subscription ID was provided with the request.",没有提供订阅ID。
+Retrieve,检索
 Revoke,撤销
 Revoked,已撤销
 Subscription,订阅

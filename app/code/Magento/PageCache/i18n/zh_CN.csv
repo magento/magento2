@@ -2,6 +2,7 @@
 "Enable External Cache",启用外部缓存
 "External Cache Control",外部缓存控制
 "External Full Page Cache Settings",外部全页面缓存设置
+"External Page Cache",外部页缓存
 "External full page cache.",外部全页面缓存。
 "Failed to load external cache control",加载外部缓存控制出错
 "Flush External Page Cache",清除外部页面缓存

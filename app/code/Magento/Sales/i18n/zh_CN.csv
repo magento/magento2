@@ -23,6 +23,7 @@
 "About Your Refund",关于您的退款
 "About Your Shipment",关于您的运送
 "Accept Payment",接受付款
+"Accept or Deny Payment",接受或拒绝付款
 "Account Information",帐户信息
 Action,操作
 Actions,操作
@@ -385,6 +386,7 @@ Partial,部分
 Pending,挂起
 "Pending Payment",挂起的支付
 Period,周期
+"Place Order Using Billing Agreements",使用记账协议下单
 "Placed from IP",下单用的IP
 "Please check the billing address information. %1","请检查账单地址信息。 %1"
 "Please check the shipping address information. %1","请检查运送地址信息。 %1"
@@ -449,6 +451,7 @@ Rate,费率
 "Recently Compared Products",最近比较过的产品
 "Recently Viewed",最近查看过的
 "Recently Viewed Products",最近查看过的产品
+"Recurring Billing",周期账单
 "Recurring Billing Profiles",周期账单配置
 "Recurring Billing Profiles (beta)",周期账单配置（beta）
 "Recurring Profile # %1","循环配置文件 # %1"
@@ -489,7 +492,9 @@ SKU,SKU
 Sales,销售
 "Sales Discount",销售折扣
 "Sales Emails",销售邮件
+"Sales Emails Section",销售邮件区域
 "Sales Items",销售产品
+"Sales Section",销售部分
 "Sales Shipping",销售发货
 "Sales Tax",销售税
 "Sales Total",销售总量
@@ -515,8 +520,10 @@ Select,选择
 "Send Invoice Email Copy To",发送发票邮件副本到
 "Send Order Comment Email Copy To",发送订单评论邮件副本至
 "Send Order Comments Email Copy Method",发送订单评论邮件副本的方法
+"Send Order Email",发送订单邮件
 "Send Order Email Copy Method",发送订单邮件副本的方法
 "Send Order Email Copy To",发送订单邮件副本至
+"Send Sales Emails",发送销售邮件
 "Send Shipment Comment Email Copy To",发送送货评论邮件副本至
 "Send Shipment Comments Email Copy Method",发送运单评论邮件副本的方法
 "Send Shipment Email Copy Method",发送运单邮件副本的方法
@@ -810,6 +817,7 @@ cm,厘米
 in,英寸
 kg,kg
 lb,lb
+order-header,订单头
 "the credit memo email is not sent",信用备忘录邮件未发送
 "the invoice email is not sent",发票电子邮件未发送
 "the invoice email was sent",发票电子邮件已发送
