@@ -29,7 +29,7 @@
  */
 namespace Magento\SalesRule\Helper;
 
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Set store and base price which will be used during discount calculation to item object

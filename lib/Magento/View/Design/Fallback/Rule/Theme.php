@@ -22,17 +22,14 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * An aggregate of a fallback rule that propagates it to every theme according to a hierarchy
- */
 namespace Magento\View\Design\Fallback\Rule;
 
 use Magento\View\Design\ThemeInterface;
 
 /**
- * Theme
+ * Fallback Rule Theme
  *
- * @package Magento\View
+ * An aggregate of a fallback rule that propagates it to every theme according to a hierarchy
  */
 class Theme implements RuleInterface
 {
@@ -42,8 +39,6 @@ class Theme implements RuleInterface
     protected $rule;
 
     /**
-     * Constructor
-     *
      * @param RuleInterface $rule
      */
     public function __construct(RuleInterface $rule)
@@ -54,7 +49,8 @@ class Theme implements RuleInterface
     /**
      * Propagate an underlying fallback rule to every theme in a hierarchy: parent, grandparent, etc.
      *
-     * {@inheritdoc}
+     * @param array $params
+     * @return array
      * @throws \InvalidArgumentException
      */
     public function getPatternDirs(array $params)

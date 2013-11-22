@@ -58,8 +58,8 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         /** @var $themeCollection \Magento\Core\Model\Resource\Theme\Collection */
         $themeCollection = $this->getMock('Magento\Core\Model\Resource\Theme\Collection', null, array(), '', false);
 
-        /** @var $context \Magento\Core\Helper\Context */
-        $context = $this->getMock('Magento\Core\Helper\Context', null, array(), '', false);
+        /** @var $context \Magento\App\Helper\Context */
+        $context = $this->getMock('Magento\App\Helper\Context', null, array(), '', false);
 
         $fileSystem = $this->getMockBuilder('Magento\View\FileSystem')->disableOriginalConstructor()
             ->getMock();
@@ -113,8 +113,8 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $themeCollection = $this->getMock('Magento\Core\Model\Resource\Theme\Collection', null, array(), '', false);
 
         // 6.
-        /** @var $context \Magento\Core\Helper\Context */
-        $context = $this->getMock('Magento\Core\Helper\Context', null, array(), '', false);
+        /** @var $context \Magento\App\Helper\Context */
+        $context = $this->getMock('Magento\App\Helper\Context', null, array(), '', false);
 
         // 7. Get view file system model mock
         $params = array(
@@ -576,8 +576,8 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         /** @var $processorFactory \Magento\View\Layout\ProcessorFactory|\PHPUnit_Framework_MockObject_MockObject */
         $processorFactory = $this->getMock('Magento\View\Layout\ProcessorFactory', array('create'), array(), '', false);
 
-        /** @var $context \Magento\Core\Helper\Context */
-        $context = $this->getMock('Magento\Core\Helper\Context', null, array(), '', false);
+        /** @var $context \Magento\App\Helper\Context */
+        $context = $this->getMock('Magento\App\Helper\Context', null, array(), '', false);
 
         /** @var $fileSystem \Magento\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject */
         $fileSystem = $this->getMockBuilder('Magento\View\FileSystem', array())

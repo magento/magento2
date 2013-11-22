@@ -54,11 +54,6 @@ class Sales extends \Magento\Backend\Block\Template
     protected $_currency;
 
     /**
-     * @var \Magento\Core\Model\StoreManager
-     */
-    protected $_storeManager;
-
-    /**
      * @param \Magento\Core\Helper\Data $coreData
      * Core registry
      *
@@ -77,28 +72,25 @@ class Sales extends \Magento\Backend\Block\Template
     protected $_collectionFactory;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Sales\Model\Resource\Sale\CollectionFactory $collectionFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Sales\Model\Resource\Sale\CollectionFactory $collectionFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Core\Model\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;
-        $this->_storeManager = $storeManager;
         $this->_currencyFactory = $currencyFactory;
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     protected function _construct()

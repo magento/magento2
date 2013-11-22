@@ -35,7 +35,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Composite\Update;
 
-class Result extends \Magento\Core\Block\Template
+class Result extends \Magento\View\Block\Template
 {
     /**
      * Adminhtml js
@@ -52,22 +52,22 @@ class Result extends \Magento\Core\Block\Template
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Adminhtml\Helper\Js $adminhtmlJs
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Adminhtml\Helper\Js $adminhtmlJs
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Adminhtml\Helper\Js $adminhtmlJs,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Adminhtml\Helper\Js $adminhtmlJs,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
         $this->_adminhtmlJs = $adminhtmlJs;
         $this->_coreRegistry = $registry;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

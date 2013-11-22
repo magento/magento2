@@ -72,7 +72,7 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
         $this->_model->apply(
             $request,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-                ->createBlock('Magento\Core\Block\Text')
+                ->createBlock('Magento\View\Block\Text')
         );
 
         $this->assertEmpty($this->_model->getData('range'));
@@ -89,7 +89,7 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
         $this->_model->apply(
             $request,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-                ->createBlock('Magento\Core\Block\Text')
+                ->createBlock('Magento\View\Block\Text')
         );
 
         $this->assertEmpty($this->_model->getData('range'));
@@ -105,7 +105,7 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
         $this->_model->apply(
             $request,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-                ->createBlock('Magento\Core\Block\Text')
+                ->createBlock('Magento\View\Block\Text')
         );
 
         $this->assertEquals(100, $this->_model->getData('range'));

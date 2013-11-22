@@ -36,11 +36,6 @@
             </value>
         </param>
     </type>
-    <type name="Magento\Backend\Controller\Context">
-        <param name="translator">
-            <instance type="Magento\Core\Model\Translate\Proxy" />
-        </param>
-    </type>
     <type name="Magento\Backend\App\Router\DefaultRouter">
         <param name="routerId">
             <value>admin</value>

@@ -33,7 +33,7 @@
  */
 namespace Magento\Page\Block\Html;
 
-class Header extends \Magento\Core\Block\Template
+class Header extends \Magento\View\Block\Template
 {
     /**
      * @var \Magento\Customer\Model\Session
@@ -41,27 +41,19 @@ class Header extends \Magento\Core\Block\Template
     protected $_customerSession;
 
     /**
-     * @var \Magento\App\State
-     */
-    protected $_appState;
-
-    /**
-     * @param \Magento\App\State $appState
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
      * @param array $data
      */
     public function __construct(
-        \Magento\App\State $appState,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Customer\Model\Session $customerSession,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;
-        $this->_appState = $appState;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     public function _construct()

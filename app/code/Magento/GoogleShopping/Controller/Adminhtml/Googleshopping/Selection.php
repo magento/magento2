@@ -33,7 +33,7 @@
  */
 namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping;
 
-class Selection extends \Magento\Backend\Controller\Adminhtml\Action
+class Selection extends \Magento\Backend\App\Action
 {
     /**
      * Search result grid with available products for Google Content
@@ -41,7 +41,7 @@ class Selection extends \Magento\Backend\Controller\Adminhtml\Action
     public function searchAction()
     {
         $this->getResponse()->setBody(
-            $this->getLayout()
+            $this->_view->getLayout()
                 ->createBlock('Magento\GoogleShopping\Block\Adminhtml\Items\Product')
                 ->setIndex($this->getRequest()->getParam('index'))
                 ->setFirstShow(true)
@@ -54,9 +54,9 @@ class Selection extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function gridAction()
     {
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $this->getResponse()->setBody(
-            $this->getLayout()
+            $this->_view->getLayout()
                 ->createBlock('Magento\GoogleShopping\Block\Adminhtml\Items\Product')
                 ->setIndex($this->getRequest()->getParam('index'))
                 ->toHtml()

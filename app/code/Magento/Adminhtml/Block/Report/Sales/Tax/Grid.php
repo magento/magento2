@@ -43,31 +43,27 @@ class Grid extends \Magento\Adminhtml\Block\Report\Grid\AbstractGrid
     protected $_configFactory;
 
     /**
-     * @param \Magento\Sales\Model\Order\ConfigFactory $configFactory
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Reports\Model\Resource\Report\Collection\Factory $resourceFactory
      * @param \Magento\Reports\Model\Grouped\CollectionFactory $collectionFactory
      * @param \Magento\Reports\Helper\Data $reportsData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Sales\Model\Order\ConfigFactory $configFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Sales\Model\Order\ConfigFactory $configFactory,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Model\Url $urlModel,
         \Magento\Reports\Model\Resource\Report\Collection\Factory $resourceFactory,
         \Magento\Reports\Model\Grouped\CollectionFactory $collectionFactory,
         \Magento\Reports\Helper\Data $reportsData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Url $urlModel,
+        \Magento\Sales\Model\Order\ConfigFactory $configFactory,
         array $data = array()
     ) {
         $this->_configFactory = $configFactory;
-        parent::__construct(
-            $resourceFactory, $collectionFactory, $reportsData, $coreData, $context, $storeManager, $urlModel, $data
-        );
+        parent::__construct($context, $coreData, $urlModel, $resourceFactory, $collectionFactory, $reportsData, $data);
     }
 
     protected function _construct()

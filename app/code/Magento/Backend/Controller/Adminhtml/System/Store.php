@@ -33,7 +33,7 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System;
 
-class Store extends \Magento\Backend\Controller\Adminhtml\Action
+class Store extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -48,12 +48,12 @@ class Store extends \Magento\Backend\Controller\Adminhtml\Action
     protected $filterManager;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Filter\FilterManager $filterManager
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Filter\FilterManager $filterManager
     ) {
@@ -70,8 +70,8 @@ class Store extends \Magento\Backend\Controller\Adminhtml\Action
     protected function _initAction()
     {
         // load layout, set active menu and breadcrumbs
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_Adminhtml::system_store')
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_Adminhtml::system_store')
             ->_addBreadcrumb(__('System'), __('System'))
             ->_addBreadcrumb(__('Manage Stores'), __('Manage Stores'));
         return $this;
@@ -79,9 +79,9 @@ class Store extends \Magento\Backend\Controller\Adminhtml\Action
 
     public function indexAction()
     {
-        $this->_title(__('Stores'));
-        $this->_initAction()
-            ->renderLayout();
+        $this->_title->add(__('Stores'));
+        $this->_initAction();
+        $this->_view->renderLayout();
     }
 
     public function newWebsiteAction()
@@ -119,7 +119,7 @@ class Store extends \Magento\Backend\Controller\Adminhtml\Action
 
     public function editStoreAction()
     {
-        $this->_title(__('Stores'));
+        $this->_title->add(__('Stores'));
 
         $session = $this->_getSession();
         if ($session->getPostData()) {
@@ -165,9 +165,9 @@ class Store extends \Magento\Backend\Controller\Adminhtml\Action
             $this->_coreRegistry->register('store_data', $model);
 
             if ($this->_coreRegistry->registry('store_action') == 'add') {
-                $this->_title(__('New ') . $title);
+                $this->_title->add(__('New ') . $title);
             } else {
-                $this->_title($model->getName());
+                $this->_title->add($model->getName());
             }
 
             if ($this->_coreRegistry->registry('store_action') == 'edit' && $codeBase && !$model->isReadOnly()) {
@@ -175,8 +175,8 @@ class Store extends \Magento\Backend\Controller\Adminhtml\Action
             }
 
             $this->_initAction()
-                ->_addContent($this->getLayout()->createBlock('Magento\Backend\Block\System\Store\Edit'))
-                ->renderLayout();
+                ->_addContent($this->_view->getLayout()->createBlock('Magento\Backend\Block\System\Store\Edit'));
+            $this->_view->renderLayout();
         } else {
             $session->addError($notExists);
             $this->_redirect('adminhtml/*/');
@@ -263,7 +263,7 @@ class Store extends \Magento\Backend\Controller\Adminhtml\Action
                 $session->addException($e, __('An error occurred while saving. Please review the error log.'));
                 $session->setPostData($postData);
             }
-            $this->_redirectReferer();
+            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
             return;
         }
         $this->_redirect('adminhtml/*/');
@@ -271,7 +271,7 @@ class Store extends \Magento\Backend\Controller\Adminhtml\Action
 
     public function deleteWebsiteAction()
     {
-        $this->_title(__('Delete Web Site'));
+        $this->_title->add(__('Delete Web Site'));
 
         $session = $this->_getSession();
         $itemId = $this->getRequest()->getParam('item_id', null);
@@ -290,18 +290,18 @@ class Store extends \Magento\Backend\Controller\Adminhtml\Action
 
         $this->_initAction()
             ->_addBreadcrumb(__('Delete Web Site'), __('Delete Web Site'))
-            ->_addContent($this->getLayout()->createBlock('Magento\Backend\Block\System\Store\Delete')
+            ->_addContent($this->_view->getLayout()->createBlock('Magento\Backend\Block\System\Store\Delete')
                 ->setFormActionUrl($this->getUrl('adminhtml/*/deleteWebsitePost'))
                 ->setBackUrl($this->getUrl('adminhtml/*/editWebsite', array('website_id' => $itemId)))
                 ->setStoreTypeTitle(__('Web Site'))
                 ->setDataObject($model)
-            )
-            ->renderLayout();
+            );
+        $this->_view->renderLayout();
     }
 
     public function deleteGroupAction()
     {
-        $this->_title(__('Delete Store'));
+        $this->_title->add(__('Delete Store'));
 
         $session = $this->_getSession();
         $itemId = $this->getRequest()->getParam('item_id', null);
@@ -320,18 +320,18 @@ class Store extends \Magento\Backend\Controller\Adminhtml\Action
 
         $this->_initAction()
             ->_addBreadcrumb(__('Delete Store'), __('Delete Store'))
-            ->_addContent($this->getLayout()->createBlock('Magento\Backend\Block\System\Store\Delete')
+            ->_addContent($this->_view->getLayout()->createBlock('Magento\Backend\Block\System\Store\Delete')
                 ->setFormActionUrl($this->getUrl('adminhtml/*/deleteGroupPost'))
                 ->setBackUrl($this->getUrl('adminhtml/*/editGroup', array('group_id' => $itemId)))
                 ->setStoreTypeTitle(__('Store'))
                 ->setDataObject($model)
-            )
-            ->renderLayout();
+            );
+        $this->_view->renderLayout();
     }
 
     public function deleteStoreAction()
     {
-        $this->_title(__('Delete Store View'));
+        $this->_title->add(__('Delete Store View'));
 
         $session = $this->_getSession();
         $itemId = $this->getRequest()->getParam('item_id', null);
@@ -350,13 +350,13 @@ class Store extends \Magento\Backend\Controller\Adminhtml\Action
 
         $this->_initAction()
             ->_addBreadcrumb(__('Delete Store View'), __('Delete Store View'))
-            ->_addContent($this->getLayout()->createBlock('Magento\Backend\Block\System\Store\Delete')
+            ->_addContent($this->_view->getLayout()->createBlock('Magento\Backend\Block\System\Store\Delete')
                 ->setFormActionUrl($this->getUrl('adminhtml/*/deleteStorePost'))
                 ->setBackUrl($this->getUrl('adminhtml/*/editStore', array('store_id' => $itemId)))
                 ->setStoreTypeTitle(__('Store View'))
                 ->setDataObject($model)
-            )
-            ->renderLayout();
+            );
+        $this->_view->renderLayout();
     }
 
     public function deleteWebsitePostAction()

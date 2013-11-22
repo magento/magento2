@@ -107,7 +107,7 @@ abstract class AbstractIo implements \Magento\Io\IoInterface
                 }
             }
 
-            array_push($realPathParts, $pathParts[$i]);
+            $realPathParts[] = $pathParts[$i];
         }
 
         return $pathTokR . implode('/', $realPathParts);

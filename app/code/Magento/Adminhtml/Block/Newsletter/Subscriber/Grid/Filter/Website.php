@@ -52,18 +52,18 @@ class Website
     protected $_websitesFactory;
 
     /**
-     * @param \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Core\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Block\Context $context,
         \Magento\Core\Model\Resource\Helper $resourceHelper,
+        \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {

@@ -95,6 +95,16 @@ class Testsuite
     }
 
     /**
+     * Get test framework application instance
+     *
+     * @return \Magento\TestFramework\Application
+     */
+    public function getApplication()
+    {
+        return $this->_application;
+    }
+
+    /**
      * Run entire test suite of scenarios
      */
     public function run()

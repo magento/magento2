@@ -32,11 +32,23 @@ namespace Magento\TestFramework;
 class Application
 {
     /**
+     * Area code
+     */
+    const AREA_CODE = 'install';
+
+    /**
      * Configuration object
      *
      * @param \Magento\Config
      */
     protected $_config;
+
+    /**
+     * Application object
+     *
+     * @var \Magento\Core\Model\App
+     */
+    protected $_application;
 
     /**
      * Path to shell installer script
@@ -97,11 +109,34 @@ class Application
         if ($this->_config->getInstallOptions()) {
             $this->_uninstall()
                 ->_install()
-                ->_reindex()
+                ->reindex()
                 ->_updateFilesystemPermissions();
         } else {
             $this->_isInstalled = true;
         }
+        return $this;
+    }
+
+    /**
+     * Reset application (uninstall, install, reindex, update permissions)
+     *
+     * @return Application
+     */
+    public function reset()
+    {
+        return $this->_reset();
+    }
+
+    /**
+     * Run reindex
+     *
+     * @return Application
+     */
+    public function reindex()
+    {
+        $this->_shell->execute(
+            'php -f ' . $this->_config->getApplicationBaseDir() . '/dev/shell/indexer.php -- reindexall'
+        );
         return $this;
     }
 
@@ -155,32 +190,11 @@ class Application
     }
 
     /**
-     * Run all indexer processes
-     *
-     * @return \Magento\TestFramework\Application
-     */
-    protected function _reindex()
-    {
-        $this->_bootstrap();
-
-        /** @var $indexer \Magento\Index\Model\Indexer */
-        $indexer = $this->_objectManager->create('Magento\Index\Model\Indexer');
-        /** @var $process \Magento\Index\Model\Process */
-        foreach ($indexer->getProcessesCollection() as $process) {
-            if ($process->getIndexer()->isVisible()) {
-                $process->reindexEverything();
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * Update permissions for `var` directory
      */
     protected function _updateFilesystemPermissions()
     {
-        \Magento\Io\File::chmodRecursive($this->_objectManager->get('Magento\App\Dir')->getDir('var'), 0777);
+        \Magento\Io\File::chmodRecursive($this->getObjectManager()->get('Magento\App\Dir')->getDir('var'), 0777);
     }
 
     /**
@@ -190,12 +204,24 @@ class Application
      */
     protected function _bootstrap()
     {
-        if (!$this->_objectManager) {
-            $this->_objectManager = new \Magento\App\ObjectManager(BP, $_SERVER);
-        }
         /** @var $app \Magento\Core\Model\App */
-        $this->_objectManager->get('Magento\Core\Model\App');
+        $this->_application = $this->getObjectManager()->get('Magento\Core\Model\App');
+        $this->getObjectManager()->get('Magento\App\State')->setAreaCode(self::AREA_CODE);
+        $this->getObjectManager()->configure(
+            $this->getObjectManager()->get('Magento\App\ObjectManager\ConfigLoader')->load(self::AREA_CODE)
+        );
+        $this->getObjectManager()->get('Magento\Config\ScopeInterface')->setCurrentScope(self::AREA_CODE);
         return $this;
+    }
+
+    /**
+     * Bootstrap
+     *
+     * @return Application
+     */
+    public function bootstrap()
+    {
+        return $this->_bootstrap();
     }
 
     /**
@@ -218,12 +244,22 @@ class Application
 
         $this->_bootstrap();
         foreach ($fixturesToApply as $fixtureFile) {
-            require $fixtureFile;
+            $this->applyFixture($fixtureFile);
         }
         $this->_fixtures = $fixtures;
 
-        $this->_reindex()
+        $this->reindex()
             ->_updateFilesystemPermissions();
+    }
+
+    /**
+     * Apply fixture file
+     *
+     * @param string $fixtureFilename
+     */
+    public function applyFixture($fixtureFilename)
+    {
+        require $fixtureFilename;
     }
 
     /**
@@ -240,10 +276,16 @@ class Application
     }
 
     /**
+     * Get object manager
+     *
      * @return \Magento\ObjectManager
      */
     public function getObjectManager()
     {
+        if (!$this->_objectManager) {
+            $locatorFactory = new \Magento\App\ObjectManagerFactory();
+            $this->_objectManager = $locatorFactory->create(BP, $_SERVER);
+        }
         return $this->_objectManager;
     }
 }

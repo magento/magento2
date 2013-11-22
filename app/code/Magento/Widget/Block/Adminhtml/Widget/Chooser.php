@@ -42,19 +42,19 @@ class Chooser extends \Magento\Backend\Block\Template
     protected $_elementFactory;
 
     /**
-     * @param \Magento\Data\Form\Element\Factory $elementFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Data\Form\Element\Factory $elementFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Element\Factory $elementFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Data\Form\Element\Factory $elementFactory,
         array $data = array()
     ) {
         $this->_elementFactory = $elementFactory;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

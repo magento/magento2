@@ -60,27 +60,27 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     protected $_collectionFactory;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $collectionFactory
      * @param \Magento\Catalog\Helper\Catalog $helperCatalog
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $collectionFactory,
         \Magento\Catalog\Helper\Catalog $helperCatalog,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_coreRegistry = $registry;
         $this->_helperCatalog = $helperCatalog;
-        parent::__construct($coreData, $context, $authSession, $data);
+        parent::__construct($context, $coreData, $authSession, $data);
     }
 
     /**

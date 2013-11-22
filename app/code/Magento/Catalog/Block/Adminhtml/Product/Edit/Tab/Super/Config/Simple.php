@@ -49,27 +49,27 @@ class Simple
     protected $_productFactory;
 
     /**
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
-     * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
+     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
-        \Magento\Data\FormFactory $formFactory,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Data\FormFactory $formFactory,
+        \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
+        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\Catalog\Model\ProductFactory $productFactory,
         array $data = array()
     ) {
         $this->_productFactory = $productFactory;
-        parent::__construct($wysiwygConfig, $formFactory, $catalogData, $coreData, $context, $registry, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $wysiwygConfig, $catalogData, $data);
     }
 
     protected function _prepareForm()

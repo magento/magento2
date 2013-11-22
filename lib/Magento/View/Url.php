@@ -22,11 +22,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\View;
+
 /**
  * Builds URLs for publicly accessible files
  */
-namespace Magento\View;
-
 class Url
 {
     /**
@@ -77,8 +77,6 @@ class Url
     protected $_fileUrlMap;
 
     /**
-     * View files URL model
-     *
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\App\Dir $dirs
      * @param \Magento\UrlInterface $urlBuilder
@@ -109,7 +107,9 @@ class Url
     }
 
     /**
-     * Get url to file base on theme file identifier.
+     * Retrieve view file URL
+     *
+     * Get URL to file base on theme file identifier.
      * Publishes file there, if needed.
      *
      * @param string $fileId

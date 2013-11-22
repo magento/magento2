@@ -51,7 +51,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
             ->method('checkDbUsage')
             ->will($this->returnValue(false));
 
-        $helperFactory = $this->getMock('Magento\Core\Model\Factory\Helper', array('get'), array(), '', false);
+        $helperFactory = $this->getMock('Magento\App\Helper\HelperFactory', array('get'), array(), '', false);
         $helperFactory->expects($this->once())
             ->method('get')
             ->will($this->returnValue($helper));

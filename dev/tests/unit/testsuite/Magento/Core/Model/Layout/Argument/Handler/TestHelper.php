@@ -27,7 +27,7 @@
 
 namespace Magento\Core\Model\Layout\Argument\Handler;
 
-class TestHelper extends \Magento\Core\Helper\AbstractHelper
+class TestHelper extends \Magento\App\Helper\AbstractHelper
 {
     public function testMethod()
     {

@@ -45,14 +45,14 @@ class Link extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Abstract
     protected $_sitemapFactory;
 
     /**
-     * @param \Magento\Sitemap\Model\SitemapFactory $sitemapFactory
      * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Sitemap\Model\SitemapFactory $sitemapFactory
      * @param \Magento\Filesystem $filesystem
      * @param array $data
      */
     public function __construct(
-        \Magento\Sitemap\Model\SitemapFactory $sitemapFactory,
         \Magento\Backend\Block\Context $context,
+        \Magento\Sitemap\Model\SitemapFactory $sitemapFactory,
         \Magento\Filesystem $filesystem,
         array $data = array()
     ) {

@@ -47,4 +47,14 @@
             </value>
         </param>
     </type>
+    <virtualType name="wishlistInitSession" type="Magento\Core\App\Action\Plugin\Session">
+        <param name="cookieCheckActions">
+            <value>
+                <wishlistAdd>add</wishlistAdd>
+            </value>
+        </param>
+    </virtualType>
+    <type name="Magento\Wishlist\Controller\Index">
+        <plugin name="sessionInitializer" type="wishlistInitSession" />
+    </type>
 </config>

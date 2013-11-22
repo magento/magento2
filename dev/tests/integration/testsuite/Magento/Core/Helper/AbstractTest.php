@@ -30,14 +30,14 @@ namespace Magento\Core\Helper;
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Helper\AbstractHelper|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Helper\AbstractHelper|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_helper = null;
 
     protected function setUp()
     {
-        $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Helper\Context');
-        $this->_helper = $this->getMock('Magento\Core\Helper\AbstractHelper', array('_getModuleName'), array($context));
+        $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Helper\Context');
+        $this->_helper = $this->getMock('Magento\App\Helper\AbstractHelper', array('_getModuleName'), array($context));
         $this->_helper
             ->expects($this->any())
             ->method('_getModuleName')
@@ -46,8 +46,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Core\Helper\AbstractHelper::isModuleEnabled
-     * @covers \Magento\Core\Helper\AbstractHelper::isModuleOutputEnabled
+     * @covers \Magento\App\Helper\AbstractHelper::isModuleEnabled
+     * @covers \Magento\App\Helper\AbstractHelper::isModuleOutputEnabled
      */
     public function testIsModuleEnabled()
     {

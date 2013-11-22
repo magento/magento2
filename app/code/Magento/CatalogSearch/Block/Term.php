@@ -33,18 +33,11 @@
  */
 namespace Magento\CatalogSearch\Block;
 
-class Term extends \Magento\Core\Block\Template
+class Term extends \Magento\View\Block\Template
 {
     protected $_terms;
     protected $_minPopularity;
     protected $_maxPopularity;
-
-    /**
-     * Store manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
 
     /**
      * Url factory
@@ -61,27 +54,22 @@ class Term extends \Magento\Core\Block\Template
     protected $_queryCollectionFactory;
 
     /**
-     * Construct
-     *
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\CatalogSearch\Model\Resource\Query\CollectionFactory $queryCollectionFactory
      * @param \Magento\Core\Model\UrlFactory $urlFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\CatalogSearch\Model\Resource\Query\CollectionFactory $queryCollectionFactory,
         \Magento\Core\Model\UrlFactory $urlFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         array $data = array()
     ) {
         $this->_queryCollectionFactory = $queryCollectionFactory;
         $this->_urlFactory = $urlFactory;
-        $this->_storeManager = $storeManager;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

@@ -33,7 +33,7 @@
                     </storeManager>
                 </parameters>
             </Node1>
-            <Node2 type ="Magento\Core\Controller\Varien\Action\Context">
+            <Node2 type ="Magento\App\Action\Context">
                 <plugins>
                     <first><instance>Magento\Core\Model\Action\Plugin</instance></first>
                     <second><instance>Custom_PageCache_Model_Action_Plugin</instance></second>

@@ -42,26 +42,26 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_orderConfig;
 
     /**
-     * @param \Magento\Sales\Model\Order\Config $orderConfig
-     * @param \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $collectionFactory
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Sales\Model\Order\Config $orderConfig
+     * @param \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Sales\Model\Order\Config $orderConfig,
-        \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $collectionFactory,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Sales\Model\Order\Config $orderConfig,
+        \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $collectionFactory,
         array $data = array()
     ) {
         $this->_orderConfig = $orderConfig;
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     protected function _construct()

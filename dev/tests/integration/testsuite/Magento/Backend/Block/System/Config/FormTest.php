@@ -78,8 +78,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
         /** @var $block \Magento\Backend\Block\System\Config\Form */
         $block = $layout->createBlock('Magento\Backend\Block\System\Config\Form', 'block');
 
-        /** @var $childBlock \Magento\Core\Block\Text */
-        $childBlock = $layout->addBlock('Magento\Core\Block\Text', 'element_dependence', 'block');
+        /** @var $childBlock \Magento\View\Block\Text */
+        $childBlock = $layout->addBlock('Magento\View\Block\Text', 'element_dependence', 'block');
 
         $expectedValue = 'dependence_html_relations';
         $this->assertNotContains($expectedValue, $block->toHtml());
@@ -258,15 +258,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\App\ResponseInterface')->headersSentThrowsException = false;
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Controller\Front\Action',
-            array(
-                'request' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\App\Request\Http'),
-                'response' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\Core\Model\App')->getResponse()
-            )
-        );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\RequestInterface')
             ->setParam('section', 'general');
         /** @var $block \Magento\Backend\Block\System\Config\Form */

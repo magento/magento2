@@ -43,18 +43,18 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
     protected $_notificationList;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\AdminNotification\Model\Resource\Inbox\Collection\Unread $notificationList
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\AdminNotification\Model\Resource\Inbox\Collection\Unread $notificationList,
         array $data = array()
     ) {
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
         $this->_notificationList = $notificationList;
     }
 

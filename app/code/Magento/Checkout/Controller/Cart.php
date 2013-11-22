@@ -30,16 +30,9 @@
 namespace Magento\Checkout\Controller;
 
 class Cart
-    extends \Magento\Core\Controller\Front\Action
+    extends \Magento\App\Action\Action
     implements \Magento\Catalog\Controller\Product\View\ViewInterface
 {
-    /**
-     * Action list where need check enabled cookie
-     *
-     * @var array
-     */
-    protected $_cookieCheckActions = array('add');
-
     /**
      * @var \Magento\Core\Model\Store\ConfigInterface
      */
@@ -51,18 +44,26 @@ class Cart
     protected $_checkoutSession;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @var \Magento\Core\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Store\ConfigInterface $storeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Core\Model\Store\ConfigInterface $storeConfig,
-        \Magento\Checkout\Model\Session $checkoutSession
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
-        parent::__construct($context);
         $this->_storeConfig = $storeConfig;
         $this->_checkoutSession = $checkoutSession;
+        $this->_storeManager = $storeManager;
+        parent::__construct($context);
     }
 
     /**
@@ -93,17 +94,17 @@ class Cart
     protected function _goBack()
     {
         $returnUrl = $this->getRequest()->getParam('return_url');
-        if ($returnUrl && $this->_isUrlInternal($returnUrl)) {
+        if ($returnUrl && $this->_isInternalUrl($returnUrl)) {
             $this->_checkoutSession->getMessages(true);
             $this->getResponse()->setRedirect($returnUrl);
         } elseif (!$this->_storeConfig->getConfig('checkout/cart/redirect_to_cart')
             && !$this->getRequest()->getParam('in_cart')
-            && $backUrl = $this->_getRefererUrl()
+            && $backUrl = $this->_redirect->getRefererUrl()
         ) {
             $this->getResponse()->setRedirect($backUrl);
         } else {
             if (($this->getRequest()->getActionName() == 'add') && !$this->getRequest()->getParam('in_cart')) {
-                $this->_checkoutSession->setContinueShoppingUrl($this->_getRefererUrl());
+                $this->_checkoutSession->setContinueShoppingUrl($this->_redirect->getRefererUrl());
             }
             $this->_redirect('checkout/cart');
         }
@@ -173,12 +174,13 @@ class Cart
         $this->_checkoutSession->setCartWasUpdated(true);
 
         \Magento\Profiler::start(__METHOD__ . 'cart_display');
-        $this
-            ->loadLayout()
-            ->_initLayoutMessages('Magento\Checkout\Model\Session')
-            ->_initLayoutMessages('Magento\Catalog\Model\Session')
-            ->getLayout()->getBlock('head')->setTitle(__('Shopping Cart'));
-        $this->renderLayout();
+        $messageStores = array('Magento\Checkout\Model\Session', 'Magento\Catalog\Model\Session');
+
+        $this->_view->loadLayout();
+        $layout = $this->_view->getLayout();
+        $layout->initMessages($messageStores);
+        $layout->getBlock('head')->setTitle(__('Shopping Cart'));
+        $this->_view->renderLayout();
         \Magento\Profiler::stop(__METHOD__ . 'cart_display');
     }
 
@@ -237,7 +239,9 @@ class Cart
             } else {
                 $messages = array_unique(explode("\n", $e->getMessage()));
                 foreach ($messages as $message) {
-                    $this->_checkoutSession->addError($this->_objectManager->get('Magento\Escaper')->escapeHtml($message));
+                    $this->_checkoutSession->addError(
+                        $this->_objectManager->get('Magento\Escaper')->escapeHtml($message)
+                    );
                 }
             }
 
@@ -245,7 +249,8 @@ class Cart
             if ($url) {
                 $this->getResponse()->setRedirect($url);
             } else {
-                $this->_redirectReferer($this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl());
+                $cartUrl = $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl();
+                $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($cartUrl));
             }
         } catch (\Exception $e) {
             $this->_checkoutSession->addException($e, __('We cannot add this item to your shopping cart'));
@@ -387,7 +392,8 @@ class Cart
             if ($url) {
                 $this->getResponse()->setRedirect($url);
             } else {
-                $this->_redirectReferer($this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl());
+                $cartUrl = $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl();
+                $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($cartUrl));
             }
         } catch (\Exception $e) {
             $this->_checkoutSession->addException($e, __('We cannot update the item.'));
@@ -468,7 +474,7 @@ class Cart
     }
 
     /**
-     * Delete shoping cart item action
+     * Delete shopping cart item action
      */
     public function deleteAction()
     {
@@ -482,7 +488,8 @@ class Cart
                 $this->_objectManager->get('Magento\Logger')->logException($e);
             }
         }
-        $this->_redirectReferer($this->_objectManager->create('Magento\UrlInterface')->getUrl('*/*'));
+        $defaultUrl = $this->_objectManager->create('Magento\UrlInterface')->getUrl('*/*');
+        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($defaultUrl));
     }
 
     /**
@@ -529,10 +536,9 @@ class Cart
             return;
         }
 
-        $couponCode = (string) $this->getRequest()->getParam('coupon_code');
-        if ($this->getRequest()->getParam('remove') == 1) {
-            $couponCode = '';
-        }
+        $couponCode = $this->getRequest()->getParam('remove') == 1
+            ? ''
+            : trim($this->getRequest()->getParam('coupon_code'));
         $oldCouponCode = $this->_getQuote()->getCouponCode();
 
         if (!strlen($couponCode) && !strlen($oldCouponCode)) {
@@ -571,5 +577,27 @@ class Cart
         }
 
         $this->_goBack();
+    }
+
+    /**
+     * check if URL corresponds store
+     *
+     * @param string $url
+     * @return bool
+     */
+    protected function _isInternalUrl($url)
+    {
+        if (strpos($url, 'http') === false) {
+            return false;
+        }
+
+        /**
+         * Url must start from base secure or base unsecure url
+         */
+        /** @var $store \Magento\Core\Model\Store */
+        $store = $this->_storeManager->getStore();
+        $unsecure = (strpos($url, $store->getBaseUrl()) === 0);
+        $secure = (strpos($url, $store->getBaseUrl($store::URL_TYPE_LINK, true)) === 0);
+        return $unsecure || $secure;
     }
 }

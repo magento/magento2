@@ -37,4 +37,14 @@
             </value>
         </param>
     </type>
+    <virtualType name="checkoutCartInitSession" type="Magento\Core\App\Action\Plugin\Session">
+        <param name="cookieCheckActions">
+            <value>
+                <checkoutCartAdd>add</checkoutCartAdd>
+            </value>
+        </param>
+    </virtualType>
+    <type name="Magento\Checkout\Controller\Cart">
+        <plugin name="sessionInitializer" type="checkoutCartInitSession" />
+    </type>
 </config>

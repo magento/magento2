@@ -34,7 +34,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-class Widget extends \Magento\Backend\Controller\Adminhtml\Action
+class Widget extends \Magento\Backend\App\Action
 {
     /**
      * Chooser Source action
@@ -45,7 +45,7 @@ class Widget extends \Magento\Backend\Controller\Adminhtml\Action
         $massAction = $this->getRequest()->getParam('use_massaction', false);
         $productTypeId = $this->getRequest()->getParam('product_type_id', null);
 
-        $productsGrid = $this->getLayout()->createBlock(
+        $productsGrid = $this->_view->getLayout()->createBlock(
             'Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser',
             '',
             array(
@@ -61,7 +61,7 @@ class Widget extends \Magento\Backend\Controller\Adminhtml\Action
         $html = $productsGrid->toHtml();
 
         if (!$this->getRequest()->getParam('products_grid')) {
-            $categoriesTree = $this->getLayout()->createBlock(
+            $categoriesTree = $this->_view->getLayout()->createBlock(
                 'Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser',
                 '',
                 array(
@@ -73,7 +73,7 @@ class Widget extends \Magento\Backend\Controller\Adminhtml\Action
                 )
             );
 
-            $html = $this->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser\Container')
+            $html = $this->_view->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser\Container')
                 ->setTreeHtml($categoriesTree->toHtml())
                 ->setGridHtml($html)
                 ->toHtml();

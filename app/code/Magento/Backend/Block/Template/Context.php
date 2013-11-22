@@ -28,7 +28,7 @@ namespace Magento\Backend\Block\Template;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Context extends \Magento\Core\Block\Template\Context
+class Context extends \Magento\View\Block\Template\Context
 {
     /**
      * @var \Magento\AuthorizationInterface
@@ -36,17 +36,16 @@ class Context extends \Magento\Core\Block\Template\Context
     protected $_authorization;
 
     /**
-     * @var \Magento\Core\Model\StoreManager
-     */
-    protected $_storeManager;
-
-    /**
      * @var \Magento\Math\Random
      */
     protected $mathRandom;
 
     /**
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @var \Magento\Backend\Model\Session
+     */
+    protected $_backendSession;
+
+    /**
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Event\ManagerInterface $eventManager
@@ -57,7 +56,7 @@ class Context extends \Magento\Core\Block\Template\Context
      * @param \Magento\Core\Model\Session $session
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\App\FrontController $frontController
-     * @param \Magento\Core\Model\Factory\Helper $helperFactory
+     * @param \Magento\App\Helper\HelperFactory $helperFactory
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\View\ConfigInterface $viewConfig
      * @param \Magento\App\Cache\StateInterface $cacheState
@@ -65,20 +64,21 @@ class Context extends \Magento\Core\Block\Template\Context
      * @param \Magento\Logger $logger
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\View\FileSystem $viewFileSystem
-     * @param \Magento\View\TemplateEngineFactory $engineFactory
-     * @param \Magento\AuthorizationInterface $authorization
+     * @param \Magento\View\TemplateEnginePool $enginePool
      * @param \Magento\Core\Model\App $app
      * @param \Magento\App\State $appState
      * @param \Magento\Escaper $escaper
      * @param \Magento\Filter\FilterManager $filterManager
-     * @param \Magento\Backend\Model\Session $backendSession
      * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\AuthorizationInterface $authorization
+     * @param \Magento\Backend\Model\Session $backendSession
      * @param \Magento\Math\Random $mathRandom
-     *
+     * @param array $data
+     * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\StoreManager $storeManager,
         \Magento\App\RequestInterface $request,
         \Magento\View\LayoutInterface $layout,
         \Magento\Event\ManagerInterface $eventManager,
@@ -89,7 +89,7 @@ class Context extends \Magento\Core\Block\Template\Context
         \Magento\Core\Model\Session $session,
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\App\FrontController $frontController,
-        \Magento\Core\Model\Factory\Helper $helperFactory,
+        \Magento\App\Helper\HelperFactory $helperFactory,
         \Magento\View\Url $viewUrl,
         \Magento\View\ConfigInterface $viewConfig,
         \Magento\App\Cache\StateInterface $cacheState,
@@ -97,16 +97,21 @@ class Context extends \Magento\Core\Block\Template\Context
         \Magento\Logger $logger,
         \Magento\Filesystem $filesystem,
         \Magento\View\FileSystem $viewFileSystem,
-        \Magento\View\TemplateEngineFactory $engineFactory,
-        \Magento\AuthorizationInterface $authorization,
+        \Magento\View\TemplateEnginePool $enginePool,
         \Magento\Core\Model\App $app,
         \Magento\App\State $appState,
         \Magento\Escaper $escaper,
         \Magento\Filter\FilterManager $filterManager,
-        \Magento\Backend\Model\Session $backendSession,
         \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Math\Random $mathRandom
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\AuthorizationInterface $authorization,
+        \Magento\Backend\Model\Session $backendSession,
+        \Magento\Math\Random $mathRandom,
+        array $data = array()
     ) {
+        $this->_authorization = $authorization;
+        $this->_backendSession = $backendSession;
+        $this->mathRandom = $mathRandom;
         parent::__construct(
             $request,
             $layout,
@@ -126,23 +131,22 @@ class Context extends \Magento\Core\Block\Template\Context
             $logger,
             $filesystem,
             $viewFileSystem,
-            $engineFactory,
+            $enginePool,
             $app,
             $appState,
             $escaper,
             $filterManager,
-            $locale
+            $locale,
+            $storeManager,
+            $data
         );
-        $this->_storeManager = $storeManager;
-        $this->_authorization = $authorization;
-        $this->_backendSession = $backendSession;
-        $this->mathRandom = $mathRandom;
     }
+
 
     /**
      * Get store manager
      *
-     * @return \Magento\Core\Model\StoreManager
+     * @return \Magento\Core\Model\StoreManagerInterface
      */
     public function getStoreManager()
     {

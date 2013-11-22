@@ -35,31 +35,6 @@ namespace Magento\Adminhtml\Block\Report\Config\Form\Field;
 
 class YtdStart extends \Magento\Backend\Block\System\Config\Form\Field
 {
-    /**
-     * Locale
-     *
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\App $application
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\App $application,
-        array $data = array()
-    ) {
-        $this->_locale = $locale;
-        parent::__construct($coreData, $context, $application, $data);
-    }
-
     protected function _getElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
     {
         $_months = array();

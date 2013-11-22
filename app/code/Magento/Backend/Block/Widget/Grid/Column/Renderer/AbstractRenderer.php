@@ -35,7 +35,8 @@
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 abstract class AbstractRenderer
-    extends \Magento\Backend\Block\AbstractBlock implements \Magento\Backend\Block\Widget\Grid\Column\Renderer\RendererInterface
+    extends \Magento\Backend\Block\AbstractBlock
+    implements \Magento\Backend\Block\Widget\Grid\Column\Renderer\RendererInterface
 {
     protected $_defaultWidth;
     protected $_column;

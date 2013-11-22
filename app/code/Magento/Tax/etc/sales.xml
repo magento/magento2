@@ -29,24 +29,24 @@
             <item name="tax_subtotal" instance="Magento\Tax\Model\Sales\Total\Quote\Subtotal" sort_order="200"/>
             <item name="tax_shipping" instance="Magento\Tax\Model\Sales\Total\Quote\Shipping" sort_order="300"/>
             <item name="tax" instance="Magento\Tax\Model\Sales\Total\Quote\Tax" sort_order="450">
-                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Tax"/>
                 <renderer name="adminhtml" instance="Magento\Sales\Block\Adminhtml\Order\Create\Totals\Tax"/>
+                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Tax"/>
             </item>
             <item name="subtotal">
-                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Subtotal"/>
                 <renderer name="adminhtml" instance="Magento\Sales\Block\Adminhtml\Order\Create\Totals\Subtotal"/>
+                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Subtotal"/>
             </item>
             <item name="shipping">
-                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Shipping"/>
                 <renderer name="adminhtml" instance="Magento\Sales\Block\Adminhtml\Order\Create\Totals\Shipping"/>
+                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Shipping"/>
             </item>
             <item name="discount">
-                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Discount"/>
                 <renderer name="adminhtml" instance="Magento\Sales\Block\Adminhtml\Order\Create\Totals\Discount"/>
+                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Discount"/>
             </item>
             <item name="grand_total">
-                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Grandtotal"/>
                 <renderer name="adminhtml" instance="Magento\Sales\Block\Adminhtml\Order\Create\Totals\Grandtotal"/>
+                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Grandtotal"/>
             </item>
         </group>
         <group name="nominal_totals">

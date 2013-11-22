@@ -60,19 +60,19 @@ class Extended extends \Magento\Backend\Block\Widget
     protected $_backendData = null;
 
     /**
-     * @param \Magento\Backend\Helper\Data $backendData
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Backend\Helper\Data $backendData
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Helper\Data $backendData,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Backend\Helper\Data $backendData,
         array $data = array()
     ) {
         $this->_backendData = $backendData;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**
@@ -92,7 +92,7 @@ class Extended extends \Magento\Backend\Block\Widget
      *      'complete' => string, // Only for ajax enabled grid (optional)
      *      'url'      => string,
      *      'confirm'  => string, // text of confirmation of this action (optional)
-     *      'additional' => string|array|\Magento\Core\Block\AbstractBlock // (optional)
+     *      'additional' => string|array|\Magento\View\Block\AbstractBlock // (optional)
      * );
      *
      * @param string $itemId

@@ -84,7 +84,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
     /**
      * Create form block
      *
-     * @return \Magento\Core\Block\AbstractBlock
+     * @return \Magento\View\Block\AbstractBlock
      */
     protected function _prepareLayout()
     {

@@ -39,9 +39,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\GoogleShopping\Block\Adminhtml\Items\Product');
         $filter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Core\Block\Text');
+            ->createBlock('Magento\View\Block\Text');
         $search = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Core\Block\Text');
+            ->createBlock('Magento\View\Block\Text');
 
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         $layout->addBlock($block, 'product');

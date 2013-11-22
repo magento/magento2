@@ -33,6 +33,6 @@
  */
 namespace Magento\Adminhtml\Block\Html;
 
-class Date extends \Magento\Core\Block\Html\Date
+class Date extends \Magento\View\Block\Html\Date
 {
 }

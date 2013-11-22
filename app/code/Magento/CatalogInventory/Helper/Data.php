@@ -29,7 +29,7 @@
  */
 namespace Magento\CatalogInventory\Helper;
 
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
     const XML_PATH_SHOW_OUT_OF_STOCK    = 'cataloginventory/options/show_out_of_stock';
     const XML_PATH_ITEM_AUTO_RETURN     = 'cataloginventory/item_options/auto_return';
@@ -64,12 +64,12 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_coreStoreConfig;
 
     /**
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
     ) {

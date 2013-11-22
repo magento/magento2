@@ -43,38 +43,27 @@ class Profile
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Core\Model\Registry $coreRegistry
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Sales\Model\Resource\Recurring\Profile\CollectionFactory $profileCollection
      * @param \Magento\Sales\Model\Recurring\ProfileFactory $recurringProfile
+     * @param \Magento\Core\Model\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Registry $coreRegistry,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Payment\Helper\Data $paymentData,
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Payment\Helper\Data $paymentData,
         \Magento\Sales\Model\Resource\Recurring\Profile\CollectionFactory $profileCollection,
         \Magento\Sales\Model\Recurring\ProfileFactory $recurringProfile,
+        \Magento\Core\Model\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct(
-            $coreData,
-            $paymentData,
-            $context,
-            $storeManager,
-            $urlModel,
-            $profileCollection,
-            $recurringProfile,
-            $data
-        );
+        parent::__construct($context, $coreData, $urlModel, $paymentData, $profileCollection, $recurringProfile, $data);
     }
 
     /**

@@ -29,7 +29,7 @@ namespace Magento\Backend\Helper;
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
     const XML_PATH_USE_CUSTOM_ADMIN_URL         = 'admin/url/use_custom';
 
@@ -66,7 +66,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $mathRandom;
 
     /**
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\App\Route\Config $routeConfig
      * @param \Magento\Core\Model\AppInterface $app
      * @param \Magento\Backend\Model\Url $backendUrl
@@ -75,7 +75,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * @param \Magento\Math\Random $mathRandom
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\App\Route\Config $routeConfig,
         \Magento\Core\Model\AppInterface $app,
         \Magento\Backend\Model\Url $backendUrl,

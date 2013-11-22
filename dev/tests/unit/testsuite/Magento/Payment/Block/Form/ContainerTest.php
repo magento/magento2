@@ -38,8 +38,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testSetMethodFormTemplate()
     {
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $childBlockA = $objectManagerHelper->getObject('Magento\Core\Block\Template');
-        $childBlockB = $objectManagerHelper->getObject('Magento\Core\Block\Template');
+        $childBlockA = $objectManagerHelper->getObject('Magento\View\Block\Template');
+        $childBlockB = $objectManagerHelper->getObject('Magento\View\Block\Template');
 
         $func = function ($blockName) use ($childBlockA, $childBlockB) {
             switch ($blockName) {

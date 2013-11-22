@@ -54,21 +54,13 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->_request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $arguments = array(
-            'request' => $this->_request,
-            'objectManager' => $this->_objectManagerMock,
-
+        $this->_model = $helper->getObject('Magento\Theme\Controller\Adminhtml\System\Design\Theme',
+            array(
+                'request' => $this->_request,
+                'objectManager' => $this->_objectManagerMock,
+                'response' => $this->getMock('Magento\App\Response\Http', array(), array(), '', false)
+                )
         );
-        $context = $helper->getObject('Magento\Backend\Controller\Context', $arguments);
-        $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
-
-        $this->_model = $this->getMock('Magento\Theme\Controller\Adminhtml\System\Design\Theme',
-            array('_forward', '_title', 'loadLayout', 'renderLayout', '_redirect'),
-            array($context, $coreRegistry, null)
-        );
-        $this->_model->expects($this->any())->method('_title')->will($this->returnValue($this->_model));
-        $this->_model->expects($this->any())->method('loadLayout');
-        $this->_model->expects($this->any())->method('renderLayout');
     }
 
     /**

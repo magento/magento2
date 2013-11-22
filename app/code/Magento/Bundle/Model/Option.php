@@ -74,10 +74,8 @@ class Option extends \Magento\Core\Model\AbstractModel
         if (!$selection) {
             return false;
         }
-        if (!$selections = $this->getData('selections')) {
-            $selections = array();
-        }
-        array_push($selections, $selection);
+        $selections = $this->getDataSetDefault('selections', array());
+        $selections[] = $selection;
         $this->setSelections($selections);
         return $this;
     }

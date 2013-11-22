@@ -55,22 +55,22 @@ class Configure extends \Magento\Adminhtml\Block\Widget
     protected $_catalogProduct;
 
     /**
-     * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Model\Product $product,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Catalog\Model\Product $product,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
         $this->_catalogProduct = $product;
         $this->_coreRegistry = $registry;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

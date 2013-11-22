@@ -41,6 +41,6 @@
         </action>
     </referenceBlock>
     <referenceContainer name="js">
-        <block class="Magento\Core\Block\Template" template="Magento_Webapi::rolesusersgridjs.phtml"/>
+        <block class="Magento\View\Block\Template" template="Magento_Webapi::rolesusersgridjs.phtml"/>
     </referenceContainer>
 </layout>

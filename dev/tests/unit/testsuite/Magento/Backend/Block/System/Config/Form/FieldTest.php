@@ -57,11 +57,9 @@ class FieldTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_appModelMock = $this->getMock('Magento\Core\Model\App', array(), array(), '', false, false);
-        $this->_layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false, false);
 
         $data = array(
-            'layout' => $this->_layoutMock,
-            'application' => $this->_appModelMock,
+            'app' => $this->_appModelMock,
             'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false)
         );
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);

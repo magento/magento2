@@ -42,23 +42,23 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_wysiwygConfig;
 
     /**
-     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         array $data = array()
     ) {
         $this->_wysiwygConfig = $wysiwygConfig;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     /**

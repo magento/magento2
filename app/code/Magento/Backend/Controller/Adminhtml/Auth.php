@@ -29,7 +29,7 @@
  */
 namespace Magento\Backend\Controller\Adminhtml;
 
-class Auth extends \Magento\Backend\Controller\AbstractAction
+class Auth extends \Magento\Backend\App\AbstractAction
 {
     /**
      * Administrator login action
@@ -43,8 +43,8 @@ class Auth extends \Magento\Backend\Controller\AbstractAction
             $this->_redirect($this->_backendUrl->getStartupPageUrl());
             return;
         }
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     /**

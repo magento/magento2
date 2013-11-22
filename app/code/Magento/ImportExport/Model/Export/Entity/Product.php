@@ -197,7 +197,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_typeFactory;
 
     /**
-     * @param \Magento\Core\Model\LocaleInterface $localeInterface
+     * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -213,7 +213,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param \Magento\ImportExport\Model\Export\Entity\Product\Type\Factory $_typeFactory
      */
     public function __construct(
-        \Magento\Core\Model\LocaleInterface $localeInterface,
+        \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Eav\Model\Config $config,
         \Magento\App\Resource $resource,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
@@ -240,7 +240,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $this->_attributeColFactory = $attributeColFactory;
         $this->_typeFactory = $_typeFactory;
 
-        parent::__construct($localeInterface, $config, $resource, $storeManager);
+        parent::__construct($locale, $config, $resource, $storeManager);
 
         $this->_initTypeModels()
             ->_initAttributes()

@@ -41,23 +41,23 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_configurableType;
 
     /**
-     * @param \Magento\Catalog\Model\Product\Type\Configurable $configurableType
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Catalog\Model\Product\Type\Configurable $configurableType
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Model\Product\Type\Configurable $configurableType,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Catalog\Model\Product\Type\Configurable $configurableType,
         array $data = array()
     ) {
         $this->_configurableType = $configurableType;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     /**

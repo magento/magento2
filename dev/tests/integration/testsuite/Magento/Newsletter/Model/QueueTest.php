@@ -42,7 +42,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $themes = array('frontend' => 'magento_blank');
         /** @var $design \Magento\Core\Model\View\Design */
         $design = $objectManager->create('Magento\View\DesignInterface', array('themes' => $themes));
-        $objectManager->addSharedInstance($design, 'Magento\Core\Model\View\Design');
+        $objectManager->addSharedInstance($design, 'Magento\Core\Model\View\Design\Proxy');
         /** @var $appEmulation \Magento\Core\Model\App\Emulation */
         $appEmulation = $objectManager->create('Magento\Core\Model\App\Emulation', array('viewDesign' => $design));
         $objectManager->addSharedInstance($appEmulation, 'Magento\Core\Model\App\Emulation');
@@ -62,7 +62,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $subscriberOne->expects($this->any())->method('send');
         $subscriberTwo = clone $subscriberOne;
         $subscriberOne->expects($this->once())->method('setBodyHTML')->with(
-            $this->stringEndsWith('/static/frontend/magento_blank/en_US/images/logo.gif')
+            $this->stringEndsWith('/static/frontend/magento_plushe/en_US/images/logo.gif')
         );
         $subscriberTwo->expects($this->once())->method('setBodyHTML')->with(
             $this->stringEndsWith('/static/frontend/magento_demo/de_DE/images/logo.gif')
@@ -70,7 +70,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         /** @var $filter \Magento\Newsletter\Model\Template\Filter */
         $filter = $objectManager->get('Magento\Newsletter\Model\Template\Filter');
 
-        $emailTemplate = $this->getMock('Magento\Core\Model\Email\Template',
+        $emailTemplate = $this->getMock('Magento\Email\Model\Template',
             array('_getMail', '_getLogoUrl', '__wakeup', 'setTemplateFilter'),
             array(
                 $objectManager->get('Magento\Core\Model\Context'),
@@ -82,10 +82,10 @@ class QueueTest extends \PHPUnit_Framework_TestCase
                 $design,
                 $objectManager->get('Magento\Core\Model\Store\ConfigInterface'),
                 $objectManager->get('Magento\Core\Model\ConfigInterface'),
-                $objectManager->get('Magento\Core\Model\Email\Template\FilterFactory'),
+                $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
                 $objectManager->get('Magento\Core\Model\StoreManagerInterface'),
                 $objectManager->get('Magento\App\Dir'),
-                $objectManager->get('Magento\Core\Model\Email\Template\Config'),
+                $objectManager->get('Magento\Email\Model\Template\Config'),
             )
         );
         $emailTemplate->expects($this->once())
@@ -117,7 +117,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $errorMsg = md5(microtime());
         $brokenMail->expects($this->any())->method('send')->will($this->throwException(new \Exception($errorMsg, 99)));
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $template = $this->getMock('Magento\Core\Model\Email\Template',
+        $template = $this->getMock('Magento\Email\Model\Template',
             array('_getMail', '_getLogoUrl', '__wakeup'),
             array(
                 $objectManager->get('Magento\Core\Model\Context'),
@@ -129,10 +129,10 @@ class QueueTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Core\Model\View\Design'),
                 $objectManager->get('Magento\Core\Model\Store\ConfigInterface'),
                 $objectManager->get('Magento\Core\Model\ConfigInterface'),
-                $objectManager->get('Magento\Core\Model\Email\Template\FilterFactory'),
+                $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
                 $objectManager->get('Magento\Core\Model\StoreManagerInterface'),
                 $objectManager->get('Magento\App\Dir'),
-                $objectManager->get('Magento\Core\Model\Email\Template\Config'),
+                $objectManager->get('Magento\Email\Model\Template\Config'),
             )
         );
         $template->expects($this->any())->method('_getMail')->will($this->onConsecutiveCalls($mail, $brokenMail));

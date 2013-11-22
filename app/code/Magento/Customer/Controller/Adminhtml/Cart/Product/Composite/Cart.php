@@ -33,7 +33,7 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite;
 
-class Cart extends \Magento\Backend\Controller\Adminhtml\Action
+class Cart extends \Magento\Backend\App\Action
 {
     /**
      * Customer we're working with
@@ -115,7 +115,7 @@ class Cart extends \Magento\Backend\Controller\Adminhtml\Action
         }
 
         $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite')
-            ->renderConfigureResult($this, $configureResult);
+            ->renderConfigureResult($configureResult);
 
         return $this;
     }

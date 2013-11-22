@@ -53,11 +53,6 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
     protected $_errors = array();
 
     /**
-     * @var \Magento\Logger
-     */
-    protected $_logger;
-
-    /**
      * @var \Magento\Core\Model\File\Storage\Directory\DatabaseFactory
      */
     protected $_directoryFactory;
@@ -70,7 +65,6 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
     /**
      * Class constructor
      *
-     * @param \Magento\Logger $logger
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Core\Helper\File\Media $mediaHelper
      * @param \Magento\Core\Model\Context $context
@@ -84,7 +78,6 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      * @param array $data
      */
     public function __construct(
-        \Magento\Logger $logger,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Core\Helper\File\Media $mediaHelper,
         \Magento\Core\Model\Context $context,
@@ -98,7 +91,6 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
         array $data = array()
     ) {
         $this->_directoryFactory = $directoryFactory;
-        $this->_logger = $logger;
         $this->_mediaHelper = $mediaHelper;
         parent::__construct(
             $coreFileStorageDb,

@@ -24,7 +24,7 @@
  */
 ?>
 <?php $_code=$this->getMethodCode() ?>
-<fieldset class="fieldset items" id="payment_form_<?php echo $_code ?>" style="display:none;">
+<fieldset class="fieldset payment items ccard <?php echo $_code ?>" id="payment_form_<?php echo $_code ?>" style="display:none;">
     <div class="field name required">
         <label for="<?php echo $_code ?>_cc_owner" class="label"><span><?php echo __('Name on Card') ?></span></label>
         <div class="control">
@@ -52,25 +52,30 @@
     <div class="field date required">
         <label for="<?php echo $_code ?>_expiration" class="label"><span><?php echo __('Expiration Date') ?></span></label>
         <div class="control">
-            <div class="nested">
-                <select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month" data-validate='{required:true, "validate-cc-exp":"#<?php echo $_code ?>_expiration_yr"}'>
-                <?php $_ccExpMonth = $this->getInfoData('cc_exp_month') ?>
-                <?php foreach ($this->getCcMonths() as $k=>$v): ?>
-                    <option value="<?php echo $k?$k:'' ?>"<?php if($k==$_ccExpMonth): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
-                <?php endforeach ?>
-                </select>
-            </div>
-            <div class="nested">
-                <?php $_ccExpYear = $this->getInfoData('cc_exp_year') ?>
-                <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year" data-validate='{required:true}'>
-                <?php foreach ($this->getCcYears() as $k=>$v): ?>
-                    <option value="<?php echo $k?$k:'' ?>"<?php if($k==$_ccExpYear): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
-                <?php endforeach ?>
-                </select>
+            <div class="fields group group-2">
+                <div class="field no-label month">
+                    <div class="control">
+                        <select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month" data-validate='{required:true, "validate-cc-exp":"#<?php echo $_code ?>_expiration_yr"}'>
+                        <?php $_ccExpMonth = $this->getInfoData('cc_exp_month') ?>
+                        <?php foreach ($this->getCcMonths() as $k=>$v): ?>
+                            <option value="<?php echo $k?$k:'' ?>"<?php if($k==$_ccExpMonth): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
+                        <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="field no-label year">
+                    <div class="control">
+                        <?php $_ccExpYear = $this->getInfoData('cc_exp_year') ?>
+                        <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year" data-validate='{required:true}'>
+                        <?php foreach ($this->getCcYears() as $k=>$v): ?>
+                            <option value="<?php echo $k?$k:'' ?>"<?php if($k==$_ccExpYear): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
+                        <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <?php echo $this->getChildHtml() ?>
     <?php if($this->hasVerification()): ?>
     <div class="field cvv required">
         <label for="<?php echo $_code ?>_cc_cid" class="label"><span><?php echo __('Card Verification Number') ?></span></label>
@@ -104,20 +109,27 @@
 
             <div class="field date required">
                 <label for="<?php echo $_code ?>_start_month" class="label"><span><?php echo __('Start Date') ?></span></label>
+
                 <div class="control">
-                    <div class="nested">
-                        <select id="<?php echo $_code ?>_start_month" name="payment[cc_ss_start_month]" class="month" data-validate='{"validate-cc-ukss":true}'>
-                        <?php foreach ($this->getCcMonths() as $k=>$v): ?>
-                            <option value="<?php echo $k?$k:'' ?>"<?php if($k==$this->getInfoData('cc_ss_start_month')): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
-                        <?php endforeach ?>
-                        </select>
-                    </div>
-                    <div class="nested">
-                        <select id="<?php echo $_code ?>_start_year" name="payment[cc_ss_start_year]" class="year" data-validate='{"validate-cc-ukss":true}'>
-                        <?php foreach ($this->getSsStartYears() as $k=>$v): ?>
-                            <option value="<?php echo $k?$k:'' ?>"<?php if($k==$this->getInfoData('cc_ss_start_year')): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
-                        <?php endforeach ?>
-                        </select>
+                    <div class="fields group group-2">
+                        <div class="field no-label">
+                            <div class="control">
+                                <select id="<?php echo $_code ?>_start_month" name="payment[cc_ss_start_month]" class="month" data-validate='{"validate-cc-ukss":true}'>
+                                <?php foreach ($this->getCcMonths() as $k=>$v): ?>
+                                    <option value="<?php echo $k?$k:'' ?>"<?php if($k==$this->getInfoData('cc_ss_start_month')): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
+                                <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field no-label">
+                            <div class="control">
+                                <select id="<?php echo $_code ?>_start_year" name="payment[cc_ss_start_year]" class="year" data-validate='{"validate-cc-ukss":true}'>
+                                <?php foreach ($this->getSsStartYears() as $k=>$v): ?>
+                                    <option value="<?php echo $k?$k:'' ?>"<?php if($k==$this->getInfoData('cc_ss_start_year')): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
+                                <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -132,4 +144,5 @@
         </script>
     </div>
     <?php endif; ?>
+    <?php echo $this->getChildHtml() ?>
 </fieldset>

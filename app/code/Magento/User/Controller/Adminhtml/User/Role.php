@@ -27,7 +27,7 @@
  */
 namespace Magento\User\Controller\Adminhtml\User;
 
-class Role extends \Magento\Backend\Controller\AbstractAction
+class Role extends \Magento\Backend\App\AbstractAction
 {
 
     /**
@@ -66,9 +66,7 @@ class Role extends \Magento\Backend\Controller\AbstractAction
     protected $_authSession;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\User\Model\RoleFactory $roleFactory
      * @param \Magento\User\Model\UserFactory $userFactory
@@ -76,7 +74,7 @@ class Role extends \Magento\Backend\Controller\AbstractAction
      * @param \Magento\Backend\Model\Auth\Session $authSession
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\User\Model\RoleFactory $roleFactory,
         \Magento\User\Model\UserFactory $userFactory,
@@ -98,7 +96,7 @@ class Role extends \Magento\Backend\Controller\AbstractAction
      */
     protected function _initAction()
     {
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_User::system_acl_roles');
         $this->_addBreadcrumb(__('System'), __('System'));
         $this->_addBreadcrumb(__('Permissions'), __('Permissions'));
@@ -114,7 +112,7 @@ class Role extends \Magento\Backend\Controller\AbstractAction
      */
     protected function _initRole($requestVariable = 'rid')
     {
-        $this->_title(__('Roles'));
+        $this->_title->add(__('Roles'));
 
         $role = $this->_roleFactory->create()->load($this->getRequest()->getParam($requestVariable));
         // preventing edit of relation role
@@ -132,11 +130,11 @@ class Role extends \Magento\Backend\Controller\AbstractAction
      */
     public function indexAction()
     {
-        $this->_title(__('Roles'));
+        $this->_title->add(__('Roles'));
 
         $this->_initAction();
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -145,8 +143,8 @@ class Role extends \Magento\Backend\Controller\AbstractAction
      */
     public function roleGridAction()
     {
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     /**
@@ -166,16 +164,16 @@ class Role extends \Magento\Backend\Controller\AbstractAction
             $breadCrumbTitle = __('Add New Role');
         }
 
-        $this->_title($role->getId() ? $role->getRoleName() : __('New Role'));
+        $this->_title->add($role->getId() ? $role->getRoleName() : __('New Role'));
 
         $this->_addBreadcrumb($breadCrumb, $breadCrumbTitle);
 
-        $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
-        $this->getLayout()->getBlock('adminhtml.user.role.buttons')
+        $this->_view->getLayout()->getBlock('head')->setCanLoadExtJs(true);
+        $this->_view->getLayout()->getBlock('adminhtml.user.role.buttons')
             ->setRoleId($role->getId())
             ->setRoleInfo($role);
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -283,8 +281,8 @@ class Role extends \Magento\Backend\Controller\AbstractAction
      */
     public function editrolegridAction()
     {
-        $this->loadLayout();
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->renderLayout();
     }
 
     /**

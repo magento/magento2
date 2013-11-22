@@ -33,7 +33,7 @@
  */
 namespace Magento\Directory\Controller\Adminhtml;
 
-class Json extends \Magento\Backend\Controller\Adminhtml\Action
+class Json extends \Magento\Backend\App\Action
 {
     /**
      * Return JSON-encoded array of country regions

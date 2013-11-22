@@ -44,24 +44,24 @@ class Googleoptimizer
     protected $_formHelper;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\GoogleOptimizer\Helper\Code $codeHelper
      * @param \Magento\GoogleOptimizer\Helper\Form $formHelper
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
         \Magento\GoogleOptimizer\Helper\Code $codeHelper,
         \Magento\GoogleOptimizer\Helper\Form $formHelper,
         array $data = array()
     ) {
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
 
         $this->_codeHelper = $codeHelper;
         $this->_formHelper = $formHelper;

@@ -270,7 +270,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\App\Resource $coreResource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Validator\UniversalFactory $universalFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -292,7 +292,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\App\Resource $coreResource,
+        \Magento\App\Resource $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Validator\UniversalFactory $universalFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
@@ -315,7 +315,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
         $this->_customerSession = $customerSession;
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
-        parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $eavConfig, $coreResource,
+        parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $eavConfig, $resource,
             $eavEntityFactory, $resourceHelper, $universalFactory, $storeManager);
     }
 

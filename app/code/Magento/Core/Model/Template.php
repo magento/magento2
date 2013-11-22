@@ -97,7 +97,7 @@ abstract class Template extends \Magento\Core\Model\AbstractModel
     protected $_appEmulation;
 
     /**
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 

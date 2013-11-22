@@ -40,7 +40,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Core\Helper\Data */
     protected $_coreData;
 
-    /** @var \Magento\Core\Model\Sender|PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Email\Model\Sender|PHPUnit_Framework_MockObject_MockObject */
     protected $_senderMock;
 
     /** @var \Magento\Core\Model\Context|PHPUnit_Framework_MockObject_MockObject */
@@ -65,7 +65,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(array())
             ->getMock();
-        $this->_senderMock = $this->getMockBuilder('Magento\Core\Model\Sender')
+        $this->_senderMock = $this->getMockBuilder('Magento\Email\Model\Sender')
             ->disableOriginalConstructor()
             ->setMethods(array('send'))
             ->getMock();
@@ -88,9 +88,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
             array(), '', false);
         $roleFactoryMock = $this->getMock('Magento\User\Model\RoleFactory', array('create'),
             array(), '', false);
-        $emailFactoryMock = $this->getMock('Magento\Core\Model\Email\InfoFactory', array('create'),
+        $emailFactoryMock = $this->getMock('Magento\Email\Model\InfoFactory', array('create'),
             array(), '', false);
-        $mailerFactoryMock = $this->getMock('Magento\Core\Model\Email\Template\MailerFactory', array('create'),
+        $mailerFactoryMock = $this->getMock('Magento\Email\Model\Template\MailerFactory', array('create'),
             array(), '', false);
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);

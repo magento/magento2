@@ -269,9 +269,8 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     protected function _createIntegrationController()
     {
         // Mock Layout passed into constructor
-        $layoutMock = $this->getMockBuilder('Magento\Core\Model\Layout')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $viewMock = $this->getMock('Magento\App\ViewInterface');
+        $layoutMock = $this->getMock('Magento\View\LayoutInterface');
         $layoutMergeMock = $this->getMockBuilder('Magento\Core\Model\Layout\Merge')
             ->disableOriginalConstructor()
             ->getMock();
@@ -279,6 +278,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $testElement = new \Magento\Simplexml\Element('<test>test</test>');
         $layoutMock->expects($this->any())->method('getNode')->will($this->returnValue($testElement));
         // for _setActiveMenu
+        $viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($layoutMock));
         $blockMock = $this->getMockBuilder('Magento\Backend\Block\Menu')
             ->disableOriginalConstructor()
             ->getMock();
@@ -290,7 +290,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $layoutMock->expects($this->any())->method('getMessagesBlock')->will($this->returnValue($blockMock));
         $layoutMock->expects($this->any())->method('getBlock')->will($this->returnValue($blockMock));
         $contextParameters = array(
-            'layout' => $layoutMock,
+            'view' => $viewMock,
             'objectManager' => $this->_mockObjectManager,
             'session' => $this->_mockBackendModSess,
             'translator' => $this->_mockTranslateModel,
@@ -300,7 +300,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
 
         $this->_mockBackendCntCtxt = $this->_objectManagerHelper
             ->getObject(
-                'Magento\Backend\Controller\Context',
+                'Magento\Backend\App\Action\Context',
                 $contextParameters
             );
         $subControllerParams = array(

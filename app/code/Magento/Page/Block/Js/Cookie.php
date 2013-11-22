@@ -26,7 +26,7 @@
 
 namespace Magento\Page\Block\Js;
 
-class Cookie extends \Magento\Core\Block\Template
+class Cookie extends \Magento\View\Block\Template
 {
     /**
      * @var \Magento\Core\Model\Cookie
@@ -34,19 +34,19 @@ class Cookie extends \Magento\Core\Block\Template
     protected $_cookie;
 
     /**
-     * @param \Magento\Core\Model\Cookie $cookie
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Core\Model\Cookie $cookie
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Cookie $cookie,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Core\Model\Cookie $cookie,
         array $data = array()
     ) {
         $this->_cookie = $cookie;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

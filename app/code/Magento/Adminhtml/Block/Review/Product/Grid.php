@@ -41,7 +41,9 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     protected $_websitesFactory;
 
     /**
-     * @param \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Core\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -49,16 +51,13 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * @param \Magento\Catalog\Model\Product\Status $status
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Model\Url $urlModel,
         \Magento\Core\Model\WebsiteFactory $websiteFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
@@ -66,16 +65,22 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
         \Magento\Catalog\Model\Product\Status $status,
         \Magento\Catalog\Model\Product\Visibility $visibility,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Url $urlModel,
+        \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory,
         array $data = array()
     ) {
         $this->_websitesFactory = $websitesFactory;
         parent::__construct(
-            $websiteFactory, $setsFactory, $productFactory, $type, $status, $visibility, $catalogData, $coreData,
-            $context, $storeManager, $urlModel, $data
+            $context,
+            $coreData,
+            $urlModel,
+            $websiteFactory,
+            $setsFactory,
+            $productFactory,
+            $type,
+            $status,
+            $visibility,
+            $catalogData,
+            $data
         );
     }
 

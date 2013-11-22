@@ -33,7 +33,10 @@
  */
 namespace Magento\Downloadable\Controller;
 
-class Customer extends \Magento\Core\Controller\Front\Action
+use Magento\App\Action\NotFoundException;
+use Magento\App\RequestInterface;
+
+class Customer extends \Magento\App\Action\Action
 {
     /**
      * @var \Magento\Customer\Model\Session
@@ -41,11 +44,11 @@ class Customer extends \Magento\Core\Controller\Front\Action
     protected $_customerSession;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession
     ) {
         $this->_customerSession = $customerSession;
@@ -54,15 +57,18 @@ class Customer extends \Magento\Core\Controller\Front\Action
 
     /**
      * Check customer authentication
+     *
+     * @param RequestInterface $request
+     * @return mixed
      */
-    public function preDispatch()
+    public function dispatch(RequestInterface $request)
     {
-        parent::preDispatch();
         $loginUrl = $this->_objectManager->get('Magento\Customer\Helper\Data')->getLoginUrl();
 
         if (!$this->_customerSession->authenticate($this, $loginUrl)) {
-            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
         }
+        return parent::dispatch($request);
     }
 
     /**
@@ -71,16 +77,16 @@ class Customer extends \Magento\Core\Controller\Front\Action
      */
     public function productsAction()
     {
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
-        if ($block = $this->getLayout()->getBlock('downloadable_customer_products_list')) {
-            $block->setRefererUrl($this->_getRefererUrl());
+        $this->_view->loadLayout();
+        $this->_view->getLayout()->initMessages('Magento\Customer\Model\Session');
+        if ($block = $this->_view->getLayout()->getBlock('downloadable_customer_products_list')) {
+            $block->setRefererUrl($this->_redirect->getRefererUrl());
         }
-        $headBlock = $this->getLayout()->getBlock('head');
+        $headBlock = $this->_view->getLayout()->getBlock('head');
         if ($headBlock) {
             $headBlock->setTitle(__('My Downloadable Products'));
         }
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
 }

@@ -45,7 +45,7 @@ class Dialogs extends \Magento\Adminhtml\Block\Template
     /**
      * Include backup.js file in page before rendering
      *
-     * @see \Magento\Core\Block\AbstractBlock::_prepareLayout()
+     * @see \Magento\View\Block\AbstractBlock::_prepareLayout()
      */
     protected function _prepareLayout()
     {

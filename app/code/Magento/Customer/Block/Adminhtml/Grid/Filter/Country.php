@@ -42,15 +42,15 @@ class Country
     protected $_collectionFactory;
 
     /**
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $collectionFactory
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Core\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $collectionFactory,
         \Magento\Backend\Block\Context $context,
         \Magento\Core\Model\Resource\Helper $resourceHelper,
+        \Magento\Directory\Model\Resource\Country\CollectionFactory $collectionFactory,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;

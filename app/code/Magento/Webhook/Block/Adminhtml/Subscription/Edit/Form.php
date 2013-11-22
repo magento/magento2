@@ -50,26 +50,26 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_hook;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Webhook\Model\Source\Format $format
      * @param \Magento\Webhook\Model\Source\Authentication $authentication
      * @param \Magento\Webhook\Model\Source\Hook $hook
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Model\Registry $registry,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Webhook\Model\Source\Format $format,
         \Magento\Webhook\Model\Source\Authentication $authentication,
         \Magento\Webhook\Model\Source\Hook $hook,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
         array $data = array()
     ) {
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
         $this->_formFactory = $formFactory;
         $this->_registry = $registry;
         $this->_format = $format;

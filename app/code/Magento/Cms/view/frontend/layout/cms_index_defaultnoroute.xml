@@ -30,6 +30,6 @@
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\Core\Block\Template" name="default_no_route" template="Magento_Cms::default/no-route.phtml"/>
+        <block class="Magento\View\Block\Template" name="default_no_route" template="Magento_Cms::default/no-route.phtml"/>
     </referenceContainer>
 </layout>

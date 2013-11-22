@@ -74,7 +74,7 @@ class Observer
             ->setLoaded(true)
             ->setForwardModule('cms')
             ->setForwardController('index')
-            ->setForwardAction('noRoute');
+            ->setForwardAction('noroute');
         return $this;
     }
 

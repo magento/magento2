@@ -226,7 +226,7 @@ abstract class AbstractElement extends \Magento\Data\Form\AbstractForm
 
     protected function _getUiId($suffix = null)
     {
-        if ($this->_renderer instanceof \Magento\Core\Block\AbstractBlock) {
+        if ($this->_renderer instanceof \Magento\View\Block\AbstractBlock) {
             return $this->_renderer->getUiId($this->getType(), $this->getName(), $suffix);
         } else {
             return ' data-ui-id="form-element-' . $this->getName() . ($suffix ? : '') . '"';

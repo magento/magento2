@@ -54,29 +54,29 @@ class Attributes
     protected $_attributeFactory;
 
     /**
-     * @param \Magento\GoogleShopping\Model\Config $config
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\GoogleShopping\Model\AttributeFactory $attributeFactory
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\GoogleShopping\Model\Config $config
+     * @param \Magento\GoogleShopping\Model\AttributeFactory $attributeFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\GoogleShopping\Model\Config $config,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\GoogleShopping\Model\AttributeFactory $attributeFactory,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\GoogleShopping\Model\Config $config,
+        \Magento\GoogleShopping\Model\AttributeFactory $attributeFactory,
         array $data = array()
     ) {
         $this->_config = $config;
         $this->_attributeFactory = $attributeFactory;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
 
     /**
      * Preparing global layout
      *
-     * @return \Magento\Core\Block\AbstractBlock
+     * @return \Magento\View\Block\AbstractBlock
      */
     protected function _prepareLayout()
     {

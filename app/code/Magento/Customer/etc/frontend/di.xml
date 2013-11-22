@@ -36,4 +36,15 @@
             </value>
         </param>
     </type>
+    <virtualType name="customerAccountInitSession" type="Magento\Core\App\Action\Plugin\Session">
+        <param name="cookieCheckActions">
+            <value>
+                <customerLogin>loginPost</customerLogin>
+                <customerCreate>createpost</customerCreate>
+            </value>
+        </param>
+    </virtualType>
+    <type name="Magento\Customer\Controller\Account">
+        <plugin name="sessionInitializer" type="customerAccountInitSession" />
+    </type>
 </config>

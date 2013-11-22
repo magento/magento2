@@ -70,7 +70,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->_model->apply(
             $objectManager->get('Magento\TestFramework\Request'),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-                ->createBlock('Magento\Core\Block\Text')
+                ->createBlock('Magento\View\Block\Text')
         );
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -85,7 +85,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->_model->apply(
             $request,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-                ->createBlock('Magento\Core\Block\Text')
+                ->createBlock('Magento\View\Block\Text')
         );
 
         /** @var $category \Magento\Catalog\Model\Category */

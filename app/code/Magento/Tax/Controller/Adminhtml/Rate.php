@@ -34,19 +34,36 @@
 
 namespace Magento\Tax\Controller\Adminhtml;
 
-class Rate extends \Magento\Backend\Controller\Adminhtml\Action
+class Rate extends \Magento\Backend\App\Action
 {
+    /**
+     * @var \Magento\App\Response\Http\FileFactory
+     */
+    protected $_fileFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\App\Response\Http\FileFactory $fileFactory
+    ) {
+        $this->_fileFactory = $fileFactory;
+        parent::__construct($context);
+    }
+
     /**
      * Show Main Grid
      *
      */
     public function indexAction()
     {
-        $this->_title(__('Tax Zones and Rates'));
+        $this->_title->add(__('Tax Zones and Rates'));
 
         $this->_initAction()
             ->_addBreadcrumb(__('Manage Tax Rates'), __('Manage Tax Rates'));
-        $this ->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -58,9 +75,9 @@ class Rate extends \Magento\Backend\Controller\Adminhtml\Action
         $rateModel = $this->_objectManager->get('Magento\Tax\Model\Calculation\Rate')
             ->load(null);
 
-        $this->_title(__('Tax Zones and Rates'));
+        $this->_title->add(__('Tax Zones and Rates'));
 
-        $this->_title(__('New Tax Rate'));
+        $this->_title->add(__('New Tax Rate'));
 
         $rateModel->setData($this->_objectManager->get('Magento\Adminhtml\Model\Session')->getFormData(true));
 
@@ -72,13 +89,13 @@ class Rate extends \Magento\Backend\Controller\Adminhtml\Action
             ->_addBreadcrumb(__('Manage Tax Rates'), __('Manage Tax Rates'), $this->getUrl('tax/rate'))
             ->_addBreadcrumb(__('New Tax Rate'), __('New Tax Rate'))
             ->_addContent(
-                $this->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save')
+                $this->_view->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save')
                 ->assign('header', __('Add New Tax Rate'))
                 ->assign('form',
-                    $this->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\Form', 'tax_rate_form')
+                    $this->_view->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\Form', 'tax_rate_form')
                 )
-            )
-            ->renderLayout();
+            );
+        $this->_view->renderLayout();
     }
 
     /**
@@ -113,7 +130,7 @@ class Rate extends \Magento\Backend\Controller\Adminhtml\Action
                 $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError($e->getMessage());
             }
 
-            $this->_redirectReferer();
+            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
             return;
         }
         $this->getResponse()->setRedirect($this->getUrl('tax/rate'));
@@ -179,7 +196,7 @@ class Rate extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function editAction()
     {
-        $this->_title(__('Tax Zones and Rates'));
+        $this->_title->add(__('Tax Zones and Rates'));
 
         $rateId = (int)$this->getRequest()->getParam('rate');
         $rateModel = $this->_objectManager->get('Magento\Tax\Model\Calculation\Rate')->load($rateId);
@@ -192,20 +209,20 @@ class Rate extends \Magento\Backend\Controller\Adminhtml\Action
             $rateModel->setTaxPostcode($rateModel->getZipFrom() . '-' . $rateModel->getZipTo());
         }
 
-        $this->_title(sprintf("%s", $rateModel->getCode()));
+        $this->_title->add(sprintf("%s", $rateModel->getCode()));
 
         $this->_initAction()
             ->_addBreadcrumb(__('Manage Tax Rates'), __('Manage Tax Rates'), $this->getUrl('tax/rate'))
             ->_addBreadcrumb(__('Edit Tax Rate'), __('Edit Tax Rate'))
             ->_addContent(
-                $this->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save')
+                $this->_view->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save')
                 ->assign('header', __('Edit Tax Rate'))
                 ->assign('form',
-                    $this->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\Form', 'tax_rate_form')
+                    $this->_view->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\Form', 'tax_rate_form')
                         ->setShowLegend(true)
                 )
-            )
-            ->renderLayout();
+            );
+        $this->_view->renderLayout();
     }
 
     /**
@@ -283,9 +300,9 @@ class Rate extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function exportCsvAction()
     {
-        $this->loadLayout(false);
-        $content = $this->getLayout()->getChildBlock('adminhtml.tax.rate.grid','grid.export');
-        $this->_prepareDownloadResponse('rates.csv', $content->getCsvFile());
+        $this->_view->loadLayout(false);
+        $content = $this->_view->getLayout()->getChildBlock('adminhtml.tax.rate.grid','grid.export');
+        return $this->_fileFactory->create('rates.csv', $content->getCsvFile());
     }
 
     /**
@@ -293,20 +310,20 @@ class Rate extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function exportXmlAction()
     {
-        $this->loadLayout(false);
-        $content = $this->getLayout()->getChildBlock('adminhtml.tax.rate.grid','grid.export');
-        $this->_prepareDownloadResponse('rates.xml', $content->getExcelFile());
+        $this->_view->loadLayout(false);
+        $content = $this->_view->getLayout()->getChildBlock('adminhtml.tax.rate.grid','grid.export');
+        return $this->_fileFactory->create('rates.xml', $content->getExcelFile());
     }
 
     /**
      * Initialize action
      *
-     * @return \Magento\Backend\Controller\Adminhtml\Action
+     * @return \Magento\Backend\App\Action
      */
     protected function _initAction()
     {
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_Tax::sales_tax_rates')
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_Tax::sales_tax_rates')
             ->_addBreadcrumb(__('Sales'), __('Sales'))
             ->_addBreadcrumb(__('Tax'), __('Tax'));
         return $this;
@@ -318,15 +335,15 @@ class Rate extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function importExportAction()
     {
-        $this->_title(__('Tax Zones and Rates'));
+        $this->_title->add(__('Tax Zones and Rates'));
 
-        $this->_title(__('Import and Export Tax Rates'));
+        $this->_title->add(__('Import and Export Tax Rates'));
 
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_Tax::system_convert_tax')
-            ->_addContent($this->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\ImportExportHeader'))
-            ->_addContent($this->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\ImportExport'))
-            ->renderLayout();
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_Tax::system_convert_tax')
+            ->_addContent($this->_view->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\ImportExportHeader'))
+            ->_addContent($this->_view->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\ImportExport'));
+        $this->_view->renderLayout();
     }
 
     /**
@@ -354,7 +371,7 @@ class Rate extends \Magento\Backend\Controller\Adminhtml\Action
             $this->_objectManager->get('Magento\Adminhtml\Model\Session')
                 ->addError(__('Invalid file upload attempt'));
         }
-        $this->_redirectReferer();
+        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
     }
 
     /**
@@ -419,8 +436,8 @@ class Rate extends \Magento\Backend\Controller\Adminhtml\Action
 
             $content .= $rate->toString($template) . "\n";
         }
-        $this->loadLayout();
-        $this->_prepareDownloadResponse('tax_rates.csv', $content);
+        $this->_view->loadLayout();
+        return $this->_fileFactory->create('tax_rates.csv', $content);
     }
 
     protected function _isAllowed()

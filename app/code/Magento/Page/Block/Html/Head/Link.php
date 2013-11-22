@@ -29,26 +29,24 @@ namespace Magento\Page\Block\Html\Head;
 /**
  * Link page block
  */
-class Link extends \Magento\Core\Block\Template
+class Link extends \Magento\View\Block\Template
     implements \Magento\Page\Block\Html\Head\AssetBlock
 {
     const VIRTUAL_CONTENT_TYPE = 'link';
 
     /**
-     * Contructor
-     *
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Core\Model\Page\Asset\RemoteFactory $remoteFactory
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\Page\Asset\RemoteFactory $remoteFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Core\Model\Page\Asset\RemoteFactory $remoteFactory,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Model\Page\Asset\RemoteFactory $remoteFactory,
         array $data = array()
     ) {
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
         $this->setAsset(
             $remoteFactory->create(array(
                 'url' => (string)$this->getData('url'),

@@ -79,7 +79,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
                     continue;
                 }
                 $class = new \ReflectionClass($blockClass);
-                if ($class->isAbstract() || !$class->isSubclassOf('Magento\Core\Block\Template')) {
+                if ($class->isAbstract() || !$class->isSubclassOf('Magento\View\Block\Template')) {
                     continue;
                 }
 

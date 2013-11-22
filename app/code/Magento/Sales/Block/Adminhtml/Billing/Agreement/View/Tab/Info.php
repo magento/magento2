@@ -51,22 +51,22 @@ class Info extends \Magento\Backend\Block\Template
     protected $_customerFactory;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
         $this->_customerFactory = $customerFactory;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

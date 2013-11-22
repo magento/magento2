@@ -29,7 +29,7 @@
  */
 namespace Magento\Core\Helper;
 
-class Js extends \Magento\Core\Helper\AbstractHelper
+class Js extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Array of sentences of JS translations
@@ -52,12 +52,12 @@ class Js extends \Magento\Core\Helper\AbstractHelper
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\View\Url $viewUrl
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\View\Url $viewUrl
     ) {
         $this->_coreData = $coreData;

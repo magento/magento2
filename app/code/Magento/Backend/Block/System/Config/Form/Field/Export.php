@@ -36,7 +36,7 @@ namespace Magento\Backend\Block\System\Config\Form\Field;
 class Export extends \Magento\Data\Form\Element\AbstractElement
 {
     /**
-     * @var \Magento\Core\Model\Factory\Helper
+     * @var \Magento\App\Helper\HelperFactory
      */
     protected $_helperFactory;
 
@@ -44,14 +44,14 @@ class Export extends \Magento\Data\Form\Element\AbstractElement
      * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Core\Model\Factory\Helper $helperFactory
+     * @param \Magento\App\Helper\HelperFactory $helperFactory
      * @param array $attributes
      */
     public function __construct(
         \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Core\Model\Factory\Helper $helperFactory,
+        \Magento\App\Helper\HelperFactory $helperFactory,
         array $attributes = array()
     ) {
         $this->_helperFactory = $helperFactory;

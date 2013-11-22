@@ -51,11 +51,6 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $_catalogUrl;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * @var \Magento\Tax\Model\Config
      */
     protected $_taxConfig;
@@ -66,37 +61,34 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $_checkoutCart;
 
     /**
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param array $data
      */
     public function __construct(
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Tax\Model\Config $taxConfig,
         \Magento\Checkout\Model\Cart $checkoutCart,
         array $data = array()
     ) {
         $this->_taxData = $taxData;
         $this->_catalogUrl = $catalogUrl;
-        $this->_storeManager = $storeManager;
         $this->_taxConfig = $taxConfig;
         $this->_checkoutCart = $checkoutCart;
-        parent::__construct($catalogData, $coreData, $context, $customerSession, $checkoutSession,  $data);
+        parent::__construct($context, $coreData, $catalogData, $customerSession, $checkoutSession, $data);
     }
 
     /**
@@ -333,7 +325,7 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
     {
         $result = array();
         foreach ($this->getLayout()->getChildBlocks($this->getNameInLayout()) as $block) {
-            /** @var $block \Magento\Core\Block\Template */
+            /** @var $block \Magento\View\Block\Template */
             $result[] = implode('|', array(
                 // skip $this->getNameInLayout() and '.'
                 substr($block->getNameInLayout(), strlen($this->getNameInLayout()) + 1),

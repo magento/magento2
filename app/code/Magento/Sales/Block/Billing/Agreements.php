@@ -31,7 +31,7 @@
  */
 namespace Magento\Sales\Block\Billing;
 
-class Agreements extends \Magento\Core\Block\Template
+class Agreements extends \Magento\View\Block\Template
 {
     /**
      * Payment methods array
@@ -58,28 +58,28 @@ class Agreements extends \Magento\Core\Block\Template
     protected $_agreementCollection;
 
     /**
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Resource\Billing\Agreement\CollectionFactory $agreementCollection
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Resource\Billing\Agreement\CollectionFactory $agreementCollection,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;
         $this->_agreementCollection = $agreementCollection;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**
      * Set Billing Agreement instance
      *
-     * @return \Magento\Core\Block\AbstractBlock
+     * @return \Magento\View\Block\AbstractBlock
      */
     protected function _prepareLayout()
     {

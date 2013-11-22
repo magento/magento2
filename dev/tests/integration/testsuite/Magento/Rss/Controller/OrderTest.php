@@ -68,7 +68,6 @@ class OrderTest extends \Magento\TestFramework\TestCase\AbstractController
      * @param string $password
      * @dataProvider invalidAccessDataProvider
      * @magentoDataFixture Magento/User/_files/dummy_user.php
-     * @covers \Magento\Rss\Controller\Order::authenticateAndAuthorizeAdmin
      */
     public function testInvalidAccess($login, $password)
     {

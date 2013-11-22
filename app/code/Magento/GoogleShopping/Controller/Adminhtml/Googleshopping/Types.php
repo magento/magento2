@@ -29,7 +29,9 @@
 */
 namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping;
 
-class Types extends \Magento\Backend\Controller\Adminhtml\Action
+use Magento\App\RequestInterface;
+
+class Types extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -37,13 +39,12 @@ class Types extends \Magento\Backend\Controller\Adminhtml\Action
      * @var \Magento\Core\Model\Registry
      */
     protected $_coreRegistry = null;
-
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -51,12 +52,15 @@ class Types extends \Magento\Backend\Controller\Adminhtml\Action
     }
 
     /**
-     * Dispatches controller_action_postdispatch_adminhtml Event (as not Adminhtml router)
+     * Dispatches controller_action_postdispatch_adminhtml Event
+     *
+     * @param RequestInterface $request
+     * @return $this|mixed|void
      */
-    public function postDispatch()
+    public function dispatch(RequestInterface $request)
     {
-        parent::postDispatch();
-        if ($this->getFlag('', self::FLAG_NO_POST_DISPATCH)) {
+        parent::dispatch($request);
+        if ($this->_actionFlag->get('', self::FLAG_NO_POST_DISPATCH)) {
             return;
         }
         $this->_eventManager->dispatch('controller_action_postdispatch_adminhtml', array('controller_action' => $this));
@@ -69,7 +73,7 @@ class Types extends \Magento\Backend\Controller\Adminhtml\Action
      */
     protected function _initItemType()
     {
-        $this->_title(__('Google Content Attributes'));
+        $this->_title->add(__('Google Content Attributes'));
 
         $this->_coreRegistry
             ->register('current_item_type', $this->_objectManager->create('Magento\GoogleShopping\Model\Type'));
@@ -87,8 +91,8 @@ class Types extends \Magento\Backend\Controller\Adminhtml\Action
      */
     protected function _initAction()
     {
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_GoogleShopping::catalog_googleshopping_types')
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_GoogleShopping::catalog_googleshopping_types')
             ->_addBreadcrumb(__('Catalog'), __('Catalog'))
             ->_addBreadcrumb(__('Google Content'), __('Google Content'));
         return $this;
@@ -99,11 +103,11 @@ class Types extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function indexAction()
     {
-        $this->_title(__('Google Content Attributes'));
+        $this->_title->add(__('Google Content Attributes'));
 
         $this->_initAction()
-            ->_addBreadcrumb(__('Attribute Maps'), __('Attribute Maps'))
-            ->renderLayout();
+            ->_addBreadcrumb(__('Attribute Maps'), __('Attribute Maps'));
+        $this->_view->renderLayout();
     }
 
     /**
@@ -111,8 +115,8 @@ class Types extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function gridAction()
     {
-        $this->loadLayout('false');
-        $this->renderLayout();
+        $this->_view->loadLayout('false');
+        $this->_view->renderLayout();
     }
 
     /**
@@ -123,12 +127,14 @@ class Types extends \Magento\Backend\Controller\Adminhtml\Action
         try {
             $this->_initItemType();
 
-            $this->_title(__('New Google Content Attribute Mapping'));
+            $this->_title->add(__('New Google Content Attribute Mapping'));
 
             $this->_initAction()
                 ->_addBreadcrumb(__('New attribute set mapping'), __('New attribute set mapping'))
-                ->_addContent($this->getLayout()->createBlock('Magento\GoogleShopping\Block\Adminhtml\Types\Edit'))
-                ->renderLayout();
+                ->_addContent($this->_view->getLayout()
+                    ->createBlock('Magento\GoogleShopping\Block\Adminhtml\Types\Edit')
+                );
+            $this->_view->renderLayout();
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
             $this->_getSession()->addError(__("We can't create Attribute Set Mapping."));
@@ -156,14 +162,17 @@ class Types extends \Magento\Backend\Controller\Adminhtml\Action
                 }
             }
 
-            $this->_title(__('Google Content Attribute Mapping'));
+            $this->_title->add(__('Google Content Attribute Mapping'));
             $this->_coreRegistry->register('attributes', $result);
 
             $breadcrumbLabel = $typeId ? __('Edit attribute set mapping') : __('New attribute set mapping');
             $this->_initAction()
                 ->_addBreadcrumb($breadcrumbLabel, $breadcrumbLabel)
-                ->_addContent($this->getLayout()->createBlock('Magento\GoogleShopping\Block\Adminhtml\Types\Edit'))
-                ->renderLayout();
+                ->_addContent($this->_view->getLayout()->createBlock(
+                    'Magento\GoogleShopping\Block\Adminhtml\Types\Edit'
+                    )
+                );
+            $this->_view->renderLayout();
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
             $this->_getSession()->addError(__("We can't edit Attribute Set Mapping."));
@@ -258,7 +267,7 @@ class Types extends \Magento\Backend\Controller\Adminhtml\Action
     {
         try {
             $this->getResponse()->setBody(
-            $this->getLayout()->createBlock('Magento\GoogleShopping\Block\Adminhtml\Types\Edit\Attributes')
+            $this->_view->getLayout()->createBlock('Magento\GoogleShopping\Block\Adminhtml\Types\Edit\Attributes')
                 ->setAttributeSetId($this->getRequest()->getParam('attribute_set_id'))
                 ->setTargetCountry($this->getRequest()->getParam('target_country'))
                 ->setAttributeSetSelected(true)
@@ -278,7 +287,7 @@ class Types extends \Magento\Backend\Controller\Adminhtml\Action
     {
         try {
             $this->getResponse()->setBody(
-                $this->getLayout()->getBlockSingleton('Magento\GoogleShopping\Block\Adminhtml\Types\Edit\Form')
+                $this->_view->getLayout()->getBlockSingleton('Magento\GoogleShopping\Block\Adminhtml\Types\Edit\Form')
                     ->getAttributeSetsSelectElement($this->getRequest()->getParam('target_country'))
                     ->toHtml()
             );

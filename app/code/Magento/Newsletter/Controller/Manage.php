@@ -34,7 +34,10 @@
  */
 namespace Magento\Newsletter\Controller;
 
-class Manage extends \Magento\Core\Controller\Front\Action
+use Magento\App\Action\NotFoundException;
+use Magento\App\RequestInterface;
+
+class Manage extends \Magento\App\Action\Action
 {
     /**
      * Customer session
@@ -44,58 +47,63 @@ class Manage extends \Magento\Core\Controller\Front\Action
     protected $_customerSession;
 
     /**
-     * Store manager
-     *
+     * @var \Magento\Core\App\Action\FormKeyValidator
+     */
+    protected $_formKeyValidator;
+
+    /**
      * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Customer\Model\Session $customerSession
+        \Magento\App\Action\Context $context,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
-        parent::__construct($context);
         $this->_storeManager = $storeManager;
+        parent::__construct($context);
+        $this->_formKeyValidator = $formKeyValidator;
         $this->_customerSession = $customerSession;
     }
 
     /**
-     * Action predispatch
-     *
      * Check customer authentication for some actions
+     *
+     * @param RequestInterface $request
+     * @return mixed
      */
-    public function preDispatch()
+    public function dispatch(RequestInterface $request)
     {
-        parent::preDispatch();
         if (!$this->_customerSession->authenticate($this)) {
-            $this->setFlag('', 'no-dispatch', true);
+            $this->_actionFlag->set('', 'no-dispatch', true);
         }
+        return parent::dispatch($request);
     }
 
     public function indexAction()
     {
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
-        $this->_initLayoutMessages('Magento\Catalog\Model\Session');
+        $this->_view->loadLayout();
+        $this->_view->getLayout()
+            ->initMessages(array('Magento\Customer\Model\Session', 'Magento\Catalog\Model\Session'));
 
-        if ($block = $this->getLayout()->getBlock('customer_newsletter')) {
-            $block->setRefererUrl($this->_getRefererUrl());
+        if ($block = $this->_view->getLayout()->getBlock('customer_newsletter')) {
+            $block->setRefererUrl($this->_redirect->getRefererUrl());
         }
-        $this->getLayout()->getBlock('head')->setTitle(__('Newsletter Subscription'));
-        $this->renderLayout();
+        $this->_view->getLayout()->getBlock('head')->setTitle(__('Newsletter Subscription'));
+        $this->_view->renderLayout();
     }
 
     public function saveAction()
     {
-        if (!$this->_validateFormKey()) {
+        if (!$this->_formKeyValidator->validate($this->getRequest())) {
             return $this->_redirect('customer/account/');
         }
         try {

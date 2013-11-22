@@ -121,21 +121,21 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     protected $_dashboardData = null;
 
     /**
-     * @param \Magento\Backend\Helper\Dashboard\Data $dashboardData
-     * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
+     * @param \Magento\Backend\Helper\Dashboard\Data $dashboardData
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Helper\Dashboard\Data $dashboardData,
-        \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
+        \Magento\Backend\Helper\Dashboard\Data $dashboardData,
         array $data = array()
     ) {
         $this->_dashboardData = $dashboardData;
-        parent::__construct($collectionFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $collectionFactory, $data);
     }
 
     /**
@@ -340,9 +340,9 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                     $currentvalue = $thisdataarray[$j];
                     if (is_numeric($currentvalue)) {
                         $ylocation = round((strlen($this->_simpleEncoding)-1) * ($yorigin + $currentvalue) / $yrange);
-                        array_push($chartdata, substr($this->_simpleEncoding, $ylocation, 1) . $dataDelimiter);
+                        $chartdata[] = substr($this->_simpleEncoding, $ylocation, 1) . $dataDelimiter;
                     } else {
-                        array_push($chartdata, $dataMissing . $dataDelimiter);
+                        $chartdata[] = $dataMissing . $dataDelimiter;
                     }
                 }
                 // END SIMPLE ENCODING
@@ -360,14 +360,14 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                         $secondchar = $ylocation % 64;
                         $mappedchar = substr($this->_extendedEncoding, $firstchar, 1)
                             . substr($this->_extendedEncoding, $secondchar, 1);
-                        array_push($chartdata, $mappedchar . $dataDelimiter);
+                        $chartdata[] = $mappedchar . $dataDelimiter;
                     } else {
-                        array_push($chartdata, $dataMissing . $dataDelimiter);
+                        $chartdata[] = $dataMissing . $dataDelimiter;
                     }
                 }
                 // ============= END EXTENDED ENCODING =============
             }
-            array_push($chartdata, $dataSetdelimiter);
+            $chartdata[] = $dataSetdelimiter;
         }
         $buffer = implode('', $chartdata);
 

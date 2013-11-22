@@ -25,8 +25,8 @@
 -->
 <layout>
     <container name="container1" label="Container 1">
-        <block class="Magento\Core\Block\Text" name="no_name1" as="same_alias"/>
+        <block class="Magento\View\Block\Text" name="no_name1" as="same_alias"/>
     </container>
     <move element="no_name3" destination="container1"/>
-    <block class="Magento\Core\Block\Text" name="no_name3" as="same_alias"/>
+    <block class="Magento\View\Block\Text" name="no_name3" as="same_alias"/>
 </layout>

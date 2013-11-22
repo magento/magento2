@@ -33,7 +33,10 @@
  */
 namespace Magento\Contacts\Controller;
 
-class Index extends \Magento\Core\Controller\Front\Action
+use Magento\App\Action\NotFoundException;
+use Magento\App\RequestInterface;
+
+class Index extends \Magento\App\Action\Action
 {
     const XML_PATH_EMAIL_RECIPIENT  = 'contacts/email/recipient_email';
     const XML_PATH_EMAIL_SENDER     = 'contacts/email/sender_email_identity';
@@ -41,15 +44,18 @@ class Index extends \Magento\Core\Controller\Front\Action
     const XML_PATH_ENABLED          = 'contacts/contacts/enabled';
 
     /**
-     * Check is page enabled
+     * Dispatch request
+     *
+     * @param RequestInterface $request
+     * @return mixed
+     * @throws \Magento\App\Action\NotFoundException
      */
-    public function preDispatch()
+    public function dispatch(RequestInterface $request)
     {
-        parent::preDispatch();
-
         if (!$this->_objectManager->get('Magento\Core\Model\Store\Config')->getConfigFlag(self::XML_PATH_ENABLED)) {
-            $this->norouteAction();
+            throw new NotFoundException();
         }
+        return parent::dispatch($request);
     }
 
     /**
@@ -57,13 +63,13 @@ class Index extends \Magento\Core\Controller\Front\Action
      */
     public function indexAction()
     {
-        $this->loadLayout();
-        $this->getLayout()->getBlock('contactForm')
+        $this->_view->loadLayout();
+        $this->_view->getLayout()->getBlock('contactForm')
             ->setFormAction($this->_objectManager->create('Magento\Core\Model\Url')->getUrl('*/*/post'));
 
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
-        $this->_initLayoutMessages('Magento\Catalog\Model\Session');
-        $this->renderLayout();
+        $messageStores = array('Magento\Customer\Model\Session', 'Magento\Catalog\Model\Session');
+        $this->_view->getLayout()->initMessages($messageStores);
+        $this->_view->renderLayout();
     }
 
     /**
@@ -107,8 +113,8 @@ class Index extends \Magento\Core\Controller\Front\Action
                 if ($error) {
                     throw new \Exception();
                 }
-                $mailTemplate = $this->_objectManager->create('Magento\Core\Model\Email\Template');
-                /* @var $mailTemplate \Magento\Core\Model\Email\Template */
+                $mailTemplate = $this->_objectManager->create('Magento\Email\Model\Template');
+                /* @var $mailTemplate \Magento\Email\Model\Template */
                 $mailTemplate->setDesignConfig(array(
                     'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
                     'store' => $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')

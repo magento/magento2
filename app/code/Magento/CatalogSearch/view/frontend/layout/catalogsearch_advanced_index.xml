@@ -37,6 +37,6 @@
     <update handle="page_calendar"/>
     <referenceContainer name="content">
         <block class="Magento\CatalogSearch\Block\Advanced\Form" name="catalogsearch_advanced_form" template="advanced/form.phtml"/>
-        <block class="Magento\Core\Block\Html\Calendar" name="html_calendar" as="html_calendar" template="Magento_Page::js/calendar.phtml"/>
+        <block class="Magento\View\Block\Html\Calendar" name="html_calendar" as="html_calendar" template="Magento_Page::js/calendar.phtml"/>
     </referenceContainer>
 </layout>

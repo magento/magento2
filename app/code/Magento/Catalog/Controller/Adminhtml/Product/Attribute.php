@@ -29,7 +29,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-class Attribute extends \Magento\Backend\Controller\Adminhtml\Action
+class Attribute extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Cache\FrontendInterface
@@ -49,38 +49,46 @@ class Attribute extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Cache\FrontendInterface $attributeLabelCache
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Cache\FrontendInterface $attributeLabelCache,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context);
         $this->_attributeLabelCache = $attributeLabelCache;
+        parent::__construct($context);
     }
 
-    public function preDispatch()
+    /**
+     * Dispatch request
+     *
+     * @param \Magento\App\RequestInterface $request
+     * @return $this|mixed
+     */
+    public function dispatch(\Magento\App\RequestInterface $request)
     {
-        parent::preDispatch();
         $this->_entityTypeId = $this->_objectManager->create('Magento\Eav\Model\Entity')
             ->setType(\Magento\Catalog\Model\Product::ENTITY)
             ->getTypeId();
+        return parent::dispatch($request);
     }
 
     protected function _initAction()
     {
-        $this->_title(__('Product Attributes'));
+        $this->_title->add(__('Product Attributes'));
 
         if ($this->getRequest()->getParam('popup')) {
-            $this->loadLayout(array('popup', $this->getDefaultLayoutHandle() . '_popup'));
-            $this->getLayout()->getBlock('root')->addBodyClass('attribute-popup');
+            $this->_view->loadLayout(
+                array('popup', $this->_view->getDefaultLayoutHandle() . '_popup')
+            );
+            $this->_view->getLayout()->getBlock('root')->addBodyClass('attribute-popup');
         } else {
-            $this->loadLayout()
-                ->_addBreadcrumb(
+            $this->_view->loadLayout();
+            $this->_addBreadcrumb(
                     __('Catalog'),
                     __('Catalog')
                 )
@@ -97,8 +105,10 @@ class Attribute extends \Magento\Backend\Controller\Adminhtml\Action
     public function indexAction()
     {
         $this->_initAction()
-            ->_addContent($this->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Attribute'))
-            ->renderLayout();
+            ->_addContent(
+                $this->_view->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Attribute')
+            );
+        $this->_view->renderLayout();
     }
 
     public function newAction()
@@ -145,17 +155,17 @@ class Attribute extends \Magento\Backend\Controller\Adminhtml\Action
 
         $this->_initAction();
 
-        $this->_title($id ? $model->getName() : __('New Product Attribute'));
+        $this->_title->add($id ? $model->getName() : __('New Product Attribute'));
 
         $item = $id ? __('Edit Product Attribute')
                     : __('New Product Attribute');
 
         $this->_addBreadcrumb($item, $item);
 
-        $this->getLayout()->getBlock('attribute_edit_js')
+        $this->_view->getLayout()->getBlock('attribute_edit_js')
             ->setIsPopup((bool)$this->getRequest()->getParam('popup'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
 
     }
 
@@ -198,9 +208,9 @@ class Attribute extends \Magento\Backend\Controller\Adminhtml\Action
                     __('Attribute Set with name \'%1\' already exists.', $setName)
                 );
 
-                $this->_initLayoutMessages('Magento\Adminhtml\Model\Session');
+                $this->_view->getLayout()->initMessages('Magento\Adminhtml\Model\Session');
                 $response->setError(true);
-                $response->setMessage($this->getLayout()->getMessagesBlock()->getGroupedHtml());
+                $response->setMessage($this->_view->getLayout()->getMessagesBlock()->getGroupedHtml());
             }
         }
         $this->getResponse()->setBody($response->toJson());
@@ -446,7 +456,7 @@ class Attribute extends \Magento\Backend\Controller\Adminhtml\Action
     public function suggestConfigurableAttributesAction()
     {
         $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(
-            $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Configurable\AttributeSelector')
+            $this->_view->getLayout()->createBlock('Magento\Catalog\Block\Product\Configurable\AttributeSelector')
                 ->getSuggestedAttributes($this->getRequest()->getParam('label_part'))
         ));
     }

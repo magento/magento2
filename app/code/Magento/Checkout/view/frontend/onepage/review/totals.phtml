@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -29,19 +28,17 @@
  */
 ?>
 <?php if ($this->getTotals()): ?>
-<tfoot>
     <?php $_colspan = $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 5 : 3; ?>
     <?php echo $this->renderTotals(null, $_colspan); ?>
     <?php echo $this->renderTotals('footer', $_colspan); ?>
     <?php if ($this->needDisplayBaseGrandtotal()):?>
-    <tr>
-        <td class="a-right" colspan="<?php echo $_colspan; ?>">
-            <small><?php echo __('Your credit card will be charged for') ?></small>
+    <tr class="totals charge">
+        <td class="mark" colspan="<?php echo $_colspan; ?>">
+            <?php echo __('Your credit card will be charged for') ?>
         </td>
-        <td class="a-right">
-            <small><?php echo $this->displayBaseGrandtotal() ?></small>
+        <td class="amount">
+            <?php echo $this->displayBaseGrandtotal() ?>
         </td>
     </tr>
     <?php endif?>
-</tfoot>
 <?php endif; ?>

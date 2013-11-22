@@ -35,7 +35,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $context = $objectManagerHelper->getObject('Magento\Core\Block\Template\Context');
+        $context = $objectManagerHelper->getObject('Magento\View\Block\Template\Context');
         $session = $this->getMockBuilder('Magento\Customer\Model\Session')
             ->disableOriginalConstructor()
             ->setMethods(array('isLoggedIn'))

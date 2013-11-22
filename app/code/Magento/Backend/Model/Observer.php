@@ -80,22 +80,6 @@ class Observer
     }
 
     /**
-     * Prepare mass action separated data
-     *
-     * @return \Magento\Backend\Model\Observer
-     */
-    public function massactionPrepareKey()
-    {
-        $key = $this->_request->getPost('massaction_prepare_key');
-        if ($key) {
-            $postData = $this->_request->getPost($key);
-            $value = is_array($postData) ? $postData : explode(',', $postData);
-            $this->_request->setPost($key, $value ? $value : null);
-        }
-        return $this;
-    }
-
-    /**
      * Clear result of configuration files access level verification in system cache
      *
      * @return \Magento\Backend\Model\Observer

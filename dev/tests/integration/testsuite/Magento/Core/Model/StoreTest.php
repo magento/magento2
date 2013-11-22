@@ -56,7 +56,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'registry'                => $objectManager->get('Magento\Core\Model\Registry'),
             'configCacheType'         => $objectManager->get('Magento\App\Cache\Type\Config'),
             'url'                     => $objectManager->get('Magento\Core\Model\Url'),
-            'appState'                => $objectManager->get('Magento\App\State'),
             'request'                 => $objectManager->get('Magento\App\RequestInterface'),
             'configDataResource'      => $objectManager->get('Magento\Core\Model\Resource\Config\Data'),
             'dir'                     => $objectManager->get('Magento\App\Dir'),
@@ -377,7 +376,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($isInstalled));
 
         $params = $this->_modelParams;
-        $params['appState'] = $appStateMock;
+        $params['context'] = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Core\Model\Context', array('appState' => $appStateMock));
 
         $model = $this->getMock('Magento\Core\Model\Store', array('getConfig'), $params);
 
@@ -385,7 +385,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->with($this->stringContains(\Magento\Core\Model\Store::XML_PATH_STORE_IN_URL))
             ->will($this->returnValue($storeInUrl));
         $model->setStoreId($storeId);
-        $this->assertEquals($model->isUseStoreInUrl(), $expectedResult);
+        $this->assertEquals($expectedResult, $model->isUseStoreInUrl());
     }
 
     /**

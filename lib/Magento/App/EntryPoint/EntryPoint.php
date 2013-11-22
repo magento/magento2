@@ -92,7 +92,7 @@ class EntryPoint implements EntryPointInterface
                     if (!$this->_locator) {
                         throw new \DomainException();
                     }
-                    $this->_locator->get('Magento\Core\Model\Logger')->logException($exception);
+                    $this->_locator->get('Magento\Logger')->logException($exception);
                 } catch (\Exception $e) {
                     $message .= "Could not write error message to log. Please use developer mode to see the message.\n";
                 }

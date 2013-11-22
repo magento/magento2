@@ -27,7 +27,7 @@
 
 namespace Magento\Rule\Block;
 
-class Rule extends \Magento\Core\Block\AbstractBlock
+class Rule extends \Magento\View\Block\AbstractBlock
 {
 
 }

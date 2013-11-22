@@ -42,11 +42,6 @@ class Grid extends \Magento\Sales\Block\Recurring\Profiles
     protected $_recurringProfile;
 
     /**
-     * @var \Magento\Core\Model\StoreManager
-     */
-    protected $_storeManager;
-
-    /**
      * Profiles collection
      *
      * @var \Magento\Sales\Model\Resource\Recurring\Profile\Collection
@@ -54,25 +49,23 @@ class Grid extends \Magento\Sales\Block\Recurring\Profiles
     protected $_profiles = null;
 
     /**
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Sales\Model\Recurring\Profile $profile
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\StoreManager $storeManager
-     * @param \Magento\Core\Helper\Data $coreData
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\View\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Sales\Model\Recurring\Profile $profile,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\StoreManager $storeManager,
-        \Magento\Core\Helper\Data $coreData,
         array $data = array()
     ) {
-        parent::__construct($coreData, $context, $data);
         $this->_recurringProfile = $profile;
         $this->_registry = $registry;
-        $this->_storeManager = $storeManager;
+        parent::__construct($context, $coreData, $data);
+
     }
 
     /**
@@ -137,7 +130,7 @@ class Grid extends \Magento\Sales\Block\Recurring\Profiles
         $profiles = array();
         $store = $this->_storeManager->getStore();
         foreach ($this->_profiles as $profile) {
-            $profile->setStore($store)->setLocale($this->locale);
+            $profile->setStore($store)->setLocale($this->_locale);
             $profiles[] = new \Magento\Object(array(
                 'reference_id' => $profile->getReferenceId(),
                 'reference_id_link_url' => $this->getUrl(

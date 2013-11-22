@@ -29,6 +29,7 @@
         <container name="after_body_start" as="after_body_start" label="Page Top"/>
         <container name="content" as="content" label="Main Content Area"/>
     </block>
+    <update handle="default_head_blocks"/>
     <referenceBlock name="head">
         <block class="Magento\Page\Block\Html\Head\Css" name="css-print-css">
             <arguments>

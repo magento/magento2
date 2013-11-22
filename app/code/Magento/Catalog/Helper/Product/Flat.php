@@ -96,7 +96,7 @@ class Flat extends \Magento\Catalog\Helper\Flat\AbstractFlat
      * Construct
      *
      * @param \Magento\Index\Model\ProcessFactory $processFactory
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Catalog\Model\Product\Flat\Flag $flatFlag
      * @param $addFilterableAttrs
@@ -104,7 +104,7 @@ class Flat extends \Magento\Catalog\Helper\Flat\AbstractFlat
      */
     public function __construct(
         \Magento\Index\Model\ProcessFactory $processFactory,
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Catalog\Model\Product\Flat\Flag $flatFlag,
         $addFilterableAttrs,

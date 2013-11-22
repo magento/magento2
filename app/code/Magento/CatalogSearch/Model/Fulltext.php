@@ -57,13 +57,6 @@ class Fulltext extends \Magento\Core\Model\AbstractModel
     protected $_catalogSearchData = null;
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager = null;
-
-    /**
      * Core store config
      *
      * @var \Magento\Core\Model\Store\Config
@@ -71,7 +64,6 @@ class Fulltext extends \Magento\Core\Model\AbstractModel
     protected $_coreStoreConfig;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
@@ -81,7 +73,6 @@ class Fulltext extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\CatalogSearch\Helper\Data $catalogSearchData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
@@ -90,7 +81,6 @@ class Fulltext extends \Magento\Core\Model\AbstractModel
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_eventManager = $eventManager;
         $this->_catalogSearchData = $catalogSearchData;
         $this->_coreStoreConfig = $coreStoreConfig;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

@@ -52,29 +52,29 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_queueFactory;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Newsletter\Model\QueueFactory $queueFactory
      * @param \Magento\Core\Model\System\Store $systemStore
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Model\Registry $registry,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Newsletter\Model\QueueFactory $queueFactory,
         \Magento\Core\Model\System\Store $systemStore,
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
         array $data = array()
     ) {
         $this->_wysiwygConfig = $wysiwygConfig;
         $this->_systemStore = $systemStore;
         $this->_queueFactory = $queueFactory;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     /**

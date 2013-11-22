@@ -39,34 +39,6 @@ class Locale extends \Magento\Install\Block\AbstractBlock
     protected $_template = 'locale.phtml';
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Install\Model\Installer $installer
-     * @param \Magento\Install\Model\Wizard $installWizard
-     * @param \Magento\Core\Model\Session\Generic $session
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Install\Model\Installer $installer,
-        \Magento\Install\Model\Wizard $installWizard,
-        \Magento\Core\Model\Session\Generic $session,
-        \Magento\Core\Model\LocaleInterface $locale,
-        array $data = array()
-    ) {
-        parent::__construct($coreData, $context, $installer, $installWizard, $session, $data);
-        $this->_locale = $locale;
-    }
-
-
-    /**
      * Retrieve locale object
      *
      * @return \Zend_Locale
@@ -108,7 +80,7 @@ class Locale extends \Magento\Install\Block\AbstractBlock
      */
     public function getLocaleSelect()
     {
-        $html = $this->getLayout()->createBlock('Magento\Core\Block\Html\Select')
+        $html = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
             ->setName('config[locale]')
             ->setId('locale')
             ->setTitle(__('Locale'))
@@ -126,7 +98,7 @@ class Locale extends \Magento\Install\Block\AbstractBlock
      */
     public function getTimezoneSelect()
     {
-        $html = $this->getLayout()->createBlock('Magento\Core\Block\Html\Select')
+        $html = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
             ->setName('config[timezone]')
             ->setId('timezone')
             ->setTitle(__('Time Zone'))
@@ -160,7 +132,7 @@ class Locale extends \Magento\Install\Block\AbstractBlock
      */
     public function getCurrencySelect()
     {
-        $html = $this->getLayout()->createBlock('Magento\Core\Block\Html\Select')
+        $html = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
             ->setName('config[currency]')
             ->setId('currency')
             ->setTitle(__('Default Currency'))

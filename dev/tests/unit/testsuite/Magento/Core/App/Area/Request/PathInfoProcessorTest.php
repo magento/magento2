@@ -79,7 +79,7 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->once())->method('isDirectAccessFrontendName')
             ->with('storeCode')->will($this->returnValue(true));
-        $this->_requestMock->expects($this->once())->method('setActionName')->with('noRoute');
+        $this->_requestMock->expects($this->once())->method('setActionName')->with('noroute');
         $this->assertEquals($this->_pathInfo, $this->_model->process($this->_requestMock, $this->_pathInfo));
     }
 

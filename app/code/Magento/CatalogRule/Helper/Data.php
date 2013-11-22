@@ -29,7 +29,7 @@
  */
 namespace Magento\CatalogRule\Helper;
 
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Algorithm for calculating price rule

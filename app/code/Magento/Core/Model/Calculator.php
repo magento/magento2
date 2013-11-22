@@ -54,9 +54,9 @@ class Calculator
      * Initialize calculator
      *
      * @param \Magento\Core\Model\Store|int $store
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
-    public function __construct($store, \Magento\Core\Model\StoreManager $storeManager)
+    public function __construct($store, \Magento\Core\Model\StoreManagerInterface $storeManager)
     {
         if (!($store instanceof \Magento\Core\Model\Store)) {
             $store = $storeManager->getStore($store);

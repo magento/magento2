@@ -75,13 +75,6 @@ class Switcher extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Backend::store/switcher.phtml';
 
     /**
-     * Application model
-     *
-     * @var \Magento\Core\Model\App
-     */
-    protected $_application;
-
-    /**
      * Website factory
      *
      * @var \Magento\Core\Model\Website\Factory
@@ -103,25 +96,22 @@ class Switcher extends \Magento\Backend\Block\Template
     protected $_storeFactory;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\App $application
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Website\Factory $websiteFactory
      * @param \Magento\Core\Model\Store\Group\Factory $storeGroupFactory
      * @param \Magento\Core\Model\StoreFactory $storeFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\App $application,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Website\Factory $websiteFactory,
         \Magento\Core\Model\Store\Group\Factory $storeGroupFactory,
         \Magento\Core\Model\StoreFactory $storeFactory,
         array $data = array()
     ) {
-        parent::__construct($coreData, $context, $data);
-        $this->_application = $application;
+        parent::__construct($context, $coreData, $data);
         $this->_websiteFactory = $websiteFactory;
         $this->_storeGroupFactory = $storeGroupFactory;
         $this->_storeFactory = $storeFactory;
@@ -158,7 +148,7 @@ class Switcher extends \Magento\Backend\Block\Template
      */
     public function getWebsites()
     {
-        $websites = $this->_application->getWebsites();
+        $websites = $this->_storeManager->getWebsites();
         if ($websiteIds = $this->getWebsiteIds()) {
             foreach (array_keys($websites) as $websiteId) {
                 if (!in_array($websiteId, $websiteIds)) {
@@ -190,7 +180,7 @@ class Switcher extends \Magento\Backend\Block\Template
     public function getStoreGroups($website)
     {
         if (!$website instanceof \Magento\Core\Model\Website) {
-            $website = $this->_application->getWebsite($website);
+            $website = $this->_storeManager->getWebsite($website);
         }
         return $website->getGroups();
     }
@@ -221,7 +211,7 @@ class Switcher extends \Magento\Backend\Block\Template
     public function getStores($group)
     {
         if (!$group instanceof \Magento\Core\Model\Store\Group) {
-            $group = $this->_application->getGroup($group);
+            $group = $this->_storeManager->getGroup($group);
         }
         $stores = $group->getStores();
         if ($storeIds = $this->getStoreIds()) {
@@ -302,7 +292,7 @@ class Switcher extends \Magento\Backend\Block\Template
      */
     public function isShow()
     {
-        return !$this->_application->isSingleStoreMode();
+        return !$this->_storeManager->isSingleStoreMode();
     }
 
     /**

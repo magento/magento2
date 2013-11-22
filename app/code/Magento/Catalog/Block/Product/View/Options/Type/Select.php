@@ -54,7 +54,7 @@ class Select
             || $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_MULTIPLE) {
             $require = ($_option->getIsRequire()) ? ' required' : '';
             $extraParams = '';
-            $select = $this->getLayout()->createBlock('Magento\Core\Block\Html\Select')
+            $select = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
                 ->setData(array(
                     'id' => 'select_'.$_option->getId(),
                     'class' => $require.' product-custom-option'

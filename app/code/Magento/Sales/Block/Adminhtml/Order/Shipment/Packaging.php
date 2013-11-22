@@ -45,22 +45,22 @@ class Packaging extends \Magento\Adminhtml\Block\Template
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Usa\Model\Shipping\Carrier\Usps\Source\Size $sourceSizeModel
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Usa\Model\Shipping\Carrier\Usps\Source\Size $sourceSizeModel,
         \Magento\Core\Model\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_sourceSizeModel = $sourceSizeModel;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

@@ -25,6 +25,7 @@
  */
 
 namespace Magento\Core\Model;
+use Magento\TranslateInterface;
 
 /**
  * Translate model
@@ -33,7 +34,7 @@ namespace Magento\Core\Model;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class Translate
+class Translate implements TranslateInterface
 {
     /**
      * CSV separator
@@ -174,7 +175,7 @@ class Translate
     protected $_modulesReader;
 
     /**
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -203,7 +204,7 @@ class Translate
      * @param \Magento\Module\ModuleList $moduleList
      * @param \Magento\Module\Dir\Reader $modulesReader
      * @param \Magento\Core\Model\Config $coreConfig
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Resource\Translate $translate
      * @param \Magento\Core\Model\App $app
      * @param \Magento\App\State $appState
@@ -220,7 +221,7 @@ class Translate
         \Magento\Module\ModuleList $moduleList,
         \Magento\Module\Dir\Reader $modulesReader,
         \Magento\Core\Model\Config $coreConfig,
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Resource\Translate $translate,
         \Magento\Core\Model\App $app,
         \Magento\App\State $appState
@@ -349,9 +350,7 @@ class Translate
      * @param bool $isJson
      * @return \Magento\Core\Model\Translate\InlineInterface
      */
-    public function processResponseBody(&$body,
-        $isJson = \Magento\Core\Model\Translate\InlineParser::JSON_FLAG_DEFAULT_STATE
-    ) {
+    public function processResponseBody(&$body, $isJson = false) {
         return $this->getInlineObject()->processResponseBody($body, $isJson);
     }
 

@@ -272,7 +272,7 @@
                 </arguments>
             </block>
             <block class="Magento\Page\Block\Js\Components" name="head.components" as="components" template="Magento_Adminhtml::page/js/components.phtml"/>
-            <block class="Magento\Core\Block\Html\Calendar" name="head.calendar" as="calendar" template="Magento_Adminhtml::page/js/calendar.phtml"/>
+            <block class="Magento\View\Block\Html\Calendar" name="head.calendar" as="calendar" template="Magento_Adminhtml::page/js/calendar.phtml"/>
         </block>
         <block class="Magento\Adminhtml\Block\Page\Notices" name="global_notices" as="global_notices" template="page/notices.phtml"/>
         <block class="Magento\Adminhtml\Block\Page\Header" name="header" as="header">
@@ -288,7 +288,7 @@
         </container>
         <container name="left" as="left" label="Left Column"/>
         <container name="content" as="content" label="Content"/>
-        <block class="Magento\Core\Block\Messages" name="messages" as="messages"/>
+        <block class="Magento\View\Block\Messages" name="messages" as="messages"/>
         <container name="js" as="js" label="JavaScript"/>
         <block class="Magento\Adminhtml\Block\Page\Footer" name="footer" as="footer">
             <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright"/>

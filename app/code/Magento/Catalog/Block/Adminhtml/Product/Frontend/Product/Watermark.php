@@ -58,20 +58,20 @@ class Watermark
     protected $_imageTypes;
 
     /**
+     * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Catalog\Model\Config\Source\Watermark\Position $watermarkPosition
      * @param \Magento\Backend\Block\System\Config\Form\Field $formField
      * @param \Magento\Data\Form\Element\Factory $elementFactory
-     * @param \Magento\Backend\Block\Context $context
-     * @param array $imageTypes
      * @param array $data
+     * @param array $imageTypes
      */
     public function __construct(
+        \Magento\Backend\Block\Context $context,
         \Magento\Catalog\Model\Config\Source\Watermark\Position $watermarkPosition,
         \Magento\Backend\Block\System\Config\Form\Field $formField,
         \Magento\Data\Form\Element\Factory $elementFactory,
-        \Magento\Backend\Block\Context $context,
-        array $imageTypes = array(),
-        array $data = array()
+        array $data = array(),
+        array $imageTypes = array()
     ) {
         $this->_watermarkPosition = $watermarkPosition;
         $this->_formField = $formField;

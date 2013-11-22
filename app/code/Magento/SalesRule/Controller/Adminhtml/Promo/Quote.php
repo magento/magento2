@@ -26,7 +26,7 @@
 
 namespace Magento\SalesRule\Controller\Adminhtml\Promo;
 
-class Quote extends \Magento\Backend\Controller\Adminhtml\Action
+class Quote extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -36,20 +36,36 @@ class Quote extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @var \Magento\App\Response\Http\FileFactory
+     */
+    protected $_fileFactory;
+
+    /**
+     * @var \Magento\Core\Filter\Date
+     */
+    protected $_dateFilter;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Core\Filter\Date $dateFilter
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Core\Filter\Date $dateFilter
     ) {
-        $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
+        $this->_coreRegistry = $coreRegistry;
+        $this->_fileFactory = $fileFactory;
+        $this->_dateFilter = $dateFilter;
     }
 
     protected function _initRule()
     {
-        $this->_title(__('Cart Price Rules'));
+        $this->_title->add(__('Cart Price Rules'));
 
         $this->_coreRegistry->register('current_promo_quote_rule', $this->_objectManager->create('Magento\SalesRule\Model\Rule'));
         $id = (int)$this->getRequest()->getParam('id');
@@ -65,8 +81,8 @@ class Quote extends \Magento\Backend\Controller\Adminhtml\Action
 
     protected function _initAction()
     {
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_SalesRule::promo_quote')
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_SalesRule::promo_quote')
             ->_addBreadcrumb(__('Promotions'), __('Promotions'))
         ;
         return $this;
@@ -74,11 +90,11 @@ class Quote extends \Magento\Backend\Controller\Adminhtml\Action
 
     public function indexAction()
     {
-        $this->_title(__('Cart Price Rules'));
+        $this->_title->add(__('Cart Price Rules'));
 
         $this->_initAction()
-            ->_addBreadcrumb(__('Catalog'), __('Catalog'))
-            ->renderLayout();
+            ->_addBreadcrumb(__('Catalog'), __('Catalog'));
+        $this->_view->renderLayout();
     }
 
     public function newAction()
@@ -101,7 +117,7 @@ class Quote extends \Magento\Backend\Controller\Adminhtml\Action
             }
         }
 
-        $this->_title($model->getRuleId() ? $model->getName() : __('New Cart Price Rule'));
+        $this->_title->add($model->getRuleId() ? $model->getName() : __('New Cart Price Rule'));
 
         // set entered data if was error when we do save
         $data = $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getPageData(true);
@@ -114,16 +130,16 @@ class Quote extends \Magento\Backend\Controller\Adminhtml\Action
 
         $this->_coreRegistry->register('current_promo_quote_rule', $model);
 
-        $this->_initAction()->getLayout()->getBlock('promo_quote_edit')
+        $this->_initAction();
+        $this->_view->getLayout()->getBlock('promo_quote_edit')
             ->setData('action', $this->getUrl('sales_rule/*/save'));
 
-        $this
-            ->_addBreadcrumb(
+        $this->_addBreadcrumb(
                 $id ? __('Edit Rule')
                     : __('New Rule'),
                 $id ? __('Edit Rule')
-                    : __('New Rule'))
-            ->renderLayout();
+                    : __('New Rule'));
+        $this->_view->renderLayout();
 
     }
 
@@ -141,7 +157,9 @@ class Quote extends \Magento\Backend\Controller\Adminhtml\Action
                     'adminhtml_controller_salesrule_prepare_save',
                     array('request' => $this->getRequest()));
                 $data = $this->getRequest()->getPost();
-                $data = $this->_filterDates($data, array('from_date', 'to_date'));
+                $inputFilter = new \Zend_Filter_Input(
+                    array('from_date' => $this->_dateFilter, 'to_date' => $this->_dateFilter), array(), $data);
+                $data = $inputFilter->getUnescaped();
                 $id = $this->getRequest()->getParam('rule_id');
                 if ($id) {
                     $model->load($id);
@@ -290,7 +308,7 @@ class Quote extends \Magento\Backend\Controller\Adminhtml\Action
     public function applyRulesAction()
     {
         $this->_initAction();
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -299,7 +317,7 @@ class Quote extends \Magento\Backend\Controller\Adminhtml\Action
     public function couponsGridAction()
     {
         $this->_initRule();
-        $this->loadLayout()->renderLayout();
+        $this->_view->loadLayout()->renderLayout();
     }
 
     /**
@@ -313,10 +331,10 @@ class Quote extends \Magento\Backend\Controller\Adminhtml\Action
         $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
         if ($rule->getId()) {
             $fileName = 'coupon_codes.xml';
-            $content = $this->getLayout()
+            $content = $this->_view->getLayout()
                 ->createBlock('Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid')
                 ->getExcelFile($fileName);
-            $this->_prepareDownloadResponse($fileName, $content);
+            return $this->_fileFactory->create($fileName, $content);
         } else {
             $this->_redirect('sales_rule/*/detail', array('_current' => true));
             return;
@@ -334,10 +352,10 @@ class Quote extends \Magento\Backend\Controller\Adminhtml\Action
         $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
         if ($rule->getId()) {
             $fileName = 'coupon_codes.csv';
-            $content = $this->getLayout()
+            $content = $this->_view->getLayout()
                 ->createBlock('Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid')
                 ->getCsvFile();
-            $this->_prepareDownloadResponse($fileName, $content);
+            return $this->_fileFactory->create($fileName, $content);
         } else {
             $this->_redirect('sales_rule/*/detail', array('_current' => true));
             return;
@@ -353,7 +371,7 @@ class Quote extends \Magento\Backend\Controller\Adminhtml\Action
         $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
 
         if (!$rule->getId()) {
-            $this->_forward('noRoute');
+            $this->_forward('noroute');
         }
 
         $codesIds = $this->getRequest()->getParam('ids');
@@ -375,7 +393,7 @@ class Quote extends \Magento\Backend\Controller\Adminhtml\Action
     public function generateAction()
     {
         if (!$this->getRequest()->isAjax()) {
-            $this->_forward('noRoute');
+            $this->_forward('noroute');
             return;
         }
         $result = array();
@@ -390,7 +408,8 @@ class Quote extends \Magento\Backend\Controller\Adminhtml\Action
             try {
                 $data = $this->getRequest()->getParams();
                 if (!empty($data['to_date'])) {
-                    $data = array_merge($data, $this->_filterDates($data, array('to_date')));
+                    $inputFilter = new \Zend_Filter_Input(array('to_date' => $this->_dateFilter), array(), $data);
+                    $data = $inputFilter->getUnescaped();
                 }
 
                 /** @var $generator \Magento\SalesRule\Model\Coupon\Massgenerator */
@@ -402,8 +421,8 @@ class Quote extends \Magento\Backend\Controller\Adminhtml\Action
                     $generator->generatePool();
                     $generated = $generator->getGeneratedCount();
                     $this->_getSession()->addSuccess(__('%1 coupon(s) have been generated.', $generated));
-                    $this->_initLayoutMessages('Magento\Adminhtml\Model\Session');
-                    $result['messages']  = $this->getLayout()->getMessagesBlock()->getGroupedHtml();
+                    $this->_view->getLayout()->initMessages('Magento\Adminhtml\Model\Session');
+                    $result['messages']  = $this->_view->getLayout()->getMessagesBlock()->getGroupedHtml();
                 }
             } catch (\Magento\Core\Exception $e) {
                 $result['error'] = $e->getMessage();
@@ -421,7 +440,7 @@ class Quote extends \Magento\Backend\Controller\Adminhtml\Action
     public function chooserAction()
     {
         $uniqId = $this->getRequest()->getParam('uniq_id');
-        $chooserBlock = $this->getLayout()
+        $chooserBlock = $this->_view->getLayout()
             ->createBlock('Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser', '', array('data' => array('id' => $uniqId)));
         $this->getResponse()->setBody($chooserBlock->toHtml());
     }

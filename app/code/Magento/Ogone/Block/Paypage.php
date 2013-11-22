@@ -27,7 +27,7 @@
 
 namespace Magento\Ogone\Block;
 
-class Paypage extends \Magento\Core\Block\Template
+class Paypage extends \Magento\View\Block\Template
 {
     protected $_template = 'paypage.phtml';
 }

@@ -44,23 +44,25 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_urlBuilder = $this->getMock('Magento\Core\Model\Url', array('getUrl'), array(), '', false);
+        $this->_urlBuilder = $this->getMock('Magento\UrlInterface');
 
         /** @var  $coreData \Magento\Core\Helper\Data */
         $coreData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
-
-        /** @var \Magento\Core\Block\Template\Context $context */
-        $context = $this->getMock('Magento\Backend\Block\Template\Context', array('getUrlBuilder'), array(), '', false);
-        $context->expects($this->once())
-            ->method('getUrlBuilder')
-            ->will($this->returnValue($this->_urlBuilder));
 
         $registry = $this->getMock('Magento\Core\Model\Registry', array('registry'), array(), '', false);
         $registry->expects($this->once())
             ->method('registry')
             ->with('current_subscription')
             ->will($this->returnValue($this->_subscription));
-        $this->_block = new \Magento\Webhook\Block\Adminhtml\Registration\Activate($coreData, $context, $registry);
+
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_block = $helper->getObject('\Magento\Webhook\Block\Adminhtml\Registration\Activate',
+            array(
+                'coreData' => $coreData,
+                'registry' => $registry,
+                'urlBuilder' => $this->_urlBuilder
+            )
+        );
     }
 
     public function testGetAcceptUrl()

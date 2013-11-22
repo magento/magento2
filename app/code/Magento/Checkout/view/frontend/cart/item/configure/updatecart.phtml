@@ -19,27 +19,25 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-
 <?php $_product = $this->getProduct(); ?>
 <?php $buttonTitle = __('Update Cart'); ?>
 <?php if ($_product->isSaleable()): ?>
-    <div class="add-to-cart">
+    <div class="box tocart update">
         <?php if (!$_product->isGrouped()): ?>
-        <label for="qty"><?php echo __('Qty:') ?></label>
-        <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>"
-               title="<?php echo __('Qty') ?>" class="input-text qty"
-            <?php if ($_product->getStockItem() && $_product->getStockItem()->getIsQtyDecimal()) : ?>
-                data-validate="{required:true, 'validate-greater-than-zero':true}"/>
-            <?php else: ?>
-                data-validate="{required:true, digits:true}"/>
-            <?php endif; ?>
+        <div class="field qty">
+            <label class="label" for="qty"><span><?php echo __('Qty') ?></span></label>
+            <div class="control">
+                <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo __('Qty') ?>" class="input-text qty" data-validate="{required:true,digits:true}"/>
+            </div>
+        </div>
         <?php endif; ?>
-        <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" id="product-updatecart-button"><span><span><?php echo $buttonTitle ?></span></span></button>
+        <div class="actions">
+            <button type="button" class="action primary tocart" title="<?php echo $buttonTitle ?>" id="product-updatecart-button"><span><?php echo $buttonTitle ?></span></button>
+        </div>
         <?php echo $this->getChildHtml('', true) ?>
     </div>
 

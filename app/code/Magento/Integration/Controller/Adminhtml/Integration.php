@@ -23,11 +23,12 @@
  */
 namespace Magento\Integration\Controller\Adminhtml;
 
+use Magento\Backend\App\Action;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 /**
  * Controller for integrations management.
  */
-class Integration extends \Magento\Backend\Controller\Adminhtml\Action
+class Integration extends \Magento\Backend\App\Action
 {
     /** Param Key for extracting integration id from Request */
     const PARAM_INTEGRATION_ID = 'id';
@@ -46,12 +47,12 @@ class Integration extends \Magento\Backend\Controller\Adminhtml\Action
     private $_integrationService;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Integration\Service\IntegrationV1Interface $integrationService
      * @param \Magento\Core\Model\Registry $registry
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Integration\Service\IntegrationV1Interface $integrationService,
         \Magento\Core\Model\Registry $registry
     ) {
@@ -65,11 +66,11 @@ class Integration extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function indexAction()
     {
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Integration::system_integrations');
         $this->_addBreadcrumb(__('Integrations'), __('Integrations'));
-        $this->_title(__('Integrations'));
-        $this->renderLayout();
+        $this->_title->add(__('Integrations'));
+        $this->_view->renderLayout();
     }
 
     /**
@@ -77,8 +78,8 @@ class Integration extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function gridAction()
     {
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     /**
@@ -96,17 +97,17 @@ class Integration extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function newAction()
     {
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Integration::system_integrations');
         $this->_addBreadcrumb(__('New Integration'), __('New Integration'));
-        $this->_title(__('New Integration'));
+        $this->_title->add(__('New Integration'));
         /** Try to recover integration data from session if it was added during previous request which failed. */
         $restoredIntegration = $this->_getSession()->getIntegrationData();
         if ($restoredIntegration) {
             $this->_registry->register(self::REGISTRY_KEY_CURRENT_INTEGRATION, $restoredIntegration);
             $this->_getSession()->setIntegrationData(array());
         }
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -135,15 +136,15 @@ class Integration extends \Magento\Backend\Controller\Adminhtml\Action
             $this->_redirect('*/*/');
             return;
         }
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $this->_getSession()->setIntegrationData(array());
         $this->_setActiveMenu('Magento_Integration::system_integrations');
         $this->_addBreadcrumb(
             __('Edit "%1" Integration', $integrationData[Info::DATA_NAME]),
             __('Edit "%1" Integration', $integrationData[Info::DATA_NAME])
         );
-        $this->_title(__('Edit "%1" Integration', $integrationData[Info::DATA_NAME]));
-        $this->renderLayout();
+        $this->_title->add(__('Edit "%1" Integration', $integrationData[Info::DATA_NAME]));
+        $this->_view->renderLayout();
     }
 
     /**

@@ -39,25 +39,6 @@ class Date
     protected static $_format = null;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
-     * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Backend\Block\Context $context,
-        \Magento\Core\Model\LocaleInterface $locale,
-        array $data = array()
-    ) {
-        $this->_locale = $locale;
-        parent::__construct($context, $data);
-    }
-
-    /**
      * Retrieve date format
      *
      * @return string

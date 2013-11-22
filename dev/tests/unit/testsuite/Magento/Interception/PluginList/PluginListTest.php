@@ -67,10 +67,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
             new \Magento\ObjectManager\Config\SchemaLocator(),
             $validationStateMock
         );
-        $this->_configScopeMock = $this->getMock('Magento\Config\ScopeInterface');
-        $this->_configScopeMock->expects($this->any())
-            ->method('getAllScopes')
-            ->will($this->returnValue(array('global', 'backend', 'frontend')));
+        $this->_configScopeMock = $this->getMock('\Magento\Config\ScopeInterface');
         $cacheMock = $this->getMock('Magento\Config\CacheInterface');
         // turn cache off
         $cacheMock->expects($this->any())

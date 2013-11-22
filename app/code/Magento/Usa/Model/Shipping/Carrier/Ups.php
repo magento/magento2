@@ -157,7 +157,6 @@ class Ups
      */
     public function __construct(
         \Magento\Logger $logger,
-        \Magento\Usa\Model\Simplexml\ElementFactory $simpleXmlElementFactory,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Usa\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
@@ -176,7 +175,6 @@ class Ups
     ) {
         $this->_logger = $logger;
         $this->_locale = $locale;
-        $this->_simpleXmlElementFactory = $simpleXmlElementFactory;
         parent::__construct(
             $xmlElFactory, $rateFactory, $rateMethodFactory, $trackFactory, $trackErrorFactory, $trackStatusFactory,
             $regionFactory, $countryFactory, $currencyFactory, $directoryData, $coreStoreConfig, $rateErrorFactory,

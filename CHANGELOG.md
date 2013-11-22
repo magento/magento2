@@ -1,3 +1,25 @@
+2.0.0.0-dev53
+=============
+* Moved general action-related functionality to \Magento\App\Action\Action in the library. Removed Magento\Core\Controller\Varien\Action and related logic from the Magento_Core module
+* Moved view-related methods from action interface to \Magento\App\ViewInterface with corresponding implementation
+* Moved redirect creation logic from the action interface to \Magento\App\Response\RedirectInterface
+* Moved Magento\Core common blocks to the library
+* Added reading of etc/integration/config.xml and etc/integration/api.xml files for API Integrations
+* Various improvements:
+  * Email-related logic from the Core and Adminhtml modules consolidated in the new Email module
+* GitHub requests:
+  * [#238](https://github.com/magento/magento2/pull/238) -- Improve escaping HTML entities in URL
+  * [#199](https://github.com/magento/magento2/pull/199) -- Replaced function calls to array_push with adding the elements directly
+  * [#182](https://github.com/magento/magento2/pull/182) -- By default use collection _idFieldName for toOption* methods.
+  * [#233](https://github.com/magento/magento2/pull/233) -- Google Rich Snippet Code
+  * [#339](https://github.com/magento/magento2/pull/339) -- Correcting 'cahce' typo in documentation.
+  * [#232](https://github.com/magento/magento2/pull/232) -- Update app/code/core/Mage/Checkout/controllers/CartController.php (fix issue #27632)
+* Fixed bugs:
+  * Fixed JavaScript error when printing orders from the frontend
+  * Fixed Captcha problems on various forms when Captcha is enabled on the frontend
+  * Fixed "Page not found" on category page if setting "Add Store Code to Urls" to "Yes" in the backend config
+  * Fixed Fatal error when creating shipping label for returns
+
 2.0.0.0-dev52
 =============
 * Better Navigation menu rendering due to improved Caching of Categories
@@ -53,7 +75,7 @@
      * Moved the String Helper to the Magento\Filter, Magento\Stdlib\String, Magento\Stdlib\ArrayUtils libraries
      * Moved the Data Helper to the Magento\Math, Magento\Filter, Magento\Convert, Magento\Encryption, Magento\Filesystem libraries and to Magento\Customer\Helper\Data libraries
      * Moved the Http Magento Helper to the Magento\HTTP library
-  * The Hint Magento Helper, Http Magento Helper helpers were removed from the Magento\Core module
+  *  The Hint Magento Helper, Http Magento Helper helpers were removed from the Magento\Core module
   * Implemented SOAP faults declaration in WSDL
   * Web API config reader was refactored to use Magento\Config\Reader\Filesystem
   * Created integrations module. Added 'Integrations Grid' and 'New/Edit' Integration pages in the admin

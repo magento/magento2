@@ -34,7 +34,7 @@
  */
 namespace Magento\Customer\Block;
 
-class Newsletter extends \Magento\Customer\Block\Account\Dashboard // \Magento\Core\Block\Template
+class Newsletter extends \Magento\Customer\Block\Account\Dashboard // \Magento\View\Block\Template
 {
 
     protected $_template = 'form/newsletter.phtml';

@@ -29,35 +29,27 @@
  */
 namespace Magento\Paypal\Block;
 
-class Logo extends \Magento\Core\Block\Template
+class Logo extends \Magento\View\Block\Template
 {
-    /**
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
     /**
      * @var \Magento\Paypal\Model\Config
      */
     protected $_paypalConfig;
 
     /**
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Paypal\Model\Config $paypalConfig
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Paypal\Model\Config $paypalConfig,
         array $data = array()
     ) {
-        $this->_locale = $locale;
         $this->_paypalConfig = $paypalConfig;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

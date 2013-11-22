@@ -33,7 +33,7 @@
  */
 namespace Magento\Core\Helper\File;
 
-class Storage extends \Magento\Core\Helper\AbstractHelper
+class Storage extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Current storage code
@@ -71,20 +71,28 @@ class Storage extends \Magento\Core\Helper\AbstractHelper
     protected $_filesystemStorage;
 
     /**
+     * @var \Magento\Core\Model\ConfigInterface
+     */
+    protected $config;
+
+    /**
      * @param Storage\Database $coreFileStorageDb
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\File\Storage $storage
      * @param \Magento\Core\Model\File\Storage\File $filesystemStorage
+     * @param \Magento\Core\Model\ConfigInterface $config
      */
     public function __construct(
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\File\Storage $storage,
-        \Magento\Core\Model\File\Storage\File $filesystemStorage
+        \Magento\Core\Model\File\Storage\File $filesystemStorage,
+        \Magento\Core\Model\ConfigInterface $config
     ) {
         $this->_filesystemStorage = $filesystemStorage;
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_storage = $storage;
+        $this->config = $config;
         parent::__construct($context);
     }
 
@@ -96,8 +104,9 @@ class Storage extends \Magento\Core\Helper\AbstractHelper
     public function getCurrentStorageCode()
     {
         if (is_null($this->_currentStorage)) {
-            $this->_currentStorage = (int) $this->_app
-                ->getConfig()->getValue(\Magento\Core\Model\File\Storage::XML_PATH_STORAGE_MEDIA, 'default');
+            $this->_currentStorage = (int) $this->config->getValue(
+                \Magento\Core\Model\File\Storage::XML_PATH_STORAGE_MEDIA, 'default'
+            );
         }
 
         return $this->_currentStorage;

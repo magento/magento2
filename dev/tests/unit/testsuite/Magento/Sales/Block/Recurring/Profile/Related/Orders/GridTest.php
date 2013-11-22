@@ -43,28 +43,16 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareLayout()
     {
-        $customer = $this->getMockBuilder('Magento\Customer\Model\Customer')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getId'))
-            ->getMock();
+        $customer = $this->getMock('Magento\Customer\Model\Customer', array(), array(), '', false);
         $customer->expects($this->once())->method('getId')->will($this->returnValue(1));
-
-        $store = $this->getMockBuilder('Magento\Core\Model\Store')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $collectionElement = $this->getMockBuilder('Magento\Sales\Model\Recurring\Profile')
-            ->disableOriginalConstructor()
-            ->setMethods(array('setLocale', 'getIncrementId'))
-            ->getMock();
+        $store = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
+        $args = array(
+            'getIncrementId', 'getCreatedAt', 'getCustomerName', 'getBaseGrandTotal', 'getStatusLabel', 'getId'
+        );
+        $collectionElement = $this->getMock('Magento\Sales\Model\Recurring\Profile', $args, array(), '', false);
         $collectionElement->expects($this->once())->method('getIncrementId')
             ->will($this->returnValue(1));
-
-        $collection = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Collection')
-            ->disableOriginalConstructor()
-            ->setMethods(array('addFieldToFilter', 'addFieldToSelect', 'setOrder', 'addRecurringProfilesFilter',
-                'getIterator'))
-            ->getMock();
+        $collection = $this->getMock('Magento\Sales\Model\Resource\Order\Collection', array(), array(), '', false);
         $collection->expects($this->any())->method('addFieldToFilter')
             ->will($this->returnValue($collection));
         $collection->expects($this->once())->method('addFieldToSelect')
@@ -75,16 +63,8 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($collection));
         $collection->expects($this->once())->method('getIterator')
             ->will($this->returnValue(new \ArrayIterator(array($collectionElement))));
-
-        $profile = $this->getMockBuilder('Magento\Sales\Model\Recurring\Profile')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getFieldLabel'))
-            ->getMock();
-
-        $registry = $this->getMockBuilder('Magento\Core\Model\Registry')
-            ->disableOriginalConstructor()
-            ->setMethods(array('registry'))
-            ->getMock();
+        $profile = $this->getMock('Magento\Sales\Model\Recurring\Profile', array(), array(), '', false);
+        $registry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
         $registry->expects($this->at(0))
             ->method('registry')
             ->with('current_recurring_profile')
@@ -93,27 +73,29 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->method('registry')
             ->with('current_customer')
             ->will($this->returnValue($customer));
-
-        $storeManager = $this->getMockBuilder('Magento\Core\Model\StoreManager')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getStore'))
-            ->getMock();
+        $profile->expects($this->once())->method('setStore')->with($store)->will($this->returnValue($profile));
+        $profile->expects($this->once())->method('setLocale')->will($this->returnValue($profile));
+        $storeManager = $this->getMock('Magento\Core\Model\StoreManagerInterface');
         $storeManager->expects($this->once())->method('getStore')
             ->will($this->returnValue($store));
-
-        $context = $this->_getContext();
-
+        $locale = $this->getMock('\Magento\Core\Model\LocaleInterface');
+        $locale->expects($this->once())->method('formatDate')
+            ->will($this->returnValue('11-11-1999'));
+        $helperFactory = $this->getMock('Magento\App\Helper\HelperFactory', array(), array(), '', false);
+        $helper = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
+        $helperFactory->expects($this->any())->method('get')->will($this->returnValue($helper));
+        $helper->expects($this->once())->method('formatCurrency')
+            ->will($this->returnValue('10 USD'));
         $block = $this->_objectManagerHelper->getObject(
             'Magento\Sales\Block\Recurring\Profile\Related\Orders\Grid',
             array(
-                'profile' => $profile,
                 'registry' => $registry,
                 'storeManager' => $storeManager,
                 'collection' => $collection,
-                'context' => $context
+                'locale' => $locale,
+                'helperFactory' => $helperFactory
             )
         );
-
         $pagerBlock = $this->getMockBuilder('Magento\Page\Block\Html\Pager')
             ->disableOriginalConstructor()
             ->setMethods(array('setCollection'))
@@ -121,12 +103,14 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $pagerBlock->expects($this->once())->method('setCollection')
             ->with($collection)
             ->will($this->returnValue($pagerBlock));
-        $layout = $this->_getMockLayout();
+        $layout = $this->getMock('Magento\View\LayoutInterface');
         $layout->expects($this->once())->method('createBlock')
             ->will($this->returnValue($pagerBlock));
-
         $block->setLayout($layout);
 
+        /**
+         * @var \Magento\Sales\Block\Recurring\Profile\Related\Orders\Grid
+         */
         $this->assertNotEmpty($block->getGridColumns());
         $expectedResult = array(new \Magento\Object(array(
             'increment_id' => 1,
@@ -137,57 +121,5 @@ class GridTest extends \PHPUnit_Framework_TestCase
             'base_grand_total' => '10 USD'
         )));
         $this->assertEquals($expectedResult, $block->getGridElements());
-    }
-
-    /**
-     * Get layout mock
-     *
-     * @return \Magento\View\LayoutInterface
-     */
-    protected function _getMockLayout()
-    {
-        $layout = $this->getMockBuilder('Magento\View\LayoutInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(array('createBlock', 'getChildName', 'setChild'))
-            ->getMockForAbstractClass();
-        return $layout;
-    }
-
-    /**
-     * Get context object
-     *
-     * @return \Magento\Core\Block\Template\Context
-     */
-    protected function _getContext()
-    {
-        $locale = $this->getMockBuilder('\Magento\Core\Model\LocaleInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(array('formatDate'))
-            ->getMockForAbstractClass();
-        $locale->expects($this->once())->method('formatDate')
-            ->will($this->returnValue('11-11-1999'));
-
-        $helper = $this->getMockBuilder('Magento\Customer\Helper\Data')
-            ->disableOriginalConstructor()
-            ->setMethods(array('formatCurrency'))
-            ->getMock();
-        $helper->expects($this->once())->method('formatCurrency')
-            ->will($this->returnValue('10 USD'));
-
-        $helperFactory = $this->getMockBuilder('Magento\Core\Model\Factory\Helper')
-            ->disableOriginalConstructor()
-            ->setMethods(array('get'))
-            ->getMock();
-        $helperFactory->expects($this->any())->method('get')->will($this->returnValue($helper));
-
-        /** @var  \Magento\Core\Block\Template\Context $context */
-        $context = $this->_objectManagerHelper->getObject(
-            'Magento\Core\Block\Template\Context',
-            array(
-                'helperFactory' => $helperFactory,
-                'locale'        => $locale
-            )
-        );
-        return $context;
     }
 }

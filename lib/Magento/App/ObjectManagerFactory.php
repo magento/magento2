@@ -134,14 +134,8 @@ class ObjectManagerFactory
                 : null,
         ));
 
-        $pluginList = $locator->create('Magento\Interception\PluginList\PluginList', array(
-            'relations' => $relations,
-            'definitions' => $definitionFactory->createPluginDefinition(),
-            'omConfig' => $diConfig,
-            'classDefinitions' => $definitions instanceof \Magento\ObjectManager\Definition\Compiled
-                ? $definitions
-                : null,
-        ));
+        $pluginList = $this->_createPluginList($locator, $relations, $definitionFactory, $diConfig, $definitions);
+
         $factory = $locator->create('Magento\Interception\FactoryDecorator', array(
             'factory' => $factory,
             'config' => $interceptionConfig,
@@ -169,5 +163,32 @@ class ObjectManagerFactory
             throw new \Magento\BootstrapException($e->getMessage());
         }
         return $configData;
+    }
+
+    /**
+     * Crete plugin list object
+     *
+     * @param \Magento\ObjectManager $locator
+     * @param \Magento\ObjectManager\Relations $relations
+     * @param \Magento\ObjectManager\DefinitionFactory $definitionFactory
+     * @param \Magento\ObjectManager\Config\Config $diConfig
+     * @param \Magento\ObjectManager\Definition $definitions
+     * @return \Magento\Interception\PluginList\PluginList
+     */
+    protected function _createPluginList(
+        \Magento\ObjectManager $locator,
+        \Magento\ObjectManager\Relations $relations,
+        \Magento\ObjectManager\DefinitionFactory $definitionFactory,
+        \Magento\ObjectManager\Config\Config $diConfig,
+        \Magento\ObjectManager\Definition $definitions
+    ) {
+        return $locator->create('Magento\Interception\PluginList\PluginList', array(
+            'relations' => $relations,
+            'definitions' => $definitionFactory->createPluginDefinition(),
+            'omConfig' => $diConfig,
+            'classDefinitions' => $definitions instanceof \Magento\ObjectManager\Definition\Compiled
+                    ? $definitions
+                    : null,
+        ));
     }
 }

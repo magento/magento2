@@ -134,7 +134,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
     {
         $this->_mageModel->getSafeStore(100);
         $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Request\Http');
-        $this->assertEquals('noRoute', $request->getActionName());
+        $this->assertEquals('noroute', $request->getActionName());
     }
 
     public function testGetStores()

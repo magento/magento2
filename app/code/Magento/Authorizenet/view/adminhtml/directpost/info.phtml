@@ -32,7 +32,7 @@
 $_form = $this;
 $_code = $_form->getMethodCode();
 $_method = $_form->getMethod();
-$_controller = $this->helper('Magento\Authorizenet\Helper\Data')->getControllerName();
+$_controller = $this->getRequest()->getControllerName();
 $_orderUrl = $this->helper('Magento\Authorizenet\Helper\Data')->getPlaceOrderAdminUrl();
 ?>
 <!-- IFRAME for request to our server -->

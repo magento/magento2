@@ -44,15 +44,15 @@ class Checkbox extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Chec
     protected $_coreData = null;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter $converter
+     * @param \Magento\Core\Helper\Data $coreData
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Context $context,
         \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter $converter,
+        \Magento\Core\Helper\Data $coreData,
         array $data = array()
     ) {
         $this->_coreData = $coreData;

@@ -64,7 +64,7 @@ class File extends \Magento\Core\Model\Config\Value
      * @param \Magento\Core\Model\File\UploaderFactory $uploaderFactory
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Config $config
      * @param \Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData
      * @param \Magento\Filesystem $filesystem
@@ -79,7 +79,7 @@ class File extends \Magento\Core\Model\Config\Value
         \Magento\Core\Model\File\UploaderFactory $uploaderFactory,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Config $config,
         \Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData,
         \Magento\Filesystem $filesystem,

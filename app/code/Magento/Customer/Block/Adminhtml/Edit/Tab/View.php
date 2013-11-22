@@ -72,20 +72,20 @@ class View
     protected $dateTime;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Customer\Model\GroupFactory $groupFactory
      * @param \Magento\Log\Model\CustomerFactory $logFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Log\Model\Visitor $modelVisitor
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Customer\Model\GroupFactory $groupFactory,
         \Magento\Log\Model\CustomerFactory $logFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Log\Model\Visitor $modelVisitor,
         \Magento\Stdlib\DateTime $dateTime,
@@ -96,7 +96,7 @@ class View
         $this->_groupFactory = $groupFactory;
         $this->_logFactory = $logFactory;
         $this->dateTime = $dateTime;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

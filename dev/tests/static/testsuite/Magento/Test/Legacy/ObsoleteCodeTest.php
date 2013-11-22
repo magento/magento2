@@ -308,7 +308,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
         if (0 === strpos($file, \Magento\TestFramework\Utility\Files::init()->getPathToSource() . '/app/')) {
             $this->_assertNotRegexp('/[^a-z\d_]getChild\s*\(/iS', $content,
                 'Block method getChild() is obsolete. ' .
-                'Replacement suggestion: \Magento\Core\Block\AbstractBlock::getChildBlock()'
+                'Replacement suggestion: \Magento\View\Block\AbstractBlock::getChildBlock()'
             );
         }
     }

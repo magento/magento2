@@ -53,7 +53,7 @@ class Price extends \Magento\Data\Form\Element\Text
     protected $_locale;
 
     /**
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
@@ -62,7 +62,7 @@ class Price extends \Magento\Data\Form\Element\Text
      * @param array $attributes
      */
     public function __construct(
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,

@@ -53,7 +53,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             false);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $context = $this->getMock('Magento\Core\Helper\Context', array(), array(), '', false);
+        $context = $this->getMock('Magento\App\Helper\Context', array(), array(), '', false);
         $this->_helper = $objectManagerHelper->getObject('Magento\GoogleOptimizer\Helper\Data', array(
             'storeConfig' => $this->_storeConfigMock,
             'analyticsHelper' => $this->_googleAnalyticsHelperMock,

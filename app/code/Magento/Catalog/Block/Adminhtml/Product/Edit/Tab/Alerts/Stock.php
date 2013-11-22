@@ -49,26 +49,24 @@ class Stock extends \Magento\Adminhtml\Block\Widget\Grid
     protected $_stockFactory;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\ProductAlert\Model\StockFactory $stockFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Url $urlModel
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Model\Url $urlModel,
         \Magento\ProductAlert\Model\StockFactory $stockFactory,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Url $urlModel,
         array $data = array()
     ) {
         $this->_stockFactory = $stockFactory;
         $this->_catalogData = $catalogData;
-        parent::__construct($coreData, $context, $storeManager, $urlModel, $data);
+        parent::__construct($context, $coreData, $urlModel, $data);
     }
 
     protected function _construct()

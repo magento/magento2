@@ -33,27 +33,27 @@
  */
 namespace Magento\Adminhtml\Controller\Newsletter;
 
-class Problem extends \Magento\Backend\Controller\Adminhtml\Action
+class Problem extends \Magento\Backend\App\Action
 {
     public function indexAction()
     {
-        $this->_title(__('Newsletter Problems Report'));
+        $this->_title->add(__('Newsletter Problems Report'));
 
         if ($this->getRequest()->getQuery('ajax')) {
             $this->_forward('grid');
             return;
         }
 
-        $this->getLayout()->getMessagesBlock()->setMessages(
+        $this->_view->getLayout()->getMessagesBlock()->setMessages(
             $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getMessages(true)
         );
-        $this->loadLayout();
+        $this->_view->loadLayout();
 
         $this->_setActiveMenu('Magento_Newsletter::newsletter_problem');
 
         $this->_addBreadcrumb(__('Newsletter Problem Reports'), __('Newsletter Problem Reports'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function gridAction()
@@ -89,10 +89,10 @@ class Problem extends \Magento\Backend\Controller\Adminhtml\Action
             $this->_objectManager->get('Magento\Adminhtml\Model\Session')
                 ->addSuccess(__('The problems you identified have been deleted.'));
         }
-                $this->getLayout()->getMessagesBlock()->setMessages($this->_objectManager->get('Magento\Adminhtml\Model\Session')->getMessages(true));
+                $this->_view->getLayout()->getMessagesBlock()->setMessages($this->_objectManager->get('Magento\Adminhtml\Model\Session')->getMessages(true));
 
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     protected function _isAllowed()

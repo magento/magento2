@@ -34,7 +34,7 @@
  */
 namespace Magento\Catalog\Block\Product\View;
 
-class Options extends \Magento\Core\Block\Template
+class Options extends \Magento\View\Block\Template
 {
     protected $_product;
 
@@ -67,38 +67,31 @@ class Options extends \Magento\Core\Block\Template
     protected $_catalogProduct;
 
     /**
-     * @var \Magento\Stdlib\ArrayUtils
-     */
-    protected $arrayUtils;
-
-    /**
-     * Construct
-     *
+     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Product $catalogProduct
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Catalog\Model\Product\Option $option
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Stdlib\ArrayUtils $arrayUtils
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Product $catalogProduct,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Catalog\Model\Product\Option $option,
         \Magento\Core\Model\Registry $registry,
         \Magento\Stdlib\ArrayUtils $arrayUtils,
         array $data = array()
     ) {
         $this->_catalogProduct = $catalogProduct;
-        parent::__construct($coreData, $context, $data);
         $this->_registry = $registry;
         $this->_option = $option;
         $this->_taxData = $taxData;
         $this->arrayUtils = $arrayUtils;
+        parent::__construct($context, $coreData, $data);        
     }
 
     /**

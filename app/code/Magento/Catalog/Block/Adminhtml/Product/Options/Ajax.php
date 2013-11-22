@@ -55,16 +55,16 @@ class Ajax extends \Magento\Backend\Block\AbstractBlock
     protected $_productFactory;
 
     /**
+     * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Context $context,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Context $context,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {

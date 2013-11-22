@@ -27,7 +27,7 @@
  */
 namespace Magento\Payment\Helper;
 
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
     const XML_PATH_PAYMENT_METHODS = 'payment';
 
@@ -72,7 +72,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     /**
      * Construct
      *
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Payment\Model\Method\Factory $paymentMethodFactory
@@ -81,7 +81,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * @param \Magento\Payment\Model\Config $paymentConfig
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\View\LayoutInterface $layout,
         \Magento\Payment\Model\Method\Factory $paymentMethodFactory,
@@ -177,7 +177,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * Retrieve payment information block
      *
      * @param  \Magento\Payment\Model\Info $info
-     * @return \Magento\Core\Block\Template
+     * @return \Magento\View\Block\Template
      */
     public function getInfoBlock(\Magento\Payment\Model\Info $info)
     {

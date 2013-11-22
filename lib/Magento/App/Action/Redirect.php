@@ -25,15 +25,16 @@
  */
 namespace Magento\App\Action;
 
+use \Magento\App\RequestInterface;
+
 class Redirect extends AbstractAction
 {
     /**
-     * Dispatch controller action
-     *
-     * @param string $action action name
+     * @param RequestInterface $request
+     * @return mixed|void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function dispatch($action)
+    public function dispatch(RequestInterface $request)
     {
     }
 }

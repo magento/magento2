@@ -71,12 +71,12 @@ class Cron extends \Magento\Core\Model\AbstractModel
     protected $_log;
 
     /**
-     * @var \Magento\Core\Model\Email\TemplateFactory
+     * @var \Magento\Email\Model\TemplateFactory
      */
     protected $_templateFactory;
 
     /**
-     * @param \Magento\Core\Model\Email\TemplateFactory $templateFactory
+     * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param \Magento\Log\Model\Log $log
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Translate $translate
@@ -88,7 +88,7 @@ class Cron extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Email\TemplateFactory $templateFactory,
+        \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Log\Model\Log $log,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Translate $translate,
@@ -125,7 +125,7 @@ class Cron extends \Magento\Core\Model\AbstractModel
         $this->_translate->setTranslateInline(false);
 
         $emailTemplate = $this->_templateFactory->create();
-        /* @var $emailTemplate \Magento\Core\Model\Email\Template */
+        /* @var $emailTemplate \Magento\Email\Model\Template */
         $emailTemplate->setDesignConfig(
             array(
                 'area' => 'backend',

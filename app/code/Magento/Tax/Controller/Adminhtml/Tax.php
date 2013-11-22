@@ -33,7 +33,7 @@
  */
 namespace Magento\Tax\Controller\Adminhtml;
 
-class Tax extends \Magento\Backend\Controller\Adminhtml\Action
+class Tax extends \Magento\Backend\App\Action
 {
     /**
      * Save Tax Class via AJAX

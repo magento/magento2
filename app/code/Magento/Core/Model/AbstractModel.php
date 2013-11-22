@@ -114,7 +114,7 @@ abstract class AbstractModel extends \Magento\Object
      *
      * @var \Magento\Event\ManagerInterface
      */
-    protected $_eventDispatcher;
+    protected $_eventManager;
 
     /**
      * Application Cache Manager
@@ -134,6 +134,11 @@ abstract class AbstractModel extends \Magento\Object
     protected $_logger;
 
     /**
+     * @var \Magento\App\State
+     */
+    protected $_appState;
+
+    /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
@@ -148,11 +153,12 @@ abstract class AbstractModel extends \Magento\Object
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
-        $this->_eventDispatcher = $context->getEventDispatcher();
+        $this->_eventManager = $context->getEventDispatcher();
         $this->_cacheManager = $context->getCacheManager();
         $this->_resource = $resource;
         $this->_resourceCollection = $resourceCollection;
         $this->_logger = $context->getLogger();
+        $this->_appState = $context->getAppState();
 
         if (method_exists($this->_resource, 'getIdFieldName') || $this->_resource instanceof \Magento\Object) {
             $this->_idFieldName = $this->_getResource()->getIdFieldName();
@@ -187,7 +193,7 @@ abstract class AbstractModel extends \Magento\Object
     public function __sleep()
     {
         $properties = array_keys(get_object_vars($this));
-        $properties = array_diff($properties, array('_eventDispatcher', '_cacheManager', '_coreRegistry'));
+        $properties = array_diff($properties, array('_eventManager', '_cacheManager', '_coreRegistry'));
         return $properties;
     }
 
@@ -197,7 +203,7 @@ abstract class AbstractModel extends \Magento\Object
     public function __wakeup()
     {
         $objectManager = \Magento\App\ObjectManager::getInstance();
-        $this->_eventDispatcher = $objectManager->get('Magento\Event\ManagerInterface');
+        $this->_eventManager = $objectManager->get('Magento\Event\ManagerInterface');
         $this->_cacheManager = $objectManager->get('Magento\App\CacheInterface');
         $this->_coreRegistry = $objectManager->get('Magento\Core\Model\Registry');
     }
@@ -260,7 +266,7 @@ abstract class AbstractModel extends \Magento\Object
         return $this->_resourceCollection
             ? clone $this->_resourceCollection
             : \Magento\App\ObjectManager::getInstance()->create(
-                $this->_collectionName, array('resource' => $this->_getResource())
+                $this->_collectionName
             );
     }
 
@@ -314,9 +320,9 @@ abstract class AbstractModel extends \Magento\Object
     protected function _beforeLoad($modelId, $field = null)
     {
         $params = array('object' => $this, 'field' => $field, 'value' => $modelId);
-        $this->_eventDispatcher->dispatch('model_load_before', $params);
+        $this->_eventManager->dispatch('model_load_before', $params);
         $params = array_merge($params, $this->_getEventData());
-        $this->_eventDispatcher->dispatch($this->_eventPrefix . '_load_before', $params);
+        $this->_eventManager->dispatch($this->_eventPrefix . '_load_before', $params);
         return $this;
     }
 
@@ -327,8 +333,8 @@ abstract class AbstractModel extends \Magento\Object
      */
     protected function _afterLoad()
     {
-        $this->_eventDispatcher->dispatch('model_load_after', array('object' => $this));
-        $this->_eventDispatcher->dispatch($this->_eventPrefix . '_load_after', $this->_getEventData());
+        $this->_eventManager->dispatch('model_load_after', array('object' => $this));
+        $this->_eventManager->dispatch($this->_eventPrefix . '_load_after', $this->_getEventData());
         return $this;
     }
 
@@ -399,8 +405,8 @@ abstract class AbstractModel extends \Magento\Object
      */
     public function afterCommitCallback()
     {
-        $this->_eventDispatcher->dispatch('model_save_commit_after', array('object' => $this));
-        $this->_eventDispatcher->dispatch($this->_eventPrefix . '_save_commit_after', $this->_getEventData());
+        $this->_eventManager->dispatch('model_save_commit_after', array('object' => $this));
+        $this->_eventManager->dispatch($this->_eventPrefix . '_save_commit_after', $this->_getEventData());
         return $this;
     }
 
@@ -434,8 +440,8 @@ abstract class AbstractModel extends \Magento\Object
         if (!$this->getId()) {
             $this->isObjectNew(true);
         }
-        $this->_eventDispatcher->dispatch('model_save_before', array('object' => $this));
-        $this->_eventDispatcher->dispatch($this->_eventPrefix . '_save_before', $this->_getEventData());
+        $this->_eventManager->dispatch('model_save_before', array('object' => $this));
+        $this->_eventManager->dispatch($this->_eventPrefix . '_save_before', $this->_getEventData());
         return $this;
     }
 
@@ -452,7 +458,7 @@ abstract class AbstractModel extends \Magento\Object
             $errors = $validator->getMessages();
             $exception = new \Magento\Core\Exception(implode(PHP_EOL, $errors));
             foreach ($errors as $errorMessage) {
-                $exception->addMessage(new \Magento\Core\Model\Message\Error($errorMessage));
+                $exception->addMessage(new \Magento\Message\Error($errorMessage));
             }
             throw $exception;
         }
@@ -580,8 +586,8 @@ abstract class AbstractModel extends \Magento\Object
     protected function _afterSave()
     {
         $this->cleanModelCache();
-        $this->_eventDispatcher->dispatch('model_save_after', array('object' => $this));
-        $this->_eventDispatcher->dispatch($this->_eventPrefix . '_save_after', $this->_getEventData());
+        $this->_eventManager->dispatch('model_save_after', array('object' => $this));
+        $this->_eventManager->dispatch($this->_eventPrefix . '_save_after', $this->_getEventData());
         return $this;
     }
 
@@ -615,8 +621,8 @@ abstract class AbstractModel extends \Magento\Object
      */
     protected function _beforeDelete()
     {
-        $this->_eventDispatcher->dispatch('model_delete_before', array('object' => $this));
-        $this->_eventDispatcher->dispatch($this->_eventPrefix . '_delete_before', $this->_getEventData());
+        $this->_eventManager->dispatch('model_delete_before', array('object' => $this));
+        $this->_eventManager->dispatch($this->_eventPrefix . '_delete_before', $this->_getEventData());
         $this->cleanModelCache();
         return $this;
     }
@@ -646,8 +652,8 @@ abstract class AbstractModel extends \Magento\Object
      */
     protected function _afterDelete()
     {
-        $this->_eventDispatcher->dispatch('model_delete_after', array('object' => $this));
-        $this->_eventDispatcher->dispatch($this->_eventPrefix . '_delete_after', $this->_getEventData());
+        $this->_eventManager->dispatch('model_delete_after', array('object' => $this));
+        $this->_eventManager->dispatch($this->_eventPrefix . '_delete_after', $this->_getEventData());
         return $this;
     }
 
@@ -658,8 +664,8 @@ abstract class AbstractModel extends \Magento\Object
      */
     protected function _afterDeleteCommit()
     {
-        $this->_eventDispatcher->dispatch('model_delete_commit_after', array('object' => $this));
-        $this->_eventDispatcher->dispatch($this->_eventPrefix . '_delete_commit_after', $this->_getEventData());
+        $this->_eventManager->dispatch('model_delete_commit_after', array('object' => $this));
+        $this->_eventManager->dispatch($this->_eventPrefix . '_delete_commit_after', $this->_getEventData());
         return $this;
     }
 
@@ -691,7 +697,7 @@ abstract class AbstractModel extends \Magento\Object
     final public function clearInstance()
     {
         $this->_clearReferences();
-        $this->_eventDispatcher->dispatch($this->_eventPrefix . '_clear', $this->_getEventData());
+        $this->_eventManager->dispatch($this->_eventPrefix . '_clear', $this->_getEventData());
         $this->_clearData();
         return $this;
     }

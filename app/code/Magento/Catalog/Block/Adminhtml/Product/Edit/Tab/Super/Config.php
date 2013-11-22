@@ -47,16 +47,6 @@ class Config
     protected $_catalogData = null;
 
     /**
-     * @var \Magento\Core\Model\App
-     */
-    protected $_storeManager;
-
-    /**
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
      * Core registry
      *
      * @var \Magento\Core\Model\Registry
@@ -69,31 +59,25 @@ class Config
     protected $_configurableType;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Product\Type\Configurable $configurableType
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Model\App $app
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Product\Type\Configurable $configurableType,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Model\App $app,
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_configurableType = $configurableType;
         $this->_coreRegistry = $coreRegistry;
         $this->_catalogData = $catalogData;
-        $this->_storeManager = $app;
-        $this->_locale = $locale;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**
@@ -164,20 +148,6 @@ class Config
             'onclick' => 'superProduct.createEmptyProduct()'
         ));
         $this->addChild('super_settings', 'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Super\Settings');
-
-// @todo: Remove unused code and blocks
-//        if ($this->getProduct()->getId()) {
-//            $this->setChild('simple',
-//                $this->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Super\Config\Simple',
-//                    'catalog.product.edit.tab.super.config.simple')
-//            );
-//
-//            $this->addChild('create_from_configurable', 'Magento\Adminhtml\Block\Widget\Button', array(
-//                'label' => __('Copy From Configurable'),
-//                'class' => 'add',
-//                'onclick' => 'superProduct.createNewProduct()'
-//            ));
-//        }
 
         $this->addChild(
             'generate',
@@ -489,7 +459,7 @@ class Config
      */
     public function getApp()
     {
-        return $this->_storeManager;
+        return $this->_app;
     }
 
     /**

@@ -33,7 +33,7 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System;
 
-class Currency extends \Magento\Backend\Controller\Adminhtml\Action
+class Currency extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -43,11 +43,11 @@ class Currency extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -73,12 +73,12 @@ class Currency extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function indexAction()
     {
-        $this->_title(__('Currency Rates'));
+        $this->_title->add(__('Currency Rates'));
 
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_CurrencySymbol::system_currency_rates');
-        $this->_addContent($this->getLayout()->createBlock('Magento\CurrencySymbol\Block\Adminhtml\System\Currency'));
-        $this->renderLayout();
+        $this->_addContent($this->_view->getLayout()->createBlock('Magento\CurrencySymbol\Block\Adminhtml\System\Currency'));
+        $this->_view->renderLayout();
     }
 
     public function fetchRatesAction()

@@ -26,8 +26,8 @@
 ?>
 
 <?php $_code=$this->getMethodCode() ?>
-<ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
-    <li>
-        <?php echo __('You will be redirected to Ogone website when you place an order.') ?>
-    </li>
-</ul>
+<fieldset class="fieldset items" id="payment_form_<?php echo $_code ?>" style="display:none;">
+    <div class="message notice">
+        <div><?php echo __('You will be redirected to Ogone website when you place an order.') ?></div>
+    </div>
+</fieldset>

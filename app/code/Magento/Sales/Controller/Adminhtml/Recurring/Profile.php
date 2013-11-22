@@ -31,7 +31,9 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Recurring;
 
-class Profile extends \Magento\Backend\Controller\Adminhtml\Action
+use Magento\App\Action\NotFoundException;
+
+class Profile extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -41,11 +43,11 @@ class Profile extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -57,10 +59,10 @@ class Profile extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function indexAction()
     {
-        $this->_title(__('Recurring Billing Profiles'))
-            ->loadLayout()
-            ->_setActiveMenu('Magento_Sales::sales_recurring_profile')
-            ->renderLayout();
+        $this->_title->add(__('Recurring Billing Profiles'));
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_Sales::sales_recurring_profile');
+        $this->_view->renderLayout();
         return $this;
     }
 
@@ -70,12 +72,12 @@ class Profile extends \Magento\Backend\Controller\Adminhtml\Action
     public function viewAction()
     {
         try {
-            $this->_title(__('Recurring Billing Profiles'));
+            $this->_title->add(__('Recurring Billing Profiles'));
             $profile = $this->_initProfile();
-            $this->loadLayout()
-                ->_setActiveMenu('Magento_Sales::sales_recurring_profile')
-                ->_title(__('Profile #%1', $profile->getReferenceId()))
-                ->renderLayout();
+            $this->_view->loadLayout();
+            $this->_setActiveMenu('Magento_Sales::sales_recurring_profile');
+            $this->_title->add(__('Profile #%1', $profile->getReferenceId()));
+            $this->_view->renderLayout();
             return;
         } catch (\Magento\Core\Exception $e) {
             $this->_getSession()->addError($e->getMessage());
@@ -91,7 +93,7 @@ class Profile extends \Magento\Backend\Controller\Adminhtml\Action
     public function gridAction()
     {
         try {
-            $this->loadLayout()->renderLayout();
+            $this->_view->loadLayout()->renderLayout();
             return;
         } catch (\Magento\Core\Exception $e) {
             $this->_getSession()->addError($e->getMessage());
@@ -103,15 +105,17 @@ class Profile extends \Magento\Backend\Controller\Adminhtml\Action
 
     /**
      * Profile orders ajax grid
+     *
+     * @throws NotFoundException
      */
     public function ordersAction()
     {
         try {
             $this->_initProfile();
-            $this->loadLayout()->renderLayout();
+            $this->_view->loadLayout()->renderLayout();
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
-            $this->norouteAction();
+            throw new NotFoundException();
         }
     }
 
@@ -184,8 +188,8 @@ class Profile extends \Magento\Backend\Controller\Adminhtml\Action
     public function customerGridAction()
     {
         $this->_initCustomer();
-        $this->loadLayout(false)
-            ->renderLayout();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     /**

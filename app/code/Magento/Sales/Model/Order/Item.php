@@ -219,13 +219,6 @@ class Item extends \Magento\Core\Model\AbstractModel
     protected $_children    = array();
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager = null;
-
-    /**
      * @var \Magento\Sales\Model\OrderFactory
      */
     protected $_orderFactory;
@@ -236,7 +229,6 @@ class Item extends \Magento\Core\Model\AbstractModel
     protected $_productFactory;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
@@ -246,7 +238,6 @@ class Item extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -255,7 +246,6 @@ class Item extends \Magento\Core\Model\AbstractModel
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_eventManager = $eventManager;
         $this->_orderFactory = $orderFactory;
         $this->_productFactory = $productFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

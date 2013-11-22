@@ -33,8 +33,25 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml;
 
-class Export extends \Magento\Backend\Controller\Adminhtml\Action
+class Export extends \Magento\Backend\App\Action
 {
+    /**
+     * @var \Magento\App\Response\Http\FileFactory
+     */
+    protected $_fileFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\App\Response\Http\FileFactory $fileFactory
+    ) {
+        $this->_fileFactory = $fileFactory;
+        parent::__construct($context);
+    }
+
     /**
      * Initialize layout.
      *
@@ -42,9 +59,9 @@ class Export extends \Magento\Backend\Controller\Adminhtml\Action
      */
     protected function _initAction()
     {
-        $this->_title(__('Import/Export'))
-            ->loadLayout()
-            ->_setActiveMenu('Magento_ImportExport::system_convert_export');
+        $this->_title->add(__('Import/Export'));
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_ImportExport::system_convert_export');
 
         return $this;
     }
@@ -72,7 +89,7 @@ class Export extends \Magento\Backend\Controller\Adminhtml\Action
                 $model = $this->_objectManager->create('Magento\ImportExport\Model\Export');
                 $model->setData($this->getRequest()->getParams());
 
-                return $this->_prepareDownloadResponse(
+                return $this->_fileFactory->create(
                     $model->getFileName(),
                     $model->export(),
                     $model->getContentType()
@@ -96,11 +113,11 @@ class Export extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function indexAction()
     {
-        $this->_initAction()
-            ->_title(__('Export'))
-            ->_addBreadcrumb(__('Export'), __('Export'));
+        $this->_initAction();
+        $this->_title->add(__('Export'));
+        $this->_addBreadcrumb(__('Export'), __('Export'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -113,10 +130,10 @@ class Export extends \Magento\Backend\Controller\Adminhtml\Action
         $data = $this->getRequest()->getParams();
         if ($this->getRequest()->isXmlHttpRequest() && $data) {
             try {
-                $this->loadLayout();
+                $this->_view->loadLayout();
 
                 /** @var $attrFilterBlock \Magento\ImportExport\Block\Adminhtml\Export\Filter */
-                $attrFilterBlock = $this->getLayout()->getBlock('export.filter');
+                $attrFilterBlock = $this->_view->getLayout()->getBlock('export.filter');
                 /** @var $export \Magento\ImportExport\Model\Export */
                 $export = $this->_objectManager->create('Magento\ImportExport\Model\Export');
                 $export->setData($data);
@@ -126,7 +143,7 @@ class Export extends \Magento\Backend\Controller\Adminhtml\Action
                         $export->getEntityAttributeCollection()
                     )
                 );
-                $this->renderLayout();
+                $this->_view->renderLayout();
                 return;
             } catch (\Exception $e) {
                 $this->_getSession()->addError($e->getMessage());

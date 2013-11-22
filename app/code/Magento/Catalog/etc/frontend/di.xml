@@ -37,4 +37,14 @@
     <type name="Magento\Sales\Model\Convert\Quote">
         <plugin name="copy_quote_files_to_order" type="Magento\Catalog\Model\Plugin\QuoteItemProductOption"/>
     </type>
+    <virtualType name="compareProductInitSession" type="Magento\Core\App\Action\Plugin\Session">
+        <param name="cookieCheckActions">
+            <value>
+                <compareProductAdd>add</compareProductAdd>
+            </value>
+        </param>
+    </virtualType>
+    <type name="Magento\Catalog\Controller\Product\Compare">
+        <plugin name="sessionInitializer" type="compareProductInitSession" />
+    </type>
 </config>

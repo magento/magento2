@@ -43,19 +43,19 @@ class Additional extends \Magento\Backend\Block\Template
     protected $_pageCacheData = null;
 
     /**
-     * @param \Magento\PageCache\Helper\Data $pageCacheData
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\PageCache\Helper\Data $pageCacheData
      * @param array $data
      */
     public function __construct(
-        \Magento\PageCache\Helper\Data $pageCacheData,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\PageCache\Helper\Data $pageCacheData,
         array $data = array()
     ) {
         $this->_pageCacheData = $pageCacheData;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

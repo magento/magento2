@@ -34,7 +34,7 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-class Set extends \Magento\Backend\Controller\Adminhtml\Action
+class Set extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -44,11 +44,11 @@ class Set extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_coreRegistry;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -57,11 +57,11 @@ class Set extends \Magento\Backend\Controller\Adminhtml\Action
 
     public function indexAction()
     {
-        $this->_title(__('Product Templates'));
+        $this->_title->add(__('Product Templates'));
 
         $this->_setTypeId();
 
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Catalog::catalog_attributes_sets');
 
         $this->_addBreadcrumb(__('Catalog'), __('Catalog'));
@@ -69,12 +69,12 @@ class Set extends \Magento\Backend\Controller\Adminhtml\Action
             __('Manage Attribute Sets'),
             __('Manage Attribute Sets'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function editAction()
     {
-        $this->_title(__('Product Templates'));
+        $this->_title->add(__('Product Templates'));
 
         $this->_setTypeId();
         $attributeSet = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Set')
@@ -85,13 +85,13 @@ class Set extends \Magento\Backend\Controller\Adminhtml\Action
             return;
         }
 
-        $this->_title($attributeSet->getId() ? $attributeSet->getAttributeSetName() : __('New Set'));
+        $this->_title->add($attributeSet->getId() ? $attributeSet->getAttributeSetName() : __('New Set'));
 
         $this->_coreRegistry->register('current_attribute_set', $attributeSet);
 
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Catalog::catalog_attributes_sets');
-        $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
+        $this->_view->getLayout()->getBlock('head')->setCanLoadExtJs(true);
 
         $this->_addBreadcrumb(__('Catalog'), __('Catalog'));
         $this->_addBreadcrumb(
@@ -99,17 +99,17 @@ class Set extends \Magento\Backend\Controller\Adminhtml\Action
             __('Manage Product Sets'));
 
         $this->_addContent(
-            $this->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main')
+            $this->_view->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main')
         );
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function setGridAction()
     {
         $this->_setTypeId();
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     /**
@@ -172,8 +172,8 @@ class Set extends \Magento\Backend\Controller\Adminhtml\Action
 
         if ($isNewSet) {
             if ($this->getRequest()->getPost('return_session_messages_only')) {
-                /** @var $block \Magento\Core\Block\Messages */
-                $block = $this->_objectManager->get('Magento\Core\Block\Messages');
+                /** @var $block \Magento\View\Block\Messages */
+                $block = $this->_objectManager->get('Magento\View\Block\Messages');
                 $block->setMessages($this->_getSession()->getMessages(true));
                 $body = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array(
                     'messages' => $block->getGroupedHtml(),
@@ -191,9 +191,9 @@ class Set extends \Magento\Backend\Controller\Adminhtml\Action
         } else {
             $response = array();
             if ($hasError) {
-                $this->_initLayoutMessages('Magento\Adminhtml\Model\Session');
+                $this->_view->getLayout()->initMessages('Magento\Adminhtml\Model\Session');
                 $response['error']   = 1;
-                $response['message'] = $this->getLayout()->getMessagesBlock()->getGroupedHtml();
+                $response['message'] = $this->_view->getLayout()->getMessagesBlock()->getGroupedHtml();
             } else {
                 $response['error']   = 0;
                 $response['url']     = $this->getUrl('catalog/*/');
@@ -205,19 +205,19 @@ class Set extends \Magento\Backend\Controller\Adminhtml\Action
 
     public function addAction()
     {
-        $this->_title(__('New Product Template'));
+        $this->_title->add(__('New Product Template'));
 
         $this->_setTypeId();
 
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Catalog::catalog_attributes_sets');
 
 
         $this->_addContent(
-            $this->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar\Add')
+            $this->_view->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar\Add')
         );
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function deleteAction()
@@ -232,7 +232,7 @@ class Set extends \Magento\Backend\Controller\Adminhtml\Action
             $this->getResponse()->setRedirect($this->getUrl('catalog/*/'));
         } catch (\Exception $e) {
             $this->_getSession()->addError(__('An error occurred while deleting this set.'));
-            $this->_redirectReferer();
+            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
         }
     }
 

@@ -31,6 +31,9 @@
  */
 namespace Magento\Checkout\Controller;
 
+use Magento\App\Action\NotFoundException;
+use Magento\App\RequestInterface;
+
 class Multishipping extends \Magento\Checkout\Controller\Action
 {
     /**
@@ -74,21 +77,19 @@ class Multishipping extends \Magento\Checkout\Controller\Action
     }
 
     /**
-     * Action predispatch
+     * Dispatch request
      *
-     * Check customer authentication for some actions
-     *
-     * @return \Magento\Checkout\Controller\Multishipping
+     * @param RequestInterface $request
+     * @return $this|mixed
      */
-    public function preDispatch()
+    public function dispatch(RequestInterface $request)
     {
-        parent::preDispatch();
-
-        if ($this->getFlag('', 'redirectLogin')) {
-            return $this;
+        $this->_request = $request;
+        if ($this->_actionFlag->get('', 'redirectLogin')) {
+            return parent::dispatch($request);
         }
 
-        $action = $this->getRequest()->getActionName();
+        $action = $request->getActionName();
 
         $checkoutSessionQuote = $this->_getCheckoutSession()->getQuote();
         /**
@@ -103,22 +104,22 @@ class Multishipping extends \Magento\Checkout\Controller\Action
             && !in_array($action, array('login', 'register', 'success'))
         ) {
             $this->_redirect('*/*/index');
-            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
-            return $this;
+            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
+            return parent::dispatch($request);
         }
 
         if (!in_array($action, array('login', 'register'))) {
             $customerSession = $this->_objectManager->get('Magento\Customer\Model\Session');
             if (!$customerSession->authenticate($this, $this->_getHelper()->getMSLoginUrl())) {
-                $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+                $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             }
 
             if (!$this->_objectManager->get('Magento\Checkout\Helper\Data')->isMultishippingCheckoutAvailable()) {
                 $error = $this->_getCheckout()->getMinimumAmountError();
                 $this->_getCheckoutSession()->addError($error);
-                $this->_redirectUrl($this->_getHelper()->getCartUrl());
-                $this->setFlag('', self::FLAG_NO_DISPATCH, true);
-                return $this;
+                $this->getResponse()->setRedirect($this->_getHelper()->getCartUrl());
+                $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
+                return parent::dispatch($request);
             }
         }
 
@@ -129,22 +130,22 @@ class Multishipping extends \Magento\Checkout\Controller\Action
         if ($this->_getCheckoutSession()->getCartWasUpdated(true)
             && !in_array($action, array('index', 'login', 'register', 'addresses', 'success'))
         ) {
-            $this->_redirectUrl($this->_getHelper()->getCartUrl());
-            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+            $this->getResponse()->setRedirect($this->_getHelper()->getCartUrl());
+            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
+            return parent::dispatch($request);
         }
 
         if ($action == 'success' && $this->_getCheckout()->getCheckoutSession()->getDisplaySuccess(true)) {
-            return $this;
+            return parent::dispatch($request);
         }
 
         $quote = $this->_getCheckout()->getQuote();
         if (!$quote->hasItems() || $quote->getHasError() || $quote->isVirtual()) {
-            $this->_redirectUrl($this->_getHelper()->getCartUrl());
-            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
-            return;
+            $this->getResponse()->setRedirect($this->_getHelper()->getCartUrl());
+            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
         }
 
-        return $this;
+        return parent::dispatch($request);
     }
 
     /**
@@ -166,15 +167,15 @@ class Multishipping extends \Magento\Checkout\Controller\Action
             return;
         }
 
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
+        $this->_view->loadLayout();
+        $this->_view->getLayout()->initMessages('Magento\Customer\Model\Session');
 
         // set account create url
-        $loginForm = $this->getLayout()->getBlock('customer_form_login');
+        $loginForm = $this->_view->getLayout()->getBlock('customer_form_login');
         if ($loginForm) {
             $loginForm->setCreateAccountUrl($this->_getHelper()->getMSRegisterUrl());
         }
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -183,14 +184,14 @@ class Multishipping extends \Magento\Checkout\Controller\Action
     public function registerAction()
     {
         if ($this->_objectManager->get('Magento\Customer\Model\Session')->isLoggedIn()) {
-            $this->_redirectUrl($this->_getHelper()->getMSCheckoutUrl());
+            $this->getResponse()->setRedirect($this->_getHelper()->getMSCheckoutUrl());
             return;
         }
 
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
+        $this->_view->loadLayout();
+        $this->_view->getLayout()->initMessages('Magento\Customer\Model\Session');
 
-        $registerForm = $this->getLayout()->getBlock('customer_form_register');
+        $registerForm = $this->_view->getLayout()->getBlock('customer_form_register');
         if ($registerForm) {
             $registerForm->setShowAddressFields(true)
                 ->setBackUrl($this->_getHelper()->getMSLoginUrl())
@@ -198,7 +199,7 @@ class Multishipping extends \Magento\Checkout\Controller\Action
                 ->setErrorUrl($this->_getHelper()->getCurrentUrl());
         }
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -223,10 +224,10 @@ class Multishipping extends \Magento\Checkout\Controller\Action
             $message = $this->_getCheckout()->getMinimumAmountDescription();
             $this->_getCheckout()->getCheckoutSession()->addNotice($message);
         }
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
-        $this->_initLayoutMessages('Magento\Checkout\Model\Session');
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $messageStores = array('Magento\Customer\Model\Session', 'Magento\Checkout\Model\Session');
+        $this->_view->getLayout()->initMessages($messageStores);
+        $this->_view->renderLayout();
     }
 
     /**
@@ -326,10 +327,10 @@ class Multishipping extends \Magento\Checkout\Controller\Action
         $this->_getState()->setActiveStep(
             \Magento\Checkout\Model\Type\Multishipping\State::STEP_SHIPPING
         );
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
-        $this->_initLayoutMessages('Magento\Checkout\Model\Session');
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $messageStores = array('Magento\Customer\Model\Session', 'Magento\Checkout\Model\Session');
+        $this->_view->getLayout()->initMessages($messageStores);
+        $this->_view->renderLayout();
     }
 
     public function backToShippingAction()
@@ -387,10 +388,10 @@ class Multishipping extends \Magento\Checkout\Controller\Action
             \Magento\Checkout\Model\Type\Multishipping\State::STEP_BILLING
         );
 
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
-        $this->_initLayoutMessages('Magento\Checkout\Model\Session');
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $messageStores = array('Magento\Customer\Model\Session', 'Magento\Checkout\Model\Session');
+        $this->_view->getLayout()->initMessages($messageStores);
+        $this->_view->renderLayout();
     }
 
     /**
@@ -445,10 +446,10 @@ class Multishipping extends \Magento\Checkout\Controller\Action
                 \Magento\Checkout\Model\Type\Multishipping\State::STEP_BILLING
             );
 
-            $this->loadLayout();
-            $this->_initLayoutMessages('Magento\Checkout\Model\Session');
-            $this->_initLayoutMessages('Magento\Customer\Model\Session');
-            $this->renderLayout();
+            $this->_view->loadLayout();
+            $messageStores = array('Magento\Customer\Model\Session', 'Magento\Checkout\Model\Session');
+            $this->_view->getLayout()->initMessages($messageStores);
+            $this->_view->renderLayout();
         } catch (\Magento\Core\Exception $e) {
             $this->_getCheckoutSession()->addError($e->getMessage());
             $this->_redirect('*/*/billing');
@@ -536,11 +537,11 @@ class Multishipping extends \Magento\Checkout\Controller\Action
             return $this;
         }
 
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Checkout\Model\Session');
+        $this->_view->loadLayout();
+        $this->_view->getLayout()->initMessages('Magento\Checkout\Model\Session');
         $ids = $this->_getCheckout()->getOrderIds();
         $this->_eventManager->dispatch('checkout_multishipping_controller_success_action', array('order_ids' => $ids));
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -549,7 +550,7 @@ class Multishipping extends \Magento\Checkout\Controller\Action
      */
     public function redirectLogin()
     {
-        $this->setFlag('', 'no-dispatch', true);
+        $this->_actionFlag->set('', 'no-dispatch', true);
         $url = $this->_objectManager->create('Magento\UrlInterface')
             ->getUrl('*/*', array('_secure' => true));
         $this->_objectManager->get('Magento\Customer\Model\Session')->setBeforeAuthUrl($url);
@@ -561,6 +562,6 @@ class Multishipping extends \Magento\Checkout\Controller\Action
             )
         );
 
-        $this->setFlag('', 'redirectLogin', true);
+        $this->_actionFlag->set('', 'redirectLogin', true);
     }
 }

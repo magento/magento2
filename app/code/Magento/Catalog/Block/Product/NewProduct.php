@@ -60,13 +60,6 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_catalogProductVisibility;
 
     /**
-     * Locale
-     *
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
      * Product collection factory
      *
      * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
@@ -74,52 +67,35 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_productCollectionFactory;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Customer\Model\Session $customerSession
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\View\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Core\Model\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Math\Random $mathRandom,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Customer\Model\Session $customerSession,
         array $data = array()
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
-        $this->_locale = $locale;
         $this->_catalogProductVisibility = $catalogProductVisibility;
         $this->_customerSession = $customerSession;
-        parent::__construct(
-            $storeManager,
-            $catalogConfig,
-            $coreRegistry,
-            $taxData,
-            $catalogData,
-            $coreData,
-            $context,
-            $mathRandom,
-            $data
-        );
+        parent::__construct($context, $coreData, $catalogConfig, $registry, $taxData, $catalogData, $mathRandom, $data);
     }
 
     /**
@@ -205,7 +181,7 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Prepare collection with new products
      *
-     * @return \Magento\Core\Block\AbstractBlock
+     * @return \Magento\View\Block\AbstractBlock
      */
     protected function _beforeToHtml()
     {

@@ -32,27 +32,6 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 class Longtext extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * Core string
-     *
-     * @var \Magento\Filter\FilterManager
-     */
-    protected $filter;
-
-    /**
-     * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Filter\FilterManager $filter
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Backend\Block\Context $context,
-        \Magento\Filter\FilterManager $filter,
-        array $data = array()
-    ) {
-        $this->filter = $filter;
-        parent::__construct($context, $data);
-    }
-
-    /**
      * Render contents as a long text
      *
      * Text will be truncated as specified in string_limit, truncate or 250 by default
@@ -71,7 +50,7 @@ class Longtext extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
         if ($this->getColumn()->getTruncate()) {
             $truncateLength = $this->getColumn()->getTruncate();
         }
-        $text = $this->filter->truncate(parent::_getValue($row), array('length' => $truncateLength));
+        $text = $this->filterManager->truncate(parent::_getValue($row), array('length' => $truncateLength));
         if ($this->getColumn()->getEscape()) {
             $text = $this->escapeHtml($text);
         }

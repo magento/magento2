@@ -44,13 +44,13 @@ class Item
     protected $_productConfig = null;
 
     /**
-     * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Helper\Product\Configuration $productConfig,
         \Magento\Backend\Block\Context $context,
+        \Magento\Catalog\Helper\Product\Configuration $productConfig,
         array $data = array()
     ) {
         $this->_productConfig = $productConfig;

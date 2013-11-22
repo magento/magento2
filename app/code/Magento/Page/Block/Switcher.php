@@ -33,30 +33,9 @@
  */
 namespace Magento\Page\Block;
 
-class Switcher extends \Magento\Core\Block\Template
+class Switcher extends \Magento\View\Block\Template
 {
     protected $_storeInUrl;
-
-    /**
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        array $data = array()
-    ) {
-        $this->_storeManager = $storeManager;
-        parent::__construct($coreData, $context, $data);
-    }
 
     public function getCurrentWebsiteId()
     {

@@ -1,7 +1,5 @@
 <?php
 /**
- * Source of layout files that explicitly override files of ancestor themes
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -33,6 +31,9 @@ use Magento\Filesystem;
 use Magento\View\Layout\File\Factory;
 use Magento\Exception;
 
+/**
+ * Source of layout files that explicitly override files of ancestor themes
+ */
 class Theme implements SourceInterface
 {
     /**
@@ -66,7 +67,12 @@ class Theme implements SourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieve files
+     *
+     * @param ThemeInterface $theme
+     * @param string $filePath
+     * @return array|\Magento\View\Layout\File[]
+     * @throws \Magento\Exception
      */
     public function getFiles(ThemeInterface $theme, $filePath = '*')
     {

@@ -114,7 +114,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $translator->expects($this->any())
             ->method('isAllowed')
             ->will($this->returnValue(false));
-        $context = $this->getMock('Magento\Core\Helper\Context', array('getTranslator'), array(), '', false);
+        $context = $this->getMock('Magento\App\Helper\Context', array('getTranslator'), array(), '', false);
         $context->expects($this->any())->method('getTranslator')->will($this->returnValue($translator));
         $data = array(
             'translator' => $translator,

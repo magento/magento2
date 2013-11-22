@@ -24,16 +24,15 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php 
+<?php
 /**
  * Mustishipping state
- * 
+ *
  * @see \Magento\Checkout\Block\Multishipping\State
  */
 ?>
-<ul class="checkout-progress" id="checkout-progress-state">
-<?php foreach ($this->getSteps() as $_step): ?>
-    <li title="<?php echo $_step->getLabel() ?>"<?php if($_step->getIsActive()): ?> class="active"<?php endif; ?>><span><?php echo $_step->getLabel() ?></span></li>
-<?php endforeach; ?>
-</ul>
-<script type="text/javascript">(function($) {$('#checkout-progress-state li').decorate('generic', ['first','last'])})(jQuery)</script>
+<ol class="block multicheckout progress items" id="checkout-progress-state">
+    <?php foreach ($this->getSteps() as $_step): ?>
+        <li title="<?php echo $_step->getLabel() ?>" class="item<?php echo ($_step->getIsActive()) ? ' active' : ''?>"><span><?php echo $_step->getLabel() ?></span></li>
+    <?php endforeach; ?>
+</ol>

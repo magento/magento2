@@ -24,9 +24,9 @@
  */
 -->
 <layout>
-    <block name="test.broken.block" type="Magento\Core\Block\Text"/>
+    <block name="test.broken.block" type="Magento\View\Block\Text"/>
     <remove name="test.broken.block"/>
-    <block class="Magento\Core\Block\Template" name="bug.without.name.action.is.ignored">
+    <block class="Magento\View\Block\Template" name="bug.without.name.action.is.ignored">
         <action method="insert">
             <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="element" xsi:type="string">test.broken.block</argument>
         </action>

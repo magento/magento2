@@ -21,6 +21,7 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\View\Design\Theme;
 
 /**
@@ -33,18 +34,16 @@ class ImageFactory
      *
      * @var \Magento\ObjectManager
      */
-    protected $_objectManager = null;
+    protected $_objectManager;
 
     /**
      * Instance name to create
      *
      * @var string
      */
-    protected $_instanceName = null;
+    protected $_instanceName;
 
     /**
-     * Factory constructor
-     *
      * @param \Magento\ObjectManager $objectManager
      * @param string $instanceName
      */

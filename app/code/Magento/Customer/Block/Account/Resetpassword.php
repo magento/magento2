@@ -34,7 +34,7 @@
 
 namespace Magento\Customer\Block\Account;
 
-class Resetpassword extends \Magento\Core\Block\Template
+class Resetpassword extends \Magento\View\Block\Template
 {
 
 }

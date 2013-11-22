@@ -101,6 +101,7 @@ class PluginList
      *
      * @param string $type
      * @return array
+     * @throws \Zend\Soap\Exception\InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _inheritPlugins($type)

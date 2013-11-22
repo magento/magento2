@@ -110,7 +110,7 @@ class Pdf
                     (string)$piece->LicensePlate,
                     (string)$piece->LicensePlateBarCode
                 );
-            array_push($pdf->pages, $page);
+            $pdf->pages[] = $page;
             $i++;
         }
         return $pdf->render();

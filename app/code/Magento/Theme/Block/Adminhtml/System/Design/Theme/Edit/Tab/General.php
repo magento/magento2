@@ -52,20 +52,20 @@ class General
     protected $_fileSize;
 
     /**
-     * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\View\Design\Theme\Image\PathInterface $themeImagePath
      * @param \Magento\File\Size $fileSize
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\ObjectManager $objectManager,
         \Magento\View\Design\Theme\Image\PathInterface $themeImagePath,
         \Magento\File\Size $fileSize,
@@ -73,7 +73,7 @@ class General
     ) {
         $this->_themeImagePath = $themeImagePath;
         $this->_fileSize = $fileSize;
-        parent::__construct($formFactory, $coreData, $context, $registry, $objectManager, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $objectManager, $data);
     }
 
     /**

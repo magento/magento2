@@ -180,7 +180,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
             'objectManager' => $objectManager,
             'frontController' => $varienFront,
         );
-        $context = $helper->getObject('Magento\Backend\Controller\Context', $arguments);
+        $context = $helper->getObject('Magento\Backend\App\Action\Context', $arguments);
         return new \Magento\Backend\Controller\Adminhtml\Dashboard($context);
     }
 }

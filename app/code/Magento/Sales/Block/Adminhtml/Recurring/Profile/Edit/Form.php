@@ -69,14 +69,14 @@ class Form extends \Magento\Backend\Block\AbstractBlock
     protected $_recurringProfile;
 
     /**
-     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Sales\Model\Recurring\Profile $recurringProfile
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\FormFactory $formFactory,
         \Magento\Backend\Block\Context $context,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Sales\Model\Recurring\Profile $recurringProfile,
         array $data = array()
     ) {

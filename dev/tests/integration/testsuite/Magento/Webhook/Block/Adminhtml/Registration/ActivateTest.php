@@ -54,9 +54,9 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
         $registry->register(\Magento\Webhook\Block\Adminhtml\Registration\Activate::REGISTRY_KEY_CURRENT_SUBSCRIPTION,
             $subscriptionData);
 
-        /** @var \Magento\Core\Block\Template\Context $context */
+        /** @var \Magento\View\Block\Template\Context $context */
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Block\Template\Context');
+            ->create('Magento\View\Block\Template\Context');
 
         /** @var \Magento\Webhook\Block\Adminhtml\Registration\Activate $block */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

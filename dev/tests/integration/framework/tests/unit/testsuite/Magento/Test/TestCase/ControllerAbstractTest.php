@@ -37,16 +37,17 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     protected function setUp()
     {
         // emulate session messages
-        $messagesCollection = new \Magento\Core\Model\Message\Collection();
+        $messagesCollection = new \Magento\Message\Collection();
         $messagesCollection
-            ->add(new \Magento\Core\Model\Message\Warning('some_warning'))
-            ->add(new \Magento\Core\Model\Message\Error('error_one'))
-            ->add(new \Magento\Core\Model\Message\Error('error_two'))
-            ->add(new \Magento\Core\Model\Message\Notice('some_notice'))
+            ->add(new \Magento\Message\Warning('some_warning'))
+            ->add(new \Magento\Message\Error('error_one'))
+            ->add(new \Magento\Message\Error('error_two'))
+            ->add(new \Magento\Message\Notice('some_notice'))
         ;
         $session = new \Magento\Object(array('messages' => $messagesCollection));
         $request = new \Magento\TestFramework\Request(
-            $this->getMock('\Magento\App\Route\ConfigInterface', array(), array(), '', false)
+            $this->getMock('\Magento\App\Route\ConfigInterface', array(), array(), '', false),
+            $this->getMock('Magento\App\Request\PathInfoProcessorInterface', array(), array(), '', false)
         );
         $response = new \Magento\TestFramework\Response();
 
@@ -94,7 +95,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
      */
     public function testAssert404NotFound()
     {
-        $this->getRequest()->setActionName('noRoute');
+        $this->getRequest()->setControllerName('noroute');
         $this->getResponse()->setBody(
             '404 Not Found test <h3>We are sorry, but the page you are looking for cannot be found.</h3>'
         );
@@ -154,7 +155,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     {
         return array(
             'no message type filtering' => array(array('some_warning', 'error_one', 'error_two', 'some_notice'), null),
-            'message type filtering'    => array(array('error_one', 'error_two'), \Magento\Core\Model\Message::ERROR),
+            'message type filtering'    => array(array('error_one', 'error_two'), \Magento\Message\Factory::ERROR),
         );
     }
 

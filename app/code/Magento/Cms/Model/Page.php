@@ -92,33 +92,6 @@ class Page extends \Magento\Core\Model\AbstractModel
     protected $_eventPrefix = 'cms_page';
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager = null;
-
-    /**
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
-    ) {
-        $this->_eventManager = $eventManager;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-    }
-
-    /**
      * Initialize resource model
      *
      */

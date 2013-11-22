@@ -45,32 +45,24 @@ class Form extends \Magento\Payment\Block\Form
     protected $_config;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
      * @var \Magento\Paypal\Model\ConfigFactory
      */
     protected $_paypalConfigFactory;
 
     /**
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory,
         array $data = array()
     ) {
-        $this->_locale = $locale;
         $this->_paypalConfigFactory = $paypalConfigFactory;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**
@@ -79,8 +71,8 @@ class Form extends \Magento\Payment\Block\Form
     protected function _construct()
     {
         $this->_config = $this->_paypalConfigFactory->create()->setMethod($this->getMethodCode());
-        /** @var $mark \Magento\Core\Block\Template */
-        $mark = $this->_layout->createBlock('Magento\Core\Block\Template');
+        /** @var $mark \Magento\View\Block\Template */
+        $mark = $this->_layout->createBlock('Magento\View\Block\Template');
         $mark->setTemplate('Magento_Paypal::payment/mark.phtml')
             ->setPaymentAcceptanceMarkHref($this->_config->getPaymentMarkWhatIsPaypalUrl($this->_locale))
             ->setPaymentAcceptanceMarkSrc($this->_config->getPaymentMarkImageUrl($this->_locale->getLocaleCode()));

@@ -36,23 +36,23 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_optionFactory;
 
     /**
-     * @param \Magento\Rating\Model\Rating\OptionFactory $optionFactory
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Rating\Model\Rating\OptionFactory $optionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Rating\Model\Rating\OptionFactory $optionFactory,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Rating\Model\Rating\OptionFactory $optionFactory,
         array $data = array()
     ) {
         $this->_optionFactory = $optionFactory;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
 

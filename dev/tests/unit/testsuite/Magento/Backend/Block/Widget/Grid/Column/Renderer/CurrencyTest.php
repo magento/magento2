@@ -37,11 +37,6 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_appMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_localeMock;
 
     /**
@@ -62,11 +57,6 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_contextMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_requestMock;
 
     /**
@@ -76,9 +66,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_contextMock = $this->getMock('Magento\Backend\Block\Context', array(), array(), '', false);
-        $this->_appMock = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
-        $this->_storeManagerMock = $this->getMock('\Magento\Core\Model\StoreManagerInterface');
+        $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManagerInterface');
         $this->_localeMock = $this->getMock('Magento\Core\Model\LocaleInterface');
         $this->_requestMock = $this->getMock('Magento\App\RequestInterface');
 
@@ -92,36 +80,29 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
             ->method('getIndex')
             ->will($this->returnValue('columnIndex'));
 
-        $this->_contextMock->expects($this->any())
-            ->method('getApp')
-            ->will($this->returnValue($this->_appMock));
-
-        $this->_contextMock->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($this->_requestMock));
-
         $this->_row = new \Magento\Object(array('columnIndex' => '10'));
 
-        $this->_blockCurrency = new \Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency(
-            $this->_contextMock,
-            $this->_storeManagerMock,
-            $this->_localeMock,
-            $this->_curLocatorMock
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_blockCurrency = $helper->getObject('Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency', array(
+            'storeManager' => $this->_storeManagerMock,
+            'locale' => $this->_localeMock,
+            'currencyLocator' => $this->_curLocatorMock,
+            'request' => $this->_requestMock
+            )
         );
+
 
         $this->_blockCurrency->setColumn($this->_columnMock);
     }
 
     protected function tearDown()
     {
-        unset($this->_appMock);
         unset($this->_localeMock);
         unset($this->_curLocatorMock);
         unset($this->_columnMock);
         unset($this->_row);
         unset($this->_storeManagerMock);
         unset($this->_requestMock);
-        unset($this->_contextMock);
         unset($this->_blockCurrency);
     }
 

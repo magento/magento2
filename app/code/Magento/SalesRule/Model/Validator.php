@@ -85,13 +85,6 @@ class Validator extends \Magento\Core\Model\AbstractModel
     protected $_taxData = null;
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager = null;
-
-    /**
      * @var \Magento\SalesRule\Model\Resource\Rule\CollectionFactory
      */
     protected $_collectionFactory;
@@ -113,7 +106,6 @@ class Validator extends \Magento\Core\Model\AbstractModel
     /**
      * @param \Magento\SalesRule\Model\Resource\Coupon\UsageFactory $usageFactory
      * @param \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
@@ -126,7 +118,6 @@ class Validator extends \Magento\Core\Model\AbstractModel
     public function __construct(
         \Magento\SalesRule\Model\Resource\Coupon\UsageFactory $usageFactory,
         \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory,
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
@@ -138,7 +129,6 @@ class Validator extends \Magento\Core\Model\AbstractModel
     ) {
         $this->_usageFactory = $usageFactory;
         $this->_collectionFactory = $collectionFactory;
-        $this->_eventManager = $eventManager;
         $this->_taxData = $taxData;
         $this->_couponFactory = $couponFactory;
         $this->_customerFactory = $customerFactory;

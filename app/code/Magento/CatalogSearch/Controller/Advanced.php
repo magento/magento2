@@ -33,7 +33,7 @@
  */
 namespace Magento\CatalogSearch\Controller;
 
-class Advanced extends \Magento\Core\Controller\Front\Action
+class Advanced extends \Magento\App\Action\Action
 {
 
     /**
@@ -60,13 +60,13 @@ class Advanced extends \Magento\Core\Controller\Front\Action
     /**
      * Construct
      *
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Session\Generic $catalogSearchSession
      * @param \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced
      * @param \Magento\Core\Model\UrlFactory $urlFactory
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Core\Model\Session\Generic $catalogSearchSession,
         \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced,
         \Magento\Core\Model\UrlFactory $urlFactory
@@ -79,25 +79,24 @@ class Advanced extends \Magento\Core\Controller\Front\Action
 
     public function indexAction()
     {
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\CatalogSearch\Model\Session');
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->getLayout()->initMessages('Magento\CatalogSearch\Model\Session');
+        $this->_view->renderLayout();
     }
 
     public function resultAction()
     {
-        $this->loadLayout();
+        $this->_view->loadLayout();
         try {
             $this->_catalogSearchAdvanced->addFilters($this->getRequest()->getQuery());
         } catch (\Magento\Core\Exception $e) {
             $this->_catalogSearchSession->addError($e->getMessage());
-            $this->_redirectError(
-                $this->_urlFactory->create()
-                    ->setQueryParams($this->getRequest()->getQuery())
-                    ->getUrl('*/*/')
-            );
+            $defaultUrl = $this->_urlFactory->create()
+                ->setQueryParams($this->getRequest()->getQuery())
+                ->getUrl('*/*/');
+            $this->getResponse()->setRedirect($this->_redirect->error($defaultUrl));
         }
-        $this->_initLayoutMessages('Magento\Catalog\Model\Session');
-        $this->renderLayout();
+        $this->_view->getLayout()->initMessages('Magento\Catalog\Model\Session');
+        $this->_view->renderLayout();
     }
 }

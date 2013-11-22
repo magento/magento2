@@ -18,17 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\View\Design\Theme;
+
 /**
  * Theme customizations manager
  */
-namespace Magento\View\Design\Theme;
-
 class Customization implements CustomizationInterface
 {
     /**
@@ -47,12 +45,12 @@ class Customization implements CustomizationInterface
     protected $theme;
 
     /**
-     * @var \Magento\Core\Model\Resource\Theme\File\Collection
+     * @var \Magento\View\Design\Theme\FileInterface[]
      */
     protected $themeFiles;
 
     /**
-     * @var \Magento\Core\Model\Resource\Theme\File\Collection[]
+     * @var \Magento\View\Design\Theme\FileInterface[]
      */
     protected $themeFilesByType = array();
 
@@ -119,7 +117,9 @@ class Customization implements CustomizationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Returns customization absolute path
+     *
+     * @return null|string
      */
     public function getCustomizationPath()
     {
@@ -127,7 +127,9 @@ class Customization implements CustomizationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get directory where themes files are stored
+     *
+     * @return null|string
      */
     public function getThemeFilesPath()
     {
@@ -137,7 +139,9 @@ class Customization implements CustomizationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get path to custom view configuration file
+     *
+     * @return null|string
      */
     public function getCustomViewConfigPath()
     {
@@ -145,7 +149,9 @@ class Customization implements CustomizationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $type
+     * @param array $sequence
+     * @return $this|CustomizationInterface
      */
     public function reorder($type, array $sequence)
     {

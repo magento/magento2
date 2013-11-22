@@ -100,13 +100,12 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
     protected $_itemCollectionFactory;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Catalog\Helper\Product\Compare $catalogProductCompare
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory
@@ -116,13 +115,12 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\View\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Core\Model\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Math\Random $mathRandom,
         \Magento\Catalog\Helper\Product\Compare $catalogProductCompare,
         \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
@@ -136,13 +134,12 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
         $this->_logVisitor = $logVisitor;
         $this->_customerSession = $customerSession;
         parent::__construct(
-            $storeManager,
+            $context,
+            $coreData,
             $catalogConfig,
-            $coreRegistry,
+            $registry,
             $taxData,
             $catalogData,
-            $coreData,
-            $context,
             $mathRandom,
             $catalogProductCompare,
             $data
@@ -158,7 +155,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
     public function getAddToWishlistUrl($product)
     {
         $continueUrl    = $this->_coreData->urlEncode($this->getUrl('customer/account'));
-        $urlParamName   = \Magento\Core\Controller\Front\Action::PARAM_NAME_URL_ENCODED;
+        $urlParamName   = \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED;
 
         $params = array(
             $urlParamName   => $continueUrl

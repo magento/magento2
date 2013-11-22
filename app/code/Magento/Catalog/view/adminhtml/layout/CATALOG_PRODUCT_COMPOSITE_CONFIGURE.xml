@@ -31,7 +31,7 @@
             <block class="Magento\Catalog\Block\Product\View\Options\Type\File" as="file" template="Magento_Catalog::catalog/product/composite/fieldset/options/type/file.phtml"/>
             <block class="Magento\Catalog\Block\Product\View\Options\Type\Select" as="select" template="Magento_Catalog::catalog/product/composite/fieldset/options/type/select.phtml"/>
             <block class="Magento\Catalog\Block\Product\View\Options\Type\Date" as="date" template="Magento_Catalog::catalog/product/composite/fieldset/options/type/date.phtml"/>
-            <block class="Magento\Core\Block\Template" name="product.composite.fieldset.options.js" as="options_js" template="Magento_Catalog::catalog/product/composite/fieldset/options/js.phtml"/>
+            <block class="Magento\View\Block\Template" name="product.composite.fieldset.options.js" as="options_js" template="Magento_Catalog::catalog/product/composite/fieldset/options/js.phtml"/>
         </block>
         <block class="Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Qty" name="product.composite.fieldset.qty" template="catalog/product/composite/fieldset/qty.phtml"/>
     </block>

@@ -75,7 +75,7 @@ class Observer
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\Core\Model\Email\TemplateFactory
+     * @var \Magento\Email\Model\TemplateFactory
      */
     protected $_templateFactory;
 
@@ -88,13 +88,13 @@ class Observer
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Sitemap\Model\Resource\Sitemap\CollectionFactory $collectionFactory
      * @param \Magento\Core\Model\Translate $translateModel
-     * @param \Magento\Core\Model\Email\TemplateFactory $templateFactory
+     * @param \Magento\Email\Model\TemplateFactory $templateFactory
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Sitemap\Model\Resource\Sitemap\CollectionFactory $collectionFactory,
         \Magento\Core\Model\Translate $translateModel,
-        \Magento\Core\Model\Email\TemplateFactory $templateFactory
+        \Magento\Email\Model\TemplateFactory $templateFactory
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_collectionFactory = $collectionFactory;
@@ -133,7 +133,7 @@ class Observer
             $this->_translateModel->setTranslateInline(false);
 
             $emailTemplate = $this->_templateFactory->create();
-            /* @var $emailTemplate \Magento\Core\Model\Email\Template */
+            /* @var $emailTemplate \Magento\Email\Model\Template */
             $emailTemplate->setDesignConfig(array('area' => 'backend'))
                 ->sendTransactional(
                     $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE),

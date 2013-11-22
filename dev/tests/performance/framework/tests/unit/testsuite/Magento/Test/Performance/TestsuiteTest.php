@@ -27,33 +27,51 @@
 
 namespace Magento\Test\Performance;
 
+/**
+ * Class TestsuiteTest
+ *
+ * @package Magento\Test\Performance
+ */
 class TestsuiteTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Testsuite object
+     *
      * @var \Magento\TestFramework\Performance\Testsuite
      */
     protected $_object;
 
     /**
+     * Config object
+     *
      * @var \Magento\TestFramework\Performance\Config
      */
     protected $_config;
 
     /**
-     * @var \Magento\TestFramework\Application|PHPUnit_Framework_MockObject_MockObject
+     * Application object
+     *
+     * @var \Magento\TestFramework\Application|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_application;
 
     /**
-     * @var \Magento\TestFramework\Performance\Scenario\HandlerInterface|PHPUnit_Framework_MockObject_MockObject
+     * Scenario handler
+     *
+     * @var \Magento\TestFramework\Performance\Scenario\HandlerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_handler;
 
     /**
+     * Fixtures directory
+     *
      * @var string
      */
     protected $_fixtureDir;
 
+    /**
+     * Set up before test
+     */
     protected function setUp()
     {
         $this->_fixtureDir = __DIR__ . DIRECTORY_SEPARATOR . '_files';
@@ -74,6 +92,9 @@ class TestsuiteTest extends \PHPUnit_Framework_TestCase
             new \Magento\TestFramework\Performance\Testsuite($this->_config, $this->_application, $this->_handler);
     }
 
+    /**
+     * Teardown after test
+     */
     protected function tearDown()
     {
         $this->_config = null;
@@ -145,6 +166,9 @@ class TestsuiteTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * Test run testsuite
+     */
     public function testRun()
     {
         $this->_expectScenarioWarmUp('Scenario with Error', 'scenario_error.jmx', 0);
@@ -159,6 +183,9 @@ class TestsuiteTest extends \PHPUnit_Framework_TestCase
         $this->_object->run();
     }
 
+    /**
+     * Scenario run test
+     */
     public function testOnScenarioRun()
     {
         $this->_handler
@@ -178,6 +205,8 @@ class TestsuiteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test exception on scenario run
+     *
      * @expectedException \BadFunctionCallException
      */
     public function testOnScenarioRunException()
@@ -185,6 +214,9 @@ class TestsuiteTest extends \PHPUnit_Framework_TestCase
         $this->_object->onScenarioRun('invalid_callback');
     }
 
+    /**
+     * Test scenario failure
+     */
     public function testOnScenarioFailure()
     {
         $scenario = new \Magento\TestFramework\Performance\Scenario('Scenario with Error', 'scenario_error.jmx',
@@ -224,10 +256,20 @@ class TestsuiteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test exception on scenario failure
+     *
      * @expectedException \BadFunctionCallException
      */
     public function testOnScenarioFailureException()
     {
         $this->_object->onScenarioFailure(array($this, 'invalid_callback'));
+    }
+
+    /**
+     * Test get application
+     */
+    public function testGetApplication()
+    {
+        $this->assertEquals(true, $this->_object->getApplication() instanceof \Magento\TestFramework\Application);
     }
 }

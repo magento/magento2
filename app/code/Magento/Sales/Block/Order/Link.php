@@ -33,20 +33,20 @@ class Link extends \Magento\Page\Block\Link\Current
     protected $_registry;
 
     /**
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\App\DefaultPathInterface $defaultPath
+     * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
         \Magento\App\DefaultPathInterface $defaultPath,
+        \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
-        parent::__construct($coreData, $context, $defaultPath, $data);
+        parent::__construct($context, $coreData, $defaultPath, $data);
         $this->_registry = $registry;
     }
 

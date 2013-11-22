@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-class Gallery extends \Magento\Backend\Controller\Adminhtml\Action
+class Gallery extends \Magento\Backend\App\Action
 {
     public function uploadAction()
     {

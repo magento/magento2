@@ -42,32 +42,24 @@ class Uploader extends \Magento\Adminhtml\Block\Widget
     protected $_template = 'Magento_Adminhtml::media/uploader.phtml';
 
     /**
-     * @var \Magento\View\Url
-     */
-    protected $_viewUrl;
-
-    /**
      * @var \Magento\File\Size
      */
     protected $_fileSizeService;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\View\Url $viewUrl
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\File\Size $fileSize
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\View\Url $viewUrl,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\File\Size $fileSize,
         array $data = array()
     ) {
-        $this->_viewUrl = $viewUrl;
         $this->_fileSizeService = $fileSize;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     protected function _construct()

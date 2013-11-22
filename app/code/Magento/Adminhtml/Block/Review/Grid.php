@@ -73,26 +73,24 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_reviewFactory;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param \Magento\Review\Model\Resource\Review\Product\CollectionFactory $productsFactory
      * @param \Magento\Review\Helper\Data $reviewData
      * @param \Magento\Review\Helper\Action\Pager $reviewActionPager
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Model\Url $urlModel,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
         \Magento\Review\Model\Resource\Review\Product\CollectionFactory $productsFactory,
         \Magento\Review\Helper\Data $reviewData,
         \Magento\Review\Helper\Action\Pager $reviewActionPager,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Core\Model\Registry $coreRegistry,
         array $data = array()
     ) {
@@ -101,7 +99,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->_reviewData = $reviewData;
         $this->_reviewActionPager = $reviewActionPager;
         $this->_reviewFactory = $reviewFactory;
-        parent::__construct($coreData, $context, $storeManager, $urlModel, $data);
+        parent::__construct($context, $coreData, $urlModel, $data);
     }
 
     /**

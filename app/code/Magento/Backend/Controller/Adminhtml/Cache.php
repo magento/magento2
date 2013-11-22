@@ -26,7 +26,9 @@
 
 namespace Magento\Backend\Controller\Adminhtml;
 
-class Cache extends \Magento\Backend\Controller\Adminhtml\Action
+use Magento\Backend\App\Action;
+
+class Cache extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\App\Cache\TypeListInterface
@@ -44,13 +46,13 @@ class Cache extends \Magento\Backend\Controller\Adminhtml\Action
     private $_cacheFrontendPool;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param Action\Context $context
      * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\App\Cache\StateInterface $cacheState
      * @param \Magento\App\Cache\Frontend\Pool $cacheFrontendPool
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        Action\Context $context,
         \Magento\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\App\Cache\StateInterface $cacheState,
         \Magento\App\Cache\Frontend\Pool $cacheFrontendPool
@@ -76,11 +78,11 @@ class Cache extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function indexAction()
     {
-        $this->_title(__('Cache Management'));
+        $this->_title->add(__('Cache Management'));
 
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_Adminhtml::system_cache')
-            ->renderLayout();
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_Adminhtml::system_cache');
+        $this->_view->renderLayout();
     }
 
     /**

@@ -34,7 +34,7 @@
  */
 namespace Magento\Cms\Block;
 
-class Block extends \Magento\Core\Block\AbstractBlock
+class Block extends \Magento\View\Block\AbstractBlock
 {
     /**
      * @var \Magento\Cms\Model\Template\FilterProvider
@@ -58,14 +58,14 @@ class Block extends \Magento\Core\Block\AbstractBlock
     /**
      * Construct
      * 
-     * @param \Magento\Core\Block\Context $context
+     * @param \Magento\View\Block\Context $context
      * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Cms\Model\BlockFactory $blockFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Block\Context $context,
+        \Magento\View\Block\Context $context,
         \Magento\Cms\Model\Template\FilterProvider $filterProvider,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Cms\Model\BlockFactory $blockFactory,

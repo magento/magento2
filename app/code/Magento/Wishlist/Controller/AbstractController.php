@@ -34,7 +34,7 @@
  */
 namespace Magento\Wishlist\Controller;
 
-abstract class AbstractController extends \Magento\Core\Controller\Front\Action
+abstract class AbstractController extends \Magento\App\Action\Action
 {
     /**
      * Filter to convert localized values to internal ones
@@ -77,7 +77,7 @@ abstract class AbstractController extends \Magento\Core\Controller\Front\Action
     {
         $wishlist   = $this->_getWishlist();
         if (!$wishlist) {
-            $this->_forward('noRoute');
+            $this->_forward('noroute');
             return ;
         }
         $isOwner    = $wishlist->isOwner($this->_objectManager->get('Magento\Customer\Model\Session')->getCustomerId());
@@ -133,8 +133,8 @@ abstract class AbstractController extends \Magento\Core\Controller\Front\Action
         }
         if ($this->_objectManager->get('Magento\Checkout\Helper\Cart')->getShouldRedirectToCart()) {
             $redirectUrl = $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl();
-        } else if ($this->_getRefererUrl()) {
-            $redirectUrl = $this->_getRefererUrl();
+        } else if ($this->_redirect->getRefererUrl()) {
+            $redirectUrl = $this->_redirect->getRefererUrl();
         } else {
             $redirectUrl = $indexUrl;
         }
@@ -197,6 +197,6 @@ abstract class AbstractController extends \Magento\Core\Controller\Front\Action
 
         $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
 
-        $this->_redirectUrl($redirectUrl);
+        $this->getResponse()->setRedirect($redirectUrl);
     }
 }

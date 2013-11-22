@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-class Status extends \Magento\Backend\Controller\Adminhtml\Action
+class Status extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -43,11 +43,11 @@ class Status extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -75,8 +75,10 @@ class Status extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function indexAction()
     {
-        $this->_title(__('Order Status'));
-        $this->loadLayout()->_setActiveMenu('Magento_Sales::system_order_statuses')->renderLayout();
+        $this->_title->add(__('Order Status'));
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_Sales::system_order_statuses');
+        $this->_view->renderLayout();
     }
 
     /**
@@ -90,10 +92,11 @@ class Status extends \Magento\Backend\Controller\Adminhtml\Action
                 ->setData($data);
             $this->_coreRegistry->register('current_status', $status);
         }
-        $this->_title(__('Order Status'))->_title(__('Create New Order Status'));
-        $this->loadLayout()
-                ->_setActiveMenu('Magento_Sales::system_order_statuses')
-                ->renderLayout();
+        $this->_title->add(__('Order Status'));
+        $this->_title->add(__('Create New Order Status'));
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_Sales::system_order_statuses');
+        $this->_view->renderLayout();
     }
 
     /**
@@ -104,10 +107,11 @@ class Status extends \Magento\Backend\Controller\Adminhtml\Action
         $status = $this->_initStatus();
         if ($status) {
             $this->_coreRegistry->register('current_status', $status);
-            $this->_title(__('Order Status'))->_title(__('Edit Order Status'));
-            $this->loadLayout()
-                ->_setActiveMenu('Magento_Sales::system_order_statuses')
-                ->renderLayout();
+            $this->_title->add(__('Order Status'));
+            $this->_title->add(__('Edit Order Status'));
+            $this->_view->loadLayout();
+            $this->_setActiveMenu('Magento_Sales::system_order_statuses');
+            $this->_view->renderLayout();
         } else {
             $this->_getSession()->addError(
                 __('We can\'t find this order status.')
@@ -181,10 +185,11 @@ class Status extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function assignAction()
     {
-        $this->_title(__('Order Status'))->_title(__('Assign Order Status to State'));
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_Sales::system_order_statuses')
-            ->renderLayout();
+        $this->_title->add(__('Order Status'));
+        $this->_title->add(__('Assign Order Status to State'));
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_Sales::system_order_statuses');
+        $this->_view->renderLayout();
     }
 
     /**

@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Layer;
 
-class State extends \Magento\Core\Block\Template
+class State extends \Magento\View\Block\Template
 {
     protected $_template = 'layer/state.phtml';
 
@@ -45,21 +45,19 @@ class State extends \Magento\Core\Block\Template
     protected $_catalogLayer;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Catalog\Model\Layer $catalogLayer
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Catalog\Model\Layer $catalogLayer
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Model\Layer $catalogLayer,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Catalog\Model\Layer $catalogLayer,
         array $data = array()
     ) {
         $this->_catalogLayer = $catalogLayer;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

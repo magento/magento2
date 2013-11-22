@@ -29,13 +29,8 @@
  */
 namespace Magento\Directory\Block;
 
-class Currency extends \Magento\Core\Block\Template
+class Currency extends \Magento\View\Block\Template
 {
-    /**
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
     /**
      * Directory url
      *
@@ -44,38 +39,27 @@ class Currency extends \Magento\Core\Block\Template
     protected $_directoryUrl = null;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
      * @var \Magento\Directory\Model\CurrencyFactory
      */
     protected $_currencyFactory;
 
     /**
-     * @param \Magento\Directory\Helper\Url $directoryUrl
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Directory\Helper\Url $directoryUrl
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Directory\Helper\Url $directoryUrl,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Directory\Helper\Url $directoryUrl,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         array $data = array()
     ) {
         $this->_directoryUrl = $directoryUrl;
-        $this->_storeManager = $storeManager;
-        $this->_locale = $locale;
         $this->_currencyFactory = $currencyFactory;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

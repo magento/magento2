@@ -24,12 +24,8 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="root">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">2columns-right.phtml</argument>
-        </action>
-    </referenceBlock>
-    <referenceContainer name="right">
+    <update handle="page_one_column"/>
+    <referenceContainer name="content">
         <container name="checkout.progress.wrapper" label="Checkout Progress Wrapper" htmlTag="div" htmlId="checkout-progress-wrapper">
             <block class="Magento\Checkout\Block\Onepage\Progress" name="checkout.progress" before="-" template="onepage/progress.phtml"/>
         </container>
@@ -38,9 +34,12 @@
         <block class="Magento\Checkout\Block\Onepage" name="checkout.onepage" template="onepage.phtml">
             <block class="Magento\Checkout\Block\Onepage\Login" name="checkout.onepage.login" as="login" template="onepage/login.phtml">
                 <container name="checkout.onepage.login.before" as="login_before" label="Login/Registration Before" htmlTag="div"/>
+                <container name="form.login.additional.info" label="invisible" as="form_additional_info"/>
             </block>
-            <block class="Magento\Checkout\Block\Onepage\Billing" name="checkout.onepage.billing" as="billing" template="onepage/billing.phtml"/>
-            <block class="Magento\Checkout\Block\Onepage\Shipping" name="checkout.onepage.shipping" as="shipping" template="onepage/shipping.phtml"/>
+            <block class="Magento\Checkout\Block\Onepage\Billing" name="checkout.onepage.billing" as="billing" template="onepage/billing.phtml">
+                <container name="form.billing.additional.info" label="invisible" as="form_additional_info"/>
+            </block>
+            <block class="Magento\Checkout\Block\Onepage\Shipping" name="checkout.onepage.shipping" as="shipping" template="onepage/shipping.phtml" />
             <block class="Magento\Checkout\Block\Onepage\Shipping\Method" name="checkout.onepage.shipping_method" as="shipping_method" template="onepage/shipping_method.phtml">
                 <block class="Magento\Checkout\Block\Onepage\Shipping\Method\Available" name="checkout.onepage.shipping_method.available" as="available" template="onepage/shipping_method/available.phtml"/>
                 <block class="Magento\Checkout\Block\Onepage\Shipping\Method\Additional" name="checkout.onepage.shipping_method.additional" as="additional" template="onepage/shipping_method/additional.phtml"/>
@@ -52,8 +51,11 @@
                         <argument name="template" xsi:type="string">Magento_Payment::form/purchaseorder.phtml</argument>
                     </action>
                 </block>
+                <block class="Magento\View\Block\Template" name="checkout.onepage.payment.additional" as="additional"/>
+                <block class="Magento\View\Block\Template" name="checkout.onepage.payment.methods_additional" as="methods_additional"/>
             </block>
             <block class="Magento\Checkout\Block\Onepage\Review" name="checkout.onepage.review" as="review" template="onepage/review.phtml"/>
         </block>
     </referenceContainer>
+    <update handle="customer_form_template_handle"/>
 </layout>

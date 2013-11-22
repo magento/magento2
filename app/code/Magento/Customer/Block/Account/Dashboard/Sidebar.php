@@ -34,7 +34,7 @@
 
 namespace Magento\Customer\Block\Account\Dashboard;
 
-class Sidebar extends \Magento\Core\Block\Template
+class Sidebar extends \Magento\View\Block\Template
 {
     protected $_cartItemsCount;
 
@@ -58,11 +58,6 @@ class Sidebar extends \Magento\Core\Block\Template
     protected $_checkoutSession;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * @var \Magento\Sales\Model\QuoteFactory
      */
     protected $_quoteFactory;
@@ -78,22 +73,20 @@ class Sidebar extends \Magento\Core\Block\Template
     protected $_itemsCompareFactory;
 
     /**
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Wishlist\Model\WishlistFactory $wishListFactory
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemsCompareFactory
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Wishlist\Model\WishlistFactory $wishListFactory,
         \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemsCompareFactory,
@@ -101,11 +94,10 @@ class Sidebar extends \Magento\Core\Block\Template
     ) {
         $this->_customerSession = $customerSession;
         $this->_checkoutSession = $checkoutSession;
-        $this->_storeManager = $storeManager;
         $this->_quoteFactory = $quoteFactory;
         $this->_wishListFactory = $wishListFactory;
         $this->_itemsCompareFactory = $itemsCompareFactory;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
 

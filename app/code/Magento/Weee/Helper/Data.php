@@ -33,7 +33,7 @@
  */
 namespace Magento\Weee\Helper;
 
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
 
     const XML_PATH_FPT_ENABLED       = 'tax/weee/enable';
@@ -75,7 +75,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Weee\Model\Tax $weeeTax
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      */
@@ -83,7 +83,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Weee\Model\Tax $weeeTax,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
     ) {

@@ -24,10 +24,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 namespace Magento\Ogone\Block;
 
-class Placeform extends \Magento\Core\Block\Template
+class Placeform extends \Magento\View\Block\Template
 {
     /**
      * @var \Magento\Sales\Model\OrderFactory
@@ -45,25 +44,25 @@ class Placeform extends \Magento\Core\Block\Template
     protected $_ogoneApi;
 
     /**
+     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Ogone\Model\Api $ogoneApi
      * @param \Magento\Sales\Model\OrderFactory $salesOrderFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Ogone\Model\Api $ogoneApi,
         \Magento\Sales\Model\OrderFactory $salesOrderFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         array $data = array()
     ) {
         $this->_checkoutSession = $checkoutSession;
         $this->_ogoneApi = $ogoneApi;
         $this->_salesOrderFactory = $salesOrderFactory;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

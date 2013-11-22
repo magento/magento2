@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -27,37 +26,36 @@
 <?php /** @var $this \Magento\Checkout\Block\Onepage\Shipping\Method\Available */ ?>
 <?php $_shippingRateGroups = $this->getShippingRates(); ?>
 <?php if (!$_shippingRateGroups): ?>
-    <p><?php echo __('Sorry, no quotes are available for this order.') ?></p>
+    <p><?php echo __('Sorry, no quotes are available for this order at this time.') ?></p>
 <?php else: ?>
-    <dl class="sp-methods">
+    <dl class="items methods shipping">
     <?php $shippingCodePrice = array(); ?>
     <?php $_sole = count($_shippingRateGroups) == 1; foreach ($_shippingRateGroups as $code => $_rates): ?>
-        <dt><?php echo $this->escapeHtml($this->getCarrierName($code)) ?></dt>
-        <dd>
-            <ul>
+        <dt class="item title <?php echo $code ?>"><?php echo $this->escapeHtml($this->getCarrierName($code)) ?></dt>
+        <dd class="item content <?php echo $code ?>">
             <?php $_sole = $_sole && count($_rates) == 1; foreach ($_rates as $_rate): ?>
                 <?php $shippingCodePrice[] = '"'.$_rate->getCode().'":'.(float)$_rate->getPrice(); ?>
-                <li>
+                <div class="field choice">
                    <?php if ($_rate->getErrorMessage()): ?>
-                    <ul class="messages"><li class="error-msg"><ul><li><?php echo $this->escapeHtml($_rate->getErrorMessage()) ?></li></ul></li></ul>
+                    <div class="message error"><div><?php echo $this->escapeHtml($_rate->getErrorMessage()) ?></div></div>
                    <?php else: ?>
                         <?php if ($_sole) : ?>
                         <span class="no-display"><input name="shipping_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_rate->getCode() ?>" checked="checked" /></span>
                         <?php else: ?>
                         <input name="shipping_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod()) echo ' checked="checked"' ?> class="radio"/>
                         <?php endif; ?>
-                        <label for="s_method_<?php echo $_rate->getCode() ?>"><?php echo $this->escapeHtml($_rate->getMethodTitle()) ?>
+                        <label class="label" for="s_method_<?php echo $_rate->getCode() ?>"><span><?php echo $this->escapeHtml($_rate->getMethodTitle()) ?>
                         <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()); ?>
                         <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
                         <?php echo $_excl; ?>
                         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
                             (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
                         <?php endif; ?>
+                        </span>
                         </label>
                    <?php endif ?>
-                </li>
+                </div>
             <?php endforeach; ?>
-            </ul>
         </dd>
     <?php endforeach; ?>
     </dl>

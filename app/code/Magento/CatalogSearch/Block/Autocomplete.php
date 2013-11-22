@@ -29,7 +29,7 @@
  */
 namespace Magento\CatalogSearch\Block;
 
-class Autocomplete extends \Magento\Core\Block\AbstractBlock
+class Autocomplete extends \Magento\View\Block\AbstractBlock
 {
     protected $_suggestData = null;
 

@@ -29,7 +29,7 @@
  */
 namespace Magento\Ogone\Controller;
 
-class Api extends \Magento\Core\Controller\Front\Action
+class Api extends \Magento\App\Action\Action
 {
     /**
      * Order instance
@@ -47,14 +47,14 @@ class Api extends \Magento\Core\Controller\Front\Action
     protected $_transactionFactory;
 
     /**
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Resource\TransactionFactory $transactionFactory
      * @param \Magento\Sales\Model\OrderFactory $salesOrderFactory
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
      */
     public function __construct(
+        \Magento\App\Action\Context $context,
         \Magento\Core\Model\Resource\TransactionFactory $transactionFactory,
-        \Magento\Sales\Model\OrderFactory $salesOrderFactory,
-        \Magento\Core\Controller\Varien\Action\Context $context
+        \Magento\Sales\Model\OrderFactory $salesOrderFactory
     ) {
         parent::__construct($context);
         $this->_transactionFactory = $transactionFactory;
@@ -161,8 +161,8 @@ class Api extends \Magento\Core\Controller\Front\Action
         $this->_getCheckout()->setOgoneLastSuccessQuoteId($this->_getCheckout()->getLastSuccessQuoteId());
         $this->_getCheckout()->clear();
 
-        $this->loadLayout();
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -170,8 +170,8 @@ class Api extends \Magento\Core\Controller\Front\Action
      */
     public function paypageAction()
     {
-        $this->loadLayout();
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->renderLayout();
     }
 
     /**

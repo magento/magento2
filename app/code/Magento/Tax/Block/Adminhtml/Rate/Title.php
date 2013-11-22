@@ -32,7 +32,7 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Rate;
 
-class Title extends \Magento\Core\Block\Template
+class Title extends \Magento\View\Block\Template
 {
     protected $_titles;
 
@@ -49,22 +49,22 @@ class Title extends \Magento\Core\Block\Template
     protected $_storeFactory;
 
     /**
+     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\StoreFactory $storeFactory
      * @param \Magento\Tax\Model\Calculation\Rate $rate
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\StoreFactory $storeFactory,
         \Magento\Tax\Model\Calculation\Rate $rate,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         array $data = array()
     ) {
         $this->_rate = $rate;
         $this->_storeFactory = $storeFactory;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     public function getTitles()

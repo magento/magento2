@@ -49,9 +49,9 @@ class Observer
     protected $_googleAnalyticsData = null;
 
     /**
-     * @var \Magento\Core\Model\App
+     * @var \Magento\Core\Model\Layout
      */
-    protected $_application;
+    protected $_layout;
 
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -60,16 +60,16 @@ class Observer
 
     /**
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\App $application
+     * @param \Magento\Core\Model\Layout $layout
      * @param \Magento\GoogleAnalytics\Helper\Data $googleAnalyticsData
      */
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\App $application,
+        \Magento\Core\Model\Layout $layout,
         \Magento\GoogleAnalytics\Helper\Data $googleAnalyticsData
     ) {
         $this->_googleAnalyticsData = $googleAnalyticsData;
-        $this->_application = $application;
+        $this->_layout = $layout;
         $this->_storeManager = $storeManager;
     }
 
@@ -84,7 +84,7 @@ class Observer
         if (empty($orderIds) || !is_array($orderIds)) {
             return;
         }
-        $block = $this->_application->getFrontController()->getAction()->getLayout()->getBlock('google_analytics');
+        $block = $this->_layout->getBlock('google_analytics');
         if ($block) {
             $block->setOrderIds($orderIds);
         }

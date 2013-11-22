@@ -67,19 +67,11 @@ class Transaction extends \Magento\Core\Model\AbstractModel
     protected $_orderWebsiteId;
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager;
-
-    /**
      * @var \Magento\Core\Model\DateFactory
      */
     protected $_dateFactory;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\DateFactory $dateFactory
@@ -88,7 +80,6 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\DateFactory $dateFactory,
@@ -96,7 +87,6 @@ class Transaction extends \Magento\Core\Model\AbstractModel
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_eventManager = $eventManager;
         $this->_dateFactory = $dateFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }

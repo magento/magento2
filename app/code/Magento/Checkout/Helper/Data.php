@@ -31,19 +31,12 @@
  */
 namespace Magento\Checkout\Helper;
 
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
     const XML_PATH_GUEST_CHECKOUT = 'checkout/options/guest_checkout';
     const XML_PATH_CUSTOMER_MUST_BE_LOGGED = 'checkout/options/customer_must_be_logged';
 
     protected $_agreements = null;
-
-    /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager = null;
 
     /**
      * Core store config
@@ -73,31 +66,28 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_agreementCollFactory;
 
     /**
-     * @var \Magento\Core\Model\Email\TemplateFactory
+     * @var \Magento\Email\Model\TemplateFactory
      */
     protected $_emailTemplFactory;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollFactory
-     * @param \Magento\Core\Model\Email\TemplateFactory $emailTemplFactory
+     * @param \Magento\Email\Model\TemplateFactory $emailTemplFactory
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollFactory,
-        \Magento\Core\Model\Email\TemplateFactory $emailTemplFactory
+        \Magento\Email\Model\TemplateFactory $emailTemplFactory
     ) {
-        $this->_eventManager = $eventManager;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_storeManager = $storeManager;
         $this->_checkoutSession = $checkoutSession;
@@ -221,14 +211,15 @@ class Data extends \Magento\Core\Helper\AbstractHelper
         /* @var $translate \Magento\Core\Model\Translate */
         $this->_translator->setTranslateInline(false);
 
-        /** @var \Magento\Core\Model\Email\Template $mailTemplate */
+        /** @var \Magento\Email\Model\Template $mailTemplate */
         $mailTemplate = $this->_emailTemplFactory->create();
-        /* @var $mailTemplate \Magento\Core\Model\Email\Template */
 
         $template = $this->_coreStoreConfig->getConfig('checkout/payment_failed/template', $checkout->getStoreId());
 
         $copyTo = $this->_getEmails('checkout/payment_failed/copy_to', $checkout->getStoreId());
-        $copyMethod = $this->_coreStoreConfig->getConfig('checkout/payment_failed/copy_method', $checkout->getStoreId());
+        $copyMethod = $this->_coreStoreConfig->getConfig(
+            'checkout/payment_failed/copy_method', $checkout->getStoreId()
+        );
         if ($copyTo && $copyMethod == 'bcc') {
             $mailTemplate->addBcc($copyTo);
         }
@@ -236,8 +227,12 @@ class Data extends \Magento\Core\Helper\AbstractHelper
         $_receiver = $this->_coreStoreConfig->getConfig('checkout/payment_failed/receiver', $checkout->getStoreId());
         $sendTo = array(
             array(
-                'email' => $this->_coreStoreConfig->getConfig('trans_email/ident_'.$_receiver.'/email', $checkout->getStoreId()),
-                'name'  => $this->_coreStoreConfig->getConfig('trans_email/ident_'.$_receiver.'/name', $checkout->getStoreId())
+                'email' => $this->_coreStoreConfig->getConfig(
+                        'trans_email/ident_' . $_receiver . '/email', $checkout->getStoreId()
+                    ),
+                'name'  => $this->_coreStoreConfig->getConfig(
+                        'trans_email/ident_' . $_receiver . '/name', $checkout->getStoreId()
+                    )
             )
         );
 

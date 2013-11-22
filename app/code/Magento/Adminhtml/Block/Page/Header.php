@@ -50,22 +50,22 @@ class Header extends \Magento\Adminhtml\Block\Template
     protected $_authSession;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Backend\Helper\Data $backendData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Backend\Helper\Data $backendData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
         array $data = array()
     ) {
         $this->_backendData = $backendData;
         $this->_authSession = $authSession;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     public function getHomeLink()

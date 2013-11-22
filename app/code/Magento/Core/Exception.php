@@ -39,7 +39,7 @@ class Exception extends \Exception
 {
     protected $_messages = array();
 
-    public function addMessage(\Magento\Core\Model\Message\AbstractMessage $message)
+    public function addMessage(\Magento\Message\AbstractMessage $message)
     {
         if (!isset($this->_messages[$message->getType()])) {
             $this->_messages[$message->getType()] = array();

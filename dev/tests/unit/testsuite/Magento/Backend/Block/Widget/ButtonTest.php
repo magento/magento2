@@ -53,7 +53,7 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
     protected $_buttonMock;
 
     /**
-     * @var \Magento\Core\Model\Factory\Helper
+     * @var \Magento\App\Helper\HelperFactory
      */
     protected $_helperFactoryMock;
 
@@ -63,7 +63,7 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false, false);
 
         $this->_helperFactoryMock = $this->getMock(
-            'Magento\Core\Model\Factory\Helper', array('get'), array(), '', false, false
+            'Magento\App\Helper\HelperFactory', array('get'), array(), '', false, false
         );
 
         $arguments = array(

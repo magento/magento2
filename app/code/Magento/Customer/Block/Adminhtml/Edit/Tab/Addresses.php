@@ -45,27 +45,27 @@ class Addresses extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_adminhtmlAddresses = null;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Customer\Model\Renderer\RegionFactory $regionFactory
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
      * @param \Magento\Customer\Model\FormFactory $customerFactory
      * @param \Magento\Core\Model\System\Store $systemStore
-     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Adminhtml\Helper\Addresses $adminhtmlAddresses
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Model\Registry $registry,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Customer\Model\Renderer\RegionFactory $regionFactory,
         \Magento\Customer\Model\AddressFactory $addressFactory,
         \Magento\Customer\Model\FormFactory $customerFactory,
         \Magento\Core\Model\System\Store $systemStore,
-        \Magento\Data\FormFactory $formFactory,
         \Magento\Adminhtml\Helper\Addresses $adminhtmlAddresses,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
         $this->_adminhtmlAddresses = $adminhtmlAddresses;
@@ -73,7 +73,7 @@ class Addresses extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_addressFactory = $addressFactory;
         $this->_customerFactory = $customerFactory;
         $this->_systemStore = $systemStore;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     public function getRegionsUrl()

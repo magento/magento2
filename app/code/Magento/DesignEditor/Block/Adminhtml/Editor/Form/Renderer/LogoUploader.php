@@ -61,22 +61,22 @@ class LogoUploader
     );
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\DesignEditor\Model\Theme\Context $themeContext
      * @param \Magento\Theme\Model\Config\Customization $customization
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\DesignEditor\Model\Theme\Context $themeContext,
         \Magento\Theme\Model\Config\Customization $customization,
         array $data = array()
     ) {
         $this->_themeContext = $themeContext;
         $this->_customization = $customization;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

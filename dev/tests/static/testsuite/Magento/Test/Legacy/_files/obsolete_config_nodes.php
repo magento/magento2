@@ -34,7 +34,7 @@ return array(
     '/config/general/locale'                   =>
         'This configuration moved to Di configuration of \Magento\Core\Model\Locale\Config model',
     '/config/global/can_use_base_url'          =>
-        'This configuration moved to Di configuration of \Magento\Backend\Controller\Context class',
+        'This configuration moved to Di configuration of \Magento\Backend\App\Action\Context class',
     '/config/global/locale/allow/codes'        =>
         'This configuration moved to Di configuration of \Magento\Core\Model\Locale\Config model',
     '/config/global/locale/allow/currencies'   =>
@@ -77,7 +77,7 @@ return array(
     '/config/global/secure_url' =>
         'This configuration moved to Di configuration of \Magento\Core\Model\Url\SecurityInfo',
     '/config/global/dev' =>
-        'This configuration moved to Di configuration of \Magento\Core\Controller\Varien\Action\Context',
+        'This configuration moved to Di configuration of \Magento\App\Action\Context',
     '/config/global/webapi' =>
         'This configuration moved to Di configuration of \Magento\Webapi\Controller\Request\Rest\Interpreter\Factory'
         . ' and \Magento\Webapi\Controller\Response\Rest\Renderer\Factory',

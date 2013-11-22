@@ -33,7 +33,7 @@
  */
 namespace Magento\Newsletter\Controller;
 
-class Subscriber extends \Magento\Core\Controller\Front\Action
+class Subscriber extends \Magento\App\Action\Action
 {
     /**
      * Session
@@ -50,13 +50,6 @@ class Subscriber extends \Magento\Core\Controller\Front\Action
     protected $_customerSession;
 
     /**
-     * Store manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * Customer factory
      *
      * @var \Magento\Customer\Model\CustomerFactory
@@ -71,27 +64,30 @@ class Subscriber extends \Magento\Core\Controller\Front\Action
     protected $_subscriberFactory;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @var \Magento\Core\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Core\Model\Session $session
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\Model\Session $session
+        \Magento\Core\Model\Session $session,
+        \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
+        $this->_storeManager = $storeManager;
         parent::__construct($context);
         $this->_subscriberFactory = $subscriberFactory;
         $this->_customerFactory = $customerFactory;
-        $this->_storeManager = $storeManager;
         $this->_customerSession = $customerSession;
         $this->_session = $session;
     }
@@ -142,7 +138,7 @@ class Subscriber extends \Magento\Core\Controller\Front\Action
                 $this->_session->addException($e, __('Something went wrong with the subscription.'));
             }
         }
-        $this->_redirectReferer();
+        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
     }
 
     /**
@@ -168,7 +164,7 @@ class Subscriber extends \Magento\Core\Controller\Front\Action
             }
         }
 
-        $this->_redirectUrl($this->_storeManager->getStore()->getBaseUrl());
+        $this->getResponse()->setRedirect($this->_storeManager->getStore()->getBaseUrl());
     }
 
     /**
@@ -193,6 +189,6 @@ class Subscriber extends \Magento\Core\Controller\Front\Action
                 $this->_session->addException($e, __('Something went wrong with the un-subscription.'));
             }
         }
-        $this->_redirectReferer();
+        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
     }
 }

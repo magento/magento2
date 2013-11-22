@@ -26,13 +26,13 @@ namespace Magento\Backend\Block\Widget\Grid\Column;
 class Extended extends \Magento\Backend\Block\Widget\Grid\Column
 {
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         array $data = array()
     ) {
         $this->_rendererTypes['options'] = 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Extended';
@@ -41,6 +41,6 @@ class Extended extends \Magento\Backend\Block\Widget\Grid\Column
         $this->_rendererTypes['checkbox'] = 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkboxes\Extended';
         $this->_rendererTypes['radio'] = 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Radio\Extended';
 
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 }

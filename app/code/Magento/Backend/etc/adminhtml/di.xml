@@ -27,13 +27,20 @@
     <preference for="Magento\Authorization\Policy" type="Magento\Authorization\Policy\Acl" />
     <preference for="Magento\Authorization\RoleLocator" type="Magento\Backend\Model\Authorization\RoleLocator" />
     <preference for="Magento\Core\Model\LocaleInterface" type="Magento\Backend\Model\Locale" />
-    <preference for="Magento\Core\Controller\Varien\Action\Context" type="Magento\Backend\Controller\Context" />
+    <preference for="Magento\App\Action\Context" type="Magento\Backend\App\Action\Context" />
     <preference for="Magento\UrlInterface" type="Magento\Backend\Model\Url" />
     <preference for="Magento\Backend\Model\Auth\StorageInterface" type="Magento\Backend\Model\Auth\Session" />
     <preference for="Magento\Backend\Model\Config\Structure\SearchInterface" type="Magento\Backend\Model\Config\Structure" />
     <preference for="Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Backend\Model\Config\Backend\File\RequestData" />
     <preference for="Magento\Acl\Resource\ProviderInterface" type="Magento\Acl\Resource\Provider" />
     <preference for="Magento\App\DefaultPathInterface" type="Magento\Backend\App\DefaultPath" />
+    <preference for="Magento\App\Response\Http\FileFactory" type="Magento\Backend\App\Response\Http\FileFactory" />
+    <preference for="Magento\App\View" type="Magento\Backend\Model\View" />
+    <type name="Magento\Backend\App\Action\Context">
+        <param name="helper">
+            <instance type="Magento\Backend\Helper\Data" />
+        </param>
+    </type>
     <type name="Magento\Backend\Model\Auth\Session">
         <param name="backendUrl">
             <instance type="Magento\Backend\Model\Url\Proxy" />
@@ -122,6 +129,21 @@
                     <sortOrder>100</sortOrder>
                 </default>
             </value>
+        </param>
+    </type>
+    <type name="Magento\Core\App\Action\Plugin\Session">
+        <param name="sessionNamespace">
+            <value type="const">Magento\Backend\App\AbstractAction::SESSION_NAMESPACE</value>
+        </param>
+    </type>
+    <type name="Magento\Backend\App\AbstractAction">
+        <plugin name="adminAuthentication" type="Magento\Backend\App\Action\Plugin\Authentication" sortOrder="100" />
+        <plugin name="adminStore" type="Magento\Backend\App\Action\Plugin\Store" sortOrder="10" />
+        <plugin name="adminMassactionKey" type="Magento\Backend\App\Action\Plugin\MassactionKey" sortOrder="11" />
+    </type>
+    <type name="Magento\Core\App\Response\Redirect">
+        <param name="canUseSessionIdInParam">
+            <value type="bool">false</value>
         </param>
     </type>
 </config>

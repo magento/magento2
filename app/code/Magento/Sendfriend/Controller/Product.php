@@ -33,7 +33,10 @@
  */
 namespace Magento\Sendfriend\Controller;
 
-class Product extends \Magento\Core\Controller\Front\Action
+use Magento\App\Action\NotFoundException;
+use Magento\App\RequestInterface;
+
+class Product extends \Magento\App\Action\Action
 {
     /**
      * Core registry
@@ -43,51 +46,57 @@ class Product extends \Magento\Core\Controller\Front\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @var \Magento\Core\App\Action\FormKeyValidator
+     */
+    protected $_formKeyValidator;
+
+    /**
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\App\Action\Context $context,
+        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
     ) {
         $this->_coreRegistry = $coreRegistry;
+        $this->_formKeyValidator = $formKeyValidator;
         parent::__construct($context);
     }
 
     /**
-     * Predispatch: check is enable module
+     * Check if module is enabled
      * If allow only for customer - redirect to login page
      *
-     * @return \Magento\Sendfriend\Controller\Product
+     * @param RequestInterface $request
+     * @return mixed
+     * @throws \Magento\App\Action\NotFoundException
      */
-    public function preDispatch()
+    public function dispatch(RequestInterface $request)
     {
-        parent::preDispatch();
-
         /* @var $helper \Magento\Sendfriend\Helper\Data */
         $helper = $this->_objectManager->get('Magento\Sendfriend\Helper\Data');
         /* @var $session \Magento\Customer\Model\Session */
         $session = $this->_objectManager->get('Magento\Customer\Model\Session');
 
         if (!$helper->isEnabled()) {
-            $this->norouteAction();
-            return $this;
+            throw new NotFoundException();
         }
 
         if (!$helper->isAllowForGuest() && !$session->authenticate($this)) {
-            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             if ($this->getRequest()->getActionName() == 'sendemail') {
                 $session->setBeforeAuthUrl($this->_objectManager
-                        ->create('Magento\Core\Model\Url')
-                        ->getUrl('*/*/send', array(
-                            '_current' => true
-                        )));
+                    ->create('Magento\Core\Model\Url')
+                    ->getUrl('*/*/send', array(
+                        '_current' => true
+                    )));
                 $this->_objectManager->get('Magento\Catalog\Model\Session')
-                    ->setSendfriendFormData($this->getRequest()->getPost());
+                    ->setSendfriendFormData($request->getPost());
             }
         }
-
-        return $this;
+        return parent::dispatch($request);
     }
 
     /**
@@ -148,7 +157,7 @@ class Product extends \Magento\Core\Controller\Front\Action
         $model      = $this->_initSendToFriendModel();
 
         if (!$product) {
-            $this->_forward('noRoute');
+            $this->_forward('noroute');
             return;
         }
         /* @var $session \Magento\Catalog\Model\Session */
@@ -160,20 +169,20 @@ class Product extends \Magento\Core\Controller\Front\Action
             );
         }
 
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Catalog\Model\Session');
+        $this->_view->loadLayout();
+        $this->_view->getLayout()->initMessages('Magento\Catalog\Model\Session');
 
         $this->_eventManager->dispatch('sendfriend_product', array('product' => $product));
         $data = $catalogSession->getSendfriendFormData();
         if ($data) {
             $catalogSession->setSendfriendFormData(true);
-            $block = $this->getLayout()->getBlock('sendfriend.send');
+            $block = $this->_view->getLayout()->getBlock('sendfriend.send');
             if ($block) {
                 $block->setFormData($data);
             }
         }
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -182,7 +191,7 @@ class Product extends \Magento\Core\Controller\Front\Action
      */
     public function sendmailAction()
     {
-        if (!$this->_validateFormKey()) {
+        if (!$this->_formKeyValidator->validate($this->getRequest())) {
             return $this->_redirect('*/*/send', array('_current' => true));
         }
 
@@ -191,7 +200,7 @@ class Product extends \Magento\Core\Controller\Front\Action
         $data       = $this->getRequest()->getPost();
 
         if (!$product || !$data) {
-            $this->_forward('noRoute');
+            $this->_forward('noroute');
             return;
         }
 
@@ -214,7 +223,8 @@ class Product extends \Magento\Core\Controller\Front\Action
             if ($validate === true) {
                 $model->send();
                 $catalogSession->addSuccess(__('The link to a friend was sent.'));
-                $this->_redirectSuccess($product->getProductUrl());
+                $url = $product->getProductUrl();
+                $this->getResponse()->setRedirect($this->_redirect->success($url));
                 return;
             }
             else {
@@ -235,10 +245,9 @@ class Product extends \Magento\Core\Controller\Front\Action
         // save form data
         $catalogSession->setSendfriendFormData($data);
 
-        $this->_redirectError(
-            $this->_objectManager
-                ->create('Magento\Core\Model\Url')
-                ->getUrl('*/*/send', array('_current' => true))
-        );
+        $url = $this->_objectManager
+            ->create('Magento\Core\Model\Url')
+            ->getUrl('*/*/send', array('_current' => true));
+        $this->getResponse()->setRedirect($this->_redirect->error($url));
     }
 }

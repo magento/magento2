@@ -98,7 +98,7 @@ class ListTest extends \PHPUnit_Framework_TestCase
         $layout = $this->_getLayout();
         /** @var $parent \Magento\Catalog\Block\Product\ListProduct */
         $parent = $layout->createBlock('Magento\Catalog\Block\Product\ListProduct');
-        $childBlock = $layout->createBlock('Magento\Core\Block\Text', 'test', array('data' => array('text' => 'test')));
+        $childBlock = $layout->createBlock('Magento\View\Block\Text', 'test', array('data' => array('text' => 'test')));
         $layout->setChild($parent->getNameInLayout(), $childBlock->getNameInLayout(), 'additional');
         $this->assertEquals('test', $parent->getAdditionalHtml());
     }

@@ -66,23 +66,6 @@ abstract class AbstractAction implements \Magento\App\ActionInterface
      */
     public function getResponse()
     {
-        if (!$this->_response->getHeader('X-Frame-Options')) {
-            $this->_response->setHeader('X-Frame-Options', 'SAMEORIGIN');
-        }
         return $this->_response;
-    }
-
-    /**
-     * Retrieve full bane of current action current controller and
-     * current module
-     *
-     * @param   string $delimiter
-     * @return  string
-     */
-    public function getFullActionName($delimiter = '_')
-    {
-        return $this->getRequest()->getRequestedRouteName() . $delimiter .
-            $this->getRequest()->getRequestedControllerName() . $delimiter .
-            $this->getRequest()->getRequestedActionName();
     }
 }

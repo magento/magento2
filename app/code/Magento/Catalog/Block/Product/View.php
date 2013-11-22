@@ -53,13 +53,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_taxCalculation;
 
     /**
-     * Locale
-     *
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
      * Product factory
      *
      * @var \Magento\Catalog\Model\ProductFactory
@@ -67,52 +60,35 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_productFactory;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Tax\Model\Calculation $taxCalculation
-     * @param \Magento\Core\Model\Registry $coreRegistry
-     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Tax\Model\Calculation $taxCalculation
+     * @param \Magento\Stdlib\String $string
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\View\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Tax\Model\Calculation $taxCalculation,
-        \Magento\Core\Model\Registry $coreRegistry,
-        \Magento\Stdlib\String $string,
+        \Magento\Core\Model\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Math\Random $mathRandom,
+        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Tax\Model\Calculation $taxCalculation,
+        \Magento\Stdlib\String $string,
         array $data = array()
     ) {
         $this->_productFactory = $productFactory;
-        $this->_locale = $locale;
         $this->_taxCalculation = $taxCalculation;
         $this->string = $string;
-        parent::__construct(
-            $storeManager,
-            $catalogConfig,
-            $coreRegistry,
-            $taxData,
-            $catalogData,
-            $coreData,
-            $context,
-            $mathRandom,
-            $data
-        );
+        parent::__construct($context, $coreData, $catalogConfig, $registry, $taxData, $catalogData, $mathRandom, $data);
     }
 
     /**
@@ -208,7 +184,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
             $additional['wishlist_next'] = 1;
         }
 
-        $addUrlKey = \Magento\Core\Controller\Front\Action::PARAM_NAME_URL_ENCODED;
+        $addUrlKey = \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED;
         $addUrlValue = $this->_urlBuilder->getUrl('*/*/*', array('_use_rewrite' => true, '_current' => true));
         $additional[$addUrlKey] = $this->_coreData->urlEncode($addUrlValue);
 

@@ -25,13 +25,13 @@
 -->
 <layout>
     <container name="container1" label="Container 1">
-        <block class="Magento\Core\Block\Text" name="no_name2"/>
+        <block class="Magento\View\Block\Text" name="no_name2"/>
     </container>
     <remove name="container1"/>
     <remove name="child_block1"/>
-    <block class="Magento\Core\Block\Text" name="block_container" as="block.container">
-        <block class="Magento\Core\Block\Text" name="child_block1"/>
-        <block class="Magento\Core\Block\Text" name="child_block2"/>
+    <block class="Magento\View\Block\Text" name="block_container" as="block.container">
+        <block class="Magento\View\Block\Text" name="child_block1"/>
+        <block class="Magento\View\Block\Text" name="child_block2"/>
     </block>
     <remove name="not_exist"/>
 </layout>

@@ -57,7 +57,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_translatorMock = $this->getMock('Magento\Core\Model\Translate', array(), array(), '', false);
-        $this->_context = $this->getMock('Magento\Core\Helper\Context', array(), array(), '', false);
+        $this->_context = $this->getMock('Magento\App\Helper\Context', array(), array(), '', false);
         $this->_context
             ->expects($this->any())->method('getTranslator')->will($this->returnValue($this->_translatorMock));
     }

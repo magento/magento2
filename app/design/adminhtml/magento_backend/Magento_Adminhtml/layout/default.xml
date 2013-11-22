@@ -50,24 +50,14 @@
                 <argument name="file" xsi:type="string">mui/components.css</argument>
             </arguments>
         </block>
-        <block class="Magento\Page\Block\Html\Head\Css" name="css-admin-css">
+        <block class="Magento\Page\Block\Html\Head\Css" name="css-styles-css">
             <arguments>
-                <argument name="file" xsi:type="string">css/admin.css</argument>
+                <argument name="file" xsi:type="string">css/styles.css</argument>
             </arguments>
         </block>
         <block class="Magento\Page\Block\Html\Head\Css" name="jquery-farbtastic-css-farbtastic-css">
             <arguments>
                 <argument name="file" xsi:type="string">jquery/farbtastic/css/farbtastic.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Page\Block\Html\Head\Css" name="css-header-css">
-            <arguments>
-                <argument name="file" xsi:type="string">css/header.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Page\Block\Html\Head\Css" name="css-pages-css">
-            <arguments>
-                <argument name="file" xsi:type="string">css/pages.css</argument>
             </arguments>
         </block>
         <block class="Magento\Page\Block\Html\Head\Css" name="mui-utils-css">
@@ -78,11 +68,6 @@
         <block class="Magento\Page\Block\Html\Head\Css" name="magento-core-prototype-magento-css">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Core::prototype/magento.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Page\Block\Html\Head\Css" name="css-debug-css">
-            <arguments>
-                <argument name="file" xsi:type="string">css/debug.css</argument>
             </arguments>
         </block>
         <!-- temporary to debug -->

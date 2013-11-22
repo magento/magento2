@@ -44,19 +44,19 @@ class Problem extends \Magento\Adminhtml\Block\Template
     protected $_problemCollection;
 
     /**
-     * @param \Magento\Newsletter\Model\Resource\Problem\Collection $problemCollection
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Newsletter\Model\Resource\Problem\Collection $problemCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Newsletter\Model\Resource\Problem\Collection $problemCollection,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Newsletter\Model\Resource\Problem\Collection $problemCollection,
         array $data = array()
     ) {
         $this->_problemCollection = $problemCollection;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     protected function _construct()

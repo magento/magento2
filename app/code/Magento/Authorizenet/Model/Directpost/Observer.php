@@ -67,7 +67,7 @@ class Observer
     protected $_session;
 
     /**
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -77,7 +77,7 @@ class Observer
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Authorizenet\Model\DirectpostFactory $modelFactory
      * @param \Magento\Authorizenet\Model\Directpost\Session $session
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Authorizenet\Helper\Data $authorizenetData,
@@ -85,7 +85,7 @@ class Observer
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Authorizenet\Model\DirectpostFactory $modelFactory,
         \Magento\Authorizenet\Model\Directpost\Session $session,
-        \Magento\Core\Model\StoreManager $storeManager
+        \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_authorizenetData = $authorizenetData;
@@ -124,12 +124,9 @@ class Observer
         if ($order && $order->getId()) {
             $payment = $order->getPayment();
             if ($payment && $payment->getMethod() == $this->_modelFactory->create()->getCode()) {
-                /* @var $controller \Magento\Core\Controller\Varien\Action */
-                $controller = $observer->getEvent()->getData('controller_action');
-                $result = $this->_coreData->jsonDecode(
-                    $controller->getResponse()->getBody('default'),
-                    \Zend_Json::TYPE_ARRAY
-                );
+                $request = $observer->getEvent()->getRequest();
+                $response = $observer->getEvent()->getResponse();
+                $result = $this->_coreData->jsonDecode($response->getBody('default'), \Zend_Json::TYPE_ARRAY);
 
                 if (empty($result['error'])) {
                     $payment = $order->getPayment();
@@ -137,13 +134,13 @@ class Observer
                     $this->_session->addCheckoutOrderIncrementId($order->getIncrementId());
                     $this->_session->setLastOrderIncrementId($order->getIncrementId());
                     $requestToPaygate = $payment->getMethodInstance()->generateRequestFromOrder($order);
-                    $requestToPaygate->setControllerActionName($controller->getRequest()->getControllerName());
+                    $requestToPaygate->setControllerActionName($request->getControllerName());
                     $requestToPaygate->setIsSecure((string)$this->_storeManager->getStore()->isCurrentlySecure());
 
                     $result['directpost'] = array('fields' => $requestToPaygate->getData());
 
-                    $controller->getResponse()->clearHeader('Location');
-                    $controller->getResponse()->setBody($this->_coreData->jsonEncode($result));
+                    $response->clearHeader('Location');
+                    $response->setBody($this->_coreData->jsonEncode($result));
                 }
             }
         }

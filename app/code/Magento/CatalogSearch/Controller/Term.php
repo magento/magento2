@@ -27,20 +27,27 @@
 
 namespace Magento\CatalogSearch\Controller;
 
-class Term extends \Magento\Core\Controller\Front\Action {
+use Magento\App\Action\NotFoundException;
+use Magento\App\RequestInterface;
 
-    public function preDispatch(){
-        parent::preDispatch();
-        if(!$this->_objectManager->get('Magento\Core\Model\Store\Config')->getConfig('catalog/seo/search_terms')){
-              $this->_redirect('noroute');
-              $this->setFlag('',self::FLAG_NO_DISPATCH,true);
+class Term extends \Magento\App\Action\Action
+{
+    /**
+     * @param RequestInterface $request
+     * @return mixed
+     */
+    public function dispatch(RequestInterface $request)
+    {
+        if (!$this->_objectManager->get('Magento\Core\Model\Store\Config')->getConfig('catalog/seo/search_terms')) {
+            $this->_redirect('noroute');
+            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
         }
-        return $this;
-
+        return parent::dispatch($request);
     }
+
     public function popularAction()
     {
-        $this->loadLayout();
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->renderLayout();
     }
 }

@@ -71,13 +71,13 @@ class NewsletterQueueTest extends \Magento\Backend\Utility\Controller
         /**
          * Check that errors was generated and set to session
          */
-        $this->assertSessionMessages($this->isEmpty(), \Magento\Core\Model\Message::ERROR);
+        $this->assertSessionMessages($this->isEmpty(), \Magento\Message\Factory::ERROR);
 
         /**
          * Check that success message is set
          */
         $this->assertSessionMessages(
-            $this->equalTo(array('The newsletter queue has been saved.')), \Magento\Core\Model\Message::SUCCESS
+            $this->equalTo(array('The newsletter queue has been saved.')), \Magento\Message\Factory::SUCCESS
         );
     }
 }

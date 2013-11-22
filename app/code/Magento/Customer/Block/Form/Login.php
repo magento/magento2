@@ -33,7 +33,7 @@
  */
 namespace Magento\Customer\Block\Form;
 
-class Login extends \Magento\Core\Block\Template
+class Login extends \Magento\View\Block\Template
 {
     private $_username = -1;
 
@@ -42,14 +42,20 @@ class Login extends \Magento\Core\Block\Template
      */
     protected $_customerSession;
 
+    /**
+     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param array $data
+     */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     protected function _prepareLayout()

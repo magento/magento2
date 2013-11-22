@@ -44,8 +44,6 @@ app/code/Magento/Core/data
 app/code/Magento/Core/Model/Config
 app/code/Magento/Core/Model/DataService
 app/code/Magento/Core/Model/Design.php
-app/code/Magento/Core/Model/Email/Template/Config
-app/code/Magento/Core/Model/Email/Template/Config.php
 app/code/Magento/Core/Model/Layout/Factory.php
 app/code/Magento/Core/Model/Layout/Update.php
 app/code/Magento/Core/Model/Layout/Argument
@@ -55,14 +53,12 @@ app/code/Magento/Core/Model/Page
 app/code/Magento/Core/Model/Page.php
 app/code/Magento/Core/Model/Resource/Theme
 app/code/Magento/Core/Model/Resource/Theme.php
-app/code/Magento/Core/Model/Sender.php
 app/code/Magento/Core/Model/Session/Validator.php
 app/code/Magento/Core/Model/AbstractShell.php
 app/code/Magento/Core/Model/Theme
 app/code/Magento/Core/Model/Theme.php
 app/code/Magento/Core/Model/Url/SecurityInfo.php
 app/code/Magento/Core/Model/Url/SecurityInfoInterface.php
-app/code/Magento/Core/Helper/AbstractHelper.php
 app/code/Magento/Core/sql/core_setup/upgrade-1.6.0.3-1.6.0.4.php
 app/code/Magento/Cron/Model/Config/Converter
 app/code/Magento/Cron/Model/Config/Reader
@@ -83,6 +79,7 @@ app/code/Magento/GoogleShopping/Block/SiteVerification.php
 app/code/Magento/GoogleShopping/Model/AttributeFactory.php
 app/code/Magento/Eav/Model/Entity/Attribute/Config
 app/code/Magento/Eav/Model/Entity/Attribute/Config.php
+app/code/Magento/Email
 app/code/Magento/ImportExport/Model/Import/Entity/CustomerComposite.php
 app/code/Magento/ImportExport/Model/Export/Config
 app/code/Magento/ImportExport/Model/Export/Config.php

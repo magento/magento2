@@ -30,7 +30,7 @@
  */
 namespace Magento\Centinel\Controller;
 
-class Index extends \Magento\Core\Controller\Front\Action
+class Index extends \Magento\App\Action\Action
 {
     /**
      * Core registry
@@ -40,11 +40,11 @@ class Index extends \Magento\Core\Controller\Front\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -61,7 +61,7 @@ class Index extends \Magento\Core\Controller\Front\Action
         if ($validator) {
             $this->_coreRegistry->register('current_centinel_validator', $validator);
         }
-        $this->loadLayout()->renderLayout();
+        $this->_view->loadLayout()->renderLayout();
     }
 
     /**
@@ -85,7 +85,7 @@ class Index extends \Magento\Core\Controller\Front\Action
         } catch (\Exception $e) {
             $this->_coreRegistry->register('current_centinel_validator', false);
         }
-        $this->loadLayout()->renderLayout();
+        $this->_view->loadLayout()->renderLayout();
     }
 
     /**

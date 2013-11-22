@@ -47,6 +47,11 @@ class InjectableTest extends \PHPUnit_Framework_TestCase
     protected $parameterReflection;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $declaredClass;
+
+    /**
      * @inheritdoc
      */
     public function setUp()
@@ -68,7 +73,15 @@ class InjectableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->declaredClass = $this->getMockBuilder('Zend\Code\Reflection\ClassReflection')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $methodReflection->expects($this->once())
+            ->method('getDeclaringClass')
+            ->will($this->returnValue($this->declaredClass));
+
+        $methodReflection->expects($this->any())
             ->method('getParameters')
             ->will($this->returnValue(array($this->parameterReflection)));
 
@@ -146,6 +159,20 @@ class InjectableTest extends \PHPUnit_Framework_TestCase
                     }
                 )
             );
+
+        $this->injectable->getDependencies($this->fileReflection);
+    }
+
+    /**
+     * Covered when method declared in parent class
+     *
+     * @test
+     */
+    public function testGetDependenciesWhenMethodDeclaredInParentClass()
+    {
+        $this->declaredClass->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue('ParentClass'));
 
         $this->injectable->getDependencies($this->fileReflection);
     }

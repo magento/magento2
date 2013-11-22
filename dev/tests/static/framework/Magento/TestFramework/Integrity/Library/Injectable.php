@@ -49,6 +49,10 @@ class Injectable
             /** @var ClassReflection $class */
             foreach ($class->getMethods() as $method) {
                 /** @var \Zend\Code\Reflection\MethodReflection $method */
+                if ($method->getDeclaringClass()->getName() != $class->getName()) {
+                    continue;
+                }
+
                 foreach ($method->getParameters() as $parameter) {
                     try {
                         /** @var ParameterReflection $parameter */

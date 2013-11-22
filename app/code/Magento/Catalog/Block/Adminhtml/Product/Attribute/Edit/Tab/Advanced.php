@@ -50,26 +50,26 @@ class Advanced
     protected $_yesNo;
 
     /**
-     * @param \Magento\Backend\Model\Config\Source\Yesno $yesNo
-     * @param \Magento\Eav\Helper\Data $eavData
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Model\Config\Source\Yesno $yesNo
+     * @param \Magento\Eav\Helper\Data $eavData
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Model\Config\Source\Yesno $yesNo,
-        \Magento\Eav\Helper\Data $eavData,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Model\Config\Source\Yesno $yesNo,
+        \Magento\Eav\Helper\Data $eavData,
         array $data = array()
     ) {
         $this->_yesNo = $yesNo;
         $this->_eavData = $eavData;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     /**

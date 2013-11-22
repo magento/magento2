@@ -42,11 +42,6 @@ class NewCatalog extends \Magento\Rss\Block\Catalog\AbstractCatalog
     protected $_productFactory;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
      * @var \Magento\Catalog\Model\Product\Visibility
      */
     protected $_visibility;
@@ -57,37 +52,32 @@ class NewCatalog extends \Magento\Rss\Block\Catalog\AbstractCatalog
     protected $_resourceIterator;
 
     /**
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Rss\Model\RssFactory $rssFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
      * @param \Magento\Core\Model\Resource\Iterator $resourceIterator
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Customer\Model\Session $customerSession,
+        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Rss\Model\RssFactory $rssFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Catalog\Model\Product\Visibility $visibility,
         \Magento\Core\Model\Resource\Iterator $resourceIterator,
         array $data = array()
     ) {
         $this->_rssFactory = $rssFactory;
         $this->_productFactory = $productFactory;
-        $this->_locale = $locale;
         $this->_visibility = $visibility;
         $this->_resourceIterator = $resourceIterator;
-        parent::__construct($catalogData, $coreData, $context, $storeManager, $customerSession, $data);
+        parent::__construct($context, $coreData, $customerSession, $catalogData, $data);
     }
 
     protected function _toHtml()

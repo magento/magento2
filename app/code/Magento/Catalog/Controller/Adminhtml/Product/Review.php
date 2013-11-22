@@ -29,7 +29,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-class Review extends \Magento\Backend\Controller\Adminhtml\Action
+class Review extends \Magento\Backend\App\Action
 {
     /**
      * Array of actions which can be processed without secret key validation
@@ -46,11 +46,11 @@ class Review extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -59,70 +59,70 @@ class Review extends \Magento\Backend\Controller\Adminhtml\Action
 
     public function indexAction()
     {
-        $this->_title(__('Customer Reviews'));
+        $this->_title->add(__('Customer Reviews'));
 
-        $this->_title(__('Reviews'));
+        $this->_title->add(__('Reviews'));
 
         if ($this->getRequest()->getParam('ajax')) {
             return $this->_forward('reviewGrid');
         }
 
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Review::catalog_reviews_ratings_reviews_all');
 
-        $this->_addContent($this->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Main'));
+        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Main'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function pendingAction()
     {
-        $this->_title(__('Customer Reviews'));
+        $this->_title->add(__('Customer Reviews'));
 
-        $this->_title(__('Pending Reviews'));
+        $this->_title->add(__('Pending Reviews'));
 
         if ($this->getRequest()->getParam('ajax')) {
             $this->_coreRegistry->register('usePendingFilter', true);
             return $this->_forward('reviewGrid');
         }
 
-        $this->loadLayout();
+        $this->_view->loadLayout();
 
         $this->_coreRegistry->register('usePendingFilter', true);
-        $this->_addContent($this->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Main'));
+        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Main'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function editAction()
     {
-        $this->_title(__('Customer Reviews'));
+        $this->_title->add(__('Customer Reviews'));
 
-        $this->_title(__('Edit Review'));
+        $this->_title->add(__('Edit Review'));
 
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Review::catalog_reviews_ratings_reviews_all');
 
-        $this->_addContent($this->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Edit'));
+        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Edit'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function newAction()
     {
-        $this->_title(__('Customer Reviews'));
+        $this->_title->add(__('Customer Reviews'));
 
-        $this->_title(__('New Review'));
+        $this->_title->add(__('New Review'));
 
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Review::catalog_reviews_ratings_reviews_all');
 
-        $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
+        $this->_view->getLayout()->getBlock('head')->setCanLoadExtJs(true);
 
-        $this->_addContent($this->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Add'));
-        $this->_addContent($this->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Product\Grid'));
+        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Add'));
+        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Product\Grid'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function saveAction()
@@ -292,14 +292,14 @@ class Review extends \Magento\Backend\Controller\Adminhtml\Action
     public function productGridAction()
     {
         $this->getResponse()->setBody(
-            $this->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Product\Grid')->toHtml()
+            $this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Product\Grid')->toHtml()
         );
     }
 
     public function reviewGridAction()
     {
         $this->getResponse()->setBody(
-            $this->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Grid')->toHtml()
+            $this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Grid')->toHtml()
         );
     }
 
@@ -379,7 +379,7 @@ class Review extends \Magento\Backend\Controller\Adminhtml\Action
     public function ratingItemsAction()
     {
         $this->getResponse()->setBody(
-            $this->getLayout()
+            $this->_view->getLayout()
                 ->createBlock('Magento\Adminhtml\Block\Review\Rating\Detailed')
                 ->setIndependentMode()
                 ->toHtml()

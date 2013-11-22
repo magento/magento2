@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Category;
 
-class View extends \Magento\Core\Block\Template
+class View extends \Magento\View\Block\Template
 {
     /**
      * Core registry
@@ -50,34 +50,22 @@ class View extends \Magento\Core\Block\Template
     protected $_catalogLayer;
 
     /**
-     * Store manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
-     * Construct
-     *
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Layer $catalogLayer
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Catalog\Model\Layer $catalogLayer
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Layer $catalogLayer,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Catalog\Model\Layer $catalogLayer,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
-        $this->_storeManager = $storeManager;
         $this->_catalogLayer = $catalogLayer;
         $this->_coreRegistry = $registry;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     protected function _prepareLayout()

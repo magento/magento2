@@ -66,22 +66,22 @@ class AbstractItems extends \Magento\Backend\Block\Template
     protected $_productFactory;
 
     /**
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
         $this->_productFactory = $productFactory;
         $this->_coreRegistry = $registry;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**
@@ -106,7 +106,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * Retrieve item renderer block
      *
      * @param string $type
-     * @return \Magento\Core\Block\AbstractBlock
+     * @return \Magento\View\Block\AbstractBlock
      * @throws \RuntimeException
      */
     public function getItemRenderer($type)
@@ -126,7 +126,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
      *
      * @param string $column
      * @param string $compositePart
-     * @return \Magento\Core\Block\AbstractBlock
+     * @return \Magento\View\Block\AbstractBlock
      */
     public function getColumnRenderer($column, $compositePart = '')
     {

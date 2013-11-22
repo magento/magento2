@@ -120,7 +120,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'auth' => $this->_authMock
         );
 
-        $context = $helper->getObject('Magento\Backend\Controller\Context', $arguments);
+        $context = $helper->getObject('Magento\Backend\App\Action\Context', $arguments);
         $this->_controller = $this->getMock(
             'Magento\Backend\Controller\Adminhtml\System\Config\Save',
             array('deniedAction'),

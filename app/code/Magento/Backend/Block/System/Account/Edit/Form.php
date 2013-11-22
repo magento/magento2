@@ -47,26 +47,26 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_userFactory;
 
     /**
-     * @param \Magento\User\Model\UserFactory $userFactory
-     * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\User\Model\UserFactory $userFactory
+     * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param array $data
      */
     public function __construct(
-        \Magento\User\Model\UserFactory $userFactory,
-        \Magento\Backend\Model\Auth\Session $authSession,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\User\Model\UserFactory $userFactory,
+        \Magento\Backend\Model\Auth\Session $authSession,
         array $data = array()
     ) {
         $this->_userFactory = $userFactory;
         $this->_authSession = $authSession;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     protected function _prepareForm()

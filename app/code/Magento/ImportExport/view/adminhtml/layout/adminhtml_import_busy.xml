@@ -25,6 +25,6 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceContainer name="content">
-        <block class="Magento\Core\Block\Template" template="Magento_ImportExport::busy.phtml" name="busy" as="busy"/>
+        <block class="Magento\View\Block\Template" template="Magento_ImportExport::busy.phtml" name="busy" as="busy"/>
     </referenceContainer>
 </layout>

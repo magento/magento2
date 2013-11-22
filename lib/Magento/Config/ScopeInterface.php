@@ -33,13 +33,6 @@ interface ScopeInterface
     public function getCurrentScope();
 
     /**
-     * Retrieve list of all scopes
-     *
-     * @return array
-     */
-    public function getAllScopes();
-
-    /**
      * Set current configuration scope
      *
      * @param string $scope

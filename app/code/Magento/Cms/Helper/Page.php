@@ -34,7 +34,7 @@
  */
 namespace Magento\Cms\Helper;
 
-class Page extends \Magento\Core\Helper\AbstractHelper
+class Page extends \Magento\App\Helper\AbstractHelper
 {
     const XML_PATH_NO_ROUTE_PAGE        = 'web/default/cms_no_route';
     const XML_PATH_NO_COOKIES_PAGE      = 'web/default/cms_no_cookies';
@@ -46,13 +46,6 @@ class Page extends \Magento\Core\Helper\AbstractHelper
      * @var \Magento\Page\Helper\Layout
      */
     protected $_pageLayout;
-
-    /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager;
 
     /**
      * Design package instance
@@ -93,52 +86,44 @@ class Page extends \Magento\Core\Helper\AbstractHelper
     protected $_pageFactory;
 
     /**
-     * Url
-     *
-     * @var \Magento\UrlInterface
-     */
-    protected $_url;
-
-    /**
      * @var \Magento\Escaper
      */
     protected $_escaper;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Core\Helper\Context $context
+     * @var \Magento\App\ViewInterface
+     */
+    protected $_view;
+
+    /**
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Session\Pool $sessionFactory
      * @param \Magento\Cms\Model\Page $page
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Page\Helper\Layout $pageLayout
      * @param \Magento\View\DesignInterface $design
-     * @param \Magento\UrlInterface $url
      * @param \Magento\Cms\Model\PageFactory $pageFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Escaper $escaper
+     * @param \Magento\App\ViewInterface $view
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Session\Pool $sessionFactory,
         \Magento\Cms\Model\Page $page,
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Page\Helper\Layout $pageLayout,
         \Magento\View\DesignInterface $design,
-        \Magento\UrlInterface $url,
         \Magento\Cms\Model\PageFactory $pageFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Escaper $escaper
+        \Magento\Escaper $escaper,
+        \Magento\App\ViewInterface $view
     ) {
         $this->_sessionPool = $sessionFactory;
-        // used singleton (instead factory) because there exist dependencies on \Magento\Cms\Helper\Page
+        $this->_view = $view;
         $this->_page = $page;
-        $this->_eventManager = $eventManager;
         $this->_pageLayout = $pageLayout;
         $this->_design = $design;
-        $this->_url = $url;
         $this->_pageFactory = $pageFactory;
         $this->_storeManager = $storeManager;
         $this->_locale = $locale;
@@ -151,11 +136,11 @@ class Page extends \Magento\Core\Helper\AbstractHelper
      *
      * Call from controller action
      *
-     * @param \Magento\Core\Controller\Front\Action $action
+     * @param \Magento\App\Action\Action $action
      * @param integer $pageId
      * @return boolean
      */
-    public function renderPage(\Magento\Core\Controller\Front\Action $action, $pageId = null)
+    public function renderPage(\Magento\App\Action\Action $action, $pageId = null)
     {
         return $this->_renderPage($action, $pageId);
     }
@@ -163,17 +148,17 @@ class Page extends \Magento\Core\Helper\AbstractHelper
     /**
      * Renders CMS page
      *
-     * @param \Magento\Core\Controller\Front\Action|\Magento\Core\Controller\Varien\Action $action
+     * @param \Magento\App\Action\Action|\Magento\App\Action\Action $action
      * @param integer $pageId
      * @param bool $renderLayout
      * @return boolean
      */
-    protected function _renderPage(\Magento\Core\Controller\Varien\Action  $action, $pageId = null, $renderLayout = true)
+    protected function _renderPage(\Magento\App\Action\Action  $action, $pageId = null, $renderLayout = true)
     {
         if (!is_null($pageId) && $pageId!==$this->_page->getId()) {
-            $delimeterPosition = strrpos($pageId, '|');
-            if ($delimeterPosition) {
-                $pageId = substr($pageId, 0, $delimeterPosition);
+            $delimiterPosition = strrpos($pageId, '|');
+            if ($delimiterPosition) {
+                $pageId = substr($pageId, 0, $delimiterPosition);
             }
 
             $this->_page->setStoreId($this->_storeManager->getStore()->getId());
@@ -194,10 +179,10 @@ class Page extends \Magento\Core\Helper\AbstractHelper
                 $this->_design->setDesignTheme($this->_page->getCustomTheme());
             }
         }
-        $action->getLayout()->getUpdate()->addHandle('default')->addHandle('cms_page_view');
-        $action->addPageLayoutHandles(array('id' => $this->_page->getIdentifier()));
+        $this->_view->getLayout()->getUpdate()->addHandle('default')->addHandle('cms_page_view');
+        $this->_view->addPageLayoutHandles(array('id' => $this->_page->getIdentifier()));
 
-        $action->addActionLayoutHandles();
+        $this->_view->addActionLayoutHandles();
         if ($this->_page->getRootTemplate()) {
             $handle = ($this->_page->getCustomRootTemplate()
                         && $this->_page->getCustomRootTemplate() != 'empty'
@@ -210,15 +195,15 @@ class Page extends \Magento\Core\Helper\AbstractHelper
             array('page' => $this->_page, 'controller_action' => $action)
         );
 
-        $action->loadLayoutUpdates();
+        $this->_view->loadLayoutUpdates();
         $layoutUpdate = ($this->_page->getCustomLayoutUpdateXml() && $inRange)
             ? $this->_page->getCustomLayoutUpdateXml() : $this->_page->getLayoutUpdateXml();
         if (!empty($layoutUpdate)) {
-            $action->getLayout()->getUpdate()->addUpdate($layoutUpdate);
+            $this->_view->getLayout()->getUpdate()->addUpdate($layoutUpdate);
         }
-        $action->generateLayoutXml()->generateLayoutBlocks();
+        $this->_view->generateLayoutXml()->generateLayoutBlocks();
 
-        $contentHeadingBlock = $action->getLayout()->getBlock('page_content_heading');
+        $contentHeadingBlock = $this->_view->getLayout()->getBlock('page_content_heading');
         if ($contentHeadingBlock) {
             $contentHeading = $this->_escaper->escapeHtml($this->_page->getContentHeading());
             $contentHeadingBlock->setContentHeading($contentHeading);
@@ -229,7 +214,7 @@ class Page extends \Magento\Core\Helper\AbstractHelper
         }
 
         /* @TODO: Move catalog and checkout storage types to appropriate modules */
-        $messageBlock = $action->getLayout()->getMessagesBlock();
+        $messageBlock = $this->_view->getLayout()->getMessagesBlock();
         $sessions = array(
             'Magento\Catalog\Model\Session',
             'Magento\Checkout\Model\Session',
@@ -244,7 +229,7 @@ class Page extends \Magento\Core\Helper\AbstractHelper
         }
 
         if ($renderLayout) {
-            $action->renderLayout();
+            $this->_view->renderLayout();
         }
 
         return true;
@@ -255,12 +240,12 @@ class Page extends \Magento\Core\Helper\AbstractHelper
      * Allows to use also backend action as first parameter.
      * Also takes third parameter which allows not run renderLayout method.
      *
-     * @param \Magento\Core\Controller\Varien\Action $action
+     * @param \Magento\App\Action\Action $action
      * @param $pageId
      * @param $renderLayout
      * @return bool
      */
-    public function renderPageExtended(\Magento\Core\Controller\Varien\Action $action, $pageId = null, $renderLayout = true)
+    public function renderPageExtended(\Magento\App\Action\Action $action, $pageId = null, $renderLayout = true)
     {
         return $this->_renderPage($action, $pageId, $renderLayout);
     }
@@ -286,6 +271,6 @@ class Page extends \Magento\Core\Helper\AbstractHelper
             return null;
         }
 
-        return $this->_url->getUrl(null, array('_direct' => $page->getIdentifier()));
+        return $this->_urlBuilder->getUrl(null, array('_direct' => $page->getIdentifier()));
     }
 }

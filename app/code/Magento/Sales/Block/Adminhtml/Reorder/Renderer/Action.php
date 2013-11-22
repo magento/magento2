@@ -52,13 +52,13 @@ class Action
     protected $_salesReorder = null;
 
     /**
-     * @param \Magento\Sales\Helper\Reorder $salesReorder
      * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Sales\Helper\Reorder $salesReorder
      * @param array $data
      */
     public function __construct(
-        \Magento\Sales\Helper\Reorder $salesReorder,
         \Magento\Backend\Block\Context $context,
+        \Magento\Sales\Helper\Reorder $salesReorder,
         array $data = array()
     ) {
         $this->_salesReorder = $salesReorder;

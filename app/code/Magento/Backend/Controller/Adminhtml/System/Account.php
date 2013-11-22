@@ -34,14 +34,14 @@
 
 namespace Magento\Backend\Controller\Adminhtml\System;
 
-class Account extends \Magento\Backend\Controller\Adminhtml\Action
+class Account extends \Magento\Backend\App\Action
 {
     public function indexAction()
     {
-        $this->_title(__('My Account'));
+        $this->_title->add(__('My Account'));
 
-        $this->loadLayout();
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->renderLayout();
     }
 
     /**

@@ -41,7 +41,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helperFactoryMock = $this->getMock('Magento\Core\Model\Factory\Helper',
+        $this->_helperFactoryMock = $this->getMock('Magento\App\Helper\HelperFactory',
             array(), array(), '', false, false
         );
 

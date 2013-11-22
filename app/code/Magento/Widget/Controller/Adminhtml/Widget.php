@@ -33,7 +33,9 @@
  */
 namespace Magento\Widget\Controller\Adminhtml;
 
-class Widget extends \Magento\Backend\Controller\Adminhtml\Action
+use Magento\Backend\App\Action;
+
+class Widget extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -53,15 +55,15 @@ class Widget extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_widget;
 
     /**
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Widget\Model\Widget\Config $widgetConfig
      * @param \Magento\Widget\Model\Widget $widget
-     * @param \Magento\Backend\Controller\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Widget\Model\Widget\Config $widgetConfig,
         \Magento\Widget\Model\Widget $widget,
-        \Magento\Backend\Controller\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_widgetConfig = $widgetConfig;
@@ -81,7 +83,7 @@ class Widget extends \Magento\Backend\Controller\Adminhtml\Action
 
         $this->_coreRegistry->register('skip_widgets', $skipped);
 
-        $this->loadLayout('empty')->renderLayout();
+        $this->_view->loadLayout('empty')->renderLayout();
     }
 
     /**
@@ -90,11 +92,11 @@ class Widget extends \Magento\Backend\Controller\Adminhtml\Action
     public function loadOptionsAction()
     {
         try {
-            $this->loadLayout('empty');
+            $this->_view->loadLayout('empty');
             if ($paramsJson = $this->getRequest()->getParam('widget')) {
                 $request = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonDecode($paramsJson);
                 if (is_array($request)) {
-                    $optionsBlock = $this->getLayout()->getBlock('wysiwyg_widget.options');
+                    $optionsBlock = $this->_view->getLayout()->getBlock('wysiwyg_widget.options');
                     if (isset($request['widget_type'])) {
                         $optionsBlock->setWidgetType($request['widget_type']);
                     }
@@ -102,7 +104,7 @@ class Widget extends \Magento\Backend\Controller\Adminhtml\Action
                         $optionsBlock->setWidgetValues($request['values']);
                     }
                 }
-                $this->renderLayout();
+                $this->_view->renderLayout();
             }
         } catch (\Magento\Core\Exception $e) {
             $result = array('error' => true, 'message' => $e->getMessage());

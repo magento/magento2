@@ -42,23 +42,21 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
     protected $_collectionFactory;
 
     /**
-     * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($coreData, $context, $storeManager, $urlModel, $data);
+        parent::__construct($context, $coreData, $urlModel, $data);
     }
 
     protected function _construct()

@@ -40,7 +40,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
 
         /** @var $session \Magento\Catalog\Model\Session */
         $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Session');
-        $this->assertInstanceOf('Magento\Core\Model\Message\Success', $session->getMessages()->getLastAddedMessage());
+        $this->assertInstanceOf('Magento\Message\Success', $session->getMessages()->getLastAddedMessage());
         $this->assertContains('Simple Product 1 Name',
             (string)$session->getMessages()->getLastAddedMessage()->getText());
 
@@ -68,7 +68,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
 
         /** @var $session \Magento\Catalog\Model\Session */
         $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Session');
-        $this->assertInstanceOf('Magento\Core\Model\Message\Success', $session->getMessages()->getLastAddedMessage());
+        $this->assertInstanceOf('Magento\Message\Success', $session->getMessages()->getLastAddedMessage());
         $this->assertContains('Simple Product 2 Name',
             (string)$session->getMessages()->getLastAddedMessage()->getText());
 
@@ -108,7 +108,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
 
         /** @var $session \Magento\Catalog\Model\Session */
         $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Session');
-        $this->assertInstanceOf('Magento\Core\Model\Message\Success', $session->getMessages()->getLastAddedMessage());
+        $this->assertInstanceOf('Magento\Message\Success', $session->getMessages()->getLastAddedMessage());
 
         $this->assertRedirect();
 

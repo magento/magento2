@@ -178,13 +178,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected $_validatedAddresses = array();
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager = null;
-
-    /**
      * @var \Magento\SalesRule\Model\CouponFactory
      */
     protected $_couponFactory;
@@ -215,7 +208,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
@@ -231,7 +223,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
@@ -246,7 +237,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_eventManager = $eventManager;
         $this->_couponFactory = $couponFactory;
         $this->_codegenFactory = $codegenFactory;
         $this->_condCombineFactory = $condCombineFactory;

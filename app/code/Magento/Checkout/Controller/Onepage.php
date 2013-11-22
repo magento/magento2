@@ -26,6 +26,9 @@
 
 namespace Magento\Checkout\Controller;
 
+use Magento\App\Action\NotFoundException;
+use Magento\App\RequestInterface;
+
 class Onepage extends \Magento\Checkout\Controller\Action
 {
     /**
@@ -50,12 +53,12 @@ class Onepage extends \Magento\Checkout\Controller\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
@@ -64,11 +67,15 @@ class Onepage extends \Magento\Checkout\Controller\Action
     }
 
     /**
-     * @return \Magento\Checkout\Controller\Onepage|null
+     * Dispatch request
+     *
+     * @param RequestInterface $request
+     * @return mixed
+     * @throws \Magento\App\Action\NotFoundException
      */
-    public function preDispatch()
+    public function dispatch(RequestInterface $request)
     {
-        parent::preDispatch();
+        $this->_request = $request;
         $this->_preDispatchValidateCustomer();
 
         $checkoutSessionQuote = $this->_objectManager->get('Magento\Checkout\Model\Session')->getQuote();
@@ -78,12 +85,9 @@ class Onepage extends \Magento\Checkout\Controller\Action
         }
 
         if (!$this->_canShowForUnregisteredUsers()) {
-            $this->norouteAction();
-            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
-            return null;
+            throw new NotFoundException();
         }
-
-        return $this;
+        return parent::dispatch($request);
     }
 
     /**
@@ -129,7 +133,7 @@ class Onepage extends \Magento\Checkout\Controller\Action
      */
     protected function _getHtmlByHandle($handle)
     {
-        $layout = $this->getLayout();
+        $layout = $this->_view->getLayout();
         $layout->getUpdate()->addPageHandles(array($handle));
         $layout->getUpdate()->load();
         $layout->generateXml();
@@ -217,10 +221,11 @@ class Onepage extends \Magento\Checkout\Controller\Action
             ->getUrl('*/*/*', array('_secure'=>true));
         $this->_objectManager->get('Magento\Customer\Model\Session')->setBeforeAuthUrl($currentUrl);
         $this->getOnepage()->initCheckout();
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
-        $this->getLayout()->getBlock('head')->setTitle(__('Checkout'));
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $layout = $this->_view->getLayout();
+        $layout->initMessages('Magento\Customer\Model\Session');
+        $layout->getBlock('head')->setTitle(__('Checkout'));
+        $this->_view->renderLayout();
     }
 
     /**
@@ -231,9 +236,9 @@ class Onepage extends \Magento\Checkout\Controller\Action
         if ($this->_expireAjax()) {
             return;
         }
-        $this->addPageLayoutHandles();
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->addPageLayoutHandles();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     public function shippingMethodAction()
@@ -241,9 +246,9 @@ class Onepage extends \Magento\Checkout\Controller\Action
         if ($this->_expireAjax()) {
             return;
         }
-        $this->addPageLayoutHandles();
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->addPageLayoutHandles();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     public function reviewAction()
@@ -251,9 +256,9 @@ class Onepage extends \Magento\Checkout\Controller\Action
         if ($this->_expireAjax()) {
             return;
         }
-        $this->addPageLayoutHandles();
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->addPageLayoutHandles();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     /**
@@ -276,12 +281,12 @@ class Onepage extends \Magento\Checkout\Controller\Action
         }
 
         $session->clear();
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Checkout\Model\Session');
+        $this->_view->loadLayout();
+        $this->_view->getLayout()->initMessages('Magento\Checkout\Model\Session');
         $this->_eventManager->dispatch(
             'checkout_onepage_controller_success_action', array('order_ids' => array($lastOrderId))
         );
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function failureAction()
@@ -294,8 +299,8 @@ class Onepage extends \Magento\Checkout\Controller\Action
             return;
         }
 
-        $this->loadLayout();
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->renderLayout();
     }
 
 
@@ -618,18 +623,6 @@ class Onepage extends \Magento\Checkout\Controller\Action
         }
 
         $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
-    }
-
-    /**
-     * Filtering posted data. Converting localized data if needed
-     *
-     * @param array
-     * @return array
-     */
-    protected function _filterPostData($data)
-    {
-        $data = $this->_filterDates($data, array('dob'));
-        return $data;
     }
 
     /**

@@ -34,9 +34,6 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Customer */
     protected $_model;
 
-    /** @var  \Magento\Customer\Helper\Data */
-    protected $_customerData;
-
     /** @var \Magento\Core\Model\Website|\PHPUnit_Framework_MockObject_MockObject */
     protected $_website;
 
@@ -52,88 +49,22 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Eav\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject */
     protected $_attribute;
 
-    /** @var \Magento\Core\Model\Context|\PHPUnit_Framework_MockObject_MockObject */
-    protected $_contextMock;
-
-    /** @var \Magento\Customer\Model\Resource\Customer\Collection|\PHPUnit_Framework_MockObject_MockObject */
-    protected $_resourceMock;
-
-    /** @var \Magento\Data\Collection\Db|\PHPUnit_Framework_MockObject_MockObject */
-    protected $_collectionMock;
-
     /**
      * Set required values
      */
     protected function setUp()
     {
-        $this->_customerData = $this->getMockBuilder('Magento\Customer\Helper\Data')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getResetPasswordLinkExpirationPeriod'))
-            ->getMock();
-        $this->_website = $this->getMockBuilder('Magento\Core\Model\Website')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getStoreIds', '__wakeup'))
-            ->getMock();
-        $this->_senderMock = $this->getMockBuilder('Magento\Core\Model\Sender')
-            ->disableOriginalConstructor()
-            ->setMethods(array('send'))
-            ->getMock();
-        $this->_config = $this->getMockBuilder('Magento\Eav\Model\Config')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getAttribute'))
-            ->getMock();
-        $this->_attribute = $this->getMockBuilder('Magento\Eav\Model\Attribute')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getIsVisible', '__wakeup'))
-            ->getMock();
-        $this->_resourceMock = $this->getMockBuilder('Magento\Customer\Model\Resource\Customer')
-            ->disableOriginalConstructor()
-            ->setMethods(array())
-            ->getMock();
-        $this->_collectionMock = $this->getMockBuilder('Magento\Data\Collection\Db')
-            ->disableOriginalConstructor()
-            ->setMethods(array())
-            ->getMock();
-        $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
-        $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
-        $encryptor = $this->getMockBuilder('\Magento\Encryption\EncryptorInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(array())
-            ->getMock();
-
-        $this->_storeManager = $this->getMockBuilder('Magento\Core\Model\StoreManager')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getWebsite'))
-            ->getMock();
-        $this->_contextMock = $this->getMockBuilder('Magento\Core\Model\Context')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getStoreManager'))
-            ->getMock();
-        $this->_contextMock->expects($this->any())->method('getStoreManager')
-            ->will($this->returnValue($this->_storeManager));
-
-        $this->_model = new \Magento\Customer\Model\Customer(
-            $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false),
-            $this->_customerData,
-            $this->_contextMock,
-            $coreRegistry,
-            $this->_senderMock,
-            $this->_storeManager,
-            $this->_config,
-            $coreStoreConfig,
-            $this->_resourceMock,
-            $this->getMock('Magento\Customer\Model\Config\Share', array(), array(), '', false),
-            $this->getMock('Magento\Customer\Model\AddressFactory', array(), array(), '', false),
-            $this->getMock('Magento\Customer\Model\Resource\Address\CollectionFactory', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Email\Template\MailerFactory', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Email\InfoFactory', array(), array(), '', false),
-            $this->getMock('Magento\Customer\Model\GroupFactory', array(), array(), '', false),
-            $this->getMock('Magento\Customer\Model\AttributeFactory', array(), array(), '', false),
-            $encryptor,
-            new \Magento\Math\Random,
-            new \Magento\Stdlib\DateTime,
-            $this->_collectionMock,
-            array()
+        $this->_website = $this->getMock('Magento\Core\Model\Website', array(), array(), '', false);
+        $this->_senderMock = $this->getMock('Magento\Email\Model\Sender', array(), array(), '', false);
+        $this->_config = $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false);
+        $this->_attribute = $this->getMock('Magento\Eav\Model\Attribute', array(), array(), '', false);
+        $this->_storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_model = $helper->getObject('Magento\Customer\Model\Customer', array(
+            'sender' => $this->_senderMock,
+            'storeManager' => $this->_storeManager,
+            'config' =>  $this->_config
+            )
         );
     }
 

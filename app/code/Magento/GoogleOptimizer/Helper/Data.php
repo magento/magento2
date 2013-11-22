@@ -25,7 +25,7 @@
  */
 namespace Magento\GoogleOptimizer\Helper;
 
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Xml path google experiments enabled
@@ -48,12 +48,12 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_analyticsHelper;
 
     /**
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\ConfigInterface $storeConfig
      * @param \Magento\GoogleAnalytics\Helper\Data $analyticsHelper
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\ConfigInterface $storeConfig,
         \Magento\GoogleAnalytics\Helper\Data $analyticsHelper
     ) {

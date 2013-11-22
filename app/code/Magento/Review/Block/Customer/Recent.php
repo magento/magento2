@@ -29,7 +29,7 @@ namespace Magento\Review\Block\Customer;
 /**
  * Recent Customer Reviews Block
  */
-class Recent extends \Magento\Core\Block\Template
+class Recent extends \Magento\View\Block\Template
 {
     /**
      * @var string
@@ -49,40 +49,22 @@ class Recent extends \Magento\Core\Block\Template
     protected $_customerSession;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
-     * Filter manager
-     *
-     * @var \Magento\Filter\FilterManager
-     */
-    protected $filter;
-
-    /**
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Filter\FilterManager $filter
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Filter\FilterManager $filter,
         array $data = array()
     ) {
         $this->_collection = $collectionFactory->create();
         $this->_customerSession = $customerSession;
-        $this->_storeManager = $storeManager;
-        $this->filter = $filter;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**
@@ -97,7 +79,7 @@ class Recent extends \Magento\Core\Block\Template
      */
     public function truncateString($value, $length = 80, $etc = '...', &$remainder = '', $breakWords = true)
     {
-        return $this->filter->truncate($value, array(
+        return $this->filterManager->truncate($value, array(
             'length' => $length,
             'etc' => $etc,
             'remainder' => $remainder,

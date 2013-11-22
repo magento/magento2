@@ -53,25 +53,25 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $_directoryBlock;
 
     /**
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Directory\Block\Data $directoryBlock
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Directory\Block\Data $directoryBlock,
         array $data = array()
     ) {
         $this->_directoryBlock = $directoryBlock;
-        parent::__construct($catalogData, $coreData, $context, $customerSession, $checkoutSession, $data);
+        parent::__construct($context, $coreData, $catalogData, $customerSession, $checkoutSession, $data);
     }
 
     /**

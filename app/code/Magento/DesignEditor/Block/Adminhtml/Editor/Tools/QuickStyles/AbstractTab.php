@@ -63,20 +63,20 @@ abstract class AbstractTab
     protected $_tab = null;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Builder $formBuilder
      * @param \Magento\DesignEditor\Model\Theme\Context $themeContext
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Builder $formBuilder,
         \Magento\DesignEditor\Model\Theme\Context $themeContext,
         array $data = array()
     ) {
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
         $this->_formBuilder = $formBuilder;
         $this->_themeContext = $themeContext;
     }

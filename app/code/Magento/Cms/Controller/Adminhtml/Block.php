@@ -34,7 +34,7 @@
  */
 namespace Magento\Cms\Controller\Adminhtml;
 
-class Block extends \Magento\Backend\Controller\Adminhtml\Action
+class Block extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -44,11 +44,11 @@ class Block extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -63,8 +63,8 @@ class Block extends \Magento\Backend\Controller\Adminhtml\Action
     protected function _initAction()
     {
         // load layout, set active menu and breadcrumbs
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_Cms::cms_block')
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_Cms::cms_block')
             ->_addBreadcrumb(__('CMS'), __('CMS'))
             ->_addBreadcrumb(__('Static Blocks'), __('Static Blocks'));
         return $this;
@@ -75,10 +75,10 @@ class Block extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function indexAction()
     {
-        $this->_title(__('Blocks'));
+        $this->_title->add(__('Blocks'));
 
         $this->_initAction();
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -95,7 +95,7 @@ class Block extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function editAction()
     {
-        $this->_title(__('Blocks'));
+        $this->_title->add(__('Blocks'));
 
         // 1. Get ID and create model
         $id = $this->getRequest()->getParam('block_id');
@@ -111,7 +111,7 @@ class Block extends \Magento\Backend\Controller\Adminhtml\Action
             }
         }
 
-        $this->_title($model->getId() ? $model->getTitle() : __('New Block'));
+        $this->_title->add($model->getId() ? $model->getTitle() : __('New Block'));
 
         // 3. Set entered data if was error when we do save
         $data = $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getFormData(true);
@@ -124,8 +124,8 @@ class Block extends \Magento\Backend\Controller\Adminhtml\Action
 
         // 5. Build edit form
         $this->_initAction()
-            ->_addBreadcrumb($id ? __('Edit Block') : __('New Block'), $id ? __('Edit Block') : __('New Block'))
-            ->renderLayout();
+            ->_addBreadcrumb($id ? __('Edit Block') : __('New Block'), $id ? __('Edit Block') : __('New Block'));
+        $this->_view->renderLayout();
     }
 
     /**

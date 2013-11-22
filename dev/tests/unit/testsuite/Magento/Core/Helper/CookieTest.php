@@ -37,7 +37,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_object = new \Magento\Core\Helper\Cookie(
-            $this->getMock('Magento\Core\Helper\Context', array(), array(), '', false, false),
+            $this->getMock('Magento\App\Helper\Context', array(), array(), '', false, false),
             $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false, false),
             $this->getMock('Magento\Core\Model\Cookie', array(), array(), '', false, false),
             array(
@@ -52,7 +52,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertFalse($this->_object->isUserNotAllowSaveCookie());
         $this->_object = new \Magento\Core\Helper\Cookie(
-            $this->getMock('Magento\Core\Helper\Context', array(), array(), '', false, false),
+            $this->getMock('Magento\App\Helper\Context', array(), array(), '', false, false),
             $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false, false),
             $this->getMock('Magento\Core\Model\Cookie', array(), array(), '', false, false),
             array(
@@ -80,7 +80,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback('Magento\\Core\\Helper\\CookieTest::getConfigMethodStub'))
             ->with($this->equalTo('web/cookie/cookie_restriction_lifetime'));
         $this->_object = new \Magento\Core\Helper\Cookie(
-            $this->getMock('Magento\Core\Helper\Context', array(), array(), '', false, false),
+            $this->getMock('Magento\App\Helper\Context', array(), array(), '', false, false),
             $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false, false),
             $this->getMock('Magento\Core\Model\Cookie', array(), array(), '', false, false),
             array(

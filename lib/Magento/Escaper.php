@@ -67,7 +67,7 @@ class Escaper
      */
     public function escapeUrl($data)
     {
-        return htmlspecialchars($data);
+        return htmlspecialchars($data, ENT_COMPAT, 'UTF-8', false);
     }
 
     /**

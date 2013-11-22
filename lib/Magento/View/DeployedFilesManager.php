@@ -22,12 +22,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\View;
 
 /**
  * Builds path for files deployed into public directory in advance
  */
-namespace Magento\View;
-
 class DeployedFilesManager implements \Magento\View\PublicFilesManagerInterface
 {
     /**
@@ -36,8 +35,6 @@ class DeployedFilesManager implements \Magento\View\PublicFilesManagerInterface
     protected $_viewService;
 
     /**
-     * Deployed view files manager
-     *
      * @param \Magento\View\Service $viewService
      */
     public function __construct(\Magento\View\Service $viewService)
@@ -46,7 +43,11 @@ class DeployedFilesManager implements \Magento\View\PublicFilesManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get deployed file path
+     *
+     * @param string $filePath
+     * @param array $params
+     * @return string
      */
     public function getPublicFilePath($filePath, $params)
     {

@@ -40,7 +40,7 @@ class Rating extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -60,14 +60,14 @@ class Rating extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\Logger $logger
      * @param \Magento\Rating\Helper\Data $ratingData
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Review\Model\Resource\Review\Summary $reviewSummary
      */
     public function __construct(
         \Magento\Logger $logger,
         \Magento\Rating\Helper\Data $ratingData,
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Review\Model\Resource\Review\Summary $reviewSummary
     ) {
         $this->_ratingData = $ratingData;

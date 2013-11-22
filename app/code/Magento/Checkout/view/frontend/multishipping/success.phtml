@@ -24,27 +24,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="multiple-checkout">
-    <div class="page-title">
-        <h1><?php echo __('Order Success') ?></h1>
-    </div>
-    <h2 class="sub-title"><?php echo __('Thank you for your purchase!') ?></h2>
+<div class="multicheckout success">
+    <h2 class="subtitle"><?php echo __('Thank you for your purchase!') ?></h2>
     <p><?php echo __('Thanks for your order. We\'ll send you emails with order details and tracking information.') ?></p>
     <?php if($_orderIds = $this->getOrderIds()): ?>
     <p>
         <?php $flag = false ?>
         <?php echo __('Your order number is ') ?>
         <?php foreach ($_orderIds as $orderId=>$incrementId): ?>
-            <?php if ($flag): ?>
-                <?php echo ', ' ?>
-            <?php endif; ?>
+            <?php if ($flag): ?><?php echo ', ' ?><?php endif; ?>
             <?php $flag = true ?>
             <a href="<?php echo $this->getViewOrderUrl($orderId) ?>"><?php echo $incrementId ?></a>
         <?php endforeach; ?>
     </p>
     <?php endif; ?>
     <?php echo $this->getChildHtml() ?>
-    <div class="buttons-set">
-        <button type="button" title="<?php echo __('Continue Shopping') ?>" class="button" onclick="window.location = '<?php echo $this->getContinueUrl() ?>';"><span><span><?php echo __('Continue Shopping') ?></span></span></button>
+    <div class="actions">
+        <a class="action continue" title="<?php echo __('Continue Shopping') ?>" href="<?php echo $this->getContinueUrl() ?>"><span><?php echo __('Continue Shopping') ?></span></a>
     </div>
 </div>

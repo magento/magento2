@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Helper\Product;
 
-class View extends \Magento\Core\Helper\AbstractHelper
+class View extends \Magento\App\Helper\AbstractHelper
 {
     // List of exceptions throwable during prepareAndRender() method
     public $ERR_NO_PRODUCT_LOADED = 1;
@@ -68,13 +68,6 @@ class View extends \Magento\Core\Helper\AbstractHelper
     protected $_pageLayout = null;
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager = null;
-
-    /**
      * Catalog design
      *
      * @var \Magento\Catalog\Model\Design
@@ -89,33 +82,36 @@ class View extends \Magento\Core\Helper\AbstractHelper
     protected $_catalogSession;
 
     /**
-     * Construct
-     *
+     * @var \Magento\App\ViewInterface
+     */
+    protected $_view;
+
+    /**
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Catalog\Model\Design $catalogDesign
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Page\Helper\Layout $pageLayout
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\App\ViewInterface $view
      * @param array $messageModels
      */
     public function __construct(
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Catalog\Model\Design $catalogDesign,
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Page\Helper\Layout $pageLayout,
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\App\ViewInterface $view,
         array $messageModels = array()
     ) {
         $this->_catalogSession = $catalogSession;
         $this->_catalogDesign = $catalogDesign;
-        $this->_eventManager = $eventManager;
         $this->_catalogProduct = $catalogProduct;
         $this->_pageLayout = $pageLayout;
         $this->_coreRegistry = $coreRegistry;
+        $this->_view = $view;
         parent::__construct($context);
         $this->_messageModels = $messageModels;
     }
@@ -124,7 +120,7 @@ class View extends \Magento\Core\Helper\AbstractHelper
      * Inits layout for viewing product page
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Core\Controller\Front\Action $controller
+     * @param \Magento\App\Action\Action $controller
      *
      * @return \Magento\Catalog\Helper\Product\View
      */
@@ -136,12 +132,12 @@ class View extends \Magento\Core\Helper\AbstractHelper
             $this->_catalogDesign->applyCustomDesign($settings->getCustomDesign());
         }
 
-        $update = $controller->getLayout()->getUpdate();
+        $update = $this->_view->getLayout()->getUpdate();
         $update->addHandle('default');
-        $controller->addPageLayoutHandles(
+        $this->_view->addPageLayoutHandles(
             array('id' => $product->getId(), 'sku' => $product->getSku(), 'type' => $product->getTypeId())
         );
-        $controller->loadLayoutUpdates();
+        $this->_view->loadLayoutUpdates();
         // Apply custom layout update once layout is loaded
         $layoutUpdates = $settings->getLayoutUpdates();
         if ($layoutUpdates) {
@@ -152,7 +148,8 @@ class View extends \Magento\Core\Helper\AbstractHelper
             }
         }
 
-        $controller->generateLayoutXml()->generateLayoutBlocks();
+        $this->_view->generateLayoutXml();
+        $this->_view->generateLayoutBlocks();
 
         // Apply custom layout (page) template once the blocks are generated
         if ($settings->getPageLayout()) {
@@ -160,9 +157,9 @@ class View extends \Magento\Core\Helper\AbstractHelper
         }
 
         $currentCategory = $this->_coreRegistry->registry('current_category');
-        $root = $controller->getLayout()->getBlock('root');
+        $root = $this->_view->getLayout()->getBlock('root');
         if ($root) {
-            $controllerClass = $controller->getFullActionName();
+            $controllerClass = $this->_request->getFullActionName();
             if ($controllerClass != 'catalog-product-view') {
                 $root->addBodyClass('catalog-product-view');
             }
@@ -186,7 +183,7 @@ class View extends \Magento\Core\Helper\AbstractHelper
      *   - 'configure_mode' - boolean, whether we're in Configure-mode to edit product configuration
      *
      * @param int $productId
-     * @param \Magento\Core\Controller\Front\Action $controller
+     * @param \Magento\App\Action\Action $controller
      * @param null|\Magento\Object $params
      *
      * @return \Magento\Catalog\Helper\Product\View
@@ -200,7 +197,7 @@ class View extends \Magento\Core\Helper\AbstractHelper
             $params = new \Magento\Object();
         }
 
-        // Standard algorithm to prepare and rendern product view page
+        // Standard algorithm to prepare and render product view page
         $product = $productHelper->initProduct($productId, $controller, $params);
         if (!$product) {
             throw new \Magento\Core\Exception(__('Product is not loaded'), $this->ERR_NO_PRODUCT_LOADED);
@@ -228,7 +225,7 @@ class View extends \Magento\Core\Helper\AbstractHelper
 
         if ($controller instanceof \Magento\Catalog\Controller\Product\View\ViewInterface) {
             foreach ($this->_messageModels as $sessionModel) {
-                $controller->initLayoutMessages($sessionModel);
+                $this->_view->getLayout()->initMessages($sessionModel);
             }
         } else {
             throw new \Magento\Core\Exception(
@@ -236,7 +233,7 @@ class View extends \Magento\Core\Helper\AbstractHelper
                 $this->ERR_BAD_CONTROLLER_INTERFACE
             );
         }
-        $controller->renderLayout();
+        $this->_view->renderLayout();
 
         return $this;
     }

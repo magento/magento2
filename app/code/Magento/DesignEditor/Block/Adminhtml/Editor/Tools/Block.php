@@ -29,6 +29,6 @@
  */
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools;
 
-class Block extends \Magento\Core\Block\Template
+class Block extends \Magento\View\Block\Template
 {
 }

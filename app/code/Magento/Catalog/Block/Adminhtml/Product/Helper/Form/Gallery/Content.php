@@ -46,19 +46,19 @@ class Content extends \Magento\Backend\Block\Widget
     protected $_mediaConfig;
 
     /**
-     * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         array $data = array()
     ) {
         $this->_mediaConfig = $mediaConfig;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     protected function _prepareLayout()

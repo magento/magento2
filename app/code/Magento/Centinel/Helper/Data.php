@@ -31,7 +31,7 @@
  */
 namespace Magento\Centinel\Helper;
 
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Layout factory
@@ -41,11 +41,11 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_layout;
 
     /**
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\View\LayoutInterface $layout
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\View\LayoutInterface $layout
     ) {
         $this->_layout = $layout;

@@ -31,7 +31,7 @@ namespace Magento\Page\Block;
  * @method string getPath()
  * @method string getTitle()
  */
-class Link extends \Magento\Core\Block\Template
+class Link extends \Magento\View\Block\Template
 {
     /** @var string */
     protected $_template = 'Magento_Page::link.phtml';

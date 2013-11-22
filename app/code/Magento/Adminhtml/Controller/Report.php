@@ -33,26 +33,43 @@
  */
 namespace Magento\Adminhtml\Controller;
 
-class Report extends \Magento\Backend\Controller\Adminhtml\Action
+class Report extends \Magento\Backend\App\Action
 {
+    /**
+     * @var \Magento\App\Response\Http\FileFactory
+     */
+    protected $_fileFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\App\Response\Http\FileFactory $fileFactory
+    ) {
+        $this->_fileFactory = $fileFactory;
+        parent::__construct($context);
+    }
+
     public function _initAction()
     {
-        $this->loadLayout()
-            ->_addBreadcrumb(__('Reports'), __('Reports'));
+        $this->_view->loadLayout();
+        $this->_addBreadcrumb(__('Reports'), __('Reports'));
         return $this;
     }
 
 
     public function searchAction()
     {
-        $this->_title(__('Search Terms Report'));
+        $this->_title->add(__('Search Terms Report'));
 
         $this->_eventManager->dispatch('on_view_report', array('report' => 'search'));
 
         $this->_initAction()
             ->_setActiveMenu('Magento_Reports::report_search')
-            ->_addBreadcrumb(__('Search Terms'), __('Search Terms'))
-            ->renderLayout();
+            ->_addBreadcrumb(__('Search Terms'), __('Search Terms'));
+        $this->_view->renderLayout();
     }
 
     /**
@@ -60,9 +77,9 @@ class Report extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function exportSearchCsvAction()
     {
-        $this->loadLayout(false);
-        $content = $this->getLayout()->getChildBlock('adminhtml.report.search.grid', 'grid.export');
-        $this->_prepareDownloadResponse('search.csv', $content->getCsvFile());
+        $this->_view->loadLayout(false);
+        $content = $this->_view->getLayout()->getChildBlock('adminhtml.report.search.grid', 'grid.export');
+        return $this->_fileFactory->create('search.csv', $content->getCsvFile());
     }
 
     /**
@@ -70,9 +87,9 @@ class Report extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function exportSearchExcelAction()
     {
-        $this->loadLayout(false);
-        $content = $this->getLayout()->getChildBlock('adminhtml.report.search.grid', 'grid.export');
-        $this->_prepareDownloadResponse('search.xml', $content->getExcelFile());
+        $this->_view->loadLayout(false);
+        $content = $this->_view->getLayout()->getChildBlock('adminhtml.report.search.grid', 'grid.export');
+        return $this->_fileFactory->create('search.xml', $content->getExcelFile());
     }
 
     protected function _isAllowed()

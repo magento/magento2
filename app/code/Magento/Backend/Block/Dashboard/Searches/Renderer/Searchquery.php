@@ -41,13 +41,13 @@ class Searchquery
     protected $_stringHelper = null;
 
     /**
-     * @param \Magento\Stdlib\String $stringHelper
      * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Stdlib\String $stringHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Stdlib\String $stringHelper,
         \Magento\Backend\Block\Context $context,
+        \Magento\Stdlib\String $stringHelper,
         array $data = array()
     ) {
         $this->_stringHelper = $stringHelper;

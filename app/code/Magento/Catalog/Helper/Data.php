@@ -34,7 +34,7 @@
  */
 namespace Magento\Catalog\Helper;
 
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
     const PRICE_SCOPE_GLOBAL               = 0;
     const PRICE_SCOPE_WEBSITE              = 1;
@@ -164,7 +164,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Helper\Product $catalogProduct
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Catalog\Model\Template\Filter\Factory $templateFilterFactory
@@ -180,7 +180,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
         \Magento\Stdlib\String $string,
         \Magento\Catalog\Helper\Category $catalogCategory,
         \Magento\Catalog\Helper\Product $catalogProduct,
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Catalog\Model\Template\Filter\Factory $templateFilterFactory,

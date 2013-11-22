@@ -34,7 +34,7 @@
  */
 namespace Magento\AdminNotification\Helper;
 
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
     const XML_PATH_POPUP_URL    = 'system/adminnotification/popup_url';
 
@@ -77,7 +77,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_inboxFactory;
 
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\AdminNotification\Model\InboxFactory $inboxFactory
     ) {

@@ -33,7 +33,7 @@
  */
 namespace Magento\Adminhtml\Helper;
 
-class Addresses extends \Magento\Core\Helper\AbstractHelper
+class Addresses extends \Magento\App\Helper\AbstractHelper
 {
     const DEFAULT_STREET_LINES_COUNT = 2;
 

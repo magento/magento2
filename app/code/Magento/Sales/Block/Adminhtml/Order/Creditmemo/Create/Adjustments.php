@@ -35,19 +35,19 @@ class Adjustments extends \Magento\Adminhtml\Block\Template
     protected $_taxConfig;
 
     /**
-     * @param \Magento\Tax\Model\Config $taxConfig
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Tax\Model\Config $taxConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Tax\Model\Config $taxConfig,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Tax\Model\Config $taxConfig,
         array $data = array()
     ) {
         $this->_taxConfig = $taxConfig;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

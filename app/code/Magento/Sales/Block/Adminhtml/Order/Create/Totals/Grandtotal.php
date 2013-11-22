@@ -42,27 +42,27 @@ class Grandtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defa
     protected $_taxConfig;
 
     /**
-     * @param \Magento\Tax\Model\Config $taxConfig
-     * @param \Magento\Sales\Helper\Data $salesData
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Adminhtml\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Sales\Helper\Data $salesData
      * @param \Magento\Sales\Model\Config $salesConfig
+     * @param \Magento\Tax\Model\Config $taxConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Tax\Model\Config $taxConfig,
-        \Magento\Sales\Helper\Data $salesData,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Adminhtml\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Sales\Helper\Data $salesData,
         \Magento\Sales\Model\Config $salesConfig,
+        \Magento\Tax\Model\Config $taxConfig,
         array $data = array()
     ) {
         $this->_taxConfig = $taxConfig;
-        parent::__construct($salesData, $sessionQuote, $orderCreate, $coreData, $context, $salesConfig, $data);
+        parent::__construct($context, $coreData, $sessionQuote, $orderCreate, $salesData, $salesConfig, $data);
     }
 
     public function includeTax()

@@ -97,13 +97,6 @@ class Process extends \Magento\Core\Model\AbstractModel
     protected $_eventRepository;
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager = null;
-
-    /**
      * @var \Magento\Index\Model\IndexerFactory
      */
     protected $_indexerFactory;
@@ -127,7 +120,6 @@ class Process extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Index\Model\Resource\Event $resourceEvent
      * @param \Magento\Index\Model\Indexer\Factory $indexerFactory
      * @param \Magento\Index\Model\Indexer $indexer
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Index\Model\Indexer\ConfigInterface $indexerConfig
      * @param \Magento\Core\Model\Registry $registry
@@ -143,7 +135,6 @@ class Process extends \Magento\Core\Model\AbstractModel
         \Magento\Index\Model\Resource\Event $resourceEvent,
         \Magento\Index\Model\Indexer\Factory $indexerFactory,
         \Magento\Index\Model\Indexer $indexer,
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Context $context,
         \Magento\Index\Model\Indexer\ConfigInterface $indexerConfig,
         \Magento\Core\Model\Registry $registry,
@@ -153,7 +144,6 @@ class Process extends \Magento\Core\Model\AbstractModel
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_eventManager = $eventManager;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_indexerConfig = $indexerConfig;
         $this->_indexerFactory = $indexerFactory;

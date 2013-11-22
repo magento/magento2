@@ -32,33 +32,6 @@ namespace Magento\Bundle\Block\Adminhtml\Sales\Order\Items;
 class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer
 {
     /**
-     * Filter manager
-     *
-     * @var \Magento\Filter\FilterManager
-     */
-    protected $filter;
-
-    /**
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Filter\FilterManager $filter
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Filter\FilterManager $filter,
-        array $data = array()
-    ) {
-        $this->filter = $filter;
-        parent::__construct($productFactory, $coreData, $context, $registry, $data);
-    }
-
-    /**
      * Truncate string
      *
      * @param string $value
@@ -70,7 +43,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
      */
     public function truncateString($value, $length = 80, $etc = '...', &$remainder = '', $breakWords = true)
     {
-        return $this->filter->truncate($value, array(
+        return $this->filterManager->truncate($value, array(
             'length' => $length,
             'etc' => $etc,
             'remainder' => $remainder,

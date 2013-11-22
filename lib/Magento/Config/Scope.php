@@ -23,7 +23,7 @@
  */
 namespace Magento\Config;
 
-class Scope implements \Magento\Config\ScopeInterface
+class Scope implements \Magento\Config\ScopeInterface, \Magento\Config\ScopeListInterface
 {
     /**
      * Default application scope

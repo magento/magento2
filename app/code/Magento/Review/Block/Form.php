@@ -33,7 +33,7 @@
  */
 namespace Magento\Review\Block;
 
-class Form extends \Magento\Core\Block\Template
+class Form extends \Magento\View\Block\Template
 {
     /**
      * Review data
@@ -58,35 +58,28 @@ class Form extends \Magento\Core\Block\Template
     protected $_ratingFactory;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * @var \Magento\Review\Model\Session
      */
     protected $_reviewSession;
 
     /**
+     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Session\Generic $reviewSession
      * @param \Magento\Review\Helper\Data $reviewData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Rating\Model\RatingFactory $ratingFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Session\Generic $reviewSession,
         \Magento\Review\Helper\Data $reviewData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Rating\Model\RatingFactory $ratingFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         array $data = array()
     ) {
         $this->_reviewSession = $reviewSession;
@@ -94,8 +87,7 @@ class Form extends \Magento\Core\Block\Template
         $this->_customerSession = $customerSession;
         $this->_productFactory = $productFactory;
         $this->_ratingFactory = $ratingFactory;
-        $this->_storeManager = $storeManager;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     protected function _construct()

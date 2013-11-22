@@ -33,7 +33,7 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg;
 
-class Images extends \Magento\Backend\Controller\Adminhtml\Action
+class Images extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -43,11 +43,11 @@ class Images extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -74,12 +74,13 @@ class Images extends \Magento\Backend\Controller\Adminhtml\Action
         } catch (\Exception $e) {
             $this->_getSession()->addError($e->getMessage());
         }
-        $this->_initAction()->loadLayout('overlay_popup');
-        $block = $this->getLayout()->getBlock('wysiwyg_images.js');
+        $this->_initAction();
+        $this->_view->loadLayout('overlay_popup');
+        $block = $this->_view->getLayout()->getBlock('wysiwyg_images.js');
         if ($block) {
             $block->setStoreId($storeId);
         }
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function treeJsonAction()
@@ -87,7 +88,7 @@ class Images extends \Magento\Backend\Controller\Adminhtml\Action
         try {
             $this->_initAction();
             $this->getResponse()->setBody(
-                $this->getLayout()->createBlock('Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Tree')
+                $this->_view->getLayout()->createBlock('Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Tree')
                     ->getTreeJson()
             );
         } catch (\Exception $e) {
@@ -100,8 +101,8 @@ class Images extends \Magento\Backend\Controller\Adminhtml\Action
     {
         try {
             $this->_initAction()->_saveSessionCurrentPath();
-            $this->loadLayout('empty');
-            $this->renderLayout();
+            $this->_view->loadLayout('empty');
+            $this->_view->renderLayout();
         } catch (\Exception $e) {
             $result = array('error' => true, 'message' => $e->getMessage());
             $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));

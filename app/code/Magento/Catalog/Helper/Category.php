@@ -31,7 +31,7 @@ namespace Magento\Catalog\Helper;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Category extends \Magento\Core\Helper\AbstractHelper
+class Category extends \Magento\App\Helper\AbstractHelper
 {
     const XML_PATH_CATEGORY_URL_SUFFIX          = 'catalog/seo/category_url_suffix';
     const XML_PATH_USE_CATEGORY_CANONICAL_TAG   = 'catalog/seo/category_canonical_tag';
@@ -84,14 +84,14 @@ class Category extends \Magento\Core\Helper\AbstractHelper
      *
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Data\CollectionFactory $dataCollectionFactory
      */
     public function __construct(
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Data\CollectionFactory $dataCollectionFactory
     ) {

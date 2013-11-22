@@ -25,6 +25,11 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="checkout_multishipping"/>
+    <referenceBlock name="page.main.title">
+        <action method="setPageTitle">
+            <argument translate="true" name="label" xsi:type="string">Review Order</argument>
+        </action>
+    </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Checkout\Block\Multishipping\Overview" name="checkout_overview" template="multishipping/overview.phtml">
             <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="multishipping/item/default.phtml"/>
@@ -38,9 +43,10 @@
                     <argument name="template" xsi:type="string"/>
                 </action>
             </block>
-            <block class="Magento\Checkout\Block\Agreements" name="checkout.multishipping.agreements" as="agreements" template="multishipping/agreements.phtml"/>
+            <block class="Magento\Checkout\Block\Agreements" name="checkout.multishipping.agreements" as="agreements" template="agreements.phtml"/>
             <block class="Magento\Checkout\Block\Cart\Totals" name="totals"/>
             <container name="checkout.multishipping.overview.items.after" as="items_after" label="Overview Items After"/>
         </block>
     </referenceContainer>
+    <block class="Magento\View\Block\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
 </layout>

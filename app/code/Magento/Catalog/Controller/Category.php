@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Controller;
 
-class Category extends \Magento\Core\Controller\Front\Action
+class Category extends \Magento\App\Action\Action
 {
     /**
      * Core registry
@@ -57,13 +57,6 @@ class Category extends \Magento\Core\Controller\Front\Action
     protected $_catalogDesign;
 
     /**
-     * Store manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * Category factory
      *
      * @var \Magento\Catalog\Model\CategoryFactory
@@ -71,25 +64,28 @@ class Category extends \Magento\Core\Controller\Front\Action
     protected $_categoryFactory;
 
     /**
-     * Construct
-     *
+     * @var \Magento\Core\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Design $catalogDesign
      * @param \Magento\Catalog\Model\Session $catalogSession
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
+        \Magento\App\Action\Context $context,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Design $catalogDesign,
         \Magento\Catalog\Model\Session $catalogSession,
-        \Magento\Core\Controller\Varien\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
-        $this->_categoryFactory = $categoryFactory;
         $this->_storeManager = $storeManager;
+        $this->_categoryFactory = $categoryFactory;
         $this->_catalogDesign = $catalogDesign;
         $this->_catalogSession = $catalogSession;
         $this->_coreRegistry = $coreRegistry;
@@ -150,7 +146,7 @@ class Category extends \Magento\Core\Controller\Front\Action
 
             $this->_catalogSession->setLastViewedCategoryId($category->getId());
 
-            $update = $this->getLayout()->getUpdate();
+            $update = $this->_view->getLayout()->getUpdate();
             $update->addHandle('default');
             if ($category->getIsAnchor()) {
                 $type = $category->hasChildren() ? 'layered' : 'layered_without_children';
@@ -161,10 +157,10 @@ class Category extends \Magento\Core\Controller\Front\Action
             if (!$category->hasChildren()) {
                 // Two levels removed from parent.  Need to add default page type.
                 $parentType = strtok($type, '_');
-                $this->addPageLayoutHandles(array('type' => $parentType));
+                $this->_view->addPageLayoutHandles(array('type' => $parentType));
             }
-            $this->addPageLayoutHandles(array('type' => $type, 'id' => $category->getId()));
-            $this->loadLayoutUpdates();
+            $this->_view->addPageLayoutHandles(array('type' => $type, 'id' => $category->getId()));
+            $this->_view->loadLayoutUpdates();
 
             // apply custom layout update once layout is loaded
             $layoutUpdates = $settings->getLayoutUpdates();
@@ -174,23 +170,23 @@ class Category extends \Magento\Core\Controller\Front\Action
                 }
             }
 
-            $this->generateLayoutXml()->generateLayoutBlocks();
+            $this->_view->generateLayoutXml();
+            $this->_view->generateLayoutBlocks();
             // apply custom layout (page) template once the blocks are generated
             if ($settings->getPageLayout()) {
                 $this->_objectManager->get('Magento\Page\Helper\Layout')->applyTemplate($settings->getPageLayout());
             }
 
-            $root = $this->getLayout()->getBlock('root');
+            $root = $this->_view->getLayout()->getBlock('root');
             if ($root) {
                 $root->addBodyClass('categorypath-' . $category->getUrlPath())
                     ->addBodyClass('category-' . $category->getUrlKey());
             }
 
-            $this->_initLayoutMessages('Magento\Catalog\Model\Session');
-            $this->_initLayoutMessages('Magento\Checkout\Model\Session');
-            $this->renderLayout();
+            $this->_view->getLayout()->initMessages(array('Magento\Catalog\Model\Session', 'Magento\Checkout\Model\Session'));
+            $this->_view->renderLayout();
         } elseif (!$this->getResponse()->isRedirect()) {
-            $this->_forward('noRoute');
+            $this->_forward('noroute');
         }
     }
 }

@@ -18,16 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * A proxy for the Fallback resolver. This proxy processes fallback resolution calls by either using map of cached
- * paths, or passing resolution to the Fallback resolver.
- */
 namespace Magento\View\Design\FileResolution\Strategy\Fallback;
 
 use Magento\Filesystem;
@@ -41,7 +35,8 @@ use Magento\View\Design\ThemeInterface;
 /**
  * Caching Proxy
  *
- * @package Magento\View
+ * A proxy for the Fallback resolver. This proxy processes fallback resolution calls by either using map of cached
+ * paths, or passing resolution to the Fallback resolver.
  */
 class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, NotifiableInterface
 {

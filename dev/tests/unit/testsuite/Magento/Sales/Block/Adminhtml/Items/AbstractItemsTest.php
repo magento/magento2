@@ -39,25 +39,19 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
             ->with(null, 'column')
             ->will($this->returnValue(array('column_block-name')));
 
-        $context = $this->getMock('Magento\Backend\Block\Template\Context', array('getLayout'), array(), '', false);
-        $context->expects($this->any())
-            ->method('getLayout')
-            ->will($this->returnValue($layout));
-
-        $product = $this->getMock('\Magento\Catalog\Model\ProductFactory', array(), array(), '', false);
-        $coreData = $this->getMock('\Magento\Core\Helper\Data', array(), array(), '', false);
-        $registry = $this->getMock('\Magento\Core\Model\Registry', array(), array(), '', false);
-
-        $renderer = new \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer(
-            $product, $coreData, $context, $registry
-        );
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        /** @var \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer $renderer */
+        $renderer = $helper->getObject('Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer');
+        $renderer->setLayout($layout);
 
         $layout->expects($this->any())
             ->method('getBlock')
             ->with('column_block-name')
             ->will($this->returnValue($renderer));
 
-        $block = new \Magento\Sales\Block\Adminhtml\Items\AbstractItems($product, $coreData, $context, $registry);
+        /** @var \Magento\Sales\Block\Adminhtml\Items\AbstractItems $block */
+        $block = $helper->getObject('Magento\Sales\Block\Adminhtml\Items\AbstractItems');
+        $block->setLayout($layout);
 
         $this->assertSame($renderer, $block->getItemRenderer('some-type'));
         $this->assertSame($renderer, $renderer->getColumnRenderer('block-name'));

@@ -37,23 +37,21 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_salesRule;
 
     /**
-     * @param \Magento\SalesRule\Model\RuleFactory $salesRule
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\SalesRule\Model\RuleFactory $salesRule
      * @param array $data
      */
     public function __construct(
-        \Magento\SalesRule\Model\RuleFactory $salesRule,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\SalesRule\Model\RuleFactory $salesRule,
         array $data = array()
     ) {
         $this->_salesRule = $salesRule;
-        parent::__construct($coreData, $context, $storeManager, $urlModel, $data);
+        parent::__construct($context, $coreData, $urlModel, $data);
     }
 
     /**

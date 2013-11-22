@@ -36,15 +36,20 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Core\Model\Email\Template\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Email\Model\Template\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_emailConfig;
+
+    /**
+     * @var /Magento\Core\Model\Resource\Email\Template\CollectionFactory
+     */
+    protected $_templatesFactory;
 
     protected function setUp()
     {
         $this->_coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false, false);
-        $this->_emailConfig = $this->getMock('Magento\Core\Model\Email\Template\Config', array(), array(), '', false);
-        $this->_templatesFactory = $this->getMock('Magento\Core\Model\Resource\Email\Template\CollectionFactory',
+        $this->_emailConfig = $this->getMock('Magento\Email\Model\Template\Config', array(), array(), '', false);
+        $this->_templatesFactory = $this->getMock('Magento\Email\Model\Resource\Template\CollectionFactory',
             array(), array(), '', false);
         $this->_model = new \Magento\Backend\Model\Config\Source\Email\Template(
             $this->_coreRegistry, $this->_templatesFactory, $this->_emailConfig
@@ -54,7 +59,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testToOptionArray()
     {
         $collection = $this->getMock(
-            'Magento\Core\Model\Resource\Email\Template\Collection', array(), array(), '', false
+            'Magento\Email\Model\Resource\Template\Collection', array(), array(), '', false
         );
         $collection
             ->expects($this->once())

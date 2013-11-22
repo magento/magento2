@@ -77,21 +77,22 @@ class Data extends \Magento\Core\Helper\Data
     protected $_modulesReader;
 
     /**
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Locale $locale
      * @param \Magento\App\State $appState
      * @param \Magento\Core\Helper\Url $coreUrl
      * @param \Magento\Checkout\Helper\Data $checkoutData
      * @param Session $persistentSession
+     * @param \Magento\Module\Dir\Reader $modulesReader
      * @param \Magento\Escaper $escaper
      * @param bool $dbCompatibleMode
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Locale $locale,
         \Magento\App\State $appState,
         \Magento\Core\Helper\Url $coreUrl,
@@ -221,15 +222,6 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function canProcess($observer)
     {
-        $action = $observer->getEvent()->getAction();
-        $controllerAction = $observer->getEvent()->getControllerAction();
-
-        if ($action instanceof \Magento\Core\Controller\Varien\Action) {
-            return !$action->getFlag('', \Magento\Core\Controller\Varien\Action::FLAG_NO_START_SESSION);
-        }
-        if ($controllerAction instanceof \Magento\Core\Controller\Varien\Action) {
-            return !$controllerAction->getFlag('', \Magento\Core\Controller\Varien\Action::FLAG_NO_START_SESSION);
-        }
         return true;
     }
 

@@ -44,23 +44,21 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
     protected $_queriesFactory;
 
     /**
-     * @param \Magento\CatalogSearch\Model\Resource\Query\CollectionFactory $queriesFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\CatalogSearch\Model\Resource\Query\CollectionFactory $queriesFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\CatalogSearch\Model\Resource\Query\CollectionFactory $queriesFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\CatalogSearch\Model\Resource\Query\CollectionFactory $queriesFactory,
         array $data = array()
     ) {
         $this->_queriesFactory = $queriesFactory;
-        parent::__construct($coreData, $context, $storeManager, $urlModel, $data);
+        parent::__construct($context, $coreData, $urlModel, $data);
     }
 
     protected function _construct()

@@ -31,7 +31,7 @@
  */
 namespace Magento\Paypal\Controller;
 
-class Hostedpro extends \Magento\Core\Controller\Front\Action
+class Hostedpro extends \Magento\App\Action\Action
 {
     /**
      * When a customer return to website from gateway.
@@ -50,12 +50,12 @@ class Hostedpro extends \Magento\Core\Controller\Front\Action
      */
     public function cancelAction()
     {
-        $this->loadLayout(false);
+        $this->_view->loadLayout(false);
         $gotoSection = $this->_cancelPayment();
-        $redirectBlock = $this->getLayout()->getBlock('hosted.pro.iframe');
+        $redirectBlock = $this->_view->getLayout()->getBlock('hosted.pro.iframe');
         $redirectBlock->setGotoSection($gotoSection);
         //TODO: clarify return logic whether customer will be returned in iframe or in parent window
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**

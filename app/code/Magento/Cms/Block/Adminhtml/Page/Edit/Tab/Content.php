@@ -39,25 +39,23 @@ class Content
     protected $_wysiwygConfig;
 
     /**
-     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Core\Model\Registry $registry,
+        \Magento\Data\FormFactory $formFactory,
+        \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         array $data = array()
     ) {
         $this->_wysiwygConfig = $wysiwygConfig;
-        parent::__construct($coreRegistry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     /**

@@ -48,25 +48,25 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
     protected $_reportRule;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Sales\Model\Order\ConfigFactory $orderConfig
      * @param \Magento\SalesRule\Model\Resource\Report\RuleFactory $reportRule
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
         \Magento\Sales\Model\Order\ConfigFactory $orderConfig,
         \Magento\SalesRule\Model\Resource\Report\RuleFactory $reportRule,
         array $data = array()
     ) {
         $this->_reportRule = $reportRule;
-        parent::__construct($registry, $formFactory, $coreData, $context, $orderConfig, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $orderConfig, $data);
     }
 
     /**

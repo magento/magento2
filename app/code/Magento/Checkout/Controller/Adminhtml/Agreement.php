@@ -26,7 +26,7 @@
 
 namespace Magento\Checkout\Controller\Adminhtml;
 
-class Agreement extends \Magento\Backend\Controller\Adminhtml\Action
+class Agreement extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -36,11 +36,11 @@ class Agreement extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -49,11 +49,13 @@ class Agreement extends \Magento\Backend\Controller\Adminhtml\Action
 
     public function indexAction()
     {
-        $this->_title(__('Terms and Conditions'));
+        $this->_title->add(__('Terms and Conditions'));
 
         $this->_initAction()
-            ->_addContent($this->getLayout()->createBlock('Magento\Checkout\Block\Adminhtml\Agreement'))
-            ->renderLayout();
+            ->_addContent(
+                $this->_view->getLayout()->createBlock('Magento\Checkout\Block\Adminhtml\Agreement')
+            );
+        $this->_view->renderLayout();
         return $this;
     }
 
@@ -64,7 +66,7 @@ class Agreement extends \Magento\Backend\Controller\Adminhtml\Action
 
     public function editAction()
     {
-        $this->_title(__('Terms and Conditions'));
+        $this->_title->add(__('Terms and Conditions'));
 
         $id  = $this->getRequest()->getParam('id');
         $agreementModel  = $this->_objectManager->create('Magento\Checkout\Model\Agreement');
@@ -80,7 +82,7 @@ class Agreement extends \Magento\Backend\Controller\Adminhtml\Action
             }
         }
 
-        $this->_title($agreementModel->getId() ? $agreementModel->getName() : __('New Condition'));
+        $this->_title->add($agreementModel->getId() ? $agreementModel->getName() : __('New Condition'));
 
         $data = $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getAgreementData(true);
         if (!empty($data)) {
@@ -95,11 +97,11 @@ class Agreement extends \Magento\Backend\Controller\Adminhtml\Action
                 $id ?  __('Edit Condition') :  __('New Condition')
             )
             ->_addContent(
-                $this->getLayout()
+                $this->_view->getLayout()
                     ->createBlock('Magento\Checkout\Block\Adminhtml\Agreement\Edit')
                     ->setData('action', $this->getUrl('checkout/*/save'))
-            )
-            ->renderLayout();
+            );
+        $this->_view->renderLayout();
     }
 
     public function saveAction()
@@ -123,7 +125,7 @@ class Agreement extends \Magento\Backend\Controller\Adminhtml\Action
             }
 
             $this->_objectManager->get('Magento\Adminhtml\Model\Session')->setAgreementData($postData);
-            $this->_redirectReferer();
+            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
         }
     }
 
@@ -149,18 +151,18 @@ class Agreement extends \Magento\Backend\Controller\Adminhtml\Action
             $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(__('Something went wrong  while deleting this condition.'));
         }
 
-        $this->_redirectReferer();
+        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
     }
 
     /**
      * Initialize action
      *
-     * @return \Magento\Backend\Controller\Adminhtml\Action
+     * @return \Magento\Backend\App\Action
      */
     protected function _initAction()
     {
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_Checkout::sales_checkoutagreement')
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_Checkout::sales_checkoutagreement')
             ->_addBreadcrumb(__('Sales'), __('Sales'))
             ->_addBreadcrumb(__('Checkout Conditions'), __('Checkout Terms and Conditions'));
         return $this;

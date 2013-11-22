@@ -55,29 +55,29 @@ class Group
     protected $_websiteFactory;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Catalog\Model\Config\Source\Category $category
      * @param \Magento\Core\Model\StoreFactory $storeFactory
      * @param \Magento\Core\Model\Website\Factory $websiteFactory
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Model\Registry $registry,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Catalog\Model\Config\Source\Category $category,
         \Magento\Core\Model\StoreFactory $storeFactory,
         \Magento\Core\Model\Website\Factory $websiteFactory,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
         array $data = array()
     ) {
         $this->_category = $category;
         $this->_storeFactory = $storeFactory;
         $this->_websiteFactory = $websiteFactory;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     /**

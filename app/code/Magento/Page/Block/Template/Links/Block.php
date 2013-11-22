@@ -34,7 +34,7 @@
  */
 namespace Magento\Page\Block\Template\Links;
 
-class Block extends \Magento\Core\Block\Template
+class Block extends \Magento\View\Block\Template
 {
 
     /**

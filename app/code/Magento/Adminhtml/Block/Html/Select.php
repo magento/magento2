@@ -33,6 +33,6 @@
  */
 namespace Magento\Adminhtml\Block\Html;
 
-class Select extends \Magento\Core\Block\Html\Select
+class Select extends \Magento\View\Block\Html\Select
 {
 }

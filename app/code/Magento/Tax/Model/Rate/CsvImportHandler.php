@@ -171,6 +171,7 @@ class CsvImportHandler
             // skip empty rows
             if (count($dataRow) <= 1) {
                 unset($rateRawData[$rowIndex]);
+                continue;
             }
             // unset invalid fields from data row
             foreach ($dataRow as $fieldIndex => $fieldValue) {

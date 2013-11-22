@@ -48,13 +48,12 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
     protected $_layerFactory;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\Layer $catalogLayer
@@ -63,13 +62,12 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\View\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Core\Model\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Math\Random $mathRandom,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Layer $catalogLayer,
@@ -80,13 +78,12 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
         $this->_layerFactory = $layerFactory;
         $this->_productCollectionFactory = $productCollectionFactory;
         parent::__construct(
-            $storeManager,
+            $context,
+            $coreData,
             $catalogConfig,
-            $coreRegistry,
+            $registry,
             $taxData,
             $catalogData,
-            $coreData,
-            $context,
             $mathRandom,
             $categoryFactory,
             $catalogLayer,

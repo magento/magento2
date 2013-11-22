@@ -22,11 +22,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\View\Design\Fallback\Rule;
+
 /**
  * Class with simple substitution parameters to values
  */
-namespace Magento\View\Design\Fallback\Rule;
-
 class Simple implements RuleInterface
 {
     /**
@@ -44,8 +44,6 @@ class Simple implements RuleInterface
     protected $pattern;
 
     /**
-     * Constructor
-     *
      * @param string $pattern
      * @param array $optionalParams
      */

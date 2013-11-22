@@ -23,6 +23,9 @@
  */
 namespace Magento\View\Design\Theme;
 
+/**
+ * Interface ThemeProviderInterface
+ */
 interface ThemeProviderInterface
 {
     /**

@@ -65,7 +65,7 @@ class Composite implements \Magento\Phrase\RendererInterface
      */
     protected function _append($render)
     {
-        array_push($this->_renderers, $this->_rendererFactory->create($render));
+        $this->_renderers[] = $this->_rendererFactory->create($render);
     }
 
     /**

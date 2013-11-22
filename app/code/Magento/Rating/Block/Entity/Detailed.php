@@ -33,7 +33,7 @@
  */
 namespace Magento\Rating\Block\Entity;
 
-class Detailed extends \Magento\Core\Block\Template
+class Detailed extends \Magento\View\Block\Template
 {
     /**
      * @var string
@@ -41,34 +41,24 @@ class Detailed extends \Magento\Core\Block\Template
     protected $_template = 'detailed.phtml';
 
     /**
-     * Store list manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * @var \Magento\Rating\Model\RatingFactory
      */
     protected $_ratingFactory;
 
     /**
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Rating\Model\RatingFactory $ratingFactory
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Rating\Model\RatingFactory $ratingFactory,
         array $data = array()
-    ){
-        $this->_storeManager = $storeManager;
+    ) {
         $this->_ratingFactory = $ratingFactory;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

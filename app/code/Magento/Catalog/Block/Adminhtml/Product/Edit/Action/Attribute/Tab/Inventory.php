@@ -43,19 +43,19 @@ class Inventory
     protected $_backorders;
 
     /**
-     * @param \Magento\CatalogInventory\Model\Source\Backorders $backorders
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\CatalogInventory\Model\Source\Backorders $backorders
      * @param array $data
      */
     public function __construct(
-        \Magento\CatalogInventory\Model\Source\Backorders $backorders,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\CatalogInventory\Model\Source\Backorders $backorders,
         array $data = array()
     ) {
         $this->_backorders = $backorders;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

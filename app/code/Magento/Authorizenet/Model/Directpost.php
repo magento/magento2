@@ -49,7 +49,7 @@ class Directpost extends \Magento\Paygate\Model\Authorizenet
     protected $_isInitializeNeeded      = true;
 
     /**
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -90,7 +90,7 @@ class Directpost extends \Magento\Paygate\Model\Authorizenet
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Centinel\Model\Service $centinelService
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Authorizenet\Model\Directpost\RequestFactory $requestFactory
@@ -112,7 +112,7 @@ class Directpost extends \Magento\Paygate\Model\Authorizenet
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Centinel\Model\Service $centinelService,
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Authorizenet\Model\Directpost\RequestFactory $requestFactory,

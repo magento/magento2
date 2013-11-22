@@ -34,18 +34,16 @@ class LayoutFactory
      *
      * @var \Magento\ObjectManager
      */
-    protected $_objectManager = null;
+    protected $_objectManager;
 
     /**
      * Instance name to create
      *
      * @var string
      */
-    protected $_instanceName = null;
+    protected $_instanceName;
 
     /**
-     * Factory constructor
-     *
      * @param \Magento\ObjectManager $objectManager
      * @param string $instanceName
      */

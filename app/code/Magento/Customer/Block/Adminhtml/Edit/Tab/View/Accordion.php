@@ -53,25 +53,25 @@ class Accordion extends \Magento\Adminhtml\Block\Widget\Accordion
     protected $_itemsFactory;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Wishlist\Model\Resource\Item\CollectionFactory $itemsFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Wishlist\Model\Resource\Item\CollectionFactory $itemsFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
         $this->_quoteFactory = $quoteFactory;
         $this->_itemsFactory = $itemsFactory;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     protected function _prepareLayout()

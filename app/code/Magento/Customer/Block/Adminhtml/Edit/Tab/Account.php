@@ -56,26 +56,26 @@ class Account extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_systemStore;
 
     /**
-     * @param \Magento\Customer\Model\FormFactory $customerFactory
-     * @param \Magento\Core\Model\System\Store $systemStore
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Customer\Model\FormFactory $customerFactory
+     * @param \Magento\Core\Model\System\Store $systemStore
      * @param array $data
      */
     public function __construct(
-        \Magento\Customer\Model\FormFactory $customerFactory,
-        \Magento\Core\Model\System\Store $systemStore,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Customer\Model\FormFactory $customerFactory,
+        \Magento\Core\Model\System\Store $systemStore,
         array $data = array()
     ) {
         $this->_systemStore = $systemStore;
         $this->_customerFactory = $customerFactory;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     /**

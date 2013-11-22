@@ -165,7 +165,7 @@ class Website extends \Magento\Core\Model\AbstractModel
     protected $_websiteFactory;
 
     /**
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -187,7 +187,7 @@ class Website extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\StoreFactory $storeFactory
      * @param \Magento\Core\Model\Store\GroupFactory $storeGroupFactory
      * @param \Magento\Core\Model\WebsiteFactory $websiteFactory
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
@@ -202,7 +202,7 @@ class Website extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\StoreFactory $storeFactory,
         \Magento\Core\Model\Store\GroupFactory $storeGroupFactory,
         \Magento\Core\Model\WebsiteFactory $websiteFactory,
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\App $app,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,

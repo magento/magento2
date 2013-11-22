@@ -18,17 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Factory for \Magento\Core\Model\Theme\File
- */
 namespace Magento\View\Design\Theme;
 
+/**
+ * Theme File Factory
+ */
 class FileFactory
 {
     /**
@@ -39,8 +37,6 @@ class FileFactory
     protected $_objectManager;
 
     /**
-     * Factory constructor
-     *
      * @param \Magento\ObjectManager $objectManager
      */
     public function __construct(\Magento\ObjectManager $objectManager)
@@ -52,7 +48,7 @@ class FileFactory
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return \Magento\Core\Model\Theme\File
+     * @return \Magento\View\Design\Theme\FileInterface
      */
     public function create(array $data = array())
     {

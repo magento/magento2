@@ -41,35 +41,9 @@ class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     protected $_dateInputs = array();
 
-    /**
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Core\Model\LocaleInterface $locale,
-        array $data = array()
-    ) {
-        $this->_locale = $locale;
-        parent::__construct($coreData, $context, $eavConfig, $data);
-    }
-
-
     public function _construct()
     {
         parent::_construct();
-
-        // default template location
         $this->setTemplate('widget/dob.phtml');
     }
 

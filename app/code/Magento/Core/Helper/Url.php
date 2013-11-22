@@ -33,7 +33,7 @@
  */
 namespace Magento\Core\Helper;
 
-class Url extends \Magento\Core\Helper\AbstractHelper
+class Url extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -41,11 +41,11 @@ class Url extends \Magento\Core\Helper\AbstractHelper
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         parent::__construct($context);

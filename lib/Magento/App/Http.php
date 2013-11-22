@@ -142,7 +142,8 @@ class Http implements \Magento\AppInterface
                     require_once ($this->_dir->getDir(Dir::PUB) . DS . 'errors' . DS . 'report.php');
                 }
             } catch (\Exception $exception) {
-                header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+                $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP 1.1';
+                header($protocol . ' 500 Internal Server Error', true, 500);
                 print "Unknown error happened.";
             }
             return -1;

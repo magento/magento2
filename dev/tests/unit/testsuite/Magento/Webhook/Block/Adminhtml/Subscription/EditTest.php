@@ -55,8 +55,8 @@ class EditTest extends \Magento\Test\Block\Adminhtml
             \Magento\Webhook\Block\Adminhtml\Subscription\Edit::REGISTRY_KEY_CURRENT_SUBSCRIPTION,
             $subscriptionData);
         $this->_block = new \Magento\Webhook\Block\Adminhtml\Subscription\Edit(
-            $this->_coreData,
             $this->_context,
+            $this->_coreData,
             $this->_registry
         );
         $this->assertEquals('Edit Subscription', $this->_block->getHeaderText());
@@ -70,8 +70,8 @@ class EditTest extends \Magento\Test\Block\Adminhtml
     {
         $this->_registry = new \Magento\Core\Model\Registry();
         $this->_block = new \Magento\Webhook\Block\Adminhtml\Subscription\Edit(
-            $this->_coreData,
             $this->_context,
+            $this->_coreData,
             $this->_registry
         );
 

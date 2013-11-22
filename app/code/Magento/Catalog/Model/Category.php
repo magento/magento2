@@ -126,13 +126,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel
     protected $filter;
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager = null;
-
-    /**
      * Index indexer
      *
      * @var \Magento\Index\Model\Indexer
@@ -194,7 +187,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Index\Model\Indexer $indexIndexer
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Helper\Category\Flat $catalogCategoryFlat
      * @param \Magento\Core\Model\Context $context
@@ -217,7 +209,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Index\Model\Indexer $indexIndexer,
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Helper\Category\Flat $catalogCategoryFlat,
         \Magento\Core\Model\Context $context,
@@ -235,7 +226,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_catalogConfig = $catalogConfig;
         $this->_indexIndexer = $indexIndexer;
-        $this->_eventManager = $eventManager;
         $this->filter = $filter;
         $this->_catalogCategoryFlat = $catalogCategoryFlat;
         $this->_treeModel = $categoryTreeResource;

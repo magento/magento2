@@ -26,12 +26,27 @@
 
 namespace Magento\Code\Validator;
 
-class ConstructorIntegrity
+use Magento\Code\ValidatorInterface;
+
+class ConstructorIntegrity implements ValidatorInterface
 {
+    /**
+     * @var \Magento\Code\Reader\ArgumentsReader
+     */
+    protected $_argumentsReader;
+
+    /**
+     * @param \Magento\Code\Reader\ArgumentsReader $argumentsReader
+     */
+    public function __construct(\Magento\Code\Reader\ArgumentsReader $argumentsReader = null)
+    {
+        $this->_argumentsReader = $argumentsReader ?: new \Magento\Code\Reader\ArgumentsReader();
+    }
+
     /**
      * Validate class
      *
-     * @param $className
+     * @param string $className
      * @return bool
      * @throws \Magento\Code\ValidationException
      */
@@ -41,24 +56,30 @@ class ConstructorIntegrity
         $parent = $class->getParentClass();
 
         /** Check whether parent class exists and has __construct method */
-        if (!$parent || !$parent->hasMethod('__construct')) {
+        if (!$parent) {
+            return true;
+        }
+
+        /** Get parent class __construct arguments */
+        $parentArguments = $this->_argumentsReader->getConstructorArguments($parent, true, true);
+        if (empty($parentArguments)) {
             return true;
         }
 
         /** Check whether class has __construct */
-        $classArguments = $this->_getConstructorArguments($class);
+        $classArguments = $this->_argumentsReader->getConstructorArguments($class);
         if (null === $classArguments) {
             return true;
         }
 
         /** Check whether class has parent::__construct call */
-        $callArguments = $this->_getParentCall($class, $classArguments);
+        $callArguments = $this->_argumentsReader->getParentCall($class, $classArguments);
         if (null === $callArguments) {
             return true;
         }
 
         /** Get parent class __construct arguments */
-        $parentArguments = $this->_getConstructorArguments($parent, true);
+        $parentArguments = $this->_argumentsReader->getConstructorArguments($parent, true, true);
 
         foreach ($parentArguments as $index => $requiredArgument) {
             if (isset($callArguments[$index])) {
@@ -73,10 +94,14 @@ class ConstructorIntegrity
                 );
             }
 
-            if (false == $this->_isCompatibleType($requiredArgument['type'], $actualArgument['type'])) {
+            $isCompatibleTypes = $this->_argumentsReader->isCompatibleType(
+                $requiredArgument['type'],
+                $actualArgument['type']
+            );
+            if (false == $isCompatibleTypes) {
                 throw new \Magento\Code\ValidationException('Incompatible argument type: Required type: '
                     . $requiredArgument['type'] . '. Actual type: ' . $actualArgument['type']
-                    . '; File: ' . $class->getFileName()
+                    . '; File: ' . PHP_EOL .$class->getFileName() . PHP_EOL
                 );
             }
         }
@@ -101,109 +126,4 @@ class ConstructorIntegrity
         return true;
     }
 
-    /**
-     * Check argument type compatibility
-     *
-     * @param string $requiredType
-     * @param string $actualType
-     * @return bool
-     */
-    protected function _isCompatibleType($requiredType, $actualType)
-    {
-        /** Types are compatible if type names are equal */
-        if ($requiredType === $actualType) {
-            return true;
-        }
-
-        /** Types are 'semi-compatible' if one of them are undefined */
-        if ($requiredType === null || $actualType === null) {
-            return true;
-        }
-
-        /**
-         * Special case for scalar arguments
-         * Array type is compatible with array or null type. Both of these types are checked above
-         */
-        if ($requiredType === 'array' || $actualType === 'array') {
-            return false;
-        }
-
-        return is_subclass_of($actualType, $requiredType);
-    }
-
-    /**
-     * Get arguments of parent __construct call
-     *
-     * @param \ReflectionClass $class
-     * @param array $classArguments
-     * @return array|null
-     */
-    protected function _getParentCall(\ReflectionClass $class, array $classArguments)
-    {
-        $trimFunction = function (&$value) {
-            $value = trim($value, PHP_EOL . ' $');
-        };
-
-        $method = $class->getMethod('__construct');
-        $start = $method->getStartLine();
-        $end = $method->getEndLine();
-        $length = $end - $start;
-
-        $source = file($class->getFileName());
-        $content = implode('', array_slice($source, $start, $length));
-        $pattern = '/parent::__construct\(([a-zA-Z0-9_$, \n]*)\);/';
-
-        if (!preg_match($pattern, $content, $matches)) {
-            return null;
-        }
-
-        $arguments = $matches[1];
-        if (!trim($arguments)) {
-            return null;
-        }
-
-        $arguments = explode(',', $arguments);
-        array_walk($arguments, $trimFunction);
-
-        $output = array();
-        foreach ($arguments as $argumentPosition => $argumentName) {
-            $type = isset($classArguments[$argumentName]) ? $classArguments[$argumentName]['type'] : null;
-            $output[$argumentPosition] = array(
-                'name' => $argumentName,
-                'position' => $argumentPosition,
-                'type' => $type,
-            );
-        }
-        return $output;
-    }
-
-    /**
-     * Get class constructor
-     *
-     * @param \ReflectionClass $class
-     * @param bool $groupByPosition
-     * @return array|null
-     */
-    protected function _getConstructorArguments(\ReflectionClass $class, $groupByPosition = false)
-    {
-        if (false == $class->hasMethod('__construct')) {
-            return null;
-        }
-
-        $output = array();
-        foreach ($class->getConstructor()->getParameters() as $parameter) {
-            $name = $parameter->getName();
-            $position = $parameter->getPosition();
-            $parameterClass = $parameter->getClass();
-            $type = $parameterClass ? $parameterClass->getName() : ($parameter->isArray() ? 'array' : null);
-            $index = $groupByPosition ? $position : $name;
-            $output[$index] = array(
-                'name' => $name,
-                'position' => $position,
-                'type' => $type,
-                'isOptional' => $parameter->isOptional()
-            );
-        }
-        return $output;
-    }
-} 
+}

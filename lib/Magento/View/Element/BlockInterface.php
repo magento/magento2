@@ -1,7 +1,5 @@
 <?php
 /**
- * Magento Block. Used to present information to user
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -23,10 +21,13 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\View\Element;
 
 /**
- * @package Magento\View
+ * Magento Block
+ *
+ * Used to present information to user
  */
 interface BlockInterface
 {

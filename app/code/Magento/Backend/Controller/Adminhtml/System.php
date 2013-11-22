@@ -33,17 +33,17 @@
  */
 namespace Magento\Backend\Controller\Adminhtml;
 
-class System extends \Magento\Backend\Controller\AbstractAction
+class System extends \Magento\Backend\App\AbstractAction
 {
     public function indexAction()
     {
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Adminhtml::system');
         $this->_addBreadcrumb(
             __('System'),
             __('System')
         );
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function setStoreAction()
@@ -52,7 +52,7 @@ class System extends \Magento\Backend\Controller\AbstractAction
         if ($storeId) {
             $this->_session->setStoreId($storeId);
         }
-        $this->_redirectReferer();
+        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
     }
 
     protected function _isAllowed()

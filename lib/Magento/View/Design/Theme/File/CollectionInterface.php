@@ -23,6 +23,9 @@
  */
 namespace Magento\View\Design\Theme\File;
 
+/**
+ * Design Theme File collection interface
+ */
 interface CollectionInterface
 {
     /**

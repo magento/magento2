@@ -33,7 +33,7 @@
  */
 namespace Magento\SalesRule\Helper;
 
-class Coupon extends \Magento\Core\Helper\AbstractHelper
+class Coupon extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Constants which defines all possible coupon codes formats
@@ -69,12 +69,12 @@ class Coupon extends \Magento\Core\Helper\AbstractHelper
     protected $_coreStoreConfig;
 
     /**
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param array $couponParameters
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         array $couponParameters
     ) {

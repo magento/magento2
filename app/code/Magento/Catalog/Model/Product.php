@@ -32,7 +32,6 @@
  * @method \Magento\Catalog\Model\Product setHasError(bool $value)
  * @method null|bool getHasError()
  * @method \Magento\Catalog\Model\Product setTypeId(string $typeId)
- * @method string \Magento\Catalog\Model\Product getTypeId()
  * @method \Magento\Catalog\Model\Product setAssociatedProductIds(array $productIds)
  * @method array getAssociatedProductIds()
  * @method \Magento\Catalog\Model\Product setNewVariationsAttributeSetId(int $value)
@@ -139,13 +138,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel
     protected $_catalogImage = null;
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager = null;
-
-    /**
      * @var \Magento\Data\CollectionFactory
      */
     protected $_collectionFactory;
@@ -229,7 +221,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel
      * @param \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig
      * @param \Magento\Index\Model\Indexer $indexIndexer
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Helper\Image $catalogImage
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Catalog\Helper\Product $catalogProduct
@@ -256,7 +247,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel
         \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig,
         \Magento\Index\Model\Indexer $indexIndexer,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Helper\Image $catalogImage,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Catalog\Helper\Product $catalogProduct,
@@ -277,7 +267,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel
         $this->_catalogProductMediaConfig = $catalogProductMediaConfig;
         $this->_indexIndexer = $indexIndexer;
         $this->_catalogProductType = $catalogProductType;
-        $this->_eventManager = $eventManager;
         $this->_catalogImage = $catalogImage;
         $this->_catalogData = $catalogData;
         $this->_catalogProduct = $catalogProduct;
@@ -356,9 +345,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel
     }
 
     /**
-     * Get product price throught type instance
+     * Get product price through type instance
      *
-     * @return unknown
+     * @return float
      */
     public function getPrice()
     {
@@ -441,7 +430,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel
     }
 
     /**
-     * Retrive product id by sku
+     * Retrieve product id by sku
      *
      * @param   string $sku
      * @return  integer
@@ -670,7 +659,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel
     }
 
     /**
-     * Clear chache related with product and protect delete from not admin
+     * Clear cache related with product and protect delete from not admin
      * Register indexing event before delete product
      *
      * @return \Magento\Catalog\Model\Product
@@ -877,7 +866,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel
  ** Linked products API
  */
     /**
-     * Retrieve array of related roducts
+     * Retrieve array of related products
      *
      * @return array
      */
@@ -1089,7 +1078,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel
  ** Media API
  */
     /**
-     * Retrive attributes for media gallery
+     * Retrieve attributes for media gallery
      *
      * @return array
      */
@@ -1108,7 +1097,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel
     }
 
     /**
-     * Retrive media gallery images
+     * Retrieve media gallery images
      *
      * @return \Magento\Data\Collection
      */
@@ -1154,7 +1143,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel
     }
 
     /**
-     * Retrive product media config
+     * Retrieve product media config
      *
      * @return \Magento\Catalog\Model\Product\Media\Config
      */
@@ -1335,7 +1324,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel
     }
 
     /**
-     * Check Product visilbe in catalog
+     * Check Product visible in catalog
      *
      * @return bool
      */
@@ -1685,9 +1674,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel
     }
 
     /**
-     * Retrieve weight throught type instance
+     * Retrieve weight through type instance
      *
-     * @return unknown
+     * @return float
      */
     public function getWeight()
     {
@@ -1942,7 +1931,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel
     }
 
     /**
-     * Get cahce tags associated with object id
+     * Get cache tags associated with object id
      *
      * @return array
      */

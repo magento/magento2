@@ -46,14 +46,14 @@ class PageTest extends \PHPUnit_Framework_TestCase
             'response' => $objectManager->get('Magento\TestFramework\Response')
         );
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Controller\Varien\Action\Context', $arguments);
+            ->create('Magento\App\Action\Context', $arguments);
         $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Cms\Model\Page');
         $page->load('page_design_blank', 'identifier'); // fixture
         /** @var $pageHelper \Magento\Cms\Helper\Page */
         $pageHelper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Cms\Helper\Page');
         $result = $pageHelper->renderPage(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Controller\Front\Action', array('context' => $context)),
+            ->create('Magento\App\Action\Action', array('context' => $context)),
             $page->getId()
         );
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

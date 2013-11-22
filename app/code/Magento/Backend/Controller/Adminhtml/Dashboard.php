@@ -33,16 +33,24 @@
  */
 namespace Magento\Backend\Controller\Adminhtml;
 
-class Dashboard extends \Magento\Backend\Controller\Adminhtml\Action
+class Dashboard extends \Magento\Backend\App\Action
 {
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     */
+    public function __construct(\Magento\Backend\App\Action\Context $context)
+    {
+        parent::__construct($context);
+    }
+
     public function indexAction()
     {
-        $this->_title(__('Dashboard'));
+        $this->_title->add(__('Dashboard'));
 
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Adminhtml::dashboard');
         $this->_addBreadcrumb(__('Dashboard'), __('Dashboard'));
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -51,8 +59,8 @@ class Dashboard extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function productsViewedAction()
     {
-        $this->loadLayout();
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -61,8 +69,8 @@ class Dashboard extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function customersNewestAction()
     {
-        $this->loadLayout();
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -71,8 +79,8 @@ class Dashboard extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function customersMostAction()
     {
-        $this->loadLayout();
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->renderLayout();
     }
 
     public function ajaxBlockAction()
@@ -85,7 +93,7 @@ class Dashboard extends \Magento\Backend\Controller\Adminhtml\Action
             ucwords(str_replace('_', ' ', $blockTab))
         );
         if (in_array($blockTab, array('tab_orders', 'tab_amounts', 'totals'))) {
-            $output = $this->getLayout()->createBlock('Magento\\Backend\\Block\\Dashboard\\' . $blockClassSuffix)
+            $output = $this->_view->getLayout()->createBlock('Magento\\Backend\\Block\\Dashboard\\' . $blockClassSuffix)
                 ->toHtml();
         }
         $this->getResponse()->setBody($output);

@@ -36,7 +36,7 @@
  */
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Tabs;
 
-class Body extends \Magento\Core\Block\Template
+class Body extends \Magento\View\Block\Template
 {
     /**
      * Get tab content

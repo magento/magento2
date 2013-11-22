@@ -33,39 +33,31 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_labelFactory;
 
     /**
-     * @var \Magento\Backend\Model\Session
-     */
-    protected $_backendSession;
-
-    /**
      * @var \Magento\Core\Model\System\Store
      */
     protected $_systemStore;
 
     /**
-     * @param \Magento\Core\Model\Theme\LabelFactory $labelFactory
-     * @param \Magento\Backend\Model\Session $backendSession
-     * @param \Magento\Core\Model\System\Store $systemStore
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Model\Theme\LabelFactory $labelFactory
+     * @param \Magento\Core\Model\System\Store $systemStore
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Theme\LabelFactory $labelFactory,
-        \Magento\Backend\Model\Session $backendSession,
-        \Magento\Core\Model\System\Store $systemStore,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Model\Theme\LabelFactory $labelFactory,
+        \Magento\Core\Model\System\Store $systemStore,
         array $data = array()
     ) {
         $this->_labelFactory = $labelFactory;
-        $this->_backendSession = $backendSession;
         $this->_systemStore = $systemStore;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     /**

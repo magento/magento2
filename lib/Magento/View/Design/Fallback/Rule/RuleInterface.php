@@ -22,15 +22,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Interface for search path resolution during fallback process
- */
 namespace Magento\View\Design\Fallback\Rule;
 
 /**
  * Rule Interface
  *
- * @package Magento\View
+ * Interface for search path resolution during fallback process
  */
 interface RuleInterface
 {

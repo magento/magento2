@@ -271,9 +271,6 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
                 array( 'name' => 'nameTest' )
             ));
 
-        // Use real translate model
-        $this->_mockTranslateModel = null;
-
         // verify success message
         $this->_mockBackendModSess->expects($this->once())->method('addSuccess')
             ->with($this->equalTo('The subscription \'nameTest\' has been activated.'));
@@ -326,8 +323,8 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $layoutMock->expects($this->any())->method('getUpdate')->will($this->returnValue($layoutMergeMock));
         $testElement = new \Magento\Simplexml\Element('<test>test</test>');
-        $layoutMock->expects($this->any())->method('getNode')->will($this->returnValue($testElement));
-        $blockMock = $this->getMockBuilder('Magento\Core\Block\AbstractBlock')
+        $layoutMock->expects($this->never())->method('getNode')->will($this->returnValue($testElement));
+        $blockMock = $this->getMockBuilder('Magento\View\Block\AbstractBlock')
             ->disableOriginalConstructor()
             ->getMock();
         $layoutMock->expects($this->any())->method('getMessagesBlock')->will($this->returnValue($blockMock));
@@ -343,8 +340,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_mockBackendCntCtxt = $this->_objectManagerHelper
-            ->getObject('Magento\Backend\Controller\Context',
-                $contextParameters);
+            ->getObject('Magento\Backend\App\Action\Context', $contextParameters);
 
         $regControllerParams = array(
             'context' => $this->_mockBackendCntCtxt,
@@ -369,7 +365,6 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
             array('Magento\Core\Model\Config', $this->_mockConfig),
             array('Magento\Core\Model\Layout\Filter\Acl', $this->_mockLayoutFilter),
             array('Magento\Backend\Model\Session', $this->_mockBackendModSess),
-            array('Magento\Core\Model\Translate', $this->_mockTranslateModel),
             array('Magento\Config\ScopeInterface', $this->_mockConfigScope),
         );
         $this->_mockObjectManager->expects($this->any())

@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Product;
 
-class Price extends \Magento\Core\Block\Template
+class Price extends \Magento\View\Block\Template
 {
     protected $_priceDisplayType = null;
     protected $_idSuffix = '';
@@ -60,13 +60,6 @@ class Price extends \Magento\Core\Block\Template
     protected $_catalogData = null;
 
     /**
-     * Store manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * @var \Magento\Stdlib\String
      */
     protected $string;
@@ -77,36 +70,31 @@ class Price extends \Magento\Core\Block\Template
     protected $mathRandom;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Math\Random $mathRandom
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\View\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Stdlib\String $string,
         \Magento\Math\Random $mathRandom,
         array $data = array()
     ) {
-        $this->_storeManager = $storeManager;
         $this->_coreRegistry = $registry;
         $this->_catalogData = $catalogData;
         $this->_taxData = $taxData;
         $this->string = $string;
         $this->mathRandom = $mathRandom;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

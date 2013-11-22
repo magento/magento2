@@ -42,19 +42,19 @@ class Agreement extends \Magento\Payment\Block\Form
     protected $_agreementFactory;
 
     /**
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory,
         array $data = array()
     ) {
         $this->_agreementFactory = $agreementFactory;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     protected function _construct()

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -35,8 +33,8 @@
                 <?php $isFirst = 1; ?>
 
                 <?php foreach ($rates as $rate): ?>
-                <tr class="summary-details-<?php echo $taxIter; ?> summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
-                    <td class="a-right" style="<?php echo $this->getTotal()->getStyle() ?>" colspan="<?php echo $this->getColspan(); ?>">
+                <tr class="totals tax details details-<?php echo $taxIter; ?>">
+                    <td class="mark" style="<?php echo $this->getTotal()->getStyle() ?>" colspan="<?php echo $this->getColspan(); ?>">
                         <?php echo $this->escapeHtml($rate['title']); ?>
                         <?php if (!is_null($rate['percent'])): ?>
                             (<?php echo (float)$rate['percent']; ?>%)
@@ -44,7 +42,7 @@
                         <br />
                     </td>
                     <?php if ($isFirst): ?>
-                        <td rowspan="<?php echo count($rates); ?>" class="a-right" style="<?php echo $this->getTotal()->getStyle() ?>">
+                        <td class="amount" rowspan="<?php echo count($rates); ?>" class="a-right" style="<?php echo $this->getTotal()->getStyle() ?>">
                             <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($amount); ?>
                         </td>
                     <?php endif; ?>
@@ -54,15 +52,21 @@
                 <?php endforeach; ?>
             <?php endforeach; ?>
 <?php endif;?>
-<tr<?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() && $this->getTotal()->getValue()!=0): ?> class="summary-total" onclick="expandDetails(this, '.summary-details-<?php echo $taxIter;?>')"<?php endif; ?>>
-    <td class="a-right" colspan="<?php echo $this->getColspan(); ?>" style="<?php echo $this->getTotal()->getStyle() ?>">
+<?php
+    $attributes = 'class="totals tax"';
+    if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() && $this->getTotal()->getValue()!=0) {
+        $attributes = 'class="totals tax summary"';
+    }
+?>
+<tr <?php echo $attributes; ?>>
+    <td class="mark" colspan="<?php echo $this->getColspan(); ?>" style="<?php echo $this->getTotal()->getStyle() ?>">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
-            <div class="summary-collapse"><?php echo $this->getTotal()->getTitle() ?></div>
+            <div class="detailed"><?php echo $this->getTotal()->getTitle() ?></div>
         <?php else: ?>
             <?php echo $this->getTotal()->getTitle() ?>
         <?php endif;?>
     </td>
-    <td class="a-right" style="<?php echo $this->getTotal()->getStyle() ?>">
-        <strong><?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getTotal()->getValue()) ?></strong>
+    <td class="amount" style="<?php echo $this->getTotal()->getStyle() ?>">
+        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getTotal()->getValue()) ?>
     </td>
 </tr>

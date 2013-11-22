@@ -34,7 +34,10 @@
 
 namespace Magento\Review\Controller;
 
-class Customer extends \Magento\Core\Controller\Front\Action
+use Magento\App\Action\NotFoundException;
+use Magento\App\RequestInterface;
+
+class Customer extends \Magento\App\Action\Action
 {
     /**
      * @var \Magento\Customer\Model\Session
@@ -42,11 +45,11 @@ class Customer extends \Magento\Core\Controller\Front\Action
     protected $_customerSession;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession
     ) {
         $this->_customerSession = $customerSession;
@@ -54,42 +57,43 @@ class Customer extends \Magento\Core\Controller\Front\Action
     }
 
     /**
-     * Action predispatch
-     *
      * Check customer authentication for some actions
+     *
+     * @param RequestInterface $request
+     * @return mixed
      */
-    public function preDispatch()
+    public function dispatch(RequestInterface $request)
     {
-        parent::preDispatch();
         if (!$this->_customerSession->authenticate($this)) {
-            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
         }
+        return parent::dispatch($request);
     }
 
     public function indexAction()
     {
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Catalog\Model\Session');
+        $this->_view->loadLayout();
+        $this->_view->getLayout()->initMessages('Magento\Catalog\Model\Session');
 
-        if ($navigationBlock = $this->getLayout()->getBlock('customer_account_navigation')) {
+        if ($navigationBlock = $this->_view->getLayout()->getBlock('customer_account_navigation')) {
             $navigationBlock->setActive('review/customer');
         }
-        if ($block = $this->getLayout()->getBlock('review_customer_list')) {
-            $block->setRefererUrl($this->_getRefererUrl());
+        if ($block = $this->_view->getLayout()->getBlock('review_customer_list')) {
+            $block->setRefererUrl($this->_redirect->getRefererUrl());
         }
 
-        $this->getLayout()->getBlock('head')->setTitle(__('My Product Reviews'));
+        $this->_view->getLayout()->getBlock('head')->setTitle(__('My Product Reviews'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function viewAction()
     {
-        $this->loadLayout();
-        if ($navigationBlock = $this->getLayout()->getBlock('customer_account_navigation')) {
+        $this->_view->loadLayout();
+        if ($navigationBlock = $this->_view->getLayout()->getBlock('customer_account_navigation')) {
             $navigationBlock->setActive('review/customer');
         }
-        $this->getLayout()->getBlock('head')->setTitle(__('Review Details'));
-        $this->renderLayout();
+        $this->_view->getLayout()->getBlock('head')->setTitle(__('Review Details'));
+        $this->_view->renderLayout();
     }
 }

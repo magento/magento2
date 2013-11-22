@@ -47,12 +47,12 @@
                     <argument name="file" xsi:type="string">prototype/deprecation.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Core\Block\Html\Calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
+            <block class="Magento\View\Block\Html\Calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
         </block>
         <block class="Magento\Adminhtml\Block\Page\Header" name="header" as="header"/>
         <block class="Magento\Backend\Block\Menu" name="menu" as="menu"/>
-        <block class="Magento\Core\Block\Messages" name="messages" as="messages"/>
-        <block class="Magento\Core\Block\Text" as="no_name"/>
+        <block class="Magento\View\Block\Messages" name="messages" as="messages"/>
+        <block class="Magento\View\Block\Text" as="no_name"/>
     </block>
     <update handle="layout_test_handle_sample"/>
     <remove name="header"/>
@@ -65,7 +65,7 @@
         </action>
     </referenceBlock>
     <referenceBlock name="some_element_1"/>
-    <block class="Magento\Core\Block\Text\ListText" name="test.nonexisting.block"/>
+    <block class="Magento\View\Block\Text\ListText" name="test.nonexisting.block"/>
     <remove name="test.nonexisting.block"/>
     <referenceBlock name="test.nonexisting.block">
         <action method="getSomething"/>

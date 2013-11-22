@@ -60,8 +60,8 @@
         <container name="columns.top" label="Before Main Columns" as="columns_top">
             <block class="Magento\Page\Block\Html\Title" name="page.main.title" template="html/title.phtml"/>
             <container name="page.messages" label="invisible" htmlTag="div" htmlClass="page messages">
-                <block class="Magento\Core\Block\Messages" name="global_messages" as="global_messages"/>
-                <block class="Magento\Core\Block\Messages" name="messages" as="messages"/>
+                <block class="Magento\View\Block\Messages" name="global_messages" as="global_messages"/>
+                <block class="Magento\View\Block\Messages" name="messages" as="messages"/>
             </container>
         </container>
         <container name="main" as="main" label="Main Content Container" htmlTag="div" htmlClass="column main">
@@ -80,7 +80,7 @@
                 <block class="Magento\Page\Block\Switcher" name="store_switcher" as="store_switcher" template="switch/stores.phtml"/>
                 <block class="Magento\Page\Block\Links" name="footer_links"/>
                 <block class="Magento\Page\Block\Html\Footer" name="copyright" template="html/copyright.phtml"/>
-                <block class="Magento\Core\Block\Template" name="report.bugs" template="Magento_Page::html/bugreport.phtml" />
+                <block class="Magento\View\Block\Template" name="report.bugs" template="Magento_Page::html/bugreport.phtml" />
             </container>
         </container>
         <container name="before_body_end" as="before_body_end" label="Page Bottom">
@@ -163,6 +163,7 @@
                 <argument name="file" xsi:type="string">mage/popup-window.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Core\Block\Template" name="head.components" as="components" template="Magento_Page::js/components.phtml"/>
+        <block class="Magento\View\Block\Template" name="head.components" as="components" template="Magento_Page::js/components.phtml"/>
     </referenceBlock>
+    <update handle="default_head_blocks"/>
 </layout>

@@ -48,24 +48,22 @@ class AttributeSelector extends \Magento\Backend\Block\Template
     protected $_resourceHelper;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
         array $data = array()
     ) {
         $this->_attributeColFactory = $attributeColFactory;
         $this->_resourceHelper = $resourceHelper;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

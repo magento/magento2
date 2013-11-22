@@ -54,7 +54,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 

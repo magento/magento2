@@ -62,29 +62,29 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     protected $_productFactory;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
+     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Backend\Helper\Data $adminhtmlData
-     * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
+        \Magento\Core\Model\Registry $registry,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Backend\Helper\Data $adminhtmlData,
-        \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
         $this->_categoryFactory = $categoryFactory;
         $this->_productFactory = $productFactory;
         $this->_adminhtmlData = $adminhtmlData;
-        parent::__construct($categoryTree, $coreData, $context, $registry, $data);
+        parent::__construct($context, $coreData, $categoryTree, $registry, $data);
     }
 
     /**

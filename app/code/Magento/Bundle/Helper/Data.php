@@ -33,7 +33,7 @@
  */
 namespace Magento\Bundle\Helper;
 
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
@@ -41,11 +41,11 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_config;
 
     /**
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
     ) {
         $this->_config = $config;

@@ -66,7 +66,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Layer')
             ->setCurrentCategory($category);
 
-        $childBlock = $this->_layout->addBlock('Magento\Core\Block\Text', 'search_result_list', 'block');
+        $childBlock = $this->_layout->addBlock('Magento\View\Block\Text', 'search_result_list', 'block');
 
         $expectedOptions = array(
             'option1' => 'Label Option 1',
@@ -82,8 +82,8 @@ class ResultTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetListModes()
     {
-        /** @var $childBlock \Magento\Core\Block\Text */
-        $childBlock = $this->_layout->addBlock('Magento\Core\Block\Text', 'search_result_list', 'block');
+        /** @var $childBlock \Magento\View\Block\Text */
+        $childBlock = $this->_layout->addBlock('Magento\View\Block\Text', 'search_result_list', 'block');
         $this->assertEmpty($childBlock->getModes());
         $this->_block->setListModes();
         $this->assertNotEmpty($childBlock->getModes());
@@ -91,8 +91,8 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
     public function testSetListCollection()
     {
-        /** @var $childBlock \Magento\Core\Block\Text */
-        $childBlock = $this->_layout->addBlock('Magento\Core\Block\Text', 'search_result_list', 'block');
+        /** @var $childBlock \Magento\View\Block\Text */
+        $childBlock = $this->_layout->addBlock('Magento\View\Block\Text', 'search_result_list', 'block');
         $this->assertEmpty($childBlock->getCollection());
         $this->_block->setListCollection();
         $this->assertInstanceOf(

@@ -33,22 +33,8 @@
  */
 namespace Magento\CatalogSearch\Block\Advanced;
 
-class Form extends \Magento\Core\Block\Template
+class Form extends \Magento\View\Block\Template
 {
-    /**
-     * Locale
-     *
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
-     * Store manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
     /**
      * Currency factory
      *
@@ -64,30 +50,22 @@ class Form extends \Magento\Core\Block\Template
     protected $_catalogSearchAdvanced;
 
     /**
-     * Construct
-     *
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\LocaleInterface $locale
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\LocaleInterface $locale,
         array $data = array()
     ) {
         $this->_catalogSearchAdvanced = $catalogSearchAdvanced;
         $this->_currencyFactory = $currencyFactory;
-        $this->_storeManager = $storeManager;
-        $this->_locale = $locale;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     public function _prepareLayout()
@@ -308,7 +286,7 @@ class Form extends \Magento\Core\Block\Template
     {
         $block = $this->getData('_select_block');
         if (is_null($block)) {
-            $block = $this->getLayout()->createBlock('Magento\Core\Block\Html\Select');
+            $block = $this->getLayout()->createBlock('Magento\View\Block\Html\Select');
             $this->setData('_select_block', $block);
         }
         return $block;
@@ -318,7 +296,7 @@ class Form extends \Magento\Core\Block\Template
     {
         $block = $this->getData('_date_block');
         if (is_null($block)) {
-            $block = $this->getLayout()->createBlock('Magento\Core\Block\Html\Date');
+            $block = $this->getLayout()->createBlock('Magento\View\Block\Html\Date');
             $this->setData('_date_block', $block);
         }
         return $block;

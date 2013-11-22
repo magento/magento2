@@ -297,8 +297,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Customer\Model\Resource\Address\CollectionFactory', array(), array(), '',
                     false
                 ),
-                $this->getMock('Magento\Core\Model\Email\Template\MailerFactory', array(), array(), '', false),
-                $this->getMock('Magento\Core\Model\Email\InfoFactory', array(), array(), '', false),
+                $this->getMock('Magento\Email\Model\Template\MailerFactory', array(), array(), '', false),
+                $this->getMock('Magento\Email\Model\InfoFactory', array(), array(), '', false),
                 $this->getMock('Magento\Customer\Model\GroupFactory', array(), array(), '', false),
                 $this->getMock('Magento\Customer\Model\AttributeFactory', array(), array(), '', false),
             );

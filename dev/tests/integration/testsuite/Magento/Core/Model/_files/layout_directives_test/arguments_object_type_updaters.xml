@@ -24,7 +24,7 @@
  */
 -->
 <layout>
-    <block class="Magento\Core\Block\Text" name="block_with_object_updater_args">
+    <block class="Magento\View\Block\Text" name="block_with_object_updater_args">
         <arguments>
             <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="one" xsi:type="object">Magento\Core\Model\DataSource</argument>
             <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="two" xsi:type="number">0</argument>

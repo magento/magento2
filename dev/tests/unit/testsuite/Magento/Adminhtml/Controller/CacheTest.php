@@ -29,50 +29,18 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     public function testCleanMediaAction()
     {
         // Wire object with mocks
-        $context = $this->getMock('Magento\Backend\Controller\Context', array(), array(), '', false);
-
-        $request = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false);
-        $context->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-
         $response = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
-        $context->expects($this->any())
-            ->method('getResponse')
-            ->will($this->returnValue($response));
-
         $objectManager = $this->getMock('Magento\ObjectManager');
-        $context->expects($this->any())
-            ->method('getObjectManager')
-            ->will($this->returnValue($objectManager));
-
-        $frontController = $this->getMock('Magento\App\FrontController', array(), array(), '', false);
-        $context->expects($this->any())
-            ->method('getFrontController')
-            ->will($this->returnValue($frontController));
-
         $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
-        $eventManager->expects($this->once())
-            ->method('dispatch')
-            ->with('clean_media_cache_after');
-        $context->expects($this->any())
-            ->method('getEventManager')
-            ->will($this->returnValue($eventManager));
-
         $backendHelper = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false);
-        $context->expects($this->any())
-            ->method('getHelper')
-            ->will($this->returnValue($backendHelper));
-
-        $cacheTypeListMock = $this->getMock('Magento\App\Cache\TypeListInterface');
-        $cacheStateMock = $this->getMock('Magento\App\Cache\StateInterface');
-        $cacheFrontendPool = $this->getMock('Magento\App\Cache\Frontend\Pool', array(), array(), '', false);
-
-        $controller = new \Magento\Backend\Controller\Adminhtml\Cache(
-            $context,
-            $cacheTypeListMock,
-            $cacheStateMock,
-            $cacheFrontendPool
+        $session = $this->getMock('Magento\Adminhtml\Model\Session', array('addSuccess'), array(), '', false);
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $controller = $helper->getObject('Magento\Backend\Controller\Adminhtml\Cache', array(
+                'objectManager' => $objectManager,
+                'response' => $response,
+                'helper' => $backendHelper,
+                'eventManager' => $eventManager
+            )
         );
 
         // Setup expectations
@@ -80,7 +48,6 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $mergeService->expects($this->once())
             ->method('cleanMergedJsCss');
 
-        $session = $this->getMock('Magento\Adminhtml\Model\Session', array(), array(), '', false);
         $session->expects($this->once())
             ->method('addSuccess')
             ->with('The JavaScript/CSS cache has been cleaned.');
@@ -101,12 +68,6 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $response->expects($this->once())
             ->method('setRedirect')
             ->with('redirect_url');
-
-        $response->expects($this->once())
-            ->method('getHeader')
-            ->with('X-Frame-Options')
-            ->will($this->returnValue(false));
-
         // Run
         $controller->cleanMediaAction();
     }

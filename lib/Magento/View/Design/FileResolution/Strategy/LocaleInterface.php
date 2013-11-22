@@ -18,15 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Interface for 'locale' file resolution strategy
- */
 namespace Magento\View\Design\FileResolution\Strategy;
 
 use Magento\View\Design\ThemeInterface;
@@ -34,7 +29,7 @@ use Magento\View\Design\ThemeInterface;
 /**
  * Locale Interface
  *
- * @package Magento\View
+ * Interface for 'locale' file resolution strategy
  */
 interface LocaleInterface
 {

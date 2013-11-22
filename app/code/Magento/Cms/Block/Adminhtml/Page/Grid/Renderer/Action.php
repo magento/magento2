@@ -35,13 +35,13 @@ class Action
     protected $_urlFactory;
 
     /**
-     * @param \Magento\Core\Model\UrlFactory $urlFactory
      * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Core\Model\UrlFactory $urlFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\UrlFactory $urlFactory,
         \Magento\Backend\Block\Context $context,
+        \Magento\Core\Model\UrlFactory $urlFactory,
         array $data = array()
     ) {
         $this->_urlFactory = $urlFactory;

@@ -56,24 +56,22 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
     protected $_productFactory;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Adminhtml\Model\Session\Quote $sessionQuote
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Model\Url $urlModel,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Adminhtml\Model\Session\Quote $sessionQuote,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Sales\Model\Config $salesConfig,
         array $data = array()
     ) {
@@ -81,7 +79,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
         $this->_catalogConfig = $catalogConfig;
         $this->_sessionQuote = $sessionQuote;
         $this->_salesConfig = $salesConfig;
-        parent::__construct($coreData, $context, $storeManager, $urlModel, $data);
+        parent::__construct($context, $coreData, $urlModel, $data);
     }
 
     protected function _construct()

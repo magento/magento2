@@ -38,34 +38,34 @@ class Messages extends \Magento\Adminhtml\Block\Messages
     /**
      * @var \Magento\Adminhtml\Model\Session\Quote
      */
-    protected $_sessionQuote;
+    protected $sessionQuote;
 
     /**
-     * @param \Magento\Adminhtml\Model\Session\Quote $sessionQuote
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Core\Model\Message $message
-     * @param \Magento\Core\Model\Message\CollectionFactory $messageFactory
+     * @param \Magento\Message\Factory $messageFactory
+     * @param \Magento\Message\CollectionFactory $collectionFactory
+     * @param \Magento\Adminhtml\Model\Session\Quote $sessionQuote
      * @param array $data
      */
     public function __construct(
-        \Magento\Adminhtml\Model\Session\Quote $sessionQuote,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Core\Model\Message $message,
-        \Magento\Core\Model\Message\CollectionFactory $messageFactory,
+        \Magento\Message\Factory $messageFactory,
+        \Magento\Message\CollectionFactory $collectionFactory,
+        \Magento\Adminhtml\Model\Session\Quote $sessionQuote,
         array $data = array()
     ) {
-        $this->_sessionQuote = $sessionQuote;
-        parent::__construct($coreData, $context, $message, $messageFactory, $data);
+        $this->sessionQuote = $sessionQuote;
+        parent::__construct($context, $coreData, $messageFactory, $collectionFactory, $data);
     }
 
     /**
-     * @return \Magento\Core\Block\Messages
+     * @return \Magento\View\Block\Messages
      */
     protected function _prepareLayout()
     {
-        $this->addMessages($this->_sessionQuote->getMessages(true));
+        $this->addMessages($this->sessionQuote->getMessages(true));
         parent::_prepareLayout();
     }
 

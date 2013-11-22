@@ -39,10 +39,10 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Prepare item before output
      *
-     * @param \Magento\Core\Block\AbstractBlock $renderer
+     * @param \Magento\View\Block\AbstractBlock $renderer
      * @return \Magento\Sales\Block\Items\AbstractItems
      */
-    protected function _prepareItem(\Magento\Core\Block\AbstractBlock $renderer)
+    protected function _prepareItem(\Magento\View\Block\AbstractBlock $renderer)
     {
         $renderer->getItem()->setOrder($this->getOrder());
         $renderer->getItem()->setSource($this->getShipment());

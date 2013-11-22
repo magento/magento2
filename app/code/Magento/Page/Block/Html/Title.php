@@ -32,7 +32,7 @@
  */
 namespace Magento\Page\Block\Html;
 
-class Title extends \Magento\Core\Block\Template
+class Title extends \Magento\View\Block\Template
 {
     /**
      * Own page title to display on the page

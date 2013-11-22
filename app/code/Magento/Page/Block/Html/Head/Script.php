@@ -29,18 +29,18 @@ namespace Magento\Page\Block\Html\Head;
 /**
  * Script page block
  */
-class Script extends \Magento\Core\Block\AbstractBlock
+class Script extends \Magento\View\Block\AbstractBlock
     implements \Magento\Page\Block\Html\Head\AssetBlock
 {
     /**
      * Contructor
      *
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Model\Page\Asset\ViewFileFactory $viewFileFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Model\Page\Asset\ViewFileFactory $viewFileFactory,
         array $data = array()
     ) {

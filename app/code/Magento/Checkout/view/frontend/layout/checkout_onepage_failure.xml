@@ -24,9 +24,10 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="root">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">2columns-right.phtml</argument>
+    <update handle="page_one_column"/>
+    <referenceBlock name="page.main.title">
+        <action method="setPageTitle">
+            <argument translate="true" name="title" xsi:type="string">Your order has been received.</argument>
         </action>
     </referenceBlock>
     <referenceContainer name="content">

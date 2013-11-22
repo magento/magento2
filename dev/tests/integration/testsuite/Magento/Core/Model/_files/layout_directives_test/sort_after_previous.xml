@@ -25,17 +25,17 @@
 -->
 <layout>
     <container name="root" label="Root">
-        <block class="Magento\Core\Block\Text" name="element1" after="element2">
+        <block class="Magento\View\Block\Text" name="element1" after="element2">
             <action method="setText">
                 <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="text" xsi:type="string">1</argument>
             </action>
         </block>
-        <block class="Magento\Core\Block\Text" name="element2" after="element3">
+        <block class="Magento\View\Block\Text" name="element2" after="element3">
             <action method="setText">
                 <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="text" xsi:type="string">2</argument>
             </action>
         </block>
-        <block class="Magento\Core\Block\Text" name="element3">
+        <block class="Magento\View\Block\Text" name="element3">
             <!-- neither "before" or "after" specified, therefore insert before all elements -->
             <action method="setText">
                 <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="text" xsi:type="string">3</argument>

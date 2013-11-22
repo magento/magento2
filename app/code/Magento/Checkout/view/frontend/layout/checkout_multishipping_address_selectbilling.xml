@@ -25,6 +25,11 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="checkout_multishipping"/>
+    <referenceBlock name="page.main.title">
+        <action method="setPageTitle">
+            <argument name="label" translate="true" xsi:type="string">Change Billing Address</argument>
+        </action>
+    </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Checkout\Block\Multishipping\Address\Select" name="checkout_address_select" template="multishipping/address/select.phtml"/>
     </referenceContainer>

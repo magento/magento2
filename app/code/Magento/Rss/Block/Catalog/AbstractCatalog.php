@@ -68,30 +68,28 @@ class AbstractCatalog extends \Magento\Rss\Block\AbstractBlock
     protected $_catalogData = null;
 
     /**
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Customer\Model\Session $customerSession,
+        \Magento\Catalog\Helper\Data $catalogData,
         array $data = array()
     ) {
         $this->_catalogData = $catalogData;
-        parent::__construct($coreData, $context, $storeManager, $customerSession, $data);
+        parent::__construct($context, $coreData, $customerSession, $data);
     }
 
     /**
      * Return Price Block renderer for specified product type
      *
      * @param string $productTypeId Catalog Product type
-     * @return \Magento\Core\Block\AbstractBlock
+     * @return \Magento\View\Block\AbstractBlock
      */
     protected function _getPriceBlock($productTypeId)
     {

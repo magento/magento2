@@ -34,7 +34,7 @@
  */
 namespace Magento\Sendfriend\Block;
 
-class Send extends \Magento\Core\Block\Template
+class Send extends \Magento\View\Block\Template
 {
     /**
      * Sendfriend data
@@ -56,25 +56,25 @@ class Send extends \Magento\Core\Block\Template
     protected $_customerSession;
 
     /**
+     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sendfriend\Helper\Data $sendfriendData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sendfriend\Helper\Data $sendfriendData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;
         $this->_coreRegistry = $registry;
         $this->_sendfriendData = $sendfriendData;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

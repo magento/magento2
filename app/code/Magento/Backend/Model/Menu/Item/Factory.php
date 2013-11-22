@@ -33,17 +33,17 @@ class Factory
     protected $_objectManager;
 
     /**
-     * @var \Magento\Core\Model\Factory\Helper
+     * @var \Magento\App\Helper\HelperFactory
      */
     protected $_helperFactory;
 
     /**
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\Factory\Helper $helperFactory
+     * @param \Magento\App\Helper\HelperFactory $helperFactory
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\Factory\Helper $helperFactory
+        \Magento\App\Helper\HelperFactory $helperFactory
     ) {
         $this->_objectManager = $objectManager;
         $this->_helperFactory = $helperFactory;

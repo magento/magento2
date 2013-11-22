@@ -44,7 +44,7 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
             ->register('current_product', \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Catalog\Model\Product')->load(1));
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Core\Block\Text', 'head');
+            ->createBlock('Magento\View\Block\Text', 'head');
         /** @var $usedAttribute \Magento\Catalog\Model\Entity\Attribute */
         $usedAttribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Catalog\Model\Entity\Attribute')->loadByCode(

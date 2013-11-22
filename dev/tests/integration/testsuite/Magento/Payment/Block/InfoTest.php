@@ -51,7 +51,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $childBank->setInfo($paymentInfoBank);
 
         $nonExpectedHtml = 'non-expected html';
-        $childHtml = $layout->addBlock('Magento\Core\Block\Text', 'child.html', 'block');
+        $childHtml = $layout->addBlock('Magento\View\Block\Text', 'child.html', 'block');
         $childHtml->setText($nonExpectedHtml);
 
         /** @var $paymentInfoCheckmo \Magento\Payment\Model\Info */

@@ -22,11 +22,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Theme Image Path
- */
 namespace Magento\View\Design\Theme\Image;
 
+/**
+ * Theme Image Path interface
+ */
 interface PathInterface
 {
     /**

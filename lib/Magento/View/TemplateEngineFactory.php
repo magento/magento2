@@ -1,7 +1,5 @@
 <?php
 /**
- * Factory class for Template Engine
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -28,6 +26,9 @@ namespace Magento\View;
 
 use Magento\ObjectManager;
 
+/**
+ * Factory class for Template Engine
+ */
 class TemplateEngineFactory
 {
     /**
@@ -36,31 +37,40 @@ class TemplateEngineFactory
     protected $objectManager;
 
     /**
-     * Template engine type
+     * @var array
      */
-    const ENGINE_PHTML = 'phtml';
+    protected $engines;
 
     /**
      * @param ObjectManager $objectManager
+     * @param array $engines Format: array('<name>' => 'TemplateEngine\Class', ...)
      */
-    public function __construct(ObjectManager $objectManager)
-    {
+    public function __construct(
+        ObjectManager $objectManager,
+        array $engines
+    ) {
         $this->objectManager = $objectManager;
+        $this->engines       = $engines;
     }
 
     /**
-     * Gets the singleton instance of the appropriate template engine
+     * Retrieve a template engine instance by its unique name
      *
-     * @param string $name
-     * @return \Magento\View\TemplateEngineInterface
-     * @throws \InvalidArgumentException if template engine doesn't exist
+     * @param $name
+     * @return TemplateEngineInterface
+     * @throws \UnexpectedValueException If template engine doesn't implement the necessary interface
+     * @throws \InvalidArgumentException If template engine doesn't exist
      */
-    public function get($name)
+    public function create($name)
     {
-        if (self::ENGINE_PHTML == $name) {
-            return $this->objectManager->get('Magento\\View\\TemplateEngine\\Php');
+        if (!isset($this->engines[$name])) {
+            throw new \InvalidArgumentException("Unknown template engine type: '$name'.");
         }
-        // Unknown type, throw exception
-        throw new \InvalidArgumentException('Unknown template engine type: ' . $name);
+        $engineClass = $this->engines[$name];
+        $engineInstance = $this->objectManager->create($engineClass);
+        if (!($engineInstance instanceof \Magento\View\TemplateEngineInterface)) {
+            throw new \UnexpectedValueException("$engineClass has to implement the template engine interface.");
+        }
+        return $engineInstance;
     }
 }

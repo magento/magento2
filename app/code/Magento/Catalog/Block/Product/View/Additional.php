@@ -34,7 +34,7 @@
  */
 namespace Magento\Catalog\Block\Product\View;
 
-class Additional extends \Magento\Core\Block\Template
+class Additional extends \Magento\View\Block\Template
 {
 
     protected $_list;

@@ -29,7 +29,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml;
 
-class Index extends \Magento\Backend\Controller\AbstractAction
+use Magento\App\Action\NotFoundException;
+
+class Index extends \Magento\Backend\App\AbstractAction
 {
     /**
      * Search modules list
@@ -39,11 +41,11 @@ class Index extends \Magento\Backend\Controller\AbstractAction
     protected $_searchModules;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param array $searchModules
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         array $searchModules = array()
     ) {
         $this->_searchModules = $searchModules;

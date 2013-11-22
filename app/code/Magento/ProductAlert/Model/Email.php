@@ -119,7 +119,7 @@ class Email extends \Magento\Core\Model\AbstractModel
     protected $_appEmulation;
 
     /**
-     * @var \Magento\Core\Model\Email\TemplateFactory
+     * @var \Magento\Email\Model\TemplateFactory
      */
     protected $_templateFactory;
 
@@ -131,7 +131,7 @@ class Email extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Core\Model\App\Emulation $appEmulation
-     * @param \Magento\Core\Model\Email\TemplateFactory $templateFactory
+     * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -144,7 +144,7 @@ class Email extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Core\Model\App\Emulation $appEmulation,
-        \Magento\Core\Model\Email\TemplateFactory $templateFactory,
+        \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()

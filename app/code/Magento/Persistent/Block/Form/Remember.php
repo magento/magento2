@@ -34,7 +34,7 @@
 
 namespace Magento\Persistent\Block\Form;
 
-class Remember extends \Magento\Core\Block\Template
+class Remember extends \Magento\View\Block\Template
 {
     /**
      * Persistent data
@@ -49,23 +49,22 @@ class Remember extends \Magento\Core\Block\Template
     protected $mathRandom;
 
     /**
-     * @param \Magento\Persistent\Helper\Data $persistentData
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Math\Random $mathRandom
      * @param array $data
-     * @param \Magento\Math\Random $mathRandom
      */
     public function __construct(
-        \Magento\Persistent\Helper\Data $persistentData,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Persistent\Helper\Data $persistentData,
         \Magento\Math\Random $mathRandom,
         array $data = array()
     ) {
         $this->_persistentData = $persistentData;
         $this->mathRandom = $mathRandom;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

@@ -33,7 +33,7 @@
  */
 namespace Magento\Adminhtml\Controller\Report;
 
-class Statistics extends \Magento\Backend\Controller\Adminhtml\Action
+class Statistics extends \Magento\Backend\App\Action
 {
     /**
      * Admin session model
@@ -42,11 +42,26 @@ class Statistics extends \Magento\Backend\Controller\Adminhtml\Action
      */
     protected $_adminSession = null;
 
+    /**
+     * @var \Magento\Core\Filter\Date
+     */
+    protected $_dateFilter;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Core\Filter\Date $dateFilter
+     */
+    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Core\Filter\Date $dateFilter)
+    {
+        $this->_dateFilter = $dateFilter;
+        parent::__construct($context);
+    }
+
     public function _initAction()
     {
-        $this->loadLayout()
-            ->_addBreadcrumb(__('Reports'), __('Reports'))
-            ->_addBreadcrumb(__('Statistics'), __('Statistics'));
+        $this->_view->loadLayout();
+        $this->_addBreadcrumb(__('Reports'), __('Reports'));
+        $this->_addBreadcrumb(__('Statistics'), __('Statistics'));
         return $this;
     }
 
@@ -58,7 +73,9 @@ class Statistics extends \Magento\Backend\Controller\Adminhtml\Action
 
         $requestData = $this->_objectManager->get('Magento\Adminhtml\Helper\Data')
             ->prepareFilterString($this->getRequest()->getParam('filter'));
-        $requestData = $this->_filterDates($requestData, array('from', 'to'));
+        $inputFilter = new \Zend_Filter_Input(array('from' => $this->_dateFilter, 'to' => $this->_dateFilter),
+            array(), $requestData);
+        $requestData = $inputFilter->getUnescaped();
         $requestData['store_ids'] = $this->getRequest()->getParam('store_ids');
         $params = new \Magento\Object();
 
@@ -141,7 +158,7 @@ class Statistics extends \Magento\Backend\Controller\Adminhtml\Action
         if($this->_getSession()->isFirstPageAfterLogin()) {
             $this->_redirect('adminhtml/*');
         } else {
-            $this->_redirectReferer('*/*');
+            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl('*/*'));
         }
         return $this;
     }
@@ -172,7 +189,7 @@ class Statistics extends \Magento\Backend\Controller\Adminhtml\Action
         if($this->_getSession()->isFirstPageAfterLogin()) {
             $this->_redirect('adminhtml/*');
         } else {
-            $this->_redirectReferer('*/*');
+            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl('*/*'));
         }
 
         return $this;
@@ -180,12 +197,12 @@ class Statistics extends \Magento\Backend\Controller\Adminhtml\Action
 
     public function indexAction()
     {
-        $this->_title(__('Refresh Statistics'));
+        $this->_title->add(__('Refresh Statistics'));
 
         $this->_initAction()
             ->_setActiveMenu('Magento_Reports::report_statistics_refresh')
-            ->_addBreadcrumb(__('Refresh Statistics'), __('Refresh Statistics'))
-            ->renderLayout();
+            ->_addBreadcrumb(__('Refresh Statistics'), __('Refresh Statistics'));
+        $this->_view->renderLayout();
     }
 
     protected function _isAllowed()

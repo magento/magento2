@@ -33,7 +33,7 @@
  */
 namespace Magento\Core\Helper\Url;
 
-class Rewrite extends \Magento\Core\Helper\AbstractHelper
+class Rewrite extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Validation error constants
@@ -47,11 +47,11 @@ class Rewrite extends \Magento\Core\Helper\AbstractHelper
     protected $_urlrewrite;
 
     /**
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Source\Urlrewrite\Options $urlrewrite
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Source\Urlrewrite\Options $urlrewrite
     ) {
         parent::__construct($context);

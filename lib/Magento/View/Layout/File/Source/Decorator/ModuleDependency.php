@@ -1,7 +1,5 @@
 <?php
 /**
- * Decorator that sorts layout files according to dependencies between modules they belong to
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -31,6 +29,9 @@ use Magento\View\Layout\File;
 use Magento\Module\ModuleListInterface;
 use Magento\View\Design\ThemeInterface;
 
+/**
+ * Decorator that sorts layout files according to dependencies between modules they belong to
+ */
 class ModuleDependency implements SourceInterface
 {
     /**
@@ -65,7 +66,9 @@ class ModuleDependency implements SourceInterface
     /**
      * Retrieve layout files, sorted by the priority of modules they belong to
      *
-     * {@inheritdoc}
+     * @param ThemeInterface $theme
+     * @param string $filePath
+     * @return \Magento\View\Layout\File[]
      */
     public function getFiles(ThemeInterface $theme, $filePath = '*')
     {

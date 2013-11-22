@@ -41,23 +41,23 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     protected $_salesData = null;
 
     /**
-     * @param \Magento\Sales\Helper\Data $salesData
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Sales\Helper\Data $salesData
      * @param array $data
      */
     public function __construct(
-        \Magento\Sales\Helper\Data $salesData,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Sales\Helper\Data $salesData,
         array $data = array()
     ) {
         $this->_salesData = $salesData;
-        parent::__construct($productFactory, $coreData, $context, $registry, $data);
+        parent::__construct($context, $coreData, $productFactory, $registry, $data);
     }
 
     /**

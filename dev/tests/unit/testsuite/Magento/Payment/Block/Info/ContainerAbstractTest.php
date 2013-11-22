@@ -48,7 +48,7 @@ class ContainerAbstractTest extends \PHPUnit_Framework_TestCase
             ->method('getPaymentInfo')
             ->will($this->returnValue($paymentInfo));
 
-        $childBlock = $objectManagerHelper->getObject('Magento\Core\Block\Template');
+        $childBlock = $objectManagerHelper->getObject('Magento\View\Block\Template');
         $block->expects($this->atLeastOnce())
             ->method('getChildBlock')
             ->with('payment.info.checkmo')
