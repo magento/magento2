@@ -24,51 +24,6 @@
  */
 
 /*
-   Actions look like buttons
--------------------------------------- */
-.action-theme-preview,
-.action-theme-preview:visited,
-.action-theme-assign,
-.action-theme-assign:visited,
-.action-save,
-.action-save:visited {
-    font-family: 'CallunaSans';
-    font-size: 13px;
-    font-weight: 500;
-    color: #676056;
-    position: relative;
-    display: inline-block;
-    padding: 4px 10px;
-    margin-bottom: 0;
-    line-height: 18px;
-    text-align: center;
-    text-decoration: none;
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-    vertical-align: top;
-    cursor: pointer;
-    background: #ffffff;
-    background: -moz-linear-gradient(top, #ffffff 0%, #e6e6e6 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #e6e6e6));
-    background: -webkit-linear-gradient(top, #ffffff 0%, #e6e6e6 100%);
-    background: -o-linear-gradient(top, #ffffff 0%, #e6e6e6 100%);
-    background: -ms-linear-gradient(top, #ffffff 0%, #e6e6e6 100%);
-    background: linear-gradient(to bottom, #ffffff 0%, #e6e6e6 100%);
-    border: 1px solid #c0bcb8;
-    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-
-
-/*
     Actions look like links
 -------------------------------------- */
 #store-view-window .action-close {
@@ -532,30 +487,6 @@
 
 .theme-assigned-to-storeview span {
     color: #959393;
-}
-
-.theme-assigned-data .action-edit {
-    background: #f47b20;
-    color: #fff;
-    border-color: transparent;
-}
-
-.theme-assigned-data .action-edit:hover {
-    background: #e2701a;
-    color: #fff;
-    text-shadow: 0 -1px 2px #955326;
-}
-
-.eq-ie8 .theme-assigned-data .action-edit,
-.eq-ie8 .theme-assigned-data .action-edit:hover,
-.eq-ie8 .theme-assigned-data .action-edit:active,
-.eq-ie8 .theme-assigned-data .action-edit:focus,
-.eq-ie8 .theme-assigned-data .action-edit[disabled] {
-    filter: none;
-}
-
-.theme-assigned-data .action-edit:active {
-    box-shadow: 0 1px 5px #955326 inset;
 }
 
 /*

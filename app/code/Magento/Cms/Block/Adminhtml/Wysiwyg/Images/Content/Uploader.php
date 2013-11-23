@@ -41,23 +41,21 @@ class Uploader extends \Magento\Adminhtml\Block\Media\Uploader
     protected $_imagesStorage;
 
     /**
-     * @param \Magento\Cms\Model\Wysiwyg\Images\Storage $imagesStorage
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\View\Url $viewUrl
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\File\Size $fileSize
+     * @param \Magento\Cms\Model\Wysiwyg\Images\Storage $imagesStorage
      * @param array $data
      */
     public function __construct(
-        \Magento\Cms\Model\Wysiwyg\Images\Storage $imagesStorage,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\View\Url $viewUrl,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\File\Size $fileSize,
+        \Magento\Cms\Model\Wysiwyg\Images\Storage $imagesStorage,
         array $data = array()
     ) {
         $this->_imagesStorage = $imagesStorage;
-        parent::__construct($coreData, $context, $viewUrl, $fileSize, $data);
+        parent::__construct($context, $coreData, $fileSize, $data);
     }
 
     protected function _construct()

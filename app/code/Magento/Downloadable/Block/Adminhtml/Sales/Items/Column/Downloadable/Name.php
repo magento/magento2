@@ -44,27 +44,24 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
     protected $_itemsFactory;
 
     /**
-     * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Filter\FilterManager $filter
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param array $data
-     * @internal param \Magento\Core\Helper\String $coreString
      */
     public function __construct(
-        \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Filter\FilterManager $filter,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
         \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,
         array $data = array()
     ) {
         $this->_purchasedFactory = $purchasedFactory;
         $this->_itemsFactory = $itemsFactory;
-        parent::__construct($optionFactory, $coreData, $context, $filter, $data);
+        parent::__construct($context, $coreData, $optionFactory, $data);
     }
 
     public function getLinks()

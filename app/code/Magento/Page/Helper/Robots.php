@@ -33,7 +33,7 @@
  */
 namespace Magento\Page\Helper;
 
-class Robots extends \Magento\Core\Helper\AbstractHelper
+class Robots extends \Magento\App\Helper\AbstractHelper
 {
     const XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS = 'design/search_engine_robots/default_custom_instructions';
 
@@ -45,11 +45,11 @@ class Robots extends \Magento\Core\Helper\AbstractHelper
     /**
      * Constructor
      *
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Config $coreConfig
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Config $coreConfig
     ) {
         parent::__construct(

@@ -26,7 +26,6 @@ namespace Magento\Filter;
 class StripTagsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \Magento\Filter\StripTags::_construct
      * @covers \Magento\Filter\StripTags::filter
      */
     public function testStripTags()

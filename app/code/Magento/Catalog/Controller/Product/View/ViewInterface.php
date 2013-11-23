@@ -25,17 +25,8 @@
  */
 
 /**
- * Interface needed to be implemented by controller that wants to
- * show product view page
+ * Marker interface for controllers on product view page
  */
 namespace Magento\Catalog\Controller\Product\View;
 
-interface ViewInterface
-{
-    /**
-     * Loads layout messages from message storage
-     *
-     * @param string $messagesStorage
-     */
-    public function initLayoutMessages($messagesStorage);
-}
+interface ViewInterface{}

@@ -127,7 +127,7 @@ class Observer
     protected $_translate;
 
     /**
-     * @var \Magento\Core\Model\Email\TemplateFactory
+     * @var \Magento\Email\Model\TemplateFactory
      */
     protected $_templateFactory;
 
@@ -146,7 +146,7 @@ class Observer
      * @param \Magento\Core\Model\DateFactory $dateFactory
      * @param \Magento\ProductAlert\Model\Resource\Stock\CollectionFactory $stockColFactory
      * @param \Magento\Core\Model\Translate $translate
-     * @param \Magento\Core\Model\Email\TemplateFactory $templateFactory
+     * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param \Magento\ProductAlert\Model\EmailFactory $emailFactory
      */
     public function __construct(
@@ -159,7 +159,7 @@ class Observer
         \Magento\Core\Model\DateFactory $dateFactory,
         \Magento\ProductAlert\Model\Resource\Stock\CollectionFactory $stockColFactory,
         \Magento\Core\Model\Translate $translate,
-        \Magento\Core\Model\Email\TemplateFactory $templateFactory,
+        \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\ProductAlert\Model\EmailFactory $emailFactory
     ) {
         $this->_taxData = $taxData;
@@ -382,7 +382,7 @@ class Observer
 
             $$this->_translate->setTranslateInline(false);
 
-            /* @var $emailTemplate \Magento\Core\Model\Email\Template */
+            /* @var $emailTemplate \Magento\Email\Model\Template */
             $this->_templateFactory->create()->setDesignConfig(array('area'  => 'backend'))
                 ->sendTransactional(
                     $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE),

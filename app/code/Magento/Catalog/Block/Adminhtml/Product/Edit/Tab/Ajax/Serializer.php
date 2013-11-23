@@ -25,7 +25,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax;
 
-class Serializer extends \Magento\Core\Block\Template
+class Serializer extends \Magento\View\Block\Template
 {
     public function _construct()
     {

@@ -1,7 +1,5 @@
 <?php
 /**
- * Source of non-overriding layout files introduced by a theme
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -32,6 +30,9 @@ use Magento\App\Dir;
 use Magento\Filesystem;
 use Magento\View\Layout\File\Factory;
 
+/**
+ * Source of non-overriding layout files introduced by a theme
+ */
 class Theme implements SourceInterface
 {
     /**
@@ -65,7 +66,11 @@ class Theme implements SourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieve files
+     *
+     * @param ThemeInterface $theme
+     * @param string $filePath
+     * @return array|\Magento\View\Layout\File[]
      */
     public function getFiles(ThemeInterface $theme, $filePath = '*')
     {

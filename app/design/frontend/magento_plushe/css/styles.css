@@ -431,7 +431,7 @@ input[type="button"],
 .popup .actions .action.submit,
 .page.title .action,
 .block.add.review .action.submit,
-.opc.wrapper .form:not(.login) .actions button.action,
+.opc.wrapper .actions button.action,
 .step.login.wrapper button.action:not(.reload),
 .multicheckout .action.continue,
 .multicheckout .action.submit,
@@ -497,7 +497,7 @@ input[type="button"],
 .popup .actions .action.submit,
 .page.title .action,
 .block.add.review .action.submit,
-.opc.wrapper .form:not(.login) .actions button.action,
+.opc.wrapper .actions button.action,
 .step.login.wrapper button.action:not(.reload),
 .multicheckout .action.continue,
 .multicheckout .action.submit,
@@ -589,9 +589,9 @@ input[type="button"]:hover,
 .block.add.review .action.submit:focus,
 .block.add.review .action.submit:active,
 .block.add.review .action.submit:hover,
-.opc.wrapper .form:not(.login) .actions button.action:focus,
-.opc.wrapper .form:not(.login) .actions button.action:active,
-.opc.wrapper .form:not(.login) .actions button.action:hover,
+.opc.wrapper .actions button.action:focus,
+.opc.wrapper .actions button.action:active,
+.opc.wrapper .actions button.action:hover,
 .step.login.wrapper button.action:not(.reload):focus,
 .step.login.wrapper button.action:not(.reload):active,
 .step.login.wrapper button.action:not(.reload):hover,
@@ -882,7 +882,7 @@ input[type="reset"],
 .popup .actions .action.cancel,
 .page.title .action,
 .block.add.review .action.submit,
-.opc.wrapper .form:not(.login) .actions button.action,
+.opc.wrapper .actions button.action,
 .step.login.wrapper button.action:not(.reload),
 .multicheckout .action.update,
 .multicheckout .action.continue,
@@ -1351,7 +1351,7 @@ textarea:disabled {
 .form.validation .fieldset {
   margin: 20px 0;
 }
-.form.settings .field {
+.form.settings > .field {
   display: inline-block;
   padding-right: 20px;
   vertical-align: top;
@@ -1596,6 +1596,57 @@ textarea:disabled {
   background: #da370a;
   display: block;
   position: absolute;
+}
+/* Field with multiple fields */
+.fields.group {
+  letter-spacing: -0.31em;
+  /* webkit */
+
+  *letter-spacing: normal;
+  /* reset IE < 8 */
+
+  word-spacing: -0.43em;
+  /* IE < 8 && gecko */
+
+  margin-right: -20px;
+}
+.fields.group > * {
+  letter-spacing: normal;
+  word-spacing: normal;
+}
+.fields.group .field {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  vertical-align: top;
+  margin: 0!important;
+}
+.fields.group .field .label {
+  width: auto;
+  float: none;
+  text-align: left;
+  padding-right: 0;
+}
+.fields.group .field .control {
+  float: none;
+  width: auto;
+}
+.fields.group.group-2 .field {
+  width: 50%!important;
+  display: inline-block;
+}
+.fields.group.group-3 .field {
+  width: 33.3%!important;
+  display: inline-block;
+}
+.fields.group.group-4 .field {
+  width: 25%!important;
+  display: inline-block;
+}
+.fields.group.group-5 .field {
+  width: 20%!important;
+  display: inline-block;
 }
 .clearlessgrid1 {
   width: 100%;
@@ -2416,6 +2467,10 @@ ul.messages {
   html.opened {
     overflow: hidden;
   }
+  body {
+    width: 100%;
+    height: 100%;
+  }
   body.opened {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     position: relative;
@@ -2427,6 +2482,9 @@ ul.messages {
     left: 0;
     -webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    -webkit-transition: left 0.3s ease-out 0;
+    -moz-transition: left 0.3s ease-out 0;
+    transition: left 0.3s ease-out 0;
   }
   body.opened .page.wrapper {
     margin-right: -86%;
@@ -3756,7 +3814,7 @@ ul.messages {
 .opc .fieldset {
   margin: 20px 0;
 }
-.opc .fieldset .field {
+.opc .fieldset > .field {
   display: inline-block;
   padding-right: 20px;
   vertical-align: top;
@@ -4122,12 +4180,20 @@ strong {
   list-style-type: none;
   list-style-image: none;
 }
+.hidden,
+.no-display {
+  display: none !important;
+  visibility: hidden;
+}
 /*
     Forms
 -------------------------------------- */
 .field.required > .label > span:first-child:after {
   content: '*';
   color: #da370a;
+}
+.fields .field {
+  padding-right: 20px;
 }
 /*
     Magento_Page
@@ -5194,40 +5260,40 @@ body {
 .opc.wrapper > .opc .section {
   margin-bottom: 4px;
 }
-.opc.wrapper > .opc .section > .step-title {
+.opc.wrapper > .opc .section > .step.title {
   padding: 15px 20px;
   line-height: 1;
   background: #da370a;
   font-size: 22px;
 }
-.opc.wrapper > .opc .section > .step-title h2 {
+.opc.wrapper > .opc .section > .step.title h2 {
   font-weight: 400;
   font-size: 18px;
   margin: 0;
   padding: 0;
   color: #fff;
 }
-.opc.wrapper > .opc .section > .step-title .number {
+.opc.wrapper > .opc .section > .step.title .number {
   display: none;
 }
-.opc.wrapper > .opc .section.active > .step-title {
+.opc.wrapper > .opc .section.active > .step.title {
   background: #f8f8f8;
   margin-bottom: 0;
 }
-.opc.wrapper > .opc .section.active > .step-title h2 {
+.opc.wrapper > .opc .section.active > .step.title h2 {
   color: #675f55;
 }
-.opc.wrapper > .opc .section.allow > .step-title {
+.opc.wrapper > .opc .section.allow > .step.title {
   cursor: pointer;
 }
-.opc.wrapper > .opc .section.allow > .step-title h2:after {
+.opc.wrapper > .opc .section.allow > .step.title h2:after {
   display: block;
 }
-.opc.wrapper > .opc .section > .step {
+.opc.wrapper > .opc .section > .step.content {
   padding: 0 20px 20px;
   background: #f8f8f8;
 }
-.opc.wrapper > .opc .section > .step:before {
+.opc.wrapper > .opc .section > .step.content:before {
   content: '';
   border-top: 3px solid #e5e5e5;
   display: block;
@@ -5239,7 +5305,7 @@ body {
   border: 0;
   position: relative;
 }
-.opc.wrapper .form:not(.login) .fieldset .field {
+.opc.wrapper .form:not(.login) .fieldset > .field {
   display: inline-block;
   padding-right: 20px;
   vertical-align: top;
@@ -5266,26 +5332,6 @@ body {
 .opc.wrapper .form:not(.login) .field:not(.choice) .label {
   display: block;
   padding-bottom: 5px;
-}
-.opc.wrapper .form:not(.login) .actions {
-  *zoom: 1;
-  text-align: right;
-}
-.opc.wrapper .form:not(.login) .actions:before,
-.opc.wrapper .form:not(.login) .actions:after {
-  content: "";
-  display: table;
-}
-.opc.wrapper .form:not(.login) .actions:after {
-  clear: both;
-}
-.opc.wrapper .form:not(.login) .actions button.action {
-  float: right;
-}
-.opc.wrapper .form:not(.login) .actions .secondary {
-  padding-top: 10px;
-  clear: right;
-  float: right;
 }
 .opc.wrapper .form:not(.login) .field.fullname + .field.company,
 .opc.wrapper .form:not(.login) .field.name-lastname + .field.company,
@@ -5316,63 +5362,25 @@ body {
   word-spacing: normal;
   color: #da370a;
 }
-.opc.wrapper .form:not(.login) .field.date .nested {
-  display: inline-block;
-  margin-right: 5px;
+.opc.wrapper .actions {
+  *zoom: 1;
+  text-align: right;
 }
-.opc.wrapper .form:not(.login) .field.date select {
-  width: auto;
+.opc.wrapper .actions:before,
+.opc.wrapper .actions:after {
+  content: "";
+  display: table;
 }
-.opc.wrapper .tooltip {
-  background: #ffffff;
-  border: 1px solid #c2c2c2;
-  display: block;
-  cursor: default;
-  padding: 30px;
-  position: absolute;
-  left: 20px;
-  top: 10px;
+.opc.wrapper .actions:after {
+  clear: both;
 }
-.opc.wrapper .tooltip.hidden {
-  display: none;
+.opc.wrapper .actions button.action {
+  float: right;
 }
-.opc.wrapper .tooltip .action.close {
-  position: absolute;
-  right: 5px;
-  top: 5px;
-}
-.opc.wrapper .tooltip .action.close span {
-  width: 11px;
-  display: block;
-  line-height: 0;
-  white-space: nowrap;
-  vertical-align: middle;
-  text-align: center;
-  text-indent: -999em;
-}
-.opc.wrapper .tooltip .action.close span:after {
-  font-family: "icons";
-  font-size: 11px;
-  line-height: 11px;
-  height: 11px;
-  margin: 0;
-  overflow: hidden;
-  content: "\e012";
-  font-style: normal;
-  speak: none;
-  font-weight: normal;
-  -webkit-font-smoothing: antialiased;
-  display: inline-block;
-  vertical-align: middle;
-  text-align: center;
-}
-.opc.wrapper .tooltip .action.close span:active {
-  outline: 0;
-}
-.opc.wrapper .tooltip .action.close span:after {
-  text-indent: 0;
-  display: block;
-  margin: 0;
+.opc.wrapper .actions .secondary {
+  padding-top: 10px;
+  clear: right;
+  float: right;
 }
 .opc.wrapper .check.payable {
   margin: 0 0 0 20px;
@@ -5388,15 +5396,24 @@ body {
   padding: 5px 0;
   width: 68%;
 }
-.opc.wrapper .sp-methods .items,
-.opc.wrapper .sp-methods .fieldset.items {
+.opc.wrapper .methods.payment {
+  margin: 15px 0;
+}
+.opc.wrapper .methods.payment .item.content {
+  padding: 0;
+}
+.opc.wrapper .methods.payment .item.content > * {
+  padding: 15px 0;
+}
+.opc.wrapper .methods.payment .items,
+.opc.wrapper .methods.payment .fieldset.items {
   margin: 0 0 0 6px;
 }
-.opc.wrapper .sp-methods .paypal.field.items {
+.opc.wrapper .methods.payment .paypal.field.items {
   padding: 0;
   width: 100%;
 }
-.opc.wrapper .sp-methods .paypal.icon {
+.opc.wrapper .methods.payment .paypal.icon {
   display: inline-block;
   margin-right: 5px;
   vertical-align: middle;
@@ -5418,10 +5435,88 @@ body {
   height: 100%;
   background: rgba(255, 255, 255, 0.1);
 }
-.opc.loading .active .actions .action {
+.opc.loading .active .actions .secondary,
+.opc.loading .active .actions .primary {
   visibility: hidden;
-  width: 1px;
   overflow: hidden;
+  height: 0px;
+}
+.opc.loading .active .actions .load.indicator {
+  margin-top: 0;
+}
+.fieldset.ccard {
+  padding: 20px 0;
+  margin: 20px 0;
+  border: 0;
+  position: relative;
+}
+.fieldset.ccard > .legend {
+  margin: 15px 0;
+}
+.fieldset.ccard > .field {
+  display: inline-block;
+  padding-right: 20px;
+  vertical-align: top;
+  width: 50%;
+}
+.fieldset.ccard .nested .field {
+  width: 100%;
+}
+.fieldset.ccard .actions {
+  margin-right: 30px;
+}
+.fieldset.ccard .field {
+  margin: 0 0 10px;
+}
+.fieldset.ccard .field.logos img {
+  display: inline-block;
+  vertical-align: middle;
+}
+.fieldset.ccard .field:last-child {
+  margin-bottom: 0;
+}
+.fieldset.ccard .field .nested {
+  padding: 0 0 0;
+}
+.fieldset.ccard .field .nested .field {
+  margin: 5px 0;
+}
+.fieldset.ccard .field:not(.choice) .label {
+  display: block;
+  padding-bottom: 5px;
+}
+.fieldset.ccard .field.cvv input.cvv {
+  width: 80px;
+}
+.fieldset.ccard .field.cvv .tooltip {
+  -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+  background: #ffffff;
+  border: 1px solid #c2c2c2;
+  z-index: 99;
+  width: 500px;
+  height: 250px;
+  position: fixed;
+  float: left;
+  top: 50%;
+  left: 50%;
+  padding: 25px;
+  text-align: center;
+  margin: -125px 0 0 -250px;
+  background-color: #ffffff;
+  border: 1px solid #e5e5e5;
+}
+.fieldset.ccard .field.cvv .tooltip:before {
+  content: '';
+  position: fixed;
+  z-index: -1;
+  display: block;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.15);
 }
 /*
     Load Indicator
@@ -5523,7 +5618,7 @@ body {
     Step Review
 -------------------------------------- */
 .checkout.submit.order .actions {
-  margin-top: 15px;
+  margin-top: 20px;
   *zoom: 1;
 }
 .checkout.submit.order .actions:before,
@@ -5538,6 +5633,7 @@ body {
   float: right;
 }
 .checkout.submit.order .actions .secondary {
+  clear: none;
   float: left;
   line-height: 32px;
 }
@@ -5568,6 +5664,23 @@ body {
 .order.review.data th.col.item {
   text-align: left;
   padding-left: 20px;
+}
+.checkout.agreements {
+  margin: 10px 0;
+}
+.checkout.agreements .item {
+  margin: 0 0 10px;
+}
+.checkout.agreements .item:last-child {
+  margin: 0;
+}
+.checkout.agreements .agreement {
+  background-color: #f8f8f8;
+  border: 1px solid #e5e5e5;
+  font-size: 11px;
+  overflow: auto;
+  margin: 0 0 10px;
+  padding: 15px;
 }
 /*
     Magento_Checkout
@@ -5716,27 +5829,6 @@ body {
 }
 .multicheckout.overview > .block.shipping .content:last-child {
   margin-bottom: 0;
-}
-.multicheckout.overview .checkout.agreements {
-  padding: 0;
-  margin: 0;
-  list-style-type: none;
-  list-style-image: none;
-  margin: 10px 0;
-}
-.multicheckout.overview .checkout.agreements .item {
-  margin: 0 0 10px;
-}
-.multicheckout.overview .checkout.agreements .item:last-child {
-  margin: 0;
-}
-.multicheckout.overview .checkout.agreements .agreement {
-  background-color: #f8f8f8;
-  border: 1px solid #e5e5e5;
-  font-size: 11px;
-  overflow: auto;
-  margin: 0 0 10px;
-  padding: 15px;
 }
 .multicheckout.overview > .checkout.review .grand.total {
   margin: 15px 0;
@@ -5917,9 +6009,8 @@ body {
   -webkit-box-sizing: border-box;
   -ms-box-sizing: border-box;
   box-sizing: border-box;
-  border: 1px solid #e5e5e5;
-  height: 310px;
-  overflow: auto;
+  background: #e5e5e5;
+  margin: 0 -20px;
   padding: 20px;
 }
 .gift.message dt {
@@ -5943,34 +6034,6 @@ body {
   margin-top: 2px;
   vertical-align: top;
 }
-.gift.message .design {
-  *zoom: 1;
-  margin: 10px 0 0;
-}
-.gift.message .design:before,
-.gift.message .design:after {
-  content: "";
-  display: table;
-}
-.gift.message .design:after {
-  clear: both;
-}
-.gift.message .design img {
-  height: 75px;
-  width: 75px;
-  float: left;
-  margin-right: 15px;
-}
-.gift.message .design > .price {
-  float: left;
-}
-.gift.message .field.gift.wrapping .label {
-  display: block;
-  padding-bottom: 5px;
-}
-.gift.message .field.gift.wrapping .control select {
-  width: 100%;
-}
 .gift.message .activate.message {
   display: inline-block;
   margin: 10px 0 0;
@@ -5978,18 +6041,6 @@ body {
 .gift.message .activate.message + div .fieldset {
   margin-top: 0;
 }
-.gift.message .field.gift.wrapping .design > .price > .price,
-.gift.message dt > .price > .price {
-  display: block;
-}
-.gift.message .field.gift.wrapping .design > .price > .price > span,
-.gift.message dt > .price > .price > span {
-  display: inline-block;
-}
-.gift.message .no-display {
-  display: none;
-}
-.gift.message .options.order .field.gift.wrapping,
 .gift.message .options.order .field.text {
   width: 100%;
 }
@@ -6071,17 +6122,6 @@ body {
   padding-right: 20px;
   vertical-align: top;
   width: 50%;
-}
-.data.table .gift.wrapping {
-  font-size: 13px;
-  margin: 0;
-}
-.data.table .gift.wrapping dt {
-  font-weight: 600;
-  margin: 5px 0 0;
-}
-.data.table .gift.wrapping dd {
-  margin: 0 0 5px;
 }
 /*
     Magento_Checkout
@@ -6226,6 +6266,9 @@ body {
   font-weight: 200;
   margin: 0 0 10px 10px;
   padding: 0;
+}
+.items.data .item.options dd em:after {
+  content: ':';
 }
 .cart.table.wrapper {
   float: left;
@@ -6932,14 +6975,13 @@ body {
   font-size: 12px;
 }
 .block.minicart .products.minilist .item .product.options.wrapper + .action.edit {
-  margin-right: 8px;
+  margin-right: 16px;
 }
 .block.minicart .products.minilist .item .product.options.wrapper + .action.edit:before {
   content: '|';
   display: inline-block;
   text-decoration: none;
   padding: 0 8px;
-  margin-right: -16px;
 }
 .block.minicart .products.minilist .item .product.options.wrapper + .action.edit:hover:before {
   color: #675f55;
@@ -9726,18 +9768,18 @@ img[align="right"] {
   position: relative;
   z-index: 1;
 }
-.form.send.friend .fieldset .field,
-.form.address.edit .fieldset .field,
-.form.edit.account .fieldset .field,
-.form.search.advanced .fieldset .field,
-.form.orders.search .fieldset .field,
-.form.contact .fieldset .field,
-.form.password.forget .fieldset .field,
-.form.create.account .fieldset .field,
-.form.wishlist.share .fieldset .field,
-.form.password.reset .fieldset .field,
-.form.paypal.review .fieldset .field,
-.form.send.confirmation .fieldset .field {
+.form.send.friend .fieldset > .field,
+.form.address.edit .fieldset > .field,
+.form.edit.account .fieldset > .field,
+.form.search.advanced .fieldset > .field,
+.form.orders.search .fieldset > .field,
+.form.contact .fieldset > .field,
+.form.password.forget .fieldset > .field,
+.form.create.account .fieldset > .field,
+.form.wishlist.share .fieldset > .field,
+.form.password.reset .fieldset > .field,
+.form.paypal.review .fieldset > .field,
+.form.send.confirmation .fieldset > .field {
   display: inline-block;
   padding-right: 20px;
   vertical-align: top;
@@ -11344,6 +11386,10 @@ img[align="right"] {
   content: "";
   display: none;
 }
+.data.table th,
+.data.table td {
+  border-right-width: 0;
+}
 .data.table.order {
   margin-bottom: 45px;
   width: 100%;
@@ -11434,7 +11480,7 @@ img[align="right"] {
 .billing.agreements .data.table {
   margin-bottom: 40px;
 }
-.billing.agreements .form.new.agreement .field {
+.billing.agreements .form.new.agreement > .field {
   display: inline-block;
   padding-right: 20px;
   vertical-align: top;
@@ -12772,10 +12818,11 @@ img[align="right"] {
     display: none;
   }
   .opc.wrapper .load.indicator {
-    left: 0;
-    position: absolute;
-    top: 10px;
-    width: 100%;
+    /*            left: 0;
+              position: absolute;
+              top: 10px;
+              width: 100%;*/
+  
   }
   .block.progress.onepage {
     background: #f8f8f8;
@@ -13459,7 +13506,7 @@ img[align="right"] {
   /*
       My Account -> Billing agreements
       -------------------------------------- */
-  .billing.agreements .form.new.agreement .field {
+  .billing.agreements .form.new.agreement > .field {
     display: inline-block;
     padding-right: 20px;
     vertical-align: top;

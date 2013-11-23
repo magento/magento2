@@ -41,19 +41,19 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
     protected $_symbolSystemFactory;
 
     /**
-     * @param \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolSystemFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolSystemFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolSystemFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolSystemFactory,
         array $data = array()
     ) {
         $this->_symbolSystemFactory = $symbolSystemFactory;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**
@@ -76,7 +76,7 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
     /**
      * Prepares layout
      *
-     * @return \Magento\Core\Block\AbstractBlock
+     * @return \Magento\View\Block\AbstractBlock
      */
     protected function _prepareLayout()
     {
@@ -100,7 +100,7 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
      */
     public function getSaveButtonHtml()
     {
-        /** @var $block \Magento\Core\Block\AbstractBlock */
+        /** @var $block \Magento\View\Block\AbstractBlock */
         $block = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button');
         $block->setData(array(
             'label'     => __('Save Currency Symbols'),

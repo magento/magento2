@@ -45,12 +45,13 @@ class AbstractTest
         $objectManager->get('Magento\View\DesignInterface')
             ->setDefaultDesignTheme();
         $arguments = array(
-            $objectManager->get('Magento\Data\FormFactory'),
+            $objectManager->get('Magento\Backend\Block\Template\Context'),
+            $objectManager->get('Magento\Core\Helper\Data'),
             $objectManager->get('Magento\Adminhtml\Model\Session\Quote'),
             $objectManager->get('Magento\Sales\Model\AdminOrder\Create'),
-            $objectManager->get('Magento\Core\Helper\Data'),
-            $objectManager->get('Magento\Backend\Block\Template\Context'),
+            $objectManager->get('Magento\Data\FormFactory'),
         );
+
         /** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm */
         $block = $this
             ->getMockForAbstractClass('Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm', $arguments);

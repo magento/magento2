@@ -45,13 +45,10 @@ class Date
     protected $_locale;
 
     /**
-     * Init offset
-     *
+     * @param LocaleInterface $locale
      */
-    public function __construct(
-        \Magento\Core\Model\StoreManager $storeManager,
-        \Magento\Core\Model\LocaleInterface $locale
-    ) {
+    public function __construct(\Magento\Core\Model\LocaleInterface $locale)
+    {
         $this->_locale = $locale;
         $this->_offset = $this->calculateOffset($locale->getConfigTimezone());
     }

@@ -19,17 +19,16 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /* @var $this \Magento\Checkout\Block\Onepage\Progress */
 ?>
-<div class="block block-progress opc-block-progress">
-    <div class="block-title">
-        <strong><span><?php echo __('Your Checkout Progress') ?></span></strong>
+<div class="block progress onepage opc-block-progress">
+    <div class="title">
+        <strong><?php echo __('Your Checkout Progress') ?></strong>
     </div>
-    <div class="block-content">
+    <div class="content">
         <dl>
         <?php if ($this->getCheckout()->getStepData('billing', 'is_show')): ?>
         <?php if ($this->isStepComplete('billing')): ?>

@@ -96,33 +96,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     protected $_filterValues;
 
     /**
-     * Locale instance
-     *
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Url $urlModel
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Url $urlModel,
-        \Magento\Core\Model\LocaleInterface $locale,
-        array $data = array()
-    ) {
-        parent::__construct($coreData, $context, $storeManager, $urlModel, $data);
-        $this->_locale = $locale;
-    }
-
-    /**
      * Apply sorting and filtering to collection
      *
      * @return \Magento\Backend\Block\Widget\Grid|\Magento\Reports\Block\Adminhtml\Grid

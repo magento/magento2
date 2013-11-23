@@ -25,7 +25,7 @@
  */
 namespace Magento\GoogleOptimizer\Helper;
 
-class Form extends \Magento\Core\Helper\AbstractHelper
+class Form extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Prepare form

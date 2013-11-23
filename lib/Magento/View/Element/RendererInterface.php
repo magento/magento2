@@ -22,13 +22,10 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Magento Block interface
- */
 namespace Magento\View\Element;
 
 /**
- * @package Magento\View
+ * Magento Block interface
  */
 interface RendererInterface
 {

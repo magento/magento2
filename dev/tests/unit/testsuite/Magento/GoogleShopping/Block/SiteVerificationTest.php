@@ -43,7 +43,7 @@ class SiteVerificationTest extends \PHPUnit_Framework_TestCase
             ->method('escapeHtml')
             ->with('Valor & Honor')->will($this->returnValue('Valor &amp; Honor'));
 
-        $context = $objectHelper->getObject('Magento\Core\Block\Context', array(
+        $context = $objectHelper->getObject('Magento\View\Block\Context', array(
             'escaper' => $escaper
         ));
 

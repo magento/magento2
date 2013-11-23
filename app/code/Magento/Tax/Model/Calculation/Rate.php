@@ -54,13 +54,6 @@ class Rate extends \Magento\Core\Model\AbstractModel
     protected $_titleModel = null;
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager;
-
-    /**
      * @var \Magento\Directory\Model\RegionFactory
      */
     protected $_regionFactory;
@@ -71,7 +64,6 @@ class Rate extends \Magento\Core\Model\AbstractModel
     protected $_titleFactory;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
@@ -81,7 +73,6 @@ class Rate extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Directory\Model\RegionFactory $regionFactory,
@@ -90,7 +81,6 @@ class Rate extends \Magento\Core\Model\AbstractModel
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_eventManager = $eventManager;
         $this->_regionFactory = $regionFactory;
         $this->_titleFactory = $taxTitleFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

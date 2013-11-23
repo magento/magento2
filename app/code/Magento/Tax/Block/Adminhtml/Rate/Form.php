@@ -75,29 +75,29 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_regionFactory;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\Config\Source\Country $country
      * @param \Magento\Tax\Block\Adminhtml\Rate\Title\Fieldset $fieldset
      * @param \Magento\Tax\Model\Calculation\RateFactory $rateFactory
      * @param \Magento\Tax\Model\Calculation\Rate $rate
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Model\Registry $registry,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Directory\Model\Config\Source\Country $country,
         \Magento\Tax\Block\Adminhtml\Rate\Title\Fieldset $fieldset,
         \Magento\Tax\Model\Calculation\RateFactory $rateFactory,
         \Magento\Tax\Model\Calculation\Rate $rate,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
         array $data = array()
     ) {
         $this->_regionFactory = $regionFactory;
@@ -106,7 +106,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_rateFactory = $rateFactory;
         $this->_rate = $rate;
         $this->_taxData = $taxData;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     protected function _construct()
@@ -243,7 +243,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $this->setChild(
             'form_after',
-            $this->getLayout()->createBlock('Magento\Core\Block\Template')
+            $this->getLayout()->createBlock('Magento\View\Block\Template')
                 ->setTemplate('Magento_Tax::rate/js.phtml')
         );
 

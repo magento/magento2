@@ -56,32 +56,30 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_catalogProduct;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Catalog\Model\ProductFactory $catalogProduct
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavAttSetCollection
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $cpCollection
      * @param \Magento\Catalog\Model\Product\Type $catalogType
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Url $urlModel
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Model\Url $urlModel,
         \Magento\Catalog\Model\ProductFactory $catalogProduct,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavAttSetCollection,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $cpCollection,
         \Magento\Catalog\Model\Product\Type $catalogType,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Url $urlModel,
         array $data = array()
     ) {
         $this->_catalogType = $catalogType;
         $this->_cpCollection = $cpCollection;
         $this->_eavAttSetCollection = $eavAttSetCollection;
         $this->_catalogProduct = $catalogProduct;
-        parent::__construct($coreData, $context, $storeManager, $urlModel, $data);
+        parent::__construct($context, $coreData, $urlModel, $data);
     }
 
     protected function _construct()

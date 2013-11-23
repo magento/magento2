@@ -25,6 +25,11 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="checkout_multishipping"/>
+    <referenceBlock name="page.main.title">
+        <action method="setPageTitle">
+            <argument translate="true" name="title" xsi:type="string">Your order has been received.</argument>
+        </action>
+    </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Checkout\Block\Multishipping\Success" name="checkout_success" template="multishipping/success.phtml"/>
     </referenceContainer>

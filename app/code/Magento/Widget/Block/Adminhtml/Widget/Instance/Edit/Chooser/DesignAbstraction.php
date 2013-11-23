@@ -32,7 +32,7 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
  * @method getArea()
  * @method getTheme()
  */
-class DesignAbstraction extends \Magento\Core\Block\Html\Select
+class DesignAbstraction extends \Magento\View\Block\Html\Select
 {
     /**
      * @var \Magento\View\Layout\ProcessorFactory
@@ -50,14 +50,14 @@ class DesignAbstraction extends \Magento\Core\Block\Html\Select
     protected $_appState;
 
     /**
-     * @param \Magento\Core\Block\Context $context
+     * @param \Magento\View\Block\Context $context
      * @param \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory
      * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory
      * @param \Magento\App\State $appState
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Block\Context $context,
+        \Magento\View\Block\Context $context,
         \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory,
         \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory,
         \Magento\App\State $appState,
@@ -72,7 +72,7 @@ class DesignAbstraction extends \Magento\Core\Block\Html\Select
     /**
      * Add necessary options
      *
-     * @return \Magento\Core\Block\AbstractBlock
+     * @return \Magento\View\Block\AbstractBlock
      */
     protected function _beforeToHtml()
     {

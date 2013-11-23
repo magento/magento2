@@ -51,9 +51,15 @@ class ObjectManager extends \Magento\App\ObjectManager
         }
 
         \Magento\Core\Model\Config\Base::destroy();
-        $sharedInstances = array('Magento\ObjectManager' => $this, 'Magento\App\ObjectManager' => $this);
+        $sharedInstances = array(
+            'Magento\ObjectManager' => $this, 'Magento\App\ObjectManager' => $this
+        );
         if (isset($this->_sharedInstances['Magento\App\Resource'])) {
             $sharedInstances['Magento\App\Resource'] = $this->_sharedInstances['Magento\App\Resource'];
+        }
+
+        if (isset($this->_sharedInstances['Magento\Config\Scope'])) {
+            $sharedInstances['Magento\Config\Scope'] = $this->_sharedInstances['Magento\Config\Scope'];
         }
         $this->_sharedInstances = $sharedInstances;
         $this->_config->clean();

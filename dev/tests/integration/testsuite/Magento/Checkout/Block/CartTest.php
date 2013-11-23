@@ -36,9 +36,9 @@ class CartTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $layout \Magento\Core\Model\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
-        $child = $layout->createBlock('Magento\Core\Block\Text')
-            ->setChild('child1', $layout->createBlock('Magento\Core\Block\Text', 'method1'))
-            ->setChild('child2', $layout->createBlock('Magento\Core\Block\Text', 'method2'));
+        $child = $layout->createBlock('Magento\View\Block\Text')
+            ->setChild('child1', $layout->createBlock('Magento\View\Block\Text', 'method1'))
+            ->setChild('child2', $layout->createBlock('Magento\View\Block\Text', 'method2'));
         /** @var $block \Magento\Checkout\Block\Cart */
         $block = $layout->createBlock('Magento\Checkout\Block\Cart')
             ->setChild('child', $child);
@@ -50,7 +50,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $layout \Magento\Core\Model\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
-        $childEmpty = $layout->createBlock('Magento\Core\Block\Text');
+        $childEmpty = $layout->createBlock('Magento\View\Block\Text');
         /** @var $block \Magento\Checkout\Block\Cart */
         $block = $layout->createBlock('Magento\Checkout\Block\Cart')
             ->setChild('child', $childEmpty);

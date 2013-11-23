@@ -33,23 +33,21 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
     protected $_collectionFactory;
 
     /**
-     * @param \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $collectionFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $collectionFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $collectionFactory,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($coreData, $context, $storeManager, $urlModel, $data);
+        parent::__construct($context, $coreData, $urlModel, $data);
     }
 
     protected function _construct()

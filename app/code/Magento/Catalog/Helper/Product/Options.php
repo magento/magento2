@@ -34,7 +34,7 @@
  */
 namespace Magento\Catalog\Helper\Product;
 
-class Options extends \Magento\Core\Helper\AbstractHelper
+class Options extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * @var \Magento\Filesystem
@@ -42,10 +42,10 @@ class Options extends \Magento\Core\Helper\AbstractHelper
     protected $_filesystem;
 
     /**
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Filesystem $filesystem
      */
-    public function __construct(\Magento\Core\Helper\Context $context, \Magento\Filesystem $filesystem)
+    public function __construct(\Magento\App\Helper\Context $context, \Magento\Filesystem $filesystem)
     {
         parent::__construct($context);
         $this->_filesystem = $filesystem;

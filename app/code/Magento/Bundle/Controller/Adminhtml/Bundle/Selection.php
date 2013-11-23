@@ -33,12 +33,12 @@
  */
 namespace Magento\Bundle\Controller\Adminhtml\Bundle;
 
-class Selection extends \Magento\Backend\Controller\Adminhtml\Action
+class Selection extends \Magento\Backend\App\Action
 {
     public function searchAction()
     {
         return $this->getResponse()->setBody(
-            $this->getLayout()
+            $this->_view->getLayout()
                 ->createBlock('Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search')
                 ->setIndex($this->getRequest()->getParam('index'))
                 ->setFirstShow(true)
@@ -49,7 +49,7 @@ class Selection extends \Magento\Backend\Controller\Adminhtml\Action
     public function gridAction()
     {
         return $this->getResponse()->setBody(
-            $this->getLayout()
+            $this->_view->getLayout()
                 ->createBlock('Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid',
                     'adminhtml.catalog.product.edit.tab.bundle.option.search.grid')
                 ->setIndex($this->getRequest()->getParam('index'))

@@ -40,7 +40,6 @@ class StringTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Stdlib\String::__construct
      * @covers \Magento\Stdlib\String::split
      */
     public function testStrSplit()
@@ -54,7 +53,6 @@ class StringTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Stdlib\String::__construct
      * @covers \Magento\Stdlib\String::splitInjection
      */
     public function testSplitInjection()

@@ -33,7 +33,7 @@
  */
 namespace Magento\PageCache\Helper;
 
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Paths to external cache config options
@@ -64,13 +64,13 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_coreStoreConfig;
 
     /**
-     * @param \Magento\Core\Helper\Context                 $context
+     * @param \Magento\App\Helper\Context                 $context
      * @param \Magento\PageCache\Model\CacheControlFactory $ccFactory
      * @param \Magento\Core\Model\Cookie                   $cookie
      * @param \Magento\Core\Model\Store\Config             $coreStoreConfig
      */
     function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\PageCache\Model\CacheControlFactory $ccFactory,
         \Magento\Core\Model\Cookie $cookie,
         \Magento\Core\Model\Store\Config $coreStoreConfig

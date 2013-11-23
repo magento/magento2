@@ -82,10 +82,9 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
         $this->_request->expects($this->any())->method('isDispatched')->will($this->returnValue(false));
         $this->_routerList->expects($this->atLeastOnce())->method('valid')->will($this->returnValue(true));
         $this->_routerList->expects($this->atLeastOnce())->method('current')->will($this->returnValue($this->_router));
-        $controllerInstance = $this->getMock('\Magento\App\ActionInterface');
+        $controllerInstance = $this->getMock('Magento\App\ActionInterface');
         $this->_router->expects($this->atLeastOnce())->method('match')->will($this->returnValue($controllerInstance));
-        $this->_request->expects($this->atLeastOnce())->method('getActionName')->will($this->returnValue('testString'));
-        $controllerInstance->expects($this->atLeastOnce())->method('dispatch')->with('testString');
+        $controllerInstance->expects($this->atLeastOnce())->method('dispatch')->with($this->_request);
         $this->_model->dispatch($this->_request);
     }
 }

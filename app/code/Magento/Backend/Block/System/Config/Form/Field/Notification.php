@@ -33,10 +33,10 @@ class Notification extends \Magento\Backend\Block\System\Config\Form\Field
 {
     protected function _getElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
     {
-        $element->setValue($this->_application->loadCache('admin_notifications_lastcheck'));
-        $format = $this->_application->getLocale()->getDateTimeFormat(
+        $element->setValue($this->_app->loadCache('admin_notifications_lastcheck'));
+        $format = $this->_app->getLocale()->getDateTimeFormat(
             \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM
         );
-        return $this->_application->getLocale()->date(intval($element->getValue()))->toString($format);
+        return $this->_app->getLocale()->date(intval($element->getValue()))->toString($format);
     }
 }

@@ -29,14 +29,8 @@
  */
 namespace Magento\CatalogSearch\Controller;
 
-class Result extends \Magento\Core\Controller\Front\Action
+class Result extends \Magento\App\Action\Action
 {
-    /**
-     * Store manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
 
     /**
      * Catalog session
@@ -46,19 +40,22 @@ class Result extends \Magento\Core\Controller\Front\Action
     protected $_catalogSession;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @var \Magento\Core\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
-        $this->_catalogSession = $catalogSession;
         $this->_storeManager = $storeManager;
+        $this->_catalogSession = $catalogSession;
         parent::__construct($context);
     }
 
@@ -86,38 +83,34 @@ class Result extends \Magento\Core\Controller\Front\Action
                 $query->setId(0)
                     ->setIsActive(1)
                     ->setIsProcessed(1);
-            }
-            else {
+            } else {
                 if ($query->getId()) {
                     $query->setPopularity($query->getPopularity()+1);
-                }
-                else {
+                } else {
                     $query->setPopularity(1);
                 }
 
-                if ($query->getRedirect()){
+                if ($query->getRedirect()) {
                     $query->save();
                     $this->getResponse()->setRedirect($query->getRedirect());
                     return;
-                }
-                else {
+                } else {
                     $query->prepare();
                 }
             }
 
             $this->_objectManager->get('Magento\CatalogSearch\Helper\Data')->checkNotes();
 
-            $this->loadLayout();
-            $this->_initLayoutMessages('Magento\Catalog\Model\Session');
-            $this->_initLayoutMessages('Magento\Checkout\Model\Session');
-            $this->renderLayout();
+            $this->_view->loadLayout();
+            $this->_view->getLayout()
+                ->initMessages(array('Magento\Catalog\Model\Session', 'Magento\Checkout\Model\Session'));
+            $this->_view->renderLayout();
 
             if (!$this->_objectManager->get('Magento\CatalogSearch\Helper\Data')->isMinQueryLength()) {
                 $query->save();
             }
-        }
-        else {
-            $this->_redirectReferer();
+        } else {
+            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
         }
     }
 }

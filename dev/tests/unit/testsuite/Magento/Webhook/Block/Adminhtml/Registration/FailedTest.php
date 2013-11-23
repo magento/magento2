@@ -37,22 +37,14 @@ class FailedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $urlBuilder = $this->getMock('Magento\Core\Model\Url', array('getUrl'), array(), '', false);
 
         /** @var  $coreData \Magento\Core\Helper\Data */
         $coreData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
 
-        $context = $this->getMockBuilder('Magento\Backend\Block\Template\Context')
+        $this->_lastMessage = $this->getMockBuilder('Magento\Message\AbstractMessage')
             ->disableOriginalConstructor()
             ->getMock();
-        $context->expects($this->once())
-            ->method('getUrlBuilder')
-            ->will($this->returnValue($urlBuilder));
-
-        $this->_lastMessage = $this->getMockBuilder('Magento\Core\Model\Message\AbstractMessage')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $messages = $this->getMockBuilder('Magento\Core\Model\Message\Collection')
+        $messages = $this->getMockBuilder('Magento\Message\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $messages->expects($this->any())
@@ -64,7 +56,13 @@ class FailedTest extends \PHPUnit_Framework_TestCase
         $session->expects($this->once())
             ->method('getMessages')
             ->will($this->returnValue($messages));
-        $this->_block = new \Magento\Webhook\Block\Adminhtml\Registration\Failed($coreData, $session, $context);
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_block = $helper->getObject('\Magento\Webhook\Block\Adminhtml\Registration\Failed',
+            array(
+                'coreData' => $coreData,
+                'backendSession' => $session
+            )
+        );
     }
 
     public function testGetSessionError()
@@ -76,5 +74,4 @@ class FailedTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($errorMessage, $this->_block->getSessionError());
     }
-
 }

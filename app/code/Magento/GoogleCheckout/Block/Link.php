@@ -33,7 +33,7 @@
  */
 namespace Magento\GoogleCheckout\Block;
 
-class Link extends \Magento\Core\Block\Template
+class Link extends \Magento\View\Block\Template
 {
     /**
      * @var \Magento\Checkout\Model\Session
@@ -46,22 +46,22 @@ class Link extends \Magento\Core\Block\Template
     protected $paymentFactory;
 
     /**
+     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\GoogleCheckout\Model\PaymentFactory $paymentFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\GoogleCheckout\Model\PaymentFactory $paymentFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         array $data = array()
     ) {
         $this->paymentFactory = $paymentFactory;
         $this->checkoutSession = $checkoutSession;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     public function getImageStyle()

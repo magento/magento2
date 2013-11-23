@@ -45,23 +45,23 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
     protected $_bundleProdConfigur = null;
 
     /**
-     * @param \Magento\Catalog\Helper\Product\Configuration $ctlgProdConfigur
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Bundle\Helper\Catalog\Product\Configuration $bundleProdConfigur
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Helper\Product\Configuration $ctlgProdConfigur,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Catalog\Helper\Product\Configuration $productConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Bundle\Helper\Catalog\Product\Configuration $bundleProdConfigur,
         array $data = array()
     ) {
         $this->_bundleProdConfigur = $bundleProdConfigur;
-        parent::__construct($ctlgProdConfigur, $coreData, $context, $checkoutSession, $data);
+        parent::__construct($context, $coreData, $productConfig, $checkoutSession, $data);
     }
 
     protected function _construct()

@@ -24,10 +24,10 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\Core\Block\Text" name="block1" ifconfig="not_exists">
-        <block class="Magento\Core\Block\Text" name="block2"/>
+    <block class="Magento\View\Block\Text" name="block1" ifconfig="not_exists">
+        <block class="Magento\View\Block\Text" name="block2"/>
     </block>
-    <block class="Magento\Core\Block\Text" name="block3" ifconfig="true_options">
-        <block class="Magento\Core\Block\Text" name="block4" ifconfig="not_exists"/>
+    <block class="Magento\View\Block\Text" name="block3" ifconfig="true_options">
+        <block class="Magento\View\Block\Text" name="block4" ifconfig="not_exists"/>
     </block>
 </layout>

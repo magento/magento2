@@ -38,7 +38,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         /** @var $block \Magento\Adminhtml\Block\Widget\Grid\Massaction\Item */
         $block = $layout->createBlock('Magento\Adminhtml\Block\Widget\Grid\Massaction\Item', 'block');
-        $expected = $layout->addBlock('Magento\Core\Block\Template', 'additional_action', 'block');
+        $expected = $layout->addBlock('Magento\View\Block\Template', 'additional_action', 'block');
         $this->assertSame($expected, $block->getAdditionalActionBlock());
     }
 }

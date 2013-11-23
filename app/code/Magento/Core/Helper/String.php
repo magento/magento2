@@ -29,7 +29,7 @@ namespace Magento\Core\Helper;
 /**
  * Core data helper
  */
-class String extends \Magento\Core\Helper\AbstractHelper
+class String extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Builds namespace + classname out of the parts array

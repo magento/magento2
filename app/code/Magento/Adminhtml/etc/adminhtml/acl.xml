@@ -34,9 +34,6 @@
                 <resource id="Magento_Adminhtml::global_search" title="Global Search" sortOrder="100" />
                 <resource id="Magento_Adminhtml::myaccount" title="My Account" sortOrder="50" />
                 <resource id="Magento_Adminhtml::marketing" title="Marketing" sortOrder="50">
-                    <resource id="Magento_Adminhtml::marketing_communications" title="Communications" sortOrder="30">
-                        <resource id="Magento_Adminhtml::email_template" title="Email Templates" sortOrder="10" />
-                    </resource>
                     <resource id="Magento_Adminhtml::marketing_seo" title="SEO &amp; Search" sortOrder="40" />
                     <resource id="Magento_Adminhtml::marketing_user_content" title="User Content" sortOrder="50" />
                 </resource>

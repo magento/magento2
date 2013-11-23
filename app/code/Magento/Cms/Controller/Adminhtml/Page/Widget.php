@@ -34,7 +34,7 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
-class Widget extends \Magento\Backend\Controller\Adminhtml\Action
+class Widget extends \Magento\Backend\App\Action
 {
     /**
      * Chooser Source action
@@ -42,7 +42,7 @@ class Widget extends \Magento\Backend\Controller\Adminhtml\Action
     public function chooserAction()
     {
         $uniqId = $this->getRequest()->getParam('uniq_id');
-        $pagesGrid = $this->getLayout()->createBlock('Magento\Cms\Block\Adminhtml\Page\Widget\Chooser', '', array(
+        $pagesGrid = $this->_view->getLayout()->createBlock('Magento\Cms\Block\Adminhtml\Page\Widget\Chooser', '', array(
             'data' => array('id' => $uniqId)
         ));
         $this->getResponse()->setBody($pagesGrid->toHtml());

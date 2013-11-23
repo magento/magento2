@@ -24,7 +24,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="product.info">
+    <referenceBlock name="product.info.main">
         <block class="Magento\Payment\Block\Catalog\Product\View\Profile" name="product.info.additional.recurring.schedule" as="recurring_info" template="catalog/product/view/profile/schedule.phtml" group="detailed_info">
             <action method="setTitle">
                 <argument translate="true" name="value" xsi:type="string">Recurring Profile</argument>

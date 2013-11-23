@@ -57,14 +57,14 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\AbstractConfig
     protected $string;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\Config\Structure $configStructure
      * @param \Magento\Backend\Model\Config\Factory $configFactory
      * @param \Magento\Cache\FrontendInterface $cache
      * @param \Magento\Stdlib\String $string
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Backend\Model\Config\Structure $configStructure,
         \Magento\Backend\Model\Config\Factory $configFactory,
         \Magento\Cache\FrontendInterface $cache,

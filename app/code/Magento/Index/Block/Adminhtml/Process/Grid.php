@@ -55,26 +55,24 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
     protected $_collectionFactory;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Index\Model\Resource\Process\CollectionFactory $factory
      * @param \Magento\Index\Model\Process $indexProcess
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Index\Model\EventRepository $eventRepository
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Model\Url $urlModel,
         \Magento\Index\Model\Resource\Process\CollectionFactory $factory,
         \Magento\Index\Model\Process $indexProcess,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Index\Model\EventRepository $eventRepository,
         array $data = array()
     ) {
-        parent::__construct($coreData, $context, $storeManager, $urlModel, $data);
+        parent::__construct($context, $coreData, $urlModel, $data);
         $this->_eventRepository = $eventRepository;
         $this->_indexProcess = $indexProcess;
         $this->_collectionFactory = $factory;

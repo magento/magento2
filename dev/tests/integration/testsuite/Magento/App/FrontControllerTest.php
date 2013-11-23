@@ -48,23 +48,6 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
         $this->_model = $this->_objectManager->create('Magento\App\FrontController');
     }
 
-    public function testGetRequest()
-    {
-        $this->assertNull($this->_model->getRequest());
-    }
-
-    public function testGetResponse()
-    {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')->setResponse(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\App\ResponseInterface')
-        );
-        if (!\Magento\TestFramework\Helper\Bootstrap::canTestHeaders()) {
-            $this->markTestSkipped('Can\'t test get response without sending headers');
-        }
-        $this->assertInstanceOf('Magento\App\ResponseInterface', $this->_model->getResponse());
-    }
-
     public function testDispatch()
     {
         if (!\Magento\TestFramework\Helper\Bootstrap::canTestHeaders()) {
@@ -75,8 +58,6 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
         $request = $this->_objectManager->create('Magento\App\Request\Http');
         /* empty action */
         $request->setRequestUri('core/index/index');
-        $this->_model->dispatch($request);
-        $this->assertEmpty($this->_model->getResponse()->getBody());
-        $this->assertEquals($request, $this->_model->getRequest());
+        $this->assertEmpty($this->_model->dispatch($request)->getBody());
     }
 }

@@ -25,19 +25,13 @@
  */
 
 namespace Magento\Customer\Controller;
+use Magento\App\RequestInterface;
 
 /**
  * Customer account controller
  */
-class Account extends \Magento\Core\Controller\Front\Action
+class Account extends \Magento\App\Action\Action
 {
-    /**
-     * Action list where need check enabled cookie
-     *
-     * @var array
-     */
-    protected $_cookieCheckActions = array('loginPost', 'createpost');
-
     /**
      * List of actions that are allowed for not authorized users
      *
@@ -76,11 +70,6 @@ class Account extends \Magento\Core\Controller\Front\Action
     protected $_urlFactory;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * @var \Magento\Customer\Model\CustomerFactory
      */
     protected $_customerFactory;
@@ -103,35 +92,43 @@ class Account extends \Magento\Core\Controller\Front\Action
     protected $string;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @var \Magento\Core\App\Action\FormKeyValidator
+     */
+    protected $_formKeyValidator;
+
+    /**
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\UrlFactory $urlFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Customer\Model\FormFactory $formFactory
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
      * @param \Magento\Stdlib\String $string
+     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\UrlFactory $urlFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Customer\Model\FormFactory $formFactory,
         \Magento\Customer\Model\AddressFactory $addressFactory,
-        \Magento\Stdlib\String $string
+        \Magento\Stdlib\String $string,
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
+        $this->_storeManager = $storeManager;
         $this->_coreRegistry = $coreRegistry;
         $this->_customerSession = $customerSession;
-        $this->_storeManager = $storeManager;
         $this->_urlFactory = $urlFactory;
         $this->_customerFactory = $customerFactory;
         $this->_formFactory = $formFactory;
         $this->_addressFactory = $addressFactory;
         $this->string = $string;
+        $this->_formKeyValidator = $formKeyValidator;
         parent::__construct($context);
     }
 
@@ -146,37 +143,6 @@ class Account extends \Magento\Core\Controller\Front\Action
     }
 
     /**
-     * Action predispatch
-     *
-     * Check customer authentication for some actions
-     */
-    public function preDispatch()
-    {
-        // a brute-force protection here would be nice
-
-        parent::preDispatch();
-
-        if (!$this->_objectManager->get('Magento\App\State')->isInstalled()) {
-            return;
-        }
-
-        if (!$this->getRequest()->isDispatched()) {
-            return;
-        }
-
-        $action = $this->getRequest()->getActionName();
-        $pattern = '/^(' . implode('|', $this->_getAllowedActions()) . ')$/i';
-
-        if (!preg_match($pattern, $action)) {
-            if (!$this->_getSession()->authenticate($this)) {
-                $this->setFlag('', 'no-dispatch', true);
-            }
-        } else {
-            $this->_getSession()->setNoReferer(true);
-        }
-    }
-
-    /**
      * Get list of actions that are allowed for not authorized users
      *
      * @return array
@@ -187,14 +153,34 @@ class Account extends \Magento\Core\Controller\Front\Action
     }
 
     /**
-     * Action postdispatch
+     * Dispatch request
      *
-     * Remove No-referer flag from customer session after each action
+     * @param RequestInterface $request
+     * @return mixed|void
      */
-    public function postDispatch()
+    public function dispatch(RequestInterface $request)
     {
-        parent::postDispatch();
+        if (!$this->_objectManager->get('Magento\App\State')->isInstalled()) {
+            parent::dispatch($request);
+        }
+
+        if (!$this->getRequest()->isDispatched()) {
+            parent::dispatch($request);
+        }
+
+        $action = $this->getRequest()->getActionName();
+        $pattern = '/^(' . implode('|', $this->_getAllowedActions()) . ')$/i';
+
+        if (!preg_match($pattern, $action)) {
+            if (!$this->_getSession()->authenticate($this)) {
+                $this->_actionFlag->set('', 'no-dispatch', true);
+            }
+        } else {
+            $this->_getSession()->setNoReferer(true);
+        }
+        $result = parent::dispatch($request);
         $this->_getSession()->unsNoReferer(false);
+        return $result;
     }
 
     /**
@@ -202,11 +188,11 @@ class Account extends \Magento\Core\Controller\Front\Action
      */
     public function indexAction()
     {
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
-        $this->_initLayoutMessages('Magento\Catalog\Model\Session');
-        $this->getLayout()->getBlock('head')->setTitle(__('My Account'));
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $messageStores = array('Magento\Customer\Model\Session', 'Magento\Catalog\Model\Session');
+        $this->_view->getLayout()->initMessages($messageStores);
+        $this->_view->getLayout()->getBlock('head')->setTitle(__('My Account'));
+        $this->_view->renderLayout();
     }
 
     /**
@@ -219,10 +205,10 @@ class Account extends \Magento\Core\Controller\Front\Action
             return;
         }
         $this->getResponse()->setHeader('Login-Required', 'true');
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
-        $this->_initLayoutMessages('Magento\Catalog\Model\Session');
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $messageStores = array('Magento\Customer\Model\Session', 'Magento\Catalog\Model\Session');
+        $this->_view->getLayout()->initMessages($messageStores);
+        $this->_view->renderLayout();
     }
 
     /**
@@ -296,7 +282,7 @@ class Account extends \Magento\Core\Controller\Front\Action
                     $referer = $this->getRequest()->getParam(\Magento\Customer\Helper\Data::REFERER_QUERY_PARAM_NAME);
                     if ($referer) {
                         $referer = $this->_objectManager->get('Magento\Core\Helper\Data')->urlDecode($referer);
-                        if ($this->_isUrlInternal($referer)) {
+                        if ($this->_url->isInternal($referer)) {
                             $session->setBeforeAuthUrl($referer);
                         }
                     }
@@ -316,7 +302,7 @@ class Account extends \Magento\Core\Controller\Front\Action
                 $session->setBeforeAuthUrl($session->getAfterAuthUrl(true));
             }
         }
-        $this->_redirectUrl($session->getBeforeAuthUrl(true));
+        $this->getResponse()->setRedirect($session->getBeforeAuthUrl(true));
     }
 
     /**
@@ -327,7 +313,7 @@ class Account extends \Magento\Core\Controller\Front\Action
         $lastCustomerId = $this->_getSession()->getId();
         $this->_getSession()->logout()
             ->renewSession()
-            ->setBeforeAuthUrl($this->_getRefererUrl())
+            ->setBeforeAuthUrl($this->_redirect->getRefererUrl())
             ->setLastCustomerId($lastCustomerId);
 
         $this->_redirect('*/*/logoutSuccess');
@@ -338,8 +324,8 @@ class Account extends \Magento\Core\Controller\Front\Action
      */
     public function logoutSuccessAction()
     {
-        $this->loadLayout();
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -352,9 +338,9 @@ class Account extends \Magento\Core\Controller\Front\Action
             return;
         }
 
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->getLayout()->initMessages('Magento\Customer\Model\Session');
+        $this->_view->renderLayout();
     }
 
     /**
@@ -370,7 +356,8 @@ class Account extends \Magento\Core\Controller\Front\Action
         $session->setEscapeMessages(true); // prevent XSS injection in user input
 
         if (!$this->getRequest()->isPost()) {
-            $this->_redirectError($this->_createUrl()->getUrl('*/*/create', array('_secure' => true)));
+            $url = $this->_createUrl()->getUrl('*/*/create', array('_secure' => true));
+            $this->getResponse()->setRedirect($this->_redirect->error($url));
             return;
         }
 
@@ -398,11 +385,12 @@ class Account extends \Magento\Core\Controller\Front\Action
                 $session->addSuccess(
                     __('Account confirmation is required. Please, check your email for the confirmation link. To resend the confirmation email please <a href="%1">click here</a>.', $email)
                 );
-                $this->_redirectSuccess($this->_createUrl()->getUrl('*/*/index', array('_secure' => true)));
+                $url = $this->_createUrl()->getUrl('*/*/index', array('_secure' => true));
+                $this->getResponse()->setRedirect($this->_redirect->success($url));
             } else {
                 $session->setCustomerAsLoggedIn($customer);
                 $url = $this->_welcomeCustomer($customer);
-                $this->_redirectSuccess($url);
+                $this->getResponse()->setRedirect($this->_redirect->success($url));
             }
             return;
         } catch (\Magento\Core\Exception $e) {
@@ -425,7 +413,8 @@ class Account extends \Magento\Core\Controller\Front\Action
         }
 
         $session->setCustomerFormData($this->getRequest()->getPost());
-        $this->_redirectError($this->_createUrl()->getUrl('*/*/create', array('_secure' => true)));
+        $defaultUrl = $this->_createUrl()->getUrl('*/*/create', array('_secure' => true));
+        $this->getResponse()->setRedirect($this->_redirect->error($defaultUrl));
     }
 
     /**
@@ -555,6 +544,67 @@ class Account extends \Magento\Core\Controller\Front\Action
     }
 
     /**
+     * load customer by id (try/catch in case if it throws exceptions)
+     *
+     * @param $customerId
+     * @return \Magento\Customer\Model\Customer
+     * @throws \Exception
+     */
+    protected function _loadCustomerById($customerId)
+    {
+        try {
+            /** @var \Magento\Customer\Model\Customer $customer */
+            $customer = $this->_createCustomer()->load($customerId);
+            if ((!$customer) || (!$customer->getId())) {
+                throw new \Exception('Failed to load customer by id.');
+            }
+        } catch (\Exception $e) {
+            throw new \Exception(__('Wrong customer account specified.'));
+        }
+        return $customer;
+    }
+
+    /**
+     * @param \Magento\Customer\Model\Customer $customer
+     * @throws \Exception
+     */
+    protected function _activateCustomer($customer)
+    {
+        try {
+            $customer->setConfirmation(null);
+            $customer->save();
+        } catch (\Exception $e) {
+            throw new \Exception(__('Failed to confirm customer account.'));
+        }
+    }
+
+    /**
+     * @param \Magento\Customer\Model\Customer $customer
+     * @param mixed $key
+     * @return bool|null
+     * @throws \Exception
+     */
+    protected function _checkCustomerActive($customer, $key)
+    {
+        $backUrl = $this->getRequest()->getParam('back_url', false);
+
+        // check if it is inactive
+        if ($customer->getConfirmation()) {
+            if ($customer->getConfirmation() !== $key) {
+                throw new \Exception(__('Wrong confirmation key.'));
+            }
+            $this->_activateCustomer($customer);
+
+            // log in and send greeting email, then die happy
+            $this->_getSession()->setCustomerAsLoggedIn($customer);
+            $successUrl = $this->_welcomeCustomer($customer, true);
+            $url = $backUrl ? $backUrl : $successUrl;
+            $this->getResponse()->setRedirect($this->_redirect->success($url));
+            return true;
+        }
+    }
+
+    /**
      * Confirm customer account by id and confirmation key
      */
     public function confirmAction()
@@ -566,51 +616,52 @@ class Account extends \Magento\Core\Controller\Front\Action
         try {
             $customerId = $this->getRequest()->getParam('id', false);
             $key     = $this->getRequest()->getParam('key', false);
-            $backUrl = $this->getRequest()->getParam('back_url', false);
             if (empty($customerId) || empty($key)) {
                 throw new \Exception(__('Bad request.'));
             }
 
-            // load customer by id (try/catch in case if it throws exceptions)
-            try {
-                /** @var \Magento\Customer\Model\Customer $customer */
-                $customer = $this->_createCustomer()->load($customerId);
-                if ((!$customer) || (!$customer->getId())) {
-                    throw new \Exception('Failed to load customer by id.');
-                }
-            } catch (\Exception $e) {
-                throw new \Exception(__('Wrong customer account specified.'));
-            }
-
-            // check if it is inactive
-            if ($customer->getConfirmation()) {
-                if ($customer->getConfirmation() !== $key) {
-                    throw new \Exception(__('Wrong confirmation key.'));
-                }
-
-                // activate customer
-                try {
-                    $customer->setConfirmation(null);
-                    $customer->save();
-                } catch (\Exception $e) {
-                    throw new \Exception(__('Failed to confirm customer account.'));
-                }
-
-                // log in and send greeting email, then die happy
-                $this->_getSession()->setCustomerAsLoggedIn($customer);
-                $successUrl = $this->_welcomeCustomer($customer, true);
-                $this->_redirectSuccess($backUrl ? $backUrl : $successUrl);
+            $customer = $this->_loadCustomerById($customerId);
+            if (true === $this->_checkCustomerActive($customer, $key)) {
                 return;
             }
 
             // die happy
-            $this->_redirectSuccess($this->_createUrl()->getUrl('*/*/index', array('_secure' => true)));
+            $url = $this->_createUrl()->getUrl('*/*/index', array('_secure' => true));
+            $this->getResponse()->setRedirect($this->_redirect->success($url));
             return;
         } catch (\Exception $e) {
             // die unhappy
             $this->_getSession()->addError($e->getMessage());
-            $this->_redirectError($this->_createUrl()->getUrl('*/*/index', array('_secure' => true)));
+            $url = $this->_createUrl()->getUrl('*/*/index', array('_secure' => true));
+            $this->getResponse()->setRedirect($this->_redirect->error($url));
             return;
+        }
+    }
+
+    /**
+     * @param \Magento\Customer\Model\Customer $customer
+     * @param string $email
+     */
+    protected function _confirmByEmail($customer, $email)
+    {
+        try {
+            $customer->setWebsiteId($this->_storeManager->getStore()->getWebsiteId())->loadByEmail($email);
+            if (!$customer->getId()) {
+                throw new \Exception('');
+            }
+            if ($customer->getConfirmation()) {
+                $customer->sendNewAccountEmail('confirmation', '', $this->_storeManager->getStore()->getId());
+                $this->_getSession()->addSuccess(__('Please, check your email for confirmation key.'));
+            } else {
+                $this->_getSession()->addSuccess(__('This email does not require confirmation.'));
+            }
+            $this->_getSession()->setUsername($email);
+            $url = $this->_createUrl()->getUrl('*/*/index', array('_secure' => true));
+            $this->getResponse()->setRedirect($this->_redirect->success($url));
+        } catch (\Exception $e) {
+            $this->_getSession()->addException($e, __('Wrong email.'));
+            $url = $this->_createUrl()->getUrl('*/*/*', array('email' => $email, '_secure' => true));
+            $this->getResponse()->setRedirect($this->_redirect->error($url));
         }
     }
 
@@ -628,34 +679,18 @@ class Account extends \Magento\Core\Controller\Front\Action
         // try to confirm by email
         $email = $this->getRequest()->getPost('email');
         if ($email) {
-            try {
-                $customer->setWebsiteId($this->_storeManager->getStore()->getWebsiteId())->loadByEmail($email);
-                if (!$customer->getId()) {
-                    throw new \Exception('');
-                }
-                if ($customer->getConfirmation()) {
-                    $customer->sendNewAccountEmail('confirmation', '', $this->_storeManager->getStore()->getId());
-                    $this->_getSession()->addSuccess(__('Please, check your email for confirmation key.'));
-                } else {
-                    $this->_getSession()->addSuccess(__('This email does not require confirmation.'));
-                }
-                $this->_getSession()->setUsername($email);
-                $this->_redirectSuccess($this->_createUrl()->getUrl('*/*/index', array('_secure' => true)));
-            } catch (\Exception $e) {
-                $this->_getSession()->addException($e, __('Wrong email.'));
-                $this->_redirectError($this->_createUrl()->getUrl('*/*/*', array('email' => $email, '_secure' => true)));
-            }
+            $this->_confirmByEmail($customer, $email);
             return;
         }
 
         // output form
-        $this->loadLayout();
+        $this->_view->loadLayout();
 
-        $this->getLayout()->getBlock('accountConfirmation')
+        $this->_view->getLayout()->getBlock('accountConfirmation')
             ->setEmail($this->getRequest()->getParam('email', $email));
 
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
-        $this->renderLayout();
+        $this->_view->getLayout()->initMessages('Magento\Customer\Model\Session');
+        $this->_view->renderLayout();
     }
 
     /**
@@ -663,15 +698,15 @@ class Account extends \Magento\Core\Controller\Front\Action
      */
     public function forgotPasswordAction()
     {
-        $this->loadLayout();
+        $this->_view->loadLayout();
 
-        $this->getLayout()->getBlock('forgotPassword')->setEmailValue(
+        $this->_view->getLayout()->getBlock('forgotPassword')->setEmailValue(
             $this->_getSession()->getForgottenEmail()
         );
         $this->_getSession()->unsForgottenEmail();
 
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
-        $this->renderLayout();
+        $this->_view->getLayout()->initMessages('Magento\Customer\Model\Session');
+        $this->_view->renderLayout();
     }
 
     /**
@@ -738,12 +773,12 @@ class Account extends \Magento\Core\Controller\Front\Action
         $customerId = (int)$this->getRequest()->getParam('id');
         try {
             $this->_validateResetPasswordLinkToken($customerId, $resetPasswordToken);
-            $this->loadLayout();
+            $this->_view->loadLayout();
             // Pass received parameters to the reset forgotten password form
-            $this->getLayout()->getBlock('resetPassword')
+            $this->_view->getLayout()->getBlock('resetPassword')
                 ->setCustomerId($customerId)
                 ->setResetPasswordLinkToken($resetPasswordToken);
-            $this->renderLayout();
+            $this->_view->renderLayout();
         } catch (\Exception $exception) {
             $this->_getSession()->addError(
                 __('Your password reset link has expired.')
@@ -777,10 +812,7 @@ class Account extends \Magento\Core\Controller\Front\Action
 
         $errorMessages = array();
         if (iconv_strlen($password) <= 0) {
-            array_push(
-                $errorMessages,
-                __('New password field cannot be empty.')
-            );
+            $errorMessages[] = __('New password field cannot be empty.');
         }
         /** @var $customer \Magento\Customer\Model\Customer */
         $customer = $this->_createCustomer()->load($customerId);
@@ -859,13 +891,13 @@ class Account extends \Magento\Core\Controller\Front\Action
      */
     public function editAction()
     {
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
-        $this->_initLayoutMessages('Magento\Catalog\Model\Session');
+        $this->_view->loadLayout();
+        $messageStores = array('Magento\Customer\Model\Session', 'Magento\Catalog\Model\Session');
+        $this->_view->getLayout()->initMessages($messageStores);
 
-        $block = $this->getLayout()->getBlock('customer_edit');
+        $block = $this->_view->getLayout()->getBlock('customer_edit');
         if ($block) {
-            $block->setRefererUrl($this->_getRefererUrl());
+            $block->setRefererUrl($this->_redirect->getRefererUrl());
         }
         $data = $this->_getSession()->getCustomerFormData(true);
         $customer = $this->_getSession()->getCustomer();
@@ -876,9 +908,9 @@ class Account extends \Magento\Core\Controller\Front\Action
             $customer->setChangePassword(1);
         }
 
-        $this->getLayout()->getBlock('head')->setTitle(__('Account Information'));
-        $this->getLayout()->getBlock('messages')->setEscapeMessageFlag(true);
-        $this->renderLayout();
+        $this->_view->getLayout()->getBlock('head')->setTitle(__('Account Information'));
+        $this->_view->getLayout()->getBlock('messages')->setEscapeMessageFlag(true);
+        $this->_view->renderLayout();
     }
 
     /**
@@ -886,7 +918,7 @@ class Account extends \Magento\Core\Controller\Front\Action
      */
     public function editPostAction()
     {
-        if (!$this->_validateFormKey()) {
+        if (!$this->_formKeyValidator->validate($this->getRequest())) {
             $this->_redirect('*/*/edit');
             return;
         }
@@ -970,18 +1002,6 @@ class Account extends \Magento\Core\Controller\Front\Action
         }
 
         $this->_redirect('*/*/edit');
-    }
-
-    /**
-     * Filtering posted data. Converting localized data if needed
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function _filterPostData($data)
-    {
-        $data = $this->_filterDates($data, array('dob'));
-        return $data;
     }
 
     /**

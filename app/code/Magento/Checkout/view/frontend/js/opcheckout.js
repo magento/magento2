@@ -34,7 +34,7 @@
                 loginRegisterSelector: '#login\\:register',
                 loginFormSelector: '#login-form',
                 continueSelector: '#onepage-guest-register-button',
-                registerCustomerPasswordSelector: '#register-customer-password',
+                registerCustomerPasswordSelector: '#co-billing-form .field.password,#co-billing-form .field.confirm',
                 suggestRegistration: false
             },
             sectionSelectorPrefix: '#opc-',
@@ -42,8 +42,12 @@
             ajaxLoaderPlaceButton: false,
             updateSelectorPrefix: '#checkout-',
             updateSelectorSuffix: '-load',
-            backSelector: '.back-link',
-            minBalance: 0.0001
+            backSelector: '.action.back',
+            minBalance: 0.0001,
+            methodsListContainer: 'dl',
+            methodContainer: 'dt',
+            methodDescription : 'dd ul',
+            methodOn: 'dt input:radio'
         },
 
         _create: function() {
@@ -83,6 +87,7 @@
          * @private
          */
         _ajaxSend: function() {
+            this.element.addClass('loading');
             var loader = this.element.find('.section.active .please-wait').show();
             if (this.options.ajaxLoaderPlaceButton) {
                 loader.siblings('.button').hide();
@@ -94,6 +99,7 @@
          * @private
          */
         _ajaxComplete: function() {
+            this.element.removeClass('loading');
             this.element.find('.please-wait').hide();
             if (this.options.ajaxLoaderPlaceButton) {
                 this.element.find('.button').show();
@@ -232,13 +238,13 @@
             this._super();
             this.element
                 .on('change', this.options.billing.addressDropdownSelector, $.proxy(function(e) {
-                this.element.find(this.options.billing.newAddressFormSelector).toggle(!$(e.target).val());
-            }, this))
+                    this.element.find(this.options.billing.newAddressFormSelector).toggle(!$(e.target).val());
+                }, this))
                 .on('click', this.options.billing.continueSelector, $.proxy(function() {
-                if ($(this.options.billing.form).validation && $(this.options.billing.form).validation('isValid')) {
-                    this._billingSave();
-                }
-            }, this))
+                    if ($(this.options.billing.form).validation && $(this.options.billing.form).validation('isValid')) {
+                        this._billingSave();
+                    }
+                }, this))
                 .find(this.options.billing.form).validation();
         } ,
 
@@ -267,24 +273,24 @@
             this._super();
             this.element
                 .on('change', this.options.shipping.addressDropdownSelector, $.proxy(function(e) {
-                $(this.options.shipping.newAddressFormSelector).toggle(!$(e.target).val());
-            }, this))
+                    $(this.options.shipping.newAddressFormSelector).toggle(!$(e.target).val());
+                }, this))
                 .on('input propertychange', this.options.shipping.form + ' :input[name]', $.proxy(function() {
-                $(this.options.shipping.copyBillingSelector).prop('checked', false);
-            }, this))
+                    $(this.options.shipping.copyBillingSelector).prop('checked', false);
+                }, this))
                 .on('click', this.options.shipping.copyBillingSelector, $.proxy(function(e) {
-                if ($(e.target).is(':checked')) {
-                    this._billingToShipping();
-                }
-            }, this))
+                    if ($(e.target).is(':checked')) {
+                        this._billingToShipping();
+                    }
+                }, this))
                 .on('click', this.options.shipping.continueSelector, $.proxy(function() {
-                if ($(this.options.shipping.form).validation && $(this.options.shipping.form).validation('isValid')) {
+                    if ($(this.options.shipping.form).validation && $(this.options.shipping.form).validation('isValid')) {
                     this._ajaxContinue(this.options.shipping.saveUrl, $(this.options.shipping.form).serialize(), false, function() {
                         //Trigger indicating shipping save. eg. GiftMessage listens to this to inject gift options
                         this.element.trigger('shippingSave');
                     });
-                }
-            }, this))
+                    }
+                }, this))
                 .find(this.options.shipping.form).validation();
         },
 
@@ -318,12 +324,12 @@
             var _this = this;
             this.element
                 .on('click', this.options.shippingMethod.continueSelector, $.proxy(function() {
-                if (this._validateShippingMethod()&&
-                    $(this.options.shippingMethod.form).validation &&
-                    $(this.options.shippingMethod.form).validation('isValid')) {
-                    this._ajaxContinue(this.options.shippingMethod.saveUrl, $(this.options.shippingMethod.form).serialize());
-                }
-            }, this))
+                    if (this._validateShippingMethod()&&
+                        $(this.options.shippingMethod.form).validation &&
+                        $(this.options.shippingMethod.form).validation('isValid')) {
+                        this._ajaxContinue(this.options.shippingMethod.saveUrl, $(this.options.shippingMethod.form).serialize());
+                    }
+                }, this))
                 .on('click', 'input[name="shipping_method"]', function() {
                     var selectedPrice = _this.shippingCodePrice[$(this).val()] || 0,
                         oldPrice = _this.shippingCodePrice[_this.currentShippingMethod] || 0;
@@ -331,9 +337,9 @@
                     _this.currentShippingMethod = $(this).val();
                 })
                 .on('contentUpdated', $.proxy(function() {
-                this.currentShippingMethod = this.element.find('input[name="shipping_method"]:checked').val();
-                this.shippingCodePrice = this.element.find('[data-shipping-code-price]').data('shipping-code-price');
-            }, this))
+                    this.currentShippingMethod = this.element.find('input[name="shipping_method"]:checked').val();
+                    this.shippingCodePrice = this.element.find('[data-shipping-code-price]').data('shipping-code-price');
+                }, this))
                 .find(this.options.shippingMethod.form).validation();
         },
 
@@ -374,39 +380,39 @@
             this._super();
             this.element
                 .on('click', this.options.payment.continueSelector, $.proxy(function() {
-                if (this._validatePaymentMethod() &&
-                    $(this.options.payment.form).validation &&
-                    $(this.options.payment.form).validation('isValid')) {
-                    this._ajaxContinue(this.options.payment.saveUrl, $(this.options.payment.form).serialize());
-                }
-            }, this))
+                    if (this._validatePaymentMethod() &&
+                        $(this.options.payment.form).validation &&
+                        $(this.options.payment.form).validation('isValid')) {
+                        this._ajaxContinue(this.options.payment.saveUrl, $(this.options.payment.form).serialize());
+                    }
+                }, this))
                 .on('updateCheckoutPrice', $.proxy(function(event, data) {
-                if (data.price) {
-                    this.checkoutPrice += data.price;
-                }
-                if (data.totalPrice) {
-                    data.totalPrice = this.checkoutPrice;
-                }
-                if (this.checkoutPrice < this.options.minBalance) {
-                    // Add free input field, hide and disable unchecked checkbox payment method and all radio button payment methods
-                    this._disablePaymentMethods();
-                } else {
-                    // Remove free input field, show all payment method
-                    this._enablePaymentMethods();
-                }
-            }, this))
+                    if (data.price) {
+                        this.checkoutPrice += data.price;
+                    }
+                    if (data.totalPrice) {
+                        data.totalPrice = this.checkoutPrice;
+                    }
+                    if (this.checkoutPrice < this.options.minBalance) {
+                        // Add free input field, hide and disable unchecked checkbox payment method and all radio button payment methods
+                        this._disablePaymentMethods();
+                    } else {
+                        // Remove free input field, show all payment method
+                        this._enablePaymentMethods();
+                    }
+                }, this))
                 .on('contentUpdated', this.options.payment.form, $.proxy(function() {
-                $(this.options.payment.form).find('dd [name^="payment["]').prop('disabled', true);
-                var checkoutPrice = this.element.find(this.options.payment.form).find('[data-checkout-price]').data('checkout-price');
-                if ($.isNumeric(checkoutPrice)) {
-                    this.checkoutPrice = checkoutPrice;
-                }
-                if (this.checkoutPrice < this.options.minBalance) {
-                    this._disablePaymentMethods();
-                } else {
-                    this._enablePaymentMethods();
-                }
-            }, this))
+                    $(this.options.payment.form).find('dd [name^="payment["]').prop('disabled', true);
+                    var checkoutPrice = this.element.find(this.options.payment.form).find('[data-checkout-price]').data('checkout-price');
+                    if ($.isNumeric(checkoutPrice)) {
+                        this.checkoutPrice = checkoutPrice;
+                    }
+                    if (this.checkoutPrice < this.options.minBalance) {
+                        this._disablePaymentMethods();
+                    } else {
+                        this._enablePaymentMethods();
+                    }
+                }, this))
                 .on('click', this.options.payment.form + ' dt input:radio', $.proxy(this._paymentMethodHandler, this))
                 .find(this.options.payment.form).validation({
                     errorPlacement: function(error, element) {
@@ -426,11 +432,11 @@
          */
         _paymentMethodHandler: function(e) {
             var _this = $(e.target),
-                parentsDl = _this.closest('dl');
-            parentsDl.find('dt input:radio').prop('checked', false);
+                parentsDl = _this.closest(this.options.methodsListContainer);
+            parentsDl.find(this.options.methodOn).prop('checked', false);
             _this.prop('checked', true);
-            parentsDl.find('dd ul').hide().find('[name^="payment["]').prop('disabled', true);
-            _this.parent().nextUntil('dt').find('ul').show().find('[name^="payment["]').prop('disabled', false);
+            parentsDl.find(this.options.methodDescription).hide().find('[name^="payment["]').prop('disabled', true);
+            _this.parent().nextUntil(this.options.methodContainer).find(this.options.methodDescription).show().find('[name^="payment["]').prop('disabled', false);
         },
 
         /**
@@ -460,8 +466,8 @@
         _disablePaymentMethods: function() {
             var paymentForm = $(this.options.payment.form);
             paymentForm.find('input[name="payment[method]"]').prop('disabled', true);
-            paymentForm.find(this.options.payment.methodsContainer).hide().find('[name^="payment["]').prop('disabled', true);
-            paymentForm.find('input[id^="use"][name^="payment[use"]:not(:checked)').prop('disabled', true).parent().hide();
+            paymentForm.find(this.options.payment.methodsContainer).find('[name^="payment["]').prop('disabled', true);
+            paymentForm.find('input[id^="use"][name^="payment[use"]:not(:checked)').prop('disabled', true).parent();
             paymentForm.find(this.options.payment.freeInput.selector).remove();
             $.tmpl(this.options.payment.freeInput.tmpl).appendTo(paymentForm);
         },
@@ -486,7 +492,7 @@
             review: {
                 continueSelector: '#review-buttons-container .button',
                 container: '#opc-review',
-                agreementFormSelector:'#checkout-agreements',
+                agreementFormSelector:'#checkout-agreements input[type="checkbox"]',
                 submitContainer: '#checkout-review-submit'
             }
         },
@@ -507,12 +513,12 @@
         },
 
         _saveOrder: function() {
-            if ($(this.options.payment.form).validation &&
-                $(this.options.payment.form).validation('isValid')) {
-                this._ajaxContinue(
-                    this.options.review.saveUrl,
+                    if ($(this.options.payment.form).validation &&
+                        $(this.options.payment.form).validation('isValid')) {
+                        this._ajaxContinue(
+                            this.options.review.saveUrl,
                     $(this.options.payment.form).serialize() + '&' + $(this.options.review.agreementFormSelector).serialize());
-            }
+                    }
         }
     });
 })(jQuery, window);

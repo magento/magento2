@@ -37,23 +37,23 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_rateFactory;
 
     /**
-     * @param \Magento\Tax\Model\Calculation\RateFactory $rateFactory
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Tax\Model\Calculation\RateFactory $rateFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Tax\Model\Calculation\RateFactory $rateFactory,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Tax\Model\Calculation\RateFactory $rateFactory,
         array $data = array()
     ) {
         $this->_rateFactory = $rateFactory;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     /**

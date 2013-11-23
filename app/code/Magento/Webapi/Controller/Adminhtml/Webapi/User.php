@@ -25,7 +25,7 @@
  */
 namespace Magento\Webapi\Controller\Adminhtml\Webapi;
 
-class User extends \Magento\Backend\Controller\AbstractAction
+class User extends \Magento\Backend\App\AbstractAction
 {
     /**
      * @var \Magento\Core\Model\Validator\Factory
@@ -33,17 +33,15 @@ class User extends \Magento\Backend\Controller\AbstractAction
     protected $_validatorFactory;
 
     /**
-     * Initialize dependencies.
-     *
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Validator\Factory $validatorFactory
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Validator\Factory $validatorFactory
     ) {
-        parent::__construct($context);
         $this->_validatorFactory = $validatorFactory;
+        parent::__construct($context);
     }
 
     /**
@@ -53,8 +51,8 @@ class User extends \Magento\Backend\Controller\AbstractAction
      */
     protected function _initAction()
     {
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_Webapi::system_api_webapi_users')
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_Webapi::system_api_webapi_users')
             ->_addBreadcrumb(
                 __('Web Services'),
                 __('Web Services')
@@ -73,9 +71,9 @@ class User extends \Magento\Backend\Controller\AbstractAction
     public function indexAction()
     {
         $this->_initAction();
-        $this->_title(__('API Users'));
+        $this->_title->add(__('API Users'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -93,7 +91,7 @@ class User extends \Magento\Backend\Controller\AbstractAction
     public function editAction()
     {
         $this->_initAction();
-        $this->_title(__('API Users'));
+        $this->_title->add(__('API Users'));
 
         $userId = (int)$this->getRequest()->getParam('user_id');
         $user = $this->_loadApiUser($userId);
@@ -105,7 +103,7 @@ class User extends \Magento\Backend\Controller\AbstractAction
         $actionTitle = $user->getId()
             ? $this->_objectManager->get('Magento\Escaper')->escapeHtml($user->getApiKey())
             : __('New API User');
-        $this->_title($actionTitle);
+        $this->_title->add($actionTitle);
         $this->_addBreadcrumb($actionTitle, $actionTitle);
 
         // Restore previously entered form data from session.
@@ -115,17 +113,17 @@ class User extends \Magento\Backend\Controller\AbstractAction
         }
 
         /** @var \Magento\Webapi\Block\Adminhtml\User\Edit $editBlock */
-        $editBlock = $this->getLayout()->getBlock('webapi.user.edit');
+        $editBlock = $this->_view->getLayout()->getBlock('webapi.user.edit');
         if ($editBlock) {
             $editBlock->setApiUser($user);
         }
         /** @var \Magento\Webapi\Block\Adminhtml\User\Edit\Tabs $tabsBlock */
-        $tabsBlock = $this->getLayout()->getBlock('webapi.user.edit.tabs');
+        $tabsBlock = $this->_view->getLayout()->getBlock('webapi.user.edit.tabs');
         if ($tabsBlock) {
             $tabsBlock->setApiUser($user);
         }
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -208,8 +206,8 @@ class User extends \Magento\Backend\Controller\AbstractAction
      */
     public function gridAction()
     {
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     /**
@@ -217,8 +215,8 @@ class User extends \Magento\Backend\Controller\AbstractAction
      */
     public function rolesgridAction()
     {
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     /**

@@ -29,12 +29,18 @@ namespace Magento\Webhook\Block\Adminhtml;
 
 class SubscriptionTest extends \Magento\Test\Block\Adminhtml
 {
+    /**
+     * @var \Magento\TestFramework\Helper\ObjectManager
+     */
+    protected $_objectManagerHelper;
+
     public function testConstruct()
     {
-        $block = new \Magento\Webhook\Block\Adminhtml\Subscription(
-            $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false),
-            $this->_context
-        );
+        $this->_objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $block = $this->_objectManagerHelper->getObject(
+            '\Magento\Webhook\Block\Adminhtml\Subscription', array());
+
+
         $this->assertEquals('Subscriptions', $block->getHeaderText());
         $this->assertEquals('Add Subscription', $block->getAddButtonLabel());
     }

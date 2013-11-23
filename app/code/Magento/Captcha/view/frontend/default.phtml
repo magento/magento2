@@ -23,9 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php /* @var $captcha \Magento\Captcha\Model\DefaultModel */ ?>
 <?php /* @var $this \Magento\Captcha\Block\Captcha\DefaultCaptcha */ ?>
-
-<?php /* @var $captcha \Magento\Captcha\Model\ModelInterface */ ?>
 <?php $captcha = $this->getCaptchaModel() ?>
 <div class="field captcha required" role="<?php echo $this->getFormId()?>">
     <label for="captcha_<?php echo $this->getFormId() ?>" class="label"><span><?php echo __('Please type the letters below')?></span></label>

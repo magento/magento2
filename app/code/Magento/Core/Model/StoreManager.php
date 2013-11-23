@@ -77,21 +77,21 @@ class StoreManager implements \Magento\Core\Model\StoreManagerInterface
     /**
      * Helper factory
      *
-     * @var \Magento\Core\Model\Factory\Helper
+     * @var \Magento\App\Helper\HelperFactory
      */
     protected $_helperFactory;
 
     /**
      * @param \Magento\Core\Model\Store\StorageFactory $factory
      * @param \Magento\App\RequestInterface $request
-     * @param \Magento\Core\Model\Factory\Helper $helperFactory
+     * @param \Magento\App\Helper\HelperFactory $helperFactory
      * @param string $scopeCode
      * @param string $scopeType
      */
     public function __construct(
         \Magento\Core\Model\Store\StorageFactory $factory,
         \Magento\App\RequestInterface $request,
-        \Magento\Core\Model\Factory\Helper $helperFactory,
+        \Magento\App\Helper\HelperFactory $helperFactory,
         $scopeCode = '',
         $scopeType = 'store'
     ) {
@@ -131,7 +131,7 @@ class StoreManager implements \Magento\Core\Model\StoreManagerInterface
             return $this->getStore($storeId);
         } catch (\Exception $e) {
             if ($this->_getStorage()->getCurrentStore()) {
-                $this->_request->setActionName('noRoute');
+                $this->_request->setActionName('noroute');
                 return new \Magento\Object();
             }
 

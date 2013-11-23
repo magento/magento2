@@ -29,7 +29,7 @@
  */
 namespace Magento\Paypal\Block\Express;
 
-class Shortcut extends \Magento\Core\Block\Template
+class Shortcut extends \Magento\View\Block\Template
 {
     /**
      * Position of "OR" label against shortcut
@@ -70,7 +70,7 @@ class Shortcut extends \Magento\Core\Block\Template
      *
      * @var \Magento\Core\Model\Registry
      */
-    protected $_coreRegistry;
+    protected $_registry;
 
     /**
      * Payment data
@@ -85,11 +85,6 @@ class Shortcut extends \Magento\Core\Block\Template
      * @var \Magento\Paypal\Helper\Data
      */
     protected $_paypalData;
-
-    /**
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
 
     /**
      * @var \Magento\Customer\Model\Session
@@ -117,12 +112,11 @@ class Shortcut extends \Magento\Core\Block\Template
     protected $mathRandom;
 
     /**
+     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Paypal\Helper\Data $paypalData
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -131,12 +125,11 @@ class Shortcut extends \Magento\Core\Block\Template
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Paypal\Helper\Data $paypalData,
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -144,20 +137,19 @@ class Shortcut extends \Magento\Core\Block\Template
         \Magento\Math\Random $mathRandom,
         array $data = array()
     ) {
-        $this->_coreRegistry = $registry;
+        $this->_registry = $registry;
         $this->_paypalData = $paypalData;
         $this->_paymentData = $paymentData;
-        $this->_locale = $locale;
         $this->_customerSession = $customerSession;
         $this->_paypalConfigFactory = $paypalConfigFactory;
         $this->_checkoutSession = $checkoutSession;
         $this->_checkoutFactory = $checkoutFactory;
         $this->mathRandom = $mathRandom;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**
-     * @return \Magento\Core\Block\AbstractBlock
+     * @return \Magento\View\Block\AbstractBlock
      */
     protected function _beforeToHtml()
     {
@@ -177,7 +169,7 @@ class Shortcut extends \Magento\Core\Block\Template
         if ($isInCatalog) {
             // Show PayPal shortcut on a product view page only if product has nonzero price
             /** @var $currentProduct \Magento\Catalog\Model\Product */
-            $currentProduct = $this->_coreRegistry->registry('current_product');
+            $currentProduct = $this->_registry->registry('current_product');
             if (!is_null($currentProduct)) {
                 $productPrice = (float)$currentProduct->getFinalPrice();
                 if (empty($productPrice) && !$currentProduct->isGrouped()) {

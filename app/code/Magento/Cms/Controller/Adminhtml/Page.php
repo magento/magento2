@@ -34,7 +34,7 @@
  */
 namespace Magento\Cms\Controller\Adminhtml;
 
-class Page extends \Magento\Backend\Controller\Adminhtml\Action
+class Page extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -44,14 +44,22 @@ class Page extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @var \Magento\Core\Filter\Date
+     */
+    protected $_dateFilter;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Core\Filter\Date $dateFilter
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Core\Filter\Date $dateFilter
     ) {
         $this->_coreRegistry = $coreRegistry;
+        $this->_dateFilter = $dateFilter;
         parent::__construct($context);
     }
 
@@ -63,8 +71,8 @@ class Page extends \Magento\Backend\Controller\Adminhtml\Action
     protected function _initAction()
     {
         // load layout, set active menu and breadcrumbs
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_Cms::cms_page')
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_Cms::cms_page')
             ->_addBreadcrumb(__('CMS'), __('CMS'))
             ->_addBreadcrumb(__('Manage Pages'), __('Manage Pages'))
         ;
@@ -76,10 +84,10 @@ class Page extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function indexAction()
     {
-        $this->_title(__('Pages'));
+        $this->_title->add(__('Pages'));
 
         $this->_initAction();
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -96,7 +104,7 @@ class Page extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function editAction()
     {
-        $this->_title(__('Pages'));
+        $this->_title->add(__('Pages'));
 
         // 1. Get ID and create model
         $id = $this->getRequest()->getParam('page_id');
@@ -113,7 +121,7 @@ class Page extends \Magento\Backend\Controller\Adminhtml\Action
             }
         }
 
-        $this->_title($model->getId() ? $model->getTitle() : __('New Page'));
+        $this->_title->add($model->getId() ? $model->getTitle() : __('New Page'));
 
         // 3. Set entered data if was error when we do save
         $data = $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getFormData(true);
@@ -131,7 +139,7 @@ class Page extends \Magento\Backend\Controller\Adminhtml\Action
                 $id ? __('Edit Page') : __('New Page')
         );
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -258,7 +266,9 @@ class Page extends \Magento\Backend\Controller\Adminhtml\Action
      */
     protected function _filterPostData($data)
     {
-        $data = $this->_filterDates($data, array('custom_theme_from', 'custom_theme_to'));
+        $inputFilter = new \Zend_Filter_Input(
+            array('custom_theme_from' => $this->_dateFilter, 'custom_theme_to' => $this->_dateFilter), array(), $data);
+        $data = $inputFilter->getUnescaped();
         return $data;
     }
 

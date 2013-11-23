@@ -41,21 +41,21 @@ class Info extends \Magento\Payment\Block\Info\AbstractContainer
     protected $_multishipping;
 
     /**
-     * @param \Magento\Payment\Helper\Data $paymentData
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Checkout\Model\Type\Multishipping $multishipping
      * @param array $data
      */
     public function __construct(
-        \Magento\Payment\Helper\Data $paymentData,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Payment\Helper\Data $paymentData,
         \Magento\Checkout\Model\Type\Multishipping $multishipping,
         array $data = array()
     ) {
         $this->_multishipping = $multishipping;
-        parent::__construct($paymentData, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $paymentData, $data);
     }
 
     /**

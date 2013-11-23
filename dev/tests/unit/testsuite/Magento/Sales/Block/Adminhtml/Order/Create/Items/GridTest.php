@@ -37,16 +37,6 @@ class GridTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $orderCreateMock = $this->getMock('Magento\Sales\Model\AdminOrder\Create', array(), array(), '', false);
-        $helperFactory = $this->getMockBuilder('Magento\Core\Model\Factory\Helper')
-            ->disableOriginalConstructor()
-            ->setMethods(array('get'))
-            ->getMock();
-
-        $contextMock = $this->getMockBuilder('Magento\Backend\Block\Template\Context')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getHelperFactory'))
-            ->getMock();
-        $contextMock->expects($this->any())->method('getHelperFactory')->will($this->returnValue($helperFactory));
 
         $taxData = $this->getMockBuilder('Magento\Tax\Helper\Data')
             ->disableOriginalConstructor()
@@ -85,17 +75,18 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
         $taxConfig = $this->getMockBuilder('Magento\Tax\Model\Config')->disableOriginalConstructor()->getMock();
 
-        $this->_block = $this->getMockBuilder('Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid')
-            ->setConstructorArgs(
-                array(
-                    $wishlistFactoryMock, $giftMessageSave, $taxConfig, $taxData,
-                    $sessionMock, $orderCreateMock, $coreData, $contextMock
-                )
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_block = $helper->getObject('Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid',
+            array(
+                'wishlistFactory' => $wishlistFactoryMock,
+                'giftMessageSave' => $giftMessageSave,
+                'taxConfig' => $taxConfig,
+                'taxData' => $taxData,
+                'sessionQuote' => $sessionMock,
+                'orderCreate' => $orderCreateMock,
+                'coreData' => $coreData
             )
-            ->setMethods(array('_getSession'))
-            ->getMock();
-
-        $this->_block->expects($this->any())->method('_getSession')->will($this->returnValue($sessionMock));
+        );
     }
 
     /**
@@ -162,10 +153,8 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->once())
             ->method('getTierPrice')
             ->will($this->returnValue($tierPrices));
-        $item = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getProduct', 'getProductType'))
-            ->getMock();
+        $item = $this->getMock('Magento\Sales\Model\Quote\Item',
+            array(), array('getProduct', 'getProductType'), '', false);
         $item->expects($this->once())
             ->method('getProduct')
             ->will($this->returnValue($product));

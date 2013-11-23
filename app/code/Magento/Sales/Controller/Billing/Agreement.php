@@ -29,7 +29,10 @@
  */
 namespace Magento\Sales\Controller\Billing;
 
-class Agreement extends \Magento\Core\Controller\Front\Action
+use Magento\App\Action\NotFoundException;
+use Magento\App\RequestInterface;
+
+class Agreement extends \Magento\App\Action\Action
 {
     /**
      * Core registry
@@ -39,15 +42,23 @@ class Agreement extends \Magento\Core\Controller\Front\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @var \Magento\App\Action\Title
+     */
+    protected $_title;
+
+    /**
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\App\Action\Title $title
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\App\Action\Context $context,
+        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\App\Action\Title $title
     ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
+        $this->_title = $title;
     }
 
     /**
@@ -56,26 +67,28 @@ class Agreement extends \Magento\Core\Controller\Front\Action
      */
     public function indexAction()
     {
-        $this->_title(__('Billing Agreements'));
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
-        $this->renderLayout();
+        $this->_title->add(__('Billing Agreements'));
+        $this->_view->loadLayout();
+        $this->_view->getLayout()->initMessages('Magento\Customer\Model\Session');
+        $this->_view->renderLayout();
     }
 
+
     /**
-     * Action predispatch
-     *
      * Check customer authentication
+     *
+     * @param RequestInterface $request
+     * @return mixed
      */
-    public function preDispatch()
+    public function dispatch(RequestInterface $request)
     {
-        parent::preDispatch();
-        if (!$this->getRequest()->isDispatched()) {
-            return;
+        if (!$request->isDispatched()) {
+            return parent::dispatch($request);
         }
         if (!$this->_getSession()->authenticate($this)) {
-            $this->setFlag('', 'no-dispatch', true);
+            $this->_actionFlag->set('', 'no-dispatch', true);
         }
+        return parent::dispatch($request);
     }
 
     /**
@@ -87,15 +100,15 @@ class Agreement extends \Magento\Core\Controller\Front\Action
         if (!$agreement = $this->_initAgreement()) {
             return;
         }
-        $this->_title(__('Billing Agreements'))
-            ->_title(__('Billing Agreement # %1', $agreement->getReferenceId()));
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
-        $navigationBlock = $this->getLayout()->getBlock('customer_account_navigation');
+        $this->_title->add(__('Billing Agreements'));
+        $this->_title->add(__('Billing Agreement # %1', $agreement->getReferenceId()));
+        $this->_view->loadLayout();
+        $this->_view->getLayout()->initMessages('Magento\Customer\Model\Session');
+        $navigationBlock = $this->_view->getLayout()->getBlock('customer_account_navigation');
         if ($navigationBlock) {
             $navigationBlock->setActive('sales/billing_agreement/');
         }
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -116,7 +129,7 @@ class Agreement extends \Magento\Core\Controller\Front\Action
                     ->setCancelUrl($this->_objectManager->create('Magento\Core\Model\Url')
                         ->getUrl('*/*/cancelWizard', array('payment_method' => $paymentCode)));
 
-                $this->_redirectUrl($agreement->initToken());
+                $this->getResponse()->setRedirect($agreement->initToken());
                 return $this;
             } catch (\Magento\Core\Exception $e) {
                 $this->_getSession()->addError($e->getMessage());

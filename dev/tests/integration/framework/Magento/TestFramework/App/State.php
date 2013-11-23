@@ -37,7 +37,7 @@ class State extends \Magento\App\State
      */
     public function getAreaCode()
     {
-        return $this->_areaCode;;
+        return $this->_areaCode;
     }
 
     /**

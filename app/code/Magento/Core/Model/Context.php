@@ -97,12 +97,4 @@ class Context implements \Magento\ObjectManager\ContextInterface
     {
         return $this->_appState;
     }
-
-    /**
-     * @return \Magento\Core\Model\StoreManager
-     */
-    public function getStoreManager()
-    {
-        return $this->_storeManager;
-    }
 }

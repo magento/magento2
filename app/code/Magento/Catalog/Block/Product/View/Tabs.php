@@ -29,7 +29,7 @@
  */
 namespace Magento\Catalog\Block\Product\View;
 
-class Tabs extends \Magento\Core\Block\Template
+class Tabs extends \Magento\View\Block\Template
 {
     /**
      * Configured tabs

@@ -55,7 +55,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $helperImage->expects($this->any())->method('__toString')->will($this->returnValue($url));
 
         $helperFactory = $this->getMock(
-            'Magento\Core\Model\Factory\Helper', array('get'), array(), '', false, false
+            'Magento\App\Helper\HelperFactory', array('get'), array(), '', false, false
         );
         $helperFactory->expects($this->any())
             ->method('get')

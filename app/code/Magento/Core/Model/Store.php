@@ -246,11 +246,6 @@ class Store extends \Magento\Core\Model\AbstractModel
     protected $_url;
 
     /**
-     * @var \Magento\App\State
-     */
-    protected $_appState;
-
-    /**
      * @var bool
      */
     protected $_isCustomEntryPoint = false;
@@ -295,14 +290,13 @@ class Store extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Core\Model\Url $url
-     * @param \Magento\App\State $appState
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
      * @param \Magento\App\Dir $dir
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Config $coreConfig
      * @param \Magento\Core\Model\Resource\Store $resource
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param bool $isCustomEntryPoint
      * @param array $data
@@ -313,14 +307,13 @@ class Store extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Registry $registry,
         \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\Core\Model\Url $url,
-        \Magento\App\State $appState,
         \Magento\App\RequestInterface $request,
         \Magento\Core\Model\Resource\Config\Data $configDataResource,
         \Magento\App\Dir $dir,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Config $coreConfig,
         \Magento\Core\Model\Resource\Store $resource,
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Data\Collection\Db $resourceCollection = null,
         $isCustomEntryPoint = false,
         array $data = array()
@@ -329,7 +322,6 @@ class Store extends \Magento\Core\Model\AbstractModel
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_url = $url;
         $this->_configCacheType = $configCacheType;
-        $this->_appState = $appState;
         $this->_request = $request;
         $this->_configDataResource = $configDataResource;
         $this->_isCustomEntryPoint = $isCustomEntryPoint;
@@ -358,7 +350,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     public function __wakeup()
     {
         parent::__wakeup();
-        $this->_eventDispatcher = \Magento\App\ObjectManager::getInstance()
+        $this->_eventManager = \Magento\App\ObjectManager::getInstance()
             ->get('Magento\Event\ManagerInterface');
         $this->_cacheManager    = \Magento\App\ObjectManager::getInstance()
             ->get('Magento\App\CacheInterface');

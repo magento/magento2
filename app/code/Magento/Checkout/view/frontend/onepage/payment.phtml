@@ -18,22 +18,25 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<form action="" id="co-payment-form">
-    <fieldset>
-        <?php echo $this->getChildHtml('methods') ?>
+<form id="co-payment-form" class="form payments">
+    <fieldset class="fieldset">
+        <?php echo $this->getChildChildHtml('methods_additional') ?>
+        <div id="checkout-payment-method-load"><?php echo $this->getChildHtml('methods') ?></div>
     </fieldset>
+    <?php echo $this->getChildChildHtml('additional') ?>
+    <div class="actions" id="payment-buttons-container">
+        <div class="primary">
+            <button type="button" class="button action continue"><span><?php echo __('Continue') ?></span></button>
+        </div>
+        <div class="secondary">
+            <a class="action back" href="#"><span><?php echo __('Back') ?></span></a>
+        </div>
+        <span id="payment-please-wait" class="please-wait load indicator" style="display:none">
+            <span><?php echo __('Loading next step...') ?></span>
+        </span>
+    </div>
 </form>
-<div class="buttons-set" id="payment-buttons-container">
-    <p class="required"><?php echo __('* Required Fields') ?></p>
-    <p class="back-link"><a href="#"><small>&laquo; </small><?php echo __('Back') ?></a></p>
-    <button type="button" class="button"><span><span><?php echo __('Continue') ?></span></span></button>
-    <span class="please-wait" id="payment-please-wait" style="display:none;">
-        <img src="<?php echo $this->getViewFileUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo __('Loading next step...') ?>" title="<?php echo __('Loading next step...') ?>" class="v-middle" /> <?php echo __('Loading next step...') ?>
-    </span>
-</div>

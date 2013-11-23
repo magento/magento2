@@ -156,7 +156,7 @@
 }
 
 .formCols(@fieldWidth : 50%) {
-    .field {
+    > .field {
         display: inline-block;
         padding-right: 20px;
         vertical-align: top;
@@ -915,5 +915,41 @@ textarea {
         background: @datepickerArrows;
         display: block;
         position: absolute;
+    }
+}
+
+/* Field with multiple fields */
+
+.fields.group {
+    letter-spacing: -0.31em; /* webkit */
+    *letter-spacing: normal; /* reset IE < 8 */
+    word-spacing: -0.43em; /* IE < 8 && gecko */
+    margin-right: -20px;
+    & > * {
+        letter-spacing: normal;
+        word-spacing: normal;
+    }
+    .field {
+        .box-sizing();
+        vertical-align:top;
+        margin:0!important;
+        .label { width:auto; float:none; text-align: left; padding-right:0; }
+        .control { float:none; width:auto; }
+    }
+    &.group-2 .field {
+        width:50%!important;
+        display:inline-block;
+    }
+    &.group-3 .field {
+        width:33.3%!important;
+        display:inline-block;
+    }
+    &.group-4 .field {
+        width:25%!important;
+        display:inline-block;
+    }
+    &.group-5 .field {
+        width:20%!important;
+        display:inline-block;
     }
 }

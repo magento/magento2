@@ -27,7 +27,7 @@
  */
 namespace Magento\Payment\Block\Catalog\Product\View;
 
-class Profile extends \Magento\Core\Block\Template
+class Profile extends \Magento\View\Block\Template
 {
     /**
      * Recurring profile instance
@@ -41,14 +41,8 @@ class Profile extends \Magento\Core\Block\Template
      *
      * @var \Magento\Core\Model\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_registry = null;
 
-    /**
-     * Locale model
-     *
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
 
     /**
      * Recurring profile factory
@@ -58,26 +52,21 @@ class Profile extends \Magento\Core\Block\Template
     protected $_profileFactory;
 
     /**
-     * Construct
-     *
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Payment\Model\Recurring\ProfileFactory $profileFactory
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Payment\Model\Recurring\ProfileFactory $profileFactory,
         array $data = array()
     ) {
-        parent::__construct($coreData, $context, $data);
-        $this->_coreRegistry = $registry;
-        $this->_locale = $locale;
+        parent::__construct($context, $coreData, $data);
+        $this->_registry = $registry;
         $this->_profileFactory = $profileFactory;
     }
 
@@ -108,7 +97,7 @@ class Profile extends \Magento\Core\Block\Template
         if ($this->_profile->getStartDateIsEditable()) {
             $this->setDateHtmlId('recurring_start_date');
             $calendar = $this->getLayout()
-                ->createBlock('Magento\Core\Block\Html\Date')
+                ->createBlock('Magento\View\Block\Html\Date')
                 ->setId('recurring_start_date')
                 ->setName(\Magento\Payment\Model\Recurring\Profile::BUY_REQUEST_START_DATETIME)
                 ->setClass('datetime-picker input-text')
@@ -126,7 +115,7 @@ class Profile extends \Magento\Core\Block\Template
      */
     protected function _prepareLayout()
     {
-        $product = $this->_coreRegistry->registry('current_product');
+        $product = $this->_registry->registry('current_product');
         if ($product) {
             $this->_profile = $this->_profileFactory->create()->importProduct($product);
         }

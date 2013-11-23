@@ -31,7 +31,7 @@
  */
 namespace Magento\Checkout\Block\Onepage;
 
-abstract class AbstractOnepage extends \Magento\Core\Block\Template
+abstract class AbstractOnepage extends \Magento\View\Block\Template
 {
     /**
      * @var \Magento\App\Cache\Type\Config
@@ -43,11 +43,6 @@ abstract class AbstractOnepage extends \Magento\Core\Block\Template
     protected $_countryCollection;
     protected $_regionCollection;
     protected $_addressesCollection;
-
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $_customerSession;
 
     /**
      * @var \Magento\Checkout\Model\Session
@@ -65,30 +60,23 @@ abstract class AbstractOnepage extends \Magento\Core\Block\Template
     protected $_countryCollFactory;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
-     * @param \Magento\App\Cache\Type\Config $configCacheType
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $resourceSession
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
-        \Magento\App\Cache\Type\Config $configCacheType,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $resourceSession,
         \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         array $data = array()
     ) {
         $this->_configCacheType = $configCacheType;
@@ -96,8 +84,7 @@ abstract class AbstractOnepage extends \Magento\Core\Block\Template
         $this->_checkoutSession = $resourceSession;
         $this->_countryCollFactory = $countryCollFactory;
         $this->_regionCollFactory = $regionCollFactory;
-        $this->_storeManager = $storeManager;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**
@@ -198,7 +185,7 @@ abstract class AbstractOnepage extends \Magento\Core\Block\Template
                 }
             }
 
-            $select = $this->getLayout()->createBlock('Magento\Core\Block\Html\Select')
+            $select = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
                 ->setName($type.'_address_id')
                 ->setId($type.'-address-select')
                 ->setClass('address-select')
@@ -220,7 +207,7 @@ abstract class AbstractOnepage extends \Magento\Core\Block\Template
         if (is_null($countryId)) {
             $countryId = $this->_coreData->getDefaultCountry();
         }
-        $select = $this->getLayout()->createBlock('Magento\Core\Block\Html\Select')
+        $select = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
             ->setName($type.'[country_id]')
             ->setId($type.':country_id')
             ->setTitle(__('Country'))
@@ -233,7 +220,7 @@ abstract class AbstractOnepage extends \Magento\Core\Block\Template
 
     public function getRegionHtmlSelect($type)
     {
-        $select = $this->getLayout()->createBlock('Magento\Core\Block\Html\Select')
+        $select = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
             ->setName($type.'[region]')
             ->setId($type.':region')
             ->setTitle(__('State/Province'))

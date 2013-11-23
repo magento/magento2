@@ -107,7 +107,7 @@ class Creditmemo
      */
     protected function _initCreditmemo($update = false)
     {
-        $this->_title(__('Credit Memos'));
+        $this->_title->add(__('Credit Memos'));
 
         $creditmemo = false;
         $creditmemoId = $this->getRequest()->getParam('creditmemo_id');
@@ -201,18 +201,18 @@ class Creditmemo
         $creditmemo = $this->_initCreditmemo();
         if ($creditmemo) {
             if ($creditmemo->getInvoice()) {
-                $this->_title(__("View Memo for #%1", $creditmemo->getInvoice()->getIncrementId()));
+                $this->_title->add(__("View Memo for #%1", $creditmemo->getInvoice()->getIncrementId()));
             } else {
-                $this->_title(__("View Memo"));
+                $this->_title->add(__("View Memo"));
             }
 
-            $this->loadLayout();
-            $this->getLayout()->getBlock('sales_creditmemo_view')
+            $this->_view->loadLayout();
+            $this->_view->getLayout()->getBlock('sales_creditmemo_view')
                 ->updateBackButtonUrl($this->getRequest()->getParam('come_from'));
-            $this->_setActiveMenu('Magento_Sales::sales_creditmemo')
-                ->renderLayout();
+            $this->_setActiveMenu('Magento_Sales::sales_creditmemo');
+            $this->_view->renderLayout();
         } else {
-            $this->_forward('noRoute');
+            $this->_forward('noroute');
         }
     }
 
@@ -234,20 +234,20 @@ class Creditmemo
     {
         if ($creditmemo = $this->_initCreditmemo()) {
             if ($creditmemo->getInvoice()) {
-                $this->_title(__("New Memo for #%1", $creditmemo->getInvoice()->getIncrementId()));
+                $this->_title->add(__("New Memo for #%1", $creditmemo->getInvoice()->getIncrementId()));
             } else {
-                $this->_title(__("New Memo"));
+                $this->_title->add(__("New Memo"));
             }
 
             if ($comment = $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getCommentText(true)) {
                 $creditmemo->setCommentText($comment);
             }
 
-            $this->loadLayout()
-                ->_setActiveMenu('Magento_Sales::sales_order')
-                ->renderLayout();
+            $this->_view->loadLayout();
+            $this->_setActiveMenu('Magento_Sales::sales_order');
+            $this->_view->renderLayout();
         } else {
-            $this->_forward('noRoute');
+            $this->_forward('noroute');
         }
     }
 
@@ -258,8 +258,8 @@ class Creditmemo
     {
         try {
             $creditmemo = $this->_initCreditmemo(true);
-            $this->loadLayout();
-            $response = $this->getLayout()->getBlock('order_items')->toHtml();
+            $this->_view->loadLayout();
+            $response = $this->_view->getLayout()->getBlock('order_items')->toHtml();
         } catch (\Magento\Core\Exception $e) {
             $response = array(
                 'error'     => true,
@@ -333,7 +333,7 @@ class Creditmemo
                 $this->_redirect('sales/order/view', array('order_id' => $creditmemo->getOrderId()));
                 return;
             } else {
-                $this->_forward('noRoute');
+                $this->_forward('noroute');
                 return;
             }
         } catch (\Magento\Core\Exception $e) {
@@ -364,7 +364,7 @@ class Creditmemo
             }
             $this->_redirect('sales/*/view', array('creditmemo_id'=>$creditmemo->getId()));
         } else {
-            $this->_forward('noRoute');
+            $this->_forward('noroute');
         }
     }
 
@@ -386,7 +386,7 @@ class Creditmemo
             }
             $this->_redirect('sales/*/view', array('creditmemo_id'=>$creditmemo->getId()));
         } else {
-            $this->_forward('noRoute');
+            $this->_forward('noroute');
         }
     }
 
@@ -413,8 +413,8 @@ class Creditmemo
             $comment->save();
             $creditmemo->sendUpdateEmail(!empty($data['is_customer_notified']), $data['comment']);
 
-            $this->loadLayout();
-            $response = $this->getLayout()->getBlock('creditmemo_comments')->toHtml();
+            $this->_view->loadLayout();
+            $response = $this->_view->getLayout()->getBlock('creditmemo_comments')->toHtml();
         } catch (\Magento\Core\Exception $e) {
             $response = array(
                 'error'     => true,

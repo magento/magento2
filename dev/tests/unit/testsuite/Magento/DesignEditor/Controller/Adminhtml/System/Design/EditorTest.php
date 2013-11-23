@@ -68,11 +68,11 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         $layoutMock->expects($this->any())->method('generateXml')->will($this->returnSelf());
         $layoutMock->expects($this->any())->method('getNode')
             ->will($this->returnValue(new \Magento\Simplexml\Element('<root />')));
-        $blockMessage = $this->getMock('Magento\Core\Block\Messages',
+        $blockMessage = $this->getMock('Magento\View\Block\Messages',
             array('addMessages', 'setEscapeMessageFlag', 'addStorageType'), array(), '', false);
         $layoutMock->expects($this->any())->method('getMessagesBlock')->will($this->returnValue($blockMessage));
 
-        $blockMock = $this->getMock('Magento\Core\Block\Template', array('setActive', 'getMenuModel', 'getParentItems'),
+        $blockMock = $this->getMock('Magento\View\Block\Template', array('setActive', 'getMenuModel', 'getParentItems'),
             array(), '', false);
         $blockMock->expects($this->any())->method('getMenuModel')->will($this->returnSelf());
         $blockMock->expects($this->any())->method('getParentItems')->will($this->returnValue(array()));
@@ -195,7 +195,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         $backendSession = $this->getMock('Magento\Backend\Model\Session', array('getMessages', 'getEscapeMessages'),
             array(), '', false);
         $backendSession->expects($this->any())->method('getMessages')->will(
-            $this->returnValue($this->getMock('Magento\Core\Model\Message\Collection', array(), array(), '', false))
+            $this->returnValue($this->getMock('Magento\Message\Collection', array(), array(), '', false))
         );
 
         $inlineMock = $this->getMock('Magento\Core\Model\Translate\Inline', array(), array(), '', false);

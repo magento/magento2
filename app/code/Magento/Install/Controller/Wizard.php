@@ -29,8 +29,18 @@
  */
 namespace Magento\Install\Controller;
 
+use Magento\App\Action\NotFoundException;
+use Magento\App\RequestInterface;
+
 class Wizard extends \Magento\Install\Controller\Action
 {
+    /**
+     * Application state
+     *
+     * @var \Magento\App\State
+     */
+    protected $_appState;
+
     /**
      * Installer Model
      *
@@ -60,44 +70,32 @@ class Wizard extends \Magento\Install\Controller\Action
     protected $_dbUpdater;
 
     /**
-     * Store Manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Config\Scope $configScope
-     * @param \Magento\View\DesignInterface $viewDesign
-     * @param \Magento\Core\Model\Theme\CollectionFactory $collectionFactory
-     * @param \Magento\Core\Model\App $app
-     * @param \Magento\App\State $appState
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Install\Model\Wizard $wizard
      * @param \Magento\Core\Model\Session\Generic $session
      * @param \Magento\Module\UpdaterInterface $dbUpdater
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\State $appState
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Config\Scope $configScope,
-        \Magento\View\DesignInterface $viewDesign,
-        \Magento\Core\Model\Theme\CollectionFactory $collectionFactory,
-        \Magento\Core\Model\App $app,
-        \Magento\App\State $appState,
         \Magento\Install\Model\Installer $installer,
         \Magento\Install\Model\Wizard $wizard,
         \Magento\Core\Model\Session\Generic $session,
         \Magento\Module\UpdaterInterface $dbUpdater,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\State $appState
     ) {
+        $this->_storeManager = $storeManager;
+        parent::__construct($context, $configScope);
         $this->_installer = $installer;
         $this->_wizard = $wizard;
         $this->_session = $session;
         $this->_dbUpdater = $dbUpdater;
-        $this->_storeManager = $storeManager;
-        parent::__construct($context, $configScope, $viewDesign, $collectionFactory, $app, $appState);
+        $this->_appState = $appState;
     }
 
     /**
@@ -106,18 +104,16 @@ class Wizard extends \Magento\Install\Controller\Action
      * Redirect out if system is already installed
      * Throw a bootstrap exception if page cannot be displayed due to mis-configured base directories
      *
-     * @throws \Magento\BootstrapException
+     * @param RequestInterface $request
+     * @return mixed
      */
-    public function preDispatch()
+    public function dispatch(RequestInterface $request)
     {
         if ($this->_appState->isInstalled()) {
-            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             $this->_redirect('/');
-            return;
         }
-
-        $this->setFlag('', self::FLAG_NO_CHECK_INSTALLATION, true);
-        return parent::preDispatch();
+        return parent::dispatch($request);
     }
 
     /**
@@ -147,13 +143,13 @@ class Wizard extends \Magento\Install\Controller\Action
      */
     protected function _prepareLayout()
     {
-        $this->loadLayout('install_wizard');
+        $this->_view->loadLayout('install_wizard');
         $step = $this->_getWizard()->getStepByRequest($this->getRequest());
         if ($step) {
             $step->setActive(true);
         }
 
-        $this->getLayout()->addBlock('Magento\Install\Block\State', 'install.state', 'left');
+        $this->_view->getLayout()->addBlock('Magento\Install\Block\State', 'install.state', 'left');
         return $this;
     }
 
@@ -189,15 +185,15 @@ class Wizard extends \Magento\Install\Controller\Action
     {
         $this->_checkIfInstalled();
 
-        $this->setFlag('', self::FLAG_NO_DISPATCH_BLOCK_EVENT, true);
-        $this->setFlag('', self::FLAG_NO_POST_DISPATCH, true);
+        $this->_actionFlag->set('', self::FLAG_NO_DISPATCH_BLOCK_EVENT, true);
+        $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
 
         $this->_prepareLayout();
-        $this->_initLayoutMessages('Magento\Install\Model\Session');
+        $this->_view->getLayout()->initMessages('Magento\Install\Model\Session');
 
-        $this->getLayout()->addBlock('Magento\Install\Block\Begin', 'install.begin', 'content');
+        $this->_view->getLayout()->addBlock('Magento\Install\Block\Begin', 'install.begin', 'content');
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -221,14 +217,14 @@ class Wizard extends \Magento\Install\Controller\Action
     public function localeAction()
     {
         $this->_checkIfInstalled();
-        $this->setFlag('', self::FLAG_NO_DISPATCH_BLOCK_EVENT, true);
-        $this->setFlag('', self::FLAG_NO_POST_DISPATCH, true);
+        $this->_actionFlag->set('', self::FLAG_NO_DISPATCH_BLOCK_EVENT, true);
+        $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
 
         $this->_prepareLayout();
-        $this->_initLayoutMessages('Magento\Install\Model\Session');
-        $this->getLayout()->addBlock('Magento\Install\Block\Locale', 'install.locale', 'content');
+        $this->_view->getLayout()->initMessages('Magento\Install\Model\Session');
+        $this->_view->getLayout()->addBlock('Magento\Install\Block\Locale', 'install.locale', 'content');
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -272,14 +268,14 @@ class Wizard extends \Magento\Install\Controller\Action
     public function downloadAction()
     {
         $this->_checkIfInstalled();
-        $this->setFlag('', self::FLAG_NO_DISPATCH_BLOCK_EVENT, true);
-        $this->setFlag('', self::FLAG_NO_POST_DISPATCH, true);
+        $this->_actionFlag->set('', self::FLAG_NO_DISPATCH_BLOCK_EVENT, true);
+        $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
 
         $this->_prepareLayout();
-        $this->_initLayoutMessages('Magento\Install\Model\Session');
-        $this->getLayout()->addBlock('Magento\Install\Block\Download', 'install.download', 'content');
+        $this->_view->getLayout()->initMessages('Magento\Install\Model\Session');
+        $this->_view->getLayout()->addBlock('Magento\Install\Block\Download', 'install.download', 'content');
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -347,7 +343,7 @@ class Wizard extends \Magento\Install\Controller\Action
             $params['failure_callback'] = array($this, 'installFailureCallback');
         }
         $pear->runHtmlConsole($params);
-        $this->_frontController->getResponse()->clearAllHeaders();
+        $this->getResponse()->clearAllHeaders();
     }
 
     /**
@@ -383,8 +379,8 @@ class Wizard extends \Magento\Install\Controller\Action
         $this->_checkIfInstalled();
         $this->_getInstaller()->checkServer();
 
-        $this->setFlag('', self::FLAG_NO_DISPATCH_BLOCK_EVENT, true);
-        $this->setFlag('', self::FLAG_NO_POST_DISPATCH, true);
+        $this->_actionFlag->set('', self::FLAG_NO_DISPATCH_BLOCK_EVENT, true);
+        $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
 
         $data = $this->getRequest()->getQuery('config');
         if ($data) {
@@ -392,10 +388,10 @@ class Wizard extends \Magento\Install\Controller\Action
         }
 
         $this->_prepareLayout();
-        $this->_initLayoutMessages('Magento\Install\Model\Session');
-        $this->getLayout()->addBlock('Magento\Install\Block\Config', 'install.config', 'content');
+        $this->_view->getLayout()->initMessages('Magento\Install\Model\Session');
+        $this->_view->getLayout()->addBlock('Magento\Install\Block\Config', 'install.config', 'content');
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -461,10 +457,10 @@ class Wizard extends \Magento\Install\Controller\Action
         $this->_checkIfInstalled();
 
         $this->_prepareLayout();
-        $this->_initLayoutMessages('Magento\Install\Model\Session');
+        $this->_view->getLayout()->initMessages('Magento\Install\Model\Session');
 
-        $this->getLayout()->addBlock('Magento\Install\Block\Admin', 'install.administrator', 'content');
-        $this->renderLayout();
+        $this->_view->getLayout()->addBlock('Magento\Install\Block\Admin', 'install.administrator', 'content');
+        $this->_view->renderLayout();
     }
 
     /**
@@ -511,10 +507,10 @@ class Wizard extends \Magento\Install\Controller\Action
         $this->_objectManager->get('Magento\AdminNotification\Model\Survey')->saveSurveyViewed(true);
 
         $this->_prepareLayout();
-        $this->_initLayoutMessages('Magento\Install\Model\Session');
+        $this->_view->getLayout()->initMessages('Magento\Install\Model\Session');
 
-        $this->getLayout()->addBlock('Magento\Install\Block\End', 'install.end', 'content');
-        $this->renderLayout();
+        $this->_view->getLayout()->addBlock('Magento\Install\Block\End', 'install.end', 'content');
+        $this->_view->renderLayout();
         $this->_session->clear();
     }
 }

@@ -165,8 +165,8 @@ class InlineVde implements \Magento\Core\Model\Translate\InlineInterface
             \Magento\DesignEditor\Helper\Data::TRANSLATION_MODE => $this->_helper->getTranslationMode()
         ));
 
-        /** @var $block \Magento\Core\Block\Template */
-        $block = $this->_objectManager->create('Magento\Core\Block\Template');
+        /** @var $block \Magento\View\Block\Template */
+        $block = $this->_objectManager->create('Magento\View\Block\Template');
 
         $block->setArea($this->_parser->getDesignPackage()->getArea());
         $block->setAjaxUrl($ajaxUrl);

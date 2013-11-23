@@ -27,7 +27,7 @@
  */
 namespace Magento\Paypal\Controller;
 
-class Payflow extends \Magento\Core\Controller\Front\Action
+class Payflow extends \Magento\App\Action\Action
 {
     /**
      * @var \Magento\Checkout\Model\Session
@@ -55,22 +55,23 @@ class Payflow extends \Magento\Core\Controller\Front\Action
     protected $_checkoutHelper;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Paypal\Model\PayflowlinkFactory $payflowlinkFactory
      * @param \Magento\Paypal\Helper\Checkout $checkoutHelper
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Paypal\Model\PayflowlinkFactory $payflowlinkFactory,
-        \Magento\Paypal\Helper\Checkout $checkoutHelper
+        \Magento\Paypal\Helper\Checkout $checkoutHelper,
+        \Magento\Logger $logger
     ) {
         $this->_checkoutSession = $checkoutSession;
         $this->_orderFactory = $orderFactory;
-        $this->_logger = $context->getLogger();
+        $this->_logger = $logger;
         $this->_payflowlinkFactory = $payflowlinkFactory;
         $this->_checkoutHelper = $checkoutHelper;
         parent::__construct($context);
@@ -81,11 +82,11 @@ class Payflow extends \Magento\Core\Controller\Front\Action
      */
     public function cancelPaymentAction()
     {
-        $this->loadLayout(false);
+        $this->_view->loadLayout(false);
         $gotoSection = $this->_cancelPayment();
-        $redirectBlock = $this->getLayout()->getBlock('payflow.link.iframe');
+        $redirectBlock = $this->_view->getLayout()->getBlock('payflow.link.iframe');
         $redirectBlock->setGotoSection($gotoSection);
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -93,8 +94,8 @@ class Payflow extends \Magento\Core\Controller\Front\Action
      */
     public function returnUrlAction()
     {
-        $this->loadLayout(false);
-        $redirectBlock = $this->getLayout()->getBlock('payflow.link.iframe');
+        $this->_view->loadLayout(false);
+        $redirectBlock = $this->_view->getLayout()->getBlock('payflow.link.iframe');
 
         if ($this->_checkoutSession->getLastRealOrderId()) {
             $order = $this->_orderFactory->create()->loadByIncrementId($this->_checkoutSession->getLastRealOrderId());
@@ -115,7 +116,7 @@ class Payflow extends \Magento\Core\Controller\Front\Action
             }
         }
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -123,7 +124,7 @@ class Payflow extends \Magento\Core\Controller\Front\Action
      */
     public function formAction()
     {
-        $this->loadLayout(false)->renderLayout();
+        $this->_view->loadLayout(false)->renderLayout();
     }
 
     /**

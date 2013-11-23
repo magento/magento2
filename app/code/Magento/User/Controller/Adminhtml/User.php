@@ -23,7 +23,7 @@
  */
 namespace Magento\User\Controller\Adminhtml;
 
-class User extends \Magento\Backend\Controller\AbstractAction
+class User extends \Magento\Backend\App\AbstractAction
 {
     /**
      * Core registry
@@ -40,14 +40,12 @@ class User extends \Magento\Backend\Controller\AbstractAction
     protected $_userFactory;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\User\Model\UserFactory $userFactory
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\User\Model\UserFactory $userFactory
     ) {
@@ -58,8 +56,8 @@ class User extends \Magento\Backend\Controller\AbstractAction
 
     protected function _initAction()
     {
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_User::system_acl_users')
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_User::system_acl_users')
             ->_addBreadcrumb(__('System'), __('System'))
             ->_addBreadcrumb(__('Permissions'), __('Permissions'))
             ->_addBreadcrumb(__('Users'), __('Users'))
@@ -69,9 +67,9 @@ class User extends \Magento\Backend\Controller\AbstractAction
 
     public function indexAction()
     {
-        $this->_title(__('Users'));
+        $this->_title->add(__('Users'));
         $this->_initAction();
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function newAction()
@@ -81,7 +79,7 @@ class User extends \Magento\Backend\Controller\AbstractAction
 
     public function editAction()
     {
-        $this->_title(__('Users'));
+        $this->_title->add(__('Users'));
 
         $userId = $this->getRequest()->getParam('user_id');
         /** @var \Magento\User\Model\User $model */
@@ -98,7 +96,7 @@ class User extends \Magento\Backend\Controller\AbstractAction
             $model->setInterfaceLocale(\Magento\Core\Model\LocaleInterface::DEFAULT_LOCALE);
         }
 
-        $this->_title($model->getId() ? $model->getName() : __('New User'));
+        $this->_title->add($model->getId() ? $model->getName() : __('New User'));
 
         // Restore previously entered form data from session
         $data = $this->_session->getUserData(true);
@@ -114,7 +112,7 @@ class User extends \Magento\Backend\Controller\AbstractAction
             $breadcrumb = __('New User');
         }
         $this->_initAction()->_addBreadcrumb($breadcrumb, $breadcrumb);
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function saveAction()
@@ -216,14 +214,14 @@ class User extends \Magento\Backend\Controller\AbstractAction
             $model->load($userId);
         }
         $this->_coreRegistry->register('permissions_user', $model);
-        $this->loadLayout();
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->renderLayout();
     }
 
     public function roleGridAction()
     {
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     protected function _isAllowed()

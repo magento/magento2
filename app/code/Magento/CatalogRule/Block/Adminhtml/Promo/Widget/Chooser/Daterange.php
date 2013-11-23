@@ -64,14 +64,14 @@ class Daterange extends \Magento\Backend\Block\AbstractBlock
     protected $mathRandom;
 
     /**
-     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Math\Random $mathRandom
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\FormFactory $formFactory,
         \Magento\Backend\Block\Context $context,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Math\Random $mathRandom,
         array $data = array()
     ) {

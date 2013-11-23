@@ -38,8 +38,8 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         /** @var $block \Magento\Adminhtml\Block\Newsletter\Subscriber */
         $block = $layout->createBlock('Magento\Adminhtml\Block\Newsletter\Subscriber', 'block');
-        /** @var $childBlock \Magento\Core\Block\Template */
-        $childBlock = $layout->addBlock('Magento\Core\Block\Template', 'grid', 'block');
+        /** @var $childBlock \Magento\View\Block\Template */
+        $childBlock = $layout->addBlock('Magento\View\Block\Template', 'grid', 'block');
 
         $expected = 'test_data';
         $this->assertNotEquals($expected, $block->getShowQueueAdd());

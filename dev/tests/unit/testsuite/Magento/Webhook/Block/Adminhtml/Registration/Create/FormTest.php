@@ -63,10 +63,10 @@ class FormTest extends \Magento\Test\Block\Adminhtml
         $this->_setStub($collectionMock, 'getSelect', $selectMock);
 
         $arguments = array(
+            $this->_context,
+            $this->_coreData,
             $this->_registry,
             $this->_formFactoryMock,
-            $this->_coreData,
-            $this->_context,
         );
 
         $methods = array(

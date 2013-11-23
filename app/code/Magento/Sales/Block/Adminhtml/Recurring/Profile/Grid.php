@@ -52,21 +52,19 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
     protected $_recurringProfile;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Sales\Model\Resource\Recurring\Profile\CollectionFactory $profileCollection
      * @param \Magento\Sales\Model\Recurring\ProfileFactory $recurringProfile
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Payment\Helper\Data $paymentData,
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Payment\Helper\Data $paymentData,
         \Magento\Sales\Model\Resource\Recurring\Profile\CollectionFactory $profileCollection,
         \Magento\Sales\Model\Recurring\ProfileFactory $recurringProfile,
         array $data = array()
@@ -74,7 +72,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
         $this->_paymentData = $paymentData;
         $this->_profileCollection = $profileCollection;
         $this->_recurringProfile = $recurringProfile;
-        parent::__construct($coreData, $context, $storeManager, $urlModel, $data);
+        parent::__construct($context, $coreData, $urlModel, $data);
     }
 
     protected function _construct()

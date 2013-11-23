@@ -43,13 +43,13 @@ class Checkbox
     protected $_elementFactory;
 
     /**
-     * @param \Magento\Data\Form\Element\Factory $elementFactory
      * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Data\Form\Element\Factory $elementFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Element\Factory $elementFactory,
         \Magento\Backend\Block\Context $context,
+        \Magento\Data\Form\Element\Factory $elementFactory,
         array $data = array()
     ) {
         $this->_elementFactory = $elementFactory;

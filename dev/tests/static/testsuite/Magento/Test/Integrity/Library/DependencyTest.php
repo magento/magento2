@@ -73,8 +73,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
 
         foreach ($dependencies as $dependency) {
             if (preg_match('#^(\\\\|)' . implode('|', $this->getForbiddenNamespaces()) . '\\\\#', $dependency)
-                && !class_exists($dependency)
-                && !interface_exists($dependency)
+                && !file_exists(BP . '/lib/' . str_replace('\\', '/', $dependency) . '.php')
             ) {
                 $this->errors[$fileReflection->getFileName()][] = $dependency;
             }

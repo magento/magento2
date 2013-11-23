@@ -33,7 +33,7 @@
  */
 namespace Magento\Connect\Controller\Adminhtml\Extension;
 
-class Local extends \Magento\Backend\Controller\Adminhtml\Action
+class Local extends \Magento\Backend\App\Action
 {
     /**
      * Redirect to Magento Connect

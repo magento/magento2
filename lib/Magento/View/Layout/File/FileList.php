@@ -1,7 +1,5 @@
 <?php
 /**
- * Unordered list of layout file instances with awareness of layout file identity
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -28,6 +26,9 @@ namespace Magento\View\Layout\File;
 
 use Magento\View\Layout\File;
 
+/**
+ * Unordered list of layout file instances with awareness of layout file identity
+ */
 class FileList
 {
     /**

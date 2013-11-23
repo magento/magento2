@@ -29,7 +29,7 @@
  */
 namespace Magento\Sales\Block\Order;
 
-class History extends \Magento\Core\Block\Template
+class History extends \Magento\View\Block\Template
 {
     /**
      * @var string
@@ -52,39 +52,30 @@ class History extends \Magento\Core\Block\Template
     protected $_orderConfig;
 
     /**
-     * @var \Magento\Core\Model\App
-     */
-    protected $_coreApp;
-
-    /**
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
-     * @param \Magento\Core\Model\App $coreApp
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Order\Config $orderConfig,
-        \Magento\Core\Model\App $coreApp,
         array $data = array()
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_customerSession = $customerSession;
         $this->_orderConfig = $orderConfig;
-        $this->_coreApp = $coreApp;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     protected function _construct()
     {
         parent::_construct();
-
 
         $orders = $this->_orderCollectionFactory->create()
             ->addFieldToSelect('*')
@@ -94,15 +85,13 @@ class History extends \Magento\Core\Block\Template
 
         $this->setOrders($orders);
 
-        if ($this->_coreApp->getFrontController()->getAction()) {
-            $this->_coreApp->getFrontController()->getAction()->getLayout()->getBlock('root')->setHeaderTitle(
-                __('My Orders')
-            );
+        if ($this->_layout->getBlock('root')) {
+            $this->_layout->getBlock('root')->setHeaderTitle(__('My Orders'));
         }
     }
 
     /**
-     * @return $this|\Magento\Core\Block\AbstractBlock
+     * @return $this|\Magento\View\Block\AbstractBlock
      */
     protected function _prepareLayout()
     {

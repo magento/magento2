@@ -31,15 +31,8 @@ namespace Magento\Catalog\Controller\Product;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Compare extends \Magento\Core\Controller\Front\Action
+class Compare extends \Magento\App\Action\Action
 {
-    /**
-     * Action list where need check enabled cookie
-     *
-     * @var array
-     */
-    protected $_cookieCheckActions = array('add');
-
     /**
      * Customer id
      *
@@ -76,13 +69,6 @@ class Compare extends \Magento\Core\Controller\Front\Action
     protected $_customerSession;
 
     /**
-     * Store manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * Item collection factory
      *
      * @var \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory
@@ -111,36 +97,39 @@ class Compare extends \Magento\Core\Controller\Front\Action
     protected $_customerFactory;
 
     /**
-     * Construct
-     *
+     * @var \Magento\Core\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Catalog\Model\Product\Compare\ItemFactory $compareItemFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Log\Model\Visitor $logVisitor
      * @param \Magento\Catalog\Model\Product\Compare\ListCompare $catalogProductCompareList
      * @param \Magento\Catalog\Model\Session $catalogSession
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
+        \Magento\App\Action\Context $context,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Catalog\Model\Product\Compare\ItemFactory $compareItemFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Log\Model\Visitor $logVisitor,
         \Magento\Catalog\Model\Product\Compare\ListCompare $catalogProductCompareList,
         \Magento\Catalog\Model\Session $catalogSession,
-        \Magento\Core\Controller\Varien\Action\Context $context
+        \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
+        $this->_storeManager = $storeManager;
         $this->_customerFactory = $customerFactory;
         $this->_compareItemFactory = $compareItemFactory;
         $this->_productFactory = $productFactory;
         $this->_itemCollectionFactory = $itemCollectionFactory;
-        $this->_storeManager = $storeManager;
         $this->_customerSession = $customerSession;
         $this->_logVisitor = $logVisitor;
         $this->_catalogProductCompareList = $catalogProductCompareList;
@@ -170,8 +159,8 @@ class Compare extends \Magento\Core\Controller\Front\Action
             return;
         }
 
-        $this->loadLayout();
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -200,8 +189,7 @@ class Compare extends \Magento\Core\Controller\Front\Action
 
             $this->_objectManager->get('Magento\Catalog\Helper\Product\Compare')->calculate();
         }
-
-        $this->_redirectReferer();
+        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
     }
 
     /**
@@ -245,7 +233,7 @@ class Compare extends \Magento\Core\Controller\Front\Action
         }
 
         if (!$this->getRequest()->getParam('isAjax', false)) {
-            $this->_redirectReferer();
+            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
         }
     }
 
@@ -275,7 +263,7 @@ class Compare extends \Magento\Core\Controller\Front\Action
             $this->_catalogSession->addException($e, __('Something went wrong  clearing the comparison list.'));
         }
 
-        $this->_redirectReferer();
+        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
     }
 
     /**

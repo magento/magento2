@@ -132,7 +132,7 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
     /**
      * Email template factory
      *
-     * @var \Magento\Core\Model\Email\TemplateFactory
+     * @var \Magento\Email\Model\TemplateFactory
      */
     protected $_emailTemplateFactory;
 
@@ -143,7 +143,7 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Newsletter\Helper\Data $newsletterData
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Email\TemplateFactory $emailTemplateFactory
+     * @param \Magento\Email\Model\TemplateFactory $emailTemplateFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Translate $translate
@@ -157,7 +157,7 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Registry $registry,
         \Magento\Newsletter\Helper\Data $newsletterData,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Email\TemplateFactory $emailTemplateFactory,
+        \Magento\Email\Model\TemplateFactory $emailTemplateFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Translate $translate,
@@ -605,7 +605,7 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
 
         $this->_translate->setTranslateInline(false);
 
-        /** @var \Magento\Core\Model\Email\Template $email */
+        /** @var \Magento\Email\Model\Template $email */
         $email = $this->_emailTemplateFactory->create();
 
         $email->sendTransactional(
@@ -640,7 +640,7 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
 
         $this->_translate->setTranslateInline(false);
 
-        /** @var \Magento\Core\Model\Email\Template $email */
+        /** @var \Magento\Email\Model\Template $email */
         $email = $this->_emailTemplateFactory->create();
 
         $email->sendTransactional(
@@ -674,7 +674,7 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
 
         $this->_translate->setTranslateInline(false);
 
-        /** @var \Magento\Core\Model\Email\Template $email */
+        /** @var \Magento\Email\Model\Template $email */
         $email = $this->_emailTemplateFactory->create();
 
         $email->sendTransactional(

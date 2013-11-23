@@ -26,7 +26,9 @@
 
 namespace Magento\Catalog\Controller\Adminhtml;
 
-class Search extends \Magento\Backend\Controller\Adminhtml\Action
+use Magento\Backend\App\Action;
+
+class Search extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -36,11 +38,11 @@ class Search extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -49,8 +51,8 @@ class Search extends \Magento\Backend\Controller\Adminhtml\Action
 
     protected function _initAction()
     {
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_CatalogSearch::catalog_search')
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_CatalogSearch::catalog_search')
             ->_addBreadcrumb(__('Search'), __('Search'))
         ;
         return $this;
@@ -58,11 +60,11 @@ class Search extends \Magento\Backend\Controller\Adminhtml\Action
 
     public function indexAction()
     {
-        $this->_title(__('Search Terms'));
+        $this->_title->add(__('Search Terms'));
 
         $this->_initAction()
             ->_addBreadcrumb(__('Catalog'), __('Catalog'));
-            $this->renderLayout();
+            $this->_view->renderLayout();
     }
 
     public function newAction()
@@ -72,7 +74,7 @@ class Search extends \Magento\Backend\Controller\Adminhtml\Action
 
     public function editAction()
     {
-        $this->_title(__('Search Terms'));
+        $this->_title->add(__('Search Terms'));
 
         $id = $this->getRequest()->getParam('id');
         $model = $this->_objectManager->create('Magento\CatalogSearch\Model\Query');
@@ -96,17 +98,17 @@ class Search extends \Magento\Backend\Controller\Adminhtml\Action
 
         $this->_initAction();
 
-        $this->_title($id ? $model->getQueryText() : __('New Search'));
+        $this->_title->add($id ? $model->getQueryText() : __('New Search'));
 
-        $this->getLayout()->getBlock('head')->setCanLoadRulesJs(true);
+        $this->_view->getLayout()->getBlock('head')->setCanLoadRulesJs(true);
 
-        $this->getLayout()->getBlock('adminhtml.catalog.search.edit')
+        $this->_view->getLayout()->getBlock('adminhtml.catalog.search.edit')
             ->setData('action', $this->getUrl('catalog/search/save'));
 
         $this
             ->_addBreadcrumb($id ? __('Edit Search') : __('New Search'), $id ? __('Edit Search') : __('New Search'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**

@@ -29,7 +29,7 @@ namespace Magento\Customer\Helper;
 /**
  * Customer Data Helper
  */
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Query param name for last url visited
@@ -120,13 +120,6 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_customerAddress = null;
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager = null;
-
-    /**
      * Core store config
      *
      * @var \Magento\Core\Model\Store\Config
@@ -164,10 +157,9 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $mathRandom;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Customer\Helper\Address $customerAddress
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Config $coreConfig
      * @param \Magento\Customer\Model\Session $customerSession
@@ -177,10 +169,9 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      * @param \Magento\Math\Random $mathRandom
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Customer\Helper\Address $customerAddress,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Config $coreConfig,
         \Magento\Customer\Model\Session $customerSession,
@@ -189,7 +180,6 @@ class Data extends \Magento\Core\Helper\AbstractHelper
         \Magento\Escaper $escaper,
         \Magento\Math\Random $mathRandom
     ) {
-        $this->_eventManager = $eventManager;
         $this->_customerAddress = $customerAddress;
         $this->_coreData = $coreData;
         $this->_coreStoreConfig = $coreStoreConfig;

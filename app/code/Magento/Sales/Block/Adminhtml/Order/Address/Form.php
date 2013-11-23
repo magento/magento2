@@ -46,35 +46,40 @@ class Form
     protected $_coreRegistry = null;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Adminhtml\Model\Session\Quote $sessionQuote
+     * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
      * @param \Magento\Customer\Model\FormFactory $customerFormFactory
      * @param \Magento\Adminhtml\Helper\Addresses $adminhtmlAddresses
-     * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Adminhtml\Model\Session\Quote $sessionQuote
-     * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Adminhtml\Model\Session\Quote $sessionQuote,
+        \Magento\Sales\Model\AdminOrder\Create $orderCreate,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\Customer\Model\AddressFactory $addressFactory,
         \Magento\Customer\Model\FormFactory $customerFormFactory,
         \Magento\Adminhtml\Helper\Addresses $adminhtmlAddresses,
-        \Magento\Data\FormFactory $formFactory,
-        \Magento\Adminhtml\Model\Session\Quote $sessionQuote,
-        \Magento\Sales\Model\AdminOrder\Create $orderCreate,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct(
-            $addressFactory, $customerFormFactory, $adminhtmlAddresses, $formFactory,
-            $sessionQuote, $orderCreate, $coreData, $context, $data
+            $context,
+            $coreData,
+            $sessionQuote,
+            $orderCreate,
+            $formFactory,
+            $addressFactory,
+            $customerFormFactory,
+            $adminhtmlAddresses,
+            $data
         );
     }
 

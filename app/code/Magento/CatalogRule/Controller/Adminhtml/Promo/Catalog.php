@@ -33,7 +33,7 @@
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo;
 
-class Catalog extends \Magento\Backend\Controller\Adminhtml\Action
+class Catalog extends \Magento\Backend\App\Action
 {
     /**
      * Dirty rules notice message
@@ -50,22 +50,30 @@ class Catalog extends \Magento\Backend\Controller\Adminhtml\Action
      */
     protected $_coreRegistry = null;
 
+    /*
+     * @var \Magento\Core\Filter\Date
+     */
+    protected $_dateFilter;
+
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Core\Filter\Date $dateFilter
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Core\Filter\Date $dateFilter
     ) {
-        $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
+        $this->_coreRegistry = $coreRegistry;
+        $this->_dateFilter = $dateFilter;
     }
 
     protected function _initAction()
     {
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_CatalogRule::promo_catalog')
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_CatalogRule::promo_catalog')
             ->_addBreadcrumb(
                 __('Promotions'),
                 __('Promotions')
@@ -75,7 +83,7 @@ class Catalog extends \Magento\Backend\Controller\Adminhtml\Action
 
     public function indexAction()
     {
-        $this->_title(__('Catalog Price Rules'));
+        $this->_title->add(__('Catalog Price Rules'));
 
         $dirtyRules = $this->_objectManager->create('Magento\CatalogRule\Model\Flag')->loadSelf();
         if ($dirtyRules->getState()) {
@@ -86,8 +94,8 @@ class Catalog extends \Magento\Backend\Controller\Adminhtml\Action
             ->_addBreadcrumb(
                 __('Catalog'),
                 __('Catalog')
-            )
-            ->renderLayout();
+            );
+        $this->_view->renderLayout();
     }
 
     public function newAction()
@@ -97,7 +105,7 @@ class Catalog extends \Magento\Backend\Controller\Adminhtml\Action
 
     public function editAction()
     {
-        $this->_title(__('Catalog Price Rules'));
+        $this->_title->add(__('Catalog Price Rules'));
 
         $id = $this->getRequest()->getParam('id');
         $model = $this->_objectManager->create('Magento\CatalogRule\Model\Rule');
@@ -113,7 +121,7 @@ class Catalog extends \Magento\Backend\Controller\Adminhtml\Action
             }
         }
 
-        $this->_title($model->getRuleId() ? $model->getName() : __('New Catalog Price Rule'));
+        $this->_title->add($model->getRuleId() ? $model->getName() : __('New Catalog Price Rule'));
 
         // set entered data if was error when we do save
         $data = $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getPageData(true);
@@ -124,11 +132,13 @@ class Catalog extends \Magento\Backend\Controller\Adminhtml\Action
 
         $this->_coreRegistry->register('current_promo_catalog_rule', $model);
 
-        $this->_initAction()->getLayout()->getBlock('promo_catalog_edit')
+        $this->_initAction();
+        $this->_view->getLayout()->getBlock('promo_catalog_edit')
             ->setData('action', $this->getUrl('catalog_rule/promo_catalog/save'));
 
         $breadcrumb = $id ? __('Edit Rule') : __('New Rule');
-        $this->_addBreadcrumb($breadcrumb, $breadcrumb)->renderLayout();
+        $this->_addBreadcrumb($breadcrumb, $breadcrumb);
+        $this->_view->renderLayout();
     }
 
     public function saveAction()
@@ -141,7 +151,9 @@ class Catalog extends \Magento\Backend\Controller\Adminhtml\Action
                     array('request' => $this->getRequest())
                 );
                 $data = $this->getRequest()->getPost();
-                $data = $this->_filterDates($data, array('from_date', 'to_date'));
+                $inputFilter = new \Zend_Filter_Input(
+                    array('from_date' => $this->_dateFilter, 'to_date' => $this->_dateFilter), array(), $data);
+                $data = $inputFilter->getUnescaped();
                 $id = $this->getRequest()->getParam('rule_id');
                 if ($id) {
                     $model->load($id);
@@ -152,7 +164,7 @@ class Catalog extends \Magento\Backend\Controller\Adminhtml\Action
 
                 $validateResult = $model->validateData(new \Magento\Object($data));
                 if ($validateResult !== true) {
-                    foreach($validateResult as $errorMessage) {
+                    foreach ($validateResult as $errorMessage) {
                         $this->_getSession()->addError($errorMessage);
                     }
                     $this->_getSession()->setPageData($data);
@@ -265,7 +277,7 @@ class Catalog extends \Magento\Backend\Controller\Adminhtml\Action
             $type = 'Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser\Sku';
         }
         if (!empty($type)) {
-            $block = $this->getLayout()->createBlock($type);
+            $block = $this->_view->getLayout()->createBlock($type);
             if ($block) {
                 $this->getResponse()->setBody($block->toHtml());
             }

@@ -25,7 +25,9 @@
  */
 namespace Magento\Index\Controller\Adminhtml;
 
-class Process extends \Magento\Backend\Controller\Adminhtml\Action
+use Magento\Backend\App\Action;
+
+class Process extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -45,13 +47,13 @@ class Process extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_indexer;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Index\Model\ProcessFactory $processFactory
      * @param \Magento\Index\Model\Indexer $indexer
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Index\Model\ProcessFactory $processFactory,
         \Magento\Index\Model\Indexer $indexer
@@ -85,12 +87,12 @@ class Process extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function listAction()
     {
-        $this->_title(__('Index Management'));
+        $this->_title->add(__('Index Management'));
 
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Index::system_index');
-        $this->_addContent($this->getLayout()->createBlock('Magento\Index\Block\Adminhtml\Process'));
-        $this->renderLayout();
+        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Index\Block\Adminhtml\Process'));
+        $this->_view->renderLayout();
     }
 
     /**
@@ -101,15 +103,14 @@ class Process extends \Magento\Backend\Controller\Adminhtml\Action
         /** @var $process \Magento\Index\Model\Process */
         $process = $this->_initProcess();
         if ($process) {
-            $this->_title($process->getIndexCode());
-
-            $this->_title(__('System'))
-                 ->_title(__('Index Management'))
-                 ->_title(__($process->getIndexer()->getName()));
+            $this->_title->add($process->getIndexCode());
+            $this->_title->add(__('System'));
+            $this->_title->add(__('Index Management'));
+            $this->_title->add(__($process->getIndexer()->getName()));
 
             $this->_coreRegistry->register('current_index_process', $process);
-            $this->loadLayout();
-            $this->renderLayout();
+            $this->_view->loadLayout();
+            $this->_view->renderLayout();
         } else {
             $this->_getSession()->addError(
                 __('Cannot initialize the indexer process.')

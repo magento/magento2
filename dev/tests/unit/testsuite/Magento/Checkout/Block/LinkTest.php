@@ -44,7 +44,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $urlBuilder->expects($this->once())->method('getUrl')->with($path)->will($this->returnValue($url . $path));
 
         $context = $this->_objectManagerHelper->getObject(
-            'Magento\Core\Block\Template\Context',
+            'Magento\View\Block\Template\Context',
             array('urlBuilder' => $urlBuilder)
         );
         $link = $this->_objectManagerHelper->getObject(
@@ -66,7 +66,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('canOnepageCheckout', 'isModuleOutputEnabled'))
             ->getMock();
 
-        $helperFactory = $this->getMockBuilder('Magento\Core\Model\Factory\Helper')
+        $helperFactory = $this->getMockBuilder('Magento\App\Helper\HelperFactory')
             ->disableOriginalConstructor()
             ->setMethods(array('get'))
             ->getMock();
@@ -77,9 +77,9 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('isOutputEnabled'))
             ->getMock();
 
-        /** @var  \Magento\Core\Block\Template\Context $context */
+        /** @var  \Magento\View\Block\Template\Context $context */
         $context = $this->_objectManagerHelper->getObject(
-            'Magento\Core\Block\Template\Context',
+            'Magento\View\Block\Template\Context',
             array('helperFactory' => $helperFactory)
         );
 

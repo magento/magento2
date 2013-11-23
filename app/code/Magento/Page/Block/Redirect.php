@@ -34,7 +34,7 @@
  */
 namespace Magento\Page\Block;
 
-class Redirect extends \Magento\Core\Block\Template
+class Redirect extends \Magento\View\Block\Template
 {
     /**
      *  HTML form hidden fields
@@ -47,19 +47,19 @@ class Redirect extends \Magento\Core\Block\Template
     protected $_formFactory;
 
     /**
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Data\FormFactory $formFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Data\FormFactory $formFactory,
         array $data = array()
     ) {
         $this->_formFactory = $formFactory;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

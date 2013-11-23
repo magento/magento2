@@ -24,7 +24,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\Core\Block\Template" name="block_with_service_calls">
+    <block class="Magento\View\Block\Template" name="block_with_service_calls">
         <data service_call="testServiceCall" alias="testData"/>
     </block>
 </layout>

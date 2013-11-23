@@ -33,9 +33,6 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
      */
     protected $_block;
 
-    /** @var \Magento\Backend\Block\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
-    protected $_context;
-
     /** @var \Magento\Core\Model\App|\PHPUnit_Framework_MockObject_MockObject */
     protected $_application;
 
@@ -44,11 +41,10 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_context = $this->getMock('Magento\Backend\Block\Template\Context', array(), array(), '', false);
         $this->_application = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
         $this->_locale = $this->getMock('Magento\Core\Model\LocaleInterface', array(), array(), '', false);
         $data = array(
-            'application' => $this->_application,
+            'app' => $this->_application,
             'locale' => $this->_locale,
             'formFactory' => $this->getMock('Magento\Data\FormFactory', array(), array(), '', false),
             'productFactory' => $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false),

@@ -26,4 +26,9 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="checkout_multishipping"/>
     <update handle="checkout_multishipping_customer_address"/>
+    <referenceBlock name="page.main.title">
+        <action method="setPageTitle">
+            <argument translate="true" name="label" xsi:type="string">Edit Shipping Address</argument>
+        </action>
+    </referenceBlock>
 </layout>

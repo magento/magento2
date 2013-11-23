@@ -64,23 +64,21 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_itemCollectionFactory;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $itemCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavCollectionFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Model\Url $urlModel,
         \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavCollectionFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Catalog\Model\Product\Type $productType,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         array $data = array()
@@ -89,7 +87,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->_eavCollectionFactory = $eavCollectionFactory;
         $this->_productType = $productType;
         $this->_productFactory = $productFactory;
-        parent::__construct($coreData, $context, $storeManager, $urlModel, $data);
+        parent::__construct($context, $coreData, $urlModel, $data);
     }
 
     protected function _construct()

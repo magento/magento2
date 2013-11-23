@@ -29,7 +29,7 @@
  */
 namespace Magento\Core\Model\Theme\Domain;
 
-class Virtual
+class Virtual implements \Magento\View\Design\Theme\Domain\VirtualInterface
 {
     /**
      * Virtual theme model instance

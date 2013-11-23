@@ -51,29 +51,27 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
     protected $_groupsFactory;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Core\Model\System\Store $systemStore
      * @param \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory
      * @param \Magento\Customer\Model\Resource\Group\CollectionFactory $groupsFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Url $urlModel
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Model\Url $urlModel,
         \Magento\Core\Model\System\Store $systemStore,
         \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory,
         \Magento\Customer\Model\Resource\Group\CollectionFactory $groupsFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Url $urlModel,
         array $data = array()
     ) {
         $this->_systemStore = $systemStore;
         $this->_customersFactory = $customersFactory;
         $this->_groupsFactory = $groupsFactory;
-        parent::__construct($coreData, $context, $storeManager, $urlModel, $data);
+        parent::__construct($context, $coreData, $urlModel, $data);
     }
 
     protected function _construct()

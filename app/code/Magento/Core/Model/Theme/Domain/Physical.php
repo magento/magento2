@@ -29,7 +29,7 @@
  */
 namespace Magento\Core\Model\Theme\Domain;
 
-class Physical
+class Physical implements \Magento\View\Design\Theme\Domain\PhysicalInterface
 {
     /**
      * Physical theme model instance

@@ -41,23 +41,21 @@ class Grid extends \Magento\Adminhtml\Block\Report\Grid\Shopcart
     protected $_customersFactory;
 
     /**
-     * @param \Magento\Reports\Model\Resource\Customer\CollectionFactory $customersFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Reports\Model\Resource\Customer\CollectionFactory $customersFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Reports\Model\Resource\Customer\CollectionFactory $customersFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Reports\Model\Resource\Customer\CollectionFactory $customersFactory,
         array $data = array()
     ) {
         $this->_customersFactory = $customersFactory;
-        parent::__construct($coreData, $context, $storeManager, $urlModel, $data);
+        parent::__construct($context, $coreData, $urlModel, $data);
     }
 
     protected function _construct()

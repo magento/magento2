@@ -29,7 +29,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System;
 
-abstract class AbstractConfig extends \Magento\Backend\Controller\AbstractAction
+use Magento\App\Action\NotFoundException;
+
+abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
 {
     /**
      * @var \Magento\Backend\Model\Config\Structure
@@ -37,11 +39,11 @@ abstract class AbstractConfig extends \Magento\Backend\Controller\AbstractAction
     protected $_configStructure;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\Config\Structure $configStructure
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Backend\Model\Config\Structure $configStructure
     ) {
         parent::__construct($context);
@@ -49,23 +51,21 @@ abstract class AbstractConfig extends \Magento\Backend\Controller\AbstractAction
     }
 
     /**
-     * Controller pre-dispatch method
      * Check if current section is found and is allowed
      *
-     * @return \Magento\Backend\Controller\AbstractAction
+     * @param \Magento\App\RequestInterface $request
+     * @return $this|mixed
      */
-    public function preDispatch()
+    public function dispatch(\Magento\App\RequestInterface $request)
     {
-        parent::preDispatch();
-
         $section = null;
-        if (!$this->getRequest()->getParam('section')) {
+        if (!$request->getParam('section')) {
             $section = $this->_configStructure->getFirstSection();
-            $this->getRequest()->setParam('section', $section->getId());
+            $request->setParam('section', $section->getId());
         } else {
-            $this->_isSectionAllowed($this->getRequest()->getParam('section'));
+            $this->_isSectionAllowed($request->getParam('section'));
         }
-        return $this;
+        return parent::dispatch($request);
     }
 
     /**
@@ -86,6 +86,7 @@ abstract class AbstractConfig extends \Magento\Backend\Controller\AbstractAction
      * @param string $sectionId
      * @throws \Exception
      * @return bool
+     * @throws NotFoundException
      */
     protected function _isSectionAllowed($sectionId)
     {
@@ -95,12 +96,10 @@ abstract class AbstractConfig extends \Magento\Backend\Controller\AbstractAction
             }
             return true;
         } catch (\Zend_Acl_Exception $e) {
-            $this->norouteAction();
-            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
-            return false;
+            throw new NotFoundException();
         } catch (\Exception $e) {
             $this->deniedAction();
-            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             return false;
         }
     }

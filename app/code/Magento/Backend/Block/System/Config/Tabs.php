@@ -77,18 +77,18 @@ class Tabs extends \Magento\Backend\Block\Widget
     protected $_storeCode;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Model\Config\Structure $configStructure
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Model\Config\Structure $configStructure,
         array $data = array()
     ) {
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
         $this->_tabs = $configStructure->getTabs();
 
         $this->setId('system_config_tabs');

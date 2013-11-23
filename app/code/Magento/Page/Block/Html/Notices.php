@@ -33,7 +33,7 @@
  */
 namespace Magento\Page\Block\Html;
 
-class Notices extends \Magento\Core\Block\Template
+class Notices extends \Magento\View\Block\Template
 {
     /**
      * @var \Magento\Core\Model\Url
@@ -41,19 +41,19 @@ class Notices extends \Magento\Core\Block\Template
     protected $_urlModel;
 
     /**
-     * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Core\Model\Url $urlModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Url $urlModel,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Core\Model\Url $urlModel,
         array $data = array()
     ) {
         $this->_urlModel = $urlModel;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

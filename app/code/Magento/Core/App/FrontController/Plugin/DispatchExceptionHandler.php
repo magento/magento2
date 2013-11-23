@@ -31,7 +31,7 @@ use Magento\Core\Model\StoreManager,
 class DispatchExceptionHandler
 {
     /**
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 

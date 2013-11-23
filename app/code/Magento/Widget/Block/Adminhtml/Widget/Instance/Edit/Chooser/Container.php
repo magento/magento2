@@ -34,7 +34,7 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
-class Container extends \Magento\Core\Block\Html\Select
+class Container extends \Magento\View\Block\Html\Select
 {
     /**
      * @var \Magento\View\Layout\ProcessorFactory
@@ -47,14 +47,14 @@ class Container extends \Magento\Core\Block\Html\Select
     protected $_themesFactory;
 
     /**
-     * @param \Magento\Core\Block\Context $context
+     * @param \Magento\View\Block\Context $context
      * @param \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory
      * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory
      * @param array $data
      */
 
     public function __construct(
-        \Magento\Core\Block\Context $context,
+        \Magento\View\Block\Context $context,
         \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory,
         \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory,
         array $data = array()
@@ -78,7 +78,7 @@ class Container extends \Magento\Core\Block\Html\Select
     /**
      * Add necessary options
      *
-     * @return \Magento\Core\Block\AbstractBlock
+     * @return \Magento\View\Block\AbstractBlock
      */
     protected function _beforeToHtml()
     {

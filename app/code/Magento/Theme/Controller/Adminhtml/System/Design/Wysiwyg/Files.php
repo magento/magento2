@@ -29,15 +29,32 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg;
 
-class Files extends \Magento\Backend\Controller\Adminhtml\Action
+class Files extends \Magento\Backend\App\Action
 {
+    /**
+     * @var \Magento\App\Response\Http\FileFactory
+     */
+    protected $_fileFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\App\Response\Http\FileFactory $fileFactory
+    ) {
+        $this->_fileFactory = $fileFactory;
+        parent::__construct($context);
+    }
+    
     /**
      * Index action
      */
     public function indexAction()
     {
-        $this->loadLayout('overlay_popup');
-        $this->renderLayout();
+        $this->_view->loadLayout('overlay_popup');
+        $this->_view->renderLayout();
     }
 
     /**
@@ -47,7 +64,7 @@ class Files extends \Magento\Backend\Controller\Adminhtml\Action
     {
         try {
             $this->getResponse()->setBody(
-                $this->getLayout()->createBlock('Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree')
+                $this->_view->getLayout()->createBlock('Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree')
                     ->getTreeJson($this->_getStorage()->getTreeArray())
             );
         } catch (\Exception $e) {
@@ -94,9 +111,9 @@ class Files extends \Magento\Backend\Controller\Adminhtml\Action
     public function contentsAction()
     {
         try {
-            $this->loadLayout('empty');
-            $this->getLayout()->getBlock('wysiwyg_files.files')->setStorage($this->_getStorage());
-            $this->renderLayout();
+            $this->_view->loadLayout('empty');
+            $this->_view->getLayout()->getBlock('wysiwyg_files.files')->setStorage($this->_getStorage());
+            $this->_view->renderLayout();
 
             $this->_getSession()->setStoragePath(
                 $this->_objectManager->get('Magento\Theme\Helper\Storage')->getCurrentPath()
@@ -130,7 +147,7 @@ class Files extends \Magento\Backend\Controller\Adminhtml\Action
         /** @var $helper \Magento\Theme\Helper\Storage */
         $helper = $this->_objectManager->get('Magento\Theme\Helper\Storage');
         try {
-            $this->_prepareDownloadResponse($file, array(
+            $this->_fileFactory->create($file, array(
                 'type'  => 'filename',
                 'value' => $helper->getThumbnailPath($file)
             ));

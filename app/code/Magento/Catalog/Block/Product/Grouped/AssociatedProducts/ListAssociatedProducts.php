@@ -36,13 +36,6 @@ namespace Magento\Catalog\Block\Product\Grouped\AssociatedProducts;
 class ListAssociatedProducts extends \Magento\Backend\Block\Template
 {
     /**
-     * Store manager
-     *
-     * @var \Magento\Core\Model\StoreManager
-     */
-    protected $_storeManager;
-
-    /**
      * Registry
      *
      * @var \Magento\Core\Model\Registry
@@ -50,21 +43,18 @@ class ListAssociatedProducts extends \Magento\Backend\Block\Template
     protected $_registry;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
-        parent::__construct($coreData, $context, $data);
-        $this->_storeManager = $storeManager;
+        parent::__construct($context, $coreData, $data);
         $this->_registry = $registry;
     }
 

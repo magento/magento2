@@ -25,12 +25,19 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="checkout_multishipping"/>
+    <referenceBlock name="page.main.title">
+        <action method="setPageTitle">
+            <argument translate="true" name="label" xsi:type="string">Billing Information</argument>
+        </action>
+    </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Checkout\Block\Multishipping\Billing" name="checkout_billing" template="multishipping/billing.phtml">
             <action method="setMethodFormTemplate">
                 <argument name="method" xsi:type="string">purchaseorder</argument>
                 <argument name="template" xsi:type="string">Magento_Payment::form/purchaseorder.phtml</argument>
             </action>
+            <container name="payment_methods_before" label="Payment Methods Before"/>
+            <container name="payment_methods_after" label="Payment Methods After"/>
         </block>
     </referenceContainer>
 </layout>

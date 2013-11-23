@@ -44,23 +44,23 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
     protected $_downloadProdConfig = null;
 
     /**
-     * @param \Magento\Catalog\Helper\Product\Configuration $productConfiguration
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Downloadable\Helper\Catalog\Product\Configuration $dwnCtlgProdConfig
+     * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Downloadable\Helper\Catalog\Product\Configuration $dwnCtlgProdConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Helper\Product\Configuration $productConfiguration,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Downloadable\Helper\Catalog\Product\Configuration $dwnCtlgProdConfig,
+        \Magento\Catalog\Helper\Product\Configuration $productConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Downloadable\Helper\Catalog\Product\Configuration $dwnCtlgProdConfig,
         array $data = array()
     ) {
         $this->_downloadProdConfig = $dwnCtlgProdConfig;
-        parent::__construct($productConfiguration, $coreData, $context, $checkoutSession, $data);
+        parent::__construct($context, $coreData, $productConfig, $checkoutSession, $data);
     }
 
     /**

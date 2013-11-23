@@ -42,29 +42,6 @@ class Field
     implements \Magento\Data\Form\Element\Renderer\RendererInterface
 {
     /**
-     * Application
-     *
-     * @var \Magento\Core\Model\App
-     */
-    protected $_application;
-
-    /**
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\App $application
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\App $application,
-        array $data = array()
-    ) {
-        $this->_application = $application;
-        parent::__construct($coreData, $context, $data);
-    }
-
-    /**
      * Retrieve element HTML markup
      *
      * @param \Magento\Data\Form\Element\AbstractElement $element
@@ -186,7 +163,7 @@ class Field
     protected function _renderScopeLabel(\Magento\Data\Form\Element\AbstractElement $element)
     {
         $html = '<td class="scope-label">';
-        if ($element->getScope() && false == $this->_application->isSingleStoreMode()) {
+        if ($element->getScope() && false == $this->_app->isSingleStoreMode()) {
             $html .= $element->getScopeLabel();
         }
         $html .= '</td>';

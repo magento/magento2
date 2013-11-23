@@ -54,7 +54,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectFactoryMock = $this->getMock('Magento\ObjectManager');
-        $this->_helperFactoryMock = $this->getMock('Magento\Core\Model\Factory\Helper', array(), array(), '', false);
+        $this->_helperFactoryMock = $this->getMock('Magento\App\Helper\HelperFactory', array(), array(), '', false);
         $this->_helperFactoryMock
             ->expects($this->any())
             ->method('get')

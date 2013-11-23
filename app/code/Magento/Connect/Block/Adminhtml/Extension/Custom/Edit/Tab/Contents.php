@@ -44,25 +44,25 @@ class Contents
     protected $_extensionFactory;
 
     /**
-     * @param \Magento\Connect\Model\ExtensionFactory $extensionFactory
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Connect\Model\Session $session
+     * @param \Magento\Connect\Model\ExtensionFactory $extensionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Connect\Model\ExtensionFactory $extensionFactory,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
         \Magento\Connect\Model\Session $session,
+        \Magento\Connect\Model\ExtensionFactory $extensionFactory,
         array $data = array()
     ) {
         $this->_extensionFactory = $extensionFactory;
-        parent::__construct($registry, $formFactory, $coreData, $context, $session, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $session, $data);
     }
 
     /**

@@ -27,7 +27,7 @@ namespace Magento\Page\Block;
 /**
  * Links list block
  */
-class Links extends \Magento\Core\Block\Template
+class Links extends \Magento\View\Block\Template
 {
     /** @var string */
     protected $_template = 'Magento_Page::links.phtml';
@@ -43,10 +43,10 @@ class Links extends \Magento\Core\Block\Template
     /**
      * Render Block
      *
-     * @param \Magento\Core\Block\AbstractBlock $link
+     * @param \Magento\View\Block\AbstractBlock $link
      * @return string
      */
-    public function renderLink(\Magento\Core\Block\AbstractBlock $link)
+    public function renderLink(\Magento\View\Block\AbstractBlock $link)
     {
         return $this->_layout->renderElement($link->getNameInLayout());
     }

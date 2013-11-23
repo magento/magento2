@@ -35,9 +35,6 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
 
 class Options extends \Magento\Backend\Block\Template
 {
-    /** @var \Magento\Core\Model\StoreManager */
-    protected $_storeManager;
-
     /** @var \Magento\Core\Model\Registry */
     protected $_registry;
 
@@ -55,25 +52,22 @@ class Options extends \Magento\Backend\Block\Template
     protected $_universalFactory;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptCollFactory
      * @param \Magento\Validator\UniversalFactory $universalFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptCollFactory,
         \Magento\Validator\UniversalFactory $universalFactory,
         array $data = array()
     ) {
-        parent::__construct($coreData, $context, $data);
-        $this->_storeManager = $storeManager;
+        parent::__construct($context, $coreData, $data);
         $this->_registry = $registry;
         $this->_attrOptCollFactory = $attrOptCollFactory;
         $this->_universalFactory = $universalFactory;

@@ -111,7 +111,7 @@
                     <block class="Magento\Adminhtml\Block\Template" name="gift_options" template="Magento_Sales::order/giftoptions.phtml">
                         <block class="Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage" template="order/create/giftmessage.phtml" name="giftmessage"/>
                     </block>
-                    <block class="Magento\Core\Block\Text\ListText" name="order_item_extra_info"/>
+                    <block class="Magento\View\Block\Text\ListText" name="order_item_extra_info"/>
                 </block>
             </block>
         </block>

@@ -29,25 +29,6 @@ namespace Magento\Webhook\Block\Adminhtml\Registration;
 
 class Failed extends \Magento\Backend\Block\Template
 {
-    /** @var  \Magento\Backend\Model\Session */
-    protected $_session;
-
-    /**
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Model\Session $session
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Model\Session $session,
-        \Magento\Backend\Block\Template\Context $context,
-        array $data = array()
-    ) {
-        parent::__construct($coreData, $context, $data);
-        $this->_session = $session;
-    }
-
     /**
      * Get error message produced on failure
      *
@@ -55,8 +36,7 @@ class Failed extends \Magento\Backend\Block\Template
      */
     public function getSessionError()
     {
-        return $this->_session->getMessages(true)
-            ->getLastAddedMessage()
-            ->toString();
+        $lastAdded = $this->_backendSession->getMessages(true)->getLastAddedMessage();
+        return $lastAdded ? $lastAdded->toString() : null;
     }
 }

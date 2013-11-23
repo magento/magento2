@@ -33,32 +33,48 @@
  */
 namespace Magento\Adminhtml\Controller\Newsletter;
 
-class Subscriber extends \Magento\Backend\Controller\Adminhtml\Action
+class Subscriber extends \Magento\Backend\App\Action
 {
+    /**
+     * @var \Magento\App\Response\Http\FileFactory
+     */
+    protected $_fileFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\App\Response\Http\FileFactory $fileFactory
+    ) {
+        $this->_fileFactory = $fileFactory;
+        parent::__construct($context);
+    }
 
     public function indexAction()
     {
-        $this->_title(__('Newsletter Subscribers'));
+        $this->_title->add(__('Newsletter Subscribers'));
 
         if ($this->getRequest()->getParam('ajax')) {
             $this->_forward('grid');
             return;
         }
 
-        $this->loadLayout();
+        $this->_view->loadLayout();
 
         $this->_setActiveMenu('Magento_Newsletter::newsletter_subscriber');
 
         $this->_addBreadcrumb(__('Newsletter'), __('Newsletter'));
         $this->_addBreadcrumb(__('Subscribers'), __('Subscribers'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function gridAction()
     {
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
      }
 
     /**
@@ -66,11 +82,11 @@ class Subscriber extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function exportCsvAction()
     {
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $fileName = 'subscribers.csv';
-        $content = $this->getLayout()->getChildBlock('adminhtml.newslettrer.subscriber.grid', 'grid.export');
+        $content = $this->_view->getLayout()->getChildBlock('adminhtml.newslettrer.subscriber.grid', 'grid.export');
 
-        $this->_prepareDownloadResponse($fileName, $content->getCsvFile($fileName));
+        return $this->_fileFactory->create($fileName, $content->getCsvFile($fileName));
     }
 
     /**
@@ -78,10 +94,10 @@ class Subscriber extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function exportXmlAction()
     {
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $fileName = 'subscribers.xml';
-        $content = $this->getLayout()->getChildBlock('adminhtml.newslettrer.subscriber.grid', 'grid.export');
-        $this->_prepareDownloadResponse($fileName, $content->getExcelFile($fileName));
+        $content = $this->_view->getLayout()->getChildBlock('adminhtml.newslettrer.subscriber.grid', 'grid.export');
+        return $this->_fileFactory->create($fileName, $content->getExcelFile($fileName));
     }
 
     public function massUnsubscribeAction()

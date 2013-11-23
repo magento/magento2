@@ -33,7 +33,7 @@
  */
 namespace Magento\Authorizenet\Controller\Directpost;
 
-class Payment extends \Magento\Core\Controller\Front\Action
+class Payment extends \Magento\App\Action\Action
 {
     /**
      * Core registry
@@ -43,11 +43,11 @@ class Payment extends \Magento\Core\Controller\Front\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -117,8 +117,8 @@ class Payment extends \Magento\Core\Controller\Front\Action
         }
 
         $this->_coreRegistry->register('authorizenet_directpost_form_params', $params);
-        $this->addPageLayoutHandles();
-        $this->loadLayout(false)->renderLayout();
+        $this->_view->addPageLayoutHandles();
+        $this->_view->loadLayout(false)->renderLayout();
     }
 
     /**
@@ -150,8 +150,8 @@ class Payment extends \Magento\Core\Controller\Front\Action
         }
 
         $this->_coreRegistry->register('authorizenet_directpost_form_params', array_merge($params, $redirectParams));
-        $this->addPageLayoutHandles();
-        $this->loadLayout(false)->renderLayout();
+        $this->_view->addPageLayoutHandles();
+        $this->_view->loadLayout(false)->renderLayout();
     }
 
     /**

@@ -29,7 +29,7 @@
  */
 namespace Magento\Centinel\Block;
 
-class Authentication extends \Magento\Core\Block\Template
+class Authentication extends \Magento\View\Block\Template
 {
     /**
      * Checkout session
@@ -54,19 +54,19 @@ class Authentication extends \Magento\Core\Block\Template
     protected $_authenticationStartMode = false;
 
     /**
-     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
      */
     public function __construct(
-        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Checkout\Model\Session $checkoutSession,
         array $data = array()
     ) {
         $this->_checkoutSession = $checkoutSession;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

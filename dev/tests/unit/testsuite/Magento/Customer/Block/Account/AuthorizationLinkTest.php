@@ -63,7 +63,7 @@ class AuthorizationLinkTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('getLogoutUrl', 'getLoginUrl'))
             ->getMock();
 
-        $context = $this->_objectManager->getObject('Magento\Core\Block\Template\Context');
+        $context = $this->_objectManager->getObject('Magento\View\Block\Template\Context');
 
         $context->getHelperFactory()->expects($this->any())->method('get')->will($this->returnValue($this->_helper));
 

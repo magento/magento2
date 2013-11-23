@@ -50,26 +50,26 @@ class Store
     protected $_groupFactory;
 
     /**
-     * @param \Magento\Core\Model\Store\Group\Factory $groupFactory
-     * @param \Magento\Core\Model\Website\Factory $websiteFactory
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Model\Store\Group\Factory $groupFactory
+     * @param \Magento\Core\Model\Website\Factory $websiteFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Store\Group\Factory $groupFactory,
-        \Magento\Core\Model\Website\Factory $websiteFactory,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Model\Store\Group\Factory $groupFactory,
+        \Magento\Core\Model\Website\Factory $websiteFactory,
         array $data = array()
     ) {
         $this->_groupFactory = $groupFactory;
         $this->_websiteFactory = $websiteFactory;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     /**

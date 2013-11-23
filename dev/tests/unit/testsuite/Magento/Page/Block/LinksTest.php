@@ -33,15 +33,15 @@ class LinksTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Page\Block\Links */
     protected $_block;
 
-    /** @var \Magento\Core\Block\Template\Context */
+    /** @var \Magento\View\Block\Template\Context */
     protected $_context;
 
     protected function setUp()
     {
         $this->_objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        /** @var  \Magento\Core\Block\Template\Context $context */
-        $this->_context = $this->_objectManagerHelper->getObject('Magento\Core\Block\Template\Context');
+        /** @var  \Magento\View\Block\Template\Context $context */
+        $this->_context = $this->_objectManagerHelper->getObject('Magento\View\Block\Template\Context');
 
         /** @var \Magento\Page\Block\Links $block */
         $this->_block = $this->_objectManagerHelper->getObject(
@@ -72,8 +72,8 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         $this->_context->getLayout()->expects($this->once())->method('renderElement')->with($name)
             ->will($this->returnValue($blockHtml));
 
-        /** @var \Magento\Core\Block\AbstractBlock $link */
-        $link = $this->getMockBuilder('Magento\Core\Block\AbstractBlock')->disableOriginalConstructor()->getMock();
+        /** @var \Magento\View\Block\AbstractBlock $link */
+        $link = $this->getMockBuilder('Magento\View\Block\AbstractBlock')->disableOriginalConstructor()->getMock();
         $link->expects($this->once())
             ->method('getNameInLayout')
             ->will($this->returnValue($name));

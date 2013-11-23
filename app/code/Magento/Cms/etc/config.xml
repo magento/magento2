@@ -33,7 +33,7 @@
                 <cms_no_route>no-route</cms_no_route>
                 <cms_no_cookies>enable-cookies</cms_no_cookies>
                 <front>cms</front>
-                <no_route>cms/index/noRoute</no_route>
+                <no_route>cms/noroute/index</no_route>
                 <show_cms_breadcrumbs>1</show_cms_breadcrumbs>
             </default>
         </web>

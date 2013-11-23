@@ -19,40 +19,40 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="multiple-checkout">
-    <div class="page-title title-buttons">
-        <h1><?php echo __('Change Billing Address') ?></h1>
-        <button type="button" title="<?php echo __('Add New Address') ?>" class="button" onclick="setLocation('<?php echo $this->getAddNewUrl() ?>')"><span><span><?php echo __('Add New Address') ?></span></span></button>
+<div class="multicheckout block change billing">
+    <div class="actions">
+        <button type="button" class="action add" role="add-address" title="<?php echo __('Add New Address') ?>"><span><?php echo __('Add New Address') ?></span></button>
     </div>
-    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-    <?php $_index=0 ?>
     <?php foreach ($this->getAddressCollection() as $_address): ?>
-        <?php if($_index%3==0): ?><div class="col3-set"><?php endif; ?>
-        <div class="col-<?php echo ($_index%3+1) ?>">
-                <p class="actions">
-                    <a href="<?php echo $this->getEditAddressUrl($_address) ?>"><?php echo __('Edit Address') ?></a> <span class="separator">|</span> 
-                    <a href="<?php echo $this->getSetAddressUrl($_address) ?>"><strong><?php echo __('Select Address') ?></strong></a>
-                </p>
-                <address>
-                    <?php echo $_address->format('html') ?>
-                </address>
+        <div class="box billing">
+            <address>
+                <?php echo $_address->format('html') ?>
                 <?php if($this->isAddressDefaultBilling($_address)): ?>
-                   <strong><?php echo __('Default Billing') ?></strong>
+                    <br /><strong><?php echo __('Default Billing') ?></strong>
                 <?php endif; ?>
                 <?php if($this->isAddressDefaultShipping($_address)): ?>
                     <br /><strong><?php echo __('Default Shipping') ?></strong>
                 <?php endif; ?>
+            </address>
+            <div class="actions">
+                <a href="<?php echo $this->getEditAddressUrl($_address) ?>" class="action edit"><span><?php echo __('Edit Address') ?></span></a>
+                <a href="<?php echo $this->getSetAddressUrl($_address) ?>" class="action select"><span><?php echo __('Select Address') ?></span></a>
+            </div>
         </div>
-        <?php $_index++ ?>
-        <?php if($_index && $_index%3==0): ?></div><?php endif; ?>
     <?php endforeach; ?>
-    <?php if(!$_index || $_index%3!=0): ?></div><?php endif; ?>
-    <div class="buttons-set">
-        <p class="back-link"><a href="<?php echo $this->getBackUrl() ?>"><small>&laquo; </small><?php echo __('Back to Billing Information') ?></a></p>
+    <div class="actions">
+        <a href="<?php echo $this->getBackUrl() ?>" class="action back"><span><?php echo __('Back to Billing Information') ?></span></a>
     </div>
 </div>
+<script type="text/javascript">
+    head.js("<?php echo $this->getViewFileUrl('Magento_Customer::address.js'); ?>", function() {
+        jQuery('.actions').address({
+            addAddress: "button[role='add-address']",
+            addAddressLocation: '<?php echo $this->getAddNewUrl() ?>'
+        });
+    });
+</script>

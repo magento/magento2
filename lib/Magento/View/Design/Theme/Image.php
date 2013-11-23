@@ -22,11 +22,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\View\Design\Theme;
+
 /**
  * Theme Image model class
  */
-namespace Magento\View\Design\Theme;
-
 class Image
 {
     /**
@@ -70,8 +70,6 @@ class Image
     protected $_theme;
 
     /**
-     * Initialize dependencies
-     *
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Image\Factory $imageFactory
      * @param Image\Uploader $uploader

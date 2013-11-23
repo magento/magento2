@@ -178,7 +178,31 @@ return array(
     array('Mage_Adminhtml_Block_System_Config_Dwstree', 'Magento\Backend\Block\System\Config\Dwstree'),
     array('Mage_Adminhtml_Block_System_Config_Switcher', 'Magento\Backend\Block\System\Config\Switcher'),
     array('Mage_Adminhtml_Block_System_Design_Grid'),
+    array('Magento\Adminhtml\Block\System\Email\Template',
+        'Magento\Email\Block\Adminhtml\Template'
+    ),
+    array('Magento\Adminhtml\Block\System\Email\Template\Edit',
+        'Magento\Email\Block\Adminhtml\Template\Edit'
+    ),
+    array('Magento\Adminhtml\Block\System\Email\Template\Edit\Form',
+        'Magento\Email\Block\Adminhtml\Template\Edit\Form'
+    ),
+    array('Magento\Adminhtml\Block\System\Email\Template\Preview',
+        'Magento\Email\Block\Adminhtml\Template\Preview'
+    ),
     array('Mage_Adminhtml_Block_System_Email_Template_Grid'),
+    array('Magento\Adminhtml\Block\System\Email\Template\Grid\Renderer\Action',
+        'Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Action'
+    ),
+    array('Magento\Adminhtml\Block\System\Email\Template\Grid\Renderer\Sender',
+        'Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Sender'
+    ),
+    array('Magento\Adminhtml\Block\System\Email\Template\Grid\Renderer\Type',
+        'Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Type'
+    ),
+    array('Magento\Adminhtml\Block\System\Email\Template\Grid\Filter\Type',
+        'Magento\Email\Block\Adminhtml\Template\Grid\Filter\Type'
+    ),
     array('Mage_Adminhtml_Block_System_Variable_Grid'),
     array('Mage_Adminhtml_Block_Store_Switcher', 'Magento\Backend\Block\Store\Switcher'),
     array('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset',
@@ -193,9 +217,13 @@ return array(
     array('Mage_Adminhtml_Block_Tax_Rule_Grid'),
     array('Mage_Adminhtml_Block_Tree'),
     array('Mage_Adminhtml_Block_Urlrewrite_Grid'),
+    array('Magento\Adminhtml\Controller\System\Email\Template',
+        'Magento\Email\Controller\Adminhtml\Template'
+    ),
     array('Mage_Adminhtml_Helper_Rss'),
     array('Mage_Adminhtml_Model_Config', 'Magento\Backend\Model\Config\Structure'),
     array('Mage_Adminhtml_Model_Config_Data', 'Magento\Backend\Model\Config'),
+    array('Magento\Adminhtml\Model\Email\Template', 'Magento\Email\Model\Adminhtml\Template'),
     array('Mage_Adminhtml_Model_Extension'),
     array('Mage_Adminhtml_Model_System_Config_Source_Shipping_Allowedmethods'),
     array('Mage_Adminhtml_Model_System_Config_Backend_Admin_Password_Link_Expirationperiod',
@@ -593,11 +621,24 @@ return array(
     array('Mage_Core_Model_Config_System'),
     array('Mage_Core_Model_Design_Source_Apply'),
     array('Mage_Core_Model_Language'),
+    array('Magento\Core\Model\Email\Info', 'Magento\Email\Model\Info'),
+    array('Magento\Core\Model\Email\Sender', 'Magento\Email\Model\Sender'),
+    array('Magento\Core\Model\Email\Template', 'Magento\Email\Model\Template'),
+    array('Magento\Core\Model\Email\Transport', 'Magento\Email\Model\Transport'),
+    array('Magento\Core\Model\Email\Template\Config', 'Magento\Email\Model\Template\Config'),
+    array('Magento\Core\Model\Email\Template\Filter', 'Magento\Email\Model\Template\Filter'),
+    array('Magento\Core\Model\Email\Template\Mailer', 'Magento\Email\Model\Template\Mailer'),
+    array('Magento\Core\Model\Email\Template\Config\Converter', 'Magento\Email\Model\Template\Config\Converter'),
+    array('Magento\Core\Model\Template\Config\Data', 'Magento\Email\Model\Template\Config\Data'),
+    array('Magento\Core\Model\Template\Config\SchemaLocator', 'Magento\Email\Model\Template\Config\SchemaLocator'),
+    array('Magento\Core\Model\Resource\Email\Template', 'Magento\Email\Model\Resource\Template'),
+    array('Magento\Core\Model\Resource\Email\Template\Collection', 'Magento\Email\Model\Resource\Template\Collection'),
     array('Mage_Core_Model_Resource_Language'),
     array('Mage_Core_Model_Resource_Language_Collection'),
     array('Mage_Core_Model_Resource_Setup_Query_Modifier'),
     array('Mage_Core_Model_Session_Abstract_Varien'),
     array('Mage_Core_Model_Session_Abstract_Zend'),
+    array('Magento\Core\Model\Source\Email\Variables', 'Magento\Email\Model\Source\Variables'),
     array('Mage_Core_Model_Store_Group_Limitation'),
     array('Mage_Core_Model_Store_Limitation'),
     array('Magento\Core\Model\Variable\Observer'),
@@ -1116,10 +1157,10 @@ return array(
     array('Magento\Core\Model\Layout\File\Source\Theme', 'Magento\View\Layout\File\Source\Theme'),
     array('Magento\Core\Model\Layout\File\SourceInterface', 'Magento\View\Layout\File\SourceInterface'),
     array('Magento\Core\Model\LayoutFactory', 'Magento\View\LayoutFactory'),
-    array('Magento\Core\Model\TemplateEngine\EngineInterface','Magento\View\TemplateEngineInterface'),
-    array('Magento\Core\Model\TemplateEngine\Factory','Magento\View\TemplateEngineFactory'),
-    array('Magento\Core\Model\TemplateEngine\Php','Magento\View\TemplateEngine\Php'),
-    array('Magento\Core\Model\TemplateEngine\Pool'),
+    array('Magento\Core\Model\TemplateEngine\EngineInterface', 'Magento\View\TemplateEngineInterface'),
+    array('Magento\Core\Model\TemplateEngine\Factory', 'Magento\View\TemplateEngineFactory'),
+    array('Magento\Core\Model\TemplateEngine\Php', 'Magento\View\TemplateEngine\Php'),
+    array('Magento\Core\Model\TemplateEngine\Pool', 'Magento\View\TemplateEnginePool'),
     array('Magento\Media\Model\File\Image'),
     array('Magento\Media\Model\Image'),
     array('Magento\Media\Helper\Data'),
@@ -1252,10 +1293,6 @@ return array(
         'Magento\Backend\Controller\Adminhtml\System\Design',
     ),
     array(
-        'Magento\Adminhtml\Controller\System\Email\Template',
-        'Magento\Backend\Controller\Adminhtml\System\Email\Template',
-    ),
-    array(
         'Magento\Adminhtml\Controller\System\Store',
         'Magento\Backend\Controller\Adminhtml\System\Store',
     ),
@@ -1294,38 +1331,6 @@ return array(
     array(
         'Magento\Adminhtml\Block\System\Design',
         'Magento\Backend\Block\System\Design'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Email\Template\Edit\Form',
-        'Magento\Backend\Block\System\Email\Template\Edit\Form'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Email\Template\Edit',
-        'Magento\Backend\Block\System\Email\Template\Edit'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Email\Template\Grid\Filter\Type',
-        'Magento\Backend\Block\System\Email\Template\Grid\Filter\Type'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Email\Template\Grid\Renderer\Action',
-        'Magento\Backend\Block\System\Email\Template\Grid\Renderer\Action'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Email\Template\Grid\Renderer\Sender',
-        'Magento\Backend\Block\System\Email\Template\Grid\Renderer\Sender'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Email\Template\Grid\Renderer\Type',
-        'Magento\Backend\Block\System\Email\Template\Grid\Renderer\Type'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Email\Template\Preview',
-        'Magento\Backend\Block\System\Email\Template\Preview'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Email\Template',
-        'Magento\Backend\Block\System\Email\Template'
     ),
     array(
         'Magento\Adminhtml\Block\System\Shipping\Ups',
@@ -1430,7 +1435,8 @@ return array(
     array('Magento\Log\Model\EntryPoint\Shell', 'Magento\Log\App\Shell'),
     array('Magento\Index\Model\EntryPoint\Shell', 'Magento\Index\App\Shell'),
     array('Magento\Index\Model\EntryPoint\Indexer', 'Magento\Index\App\Indexer'),
-    array('\Magento\Core\Model\EntryPoint\Media', '\Magento\Core\App\Media'),
+    array('Magento\Core\Model\Config\Modules\Reader', 'Magento\Module\Dir\Reader'),
+    array('Magento\Data\Form\Factory', 'Magento\Data\FormFactory'),
     array('Magento\App\Cache\Config', 'Magento\Cache\Config'),
     array('Magento\App\Cache\Config\Converter', 'Magento\Cache\Config\Converter'),
     array('Magento\App\Cache\Config\Data', 'Magento\Cache\Config\Data'),
@@ -1440,7 +1446,36 @@ return array(
     array('Magento\Core\Model\Fieldset\Config\Converter', 'Magento\Object\Copy\Config\Converter'),
     array('Magento\Core\Model\Fieldset\Config\Data', 'Magento\Object\Copy\Config\Data'),
     array('Magento\Core\Model\Fieldset\Config\Reader', 'Magento\Object\Copy\Config\Reader'),
-    array('Magento\Core\Model\Fieldset\Config\SchemaLocator', 'Magento\Object\Copy\Config\SchemaLocator'),
-    array('Magento\Core\Model\EntryPoint\Media', '\Magento\Core\App\Media'),
+    array('Magento\Core\Model\Fieldset\Config\SchemaLocator', 'Magento\Object\Copy\Config\SchemaLocator'),    
     array('Magento\Core\Model\ModuleManager', 'Magento\Module\Manager'),
+    array('Magento\Core\Model\EntryPoint\Media', 'Magento\Core\App\Media'),
+    array('Magento\Core\Controller\Varien\Action', 'Magento\App\Action\Action'),
+    array('Magento\Core\Controller\Varien\Action\Context', 'Magento\App\Action\Context'),
+    array('Magento\Backend\Controller\AbstractAction', 'Magento\Backend\App\AbstractAction'),
+    array('Magento\Backend\Controller\Context', 'Magento\Backend\App\Action\Context'),
+    array('Magento\Backend\Controller\Adminhtml\Action', 'Magento\Backend\App\Action'),
+    array('Magento\Core\Block\Text', 'Magento\View\Block\Text'),
+    array('Magento\Core\Block\Text\ListText', 'Magento\View\Block\Text\ListText'),
+    array('Magento\Core\Block\Text\TextList\Item', 'Magento\View\Block\Text\TextList\Item'),
+    array('Magento\Core\Block\Text\TextList\Link', 'Magento\View\Block\Text\TextList\Link'),
+    array('Magento\Core\Block\Messages', 'Magento\View\Block\Messages'),
+    array('Magento\Core\Model\Message', 'Magento\Message\Factory'),
+    array('Magento\Core\Model\Message\AbstractMessage', 'Magento\Message\AbstractMessage'),
+    array('Magento\Core\Model\Message\Collection', 'Magento\Message\Collection'),
+    array('Magento\Core\Model\Message\CollectionFactory', 'Magento\Message\CollectionFactory'),
+    array('Magento\Core\Model\Message\Error', 'Magento\Message\Error'),
+    array('Magento\Core\Model\Message\Warning', 'Magento\Message\Warning'),
+    array('Magento\Core\Model\Message\Notice', 'Magento\Message\Notice'),
+    array('Magento\Core\Model\Message\Success', 'Magento\Message\Success'),
+    array('Magento\Core\Block\Html\Date', 'Magento\View\Block\Html\Date'),
+    array('Magento\Core\Block\Html\Select', 'Magento\View\Block\Html\Select'),
+    array('Magento\Core\Block\AbstractBlock', 'Magento\View\Block\AbstractBlock'),
+    array('Magento\Core\Block\Template', 'Magento\View\Block\Template'),
+    array('Magento\Core\Block\Html\Calendar', 'Magento\View\Block\Html\Calendar'),
+    array('Magento\Core\Block\Html\Link', 'Magento\View\Block\Html\Link'),
+    array('Magento\Core\Block\Context', 'Magento\View\Block\Context'),
+    array('Magento\Core\Model\Factory\Helper', 'Magento\App\Helper\HelperFactory'),
+    array('Magento\Core\Helper\AbstractHelper', 'Magento\App\Helper\AbstractHelper'),
+    array('Magento\Core\Helper\Context', 'Magento\App\Helper\Context'),
+    array('Magento\Core\Block\Template\Context', 'Magento\View\Block\Template\Context'),
 );

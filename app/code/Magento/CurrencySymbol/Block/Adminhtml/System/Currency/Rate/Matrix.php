@@ -38,38 +38,30 @@ class Matrix extends \Magento\Backend\Block\Template
     protected $_template = 'system/currency/rate/matrix.phtml';
 
     /**
-     * @var \Magento\Backend\Model\Session
-     */
-    protected $_adminSession;
-
-    /**
      * @var \Magento\Directory\Model\CurrencyFactory
      */
     protected $_dirCurrencyFactory;
 
     /**
-     * @param \Magento\Directory\Model\CurrencyFactory $dirCurrencyFactory
-     * @param \Magento\Backend\Model\Session $adminSession
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Directory\Model\CurrencyFactory $dirCurrencyFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Directory\Model\CurrencyFactory $dirCurrencyFactory,
-        \Magento\Backend\Model\Session $adminSession,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Directory\Model\CurrencyFactory $dirCurrencyFactory,
         array $data = array()
     ) {
         $this->_dirCurrencyFactory = $dirCurrencyFactory;
-        $this->_adminSession = $adminSession;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     protected function _prepareLayout()
     {
-        $newRates = $this->_adminSession->getRates();
-        $this->_adminSession->unsetData('rates');
+        $newRates = $this->_backendSession->getRates();
+        $this->_backendSession->unsetData('rates');
 
         $currencyModel = $this->_dirCurrencyFactory->create();
         $currencies = $currencyModel->getConfigAllowCurrencies();

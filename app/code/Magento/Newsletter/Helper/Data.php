@@ -34,29 +34,8 @@
  */
 namespace Magento\Newsletter\Helper;
 
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
-    /**
-     * Url
-     *
-     * @var \Magento\UrlInterface
-     */
-    protected $_url;
-
-    /**
-     * Constructor
-     *
-     * @param \Magento\Core\Helper\Context $context
-     * @param \Magento\UrlInterface $url
-     */
-    public function __construct(
-        \Magento\Core\Helper\Context $context,
-        \Magento\UrlInterface $url
-    ) {
-        parent::__construct($context);
-        $this->_url = $url;
-    }
-
     /**
      * Retrieve subsription confirmation url
      *
@@ -65,7 +44,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      */
     public function getConfirmationUrl($subscriber)
     {
-        return $this->_url->setStore($subscriber->getStoreId())
+        return $this->_urlBuilder->setStore($subscriber->getStoreId())
             ->getUrl('newsletter/subscriber/confirm', array(
                 'id'     => $subscriber->getId(),
                 'code'   => $subscriber->getCode(),
@@ -81,7 +60,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      */
     public function getUnsubscribeUrl($subscriber)
     {
-        return $this->_url->setStore($subscriber->getStoreId())
+        return $this->_urlBuilder->setStore($subscriber->getStoreId())
             ->getUrl('newsletter/subscriber/unsubscribe', array(
                 'id'     => $subscriber->getId(),
                 'code'   => $subscriber->getCode(),

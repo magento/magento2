@@ -525,7 +525,7 @@ class Instance extends \Magento\Core\Model\AbstractModel
         $templateFilename = $this->_viewFileSystem->getFilename($templatePath, array(
             'area'    => $this->getArea(),
             'themeId' => $this->getThemeId(),
-            'module'  => \Magento\Core\Block\AbstractBlock::extractModuleName($this->getType()),
+            'module'  => \Magento\View\Block\AbstractBlock::extractModuleName($this->getType()),
         ));
         if (!$this->getId() && !$this->isCompleteToCreate() || ($templatePath && !is_readable($templateFilename))) {
             return '';

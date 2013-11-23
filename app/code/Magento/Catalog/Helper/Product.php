@@ -65,13 +65,6 @@ class Product extends \Magento\Core\Helper\Url
     protected $_viewUrl;
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager = null;
-
-    /**
      * Core registry
      *
      * @var \Magento\Core\Model\Registry
@@ -127,21 +120,18 @@ class Product extends \Magento\Core\Helper\Url
     protected $_categoryFactory;
 
     /**
-     * Construct
-     * 
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Session $catalogSession
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Config $coreConfig
-     * @param string $typeSwitcherLabel
-     *
+     * @param $typeSwitcherLabel
+     * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -149,8 +139,7 @@ class Product extends \Magento\Core\Helper\Url
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Session $catalogSession,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\View\Url $viewUrl,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
@@ -164,7 +153,6 @@ class Product extends \Magento\Core\Helper\Url
         $this->_typeSwitcherLabel = $typeSwitcherLabel;
         $this->_attributeConfig = $attributeConfig;
         $this->_coreRegistry = $coreRegistry;
-        $this->_eventManager = $eventManager;
         $this->_coreRegistry = $coreRegistry;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_viewUrl = $viewUrl;
@@ -408,7 +396,7 @@ class Product extends \Magento\Core\Helper\Url
      *     If empty (except FALSE) - will be guessed (e.g. from last visited) to load as current.
      *
      * @param int $productId
-     * @param \Magento\Core\Controller\Front\Action $controller
+     * @param \Magento\App\Action\Action $controller
      * @param \Magento\Object $params
      *
      * @return false|\Magento\Catalog\Model\Product

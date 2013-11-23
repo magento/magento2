@@ -43,19 +43,19 @@ class View extends \Magento\Adminhtml\Block\Template
     protected $_salesData = null;
 
     /**
-     * @param \Magento\Sales\Helper\Data $salesData
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Sales\Helper\Data $salesData
      * @param array $data
      */
     public function __construct(
-        \Magento\Sales\Helper\Data $salesData,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Sales\Helper\Data $salesData,
         array $data = array()
     ) {
         $this->_salesData = $salesData;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

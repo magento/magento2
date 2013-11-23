@@ -37,12 +37,7 @@
     <rule ref="rulesets/codesize.xml/ExcessiveMethodLength" />
     <rule ref="rulesets/codesize.xml/ExcessiveParameterList" />
     <rule ref="rulesets/codesize.xml/ExcessivePublicCount" />
-    <rule ref="rulesets/codesize.xml/TooManyFields" />
-    <rule ref="rulesets/codesize.xml/TooManyMethods">
-        <properties>
-            <property name="maxmethods" value="50" />
-        </properties>
-    </rule>
+    <rule ref="rulesets/codesize.xml/TooManyFields" />    
     <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity">
         <properties>
             <property name="maximum" value="100" />
@@ -56,7 +51,6 @@
     <rule ref="rulesets/design.xml" />
 
     <!-- Naming Rules -->
-    <rule ref="rulesets/naming.xml/ShortVariable" />
     <rule ref="rulesets/naming.xml/ShortMethodName" />
     <rule ref="rulesets/naming.xml/ConstructorWithNameAsEnclosingClass" />
     <rule ref="rulesets/naming.xml/ConstantNamingConventions" />

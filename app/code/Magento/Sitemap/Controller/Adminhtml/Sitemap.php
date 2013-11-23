@@ -30,7 +30,9 @@
  */
 namespace Magento\Sitemap\Controller\Adminhtml;
 
-class Sitemap extends  \Magento\Backend\Controller\Adminhtml\Action
+use Magento\Backend\App\Action;
+
+class Sitemap extends  \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -40,11 +42,11 @@ class Sitemap extends  \Magento\Backend\Controller\Adminhtml\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -59,8 +61,8 @@ class Sitemap extends  \Magento\Backend\Controller\Adminhtml\Action
     protected function _initAction()
     {
         // load layout, set active menu and breadcrumbs
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_Sitemap::catalog_sitemap')
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_Sitemap::catalog_sitemap')
             ->_addBreadcrumb(
                 __('Catalog'),
                 __('Catalog'))
@@ -76,9 +78,9 @@ class Sitemap extends  \Magento\Backend\Controller\Adminhtml\Action
      */
     public function indexAction()
     {
-        $this->_title(__('Site Map'));
+        $this->_title->add(__('Site Map'));
         $this->_initAction();
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -95,7 +97,7 @@ class Sitemap extends  \Magento\Backend\Controller\Adminhtml\Action
      */
     public function editAction()
     {
-        $this->_title(__('Site Map'));
+        $this->_title->add(__('Site Map'));
 
         // 1. Get ID and create model
         $id = $this->getRequest()->getParam('sitemap_id');
@@ -112,7 +114,7 @@ class Sitemap extends  \Magento\Backend\Controller\Adminhtml\Action
             }
         }
 
-        $this->_title($model->getId() ? $model->getSitemapFilename() : __('New Site Map'));
+        $this->_title->add($model->getId() ? $model->getSitemapFilename() : __('New Site Map'));
 
         // 3. Set entered data if was error when we do save
         $data = $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getFormData(true);
@@ -129,8 +131,8 @@ class Sitemap extends  \Magento\Backend\Controller\Adminhtml\Action
                 $id ? __('Edit Sitemap') : __('New Sitemap'),
                 $id ? __('Edit Sitemap') : __('New Sitemap')
             )
-            ->_addContent($this->getLayout()->createBlock('Magento\Adminhtml\Block\Sitemap\Edit'))
-            ->renderLayout();
+            ->_addContent($this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Sitemap\Edit'));
+        $this->_view->renderLayout();
     }
 
     /**

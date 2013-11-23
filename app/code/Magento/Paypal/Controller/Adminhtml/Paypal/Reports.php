@@ -29,7 +29,7 @@
  */
 namespace Magento\Paypal\Controller\Adminhtml\Paypal;
 
-class Reports extends \Magento\Backend\Controller\Adminhtml\Action
+class Reports extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -54,21 +54,23 @@ class Reports extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_logger;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Paypal\Model\Report\Settlement\RowFactory $rowFactory
      * @param \Magento\Paypal\Model\Report\SettlementFactory $settlementFactory
+     * @param \Magento\Logger $logger
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Paypal\Model\Report\Settlement\RowFactory $rowFactory,
-        \Magento\Paypal\Model\Report\SettlementFactory $settlementFactory
+        \Magento\Paypal\Model\Report\SettlementFactory $settlementFactory,
+        \Magento\Logger $logger
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_rowFactory = $rowFactory;
         $this->_settlementFactory = $settlementFactory;
-        $this->_logger = $context->getLogger();
+        $this->_logger = $logger;
         parent::__construct($context);
     }
 
@@ -77,7 +79,8 @@ class Reports extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function indexAction()
     {
-        $this->_initAction()->renderLayout();
+        $this->_initAction();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -85,8 +88,8 @@ class Reports extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function gridAction()
     {
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     /**
@@ -101,11 +104,13 @@ class Reports extends \Magento\Backend\Controller\Adminhtml\Action
             return;
         }
         $this->_coreRegistry->register('current_transaction', $row);
-        $this->_initAction()
-            ->_title(__('View Transaction'))
-            ->_addContent($this->getLayout()
-                ->createBlock('Magento\Paypal\Block\Adminhtml\Settlement\Details', 'settlementDetails'))
-            ->renderLayout();
+        $this->_initAction();
+        $this->_title->add(__('View Transaction'));
+        $this->_addContent(
+            $this->_view->getLayout()
+                ->createBlock('Magento\Paypal\Block\Adminhtml\Settlement\Details', 'settlementDetails')
+        );
+        $this->_view->renderLayout();
     }
 
     /**
@@ -152,9 +157,9 @@ class Reports extends \Magento\Backend\Controller\Adminhtml\Action
      */
     protected function _initAction()
     {
-        $this->_title(__('PayPal Settlement Reports'));
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_Paypal::report_salesroot_paypal_settlement_reports')
+        $this->_title->add(__('PayPal Settlement Reports'));
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_Paypal::report_salesroot_paypal_settlement_reports')
             ->_addBreadcrumb(__('Reports'), __('Reports'))
             ->_addBreadcrumb(__('Sales'), __('Sales'))
             ->_addBreadcrumb(__('PayPal Settlement Reports'), __('PayPal Settlement Reports'));

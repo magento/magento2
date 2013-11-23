@@ -41,21 +41,21 @@ class Info extends \Magento\Payment\Block\Info\AbstractContainer
     protected $_checkoutSession;
 
     /**
-     * @param \Magento\Payment\Helper\Data $paymentData
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
      */
     public function __construct(
-        \Magento\Payment\Helper\Data $paymentData,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Payment\Helper\Data $paymentData,
         \Magento\Checkout\Model\Session $checkoutSession,
         array $data = array()
     ) {
         $this->_checkoutSession = $checkoutSession;
-        parent::__construct($paymentData, $coreData, $context,$data);
+        parent::__construct($context, $coreData, $paymentData, $data);
     }
 
     /**

@@ -27,7 +27,7 @@
  */
 namespace Magento\Paypal\Helper;
 
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Cache for shouldAskToCreateBillingAgreement()
@@ -50,12 +50,12 @@ class Data extends \Magento\Core\Helper\AbstractHelper
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory
     ) {
         $this->_coreData = $coreData;

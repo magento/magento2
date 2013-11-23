@@ -34,7 +34,7 @@
  */
 namespace Magento\Page\Block\Template;
 
-class Container extends \Magento\Core\Block\Template
+class Container extends \Magento\View\Block\Template
 {
 
     protected $_template = 'template/container.phtml';

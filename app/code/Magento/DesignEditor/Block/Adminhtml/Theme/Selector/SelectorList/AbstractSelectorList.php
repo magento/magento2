@@ -168,7 +168,7 @@ abstract class AbstractSelectorList
         $editButton->setData(array(
             'title'  => __('Edit'),
             'label'  => __('Edit'),
-            'class'  => 'action-edit',
+            'class'  => 'action-edit primary',
             'href'   => $this->_getEditUrl($themeBlock->getTheme()->getId()),
             'target' => 'edittheme',
         ));

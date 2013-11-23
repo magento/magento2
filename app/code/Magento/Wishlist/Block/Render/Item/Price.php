@@ -33,7 +33,7 @@
  */
 namespace Magento\Wishlist\Block\Render\Item;
 
-class Price extends \Magento\Core\Block\Template
+class Price extends \Magento\View\Block\Template
 {
     /**
      * Returns html for rendering non-configured product

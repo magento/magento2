@@ -29,15 +29,8 @@ namespace Magento\Sales\Block\Order\Item\Renderer;
 /**
  * Order item render block
  */
-class DefaultRenderer extends \Magento\Core\Block\Template
+class DefaultRenderer extends \Magento\View\Block\Template
 {
-    /**
-     * Filter manager
-     *
-     * @var \Magento\Filter\FilterManager
-     */
-    protected $filter;
-
     /**
      * Magento string lib
      *
@@ -51,26 +44,22 @@ class DefaultRenderer extends \Magento\Core\Block\Template
     protected $_productOptionFactory;
 
     /**
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
-     * @param \Magento\Filter\FilterManager $filter
-     * @param \Magento\Stdlib\String $string
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Stdlib\String $string,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
-        \Magento\Filter\FilterManager $filter,
         array $data = array()
     ) {
         $this->string = $string;
         $this->_productOptionFactory = $productOptionFactory;
-        $this->filter = $filter;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     public function setItem(\Magento\Object $item)
@@ -179,7 +168,7 @@ class DefaultRenderer extends \Magento\Core\Block\Template
             $truncatedValue = nl2br($truncatedValue);
             return array('value' => $truncatedValue);
         } else {
-            $truncatedValue = $this->filter->truncate($optionValue, array('length' => 55, 'etc' => ''));
+            $truncatedValue = $this->filterManager->truncate($optionValue, array('length' => 55, 'etc' => ''));
             $truncatedValue = nl2br($truncatedValue);
         }
 
@@ -207,7 +196,7 @@ class DefaultRenderer extends \Magento\Core\Block\Template
     /**
      * Return product additional information block
      *
-     * @return \Magento\Core\Block\AbstractBlock
+     * @return \Magento\View\Block\AbstractBlock
      */
     public function getProductAdditionalInformationBlock()
     {

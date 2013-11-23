@@ -27,10 +27,10 @@
     <update handle="catalog_product_grouped_grid_popup"/>
     <referenceBlock name="product_tabs">
         <block class="Magento\Catalog\Block\Product\Grouped\AssociatedProducts" name="catalog.product.edit.grouped.container" template="Magento_Catalog::product/grouped/container.phtml">
-            <block class="Magento\Core\Block\Template" name="catalog.product.edit.tab.super.container" template="Magento_Catalog::product/grouped/grouped.phtml">
+            <block class="Magento\View\Block\Template" name="catalog.product.edit.tab.super.container" template="Magento_Catalog::product/grouped/grouped.phtml">
                 <block class="Magento\Catalog\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts" name="catalog.product.edit.tab.super.list" as="list" template="Magento_Catalog::product/grouped/list.phtml">
                 </block>
-                <block class="Magento\Core\Block\Template" name="catalog.product.edit.tab.super.grid.popup.container" as="catalog.product.group.grid.popup.container"/>
+                <block class="Magento\View\Block\Template" name="catalog.product.edit.tab.super.grid.popup.container" as="catalog.product.group.grid.popup.container"/>
             </block>
         </block>
         <action method="addTab">

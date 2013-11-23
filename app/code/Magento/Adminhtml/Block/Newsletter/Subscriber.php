@@ -51,19 +51,19 @@ class Subscriber extends \Magento\Adminhtml\Block\Template
     protected $_collectionFactory;
 
     /**
-     * @param \Magento\Newsletter\Model\Resource\Queue\CollectionFactory $collectionFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Newsletter\Model\Resource\Queue\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Newsletter\Model\Resource\Queue\CollectionFactory $collectionFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Newsletter\Model\Resource\Queue\CollectionFactory $collectionFactory,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

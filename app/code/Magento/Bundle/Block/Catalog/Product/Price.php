@@ -41,11 +41,10 @@ class Price extends \Magento\Catalog\Block\Product\Price
     protected $_taxCalc;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Math\Random $mathRandom
@@ -53,28 +52,17 @@ class Price extends \Magento\Catalog\Block\Product\Price
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\View\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Stdlib\String $string,
         \Magento\Math\Random $mathRandom,
         \Magento\Tax\Model\Calculation $taxCalc,
         array $data = array()
     ) {
-        parent::__construct(
-            $storeManager,
-            $catalogData,
-            $taxData,
-            $coreData,
-            $context,
-            $registry,
-            $string,
-            $mathRandom,
-            $data
-        );
+        parent::__construct($context, $coreData, $catalogData, $taxData, $registry, $string, $mathRandom, $data);
         $this->_taxCalc = $taxCalc;
     }
 

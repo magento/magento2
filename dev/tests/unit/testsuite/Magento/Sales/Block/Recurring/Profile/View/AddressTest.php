@@ -97,7 +97,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->_profile->expects($this->once())->method('getInfoValue')->will($this->returnValue('1'));
         $this->_block->setAddressType('shipping');
 
-        $parentBlock = $this->getMockBuilder('Magento\Core\Block\Template')
+        $parentBlock = $this->getMockBuilder('Magento\View\Block\Template')
             ->disableOriginalConstructor()
             ->setMethods(array('unsetChild'))
             ->getMock();

@@ -25,16 +25,17 @@
  */
 namespace Magento\App\Action;
 
+use Magento\App\RequestInterface;
+
 class Forward extends AbstractAction
 {
     /**
-     * Dispatch controller action
-     *
-     * @param string $action action name
+     * @param RequestInterface $request
+     * @return mixed|void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function dispatch($action)
+    public function dispatch(RequestInterface $request)
     {
-        $this->_request->setDispatched(false);
+        $request->setDispatched(false);
     }
 }

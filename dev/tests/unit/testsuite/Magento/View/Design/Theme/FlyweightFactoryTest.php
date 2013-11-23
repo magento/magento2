@@ -42,7 +42,7 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\View\Design\Theme\FlyweightFactory::createById
+     * @covers \Magento\View\Design\Theme\FlyweightFactory::create
      */
     public function testCreateById()
     {
@@ -65,7 +65,7 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\View\Design\Theme\FlyweightFactory::createByPath
+     * @covers \Magento\View\Design\Theme\FlyweightFactory::create
      */
     public function testCreateByPath()
     {

@@ -33,22 +33,13 @@ namespace Magento\Install\Block;
 class BeginTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Get block model
-     *
-     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Filesystem $contextFileSystem
-     * @param string|null $fileName
-     * @return \Magento\Install\Block\Begin
+     * @var \Magento\TestFramework\Helper\ObjectManager
      */
-    protected function _getBlockModel($contextFileSystem, $fileName = null)
+    protected $_objectManager;
+
+    protected function setUp()
     {
-        $helper = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
-        $context = $this->getMock('Magento\Core\Block\Template\Context', array(), array(), '', false);
-        $context->expects($this->once())->method('getFileSystem')->will($this->returnValue($contextFileSystem));
-        $installer = $this->getMock('Magento\Install\Model\Installer', array(), array(), '', false);
-        $wizard = $this->getMock('Magento\Install\Model\Wizard', array(), array(), '', false);
-        $session = $this->getMock('Magento\Core\Model\Session\Generic', array(), array(), '', false);
-        $block = new \Magento\Install\Block\Begin($helper, $context, $installer, $wizard, $session, $fileName, array());
-        return $block;
+        $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
     }
 
     /**
@@ -65,7 +56,9 @@ class BeginTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo(BP . DS . $fileName))
             ->will($this->returnValue($expectedTxt));
 
-        $block = $this->_getBlockModel($fileSystem, $fileName);
+        $block = $this->_objectManager->getObject('Magento\Install\Block\Begin',
+            array('filesystem' => $fileSystem, 'eulaFile' => $fileName));
+
         $this->assertEquals($expectedTxt, $block->getLicenseHtml());
     }
 
@@ -81,7 +74,8 @@ class BeginTest extends \PHPUnit_Framework_TestCase
         $fileSystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
         $fileSystem->expects($this->never())->method('read');
 
-        $block = $this->_getBlockModel($fileSystem, $fileName);
+        $block = $this->_objectManager->getObject('Magento\Install\Block\Begin',
+            array('filesystem' => $fileSystem, 'eulaFile' => $fileName));
         $this->assertEquals('', $block->getLicenseHtml());
     }
 

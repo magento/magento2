@@ -29,7 +29,7 @@
  */
 namespace Magento\Rss\Controller;
 
-class Order extends \Magento\Core\Controller\Front\Action
+class Order extends \Magento\App\Action\Action
 {
     /**
      * Core registry
@@ -39,11 +39,11 @@ class Order extends \Magento\Core\Controller\Front\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -61,8 +61,8 @@ class Order extends \Magento\Core\Controller\Front\Action
         if (!is_null($order)) {
             $this->_coreRegistry->register('current_order', $order);
             $this->getResponse()->setHeader('Content-type', 'text/xml; charset=UTF-8');
-            $this->loadLayout(false);
-            $this->renderLayout();
+            $this->_view->loadLayout(false);
+            $this->_view->renderLayout();
             return;
         }
 

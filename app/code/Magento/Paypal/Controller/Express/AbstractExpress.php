@@ -29,7 +29,7 @@
  */
 namespace Magento\Paypal\Controller\Express;
 
-abstract class AbstractExpress extends \Magento\Core\Controller\Front\Action
+abstract class AbstractExpress extends \Magento\App\Action\Action
 {
     /**
      * @var \Magento\Paypal\Model\Express\Checkout
@@ -80,11 +80,6 @@ abstract class AbstractExpress extends \Magento\Core\Controller\Front\Action
     protected $_customerSession;
 
     /**
-     * @var \Magento\UrlInterface
-     */
-    protected $_urlBuilder;
-
-    /**
      * @var \Magento\Sales\Model\QuoteFactory
      */
     protected $_quoteFactory;
@@ -110,9 +105,8 @@ abstract class AbstractExpress extends \Magento\Core\Controller\Front\Action
     protected $_paypalSession;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\UrlInterface $urlBuilder
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
@@ -120,9 +114,8 @@ abstract class AbstractExpress extends \Magento\Core\Controller\Front\Action
      * @param \Magento\Core\Model\Session\Generic $paypalSession
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\UrlInterface $urlBuilder,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -130,21 +123,12 @@ abstract class AbstractExpress extends \Magento\Core\Controller\Front\Action
         \Magento\Core\Model\Session\Generic $paypalSession
     ) {
         $this->_customerSession = $customerSession;
-        $this->_urlBuilder = $urlBuilder;
         $this->_quoteFactory = $quoteFactory;
         $this->_checkoutSession = $checkoutSession;
         $this->_orderFactory = $orderFactory;
         $this->_checkoutFactory = $checkoutFactory;
         $this->_paypalSession = $paypalSession;
         parent::__construct($context);
-    }
-
-    /**
-     * Instantiate config
-     */
-    protected function _construct()
-    {
-        parent::_construct();
         $parameters = array('params' => array($this->_configMethod));
         $this->_config = $this->_objectManager->create($this->_configType, $parameters);
     }
@@ -178,14 +162,14 @@ abstract class AbstractExpress extends \Magento\Core\Controller\Front\Action
 
             // giropay
             $this->_checkout->prepareGiropayUrls(
-                $this->_urlBuilder->getUrl('checkout/onepage/success'),
-                $this->_urlBuilder->getUrl('paypal/express/cancel'),
-                $this->_urlBuilder->getUrl('checkout/onepage/success')
+                $this->_url->getUrl('checkout/onepage/success'),
+                $this->_url->getUrl('paypal/express/cancel'),
+                $this->_url->getUrl('checkout/onepage/success')
             );
 
             $token = $this->_checkout->start(
-                $this->_urlBuilder->getUrl('*/*/return'),
-                $this->_urlBuilder->getUrl('*/*/cancel')
+                $this->_url->getUrl('*/*/return'),
+                $this->_url->getUrl('*/*/cancel')
             );
             if ($token && $url = $this->_checkout->getRedirectUrl()) {
                 $this->_initToken($token);
@@ -278,15 +262,15 @@ abstract class AbstractExpress extends \Magento\Core\Controller\Front\Action
         try {
             $this->_initCheckout();
             $this->_checkout->prepareOrderReview($this->_initToken());
-            $this->loadLayout();
-            $this->_initLayoutMessages('Magento\Paypal\Model\Session');
-            $reviewBlock = $this->getLayout()->getBlock('paypal.express.review');
+            $this->_view->loadLayout();
+            $this->_view->getLayout()->initMessages('Magento\Paypal\Model\Session');
+            $reviewBlock = $this->_view->getLayout()->getBlock('paypal.express.review');
             $reviewBlock->setQuote($this->_getQuote());
             $reviewBlock->getChildBlock('details')->setQuote($this->_getQuote());
             if ($reviewBlock->getChildBlock('shipping_method')) {
                 $reviewBlock->getChildBlock('shipping_method')->setQuote($this->_getQuote());
             }
-            $this->renderLayout();
+            $this->_view->renderLayout();
             return;
         } catch (\Magento\Core\Exception $e) {
             $this->_checkoutSession->addError($e->getMessage());
@@ -322,8 +306,8 @@ abstract class AbstractExpress extends \Magento\Core\Controller\Front\Action
             $this->_initCheckout();
             $this->_checkout->updateShippingMethod($this->getRequest()->getParam('shipping_method'));
             if ($isAjax) {
-                $this->loadLayout('paypal_express_review_details');
-                $this->getResponse()->setBody($this->getLayout()->getBlock('root')
+                $this->_view->loadLayout('paypal_express_review_details');
+                $this->getResponse()->setBody($this->_view->getLayout()->getBlock('root')
                     ->setQuote($this->_getQuote())
                     ->toHtml());
                 return;
@@ -336,7 +320,7 @@ abstract class AbstractExpress extends \Magento\Core\Controller\Front\Action
         }
         if ($isAjax) {
             $this->getResponse()->setBody('<script type="text/javascript">window.location.href = '
-                . $this->_urlBuilder->getUrl('*/*/review') . ';</script>');
+                . $this->_url->getUrl('*/*/review') . ';</script>');
         } else {
             $this->_redirect('*/*/review');
         }
@@ -350,9 +334,9 @@ abstract class AbstractExpress extends \Magento\Core\Controller\Front\Action
         try {
             $this->_initCheckout();
             $this->_checkout->prepareOrderReview($this->_initToken());
-            $this->loadLayout('paypal_express_review');
+            $this->_view->loadLayout('paypal_express_review');
 
-            $this->getResponse()->setBody($this->getLayout()->getBlock('express.review.shipping.method')
+            $this->getResponse()->setBody($this->_view->getLayout()->getBlock('express.review.shipping.method')
                 ->setQuote($this->_getQuote())
                 ->toHtml());
             return;
@@ -363,7 +347,7 @@ abstract class AbstractExpress extends \Magento\Core\Controller\Front\Action
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         $this->getResponse()->setBody('<script type="text/javascript">window.location.href = '
-            . $this->_urlBuilder->getUrl('*/*/review') . ';</script>');
+            . $this->_url->getUrl('*/*/review') . ';</script>');
     }
 
     /**
@@ -376,8 +360,8 @@ abstract class AbstractExpress extends \Magento\Core\Controller\Front\Action
             $this->_initCheckout();
             $this->_checkout->updateOrder($this->getRequest()->getParams());
             if ($isAjax) {
-                $this->loadLayout('paypal_express_review_details');
-                $this->getResponse()->setBody($this->getLayout()->getBlock('root')
+                $this->_view->loadLayout('paypal_express_review_details');
+                $this->getResponse()->setBody($this->_view->getLayout()->getBlock('root')
                     ->setQuote($this->_getQuote())
                     ->toHtml());
                 return;
@@ -390,7 +374,7 @@ abstract class AbstractExpress extends \Magento\Core\Controller\Front\Action
         }
         if ($isAjax) {
             $this->getResponse()->setBody('<script type="text/javascript">window.location.href = '
-                . $this->_urlBuilder->getUrl('*/*/review') . ';</script>');
+                . $this->_url->getUrl('*/*/review') . ';</script>');
         } else {
             $this->_redirect('*/*/review');
         }
@@ -562,7 +546,7 @@ abstract class AbstractExpress extends \Magento\Core\Controller\Front\Action
      */
     public function redirectLogin()
     {
-        $this->setFlag('', 'no-dispatch', true);
+        $this->_actionFlag->set('', 'no-dispatch', true);
         $this->getResponse()->setRedirect(
             $this->_objectManager->get('Magento\Core\Helper\Url')->addRequestParam(
                 $this->_objectManager->get('Magento\Customer\Helper\Data')->getLoginUrl(),

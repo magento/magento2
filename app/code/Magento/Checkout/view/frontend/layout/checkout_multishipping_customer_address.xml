@@ -27,4 +27,5 @@
     <referenceContainer name="content">
         <block class="Magento\Customer\Block\Address\Edit" name="customer_address_edit" template="address/edit.phtml"/>
     </referenceContainer>
+    <update handle="customer_form_template_handle"/>
 </layout>

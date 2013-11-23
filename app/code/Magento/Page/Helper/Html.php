@@ -31,7 +31,7 @@
  */
 namespace Magento\Page\Helper;
 
-class Html extends \Magento\Core\Helper\AbstractHelper
+class Html extends \Magento\App\Helper\AbstractHelper
 {
     
 }

@@ -34,7 +34,7 @@ namespace Magento\Backend\Block\Widget\Grid;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ColumnSet extends \Magento\Core\Block\Template
+class ColumnSet extends \Magento\View\Block\Template
 {
     /**
      * @var \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator
@@ -120,17 +120,16 @@ class ColumnSet extends \Magento\Core\Block\Template
     protected $_totals = null;
 
     /**
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory
-     * $generatorFactory
+     * @param \Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory $generatorFactory
      * @param \Magento\Backend\Model\Widget\Grid\SubTotals $subtotals
      * @param \Magento\Backend\Model\Widget\Grid\Totals $totals
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory $generatorFactory,
         \Magento\Backend\Model\Widget\Grid\SubTotals $subtotals,
         \Magento\Backend\Model\Widget\Grid\Totals $totals,
@@ -150,7 +149,7 @@ class ColumnSet extends \Magento\Core\Block\Template
             array_key_exists('filter_visibility', $data) ? (bool) $data['filter_visibility'] : true
         );
 
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
 
         $this->setEmptyText(__(
             isset($data['empty_text'])? $data['empty_text'] : 'We couldn\'t find any records.'
@@ -243,7 +242,7 @@ class ColumnSet extends \Magento\Core\Block\Template
     /**
      * Prepare block for rendering
      *
-     * @return \Magento\Core\Block\AbstractBlock
+     * @return \Magento\View\Block\AbstractBlock
      */
     protected function _beforeToHtml()
     {

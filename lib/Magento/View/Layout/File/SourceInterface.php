@@ -1,7 +1,5 @@
 <?php
 /**
- * Interface of locating layout files in the file system
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -28,6 +26,9 @@ namespace Magento\View\Layout\File;
 
 use Magento\View\Design\ThemeInterface;
 
+/**
+ * Interface of locating layout files in the file system
+ */
 interface SourceInterface
 {
     /**

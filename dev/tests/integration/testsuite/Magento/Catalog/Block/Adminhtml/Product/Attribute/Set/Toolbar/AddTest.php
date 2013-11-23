@@ -41,7 +41,7 @@ class AddTest extends \PHPUnit_Framework_TestCase
             'block');
         $block->setArea('adminhtml')->unsetChild('setForm');
 
-        $childBlock = $layout->addBlock('Magento\Core\Block\Template', 'setForm', 'block');
+        $childBlock = $layout->addBlock('Magento\View\Block\Template', 'setForm', 'block');
         $form = new \Magento\Object();
         $childBlock->setForm($form);
 

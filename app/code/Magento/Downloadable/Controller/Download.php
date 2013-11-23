@@ -33,7 +33,7 @@
  */
 namespace Magento\Downloadable\Controller;
 
-class Download extends \Magento\Core\Controller\Front\Action
+class Download extends \Magento\App\Action\Action
 {
 
     /**
@@ -120,7 +120,7 @@ class Download extends \Magento\Core\Controller\Front\Action
                 $this->_getSession()->addError(__('Sorry, there was an error getting requested content. Please contact the store owner.'));
             }
         }
-        return $this->_redirectReferer();
+        return $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
     }
 
     /**
@@ -150,7 +150,7 @@ class Download extends \Magento\Core\Controller\Front\Action
                 $this->_getCustomerSession()->addError(__('Sorry, there was an error getting requested content. Please contact the store owner.'));
             }
         }
-        return $this->_redirectReferer();
+        return $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
     }
 
     /**

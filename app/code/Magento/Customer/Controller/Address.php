@@ -33,7 +33,10 @@
  */
 namespace Magento\Customer\Controller;
 
-class Address extends \Magento\Core\Controller\Front\Action
+use Magento\App\Action\NotFoundException;
+use Magento\App\RequestInterface;
+
+class Address extends \Magento\App\Action\Action
 {
     /**
      * @var \Magento\Customer\Model\Session
@@ -50,15 +53,29 @@ class Address extends \Magento\Core\Controller\Front\Action
      */
     protected $_addressFormFactory;
 
+    /**
+     * @var \Magento\Core\App\Action\FormKeyValidator
+     */
+    protected $_formKeyValidator;
+
+    /**
+     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Customer\Model\AddressFactory $addressFactory
+     * @param \Magento\Customer\Model\Address\FormFactory $addressFormFactory
+     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\AddressFactory $addressFactory,
-        \Magento\Customer\Model\Address\FormFactory $addressFormFactory
+        \Magento\Customer\Model\Address\FormFactory $addressFormFactory,
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
     ) {
         $this->_customerSession = $customerSession;
         $this->_addressFactory = $addressFactory;
         $this->_addressFormFactory = $addressFormFactory;
+        $this->_formKeyValidator = $formKeyValidator;
         parent::__construct($context);
     }
 
@@ -72,13 +89,16 @@ class Address extends \Magento\Core\Controller\Front\Action
         return $this->_customerSession;
     }
 
-    public function preDispatch()
+    /**
+     * @param RequestInterface $request
+     * @return mixed
+     */
+    public function dispatch(RequestInterface $request)
     {
-        parent::preDispatch();
-
         if (!$this->_getSession()->authenticate($this)) {
-            $this->setFlag('', 'no-dispatch', true);
+            $this->_actionFlag->set('', 'no-dispatch', true);
         }
+        return parent::dispatch($request);
     }
 
     /**
@@ -87,15 +107,15 @@ class Address extends \Magento\Core\Controller\Front\Action
     public function indexAction()
     {
         if (count($this->_getSession()->getCustomer()->getAddresses())) {
-            $this->loadLayout();
-            $this->_initLayoutMessages('Magento\Customer\Model\Session');
-            $this->_initLayoutMessages('Magento\Catalog\Model\Session');
+            $this->_view->loadLayout();
+            $this->_view->getLayout()
+                ->initMessages(array('Magento\Customer\Model\Session', 'Magento\Catalog\Model\Session'));
 
-            $block = $this->getLayout()->getBlock('address_book');
+            $block = $this->_view->getLayout()->getBlock('address_book');
             if ($block) {
-                $block->setRefererUrl($this->_getRefererUrl());
+                $block->setRefererUrl($this->_redirect->getRefererUrl());
             }
-            $this->renderLayout();
+            $this->_view->renderLayout();
         } else {
             $this->getResponse()->setRedirect($this->_buildUrl('*/*/new'));
         }
@@ -116,13 +136,13 @@ class Address extends \Magento\Core\Controller\Front\Action
      */
     public function formAction()
     {
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
-        $navigationBlock = $this->getLayout()->getBlock('customer_account_navigation');
+        $this->_view->loadLayout();
+        $this->_view->getLayout()->initMessages('Magento\Customer\Model\Session');
+        $navigationBlock = $this->_view->getLayout()->getBlock('customer_account_navigation');
         if ($navigationBlock) {
             $navigationBlock->setActive('customer/address');
         }
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -130,13 +150,13 @@ class Address extends \Magento\Core\Controller\Front\Action
      */
     public function formPostAction()
     {
-        if (!$this->_validateFormKey()) {
+        if (!$this->_formKeyValidator->validate($this->getRequest())) {
             return $this->_redirect('*/*/');
         }
 
         if (!$this->getRequest()->isPost()) {
             $this->_getSession()->setAddressFormData($this->getRequest()->getPost());
-            $this->_redirectError($this->_buildUrl('*/*/edit'));
+            $this->getResponse()->setRedirect($this->_redirect->error($this->_buildUrl('*/*/edit')));
             return;
         }
 
@@ -145,7 +165,8 @@ class Address extends \Magento\Core\Controller\Front\Action
             $this->_validateAddress($address);
             $address->save();
             $this->_getSession()->addSuccess(__('The address has been saved.'));
-            $this->_redirectSuccess($this->_buildUrl('*/*/index', array('_secure'=>true)));
+            $url = $this->_buildUrl('*/*/index', array('_secure'=>true));
+            $this->getResponse()->setRedirect($this->_redirect->success($url));
             return;
         } catch (\Magento\Core\Exception $e) {
             $this->_getSession()->addException($e, $e->getMessage());
@@ -160,7 +181,8 @@ class Address extends \Magento\Core\Controller\Front\Action
         }
 
         $this->_getSession()->setAddressFormData($this->getRequest()->getPost());
-        $this->_redirectError($this->_buildUrl('*/*/edit', array('id' => $address->getId())));
+        $url = $this->_buildUrl('*/*/edit', array('id' => $address->getId()));
+        $this->getResponse()->setRedirect($this->_redirect->error($url));
     }
 
     /**

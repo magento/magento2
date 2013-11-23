@@ -59,7 +59,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
 
-        $context = $this->getMock('Magento\Core\Helper\Context', array(), array(), '', false);
+        $context = $this->getMock('Magento\App\Helper\Context', array(), array(), '', false);
 
         return new \Magento\Captcha\Helper\Data(
             $context, $this->_dirMock, $storeManager, $config, $filesystem, $factory

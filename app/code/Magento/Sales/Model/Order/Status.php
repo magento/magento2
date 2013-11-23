@@ -99,7 +99,7 @@ class Status extends \Magento\Core\Model\AbstractModel
             $this->_getResource()->unassignState($this->getStatus(), $state);
             $this->_getResource()->commit();
             $params = array('status' => $this->getStatus(), 'state' => $state);
-            $this->_eventDispatcher->dispatch('sales_order_status_unassign', $params);
+            $this->_eventManager->dispatch('sales_order_status_unassign', $params);
         } catch (\Exception $e) {
             $this->_getResource()->rollBack();
             throw $e;

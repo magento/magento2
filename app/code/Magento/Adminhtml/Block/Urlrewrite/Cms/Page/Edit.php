@@ -44,23 +44,23 @@ class Edit extends \Magento\Adminhtml\Block\Urlrewrite\Edit
     protected $_pageFactory;
 
     /**
-     * @param \Magento\Cms\Model\PageFactory $pageFactory
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url\RewriteFactory $rewriteFactory
      * @param \Magento\Backend\Helper\Data $adminhtmlData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Cms\Model\PageFactory $pageFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Cms\Model\PageFactory $pageFactory,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url\RewriteFactory $rewriteFactory,
         \Magento\Backend\Helper\Data $adminhtmlData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Cms\Model\PageFactory $pageFactory,
         array $data = array()
     ) {
         $this->_pageFactory = $pageFactory;
-        parent::__construct($rewriteFactory, $adminhtmlData, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $rewriteFactory, $adminhtmlData, $data);
     }
 
     /**

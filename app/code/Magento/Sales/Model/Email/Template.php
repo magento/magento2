@@ -27,7 +27,7 @@
 
 namespace Magento\Sales\Model\Email;
 
-class Template extends \Magento\Core\Model\Email\Template
+class Template extends \Magento\Email\Model\Template
 {
     /**
      * @param string $template

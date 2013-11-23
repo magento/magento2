@@ -33,7 +33,7 @@
  */
 namespace Magento\Adminhtml\Controller\Newsletter;
 
-class Queue extends \Magento\Backend\Controller\Adminhtml\Action
+class Queue extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -43,11 +43,11 @@ class Queue extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -59,20 +59,20 @@ class Queue extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function indexAction()
     {
-        $this->_title(__('Newsletter Queue'));
+        $this->_title->add(__('Newsletter Queue'));
 
         if ($this->getRequest()->getQuery('ajax')) {
             $this->_forward('grid');
             return;
         }
 
-        $this->loadLayout();
+        $this->_view->loadLayout();
 
         $this->_setActiveMenu('Magento_Newsletter::newsletter_queue');
 
         $this->_addBreadcrumb(__('Newsletter Queue'), __('Newsletter Queue'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
 
@@ -81,8 +81,8 @@ class Queue extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function dropAction()
     {
-        $this->loadLayout('newsletter_queue_preview');
-        $this->renderLayout();
+        $this->_view->loadLayout('newsletter_queue_preview');
+        $this->_view->renderLayout();
     }
 
     /**
@@ -90,10 +90,10 @@ class Queue extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function previewAction()
     {
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $data = $this->getRequest()->getParams();
         if (empty($data) || !isset($data['id'])) {
-            $this->_forward('noRoute');
+            $this->_forward('noroute');
             return $this;
         }
 
@@ -101,8 +101,8 @@ class Queue extends \Magento\Backend\Controller\Adminhtml\Action
         $data['preview_store_id'] = $this->_objectManager->get('Magento\Core\Model\StoreManager')
             ->getDefaultStoreView()->getId();
 
-        $this->getLayout()->getBlock('preview_form')->setFormData($data);
-        $this->renderLayout();
+        $this->_view->getLayout()->getBlock('preview_form')->setFormData($data);
+        $this->_view->renderLayout();
     }
 
     /**
@@ -110,8 +110,8 @@ class Queue extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function gridAction()
     {
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     public function startAction()
@@ -202,7 +202,7 @@ class Queue extends \Magento\Backend\Controller\Adminhtml\Action
 
     public function editAction()
     {
-        $this->_title(__('Newsletter Queue'));
+        $this->_title->add(__('Newsletter Queue'));
 
         $this->_coreRegistry->register('current_queue', $this->_objectManager->get('Magento\Newsletter\Model\Queue'));
 
@@ -216,9 +216,9 @@ class Queue extends \Magento\Backend\Controller\Adminhtml\Action
             $queue = $this->_coreRegistry->registry('current_queue')->setTemplateId($template->getId());
         }
 
-        $this->_title(__('Edit Queue'));
+        $this->_title->add(__('Edit Queue'));
 
-        $this->loadLayout();
+        $this->_view->loadLayout();
 
         $this->_setActiveMenu('Magento_Newsletter::newsletter_queue');
 
@@ -229,7 +229,7 @@ class Queue extends \Magento\Backend\Controller\Adminhtml\Action
         );
         $this->_addBreadcrumb(__('Edit Queue'), __('Edit Queue'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function saveAction()
@@ -289,7 +289,7 @@ class Queue extends \Magento\Backend\Controller\Adminhtml\Action
             if ($id) {
                 $this->_redirect('adminhtml/*/edit', array('id' => $id));
             } else {
-                $this->_redirectReferer();
+                $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
             }
         }
     }

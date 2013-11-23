@@ -19,31 +19,38 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<form id="discount-coupon-form" action="<?php echo $this->getUrl('checkout/cart/couponPost') ?>" method="post">
-    <div class="discount">
-        <h2><?php echo __('Discount Codes') ?></h2>
-        <div class="discount-form">
-            <label for="coupon_code"><?php echo __('Enter your coupon code if you have one.') ?></label>
-            <input type="hidden" name="remove" id="remove-coupon" value="0" />
-            <div class="input-box">
-                <input class="input-text" id="coupon_code" name="coupon_code" value="<?php echo $this->escapeHtml($this->getCouponCode()) ?>" />
-            </div>
-            <div class="buttons-set">
-                <button type="button" title="<?php echo __('Apply Coupon') ?>" class="button apply-coupon" value="<?php echo __('Apply Coupon') ?>"><span><span><?php echo __('Apply Coupon') ?></span></span></button>
-                <?php if(strlen($this->getCouponCode())): ?>
-                    &nbsp; <button type="button" title="<?php echo __('Cancel Coupon') ?>" class="button cancel-coupon" value="<?php echo __('Cancel Coupon') ?>"><span><span><?php echo __('Cancel Coupon') ?></span></span></button>
-                <?php endif;?>
-            </div>
-        </div>
-    </div>
-</form>
-<script type="text/javascript">
-//<![CDATA[
+<div class="block discount">
+    <div class="title"><strong><?php echo __('Discount Codes') ?></strong></div>
+    <div class="content">
+        <form id="discount-coupon-form" action="<?php echo $this->getUrl('checkout/cart/couponPost') ?>" method="post">
+            <fieldset class="fieldset coupon<?php strlen($this->getCouponCode()) ? ' applied' : ''?>">
+                <input type="hidden" name="remove" id="remove-coupon" value="0" />
+                <div class="field">
+                    <label for="coupon_code" class="label"><span><?php echo __('Enter your coupon code if you have one.') ?></span></label>
+                    <div class="control">
+                        <input type="text" class="input-text" id="coupon_code" name="coupon_code" value="<?php echo $this->escapeHtml($this->getCouponCode()) ?>" />
+                    </div>
+                </div>
+                <div class="actions">
+                    <div class="primary">
+                        <button class="action apply" type="button" value="<?php echo __('Apply Coupon') ?>">
+                            <span><?php echo __('Apply Coupon') ?></span>
+                        </button>
+                    </div>
+                    <?php if(strlen($this->getCouponCode())): ?>
+                        <div class="secondary">
+                            <button  type="button" class="action cancel" value="<?php echo __('Cancel Coupon') ?>"><span><?php echo __('Cancel Coupon') ?></span></button>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </fieldset>
+        </form>
+    <script type="text/javascript">
+    //<![CDATA[
     (function($) {
         head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
             "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
@@ -52,9 +59,11 @@
             "<?php echo $this->getViewFileUrl('Magento_Checkout::js/discount-codes.js')?>", function() {
                 $('#discount-coupon-form').discountCode({
                     couponCodeSelector: '#coupon_code', removeCouponSelector: '#remove-coupon',
-                    applyButton: 'button.apply-coupon', cancelButton: 'button.cancel-coupon'
+                    applyButton: 'button.action.apply', cancelButton: 'button.action.cancel'
                 });
             });
     })(jQuery);
-//]]>
-</script>
+    //]]>
+    </script>
+    </div>
+</div>

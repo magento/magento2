@@ -9,6 +9,7 @@ app/code/Magento/Backend/Block/Widget/Grid
 app/code/Magento/Backend/view
 app/code/Magento/Core/Model/Config/Element.php
 app/code/Magento/DesignEditor/view
+app/code/Magento/Email/view
 app/code/Magento/Theme/view
 app/code/Magento/User/view
 app/code/Magento/Webapi/view

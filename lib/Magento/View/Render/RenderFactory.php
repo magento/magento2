@@ -27,6 +27,9 @@ namespace Magento\View\Render;
 use Magento\ObjectManager;
 use Magento\View\RenderInterface;
 
+/**
+ * Class RenderFactory
+ */
 class RenderFactory
 {
     /**

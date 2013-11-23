@@ -25,28 +25,28 @@
 -->
 <layout  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <container name="container1" label="test1" htmlTag="div" htmlId="container1-1" htmlClass="class11">
-        <block class="Magento\Core\Block\Text" name="block11">
+        <block class="Magento\View\Block\Text" name="block11">
             <action method="setText">
                 <argument name="text" xsi:type="string">Test11</argument>
             </action>
         </block>
     </container>
     <referenceContainer name="container1" label="test1" htmlId="container1-2" htmlClass="class12">
-        <block class="Magento\Core\Block\Text" name="block12">
+        <block class="Magento\View\Block\Text" name="block12">
             <action method="setText">
                 <argument name="text" xsi:type="string">Test12</argument>
             </action>
         </block>
     </referenceContainer>
     <container name="container2" label="test2" htmlTag="div" htmlClass="class21">
-        <block class="Magento\Core\Block\Text" name="block21">
+        <block class="Magento\View\Block\Text" name="block21">
             <action method="setText">
                 <argument name="text" xsi:type="string">Test21</argument>
             </action>
         </block>
     </container>
     <referenceContainer name="container2" label="test2" htmlId="container2-2" htmlClass="class22">
-        <block class="Magento\Core\Block\Text" name="block22">
+        <block class="Magento\View\Block\Text" name="block22">
             <action method="setText">
                 <argument name="text" xsi:type="string">Test22</argument>
             </action>

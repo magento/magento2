@@ -33,15 +33,11 @@
  */
 namespace Magento\Review\Controller;
 
-class Product extends \Magento\Core\Controller\Front\Action
-{
-    /**
-     * Action list where need check enabled cookie
-     *
-     * @var array
-     */
-    protected $_cookieCheckActions = array('post');
+use Magento\App\Action\NotFoundException;
+use Magento\App\RequestInterface;
 
+class Product extends \Magento\App\Action\Action
+{
     /**
      * Core registry
      *
@@ -55,19 +51,9 @@ class Product extends \Magento\Core\Controller\Front\Action
     protected $_customerSession;
 
     /**
-     * @var \Magento\UrlInterface
-     */
-    protected $_urlModel;
-
-    /**
      * @var \Magento\Review\Model\Session
      */
     protected $_reviewSession;
-
-    /**
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
 
     /**
      * @var \Magento\Catalog\Model\CategoryFactory
@@ -105,11 +91,14 @@ class Product extends \Magento\Core\Controller\Front\Action
     protected $_catalogDesign;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @var \Magento\Core\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\UrlInterface $urlModel
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -118,13 +107,12 @@ class Product extends \Magento\Core\Controller\Front\Action
      * @param \Magento\Core\Model\Session $session
      * @param \Magento\Catalog\Model\Design $catalogDesign
      * @param \Magento\Core\Model\Session\Generic $reviewSession
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\UrlInterface $urlModel,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Logger $logger,
         \Magento\Catalog\Model\ProductFactory $productFactory,
@@ -132,13 +120,13 @@ class Product extends \Magento\Core\Controller\Front\Action
         \Magento\Rating\Model\RatingFactory $ratingFactory,
         \Magento\Core\Model\Session $session,
         \Magento\Catalog\Model\Design $catalogDesign,
-        \Magento\Core\Model\Session\Generic $reviewSession
+        \Magento\Core\Model\Session\Generic $reviewSession,
+        \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
+        $this->_storeManager = $storeManager;
         $this->_coreRegistry = $coreRegistry;
         $this->_customerSession = $customerSession;
-        $this->_urlModel = $urlModel;
         $this->_reviewSession = $reviewSession;
-        $this->_storeManager = $storeManager;
         $this->_categoryFactory = $categoryFactory;
         $this->_logger = $logger;
         $this->_productFactory = $productFactory;
@@ -150,29 +138,35 @@ class Product extends \Magento\Core\Controller\Front\Action
         parent::__construct($context);
     }
 
-    public function preDispatch()
+    /**
+     * Dispatch request
+     *
+     * @param RequestInterface $request
+     * @return mixed
+     */
+    public function dispatch(RequestInterface $request)
     {
-        parent::preDispatch();
-
         $allowGuest = $this->_objectManager->get('Magento\Review\Helper\Data')->getIsGuestAllowToWrite();
-        if (!$this->getRequest()->isDispatched()) {
-            return;
+        if (!$request->isDispatched()) {
+            return parent::dispatch($request);
         }
 
-        $action = $this->getRequest()->getActionName();
-        if (!$allowGuest && $action == 'post' && $this->getRequest()->isPost()) {
+        if (!$allowGuest && $request->getActionName() == 'post' && $request->isPost()) {
             if (!$this->_customerSession->isLoggedIn()) {
-                $this->setFlag('', self::FLAG_NO_DISPATCH, true);
-                $this->_customerSession->setBeforeAuthUrl($this->_urlModel->getUrl('*/*/*', array('_current' => true)));
+                $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
+                $this->_customerSession->setBeforeAuthUrl($this->_url->getUrl('*/*/*', array('_current' => true)));
                 $this->_reviewSession
-                    ->setFormData($this->getRequest()->getPost())
-                    ->setRedirectUrl($this->_getRefererUrl());
-                $this->_redirectUrl($this->_objectManager->get('Magento\Customer\Helper\Data')->getLoginUrl());
+                    ->setFormData($request->getPost())
+                    ->setRedirectUrl($this->_redirect->getRefererUrl());
+                $this->getResponse()->setRedirect(
+                    $this->_objectManager->get('Magento\Customer\Helper\Data')->getLoginUrl()
+                );
             }
         }
 
-        return $this;
+        return parent::dispatch($request);
     }
+
     /**
      * Initialize and check product
      *
@@ -320,10 +314,10 @@ class Product extends \Magento\Core\Controller\Front\Action
 
         $redirectUrl = $this->_reviewSession->getRedirectUrl(true);
         if ($redirectUrl) {
-            $this->_redirectUrl($redirectUrl);
+            $this->getResponse()->setRedirect($redirectUrl);
             return;
         }
-        $this->_redirectReferer();
+        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
     }
 
     /**
@@ -344,7 +338,7 @@ class Product extends \Magento\Core\Controller\Front\Action
             $this->_initProductLayout($product);
 
             // update breadcrumbs
-            $breadcrumbsBlock = $this->getLayout()->getBlock('breadcrumbs');
+            $breadcrumbsBlock = $this->_view->getLayout()->getBlock('breadcrumbs');
             if ($breadcrumbsBlock) {
                 $breadcrumbsBlock->addCrumb('product', array(
                     'label'    => $product->getName(),
@@ -354,9 +348,9 @@ class Product extends \Magento\Core\Controller\Front\Action
                 $breadcrumbsBlock->addCrumb('reviews', array('label' => __('Product Reviews')));
             }
 
-            $this->renderLayout();
+            $this->_view->renderLayout();
         } elseif (!$this->getResponse()->isRedirect()) {
-            $this->_forward('noRoute');
+            $this->_forward('noroute');
         }
     }
 
@@ -378,10 +372,9 @@ class Product extends \Magento\Core\Controller\Front\Action
             return;
         }
 
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Review\Model\Session');
-        $this->_initLayoutMessages('Magento\Catalog\Model\Session');
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->getLayout()->initMessages(array('Magento\Review\Model\Session', 'Magento\Catalog\Model\Session'));
+        $this->_view->renderLayout();
     }
 
     /**
@@ -390,9 +383,9 @@ class Product extends \Magento\Core\Controller\Front\Action
      */
     protected function _initProductLayout($product)
     {
-        $update = $this->getLayout()->getUpdate();
+        $update = $this->_view->getLayout()->getUpdate();
         $update->addHandle('default');
-        $this->addPageLayoutHandles(
+        $this->_view->addPageLayoutHandles(
             array('id' => $product->getId(), 'sku' => $product->getSku(), 'type' => $product->getTypeId())
         );
 
@@ -400,13 +393,14 @@ class Product extends \Magento\Core\Controller\Front\Action
             $this->_objectManager->get('Magento\Page\Helper\Layout')
                 ->applyHandle($product->getPageLayout());
         }
-        $this->loadLayoutUpdates();
+        $this->_view->loadLayoutUpdates();
 
         if ($product->getPageLayout()) {
             $this->_objectManager->get('Magento\Page\Helper\Layout')
                 ->applyTemplate($product->getPageLayout());
         }
         $update->addUpdate($product->getCustomLayoutUpdate());
-        $this->generateLayoutXml()->generateLayoutBlocks();
+        $this->_view->generateLayoutXml();
+        $this->_view->generateLayoutBlocks();
     }
 }

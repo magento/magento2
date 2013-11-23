@@ -42,19 +42,19 @@ class Translate extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_appState;
 
     /**
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\App\Resource $resource
      * @param \Magento\App\State $appState
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\App\Resource $resource,
         \Magento\App\State $appState,
-        \Magento\Core\Model\StoreManager $storeManager
+        \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         parent::__construct($resource);
         $this->_appState = $appState;

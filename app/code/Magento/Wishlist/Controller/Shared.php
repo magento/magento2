@@ -44,11 +44,11 @@ class Shared extends \Magento\Wishlist\Controller\AbstractController
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -87,16 +87,17 @@ class Shared extends \Magento\Wishlist\Controller\AbstractController
         $customerId = $this->_objectManager->get('Magento\Customer\Model\Session')->getCustomerId();
 
         if ($wishlist && $wishlist->getCustomerId() && $wishlist->getCustomerId() == $customerId) {
-            $this->_redirectUrl($this->_objectManager->get('Magento\Wishlist\Helper\Data')->getListUrl($wishlist->getId()));
+            $this->getResponse()->setRedirect(
+                $this->_objectManager->get('Magento\Wishlist\Helper\Data')->getListUrl($wishlist->getId())
+            );
             return;
         }
 
         $this->_coreRegistry->register('shared_wishlist', $wishlist);
 
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Checkout\Model\Session');
-        $this->_initLayoutMessages('Magento\Wishlist\Model\Session');
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->getLayout()->initMessages(array('Magento\Checkout\Model\Session', 'Magento\Wishlist\Model\Session'));
+        $this->_view->renderLayout();
     }
 
     /**
@@ -118,7 +119,7 @@ class Shared extends \Magento\Wishlist\Controller\AbstractController
         $session    = $this->_objectManager->get('Magento\Wishlist\Model\Session');
         $cart       = $this->_objectManager->get('Magento\Checkout\Model\Cart');
 
-        $redirectUrl = $this->_getRefererUrl();
+        $redirectUrl = $this->_redirect->getRefererUrl();
 
         try {
             $options = $this->_objectManager->create('Magento\Wishlist\Model\Item\Option')->getCollection()
@@ -142,6 +143,6 @@ class Shared extends \Magento\Wishlist\Controller\AbstractController
             $session->addException($e, __('Cannot add item to shopping cart'));
         }
 
-        return $this->_redirectUrl($redirectUrl);
+        return $this->getResponse()->setRedirect($redirectUrl);
     }
 }

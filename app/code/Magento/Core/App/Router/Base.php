@@ -80,7 +80,7 @@ class Base extends \Magento\App\Router\AbstractRouter
     protected $_url;
 
     /**
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -106,7 +106,7 @@ class Base extends \Magento\App\Router\AbstractRouter
      * @param \Magento\App\Route\ConfigInterface $routeConfig
      * @param \Magento\App\State $appState
      * @param \Magento\Core\Model\Url|\Magento\UrlInterface $url
-     * @param \Magento\Core\Model\StoreManager|\Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface|\Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo
      * @param $routerId
@@ -140,7 +140,7 @@ class Base extends \Magento\App\Router\AbstractRouter
      * Match provided request and if matched - return corresponding controller
      *
      * @param \Magento\App\RequestInterface $request
-     * @return \Magento\Core\Controller\Front\Action|null
+     * @return \Magento\App\Action\Action|null
      */
     public function match(\Magento\App\RequestInterface $request)
     {
@@ -244,7 +244,7 @@ class Base extends \Magento\App\Router\AbstractRouter
      *
      * @param $currentModuleName
      * @param \Magento\App\RequestInterface $request
-     * @return \Magento\Core\Controller\Varien\Action|null
+     * @return \Magento\App\Action\Action|null
      */
     protected function _getNotFoundControllerInstance($currentModuleName, \Magento\App\RequestInterface $request)
     {
@@ -268,7 +268,7 @@ class Base extends \Magento\App\Router\AbstractRouter
      *
      * @param \Magento\App\RequestInterface $request
      * @param array $params
-     * @return \Magento\Core\Controller\Front\Action|null
+     * @return \Magento\App\Action\Action|null
      */
     protected function _matchController(\Magento\App\RequestInterface $request, array $params)
     {

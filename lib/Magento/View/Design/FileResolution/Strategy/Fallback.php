@@ -18,15 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Resolver, which performs full search of files, according to fallback rules
- */
 namespace Magento\View\Design\FileResolution\Strategy;
 
 use Magento\Filesystem;
@@ -35,9 +30,9 @@ use Magento\View\Design\Fallback\Rule\RuleInterface;
 use Magento\View\Design\ThemeInterface;
 
 /**
- * Fallback
+ * Class Fallback
  *
- * @package Magento\View
+ * Resolver, which performs full search of files, according to fallback rules
  */
 class Fallback implements FileInterface, LocaleInterface, ViewInterface
 {

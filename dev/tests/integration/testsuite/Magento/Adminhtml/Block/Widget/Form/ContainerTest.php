@@ -41,13 +41,13 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         /** @var $block \Magento\Adminhtml\Block\Widget\Form\Container */
         $block = $this->getMock('Magento\Adminhtml\Block\Widget\Form\Container', array('_prepareLayout'),
             array(
-                $objectManager->create('Magento\Core\Helper\Data'),
                 $objectManager->create('Magento\Backend\Block\Template\Context'),
+                $objectManager->create('Magento\Core\Helper\Data'),
             )
         );
 
         $layout->addBlock($block, 'block');
-        $form = $layout->addBlock('Magento\Core\Block\Text', 'form', 'block');
+        $form = $layout->addBlock('Magento\View\Block\Text', 'form', 'block');
 
         $expectedHtml = '<b>html</b>';
         $this->assertNotEquals($expectedHtml, $block->getFormHtml());

@@ -70,6 +70,10 @@ try {
     $log = new Log($logWriter, $errorWriter);
     $serializer = ($opt->getOption('serializer') == 'binary') ? new Serializer\Igbinary() : new Serializer\Standard();
 
+    $validator = new \Magento\Code\Validator();
+    $validator->add(new \Magento\Code\Validator\ConstructorIntegrity());
+    $validator->add(new \Magento\Code\Validator\ContextAggregation());
+
     // 1 Code generation
     // 1.1 Code scan
     $directoryScanner = new Scanner\DirectoryScanner();
@@ -84,12 +88,13 @@ try {
     $entities = $scanner->collectEntities($files);
 
     $interceptorScanner = new Scanner\XmlInterceptorScanner();
-    $entities['di'] = array_merge($entities['di'], $interceptorScanner->collectEntities($files['di']));
+    $entities['interceptors'] = $interceptorScanner->collectEntities($files['di']);
 
     // 1.2 Generation of Factory and Additional Classes
     $generatorIo = new \Magento\Code\Generator\Io(null, null, $generationDir);
     $generator = new \Magento\Code\Generator(null, null, $generatorIo);
     foreach (array('php', 'additional') as $type) {
+        sort($entities[$type]);
         foreach ($entities[$type] as $entityName) {
             switch ($generator->generateClass($entityName)) {
                 case \Magento\Code\Generator::GENERATION_SUCCESS:
@@ -110,30 +115,36 @@ try {
 
     // 2. Compilation
     // 2.1 Code scan
-    $directoryCompiler = new Directory($log);
+    $directoryCompiler = new Directory($log, $validator);
     foreach ($compilationDirs as $path) {
         if (is_readable($path)) {
             $directoryCompiler->compile($path);
         }
     }
 
+    $inheritanceScanner = new Scanner\InheritanceInterceptorScanner();
+    $entities['interceptors'] = $inheritanceScanner->collectEntities(get_declared_classes(), $entities['interceptors']);
+
     // 2.1.1 Generation of Proxy and Interceptor Classes
-    foreach ($entities['di'] as $entityName) {
-        switch ($generator->generateClass($entityName)) {
-            case \Magento\Code\Generator::GENERATION_SUCCESS:
-                $log->add(Log::GENERATION_SUCCESS, $entityName);
-                break;
+    foreach (array('interceptors', 'di') as $type) {
+        foreach ($entities[$type] as $entityName) {
+            switch ($generator->generateClass($entityName)) {
+                case \Magento\Code\Generator::GENERATION_SUCCESS:
+                    $log->add(Log::GENERATION_SUCCESS, $entityName);
+                    break;
 
-            case \Magento\Code\Generator::GENERATION_ERROR:
-                $log->add(Log::GENERATION_ERROR, $entityName);
-                break;
+                case \Magento\Code\Generator::GENERATION_ERROR:
+                    $log->add(Log::GENERATION_ERROR, $entityName);
+                    break;
 
-            case \Magento\Code\Generator::GENERATION_SKIP:
-            default:
-                //no log
-                break;
+                case \Magento\Code\Generator::GENERATION_SKIP:
+                default:
+                    //no log
+                    break;
+            }
         }
     }
+
 
     //2.1.2 Compile definitions for Proxy/Interceptor classes
     $directoryCompiler->compile($generationDir);

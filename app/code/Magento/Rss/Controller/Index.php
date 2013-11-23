@@ -26,7 +26,9 @@
 
 namespace Magento\Rss\Controller;
 
-class Index extends \Magento\Core\Controller\Front\Action
+use Magento\App\Action\NotFoundException;
+
+class Index extends \Magento\App\Action\Action
 {
     /**
      * Current wishlist
@@ -48,11 +50,11 @@ class Index extends \Magento\Core\Controller\Front\Action
     protected $_storeConfig;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Store\Config $storeConfig
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Core\Model\Store\Config $storeConfig
     ) {
         $this->_storeConfig = $storeConfig;
@@ -61,14 +63,16 @@ class Index extends \Magento\Core\Controller\Front\Action
 
     /**
      * Index action
+     *
+     * @throws NotFoundException
      */
     public function indexAction()
     {
         if ($this->_storeConfig->getConfig('rss/config/active')) {
-            $this->loadLayout();
-            $this->renderLayout();
+            $this->_view->loadLayout();
+            $this->_view->renderLayout();
         } else {
-            $this->norouteAction();
+            throw new NotFoundException();
         }
     }
 
@@ -99,8 +103,8 @@ class Index extends \Magento\Core\Controller\Front\Action
                     && $wishlist->getCustomerId() == $this->_getCustomer()->getId())
             ) {
                 $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8');
-                $this->loadLayout(false);
-                $this->renderLayout();
+                $this->_view->loadLayout(false);
+                $this->_view->renderLayout();
                 return;
             }
         }

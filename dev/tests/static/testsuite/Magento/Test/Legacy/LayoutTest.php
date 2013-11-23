@@ -145,8 +145,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                     );
                 }
                 $this->assertSame(array(),
-                    $layoutXml->xpath('/layout//block[@class="Magento\Core\Block\Text\ListText"]'),
-                    'The class \Magento\Core\Block\Text\ListTest is not supposed to be used in layout anymore.'
+                    $layoutXml->xpath('/layout//block[@class="Magento\View\Block\Text\ListText"]'),
+                    'The class \Magento\View\Block\Text\ListTest is not supposed to be used in layout anymore.'
                 );
             },
             \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()

@@ -54,26 +54,26 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_sourceModelPool;
 
     /**
-     * @param \Magento\Core\Model\Option\ArrayPool $sourceModelPool
-     * @param \Magento\Widget\Model\Widget $widget
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Model\Option\ArrayPool $sourceModelPool
+     * @param \Magento\Widget\Model\Widget $widget
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Option\ArrayPool $sourceModelPool,
-        \Magento\Widget\Model\Widget $widget,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Model\Option\ArrayPool $sourceModelPool,
+        \Magento\Widget\Model\Widget $widget,
         array $data = array()
     ) {
         $this->_sourceModelPool = $sourceModelPool;
         $this->_widget = $widget;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     /**

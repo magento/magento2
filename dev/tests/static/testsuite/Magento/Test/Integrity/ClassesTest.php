@@ -57,7 +57,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 \:\:get(?:ResourceModel | BlockSingleton | Model | Singleton)?\(\s*[\'"]([a-z\d\\\\]+)[\'"]\s*[\),]
 
                 # various methods, first argument
-                | \->(?:initReport | addBlock | createBlock | setDataHelperName | _?initLayoutMessages
+                | \->(?:initReport | addBlock | createBlock | setDataHelperName
                     | setAttributeModel | setBackendModel | setFrontendModel | setSourceModel | setModel
                 )\(\s*\'([a-z\d\\\\]+)\'\s*[\),]
 

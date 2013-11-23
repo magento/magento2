@@ -61,35 +61,32 @@ class Payflowadvanced extends \Magento\Paypal\Controller\Express\AbstractExpress
     protected $_checkoutHelper;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\UrlInterface $urlBuilder
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory
      * @param \Magento\Core\Model\Session\Generic $paypalSession
      * @param \Magento\Paypal\Helper\Checkout $checkoutHelper
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @param \Magento\Logger $logger
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\UrlInterface $urlBuilder,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,
         \Magento\Core\Model\Session\Generic $paypalSession,
-        \Magento\Paypal\Helper\Checkout $checkoutHelper
+        \Magento\Paypal\Helper\Checkout $checkoutHelper,
+        \Magento\Logger $logger
     ) {
-        $this->_logger = $context->getLogger();
+        $this->_logger = $logger;
         $this->_checkoutHelper = $checkoutHelper;
         parent::__construct(
             $context,
             $customerSession,
-            $urlBuilder,
             $quoteFactory,
             $checkoutSession,
             $orderFactory,
@@ -103,11 +100,11 @@ class Payflowadvanced extends \Magento\Paypal\Controller\Express\AbstractExpress
      */
     public function cancelPaymentAction()
     {
-        $this->loadLayout(false);
+        $this->_view->loadLayout(false);
         $gotoSection = $this->_cancelPayment();
-        $redirectBlock = $this->getLayout()->getBlock('payflow.advanced.iframe');
+        $redirectBlock = $this->_view->getLayout()->getBlock('payflow.advanced.iframe');
         $redirectBlock->setGotoSection($gotoSection);
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -115,8 +112,8 @@ class Payflowadvanced extends \Magento\Paypal\Controller\Express\AbstractExpress
      */
     public function returnUrlAction()
     {
-        $this->loadLayout(false);
-        $redirectBlock = $this->getLayout()->getBlock('payflow.advanced.iframe');;
+        $this->_view->loadLayout(false);
+        $redirectBlock = $this->_view->getLayout()->getBlock('payflow.advanced.iframe');;
 
         if ($this->_checkoutSession->getLastRealOrderId()) {
             $order = $this->_orderFactory->create()->loadByIncrementId($this->_checkoutSession->getLastRealOrderId());
@@ -137,7 +134,7 @@ class Payflowadvanced extends \Magento\Paypal\Controller\Express\AbstractExpress
             }
         }
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -145,8 +142,8 @@ class Payflowadvanced extends \Magento\Paypal\Controller\Express\AbstractExpress
      */
     public function formAction()
     {
-        $this->loadLayout(false)->renderLayout();
-        $html = $this->getLayout()->getBlock('payflow.advanced.iframe')->toHtml();
+        $this->_view->loadLayout(false)->renderLayout();
+        $html = $this->_view->getLayout()->getBlock('payflow.advanced.iframe')->toHtml();
         $this->getResponse()->setBody($html);
     }
 

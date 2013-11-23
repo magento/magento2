@@ -44,19 +44,19 @@ abstract class AbstractDashboard extends \Magento\Adminhtml\Block\Widget
     protected $_collectionFactory;
 
     /**
-     * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     public function getCollection()

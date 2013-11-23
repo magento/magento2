@@ -56,7 +56,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\App\Resource $coreResource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Validator\UniversalFactory $universalFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -80,7 +80,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\App\Resource $coreResource,
+        \Magento\App\Resource $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Validator\UniversalFactory $universalFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
@@ -99,7 +99,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         $this->_catalogSearchFulltext = $catalogSearchFulltext;
         $this->_catalogSearchData = $catalogSearchData;
         parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $eavConfig,
-            $coreResource, $eavEntityFactory, $universalFactory, $storeManager, $catalogData,
+            $resource, $eavEntityFactory, $universalFactory, $storeManager, $catalogData,
             $catalogProductFlat, $coreStoreConfig, $productOptionFactory, $catalogUrl, $locale,
             $customerSession, $resourceHelper, $dateTime
         );

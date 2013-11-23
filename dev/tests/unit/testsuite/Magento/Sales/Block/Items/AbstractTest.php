@@ -35,7 +35,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     public function testGetItemRenderer()
     {
-        $renderer = $this->getMock('Magento\Core\Block\AbstractBlock', array('setRenderedBlock'), array(), '', false);
+        $renderer = $this->getMock('Magento\View\Block\AbstractBlock', array('setRenderedBlock'), array(), '', false);
         $layout = $this->getMock('Magento\Core\Model\Layout', array(
             'getChildName', 'getBlock'
         ), array(), '', false);

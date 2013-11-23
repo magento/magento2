@@ -25,10 +25,10 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <handle id="test">
-        <block class="Magento\Core\Block\Template" name="block"/>
+        <block class="Magento\View\Block\Template" name="block"/>
         <container name="container" label="Container"/>
         <reference name="block">
-            <block class="Magento\Core\Block\Template" name="another.block"/>
+            <block class="Magento\View\Block\Template" name="another.block"/>
         </reference>
         <reference name="container">
             <container name="another.container" label="Container"/>

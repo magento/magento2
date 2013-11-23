@@ -27,18 +27,18 @@ namespace Magento\GoogleShopping\Block;
 /**
  * Google site verification <meta> tag
  */
-class SiteVerification extends \Magento\Core\Block\AbstractBlock
+class SiteVerification extends \Magento\View\Block\AbstractBlock
 {
     /** @var \Magento\GoogleShopping\Model\Config */
     protected $_config;
 
     /**
-     * @param \Magento\Core\Block\Context $context
+     * @param \Magento\View\Block\Context $context
      * @param \Magento\GoogleShopping\Model\Config $config
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Block\Context $context,
+        \Magento\View\Block\Context $context,
         \Magento\GoogleShopping\Model\Config $config,
         array $data = array()
     ) {

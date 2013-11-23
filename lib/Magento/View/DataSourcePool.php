@@ -26,6 +26,9 @@ namespace Magento\View;
 
 use Magento\View\Element\BlockFactory;
 
+/**
+ * Class DataSourcePool
+ */
 class DataSourcePool
 {
     /**

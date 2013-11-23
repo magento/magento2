@@ -46,53 +46,45 @@ class View extends \Magento\Catalog\Block\Product\View
     protected $_reviewsColFactory;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Tax\Model\Calculation $taxCalculation
-     * @param \Magento\Core\Model\Registry $coreRegistry
-     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Tax\Model\Calculation $taxCalculation
+     * @param \Magento\Stdlib\String $string
      * @param \Magento\Review\Model\Resource\Review\CollectionFactory $collectionFactory
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\View\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Tax\Model\Calculation $taxCalculation,
-        \Magento\Core\Model\Registry $coreRegistry,
-        \Magento\Stdlib\String $string,
+        \Magento\Core\Model\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Math\Random $mathRandom,
+        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Tax\Model\Calculation $taxCalculation,
+        \Magento\Stdlib\String $string,
         \Magento\Review\Model\Resource\Review\CollectionFactory $collectionFactory,
         array $data = array()
     ) {
         $this->_reviewsColFactory = $collectionFactory;
         parent::__construct(
-            $storeManager,
+            $context,
+            $coreData,
             $catalogConfig,
-            $productFactory,
-            $locale,
-            $taxCalculation,
-            $coreRegistry,
-            $string,
+            $registry,
             $taxData,
             $catalogData,
-            $coreData,
-            $context,
             $mathRandom,
+            $productFactory,
+            $taxCalculation,
+            $string,
             $data
         );
     }

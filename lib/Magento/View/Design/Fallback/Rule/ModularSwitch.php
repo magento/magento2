@@ -22,15 +22,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Fallback rule that delegates execution to either modular or non-modular sub-rule depending on input parameters
- */
 namespace Magento\View\Design\Fallback\Rule;
 
 /**
  * Modular Switch
  *
- * @package Magento\View
+ * Fallback rule that delegates execution to either modular or non-modular sub-rule depending on input parameters.
  */
 class ModularSwitch implements RuleInterface
 {
@@ -45,8 +42,6 @@ class ModularSwitch implements RuleInterface
     protected $ruleModular;
 
     /**
-     * Constructor
-     *
      * @param RuleInterface $ruleNonModular
      * @param RuleInterface $ruleModular
      */
@@ -61,7 +56,8 @@ class ModularSwitch implements RuleInterface
     /**
      * Delegate execution to either modular or non-modular sub-rule depending on input parameters
      *
-     * {@inheritdoc}
+     * @param array $params
+     * @return array
      * @throws \InvalidArgumentException
      */
     public function getPatternDirs(array $params)

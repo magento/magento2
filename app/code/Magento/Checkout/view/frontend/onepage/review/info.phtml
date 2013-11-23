@@ -18,41 +18,35 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
+/** @var $this \Magento\Checkout\Block\Onepage\Review\Info */
 ?>
 <?php echo $this->getChildHtml('items_before'); ?>
-<div id="checkout-review-table-wrapper" data-mage-init="{paymentAuthentication:{}}">
-    <table class="data-table" id="checkout-review-table">
-        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): $colspan = $rowspan = 2; else: $colspan = $rowspan = 1; endif; ?>
-        <col />
-        <col width="1" />
-        <col width="1" />
-        <col width="1" />
-        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-        <col width="1" />
-        <col width="1" />
-        <?php endif; ?>
+<div id="checkout-review-table-wrapper" class="review table wrapper">
+    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): $colspan = $rowspan = 2; else: $colspan = $rowspan = 1; endif; ?>
+    <table class="order review items data" id="checkout-review-table">
         <thead>
             <tr>
-                <th rowspan="<?php echo $rowspan ?>"><?php echo __('Product Name') ?></th>
-                <th colspan="<?php echo $colspan ?>" class="a-center"><?php echo __('Price') ?></th>
-                <th rowspan="<?php echo $rowspan ?>" class="a-center"><?php echo __('Qty') ?></th>
-                <th colspan="<?php echo $colspan ?>" class="a-center"><?php echo __('Subtotal') ?></th>
+                <th rowspan="<?php echo $rowspan ?>" class="col item"><?php echo __('Product Name') ?></th>
+                <th colspan="<?php echo $colspan ?>" class="col price"><?php echo __('Price') ?></th>
+                <th rowspan="<?php echo $rowspan ?>" class="col qty"><?php echo __('Qty') ?></th>
+                <th colspan="<?php echo $colspan ?>" class="col subtotal"><?php echo __('Subtotal') ?></th>
             </tr>
             <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
                 <tr>
-                    <th class="a-right"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
-                    <th><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
-                    <th class="a-right"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
-                    <th><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
+                    <th class="col price excl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
+                    <th class="col price incl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
+                    <th class="col subtotal excl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
+                    <th class="col subtotal incl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
                 </tr>
             <?php endif; ?>
         </thead>
-        <?php echo $this->getChildHtml('totals'); ?>
+        <tfoot>
+            <?php echo $this->getChildHtml('totals'); ?>
+        </tfoot>
         <tbody>
         <?php foreach($this->getItems() as $_item): ?>
             <?php echo $this->getItemHtml($_item)?>
@@ -61,14 +55,13 @@
     </table>
 </div>
 <?php echo $this->getChildHtml('items_after'); ?>
-<script type="text/javascript">jQuery('#checkout-review-table').decorate('table')</script>
-<div id="checkout-review-submit" data-mage-init="{paymentAuthentication:{}}">
+<div id="checkout-review-submit" data-mage-init="{paymentAuthentication:{}}" class="checkout submit order">
     <?php echo $this->getChildHtml('agreements') ?>
-    <div class="buttons-set" id="review-buttons-container">
-        <p class="f-left"><?php echo __('Forgot an Item?') ?> <a href="<?php echo $this->getUrl('checkout/cart') ?>"><?php echo __('Edit Your Cart') ?></a></p>
-        <?php echo $this->getChildHtml('button') ?>
-        <span class="please-wait" id="review-please-wait" style="display:none;">
-            <img src="<?php echo $this->getViewFileUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo __('Submitting order information...') ?>" title="<?php echo __('Submitting order information...') ?>" class="v-middle" /> <?php echo __('Submitting order information...') ?>
+    <div class="actions" id="review-buttons-container">
+        <div class="primary"><?php echo $this->getChildHtml('button') ?></div>
+        <div class="secondary"><?php echo __('Forgot an Item?') ?> <a href="<?php echo $this->getUrl('checkout/cart') ?>" class="action edit"><span><?php echo __('Edit Your Cart') ?></span></a></div>
+        <span class="please-wait load indicator" id="review-please-wait" style="display:none;">
+            <span><?php echo __('Submitting order information...') ?></span>
         </span>
     </div>
 </div>

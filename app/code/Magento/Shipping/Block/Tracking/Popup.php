@@ -26,39 +26,29 @@
 
 namespace Magento\Shipping\Block\Tracking;
 
-class Popup extends \Magento\Core\Block\Template
+class Popup extends \Magento\View\Block\Template
 {
     /**
      * Core registry
      *
      * @var \Magento\Core\Model\Registry
      */
-    protected $_coreRegistry;
+    protected $_registry;
 
     /**
-     * Core registry
-     *
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\LocaleInterface $locale
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\LocaleInterface $locale,
         array $data = array()
     ) {
-        $this->_coreRegistry = $registry;
-        $this->_locale = $locale;
-        parent::__construct($coreData, $context, $data);
+        $this->_registry = $registry;
+        parent::__construct($context, $coreData, $data);
     }
 
     /**
@@ -69,7 +59,7 @@ class Popup extends \Magento\Core\Block\Template
     public function getTrackingInfo()
     {
         /* @var $info \Magento\Shipping\Model\Info */
-        $info = $this->_coreRegistry->registry('current_shipping_info');
+        $info = $this->_registry->registry('current_shipping_info');
 
         return $info->getTrackingInfo();
     }

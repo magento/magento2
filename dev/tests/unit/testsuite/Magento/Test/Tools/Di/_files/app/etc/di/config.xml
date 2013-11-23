@@ -27,7 +27,7 @@
     <type name="Magento\App\Cache">
         <param name="storeManager"><instance type="customStoreManagerProxy" /></param>
     </type>
-    <type name="Magento\Core\Controller\Varien\Action\Context">
+    <type name="Magento\App\Action\Context">
         <param name="layoutFactory"><instance type="customLayoutFactory" /></param>
         <plugin name="first" type="Magento\Core\Model\Action\Plugin" />
         <plugin name="second" type="Custom_PageCache_Model_Action_Plugin" />

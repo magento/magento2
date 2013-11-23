@@ -65,13 +65,12 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $_taxCalculation;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Tax\Model\Calculation $taxCalculation
@@ -79,13 +78,12 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\View\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Core\Model\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Math\Random $mathRandom,
         \Magento\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Tax\Model\Calculation $taxCalculation,
@@ -95,16 +93,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $this->_taxCalculation = $taxCalculation;
         $this->_catalogProduct = $catalogProduct;
         parent::__construct(
-            $storeManager,
-            $catalogConfig,
-            $coreRegistry,
-            $taxData,
-            $catalogData,
-            $coreData,
-            $context,
-            $mathRandom,
-            $arrayUtils,
-            $data
+            $context, $coreData, $catalogConfig, $registry, $taxData, $catalogData, $mathRandom, $arrayUtils, $data
         );
     }
 

@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<fieldset class="fieldset items" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display: none">
+<fieldset class="fieldset items <?php echo $this->getMethodCode() ?>" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display: none">
     <div class="field number required">
         <label for="po_number" class="label"><span><?php echo __('Purchase Order Number') ?></span></label>
         <div class="control">

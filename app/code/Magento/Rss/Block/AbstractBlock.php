@@ -26,35 +26,27 @@
 
 namespace Magento\Rss\Block;
 
-class AbstractBlock extends \Magento\Core\Block\Template
+class AbstractBlock extends \Magento\View\Block\Template
 {
-    /**
-     * @var \Magento\Core\Model\StoreManager
-     */
-    protected $_storeManager;
-
     /**
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
 
     /**
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Customer\Model\Session $customerSession,
         array $data = array()
     ) {
-        $this->_storeManager = $storeManager;
         $this->_customerSession = $customerSession;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**
@@ -65,8 +57,8 @@ class AbstractBlock extends \Magento\Core\Block\Template
     protected function _getStoreId()
     {
         $storeId =   (int) $this->getRequest()->getParam('store_id');
-        if($storeId == null) {
-           $storeId = $this->_storeManager->getStore()->getId();
+        if ($storeId == null) {
+            $storeId = $this->_storeManager->getStore()->getId();
         }
         return $storeId;
     }

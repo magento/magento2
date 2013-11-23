@@ -99,7 +99,7 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
     protected $_catalogImage = null;
 
     /**
-     * @var \Magento\Core\Model\Email\TemplateFactory
+     * @var \Magento\Email\Model\TemplateFactory
      */
     protected $_templateFactory;
 
@@ -115,7 +115,7 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
 
     /**
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Email\TemplateFactory $templateFactory
+     * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param \Magento\Core\Model\Translate $translate
      * @param \Magento\Catalog\Helper\Image $catalogImage
      * @param \Magento\Sendfriend\Helper\Data $sendfriendData
@@ -128,7 +128,7 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
      */
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Email\TemplateFactory $templateFactory,
+        \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Core\Model\Translate $translate,
         \Magento\Catalog\Helper\Image $catalogImage,
         \Magento\Sendfriend\Helper\Data $sendfriendData,
@@ -179,7 +179,7 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
         $translate = $this->_translate;
         $translate->setTranslateInline(false);
 
-        /* @var $mailTemplate \Magento\Core\Model\Email\Template */
+        /* @var $mailTemplate \Magento\Email\Model\Template */
         $mailTemplate = $this->_templateFactory->create();
 
         $message = nl2br(htmlspecialchars($this->getSender()->getMessage()));

@@ -38,40 +38,25 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $_salesConfig;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Sales\Model\Config $salesConfig
+     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Sales\Model\Config $salesConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Sales\Model\Config $salesConfig,
+        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Sales\Model\Config $salesConfig,
         array $data = array()
     ) {
         $this->_salesConfig = $salesConfig;
-        $this->_storeManager = $storeManager;
-        parent::__construct(
-            $catalogData,
-            $coreData,
-            $context,
-            $customerSession,
-            $checkoutSession,
-            $data
-        );
+        parent::__construct($context, $coreData, $catalogData, $customerSession, $checkoutSession, $data);
 
     }
 

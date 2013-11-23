@@ -27,7 +27,7 @@
  */
 namespace Magento\Integration\Controller;
 
-class Token extends \Magento\Core\Controller\Front\Action
+class Token extends \Magento\App\Action\Action
 {
     /** @var  \Magento\Oauth\OauthInterface */
     protected $_oauthService;
@@ -35,13 +35,13 @@ class Token extends \Magento\Core\Controller\Front\Action
     /** @var  \Magento\Oauth\Helper\Request */
     protected $_helper;
 
-    /**
+    /***
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Oauth\OauthInterface $oauthService
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
      * @param \Magento\Oauth\Helper\Request $helper
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Oauth\OauthInterface $oauthService,
         \Magento\Oauth\Helper\Request $helper
     ) {

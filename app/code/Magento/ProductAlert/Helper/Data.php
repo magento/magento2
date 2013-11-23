@@ -68,16 +68,16 @@ class Data extends \Magento\Core\Helper\Url
     protected $_session;
 
     /**
-     * @param \Magento\Core\Helper\Context $context
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Customer\Model\Session $session
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\App\Helper\Context $context,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\View\LayoutInterface $layout,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
@@ -129,15 +129,15 @@ class Data extends \Magento\Core\Helper\Url
     {
         return $this->_getUrl('productalert/add/' . $type, array(
             'product_id'    => $this->getProduct()->getId(),
-            \Magento\Core\Controller\Front\Action::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl()
+            \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl()
         ));
     }
 
     /**
      * Create block instance
      *
-     * @param string|\Magento\Core\Block\AbstractBlock $block
-     * @return \Magento\Core\Block\AbstractBlock
+     * @param string|\Magento\View\Block\AbstractBlock $block
+     * @return \Magento\View\Block\AbstractBlock
      * @throws \Magento\Core\Exception
      */
     public function createBlock($block)
@@ -147,7 +147,7 @@ class Data extends \Magento\Core\Helper\Url
                 $block = $this->_layout->createBlock($block);
             }
         }
-        if (!$block instanceof \Magento\Core\Block\AbstractBlock) {
+        if (!$block instanceof \Magento\View\Block\AbstractBlock) {
             throw new \Magento\Core\Exception(__('Invalid block type: %1', $block));
         }
         return $block;

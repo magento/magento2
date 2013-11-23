@@ -50,11 +50,6 @@ class Tax
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * @var \Magento\Directory\Model\Config\Source\Country
      */
     protected $_sourceCountry;
@@ -65,28 +60,25 @@ class Tax
     protected $_directoryHelper;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Directory\Model\Config\Source\Country $sourceCountry
      * @param \Magento\Directory\Helper\Data $directoryHelper
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Directory\Model\Config\Source\Country $sourceCountry,
         \Magento\Directory\Helper\Data $directoryHelper,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
-        $this->_storeManager = $storeManager;
         $this->_sourceCountry = $sourceCountry;
         $this->_directoryHelper = $directoryHelper;
         $this->_coreRegistry = $registry;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     public function getProduct()

@@ -40,13 +40,13 @@ class Time extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Abstract
     protected $_date;
 
     /**
-     * @param \Magento\Core\Model\Date $date
      * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Core\Model\Date $date
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Date $date,
         \Magento\Backend\Block\Context $context,
+        \Magento\Core\Model\Date $date,
         array $data = array()
     ) {
         $this->_date = $date;

@@ -33,7 +33,7 @@
  */
 namespace Magento\GoogleShopping\Helper;
 
-class Product extends \Magento\Core\Helper\AbstractHelper
+class Product extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Product attributes cache

@@ -25,7 +25,7 @@
  */
 namespace Magento\GoogleAdwords\Helper;
 
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**#@+
      * Google AdWords language codes
@@ -87,13 +87,13 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_registry;
 
     /**
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Config $config
      * @param \Magento\Core\Model\Store\ConfigInterface $storeConfig
      * @param \Magento\Core\Model\Registry $registry
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Config $config,
         \Magento\Core\Model\Store\ConfigInterface $storeConfig,
         \Magento\Core\Model\Registry $registry

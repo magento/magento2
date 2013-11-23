@@ -33,7 +33,7 @@
  */
 namespace Magento\Core\Helper\File\Storage;
 
-class Database extends \Magento\Core\Helper\AbstractHelper
+class Database extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Database storage model
@@ -72,7 +72,7 @@ class Database extends \Magento\Core\Helper\AbstractHelper
     protected $_dbStorageFactory;
 
     /**
-     * @var \Magento\Core\Model\File\Storage\File\Proxy
+     * @var \Magento\Core\Model\File\Storage\File
      */
     protected $_fileStorage;
 
@@ -82,24 +82,32 @@ class Database extends \Magento\Core\Helper\AbstractHelper
     protected $_dir;
 
     /**
-     * @param \Magento\Core\Helper\Context $context
+     * @var \Magento\Core\Model\ConfigInterface
+     */
+    protected $config;
+
+    /**
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\File\Storage\DatabaseFactory $dbStorageFactory
      * @param \Magento\Core\Model\File\Storage\File $fileStorage
      * @param \Magento\App\Dir $dir
      * @param \Magento\Filesystem $filesystem
+     * @param \Magento\Core\Model\ConfigInterface $config
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\File\Storage\DatabaseFactory $dbStorageFactory,
         \Magento\Core\Model\File\Storage\File $fileStorage,
         \Magento\App\Dir $dir,
-        \Magento\Filesystem $filesystem
+        \Magento\Filesystem $filesystem,
+        \Magento\Core\Model\ConfigInterface $config
     ) {
-        parent::__construct($context);
         $this->_filesystem = $filesystem;
         $this->_dbStorageFactory = $dbStorageFactory;
         $this->_fileStorage = $fileStorage;
         $this->_dir = $dir;
+        $this->config = $config;
+        parent::__construct($context);
     }
 
     /**
@@ -111,8 +119,9 @@ class Database extends \Magento\Core\Helper\AbstractHelper
     public function checkDbUsage()
     {
         if (null === $this->_useDb) {
-            $currentStorage = (int) $this->_app->getConfig()
-                ->getValue(\Magento\Core\Model\File\Storage::XML_PATH_STORAGE_MEDIA, 'default');
+            $currentStorage = (int) $this->config->getValue(
+                \Magento\Core\Model\File\Storage::XML_PATH_STORAGE_MEDIA, 'default'
+            );
             $this->_useDb = ($currentStorage == \Magento\Core\Model\File\Storage::STORAGE_MEDIA_DATABASE);
         }
 

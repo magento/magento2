@@ -35,7 +35,7 @@
 namespace Magento\Catalog\Block\Widget;
 
 class Link
-    extends \Magento\Core\Block\Html\Link
+    extends \Magento\View\Block\Html\Link
     implements \Magento\Widget\Block\BlockInterface
 {
     /**
@@ -59,13 +59,6 @@ class Link
     protected $_anchorText;
 
     /**
-     * Store manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * Url rewrite
      *
      * @var \Magento\Core\Model\Resource\Url\Rewrite
@@ -73,24 +66,19 @@ class Link
     protected $_urlRewrite;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Core\Model\Resource\Url\Rewrite $urlRewrite
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Core\Model\Resource\Url\Rewrite $urlRewrite
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Url\Rewrite $urlRewrite,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Core\Model\Resource\Url\Rewrite $urlRewrite,
         array $data = array()
     ) {
         $this->_urlRewrite = $urlRewrite;
-        $this->_storeManager = $storeManager;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

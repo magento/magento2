@@ -69,7 +69,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\CatalogSearch\Helper\Data $catalogSearchHelper */
         $catalogSearchHelper = $this->getMock('Magento\CatalogSearch\Helper\Data', array('getQueryText'), array(
-            $objectManager->get('Magento\Core\Helper\Context'),
+            $objectManager->get('Magento\App\Helper\Context'),
             $objectManager->get('Magento\Stdlib\String'),
             $objectManager->get('Magento\Core\Model\Store\ConfigInterface'),
             $objectManager->get('Magento\CatalogSearch\Model\QueryFactory'),

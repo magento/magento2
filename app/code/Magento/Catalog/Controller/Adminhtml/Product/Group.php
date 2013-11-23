@@ -26,7 +26,7 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-class Group extends \Magento\Backend\Controller\Adminhtml\Action
+class Group extends \Magento\Backend\App\Action
 {
     public function saveAction()
     {

@@ -29,7 +29,7 @@
  */
 namespace Magento\Persistent\Controller;
 
-class Index extends \Magento\Core\Controller\Front\Action
+class Index extends \Magento\App\Action\Action
 {
     /**
      * Whether clear checkout session when logout
@@ -69,14 +69,14 @@ class Index extends \Magento\Core\Controller\Front\Action
     /**
      * Construct
      *
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Session $session
      * @param \Magento\Persistent\Model\Observer $persistentObserver
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Core\Model\Session $session,
         \Magento\Persistent\Model\Observer $persistentObserver,
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -156,8 +156,8 @@ class Index extends \Magento\Core\Controller\Front\Action
             $this->_persistentObserver->setQuoteGuest();
         }
 
-        $checkoutUrl = $this->_getRefererUrl();
-        $this->_redirectUrl($checkoutUrl . (strpos($checkoutUrl, '?') ? '&' : '?') . 'register');
+        $checkoutUrl = $this->_redirect->getRefererUrl();
+        $this->getResponse()->setRedirect($checkoutUrl . (strpos($checkoutUrl, '?') ? '&' : '?') . 'register');
     }
 
     /**

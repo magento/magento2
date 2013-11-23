@@ -37,7 +37,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         // \Magento\Core\Model\Template is an abstract class
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Email\Template');
+            ->create('Magento\Email\Model\Template');
         $model->setDesignConfig($config);
     }
 

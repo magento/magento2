@@ -26,7 +26,7 @@
 
 namespace Magento\Backend\Controller\Adminhtml\System;
 
-class Design extends \Magento\Backend\Controller\Adminhtml\Action
+class Design extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -36,11 +36,11 @@ class Design extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -49,16 +49,16 @@ class Design extends \Magento\Backend\Controller\Adminhtml\Action
 
     public function indexAction()
     {
-        $this->_title(__('Store Design'));
-        $this->loadLayout();
+        $this->_title->add(__('Store Design'));
+        $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Adminhtml::system_design_schedule');
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function gridAction()
     {
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     public function newAction()
@@ -68,11 +68,11 @@ class Design extends \Magento\Backend\Controller\Adminhtml\Action
 
     public function editAction()
     {
-        $this->_title(__('Store Design'));
+        $this->_title->add(__('Store Design'));
 
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Adminhtml::system_design_schedule');
-        $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
+        $this->_view->getLayout()->getBlock('head')->setCanLoadExtJs(true);
 
         $id  = (int)$this->getRequest()->getParam('id');
         $design    = $this->_objectManager->create('Magento\Core\Model\Design');
@@ -81,14 +81,14 @@ class Design extends \Magento\Backend\Controller\Adminhtml\Action
             $design->load($id);
         }
 
-        $this->_title($design->getId() ? __('Edit Store Design Change') : __('New Store Design Change'));
+        $this->_title->add($design->getId() ? __('Edit Store Design Change') : __('New Store Design Change'));
 
         $this->_coreRegistry->register('design', $design);
 
-        $this->_addContent($this->getLayout()->createBlock('Magento\Backend\Block\System\Design\Edit'));
-        $this->_addLeft($this->getLayout()->createBlock('Magento\Backend\Block\System\Design\Edit\Tabs', 'design_tabs'));
+        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Backend\Block\System\Design\Edit'));
+        $this->_addLeft($this->_view->getLayout()->createBlock('Magento\Backend\Block\System\Design\Edit\Tabs', 'design_tabs'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function saveAction()

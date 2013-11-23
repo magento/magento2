@@ -34,7 +34,9 @@
 
 namespace Magento\Shipping\Controller;
 
-class Tracking extends \Magento\Core\Controller\Front\Action
+use Magento\App\Action\NotFoundException;
+
+class Tracking extends \Magento\App\Action\Action
 {
     /**
      * Core registry
@@ -54,14 +56,14 @@ class Tracking extends \Magento\Core\Controller\Front\Action
     protected $_orderFactory;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Shipping\Model\InfoFactory $shippingInfoFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Shipping\Model\InfoFactory $shippingInfoFactory,
@@ -85,8 +87,8 @@ class Tracking extends \Magento\Core\Controller\Front\Action
             $response = '';
             $tracks = $order->getTracksCollection();
 
-            $block = $this->_objectManager->create('Magento\Core\Block\Template');
-            $block->setType('Magento\Core\Block\Template')
+            $block = $this->_objectManager->create('Magento\View\Block\Template');
+            $block->setType('Magento\View\Block\Template')
                 ->setTemplate('order/trackinginfo.phtml');
 
             foreach ($tracks as $track) {
@@ -102,17 +104,18 @@ class Tracking extends \Magento\Core\Controller\Front\Action
     /**
      * Popup action
      * Shows tracking info if it's present, otherwise redirects to 404
+     *
+     * @throws NotFoundException
      */
     public function popupAction()
     {
         $shippingInfoModel = $this->_shippingInfoFactory->create()->loadByHash($this->getRequest()->getParam('hash'));
         $this->_coreRegistry->register('current_shipping_info', $shippingInfoModel);
         if (count($shippingInfoModel->getTrackingInfo()) == 0) {
-            $this->norouteAction();
-            return;
+            throw new NotFoundException();
         }
-        $this->loadLayout();
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->renderLayout();
     }
 
 

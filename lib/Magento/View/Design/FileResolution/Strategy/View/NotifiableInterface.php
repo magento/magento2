@@ -18,15 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Interface for a view strategy to be notifiable, that file location has changed
- */
 namespace Magento\View\Design\FileResolution\Strategy\View;
 
 use Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy;
@@ -35,11 +30,13 @@ use Magento\View\Design\ThemeInterface;
 /**
  * Notifiable Interface
  *
- * @package Magento\View
+ * Interface for a view strategy to be notifiable, that file location has changed
  */
 interface NotifiableInterface
 {
     /**
+     * Set view file path to map
+     *
      * Notify the strategy, that file has changed its location, and next time should be resolved to this
      * new location.
      *

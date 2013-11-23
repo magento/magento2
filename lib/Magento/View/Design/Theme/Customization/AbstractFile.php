@@ -18,17 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\View\Design\Theme\Customization;
+
 /**
  * Theme file service abstract class
  */
-namespace Magento\View\Design\Theme\Customization;
-
 abstract class AbstractFile
     implements \Magento\View\Design\Theme\Customization\FileInterface,
                \Magento\View\Design\Theme\Customization\FileAssetInterface
@@ -64,7 +62,9 @@ abstract class AbstractFile
     }
 
     /**
-     * {@inheritdoc}
+     * Create class instance with specified parameters
+     *
+     * @return \Magento\View\Design\Theme\FileInterface
      */
     public function create()
     {
@@ -74,7 +74,10 @@ abstract class AbstractFile
     }
 
     /**
-     * {@inheritdoc}
+     * Returns customization full path
+     *
+     * @param \Magento\View\Design\Theme\FileInterface $file
+     * @return string
      */
     public function getFullPath(\Magento\View\Design\Theme\FileInterface $file)
     {
@@ -83,7 +86,8 @@ abstract class AbstractFile
     }
 
     /**
-     * {@inheritdoc}
+     * @param \Magento\View\Design\Theme\FileInterface $file
+     * @return $this
      */
     public function prepareFile(\Magento\View\Design\Theme\FileInterface $file)
     {
@@ -97,7 +101,10 @@ abstract class AbstractFile
     }
 
     /**
-     * {@inheritdoc}
+     * Creates or updates file of customization in filesystem
+     *
+     * @param \Magento\View\Design\Theme\FileInterface $file
+     * @return $this
      */
     public function save(\Magento\View\Design\Theme\FileInterface $file)
     {
@@ -106,7 +113,10 @@ abstract class AbstractFile
     }
 
     /**
-     * {@inheritdoc}
+     * Deletes file of customization in filesystem
+     *
+     * @param \Magento\View\Design\Theme\FileInterface $file
+     * @return $this
      */
     public function delete(\Magento\View\Design\Theme\FileInterface $file)
     {

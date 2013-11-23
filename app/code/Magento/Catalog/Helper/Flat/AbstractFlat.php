@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Helper\Flat;
 
-abstract class AbstractFlat extends \Magento\Core\Helper\AbstractHelper
+abstract class AbstractFlat extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Catalog Flat index process code
@@ -76,11 +76,11 @@ abstract class AbstractFlat extends \Magento\Core\Helper\AbstractHelper
      * Construct
      *
      * @param \Magento\Index\Model\ProcessFactory $processFactory
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      */
     public function __construct(
         \Magento\Index\Model\ProcessFactory $processFactory,
-        \Magento\Core\Helper\Context $context
+        \Magento\App\Helper\Context $context
     ) {
         $this->_processFactory = $processFactory;
         parent::__construct($context);

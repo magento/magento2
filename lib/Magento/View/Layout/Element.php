@@ -25,7 +25,7 @@
 namespace Magento\View\Layout;
 
 /**
- * @package Magento\View
+ * Class Element
  */
 class Element extends \Magento\Simplexml\Element
 {

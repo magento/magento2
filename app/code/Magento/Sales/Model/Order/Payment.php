@@ -185,13 +185,6 @@ class Payment extends \Magento\Payment\Model\Info
     protected $_transactionAdditionalInfo = array();
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager = null;
-
-    /**
      * @var \Magento\Sales\Model\Service\Order
      */
     protected $_serviceOrderFactory;
@@ -217,7 +210,6 @@ class Payment extends \Magento\Payment\Model\Info
     protected $_storeManager;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
@@ -232,7 +224,6 @@ class Payment extends \Magento\Payment\Model\Info
      * @param array $data
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
@@ -246,7 +237,6 @@ class Payment extends \Magento\Payment\Model\Info
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_eventManager = $eventManager;
         $this->_serviceOrderFactory = $serviceOrderFactory;
         $this->_transactionFactory = $transactionFactory;
         $this->_transactionCollFactory = $transactionCollFactory;

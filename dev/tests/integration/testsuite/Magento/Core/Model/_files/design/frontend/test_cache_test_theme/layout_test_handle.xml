@@ -27,7 +27,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
-    <block class="Magento\Core\Block\Text" name="sample_text_block">
+    <block class="Magento\View\Block\Text" name="sample_text_block">
         <action method="setText">
             <argument name="text" xsi:type="string">Text declared in the frontend/test/cache_test_theme</argument>
         </action>

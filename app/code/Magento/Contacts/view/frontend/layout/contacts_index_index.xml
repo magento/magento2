@@ -38,7 +38,7 @@
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\Core\Block\Template" name="contactForm" template="Magento_Contacts::form.phtml">
+        <block class="Magento\View\Block\Template" name="contactForm" template="Magento_Contacts::form.phtml">
             <container name="form.additional.info" label="Form Additional Info"/>
         </block>
     </referenceContainer>

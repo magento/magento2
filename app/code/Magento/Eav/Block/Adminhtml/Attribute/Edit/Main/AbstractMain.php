@@ -50,11 +50,6 @@ abstract class AbstractMain
      * @var \Magento\Eav\Model\Entity\Attribute\Config
      */
     protected $_attributeConfig;
-    
-    /**
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
 
     /**
      * @var \Magento\Backend\Model\Config\Source\YesnoFactory
@@ -67,35 +62,32 @@ abstract class AbstractMain
     protected $_inputTypeFactory;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Eav\Helper\Data $eavData
-     * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Backend\Model\Config\Source\YesnoFactory $yesnoFactory
      * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\InputtypeFactory $inputTypeFactory
      * @param \Magento\Eav\Model\Entity\Attribute\Config $attributeConfig
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
         \Magento\Eav\Helper\Data $eavData,
-        \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Backend\Model\Config\Source\YesnoFactory $yesnoFactory,
         \Magento\Eav\Model\Adminhtml\System\Config\Source\InputtypeFactory $inputTypeFactory,
         \Magento\Eav\Model\Entity\Attribute\Config $attributeConfig,
         array $data = array()
     ) {
         $this->_eavData = $eavData;
-        $this->_locale = $locale;
         $this->_yesnoFactory = $yesnoFactory;
         $this->_inputTypeFactory = $inputTypeFactory;
         $this->_attributeConfig = $attributeConfig;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     public function setAttributeObject($attribute)

@@ -114,14 +114,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('_canUseCache'))
             ->getMock();
 
-        $contextArgs = array(
-            'getHelper', 'getSession', 'getAuthorization', 'getTranslator', 'getObjectManager', 'getFrontController',
-            'getLayoutFactory', 'getEventManager', 'getRequest', 'getResponse'
-        );
-        $contextMock = $this->getMockBuilder('Magento\Backend\Controller\Context')
-            ->disableOriginalConstructor()
-            ->setMethods($contextArgs)
-            ->getMock();
+        $contextMock = $this->getMock('Magento\Backend\App\Action\Context', array(), array(), '', false);
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->_requestMock));
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->_responseMock));
         $contextMock->expects($this->any())

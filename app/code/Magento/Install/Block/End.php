@@ -56,29 +56,29 @@ class End extends \Magento\Install\Block\AbstractBlock
     protected $_cryptKey;
 
     /**
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Core\Model\Config $coreConfig
-     * @param \Magento\AdminNotification\Model\Survey $survey
-     * @param \Magento\Core\Model\Session\Generic $cryptKey
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Install\Model\Wizard $installWizard
      * @param \Magento\Core\Model\Session\Generic $session
+     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\AdminNotification\Model\Survey $survey
+     * @param $cryptKey
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Core\Model\Config $coreConfig,
-        \Magento\AdminNotification\Model\Survey $survey,
-        $cryptKey,
         \Magento\Install\Model\Installer $installer,
         \Magento\Install\Model\Wizard $installWizard,
         \Magento\Core\Model\Session\Generic $session,
+        \Magento\Core\Model\Config $coreConfig,
+        \Magento\AdminNotification\Model\Survey $survey,
+        $cryptKey,
         array $data = array()
     ) {
         $this->_cryptKey = $cryptKey;
-        parent::__construct($coreData, $context, $installer, $installWizard, $session, $data);
+        parent::__construct($context, $coreData, $installer, $installWizard, $session, $data);
         $this->_coreConfig = $coreConfig;
         $this->_survey = $survey;
     }

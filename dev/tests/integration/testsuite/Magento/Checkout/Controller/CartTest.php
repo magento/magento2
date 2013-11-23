@@ -51,7 +51,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertSessionMessages(
             $this->isEmpty(),
-            \Magento\Core\Model\Message::ERROR,
+            \Magento\Message\Factory::ERROR,
             'Magento\Checkout\Model\Session'
         );
 
@@ -78,7 +78,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertSessionMessages(
             $this->isEmpty(),
-            \Magento\Core\Model\Message::ERROR,
+            \Magento\Message\Factory::ERROR,
             'Magento\Checkout\Model\Session'
         );
 
@@ -108,7 +108,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertSessionMessages(
             $this->isEmpty(),
-            \Magento\Core\Model\Message::ERROR,
+            \Magento\Message\Factory::ERROR,
             'Magento\Checkout\Model\Session'
         );
 
@@ -135,7 +135,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertSessionMessages(
             $this->isEmpty(),
-            \Magento\Core\Model\Message::ERROR,
+            \Magento\Message\Factory::ERROR,
             'Magento\Checkout\Model\Session'
         );
 
@@ -165,7 +165,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertSessionMessages(
             $this->isEmpty(),
-            \Magento\Core\Model\Message::ERROR,
+            \Magento\Message\Factory::ERROR,
             'Magento\Checkout\Model\Session'
         );
 

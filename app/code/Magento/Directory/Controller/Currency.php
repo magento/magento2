@@ -29,7 +29,7 @@
  */
 namespace Magento\Directory\Controller;
 
-class Currency extends \Magento\Core\Controller\Front\Action
+class Currency extends \Magento\App\Action\Action
 {
     public function switchAction()
     {
@@ -39,6 +39,7 @@ class Currency extends \Magento\Core\Controller\Front\Action
         if ($currency) {
             $storeManager->getStore()->setCurrentCurrencyCode($currency);
         }
-        $this->_redirectReferer($storeManager->getStore()->getBaseUrl());
+        $storeUrl = $storeManager->getStore()->getBaseUrl();
+        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($storeUrl));
     }
 }

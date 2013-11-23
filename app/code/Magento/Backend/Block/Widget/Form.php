@@ -48,17 +48,17 @@ class Form extends \Magento\Backend\Block\Widget
     protected $_locale;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         array $data = array()
     ) {
         $this->_locale = $context->getLocale();
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**
@@ -78,7 +78,7 @@ class Form extends \Magento\Backend\Block\Widget
      *
      * You can redefine this method in child classes for changing layout
      *
-     * @return \Magento\Core\Block\AbstractBlock
+     * @return \Magento\View\Block\AbstractBlock
      */
     protected function _prepareLayout()
     {
@@ -154,7 +154,7 @@ class Form extends \Magento\Backend\Block\Widget
     /**
      * This method is called before rendering HTML
      *
-     * @return \Magento\Backend\Block\Widget\Form|\Magento\Core\Block\AbstractBlock
+     * @return \Magento\Backend\Block\Widget\Form|\Magento\View\Block\AbstractBlock
      */
     protected function _beforeToHtml()
     {

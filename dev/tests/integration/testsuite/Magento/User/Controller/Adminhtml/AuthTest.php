@@ -100,7 +100,7 @@ class AuthTest extends \Magento\Backend\Utility\Controller
         $this->getRequest()->setQuery('token', 'dummy')->setQuery('id', 1);
         $this->dispatch('backend/admin/auth/resetpassword');
         $this->assertSessionMessages(
-            $this->equalTo(array('Your password reset link has expired.')), \Magento\Core\Model\Message::ERROR
+            $this->equalTo(array('Your password reset link has expired.')), \Magento\Message\Factory::ERROR
         );
         $this->assertRedirect();
     }
@@ -159,7 +159,7 @@ class AuthTest extends \Magento\Backend\Utility\Controller
         $this->getRequest()->setQuery('token', 'dummy')->setQuery('id', 1);
         $this->dispatch('backend/admin/auth/resetpasswordpost');
         $this->assertSessionMessages(
-            $this->equalTo(array('Your password reset link has expired.')), \Magento\Core\Model\Message::ERROR
+            $this->equalTo(array('Your password reset link has expired.')), \Magento\Message\Factory::ERROR
         );
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -203,7 +203,7 @@ class AuthTest extends \Magento\Backend\Utility\Controller
 
         $this->assertSessionMessages(
             $this->equalTo(array('Your password confirmation must match your password.')),
-            \Magento\Core\Model\Message::ERROR
+            \Magento\Message\Factory::ERROR
         );
         $this->assertRedirect();
     }

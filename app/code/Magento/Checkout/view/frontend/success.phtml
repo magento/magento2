@@ -19,30 +19,24 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="page-title">
-    <h1><?php echo __('We received your order.') ?></h1>
-</div>
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<h2 class="sub-title"><?php echo __('Thank you for your purchase!') ?></h2>
-
+<h2 class="subtitle"><?php echo __('Thank you for your purchase!') ?></h2>
 <?php if ($this->getOrderId()):?>
-<?php if ($this->getCanViewOrder()) :?>
-    <p><?php echo __('Your order # is: %1.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></p>
-<?php  else :?>
-    <p><?php echo __('Your order # is: %1.', $this->escapeHtml($this->getOrderId())) ?></p>
-<?php endif;?>
-    <p><?php echo __('We\'ll send you a confirmation email with order details and tracking information.') ?></p>
-<?php if ($this->getCanViewOrder() && $this->getCanPrintOrder()) :?>
-    <p>
-        <?php echo __('Click <a href="%1" onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.', $this->getPrintUrl()) ?>
-        <?php echo $this->getChildHtml() ?>
-    </p>
-<?php endif;?>
+    <?php if ($this->getCanViewOrder()) :?>
+        <p><?php echo __('Your order # is: %1.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></p>
+    <?php  else :?>
+        <p><?php echo __('Your order # is: %1.', $this->escapeHtml($this->getOrderId())) ?></p>
+    <?php endif;?>
+        <p><?php echo __('You will receive an order confirmation email with details of your order and a link to track its progress.') ?></p>
+    <?php if ($this->getCanViewOrder() && $this->getCanPrintOrder()) :?>
+        <p>
+            <?php echo __('Click <a href="%1" onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.', $this->getPrintUrl()) ?>
+            <?php echo $this->getChildHtml() ?>
+        </p>
+    <?php endif;?>
 <?php endif;?>
 
 <?php if ($this->getAgreementRefId()): ?>
@@ -51,14 +45,14 @@
 
 <?php if ($profiles = $this->getRecurringProfiles()):?>
 <p><?php echo __('Your recurring payment profiles:'); ?></p>
-<ul class="disc">
+<ul>
 <?php foreach($profiles as $profile):?>
 <?php $profileIdHtml = ($this->getCanViewProfiles() ? sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getProfileUrl($profile)), $this->escapeHtml($this->getObjectData($profile, 'reference_id'))) : $this->escapeHtml($this->getObjectData($profile, 'reference_id')));?>
-    <li><?php echo __('Payment profile # %1: "%2"', $profileIdHtml, $this->escapeHtml($this->getObjectData($profile, 'schedule_description')))?></li>
+    <li><?php echo __('Payment profile # %1: "%2".', $profileIdHtml, $this->escapeHtml($this->getObjectData($profile, 'schedule_description')))?></li>
 <?php endforeach;?>
 </ul>
 <?php endif;?>
 
-<div class="buttons-set">
-    <button type="button" class="button" title="<?php echo __('Continue Shopping') ?>" onclick="window.location='<?php echo $this->getUrl() ?>'"><span><span><?php echo __('Continue Shopping') ?></span></span></button>
+<div class="actions">
+    <a class="action continue" title="<?php echo __('Continue Shopping') ?>" href="<?php echo $this->getUrl() ?>"><span><?php echo __('Continue Shopping') ?></span></a>
 </div>

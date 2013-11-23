@@ -77,13 +77,6 @@ class Config implements \Magento\Interception\Config
     protected $_reader;
 
     /**
-     * Configuration scope resolver
-     *
-     * @var \Magento\Config\ScopeInterface
-     */
-    protected $_configScope;
-
-    /**
      * Inherited list of intercepted types
      *
      * @var array
@@ -92,7 +85,7 @@ class Config implements \Magento\Interception\Config
 
     /**
      * @param \Magento\Config\ReaderInterface $reader
-     * @param \Magento\Config\ScopeInterface $configScope
+     * @param \Magento\Config\ScopeListInterface $scopeList
      * @param \Magento\Cache\FrontendInterface $cache
      * @param \Magento\ObjectManager\Relations $relations
      * @param \Magento\ObjectManager\Config $omConfig
@@ -102,7 +95,7 @@ class Config implements \Magento\Interception\Config
      */
     public function __construct(
         \Magento\Config\ReaderInterface $reader,
-        \Magento\Config\ScopeInterface $configScope,
+        \Magento\Config\ScopeListInterface $scopeList,
         \Magento\Cache\FrontendInterface $cache,
         \Magento\ObjectManager\Relations $relations,
         \Magento\ObjectManager\Config $omConfig,
@@ -117,14 +110,13 @@ class Config implements \Magento\Interception\Config
         $this->_cache = $cache;
         $this->_cacheId = $cacheId;
         $this->_reader = $reader;
-        $this->_configScope = $configScope;
 
         $intercepted = $this->_cache->load($this->_cacheId);
         if ($intercepted !== false) {
             $this->_intercepted = unserialize($intercepted);
         } else {
             $config = array();
-            foreach ($this->_configScope->getAllScopes() as $scope) {
+            foreach ($scopeList->getAllScopes() as $scope) {
                 $config = array_replace_recursive($config, $this->_reader->read($scope));
             }
             foreach ($config as $typeName => $typeConfig) {

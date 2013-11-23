@@ -30,7 +30,7 @@
  */
 namespace Magento\Checkout\Controller;
 
-abstract class Action extends \Magento\Core\Controller\Front\Action
+abstract class Action extends \Magento\App\Action\Action
 {
     /**
      * @var \Magento\Customer\Model\Session
@@ -38,11 +38,11 @@ abstract class Action extends \Magento\Core\Controller\Front\Action
     protected $_customerSession;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
+        \Magento\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession
     ) {
         $this->_customerSession = $customerSession;
@@ -70,7 +70,7 @@ abstract class Action extends \Magento\Core\Controller\Front\Action
                 }
                 if ($redirect) {
                     $this->_redirect('customer/account/edit');
-                    $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+                    $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
                 }
                 return false;
             }

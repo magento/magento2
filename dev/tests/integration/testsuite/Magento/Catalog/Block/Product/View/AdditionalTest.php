@@ -36,13 +36,13 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
         /** @var $block \Magento\Catalog\Block\Product\View\Additional */
         $block = $layout->createBlock('Magento\Catalog\Block\Product\View\Additional', 'block');
 
-        /** @var $childFirst \Magento\Core\Block\Text */
-        $childFirst = $layout->addBlock('Magento\Core\Block\Text', 'child1', 'block');
+        /** @var $childFirst \Magento\View\Block\Text */
+        $childFirst = $layout->addBlock('Magento\View\Block\Text', 'child1', 'block');
         $htmlFirst = '<b>Any html of child1</b>';
         $childFirst->setText($htmlFirst);
 
-        /** @var $childSecond \Magento\Core\Block\Text */
-        $childSecond = $layout->addBlock('Magento\Core\Block\Text', 'child2', 'block');
+        /** @var $childSecond \Magento\View\Block\Text */
+        $childSecond = $layout->addBlock('Magento\View\Block\Text', 'child2', 'block');
         $htmlSecond = '<b>Any html of child2</b>';
         $childSecond->setText($htmlSecond);
 

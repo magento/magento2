@@ -38,7 +38,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     protected $_loggerMock;
 
     /**
-     * @var \Magento\Core\Helper\Context
+     * @var \Magento\App\Helper\Context
      */
     protected $_storageHelperMock;
 

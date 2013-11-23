@@ -44,6 +44,7 @@ class Console implements WriterInterface
      */
     public function write(array $data)
     {
+        $errorsCount = 0;
         foreach ($data as $type => $classes) {
             if (!count($classes)) {
                 continue;
@@ -55,10 +56,17 @@ class Console implements WriterInterface
                     foreach ($messages as $message) {
                         if ($message) {
                             echo "\t\t - " . $message . "\n";
+                            if ($type != Log::GENERATION_SUCCESS) {
+                                $errorsCount++;
+                            }
                         }
                     }
                 }
             }
+        }
+
+        if ($errorsCount) {
+            echo 'Total Errors Count: ' . $errorsCount . "\n";
         }
     }
 }

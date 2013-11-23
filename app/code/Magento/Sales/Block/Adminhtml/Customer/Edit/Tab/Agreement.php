@@ -50,38 +50,27 @@ class Agreement
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Core\Model\Registry $coreRegistry
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Sales\Model\Resource\Billing\Agreement\CollectionFactory $agreementFactory
      * @param \Magento\Sales\Model\Billing\Agreement $agreementModel
+     * @param \Magento\Core\Model\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Registry $coreRegistry,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Payment\Helper\Data $paymentData,
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Payment\Helper\Data $paymentData,
         \Magento\Sales\Model\Resource\Billing\Agreement\CollectionFactory $agreementFactory,
         \Magento\Sales\Model\Billing\Agreement $agreementModel,
+        \Magento\Core\Model\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct(
-            $coreData,
-            $paymentData,
-            $context,
-            $storeManager,
-            $urlModel,
-            $agreementFactory,
-            $agreementModel,
-            $data
-        );
+        parent::__construct($context, $coreData, $urlModel, $paymentData, $agreementFactory, $agreementModel, $data);
     }
 
     /**

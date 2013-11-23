@@ -24,6 +24,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Core\Model;
 
 /**
  * Core session model
@@ -34,8 +35,6 @@
  * @method \Magento\Core\Model\Session setCookieShouldBeReceived(bool $flag)
  * @method \Magento\Core\Model\Session unsCookieShouldBeReceived()
  */
-namespace Magento\Core\Model;
-
 class Session extends \Magento\Core\Model\Session\AbstractSession
 {
     /**

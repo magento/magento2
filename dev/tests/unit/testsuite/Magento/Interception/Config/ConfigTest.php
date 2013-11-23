@@ -67,7 +67,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             new \Magento\ObjectManager\Config\SchemaLocator(),
             $validationStateMock
         );
-        $this->_configScopeMock = $this->getMock('Magento\Config\ScopeInterface');
+        $this->_configScopeMock = $this->getMock('Magento\Config\ScopeListInterface');
         $this->_configScopeMock->expects($this->any())
             ->method('getAllScopes')
             ->will($this->returnValue(array('global', 'backend', 'frontend')));

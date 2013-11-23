@@ -24,7 +24,7 @@
  */
 -->
 <layout>
-    <block class="Magento\Core\Block\Text" name="some_text_block">
+    <block class="Magento\View\Block\Text" name="some_text_block">
         <action method="setText">
             <text>Some Default Text</text>
         </action>

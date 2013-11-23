@@ -29,17 +29,12 @@
  */
 namespace Magento\Directory\Block;
 
-class Data extends \Magento\Core\Block\Template
+class Data extends \Magento\View\Block\Template
 {
     /**
      * @var \Magento\App\Cache\Type\Config
      */
     protected $_configCacheType;
-
-    /**
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
 
     /**
      * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
@@ -52,26 +47,23 @@ class Data extends \Magento\Core\Block\Template
     protected $_countryCollFactory;
 
     /**
-     * @param \Magento\App\Cache\Type\Config $configCacheType
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\App\Cache\Type\Config $configCacheType,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory,
         \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory,
         array $data = array()
     ) {
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
         $this->_configCacheType = $configCacheType;
-        $this->_storeManager = $storeManager;
         $this->_regionCollFactory = $regionCollFactory;
         $this->_countryCollFactory = $countryCollFactory;
     }
@@ -119,7 +111,7 @@ class Data extends \Magento\Core\Block\Template
             $options = $this->getCountryCollection()->toOptionArray();
             $this->_configCacheType->save(serialize($options), $cacheKey);
         }
-        $html = $this->getLayout()->createBlock('Magento\Core\Block\Html\Select')
+        $html = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
             ->setName($name)
             ->setId($id)
             ->setTitle(__($title))
@@ -162,7 +154,7 @@ class Data extends \Magento\Core\Block\Template
             $options = $this->getRegionCollection()->toOptionArray();
             $this->_configCacheType->save(serialize($options), $cacheKey);
         }
-        $html = $this->getLayout()->createBlock('Magento\Core\Block\Html\Select')
+        $html = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
             ->setName('region')
             ->setTitle(__('State/Province'))
             ->setId('state')

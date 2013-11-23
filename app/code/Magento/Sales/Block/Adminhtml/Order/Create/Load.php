@@ -34,7 +34,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
-class Load extends \Magento\Core\Block\Template
+class Load extends \Magento\View\Block\Template
 {
     /**
      * Adminhtml js
@@ -44,19 +44,19 @@ class Load extends \Magento\Core\Block\Template
     protected $_adminhtmlJs = null;
 
     /**
-     * @param \Magento\Adminhtml\Helper\Js $adminhtmlJs
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Adminhtml\Helper\Js $adminhtmlJs
      * @param array $data
      */
     public function __construct(
-        \Magento\Adminhtml\Helper\Js $adminhtmlJs,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Adminhtml\Helper\Js $adminhtmlJs,
         array $data = array()
     ) {
         $this->_adminhtmlJs = $adminhtmlJs;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     protected function _toHtml()

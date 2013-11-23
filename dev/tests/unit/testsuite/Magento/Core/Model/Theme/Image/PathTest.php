@@ -89,7 +89,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Core\Model\Theme\Image\PathMagento\Core\Model\Theme\Image\Path::getPreviewImageDefaultUrl
+     * @covers Magento\Core\Model\Theme\Image\Path::getPreviewImageDefaultUrl
      */
     public function testDefaultPreviewImageUrlGetter()
     {

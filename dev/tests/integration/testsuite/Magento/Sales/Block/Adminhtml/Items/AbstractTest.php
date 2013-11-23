@@ -44,8 +44,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($block->getItemExtraInfoHtml($item));
 
         $expectedHtml ='<html><body>some data</body></html>';
-        /** @var $childBlock \Magento\Core\Block\Text */
-        $childBlock = $layout->addBlock('Magento\Core\Block\Text', 'other_block', 'block', 'order_item_extra_info');
+        /** @var $childBlock \Magento\View\Block\Text */
+        $childBlock = $layout->addBlock('Magento\View\Block\Text', 'other_block', 'block', 'order_item_extra_info');
         $childBlock->setText($expectedHtml);
 
         $this->assertEquals($expectedHtml, $block->getItemExtraInfoHtml($item));

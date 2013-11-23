@@ -33,7 +33,7 @@
  */
 namespace Magento\Payment\Block\Info;
 
-abstract class AbstractContainer extends \Magento\Core\Block\Template
+abstract class AbstractContainer extends \Magento\View\Block\Template
 {
     /**
      * Payment data
@@ -43,19 +43,19 @@ abstract class AbstractContainer extends \Magento\Core\Block\Template
     protected $_paymentData = null;
 
     /**
-     * @param \Magento\Payment\Helper\Data $paymentData
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Payment\Helper\Data $paymentData
      * @param array $data
      */
     public function __construct(
-        \Magento\Payment\Helper\Data $paymentData,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Payment\Helper\Data $paymentData,
         array $data = array()
     ) {
         $this->_paymentData = $paymentData;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

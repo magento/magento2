@@ -40,9 +40,12 @@ lib/Magento/Filter/Object/Grid.php
 lib/Magento/Filter/Object.php
 
 lib/Magento/View/Context.php
-lib/Magento/View/Service.php
-lib/Magento/View/Config.php
-lib/Magento/View/Layout/File/Source/Decorator/ModuleOutput.php
+lib/Magento/View/Block/Html/Calendar.php
+lib/Magento/View/Block/Messages.php
+lib/Magento/View/Block/AbstractBlock.php
+lib/Magento/View/Block/Template.php
+lib/Magento/View/Block/Context.php
+lib/Magento/View/Block/Template/Context.php
 
 lib/Magento/App/Module/ResourceResolver.php
 lib/Magento/Event/Invoker/InvokerDefault.php
@@ -50,3 +53,7 @@ lib/Magento/Phrase/Renderer/Translate.php
 lib/Magento/Backup/Snapshot.php
 lib/Magento/Outbound/Authentication/Hmac.php
 lib/Magento/Oauth/Exception.php
+
+lib/Magento/App/Helper/AbstractHelper.php
+lib/Magento/App/Helper/Context.php
+

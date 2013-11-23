@@ -35,5 +35,5 @@
             <block class="Magento\Tax\Block\Sales\Order\Tax" name="tax" template="order/tax.phtml"/>
         </block>
     </block>
-    <container name="additional.product.info" label="Additional Product Info"/>
+    <block class="Magento\View\Block\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
 </layout>

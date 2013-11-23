@@ -35,6 +35,6 @@
             <argument name="template" xsi:type="string">Magento_Persistent::checkout/onepage/billing.phtml</argument>
         </action>
         <block class="Magento\Persistent\Block\Form\Remember" name="checkout.onepage.billing.persistent.remember.me" as="persistent.remember.me" template="remember_me.phtml"/>
-        <block class="Magento\Core\Block\Template" name="checkout.onepage.billing.persistent.remember.me.tooltip" as="persistent.remember.me.tooltip" template="Magento_Persistent::remember_me_tooltip.phtml"/>
+        <block class="Magento\View\Block\Template" name="checkout.onepage.billing.persistent.remember.me.tooltip" as="persistent.remember.me.tooltip" template="Magento_Persistent::remember_me_tooltip.phtml"/>
     </referenceBlock>
 </layout>

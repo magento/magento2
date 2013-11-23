@@ -24,11 +24,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="root">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">popup.phtml</argument>
-        </action>
-    </referenceBlock>
+    <update handle="page_empty" />
     <referenceContainer name="content">
         <block class="Magento\Shipping\Block\Tracking\Popup" name="shipping.tracking.popup" template="tracking/popup.phtml"/>
     </referenceContainer>

@@ -46,11 +46,11 @@ class Coupons
 
     /**
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Block\Context $context
+     * @param \Magento\View\Block\Context $context
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Block\Context $context,
+        \Magento\View\Block\Context $context,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {

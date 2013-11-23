@@ -29,7 +29,7 @@
  */
 namespace Magento\Checkout\Block\Multishipping;
 
-class Link extends \Magento\Core\Block\Template
+class Link extends \Magento\View\Block\Template
 {
     /**
      * Checkout data
@@ -44,22 +44,22 @@ class Link extends \Magento\Core\Block\Template
     protected $_checkoutSession;
 
     /**
-     * @param \Magento\Checkout\Helper\Data $checkoutData
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Checkout\Helper\Data $checkoutData
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
      */
     public function __construct(
-        \Magento\Checkout\Helper\Data $checkoutData,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Checkout\Helper\Data $checkoutData,
         \Magento\Checkout\Model\Session $checkoutSession,
         array $data = array()
     ) {
         $this->_checkoutData = $checkoutData;
         $this->_checkoutSession = $checkoutSession;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

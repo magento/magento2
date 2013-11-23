@@ -32,22 +32,12 @@ namespace Magento\Rss\Controller\Adminhtml;
 class Order extends \Magento\Rss\Controller\Adminhtml\Authenticate
 {
     /**
-     * Return required ACL resource for current action
-     *
-     * @return string
-     */
-    protected function _getActionAclResource()
-    {
-        return 'Magento_Sales::sales_order';
-    }
-
-    /**
      * New orders action
      */
     public function newAction()
     {
         $this->getResponse()->setHeader('Content-type', 'text/xml; charset=UTF-8');
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 }

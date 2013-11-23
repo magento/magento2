@@ -25,26 +25,25 @@
  */
 namespace Magento\Customer\Controller\Adminhtml;
 
-class Online extends \Magento\Backend\Controller\Adminhtml\Action
+class Online extends \Magento\Backend\App\Action
 {
-
     public function indexAction()
     {
-        $this->_title(__('Customers Now Online'));
+        $this->_title->add(__('Customers Now Online'));
 
-        if($this->getRequest()->getParam('ajax')) {
+        if ($this->getRequest()->getParam('ajax')) {
             $this->_forward('grid');
             return;
         }
 
-        $this->loadLayout();
+        $this->_view->loadLayout();
 
         $this->_setActiveMenu('Magento_Customer::customer_online');
 
         $this->_addBreadcrumb(__('Customers'), __('Customers'));
         $this->_addBreadcrumb(__('Online Customers'), __('Online Customers'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     protected function _isAllowed()

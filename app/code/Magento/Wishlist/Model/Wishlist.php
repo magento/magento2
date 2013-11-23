@@ -82,13 +82,6 @@ class Wishlist extends \Magento\Core\Model\AbstractModel
     protected $_catalogProduct;
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager;
-
-    /**
      * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -124,7 +117,6 @@ class Wishlist extends \Magento\Core\Model\AbstractModel
     protected $dateTime;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Wishlist\Helper\Data $wishlistData
      * @param \Magento\Core\Model\Context $context
@@ -141,7 +133,6 @@ class Wishlist extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Wishlist\Helper\Data $wishlistData,
         \Magento\Core\Model\Context $context,
@@ -157,7 +148,6 @@ class Wishlist extends \Magento\Core\Model\AbstractModel
         \Magento\Stdlib\DateTime $dateTime,
         array $data = array()
     ) {
-        $this->_eventManager = $eventManager;
         $this->_catalogProduct = $catalogProduct;
         $this->_wishlistData = $wishlistData;
         $this->_storeManager = $storeManager;

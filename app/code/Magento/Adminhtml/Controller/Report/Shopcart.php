@@ -33,26 +33,46 @@
  */
 namespace Magento\Adminhtml\Controller\Report;
 
-class Shopcart extends \Magento\Backend\Controller\Adminhtml\Action
+class Shopcart extends \Magento\Backend\App\Action
 {
+    /**
+     * @var \Magento\App\Response\Http\FileFactory
+     */
+    protected $_fileFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\App\Response\Http\FileFactory $fileFactory
+    ) {
+        $this->_fileFactory = $fileFactory;
+        parent::__construct($context);
+    }
+
     public function _initAction()
     {
-        $act = $this->getRequest()->getActionName();
-        $this->loadLayout()
-            ->_addBreadcrumb(__('Reports'), __('Reports'))
-            ->_addBreadcrumb(__('Shopping Cart'), __('Shopping Cart'));
+        $this->_view->loadLayout();
+        $this->_addBreadcrumb(__('Reports'), __('Reports'));
+        $this->_addBreadcrumb(__('Shopping Cart'), __('Shopping Cart'));
         return $this;
     }
 
     public function customerAction()
     {
-        $this->_title(__('Customer Shopping Carts'));
+        $this->_title->add(__('Customer Shopping Carts'));
 
         $this->_initAction()
             ->_setActiveMenu('Magento_Reports::report_shopcart_customer')
             ->_addBreadcrumb(__('Customers Report'), __('Customers Report'))
-            ->_addContent($this->getLayout()->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Customer'))
-            ->renderLayout();
+            ->_addContent(
+                $this->_view
+                    ->getLayout()
+                    ->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Customer')
+            );
+        $this->_view->renderLayout();
     }
 
     /**
@@ -61,10 +81,10 @@ class Shopcart extends \Magento\Backend\Controller\Adminhtml\Action
     public function exportCustomerCsvAction()
     {
         $fileName   = 'shopcart_customer.csv';
-        $content    = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Customer\Grid')
+        $content    = $this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Customer\Grid')
             ->getCsvFile();
 
-        $this->_prepareDownloadResponse($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content);
     }
 
     /**
@@ -73,21 +93,23 @@ class Shopcart extends \Magento\Backend\Controller\Adminhtml\Action
     public function exportCustomerExcelAction()
     {
         $fileName   = 'shopcart_customer.xml';
-        $content    = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Customer\Grid')
+        $content    = $this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Customer\Grid')
             ->getExcelFile($fileName);
 
-        $this->_prepareDownloadResponse($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content);
     }
 
     public function productAction()
     {
-        $this->_title(__('Products in Carts'));
+        $this->_title->add(__('Products in Carts'));
 
         $this->_initAction()
             ->_setActiveMenu('Magento_Reports::report_shopcart_product')
             ->_addBreadcrumb(__('Products Report'), __('Products Report'))
-            ->_addContent($this->getLayout()->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Product'))
-            ->renderLayout();
+            ->_addContent(
+                $this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Product')
+            );
+        $this->_view->renderLayout();
     }
 
     /**
@@ -96,10 +118,10 @@ class Shopcart extends \Magento\Backend\Controller\Adminhtml\Action
     public function exportProductCsvAction()
     {
         $fileName   = 'shopcart_product.csv';
-        $content    = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Product\Grid')
+        $content    = $this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Product\Grid')
             ->getCsvFile();
 
-        $this->_prepareDownloadResponse($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content);
     }
 
     /**
@@ -108,21 +130,23 @@ class Shopcart extends \Magento\Backend\Controller\Adminhtml\Action
     public function exportProductExcelAction()
     {
         $fileName   = 'shopcart_product.xml';
-        $content    = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Product\Grid')
+        $content    = $this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Product\Grid')
             ->getExcelFile($fileName);
 
-        $this->_prepareDownloadResponse($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content);
     }
 
     public function abandonedAction()
     {
-        $this->_title(__('Abandoned Carts'));
+        $this->_title->add(__('Abandoned Carts'));
 
         $this->_initAction()
             ->_setActiveMenu('Magento_Reports::report_shopcart_abandoned')
             ->_addBreadcrumb(__('Abandoned Carts'), __('Abandoned Carts'))
-            ->_addContent($this->getLayout()->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Abandoned'))
-            ->renderLayout();
+            ->_addContent(
+                $this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Abandoned')
+            );
+        $this->_view->renderLayout();
     }
 
     /**
@@ -131,10 +155,10 @@ class Shopcart extends \Magento\Backend\Controller\Adminhtml\Action
     public function exportAbandonedCsvAction()
     {
         $fileName   = 'shopcart_abandoned.csv';
-        $content    = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Abandoned\Grid')
+        $content    = $this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Abandoned\Grid')
             ->getCsvFile();
 
-        $this->_prepareDownloadResponse($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content);
     }
 
     /**
@@ -143,10 +167,10 @@ class Shopcart extends \Magento\Backend\Controller\Adminhtml\Action
     public function exportAbandonedExcelAction()
     {
         $fileName   = 'shopcart_abandoned.xml';
-        $content    = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Abandoned\Grid')
+        $content    = $this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Report\Shopcart\Abandoned\Grid')
             ->getExcelFile($fileName);
 
-        $this->_prepareDownloadResponse($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content);
     }
 
     protected function _isAllowed()

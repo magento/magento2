@@ -27,7 +27,7 @@
  */
 namespace Magento\User\Controller\Adminhtml;
 
-class Auth extends \Magento\Backend\Controller\AbstractAction
+class Auth extends \Magento\Backend\App\AbstractAction
 {
     /**
      * User model factory
@@ -39,11 +39,11 @@ class Auth extends \Magento\Backend\Controller\AbstractAction
     /**
      * Construct
      *
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\User\Model\UserFactory $userFactory
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\User\Model\UserFactory $userFactory
     ) {
         parent::__construct($context);
@@ -94,8 +94,8 @@ class Auth extends \Magento\Backend\Controller\AbstractAction
         } elseif (!empty($params)) {
             $this->_getSession()->addError(__('The email address is empty.'));
         }
-        $this->loadLayout();
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -110,15 +110,15 @@ class Auth extends \Magento\Backend\Controller\AbstractAction
         try {
             $this->_validateResetPasswordLinkToken($userId, $passwordResetToken);
 
-            $this->loadLayout();
+            $this->_view->loadLayout();
 
-            $content = $this->getLayout()->getBlock('content');
+            $content = $this->_view->getLayout()->getBlock('content');
             if ($content) {
                 $content->setData('user_id', $userId)
                     ->setData('reset_password_link_token', $passwordResetToken);
             }
 
-            $this->renderLayout();
+            $this->_view->renderLayout();
         } catch (\Exception $exception) {
             $this->_getSession()->addError(
                 __('Your password reset link has expired.')

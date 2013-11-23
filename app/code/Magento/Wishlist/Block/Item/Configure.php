@@ -34,7 +34,7 @@
  */
 namespace Magento\Wishlist\Block\Item;
 
-class Configure extends \Magento\Core\Block\Template
+class Configure extends \Magento\View\Block\Template
 {
     /**
      * Wishlist data
@@ -51,22 +51,22 @@ class Configure extends \Magento\Core\Block\Template
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Wishlist\Helper\Data $wishlistData
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Wishlist\Helper\Data $wishlistData
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Wishlist\Helper\Data $wishlistData,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Wishlist\Helper\Data $wishlistData,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
         $this->_wishlistData = $wishlistData;
         $this->_coreRegistry = $registry;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

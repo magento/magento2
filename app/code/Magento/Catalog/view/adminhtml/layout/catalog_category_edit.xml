@@ -64,6 +64,6 @@
         <block class="Magento\Catalog\Block\Adminhtml\Category\Edit" name="category.edit" template="catalog/category/edit.phtml"/>
     </referenceContainer>
     <referenceContainer name="js">
-        <block class="Magento\Core\Block\Template" template="Magento_Catalog::catalog/wysiwyg/js.phtml" name="catalog.wysiwyg.js"/>
+        <block class="Magento\View\Block\Template" template="Magento_Catalog::catalog/wysiwyg/js.phtml" name="catalog.wysiwyg.js"/>
     </referenceContainer>
 </layout>

@@ -89,7 +89,7 @@ class Locale implements \Magento\Core\Model\LocaleInterface
     protected $_appState;
 
     /**
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -128,7 +128,7 @@ class Locale implements \Magento\Core\Model\LocaleInterface
      * @param \Magento\Core\Helper\Translate $translate
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\App\State $appState
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Locale\Config $config
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Stdlib\DateTime $dateTime
@@ -140,7 +140,7 @@ class Locale implements \Magento\Core\Model\LocaleInterface
         \Magento\Core\Helper\Translate $translate,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\App\State $appState,
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Locale\Config $config,
         \Magento\Core\Model\App $app,
         \Magento\Stdlib\DateTime $dateTime,

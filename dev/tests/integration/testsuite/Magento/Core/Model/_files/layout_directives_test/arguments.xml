@@ -24,7 +24,7 @@
  */
 -->
 <layout>
-    <block class="Magento\Core\Block\Text" name="block_with_args">
+    <block class="Magento\View\Block\Text" name="block_with_args">
         <arguments>
             <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="one" xsi:type="string">1</argument>
             <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="two" xsi:type="string">2</argument>

@@ -57,11 +57,10 @@ class Category extends \Magento\Rss\Block\Catalog\AbstractCatalog
     protected $_collectionFactory;
 
     /**
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Catalog\Model\Layer $catalogLayer
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
      * @param \Magento\Rss\Model\RssFactory $rssFactory
@@ -70,11 +69,10 @@ class Category extends \Magento\Rss\Block\Catalog\AbstractCatalog
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Customer\Model\Session $customerSession,
+        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Catalog\Model\Layer $catalogLayer,
         \Magento\Catalog\Model\Product\Visibility $visibility,
         \Magento\Rss\Model\RssFactory $rssFactory,
@@ -87,7 +85,7 @@ class Category extends \Magento\Rss\Block\Catalog\AbstractCatalog
         $this->_rssFactory = $rssFactory;
         $this->_categoryFactory = $categoryFactory;
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($catalogData, $coreData, $context, $storeManager, $customerSession, $data);
+        parent::__construct($context, $coreData, $customerSession, $catalogData, $data);
     }
 
     protected function _construct()

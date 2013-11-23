@@ -56,33 +56,30 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     protected $_eavConfig;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Customer\Model\GroupFactory $groupFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Eav\Model\AttributeDataFactory $attrDataFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Customer\Model\GroupFactory $groupFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Eav\Model\AttributeDataFactory $attrDataFactory,
         array $data = array()
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_groupFactory = $groupFactory;
         $this->_eavConfig = $eavConfig;
-        $this->_storeManager = $storeManager;
         $this->_attrDataFactory = $attrDataFactory;
-        parent::__construct($coreData, $context, $registry, $data);
+        parent::__construct($context, $coreData, $registry, $data);
     }
 
     /**

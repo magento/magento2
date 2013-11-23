@@ -24,10 +24,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 namespace Magento\Catalog\Block;
 
-class Product extends \Magento\Core\Block\Template
+class Product extends \Magento\View\Block\Template
 {
     protected $_finalPrice = array();
 
@@ -39,21 +38,19 @@ class Product extends \Magento\Core\Block\Template
     protected $_productFactory;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\Catalog\Model\ProductFactory $productFactory,
         array $data = array()
     ) {
         $this->_productFactory = $productFactory;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     public function getProduct()

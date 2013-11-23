@@ -41,23 +41,21 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     protected $_queueFactory;
 
     /**
-     * @param \Magento\Newsletter\Model\QueueFactory $queueFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Newsletter\Model\QueueFactory $queueFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Newsletter\Model\QueueFactory $queueFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Newsletter\Model\QueueFactory $queueFactory,
         array $data = array()
     ) {
         $this->_queueFactory = $queueFactory;
-        parent::__construct($coreData, $context, $storeManager, $urlModel, $data);
+        parent::__construct($context, $coreData, $urlModel, $data);
     }
 
     /**

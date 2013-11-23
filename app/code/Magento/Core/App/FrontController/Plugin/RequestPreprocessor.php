@@ -46,19 +46,19 @@ class RequestPreprocessor
     protected $_appState;
 
     /**
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\State $appState
      * @param \Magento\Core\Model\Url $url
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\App\ResponseFactory $responseFactory
      */
     public function __construct(
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\State $appState,
         \Magento\Core\Model\Url $url,
         \Magento\Core\Model\Store\Config $storeConfig,

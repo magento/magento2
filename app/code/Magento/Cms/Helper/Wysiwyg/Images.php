@@ -29,7 +29,7 @@
  */
 namespace Magento\Cms\Helper\Wysiwyg;
 
-class Images extends \Magento\Core\Helper\AbstractHelper
+class Images extends \Magento\App\Helper\AbstractHelper
 {
 
     /**
@@ -71,13 +71,6 @@ class Images extends \Magento\Core\Helper\AbstractHelper
     protected $_backendData;
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager;
-
-    /**
      * Store manager
      *
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -92,10 +85,7 @@ class Images extends \Magento\Core\Helper\AbstractHelper
     protected $_dir;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Core\Helper\Context $context
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Filesystem $filesystem
@@ -103,8 +93,7 @@ class Images extends \Magento\Core\Helper\AbstractHelper
      * @param \Magento\App\Dir $dir
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\App\Helper\Context $context,
         \Magento\Backend\Helper\Data $backendData,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Filesystem $filesystem,
@@ -112,7 +101,6 @@ class Images extends \Magento\Core\Helper\AbstractHelper
         \Magento\App\Dir $dir
     ) {
         parent::__construct($context);
-        $this->_eventManager = $eventManager;
         $this->_backendData = $backendData;
         $this->_coreData = $coreData;
         $this->_filesystem = $filesystem;

@@ -34,8 +34,33 @@
  */
 namespace Magento\Adminhtml\Controller\Report;
 
-abstract class AbstractReport extends \Magento\Backend\Controller\Adminhtml\Action
+abstract class AbstractReport extends \Magento\Backend\App\Action
 {
+    /**
+     * @var \Magento\App\Response\Http\FileFactory
+     */
+    protected $_fileFactory;
+
+    /**
+     * @var \Magento\Core\Filter\Date
+     */
+    protected $_dateFilter;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Core\Filter\Date $dateFilter
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Core\Filter\Date $dateFilter
+    ) {
+        parent::__construct($context);
+        $this->_fileFactory = $fileFactory;
+        $this->_dateFilter = $dateFilter;
+    }
+
     /**
      * Admin session model
      *
@@ -63,8 +88,8 @@ abstract class AbstractReport extends \Magento\Backend\Controller\Adminhtml\Acti
      */
     public function _initAction()
     {
-        $this->loadLayout()
-            ->_addBreadcrumb(__('Reports'), __('Reports'));
+        $this->_view->loadLayout();
+        $this->_addBreadcrumb(__('Reports'), __('Reports'));
         return $this;
     }
 
@@ -82,7 +107,9 @@ abstract class AbstractReport extends \Magento\Backend\Controller\Adminhtml\Acti
 
         $requestData = $this->_objectManager->get('Magento\Adminhtml\Helper\Data')
             ->prepareFilterString($this->getRequest()->getParam('filter'));
-        $requestData = $this->_filterDates($requestData, array('from', 'to'));
+        $inputFilter = new \Zend_Filter_Input(array('from' => $this->_dateFilter, 'to' => $this->_dateFilter),
+            array(), $requestData);
+        $requestData = $inputFilter->getUnescaped();
         $requestData['store_ids'] = $this->getRequest()->getParam('store_ids');
         $params = new \Magento\Object();
 

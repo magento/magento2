@@ -50,7 +50,7 @@ class Item
     /**
      * Module of menu item
      *
-     * @var \Magento\Core\Helper\AbstractHelper
+     * @var \Magento\App\Helper\AbstractHelper
      */
     protected $_moduleHelper;
 
@@ -171,7 +171,7 @@ class Item
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\Backend\Model\MenuFactory $menuFactory
      * @param \Magento\Backend\Model\Url $urlModel
-     * @param \Magento\Core\Helper\AbstractHelper $helper
+     * @param \Magento\App\Helper\AbstractHelper $helper
      * @param \Magento\Module\ModuleListInterface $moduleList
      * @param array $data
      */
@@ -181,7 +181,7 @@ class Item
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\Backend\Model\MenuFactory $menuFactory,
         \Magento\Backend\Model\Url $urlModel,
-        \Magento\Core\Helper\AbstractHelper $helper,
+        \Magento\App\Helper\AbstractHelper $helper,
         \Magento\Module\ModuleListInterface $moduleList,
         array $data = array()
     ) {
@@ -371,11 +371,11 @@ class Item
     /**
      * Set Item module
      *
-     * @param \Magento\Core\Helper\AbstractHelper $helper
+     * @param \Magento\App\Helper\AbstractHelper $helper
      * @return \Magento\Backend\Model\Menu\Item
      * @throws \InvalidArgumentException
      */
-    public function setModuleHelper(\Magento\Core\Helper\AbstractHelper $helper)
+    public function setModuleHelper(\Magento\App\Helper\AbstractHelper $helper)
     {
         $this->_validator->validateParam('module', $helper);
         $this->_moduleHelper = $helper;

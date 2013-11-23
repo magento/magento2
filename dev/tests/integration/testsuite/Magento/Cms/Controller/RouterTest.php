@@ -39,7 +39,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->markTestIncomplete('MAGETWO-3393');
         $this->_model = new \Magento\Cms\Controller\Router(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Core\Controller\Varien\Action\Factory'),
+                ->get('Magento\App\ActionFactory'),
             new \Magento\Event\ManagerInterfaceStub(
                 $this->getMockForAbstractClass('Magento\Event\InvokerInterface'),
                 $this->getMock('Magento\Event\Config', array(), array(), '', false),
@@ -70,7 +70,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         //Open Node
         $request->setPathInfo('parent_node');
         $controller = $this->_model->match($request);
-        $this->assertInstanceOf('Magento\Core\Controller\Varien\Action\Redirect', $controller);
+        $this->assertInstanceOf('Magento\App\Action\Redirect', $controller);
     }
 }
 

@@ -47,7 +47,7 @@ class ActionFactory
      */
     public function createController($controllerName, array $arguments = array())
     {
-        $context = $this->_objectManager->create('Magento\Core\Controller\Varien\Action\Context', $arguments);
+        $context = $this->_objectManager->create('Magento\App\Action\Context', $arguments);
         $arguments['context'] = $context;
         return $this->_objectManager->create($controllerName, $arguments);
     }

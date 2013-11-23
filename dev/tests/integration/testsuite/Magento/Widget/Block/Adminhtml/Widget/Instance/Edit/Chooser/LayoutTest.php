@@ -66,7 +66,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
               ->will($this->returnValue($pageTypeValues));
 
         $this->_block = new \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout(
-            $objectManager->get('Magento\Core\Block\Template\Context'),
+            $objectManager->get('Magento\View\Block\Template\Context'),
             $config,
             array(
                 'name'  => 'page_type',

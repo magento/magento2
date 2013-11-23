@@ -43,26 +43,26 @@ class Design
     protected $_pageLayout;
 
     /**
-     * @param \Magento\Page\Model\Source\Layout $pageLayout
-     * @param \Magento\Core\Model\Theme\LabelFactory $labelFactory
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Page\Model\Source\Layout $pageLayout
+     * @param \Magento\Core\Model\Theme\LabelFactory $labelFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Page\Model\Source\Layout $pageLayout,
-        \Magento\Core\Model\Theme\LabelFactory $labelFactory,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Page\Model\Source\Layout $pageLayout,
+        \Magento\Core\Model\Theme\LabelFactory $labelFactory,
         array $data = array()
     ) {
         $this->_labelFactory = $labelFactory;
         $this->_pageLayout = $pageLayout;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     /**

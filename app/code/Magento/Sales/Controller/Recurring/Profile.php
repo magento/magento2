@@ -29,7 +29,10 @@
  */
 namespace Magento\Sales\Controller\Recurring;
 
-class Profile extends \Magento\Core\Controller\Front\Action
+use Magento\App\Action\NotFoundException;
+use Magento\App\RequestInterface;
+
+class Profile extends \Magento\App\Action\Action
 {
     /**
      *
@@ -45,31 +48,42 @@ class Profile extends \Magento\Core\Controller\Front\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Core\Controller\Varien\Action\Context $context
+     * @var \Magento\App\Action\Title
+     */
+    protected $_title;
+
+    /**
+     * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\App\Action\Title $title
      */
     public function __construct(
-        \Magento\Core\Controller\Varien\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\App\Action\Context $context,
+        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\App\Action\Title $title
     ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
+        $this->_title = $title;
     }
 
     /**
      * Make sure customer is logged in and put it into registry
+     *
+     * @param RequestInterface $request
+     * @return mixed
      */
-    public function preDispatch()
+    public function dispatch(RequestInterface $request)
     {
-        parent::preDispatch();
-        if (!$this->getRequest()->isDispatched()) {
-            return;
+        if (!$request->isDispatched()) {
+            return parent::dispatch($request);
         }
         $this->_session = $this->_objectManager->get('Magento\Customer\Model\Session');
         if (!$this->_session->authenticate($this)) {
-            $this->setFlag('', 'no-dispatch', true);
+            $this->_actionFlag->set('', 'no-dispatch', true);
         }
         $this->_coreRegistry->register('current_customer', $this->_session->getCustomer());
+        return parent::dispatch($request);
     }
 
     /**
@@ -77,10 +91,10 @@ class Profile extends \Magento\Core\Controller\Front\Action
      */
     public function indexAction()
     {
-        $this->_title(__('Recurring Billing Profiles'));
-        $this->loadLayout();
-        $this->_initLayoutMessages('Magento\Customer\Model\Session');
-        $this->renderLayout();
+        $this->_title->add(__('Recurring Billing Profiles'));
+        $this->_view->loadLayout();
+        $this->_view->getLayout()->initMessages('Magento\Customer\Model\Session');
+        $this->_view->renderLayout();
     }
 
     /**
@@ -162,14 +176,15 @@ class Profile extends \Magento\Core\Controller\Front\Action
     {
         try {
             $profile = $this->_initProfile();
-            $this->_title(__('Recurring Billing Profiles'))->_title(__('Profile #%1', $profile->getReferenceId()));
-            $this->loadLayout();
-            $this->_initLayoutMessages('Magento\Customer\Model\Session');
-            $navigationBlock = $this->getLayout()->getBlock('customer_account_navigation');
+            $this->_title->add(__('Recurring Billing Profiles'));
+            $this->_title->add(__('Profile #%1', $profile->getReferenceId()));
+            $this->_view->loadLayout();
+            $this->_view->getLayout()->initMessages('Magento\Customer\Model\Session');
+            $navigationBlock = $this->_view->getLayout()->getBlock('customer_account_navigation');
             if ($navigationBlock) {
                 $navigationBlock->setActive('sales/recurring_profile/');
             }
-            $this->renderLayout();
+            $this->_view->renderLayout();
             return;
         } catch (\Magento\Core\Exception $e) {
             $this->_session->addError($e->getMessage());

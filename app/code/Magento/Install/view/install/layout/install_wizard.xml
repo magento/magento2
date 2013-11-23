@@ -24,7 +24,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\Core\Block\Template" name="root" output="1">
+    <block class="Magento\View\Block\Template" name="root" output="1">
         <action method="setTemplate">
             <argument name="template" xsi:type="string">Magento_Install::page.phtml</argument>
         </action>

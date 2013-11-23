@@ -98,11 +98,11 @@ class User
     /**
      * Mail handler
      *
-     * @var  \Magento\Core\Model\Email\Template\Mailer
+     * @var  \Magento\Email\Model\Template\Mailer
      */
     protected $_mailer;
 
-    /** @var \Magento\Core\Model\Sender */
+    /** @var \Magento\Email\Model\Sender */
     protected $_sender;
 
     /**
@@ -111,13 +111,6 @@ class User
      * @var \Magento\User\Helper\Data
      */
     protected $_userData = null;
-
-    /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
-     */
-    protected $_eventManager = null;
 
     /**
      * Core store config
@@ -143,7 +136,7 @@ class User
     /**
      * Factory for email info model
      *
-     * @var \Magento\Core\Model\Email\InfoFactory
+     * @var \Magento\Email\Model\InfoFactory
      */
     protected $_emailInfoFactory;
 
@@ -160,14 +153,13 @@ class User
     /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\User\Helper\Data $userData
-     * @param \Magento\Core\Model\Sender $sender
+     * @param \Magento\Email\Model\Sender $sender
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Validator\Composite\VarienObjectFactory $validatorCompositeFactory
      * @param \Magento\User\Model\RoleFactory $roleFactory
-     * @param \Magento\Core\Model\Email\InfoFactory $emailInfoFactory
-     * @param \Magento\Core\Model\Email\Template\MailerFactory $mailerFactory
+     * @param \Magento\Email\Model\InfoFactory $emailInfoFactory
+     * @param \Magento\Email\Model\Template\MailerFactory $mailerFactory
      * @param \Magento\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
@@ -179,14 +171,13 @@ class User
     public function __construct(
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\User\Helper\Data $userData,
-        \Magento\Core\Model\Sender $sender,
+        \Magento\Email\Model\Sender $sender,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Validator\Composite\VarienObjectFactory $validatorCompositeFactory,
         \Magento\User\Model\RoleFactory $roleFactory,
-        \Magento\Core\Model\Email\InfoFactory $emailInfoFactory,
-        \Magento\Core\Model\Email\Template\MailerFactory $mailerFactory,
+        \Magento\Email\Model\InfoFactory $emailInfoFactory,
+        \Magento\Email\Model\Template\MailerFactory $mailerFactory,
         \Magento\Encryption\EncryptorInterface $encryptor,
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
@@ -196,7 +187,6 @@ class User
         $this->_encryptor = $encryptor;
         $this->dateTime = $dateTime;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->_eventManager = $eventManager;
         $this->_userData = $userData;
         $this->_sender = $sender;
         $this->_coreStoreConfig = $coreStoreConfig;
@@ -235,14 +225,14 @@ class User
         parent::__wakeup();
         $objectManager = \Magento\App\ObjectManager::getInstance();
         $this->_eventManager    = $objectManager->get('Magento\Event\ManagerInterface');
-        $this->_sender          = $objectManager->get('Magento\Core\Model\Sender');
+        $this->_sender          = $objectManager->get('Magento\Email\Model\Sender');
         $this->_userData        = $objectManager->get('Magento\User\Helper\Data');
         $this->_coreStoreConfig = $objectManager->get('Magento\Core\Model\Store\Config');
         $this->_coreRegistry    = $objectManager->get('Magento\Core\Model\Registry');
         $this->_validatorComposite = $objectManager->get('Magento\Validator\Composite\VarienObjectFactory');
         $this->_roleFactory = $objectManager->get('Magento\User\Model\RoleFactory');
-        $this->_emailInfoFactory = $objectManager->get('Magento\Core\Model\Email\InfoFactory');
-        $this->_mailer = $objectManager->get('Magento\Core\Model\Email\Template\MailerFactory');
+        $this->_emailInfoFactory = $objectManager->get('Magento\Email\Model\InfoFactory');
+        $this->_mailer = $objectManager->get('Magento\Email\Model\Template\MailerFactory');
         $this->_encryptor = $objectManager->get('Magento\Encryption\EncryptorInterface');
     }
 
@@ -449,10 +439,10 @@ class User
     /**
      * Set custom mail handler
      *
-     * @param \Magento\Core\Model\Email\Template\Mailer $mailer
+     * @param \Magento\Email\Model\Template\Mailer $mailer
      * @return \Magento\User\Model\User
      */
-    public function setMailer(\Magento\Core\Model\Email\Template\Mailer $mailer)
+    public function setMailer(\Magento\Email\Model\Template\Mailer $mailer)
     {
         $this->_mailer = $mailer;
         return $this;
@@ -465,7 +455,7 @@ class User
      */
     public function sendPasswordResetConfirmationEmail()
     {
-        /** @var \Magento\Core\Model\Email\Info $emailInfo */
+        /** @var \Magento\Email\Model\Info $emailInfo */
         $emailInfo = $this->_emailInfoFactory->create();
         $emailInfo->addTo($this->getEmail(), $this->getName());
         $this->_mailer->addEmailInfo($emailInfo);

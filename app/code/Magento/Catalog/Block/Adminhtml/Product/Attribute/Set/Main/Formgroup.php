@@ -41,23 +41,23 @@ class Formgroup
     protected $_typeFactory;
 
     /**
-     * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         array $data = array()
     ) {
         $this->_typeFactory = $typeFactory;
-        parent::__construct($registry, $formFactory, $coreData, $context, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $data);
     }
 
     protected function _prepareForm()

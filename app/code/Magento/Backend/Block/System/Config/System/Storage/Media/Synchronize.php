@@ -40,21 +40,19 @@ class Synchronize
     protected $_fileStorage;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\App $application
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\File\Storage $fileStorage
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\App $application,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\File\Storage $fileStorage,
         array $data = array()
     ) {
         $this->_fileStorage = $fileStorage;
-        parent::__construct($coreData, $context, $application, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

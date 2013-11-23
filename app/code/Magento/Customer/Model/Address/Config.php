@@ -63,7 +63,7 @@ class Config extends \Magento\Config\Data
     protected $_defaultTypes    = array();
 
     /**
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -75,14 +75,14 @@ class Config extends \Magento\Config\Data
     /**
      * @param \Magento\Customer\Model\Address\Config\Reader $reader
      * @param \Magento\Config\CacheInterface $cache
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param string $cacheId
      */
     public function __construct(
         \Magento\Customer\Model\Address\Config\Reader $reader,
         \Magento\Config\CacheInterface $cache,
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Helper\Address $addressHelper,
         $cacheId = 'address_format'
     ) {

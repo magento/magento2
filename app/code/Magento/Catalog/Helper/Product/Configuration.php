@@ -31,7 +31,7 @@ namespace Magento\Catalog\Helper\Product;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Configuration extends \Magento\Core\Helper\AbstractHelper
+class Configuration extends \Magento\App\Helper\AbstractHelper
     implements \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
 {
     /**
@@ -64,14 +64,14 @@ class Configuration extends \Magento\Core\Helper\AbstractHelper
     /**
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param \Magento\Filter\FilterManager $filter
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
      * @param \Magento\Stdlib\String $string
      */
     public function __construct(
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         \Magento\Filter\FilterManager $filter,
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $config,
         \Magento\Stdlib\String $string
     ) {

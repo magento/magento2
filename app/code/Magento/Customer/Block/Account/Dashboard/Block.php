@@ -27,7 +27,7 @@
 
 namespace Magento\Customer\Block\Account\Dashboard;
 
-class Block extends \Magento\Core\Block\Template
+class Block extends \Magento\View\Block\Template
 {
 
 }

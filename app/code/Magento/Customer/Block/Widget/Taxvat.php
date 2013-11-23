@@ -34,21 +34,21 @@ class Taxvat extends \Magento\Customer\Block\Widget\AbstractWidget
     protected $_customerResource;
 
     /**
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Model\Session $customerSession
      * @param array $data
      */
     public function __construct(
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Session $customerSession,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;
-        parent::__construct($coreData, $context, $eavConfig, $data);
+        parent::__construct($context, $coreData, $eavConfig, $data);
     }
 
     public function _construct()

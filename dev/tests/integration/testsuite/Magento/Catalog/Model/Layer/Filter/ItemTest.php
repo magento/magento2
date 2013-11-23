@@ -76,16 +76,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $request \Magento\TestFramework\Request */
         $request = $objectManager->get('Magento\TestFramework\Request');
-        $action = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Controller\Front\Action',
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\App\Action\Action',
             array(
                 'request' => $request,
                 'response' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                     ->get('Magento\TestFramework\Response'),
             )
         );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')->getFrontController()
-            ->setAction($action); // done in action's constructor
         $this->assertStringEndsWith('/?cat%5B0%5D=valuePart1&cat%5B1%5D=valuePart2', $this->_model->getUrl());
     }
 
@@ -110,7 +108,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->_model->getFilter()->apply(
             $request,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-                ->createBlock('Magento\Core\Block\Text')
+                ->createBlock('Magento\View\Block\Text')
         );
 
         $this->assertStringEndsWith('/x/y/z/?cat=3', $this->_model->getRemoveUrl());

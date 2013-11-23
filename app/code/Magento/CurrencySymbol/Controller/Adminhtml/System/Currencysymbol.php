@@ -33,7 +33,7 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System;
 
-class Currencysymbol extends \Magento\Backend\Controller\Adminhtml\Action
+class Currencysymbol extends \Magento\Backend\App\Action
 {
     /**
      * Show Currency Symbols Management dialog
@@ -41,8 +41,8 @@ class Currencysymbol extends \Magento\Backend\Controller\Adminhtml\Action
     public function indexAction()
     {
         // set active menu and breadcrumbs
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_CurrencySymbol::system_currency_symbols')
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_CurrencySymbol::system_currency_symbols')
             ->_addBreadcrumb(
                 __('System'),
                 __('System')
@@ -52,8 +52,8 @@ class Currencysymbol extends \Magento\Backend\Controller\Adminhtml\Action
                 __('Manage Currency Rates')
             );
 
-        $this->_title(__('Currency Symbols'));
-        $this->renderLayout();
+        $this->_title->add(__('Currency Symbols'));
+        $this->_view->renderLayout();
     }
 
     /**
@@ -80,7 +80,7 @@ class Currencysymbol extends \Magento\Backend\Controller\Adminhtml\Action
             $backendSession->addError($e->getMessage());
         }
 
-        $this->_redirectReferer();
+        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
     }
 
     /**
@@ -89,7 +89,7 @@ class Currencysymbol extends \Magento\Backend\Controller\Adminhtml\Action
     public function resetAction()
     {
         $this->_objectManager->create('Magento\CurrencySymbol\Model\System\Currencysymbol')->resetValues();
-        $this->_redirectReferer();
+        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
     }
 
     /**

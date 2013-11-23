@@ -141,7 +141,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\App\Resource $coreResource
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Validator\UniversalFactory $universalFactory
@@ -152,14 +152,14 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\App\Resource $coreResource,
+        \Magento\App\Resource $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Validator\UniversalFactory $universalFactory
     ) {
         $this->_eventManager = $eventManager;
         $this->_eavConfig = $eavConfig;
-        $this->_resource = $coreResource;
+        $this->_resource = $resource;
         $this->_eavEntityFactory = $eavEntityFactory;
         $this->_resourceHelper = $resourceHelper;
         $this->_universalFactory = $universalFactory;

@@ -27,8 +27,8 @@
  */
 return array(
     // Blocks with abstract constructor arguments
-    'Magento\Backend\Block\System\Email\Template',
-    'Magento\Backend\Block\System\Email\Template\Edit',
+    'Magento\Email\Block\Adminhtml\Template',
+    'Magento\Email\Block\Adminhtml\Template\Edit',
     'Magento\Backend\Block\System\Config\Edit',
     'Magento\Backend\Block\System\Config\Form',
     'Magento\Backend\Block\System\Config\Tabs',

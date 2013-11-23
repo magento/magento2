@@ -34,17 +34,17 @@
 
 namespace Magento\Customer\Controller;
 
-class Review extends \Magento\Core\Controller\Front\Action
+class Review extends \Magento\App\Action\Action
 {
     public function indexAction()
     {
-        $this->loadLayout();
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->renderLayout();
     }
 
     public function viewAction()
     {
-        $this->loadLayout();
-        $this->renderLayout();
+        $this->_view->loadLayout();
+        $this->_view->renderLayout();
     }
 }

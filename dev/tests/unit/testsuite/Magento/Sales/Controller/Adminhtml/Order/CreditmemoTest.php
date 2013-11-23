@@ -75,7 +75,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
             'objectManager' => $this->_objectManager,
         );
 
-        $context = $helper->getObject('Magento\Backend\Controller\Context', $arguments);
+        $context = $helper->getObject('Magento\Backend\App\Action\Context', $arguments);
 
         $this->_controller = $helper->getObject('Magento\Sales\Controller\Adminhtml\Order\Creditmemo',
             array('context' => $context));

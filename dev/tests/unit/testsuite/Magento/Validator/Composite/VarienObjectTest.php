@@ -99,7 +99,7 @@ class VarienObjectTest extends \PHPUnit_Framework_TestCase
             count($expectedErrors), $actualMessages, 'Number of messages does not meet expectations.'
         );
         foreach ($expectedErrors as $errorIndex => $expectedErrorMessage) {
-            /** @var $actualMessage \Magento\Core\Model\Message\AbstractMessage */
+            /** @var $actualMessage \Magento\Message\AbstractMessage */
             $actualMessage = $actualMessages[$errorIndex];
             $this->assertEquals($expectedErrorMessage, $actualMessage);
         }

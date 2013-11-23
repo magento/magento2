@@ -166,9 +166,8 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
     {
         $exceptionMessage = 'An exception happened';
         // have load layout throw an exception
-        $this->_mockObjectManager->expects($this->at(0))
-            ->method('get')
-            ->with('Magento\Config\ScopeInterface')
+        $this->_mockRegistry->expects($this->any())
+            ->method('registry')
             ->will($this->throwException(new \Magento\Core\Exception($exceptionMessage)));
 
         // verify the error
@@ -545,9 +544,8 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
     protected function _createSubscriptionController()
     {
         // Mock Layout passed into constructor
-        $layoutMock = $this->getMockBuilder('Magento\Core\Model\Layout')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $viewMock = $this->getMock('Magento\App\ViewInterface');
+        $layoutMock = $this->getMock('Magento\View\LayoutInterface');
         $layoutMergeMock = $this->getMockBuilder('Magento\Core\Model\Layout\Merge')
             ->disableOriginalConstructor()
             ->getMock();
@@ -556,6 +554,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
         $layoutMock->expects($this->any())->method('getNode')->will($this->returnValue($testElement));
 
         // for _setActiveMenu
+        $viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($layoutMock));
         $blockMock = $this->getMockBuilder('Magento\Backend\Block\Menu')
             ->disableOriginalConstructor()
             ->getMock();
@@ -568,18 +567,20 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
         $layoutMock->expects($this->any())->method('getMessagesBlock')->will($this->returnValue($blockMock));
         $layoutMock->expects($this->any())->method('getBlock')->will($this->returnValue($blockMock));
 
+        $title = $this->getMock('Magento\App\Action\Title', array(), array(), '', false);
+        $title->expects($this->any())->method('add')->will($this->returnValue($title));
         $contextParameters = array(
-            'layout' => $layoutMock,
+            'view' => $viewMock,
             'objectManager' => $this->_mockObjectManager,
             'session' => $this->_mockBackendModSess,
             'translator' => $this->_mockTranslateModel,
             'request' => $this->_mockRequest,
             'response' => $this->_mockResponse,
+            'title' => $title
         );
 
         $this->_mockBackendCntCtxt = $this->_objectManagerHelper
-            ->getObject('Magento\Backend\Controller\Context',
-                $contextParameters);
+            ->getObject('Magento\Backend\App\Action\Context', $contextParameters);
 
         $subControllerParams = array(
             'context' => $this->_mockBackendCntCtxt,

@@ -29,7 +29,7 @@
  */
 namespace Magento\DesignEditor\Helper;
 
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * XML path to VDE front name setting
@@ -61,12 +61,12 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_translationMode;
 
     /**
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param $frontName
      * @param array $disabledCacheTypes
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         $frontName,
         array $disabledCacheTypes = array()
     ) {

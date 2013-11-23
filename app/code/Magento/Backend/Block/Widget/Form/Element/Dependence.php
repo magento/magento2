@@ -79,14 +79,14 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
     protected $_fieldFactory;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory,
         array $data = array()
     ) {

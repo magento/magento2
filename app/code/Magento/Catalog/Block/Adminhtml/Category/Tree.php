@@ -56,29 +56,29 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     protected $_helperPool;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
+     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\Resource\HelperPool $helperPool
      * @param \Magento\Backend\Model\Auth\Session $backendSession
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
+        \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\Resource\HelperPool $helperPool,
         \Magento\Backend\Model\Auth\Session $backendSession,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
         $this->_helperPool = $helperPool;
         $this->_backendSession = $backendSession;
         $this->_categoryFactory = $categoryFactory;
-        parent::__construct($categoryTree, $coreData, $context, $registry, $data);
+        parent::__construct($context, $coreData, $categoryTree, $registry, $data);
     }
 
     protected function _construct()

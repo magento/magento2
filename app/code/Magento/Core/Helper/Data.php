@@ -29,7 +29,7 @@ namespace Magento\Core\Helper;
 /**
  * Core data helper
  */
-class Data extends \Magento\Core\Helper\AbstractHelper
+class Data extends \Magento\App\Helper\AbstractHelper
 {
     const XML_PATH_DEFAULT_COUNTRY              = 'general/country/default';
     const XML_PATH_DEV_ALLOW_IPS                = 'dev/restrict/allow_ips';
@@ -42,15 +42,19 @@ class Data extends \Magento\Core\Helper\AbstractHelper
      */
     const DIVIDE_EPSILON = 10000;
 
-    /**
-     * Config path to mail sending setting that shows if email communications are disabled
-     */
-    const XML_PATH_SYSTEM_SMTP_DISABLE = 'system/smtp/disable';
+    protected $_allowedFormats = array(
+        \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_FULL,
+        \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_LONG,
+        \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM,
+        \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT
+    );
 
     /**
-     * @var \Magento\Cache\ConfigInterface
+     * Core event manager proxy
+     *
+     * @var \Magento\Event\ManagerInterface
      */
-    protected $_cacheConfig;
+    protected $_eventManager = null;
 
     /**
      * Core store config
@@ -60,7 +64,7 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_coreStoreConfig;
 
     /**
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -80,30 +84,23 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     protected $_dbCompatibleMode;
 
     /**
-     * @var \Magento\HTTP\PhpEnvironment\RemoteAddress
-     */
-    protected $_remoteAddress;
-
-    /**
-     * @param Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Locale $locale
      * @param \Magento\App\State $appState
      * @param bool $dbCompatibleMode
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Locale $locale,
         \Magento\App\State $appState,
         $dbCompatibleMode = true
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_remoteAddress = $context->getRemoteAddress();
         parent::__construct($context);
-        $this->_cacheConfig = $context->getCacheConfig();
+        $this->_coreStoreConfig = $coreStoreConfig;
         $this->_storeManager = $storeManager;
         $this->_locale = $locale;
         $this->_appState = $appState;
@@ -271,15 +268,5 @@ class Data extends \Magento\Core\Helper\AbstractHelper
     public function isSingleStoreModeEnabled()
     {
         return (bool) $this->_coreStoreConfig->getConfig(self::XML_PATH_SINGLE_STORE_MODE_ENABLED);
-    }
-
-    /**
-     * Returns the translate model for this instance.
-     *
-     * @return \Magento\Core\Model\Translate
-     */
-    public function getTranslator()
-    {
-        return $this->_translator;
     }
 }

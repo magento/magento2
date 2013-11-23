@@ -30,7 +30,6 @@
     $_fullInfo = $_order->getFullTaxInfo();
     global $taxIter; $taxIter++;
 ?>
-<?php  ?>
 
 <?php if ($this->displayFullSummary()): ?>
 <?php $isTop = 1; ?>
@@ -43,8 +42,8 @@
             $isFirst    = 1;
         ?>
         <?php foreach ($rates as $rate): ?>
-        <tr class="summary-details-<?php echo $taxIter; ?> summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>"<?php if (!$this->getIsPlaneMode()):?> style="display:none;"<?php endif;?>>
-            <td <?php echo $this->getLabelProperties()?>>
+        <tr class="totals tax details details-<?php echo $taxIter; ?> <?php echo ($this->getIsPlaneMode()) ? ' plane' : '';?>">
+            <td class="mark" <?php echo $this->getLabelProperties()?>>
                 <?php echo $this->escapeHtml($rate['title']); ?>
                 <?php if (!is_null($rate['percent'])): ?>
                     (<?php echo (float)$rate['percent']; ?>%)
@@ -52,7 +51,7 @@
                 <br />
             </td>
             <?php if ($isFirst): ?>
-                <td <?php echo $this->getValueProperties()?> rowspan="<?php echo count($rates); ?>">
+                <td class="amount" <?php echo $this->getValueProperties()?> rowspan="<?php echo count($rates); ?>">
                     <?php echo $_order->formatPrice($amount); ?>
                 </td>
             <?php endif; ?>
@@ -64,18 +63,18 @@
 <?php endif;?>
 
 <?php if ($this->displayFullSummary() && $_fullInfo && !$this->getIsPlaneMode()): ?>
-<tr class="summary-total" onclick="expandDetails(this, '.summary-details-<?php echo $taxIter;?>')">
+<tr class="totals tax summary">
 <?php elseif ($this->displayFullSummary() && $_fullInfo && $this->getIsPlaneMode()): ?>
-<tr class="show-details">
+<tr class="totals tax summary plane">
 <?php else: ?>
-<tr>
+<tr class="totals tax">
 <?php endif; ?>
-    <td <?php echo $this->getLabelProperties()?>>
+    <td class="mark" <?php echo $this->getLabelProperties()?>>
         <?php if ($this->displayFullSummary()): ?>
-            <div class="summary-collapse"><?php echo __('Tax'); ?></div>
+            <div class="detailed"><?php echo __('Tax'); ?></div>
         <?php else: ?>
             <?php echo __('Tax'); ?>
         <?php endif;?>
     </td>
-    <td <?php echo $this->getValueProperties()?>><?php echo $_order->formatPrice($_source->getTaxAmount()) ?></td>
+    <td class="amount" <?php echo $this->getValueProperties()?>><?php echo $_order->formatPrice($_source->getTaxAmount()) ?></td>
 </tr>

@@ -67,21 +67,21 @@ class Option extends \Magento\Adminhtml\Block\Widget
     protected $_optionType;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Model\Config\Source\Yesno $configYesNo
      * @param \Magento\Catalog\Model\Config\Source\Product\Options\Type $optionType
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Catalog\Model\ProductOptions\ConfigInterface $productOptionConfig
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Model\Config\Source\Yesno $configYesNo,
         \Magento\Catalog\Model\Config\Source\Product\Options\Type $optionType,
         \Magento\Catalog\Model\Product $product,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Catalog\Model\ProductOptions\ConfigInterface $productOptionConfig,
         array $data = array()
@@ -91,7 +91,7 @@ class Option extends \Magento\Adminhtml\Block\Widget
         $this->_product = $product;
         $this->_productOptionConfig = $productOptionConfig;
         $this->_coreRegistry = $registry;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     /**

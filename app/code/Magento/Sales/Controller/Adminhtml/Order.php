@@ -33,7 +33,9 @@
  */
 namespace Magento\Sales\Controller\Adminhtml;
 
-class Order extends \Magento\Backend\Controller\Adminhtml\Action
+use Magento\Backend\App\Action;
+
+class Order extends \Magento\Backend\App\Action
 {
     /**
      * Array of actions which can be processed without secret key validation
@@ -50,14 +52,29 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @var \Magento\App\Response\Http\FileFactory
+     */
+    protected $_fileFactory;
+
+    /**
+     * @var \Magento\Core\Model\Translate
+     */
+    protected $_translator;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\App\Response\Http\FileFactory $fileFactory
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
+        Action\Context $context,
+        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Core\Model\Translate $translator
     ) {
         $this->_coreRegistry = $coreRegistry;
+        $this->_fileFactory = $fileFactory;
+        $this->_translator = $translator;
         parent::__construct($context);
     }
 
@@ -68,8 +85,8 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
      */
     protected function _initAction()
     {
-        $this->loadLayout()
-            ->_setActiveMenu('Magento_Sales::sales_order')
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_Sales::sales_order')
             ->_addBreadcrumb(__('Sales'), __('Sales'))
             ->_addBreadcrumb(__('Orders'), __('Orders'));
         return $this;
@@ -88,7 +105,7 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
         if (!$order->getId()) {
             $this->_getSession()->addError(__('This order no longer exists.'));
             $this->_redirect('sales/*/');
-            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             return false;
         }
         $this->_coreRegistry->register('sales_order', $order);
@@ -101,8 +118,9 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function indexAction()
     {
-        $this->_title(__('Orders'));
-        $this->_initAction()->renderLayout();
+        $this->_title->add(__('Orders'));
+        $this->_initAction();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -110,8 +128,8 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function gridAction()
     {
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     /**
@@ -119,13 +137,13 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function viewAction()
     {
-        $this->_title(__('Orders'));
+        $this->_title->add(__('Orders'));
 
         $order = $this->_initOrder();
         if ($order) {
             $this->_initAction();
-            $this->_title(sprintf("#%s", $order->getRealOrderId()));
-            $this->renderLayout();
+            $this->_title->add(sprintf("#%s", $order->getRealOrderId()));
+            $this->_view->renderLayout();
         }
     }
 
@@ -290,8 +308,8 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
                 $order->save();
                 $order->sendOrderUpdateEmail($notify, $comment);
 
-                $this->loadLayout('empty');
-                $this->renderLayout();
+                $this->_view->loadLayout('empty');
+                $this->_view->renderLayout();
             } catch (\Magento\Core\Exception $e) {
                 $response = array(
                     'error'     => true,
@@ -317,7 +335,7 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
     {
         $this->_initOrder();
         $this->getResponse()->setBody(
-            $this->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Order\View\Tab\Invoices')->toHtml()
+            $this->_view->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Order\View\Tab\Invoices')->toHtml()
         );
     }
 
@@ -328,7 +346,7 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
     {
         $this->_initOrder();
         $this->getResponse()->setBody(
-            $this->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Order\View\Tab\Shipments')->toHtml()
+            $this->_view->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Order\View\Tab\Shipments')->toHtml()
         );
     }
 
@@ -339,7 +357,7 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
     {
         $this->_initOrder();
         $this->getResponse()->setBody(
-            $this->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Order\View\Tab\Creditmemos')->toHtml()
+            $this->_view->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Order\View\Tab\Creditmemos')->toHtml()
         );
     }
 
@@ -349,7 +367,8 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
     public function commentsHistoryAction()
     {
         $this->_initOrder();
-        $html = $this->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Order\View\Tab\History')->toHtml();
+        $html = $this->_view->getLayout()
+            ->createBlock('Magento\Sales\Block\Adminhtml\Order\View\Tab\History')->toHtml();
         if ($this->_translator->isAllowed()) {
             $this->_translator->processResponseBody($html);
         }
@@ -496,7 +515,7 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
                 }
             }
             if ($flag) {
-                return $this->_prepareDownloadResponse(
+                return $this->_fileFactory->create(
                     'invoice' . $this->_objectManager->get('Magento\Core\Model\Date')->date('Y-m-d_H-i-s') . '.pdf',
                     $pdf->render(),
                     'application/pdf'
@@ -534,7 +553,7 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
                 }
             }
             if ($flag) {
-                return $this->_prepareDownloadResponse(
+                return $this->_fileFactory->create(
                     'packingslip' . $this->_objectManager->get('Magento\Core\Model\Date')->date('Y-m-d_H-i-s') . '.pdf',
                     $pdf->render(),
                     'application/pdf'
@@ -572,7 +591,7 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
                 }
             }
             if ($flag) {
-                return $this->_prepareDownloadResponse(
+                return $this->_fileFactory->create(
                     'creditmemo' . $this->_objectManager->get('Magento\Core\Model\Date')->date('Y-m-d_H-i-s') . '.pdf',
                     $pdf->render(),
                     'application/pdf'
@@ -636,7 +655,7 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
                 }
             }
             if ($flag) {
-                return $this->_prepareDownloadResponse(
+                return $this->_fileFactory->create(
                     'docs' . $this->_objectManager->get('Magento\Core\Model\Date')->date('Y-m-d_H-i-s') . '.pdf',
                     $pdf->render(),
                     'application/pdf'
@@ -723,11 +742,11 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function exportCsvAction()
     {
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $fileName = 'orders.csv';
         /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
-        $exportBlock = $this->getLayout()->getChildBlock('sales.order.grid', 'grid.export');
-        $this->_prepareDownloadResponse($fileName, $exportBlock->getCsvFile());
+        $exportBlock = $this->_view->getLayout()->getChildBlock('sales.order.grid', 'grid.export');
+        return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile());
     }
 
     /**
@@ -735,11 +754,11 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function exportExcelAction()
     {
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $fileName = 'orders.xml';
         /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
-        $exportBlock = $this->getLayout()->getChildBlock('sales.order.grid', 'grid.export');
-        $this->_prepareDownloadResponse($fileName, $exportBlock->getExcelFile($fileName));
+        $exportBlock = $this->_view->getLayout()->getChildBlock('sales.order.grid', 'grid.export');
+        return $this->_fileFactory->create($fileName, $exportBlock->getExcelFile($fileName));
     }
 
     /**
@@ -749,8 +768,8 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
     public function transactionsAction()
     {
         $this->_initOrder();
-        $this->loadLayout(false);
-        $this->renderLayout();
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     /**
@@ -762,14 +781,14 @@ class Order extends \Magento\Backend\Controller\Adminhtml\Action
         $address = $this->_objectManager->create('Magento\Sales\Model\Order\Address')->load($addressId);
         if ($address->getId()) {
             $this->_coreRegistry->register('order_address', $address);
-            $this->loadLayout();
+            $this->_view->loadLayout();
             // Do not display VAT validation button on edit order address form
-            $addressFormContainer = $this->getLayout()->getBlock('sales_order_address.form.container');
+            $addressFormContainer = $this->_view->getLayout()->getBlock('sales_order_address.form.container');
             if ($addressFormContainer) {
                 $addressFormContainer->getChildBlock('form')->setDisplayVatValidationButton(false);
             }
 
-            $this->renderLayout();
+            $this->_view->renderLayout();
         } else {
             $this->_redirect('sales/*/');
         }

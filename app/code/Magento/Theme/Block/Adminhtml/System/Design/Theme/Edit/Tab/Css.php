@@ -53,24 +53,24 @@ class Css
     protected $_customCssFile;
 
     /**
-     * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Theme\Model\Uploader\Service $uploaderService
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Data\FormFactory $formFactory,
         \Magento\ObjectManager $objectManager,
         \Magento\Theme\Model\Uploader\Service $uploaderService,
         array $data = array()
     ) {
-        parent::__construct($formFactory, $coreData, $context, $registry, $objectManager, $data);
+        parent::__construct($context, $coreData, $registry, $formFactory, $objectManager, $data);
         $this->_uploaderService = $uploaderService;
     }
 

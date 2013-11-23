@@ -36,31 +36,6 @@ namespace Magento\Sales\Block\Adminhtml\Recurring\Profile\View;
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        array $data = array()
-    ) {
-        $this->_storeManager = $storeManager;
-        parent::__construct($productFactory, $coreData, $context, $registry, $data);
-    }
-
-    /**
      * Retrieve required options from parent
      */
     protected function _beforeToHtml()

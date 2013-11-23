@@ -48,11 +48,6 @@
                 <argument name="file" xsi:type="string">Magento_Core::prototype/magento.css</argument>
             </arguments>
         </block>
-        <block class="Magento\Page\Block\Html\Head\Css" name="magento-widget-css-styles-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Widget::css/styles.css</argument>
-            </arguments>
-        </block>
     </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Widget\Block\Adminhtml\Widget\Instance\Edit" name="widget_instance_edit"/>

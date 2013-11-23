@@ -19,7 +19,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -27,22 +26,18 @@
 <?php
 /**
  * Shopping cart totals template
- *
- * @see \Magento\Checkout\Block\Cart\Totals
  * @var $this \Magento\Checkout\Block\Cart\Totals
  */
 ?>
+<div class="cart totals">
 <?php if ($this->canApplyMsrp()): ?>
     <div class="cart-msrp-totals"><?php echo __('You will see the order total before you submit the order.'); ?></div>
 <?php else: ?>
-    <table id="shopping-cart-totals-table">
-        <col />
-        <col width="1" />
+    <table id="shopping-cart-totals-table" class="data table totals">
+        <?php echo $this->renderTotals(); ?>
         <tfoot>
             <?php echo $this->renderTotals('footer'); ?>
         </tfoot>
-        <tbody>
-            <?php echo $this->renderTotals(); ?>
-        </tbody>
     </table>
 <?php endif; ?>
+</div>

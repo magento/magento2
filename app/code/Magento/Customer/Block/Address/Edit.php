@@ -51,10 +51,9 @@ class Edit extends \Magento\Directory\Block\Data
     protected $_addressFactory;
 
     /**
-     * @param \Magento\Core\Block\Template\Context $context
+     * @param \Magento\View\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\App\Cache\Type\Config $configCacheType
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
      * @param \Magento\Core\Model\Config $config
@@ -63,10 +62,9 @@ class Edit extends \Magento\Directory\Block\Data
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Block\Template\Context $context,
+        \Magento\View\Block\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
         \Magento\App\Cache\Type\Config $configCacheType,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory,
         \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory,
         \Magento\Core\Model\Config $config,
@@ -77,9 +75,7 @@ class Edit extends \Magento\Directory\Block\Data
         $this->_config = $config;
         $this->_customerSession = $customerSession;
         $this->_addressFactory = $addressFactory;
-        parent::__construct(
-            $configCacheType, $coreData, $context, $storeManager, $regionCollFactory, $countryCollFactory, $data
-        );
+        parent::__construct($context, $coreData, $configCacheType, $regionCollFactory, $countryCollFactory, $data);
     }
 
     protected function _prepareLayout()

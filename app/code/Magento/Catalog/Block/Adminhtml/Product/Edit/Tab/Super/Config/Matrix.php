@@ -36,12 +36,6 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Super\Config;
 class Matrix
     extends \Magento\Backend\Block\Template
 {
-    /** @var \Magento\Core\Model\App */
-    protected $_application;
-
-    /** @var \Magento\Core\Model\LocaleInterface */
-    protected $_locale;
-
     /**
      * @param \Magento\Core\Helper\Data $coreData
      * Core registry
@@ -66,24 +60,20 @@ class Matrix
     protected $_config;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Product\Type\Configurable $configurableType
      * @param \Magento\Catalog\Model\Config $config
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\App $application
-     * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Product\Type\Configurable $configurableType,
         \Magento\Catalog\Model\Config $config,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\App $application,
-        \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Core\Model\Registry $coreRegistry,
         array $data = array()
     ) {
@@ -91,9 +81,7 @@ class Matrix
         $this->_productFactory = $productFactory;
         $this->_config = $config;
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($coreData, $context, $data);
-        $this->_application = $application;
-        $this->_locale = $locale;
+        parent::__construct($context, $coreData, $data);
     }
 
     /**
@@ -104,7 +92,7 @@ class Matrix
      */
     public function renderPrice($price)
     {
-        return $this->_locale->currency($this->_application->getBaseCurrencyCode())->toCurrency(sprintf('%f', $price));
+        return $this->_locale->currency($this->_app->getBaseCurrencyCode())->toCurrency(sprintf('%f', $price));
     }
 
     /**

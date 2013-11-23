@@ -80,9 +80,9 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
                     ) {
                         continue;
                     }
-                    array_push($data['authors']['name'], $data['maintainers']['name'][$i]);
-                    array_push($data['authors']['user'], $data['maintainers']['handle'][$i]);
-                    array_push($data['authors']['email'], $data['maintainers']['email'][$i]);
+                    $data['authors']['name'][] = $data['maintainers']['name'][$i];
+                    $data['authors']['user'][] = $data['maintainers']['handle'][$i];
+                    $data['authors']['email'][] = $data['maintainers']['email'][$i];
                 }
                 // Convert channel from previous version for entire package
                 $helper = $this->_connectData;

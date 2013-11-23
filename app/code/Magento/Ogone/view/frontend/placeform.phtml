@@ -25,14 +25,14 @@
  */
 ?>
 
-<p><strong><?php echo __('Please stand by. In a moment, this page will transfer your data to the Ogone payment gateway.'); ?></strong></p>
+<div class="message info"><div><?php echo __('Please stand by. In a moment, this page will transfer your data to the Ogone payment gateway.'); ?></div></div>
 <form name="ogone" id="ogone-review-form" action="<?php echo $this->getFormAction();?>" method="post" accept-charset="ISO-8859-1">
     <?php if ($formData = $this->getFormData()): ?>
-    <fieldset>
+    <div>
         <?php foreach ($formData as $name => $value) { ?>
             <input type="hidden" name="<?php echo $this->escapeHtml($name); ?>" value="<?php echo $this->escapeHtml($value); ?>" />
         <?php }?>
-    </fieldset>
+    </div>
     <?php endif; ?>
 </form>
 <script type="text/javascript">

@@ -65,7 +65,7 @@ class RewriteTest extends \PHPUnit_Framework_TestCase
             array(), '', false, false);
         $optionsMock->expects($this->any())->method('getRedirectOptions')->will($this->returnValue(array('R', 'RP')));
         $helper = new \Magento\Core\Helper\Url\Rewrite(
-            $this->getMock('Magento\Core\Helper\Context', array(), array(), '', false, false),
+            $this->getMock('Magento\App\Helper\Context', array(), array(), '', false, false),
             $optionsMock
         );
         $mockObject = new \Magento\Object();

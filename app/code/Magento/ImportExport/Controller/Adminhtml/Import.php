@@ -33,8 +33,17 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml;
 
-class Import extends \Magento\Backend\Controller\Adminhtml\Action
+class Import extends \Magento\Backend\App\Action
 {
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context
+    ) {
+        parent::__construct($context);
+    }
+
     /**
      * Initialize layout.
      *
@@ -42,9 +51,9 @@ class Import extends \Magento\Backend\Controller\Adminhtml\Action
      */
     protected function _initAction()
     {
-        $this->_title(__('Import/Export'))
-            ->loadLayout()
-            ->_setActiveMenu('Magento_ImportExport::system_convert_import');
+        $this->_title->add(__('Import/Export'));
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_ImportExport::system_convert_import');
         return $this;
     }
 
@@ -65,8 +74,10 @@ class Import extends \Magento\Backend\Controller\Adminhtml\Action
     {
         $this->_getSession()->addNotice($this->_objectManager->get('Magento\ImportExport\Helper\Data')
             ->getMaxUploadSizeMessage());
-        $this->_initAction()->_title(__('Import'))->_addBreadcrumb(__('Import'), __('Import'));
-        $this->renderLayout();
+        $this->_initAction();
+        $this->_title->add(__('Import'));
+        $this->_addBreadcrumb(__('Import'), __('Import'));
+        $this->_view->renderLayout();
     }
 
     /**
@@ -76,10 +87,10 @@ class Import extends \Magento\Backend\Controller\Adminhtml\Action
     {
         $data = $this->getRequest()->getPost();
         if ($data) {
-            $this->loadLayout(false);
+            $this->_view->loadLayout(false);
 
             /** @var $resultBlock \Magento\ImportExport\Block\Adminhtml\Import\Frame\Result */
-            $resultBlock = $this->getLayout()->getBlock('import.frame.result');
+            $resultBlock = $this->_view->getLayout()->getBlock('import.frame.result');
             /** @var $importModel \Magento\ImportExport\Model\Import */
             $importModel = $this->_objectManager->create('Magento\ImportExport\Model\Import');
 
@@ -90,12 +101,12 @@ class Import extends \Magento\Backend\Controller\Adminhtml\Action
                     ->addAction('innerHTML', 'import_validation_container_header', __('Status'));
             } catch (\Exception $e) {
                 $resultBlock->addError($e->getMessage());
-                $this->renderLayout();
+                $this->_view->renderLayout();
                 return;
             }
             $resultBlock->addAction('hide', array('edit_form', 'upload_button', 'messages'))
                 ->addSuccess(__('Import successfully done'));
-            $this->renderLayout();
+            $this->_view->renderLayout();
         } else {
             $this->_redirect('adminhtml/*/index');
         }
@@ -108,9 +119,9 @@ class Import extends \Magento\Backend\Controller\Adminhtml\Action
     {
         $data = $this->getRequest()->getPost();
         if ($data) {
-            $this->loadLayout(false);
+            $this->_view->loadLayout(false);
             /** @var $resultBlock \Magento\ImportExport\Block\Adminhtml\Import\Frame\Result */
-            $resultBlock = $this->getLayout()->getBlock('import.frame.result');
+            $resultBlock = $this->_view->getLayout()->getBlock('import.frame.result');
             // common actions
             $resultBlock->addAction('show', 'import_validation_container')
                 ->addAction('clear', array(
@@ -152,12 +163,12 @@ class Import extends \Magento\Backend\Controller\Adminhtml\Action
                 $resultBlock->addNotice(__('Please fix errors and re-upload file.'))
                     ->addError($e->getMessage());
             }
-            $this->renderLayout();
+            $this->_view->renderLayout();
         } elseif ($this->getRequest()->isPost() && empty($_FILES)) {
-            $this->loadLayout(false);
-            $resultBlock = $this->getLayout()->getBlock('import.frame.result');
+            $this->_view->loadLayout(false);
+            $resultBlock = $this->_view->getLayout()->getBlock('import.frame.result');
             $resultBlock->addError(__('File was not uploaded'));
-            $this->renderLayout();
+            $this->_view->renderLayout();
         } else {
             $this->_getSession()->addError(__('Data is invalid or file is not uploaded'));
             $this->_redirect('adminhtml/*/index');

@@ -33,7 +33,7 @@
  */
 namespace Magento\PageCache\Controller\Adminhtml;
 
-class PageCache extends \Magento\Backend\Controller\Adminhtml\Action
+class PageCache extends \Magento\Backend\App\Action
 {
     /**
      * Clean external cache action

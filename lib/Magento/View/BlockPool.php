@@ -29,6 +29,9 @@ use Magento\View\Element\BlockInterface;
 use Magento\View\Element\BlockFactory;
 use Magento\ObjectManager;
 
+/**
+ * Class BlockPool
+ */
 class BlockPool
 {
     /**

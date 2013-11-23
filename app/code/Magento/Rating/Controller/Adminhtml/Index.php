@@ -29,7 +29,9 @@
  */
 namespace Magento\Rating\Controller\Adminhtml;
 
-class Index extends \Magento\Backend\Controller\Adminhtml\Action
+use Magento\Backend\App\Action;
+
+class Index extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -39,11 +41,11 @@ class Index extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -53,32 +55,32 @@ class Index extends \Magento\Backend\Controller\Adminhtml\Action
     public function indexAction()
     {
         $this->_initEnityId();
-        $this->loadLayout();
+        $this->_view->loadLayout();
 
         $this->_setActiveMenu('Magento_Review::catalog_reviews_ratings_ratings');
         $this->_addBreadcrumb(__('Manage Ratings'), __('Manage Ratings'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     public function editAction()
     {
         $this->_initEnityId();
-        $this->loadLayout();
+        $this->_view->loadLayout();
 
         $ratingModel = $this->_objectManager->create('Magento\Rating\Model\Rating');
         if ($this->getRequest()->getParam('id')) {
             $ratingModel->load($this->getRequest()->getParam('id'));
         }
 
-        $this->_title($ratingModel->getId() ? $ratingModel->getRatingCode() : __('New Rating'));
+        $this->_title->add($ratingModel->getId() ? $ratingModel->getRatingCode() : __('New Rating'));
 
         $this->_setActiveMenu('Magento_Review::catalog_reviews_ratings_ratings');
         $this->_addBreadcrumb(__('Manage Ratings'), __('Manage Ratings'));
 
-        $this->_addContent($this->getLayout()->createBlock('Magento\Rating\Block\Adminhtml\Edit'))
-            ->_addLeft($this->getLayout()->createBlock('Magento\Rating\Block\Adminhtml\Edit\Tabs'));
-        $this->renderLayout();
+        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Rating\Block\Adminhtml\Edit'))
+            ->_addLeft($this->_view->getLayout()->createBlock('Magento\Rating\Block\Adminhtml\Edit\Tabs'));
+        $this->_view->renderLayout();
     }
 
     public function newAction()
@@ -164,7 +166,7 @@ class Index extends \Magento\Backend\Controller\Adminhtml\Action
 
     protected function _initEnityId()
     {
-        $this->_title(__('Ratings'));
+        $this->_title->add(__('Ratings'));
 
         $this->_coreRegistry->register(
             'entityId', $this->_objectManager->create('Magento\Rating\Model\Rating\Entity')->getIdByCode('product')

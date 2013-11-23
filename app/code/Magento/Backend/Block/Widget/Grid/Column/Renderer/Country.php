@@ -33,25 +33,6 @@ class Country
     extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
-     * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Backend\Block\Context $context,
-        \Magento\Core\Model\LocaleInterface $locale,
-        array $data = array()
-    ) {
-        $this->_locale = $locale;
-        parent::__construct($context, $data);
-    }
-
-    /**
      * Render country grid column
      *
      * @param   \Magento\Object $row

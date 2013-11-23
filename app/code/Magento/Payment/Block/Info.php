@@ -29,7 +29,7 @@
  */
 namespace Magento\Payment\Block;
 
-class Info extends \Magento\Core\Block\Template
+class Info extends \Magento\View\Block\Template
 {
     /**
      * Payment rendered specific information
@@ -39,32 +39,6 @@ class Info extends \Magento\Core\Block\Template
     protected $_paymentSpecificInformation = null;
 
     protected $_template = 'Magento_Payment::info/default.phtml';
-
-    /**
-     * Store manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
-     * Construct
-     *
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Block\Template\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Block\Template\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        array $data = array()
-    ) {
-        parent::__construct($coreData, $context, $data);
-
-        $this->_storeManager = $storeManager;
-    }
 
     /**
      * Retrieve info model

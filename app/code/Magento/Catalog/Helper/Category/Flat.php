@@ -78,13 +78,13 @@ class Flat extends \Magento\Catalog\Helper\Flat\AbstractFlat
      *
      * @param \Magento\Index\Model\ProcessFactory $processFactory
      * @param \Magento\Catalog\Model\Resource\Category\Flat $catalogCategoryFlat
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      */
     public function __construct(
         \Magento\Index\Model\ProcessFactory $processFactory,
         \Magento\Catalog\Model\Resource\Category\Flat $catalogCategoryFlat,
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig
     ) {
         $this->_catalogCategoryFlat = $catalogCategoryFlat;

@@ -37,5 +37,5 @@
         </block>
     </referenceContainer>
     <update handle="sales_order_info_links"/>
-    <container name="additional.product.info" label="Additional Product Info"/>
+    <block class="Magento\View\Block\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
 </layout>

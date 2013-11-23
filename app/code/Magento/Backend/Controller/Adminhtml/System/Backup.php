@@ -33,7 +33,7 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System;
 
-class Backup extends \Magento\Backend\Controller\Adminhtml\Action
+class Backup extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -48,17 +48,25 @@ class Backup extends \Magento\Backend\Controller\Adminhtml\Action
     protected $_backupFactory;
 
     /**
-     * @param \Magento\Backend\Controller\Context $context
+     * @var \Magento\App\Response\Http\FileFactory
+     */
+    protected $_fileFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Backup\Factory $backupFactory
+     * @param \Magento\App\Response\Http\FileFactory $fileFactory
      */
     public function __construct(
-        \Magento\Backend\Controller\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
-        \Magento\Backup\Factory $backupFactory
+        \Magento\Backup\Factory $backupFactory,
+        \Magento\App\Response\Http\FileFactory $fileFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_backupFactory = $backupFactory;
+        $this->_fileFactory = $fileFactory;
         parent::__construct($context);
     }
 
@@ -67,20 +75,20 @@ class Backup extends \Magento\Backend\Controller\Adminhtml\Action
      */
     public function indexAction()
     {
-        $this->_title(__('Backups'));
+        $this->_title->add(__('Backups'));
 
         if ($this->getRequest()->getParam('ajax')) {
             $this->_forward('grid');
             return;
         }
 
-        $this->loadLayout();
+        $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Backup::system_tools_backup');
         $this->_addBreadcrumb(__('System'), __('System'));
         $this->_addBreadcrumb(__('Tools'), __('Tools'));
         $this->_addBreadcrumb(__('Backups'), __('Backup'));
 
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
@@ -89,13 +97,13 @@ class Backup extends \Magento\Backend\Controller\Adminhtml\Action
     public function gridAction()
     {
         $this->renderLayot(false);
-        $this->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**
      * Create backup action
      *
-     * @return \Magento\Backend\Controller\Adminhtml\Action
+     * @return \Magento\Backend\App\Action
      */
     public function createAction()
     {
@@ -179,7 +187,7 @@ class Backup extends \Magento\Backend\Controller\Adminhtml\Action
     /**
      * Download backup action
      *
-     * @return \Magento\Backend\Controller\Adminhtml\Action
+     * @return \Magento\Backend\App\Action
      */
     public function downloadAction()
     {
@@ -196,9 +204,9 @@ class Backup extends \Magento\Backend\Controller\Adminhtml\Action
         $fileName = $this->_objectManager->get('Magento\Backup\Helper\Data')
             ->generateBackupDownloadName($backup);
 
-        $this->_prepareDownloadResponse($fileName, null, 'application/octet-stream', $backup->getSize());
+        $response = $this->_fileFactory->create($fileName, null, 'application/octet-stream', $backup->getSize());
 
-        $this->getResponse()->sendHeaders();
+        $response->sendHeaders();
 
         $backup->output();
         exit();
@@ -207,7 +215,7 @@ class Backup extends \Magento\Backend\Controller\Adminhtml\Action
     /**
      * Rollback Action
      *
-     * @return \Magento\Backend\Controller\Adminhtml\Action
+     * @return \Magento\Backend\App\Action
      */
     public function rollbackAction()
     {
@@ -325,7 +333,7 @@ class Backup extends \Magento\Backend\Controller\Adminhtml\Action
     /**
      * Delete backups mass action
      *
-     * @return \Magento\Backend\Controller\Adminhtml\Action
+     * @return \Magento\Backend\App\Action
      */
     public function massDeleteAction()
     {

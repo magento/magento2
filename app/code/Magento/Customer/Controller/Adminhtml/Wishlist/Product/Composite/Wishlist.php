@@ -34,7 +34,7 @@
 namespace Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite;
 
 class Wishlist
-    extends \Magento\Backend\Controller\Adminhtml\Action
+    extends \Magento\Backend\App\Action
 {
      /**
      * Wishlist we're working with
@@ -101,7 +101,7 @@ class Wishlist
         }
 
         $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite')
-            ->renderConfigureResult($this, $configureResult);
+            ->renderConfigureResult($configureResult);
 
         return $this;
     }

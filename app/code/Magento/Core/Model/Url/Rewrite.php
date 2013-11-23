@@ -81,12 +81,7 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
     protected $_app;
 
     /**
-     * @var \Magento\App\State
-     */
-    protected $_appState;
-
-    /**
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -95,8 +90,7 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\App $app
-     * @param \Magento\App\State $appState
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -106,15 +100,13 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\App $app,
-        \Magento\App\State $appState,
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_app = $app;
-        $this->_appState = $appState;
         $this->_storeManager = $storeManager;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -251,9 +243,6 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
     {
         if (!$this->_appState->isInstalled()) {
             return false;
-        }
-        if (is_null($request)) {
-            $request = $this->_app->getFrontController()->getRequest();
         }
         if (is_null($this->getStoreId()) || false === $this->getStoreId()) {
             $this->setStoreId($this->_storeManager->getStore()->getId());

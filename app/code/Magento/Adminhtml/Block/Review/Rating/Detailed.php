@@ -53,25 +53,25 @@ class Detailed extends \Magento\Adminhtml\Block\Template
     protected $_votesFactory;
 
     /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Rating\Model\Resource\Rating\CollectionFactory $ratingsFactory
      * @param \Magento\Rating\Model\Resource\Rating\Option\Vote\CollectionFactory $votesFactory
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Rating\Model\Resource\Rating\CollectionFactory $ratingsFactory,
         \Magento\Rating\Model\Resource\Rating\Option\Vote\CollectionFactory $votesFactory,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
         $this->_ratingsFactory = $ratingsFactory;
         $this->_votesFactory = $votesFactory;
         $this->_coreRegistry = $registry;
-        parent::__construct($coreData, $context, $data);
+        parent::__construct($context, $coreData, $data);
     }
 
     protected function _construct()

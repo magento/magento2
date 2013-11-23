@@ -29,7 +29,7 @@ namespace Magento\Core\Helper\File;
 /**
  * Class Media
  */
-class Media extends \Magento\Core\Helper\AbstractHelper
+class Media extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * @var \Magento\Core\Model\Date
@@ -39,11 +39,11 @@ class Media extends \Magento\Core\Helper\AbstractHelper
     /**
      * Constructor
      *
-     * @param \Magento\Core\Helper\Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Date $date
      */
     public function __construct(
-        \Magento\Core\Helper\Context $context,
+        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Date $date
     ) {
         parent::__construct($context);

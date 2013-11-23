@@ -31,18 +31,18 @@ class QuoteConfigProductAttributes
     /** @var \Magento\Customer\Model\Session */
     protected $_customerSession;
 
-    /** @var \Magento\Core\Model\StoreManager */
+    /** @var \Magento\Core\Model\StoreManagerInterface */
     protected $_storeManager;
 
     /**
      * @param \Magento\SalesRule\Model\Resource\Rule $ruleResource
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\SalesRule\Model\Resource\Rule $ruleResource,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\Model\StoreManager $storeManager
+        \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         $this->_ruleResource = $ruleResource;
         $this->_customerSession = $customerSession;

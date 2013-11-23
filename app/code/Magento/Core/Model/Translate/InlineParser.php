@@ -140,7 +140,7 @@ class InlineParser
     protected $_resource;
 
     /**
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -158,7 +158,7 @@ class InlineParser
      * Initialize base inline translation model
      *
      * @param \Magento\Core\Model\Resource\Translate\String $resource
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Helper\Data $helper
      * @param \Zend_Filter_Interface $inputFilter
@@ -168,7 +168,7 @@ class InlineParser
         \Magento\Core\Model\Resource\Translate\String $resource,
         \Magento\View\DesignInterface $design,
         \Magento\Core\Helper\Data $helper,
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Zend_Filter_Interface $inputFilter,
         \Magento\App\State $appState
     ) {
@@ -197,7 +197,7 @@ class InlineParser
     }
 
     /**
-     * @return \Magento\Core\Model\StoreManager
+     * @return \Magento\Core\Model\StoreManagerInterface
      */
     public function getStoreManager()
     {
