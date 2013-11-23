@@ -45,7 +45,7 @@ Checkout,结账
 City,城市
 "Clear Shopping Cart",清空购物车
 "Click <a href=""%1"" onclick=""this.target='_blank'"">here to print</a> a copy of your order confirmation.","单击<a href=""%1"">这里来打印</a>您订单确认信息的拷贝。"
-"Click <a href=""%1"" onclick=""this.target=\'_blank\'"">here to print</a> a copy of your order confirmation.","点击<a href=""%1"" onclick=""this。target=\'_blank\'"">这里打印</a>您的订单确认信息。"
+"Click <a href=""%1"" onclick=""this.target=\'_blank\'"">here to print</a> a copy of your order confirmation.","点击<a href=""%1"" onclick=""this.target=\'_blank\'"">这里打印</a>您的订单确认信息。"
 "Click <a href=""%1"">here</a> to continue shopping.","单击<a href=""%1"">这里</a>继续购物。"
 Close,关闭
 Company,公司
@@ -194,6 +194,7 @@ Sales,销售
 "Send Payment Failed Email Copy Method",发送支付失败电子邮件复制方法
 "Send Payment Failed Email Copy To",发送支付失败电子邮件拷贝至
 "Send To",发送至
+"Separate by "","".",以“，”分隔。
 "Ship to Multiple Addresses",运送到多个地址
 "Ship to different address",送货到不同地址
 "Ship to this address",送货到这个地址

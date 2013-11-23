@@ -82,7 +82,7 @@ Password,密码
 "The URL ""%1"" is invalid.","URL ""%1"" 无效。"
 "The URL ""%1"" is not accessible.","URL “%1” 无法访问。"
 "The database server version doesn't match system requirements (required: %1, actual: %2).",数据库服务器版本不满足要求（需要：%1，实际：%2）。
-"The table prefix should contain only letters (a-z), numbers (0-9) or underscores (_); the first character should be a letter.",表前缀应该仅仅包含字母（a-z）、数字（0-9）或者下划线（_）;首字母必须是字母。
+"The table prefix should contain only letters (a-z), numbers (0-9) or underscores (_); the first character should be a letter.",表前缀应该仅仅包含字母（a-z）、数字（0-9）或者下划线（_）；首字母必须是字母。
 "This is the additional path used after your base URL to access your store Admin (e.g, Admin).",这是另外的路径附加到你的基础URL用来存取店铺管理（如：Admin）。
 "Time Zone",时区
 "Use Secure URLs (SSL)",使用安全URL（SSL）

@@ -1,4 +1,5 @@
 " was not delivered nor scanned",尚未发布或扫描
+"""Per Order"" allows a single handling fee for the entire order. ""Per Package"" allows an individual handling fee for each package.","""每订单""是整个订单采用一笔处理费用。 ""每包裹""""是每个包裹单独一笔处理费用。"""
 "1 Day Freight",1天送达
 "2 Day",2天
 "2 Day AM","2 Day AM"
@@ -163,6 +164,7 @@ PAK,PAK
 Package,包裹
 "Package Description",包裹描述
 "Package content is missing",缺少包括内容
+"Package ready time after order submission (in hours)",在订单提交后打包时间（小时）
 "Packages Request Type",包裹请求类型
 Packaging,打包
 Pallet,托盘
@@ -173,6 +175,7 @@ Password,密码
 "Piece Id barcode is missing","价格 ID 条码丢失"
 "Piece number information is missing",价格数字信息丢失
 "Please format your response correctly.",请正确格式化返回应答。
+"Please make sure to use only digits here. No dashes are allowed.",请在这里只使用数字，不能使用横线。
 "Please, specify origin country",请指定发起国家
 Pounds,磅
 "Priority Mail",优先邮件
@@ -187,6 +190,7 @@ Regular,常规
 "Regular Pickup",常规取件
 "Request Courier",需要快递员
 Required,必须
+"Required for negotiated rates; 6-character UPS",对于协议汇率是必须的；6-字符UPS
 Residential,住宅
 "Residential Delivery",住宅送货
 "Response is in the wrong format",响应的格式有误
@@ -228,10 +232,14 @@ Sprintline,Sprintline
 Station,站台
 Subtotal,小计
 "Subtotal With Discount",不含折扣小计
+"The field is applicable if the Smart Post method is selected.","如果Smart Post方法被选择该字段是可接受的。"
 "The response is in wrong format.",响应格式有误。
 "There is no items in this order",该订单不包含商品
 "Third Party",第三方
 "This allows breaking total order weight into smaller pieces if it exceeds %1 %2 to ensure accurate calculation of shipping charges.",如果重量超过%1%2可以拆分整个订单重量到多个小包以确保货运费用计算更精确
+"This allows breaking total order weight into smaller pieces if it exeeds 70 kg to ensure accurate calculation of shipping charges.",如果超过70公斤允许拆分整个订单重量到多个小包以确保更精确的运费结算。
+"This enables or disables SSL verification of the Magento server by UPS.",这里启用或禁止由UPS发起的Magento服务器的SSL校验.
+"This is used when ""Additional Protection Value"" is set to ""Configuration"". Enter only a numeric amount.","当""额外的保护值""设置为""配置""被使用。仅输入数量。"
 "This shipping method is not available. Please specify the zip code.",无效的货运方法，请指定邮政编码。
 Title,标题
 "To Lower",要降低

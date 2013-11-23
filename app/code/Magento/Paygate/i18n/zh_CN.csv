@@ -6,7 +6,7 @@
 "Are you sure you want to cancel your payment? Click OK to cancel your payment and release the amount on hold. Click Cancel to enter another credit card and continue with your payment.",您是否确定要取消支付？单击确定可取消您的支付，并释放占用的额度。单击取消可输入其他信用卡，并继续进行支付。
 "Authorize Only",仅供授权
 "Authorize and Capture",授权和捕获
-"Authorize.Net Transaction ID %1","Authorize。Net 交易 ID %1"
+"Authorize.Net Transaction ID %1","Authorize.Net 交易 ID %1"
 Cancel,取消
 "Centinel API URL","Centinel API链接"
 "Click ""Cancel"" to remove any pending status and release money already processed during this payment.","单击""取消""来移除任何待处理状态和释放已经处理的支付。"
@@ -18,6 +18,7 @@ Debug,调试
 Enabled,已启用
 "Gateway URL","网关 URL"
 "Gateway error: %1",网关错误：%1
+"If you leave this empty, we'll use a default value. The custom URL may be provided by CardinalCommerce agreement.",如果留空将使用默认值。定制URL可能有CardinalCommerce协议提供。
 "Invalid amount for capture.",获取的额度无效。
 "Invalid amount for refund.",退款额度无效。
 "Maximum Order Total",最大订单总数
@@ -36,6 +37,7 @@ Enabled,已启用
 Processing...,处理中...
 "Remaining Balance",剩下的余额
 "Severe 3D Secure Card Validation","提供 3D 安全信用卡验证"
+"Severe Validation Removes Chargeback Liability on Merchant",正式验证将撤销银行的退款责任
 "Something went wrong canceling the transactions.",当取消交易时发生错误。
 "Something went wrong in the payment gateway.",支付网关发生错误。
 "Something went wrong while authorizing the partial payment.",当授权部分支付时发生错误。

@@ -16,7 +16,7 @@
 24h,24h
 2YTD,2YTD
 "6 Hours",6小时
-"<a href=""%1"" onclick=""this.target='blank'"">%2 %3</a> <a href=""mailto:%4"">(%4)</a>","<a href=""%1"" onclick=""this。target='blank'"">%2 %3</a> <a href=""mailto：%4"">（%4）</a>"
+"<a href=""%1"" onclick=""this.target='blank'"">%2 %3</a> <a href=""mailto:%4"">(%4)</a>","<a href=""%1"" onclick=""this.target='blank'"">%2 %3</a> <a href=""mailto:%4"">（%4）</a>"
 "<strong>Attention</strong>: Captcha is case sensitive.",<strong>注意</strong>：验证码为大小写敏感的。
 "A total of %1 record(s) were deleted.",共%1条记录被删除。
 "A total of %1 record(s) were updated.",共%1条记录被更新。
@@ -514,12 +514,12 @@ Permissions,权限
 "Please enter a number greater than 0 in this field.",请在该字段中输入大于0的数字。
 "Please enter a password.",请输入密码。
 "Please enter a valid URL (for example, the URL must begin with ""http://"").","请输入有效的URL（例如：URL必须以""http：//""开头）。"
-"Please enter a valid URL (for examples, http://www.example.com or www.example.com).","请输入有效的URL（例如：http：//www。example。com or www。example。com）。"
+"Please enter a valid URL (for examples, http://www.example.com or www.example.com).","请输入有效的URL（例如：http：//www.example.com or www.example.com）。"
 "Please enter a valid credit card number.",请输入有效的信用卡卡号。
 "Please enter a valid date.",请输入有效日期
 "Please enter a valid dollar amount (for example, $100.00).",请输入有效的美元数量（如：$100。00）。
-"Please enter a valid email address(for example johndoe@domain.com.).",请输入有效的邮件地址（例如：jondoe@domain。com）。
-"Please enter a valid email address. For example johndoe@domain.com.",请输入有效邮件地址。例如johndoe@domain。com。
+"Please enter a valid email address(for example johndoe@domain.com.).",请输入有效的邮件地址（例如：jondoe@domain.com）。
+"Please enter a valid email address. For example johndoe@domain.com.",请输入有效邮件地址。例如johndoe@domain.com。
 "Please enter a valid email.",请输入有效邮件。
 "Please enter a valid number in this field.",请在此区域输入有效的数字。
 "Please enter a valid password.",请输入有效的密码。
@@ -880,7 +880,7 @@ Warning,警告
 "Web Site Information",站点信息
 Website,网站
 "What is this?",这是什么？
-"Wish List vs. Regular Order",收藏清单vs。正规订单
+"Wish List vs. Regular Order",收藏清单vs.正规订单
 "Wish Lists",收藏清单
 "Wishlist - %1 item(s)","收藏清单 - %1个条目（s）"
 "XML Sitemap",XML站点地图
@@ -914,7 +914,7 @@ b,b
 close,关闭
 critical,重要
 "example: ""sitemap/"" or ""/"" for base path (path must be writeable)","例如： ""sitemap/"" 或 ""/"" 可代表路径根（路径必须可写）"
-"example: sitemap.xml",例如：sitemap。xml
+"example: sitemap.xml",例如：sitemap.xml
 failed,失败
 major,主要
 minor,次要

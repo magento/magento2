@@ -8,6 +8,7 @@
 "Apply Customer Tax",应用客户税
 "Apply Discount On Prices",在价格上应用折扣
 "Apply Tax On",将税应用于
+"Apply discount on price including tax is calculated based on store tax, if ""Apply Tax after Discount"" is selected.",如果选中”折后应用税率“，则在含税价格上应用折扣会根据店铺税率计算。
 "Are you sure you want to do this?",您是否确认要这样做？
 Back,返回
 "Before Discount",折前
@@ -135,6 +136,8 @@ Taxes,税
 "This class no longer exists.",该类不在存在。
 "This rule no longer exists",该规则不存在。
 "This rule no longer exists.",该规则已不存在。
+"This sets whether catalog prices entered by admin include tax.","这里设置管理员输入产品目录价格是否含税。"""
+"This sets whether shipping amounts entered by admin or obtained from gateways include tax.",这里设置由管理员输入或者网关获得的运费是否含税。
 Total,总数
 "Unit Price",单价
 Yes,是

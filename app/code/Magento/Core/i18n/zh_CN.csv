@@ -26,8 +26,8 @@ Back,返回
 "Base Secure URL","基本安全 URL"
 "Base URL",备份URL
 "Base Unsecure URL","基本不安全 URL"
-"Before modifying the store view code please make sure that it is not used in index.php.","请在修改商店视图代码前，确认它没有在 index。php 中使用。"
-"Before modifying the website code please make sure that it is not used in index.php.","请在修改网站代码前，确认它没有在 index。php 中使用。"
+"Before modifying the store view code please make sure that it is not used in index.php.","请在修改商店视图代码前，确认它没有在 index.php 中使用。"
+"Before modifying the website code please make sure that it is not used in index.php.","请在修改网站代码前，确认它没有在 index.php 中使用。"
 "Blocks HTML output",块HTML输出
 "Cache Storage Management",缓存存储管理
 "Cache storage may contain additional data. Are you sure that you want flush it?",缓存存储可能包含额外数据。您确认要清空它吗？
@@ -146,14 +146,14 @@ Package,包裹
 "Please enter a number 0 or greater in this field.",请在该字段中输入数字0或更大值。
 "Please enter a number greater than 0 in this field.",请在该字段中输入大于0的数字。
 "Please enter a number lower than 100.",请输入不超过100个数字。
-"Please enter a valid URL Key. For example ""example-page"", ""example-page.html"" or ""anotherlevel/example-page"".","请输入有效的 URL 密钥。例如， ""example-page""、""example-page。html""，或 ""anotherlevel/example-page""。"
+"Please enter a valid URL Key. For example ""example-page"", ""example-page.html"" or ""anotherlevel/example-page"".","请输入有效的 URL 密钥。例如， ""example-page""、""example-page.html""，或 ""anotherlevel/example-page""。"
 "Please enter a valid URL. Protocol is required (http://, https:// or ftp://)",请输入有效URL。协议名是必须的（http：//、https：//，或ftp：//）
 "Please enter a valid XML-identifier. For example something_1, block5, id-4.",请输入有效的XML标识符。例如，类似something_1、block5、id-4。
 "Please enter a valid credit card number.",请输入有效的信用卡卡号。
 "Please enter a valid credit card verification number.",请输入有效的信用卡验证码。
 "Please enter a valid date.",请输入有效日期
 "Please enter a valid day (1-%1).",请输入有效的天（1-%1）。
-"Please enter a valid email address. For example johndoe@domain.com.",请输入有效邮件地址。例如johndoe@domain。com。
+"Please enter a valid email address. For example johndoe@domain.com.",请输入有效邮件地址。例如johndoe@domain.com。
 "Please enter a valid fax number. For example (123) 456-7890 or 123-456-7890.","请输入有效传真号码，例如 （123） 456-7890 或 123-456-7890。"
 "Please enter a valid full date",请输入有效完整日期
 "Please enter a valid month (1-12).",请输入有效月份（1-12）。

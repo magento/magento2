@@ -5,6 +5,7 @@
 Always,总是
 CAPTCHA,验证码
 "CAPTCHA Timeout (minutes)",验证码超时（分钟）
+"CAPTCHA for ""Create user"" and ""Forgot password"" forms is always enabled if chosen.","如果选择该项，""创建用户""和""忘记密码""的CAPTCHA表单总是被允许。"
 "Case Sensitive",大小写敏感
 "Create user",创建用户
 "Displaying Mode",显示模式
@@ -13,6 +14,7 @@ CAPTCHA,验证码
 Font,字体
 "Forgot password",忘记密码
 Forms,表单
+"If 0 is specified, CAPTCHA on the Login form will be always available.",如果设置为0，登录表单上的验证码将总是显示。
 "Incorrect CAPTCHA",不正确的CAPTCHA
 "Incorrect CAPTCHA.",验证码有误。
 LinLibertine,LinLibertine
@@ -20,6 +22,7 @@ LinLibertine,LinLibertine
 "Number of Unsuccessful Attempts to Login",不成功的登录企图数量
 "Please enter the letters below",请输入下面的字母
 "Please enter the letters from the image:",请输入图片里的字母：
+"Please specify 8 symbols at the most. Range allowed (e.g. 3-5)",请最多指定8个符号。可用范围指定（例如3-5）
 "Please type the letters below",请输入下面的字符
 "Register during Checkout",在结账时注册
 "Reload captcha",刷新验证码

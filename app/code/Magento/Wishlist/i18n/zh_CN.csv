@@ -4,6 +4,8 @@
 "%1 product(s) have been added to shopping cart: %2.","%1个产品已经被添加到购物车： %2。"
 "%1's Wishlist","%1 的收藏清单"
 "* Required Fields",*必要字段
+"10 by default. Max - 10000","默认10。 最大 - 10000"
+"255 by default",默认255
 "Add All to Cart",全部添加到购物车
 "Add Date",添加日期
 "Add Locale",已添加，来自

@@ -11,17 +11,21 @@ Authorization,授权
 Enabled,已启用
 "Exception not defined",异常未定义
 "Font Family of the Ogone Template","Ogone 模板的字体库"
+"For production, replace ""test"" with ""prod"". Example: https://secure.ogone.com/ncol/prod/orderstandard.asp","对于产品，将 ""test"" 替换为 ""prod""。例如：https：//secure.ogone.com/ncol/prod/orderstandard。asp"
 "Gateway URL","网关 URL"
 "Hash All Parameters",哈希所有参数
 "Hashing Algorithm",哈希算法
 "Horizontally grouped logo with group name on left",左侧带组名称的水平分组标志
 "Horizontally grouped logo with no group name",不带组名称的水平分组标志
+"If you choose ""No Operation"", Ogone will use the default payment procedure in your Ogone setup.","如果选择""不操作""， Ogone将在你的Ogone设置中使用默认支付过程。"
+"If you choose ""Ogone Template"", you will need to fill in all the following fields.",如果选择“Ogone模板”，则需要填写下列全部字段。
 "Layout of Payment Methods",支付方法布局
 "Logo of the Ogone Template",Ogone模板的徽标
 Magento,Magento
 Ogone,Ogone
 "Ogone Default Operation",Ogone默认操作
 "Order can't save",订单无法保存
+"PSPID is a case sensitive field.",PSPID是一个大小写敏感的字段。
 "Payment Action",支付操作
 "Payment ID: %1","支付ID： %1"
 "Payment Template",支付模板
@@ -50,4 +54,5 @@ Title,标题
 "Unknown exception",未知例外
 "Verical list",垂直列表
 "Waiting Authorization",等待身份验证
+"You can arrange the layout/list of the payment methods on Ogone payment page.",您可以在Ogone支付页面上安排支付方法的布局/列表。
 "You will be redirected to Ogone website when you place an order.",在下单时，您会被重定向到Ogone的网站。

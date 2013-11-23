@@ -107,6 +107,7 @@ Sales,销售
 "Sales Report",销售报告
 "Search Query",搜索查询
 "Search Terms",搜索条件
+"Select day of the month.",选择每月的天数。
 Shipping,运送
 "Shopping Cart",购物车
 "Show Actual Values",显示实际值
@@ -122,7 +123,7 @@ Tax,传真
 Title,标题
 To,发送至
 Total,总数
-"Total Invoiced vs. Paid Report","发票总数 vs。 付款报告"
+"Total Invoiced vs. Paid Report","发票总数 vs. 付款报告"
 "Total Ordered Report",订单总数报告
 "Total Refunded Report",退款总数报告
 "Total Shipped Report",发货总数报告

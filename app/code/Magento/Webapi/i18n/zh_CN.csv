@@ -14,6 +14,7 @@
 "Delete API User",删除API用户
 "Edit API Role",编辑API角色
 "Enable WSDL Cache",允许WSDL缓存
+"If empty, UTF-8 will be used.","如果为空， 将使用UTF-8."
 "Incorrect format of WSDL request URI or Requested services are missing.",WSDL请求不正确或者请求的服务不存在。
 "Internal Error. Details are available in Magento log file. Report ID: %1","内不错误。详细信息请查看Magento日志文件。 报告ID： %1"
 "Invalid XML",无效的XML

@@ -1,6 +1,6 @@
 " for more information or ",欲知详情或
 "# of Items (and above)","# 商品（上述）"
-"# of Items vs. Destination","# 商品 vs。 目标"
+"# of Items vs. Destination","# 商品 vs. 目标"
 "Allow Shipping to Multiple Addresses",允许发送到多个地址
 "Calculate Handling Fee",计算的手续费
 Carrier:,运营商：
@@ -48,7 +48,7 @@ Percent,百分之
 "Please correct Table Rates File Format.",请纠正货运费率表文件格式。
 "Please correct Table Rates format in the Row #%1.",请在行#%1纠正表费率格式。
 Price,价格
-"Price vs. Destination","价格 vs。 目标"
+"Price vs. Destination","价格 vs. 目标"
 Region/State,地区/州
 "Service Type:",服务类型：
 "Ship to Applicable Countries",发送到适用的国家
@@ -85,7 +85,7 @@ Type,类型
 "We couldn't import this file because of these errors: %1",由于错误%1，不能导入该文件
 "We don't have enough information to create shipping labels. Please make sure your store information and settings are complete.",没有足够的信息创建货运标签，请确保设置了完整的店铺信息。
 "Weight (and above)",重量（和以上）
-"Weight vs. Destination","重量 vs。 目的地"
+"Weight vs. Destination","重量 vs. 目的地"
 Weight:,重量：
 "ZIP/Postal Code",邮政编码
 "contact us",联系我们

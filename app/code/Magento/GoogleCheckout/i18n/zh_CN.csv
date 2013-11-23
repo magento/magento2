@@ -38,6 +38,7 @@ Enable,启用
 "Enable Digital Delivery",启用数字交付
 "Enable Flat Rate",启用平坦费率
 "Enable Merchant Calculated",启用分行计算
+"Enable this if your checkout request is too big and being cut off.",如果您的结账请求太大被截断，请启用这个。
 "Expiration: %1",到期：%1
 "Express Mail",快速邮件
 "Express Saver",快速经济
@@ -68,6 +69,7 @@ Ground,地面
 "Hide Cart Contents",隐藏购物车内容
 "Home Delivery",家庭运送
 "IP Address: %1","IP 地址：%1"
+"If enabled, cart contents will be hidden after clicking on the Google Checkout button in the shopping cart, and restored if ""Edit Cart"" link was activated.","如果启用，购物车内容会在单击购物车中的 Google Checkout 按钮后被隐藏，并在“编辑购物车”链接激活后恢复显示。"
 Inches,英寸
 "Invoice Auto-Created: %1",发票已自动创建：%1
 "Is Buyer Willing to Receive Marketing Emails: %1",买家是否愿意接收市场营销电子邮件：%1
@@ -90,6 +92,7 @@ No,否
 "No Comment",无评论
 "No Reason",无原因
 Optimistic,乐观的
+"Optional, leave empty for home page","可选的， 对于主页请留空。"
 "Parcel Post",邮政包裹
 Pessimistic,悲观的
 "Priority Mail",优先邮件
@@ -107,6 +110,7 @@ Pessimistic,悲观的
 "Rate 3 Ship to Specific Countries","比率 3 发货到指定国家"
 "Rate 3 Title","比率 3 标题"
 Remove,删除
+"Required for live Google Checkout transactions. Make sure that this option corresponds to Use Secure URLs in Frontend (""Web"" &gt; ""Secure"").","对于活动的Google Checkout交易是必须的。确保这个选项符合在前端（""Web"" &gt； ""安全""）使用安全URLs。"
 Residential,住宅
 Sandbox,沙箱
 "Secure Callback URL",安全回拨URL

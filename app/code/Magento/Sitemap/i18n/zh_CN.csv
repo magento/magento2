@@ -7,10 +7,11 @@ Always,总是
 "Categories Options",分类选项
 Daily,每天
 "Edit Sitemap",编辑站点结构图
-"Enable Submission to Robots.txt",允许提交到Robots。txt
+"Enable Submission to Robots.txt",允许提交到Robots.txt
 Enabled,已启用
 "File ""%1"" cannot be saved. Please, make sure the directory ""%2"" is writable by web server.","文件""%1""不能被存储。 请确保服务器上的目录""%2""可写。"
 "File handler unreachable",文件句柄不可达
+"File size in bytes.",文件字节数。
 Filename,文件名
 Generate,生成
 "Generation Settings",常规设置
@@ -41,6 +42,7 @@ Sitemap,站点结构图
 "The sitemap has been deleted.",站点结构图已被删除。
 "The sitemap has been saved.",站点结构图已保存。
 "This sitemap no longer exists.",站点结构图不存在。
+"Valid values range from 0.0 to 1.0.",有效的值范围从0.0到1.0。
 "We can't find a sitemap to delete.",找不到要删除的站点地图
 "We can't find a sitemap to generate.",找不到要产生的站点地图。
 Weekly,每周

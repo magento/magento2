@@ -24,6 +24,7 @@ Inventory,盘点
 "Out of Stock",无货
 "Please correct the quantity for some products.",请纠正部分产品的数量。
 "Product Stock Options",产品库存选项
+"Products will still be shown by direct product URLs.",通过直接的产品URLs访问仍然能显示产品。
 "Rule price",规则价格
 "Set Items' Status to be In Stock When Order is Cancelled",如果订单被取消，设置商品的状态为有货
 "Some of the products are currently out of stock.",部分产品当前缺货。

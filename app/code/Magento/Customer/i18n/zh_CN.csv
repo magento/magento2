@@ -21,6 +21,7 @@ All,全部
 "All Customers",所有客户
 "All Store Views",所有店铺视图
 "All countries",所有国家
+"Always optional.",总是可选。
 Amount,数量
 "An error occurred while deleting the address.",删除该地址时遇到了错误。
 Approved,已批准
@@ -71,6 +72,7 @@ Customer,客户
 "Customer View",客户视图
 "Customer email is required",需要客户邮件
 "Customer website ID must be specified when using the website scope",使用网站范围时必须指定客户网站ID
+"Customer will stay on the current page if ""No"" is selected.",如果选择“否”，客户将停留在当前页面。
 Customers,客户
 "Customers Only",仅限客户
 "Customers Section",客户区域
@@ -146,6 +148,8 @@ ID,ID
 "Last Date Unsubscribed",上次退订的日期
 "Last Name",姓氏
 "Last URL",最后一个URL
+"Leave empty for default (15 minutes).",留空可使用默认值（15分钟）。
+"Leave empty for default (2). Valid range: 1-4",留空可使用默认值（2）。有效范围：1-4
 "Lifetime Sales",终生销售
 "Log In",登录
 "Log Out",注销
@@ -207,6 +211,7 @@ Pending,挂起
 "Personal Information",个人信息
 "Please correct the email address.",请纠正邮件地址。
 "Please correct this email address: ""%1"".","请纠正该邮件地址： ""%1""。"
+"Please enter a number 1 or greater in this field.",请在该字段输入数字1或更大值。
 "Please enter a valid date between %1 and %2 at %3.","请在%1输入介于%2 与 %3 之间的有效日期。"
 "Please enter a valid date equal to or greater than %1 at %2.","请在 %1 输入等于或大于 %2 的有效日期。"
 "Please enter a valid date less than or equal to %1 at %2.","请在 %2 输入小于或等于 %1 的有效日期。"
@@ -309,12 +314,16 @@ Text,文字
 "The last name cannot be empty.",姓氏不能为空。
 "The password can not begin or end with a space.",密码不能以空格开头或者结束。
 "The password must have at least %1 characters.",密码必须有至少%1个字符。
+"The suffix that goes after name (Jr., Sr., etc.)",名字后面的后缀（Jr.、Sr.等）
+"The title that goes before name (Mr., Mrs., etc.)",姓名前称谓（先生、女士等）
 "There are no items in customer's shopping cart at the moment",客户的购物车中目前没内容
 "There are no recurring profiles yet.",还没有周期配置。
 "There is already an account with this email address. If you are sure that it is your email address, <a href=""%1"">click here</a> to get your password and access your account.","已经存在一个同名邮件地址的账号。如果您确定这就是您的邮件地址，<a href=""%1"">点击这里</a>得到密码来访问您的账户信息。"
 "There was an error validating the VAT ID.","验证 VAT ID 时出错。"
 "This account is not confirmed.",该帐户尚未确认。
 "This email does not require confirmation.",该电子邮件不需要确认。
+"This email will be sent instead of default welcome email, after account confirmation.",在确认帐户后，该邮件将代替默认欢迎邮件发送。
+"To show VAT number on frontend, set Show VAT Number on Frontend option to Yes.",为了在前端显示VAT号，设置在前端显示VAT号选项为是。
 Total,总数
 Type,类型
 Unknown,未知

@@ -10,14 +10,20 @@
 "Admin Base URL",管理基本URL
 "Admin Session Lifetime (seconds)",管理会话生命周期（秒）
 "Admin User Emails",管理用户邮件
+"After selecting a new media storage location, press the Synchronize button to transfer all media to that location. Media will not be available in the new location until the synchronization process is complete.",在选择新媒介位置之后，按同步按钮迁移所有媒介到那个位置。直到同步过程完成后媒介才可以使用。
 "Allow Countries",允许的国家
 "Allow Symlinks",允许的符号链接
 "Allowed IPs (comma separated)",允许的IP（逗号分割）
+"Allowed file types: jpg, jpeg, gif, png","允许的文件类型：jpg， jpeg， gif， png"
+"Allows customers to stay logged in when switching between different stores.",允许客户在不同店铺间切换时保持登录。
+"Alternative text for next link in pagination menu. If empty, default arrow image will used.",轮换菜单中链接旁的候选文字。如果为空，则使用默认的箭头图片。
+"Alternative text for previous link in pagination menu. If empty, default arrow image will used.",轮换菜单中上一个链接旁的候选文字。如果为空，则使用默认的箭头图片。
 "An error occurred while disabling cache.",当禁止缓存时发生错误。
 "An error occurred while enabling cache.",当允许缓存时发生错误。
 "An error occurred while refreshing cache.",当刷新缓存时发生错误。
 "Anchor Text for Next",下一个的锚点文字
 "Anchor Text for Previous",上一个的锚点文字
+"Any of the fields allow fully qualified URLs that end with '/' (slash) e.g. http://example.com/magento/",任何字段允许以'/'结尾的完整的URLs。如：http：//example.com/magento/
 "Are you sure you want to delete the selected backup(s)?",你是否确定要删除所选备份？
 "Authentication error occurred.",认证错误。
 "Auto-redirect to Base URL","自定重定向到基本 URL"
@@ -62,24 +68,37 @@ Developer,开发人员
 "European Union Countries",欧盟成员国
 "Exceptions Log File Name",例外日志文件名
 "First Day of Week",每周第一天
+"For Windows server only.",仅仅为Windows服务器。
 "Forgot Password Email Template",忘记密码邮件模板
 "Forgot and Reset Email Sender",忘记和重置邮件发送者
 "General Contact",常规联系人
+"How many links to display at once.",一次显示多少链接。
+"I.e. redirect from http://example.com/store/ to http://www.example.com/store/",例如：从http：//example.com/store/转向http：//www.example.com/store/
+"If no value is specified, the system default will be used. The system default may be modified by third party extensions.",如果没有指定值系统默认值将被使用。系统默认值可能被第三方扩展修改。
+"If the current frame position does not cover utmost pages, will render link to current position plus/minus this value.",如果当前框架位置无法涵盖最大的页面，将呈现链接到当前位置并加/减该数值。
 "Image Adapter",图片适配器
 "Image Processing Settings",图片处理设置
 ImageMagick,ImageMagick
 "Invalid %1. %2","无效的%1。 %2"
 "JavaScript Settings","JavaScript 设置"
+"Leave empty for access from any location.",从任何位置访问留空。
 "Locale Options",区域选项
 "Log Settings",日志设置
 "Log in",登录
+"Logging from \Magento\Logger. File is located in {{base_dir}}/var/log","从\Magento\Logger记录。文件位于{{base_dir}}/var/log"
 "Login is Case Sensitive",登录信息大小写敏感
 "Logo Image",徽标图像
 "Logo Image Alt",备选徽标图像
 "Magento Admin Panel",Magento管理面板
-"Magento is an eBay Inc. company. Copyright&copy; %1 Magento, Inc. All rights reserved.","Magento属于eBay公司。 版权&copy; %1 Magento， Inc。 版权所有。"
+"Magento is an eBay Inc. company. Copyright&copy; %1 Magento, Inc. All rights reserved.","Magento属于eBay公司。 版权&copy； %1 Magento， Inc. 版权所有。"
 "Mail Sending Settings",邮件发送设置
+"Make sure that base URL ends with '/' (slash), e.g. http://yourdomain/magento/","确保基本URL以""/""（斜线）结尾，例如http：//yourdomain/magento/"
 "Maximum sender name length is 255. Please correct your settings.",最大发送者名字长度是255。请修正您的设置。
+"May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.",可以为空或以{{secure_base_url}}、{{unsecure_base_url}}占位符号开始。
+"May be empty or start with {{unsecure_base_url}} placeholder.",可以为空或者以{{unsecure_base_url}}占位符开始。
+"May be empty or start with {{unsecure_base_url}} placeholder. &lt;br/&gt; &lt;strong style=""color:red""&gt;Warning!&lt;/strong&gt; When using CDN, in some cases JavaScript may not run properly if CDN is not in your subdomain","可以为空或者以{{unsecure_base_url}}占位符开始。 &lt；br/&gt； &lt；strong style=""color：red""&gt；警告！&lt；/strong&gt； 当使用CDN，如果CDN不在您的子域有些情况下JavaScript可能不能正确运行。"
+"May start with {{secure_base_url}} or {{unsecure_base_url}} placeholder.",可以以{{secure_base_url}}或{{unsecure_base_url}}占位符开始。
+"May start with {{unsecure_base_url}} placeholder.",可以以{{unsecure_base_url}}占位符开始。
 "Merge CSS Files",合并CSS文件
 "Merge JavaScript Files",合并JavaScript文件
 "Minify JavaScript Files",缩小JavaScript文件
@@ -94,6 +113,7 @@ Pagination,轮换
 "Please correct the tab configuration and try again.",请纠正tab配置再试一次。
 "Please correct the timezone.",请纠正您的时区。
 "Please correct the user name or password.",请纠正用户名或密码。
+"Please enter a number 1 or greater in this field.",请在该字段输入数字1或更大值。
 "Port (25)",端口（25）
 "Recovery Link Expiration Period (days)",恢复链接过期周期（天）
 "Return-Path Email",返回路径邮件
@@ -119,6 +139,8 @@ Size(bytes),尺寸（字节）
 "Sorry, the default display currency you selected in not available in allowed currencies.","很抱歉， 您选择的默认显示货币在允许的货币里无效。"
 "Sorry, we haven't installed the base currency you selected.",很抱歉，还没有安装你选择的基础货币。
 "Sorry, we haven't installed the default display currency you selected.","很抱歉， 还没有安装你选择默认显示货币。"
+"Specify URL or {{base_url}} placeholder.",指定URL或{{base_url}}占位符。
+"Specify URL or {{base_url}}, or {{unsecure_base_url}} placeholder.",指定URL或{{base_url}}、{{unsecure_base_url}}占位符。
 "Specify a URL or path that starts with placeholder(s): %1.",指定一个以占位符%1开头的URL或路径：。
 "Specify a fully qualified URL.",指定完整的URL。
 "Startup Page",启动页面
@@ -134,9 +156,11 @@ Tags,标签
 "The sender name ""%1"" is not valid. Please use only visible characters and spaces.","无效的发送者名字""%1""。 请仅仅使用可见的字符和空。"
 "There are no search keywords.",没有搜索关键字。
 "This attribute shares the same value in all stores.",该属性在所有的店铺分享了同一个值。
+"This setting will not be taken into account if system has more than one store view.",如果系统有超过一个店铺视图，该设置将不生效。
 Timezone,时区
 "Total %1 records found",共发现%1条记录
 "Translate Inline",翻译内嵌
+"Translate, blocks and other output caches should be disabled for both frontend and admin inline translations.",对于前端和管理员内嵌翻译，翻译区块和其它输出缓存应被禁用。
 "Url Options","URL 选项"
 "Use Custom Admin Path",使用自定义管理员路径
 "Use Custom Admin URL","使用自定义管理 URL"
@@ -151,14 +175,18 @@ Timezone,时区
 "Validate HTTP_X_FORWARDED_FOR","验证 HTTP_X_FORWARDED_FOR"
 "Validate REMOTE_ADDR","验证 REMOTE_ADDR"
 "Value must be a URL or one of placeholders: %1",值必须是URL或者占位符%1中的一个
+"Values less than 60 are ignored.",值小于60将被忽略。
 "Variable ID",变量ID
+"Warning! Enabling this feature is not recommended on production environments because it represents a potential security risk.",警告！不建议在生产环境中启用该功能，因为可能带来潜在的安全隐患。
 "We can't save the Cron expression.",不能存储Cron表达式。
 "We couldn't find any records.",找不到任何记录。
 "Weekend Days",周末
+"When the adapter was changed, please, flush Catalog Images Cache.",当适配器改变，请刷新产品目录缓存。
 YTD,YTD
 "You entered an invalid Secret Key. Please refresh the page.",您输入了一个无效的密钥，请刷新页面。
 "You need more permissions to do this.",您需要更高的权限进行该操作。
 "You saved the configuration.",成功存储该配置。
+"You will have to log in after you save your custom admin path.",保存您的自定义管理路径后，您需要重登录。
 "ZIP/Postal Code",邮政编码
 "invalid request",无效的请求
 "of %1 pages",总页数%1中

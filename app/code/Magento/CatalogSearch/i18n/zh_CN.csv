@@ -2,10 +2,12 @@
 "<strong>%1 item(s)</strong> were found using the following search criteria",发现<strong>%1个条目</strong>使用下面的搜索条件
 "<strong>%1 item(s)</strong> were found using the following search criteria.",<strong>%1个条目</strong>被发现使用下面的搜索条件。
 All,全部
+"Applies for ""Like"" search type only","仅应用""喜欢""搜索类型"
 "Apply Layered Navigation if Search Results are Less Than",如果搜索结果少于该数量，应用层次式导航
 "Attribute setting change related with Search Index. Please run <a href=""%1"">Rebuild Search Index</a> process.","属性设置改变与搜索索引相关。请运行<a href=""%1"">重建搜索索引</a>过程。"
 "Catalog Advanced Search",分类高级搜索
 "Catalog Search",分类搜索
+"Enter ""0"" to enable layered navigation for any number of results.",输入“0”即可为任何数量的结果启用层次式导航。
 "Go to Home Page",前往主页
 Grid,网格
 Home,主页
