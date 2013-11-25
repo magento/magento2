@@ -11,8 +11,8 @@ Action,操作
 "Add New Customer Group",添加新顾客组
 "Additional Address Entries",额外地址行
 Address,地址
-"Address Book",地址薄
-"Address Books",地址簿
+"Address Book",地址簿
+"Address Books",地簿簿
 "Address Information",地址信息
 "Address Templates",地址模板
 Addresses,地址
@@ -375,9 +375,9 @@ Year,年
 "You have logged out and will be redirected to our homepage in 5 seconds.",您已退出，5秒钟内会回到首页。
 "You have no additional address entries in your address book.",地址簿中没有其他的地址。
 "You have no additional entries in your address book.",您的地址簿里有没有额外的条目。
-"You have no default billing address in your address book.",您的地址薄中没有默认账单地址。
-"You have no default entries in your address book.",您的地址薄里没有默认的条目。
-"You have no default shipping address in your address book.",您的地址薄中没有默认运送地址。
+"You have no default billing address in your address book.",您的地址簿中没有默认账单地址。
+"You have no default entries in your address book.",您的地址簿里没有默认的条目。
+"You have no default shipping address in your address book.",您的地址簿中没有默认运送地址。
 "You have no more address entries in your address book.",您的地址簿中没有更多地址。
 "You have not purchased any downloadable products yet.",您尚未购买任何可下载的产品。
 "You have not set a default billing address.",您还没有设置默认的账单地址。
