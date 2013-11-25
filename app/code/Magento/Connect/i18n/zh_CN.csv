@@ -1,4 +1,4 @@
-"1.5.0.0 & later","1。5。0。0 及更新版"
+"1.5.0.0 & later","1.5.0.0 及更新版"
 Action,操作
 "Add Author",添加作者
 "Add Contents Path",添加内容路径
@@ -6,6 +6,7 @@ Action,操作
 "Add Package dependency",添加数据包依存性
 "Add files",添加文件
 Authors,作者
+"Caution: All unsaved form data will be lost as soon as you you click on the row and the package data loads.",注意：只要你点击行并且包数据加载，所有未存储的表单数据都将会丢失。
 Channel,渠道
 "Connect Manager",连接管理器
 Contents,内容
@@ -14,14 +15,18 @@ Dependencies,依存性
 Description,描述
 Email,电子邮件
 Extension,扩展
+Files,文件
 Folder,文件夹
+Ignore,忽略
 Include,包含
 License,许可
 "License URI",许可URI
 "Load Local Package",加载本地包
 "Load local Package",载入本地包
 "Magento Connect",Magento内容
+Max,最大
 Maximum,最大
+Min,最小
 Minimum,最小
 Name,姓名
 "New Extension",新扩展
@@ -32,7 +37,6 @@ Package,包裹
 "Package Info",包信息
 Packages,包裹
 Path,路径
-Pre-1.5.0.0,Pre-1。5。0。0
 "Release Info",发布信息
 Remove,删除
 "Save As...",另存为...
@@ -45,6 +49,7 @@ Remove,删除
 Summary,摘要
 "Supported releases",支持的版本
 System,系统
+Target,目标
 "The package %1 data has been loaded.",包%1的数据已载入。
 "The package data has been saved.",包中数据已保存。
 Type,类型

@@ -2,7 +2,7 @@
 "%1 is not a correct comparison method.",%1不是一个正确的比较方法。
 "Add Minimum Qty",添加最小的数量
 "Allow Qty Below 0",允许数量小于零
-"Allow Qty Below 0 and Notify Customer",允许数量小于零并通知客户
+"Allow Qty Below 0 and Notify Customer",允许数量小于零并通知顾客
 "Automatically Return Credit Memo Item to Stock",自动返回信用备忘条目到库存
 Backorders,缺货
 "By Fixed value",由固定值
@@ -23,6 +23,7 @@ Inventory,盘点
 "Only X left Threshold","仅 X左侧阈值"
 "Out of Stock",无货
 "Please correct the quantity for some products.",请纠正部分产品的数量。
+"Please note that these settings apply to individual items in the cart, not to the entire cart.",请注意这些设置应用到购物车中个别条目，不是整个购物车。
 "Product Stock Options",产品库存选项
 "Products will still be shown by direct product URLs.",通过直接的产品URLs访问仍然能显示产品。
 "Rule price",规则价格
@@ -36,7 +37,7 @@ Inventory,盘点
 "The stock item for Product is not valid.",产品的库存项无效。
 "This product is out of stock.",该产品缺货。
 "To Fixed Value",为固定值
-"To Percentage",为百分率
+"To Percentage",为百分比
 "Undefined product type",未定义的产品类型
 "Unsupported product type ""%1"".","不支持的产品类型""%1""。"
 Update,更新

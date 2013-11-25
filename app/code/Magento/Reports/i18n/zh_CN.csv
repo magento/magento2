@@ -1,5 +1,5 @@
 "Abandoned Cart",废弃的购物车
-"Abandoned Carts",放弃购物车
+"Abandoned Carts",废弃的物车
 "Abandoned carts",废弃的购物车
 Action,操作
 "Add to Cart",添加到购物车
@@ -9,12 +9,12 @@ Action,操作
 Any,任意
 "Applied Coupon",已应用的优惠券
 "Applies to Any of the Specified Order Statuses",适用于任何指定的顺序状态
-"Are you sure you want to refresh lifetime statistics? There can be performance impact during this operation.",您确认要刷新生命期数据吗？此操作过程可能会影响性能。
+"Are you sure you want to refresh lifetime statistics? There can be performance impact during this operation.",您确认要刷新生命期统计数据吗？此操作过程可能会影响性能。
 "Are you sure you want to refresh statistics for last day?",您确定要刷新最后一天的统计吗？
 "Are you sure?",您是否确认？
 "Average (Approved)",平均（已批准）
 Bestsellers,最佳销量
-"By Customers",按客户
+"By Customers",按顾客
 "By Products",按产品
 CSV,CSV
 Carts,购物车
@@ -23,14 +23,14 @@ Carts,购物车
 "Compared Products Grid Template",比对的产品网格模板
 "Compared Products Images and Names Template",比较产品图片和名字模板
 "Compared Products List Template",比对的产品列表模板
-Coupons,折价券
-"Coupons Usage Report",优惠券使用报告
+Coupons,优惠券
+"Coupons Usage Report",优惠券使用报表
 "Created At",创建于
 "Current Month Starts",当前月起始
 Customer,顾客姓名
-Customers,客户
-"Customers Report",顾客报告
-"Customers Reviews",客户评论
+Customers,顾客
+"Customers Report",顾客报表
+"Customers Reviews",顾客评论
 "Customers by Orders Total",按订单数量排列顾客
 "Customers by number of orders",按订单数排列顾客
 Dashboard,仪表板
@@ -43,7 +43,7 @@ Downloads,下载
 Email,电子邮件
 "Empty Rows",空行
 "Excel XML","Excel XML"
-Filter,过滤器
+Filter,筛选器
 "First Name",名字
 From,来自
 Guest,来宾
@@ -70,7 +70,7 @@ No,否
 "Order Count",订单数
 "Order Quantity",下单的数量
 "Order Status",订单状态
-"Order Taxes Report Grouped by Tax Rate",按税率分组的订购税费报告
+"Order Taxes Report Grouped by Tax Rate",按税率分组的订购税费报表
 "Ordered Quantity",订购数量
 Orders,订单
 "Out of stock",缺货
@@ -79,8 +79,8 @@ Price,价格
 Product,产品名
 "Product Reviews",产品评论
 Products,产品
-"Products Ordered",产品已下单
-"Products Report",产品报告
+"Products Ordered",已订购产品
+"Products Report",产品报表
 "Products Reviews",产品评论
 "Products in Cart",购物车中的产品
 "Products in carts",购物车中的产品
@@ -91,50 +91,50 @@ Quantity,商品的数量
 "Recently Viewed",最近查看过的
 "Recently Viewed Products",最近查看过的产品
 "Recently Viewed/Compared Products",最近查看/比较过的产品
-"Refresh Lifetime Statistics",刷新寿命状态
-"Refresh Statistics",刷新状态
-"Refresh Statistics for the Last Day",刷新昨天的状态
+"Refresh Lifetime Statistics",刷新生命周期统计
+"Refresh Statistics",刷新统计
+"Refresh Statistics for the Last Day",刷新昨天的统计
 "Refresh statistics",刷新统计
 Refunds,退款
-Report,报告
-Reports,报告
+Report,报表
+Reports,报表
 Results,结果
 Revenue,收入
 Review,评论
 Reviews,评论
 "Reviews for %1",%1的评论
 Sales,销售
-"Sales Report",销售报告
+"Sales Report",销售报表
 "Search Query",搜索查询
-"Search Terms",搜索条件
+"Search Terms",搜索词
 "Select day of the month.",选择每月的天数。
-Shipping,运送
+Shipping,货运
 "Shopping Cart",购物车
 "Show Actual Values",显示实际值
-"Show Report",显示报告
+"Show Report",显示报表
 "Show for Current",显示最新值
 Specified,已指定
-Statistics,状态
+Statistics,统计
 "Stock Quantity",库存数量
 Subtotal,小计
 Tax,传真
-"The product type filter specified is incorrect.",产品类型过滤器不正确。
+"The product type filter specified is incorrect.",产品类型筛选器不正确。
 "Times Deleted",已删除时间数量
 Title,标题
 To,发送至
 Total,总数
-"Total Invoiced vs. Paid Report","发票总数 vs. 付款报告"
-"Total Ordered Report",订单总数报告
-"Total Refunded Report",退款总数报告
-"Total Shipped Report",发货总数报告
+"Total Invoiced vs. Paid Report","发票总数 vs. 付款报表"
+"Total Ordered Report",订单总数报表
+"Total Refunded Report",退款总数报表
+"Total Shipped Report",发货总数报表
 "Updated At",更新于
-Viewed,浏览数目
+Viewed,浏览数
 "Viewed Products Grid Template",查看过的产品网格模板
 "Viewed Products Images Only Template",查看产品图片仅模板
 "Viewed Products Images and Names Template",查看产品图片和名字模板
 "Viewed Products List Template",查看的产品列表模板
 "Viewed Products Names Only Template",查看图片名字仅模板
-Views,浏览数量
+Views,浏览数
 Visibility,可见性
 "Wishlist Purchase",购买自收藏清单
 Year,年

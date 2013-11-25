@@ -12,28 +12,28 @@
 "86400 by default, if not set. To refresh instantly, clear the Blocks HTML Output cache.",如果未设置默认86400秒。为了立即刷新，清除块HTML输出缓存。
 "<label class=""label""><span>from</span></label>","<label class=""label""><span>从</span></label>"
 "<label class=""label""><span>to</span></label>","<label class=""label""><span>到</span></label>"
-"A group with the same name already exists.",以同样名称命名的群组已存在。
+"A group with the same name already exists.",以同样名称命名的组已存在。
 "A name is required.",名字是必输项。
 "A product type is not defined for the indexer.",索引器中产品类型未定义。
 "A total of %1 record(s) have been deleted.",共%1条记录已经被删除。
 "A total of %1 record(s) have been updated.",共%1条记录已经被更新。
-"ALL GROUPS",所有群组
+"ALL GROUPS",所有组
 AM,AM
 Action,操作
 "Actual Price",实际价格
 Add,添加
 "Add Attribute",添加属性
 "Add Design Change",添加设计变更
-"Add Group",添加群组
+"Add Group",添加组
 "Add Group Price",添加组价格
 "Add New",添加新内容
 "Add New Attribute",添加新属性
 "Add New Attribute Set",添加新属性集
-"Add New Group",添加新群组
+"Add New Group",添加新组
 "Add New Images",添加新图像
 "Add New Option",添加新选项
 "Add New Row",添加新行
-"Add New Search Term",添加新的搜索条件
+"Add New Search Term",添加新的搜索词
 "Add New Set",添加新集
 "Add Product",添加产品
 "Add Product To Websites",添加产品到网站
@@ -108,20 +108,21 @@ Bottom/Right,底部/右侧
 "Buy %1 for %2 each",每以%2买%1
 "Cache Lifetime (Seconds)",缓存生存时间（秒）
 "Can be Divided into Multiple Boxes for Shipping",可拆分为多个箱发货
-"Can be used only with catalog input type Dropdown, Multiple Select and Price",仅可用于类别输入类型　下拉、多选和价格
+"Can be used only with catalog input type Dropdown, Multiple Select and Price",仅可用于产品目录输入类型　下拉、多选和价格
 Cancel,取消
 "Cart Item Attribute",购物车条目属性
-Catalog,分类
-"Catalog Category Link",分类类别链接
-"Catalog New Products List",分类新产品列表
-"Catalog Price Scope",分类价格范围
-"Catalog Product Link",分类产品链接
-"Catalog URL Rewrites",分类URL重写
-"Catalog, Search",分类，搜索
+Catalog,产品目录
+"Catalog Category Link",产品目录类别链接
+"Catalog New Products List",目录新产品列表
+"Catalog Price Scope",产品目录价格范围
+"Catalog Product Link",目录产品链接
+"Catalog Section",产品目录区
+"Catalog URL Rewrites",产品目录URL重写
+"Catalog, Search",产品目录，搜索
 Categories,分类
 Category,分类
 "Category Data",分类数据
-"Category Flat Data",分类平坦数据
+"Category Flat Data",分类扁平数据
 "Category Link Block Template",分类链接块模板
 "Category Link Inline Template",分类链接内联摸板
 "Category Name",分类名
@@ -165,8 +166,8 @@ Cross-sells,交叉销售
 "Currently Shopping by:",目前的购物者：
 "Custom Design",自定义设计
 "Custom Options",自定义选项
-"Customer Group",客户组
-"Customers Reviews",客户评论
+"Customer Group",顾客组
+"Customers Reviews",顾客评论
 "Data Type for Saving in Database",要保存在数据库中的数据类型
 "Date & Time Custom Options",日期和时间定制设置
 "Date Fields Order",日期字段顺序
@@ -203,7 +204,7 @@ Display,显示
 "Display Price Interval as One Price",将价格间隔显示为一个价格
 "Display Product Count",显示产品数量
 "Display Type",显示类型
-"Display in Suggested Terms",显示建议的搜索条件
+"Display in Suggested Terms",显示建议的搜索词
 "Do not change the scope. This attribute is used in configurable products.",不要改变范围，该属性被用在可配置产品中。
 "Double click on a group to rename it",双击组即可更名
 "Double click on above image to view full picture",双击上述图片即可查看完整大小
@@ -219,7 +220,7 @@ Email,电子邮件
 "Email to a Friend",给朋友发邮件
 Empty,空
 "Enable MAP",启用映射
-"Enable Qty Increments",允许数量
+"Enable Qty Increments",启用数量增量
 "Enable WYSIWYG",启用所见即所得
 Enabled,已启用
 "Enter Name for New Attribute Set",为新的属性集输入名称
@@ -241,12 +242,12 @@ Frontend,前端
 Gallery,画廊
 "General Information",常规信息
 "Generate Variations",产生变量
-Global,全球
-"Globally Editable",全球范围内可编辑
+Global,全局
+"Globally Editable",全局范围内可编辑
 "Go to Home Page",前往主页
 Grid,网格
 "Grouped Products",分组产品
-Groups,群组
+Groups,组
 Hidden,隐藏
 "Hide from Product Page",从产品页隐藏
 Home,主页
@@ -262,6 +263,7 @@ Image,图案
 "In Stock",有货
 "In stock",现货
 "Incl. Tax",含税
+"Include in Navigation Menu",包含在导航菜单
 "Index product and categories URL Redirects",索引产品和分类的转向URL
 "Index product attributes for layered navigation building",为分层导航建筑索引产品属性
 "Index product prices",索引产品价格
@@ -287,7 +289,7 @@ List,列表
 "Look for our special back-to-school items and save bunches!",查找特价的back-to-school条目并存储一批！
 "Make Base",设置为基本
 "Manage Attribute Sets",管理属性集
-"Manage Catalog Categories",管理分类类别
+"Manage Catalog Categories",管理产品目录分类
 "Manage Categories",管理分类
 "Manage Labels",管理标签
 "Manage Options (values of your attribute)",管理选项（属性值）
@@ -351,7 +353,7 @@ None,无
 OK,确定
 OR,或
 "On Gesture",手势
-"Our customer service is available 24/7.",我们的客户服务24小时/7天有效。
+"Our customer service is available 24/7.",我们的顾客服务24小时/7天有效。
 "Out of Stock",无货
 "Out of stock",缺货
 PM,PM
@@ -380,7 +382,7 @@ Pending,挂起
 "Please use a four-digit year format.",请使用一个四位年份格式。
 "Please wait...",请稍候...
 Position,位置
-"Position in Layered Navigation",在层次式导航中定位
+"Position in Layered Navigation",在分层式导航中定位
 "Position of Watermark for %1",%1的水印位置
 "Position of attribute in layered navigation block",分层导航区块的属性位置
 Prev,上一个
@@ -397,7 +399,7 @@ Product,产品名
 "Product Attribute",产品属性
 "Product Attributes",产品属性
 "Product Fields Auto-Generation",产品字段自动产生
-"Product Flat Data",产品平坦数据
+"Product Flat Data",产品扁平数据
 "Product Image Placeholders",产品图像占位符
 "Product Image Watermarks",产品图像水印
 "Product In Websites",网站中的产品
@@ -439,8 +441,8 @@ Remove,删除
 "Remove Product",移除产品
 "Remove Product From Websites",从网站删除产品
 "Remove This Item",删除该内容
-"Reorganize EAV category structure to flat structure",重新识别EAV分类结构为平坦结构
-"Reorganize EAV product structure to flat structure",重新整理EAV产品结构为平坦结构
+"Reorganize EAV category structure to flat structure",重新识别EAV分类结构为扁平结构
+"Reorganize EAV product structure to flat structure",重新整理EAV产品结构为扁平结构
 Reset,重置状态
 Results,结果
 Reviews,评论
@@ -533,9 +535,9 @@ Text,文字
 "The category must be an instance of \Magento\Catalog\Model\Category.","分类必须是\Magento\Catalog\Model\Category的实例。"
 "The configuration item instance in options group is incorrect.",选项组中配置条目实例是不正确的。
 "The configuration item option instance in options group is incorrect.",选项组中配置条目选项实例是不正确的。
-"The filter model name must be declared.",过滤器模型必须被声明。
-"The filter must be an object. Please set correct filter.",过滤器必须是一个对象。请设置正确的过滤器。
-"The filters must be an array.",过滤器必须为数组。
+"The filter model name must be declared.",筛选器模型必须被声明。
+"The filter must be an object. Please set correct filter.",筛选器必须是一个对象。请设置正确的筛选器。
+"The filters must be an array.",筛选器必须为数组。
 "The image does not exist.",该图片不存在。
 "The option instance type in options group is incorrect.",选项组中选项实例类型是不正确的。
 "The option type to get group instance is incorrect.",用来获得组实例的该选项类别是不正确的。
@@ -548,7 +550,7 @@ Text,文字
 "The review was removed by another user or does not exist.",评论已被另一用户删除，或评论不存在。
 "The text is too long.",文本太长。
 "The value of attribute ""%1"" must be unique.","属性""%1""的值得必须是唯一的。"
-"There are no customers for this alert.",没有客户适用于此提醒。
+"There are no customers for this alert.",没有顾客适用于此提醒。
 "There are no grouped products.",没有分组的产品。
 "There are no products matching the selection.",没有产品匹配该选择。
 "There was a category move error %1",分类%1移动错误
@@ -562,7 +564,7 @@ Text,文字
 "This attribute set no longer exists.",该属性已不存在。
 "This defines the base currency scope (""Currency Setup"" > ""Currency Options"" > ""Base Currency"").","这里定义基础货币范围（""货币设置"" > ""货币选项"" > ""基础货币""）。"
 "This group contains attributes used in configurable products. Please move these attributes to another group and try again.",该组包含使用在配置产品中的属性。请移动这些属性到另一个组再试。
-"This group contains system attributes. Please move system attributes to another group and try again.",该群组包含系统属性。请移动系统属性到另一群组并重试。
+"This group contains system attributes. Please move system attributes to another group and try again.",该组包含系统属性。请移动系统属性到另一组并重试。
 "This is a required option.",这是一个必须的选项。
 "This product no longer exists.",该产品已不存在。
 "This search no longer exists.",该搜索已不存在。
@@ -571,7 +573,7 @@ Text,文字
 Tile,平铺
 "Time Format",时间格式
 Title,标题
-"To reindex the enabled product(s), please specify the store or product.",为了重新所以你允许的产品，请指定店铺或产品。
+"To reindex the enabled product(s), please specify the store or product.",为了重新索引启用的产品，请指定店铺或产品。
 "To see product price, add this item to your cart. You can always remove it later.",要查看产品价格，请添加该条目到您的购物车。您总是可以稍后删除它。
 Top/Left,顶部/左侧
 Top/Right,顶部/右侧
@@ -582,7 +584,7 @@ Type,类型
 "Unable to save the category",不能存储分类
 "Unassigned Attributes",未分配的属性
 "Unsupported product type ""%1"".","不支持的产品类型 ""%1""。"
-Up-sells,超售
+Up-sells,追加销售
 Update,更新
 "Update Attributes",更新属性
 "Upload Image",上传图片
@@ -591,15 +593,16 @@ Update,更新
 "Use Categories Path for Product URLs","产品 URL 使用分类路径"
 "Use Config Settings",使用配置设置
 "Use Default Value",使用默认值
-"Use Flat Catalog Category",使用平面目录产品分类
-"Use Flat Catalog Product",使用平面目录产品
+"Use Flat Catalog Category",使用扁平产品目录分类
+"Use Flat Catalog Product",使用扁平目录产品
 "Use JavaScript Calendar","使用 JavaScript 日历"
-"Use Static URLs for Media Content in WYSIWYG for Catalog",为分类的所见即所得编辑中的媒体内容使用静态URL
+"Use Parent Category Settings",使用父分类设置
+"Use Static URLs for Media Content in WYSIWYG for Catalog",为产品目录的所见即所得编辑中的媒体内容使用静态URL
 "Use To Create Configurable Product",用于创建可配置的产品
 "Use config",用户配置
 "Use for Promo Rule Conditions",使用促销规则条件
 "Use in Advanced Search",使用高级搜索
-"Use in Layered Navigation",用在层次式导航中
+"Use in Layered Navigation",用在分层式导航中
 "Use in Quick Search",使用快速搜索
 "Use {{name}} and {{description}} as Product Name and Product Description placeholders",使用{{name}}和{{description}}作为产品名和产品描述占位符
 "Use {{name}} as Product Name or {{sku}} as Product SKU placeholders",使用{{name}}作为产品名{{sku}}作为产品SKU占位符
@@ -620,7 +623,7 @@ Watermark,水印
 "Watermark File for %1",%1的水印文件
 "Watermark Opacity, Percent",水印不透明度，百分比
 "Watermark Position",水印位置
-"We can't find a search term to delete.",找不到要删除的搜索名词。
+"We can't find a search term to delete.",找不到要删除的搜索词。
 "We can't find an attribute to delete.",找不到要删除的属性。
 "We can't find the image file.",找不到图片文件。
 "We can't get the product ID.",得不到产品ID。
@@ -629,8 +632,8 @@ Watermark,水印
 "We couldn't add the product to the cart because of an option validation issue.",由于选项校验问题不能添加产品到购物车。
 "We couldn't copy file %1. Please delete media with non-existing images and try again.",不能复制文件%1。请用不存在的图片删除媒体然后再试。
 "We couldn't move this file: %1.",不能移动文件%1。
-"We found a duplicate website group price customer group.",发现重复的站点组价格客户组。
-"We found a duplicate website, tier price, customer group and quantity.",发现重复站点、层级价格、客户组和数量。
+"We found a duplicate website group price customer group.",发现重复的站点组价格顾客组。
+"We found a duplicate website, tier price, customer group and quantity.",发现重复站点、层级价格、顾客组和数量。
 "We found an unknown EAV indexer type ""%1"".","找不到未知的EAV索引器类型""%1""。"
 "We found an unsupported product type ""%1"".","找不到不支持的产品类型""%1""。"
 "We saved the price alert subscription.",存储了价格警报订阅。
@@ -645,7 +648,7 @@ Websites,网站
 "Year Range",年份范围
 Yes,是
 "You added product %1 to the comparison list.",您已经添加了产品%1比较列表。
-"You already have an identical search term query.",您已经有了一个同样的搜索名词查询。
+"You already have an identical search term query.",您已经有了一个同样的搜索词查询。
 "You are about to delete all products in this set. Are you sure you want to delete this attribute set?",此操作将要删除该集合里的所有产品。你确定要删除该属性集吗？
 "You can't update your attribute.",不能更新您的属性。
 "You cannot remove system attributes from this set.",不能从该属性集移除系统属性。
@@ -668,7 +671,7 @@ Yes,是
 and,和
 "begin typing to add value",开始输入来添加值
 each,每个
-"ex. http://domain.com","例如 http：//domain.com"
+"ex. http://domain.com","例如 http://domain.com"
 lbs,磅
 "per page",每页
 px.,像素

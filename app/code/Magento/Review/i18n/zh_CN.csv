@@ -4,21 +4,21 @@
 "Add Your Review",添加您的评论
 Administrator,管理员
 "All Reviews",所有评论
-"All Reviews of Customer `%1`","客户 '%1' 的所有评论"
+"All Reviews of Customer `%1`","顾客 '%1' 的所有评论"
 "Allow Guests to Write Reviews",允许来宾撰写评论
 "Are you sure you want to do this?",您是否确认要这样做？
 "Are you sure?",您是否确认？
-"Average Customer Rating",客户平均分
-"Average Customer Rating:",客户平均分：
+"Average Customer Rating",顾客平均分
+"Average Customer Rating:",顾客平均分：
 Back,返回
 "Back to Main Product Info",返回产品信息主页
 "Back to My Reviews",返回我的评论
 "Back to Product Reviews",返回产品评论
 "Be the first to review this product",作为评论该产品的第一人
 Created,创建于
-Customer,客户
+Customer,顾客
 "Customer Reviews",顾客评论
-"Customers Reviews",客户评论
+"Customers Reviews",顾客评论
 Delete,删除
 "Delete Review",删除评论
 "Detailed Rating",详细评级
@@ -34,7 +34,7 @@ Nickname,昵称
 "Not Approved",未批准
 "Only registered users can write reviews. Please, <a href=""%1"">log in</a> or <a href=""%2"">register</a>","只有注册用户能发表评论，<a href=""%1"">登录</a>或者<a href=""%2"">注册</a>"
 "Pending Reviews",挂起的评论
-"Pending Reviews of Customer `%1`",来自客户“%1”未决的评论
+"Pending Reviews of Customer `%1`",来自顾客“%1”未决的评论
 "Please select a product",请选择产品
 "Posted By",发布者
 "Posted on",张贴于

@@ -15,12 +15,12 @@ Date,日期
 Description,描述
 "Displayed Error Message",显示的错误信息
 "Divide to equal weight (one request)",拆分为相等重量（申请一次）
-"Duplicate Row #%1 (Country ""%2"", Region/State ""%3"", Zip ""%4"" and Value ""%5"")","重复行 #%1 （国家 ""%2""， 地区/州 ""%3""， 邮编 ""%4"" ，以及值 ""%5""）。"
+"Duplicate Row #%1 (Country ""%2"", Region/State ""%3"", Zip ""%4"" and Value ""%5"")","重复行 #%1（国家 ""%2""， 地区/州 ""%3""， 邮编 ""%4"" ，以及值 ""%5""）。"
 Enabled,已启用
 Error:,错误：
 Export,导出
 Fixed,固定
-"Flat Rate",平坦费率
+"Flat Rate",扁平费率
 "Free Shipping",免运费
 "Handling Fee",处理费
 Import,导入

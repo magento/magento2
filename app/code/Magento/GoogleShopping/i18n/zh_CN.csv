@@ -1,6 +1,6 @@
 "A total of %1 items(s) have been deleted; a total of %2 items(s) have been updated.",共%1条记录已经被删除；%2条记录已经被更新。
 "A total of %1 product(s) have been added to Google Content.","共%1个产品被添加到Google Content。"
-"Account ID",帐户ID
+"Account ID",账户ID
 "Account Login",账户登录
 "Account Password",账户密码
 "Account Type",账户类型
@@ -17,7 +17,6 @@ Attribute,属性
 AuthSub,AuthSub
 "Available Products",可用的产品
 "Captcha has been confirmed.",Captcha已经被确认。
-ClientLogin,客户登录
 "Commerce Search",商业搜索
 Confirm,确认
 "Current Mapping will be reloaded. Continue?","当前映射将被重载。 要继续吗？"
@@ -53,6 +52,7 @@ Hosted,托管
 "Operation of adding products to Google Shopping expired.","添加产品到Google Shopping的操作过期。"
 "Please correct the attribute ""%1"" type for Google Shopping. The product with this attribute hasn't been updated in Google Content.","请纠正Google Shopping的属性""%1""类型。 有该属性的产品没有在Google Content里更新。"
 "Please, select Attribute Set and Google Item Type to load attributes",请选择属性集和谷歌条目类型来加载属性
+"Please, select Attribute Set to load attributes",请选择属性集加载属性
 "Product Ads",产品广告
 "Product synchronization with Google Shopping completed","和Google Shopping的产品同步完成"
 "Products were added to Google Shopping account.","产品已被添加到Google Shopping账号。"
@@ -61,7 +61,7 @@ SKU,SKU
 "Some products may have not been added to Google Shopping bacause of expiration","由于过期，一些产品可能还没有被添加到Google Shopping"
 "Something went wrong during Captcha confirmation.",在Captcha确认时发生错误。
 "Sorry, but we can't connect to Google Content. Please check the account settings in your store configuration.","很抱歉， 不能连接到Google Content。 请检查您的店铺配置里的账户设置。"
-"Target Country","目标国家"""
+"Target Country",目标国家
 "The attribute mapping has been saved.",属性集映射被存储。
 "The item ""%1"" cannot be updated at Google Content. %2","条目""%1""不能在Google Content里更新。 %2"
 "The item ""%1"" hasn't been deleted.","条目""%1""还没有被删除。"

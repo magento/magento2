@@ -1,6 +1,6 @@
 "(Make sure you keep it in a safe place.)",（请务必将其保存在安全的地点。）
 "(Optional. Leave blank for no prefix)",（可选，留空即可不使用前缀。）
-"(ver. %1)","（版本。 %1）"
+"(ver. %1)",（版本：%1）
 "Admin Path",管理路径
 "As another option, you could try the ""Manual Downloads and Upgrades"" method.","作为另一个选择，你能试试""手动下载和更新""方法。"
 "Base URL",备份URL
@@ -14,7 +14,7 @@ Connection,连接
 Continue,继续
 "Continue After Manual Download",手工下载后连接
 "Continue Full Download / SVN Installation",继续完整下载/SVN安装
-"Create Admin Account",创建管理帐户
+"Create Admin Account",创建管理账户
 Database,数据库
 "Database Connection",数据库连接
 "Database Name",数据库名称
@@ -66,7 +66,7 @@ Password,密码
 "Please set all required settings before clicking ""Continue"".","在单击""继续""之前请设置所有必须的设置选项。"
 "Proceed With Automatic Download (%1)",正在处理自动下载（%1）
 "Provide a complete base URL for SSL connection. For example: %1.",请为SSL连接提供一个完整的基础URL。例：%1。
-"Report All Bugs",报告所有Bug
+"Report All Bugs",报表所有Bug
 "Required Fields",必须的字段
 "Response from the server is invalid.",来自服务器的响应无效。
 "Run admin interface with SSL",使用SSL运行管理界面。

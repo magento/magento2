@@ -1,3 +1,21 @@
+"<br />
+                    <div class=""custom-options"">
+                    <div class=""box"">
+                    <p class=""grand-total""><br /><b>Signing up with Ogone</b></p>
+                    <p>Please enter the correct post back url and offline processiong url in Ogone configuration</p>
+                    <p>post back url example: http://myMagentoStore.com/ogone/api/postBack</p>
+                    <p>offline processing url example: http://myMagentoStore.com/ogone/api/offlineProcess</p>
+                    </div>
+                    </div>
+                    ","<br />
+                    <div class=""custom-options"">
+                    <div class=""box"">
+                    <p class=""grand-total""><br /><b>注册Ogone</b></p>
+                    <p>请在Ogone配置输入正确的回送URL和离线处理URL</p>
+                    <p>回送URL例：http://myMagentoStore.com/ogone/api/postBack</p>
+                    <p>离线处理URL例：http://myMagentoStore.com/ogone/api/offlineProcess</p>
+                    </div>
+                    </div>"
 Authorization,授权
 "Authorization Waiting from Ogone","正在等待从 Ogone 的授权"
 "Background Color of Ogone Template","Ogone 模板的背景颜色"
@@ -8,6 +26,9 @@ Authorization,授权
 "Declined Ogone","已拒绝 Ogone"
 "Declined Order on Ogone side",Ogone拒绝订单
 "Direct Sale",直销
+"E.g: ""Verdana""","例：""Verdana"""
+"E.g: ""black""","例：""black"""
+"E.g: ""white""","例：""white"""
 Enabled,已启用
 "Exception not defined",异常未定义
 "Font Family of the Ogone Template","Ogone 模板的字体库"
@@ -51,7 +72,12 @@ Ogone,Ogone
 "The payment transaction has been declined.",支付交易被拒绝。
 Title,标题
 "Title of the Ogone Template",Ogone模板的名称
+"To enable this feature, please edit your global security parameters.",为启用该特性，请编辑您的全局安全参数。
+"To hash <strong>all parameters</strong>, select the following options in the ""Global security parameters"" fieldset: <ul><li>Each parameter followed by the pass phrase.</li><li>""Hash algorithm"" same as ""Hashing Algorithm"" below</li><li>UTF-8</li></ul>","要对 <strong>所有参数</strong>创建哈希，请在“全局安全参数”类别下选择下列选项：<ul><li>通路后的每个参数。</li><li>""哈希算法""与 下面的""哈希算法""相同</li><li>UTF-8</li></ul>"
+"URL/filename of the logo.<br />The URL must be absolute and stored on a secure server.","徽标的URL/文件名。<br />URL必须是绝对路径，并保存在安全的服务器上。"
 "Unknown exception",未知例外
+"Use in posting data from Magento to Ogone.<br/>Use in data checking by Ogone before the payment.",用于从Magento向Ogone发布数据。<br/>用于在支付前由Ogone检查数据。
+"Use in posting data from Ogone to Magento.<br/>Use in feedback data checking by Magento.",用于从Ogone向Magento发布数据。<br/>被Magento用于检查反馈的数据。
 "Verical list",垂直列表
 "Waiting Authorization",等待身份验证
 "You can arrange the layout/list of the payment methods on Ogone payment page.",您可以在Ogone支付页面上安排支付方法的布局/列表。

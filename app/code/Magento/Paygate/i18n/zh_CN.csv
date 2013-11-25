@@ -1,11 +1,13 @@
 "3D Secure","3D 安全"
 "3D Secure Card Validation","3D 安全信用卡验证"
+"<a href=""http://celinks.magento.com/authorize_netRegistration"" target=""_blank"">Click here to sign up for an Authorize.net account</a>","<a href=""http://celinks.magento.com/authorize_netRegistration"" target=""_blank"">
+点击这里注册Authorize.net账户</a>"
 "API Login ID","API 登录 ID"
 "Accepted Currency",接受的汇率
 "Allow Partial Authorization",允许部分身份验证
 "Are you sure you want to cancel your payment? Click OK to cancel your payment and release the amount on hold. Click Cancel to enter another credit card and continue with your payment.",您是否确定要取消支付？单击确定可取消您的支付，并释放占用的额度。单击取消可输入其他信用卡，并继续进行支付。
 "Authorize Only",仅供授权
-"Authorize and Capture",授权和捕获
+"Authorize and Capture",授权和捕捉
 "Authorize.Net Transaction ID %1","Authorize.Net 交易 ID %1"
 Cancel,取消
 "Centinel API URL","Centinel API链接"
@@ -14,7 +16,7 @@ Cancel,取消
 "Credit Card Verification",信用卡验证
 "Credit Card: xxxx-%1",信用卡：xxxx-%1
 Debug,调试
-"Email Customer",发送电子邮件给客户
+"Email Customer",发送电子邮件给顾客
 Enabled,已启用
 "Gateway URL","网关 URL"
 "Gateway error: %1",网关错误：%1
@@ -26,7 +28,7 @@ Enabled,已启用
 "Minimum Order Total",最小订单总数
 "New Order Status",新订单状态
 "Payment Action",支付操作
-"Payment capturing error.",支付捕获出错。
+"Payment capturing error.",支付捕捉出错。
 "Payment from Applicable Countries",从可接受的国家支付
 "Payment from Specific Countries",从指定的国家支付
 "Payment refunding error.",支付的退款出错。

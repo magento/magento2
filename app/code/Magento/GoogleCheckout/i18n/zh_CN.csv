@@ -3,7 +3,9 @@
 "2nd Day Air",2天航空
 "2nd Day Air AM",第二天航空朝至
 "3 Day Select",3天选择
+"<a href=""http://www.magentocommerce.com/redirect/google-checkout/"" target=""_blank"">Signup for Google Checkout</a>","<a href=""http://www.magentocommerce.com/redirect/google-checkout/"" target=""_blank"">注册Google Checkout</a>"
 "<br />Warning: <strong>%1</strong><br />","<br />警告：<strong>%1</strong><br />"
+"<strong style=""color:red"">Warning!</strong> This option disables the merchant calculated shipping. With this option, Google API ignores any attempt to affect shipping prices.","<strong style="":red"">警告！</strong>该设置禁止商户计算的货运。用该设置，Google API忽略任何影响运费的尝试。"
 "A virtual item to reflect the discount total",一件虚拟条目反应总折扣
 "A virtual item to reflect the tax total",一件虚拟条目反映总税费
 "AVS Status: %1","AVS 状态：%1"
@@ -22,9 +24,9 @@ Commercial,商业
 "Continue Shopping URL","继续购物 URL"
 "Credit memo has been created automatically",信用备忘录已自动创建
 Debug,调试
-"Default Package Height (in)","默认包裹高度 （in）"
-"Default Package Length (in)","默认包裹长度 （in）"
-"Default Package Width (in)","默认包裹宽度 （in）"
+"Default Package Height (in)",默认包裹高度（英寸）
+"Default Package Length (in)",默认包裹长度（英寸）
+"Default Package Width (in)",默认包裹宽度（英寸）
 "Default Price for Methods",默认价格
 "Delivery Address Category",送货地址分类
 "Delivery Schedule",发货计划
@@ -36,7 +38,7 @@ Debug,调试
 Enable,启用
 "Enable Carrier Calculated",启用承运人计算
 "Enable Digital Delivery",启用数字交付
-"Enable Flat Rate",启用平坦费率
+"Enable Flat Rate",启用扁平费率
 "Enable Merchant Calculated",启用分行计算
 "Enable this if your checkout request is too big and being cut off.",如果您的结账请求太大被截断，请启用这个。
 "Expiration: %1",到期：%1
@@ -57,7 +59,7 @@ FedEx,FedEx
 "Google Checkout","Google Checkout"
 "Google Checkout Shipping - Carrier Calculated","Google Checkout 送货 - 承运人计算"
 "Google Checkout Shipping - Digital Delivery","Google Checkout 送货 - 数字交付"
-"Google Checkout Shipping - Flat Rate","Google Checkout 送货 - 平坦费率"
+"Google Checkout Shipping - Flat Rate","Google Checkout 送货 - 扁平费率"
 "Google Checkout Shipping - Merchant Calculated","Google Checkout 送货 - 分行计算"
 "Google Checkout: %1","Google Checkout：%1"
 "Google Order Number: %1","Google 订单号码：%1"
@@ -110,7 +112,7 @@ Pessimistic,悲观的
 "Rate 3 Ship to Specific Countries","比率 3 发货到指定国家"
 "Rate 3 Title","比率 3 标题"
 Remove,删除
-"Required for live Google Checkout transactions. Make sure that this option corresponds to Use Secure URLs in Frontend (""Web"" &gt; ""Secure"").","对于活动的Google Checkout交易是必须的。确保这个选项符合在前端（""Web"" &gt； ""安全""）使用安全URLs。"
+"Required for live Google Checkout transactions. Make sure that this option corresponds to Use Secure URLs in Frontend (""Web"" > ""Secure"").","对于活动的Google Checkout交易是必须的。确保这个选项符合在前端（""Web"">""安全""）使用安全URLs。"
 Residential,住宅
 Sandbox,沙箱
 "Secure Callback URL",安全回拨URL

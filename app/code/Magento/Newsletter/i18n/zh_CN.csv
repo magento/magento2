@@ -9,17 +9,17 @@ Back,返回
 Cancel,取消
 Cancelled,已取消
 "Confirmation Email Sender",确认电子邮件发送者
-"Confirmation Email Template",确认电子邮件模版
+"Confirmation Email Template",确认电子邮件模板
 "Convert to Plain Text",转换为纯文本
-"Create Newsletter Template",创建新闻通讯模板
-Customer,客户
+"Create Newsletter Template",创建新闻邮件模板
+Customer,顾客
 Delete,删除
 "Delete Selected Problems",删除已选择的问题
 "Delete Template",删除模板
 "Do you really want to cancel the queue?",您确认要删除队列吗？
 "Duplicate template code",重复的模板代码
-"Edit Newsletter",编辑新闻通讯
-"Edit Newsletter Template",编辑新闻通讯模版
+"Edit Newsletter",编辑新闻邮件
+"Edit Newsletter Template",编辑新闻邮件模板
 "Edit Queue",编辑队列
 "Edit Template",编辑模板
 Email,电子邮件
@@ -28,11 +28,11 @@ Guest,来宾
 ID,ID
 Message,信息
 "Need to Confirm",需要确认
-"New Newsletter Template",新新闻通讯模板
+"New Newsletter Template",新新闻邮件模板
 "New Template",新模板
 Newsletter,新闻邮件
-"Newsletter Message Preview",新闻通讯消息预览
-"Newsletter Problem Reports",新闻通讯问题报告
+"Newsletter Message Preview",新闻邮件消息预览
+"Newsletter Problem Reports",新闻邮件问题报表
 "Newsletter Queue",新闻邮件队列
 "Newsletter Section",新闻邮件区域
 "Newsletter Styles",新闻邮件风格

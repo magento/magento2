@@ -1,14 +1,14 @@
 "* Required Fields",*必要字段
-"ALL GROUPS",所有群组
+"ALL GROUPS",所有组
 "Account Dashboard",账户面板
-"Account Information",帐户信息
+"Account Information",账户信息
 "Account Sharing Options",账户分享选项
-"Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href=""%1"">click here</a>.","帐户信息是必须的。请使用您电子邮件中的确认链接。要重新发送确认电子邮件，请 <a href=""%1"">点击这里</a>。"
-"Account confirmation is required. Please, check your email for the confirmation link. To resend the confirmation email please <a href=""%1"">click here</a>.","帐户信息是必须的。请使用您电子邮件中的确认链接。要重新发送确认电子邮件，请 <a href=""%1"">点击这里</a>。"
+"Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href=""%1"">click here</a>.","账户信息是必须的。请使用您电子邮件中的确认链接。要重新发送确认电子邮件，请 <a href=""%1"">点击这里</a>。"
+"Account confirmation is required. Please, check your email for the confirmation link. To resend the confirmation email please <a href=""%1"">click here</a>.","账户信息是必须的。请使用您电子邮件中的确认链接。要重新发送确认电子邮件，请 <a href=""%1"">点击这里</a>。"
 Action,操作
 "Add New Address",添加新地址
-"Add New Customer",添加新客户
-"Add New Customer Group",添加新客户群组
+"Add New Customer",添加新顾客
+"Add New Customer Group",添加新顾客组
 "Additional Address Entries",额外地址行
 Address,地址
 "Address Book",地址薄
@@ -18,7 +18,7 @@ Address,地址
 Addresses,地址
 Admin,管理员
 All,全部
-"All Customers",所有客户
+"All Customers",所有顾客
 "All Store Views",所有店铺视图
 "All countries",所有国家
 "Always optional.",总是可选。
@@ -28,7 +28,8 @@ Approved,已批准
 "Are you sure that you want to remove this item?",您是否确认要删除该内容？
 "Are you sure you want to delete this address?",您是否确认要删除该地址？
 "Are you sure?",您是否确认？
-"Assign a Customer Group",分配客户组
+"Assign a Customer Group",分配顾客组
+"Associate to Website",关联到站点
 "Average Sale",平均销售
 Back,返回
 "Back to Login",返回到登录界面
@@ -38,9 +39,9 @@ CSV,CSV
 Cancel,取消
 "Cannot save a new password.",无法保存新密码。
 "Cannot save address.",无法保存地址。
-"Cannot save the customer.",无法保存客户。
-"Cannot share customer accounts globally because some customer accounts with the same emails exist on multiple websites and cannot be merged.",无法全局分享客户帐户，因为某些客户的帐户所用的邮件地址在多个网站是相同的，无法合并。
-"Change Account Password",更改帐户密码
+"Cannot save the customer.",无法保存顾客。
+"Cannot share customer accounts globally because some customer accounts with the same emails exist on multiple websites and cannot be merged.",无法全局分享顾客账户，因为某些顾客的账户所用的邮件地址在多个网站是相同的，无法合并。
+"Change Account Password",更改账户密码
 "Change Billing Address",更改账单地址
 "Change Password",更改密码
 "Change Shipping Address",更改送货地址
@@ -55,28 +56,29 @@ Confirmed,已确认
 "Continue Shopping",继续购物
 Country,国家
 Create,创建
-"Create New Account Options",创建新帐户选项
-"Create New Customer Account",创建新客户帐户
+"Create New Account Options",创建新账户选项
+"Create New Customer Account",创建新顾客账户
 "Create Order",创建订单
 "Create a new password",创建新密码
-"Create an Account",创建帐户
+"Create an Account",创建账户
 "Current Password",当前密码
-Customer,客户
-"Customer Addresses",客户地址
-"Customer Configuration",客户配置
-"Customer Group",客户组
-"Customer Groups",客户组
-"Customer Information",客户信息
-"Customer Login",客户登录
-"Customer Since",客户加入日期
-"Customer View",客户视图
-"Customer email is required",需要客户邮件
-"Customer website ID must be specified when using the website scope",使用网站范围时必须指定客户网站ID
-"Customer will stay on the current page if ""No"" is selected.",如果选择“否”，客户将停留在当前页面。
-Customers,客户
-"Customers Only",仅限客户
-"Customers Section",客户区域
+Customer,顾客
+"Customer Addresses",顾客地址
+"Customer Configuration",顾客配置
+"Customer Group",顾客组
+"Customer Groups",顾客组
+"Customer Information",顾客信息
+"Customer Login",顾客登录
+"Customer Since",顾客加入日期
+"Customer View",顾客视图
+"Customer email is required",需要顾客邮件
+"Customer website ID must be specified when using the website scope",使用网站范围时必须指定顾客网站ID
+"Customer will stay on the current page if ""No"" is selected.",如果选择“否”，顾客将停留在当前页面。
+Customers,顾客
+"Customers Only",仅限顾客
+"Customers Section",顾客区域
 Date,日期
+"Date Of Birth",生日
 "Date of Birth",出生日期
 Day,天
 "Day (DD)",DD
@@ -89,18 +91,20 @@ Day,天
 "Default Welcome Email",默认欢迎邮件
 Delete,删除
 "Delete Address",删除地址
-"Delete Customer",删除客户
-"Delete Customer Group",删除客户组
+"Delete Customer",删除顾客
+"Delete Customer Group",删除顾客组
 "Deleted Stores",删除店铺
 Details,详情
+"Disable Automatic Group Change Based on VAT ID",禁止基于增值税编号的自动组改变
 Disabled,已禁用
 Edit,编辑
-"Edit Account Info",编辑帐户信息
-"Edit Account Information",修改帐户信息
+"Edit Account Info",编辑账户信息
+"Edit Account Information",修改账户信息
 "Edit Address",编辑地址
 "Edit Address Entry",编辑地址项
-"Edit Customer Group ""%1""","编辑客户组 ""%1"""
-"Edit Customer Groups",编辑客户组
+"Edit Customer Group ""%1""","编辑顾客组 ""%1"""
+"Edit Customer Groups",编辑顾客组
+"Edit Customer's Address",编辑客户地址
 "Edit Group",编辑组
 "Edit Newsletters",编辑新闻邮件
 Email,电子邮件
@@ -109,7 +113,7 @@ Email,电子邮件
 Email:,电子邮件：
 "Enable Automatic Assignment to Customer Group",启用顾客群体的自动分配
 "Excel XML","Excel XML"
-"Failed to confirm customer account.",确认客户帐户失败。
+"Failed to confirm customer account.",确认顾客账户失败。
 Fax,传真
 "First Name",名字
 "Forgot Email Template",忘记邮件模板
@@ -120,13 +124,13 @@ Fax,传真
 Gender,性别
 "Gender is required.",需提供性别信息。
 "General Subscription",常规订阅
-"Generate Human-Friendly Customer ID","生成人性化客户 ID"
-Global,全球
+"Generate Human-Friendly Customer ID","生成人性化顾客 ID"
+Global,全局
 "Go back",回退
 "Grand Total",总计
 Group,分组
-"Group Information",群组信息
-"Group Name",群组名称
+"Group Information",组信息
+"Group Name",组名称
 "Group for Invalid VAT ID","无效 VAT ID 组"
 "Group for Valid VAT ID - Domestic","无效 VAT ID 组 - 国内"
 "Group for Valid VAT ID - Intra-Union","有效 VAT ID 组 - 联邦内"
@@ -138,6 +142,7 @@ ID,ID
 "If there is an account associated with %1 you will receive an email with a link to reset your password.","如果有关联给 %1 的账户，你将收到一封包含重设密码链接的电子邮件。"
 "If you are a registered VAT customer, please click <a href=""%1"">here</a> to enter you billing address for proper VAT calculation","如果你是已注册的 VAT 顾客，请点击 <a href=""%1"">这里</a> 输入帐单地址，以准确计算 VAT"
 "If you are a registered VAT customer, please click <a href=""%1"">here</a> to enter you shipping address for proper VAT calculation","如果你是已注册的 VAT 顾客，请点击<a href=""%1"">这里</a>输入发货地址，以准确计算 VAT"
+"If you believe this is an error, please contact us at %1",如果您认为这是一个错误，请联系%1
 "If you have an account with us, log in using your email address.",如果您已经有了一个账户，请使用您的邮件地址登录。
 "If you have an account with us, please log in.",如果您拥有账户，请登录。
 "Invalid current password",当前密码无效
@@ -157,13 +162,14 @@ Login,登录
 "Login Information",登录信息
 "Login Options",登录选项
 "Login and password are required.",需要登录和密码。
-"Login or Create an Account",登录或创建帐户
+"Login or Create an Account",登录或创建账户
 "Manage Addresses",管理地址
-"Manage Customers",管理客户
+"Manage Customers",管理顾客
 "Maximum length must be less then %1 symbols","最大长度不能超过 %1 个字符"
+"Middle Name/Initial",中间名/初始
 Month,月
 "Month (MM)",MM
-"My Account",我的帐户
+"My Account",我的账户
 "My Dashboard",我的仪表板
 "My Orders",我的订单
 Name,姓名
@@ -172,10 +178,10 @@ Never,永不
 "New Address",新地址
 "New Address Entry",新地址项
 "New Customer",新顾客
-"New Customer Address",新建客户地址
-"New Customer Group",新客户组
-"New Customer Groups",新建客户组
-"New Customers",新客户
+"New Customer Address",新建顾客地址
+"New Customer Group",新顾客组
+"New Customer Groups",新建顾客组
+"New Customers",新顾客
 "New Group",新组
 "New Password",新密码
 "New password field cannot be empty.",新密码字段不能为空。
@@ -193,8 +199,8 @@ Newsletters,新闻邮件
 "Number of Lines in a Street Address",街道地址行数
 Offline,离线
 Online,在线
-"Online Customers",在线客户
-"Online Customers Options",在线客户选项
+"Online Customers",在线顾客
+"Online Customers Options",在线顾客选项
 "Online Minutes Interval",在线分钟数间隔
 "Order #","订单 #"
 "Order Total",订单总数
@@ -233,6 +239,7 @@ Pending,挂起
 "Please select a website which contains store view",请选择包含该店铺视图的网站
 "Please select region, state or province",请选择地区、州，或省
 "Please, check your email for confirmation key.",请检查您的电子邮件以获取确认密钥。
+Prefix,前缀
 "Prefix Dropdown Options",前缀下拉菜单选项
 Price,价格
 Product,产品
@@ -242,9 +249,9 @@ Qty,数量
 "Recent Orders",近期订单
 "Recovery Link Expiration Period (days)",恢复链接过期周期（天）
 "Recurring Profiles",周期配置
-"Redirect Customer to Account Dashboard after Logging in",登录后，重定向客户到账户显示板
+"Redirect Customer to Account Dashboard after Logging in",登录后，重定向顾客到账户显示板
 Refunded,已存储
-"Registered Customers",已注册的客户
+"Registered Customers",已注册的顾客
 "Remind Email Template",提醒邮件模板
 Remove,删除
 "Require Emails Confirmation",需要确认电子邮件
@@ -256,10 +263,11 @@ SKU,SKU
 "Sales Statistics",销售数据统计
 Save,保存
 "Save Address",保存地址
-"Save Customer",保存客户
-"Save Customer Group",保存客户群组
+"Save Customer",保存顾客
+"Save Customer Group",保存顾客组
 "Save Password",保存密码
 "Save and Continue Edit",保存并继续编辑
+"Semicolon (;) separated values.<br/>Put semicolon in the beginning for empty first option.<br/>Leave empty for open text field.",用分号（；）分隔值。<br/>将分号放在第一个选项前面的空白处。<br/>对于打开文字的字段请留空。
 "Send From",发送自
 "Send Welcome Email",发送欢迎邮件
 "Send Welcome Email after Confirmation",在确认后发送欢迎邮件
@@ -269,7 +277,7 @@ Sent,已发送
 "Session Start Time",会话开始时间
 "Set as Default Billing Address",设置为默认账单地址
 "Set as Default Shipping Address",设置为默认运送地址
-"Share Customer Accounts",分享客户账户
+"Share Customer Accounts",分享顾客账户
 "Shopping Cart",购物车
 "Shopping Cart - %1 item(s)","购物车 - %1 个条目"
 "Show Date of Birth",显示出生日期
@@ -288,11 +296,13 @@ Store,商店
 "Street Address %1","街道地址 %1"
 Subject,主题
 Submit,提交
-"Subscribe to Newsletter",订阅到新闻通讯
+"Subscribe to Newsletter",订阅到新闻邮件
 "Subscription option",订阅选项
+Suffix,后缀
 "Suffix Dropdown Options",后缀下拉菜单选项
 "Tax Calculation Based On",税金的计算基于
 "Tax Class",税率
+"Tax/VAT Number",税/增值税号
 "Tax/VAT number",税/增值税号码
 Telephone,电话
 Text,文字
@@ -300,15 +310,17 @@ Text,文字
 "Thank you for registering with %1.","感谢您注册 %1。"
 "The Date of Birth is required.",需提供生日。
 "The TAX/VAT number is required.","需提供 TAX/VAT 号码。"
+"The VAT ID entered (%s) is not a valid VAT ID.",输入的增值税ID：%s无效。
 "The VAT ID is valid. The current Customer Group will be used.","VAT ID 有效。将使用当前的顾客群体。"
-"The account information has been saved.",帐户信息已保存。
+"The account information has been saved.",账户信息已保存。
 "The address does not belong to this customer.",该地址不输入此用户。
 "The address has been deleted.",地址已删除。
 "The address has been saved.",地址已保存。
 "The address with the specified ID not found.",找不到指定ID的地址。
-"The customer does not have default billing address.",客户未设置默认账单地址。
-"The customer group has been deleted.",客户组已删除。
-"The customer group has been saved.",客户群组已保存。
+"The customer does not have default billing address.",顾客未设置默认账单地址。
+"The customer group has been deleted.",顾客组已删除。
+"The customer group has been saved.",顾客组已保存。
+"The customer is currently assigned to Customer Group %s.",该顾客当前被分配到顾客组%1。
 "The first name cannot be empty.",名字不能为空。
 "The group ""%1"" cannot be deleted","组 ""%1"" 无法删除"
 "The last name cannot be empty.",姓氏不能为空。
@@ -316,13 +328,13 @@ Text,文字
 "The password must have at least %1 characters.",密码必须有至少%1个字符。
 "The suffix that goes after name (Jr., Sr., etc.)",名字后面的后缀（Jr.、Sr.等）
 "The title that goes before name (Mr., Mrs., etc.)",姓名前称谓（先生、女士等）
-"There are no items in customer's shopping cart at the moment",客户的购物车中目前没内容
+"There are no items in customer's shopping cart at the moment",顾客的购物车中目前没内容
 "There are no recurring profiles yet.",还没有周期配置。
 "There is already an account with this email address. If you are sure that it is your email address, <a href=""%1"">click here</a> to get your password and access your account.","已经存在一个同名邮件地址的账号。如果您确定这就是您的邮件地址，<a href=""%1"">点击这里</a>得到密码来访问您的账户信息。"
 "There was an error validating the VAT ID.","验证 VAT ID 时出错。"
-"This account is not confirmed.",该帐户尚未确认。
+"This account is not confirmed.",该账户尚未确认。
 "This email does not require confirmation.",该电子邮件不需要确认。
-"This email will be sent instead of default welcome email, after account confirmation.",在确认帐户后，该邮件将代替默认欢迎邮件发送。
+"This email will be sent instead of default welcome email, after account confirmation.",在确认账户后，该邮件将代替默认欢迎邮件发送。
 "To show VAT number on frontend, set Show VAT Number on Frontend option to Yes.",为了在前端显示VAT号，设置在前端显示VAT号选项为是。
 Total,总数
 Type,类型
@@ -336,6 +348,7 @@ Update,更新
 "VAT Number","VAT 编号"
 "VAT Request Date","VAT 请求日期"
 "VAT Request Identifier","VAT 申请标识符"
+"VAT number",增值税号
 "Validate VAT Number","验证 VAT 号码"
 "Validate on Each Transaction",每次交易都验证
 "Validation Error Group",验证错误组
@@ -350,7 +363,7 @@ Wishlist,收藏清单
 "With your own account, you can check out faster, store multiple shipping addesses, see your shopping activity and more.",用自己的账号方便更快结账、存储多运送地址、查看购物历史以及更多。
 "Would you like to change the Customer Group for this order?",你是否想更改该订单的顾客群体？
 "Wrong confirmation key.",错误的确认密钥。
-"Wrong customer account specified.",指定的客户帐户有误。
+"Wrong customer account specified.",指定的顾客账户有误。
 "Wrong email.",邮件有误。
 "Wrong transactional account email type",错误的交易账户电子邮件类型
 Year,年

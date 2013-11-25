@@ -15,13 +15,14 @@ Categories,分类
 Choose...,选择...
 Close,关闭
 Continue,继续
+"Custom Layouts",定制布局
 Delete,删除
 "Design Package/Theme","设计 包裹/主题"
 "Design Theme",设计主题
 "Export to:",导出到：
 "Frontend Apps",前端应用集
 "Frontend Properties",前端属性
-"Generic Pages",通用页面
+"Generic Pages",常规页面
 Images,图像
 "Insert Widget",插入小工具
 "Insert Widget...",插入小工具...
@@ -30,10 +31,12 @@ Images,图像
 "New Frontend App Instance",新的前端应用实例
 "New Widget Instance",新小工具实例
 "Next page",下一页
+"No file selected.",未选择文件
 "Non-Anchor Categories",非锚点分类
 "Not Selected",非所选
 "Open Chooser",打开选择器
 Page,页面
+"Page Layouts",页布局
 "Please Select Container First",请首先选择容器
 "Please specify a Widget Type.",请指定小部件类型。
 "Please specify a correct widget.",请指定一个正确的小部件。
@@ -68,6 +71,6 @@ Widget,小工具
 "Widget Instance Title",小工具实例标题
 "Widget Options",小工具选项
 "Widget Type",小工具类型
-"items selected",以选项
+"items selected",个选择条目
 "of %1 pages","共 %1 页"
 "per page",每页

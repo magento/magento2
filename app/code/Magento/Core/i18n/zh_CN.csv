@@ -16,7 +16,7 @@ Advanced,高级
 "Advanced Search",高级搜索
 "An error occurred while saving. Please review the error log.",在保存时出现了错误。请查看错误日志。
 "Anchor symbol (#) is not supported in request path",锚点符号（#）不能用于请求路径中
-"Anchor symbol (#) is not supported in url rewrite suffix","URL 重写后缀不支持固定标志 （#）"
+"Anchor symbol (#) is not supported in url rewrite suffix","URL 重写后缀不支持固定标志（#）"
 "Are you sure you want to delete the folder named",你确定要删除该目录
 "Are you sure?",您是否确认？
 "Assign theme to your live store-view:",分配主题到你的活动店铺视图：
@@ -38,6 +38,7 @@ Cancel,取消
 "Choose existing category.",选择存在的分类。
 "Circular-reference in theme inheritance detected for ""%1""","为""%1""检测主题继承中的循环引用"
 Code,代码
+"Collection data files.",数据文件集合
 "Collections Data",集合数据
 "Contact Us",联系我们
 "Controller file was loaded but class does not exist",控制器文件已载入，但类不存在
@@ -54,7 +55,7 @@ Country,国家
 "Custom1 Contact Name","自定义 1 联系姓名"
 "Custom2 Contact Email","自定义 2 联系邮件"
 "Custom2 Contact Name","自定义 2 联系姓名"
-"Customer Service",客户服务
+"Customer Service",顾客服务
 Dashboard,仪表板
 "Date From",日期自
 "Date To",日期至
@@ -75,6 +76,7 @@ Design,设计
 "Empty main table name",主表名为空
 "Enable Charts",启用图表
 Enabled,已启用
+"Entity types declaration cache.",实体类型声明缓存。
 "Error happened while creating wishlist. Please try again later",当创建收藏清单时发生错误。请稍后再试
 "Error: unknown error.",未知错误。
 "Field can't be empty",字段不可为空
@@ -85,16 +87,16 @@ Enabled,已启用
 "File not found",文件未找到
 "File system",文件系统
 "File with an extension ""%value%"" is protected and cannot be uploaded","扩展为 ""%value%"" 的文件受到保护，无法上传"
-"Flush Cache Storage",清理缓存存储
-"Flush Magento Cache",清理Magento缓存
+"Flush Cache Storage",清除缓存存储
+"Flush Magento Cache",清除Magento缓存
 "Framework files",框架文件
 GB,GB
 General,常规
-"General Contact Email",一般联络电子邮件
+"General Contact Email",常规联络电子邮件
 "General Contact Name",常规联系人姓名
 "General Settings",常规设置
 "Gift Options for ",礼物选项
-Global,全球
+Global,全局
 "Group is missed for file ""%1""","文件""%1""的组缺失"
 "HTML tags are not allowed","不允许使用 HTML 标签"
 Header,头部
@@ -136,7 +138,7 @@ Package,包裹
 "Parent directory does not exist: %1",父目录不存在：%1
 "Path ""%value%"" is not available and cannot be used.","路径 ""%value%"" 不可用，因此无法使用。"
 "Path ""%value%"" is protected and cannot be used.","路径 ""%value%"" 受保护，无法使用。"
-"Path ""%value%"" may not include parent directory traversal (""../"", ""..\\).""","路径 ""%value%"" 可能不包含父目录遍历 （""。。/""， ""。。\\）。"""
+"Path ""%value%"" may not include parent directory traversal (""../"", ""..\\).""","路径 ""%value%"" 可能不包含父目录遍历（""。。/""， ""。。\\）。"
 "Please choose to register or to checkout as a guest.",请选择作为访客还是注册账户来结账。
 "Please define flag code.",请定义旗帜代码。
 "Please enter 6 or more characters. Leading or trailing spaces will be ignored.",请输入六个或更多字符。开头或结尾处的空格会被忽略。
@@ -147,14 +149,14 @@ Package,包裹
 "Please enter a number greater than 0 in this field.",请在该字段中输入大于0的数字。
 "Please enter a number lower than 100.",请输入不超过100个数字。
 "Please enter a valid URL Key. For example ""example-page"", ""example-page.html"" or ""anotherlevel/example-page"".","请输入有效的 URL 密钥。例如， ""example-page""、""example-page.html""，或 ""anotherlevel/example-page""。"
-"Please enter a valid URL. Protocol is required (http://, https:// or ftp://)",请输入有效URL。协议名是必须的（http：//、https：//，或ftp：//）
+"Please enter a valid URL. Protocol is required (http://, https:// or ftp://)",请输入有效URL。协议名是必须的（http://、https：//，或ftp：//）
 "Please enter a valid XML-identifier. For example something_1, block5, id-4.",请输入有效的XML标识符。例如，类似something_1、block5、id-4。
 "Please enter a valid credit card number.",请输入有效的信用卡卡号。
 "Please enter a valid credit card verification number.",请输入有效的信用卡验证码。
 "Please enter a valid date.",请输入有效日期
 "Please enter a valid day (1-%1).",请输入有效的天（1-%1）。
 "Please enter a valid email address. For example johndoe@domain.com.",请输入有效邮件地址。例如johndoe@domain.com。
-"Please enter a valid fax number. For example (123) 456-7890 or 123-456-7890.","请输入有效传真号码，例如 （123） 456-7890 或 123-456-7890。"
+"Please enter a valid fax number. For example (123) 456-7890 or 123-456-7890.","请输入有效传真号码，例如（123）456-7890 或 123-456-7890。"
 "Please enter a valid full date",请输入有效完整日期
 "Please enter a valid month (1-12).",请输入有效月份（1-12）。
 "Please enter a valid number in this field.",请在此区域输入有效的数字。
@@ -185,7 +187,7 @@ Package,包裹
 "Please wait, loading...",请稍候，正在加载...
 "Recent items",最近的条目
 "Request Path for Specified Store",特殊店铺的请求路径
-"Requested file may not include parent directory traversal (""../"", ""..\\ notation)""","所请求的文件可能没有包含在父目录遍历中 （""。。/""， ""。。\\ notation）"""
+"Requested file may not include parent directory traversal (""../"", ""..\\ notation)""","所请求的文件可能没有包含在父目录遍历中（""。。/""， ""。。\\ notation）"""
 "Requested invalid store ""%1""","请求了无效店铺 ""%1"""
 "Requested resource not found",找不到请求的资源
 "Resource is not set.",资源未设置。
@@ -222,11 +224,11 @@ Store,店铺名称
 "Street Address 2","街道地址 2"
 System,系统
 TB,TB
-"Template Variables",模版变量
+"Template Variables",模板变量
 "Text length does not satisfy specified text range.",文本长度不符合指定的文本长度范围。
 "The From Date value should be less than or equal to the To Date value.",开始日期应该小于等于结束日期值。
 "The URL to assign stores is not defined.",分配给店铺的URL未定义。
-"The store code may contain only letters (a-z), numbers (0-9) or underscore(_), the first character must be a letter","商店代码只可包含字母 （a-z），数字 （0-9） 或下划线 （_），首字符必须为字母"
+"The store code may contain only letters (a-z), numbers (0-9) or underscore(_), the first character must be a letter",商店代码只可包含字母（a-z），数字（0-9）或下划线（_），首字符必须为字母
 "The store has been deleted.",商店已被删除。
 "The store has been saved.",商店已保存。
 "The store view has been deleted.",商店视图已被删除。

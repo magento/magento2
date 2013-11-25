@@ -13,8 +13,8 @@
 "3 Day Select",3天选择
 "Access ID",访问ID
 "Access License Number",访问许可编号
-"Account ID",帐户ID
-"Account Number",帐户号码
+"Account ID",账户ID
+"Account Number",账户号码
 "Additional Protection Configuration Value",额外的保护已启用
 "Additional Protection Enabled",额外的保护已启用
 "Additional Protection Min Subtotal",额外的保护减去小计
@@ -35,10 +35,10 @@ Commercial,商业
 Configuration,配置
 Container,容器
 "Content Type",内容类型
-"Customer Packaging",客户自取
-"Customer Supplied Package",客户提供包裹
-"Customer services",客户服务
-"DHL (Deprecated)",DHL（不赞成）
+"Customer Packaging",顾客自取
+"Customer Supplied Package",顾客提供包裹
+"Customer services",顾客服务
+"DHL (Deprecated)",DHL（废弃）
 "Default Package Height",默认包裹高度
 "Default Package Length",默认包裹长度
 "Default Package Width",默认包裹宽度
@@ -63,7 +63,7 @@ Dropoff,自取
 "Enable Negotiated Rates",启用协商费率
 "Enabled for Checkout",为付款启用
 "Error #%1 : %2","错误 #%1 ： %2"
-"Error #%1 : %2 (%3)","错误 #%1 ： %2 （%3）"
+"Error #%1 : %2 (%3)","错误 #%1 ： %2（%3）"
 "Error #%1: %2","错误 #%1： %2"
 Europack,欧洲
 "Europe First Priority",欧洲优先
@@ -88,7 +88,7 @@ FedEx,FedEx
 "FedEx Tube","FedEx 包装管"
 "First Overnight",次日达
 First-Class,一类
-Flat,平坦
+Flat,扁平
 "Flat-Rate Box",平纸箱
 "Flat-Rate Envelope",平信封
 "Free Method",免费方法

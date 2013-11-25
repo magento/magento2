@@ -1,3 +1,4 @@
+"'*' - matches any; 'xyz*' - matches any that begins on 'xyz' and not longer than %d.","'*' - 匹配任意；'xyz*' - 匹配任何'xyz'开头并不长于%d。"
 "-- Please Select --","-- 请选择 --"
 "Add New Class",添加新类
 "Add New Tax Class",添加新的税类
@@ -5,7 +6,7 @@
 "Add New Tax Rule",添加新税率规则
 "After Discount",折扣后
 "An error occurred while deleting this tax rate.",当删除税率时发生错误。
-"Apply Customer Tax",应用客户税
+"Apply Customer Tax",应用顾客税
 "Apply Discount On Prices",在价格上应用折扣
 "Apply Tax On",将税应用于
 "Apply discount on price including tax is calculated based on store tax, if ""Apply Tax after Discount"" is selected.",如果选中”折后应用税率“，则在含税价格上应用折扣会根据店铺税率计算。
@@ -14,22 +15,22 @@ Back,返回
 "Before Discount",折前
 CSV,CSV
 "Calculation Settings",计算设置
-"Catalog Prices",分类价格
+"Catalog Prices",产品目录价格
 Code,代码
 Country,国家
 "Custom price if available",可用时的自定义价格
-"Customer Tax Class",客户税务类型
+"Customer Tax Class",顾客税务类型
 "Default Country",默认国家
 "Default Post Code",默认发布代码
 "Default State",默认州
-"Default Tax Class for Customer",客户的默认税类
+"Default Tax Class for Customer",顾客的默认税类
 "Default Tax Class for Product",产品的默认税类
 "Default Tax Destination Calculation",默认税额计算
 "Delete Rate",删除费率
 "Delete Rule",删除规则
 "Display Full Tax Summary",显示完整文字摘要
 "Display Prices",显示价格
-"Display Product Prices In Catalog",在分类中显示产品价格
+"Display Product Prices In Catalog",在产品目录中显示产品价格
 "Display Shipping Amount",显示运送量
 "Display Shipping Prices",显示运费
 "Display Subtotal",显示小计
@@ -80,7 +81,7 @@ Priority,优先级
 "Range To",范围到
 "Range To should be equal or greater than Range From.",截止范围应该大于等于开始区间。
 Rate,费率
-"Rate Percent",税率百分率
+"Rate Percent",税率百分比
 "Rate Percent should be a positive number.",比率百分比应该是一个正数。
 Reset,重置状态
 "Row Total",总行数
@@ -146,5 +147,5 @@ Yes,是
 "Zip code should not contain characters other than digits.",邮编必须为数字。
 "Zip/Post Code",邮政编码
 "Zip/Post is Range",邮编范围
-"customer group",客户组
+"customer group",顾客组
 product,产品

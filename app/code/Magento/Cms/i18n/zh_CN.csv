@@ -43,7 +43,7 @@ Disabled,已禁用
 "Disabled by Default",默认被禁用
 "Edit Block",编辑区块
 "Edit Page",编辑页面
-"Enable WYSIWYG Editor","启用 WYSIWYG 编辑器"
+"Enable WYSIWYG Editor",启用所见即所得（WYSIWYG）编辑器
 Enabled,已启用
 "Enabled by Default",默认启用
 "Expand All",全部展开
@@ -53,7 +53,7 @@ Home,主页
 ID,ID
 Identifier,标识
 "If empty, the Page Title will be used",如果为空，将使用页面标题
-"Images (%1)","图片 （%1）"
+"Images (%1)",图片（%1）
 "Insert File",插入文件
 Keywords,关键词
 Layout,布局

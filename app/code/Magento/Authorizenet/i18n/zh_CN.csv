@@ -1,9 +1,9 @@
 "--Please Select--","-- 请选择 --"
 "API Login ID","API 登录 ID"
 "Accepted Currency",接受的汇率
-"Authorize.net Direct Post","Authorize.net 直接发表"
+"Authorize.net Direct Post",Authorize.net直接发行
 "Card Verification Number",卡片验证号码
-"Card Verification Number Visual Reference","信用卡验证号码 视觉参考"
+"Card Verification Number Visual Reference",信用卡验证号码可视参考
 Close,关闭
 "Credit Card Information",信用卡信息
 "Credit Card Number",信用卡号码
@@ -11,7 +11,7 @@ Close,关闭
 "Credit Card Types",信用卡类型
 "Credit Card Verification",信用卡验证
 Debug,调试
-"Email Customer",发送电子邮件给客户
+"Email Customer",发送电子邮件给顾客
 Enabled,已启用
 "Expiration Date",过期日期
 "Gateway URL","网关 URL"

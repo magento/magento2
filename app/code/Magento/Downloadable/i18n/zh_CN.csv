@@ -36,7 +36,7 @@ Order,"订单 #"
 "Order Item Status to Enable Downloads",订单条目状态为允许下载
 "Order id cannot be null",订单编号不能为空
 "Order item id cannot be null","订购物品 id 不能为空"
-Ordered,已下单
+Ordered,已订购
 "Out of stock",缺货
 Pending,挂起
 "Please correct the download URL host.",请纠正下载URL主机名。

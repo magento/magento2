@@ -5,19 +5,20 @@ Address,地址
 "Address Information",地址信息
 "Already registered?",已注册？
 Back,返回
+"Check &quot;Remember Me&quot; to access your shopping cart on this computer when you are logged out","当退出登路时，""检查 &quot；记住我&quot；来存取您的购物车在这台电脑上"""
 "Checkout as Guest",作为来宾结账
 "Checkout as a Guest or Register",以来宾身份结账或注册
 City,城市
-"Clear Persistence on Log Out",注销时清空选项
+"Clear Persistence on Log Out",注销时清空持久化
 Close,关闭
 Company,公司
 "Confirm Password",确认密码
 Continue,继续
 Country,国家
-"Create an Account",创建帐户
+"Create an Account",创建账户
 "Email Address",编辑电子邮件地址
 "Enable ""Remember Me""",启用“记住我”
-"Enable Persistence",启用保留
+"Enable Persistence",启用持久化
 "Fast and easy check out",方便快捷的结账
 Fax,传真
 "Forgot Your Password?",忘记您的密码？
@@ -28,12 +29,12 @@ Fax,传真
 "Loading next step...",正在载入下一步...
 Login,登录
 "Login Information",登录信息
-"Login or Create an Account",登录或创建帐户
-"New Customers",新客户
+"Login or Create an Account",登录或创建账户
+"New Customers",新顾客
 Password,密码
-"Persist Shopping Cart",保留购物车
-"Persistence Lifetime (seconds)",保留寿命（秒）
-"Persistent Shopping Cart",保留购物车
+"Persist Shopping Cart",持久化购物车
+"Persistence Lifetime (seconds)",持久化生命周期（秒）
+"Persistent Shopping Cart",持久化购物车
 "Personal Information",个人信息
 Phone,电话
 "Please log in below:",请在下面登录：
@@ -41,8 +42,8 @@ Phone,电话
 "Please select region, state or province",请选择地区、州，或省
 Register,注册
 "Register and save time!",注册并节约时间！
-"Register to Create an Account",注册以创建帐户
-"Registered Customers",已注册的客户
+"Register to Create an Account",注册以创建账户
+"Registered Customers",已注册的顾客
 "Remember Me",记住我
 "Save in address book",保存到地址簿
 "Select a billing address from your address book or enter a new address.",从您的地址簿选择账单地址，或输入新地址。

@@ -3,11 +3,11 @@
 "<strong>%1 item(s)</strong> were found using the following search criteria.",<strong>%1个条目</strong>被发现使用下面的搜索条件。
 All,全部
 "Applies for ""Like"" search type only","仅应用""喜欢""搜索类型"
-"Apply Layered Navigation if Search Results are Less Than",如果搜索结果少于该数量，应用层次式导航
+"Apply Layered Navigation if Search Results are Less Than",如果搜索结果少于该数量，应用分层式导航
 "Attribute setting change related with Search Index. Please run <a href=""%1"">Rebuild Search Index</a> process.","属性设置改变与搜索索引相关。请运行<a href=""%1"">重建搜索索引</a>过程。"
-"Catalog Advanced Search",分类高级搜索
-"Catalog Search",分类搜索
-"Enter ""0"" to enable layered navigation for any number of results.",输入“0”即可为任何数量的结果启用层次式导航。
+"Catalog Advanced Search",产品目录高级搜索
+"Catalog Search",产品目录搜索
+"Enter ""0"" to enable layered navigation for any number of results.",输入“0”即可为任何数量的结果启用分层式导航。
 "Go to Home Page",前往主页
 Grid,网格
 Home,主页
@@ -27,7 +27,7 @@ Relevance,关联
 Results,结果
 Search,搜索
 "Search Settings",搜索设置
-"Search Terms",搜索条件
+"Search Terms",搜索词
 "Search Type",搜索类型
 "Search entire store here...",在这里搜索整个商店...
 Search:,搜索：
@@ -38,5 +38,5 @@ Synonym,近义词
 "We didn't find any items using this search criteria.",没有找到指定搜索条件的条目。
 Yes,是
 "Your search query can't be longer than %1, so we had to shorten your query.",您的搜索关键字不能长于%1。所以我们不得不截断它。
-"Your search returns no results.",您的搜索未找到结果。
+"Your search returns no results.",未找到您想要的搜索结果。
 "up to %1","至多 %1"

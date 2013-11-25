@@ -3,6 +3,7 @@
 "Allow to Choose State if It is Optional for Country",如果国家的州是可选的那么允许选择州
 "Allowed Currencies",允许的货币
 "Base Currency",基准货币
+"Base currency is used for all online payment transactions. If you have more than one store view, the base currency scope is defined by the catalog price scope (""Catalog"" > ""Price"" > ""Catalog Price Scope"").","基础货币用来为所有在线支付交易。如果您有超过一个以上的店铺视图，基础货币范围被产品目录价格范围（""产品目录"" > ""价格"" > ""产品目录价格范围""）定义。"
 "Connection Timeout in Seconds",连接超时的秒数
 Country,国家
 "Country and Format Type combination should be unique",国家和格式类型的组合必须是唯一的

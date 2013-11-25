@@ -14,7 +14,7 @@
 "Billing Period",账期
 "Billing Period Unit",账期单位
 "Card Verification Number",卡片验证号码
-"Cash On Delivery Payment",活到付款
+"Cash On Delivery Payment",货到付款
 "Centinel API URL","Centinel API链接"
 "Check / Money Order",支票/费用订单
 "Credit Card Number",信用卡号码
@@ -82,7 +82,7 @@ Password,密码
 "Tax Amount",税额
 "The authorize action is not available.",认证操作无效。
 "The billing period unit is not defined or wrong.",账期单位未定义或定义错误。
-"The capture action is not available.",捕获操作无效。
+"The capture action is not available.",捕捉操作无效。
 "The currency code is undefined.",货币码未定义。
 "The initial, non-recurring payment amount is due immediately when the profile is created.",当配置文件创建后，初始的、非周期性的支付额立即到期。
 "The order action is not available.",订购操作无效。
@@ -108,7 +108,7 @@ Password,密码
 "This is the number of billing periods that make up one billing cycle.",这是用来完成一个账单周期的账期数。
 "This is the unit for billing during the subscription period.",这是账单订阅期间的单位。
 Title,标题
-"Trial Billing Amount",尝试记账帐户。
+"Trial Billing Amount",尝试记账账户。
 "Trial Billing Frequency",尝试记账频率
 "Trial Billing Period Unit",试用账期单位
 "Two Weeks",两周

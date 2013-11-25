@@ -31,7 +31,7 @@
 "Attribute set name is empty.",属性集名称为空。
 "Attribute with the same code",使用相同代码的属性
 "Can't create table: %1",无法创建表格：%1
-"Catalog Input Type for Store Owner",店铺所有者的分类输出类型
+"Catalog Input Type for Store Owner",店铺所有者的产品目录输出类型
 "Current module EAV entity is undefined",当前模块EAV实体未定义
 "Current module pathname is undefined",当前模块路径名未定义
 "Data integrity: No header row found for attribute",数据完整性：属性的表头行没找到
@@ -72,7 +72,7 @@ Email,电子邮件
 "Invalid joint fields",无效的合并字段
 "Joint field or attribute expression with this alias is already declared",使用此别名的合并字段或属性表达式已被声明
 Letters,字母
-"Letters (a-z, A-Z) or Numbers (0-9)","字母 （a-z， A-Z） 或数字 （0-9）"
+"Letters (a-z, A-Z) or Numbers (0-9)","字母（a-z， A-Z）或数字（0-9）"
 "Maximum length of attribute code must be less than %1 symbols",属性代码最大长度必须小于%1个符号
 "Multiple Select",多选
 No,否
@@ -97,9 +97,9 @@ URL,URL
 "Unique Value (not shared with other products)",唯一数值（不与其它产品共享）
 "Unknown parameter",未知参数
 "Values Required",需要数值
-"Wrong attribute group ID","错误的属性群组 ID"
+"Wrong attribute group ID","错误的属性组 ID"
 "Wrong attribute set ID","错误的属性设置 ID"
-"Wrong entity ID","错误的实体 ID"
+"Wrong entity ID",错误的实体ID
 "Wrong type definition for %1",错误的类定义：%1
 Yes,是
 Yes/No,是/否

@@ -3,18 +3,18 @@
 "%1 RSS Feed","%1 RSS源"
 "%1 has reached a quantity of %2.",%1已经达到%2的数量。
 "%1's Wishlist","%1 的收藏清单"
-Catalog,分类
+Catalog,产品目录
 "Category Feeds",分类源
 "Click <a href=""%1"">here</a> to view the review.","点击<a href=""%1"">这里</a>查看评论。"
 "Click for price",单击获取价格
 "Comment: %1<br/>","评论：%1 <br/>"
 Coupons/Discounts,代金券/折扣
 "Current Status: %1<br/>","当前状态：%1 <br/>"
-"Customer Name: %1","客户名： %1"
-"Customer Order Status Notification",客户订单状态通知
+"Customer Name: %1","顾客名： %1"
+"Customer Order Status Notification",顾客订单状态通知
 "Details for %1 #%2","%1 #%2的详情"
 Discount,折扣
-"Discount (%1)","折扣 （%1）"
+"Discount (%1)",折扣（%1）
 "Enable RSS",启用RSS
 "Error in processing xml. %1",处理xml时出错。%1
 From:,来自：
@@ -39,7 +39,6 @@ Message:,信息：
 "RSS Feeds Section","RSS 源选区"
 "Review: %1 <br/>","评论：%1 <br/>"
 "Rss Config","RSS 配置"
-"Shipping &amp; Handling",运送与手续费
 "Special Expires On: %1",特价于%1过期
 "Special Price: %1","特价： %1"
 "Special Products",特殊商品

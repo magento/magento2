@@ -54,7 +54,7 @@ Company,公司
 "Confirm Password",确认密码
 Content,内容
 "Content Height",内容高度
-"Content Height (css)","内容高度 （css）"
+"Content Height (css)",内容高度（css）
 Continue,继续
 "Continue Shopping",继续购物
 "Continue to Billing Information",继续以查看账单信息
@@ -63,7 +63,7 @@ Continue,继续
 Country,国家
 "Create Billing Address",创建账单地址
 "Create Shipping Address",创建运送地址
-"Customer Information",客户信息
+"Customer Information",顾客信息
 "Data saving problem",数据保存问题
 "Default Billing",默认账单
 "Default Shipping",默认运送
@@ -113,7 +113,7 @@ ID,ID
 "Invalid shipping method",无效的货运方法
 "Item not found or already ordered",无法找到条目，或条目已被订购
 Items,条目
-"Load customer quote error",载入客户报价错误
+"Load customer quote error",载入顾客报价错误
 "Loading next step...",正在载入下一步...
 Login,登录
 "Maximum Display Recently Added Item(s)",最大显示近期添加的条目
@@ -134,6 +134,7 @@ Move,移动
 "Order Review",订单总览
 "Order Success",订购成功
 "Order place error",下订单错误
+"Order total will be displayed before you submit the order",订单总额将在提交之前被显示。
 "Other Items in Your Order",您订单中的其它条目
 "Other items in your order",您订单里的其他条目
 Password,密码
@@ -174,7 +175,7 @@ Qty:,数量：
 "Recently added item(s)",最近添加的条目
 Register,注册
 "Register and save time!",注册并节约时间！
-"Register to Create an Account",注册以创建帐户
+"Register to Create an Account",注册以创建账户
 "Register with us for future convenience:",为便于使用注册：
 "Remove Item",删除条目
 "Remove This Item",删除该内容
@@ -225,7 +226,7 @@ Status,状态
 Subtotal,小计
 "Subtotal must exceed minimum order amount",总数必须超出允许订购的最小数量
 Telephone,电话
-"Terms &amp; Conditions",条款和协议
+"Terms & Conditions",条款和协议
 "Terms and Conditions",条款和条件
 "Terms and Conditions Information",条款和条件信息
 Text,文字
@@ -235,7 +236,7 @@ Text,文字
 "The coupon code ""%1"" is not valid.","无效的优惠券代码""%1"""
 "The coupon code ""%1"" was applied.","优惠券代码""%1""被应用"
 "The coupon code was canceled.",优惠券代码被取消。
-"The customer address is not valid.",无效的客户地址。
+"The customer address is not valid.",无效的顾客地址。
 "The onepage checkout is disabled.",单页面结账已被禁用。
 "The product does not exist.",产品不存在。
 "There are <a href=""%1"">%2 items</a> in your cart.","您的购物车里有<a href=""%1"">%2个条目"
@@ -249,13 +250,13 @@ Total:,总计：
 "Unable to set Payment Method",不能设置支付方法
 "Unit Price",单价
 "Update Cart",更新购物车
-"Update Qty &amp; Addresses",更新数量与地址
+"Update Qty & Addresses",更新数量与地址
 "Update Shopping Cart",更新购物车
 "Update Total",更新总额
 "Use Billing Address",使用账单地址
 "VAT Number","VAT 编号"
 "View cart",查看购物车
-"We can't find the product.",找不到该产品。
+"We can't find the product.",未找到该产品。
 "We cannot add this item to your shopping cart",不能添加该条目到您的购物车
 "We cannot apply the coupon code.",不能应用该优惠券代码。
 "We cannot configure the product.",不能配置该产品。

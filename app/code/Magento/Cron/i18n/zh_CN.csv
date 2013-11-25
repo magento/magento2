@@ -1,7 +1,7 @@
-"Cron (Scheduled Tasks) - all the times are in minutes","Cron（计划任务） = 所有时间均以分钟为单位"
+"Cron (Scheduled Tasks) - all the times are in minutes","Cron（计划任务）= 所有时间均以分钟为单位"
 Daily,每天
 "Failure History Lifetime",失败历史生命期
-"For correct URLs generated during cron runs please make sure that Web &gt; Secure and Unsecure Base URLs are explicitly set.","为了纠正在cron运行时产生的URLs，请确保Web &gt； 安全和非安全基础URLs被明确设置。"
+"For correct URLs generated during cron runs please make sure that Web > Secure and Unsecure Base URLs are explicitly set.","为了纠正在cron运行时产生的URLs，请确保Web > 安全和非安全基础URLs被明确设置。"
 "Generate Schedules Every",生成计划，每
 "History Cleanup Every",清除历史记录，每
 Hourly,每小时

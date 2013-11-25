@@ -7,7 +7,7 @@
 "Begin data validation",开始数据校验
 "Begin export of %1",开始%1的导入
 "Begin import of ""%1"" with ""%2"" behavior","开始导入用""%2""行为导入""%1"""
-"Cannot determine attribute filter type",不能检测属性过滤器类型
+"Cannot determine attribute filter type",不能检测属性筛选器类型
 "Cannot find required columns: %1","找不到必须的列： %1"
 "Cannot get autoincrement value",不能得到子增量值
 "Check Data",检查数据
@@ -18,7 +18,8 @@ Continue,继续
 "Custom Action",定制动作
 "Custom option with such title already declared in source file.",有如此标题的定制选项已经在源文件中声明。
 "Custom options have different types.",定制选项有不同的类别。
-"Customer address id column is not specified",客户地址ID列未指定
+"Customer address id column is not specified",顾客地址ID列未指定
+"Customers Main File",顾客主文件
 "Data is invalid or file is not uploaded",数据无效，或文件未被上传
 "Delete Entities",删除实体
 "Destination directory is not writable",目标目录不可写
@@ -76,7 +77,7 @@ Import/Export,导入/导出
 "Please enter a correct entity model",请输入一个正确的实体模型
 "Please enter a correct entity.",请输入正确的实体。
 "Please fix errors and re-upload file.",请修正错误重新上传文件。
-"Please provide filter data.",请提供过滤器数据。
+"Please provide filter data.",请提供筛选器数据。
 "Please specify a source.",请指定一个源。
 "Please specify writer.",请指定写入器。
 "Region is invalid",无效地区
@@ -93,7 +94,7 @@ Status,状态
 "There are no product types available for export",没有可用的产品类型可供导出
 "There are several existing custom options with such name.",有几个存在定制选项包含如此名字。
 "There is no data for export",没有要导出的数据
-"Unknown attribute filter type",未知的属性过滤器类型
+"Unknown attribute filter type",未知的属性筛选器类型
 "Uploaded file has no extension",已上传的文件没有扩展名
 "Validation Results",验证结果
 "Validation finished successfully",成功完成校验。

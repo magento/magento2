@@ -1,16 +1,18 @@
 "3D Secure","3D 安全"
 "3D Secure Card Validation","3D 安全信用卡验证"
+"3D Secure validation is required for Maestro cards. Supporting of American Express cards require additional agreement. Learn more at <a href=""http://www.paypal.com/amexupdate"">http://www.paypal.com/amexupdate</a>.","Maestro卡需要 3D 安全验证。对美国运通卡的支持需要额外的协议。详情请访问 <a href=""http://www.paypal.com/amexupdate"">http://www.paypal.com/amexupdate</a>。"
+"<a href=""http://www.magentocommerce.com/paypal"">Start accepting payments via PayPal!</a>","<a href=""http://www.magentocommerce.com/paypal"">开始通过PayPal接受付款！</a>"
 "A case that has been resolved and close requires a reimbursement.",一种情况已经被解决并且关闭要求赔偿。
-"A reversal has occurred on this transaction because of a customer dispute suspecting unauthorized spoof.",由于客户争议未授权的欺骗本次交易被撤销。
-"A reversal has occurred on this transaction because you have given the customer a refund.",由于您已经退款给的客户本次交易撤销。
-"A reversal has occurred on this transaction due to a chargeback by your customer.",由于您的客户拒付本次交易发生翻转。
-"A reversal has occurred on this transaction due to a complaint about the transaction from your customer.",由于您的客户投诉本次交易撤销。
-"A reversal has occurred on this transaction due to your customer triggering a money-back guarantee.",由于您的客户触发了一个退钱保证本次交易撤销。
+"A reversal has occurred on this transaction because of a customer dispute suspecting unauthorized spoof.",由于顾客争议未授权的欺骗本次交易被撤销。
+"A reversal has occurred on this transaction because you have given the customer a refund.",由于您已经退款给的顾客本次交易撤销。
+"A reversal has occurred on this transaction due to a chargeback by your customer.",由于您的顾客拒付本次交易发生翻转。
+"A reversal has occurred on this transaction due to a complaint about the transaction from your customer.",由于您的顾客投诉本次交易撤销。
+"A reversal has occurred on this transaction due to your customer triggering a money-back guarantee.",由于您的顾客触发了一个退钱保证本次交易撤销。
 "A value is required for live mode. Refer to your CardinalCommerce agreement.","动态模式需要提供值。请参考您的CardinalCommerce 协议。"
 "A wrong PayPal Express Checkout Token is specified.","指定了错误的PayPal Express结账令牌。"
 "ACH Deposit (Hold for Dispute or Other Investigation)",ACH保证金（用作保证或其他调查用途）
 "ACH Deposit (Reversal)",ACH保证金（撤销）
-"ACH Funding for Funds Recovery from Account Balance",来自帐户余额的返款恢复ACH返款
+"ACH Funding for Funds Recovery from Account Balance",来自账户余额的返款恢复ACH返款
 "ACH Withdrawal",ACH撤销
 "API Authentication Methods",API身份验证方法
 "API Certificate",API证书
@@ -18,13 +20,13 @@
 "API Signature",API签名
 "API Username",API用户名
 "API Uses Proxy",API使用代理
-"Ability for buyer to purchase without PayPal account.",买家在不使用PayPal帐户下购买的能力。
+"Ability for buyer to purchase without PayPal account.",买家在不使用PayPal账户下购买的能力。
 "Accept credit card and PayPal payments securely.",接受信用卡和PayPal安全地支付。
-"Accept payments with a PCI-compliant checkout that keeps customers on your site.",接受用PCI-compliant结账的支付从而留住客户在您的站点。
+"Accept payments with a PCI-compliant checkout that keeps customers on your site.",接受用PCI-compliant结账的支付从而留住顾客在您的站点。
 "Accept payments with a completely customizable checkout.",接受完全定制结账的支付。
 "Acceptance Mark",接受标志
 "Acceptance Mark Image",接受标志图片
-"Account-to-Account Payment, initiated by PayPal",帐户到帐户支付，由PayPal开创
+"Account-to-Account Payment, initiated by PayPal",账户到账户支付，由PayPal开创
 "Add PayPal as an additional payment method to your checkout page.",添加PayPal作为额外的支付方法到你的结账页面。
 "Add another payment method to your existing solution or as a stand-alone option.",添加另一个支付方法到您存在的方案或者作为一个单独的选项。
 "Additional Options",其他选项
@@ -32,6 +34,7 @@ Address,地址
 "Address Verification System Response",地址验证系统响应
 "All the address information matched",所有地址信息都匹配
 "Allow in Billing Agreement Wizard",允许使用记账协议向导
+"Allowable values: ""paypal"", ""primary"" (default), your_custom_value (a custom payment page style from your merchant account profile).","可用的值： ""paypal""、""primary"" （默认值）、your_custom_value（您的帐户配置文件中包含的一种自定义支付页面样式）。"
 "Allowed Credit Card Types",允许的信用卡类型
 "Also affects mini-shopping cart.",同时会影响迷你购物车。
 "Ask Customer",询问顾客
@@ -45,7 +48,7 @@ Authorization,授权
 Auto,自动
 AutoSweep,自动清理
 "Available Balance",可用余额
-"Balance Manager Account Bonus",余额管理器帐户点数
+"Balance Manager Account Bonus",余额管理器账户点数
 "Basic Settings - PayPal Express Checkout","基础设置 - PayPal Express Checkout"
 "Basic Settings - PayPal Payflow Link","基础设置 - PayPal Payflow Link"
 "Basic Settings - PayPal Payflow Pro","基础设置 - PayPal Payflow Pro"
@@ -55,7 +58,7 @@ AutoSweep,自动清理
 "Basic Settings - PayPal Website Payments Pro","基础设置 - PayPal Website Payments Pro"
 "Basic Settings - PayPal Website Payments Standard","基础设置 - PayPal Website Payments Standard"
 "Billing Address",账单地址
-"Billing Agreement Signup",账单协议注册
+"Billing Agreement Signup",记账协议注册
 "Bonus for first ACH Use",首次使用ACH奖励
 "Buyer Credit Payment",买家信用支付
 "Buyer claims that a possible duplicate payment was made to the merchant.",买家声称商家可能发生重复支付。
@@ -81,8 +84,8 @@ City,城市
 "Click here if you are not redirected within 10 seconds.",如果10秒中之内页面没有被转向请单击这里。
 Company,公司
 Complaint,投诉
-"Connect your merchant account with a PCI-compliant gateway that lets customers pay without leaving your site.",连接到您的带有PCI-complaint网关的商家账号以便让客户不离开您的站点就完成支付。
-"Connect your merchant account with a fully customizable gateway that lets customers pay without leaving your site.",连接到您的带有完全定制网关的商家账号以便让客户不离开您的站点就完成支付。
+"Connect your merchant account with a PCI-compliant gateway that lets customers pay without leaving your site.",连接到您的带有PCI-complaint网关的商家账号以便让顾客不离开您的站点就完成支付。
+"Connect your merchant account with a fully customizable gateway that lets customers pay without leaving your site.",连接到您的带有完全定制网关的商家账号以便让顾客不离开您的站点就完成支付。
 "Countries Payment Applicable From",各国支付可用情况表单
 Country,国家
 "Coupon Redemption",代金券兑换
@@ -92,7 +95,7 @@ Credit,信用
 Custom,自定义
 "Custom Endpoint Hostname or IP-Address",自定义端点主机名或IP地址
 "Custom Path",自定义路径
-"Customer Information",客户信息
+"Customer Information",顾客信息
 Daily,每天
 Debit,借记
 "Debit Card Cash Back",借记卡返现
@@ -101,13 +104,13 @@ Debit,借记
 "Debug Mode",调试模式
 "Direct Payment API",直接支付API
 Discount,折扣
-"Displays on catalog pages and homepage.",显示在分类页和首页
+"Displays on catalog pages and homepage.",显示在产品目录页和首页
 Dispute,争议
 Dynamic,动态
 "EFT Funding (German banking)",EFT返款（德国银行）
 "Edit Shopping Cart",编辑购物车
 "Email Address",编辑电子邮件地址
-"Email Associated with PayPal Merchant Account",关联给PayPal银行帐户的电子邮件地址
+"Email Associated with PayPal Merchant Account",关联给PayPal银行账户的电子邮件地址
 "Email Associated with PayPal Merchant Account (Optional)",与PayPal商业账户关联的邮件（可选）
 "Enable Automatic Fetching",启用自动获取
 "Enable Express Checkout","允许Express Checkout"
@@ -131,7 +134,7 @@ Fax,传真
 "Fee Reversal",撤销手续费
 "Fee: Foreign ACH Withdrawal",费用：外国ACH撤销
 "Fee: Mass Pay Request",费用：批量付款请求
-"Fee: Web Site Payments Pro Account Monthly",费用：专业帐户月度网站支付
+"Fee: Web Site Payments Pro Account Monthly",费用：专业账户月度网站支付
 "Fee: WorldLink Check Withdrawal",费用：WorldLink支票撤销
 Fetch,获取
 "Fetch Updates",获取更新
@@ -141,16 +144,16 @@ Fetch,获取
 Funding,退款
 "General (Authorization)",常规（身份验证）
 "General (Dividend)",常规（利息）
-"General (Funds Transfer from PayPal Account to Another)",常规（从一个PayPal帐户向另一个转移资金）
+"General (Funds Transfer from PayPal Account to Another)",常规（从一个PayPal账户向另一个转移资金）
 "General (Purchase with a credit card)",常规（使用信用卡购买）
 "General Adjustment without businessrelated event",与业务无关的常规调整
 "General Currency Conversion",常规货币转换
-"General Funding of PayPal Account ",PayPal帐户的常规退款
+"General Funding of PayPal Account ",PayPal账户的常规退款
 "General Redemption",常规兑换
-"General Withdrawal from PayPal Account",来自PayPal帐户的常规撤销
+"General Withdrawal from PayPal Account",来自PayPal账户的常规撤销
 "General. Product no longer supported",常规。产品不在被支持
-"General: Use of PayPal account for purchasing as well as receiving payments",常规：使用PayPal帐户进行付款以及收款
-"General: Withdrawal from PayPal Account",常规：通过PayPal帐户撤销
+"General: Use of PayPal account for purchasing as well as receiving payments",常规：使用PayPal账户进行付款以及收款
+"General: Withdrawal from PayPal Account",常规：通过PayPal账户撤销
 "General: Withdrawal to Non-Bank Entity",常规：通过非银行实体撤销
 "General: adjustment of a type not belonging to the other T12xx categories",常规：调整为一种不再属于其他T12xx分类的类型
 "General: bonus of a type not belonging to the other T08xx categories",常规：通过一种不再属于其他T08xx类型的奖励
@@ -192,14 +195,15 @@ Login,登录
 "Matched Postal Code only (no Address)",只匹配邮编（无地址）
 "Matched five-digit ZIP only (no Address)",只匹配五位邮编（无地址）
 "Matched whole nine-didgit ZIP (no Address)",只匹配九位邮编（无地址）
-"Merchant Account",银行帐户
+"Merchant Account",银行账户
 "Merchant Liability",商家责任
 "Merchant Protection Eligibility",银行保护的资格
 "Merchant Referral Bonus",银行推荐奖励
+"Merchants need to apply to PayPal for enabling billing agreements feature. Do not enable this option until PayPal confirms that billing agreements are enabled for your merchant account.",银行需要通过PayPal启用记账协议功能。在PayPal确认您的银行帐户已经启用记账协议之前，不要启用该功能。
 "Mobile Payment (made via a mobile phone)",移动支付（通过手机进行）
 N/A,N/A
 "N/A. Address not checked, or acquirer had no response. Service not available",N/A。地址未检查，或对方行未响应。服务不可用
-"N/A. Global Unavailable",N/A。全球不可用
+"N/A. Global Unavailable",N/A。全局不可用
 "N/A. International Unavailable","N/A。 国际不可用"
 "N/A. Merchant has indicated that CVV2 is not present on card","N/A。 商家指出信用卡缺少CVV2码"
 "N/A. No response","N/A。 没有响应"
@@ -226,7 +230,7 @@ No,否
 "Notice that PayPal can handle up to 10 shipping options. That is why Magento will transfer only first 10 cheapest shipping options if there are more than 10 available.","请注意，PayPal 最多可处理10个运送选项。因此如果可用数超过10个，Magento将只传输运费最便宜的前十个。"
 "Now accepting PayPal (150 X 40)",现在接受PayPal（150X40）
 "Now accepting PayPal (150 X 60)",现在接受PayPal（150X60）
-"Number of Child Authorizations",授权子帐户的数量
+"Number of Child Authorizations",授权子账户的数量
 "Once you log into your PayPal Advanced account, navigate to the Service Settings - Hosted Checkout Pages - Set Up menu and set the options described below","一旦你登录了PayPal Advanced账户，导航到Service Settings - Hosted Checkout Pages - Set Up菜单设置下面这些选项"
 "Once you log into your PayPal Payflow Link account, navigate to the Service Settings - Hosted Checkout Pages - Set Up menu and set the options described below","一旦有登录了PayPal Payflow Link账户，导航到Service Setting - Hosted Checkout Pages - Set Up菜单然后设置下面这些选项"
 "Open Authorization",开放授权
@@ -238,8 +242,9 @@ Order,订单
 "Part of the address information matched",地址信息中部分匹配
 Partner,合作伙伴
 Password,密码
-"PayPal Balance Manager function of PayPal account",PayPal帐户的PayPal余额管理器功能
-"PayPal Billing Agreement Settings",PayPal账单协议设置
+"PayPal All-in-One Payment Solutions  <i>Accept and process credit cards and PayPal payments.</i>","PayPal All-in-One支付方案 <i>接受和处理信用卡和PayPal支付。</i>"
+"PayPal Balance Manager function of PayPal account",PayPal账户的PayPal余额管理器功能
+"PayPal Billing Agreement Settings",PayPal记账协议设置
 "PayPal Buyer Warranty Bonus",PayPal买家担保津贴
 "PayPal Debit Card Cash Advance",PayPal借记卡预付现金
 "PayPal Debit Card Withdrawal from ATM",从ATM进行PayPal借记卡撤销
@@ -254,10 +259,10 @@ Password,密码
 "PayPal Reference ID",PayPal推荐ID
 "PayPal Reference ID Type",PayPal推荐ID类型
 "PayPal Section",PayPal区域
-"PayPal Settlement",PayPal协议
-"PayPal Settlement Reports",PayPal处理报告
+"PayPal Settlement",PayPal结算
+"PayPal Settlement Reports",PayPal结算报表
 "PayPal recommends that you set up an additional User on your account at manager.paypal.com",PayPal推荐你在manager.paypal.com的账户上设置一个额外的用户
-"PayPal retains reports for 45 days.",PayPal会将报告保存45天。
+"PayPal retains reports for 45 days.",PayPal会将报表保存45天。
 "PayPal/Centinel Electronic Commerce Indicator","PayPal/Centinel Electronic Commerce指示器"
 "PayPal/Centinel Visa Payer Authentication Service Result","PayPal/Centinel Visa付款者验证服务结果"
 "Payer Address ID",付款者地址ID
@@ -277,7 +282,7 @@ Password,密码
 "Payment transactions disallow storing objects.",支付交易不允许的店铺对象。
 "Payments Advanced (Includes Express Checkout)","Payments Advanced（包括Express Checkout）"
 "Payments Advanced and Express Checkout","Payments Advanced和Express Checkout"
-"Payments Pro (Includes Express Checkout)","Payments Pro （包括Express Checkout）"
+"Payments Pro (Includes Express Checkout)","Payments Pro（包括Express Checkout）"
 "Payments Pro and Express Checkout","Payments Pro和Express Checkout"
 "Payments Standard",支付标准
 "Payments by PayPal (150 X 40)",用PayPal付款（150X40）
@@ -305,13 +310,13 @@ Reauthorization,撤销授权
 "Reference Information",参考信息
 "Reimbursement for a chargeback.",偿还退款。
 "Reimbursement of Chargeback",退款的偿还
-"Report Date",报告日期
-Reports,报告
+"Report Date",报表日期
+Reports,报表
 "Require CVV Entry",需要CVV项
-"Require Customer's Billing Address",要求客户帐单地址
+"Require Customer's Billing Address",要求顾客帐单地址
 "Required PayPal Settings",必要的PayPal设置
 Reversal,撤销
-"Reversal of General Account Hold",常规帐户保持的撤销
+"Reversal of General Account Hold",常规账户保持的撤销
 "Reversal of Points Usage",点数使用情况撤销
 "Reversal of an adjustment.",调整撤销
 "Reversal of hold for Dispute Investigation",撤销保留的争议调查
@@ -325,15 +330,15 @@ Sales,销售
 Schedule,计划
 "Scheduled Fetching",计划的获取
 "Send Email Confirmation",发送邮件确认
-"Settlement Consolidation",合并处理
-"Settlement Report Settings",处理报告设置
-"Settlement of a chargeback.",处理返款。
+"Settlement Consolidation",结算处理
+"Settlement Report Settings",结算报表设置
+"Settlement of a chargeback.",返款结算。
 "Severe 3D Secure Card Validation","提供 3D 安全信用卡验证"
 "Severe Validation Removes Chargeback Liability on Merchant",正式验证将撤销银行的退款责任
 "Severe validation removes chargeback liability on merchant.",严格的验证可避免分行的退款责任。
-Shipping,运送
+Shipping,货运
 "Shipping Address",送货地址
-"Shipping Method",运送方式
+"Shipping Method",送货方式
 "Shop now using (150 X 40)",立刻购物并使用（150X40）
 "Shop now using (150 X 60)",立刻购物并使用（150X60）
 Shortcut,快捷方式
@@ -343,11 +348,11 @@ Shortcut,快捷方式
 "Sign a billing agreement to streamline further purchases with PayPal.",与PayPal签署记账协议简化后续购买。
 "Some PayPal solutions conflict.",一些PayPal方案冲突。
 "Something went wrong while processing your order.",当处理您的订单时发生错误。
-"Sorry, but something went wrong. Please contact PayPal customer service.","很抱歉， 发生错误。 请与PayPal客户服务联系。"
+"Sorry, but something went wrong. Please contact PayPal customer service.","很抱歉， 发生错误。 请与PayPal顾客服务联系。"
 "Sorry, no quotes are available for this order at this time.",抱歉，当前该订单中没有报价可用。
 "Sort Order",排序顺序
-"Specifies what the Authorization Honor Period is on the merchant&#8217;s PayPal account. It must mirror the setting in PayPal.",指定商户&#8217；PayPal账号授权期。它必须是PayPal设置的镜像。
-"Specifies what the Order Valid Period is on the merchant&#x2019;s PayPal account. It must mirror the setting in PayPal.",指定商户&#8217；PayPal账号的订单有效期。它必须是PayPal设置的镜像。
+"Specifies what the Authorization Honor Period is on the merchant&#8217;s PayPal account. It must mirror the setting in PayPal.",指定商户&#8217;PayPal账号授权期。它必须是PayPal设置的镜像。
+"Specifies what the Order Valid Period is on the merchant&#x2019;s PayPal account. It must mirror the setting in PayPal.",指定商户&#x2019;PayPal账号的订单有效期。它必须是PayPal设置的镜像。
 State/Province,州/省
 Static,静态
 "Street Address",街道地址
@@ -357,15 +362,19 @@ Static,静态
 "Subscription Payment, either payment sent or payment received",订阅支付，可通过发出或收到的付款进行
 Subtotal,小计
 "Summary Text for Aggregated Cart",聚合购物车的摘要文字
+"Supporting of American Express cards require additional agreement. Learn more at <a href=""http://www.paypal.com/amexupdate"">http://www.paypal.com/amexupdate</a>.","对美国运通卡的支持要求额外的协议。欲知详情请访问 <a href=""http://www.paypal.com/amexupdate"">http://www.paypal.com/amexupdate</a>。"
 "Test Mode",测试模式
 "The PayPal certificate does not exist.",PayPal证书不存在。
 "The PayPal certificate file is empty.",PayPal证书文件为空。
 "The PayPal gateway has rejected this request. %1","PayPal网关已经拒绝了该请求。 %1"
 "The authorized amount is %1.",授权金额为%1。
-"The default number of child authorizations in your PayPal account is 1. To do multiple authorizations please contact PayPal to request an increase.",您PayPal帐户中授权子帐户的默认数量为1。如果要获得更多授权，请联系PayPal增加数量。
+"The background color for the checkout page around the header and payment form.",付款页面上头部和支付表单周围的背景色。
+"The background color for the header of the checkout page. Case-insensitive six-character HTML hexadecimal color code in ASCII.",付款页面上头部的背景色。请用ASCII码方式输入大小写敏感的六位代表HTML十六进制颜色代码的字符。
+"The default number of child authorizations in your PayPal account is 1. To do multiple authorizations please contact PayPal to request an increase.",您PayPal账户中授权子账户的默认数量为1。如果要获得更多授权，请联系PayPal增加数量。
 "The following error(s) occured:",下列错误发生：
-"The maximum number of child authorizations is reached.",授权子帐户的最大数量已达到。
-"The merchant account is not yet verified.",银行帐户尚未验证。
+"The image at the top left of the checkout page. Max size is 750x90-pixel. <strong style=""color:red"">https</strong> is highly encouraged.","付款页面左上角的图像，最大尺寸为750x90像素。 强烈建议使用<strong style="":red"">https</strong>地址。"
+"The maximum number of child authorizations is reached.",授权子账户的最大数量已达到。
+"The merchant account is not yet verified.",银行账户尚未验证。
 "The merchant holds a non-U.S. account and does not have a withdrawal mechanism.",该商家持有一个非美国账户并且没有取款功能。
 "The merchant's reference ID format is not supported.",商家的引用ID格式不支持。
 "The ordering amount of %1 is pending approval on the payment gateway.",%1的订购数量等待支付网关批准中。
@@ -374,11 +383,11 @@ Subtotal,小计
 "The payment is authorized but not settled.",支付已获授权但尚未确定。
 "The payment is pending because it was made to an email address that is not yet registered or confirmed.",支付被挂起，因为支付使用了一个未经确认的电子邮件地址。
 "The payment is pending while it is being reviewed by PayPal for risk.",支付被挂起，因为正在由PayPal进行风险评估。
-"The payment was made via credit card. In order to receive funds merchant must upgrade account to Business or Premier status.",支付是通过信用卡进行的。为了收到资金，银行必须将帐户升级为商业或白金状态。
+"The payment was made via credit card. In order to receive funds merchant must upgrade account to Business or Premier status.",支付是通过信用卡进行的。为了收到资金，银行必须将账户升级为商业或白金状态。
 "The schedule description is too long.",时间表描述太长。
 "The subscriber name is too long.",订阅者名字太长。
 "There is already another PayPal solution enabled. Enable this solution instead?",已经允许了另一个PayPal方案，要替代允许该方案吗？
-"This customer did not include a confirmed address.",客户没有包含确认地址。
+"This customer did not include a confirmed address.",顾客没有包含确认地址。
 "This feature needs be enabled first for the merchant account through PayPal technical support.","要使用商家账户，必须先通过 PayPal 技术支持启用该功能。"
 "This operation requires an existing transaction object.",该操作需要一个现有的交易目标。
 "Time of Day",每天的时间段
@@ -419,7 +428,7 @@ Void,无效
 "We can't start Express Checkout.","不能开始Express Checkout。"
 "We can't update Order data.",不能更新订单数据。
 "We can't update shipping method.",不能更新货运方法。
-"We cannot create a target file for reading reports.",无法为书面报告创建目标文件。
+"We cannot create a target file for reading reports.",无法为书面报表创建目标文件。
 "We cannot send the new order email.",不能发送新订单邮件。
 "We found nothing to fetch because of an empty configuration.",由于空的配置导致没什么可以抓取。
 "We prefer PayPal (150 X 40)",我们喜欢PayPal（150X40）
@@ -430,14 +439,15 @@ Void,无效
 "Website Payments Standard Payment",网站支付标准版付款
 "What is PayPal?",什么是PayPal？
 "Whether to create a billing agreement, if there are no active billing agreements available.",无论是否创建记账协议，如果没有活跃的记账协议可用。
+"Will appear as a payment option only for customers who have at least one active billing agreement.",只有在客户至少有一个活跃记账协议时才能出现付款选项。
 "WorldLink Withdrawal",WorldLink撤销
 Yes,是
 "Yes. Matched Address and five-didgit ZIP",是的，匹配地址与五位邮编
 "You cannot void a verification transaction.",您不能作废一个查证交易。
 "You need an authorization transaction to void.",您需要一个授权交易来作废。
 "You need to enter a transaction ID.",您需要输入一个交易ID。
-"You notified customer about creditmemo #%1.","您告知了客户关于付款通知 #%1。"
-"You notified customer about invoice #%1.",您通知了客户关于发票#%1。
+"You notified customer about creditmemo #%1.","您告知了顾客关于付款通知 #%1。"
+"You notified customer about invoice #%1.",您通知了顾客关于发票#%1。
 "You will be redirected to the PayPal website in a few seconds.",几秒钟后，您将被重定向到PayPal网站。
 "You will be redirected to the PayPal website when you place an order.",在您下单时，您会被重定向到PayPal网站。
 "You will be redirected to the PayPal website.",您将被重定向到PayPal网站。

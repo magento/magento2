@@ -6,32 +6,32 @@ Alphanumeric,字母表
 Apply,应用
 "Apply To",应用给
 "Apply to Shipping Amount",应用给运单额度
-"Are you sure you want to delete the selected coupon(s)?",你是否确定要删除所选折扣券？
+"Are you sure you want to delete the selected coupon(s)?",你是否确定要删除所选优惠券？
 Auto,自动
-"Auto Generated Specific Coupon Codes",自动生成指定的折扣券代码
+"Auto Generated Specific Coupon Codes",自动生成指定的优惠券代码
 "Buy X get Y free (discount amount is Y)","购买 X 即可免费获得 Y（折扣额是Y）"
 "By Fixed value",由固定值
 "By Percentage",按百分比
 "Can't acquire coupon.",无法获取代金券。
 "Cart Attribute",购物车属性
-Catalog,分类
+Catalog,产品目录
 "Code Format",代码格式
 "Code Length",代码长度
 "Code Prefix",代码前缀
 "Code Suffix",代码后缀
 Conditions,条件
 "Conditions combination",条件组合
-Coupon,折扣券
-"Coupon Code",折扣券代码
-"Coupon with the same code",使用相同代码的折扣券
-"Coupons Information",折扣券信息
+Coupon,优惠券
+"Coupon Code",优惠券代码
+"Coupon with the same code",使用相同代码的优惠券
+"Coupons Information",优惠券信息
 Created,创建于
-"Customer Groups",客户组
+"Customer Groups",顾客组
 "Dash Every X Characters",每x个字符加横线
 "Default Label",默认标签
 "Default Rule Label for All Store Views",针对所有店铺视图的默认规则标签
 Description,描述
-Discount,折扣帐户
+Discount,折扣账户
 "Edit Rule",修改规则
 "End on",过期日
 "Excluding prefix, suffix and separators.",包含前缀、后缀，以及分隔符。
@@ -46,12 +46,12 @@ FOUND,找到
 Generate,生成
 ID,ID
 "If empty no separation.",如果为空则不分隔。
-"If you select and save the rule you will be able to generate multiple coupon codes.",如果选择并保存该规则，你就可以生成多个折扣券代码。
+"If you select and save the rule you will be able to generate multiple coupon codes.",如果选择并保存该规则，你就可以生成多个优惠券代码。
 Inactive,未激活
 Interval,周期
 "Item totals are not set for the rule.",条目总数没有设置该规则。
 Labels,标签
-"Manage Coupon Codes",管理折扣券代码
+"Manage Coupon Codes",管理优惠券代码
 "NOT FOUND",未找到
 "NOT LOGGED IN",未登录
 "New Rule",新规则
@@ -96,7 +96,7 @@ Subtotal,小计额度
 "Times Used",使用时间
 "To Date",截止日期
 "To Fixed Value",为固定值
-"To Percentage",为百分率
+"To Percentage",为百分比
 Total,总数量
 "Total Items Quantity",总商品数量
 "Total Weight",总重量
@@ -106,7 +106,7 @@ Total,总数量
 "Use Auto Generation",使用自动生成
 Uses,用户数
 "Uses per Coupon",每代金券使用
-"Uses per Customer",每客户使用
+"Uses per Customer",每顾客使用
 "We cannot create the requested Coupon Qty. Please check your settings and try again.",不能创建请求的优惠券数量。请检查设置再试一次。
 Website,网站
 Websites,网站

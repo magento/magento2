@@ -1,16 +1,56 @@
+"A consumer having the specified key does not exist",指定密钥的消费者不存在。
+"A consumer with ID %1 does not exist",ID为%1的消费者不存在。
+"A consumer with the ID %1 does not exist",ID为%1的消费者不存在。
+"A token with consumer ID %1 does not exist",消费者ID为%1的令牌不存在。
+"Access token has been revoked",存取令牌已经被撤销。
 "Add New Integration",添加新集成
+"An error occurred validating the nonce",当前校验发生错误
 Authentication,认证
+"Cannot convert to access token due to token is not request type",由于令牌不是请求类型不能转成换存取令牌
+"Cannot create request token because consumer token is not a verifier token",由于消费者令牌不是核验者令牌，所以不能创建请求令牌
+"Cannot get access token because consumer token is not a request token",因为消费者令牌不是一个请求令牌所以不能得到存取令牌
+"Cleanup Probability",清除几率
+"Cleanup Settings",清除设置
+"Cleanup entries older than X minutes.",清除早于X非整的条目.
+"Consumer Settings",消费者设置
+"Consumer key has expired",消费者密钥已经过期
+"Consumer key is not the correct length",消费者密钥长度错误。
+"Disable consumer key/secret credentials if not used within X seconds.",如果X分钟内未使用则禁止消费者密钥证书。
 "Edit ""%1"" Integration","编辑""%1""集成"
+"Expiration Period",过期时间
 Extensions,扩展
+"Incorrect timestamp value in the oauth_timestamp parameter",在oauth_timestamp参数中时间戳值不正确
+"Integer. Launch cleanup in X OAuth requests. 0 (not recommended) - to disable cleanup","整数. 在X OAuth请求中运行清除例程。 0 （不推荐） - 禁止清除"
 Integration,集成
 "Integration ID is not specified or is invalid.",未指定或指定了无效的集成ID。
 "Integration Info",集成信息
 "Integration Information",集成信息
 "Integration Name",集成名
 Integrations,集成
+"Invalid Callback URL",无效的回调URL
+"Invalid Rejected Callback URL",无效的拒绝回调URL
 "New Integration",新集成
-"No Integrations Found",无法找到集成
+"No Integrations Found",未发现集成
+"Number of maximum redirects for OAuth consumer credentials Post request.",OAuth消费者陪凭证发送请求的最大的转向数。
 OAuth,OAuth
+"OAuth consumer credentials HTTP Post maxredirects",OAuth消费者凭证HTTP发送最大转向
+"OAuth consumer credentials HTTP Post timeout",OAuth消费者凭证HTTP发送最大超时
 "Please enter endpoint for oAuth.",请输入oAuth的端点。
+"Request token is not associated with the specified consumer",请求令牌与指定的消费者未关联。
+"Specified token does not exist",指定的令牌不存在
 "The integration '%1' has been saved.",集成'%1'已经被存储。
+"The nonce is already being used by the consumer with ID %1",当前正在被ID为%1的消费者使用
 "This integration no longer exists.",集成不存在。
+"Timeout for OAuth consumer credentials Post request within X seconds.",在X秒内的OAuth消费者凭证发送请求超时。
+"Token is already authorized",令牌已经被授权
+"Token is already being used",令牌正在被使用
+"Token is not an access token",令牌不是一个存取令牌
+"Token is not associated with the specified consumer",令牌未与指定的消费者关联
+"Token is not ready to be authorized",令牌没有准备好被授权
+"Token is not the correct length",令牌长度不正确
+"Token verifier and verifier token do not match",令牌核验者与核验者令牌不匹配
+"Unable to post data to consumer due to an unexpected error",由于不期望的错误导致不能发送数据到消费者
+"Unexpected error. Unable to create OAuth Consumer account.",不期望的错误。不能创建OAuth消费者账号。
+"User type is unknown",未知的用户类型
+"Verifier is invalid",核验者是无效的
+"Verifier is not the correct length",核验者长度不正确
