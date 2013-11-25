@@ -5,7 +5,7 @@
 "3 Day Select",3天选择
 "<a href=""http://www.magentocommerce.com/redirect/google-checkout/"" target=""_blank"">Signup for Google Checkout</a>","<a href=""http://www.magentocommerce.com/redirect/google-checkout/"" target=""_blank"">注册Google Checkout</a>"
 "<br />Warning: <strong>%1</strong><br />","<br />警告：<strong>%1</strong><br />"
-"<strong style=""color:red"">Warning!</strong> This option disables the merchant calculated shipping. With this option, Google API ignores any attempt to affect shipping prices.","<strong style="":red"">警告！</strong>该设置禁止商户计算的货运。用该设置，Google API忽略任何影响运费的尝试。"
+"<strong style=""color:red"">Warning!</strong> This option disables the merchant calculated shipping. With this option, Google API ignores any attempt to affect shipping prices.","<strong style=""：red"">警告！</strong>该设置禁止商户计算的货运。用该设置，Google API忽略任何影响运费的尝试。"
 "A virtual item to reflect the discount total",一件虚拟条目反应总折扣
 "A virtual item to reflect the tax total",一件虚拟条目反映总税费
 "AVS Status: %1","AVS 状态：%1"

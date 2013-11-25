@@ -2,7 +2,7 @@
 "%1 An empty value is allowed as well.","%1 空值也是允许的。"
 "-- No Theme --","-- 没有主题 --"
 2YTD,2YTD
-"<strong style=""color:red"">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third party services (e.g. PayPal etc.).","<strong style="":red"">警告！</strong> 当在URLs中使用店铺代码时，如果URLs没有店铺代码在第三方服务（如PayPal）指定有时不能正确工作。"
+"<strong style=""color:red"">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third party services (e.g. PayPal etc.).","<strong style=""：red"">警告！</strong> 当在URLs中使用店铺代码时，如果URLs没有店铺代码在第三方服务（如PayPal）指定有时不能正确工作。"
 "Add Block Names to Hints",添加块名称到提示中
 "Add Secret Key to URLs",添加密钥Key到URL中
 "Add Store Code to Urls",添加店铺代码到URL中
@@ -105,7 +105,7 @@ ImageMagick,ImageMagick
 "Maximum sender name length is 255. Please correct your settings.",最大发送者名字长度是255。请修正您的设置。
 "May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.",可以为空或以{{secure_base_url}}、{{unsecure_base_url}}占位符号开始。
 "May be empty or start with {{unsecure_base_url}} placeholder.",可以为空或者以{{unsecure_base_url}}占位符开始。
-"May be empty or start with {{unsecure_base_url}} placeholder. <br/> <strong style=""color:red"">Warning!</strong> When using CDN, in some cases JavaScript may not run properly if CDN is not in your subdomain","可以为空或者以{{unsecure_base_url}}占位符开始。 <br/> <strong style="":red"">警告！</strong> 当使用CDN，如果CDN不在您的子域有些情况下JavaScript可能不能正确运行。"
+"May be empty or start with {{unsecure_base_url}} placeholder. <br/> <strong style=""color:red"">Warning!</strong> When using CDN, in some cases JavaScript may not run properly if CDN is not in your subdomain","可以为空或者以{{unsecure_base_url}}占位符开始。 <br/> <strong style=""：red"">警告！</strong> 当使用CDN，如果CDN不在您的子域有些情况下JavaScript可能不能正确运行。"
 "May start with {{secure_base_url}} or {{unsecure_base_url}} placeholder.",可以以{{secure_base_url}}或{{unsecure_base_url}}占位符开始。
 "May start with {{unsecure_base_url}} placeholder.",可以以{{unsecure_base_url}}占位符开始。
 "Merge CSS Files",合并CSS文件
