@@ -3,20 +3,14 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Code
  */
 
 namespace Zend\Code\Generator;
 
 use Zend\Code\Reflection\ParameterReflection;
 
-/**
- *
- * @category   Zend
- * @package    Zend_Code_Generator
- */
 class ParameterGenerator extends AbstractGenerator
 {
     /**
@@ -50,9 +44,7 @@ class ParameterGenerator extends AbstractGenerator
     protected static $simple = array('int', 'bool', 'string', 'float', 'resource', 'mixed', 'object');
 
     /**
-     * fromReflection()
-     *
-     * @param ParameterReflection $reflectionParameter
+     * @param  ParameterReflection $reflectionParameter
      * @return ParameterGenerator
      */
     public static function fromReflection(ParameterReflection $reflectionParameter)
@@ -62,10 +54,21 @@ class ParameterGenerator extends AbstractGenerator
 
         if ($reflectionParameter->isArray()) {
             $param->setType('array');
+        } elseif (method_exists($reflectionParameter, 'isCallable') && $reflectionParameter->isCallable()) {
+            $param->setType('callable');
         } else {
             $typeClass = $reflectionParameter->getClass();
-            if ($typeClass !== null) {
-                $param->setType($typeClass->getName());
+            if ($typeClass) {
+                $parameterType = $typeClass->getName();
+                $currentNamespace = $reflectionParameter->getDeclaringClass()->getNamespaceName();
+
+                if (!empty($currentNamespace) && substr($parameterType, 0, strlen($currentNamespace)) == $currentNamespace) {
+                    $parameterType = substr($parameterType, strlen($currentNamespace) + 1);
+                } else {
+                    $parameterType = '\\' . trim($parameterType, '\\');
+                }
+
+                $param->setType($parameterType);
             }
         }
 
@@ -79,41 +82,99 @@ class ParameterGenerator extends AbstractGenerator
         return $param;
     }
 
+    /**
+     * Generate from array
+     *
+     * @configkey name              string                                          [required] Class Name
+     * @configkey type              string
+     * @configkey defaultvalue      null|bool|string|int|float|array|ValueGenerator
+     * @configkey passedbyreference bool
+     * @configkey position          int
+     * @configkey sourcedirty       bool
+     * @configkey indentation       string
+     * @configkey sourcecontent     string
+     *
+     * @throws Exception\InvalidArgumentException
+     * @param  array $array
+     * @return ParameterGenerator
+     */
+    public static function fromArray(array $array)
+    {
+        if (!isset($array['name'])) {
+            throw new Exception\InvalidArgumentException(
+                'Paramerer generator requires that a name is provided for this object'
+            );
+        }
+
+        $param = new static($array['name']);
+        foreach ($array as $name => $value) {
+            // normalize key
+            switch (strtolower(str_replace(array('.', '-', '_'), '', $name))) {
+                case 'type':
+                    $param->setType($value);
+                    break;
+                case 'defaultvalue':
+                    $param->setDefaultValue($value);
+                    break;
+                case 'passedbyreference':
+                    $param->setPassedByReference($value);
+                    break;
+                case 'position':
+                    $param->setPosition($value);
+                    break;
+                case 'sourcedirty':
+                    $param->setSourceDirty($value);
+                    break;
+                case 'indentation':
+                    $param->setIndentation($value);
+                    break;
+                case 'sourcecontent':
+                    $param->setSourceContent($value);
+                    break;
+            }
+        }
+
+        return $param;
+    }
+
+    /**
+     * @param  string $name
+     * @param  string $type
+     * @param  mixed $defaultValue
+     * @param  int $position
+     * @param  bool $passByReference
+     */
     public function __construct($name = null, $type = null, $defaultValue = null, $position = null,
                                 $passByReference = false)
     {
-        if ($name !== null) {
+        if (null !== $name) {
             $this->setName($name);
         }
-        if ($type !== null) {
+        if (null !== $type) {
             $this->setType($type);
         }
-        if ($defaultValue !== null) {
+        if (null !== $defaultValue) {
             $this->setDefaultValue($defaultValue);
         }
-        if ($position !== null) {
+        if (null !== $position) {
             $this->setPosition($position);
         }
-        if ($passByReference !== false) {
+        if (false !== $passByReference) {
             $this->setPassedByReference(true);
         }
     }
 
     /**
-     * setType()
-     *
-     * @param string $type
+     * @param  string $type
      * @return ParameterGenerator
      */
     public function setType($type)
     {
-        $this->type = $type;
+        $this->type = (string) $type;
         return $this;
     }
 
     /**
-     * getType()
-     *
      * @return string
      */
     public function getType()
@@ -122,20 +183,16 @@ class ParameterGenerator extends AbstractGenerator
     }
 
     /**
-     * setName()
-     *
-     * @param string $name
+     * @param  string $name
      * @return ParameterGenerator
      */
     public function setName($name)
     {
-        $this->name = $name;
+        $this->name = (string) $name;
         return $this;
     }
 
     /**
-     * getName()
-     *
      * @return string
      */
     public function getName()
@@ -148,7 +205,7 @@ class ParameterGenerator extends AbstractGenerator
      *
      * Certain variables are difficult to express
      *
-     * @param null|bool|string|int|float|array|ValueGenerator $defaultValue
+     * @param  null|bool|string|int|float|array|ValueGenerator $defaultValue
      * @return ParameterGenerator
      */
     public function setDefaultValue($defaultValue)
@@ -162,8 +219,6 @@ class ParameterGenerator extends AbstractGenerator
     }
 
     /**
-     * getDefaultValue()
-     *
      * @return string
      */
     public function getDefaultValue()
@@ -172,20 +227,16 @@ class ParameterGenerator extends AbstractGenerator
     }
 
     /**
-     * setPosition()
-     *
-     * @param int $position
+     * @param  int $position
      * @return ParameterGenerator
      */
     public function setPosition($position)
     {
-        $this->position = $position;
+        $this->position = (int) $position;
         return $this;
     }
 
     /**
-     * getPosition()
-     *
      * @return int
      */
     public function getPosition()
@@ -202,29 +253,27 @@ class ParameterGenerator extends AbstractGenerator
     }
 
     /**
-     * @param bool $passedByReference
+     * @param  bool $passedByReference
      * @return ParameterGenerator
      */
     public function setPassedByReference($passedByReference)
     {
-        $this->passedByReference = $passedByReference;
+        $this->passedByReference = (bool) $passedByReference;
         return $this;
     }
 
     /**
-     * generate()
-     *
      * @return string
      */
     public function generate()
     {
         $output = '';
 
-        if ($this->type && !in_array($this->type, self::$simple)) {
+        if ($this->type && !in_array($this->type, static::$simple)) {
             $output .= $this->type . ' ';
         }
 
-        if ($this->passedByReference === true) {
+        if (true === $this->passedByReference) {
             $output .= '&';
         }
 
@@ -244,5 +293,4 @@ class ParameterGenerator extends AbstractGenerator
 
         return $output;
     }
-
 }

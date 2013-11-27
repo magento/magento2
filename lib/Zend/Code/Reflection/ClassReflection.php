@@ -3,31 +3,29 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Code
  */
 
 namespace Zend\Code\Reflection;
 
 use ReflectionClass;
-use Zend\Code\Annotation;
+use Zend\Code\Annotation\AnnotationCollection;
+use Zend\Code\Annotation\AnnotationManager;
 use Zend\Code\Reflection\FileReflection;
 use Zend\Code\Scanner\AnnotationScanner;
 use Zend\Code\Scanner\FileScanner;
 
-/**
- * @category   Zend
- * @package    Zend_Reflection
- */
 class ClassReflection extends ReflectionClass implements ReflectionInterface
 {
-
     /**
-     * @var Annotation\AnnotationCollection
+     * @var AnnotationScanner
      */
     protected $annotations = null;
 
+    /**
+     * @var DocBlockReflection
+     */
     protected $docBlock = null;
 
     /**
@@ -38,6 +36,7 @@ class ClassReflection extends ReflectionClass implements ReflectionInterface
     public function getDeclaringFile()
     {
         $instance = new FileReflection($this->getFileName());
+
         return $instance;
     }
 
@@ -45,7 +44,7 @@ class ClassReflection extends ReflectionClass implements ReflectionInterface
      * Return the classes DocBlock reflection object
      *
      * @return DocBlockReflection
-     * @throws \Zend\Code\Reflection\Exception\ExceptionInterface for missing DocBock or invalid reflection class
+     * @throws Exception\ExceptionInterface for missing DocBock or invalid reflection class
      */
     public function getDocBlock()
     {
@@ -58,24 +57,34 @@ class ClassReflection extends ReflectionClass implements ReflectionInterface
         }
 
         $this->docBlock = new DocBlockReflection($this);
+
         return $this->docBlock;
     }
 
     /**
-     * @param  Annotation\AnnotationManager $annotationManager
-     * @return Annotation\AnnotationCollection
+     * @param  AnnotationManager $annotationManager
+     * @return AnnotationCollection
      */
-    public function getAnnotations(Annotation\AnnotationManager $annotationManager)
+    public function getAnnotations(AnnotationManager $annotationManager)
     {
-        if (($docComment = $this->getDocComment()) == '') {
+        $docComment = $this->getDocComment();
+
+        if ($docComment == '') {
             return false;
         }
 
-        if (!$this->annotations) {
-            $fileScanner       = new FileScanner($this->getFileName());
-            $nameInformation   = $fileScanner->getClassNameInformation($this->getName());
-            $this->annotations = new AnnotationScanner($annotationManager, $docComment, $nameInformation);
+        if ($this->annotations) {
+            return $this->annotations;
         }
+
+        $fileScanner       = $this->createFileScanner($this->getFileName());
+        $nameInformation   = $fileScanner->getClassNameInformation($this->getName());
+
+        if (!$nameInformation) {
+            return false;
+        }
+
+        $this->annotations = new AnnotationScanner($annotationManager, $docComment, $nameInformation);
 
         return $this->annotations;
     }
@@ -83,7 +92,7 @@ class ClassReflection extends ReflectionClass implements ReflectionInterface
     /**
      * Return the start line of the class
      *
-     * @param bool $includeDocComment
+     * @param  bool $includeDocComment
      * @return int
      */
     public function getStartLine($includeDocComment = false)
@@ -98,7 +107,7 @@ class ClassReflection extends ReflectionClass implements ReflectionInterface
     /**
      * Return the contents of the class
      *
-     * @param bool $includeDocBlock
+     * @param  bool $includeDocBlock
      * @return string
      */
     public function getContents($includeDocBlock = true)
@@ -111,6 +120,7 @@ class ClassReflection extends ReflectionClass implements ReflectionInterface
         // Ensure we get between the open and close braces
         $lines = array_slice($filelines, $startnum, $endnum);
         array_unshift($lines, $filelines[$startnum-1]);
+
         return strstr(implode('', $lines), '{');
     }
 
@@ -129,6 +139,7 @@ class ClassReflection extends ReflectionClass implements ReflectionInterface
             unset($phpReflection);
         }
         unset($phpReflections);
+
         return $zendReflections;
     }
 
@@ -141,6 +152,7 @@ class ClassReflection extends ReflectionClass implements ReflectionInterface
     public function getMethod($name)
     {
         $method = new MethodReflection($this->getName(), parent::getMethod($name)->getName());
+
         return $method;
     }
 
@@ -157,13 +169,14 @@ class ClassReflection extends ReflectionClass implements ReflectionInterface
             $instance  = new MethodReflection($this->getName(), $method->getName());
             $methods[] = $instance;
         }
+
         return $methods;
     }
 
     /**
      * Get parent reflection class of reflected class
      *
-     * @return \Zend\Code\Reflection\ClassReflection|bool
+     * @return ClassReflection|bool
      */
     public function getParentClass()
     {
@@ -171,6 +184,7 @@ class ClassReflection extends ReflectionClass implements ReflectionInterface
         if ($phpReflection) {
             $zendReflection = new ClassReflection($phpReflection->getName());
             unset($phpReflection);
+
             return $zendReflection;
         }
 
@@ -188,6 +202,7 @@ class ClassReflection extends ReflectionClass implements ReflectionInterface
         $phpReflection  = parent::getProperty($name);
         $zendReflection = new PropertyReflection($this->getName(), $phpReflection->getName());
         unset($phpReflection);
+
         return $zendReflection;
     }
 
@@ -221,4 +236,18 @@ class ClassReflection extends ReflectionClass implements ReflectionInterface
         return parent::__toString();
     }
 
+    /**
+     * Creates a new FileScanner instance.
+     *
+     * By having this as a seperate method it allows the method to be overridden
+     * if a different FileScanner is needed.
+     *
+     * @param  string $filename
+     *
+     * @return FileScanner
+     */
+    protected function createFileScanner($filename)
+    {
+        return new FileScanner($filename);
+    }
 }

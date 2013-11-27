@@ -3,19 +3,15 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Code
  */
 
 namespace Zend\Code\Generator;
 
+use Zend\Code\Generator\DocBlock\Tag as DocBlockTag;
 use Zend\Code\Reflection\DocBlockReflection;
 
-/**
- * @category   Zend
- * @package    Zend_Code_Generator
- */
 class DocBlockGenerator extends AbstractGenerator
 {
     /**
@@ -39,9 +35,14 @@ class DocBlockGenerator extends AbstractGenerator
     protected $indentation = '';
 
     /**
-     * fromReflection() - Build a DocBlock generator object from a reflection object
+     * @var bool
+     */
+    protected $wordwrap = true;
+
+    /**
+     * Build a DocBlock generator object from a reflection object
      *
-     * @param DocBlockReflection $reflectionDocBlock
+     * @param  DocBlockReflection $reflectionDocBlock
      * @return DocBlockGenerator
      */
     public static function fromReflection(DocBlockReflection $reflectionDocBlock)
@@ -55,30 +56,64 @@ class DocBlockGenerator extends AbstractGenerator
         $docBlock->setLongDescription($reflectionDocBlock->getLongDescription());
 
         foreach ($reflectionDocBlock->getTags() as $tag) {
-            $docBlock->setTag(DocBlock\Tag::fromReflection($tag));
+            $docBlock->setTag(DocBlockTag::fromReflection($tag));
         }
 
         return $docBlock;
     }
 
+    /**
+     * Generate from array
+     *
+     * @configkey shortdescription string The short description for this doc block
+     * @configkey longdescription  string The long description for this doc block
+     * @configkey tags             array
+     *
+     * @throws Exception\InvalidArgumentException
+     * @param  array $array
+     * @return DocBlockGenerator
+     */
+    public static function fromArray(array $array)
+    {
+        $docBlock = new static();
+
+        foreach ($array as $name => $value) {
+            // normalize key
+            switch (strtolower(str_replace(array('.', '-', '_'), '', $name))) {
+                case 'shortdescription':
+                    $docBlock->setShortDescription($value);
+                case 'longdescription':
+                    $docBlock->setLongDescription($value);
+                    break;
+                case 'tags':
+                    $docBlock->setTags($value);
+                    break;
+            }
+        }
+
+        return $docBlock;
+    }
+
+    /**
+     * @param  string $shortDescription
+     * @param  string $longDescription
+     * @param  array $tags
+     */
     public function __construct($shortDescription = null, $longDescription = null, array $tags = array())
     {
-        if ($shortDescription !== null) {
+        if ($shortDescription) {
             $this->setShortDescription($shortDescription);
         }
-        if ($longDescription !== null) {
+        if ($longDescription) {
             $this->setLongDescription($longDescription);
         }
         if (is_array($tags) && $tags) {
             $this->setTags($tags);
         }
-
     }
 
     /**
-     * setShortDescription()
-     *
-     * @param string $shortDescription
+     * @param  string $shortDescription
      * @return DocBlockGenerator
      */
     public function setShortDescription($shortDescription)
@@ -88,8 +123,6 @@ class DocBlockGenerator extends AbstractGenerator
     }
 
     /**
-     * getShortDescription()
-     *
      * @return string
      */
     public function getShortDescription()
@@ -98,9 +131,7 @@ class DocBlockGenerator extends AbstractGenerator
     }
 
     /**
-     * setLongDescription()
-     *
-     * @param string $longDescription
+     * @param  string $longDescription
      * @return DocBlockGenerator
      */
     public function setLongDescription($longDescription)
@@ -110,8 +141,6 @@ class DocBlockGenerator extends AbstractGenerator
     }
 
     /**
-     * getLongDescription()
-     *
      * @return string
      */
     public function getLongDescription()
@@ -120,9 +149,7 @@ class DocBlockGenerator extends AbstractGenerator
     }
 
     /**
-     * setTags()
-     *
-     * @param array $tags
+     * @param  array $tags
      * @return DocBlockGenerator
      */
     public function setTags(array $tags)
@@ -135,32 +162,28 @@ class DocBlockGenerator extends AbstractGenerator
     }
 
     /**
-     * setTag()
-     *
-     * @param array|DocBlock\Tag $tag
+     * @param  array|DocBlockTag $tag
      * @throws Exception\InvalidArgumentException
      * @return DocBlockGenerator
      */
     public function setTag($tag)
     {
         if (is_array($tag)) {
-            $tag = new DocBlock\Tag($tag);
-        } elseif (!$tag instanceof DocBlock\Tag) {
-            throw new Exception\InvalidArgumentException(
-                'setTag() expects either an array of method options or an '
-                    . 'instance of Zend\Code\Generator\DocBlock\Tag'
-            );
+            $tag = new DocBlockTag($tag);
+        } elseif (!$tag instanceof DocBlockTag) {
+            throw new Exception\InvalidArgumentException(sprintf(
+                '%s expects either an array of method options or an instance of %s\DocBlock\Tag',
+                __METHOD__,
+                __NAMESPACE__
+            ));
         }
 
         $this->tags[] = $tag;
-
         return $this;
     }
 
     /**
-     * getTags
-     *
-     * @return DocBlock\Tag[]
+     * @return DocBlockTag[]
      */
     public function getTags()
     {
@@ -168,14 +191,34 @@ class DocBlockGenerator extends AbstractGenerator
     }
 
     /**
-     * generate()
+     * Set the word wrap
      *
+     * @param bool $value
+     * @return \Zend\Code\Generator\DocBlockGenerator
+     */
+    public function setWordWrap($value)
+    {
+        $this->wordwrap = (bool) $value;
+        return $this;
+    }
+
+    /**
+     * Get the word wrap
+     *
+     * @return bool
+     */
+    public function getWordWrap()
+    {
+        return $this->wordwrap;
+    }
+
+    /**
      * @return string
      */
     public function generate()
     {
         if (!$this->isSourceDirty()) {
-            return $this->docCommentize($this->getSourceContent());
+            return $this->docCommentize(trim($this->getSourceContent()));
         }
 
         $output = '';
@@ -194,16 +237,14 @@ class DocBlockGenerator extends AbstractGenerator
     }
 
     /**
-     * docCommentize()
-     *
-     * @param string $content
+     * @param  string $content
      * @return string
      */
     protected function docCommentize($content)
     {
         $indent  = $this->getIndentation();
         $output  = $indent . '/**' . self::LINE_FEED;
-        $content = wordwrap($content, 80, self::LINE_FEED);
+        $content = $this->getWordWrap() == true ? wordwrap($content, 80, self::LINE_FEED) : $content;
         $lines   = explode(self::LINE_FEED, $content);
         foreach ($lines as $line) {
             $output .= $indent . ' *';
@@ -213,7 +254,7 @@ class DocBlockGenerator extends AbstractGenerator
             $output .= self::LINE_FEED;
         }
         $output .= $indent . ' */' . self::LINE_FEED;
+
         return $output;
     }
-
 }

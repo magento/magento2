@@ -3,22 +3,16 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Code
  */
 
 namespace Zend\Code\Generator;
 
 use Zend\Code\Reflection\PropertyReflection;
 
-/**
- * @category   Zend
- * @package    Zend_Code_Generator
- */
 class PropertyGenerator extends AbstractMemberGenerator
 {
-
     const FLAG_CONSTANT = 0x08;
 
     /**
@@ -32,14 +26,12 @@ class PropertyGenerator extends AbstractMemberGenerator
     protected $defaultValue = null;
 
     /**
-     * fromReflection()
-     *
-     * @param PropertyReflection $reflectionProperty
+     * @param  PropertyReflection $reflectionProperty
      * @return PropertyGenerator
      */
     public static function fromReflection(PropertyReflection $reflectionProperty)
     {
-        $property = new self();
+        $property = new static();
 
         $property->setName($reflectionProperty->getName());
 
@@ -48,7 +40,7 @@ class PropertyGenerator extends AbstractMemberGenerator
         $property->setDefaultValue($allDefaultProperties[$reflectionProperty->getName()]);
 
         if ($reflectionProperty->getDocComment() != '') {
-            $property->setDocBlock(DocBlockGenerator::fromReflection($reflectionProperty->getDocComment()));
+            $property->setDocBlock(DocBlockGenerator::fromReflection($reflectionProperty->getDocBlock()));
         }
 
         if ($reflectionProperty->isStatic()) {
@@ -68,12 +60,76 @@ class PropertyGenerator extends AbstractMemberGenerator
         return $property;
     }
 
+    /**
+     * Generate from array
+     *
+     * @configkey name         string                                          [required] Class Name
+     * @configkey const        bool
+     * @configkey defaultvalue null|bool|string|int|float|array|ValueGenerator
+     * @configkey flags        int
+     * @configkey abstract     bool
+     * @configkey final        bool
+     * @configkey static       bool
+     * @configkey visibility   string
+     *
+     * @throws Exception\InvalidArgumentException
+     * @param  array $array
+     * @return PropertyGenerator
+     */
+    public static function fromArray(array $array)
+    {
+        if (!isset($array['name'])) {
+            throw new Exception\InvalidArgumentException(
+                'Property generator requires that a name is provided for this object'
+            );
+        }
+
+        $property = new static($array['name']);
+        foreach ($array as $name => $value) {
+            // normalize key
+            switch (strtolower(str_replace(array('.', '-', '_'), '', $name))) {
+                case 'const':
+                    $property->setConst($value);
+                    break;
+                case 'defaultvalue':
+                    $property->setDefaultValue($value);
+                    break;
+                case 'docblock':
+                    $docBlock = ($value instanceof DocBlockGenerator) ? $value : DocBlockGenerator::fromArray($value);
+                    $property->setDocBlock($docBlock);
+                    break;
+                case 'flags':
+                    $property->setFlags($value);
+                    break;
+                case 'abstract':
+                    $property->setAbstract($value);
+                    break;
+                case 'final':
+                    $property->setFinal($value);
+                    break;
+                case 'static':
+                    $property->setStatic($value);
+                    break;
+                case 'visibility':
+                    $property->setVisibility($value);
+                    break;
+            }
+        }
+
+        return $property;
+    }
+
+    /**
+     * @param  string $name
+     * @param PropertyValueGenerator|string|array $defaultValue
+     * @param  int|array $flags
+     */
     public function __construct($name = null, $defaultValue = null, $flags = self::FLAG_PUBLIC)
     {
-        if ($name !== null) {
+        if (null !== $name) {
             $this->setName($name);
         }
-        if ($defaultValue !== null) {
+        if (null !== $defaultValue) {
             $this->setDefaultValue($defaultValue);
         }
         if ($flags !== self::FLAG_PUBLIC) {
@@ -82,9 +138,7 @@ class PropertyGenerator extends AbstractMemberGenerator
     }
 
     /**
-     * setConst()
-     *
-     * @param bool $const
+     * @param  bool $const
      * @return PropertyGenerator
      */
     public function setConst($const)
@@ -95,36 +149,30 @@ class PropertyGenerator extends AbstractMemberGenerator
         } else {
             $this->removeFlag(self::FLAG_CONSTANT);
         }
+
+        return $this;
     }
 
     /**
-     * isConst()
-     *
      * @return bool
      */
     public function isConst()
     {
-        return ($this->flags & self::FLAG_CONSTANT);
+        return (bool) ($this->flags & self::FLAG_CONSTANT);
     }
 
     /**
-     * setDefaultValue()
+     * @param PropertyValueGenerator|mixed $defaultValue
+     * @param string                       $defaultValueType
+     * @param string                       $defaultValueOutputMode
      *
-     * @param PropertyValueGenerator|string|array $defaultValue
      * @return PropertyGenerator
      */
-    public function setDefaultValue($defaultValue)
+    public function setDefaultValue($defaultValue, $defaultValueType = PropertyValueGenerator::TYPE_AUTO, $defaultValueOutputMode = PropertyValueGenerator::OUTPUT_MULTIPLE_LINE)
     {
-        // if it looks like
-        if (is_array($defaultValue)
-            && array_key_exists('value', $defaultValue)
-            && array_key_exists('type', $defaultValue)
-        ) {
-            $defaultValue = new PropertyValueGenerator($defaultValue);
-        }
-
         if (!($defaultValue instanceof PropertyValueGenerator)) {
-            $defaultValue = new PropertyValueGenerator($defaultValue);
+
+            $defaultValue = new PropertyValueGenerator($defaultValue, $defaultValueType, $defaultValueOutputMode);
         }
 
         $this->defaultValue = $defaultValue;
@@ -133,8 +181,6 @@ class PropertyGenerator extends AbstractMemberGenerator
     }
 
     /**
-     * getDefaultValue()
-     *
      * @return PropertyValueGenerator
      */
     public function getDefaultValue()
@@ -143,8 +189,6 @@ class PropertyGenerator extends AbstractMemberGenerator
     }
 
     /**
-     * generate()
-     *
      * @throws Exception\RuntimeException
      * @return string
      */
@@ -162,8 +206,11 @@ class PropertyGenerator extends AbstractMemberGenerator
 
         if ($this->isConst()) {
             if ($defaultValue != null && !$defaultValue->isValidConstantType()) {
-                throw new Exception\RuntimeException('The property ' . $this->name . ' is said to be '
-                                                         . 'constant but does not have a valid constant value.');
+                throw new Exception\RuntimeException(sprintf(
+                    'The property %s is said to be '
+                    . 'constant but does not have a valid constant value.',
+                    $this->name
+                ));
             }
             $output .= $this->indentation . 'const ' . $name . ' = '
                 . (($defaultValue !== null) ? $defaultValue->generate() : 'null;');
@@ -177,5 +224,4 @@ class PropertyGenerator extends AbstractMemberGenerator
 
         return $output;
     }
-
 }

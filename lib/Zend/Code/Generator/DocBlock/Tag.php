@@ -3,38 +3,19 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Code
  */
 
 namespace Zend\Code\Generator\DocBlock;
 
+use ReflectionClass;
+use ReflectionMethod;
 use Zend\Code\Generator\AbstractGenerator;
 use Zend\Code\Reflection\DocBlock\Tag\TagInterface as ReflectionDocBlockTag;
 
-/**
- * @category   Zend
- * @package    Zend_Code_Generator
- */
 class Tag extends AbstractGenerator
 {
-
-    protected static $typeFormats = array(
-        array(
-            'param',
-            '@param <type> <variable> <description>'
-        ),
-        array(
-            'return',
-            '@return <type> <description>'
-        ),
-        array(
-            'tag',
-            '@<name> <description>'
-        )
-    );
-
     /**
      * @var string
      */
@@ -46,34 +27,21 @@ class Tag extends AbstractGenerator
     protected $description = null;
 
     /**
-     * @param array $options
-     */
-    public function __construct(array $options = array())
-    {
-        if (array_key_exists('name', $options)) {
-            $this->setName($options['name']);
-        }
-        if (array_key_exists('description', $options)) {
-            $this->setDescription($options['description']);
-        }
-    }
-
-    /**
-     * fromReflection()
+     * Build a Tag generator object from a reflection object
      *
-     * @param ReflectionDocBlockTag $reflectionTag
+     * @param  ReflectionDocBlockTag $reflectionTag
      * @return Tag
      */
     public static function fromReflection(ReflectionDocBlockTag $reflectionTag)
     {
         $tagName = $reflectionTag->getName();
 
-        $codeGenDocBlockTag = new self();
+        $codeGenDocBlockTag = new static();
         $codeGenDocBlockTag->setName($tagName);
 
         // transport any properties via accessors and mutators from reflection to codegen object
-        $reflectionClass = new \ReflectionClass($reflectionTag);
-        foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+        $reflectionClass = new ReflectionClass($reflectionTag);
+        foreach ($reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             if (substr($method->getName(), 0, 3) == 'get') {
                 $propertyName = substr($method->getName(), 3);
                 if (method_exists($codeGenDocBlockTag, 'set' . $propertyName)) {
@@ -86,9 +54,7 @@ class Tag extends AbstractGenerator
     }
 
     /**
-     * setName()
-     *
-     * @param string $name
+     * @param  string $name
      * @return Tag
      */
     public function setName($name)
@@ -98,8 +64,6 @@ class Tag extends AbstractGenerator
     }
 
     /**
-     * getName()
-     *
      * @return string
      */
     public function getName()
@@ -108,9 +72,7 @@ class Tag extends AbstractGenerator
     }
 
     /**
-     * setDescription()
-     *
-     * @param string $description
+     * @param  string $description
      * @return Tag
      */
     public function setDescription($description)
@@ -120,8 +82,6 @@ class Tag extends AbstractGenerator
     }
 
     /**
-     * getDescription()
-     *
      * @return string
      */
     public function getDescription()
@@ -130,15 +90,13 @@ class Tag extends AbstractGenerator
     }
 
     /**
-     * generate()
-     *
      * @return string
      */
     public function generate()
     {
         $output = '@' . $this->name
             . (($this->description != null) ? ' ' . $this->description : '');
+
         return $output;
     }
-
 }

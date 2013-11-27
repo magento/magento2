@@ -3,25 +3,18 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Code
  */
 
 namespace Zend\Code\Generator;
 
 use Traversable;
 
-/**
- * @category   Zend
- * @package    Zend_Code_Generator
- */
 abstract class AbstractGenerator implements GeneratorInterface
 {
-
     /**
      * Line feed to use in place of EOL
-     *
      */
     const LINE_FEED = "\n";
 
@@ -41,20 +34,26 @@ abstract class AbstractGenerator implements GeneratorInterface
     protected $sourceContent = null;
 
     /**
-     * setSourceDirty()
-     *
-     * @param bool $isSourceDirty
+     * @param  array $options
+     */
+    public function __construct($options = array())
+    {
+        if ($options) {
+            $this->setOptions($options);
+        }
+    }
+
+    /**
+     * @param  bool $isSourceDirty
      * @return AbstractGenerator
      */
     public function setSourceDirty($isSourceDirty = true)
     {
-        $this->isSourceDirty = ($isSourceDirty) ? true : false;
+        $this->isSourceDirty = (bool) $isSourceDirty;
         return $this;
     }
 
     /**
-     * isSourceDirty()
-     *
      * @return bool
      */
     public function isSourceDirty()
@@ -63,21 +62,17 @@ abstract class AbstractGenerator implements GeneratorInterface
     }
 
     /**
-     * setIndentation()
-     *
-     * @param string|int $indentation
+     * @param  string $indentation
      * @return AbstractGenerator
      */
     public function setIndentation($indentation)
     {
-        $this->indentation = $indentation;
+        $this->indentation = (string) $indentation;
         return $this;
     }
 
     /**
-     * getIndentation()
-     *
-     * @return string|int
+     * @return string
      */
     public function getIndentation()
     {
@@ -85,20 +80,16 @@ abstract class AbstractGenerator implements GeneratorInterface
     }
 
     /**
-     * setSourceContent()
-     *
-     * @param string $sourceContent
+     * @param  string $sourceContent
      * @return AbstractGenerator
      */
     public function setSourceContent($sourceContent)
     {
-        $this->sourceContent = $sourceContent;
+        $this->sourceContent = (string) $sourceContent;
         return $this;
     }
 
     /**
-     * getSourceContent()
-     *
      * @return string
      */
     public function getSourceContent()
@@ -107,21 +98,18 @@ abstract class AbstractGenerator implements GeneratorInterface
     }
 
     /**
-     * setOptions()
-     *
-     * @param array|Traversable $options
+     * @param  array|Traversable $options
      * @throws Exception\InvalidArgumentException
-     * @return self
+     * @return AbstractGenerator
      */
     public function setOptions($options)
     {
         if (!is_array($options) && !$options instanceof Traversable) {
-            throw new Exception\InvalidArgumentException(
-                sprintf(
-                    '%s expects an array or Traversable object; received "%s"',
-                    __METHOD__,
-                    (is_object($options) ? get_class($options) : gettype($options))
-                ));
+            throw new Exception\InvalidArgumentException(sprintf(
+                '%s expects an array or Traversable object; received "%s"',
+                __METHOD__,
+                (is_object($options) ? get_class($options) : gettype($options))
+            ));
         }
 
         foreach ($options as $optionName => $optionValue) {
