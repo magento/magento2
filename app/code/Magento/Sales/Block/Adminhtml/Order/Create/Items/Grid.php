@@ -55,7 +55,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     protected $_wishlistFactory;
 
     /**
-     * @var \Magento\Adminhtml\Model\Giftmessage\Save
+     * @var \Magento\GiftMessage\Model\Save
      */
     protected $_giftMessageSave;
 
@@ -70,7 +70,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param \Magento\Adminhtml\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
      * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
-     * @param \Magento\Adminhtml\Model\Giftmessage\Save $giftMessageSave
+     * @param \Magento\GiftMessage\Model\Save $giftMessageSave
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param \Magento\Tax\Helper\Data $taxData
      * @param array $data
@@ -81,7 +81,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         \Magento\Adminhtml\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
-        \Magento\Adminhtml\Model\Giftmessage\Save $giftMessageSave,
+        \Magento\GiftMessage\Model\Save $giftMessageSave,
         \Magento\Tax\Model\Config $taxConfig,
         \Magento\Tax\Helper\Data $taxData,
         array $data = array()
@@ -217,7 +217,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     }
 
     /**
-     * Retrive quote address
+     * Retrieve quote address
      *
      * @return \Magento\Sales\Model\Quote\Address
      */

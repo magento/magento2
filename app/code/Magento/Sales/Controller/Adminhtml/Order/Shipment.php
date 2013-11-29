@@ -425,7 +425,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
         }
 
         if (is_object($response)) {
-            $block = $this->_objectManager->create('Magento\Adminhtml\Block\Template');
+            $block = $this->_objectManager->create('Magento\Backend\Block\Template');
             $block->setTemplate('sales/order/shipment/tracking/info.phtml');
             $block->setTrackingInfo($response);
 

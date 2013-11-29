@@ -36,7 +36,7 @@ namespace Magento\ImportExport\Model\Export\Entity\Product\Type;
 abstract class AbstractType
 {
     /**
-     * Overriden attributes parameters.
+     * Overridden attributes parameters.
      *
      * @var array
      */

@@ -27,9 +27,9 @@
 <?php $_width = $this->getImageWidth(); ?>
 <div class="product-image-popup" style="width:<?php echo $_width; ?>px;">
     <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?php echo __('Close Window') ?></span></a></div>
-    <?php if($this->getPreviusImageUrl() || $this->getNextImageUrl()): ?>
+    <?php if($this->getPreviousImageUrl() || $this->getNextImageUrl()): ?>
         <div class="nav">
-          <?php if($_prevUrl = $this->getPreviusImageUrl()): ?>
+          <?php if($_prevUrl = $this->getPreviousImageUrl()): ?>
               <a href="<?php echo $_prevUrl ?>" class="prev">&laquo; <?php echo __('Prev') ?></a>
           <?php endif; ?>
           <?php if($_nextUrl = $this->getNextImageUrl()): ?>
@@ -42,9 +42,9 @@
     <?php endif; ?>
     <img src="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($this->getProduct(), 'image', $this->getImageFile()); ?>"<?php if($_width): ?> width="<?php echo $_width ?>"<?php endif; ?> alt="<?php echo $this->escapeHtml($this->getCurrentImage()->getLabel()) ?>" title="<?php echo $this->escapeHtml($this->getCurrentImage()->getLabel()) ?>" id="product-gallery-image" class="image" />
     <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?php echo __('Close Window') ?></span></a></div>
-    <?php if($this->getPreviusImageUrl() || $this->getNextImageUrl()): ?>
+    <?php if($this->getPreviousImageUrl() || $this->getNextImageUrl()): ?>
         <div class="nav">
-          <?php if($_prevUrl = $this->getPreviusImageUrl()): ?>
+          <?php if($_prevUrl = $this->getPreviousImageUrl()): ?>
               <a href="<?php echo $_prevUrl ?>" class="prev">&laquo; <?php echo __('Prev') ?></a>
           <?php endif; ?>
           <?php if($_nextUrl = $this->getNextImageUrl()): ?>

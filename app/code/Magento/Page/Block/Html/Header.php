@@ -64,11 +64,14 @@ class Header extends \Magento\View\Block\Template
     /**
      * Check if current url is url for home page
      *
-     * @return true
+     * @return bool
      */
     public function getIsHomePage()
     {
-        return $this->getUrl('') == $this->getUrl('*/*/*', array('_current'=>true, '_use_rewrite'=>true));
+        return $this->getUrl('', array('_current' => true)) == $this->getUrl(
+            '*/*/*',
+            array('_current' => true, '_use_rewrite' => true)
+        );
     }
 
     public function setLogo($logo_src, $logo_alt)

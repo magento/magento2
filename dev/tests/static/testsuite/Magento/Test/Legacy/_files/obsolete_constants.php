@@ -26,6 +26,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 return array(
+    array('ADMIN_STORE_ID', 'Magento\Core\Model\AppInterface'),
     array('BACKORDERS_BELOW'),
     array('BACKORDERS_YES'),
     array('CACHE_TAG', 'Magento\Api\Model\Config', 'Magento_Api_Model_Cache_Type::CACHE_TAG'),
@@ -76,6 +77,7 @@ return array(
     array('DEFAULT_THEME_NAME', 'Magento\Core\Model\Design\PackageInterface'),
     array('DEFAULT_THEME_NAME', 'Magento\Core\Model\Design\Package'),
     array('DEFAULT_TIMEZONE', 'Magento\Core\Model\Locale', 'Magento_Core_Model_LocaleInterface::DEFAULT_TIMEZONE'),
+    array('DEFAULT_STORE_ID', 'Magento\Catalog\Model\AbstractModel', 'Magento\Core\Model\Store::DEFAULT_STORE_ID'),
     array('DEFAULT_VALUE_TABLE_PREFIX'),
     array('ENTITY_PRODUCT', 'Magento\Review\Model\Review'),
     array('EXCEPTION_CODE_IS_GROUPED_PRODUCT'),
@@ -98,9 +100,9 @@ return array(
         'Magento\Core\Model\Layout\Merge',
         'Magento_Core_Model_Cache_Type_Layout::CACHE_TAG'
     ),
-    array('LOCALE_CACHE_KEY', 'Magento\Adminhtml\Block\Page\Footer'),
-    array('LOCALE_CACHE_LIFETIME', 'Magento\Adminhtml\Block\Page\Footer'),
-    array('LOCALE_CACHE_TAG', 'Magento\Adminhtml\Block\Page\Footer'),
+    array('LOCALE_CACHE_KEY', 'Magento\Backend\Block\Page\Footer'),
+    array('LOCALE_CACHE_LIFETIME', 'Magento\Backend\Block\Page\Footer'),
+    array('LOCALE_CACHE_TAG', 'Magento\Backend\Block\Page\Footer'),
     array('PATH_PREFIX_CUSTOMIZATION', 'Magento\Core\Model\Theme'),
     array('PATH_PREFIX_CUSTOMIZED', 'Magento\Core\Model\Theme\Files'),
     array('PUBLIC_BASE_THEME_DIR', 'Magento\Core\Model\Design\PackageInterface'),
@@ -392,4 +394,5 @@ return array(
     array('XML_PATH_IMAGE_TYPES', 'Magento\Adminhtml\Block\Catalog\Product\Frontend\Product\Watermark'),
     array('XML_PATH_WEBHOOK', 'Magento\Webhook\Model\Source\Hook'),
     array('XML_PATH_SUBSCRIPTIONS', 'Magento\Webhook\Model\Subscription\Config'),
+    array('PAYMENT_INFO_TRANSPORT_SHIPPING_OVERRIDEN', 'Magento\Paypal\Model\Express\Checkout'),
 );

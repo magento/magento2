@@ -43,7 +43,7 @@ class Checkout
      * Uses additional_information as storage
      */
     const PAYMENT_INFO_TRANSPORT_TOKEN    = 'paypal_express_checkout_token';
-    const PAYMENT_INFO_TRANSPORT_SHIPPING_OVERRIDEN = 'paypal_express_checkout_shipping_overriden';
+    const PAYMENT_INFO_TRANSPORT_SHIPPING_OVERRIDDEN = 'paypal_express_checkout_shipping_overridden';
     const PAYMENT_INFO_TRANSPORT_SHIPPING_METHOD = 'paypal_express_checkout_shipping_method';
     const PAYMENT_INFO_TRANSPORT_PAYER_ID = 'paypal_express_checkout_payer_id';
     const PAYMENT_INFO_TRANSPORT_REDIRECT = 'paypal_express_checkout_redirect_required';
@@ -439,13 +439,13 @@ class Checkout
             $this->_api->setSuppressShipping(true);
         } else {
             $address = $this->_quote->getShippingAddress();
-            $isOverriden = 0;
+            $isOverridden = 0;
             if (true === $address->validate()) {
-                $isOverriden = 1;
+                $isOverridden = 1;
                 $this->_api->setAddress($address);
             }
             $this->_quote->getPayment()->setAdditionalInformation(
-                self::PAYMENT_INFO_TRANSPORT_SHIPPING_OVERRIDEN, $isOverriden
+                self::PAYMENT_INFO_TRANSPORT_SHIPPING_OVERRIDDEN, $isOverridden
             );
             $this->_quote->getPayment()->save();
         }
@@ -572,7 +572,7 @@ class Checkout
             throw new \Magento\Core\Exception(__('Payer is not identified.'));
         }
         $this->_quote->setMayEditShippingAddress(
-            1 != $this->_quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_SHIPPING_OVERRIDEN)
+            1 != $this->_quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_SHIPPING_OVERRIDDEN)
         );
         $this->_quote->setMayEditShippingMethod(
             '' == $this->_quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_SHIPPING_METHOD)

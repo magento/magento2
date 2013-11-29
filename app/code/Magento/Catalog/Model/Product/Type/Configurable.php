@@ -1105,7 +1105,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Catalog\Model\Product $parentProduct,
         $postData
     ) {
-        $product->setStoreId(\Magento\Core\Model\AppInterface::ADMIN_STORE_ID)
+        $product->setStoreId(\Magento\Core\Model\Store::DEFAULT_STORE_ID)
             ->setTypeId($postData['weight']
                 ? \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
                 : \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL

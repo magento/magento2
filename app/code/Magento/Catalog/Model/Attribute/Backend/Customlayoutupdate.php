@@ -44,18 +44,18 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
     /**
      * Layoutupdate validator factory
      *
-     * @var \Magento\Adminhtml\Model\LayoutUpdate\ValidatorFactory
+     * @var \Magento\Core\Model\Layout\Update\ValidatorFactory
      */
     protected $_layoutUpdateValidatorFactory;
 
     /**
      * Construct
      *
-     * @param \Magento\Adminhtml\Model\LayoutUpdate\ValidatorFactory $layoutUpdateValidatorFactory
+     * @param \Magento\Core\Model\Layout\Update\ValidatorFactory $layoutUpdateValidatorFactory
      * @param \Magento\Logger $logger
      */
     public function __construct(
-        \Magento\Adminhtml\Model\LayoutUpdate\ValidatorFactory $layoutUpdateValidatorFactory,
+        \Magento\Core\Model\Layout\Update\ValidatorFactory $layoutUpdateValidatorFactory,
         \Magento\Logger $logger
     ) {
         $this->_layoutUpdateValidatorFactory = $layoutUpdateValidatorFactory;
@@ -71,7 +71,7 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
             return true;
         }
 
-        /** @var $validator \Magento\Adminhtml\Model\LayoutUpdate\Validator */
+        /** @var $validator \Magento\Core\Model\Layout\Update\Validator */
         $validator = $this->_layoutUpdateValidatorFactory->create();
         if (!$validator->isValid($xml)) {
             $messages = $validator->getMessages();

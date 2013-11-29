@@ -39,6 +39,6 @@
         <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit" name="attribute_edit_content"/>
     </referenceContainer>
     <referenceContainer name="js">
-        <block class="Magento\Adminhtml\Block\Template" name="attribute_edit_js" template="Magento_Catalog::catalog/product/attribute/js.phtml"/>
+        <block class="Magento\Backend\Block\Template" name="attribute_edit_js" template="Magento_Catalog::catalog/product/attribute/js.phtml"/>
     </referenceContainer>
 </layout>

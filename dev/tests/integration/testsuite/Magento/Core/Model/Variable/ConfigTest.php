@@ -27,6 +27,9 @@
 
 namespace Magento\Core\Model\Variable;
 
+/**
+ * @magentoAppArea adminhtml
+ */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**

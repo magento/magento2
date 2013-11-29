@@ -63,7 +63,7 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="link">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Link for Google</argument>
-                        <argument name="renderer" xsi:type="string">Magento\Adminhtml\Block\Sitemap\Grid\Renderer\Link</argument>
+                        <argument name="renderer" xsi:type="string">Magento\Sitemap\Block\Adminhtml\Grid\Renderer\Link</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="sitemap_time">
@@ -89,7 +89,7 @@
                         <argument name="filter" xsi:type="string">0</argument>
                         <argument name="sortable" xsi:type="string">0</argument>
                         <argument name="width" xsi:type="string">100px</argument>
-                        <argument name="renderer" xsi:type="string">Magento\Adminhtml\Block\Sitemap\Grid\Renderer\Action</argument>
+                        <argument name="renderer" xsi:type="string">Magento\Sitemap\Block\Adminhtml\Grid\Renderer\Action</argument>
                     </arguments>
                 </block>
             </block>

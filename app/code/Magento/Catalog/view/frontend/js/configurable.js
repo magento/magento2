@@ -61,7 +61,7 @@
                 $(this.options.spConfig.containerId).find(this.options.superSelector) :
                 $(this.options.superSelector);
             this.options.values = this.options.spConfig.defaultValues || {};
-            this.options.parentImage = $('[data-role=base-image]').attr('src');
+            this.options.parentImage = $('[data-role=base-image-container] img').attr('src');
         },
 
         /**
@@ -233,7 +233,7 @@
             $.each(imagesArray || {}, function (k, v) {
                 result.push(v);
             });
-            var baseImage = this.element.find('[data-role=base-image]');
+            var baseImage = $('[data-role=base-image-container] img');
             if (result.length === 1) {
                 baseImage.attr('src', result[0]).trigger('imageChanged', result[0]);
             } else {
@@ -247,7 +247,7 @@
          * @private
          */
         _fitImageToContainer: function () {
-            var image = this.element.find('[data-role=base-image]'),
+            var image = $('[data-role=base-image-container] img'),
                 imageContainer = image.closest('[data-role=base-image-container]'),
                 width = image.width(),
                 height = image.height(),

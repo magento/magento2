@@ -173,7 +173,7 @@ class Links
      */
     public function getPurchasedSeparatelySelect()
     {
-        $select = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Html\Select')
+        $select = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
             ->setName('product[links_purchased_separately]')
             ->setId('downloadable_link_purchase_type')
             ->setOptions($this->_sourceModel->toOptionArray())

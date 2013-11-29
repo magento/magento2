@@ -29,4 +29,9 @@
             <value>adminhtml</value>
         </param>
     </virtualType>
+    <type name="Magento\Reports\Model\Resource\Customer\Collection">
+        <param name="modelName">
+            <value>Magento\Customer\Model\Backend\Customer</value>
+        </param>
+    </type>
 </config>

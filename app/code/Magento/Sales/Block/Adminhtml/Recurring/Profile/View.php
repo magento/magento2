@@ -68,14 +68,14 @@ class View extends \Magento\Backend\Block\Widget\Container
         ));
 
         $profile = $this->_coreRegistry->registry('current_recurring_profile');
-        $comfirmationMessage = __('Are you sure you want to do this?');
+        $confirmationMessage = __('Are you sure you want to do this?');
 
         // cancel
         if ($profile->canCancel()) {
             $url = $this->getUrl('adminhtml/*/updateState', array('profile' => $profile->getId(), 'action' => 'cancel'));
             $this->_addButton('cancel', array(
                 'label'     => __('Cancel'),
-                'onclick'   => "confirmSetLocation('{$comfirmationMessage}', '{$url}')",
+                'onclick'   => "confirmSetLocation('{$confirmationMessage}', '{$url}')",
                 'class'     => 'delete',
             ));
         }
@@ -85,7 +85,7 @@ class View extends \Magento\Backend\Block\Widget\Container
             $url = $this->getUrl('adminhtml/*/updateState', array('profile' => $profile->getId(), 'action' => 'suspend'));
             $this->_addButton('suspend', array(
                 'label'     => __('Suspend'),
-                'onclick'   => "confirmSetLocation('{$comfirmationMessage}', '{$url}')",
+                'onclick'   => "confirmSetLocation('{$confirmationMessage}', '{$url}')",
                 'class'     => 'delete',
             ));
         }
@@ -95,7 +95,7 @@ class View extends \Magento\Backend\Block\Widget\Container
             $url = $this->getUrl('adminhtml/*/updateState', array('profile' => $profile->getId(), 'action' => 'activate'));
             $this->_addButton('activate', array(
                 'label'     => __('Activate'),
-                'onclick'   => "confirmSetLocation('{$comfirmationMessage}', '{$url}')",
+                'onclick'   => "confirmSetLocation('{$confirmationMessage}', '{$url}')",
                 'class'     => 'add',
             ));
         }
@@ -105,7 +105,7 @@ class View extends \Magento\Backend\Block\Widget\Container
             $url = $this->getUrl('adminhtml/*/updateProfile', array('profile' => $profile->getId(),));
             $this->_addButton('update', array(
                 'label'     => __('Get Update'),
-                'onclick'   => "confirmSetLocation('{$comfirmationMessage}', '{$url}')",
+                'onclick'   => "confirmSetLocation('{$confirmationMessage}', '{$url}')",
                 'class'     => 'add',
             ));
         }

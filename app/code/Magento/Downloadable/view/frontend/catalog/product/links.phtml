@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -27,40 +25,41 @@
 <?php /* @var $this \Magento\Downloadable\Block\Catalog\Product\Links */ ?>
 <?php $_linksPurchasedSeparately = $this->getLinksPurchasedSeparately(); ?>
 <?php if ($this->getProduct()->isSaleable() && $this->hasLinks()):?>
-    <dl>
-        <?php $_links = $this->getLinks(); ?>
-        <?php $_isRequired = $this->getLinkSelectionRequired(); ?>
-        <dt><label<?php if ($_isRequired) echo ' class="required"' ?>><?php if ($_isRequired) echo '<em>*</em>' ?><?php echo $this->getLinksTitle() ?></label></dt>
-        <dd>
-            <ul id="downloadable-links-list" class="options-list">
+    <?php $_links = $this->getLinks(); ?>
+    <?php $_isRequired = $this->getLinkSelectionRequired(); ?>
+    <div class="field downloads<?php if ($_isRequired) echo ' required' ?>">
+        <label class="label"><span><?php echo $this->getLinksTitle() ?></span></label>
+        <div class="control" id="downloadable-links-list">
             <?php foreach ($_links as $_link): ?>
-            <li>
-                <?php if ($_linksPurchasedSeparately): ?>
-                <input type="checkbox" <?php if ($_isRequired): ?>data-validate="{'validate-one-checkbox-required-by-name':'downloadable-links-list'}" <?php endif; ?>
-                       class="checkbox" name="links[]" id="links_<?php echo $_link->getId() ?>"
-                       value="<?php echo $_link->getId(); ?>" <?php echo $this->getLinkCheckedValue($_link); ?> />
-                <?php endif; ?>
-                <span class="label">
-                        <label for="links_<?php echo $_link->getId() ?>">
-                            <?php echo $this->escapeHtml($_link->getTitle()); ?>
-                        </label>
-                    <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
-                        &nbsp;(<a href="<?php echo $this->getLinkSamlpeUrl($_link) ?>" <?php echo $this->getIsOpenInNewWindow() ? 'target="_blank"' : ''; ?>><?php echo __('sample') ?></a>)
-                    <?php endif; ?>
+                <div class="field choice">
                     <?php if ($_linksPurchasedSeparately): ?>
-                    <?php echo $this->getFormattedLinkPrice($_link); ?>
+                        <input type="checkbox"
+                               <?php if ($_isRequired): ?>data-validate="{'validate-one-checkbox-required-by-name':'downloadable-links-list'}" <?php endif; ?>
+                               name="links[]"
+                               id="links_<?php echo $_link->getId() ?>"
+                               value="<?php echo $_link->getId(); ?>" <?php echo $this->getLinkCheckedValue($_link); ?> />
                     <?php endif; ?>
-                </span>
-            </li>
+                    <label class="label" for="links_<?php echo $_link->getId() ?>">
+                        <span><?php echo $this->escapeHtml($_link->getTitle()); ?></span>
+                        <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
+                            <a class="sample"
+                               href="<?php echo $this->getLinkSamlpeUrl($_link) ?>" <?php echo $this->getIsOpenInNewWindow() ? 'target="_blank"' : ''; ?>>
+                                <?php echo __('sample') ?>
+                            </a>
+                        <?php endif; ?>
+                        <?php if ($_linksPurchasedSeparately): ?>
+                            <?php echo $this->getFormattedLinkPrice($_link); ?>
+                        <?php endif; ?>
+                    </label>
+                </div>
             <?php endforeach; ?>
-        </ul>
-
-            <?php if ($_isRequired): ?>
-                <span id="links-advice-container"></span>
-            <?php endif;?>
-        </dd>
-    </dl>
+        </div>
+        <?php if ($_isRequired): ?>
+            <span id="links-advice-container"></span>
+        <?php endif;?>
+    </div>
     <script type="text/javascript">
+        //<![CDATA[
         (function ($) {
             head.js("<?php echo $this->getViewFileUrl('Magento_Downloadable::downloadable.js') ?>", function () {
                 $('#downloadable-links-list').downloadable({
@@ -68,6 +67,7 @@
                     config: <?php echo $this->getJsonConfig() ?>
                 });
             });
-    })(jQuery);
-</script>
+        })(jQuery);
+        //]]>
+    </script>
 <?php endif; ?>

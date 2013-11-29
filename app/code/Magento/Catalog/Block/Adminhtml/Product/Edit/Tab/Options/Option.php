@@ -190,7 +190,7 @@ class Option extends \Magento\Adminhtml\Block\Widget
 
     public function getTypeSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Html\Select')
+        $select = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
             ->setData(array(
                 'id'    => $this->getFieldId() . '_${id}_type',
                 'class' => 'select select-product-option-type required-option-select',
@@ -203,7 +203,7 @@ class Option extends \Magento\Adminhtml\Block\Widget
 
     public function getRequireSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Html\Select')
+        $select = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
             ->setData(array(
                 'id'    => $this->getFieldId() . '_${id}_is_require',
                 'class' => 'select'

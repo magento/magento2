@@ -224,10 +224,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         if (count($expectedSteps) > $counter+1) {
             $this->fail('Some expected steps are missing');
         }
-        $pathesForCheck = $model->getWritableFullPathsForCheck();
-        $this->assertArrayHasKey('etc', $pathesForCheck);
-        $this->assertArrayHasKey('media', $pathesForCheck);
-        $this->assertArrayHasKey('lib', $pathesForCheck);
-        $this->assertEquals('1', $pathesForCheck['etc']['recursive']);
+        $pathsForCheck = $model->getWritableFullPathsForCheck();
+        $this->assertArrayHasKey('etc', $pathsForCheck);
+        $this->assertArrayHasKey('media', $pathsForCheck);
+        $this->assertArrayHasKey('lib', $pathsForCheck);
+        $this->assertEquals('1', $pathsForCheck['etc']['recursive']);
     }
 }

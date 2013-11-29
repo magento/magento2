@@ -115,9 +115,9 @@ class User
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Backend\App\ConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_config;
 
     /**
      * Factory for validator composite object
@@ -155,7 +155,7 @@ class User
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\User\Helper\Data $userData
      * @param \Magento\Email\Model\Sender $sender
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Backend\App\ConfigInterface $config
      * @param \Magento\Validator\Composite\VarienObjectFactory $validatorCompositeFactory
      * @param \Magento\User\Model\RoleFactory $roleFactory
      * @param \Magento\Email\Model\InfoFactory $emailInfoFactory
@@ -173,7 +173,7 @@ class User
         \Magento\Core\Model\Registry $registry,
         \Magento\User\Helper\Data $userData,
         \Magento\Email\Model\Sender $sender,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Backend\App\ConfigInterface $config,
         \Magento\Validator\Composite\VarienObjectFactory $validatorCompositeFactory,
         \Magento\User\Model\RoleFactory $roleFactory,
         \Magento\Email\Model\InfoFactory $emailInfoFactory,
@@ -189,7 +189,7 @@ class User
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_userData = $userData;
         $this->_sender = $sender;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_config = $config;
         $this->_validatorComposite = $validatorCompositeFactory;
         $this->_roleFactory = $roleFactory;
         $this->_emailInfoFactory = $emailInfoFactory;
@@ -211,7 +211,7 @@ class User
             '_eventManager',
             '_sender',
             '_userData',
-            '_coreStoreConfig',
+            '_config',
             '_validatorComposite',
             '_roleFactory',
             '_emailInfoFactory',
@@ -227,7 +227,7 @@ class User
         $this->_eventManager    = $objectManager->get('Magento\Event\ManagerInterface');
         $this->_sender          = $objectManager->get('Magento\Email\Model\Sender');
         $this->_userData        = $objectManager->get('Magento\User\Helper\Data');
-        $this->_coreStoreConfig = $objectManager->get('Magento\Core\Model\Store\Config');
+        $this->_config = $objectManager->get('Magento\Backend\App\ConfigInterface');
         $this->_coreRegistry    = $objectManager->get('Magento\Core\Model\Registry');
         $this->_validatorComposite = $objectManager->get('Magento\Validator\Composite\VarienObjectFactory');
         $this->_roleFactory = $objectManager->get('Magento\User\Model\RoleFactory');
@@ -461,9 +461,9 @@ class User
         $this->_mailer->addEmailInfo($emailInfo);
 
         // Set all required params and send emails
-        $this->_mailer->setSender($this->_coreStoreConfig->getConfig(self::XML_PATH_FORGOT_EMAIL_IDENTITY));
+        $this->_mailer->setSender($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY));
         $this->_mailer->setStoreId(0);
-        $this->_mailer->setTemplateId($this->_coreStoreConfig->getConfig(self::XML_PATH_FORGOT_EMAIL_TEMPLATE));
+        $this->_mailer->setTemplateId($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_TEMPLATE));
         $this->_mailer->setTemplateParams(array(
             'user' => $this
         ));
@@ -533,7 +533,7 @@ class User
      */
     public function authenticate($username, $password)
     {
-        $config = $this->_coreStoreConfig->getConfigFlag('admin/security/use_case_sensitive_login');
+        $config = $this->_config->getFlag('admin/security/use_case_sensitive_login');
         $result = false;
 
         try {

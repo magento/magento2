@@ -29,6 +29,59 @@ namespace Magento\Backend\App\Router;
 class DefaultRouter extends \Magento\Core\App\Router\Base
 {
     /**
+     * @var \Magento\Backend\App\ConfigInterface
+     */
+    protected $_backendConfig;
+
+    /**
+     * @var \Magento\Core\Model\Url|\Magento\UrlInterface $url
+     */
+    protected $_url;
+
+    /**
+     * @var \Magento\Core\Model\Config
+     */
+    protected $_coreConfig;
+
+    /**
+     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\App\ActionFactory $actionFactory
+     * @param \Magento\App\DefaultPathInterface $defaultPath
+     * @param \Magento\App\ResponseFactory $responseFactory
+     * @param \Magento\App\Route\ConfigInterface $routeConfig
+     * @param \Magento\App\State $appState
+     * @param \Magento\Core\Model\Url|\Magento\UrlInterface $url
+     * @param \Magento\Core\Model\StoreManager|\Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Model\Store\Config $storeConfig
+     * @param \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo
+     * @param $routerId
+     * @param \Magento\Backend\App\ConfigInterface $backendConfig
+     * @throws \InvalidArgumentException
+     */
+    public function __construct(
+        \Magento\Core\Model\Config $coreConfig,
+        \Magento\App\ActionFactory $actionFactory,
+        \Magento\App\DefaultPathInterface $defaultPath,
+        \Magento\App\ResponseFactory $responseFactory,
+        \Magento\App\Route\ConfigInterface $routeConfig,
+        \Magento\App\State $appState,
+        \Magento\UrlInterface $url,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\Model\Store\Config $storeConfig,
+        \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo,
+        $routerId,
+        \Magento\Backend\App\ConfigInterface $backendConfig
+    ) {
+        parent::__construct(
+            $actionFactory, $defaultPath, $responseFactory, $routeConfig, $appState, $url, $storeManager, $storeConfig,
+            $urlSecurityInfo, $routerId
+        );
+        $this->_coreConfig = $coreConfig;
+        $this->_backendConfig = $backendConfig;
+        $this->_url = $url;
+    }
+
+    /**
      * List of required request parameters
      * Order sensitive
      * @var array
@@ -46,7 +99,7 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
      */
     protected function _getDefaultPath()
     {
-        return (string)$this->_storeConfig->getConfig('web/default/admin', 'admin');
+        return (string)$this->_backendConfig->getValue('web/default/admin');
     }
 
     /**
@@ -69,11 +122,9 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
      */
     protected function _shouldBeSecure($path)
     {
-        return substr((string)$this->_storeConfig->getConfig('web/unsecure/base_url'), 0, 5) === 'https'
-            || $this->_storeConfig->getConfigFlag(
-                'web/secure/use_in_adminhtml',
-                \Magento\Core\Model\AppInterface::ADMIN_STORE_ID
-            ) && substr((string)$this->_storeConfig->getConfig('web/secure/base_url'), 0, 5) === 'https';
+        return substr((string)$this->_coreConfig->getValue('web/unsecure/base_url', 'default'), 0, 5) === 'https'
+            || $this->_backendConfig->getFlag('web/secure/use_in_adminhtml')
+            && substr((string)$this->_coreConfig->getValue('web/secure/base_url', 'default'), 0, 5) === 'https';
     }
 
     /**
@@ -84,8 +135,7 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
      */
     protected function _getCurrentSecureUrl($request)
     {
-        return $this->_storeManager->getStore(\Magento\Core\Model\AppInterface::ADMIN_STORE_ID)
-            ->getBaseUrl('link', true) . ltrim($request->getPathInfo(), '/');
+        return $this->_url->getBaseUrl('link', true) . ltrim($request->getPathInfo(), '/');
     }
 
     /**

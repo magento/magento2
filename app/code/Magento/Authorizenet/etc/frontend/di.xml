@@ -24,6 +24,7 @@
  */
 -->
 <config>
+    <preference for="Magento\Authorizenet\Helper\HelperInterface" type="Magento\Authorizenet\Helper\Data" />
     <type name="Magento\Authorizenet\Model\Directpost\Session">
         <param name="sessionName">
             <value>frontend</value>

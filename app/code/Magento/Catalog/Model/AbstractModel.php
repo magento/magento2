@@ -36,12 +36,6 @@ namespace Magento\Catalog\Model;
 abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
 {
     /**
-     * Identifier of default store
-     * used for loading default data for entity
-     */
-    const DEFAULT_STORE_ID = 0;
-
-    /**
      * Attribute default values
      *
      * This array contain default values for attributes which was redefine

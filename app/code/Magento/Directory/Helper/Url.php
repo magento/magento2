@@ -66,7 +66,7 @@ class Url extends \Magento\Core\Helper\Url
             $url = $this->_storeManager->getStore()->getBaseUrl()
                 . $this->_getRequest()->getAlias('rewrite_request_path');
         } else {
-            $url = $this->getCurrentUrl();
+            $url = $this->_urlBuilder->getCurrentUrl();
         }
         $params[\Magento\App\Action\Action::PARAM_NAME_URL_ENCODED] = $this->_coreData->urlEncode($url);
         return $this->_getUrl('directory/currency/switch', $params);

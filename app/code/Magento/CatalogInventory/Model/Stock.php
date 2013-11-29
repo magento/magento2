@@ -235,7 +235,7 @@ class Stock extends \Magento\Core\Model\AbstractModel
                 if ($item->getStoreId()) {
                     $stockItem->setStoreId($item->getStoreId());
                 }
-                if ($stockItem->checkQty($item->getQtyOrdered()) || $this->_storeManager->getStore()->isAdmin()) {
+                if ($stockItem->checkQty($item->getQtyOrdered())) {
                     $stockItem->subtractQty($item->getQtyOrdered());
                     $stockItem->save();
                 }

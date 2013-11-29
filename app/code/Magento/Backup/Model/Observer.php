@@ -134,7 +134,7 @@ class Observer
 
             $this->_coreRegistry->register('backup_manager', $backupManager);
 
-            if ($type != \Magento\Backup\Helper\Data::TYPE_DB) {
+            if ($type != \Magento\Backup\Factory::TYPE_DB) {
                 $backupManager->setRootDir($this->_dir->getDir())
                     ->addIgnorePaths($this->_backupData->getBackupIgnorePaths());
             }

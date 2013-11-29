@@ -18,29 +18,26 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /* @var $this \Magento\Reports\Block\Product\Viewed */
 ?>
 <?php if ($_products = $this->getRecentlyViewedProducts()): ?>
-<div class="block block-list block-viewed">
-    <div class="block-title">
-        <strong><span><?php echo __('Recently Viewed Products') ?></span></strong>
+    <div class="block viewed links">
+        <div class="title">
+            <strong><?php echo __('Recently Viewed Products') ?></strong>
+        </div>
+        <div class="content">
+            <ol id="recently-viewed-items" class="items viewed">
+                <?php foreach ($_products as $_item): ?>
+                    <li class="item">
+                        <strong class="product name">
+                            <a href="<?php echo $this->getProductUrl($_item) ?>"><?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_item, $_item->getName(), 'name') ?></a>
+                        </strong>
+                    </li>
+                <?php endforeach; ?>
+            </ol>
+        </div>
     </div>
-    <div class="block-content">
-        <ol id="recently-viewed-items">
-            <?php foreach ($_products as $_item): ?>
-            <li class="item">
-                <p class="product-name"><a
-                    href="<?php echo $this->getProductUrl($_item) ?>"><?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_item, $_item->getName(), 'name') ?></a>
-                </p>
-            </li>
-            <?php endforeach; ?>
-        </ol>
-        <script type="text/javascript">(function($) {$('#recently-viewed-items').decorate('list', false)})(jQuery)</script>
-    </div>
-</div>
 <?php endif; ?>

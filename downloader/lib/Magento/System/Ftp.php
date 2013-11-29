@@ -59,7 +59,7 @@ class Ftp
     /**
      * ftp_mkdir wrapper
      *
-     * @param sting $name
+     * @param string $name
      * @return unknown_type
      */
     public function mdkir($name)

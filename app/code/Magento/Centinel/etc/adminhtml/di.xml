@@ -33,14 +33,14 @@
         </param>
     </virtualType>
     <type name="Magento\Centinel\Model\Service">
-        <param name="backendUrl">
+        <param name="url">
             <instance type="Magento\Backend\Model\Url" />
-        </param>
-        <param name="frontendUrl">
-            <instance type="Magento\Core\Model\Url" />
         </param>
         <param name="centinelSession">
             <instance type="Magento\Core\Model\Session" />
+        </param>
+        <param name="urlPrefix">
+            <value>adminhtml/centinel_index/</value>
         </param>
     </type>
 </config>

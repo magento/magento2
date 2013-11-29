@@ -69,7 +69,7 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateByPath()
     {
-        $path = 'frontend/magento_fixed_width';
+        $path = 'frontend/magento_plushe';
         $themeId = 7;
         $theme = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false);
         $theme->expects($this->exactly(3))
@@ -82,7 +82,7 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->themeProviderMock->expects($this->once())
             ->method('getThemeByFullPath')
-            ->with('frontend/frontend/magento_fixed_width')
+            ->with('frontend/frontend/magento_plushe')
             ->will($this->returnValue($theme));
 
         $this->assertSame($theme, $this->factory->create($path));

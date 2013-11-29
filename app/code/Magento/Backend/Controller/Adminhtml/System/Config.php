@@ -121,9 +121,9 @@ class Config extends \Magento\Backend\Controller\Adminhtml\System\AbstractConfig
     public function exportTableratesAction()
     {
         $fileName = 'tablerates.csv';
-        /** @var $gridBlock \Magento\Adminhtml\Block\Shipping\Carrier\Tablerate\Grid */
+        /** @var $gridBlock \Magento\Shipping\Block\Adminhtml\Carrier\Tablerate\Grid */
         $gridBlock = $this->_view->getLayout()
-            ->createBlock('Magento\Adminhtml\Block\Shipping\Carrier\Tablerate\Grid');
+            ->createBlock('Magento\Shipping\Block\Adminhtml\Carrier\Tablerate\Grid');
         $website = $this->_storeManager->getWebsite($this->getRequest()->getParam('website'));
         if ($this->getRequest()->getParam('conditionName')) {
             $conditionName = $this->getRequest()->getParam('conditionName');

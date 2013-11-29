@@ -1024,7 +1024,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         try {
             $http = new \Magento\HTTP\Adapter\Curl();
             $config = array(
-                'timeout'    => 30,
+                'timeout'    => 60,
                 'verifypeer' => $this->_config->verifyPeer
             );
             if ($this->getUseProxy()) {

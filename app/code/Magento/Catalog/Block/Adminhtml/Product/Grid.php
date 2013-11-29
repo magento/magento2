@@ -145,7 +145,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         }
         if ($store->getId()) {
             //$collection->setStoreId($store->getId());
-            $adminStore = \Magento\Core\Model\AppInterface::ADMIN_STORE_ID;
             $collection->addStoreFilter($store);
             $collection->joinAttribute(
                 'name',
@@ -153,7 +152,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'entity_id',
                 null,
                 'inner',
-                $adminStore
+                \Magento\Core\Model\Store::DEFAULT_STORE_ID
             );
             $collection->joinAttribute(
                 'custom_name',

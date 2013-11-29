@@ -137,7 +137,7 @@ class Dom
             }
             /* override node value */
             if ($this->_isTextNode($node)) {
-                /* skip the case when the matched node has children, otherwise they get overriden */
+                /* skip the case when the matched node has children, otherwise they get overridden */
                 if (!$matchedNode->hasChildNodes() || $this->_isTextNode($matchedNode)) {
                     $matchedNode->nodeValue = $node->childNodes->item(0)->nodeValue;
                 }

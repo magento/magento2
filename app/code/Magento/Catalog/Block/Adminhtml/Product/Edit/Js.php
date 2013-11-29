@@ -26,7 +26,7 @@
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 
-class Js extends \Magento\Adminhtml\Block\Template
+class Js extends \Magento\Backend\Block\Template
 {
     /**
      * Core registry

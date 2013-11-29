@@ -57,7 +57,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ),
         );
         $actualResult = array();
-        /** @var \Magento\Adminhtml\Model\Report\Item $reportItem */
+        /** @var \Magento\Reports\Model\Item $reportItem */
         foreach ($this->_collection->getItems() as $reportItem) {
             $actualResult[] = array_intersect_key($reportItem->getData(), $expectedResult[0]);
         }

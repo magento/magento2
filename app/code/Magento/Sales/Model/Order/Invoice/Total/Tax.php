@@ -132,8 +132,8 @@ class Tax extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
         /**
          * Check shipping amount in previous invoices
          */
-        foreach ($invoice->getOrder()->getInvoiceCollection() as $previusInvoice) {
-            if ($previusInvoice->getShippingAmount() && !$previusInvoice->isCanceled()) {
+        foreach ($invoice->getOrder()->getInvoiceCollection() as $previousInvoice) {
+            if ($previousInvoice->getShippingAmount() && !$previousInvoice->isCanceled()) {
                 $includeShippingTax = false;
             }
         }

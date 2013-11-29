@@ -24,9 +24,13 @@
  */
 -->
 <config>
+    <preference for="Magento\Captcha\Block\Captcha\DefaultCaptcha" type="Magento\Captcha\Block\Adminhtml\Captcha\DefaultCaptcha" />
     <type name="Magento\Captcha\Model\DefaultModel">
         <param name="session">
             <instance type="Magento\Backend\Model\Auth\Session" />
+        </param>
+        <param name="captchaData">
+            <instance type="Magento\Captcha\Helper\Adminhtml\Data" />
         </param>
     </type>
     <type name="Magento\Captcha\Model\Observer">

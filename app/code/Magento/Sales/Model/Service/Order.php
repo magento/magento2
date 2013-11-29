@@ -330,7 +330,7 @@ class Order
     }
 
     /**
-     * Check if order item can be invoiced. Dummy item can be invoiced or with his childrens or
+     * Check if order item can be invoiced. Dummy item can be invoiced or with his children or
      * with parent item which is included to invoice
      *
      * @param \Magento\Sales\Model\Order\Item $item
@@ -370,7 +370,7 @@ class Order
     }
 
     /**
-     * Check if order item can be shiped. Dummy item can be shiped or with his childrens or
+     * Check if order item can be shipped. Dummy item can be shipped or with his children or
      * with parent item which is included to shipment
      *
      * @param \Magento\Sales\Model\Order\Item $item

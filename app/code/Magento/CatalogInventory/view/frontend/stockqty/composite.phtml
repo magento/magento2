@@ -19,42 +19,43 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
 /**
- * @see \Magento\CatalogInventory\Block\Stockqty\Composite
+ * @var $this \Magento\CatalogInventory\Block\Stockqty\Composite
  */
 ?>
 <?php if($this->isMsgVisible()): ?>
-    <p class="availability-only">
-        <a href="#" data-mage-init='{toggleAdvanced: {selectorsToggleClass: "no-display", baseToggleClass: "expanded", toggleContainers: "#<?php echo $this->getDetailsPlaceholderId() ?>"}}'
-           id="<?php echo $this->getPlaceholderId() ?>" title="<?php echo __('Only %1 left', ($this->getStockQty())) ?>"><?php echo __('Only %1 left', "<strong>{$this->getStockQty()}</strong>") ?></a>
-    </p>
-    <table id="<?php echo $this->getDetailsPlaceholderId() ?>" class="availability-only-details no-display">
-        <col />
-        <col width="1" />
-        <thead>
-            <tr>
-                <th><?php echo __('Product Name') ?></th>
-                <th class="a-center"><?php echo __('Qty') ?></th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($this->getChildProducts() as $childProduct) : ?>
-            <?php $childProductStockQty = $this->getProductStockQty($childProduct); ?>
-            <?php if ($childProductStockQty > 0) : ?>
+    <div class="availability only">
+        <a href="#"
+           data-mage-init='{toggleAdvanced: {selectorsToggleClass: "active", baseToggleClass: "expanded", toggleContainers: "#<?php echo $this->getDetailsPlaceholderId() ?>"}}'
+           id="<?php echo $this->getPlaceholderId() ?>"
+           title="<?php echo __('Only %1 left', ($this->getStockQty())) ?>"
+           class="action show">
+            <?php echo __('Only %1 left', "<strong>{$this->getStockQty()}</strong>") ?>
+        </a>
+    </div>
+    <div class="availability only detailed" id="<?php echo $this->getDetailsPlaceholderId() ?>">
+        <table class="data table">
+            <thead>
                 <tr>
-                    <td><?php echo $childProduct->getName() ?></td>
-                    <td class="a-center"><?php echo $childProductStockQty ?></td>
+                    <th class="col item"><?php echo __('Product Name') ?></th>
+                    <th class="col qty"><?php echo __('Qty') ?></th>
                 </tr>
-            <?php endif ?>
-        <?php endforeach ?>
-        </tbody>
-    </table>
-    <script type="text/javascript">
-        jQuery('#<?php echo $this->getDetailsPlaceholderId() ?>').decorate('table');
-    </script>
+            </thead>
+            <tbody>
+            <?php foreach ($this->getChildProducts() as $childProduct) : ?>
+                <?php $childProductStockQty = $this->getProductStockQty($childProduct); ?>
+                <?php if ($childProductStockQty > 0) : ?>
+                    <tr>
+                        <td class="col item"><?php echo $childProduct->getName() ?></td>
+                        <td class="col qty"><?php echo $childProductStockQty ?></td>
+                    </tr>
+                <?php endif ?>
+            <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
 <?php endif ?>

@@ -50,9 +50,9 @@ class Security
     protected $_cache;
 
     /**
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Backend\App\ConfigInterface
      */
-    protected $_storeConfig;
+    protected $_backendConfig;
 
     /**
      * @var \Magento\Core\Model\Config
@@ -66,18 +66,18 @@ class Security
 
     /**
      * @param \Magento\App\CacheInterface $cache
-     * @param \Magento\Core\Model\Store\Config $storeConfig
+     * @param \Magento\Backend\App\ConfigInterface $backendConfig
      * @param \Magento\Core\Model\Config $config
      * @param \Magento\HTTP\Adapter\CurlFactory $curlFactory
      */
     public function __construct(
         \Magento\App\CacheInterface $cache,
-        \Magento\Core\Model\Store\Config $storeConfig,
+        \Magento\Backend\App\ConfigInterface $backendConfig,
         \Magento\Core\Model\Config $config,
         \Magento\HTTP\Adapter\CurlFactory $curlFactory
     ) {
         $this->_cache = $cache;
-        $this->_storeConfig = $storeConfig;
+        $this->_backendConfig = $backendConfig;
         $this->_config = $config;
         $this->_curlFactory = $curlFactory;
     }
@@ -97,7 +97,7 @@ class Security
             return true;
         }
 
-        $adminSessionLifetime = (int) $this->_storeConfig->getConfig('admin/security/session_lifetime');
+        $adminSessionLifetime = (int) $this->_backendConfig->getValue('admin/security/session_lifetime');
         $this->_cache->save(true, self::VERIFICATION_RESULT_CACHE_KEY, array(), $adminSessionLifetime);
         return false;
     }

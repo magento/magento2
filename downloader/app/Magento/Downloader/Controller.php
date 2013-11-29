@@ -1036,7 +1036,7 @@ final class Controller
                 ->get('Magento\Core\Model\Registry')
                 ->register('backup_manager', $backupManager);
 
-            if ($type != \Magento\Backup\Helper\Data::TYPE_DB) {
+            if ($type != \Magento\Backup\Factory::TYPE_DB) {
                 $backupManager->setRootDir(\Mage::getBaseDir())
                     ->addIgnorePaths($this->_getBackupIgnorePaths());
             }
@@ -1059,10 +1059,10 @@ final class Controller
     protected function _getExtensionType($type)
     {
         $extensionType = array(
-            \Magento\Backup\Helper\Data::TYPE_SYSTEM_SNAPSHOT => 'tgz',
-            \Magento\Backup\Helper\Data::TYPE_SNAPSHOT_WITHOUT_MEDIA => 'tgz',
-            \Magento\Backup\Helper\Data::TYPE_MEDIA => 'tgz',
-            \Magento\Backup\Helper\Data::TYPE_DB => 'gz'
+            \Magento\Backup\Factory::TYPE_SYSTEM_SNAPSHOT => 'tgz',
+            \Magento\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA => 'tgz',
+            \Magento\Backup\Factory::TYPE_MEDIA => 'tgz',
+            \Magento\Backup\Factory::TYPE_DB => 'gz'
         );
 
         return $extensionType[$type];
@@ -1092,10 +1092,10 @@ final class Controller
     protected function _getBackupTypeByCode($code)
     {
         $typeMap = array(
-            1 => \Magento\Backup\Helper\Data::TYPE_DB,
-            2 => \Magento\Backup\Helper\Data::TYPE_SYSTEM_SNAPSHOT,
-            3 => \Magento\Backup\Helper\Data::TYPE_SNAPSHOT_WITHOUT_MEDIA,
-            4 => \Magento\Backup\Helper\Data::TYPE_MEDIA
+            1 => \Magento\Backup\Factory::TYPE_DB,
+            2 => \Magento\Backup\Factory::TYPE_SYSTEM_SNAPSHOT,
+            3 => \Magento\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA,
+            4 => \Magento\Backup\Factory::TYPE_MEDIA
         );
 
         if (!isset($typeMap[$code])) {
@@ -1114,10 +1114,10 @@ final class Controller
     protected function _getCreateBackupSuccessMessageByType($type)
     {
         $messagesMap = array(
-            \Magento\Backup\Helper\Data::TYPE_SYSTEM_SNAPSHOT => 'System backup has been created',
-            \Magento\Backup\Helper\Data::TYPE_SNAPSHOT_WITHOUT_MEDIA => 'System (excluding Media) backup has been created',
-            \Magento\Backup\Helper\Data::TYPE_MEDIA => 'Database and media backup has been created',
-            \Magento\Backup\Helper\Data::TYPE_DB => 'Database backup has been created'
+            \Magento\Backup\Factory::TYPE_SYSTEM_SNAPSHOT => 'System backup has been created',
+            \Magento\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA => 'System (excluding Media) backup has been created',
+            \Magento\Backup\Factory::TYPE_MEDIA => 'Database and media backup has been created',
+            \Magento\Backup\Factory::TYPE_DB => 'Database backup has been created'
         );
 
         if (!isset($messagesMap[$type])) {

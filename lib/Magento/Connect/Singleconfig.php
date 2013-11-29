@@ -93,7 +93,7 @@ class Singleconfig
     }
 
     public function formatUri($uri)
-    {        
+    {
         $uri = rtrim($uri, "/");
         $uri = str_replace("http://", '', $uri);
         $uri = str_replace("ftp://", '', $uri);
@@ -593,7 +593,7 @@ class Singleconfig
 
     /**
      * Get package
-     * @param sting $chanName
+     * @param string $chanName
      * @param string $package
      * @return void
      */
@@ -652,9 +652,9 @@ class Singleconfig
         } elseif(version_compare($min1, $min2, ">=") && version_compare($max1, $max2, "<=")) {
             return true;
         } elseif(version_compare($min1, $min2, "<=") && version_compare($max1, $max2, ">=")) {
-           return true;            
+           return true;
         }
-        return false;        
+        return false;
     }
 
     /**
@@ -792,8 +792,8 @@ class Singleconfig
                 }
                 $deps = $package[self::K_PACK_DEPS];
                 if($this->specifiedInDependencyList($deps, $chanName, $packageName)) {
-                    $out[] = array('channel'=>$channel, 'name' =>$package['name'], 'version'=>$package['version']); 
-                }               
+                    $out[] = array('channel'=>$channel, 'name' =>$package['name'], 'version'=>$package['version']);
+                }
             }
         }
         return $out;
@@ -825,7 +825,7 @@ class Singleconfig
     }
 
 
-    
+
     /**
      * Check if package conflicts with installed packages
      * Returns:

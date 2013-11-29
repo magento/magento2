@@ -118,7 +118,7 @@ class Value extends \Magento\Core\Model\Resource\Db\AbstractDb
             $select = $this->_getReadAdapter()->select()
                 ->from($priceTable, 'option_type_id')
                 ->where('option_type_id = ?', (int)$object->getId())
-                ->where('store_id = ?', \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID);
+                ->where('store_id = ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID);
             $optionTypeId = $this->_getReadAdapter()->fetchOne($select);
 
             if ($optionTypeId) {
@@ -129,7 +129,7 @@ class Value extends \Magento\Core\Model\Resource\Db\AbstractDb
                     );
                     $where = array(
                         'option_type_id = ?'    => $optionTypeId,
-                        'store_id = ?'          => \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID
+                        'store_id = ?'          => \Magento\Core\Model\Store::DEFAULT_STORE_ID
                     );
 
                     $this->_getWriteAdapter()->update($priceTable, $bind, $where);
@@ -137,7 +137,7 @@ class Value extends \Magento\Core\Model\Resource\Db\AbstractDb
             } else {
                 $bind  = array(
                     'option_type_id'    => (int)$object->getId(),
-                    'store_id'          => \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID,
+                    'store_id'          => \Magento\Core\Model\Store::DEFAULT_STORE_ID,
                     'price'             => $price,
                     'price_type'        => $priceType
                 );
@@ -224,14 +224,14 @@ class Value extends \Magento\Core\Model\Resource\Db\AbstractDb
             $select = $this->_getReadAdapter()->select()
                 ->from($titleTable, array('option_type_id'))
                 ->where('option_type_id = ?', (int)$object->getId())
-                ->where('store_id = ?', \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID);
+                ->where('store_id = ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID);
             $optionTypeId = $this->_getReadAdapter()->fetchOne($select);
 
             if ($optionTypeId) {
                 if ($object->getStoreId() == '0') {
                     $where = array(
                         'option_type_id = ?'    => (int)$optionTypeId,
-                        'store_id = ?'          => \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID
+                        'store_id = ?'          => \Magento\Core\Model\Store::DEFAULT_STORE_ID
                     );
                     $bind  = array(
                         'title' => $object->getTitle()
@@ -241,7 +241,7 @@ class Value extends \Magento\Core\Model\Resource\Db\AbstractDb
             } else {
                 $bind  = array(
                     'option_type_id'    => (int)$object->getId(),
-                    'store_id'          => \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID,
+                    'store_id'          => \Magento\Core\Model\Store::DEFAULT_STORE_ID,
                     'title'             => $object->getTitle()
                 );
                 $this->_getWriteAdapter()->insert($titleTable, $bind);

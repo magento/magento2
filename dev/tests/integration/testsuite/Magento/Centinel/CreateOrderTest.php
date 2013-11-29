@@ -33,7 +33,7 @@ namespace Magento\Centinel;
 class CreateOrderTest extends \Magento\Backend\Utility\Controller
 {
     /**
-     * @magentoConfigFixture admin_store payment/ccsave/centinel 1
+     * @magentoConfigFixture default_store payment/ccsave/centinel 1
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testIndexAction()
@@ -49,7 +49,11 @@ class CreateOrderTest extends \Magento\Backend\Utility\Controller
             'cc_cid' => '123',
             'method' => 'ccsave',
         );
-        $order->addProducts(array(1 => array('qty' => 1)))->getQuote()->getPayment()->addData($paymentData);
+        $quote = $order->addProducts(array(1 => array('qty' => 1)))->getQuote();
+        $defaultStoreId = $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')
+            ->getStore('default')->getId();
+        $quote->setStoreId($defaultStoreId);
+        $quote->getPayment()->addData($paymentData);
         $this->dispatch('backend/sales/order_create/index');
         $this->assertContains('<div class="centinel">', $this->getResponse()->getBody());
     }

@@ -30,21 +30,21 @@ namespace Magento\Catalog\Model\Product\Media;
 interface ConfigInterface
 {
     /**
-     * Retrive base url for media files
+     * Retrieve base url for media files
      *
      * @return string
      */
     function getBaseMediaUrl();
 
     /**
-     * Retrive base path for media files
+     * Retrieve base path for media files
      *
      * @return string
      */
     function getBaseMediaPath();
 
     /**
-     * Retrive url for media file
+     * Retrieve url for media file
      *
      * @param string $file
      * @return string
@@ -52,7 +52,7 @@ interface ConfigInterface
     function getMediaUrl($file);
 
     /**
-     * Retrive file system path for media file
+     * Retrieve file system path for media file
      *
      * @param string $file
      * @return string

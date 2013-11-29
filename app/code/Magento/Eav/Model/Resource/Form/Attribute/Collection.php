@@ -278,18 +278,14 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 
 
         // add store attribute label
-        if ($store->isAdmin()) {
-            $select->columns(array('store_label' => 'ea.frontend_label'));
-        } else {
-            $storeLabelExpr = $connection->getCheckSql('al.value IS NULL', 'ea.frontend_label', 'al.value');
-            $joinExpression = $connection
-                ->quoteInto('al.attribute_id = main_table.attribute_id AND al.store_id = ?', (int)$store->getId());
-            $select->joinLeft(
-                array('al' => $this->getTable('eav_attribute_label')),
-                $joinExpression,
-                array('store_label' => $storeLabelExpr)
-            );
-        }
+        $storeLabelExpr = $connection->getCheckSql('al.value IS NULL', 'ea.frontend_label', 'al.value');
+        $joinExpression = $connection
+            ->quoteInto('al.attribute_id = main_table.attribute_id AND al.store_id = ?', (int)$store->getId());
+        $select->joinLeft(
+            array('al' => $this->getTable('eav_attribute_label')),
+            $joinExpression,
+            array('store_label' => $storeLabelExpr)
+        );
 
         // add entity type filter
         $select->where('ea.entity_type_id = ?', (int)$entityType->getId());

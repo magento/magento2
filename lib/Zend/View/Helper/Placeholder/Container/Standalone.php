@@ -54,7 +54,7 @@ abstract class Zend_View_Helper_Placeholder_Container_Standalone extends Zend_Vi
 
     /**
      * Flag wheter to automatically escape output, must also be
-     * enforced in the child class if __toString/toString is overriden
+     * enforced in the child class if __toString/toString is overridden
      * @var book
      */
     protected $_autoEscape = true;

@@ -88,7 +88,7 @@ abstract class AbstractFrontend
     }
 
     /**
-     * Retreive lable
+     * Retrieve lable
      *
      * @return string
      */
@@ -103,7 +103,7 @@ abstract class AbstractFrontend
     }
 
     /**
-     * Retreive attribute value
+     * Retrieve attribute value
      *
      * @param $object
      * @return mixed
@@ -226,7 +226,7 @@ abstract class AbstractFrontend
     }
 
     /**
-     * Retreive option by option id
+     * Retrieve option by option id
      *
      * @param int $optionId
      * @return mixed|boolean

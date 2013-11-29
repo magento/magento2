@@ -3,7 +3,7 @@
  * Application file system directories dictionary
  *
  * Provides information about what directories are available in the application
- * Serves as customizaiton point to specify different directories or add own
+ * Serves as customization point to specify different directories or add own
  *
  * Magento
  *

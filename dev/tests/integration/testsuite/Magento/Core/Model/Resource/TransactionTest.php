@@ -40,6 +40,9 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Core\Model\Resource\Transaction');
     }
 
+    /**
+     * @magentoAppArea adminhtml
+     */
     public function testSaveDelete()
     {
         $first  = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -71,8 +74,6 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($first->getId());
         $this->assertNotEmpty($second->getId());
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->setId(\Magento\Core\Model\AppInterface::ADMIN_STORE_ID);
         $this->_model->delete();
 
         $test  = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

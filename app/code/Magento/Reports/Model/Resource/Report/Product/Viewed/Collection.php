@@ -63,7 +63,7 @@ class Collection
     ) {
         $resource->init(\Magento\Reports\Model\Resource\Report\Product\Viewed::AGGREGATION_DAILY);
         parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $resource);
-        $this->setModel('Magento\Adminhtml\Model\Report\Item');
+        $this->setModel('Magento\Reports\Model\Item');
     }
 
     /**
@@ -197,8 +197,8 @@ class Collection
             $storeIds = array($storeIds);
         }
         $currentStoreIds = $this->_storesIds;
-        if (isset($currentStoreIds) && $currentStoreIds != \Magento\Core\Model\AppInterface::ADMIN_STORE_ID
-            && $currentStoreIds != array(\Magento\Core\Model\AppInterface::ADMIN_STORE_ID)) {
+        if (isset($currentStoreIds) && $currentStoreIds != \Magento\Core\Model\Store::DEFAULT_STORE_ID
+            && $currentStoreIds != array(\Magento\Core\Model\Store::DEFAULT_STORE_ID)) {
             if (!is_array($currentStoreIds)) {
                 $currentStoreIds = array($currentStoreIds);
             }

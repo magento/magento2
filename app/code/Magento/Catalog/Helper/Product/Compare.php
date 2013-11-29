@@ -170,7 +170,7 @@ class Compare extends \Magento\Core\Helper\Url
     }
 
     /**
-     * Retrive add to wishlist url
+     * Retrieve add to wishlist url
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
@@ -188,7 +188,7 @@ class Compare extends \Magento\Core\Helper\Url
     }
 
     /**
-     * Retrive add to cart url
+     * Retrieve add to cart url
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string

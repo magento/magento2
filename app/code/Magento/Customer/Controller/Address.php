@@ -54,6 +54,13 @@ class Address extends \Magento\App\Action\Action
     protected $_addressFormFactory;
 
     /**
+     * Customer data
+     *
+     * @var \Magento\Customer\Helper\Data
+     */
+    protected $_customerData;
+
+    /**
      * @var \Magento\Core\App\Action\FormKeyValidator
      */
     protected $_formKeyValidator;
@@ -63,6 +70,7 @@ class Address extends \Magento\App\Action\Action
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
      * @param \Magento\Customer\Model\Address\FormFactory $addressFormFactory
+     * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      */
     public function __construct(
@@ -70,11 +78,13 @@ class Address extends \Magento\App\Action\Action
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\AddressFactory $addressFactory,
         \Magento\Customer\Model\Address\FormFactory $addressFormFactory,
+        \Magento\Customer\Helper\Data $customerData,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
     ) {
         $this->_customerSession = $customerSession;
         $this->_addressFactory = $addressFactory;
         $this->_addressFormFactory = $addressFormFactory;
+        $this->_customerData = $customerData;
         $this->_formKeyValidator = $formKeyValidator;
         parent::__construct($context);
     }
@@ -164,6 +174,19 @@ class Address extends \Magento\App\Action\Action
             $address = $this->_extractAddress();
             $this->_validateAddress($address);
             $address->save();
+
+            // set in VAT observer
+            if ($address->getVatValidationResult()) {
+                $validationMessage = $this->_customerData->getVatValidationUserMessage(
+                    $address,
+                    $this->_getSession()->getCustomer()->getDisableAutoGroupChange(),
+                    $address->getVatValidationResult()
+                );
+                $validationMessage->getIsError()
+                    ? $this->_getSession()->addError($validationMessage->getMessage())
+                    : $this->_getSession()->addSuccess($validationMessage->getMessage());
+            }
+
             $this->_getSession()->addSuccess(__('The address has been saved.'));
             $url = $this->_buildUrl('*/*/index', array('_secure'=>true));
             $this->getResponse()->setRedirect($this->_redirect->success($url));

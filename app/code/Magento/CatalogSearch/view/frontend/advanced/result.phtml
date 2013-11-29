@@ -18,43 +18,43 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="page-title">
-    <h1><?php echo __('Catalog Advanced Search') ?></h1>
-</div>
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <?php if($this->getResultCount()): ?>
-    <p class="advanced-search-amount">
-        <?php echo __('<strong>%1 item(s)</strong> were found using the following search criteria.', $this->getResultCount()); ?>
-    </p>
+    <div class="search found">
+        <?php echo __('<strong>%1 item(s)</strong> were found using the following search criteria', $this->getResultCount()); ?>
+    </div>
 <?php else: ?>
-    <p class="error-msg"><?php echo __('We didn\'t find any items using this search criteria.');?> <a href="<?php echo $this->getFormUrl(); ?>"><?php echo __('Modify your search'); ?></a></p>
+    <div class="message error">
+        <div>
+            <?php echo __('No items were found using the following search criteria.');?> <a href="<?php echo $this->getFormUrl(); ?>"><?php echo __('Modify your search'); ?></a>
+        </div>
+    </div>
 <?php endif; ?>
 
-<div class="advanced-search-summary">
-    <?php $searchCriterias=$this->getSearchCriterias(); ?>
-        <?php foreach (array('left', 'right') as $side): ?>
-            <?php if(@$searchCriterias[$side]): ?>
-                <ul>
-                    <?php foreach($searchCriterias[$side] as $criteria): ?>
-                        <li><strong><?php echo $this->escapeHtml(__($criteria['name'])); ?>:</strong> <?php echo $this->escapeHtml($criteria['value']); ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php endif; ?>
-        <?php endforeach; ?>
-    <?php if($this->getResultCount()): ?>
-        <p>
-            <?php echo __("Don't see what you're looking for?"); ?>
-            <a href="<?php echo $this->getFormUrl(); ?>"><?php echo __('Modify your search'); ?></a>
-        </p>
-    <?php endif; ?>
+<?php $searchCriterias=$this->getSearchCriterias(); ?>
+<div class="search summary">
+    <?php foreach (array('left', 'right') as $side): ?>
+        <?php if(@$searchCriterias[$side]): ?>
+            <ul class="items">
+                <?php foreach($searchCriterias[$side] as $criteria): ?>
+                    <li class="item"><strong><?php echo $this->escapeHtml(__($criteria['name'])); ?>:</strong> <?php echo $this->escapeHtml($criteria['value']); ?></li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+    <?php endforeach; ?>
 </div>
 <?php if($this->getResultCount()): ?>
-    <?php echo $this->getProductListHtml() ?>
+    <div class="message notice">
+        <div>
+            <?php echo __("Don't see what you're looking for?"); ?>
+            <a href="<?php echo $this->getFormUrl(); ?>"><?php echo __('Modify your search'); ?></a>
+        </div>
+    </div>
+<?php endif; ?>
+<?php if($this->getResultCount()): ?>
+    <div class="search results"><?php echo $this->getProductListHtml() ?></div>
 <?php endif; ?>
 <?php $this->getSearchCriterias(); ?>

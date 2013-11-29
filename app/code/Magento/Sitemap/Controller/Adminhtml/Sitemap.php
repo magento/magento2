@@ -131,7 +131,7 @@ class Sitemap extends  \Magento\Backend\App\Action
                 $id ? __('Edit Sitemap') : __('New Sitemap'),
                 $id ? __('Edit Sitemap') : __('New Sitemap')
             )
-            ->_addContent($this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Sitemap\Edit'));
+            ->_addContent($this->_view->getLayout()->createBlock('Magento\Sitemap\Block\Adminhtml\Edit'));
         $this->_view->renderLayout();
     }
 

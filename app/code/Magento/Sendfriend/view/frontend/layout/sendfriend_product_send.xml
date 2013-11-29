@@ -24,12 +24,10 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="root">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">1column.phtml</argument>
-        </action>
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">2columns-right.phtml</argument>
+    <update handle="page_one_column"/>
+    <referenceBlock name="page.main.title">
+        <action method="setPageTitle">
+            <argument name="title" translate="true" xsi:type="string">Email to a Friend</argument>
         </action>
     </referenceBlock>
     <referenceContainer name="content">

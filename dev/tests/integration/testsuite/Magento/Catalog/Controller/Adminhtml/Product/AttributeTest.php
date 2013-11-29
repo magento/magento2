@@ -75,7 +75,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
 
     /**
      * @magentoDataFixture Magento/Core/_files/db_translate_admin_store.php
-     * @magentoDataFixture Magento/Adminhtml/controllers/_files/cache/all_types_enabled.php
+     * @magentoDataFixture Magento/Backend/controllers/_files/cache/all_types_enabled.php
      * @magentoDataFixture Magento/Catalog/controllers/_files/attribute_user_defined.php
      * @magentoAppIsolation enabled
      */
@@ -86,9 +86,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         /** @var \Magento\Core\Model\Resource\Translate\String $translateString */
         $translateString = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Core\Model\Resource\Translate\String');
-        $translateString->saveTranslate(
-            'Fixture String', 'New Db Translation', 'en_US', \Magento\Core\Model\AppInterface::ADMIN_STORE_ID
-        );
+        $translateString->saveTranslate('Fixture String', 'New Db Translation', 'en_US');
         $this->assertEquals(
             'Fixture Db Translation', $this->_translate('Fixture String'), 'Translation is expected to be cached'
         );
@@ -111,8 +109,6 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
     protected function _translate($string)
     {
         // emulate admin store and design
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->setCurrentStore(\Magento\Core\Model\AppInterface::ADMIN_STORE_ID);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
             ->setDesignTheme(1);
         /** @var \Magento\Core\Model\Translate $translate */
@@ -150,7 +146,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
             'used_for_sort_by' => '0',
             'apply_to' => array('simple', 'configurable'),
             'frontend_label' => array(
-                \Magento\Core\Model\AppInterface::ADMIN_STORE_ID => 'Fixture String',
+                \Magento\Core\Model\Store::DEFAULT_STORE_ID => 'Fixture String',
             ),
         );
     }

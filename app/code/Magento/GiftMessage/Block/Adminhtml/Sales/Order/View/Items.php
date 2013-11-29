@@ -33,7 +33,7 @@
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
 
-class Items extends \Magento\Adminhtml\Block\Template
+class Items extends \Magento\Backend\Block\Template
 {
     /**
      * Gift message array
@@ -53,7 +53,7 @@ class Items extends \Magento\Adminhtml\Block\Template
     }
 
     /**
-     * Retrive default value for giftmessage sender
+     * Retrieve default value for giftmessage sender
      *
      * @return string
      */
@@ -71,7 +71,7 @@ class Items extends \Magento\Adminhtml\Block\Template
     }
 
     /**
-     * Retrive default value for giftmessage recipient
+     * Retrieve default value for giftmessage recipient
      *
      * @return string
      */
@@ -99,7 +99,7 @@ class Items extends \Magento\Adminhtml\Block\Template
     }
 
     /**
-     * Retrive real name for field
+     * Retrieve real name for field
      *
      * @param string $name
      * @return string
@@ -110,7 +110,7 @@ class Items extends \Magento\Adminhtml\Block\Template
     }
 
     /**
-     * Retrive real html id for field
+     * Retrieve real html id for field
      *
      * @param string $name
      * @return string
@@ -121,7 +121,7 @@ class Items extends \Magento\Adminhtml\Block\Template
     }
 
     /**
-     * Retrive field html id prefix
+     * Retrieve field html id prefix
      *
      * @return string
      */
@@ -152,7 +152,7 @@ class Items extends \Magento\Adminhtml\Block\Template
     }
 
     /**
-     * Retrive gift message for entity
+     * Retrieve gift message for entity
      *
      * @return \Magento\GiftMessage\Model\Message
      */
@@ -180,7 +180,7 @@ class Items extends \Magento\Adminhtml\Block\Template
     }
 
     /**
-     * Retrive block html id
+     * Retrieve block html id
      *
      * @return string
      */

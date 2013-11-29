@@ -114,8 +114,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_model->isSecure());
         $this->_model->setSecureIsForced(1);
         $this->assertTrue(is_bool($this->_model->isSecure()));
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->setId(\Magento\Core\Model\AppInterface::ADMIN_STORE_ID);
         $this->assertFalse($this->_model->isSecure());
     }
 

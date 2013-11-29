@@ -59,4 +59,10 @@
             <item name="grand_total" instance="Magento\Sales\Model\Order\Creditmemo\Total\Grand" sort_order="400"/>
         </group>
     </section>
+    <order>
+        <available_product_type name="simple"/>
+        <available_product_type name="virtual"/>
+        <available_product_type name="configurable"/>
+        <available_product_type name="grouped"/>
+    </order>
 </config>

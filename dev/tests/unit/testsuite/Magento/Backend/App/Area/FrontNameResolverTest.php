@@ -42,24 +42,23 @@ class FrontNameResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configMock
-            = $this->getMock('\Magento\Core\Model\ConfigInterface');
+        $this->_configMock = $this->getMock('\Magento\Backend\App\Config', array(), array(), '', false);
         $this->_model = new \Magento\Backend\App\Area\FrontNameResolver($this->_configMock, $this->_defaultFrontName);
     }
 
     public function testIfCustomPathUsed()
     {
         $this->_configMock->expects($this->at(0))
-            ->method('getValue')->with('admin/url/use_custom_path', 'default')->will($this->returnValue(true));
+            ->method('getValue')->with('admin/url/use_custom_path')->will($this->returnValue(true));
         $this->_configMock->expects($this->at(1))
-            ->method('getValue')->with('admin/url/custom_path', 'default')->will($this->returnValue('expectedValue'));
+            ->method('getValue')->with('admin/url/custom_path')->will($this->returnValue('expectedValue'));
         $this->assertEquals('expectedValue', $this->_model->getFrontName());
     }
 
     public function testIfCustomPathNotUsed()
     {
-        $this->_configMock->expects($this->once())->
-            method('getValue')->with('admin/url/use_custom_path', 'default')->will($this->returnValue(false));
+        $this->_configMock->expects($this->once())
+            ->method('getValue')->with('admin/url/use_custom_path')->will($this->returnValue(false));
         $this->assertEquals($this->_defaultFrontName, $this->_model->getFrontName());
     }
 }

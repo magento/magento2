@@ -82,7 +82,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     }
 
     /**
-     * Retreive option array
+     * Retrieve option array
      *
      * @return array
      */
@@ -92,7 +92,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     }
 
     /**
-     * Retreive option hash
+     * Retrieve option hash
      *
      * @return array
      */

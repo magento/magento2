@@ -48,24 +48,4 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertContains('captcha/refresh', $this->_block->getRefreshUrl());
     }
-
-    /**
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
-     */
-    public function testGetRefreshUrlWhenIsAdminStore()
-    {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore('admin')->setUrlModel(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->create('Magento\Backend\Model\Url')
-            );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->setCurrentStore(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\Core\Model\StoreManagerInterface')->getStore('admin')
-            );
-
-        $this->assertContains('backend/admin/refresh/refresh', $this->_block->getRefreshUrl());
-    }
 }

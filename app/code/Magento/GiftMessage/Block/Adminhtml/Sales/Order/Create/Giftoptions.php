@@ -33,7 +33,7 @@
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create;
 
-class Giftoptions extends \Magento\Adminhtml\Block\Template
+class Giftoptions extends \Magento\Backend\Block\Template
 {
     /**
      * Get order item object from parent block

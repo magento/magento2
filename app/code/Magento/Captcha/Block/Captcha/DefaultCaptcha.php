@@ -80,15 +80,8 @@ class DefaultCaptcha extends \Magento\View\Block\Template
      */
     public function getRefreshUrl()
     {
-        $urlPath = 'captcha/refresh';
-        $params = array('_secure' => $this->_storeManager->getStore()->isCurrentlySecure());
-
-        if ($this->_storeManager->getStore()->isAdmin()) {
-            $urlPath = 'adminhtml/refresh/refresh';
-            $params = array_merge($params, array('_nosecret' => true));
-        }
-
-        return $this->_storeManager->getStore()->getUrl($urlPath, $params);
+        $store = $this->_storeManager->getStore();
+        return $store->getUrl('captcha/refresh', array('_secure' => $store->isCurrentlySecure()));
     }
 
     /**

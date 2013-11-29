@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -33,23 +31,34 @@
 ?>
 <?php $_filters = $this->getActiveFilters() ?>
 <?php if(!empty($_filters)): ?>
-<div class="currently">
-    <p class="block-subtitle"><?php echo __('Currently Shopping by:') ?></p>
-    <ol>
-    <?php foreach ($_filters as $_filter): ?>
-        <li>
-            <span class="label"><?php echo __($_filter->getName()) ?>:</span> <span class="value"><?php echo $this->stripTags($_filter->getLabel()) ?></span>
-            <?php
+<div class="filtered">
+    <strong class="subtitle"><?php echo __('Currently Shopping by:') ?></strong>
+    <ol class="items">
+        <?php foreach ($_filters as $_filter): ?>
+            <li class="item">
+                <span class="label"><?php echo __($_filter->getName()) ?>:</span>
+                <span class="value"><?php echo $this->stripTags($_filter->getLabel()) ?></span>
+                <?php
                 $clearLinkUrl = $_filter->getClearLinkUrl();
                 if ($clearLinkUrl):
-            ?>
-                <a  class="btn-previous" href="<?php echo $_filter->getRemoveUrl() ?>" title="<?php echo __('Previous') ?>"><?php echo __('Previous') ?></a>
-                <a  class="btn-remove" title="<?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>" href="<?php echo $clearLinkUrl ?>"><?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></a>
-            <?php else: ?>
-                <a  class="btn-remove" href="<?php echo $_filter->getRemoveUrl() ?>" title="<?php echo __('Remove This Item') ?>"><?php echo __('Remove This Item') ?></a>
-            <?php endif; ?>
-        </li>
-    <?php endforeach; ?>
+                    ?>
+                    <a class="action previous" href="<?php echo $_filter->getRemoveUrl() ?>"
+                       title="<?php echo __('Previous') ?>">
+                        <span><?php echo __('Previous') ?></span>
+                    </a>
+                    <a class="action remove"
+                       title="<?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>"
+                       href="<?php echo $clearLinkUrl ?>">
+                        <span><?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></span>
+                    </a>
+                <?php else: ?>
+                    <a class="action remove" href="<?php echo $_filter->getRemoveUrl() ?>"
+                       title="<?php echo __('Remove This Item') ?>">
+                        <span><?php echo __('Remove This Item') ?></span>
+                    </a>
+                <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
     </ol>
 </div>
 <?php endif; ?>

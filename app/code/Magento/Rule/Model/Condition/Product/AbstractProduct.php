@@ -63,7 +63,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Adminhtml data
      *
-     * @var \Magento\Adminhtml\Helper\Data
+     * @var \Magento\Backend\Helper\Data
      */
     protected $_backendData;
 
@@ -423,7 +423,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         switch ($this->getAttribute()) {
             case 'sku':
             case 'category_ids':
-                $url = '*/promo_widget/chooser/attribute/' . $this->getAttribute();
+                $url = 'catalog_rule/promo_widget/chooser/attribute/' . $this->getAttribute();
                 if ($this->getJsFormObject()) {
                     $url .= '/form/' . $this->getJsFormObject();
                 }

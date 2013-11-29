@@ -116,14 +116,14 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         $this->setChild('store_switcher',
             $this->getLayout()->createBlock('Magento\Backend\Block\Store\Switcher')
                 ->setSwitchUrl($this->getUrl('catalog/*/*', array('_current'=>true, '_query'=>false, 'store'=>null)))
-                ->setTemplate('Magento_Adminhtml::store/switcher/enhanced.phtml')
+                ->setTemplate('Magento_Backend::store/switcher/enhanced.phtml')
         );
         return parent::_prepareLayout();
     }
 
     protected function _getDefaultStoreId()
     {
-        return \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID;
+        return \Magento\Core\Model\Store::DEFAULT_STORE_ID;
     }
 
     public function getCategoryCollection()

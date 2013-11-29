@@ -133,7 +133,7 @@ class Snapshot extends \Magento\Backup\Filesystem
      */
     protected function _createDbBackupInstance()
     {
-        return $this->_backupFactory->create(\Magento\Backup\Helper\Data::TYPE_DB)
+        return $this->_backupFactory->create(\Magento\Backup\Factory::TYPE_DB)
             ->setBackupExtension('gz')
             ->setTime($this->getTime())
             ->setBackupsDir($this->_dirs->getDir('var'))

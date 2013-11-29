@@ -52,7 +52,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             array('orders_count' => 1, 'orders_invoiced' => 1),
         );
         $actualResult = array();
-        /** @var \Magento\Adminhtml\Model\Report\Item $reportItem */
+        /** @var \Magento\Reports\Model\Item $reportItem */
         foreach ($this->_collection->getItems() as $reportItem) {
             $actualResult[] = array(
                 'orders_count' => $reportItem->getData('orders_count'),

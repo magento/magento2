@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Report\Filter;
 
-class Form extends \Magento\Adminhtml\Block\Report\Filter\Form
+class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
 {
     /**
      * @var \Magento\Sales\Model\Order\ConfigFactory

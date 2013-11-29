@@ -88,4 +88,20 @@ class Cookie extends \Magento\Core\Model\Cookie
         unset($_COOKIE[$name]);
         return $this;
     }
+
+    /**
+     * Is https secure request
+     *
+     * @return bool
+     */
+    public function isSecure()
+    {
+        $areaCode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
+            ->getAreaCode();
+        if ($areaCode == \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE) {
+            return $this->_getRequest()->isSecure();
+        } else {
+            return parent::isSecure();
+        }
+    }
 }

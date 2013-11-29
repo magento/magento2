@@ -45,7 +45,6 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
              * @throws \PHPUnit_Framework_AssertionFailedError|Exception
              */
             function ($area, $themeId, $file) {
-                $this->_markTestIncompleteDueToBug($area, $file);
                 try {
                     $params = array('area' => $area, 'themeId' => $themeId);
                     $viewFile = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()
@@ -82,21 +81,6 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
             },
             $this->viewFilesFromThemesDataProvider()
         );
-    }
-
-    /**
-     * This dummy method was introduced to circumvent cyclomatic complexity check
-     *
-     * @param string $area
-     * @param string $file
-     */
-    protected function _markTestIncompleteDueToBug($area, $file)
-    {
-        if ($area === 'frontend' && in_array($file, array('js/selectivizr-min.js', 'css/styles.css'))
-            || $area === 'adminhtml' && in_array($file, array('mui/reset.css'))
-        ) {
-            $this->markTestIncomplete('MAGETWO-9806, MAGETWO-12325');
-        }
     }
 
     /**

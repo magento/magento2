@@ -26,7 +26,7 @@
 
 
 /**
- * Custom variabel collection
+ * Custom variable collection
  *
  * @category    Magento
  * @package     Magento_Core

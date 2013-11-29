@@ -234,7 +234,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
                 }
 
                 /**
-                 * Require shiping rate recollect
+                 * Require shipping rate recollect
                  */
                 $address->setCollectShippingRates((boolean) $this->getCollectRatesFlag());
 
@@ -385,7 +385,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
                     $quoteAddress->addItem($quoteItem, $qty);
                 }
                 /**
-                 * Require shiping rate recollect
+                 * Require shipping rate recollect
                  */
                 $quoteAddress->setCollectShippingRates((boolean) $this->getCollectRatesFlag());
             }

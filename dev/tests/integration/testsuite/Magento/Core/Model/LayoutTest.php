@@ -83,6 +83,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppIsolation enabled
+     * @magentoAppArea frontend
      */
     public function testDestructor()
     {

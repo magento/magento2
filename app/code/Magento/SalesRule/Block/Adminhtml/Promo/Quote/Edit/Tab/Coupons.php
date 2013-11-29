@@ -34,7 +34,7 @@
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 class Coupons
-    extends \Magento\Adminhtml\Block\Text\ListText
+    extends \Magento\Backend\Block\Text\ListText
     implements \Magento\Adminhtml\Block\Widget\Tab\TabInterface
 {
     /**

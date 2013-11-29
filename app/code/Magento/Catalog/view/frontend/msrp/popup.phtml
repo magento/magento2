@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -31,32 +29,33 @@
  */
 ?>
 <?php if ($this->helper('Magento\Catalog\Helper\Data')->isMsrpEnabled()): ?>
-<div id="map-popup" class="map-popup" style="display:none;">
-    <a href="#" class="map-popup-close" id="map-popup-close">x</a>
-
-    <div class="map-popup-arrow"></div>
-    <div class="map-popup-heading"><h2 id="map-popup-heading"></h2></div>
-    <div class="map-popup-content" id="map-popup-content">
-        <div class="map-popup-checkout">
-            <form action="" method="POST" id="product_addtocart_form_from_popup">
-                <input type="hidden" name="product" class="product_id" value="" id="map-popup-product-id"/>
-
-                <div class="additional-addtocart-box">
-                    <?php echo $this->getChildHtml(); ?>
-                </div>
-                <button type="button" title="<?php echo __('Add to Cart') ?>" class="button btn-cart"
-                        id="map-popup-button"><span><span><?php echo __('Add to Cart') ?></span></span></button>
-            </form>
+<div id="map-popup" class="map popup">
+    <a href="#" class="action close" id="map-popup-close"><span><?php echo __('Close') ?></span></a>
+    <div class="title" id="map-popup-heading"></div>
+    <div class="content" id="map-popup-content">
+        <form action="" method="POST" id="product_addtocart_form_from_popup" class="form map checkout">
+            <input type="hidden" name="product" class="product_id" value="" id="map-popup-product-id"/>
+            <div class="additional-addtocart-box">
+                <?php echo $this->getChildHtml(); ?>
+            </div>
+            <button type="button" title="<?php echo __('Add to Cart') ?>" class="action tocart" id="map-popup-button">
+                <span><?php echo __('Add to Cart') ?></span>
+            </button>
+        </form>
+        <div class="map msrp" id="map-popup-msrp-box">
+            <span class="label"><?php echo __('Price'); ?></span>
+            <div class="old price" id="map-popup-msrp"></div>
         </div>
-        <div class="map-popup-msrp" id="map-popup-msrp-box"><strong><?php echo __('Price'); ?>:</strong> <span
-            style="text-decoration:line-through;" id="map-popup-msrp"></span></div>
-        <div class="map-popup-price" id="map-popup-price-box"><strong><?php echo __('Actual Price'); ?>:</strong>
-            <span id="map-popup-price"></span></div>
-
+        <div class="map price" id="map-popup-price-box">
+            <span class="label"><?php echo __('Actual Price'); ?></span>
+            <div id="map-popup-price" class="actual price"></div>
+        </div>
     </div>
-    <div class="map-popup-text"
-         id="map-popup-text"><?php echo $this->helper('Magento\Catalog\Helper\Data')->getMsrpExplanationMessage(); ?></div>
-    <div class="map-popup-text"
-         id="map-popup-text-what-this"><?php echo $this->helper('Magento\Catalog\Helper\Data')->getMsrpExplanationMessageWhatsThis(); ?></div>
+    <div class="content" id="map-popup-text">
+        <?php echo $this->helper('Magento\Catalog\Helper\Data')->getMsrpExplanationMessage(); ?>
+    </div>
+    <div class="content" id="map-popup-text-what-this">
+        <?php echo $this->helper('Magento\Catalog\Helper\Data')->getMsrpExplanationMessageWhatsThis(); ?>
+    </div>
 </div>
 <?php endif; ?>

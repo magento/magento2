@@ -72,6 +72,6 @@
         </block>
     </referenceContainer>
     <referenceContainer name="js">
-        <block class="Magento\Adminhtml\Block\Template" template="Magento_Widget::instance/js.phtml" name="widget_instance_js"/>
+        <block class="Magento\Backend\Block\Template" template="Magento_Widget::instance/js.phtml" name="widget_instance_js"/>
     </referenceContainer>
 </layout>

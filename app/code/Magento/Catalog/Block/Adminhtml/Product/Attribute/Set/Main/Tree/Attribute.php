@@ -32,7 +32,7 @@
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main\Tree;
 
-class Attribute extends \Magento\Adminhtml\Block\Template
+class Attribute extends \Magento\Backend\Block\Template
 {
     protected $_template = 'catalog/product/attribute/set/main/tree/attribute.phtml';
 }

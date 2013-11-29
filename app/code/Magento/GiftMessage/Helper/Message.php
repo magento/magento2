@@ -111,7 +111,7 @@ class Message extends \Magento\Core\Helper\Data
     }
 
     /**
-     * Retrive inline giftmessage edit form for specified entity
+     * Retrieve inline giftmessage edit form for specified entity
      *
      * @param string $type
      * @param \Magento\Object $entity
@@ -222,7 +222,7 @@ class Message extends \Magento\Core\Helper\Data
     }
 
     /**
-     * Retrive escaped and preformated gift message text for specified entity
+     * Retrieve escaped and preformated gift message text for specified entity
      *
      * @param \Magento\Object $entity
      * @return unknown
@@ -237,7 +237,7 @@ class Message extends \Magento\Core\Helper\Data
     }
 
     /**
-     * Retrive gift message for entity. If message not exists return null
+     * Retrieve gift message for entity. If message not exists return null
      *
      * @param \Magento\Object $entity
      * @return \Magento\GiftMessage\Model\Message
@@ -252,7 +252,7 @@ class Message extends \Magento\Core\Helper\Data
     }
 
     /**
-     * Retrive internal cached data with specified key.
+     * Retrieve internal cached data with specified key.
      *
      * If cached data not found return null.
      *
@@ -309,7 +309,7 @@ class Message extends \Magento\Core\Helper\Data
     }
 
     /**
-     * Check availability for multishiping checkout items
+     * Check availability for multishipping checkout items
      *
      * @param array $items
      * @param \Magento\Core\Model\Store|integer $store
@@ -326,7 +326,7 @@ class Message extends \Magento\Core\Helper\Data
     }
 
     /**
-     * Retrive gift message with specified id
+     * Retrieve gift message with specified id
      *
      * @param integer $messageId
      * @return \Magento\GiftMessage\Model\Message

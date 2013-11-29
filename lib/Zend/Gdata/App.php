@@ -1131,7 +1131,7 @@ class Zend_Gdata_App
      * Retrieve next set of results based on a given feed.
      *
      * @param Zend_Gdata_App_Feed $feed The feed from which to
-     *          retreive the next set of results.
+     *          retrieve the next set of results.
      * @param string $className (optional) The class of feed to be returned.
      *          If null, the next feed (if found) will be the same class as
      *          the feed that was given as the first argument.
@@ -1158,7 +1158,7 @@ class Zend_Gdata_App
      * Retrieve previous set of results based on a given feed.
      *
      * @param Zend_Gdata_App_Feed $feed The feed from which to
-     *          retreive the previous set of results.
+     *          retrieve the previous set of results.
      * @param string $className (optional) The class of feed to be returned.
      *          If null, the previous feed (if found) will be the same class as
      *          the feed that was given as the first argument.

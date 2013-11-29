@@ -54,6 +54,7 @@
     <preference for="Magento\App\ViewInterface" type="Magento\App\View" />
     <preference for="Magento\TranslateInterface" type="Magento\Core\Model\Translate" />
     <preference for="Magento\App\Response\RedirectInterface" type="Magento\Core\App\Response\Redirect" />
+    <preference for="Magento\Data\Collection\EntityFactoryInterface" type="Magento\Core\Model\EntityFactory" />
     <type name="Magento\App\DefaultPath\DefaultPath">
         <param name="parts">
             <value>
@@ -451,14 +452,23 @@
             <instance type="Magento\App\FrontController\Proxy" />
         </param>
     </type>
+    <type name="Magento\Core\Model\App\Area">
+        <param name="translator">
+            <instance type="Magento\Core\Model\Translate\Proxy" />
+        </param>
+        <param name="design">
+            <instance type="Magento\Core\Model\Design\Proxy" />
+        </param>
+    </type>
     <type name="Magento\App\FrontController">
         <plugin name="dispatchExceptionHandler" type="Magento\Core\App\FrontController\Plugin\DispatchExceptionHandler" sortOrder="30"/>
         <plugin name="clickjacking" type="Magento\App\FrontController\Plugin\Clickjacking" sortOrder="0"/>
     </type>
     <type name="Magento\App\Action\Action">
         <plugin name="installInitializer" type="Magento\Core\App\Action\Plugin\Install" sortOrder="5"/>
-        <plugin name="sessionInitializer" type="Magento\Core\App\Action\Plugin\Session" sortOrder="10"/>
-        <plugin name="designLoader" type="Magento\Core\App\Action\Plugin\Design" sortOrder="20"/>
+        <plugin name="storeCheck" type="Magento\Core\App\Action\Plugin\StoreCheck" sortOrder="10"/>
+        <plugin name="sessionInitializer" type="Magento\Core\App\Action\Plugin\Session" sortOrder="20"/>
+        <plugin name="designLoader" type="Magento\Core\App\Action\Plugin\Design" sortOrder="30"/>
     </type>
     <type name="Magento\Core\Model\Locale">
         <param name="dateModel">

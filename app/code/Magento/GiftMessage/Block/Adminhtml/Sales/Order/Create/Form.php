@@ -33,7 +33,7 @@
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create;
 
-class Form extends \Magento\Adminhtml\Block\Template
+class Form extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\Adminhtml\Model\Session\Quote

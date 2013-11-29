@@ -27,6 +27,6 @@
 -->
 <config>
     <menu>
-        <add id="Magento_Downloadable::report_products_downloads" title="Downloads" module="Magento_Reports" sortOrder="50" parent="Magento_Reports::report_products" action="adminhtml/report_product/downloads" resource="Magento_Reports::downloads"/>
+        <add id="Magento_Downloadable::report_products_downloads" title="Downloads" module="Magento_Reports" sortOrder="50" parent="Magento_Reports::report_products" action="reports/report_product/downloads" resource="Magento_Reports::downloads"/>
     </menu>
 </config>

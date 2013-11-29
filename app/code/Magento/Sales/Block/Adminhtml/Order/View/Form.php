@@ -34,7 +34,7 @@
 
 namespace Magento\Sales\Block\Adminhtml\Order\View;
 
-class Form extends \Magento\Adminhtml\Block\Template
+class Form extends \Magento\Backend\Block\Template
 {
     protected $_template = 'order/view/form.phtml';
 }

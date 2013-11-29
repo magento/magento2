@@ -1,3 +1,43 @@
+2.0.0.0-dev54
+=============
+* Modularity improvements:
+  * Breakdown of the Adminhtml module:
+     * Moved Newsletter, Report logic to the respective modules
+     * Moved blocks, config, view, layout files of other components from Adminhtml folder to respective modules
+  * Removed application dependencies from the library
+* Move Magento\Core common blocks in the library
+* Application areas rework:
+  * Areas are independent from Store
+  * Removed deprecated annotation from the getArea methods
+* GitHub requests:
+  * [#245](https://github.com/magento/magento2/pull/245) -- Resolve design flaws in core URL helper
+  * [#247](https://github.com/magento/magento2/pull/247) -- Bug in Mage_Page_Block_Html_Header->getIsHomePage
+  * [#259](https://github.com/magento/magento2/pull/259) -- Turkish Lira (TRY) is supported for Turkish members.
+  * [#262](https://github.com/magento/magento2/pull/262) -- Update Rule.php
+  * [#373](https://github.com/magento/magento2/pull/373) -- [Magento/Sales] Fixed typos
+  * [#382](https://github.com/magento/magento2/pull/382) -- [Magento/Core] Fixed typos
+  * [#304](https://github.com/magento/magento2/pull/304) -- Removed Erroneous closing "
+  * [#323](https://github.com/magento/magento2/pull/323) -- InstanceController.php - made setBody protected
+  * [#349](https://github.com/magento/magento2/pull/349) -- Move Mage_Catalog menu declaration into Mage_Catalog module.
+  * [#265](https://github.com/magento/magento2/pull/265) -- Update Merge.php
+  * [#271](https://github.com/magento/magento2/pull/271) -- Check Data should validate gallery information
+  * [#305](https://github.com/magento/magento2/pull/305) -- Extra ", tidied up nested quotes
+  * [#352](https://github.com/magento/magento2/pull/352) -- Add Croatia Country as part of European Union since 1st July 2013 for default european local countries in configuration
+  * [#224](https://github.com/magento/magento2/pull/224) -- Tax formatting is locale aware and should not
+  * [#338](https://github.com/magento/magento2/pull/338) -- Correcting SQL for required_options column
+  * [#327](https://github.com/magento/magento2/pull/327) -- cart api bug fix & partial invoice credit memo divide by zero warning
+* Themes update:
+  * Old frontend (magento_demo) and backend (magento_basic) themes are removed
+  * Updated templates and layout updates in the Bundle, Catalog, CatalogInventory, CatalogSearch, Downloadable, ProductAlert, Reports, Sendfriend modules
+* Fixed bugs:
+  * Fixed the error when  Magento cannot be reinstalled to the same database with table prefix
+  * Fixed report Products in Cart
+  * Fixed error on attempt to insert image to CMS pages under version control
+  * Fixed order status grid so that you can assign state, edit, and view custom order status
+  * Fixed Related Products Rule page so that category can be selected on conditions tab
+  * Fixed Magento_Paypal_Controller_ExpressTest integration test so it is re-enabled
+  * Fixed the bug with international DHL quotes
+
 2.0.0.0-dev53
 =============
 * Moved general action-related functionality to \Magento\App\Action\Action in the library. Removed Magento\Core\Controller\Varien\Action and related logic from the Magento_Core module
@@ -10,9 +50,9 @@
 * GitHub requests:
   * [#238](https://github.com/magento/magento2/pull/238) -- Improve escaping HTML entities in URL
   * [#199](https://github.com/magento/magento2/pull/199) -- Replaced function calls to array_push with adding the elements directly
-  * [#182](https://github.com/magento/magento2/pull/182) -- By default use collection _idFieldName for toOption* methods.
+  * [#182](https://github.com/magento/magento2/pull/182) -- By default use collection _idFieldName for toOption* methods
   * [#233](https://github.com/magento/magento2/pull/233) -- Google Rich Snippet Code
-  * [#339](https://github.com/magento/magento2/pull/339) -- Correcting 'cahce' typo in documentation.
+  * [#339](https://github.com/magento/magento2/pull/339) -- Correcting 'cahce' typo in documentation
   * [#232](https://github.com/magento/magento2/pull/232) -- Update app/code/core/Mage/Checkout/controllers/CartController.php (fix issue #27632)
 * Fixed bugs:
   * Fixed JavaScript error when printing orders from the frontend
@@ -29,11 +69,10 @@
   * Moved Magento\Core\Model\Theme to the Magento\View component
   * Moved Magento\Core\Model\Design to the Magento\View component
   * Consistent declaration of page-types
-  * The Framework part of the Cache functionality moved out from modules
 * Themes update:
   * Updated templates and layout updates in the Captcha, Customer, Newsletter, Persistent, ProductAlert, Wishlist modules; old files moved to the "magento-backup" theme
   * Refactored and removed duplicate Persistent module templates
-  * Plushe theme made responsive
+  * Plushe theme is responsive now
 * Fixed bugs:
   * Fixed inability to print order, invoice, or creditmemo in the frontend
   * Fixed fatal error caused by the Mage_Backend_Block_System_Config_FormTest integration test

@@ -68,7 +68,7 @@ abstract class AbstractView extends \Magento\Catalog\Block\Product\AbstractProdu
 
 
     /**
-     * Retrive product
+     * Retrieve product
      *
      * @return \Magento\Catalog\Model\Product
      */

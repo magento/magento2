@@ -172,7 +172,7 @@ class Locale implements \Magento\Core\Model\LocaleInterface
     }
 
     /**
-     * REtrieve default locale code
+     * Retrieve default locale code
      *
      * @return string
      */
@@ -670,7 +670,7 @@ class Locale implements \Magento\Core\Model\LocaleInterface
 
     /**
      * Get store timestamp
-     * Timstamp will be builded with store timezone settings
+     * Timestamp will be built with store timezone settings
      *
      * @param   mixed $store
      * @return  int

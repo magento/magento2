@@ -100,6 +100,6 @@ class Config
      */
     public function getVariablesWysiwygActionUrl()
     {
-        return $this->_url->getUrl('*/system_variable/wysiwygPlugin');
+        return $this->_url->getUrl('adminhtml/system_variable/wysiwygPlugin');
     }
 }

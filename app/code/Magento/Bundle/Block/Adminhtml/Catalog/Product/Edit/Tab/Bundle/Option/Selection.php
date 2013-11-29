@@ -149,7 +149,7 @@ class Selection
      */
     public function getPriceTypeSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Html\Select')
+        $select = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
             ->setData(array(
                 'id'    => $this->getFieldId() . '_{{index}}_price_type',
                 'class' => 'select select-product-option-type required-option-select'
@@ -169,7 +169,7 @@ class Selection
      */
     public function getQtyTypeSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Html\Select')
+        $select = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
             ->setData(array(
                 'id' => $this->getFieldId().'_{{index}}_can_change_qty',
                 'class' => 'select'

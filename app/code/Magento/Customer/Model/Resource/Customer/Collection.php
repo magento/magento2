@@ -37,9 +37,19 @@ namespace Magento\Customer\Model\Resource\Customer;
 class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
 {
     /**
+     * Name of collection model
+     */
+    const CUSTOMER_MODEL_NAME = 'Magento\Customer\Model\Customer';
+
+    /**
      * @var \Magento\Object\Copy\Config
      */
     protected $_fieldsetConfig;
+
+    /**
+     * @var string
+     */
+    protected $_modelName;
 
     /**
      * @param \Magento\Event\ManagerInterface $eventManager
@@ -52,6 +62,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Validator\UniversalFactory $universalFactory
      * @param \Magento\Object\Copy\Config $fieldsetConfig
+     * @param string $modelName
      */
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
@@ -63,9 +74,11 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Object\Copy\Config $fieldsetConfig
+        \Magento\Object\Copy\Config $fieldsetConfig,
+        $modelName = self::CUSTOMER_MODEL_NAME
     ) {
         $this->_fieldsetConfig = $fieldsetConfig;
+        $this->_modelName = $modelName;
         parent::__construct(
             $eventManager,
             $logger,
@@ -84,7 +97,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Magento\Customer\Model\Customer', 'Magento\Customer\Model\Resource\Customer');
+        $this->_init($this->_modelName, 'Magento\Customer\Model\Resource\Customer');
     }
 
     /**

@@ -357,9 +357,9 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
     }
 
     /**
-     * Checks required dependecies
+     * Checks required dependencies
      *
-     * @throws \Exception if some of dependecies are missing
+     * @throws \Exception if some of dependencies are missing
      */
     public function checkDependencies()
     {

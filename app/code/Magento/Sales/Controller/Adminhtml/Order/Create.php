@@ -84,11 +84,11 @@ class Create extends \Magento\Backend\App\Action
     /**
      * Retrieve gift message save model
      *
-     * @return \Magento\Adminhtml\Model\Giftmessage\Save
+     * @return \Magento\GiftMessage\Model\Save
      */
     protected function _getGiftmessageSaveModel()
     {
-        return $this->_objectManager->get('Magento\Adminhtml\Model\Giftmessage\Save');
+        return $this->_objectManager->get('Magento\GiftMessage\Model\Save');
     }
 
     /**

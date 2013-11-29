@@ -63,34 +63,18 @@ class Observer
     protected $_customerData;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $_customerSession;
-
-    /**
      * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Customer\Helper\Address $customerAddress
      * @param \Magento\Core\Model\Registry $coreRegistry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
         \Magento\Customer\Helper\Data $customerData,
         \Magento\Customer\Helper\Address $customerAddress,
-        \Magento\Core\Model\Registry $coreRegistry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Customer\Model\Session $customerSession
+        \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_customerData = $customerData;
         $this->_customerAddress = $customerAddress;
         $this->_coreRegistry = $coreRegistry;
-        $this->_storeManager = $storeManager;
-        $this->_customerSession = $customerSession;
     }
 
     /**
@@ -217,16 +201,7 @@ class Observer
                     $customer->save();
                 }
 
-                if (!$this->_storeManager->getStore()->isAdmin()) {
-                    $validationMessage = $this->_customerData->getVatValidationUserMessage($customerAddress,
-                        $customer->getDisableAutoGroupChange(), $result);
-
-                    if (!$validationMessage->getIsError()) {
-                        $this->_customerSession->addSuccess($validationMessage->getMessage());
-                    } else {
-                        $this->_customerSession->addError($validationMessage->getMessage());
-                    }
-                }
+                $customerAddress->setVatValidationResult($result);
             }
         } catch (\Exception $e) {
             $this->_coreRegistry->register(self::VIV_PROCESSED_FLAG, false, true);

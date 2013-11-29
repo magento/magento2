@@ -1235,7 +1235,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
         if (!$item) {
             $item = $this->_quoteItemFactory->create();
             $item->setQuote($this);
-            if ($this->_storeManager->getStore()->isAdmin()) {
+            if ($this->_appState->getAreaCode() === \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE) {
                 $item->setStoreId($this->getStore()->getId());
             } else {
                 $item->setStoreId($this->_storeManager->getStore()->getId());

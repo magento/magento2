@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Shipment\Tracking;
 
-class Info extends \Magento\Adminhtml\Block\Template
+class Info extends \Magento\Backend\Block\Template
 {
 
     protected $_template = 'order/shipment/tracking/info.phtml';

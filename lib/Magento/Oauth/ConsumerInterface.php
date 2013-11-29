@@ -37,7 +37,7 @@ interface ConsumerInterface
      * Validate consumer data (e.g. Key and Secret length).
      *
      * @return bool - True if the consumer data is valid.
-     * @throws \Magento\Core\Exception|\Exception - Throws exception for validation errors.
+     * @throws \Exception
      */
     public function validate();
 

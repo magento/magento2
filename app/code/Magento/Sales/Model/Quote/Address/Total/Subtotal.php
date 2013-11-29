@@ -65,7 +65,7 @@ class Subtotal extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
         foreach ($items as $item) {
             if ($this->_initItem($address, $item) && $item->getQty() > 0) {
                 /**
-                 * Separatly calculate subtotal only for virtual products
+                 * Separately calculate subtotal only for virtual products
                  */
                 if ($item->getProduct()->isVirtual()) {
                     $virtualAmount += $item->getRowTotal();

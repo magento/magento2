@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -31,9 +29,10 @@
 <?php $_fieldNameAction = $_fileName . '_action'; ?>
 <?php $_fieldValueAction = $_fileExists ? 'save_old' : 'save_new'; ?>
 <?php $_fileNamed = $_fileName . '_name'; ?>
+<?php $class = ($_option->getIsRequire()) ? ' required' : ''; ?>
 
 <script type="text/javascript">
-//<![CDATA[
+    //<![CDATA[
     (function($) {
         head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/file-option.js')?>", function() {
             $('#input-box-<?php echo $_fileName ?>').fileOption({
@@ -45,33 +44,46 @@
             });
         });
     })(jQuery);
-//]]>
+    //]]>
 </script>
 
-<dt><label <?php if ($_option->getIsRequire()) echo ' class="required"' ?>><?php if ($_option->getIsRequire()) echo '<em>*</em>' ?><?php echo  $this->escapeHtml($_option->getTitle()) ?></label>
-    <?php echo $this->getFormatedPrice() ?></dt>
-<dd<?php if ($_option->getDecoratedIsLast()):?> class="last"<?php endif; ?>>
+<div class="field file<?php echo $class; ?>">
+    <label class="label">
+        <span><?php echo  $this->escapeHtml($_option->getTitle()) ?></span>
+        <?php echo $this->getFormatedPrice() ?>
+    </label>
     <?php if ($_fileExists): ?>
+    <div class="control">
         <span class="<?php echo $_fileNamed ?>"><?php echo $_fileInfo->getTitle(); ?></span>
         <a href="javascript:void(0)" class="label" id="change-<?php echo $_fileName ?>" >
             <?php echo __('Change') ?>
-        </a>&nbsp;
-        <?php if (! $_option->getIsRequire()): ?>
-           <input type="checkbox" id="delete-<?php echo $_fileName ?>" />
-           <span class="label"><?php echo __('Delete') ?></span>
-        <?php endif; ?>
-    <?php endif; ?>
-    <div id="input-box-<?php echo $_fileName ?>" <?php echo $_fileExists ? 'style="display:none"' : '' ?>>
-        <input type="file" name="<?php echo $_fileName; ?>" class="product-custom-option<?php echo $_option->getIsRequire() ? ' required' : '' ?>" <?php echo $_fileExists ? 'disabled="disabled"' : '' ?> />
-        <input type="hidden" name="<?php echo $_fieldNameAction; ?>" value="<?php echo $_fieldValueAction; ?>" />
-        <?php if ($_option->getFileExtension()): ?>
-        <p class="no-margin"><?php echo __('Allowed file extensions to upload')?>: <strong><?php echo $_option->getFileExtension() ?></strong></p>
-        <?php endif; ?>
-        <?php if ($_option->getImageSizeX() > 0): ?>
-        <p class="no-margin"><?php echo __('Maximum image width')?>: <strong><?php echo $_option->getImageSizeX() ?> <?php echo __('px.')?></strong></p>
-        <?php endif; ?>
-        <?php if ($_option->getImageSizeY() > 0): ?>
-        <p class="no-margin"><?php echo __('Maximum image height')?>: <strong><?php echo $_option->getImageSizeY() ?> <?php echo __('px.')?></strong></p>
+        </a>
+        <?php if (!$_option->getIsRequire()): ?>
+            <input type="checkbox" id="delete-<?php echo $_fileName ?>" />
+            <span class="label"><?php echo __('Delete') ?></span>
         <?php endif; ?>
     </div>
-</dd>
+    <?php endif; ?>
+    <div class="control" id="input-box-<?php echo $_fileName ?>" <?php echo $_fileExists ? 'style="display:none"' : '' ?>>
+        <input type="file"
+               name="<?php echo $_fileName; ?>"
+               class="product-custom-option<?php echo $_option->getIsRequire() ? ' required' : '' ?>"
+               <?php echo $_fileExists ? 'disabled="disabled"' : '' ?> />
+        <input type="hidden" name="<?php echo $_fieldNameAction; ?>" value="<?php echo $_fieldValueAction; ?>" />
+        <?php if ($_option->getFileExtension()): ?>
+            <p class="note">
+                <?php echo __('Allowed file extensions to upload')?>: <strong><?php echo $_option->getFileExtension() ?></strong>
+            </p>
+        <?php endif; ?>
+        <?php if ($_option->getImageSizeX() > 0): ?>
+            <p class="note">
+                <?php echo __('Maximum image width')?>: <strong><?php echo $_option->getImageSizeX() ?> <?php echo __('px.')?></strong>
+            </p>
+        <?php endif; ?>
+        <?php if ($_option->getImageSizeY() > 0): ?>
+            <p class="note">
+                <?php echo __('Maximum image height')?>: <strong><?php echo $_option->getImageSizeY() ?> <?php echo __('px.')?></strong>
+            </p>
+        <?php endif; ?>
+    </div>
+</div>

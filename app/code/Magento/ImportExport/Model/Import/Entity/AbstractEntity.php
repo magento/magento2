@@ -408,7 +408,7 @@ abstract class AbstractEntity
             $index = in_array($attribute->getAttributeCode(), $indexValAttrs) ? 'value' : 'label';
 
             // only default (admin) store values used
-            $attribute->setStoreId(\Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID);
+            $attribute->setStoreId(\Magento\Core\Model\Store::DEFAULT_STORE_ID);
 
             try {
                 foreach ($attribute->getSource()->getAllOptions(false) as $option) {

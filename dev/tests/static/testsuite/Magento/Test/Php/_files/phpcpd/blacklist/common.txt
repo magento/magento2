@@ -57,12 +57,16 @@ Magento/GiftMessage/Block/Adminhtml/Sales/Order
 Magento/ImportExport/Model
 Magento/Index/Model/Process
 Magento/Install/Block/Db
+Magento/Newsletter/Block/Adminhtml/Template/Preview
+Magento/Newsletter/Block/Adminhtml/Queue/Preview
 Magento/Payment/Block/Form
 Magento/Payment/Model/Method
 Magento/Payment/Model/Config
 Magento/ProductAlert/Model
 Magento/Rating/Model
+Magento/Reports/Block/Adminhtml
 Magento/Reports/Block/Product/Widget
+Magento/Reports/Controller/Adminhtml/Report
 Magento/Reports/Model/Resource/Helper
 Magento/Reports/Model/Resource
 Magento/Review/Block
@@ -74,6 +78,7 @@ Magento/Sales/Model/Quote/Address/Total
 Magento/Sales/Model/Resource/Report/Order
 Magento/SalesRule/Block/Adminhtml/Promo/Quote/Edit/Tab
 Magento/Shipping/Model/Carrier
+Magento/Sitemap/Block/Adminhtml/Edit
 Magento/CatalogRule/Model
 Magento/Tax/Block/Checkout
 Magento/Tax/Model/Sales/Pdf
@@ -100,5 +105,6 @@ Magento/Tax/Model/Sales/Total/Quote/Nominal
 Magento/Theme/Block/Adminhtml/System/Design/Theme/Edit
 Magento/User/Block/User/Edit
 var/generation
+Magento/Newsletter/Block/Adminhtml/Template/Grid/Renderer
 Magento/Newsletter/Model/Template/Filter
 

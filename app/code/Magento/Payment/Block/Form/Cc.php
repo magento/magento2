@@ -109,7 +109,7 @@ class Cc extends \Magento\Payment\Block\Form
     }
 
     /**
-     * Retrive has verification configuration
+     * Retrieve has verification configuration
      *
      * @return boolean
      */

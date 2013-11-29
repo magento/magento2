@@ -73,15 +73,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
+     * @magentoAppArea adminhtml
      */
     public function testCRUD()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->setCurrentStore(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\Core\Model\StoreManagerInterface')
-                    ->getStore(\Magento\Core\Model\AppInterface::ADMIN_STORE_ID)
-            );
         $this->_model->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
             ->setAttributeSetId(4)
             ->setName('Bundle Product')->setSku(uniqid())->setPrice(10)

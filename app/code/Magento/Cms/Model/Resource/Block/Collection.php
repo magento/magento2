@@ -74,7 +74,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         }
 
         if ($withAdmin) {
-            $store[] = \Magento\Core\Model\AppInterface::ADMIN_STORE_ID;
+            $store[] = \Magento\Core\Model\Store::DEFAULT_STORE_ID;
         }
 
         $this->addFilter('store', array('in' => $store), 'public');

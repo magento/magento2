@@ -18,7 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -27,19 +26,21 @@
     <div class="title"><strong>Newsletter</strong></div>
     <div class="content">
         <form action="<?php echo $this->getFormActionUrl() ?>" method="post" id="newsletter-validate-detail">
-            <div class="field newsletter">
-                <label class="label" for="newsletter"><?php echo __('Sign Up for Our Newsletter:') ?></label>
-                <div class="control">
-                    <input name="email" type="text" id="newsletter"
-                                  placeholder="<?php echo __('Enter your email address') ?>"
-                                  data-validate="{required:true, 'validate-email':true}"/>
+            <fieldset class="fieldset">
+                <div class="field newsletter">
+                    <label class="label" for="newsletter"><span><?php echo __('Sign Up for Our Newsletter:') ?></span></label>
+                    <div class="control">
+                        <input name="email" type="text" id="newsletter"
+                                      placeholder="<?php echo __('Enter your email address') ?>"
+                                      data-validate="{required:true, 'validate-email':true}"/>
+                    </div>
+                    <div class="actions">
+                        <button class="action subscribe" title="<?php echo __('Subscribe') ?>" type="submit">
+                            <span><?php echo __('Subscribe') ?></span>
+                        </button>
+                    </div>
                 </div>
-                <div class="actions">
-                    <button class="action subscribe" title="<?php echo __('Subscribe') ?>" type="submit">
-                        <span><?php echo __('Subscribe') ?></span>
-                    </button>
-                </div>
-            </div>
+            </fieldset>
         </form>
     </div>
 </div>

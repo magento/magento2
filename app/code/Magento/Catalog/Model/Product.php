@@ -206,6 +206,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel
     protected $_itemOptionFactory;
 
     /**
+     * @var \Magento\App\State
+     */
+    protected $_appState;
+
+    /**
      * Construct
      *
      * @param \Magento\Catalog\Model\Product\Url $url
@@ -273,6 +278,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel
         $this->_collectionFactory = $collectionFactory;
         $this->_urlModel = $url;
         $this->_linkInstance = $productLink;
+        $this->_appState = $context->getAppState();
         parent::__construct($storeManager, $context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -1911,7 +1917,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel
      */
     public function setOrigData($key=null, $data=null)
     {
-        if ($this->_storeManager->getStore()->isAdmin()) {
+        if ($this->_appState->getAreaCode() === \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE) {
             return parent::setOrigData($key, $data);
         }
 

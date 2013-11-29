@@ -37,7 +37,7 @@
         </block>
     </referenceBlock>
     <referenceBlock name="order_tab_info">
-        <block class="Magento\Adminhtml\Block\Template" name="popup_window" template="Magento_GiftMessage::popup.phtml">
+        <block class="Magento\Backend\Block\Template" name="popup_window" template="Magento_GiftMessage::popup.phtml">
             <block class="Magento\GiftMessage\Block\Adminhtml\Sales\Order\View\Form" name="gift_options_form" template="giftoptionsform.phtml"/>
         </block>
     </referenceBlock>

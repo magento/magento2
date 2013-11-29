@@ -914,7 +914,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
                 array())
             ->where('t1.entity_type_id = :entity_type_id')
             ->where('t1.attribute_id = :attribute_id')
-            ->where('t1.store_id = ?', \Magento\Core\Model\AppInterface::ADMIN_STORE_ID)
+            ->where('t1.store_id = ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID)
             ->where("{$fieldExpr} = ?", \Magento\Catalog\Model\Product\Status::STATUS_ENABLED);
         foreach ($this->getAttributes() as $attributeCode => $attribute) {
             /** @var $attribute \Magento\Eav\Model\Entity\Attribute */

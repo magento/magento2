@@ -43,15 +43,15 @@ class FrontNameResolver implements \Magento\App\Area\FrontNameResolverInterface
     protected $_defaultFrontName;
 
     /**
-     * @var \Magento\Core\Model\ConfigInterface
+     * @var \Magento\Backend\App\ConfigInterface
      */
     protected $_config;
 
     /**
-     * @param \Magento\Core\Model\ConfigInterface $config
+     * @param \Magento\Backend\App\Config $config
      * @param string $defaultFrontName
      */
-    public function __construct(\Magento\Core\Model\ConfigInterface $config, $defaultFrontName)
+    public function __construct(\Magento\Backend\App\Config $config, $defaultFrontName)
     {
         $this->_config = $config;
         $this->_defaultFrontName = $defaultFrontName;
@@ -64,9 +64,9 @@ class FrontNameResolver implements \Magento\App\Area\FrontNameResolverInterface
      */
     public function getFrontName()
     {
-        $isCustomPathUsed = (bool)(string)$this->_config->getValue(self::XML_PATH_USE_CUSTOM_ADMIN_PATH, 'default');
+        $isCustomPathUsed = (bool)(string)$this->_config->getValue(self::XML_PATH_USE_CUSTOM_ADMIN_PATH);
         if ($isCustomPathUsed) {
-            return (string)$this->_config->getValue(self::XML_PATH_CUSTOM_ADMIN_PATH, 'default');
+            return (string)$this->_config->getValue(self::XML_PATH_CUSTOM_ADMIN_PATH);
         }
         return $this->_defaultFrontName;
     }

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -27,12 +25,7 @@
 /**
  * Product description template
  *
- * @see \Magento\Catalog\Block\Product\View\Description
+ * @var $this \Magento\Catalog\Block\Product\View\Description
  */
 ?>
-<?php $_description = $this->getProduct()->getDescription(); ?>
-<?php if ($_description): ?>
-    <div class="std">
-        <?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($this->getProduct(), $_description, 'description') ?>
-    </div>
-<?php endif; ?>
+<?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($this->getProduct(), $this->getProduct()->getDescription(), 'description') ?>

@@ -34,7 +34,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Invoice\View;
 
-class Comments extends \Magento\Adminhtml\Block\Text\ListText
+class Comments extends \Magento\Backend\Block\Text\ListText
 {
     /**
      * Core registry

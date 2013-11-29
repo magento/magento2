@@ -129,7 +129,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      */
     public function getDefaultStoreId()
     {
-        return \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID;
+        return \Magento\Core\Model\Store::DEFAULT_STORE_ID;
     }
 
     /**

@@ -19,17 +19,16 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
 /**
- * @see \Magento\CatalogInventory\Block\Stockqty\DefaultStockqty
+ * @var $this \Magento\CatalogInventory\Block\Stockqty\DefaultStockqty
  */
 ?>
 <?php if($this->isMsgVisible()): ?>
-    <p class="availability-only">
-        <span title="<?php echo __('Only %1 left', ($this->getStockQty())) ?>"><?php echo __('Only %1 left', "<strong>{$this->getStockQty()}</strong>") ?></span>
-    </p>
+    <div class="availability only" title="<?php echo __('Only %1 left', ($this->getStockQty())) ?>">
+        <?php echo __('Only %1 left', "<strong>{$this->getStockQty()}</strong>") ?>
+    </div>
 <?php endif ?>

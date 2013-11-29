@@ -56,7 +56,7 @@ tinyMCEPopup = {
 		 * tinyMCEPopup.onInit.add(function(ed) {
 		 *     alert(ed.selection.getContent());
 		 * });
-		 * 
+		 *
 		 * // Executes the init method on page load in some object using the SomeObject scope
 		 * tinyMCEPopup.onInit.add(SomeObject.init, SomeObject);
 		 */
@@ -86,7 +86,7 @@ tinyMCEPopup = {
 	 * Returns a window argument/parameter by name.
 	 *
 	 * @method getWindowArg
-	 * @param {String} n Name of the window argument to retrive.
+	 * @param {String} n Name of the window argument to retrieve.
 	 * @param {String} dv Optional default value to return.
 	 * @return {String} Argument value or default value if it wasn't found.
 	 */
@@ -100,7 +100,7 @@ tinyMCEPopup = {
 	 * Returns a editor parameter/config option value.
 	 *
 	 * @method getParam
-	 * @param {String} n Name of the editor config option to retrive.
+	 * @param {String} n Name of the editor config option to retrieve.
 	 * @param {String} dv Optional default value to return.
 	 * @return {String} Parameter value or default value if it wasn't found.
 	 */
@@ -297,7 +297,7 @@ tinyMCEPopup = {
 			close();
 	},
 
-	// Internal functions	
+	// Internal functions
 
 	_restoreSelection : function() {
 		var e = window.event.srcElement;

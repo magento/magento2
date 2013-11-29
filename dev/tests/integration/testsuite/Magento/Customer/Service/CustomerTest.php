@@ -59,13 +59,9 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     {
         $previousStoreId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Core\Model\StoreManagerInterface')->getStore();
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->setCurrentStore(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\Core\Model\StoreManagerInterface')
-                    ->getStore(\Magento\Core\Model\AppInterface::ADMIN_STORE_ID)
-            );
         if ($this->_createdCustomer && $this->_createdCustomer->getId() > 0) {
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
+                ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
             $this->_createdCustomer->getAddressesCollection()->delete();
             $this->_createdCustomer->delete();
         }
@@ -123,7 +119,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 'password' => '123123q',
                 'default_billing' => null,
                 'default_shipping' => null,
-                'store_id' => \Magento\Core\Model\AppInterface::ADMIN_STORE_ID
+                'store_id' => \Magento\Core\Model\Store::DEFAULT_STORE_ID
             )),
             'Mandatory data' => array(array(
                 'firstname' => 'SomeName',
@@ -161,7 +157,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 'suffix' => null,
                 'email' => 'test' . mt_rand(1000, 9999) . '@mail.com',
                 'password' => '123123q',
-                'store_id' => \Magento\Core\Model\AppInterface::ADMIN_STORE_ID
+                'store_id' => \Magento\Core\Model\Store::DEFAULT_STORE_ID
             ), 'Magento\Validator\ValidatorException'),
             'Invalid email' => array(array(
                 'website_id' => 0,
@@ -173,7 +169,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 'suffix' => null,
                 'email' => '111@111',
                 'password' => '123123q',
-                'store_id' => \Magento\Core\Model\AppInterface::ADMIN_STORE_ID
+                'store_id' => \Magento\Core\Model\Store::DEFAULT_STORE_ID
             ), 'Magento\Validator\ValidatorException'),
             'Invalid password' => array(array(
                 'website_id' => 0,
@@ -185,7 +181,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 'suffix' => null,
                 'email' => 'test' . mt_rand(1000, 9999) . '@mail.com',
                 'password' => '123',
-                'store_id' => \Magento\Core\Model\AppInterface::ADMIN_STORE_ID
+                'store_id' => \Magento\Core\Model\Store::DEFAULT_STORE_ID
             ), 'Magento\Eav\Model\Entity\Attribute\Exception', 'The password must have at least 6 characters.')
         );
     }
@@ -364,7 +360,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 'email' => 'test' . mt_rand(1000, 9999) . '@mail.com',
                 'dob' => date('Y-m-d H:i:s'),
                 'gender' => 1,
-                'store_id' => \Magento\Core\Model\AppInterface::ADMIN_STORE_ID
+                'store_id' => \Magento\Core\Model\Store::DEFAULT_STORE_ID
             ))
         );
     }

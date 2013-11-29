@@ -654,7 +654,7 @@ class Zend_Db_Select
     }
 
     /**
-     * Get part of the structured information for the currect query.
+     * Get part of the structured information for the current query.
      *
      * @param string $part
      * @return mixed

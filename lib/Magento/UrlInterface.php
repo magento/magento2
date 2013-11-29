@@ -143,6 +143,13 @@ interface UrlInterface
     public function getBaseUrl($params = array());
 
     /**
+     * Retrieve current url with port number (if not default used)
+     *
+     * @return string
+     */
+    public function getCurrentUrl();
+
+    /**
      * Set Route Parameters
      *
      * @param array $data

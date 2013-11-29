@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Comments;
 
-class View extends \Magento\Adminhtml\Block\Template
+class View extends \Magento\Backend\Block\Template
 {
     /**
      * Sales data

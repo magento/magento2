@@ -32,11 +32,9 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testReviewAction()
     {
-        $this->markTestSkipped('There is a dependency that needs to be identified for this test');
         $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Sales\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
-        echo "Quote ID: {$quote->getId}\n";
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Checkout\Model\Session')
             ->setQuoteId($quote->getId());
 

@@ -67,7 +67,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $this->_model->setData(
             array(
                 'store_id'  => 1,
-                'design'    => 'magento_demo',
+                'design'    => 'magento_blank',
                 /* Note: in order to load a design change it should be active within the store's time zone */
                 'date_from' => date('Y-m-d', strtotime('-1 day')),
                 'date_to'   => date('Y-m-d', strtotime('+1 day')),
@@ -140,7 +140,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('design', $cachedDesign);
         $this->assertEquals($cachedDesign['design'], $design->getDesign());
 
-        $design->setDesign('magento_demo')->save();
+        $design->setDesign('magento_blank')->save();
 
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Core\Model\Design');

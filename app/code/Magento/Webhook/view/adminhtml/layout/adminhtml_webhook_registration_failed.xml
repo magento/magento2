@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <block class="Magento\Page\Block\Html" name="root" output="1" template="empty.phtml">
-        <block class="Magento\Adminhtml\Block\Page\Head" name="head" as="head" template="page/head.phtml">
+        <block class="Magento\Backend\Block\Page\Head" name="head" as="head" template="page/head.phtml">
             <block class="Magento\Page\Block\Html\Head\Css" name="mui-reset-css">
                 <arguments>
                     <argument name="file" xsi:type="string">mui/reset.css</argument>

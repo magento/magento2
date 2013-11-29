@@ -140,7 +140,7 @@ button.primary,
 .catalog-rule-promo-catalog-index .page-actions .add,
 .sales-rule-promo-quote-index .page-actions .add,
 .adminhtml-reminder-index .page-actions .add,
-.adminhtml-newsletter-template-index .page-actions .add,
+.newsletter-template-index .page-actions .add,
 .adminhtml-system-email-template-index .page-actions .add,
 .adminhtml-sitemap-index .page-actions .add,
 .adminhtml-googleshopping-types-index .page-actions .add,
@@ -272,9 +272,9 @@ button.primary:active,
 .adminhtml-reminder-index .page-actions .add:hover,
 .adminhtml-reminder-index .page-actions .add:focus,
 .adminhtml-reminder-index .page-actions .add:active,
-.adminhtml-newsletter-template-index .page-actions .add:hover,
-.adminhtml-newsletter-template-index .page-actions .add:focus,
-.adminhtml-newsletter-template-index .page-actions .add:active,
+.newsletter-template-index .page-actions .add:hover,
+.newsletter-template-index .page-actions .add:focus,
+.newsletter-template-index .page-actions .add:active,
 .adminhtml-system-email-template-index .page-actions .add:hover,
 .adminhtml-system-email-template-index .page-actions .add:focus,
 .adminhtml-system-email-template-index .page-actions .add:active,
@@ -409,7 +409,7 @@ button.primary:active,
 .catalog-rule-promo-catalog-index .page-actions .add:active,
 .sales-rule-promo-quote-index .page-actions .add:active,
 .adminhtml-reminder-index .page-actions .add:active,
-.adminhtml-newsletter-template-index .page-actions .add:active,
+.newsletter-template-index .page-actions .add:active,
 .adminhtml-system-email-template-index .page-actions .add:active,
 .adminhtml-sitemap-index .page-actions .add:active,
 .adminhtml-googleshopping-types-index .page-actions .add:active,
@@ -473,7 +473,7 @@ button.primary:visited,
 .catalog-rule-promo-catalog-index .page-actions .add:visited,
 .sales-rule-promo-quote-index .page-actions .add:visited,
 .adminhtml-reminder-index .page-actions .add:visited,
-.adminhtml-newsletter-template-index .page-actions .add:visited,
+.newsletter-template-index .page-actions .add:visited,
 .adminhtml-system-email-template-index .page-actions .add:visited,
 .adminhtml-sitemap-index .page-actions .add:visited,
 .adminhtml-googleshopping-types-index .page-actions .add:visited,
@@ -563,8 +563,8 @@ button.primary.disabled,
 .sales-rule-promo-quote-index .page-actions .add.disabled,
 .adminhtml-reminder-index .page-actions .add[disabled],
 .adminhtml-reminder-index .page-actions .add.disabled,
-.adminhtml-newsletter-template-index .page-actions .add[disabled],
-.adminhtml-newsletter-template-index .page-actions .add.disabled,
+.newsletter-template-index .page-actions .add[disabled],
+.newsletter-template-index .page-actions .add.disabled,
 .adminhtml-system-email-template-index .page-actions .add[disabled],
 .adminhtml-system-email-template-index .page-actions .add.disabled,
 .adminhtml-sitemap-index .page-actions .add[disabled],
@@ -743,10 +743,10 @@ button.primary.disabled:active,
 .adminhtml-reminder-index .page-actions .add.disabled:hover,
 .adminhtml-reminder-index .page-actions .add[disabled]:active,
 .adminhtml-reminder-index .page-actions .add.disabled:active,
-.adminhtml-newsletter-template-index .page-actions .add[disabled]:hover,
-.adminhtml-newsletter-template-index .page-actions .add.disabled:hover,
-.adminhtml-newsletter-template-index .page-actions .add[disabled]:active,
-.adminhtml-newsletter-template-index .page-actions .add.disabled:active,
+.newsletter-template-index .page-actions .add[disabled]:hover,
+.newsletter-template-index .page-actions .add.disabled:hover,
+.newsletter-template-index .page-actions .add[disabled]:active,
+.newsletter-template-index .page-actions .add.disabled:active,
 .adminhtml-system-email-template-index .page-actions .add[disabled]:hover,
 .adminhtml-system-email-template-index .page-actions .add.disabled:hover,
 .adminhtml-system-email-template-index .page-actions .add[disabled]:active,
@@ -910,7 +910,7 @@ button.primary,
 .catalog-rule-promo-catalog-index .page-actions .add,
 .sales-rule-promo-quote-index .page-actions .add,
 .adminhtml-reminder-index .page-actions .add,
-.adminhtml-newsletter-template-index .page-actions .add,
+.newsletter-template-index .page-actions .add,
 .adminhtml-system-email-template-index .page-actions .add,
 .adminhtml-sitemap-index .page-actions .add,
 .adminhtml-googleshopping-types-index .page-actions .add,
@@ -964,7 +964,7 @@ button.primary,
 .catalog-rule-promo-catalog-index .page-actions .add,
 .sales-rule-promo-quote-index .page-actions .add,
 .adminhtml-reminder-index .page-actions .add,
-.adminhtml-newsletter-template-index .page-actions .add,
+.newsletter-template-index .page-actions .add,
 .adminhtml-system-email-template-index .page-actions .add,
 .adminhtml-sitemap-index .page-actions .add,
 .adminhtml-googleshopping-types-index .page-actions .add,
@@ -1042,8 +1042,8 @@ button.primary:hover,
 .sales-rule-promo-quote-index .page-actions .add:hover,
 .adminhtml-reminder-index .page-actions .add:focus,
 .adminhtml-reminder-index .page-actions .add:hover,
-.adminhtml-newsletter-template-index .page-actions .add:focus,
-.adminhtml-newsletter-template-index .page-actions .add:hover,
+.newsletter-template-index .page-actions .add:focus,
+.newsletter-template-index .page-actions .add:hover,
 .adminhtml-system-email-template-index .page-actions .add:focus,
 .adminhtml-system-email-template-index .page-actions .add:hover,
 .adminhtml-sitemap-index .page-actions .add:focus,
@@ -1137,7 +1137,7 @@ button.primary:active,
 .catalog-rule-promo-catalog-index .page-actions .add:active,
 .sales-rule-promo-quote-index .page-actions .add:active,
 .adminhtml-reminder-index .page-actions .add:active,
-.adminhtml-newsletter-template-index .page-actions .add:active,
+.newsletter-template-index .page-actions .add:active,
 .adminhtml-system-email-template-index .page-actions .add:active,
 .adminhtml-sitemap-index .page-actions .add:active,
 .adminhtml-googleshopping-types-index .page-actions .add:active,
@@ -1196,7 +1196,7 @@ button.primary:visited,
 .catalog-rule-promo-catalog-index .page-actions .add:visited,
 .sales-rule-promo-quote-index .page-actions .add:visited,
 .adminhtml-reminder-index .page-actions .add:visited,
-.adminhtml-newsletter-template-index .page-actions .add:visited,
+.newsletter-template-index .page-actions .add:visited,
 .adminhtml-system-email-template-index .page-actions .add:visited,
 .adminhtml-sitemap-index .page-actions .add:visited,
 .adminhtml-googleshopping-types-index .page-actions .add:visited,
@@ -1310,10 +1310,10 @@ button.primary.disabled:active,
 .adminhtml-reminder-index .page-actions .add.disabled:hover,
 .adminhtml-reminder-index .page-actions .add[disabled]:active,
 .adminhtml-reminder-index .page-actions .add.disabled:active,
-.adminhtml-newsletter-template-index .page-actions .add[disabled]:hover,
-.adminhtml-newsletter-template-index .page-actions .add.disabled:hover,
-.adminhtml-newsletter-template-index .page-actions .add[disabled]:active,
-.adminhtml-newsletter-template-index .page-actions .add.disabled:active,
+.newsletter-template-index .page-actions .add[disabled]:hover,
+.newsletter-template-index .page-actions .add.disabled:hover,
+.newsletter-template-index .page-actions .add[disabled]:active,
+.newsletter-template-index .page-actions .add.disabled:active,
 .adminhtml-system-email-template-index .page-actions .add[disabled]:hover,
 .adminhtml-system-email-template-index .page-actions .add.disabled:hover,
 .adminhtml-system-email-template-index .page-actions .add[disabled]:active,
@@ -1469,7 +1469,7 @@ button.primary.disabled:active,
 .catalog-rule-promo-catalog-index .page-actions .add,
 .sales-rule-promo-quote-index .page-actions .add,
 .adminhtml-reminder-index .page-actions .add,
-.adminhtml-newsletter-template-index .page-actions .add,
+.newsletter-template-index .page-actions .add,
 .adminhtml-system-email-template-index .page-actions .add,
 .adminhtml-sitemap-index .page-actions .add,
 .adminhtml-googleshopping-types-index .page-actions .add,
@@ -1512,7 +1512,7 @@ button.primary.disabled:active,
 .catalog-rule-promo-catalog-index .page-actions .add,
 .sales-rule-promo-quote-index .page-actions .add,
 .adminhtml-reminder-index .page-actions .add,
-.adminhtml-newsletter-template-index .page-actions .add,
+.newsletter-template-index .page-actions .add,
 .adminhtml-system-email-template-index .page-actions .add,
 .adminhtml-sitemap-index .page-actions .add,
 .adminhtml-googleshopping-types-index .page-actions .add,
@@ -1563,7 +1563,7 @@ button.primary.disabled:active,
 .catalog-rule-promo-catalog-index .page-actions .add:focus,
 .sales-rule-promo-quote-index .page-actions .add:focus,
 .adminhtml-reminder-index .page-actions .add:focus,
-.adminhtml-newsletter-template-index .page-actions .add:focus,
+.newsletter-template-index .page-actions .add:focus,
 .adminhtml-system-email-template-index .page-actions .add:focus,
 .adminhtml-sitemap-index .page-actions .add:focus,
 .adminhtml-googleshopping-types-index .page-actions .add:focus,
@@ -1609,7 +1609,7 @@ button.primary.disabled:active,
 .catalog-rule-promo-catalog-index .page-actions .add > span,
 .sales-rule-promo-quote-index .page-actions .add > span,
 .adminhtml-reminder-index .page-actions .add > span,
-.adminhtml-newsletter-template-index .page-actions .add > span,
+.newsletter-template-index .page-actions .add > span,
 .adminhtml-system-email-template-index .page-actions .add > span,
 .adminhtml-sitemap-index .page-actions .add > span,
 .adminhtml-googleshopping-types-index .page-actions .add > span,
@@ -1658,7 +1658,7 @@ button.primary.disabled:active,
 .catalog-rule-promo-catalog-index .page-actions .add > span:before,
 .sales-rule-promo-quote-index .page-actions .add > span:before,
 .adminhtml-reminder-index .page-actions .add > span:before,
-.adminhtml-newsletter-template-index .page-actions .add > span:before,
+.newsletter-template-index .page-actions .add > span:before,
 .adminhtml-system-email-template-index .page-actions .add > span:before,
 .adminhtml-sitemap-index .page-actions .add > span:before,
 .adminhtml-googleshopping-types-index .page-actions .add > span:before,
@@ -1718,7 +1718,7 @@ button.primary.disabled:active,
 .eq-ie9 .catalog-rule-promo-catalog-index .page-actions .add > span:before,
 .eq-ie9 .sales-rule-promo-quote-index .page-actions .add > span:before,
 .eq-ie9 .adminhtml-reminder-index .page-actions .add > span:before,
-.eq-ie9 .adminhtml-newsletter-template-index .page-actions .add > span:before,
+.eq-ie9 .newsletter-template-index .page-actions .add > span:before,
 .eq-ie9 .adminhtml-system-email-template-index .page-actions .add > span:before,
 .eq-ie9 .adminhtml-sitemap-index .page-actions .add > span:before,
 .eq-ie9 .adminhtml-googleshopping-types-index .page-actions .add > span:before,
@@ -2092,11 +2092,11 @@ button.primary.disabled:active,
 [class^=" catalog-product-"] .page-actions .action-back:active,
 [class^=" catalog-product-"] .page-actions .action-back.active,
 [class^=" catalog-product-"] .page-actions .action-back[disabled],
-[class^=" adminhtml-newsletter-"] .page-actions .action-back,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back:hover,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back:active,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back.active,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back[disabled],
+[class^=" newsletter-"] .page-actions .action-back,
+[class^=" newsletter-"] .page-actions .action-back:hover,
+[class^=" newsletter-"] .page-actions .action-back:active,
+[class^=" newsletter-"] .page-actions .action-back.active,
+[class^=" newsletter-"] .page-actions .action-back[disabled],
 .notifications [class^="action-"],
 .notifications [class^="action-"]:hover,
 .notifications [class^="action-"]:active,
@@ -6667,7 +6667,7 @@ table .col-draggable .draggable-handle {
 .catalog-rule-promo-catalog-index .col-1-layout,
 .sales-rule-promo-quote-index .col-1-layout,
 .adminhtml-reminder-index .col-1-layout,
-.adminhtml-newsletter-template-index .col-1-layout,
+.newsletter-template-index .col-1-layout,
 .adminhtml-system-email-template-index .col-1-layout,
 .adminhtml-sitemap-index .col-1-layout,
 .adminhtml-googleshopping-types-index .col-1-layout,
@@ -6706,8 +6706,8 @@ table .col-draggable .draggable-handle {
 .sales-recurring-profile-index .col-1-layout,
 .adminhtml-googleshopping-items-index .col-1-layout,
 .customer-online-index .col-1-layout,
-.adminhtml-newsletter-queue-index .col-1-layout,
-.adminhtml-newsletter-subscriber-index .col-1-layout,
+.newsletter-queue-index .col-1-layout,
+.newsletter-subscriber-index .col-1-layout,
 .adminhtml-report-shopcart-product .col-1-layout,
 .adminhtml-report-shopcart-abandoned .adminhtml-report-product-downloads .col-1-layout,
 .adminhtml-report-product-sold .col-1-layout,
@@ -6720,7 +6720,7 @@ table .col-draggable .draggable-handle {
 .adminhtml-report-review-product .col-1-layout,
 .adminhtml-report-search .col-1-layout,
 .adminhtml-report-statistics-index .col-1-layout,
-.adminhtml-newsletter-problem-index .col-1-layout,
+.newsletter-problem-index .col-1-layout,
 .adminhtml-system-store-index .col-1-layout,
 .sales-order-status-index .col-1-layout,
 .adminhtml-system-currency-index .col-1-layout,
@@ -6751,7 +6751,7 @@ table .col-draggable .draggable-handle {
 .catalog-rule-promo-catalog-index .grid-actions,
 .sales-rule-promo-quote-index .grid-actions,
 .adminhtml-reminder-index .grid-actions,
-.adminhtml-newsletter-template-index .grid-actions,
+.newsletter-template-index .grid-actions,
 .adminhtml-system-email-template-index .grid-actions,
 .adminhtml-sitemap-index .grid-actions,
 .adminhtml-googleshopping-types-index .grid-actions,
@@ -6796,7 +6796,7 @@ table .col-draggable .draggable-handle {
 .catalog-rule-promo-catalog-index .page-actions.fixed,
 .sales-rule-promo-quote-index .page-actions.fixed,
 .adminhtml-reminder-index .page-actions.fixed,
-.adminhtml-newsletter-template-index .page-actions.fixed,
+.newsletter-template-index .page-actions.fixed,
 .adminhtml-system-email-template-index .page-actions.fixed,
 .adminhtml-sitemap-index .page-actions.fixed,
 .adminhtml-googleshopping-types-index .page-actions.fixed,
@@ -6842,7 +6842,7 @@ table .col-draggable .draggable-handle {
 .catalog-rule-promo-catalog-index .page-actions,
 .sales-rule-promo-quote-index .page-actions,
 .adminhtml-reminder-index .page-actions,
-.adminhtml-newsletter-template-index .page-actions,
+.newsletter-template-index .page-actions,
 .adminhtml-system-email-template-index .page-actions,
 .adminhtml-sitemap-index .page-actions,
 .adminhtml-googleshopping-types-index .page-actions,
@@ -7771,9 +7771,9 @@ table .col-draggable .draggable-handle {
 [class^=" catalog-product-"] .page-actions .action-back,
 [class^=" catalog-product-"] .page-actions .action-back:hover,
 [class^=" catalog-product-"] .page-actions .action-back:active,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back:hover,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back:active {
+[class^=" newsletter-"] .page-actions .action-back,
+[class^=" newsletter-"] .page-actions .action-back:hover,
+[class^=" newsletter-"] .page-actions .action-back:active {
   overflow: hidden;
   padding: 5px 6px 3px;
   margin-left: 12px;
@@ -7782,9 +7782,9 @@ table .col-draggable .draggable-handle {
 .eq-ie8 [class^=" catalog-product-"] .page-actions .action-back,
 .eq-ie8 [class^=" catalog-product-"] .page-actions .action-back:hover,
 .eq-ie8 [class^=" catalog-product-"] .page-actions .action-back:active,
-.eq-ie8 [class^=" adminhtml-newsletter-"] .page-actions .action-back,
-.eq-ie8 [class^=" adminhtml-newsletter-"] .page-actions .action-back:hover,
-.eq-ie8 [class^=" adminhtml-newsletter-"] .page-actions .action-back:active,
+.eq-ie8 [class^=" newsletter-"] .page-actions .action-back,
+.eq-ie8 [class^=" newsletter-"] .page-actions .action-back:hover,
+.eq-ie8 [class^=" newsletter-"] .page-actions .action-back:active,
 .sales-order-create-index .page-actions-inner .cancel,
 .sales-order-create-index .page-actions-inner .cancel:hover,
 .sales-order-create-index .page-actions-inner .cancel:active {
@@ -7792,16 +7792,16 @@ table .col-draggable .draggable-handle {
   border: 0;
 }
 [class^=" catalog-product-"] .page-actions .action-back:hover,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back:hover,
+[class^=" newsletter-"] .page-actions .action-back:hover,
 .sales-order-create-index .page-actions-inner .cancel:hover {
   color: #000;
 }
 [class^=" catalog-product-"] .page-actions .action-back.mage-error,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back.mage-error {
+[class^=" newsletter-"] .page-actions .action-back.mage-error {
   color: #b57c72;
 }
 [class^=" catalog-product-"] .page-actions .action-back:before,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back:before,
+[class^=" newsletter-"] .page-actions .action-back:before,
 .sales-order-create-index .page-actions-inner .cancel:before {
   display: inline-block;
   font-family: 'MUI-Icons';
@@ -7815,7 +7815,7 @@ table .col-draggable .draggable-handle {
   font-size: 16px;
 }
 [class^=" catalog-product-"] .page-actions .action-back span,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back span,
+[class^=" newsletter-"] .page-actions .action-back span,
 .sales-order-create-index .page-actions-inner .cancel span {
   display: inline-block;
   overflow: hidden;
@@ -8494,80 +8494,80 @@ table .col-draggable .draggable-handle {
 /*
     Newsletter
 -------------------------------------- */
-[class^=" adminhtml-newsletter-"] .page-actions .action-back {
+[class^=" newsletter-"] .page-actions .action-back {
   float: right;
 }
 /*
     Newsletter Templates
 -------------------------------------- */
-.adminhtml-newsletter-template-index .col-id {
+.newsletter-template-index .col-id {
   width: 35px;
 }
-.adminhtml-newsletter-template-index .col-actions {
+.newsletter-template-index .col-actions {
   width: 80px;
 }
-.adminhtml-newsletter-template-index .col-type {
+.newsletter-template-index .col-type {
   width: 100px;
 }
-.adminhtml-newsletter-template-index .col-added,
-.adminhtml-newsletter-template-index .col-updated {
+.newsletter-template-index .col-added,
+.newsletter-template-index .col-updated {
   width: 140px;
 }
-[class^=' adminhtml-newsletter-'] .buttons-set {
+[class^=' newsletter-'] .buttons-set {
   margin: 0 0 15px;
 }
-[class^=" adminhtml-newsletter-"] .buttons-set button {
+[class^=" newsletter-"] .buttons-set button {
   margin-right: 4px;
 }
 /*
     Newsletter - Queue
 -------------------------------------- */
-.adminhtml-newsletter-queue-index .col-id {
+.newsletter-queue-index .col-id {
   width: 35px;
 }
-.adminhtml-newsletter-queue-index .col-finish,
-.adminhtml-newsletter-queue-index .col-start {
+.newsletter-queue-index .col-finish,
+.newsletter-queue-index .col-start {
   width: 130px;
 }
-.adminhtml-newsletter-queue-index .col-status,
-.adminhtml-newsletter-queue-index .col-processed,
-.adminhtml-newsletter-queue-index .col-recipients {
+.newsletter-queue-index .col-status,
+.newsletter-queue-index .col-processed,
+.newsletter-queue-index .col-recipients {
   white-space: nowrap;
   width: 85px;
 }
-.adminhtml-newsletter-queue-index td.col-processed,
-.adminhtml-newsletter-queue-index td.col-recipients {
+.newsletter-queue-index td.col-processed,
+.newsletter-queue-index td.col-recipients {
   text-align: right;
 }
-.adminhtml-newsletter-queue-index .col-actions {
+.newsletter-queue-index .col-actions {
   width: 80px;
 }
 /*
     Newsletter - Subscribers
 -------------------------------------- */
-.adminhtml-newsletter-subscriber-index .col-id {
+.newsletter-subscriber-index .col-id {
   width: 35px;
 }
-.adminhtml-newsletter-subscriber-index .col-type {
+.newsletter-subscriber-index .col-type {
   width: 75px;
 }
-.adminhtml-newsletter-subscriber-index .col-status {
+.newsletter-subscriber-index .col-status {
   white-space: nowrap;
   width: 85px;
 }
 /*
     Newsletter - Problems
 -------------------------------------- */
-.adminhtml-newsletter-problem-index .col-select {
+.newsletter-problem-index .col-select {
   width: 25px;
 }
-.adminhtml-newsletter-problem-index .col-id {
+.newsletter-problem-index .col-id {
   width: 35px;
 }
-.adminhtml-newsletter-problem-index .col-start {
+.newsletter-problem-index .col-start {
   width: 130px;
 }
-.adminhtml-newsletter-problem-index .col-error-code {
+.newsletter-problem-index .col-error-code {
   width: 150px;
 }
 .table-fieldset-alt,

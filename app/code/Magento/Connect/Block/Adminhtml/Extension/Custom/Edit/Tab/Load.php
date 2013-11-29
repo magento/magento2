@@ -34,7 +34,7 @@
 namespace Magento\Connect\Block\Adminhtml\Extension\Custom\Edit\Tab;
 
 class Load
-    extends \Magento\Adminhtml\Block\Template
+    extends \Magento\Backend\Block\Template
 {
     /**
      * Retrieve Grid Block HTML

@@ -107,7 +107,7 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * Get html of invoice totlas block
+     * Get html of invoice totals block
      *
      * @param   \Magento\Sales\Model\Order\Invoice $invoice
      * @return  string

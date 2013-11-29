@@ -36,14 +36,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Helper\Url');
-    }
-
-    public function testGetCurrentUrl()
-    {
         $_SERVER['HTTP_HOST'] = 'example.com';
         $_SERVER['REQUEST_URI'] = '/fancy_uri';
-        $this->assertEquals('http://example.com/fancy_uri', $this->_helper->getCurrentUrl());
+        $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Helper\Url');
     }
 
     public function testGetCurrentBase64Url()

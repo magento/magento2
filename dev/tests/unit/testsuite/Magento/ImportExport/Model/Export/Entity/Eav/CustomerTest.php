@@ -41,8 +41,8 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_websites = array(
-        \Magento\Core\Model\AppInterface::ADMIN_STORE_ID => 'admin',
-        1                                            => 'website1',
+        \Magento\Core\Model\Store::DEFAULT_STORE_ID  => 'admin',
+        1                                                       => 'website1',
     );
 
     /**
@@ -168,7 +168,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             unset($websites[0]);
         }
         foreach ($this->_websites as $id => $code) {
-            if (!$withDefault && $id == \Magento\Core\Model\AppInterface::ADMIN_STORE_ID) {
+            if (!$withDefault && $id == \Magento\Core\Model\Store::DEFAULT_STORE_ID) {
                 continue;
             }
             $websiteData = array(

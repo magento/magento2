@@ -235,7 +235,7 @@ class Createdat extends \Magento\Sales\Model\Resource\Report\AbstractReport
                 $columns[$k] = new \Zend_Db_Expr('SUM(' . $k . ')');
             }
             $columns['period']         = 'period';
-            $columns['store_id']       = new \Zend_Db_Expr(\Magento\Core\Model\AppInterface::ADMIN_STORE_ID);
+            $columns['store_id']       = new \Zend_Db_Expr(\Magento\Core\Model\Store::DEFAULT_STORE_ID);
             $columns['order_status']   = 'order_status';
 
             $select->reset();

@@ -645,7 +645,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * Return chilgren items of this item
+     * Return children items of this item
      *
      * @return array
      */

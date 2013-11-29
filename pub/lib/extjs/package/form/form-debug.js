@@ -2,7 +2,7 @@
  * Ext JS Library 1.1 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
- * 
+ *
  * http://www.extjs.com/license
  */
 
@@ -12,30 +12,30 @@ Ext.form.Field = function(config){
 };
 
 Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
-    
+
     invalidClass : "x-form-invalid",
-    
+
     invalidText : "The value in this field is invalid",
-    
+
     focusClass : "x-form-focus",
-    
+
     validationEvent : "keyup",
-    
+
     validateOnBlur : true,
-    
+
     validationDelay : 250,
-    
+
     defaultAutoCreate : {tag: "input", type: "text", size: "20", autocomplete: "off"},
-    
+
     fieldClass: "x-form-field",
-    
+
     msgTarget: 'qtip',
-    
+
     msgFx : 'normal',
 
-    
-    
-    
+
+
+
     inputType : undefined,
 
     // private
@@ -44,34 +44,34 @@ Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
     // private
     hasFocus : false,
 
-    
+
     value : undefined,
 
 
     initComponent : function(){
         Ext.form.Field.superclass.initComponent.call(this);
         this.addEvents({
-            
+
             focus : true,
-            
+
             blur : true,
-            
+
             specialkey : true,
-            
+
             change : true,
-            
+
             invalid : true,
-            
+
             valid : true
         });
     },
 
-    
+
     getName: function(){
          return this.rendered && this.el.dom.name ? this.el.dom.name : (this.hiddenName || '');
     },
 
-    
+
     applyTo : function(target){
         this.allowDomMove = false;
         this.el = Ext.get(target);
@@ -119,7 +119,7 @@ Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
         }
     },
 
-    
+
     isDirty : function() {
         if(this.disabled) {
             return false;
@@ -140,7 +140,7 @@ Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
         }
     },
 
-    
+
     reset : function(){
         this.setValue(this.originalValue);
         this.clearInvalid();
@@ -180,7 +180,7 @@ Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
         this.fireEvent("blur", this);
     },
 
-    
+
     isValid : function(preventMark){
         if(this.disabled){
             return true;
@@ -192,7 +192,7 @@ Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
         return v;
     },
 
-    
+
     validate : function(){
         if(this.disabled || this.validateValue(this.getRawValue())){
             this.clearInvalid();
@@ -207,7 +207,7 @@ Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
         return true;
     },
 
-    
+
     markInvalid : function(msg){
         if(!this.rendered || this.preventMark){ // not rendered
             return;
@@ -255,7 +255,7 @@ Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
         this.errorIcon.alignTo(this.el, 'tl-tr', [2, 0]);
     },
 
-    
+
     clearInvalid : function(){
         if(!this.rendered || this.preventMark){ // not rendered
             return;
@@ -288,12 +288,12 @@ Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
         this.fireEvent('valid', this);
     },
 
-    
+
     getRawValue : function(){
         return this.el.getValue();
     },
 
-    
+
     getValue : function(){
         var v = this.el.getValue();
         if(v == this.emptyText || v === undefined){
@@ -302,12 +302,12 @@ Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
         return v;
     },
 
-    
+
     setRawValue : function(v){
         return this.el.dom.value = (v === null || v === undefined ? '' : v);
     },
 
-    
+
     setValue : function(v){
         this.value = v;
         if(this.rendered){
@@ -387,47 +387,47 @@ Ext.form.Field.msgFx = {
 Ext.form.TextField = function(config){
     Ext.form.TextField.superclass.constructor.call(this, config);
     this.addEvents({
-        
+
         autosize : true
     });
 };
 
 Ext.extend(Ext.form.TextField, Ext.form.Field,  {
-    
+
     grow : false,
-    
+
     growMin : 30,
-    
+
     growMax : 800,
-    
+
     vtype : null,
-    
+
     maskRe : null,
-    
+
     disableKeyFilter : false,
-    
+
     allowBlank : true,
-    
+
     minLength : 0,
-    
+
     maxLength : Number.MAX_VALUE,
-    
+
     minLengthText : "The minimum length for this field is {0}",
-    
+
     maxLengthText : "The maximum length for this field is {0}",
-    
+
     selectOnFocus : false,
-    
+
     blankText : "This field is required",
-    
+
     validator : null,
-    
+
     regex : null,
-    
+
     regexText : "",
-    
+
     emptyText : null,
-    
+
     emptyClass : 'x-form-empty-field',
 
     // private
@@ -469,7 +469,7 @@ Ext.extend(Ext.form.TextField, Ext.form.Field,  {
         }
     },
 
-    
+
     reset : function(){
         Ext.form.TextField.superclass.reset.call(this);
         this.applyEmptyText();
@@ -522,7 +522,7 @@ Ext.extend(Ext.form.TextField, Ext.form.Field,  {
         Ext.form.TextField.superclass.setValue.apply(this, arguments);
     },
 
-    
+
     validateValue : function(value){
         if(value.length < 1 || value === this.emptyText){ // if it's blank
              if(this.allowBlank){
@@ -562,7 +562,7 @@ Ext.extend(Ext.form.TextField, Ext.form.Field,  {
         return true;
     },
 
-    
+
     selectText : function(start, end){
         var v = this.getRawValue();
         if(v.length > 0){
@@ -580,7 +580,7 @@ Ext.extend(Ext.form.TextField, Ext.form.Field,  {
         }
     },
 
-    
+
     autoSize : function(){
         if(!this.grow || !this.rendered){
             return;
@@ -604,17 +604,17 @@ Ext.form.TriggerField = function(config){
 };
 
 Ext.extend(Ext.form.TriggerField, Ext.form.TextField,  {
-    
+
     // private
     defaultAutoCreate : {tag: "input", type: "text", size: "16", autocomplete: "off"},
-    
+
     hideTrigger:false,
 
-    
-    
-    
 
-    
+
+
+
+
     autoSize: Ext.emptyFn,
 
     monitorTab : true,
@@ -720,10 +720,10 @@ Ext.extend(Ext.form.TriggerField, Ext.form.TextField,  {
         Ext.form.TriggerField.superclass.onBlur.call(this);
     },
 
-    beforeBlur : Ext.emptyFn, 
+    beforeBlur : Ext.emptyFn,
 
     // private
-    // This should be overriden by any subclass that needs to check whether or not the field can be blurred.
+    // This should be overridden by any subclass that needs to check whether or not the field can be blurred.
     validateBlur : function(e, t){
         return true;
     },
@@ -755,7 +755,7 @@ Ext.extend(Ext.form.TriggerField, Ext.form.TextField,  {
         this.wrap.dom.style.display = 'none';
     },
 
-    
+
     onTriggerClick : Ext.emptyFn
 });
 
@@ -819,11 +819,11 @@ Ext.form.TextArea = function(config){
 };
 
 Ext.extend(Ext.form.TextArea, Ext.form.TextField,  {
-    
+
     growMin : 60,
-    
+
     growMax: 1000,
-    
+
     preventScrollbars: false,
 
     // private
@@ -861,7 +861,7 @@ Ext.extend(Ext.form.TextArea, Ext.form.TextField,  {
         }
     },
 
-    
+
     autoSize : function(){
         if(!this.grow || !this.textSizeEl){
             return;
@@ -899,25 +899,25 @@ Ext.form.NumberField = function(config){
 };
 
 Ext.extend(Ext.form.NumberField, Ext.form.TextField,  {
-    
+
     fieldClass: "x-form-field x-form-num-field",
-    
+
     allowDecimals : true,
-    
+
     decimalSeparator : ".",
-    
+
     decimalPrecision : 2,
-    
+
     allowNegative : true,
-    
+
     minValue : Number.NEGATIVE_INFINITY,
-    
+
     maxValue : Number.MAX_VALUE,
-    
+
     minText : "The minimum value for this field is {0}",
-    
+
     maxText : "The maximum value for this field is {0}",
-    
+
     nanText : "{0} is not a valid number",
 
     // private
@@ -1013,31 +1013,31 @@ Ext.form.DateField = function(config){
 };
 
 Ext.extend(Ext.form.DateField, Ext.form.TriggerField,  {
-    
+
     format : "m/d/y",
-    
+
     altFormats : "m/d/Y|m-d-y|m-d-Y|m/d|m-d|md|mdy|mdY|d",
-    
+
     disabledDays : null,
-    
+
     disabledDaysText : "Disabled",
-    
+
     disabledDates : null,
-    
+
     disabledDatesText : "Disabled",
-    
+
     minValue : null,
-    
+
     maxValue : null,
-    
+
     minText : "The date in this field must be after {0}",
-    
+
     maxText : "The date in this field must be before {0}",
-    
+
     invalidText : "{0} is not a valid date - it must be in the format {1}",
-    
+
     triggerClass : 'x-form-date-trigger',
-    
+
 
     // private
     defaultAutoCreate : {tag: "input", type: "text", size: "10", autocomplete: "off"},
@@ -1089,12 +1089,12 @@ Ext.extend(Ext.form.DateField, Ext.form.TriggerField,  {
         return !this.menu || !this.menu.isVisible();
     },
 
-    
+
     getValue : function(){
         return this.parseDate(Ext.form.DateField.superclass.getValue.call(this)) || "";
     },
 
-    
+
     setValue : function(date){
         Ext.form.DateField.superclass.setValue.call(this, this.formatDate(this.parseDate(date)));
     },
@@ -1177,24 +1177,24 @@ Ext.extend(Ext.form.DateField, Ext.form.TriggerField,  {
 Ext.form.Checkbox = function(config){
     Ext.form.Checkbox.superclass.constructor.call(this, config);
     this.addEvents({
-        
+
         check : true
     });
 };
 
 Ext.extend(Ext.form.Checkbox, Ext.form.Field,  {
-    
+
     focusClass : "x-form-check-focus",
-    
+
     fieldClass: "x-form-field",
-    
+
     checked: false,
 
     // private
     defaultAutoCreate : { tag: "input", type: 'checkbox', autocomplete: "off"},
-    
+
     boxLabel : undefined,
-    
+
     //
     onResize : function(){
         Ext.form.Checkbox.superclass.onResize.apply(this, arguments);
@@ -1209,7 +1209,7 @@ Ext.extend(Ext.form.Checkbox, Ext.form.Field,  {
         this.el.on("change", this.onClick,  this);
     },
 
-    
+
     getResizeEl : function(){
         return this.wrap;
     },
@@ -1236,7 +1236,7 @@ Ext.extend(Ext.form.Checkbox, Ext.form.Field,  {
     // private
     initValue : Ext.emptyFn,
 
-    
+
     getValue : function(){
         if(this.rendered){
             return this.el.dom.checked;
@@ -1250,7 +1250,7 @@ Ext.extend(Ext.form.Checkbox, Ext.form.Field,  {
         }
     },
 
-    
+
     setValue : function(v){
         this.checked = (v === true || v === 'true' || v == '1');
         if(this.el && this.el.dom){
@@ -1266,7 +1266,7 @@ Ext.form.Radio = function(){
 Ext.extend(Ext.form.Radio, Ext.form.Checkbox, {
     inputType: 'radio',
 
-    
+
     getGroupValue : function(){
         return this.el.up('form').child('input[name='+this.el.dom.name+']:checked', true).value;
     }
@@ -1275,15 +1275,15 @@ Ext.extend(Ext.form.Radio, Ext.form.Checkbox, {
 Ext.form.ComboBox = function(config){
     Ext.form.ComboBox.superclass.constructor.call(this, config);
     this.addEvents({
-        
+
         'expand' : true,
-        
+
         'collapse' : true,
-        
+
         'beforeselect' : true,
-        
+
         'select' : true,
-        
+
         'beforequery': true
     });
     if(this.transform){
@@ -1333,65 +1333,65 @@ Ext.form.ComboBox = function(config){
 };
 
 Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
-    
-    
-    
+
+
+
 
     // private
     defaultAutoCreate : {tag: "input", type: "text", size: "24", autocomplete: "off"},
-    
+
     listWidth: undefined,
-    
+
     displayField: undefined,
-    
+
     valueField: undefined,
-    
+
     hiddenName: undefined,
-    
+
     listClass: '',
-    
+
     selectedClass: 'x-combo-selected',
-    
+
     triggerClass : 'x-form-arrow-trigger',
-    
+
     shadow:'sides',
-    
+
     listAlign: 'tl-bl?',
-    
+
     maxHeight: 300,
-    
+
     triggerAction: 'query',
-    
+
     minChars : 4,
-    
+
     typeAhead: false,
-    
+
     queryDelay: 500,
-    
+
     pageSize: 0,
-    
+
     selectOnFocus:false,
-    
+
     queryParam: 'query',
-    
+
     loadingText: 'Loading...',
-    
+
     resizable: false,
-    
+
     handleHeight : 8,
-    
+
     editable: true,
-    
+
     allQuery: '',
-    
+
     mode: 'remote',
-    
+
     minListWidth : 70,
-    
+
     forceSelection:false,
-    
+
     typeAheadDelay : 250,
-    
+
     valueNotFoundText : undefined,
 
     // private
@@ -1561,7 +1561,7 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
         }
     },
 
-    
+
     setEditable : function(value){
         if(value == this.editable){
             return;
@@ -1639,7 +1639,7 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
         }
     },
 
-    
+
     getValue : function(){
         if(this.valueField){
             return typeof this.value != 'undefined' ? this.value : '';
@@ -1648,7 +1648,7 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
         }
     },
 
-    
+
     clearValue : function(){
         if(this.hiddenField){
             this.hiddenField.value = '';
@@ -1657,7 +1657,7 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
         this.lastSelectionText = '';
     },
 
-    
+
     setValue : function(v){
         var text = v;
         if(this.valueField){
@@ -1736,12 +1736,12 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
         this.collapse();
     },
 
-    
+
     isExpanded : function(){
         return this.list.isVisible();
     },
 
-    
+
     selectByValue : function(v, scrollIntoView){
         if(v !== undefined && v !== null){
             var r = this.findRecord(this.valueField || this.displayField, v);
@@ -1753,7 +1753,7 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
         return false;
     },
 
-    
+
     select : function(index, scrollIntoView){
         this.selectedIndex = index;
         this.view.select(index);
@@ -1799,7 +1799,7 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
 
     // private
     validateBlur : function(){
-        return !this.list || !this.list.isVisible();   
+        return !this.list || !this.list.isVisible();
     },
 
     // private
@@ -1816,7 +1816,7 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
         }
     },
 
-    
+
     doQuery : function(q, forceAll){
         if(q === undefined || q === null){
             q = '';
@@ -1852,7 +1852,7 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
                 }
             }else{
                 this.selectedIndex = -1;
-                this.onLoad();   
+                this.onLoad();
             }
         }
     },
@@ -1868,7 +1868,7 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
         return p;
     },
 
-    
+
     collapse : function(){
         if(!this.isExpanded()){
             return;
@@ -1885,7 +1885,7 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
         }
     },
 
-    
+
     expand : function(){
         if(this.isExpanded() || !this.hasFocus){
             return;
@@ -1921,31 +1921,31 @@ Ext.Editor = function(field, config){
     Ext.Editor.superclass.constructor.call(this, config);
     this.field = field;
     this.addEvents({
-        
+
         "beforestartedit" : true,
-        
+
         "startedit" : true,
-        
+
         "beforecomplete" : true,
-        
+
         "complete" : true,
-        
+
         "specialkey" : true
     });
 };
 
 Ext.extend(Ext.Editor, Ext.Component, {
-    
-    
-    
-    
-    
+
+
+
+
+
     value : "",
-    
+
     alignment: "c-c?",
-    
+
     shadow : "frame",
-    
+
     constrain : false,
 
     // private
@@ -2013,7 +2013,7 @@ Ext.extend(Ext.Editor, Ext.Component, {
         this.show();
     },
 
-    
+
     setSize : function(w, h){
         this.field.setSize(w, h);
         if(this.el){
@@ -2021,12 +2021,12 @@ Ext.extend(Ext.Editor, Ext.Component, {
         }
     },
 
-    
+
     realign : function(){
         this.el.alignTo(this.boundEl, this.alignment);
     },
 
-    
+
     completeEdit : function(remainVisible){
         if(!this.editing){
             return;
@@ -2075,7 +2075,7 @@ Ext.extend(Ext.Editor, Ext.Component, {
         }
     },
 
-    
+
     cancelEdit : function(remainVisible){
         if(this.editing){
             this.setValue(this.startValue);
@@ -2111,12 +2111,12 @@ Ext.extend(Ext.Editor, Ext.Component, {
         }
     },
 
-    
+
     setValue : function(v){
         this.field.setValue(v);
     },
 
-    
+
     getValue : function(){
         return this.field.getValue();
     }
@@ -2124,16 +2124,16 @@ Ext.extend(Ext.Editor, Ext.Component, {
 
 Ext.form.BasicForm = function(el, config){
     Ext.apply(this, config);
-    
+
     this.items = new Ext.util.MixedCollection(false, function(o){
         return o.id || (o.id = Ext.id());
     });
     this.addEvents({
-        
+
         beforeaction: true,
-        
+
         actionfailed : true,
-        
+
         actioncomplete : true
     });
     if(el){
@@ -2143,22 +2143,22 @@ Ext.form.BasicForm = function(el, config){
 };
 
 Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     timeout: 30,
 
     // private
     activeAction : null,
 
-    
+
     trackResetOnLoad : false,
 
-    
+
     waitMsgTarget : undefined,
 
     // private
@@ -2174,7 +2174,7 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         e.stopEvent();
     },
 
-    
+
     isValid : function(){
         var valid = true;
         this.items.each(function(f){
@@ -2185,7 +2185,7 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         return valid;
     },
 
-    
+
     isDirty : function(){
         var dirty = false;
         this.items.each(function(f){
@@ -2197,7 +2197,7 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         return dirty;
     },
 
-    
+
     doAction : function(action, options){
         if(typeof action == 'string'){
             action = new Ext.form.Action.ACTION_TYPES[action](this, options);
@@ -2209,19 +2209,19 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         return this;
     },
 
-    
+
     submit : function(options){
         this.doAction('submit', options);
         return this;
     },
 
-    
+
     load : function(options){
         this.doAction('load', options);
         return this;
     },
 
-    
+
     updateRecord : function(record){
         record.beginEdit();
         var fs = record.fields;
@@ -2235,7 +2235,7 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         return this;
     },
 
-    
+
     loadRecord : function(record){
         this.setValues(record.data);
         return this;
@@ -2282,7 +2282,7 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         }
     },
 
-    
+
     findField : function(id){
         var field = this.items.get(id);
         if(!field){
@@ -2297,7 +2297,7 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
     },
 
 
-    
+
     markInvalid : function(errors){
         if(errors instanceof Array){
             for(var i = 0, len = errors.length; i < len; i++){
@@ -2318,7 +2318,7 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         return this;
     },
 
-    
+
     setValues : function(values){
         if(values instanceof Array){ // array of objects
             for(var i = 0, len = values.length; i < len; i++){
@@ -2345,7 +2345,7 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         return this;
     },
 
-    
+
     getValues : function(asString){
         var fs = Ext.lib.Ajax.serializeForm(this.el.dom);
         if(asString === true){
@@ -2354,7 +2354,7 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         return Ext.urlDecode(fs);
     },
 
-    
+
     clearInvalid : function(){
         this.items.each(function(f){
            f.clearInvalid();
@@ -2362,7 +2362,7 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         return this;
     },
 
-    
+
     reset : function(){
         this.items.each(function(f){
             f.reset();
@@ -2370,20 +2370,20 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         return this;
     },
 
-    
+
     add : function(){
         this.items.addAll(Array.prototype.slice.call(arguments, 0));
         return this;
     },
 
 
-    
+
     remove : function(field){
         this.items.remove(field);
         return this;
     },
 
-    
+
     render : function(){
         this.items.each(function(f){
             if(f.isFormField && !f.rendered && document.getElementById(f.id)){ // if the element exists
@@ -2393,7 +2393,7 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         return this;
     },
 
-    
+
     applyToFields : function(o){
         this.items.each(function(f){
            Ext.apply(f, o);
@@ -2401,7 +2401,7 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         return this;
     },
 
-    
+
     applyIfToFields : function(o){
         this.items.each(function(f){
            Ext.applyIf(f, o);
@@ -2422,33 +2422,33 @@ Ext.form.Form = function(config){
         }, config));
     }
     this.active = this.root;
-    
+
     this.buttons = [];
     this.addEvents({
-        
+
         clientvalidation: true
     });
 };
 
 Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
-    
-    
-    
+
+
+
     buttonAlign:'center',
 
-    
+
     minButtonWidth:75,
 
-    
+
     labelAlign:'left',
 
-    
+
     monitorValid : false,
 
-    
+
     monitorPoll : 200,
 
-    
+
     column : function(c){
         var col = new Ext.form.Column(c);
         this.start(col);
@@ -2459,7 +2459,7 @@ Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
         return col;
     },
 
-    
+
     fieldset : function(c){
         var fs = new Ext.form.FieldSet(c);
         this.start(fs);
@@ -2470,7 +2470,7 @@ Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
         return fs;
     },
 
-    
+
     container : function(c){
         var l = new Ext.form.Layout(c);
         this.start(l);
@@ -2481,7 +2481,7 @@ Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
         return l;
     },
 
-    
+
     start : function(c){
         // cascade label info
         Ext.applyIf(c, {'labelAlign': this.active.labelAlign, 'labelWidth': this.active.labelWidth, 'itemCls': this.active.itemCls});
@@ -2491,7 +2491,7 @@ Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
         return this;
     },
 
-    
+
     end : function(){
         if(this.active == this.root){
             return this;
@@ -2500,7 +2500,7 @@ Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
         return this;
     },
 
-    
+
     add : function(){
         this.active.stack.push.apply(this.active.stack, arguments);
         var r = [];
@@ -2515,7 +2515,7 @@ Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
         return this;
     },
 
-    
+
     render : function(ct){
         ct = Ext.get(ct);
         var o = this.autoCreate || {
@@ -2551,7 +2551,7 @@ Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
         return this;
     },
 
-    
+
     addButton : function(config, handler, scope){
         var bc = {
             handler: handler,
@@ -2569,7 +2569,7 @@ Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
         return btn;
     },
 
-    
+
     startMonitoring : function(){
         if(!this.bound){
             this.bound = true;
@@ -2581,7 +2581,7 @@ Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
         }
     },
 
-    
+
     stopMonitoring : function(){
         this.bound = false;
     },
@@ -2815,15 +2815,15 @@ Ext.form.Layout = function(config){
 };
 
 Ext.extend(Ext.form.Layout, Ext.Component, {
-    
-    
-    
-    
-    
+
+
+
+
+
     clear : true,
-    
+
     labelSeparator : ':',
-    
+
     hideLabels : false,
 
     // private
@@ -2907,8 +2907,8 @@ Ext.form.Column = function(config){
 };
 
 Ext.extend(Ext.form.Column, Ext.form.Layout, {
-    
-    
+
+
 
     // private
     defaultAutoCreate : {tag: 'div', cls: 'x-form-ct x-form-column'},
@@ -2928,8 +2928,8 @@ Ext.form.FieldSet = function(config){
 };
 
 Ext.extend(Ext.form.FieldSet, Ext.form.Layout, {
-    
-    
+
+
 
     // private
     defaultAutoCreate : {tag: 'fieldset', cn: {tag:'legend'}},
@@ -2959,38 +2959,38 @@ Ext.form.VTypes = function(){
 
     // All these messages and functions are configurable
     return {
-        
+
         'email' : function(v){
             return email.test(v);
         },
-        
+
         'emailText' : 'This field should be an e-mail address in the format "user@domain.com"',
-        
+
         'emailMask' : /[a-z0-9_\.\-@]/i,
 
-        
+
         'url' : function(v){
             return url.test(v);
         },
-        
+
         'urlText' : 'This field should be a URL in the format "http:/'+'/www.domain.com"',
-        
-        
+
+
         'alpha' : function(v){
             return alpha.test(v);
         },
-        
+
         'alphaText' : 'This field should only contain letters and _',
-        
+
         'alphaMask' : /[a-z_]/i,
 
-        
+
         'alphanum' : function(v){
             return alphanum.test(v);
         },
-        
+
         'alphanumText' : 'This field should only contain letters, numbers and _',
-        
+
         'alphanumMask' : /[a-z0-9_]/i
     };
 }();

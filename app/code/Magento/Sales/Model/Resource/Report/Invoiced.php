@@ -149,7 +149,7 @@ class Invoiced extends \Magento\Sales\Model\Resource\Report\AbstractReport
 
             $columns = array(
                 'period'                => 'period',
-                'store_id'              => new \Zend_Db_Expr(\Magento\Core\Model\AppInterface::ADMIN_STORE_ID),
+                'store_id'              => new \Zend_Db_Expr(\Magento\Core\Model\Store::DEFAULT_STORE_ID),
                 'order_status'          => 'order_status',
                 'orders_count'          => new \Zend_Db_Expr('SUM(orders_count)'),
                 'orders_invoiced'       => new \Zend_Db_Expr('SUM(orders_invoiced)'),
@@ -158,7 +158,8 @@ class Invoiced extends \Magento\Sales\Model\Resource\Report\AbstractReport
                 'invoiced_not_captured' => new \Zend_Db_Expr('SUM(invoiced_not_captured)')
             );
 
-            $select->from($table, $columns)->where('store_id <> ?', 0);
+            $select->from($table, $columns)
+                ->where('store_id <> ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID);
 
             if ($subSelect !== null) {
                 $select->where($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));
@@ -251,7 +252,7 @@ class Invoiced extends \Magento\Sales\Model\Resource\Report\AbstractReport
 
         $columns = array(
             'period'                => 'period',
-            'store_id'              => new \Zend_Db_Expr(\Magento\Core\Model\AppInterface::ADMIN_STORE_ID),
+            'store_id'              => new \Zend_Db_Expr(\Magento\Core\Model\Store::DEFAULT_STORE_ID),
             'order_status'          => 'order_status',
             'orders_count'          => new \Zend_Db_Expr('SUM(orders_count)'),
             'orders_invoiced'       => new \Zend_Db_Expr('SUM(orders_invoiced)'),
@@ -260,7 +261,7 @@ class Invoiced extends \Magento\Sales\Model\Resource\Report\AbstractReport
             'invoiced_not_captured' => new \Zend_Db_Expr('SUM(invoiced_not_captured)')
         );
 
-        $select->from($table, $columns)->where('store_id <> ?', 0);
+        $select->from($table, $columns)->where('store_id <> ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID);
 
         if ($subSelect !== null) {
             $select->where($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));

@@ -791,7 +791,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
 
     /**
      * Run each time after applying of all updates,
-     * if setup model setted  $_callAfterApplyAllUpdates flag to true
+     * if setup model setted $_callAfterApplyAllUpdates flag to true
      *
      * @return \Magento\Core\Model\Resource\Setup
      */

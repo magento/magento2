@@ -51,12 +51,12 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsSecure()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->setConfig('web/secure/use_in_adminhtml', true);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\App\ConfigInterface')
+            ->setValue('web/secure/use_in_adminhtml', true);
         $this->assertTrue($this->_model->isSecure());
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->setConfig('web/secure/use_in_adminhtml', false);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\App\ConfigInterface')
+            ->setValue('web/secure/use_in_adminhtml', false);
         $this->assertFalse($this->_model->isSecure());
 
         $this->_model->setData('secure_is_forced', true);

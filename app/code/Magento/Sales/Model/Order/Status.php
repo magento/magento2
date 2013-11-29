@@ -131,13 +131,12 @@ class Status extends \Magento\Core\Model\AbstractModel
     public function getStoreLabel($store = null)
     {
         $store = $this->_storeManager->getStore($store);
-        if (!$store->isAdmin()) {
-            $labels = $this->getStoreLabels();
-            if (isset($labels[$store->getId()])) {
-                return $labels[$store->getId()];
-            }
+        $labels = $this->getStoreLabels();
+        if (isset($labels[$store->getId()])) {
+            return $labels[$store->getId()];
+        } else {
+            return __($this->getLabel());
         }
-        return __($this->getLabel());
     }
 
     /**

@@ -31,7 +31,7 @@ class Cc extends \Magento\Payment\Block\Form
     protected $_template = 'Magento_Paygate::form/cc.phtml';
 
     /**
-     * Retreive payment method form html
+     * Retrieve payment method form html
      *
      * @return string
      */

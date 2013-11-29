@@ -56,7 +56,7 @@ tinymce.create('tinymce.ui.Container:tinymce.ui.Control', {
 	 * Returns a control by id from the containers collection.
 	 *
 	 * @method get
-	 * @param {String} n Id for the control to retrive.
+	 * @param {String} n Id for the control to retrieve.
 	 * @return {tinymce.ui.Control} Control instance by the specified name or undefined if it wasn't found.
 	 */
 	get : function(n) {

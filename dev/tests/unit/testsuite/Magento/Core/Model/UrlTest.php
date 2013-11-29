@@ -37,21 +37,15 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
-
-    protected $_sessionMock;
+    /**
+     * @var \Magento\TestFramework\Helper\ObjectManager
+     */
+    protected $_objectManager;
 
     protected function setUp()
     {
-        $this->_sessionMock = $this->getMock('Magento\Core\Model\Session\AbstractSession', array(), array(), '', false);
-        $this->_model = new \Magento\Core\Model\Url(
-            $this->getMock('\Magento\App\Route\ConfigInterface'),
-            $this->getMock('Magento\App\Request\Http', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Url\SecurityInfoInterface'),
-            $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\App', array(), array(), '', false, false),
-            $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false, false),
-            $this->getMock('Magento\Core\Model\Session', array(), array(), '', false, false)
-        );
+        $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_model = $this->_objectManager->getObject('\Magento\Core\Model\Url');
     }
 
     public function testSetRoutePath()
@@ -118,5 +112,36 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('v1', $this->_model->getRouteParam('p1'));
         $this->assertEquals('v2', $this->_model->getRouteParam('p2'));
+    }
+
+    /**
+     * @param $port mixed
+     * @param $url string
+     * @dataProvider getCurrentUrlProvider
+     */
+    public function testGetCurrentUrl($port, $url)
+    {
+        $methods = array('getServer', 'getScheme', 'getHttpHost', 'getModuleName', 'setModuleName',
+            'getActionName', 'setActionName', 'getParam');
+        $requestMock = $this->getMock('\Magento\App\RequestInterface', $methods);
+        $requestMock->expects($this->at(0))->method('getServer')->with('SERVER_PORT')
+            ->will($this->returnValue($port));
+        $requestMock->expects($this->at(1))->method('getServer')->with('REQUEST_URI')
+            ->will($this->returnValue('/fancy_uri'));
+        $requestMock->expects($this->once())->method('getScheme')->will($this->returnValue('http'));
+        $requestMock->expects($this->once())->method('getHttpHost')->will($this->returnValue('example.com'));
+
+        /** @var \Magento\Core\Model\Url $model */
+        $model = $this->_objectManager->getObject('Magento\Core\Model\Url', array('request' => $requestMock));
+        $this->assertEquals($url, $model->getCurrentUrl());
+    }
+
+    public function getCurrentUrlProvider()
+    {
+        return array(
+            'without_port' => array('', 'http://example.com/fancy_uri'),
+            'default_port' => array(80, 'http://example.com/fancy_uri'),
+            'custom_port' => array(8080, 'http://example.com:8080/fancy_uri')
+        );
     }
 }

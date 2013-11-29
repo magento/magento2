@@ -49,7 +49,8 @@ class RelatedTest extends \PHPUnit_Framework_TestCase
             ->createBlock('Magento\Catalog\Block\Product\ProductList\Related');
         $block->setLayout(\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                 ->get('Magento\View\LayoutInterface'));
-        $block->setTemplate('product/list/related.phtml');
+        $block->setTemplate('Magento_Catalog::product/list/items.phtml');
+        $block->setType('related');
 
         $html = $block->toHtml();
         $this->assertNotEmpty($html);

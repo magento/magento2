@@ -156,7 +156,6 @@ class Design implements \Magento\View\DesignInterface
     /**
      * Retrieve package area
      *
-     * @deprecated
      * @return string
      */
     public function getArea()

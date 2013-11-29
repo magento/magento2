@@ -33,7 +33,7 @@
  */
 namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images;
 
-class Tree extends \Magento\Adminhtml\Block\Template
+class Tree extends \Magento\Backend\Block\Template
 {
     /**
      * Core registry

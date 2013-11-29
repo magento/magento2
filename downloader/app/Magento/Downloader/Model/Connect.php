@@ -39,7 +39,7 @@ include_once "Magento/Connect.php";
 class Connect extends \Magento\Downloader\Model
 {
     /**
-     * Retrive object of \Magento\Downloader\Connect
+     * Retrieve object of \Magento\Downloader\Connect
      *
      * @return \Magento\Downloader\Connect
      */

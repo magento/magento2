@@ -108,7 +108,7 @@ class Zend_Gdata_Gbase extends Zend_Gdata
     }
 
     /**
-     * Retreive feed object
+     * Retrieve feed object
      *
      * @param mixed $location The location for the feed, as a URL or Query
      * @return Zend_Gdata_Gbase_ItemFeed
@@ -126,7 +126,7 @@ class Zend_Gdata_Gbase extends Zend_Gdata
     }
 
     /**
-     * Retreive entry object
+     * Retrieve entry object
      *
      * @param mixed $location The location for the feed, as a URL or Query
      * @return Zend_Gdata_Gbase_ItemEntry

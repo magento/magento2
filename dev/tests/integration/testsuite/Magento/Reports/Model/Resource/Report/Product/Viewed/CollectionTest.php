@@ -52,7 +52,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResult = array(1 => 3, 2 => 1, 21 => 2);
         $actualResult = array();
-        /** @var \Magento\Adminhtml\Model\Report\Item $reportItem */
+        /** @var \Magento\Reports\Model\Item $reportItem */
         foreach ($this->_collection->getItems() as $reportItem) {
             $actualResult[$reportItem->getData('product_id')] = $reportItem->getData('views_num');
         }

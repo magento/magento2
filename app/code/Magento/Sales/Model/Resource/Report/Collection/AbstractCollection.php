@@ -59,7 +59,7 @@ class AbstractCollection
         \Magento\Sales\Model\Resource\Report $resource
     ) {
         parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $resource);
-        $this->setModel('Magento\Adminhtml\Model\Report\Item');
+        $this->setModel('Magento\Reports\Model\Item');
     }
 
     /**

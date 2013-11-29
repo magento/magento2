@@ -734,7 +734,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         try {
             $collection = $this->_getEntityCollection();
             $validAttrCodes = $this->_getExportAttrCodes();
-            $defaultStoreId  = \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID;
+            $defaultStoreId  = \Magento\Core\Model\Store::DEFAULT_STORE_ID;
             $dataRows        = array();
             $rowCategories   = array();
             $rowWebsites     = array();

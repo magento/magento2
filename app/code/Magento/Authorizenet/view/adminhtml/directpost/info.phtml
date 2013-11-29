@@ -33,7 +33,7 @@ $_form = $this;
 $_code = $_form->getMethodCode();
 $_method = $_form->getMethod();
 $_controller = $this->getRequest()->getControllerName();
-$_orderUrl = $this->helper('Magento\Authorizenet\Helper\Data')->getPlaceOrderAdminUrl();
+$_orderUrl = $this->helper('Magento\Authorizenet\Helper\Backend')->getPlaceOrderAdminUrl();
 ?>
 <!-- IFRAME for request to our server -->
 <iframe id="order-directpost-iframe" allowtransparency="true" frameborder="0" name="iframeSubmitOrder" style="display:none;width:100%;background-color:transparent" src="<?php echo $this->getViewFileUrl('blank.html') ?>"></iframe>

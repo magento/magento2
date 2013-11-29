@@ -526,7 +526,7 @@ class Zend_Pdf_Page extends Zend_Pdf_Canvas_Abstract
     }
 
     /**
-     * Retrive PDF file reference to the page
+     * Retrieve PDF file reference to the page
      *
      * @internal
      * @return Zend_Pdf_Element_Dictionary

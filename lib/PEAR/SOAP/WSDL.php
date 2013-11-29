@@ -1022,7 +1022,7 @@ class SOAP_WSDL_Cache extends SOAP_Base
     }
 
     /**
-     * Retrieves a file from cache if it exists, otherwise retreive from net,
+     * Retrieves a file from cache if it exists, otherwise retrieve from net,
      * add to cache, and return from cache.
      *
      * @param  string   URL to WSDL
