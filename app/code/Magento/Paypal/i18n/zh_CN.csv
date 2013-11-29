@@ -114,7 +114,7 @@ Dynamic,动态
 "Email Associated with PayPal Merchant Account (Optional)",与PayPal商业账户关联的邮件（可选）
 "Enable Automatic Fetching",启用自动获取
 "Enable Express Checkout","允许Express Checkout"
-"Enable PayPal Guest Checkout",启用PayPal来宾结账
+"Enable PayPal Guest Checkout",启用PayPal访客结账
 "Enable Payflow Link","允许Payflow Link"
 "Enable SSL verification",允许SSL校验
 "Enable this Solution",允许该方案

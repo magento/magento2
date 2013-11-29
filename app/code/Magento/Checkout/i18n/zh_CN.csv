@@ -10,7 +10,7 @@
 Address,地址
 "Address %1 of %2","地址 %1 of %2"
 "After Adding a Product Redirect to Shopping Cart",添加产品后重定向至购物车
-"Allow Guest Checkout",允许来宾结账
+"Allow Guest Checkout",允许访客结账
 "Already registered?",已注册？
 "Apply Coupon",应用优惠券
 "Are you sure you want to remove this item from the shopping cart?",您确定要从购物车中移除该条目吗？
@@ -34,13 +34,13 @@ Change,更改
 "Checkbox Text",复选框文本
 Checkout,结账
 "Checkout Conditions",支付条件
-"Checkout Method",支付方法
-"Checkout Options",支付选项
-"Checkout Section",支付区域
+"Checkout Method",结账方法
+"Checkout Options",结账选项
+"Checkout Section",结账区域
 "Checkout Terms and Conditions",结账条款和情况
-"Checkout as Guest",作为来宾结账
+"Checkout as Guest",作为访客结账
 "Checkout as a Guest",作为访客结账
-"Checkout as a Guest or Register",以来宾身份结账或注册
+"Checkout as a Guest or Register",以访客身份结账或注册
 "Checkout with Multiple Addresses",按多个地址支付
 City,城市
 "Clear Shopping Cart",清空购物车
@@ -153,7 +153,7 @@ Password,密码
 "Please agree to all the terms and conditions before placing the order.",请在下订单前同意所有的条款和条件。
 "Please check billing address information.",请检查账单地址信息。
 "Please check shipping addresses information.",请检查运送地址信息。
-"Please choose to register or to checkout as a guest",请选择地区或以来宾身份结账
+"Please choose to register or to checkout as a guest",请选择地区或以访客身份结账
 "Please log in below:",请在下面登录：
 "Please select a region, state or province.",请选择地区、州或省。
 "Please select a shipping address for applicable items.",请为合适的条目选择运送地址。
@@ -214,7 +214,7 @@ Sales,销售
 "Some products quantities were recalculated because of quantity increment mismatch.",由于数量增加不匹配，一些产品书数量被重新计算了。
 "Something went wrong processing your order. Please try again later.",处理订单时发生错误，请稍后再试。
 "Something went wrong while processing your payment.",当处理支付时发生错误。
-"Sorry, guest checkout is not enabled.",很抱歉，来宾结账是不允许的。
+"Sorry, guest checkout is not enabled.",很抱歉，访客结账是不允许的。
 "Sorry, no quotes are available for this order at this time.",抱歉，当前该订单中没有报价可用。
 "Sorry, no quotes are available for this order.","很抱歉， 没有有效的订单报价。"
 State/Province,州/省

@@ -9,7 +9,7 @@ Date,日期
 "Default Maximum Number of Downloads",下载数量默认最大值
 "Default Sample Title",默认范例标题
 Delete,删除
-"Disable Guest Checkout if Cart Contains Downloadable Items",如果购物车包含可下载内容，则禁止来宾结账
+"Disable Guest Checkout if Cart Contains Downloadable Items",如果购物车包含可下载内容，则禁止访客结账
 "Downloadable Information",可下载的信息
 "Downloadable Product Options",可下载产品选项
 "Downloadable Product Section",可下载产品区块
@@ -20,7 +20,7 @@ File,文件
 From:,来自：
 "Gift Message",礼品消息
 "Go to <a href=""%1"">My Downloadable Products</a>","转到 <a href=""%1"">我的可下载产品</a>"
-"Guest checkout will only work with shareable.",来宾结账空能仅限可分享商品。
+"Guest checkout will only work with shareable.",访客结账空能仅限可分享商品。
 "In stock",现货
 "Incl. Tax",含税
 "Invalid download link type.",无效的下载链接类型。
