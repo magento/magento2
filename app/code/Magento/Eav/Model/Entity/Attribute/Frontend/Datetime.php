@@ -47,7 +47,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFron
     }
 
     /**
-     * Retreive attribute value
+     * Retrieve attribute value
      *
      * @param $object
      * @return mixed

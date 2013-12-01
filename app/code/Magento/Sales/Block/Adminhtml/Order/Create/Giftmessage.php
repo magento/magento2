@@ -37,7 +37,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
 class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
-     * @var \Magento\Adminhtml\Model\Giftmessage\Save
+     * @var \Magento\GiftMessage\Model\Save
      */
     protected $_giftMessageSave;
 
@@ -46,7 +46,7 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Adminhtml\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
-     * @param \Magento\Adminhtml\Model\Giftmessage\Save $giftMessageSave
+     * @param \Magento\GiftMessage\Model\Save $giftMessageSave
      * @param array $data
      */
     public function __construct(
@@ -54,7 +54,7 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
         \Magento\Core\Helper\Data $coreData,
         \Magento\Adminhtml\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
-        \Magento\Adminhtml\Model\Giftmessage\Save $giftMessageSave,
+        \Magento\GiftMessage\Model\Save $giftMessageSave,
         array $data = array()
     ) {
         $this->_giftMessageSave = $giftMessageSave;
@@ -77,7 +77,7 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
     }
 
     /**
-     * Retrive items allowed for gift messages.
+     * Retrieve items allowed for gift messages.
      *
      * If no items available return false.
      *
@@ -107,7 +107,7 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
     /**
      * Retrieve gift message save model
      *
-     * @return \Magento\Adminhtml\Model\Giftmessage\Save
+     * @return \Magento\GiftMessage\Model\Save
      */
     protected function _getGiftmessageSaveModel()
     {

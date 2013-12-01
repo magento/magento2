@@ -96,7 +96,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Rating\Model\RatingFactory $ratingFactory
      * @param \Magento\Rating\Model\Rating\Option\VoteFactory $voteFactory
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -356,7 +356,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     }
 
     /**
-     * Retrive all ids for collection
+     * Retrieve all ids for collection
      *
      * @param null|int|string $limit
      * @param null|int|string $offset
@@ -464,7 +464,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
                         $this->_getConditionSql('rdt.customer_id', array('is' => new \Zend_Db_Expr('NULL'))),
                         $this->_getConditionSql(
                             'rdt.store_id',
-                            array('eq' => \Magento\Core\Model\AppInterface::ADMIN_STORE_ID)
+                            array('eq' => \Magento\Core\Model\Store::DEFAULT_STORE_ID)
                         )
                     );
                     $conditionSql = implode(' AND ', $conditionParts);
@@ -475,7 +475,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
                         $this->_getConditionSql('rdt.customer_id', array('is' => new \Zend_Db_Expr('NULL'))),
                         $this->_getConditionSql(
                             'rdt.store_id',
-                            array('neq' => \Magento\Core\Model\AppInterface::ADMIN_STORE_ID)
+                            array('neq' => \Magento\Core\Model\Store::DEFAULT_STORE_ID)
                         )
                     );
                     $conditionSql = implode(' AND ', $conditionParts);

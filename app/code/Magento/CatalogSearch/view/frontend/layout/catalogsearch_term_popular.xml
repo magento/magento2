@@ -24,14 +24,10 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <update handle="page_one_column"/>
     <referenceBlock name="head">
         <action method="setTitle">
-            <argument translate="true" name="title" xsi:type="string">Search Terms</argument>
-        </action>
-    </referenceBlock>
-    <referenceBlock name="root">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">1column.phtml</argument>
+            <argument translate="true" name="title" xsi:type="string">Popular Search Terms</argument>
         </action>
     </referenceBlock>
     <referenceContainer name="content">

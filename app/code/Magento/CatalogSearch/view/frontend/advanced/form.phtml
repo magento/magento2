@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -28,68 +26,126 @@
 /**
  * Catalog advanced search form
  *
- * @see \Magento\CatalogSearch\Block\Advanced\Form
+ * @var $this \Magento\CatalogSearch\Block\Advanced\Form
  */
 ?>
 <?php $maxQueryLength= $this->helper('Magento\CatalogSearch\Helper\Data')->getMaxQueryLength();?>
-<div class="page-title">
-    <h1><?php echo __('Catalog Advanced Search') ?></h1>
-</div>
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<form action="<?php echo $this->getSearchPostUrl() ?>" method="get" id="form-validate">
-    <div class="fieldset advanced-search">
-        <h2 class="legend"><?php echo __('Search Settings') ?></h2>
-        <ul class="form-list" id="advanced-search-list">
-            <?php foreach ($this->getSearchableAttributes() as $_attribute): ?>
-            <?php $_code = $_attribute->getAttributeCode() ?>
-            <li>
-                <label for="<?php echo $_code ?>"><?php echo $this->getAttributeLabel($_attribute) ?></label>
-                <?php switch($this->getAttributeInputType($_attribute)):
-                    case 'number': ?>
-                    <div class="input-range">
-                        <input type="text" name="<?php echo $_code ?>[from]" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'from')) ?>" id="<?php echo $_code ?>" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>" class="input-text" maxlength="<?php echo $maxQueryLength;?>" data-validate="{number:true, 'less-than-equals-to':'#<?php echo $_code ?>_to'}" />
-                        <span class="separator">-</span>
-                        <input type="text" name="<?php echo $_code ?>[to]" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'to')) ?>" id="<?php echo $_code ?>_to" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>" class="input-text" maxlength="<?php echo $maxQueryLength;?>" data-validate="{number:true, 'greater-than-equals-to':'#<?php echo $_code ?>'}" />
-                    </div>
-                    <?php break;
-                    case 'price': ?>
-                    <div class="input-range">
-                        <input name="<?php echo $_code ?>[from]" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'from')) ?>" id="<?php echo $_code ?>" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>"  class="input-text" type="text" maxlength="<?php echo $maxQueryLength;?>" data-validate="{number:true, 'less-than-equals-to':'#<?php echo $_code ?>_to'}" />
-                        <span class="separator">-</span>
-                        <input name="<?php echo $_code ?>[to]" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'to')) ?>" id="<?php echo $_code ?>_to" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>"  class="input-text" type="text" maxlength="<?php echo $maxQueryLength;?>" data-validate="{number:true, 'greater-than-equals-to':'#<?php echo $_code ?>'}" />
-                        <small>(<?php echo $this->getCurrency($_attribute); ?>)</small>
-                    </div>
-                    <?php break;
-                    case 'select': ?>
-                        <div class="input-box">
-                            <?php echo $this->getAttributeSelectElement($_attribute) ?>
+<form class="form search advanced" action="<?php echo $this->getSearchPostUrl() ?>" method="get" id="form-validate">
+<fieldset class="fieldset">
+    <legend class="legend"><span><?php echo __('Search Settings') ?></span></legend><br />
+    <?php foreach ($this->getSearchableAttributes() as $_attribute): ?>
+    <?php $_code = $_attribute->getAttributeCode() ?>
+        <div class="field <?php echo $_code ?>">
+            <label class="label" for="<?php echo $_code ?>">
+                <span><?php echo $this->getAttributeLabel($_attribute) ?></span>
+            </label>
+            <div class="control">
+            <?php switch($this->getAttributeInputType($_attribute)):
+                case 'number': ?>
+                <div class="range fields group group-2">
+                    <div class="field no-label">
+                        <div class="control">
+                            <input type="text"
+                                   name="<?php echo $_code ?>[from]"
+                                   value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'from')) ?>"
+                                   id="<?php echo $_code ?>"
+                                   title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>"
+                                   class="input-text"
+                                   maxlength="<?php echo $maxQueryLength;?>"
+                                   data-validate="{number:true, 'less-than-equals-to':'#<?php echo $_code ?>_to'}" />
                         </div>
-                    <?php break;
-                    case 'yesno': ?>
-                        <?php echo $this->getAttributeYesNoElement($_attribute) ?>
-                    <?php break;
-                    case 'date': ?>
-                    <div class="input-range">
-                        <?php echo $this->getDateInput($_attribute, 'from') ?>
-                        <span class="separator">-</span>
-                        <?php echo $this->getDateInput($_attribute, 'to') ?>
                     </div>
-                    <?php break;
-                    default: ?>
-                    <div class="input-box">
-                        <input type="text" name="<?php echo $_code ?>" id="<?php echo $_code ?>" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute)) ?>" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>"  class="input-text <?php echo $this->getAttributeValidationClass($_attribute) ?>" maxlength="<?php echo $maxQueryLength;?>" />
+                    <div class="field no-label">
+                        <div class="control">
+                            <input type="text"
+                                   name="<?php echo $_code ?>[to]"
+                                   value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'to')) ?>"
+                                   id="<?php echo $_code ?>_to"
+                                   title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>"
+                                   class="input-text"
+                                   maxlength="<?php echo $maxQueryLength;?>"
+                                   data-validate="{number:true, 'greater-than-equals-to':'#<?php echo $_code ?>'}" />
+                        </div>
                     </div>
-                <?php endswitch; ?>
-            </li>
-            <?php endforeach; ?>
-        </ul>
-        <script type="text/javascript">(function($) {$('#advanced-search-list').decorate('list')})(jQuery)</script>
-    </div>
-    <div class="buttons-set">
-        <button type="submit" title="<?php echo __('Search') ?>" class="button"><span><span><?php echo __('Search') ?></span></span></button>
-    </div>
+                </div>
+                <?php break;
+                case 'price': ?>
+                <div class="range price fields group group-2">
+                    <div class="field no-label">
+                        <div class="control">
+                            <input name="<?php echo $_code ?>[from]"
+                                   value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'from')) ?>"
+                                   id="<?php echo $_code ?>"
+                                   title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>"
+                                   class="input-text"
+                                   type="text"
+                                   maxlength="<?php echo $maxQueryLength;?>"
+                                   data-validate="{number:true, 'less-than-equals-to':'#<?php echo $_code ?>_to'}" />
+                        </div>
+                    </div>
+                    <div class="field with-addon no-label">
+                        <div class="control">
+                            <div class="addon">
+                                <input name="<?php echo $_code ?>[to]"
+                                       value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'to')) ?>"
+                                       id="<?php echo $_code ?>_to"
+                                       title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>"
+                                       class="input-text"
+                                       type="text"
+                                       maxlength="<?php echo $maxQueryLength;?>"
+                                       data-validate="{number:true, 'greater-than-equals-to':'#<?php echo $_code ?>'}" />
+                                <label class="addafter"
+                                       for="<?php echo $_code ?>_to">
+                                    <?php echo $this->getCurrency($_attribute); ?>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php break;
+                case 'select': ?>
+                    <?php echo $this->getAttributeSelectElement($_attribute) ?>
+                <?php break;
+                case 'yesno': ?>
+                    <?php echo $this->getAttributeYesNoElement($_attribute) ?>
+                <?php break;
+                case 'date': ?>
+                <div class="range dates fields group group-2">
+                    <div class="field date no-label">
+                        <div class="control">
+                            <?php echo $this->getDateInput($_attribute, 'from') ?>
+                        </div>
+                    </div>
+                    <div class="field date no-label">
+                        <div class="control">
+                            <?php echo $this->getDateInput($_attribute, 'to') ?>
+                        </div>
+                    </div>
+                </div>
+                <?php break;
+                default: ?>
+                <input type="text"
+                       name="<?php echo $_code ?>"
+                       id="<?php echo $_code ?>"
+                       value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute)) ?>"
+                       title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>"
+                       class="input-text <?php echo $this->getAttributeValidationClass($_attribute) ?>"
+                       maxlength="<?php echo $maxQueryLength;?>" />
+            <?php endswitch; ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</fieldset>
+<div class="actions">
+    <button type="submit"
+            class="action search"
+            title="<?php echo __('Search') ?>">
+        <span><?php echo __('Search') ?></span>
+    </button>
+</div>
 </form>
 <script type="text/javascript">
+    //<![CDATA[
     (function($) {
         head.js(
             "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
@@ -100,7 +156,7 @@
                 $('#form-validate').validation({
                     errorPlacement: function (error, element) {
                         var parent = element.parent();
-                        if (parent.hasClass('input-range')) {
+                        if (parent.hasClass('range')) {
                             parent.find(this.errorElement + '.' + this.errorClass).remove().end().append(error);
                         } else {
                             error.insertAfter(element);
@@ -113,4 +169,5 @@
                 });
             });
     })(jQuery);
+    //]]>
 </script>

@@ -77,6 +77,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDbIsolation enabled
+     * @magentoAppArea install
      */
     public function testCreateAdministrator()
     {
@@ -166,7 +167,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Adminhtml/controllers/_files/cache/all_types_disabled.php
+     * @magentoDataFixture Magento/Backend/controllers/_files/cache/all_types_disabled.php
      */
     public function testFinish()
     {

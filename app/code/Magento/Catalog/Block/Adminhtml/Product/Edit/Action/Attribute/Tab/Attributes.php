@@ -102,7 +102,7 @@ class Attributes
     }
 
     /**
-     * Retrive attributes for product massupdate
+     * Retrieve attributes for product mass update
      *
      * @return array
      */

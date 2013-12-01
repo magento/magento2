@@ -554,6 +554,29 @@ body {
 }
 
 /*
+    Additional Information
+-------------------------------------- */
+.data.table.additional.attributes {
+    width: 100%;
+    th,
+    td {
+        .box-sizing();
+        padding: 7px 10px;
+        text-align: left;
+    }
+    th {
+        width: 40%;
+    }
+    td {
+        width: 60%;
+    }
+    tr:nth-child(2n+1) th,
+    tr:nth-child(2n+1) td {
+        background: @primary1;
+    }
+}
+
+/*
     Reviews
 -------------------------------------- */
 @starSize : 16px;
@@ -2493,7 +2516,7 @@ body {
                     content: '|';
                     display: inline-block;
                     text-decoration: none;
-                    padding: 0 8px;
+                    padding: 0 3px;
                 }
                 &:hover:before {
                     color: @primary6;
@@ -2698,6 +2721,9 @@ body {
 .block.newsletter {
     @fit: 45px;
     text-align: left;
+    .fieldset {
+        margin: 0;
+    }
     .title {
         display: none;
     }
@@ -2826,6 +2852,13 @@ span.widget.link {
     display: inline-block;
 }
 
+.widget.mini.products.images {
+    .item {
+        display: inline-block;
+        margin: 0 3px;
+    }
+}
+
 /*
     Magento_Catalog
     Compare
@@ -2935,7 +2968,13 @@ span.widget.link {
     td:last-child {
         border-right: 1px solid @primary2;
     }
+    tbody:first-child .cell.attribute {
+        background-color: @primary1;
+    }
     tr:nth-child(odd) .cell.attribute {
+        background-color: @primary7;
+    }
+    tr:nth-child(even) .cell.attribute {
         background-color: @primary1;
     }
     .product.photo {
@@ -3165,7 +3204,8 @@ span.widget.link {
 }
 
 .block.widget.new {
-    .products.list.items.widget-new-grid {
+    .products.list.items.widget-new-grid,
+    .products.list.items.new.grid {
         .item.product {
             width: 20%;
             float: none;
@@ -3608,6 +3648,12 @@ span.widget.link {
 @imageHeight: 180px;
 @imageWidth: 180px;
 
+.category.image {
+    img {
+        max-width: 100%;
+    }
+}
+
 .products.wrapper .products.list {
     .item {
         .product.photo {
@@ -3762,6 +3808,21 @@ span.widget.link {
     }
 }
 
+.product.details .price-box .price-excluding-tax,
+.product.details .price-box .price-including-tax {
+    display: block;
+}
+
+.old-price,
+.old.price {
+    text-decoration: line-through;
+}
+
+.special-price,
+.special.price {
+    color: @secondary1;
+}
+
 .stock[title] {
     line-height: 16px;
     span:before {
@@ -3845,6 +3906,9 @@ span.widget.link {
     .page.title.product + .price-box {
         border-bottom: 1px solid @primary2;
     }
+    .col.price .price-box {
+        margin: 0;
+    }
     p {
         margin: 5px 0;
     }
@@ -3856,9 +3920,6 @@ span.widget.link {
         .price {
             text-decoration: line-through;
         }
-    }
-    .special-price {
-        color: @secondary1;
     }
     .stock {
         margin: 15px 0;
@@ -4022,6 +4083,17 @@ span.widget.link {
     }
 }
 
+.magento-zoom > .img > img {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    max-height: 100%;
+    max-width: 100%;
+}
+
 .product.attibute.sku {
     font-size: @baseFontSizeMiddle;
     .value {
@@ -4061,6 +4133,19 @@ and (max-width : 768px) {
         background: red;
         height: 200px;
         margin-top: 20px;
+    }
+}
+
+// Catalog Inventory
+.availability.only {
+    &.detailed {
+        display: none;
+        &.active {
+            display: block;
+        }
+    }
+    .data.table {
+        width: 100%;
     }
 }
 
@@ -4131,9 +4216,21 @@ and (max-width : 768px) {
         }
     }
     .product.options.bottom {
+        .box-sizing();
         float: left;
+        padding: 0 10px 20px 30px;
         width: 500px;
         clear: left;
+    }
+
+    .prices.tier {
+        background: @primary2;
+        + .price-box {
+            font-size: @baseFontSizeBigger;
+            .price {
+                color: @secondary1;
+            }
+        }
     }
 }
 
@@ -5626,13 +5723,68 @@ img[align="right"] {
     }
 }
 
-.map-popup {
+/*
+    Minimum Advertising Price
+-------------------------------------- */
+.map.popup {
     background: @commonBg;
     border: 1px solid @primary3;
+    margin: 18px 0 0;
     position: absolute;
     padding: 20px;
+    width: 300px;
     z-index: 10;
+    &:before {
+        border-color: transparent transparent @primary7 transparent;
+        border-style: solid;
+        border-width: 0 15px 15px;
+        content: "";
+        height: 0;
+        left: 50%;
+        margin: 0 0 0 -7px;
+        position: absolute;
+        top: -15px;
+        width: 0;
+        z-index: 2;
+    }
+    &:after {
+        border-color: transparent transparent @primary3 transparent;
+        border-style: solid;
+        border-width: 0 16px 16px;
+        content: "";
+        height: 0;
+        left: 50%;
+        margin: 0 0 0 -8px;
+        position: absolute;
+        top: -16px;
+        width: 0;
+        z-index: 1;
+    }
+    .title {
+        margin-bottom: 20px;
+    }
+    .map.msrp .old.price {
+        text-decoration: line-through;
+    }
+    .form.map.checkout {
+        float: right;
+    }
+    .content {
+        margin: 15px 0 0;
+        .map.msrp,
+        .map.price {
+            > .label:after {
+                content: ": ";
+            }
+        }
+        .map.price > .label {
+            font-weight: 700;
+        }
+    }
+    .price-excluding-tax,
+    .price-including-tax {
+        display: block;
+    }
 }
-
 
 @import "/responsive/responsive.less";

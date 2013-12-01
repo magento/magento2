@@ -50,7 +50,7 @@ class PathInfoProcessor implements \Magento\App\Request\PathInfoProcessorInterfa
         $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
         $storeCode = $pathParts[0];
 
-        $stores = $this->_storeManager->getStores(true, true);
+        $stores = $this->_storeManager->getStores(false, true);
         if (isset($stores[$storeCode]) && $stores[$storeCode]->isUseStoreInUrl()) {
             if (!$request->isDirectAccessFrontendName($storeCode)) {
                 $this->_storeManager->setCurrentStore($storeCode);

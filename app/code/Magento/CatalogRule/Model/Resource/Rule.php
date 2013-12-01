@@ -42,6 +42,11 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     const SECONDS_IN_DAY = 86400;
 
     /**
+     * @var \Magento\Logger
+     */
+    protected $_logger;
+
+    /**
      * Store associated with rule entities information map
      *
      * @var array
@@ -106,6 +111,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\CatalogRule\Helper\Data $catalogRuleData
+     * @param \Magento\Logger $logger
      * @param \Magento\Stdlib\DateTime $dateTime
      */
     public function __construct(
@@ -116,6 +122,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\CatalogRule\Helper\Data $catalogRuleData,
+        \Magento\Logger $logger,
         \Magento\Stdlib\DateTime $dateTime        
     ) {
         $this->_storeManager = $storeManager;
@@ -124,6 +131,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
         $this->_eavConfig = $eavConfig;
         $this->_eventManager = $eventManager;
         $this->_catalogRuleData = $catalogRuleData;
+        $this->_logger = $logger;
         $this->dateTime = $dateTime;
         parent::__construct($resource);
     }
@@ -396,7 +404,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
 
         $select->join(
             array('pp_default'=>$priceTable),
-            sprintf($joinCondition, 'pp_default', \Magento\Core\Model\AppInterface::ADMIN_STORE_ID),
+            sprintf($joinCondition, 'pp_default', \Magento\Core\Model\Store::DEFAULT_STORE_ID),
             array('default_price'=>'pp_default.value')
         );
 
@@ -406,7 +414,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
             if ($defaultGroup instanceof \Magento\Core\Model\Store\Group) {
                 $storeId = $defaultGroup->getDefaultStoreId();
             } else {
-                $storeId = \Magento\Core\Model\AppInterface::ADMIN_STORE_ID;
+                $storeId = \Magento\Core\Model\Store::DEFAULT_STORE_ID;
             }
 
             $select->joinInner(
@@ -431,7 +439,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
                 if ($defaultGroup instanceof \Magento\Core\Model\Store\Group) {
                     $storeId = $defaultGroup->getDefaultStoreId();
                 } else {
-                    $storeId = \Magento\Core\Model\AppInterface::ADMIN_STORE_ID;
+                    $storeId = \Magento\Core\Model\Store::DEFAULT_STORE_ID;
                 }
 
                 $tableAlias = 'pp' . $websiteId;
@@ -594,6 +602,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
 
             $write->commit();
         } catch (\Exception $e) {
+            $this->_logger->logException($e);
             $write->rollback();
             throw $e;
         }

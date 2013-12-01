@@ -24,36 +24,8 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="head">
-        <block class="Magento\Page\Block\Html\Head\Css" name="magento-catalog-widgets-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Catalog::widgets.css</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
-    <referenceContainer name="left">
-        <block class="Magento\View\Block\Template" name="left.permanent.callout" template="Magento_Page::callouts/left_col.phtml">
-            <action method="setImgSrc">
-                <argument name="src" xsi:type="string">Magento_Catalog::images/media/col_left_callout.jpg</argument>
-            </action>
-            <action method="setImgAlt">
-                <argument translate="true" name="alt" xsi:type="string">Our customer service is available 24/7.</argument>
-            </action>
-            <action method="setLinkUrl">
-                <argument name="url" xsi:type="string">checkout/cart</argument>
-            </action>
-        </block>
-    </referenceContainer>
     <referenceContainer name="right">
-        <block class="Magento\Catalog\Block\Product\Compare\Sidebar" before="cart_sidebar" name="catalog.compare.sidebar" template="product/compare/sidebar.phtml"/>
-        <block class="Magento\View\Block\Template" name="right.permanent.callout" template="Magento_Page::callouts/right_col.phtml">
-            <action method="setImgSrc">
-                <argument name="src" xsi:type="string">Magento_Catalog::images/media/col_right_callout.jpg</argument>
-            </action>
-            <action method="setImgAlt">
-                <argument translate="true" name="alt" xsi:type="string">Look for our special back-to-school items and save bunches!</argument>
-            </action>
-        </block>
+        <block class="Magento\Catalog\Block\Product\Compare\Sidebar" name="catalog.compare.sidebar" template="product/compare/sidebar.phtml"/>
     </referenceContainer>
     <block class="Magento\Catalog\Block\Product\Price\Template" name="catalog_product_price_template"/>
     <referenceBlock name="catalog_product_price_template">

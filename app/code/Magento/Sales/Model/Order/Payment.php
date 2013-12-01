@@ -178,7 +178,7 @@ class Payment extends \Magento\Payment\Model\Info
     protected $_eventObject = 'payment';
 
     /**
-     * Transaction addditional information container
+     * Transaction additional information container
      *
      * @var array
      */
@@ -1587,9 +1587,9 @@ class Payment extends \Magento\Payment\Model\Info
     }
 
     /**
-     * Additionnal transaction info getter
+     * Additional transaction info getter
      *
-     * @param sting $key
+     * @param string $key
      * @return mixed
      */
     public function getTransactionAdditionalInfo($key = null)

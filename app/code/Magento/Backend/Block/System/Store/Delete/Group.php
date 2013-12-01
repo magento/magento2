@@ -34,7 +34,7 @@
 
 namespace Magento\Backend\Block\System\Store\Delete;
 
-class Group extends \Magento\Adminhtml\Block\Template
+class Group extends \Magento\Backend\Block\Template
 {
     protected function _prepareLayout()
     {

@@ -141,7 +141,6 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
 
     public function testCopyPaste()
     {
-        $this->markTestSkipped('Skipped');
         $reportFile = self::$_reportDir . '/phpcpd_report.xml';
         $copyPasteDetector = new \Magento\TestFramework\CodingStandard\Tool\CopyPasteDetector($reportFile);
 

@@ -26,7 +26,7 @@
 
 namespace Magento\Backend\Block;
 
-class Dashboard extends \Magento\Adminhtml\Block\Template
+class Dashboard extends \Magento\Backend\Block\Template
 {
     protected $_locale;
 
@@ -52,7 +52,7 @@ class Dashboard extends \Magento\Adminhtml\Block\Template
         if ($this->_storeConfig->getConfig(self::XML_PATH_ENABLE_CHARTS)) {
             $block = $this->getLayout()->createBlock('Magento\Backend\Block\Dashboard\Diagrams');
         } else {
-            $block = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Template')
+            $block = $this->getLayout()->createBlock('Magento\Backend\Block\Template')
                 ->setTemplate('dashboard/graph/disabled.phtml')
                 ->setConfigUrl($this->getUrl('adminhtml/system_config/edit', array('section'=>'admin')));
         }

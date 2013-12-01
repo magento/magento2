@@ -52,7 +52,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             array('orders_count' => 1, 'total_qty_ordered' => 2, 'total_qty_invoiced' => 2),
         );
         $actualResult = array();
-        /** @var \Magento\Adminhtml\Model\Report\Item $reportItem */
+        /** @var \Magento\Reports\Model\Item $reportItem */
         foreach ($this->_collection->getItems() as $reportItem) {
             $actualResult[] = array_intersect_key($reportItem->getData(), $expectedResult[0]);
         }

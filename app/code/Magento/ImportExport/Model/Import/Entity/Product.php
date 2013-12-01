@@ -92,6 +92,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const ERROR_GROUP_PRICE_DATA_INCOMPLETE  = 'groupPriceDataIsIncomplete';
     const ERROR_SKU_NOT_FOUND_FOR_DELETE     = 'skuNotFoundToDelete';
     const ERROR_SUPER_PRODUCTS_SKU_NOT_FOUND = 'superProductsSkuNotFound';
+    const ERROR_MEDIA_DATA_INCOMPLETE        = 'mediaDataIsIncomplete';
 
     /**
      * Pairs of attribute set ID-to-name.
@@ -180,7 +181,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         self::ERROR_INVALID_TIER_PRICE_GROUP     => 'Tier Price customer group ID is invalid',
         self::ERROR_TIER_DATA_INCOMPLETE         => 'Tier Price data is incomplete',
         self::ERROR_SKU_NOT_FOUND_FOR_DELETE     => 'Product with specified SKU not found',
-        self::ERROR_SUPER_PRODUCTS_SKU_NOT_FOUND => 'Product with specified super products SKU not found'
+        self::ERROR_SUPER_PRODUCTS_SKU_NOT_FOUND => 'Product with specified super products SKU not found',
+        self::ERROR_MEDIA_DATA_INCOMPLETE        => 'Media data is incomplete'
     );
 
     /**
@@ -788,23 +790,25 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _isTierPriceValid(array $rowData, $rowNum)
     {
         if ((isset($rowData['_tier_price_website']) && strlen($rowData['_tier_price_website']))
-                || (isset($rowData['_tier_price_customer_group']) && strlen($rowData['_tier_price_customer_group']))
-                || (isset($rowData['_tier_price_qty']) && strlen($rowData['_tier_price_qty']))
-                || (isset($rowData['_tier_price_price']) && strlen($rowData['_tier_price_price']))
+            || (isset($rowData['_tier_price_customer_group']) && strlen($rowData['_tier_price_customer_group']))
+            || (isset($rowData['_tier_price_qty']) && strlen($rowData['_tier_price_qty']))
+            || (isset($rowData['_tier_price_price']) && strlen($rowData['_tier_price_price']))
         ) {
             if (!isset($rowData['_tier_price_website']) || !isset($rowData['_tier_price_customer_group'])
-                    || !isset($rowData['_tier_price_qty']) || !isset($rowData['_tier_price_price'])
-                    || !strlen($rowData['_tier_price_website']) || !strlen($rowData['_tier_price_customer_group'])
-                    || !strlen($rowData['_tier_price_qty']) || !strlen($rowData['_tier_price_price'])
+                || !isset($rowData['_tier_price_qty']) || !isset($rowData['_tier_price_price'])
+                || !strlen($rowData['_tier_price_website']) || !strlen($rowData['_tier_price_customer_group'])
+                || !strlen($rowData['_tier_price_qty']) || !strlen($rowData['_tier_price_price'])
             ) {
                 $this->addRowError(self::ERROR_TIER_DATA_INCOMPLETE, $rowNum);
                 return false;
             } elseif ($rowData['_tier_price_website'] != self::VALUE_ALL
-                    && !isset($this->_websiteCodeToId[$rowData['_tier_price_website']])) {
+                && !isset($this->_websiteCodeToId[$rowData['_tier_price_website']])
+            ) {
                 $this->addRowError(self::ERROR_INVALID_TIER_PRICE_SITE, $rowNum);
                 return false;
             } elseif ($rowData['_tier_price_customer_group'] != self::VALUE_ALL
-                    && !isset($this->_customerGroups[$rowData['_tier_price_customer_group']])) {
+                && !isset($this->_customerGroups[$rowData['_tier_price_customer_group']])
+            ) {
                 $this->addRowError(self::ERROR_INVALID_TIER_PRICE_GROUP, $rowNum);
                 return false;
             } elseif ($rowData['_tier_price_qty'] <= 0 || $rowData['_tier_price_price'] <= 0) {
@@ -845,6 +849,22 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $this->addRowError(self::ERROR_INVALID_GROUP_PRICE_GROUP, $rowNum);
                 return false;
             }
+        }
+        return true;
+    }
+
+    /**
+     * Check media information
+     *
+     * @param array $rowData
+     * @param int $rowNum
+     * @return bool
+     */
+    protected function _isMediaValid($rowData, $rowNum)
+    {
+        if (!empty($rowData['_media_image']) && empty($rowData['_media_attribute_id'])) {
+            $this->addRowError(self::ERROR_MEDIA_DATA_INCOMPLETE, $rowNum);
+            return false;
         }
         return true;
     }
@@ -1466,7 +1486,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                 $valueArr = array(
                     'value_id' => $insertValue['value_id'],
-                    'store_id' => \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID,
+                    'store_id' => \Magento\Core\Model\Store::DEFAULT_STORE_ID,
                     'label'    => $insertValue['label'],
                     'position' => $insertValue['position'],
                     'disabled' => $insertValue['disabled']
@@ -1740,6 +1760,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_isTierPriceValid($rowData, $rowNum);
         $this->_isGroupPriceValid($rowData, $rowNum);
         $this->_isSuperProductsSkuValid($rowData, $rowNum);
+        $this->_isMediaValid($rowData, $rowNum);
 
         if (self::SCOPE_DEFAULT == $rowScope) { // SKU is specified, row is SCOPE_DEFAULT, new product block begins
             $this->_processedEntitiesCount ++;

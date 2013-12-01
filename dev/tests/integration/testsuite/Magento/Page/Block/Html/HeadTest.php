@@ -39,7 +39,7 @@ class HeadTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
             ->setAreaCode('frontend');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
-            ->setDesignTheme('magento_demo');
+            ->setDesignTheme('magento_blank');
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Page\Block\Html\Head');
     }
@@ -118,12 +118,12 @@ class HeadTest extends \PHPUnit_Framework_TestCase
             . "\n"
             . '<script type="text/javascript" src="http://localhost/pub/lib/varien/js.js"></script>' . "\n"
             . '<script type="text/javascript" '
-            . 'src="http://localhost/pub/static/frontend/magento_demo/en_US/Magento_Bundle/bundle.js">'
+            . 'src="http://localhost/pub/static/frontend/magento_blank/en_US/Magento_Bundle/bundle.js">'
             . '</script>' . "\n"
             . '<link rel="stylesheet" type="text/css" media="all"'
             . ' href="http://localhost/pub/lib/tiny_mce/themes/advanced/skins/default/ui.css" />' . "\n"
             . '<link rel="stylesheet" type="text/css" media="print" '
-                . 'href="http://localhost/pub/static/frontend/magento_demo/en_US/css/styles.css" />'
+                . 'href="http://localhost/pub/static/frontend/magento_blank/en_US/css/styles.css" />'
                 . "\n"
             . '<link rel="next" href="http://localhost/index.php/category.html" />' . "\n"
             . '<!--[if lt IE 7]>' . "\n"
@@ -223,7 +223,7 @@ class HeadTest extends \PHPUnit_Framework_TestCase
             . '<link rel="stylesheet" type="text/css" media="all"'
             . ' href="http://localhost/index.php/core/index/notfound" />' . "\n"
             . '<link rel="stylesheet" type="text/css" media="print"'
-            . ' href="http://localhost/pub/static/frontend/magento_demo/en_US/css/styles.css" />'
+            . ' href="http://localhost/pub/static/frontend/magento_blank/en_US/css/styles.css" />'
             . "\n", $this->_block->getCssJsHtml());
     }
 

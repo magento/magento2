@@ -66,7 +66,7 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
                     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                         ->get('Magento\Core\Model\StoreManagerInterface')
                         ->getStore()
-                        ->setId(\Magento\Core\Model\AppInterface::ADMIN_STORE_ID);
+                        ->setId(\Magento\Core\Model\Store::DEFAULT_STORE_ID);
                     $block->setArea('adminhtml');
                     $this->assertFileExists($block->getTemplateFile(), $message);
                     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

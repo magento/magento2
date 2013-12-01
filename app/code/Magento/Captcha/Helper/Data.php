@@ -24,15 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Captcha image model
- *
- * @category   Magento
- * @package    Magento_Captcha
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Captcha\Helper;
 
+/**
+ * Captcha image model
+ */
 class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
@@ -146,9 +142,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getConfig($key, $store = null)
     {
-        $store = $this->_storeManager->getStore($store);
-        $areaCode = $store->isAdmin() ? 'admin' : 'customer';
-        return $store->getConfig($areaCode . '/captcha/' . $key);
+        return $this->_storeManager->getStore($store)->getConfig('customer/captcha/' . $key);
     }
 
     /**
@@ -184,11 +178,22 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function getImgDir($website = null)
     {
         $mediaDir =  $this->_dirs->getDir(\Magento\App\Dir::MEDIA);
-        $captchaDir = $mediaDir . '/captcha/' . $this->_storeManager->getWebsite($website)->getCode();
+        $captchaDir = $mediaDir . '/captcha/' . $this->_getWebsiteCode($website);
         $this->_filesystem->setWorkingDirectory($mediaDir);
         $this->_filesystem->setIsAllowCreateDirectories(true);
         $this->_filesystem->ensureDirectoryExists($captchaDir, 0775);
         return $captchaDir . '/';
+    }
+
+    /**
+     * Get website code
+     *
+     * @param mixed $website
+     * @return string
+     */
+    protected function _getWebsiteCode($website = null)
+    {
+        return $this->_storeManager->getWebsite($website)->getCode();
     }
 
     /**

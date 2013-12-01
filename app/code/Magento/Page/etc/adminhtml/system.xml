@@ -73,7 +73,7 @@
                 </field>
                 <field id="reset_to_defaults" translate="label comment" type="button" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Reset to Defaults</label>
-                    <frontend_model>Magento\Adminhtml\Block\Page\System\Config\Robots\Reset</frontend_model>
+                    <frontend_model>Magento\Backend\Block\Page\System\Config\Robots\Reset</frontend_model>
                     <comment>This action will delete your custom instructions and reset robots.txt file to system's default settings.</comment>
                 </field>
             </group>

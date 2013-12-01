@@ -30,7 +30,7 @@ $upsModel = $this->getShippingModel();
 $orShipArr = $upsModel->getCode('originShipment');
 $defShipArr = $upsModel->getCode('method');
 
-/** @var $this \Magento\Adminhtml\Block\Template */
+/** @var $this \Magento\Backend\Block\Template */
 $sectionCode = $this->getRequest()->getParam('section');
 $websiteCode = $this->getRequest()->getParam('website');
 $storeCode = $this->getRequest()->getParam('store');

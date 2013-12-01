@@ -154,7 +154,7 @@ class Store extends \Magento\Core\Model\Resource\Db\AbstractDb
             $storeId = $adapter->fetchOne($select, 'default_store_id');
 
             if ($storeId == $model->getId()) {
-                $bind = array('default_store_id' => \Magento\Core\Model\AppInterface::ADMIN_STORE_ID);
+                $bind = array('default_store_id' => \Magento\Core\Model\Store::DEFAULT_STORE_ID);
                 $where = array('group_id = ?' => $model->getOriginalGroupId());
                 $this->_getWriteAdapter()->update($this->getTable('core_store_group'), $bind, $where);
             }

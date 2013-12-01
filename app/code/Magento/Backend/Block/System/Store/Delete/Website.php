@@ -33,7 +33,7 @@
  */
 namespace Magento\Backend\Block\System\Store\Delete;
 
-class Website extends \Magento\Adminhtml\Block\Template
+class Website extends \Magento\Backend\Block\Template
 {
 
     protected function _prepareLayout()

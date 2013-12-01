@@ -43,7 +43,7 @@ class Create extends \Magento\Backend\Block\Widget\Button
     protected $_config = null;
 
     /**
-     * Retrive config of new attribute creation
+     * Retrieve config of new attribute creation
      *
      * @return \Magento\Object
      */

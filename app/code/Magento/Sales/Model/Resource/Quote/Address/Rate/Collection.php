@@ -26,7 +26,7 @@
 
 
 /**
- * Quote addresses shiping rates collection
+ * Quote addresses shipping rates collection
  *
  * @category    Magento
  * @package     Magento_Sales

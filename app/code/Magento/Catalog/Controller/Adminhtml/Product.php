@@ -193,7 +193,7 @@ class Product extends \Magento\Backend\App\Action
     protected function _outputBlocks()
     {
         $blocks = func_get_args();
-        $output = $this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Text\ListText');
+        $output = $this->_view->getLayout()->createBlock('Magento\Backend\Block\Text\ListText');
         foreach ($blocks as $block) {
             $output->insert($block, '', true);
         }

@@ -116,14 +116,14 @@ class Collection implements \IteratorAggregate, \Countable, \Magento\Core\Model\
     protected $_flags = array();
 
     /**
-     * @var \Magento\Core\Model\EntityFactory
+     * @var \Magento\Data\Collection\EntityFactoryInterface
      */
     protected $_entityFactory;
 
     /**
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Data\Collection\EntityFactoryInterface $entityFactory
      */
-    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory)
+    public function __construct(\Magento\Data\Collection\EntityFactoryInterface $entityFactory)
     {
         $this->_entityFactory = $entityFactory;
     }

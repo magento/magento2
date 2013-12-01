@@ -26,6 +26,6 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="adminhtml_sitemap_index_grid_block"/>
     <referenceContainer name="content">
-        <block class="Magento\Adminhtml\Block\Sitemap" name="adminhtml.sitemap.container"/>
+        <block class="Magento\Sitemap\Block\Adminhtml\Sitemap" name="adminhtml.sitemap.container"/>
     </referenceContainer>
 </layout>

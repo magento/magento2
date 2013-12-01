@@ -80,14 +80,7 @@ class Service extends \Magento\Object
      *
      * @var \Magento\UrlInterface
      */
-    protected $_backendUrl;
-
-    /**
-     * Frontend url
-     *
-     * @var \Magento\UrlInterface
-     */
-    protected $_frontendUrl;
+    protected $_url;
 
     /**
      * Centinel session
@@ -104,13 +97,6 @@ class Service extends \Magento\Object
     protected $_session;
 
     /**
-     * Store manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * State factory
      *
      * @var \Magento\Centinel\Model\StateFactory
@@ -125,35 +111,37 @@ class Service extends \Magento\Object
     protected $_validationState;
 
     /**
+     * @var string
+     */
+    protected $_urlPrefix;
+
+    /**
      * @param \Magento\Centinel\Model\Config $config
      * @param \Magento\Centinel\Model\Api $api
-     * @param \Magento\UrlInterface $backendUrl
-     * @param \Magento\UrlInterface $frontendUrl
+     * @param \Magento\UrlInterface $url
      * @param \Magento\Core\Model\Session\AbstractSession $centinelSession
      * @param \Magento\Core\Model\Session $session
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Centinel\Model\StateFactory $stateFactory
+     * @param string $urlPrefix
      * @param array $data
      */
     public function __construct(
         \Magento\Centinel\Model\Config $config,
         \Magento\Centinel\Model\Api $api,
-        \Magento\UrlInterface $backendUrl,
-        \Magento\UrlInterface $frontendUrl,
+        \Magento\UrlInterface $url,
         \Magento\Core\Model\Session\AbstractSession $centinelSession,
         \Magento\Core\Model\Session $session,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Centinel\Model\StateFactory $stateFactory,
+        $urlPrefix = 'centinel/index/',
         array $data = array()
     ) {
         $this->_config = $config;
         $this->_api = $api;
-        $this->_backendUrl = $backendUrl;
-        $this->_frontendUrl = $frontendUrl;
+        $this->_url = $url;
         $this->_centinelSession = $centinelSession;
         $this->_session = $session;
-        $this->_storeManager = $storeManager;
         $this->_stateFactory = $stateFactory;
+        $this->_urlPrefix = $urlPrefix;
         parent::__construct($data);
     }
 
@@ -170,11 +158,12 @@ class Service extends \Magento\Object
     /**
      * Generate checksum from all passed parameters
      *
+     * @param string $paymentMethodCode
      * @param string $cardType
      * @param string $cardNumber
      * @param string $cardExpMonth
      * @param string $cardExpYear
-     * @param double $amount
+     * @param float $amount
      * @param string $currencyCode
      * @return string
      */
@@ -190,7 +179,7 @@ class Service extends \Magento\Object
      * @param bool $current
      * @return string
      */
-    private function _getUrl($suffix, $current = false)
+    protected function _getUrl($suffix, $current = false)
     {
         $params = array(
             '_secure'  => true,
@@ -198,11 +187,7 @@ class Service extends \Magento\Object
             'form_key' => $this->_session->getFormKey(),
             'isIframe' => true
         );
-        if ($this->_storeManager->getStore()->isAdmin()) {
-            return $this->_backendUrl->getUrl('adminhtml/centinel_index/' . $suffix, $params);
-        } else {
-            return $this->_frontendUrl->getUrl('centinel/index/' . $suffix, $params);
-        }
+        return $this->_url->getUrl($this->_urlPrefix . $suffix, $params);
     }
 
     /**
@@ -444,12 +429,12 @@ class Service extends \Magento\Object
         return $validationState && $validationState->isAuthenticateSuccessful();
     }
 
-     /**
+    /**
      * Export cmpi lookups and authentication information stored in session into array
      *
      * @param mixed $to
      * @param array $map
-     * @return mixed $to
+     * @return mixed
      */
     public function exportCmpiData($to, $map = false)
     {

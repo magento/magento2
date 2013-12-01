@@ -395,14 +395,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
             return $this->getData('store_label');
         }
         $store = $this->_storeManager->getStore($storeId);
-        $label = false;
-        if (!$store->isAdmin()) {
-            $labels = $this->getStoreLabels();
-            if (isset($labels[$store->getId()])) {
-                return $labels[$store->getId()];
-            }
+        $labels = $this->getStoreLabels();
+        if (isset($labels[$store->getId()])) {
+            return $labels[$store->getId()];
+        } else {
+            return $this->getFrontendLabel();
         }
-        return $this->getFrontendLabel();
     }
 
     /**

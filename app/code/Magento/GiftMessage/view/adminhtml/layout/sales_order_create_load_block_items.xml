@@ -30,7 +30,7 @@
         </block>
     </referenceBlock>
     <referenceBlock name="items_grid">
-        <block class="Magento\Adminhtml\Block\Template" name="popup_window" template="Magento_GiftMessage::popup.phtml">
+        <block class="Magento\Backend\Block\Template" name="popup_window" template="Magento_GiftMessage::popup.phtml">
             <block class="Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create\Form" name="gift_options_form" template="giftoptionsform.phtml"/>
         </block>
     </referenceBlock>

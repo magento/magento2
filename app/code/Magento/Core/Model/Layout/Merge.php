@@ -114,7 +114,7 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
     protected $_cache;
 
     /**
-     * @var \Magento\Adminhtml\Model\LayoutUpdate\Validator
+     * @var \Magento\Core\Model\Layout\Update\Validator
      */
     protected $_layoutValidator;
 
@@ -132,7 +132,7 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
      * @param \Magento\Core\Model\Resource\Layout\Update $resource
      * @param \Magento\App\State $appState
      * @param \Magento\Cache\FrontendInterface $cache
-     * @param \Magento\Adminhtml\Model\LayoutUpdate\Validator $validator
+     * @param \Magento\Core\Model\Layout\Update\Validator $validator
      * @param \Magento\Logger $logger
      * @param \Magento\View\Design\ThemeInterface $theme Non-injectable theme instance
      */
@@ -143,7 +143,7 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
         \Magento\Core\Model\Resource\Layout\Update $resource,
         \Magento\App\State $appState,
         \Magento\Cache\FrontendInterface $cache,
-        \Magento\Adminhtml\Model\LayoutUpdate\Validator $validator,
+        \Magento\Core\Model\Layout\Update\Validator $validator,
         \Magento\Logger $logger,
         \Magento\View\Design\ThemeInterface $theme = null
     ) {
@@ -373,7 +373,7 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
         if ($this->_appState->getMode() === \Magento\App\State::MODE_DEVELOPER) {
             if (!$this->_layoutValidator->isValid(
                     $layout,
-                    \Magento\Adminhtml\Model\LayoutUpdate\Validator::LAYOUT_SCHEMA_MERGED,
+                    \Magento\Core\Model\Layout\Update\Validator::LAYOUT_SCHEMA_MERGED,
                     false
             )) {
                 $messages = $this->_layoutValidator->getMessages();
@@ -592,11 +592,17 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
         $layoutStr = '';
         $theme = $this->_getPhysicalTheme($this->_theme);
         $updateFiles = $this->_fileSource->getFiles($theme);
+        $useErrors = libxml_use_internal_errors(true);
         foreach ($updateFiles as $file) {
-            $fileStr = file_get_contents($file->getFilename());
+            $fileStr = (string)file_get_contents($file->getFilename());
             $fileStr = $this->_substitutePlaceholders($fileStr);
             /** @var $fileXml \Magento\View\Layout\Element */
             $fileXml = $this->_loadXmlString($fileStr);
+            if (!$fileXml instanceof \Magento\View\Layout\Element) {
+                $this->_logXmlErrors($file->getFilename(), libxml_get_errors());
+                libxml_clear_errors();
+                continue;
+            }
             if (!$file->isBase() && $fileXml->xpath(self::XPATH_HANDLE_DECLARATION)) {
                 throw new \Magento\Exception(sprintf(
                     "Theme layout update file '%s' must not declare page types.",
@@ -608,9 +614,32 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
             $handleStr = '<handle ' . $handleAttributes . '>' . $fileXml->innerXml() . '</handle>';
             $layoutStr .= $handleStr;
         }
+        libxml_use_internal_errors($useErrors);
         $layoutStr = '<layouts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' . $layoutStr . '</layouts>';
         $layoutXml = $this->_loadXmlString($layoutStr);
         return $layoutXml;
+    }
+
+    /**
+     * Log xml errors to system log
+     *
+     * @param string $fileName
+     * @param array $libXmlErrors
+     */
+    protected function _logXmlErrors($fileName, $libXmlErrors)
+    {
+        $errors = array();
+        if (count($libXmlErrors)) {
+            foreach ($libXmlErrors as $error) {
+                $errors[] = "{$error->message} Line: {$error->line}";
+            }
+
+            $this->_logger->log(sprintf(
+                "Theme layout update file '%s' is not valid.\n%s",
+                $fileName,
+                implode("\n", $errors)
+            ), \Zend_Log::ERR);
+        }
     }
 
     /**

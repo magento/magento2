@@ -35,7 +35,7 @@
         <div class="field field-url-rewrite-option-select">
             <label for="url-rewrite-option-select" class="label"><?php echo $this->getSelectorLabel() ?></label>
             <div class="control">
-                <?php $url = $this->helper('Magento\Adminhtml\Helper\Data')->getUrl('adminhtml/*/*')?>
+                <?php $url = $this->helper('Magento\Backend\Helper\Data')->getUrl('adminhtml/*/*')?>
                 <select id="url-rewrite-option-select" class="select" onchange="window.location = this.value;">
                 <?php foreach ($this->getModes() as $mode => $label): ?>
                     <option <?php echo ($this->isMode($mode) ? 'selected="selected" ' :'' ) ?>value="<?php echo $url . $mode ?>"><?php echo $label ?></option>

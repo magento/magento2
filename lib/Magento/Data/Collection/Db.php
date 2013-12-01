@@ -104,13 +104,13 @@ class Db extends \Magento\Data\Collection
     /**
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Data\Collection\EntityFactoryInterface $entityFactory
      * @param null $conn
      */
     public function __construct(
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Data\Collection\EntityFactoryInterface $entityFactory,
         $conn = null
     ) {
         parent::__construct($entityFactory);

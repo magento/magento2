@@ -27,4 +27,7 @@
     <event name="translate_initialization_before">
         <observer name="initialize_translation" instance="Magento\Backend\Model\Observer" method="initializeTranslation" />
     </event>
+    <event name="admin_system_config_changed_section_admin">
+        <observer name="bind_locale" instance="Magento\Backend\Model\Config\Backend\Admin\Observer" method="afterCustomUrlChanged" />
+    </event>
 </config>

@@ -144,7 +144,9 @@ class Info extends \Magento\View\Block\Template
         if (!$method = $payment->getMethodInstance()) {
             return true;
         }
-        return !$this->_storeManager->getStore($method->getStore())->isAdmin();
+
+        $methodStore = $this->_storeManager->getStore($method->getStore());
+        return $methodStore->getId() != \Magento\Core\Model\Store::DEFAULT_STORE_ID;
     }
 
     /**

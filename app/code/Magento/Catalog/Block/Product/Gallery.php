@@ -123,20 +123,20 @@ class Gallery extends \Magento\View\Block\Template
         return false;
     }
 
-    public function getPreviusImage()
+    public function getPreviousImage()
     {
         $current = $this->getCurrentImage();
         if (!$current) {
             return false;
         }
-        $previus = false;
+        $previous = false;
         foreach ($this->getGalleryCollection() as $image) {
             if ($image->getValueId() == $current->getValueId()) {
-                return $previus;
+                return $previous;
             }
-            $previus = $image;
+            $previous = $image;
         }
-        return $previus;
+        return $previous;
     }
 
     public function getNextImage()
@@ -159,9 +159,9 @@ class Gallery extends \Magento\View\Block\Template
         return $next;
     }
 
-    public function getPreviusImageUrl()
+    public function getPreviousImageUrl()
     {
-        $image = $this->getPreviusImage();
+        $image = $this->getPreviousImage();
         if ($image) {
             return $this->getUrl('*/*/*', array('_current' => true, 'image' => $image->getValueId()));
         }

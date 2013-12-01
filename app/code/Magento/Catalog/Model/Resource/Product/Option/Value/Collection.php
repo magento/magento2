@@ -86,7 +86,7 @@ class Collection
             'store_value_title.title'
         );
         $joinExprDefaultPrice = 'default_value_price.option_type_id = main_table.option_type_id AND '
-                  . $adapter->quoteInto('default_value_price.store_id = ?', \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID);
+                  . $adapter->quoteInto('default_value_price.store_id = ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID);
 
         $joinExprStorePrice = 'store_value_price.option_type_id = main_table.option_type_id AND '
                        . $adapter->quoteInto('store_value_price.store_id = ?', $storeId);
@@ -122,7 +122,7 @@ class Collection
                     'store_title' => 'title',
                     'title'       => $titleExpr)
             )
-            ->where('default_value_title.store_id = ?', \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID);
+            ->where('default_value_title.store_id = ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID);
 
         return $this;
     }
@@ -155,7 +155,7 @@ class Collection
                     'title'         => $titleExpr
                 )
             )
-            ->where('default_value_title.store_id = ?', \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID);
+            ->where('default_value_title.store_id = ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID);
 
         return $this;
     }
@@ -179,7 +179,7 @@ class Collection
             );
 
         $joinExprDefault = 'default_value_price.option_type_id = main_table.option_type_id AND '
-                        . $this->getConnection()->quoteInto('default_value_price.store_id = ?', \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID);
+                        . $this->getConnection()->quoteInto('default_value_price.store_id = ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID);
         $joinExprStore = 'store_value_price.option_type_id = main_table.option_type_id AND '
                        . $this->getConnection()->quoteInto('store_value_price.store_id = ?', $storeId);
         $this->getSelect()

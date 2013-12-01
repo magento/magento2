@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -27,8 +25,8 @@
 /**
  * Grouped product data template
  *
- * @see \Magento\Catalog\Block\Product\View\BaseImage
- * @see \Magento\Catalog\Block\Product\View\Type\Grouped
+ * @var $this \Magento\Catalog\Block\Product\View\BaseImage
+ * @var $this \Magento\Catalog\Block\Product\View\Type\Grouped
  */
 ?>
 <?php $this->setPreconfiguredValue(); ?>
@@ -37,35 +35,36 @@
 <?php $_hasAssociatedProducts = count($_associatedProducts) > 0; ?>
 <?php if ($this->displayProductStockStatus()): ?>
     <?php if ($_product->isAvailable() && $_hasAssociatedProducts): ?>
-        <p class="availability in-stock"><?php echo __('Availability:') ?> <span><?php echo __('In stock') ?></span></p>
+        <p class="stock available" title="<?php echo __('Availability') ?>">
+            <span><?php echo __('In stock') ?></span>
+        </p>
     <?php else: ?>
-        <p class="availability out-of-stock"><?php echo __('Availability:') ?> <span><?php echo __('Out of stock') ?></span></p>
+        <p class="stock unavailable" title="<?php echo __('Availability') ?>">
+            <span><?php echo __('Out of stock') ?></span>
+        </p>
     <?php endif; ?>
 <?php endif; ?>
-<?php echo $this->getChildHtml('product_type_data_extra') ?>
-<table class="data-table grouped-items-table" id="super-product-table">
-    <col />
-    <col />
-    <col width="1" />
+
+<table class="table data grouped" id="super-product-table">
     <thead>
-        <tr>
-            <th><?php echo __('Product Name') ?></th>
-            <?php if ($this->getCanShowProductPrice($_product)): ?>
-            <th class="a-right"><?php echo __('Price') ?></th>
-            <?php endif; ?>
-            <?php if ($_product->isSaleable()): ?>
-            <th class="a-center"><?php echo __('Qty') ?></th>
-            <?php endif; ?>
-        </tr>
+    <tr>
+        <th class="col item"><?php echo __('Product Name') ?></th>
+        <?php if ($this->getCanShowProductPrice($_product)): ?>
+            <th class="col price"><?php echo __('Price') ?></th>
+        <?php endif; ?>
+        <?php if ($_product->isSaleable()): ?>
+            <th class="col qty"><?php echo __('Qty') ?></th>
+        <?php endif; ?>
+    </tr>
     </thead>
     <tbody>
     <?php if ($_hasAssociatedProducts): ?>
     <?php foreach ($_associatedProducts as $_item): ?>
         <?php $_finalPriceInclTax = $this->helper('Magento\Tax\Helper\Data')->getPrice($_item, $_item->getFinalPrice(), true) ?>
         <tr>
-            <td><?php echo $this->escapeHtml($_item->getName()) ?></td>
+            <td class="col item"><strong class="product name"><?php echo $this->escapeHtml($_item->getName()) ?></strong></td>
             <?php if ($this->getCanShowProductPrice($_product)): ?>
-            <td class="a-right">
+            <td class="col price">
                 <?php if ($this->getCanShowProductPrice($_item)): ?>
                 <?php echo $this->getPriceHtml($_item, true) ?>
                 <?php echo $this->getTierPriceHtml($_item) ?>
@@ -73,21 +72,32 @@
             </td>
             <?php endif; ?>
             <?php if ($_product->isSaleable()): ?>
-            <td class="a-center">
+            <td class="col qty">
             <?php if ($_item->isSaleable()) : ?>
-                <input type="text" name="super_group[<?php echo $_item->getId() ?>]" maxlength="12" value="<?php echo $_item->getQty()*1 ?>" title="<?php echo __('Qty') ?>" class="input-text qty" data-validate="{'validate-grouped-qty':'#super-product-table'}"/>
+                <div class="control qty">
+                    <input type="text" name="super_group[<?php echo $_item->getId() ?>]"
+                           maxlength="12"
+                           value="<?php echo $_item->getQty() * 1 ?>"
+                           title="<?php echo __('Qty') ?>"
+                           class="input-text qty"
+                           data-validate="{'validate-grouped-qty':'#super-product-table'}"/>
+                </div>
             <?php else: ?>
-                <p class="availability out-of-stock"><span><?php echo __('Out of stock') ?></span></p>
+                <p class="stock unavailable" title="<?php echo __('Availability') ?>">
+                    <span><?php echo __('Out of stock') ?></span>
+                </p>
             <?php endif; ?>
             </td>
             <?php endif; ?>
         </tr>
     <?php endforeach; ?>
     <?php else: ?>
-       <tr>
-           <td colspan="<?php if ($_product->isSaleable()): ?>4<?php else : ?>3<?php endif; ?>"><?php echo __('No options of this product are available.') ?></td>
-       </tr>
+        <tr>
+            <td class="unavailable"
+                colspan="<?php if ($_product->isSaleable()): ?>4<?php else : ?>3<?php endif; ?>">
+                <?php echo __('No options of this product are available.') ?>
+            </td>
+        </tr>
     <?php endif; ?>
     </tbody>
 </table>
-<script type="text/javascript">(function($) {$('#super-product-table').decorate('table')})(jQuery)</script>

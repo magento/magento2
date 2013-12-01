@@ -1,17 +1,17 @@
 // Singleton class TooltipWindow
 // This class works with special className. The tooltip content could be in your HTML page as an hidden element or
-// can be retreive by an AJAX call.
+// can be retrieve by an AJAX call.
 //
 // To work, You just need to set two class name on elements that should show tooltips
 // - One to say to TooltipManager that this element must have a tooltip ('tooltip' by default)
 // - Another to indicate how to find the tooltip content
 //   It could be html_XXXX if tootltip content is somewhere hidden in your page, XXX must be DOM ID of this hidden element
-//   It could be ajax_XXXX if tootltip content must be find by an ajax request, XXX will be the string send as id parameter to your server. 
+//   It could be ajax_XXXX if tootltip content must be find by an ajax request, XXX will be the string send as id parameter to your server.
 // Check samples/tooltips/tooltip.html to see how it works
 //
 TooltipManager = {
   options: {cssClassName: 'tooltip', delayOver: 200, delayOut: 1000, shiftX: 10, shiftY: 10,
-            className: 'alphacube', width: 200, height: null, 
+            className: 'alphacube', width: 200, height: null,
             draggable: false, minimizable: false, maximizable: false, showEffect: Element.show, hideEffect: Element.hide},
   ajaxInfo: null,
   elements: null,
@@ -20,21 +20,21 @@ TooltipManager = {
 
   // Init tooltip manager
   // parameters:
-  // - cssClassName (string) : CSS class name where tooltip should be shown. 
-  // - ajaxOptions  (hash)   : Ajax options for ajax tooltip. 
-  //                           For examples {url: "/tooltip/get.php", options: {method: 'get'}} 
+  // - cssClassName (string) : CSS class name where tooltip should be shown.
+  // - ajaxOptions  (hash)   : Ajax options for ajax tooltip.
+  //                           For examples {url: "/tooltip/get.php", options: {method: 'get'}}
   //                           see Ajax.Request documentation for details
   //- tooltipOptions (hash)  : available keys
   //                           - delayOver: int in ms (default 10) delay before showing tooltip
   //                           - delayOut:  int in ms (default 1000) delay before hidding tooltip
-  //                           - shiftX:    int in pixels (default 10) left shift of the tooltip window 
-  //                           - shiftY:    int in pixels (default 10) top shift of the tooltip window 
+  //                           - shiftX:    int in pixels (default 10) left shift of the tooltip window
+  //                           - shiftY:    int in pixels (default 10) top shift of the tooltip window
   //                           and All window options like showEffect: Element.show, hideEffect: Element.hide to remove animation
   //                           default: {className: 'alphacube', width: 200, height: null, draggable: false, minimizable: false, maximizable: false}
-  
+
   init: function(cssClassName, ajaxInfo, tooltipOptions) {
     TooltipManager.options = Object.extend(TooltipManager.options, tooltipOptions || {});
-    
+
     cssClassName = TooltipManager.options.cssClassName || "tooltip";
     TooltipManager.ajaxInfo = ajaxInfo;
     TooltipManager.elements = $$("." + cssClassName);
@@ -53,66 +53,66 @@ TooltipManager = {
     });
     Windows.addObserver(this);
   },
-  
+
   addHTML: function(element, tooltipElement) {
     element = $(element);
     tooltipElement = $(tooltipElement);
     element.tooltipElement = tooltipElement;
-    
+
     element.observe("mouseover", TooltipManager._mouseOver);
     element.observe("mouseout", TooltipManager._mouseOut);
   },
-  
+
   addAjax: function(element, ajaxInfo) {
     element = $(element);
     element.ajaxInfo = ajaxInfo;
     element.observe("mouseover", TooltipManager._mouseOver);
-    element.observe("mouseout", TooltipManager._mouseOut);    
+    element.observe("mouseout", TooltipManager._mouseOut);
   },
-    
+
   addURL: function(element, url, width, height) {
     element = $(element);
     element.url = url;
     element.frameWidth = width;
     element.frameHeight = height;
     element.observe("mouseover", TooltipManager._mouseOver);
-    element.observe("mouseout", TooltipManager._mouseOut);    
+    element.observe("mouseout", TooltipManager._mouseOut);
   },
-    
+
   close: function() {
     if (TooltipManager.tooltipWindow)
       TooltipManager.tooltipWindow.hide();
   },
-  
+
   preloadImages: function(path, images, extension) {
     if (!extension)
       extension = ".gif";
-      
+
     //preload images
     $A(images).each(function(i) {
-      var image = new Image(); 
-      image.src= path + "/" + i + extension; 
+      var image = new Image();
+      image.src= path + "/" + i + extension;
     });
   },
-  
+
   _showTooltip: function(element) {
     if (this.element == element)
       return;
     // Get original element
-    while (element && (!element.tooltipElement && !element.ajaxInfo && !element.url)) 
+    while (element && (!element.tooltipElement && !element.ajaxInfo && !element.url))
       element = element.parentNode;
     this.element = element;
-    
+
     TooltipManager.showTimer = null;
     if (TooltipManager.hideTimer)
       clearTimeout(TooltipManager.hideTimer);
-    
+
     var position = Position.cumulativeOffset(element);
     var dimension = element.getDimensions();
 
     if (! this.tooltipWindow)
       this.tooltipWindow = new Window("__tooltip__", TooltipManager.options);
-      
+
     this.tooltipWindow.hide();
     this.tooltipWindow.setLocation(position[1] + dimension.height + TooltipManager.options.shiftY, position[0] + TooltipManager.options.shiftX);
 
@@ -127,7 +127,7 @@ TooltipManager = {
     if (element.ajaxInfo) {
       var p = element.ajaxInfo.options.parameters;
       var saveParam = p;
-      
+
       // Set by CSS
       if (element.ajaxId) {
         if (p)
@@ -138,8 +138,8 @@ TooltipManager = {
       element.ajaxInfo.options.parameters = p || "";
       this.tooltipWindow.setHTMLContent("");
       this.tooltipWindow.setAjaxContent(element.ajaxInfo.url, element.ajaxInfo.options);
-      element.ajaxInfo.options.parameters = saveParam;    
-    } 
+      element.ajaxInfo.options.parameters = saveParam;
+    }
     // URL content
     else if (element.url) {
       this.tooltipWindow.setURL(element.url);
@@ -158,22 +158,22 @@ TooltipManager = {
       this.tooltipWindow.toFront();
     }
   },
-  
+
   _hideTooltip: function(element) {
     if (this.tooltipWindow) {
       this.tooltipWindow.hide();
       this.element = null;
     }
   },
-  
+
   _mouseOver: function (event) {
     var element = Event.element(event);
-    if (TooltipManager.showTimer) 
+    if (TooltipManager.showTimer)
       clearTimeout(TooltipManager.showTimer);
-    
+
     TooltipManager.showTimer = setTimeout(function() {TooltipManager._showTooltip(element)}, TooltipManager.options.delayOver)
   },
-  
+
   _mouseOut: function(event) {
     var element = Event.element(event);
     if (TooltipManager.showTimer) {
@@ -184,37 +184,37 @@ TooltipManager = {
     if (TooltipManager.tooltipWindow)
       TooltipManager.hideTimer = setTimeout(function() {TooltipManager._hideTooltip(element)}, TooltipManager.options.delayOut)
   },
-  
+
   _tooltipOver: function(event, element) {
     if (TooltipManager.hideTimer) {
       clearTimeout(TooltipManager.hideTimer);
       TooltipManager.hideTimer = null;
     }
   },
-  
+
   _tooltipOut: function(event, element) {
     if (TooltipManager.hideTimer == null)
       TooltipManager.hideTimer = setTimeout(function() {TooltipManager._hideTooltip(element)}, TooltipManager.options.delayOut)
   },
-  
+
   _getInfo: function(element) {
     // Find html_ for static content
     var id = element.className.split(' ').detect(function(name) {return name.indexOf("html_") == 0});
     var ajax = true;
     if (id)
       ajax = false;
-    else 
+    else
       // Find ajax_ for ajax content
       id = element.className.split(' ').detect(function(name) {return name.indexOf("ajax_") == 0});
-    
+
     id = id.substr(id.indexOf('_')+1, id.length)
     return id ? {ajax: ajax, id: id} : null;
   },
-  
+
   onBeforeShow: function(eventName, win) {
      var top = parseFloat(win.getLocation().top);
      var dim = win.element.getDimensions();
-    
+
      if (top + dim.height > TooltipManager._getScrollTop() + TooltipManager._getPageHeight()) {
        var position = Position.cumulativeOffset(this.element);
 
@@ -226,7 +226,7 @@ TooltipManager = {
 	_getPageWidth: function(){
 		return window.innerWidth || document.documentElement.clientWidth || 0;
 	},
-	
+
 	_getPageHeight: function(){
 		return window.innerHeight || document.documentElement.clientHeight || 0;
 	},
@@ -237,5 +237,5 @@ TooltipManager = {
 
 	_getScrollLeft: function(){
 		return document.documentElement.scrollLeft || window.pageXOffset || 0;
-	}	
+	}
 };

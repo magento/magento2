@@ -33,7 +33,7 @@
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create;
 
-class Items extends \Magento\Adminhtml\Block\Template
+class Items extends \Magento\Backend\Block\Template
 {
     /**
      * Get order item

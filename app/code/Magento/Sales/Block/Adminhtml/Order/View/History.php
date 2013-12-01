@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View;
 
-class History extends \Magento\Adminhtml\Block\Template
+class History extends \Magento\Backend\Block\Template
 {
     /**
      * Core registry

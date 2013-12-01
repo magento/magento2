@@ -25,6 +25,6 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceContainer name="left">
-        <block class="Magento\Catalog\Block\Layer\View" name="catalog.leftnav" after="currency" template="layer/view.phtml"/>
+        <block class="Magento\Catalog\Block\Layer\View" name="catalog.leftnav" before="-" template="layer/view.phtml"/>
     </referenceContainer>
 </layout>

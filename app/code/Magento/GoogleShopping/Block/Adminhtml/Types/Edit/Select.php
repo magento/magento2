@@ -33,7 +33,7 @@
  */
 namespace Magento\GoogleShopping\Block\Adminhtml\Types\Edit;
 
-class Select extends \Magento\Adminhtml\Block\Template
+class Select extends \Magento\Backend\Block\Template
 {
 
     protected $_template = 'types/edit/select.phtml';

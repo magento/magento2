@@ -45,12 +45,6 @@ interface AppInterface extends \Magento\Core\Model\StoreManagerInterface
     const DISTRO_STORE_CODE     = \Magento\Core\Model\Store::DEFAULT_CODE;
 
     /**
-     * Admin store Id
-     *
-     */
-    const ADMIN_STORE_ID = 0;
-
-    /**
      * Dependency injection configuration node name
      */
     const CONFIGURATION_DI_NODE = 'di';

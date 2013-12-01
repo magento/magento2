@@ -50,7 +50,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResult = array(1 => 2);
         $actualResult = array();
-        /** @var \Magento\Adminhtml\Model\Report\Item $reportItem */
+        /** @var \Magento\Reports\Model\Item $reportItem */
         foreach ($this->_collection->getItems() as $reportItem) {
             $actualResult[$reportItem->getData('product_id')] = $reportItem->getData('qty_ordered');
         }

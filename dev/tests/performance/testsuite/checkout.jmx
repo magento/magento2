@@ -94,7 +94,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${ADMIN_PATH}admin/sales_order/</stringProp>
+          <stringProp name="HTTPSampler.path">${ADMIN_PATH}sales/order/</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -198,7 +198,7 @@
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract product name" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">product_name</stringProp>
-            <stringProp name="RegexExtractor.regex">&lt;h1&gt;(.+?)&lt;/h1&gt;</stringProp>
+            <stringProp name="RegexExtractor.regex">&lt;h1 class=&quot;title&quot;&gt;&lt;span class=&quot;base&quot;&gt;(.+?)&lt;/span&gt;&lt;/h1&gt;</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default"></stringProp>
             <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -292,7 +292,7 @@
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert success" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="2058954891">${product_name}</stringProp>
-              <stringProp name="1157735154">class=&quot;button btn-proceed-checkout btn-checkout&quot;</stringProp>
+              <stringProp name="837394321">class=&quot;action primary checkout&quot;</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>

@@ -206,7 +206,6 @@ class Application
     {
         /** @var $app \Magento\Core\Model\App */
         $this->_application = $this->getObjectManager()->get('Magento\Core\Model\App');
-        $this->getObjectManager()->get('Magento\App\State')->setAreaCode(self::AREA_CODE);
         $this->getObjectManager()->configure(
             $this->getObjectManager()->get('Magento\App\ObjectManager\ConfigLoader')->load(self::AREA_CODE)
         );
@@ -285,6 +284,7 @@ class Application
         if (!$this->_objectManager) {
             $locatorFactory = new \Magento\App\ObjectManagerFactory();
             $this->_objectManager = $locatorFactory->create(BP, $_SERVER);
+            $this->_objectManager->get('Magento\App\State')->setAreaCode(self::AREA_CODE);
         }
         return $this->_objectManager;
     }

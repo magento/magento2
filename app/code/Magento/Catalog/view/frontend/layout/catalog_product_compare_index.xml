@@ -24,17 +24,11 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="root">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">popup.phtml</argument>
+    <update handle="page_one_column"/>
+    <referenceBlock name="page.main.title">
+        <action method="setPageTitle">
+            <argument translate="true" name="page_title" xsi:type="string">Compare Products</argument>
         </action>
-    </referenceBlock>
-    <referenceBlock name="head">
-        <block class="Magento\Page\Block\Html\Head\Script" name="scriptaculous-scriptaculous-js">
-            <arguments>
-                <argument name="file" xsi:type="string">scriptaculous/scriptaculous.js</argument>
-            </arguments>
-        </block>
     </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Catalog\Block\Product\Compare\ListCompare" name="catalog.compare.list" template="product/compare/list.phtml"/>

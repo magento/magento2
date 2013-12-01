@@ -27,7 +27,7 @@
 
 namespace Magento\Backend\Block\System;
 
-class Design extends \Magento\Adminhtml\Block\Template
+class Design extends \Magento\Backend\Block\Template
 {
     protected function _prepareLayout()
     {

@@ -49,8 +49,9 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider layoutTypesDataProvider
      */
-    public function testLayoutTypes($layout)
+    public function testLayoutTypes($area, $layout)
     {
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')->loadArea($area);
         $layout = simplexml_load_file(
             $layout,
             'Magento\View\Layout\Element'
@@ -79,7 +80,15 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function layoutTypesDataProvider()
     {
-        return \Magento\TestFramework\Utility\Files::init()->getLayoutFiles();
+        $areas = array('adminhtml', 'frontend', 'install', 'email');
+        $data = array();
+        foreach ($areas as $area) {
+            $layoutFiles = \Magento\TestFramework\Utility\Files::init()->getLayoutFiles(array('area' => $area), false);
+            foreach ($layoutFiles as $layoutFile) {
+                $data[] = array($area, $layoutFile);
+            }
+        }
+        return $data;
     }
 
     /**

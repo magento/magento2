@@ -26,40 +26,49 @@
 (function ($, window) {
     $.widget('mage.compareList', {
         _create: function() {
-            this.element.decorate('table');
 
-            $(this.options.windowCloseSelector).on('click', function() {
-                window.close();
-            });
+            var elem = this.element,
+                products = $('thead td', elem);
+
+            if (products.length > this.options.productsInRow) {
+                var headings = $('<table/>')
+                    .addClass('comparison headings data table')
+                    .insertBefore(elem.closest('.container'));
+                elem.addClass('scroll');
+
+                $('th', elem).each(function(){
+                    var th = $(this),
+                        thCopy = th.clone();
+
+                    th.animate({
+                        top: '+=0'
+                    }, 50, function(){
+                        var height;
+                        if ($.browser.mozilla && $.browser.version <= '11.0') {
+                            height = th.outerHeight();
+                        }
+                        else {
+                            height = th.height();
+                        }
+                        thCopy.css('height', height)
+                            .appendTo(headings)
+                            .wrap('<tr />');
+                    });
+                });
+            }
 
             $(this.options.windowPrintSelector).on('click', function(e) {
                 e.preventDefault();
                 window.print();
             });
 
-            var ajaxSpinner = $(this.options.ajaxSpinner);
-            $(this.options.productRemoveSelector).on('click', function(e) {
-                e.preventDefault();
-                $.ajax({
-                    url: $(e.target).data('url'),
-                    type: 'POST',
-                    beforeSend: function() {
-                        ajaxSpinner.show();
-                    }
-                }).done(function() {
-                    ajaxSpinner.hide();
-                    window.location.reload();
-                    window.opener.location.reload();
-                });
-            });
-
             $.each(this.options.selectors, function(i, selector) {
                 $(selector).on('click', function(e) {
                     e.preventDefault();
-                    window.opener.focus();
-                    window.opener.location.href = $(this).data('url');
+                    window.location.href = $(this).data('url');
                 });
             });
+
         }
     });
 })(jQuery, window);

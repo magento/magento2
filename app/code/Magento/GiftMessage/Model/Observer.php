@@ -91,7 +91,7 @@ class Observer extends \Magento\Object
     /**
      * Operate with gift messages on checkout proccess
      *
-     * @param Varieb_Object $observer
+     * @param Varien_Object $observer
      * @return \Magento\GiftMessage\Model\Observer
      */
     public function checkoutEventCreateGiftMessage($observer)

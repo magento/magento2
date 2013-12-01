@@ -39,7 +39,7 @@ class Price extends \Magento\ProductAlert\Block\Email\AbstractEmail
     protected $_template = 'email/price.phtml';
 
     /**
-     * Retrive unsubscribe url for product
+     * Retrieve unsubscribe url for product
      *
      * @param int $productId
      * @return string

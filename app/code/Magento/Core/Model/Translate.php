@@ -27,6 +27,7 @@
 namespace Magento\Core\Model;
 use Magento\TranslateInterface;
 
+
 /**
  * Translate model
  *

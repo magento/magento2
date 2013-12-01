@@ -32,11 +32,10 @@ class InfoTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoConfigFixture current_store payment/banktransfer/title Bank Method Title
      * @magentoConfigFixture current_store payment/checkmo/title Checkmo Title Of The Method
+     * @magentoAppArea adminhtml
      */
     public function testGetChildPdfAsArray()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
-            ->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         /** @var $layout \Magento\Core\Model\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         $block = $layout->createBlock('Magento\Payment\Block\Info', 'block');

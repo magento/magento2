@@ -299,7 +299,7 @@ class Product extends \Magento\Index\Model\Resource\AbstractResource
         $anchorInfo = $this->_getAnchorAttributeInfo();
         $bind = array(
             'attribute_id' => $anchorInfo['id'],
-            'store_id'     => \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID,
+            'store_id'     => \Magento\Core\Model\Store::DEFAULT_STORE_ID,
             'e_value'      => 1
         );
         $select = $this->_getReadAdapter()->select()

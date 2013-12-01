@@ -105,7 +105,7 @@
 		/**
 		 * Returns all string contents of a element concated together.
 		 *
-		 * @param {XMLNode} el XML element to retrive text from.
+		 * @param {XMLNode} el XML element to retrieve text from.
 		 * @return {string} XML element text contents.
 		 */
 		getText : function(el) {

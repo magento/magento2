@@ -100,6 +100,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
      * @param \Magento\Object\Copy\Config $fieldsetConfig
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory $quoteItemFactory
+     * @param string $modelName
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -115,10 +116,11 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
         \Magento\Validator\UniversalFactory $universalFactory,
         \Magento\Object\Copy\Config $fieldsetConfig,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
-        \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory $quoteItemFactory
+        \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory $quoteItemFactory,
+        $modelName = self::CUSTOMER_MODEL_NAME
     ) {
         parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $eavConfig,
-            $resource, $eavEntityFactory, $resourceHelper, $universalFactory, $fieldsetConfig
+            $resource, $eavEntityFactory, $resourceHelper, $universalFactory, $fieldsetConfig, $modelName
         );
         $this->_quoteFactory = $quoteFactory;
         $this->_quoteItemFactory = $quoteItemFactory;

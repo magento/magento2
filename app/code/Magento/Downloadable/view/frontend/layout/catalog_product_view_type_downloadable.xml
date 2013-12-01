@@ -24,12 +24,12 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="product.info">
+    <referenceContainer name="product.info.type">
         <block class="Magento\Downloadable\Block\Catalog\Product\View\Type" name="product.info.downloadable" as="product_type_data" template="catalog/product/type.phtml">
             <block class="Magento\Downloadable\Block\Catalog\Product\Samples" name="product.info.downloadable.samples" as="samples" template="catalog/product/samples.phtml"/>
             <block class="Magento\CatalogInventory\Block\Stockqty\DefaultStockqty" name="product.info.downloadable.extra" as="product_type_data_extra" template="stockqty/default.phtml"/>
         </block>
-    </referenceBlock>
+    </referenceContainer>
     <referenceBlock name="product.info.options.wrapper">
         <block class="Magento\Downloadable\Block\Catalog\Product\Links" name="product.info.downloadable.options" as="type_downloadable_options" before="-" template="catalog/product/links.phtml"/>
     </referenceBlock>

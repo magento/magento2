@@ -40,7 +40,8 @@ class Totals extends \Magento\Backend\Block\Widget\Grid\Container
 
     protected function _construct()
     {
-        $this->_controller = 'report_customer_totals';
+        $this->_blockGroup = 'Magento_Reports';
+        $this->_controller = 'adminhtml_customer_totals';
         $this->_headerText = __('Customers by Orders Total');
         parent::_construct();
         $this->_removeButton('add');

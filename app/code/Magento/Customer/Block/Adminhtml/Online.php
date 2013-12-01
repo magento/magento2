@@ -33,7 +33,7 @@
  */
 namespace Magento\Customer\Block\Adminhtml;
 
-class Online extends \Magento\Adminhtml\Block\Template
+class Online extends \Magento\Backend\Block\Template
 {
 
     protected $_template = 'online.phtml';

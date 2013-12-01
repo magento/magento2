@@ -361,7 +361,6 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
     /**
      * Retrieve layout area
      *
-     * @deparecated
      * @return string
      */
     public function getArea()

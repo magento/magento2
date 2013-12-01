@@ -42,6 +42,6 @@ class ContentTest extends \PHPUnit_Framework_TestCase
             'block'
         );
 
-        $this->assertInstanceOf('Magento\Adminhtml\Block\Media\Uploader', $block->getUploader());
+        $this->assertInstanceOf('Magento\Backend\Block\Media\Uploader', $block->getUploader());
     }
 }

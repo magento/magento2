@@ -63,7 +63,7 @@
                 <argument name="block" xsi:type="string">promo_quote_edit_tab_coupons</argument>
             </action>
         </block>
-        <block class="Magento\Adminhtml\Block\Template" template="Magento_SalesRule::promo/salesrulejs.phtml" name="promo_quote_edit_jsinit"/>
+        <block class="Magento\Backend\Block\Template" template="Magento_SalesRule::promo/salesrulejs.phtml" name="promo_quote_edit_jsinit"/>
     </referenceContainer>
     <referenceContainer name="content">
         <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit" name="promo_quote_edit"/>

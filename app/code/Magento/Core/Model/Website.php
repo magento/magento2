@@ -422,7 +422,7 @@ class Website extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * Retrieve wersite store objects
+     * Retrieve website store objects
      *
      * @return array
      */

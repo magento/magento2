@@ -320,7 +320,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
     }
 
     /**
-     * Retreive table name
+     * Retrieve table name
      *
      * @param string $alias
      * @return string
@@ -549,7 +549,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
     }
 
     /**
-     * Retreive partial load flag
+     * Retrieve partial load flag
      *
      * @param boolean $flag
      * @return boolean
@@ -564,7 +564,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
     }
 
     /**
-     * Retreive partial save flag
+     * Retrieve partial save flag
      *
      * @param boolean $flag
      * @return boolean
@@ -1000,7 +1000,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
     }
 
     /**
-     * Retreive default source model
+     * Retrieve default source model
      *
      * @return string
      */

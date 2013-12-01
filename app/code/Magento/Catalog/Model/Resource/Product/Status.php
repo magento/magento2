@@ -127,7 +127,7 @@ class Status extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function refreshEnabledIndex($productId, $storeId)
     {
-        if ($storeId == \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID) {
+        if ($storeId == \Magento\Core\Model\Store::DEFAULT_STORE_ID) {
             foreach ($this->_storeManager->getStores() as $store) {
                 $this->refreshEnabledIndex($productId, $store->getId());
             }
@@ -212,12 +212,12 @@ class Status extends \Magento\Core\Model\Resource\Db\AbstractDb
             $productIds = array($productIds);
         }
 
-        if ($storeId === null || $storeId == \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID) {
+        if ($storeId === null || $storeId == \Magento\Core\Model\Store::DEFAULT_STORE_ID) {
             $select = $adapter->select()
                 ->from($attributeTable, array('entity_id', 'value'))
                 ->where('entity_id IN (?)', $productIds)
                 ->where('attribute_id = ?', $attribute->getAttributeId())
-                ->where('store_id = ?', \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID);
+                ->where('store_id = ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID);
 
             $rows = $adapter->fetchPairs($select);
         } else {
@@ -233,7 +233,7 @@ class Status extends \Magento\Core\Model\Resource\Db\AbstractDb
                         . (int)$storeId,
                     array('t1.entity_id')
                 )
-                ->where('t1.store_id = ?', \Magento\Core\Model\AppInterface::ADMIN_STORE_ID)
+                ->where('t1.store_id = ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID)
                 ->where('t1.attribute_id = ?', $attribute->getAttributeId())
                 ->where('t1.entity_id IN(?)', $productIds);
             $rows = $adapter->fetchPairs($select);

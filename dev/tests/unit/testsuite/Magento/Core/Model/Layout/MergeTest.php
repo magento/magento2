@@ -34,32 +34,37 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Core\Model\Layout\Merge
      */
-    private $_model;
+    protected $_model;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $_resource;
+    protected $_resource;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $_appState;
+    protected $_appState;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $_cache;
+    protected $_cache;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $_theme;
+    protected $_theme;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $_store;
+    protected $_store;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_logger;
 
     protected function setUp()
     {
@@ -81,6 +86,8 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
         $this->_appState = $this->getMock('Magento\App\State', array(), array(), '', false);
 
+        $this->_logger = $this->getMock('Magento\Logger', array('log'), array(), '', false);
+
         $this->_cache = $this->getMockForAbstractClass('Magento\Cache\FrontendInterface');
 
         $this->_theme = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false, false);
@@ -97,6 +104,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
             'appState' => $this->_appState,
             'cache' => $this->_cache,
             'theme' => $this->_theme,
+            'logger' => $this->_logger
         ));
     }
 
@@ -233,6 +241,11 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFileLayoutUpdatesXml()
     {
+        $errorString = "Theme layout update file '" . __DIR__ . "/_files/layout/file_wrong.xml' is not valid.";
+        $this->_logger->expects($this->atLeastOnce())
+            ->method('log')
+            ->with($this->stringStartsWith($errorString), \Zend_Log::ERR, \Magento\Logger::LOGGER_SYSTEM);
+
         $actualXml = $this->_model->getFileLayoutUpdatesXml();
         $this->assertXmlStringEqualsXmlFile(__DIR__ . '/_files/merged.xml', $actualXml->asNiceXml());
     }

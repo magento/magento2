@@ -112,7 +112,7 @@ class Payment extends \Magento\App\Action\Action
             }
             $result['controller_action_name'] = $data['controller_action_name'];
             $result['is_secure'] = isset($data['is_secure']) ? $data['is_secure'] : false;
-            $params['redirect'] = $this->_objectManager->get('Magento\Authorizenet\Helper\Data')
+            $params['redirect'] = $this->_objectManager->get('Magento\Authorizenet\Helper\HelperInterface')
                 ->getRedirectIframeUrl($result);
         }
 
@@ -134,7 +134,7 @@ class Payment extends \Magento\App\Action\Action
             && isset($redirectParams['controller_action_name'])
         ) {
             $this->_getDirectPostSession()->unsetData('quote_id');
-            $params['redirect_parent'] = $this->_objectManager->get('Magento\Authorizenet\Helper\Data')
+            $params['redirect_parent'] = $this->_objectManager->get('Magento\Authorizenet\Helper\HelperInterface')
                 ->getSuccessOrderUrl($redirectParams);
         }
         if (!empty($redirectParams['error_msg'])) {

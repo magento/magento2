@@ -19,15 +19,25 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php /** @var $this \Magento\Catalog\Block\Product\Image */ ?>
 
-<span style="width:<?php echo $this->getProductImageView()->getWidth()?>px;
-    height:<?php echo $this->getProductImageView()->getHeight()?>px; display: block; position: relative;
-    overflow: hidden"><img style="display: block; position: absolute; top: 0; bottom: 0; left: 0; right: 0;
-    margin: auto;" src="<?php echo $this->getProductImageView()->getUrl() ?>"
-    alt="<?php echo $this->stripTags($this->getProductImageView()->getLabel(), null, true) ?>"/></span>
+<span class="img photo container"
+      style="width:<?php echo $this->getProductImageView()->getWidth()?>px;
+             height:<?php echo $this->getProductImageView()->getHeight()?>px;
+             display: block; position: relative;
+             overflow: hidden"><img class="photo image"
+                                    style="display: block;
+                                           position: absolute;
+                                           top: 0;
+                                           bottom: 0;
+                                           left: 0;
+                                           right: 0;
+                                           margin: auto;"
+                                           <?php echo $this->getAddAttribute(); ?>
+                                           src="<?php echo $this->getProductImageView()->getUrl() ?>"
+                                           alt="<?php echo $this->stripTags($this->getProductImageView()->getLabel(), null, true) ?>"/>
+</span>

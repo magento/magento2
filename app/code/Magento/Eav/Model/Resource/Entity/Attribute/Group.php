@@ -103,7 +103,7 @@ class Group extends \Magento\Core\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * Retreive max sort order
+     * Retrieve max sort order
      *
      * @param \Magento\Core\Model\AbstractModel $object
      * @return int

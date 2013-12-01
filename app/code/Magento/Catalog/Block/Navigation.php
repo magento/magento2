@@ -299,8 +299,7 @@ class Navigation extends \Magento\View\Block\Template
         $html = array();
 
         // get all children
-        // If Flat Data enabled then use it but only on frontend
-        if ($this->_catalogCategoryFlat->isAvailable() && !$this->_storeManager->getStore()->isAdmin()) {
+        if ($this->_catalogCategoryFlat->isAvailable()) {
             $children = (array)$category->getChildrenNodes();
             $childrenCount = count($children);
         } else {

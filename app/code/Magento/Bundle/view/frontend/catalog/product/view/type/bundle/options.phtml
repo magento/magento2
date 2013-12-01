@@ -18,33 +18,41 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php /** @var $this Magento\Bundle\Block\Catalog\Product\View\Type\Bundle */ ?>
-<?php $_product = $this->getProduct(); ?>
+<?php
+$_product = $this->getProduct();
+$_helper = $this->helper('Magento\Catalog\Helper\Output');
+?>
 <?php $_options = $this->decorateArray($this->getOptions()); ?>
 <?php if ($_product->isSaleable()):?>
     <?php if (count($_options)): ?>
-    <script type="text/javascript">
-        (function ($) {
-            head.js("<?php echo $this->getViewFileUrl('Magento_Bundle::bundle.js') ?>", function () {
-                $('#product_addtocart_form').bundleOption({'optionConfig':<?php echo $this->getJsonConfig()?>}).trigger('changeSelection');
-            });
-        })(jQuery);
-    </script>
-        <dl>
-        <?php foreach ($_options as $_option): ?>
-            <?php if (!$_option->getSelections()): ?>
-                <?php continue; ?>
-            <?php endif; ?>
-            <?php echo $this->getOptionHtml($_option) ?>
-        <?php endforeach; ?>
-        </dl>
+        <script type="text/javascript">
+            //<![CDATA[
+            (function ($) {
+                head.js("<?php echo $this->getViewFileUrl('Magento_Bundle::bundle.js') ?>", function () {
+                    $('#product_addtocart_form')
+                        .bundleOption({'optionConfig':<?php echo $this->getJsonConfig()?>})
+                        .trigger('changeSelection');
+                });
+            })(jQuery);
+            //]]>
+        </script>
+        <fieldset class="fieldset bundle options">
+            <legend id="customizeTitle" class="legend">
+                <span><?php echo __('Customize %1', $_helper->productAttribute($_product, $_product->getName(), 'name')) ?></span>
+            </legend><br />
+            <?php foreach ($_options as $_option): ?>
+                <?php if (!$_option->getSelections()): ?>
+                    <?php continue; ?>
+                <?php endif; ?>
+                <?php echo $this->getOptionHtml($_option) ?>
+            <?php endforeach; ?>
+        </fieldset>
     <?php else: ?>
-        <p><?php echo __('No options of this product are available.') ?></p>
+        <p class="empty"><?php echo __('No options of this product are available.') ?></p>
     <?php endif; ?>
 <?php endif;?>

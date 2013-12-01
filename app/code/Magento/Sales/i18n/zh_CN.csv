@@ -11,8 +11,11 @@
 "* - Enter custom price including tax","* - 输入含税的自定义价格"
 "-- Please Select --","-- 请选择 --"
 "-- Please Select Billing Agreement--","-- 请选择记账协议 --"
+"<<<<<<< HEAD",
 "<span class=""label"">Order Date:</span> %1","<span class=""label"">订单日期：</span> %1"
 "<strong style=""color:red"">Warning!</strong> Applying MAP by default will hide all product prices on the front end.","<strong style=""：red"">警告！</strong>应用MAP默认将在前端隐藏所有产品价格。"
+=======,
+">>>>>>> 6e24c0b89d2c9265f667a200a9a2131fbb3292db",
 "A PDF object is not specified.",未指定一个PDF对象。
 "A PDF page object is not specified.",未指定一个PDF页对象。
 "A hold action is not available.",挂起动作不可用。
@@ -358,25 +361,45 @@ Order,订单
 "Order Status",订单状态
 "Order Status Information",订单状态信息
 "Order Statuses",订单状态
-"Order Taxes Report Grouped by Tax Rates",按税率分组的订单税费报表
+"Order Subtotal",订单小计
+"Order Taxes Report Grouped by Tax Rates",按税率分组的订单税费报告
 "Order Total",订单总数
 "Order Totals",订单总数
+"Order Update",订单更新
+"Order Update for Guest",来宾的订单更新
 "Order View",订单查看
+"Order credit memo",订单信用记录
+"Order does not allow to be canceled.",订单不允许取消。
+"Order invoice",订单发票
 "Order is suspended as its capture amount %1 is suspected to be fraudulent.","订单被暂停，因为它的接受金额 %1 被怀疑为欺诈。"
+"Order is suspended as its capture amount %s is suspected to be fraudulent.","订单被暂停，因为它的接受金额 %s 被怀疑为欺诈。"
+"Order object is not specified.",订单对象未指定。
 "Order saving error: %1",订单保存错误：%1
-Ordered,已订购
+"Order saving error: %s",订单保存错误：%s
+"Order shipments",订单运送
+"Order status does not exist.",订单状态不存在。
+"Order status with the same status code already exist.",具有相同订单代码的订单状态已存在。
+"Order was placed using %s","使用 %s 下订单"
+Ordered,已下单
 "Ordered amount of %1",%1的订购总额
+"Ordered amount of %s.","%s 的已下单数量。"
+"Ordering amount of %s is pending approval on gateway.",%s的订单数量正在网站上挂起供审批。
 Orders,订单
 "Orders Based on This Profile",基于该配置的订单
 "Orders and Returns",订单与退货
 "Orders and Returns Search Form",订单与退货搜索表单
 "Original Price",原始价格
 "Original order item that recurring payment profile corresponds to",周期支付配置相应的原始订单条目
+"Original order item that recurring payment profile corresponds to.",循环支付配置文件所对应的原始订单项。
 "PDF Credit Memos",PDF版信用记录
 "PDF Invoices",PDF版发票
 "PDF Packing Slips",PDF版包裹清单
 "PDF Print-outs",PDF版打印输出
+"PDF object is not specified.",PDF对象未指定。
+"PDF page object is not specified.",PDF页面对象未指定。
+"PDF total model should extend \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal","PDF总模块必须扩展\Magento\Sales\Model\Order\Pdf\Total\DefaultTotal"
 Package,包裹
+"Package types are disregarded for USPS domestic shipments.",USPS国内发货将忽略包装类型。
 Packages,包裹
 "Packing Slip # ","包裹清单 #"
 Paid,已付费

@@ -784,7 +784,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $storeCode = $rowData[self::COLUMN_STORE];
             $storeId = $this->_storeCodeToId[$storeCode];
         } else {
-            $storeId = \Magento\Core\Model\AppInterface::ADMIN_STORE_ID;
+            $storeId = \Magento\Core\Model\Store::DEFAULT_STORE_ID;
         }
         if (isset($this->_productsSkuToId[$this->_rowProductSku])) {
             // save in existing data array
@@ -1129,20 +1129,20 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $typeValues[$prevOptionId][] = $specificTypeData['value'];
 
                 // ensure default title is set
-                if (!isset($typeTitles[$nextValueId][\Magento\Core\Model\AppInterface::ADMIN_STORE_ID])) {
-                    $typeTitles[$nextValueId][\Magento\Core\Model\AppInterface::ADMIN_STORE_ID]
+                if (!isset($typeTitles[$nextValueId][\Magento\Core\Model\Store::DEFAULT_STORE_ID])) {
+                    $typeTitles[$nextValueId][\Magento\Core\Model\Store::DEFAULT_STORE_ID]
                         = $specificTypeData['title'];
                 }
                 $typeTitles[$nextValueId][$this->_rowStoreId] = $specificTypeData['title'];;
 
                 if ($specificTypeData['price']) {
                     if ($this->_isPriceGlobal) {
-                        $typePrices[$nextValueId][\Magento\Core\Model\AppInterface::ADMIN_STORE_ID]
+                        $typePrices[$nextValueId][\Magento\Core\Model\Store::DEFAULT_STORE_ID]
                             = $specificTypeData['price'];
                     } else {
                         // ensure default price is set
-                        if (!isset($typePrices[$nextValueId][\Magento\Core\Model\AppInterface::ADMIN_STORE_ID])) {
-                            $typePrices[$nextValueId][\Magento\Core\Model\AppInterface::ADMIN_STORE_ID]
+                        if (!isset($typePrices[$nextValueId][\Magento\Core\Model\Store::DEFAULT_STORE_ID])) {
+                            $typePrices[$nextValueId][\Magento\Core\Model\Store::DEFAULT_STORE_ID]
                                 = $specificTypeData['price'];
                         }
                         $typePrices[$nextValueId][$this->_rowStoreId] = $specificTypeData['price'];
@@ -1163,10 +1163,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _collectOptionTitle(array $rowData, $prevOptionId, array &$titles)
     {
+        $defaultStoreId = \Magento\Core\Model\Store::DEFAULT_STORE_ID;
         if (!empty($rowData[self::COLUMN_TITLE])) {
-            if (!isset($titles[$prevOptionId][\Magento\Core\Model\AppInterface::ADMIN_STORE_ID])) {
+            if (!isset($titles[$prevOptionId][$defaultStoreId])) {
                 // ensure default title is set
-                $titles[$prevOptionId][\Magento\Core\Model\AppInterface::ADMIN_STORE_ID] = $rowData[self::COLUMN_TITLE];
+                $titles[$prevOptionId][$defaultStoreId] = $rowData[self::COLUMN_TITLE];
             }
             $titles[$prevOptionId][$this->_rowStoreId] = $rowData[self::COLUMN_TITLE];
         }
@@ -1224,7 +1225,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
             $this->_rowStoreId = $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
         } else {
-            $this->_rowStoreId = \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID;
+            $this->_rowStoreId = \Magento\Core\Model\Store::DEFAULT_STORE_ID;
         }
         // Init option type and set param which tell that row is main
         if (!empty($rowData[self::COLUMN_TYPE])) { // get custom option type if its specified
@@ -1339,7 +1340,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             && strlen($rowData[self::COLUMN_PREFIX . 'price']) > 0) {
             $priceData = array(
                 'option_id'  => $optionId,
-                'store_id'   => \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID,
+                'store_id'   => \Magento\Core\Model\Store::DEFAULT_STORE_ID,
                 'price_type' => 'fixed'
             );
 

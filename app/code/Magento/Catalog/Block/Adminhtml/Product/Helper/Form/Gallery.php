@@ -214,6 +214,6 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
      */
     protected function _getDefaultStoreId()
     {
-        return \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID;
+        return \Magento\Core\Model\Store::DEFAULT_STORE_ID;
     }
 }

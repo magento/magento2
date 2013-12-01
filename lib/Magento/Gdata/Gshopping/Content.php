@@ -94,7 +94,7 @@ class Content extends \Zend_Gdata
     }
 
     /**
-     * Retreive entry object
+     * Retrieve entry object
      *
      * @param mixed $location The location for the feed, as a URL or Query
      * @return \Magento\Gdata\Gshopping\Entry

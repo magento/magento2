@@ -37,7 +37,7 @@
                 <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="sales_order_status.grid.columnSet">
                     <arguments>
                         <argument name="rowUrl" xsi:type="array">
-                            <item name="path" xsi:type="string">adminhtml/sales_order_status/edit</item>
+                            <item name="path" xsi:type="string">sales/order_status/edit</item>
                             <item name="extraParamsTemplate" xsi:type="array">
                                 <item name="status" xsi:type="string">getStatus</item>
                             </item>

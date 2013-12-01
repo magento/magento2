@@ -372,7 +372,7 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * Returns sting of random chars
+     * Returns string of random chars
      *
      * @param int $length
      * @return string

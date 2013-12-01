@@ -1057,10 +1057,10 @@ class International
     /**
      * Add rate to DHL rates array
      *
-     * @param \Magento\Usa\Model\Simplexml\Element $shipmentDetails
+     * @param \SimpleXMLElement $shipmentDetails
      * @return \Magento\Usa\Model\Shipping\Carrier\Dhl\International
      */
-    protected function _addRate(\Magento\Usa\Model\Simplexml\Element $shipmentDetails)
+    protected function _addRate(\SimpleXMLElement $shipmentDetails)
     {
         if (isset($shipmentDetails->ProductShortName)
             && isset($shipmentDetails->ShippingCharge)

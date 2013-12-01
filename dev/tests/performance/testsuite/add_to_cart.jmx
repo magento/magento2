@@ -110,7 +110,7 @@
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract &quot;product_name&quot;" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">product_name</stringProp>
-            <stringProp name="RegexExtractor.regex">&lt;h1&gt;(.+?)&lt;/h1&gt;</stringProp>
+            <stringProp name="RegexExtractor.regex">&lt;h1.*&gt;(.+?)&lt;/span&gt;&lt;/h1&gt;</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default">FAIL</stringProp>
             <stringProp name="RegexExtractor.match_number"></stringProp>

@@ -36,7 +36,7 @@ namespace Magento\Wishlist\Block\Customer\Wishlist;
 class Items extends \Magento\View\Block\Template
 {
     /**
-     * Retreive table column object list
+     * Retrieve table column object list
      *
      * @return array
      */

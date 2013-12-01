@@ -63,7 +63,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Disabled form security in order to prevent exit from the app
-     * @magentoConfigFixture current_store admin/security/session_lifetime 100
+     * @magentoAdminConfigFixture admin/security/session_lifetime 100
      */
     public function testIsLoggedIn()
     {

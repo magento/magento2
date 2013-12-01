@@ -18,27 +18,27 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-
 /**
  * Downloadable product links
  *
- * @see \Magento\Downloadable\Block\Catalog\Product\Samples
+ * @var $this \Magento\Downloadable\Block\Catalog\Product\Samples
  */
 ?>
 
 <?php if ($this->hasSamples()): ?>
-    <dl class="item-options">
+    <dl class="downloadable samples">
         <dt><?php echo $this->getSamplesTitle() ?></dt>
         <?php $_samples = $this->getSamples() ?>
         <?php foreach ($_samples as $_sample): ?>
             <dd>
-                <a href="<?php echo $this->getSampleUrl($_sample) ?>" <?php echo $this->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php echo  $this->escapeHtml($_sample->getTitle()) ?></a>
+                <a href="<?php echo $this->getSampleUrl($_sample) ?>" <?php echo $this->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>
+                   class="sample">
+                    <?php echo $this->escapeHtml($_sample->getTitle()) ?>
+                </a>
             </dd>
         <?php endforeach; ?>
     </dl>

@@ -59,7 +59,7 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $store = $this->getMock('\Magento\Core\Model\Store', array(), array(), '', false);
         $this->_storeManagerMock
-            ->expects($this->once())->method('getStores')->with(true, true)
+            ->expects($this->once())->method('getStores')->with(false, true)
             ->will($this->returnValue(array('storeCode' => $store)));
         $store->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue(true));
         $this->_requestMock
@@ -73,7 +73,7 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $store = $this->getMock('\Magento\Core\Model\Store', array(), array(), '', false);
         $this->_storeManagerMock
-            ->expects($this->once())->method('getStores')->with(true, true)
+            ->expects($this->once())->method('getStores')->with(false, true)
             ->will($this->returnValue(array('storeCode' => $store)));
         $store->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue(true));
         $this->_requestMock
@@ -88,7 +88,7 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
         $path = '/0/node_one/';
         $store = $this->getMock('\Magento\Core\Model\Store', array(), array(), '', false);
         $this->_storeManagerMock
-            ->expects($this->once())->method('getStores')->with(true, true)
+            ->expects($this->once())->method('getStores')->with(false, true)
             ->will($this->returnValue(array('0' => $store)));
         $store->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue(true));
         $this->_requestMock
@@ -102,7 +102,7 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $store = $this->getMock('\Magento\Core\Model\Store', array(), array(), '', false);
         $this->_storeManagerMock
-            ->expects($this->once())->method('getStores')->with(true, true)
+            ->expects($this->once())->method('getStores')->with(false, true)
             ->will($this->returnValue(array('0' => $store)));
         $store->expects($this->never())->method('isUseStoreInUrl');
         $this->_requestMock->expects($this->never())->method('isDirectAccessFrontendName');

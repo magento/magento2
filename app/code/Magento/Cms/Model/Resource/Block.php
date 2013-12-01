@@ -202,7 +202,7 @@ class Block extends \Magento\Core\Model\Resource\Db\AbstractDb
         if ($object->getStoreId()) {
             $stores = array(
                 (int) $object->getStoreId(),
-                \Magento\Core\Model\AppInterface::ADMIN_STORE_ID,
+                \Magento\Core\Model\Store::DEFAULT_STORE_ID,
             );
 
             $select->join(
@@ -227,7 +227,7 @@ class Block extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function getIsUniqueBlockToStores(\Magento\Core\Model\AbstractModel $object)
     {
         if ($this->_storeManager->hasSingleStore()) {
-            $stores = array(\Magento\Core\Model\AppInterface::ADMIN_STORE_ID);
+            $stores = array(\Magento\Core\Model\Store::DEFAULT_STORE_ID);
         } else {
             $stores = (array)$object->getData('stores');
         }

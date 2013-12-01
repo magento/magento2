@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar;
 
-class Add extends \Magento\Adminhtml\Block\Template
+class Add extends \Magento\Backend\Block\Template
 {
 
     protected $_template = 'catalog/product/attribute/set/toolbar/add.phtml';

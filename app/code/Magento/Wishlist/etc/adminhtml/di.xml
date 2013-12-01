@@ -24,6 +24,11 @@
  */
 -->
 <config>
+    <type name="Magento\Wishlist\Model\Wishlist">
+        <param name="useCurrentWebsite">
+            <value type="bool">false</value>
+        </param>
+    </type>
     <virtualType name="Magento\Wishlist\Model\Session" type="Magento\Core\Model\Session\Generic">
         <param name="sessionNamespace">
             <value>wishlist</value>

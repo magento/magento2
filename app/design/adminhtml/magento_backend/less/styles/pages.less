@@ -29,9 +29,9 @@
 [class^=" catalog-product-"] .page-actions .action-back,
 [class^=" catalog-product-"] .page-actions .action-back:hover,
 [class^=" catalog-product-"] .page-actions .action-back:active,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back:hover,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back:active {
+[class^=" newsletter-"] .page-actions .action-back,
+[class^=" newsletter-"] .page-actions .action-back:hover,
+[class^=" newsletter-"] .page-actions .action-back:active {
     overflow: hidden;
     padding: 5px 6px 3px;
     margin-left: 12px;
@@ -41,9 +41,9 @@
 .eq-ie8 [class^=" catalog-product-"] .page-actions .action-back,
 .eq-ie8 [class^=" catalog-product-"] .page-actions .action-back:hover,
 .eq-ie8 [class^=" catalog-product-"] .page-actions .action-back:active,
-.eq-ie8 [class^=" adminhtml-newsletter-"] .page-actions .action-back,
-.eq-ie8 [class^=" adminhtml-newsletter-"] .page-actions .action-back:hover,
-.eq-ie8 [class^=" adminhtml-newsletter-"] .page-actions .action-back:active,
+.eq-ie8 [class^=" newsletter-"] .page-actions .action-back,
+.eq-ie8 [class^=" newsletter-"] .page-actions .action-back:hover,
+.eq-ie8 [class^=" newsletter-"] .page-actions .action-back:active,
 .sales-order-create-index .page-actions-inner .cancel,
 .sales-order-create-index .page-actions-inner .cancel:hover,
 .sales-order-create-index .page-actions-inner .cancel:active {
@@ -52,18 +52,18 @@
 }
 
 [class^=" catalog-product-"] .page-actions .action-back:hover,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back:hover,
+[class^=" newsletter-"] .page-actions .action-back:hover,
 .sales-order-create-index .page-actions-inner .cancel:hover {
     color: #000;
 }
 
 [class^=" catalog-product-"] .page-actions .action-back.mage-error,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back.mage-error {
+[class^=" newsletter-"] .page-actions .action-back.mage-error {
     color: #b57c72;
 }
 
 [class^=" catalog-product-"] .page-actions .action-back:before,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back:before,
+[class^=" newsletter-"] .page-actions .action-back:before,
 .sales-order-create-index .page-actions-inner .cancel:before {
     display: inline-block;
     font-family: 'MUI-Icons';
@@ -76,7 +76,7 @@
 }
 
 [class^=" catalog-product-"] .page-actions .action-back span,
-[class^=" adminhtml-newsletter-"] .page-actions .action-back span,
+[class^=" newsletter-"] .page-actions .action-back span,
 .sales-order-create-index .page-actions-inner .cancel span {
     display: inline-block;
     overflow: hidden;
@@ -499,8 +499,8 @@
 /*
     Reports - Customer Reviews
 -------------------------------------- */
-.adminhtml-report-review-customer .col-qty,
-.adminhtml-report-review-customer .col-actions {
+.reports-report-review-customer .col-qty,
+.reports-report-review-customer .col-actions {
     width: 85px;
 }
 
@@ -508,23 +508,23 @@
     Reports - Product Reviews
 -------------------------------------- */
 
-.adminhtml-report-review-product .col-id {
+.reports-report-review-product .col-id {
     width: 35px;
 }
 
-.adminhtml-report-review-product .col-qty,
-.adminhtml-report-review-product .col-rating,
-.adminhtml-report-review-product .col-avg-rating,
-.adminhtml-report-review-product .col-actions {
+.reports-report-review-product .col-qty,
+.reports-report-review-product .col-rating,
+.reports-report-review-product .col-avg-rating,
+.reports-report-review-product .col-actions {
     text-align: right;
     width: 85px;
 }
 
-.adminhtml-report-review-product .col-date {
+.reports-report-review-product .col-date {
     width: 140px;
 }
 
-.adminhtml-report-review-product .col-rating {
+.reports-report-review-product .col-rating {
     width: 104px;
 }
 
@@ -532,7 +532,7 @@
     Reports - New Accounts
 -------------------------------------- */
 
-.adminhtml-report-customer-accounts .col-period {
+.reports-report-customer-accounts .col-period {
     white-space: nowrap;
     width: 70px;
 }
@@ -541,76 +541,76 @@
     Reports - Refresh Statistics
 -------------------------------------- */
 
-.adminhtml-report-statistics-index .col-period {
+.reports-report-statistics-index .col-period {
     white-space: nowrap;
     width: 140px;
 }
 
-.adminhtml-report-statistics-index .col-select {
+.reports-report-statistics-index .col-select {
     width: 25px;
 }
 
 /*
     Reports - Products Ordered
 -------------------------------------- */
-.adminhtml-report-product-sold .col-period {
+.reports-report-product-sold .col-period {
     white-space: nowrap;
     width: 70px;
 }
 
-.adminhtml-report-product-sold .col-qty {
+.reports-report-product-sold .col-qty {
     width: 110px;
 }
 
 /*
     Reports - Customers by Orders Total
 -------------------------------------- */
-.adminhtml-report-customer-totals .col-period {
+.reports-report-customer-totals .col-period {
     white-space: nowrap;
     width: 70px;
 }
 
-.adminhtml-report-customer-totals .col-qty {
+.reports-report-customer-totals .col-qty {
     width: 65px;
 }
 
-.adminhtml-report-customer-totals .col-rating {
+.reports-report-customer-totals .col-rating {
     width: 100px;
 }
 
 /*
     Reports - Tag by popular
 -------------------------------------- */
-.adminhtml-report-tag-popular .col-qty,
-.adminhtml-report-tag-popular .col-actions {
+.reports-report-tag-popular .col-qty,
+.reports-report-tag-popular .col-actions {
     width: 80px;
 }
 
 /*
     Reports - Tag by customer
 -------------------------------------- */
-.adminhtml-report-tag-customer .col-id {
+.reports-report-tag-customer .col-id {
     width: 35px;
 }
 
-.adminhtml-report-tag-customer .col-qty,
-.adminhtml-report-tag-customer .col-actions {
+.reports-report-tag-customer .col-qty,
+.reports-report-tag-customer .col-actions {
     width: 80px;
 }
 
 /*
     Reports - Tag by product
 -------------------------------------- */
-.adminhtml-report-tag-product .col-id {
+.reports-report-tag-product .col-id {
     width: 35px;
 }
 
-.adminhtml-report-tag-product .col-actions {
+.reports-report-tag-product .col-actions {
     width: 70px;
 }
 
-.adminhtml-report-tag-product .col-unique-numbers,
-.adminhtml-report-tag-product .col-total-numbers {
+.reports-report-tag-product .col-unique-numbers,
+.reports-report-tag-product .col-total-numbers {
     text-align: right;
     width: 95px
 }
@@ -618,28 +618,28 @@
 /*
     Reports - Customers by Number of Orders
 -------------------------------------- */
-.adminhtml-report-customer-orders .col-period {
+.reports-report-customer-orders .col-period {
     white-space: nowrap;
     width: 70px;
 }
 
-.adminhtml-report-customer-orders .col-qty,
-.adminhtml-report-customer-orders .col-average,
-.adminhtml-report-customer-orders .col-total {
+.reports-report-customer-orders .col-qty,
+.reports-report-customer-orders .col-average,
+.reports-report-customer-orders .col-total {
     width: 105px;
 }
 
 /*
    Reports - Customers by Orders Total
 -------------------------------------- */
-.adminhtml-report-customer-totals .col-period {
+.reports-report-customer-totals .col-period {
     white-space: nowrap;
     width: 70px;
 }
 
-.adminhtml-report-customer-totals .col-qty,
-.adminhtml-report-customer-totals .col-average,
-.adminhtml-report-customer-totals .col-total {
+.reports-report-customer-totals .col-qty,
+.reports-report-customer-totals .col-average,
+.reports-report-customer-totals .col-total {
     width: 105px;
 }
 
@@ -664,13 +664,13 @@
 /*
     Reports - Most Viewed
 -------------------------------------- */
-.adminhtml-report-product-viewed .col-period {
+.reports-report-product-viewed .col-period {
     white-space: nowrap;
     width: 70px;
 }
 
-.adminhtml-report-product-viewed .col-qty,
-.adminhtml-report-product-viewed .col-price {
+.reports-report-product-viewed .col-qty,
+.reports-report-product-viewed .col-price {
     white-space: nowrap;
     width: 80px;
 }
@@ -678,24 +678,24 @@
 /*
     Reports - Search Terms
 -------------------------------------- */
-.adminhtml-report-search .col-id {
+.reports-index-search .col-id {
     width: 35px;
 }
 
-.adminhtml-report-search th.col-results,
-.adminhtml-report-search th.col-hits {
+.reports-index-search th.col-results,
+.reports-index-search th.col-hits {
     text-align: left;
     width: 117px;
 }
 
-.adminhtml-report-search td.col-results,
-.adminhtml-report-search td.col-hits {
+.reports-index-search td.col-results,
+.reports-index-search td.col-hits {
     text-align: right;
     width: 117px;
 }
 
-.adminhtml-report-search .col-results .range-line:first-child,
-.adminhtml-report-search .col-hits .range-line:first-child {
+.reports-index-search .col-results .range-line:first-child,
+.reports-index-search .col-hits .range-line:first-child {
     float: left;
     margin-right: 3px;
 }
@@ -704,21 +704,21 @@
     Reports - Bestsellers
 -------------------------------------- */
 
-.adminhtml-report-sales-bestsellers .col-period {
+.reports-report-sales-bestsellers .col-period {
     white-space: nowrap;
     width: 70px;
 }
 
-.adminhtml-report-sales-bestsellers .col-qty,
-.adminhtml-report-sales-bestsellers .col-price {
+.reports-report-sales-bestsellers .col-qty,
+.reports-report-sales-bestsellers .col-price {
     width: 80px;
 }
 
 /*
     Reports - Downloads
 -------------------------------------- */
-.adminhtml-report-product-downloads .col-qty,
-.adminhtml-report-product-downloads .col-price {
+.reports-report-product-downloads .col-qty,
+.reports-report-product-downloads .col-price {
     width: 80px;
 }
 
@@ -726,31 +726,31 @@
     Reports - Abandoned Carts
 -------------------------------------- */
 
-.adminhtml-report-shopcart-abandoned .col-ip,
-.adminhtml-report-shopcart-abandoned .col-subtotal,
-.adminhtml-report-shopcart-abandoned .col-number,
-.adminhtml-report-shopcart-abandoned .col-coupon {
+.reports-report-shopcart-abandoned .col-ip,
+.reports-report-shopcart-abandoned .col-subtotal,
+.reports-report-shopcart-abandoned .col-number,
+.reports-report-shopcart-abandoned .col-coupon {
     text-align: right;
 }
 
-.adminhtml-report-shopcart-abandoned .col-ip {
+.reports-report-shopcart-abandoned .col-ip {
     width: 105px;
 }
 
-.adminhtml-report-shopcart-abandoned .col-subtotal {
+.reports-report-shopcart-abandoned .col-subtotal {
     width: 65px;
 }
 
 /*
     Reports - Products in Carts
 -------------------------------------- */
-.adminhtml-report-shopcart-product .col-id {
+.reports-report-shopcart-product .col-id {
     width: 35px;
 }
 
-.adminhtml-report-shopcart-product .col-carts,
-.adminhtml-report-shopcart-product .col-qty,
-.adminhtml-report-shopcart-product .col-price {
+.reports-report-shopcart-product .col-carts,
+.reports-report-shopcart-product .col-qty,
+.reports-report-shopcart-product .col-price {
     text-align: right;
     width: 80px;
 }
@@ -759,14 +759,14 @@
     Reports - Refunds
 -------------------------------------- */
 
-.adminhtml-report-sales-refunded .col-period {
+.reports-report-sales-refunded .col-period {
     white-space: nowrap;
     width: 70px;
 }
 
-.adminhtml-report-sales-refunded .col-ref-total,
-.adminhtml-report-sales-refunded .col-ref-online,
-.adminhtml-report-sales-refunded .col-ref-offline {
+.reports-report-sales-refunded .col-ref-total,
+.reports-report-sales-refunded .col-ref-online,
+.reports-report-sales-refunded .col-ref-offline {
     text-align: right;
     width: 23%;
 }
@@ -775,14 +775,14 @@
     Reports - Shipping
 -------------------------------------- */
 
-.adminhtml-report-sales-shipping .col-period {
+.reports-report-sales-shipping .col-period {
     white-space: nowrap;
     width: 70px;
 }
 
-.adminhtml-report-sales-shipping .col-qty,
-.adminhtml-report-sales-shipping .col-total-sales-shipping,
-.adminhtml-report-sales-shipping .col-total-shipping {
+.reports-report-sales-shipping .col-qty,
+.reports-report-sales-shipping .col-total-sales-shipping,
+.reports-report-sales-shipping .col-total-shipping {
     text-align: right;
     width: 115px;
 }
@@ -791,16 +791,16 @@
     Reports - Invoiced
 -------------------------------------- */
 
-.adminhtml-report-sales-invoiced .col-period {
+.reports-report-sales-invoiced .col-period {
     white-space: nowrap;
     width: 70px;
 }
 
-.adminhtml-report-sales-invoiced .col-qty,
-.adminhtml-report-sales-invoiced .col-invoiced,
-.adminhtml-report-sales-invoiced .col-total-invoiced,
-.adminhtml-report-sales-invoiced .col-total-invoiced-paid,
-.adminhtml-report-sales-invoiced .col-total-invoiced-not-paid {
+.reports-report-sales-invoiced .col-qty,
+.reports-report-sales-invoiced .col-invoiced,
+.reports-report-sales-invoiced .col-total-invoiced,
+.reports-report-sales-invoiced .col-total-invoiced-paid,
+.reports-report-sales-invoiced .col-total-invoiced-not-paid {
     text-align: right;
     width: 19%;
 }
@@ -809,14 +809,14 @@
     Reports - Tax
 -------------------------------------- */
 
-.adminhtml-report-sales-tax .col-period {
+.reports-report-sales-tax .col-period {
     white-space: nowrap;
     width: 70px;
 }
 
-.adminhtml-report-sales-tax .col-rate,
-.adminhtml-report-sales-tax .col-qty,
-.adminhtml-report-sales-tax .col-tax-amount {
+.reports-report-sales-tax .col-rate,
+.reports-report-sales-tax .col-qty,
+.reports-report-sales-tax .col-tax-amount {
     text-align: right;
     width: 105px;
 }
@@ -824,20 +824,20 @@
 /*
     Reports - Orders
 -------------------------------------- */
-.adminhtml-report-sales-sales .col-period {
+.reports-report-sales-sales .col-period {
     white-space: nowrap;
     width: 70px;
 }
 
-.adminhtml-report-sales-sales .col-orders,
-.adminhtml-report-sales-sales .col-sales-items,
-.adminhtml-report-sales-sales .col-sales-total,
-.adminhtml-report-sales-sales .col-invoiced,
-.adminhtml-report-sales-sales .col-refunded,
-.adminhtml-report-sales-sales .col-sales-tax,
-.adminhtml-report-sales-sales .col-sales-shipping,
-.adminhtml-report-sales-sales .col-sales-discount,
-.adminhtml-report-sales-sales .col-canceled {
+.reports-report-sales-sales .col-orders,
+.reports-report-sales-sales .col-sales-items,
+.reports-report-sales-sales .col-sales-total,
+.reports-report-sales-sales .col-invoiced,
+.reports-report-sales-sales .col-refunded,
+.reports-report-sales-sales .col-sales-tax,
+.reports-report-sales-sales .col-sales-shipping,
+.reports-report-sales-sales .col-sales-discount,
+.reports-report-sales-sales .col-canceled {
     text-align: right;
     width: 10.5%;
 }
@@ -846,18 +846,18 @@
     Reports - Coupons
 -------------------------------------- */
 /* TODO: re-check styles for coupons table after coupons functionality will have been repaired */
-.adminhtml-report-sales-coupons .col-period {
+.reports-report-sales-coupons .col-period {
     white-space: nowrap;
     width: 70px;
 }
 
-.adminhtml-report-sales-coupons .col-sales,
-.adminhtml-report-sales-coupons .col-users,
-.adminhtml-report-sales-coupons .col-sales-discount,
-.adminhtml-report-sales-coupons .col-total-amount,
-.adminhtml-report-sales-coupons .col-subtotal,
-.adminhtml-report-sales-coupons .col-discount,
-.adminhtml-report-sales-coupons .col-total {
+.reports-report-sales-coupons .col-sales,
+.reports-report-sales-coupons .col-users,
+.reports-report-sales-coupons .col-sales-discount,
+.reports-report-sales-coupons .col-total-amount,
+.reports-report-sales-coupons .col-subtotal,
+.reports-report-sales-coupons .col-discount,
+.reports-report-sales-coupons .col-total {
     text-align: right;
 }
 
@@ -865,19 +865,19 @@
     Reports - Low Stock
 -------------------------------------- */
 
-.adminhtml-report-product-lowstock .col-qty {
+.reports-report-product-lowstock .col-qty {
     width: 10%;
 }
 
-.adminhtml-report-product-lowstock .range-line {
+.reports-report-product-lowstock .range-line {
     display: inline-block;
 }
 
-.adminhtml-report-product-lowstock .col-product {
+.reports-report-product-lowstock .col-product {
     width: 65%;
 }
 
-.adminhtml-report-product-lowstock .col-sku {
+.reports-report-product-lowstock .col-sku {
     width: 25%;
 }
 
@@ -901,78 +901,78 @@
 /*
     Newsletter
 -------------------------------------- */
-[class^=" adminhtml-newsletter-"] .page-actions .action-back {
+[class^=" newsletter-"] .page-actions .action-back {
     float: right;
 }
 
 /*
     Newsletter Templates
 -------------------------------------- */
-.adminhtml-newsletter-template-index .col-id {
+.newsletter-template-index .col-id {
     width: 35px;
 }
 
-.adminhtml-newsletter-template-index .col-actions {
+.newsletter-template-index .col-actions {
     width: 80px;
 }
 
-.adminhtml-newsletter-template-index .col-type {
+.newsletter-template-index .col-type {
     width: 100px;
 }
 
-.adminhtml-newsletter-template-index .col-added,
-.adminhtml-newsletter-template-index .col-updated {
+.newsletter-template-index .col-added,
+.newsletter-template-index .col-updated {
     width: 140px;
 }
 
-[class^=' adminhtml-newsletter-'] .buttons-set {
+[class^=' newsletter-'] .buttons-set {
     margin: 0 0 15px;
 }
 
-[class^=" adminhtml-newsletter-"] .buttons-set button {
+[class^=" newsletter-"] .buttons-set button {
     margin-right: 4px;
 }
 
 /*
     Newsletter - Queue
 -------------------------------------- */
-.adminhtml-newsletter-queue-index .col-id {
+.newsletter-queue-index .col-id {
     width: 35px;
 }
 
-.adminhtml-newsletter-queue-index .col-finish,
-.adminhtml-newsletter-queue-index .col-start {
+.newsletter-queue-index .col-finish,
+.newsletter-queue-index .col-start {
     width: 130px;
 }
 
-.adminhtml-newsletter-queue-index .col-status,
-.adminhtml-newsletter-queue-index .col-processed,
-.adminhtml-newsletter-queue-index .col-recipients {
+.newsletter-queue-index .col-status,
+.newsletter-queue-index .col-processed,
+.newsletter-queue-index .col-recipients {
     white-space: nowrap;
     width: 85px;
 }
 
-.adminhtml-newsletter-queue-index td.col-processed,
-.adminhtml-newsletter-queue-index td.col-recipients {
+.newsletter-queue-index td.col-processed,
+.newsletter-queue-index td.col-recipients {
     text-align: right;
 }
 
-.adminhtml-newsletter-queue-index .col-actions {
+.newsletter-queue-index .col-actions {
     width: 80px;
 }
 
 /*
     Newsletter - Subscribers
 -------------------------------------- */
-.adminhtml-newsletter-subscriber-index .col-id {
+.newsletter-subscriber-index .col-id {
     width: 35px;
 }
 
-.adminhtml-newsletter-subscriber-index .col-type {
+.newsletter-subscriber-index .col-type {
     width: 75px;
 }
 
-.adminhtml-newsletter-subscriber-index .col-status {
+.newsletter-subscriber-index .col-status {
     white-space: nowrap;
     width: 85px;
 }
@@ -980,19 +980,19 @@
 /*
     Newsletter - Problems
 -------------------------------------- */
-.adminhtml-newsletter-problem-index .col-select {
+.newsletter-problem-index .col-select {
     width: 25px;
 }
 
-.adminhtml-newsletter-problem-index .col-id {
+.newsletter-problem-index .col-id {
     width: 35px;
 }
 
-.adminhtml-newsletter-problem-index .col-start {
+.newsletter-problem-index .col-start {
     width: 130px;
 }
 
-.adminhtml-newsletter-problem-index .col-error-code {
+.newsletter-problem-index .col-error-code {
     width: 150px;
 }
 

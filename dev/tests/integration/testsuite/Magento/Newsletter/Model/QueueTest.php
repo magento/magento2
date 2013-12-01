@@ -51,7 +51,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $app->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
 
         $collection = $objectManager->create('Magento\Core\Model\Resource\Theme\Collection');
-        $themeId = $collection->getThemeByFullPath('frontend/magento_demo')->getId();
+        $themeId = $collection->getThemeByFullPath('frontend/magento_blank')->getId();
         /** @var $storeManager \Magento\Core\Model\StoreManagerInterface */
         $storeManager = $objectManager->get('Magento\Core\Model\StoreManagerInterface');
         $storeManager->getStore('fixturestore')->setConfig(
@@ -65,7 +65,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
             $this->stringEndsWith('/static/frontend/magento_plushe/en_US/images/logo.gif')
         );
         $subscriberTwo->expects($this->once())->method('setBodyHTML')->with(
-            $this->stringEndsWith('/static/frontend/magento_demo/de_DE/images/logo.gif')
+            $this->stringEndsWith('/static/frontend/magento_blank/de_DE/images/logo.gif')
         );
         /** @var $filter \Magento\Newsletter\Model\Template\Filter */
         $filter = $objectManager->get('Magento\Newsletter\Model\Template\Filter');

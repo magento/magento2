@@ -57,7 +57,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
-            ->setDesignTheme('magento_basic');
+            ->setDesignTheme('magento_backend');
         /** @var $model \Magento\Cms\Model\Wysiwyg\Images\Storage */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Cms\Model\Wysiwyg\Images\Storage');
@@ -74,6 +74,9 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @magentoAppArea adminhtml
+     */
     public function testGetThumbsPath()
     {
         $filesystem = new \Magento\Filesystem(new \Magento\Filesystem\Adapter\Local);

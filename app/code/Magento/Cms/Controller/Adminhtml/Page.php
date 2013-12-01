@@ -282,8 +282,8 @@ class Page extends \Magento\Backend\App\Action
     {
         $errorNo = true;
         if (!empty($data['layout_update_xml']) || !empty($data['custom_layout_update_xml'])) {
-            /** @var $validatorCustomLayout \Magento\Adminhtml\Model\LayoutUpdate\Validator */
-            $validatorCustomLayout = $this->_objectManager->create('Magento\Adminhtml\Model\LayoutUpdate\Validator');
+            /** @var $validatorCustomLayout \Magento\Core\Model\Layout\Update\Validator */
+            $validatorCustomLayout = $this->_objectManager->create('Magento\Core\Model\Layout\Update\Validator');
             if (!empty($data['layout_update_xml']) && !$validatorCustomLayout->isValid($data['layout_update_xml'])) {
                 $errorNo = false;
             }

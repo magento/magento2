@@ -152,6 +152,11 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     protected $_catalogAttrFactory;
 
     /**
+     * @var \Magento\App\State
+     */
+    protected $_appState;
+
+    /**
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
      * @param \Magento\Sales\Helper\Admin $adminhtmlSales
      * @param \Magento\Event\ManagerInterface $eventManager
@@ -168,6 +173,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * @param \Magento\Catalog\Model\Resource\ConfigFactory $catalogConfFactory
      * @param \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory
      * @param \Magento\Wishlist\Model\Resource\Item $resource
+     * @param \Magento\App\State $appState
      */
     public function __construct(
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
@@ -185,7 +191,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory,
         \Magento\Catalog\Model\Resource\ConfigFactory $catalogConfFactory,
         \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory,
-        \Magento\Wishlist\Model\Resource\Item $resource
+        \Magento\Wishlist\Model\Resource\Item $resource,
+        \Magento\App\State $appState
     ) {
         $this->_inventoryData = $catalogInventoryData;
         $this->_adminhtmlSales = $adminhtmlSales;
@@ -198,6 +205,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         $this->_productCollFactory = $productCollFactory;
         $this->_catalogConfFactory = $catalogConfFactory;
         $this->_catalogAttrFactory = $catalogAttrFactory;
+        $this->_appState = $appState;
         parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $resource);
     }
 
@@ -265,16 +273,16 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         \Magento\Profiler::start('WISHLIST:'.__METHOD__, array('group' => 'WISHLIST', 'method' => __METHOD__));
         $productIds = array();
 
-        $isStoreAdmin = $this->_storeManager->getStore()->isAdmin();
+        $isBackendArea = $this->_appState->getAreaCode() === \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;
 
         $storeIds = array();
         foreach ($this as $item) {
             $productIds[$item->getProductId()] = 1;
-            if ($isStoreAdmin && !in_array($item->getStoreId(), $storeIds)) {
+            if ($isBackendArea && !in_array($item->getStoreId(), $storeIds)) {
                 $storeIds[] = $item->getStoreId();
             }
         }
-        if (!$isStoreAdmin) {
+        if (!$isBackendArea) {
             $storeIds = $this->_storeIds;
         }
 

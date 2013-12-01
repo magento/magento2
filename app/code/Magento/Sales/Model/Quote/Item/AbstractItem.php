@@ -620,7 +620,7 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * Checking can we ship product separatelly (each child separately)
+     * Checking can we ship product separately (each child separately)
      * or each parent product item can be shipped only like one item
      *
      * @return bool

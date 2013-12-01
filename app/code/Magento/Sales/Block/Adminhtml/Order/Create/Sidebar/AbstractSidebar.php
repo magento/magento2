@@ -136,7 +136,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     }
 
     /**
-     * Retreive item count
+     * Retrieve item count
      *
      * @return int
      */

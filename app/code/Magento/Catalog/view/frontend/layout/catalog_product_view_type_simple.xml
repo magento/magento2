@@ -24,9 +24,8 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="product.info">
-        <block class="Magento\Catalog\Block\Product\View\Type\Simple" name="product.info.simple" as="product_type_data" template="product/view/type/default.phtml">
-            <container name="product.info.simple.extra" as="product_type_data_extra" label="Product Extra Info"/>
-        </block>
-    </referenceBlock>
+    <referenceContainer name="product.info.type">
+        <block class="Magento\Catalog\Block\Product\View\Type\Simple" name="product.info.simple" as="product_type_data" template="product/view/type/default.phtml"/>
+        <container name="product.info.simple.extra" after="product.info.simple" as="product_type_data_extra" label="Product Extra Info"/>
+    </referenceContainer>
 </layout>

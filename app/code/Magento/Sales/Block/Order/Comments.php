@@ -51,7 +51,7 @@ class Comments extends \Magento\View\Block\Template
     protected $_entity;
 
     /**
-     * Currect comments collection
+     * Current comments collection
      *
      * @var \Magento\Sales\Model\Resource\Order\Comment\Collection\AbstractCollection
      */

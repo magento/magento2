@@ -319,8 +319,8 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
         $qty = $this->_prepareQty($qty);
 
         /**
-         * We can't modify quontity of existing items which have parent
-         * This qty declared just once duering add process and is not editable
+         * We can't modify quantity of existing items which have parent
+         * This qty declared just once during add process and is not editable
          */
         if (!$this->getParentItem() || !$this->getId()) {
             $this->setQtyToAdd($qty);
@@ -654,7 +654,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
 
     /**
      * Can specify specific actions for ability to change given quote options values
-     * Exemple: cataloginventory decimal qty validation may change qty to int,
+     * Example: cataloginventory decimal qty validation may change qty to int,
      * so need to change quote item qty option value.
      *
      * @param \Magento\Object $option

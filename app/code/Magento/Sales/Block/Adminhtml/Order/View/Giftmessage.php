@@ -114,7 +114,7 @@ class Giftmessage extends \Magento\Adminhtml\Block\Widget
     }
 
     /**
-     * Retrive save button html
+     * Retrieve save button html
      *
      * @return string
      */
@@ -140,7 +140,7 @@ class Giftmessage extends \Magento\Adminhtml\Block\Widget
     }
 
     /**
-     * Retrive entity for form
+     * Retrieve entity for form
      *
      * @return \Magento\Object
      */
@@ -154,7 +154,7 @@ class Giftmessage extends \Magento\Adminhtml\Block\Widget
     }
 
     /**
-     * Retrive default value for giftmessage sender
+     * Retrieve default value for giftmessage sender
      *
      * @return string
      */
@@ -172,7 +172,7 @@ class Giftmessage extends \Magento\Adminhtml\Block\Widget
     }
 
     /**
-     * Retrive default value for giftmessage recipient
+     * Retrieve default value for giftmessage recipient
      *
      * @return string
      */
@@ -200,7 +200,7 @@ class Giftmessage extends \Magento\Adminhtml\Block\Widget
     }
 
     /**
-     * Retrive real name for field
+     * Retrieve real name for field
      *
      * @param string $name
      * @return string
@@ -211,7 +211,7 @@ class Giftmessage extends \Magento\Adminhtml\Block\Widget
     }
 
     /**
-     * Retrive real html id for field
+     * Retrieve real html id for field
      *
      * @param string $name
      * @return string
@@ -222,7 +222,7 @@ class Giftmessage extends \Magento\Adminhtml\Block\Widget
     }
 
     /**
-     * Retrive field html id prefix
+     * Retrieve field html id prefix
      *
      * @return string
      */
@@ -254,7 +254,7 @@ class Giftmessage extends \Magento\Adminhtml\Block\Widget
     }
 
     /**
-     * Retrive gift message for entity
+     * Retrieve gift message for entity
      *
      * @return \Magento\GiftMessage\Model\Message
      */
@@ -279,7 +279,7 @@ class Giftmessage extends \Magento\Adminhtml\Block\Widget
     }
 
     /**
-     * Retrive block html id
+     * Retrieve block html id
      *
      * @return string
      */

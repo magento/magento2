@@ -200,8 +200,8 @@ class Collection
             $storeIds = array($storeIds);
         }
         $currentStoreIds = $this->_storesIds;
-        if (isset($currentStoreIds) && $currentStoreIds != \Magento\Core\Model\AppInterface::ADMIN_STORE_ID
-            && $currentStoreIds != array(\Magento\Core\Model\AppInterface::ADMIN_STORE_ID)) {
+        if (isset($currentStoreIds) && $currentStoreIds != \Magento\Core\Model\Store::DEFAULT_STORE_ID
+            && $currentStoreIds != array(\Magento\Core\Model\Store::DEFAULT_STORE_ID)) {
             if (!is_array($currentStoreIds)) {
                 $currentStoreIds = array($currentStoreIds);
             }

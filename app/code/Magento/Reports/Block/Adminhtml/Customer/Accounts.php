@@ -40,7 +40,8 @@ class Accounts extends \Magento\Backend\Block\Widget\Grid\Container
 
     protected function _construct()
     {
-        $this->_controller = 'report_customer_accounts';
+        $this->_blockGroup = 'Magento_Reports';
+        $this->_controller = 'adminhtml_customer_accounts';
         $this->_headerText = __('New Accounts');
         parent::_construct();
         $this->_removeButton('add');

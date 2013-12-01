@@ -24,16 +24,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Authorizenet Data Helper
- *
- * @category   Magento
- * @package    Magento_Authorizenet
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Authorizenet\Helper;
 
-class Data extends \Magento\App\Helper\AbstractHelper
+/**
+ * Authorizenet Data Helper
+ */
+class Data extends \Magento\App\Helper\AbstractHelper implements HelperInterface
 {
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -46,38 +42,18 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_orderFactory;
 
     /**
-     * @var \Magento\Backend\Model\Url
-     */
-    protected $_urlBuilder;
-
-    /**
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Backend\Model\Url $urlBuilder
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Backend\Model\Url $urlBuilder
+        \Magento\Sales\Model\OrderFactory $orderFactory
     ) {
         parent::__construct($context);
         $this->_storeManager = $storeManager;
         $this->_orderFactory = $orderFactory;
-        $this->_urlBuilder = $urlBuilder;
-    }
-
-    /**
-     * Return URL for admin area
-     *
-     * @param string $route
-     * @param array $params
-     * @return string
-     */
-    public function getAdminUrl($route, $params)
-    {
-        return $this->_urlBuilder->getUrl($route, $params);
     }
 
     /**
@@ -141,11 +117,6 @@ class Data extends \Magento\App\Helper\AbstractHelper
                 $route = 'authorizenet/directpost_payment/redirect';
                 break;
 
-            case 'sales_order_create':
-            case 'sales_order_edit':
-                $route = 'adminhtml/authorizenet_directpost_payment/redirect';
-                return $this->getAdminUrl($route, $params);
-
             default:
                 $route = 'authorizenet/directpost_payment/redirect';
                 break;
@@ -165,16 +136,6 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Retrieve place order url in admin
-     *
-     * @return  string
-     */
-    public function getPlaceOrderAdminUrl()
-    {
-        return $this->getAdminUrl('*/authorizenet_directpost_payment/place', array());
-    }
-
-    /**
      * Retrieve place order url
      *
      * @param array params
@@ -187,13 +148,6 @@ class Data extends \Magento\App\Helper\AbstractHelper
             case 'onepage':
                 $route = 'checkout/onepage/success';
                 break;
-
-            case 'sales_order_create':
-            case 'sales_order_edit':
-                $route = 'sales/order/view';
-                $order = $this->_orderFactory->create()->loadByIncrementId($params['x_invoice_num']);
-                $param['order_id'] = $order->getId();
-                return $this->getAdminUrl($route, $param);
 
             default :
                 $route = 'checkout/onepage/success';

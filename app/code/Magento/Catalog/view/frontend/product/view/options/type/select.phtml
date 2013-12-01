@@ -18,18 +18,21 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 
 <?php /* @var $this \Magento\Catalog\Block\Product\View\Options\Type\Select */ ?>
-<?php $_option = $this->getOption() ?>
-<dt><label<?php if ($_option->getIsRequire()) echo ' class="required"' ?>><?php if ($_option->getIsRequire()) echo '<em>*</em>' ?><?php echo  $this->escapeHtml($_option->getTitle()) ?></label></dt>
-<dd<?php if ($_option->getDecoratedIsLast()):?> class="last"<?php endif; ?>>
-    <div class="input-box">
+<?php
+$_option = $this->getOption();
+$class = ($_option->getIsRequire()) ? ' required' : '';
+?>
+<div class="field<?php echo $class; ?>">
+    <label class="label">
+        <span><?php echo  $this->escapeHtml($_option->getTitle()) ?></span>
+    </label>
+    <div class="control">
         <?php echo $this->getValuesHtml() ?>
         <?php if ($_option->getIsRequire()): ?>
             <?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_RADIO || $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_CHECKBOX): ?>
@@ -37,4 +40,4 @@
             <?php endif; ?>
         <?php endif;?>
     </div>
-</dd>
+</div>

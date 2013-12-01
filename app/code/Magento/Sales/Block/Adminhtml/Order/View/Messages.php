@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View;
 
-class Messages extends \Magento\Adminhtml\Block\Messages
+class Messages extends \Magento\View\Block\Messages
 {
     /**
      * Core registry

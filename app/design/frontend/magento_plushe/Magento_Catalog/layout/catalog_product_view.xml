@@ -24,12 +24,6 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="product.info.overview">
-        <arguments>
-            <argument name="at_label" xsi:type="string">none</argument>
-            <argument name="title" translate="true" xsi:type="string">Overview</argument>
-        </arguments>
-    </referenceBlock>
     <move element="product.info" destination="product.info.main" after="product.tierprices"/>
     <move element="page.main.title" destination="product.info.main" before="-"/>
     <!-- <remove name="product.info.sku"/> -->

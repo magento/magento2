@@ -70,7 +70,7 @@ class Review extends \Magento\Backend\App\Action
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Review::catalog_reviews_ratings_reviews_all');
 
-        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Main'));
+        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Main'));
 
         $this->_view->renderLayout();
     }
@@ -89,7 +89,7 @@ class Review extends \Magento\Backend\App\Action
         $this->_view->loadLayout();
 
         $this->_coreRegistry->register('usePendingFilter', true);
-        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Main'));
+        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Main'));
 
         $this->_view->renderLayout();
     }
@@ -103,7 +103,7 @@ class Review extends \Magento\Backend\App\Action
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Review::catalog_reviews_ratings_reviews_all');
 
-        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Edit'));
+        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Edit'));
 
         $this->_view->renderLayout();
     }
@@ -119,8 +119,8 @@ class Review extends \Magento\Backend\App\Action
 
         $this->_view->getLayout()->getBlock('head')->setCanLoadExtJs(true);
 
-        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Add'));
-        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Product\Grid'));
+        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Add'));
+        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Product\Grid'));
 
         $this->_view->renderLayout();
     }
@@ -292,14 +292,14 @@ class Review extends \Magento\Backend\App\Action
     public function productGridAction()
     {
         $this->getResponse()->setBody(
-            $this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Product\Grid')->toHtml()
+            $this->_view->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Product\Grid')->toHtml()
         );
     }
 
     public function reviewGridAction()
     {
         $this->getResponse()->setBody(
-            $this->_view->getLayout()->createBlock('Magento\Adminhtml\Block\Review\Grid')->toHtml()
+            $this->_view->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Grid')->toHtml()
         );
     }
 
@@ -380,7 +380,7 @@ class Review extends \Magento\Backend\App\Action
     {
         $this->getResponse()->setBody(
             $this->_view->getLayout()
-                ->createBlock('Magento\Adminhtml\Block\Review\Rating\Detailed')
+                ->createBlock('Magento\Review\Block\Adminhtml\Rating\Detailed')
                 ->setIndependentMode()
                 ->toHtml()
         );

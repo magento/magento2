@@ -44,7 +44,7 @@ interface RendererInterface
     function setType(\Magento\Object $type);
 
     /**
-     * Retrive format type object
+     * Retrieve format type object
      *
      * @return \Magento\Object
      */

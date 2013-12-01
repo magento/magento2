@@ -127,7 +127,7 @@ class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * Retrieve config scope and scope id of specified email template by email pathes
+     * Retrieve config scope and scope id of specified email template by email paths
      *
      * @param array $paths
      * @param int|string $templateId
@@ -136,13 +136,13 @@ class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function getSystemConfigByPathsAndTemplateId($paths, $templateId)
     {
         $orWhere = array();
-        $pathesCounter = 1;
+        $pathsCounter = 1;
         $bind = array();
         foreach ($paths as $path) {
-            $pathAlias = 'path_' . $pathesCounter;
+            $pathAlias = 'path_' . $pathsCounter;
             $orWhere[] = 'path = :' . $pathAlias;
             $bind[$pathAlias] = $path;
-            $pathesCounter++;
+            $pathsCounter++;
         }
         $bind['template_id'] = $templateId;
         $select = $this->_getReadAdapter()->select()

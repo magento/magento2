@@ -135,7 +135,7 @@ abstract class AbstractCollection
     }
 
     /**
-     * Retrive all ids for collection
+     * Retrieve all ids for collection
      * Backward compatibility with EAV collection
      *
      * @param int $limit

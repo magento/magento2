@@ -37,7 +37,7 @@ class Simple
     extends \Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType
 {
     /**
-     * Overriden attributes parameters.
+     * Overridden attributes parameters.
      *
      * @var array
      */

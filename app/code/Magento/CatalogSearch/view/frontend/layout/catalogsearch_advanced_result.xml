@@ -24,33 +24,18 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <update handle="page_two_columns_right"/>
+    <update handle="page_two_columns_left"/>
+    <referenceBlock name="page.main.title">
+        <action method="setPageTitle">
+            <argument translate="true" name="title" xsi:type="string">Catalog Advanced Search</argument>
+        </action>
+    </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\CatalogSearch\Block\Advanced\Result" name="catalogsearch_advanced_result" template="advanced/result.phtml">
             <block class="Magento\Catalog\Block\Product\ListProduct" name="search_result_list" template="product/list.phtml">
                 <block class="Magento\Catalog\Block\Product\ProductList\Toolbar" name="product_list_toolbar" template="product/list/toolbar.phtml">
                     <block class="Magento\Page\Block\Html\Pager" name="product_list_toolbar_pager"/>
                 </block>
-                <action method="addColumnCountLayoutDepend">
-                    <argument name="layout" xsi:type="string">empty</argument>
-                    <argument name="count" xsi:type="string">6</argument>
-                </action>
-                <action method="addColumnCountLayoutDepend">
-                    <argument name="layout" xsi:type="string">one_column</argument>
-                    <argument name="count" xsi:type="string">5</argument>
-                </action>
-                <action method="addColumnCountLayoutDepend">
-                    <argument name="layout" xsi:type="string">two_columns_left</argument>
-                    <argument name="count" xsi:type="string">4</argument>
-                </action>
-                <action method="addColumnCountLayoutDepend">
-                    <argument name="layout" xsi:type="string">two_columns_right</argument>
-                    <argument name="count" xsi:type="string">4</argument>
-                </action>
-                <action method="addColumnCountLayoutDepend">
-                    <argument name="layout" xsi:type="string">three_columns</argument>
-                    <argument name="count" xsi:type="string">3</argument>
-                </action>
                 <action method="setToolbarBlockName">
                     <argument name="name" xsi:type="string">product_list_toolbar</argument>
                 </action>

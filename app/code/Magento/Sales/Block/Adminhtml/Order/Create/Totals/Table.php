@@ -34,7 +34,7 @@
 
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
 
-class Table extends \Magento\Adminhtml\Block\Template
+class Table extends \Magento\Backend\Block\Template
 {
 
     protected $_websiteCollection = null;

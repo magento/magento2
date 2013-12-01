@@ -197,7 +197,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
             array('theme_file.txt', array('module' => 'Magento_Catalog')),
             array('Magento_Catalog::theme_file.txt', array()),
             array('Magento_Catalog::theme_file_with_2_dots..txt', array()),
-            array('Magento_Catalog::theme_file.txt', array('module' => 'Overriden_Module')),
+            array('Magento_Catalog::theme_file.txt', array('module' => 'Overridden_Module')),
         );
     }
 

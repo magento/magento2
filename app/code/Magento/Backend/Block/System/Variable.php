@@ -25,7 +25,7 @@
  */
 
 /**
- * Custom Varieble Block
+ * Custom Variable Block
  *
  * @category   Magento
  * @package    Magento_Backend

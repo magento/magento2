@@ -100,7 +100,7 @@ class Calculation extends \Magento\Core\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * Retreive distinct calculation
+     * Retrieve distinct calculation
      *
      * @param  string $field
      * @param  int $ruleId

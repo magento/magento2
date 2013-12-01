@@ -32,7 +32,7 @@
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main;
 
 class Layout
-    extends \Magento\Adminhtml\Block\Template implements \Magento\Data\Form\Element\Renderer\RendererInterface
+    extends \Magento\Backend\Block\Template implements \Magento\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @var \Magento\Data\Form\Element\AbstractElement

@@ -38,7 +38,7 @@ class Storage extends \Magento\Core\Model\AbstractModel
     const STORAGE_MEDIA_DATABASE            = 1;
 
     /**
-     * Config pathes for storing storage configuration
+     * Config paths for storing storage configuration
      */
     const XML_PATH_STORAGE_MEDIA            = 'system/media_storage_configuration/media_storage';
     const XML_PATH_STORAGE_MEDIA_DATABASE   = 'system/media_storage_configuration/media_database';

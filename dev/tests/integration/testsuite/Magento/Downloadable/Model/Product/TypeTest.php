@@ -45,14 +45,13 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Downloadable/_files/product_with_files.php
+     * @magentoAppArea adminhtml
      */
     public function testDeleteTypeSpecificData()
     {
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Catalog\Model\Product');
         $product->load(1);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->setCurrentStore(\Magento\Core\Model\AppInterface::ADMIN_STORE_ID);
         $product->setOrigData();
         $downloadableData = array();
 

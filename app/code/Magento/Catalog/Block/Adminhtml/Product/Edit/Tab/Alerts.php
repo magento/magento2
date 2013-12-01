@@ -35,7 +35,7 @@
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
-class Alerts extends \Magento\Adminhtml\Block\Template
+class Alerts extends \Magento\Backend\Block\Template
 {
     protected $_template = 'catalog/product/tab/alert.phtml';
 

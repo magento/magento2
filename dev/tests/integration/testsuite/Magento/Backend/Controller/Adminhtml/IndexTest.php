@@ -29,25 +29,10 @@
 namespace Magento\Backend\Controller\Adminhtml;
 
 /**
- * Test class for \Magento\Backend\Controller\Adminhtml\Index.
- *
  * @magentoAppArea adminhtml
  */
 class IndexTest extends \Magento\Backend\Utility\Controller
 {
-    /**
-     * @covers \Magento\Backend\Controller\Adminhtml\Index::globalSearchAction
-     */
-    public function testGlobalSearchAction()
-    {
-        $this->getRequest()->setParam('isAjax', 'true');
-        $this->getRequest()->setPost('query', 'dummy');
-        $this->dispatch('backend/admin/index/globalSearch');
-
-        $actual = $this->getResponse()->getBody();
-        $this->assertEquals(array(), json_decode($actual));
-    }
-
     /**
      * Check not logged state
      * @covers \Magento\Backend\Controller\Adminhtml\Index::indexAction
@@ -72,5 +57,18 @@ class IndexTest extends \Magento\Backend\Utility\Controller
     {
         $this->dispatch('backend/admin/index/index');
         $this->assertRedirect();
+    }
+
+    /**
+     * @covers \Magento\Backend\Controller\Adminhtml\Index::globalSearchAction
+     */
+    public function testGlobalSearchAction()
+    {
+        $this->getRequest()->setParam('isAjax', 'true');
+        $this->getRequest()->setPost('query', 'dummy');
+        $this->dispatch('backend/admin/index/globalSearch');
+
+        $actual = $this->getResponse()->getBody();
+        $this->assertEquals(array(), json_decode($actual));
     }
 }

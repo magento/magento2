@@ -106,7 +106,7 @@ class Cart extends \Magento\Core\Helper\Url
      */
     public function getAddUrl($product, $additional = array())
     {
-        $continueUrl    = $this->_coreData->urlEncode($this->getCurrentUrl());
+        $continueUrl    = $this->_coreData->urlEncode($this->_urlBuilder->getCurrentUrl());
         $urlParamName   = \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED;
 
         $routeParams = array(
@@ -134,7 +134,7 @@ class Cart extends \Magento\Core\Helper\Url
     /**
      * Retrieve url for remove product from cart
      *
-     * @param   \Magento\Sales\Quote\Item $item
+     * @param   \Magento\Sales\Model\Quote\Item $item
      * @return  string
      */
     public function getRemoveUrl($item)

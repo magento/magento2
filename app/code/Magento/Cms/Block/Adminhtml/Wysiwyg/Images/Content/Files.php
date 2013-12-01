@@ -33,7 +33,7 @@
  */
 namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
 
-class Files extends \Magento\Adminhtml\Block\Template
+class Files extends \Magento\Backend\Block\Template
 {
     /**
      * Files collection object

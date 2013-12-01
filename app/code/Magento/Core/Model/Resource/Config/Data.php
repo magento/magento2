@@ -105,7 +105,7 @@ class Data extends \Magento\Core\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * Cleare store data
+     * Clear store data
      *
      * @param array $storeIds
      */

@@ -24,9 +24,15 @@
  */
 -->
 <config>
+    <preference for="Magento\Customer\Model\Customer" type="Magento\Customer\Model\Backend\Customer" />
     <type name="Magento\Customer\Model\Session">
         <param name="sessionName">
             <value>adminhtml</value>
+        </param>
+    </type>
+    <type name="Magento\Customer\Model\Resource\Customer\Collection">
+        <param name="modelName">
+            <value>Magento\Customer\Model\Backend\Customer</value>
         </param>
     </type>
 </config>

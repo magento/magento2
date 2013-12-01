@@ -956,7 +956,7 @@
         ],
         "validate-cc-type": [
             /**
-             * Validate credit card number is for the currect credit card type
+             * Validate credit card number is for the correct credit card type
              * @param value - credit card number
              * @param element - element contains credit card number
              * @param params - selector for credit card type

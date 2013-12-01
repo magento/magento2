@@ -52,7 +52,7 @@ class Item extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Retrive parent massaction block
+     * Retrieve parent massaction block
      *
      * @return \Magento\Backend\Block\Widget\Grid\Massaction\Extended
      */
@@ -97,7 +97,7 @@ class Item extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Retrive additional action block for this item
+     * Retrieve additional action block for this item
      *
      * @return \Magento\View\Block\AbstractBlock
      */
@@ -107,7 +107,7 @@ class Item extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Retrive additional action block HTML for this item
+     * Retrieve additional action block HTML for this item
      *
      * @return string
      */

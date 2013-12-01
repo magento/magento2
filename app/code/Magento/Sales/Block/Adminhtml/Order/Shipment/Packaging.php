@@ -30,7 +30,7 @@
 
 namespace Magento\Sales\Block\Adminhtml\Order\Shipment;
 
-class Packaging extends \Magento\Adminhtml\Block\Template
+class Packaging extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\Usa\Model\Shipping\Carrier\Usps\Source\Size

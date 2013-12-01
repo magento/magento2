@@ -49,6 +49,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         foreach ($registryData as $key => $value) {
+            if ($key == 'store_data') {
+                $value = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($value);
+            }
             $objectManager->get('Magento\Core\Model\Registry')->register($key, $value);
         }
     }
@@ -81,27 +84,24 @@ class EditTest extends \PHPUnit_Framework_TestCase
             array(
                 array(
                     'store_type' => 'website',
-                    'store_data' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                            ->create('Magento\Core\Model\Website')
+                    'store_data' => 'Magento\Core\Model\Website',
                 ),
-                'Magento\Backend\Block\System\Store\Edit\Form\Website'
+                'Magento\Backend\Block\System\Store\Edit\Form\Website',
             ),
             array(
                 array(
                     'store_type' => 'group',
-                    'store_data' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                            ->create('Magento\Core\Model\Store\Group')
+                    'store_data' => 'Magento\Core\Model\Store\Group',
                 ),
-                'Magento\Backend\Block\System\Store\Edit\Form\Group'
+                'Magento\Backend\Block\System\Store\Edit\Form\Group',
             ),
             array(
                 array(
                     'store_type' => 'store',
-                    'store_data' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                            ->create('Magento\Core\Model\Store')
+                    'store_data' => 'Magento\Core\Model\Store',
                 ),
-                'Magento\Backend\Block\System\Store\Edit\Form\Store'
-            )
+                'Magento\Backend\Block\System\Store\Edit\Form\Store',
+            ),
         );
     }
     /**
@@ -132,57 +132,51 @@ class EditTest extends \PHPUnit_Framework_TestCase
             array(
                 array(
                     'store_type' => 'website',
-                    'store_data' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                            ->create('Magento\Core\Model\Website'),
-                    'store_action' => 'add'
+                    'store_data' => 'Magento\Core\Model\Website',
+                    'store_action' => 'add',
                 ),
-                'New Web Site'
+                'New Web Site',
             ),
             array(
                 array(
                     'store_type' => 'website',
-                    'store_data' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                            ->create('Magento\Core\Model\Website'),
-                    'store_action' => 'edit'
+                    'store_data' => 'Magento\Core\Model\Website',
+                    'store_action' => 'edit',
                 ),
-                'Edit Web Site'
+                'Edit Web Site',
             ),
             array(
                 array(
                     'store_type' => 'group',
-                    'store_data' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                            ->create('Magento\Core\Model\Store\Group'),
-                    'store_action' => 'add'
+                    'store_data' => 'Magento\Core\Model\Store\Group',
+                    'store_action' => 'add',
                 ),
-                'New Store'
+                'New Store',
             ),
             array(
                 array(
                     'store_type' => 'group',
-                    'store_data' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                            ->create('Magento\Core\Model\Store\Group'),
-                    'store_action' => 'edit'
+                    'store_data' => 'Magento\Core\Model\Store\Group',
+                    'store_action' => 'edit',
                 ),
-                'Edit Store'
+                'Edit Store',
             ),
             array(
                 array(
                     'store_type' => 'store',
-                    'store_data' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                            ->create('Magento\Core\Model\Store'),
-                    'store_action' => 'add'
+                    'store_data' => 'Magento\Core\Model\Store',
+                    'store_action' => 'add',
                 ),
-                'New Store View'
+                'New Store View',
             ),
             array(
                 array(
                     'store_type' => 'store',
-                    'store_data' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                            ->create('Magento\Core\Model\Store'),
-                    'store_action' => 'edit'
+                    'store_data' => 'Magento\Core\Model\Store',
+                    'store_action' => 'edit',
                 ),
-                'Edit Store View'
-            )
+                'Edit Store View',
+            ),
         );
     }
 }

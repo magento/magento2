@@ -63,11 +63,6 @@ class Inline implements \Magento\Core\Model\Translate\InlineInterface
     protected $_isScriptInserted    = false;
 
     /**
-     * @var \Magento\Backend\Model\Url
-     */
-    protected $_backendUrl;
-
-    /**
      * @var \Magento\Core\Model\Url
      */
     protected $_url;
@@ -78,41 +73,36 @@ class Inline implements \Magento\Core\Model\Translate\InlineInterface
     protected $_layout;
 
     /**
-     * Core store config
-     *
-     * @var \Magento\Core\Model\Store\Config
-     */
-    protected $_coreStoreConfig;
-
-    /**
      * @var \Magento\App\State
      */
     protected $_appState;
+
+    /**
+     * @var \Magento\Core\Model\Translate\Inline\ConfigFactory
+     */
+    protected $_configFactory;
 
     /**
      * Initialize inline translation model
      *
      * @param InlineParser $parser
      * @param \Magento\Core\Model\Translate $translate
-     * @param \Magento\Backend\Model\Url $backendUrl
      * @param \Magento\Core\Model\Url $url
      * @param \Magento\View\LayoutInterface $layout
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Core\Model\Translate\Inline\ConfigFactory $configFactory
      * @param \Magento\App\State $appState
      */
     public function __construct(
         \Magento\Core\Model\Translate\InlineParser $parser,
         \Magento\Core\Model\Translate $translate,
-        \Magento\Backend\Model\Url $backendUrl,
         \Magento\Core\Model\Url $url,
         \Magento\View\LayoutInterface $layout,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Core\Model\Translate\Inline\ConfigFactory $configFactory,
         \Magento\App\State $appState
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_configFactory = $configFactory;
         $this->_parser = $parser;
         $this->_translator = $translate;
-        $this->_backendUrl = $backendUrl;
         $this->_url = $url;
         $this->_layout = $layout;
         $this->_appState = $appState;
@@ -134,11 +124,7 @@ class Inline implements \Magento\Core\Model\Translate\InlineInterface
                 $store = $this->_parser->getStoreManager()->getStore($store);
             }
 
-            if ($this->_parser->getDesignPackage()->getArea() == 'adminhtml') {
-                $active = $this->_coreStoreConfig->getConfigFlag('dev/translate_inline/active_admin', $store);
-            } else {
-                $active = $this->_coreStoreConfig->getConfigFlag('dev/translate_inline/active', $store);
-            }
+            $active = $this->_configFactory->create()->isActive($store);
             $this->_isAllowed = $active && $this->_parser->getHelper()->isDevAllowed($store);
         }
         return $this->_translator->getTranslateInline() && $this->_isAllowed;
@@ -194,21 +180,10 @@ class Inline implements \Magento\Core\Model\Translate\InlineInterface
             return;
         }
 
-        $store = $this->_parser->getStoreManager()->getStore();
-        if ($store->isAdmin()) {
-            $urlPrefix = \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;
-            $urlModel = $this->_backendUrl;
-        } else {
-            $urlPrefix = 'core';
-            $urlModel = $this->_url;
-        }
-        $ajaxUrl = $urlModel->getUrl($urlPrefix . '/ajax/translate',
-            array('_secure' => $store->isCurrentlySecure()));
-
         /** @var $block \Magento\View\Block\Template */
         $block = $this->_layout->createBlock('Magento\View\Block\Template');
 
-        $block->setAjaxUrl($ajaxUrl);
+        $block->setAjaxUrl($this->_getAjaxUrl());
 
         $block->setTemplate('Magento_Core::translate_inline.phtml');
 
@@ -217,6 +192,17 @@ class Inline implements \Magento\Core\Model\Translate\InlineInterface
         $this->_parser->setContent(str_ireplace('</body>', $html . '</body>', $content));
 
         $this->_isScriptInserted = true;
+    }
+
+    /**
+     * Return URL for ajax requests
+     *
+     * @return string
+     */
+    protected function _getAjaxUrl()
+    {
+        $store = $this->_parser->getStoreManager()->getStore();
+        return $this->_url->getUrl('core/ajax/translate', array('_secure' => $store->isCurrentlySecure()));
     }
 
     /**

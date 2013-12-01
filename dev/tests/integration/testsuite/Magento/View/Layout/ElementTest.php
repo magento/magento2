@@ -51,7 +51,7 @@ class ElementTest extends \PHPUnit_Framework_TestCase
         $this->_model->prepare();
 
         $this->assertEquals('root', (string)$blockNode->attributes()->parent);
-        $this->assertEquals('Magento\Adminhtml\Block\Page\Head', (string)$blockNode->attributes()->class);
+        $this->assertEquals('Magento\Backend\Block\Page\Head', (string)$blockNode->attributes()->class);
         $this->assertEquals('head', (string)$actionNode->attributes()->block);
     }
 }

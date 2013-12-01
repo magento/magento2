@@ -129,7 +129,7 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
                 $statement = $readAdapter->select()
                     ->from($priceTable, 'option_id')
                     ->where('option_id = ?', $object->getId())
-                    ->where('store_id = ?', \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID);
+                    ->where('store_id = ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID);
                 $optionId = $readAdapter->fetchOne($statement);
 
                 if ($optionId) {
@@ -148,7 +148,7 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
                             $data,
                             array(
                                 'option_id = ?' => $object->getId(),
-                                'store_id  = ?' => \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID,
+                                'store_id  = ?' => \Magento\Core\Model\Store::DEFAULT_STORE_ID,
                             )
                         );
                     }
@@ -157,7 +157,7 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
                          new \Magento\Object(
                             array(
                                 'option_id'  => $object->getId(),
-                                'store_id'   => \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID,
+                                'store_id'   => \Magento\Core\Model\Store::DEFAULT_STORE_ID,
                                 'price'      => $object->getPrice(),
                                 'price_type' => $object->getPriceType()
                             )
@@ -261,7 +261,7 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
             $statement = $readAdapter->select()
                 ->from($titleTable)
                 ->where('option_id = ?', $object->getId())
-                ->where('store_id  = ?', \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID);
+                ->where('store_id  = ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID);
 
             if ($readAdapter->fetchOne($statement)) {
                 if ($object->getStoreId() == '0') {
@@ -279,7 +279,7 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
                         $data,
                         array(
                             'option_id = ?' => $object->getId(),
-                            'store_id  = ?' => \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID
+                            'store_id  = ?' => \Magento\Core\Model\Store::DEFAULT_STORE_ID
                         )
                     );
                 }
@@ -288,7 +288,7 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
                     new \Magento\Object(
                         array(
                             'option_id' => $object->getId(),
-                            'store_id'  => \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID,
+                            'store_id'  => \Magento\Core\Model\Store::DEFAULT_STORE_ID,
                             'title'     => $object->getTitle()
                         )
                     ),
@@ -485,7 +485,7 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
         $defaultOptionJoin = implode(
             ' AND ',
             array('option_title_default.option_id=product_option.option_id',
-            $adapter->quoteInto('option_title_default.store_id = ?', \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID))
+            $adapter->quoteInto('option_title_default.store_id = ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID))
         );
 
         $storeOptionJoin = implode(
@@ -518,7 +518,7 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
         $defaultOptionJoin = implode(
             ' AND ', array(
                 'option_title_default.option_type_id=option_type.option_type_id',
-                $adapter->quoteInto('option_title_default.store_id = ?', \Magento\Catalog\Model\AbstractModel::DEFAULT_STORE_ID))
+                $adapter->quoteInto('option_title_default.store_id = ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID))
         );
 
         $storeOptionJoin = implode(

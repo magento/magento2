@@ -43,7 +43,6 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_logger;
 
     /**
-     * @param \Magento\Logger $logger
      * @var \Magento\App\State
      */
     protected $_appState;

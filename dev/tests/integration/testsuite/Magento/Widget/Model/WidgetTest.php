@@ -68,9 +68,9 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
-            ->setDesignTheme('magento_basic');
+            ->setDesignTheme('magento_backend');
         $expectedPubFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')
-                ->getDir(\Magento\App\Dir::STATIC_VIEW) . "/adminhtml/magento_basic/en_US/{$expectedFile}";
+                ->getDir(\Magento\App\Dir::STATIC_VIEW) . "/adminhtml/magento_backend/en_US/{$expectedFile}";
         if (file_exists($expectedPubFile)) {
             unlink($expectedPubFile);
         }
@@ -122,7 +122,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         );
 
         $expectedFile = dirname(__DIR__)
-            . '/_files/design/adminhtml/magento_basic/Magento_Catalog/images/product_widget_new.gif';
+            . '/_files/design/adminhtml/magento_backend/Magento_Catalog/images/product_widget_new.gif';
         $this->assertFileEquals($expectedFile, $actualFile);
     }
 }

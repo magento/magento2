@@ -46,9 +46,9 @@ class Tax extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
             if ($orderItem->isDummy()) {
                 continue;
             }
-            $orderItemTax     = $orderItem->getTaxInvoiced();
-            $baseOrderItemTax = $orderItem->getBaseTaxInvoiced();
-            $orderItemQty     = $orderItem->getQtyInvoiced();
+            $orderItemTax     = (float)$orderItem->getTaxInvoiced();
+            $baseOrderItemTax = (float)$orderItem->getBaseTaxInvoiced();
+            $orderItemQty     = (float)$orderItem->getQtyInvoiced();
 
             if ($orderItemTax && $orderItemQty) {
                 /**

@@ -25,7 +25,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
 
-class Adjustments extends \Magento\Adminhtml\Block\Template
+class Adjustments extends \Magento\Backend\Block\Template
 {
     protected $_source;
 

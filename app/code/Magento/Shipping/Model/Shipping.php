@@ -78,11 +78,6 @@ class Shipping
     protected $_shippingConfig;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session
-     */
-    protected $_authSession;
-
-    /**
      * @var \Magento\Shipping\Model\Carrier\Factory
      */
     protected $_carrierFactory;
@@ -111,7 +106,6 @@ class Shipping
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Shipping\Model\Config $shippingConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Shipping\Model\Carrier\Factory $carrierFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
      * @param \Magento\Shipping\Model\Rate\RequestFactory $rateRequestFactory
@@ -122,7 +116,6 @@ class Shipping
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Shipping\Model\Config $shippingConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Shipping\Model\Carrier\Factory $carrierFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
         \Magento\Shipping\Model\Rate\RequestFactory $rateRequestFactory,
@@ -132,7 +125,6 @@ class Shipping
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_shippingConfig = $shippingConfig;
         $this->_storeManager = $storeManager;
-        $this->_authSession = $authSession;
         $this->_carrierFactory = $carrierFactory;
         $this->_rateResultFactory = $rateResultFactory;
         $this->_rateRequestFactory = $rateRequestFactory;
@@ -498,84 +490,5 @@ class Shipping
         }
 
         return $this->_carrierFactory->create($carrierCode, $storeId);
-    }
-
-    /**
-     * Prepare and do request to shipment
-     *
-     * @param \Magento\Sales\Model\Order\Shipment $orderShipment
-     * @return \Magento\Object
-     * @throws \Magento\Core\Exception
-     */
-    public function requestToShipment(\Magento\Sales\Model\Order\Shipment $orderShipment)
-    {
-        $admin = $this->_authSession->getUser();
-        $order = $orderShipment->getOrder();
-        $address = $order->getShippingAddress();
-        $shippingMethod = $order->getShippingMethod(true);
-        $shipmentStoreId = $orderShipment->getStoreId();
-        $shipmentCarrier = $order->getShippingCarrier();
-        $baseCurrencyCode = $this->_storeManager->getStore($shipmentStoreId)->getBaseCurrencyCode();
-        if (!$shipmentCarrier) {
-            throw new \Magento\Core\Exception('Invalid carrier: ' . $shippingMethod->getCarrierCode());
-        }
-        $shipperRegionCode = $this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_REGION_ID, $shipmentStoreId);
-        if (is_numeric($shipperRegionCode)) {
-            $shipperRegionCode = $this->_regionFactory->create()->load($shipperRegionCode)->getCode();
-        }
-
-        $recipientRegionCode = $this->_regionFactory->create()->load($address->getRegionId())->getCode();
-
-        $originStreet1 = $this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_ADDRESS1, $shipmentStoreId);
-        $originStreet2 = $this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_ADDRESS2, $shipmentStoreId);
-        $storeInfo = new \Magento\Object($this->_coreStoreConfig->getConfig('general/store_information', $shipmentStoreId));
-
-        if (!$admin->getFirstname() || !$admin->getLastname() || !$storeInfo->getName() || !$storeInfo->getPhone()
-            || !$originStreet1 || !$this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_CITY, $shipmentStoreId)
-            || !$shipperRegionCode || !$this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_ZIP, $shipmentStoreId)
-            || !$this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_COUNTRY_ID, $shipmentStoreId)
-        ) {
-            throw new \Magento\Core\Exception(
-                __('We don\'t have enough information to create shipping labels. Please make sure your store information and settings are complete.')
-            );
-        }
-
-        /** @var $request \Magento\Shipping\Model\Shipment\Request */
-        $request = $this->_rateRequestFactory->create();
-        $request->setOrderShipment($orderShipment);
-        $request->setShipperContactPersonName($admin->getName());
-        $request->setShipperContactPersonFirstName($admin->getFirstname());
-        $request->setShipperContactPersonLastName($admin->getLastname());
-        $request->setShipperContactCompanyName($storeInfo->getName());
-        $request->setShipperContactPhoneNumber($storeInfo->getPhone());
-        $request->setShipperEmail($admin->getEmail());
-        $request->setShipperAddressStreet(trim($originStreet1 . ' ' . $originStreet2));
-        $request->setShipperAddressStreet1($originStreet1);
-        $request->setShipperAddressStreet2($originStreet2);
-        $request->setShipperAddressCity($this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_CITY, $shipmentStoreId));
-        $request->setShipperAddressStateOrProvinceCode($shipperRegionCode);
-        $request->setShipperAddressPostalCode($this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_ZIP, $shipmentStoreId));
-        $request->setShipperAddressCountryCode($this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_COUNTRY_ID, $shipmentStoreId));
-        $request->setRecipientContactPersonName(trim($address->getFirstname() . ' ' . $address->getLastname()));
-        $request->setRecipientContactPersonFirstName($address->getFirstname());
-        $request->setRecipientContactPersonLastName($address->getLastname());
-        $request->setRecipientContactCompanyName($address->getCompany());
-        $request->setRecipientContactPhoneNumber($address->getTelephone());
-        $request->setRecipientEmail($address->getEmail());
-        $request->setRecipientAddressStreet(trim($address->getStreet1() . ' ' . $address->getStreet2()));
-        $request->setRecipientAddressStreet1($address->getStreet1());
-        $request->setRecipientAddressStreet2($address->getStreet2());
-        $request->setRecipientAddressCity($address->getCity());
-        $request->setRecipientAddressStateOrProvinceCode($address->getRegionCode());
-        $request->setRecipientAddressRegionCode($recipientRegionCode);
-        $request->setRecipientAddressPostalCode($address->getPostcode());
-        $request->setRecipientAddressCountryCode($address->getCountryId());
-        $request->setShippingMethod($shippingMethod->getMethod());
-        $request->setPackageWeight($order->getWeight());
-        $request->setPackages($orderShipment->getPackages());
-        $request->setBaseCurrencyCode($baseCurrencyCode);
-        $request->setStoreId($shipmentStoreId);
-
-        return $shipmentCarrier->requestToShipment($request);
     }
 }

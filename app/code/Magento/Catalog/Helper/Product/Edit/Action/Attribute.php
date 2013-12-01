@@ -141,7 +141,7 @@ class Attribute extends \Magento\Backend\Helper\Data
      */
     public function getSelectedStoreId()
     {
-        return (int)$this->_getRequest()->getParam('store', \Magento\Core\Model\AppInterface::ADMIN_STORE_ID);
+        return (int)$this->_getRequest()->getParam('store', \Magento\Core\Model\Store::DEFAULT_STORE_ID);
     }
 
     /**

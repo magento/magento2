@@ -54,7 +54,7 @@ $subscriptionTable = $connection->newTable($this->getTable('webhook_subscription
         array('nullable' => true,'default'  => NULL,'unsigned' => true),
         'Subscription Endpoint')
     ->addForeignKey(
-        'FK_WEBHOOK_SUBSCRIPTION_ENDPOINT_ID',
+        $this->getFkName('webhook_subscription', 'endpoint_id', 'outbound_endpoint', 'endpoint_id'),
         'endpoint_id',
         $this->getTable('outbound_endpoint'),
         'endpoint_id',
@@ -92,7 +92,7 @@ $hookTable = $connection->newTable($this->getTable('webhook_subscription_hook'))
         $this->getIdxName('webhook_subscription_hook', array('topic')),
         array('topic'))
     ->addForeignKey(
-        'FK_WEBHOOK_SUBSCRIPTION_SUBSCRIPTION_ID',
+        $this->getFkName('webhook_subscription_hook', 'subscription_id', 'webhook_subscription', 'subscription_id'),
         'subscription_id',
         $this->getTable('webhook_subscription'),
         'subscription_id',
@@ -159,7 +159,7 @@ $dispatchJobTable = $connection->newTable($this->getTable('webhook_dispatch_job'
         array('default' => '0000-00-00 00:00:00', 'nullable' => false),
         'Retry At')
     ->addForeignKey(
-        'FK_WEBHOOK_SERVICE_DISPATCHER_ID',
+        $this->getFkName('webhook_dispatch_job', 'subscription_id', 'webhook_subscription', 'subscription_id'),
         'subscription_id',
         $this->getTable('webhook_subscription'),
         'subscription_id',
@@ -167,7 +167,7 @@ $dispatchJobTable = $connection->newTable($this->getTable('webhook_dispatch_job'
         \Magento\DB\Ddl\Table::ACTION_CASCADE
     )
     ->addForeignKey(
-        'FK_WEBHOOK_MESSAGE_DISPATCHER_ID',
+        $this->getFkName('webhook_dispatch_job', 'event_id', 'webhook_event', 'event_id'),
         'event_id',
         $this->getTable('webhook_event'),
         'event_id',

@@ -40,7 +40,8 @@ class Statistics extends \Magento\Backend\Block\Widget\Grid\Container
      */
     protected function _construct()
     {
-        $this->_controller = 'report_refresh_statistics';
+        $this->_blockGroup = 'Magento_Reports';
+        $this->_controller = 'adminhtml_refresh_statistics';
         $this->_headerText = __('Refresh Statistics');
         parent::_construct();
         $this->_removeButton('add');

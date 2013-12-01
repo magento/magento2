@@ -97,6 +97,7 @@ class CreateTest extends \Magento\Backend\Utility\Controller
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoAppArea adminhtml
      */
     public function testIndexAction()
     {

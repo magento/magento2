@@ -102,12 +102,6 @@ class Main extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
         $frontendInputValues = array_merge($frontendInputElm->getValues(), $additionalTypes);
         $frontendInputElm->setValues($frontendInputValues);
 
-
-        $this->_eventManager->dispatch('adminhtml_catalog_product_attribute_edit_prepare_form', array(
-            'form'      => $form,
-            'attribute' => $attributeObject
-        ));
-
         return $this;
     }
 

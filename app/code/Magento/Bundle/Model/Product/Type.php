@@ -496,7 +496,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * Retrive bundle selections collection based on used options
+     * Retrieve bundle selections collection based on used options
      *
      * @param array $optionIds
      * @param \Magento\Catalog\Model\Product $product

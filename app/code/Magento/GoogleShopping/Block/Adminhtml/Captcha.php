@@ -34,7 +34,7 @@
  */
 namespace Magento\GoogleShopping\Block\Adminhtml;
 
-class Captcha extends \Magento\Adminhtml\Block\Template
+class Captcha extends \Magento\Backend\Block\Template
 {
 
     protected $_template = 'captcha.phtml';

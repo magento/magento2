@@ -53,7 +53,7 @@
                 </block>
                 <block class="Magento\Sales\Block\Adminhtml\Order\Payment" name="order_payment"/>
                 <block class="Magento\Sales\Block\Adminhtml\Order\View\History" name="order_history" template="order/view/history.phtml"/>
-                <block class="Magento\Adminhtml\Block\Template" name="gift_options" template="Magento_Sales::order/giftoptions.phtml">
+                <block class="Magento\Backend\Block\Template" name="gift_options" template="Magento_Sales::order/giftoptions.phtml">
                     <block class="Magento\Sales\Block\Adminhtml\Order\View\Giftmessage" name="order_giftmessage" template="order/view/giftmessage.phtml"/>
                 </block>
                 <block class="Magento\Sales\Block\Adminhtml\Order\Totals" name="order_totals" template="order/totals.phtml">

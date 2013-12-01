@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order;
 
-class Payment extends \Magento\Adminhtml\Block\Template
+class Payment extends \Magento\Backend\Block\Template
 {
     /**
      * Payment data

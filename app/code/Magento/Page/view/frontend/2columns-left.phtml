@@ -32,12 +32,15 @@ $bodyCss = $this->getBodyClass() ? $this->getBodyClass() : '';
 <!doctype html>
 <html lang="<?php echo $this->getLang() ?>" class="no-js">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <?php echo $this->getChildHtml('head') ?>
 </head>
-<body class="col2-left-layout<?php echo $bodyCss ?>" data-container="body" data-mage-init="{loaderAjax: {}, loader: {}}">
+<body class="col2-left-layout<?php echo $bodyCss ?>"
+      data-container="body"
+      <?php echo $this->getAddAttribute(); ?>
+      data-mage-init="{loaderAjax: {}, loader: {}}">
     <?php echo $this->getChildHtml('after_body_start') ?>
     <div class="page wrapper">
         <?php echo $this->getChildHtml('global_notices') ?>

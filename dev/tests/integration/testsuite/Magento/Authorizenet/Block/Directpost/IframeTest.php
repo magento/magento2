@@ -31,10 +31,10 @@ class IframeTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @magentoAppIsolation enabled
+     * @magentoAppArea frontend
      */
     public function testToHtml()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
         $xssString = '</script><script>alert("XSS")</script>';
         /** @var $block \Magento\Authorizenet\Block\Directpost\Iframe */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')

@@ -324,13 +324,35 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
         }
         $path = $prefix . $key;
 
-        $cacheId = $this->getStore()->getCode() . '/' . $path;
+        $cacheId = $this->_getConfigCacheId($path);
         if (!isset(self::$_configDataCache[$cacheId])) {
-            $data = $this->getStore()->getConfig($path);
+            $data = $this->_getConfig($path);
             self::$_configDataCache[$cacheId] = $data;
         }
 
         return self::$_configDataCache[$cacheId];
+    }
+
+    /**
+     * Get cache id for config path
+     *
+     * @param string $path
+     * @return string
+     */
+    protected function _getConfigCacheId($path)
+    {
+        return $this->getStore()->getCode() . '/' . $path;
+    }
+
+    /**
+     * Get config data by path
+     *
+     * @param string $path
+     * @return null|string
+     */
+    protected function _getConfig($path)
+    {
+        return $this->getStore()->getConfig($path);
     }
 
     /**
@@ -379,23 +401,19 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
             return (bool)$this->getData('secure');
         }
 
-        $store = $this->getStore();
-
-        if ($store->isAdmin() && !$store->isAdminUrlSecure()) {
-            return false;
-        }
-        if (!$store->isAdmin() && !$store->isFrontUrlSecure()) {
+        if (!$this->getStore()->isUrlSecure()) {
             return false;
         }
 
         if (!$this->hasData('secure')) {
-            if ($this->getType() == \Magento\Core\Model\Store::URL_TYPE_LINK && !$store->isAdmin()) {
+            if ($this->getType() == \Magento\Core\Model\Store::URL_TYPE_LINK) {
                 $pathSecure = $this->_urlSecurityInfo->isSecure('/' . $this->getActionPath());
                 $this->setData('secure', $pathSecure);
             } else {
                 $this->setData('secure', true);
             }
         }
+
         return $this->getData('secure');
     }
 
@@ -1269,6 +1287,27 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
             $url .= (strpos($url, '?') === false ? '?' : '&') . $query;
         }
 
+        return $url;
+    }
+
+    /**
+     * Retrieve current url
+     *
+     * @return string
+     */
+    public function getCurrentUrl()
+    {
+        $port = $this->_request->getServer('SERVER_PORT');
+        if ($port) {
+            $defaultPorts = array(
+                \Magento\App\Request\Http::DEFAULT_HTTP_PORT,
+                \Magento\App\Request\Http::DEFAULT_HTTPS_PORT
+            );
+            $port = (in_array($port, $defaultPorts)) ? '' : ':' . $port;
+        }
+        $requestUri = $this->_request->getServer('REQUEST_URI');
+        $url = $this->_request->getScheme() . '://' . $this->_request->getHttpHost()
+                . $port . $requestUri;
         return $url;
     }
 }

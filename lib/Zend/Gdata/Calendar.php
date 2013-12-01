@@ -90,7 +90,7 @@ class Zend_Gdata_Calendar extends Zend_Gdata
     }
 
     /**
-     * Retreive feed object
+     * Retrieve feed object
      *
      * @param mixed $location The location for the feed, as a URL or Query
      * @return Zend_Gdata_Calendar_EventFeed
@@ -108,7 +108,7 @@ class Zend_Gdata_Calendar extends Zend_Gdata
     }
 
     /**
-     * Retreive entry object
+     * Retrieve entry object
      *
      * @return Zend_Gdata_Calendar_EventEntry
      */
@@ -139,7 +139,7 @@ class Zend_Gdata_Calendar extends Zend_Gdata
     }
 
     /**
-     * Retreive entryobject
+     * Retrieve entry object
      *
      * @return Zend_Gdata_Calendar_ListEntry
      */
